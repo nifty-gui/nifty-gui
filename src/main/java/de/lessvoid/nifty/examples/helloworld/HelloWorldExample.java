@@ -1,0 +1,245 @@
+package de.lessvoid.nifty.examples.helloworld;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.glu.GLU;
+
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.render.opengl.RenderDeviceLwjgl;
+import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.sound.slick.SlickSoundLoader;
+import de.lessvoid.nifty.tools.TimeProvider;
+
+/**
+ * The Nifty Hello World.
+ * @author void
+ */
+public final class HelloWorldExample {
+
+  /** logger. */
+  private static Log log = LogFactory.getLog(HelloWorldExample.class);
+
+  /** title of window. */
+  private static final String TITLE = "Nifty Hello World";
+
+  /**
+   * Prevent instantiation of this class.
+   */
+  private HelloWorldExample() {
+  }
+
+  /**
+   * Main method.
+   * @param args arguments
+   */
+  public static void main(final String[] args) {
+    if (!initSubSystems()) {
+      System.exit(0);
+    }
+
+    // create nifty
+    Nifty nifty = new Nifty(
+        new RenderDeviceLwjgl(),
+        new SoundSystem(new SlickSoundLoader()),
+        new TimeProvider(),
+        false);
+    nifty.fromXml("helloworld/helloworld.xml");
+
+    // wait for user to close window
+    boolean done = false;
+    while (!Display.isCloseRequested() && !done) {
+      // show render
+      Display.update();
+
+      // forward keyboard events to nifty
+      while (Keyboard.next()) {
+        nifty.keyEvent(Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
+      }
+
+      // render nifty
+      int mouseX = Mouse.getX();
+      int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
+      if (nifty.render(true, mouseX, mouseY, Mouse.isButtonDown(0))) {
+        done = true;
+      }
+
+      // check gl error at least ones per frame
+      int error = GL11.glGetError();
+      if (error != GL11.GL_NO_ERROR) {
+        String glerrmsg = GLU.gluErrorString(error);
+        log.error("OpenGL Error: (" + error + ") " + glerrmsg);
+      }
+    }
+
+    // nuke window and get out
+    Display.destroy();
+    System.exit(0);
+  }
+
+  /**
+   * Init SubSystems.
+   * @return true on success and false otherwise
+   */
+  private static boolean initSubSystems() {
+    if (!initGraphics()) {
+      return false;
+    }
+
+    // init input system
+    if (!initInput()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Init lwjgl graphics.
+   * @return true on success and false otherwise
+   */
+  private static boolean initGraphics() {
+    try {
+      DisplayMode currentMode = Display.getDisplayMode();
+      log.debug(
+          "currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", "
+          + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
+
+      //  get available modes, and print out
+      DisplayMode[] modes = Display.getAvailableDisplayModes();
+      log.debug("Found " + modes.length + " display modes");
+
+      List < DisplayMode > matching = new ArrayList < DisplayMode >();
+      for (int i = 0; i < modes.length; i++) {
+        DisplayMode mode = modes[i];
+        if (mode.getWidth() == 1024 && mode.getHeight() == 768 && mode.getBitsPerPixel() == 32 ) {
+          log.debug(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
+          matching.add(mode);
+        }
+      }
+
+      DisplayMode[] matchingModes = matching.toArray(new DisplayMode[0]);
+
+      // find mode with matching freq
+      boolean found = false;
+      for(int i=0; i<matchingModes.length; i++) {
+        if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
+          log.debug("using mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
+          Display.setDisplayMode(matchingModes[i]);
+          found = true;
+          break;
+        }
+      }
+
+      if(!found) {
+        Arrays.sort(matchingModes, new Comparator < DisplayMode >() {  
+          public int compare(final DisplayMode o1, final DisplayMode o2) {
+            if (o1.getFrequency() > o2.getFrequency()) {
+              return 1;
+            } else if(o1.getFrequency() < o2.getFrequency()) {
+              return -1;
+            } else {
+              return 0;
+            }
+          }
+        });
+
+        for (int i=0; i<matchingModes.length; i++) {
+          log.debug("using fallback mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
+          Display.setDisplayMode(matchingModes[i]);
+          break;
+        }
+      }
+
+      int x = 0, y = 0;
+      Display.setLocation(x, y);
+
+      // Create the actual window
+      try {
+        Display.setFullscreen(false);
+        Display.create();
+        Display.setVSyncEnabled(true);
+        Display.setTitle(TITLE);
+      } catch (Exception e) {
+        e.printStackTrace();
+        log.error("Unable to create window!, exiting...");
+        System.exit(-1);
+      }
+
+      log.debug(
+          "Width: " + Display.getDisplayMode().getWidth() +
+          ", Height: " + Display.getDisplayMode().getHeight() +
+          ", Bits per pixel: " + Display.getDisplayMode().getBitsPerPixel() +
+          ", Frequency: " + Display.getDisplayMode().getFrequency() +
+          ", Title: " + Display.getTitle());
+
+      // just output some infos about the system we're on
+      log.debug("plattform: " + LWJGLUtil.getPlatformName());
+      log.debug("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
+      log.debug("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
+      log.debug("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
+      String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
+      if (extensions != null) {
+        String[] ext = extensions.split(" ");
+        for (int i = 0; i < ext.length; i++) {
+          log.debug("opengl extensions: " + ext[i]);
+        }
+      }
+
+      GL11.glViewport(0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
+      GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight(), 0, -9999, 9999);
+
+      GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+
+        // Prepare Rendermode
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glAlphaFunc(GL11.GL_NOTEQUAL, 0);
+
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+      return true;
+    } catch (LWJGLException e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  /**
+   * Init input system.
+   * @return true on success and false otherwise
+   */
+  protected static boolean initInput() {
+    try {
+      Keyboard.create();
+      Keyboard.enableRepeatEvents(true);
+      return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      log.error("Unable to create keyboard!, exiting...");
+      return false;
+    }
+  }
+}
