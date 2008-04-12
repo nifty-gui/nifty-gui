@@ -1,9 +1,7 @@
 package de.lessvoid.nifty.tools.time;
 
 import java.util.Properties;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.time.interpolator.ExpTime;
@@ -20,7 +18,7 @@ public class TimeInterpolator {
   /**
    * the logger.
    */
-  private static Log log = LogFactory.getLog(TimeInterpolator.class);
+  private static Logger log = Logger.getLogger(TimeInterpolator.class.getName());
 
   /**
    * the time provider.
@@ -73,7 +71,7 @@ public class TimeInterpolator {
     } else if (timeType.equals("exp")) {
       interpolatorProvider = new ExpTime();
     } else {
-      log.error(timeType + " is not supported, using NullTime for fallback. probably not what you want...");
+      log.warning(timeType + " is not supported, using NullTime for fallback. probably not what you want...");
       interpolatorProvider = new NullTime();
     }
 

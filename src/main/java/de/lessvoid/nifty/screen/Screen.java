@@ -1,15 +1,11 @@
 package de.lessvoid.nifty.screen;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.elements.Controller;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MouseFocusHandler;
 import de.lessvoid.nifty.render.RenderDevice;
@@ -24,7 +20,7 @@ public class Screen implements MouseFocusHandler {
   /**
    * the logger.
    */
-  private static Log log = LogFactory.getLog(Screen.class);
+  private static Logger log = Logger.getLogger(Screen.class.getName());
 
   /**
    * screen id of this screen.
@@ -246,7 +242,7 @@ public class Screen implements MouseFocusHandler {
    * @param newFocusElement element that request focus
    */
   public void requestExclusiveFocus(final Element newFocusElement) {
-    log.debug("requestExclusiveFocus: " + newFocusElement.getId());
+    log.info("requestExclusiveFocus: " + newFocusElement.getId());
 
     if (focusElement != null) {
       focusElement.stopEffect(EffectEventId.onFocus);
@@ -261,7 +257,7 @@ public class Screen implements MouseFocusHandler {
    * lost focus.
    */
   public void lostFocus(Element elementThatLostFocus) {
-    log.debug("lostFocus: " + elementThatLostFocus.getId());
+    log.info("lostFocus: " + elementThatLostFocus.getId());
     mouseFocusElement = null;
   }
 

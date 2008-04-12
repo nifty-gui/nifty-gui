@@ -4,9 +4,8 @@
 package de.lessvoid.font;
 
 import java.nio.ByteBuffer;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.glu.GLU;
@@ -17,7 +16,7 @@ import org.lwjgl.opengl.glu.GLU;
  */
 public class Tools
 {
-  private static Log log = LogFactory.getLog( Tools.class );
+  private static Logger log = Logger.getLogger(Tools.class.getName());
   
   /**
    * 
@@ -31,7 +30,7 @@ public class Tools
     if( error != GL11.GL_NO_ERROR )
     {
       String glerrmsg= GLU.gluErrorString( error );
-      log.error( "OpenGL Error: (" + error + ") " + glerrmsg + ", " + fkt );
+      log.warning("OpenGL Error: (" + error + ") " + glerrmsg + ", " + fkt);
     }
     
   }

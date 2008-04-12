@@ -3,9 +3,8 @@ package de.lessvoid.nifty.loader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.QNameSet;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
@@ -20,7 +19,7 @@ public final class XmlBeansHelper {
   /**
    * the logger.
    */
-  private static Log log = LogFactory.getLog(XmlBeansHelper.class);
+  private static Logger log = Logger.getLogger(XmlBeansHelper.class.getName());
 
   /**
    * This class is a Helper method that can't be instanziated.
@@ -43,7 +42,7 @@ public final class XmlBeansHelper {
     if (!isValid) {
       Iterator < String > iter = validationErrors.iterator();
       while (iter.hasNext()) {
-        log.error(iter.next());
+        log.warning(iter.next());
       }
     }
 

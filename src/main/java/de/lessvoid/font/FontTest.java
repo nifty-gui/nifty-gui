@@ -1,7 +1,7 @@
 package de.lessvoid.font;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -11,7 +11,7 @@ import org.lwjgl.opengl.glu.GLU;
 
 public class FontTest
 {
-  private static Log log= LogFactory.getLog( FontTest.class );
+  private static Logger log= Logger.getLogger(FontTest.class.getName());
   
   private static Font font;
   
@@ -95,7 +95,7 @@ public class FontTest
       if( error != GL11.GL_NO_ERROR )
       {
         String glerrmsg= GLU.gluErrorString( error );
-        log.error( "OpenGL Error: (" + error + ") " + glerrmsg );
+        log.warning("OpenGL Error: (" + error + ") " + glerrmsg);
       }
 
       // check keys, buffered
@@ -125,11 +125,11 @@ public class FontTest
     {
       //  get avaialble modes, and print out
       DisplayMode[] modes= Display.getAvailableDisplayModes();
-      log.debug( "Found " + modes.length + " display modes" );
+      log.fine( "Found " + modes.length + " display modes" );
 
       int x= 0, y= 0;
       boolean fullscreen= false;
-      log.debug( "Moving to 100, 100" );
+      log.fine( "Moving to 100, 100" );
       Display.setLocation( x, y );
 
       // Create the actual window
@@ -142,12 +142,12 @@ public class FontTest
       catch( Exception e )
       {
         e.printStackTrace();
-        log.error( "Unable to create window!, exiting..." );
+        log.warning("Unable to create window!, exiting...");
         System.exit( -1 );
       }
 
-      log.debug( "Window created" );
-      log.debug( "Width: " + Display.getDisplayMode().getWidth() + ", Height: " + Display.getDisplayMode().getHeight() + ", Bits per pixel: "
+      log.fine( "Window created" );
+      log.fine( "Width: " + Display.getDisplayMode().getWidth() + ", Height: " + Display.getDisplayMode().getHeight() + ", Bits per pixel: "
           + Display.getDisplayMode().getBitsPerPixel() + ", Frequency: " + Display.getDisplayMode().getFrequency() + ", Title: " + Display.getTitle() );
 
       Display.setVSyncEnabled( true );
@@ -174,7 +174,7 @@ public class FontTest
     catch( Exception e )
     {
       e.printStackTrace();
-      log.error( "Unable to create keyboard!, exiting..." );
+      log.warning( "Unable to create keyboard!, exiting..." );
       System.exit( -1 );
     }
   }

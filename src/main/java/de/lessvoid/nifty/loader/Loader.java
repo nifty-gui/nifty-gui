@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import net.sourceforge.niftyGui.nifty.ControlDefinition;
 import net.sourceforge.niftyGui.nifty.ControlType;
@@ -29,10 +30,6 @@ import net.sourceforge.niftyGui.nifty.RegisterSoundType;
 import net.sourceforge.niftyGui.nifty.ScreenType;
 import net.sourceforge.niftyGui.nifty.TextType;
 import net.sourceforge.niftyGui.nifty.ScreenType.LayerGroup;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.general.Effect;
@@ -71,7 +68,7 @@ public class Loader {
   /**
    * logger.
    */
-  private static Log log = LogFactory.getLog(Loader.class);
+  private static Logger log = Logger.getLogger(Loader.class.getName());
 
   /**
    * effect groups.
@@ -113,13 +110,13 @@ public class Loader {
       final String filename,
       final TimeProvider timeProvider) throws Exception {
 
-    log.debug("loadXml: " + filename);
+    log.info("loadXml: " + filename);
     NiftyDocument niftyDoc =
       NiftyDocument.Factory.parse(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
 
-    log.debug("parse done");
+    log.info("parse done");
     if (XmlBeansHelper.validate(niftyDoc)) {
-      log.debug("is valid");
+      log.info("is valid");
       NiftyType nifty = niftyDoc.getNifty();
 
       // register effects
@@ -242,7 +239,7 @@ public class Loader {
       final RenderDevice r,
       final TimeProvider timeProvider) throws Exception {
     if (!screenType.isSetController()) {
-      log.error("required screencontroler for id: " + screenType.getId());
+      log.warning("required screencontroler for id: " + screenType.getId());
     }
     ScreenController controller = getController(r, niftyParent, screenType.getController());
     Screen screen = new Screen(screenType.getId(), controller, timeProvider);
@@ -319,10 +316,10 @@ public class Loader {
       if( ScreenController.class.isAssignableFrom( cls )) {
         return (ScreenController)cls.newInstance();
       } else {
-        log.error( "given screenController class [" + controllerClass + "] does not implement [" + ScreenController.class.getName() + "]" );
+        log.warning( "given screenController class [" + controllerClass + "] does not implement [" + ScreenController.class.getName() + "]" );
       }
     } catch ( Exception e ) {
-      log.error( "class [" + controllerClass + "] could not be instanziated" );
+      log.warning( "class [" + controllerClass + "] could not be instanziated" );
     }
     return null;
   }
@@ -338,10 +335,10 @@ public class Loader {
       if (Controller.class.isAssignableFrom(cls)) {
         return (Controller) cls.newInstance();
       } else {
-        log.error("given class [" + controllerClass + "] does not implement [" + Controller.class.getName() + "]");
+        log.warning("given class [" + controllerClass + "] does not implement [" + Controller.class.getName() + "]");
       }
     } catch (Exception e) {
-      log.error("class [" + controllerClass + "] could not be instanziated");
+      log.warning("class [" + controllerClass + "] could not be instanziated");
     }
     return null;
   }
@@ -428,7 +425,7 @@ public class Loader {
       if (controlType.isSetOnChange()) {
         final Method onChangeMethod = MethodResolver.findMethod(controller.getClass(), controlType.getOnChange());
         if (onChangeMethod == null) {
-          log.warn("method [" + controlType.getOnChange() + "] "
+          log.warning("method [" + controlType.getOnChange() + "] "
                    + "not found in class [" + controller.getClass().getName() + "]");
         } else {
           if (onChangeMethod != null) {
@@ -437,7 +434,7 @@ public class Loader {
                 try {
                   onChangeMethod.invoke(controller, c);
                 } catch (Exception e) {
-                  log.error("ControllerEventListener with error: " + e, e);
+                  log.warning("ControllerEventListener with error: " + e);
                 }
               }
             };
@@ -733,7 +730,7 @@ public class Loader {
         String methodName = interactType.getOnClick();
         Method onClickMethod = MethodResolver.findMethod(controller.getClass(), methodName);
         if (onClickMethod == null) {
-          log.warn("method [" + methodName + "] not found in class [" + controller.getClass().getName() + "]");
+          log.warning("method [" + methodName + "] not found in class [" + controller.getClass().getName() + "]");
         } else {
           element.setOnClickMethod(onClickMethod, controller, false);
         }
@@ -744,7 +741,7 @@ public class Loader {
         String methodName = interactType.getOnClickRepeat();
         Method onClickMethod = MethodResolver.findMethod(controller.getClass(), methodName);
         if (onClickMethod == null) {
-          log.warn("method [" + methodName + "] not found in class [" + controller.getClass().getName() + "]");
+          log.warning("method [" + methodName + "] not found in class [" + controller.getClass().getName() + "]");
         } else {
           element.setOnClickMethod(onClickMethod, controller, true);
         }
@@ -755,7 +752,7 @@ public class Loader {
         String methodName = interactType.getOnClickMouseMove();
         Method onClickMouseMoveMethod = MethodResolver.findMethod(controller.getClass(), methodName);
         if (onClickMouseMoveMethod == null) {
-          log.warn("method [" + methodName + "] not found in class [" + controller.getClass().getName() + "]");
+          log.warning("method [" + methodName + "] not found in class [" + controller.getClass().getName() + "]");
         } else {
           element.setOnClickMouseMoveMethod(onClickMouseMoveMethod, controller);
         }
@@ -819,7 +816,7 @@ public class Loader {
         } else if (layout.equals(LayoutType.OVERLAY)) {
           newPanel.setLayoutManager(new OverlayLayout());
         } else {
-          log.warn("unsupported layout: " + layout.toString());
+          log.warning("unsupported layout: " + layout.toString());
         }
       }
     }
@@ -876,7 +873,7 @@ public class Loader {
       processEffect(EffectEventId.onHover, effectGroupType.getOnHoverArray(), element, nifty);
       processEffect(EffectEventId.onActive, effectGroupType.getOnActiveArray(), element, nifty);
     } else {
-      log.warn("missing effectGroup: " + effectGroupId);
+      log.warning("missing effectGroup: " + effectGroupId);
     }
   }
 

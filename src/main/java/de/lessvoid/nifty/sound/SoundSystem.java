@@ -2,9 +2,7 @@ package de.lessvoid.nifty.sound;
 
 
 import java.util.Hashtable;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 /**
  * The SoundManager loads and manages all available Sound and Music Files available to be played.
@@ -15,7 +13,7 @@ public class SoundSystem {
   /**
    * The logger.
    */
-  private static Log log = LogFactory.getLog(SoundSystem.class);
+  private static Logger log = Logger.getLogger(SoundSystem.class.getName());
 
   /**
    * The SoundLoader we should use.
@@ -57,7 +55,7 @@ public class SoundSystem {
    * @return true on success and false when loading the sound failed
    */
   public boolean addSound(final String name, final String filename) {
-    log.debug("register sound [" + name + "] for file '" + filename + "'");
+    log.info("register sound [" + name + "] for file '" + filename + "'");
 
     SoundHandle sound = soundLoader.loadSound(this, filename);
     if (sound == null) {
@@ -75,7 +73,7 @@ public class SoundSystem {
    * @return true on success and false when loading the music file failed
    */
   public boolean addMusic(final String name, final String filename) {
-    log.debug("register music [" + name + "] for file '" + filename + "'");
+    log.info("register music [" + name + "] for file '" + filename + "'");
 
     SoundHandle music = soundLoader.loadMusic(this, filename);
     if (music == null) {
@@ -93,13 +91,13 @@ public class SoundSystem {
    */
   public SoundHandle getSound(final String name) {
     if (name == null) {
-      log.warn("unknown sound name given [" + name + "]?");
+      log.warning("unknown sound name given [" + name + "]?");
       return null;
     }
 
     SoundHandle sound = soundLookup.get(name);
     if (sound == null) {
-        log.warn("missing sound [" + name + "]");
+        log.warning("missing sound [" + name + "]");
         return null;
     }
 

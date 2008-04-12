@@ -2,9 +2,7 @@ package de.lessvoid.nifty;
 
 import java.util.Hashtable;
 import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.loader.Loader;
 import de.lessvoid.nifty.render.RenderDevice;
@@ -21,7 +19,7 @@ public class Nifty {
   /**
    * The logger.
    */
-  private Log log = LogFactory.getLog(Nifty.class);
+  private Logger log = Logger.getLogger(Nifty.class.getName());
 
   /**
    * RenderDevice.
@@ -175,7 +173,7 @@ public class Nifty {
   private void gotoScreenInternal(final String id) {
     currentScreen = screens.get(id);
     if (currentScreen == null) {
-      log.error("screen [" + id + "] not found");
+      log.warning("screen [" + id + "] not found");
       return;
     }
 
@@ -214,7 +212,7 @@ public class Nifty {
   public Screen getScreen(final String id) {
     Screen screen = screens.get(id);
     if (screen == null) {
-      log.error("screen [" + id + "] not found");
+      log.warning("screen [" + id + "] not found");
       return null;
     }
 

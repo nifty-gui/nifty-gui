@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.sound.slick;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -19,7 +19,7 @@ public class SlickSoundLoader implements SoundLoader {
   /**
    * The logger.
    */
-  private static Log log = LogFactory.getLog(SoundSystem.class);
+  private static Logger log = Logger.getLogger(SoundSystem.class.getName());
 
   /**
    * Load a sound.
@@ -31,7 +31,7 @@ public class SlickSoundLoader implements SoundLoader {
     try {
       return new SlickSoundHandle(soundSystem, new Sound(filename));
     } catch (SlickException e) {
-      log.error("loading of '" + filename + "' failed", e);
+      log.warning("loading of '" + filename + "' failed" + e);
     }
     return null;
   }
@@ -46,7 +46,7 @@ public class SlickSoundLoader implements SoundLoader {
     try {
       return new SlickMusicHandle(soundSystem, new Music(filename));
     } catch (SlickException e) {
-      log.error("loading of '" + filename + "' failed", e);
+      log.warning("loading of '" + filename + "' failed" + e);
     }
     return null;
   }

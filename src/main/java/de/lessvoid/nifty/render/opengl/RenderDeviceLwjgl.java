@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.render.opengl;
 
-import java.awt.Dimension;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.util.EnumMap;
@@ -9,9 +8,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -24,7 +22,7 @@ import de.lessvoid.nifty.tools.Color;
 
 public class RenderDeviceLwjgl implements RenderDevice {
 
-  private final static Log log = LogFactory.getLog(RenderDeviceLwjgl.class);
+  private final static Logger log = Logger.getLogger(RenderDeviceLwjgl.class.getName());
 
   private float globalPosX = 0;
   private float globalPosY = 0;

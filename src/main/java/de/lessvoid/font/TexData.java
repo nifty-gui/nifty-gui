@@ -3,9 +3,9 @@ package de.lessvoid.font;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.glu.GLU;
@@ -24,7 +24,7 @@ class TexData {
   /**
    * the logger for this class.
    */
-  private static Log log = LogFactory.getLog(Font.class);
+  private static Logger log = Logger.getLogger(Font.class.getName());
 
   /**
    * the texture.
@@ -78,7 +78,7 @@ class TexData {
       texAlpha = createTexture(tempData, GL11.GL_LINEAR);
 
     } catch (SlickException e) {
-      log.error("unable to load: " + texName, e);
+      log.log(Level.WARNING, "unable to load: " + texName, e);
     }
   }
 

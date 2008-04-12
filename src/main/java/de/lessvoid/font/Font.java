@@ -1,7 +1,7 @@
 package de.lessvoid.font;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
@@ -14,7 +14,7 @@ public class Font {
   /**
    * the logger.
    */
-  private static Log log = LogFactory.getLog(Font.class);
+  private static Logger log = Logger.getLogger(Font.class.getName());
 
   /**
    * the font reader.

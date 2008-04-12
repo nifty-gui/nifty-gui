@@ -1,9 +1,7 @@
 package de.lessvoid.nifty.tools.pulsate;
 
 import java.util.Properties;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.provider.NullPulsater;
@@ -19,7 +17,7 @@ public class Pulsater {
   /**
    * the logger.
    */
-  private static Log log = LogFactory.getLog(Pulsater.class);
+  private static Logger log = Logger.getLogger(Pulsater.class.getName());
 
   /**
    * the time provider.
@@ -47,7 +45,7 @@ public class Pulsater {
     } else if (pulsateType.equals("rectangle")) {
       pulsateProvider = new RectanglePulsater();
     } else {
-      log.error(pulsateType + " is not supported, using NullPulsater for fallback. probably not what you want...");
+      log.warning(pulsateType + " is not supported, using NullPulsater for fallback. probably not what you want...");
       pulsateProvider = new NullPulsater();
     }
 

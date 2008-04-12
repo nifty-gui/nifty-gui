@@ -3,9 +3,8 @@ package de.lessvoid.nifty.elements;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
@@ -42,7 +41,7 @@ public class Element {
   /**
    * the logger.
    */
-  private static Log log = LogFactory.getLog(Element.class);
+  private static Logger log = Logger.getLogger(Element.class.getName());
 
   /**
    * our identification.
@@ -436,7 +435,7 @@ public class Element {
       if (elements.size() == layoutPartChild.size()) {
         SizeValue newWidth = layoutManager.calculateConstraintWidth(layoutPartChild);
         if (newWidth != null) {
-          log.debug("pre processed new width for element: " + getId() + ": " + newWidth.getValueAsInt(0));
+          log.info("pre processed new width for element: " + getId() + ": " + newWidth.getValueAsInt(0));
           setConstraintWidth(newWidth);
         }
       }
@@ -470,7 +469,7 @@ public class Element {
       if (elements.size() == layoutPartChild.size()) {
         SizeValue newHeight = layoutManager.calculateConstraintHeight(layoutPartChild);
         if (newHeight != null) {
-          log.debug("pre processed new height for element: " + getId() + ": " + newHeight.getValueAsInt(0));
+          log.info("pre processed new height for element: " + getId() + ": " + newHeight.getValueAsInt(0));
           setConstraintHeight(newHeight);
         }
       }
@@ -576,7 +575,7 @@ public class Element {
   public final void registerEffect(
       final EffectEventId theId,
       final Effect e) {
-    log.debug("register: " + theId.toString() + "(" + e.getStateString() + ") for Element: " + this.getId());
+    log.info("register: " + theId.toString() + "(" + e.getStateString() + ") for Element: " + this.getId());
     effectManager.registerEffect(theId, e);
   }
 
@@ -820,7 +819,7 @@ public class Element {
           onClickMethod.invoke(onClickObject, mouseX, mouseY);
         }
       } catch (Exception e) {
-        log.error(e);
+        log.log(Level.WARNING, "error", e);
       }
     }
   }
@@ -850,7 +849,7 @@ public class Element {
           onClickMouseMoveMethod.invoke(onClickMouseMoveObject, mouseX, mouseY);
         }
       } catch (Exception e) {
-        log.error(e);
+        log.throwing(Element.class.getName(), "onClickMouseMove", e);
       }
     }
   }

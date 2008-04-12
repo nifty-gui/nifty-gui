@@ -6,7 +6,7 @@
   </skin>
   <bannerLeft>
     <name>Nifty GUI</name>
-    <href>http://nifty-gui.sourceforge.net/project-info.html</href>
+    <href>http://nifty-gui.sourceforge.net/nifty/</href>
   </bannerLeft>
   <publishDate format="dd.MM.yyyy" />
   <body>
@@ -14,7 +14,6 @@
       <item name="Blog" href="http://nifty-gui.lessvoid.com"/>
     </links>
     <head>
-      <meta name="faq" content="proficio"/>
     </head>
     ${reports}
   </body>

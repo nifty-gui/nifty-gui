@@ -1,14 +1,11 @@
 package de.lessvoid.nifty.loader;
 
 import java.util.Hashtable;
+import java.util.logging.Logger;
 
 import net.sourceforge.niftyGui.nifty.EffectType;
 import net.sourceforge.niftyGui.nifty.PostType;
 import net.sourceforge.niftyGui.nifty.RegisterEffectType;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.general.Effect;
@@ -26,7 +23,7 @@ public class EffectConvert {
    */
   private static final boolean DEFAULT_EFFECT_POST = false;
 
-  private static Log log= LogFactory.getLog( EffectConvert.class );
+  private static Logger log= Logger.getLogger(EffectConvert.class.getName());
 
   public static Effect convertEffect(
       Nifty nifty,
@@ -38,7 +35,7 @@ public class EffectConvert {
     String name= effectType.getName();
     RegisterEffectType registerEffectType= registerEffects.get( name );
     if( registerEffectType == null ) {
-      log.warn( "unable to convert effect: " + name + ". no effect with this name registered." );
+      log.info( "unable to convert effect: " + name + ". no effect with this name registered." );
       return null;
     }
 
@@ -100,10 +97,10 @@ public class EffectConvert {
       if (EffectImpl.class.isAssignableFrom(cls)) {
         return (EffectImpl) cls.newInstance();
       } else {
-        log.error("given effect class [" + className + "] does not implement [" + EffectImpl.class.getName() + "]");
+        log.warning("given effect class [" + className + "] does not implement [" + EffectImpl.class.getName() + "]");
       }
     } catch (Exception e) {
-      log.error("class [" + className + "] could not be instanziated");
+      log.throwing(EffectConvert.class.getName(), "createEffectImpl", e);
     }
     return null;
   }
@@ -119,11 +116,10 @@ public class EffectConvert {
       if (HoverEffectImpl.class.isAssignableFrom(cls)) {
         return (HoverEffectImpl) cls.newInstance();
       } else {
-        log.error(
-            "given effect class [" + className + "] does not implement [" + HoverEffectImpl.class.getName() + "]");
+        log.warning("given effect class [" + className + "] does not implement [" + HoverEffectImpl.class.getName() + "]");
       }
     } catch (Exception e) {
-      log.error("class [" + className + "] could not be instanziated");
+      log.warning("class [" + className + "] could not be instanziated");
     }
     return null;
   }
