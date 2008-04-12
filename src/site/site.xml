@@ -1,0 +1,21 @@
+<project name="Nifty GUI">
+  <skin>
+    <groupId>lessvoid</groupId>
+    <artifactId>maven-nifty-skin</artifactId>
+    <version>1.0</version>
+  </skin>
+  <bannerLeft>
+    <name>Nifty GUI</name>
+    <href>http://nifty-gui.sourceforge.net/project-info.html</href>
+  </bannerLeft>
+  <publishDate format="dd.MM.yyyy" />
+  <body>
+    <links>
+      <item name="Blog" href="http://nifty-gui.lessvoid.com"/>
+    </links>
+    <head>
+      <meta name="faq" content="proficio"/>
+    </head>
+    ${reports}
+  </body>
+</project>
