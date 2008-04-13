@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.input.Keyboard;
@@ -29,7 +28,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
 public final class HelloWorldExample {
 
   /** logger. */
-  private static Log log = LogFactory.getLog(HelloWorldExample.class);
+  private static Logger log = Logger.getLogger(HelloWorldExample.class.getName());
 
   /** title of window. */
   private static final String TITLE = "Nifty Hello World";
@@ -45,6 +44,7 @@ public final class HelloWorldExample {
    * @param args arguments
    */
   public static void main(final String[] args) {
+    System.out.println(System.getProperty("user.dir"));
     if (!initSubSystems()) {
       System.exit(0);
     }
@@ -79,7 +79,7 @@ public final class HelloWorldExample {
       int error = GL11.glGetError();
       if (error != GL11.GL_NO_ERROR) {
         String glerrmsg = GLU.gluErrorString(error);
-        log.error("OpenGL Error: (" + error + ") " + glerrmsg);
+        log.warning("OpenGL Error: (" + error + ") " + glerrmsg);
       }
     }
 
@@ -112,19 +112,19 @@ public final class HelloWorldExample {
   private static boolean initGraphics() {
     try {
       DisplayMode currentMode = Display.getDisplayMode();
-      log.debug(
+      log.info(
           "currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", "
           + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
 
       //  get available modes, and print out
       DisplayMode[] modes = Display.getAvailableDisplayModes();
-      log.debug("Found " + modes.length + " display modes");
+      log.info("Found " + modes.length + " display modes");
 
       List < DisplayMode > matching = new ArrayList < DisplayMode >();
       for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
         if (mode.getWidth() == 1024 && mode.getHeight() == 768 && mode.getBitsPerPixel() == 32 ) {
-          log.debug(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
+          log.info(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
           matching.add(mode);
         }
       }
@@ -135,7 +135,7 @@ public final class HelloWorldExample {
       boolean found = false;
       for(int i=0; i<matchingModes.length; i++) {
         if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
-          log.debug("using mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
+          log.info("using mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
           Display.setDisplayMode(matchingModes[i]);
           found = true;
           break;
@@ -156,7 +156,7 @@ public final class HelloWorldExample {
         });
 
         for (int i=0; i<matchingModes.length; i++) {
-          log.debug("using fallback mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
+          log.info("using fallback mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
           Display.setDisplayMode(matchingModes[i]);
           break;
         }
@@ -173,11 +173,11 @@ public final class HelloWorldExample {
         Display.setTitle(TITLE);
       } catch (Exception e) {
         e.printStackTrace();
-        log.error("Unable to create window!, exiting...");
+        log.warning("Unable to create window!, exiting...");
         System.exit(-1);
       }
 
-      log.debug(
+      log.info(
           "Width: " + Display.getDisplayMode().getWidth() +
           ", Height: " + Display.getDisplayMode().getHeight() +
           ", Bits per pixel: " + Display.getDisplayMode().getBitsPerPixel() +
@@ -185,15 +185,15 @@ public final class HelloWorldExample {
           ", Title: " + Display.getTitle());
 
       // just output some infos about the system we're on
-      log.debug("plattform: " + LWJGLUtil.getPlatformName());
-      log.debug("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
-      log.debug("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
-      log.debug("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
+      log.info("plattform: " + LWJGLUtil.getPlatformName());
+      log.info("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
+      log.info("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
+      log.info("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
       String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
       if (extensions != null) {
         String[] ext = extensions.split(" ");
         for (int i = 0; i < ext.length; i++) {
-          log.debug("opengl extensions: " + ext[i]);
+          log.info("opengl extensions: " + ext[i]);
         }
       }
 
@@ -238,7 +238,7 @@ public final class HelloWorldExample {
       return true;
     } catch (Exception e) {
       e.printStackTrace();
-      log.error("Unable to create keyboard!, exiting...");
+      log.warning("Unable to create keyboard!, exiting...");
       return false;
     }
   }

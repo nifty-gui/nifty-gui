@@ -16,7 +16,7 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
     </dependency>
   </dependencies>
   <build>
@@ -28,14 +28,32 @@
           <target>1.5</target>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/assemble/assemble.xml</descriptor>
+          </descriptors>
+          <archive>
+            <manifest>
+              <mainClass>de.lessvoid.nifty.examples.helloworld.HelloWorldExample</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>de.lessvoid.nifty.examples.helloworld.HelloWorldExample</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>      
     </plugins>
     <resources>
-      <resource>
-        <directory>src/main/java</directory>
-        <includes>
-          <include>log4j.properties</include>
-        </includes>
-      </resource>
       <resource>
         <directory>src/main/resources</directory>
       </resource>
