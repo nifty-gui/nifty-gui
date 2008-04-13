@@ -2,7 +2,7 @@
   <skin>
     <groupId>lessvoid</groupId>
     <artifactId>maven-nifty-skin</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
   </skin>
   <bannerLeft>
     <name></name>
