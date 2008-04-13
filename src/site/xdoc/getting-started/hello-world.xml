@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <author email="void.AT.lessvoid.DOT.com">void256</author>
+    <title>Nifty Hello World</title>
+  </properties>
+  <meta name="keyword" content="nifty, hello world"/>
+  <body>
+    <section name="Section 1">
+    <img src="images/nifty-logo.png" border="0" alt="nifty"/>
+      <p>This is section 1.</p>
+      <table>
+        <tr>
+          <td>This is a table</td>
+        </tr>
+      </table>
+      <ul>
+        <li>This is an unordered list.</li>
+      </ul>
+    </section>
+    <section name="Section 2">
+      <p>This is section 2.</p>
+      <ol>
+        <li>This is an ordered list.</li>
+      </ol>
+    </section>
+    <section name="Section 3">
+      <p>This is section 3.</p>
+      <source>Anything within this tag is rendered as a "box" with blue lines and <pre></pre> tags around it.</source>
+      <subsection name="Subsection of Section 3">
+        <p>This is the subsection 3.</p>
+      </subsection>
+    </section>
+  </body>
+</document>
