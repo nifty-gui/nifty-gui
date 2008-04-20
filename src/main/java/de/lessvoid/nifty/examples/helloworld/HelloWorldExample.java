@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.glu.GLU;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.examples.ShortFormatter;
 import de.lessvoid.nifty.render.opengl.RenderDeviceLwjgl;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.sound.slick.SlickSoundLoader;
@@ -44,6 +45,8 @@ public final class HelloWorldExample {
    * @param args arguments
    */
   public static void main(final String[] args) {
+    ShortFormatter.intialize();
+    System.out.println("HUH");
     System.out.println(System.getProperty("user.dir"));
     if (!initSubSystems()) {
       System.exit(0);
@@ -54,7 +57,7 @@ public final class HelloWorldExample {
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider(),
-        false);
+        true);
     nifty.fromXml("helloworld/helloworld.xml");
 
     // wait for user to close window

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd">
+<nifty>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- register effects we want to use -->
@@ -12,14 +12,14 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.HelloWorldStartScreen">
     <layer id="layer" backgroundColor="#006f" childLayout="center">
-      <panel height="25%" width="35%" align="center" valign="center" backgroundColor="#487f" childLayout="center" visibleToMouse="true">
+      <panel height="25%" width="35%" align="center" valign="center" backgroundColor="#f06f" childLayout="center" visibleToMouse="true">
         <interact onClick="quit()"/>
         <effect>
           <onStartScreen name="move" directionType="in" direction="top" length="300" startDelay="0" inherit="true"/>
           <onEndScreen name="move" directionType="out" direction="bottom" length="300" startDelay="0" inherit="true"/>
           <onHover name="pulsateHover" scaleFactor="0.007" startColor="#4870" endColor="#cfef" post="true"/>
         </effect>
-        <text font="verdana-48-regular.fnt" text="Hello World!" align="center" valign="center" /> 
+        <text font="verdana-48-regular.fnt" text="Hello World!" align="center" valign="center" />
       </panel>
     </layer>
   </screen>

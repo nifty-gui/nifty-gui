@@ -20,7 +20,7 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>0.0.1</version>
+      <version>0.0.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>
@@ -41,6 +41,7 @@
           <archive>
             <manifest>
               <mainClass>de.lessvoid.nifty.examples.helloworld.HelloWorldExample</mainClass>
+              <!--  <mainClass>de.lessvoid.nifty.examples.menu.MenuExample</mainClass> -->
             </manifest>
           </archive>
         </configuration>

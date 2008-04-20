@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.helloworld;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -20,6 +21,7 @@ public class HelloWorldStartScreen implements ScreenController {
    */
   public final void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
+    
   }
 
   /**
