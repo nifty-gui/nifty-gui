@@ -63,9 +63,9 @@
       <version>0.0.0-203</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.xmlbeans</groupId>
-      <artifactId>xmlbeans</artifactId>
-      <version>2.3.0</version>
+      <groupId>xpp3</groupId>
+      <artifactId>xpp3</artifactId>
+      <version>1.1.4c</version>
     </dependency>
   </dependencies>
   <build>
@@ -92,30 +92,7 @@
           <excludeModules>fml</excludeModules>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xmlbeans-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>xmlbeans</goal>
-            </goals>
-          </execution>
-        </executions>
-        <inherited>true</inherited>
-        <configuration>
-          <schemaDirectory>src/main/xsd</schemaDirectory>
-        </configuration>
-      </plugin>
     </plugins>
-    <resources>
-      <resource>
-        <directory>src/main/xsd</directory>
-        <includes>
-          <include>*</include>
-        </includes>
-      </resource>
-    </resources>
   </build>
   <reporting>
     <plugins>

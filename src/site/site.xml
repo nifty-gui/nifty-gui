@@ -15,6 +15,7 @@
     <head>
     </head>
     <menu name="Getting Started">
+      <item name="Introduction" href="getting-started/introduction.html" />
       <item name="Hello World" href="getting-started/hello-world.html" />
     </menu>
     ${reports}

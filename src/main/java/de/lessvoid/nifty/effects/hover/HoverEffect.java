@@ -93,7 +93,8 @@ public class HoverEffect implements Effect {
       final Nifty newNifty,
       final boolean newInherit,
       final boolean newPost,
-      final String newAlternateKey, final boolean newAlternateEnable) {
+      final String newAlternateKey,
+      final boolean newAlternateEnable) {
     this.nifty = newNifty;
     this.inherit = newInherit;
     this.active = false;

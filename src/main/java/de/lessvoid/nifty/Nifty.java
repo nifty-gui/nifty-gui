@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import de.lessvoid.nifty.loader.Loader;
+import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.SoundSystem;
@@ -139,7 +139,9 @@ public class Nifty {
   public void fromXml(final String filename) {
     try {
       screens.clear();
-      Loader.loadXml(this, screens, renderDevice, filename, timeProvider);
+
+      NiftyLoader loader = new NiftyLoader();
+      loader.loadXml(this, screens, renderDevice, filename, timeProvider);
     } catch (Exception e) {
       e.printStackTrace();
     }

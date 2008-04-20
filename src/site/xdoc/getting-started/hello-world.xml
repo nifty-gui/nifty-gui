@@ -2,33 +2,57 @@
 <document>
   <properties>
     <author email="void.AT.lessvoid.DOT.com">void256</author>
-    <title>Nifty Hello World</title>
+    <title>Nifty Getting Started - Nifty Hello World</title>
   </properties>
   <meta name="keyword" content="nifty, hello world"/>
   <body>
-    <section name="Section 1">
-    <img src="images/nifty-logo.png" border="0" alt="nifty"/>
-      <p>This is section 1.</p>
-      <table>
-        <tr>
-          <td>This is a table</td>
-        </tr>
-      </table>
-      <ul>
-        <li>This is an unordered list.</li>
-      </ul>
+    <section name="Hello World">
+      <p>In this Mini Tutorial you're going to create a very basic and simple Hello World Application to get used to Nifty.</p>
+      <p><a href="images/nifty-hello-world.png"><img src="images/nifty-hello-world-thumb.png" border="0" alt="Nifty Hello World"/></a></p>
+      <p><a href="http://nifty-gui.sourceforge.net/webstart/nifty-examples.jnlp">Webstart (jnlp)</a></p>
     </section>
-    <section name="Section 2">
-      <p>This is section 2.</p>
-      <ol>
-        <li>This is an ordered list.</li>
-      </ol>
-    </section>
-    <section name="Section 3">
-      <p>This is section 3.</p>
-      <source>Anything within this tag is rendered as a "box" with blue lines and <pre></pre> tags around it.</source>
-      <subsection name="Subsection of Section 3">
-        <p>This is the subsection 3.</p>
+    <section name="Java Preparation">
+      <p>Create a new Java Project with you favorite IDE. For the sake of simplicity I assume you've downloaded the
+      "complete" version of nifty. Just add nifty to your classpath.</p>
+      <p><img src="images/nifty-classpath.png" border="0" alt="Classpath"/></p>
+      <p>Now initialize lwjgl and set the DisplayMode you want to use (This step is not covered here because it is
+      lwjgl specific and is <a href="http://lwjgl.org/wiki/doku.php">covered elsewhere</a>).</p>
+      <subsection name="Create the Nifty Instance and load a XML-File">
+        <p>Everything you do within Nifty is done with an Instance of the Nifty class. To create one you'll need to give
+        it the RenderDevice you want to use. At the moment only a RenderDeviceLwjgl implementation is available. With Nifty you
+        can easily add sound to your gui, so you need to give it the SoundSystem that it should use too.</p>
+        <source><![CDATA[Nifty nifty = new Nifty(
+    new RenderDeviceLwjgl(),
+    new SoundSystem(new SlickSoundLoader()),
+    new TimeProvider(),
+    false);]]></source>
+        <p>To load a xml gui file and initializes the rendering you simply use the fromXml() method. Creating the actual
+        XML-File is covered below.</p>
+        <source>nifty.fromXml("helloworld/helloworld.xml");</source>
+      </subsection>
+      <subsection name="Lwjgl Renderloop with Nifty">
+        <p>This is your basic lwjgl render loop. You'll need to call Niftys render() method once a frame. And you'll need to
+        forward Keyboard-Events to Nifty so that it can respond to them.</p>
+        <p>This might look like this:</p>
+        <source><![CDATA[
+    boolean done = false;
+    while (!Display.isCloseRequested() && !done) {
+      // show render
+      Display.update();
+  
+      // forward keyboard events to nifty
+      while (Keyboard.next()) {
+        nifty.keyEvent(
+          Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
+      }
+  
+      // render nifty
+      int mouseX = Mouse.getX();
+      int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
+      if (nifty.render(true, mouseX, mouseY, Mouse.isButtonDown(0))) {
+        done = true;
+      }
+    }]]></source>
       </subsection>
     </section>
   </body>
