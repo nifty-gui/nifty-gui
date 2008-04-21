@@ -88,7 +88,7 @@ public class ScreenType implements XmlElementProcessor {
     // process layer groups
     parser.nextTag();
     parser.zeroOrMore("layerGroup", new LayerGroupType());
-    parser.oneOrMore("layer", new LayerType(nifty, screen, registeredEffects));
+    parser.oneOrMore("layer", new LayerType(nifty, screen, registeredEffects, screenController));
     return screen;
   }
 }

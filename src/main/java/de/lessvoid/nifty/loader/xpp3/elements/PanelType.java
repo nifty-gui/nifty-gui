@@ -9,6 +9,7 @@ import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  * PanelType.
@@ -37,21 +38,29 @@ public class PanelType implements XmlElementProcessor {
   private Map < String, Class < ? > > registeredEffects;
 
   /**
+   * ScreenController.
+   */
+  private ScreenController screenController;
+
+  /**
    * LayerType.
    * @param niftyParam nifty
    * @param screenParam screenParam
    * @param parentParam parentParam
    * @param registeredEffectsParam registeredEffectsParam
+   * @param screenControllerParam ScreenController
    */
   public PanelType(
       final Nifty niftyParam,
       final Screen screenParam,
       final Element parentParam,
-      final Map < String, Class < ? > > registeredEffectsParam) {
+      final Map < String, Class < ? > > registeredEffectsParam,
+      final ScreenController screenControllerParam) {
     nifty = niftyParam;
     screen = screenParam;
     parent = parentParam;
     this.registeredEffects = registeredEffectsParam;
+    this.screenController = screenControllerParam;
   }
 
   /**
@@ -71,6 +80,6 @@ public class PanelType implements XmlElementProcessor {
     NiftyCreator.processElementAttributes(nifty, panel, attributes);
     parent.add(panel);
 
-    ElementType.processChildElements(xmlParser, nifty, screen, panel, registeredEffects);
+    ElementType.processChildElements(xmlParser, nifty, screen, panel, registeredEffects, screenController);
   }
 }

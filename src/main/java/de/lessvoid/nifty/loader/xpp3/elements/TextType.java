@@ -10,6 +10,7 @@ import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
@@ -40,21 +41,29 @@ public class TextType implements XmlElementProcessor {
   private Map < String, Class < ? > > registeredEffects;
 
   /**
+   * ScreenController.
+   */
+  private ScreenController screenController;
+
+  /**
    * LayerType.
    * @param niftyParam nifty
    * @param screenParam screenParam
    * @param parentParam parentParam
    * @param registeredEffectsParam registeredEffectsParam
+   * @param screenControllerParam ScreenController
    */
   public TextType(
       final Nifty niftyParam,
       final Screen screenParam,
       final Element parentParam,
-      final Map < String, Class < ? > > registeredEffectsParam) {
+      final Map < String, Class < ? > > registeredEffectsParam,
+      final ScreenController screenControllerParam) {
     nifty = niftyParam;
     screen = screenParam;
     parent = parentParam;
     this.registeredEffects = registeredEffectsParam;
+    this.screenController = screenControllerParam;
   }
 
   /**
@@ -88,6 +97,6 @@ public class TextType implements XmlElementProcessor {
     NiftyCreator.processElementAttributes(nifty, textPanel, attributes);
     parent.add(textPanel);
 
-    ElementType.processChildElements(xmlParser, nifty, screen, textPanel, registeredEffects);
+    ElementType.processChildElements(xmlParser, nifty, screen, textPanel, registeredEffects, screenController);
   }
 }
