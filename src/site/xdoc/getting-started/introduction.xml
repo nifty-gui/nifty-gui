@@ -35,7 +35,7 @@
       <subsection name="Nifty Dependencies">
         <p>Nifty uses <a href="http://www.lwjgl.com/">http://www.lwjgl.com/</a> as the OpenGL rendering backend as well as
         <a href="http://slick.cokeandcode.com/">Slick2D</a> as a supporting library. For parsing XML-Files it also uses
-        <a href="http://xmlbeans.apache.org/">XMLBeans</a>.</p>
+        <a href="http://www.extreme.indiana.edu/xgws/xsoap/xpp/">XPP3</a>.</p>
         <p>You can view the current dependencies on the <a href="../dependencies.html">Project Dependencies Page</a>.</p>
       </subsection>
     </section>
