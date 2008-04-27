@@ -19,7 +19,7 @@ public class TextRenderer implements ElementRenderer {
   /**
    * the text to output.
    */
-  private String[] text;
+  private String[] textLines;
 
   /**
    * max width of all text strings.
@@ -71,10 +71,10 @@ public class TextRenderer implements ElementRenderer {
    * @param newText
    */
   private void initText(final String newText) {
-    this.text = newText.split("\n", -1);
+    this.textLines = newText.split("\n", -1);
 
     maxWidth = 0;
-    for (String line : text) {
+    for (String line : textLines) {
       int lineWidth = font.getWidth(line);
       if (lineWidth > maxWidth) {
         maxWidth = lineWidth;
@@ -95,7 +95,7 @@ public class TextRenderer implements ElementRenderer {
 
     int x = 0;
     int y = 0;
-    for (String line : text) {
+    for (String line : textLines) {
       if (Math.abs(xoffsetHack) > 0) {
         int fittingOffset = font.getFittingOffset(line, Math.abs(xoffsetHack));
         String cut = line.substring(0, fittingOffset);
@@ -127,7 +127,7 @@ public class TextRenderer implements ElementRenderer {
    * @return the height in pixel of the current set text.
    */
   public final int getTextHeight() {
-    return font.getHeight() * text.length;
+    return font.getHeight() * textLines.length;
   }
 
   /**
