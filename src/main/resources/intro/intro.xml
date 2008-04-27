@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nifty.xsd">
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- register effects we want to use -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <registerEffect name="imageSize" class="de.lessvoid.nifty.effects.general.ImageSize" />
+  <registerEffect name="nop" class="de.lessvoid.nifty.effects.general.Nop" />
+  <registerEffect name="fade" class="de.lessvoid.nifty.effects.general.Fade" />
+  <registerEffect name="hide" class="de.lessvoid.nifty.effects.general.Hide" />
+  <registerEffect name="shake" class="de.lessvoid.nifty.effects.general.Shake" />
+  <registerEffect name="playSound" class="de.lessvoid.nifty.effects.general.PlaySound" />
+  <registerEffect name="move" class="de.lessvoid.nifty.effects.general.Move" />
+  <registerEffect name="pulsate" class="de.lessvoid.nifty.effects.general.Pulsate" />
+  <registerEffect name="pulsateHover" class="de.lessvoid.nifty.effects.hover.Pulsate" />
+  
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- register sounds -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <registerSound id="intro" filename="intro/intro.wav" />
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- intro screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" controller="de.lessvoid.nifty.examples.intro.Splash">
+    <layer id="background" childLayout="center">
+      <panel id="panel" height="100%" width="100%" backgroundColor="#ffff">
+        <effect>
+          <onStartScreen name="fade" startColor="#000f" endColor="#ffff" length="100" post="false"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#393939ff" length="500" post="false"/>
+        </effect>
+      </panel>
+    </layer>
+    <layer id="logo" childLayout="center">
+      <panel id="panel" height="60%" childLayout="center">
+        <image id="image" filename="intro/nifty.png" align="center">
+          <effect>
+            <onStartScreen name="playSound" sound="intro" length="3300"/>
+            <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1700" />
+            <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="1700" />
+            <onStartScreen name="shake" length="4200" startDelay="500" global="false" />
+          </effect>
+        </image>
+      </panel>
+    </layer>
+  </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- menu screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="menu" controller="de.lessvoid.nifty.examples.intro.Menu">
+    <layer id="top" childLayout="vertical" backgroundColor="#393939ff">
+      <effect>
+        <onEndScreen name="fade" startColor="#393939ff" endColor="#fffff9ff" length="2000" startDelay="2000" post="false"/>
+      </effect>
+      <panel id="panel" height="30%" childLayout="center">
+        <image id="image" filename="intro/nifty.png" align="center">
+          <effect>
+            <onStartScreen name="move" mode="fromPosition" targetElement="image2" length="500"/>
+            <onEndScreen name="move" mode="toPosition" targetElement="image2" startDelay="1000" length="500"/>
+            <onEndScreen name="imageSize" factor="0.5" startSize="1.0" endSize="1.5" length="1700" startDelay="2000"/>
+            <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="700" startDelay="3000"/>
+          </effect>
+        </image>
+      </panel>
+    </layer>
+    <layer id="logo" childLayout="center">
+      <menu id="mainMenu" font="menu.fnt" childLayout="vertical" align="center">
+        <effect>
+          <onStartScreen name="hide" length="500" inherit="true"/>
+          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" startDelay="500" inherit="true"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" inherit="true"/>
+        </effect>
+        <menuItem id="helloWorld" text="Hello World" align="center">
+          <interact onClick="helloWorld()"/>
+          <hover width="200%" falloffConstraint="horizontal"/>
+          <effect>
+            <onHover name="pulsateHover" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+          </effect>
+        </menuItem>
+        <menuItem id="quit" text="Quit" align="center">
+          <interact onClick="quit()"/>
+          <hover width="200%" falloffConstraint="horizontal"/>
+          <effect>
+            <onHover name="pulsateHover" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+          </effect>
+        </menuItem>
+      </menu>
+    </layer>
+    <layer id="logo2" childLayout="center" visible="false">
+      <image id="image2" filename="intro/nifty.png" align="center"/>
+    </layer>
+    <layer id="example" childLayout="absolute">
+      <image x="550" y="170" filename="intro/examples.png" align="center">
+        <effect>
+          <onStartScreen name="imageSize" factor="0.5" startSize="2.0" endSize="1.0" length="500" startDelay="1000"/>
+          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="1000"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" inherit="true"/>
+        </effect>
+      </image>
+    </layer>
+  </screen>
+</nifty>

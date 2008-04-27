@@ -40,7 +40,7 @@
           </descriptors>
           <archive>
             <manifest>
-              <mainClass>de.lessvoid.nifty.examples.helloworld.HelloWorldExample</mainClass>
+              <mainClass>de.lessvoid.nifty.examples.AllExamples</mainClass>
               <!--  <mainClass>de.lessvoid.nifty.examples.menu.MenuExample</mainClass> -->
             </manifest>
           </archive>
