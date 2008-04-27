@@ -111,4 +111,7 @@ public class RenderDeviceProxy implements RenderDevice {
     
   }
 
+  public boolean isColorChanged() {
+    return false;
+  }
 }

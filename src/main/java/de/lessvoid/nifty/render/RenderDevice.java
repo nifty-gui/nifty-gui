@@ -34,7 +34,23 @@ public interface RenderDevice {
    * @param srcH heightin image to coopy from
    */
   void renderImagePart(RenderImage image, int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH);
-  public void setColor( float r, float g, float b, float a );
+
+  /**
+   * Set current color.
+   * @param r red
+   * @param g green
+   * @param b blue
+   * @param a alpha
+   */
+  void setColor(float r, float g, float b, float a);
+
+  /**
+   * Checks if the current color has been changed with a call to setColor. This state
+   * information is reset with each call to the clear method.
+   * @return true, when color has been changed and false otherwise
+   */
+  boolean isColorChanged();
+
   public void renderQuad( int x, int y, int width, int height );
 
   /**

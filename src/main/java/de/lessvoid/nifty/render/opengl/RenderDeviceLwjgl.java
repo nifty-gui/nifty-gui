@@ -34,6 +34,8 @@ public class RenderDeviceLwjgl implements RenderDevice {
 
   private static ByteBuffer byteBuffer = BufferUtils.createByteBuffer(1024);
   private static DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
+  
+  private boolean colorChanged = false;
 
   /**
    * font cache.
@@ -125,8 +127,24 @@ public class RenderDeviceLwjgl implements RenderDevice {
     internalImage.render(x, y, w, h, srcX, srcY, srcW, srcH);
   }
 
-  public void setColor( float colorR, float colorG, float colorB, float colorA ) {
-    GL11.glColor4f( colorR, colorG, colorB, colorA );  
+  /**
+   * Set a new color.
+   * @param colorR color red
+   * @param colorG color green
+   * @param colorB color blue
+   * @param colorA color alpha
+   */
+  public void setColor(final float colorR, final float colorG, final float colorB, final float colorA) {
+    GL11.glColor4f(colorR, colorG, colorB, colorA);
+    colorChanged = true;
+  }
+
+  /**
+   * return true when color has been changed.
+   * @return color changed
+   */
+  public boolean isColorChanged() {
+    return colorChanged;
   }
 
   public void renderQuad( int x, int y, int width, int height ) {
@@ -163,6 +181,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
   public void clear() {
     GL11.glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     GL11.glClear( GL11.GL_COLOR_BUFFER_BIT );
+    colorChanged = false;
   }
   
   public RenderFont createFont( String name ) {
@@ -294,10 +313,16 @@ public class RenderDeviceLwjgl implements RenderDevice {
   public final class RenderStateEnable implements RenderStateImpl {
 
     /**
+     * color changed flag.
+     */
+    private boolean colorChanged;
+
+    /**
      * save.
      */
     public RenderStateEnable() {
       GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_ENABLE_BIT);
+      this.colorChanged = RenderDeviceLwjgl.this.colorChanged;
     }
 
     /**
@@ -305,6 +330,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
      */
     public void restore() {
       GL11.glPopAttrib();
+      RenderDeviceLwjgl.this.colorChanged = this.colorChanged;
     }
   }
 
