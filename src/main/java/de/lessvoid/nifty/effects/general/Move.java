@@ -52,6 +52,16 @@ public class Move implements EffectImpl {
    */
   private int offsetDir = 0;
 
+  private float offsetY;
+
+  private float startOffsetY;
+
+  private int startOffsetX;
+
+  private float offsetX;
+  
+  private boolean withTarget = false;
+
   /**
    * Initialize.
    * @param nifty Nifty
@@ -72,13 +82,36 @@ public class Move implements EffectImpl {
       offset = 0;
     }
 
-    String type = parameter.getProperty("directionType");
-    if ("out".equals(type)) {
+    String mode = parameter.getProperty("mode");
+    if ("out".equals(mode)) {
       startOffset = 0;
       offsetDir = -1;
-    } else if ("in".equals(type)) {
+      withTarget = false;
+    } else if ("in".equals(mode)) {
       startOffset = offset;
       offsetDir = 1;
+      withTarget = false;
+    } else if ("fromPosition".equals(mode)) {
+      withTarget = true;
+    } else if ("toPosition".equals(mode)) {
+      withTarget = true;
+    }
+
+    String target = parameter.getProperty("targetElement");
+    if (target != null) {
+      Element targetElement = nifty.getCurrentScreen().findElementByName(target);
+
+      if ("fromPosition".equals(mode)) {
+        startOffsetX = targetElement.getX()- element.getX();
+        startOffsetY = targetElement.getY()- element.getY();
+        offsetX = -(targetElement.getX() - element.getX());
+        offsetY = -(targetElement.getY() - element.getY());
+      } else if ("toPosition".equals(mode)) {
+        startOffsetX = 0;
+        startOffsetY = 0;
+        offsetX = (targetElement.getX() - element.getX());
+        offsetY = (targetElement.getY() - element.getY());
+      }
     }
   }
 
@@ -89,14 +122,20 @@ public class Move implements EffectImpl {
    * @param r RenderDevice
    */
   public void execute(final Element element, final float normalizedTime, final RenderDevice r) {
-    if (LEFT.equals(direction)) {
-      r.moveTo(-startOffset + offsetDir * normalizedTime * offset, 0);
-    } else if (RIGHT.equals(direction)) {
-      r.moveTo(startOffset - offsetDir * normalizedTime * offset, 0);
-    } else if (TOP.equals(direction)) {
-      r.moveTo(0, -startOffset + offsetDir * normalizedTime * offset);
-    } else if (BOTTOM.equals(direction)) {
-      r.moveTo(0, startOffset - offsetDir * normalizedTime * offset);
+    if (withTarget) {
+      float moveToX = startOffsetX + normalizedTime * offsetX;
+      float moveToY = startOffsetY + normalizedTime * offsetY;
+      r.moveTo(moveToX, moveToY);
+    } else {
+      if (LEFT.equals(direction)) {
+        r.moveTo(-startOffset + offsetDir * normalizedTime * offset, 0);
+      } else if (RIGHT.equals(direction)) {
+        r.moveTo(startOffset - offsetDir * normalizedTime * offset, 0);
+      } else if (TOP.equals(direction)) {
+        r.moveTo(0, -startOffset + offsetDir * normalizedTime * offset);
+      } else if (BOTTOM.equals(direction)) {
+        r.moveTo(0, startOffset - offsetDir * normalizedTime * offset);
+      }
     }
   }
 }
