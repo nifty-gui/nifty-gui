@@ -50,8 +50,9 @@ public class ElementType implements XmlElementProcessor {
     xmlParser.zeroOrMore(
           new SubstitutionGroup().
             add("panel", new PanelType(nifty, screen, element, registeredEffectsParam, screenController)).
-            add("text", new TextType(nifty, screen, element, registeredEffectsParam, screenController))
+            add("text", new TextType(nifty, screen, element, registeredEffectsParam, screenController)).
+            add("image", new ImageType(nifty, screen, element, registeredEffectsParam, screenController)).
+            add("menu", new MenuType(nifty, screen, element, registeredEffectsParam, screenController))
             );
-    xmlParser.nextTag();
   }
 }

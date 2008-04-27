@@ -82,12 +82,11 @@ public class EffectType implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    xmlParser.nextTag();
-
     String name = attributes.get("name");
     Class < ? > effectClass = registerEffects.get(name);
     if (effectClass == null) {
       log.warning("unable to convert effect [" + name + "] because no effect with this name has been registered.");
+      xmlParser.nextTag();
       return;
     }
 
@@ -136,6 +135,8 @@ public class EffectType implements XmlElementProcessor {
           new TimeProvider());
       element.registerEffect(effectEventId, effect);
     }
+
+    xmlParser.nextTag();
   }
 
   /**

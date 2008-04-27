@@ -35,6 +35,8 @@ public class RegisterSound implements XmlElementProcessor {
   /**
    * process.
    * @param xmlParser parser
+   * @param attributes attributes
+   * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     String id = attributes.get("id");

@@ -30,10 +30,9 @@ public enum EffectEventId {
    * on hover.
    */
   onHover,
-  
+
   /**
    * on active.
    */
   onActive
-
 }

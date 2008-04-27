@@ -156,7 +156,7 @@ public class XmlParser {
 
   /**
    * next start or end tag.
-   * @throws Exception
+   * @throws Exception exception
    */
   public void nextTag() throws Exception {
     if (xpp.getEventType() == XmlPullParser.END_DOCUMENT) {

@@ -64,7 +64,7 @@ public class TimeInterpolator {
 
     // check for the given timeType to create the appropriate interpolator
     String timeType = parameter.getProperty("timeType", "linear");
-    if (timeType == "infinite") {
+    if (timeType.equals("infinite")) {
       interpolatorProvider = new NullTime();
     } else if (timeType.equals("linear")) {
       interpolatorProvider = new LinearTime();

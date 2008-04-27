@@ -53,23 +53,27 @@ public class InteractType implements XmlElementProcessor {
     Method method = getMethod(attributes, "onClick");
     if (method != null) {
       element.setOnClickMethod(method, controller, false);
+      element.setVisibleToMouseEvents(true);
     }
 
     // onClick action
     method = getMethod(attributes, "onClickRepeat");
     if (method != null) {
       element.setOnClickMethod(method, controller, true);
+      element.setVisibleToMouseEvents(true);
     }
 
     // onClick action
     method = getMethod(attributes, "onClickMouseMove");
     if (method != null) {
       element.setOnClickMouseMoveMethod(method, controller);
+      element.setVisibleToMouseEvents(true);
     }
 
     // on click alternate
     if (attributes.isSet("onClickAlternateKey")) {
       element.setOnClickAlternateKey(attributes.get("onClickAlternateKey"));
+      element.setVisibleToMouseEvents(true);
     }
 
     xmlParser.nextTag();
