@@ -99,6 +99,15 @@ public final class NiftyCreator {
     // attach to the given screen
     element.bindToScreen(nifty);
 
+    // visible
+    if (attributes.isSet("visible")) {
+      if ("true".equals(attributes.get("visible").toString())) {
+        element.show();
+      } else {
+        element.hide();
+      }
+    }
+
     // height
     if (attributes.isSet("height")) {
       SizeValue height = new SizeValue(attributes.get("height"));
