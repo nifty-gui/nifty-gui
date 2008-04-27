@@ -115,6 +115,7 @@ public class Screen implements MouseFocusHandler {
    * @param callback to call when the end screen effect finished.
    */
   public final void endScreen(final EndNotify callback) {
+    resetLayers();
     startLayers(EffectEventId.onEndScreen, callback);
   }
 
