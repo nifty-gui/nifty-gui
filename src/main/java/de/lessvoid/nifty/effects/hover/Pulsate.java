@@ -73,7 +73,7 @@ public class Pulsate implements HoverEffectImpl {
         c.getGreen(),
         c.getBlue(),
         c.getAlpha());
-    int size = (int) width.getValue(element.getWidth());
+    int size = (int) width.getValue(element.getParent().getWidth());
     if (size == -1) {
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
     } else {
