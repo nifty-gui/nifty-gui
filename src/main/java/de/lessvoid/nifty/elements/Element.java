@@ -590,6 +590,10 @@ public class Element {
       final TimeProvider time,
       final EndNotify effectEndNotiy) {
 
+    if (effectEventId == EffectEventId.onEndScreen) {
+      done = true;
+    }
+
     // whenever the effect ends we forward to this event
     // that checks first, if all child elements are finished
     // and when yes forwards to the actual effectEndNotify event.
@@ -725,7 +729,9 @@ public class Element {
         ||
         isEffectActive(EffectEventId.onEndScreen)
         ||
-        !visible) {
+        !visible
+        ||
+        done) {
       return;
     }
 
