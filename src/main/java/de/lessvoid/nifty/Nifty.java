@@ -93,11 +93,15 @@ public class Nifty {
   /**
    * Initialize this instance.
    * @param newRenderDevice RenderDevice
-   * @param soundSystem SoundSystem
+   * @param newSoundSystem SoundSystem
    * @param newTimeProvider TimeProvider
    */
-  private void initialize(final RenderDevice newRenderDevice, SoundSystem soundSystem, final TimeProvider newTimeProvider) {
+  private void initialize(
+      final RenderDevice newRenderDevice,
+      final SoundSystem newSoundSystem,
+      final TimeProvider newTimeProvider) {
     this.renderDevice = newRenderDevice;
+    this.soundSystem = newSoundSystem;
     this.timeProvider = newTimeProvider;
     this.exit = false;
     this.console = null;
@@ -137,6 +141,24 @@ public class Nifty {
    * @param filename filename to nifty xml
    */
   public void fromXml(final String filename) {
+    start(filename, "start");
+  }
+
+  /**
+   * Initialize this Nifty instance from the given xml file.
+   * @param filename filename to nifty xml
+   * @param startScreen screen to start exec
+   */
+  public void fromXml(final String filename, final String startScreen) {
+    start(filename, startScreen);
+  }
+
+  /**
+   * internal start method.
+   * @param filename filename to load
+   * @param startScreen screen to start exec
+   */
+  private void start(final String filename, final String startScreen) {
     try {
       screens.clear();
 
@@ -147,7 +169,7 @@ public class Nifty {
     }
 
     // start with first screen
-    gotoScreen("start");
+    gotoScreen(startScreen);
   }
 
   /**
@@ -223,6 +245,7 @@ public class Nifty {
 
   /**
    * keyboard event.
+   * @param eventKey eventKey
    * @param eventCharacter the character
    * @param keyDown TODO
    */
@@ -246,6 +269,14 @@ public class Nifty {
    */
   public RenderDevice getRenderDevice() {
     return renderDevice;
+  }
+
+  /**
+   * Get current screen.
+   * @return current screen
+   */
+  public Screen getCurrentScreen() {
+    return currentScreen;
   }
 
 }
