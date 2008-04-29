@@ -27,7 +27,7 @@
       <panel id="panel" height="100%" width="100%" backgroundColor="#ffff">
         <effect>
           <onStartScreen name="fade" startColor="#000f" endColor="#ffff" length="100" post="false"/>
-          <onEndScreen name="fade" startColor="#ffff" endColor="#393939ff" length="500" post="false"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#000f" length="500" post="false"/>
         </effect>
       </panel>
     </layer>
@@ -39,8 +39,14 @@
             <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1700" />
             <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="1700" />
             <onStartScreen name="shake" length="4200" startDelay="500" global="false" />
+            <onEndScreen name="move" mode="toPosition" targetElement="image2" length="500"/>
           </effect>
         </image>
+      </panel>
+    </layer>
+    <layer id="logo2" childLayout="vertical" visible="false">
+      <panel id="panel2" height="30%" childLayout="center">
+        <image id="image2" filename="intro/nifty.png" align="center"/>
       </panel>
     </layer>
   </screen>
@@ -51,25 +57,23 @@
   <screen id="menu" controller="de.lessvoid.nifty.examples.intro.Menu">
     <layer id="top" childLayout="vertical" backgroundColor="#393939ff">
       <effect>
-        <onEndScreen name="fade" startColor="#393939ff" endColor="#fffff9ff" length="2000" startDelay="2000" post="false"/>
+        <onStartScreen name="fade" startColor="#000f" endColor="#393939ff" length="500"/>
+        <onEndScreen name="fade" startColor="#393939ff" endColor="#000000ff" length="500"/>
       </effect>
       <panel id="panel" height="30%" childLayout="center">
         <image id="image" filename="intro/nifty.png" align="center">
           <effect>
-            <onStartScreen name="move" mode="fromPosition" targetElement="image2" length="500"/>
-            <onEndScreen name="move" mode="toPosition" targetElement="image2" startDelay="1000" length="500"/>
-            <onEndScreen name="imageSize" factor="0.5" startSize="1.0" endSize="1.5" length="1700" startDelay="2000"/>
-            <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="700" startDelay="3000"/>
+            <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" />
           </effect>
         </image>
       </panel>
     </layer>
-    <layer id="logo" childLayout="center">
+    <layer id="menu" childLayout="center">
       <menu id="mainMenu" font="menu.fnt" childLayout="vertical" align="center">
         <effect>
-          <onStartScreen name="hide" length="500" inherit="true"/>
+          <onStartScreen name="hide" length="500" inherit="true" startDelay="1000"/>
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" startDelay="500" inherit="true"/>
-          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" inherit="true"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" inherit="true"/>
         </effect>
         <menuItem id="helloWorld" text="Hello World" align="center">
           <interact onClick="helloWorld()"/>
@@ -87,15 +91,13 @@
         </menuItem>
       </menu>
     </layer>
-    <layer id="logo2" childLayout="center" visible="false">
-      <image id="image2" filename="intro/nifty.png" align="center"/>
-    </layer>
     <layer id="example" childLayout="absolute">
       <image x="550" y="170" filename="intro/examples.png" align="center">
         <effect>
-          <onStartScreen name="imageSize" factor="0.5" startSize="2.0" endSize="1.0" length="500" startDelay="1000"/>
-          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="1000"/>
-          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" inherit="true"/>
+          <onStartScreen name="move" direction="right" mode="in" length="800" />
+          <onStartScreen name="fade" startColor="#0000" endColor="#ffff" length="800" />
+          <onEndScreen name="move" direction="right" mode="out" length="800" />
+          <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="800" />
         </effect>
       </image>
     </layer>

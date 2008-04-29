@@ -32,6 +32,7 @@ public class Menu implements ScreenController {
    * just goto the next screen.
    */
   public final void onStartInteractive() {
+    nifty.getCurrentScreen().findElementByName("mainMenu").setFocus();
   }
 
   /**
@@ -45,5 +46,9 @@ public class Menu implements ScreenController {
    */
   public void quit() {
     nifty.exit();
+  }
+  
+  public void helloWorld() {
+    nifty.fromXml("helloworld/helloworld.xml");
   }
 }

@@ -46,7 +46,7 @@ public class HelloWorldStartScreen implements ScreenController {
    * quit method called from the helloworld.xml.
    */
   public final void quit() {
-    nifty.exit();
+    nifty.fromXml("intro/intro.xml", "menu");
   }
 
 }

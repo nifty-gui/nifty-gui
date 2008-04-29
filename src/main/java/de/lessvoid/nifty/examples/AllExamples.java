@@ -54,8 +54,9 @@ public final class AllExamples {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
-        new TimeProvider());
-    nifty.fromXml("intro/intro.xml", "menu");
+        new TimeProvider(),
+        true);
+    nifty.fromXml("intro/intro.xml", "start");
 
     // wait for user to close window
     boolean done = false;
