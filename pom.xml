@@ -57,6 +57,13 @@
           </archive>
         </configuration>
       </plugin>      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+          <workspaceCodeStylesURL>https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/trunk/my-checkstyle.xml</workspaceCodeStylesURL>
+        </configuration>
+      </plugin>      
     </plugins>
     <resources>
       <resource>

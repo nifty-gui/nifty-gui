@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- register effects we want to use -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <registerEffect name="colorBarHover" class="de.lessvoid.nifty.effects.hover.ColorBar" />
+  <registerEffect name="pulsateHover" class="de.lessvoid.nifty.effects.hover.Pulsate" />
+  <registerEffect name="colorBar" class="de.lessvoid.nifty.effects.general.ColorBar" />
+  <registerEffect name="pulsate" class="de.lessvoid.nifty.effects.general.Pulsate" />
+  <registerEffect name="ImageOverlay" class="de.lessvoid.nifty.effects.general.ImageOverlay" />
+  <registerEffect name="ImageOverlayPulsate" class="de.lessvoid.nifty.effects.general.ImageOverlayPulsate" />
+  
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <!-- textfield control -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <controlDefinition name="textfield" controller="de.lessvoid.nifty.examples.textfield.TextFieldControl">
+    <panel id="textfield-panel" backgroundColor="#555f" childLayout="overlay" height="40px">
+      <panel id="field" childLayout="center" visibleToMouse="true" childClip="true">
+        <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()"/>
+        <effect>
+          <onHover name="colorBarHover" timeType="infinite" color="#7707" post="true"/>
+          <onFocus name="pulsate" period="1500" timeType="infinite" startColor="#770f" endColor="#700f" post="true"/>
+        </effect>
+        <text id="text" font="verdana-48-regular.fnt" visibleToMouse="false" text="" align="left" />
+      </panel>
+      <panel id="textfield-av" childLayout="absolute">
+        <image id="cursor" filename="textfield/cursor-empty.png">
+          <effect>
+            <onActive name="ImageOverlayPulsate" period="300" timeType="infinite" pulsatechildLayout="rectangle" filename="textfield/cursor.png" post="true"/>
+          </effect>
+        </image>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- start screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" controller="de.lessvoid.nifty.examples.textfield.Start">
+    <layer id="layer" childLayout="center">
+      <panel childLayout="horizontal" valign="center" height="50%" align="center">
+        <panel width="50px" />
+        <panel backgroundColor="#222f" childLayout="vertical" height="50%" align="center" valign="center">
+          <panel childLayout="horizontal">
+            <text font="verdana-48-regular.fnt" text="Your Name: " width="200px" align="left" />
+            <control id="name" name="textfield" />
+          </panel>
+          <panel childLayout="horizontal">
+            <text font="verdana-48-regular.fnt" text="Your Host: " width="200px" align="left" />
+            <control id="ip" name="textfield" />
+          </panel>
+          <panel width="50px" />
+        </panel>
+        <panel width="50px" />
+      </panel>
+    </layer>
+  </screen>
+</nifty>

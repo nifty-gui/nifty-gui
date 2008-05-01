@@ -16,111 +16,51 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.glu.GLU;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.examples.ShortFormatter;
-import de.lessvoid.nifty.render.opengl.RenderDeviceLwjgl;
-import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.sound.slick.SlickSoundLoader;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
- * The Nifty Examples.
+ * Helper class shared by all the examples to initialize lwjgl and stuff.
  * @author void
  */
-public final class AllExamples {
+public class LwjglInitHelper {
 
   /** logger. */
-  private static Logger log = Logger.getLogger(AllExamples.class.getName());
-
-  /** title of window. */
-  private static final String TITLE = "Nifty Examples";
-
-  /**
-   * Prevent instantiation of this class.
-   */
-  private AllExamples() {
-  }
-
-  /**
-   * Main method.
-   * @param args arguments
-   */
-  public static void main(final String[] args) {
-    ShortFormatter.intialize();
-    if (!initSubSystems()) {
-      System.exit(0);
-    }
-
-    // create nifty
-    Nifty nifty = new Nifty(
-        new RenderDeviceLwjgl(),
-        new SoundSystem(new SlickSoundLoader()),
-        new TimeProvider(),
-        true);
-    nifty.fromXml("intro/intro.xml", "start");
-
-    // wait for user to close window
-    boolean done = false;
-    while (!Display.isCloseRequested() && !done) {
-      // show render
-      Display.update();
-
-      // forward keyboard events to nifty
-      while (Keyboard.next()) {
-        nifty.keyEvent(Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
-      }
-
-      // render nifty
-      int mouseX = Mouse.getX();
-      int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
-      if (nifty.render(true, mouseX, mouseY, Mouse.isButtonDown(0))) {
-        done = true;
-      }
-
-      // check gl error at least ones per frame
-      int error = GL11.glGetError();
-      if (error != GL11.GL_NO_ERROR) {
-        String glerrmsg = GLU.gluErrorString(error);
-        log.warning("OpenGL Error: (" + error + ") " + glerrmsg);
-      }
-    }
-
-    // nuke window and get out
-    Display.destroy();
-    System.exit(0);
-  }
+  private static Logger log = Logger.getLogger(LwjglInitHelper.class.getName());
 
   /**
    * Init SubSystems.
+   * @param title title pf window
    * @return true on success and false otherwise
    */
-  private static boolean initSubSystems() {
-    if (!initGraphics()) {
+  public static boolean initSubSystems(final String title) {
+    LoggerShortFormat.intialize();
+    if (!LwjglInitHelper.initGraphics(title)) {
       return false;
     }
-
+  
     // init input system
-    if (!initInput()) {
+    if (!LwjglInitHelper.initInput()) {
       return false;
     }
-
+  
     return true;
   }
 
   /**
    * Init lwjgl graphics.
+   * @param title title of window
    * @return true on success and false otherwise
    */
-  private static boolean initGraphics() {
+  private static boolean initGraphics(final String title) {
     try {
       DisplayMode currentMode = Display.getDisplayMode();
       log.info(
           "currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", "
           + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
-
+  
       //  get available modes, and print out
       DisplayMode[] modes = Display.getAvailableDisplayModes();
       log.info("Found " + modes.length + " display modes");
-
+  
       List < DisplayMode > matching = new ArrayList < DisplayMode >();
       for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
@@ -129,9 +69,9 @@ public final class AllExamples {
           matching.add(mode);
         }
       }
-
+  
       DisplayMode[] matchingModes = matching.toArray(new DisplayMode[0]);
-
+  
       // find mode with matching freq
       boolean found = false;
       for(int i=0; i<matchingModes.length; i++) {
@@ -142,7 +82,7 @@ public final class AllExamples {
           break;
         }
       }
-
+  
       if(!found) {
         Arrays.sort(matchingModes, new Comparator < DisplayMode >() {  
           public int compare(final DisplayMode o1, final DisplayMode o2) {
@@ -155,36 +95,36 @@ public final class AllExamples {
             }
           }
         });
-
+  
         for (int i=0; i<matchingModes.length; i++) {
           log.info("using fallback mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
           Display.setDisplayMode(matchingModes[i]);
           break;
         }
       }
-
+  
       int x = 0, y = 0;
       Display.setLocation(x, y);
-
+  
       // Create the actual window
       try {
         Display.setFullscreen(false);
         Display.create();
         Display.setVSyncEnabled(true);
-        Display.setTitle(TITLE);
+        Display.setTitle(title);
       } catch (Exception e) {
         e.printStackTrace();
         log.warning("Unable to create window!, exiting...");
         System.exit(-1);
       }
-
+  
       log.info(
           "Width: " + Display.getDisplayMode().getWidth() +
           ", Height: " + Display.getDisplayMode().getHeight() +
           ", Bits per pixel: " + Display.getDisplayMode().getBitsPerPixel() +
           ", Frequency: " + Display.getDisplayMode().getFrequency() +
           ", Title: " + Display.getTitle());
-
+  
       // just output some infos about the system we're on
       log.info("plattform: " + LWJGLUtil.getPlatformName());
       log.info("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
@@ -197,30 +137,30 @@ public final class AllExamples {
           log.info("opengl extensions: " + ext[i]);
         }
       }
-
+  
       GL11.glViewport(0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
       GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         GL11.glOrtho(0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight(), 0, -9999, 9999);
-
+  
       GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
-
+  
         // Prepare Rendermode
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
-
+  
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glAlphaFunc(GL11.GL_NOTEQUAL, 0);
-
+  
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-
+  
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
-
+  
       return true;
     } catch (LWJGLException e) {
       e.printStackTrace();
@@ -232,7 +172,7 @@ public final class AllExamples {
    * Init input system.
    * @return true on success and false otherwise
    */
-  protected static boolean initInput() {
+  private static boolean initInput() {
     try {
       Keyboard.create();
       Keyboard.enableRepeatEvents(true);
@@ -243,4 +183,43 @@ public final class AllExamples {
       return false;
     }
   }
+
+  /**
+   * @param nifty nifty instance
+   */
+  public static void renderLoop(final Nifty nifty) {
+    boolean done = false;
+    while (!Display.isCloseRequested() && !done) {
+      // show render
+      Display.update();
+  
+      // forward keyboard events to nifty
+      while (Keyboard.next()) {
+        nifty.keyEvent(Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
+      }
+  
+      // render nifty
+      int mouseX = Mouse.getX();
+      int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
+      if (nifty.render(true, mouseX, mouseY, Mouse.isButtonDown(0))) {
+        done = true;
+      }
+  
+      // check gl error at least ones per frame
+      int error = GL11.glGetError();
+      if (error != GL11.GL_NO_ERROR) {
+        String glerrmsg = GLU.gluErrorString(error);
+        log.warning("OpenGL Error: (" + error + ") " + glerrmsg);
+      }
+    }
+  }
+
+  /**
+   * destroy all and quit.
+   */
+  public static void destroy() {
+    Display.destroy();
+    System.exit(0);
+  }
+  
 }

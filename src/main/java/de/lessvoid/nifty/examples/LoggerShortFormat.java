@@ -5,7 +5,7 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-public class ShortFormatter extends java.util.logging.Formatter {
+public class LoggerShortFormat extends java.util.logging.Formatter {
   // inefficient implementation
   public String format(LogRecord record) {
      return
@@ -22,7 +22,7 @@ public class ShortFormatter extends java.util.logging.Formatter {
 
     for (int i = 0; i < handlers.length; i++) {
       if (handlers[i] instanceof ConsoleHandler) {
-        ((ConsoleHandler)handlers[i]).setFormatter(new ShortFormatter());
+        ((ConsoleHandler)handlers[i]).setFormatter(new LoggerShortFormat());
       }
     }
   }

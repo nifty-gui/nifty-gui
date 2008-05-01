@@ -1,26 +1,37 @@
-package de.lessvoid.nifty.examples.helloworld;
+package de.lessvoid.nifty.examples.textfield;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
- * ScreenController for Hello World Example.
+ * MainMenu.
  * @author void
+ *
  */
-public class HelloWorldStartScreen implements ScreenController {
+public class Start implements ScreenController {
 
-  /** nifty instance. */
+  /**
+   * nifty.
+   */
   private Nifty nifty;
 
   /**
-   * Bind this ScreenController to a screen.
+   * screen.
+   */
+  private Screen screen;
+
+  /**
+   * bind this ScreenController to a screen.
+   * @param newRenderDevice RenderDevice
    * @param newNifty nifty
    * @param newScreen screen
    */
-  public final void bind(final Nifty newNifty, final Screen newScreen) {
+  public final void bind(
+      final Nifty newNifty,
+      final Screen newScreen) {
     this.nifty = newNifty;
-    
+    this.screen = newScreen;
   }
 
   /**
@@ -30,7 +41,7 @@ public class HelloWorldStartScreen implements ScreenController {
   }
 
   /**
-   * on start screen interactive.
+   * just goto the next screen.
    */
   public final void onStartInteractive() {
   }
@@ -42,10 +53,9 @@ public class HelloWorldStartScreen implements ScreenController {
   }
 
   /**
-   * quit method called from the helloworld.xml.
+   * next.
    */
-  public final void quit() {
-    nifty.exit();
+  public final void next() {
   }
 
 }

@@ -82,6 +82,13 @@
             <onHover name="pulsateHover" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
           </effect>
         </menuItem>
+        <menuItem id="textfield" text="Textfield Example" align="center">
+          <interact onClick="textField()"/>
+          <hover width="200%" falloffConstraint="horizontal"/>
+          <effect>
+            <onHover name="pulsateHover" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+          </effect>
+        </menuItem>
         <menuItem id="quit" text="Quit" align="center">
           <interact onClick="quit()"/>
           <hover width="200%" falloffConstraint="horizontal"/>
@@ -102,4 +109,21 @@
       </image>
     </layer>
   </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- outro screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="outro" controller="de.lessvoid.nifty.examples.intro.Outro">
+    <layer id="logo" childLayout="center">
+      <image id="image" filename="intro/nifty.png" align="center">
+        <effect>
+          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" />
+          <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1000" />
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" />
+          <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="1000" />
+        </effect>
+      </image>
+    </layer>
+  </screen>
+  
 </nifty>
