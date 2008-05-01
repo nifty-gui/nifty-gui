@@ -4,82 +4,46 @@ import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.PanelRenderer;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * PanelType.
  * @author void
  */
-public class PanelType implements XmlElementProcessor {
+public class PanelType extends ElementType {
 
   /**
-   * nifty.
+   * create element.
+   * @param parent parent parent
+   * @param nifty nifty
+   * @param screen screen
+   * @param screenController screenController
+   * @param registeredEffects registeredEffects
+   * @param registeredControls registeredControls
+   * @param time time
+   * @return element
    */
-  private Nifty nifty;
-
-  /**
-   * screen.
-   */
-  private Screen screen;
-
-  /**
-   * parent.
-   */
-  private Element parent;
-
-  /**
-   * effects.
-   */
-  private Map < String, Class < ? > > registeredEffects;
-
-  /**
-   * ScreenController.
-   */
-  private ScreenController screenController;
-
-  /**
-   * LayerType.
-   * @param niftyParam nifty
-   * @param screenParam screenParam
-   * @param parentParam parentParam
-   * @param registeredEffectsParam registeredEffectsParam
-   * @param screenControllerParam ScreenController
-   */
-  public PanelType(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element parentParam,
-      final Map < String, Class < ? > > registeredEffectsParam,
-      final ScreenController screenControllerParam) {
-    nifty = niftyParam;
-    screen = screenParam;
-    parent = parentParam;
-    this.registeredEffects = registeredEffectsParam;
-    this.screenController = screenControllerParam;
-  }
-
-  /**
-   * process.
-   * @param xmlParser XmlParser
-   * @param attributes attributes
-   * @throws Exception exception
-   */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    PanelRenderer renderer = NiftyCreator.createPanelRenderer(nifty.getRenderDevice(), attributes);
-    Element panel = new Element(
-        attributes.get("id"),
-        parent,
+  public Element createElement(
+      final Element parent,
+      final Nifty nifty,
+      final Screen screen,
+      final Object screenController,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final Map < String, RegisterControlDefinitionType > registeredControls,
+      final TimeProvider time) {
+    Element element = NiftyCreator.createPanel(
+        getId(),
+        nifty,
         screen,
-        false,
-        renderer);
-    NiftyCreator.processElementAttributes(nifty, panel, attributes);
-    parent.add(panel);
-
-    ElementType.processChildElements(xmlParser, nifty, screen, panel, registeredEffects, screenController);
+        parent,
+        getBackgroundImage(),
+        getBackgroundColor().createColor(),
+        false);
+    super.addElementAttributes(element, screen, screenController, nifty, registeredEffects, registeredControls, time);
+    parent.add(element);
+    return element;
   }
 }

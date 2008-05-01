@@ -1,57 +1,89 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
-
 import java.util.Properties;
 
 import de.lessvoid.nifty.effects.shared.Falloff;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
 
 /**
  * HoverType.
  * @author void
  */
-public class HoverType implements XmlElementProcessor {
+public class HoverType {
 
   /**
-   * the element.
+   * width.
    */
-  private Element element;
+  private String width;
 
   /**
-   * create.
-   * @param elementParam element
+   * height.
    */
-  public HoverType(final Element elementParam) {
-    this.element = elementParam;
+  private String height;
+
+  /**
+   * falloffType.
+   */
+  private HoverFalloffType falloffType;
+
+  /**
+   * falloffConstraint.
+   */
+  private HoverFalloffConstraintType falloffConstraint;
+
+  /**
+   * setWidth.
+   * @param widthParam width
+   */
+  public void setWidth(final String widthParam) {
+    this.width = widthParam;
   }
 
   /**
-   * process.
-   * @param xmlParser xmlParser
-   * @param attributes attributes
-   * @throws Exception exception
+   * setHeight.
+   * @param heightParam height
    */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
+  public void setHeight(final String heightParam) {
+    this.height = heightParam;
+  }
+
+  /**
+   * setFalloffType.
+   * @param falloffTypeParam falloffType
+   */
+  public void setFalloffType(final HoverFalloffType falloffTypeParam) {
+    this.falloffType = falloffTypeParam;
+  }
+
+  /**
+   * setFalloffConstraint.
+   * @param falloffConstraintParam falloffConstraint
+   */
+  public void setFalloffConstraint(final HoverFalloffConstraintType falloffConstraintParam) {
+    this.falloffConstraint = falloffConstraintParam;
+  }
+
+  /**
+   * init element.
+   * @param element element
+   */
+  public void initElement(final Element element) {
     Properties prop = new Properties();
-    if (attributes.isSet("width")) {
-      prop.put(Falloff.HOVER_WIDTH, attributes.get("width"));
+    if (width != null) {
+      prop.put(Falloff.HOVER_WIDTH, width);
     }
-    if (attributes.isSet("height")) {
-      prop.put(Falloff.HOVER_HEIGHT, attributes.get("height"));
+    if (height != null) {
+      prop.put(Falloff.HOVER_HEIGHT, height);
     }
-    if (attributes.isSet("falloffType")) {
-      prop.put(Falloff.HOVER_FALLOFF_TYPE, attributes.get("falloffType"));
+    if (falloffType != null) {
+      prop.put(Falloff.HOVER_FALLOFF_TYPE, falloffType.toString());
     }
-    if (attributes.isSet("falloffConstraint")) {
-      prop.put(Falloff.HOVER_FALLOFF_CONSTRAINT, attributes.get("falloffConstraint"));
+    if (falloffConstraint != null) {
+      prop.put(Falloff.HOVER_FALLOFF_CONSTRAINT, falloffConstraint.toString());
     }
     if (!prop.isEmpty()) {
       Falloff falloff = new Falloff(prop);
       element.setHotSpotFalloff(falloff);
     }
-    xmlParser.nextTag();
   }
 }

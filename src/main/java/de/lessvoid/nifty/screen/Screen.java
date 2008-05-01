@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.lessvoid.console.Console;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
@@ -245,13 +246,20 @@ public class Screen implements MouseFocusHandler {
   public void requestExclusiveFocus(final Element newFocusElement) {
     log.info("requestExclusiveFocus: " + newFocusElement.getId());
 
+    setFocus(newFocusElement);
+    mouseFocusElement = newFocusElement;
+    mouseFocusElement.startEffect(EffectEventId.onFocus, timeProvider, null);
+  }
+
+  /**
+   * @param newFocusElement
+   */
+  public void setFocus(final Element newFocusElement) {
     if (focusElement != null) {
       focusElement.stopEffect(EffectEventId.onFocus);
     }
 
     focusElement = newFocusElement;
-    mouseFocusElement = newFocusElement;
-    mouseFocusElement.startEffect(EffectEventId.onFocus, timeProvider, null);
   }
 
   /**
@@ -283,6 +291,16 @@ public class Screen implements MouseFocusHandler {
   public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
     if (focusElement != null) {
       focusElement.keyEvent(eventKey, eventCharacter, keyDown);
+    }
+  }
+
+  /**
+   * Debug output to the console.
+   * @param console console
+   */
+  public void debug(final Console console) {
+    if (focusElement != null) {
+      console.output("focus element: " + focusElement.getId());
     }
   }
 

@@ -1,100 +1,88 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
-
-import java.lang.reflect.Method;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.tools.MethodResolver;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  * InteractType.
  * @author void
  */
-public class InteractType implements XmlElementProcessor {
+public class InteractType {
+  /**
+   * onClick.
+   */
+  private OnClickType onClick;
 
   /**
-   * logger.
+   * onClickRepeat.
    */
-  private Logger log = Logger.getLogger(InteractType.class.getName());
+  private OnClickType onClickRepeat;
 
   /**
-   * the element.
+   * onClickMouseMove.
    */
-  private Element element;
+  private OnClickType onClickMouseMove;
 
   /**
-   * the ScreenController.
+   * onClickAlternateKey.
    */
-  private ScreenController controller;
+  private String onClickAlternateKey;
 
   /**
-   * create.
-   * @param elementParam element
-   * @param controllerParam ScreenController
+   * Set onClick.
+   * @param onClickParam onClick
    */
-  public InteractType(final Element elementParam, final ScreenController controllerParam) {
-    this.element = elementParam;
-    this.controller = controllerParam;
+  public void setOnClick(final OnClickType onClickParam) {
+    this.onClick = onClickParam;
   }
 
   /**
-   * process.
-   * @param xmlParser xmlParser
-   * @param attributes attributes
-   * @throws Exception exception
+   * Set onClickRepeat.
+   * @param onClickRepeatParam onClickRepeat
    */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    // onClick action
-    Method method = getMethod(attributes, "onClick");
-    if (method != null) {
-      element.setOnClickMethod(method, controller, false);
-      element.setVisibleToMouseEvents(true);
-    }
-
-    // onClick action
-    method = getMethod(attributes, "onClickRepeat");
-    if (method != null) {
-      element.setOnClickMethod(method, controller, true);
-      element.setVisibleToMouseEvents(true);
-    }
-
-    // onClick action
-    method = getMethod(attributes, "onClickMouseMove");
-    if (method != null) {
-      element.setOnClickMouseMoveMethod(method, controller);
-      element.setVisibleToMouseEvents(true);
-    }
-
-    // on click alternate
-    if (attributes.isSet("onClickAlternateKey")) {
-      element.setOnClickAlternateKey(attributes.get("onClickAlternateKey"));
-      element.setVisibleToMouseEvents(true);
-    }
-
-    xmlParser.nextTag();
+  public void setOnClickRepeat(final OnClickType onClickRepeatParam) {
+    this.onClickRepeat = onClickRepeatParam;
   }
 
   /**
-   * Get Method.
-   * @param attributes attributes
-   * @param method method name
-   * @return resolved Method
+   * Set onClickMouseMove.
+   * @param onClickMouseMoveParam onClickMouseMove
    */
-  private Method getMethod(final Attributes attributes, final String method) {
-    if (attributes.isSet(method)) {
-      String methodName = attributes.get(method);
-      Method onClickMethod = MethodResolver.findMethod(controller.getClass(), methodName);
-      if (onClickMethod == null) {
-        log.warning("method [" + methodName + "] not found in class [" + controller.getClass().getName() + "]");
-        return null;
-      }
-      return onClickMethod;
+  public void setOnClickMouseMove(final OnClickType onClickMouseMoveParam) {
+    this.onClickMouseMove = onClickMouseMoveParam;
+  }
+
+  /**
+   * Set onClickAlternateKey.
+   * @param onClickAlternateKeyParam onClickAlternateKey
+   */
+  public void setOnClickAlternateKey(final String onClickAlternateKeyParam) {
+    this.onClickAlternateKey = onClickAlternateKeyParam;
+  }
+
+  /**
+   * init element.
+   * @param element element
+   * @param controller ScreenController
+   */
+  public void initElement(
+      final Element element,
+      final Object controller) {
+
+    if (onClick != null) {
+      element.setOnClickMethod(onClick.getMethod(controller), controller, false);
+      element.setVisibleToMouseEvents(true);
     }
-    return null;
+    if (onClickRepeat != null) {
+      element.setOnClickMethod(onClickRepeat.getMethod(controller), controller, true);
+      element.setVisibleToMouseEvents(true);
+    }
+    if (onClickMouseMove != null) {
+      element.setOnClickMouseMoveMethod(onClickMouseMove.getMethod(controller), controller);
+      element.setVisibleToMouseEvents(true);
+    }
+    if (onClickAlternateKey != null) {
+      element.setOnClickAlternateKey(onClickAlternateKey);
+    }
   }
 }

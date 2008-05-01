@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import org.xmlpull.mxp1.MXParser;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.loader.xpp3.processor.NiftyTypeProcessor;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -25,7 +25,6 @@ public class NiftyLoader {
    * load xml.
    * @param nifty nifty
    * @param screens screens
-   * @param r renderDevice
    * @param filename filename
    * @param timeProvider timeProvider
    * @throws Exception exception
@@ -33,15 +32,21 @@ public class NiftyLoader {
   public void loadXml(
       final Nifty nifty,
       final Map < String, Screen > screens,
-      final RenderDevice r,
       final String filename,
       final TimeProvider timeProvider) throws Exception {
 
     log.info("loadXml: " + filename);
 
+    // create parser
     XmlParser parser = new XmlParser(new MXParser());
     parser.read(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
+
+    // start parsing
+    NiftyTypeProcessor niftyTypeProcessor = new NiftyTypeProcessor();
     parser.nextTag();
-    parser.required("nifty", new de.lessvoid.nifty.loader.xpp3.elements.Nifty(nifty, screens));
+    parser.required("nifty", niftyTypeProcessor);
+
+    // create actual nifty objects
+    niftyTypeProcessor.create(nifty, screens, timeProvider);
   }
 }

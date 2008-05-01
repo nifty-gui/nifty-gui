@@ -42,6 +42,11 @@ public class Nifty {
   private Screen currentScreen;
 
   /**
+   * The current xml file loaded.
+   */
+  private String currentFile;
+
+  /**
    * When everything is done exit is true.
    */
   private boolean exit;
@@ -105,6 +110,7 @@ public class Nifty {
     this.timeProvider = newTimeProvider;
     this.exit = false;
     this.console = null;
+    this.currentFile = null;
   }
 
   /**
@@ -133,6 +139,9 @@ public class Nifty {
       }
     }
 
+    if (exit) {
+      renderDevice.clear();
+    }
     return exit;
   }
 
@@ -162,8 +171,12 @@ public class Nifty {
     try {
       screens.clear();
 
+      this.currentScreen = null;
+      this.currentFile = filename;
+      this.exit = false;
+
       NiftyLoader loader = new NiftyLoader();
-      loader.loadXml(this, screens, renderDevice, filename, timeProvider);
+      loader.loadXml(this, screens, filename, timeProvider);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -219,7 +232,6 @@ public class Nifty {
    * exit.
    */
   public void exit() {
-    // end current screen
     currentScreen.endScreen(
         new EndNotify() {
           public final void perform() {
@@ -279,4 +291,18 @@ public class Nifty {
     return currentScreen;
   }
 
+  /**
+   * Check if nifty displays the file with the given filename and is at a screen with the given screenId.
+   * @param filename filename
+   * @param screenId screenId
+   * @return true if the given screen is active and false when not
+   */
+  public boolean isActive(final String filename, final String screenId) {
+    if (currentFile != null && currentFile.equals(filename)) {
+      if (currentScreen != null && currentScreen.getScreenId().equals(screenId)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

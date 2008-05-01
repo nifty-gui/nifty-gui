@@ -7,46 +7,29 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.layout.align.HorizontalAlign;
-import de.lessvoid.nifty.layout.align.VerticalAlign;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
- * PanelType.
+ * ImageType.
  * @author void
  */
-public class MenuItemType implements XmlElementProcessor {
+public class MenuItemType extends ElementType {
 
   /**
-   * nifty.
+   * text.
+   * @optional
    */
-  private Nifty nifty;
+  private String text;
 
   /**
-   * screen.
+   * color.
+   * @optional
    */
-  private Screen screen;
-
-  /**
-   * parent.
-   */
-  private Element parent;
-
-  /**
-   * effects.
-   */
-  private Map < String, Class < ? > > registeredEffects;
-
-  /**
-   * ScreenController.
-   */
-  private ScreenController screenController;
+  private ColorType color = new ColorType();
 
   /**
    * font.
@@ -54,72 +37,71 @@ public class MenuItemType implements XmlElementProcessor {
   private String font;
 
   /**
-   * LayerType.
-   * @param niftyParam nifty
-   * @param screenParam screenParam
-   * @param parentParam parentParam
-   * @param registeredEffectsParam registeredEffectsParam
-   * @param screenControllerParam ScreenController
+   * create it.
    * @param fontParam font
    */
-  public MenuItemType(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element parentParam,
-      final Map < String, Class < ? > > registeredEffectsParam,
-      final ScreenController screenControllerParam,
-      final String fontParam) {
-    nifty = niftyParam;
-    screen = screenParam;
-    parent = parentParam;
-    this.registeredEffects = registeredEffectsParam;
-    this.screenController = screenControllerParam;
+  public MenuItemType(final String fontParam) {
     this.font = fontParam;
   }
 
   /**
-   * process.
-   * @param xmlParser XmlParser
-   * @param attributes attributes
-   * @throws Exception exception
+   * set text.
+   * @param textParam text
    */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    TextRenderer textRenderer;
-    if (attributes.isSet("color")) {
-      textRenderer = new TextRenderer(
-          nifty.getRenderDevice().createFont(font),
-          attributes.get("text"),
-          new Color(attributes.get("color")));
-    } else {
-      textRenderer = new TextRenderer(
-          nifty.getRenderDevice().createFont(font),
-          attributes.get("text"));
-    }
-    PanelRenderer panelRenderer = NiftyCreator.createPanelRenderer(nifty.getRenderDevice(), attributes);
-    Element current = new Element(
-        attributes.get("id"),
+  public void setText(final String textParam) {
+    this.text = textParam;
+  }
+
+  /**
+   * set color.
+   * @param colorParam color
+   */
+  public void setColor(final ColorType colorParam) {
+    this.color = colorParam;
+  }
+
+  /**
+   * create element.
+   * @param parent parent
+   * @param nifty nifty
+   * @param screen screen
+   * @param screenController screenController
+   * @param registeredEffects registeredEffects
+   * @param registeredControls registeredControls
+   * @param time time
+   * @return element
+   */
+  public Element createElement(
+      final Element parent,
+      final Nifty nifty,
+      final Screen screen,
+      final Object screenController,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final Map < String, RegisterControlDefinitionType > registeredControls,
+      final TimeProvider time) {
+    TextRenderer textRenderer = NiftyCreator.createTextRenderer(nifty, color, text, font);
+
+    PanelRenderer renderer = NiftyCreator.createPanelRenderer(
+        nifty.getRenderDevice(),
+        getBackgroundColor().createColor(),
+        getBackgroundImage());
+
+    Element panel = new Element(
+        getId(),
         parent,
         screen,
         true,
-        panelRenderer,
+        renderer,
         textRenderer);
-    current.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
-    current.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-    if (attributes.isSet("align")) {
-      current.setConstraintHorizontalAlign(HorizontalAlign.valueOf(attributes.get("align").toString()));
-    }
 
-    if (attributes.isSet("valign")) {
-      current.setConstraintVerticalAlign(VerticalAlign.valueOf(attributes.get("valign").toString()));
-    }
+    panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+    panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
+    super.addElementAttributes(panel, screen, screenController, nifty, registeredEffects, registeredControls, time);
 
-    NiftyCreator.processElementAttributes(nifty, current, attributes);
-    parent.add(current);
-
+    parent.add(panel);
     parent.setConstraintWidth(getMenuMaxWidth(parent.getElements()));
     parent.setConstraintHeight(getMenuMaxHeight(parent.getElements()));
-
-    ElementType.processChildElements(xmlParser, nifty, screen, current, registeredEffects, screenController);
+    return panel;
   }
 
   /**
@@ -164,5 +146,6 @@ public class MenuItemType implements XmlElementProcessor {
     }
     return new SizeValue(max + "px");
   }
-  
+
+
 }

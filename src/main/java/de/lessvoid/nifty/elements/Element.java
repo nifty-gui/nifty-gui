@@ -56,7 +56,7 @@ public class Element {
   /**
    * the child elements.
    */
-  private ArrayList < Element > elements = new ArrayList < Element > ();
+  private ArrayList < Element > elements = new ArrayList < Element >();
 
   /**
    * The LayoutManager we should use for all child elements.
@@ -996,9 +996,9 @@ public class Element {
 
   /**
    * key event.
-   * @param eventKey
-   * @param eventCharacter
-   * @param keyDown
+   * @param eventKey eventKey
+   * @param eventCharacter eventCharacter
+   * @param keyDown keyDown
    */
   public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
     if (onClickObject instanceof Controller) {
@@ -1008,9 +1008,16 @@ public class Element {
 
   /**
    * Set clip children.
-   * @param clipChildren clip children flag
+   * @param clipChildrenParam clip children flag
    */
-  public void setClipChildren(final boolean clipChildren) {
-    this.clipChildren = clipChildren;
+  public void setClipChildren(final boolean clipChildrenParam) {
+    this.clipChildren = clipChildrenParam;
+  }
+
+  /**
+   * Set the focus to this element.
+   */
+  public void setFocus() {
+    nifty.getCurrentScreen().setFocus(this);
   }
 }

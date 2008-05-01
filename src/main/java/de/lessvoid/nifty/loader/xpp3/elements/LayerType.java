@@ -4,68 +4,42 @@ import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 
 /**
  * LayerType.
  * @author void
  */
-public class LayerType implements XmlElementProcessor {
+public class LayerType extends PanelType {
 
   /**
-   * nifty.
+   * Create Layer.
+   * @param nifty nifty
+   * @param screen screen
+   * @param screenController screenController
+   * @param registeredEffects effects
+   * @param registeredControls registeredControls
+   * @param time time
+   * @return element element
    */
-  private Nifty nifty;
-
-  /**
-   * screen.
-   */
-  private Screen screen;
-
-  /**
-   * effects.
-   */
-  private Map < String, Class < ? > > registeredEffects;
-
-  /**
-   * ScreenController.
-   */
-  private ScreenController screenController;
-
-  /**
-   * LayerType.
-   * @param niftyParam nifty
-   * @param screenParam screenParam
-   * @param registeredEffectsParam registeredEffectsParam
-   * @param screenControllerParam ScreenController
-   */
-  public LayerType(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Map < String, Class < ? > > registeredEffectsParam,
-      final ScreenController screenControllerParam) {
-    nifty = niftyParam;
-    screen = screenParam;
-    this.registeredEffects = registeredEffectsParam;
-    this.screenController = screenControllerParam;
-  }
-
-  /**
-   * process.
-   * @param xmlParser XmlParser
-   * @param attributes attributes
-   * @throws Exception exception
-   */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    Element rootPanel = NiftyCreator.createLayer(nifty, screen, attributes);
-    screen.addLayerElement(rootPanel);
-
-    NiftyCreator.processElementAttributes(nifty, rootPanel, attributes);
-    ElementType.processChildElements(xmlParser, nifty, screen, rootPanel, registeredEffects, screenController);
+  public Element createElement(
+      final Nifty nifty,
+      final Screen screen,
+      final ScreenController screenController,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final Map < String, RegisterControlDefinitionType > registeredControls,
+      final TimeProvider time) {
+    Element layer = NiftyCreator.createLayer(
+        getId(),
+        nifty,
+        screen,
+        getBackgroundImage(),
+        getBackgroundColor().createColor());
+    super.addElementAttributes(layer, screen, screenController, nifty, registeredEffects, registeredControls, time);
+    return layer;
   }
 }

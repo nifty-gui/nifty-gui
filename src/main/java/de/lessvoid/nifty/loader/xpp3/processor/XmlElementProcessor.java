@@ -1,4 +1,7 @@
-package de.lessvoid.nifty.loader.xpp3;
+package de.lessvoid.nifty.loader.xpp3.processor;
+
+import de.lessvoid.nifty.loader.xpp3.Attributes;
+import de.lessvoid.nifty.loader.xpp3.XmlParser;
 
 
 /**

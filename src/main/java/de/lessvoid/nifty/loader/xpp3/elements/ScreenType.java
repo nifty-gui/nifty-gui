@@ -1,94 +1,129 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
- * HandleScreen.
+ * ScreenType.
  * @author void
  */
-public class ScreenType implements XmlElementProcessor {
+public class ScreenType {
 
   /**
-   * logger.
+   * screen id.
+   * @required
    */
-  private static Logger log = Logger.getLogger(ScreenType.class.getName());
+  private String id;
 
   /**
-   * Nifty instance we're connected to.
+   * controller.
+   * @required
    */
-  private Nifty nifty;
+  private String controller;
 
   /**
-   * Screens we should fill.
+   * effectGroup.
+   * @optional
    */
-  private Map < String, Screen > screens;
+  private String effectGroup;
 
   /**
-   * effects.
+   * layerGroup.
+   * @optional
    */
-  private Map < String, Class < ? > > registeredEffects;
+  private Collection < ScreenTypeLayerGroupType > layerGroups = new ArrayList < ScreenTypeLayerGroupType >();
 
   /**
-   * HandleScreen.
-   * @param niftyParam niftyParam
-   * @param screensParam screensParam
-   * @param registeredEffectsParam registeredEffectsParam
+   * layer.
+   * @required
    */
-  public ScreenType(
-      final Nifty niftyParam,
-      final Map < String, Screen > screensParam,
-      final Map < String, Class < ? > > registeredEffectsParam) {
-    nifty = niftyParam;
-    screens = screensParam;
-    this.registeredEffects = registeredEffectsParam;
+  private Collection < LayerType > layers = new ArrayList < LayerType >();
+
+  /**
+   * @param idParam id
+   * @param controllerParam controller
+   */
+  public ScreenType(final String idParam, final String controllerParam) {
+    this.id = idParam;
+    this.controller = controllerParam;
   }
 
   /**
-   * process.
-   * @param parser parser
-   * @param attributes attributes
-   * @throws Exception exception
+   * set id.
+   * @param idParam id
    */
-  public void process(final XmlParser parser, final Attributes attributes) throws Exception {
-    String id = attributes.get("id");
-    String controllerClass = attributes.get("controller");
-    String effectGroup = attributes.get("effectGroup");
-
-    log.info("processing screen [" + id + "]");
-    Screen screen = createScreeen(id, controllerClass, parser);
-    screens.put(id, screen);
+  public void setId(final String idParam) {
+    this.id = idParam;
   }
 
   /**
-   * Create Screen.
-   * @param id the id
-   * @param controllerClass controller class name
-   * @param parser XmlParser
+   * setController.
+   * @param controllerParam controller
+   */
+  public void setController(final String controllerParam) {
+    this.controller = controllerParam;
+  }
+
+  /**
+   * setEffectGroup.
+   * @param effectGroupParam effectGroup
+   */
+  public void setEffectGroup(final String effectGroupParam) {
+    this.effectGroup = effectGroupParam;
+  }
+
+  /**
+   * addLayerGroup.
+   * @param layerGroupParam layerGroup
+   */
+  public void addLayerGroup(final ScreenTypeLayerGroupType layerGroupParam) {
+    layerGroups.add(layerGroupParam);
+  }
+
+  /**
+   * addLayer.
+   * @param layerParam layer
+   */
+  public void addLayer(final LayerType layerParam) {
+    layers.add(layerParam);
+  }
+
+  /**
+   * create screen.
+   * @param nifty nifty
+   * @param timeProvider time
+   * @param registeredEffects effects
+   * @param registeredControls registeredControls
    * @return Screen
-   * @throws Exception exception
    */
-  private Screen createScreeen(final String id, final String controllerClass, final XmlParser parser) throws Exception {
-    // create the ScreenController.
-    ScreenController screenController = ClassHelper.getScreenController(controllerClass);
-
-    // create the screen.
-    Screen screen = new Screen(id, screenController, new TimeProvider());
+  public Screen createScreen(
+      final Nifty nifty,
+      final TimeProvider timeProvider,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final Map < String, RegisterControlDefinitionType > registeredControls) {
+    ScreenController screenController = ClassHelper.getScreenController(controller);
+    Screen screen = new Screen(
+        id,
+        screenController,
+        timeProvider);
     screenController.bind(nifty, screen);
-
-    // process layer groups
-    parser.nextTag();
-    parser.zeroOrMore("layerGroup", new LayerGroupType());
-    parser.oneOrMore("layer", new LayerType(nifty, screen, registeredEffects, screenController));
+    for (LayerType layerType : layers) {
+      screen.addLayerElement(
+          layerType.createElement(
+              nifty,
+              screen,
+              screenController,
+              registeredEffects,
+              registeredControls,
+              timeProvider));
+    }
     return screen;
   }
 }

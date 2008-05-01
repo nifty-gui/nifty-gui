@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
-
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -10,111 +9,124 @@ import de.lessvoid.nifty.effects.general.EffectImpl;
 import de.lessvoid.nifty.effects.general.StaticEffect;
 import de.lessvoid.nifty.effects.hover.HoverEffect;
 import de.lessvoid.nifty.effects.hover.HoverEffectImpl;
-import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * EffectType.
  * @author void
  */
-public class EffectType implements XmlElementProcessor {
-
+public class EffectType {
   /**
    * logger.
    */
-  private Logger log = Logger.getLogger(EffectType.class.getName());
+  private static Logger log = Logger.getLogger(EffectType.class.getName());
 
   /**
-   * registered effects.
+   * name.
    */
-  private Map < String, Class < ? >> registerEffects;
+  private String name;
 
   /**
-   * EffectEventId.
+   * post.
+   * @optional
    */
-  private EffectEventId effectEventId;
+  private boolean post;
 
   /**
-   * nifty.
+   * alternateEnable.
    */
-  private Nifty nifty;
+  private String alternateKey;
 
   /**
-   * the element.
+   * alternateEnable.
    */
-  private Element element;
+  private boolean alternateEnable;
 
   /**
-   * default value for post/pre effect state.
+   * inherit.
    */
-  private static final boolean DEFAULT_EFFECT_POST = false;
+  private boolean inherit;
 
   /**
-   * default value for alternate key.
+   * any.
    */
-  private static final String DEFAULT_ALTERNATE_KEY = null;
+  private Attributes any;
 
   /**
-   * create.
-   * @param niftyParam nifty
-   * @param registerEffectsParam registered effects
-   * @param elementParam elementParam
-   * @param effectEventIdParam effectEventIdParam
+   * create it.
+   * @param attributes attributes
    */
-  public EffectType(
-      final Nifty niftyParam,
-      final Map < String, Class < ? > > registerEffectsParam,
-      final Element elementParam,
-      final EffectEventId effectEventIdParam) {
-    this.nifty = niftyParam;
-    this.registerEffects = registerEffectsParam;
-    this.element = elementParam;
-    this.effectEventId = effectEventIdParam;
+  public EffectType(final Attributes attributes) {
+    any = attributes;
   }
 
   /**
-   * process.
-   * @param xmlParser xmlParser
-   * @param attributes attributes
-   * @throws Exception exception
+   * setName.
+   * @param nameParam name
    */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    String name = attributes.get("name");
-    Class < ? > effectClass = registerEffects.get(name);
+  public void setName(final String nameParam) {
+    this.name = nameParam;
+  }
+
+  /**
+   * setAlternateKey.
+   * @param alternateKeyParam alternateKey
+   */
+  public void setAlternateKey(final String alternateKeyParam) {
+    this.alternateKey = alternateKeyParam;
+  }
+
+  /**
+   * setAlternateDisable.
+   * @param alternateEnableParam alternateDisable
+   */
+  public void setAlternateEnable(final boolean alternateEnableParam) {
+    this.alternateEnable = alternateEnableParam;
+  }
+
+  /**
+   * setInherit.
+   * @param inheritParam inherit
+   */
+  public void setInherit(final boolean inheritParam) {
+    this.inherit = inheritParam;
+  }
+
+  /**
+   * setAny.
+   * @param anyParam any
+   */
+  public void setAny(final Attributes anyParam) {
+    this.any = anyParam;
+  }
+
+  /**
+   * setPost.
+   * @param postParam post effect or not
+   */
+  public void setPost(final boolean postParam) {
+    this.post = postParam;
+  }
+
+  /**
+   * Create effect.
+   * @param element element
+   * @param nifty nifty
+   * @param effectEventId eventId
+   * @param registeredEffects effects
+   * @param time time
+   */
+  public void create(
+      final de.lessvoid.nifty.elements.Element element,
+      final Nifty nifty,
+      final EffectEventId effectEventId,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final TimeProvider time) {
+    Class < ? > effectClass = registeredEffects.get(name).getEffectClass();
     if (effectClass == null) {
       log.warning("unable to convert effect [" + name + "] because no effect with this name has been registered.");
-      xmlParser.nextTag();
       return;
-    }
-
-    // get inherit
-    boolean inherit = false;
-    if (attributes.isSet("inherit")) {
-      inherit = "true".equals(attributes.get("inherit"));
-    }
-
-    // get post mode and default to post = true, when nothing is given
-    boolean post = DEFAULT_EFFECT_POST;
-    if (attributes.isSet("post")) {
-      if ("false".equals(attributes.get("post"))) {
-        post = false;
-      } else if ("true".equals(attributes.get("post"))) {
-        post = true;
-      }
-    }
-
-    // get alternate key, this defaults to null
-    String alternateKey = DEFAULT_ALTERNATE_KEY;
-    boolean alternateEnable = false;
-    if (attributes.isSet("alternateEnable")) {
-      alternateKey = attributes.get("alternateEnable");
-      alternateEnable = true;
-    } else if (attributes.isSet("alternateDisable")) {
-      alternateKey = attributes.get("alternateDisable");
-      alternateEnable = false;
     }
 
     // create the effect class
@@ -123,20 +135,18 @@ public class EffectType implements XmlElementProcessor {
       hoverEffect.init(
           element,
           createHoverEffectImpl(effectClass),
-          attributes.createProperties(),
-          new TimeProvider());
+          any.createProperties(),
+          time);
       element.registerEffect(effectEventId, hoverEffect);
     } else {
       StaticEffect effect = new StaticEffect(nifty, inherit, post, alternateKey, alternateEnable);
       effect.init(
           element,
           createEffectImpl(effectClass),
-          attributes.createProperties(),
-          new TimeProvider());
+          any.createProperties(),
+          time);
       element.registerEffect(effectEventId, effect);
     }
-
-    xmlParser.nextTag();
   }
 
   /**
@@ -180,4 +190,5 @@ public class EffectType implements XmlElementProcessor {
     }
     return null;
   }
+
 }

@@ -6,97 +6,98 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
- * PanelType.
+ * ImageType.
  * @author void
  */
-public class TextType implements XmlElementProcessor {
+public class TextType extends ElementType {
 
   /**
-   * nifty.
+   * filename.
+   * @required
    */
-  private Nifty nifty;
+  private String text;
 
   /**
-   * screen.
+   * font.
+   * @required
    */
-  private Screen screen;
+  private String font;
 
   /**
-   * parent.
+   * color.
    */
-  private Element parent;
+  private ColorType color = new ColorType();
 
   /**
-   * effects.
+   * create it.
+   * @param textParam filename
+   * @param fontParam font
    */
-  private Map < String, Class < ? > > registeredEffects;
-
-  /**
-   * ScreenController.
-   */
-  private ScreenController screenController;
-
-  /**
-   * LayerType.
-   * @param niftyParam nifty
-   * @param screenParam screenParam
-   * @param parentParam parentParam
-   * @param registeredEffectsParam registeredEffectsParam
-   * @param screenControllerParam ScreenController
-   */
-  public TextType(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element parentParam,
-      final Map < String, Class < ? > > registeredEffectsParam,
-      final ScreenController screenControllerParam) {
-    nifty = niftyParam;
-    screen = screenParam;
-    parent = parentParam;
-    this.registeredEffects = registeredEffectsParam;
-    this.screenController = screenControllerParam;
+  public TextType(final String textParam, final String fontParam) {
+    this.text = textParam;
+    this.font = fontParam;
   }
 
   /**
-   * process.
-   * @param xmlParser XmlParser
-   * @param attributes attributes
-   * @throws Exception exception
+   * set text.
+   * @param textParam text
    */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    TextRenderer textRenderer;
-    if (attributes.isSet("color")) {
-      textRenderer = new TextRenderer(
-          nifty.getRenderDevice().createFont(attributes.get("font")),
-          attributes.get("text"),
-          new Color(attributes.get("color")));
-    } else {
-      textRenderer = new TextRenderer(
-          nifty.getRenderDevice().createFont(attributes.get("font")),
-          attributes.get("text"));
-    }
-    PanelRenderer panelRenderer = NiftyCreator.createPanelRenderer(nifty.getRenderDevice(), attributes);
-    Element textPanel = new Element(
-        attributes.get("id"),
+  public void setText(final String textParam) {
+    this.text = textParam;
+  }
+
+  /**
+   * set color.
+   * @param colorParam color
+   */
+  public void setColor(final ColorType colorParam) {
+    this.color = colorParam;
+  }
+
+  /**
+   * create element.
+   * @param parent parent
+   * @param nifty nifty
+   * @param screen screen
+   * @param screenController screenController
+   * @param registeredEffects registeredEffects
+   * @param registeredControls registeredControls
+   * @param time time
+   * @return element
+   */
+  public Element createElement(
+      final Element parent,
+      final Nifty nifty,
+      final Screen screen,
+      final Object screenController,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final Map < String, RegisterControlDefinitionType > registeredControls,
+      final TimeProvider time) {
+    TextRenderer textRenderer = NiftyCreator.createTextRenderer(nifty, color, text, font);
+    PanelRenderer renderer = NiftyCreator.createPanelRenderer(
+        nifty.getRenderDevice(),
+        getBackgroundColor().createColor(),
+        getBackgroundImage());
+    Element panel = new Element(
+        getId(),
         parent,
         screen,
         false,
-        panelRenderer,
+        renderer,
         textRenderer);
-    textPanel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
-    textPanel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-    NiftyCreator.processElementAttributes(nifty, textPanel, attributes);
-    parent.add(textPanel);
 
-    ElementType.processChildElements(xmlParser, nifty, screen, textPanel, registeredEffects, screenController);
+    panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+    panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
+
+    super.addElementAttributes(panel, screen, screenController, nifty, registeredEffects, registeredControls, time);
+    parent.add(panel);
+    return panel;
   }
 }

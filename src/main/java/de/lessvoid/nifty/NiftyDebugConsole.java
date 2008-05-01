@@ -59,6 +59,8 @@ public class NiftyDebugConsole {
       }
     }
 
+    screen.debug(console);
+
     theRenderDevice.saveState(RenderState.allStates());
     console.update();
     theRenderDevice.restoreState();

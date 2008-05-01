@@ -3,6 +3,8 @@ package de.lessvoid.nifty.loader.xpp3;
 import java.util.Hashtable;
 import java.util.Map;
 
+import de.lessvoid.nifty.loader.xpp3.processor.XmlElementProcessor;
+
 /**
  * SubstitutionGroup thing.
  * @author void

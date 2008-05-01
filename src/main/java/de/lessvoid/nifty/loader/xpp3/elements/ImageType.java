@@ -5,114 +5,153 @@ import java.util.Map;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
-import de.lessvoid.nifty.elements.render.PanelRenderer;
-import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.render.RenderImage;
 import de.lessvoid.nifty.render.RenderImage.SubImageMode;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * ImageType.
  * @author void
  */
-public class ImageType implements XmlElementProcessor {
+public class ImageType extends ElementType {
 
   /**
-   * nifty.
+   * filename.
+   * @required
    */
-  private Nifty nifty;
+  private String filename;
 
   /**
-   * screen.
+   * x position.
+   * @optional
    */
-  private Screen screen;
+  private Integer x;
 
   /**
-   * parent.
+   * y position.
+   * @optional
    */
-  private Element parent;
+  private Integer y;
 
   /**
-   * effects.
+   * filter.
+   * @optional
    */
-  private Map < String, Class < ? > > registeredEffects;
+  private boolean filter;
 
   /**
-   * ScreenController.
+   * subImageSizeMode.
+   * @optional
    */
-  private ScreenController screenController;
+  private SubImageSizeModeType subImageSizeMode;
 
   /**
-   * ImageType.
-   * @param niftyParam nifty
-   * @param screenParam screenParam
-   * @param parentParam parentParam
-   * @param registeredEffectsParam registeredEffectsParam
-   * @param screenControllerParam ScreenController
+   * resizeHint.
+   * @optional
    */
-  public ImageType(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element parentParam,
-      final Map < String, Class < ? > > registeredEffectsParam,
-      final ScreenController screenControllerParam) {
-    nifty = niftyParam;
-    screen = screenParam;
-    parent = parentParam;
-    this.registeredEffects = registeredEffectsParam;
-    this.screenController = screenControllerParam;
+  private String resizeHint;
+
+  /**
+   * create it.
+   * @param filenameParam filename
+   */
+  public ImageType(final String filenameParam) {
+    this.filename = filenameParam;
   }
 
   /**
-   * process.
-   * @param xmlParser XmlParser
-   * @param attributes attributes
-   * @throws Exception exception
+   * set x.
+   * @param xParam x
    */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    // create the actual image
-    boolean filter = true;
-    if (attributes.isSet("filter")) {
-      filter = "true".equals(attributes.get("filter"));
-    }
+  public void setX(final Integer xParam) {
+    this.x = xParam;
+  }
 
+  /**
+   * set y.
+   * @param yParam y
+   */
+  public void setY(final Integer yParam) {
+    this.y = yParam;
+  }
+
+  /**
+   * set filter.
+   * @param filterParam filter
+   */
+  public void setFilter(final Boolean filterParam) {
+    this.filter = filterParam;
+  }
+
+  /**
+   * set subImageSizeMode.
+   * @param subImageSizeModeParam mode
+   */
+  public void setSubImageSizeMode(final SubImageSizeModeType subImageSizeModeParam) {
+    this.subImageSizeMode = subImageSizeModeParam;
+  }
+
+  /**
+   * set resize hint.
+   * @param resizeHintParam resize hint
+   */
+  public void setResizeHint(final String resizeHintParam) {
+    this.resizeHint = resizeHintParam;
+  }
+
+  /**
+   * create element.
+   * @param parent parent
+   * @param nifty nifty
+   * @param screen screen
+   * @param screenController screenController
+   * @param registeredEffects registeredEffects
+   * @param registeredControls registeredControls
+   * @param time time
+   * @return element
+   */
+  public Element createElement(
+      final Element parent,
+      final Nifty nifty,
+      final Screen screen,
+      final Object screenController,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final Map < String, RegisterControlDefinitionType > registeredControls,
+      final TimeProvider time) {
     // create the image
-    RenderImage image = nifty.getRenderDevice().createImage(attributes.get("filename"), filter);
+    RenderImage image = nifty.getRenderDevice().createImage(filename, filter);
 
     // create the image renderer
     ImageRenderer imageRenderer = new ImageRenderer(image);
 
     // create a new element with the given renderer
-    Element element = new Element(attributes.get("id"), parent, screen, true, imageRenderer);
+    Element element = new Element(getId(), parent, screen, true, imageRenderer);
 
     // set absolute x position when given
-    if (attributes.isSet("x")) {
-      element.setConstraintX(new SizeValue(attributes.get("x") + "px"));
+    if (x != null) {
+      element.setConstraintX(new SizeValue(x + "px"));
     }
 
     // set absolute y position when given
-    if (attributes.isSet("y")) {
-      element.setConstraintY(new SizeValue(attributes.get("y") + "px"));
+    if (y != null) {
+      element.setConstraintY(new SizeValue(y + "px"));
     }
 
     // sub image enable?
-    if (attributes.isSet("subImageSizeMode")) {
-      if (attributes.get("subImageSizeMode").equals("scale")) {
+    if (subImageSizeMode != null) {
+      if (subImageSizeMode == SubImageSizeModeType.scale) {
         image.setSubImageMode(SubImageMode.Scale);
-      } else if (attributes.get("subImageSizeMode").equals("resizeHint")) {
+      } else if (subImageSizeMode == SubImageSizeModeType.resizeHint) {
         image.setSubImageMode(SubImageMode.ResizeHint);
       }
     }
 
     // resize hint available?
-    if (attributes.isSet("resizeHint")) {
-      image.setResizeHint(attributes.get("resizeHint"));
+    if (resizeHint != null) {
+      image.setResizeHint(resizeHint);
       image.setSubImageMode(SubImageMode.ResizeHint);
     }
 
@@ -120,9 +159,9 @@ public class ImageType implements XmlElementProcessor {
     element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
     element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
 
-    NiftyCreator.processElementAttributes(nifty, element, attributes);
+    super.addElementAttributes(element, screen, screenController, nifty, registeredEffects, registeredControls, time);
     parent.add(element);
-
-    ElementType.processChildElements(xmlParser, nifty, screen, element, registeredEffects, screenController);
+    return element;
   }
+
 }

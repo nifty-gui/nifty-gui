@@ -1,27 +1,25 @@
-package de.lessvoid.nifty.loader.xpp3.elements;
+package de.lessvoid.nifty.loader.xpp3.processor;
 
 
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 
 /**
  * RegisterLayoutGroup.
  * @author void
  */
-public class RegisterLayoutGroup implements XmlElementProcessor {
+public class RegisterLayoutGroupProcessor implements XmlElementProcessor {
 
   /**
    * process.
-   * @param parser parser
+   * @param xmlParser parser
+   * @param attributes attributes
+   * @throws Exception exception
    */
-  public void process(final XmlParser parser, Attributes attributes) throws Exception {
+  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     String effectName = attributes.get("name");
     String className = attributes.get("class");
     Class < ? > cl = ClassHelper.loadClass(className);
-    if (cl != null) {
-    }
-    
   }
 }

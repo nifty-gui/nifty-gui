@@ -1,11 +1,11 @@
 package de.lessvoid.nifty.loader.xpp3;
 
 import java.io.InputStream;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.xmlpull.v1.XmlPullParser;
+
+import de.lessvoid.nifty.loader.xpp3.processor.XmlElementProcessor;
 
 /**
  * XmlParser is a helper/wrapper around XPP3.
@@ -93,6 +93,11 @@ public class XmlParser {
     zeroOrMore(tag, xmlElement);
   }
 
+  /**
+   * check if the current tag is an end tag.
+   * @return true on end tag reached and false otherwise
+   * @throws Exception exception
+   */
   private boolean isEndTag() throws Exception {
     return XmlPullParser.END_TAG == xpp.getEventType();
   }
@@ -166,13 +171,26 @@ public class XmlParser {
     int eventType = xpp.next();
     while (eventType != XmlPullParser.END_DOCUMENT) {
      if (eventType == XmlPullParser.END_TAG) {
-       log.info("END <" + xpp.getName() + ">");
+       indent();
+       log.info(indent() + "END <" + xpp.getName() + ">");
        return;
      } else if (eventType == XmlPullParser.START_TAG) {
-       log.info("START <" + xpp.getName() + ">");
+       log.info(indent() + "START <" + xpp.getName() + ">");
        return;
      }
      eventType = xpp.next();
     }
+  }
+
+  /**
+   * indent current xpp depth level.
+   * @return string of whitespace of xpp depth level length
+   */
+  private String indent() {
+    StringBuffer b = new StringBuffer();
+     for (int i = 0; i < xpp.getDepth(); i++) {
+       b.append(" ");
+     }
+    return b.toString();
   }
 }

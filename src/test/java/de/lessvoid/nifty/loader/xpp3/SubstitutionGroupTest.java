@@ -3,6 +3,7 @@ package de.lessvoid.nifty.loader.xpp3;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import de.lessvoid.nifty.loader.xpp3.processor.XmlElementProcessor;
 
 import junit.framework.TestCase;
 

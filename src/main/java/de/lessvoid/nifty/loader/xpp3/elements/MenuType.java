@@ -4,92 +4,59 @@ import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.PanelRenderer;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.XmlElementProcessor;
-import de.lessvoid.nifty.loader.xpp3.XmlParser;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
- * PanelType.
+ * ImageType.
  * @author void
  */
-public class MenuType implements XmlElementProcessor {
+public class MenuType extends ElementType {
 
   /**
-   * nifty.
+   * filename.
+   * @required
    */
-  private Nifty nifty;
+  private String font;
 
   /**
-   * screen.
+   * create it.
+   * @param fontParam filename
    */
-  private Screen screen;
-
-  /**
-   * parent.
-   */
-  private Element parent;
-
-  /**
-   * effects.
-   */
-  private Map < String, Class < ? > > registeredEffects;
-
-  /**
-   * ScreenController.
-   */
-  private ScreenController screenController;
-
-  /**
-   * LayerType.
-   * @param niftyParam nifty
-   * @param screenParam screenParam
-   * @param parentParam parentParam
-   * @param registeredEffectsParam registeredEffectsParam
-   * @param screenControllerParam ScreenController
-   */
-  public MenuType(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element parentParam,
-      final Map < String, Class < ? > > registeredEffectsParam,
-      final ScreenController screenControllerParam) {
-    nifty = niftyParam;
-    screen = screenParam;
-    parent = parentParam;
-    this.registeredEffects = registeredEffectsParam;
-    this.screenController = screenControllerParam;
+  public MenuType(final String fontParam) {
+    this.font = fontParam;
   }
 
   /**
-   * process.
-   * @param xmlParser XmlParser
-   * @param attributes attributes
-   * @throws Exception exception
+   * create element.
+   * @param parent parent
+   * @param nifty nifty
+   * @param screen screen
+   * @param screenController screenController
+   * @param registeredEffects registeredEffects
+   * @param registeredControls registeredControls
+   * @param time time
+   * @return element
    */
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    PanelRenderer renderer = NiftyCreator.createPanelRenderer(nifty.getRenderDevice(), attributes);
-    Element panel = new Element(
-        attributes.get("id"),
-        parent,
+  public Element createElement(
+      final Element parent,
+      final Nifty nifty,
+      final Screen screen,
+      final Object screenController,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final Map < String, RegisterControlDefinitionType > registeredControls,
+      final TimeProvider time) {
+    Element element = NiftyCreator.createPanel(
+        getId(),
+        nifty,
         screen,
-        false,
-        renderer);
-    NiftyCreator.processElementAttributes(nifty, panel, attributes);
-    parent.add(panel);
-
-    ElementType.processChildElements(xmlParser, nifty, screen, panel, registeredEffects, screenController);
-    //xmlParser.nextTag();
-    xmlParser.zeroOrMore(
-        "menuItem",
-        new MenuItemType(
-            nifty,
-            screen,
-            panel,
-            registeredEffects,
-            screenController,
-            attributes.get("font")));
+        parent,
+        getBackgroundImage(),
+        getBackgroundColor().createColor(), false);
+    super.addElementAttributes(element, screen, screenController, nifty, registeredEffects, registeredControls, time);
+    parent.add(element);
+    return element;
   }
 }

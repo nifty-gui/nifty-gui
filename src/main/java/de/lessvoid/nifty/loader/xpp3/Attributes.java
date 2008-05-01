@@ -6,6 +6,14 @@ import java.util.Properties;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import de.lessvoid.nifty.loader.xpp3.elements.AlignType;
+import de.lessvoid.nifty.loader.xpp3.elements.HoverFalloffConstraintType;
+import de.lessvoid.nifty.loader.xpp3.elements.HoverFalloffType;
+import de.lessvoid.nifty.loader.xpp3.elements.LayoutType;
+import de.lessvoid.nifty.loader.xpp3.elements.OnClickType;
+import de.lessvoid.nifty.loader.xpp3.elements.SubImageSizeModeType;
+import de.lessvoid.nifty.loader.xpp3.elements.ValignType;
+
 /**
  * Attributes.
  * @author void
@@ -66,4 +74,125 @@ public final class Attributes {
     return props;
   }
 
+  /**
+   * OnClickType.
+   * @param name name
+   * @return instance
+   */
+  public OnClickType getAsOnClickType(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return new OnClickType(value);
+  }
+
+  /**
+   * HoverFalloffType.
+   * @param name name
+   * @return instance
+   */
+  public HoverFalloffType getAsHoverFalloffType(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return HoverFalloffType.valueOf(value);
+  }
+
+  /**
+   * HoverFalloffConstraintType.
+   * @param name name
+   * @return instance
+   */
+  public HoverFalloffConstraintType getAsHoverFalloffConstraintType(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return HoverFalloffConstraintType.valueOf(value);
+  }
+
+  /**
+   * get as boolean.
+   * @param name name
+   * @return boolean value
+   */
+  public Boolean getAsBoolean(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    if (value.equals("true")) {
+      return new Boolean(true);
+    } else if (value.equals("false")) {
+      return new Boolean(false);
+    }
+    return null;
+  }
+
+  /**
+   * Get value from attributes as AlignType.
+   * @param name attribute name
+   * @return AlignType
+   */
+  public AlignType getAsAlignType(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return AlignType.valueOf(value);
+  }
+
+  /**
+   * Get value from attributes as VAlignType.
+   * @param name attribute name
+   * @return ValignType
+   */
+  public ValignType getAsVAlignType(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return ValignType.valueOf(value);
+  }
+
+  /**
+   * LayoutType.
+   * @param name name
+   * @return LayoutType
+   */
+  public LayoutType getAsLayoutType(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return LayoutType.valueOf(value);
+  }
+
+  /**
+   * get as integer.
+   * @param name name
+   * @return Integer
+   */
+  public Integer getAsInteger(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return Integer.valueOf(value);
+  }
+
+  /**
+   * get as SubImageSizeModeType.
+   * @param name name
+   * @return SubImageSizeModeType
+   */
+  public SubImageSizeModeType getAsSubImageSizeModeType(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return SubImageSizeModeType.valueOf(value);
+  }
 }
