@@ -5,9 +5,10 @@ import java.util.Properties;
 import org.lwjgl.input.Keyboard;
 
 import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.elements.Controller;
+import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -17,7 +18,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * A TextFieldControl.
  * @author void
  */
-public class TextFieldControl implements Controller {
+public class TextFieldControl implements ControlController {
 
   /**
    * the screen.
@@ -262,5 +263,7 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
     cursorElement.hide();
   }
 
+  public void forward(MethodInvoker controllerMethod) {
+  }
   
 }

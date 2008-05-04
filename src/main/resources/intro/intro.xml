@@ -79,21 +79,21 @@
           <interact onClick="helloWorld()"/>
           <hover width="200%" falloffConstraint="horizontal"/>
           <effect>
-            <onHover name="pulsateHover" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+            <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
           </effect>
         </menuItem>
         <menuItem id="textfield" text="Textfield Example" align="center">
           <interact onClick="textField()"/>
           <hover width="200%" falloffConstraint="horizontal"/>
           <effect>
-            <onHover name="pulsateHover" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+            <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
           </effect>
         </menuItem>
-        <menuItem id="quit" text="Quit" align="center">
-          <interact onClick="quit()"/>
+        <menuItem id="exit" text="Exit" align="center">
+          <interact onClick="exit()"/>
           <hover width="200%" falloffConstraint="horizontal"/>
           <effect>
-            <onHover name="pulsateHover" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+            <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
           </effect>
         </menuItem>
       </menu>

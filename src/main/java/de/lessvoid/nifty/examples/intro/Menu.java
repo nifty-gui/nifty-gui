@@ -15,12 +15,18 @@ public class Menu implements ScreenController {
    * the nifty instance.
    */
   private Nifty nifty;
+  
+  /**
+   * the screen this menu belongs to.
+   */
+  private Screen screen;
 
   /**
    * 
    */
-  public void bind(Nifty newNifty, Screen screen) {
-    this.nifty = newNifty;
+  public void bind(Nifty niftyParam, Screen screenParam) {
+    this.nifty = niftyParam;
+    this.screen = screenParam;
   }
 
   /**
@@ -33,6 +39,7 @@ public class Menu implements ScreenController {
    * just goto the next screen.
    */
   public final void onStartInteractive() {
+    screen.findElementByName("helloWorld").setFocus();
   }
 
   /**
@@ -58,9 +65,9 @@ public class Menu implements ScreenController {
   }
 
   /**
-   * quit.
+   * exit.
    */
-  public void quit() {
+  public void exit() {
     nifty.gotoScreen("outro");
   }
 }

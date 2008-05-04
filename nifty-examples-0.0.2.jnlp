@@ -13,7 +13,7 @@
 	</security>
 	<resources>
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-		<jar href="nifty-examples-0.0.2-SNAPSHOT-complete-with-dependencies.jar" main="true"/>
+		<jar href="nifty-examples-0.0.2-complete-with-dependencies.jar" main="true"/>
 	</resources>
 	<resources os="Windows">
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
