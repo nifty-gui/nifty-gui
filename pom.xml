@@ -4,13 +4,13 @@
   <groupId>lessvoid</groupId>
   <artifactId>nifty</artifactId>
   <name>nifty</name>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.2</version>
   <url>http://nifty-gui.sourceforge.net/nifty/project-info.html</url>
   <description>Nifty GUI is a Java Library that supports the building of interactive user interfaces for games or similar applications. It utilizes lwjgl for OpenGL rendering. The configuration of the GUI is stored in xml files with little supporting Java code. In short Nifty helps you to layout stuff, display it in a cool way and interact with it :)</description>
   <scm>
-    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/trunk</connection>
-    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/trunk</developerConnection>
-    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty/</url>
+    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/tags/nifty-0.0.2</connection>
+    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/tags/nifty-0.0.2</developerConnection>
+    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty/tags/nifty-0.0.2</url>
   </scm>
   <developers>
     <developer>
