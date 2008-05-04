@@ -9,7 +9,7 @@
     <section name="Hello World">
       <p>In this Mini Tutorial you're going to create a very basic and simple Hello World Application to get used to Nifty.</p>
       <p><a href="images/nifty-hello-world.png"><img src="images/nifty-hello-world-thumb.png" border="0" alt="Nifty Hello World"/></a></p>
-      <p><a href="http://nifty-gui.sourceforge.net/webstart/nifty-examples.jnlp">Webstart (jnlp)</a></p>
+      <p><a href="http://nifty-gui.sourceforge.net/webstart/nifty-examples-0.0.2.jnlp">Webstart (jnlp)</a></p>
     </section>
     <section name="Java Preparation">
       <p>Create a new Java Project with you favorite IDE. For the sake of simplicity I assume you've downloaded the
@@ -151,15 +151,15 @@
         <p>So, the next thing is to add the actual onStartScreen effect to the panel:</p>
         <source><![CDATA[<panel height="25%" width="35%" ...>
   <effect>
-    <onStartScreen name="move" directionType="in" direction="top" length="300" startDelay="0" inherit="true"/>
+    <onStartScreen name="move" mode="in" direction="top" length="300" startDelay="0" inherit="true"/>
   </effect>]]></source>
         <p>With the &quot;name&quot; attribute you add the registered effect. All other attributes are effect specific. For the
         &quot;de.lessvoid.nifty.effects.general.Move&quot; effect you can for example define the direction from where it should move
         in or out. You can give a start delay and and effect length time in ms. The inherit flag defines if the effect travels to
         all child elements or if it is limited only to the element you attached the effect too.</p>
-        <p>In the example above the panel moves in from the top of the screen. The effect starts immediatly and tooks 300 ms. The
-        effect is not limited to the panel and moves all child elements. In this example the &quot;Hello World!&quot; text is
-        moved too.</p>
+        <p>In the example above the panel moves in from the top of the screen. The effect starts immediately and takes
+        300 ms. The effect is not limited to the panel and moves all child elements. In this example the
+        &quot;Hello World!&quot; text is moved together with the panel.</p>
       </subsection>
     </section>
   </body>
