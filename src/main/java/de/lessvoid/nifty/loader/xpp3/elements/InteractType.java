@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
+import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -61,24 +63,29 @@ public class InteractType {
   }
 
   /**
-   * init element.
+   * Initialize element.
    * @param element element
-   * @param controller ScreenController
+   * @param controlController controlController
+   * @param screenController screenController
    */
   public void initElement(
       final Element element,
-      final Object controller) {
+      final ControlController controlController,
+      final ScreenController screenController) {
 
     if (onClick != null) {
-      element.setOnClickMethod(onClick.getMethod(controller), controller, false);
+      MethodInvoker onClickMethod = onClick.getMethod(controlController, screenController);
+      element.setOnClickMethod(onClickMethod, false);
       element.setVisibleToMouseEvents(true);
     }
     if (onClickRepeat != null) {
-      element.setOnClickMethod(onClickRepeat.getMethod(controller), controller, true);
+      MethodInvoker onClickRepeatMethod = onClickRepeat.getMethod(controlController, screenController);
+      element.setOnClickMethod(onClickRepeatMethod, true);
       element.setVisibleToMouseEvents(true);
     }
     if (onClickMouseMove != null) {
-      element.setOnClickMouseMoveMethod(onClickMouseMove.getMethod(controller), controller);
+      MethodInvoker onClickMouseMoveMethod = onClickMouseMove.getMethod(controlController, screenController);
+      element.setOnClickMouseMoveMethod(onClickMouseMoveMethod);
       element.setVisibleToMouseEvents(true);
     }
     if (onClickAlternateKey != null) {

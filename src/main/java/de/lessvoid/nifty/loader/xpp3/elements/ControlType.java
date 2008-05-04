@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Controller;
+import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.tools.MethodResolver;
@@ -56,20 +56,21 @@ public class ControlType extends ElementType {
    * @param parent parent
    * @param nifty nifty
    * @param screen screen
-   * @param screenController screenController
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param screenController screenController
    * @return element
    */
   public Element createElement(
       final Element parent,
       final Nifty nifty,
       final Screen screen,
-      final Object screenController,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final ControlController controlController,
+      final ScreenController screenController) {
 
     RegisterControlDefinitionType controlDefinition = registeredControls.get(name);
     if (controlDefinition == null) {
@@ -77,7 +78,7 @@ public class ControlType extends ElementType {
       return null;
     }
 
-    final Controller c = controlDefinition.getControllerInstance(nifty);
+    final ControlController c = controlDefinition.getControllerInstance(nifty);
     ControllerEventListener listener = null;
 
     // onClick action
@@ -109,10 +110,11 @@ public class ControlType extends ElementType {
           parent,
           nifty,
           screen,
-          c,
           registeredEffects,
           registeredControls,
-          time);
+          time,
+          c,
+          screenController);
       c.bind(screen, current, null, listener);
       return current;
     }

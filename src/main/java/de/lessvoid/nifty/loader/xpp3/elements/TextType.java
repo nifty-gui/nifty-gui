@@ -3,6 +3,7 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -66,20 +67,21 @@ public class TextType extends ElementType {
    * @param parent parent
    * @param nifty nifty
    * @param screen screen
-   * @param screenController screenController
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param screenController screenController
    * @return element
    */
   public Element createElement(
       final Element parent,
       final Nifty nifty,
       final Screen screen,
-      final Object screenController,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final ControlController controlController,
+      final ScreenController screenController) {
     TextRenderer textRenderer = NiftyCreator.createTextRenderer(nifty, color, text, font);
     PanelRenderer renderer = NiftyCreator.createPanelRenderer(
         nifty.getRenderDevice(),
@@ -96,7 +98,16 @@ public class TextType extends ElementType {
     panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
     panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
 
-    super.addElementAttributes(panel, screen, screenController, nifty, registeredEffects, registeredControls, time);
+    super.addElementAttributes(
+        panel,
+        screen,
+        nifty,
+        registeredEffects,
+        registeredControls,
+        time,
+        controlController,
+        screenController);
+
     parent.add(panel);
     return panel;
   }

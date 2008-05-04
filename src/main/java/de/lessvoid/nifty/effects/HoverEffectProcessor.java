@@ -57,7 +57,7 @@ public class HoverEffectProcessor extends StandardEffectProcessor {
         if (hoverEffect.isActive()) {
           if (!hoverEffect.isInsideFalloff(x, y)) {
             hoverEffect.setActive(false);
-            activeEffects.remove(hoverEffect);
+            getActiveEffects().remove(hoverEffect);
           } else {
             hoverEffect.hoverDistance(x, y);
           }

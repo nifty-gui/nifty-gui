@@ -36,7 +36,7 @@ public class Screen implements MouseFocusHandler {
   /**
    * layer elements the root elements of all elements in this screen.
    */
-  private ArrayList < Element > layerElements = new ArrayList < Element > ();
+  private ArrayList < Element > layerElements = new ArrayList < Element >();
 
   /**
    * the current element that has exclusive access to the mouse or null.
@@ -248,43 +248,51 @@ public class Screen implements MouseFocusHandler {
 
     setFocus(newFocusElement);
     mouseFocusElement = newFocusElement;
-    mouseFocusElement.startEffect(EffectEventId.onFocus, timeProvider, null);
   }
 
   /**
-   * @param newFocusElement
+   * set the focus to the given element.
+   * @param newFocusElement new focus element
    */
   public void setFocus(final Element newFocusElement) {
+    if (focusElement == newFocusElement) {
+      return;
+    }
+
     if (focusElement != null) {
       focusElement.stopEffect(EffectEventId.onFocus);
     }
 
     focusElement = newFocusElement;
+    focusElement.startEffect(EffectEventId.onFocus, timeProvider, null);
   }
 
   /**
    * lost focus.
+   * @param elementThatLostFocus elementThatLostFocus
    */
-  public void lostFocus(Element elementThatLostFocus) {
+  public void lostFocus(final Element elementThatLostFocus) {
     log.info("lostFocus: " + elementThatLostFocus.getId());
     mouseFocusElement = null;
   }
 
   /**
    * checks to see if access to mouse event is granted for the given element.
+   * @param element element
+   * @return true or false
    */
-  public boolean canProcessMouseEvents(Element element) {
+  public boolean canProcessMouseEvents(final Element element) {
     if (mouseFocusElement == null) {
       return true;
     }
 
     boolean canProcessResult = mouseFocusElement == element;
-    return canProcessResult; 
+    return canProcessResult;
   }
 
   /**
    * keyboard event.
-   * @param eventKey 
+   * @param eventKey eventKey
    * @param eventCharacter the keyboard character
    * @param keyDown TODO
    */
@@ -302,6 +310,14 @@ public class Screen implements MouseFocusHandler {
     if (focusElement != null) {
       console.output("focus element: " + focusElement.getId());
     }
+  }
+
+  /**
+   * get current attached screen controller.
+   * @return ScreenController
+   */
+  public ScreenController getScreenController() {
+    return screenController;
   }
 
 }

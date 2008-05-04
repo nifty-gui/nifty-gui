@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Controller;
+import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
@@ -56,7 +56,7 @@ public class RegisterControlDefinitionType {
    * @param nifty nifty
    * @return Controller
    */
-  public de.lessvoid.nifty.elements.Controller getControllerInstance(final Nifty nifty) {
+  public de.lessvoid.nifty.elements.ControlController getControllerInstance(final Nifty nifty) {
     return getController(nifty, controller);
   }
 
@@ -66,13 +66,13 @@ public class RegisterControlDefinitionType {
    * @param controllerClass controllerClass
    * @return new ScreenController instance or null
    */
-  private static Controller getController(
+  private static ControlController getController(
       final Nifty niftyParent,
       final String controllerClass) {
     try {
       Class < ? > cls = ControlType.class.getClassLoader().loadClass(controllerClass);
-      if (Controller.class.isAssignableFrom(cls)) {
-        return (Controller) cls.newInstance();
+      if (ControlController.class.isAssignableFrom(cls)) {
+        return (ControlController) cls.newInstance();
       } else {
         log.warning(
             "given screenController class ["

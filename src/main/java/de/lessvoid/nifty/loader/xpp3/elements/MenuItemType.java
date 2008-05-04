@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.controls.MenuFocusHandler;
+import de.lessvoid.nifty.elements.controls.MenuItemControl;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
@@ -36,11 +39,14 @@ public class MenuItemType extends ElementType {
    */
   private String font;
 
+  private MenuFocusHandler focusHandler;
+
   /**
    * create it.
    * @param fontParam font
    */
-  public MenuItemType(final String fontParam) {
+  public MenuItemType(final MenuFocusHandler focusHandlerParam, final String fontParam) {
+    this.focusHandler = focusHandlerParam;
     this.font = fontParam;
   }
 
@@ -65,20 +71,21 @@ public class MenuItemType extends ElementType {
    * @param parent parent
    * @param nifty nifty
    * @param screen screen
-   * @param screenController screenController
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param screenController screenController
    * @return element
    */
   public Element createElement(
       final Element parent,
       final Nifty nifty,
       final Screen screen,
-      final Object screenController,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final ControlController controlController,
+      final ScreenController screenController) {
     TextRenderer textRenderer = NiftyCreator.createTextRenderer(nifty, color, text, font);
 
     PanelRenderer renderer = NiftyCreator.createPanelRenderer(
@@ -86,7 +93,7 @@ public class MenuItemType extends ElementType {
         getBackgroundColor().createColor(),
         getBackgroundImage());
 
-    Element panel = new Element(
+    Element menuItem = new Element(
         getId(),
         parent,
         screen,
@@ -94,14 +101,28 @@ public class MenuItemType extends ElementType {
         renderer,
         textRenderer);
 
-    panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
-    panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-    super.addElementAttributes(panel, screen, screenController, nifty, registeredEffects, registeredControls, time);
+    menuItem.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+    menuItem.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
 
-    parent.add(panel);
+    focusHandler.addElement(menuItem);
+
+    MenuItemControl control = new MenuItemControl(focusHandler);
+    control.bind(screen, menuItem, null, null);
+
+    super.addElementAttributes(
+        menuItem,
+        screen,
+        nifty,
+        registeredEffects,
+        registeredControls,
+        time,
+        control,
+        screenController);
+
+    parent.add(menuItem);
     parent.setConstraintWidth(getMenuMaxWidth(parent.getElements()));
     parent.setConstraintHeight(getMenuMaxHeight(parent.getElements()));
-    return panel;
+    return menuItem;
   }
 
   /**

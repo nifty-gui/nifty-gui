@@ -119,10 +119,11 @@ public class ScreenType {
           layerType.createElement(
               nifty,
               screen,
-              screenController,
               registeredEffects,
               registeredControls,
-              timeProvider));
+              timeProvider,
+              null,
+              screenController));
     }
     return screen;
   }

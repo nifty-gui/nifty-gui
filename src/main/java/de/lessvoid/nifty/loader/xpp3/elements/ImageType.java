@@ -3,6 +3,7 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.RenderImage;
@@ -107,20 +108,21 @@ public class ImageType extends ElementType {
    * @param parent parent
    * @param nifty nifty
    * @param screen screen
-   * @param screenController screenController
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param screenController screenController
    * @return element
    */
   public Element createElement(
       final Element parent,
       final Nifty nifty,
       final Screen screen,
-      final Object screenController,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final ControlController controlController,
+      final ScreenController screenController) {
     // create the image
     RenderImage image = nifty.getRenderDevice().createImage(filename, filter);
 
@@ -159,7 +161,16 @@ public class ImageType extends ElementType {
     element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
     element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
 
-    super.addElementAttributes(element, screen, screenController, nifty, registeredEffects, registeredControls, time);
+    super.addElementAttributes(
+        element,
+        screen,
+        nifty,
+        registeredEffects,
+        registeredControls,
+        time,
+        controlController,
+        screenController);
+
     parent.add(element);
     return element;
   }

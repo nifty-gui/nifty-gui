@@ -1,9 +1,7 @@
 package de.lessvoid.nifty.elements;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
@@ -86,22 +84,12 @@ public class Element {
   /**
    * method that should be invoked when someone clicks on this element.
    */
-  private Method onClickMethod;
-
-  /**
-   * on click object the onClickMethod should be invoked on.
-   */
-  private Object onClickObject;
+  private MethodInvoker onClickMethod = new MethodInvoker();
 
   /**
    * method that should be invoked when someone clicks and moves the cursor on this element.
    */
-  private Method onClickMouseMoveMethod;
-
-  /**
-   * on click object the onClickMouseMoveMethod should be invoked on.
-   */
-  private Object onClickMouseMoveObject;
+  private MethodInvoker onClickMouseMoveMethod = new MethodInvoker();
 
   /**
    * Nifty instance this element is attached to.
@@ -625,8 +613,9 @@ public class Element {
     }
 
     if (effectEventId == EffectEventId.onFocus) {
-      if (onClickObject instanceof Controller) {
-        ((Controller) onClickObject).onGetFocus();
+      Object onClickObject = onClickMethod.getObject();
+      if (onClickObject instanceof ControlController) {
+        ((ControlController) onClickObject).onGetFocus();
       }
     }
   }
@@ -644,8 +633,9 @@ public class Element {
     }
 
     if (effectEventId == EffectEventId.onFocus) {
-      if (onClickObject instanceof Controller) {
-        ((Controller) onClickObject).onLostFocus();
+      Object onClickObject = onClickMethod.getObject();
+      if (onClickObject instanceof ControlController) {
+        ((ControlController) onClickObject).onLostFocus();
       }
     }
   }
@@ -759,9 +749,9 @@ public class Element {
         if (isInside(x, y) && !isMouseDown()) {
           if (leftMouseDown) {
             setMouseDown(true, eventTime);
+            focusHandler.requestExclusiveFocus(this);
             effectManager.startEffect(EffectEventId.onClick, this, new TimeProvider(), null);
             onClick(x, y);
-            focusHandler.requestExclusiveFocus(this);
           }
         } else if (!leftMouseDown && isMouseDown()) {
             setMouseDown(false, eventTime);
@@ -815,19 +805,19 @@ public class Element {
 
     if (onClickMethod != null) {
       nifty.setAlternateKey(onClickAlternateKey);
-      try {
-        Class < ? > [] parameterTypes = onClickMethod.getParameterTypes();
-        if (parameterTypes.length == 0) {
-          log.info("invoking onClick method: " + onClickMethod);
-          onClickMethod.invoke(onClickObject);
-        } else {
-          log.info("invoking onClick method: " + onClickMethod + "(" + mouseX + ", " + mouseY + ")");
-          onClickMethod.invoke(onClickObject, mouseX, mouseY);
-        }
-      } catch (Exception e) {
-        log.log(Level.WARNING, "error", e);
+
+      if (onClickMethod.getMethodParameterCount() == 0) {
+        onClickMethod.invoke();
+      } else {
+        onClickMethod.invoke(mouseX, mouseY);
       }
     }
+  }
+
+  /**
+   */
+  public void onClick() {
+    onClickMethod.invoke();
   }
 
   /**
@@ -844,42 +834,30 @@ public class Element {
     lastMouseY = mouseY;
 
     if (onClickMouseMoveMethod != null) {
-      try {
-        Class < ? > [] parameterTypes = onClickMouseMoveMethod.getParameterTypes();
-        if (parameterTypes.length == 0) {
-          log.info("invoking onClickMouseMoveMethod method: " + onClickMouseMoveMethod);
-          onClickMouseMoveMethod.invoke(onClickMouseMoveObject);
-        } else {
-          log.info(
-              "invoking onClickMouseMoveMethod method: " + onClickMouseMoveMethod + "(" + mouseX + ", " + mouseY + ")");
-          onClickMouseMoveMethod.invoke(onClickMouseMoveObject, mouseX, mouseY);
-        }
-      } catch (Exception e) {
-        log.throwing(Element.class.getName(), "onClickMouseMove", e);
+      if (onClickMouseMoveMethod.getMethodParameterCount() == 0) {
+        onClickMouseMoveMethod.invoke();
+      } else {
+        onClickMouseMoveMethod.invoke(mouseX, mouseY);
       }
     }
   }
 
   /**
    * set on click method for the given screen.
-   * @param method the method to invoke
-   * @param object the object the method should be invoked on
+   * @param methodInvoker the method to invoke
    * @param useRepeat repeat on click (true) or single event (false)
    */
-  public final void setOnClickMethod(final Method method, final Object object, final boolean useRepeat) {
-    this.onClickMethod = method;
-    this.onClickObject = object;
+  public final void setOnClickMethod(final MethodInvoker methodInvoker, final boolean useRepeat) {
+    this.onClickMethod = methodInvoker;
     this.onClickRepeat = useRepeat;
   }
 
   /**
    * Set on click mouse move method.
-   * @param method the method to invoke
-   * @param object the object the method should be invoked on
+   * @param methodInvoker the method to invoke
    */
-  public void setOnClickMouseMoveMethod(final Method method, final Object object) {
-    this.onClickMouseMoveMethod = method;
-    this.onClickMouseMoveObject = object;
+  public void setOnClickMouseMoveMethod(final MethodInvoker methodInvoker) {
+    this.onClickMouseMoveMethod = methodInvoker;
   }
 
   /**
@@ -962,8 +940,9 @@ public class Element {
    * On start screen event.
    */
   public void onStartScreen() {
-    if (onClickObject instanceof Controller) {
-      ((Controller) onClickObject).onStartScreen();
+    Object onClickObject = onClickMethod.getObject();
+    if (onClickObject instanceof ControlController) {
+      ((ControlController) onClickObject).onStartScreen();
     }
 
     for (Element e : elements) {
@@ -1001,8 +980,9 @@ public class Element {
    * @param keyDown keyDown
    */
   public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
-    if (onClickObject instanceof Controller) {
-      ((Controller) onClickObject).keyEvent(eventKey, eventCharacter, keyDown);
+    Object onClickObject = onClickMethod.getObject();
+    if (onClickObject instanceof ControlController) {
+      ((ControlController) onClickObject).keyEvent(eventKey, eventCharacter, keyDown);
     }
   }
 

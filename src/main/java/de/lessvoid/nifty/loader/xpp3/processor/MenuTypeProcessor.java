@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.loader.xpp3.processor;
 
+import de.lessvoid.nifty.elements.controls.MenuFocusHandler;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
@@ -35,7 +36,8 @@ public class MenuTypeProcessor implements XmlElementProcessor {
     String font = attributes.get("font");
     MenuType menuType = new MenuType(font);
     ProcessorHelper.processElement(xmlParser, menuType, attributes);
-    xmlParser.zeroOrMore("menuItem", new MenuItemTypeProcessor(menuType, font));
+    xmlParser.zeroOrMore("menuItem", new MenuItemTypeProcessor(menuType, font, new MenuFocusHandler()));
+    xmlParser.zeroOrMore("control", new ControlTypeProcessor(menuType));
     element.addElementType(menuType);
   }
 }

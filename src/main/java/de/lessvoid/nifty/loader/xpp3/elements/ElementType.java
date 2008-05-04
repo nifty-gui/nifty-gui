@@ -5,10 +5,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -189,20 +191,21 @@ public class ElementType {
    * @param parent parent element
    * @param nifty nifty
    * @param screen screen
-   * @param controller ScreenController
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param controller ScreenController
    * @return element
    */
   public Element createElement(
       final Element parent,
       final Nifty nifty,
       final Screen screen,
-      final Object controller,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final ControlController controlController,
+      final ScreenController screenController) {
     return null;
   }
 
@@ -322,20 +325,21 @@ public class ElementType {
    * add attributes to the element.
    * @param element element
    * @param screen screen
-   * @param controller screenController
    * @param nifty nifty
    * @param registeredEffects effects
    * @param registeredControls registeredControls
    * @param time time
+   * @param controller screenController
    */
   protected void addElementAttributes(
       final Element element,
       final Screen screen,
-      final Object controller,
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final ControlController controlController,
+      final ScreenController screenController) {
     element.bindToScreen(nifty);
 
     // height
@@ -378,7 +382,7 @@ public class ElementType {
     }
     // interact
     if (interact != null) {
-      interact.initElement(element, controller);
+      interact.initElement(element, controlController, screenController);
     }
     // hover
     if (hover != null) {
@@ -390,7 +394,15 @@ public class ElementType {
     }
     // children
     for (ElementType elementType : elements) {
-      elementType.createElement(element, nifty, screen, controller, registeredEffects, registeredControls, time);
+      elementType.createElement(
+          element,
+          nifty,
+          screen,
+          registeredEffects,
+          registeredControls,
+          time,
+          controlController,
+          screenController);
     }
   }
 

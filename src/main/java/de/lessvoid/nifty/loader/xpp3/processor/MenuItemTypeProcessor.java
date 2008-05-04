@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.loader.xpp3.processor;
 
+import de.lessvoid.nifty.elements.controls.MenuFocusHandler;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.ColorType;
@@ -23,14 +24,17 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
    */
   private String font;
 
+  private MenuFocusHandler focusHandler;
+
   /**
    * create it.
    * @param elementParam element
    * @param fontParam font
    */
-  public MenuItemTypeProcessor(final ElementType elementParam, final String fontParam) {
+  public MenuItemTypeProcessor(final ElementType elementParam, final String fontParam, final MenuFocusHandler focusHandlerParam) {
     this.element = elementParam;
     this.font = fontParam;
+    this.focusHandler = focusHandlerParam;
   }
 
   /**
@@ -40,7 +44,7 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    MenuItemType menuItemType = new MenuItemType(font);
+    MenuItemType menuItemType = new MenuItemType(focusHandler, font);
     if (attributes.isSet("text")) {
       menuItemType.setText(attributes.get("text"));
     }

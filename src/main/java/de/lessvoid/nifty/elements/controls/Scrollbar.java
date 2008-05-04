@@ -2,8 +2,9 @@ package de.lessvoid.nifty.elements.controls;
 
 import java.util.Properties;
 
-import de.lessvoid.nifty.elements.Controller;
+import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.ControllerEventListener;
+import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -12,7 +13,7 @@ import de.lessvoid.nifty.tools.SizeValue;
  * A slider control.
  * @author void
  */
-public class Scrollbar implements Controller {
+public class Scrollbar implements ControlController {
 
   /**
    * the screen.
@@ -230,7 +231,9 @@ public class Scrollbar implements Controller {
 
   public void onLostFocus() {
     // TODO Auto-generated method stub
-    
+  }
+
+  public void forward(final MethodInvoker controllerMethod) {
   }
 
 }

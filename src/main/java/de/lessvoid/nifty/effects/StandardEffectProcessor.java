@@ -22,12 +22,12 @@ public class StandardEffectProcessor implements EffectProcessor {
   /**
    * the list of all pre effects registered in this processor.
    */
-  private List < Effect > effects = new ArrayList < Effect > ();
+  private List < Effect > effects = new ArrayList < Effect >();
 
   /**
    * the list of active effects.
    */
-  protected List < Effect > activeEffects = new ArrayList < Effect > ();
+  private List < Effect > activeEffects = new ArrayList < Effect >();
 
   /**
    * flag if this effect is active.
@@ -117,7 +117,7 @@ public class StandardEffectProcessor implements EffectProcessor {
   public Set < RenderState > getRenderStatesToSave() {
     if (!neverStopRendering) {
       if (!active) {
-        return new HashSet < RenderState > ();
+        return new HashSet < RenderState >();
       }
     }
 
@@ -261,5 +261,13 @@ public class StandardEffectProcessor implements EffectProcessor {
       }
       return "active: " + active + ", " + data.toString();
     }
+  }
+
+  /**
+   * get list of active effects.
+   * @return active effect list
+   */
+  public List < Effect > getActiveEffects() {
+    return activeEffects;
   }
 }
