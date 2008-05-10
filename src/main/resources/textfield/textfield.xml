@@ -10,6 +10,7 @@
   <registerEffect name="pulsate" class="de.lessvoid.nifty.effects.general.Pulsate" />
   <registerEffect name="ImageOverlay" class="de.lessvoid.nifty.effects.general.ImageOverlay" />
   <registerEffect name="ImageOverlayPulsate" class="de.lessvoid.nifty.effects.general.ImageOverlayPulsate" />
+  <registerEffect name="hint" class="de.lessvoid.nifty.effects.hover.Hint" />
   
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- textfield control -->
