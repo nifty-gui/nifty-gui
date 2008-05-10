@@ -38,6 +38,7 @@ public class MenuType extends ElementType {
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param controlController controlController
    * @param screenController screenController
    * @return element
    */
@@ -56,7 +57,8 @@ public class MenuType extends ElementType {
         screen,
         parent,
         getBackgroundImage(),
-        getBackgroundColor().createColor(), false);
+        getBackgroundColor().createColor(),
+        false);
     super.addElementAttributes(
         element,
         screen,

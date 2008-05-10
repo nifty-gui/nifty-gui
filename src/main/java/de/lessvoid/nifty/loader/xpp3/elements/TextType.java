@@ -70,6 +70,7 @@ public class TextType extends ElementType {
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param controlController controlController
    * @param screenController screenController
    * @return element
    */

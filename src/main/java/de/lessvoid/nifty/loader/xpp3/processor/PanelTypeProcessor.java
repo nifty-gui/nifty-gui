@@ -35,19 +35,5 @@ public class PanelTypeProcessor implements XmlElementProcessor {
     PanelType panel = new PanelType();
     ProcessorHelper.processElement(xmlParser, panel, attributes);
     element.addElementType(panel);
-
-    /*
-    PanelRenderer renderer = NiftyCreator.createPanelRenderer(nifty.getRenderDevice(), attributes);
-    Element panel = new Element(
-        attributes.get("id"),
-        parent,
-        screen,
-        false,
-        renderer);
-    NiftyCreator.processElementAttributes(nifty, panel, attributes);
-    parent.add(panel);
-
-    ElementHelper.processChildElements(xmlParser, nifty, screen, panel, registeredEffects, screenController);
-    */
   }
 }
