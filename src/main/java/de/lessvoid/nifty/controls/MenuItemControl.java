@@ -1,20 +1,20 @@
-package de.lessvoid.nifty.elements.controls;
+package de.lessvoid.nifty.controls;
 
 import java.util.Properties;
 
 import org.lwjgl.input.Keyboard;
 
-import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.ControllerEventListener;
-import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.MethodInvoker;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
  * A TextFieldControl.
  * @author void
  */
-public class MenuItemControl implements ControlController {
+public class MenuItemControl implements Controller {
 
   private Screen screen;
   private Element element;
@@ -46,7 +46,7 @@ public class MenuItemControl implements ControlController {
   }
 
 
-  public void onGetFocus() {
+  public void onFocus(boolean getFocus) {
     System.out.println("*** " + element.getId() + " *** onGetFocus");
   }
 
@@ -54,19 +54,20 @@ public class MenuItemControl implements ControlController {
     System.out.println("*** " + element.getId() + " *** onLostFocus");
   }
 
-  public void keyEvent(int eventKey, char keyEvent, boolean keyDown) {
-    System.out.println("*** " + element.getId() + " *** keyEvent: " + eventKey + ", " + keyEvent + ", " + keyDown);
-    if (keyDown) {
-      if (eventKey == Keyboard.KEY_DOWN) {
-        focusHandler.getNext(element).setFocus();
-      } else if (eventKey == Keyboard.KEY_UP) {
-        focusHandler.getPrev(element).setFocus();
-      } else if (eventKey == Keyboard.KEY_RETURN) {
-        element.onClick();
-      }
+  /**
+   * process InputEvent.
+   * @param inputEvent input event to process
+   */
+  public void inputEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
+      focusHandler.getNext(element).setFocus();
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+      focusHandler.getPrev(element).setFocus();
+    } else if (inputEvent == NiftyInputEvent.SubmitText) {
+      element.onClick();
     }
   }
-  
+
   public void forward(final MethodInvoker controllerMethod) {
     
   }

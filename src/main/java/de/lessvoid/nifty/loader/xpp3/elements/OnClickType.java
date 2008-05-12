@@ -2,7 +2,7 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 
 import java.lang.reflect.Method;
 
-import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.tools.MethodResolver;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -44,9 +44,8 @@ public class OnClickType {
    * @return method
    */
   public MethodInvoker getMethod(
-      final ControlController controlController,
+      final Controller controlController,
       final ScreenController screenController) {
-    // control controller method
     if (controlController != null) {
       return resolveControlControllerMethod(controlController, screenController);
     }
@@ -62,7 +61,7 @@ public class OnClickType {
    * @return MethodInvoker (might be a forward on the controlController)
    */
   private MethodInvoker resolveControlControllerMethod(
-      final ControlController controlController,
+      final Controller controlController,
       final ScreenController screenController) {
     // alright, first check for method directly on control controller
     MethodInvoker controlMethod = getMethod(value, controlController);

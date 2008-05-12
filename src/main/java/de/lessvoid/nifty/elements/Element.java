@@ -6,11 +6,14 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.shared.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
@@ -161,6 +164,11 @@ public class Element {
    * clip children.
    */
   private boolean clipChildren;
+
+  /**
+   * attached control when this element is an control.
+   */
+  private NiftyInputControl attachedInputControl = null;
 
   /**
    * construct new instance of Element.
@@ -613,9 +621,8 @@ public class Element {
     }
 
     if (effectEventId == EffectEventId.onFocus) {
-      Object onClickObject = onClickMethod.getObject();
-      if (onClickObject instanceof ControlController) {
-        ((ControlController) onClickObject).onGetFocus();
+      if (attachedInputControl != null) {
+        attachedInputControl.onFocus(true);
       }
     }
   }
@@ -633,9 +640,8 @@ public class Element {
     }
 
     if (effectEventId == EffectEventId.onFocus) {
-      Object onClickObject = onClickMethod.getObject();
-      if (onClickObject instanceof ControlController) {
-        ((ControlController) onClickObject).onLostFocus();
+      if (attachedInputControl != null) {
+        attachedInputControl.onFocus(false);
       }
     }
   }
@@ -805,12 +811,7 @@ public class Element {
 
     if (onClickMethod != null) {
       nifty.setAlternateKey(onClickAlternateKey);
-
-      if (onClickMethod.getMethodParameterCount() == 0) {
-        onClickMethod.invoke();
-      } else {
-        onClickMethod.invoke(mouseX, mouseY);
-      }
+      onClickMethod.invoke(mouseX, mouseY);
     }
   }
 
@@ -834,11 +835,7 @@ public class Element {
     lastMouseY = mouseY;
 
     if (onClickMouseMoveMethod != null) {
-      if (onClickMouseMoveMethod.getMethodParameterCount() == 0) {
-        onClickMouseMoveMethod.invoke();
-      } else {
-        onClickMouseMoveMethod.invoke(mouseX, mouseY);
-      }
+      onClickMouseMoveMethod.invoke(mouseX, mouseY);
     }
   }
 
@@ -940,9 +937,8 @@ public class Element {
    * On start screen event.
    */
   public void onStartScreen() {
-    Object onClickObject = onClickMethod.getObject();
-    if (onClickObject instanceof ControlController) {
-      ((ControlController) onClickObject).onStartScreen();
+    if (attachedInputControl != null) {
+      attachedInputControl.onStartScreen();
     }
 
     for (Element e : elements) {
@@ -980,9 +976,8 @@ public class Element {
    * @param keyDown keyDown
    */
   public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
-    Object onClickObject = onClickMethod.getObject();
-    if (onClickObject instanceof ControlController) {
-      ((ControlController) onClickObject).keyEvent(eventKey, eventCharacter, keyDown);
+    if (attachedInputControl != null) {
+      attachedInputControl.keyEvent(eventKey, eventCharacter, keyDown);
     }
   }
 
@@ -999,5 +994,13 @@ public class Element {
    */
   public void setFocus() {
     nifty.getCurrentScreen().setFocus(this);
+  }
+
+  /**
+   * attach an input control to this element.
+   * @param newInputControl input control
+   */
+  public void attachInputControl(final NiftyInputControl newInputControl) {
+    attachedInputControl = newInputControl;
   }
 }

@@ -75,7 +75,7 @@ public class MethodInvoker {
    * return count of actual method parameters.
    * @return count of parameters the method needs
    */
-  public int getMethodParameterCount() {
+  private int getMethodParameterCount() {
     if (forwardInvoker != null) {
       return forwardInvoker.getMethodParameterCount();
     } else {
@@ -86,24 +86,31 @@ public class MethodInvoker {
 
   /**
    * invoke method with optional parameters.
-   * @param invokeParameters parameter array for call
+   * @param invokeParametersParam parameter array for call
    */
-  public void invoke(final Object ... invokeParameters) {
+  public void invoke(final Object ... invokeParametersParam) {
     if (forwardInvoker != null) {
-      forwardInvoker.invoke(invokeParameters);
+      forwardInvoker.invoke(invokeParametersParam);
       return;
     }
 
+    // now build invoke parameters
+    Object [] invokeParameters = invokeParametersParam;
     if (invokeParameters.length == 0) {
       log.info("invoking method '" + method + "'");
     } else {
-      StringBuffer paraString = new StringBuffer();
-      paraString.append(invokeParameters[0].toString());
-      for (int i = 1; i < invokeParameters.length; i++) {
-        paraString.append(", ");
-        paraString.append(invokeParameters[i].toString());
+      if (!supportsParameters()) {
+        log.info("invoking method '" + method + "' (note: given invokeParameters have been ignored)");
+        invokeParameters = new Object[0];
+      } else {
+        StringBuffer paraString = new StringBuffer();
+        paraString.append(invokeParameters[0].toString());
+        for (int i = 1; i < invokeParameters.length; i++) {
+          paraString.append(", ");
+          paraString.append(invokeParameters[i].toString());
+        }
+        log.info("invoking method '" + method + "' with (" + paraString + ")");
       }
-      log.info("invoking method '" + method + "' with (" + paraString + ")");
     }
 
     try {
@@ -111,5 +118,14 @@ public class MethodInvoker {
     } catch (Exception e) {
       log.warning("error: " + e.getMessage());
     }
+  }
+
+  /**
+   * returns true when this method supports parameters and false when not.
+   * @return true when parametercount != 0 (in this case parameters are supported)
+   * and false if not
+   */
+  private boolean supportsParameters() {
+    return getMethodParameterCount() != 0;
   }
 }

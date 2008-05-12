@@ -1,13 +1,13 @@
 package de.lessvoid.nifty.screen;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Controller;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 
 /**
  * ScreenController Interface all screen controllers should support.
  * @author void
  */
-public interface ScreenController extends Controller {
+public interface ScreenController {
 
   /**
    * bind this ScreenController to a screen.

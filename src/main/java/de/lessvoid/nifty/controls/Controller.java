@@ -1,14 +1,18 @@
-package de.lessvoid.nifty.elements;
+package de.lessvoid.nifty.controls;
 
 import java.util.Properties;
 
+import de.lessvoid.nifty.elements.ControllerEventListener;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.MethodInvoker;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
  * Controller.
  * @author void
  */
-public interface ControlController extends Controller {
+public interface Controller {
 
   /**
    * Bind this Controller to a certain element.
@@ -25,22 +29,16 @@ public interface ControlController extends Controller {
   void onStartScreen();
 
   /**
-   * key event.
-   * @param eventKey event key
-   * @param keyEvent key event
-   * @param keyDown key down
-   */
-  void keyEvent(int eventKey, char keyEvent, boolean keyDown);
-
-  /**
    * This controller gets the focus.
+   * @param getFocus get focus (true) or loose focus (false)
    */
-  void onGetFocus();
+  void onFocus(boolean getFocus);
 
   /**
-   * This controller looses the focus.
+   * input event.
+ * @param inputEvent the NiftyInputEvent to process
    */
-  void onLostFocus();
+  void inputEvent(NiftyInputEvent inputEvent);
 
   /**
    * Forward a controller method call. This is used so that a controller for

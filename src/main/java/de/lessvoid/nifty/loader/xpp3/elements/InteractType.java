@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
-import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -63,14 +64,39 @@ public class InteractType {
   }
 
   /**
+   * init with input control.
+   * @param element element
+   * @param control input control
+   * @param screenController screen controller
+   */
+  public void initWithControl(
+      final Element element,
+      final NiftyInputControl control,
+      final ScreenController screenController) {
+    element.attachInputControl(control);
+    initElement(element, control.getController(), screenController);
+  }
+
+  /**
+   * initialize with screen controller.
+   * @param element element
+   * @param screenController screen controller
+   */
+  public void initWithScreenController(
+      final Element element,
+      final ScreenController screenController) {
+    initElement(element, null, screenController);
+  }
+
+  /**
    * Initialize element.
    * @param element element
    * @param controlController controlController
    * @param screenController screenController
    */
-  public void initElement(
+  private void initElement(
       final Element element,
-      final ControlController controlController,
+      final Controller controlController,
       final ScreenController screenController) {
 
     if (onClick != null) {

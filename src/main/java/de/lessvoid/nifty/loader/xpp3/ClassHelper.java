@@ -56,4 +56,26 @@ public final class ClassHelper {
     return null;
   }
 
+  /**
+   * dynamically load the given class, create and return a new instance.
+   * @param className className
+   * @param type type
+   * @param <T> class
+   * @return new ScreenController instance or null
+   */
+  public static < T > T getInstance(final String className, final Class < T > type) {
+    try {
+      Class < ? > cls = ClassHelper.class.getClassLoader().loadClass(className);
+      if (type.isAssignableFrom(cls)) {
+        return type.cast(cls.newInstance());
+      } else {
+        log.warning(
+            "given class [" + className + "] does not implement [" + type.getName() + "]");
+      }
+    } catch (Exception e) {
+      log.warning("class [" + className + "] could not be instanziated");
+    }
+    return null;
+  }
 }
+

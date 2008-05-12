@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.elements.controls;
+package de.lessvoid.nifty.controls;
 
 import java.util.ArrayList;
 

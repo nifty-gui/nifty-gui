@@ -3,7 +3,7 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.RenderImage;
@@ -111,6 +111,7 @@ public class ImageType extends ElementType {
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param inputControl input control
    * @param screenController screenController
    * @return element
    */
@@ -121,7 +122,7 @@ public class ImageType extends ElementType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final TimeProvider time,
-      final ControlController controlController,
+      final NiftyInputControl inputControl,
       final ScreenController screenController) {
     // create the image
     RenderImage image = nifty.getRenderDevice().createImage(filename, filter);
@@ -168,7 +169,7 @@ public class ImageType extends ElementType {
         registeredEffects,
         registeredControls,
         time,
-        controlController,
+        inputControl,
         screenController);
 
     parent.add(element);

@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.loader.xpp3.processor;
 
-import de.lessvoid.nifty.elements.controls.MenuFocusHandler;
+import de.lessvoid.nifty.controls.MenuFocusHandler;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.ColorType;

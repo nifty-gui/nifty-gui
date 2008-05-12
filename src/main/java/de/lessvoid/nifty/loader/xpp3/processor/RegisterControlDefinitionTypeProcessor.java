@@ -30,7 +30,11 @@ public class RegisterControlDefinitionTypeProcessor implements XmlElementProcess
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     String name = attributes.get("name");
     String controller = attributes.get("controller");
-    final RegisterControlDefinitionType registerControl = new RegisterControlDefinitionType(name, controller);
+    String inputMapping = attributes.get("inputMapping");
+    final RegisterControlDefinitionType registerControl = new RegisterControlDefinitionType(
+        name,
+        controller,
+        inputMapping);
     registeredControls.put(name, registerControl);
 
     ElementType pseudoElement = new ElementType() {

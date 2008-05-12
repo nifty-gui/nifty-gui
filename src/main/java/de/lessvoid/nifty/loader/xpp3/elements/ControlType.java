@@ -5,10 +5,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.tools.MethodResolver;
+import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -59,6 +61,7 @@ public class ControlType extends ElementType {
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
+   * @param inputControlParam controlController
    * @param screenController screenController
    * @return element
    */
@@ -69,7 +72,7 @@ public class ControlType extends ElementType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final TimeProvider time,
-      final ControlController controlController,
+      final NiftyInputControl inputControlParam,
       final ScreenController screenController) {
 
     RegisterControlDefinitionType controlDefinition = registeredControls.get(name);
@@ -78,7 +81,7 @@ public class ControlType extends ElementType {
       return null;
     }
 
-    final ControlController c = controlDefinition.getControllerInstance(nifty);
+    final Controller c = controlDefinition.getControllerInstance(nifty);
     ControllerEventListener listener = null;
 
     // onClick action
@@ -103,6 +106,9 @@ public class ControlType extends ElementType {
       }
     }
 
+    final NiftyInputMapping inputMapping = controlDefinition.getInputMappingInstance();
+    NiftyInputControl inputControl = new NiftyInputControl(c, inputMapping);
+
     // get very first child if available
     if (controlDefinition.getElements().size() == 1) {
       ElementType w = controlDefinition.getElements().iterator().next();
@@ -113,7 +119,7 @@ public class ControlType extends ElementType {
           registeredEffects,
           registeredControls,
           time,
-          c,
+          inputControl,
           screenController);
       c.bind(screen, current, null, listener);
       return current;

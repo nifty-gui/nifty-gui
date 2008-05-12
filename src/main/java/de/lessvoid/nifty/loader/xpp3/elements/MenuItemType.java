@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.controls.MenuFocusHandler;
+import de.lessvoid.nifty.controls.MenuItemControl;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.controls.MenuFocusHandler;
-import de.lessvoid.nifty.elements.controls.MenuItemControl;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.mapping.Default;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -74,7 +76,7 @@ public class MenuItemType extends ElementType {
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
-   * @param controlController controlController
+   * @param inputControlParam controlController
    * @param screenController screenController
    * @return element
    */
@@ -85,7 +87,7 @@ public class MenuItemType extends ElementType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final TimeProvider time,
-      final ControlController controlController,
+      final NiftyInputControl inputControlParam,
       final ScreenController screenController) {
     TextRenderer textRenderer = NiftyCreator.createTextRenderer(nifty, color, text, font);
 
@@ -110,6 +112,9 @@ public class MenuItemType extends ElementType {
     MenuItemControl control = new MenuItemControl(focusHandler);
     control.bind(screen, menuItem, null, null);
 
+    final NiftyInputMapping inputMapping = new Default();
+    NiftyInputControl inputControl = new NiftyInputControl(control, inputMapping);
+
     super.addElementAttributes(
         menuItem,
         screen,
@@ -117,7 +122,7 @@ public class MenuItemType extends ElementType {
         registeredEffects,
         registeredControls,
         time,
-        control,
+        inputControl,
         screenController);
 
     parent.add(menuItem);

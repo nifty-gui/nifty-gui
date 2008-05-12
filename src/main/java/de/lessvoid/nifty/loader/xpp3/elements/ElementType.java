@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
@@ -194,7 +194,8 @@ public class ElementType {
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
-   * @param controller ScreenController
+   * @param inputControl inputControl we should attach to the element (can be null)
+   * @param screenController ScreenController
    * @return element
    */
   public Element createElement(
@@ -204,7 +205,7 @@ public class ElementType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final TimeProvider time,
-      final ControlController controlController,
+      final NiftyInputControl inputControl,
       final ScreenController screenController) {
     return null;
   }
@@ -329,7 +330,8 @@ public class ElementType {
    * @param registeredEffects effects
    * @param registeredControls registeredControls
    * @param time time
-   * @param controller screenController
+   * @param control attached control (might be null)
+   * @param screenController screenController
    */
   protected void addElementAttributes(
       final Element element,
@@ -338,7 +340,7 @@ public class ElementType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final TimeProvider time,
-      final ControlController controlController,
+      final NiftyInputControl control,
       final ScreenController screenController) {
     element.bindToScreen(nifty);
 
@@ -382,7 +384,12 @@ public class ElementType {
     }
     // interact
     if (interact != null) {
-      interact.initElement(element, controlController, screenController);
+      // control given?
+      if (control != null) {
+        interact.initWithControl(element, control, screenController);
+      } else {
+        interact.initWithScreenController(element, screenController);
+      }
     }
     // hover
     if (hover != null) {
@@ -401,7 +408,7 @@ public class ElementType {
           registeredEffects,
           registeredControls,
           time,
-          controlController,
+          control,
           screenController);
     }
   }

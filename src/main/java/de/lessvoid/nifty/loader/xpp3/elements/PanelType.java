@@ -3,7 +3,7 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.screen.Screen;
@@ -24,7 +24,7 @@ public class PanelType extends ElementType {
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
    * @param time time
-   * @param controlController controlController
+   * @param inputControl controlController
    * @param screenController screenController
    * @return element
    */
@@ -35,7 +35,7 @@ public class PanelType extends ElementType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final TimeProvider time,
-      final ControlController controlController,
+      final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element element = NiftyCreator.createPanel(
         getId(),
@@ -52,7 +52,7 @@ public class PanelType extends ElementType {
         registeredEffects,
         registeredControls,
         time,
-        controlController,
+        inputControl,
         screenController);
     parent.add(element);
     return element;

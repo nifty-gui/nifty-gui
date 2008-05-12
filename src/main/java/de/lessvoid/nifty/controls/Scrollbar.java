@@ -1,11 +1,11 @@
-package de.lessvoid.nifty.elements.controls;
+package de.lessvoid.nifty.controls;
 
 import java.util.Properties;
 
-import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.ControllerEventListener;
-import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.MethodInvoker;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
@@ -13,7 +13,7 @@ import de.lessvoid.nifty.tools.SizeValue;
  * A slider control.
  * @author void
  */
-public class Scrollbar implements ControlController {
+public class Scrollbar implements Controller {
 
   /**
    * the screen.
@@ -221,10 +221,10 @@ public class Scrollbar implements ControlController {
     return currentValue;
   }
 
-  public void keyEvent(int keyEvent, char keyCharacter, boolean keyDown) {
+  public void inputEvent(NiftyInputEvent inputEvent) {
   }
 
-  public void onGetFocus() {
+  public void onFocus(boolean getFocus) {
     // TODO Auto-generated method stub
     
   }

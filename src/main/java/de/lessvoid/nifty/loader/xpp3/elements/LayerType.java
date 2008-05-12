@@ -3,7 +3,8 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.ControlController;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.screen.Screen;
@@ -21,11 +22,12 @@ public class LayerType extends PanelType {
    * Create Layer.
    * @param nifty nifty
    * @param screen screen
-   * @param screenController screenController
    * @param registeredEffects effects
    * @param registeredControls registeredControls
    * @param time time
-   * @return element element
+   * @param inputControl input control
+   * @param screenController screen controller
+   * @return element
    */
   public Element createElement(
       final Nifty nifty,
@@ -33,7 +35,7 @@ public class LayerType extends PanelType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final TimeProvider time,
-      final ControlController controlController,
+      final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element layer = NiftyCreator.createLayer(
         getId(),
@@ -48,7 +50,7 @@ public class LayerType extends PanelType {
         registeredEffects,
         registeredControls,
         time,
-        controlController,
+        inputControl,
         screenController);
     return layer;
   }

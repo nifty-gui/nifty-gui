@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.ControlController;
-import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.mapping.NoInputMapping;
+import de.lessvoid.nifty.loader.xpp3.ClassHelper;
 
 /**
  * RegisterControlDefinitionType.
@@ -14,7 +16,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  */
 public class RegisterControlDefinitionType {
   /**
-   * logger.
+   * log.
    */
   private static Logger log = Logger.getLogger(RegisterControlDefinitionType.class.getName());
 
@@ -29,6 +31,11 @@ public class RegisterControlDefinitionType {
   private String controller;
 
   /**
+   * inputMapper.
+   */
+  private String inputMapper;
+
+  /**
    * elements.
    */
   private Collection < ElementType > elements = new ArrayList < ElementType >();
@@ -37,10 +44,15 @@ public class RegisterControlDefinitionType {
    * Create new instance.
    * @param nameParam name
    * @param controllerParam controller
+   * @param inputMapperParam inputMapperParam
    */
-  public RegisterControlDefinitionType(final String nameParam, final String controllerParam) {
+  public RegisterControlDefinitionType(
+      final String nameParam,
+      final String controllerParam,
+      final String inputMapperParam) {
     this.name = nameParam;
     this.controller = controllerParam;
+    this.inputMapper = inputMapperParam;
   }
 
   /**
@@ -56,32 +68,21 @@ public class RegisterControlDefinitionType {
    * @param nifty nifty
    * @return Controller
    */
-  public de.lessvoid.nifty.elements.ControlController getControllerInstance(final Nifty nifty) {
-    return getController(nifty, controller);
+  public Controller getControllerInstance(final Nifty nifty) {
+    return ClassHelper.getInstance(controller, Controller.class);
   }
 
   /**
-   * dynamically load the given class, create and return a new instance.
-   * @param niftyParent niftyParent
-   * @param controllerClass controllerClass
-   * @return new ScreenController instance or null
+   * Get new NiftyInputMapping instance.
+   * @return NiftyInputMapping
    */
-  private static ControlController getController(
-      final Nifty niftyParent,
-      final String controllerClass) {
-    try {
-      Class < ? > cls = ControlType.class.getClassLoader().loadClass(controllerClass);
-      if (ControlController.class.isAssignableFrom(cls)) {
-        return (ControlController) cls.newInstance();
-      } else {
-        log.warning(
-            "given screenController class ["
-            + controllerClass + "] does not implement [" + ScreenController.class.getName() + "]");
-      }
-    } catch (Exception e) {
-      log.warning("class [" + controllerClass + "] could not be instanziated");
+  public NiftyInputMapping getInputMappingInstance() {
+    NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMapper, NiftyInputMapping.class);
+    if (inputMapping == null) {
+      log.warning("unable to instance inputMapping - fall back to no mapping");
+      inputMapping = new NoInputMapping();
     }
-    return null;
+    return inputMapping;
   }
 
   /**
