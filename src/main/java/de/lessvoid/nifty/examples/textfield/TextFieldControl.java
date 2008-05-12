@@ -2,14 +2,13 @@ package de.lessvoid.nifty.examples.textfield;
 
 import java.util.Properties;
 
-import org.lwjgl.input.Keyboard;
-
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.elements.ControlController;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -18,7 +17,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * A TextFieldControl.
  * @author void
  */
-public class TextFieldControl implements ControlController {
+public class TextFieldControl implements Controller {
 
   /**
    * the screen.
@@ -146,33 +145,35 @@ public class TextFieldControl implements ControlController {
     return textRenderer.getFont().getIndexFromPixel(visibleString, (mouseX-fieldElement.getX()), 1.0f);
   }
 
-  public void keyEvent(final int eventKey, final char eventCharacter, boolean keyDown) {
-    if (keyDown && eventKey == Keyboard.KEY_LEFT) {
+  /**
+   * handle input event.
+   * @param inputEvent input event
+   */
+  public void inputEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.MoveCursorLeft) {
       textField.cursorLeft();
-    } else if (keyDown && eventKey == Keyboard.KEY_RIGHT) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorRight) {
       textField.cursorRight();
-    } else if (keyDown && eventKey == Keyboard.KEY_DELETE) {
+    } else if (inputEvent == NiftyInputEvent.Delete) {
       textField.delete();
-    } else if (keyDown && eventKey == Keyboard.KEY_BACK) {
+    } else if (inputEvent == NiftyInputEvent.Backspace) {
       textField.backspace();
-    } else if (keyDown && eventKey == Keyboard.KEY_END) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorToLastPosition) {
       textField.toLastPosition();
-    } else if (keyDown && eventKey == Keyboard.KEY_HOME) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorToFirstPosition) {
       textField.toFirstPosition();
-    } else if (keyDown && (eventKey == Keyboard.KEY_LSHIFT || eventKey == Keyboard.KEY_RSHIFT)) {
+    } else if (inputEvent == NiftyInputEvent.SelectionStart) {
       textField.startSelecting();
-    } else if (!keyDown && (eventKey == Keyboard.KEY_LSHIFT || eventKey == Keyboard.KEY_RSHIFT)) {
+    } else if (inputEvent == NiftyInputEvent.SelectionEnd) {
       textField.endSelecting();
-    } else if (keyDown && (eventKey == Keyboard.KEY_X)) {
+    } else if (inputEvent == NiftyInputEvent.Cut) {
       textField.cut();
-    } else if (keyDown && (eventKey == Keyboard.KEY_C)) {
+    } else if (inputEvent == NiftyInputEvent.Copy) {
       textField.copy();
-    } else if (keyDown && (eventKey == Keyboard.KEY_V)) {
+    } else if (inputEvent == NiftyInputEvent.Paste) {
       textField.put();
-    } else {
-      if (eventCharacter > 31 && eventCharacter < 127) {
-        textField.insert(eventCharacter);
-      }
+    } else if (inputEvent == NiftyInputEvent.Character) {
+      textField.insert(inputEvent.getCharacter());
     }
 
     updateCursor();
@@ -255,12 +256,13 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
     }
   }
 
-  public void onGetFocus() {
-    cursorElement.show();
-  }
-
-  public void onLostFocus() {
-    cursorElement.hide();
+  public void onFocus(final boolean getFocus) {
+	  if (getFocus) {
+		  cursorElement.show();	  
+	  } else {
+		  cursorElement.hide();	  
+	  }
+    
   }
 
   public void forward(MethodInvoker controllerMethod) {
