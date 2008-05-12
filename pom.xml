@@ -92,6 +92,33 @@
           <excludeModules>fml</excludeModules>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+          <additionalBuildcommands>
+            <buildcommand>com.atlassw.tools.eclipse.checkstyle.CheckstyleBuilder</buildcommand>
+          </additionalBuildcommands>
+          <additionalConfig>
+            <file>
+              <name>.checkstyle</name>
+              <content>
+                <![CDATA[<fileset-config file-format-version="1.2.0" simple-config="true">
+  <fileset name="all" enabled="true" check-config-name="Nifty Checkstyle" local="false">
+    <file-match-pattern match-pattern="." include-pattern="true"/>
+  </fileset>
+  <filter name="NonSrcDirs" enabled="true"/>
+</fileset-config>]]>
+              </content>
+            </file>
+          </additionalConfig>
+          <additionalProjectnatures>
+            <projectnature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</projectnature>
+          </additionalProjectnatures>
+          <downloadJavadocs>true</downloadJavadocs>
+          <downloadSources>true</downloadSources>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <reporting>
@@ -137,7 +164,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <configuration>
-          <configLocation>my-checkstyle.xml</configLocation>
+          <configLocation>nifty-checkstyle.xml</configLocation>
         </configuration>
       </plugin>
       <plugin>
@@ -158,13 +185,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changelog-plugin</artifactId>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <configuration>
-          <workspaceCodeStylesURL>http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty/trunk/my-checkstyle.xml</workspaceCodeStylesURL>
-        </configuration>
-      </plugin>      
     </plugins>
   </reporting>
   <distributionManagement>
