@@ -48,14 +48,6 @@ public class MethodInvoker {
   }
 
   /**
-   * get object.
-   * @return object
-   */
-  public Object getObject() {
-    return object;
-  }
-
-  /**
    * is null method?
    * @return true when null object
    */

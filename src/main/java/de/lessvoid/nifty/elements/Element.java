@@ -6,14 +6,12 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.shared.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
-import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
@@ -733,7 +731,7 @@ public class Element {
 
     if (visibleToMouseEvents) {
       // if some other element has exclusive access to mouse events we are done
-      if (!focusHandler.canProcessMouseEvents(this)) {
+      if (focusHandler != null && !focusHandler.canProcessMouseEvents(this)) {
         return;
       }
 
@@ -755,14 +753,18 @@ public class Element {
         if (isInside(x, y) && !isMouseDown()) {
           if (leftMouseDown) {
             setMouseDown(true, eventTime);
-            focusHandler.requestExclusiveFocus(this);
+            if (focusHandler != null) {
+              focusHandler.requestExclusiveFocus(this);
+            }
             effectManager.startEffect(EffectEventId.onClick, this, new TimeProvider(), null);
             onClick(x, y);
           }
         } else if (!leftMouseDown && isMouseDown()) {
             setMouseDown(false, eventTime);
             effectManager.stopEffect(EffectEventId.onClick);
-            focusHandler.lostFocus(this);
+            if (focusHandler != null) {
+              focusHandler.lostFocus(this);
+            }
         }
 
         if (isMouseDown()) {
