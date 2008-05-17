@@ -39,6 +39,14 @@ public class Screen implements MouseFocusHandler {
   private ArrayList < Element > layerElements = new ArrayList < Element >();
 
   /**
+   * Popup layers are dynamic layers on top of the normal layers.
+   * They are treated as "normal" layers and are added to the layerElements variable. In the
+   * popupLayer variable we remember the pop ups additionally, so that we can send
+   * input events only to these elements when they are present.
+   */
+  private ArrayList < Element > popupElements = new ArrayList < Element >();
+
+  /**
    * the current element that has exclusive access to the mouse or null.
    */
   private Element mouseFocusElement;
@@ -87,8 +95,22 @@ public class Screen implements MouseFocusHandler {
    * add a layer element to this screen.
    * @param layerElement the layer element to add
    */
-  public final void addLayerElement(final Element layerElement) {
+  public void addLayerElement(final Element layerElement) {
     layerElements.add(layerElement);
+  }
+
+  /**
+   * add a popup layer.
+   * @param popup popup
+   */
+  public void addPopup(final Element popup) {
+    // prepare popup for display
+    popup.resetEffects();
+    popup.layoutElements();
+
+    // add to layers and add as popup
+    layerElements.add(popup);
+    popupElements.add(popup);
   }
 
   /**
@@ -207,8 +229,28 @@ public class Screen implements MouseFocusHandler {
    * @param leftMouseDown mouse button down
    */
   public final void mouseEvent(final int x, final int y, final boolean leftMouseDown) {
-    for (int i = layerElements.size() - 1; i >= 0; i--) {
-      Element layer = layerElements.get(i);
+    // when there are popup elements available this event will only travel to these layers!
+    if (!popupElements.isEmpty()) {
+      forwardMouseEventToLayers(popupElements, x, y, leftMouseDown);
+    } else {
+      forwardMouseEventToLayers(layerElements, x, y, leftMouseDown);
+    }
+  }
+
+  /**
+   * forward mouse event to the given layer list.
+   * @param layerList layer list
+   * @param x x position of mouse
+   * @param y y position of mouse
+   * @param leftMouseDown mouse button down
+   */
+  private void forwardMouseEventToLayers(
+      final List < Element > layerList,
+      final int x,
+      final int y,
+      final boolean leftMouseDown) {
+    for (int i = layerList.size() - 1; i >= 0; i--) {
+      Element layer = layerList.get(i);
       layer.mouseEvent(x, y, leftMouseDown, timeProvider.getMsTime());
     }
   }

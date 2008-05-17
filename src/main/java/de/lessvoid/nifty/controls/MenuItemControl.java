@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.lwjgl.input.Keyboard;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MethodInvoker;
@@ -31,10 +32,10 @@ public class MenuItemControl implements Controller {
    * @param newListener listener
    */
   public void bind(
+      Nifty nifty,
       final Screen newScreen,
       final Element newElement,
-      final Properties properties,
-      final ControllerEventListener newListener) {
+      final Properties properties, final ControllerEventListener newListener) {
     screen = newScreen;
     element = newElement;
   }

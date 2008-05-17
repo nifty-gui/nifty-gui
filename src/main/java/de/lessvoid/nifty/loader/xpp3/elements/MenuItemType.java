@@ -41,10 +41,14 @@ public class MenuItemType extends ElementType {
    */
   private String font;
 
+  /**
+   * focus handler.
+   */
   private MenuFocusHandler focusHandler;
 
   /**
    * create it.
+   * @param focusHandlerParam focusHandler
    * @param fontParam font
    */
   public MenuItemType(final MenuFocusHandler focusHandlerParam, final String fontParam) {
@@ -110,7 +114,7 @@ public class MenuItemType extends ElementType {
     focusHandler.addElement(menuItem);
 
     MenuItemControl control = new MenuItemControl(focusHandler);
-    control.bind(screen, menuItem, null, null);
+    control.bind(nifty, screen, menuItem, null, null);
 
     final NiftyInputMapping inputMapping = new Default();
     NiftyInputControl inputControl = new NiftyInputControl(control, inputMapping);

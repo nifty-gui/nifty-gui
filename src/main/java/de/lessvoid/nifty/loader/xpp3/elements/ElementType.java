@@ -40,6 +40,16 @@ public class ElementType {
   private String height;
 
   /**
+   * x pos.
+   */
+  private String x;
+
+  /**
+   * y pos.
+   */
+  private String y;
+
+  /**
    * align.
    */
   private AlignType align;
@@ -243,6 +253,22 @@ public class ElementType {
   }
 
   /**
+   * set x.
+   * @param xParam x
+   */
+  public void setX(final String xParam) {
+    this.x = xParam;
+  }
+
+  /**
+   * set y.
+   * @param yParam y
+   */
+  public void setY(final String yParam) {
+    this.y = yParam;
+  }
+
+  /**
    * get align.
    * @return align
    */
@@ -353,6 +379,14 @@ public class ElementType {
     if (width != null) {
       SizeValue widthValue = new SizeValue(width);
       element.setConstraintWidth(widthValue);
+    }
+    // set absolute x position when given
+    if (x != null) {
+      element.setConstraintX(new SizeValue(x));
+    }
+    // set absolute y position when given
+    if (y != null) {
+      element.setConstraintY(new SizeValue(y));
     }
     // horizontal align
     if (align != null) {

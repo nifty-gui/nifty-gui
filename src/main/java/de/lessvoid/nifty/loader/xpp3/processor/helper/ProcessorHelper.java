@@ -30,82 +30,92 @@ public final class ProcessorHelper {
 
   /**
    * process element attributes.
-   * @param xmlParser TODO
-   * @param element element
+   * @param xmlParser xmlParser
+   * @param elementType elementType
    * @param attributes attributes
    * @throws Exception exception
    */
   public static void processElement(
       final XmlParser xmlParser,
-      final ElementType element,
+      final ElementType elementType,
       final Attributes attributes) throws Exception {
 
     // id
     if (attributes.isSet("id")) {
-      element.setId(attributes.get("id"));
+      elementType.setId(attributes.get("id"));
     }
 
     // visible
     if (attributes.isSet("visible")) {
-      element.setVisible(attributes.getAsBoolean("visible"));
+      elementType.setVisible(attributes.getAsBoolean("visible"));
     }
 
     // height
     if (attributes.isSet("height")) {
-      element.setHeight(attributes.get("height"));
+      elementType.setHeight(attributes.get("height"));
     }
 
     // width
     if (attributes.isSet("width")) {
-      element.setWidth(attributes.get("width"));
+      elementType.setWidth(attributes.get("width"));
+    }
+
+    // x
+    if (attributes.isSet("x")) {
+      elementType.setX(attributes.get("x"));
+    }
+
+    // y
+    if (attributes.isSet("y")) {
+      elementType.setY(attributes.get("y"));
     }
 
     // horizontal align
     if (attributes.isSet("align")) {
-      element.setAlign(attributes.getAsAlignType("align"));
+      elementType.setAlign(attributes.getAsAlignType("align"));
     }
 
     // vertical align
     if (attributes.isSet("valign")) {
-      element.setValign(attributes.getAsVAlignType("valign"));
+      elementType.setValign(attributes.getAsVAlignType("valign"));
     }
 
     // child clip
     if (attributes.isSet("childClip")) {
-      element.setChildClip(attributes.getAsBoolean("childClip"));
+      elementType.setChildClip(attributes.getAsBoolean("childClip"));
     }
 
     // visibleToMouse
     if (attributes.isSet("visibleToMouse")) {
-      element.setVisibleToMouse(attributes.getAsBoolean("visibleToMouse"));
+      elementType.setVisibleToMouse(attributes.getAsBoolean("visibleToMouse"));
     }
 
     // childLayout
     if (attributes.isSet("childLayout")) {
-      element.setChildLayoutType(attributes.getAsLayoutType("childLayout"));
+      elementType.setChildLayoutType(attributes.getAsLayoutType("childLayout"));
     }
 
     // backgroundImage
     if (attributes.isSet("backgroundImage")) {
-      element.setBackgroundImage(attributes.get("backgroundImage"));
+      elementType.setBackgroundImage(attributes.get("backgroundImage"));
     }
 
     // backgroundColor
     if (attributes.isSet("backgroundColor")) {
-      element.setBackgroundColor(new ColorType(attributes.get("backgroundColor")));
+      elementType.setBackgroundColor(new ColorType(attributes.get("backgroundColor")));
     }
 
     xmlParser.nextTag();
-    xmlParser.optional("interact", new InteractTypeProcessor(element));
-    xmlParser.optional("hover", new HoverTypeProcessor(element));
-    xmlParser.optional("effect", new EffectsTypeProcessor(element));
+    xmlParser.optional("interact", new InteractTypeProcessor(elementType));
+    xmlParser.optional("hover", new HoverTypeProcessor(elementType));
+    xmlParser.optional("effect", new EffectsTypeProcessor(elementType));
     xmlParser.zeroOrMore(
           new SubstitutionGroup().
-            add("panel", new PanelTypeProcessor(element)).
-            add("text", new TextTypeProcessor(element)).
-            add("image", new ImageTypeProcessor(element)).
-            add("menu", new MenuTypeProcessor(element)).
-            add("control", new ControlTypeProcessor(element))
+            add("panel", new PanelTypeProcessor(elementType)).
+            add("text", new TextTypeProcessor(elementType)).
+            add("image", new ImageTypeProcessor(elementType)).
+            add("menu", new MenuTypeProcessor(elementType)).
+            add("control", new ControlTypeProcessor(elementType))
             );
   }
 }

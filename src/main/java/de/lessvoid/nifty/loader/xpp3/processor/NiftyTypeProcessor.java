@@ -50,6 +50,11 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   private ScreenTypeProcessor screenTypeProcessor;
 
   /**
+   * popupTypeProcessor.
+   */
+  private PopupTypeProcessor popupTypeProcessor;
+
+  /**
    * process.
    * @param xmlParser XmlParser
    * @param attributes attributes
@@ -63,6 +68,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
     registerEffectGroupProcessor = new RegisterEffectGroupProcessor();
     registerLayoutGroupProcessor = new RegisterLayoutGroupProcessor();
     screenTypeProcessor = new ScreenTypeProcessor();
+    popupTypeProcessor = new PopupTypeProcessor();
 
     xmlParser.nextTag();
     xmlParser.zeroOrMore("registerEffect", registerEffectTypeProcessor);
@@ -72,6 +78,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
     xmlParser.zeroOrMore("effectGroup", registerEffectGroupProcessor);
     xmlParser.zeroOrMore("layerGroup", registerLayoutGroupProcessor);
     xmlParser.oneOrMore("screen", screenTypeProcessor);
+    xmlParser.zeroOrMore("popup", popupTypeProcessor);
   }
 
   /**
@@ -89,5 +96,10 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
         time,
         registerEffectTypeProcessor.getRegisterEffects(),
         registerControlDefinitionTypeProcessor.getRegisteredControls());
+    popupTypeProcessor.registerPopups(
+        nifty,
+        registerEffectTypeProcessor.getRegisterEffects(),
+        registerControlDefinitionTypeProcessor.getRegisteredControls(),
+        time);
   }
 }

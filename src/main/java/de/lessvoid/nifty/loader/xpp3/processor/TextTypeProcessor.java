@@ -16,14 +16,14 @@ public class TextTypeProcessor implements XmlElementProcessor {
   /**
    * element this belongs to.
    */
-  private ElementType element;
+  private ElementType elementType;
 
   /**
    * init it.
    * @param elementParam element
    */
   public TextTypeProcessor(final ElementType elementParam) {
-    this.element = elementParam;
+    this.elementType = elementParam;
   }
 
   /**
@@ -38,6 +38,6 @@ public class TextTypeProcessor implements XmlElementProcessor {
       textType.setColor(new ColorType(attributes.get("color")));
     }
     ProcessorHelper.processElement(xmlParser, textType, attributes);
-    element.addElementType(textType);
+    elementType.addElementType(textType);
   }
 }

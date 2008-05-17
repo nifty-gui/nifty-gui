@@ -33,12 +33,6 @@ public class ImageTypeProcessor implements XmlElementProcessor {
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     ImageType imageType = new ImageType(attributes.get("filename"));
-    if (attributes.isSet("x")) {
-      imageType.setX(attributes.getAsInteger("x"));
-    }
-    if (attributes.isSet("y")) {
-      imageType.setY(attributes.getAsInteger("y"));
-    }
     if (attributes.isSet("filter")) {
       imageType.setFilter(attributes.getAsBoolean("filer"));
     }

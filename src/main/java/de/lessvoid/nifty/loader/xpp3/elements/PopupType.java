@@ -12,10 +12,10 @@ import de.lessvoid.nifty.tools.TimeProvider;
 
 
 /**
- * LayerType.
+ * PopupType.
  * @author void
  */
-public class LayerType extends PanelType {
+public class PopupType extends PanelType {
 
   /**
    * Create Layer.
@@ -36,14 +36,14 @@ public class LayerType extends PanelType {
       final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
-    Element layer = NiftyCreator.createLayer(
+    Element element = NiftyCreator.createLayer(
         getId(),
         nifty,
         screen,
         getBackgroundImage(),
         getBackgroundColor().createColor());
     super.addElementAttributes(
-        layer,
+        element,
         screen,
         nifty,
         registeredEffects,
@@ -51,6 +51,6 @@ public class LayerType extends PanelType {
         time,
         inputControl,
         screenController);
-    return layer;
+    return element;
   }
 }

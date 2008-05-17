@@ -121,7 +121,7 @@ public class ControlType extends ElementType {
           time,
           inputControl,
           screenController);
-      c.bind(screen, current, null, listener);
+      c.bind(nifty, screen, current, null, listener);
       return current;
     }
 

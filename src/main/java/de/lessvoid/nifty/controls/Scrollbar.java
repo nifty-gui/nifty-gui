@@ -2,6 +2,7 @@ package de.lessvoid.nifty.controls;
 
 import java.util.Properties;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MethodInvoker;
@@ -73,10 +74,10 @@ public class Scrollbar implements Controller {
    * @param newListener listener
    */
   public void bind(
+      Nifty nifty,
       final Screen newScreen,
       final Element newElement,
-      final Properties properties,
-      final ControllerEventListener newListener) {
+      final Properties properties, final ControllerEventListener newListener) {
     this.screen = newScreen;
     this.element = newElement;
     this.listener = newListener;

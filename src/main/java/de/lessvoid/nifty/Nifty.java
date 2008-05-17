@@ -4,7 +4,9 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
+import de.lessvoid.nifty.loader.xpp3.elements.PopupType;
 import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.SoundSystem;
@@ -35,6 +37,11 @@ public class Nifty {
    * All screens with Id of screen as the key.
    */
   private Map < String, Screen > screens = new Hashtable < String, Screen >();
+
+  /**
+   * All popups with Id as the key.
+   */
+  private Map < String, Element > popups = new Hashtable < String, Element >();
 
   /**
    * The current screen.
@@ -304,5 +311,27 @@ public class Nifty {
       }
     }
     return false;
+  }
+
+  /**
+   * popup.
+   * @param popup popup
+   */
+  public void registerPopup(final Element popup) {
+    popups.put(popup.getId(), popup);
+  }
+
+  /**
+   * show popup in the given screen.
+   * @param screen screen
+   * @param id id
+   */
+  public void showPopup(final Screen screen, final String id) {
+    Element popup = popups.get(id);
+    if (popup == null) {
+      log.warning("missing popup [" + id + "] o_O");
+    } else {
+      screen.addPopup(popup);
+    }
   }
 }

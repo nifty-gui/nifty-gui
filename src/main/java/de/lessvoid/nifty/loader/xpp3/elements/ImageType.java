@@ -26,18 +26,6 @@ public class ImageType extends ElementType {
   private String filename;
 
   /**
-   * x position.
-   * @optional
-   */
-  private Integer x;
-
-  /**
-   * y position.
-   * @optional
-   */
-  private Integer y;
-
-  /**
    * filter.
    * @optional
    */
@@ -61,22 +49,6 @@ public class ImageType extends ElementType {
    */
   public ImageType(final String filenameParam) {
     this.filename = filenameParam;
-  }
-
-  /**
-   * set x.
-   * @param xParam x
-   */
-  public void setX(final Integer xParam) {
-    this.x = xParam;
-  }
-
-  /**
-   * set y.
-   * @param yParam y
-   */
-  public void setY(final Integer yParam) {
-    this.y = yParam;
   }
 
   /**
@@ -132,16 +104,6 @@ public class ImageType extends ElementType {
 
     // create a new element with the given renderer
     Element element = new Element(getId(), parent, screen, true, imageRenderer);
-
-    // set absolute x position when given
-    if (x != null) {
-      element.setConstraintX(new SizeValue(x + "px"));
-    }
-
-    // set absolute y position when given
-    if (y != null) {
-      element.setConstraintY(new SizeValue(y + "px"));
-    }
 
     // sub image enable?
     if (subImageSizeMode != null) {
