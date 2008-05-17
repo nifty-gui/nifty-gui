@@ -33,7 +33,7 @@ public final class AllExamplesMain {
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider(),
         true);
-    nifty.fromXml("intro/intro.xml", "menu");
+    nifty.fromXml("intro/intro.xml", "start");
 
     boolean done = false;
     while(!done) {

@@ -109,7 +109,7 @@
       </panel>
     </layer>
     <layer id="example" childLayout="absolute">
-      <image x="550" y="170" filename="intro/examples.png" align="center">
+      <image x="550px" y="170px" filename="intro/examples.png" align="center">
         <effect>
           <onStartScreen name="move" direction="right" mode="in" length="800" />
           <onStartScreen name="fade" startColor="#0000" endColor="#ffff" length="800" />

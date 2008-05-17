@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples.textfield;
 
 import java.util.Properties;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
@@ -62,12 +63,14 @@ public class TextFieldControl implements Controller {
 
   /**
    * Bind this controller to the given element.
+   * @param niftyParam niftyParam
    * @param newScreen the new nifty to set
    * @param newElement the new element to set
    * @param properties all attributes of the xml tag we're connected to
    * @param newListener listener
    */
   public void bind(
+      final Nifty niftyParam,
       final Screen newScreen,
       final Element newElement,
       final Properties properties,
