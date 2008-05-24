@@ -60,7 +60,7 @@
     <dependency>
       <groupId>slick</groupId>
       <artifactId>slick</artifactId>
-      <version>0.0.0-203</version>
+      <version>0.0.0-231</version>
     </dependency>
     <dependency>
       <groupId>xpp3</groupId>
