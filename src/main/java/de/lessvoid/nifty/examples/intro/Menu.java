@@ -68,6 +68,13 @@ public class Menu implements ScreenController {
    * exit.
    */
   public void exit() {
-    nifty.gotoScreen("outro");
+    nifty.showPopup(screen, "popupExit");
+  }
+  
+  public void popupExit(final String exit) {
+    nifty.closePopup("popupExit");
+    if ("yes".equals(exit)) {
+      nifty.gotoScreen("outro");    
+    }
   }
 }

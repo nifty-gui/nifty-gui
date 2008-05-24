@@ -12,16 +12,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class Start implements ScreenController {
 
   /**
-   * nifty.
-   */
-  private Nifty nifty;
-
-  /**
-   * screen.
-   */
-  private Screen screen;
-
-  /**
    * bind this ScreenController to a screen.
    * @param newRenderDevice RenderDevice
    * @param newNifty nifty
@@ -30,8 +20,6 @@ public class Start implements ScreenController {
   public final void bind(
       final Nifty newNifty,
       final Screen newScreen) {
-    this.nifty = newNifty;
-    this.screen = newScreen;
   }
 
   /**

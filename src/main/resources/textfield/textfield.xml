@@ -15,7 +15,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- textfield control -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <controlDefinition name="textfield" controller="de.lessvoid.nifty.examples.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
+  <controlDefinition name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
     <panel id="textfield-panel" backgroundColor="#555f" childLayout="overlay" height="40px">
       <panel id="field" childLayout="center" visibleToMouse="true" childClip="true">
         <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()"/>
