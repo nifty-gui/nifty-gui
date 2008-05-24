@@ -18,21 +18,21 @@ public class RenderDeviceProxy implements RenderDevice {
 
   public void clear() {
   }
-  
+
   public RenderFont createFont(String name) {
     return null;
   }
-  
+
   public RenderImage createImage(String name, boolean filter) {
     return null;
   }
-  
+
   public void disableTexture() {
   }
-  
+
   public void enableBlend() {
   }
-  
+
   public int getHeight() {
     return 0;
   }
@@ -53,18 +53,13 @@ public class RenderDeviceProxy implements RenderDevice {
     renderStates.add(RenderState.position);
   }
 
-  public void renderImage(RenderImage background, int x, int y, int width,
-      int height) {
-    // TODO Auto-generated method stub
+  public void renderImage(RenderImage background, int x, int y, int width, int height) {
   }
 
-  public void renderImagePart(RenderImage image, int x, int y, int w, int h,
-      int srcX, int srcY, int srcW, int srcH) {
-    // TODO Auto-generated method stub
+  public void renderImagePart(RenderImage image, int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH) {
   }
 
   public void renderQuad(int x, int y, int width, int height) {
-    // TODO Auto-generated method stub
   }
 
   public void renderText(RenderFont font, String text, int x, int y) {
@@ -77,7 +72,7 @@ public class RenderDeviceProxy implements RenderDevice {
   }
 
   public void setColor(float r, float g, float b, float a) {
-    renderStates.add(RenderState.enable);
+    renderStates.add(RenderState.color);
   }
 
   public void setFontColor(float r, float g, float b, float a) {
@@ -102,13 +97,9 @@ public class RenderDeviceProxy implements RenderDevice {
   }
 
   public void disableClip() {
-    // TODO Auto-generated method stub
-    
   }
 
   public void enableClip(int x0, int y0, int x1, int y1) {
-    // TODO Auto-generated method stub
-    
   }
 
   public boolean isColorChanged() {

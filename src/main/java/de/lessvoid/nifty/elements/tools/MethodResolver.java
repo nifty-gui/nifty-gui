@@ -47,4 +47,36 @@ public final class MethodResolver {
     log.info("trying to resolve method [" + methodName + "] on [" + c.toString() + "] = failed, trying base class");
     return findMethod(c.getSuperclass(), methodName);
   }
+
+  /**
+   * extract array of strings encoding in the given method string.
+   * @param methodName method
+   * @return array of strings with actual parameters or empty array
+   */
+  public static String[] extractParameters(final String methodName) {
+    String parameterString = extractArgs(methodName);
+    if (parameterString == null || parameterString.length() == 0) {
+      return new String[0];
+    }
+
+    String[] result = parameterString.split(",");
+    for (int i = 0; i < result.length; i++) {
+      result[i] = result[i].trim();
+    }
+    return result;
+  }
+
+  /**
+   * extract the part within ().
+   * @param methodName complete methodname with argument list in ()
+   * @return the part within ()
+   */
+  public static String extractArgs(final String methodName) {
+    int startIdx = methodName.indexOf("(");
+    int endIdx = methodName.lastIndexOf(")");
+    if (startIdx == -1 || endIdx == -1) {
+      return "";
+    }
+    return methodName.substring(startIdx + 1, endIdx);
+  }
 }

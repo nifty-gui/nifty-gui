@@ -2,6 +2,7 @@ package de.lessvoid.nifty.render.opengl;
 
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -21,26 +22,24 @@ import de.lessvoid.nifty.render.RenderState;
 import de.lessvoid.nifty.tools.Color;
 
 public class RenderDeviceLwjgl implements RenderDevice {
-
   private final static Logger log = Logger.getLogger(RenderDeviceLwjgl.class.getName());
-
   private float globalPosX = 0;
   private float globalPosY = 0;
   private float moveX= 0;
   private float moveY= 0;
   private Color fontColor;
+  private Color color;
   private float imageScale= 1.0f;
   private float textSize= 1.0f;
-
   private static ByteBuffer byteBuffer = BufferUtils.createByteBuffer(1024);
   private static DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
-  
+  private static FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
   private boolean colorChanged = false;
 
   /**
    * font cache.
    */
-  private Map < String, RenderFont > fontCache= new Hashtable < String, RenderFont > ();
+  private Map < String, RenderFont > fontCache = new Hashtable < String, RenderFont >();
 
   /**
    * stack to save data.
@@ -51,21 +50,20 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * renderStates mapping.
    */
   private EnumMap < RenderState, Class < ? extends RenderStateImpl > > renderStatesMap =
-    new EnumMap < RenderState, Class < ? extends RenderStateImpl > > (RenderState.class);
+    new EnumMap < RenderState, Class < ? extends RenderStateImpl > >(RenderState.class);
 
   /**
    * create the device.
    */
   public RenderDeviceLwjgl() {
-    renderStatesMap.put(RenderState.enable, RenderStateEnable.class);
+    renderStatesMap.put(RenderState.currentState, RenderStateCurrentState.class);
+    renderStatesMap.put(RenderState.color, RenderStateColor.class);
     renderStatesMap.put(RenderState.fontColor, RenderStateFontColor.class);
     renderStatesMap.put(RenderState.imageScale, RenderStateImageScale.class);
     renderStatesMap.put(RenderState.position, RenderStatePosition.class);
     renderStatesMap.put(RenderState.textSize, RenderStateTextSize.class);
   }
 
-
-  
   public int getHeight() {
     return Display.getDisplayMode().getHeight();
   }
@@ -73,7 +71,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
   public int getWidth() {
     return Display.getDisplayMode().getWidth();
   }
-  
+
   private void testMethod() {
     GL11.glTranslatef(globalPosX, globalPosY, 0.0f);
   }
@@ -136,6 +134,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    */
   public void setColor(final float colorR, final float colorG, final float colorB, final float colorA) {
     GL11.glColor4f(colorR, colorG, colorB, colorA);
+    color = new Color(colorR, colorG, colorB, colorA);
     colorChanged = true;
   }
 
@@ -147,15 +146,20 @@ public class RenderDeviceLwjgl implements RenderDevice {
     return colorChanged;
   }
 
-  public void renderQuad( int x, int y, int width, int height ) {
+  /**
+   * render a quad.
+   * @param x x
+   * @param y y
+   * @param width width
+   * @param height height
+   */
+  public void renderQuad(final int x, final int y, final int width, final int height ) {
     testMethod();
-    GL11.glBegin( GL11.GL_QUADS );
-    
-      GL11.glVertex2i( x,         y );
-      GL11.glVertex2i( x + width, y );
-      GL11.glVertex2i( x + width, y + height );
-      GL11.glVertex2i( x,         y + height );
-
+    GL11.glBegin(GL11.GL_QUADS);
+      GL11.glVertex2i(x,         y);
+      GL11.glVertex2i(x + width, y);
+      GL11.glVertex2i(x + width, y + height);
+      GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
   }
 
@@ -220,9 +224,12 @@ public class RenderDeviceLwjgl implements RenderDevice {
     GL11.glDisable( GL11.GL_TEXTURE_2D );
   }
 
+  /**
+   * enable alpha blend.
+   */
   public void enableBlend() {
-    GL11.glEnable( GL11.GL_BLEND );
-    GL11.glBlendFunc( GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA );
+    GL11.glEnable(GL11.GL_BLEND);
+    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   }
 
   /**
@@ -246,7 +253,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @param statesToSave set of renderstates to save
    */
   public void saveState(final Set < RenderState > statesToSave) {
-    Set < RenderStateImpl > renderStateImpl = new HashSet < RenderStateImpl > ();
+    Set < RenderStateImpl > renderStateImpl = new HashSet < RenderStateImpl >();
 
     for (RenderState state : statesToSave) {
       try {
@@ -307,11 +314,10 @@ public class RenderDeviceLwjgl implements RenderDevice {
   }
 
   /**
-   * RenderStateEnable.
+   * Save global GL attributes.
    * @author void
    */
-  public final class RenderStateEnable implements RenderStateImpl {
-
+  public final class RenderStateCurrentState implements RenderStateImpl {
     /**
      * color changed flag.
      */
@@ -320,7 +326,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
     /**
      * save.
      */
-    public RenderStateEnable() {
+    public RenderStateCurrentState() {
       GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_ENABLE_BIT);
       this.colorChanged = RenderDeviceLwjgl.this.colorChanged;
     }
@@ -329,8 +335,49 @@ public class RenderDeviceLwjgl implements RenderDevice {
      * restore.
      */
     public void restore() {
+      floatBuffer.clear();
+      GL11.glGetFloat(GL11.GL_CURRENT_COLOR, floatBuffer);
       GL11.glPopAttrib();
+      GL11.glColor4f(
+          floatBuffer.get(0),
+          floatBuffer.get(1),
+          floatBuffer.get(2),
+          floatBuffer.get(3));
       RenderDeviceLwjgl.this.colorChanged = this.colorChanged;
+    }
+  }
+
+  /**
+   * RenderStateColor.
+   * @author void
+   */
+  public final class RenderStateColor implements RenderStateImpl {
+    /**
+     * Color.
+     */
+    private Color color;
+
+    /**
+     * save.
+     */
+    public RenderStateColor() {
+      this.color = RenderDeviceLwjgl.this.color;
+    }
+
+    /**
+     * restore.
+     */
+    public void restore() {
+      if (color != null) {
+        GL11.glColor4f(
+          color.getRed(),
+          color.getGreen(),
+          color.getBlue(),
+          color.getAlpha());
+      } else {
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      }
+      RenderDeviceLwjgl.this.color = color;
     }
   }
 

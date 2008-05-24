@@ -15,9 +15,9 @@ public enum RenderState {
   position,
 
   /**
-   * enable.
+   * color.
    */
-  enable,
+  color,
 
   /**
    * text size.
@@ -32,7 +32,12 @@ public enum RenderState {
   /**
    * image scale.
    */
-  imageScale;
+  imageScale,
+
+  /**
+   * current state.
+   */
+  currentState;
 
 
   /**
@@ -40,7 +45,7 @@ public enum RenderState {
    * @return the set of all available render states.
    */
   public static Set < RenderState > allStates() {
-    Set < RenderState > allStates = new HashSet < RenderState > ();
+    Set < RenderState > allStates = new HashSet < RenderState >();
 
     for (RenderState state : RenderState.values()) {
       allStates.add(state);

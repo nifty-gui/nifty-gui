@@ -4,6 +4,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.elements.PopupType;
@@ -69,6 +70,8 @@ public class Nifty {
    * The TimeProvider to use.
    */
   private TimeProvider timeProvider;
+
+  private String removePopupId = null;
 
   /**
    * Create nifty for the given RenderDevice and TimeProvider.
@@ -148,6 +151,11 @@ public class Nifty {
 
     if (exit) {
       renderDevice.clear();
+    }
+
+    if (removePopupId != null) {
+      currentScreen.closePopup(popups.get(removePopupId));
+      removePopupId = null;
     }
     return exit;
   }
@@ -332,6 +340,23 @@ public class Nifty {
       log.warning("missing popup [" + id + "] o_O");
     } else {
       screen.addPopup(popup);
+    }
+  }
+
+  /**
+   * close the given popup on the given screen.
+   * @param id the popup id
+   */
+  public void closePopup(final String id) {
+    Element popup = popups.get(id);
+    if (popup == null) {
+      log.warning("missing popup [" + id + "] o_O");
+    } else {
+      popup.startEffect(EffectEventId.onEndScreen, timeProvider, new EndNotify() {
+        public void perform() {
+          removePopupId = id;
+        }
+      });
     }
   }
 }

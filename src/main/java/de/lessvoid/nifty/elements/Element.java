@@ -18,6 +18,7 @@ import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -584,6 +585,10 @@ public class Element {
       final TimeProvider time,
       final EndNotify effectEndNotiy) {
 
+    if (effectEventId == EffectEventId.onStartScreen) {
+      done = false;
+    }
+
     if (effectEventId == EffectEventId.onEndScreen) {
       done = true;
     }
@@ -596,19 +601,7 @@ public class Element {
     // before forwarding this to the real event handler.
     //
     // little bit tricky though :/
-    EndNotify forwardToSelf = new EndNotify() {
-      public final void perform() {
-        // notify parent if:
-        // a) the effect is done for ourself
-        // b) the effect is done for all of our children
-        if (!isEffectActive(effectEventId)) {
-          // all fine. we can notify the actual event handler
-          if (effectEndNotiy != null) {
-            effectEndNotiy.perform();
-          }
-        }
-      }
-    };
+    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotiy);
 
     // start the effect for ourself
     effectManager.startEffect(effectEventId, this, time, forwardToSelf);
@@ -1004,5 +997,39 @@ public class Element {
    */
   public void attachInputControl(final NiftyInputControl newInputControl) {
     attachedInputControl = newInputControl;
+  }
+  
+  public void attachPopup(final ScreenController screenController) {
+    attach(onClickMethod, screenController);
+    attach(onClickMouseMoveMethod, screenController);
+  }
+
+  private void attach(final MethodInvoker method, final ScreenController screenController) {
+    method.setFirst(screenController);
+    for (Element e : elements) {
+      e.attachPopup(screenController);
+    }
+  }
+
+  public class LocalEndNotify implements EndNotify {
+    private EffectEventId effectEventId;
+    private EndNotify effectEndNotiy;
+
+    public LocalEndNotify(final EffectEventId effectEventIdParam, final EndNotify effectEndNotiyParam) {
+      effectEventId = effectEventIdParam;
+      effectEndNotiy = effectEndNotiyParam;
+    }
+
+    public void perform() {
+      // notify parent if:
+      // a) the effect is done for ourself
+      // b) the effect is done for all of our children
+      if (!isEffectActive(effectEventId)) {
+        // all fine. we can notify the actual event handler
+        if (effectEndNotiy != null) {
+          effectEndNotiy.perform();
+        }
+      }
+    }
   }
 }

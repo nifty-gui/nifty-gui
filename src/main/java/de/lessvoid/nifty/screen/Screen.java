@@ -104,13 +104,26 @@ public class Screen implements MouseFocusHandler {
    * @param popup popup
    */
   public void addPopup(final Element popup) {
+    // attach screenController to the popup element
+    popup.attachPopup(screenController);
+
     // prepare popup for display
     popup.resetEffects();
     popup.layoutElements();
+    popup.startEffect(EffectEventId.onStartScreen, timeProvider, null);
 
     // add to layers and add as popup
     layerElements.add(popup);
     popupElements.add(popup);
+  }
+
+  /**
+   * close popup.
+   * @param popup popup to close
+   */
+  public void closePopup(final Element popup) {
+    layerElements.remove(popup);
+    popupElements.remove(popup);
   }
 
   /**
@@ -361,5 +374,6 @@ public class Screen implements MouseFocusHandler {
   public ScreenController getScreenController() {
     return screenController;
   }
+
 
 }

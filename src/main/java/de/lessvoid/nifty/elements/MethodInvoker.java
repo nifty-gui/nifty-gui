@@ -1,7 +1,10 @@
 package de.lessvoid.nifty.elements;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.logging.Logger;
+
+import de.lessvoid.nifty.elements.tools.MethodResolver;
 
 /**
  * A object and a method for the object.
@@ -16,64 +19,43 @@ public class MethodInvoker {
   /**
    * object.
    */
-  private Object object;
+  private Object[] target;
 
   /**
    * method.
    */
-  private Method method;
-
-  /**
-   * forwardInvoker.
-   */
-  private MethodInvoker forwardInvoker;
+  private String methodWithName;
 
   /**
    * create null MethodInvoker.
    */
   public MethodInvoker() {
-    this.object = null;
-    this.method = null;
-    this.forwardInvoker = null;
+    this.methodWithName = null;
+    this.target = null;
   }
 
   /**
-   * @param objectParam object
+   * Create new MethodInvoker.
    * @param methodParam method
+   * @param targetParam target
    */
-  public MethodInvoker(final Object objectParam, final Method methodParam) {
-    this.object = objectParam;
-    this.method = methodParam;
-    this.forwardInvoker = null;
+  public MethodInvoker(final String methodParam, final Object ... targetParam) {
+    this.methodWithName = methodParam;
+    this.target = targetParam;
   }
 
   /**
-   * is null method?
-   * @return true when null object
+   * Set first.
+   * @param object object
    */
-  public boolean isNull() {
-    return object == null || method == null;
-  }
-
-  /**
-   * set forwardInvoker.
-   * @param forwardInvokerParam forwardInvoker
-   */
-  public void setForward(final MethodInvoker forwardInvokerParam) {
-    forwardInvoker = forwardInvokerParam;
-  }
-
-  /**
-   * return count of actual method parameters.
-   * @return count of parameters the method needs
-   */
-  private int getMethodParameterCount() {
-    if (forwardInvoker != null) {
-      return forwardInvoker.getMethodParameterCount();
-    } else {
-      Class < ? > [] parameterTypes = method.getParameterTypes();
-      return parameterTypes.length;
+  public void setFirst(final Object object) {
+    if (methodWithName == null) {
+      return;
     }
+    if (target == null) {
+      target = new Object[1];
+    }
+    this.target[0] = object;
   }
 
   /**
@@ -81,43 +63,74 @@ public class MethodInvoker {
    * @param invokeParametersParam parameter array for call
    */
   public void invoke(final Object ... invokeParametersParam) {
-    if (forwardInvoker != null) {
-      forwardInvoker.invoke(invokeParametersParam);
+    // nothing to do?
+    if (target == null || target.length == 0 || methodWithName == null) {
       return;
     }
 
-    // now build invoke parameters
-    Object [] invokeParameters = invokeParametersParam;
-    if (invokeParameters.length == 0) {
-      log.info("invoking method '" + method + "'");
-    } else {
-      if (!supportsParameters()) {
-        log.info("invoking method '" + method + "' (note: given invokeParameters have been ignored)");
-        invokeParameters = new Object[0];
-      } else {
-        StringBuffer paraString = new StringBuffer();
-        paraString.append(invokeParameters[0].toString());
-        for (int i = 1; i < invokeParameters.length; i++) {
-          paraString.append(", ");
-          paraString.append(invokeParameters[i].toString());
-        }
-        log.info("invoking method '" + method + "' with (" + paraString + ")");
-      }
-    }
+    // process all methods (first one wins)
+    for (Object object : target) {
+      if (object != null) {
+        Method method = MethodResolver.findMethod(object.getClass(), methodWithName);
+        if (method != null) {
+          // now build invoke parameters
+          String[] invokeParameters = MethodResolver.extractParameters(methodWithName);
+          if (invokeParameters.length == 0) {
+            log.info("invoking method '" + methodWithName + "' without parameters");
+          } else {
+            if (!supportsParameters(method)) {
+              log.info("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
+              invokeParameters = new String[0];
+            } else {
+              log.info("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
+            }
+          }
 
-    try {
-      method.invoke(object, invokeParameters);
-    } catch (Exception e) {
-      log.warning("error: " + e.getMessage());
+          try {
+            method.invoke(object, invokeParameters);
+          } catch (Exception e) {
+            log.warning("error: " + e.getMessage());
+          }
+
+          return;
+        }
+      }
     }
   }
 
   /**
+   * helper method to convert the given parameter object array into a string for debugging.
+   * @param invokeParameters parameter array
+   * @return string of parameter array in debug output friendly way
+   */
+  private String debugParaString(final Object[] invokeParameters) {
+    StringBuffer paraStringBuffer = new StringBuffer();
+    paraStringBuffer.append(invokeParameters[0].toString());
+    for (int i = 1; i < invokeParameters.length; i++) {
+      paraStringBuffer.append(", ");
+      paraStringBuffer.append(invokeParameters[i].toString());
+    }
+    return paraStringBuffer.toString();
+  }
+
+  /**
    * returns true when this method supports parameters and false when not.
-   * @return true when parametercount != 0 (in this case parameters are supported)
+   * @param method method to check
+   * @return true when parameterCount != 0 (in this case parameters are supported)
    * and false if not
    */
-  private boolean supportsParameters() {
-    return getMethodParameterCount() != 0;
+  private boolean supportsParameters(final Method method) {
+    return getMethodParameterCount(method) != 0;
   }
+
+  /**
+   * return count of actual method parameters.
+   * @param method method
+   * @return count of parameters the method needs
+   */
+  private int getMethodParameterCount(final Method method) {
+    Class < ? > [] parameterTypes = method.getParameterTypes();
+    return parameterTypes.length;
+  }
+
 }
