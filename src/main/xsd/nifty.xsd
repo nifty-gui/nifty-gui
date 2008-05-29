@@ -222,70 +222,12 @@
       <xs:element name="controlDefinition"
         type="nifty:controlDefinition" maxOccurs="unbounded"
         minOccurs="0">
-      </xs:element>
-      <xs:element name="effectGroup" type="nifty:effectGroupType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
-      <xs:element name="layerGroup" type="nifty:layerGroupType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
+      </xs:element>
       <xs:element name="screen" type="nifty:screenType"
         maxOccurs="unbounded" minOccurs="1">
       </xs:element>
     </xs:sequence>
-  </xs:complexType>
-  <xs:element name="effectGroup" type="nifty:effectGroupType"></xs:element>
-  <xs:complexType name="effectGroupType">
-    <xs:sequence>
-      <xs:element name="for" maxOccurs="unbounded" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="id" type="xs:string" maxOccurs="unbounded"
-              minOccurs="0">
-            </xs:element>
-            <xs:element name="onStartScreen" type="nifty:effectType"
-              maxOccurs="unbounded" minOccurs="0">
-            </xs:element>
-            <xs:element name="onEndScreen" type="nifty:effectType"
-              maxOccurs="unbounded" minOccurs="0">
-            </xs:element>
-            <xs:element name="onHover" type="nifty:effectType"
-              maxOccurs="unbounded" minOccurs="0">
-            </xs:element>
-            <xs:element name="onClick" type="nifty:effectType"
-              maxOccurs="unbounded" minOccurs="0">
-            </xs:element>
-            <xs:element name="onFocus" type="nifty:effectType"
-              maxOccurs="unbounded" minOccurs="0">
-            </xs:element>
-            <xs:element name="onActive" type="nifty:effectType"
-              maxOccurs="unbounded" minOccurs="0">
-            </xs:element>
-          </xs:sequence>
-          <xs:attribute name="id" type="xs:string"></xs:attribute>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="onStartScreen" type="nifty:effectType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
-      <xs:element name="onEndScreen" type="nifty:effectType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
-      <xs:element name="onHover" type="nifty:effectType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
-      <xs:element name="onClick" type="nifty:effectType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
-      <xs:element name="onFocus" type="nifty:effectType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
-      <xs:element name="onActive" type="nifty:effectType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="id" type="xs:string"></xs:attribute>
-  </xs:complexType>
+  </xs:complexType>
   <xs:complexType name="registerEffectType">
     <xs:attribute name="name" type="xs:string"></xs:attribute>
     <xs:attribute name="class" type="xs:string"></xs:attribute>
@@ -317,15 +259,7 @@
   <xs:complexType name="registerMusicType">
     <xs:attribute name="id" type="xs:string"></xs:attribute>
     <xs:attribute name="filename" type="xs:string"></xs:attribute>
-  </xs:complexType>
-  <xs:complexType name="layerGroupType">
-    <xs:sequence>
-      <xs:element name="layer" type="nifty:layerType"
-        maxOccurs="unbounded" minOccurs="0">
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="id" type="xs:string"></xs:attribute>
-  </xs:complexType>
+  </xs:complexType>
   <xs:complexType name="controlDefinition">
     <xs:sequence>
       <xs:element ref="nifty:elementBase" maxOccurs="unbounded"

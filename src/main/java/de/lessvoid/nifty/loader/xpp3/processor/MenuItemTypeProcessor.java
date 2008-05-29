@@ -3,7 +3,6 @@ package de.lessvoid.nifty.loader.xpp3.processor;
 import de.lessvoid.nifty.controls.MenuFocusHandler;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
-import de.lessvoid.nifty.loader.xpp3.elements.ColorType;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.loader.xpp3.elements.MenuItemType;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.ProcessorHelper;
@@ -20,21 +19,28 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
   private ElementType element;
 
   /**
-   * font.
+   * focus handler.
    */
-  private String font;
-
   private MenuFocusHandler focusHandler;
+
+  /**
+   * default font (inherited from parent menu).
+   */
+  private String defaultFont;
 
   /**
    * create it.
    * @param elementParam element
+   * @param focusHandlerParam focusHandlerParam
    * @param fontParam font
    */
-  public MenuItemTypeProcessor(final ElementType elementParam, final String fontParam, final MenuFocusHandler focusHandlerParam) {
+  public MenuItemTypeProcessor(
+      final ElementType elementParam,
+      final MenuFocusHandler focusHandlerParam,
+      final String fontParam) {
     this.element = elementParam;
-    this.font = fontParam;
     this.focusHandler = focusHandlerParam;
+    this.defaultFont = fontParam;
   }
 
   /**
@@ -44,12 +50,10 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    MenuItemType menuItemType = new MenuItemType(focusHandler, font);
-    if (attributes.isSet("text")) {
-      menuItemType.setText(attributes.get("text"));
-    }
-    if (attributes.isSet("color")) {
-      menuItemType.setColor(new ColorType(attributes.get("color")));
+    MenuItemType menuItemType = new MenuItemType(focusHandler);
+    menuItemType.setText(attributes.get("text"));
+    if (!attributes.isSet("font")) {
+      attributes.overwriteAttribute("font", defaultFont);
     }
     ProcessorHelper.processElement(xmlParser, menuItemType, attributes);
     element.addElementType(menuItemType);

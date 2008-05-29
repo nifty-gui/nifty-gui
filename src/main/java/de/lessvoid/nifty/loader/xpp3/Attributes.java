@@ -52,6 +52,15 @@ public final class Attributes {
   }
 
   /**
+   * Overwrite key with value.
+   * @param key key
+   * @param value value
+   */
+  public void overwriteAttribute(final String key, final String value) {
+    attributes.put(key, value);
+  }
+
+  /**
    * Get Attributes as Map.
    * @param xpp xpp
    * @return Attributes as Map

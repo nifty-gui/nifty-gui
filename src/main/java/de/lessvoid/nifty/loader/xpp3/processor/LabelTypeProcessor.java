@@ -3,14 +3,14 @@ package de.lessvoid.nifty.loader.xpp3.processor;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
-import de.lessvoid.nifty.loader.xpp3.elements.TextType;
+import de.lessvoid.nifty.loader.xpp3.elements.LabelType;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.ProcessorHelper;
 
 /**
- * PanelType.
+ * LabelTypeProcessor.
  * @author void
  */
-public class TextTypeProcessor implements XmlElementProcessor {
+public class LabelTypeProcessor implements XmlElementProcessor {
 
   /**
    * element this belongs to.
@@ -21,7 +21,7 @@ public class TextTypeProcessor implements XmlElementProcessor {
    * init it.
    * @param elementParam element
    */
-  public TextTypeProcessor(final ElementType elementParam) {
+  public LabelTypeProcessor(final ElementType elementParam) {
     this.elementType = elementParam;
   }
 
@@ -32,8 +32,8 @@ public class TextTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    TextType textType = new TextType(attributes.get("text"));
-    ProcessorHelper.processElement(xmlParser, textType, attributes);
-    elementType.addElementType(textType);
+    LabelType labelType = new LabelType(attributes.get("text"));
+    ProcessorHelper.processElement(xmlParser, labelType, attributes);
+    elementType.addElementType(labelType);
   }
 }

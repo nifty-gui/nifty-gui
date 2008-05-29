@@ -327,7 +327,6 @@ public class Element {
   public final void render(final RenderDevice r) {
     // render element only when it is visible
     if (visible) {
-
       r.saveState(RenderState.allStates());
 
       // begin rendering / pre
@@ -1031,5 +1030,13 @@ public class Element {
         }
       }
     }
+  }
+
+  /**
+   * Get HotSpotFalloff.
+   * @return Falloff
+   */
+  public Falloff getFalloff() {
+    return falloff;
   }
 }

@@ -7,7 +7,7 @@ import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -26,24 +26,11 @@ public class TextType extends ElementType {
   private String text;
 
   /**
-   * font.
-   * @required
-   */
-  private String font;
-
-  /**
-   * color.
-   */
-  private ColorType color = new ColorType();
-
-  /**
    * create it.
    * @param textParam filename
-   * @param fontParam font
    */
-  public TextType(final String textParam, final String fontParam) {
+  public TextType(final String textParam) {
     this.text = textParam;
-    this.font = fontParam;
   }
 
   /**
@@ -55,20 +42,13 @@ public class TextType extends ElementType {
   }
 
   /**
-   * set color.
-   * @param colorParam color
-   */
-  public void setColor(final ColorType colorParam) {
-    this.color = colorParam;
-  }
-
-  /**
    * create element.
    * @param parent parent
    * @param nifty nifty
    * @param screen screen
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
+   * @param styleHandler style handler
    * @param time time
    * @param inputControl controlController
    * @param screenController screenController
@@ -80,35 +60,35 @@ public class TextType extends ElementType {
       final Screen screen,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
+      final StyleHandler styleHandler,
       final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
-    TextRenderer textRenderer = NiftyCreator.createTextRenderer(nifty, color, text, font);
-    PanelRenderer renderer = NiftyCreator.createPanelRenderer(
-        nifty.getRenderDevice(),
-        getBackgroundColor().createColor(),
-        getBackgroundImage());
+    TextRenderer textRenderer = new TextRenderer();
     Element panel = new Element(
-        getId(),
+        getAttributes().getId(),
         parent,
         screen,
         false,
-        renderer,
+        new PanelRenderer(),
         textRenderer);
-
-    panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
-    panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-
     super.addElementAttributes(
         panel,
         screen,
         nifty,
         registeredEffects,
         registeredControls,
+        styleHandler,
         time,
         inputControl,
         screenController);
-
+    textRenderer.setText(text);
+    if (panel.getConstraintHeight() == null) {
+      panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+    }
+    if (panel.getConstraintWidth() == null) {
+      panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
+    }
     parent.add(panel);
     return panel;
   }

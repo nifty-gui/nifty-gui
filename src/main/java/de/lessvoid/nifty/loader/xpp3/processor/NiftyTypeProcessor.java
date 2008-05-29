@@ -30,19 +30,14 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   private RegisterMusicTypeProcessor registerMusicTypeProcessor;
 
   /**
+   * registerStyleTypeProcessor.
+   */
+  private RegisterStyleProcessor registerStyleTypeProcessor;
+
+  /**
    * registerControlDefinitionTypeProcessor.
    */
   private RegisterControlDefinitionTypeProcessor registerControlDefinitionTypeProcessor;
-
-  /**
-   * registerEffectGroupProcessor.
-   */
-  private RegisterEffectGroupProcessor registerEffectGroupProcessor;
-
-  /**
-   * registerLayoutGroupProcessor.
-   */
-  private RegisterLayoutGroupProcessor registerLayoutGroupProcessor;
 
   /**
    * screenTypeProcessor.
@@ -65,18 +60,16 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
     registerSoundTypeProcessor = new RegisterSoundTypeProcessor();
     registerMusicTypeProcessor = new RegisterMusicTypeProcessor();
     registerControlDefinitionTypeProcessor = new RegisterControlDefinitionTypeProcessor();
-    registerEffectGroupProcessor = new RegisterEffectGroupProcessor();
-    registerLayoutGroupProcessor = new RegisterLayoutGroupProcessor();
     screenTypeProcessor = new ScreenTypeProcessor();
     popupTypeProcessor = new PopupTypeProcessor();
+    registerStyleTypeProcessor = new RegisterStyleProcessor();
 
     xmlParser.nextTag();
     xmlParser.zeroOrMore("registerEffect", registerEffectTypeProcessor);
     xmlParser.zeroOrMore("registerSound", registerSoundTypeProcessor);
     xmlParser.zeroOrMore("registerMusic", registerMusicTypeProcessor);
+    xmlParser.zeroOrMore("style", registerStyleTypeProcessor);
     xmlParser.zeroOrMore("controlDefinition", registerControlDefinitionTypeProcessor);
-    xmlParser.zeroOrMore("effectGroup", registerEffectGroupProcessor);
-    xmlParser.zeroOrMore("layerGroup", registerLayoutGroupProcessor);
     xmlParser.oneOrMore("screen", screenTypeProcessor);
     xmlParser.zeroOrMore("popup", popupTypeProcessor);
   }
@@ -87,7 +80,10 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
    * @param screens screens screens
    * @param time time
    */
-  public void create(final Nifty nifty, final Map < String, Screen > screens, final TimeProvider time) {
+  public void create(
+      final Nifty nifty,
+      final Map < String, Screen > screens,
+      final TimeProvider time) {
     registerSoundTypeProcessor.register(nifty.getSoundSystem());
     registerMusicTypeProcessor.register(nifty.getSoundSystem());
     screenTypeProcessor.create(
@@ -95,11 +91,13 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
         screens,
         time,
         registerEffectTypeProcessor.getRegisterEffects(),
-        registerControlDefinitionTypeProcessor.getRegisteredControls());
+        registerControlDefinitionTypeProcessor.getRegisteredControls(),
+        registerStyleTypeProcessor.getStyleHandler());
     popupTypeProcessor.registerPopups(
         nifty,
         registerEffectTypeProcessor.getRegisterEffects(),
         registerControlDefinitionTypeProcessor.getRegisteredControls(),
+        registerStyleTypeProcessor.getStyleHandler(),
         time);
   }
 }

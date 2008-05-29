@@ -123,7 +123,12 @@ public class EffectType {
       final EffectEventId effectEventId,
       final Map < String, RegisterEffectType > registeredEffects,
       final TimeProvider time) {
-    Class < ? > effectClass = registeredEffects.get(name).getEffectClass();
+    RegisterEffectType registerEffectType = registeredEffects.get(name);
+    if (registerEffectType == null) {
+      log.warning("unable to convert effect [" + name + "] because no effect with this name has been registered.");
+      return;
+    }
+    Class < ? > effectClass = registerEffectType.getEffectClass();
     if (effectClass == null) {
       log.warning("unable to convert effect [" + name + "] because no effect with this name has been registered.");
       return;

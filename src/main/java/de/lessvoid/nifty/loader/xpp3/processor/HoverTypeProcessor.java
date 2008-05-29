@@ -5,6 +5,7 @@ import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.loader.xpp3.elements.HoverType;
+import de.lessvoid.nifty.loader.xpp3.elements.StyleType;
 
 /**
  * HoverType.
@@ -18,9 +19,17 @@ public class HoverTypeProcessor implements XmlElementProcessor {
   private ElementType element;
 
   /**
-   * HoverType.
+   * StyleType.
    */
-  private HoverType hoverType;
+  private StyleType style;
+
+  /**
+   * Default constructor.
+   * @param styleTypeParam styleType
+   */
+  public HoverTypeProcessor(final StyleType styleTypeParam) {
+    style = styleTypeParam;
+  }
 
   /**
    * init it.
@@ -37,7 +46,7 @@ public class HoverTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    hoverType = new HoverType();
+    HoverType hoverType = new HoverType();
     if (attributes.isSet("width")) {
       hoverType.setWidth(attributes.get("width"));
     }
@@ -50,7 +59,12 @@ public class HoverTypeProcessor implements XmlElementProcessor {
     if (attributes.isSet("falloffConstraint")) {
       hoverType.setFalloffConstraint(attributes.getAsHoverFalloffConstraintType("falloffConstraint"));
     }
-    element.setHover(hoverType);
+    if (element != null) {
+      element.setHover(hoverType);
+    }
+    if (style != null) {
+      style.setHover(hoverType);
+    }
     xmlParser.nextTag();
   }
 }

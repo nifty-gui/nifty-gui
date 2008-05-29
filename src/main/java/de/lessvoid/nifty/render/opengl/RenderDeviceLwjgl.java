@@ -196,22 +196,33 @@ public class RenderDeviceLwjgl implements RenderDevice {
       fontCache.put( name, font );
       return font;
     }
-    
-  }
-  
-  public void renderText( RenderFont font, String text, int x, int y ) {
-    RenderFontLwjgl internalFont= (RenderFontLwjgl)font;
-    if( fontColor == null ) {
-      internalFont.renderWithSize( text, x, y, textSize );  
-    } else {
-      internalFont.renderWithSizeAndColor( text, x, y, textSize, fontColor.getRed(), fontColor.getGreen(), fontColor.getBlue(), fontColor.getAlpha() );
-    }
   }
 
-  public void setRenderTextSize( float size ) {
-    this.textSize= size;
+  /**
+   * renderText.
+   * @param font font
+   * @param text text
+   * @param x x
+   * @param y y
+   */
+  public void renderText(final RenderFont font, final String text, final int x, final int y) {
+    if (fontColor != null) {
+      font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+    } else {
+      font.setDefaultColor();
+    }
+    font.setSize(textSize);
+    font.render(text, x, y);
   }
-  
+
+  /**
+   * Set RenderTextSize.
+   * @param size size
+   */
+  public void setRenderTextSize(final float size) {
+    this.textSize = size;
+  }
+
   public float getMoveToX() {
     return moveX;
   }

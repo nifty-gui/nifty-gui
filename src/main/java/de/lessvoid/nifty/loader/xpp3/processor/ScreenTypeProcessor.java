@@ -9,6 +9,7 @@ import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
 import de.lessvoid.nifty.loader.xpp3.elements.ScreenType;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -50,15 +51,22 @@ public class ScreenTypeProcessor implements XmlElementProcessor {
    * @param time time
    * @param registeredEffects effects
    * @param registeredControls registeredControls
+   * @param styleHandler styleHandler
    */
   public void create(
       final Nifty nifty,
       final Map < String, Screen > screenParam,
       final TimeProvider time,
       final Map < String, RegisterEffectType > registeredEffects,
-      final Map < String, RegisterControlDefinitionType > registeredControls) {
+      final Map < String, RegisterControlDefinitionType > registeredControls,
+      final StyleHandler styleHandler) {
     for (ScreenType screenType : screens.values()) {
-      Screen screen = screenType.createScreen(nifty, time, registeredEffects, registeredControls);
+      Screen screen = screenType.createScreen(
+          nifty,
+          time,
+          registeredEffects,
+          registeredControls,
+          styleHandler);
       screenParam.put(screen.getScreenId(), screen);
     }
   }

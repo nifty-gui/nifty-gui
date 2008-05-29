@@ -7,8 +7,13 @@ import java.util.Map;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.elements.render.PanelRenderer;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -19,70 +24,11 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class ElementType {
-  /**
-   * id.
-   */
-  private String id;
 
   /**
-   * visible.
+   * attributes.
    */
-  private Boolean visible;
-
-  /**
-   * width.
-   */
-  private String width;
-
-  /**
-   * height.
-   */
-  private String height;
-
-  /**
-   * x pos.
-   */
-  private String x;
-
-  /**
-   * y pos.
-   */
-  private String y;
-
-  /**
-   * align.
-   */
-  private AlignType align;
-
-  /**
-   * valign.
-   */
-  private ValignType valign;
-
-  /**
-   * childLayoutType.
-   */
-  private LayoutType childLayoutType;
-
-  /**
-   * childClip.
-   */
-  private Boolean childClip;
-
-  /**
-   * backgroundImage.
-   */
-  private String backgroundImage;
-
-  /**
-   * backgroundColor.
-   */
-  private ColorType backgroundColor = new ColorType(null);
-
-  /**
-   * visibleToMouse.
-   */
-  private Boolean visibleToMouse;
+  private AttributesType attributes;
 
   /**
    * interact.
@@ -109,100 +55,13 @@ public class ElementType {
   private Collection < ElementType > elements = new ArrayList < ElementType >();
 
   /**
-   * setId.
-   * @param idParam id
-   */
-  public void setId(final String idParam) {
-    this.id = idParam;
-  }
-
-  /**
-   * setWidth.
-   * @param widthParam width
-   */
-  public void setWidth(final String widthParam) {
-    this.width = widthParam;
-  }
-
-  /**
-   * setHeight.
-   * @param heightParam height
-   */
-  public void setHeight(final String heightParam) {
-    this.height = heightParam;
-  }
-
-  /**
-   * setAlign.
-   * @param alignParam align
-   */
-  public void setAlign(final AlignType alignParam) {
-    this.align = alignParam;
-  }
-
-  /**
-   * setValign.
-   * @param valignParam valign
-   */
-  public void setValign(final ValignType valignParam) {
-    this.valign = valignParam;
-  }
-
-  /**
-   * setChildLayoutType.
-   * @param layoutTypeParam layoutType
-   */
-  public void setChildLayoutType(final LayoutType layoutTypeParam) {
-    this.childLayoutType = layoutTypeParam;
-  }
-
-  /**
-   * setChildClip.
-   * @param childClipParam childClip
-   */
-  public void setChildClip(final boolean childClipParam) {
-    this.childClip = childClipParam;
-  }
-
-  /**
-   * setBackgroundImage.
-   * @param backgroundImageParam backgroundImage
-   */
-  public void setBackgroundImage(final String backgroundImageParam) {
-    this.backgroundImage = backgroundImageParam;
-  }
-
-  /**
-   * setBackgroundColor.
-   * @param backgroundColorParam backgroundColor
-   */
-  public void setBackgroundColor(final ColorType backgroundColorParam) {
-    this.backgroundColor = backgroundColorParam;
-  }
-
-  /**
-   * setVisibleToMouse.
-   * @param visibleToMouseParam visibleToMouse
-   */
-  public void setVisibleToMouse(final Boolean visibleToMouseParam) {
-    this.visibleToMouse = visibleToMouseParam;
-  }
-
-  /**
-   * set visible.
-   * @param visibleParam visible
-   */
-  public void setVisible(final Boolean visibleParam) {
-    this.visible = visibleParam;
-  }
-
-  /**
    * Create element.
    * @param parent parent element
    * @param nifty nifty
    * @param screen screen
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
+   * @param styleHandler style handler
    * @param time time
    * @param inputControl inputControl we should attach to the element (can be null)
    * @param screenController ScreenController
@@ -214,114 +73,11 @@ public class ElementType {
       final Screen screen,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
+      final StyleHandler styleHandler,
       final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     return null;
-  }
-
-  /**
-   * get id.
-   * @return id
-   */
-  protected String getId() {
-    return id;
-  }
-
-  /**
-   * get visible.
-   * @return visible
-   */
-  protected Boolean getVisible() {
-    return visible;
-  }
-
-  /**
-   * get width.
-   * @return width
-   */
-  protected String getWidth() {
-    return width;
-  }
-
-  /**
-   * get height.
-   * @return height
-   */
-  protected String getHeight() {
-    return height;
-  }
-
-  /**
-   * set x.
-   * @param xParam x
-   */
-  public void setX(final String xParam) {
-    this.x = xParam;
-  }
-
-  /**
-   * set y.
-   * @param yParam y
-   */
-  public void setY(final String yParam) {
-    this.y = yParam;
-  }
-
-  /**
-   * get align.
-   * @return align
-   */
-  protected AlignType getAlign() {
-    return align;
-  }
-
-  /**
-   * get valign.
-   * @return valign
-   */
-  protected ValignType getValign() {
-    return valign;
-  }
-
-  /**
-   * Get childLayoutType.
-   * @return childLayoutType
-   */
-  protected LayoutType getChildLayoutType() {
-    return childLayoutType;
-  }
-
-  /**
-   * is child clip.
-   * @return child clip
-   */
-  protected boolean isChildClip() {
-    return childClip;
-  }
-
-  /**
-   * get background image.
-   * @return background image
-   */
-  protected String getBackgroundImage() {
-    return backgroundImage;
-  }
-
-  /**
-   * get background color.
-   * @return background color
-   */
-  protected ColorType getBackgroundColor() {
-    return backgroundColor;
-  }
-
-  /**
-   * get visible to mouse flag.
-   * @return visible to mouse
-   */
-  protected Boolean getVisibleToMouse() {
-    return visibleToMouse;
   }
 
   /**
@@ -355,6 +111,7 @@ public class ElementType {
    * @param nifty nifty
    * @param registeredEffects effects
    * @param registeredControls registeredControls
+   * @param styleHandler style handler
    * @param time time
    * @param control attached control (might be null)
    * @param screenController screenController
@@ -365,57 +122,25 @@ public class ElementType {
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
+      final StyleHandler styleHandler,
       final TimeProvider time,
       final NiftyInputControl control,
       final ScreenController screenController) {
     element.bindToScreen(nifty);
 
-    // height
-    if (height != null) {
-      SizeValue heightValue = new SizeValue(height);
-      element.setConstraintHeight(heightValue);
-    }
-    // width
-    if (width != null) {
-      SizeValue widthValue = new SizeValue(width);
-      element.setConstraintWidth(widthValue);
-    }
-    // set absolute x position when given
-    if (x != null) {
-      element.setConstraintX(new SizeValue(x));
-    }
-    // set absolute y position when given
-    if (y != null) {
-      element.setConstraintY(new SizeValue(y));
-    }
-    // horizontal align
-    if (align != null) {
-      element.setConstraintHorizontalAlign(HorizontalAlign.valueOf(align.getValue()));
-    }
-    // vertical align
-    if (valign != null) {
-      element.setConstraintVerticalAlign(VerticalAlign.valueOf(valign.getValue()));
-    }
-    // child clip
-    if (childClip != null) {
-      element.setClipChildren(childClip);
-    }
-    // visible
-    if (visible != null) {
-      if (visible) {
-        element.show();
-      } else {
-        element.hide();
+    // if the element we process has a style set, we try to apply
+    // the style attributes first
+    String styleId = attributes.getStyle();
+    if (styleId != null) {
+      StyleType style = styleHandler.getStyle(styleId);
+      if (style != null) {
+        style.applyStyle(element, nifty, registeredEffects, time);
       }
     }
-    // visibleToMouse
-    if (visibleToMouse != null) {
-      element.setVisibleToMouseEvents(visibleToMouse);
-    }
-    // childLayout
-    if (childLayoutType != null) {
-      element.setLayoutManager(childLayoutType.getLayoutManager());
-    }
+
+    // now apply our own attributes
+    applyAttributes(attributes, element, nifty.getRenderDevice());
+
     // interact
     if (interact != null) {
       // control given?
@@ -441,9 +166,99 @@ public class ElementType {
           screen,
           registeredEffects,
           registeredControls,
+          styleHandler,
           time,
           control,
           screenController);
+    }
+  }
+
+  /**
+   * apply given attributes to the element.
+   * @param attrib attributes
+   * @param element the element to apply attributes
+   * @param renderDevice RenderDevice
+   */
+  public static void applyAttributes(
+      final AttributesType attrib,
+      final Element element,
+      final RenderDevice renderDevice) {
+    if (attrib == null) {
+      return;
+    }
+    // height
+    if (attrib.getHeight() != null) {
+      SizeValue heightValue = new SizeValue(attrib.getHeight());
+      element.setConstraintHeight(heightValue);
+    }
+    // width
+    if (attrib.getWidth() != null) {
+      SizeValue widthValue = new SizeValue(attrib.getWidth());
+      element.setConstraintWidth(widthValue);
+    }
+    // set absolute x position when given
+    if (attrib.getX() != null) {
+      element.setConstraintX(new SizeValue(attrib.getX()));
+    }
+    // set absolute y position when given
+    if (attrib.getY() != null) {
+      element.setConstraintY(new SizeValue(attrib.getY()));
+    }
+    // horizontal align
+    if (attrib.getAlign() != null) {
+      element.setConstraintHorizontalAlign(HorizontalAlign.valueOf(attrib.getAlign().getValue()));
+    }
+    // vertical align
+    if (attrib.getValign() != null) {
+      element.setConstraintVerticalAlign(VerticalAlign.valueOf(attrib.getValign().getValue()));
+    }
+    // child clip
+    if (attrib.getChildClip() != null) {
+      element.setClipChildren(attrib.getChildClip());
+    }
+    // visible
+    if (attrib.getVisible() != null) {
+      if (attrib.getVisible()) {
+        element.show();
+      } else {
+        element.hide();
+      }
+    }
+    // visibleToMouse
+    if (attrib.getVisibleToMouse() != null) {
+      element.setVisibleToMouseEvents(attrib.getVisibleToMouse());
+    }
+    // childLayout
+    if (attrib.getChildLayoutType() != null) {
+      element.setLayoutManager(attrib.getChildLayoutType().getLayoutManager());
+    }
+    // textRenderer
+    TextRenderer textRenderer = element.getRenderer(TextRenderer.class);
+    if (textRenderer != null) {
+      // font
+      if (attrib.getFont() != null) {
+        textRenderer.setFont(renderDevice.createFont(attrib.getFont()));
+      }
+      // font color
+      if (attrib.getColor() != null) {
+        textRenderer.setColor(attrib.getColor().createColor());
+      }
+    }
+    // panelRenderer
+    PanelRenderer panelRenderer = element.getRenderer(PanelRenderer.class);
+    if (panelRenderer != null) {
+      // background color
+      if (attrib.getBackgroundColor() != null) {
+        panelRenderer.setBackgroundColor(attrib.getBackgroundColor().createColor());
+      }
+      // background image
+      if (attrib.getBackgroundImage() != null) {
+        panelRenderer.setBackgroundImage(renderDevice.createImage(attrib.getBackgroundImage(), false));
+      }
+    }
+    // imageRenderer
+    ImageRenderer imageRenderer = element.getRenderer(ImageRenderer.class);
+    if (imageRenderer != null) {
     }
   }
 
@@ -453,14 +268,6 @@ public class ElementType {
    */
   public void addElementType(final ElementType elementType) {
     elements.add(elementType);
-  }
-
-  /**
-   * set child clip.
-   * @param childClipParam childClip
-   */
-  public void setChildClip(final Boolean childClipParam) {
-    this.childClip = childClipParam;
   }
 
   /**
@@ -485,5 +292,21 @@ public class ElementType {
    */
   public void setEffects(final EffectsType effectsParam) {
     this.effects = effectsParam;
+  }
+
+  /**
+   * get attributes.
+   * @return attributes
+   */
+  public AttributesType getAttributes() {
+    return attributes;
+  }
+
+  /**
+   * set attributes.
+   * @param attributesTypeParam attributes type to set
+   */
+  public void setAttributes(final AttributesType attributesTypeParam) {
+    attributes = attributesTypeParam;
   }
 }

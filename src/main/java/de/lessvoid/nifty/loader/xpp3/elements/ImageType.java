@@ -6,6 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.render.RenderImage;
 import de.lessvoid.nifty.render.RenderImage.SubImageMode;
 import de.lessvoid.nifty.screen.Screen;
@@ -82,6 +83,7 @@ public class ImageType extends ElementType {
    * @param screen screen
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
+   * @param styleHandler styleHandler
    * @param time time
    * @param inputControl input control
    * @param screenController screenController
@@ -93,6 +95,7 @@ public class ImageType extends ElementType {
       final Screen screen,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
+      final StyleHandler styleHandler,
       final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
@@ -103,7 +106,7 @@ public class ImageType extends ElementType {
     ImageRenderer imageRenderer = new ImageRenderer(image);
 
     // create a new element with the given renderer
-    Element element = new Element(getId(), parent, screen, true, imageRenderer);
+    Element element = new Element(getAttributes().getId(), parent, screen, true, imageRenderer);
 
     // sub image enable?
     if (subImageSizeMode != null) {
@@ -119,20 +122,19 @@ public class ImageType extends ElementType {
       image.setResizeHint(resizeHint);
       image.setSubImageMode(SubImageMode.ResizeHint);
     }
-
-    // set width and height to image width and height (for now)
-    element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
-    element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
-
     super.addElementAttributes(
         element,
         screen,
         nifty,
         registeredEffects,
         registeredControls,
+        styleHandler,
         time,
-        inputControl,
-        screenController);
+        inputControl, screenController);
+
+    // set width and height to image width and height (for now)
+    element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
+    element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
 
     parent.add(element);
     return element;

@@ -3,6 +3,7 @@ package de.lessvoid.nifty.elements.render;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.render.RenderFont;
+import de.lessvoid.nifty.render.RenderFontNull;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -14,12 +15,12 @@ public class TextRenderer implements ElementRenderer {
   /**
    * the font to use.
    */
-  private RenderFont font;
+  private RenderFont font = new RenderFontNull();
 
   /**
    * the text to output.
    */
-  private String[] textLines;
+  private String[] textLines = new String[0];
 
   /**
    * max width of all text strings.
@@ -30,12 +31,35 @@ public class TextRenderer implements ElementRenderer {
    * the font color.
    */
   private Color color;
-  
+
+  /**
+   * can't remember what this is :>.
+   */
   private int xoffsetHack = 0;
 
+  /**
+   * selection start.
+   */
   private int selectionStart;
 
+  /**
+   * selection end.
+   */
   private int selectionEnd;
+
+  /**
+   * default constructor.
+   */
+  public TextRenderer() {
+  }
+
+  /**
+   * set Text.
+   * @param newText text
+   */
+  public void setText(final String newText) {
+    initText(newText);
+  }
 
   /**
    * create new renderer with the given font and text.
@@ -68,7 +92,7 @@ public class TextRenderer implements ElementRenderer {
   }
 
   /**
-   * @param newText
+   * @param newText new text
    */
   private void initText(final String newText) {
     this.textLines = newText.split("\n", -1);
@@ -142,12 +166,37 @@ public class TextRenderer implements ElementRenderer {
     this.xoffsetHack = xoffsetHack;
   }
 
+  /**
+   * Get RenderFont.
+   * @return render font
+   */
   public RenderFont getFont() {
     return font;
   }
 
-  public void setSelection(int selectionStart, int selectionEnd) {
-    this.selectionStart = selectionStart;
-    this.selectionEnd = selectionEnd;
+  /**
+   * set a new selection.
+   * @param selectionStartParam start
+   * @param selectionEndParam end
+   */
+  public void setSelection(final int selectionStartParam, final int selectionEndParam) {
+    this.selectionStart = selectionStartParam;
+    this.selectionEnd = selectionEndParam;
+  }
+
+  /**
+   * set color.
+   * @param colorParam color
+   */
+  public void setColor(final Color colorParam) {
+    this.color = colorParam;
+  }
+
+  /**
+   * set font.
+   * @param fontParam font
+   */
+  public void setFont(final RenderFont fontParam) {
+    this.font = fontParam;
   }
 }

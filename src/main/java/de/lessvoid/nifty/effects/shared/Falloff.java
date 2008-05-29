@@ -121,6 +121,14 @@ public class Falloff {
   }
 
   /**
+   * apply properties.
+   * @param parameter parameter
+   */
+  public void applyProperties(final Properties parameter) {
+    
+  }
+
+  /**
    * @param widget
    * @param x
    * @param y

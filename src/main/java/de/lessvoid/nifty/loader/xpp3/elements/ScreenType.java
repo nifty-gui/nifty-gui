@@ -6,6 +6,7 @@ import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -101,13 +102,15 @@ public class ScreenType {
    * @param timeProvider time
    * @param registeredEffects effects
    * @param registeredControls registeredControls
+   * @param styleHandler styleHandler
    * @return Screen
    */
   public Screen createScreen(
       final Nifty nifty,
       final TimeProvider timeProvider,
       final Map < String, RegisterEffectType > registeredEffects,
-      final Map < String, RegisterControlDefinitionType > registeredControls) {
+      final Map < String, RegisterControlDefinitionType > registeredControls,
+      final StyleHandler styleHandler) {
     ScreenController screenController = ClassHelper.getScreenController(controller);
     Screen screen = new Screen(
         id,
@@ -121,6 +124,7 @@ public class ScreenType {
               screen,
               registeredEffects,
               registeredControls,
+              styleHandler,
               timeProvider,
               null,
               screenController));

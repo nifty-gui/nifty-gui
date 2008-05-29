@@ -34,9 +34,9 @@ public class MenuTypeProcessor implements XmlElementProcessor {
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     String font = attributes.get("font");
-    MenuType menuType = new MenuType(font);
+    MenuType menuType = new MenuType();
     ProcessorHelper.processElement(xmlParser, menuType, attributes);
-    xmlParser.zeroOrMore("menuItem", new MenuItemTypeProcessor(menuType, font, new MenuFocusHandler()));
+    xmlParser.zeroOrMore("menuItem", new MenuItemTypeProcessor(menuType, new MenuFocusHandler(), font));
     xmlParser.zeroOrMore("control", new ControlTypeProcessor(menuType));
     element.addElementType(menuType);
   }

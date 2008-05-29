@@ -50,4 +50,32 @@ public interface RenderFont {
    * @param selectionEnd selection end
    */
   void setSelection(int selectionStart, int selectionEnd);
+
+  /**
+   * Render the given text at the given position.
+   * @param text text to render
+   * @param x x position
+   * @param y y position
+   */
+  void render(String text, int x, int y);
+
+  /**
+   * Set font size to the given value.
+   * @param size new font size
+   */
+  void setSize(float size);
+
+  /**
+   * Set font color to the given values.
+   * @param r red
+   * @param g green
+   * @param b blue
+   * @param a alpha
+   */
+  void setColor(float r, float g, float b, float a);
+
+  /**
+   * render the font with the default color.
+   */
+  void setDefaultColor();
 }

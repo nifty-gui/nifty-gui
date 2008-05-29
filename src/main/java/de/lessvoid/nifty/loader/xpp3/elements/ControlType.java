@@ -11,6 +11,7 @@ import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.tools.MethodResolver;
 import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -60,9 +61,10 @@ public class ControlType extends ElementType {
    * @param screen screen
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
+   * @param styleHandler style handler
    * @param time time
-   * @param inputControlParam controlController
    * @param screenController screenController
+   * @param inputControlParam controlController
    * @return element
    */
   public Element createElement(
@@ -71,9 +73,9 @@ public class ControlType extends ElementType {
       final Screen screen,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
+      final StyleHandler styleHandler,
       final TimeProvider time,
-      final NiftyInputControl inputControlParam,
-      final ScreenController screenController) {
+      final NiftyInputControl inputControlParam, final ScreenController screenController) {
 
     RegisterControlDefinitionType controlDefinition = registeredControls.get(name);
     if (controlDefinition == null) {
@@ -118,6 +120,17 @@ public class ControlType extends ElementType {
           screen,
           registeredEffects,
           registeredControls,
+          styleHandler,
+          time,
+          inputControl,
+          screenController);
+      super.addElementAttributes(
+          parent,
+          screen,
+          nifty,
+          registeredEffects,
+          registeredControls,
+          styleHandler,
           time,
           inputControl,
           screenController);

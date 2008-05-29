@@ -6,6 +6,7 @@ import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.EffectsType;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
+import de.lessvoid.nifty.loader.xpp3.elements.StyleType;
 
 /**
  * EffectsType.
@@ -19,16 +20,24 @@ public class EffectsTypeProcessor implements XmlElementProcessor {
   private ElementType element;
 
   /**
-   * effects type.
+   * StyleType.
    */
-  private EffectsType effectsType;
+  private StyleType style;
+
+  /**
+   * init with StyleType.
+   * @param styleParam StyleType
+   */
+  public EffectsTypeProcessor(final StyleType styleParam) {
+    style = styleParam;
+  }
 
   /**
    * init it.
    * @param elementParam element
    */
   public EffectsTypeProcessor(final ElementType elementParam) {
-    this.element = elementParam;
+    element = elementParam;
   }
 
   /**
@@ -38,7 +47,7 @@ public class EffectsTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    effectsType = new EffectsType();
+    EffectsType effectsType = new EffectsType();
 
     if (attributes.isSet("effectGroup")) {
       effectsType.setEffectGroup(attributes.get("effectGroup"));
@@ -56,6 +65,12 @@ public class EffectsTypeProcessor implements XmlElementProcessor {
     xmlParser.zeroOrMore("onFocus", new EffectTypeProcessor(effectsType, EffectEventId.onFocus));
     xmlParser.zeroOrMore("onActive", new EffectTypeProcessor(effectsType, EffectEventId.onActive));
 
-    element.setEffects(effectsType);
+    if (element != null) {
+      element.setEffects(effectsType);
+    }
+
+    if (style != null) {
+      style.setEffects(effectsType);
+    }
   }
 }

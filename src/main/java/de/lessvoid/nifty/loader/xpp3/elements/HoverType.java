@@ -82,8 +82,13 @@ public class HoverType {
       prop.put(Falloff.HOVER_FALLOFF_CONSTRAINT, falloffConstraint.toString());
     }
     if (!prop.isEmpty()) {
-      Falloff falloff = new Falloff(prop);
-      element.setHotSpotFalloff(falloff);
+      Falloff falloff = element.getFalloff();
+      if (falloff == null) {
+        falloff = new Falloff(prop);
+        element.setHotSpotFalloff(falloff);
+      } else {
+        falloff.applyProperties(prop);
+      }
     }
   }
 }

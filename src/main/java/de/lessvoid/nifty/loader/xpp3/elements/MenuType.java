@@ -6,6 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -17,17 +18,9 @@ import de.lessvoid.nifty.tools.TimeProvider;
 public class MenuType extends ElementType {
 
   /**
-   * filename.
-   * @required
-   */
-  private String font;
-
-  /**
    * create it.
-   * @param fontParam filename
    */
-  public MenuType(final String fontParam) {
-    this.font = fontParam;
+  public MenuType() {
   }
 
   /**
@@ -37,6 +30,7 @@ public class MenuType extends ElementType {
    * @param screen screen
    * @param registeredEffects registeredEffects
    * @param registeredControls registeredControls
+   * @param styleHandler styleHandler
    * @param time time
    * @param inputControl controlController
    * @param screenController screenController
@@ -48,16 +42,15 @@ public class MenuType extends ElementType {
       final Screen screen,
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
+      final StyleHandler styleHandler,
       final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element element = NiftyCreator.createPanel(
-        getId(),
+        getAttributes().getId(),
         nifty,
         screen,
         parent,
-        getBackgroundImage(),
-        getBackgroundColor().createColor(),
         false);
     super.addElementAttributes(
         element,
@@ -65,9 +58,9 @@ public class MenuType extends ElementType {
         nifty,
         registeredEffects,
         registeredControls,
+        styleHandler,
         time,
-        inputControl,
-        screenController);
+        inputControl, screenController);
     parent.add(element);
     return element;
   }
