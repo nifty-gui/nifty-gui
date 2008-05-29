@@ -20,6 +20,25 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <registerSound id="intro" filename="intro/intro.wav" />
 
+  <!-- main menu style -->
+  <style id="menu">
+    <attributes childLayout="vertical" align="center" valign="center" height="50%"/>
+    <effect>
+      <onStartScreen name="hide" length="500" inherit="true" startDelay="1000"/>
+      <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" startDelay="500" inherit="true"/>
+      <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" inherit="true"/>
+    </effect>
+  </style>
+
+  <!-- menu item style -->
+  <style id="menu-item">
+    <attributes align="center"/>
+    <hover width="200%" falloffConstraint="horizontal"/>
+    <effect>
+      <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+    </effect>
+  </style>
+
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- intro screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -72,38 +91,18 @@
     <layer id="menu" childLayout="vertical">
       <panel height="20%" childLayout="center"/>
       <panel height="60%" childLayout="center">
-	      <menu id="mainMenu" font="menu.fnt" childLayout="vertical" align="center" valign="center" height="50%">
-	        <effect>
-	          <onStartScreen name="hide" length="500" inherit="true" startDelay="1000"/>
-	          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" startDelay="500" inherit="true"/>
-	          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" inherit="true"/>
-	        </effect>
-	        <menuItem id="helloWorld" text="Hello World" align="center">
-	          <interact onClick="helloWorld()"/>
-	          <hover width="200%" falloffConstraint="horizontal"/>
-	          <effect>
-	            <onHover name="hint" hoverWidth="200%" width="200%" targetElement="hintElement" text="Run the Hello World Example" />
-	            <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
-	          </effect>
-	        </menuItem>
-	        <menuItem id="textfield" text="Textfield Example" align="center">
-	          <interact onClick="textField()"/>
-	          <hover width="200%" falloffConstraint="horizontal"/>
-	          <effect>
-	            <onHover name="hint" hoverWidth="200%" width="200%" targetElement="hintElement" text="Run the Textfield Example" />
-	            <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
-	          </effect>
-	        </menuItem>
-	        <menuItem id="exit" text="Exit" align="center">
-	          <interact onClick="exit()"/>
-	          <hover width="200%" falloffConstraint="horizontal"/>
-	          <effect>
-	            <onHover name="hint" hoverWidth="200%" width="200%" targetElement="hintElement" text="Leave the Examples" />
-	            <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
-	          </effect>
-	        </menuItem>
-	      </menu>
-	    </panel>
+      <menu id="mainMenu" font="menu.fnt" style="menu">
+        <menuItem id="helloWorld" text="Hello World" style="menu-item">
+          <interact onClick="helloWorld()"/>
+        </menuItem>
+        <menuItem id="textfield" text="Textfield Example" style="menu-item">
+          <interact onClick="textField()"/>
+        </menuItem>
+        <menuItem id="exit" text="Exit" style="menu-item">
+          <interact onClick="exit()"/>
+        </menuItem>
+      </menu>
+    </panel>
       <panel id="hintArea" childLayout="center" align="center" valign="center" height="20%">
         <text id="hintElement" text="Welcome to Nifty Examples" font="verdana-48-regular.fnt" align="center" valign="center"/>
       </panel>

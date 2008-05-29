@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty>
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+
   <!-- register effects we want to use -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <registerEffect name="move" class="de.lessvoid.nifty.effects.general.Move" />
-  <registerEffect name="pulsateHover" class="de.lessvoid.nifty.effects.hover.Pulsate" />
 
   <style id="default-font">
     <attributes font="menu.fnt" />
   </style>
-  
+
   <style id="default-label" base="default-font">
+   
   </style>
 
   <style id="default-label-centered" base="default-label">
-    <layout align="center" valign="center" />
-  </style>
-  
-  <style id="label-with-effect" base="default-label">
+    <attributes align="center"/>
     <effect>
-	    <onStartScreen name="move" mode="in" direction="top" length="300" startDelay="0" inherit="true"/>
-	    <onEndScreen name="move" mode="out" direction="bottom" length="300" startDelay="0" inherit="true"/>
+      <onStartScreen name="move" direction="right" mode="in" length="800" />
     </effect>
   </style>
-  
+
   <style id="layer-style">
-    <attributes backgroundColor="#003f" childLayout="vertical" />
+    <attributes backgroundColor="#00ff" />
   </style>
 
   <screen id="start" controller="de.lessvoid.nifty.examples.style.label.LabelStartScreen">
-    <layer style="layer-style">
-      <label style="default-label" text="default-label" />
-      <label style="default-label-centered" text="default-label-centered" />
+    <layer id="layer"  backgroundColor="#f0ff" childLayout="center">
+      <label id="label" style="default-label" text="label standard" align="center" valign="center" backgroundColor="#f00f" >
+       <effect>
+         <onStartScreen name="move" direction="bottom" mode="in" length="800" />
+       </effect>
+      </label>
+      <!--  
+      <label style="default-label-centered" text="label centered" />
+      -->
     </layer>
   </screen>
 </nifty>
