@@ -33,11 +33,23 @@ public class SizeValue {
   private String value;
 
   /**
+   * percent value.
+   */
+  private float percentValue;
+
+  /**
+   * pixel value.
+   */
+  private float pixelValue;
+
+  /**
    * Create a new instance using the given value.
    * @param valueParam the String value
    */
   public SizeValue(final String valueParam) {
     this.value = valueParam;
+    this.percentValue = getPercentValue();
+    this.pixelValue = getPixelValue();
   }
 
   /**
@@ -55,9 +67,9 @@ public class SizeValue {
    */
   public final float getValue(final float range) {
     if (isPercent()) {
-      return (range / MAX_PERCENT) * getPercentValue();
+      return (range / MAX_PERCENT) * percentValue;
     } else if (isPixel()) {
-      return getPixelValue();
+      return pixelValue;
     } else {
       return -1;
     }
@@ -78,7 +90,7 @@ public class SizeValue {
    */
   private float getPercentValue() {
     if (isPercent()) {
-      String percent = value.substring(0, value.length() - 1);
+      String percent = value.substring(0, value.length() - PERCENT.length());
       return Float.valueOf(percent);
     } else {
       return 0;
@@ -91,7 +103,7 @@ public class SizeValue {
    */
   private int getPixelValue() {
     if (isPixel()) {
-      String pixel = value.substring(0, value.length() - 2);
+      String pixel = value.substring(0, value.length() - PIXEL.length());
       return Integer.valueOf(pixel);
     } else {
       return 0;
