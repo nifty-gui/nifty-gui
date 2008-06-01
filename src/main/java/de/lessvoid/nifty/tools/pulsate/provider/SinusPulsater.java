@@ -36,7 +36,7 @@ public class SinusPulsater implements PulsateProvider {
    */
   public void initialize(final Properties parameter) {
     this.period = Float.parseFloat(parameter.getProperty("period", "1000"));
-    this.cycle = "true".equals(parameter.getProperty("cycle", "true").toLowerCase());
+    this.cycle = Boolean.parseBoolean(parameter.getProperty("cycle", "true"));
   }
 
   /**
