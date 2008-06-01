@@ -4,20 +4,20 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.nifty.tools.pulsate.provider.NullPulsater;
-import de.lessvoid.nifty.tools.pulsate.provider.RectanglePulsater;
-import de.lessvoid.nifty.tools.pulsate.provider.SinusPulsater;
+import de.lessvoid.nifty.tools.pulsate.provider.NullPulsator;
+import de.lessvoid.nifty.tools.pulsate.provider.RectanglePulsator;
+import de.lessvoid.nifty.tools.pulsate.provider.SinusPulsator;
 
 /**
- * Pulsater class.
+ * Pulsator class.
  * @author void
  */
-public class Pulsater {
+public class Pulsator {
 
   /**
    * the logger.
    */
-  private static Logger log = Logger.getLogger(Pulsater.class.getName());
+  private static Logger log = Logger.getLogger(Pulsator.class.getName());
 
   /**
    * the time provider.
@@ -27,7 +27,7 @@ public class Pulsater {
   /**
    * the PulsateProvider we use.
    */
-  private PulsateProvider pulsateProvider;
+  private PulsatorProvider pulsateProvider;
 
   /**
    * initialize with the given parameters.
@@ -35,18 +35,18 @@ public class Pulsater {
    * @param parameter parameter props
    * @param newTimeProvider TimeProvider to use
    */
-  public Pulsater(final Properties parameter, final TimeProvider newTimeProvider) {
+  public Pulsator(final Properties parameter, final TimeProvider newTimeProvider) {
     this.timeProvider = newTimeProvider;
 
     // check for the given pulsateType to create the appropriate PulsateProvider
     String pulsateType = parameter.getProperty("pulsateType", "sin");
     if (pulsateType.equals("sin")) {
-      pulsateProvider = new SinusPulsater();
+      pulsateProvider = new SinusPulsator();
     } else if (pulsateType.equals("rectangle")) {
-      pulsateProvider = new RectanglePulsater();
+      pulsateProvider = new RectanglePulsator();
     } else {
       log.warning(pulsateType + " is not supported, using NullPulsater for fallback. probably not what you want...");
-      pulsateProvider = new NullPulsater();
+      pulsateProvider = new NullPulsator();
     }
 
     // initialize the provider

@@ -2,13 +2,13 @@ package de.lessvoid.nifty.tools.pulsate.provider;
 
 import java.util.Properties;
 
-import de.lessvoid.nifty.tools.pulsate.PulsateProvider;
+import de.lessvoid.nifty.tools.pulsate.PulsatorProvider;
 
 /**
  * SinusPulsater.
  * @author void
  */
-public class SinusPulsater implements PulsateProvider {
+public class SinusPulsator implements PulsatorProvider {
 
   /**
    * constant to half things.

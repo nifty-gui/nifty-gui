@@ -8,7 +8,7 @@ import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.render.RenderImage;
 import de.lessvoid.nifty.render.RenderImage.SubImageMode;
 import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.nifty.tools.pulsate.Pulsater;
+import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 /**
  * ImagePulsate - image color pulsate.
@@ -24,7 +24,7 @@ public class ImageOverlayPulsate implements EffectImpl {
   /**
    * the pulsater.
    */
-  private Pulsater pulsater;
+  private Pulsator pulsater;
 
   /**
    * Initialize.
@@ -45,7 +45,7 @@ public class ImageOverlayPulsate implements EffectImpl {
       image.setSubImageMode(SubImageMode.ResizeHint);
     }
 
-    this.pulsater = new Pulsater(parameter, new TimeProvider());
+    this.pulsater = new Pulsator(parameter, new TimeProvider());
   }
 
   /**

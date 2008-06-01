@@ -3,11 +3,11 @@ package de.lessvoid.nifty.tools.pulsate;
 import java.util.Properties;
 
 /**
- * The actual pulsater.
+ * The actual Pulsator.
  * @author void
  *
  */
-public interface PulsateProvider {
+public interface PulsatorProvider {
 
   /**
    * Initialize the parameter.

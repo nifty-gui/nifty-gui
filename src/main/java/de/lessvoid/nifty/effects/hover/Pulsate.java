@@ -9,7 +9,7 @@ import de.lessvoid.nifty.render.RenderState;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.nifty.tools.pulsate.Pulsater;
+import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 /**
  * Color - color overlay.
@@ -35,7 +35,7 @@ public class Pulsate implements HoverEffectImpl {
   /**
    * pulsater.
    */
-  private Pulsater pulsater;
+  private Pulsator pulsater;
 
   /**
    * initialize.
@@ -47,7 +47,7 @@ public class Pulsate implements HoverEffectImpl {
     startColor = new Color(parameter.getProperty("startColor", "#00000000"));
     endColor = new Color(parameter.getProperty("endColor", "#ffffffff"));
     width = new SizeValue(parameter.getProperty("width"));
-    pulsater = new Pulsater(parameter, new TimeProvider());
+    pulsater = new Pulsator(parameter, new TimeProvider());
   }
 
   /**

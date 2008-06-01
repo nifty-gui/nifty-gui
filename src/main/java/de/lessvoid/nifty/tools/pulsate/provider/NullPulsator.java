@@ -2,13 +2,13 @@ package de.lessvoid.nifty.tools.pulsate.provider;
 
 import java.util.Properties;
 
-import de.lessvoid.nifty.tools.pulsate.PulsateProvider;
+import de.lessvoid.nifty.tools.pulsate.PulsatorProvider;
 
 /**
- * The NullPulsate does not really pulsates =).
- *  * @author void
+ * The NullPulsator does not really pulsate =).
+ * @author void
  */
-public class NullPulsater implements PulsateProvider {
+public class NullPulsator implements PulsatorProvider {
 
   /**
    * Actually does nothing.
