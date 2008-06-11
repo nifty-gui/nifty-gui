@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderFont;
 import de.lessvoid.nifty.render.RenderFontNull;
 import de.lessvoid.nifty.tools.Color;
@@ -111,28 +111,24 @@ public class TextRenderer implements ElementRenderer {
    * @param w the widget we're connected to
    * @param r the renderDevice we should use
    */
-  public final void render(final Element w, final RenderDevice r) {
+  public final void render(final Element w, final RenderEngine r) {
 
     if (color != null) {
-      r.setFontColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+      r.setFontColor(color);
     }
 
     int x = 0;
     int y = 0;
     for (String line : textLines) {
       if (Math.abs(xoffsetHack) > 0) {
-        int fittingOffset = font.getFittingOffset(line, Math.abs(xoffsetHack));
+        int fittingOffset = font.getVisibleCharactersFromStart(line, Math.abs(xoffsetHack));
         String cut = line.substring(0, fittingOffset);
         String substring = line.substring(fittingOffset, line.length());
         font.setSelection(selectionStart - fittingOffset, selectionEnd - fittingOffset);
-        r.renderText(
-            font,
-            substring,
-            (int) (r.getMoveToX() + w.getX() + x + xoffsetHack + font.getWidth(cut)),
-            (int) (r.getMoveToY() + w.getY()) + y);
+        r.renderText(font, substring, w.getX() + x + xoffsetHack + font.getWidth(cut), w.getY() + y);
       } else {
         font.setSelection(selectionStart, selectionEnd);
-        r.renderText(font, line, (int) (r.getMoveToX() + w.getX() + x + xoffsetHack), (int) (r.getMoveToY() + w.getY()) + y);
+        r.renderText(font, line, w.getX() + x + xoffsetHack, w.getY() + y);
       }
       y += font.getHeight();
     }

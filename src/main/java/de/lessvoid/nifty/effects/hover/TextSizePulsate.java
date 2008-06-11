@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
@@ -52,7 +52,7 @@ public class TextSizePulsate implements HoverEffectImpl {
       final Element element,
       final float normalizedTime,
       final float normalizedFalloff,
-      final RenderDevice r) {
+      final RenderEngine r) {
     float value =
       startSize.getValue(1.0f)
       +

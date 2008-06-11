@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.effects.general;
 
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 
 /**
  * Effect interface.
@@ -21,7 +21,7 @@ public interface Effect {
      * execute the effect.
      * @param r RenderDevice
      */
-    void execute(final RenderDevice r);
+    void execute(final RenderEngine r);
 
     /**
      * is this effect still active?

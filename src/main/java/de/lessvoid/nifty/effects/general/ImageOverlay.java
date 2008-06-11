@@ -4,9 +4,9 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderImage;
-import de.lessvoid.nifty.render.RenderImage.SubImageMode;
+import de.lessvoid.nifty.render.RenderImageSubImageMode;
 
 /**
  * Image Overlay.
@@ -29,13 +29,13 @@ public class ImageOverlay implements EffectImpl {
     image = nifty.getRenderDevice().createImage(parameter.getProperty("filename"), true);
     String subImageSizeMode = parameter.getProperty("subImageSizeMode", null);
     if (subImageSizeMode != null) {
-      image.setSubImageMode(SubImageMode.valueOf(subImageSizeMode));
+      image.setSubImageMode(RenderImageSubImageMode.valueOf(subImageSizeMode));
     }
 
     String resizeHint = parameter.getProperty("resizeHint", null);
     if (resizeHint != null) {
       image.setResizeHint(resizeHint);
-      image.setSubImageMode(SubImageMode.ResizeHint);
+      image.setSubImageMode(RenderImageSubImageMode.RESIZE());
     }
   }
 
@@ -48,7 +48,7 @@ public class ImageOverlay implements EffectImpl {
   public void execute(
       final Element element,
       final float normalizedTime,
-      final RenderDevice r) {
+      final RenderEngine r) {
     r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
   }
 }

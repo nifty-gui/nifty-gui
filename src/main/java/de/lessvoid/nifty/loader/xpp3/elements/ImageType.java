@@ -8,7 +8,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.render.RenderImage;
-import de.lessvoid.nifty.render.RenderImage.SubImageMode;
+import de.lessvoid.nifty.render.RenderImageSubImageMode;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -111,16 +111,16 @@ public class ImageType extends ElementType {
     // sub image enable?
     if (subImageSizeMode != null) {
       if (subImageSizeMode == SubImageSizeModeType.scale) {
-        image.setSubImageMode(SubImageMode.Scale);
+        image.setSubImageMode(RenderImageSubImageMode.SCALE());
       } else if (subImageSizeMode == SubImageSizeModeType.resizeHint) {
-        image.setSubImageMode(SubImageMode.ResizeHint);
+        image.setSubImageMode(RenderImageSubImageMode.RESIZE());
       }
     }
 
     // resize hint available?
     if (resizeHint != null) {
       image.setResizeHint(resizeHint);
-      image.setSubImageMode(SubImageMode.ResizeHint);
+      image.setSubImageMode(RenderImageSubImageMode.RESIZE());
     }
     super.addElementAttributes(
         element,

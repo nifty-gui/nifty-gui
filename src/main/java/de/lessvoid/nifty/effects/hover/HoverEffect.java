@@ -6,7 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.shared.Falloff;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
 
@@ -54,7 +54,7 @@ public class HoverEffect implements Effect {
   /**
    * RenderDevice.
    */
-  private RenderDevice renderDevice;
+  private RenderEngine renderDevice;
 
   /**
    * post (true) or pre (false) effect.
@@ -142,7 +142,7 @@ public class HoverEffect implements Effect {
    * execute the effect.
    * @param r RenderDevice
    */
-  public void execute(final RenderDevice r) {
+  public void execute(final RenderEngine r) {
     effectImpl.execute(element, timeInterpolator.getValue(), falloffValue, r);
   }
 

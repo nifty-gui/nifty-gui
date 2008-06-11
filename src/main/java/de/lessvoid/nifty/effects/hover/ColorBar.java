@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderState;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -47,15 +47,10 @@ public class ColorBar implements HoverEffectImpl {
       final Element element,
       final float normalizedTime,
       final float normalizedFalloff,
-      final RenderDevice r) {
+      final RenderEngine r) {
     r.saveState(RenderState.allStates());
     r.enableBlend();
-    r.disableTexture();
-    r.setColor(
-        color.getRed() * normalizedFalloff,
-        color.getGreen() * normalizedFalloff,
-        color.getBlue() * normalizedFalloff,
-        color.getAlpha() * normalizedFalloff);
+    r.setColor(color.mutiply(normalizedFalloff));
     int size = (int) width.getValue(element.getParent().getWidth());
     if (size == -1) {
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());

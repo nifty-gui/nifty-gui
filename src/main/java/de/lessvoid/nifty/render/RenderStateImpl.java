@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.render.opengl;
+package de.lessvoid.nifty.render;
 
 /**
  * RenderStateImpl.

@@ -1,96 +1,68 @@
 package de.lessvoid.nifty.render;
 
-import java.util.Set;
-
 /**
- * The RenderDevice.
+ * Nifty RenderDevice.
  * @author void
  */
 public interface RenderDevice {
 
-  public int getWidth();
-  public int getHeight();
+  /**
+   * Get Width.
+   * @return width of display mode
+   */
+  int getWidth();
 
   /**
-   * Render Image.
-   * @param image the image to render
-   * @param x the x position on the screen
-   * @param y the y position on the screen
-   * @param width the width
-   * @param height the height
+   * Get Height.
+   * @return height of display mode
    */
-  void renderImage(RenderImage image, int x, int y, int width, int height);
+  int getHeight();
 
   /**
-   * Render a Part of an Image.
-   * @param image the image to render
-   * @param x the x position on the screen
-   * @param y the y position on the screen
-   * @param w the width
-   * @param h the height
-   * @param srcX x position in image to copy from
-   * @param srcY y position in image to copy from
-   * @param srcW width in image to copy from
-   * @param srcH heightin image to coopy from
+   * Clear the Screen.
    */
-  void renderImagePart(RenderImage image, int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH);
+  void clear();
 
   /**
-   * Set current color.
-   * @param r red
-   * @param g green
-   * @param b blue
-   * @param a alpha
+   * Create a new RenderImage.
+   * @param filename filename
+   * @param filter filter
+   * @return RenderImage
    */
-  void setColor(float r, float g, float b, float a);
+  RenderImage createImage(String filename, boolean filter);
 
   /**
-   * Checks if the current color has been changed with a call to setColor. This state
-   * information is reset with each call to the clear method.
-   * @return true, when color has been changed and false otherwise
+   * Create a new RenderFont.
+   * @param filename filename
+   * @return RenderFont
    */
-  boolean isColorChanged();
-
-  public void renderQuad( int x, int y, int width, int height );
+  RenderFont createFont(String filename);
 
   /**
-   * Create a RenderImage.
-   * @param name the filename
-   * @param filter use linear filter (true) or nearest filter (false)
-   * @return a new RenderImage instance
+   * Render a quad.
+   * @param x x
+   * @param y y
+   * @param width width
+   * @param height height
    */
-  RenderImage createImage(String name, boolean filter);
-
-
-  public RenderFont createFont( String name );
+  void renderQuad(final int x, final int y, final int width, final int height);
 
   /**
-   * Save the given Set of States on a Stack.
-   * @param stateToSave set of SaveState elements to identify state to save
+   * Enable Blendmode.
    */
-  void saveState(Set < RenderState > stateToSave);
+  void enableBlend();
 
   /**
-   * restore the last state from stack.
+   * Enable clipping to the given region.
+   * @param x0 x0
+   * @param y0 y0
+   * @param x1 x1
+   * @param y1 y1
    */
-  void restoreState();
-
-  public void moveTo( float x, float y );
-  public float getMoveToX();
-  public float getMoveToY();
-  
-  public void clear();
-  
-  public void setFontColor( float r, float g, float b, float a );
-  public void renderText( RenderFont font, String text, int x, int y );
-  public void setRenderTextSize( float size );
-  
-  public void enableBlend();
-  public void disableTexture();
-  public void setImageScale(float f);
-
-  public void setGlobalPosition(float x, float y);
-
-  void disableClip();
   void enableClip(int x0, int y0, int x1, int y1);
+
+  /**
+   * Disable Clipping.
+   */
+  void disableClip();
 }

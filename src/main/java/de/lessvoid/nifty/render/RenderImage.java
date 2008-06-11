@@ -8,28 +8,6 @@ package de.lessvoid.nifty.render;
 public interface RenderImage {
 
   /**
-   * sub image type.
-   * @author void
-   */
-  public enum SubImageMode {
-
-    /**
-     * disabled - use normal rendering.
-     */
-    Disabled,
-
-    /**
-     * just scale it.
-     */
-    Scale,
-
-    /**
-     * use the resize hint.
-     */
-    ResizeHint;
-  }
-
-  /**
    * Get the width of the image.
    * @return width of image in pixel
    */
@@ -54,7 +32,7 @@ public interface RenderImage {
    * Set the sub image mode for this image.
    * @param newSubImageMode the SubImageMode
    */
-  void setSubImageMode(SubImageMode newSubImageMode);
+  void setSubImageMode(RenderImageSubImageMode newSubImageMode);
 
   /**
    * Set the sub image dimensions.

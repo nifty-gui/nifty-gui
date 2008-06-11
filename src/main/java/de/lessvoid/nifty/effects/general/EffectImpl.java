@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 
 /**
  * Effect Implementation ... here is the actual fun :>
@@ -26,5 +26,5 @@ public interface EffectImpl {
    * @param normalizedTime TimeInterpolator to use
    * @param r RenderDevice to use
    */
-  void execute(Element element, float normalizedTime, RenderDevice r);
+  void execute(Element element, float normalizedTime, RenderEngine r);
 }

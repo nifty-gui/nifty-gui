@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderImage;
 
 /**
@@ -25,11 +25,11 @@ public class ImageRenderer implements ElementRenderer {
 
   /**
    * render it.
-   * @param w the element this ElementRenderer connects to
+   * @param element the element this ElementRenderer connects to
    * @param r the RenderDevice
    */
-  public final void render(final Element w, final RenderDevice r) {
-    r.renderImage(image, w.getX(), w.getY(), w.getWidth(), w.getHeight());
+  public final void render(final Element element, final RenderEngine r) {
+    r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
   }
 
   /**

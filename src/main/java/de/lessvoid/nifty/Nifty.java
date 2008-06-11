@@ -9,6 +9,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.elements.PopupType;
 import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -27,7 +28,7 @@ public class Nifty {
   /**
    * RenderDevice.
    */
-  private RenderDevice renderDevice;
+  private RenderEngine renderDevice;
 
   /**
    * SoundSystem.
@@ -80,7 +81,7 @@ public class Nifty {
    * @param newTimeProvider the TimeProvider
    */
   public Nifty(
-      final RenderDevice newRenderDevice,
+      final RenderEngine newRenderDevice,
       final SoundSystem newSoundSystem,
       final TimeProvider newTimeProvider) {
     initialize(newRenderDevice, newSoundSystem, newTimeProvider);
@@ -98,7 +99,7 @@ public class Nifty {
       final SoundSystem newSoundSystem,
       final TimeProvider newTimeProvider,
       final boolean useConsoleParam) {
-    initialize(newRenderDevice, newSoundSystem, newTimeProvider);
+    initialize(new RenderEngine(newRenderDevice), newSoundSystem, newTimeProvider);
 
     if (useConsoleParam) {
       this.console = new NiftyDebugConsole();
@@ -112,7 +113,7 @@ public class Nifty {
    * @param newTimeProvider TimeProvider
    */
   private void initialize(
-      final RenderDevice newRenderDevice,
+      final RenderEngine newRenderDevice,
       final SoundSystem newSoundSystem,
       final TimeProvider newTimeProvider) {
     this.renderDevice = newRenderDevice;
@@ -294,7 +295,7 @@ public class Nifty {
    * Return the RenderDevice.
    * @return RenderDevice
    */
-  public RenderDevice getRenderDevice() {
+  public RenderEngine getRenderDevice() {
     return renderDevice;
   }
 

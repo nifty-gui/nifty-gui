@@ -10,11 +10,11 @@ import org.newdawn.slick.SlickException;
 
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.render.RenderImage;
+import de.lessvoid.nifty.render.RenderImageSubImageMode;
 
 /**
  * Lwjgl/Slick implementation for the RenderImage interface.
  * @author void
- *
  */
 public class RenderImageLwjgl implements RenderImage {
 
@@ -26,7 +26,7 @@ public class RenderImageLwjgl implements RenderImage {
   /**
    * sub image type to use.
    */
-  private SubImageMode subImageMode;
+  private RenderImageSubImageMode subImageMode;
 
   /**
    * resize helper for the ResizeHint scale type.
@@ -59,7 +59,7 @@ public class RenderImageLwjgl implements RenderImage {
    * @param filter use linear filter (true) or nearest filter (false)
    */
   public RenderImageLwjgl(final String name, final boolean filter) {
-    this.subImageMode = SubImageMode.Disabled;
+    this.subImageMode = RenderImageSubImageMode.NORMAL();
 
     try {
       this.image = new org.newdawn.slick.Image(name, false, filter ? Image.FILTER_LINEAR : Image.FILTER_NEAREST);
@@ -85,26 +85,19 @@ public class RenderImageLwjgl implements RenderImage {
   }
 
   /**
-   * Render the image.
+   * Render the image using the given Box to specify the render attributes.
    * @param x x
    * @param y y
-   * @param width w
-   * @param height h
+   * @param width width
+   * @param height height
    */
   public void render(final int x, final int y, final int width, final int height) {
-    switch (subImageMode) {
-      case Scale:
-        render(x, y, width, height, subImageX, subImageY, subImageW, subImageH);
-        break;
-
-      case ResizeHint:
-        resizeHelper.performRender(x, y, width, height);
-        break;
-
-      case Disabled:
-      default:
-        internalRender(x, y, width, height);
-      break;
+    if (subImageMode.equals(RenderImageSubImageMode.SCALE())) {
+      render(x, y, width, height, subImageX, subImageY, subImageW, subImageH);
+    } else if (subImageMode.equals(RenderImageSubImageMode.RESIZE())) {
+      resizeHelper.performRender(x, y, width, height);
+    } else {
+      internalRender(x, y, width, height);
     }
   }
 
@@ -194,7 +187,7 @@ public class RenderImageLwjgl implements RenderImage {
    * Set a new sub image active state.
    * @param newSubImageMode new type
    */
-  public void setSubImageMode(final SubImageMode newSubImageMode) {
+  public void setSubImageMode(final RenderImageSubImageMode newSubImageMode) {
     this.subImageMode = newSubImageMode;
   }
 

@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
 
@@ -127,7 +127,7 @@ public class StaticEffect implements Effect {
    * execute the effect.
    * @param r RenderDevice
    */
-  public void execute(final RenderDevice r) {
+  public void execute(final RenderEngine r) {
     effectImpl.execute(element, timeInterpolator.getValue(), r);
   }
 

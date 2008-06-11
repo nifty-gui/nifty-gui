@@ -25,7 +25,7 @@ public interface RenderFont {
    * @param width the minimum width
    * @return the character index into the string.
    */
-  int getFittingOffset(String text, int width);
+  int getVisibleCharactersFromStart(String text, int width);
 
   /**
    * Get character index into the given text that is no more pixel as the given width.
@@ -33,7 +33,7 @@ public interface RenderFont {
    * @param width the minimum width
    * @return the character index into the string.
    */
-  int getFittingOffsetBackward(String text, int width);
+  int getVisibleCharactersFromEnd(String text, int width);
 
   /**
    * get index into text from a given pixel position.
@@ -42,7 +42,7 @@ public interface RenderFont {
    * @param size font size
    * @return index into text string
    */
-  int getIndexFromPixel(final String text, final int pixel, final float size);
+  int getCharacterIndexFromPixelPosition(final String text, final int pixel, final float size);
 
   /**
    * set selection.

@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -39,7 +39,7 @@ public class TextColor implements HoverEffectImpl {
       final Element element,
       final float normalizedTime,
       final float normalizedFalloff,
-      final RenderDevice r) {
-    r.setFontColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+      final RenderEngine r) {
+    r.setFontColor(color);
   }
 }

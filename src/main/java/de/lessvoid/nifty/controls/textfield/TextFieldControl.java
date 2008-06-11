@@ -99,7 +99,7 @@ public class TextFieldControl implements Controller {
 
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
     this.firstVisibleCharacterIndex = 0;
-    this.lastVisibleCharacterIndex = textRenderer.getFont().getFittingOffset(this.textField.getText(), fieldWidth);
+    this.lastVisibleCharacterIndex = textRenderer.getFont().getVisibleCharactersFromStart(this.textField.getText(), fieldWidth);
 
     cursorElement.hide();
     updateCursor();
@@ -145,7 +145,7 @@ public class TextFieldControl implements Controller {
    */
   private int getCursorPosFromMouse(final int mouseX, String visibleString) {
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
-    return textRenderer.getFont().getIndexFromPixel(visibleString, (mouseX-fieldElement.getX()), 1.0f);
+    return textRenderer.getFont().getCharacterIndexFromPixelPosition(visibleString, (mouseX-fieldElement.getX()), 1.0f);
   }
 
   /**
@@ -241,7 +241,7 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
     if (firstVisibleCharacterIndex > textLen) {
       // re position so that we show at much possible text
       lastVisibleCharacterIndex = textLen;
-      firstVisibleCharacterIndex = textRenderer.getFont().getFittingOffsetBackward(text, fieldWidth);
+      firstVisibleCharacterIndex = textRenderer.getFont().getVisibleCharactersFromEnd(text, fieldWidth);
     }
   }
 
@@ -252,7 +252,7 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
     String currentText = this.textField.getText();
     if (firstVisibleCharacterIndex < currentText.length()) {
       String textToCheck = currentText.substring(firstVisibleCharacterIndex);
-      int lengthFitting = textRenderer.getFont().getFittingOffset(textToCheck, fieldWidth);
+      int lengthFitting = textRenderer.getFont().getVisibleCharactersFromStart(textToCheck, fieldWidth);
       lastVisibleCharacterIndex = lengthFitting + firstVisibleCharacterIndex;
     } else {
       lastVisibleCharacterIndex = firstVisibleCharacterIndex;

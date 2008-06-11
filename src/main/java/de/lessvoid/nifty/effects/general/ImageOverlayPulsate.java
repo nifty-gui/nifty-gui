@@ -4,9 +4,10 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderImage;
-import de.lessvoid.nifty.render.RenderImage.SubImageMode;
+import de.lessvoid.nifty.render.RenderImageSubImageMode;
+import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
@@ -36,13 +37,13 @@ public class ImageOverlayPulsate implements EffectImpl {
     image = nifty.getRenderDevice().createImage(parameter.getProperty("filename"), true);
     String subImageSizeMode = parameter.getProperty("subImageSizeMode", null);
     if (subImageSizeMode != null) {
-      image.setSubImageMode(SubImageMode.valueOf(subImageSizeMode));
+      image.setSubImageMode(RenderImageSubImageMode.valueOf(subImageSizeMode));
     }
 
     String resizeHint = parameter.getProperty("resizeHint", null);
     if (resizeHint != null) {
       image.setResizeHint(resizeHint);
-      image.setSubImageMode(SubImageMode.ResizeHint);
+      image.setSubImageMode(RenderImageSubImageMode.RESIZE());
     }
 
     this.pulsater = new Pulsator(parameter, new TimeProvider());
@@ -57,9 +58,9 @@ public class ImageOverlayPulsate implements EffectImpl {
   public void execute(
       final Element element,
       final float normalizedTime,
-      final RenderDevice r) {
+      final RenderEngine r) {
     float value = pulsater.update();
-    r.setColor(1.0f, 1.0f, 1.0f, value);
+    r.setColor(new Color(1.0f, 1.0f, 1.0f, value));
     r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
   }
 

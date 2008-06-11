@@ -7,7 +7,7 @@ import java.util.Set;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.effects.general.Effect;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderState;
 
 /**
@@ -56,7 +56,7 @@ public class StandardEffectProcessor implements EffectProcessor {
   public StandardEffectProcessor(final boolean neverEndsValue) {
     this.neverStopRendering = neverEndsValue;
     this.active = false;
-    this.renderDeviceProxy = new RenderDeviceProxy();
+    this.renderDeviceProxy = new RenderDeviceProxy(null);
   }
 
   /**
@@ -71,7 +71,7 @@ public class StandardEffectProcessor implements EffectProcessor {
    * render pre.
    * @param renderDevice the renderDevice
    */
-  public final void renderPre(final RenderDevice renderDevice) {
+  public final void renderPre(final RenderEngine renderDevice) {
     if (!neverStopRendering) {
       if (!active) {
         return;
@@ -92,7 +92,7 @@ public class StandardEffectProcessor implements EffectProcessor {
    * render post.
    * @param renderDevice the RenderDevice
    */
-  public final void renderPost(final RenderDevice renderDevice) {
+  public final void renderPost(final RenderEngine renderDevice) {
     if (!neverStopRendering) {
       if (!active) {
         return;

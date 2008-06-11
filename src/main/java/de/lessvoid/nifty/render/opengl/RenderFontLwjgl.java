@@ -105,15 +105,15 @@ public class RenderFontLwjgl implements RenderFont {
     return font.getStringWidth( text );
   }
 
-  public int getFittingOffset(final String text, final int width) {
+  public int getVisibleCharactersFromStart(final String text, final int width) {
     return font.getLengthFittingPixelSize(text, width, 1.0f);
   }
 
-  public int getFittingOffsetBackward(final String text, final int width) {
+  public int getVisibleCharactersFromEnd(final String text, final int width) {
     return font.getLengthFittingPixelSizeBackwards(text, width, 1.0f);
   }
 
-  public int getIndexFromPixel(final String text, final int pixel, final float size) {
+  public int getCharacterIndexFromPixelPosition(final String text, final int pixel, final float size) {
     return font.getIndexFromPixel(text, pixel, size);
   }
 

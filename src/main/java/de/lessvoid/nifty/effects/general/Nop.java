@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 
 /**
  * Nop effect - does nothing.
@@ -27,7 +27,7 @@ public class Nop implements EffectImpl {
    * @param normalizedTime TimeInterpolator
    * @param r RenderDevice
    */
-  public void execute(final Element element, final float normalizedTime, final RenderDevice r) {
+  public void execute(final Element element, final float normalizedTime, final RenderEngine r) {
   }
 }
 

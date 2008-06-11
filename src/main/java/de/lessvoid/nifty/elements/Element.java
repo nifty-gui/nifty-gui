@@ -12,11 +12,12 @@ import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.shared.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderState;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -273,6 +274,14 @@ public class Element {
   }
 
   /**
+   * Get Original Layout Box.
+   * @return box
+   */
+  public final Box getOriginalBox() {
+    return layoutPart.getBox();
+  }
+
+  /**
    * get x.
    * @return x position of this element.
    */
@@ -324,7 +333,7 @@ public class Element {
    * render this element.
    * @param r the RenderDevice to use
    */
-  public final void render(final RenderDevice r) {
+  public final void render(final RenderEngine r) {
     // render element only when it is visible
     if (visible) {
       r.saveState(RenderState.allStates());

@@ -6,11 +6,11 @@ package de.lessvoid.nifty.render;
  */
 public class RenderFontNull implements RenderFont {
 
-  public int getFittingOffset(String text, int width) {
+  public int getVisibleCharactersFromStart(String text, int width) {
     return 0;
   }
 
-  public int getFittingOffsetBackward(String text, int width) {
+  public int getVisibleCharactersFromEnd(String text, int width) {
     return 0;
   }
 
@@ -18,7 +18,7 @@ public class RenderFontNull implements RenderFont {
     return 0;
   }
 
-  public int getIndexFromPixel(String text, int pixel, float size) {
+  public int getCharacterIndexFromPixelPosition(String text, int pixel, float size) {
     return 0;
   }
 

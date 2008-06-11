@@ -3,13 +3,6 @@ package de.lessvoid.nifty.render.opengl;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
@@ -18,143 +11,84 @@ import org.lwjgl.opengl.GL11;
 import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.render.RenderFont;
 import de.lessvoid.nifty.render.RenderImage;
-import de.lessvoid.nifty.render.RenderState;
-import de.lessvoid.nifty.tools.Color;
 
+/**
+ * Lwjgl RenderDevice Implementation.
+ * @author void
+ */
 public class RenderDeviceLwjgl implements RenderDevice {
-  private final static Logger log = Logger.getLogger(RenderDeviceLwjgl.class.getName());
-  private float globalPosX = 0;
-  private float globalPosY = 0;
-  private float moveX= 0;
-  private float moveY= 0;
-  private Color fontColor;
-  private Color color;
-  private float imageScale= 1.0f;
-  private float textSize= 1.0f;
-  private static ByteBuffer byteBuffer = BufferUtils.createByteBuffer(1024);
+
+  /**
+   * Buffersize.
+   */
+  private static final int INTERNAL_BUFFERSIZE_IN_BYTES = 1024;
+
+  /**
+   * ByteBuffer.
+   */
+  private static ByteBuffer byteBuffer = BufferUtils.createByteBuffer(INTERNAL_BUFFERSIZE_IN_BYTES);
+
+  /**
+   * DoubleBuffer.
+   */
   private static DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
+
+  /**
+   * FloatBuffer.
+   */
   private static FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
-  private boolean colorChanged = false;
 
   /**
-   * font cache.
+   * Get Width.
+   * @return width of display mode
    */
-  private Map < String, RenderFont > fontCache = new Hashtable < String, RenderFont >();
-
-  /**
-   * stack to save data.
-   */
-  private Stack < Set < RenderStateImpl > > stack = new Stack < Set < RenderStateImpl > >();
-
-  /**
-   * renderStates mapping.
-   */
-  private EnumMap < RenderState, Class < ? extends RenderStateImpl > > renderStatesMap =
-    new EnumMap < RenderState, Class < ? extends RenderStateImpl > >(RenderState.class);
-
-  /**
-   * create the device.
-   */
-  public RenderDeviceLwjgl() {
-    renderStatesMap.put(RenderState.currentState, RenderStateCurrentState.class);
-    renderStatesMap.put(RenderState.color, RenderStateColor.class);
-    renderStatesMap.put(RenderState.fontColor, RenderStateFontColor.class);
-    renderStatesMap.put(RenderState.imageScale, RenderStateImageScale.class);
-    renderStatesMap.put(RenderState.position, RenderStatePosition.class);
-    renderStatesMap.put(RenderState.textSize, RenderStateTextSize.class);
-  }
-
-  public int getHeight() {
-    return Display.getDisplayMode().getHeight();
-  }
-
   public int getWidth() {
     return Display.getDisplayMode().getWidth();
   }
 
-  private void testMethod() {
-    GL11.glTranslatef(globalPosX, globalPosY, 0.0f);
-  }
-
   /**
-   * Render Image.
-   * @param image the image to render
-   * @param x the x position on the screen
-   * @param y the y position on the screen
-   * @param width the width
-   * @param height the height
+   * Get Height.
+   * @return height of display mode
    */
-  public void renderImage(final RenderImage image, final int x, final int y, final int width, final int height) {
-    moveTo( this.moveX, this.moveY );
-    GL11.glTranslatef( x+width/2, y+height/2, 0.0f );
-    GL11.glScalef( imageScale, imageScale, 1.0f );
-    GL11.glTranslatef( -(x+width/2), -(y+height/2), 0.0f );
-    testMethod();    
-    RenderImageLwjgl internalImage= (RenderImageLwjgl)image;
-    internalImage.render( x, y, width, height );
+  public int getHeight() {
+    return Display.getDisplayMode().getHeight();
   }
 
   /**
-   * Render a Part of an Image.
-   * @param image the image to render
-   * @param x the x position on the screen
-   * @param y the y position on the screen
-   * @param w the width
-   * @param h the height
-   * @param srcX x position in image to copy from
-   * @param srcY y position in image to copy from
-   * @param srcW width in image to copy from
-   * @param srcH heightin image to coopy from
+   * Clear Screen.
    */
-  public void renderImagePart(
-      final RenderImage image,
-      final int x,
-      final int y,
-      final int w,
-      final int h,
-      final int srcX,
-      final int srcY,
-      final int srcW,
-      final int srcH) {
-    moveTo(this.moveX, this.moveY);
-    GL11.glTranslatef(x + w / 2, y + h / 2, 0.0f);
-    GL11.glScalef(imageScale, imageScale, 1.0f);
-    GL11.glTranslatef(-(x + w / 2), -(y + h / 2), 0.0f);
-    testMethod();
-    RenderImageLwjgl internalImage = (RenderImageLwjgl) image;
-    internalImage.render(x, y, w, h, srcX, srcY, srcW, srcH);
+  public void clear() {
+    GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
   }
 
   /**
-   * Set a new color.
-   * @param colorR color red
-   * @param colorG color green
-   * @param colorB color blue
-   * @param colorA color alpha
+   * Create a new RenderImage.
+   * @param filename filename
+   * @param filterLinear linear filter the image
+   * @return RenderImage
    */
-  public void setColor(final float colorR, final float colorG, final float colorB, final float colorA) {
-    GL11.glColor4f(colorR, colorG, colorB, colorA);
-    color = new Color(colorR, colorG, colorB, colorA);
-    colorChanged = true;
+  public RenderImage createImage(final String filename, final boolean filterLinear) {
+    return new RenderImageLwjgl(filename, filterLinear);
   }
 
   /**
-   * return true when color has been changed.
-   * @return color changed
+   * Create a new RenderFont.
+   * @param filename filename
+   * @return RenderFont
    */
-  public boolean isColorChanged() {
-    return colorChanged;
+  public RenderFont createFont(final String filename) {
+    return new RenderFontLwjgl(filename);
   }
 
   /**
-   * render a quad.
+   * Render a quad.
    * @param x x
    * @param y y
    * @param width width
    * @param height height
    */
-  public void renderQuad(final int x, final int y, final int width, final int height ) {
-    testMethod();
+  public void renderQuad(final int x, final int y, final int width, final int height) {
     GL11.glBegin(GL11.GL_QUADS);
       GL11.glVertex2i(x,         y);
       GL11.glVertex2i(x + width, y);
@@ -164,320 +98,11 @@ public class RenderDeviceLwjgl implements RenderDevice {
   }
 
   /**
-   * Create a new Image.
-   * @param name file name to use
-   * @param filter filter
-   * @return RenderImage instance
-   */
-  public RenderImage createImage(final String name, final boolean filter) {
-    return new RenderImageLwjgl(name, filter);
-  }
-
-  public void moveTo( float x, float y ) {
-    GL11.glLoadIdentity();
-    GL11.glTranslatef( x, y, 0.0f );
-    
-    this.moveX= x;
-    this.moveY= y;
-  }
-
-
-  public void clear() {
-    GL11.glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-    GL11.glClear( GL11.GL_COLOR_BUFFER_BIT );
-    colorChanged = false;
-  }
-  
-  public RenderFont createFont( String name ) {
-    if( fontCache.containsKey( name )) {
-      return fontCache.get( name );
-    } else {
-      RenderFont font= new RenderFontLwjgl( name );
-      fontCache.put( name, font );
-      return font;
-    }
-  }
-
-  /**
-   * renderText.
-   * @param font font
-   * @param text text
-   * @param x x
-   * @param y y
-   */
-  public void renderText(final RenderFont font, final String text, final int x, final int y) {
-    if (fontColor != null) {
-      font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-    } else {
-      font.setDefaultColor();
-    }
-    font.setSize(textSize);
-    font.render(text, x, y);
-  }
-
-  /**
-   * Set RenderTextSize.
-   * @param size size
-   */
-  public void setRenderTextSize(final float size) {
-    this.textSize = size;
-  }
-
-  public float getMoveToX() {
-    return moveX;
-  }
-  
-  public float getMoveToY() {
-    return moveY;
-  }
-
-  public void disableTexture() {
-    GL11.glDisable( GL11.GL_TEXTURE_2D );
-  }
-
-  /**
-   * enable alpha blend.
+   * Enable Blendmode.
    */
   public void enableBlend() {
     GL11.glEnable(GL11.GL_BLEND);
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-  }
-
-  /**
-   * set the font color.
-   */
-  public void setFontColor(final float r, final float g, final float b, final float a) {
-    fontColor = new Color(r, g, b, a);
-  }
-
-  public void setImageScale( float scale ) {
-    this.imageScale= scale;
-  }
-  
-  public void setGlobalPosition(float x, float y) {
-    globalPosX = x;
-    globalPosY = y;
-  }
-
-  /**
-   * save given states.
-   * @param statesToSave set of renderstates to save
-   */
-  public void saveState(final Set < RenderState > statesToSave) {
-    Set < RenderStateImpl > renderStateImpl = new HashSet < RenderStateImpl >();
-
-    for (RenderState state : statesToSave) {
-      try {
-        Class < ? extends RenderStateImpl > clazz = renderStatesMap.get(state);
-        renderStateImpl.add(clazz.getConstructor(new Class[] {RenderDeviceLwjgl.class }).newInstance(this));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-
-    stack.push(renderStateImpl);
-  }
-
-  /**
-   * restore states.
-   */
-  public void restoreState() {
-    Set < RenderStateImpl > renderStateImpl = stack.pop();
-
-    for (RenderStateImpl impl : renderStateImpl) {
-      impl.restore();
-    }
-  }
-
-  /**
-   * RenderStatePositionImpl.
-   * @author void
-   */
-  public final class RenderStatePosition implements RenderStateImpl {
-
-    /**
-     * saved x.
-     */
-    private float x;
-
-    /**
-     * saved y.
-     */
-    private float y;
-
-    /**
-     * store this state.
-     */
-    public RenderStatePosition() {
-      GL11.glPushMatrix();
-      this.x = RenderDeviceLwjgl.this.moveX;
-      this.y = RenderDeviceLwjgl.this.moveY;
-    }
-
-    /**
-     * restore this state.
-     */
-    public void restore() {
-      GL11.glPopMatrix();
-      RenderDeviceLwjgl.this.moveX = this.x;
-      RenderDeviceLwjgl.this.moveY = this.y;
-    }
-  }
-
-  /**
-   * Save global GL attributes.
-   * @author void
-   */
-  public final class RenderStateCurrentState implements RenderStateImpl {
-    /**
-     * color changed flag.
-     */
-    private boolean colorChanged;
-
-    /**
-     * save.
-     */
-    public RenderStateCurrentState() {
-      GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_ENABLE_BIT);
-      this.colorChanged = RenderDeviceLwjgl.this.colorChanged;
-    }
-
-    /**
-     * restore.
-     */
-    public void restore() {
-      floatBuffer.clear();
-      GL11.glGetFloat(GL11.GL_CURRENT_COLOR, floatBuffer);
-      GL11.glPopAttrib();
-      GL11.glColor4f(
-          floatBuffer.get(0),
-          floatBuffer.get(1),
-          floatBuffer.get(2),
-          floatBuffer.get(3));
-      RenderDeviceLwjgl.this.colorChanged = this.colorChanged;
-    }
-  }
-
-  /**
-   * RenderStateColor.
-   * @author void
-   */
-  public final class RenderStateColor implements RenderStateImpl {
-    /**
-     * Color.
-     */
-    private Color color;
-
-    /**
-     * save.
-     */
-    public RenderStateColor() {
-      this.color = RenderDeviceLwjgl.this.color;
-    }
-
-    /**
-     * restore.
-     */
-    public void restore() {
-      if (color != null) {
-        GL11.glColor4f(
-          color.getRed(),
-          color.getGreen(),
-          color.getBlue(),
-          color.getAlpha());
-      } else {
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-      }
-      RenderDeviceLwjgl.this.color = color;
-    }
-  }
-
-  /**
-   * RenderStateTextSize.
-   * @author void
-   */
-  public final class RenderStateTextSize implements RenderStateImpl {
-
-    /**
-     * textSize.
-     */
-    private float textSize;
-
-    /**
-     * save.
-     */
-    public RenderStateTextSize() {
-      this.textSize = RenderDeviceLwjgl.this.textSize;
-    }
-
-    /**
-     * restore.
-     */
-    public void restore() {
-      RenderDeviceLwjgl.this.textSize = this.textSize;
-    }
-  }
-
-  /**
-   * RenderStateFontColor.
-   * @author void
-   */
-  public final class RenderStateFontColor implements RenderStateImpl {
-
-    /**
-     * fontColor.
-     */
-    private Color fontColor;
-
-    /**
-     * save.
-     */
-    public RenderStateFontColor() {
-      this.fontColor = RenderDeviceLwjgl.this.fontColor;
-    }
-
-    /**
-     * restore.
-     */
-    public void restore() {
-      RenderDeviceLwjgl.this.fontColor = this.fontColor;
-    }
-  }
-
-  /**
-   * RenderStateImageScale.
-   * @author void
-   */
-  public final class RenderStateImageScale implements RenderStateImpl {
-
-    /**
-     * imageScale.
-     */
-    private float imageScale;
-
-    /**
-     * save.
-     */
-    public RenderStateImageScale() {
-      this.imageScale = RenderDeviceLwjgl.this.imageScale;
-    }
-
-    /**
-     * restore.
-     */
-    public void restore() {
-      RenderDeviceLwjgl.this.imageScale = this.imageScale;
-    }
-  }
-
-  /**
-   * Disable the clipping.
-   */
-  public void disableClip() {
-    GL11.glDisable(GL11.GL_CLIP_PLANE0);
-    GL11.glDisable(GL11.GL_CLIP_PLANE1);
-    GL11.glDisable(GL11.GL_CLIP_PLANE2);
-    GL11.glDisable(GL11.GL_CLIP_PLANE3);
   }
 
   /**
@@ -506,4 +131,15 @@ public class RenderDeviceLwjgl implements RenderDevice {
     doubleBuffer.put(0).put(-1).put(0).put(y1).flip();
     GL11.glClipPlane(GL11.GL_CLIP_PLANE3, doubleBuffer);
   }
+
+  /**
+   * Disable Clip.
+   */
+  public void disableClip() {
+    GL11.glDisable(GL11.GL_CLIP_PLANE0);
+    GL11.glDisable(GL11.GL_CLIP_PLANE1);
+    GL11.glDisable(GL11.GL_CLIP_PLANE2);
+    GL11.glDisable(GL11.GL_CLIP_PLANE3);
+  }
+
 }

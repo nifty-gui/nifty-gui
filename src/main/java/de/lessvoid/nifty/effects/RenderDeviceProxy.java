@@ -4,15 +4,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderFont;
 import de.lessvoid.nifty.render.RenderImage;
 import de.lessvoid.nifty.render.RenderState;
 
-public class RenderDeviceProxy implements RenderDevice {
+public class RenderDeviceProxy extends RenderEngine {
 
   private Set < RenderState > renderStates;
 
-  public RenderDeviceProxy() {
+  public RenderDeviceProxy(final RenderDevice renderDevice) {
+    super(renderDevice);
     this.renderStates = new HashSet < RenderState > ();
   }
 

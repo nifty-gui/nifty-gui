@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderImage;
 import de.lessvoid.nifty.render.RenderState;
 import de.lessvoid.nifty.tools.Color;
@@ -31,30 +31,25 @@ public class PanelRenderer implements ElementRenderer {
   /**
    * render it.
    *
-   * @param w
+   * @param element
    *            the widget we're connected to
    * @param r
    *            the renderDevice we should use
    */
-  public final void render(final Element w, final RenderDevice r) {
+  public final void render(final Element element, final RenderEngine r) {
 
     // use background image?
     if (backgroundImage != null) {
-      r.renderImage(backgroundImage, w.getX(), w.getY(), w.getWidth(), w.getHeight());
+      r.renderImage(backgroundImage, element.getX(), element.getY(), element.getWidth(), element.getHeight());
     }
 
     if (backgroundColor != null) {
       r.saveState(RenderState.allStates());
       if (!r.isColorChanged()) {
-        r.setColor(
-          backgroundColor.getRed(),
-          backgroundColor.getGreen(),
-          backgroundColor.getBlue(),
-          backgroundColor.getAlpha());
+        r.setColor(backgroundColor);
       }
       r.enableBlend();
-      r.disableTexture();
-      r.renderQuad(w.getX(), w.getY(), w.getWidth(), w.getHeight());
+      r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
       r.restoreState();
     }
   }

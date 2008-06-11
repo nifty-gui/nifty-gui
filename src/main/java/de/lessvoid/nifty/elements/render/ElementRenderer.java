@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 
 /**
  * The element renderer.
@@ -14,5 +14,5 @@ public interface ElementRenderer {
    * @param w the Widget
    * @param r the RenderDevice for output.
    */
-  void render(Element w, RenderDevice r);
+  void render(Element w, RenderEngine r);
 }

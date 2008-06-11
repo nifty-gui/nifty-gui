@@ -13,7 +13,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -182,7 +182,7 @@ public class ElementType {
   public static void applyAttributes(
       final AttributesType attrib,
       final Element element,
-      final RenderDevice renderDevice) {
+      final RenderEngine renderDevice) {
     if (attrib == null) {
       return;
     }

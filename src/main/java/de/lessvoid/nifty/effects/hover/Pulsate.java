@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderDevice;
+import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderState;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -61,18 +61,13 @@ public class Pulsate implements HoverEffectImpl {
       final Element element,
       final float normalizedTime,
       final float normalizedFalloff,
-      final RenderDevice r) {
+      final RenderEngine r) {
     r.saveState(RenderState.allStates());
     r.enableBlend();
-    r.disableTexture();
 
     float value = pulsater.update();
     Color c = startColor.linear(endColor, value);
-    r.setColor(
-        c.getRed(),
-        c.getGreen(),
-        c.getBlue(),
-        c.getAlpha());
+    r.setColor(c);
     int size = (int) width.getValue(element.getParent().getWidth());
     if (size == -1) {
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
