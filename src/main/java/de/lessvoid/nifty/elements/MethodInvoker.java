@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.elements;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.elements.tools.MethodResolver;
@@ -73,16 +72,26 @@ public class MethodInvoker {
       if (object != null) {
         Method method = MethodResolver.findMethod(object.getClass(), methodWithName);
         if (method != null) {
-          // now build invoke parameters
-          String[] invokeParameters = MethodResolver.extractParameters(methodWithName);
-          if (invokeParameters.length == 0) {
-            log.info("invoking method '" + methodWithName + "' without parameters");
+          // there really are two different modes:
+          // a) there are invokeParametersParam given
+          //    in this case we will call the method with the parameters given
+          // b) there are no invokeParametersParam given
+          //    in this case we well look for predefined parameters to call the method with
+          Object[] invokeParameters = new Object[0];
+          if (invokeParametersParam.length > 0) {
+            invokeParameters = invokeParametersParam;
           } else {
-            if (!supportsParameters(method)) {
-              log.info("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
-              invokeParameters = new String[0];
+            // now build invoke parameters
+            invokeParameters = MethodResolver.extractParameters(methodWithName);
+            if (invokeParameters.length == 0) {
+              log.info("invoking method '" + methodWithName + "' without parameters");
             } else {
-              log.info("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
+              if (!supportsParameters(method)) {
+                log.info("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
+                invokeParameters = new String[0];
+              } else {
+                log.info("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
+              }
             }
           }
 

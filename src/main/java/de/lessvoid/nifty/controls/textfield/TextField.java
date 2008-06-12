@@ -20,12 +20,12 @@ public class TextField {
   /**
    * Index of first selected character.
    */
-  private int selectionStart;
+  private int selectionStart = -1;
 
   /**
    * Index of last selected character.
    */
-  private int selectionEnd;
+  private int selectionEnd = -1;
 
   /**
    * currently selecting stuff.

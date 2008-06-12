@@ -10,6 +10,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -26,6 +27,11 @@ public class TextType extends ElementType {
   private String text;
 
   /**
+   * text selection color.
+   */
+  private String textSelectionColor;
+
+  /**
    * create it.
    * @param textParam filename
    */
@@ -39,6 +45,14 @@ public class TextType extends ElementType {
    */
   public void setText(final String textParam) {
     this.text = textParam;
+  }
+
+  /**
+   * set text selection color.
+   * @param textSelectionColorParam new text selection color
+   */
+  public void setTextSelectionTextColor(final String textSelectionColorParam) {
+    textSelectionColor = textSelectionColorParam;
   }
 
   /**
@@ -83,6 +97,9 @@ public class TextType extends ElementType {
         inputControl,
         screenController);
     textRenderer.setText(text);
+    if (textSelectionColor != null) {
+      textRenderer.setTextSelectionColor(new Color(textSelectionColor));
+    }
     if (panel.getConstraintHeight() == null) {
       panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
     }

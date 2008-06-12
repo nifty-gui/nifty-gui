@@ -47,13 +47,6 @@ public interface RenderFont {
   int getCharacterIndexFromPixelPosition(String text, int pixel, float size);
 
   /**
-   * set selection.
-   * @param selectionStart selection start
-   * @param selectionEnd selection end
-   */
-  void setSelection(int selectionStart, int selectionEnd);
-
-  /**
    * Render the given text at the given position.
    * @param text text to render
    * @param x x position

@@ -56,9 +56,9 @@ public class NiftyRenderEngine implements RenderEngine {
   private float imageScale = 1.0f;
 
   /**
-   * current textSize.
+   * current textScale.
    */
-  private float textSize = 1.0f;
+  private float textScale = 1.0f;
 
   /**
    * font cache.
@@ -167,9 +167,103 @@ public class NiftyRenderEngine implements RenderEngine {
    * @param text text
    * @param x x
    * @param y y
+   * @param selectionStart selection start
+   * @param selectionEnd selection end
+   * @param textSelectionColor textSelectionColor
    */
-  public void renderText(final RenderFont font, final String text, final int x, final int y) {
-    font.render(text, x + getX(), y + getY(), color, textSize);
+  public void renderText(
+      final RenderFont font,
+      final String text,
+      final int x,
+      final int y,
+      final int selectionStart,
+      final int selectionEnd,
+      final Color textSelectionColor) {
+    if (isSelection(selectionStart, selectionEnd)) {
+      renderSelectionText(
+          font, text, x + getX(), y + getY(), color, textSelectionColor, textScale, selectionStart, selectionEnd);
+    } else {
+      font.render(text, x + getX(), y + getY(), color, textScale);
+    }
+  }
+
+  /**
+   * Render a Text with some text selected.
+   * @param font font
+   * @param text text
+   * @param x x
+   * @param y y
+   * @param textColor color
+   * @param textSelectionColor textSelectionColor
+   * @param textSize text size
+   * @param selectionStart selection start
+   * @param selectionEnd selection end
+   */
+  protected void renderSelectionText(
+      final RenderFont font,
+      final String text,
+      final int x,
+      final int y,
+      final Color textColor,
+      final Color textSelectionColor,
+      final float textSize,
+      final int selectionStart,
+      final int selectionEnd) {
+    if (isEverythingSelected(text, selectionStart, selectionEnd)) {
+      font.render(text, x, y, textSelectionColor, textSize);
+    } else if (isSelectionAtBeginning(selectionStart)) {
+      String selectedString = text.substring(selectionStart, selectionEnd);
+      String unselectedString = text.substring(selectionEnd);
+
+      font.render(selectedString, x, y, textSelectionColor, textSize);
+      font.render(unselectedString, x + font.getWidth(selectedString), y, textColor, textSize);
+    } else if (isSelectionAtEnd(text, selectionEnd)) {
+      String unselectedString = text.substring(0, selectionStart);
+      String selectedString = text.substring(selectionStart, selectionEnd);
+
+      font.render(unselectedString, x, y, textColor, textSize);
+      font.render(selectedString, x + font.getWidth(unselectedString), y, textSelectionColor, textSize);
+    } else {
+      String unselectedString1 = text.substring(0, selectionStart);
+      String selectedString = text.substring(selectionStart, selectionEnd);
+      String unselectedString2 = text.substring(selectionEnd, text.length());
+
+      font.render(unselectedString1, x, y, textColor, textSize);
+      int unselectedString1Len = font.getWidth(unselectedString1);
+      font.render(selectedString, x + unselectedString1Len, y, textSelectionColor, textSize);
+      int selectedStringLen = font.getWidth(selectedString);
+      font.render(unselectedString2, x + unselectedString1Len + selectedStringLen, y, textColor, textSize);
+    }
+  }
+
+  /**
+   * Returns true of selection is at the end of the string.
+   * @param text text
+   * @param selectionEnd selection end
+   * @return true or false
+   */
+  private boolean isSelectionAtEnd(final String text, final int selectionEnd) {
+    return selectionEnd == text.length();
+  }
+
+  /**
+   * Returns true if selection starts at the beginning.
+   * @param selectionStart selection start
+   * @return true or false
+   */
+  private boolean isSelectionAtBeginning(final int selectionStart) {
+    return selectionStart == 0;
+  }
+
+  /**
+   * Returns true when everything is selected.
+   * @param text text
+   * @param selectionStart selection start
+   * @param selectionEnd selection end
+   * @return true when everything is selected
+   */
+  private boolean isEverythingSelected(final String text, final int selectionStart, final int selectionEnd) {
+    return isSelectionAtBeginning(selectionStart) && isSelectionAtEnd(text, selectionEnd);
   }
 
   /**
@@ -222,7 +316,7 @@ public class NiftyRenderEngine implements RenderEngine {
    * @param size size
    */
   public void setRenderTextSize(final float size) {
-    this.textSize = size;
+    this.textScale = size;
   }
 
   /**
@@ -257,6 +351,16 @@ public class NiftyRenderEngine implements RenderEngine {
    */
   private int getY() {
     return (int) (globalPosY + currentY);
+  }
+
+  /**
+   * has selection.
+   * @param selectionStart selection start
+   * @param selectionEnd selection end
+   * @return true or false
+   */
+  private boolean isSelection(final int selectionStart, final int selectionEnd) {
+    return !(selectionStart == -1 && selectionEnd == -1);
   }
 
   /**
@@ -369,14 +473,14 @@ public class NiftyRenderEngine implements RenderEngine {
      * save.
      */
     public RenderStateTextSize() {
-      this.textSize = NiftyRenderEngine.this.textSize;
+      this.textSize = NiftyRenderEngine.this.textScale;
     }
 
     /**
      * restore.
      */
     public void restore() {
-      NiftyRenderEngine.this.textSize = this.textSize;
+      NiftyRenderEngine.this.textScale = this.textSize;
     }
   }
 

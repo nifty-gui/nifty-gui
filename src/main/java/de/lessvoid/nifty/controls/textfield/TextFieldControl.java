@@ -89,11 +89,11 @@ public class TextFieldControl implements Controller {
    * On start screen event.
    */
   public void onStartScreen() {
-    this.textElement = element.findElementByName("text");
+    this.textElement = element.findElementByName("textfield-text");
     this.textElement.getRenderer(TextRenderer.class).changeText(textField.getText());
 
-    this.fieldElement = element.findElementByName("field");
-    this.cursorElement = element.findElementByName("cursor");
+    this.fieldElement = element.findElementByName("textfield-field");
+    this.cursorElement = element.findElementByName("textfield-cursor");
 
     this.fieldWidth = this.fieldElement.getWidth() - this.cursorElement.getWidth();
 

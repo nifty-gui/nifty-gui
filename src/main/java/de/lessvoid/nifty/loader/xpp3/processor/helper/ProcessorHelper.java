@@ -136,5 +136,13 @@ public final class ProcessorHelper {
     if (attributes.isSet("color")) {
       attributesType.setColor(new ColorType(attributes.get("color")));
     }
+    // filename
+    if (attributes.isSet("filename")) {
+      attributesType.setFilename(attributes.get("filename"));
+    }
+    // filter
+    if (attributes.isSet("filter")) {
+      attributesType.setFilter(attributes.getAsBoolean("filter"));
+    }
   }
 }

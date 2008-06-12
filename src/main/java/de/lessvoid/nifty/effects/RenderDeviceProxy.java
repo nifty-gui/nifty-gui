@@ -56,7 +56,7 @@ public class RenderDeviceProxy implements RenderEngine {
   public void renderQuad(int x, int y, int width, int height) {
   }
 
-  public void renderText(RenderFont font, String text, int x, int y) {
+  public void renderText(RenderFont font, String text, int x, int y, int selectionStart, int selectionEnd, Color c) {
   }
 
   public void restoreState() {

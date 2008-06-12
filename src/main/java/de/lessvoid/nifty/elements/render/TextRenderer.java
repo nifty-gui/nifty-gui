@@ -40,12 +40,17 @@ public class TextRenderer implements ElementRenderer {
   /**
    * selection start.
    */
-  private int selectionStart;
+  private int selectionStart = -1;
 
   /**
    * selection end.
    */
-  private int selectionEnd;
+  private int selectionEnd = -1;
+
+  /**
+   * text selection corlor.
+   */
+  private Color textSelectionColor;
 
   /**
    * default constructor.
@@ -124,11 +129,25 @@ public class TextRenderer implements ElementRenderer {
         int fittingOffset = font.getVisibleCharactersFromStart(line, Math.abs(xoffsetHack));
         String cut = line.substring(0, fittingOffset);
         String substring = line.substring(fittingOffset, line.length());
-        font.setSelection(selectionStart - fittingOffset, selectionEnd - fittingOffset);
-        r.renderText(font, substring, w.getX() + x + xoffsetHack + font.getWidth(cut), w.getY() + y);
+        // font.setSelection(selectionStart - fittingOffset, selectionEnd - fittingOffset);
+        r.renderText(
+            font,
+            substring,
+            w.getX() + x + xoffsetHack + font.getWidth(cut),
+            w.getY() + y,
+            selectionStart - fittingOffset,
+            selectionEnd - fittingOffset,
+            textSelectionColor);
       } else {
-        font.setSelection(selectionStart, selectionEnd);
-        r.renderText(font, line, w.getX() + x + xoffsetHack, w.getY() + y);
+        // font.setSelection(selectionStart, selectionEnd);
+        r.renderText(
+            font,
+            line,
+            w.getX() + x + xoffsetHack,
+            w.getY() + y,
+            selectionStart,
+            selectionEnd,
+            textSelectionColor);
       }
       y += font.getHeight();
     }
@@ -194,5 +213,13 @@ public class TextRenderer implements ElementRenderer {
    */
   public void setFont(final RenderFont fontParam) {
     this.font = fontParam;
+  }
+
+  /**
+   * set new text selection color.
+   * @param textSelectionColorParam text selection color
+   */
+  public void setTextSelectionColor(final Color textSelectionColorParam) {
+    this.textSelectionColor = textSelectionColorParam;
   }
 }

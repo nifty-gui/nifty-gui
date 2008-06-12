@@ -87,6 +87,16 @@ public class AttributesType {
   private ColorType color = null;
 
   /**
+   * filename.
+   */
+  private String filename;
+
+  /**
+   * image filter.
+   */
+  private Boolean filter = false;
+
+  /**
    * default constructor.
    */
   public AttributesType() {
@@ -111,6 +121,8 @@ public class AttributesType {
     visibleToMouse = other.getVisibleToMouse();
     font = other.getFont();
     color = other.getColor();
+    filename = other.getFilename();
+    filter = other.getFilter();
   }
 
   /**
@@ -362,6 +374,14 @@ public class AttributesType {
   }
 
   /**
+   * get filename.
+   * @return filename
+   */
+  public String getFilename() {
+    return filename;
+  }
+
+  /**
    * set font.
    * @param fontParam font
    */
@@ -383,6 +403,30 @@ public class AttributesType {
    */
   public void setColor(final ColorType colorParam) {
     this.color = colorParam;
+  }
+
+  /**
+   * set filename.
+   * @param filenameParam filename
+   */
+  public void setFilename(final String filenameParam) {
+    this.filename = filenameParam;
+  }
+
+  /**
+   * get filter.
+   * @return filter
+   */
+  public Boolean getFilter() {
+    return filter;
+  }
+
+  /**
+   * set filter.
+   * @param filterParam filter
+   */
+  public void setFilter(final Boolean filterParam) {
+    this.filter = filterParam;
   }
 
   /**
@@ -433,6 +477,12 @@ public class AttributesType {
     }
     if (attributesParam.getColor() != null) {
       result.setColor(attributesParam.getColor());
+    }
+    if (attributesParam.getFilename() != null) {
+      result.setFilename(attributesParam.getFilename());
+    }
+    if (attributesParam.getFilter() != null) {
+      result.setFilter(attributesParam.getFilter());
     }
     return result;
   }

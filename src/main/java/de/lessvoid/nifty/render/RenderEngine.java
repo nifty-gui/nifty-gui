@@ -67,8 +67,12 @@ public interface RenderEngine {
    * @param text text
    * @param x x
    * @param y y
+   * @param selectionStart selection start
+   * @param selectionEnd selection end
+   * @param textSelectionColor color for text selections
    */
-  void renderText(RenderFont font, String text, int x, int y);
+  void renderText(
+      RenderFont font, String text, int x, int y, int selectionStart, int selectionEnd, Color textSelectionColor);
 
   /**
    * Set a new color.

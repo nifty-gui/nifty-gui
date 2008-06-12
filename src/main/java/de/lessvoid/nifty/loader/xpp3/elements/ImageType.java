@@ -100,7 +100,10 @@ public class ImageType extends ElementType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     // create the image
-    RenderImage image = nifty.getRenderDevice().createImage(filename, filter);
+    RenderImage image = null;
+    if (filename != null) {
+      image = nifty.getRenderDevice().createImage(filename, filter);
+    }
 
     // create the image renderer
     ImageRenderer imageRenderer = new ImageRenderer(image);
@@ -109,7 +112,7 @@ public class ImageType extends ElementType {
     Element element = new Element(getAttributes().getId(), parent, screen, true, imageRenderer);
 
     // sub image enable?
-    if (subImageSizeMode != null) {
+    if (image != null && subImageSizeMode != null) {
       if (subImageSizeMode == SubImageSizeModeType.scale) {
         image.setSubImageMode(RenderImageSubImageMode.SCALE());
       } else if (subImageSizeMode == SubImageSizeModeType.resizeHint) {
@@ -118,7 +121,7 @@ public class ImageType extends ElementType {
     }
 
     // resize hint available?
-    if (resizeHint != null) {
+    if (image != null && resizeHint != null) {
       image.setResizeHint(resizeHint);
       image.setSubImageMode(RenderImageSubImageMode.RESIZE());
     }
@@ -130,14 +133,20 @@ public class ImageType extends ElementType {
         registeredControls,
         styleHandler,
         time,
-        inputControl, screenController);
+        inputControl,
+        screenController);
 
     // set width and height to image width and height (for now)
-    element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
-    element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
+    image = imageRenderer.getImage();
+    if (image != null) {
+      element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
+      element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
+    } else {
+      element.setConstraintWidth(new SizeValue("1px"));
+      element.setConstraintHeight(new SizeValue("1px"));
+    }
 
     parent.add(element);
     return element;
   }
-
 }

@@ -62,14 +62,4 @@ public class RenderFontLwjgl implements RenderFont {
   public int getCharacterIndexFromPixelPosition(final String text, final int pixel, final float size) {
     return font.getIndexFromPixel(text, pixel, size);
   }
-
-  /**
-   * set selection.
-   * @param selectionStart selection start
-   * @param selectionEnd selection end
-   */
-  public void setSelection(final int selectionStart, final int selectionEnd) {
-    font.setSelectionStart(selectionStart);
-    font.setSelectionEnd(selectionEnd);
-  }
 }

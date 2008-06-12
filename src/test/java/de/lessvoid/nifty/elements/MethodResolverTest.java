@@ -3,7 +3,7 @@ package de.lessvoid.nifty.elements;
 import junit.framework.TestCase;
 import de.lessvoid.nifty.elements.tools.MethodResolver;
 
-public class MethodInvokerTest extends TestCase {
+public class MethodResolverTest extends TestCase {
 
   public void testEmptyParameters() {
     assertEquals(0, MethodResolver.extractParameters("empty()").length);

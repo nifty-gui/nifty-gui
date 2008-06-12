@@ -14,6 +14,7 @@ import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.render.RenderEngine;
+import de.lessvoid.nifty.render.RenderImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -259,6 +260,11 @@ public class ElementType {
     // imageRenderer
     ImageRenderer imageRenderer = element.getRenderer(ImageRenderer.class);
     if (imageRenderer != null) {
+      // filename
+      if (attrib.getFilename() != null) {
+        RenderImage image = renderDevice.createImage(attrib.getFilename(), attrib.getFilter());
+        imageRenderer.setImage(image);
+      }
     }
   }
 

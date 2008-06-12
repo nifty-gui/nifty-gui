@@ -39,4 +39,12 @@ public class ImageRenderer implements ElementRenderer {
   public de.lessvoid.nifty.render.RenderImage getImage() {
     return image;
   }
+
+  /**
+   * Set a new image.
+   * @param newImage new image
+   */
+  public void setImage(final RenderImage newImage) {
+    image = newImage;
+  }
 }
