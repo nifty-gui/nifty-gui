@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.logging.Logger;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import de.lessvoid.nifty.loader.xpp3.processor.XmlElementProcessor;
 
@@ -147,7 +148,15 @@ public class XmlParser {
    */
   private void processElement(final XmlElementProcessor xmlElement) throws Exception {
     log.info("process element: " + xmlElement.getClass().getName());
-    xmlElement.process(this, new Attributes(xpp));
+    try {
+     xmlElement.process(this, new Attributes(xpp));
+    } catch (Exception ex) {
+      if (!(ex instanceof XmlPullParserException)) {
+          throw new XmlPullParserException("Error parsing document.", xpp, ex);
+      } else {
+        throw ex;
+      }
+    }
   }
 
   /**
