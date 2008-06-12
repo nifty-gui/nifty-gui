@@ -1,9 +1,10 @@
 package de.lessvoid.nifty.render;
 
+import de.lessvoid.nifty.tools.Color;
+
 /**
  * RenderImage interface.
  * @author void
- *
  */
 public interface RenderImage {
 
@@ -25,8 +26,10 @@ public interface RenderImage {
    * @param y y
    * @param width w
    * @param height h
+   * @param color color
+   * @param imageScale image scale
    */
-  void render(final int x, final int y, final int width, final int height);
+  void render(int x, int y, int width, int height, Color color, float imageScale);
 
   /**
    * Set the sub image mode for this image.

@@ -61,7 +61,6 @@ public class Pulsate implements EffectImpl {
       final float normalizedTime,
       final RenderEngine r) {
     r.saveState(RenderState.allStates());
-    r.enableBlend();
 
     float value = pulsater.update();
     Color c = startColor.linear(endColor, value);

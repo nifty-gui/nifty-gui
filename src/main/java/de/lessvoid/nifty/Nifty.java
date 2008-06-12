@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
-import de.lessvoid.nifty.loader.xpp3.elements.PopupType;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.screen.Screen;
@@ -99,7 +99,7 @@ public class Nifty {
       final SoundSystem newSoundSystem,
       final TimeProvider newTimeProvider,
       final boolean useConsoleParam) {
-    initialize(new RenderEngine(newRenderDevice), newSoundSystem, newTimeProvider);
+    initialize(new NiftyRenderEngine(newRenderDevice), newSoundSystem, newTimeProvider);
 
     if (useConsoleParam) {
       this.console = new NiftyDebugConsole();

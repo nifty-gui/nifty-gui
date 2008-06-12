@@ -114,7 +114,7 @@ public class TextRenderer implements ElementRenderer {
   public final void render(final Element w, final RenderEngine r) {
 
     if (color != null) {
-      r.setFontColor(color);
+      // r.setColor(color);
     }
 
     int x = 0;

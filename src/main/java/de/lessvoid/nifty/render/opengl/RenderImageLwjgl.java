@@ -1,16 +1,12 @@
 package de.lessvoid.nifty.render.opengl;
 
-import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.render.RenderImage;
 import de.lessvoid.nifty.render.RenderImageSubImageMode;
+import de.lessvoid.nifty.tools.Color;
 
 /**
  * Lwjgl/Slick implementation for the RenderImage interface.
@@ -90,14 +86,17 @@ public class RenderImageLwjgl implements RenderImage {
    * @param y y
    * @param width width
    * @param height height
+   * @param color color
+   * @param scale scale
    */
-  public void render(final int x, final int y, final int width, final int height) {
+  public void render(
+      final int x, final int y, final int width, final int height, final Color color, final float scale) {
     if (subImageMode.equals(RenderImageSubImageMode.SCALE())) {
-      render(x, y, width, height, subImageX, subImageY, subImageW, subImageH);
+      renderScale(x, y, width, height, subImageX, subImageY, subImageW, subImageH, color);
     } else if (subImageMode.equals(RenderImageSubImageMode.RESIZE())) {
-      resizeHelper.performRender(x, y, width, height);
+      resizeHelper.performRender(x, y, width, height, color);
     } else {
-      internalRender(x, y, width, height);
+      renderNormal(x, y, width, height, color, scale);
     }
   }
 
@@ -107,17 +106,18 @@ public class RenderImageLwjgl implements RenderImage {
    * @param y y
    * @param width w
    * @param height h
+   * @param color color
+   * @param scale scale
    */
-  private void internalRender(final int x, final int y, final int width, final int height) {
-    beginRender();
-    Color color = convertColor();
-
-    image.draw(
-        x, y,
-        width, height,
-        color);
-
-    endRender();
+  private void renderNormal(
+      final int x, final int y, final int width, final int height, final Color color, final float scale) {
+    RenderTools.beginRender();
+    GL11.glTranslatef(x + width / 2, y + height / 2, 0.0f);
+    GL11.glScalef(scale, scale, 1.0f);
+    GL11.glTranslatef(-(x + width / 2), -(y + height / 2), 0.0f);
+    image.bind();
+    image.draw(x, y, width, height, convertToSlickColor(color));
+    RenderTools.endRender();
   }
 
   /**
@@ -130,8 +130,9 @@ public class RenderImageLwjgl implements RenderImage {
    * @param srcY y
    * @param srcW w
    * @param srcH h
+   * @param color color
    */
-  public void render(
+  public void renderScale(
       final int x,
       final int y,
       final int w,
@@ -139,48 +140,12 @@ public class RenderImageLwjgl implements RenderImage {
       final int srcX,
       final int srcY,
       final int srcW,
-      final int srcH) {
-    beginRender();
-    Color color = convertColor();
-
-    image.draw(
-        x, y,
-        x + w, y + h,
-        srcX,
-        srcY,
-        srcX + srcW,
-        srcY + srcH,
-        color);
-
-    endRender();
-  }
-
-  /**
-   * helper to prepare render state.
-   */
-  private void beginRender() {
-    GL11.glEnable(GL11.GL_TEXTURE_2D);
-    GL11.glEnable(GL11.GL_BLEND);
-    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+      final int srcH,
+      final Color color) {
+    RenderTools.beginRender();
     image.bind();
-  }
-
-  /**
-   * helper to restore state.
-   */
-  private void endRender() {
-    GL11.glDisable(GL11.GL_BLEND);
-    GL11.glDisable(GL11.GL_TEXTURE_2D);
-  }
-
-  /**
-   * Helper to convert color to slick color.
-   * @return Slick color
-   */
-  private Color convertColor() {
-    FloatBuffer color = BufferUtils.createFloatBuffer(16);
-    GL11.glGetFloat(GL11.GL_CURRENT_COLOR, color);
-    return new Color(color.get(0), color.get(1), color.get(2), color.get(3));
+    image.draw(x, y, x + w, y + h, srcX, srcY, srcX + srcW, srcY + srcH, convertToSlickColor(color));
+    RenderTools.endRender();
   }
 
   /**
@@ -196,7 +161,7 @@ public class RenderImageLwjgl implements RenderImage {
    * @param resizeHint string representing the resize hint
    */
   public void setResizeHint(final String resizeHint) {
-    resizeHelper = new ResizeHelper(resizeHint);
+    resizeHelper = new ResizeHelper(this, resizeHint);
   }
 
   /**
@@ -218,133 +183,15 @@ public class RenderImageLwjgl implements RenderImage {
   }
 
   /**
-   * The resize helper adds support for a sub image format that is
-   * resizable using different parts of the image.
-   * @author void
+   * Convert a Nifty color to a Slick color.
+   * @param color nifty color
+   * @return slick color
    */
-  private class ResizeHelper {
-
-    /**
-     * All boxes as calulated from the String.
-     */
-    private Box[] box = new Box[12];
-
-    /**
-     * Create from the given String.
-     * @param resizeString the String in the format: b1,b2,b3,h1,b4,b5,b6,h2,b7,b8,b9,h3
-     */
-    public ResizeHelper(final String resizeString) {
-      parseFromString(resizeString, box);
-    }
-
-    /**
-     * Parse the given String and extract the images boxes.
-     * @param resizeString the string
-     * @param boxArray the box array to fill
-     */
-    private void parseFromString(final String resizeString, final Box[] boxArray) {
-      String[] data = resizeString.split(",");
-      int y = 0;
-      y = processRow(y, boxArray, 0, data, 0);
-      y = processRow(y, boxArray, 3, data, 4);
-      y = processRow(y, boxArray, 6, data, 8);
-    }
-
-    /**
-     * @param y TODO
-     * @param boxArray the box array
-     * @param offsetBox offset into box array
-     * @param data the data to parse from
-     * @param offsetData offset into data array
-     * @return TODO
-     */
-    private int processRow(
-        final int y,
-        final Box[] boxArray,
-        final int offsetBox,
-        final String[] data, final int offsetData) {
-      int leftWidth = Integer.parseInt(data[offsetData + 0]);
-      int middleWidth = Integer.parseInt(data[offsetData + 1]);
-      int rightWidth = Integer.parseInt(data[offsetData + 2]);
-      int height = Integer.parseInt(data[offsetData + 3]);
-
-      boxArray[offsetBox + 0] = new Box(0, y, leftWidth, height);
-      boxArray[offsetBox + 1] = new Box(leftWidth, y, middleWidth, height);
-      boxArray[offsetBox + 2] = new Box(leftWidth + middleWidth, y, rightWidth, height);
-
-      return y + height;
-    }
-
-    /**
-     * Render the given image at x and y position with the given width and height
-     * using the resize hint boxes.
-     * @param renderDevice the RenderDevice to render on
-     * @param theImage the image to render
-     * @param x x position
-     * @param y y position
-     * @param width width
-     * @param height height
-     */
-    public void performRender(
-        final int x,
-        final int y,
-        final int width,
-        final int height) {
-      int middlePartHeight = height - box[0].getHeight() - box[3].getHeight() - box[6].getHeight();
-
-      renderRow(x, y,                      width, 0,                box[0], box[1], box[2]);
-      renderRow(x, y + box[0].getHeight(), width, middlePartHeight, box[3], box[4], box[5]);
-      renderRow(x, y + middlePartHeight + box[3].getHeight() + box[0].getHeight(),   width, 0,                box[6], box[7], box[8]);
-    }
-
-    /**
-     * @param renderDevice RenderDevice
-     * @param theImage image to render
-     * @param x x
-     * @param y y
-     * @param width width
-     * @param addHeight additional height
-     * @param left left box
-     * @param middle middle box
-     * @param right right box
-     */
-    private void renderRow(
-        final int x,
-        final int y,
-        final int width,
-        final int addHeight,
-        final Box left,
-        final Box middle,
-        final Box right) {
-      render(
-          x,
-          y,
-          left.getWidth(),
-          left.getHeight() + addHeight,
-          left.getX(),
-          left.getY(),
-          left.getWidth(),
-          left.getHeight());
-
-      render(
-          x + left.getWidth(),
-          y,
-          width - left.getWidth() - right.getWidth(),
-          middle.getHeight() + addHeight,
-          middle.getX(),
-          middle.getY(),
-          middle.getWidth(),
-          middle.getHeight());
-
-      render(
-          x + width - right.getWidth(),
-          y,
-          right.getWidth(),
-          right.getHeight() + addHeight,
-          right.getX(),
-          right.getY(),
-          right.getWidth(),
-          right.getHeight());
+  private org.newdawn.slick.Color convertToSlickColor(final Color color) {
+    if (color != null) {
+      return new org.newdawn.slick.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    } else {
+      return null;
     }
   }
 

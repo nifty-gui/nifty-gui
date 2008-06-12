@@ -25,20 +25,9 @@ public enum RenderState {
   textSize,
 
   /**
-   * font color.
-   */
-  fontColor,
-
-  /**
    * image scale.
    */
-  imageScale,
-
-  /**
-   * current state.
-   */
-  currentState;
-
+  imageScale;
 
   /**
    * Helper to get all available RenderStates as a set.

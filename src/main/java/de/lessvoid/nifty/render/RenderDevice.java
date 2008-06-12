@@ -1,10 +1,27 @@
 package de.lessvoid.nifty.render;
 
+import de.lessvoid.nifty.tools.Color;
+
 /**
  * Nifty RenderDevice.
  * @author void
  */
 public interface RenderDevice {
+
+  /**
+   * Create a new RenderImage.
+   * @param filename filename
+   * @param filterLinear filter
+   * @return RenderImage
+   */
+  RenderImage createImage(String filename, boolean filterLinear);
+
+  /**
+   * Create a new RenderFont.
+   * @param filename filename
+   * @return RenderFont
+   */
+  RenderFont createFont(String filename);
 
   /**
    * Get Width.
@@ -24,33 +41,14 @@ public interface RenderDevice {
   void clear();
 
   /**
-   * Create a new RenderImage.
-   * @param filename filename
-   * @param filter filter
-   * @return RenderImage
-   */
-  RenderImage createImage(String filename, boolean filter);
-
-  /**
-   * Create a new RenderFont.
-   * @param filename filename
-   * @return RenderFont
-   */
-  RenderFont createFont(String filename);
-
-  /**
    * Render a quad.
    * @param x x
    * @param y y
    * @param width width
    * @param height height
+   * @param color color
    */
-  void renderQuad(final int x, final int y, final int width, final int height);
-
-  /**
-   * Enable Blendmode.
-   */
-  void enableBlend();
+  void renderQuad(int x, int y, int width, int height, Color color);
 
   /**
    * Enable clipping to the given region.

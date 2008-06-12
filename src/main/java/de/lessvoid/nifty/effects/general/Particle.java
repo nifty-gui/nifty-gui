@@ -45,7 +45,6 @@ public class Particle implements EffectImpl {
    */
   public void execute(final Element element, final float normalizedTime, final RenderEngine r) {
     r.saveState(RenderState.allStates());
-    r.enableBlend();
     system.render();
     r.restoreState();
   }

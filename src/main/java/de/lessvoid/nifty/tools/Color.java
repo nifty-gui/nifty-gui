@@ -205,4 +205,8 @@ public class Color {
         blue * factor,
         alpha * factor);
   }
+  
+  public String toString() {
+    return red + ":" + green + ":" + blue + ":" + alpha;
+  }
 }

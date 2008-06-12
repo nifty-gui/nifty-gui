@@ -56,7 +56,7 @@ public class StandardEffectProcessor implements EffectProcessor {
   public StandardEffectProcessor(final boolean neverEndsValue) {
     this.neverStopRendering = neverEndsValue;
     this.active = false;
-    this.renderDeviceProxy = new RenderDeviceProxy(null);
+    this.renderDeviceProxy = new RenderDeviceProxy();
   }
 
   /**

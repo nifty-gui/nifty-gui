@@ -49,7 +49,6 @@ public class ColorBar implements HoverEffectImpl {
       final float normalizedFalloff,
       final RenderEngine r) {
     r.saveState(RenderState.allStates());
-    r.enableBlend();
     r.setColor(color.mutiply(normalizedFalloff));
     int size = (int) width.getValue(element.getParent().getWidth());
     if (size == -1) {

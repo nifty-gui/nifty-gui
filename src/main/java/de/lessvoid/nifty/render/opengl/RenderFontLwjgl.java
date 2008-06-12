@@ -2,6 +2,7 @@ package de.lessvoid.nifty.render.opengl;
 
 import de.lessvoid.font.Font;
 import de.lessvoid.nifty.render.RenderFont;
+import de.lessvoid.nifty.tools.Color;
 
 /**
  * RenderFontLwjgl.
@@ -13,36 +14,6 @@ public class RenderFontLwjgl implements RenderFont {
    * font.
    */
   private Font font;
-
-  /**
-   * font size.
-   */
-  private float fontSize = 1.0f;
-
-  /**
-   * use default or custom color.
-   */
-  private boolean useDefaultColor = true;
-
-  /**
-   * font color red.
-   */
-  private float fontColorR = 1.0f;
-
-  /**
-   * font color green.
-   */
-  private float fontColorG = 1.0f;
-
-  /**
-   * font color blue.
-   */
-  private float fontColorB = 1.0f;
-
-  /**
-   * font color alpha.
-   */
-  private float fontColorA = 1.0f;
 
   /**
    * Initialize the font.
@@ -58,43 +29,18 @@ public class RenderFontLwjgl implements RenderFont {
    * @param text text
    * @param x x
    * @param y y
+   * @param color color
+   * @param fontSize size
    */
-  public void render(final String text, final int x, final int y) {
-    if (useDefaultColor) {
+  public void render(final String text, final int x, final int y, final Color color, final float fontSize) {
+    RenderTools.beginRender();
+    if (color == null) {
       font.drawStringWithSize(x, y, text, fontSize);
     } else {
-      font.renderWithSizeAndColor(x, y, text, fontSize, fontColorR, fontColorG, fontColorB, fontColorA);
+      font.renderWithSizeAndColor(
+          x, y, text, fontSize, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
-  }
-
-  /**
-   * set font size.
-   * @param size size
-   */
-  public void setSize(final float size) {
-    fontSize = size;
-  }
-
-  /**
-   * set font color.
-   * @param r red
-   * @param g green
-   * @param b blue
-   * @param a alpha
-   */
-  public void setColor(final float r, final float g, final float b, final float a) {
-    fontColorR = r;
-    fontColorG = g;
-    fontColorB = b;
-    fontColorA = a;
-    useDefaultColor = false;
-  }
-
-  /**
-   * set default color.
-   */
-  public void setDefaultColor() {
-    useDefaultColor = true;
+    RenderTools.endRender();
   }
 
   public int getHeight() {

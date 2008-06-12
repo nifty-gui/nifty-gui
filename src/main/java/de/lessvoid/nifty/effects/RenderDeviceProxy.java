@@ -3,20 +3,19 @@ package de.lessvoid.nifty.effects;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderFont;
 import de.lessvoid.nifty.render.RenderImage;
 import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.tools.Color;
 
-public class RenderDeviceProxy extends RenderEngine {
+/**
+ * RenderDeviceProxy.
+ * @author void
+ */
+public class RenderDeviceProxy implements RenderEngine {
 
-  private Set < RenderState > renderStates;
-
-  public RenderDeviceProxy(final RenderDevice renderDevice) {
-    super(renderDevice);
-    this.renderStates = new HashSet < RenderState > ();
-  }
+  private Set < RenderState > renderStates = new HashSet < RenderState > ();
 
   public void clear() {
   }
@@ -25,25 +24,17 @@ public class RenderDeviceProxy extends RenderEngine {
     return null;
   }
 
-  public RenderImage createImage(String name, boolean filter) {
+  public RenderImage createImage(String name, boolean filterLinear) {
     return null;
   }
 
-  public void disableTexture() {
+  public void disableClip() {
   }
 
-  public void enableBlend() {
+  public void enableClip(int x0, int y0, int x1, int y1) {
   }
 
   public int getHeight() {
-    return 0;
-  }
-
-  public float getMoveToX() {
-    return 0;
-  }
-
-  public float getMoveToY() {
     return 0;
   }
 
@@ -51,14 +42,15 @@ public class RenderDeviceProxy extends RenderEngine {
     return 0;
   }
 
-  public void moveTo(float x, float y) {
+  public boolean isColorChanged() {
+    return false;
+  }
+
+  public void moveTo(float param, float param2) {
     renderStates.add(RenderState.position);
   }
 
-  public void renderImage(RenderImage background, int x, int y, int width, int height) {
-  }
-
-  public void renderImagePart(RenderImage image, int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH) {
+  public void renderImage(RenderImage image, int x, int y, int width, int height) {
   }
 
   public void renderQuad(int x, int y, int width, int height) {
@@ -70,21 +62,17 @@ public class RenderDeviceProxy extends RenderEngine {
   public void restoreState() {
   }
 
-  public void saveState(Set<RenderState> stateToSave) {
+  public void saveState(Set<RenderState> statesToSave) {
   }
 
-  public void setColor(float r, float g, float b, float a) {
+  public void setColor(Color colorParam) {
     renderStates.add(RenderState.color);
   }
 
-  public void setFontColor(float r, float g, float b, float a) {
-    renderStates.add(RenderState.fontColor);
+  public void setGlobalPosition(float pos, float pos2) {
   }
 
-  public void setGlobalPosition(float x, float y) {
-  }
-
-  public void setImageScale(float f) {
+  public void setImageScale(float scale) {
   }
 
   public void setRenderTextSize(float size) {
@@ -96,15 +84,5 @@ public class RenderDeviceProxy extends RenderEngine {
 
   public Set < RenderState > getStates() {
     return renderStates;
-  }
-
-  public void disableClip() {
-  }
-
-  public void enableClip(int x0, int y0, int x1, int y1) {
-  }
-
-  public boolean isColorChanged() {
-    return false;
   }
 }

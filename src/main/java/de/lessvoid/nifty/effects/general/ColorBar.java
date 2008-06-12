@@ -47,7 +47,6 @@ public class ColorBar implements EffectImpl {
       final float normalizedTime,
       final RenderEngine r) {
     r.saveState(RenderState.allStates());
-    r.enableBlend();
     r.setColor(color);
     int size = (int) width.getValue(element.getParent().getWidth());
     if (size == -1) {

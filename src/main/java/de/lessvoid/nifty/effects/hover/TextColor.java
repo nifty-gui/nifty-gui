@@ -40,6 +40,6 @@ public class TextColor implements HoverEffectImpl {
       final float normalizedTime,
       final float normalizedFalloff,
       final RenderEngine r) {
-    r.setFontColor(color);
+    r.setColor(color);
   }
 }

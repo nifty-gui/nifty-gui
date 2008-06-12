@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.render.RenderFont;
 import de.lessvoid.nifty.render.RenderImage;
+import de.lessvoid.nifty.tools.Color;
 
 /**
  * Lwjgl RenderDevice Implementation.
@@ -87,22 +88,21 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @param y y
    * @param width width
    * @param height height
+   * @param color color
    */
-  public void renderQuad(final int x, final int y, final int width, final int height) {
+  public void renderQuad(final int x, final int y, final int width, final int height, final Color color) {
+    GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_ENABLE_BIT);
+    GL11.glDisable(GL11.GL_TEXTURE_2D);
+    GL11.glEnable(GL11.GL_BLEND);
+    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+    GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     GL11.glBegin(GL11.GL_QUADS);
       GL11.glVertex2i(x,         y);
       GL11.glVertex2i(x + width, y);
       GL11.glVertex2i(x + width, y + height);
       GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
-  }
-
-  /**
-   * Enable Blendmode.
-   */
-  public void enableBlend() {
-    GL11.glEnable(GL11.GL_BLEND);
-    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+    GL11.glPopAttrib();
   }
 
   /**

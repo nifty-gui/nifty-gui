@@ -11,6 +11,12 @@ import org.lwjgl.opengl.GL11;
  * @author void
  */
 public class Font {
+
+  /**
+   * max distance.
+   */
+  private static final int MAX_DISTANCE = 9999;
+
   /**
    * the logger.
    */
@@ -161,16 +167,16 @@ public class Font {
   public void renderWithSizeAndColor( int x, int y, String text, float size, float r, float g, float b, float a ) {
     enableBlend();
     GL11.glColor4f( r, g, b, a );
-    internalRenderText( x, y, text, size, true );
+    internalRenderText( x, y, text, size, false );
     disableBlend();
   }
   
   /**
-   * @param xPos
-   * @param yPos
-   * @param text
-   * @param size TODO
-   * @param useAlphaTexture TODO
+   * @param xPos x
+   * @param yPos y
+   * @param text text
+   * @param size size
+   * @param useAlphaTexture use alpha
    */
   private void internalRenderText(
       final int xPos,
@@ -178,18 +184,19 @@ public class Font {
       final String text,
       final float size,
       final boolean useAlphaTexture) {
-    GL11.glMatrixMode( GL11.GL_PROJECTION );
+    GL11.glMatrixMode(GL11.GL_PROJECTION);
       GL11.glPushMatrix();
       GL11.glLoadIdentity();
-      GL11.glOrtho( 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight(), 0, -9999, 9999 );
-    
-    GL11.glMatrixMode( GL11.GL_MODELVIEW );
+      GL11.glOrtho(
+          0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight(), 0, -MAX_DISTANCE, MAX_DISTANCE);
+
+    GL11.glMatrixMode(GL11.GL_MODELVIEW);
       GL11.glPushMatrix();
       GL11.glLoadIdentity();
 
-      int originalWidth= getStringWidthInternal( text, 1.0f );
-      int sizedWidth= getStringWidthInternal( text, size );
-      int x = xPos - ( sizedWidth - originalWidth ) / 2;
+      int originalWidth = getStringWidthInternal(text, 1.0f);
+      int sizedWidth = getStringWidthInternal(text, size);
+      int x = xPos - (sizedWidth - originalWidth) / 2;
 
       int activeTextureIdx = -1;
       for (int i = 0; i < text.length(); i++) {
@@ -203,20 +210,20 @@ public class Font {
         if (charInfoC != null) {
           int texId = charInfoC.getPage();
           if (activeTextureIdx != texId) {
-            activeTextureIdx= texId;
-            textures[ activeTextureIdx ].activate(useAlphaTexture);            
+            activeTextureIdx = texId;
+            textures[ activeTextureIdx ].activate(useAlphaTexture);
           }
 
           kerning = getKerning(charInfoC, nextc);
-          characterWidth = (float)(charInfoC.getXadvance() * size + kerning );
+          characterWidth = (float) (charInfoC.getXadvance() * size + kerning);
         }
 
         GL11.glLoadIdentity();
-        GL11.glTranslatef( x, yPos, 0.0f );
-        
-        GL11.glTranslatef( 0.0f, getHeight()/2, 0.0f );
-        GL11.glScalef( size, size, 1.0f );
-        GL11.glTranslatef( 0.0f, -getHeight()/2, 0.0f );
+        GL11.glTranslatef(x, yPos, 0.0f);
+
+        GL11.glTranslatef(0.0f, getHeight() / 2, 0.0f);
+        GL11.glScalef(size, size, 1.0f);
+        GL11.glTranslatef(0.0f, -getHeight() / 2, 0.0f);
 
         boolean characterDone = false;
           if (isSelection()) {
@@ -225,41 +232,40 @@ public class Font {
 
               disableBlend();
               GL11.glDisable(GL11.GL_TEXTURE_2D);
-              
+
               GL11.glColor4f(selectionBackgroundR, selectionBackgroundG, selectionBackgroundB, selectionBackgroundA);
-              GL11.glBegin( GL11.GL_QUADS );
-              
-                GL11.glVertex2i( 0,         0 );
-                GL11.glVertex2i( (int)characterWidth, 0 );
-                GL11.glVertex2i( (int)characterWidth, 0 + getHeight() );
-                GL11.glVertex2i( 0,         0 + getHeight() );
-      
+              GL11.glBegin(GL11.GL_QUADS);
+
+                GL11.glVertex2i(0, 0);
+                GL11.glVertex2i((int) characterWidth, 0);
+                GL11.glVertex2i((int) characterWidth, 0 + getHeight());
+                GL11.glVertex2i(0, 0 + getHeight());
+
               GL11.glEnd();
-              
               GL11.glEnable(GL11.GL_TEXTURE_2D);
               enableBlend();
-              
+
               GL11.glColor4f(selectionR, selectionG, selectionB, selectionA);
-              GL11.glCallList( listId + currentc );
-              Tools.checkGLError( "glCallList" );
+              GL11.glCallList(listId + currentc);
+              Tools.checkGLError("glCallList");
               GL11.glPopAttrib();
-              
-              characterDone= true;
+
+              characterDone = true;
             }
           }
-        
+
         if (!characterDone) {
-          GL11.glCallList( listId + currentc );
-          Tools.checkGLError( "glCallList" );
+          GL11.glCallList(listId + currentc);
+          Tools.checkGLError("glCallList");
         }
 
         x += characterWidth;
       }
 
-      GL11.glMatrixMode( GL11.GL_PROJECTION );
+      GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPopMatrix();
 
-      GL11.glMatrixMode( GL11.GL_MODELVIEW );
+      GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPopMatrix();
   }
 

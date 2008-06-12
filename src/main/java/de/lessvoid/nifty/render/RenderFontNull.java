@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.render;
 
+import de.lessvoid.nifty.tools.Color;
+
 /**
  * RenderFontNull.
  * @author void
@@ -29,15 +31,9 @@ public class RenderFontNull implements RenderFont {
   public void setSelection(int selectionStart, int selectionEnd) {
   }
 
-  public void render(String text, int x, int y) {
-  }
-
-  public void setColor(float r, float g, float b, float a) {
+  public void render(String text, int x, int y, Color color, float size) {
   }
 
   public void setSize(float size) { 
-  }
-
-  public void setDefaultColor() { 
   }
 }
