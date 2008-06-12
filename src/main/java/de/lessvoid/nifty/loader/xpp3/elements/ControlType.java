@@ -124,6 +124,7 @@ public class ControlType extends ElementType {
           time,
           inputControl,
           screenController);
+      current.setId(getAttributes().getId());
       super.addElementAttributes(
           parent,
           screen,
