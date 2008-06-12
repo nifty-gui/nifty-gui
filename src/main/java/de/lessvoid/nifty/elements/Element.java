@@ -1048,4 +1048,12 @@ public class Element {
   public Falloff getFalloff() {
     return falloff;
   }
+
+  /**
+   * set id.
+   * @param newId new id
+   */
+  public void setId(final String newId) {
+    this.id = newId;
+  }
 }
