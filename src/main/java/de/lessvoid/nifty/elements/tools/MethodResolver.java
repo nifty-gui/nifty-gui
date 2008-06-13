@@ -27,9 +27,7 @@ public final class MethodResolver {
    * @param methodName the methodName
    * @return the Method instance
    */
-  public static Method findMethod(
-      final Class < ? > c,
-      final String methodName) {
+  public static Method findMethod(final Class < ? > c, final String methodName) {
     if (c == null) {
       log.info("trying to resolve method [" + methodName + "] failed");
       return null;

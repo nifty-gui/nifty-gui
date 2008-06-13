@@ -72,39 +72,73 @@ public class MethodInvoker {
       if (object != null) {
         Method method = MethodResolver.findMethod(object.getClass(), methodWithName);
         if (method != null) {
-          // there really are two different modes:
-          // a) there are invokeParametersParam given
-          //    in this case we will call the method with the parameters given
-          // b) there are no invokeParametersParam given
-          //    in this case we well look for predefined parameters to call the method with
-          Object[] invokeParameters = new Object[0];
-          if (invokeParametersParam.length > 0) {
-            invokeParameters = invokeParametersParam;
-          } else {
-            // now build invoke parameters
-            invokeParameters = MethodResolver.extractParameters(methodWithName);
-            if (invokeParameters.length == 0) {
-              log.info("invoking method '" + methodWithName + "' without parameters");
+          // we've found a method with the given name. now we need to match the parameters.
+          //
+          // 1) if the target method has parameters encoded we ignore the invokeParametersParam we've been
+          //    called with and call the method as is.
+          // 2) if the target method has no parameters there are two possibilities:
+          //    2a) invokeParametersParam are given, in this case we'll try to forward them to the method
+          //        if this is not possible we fall back to 2b)
+          //    2b) just call the method without any parameters
+          Object[] invokeParameters = MethodResolver.extractParameters(methodWithName);
+          if (invokeParameters.length > 0) {
+            // does the method supports the parameters?
+            // TODO: not only check for the count but check the type too
+            if (getMethodParameterCount(method) == invokeParameters.length) {
+              log.info("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
+              callMethod(object, method, invokeParameters);
+              return;
             } else {
-              if (!supportsParameters(method)) {
-                log.info("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
-                invokeParameters = new String[0];
+              log.info("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
+              callMethod(object, method, new Object[0]);
+              return;
+            }
+          } else {
+            // no invokeParameters encoded. this means we can call the method as is or with the invokeParametersParam
+            if (invokeParametersParam.length > 0) {
+              if (getMethodParameterCount(method) == invokeParametersParam.length) {
+                log.info("invoking method '" + methodWithName + "' with the actual parameters ("
+                    + debugParaString(invokeParametersParam) + ")");
+                callMethod(object, method, invokeParametersParam);
+                return;
               } else {
-                log.info("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
+                log.info("invoking method '" + methodWithName
+                    + "' without parameters (invokeParametersParam mismatch)");
+                callMethod(object, method, null);
               }
+            } else {
+              log.info("invoking method '" + methodWithName + "' without parameters");
+              callMethod(object, method, null);
             }
           }
-
-          try {
-            method.invoke(object, invokeParameters);
-          } catch (Exception e) {
-            log.warning("error: " + e.getMessage());
-          }
-
           return;
         }
       }
     }
+  }
+
+  /**
+   * Invoke the given method on the given object.
+   * @param targetObject target object to invoke method on
+   * @param method method to invoke
+   * @param invokeParameters parameters to use
+   */
+  private void callMethod(final Object targetObject, final Method method, final Object[] invokeParameters) {
+    try {
+      method.invoke(targetObject, invokeParameters);
+    } catch (Exception e) {
+      log.warning("error: " + e.getMessage());
+    }
+  }
+
+  /**
+   * return count of actual method parameters.
+   * @param method method
+   * @return count of parameters the method needs
+   */
+  private int getMethodParameterCount(final Method method) {
+    Class < ? > [] parameterTypes = method.getParameterTypes();
+    return parameterTypes.length;
   }
 
   /**
@@ -121,25 +155,4 @@ public class MethodInvoker {
     }
     return paraStringBuffer.toString();
   }
-
-  /**
-   * returns true when this method supports parameters and false when not.
-   * @param method method to check
-   * @return true when parameterCount != 0 (in this case parameters are supported)
-   * and false if not
-   */
-  private boolean supportsParameters(final Method method) {
-    return getMethodParameterCount(method) != 0;
-  }
-
-  /**
-   * return count of actual method parameters.
-   * @param method method
-   * @return count of parameters the method needs
-   */
-  private int getMethodParameterCount(final Method method) {
-    Class < ? > [] parameterTypes = method.getParameterTypes();
-    return parameterTypes.length;
-  }
-
 }
