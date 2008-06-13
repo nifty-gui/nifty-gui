@@ -34,12 +34,12 @@
   </style>
 
   <style id="thing-text">
-    <attributes font="verdana-48-regular.fnt" align="left" width="20%"/>
+    <attributes font="verdana-48-regular.fnt" align="center" valign="center" width="25%"/>
     <effect>
-      <onHover name="textSize" maxSize="30%" />
+      <onHover name="textSize" maxSize="40%" />
     </effect>
   </style>
-  
+
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- textfield control -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
@@ -57,24 +57,31 @@
     </panel>
   </controlDefinition>
 
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <!-- multiplayerPanel -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <controlDefinition name="multiplayerPanel" controller="de.lessvoid.nifty.examples.multiplayer.MultiplayerPanelControl">
-    <panel align="center" valign="center" backgroundColor="#ff0f" width="70%" height="100px" childLayout="vertical">
+    <panel align="center" valign="center" backgroundColor="#ff0f" width="70%" height="80px" childLayout="vertical">
       <panel childLayout="horizontal" height="50%">
-        <text font="verdana-48-regular.fnt" text="Name:" align="left" width="25%"/>
+        <text font="verdana-48-regular.fnt" text="Name:" align="left" width="25%" backgroundColor="#f0ff"/>
         <control id="name" name="textfield" />
       </panel>
       <panel childLayout="horizontal" height="50%">
-        <text text="Difficulty:" font="verdana-48-regular.fnt"  align="left" width="25%"/>
-        <text text="Easy" style="thing-text">
-          <interact onClick="easyClicked()"/>
-        </text>
-        <text text="Medium" style="thing-text">
-          <interact onClick="mediumClicked()"/>
-        </text>
-        <text text="Hard" style="thing-text">
-        </text>
-        <text text="Expert" style="thing-text">
-        </text>
+        <text text="Difficulty:" font="verdana-48-regular.fnt" width="25%" align="left" valign="center" />
+        <panel childLayout="horizontal" width="75%" backgroundColor="#00ff">
+          <label text="Easy" style="thing-text">
+            <interact onClick="easyClicked()"/>
+          </label>
+          <text text="Medium" style="thing-text" backgroundColor="#f0ff"> 
+            <interact onClick="mediumClicked()"/>
+          </text>
+          <text text="Hard" style="thing-text">
+            <interact onClick="mediumClicked()"/>
+          </text>
+          <text text="Expert" style="thing-text" backgroundColor="#f0ff">
+            <interact onClick="mediumClicked()"/>
+          </text>
+        </panel>
       </panel>
     </panel>
   </controlDefinition>
