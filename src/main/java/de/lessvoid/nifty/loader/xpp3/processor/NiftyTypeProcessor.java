@@ -5,6 +5,9 @@ import java.util.Map;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
+import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
+import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -99,5 +102,17 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
         registerControlDefinitionTypeProcessor.getRegisteredControls(),
         registerStyleTypeProcessor.getStyleHandler(),
         time);
+  }
+
+  public Map<String, RegisterEffectType> getRegisteredEffects() {
+    return registerEffectTypeProcessor.getRegisterEffects();
+  }
+
+  public Map<String, RegisterControlDefinitionType> getRegisteredControls() {
+    return registerControlDefinitionTypeProcessor.getRegisteredControls();
+  }
+
+  public StyleHandler getStyleHandler() {
+    return registerStyleTypeProcessor.getStyleHandler();
   }
 }

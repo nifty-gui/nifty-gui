@@ -12,7 +12,6 @@ import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.shared.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
-import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
@@ -171,6 +170,16 @@ public class Element {
   private NiftyInputControl attachedInputControl = null;
 
   /**
+   * remember if we've calculated this constraint ourself.
+   */
+  private boolean isCalcWidthConstraint;
+
+  /**
+   * remember if we've calculated this constraint ourself.
+   */
+  private boolean isCalcHeightConstraint;
+
+  /**
    * construct new instance of Element.
    * @param newId the id
    * @param newParent new parent
@@ -233,7 +242,6 @@ public class Element {
     this.onClickAlternateKey = null;
     this.focusHandler = newFocusHandler;
     this.visibleToMouseEvents = newVisibleToMouseEvents;
-
     this.setMouseDown(false, 0);
   }
 
@@ -258,29 +266,39 @@ public class Element {
    * @return the element state as string.
    */
   public final String getElementStateString() {
+    String pos =
+      "[" + getX() + "," + getY() + ") (" + getWidth() + "," + getHeight() + "] "
+      + "[" + outputSizeValue(layoutPart.getBoxConstraints().getX())
+      + "," + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ") "
+      + "(" + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ","
+      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]";
     if (isEffectActive(EffectEventId.onStartScreen)) {
-      return "(starting)";
+      return pos + "(starting)";
     }
 
     if (isEffectActive(EffectEventId.onEndScreen)) {
-      return "(ending)";
+      return pos + "(ending)";
     }
 
     if (!visible) {
-      return "(hidden)";
+      return pos + "(hidden)";
     }
 
-    return "normal";
+    return pos + "normal";
   }
 
   /**
-   * Get Original Layout Box.
-   * @return box
+   * Output SizeValue.
+   * @param value SizeValue
+   * @return value string
    */
-  public final Box getOriginalBox() {
-    return layoutPart.getBox();
+  private String outputSizeValue(final SizeValue value) {
+    if (value == null) {
+      return "null";
+    } else {
+      return value.toString();
+    }
   }
-
   /**
    * get x.
    * @return x position of this element.
@@ -383,7 +401,8 @@ public class Element {
    * layout this element and all it's children.
    */
   public final void layoutElements() {
-    preProcessLayout();
+    preProcessConstraintWidth();
+    preProcessConstraintHeight();
 
     if (layoutManager != null) {
       // we need a list of LayoutPart and not of Element, so we'll build one on the fly here
@@ -403,18 +422,9 @@ public class Element {
   }
 
   /**
-   * pre process layout.
-   */
-  private void preProcessLayout() {
-    preProcessConstraintWidth();
-    preProcessConstraintHeight();
-  }
-
-  /**
    * pre-process constraint width.
    */
   private void preProcessConstraintWidth() {
-
     for (Element e : elements) {
       e.preProcessConstraintWidth();
     }
@@ -423,7 +433,7 @@ public class Element {
     SizeValue myWidth = getConstraintWidth();
 
     // is it empty and we have an layoutManager there's still hope for a width constraint
-    if (myWidth == null && layoutManager != null) {
+    if (layoutManager != null && (myWidth == null || isCalcWidthConstraint)) {
 
       // collect all child layoutPart that have a fixed pixel size in a list
       List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
@@ -440,6 +450,7 @@ public class Element {
         if (newWidth != null) {
           log.info("pre processed new width for element: " + getId() + ": " + newWidth.getValueAsInt(0));
           setConstraintWidth(newWidth);
+          isCalcWidthConstraint = true;
         }
       }
     }
@@ -457,7 +468,7 @@ public class Element {
     SizeValue myHeight = getConstraintHeight();
 
     // is it empty and we have an layoutManager there's still hope for a height constraint
-    if (myHeight == null && layoutManager != null) {
+    if (layoutManager != null && (myHeight == null || isCalcHeightConstraint)) {
 
       // collect all child layoutPart that have a fixed px size in a list
       List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
@@ -474,6 +485,7 @@ public class Element {
         if (newHeight != null) {
           log.info("pre processed new height for element: " + getId() + ": " + newHeight.getValueAsInt(0));
           setConstraintHeight(newHeight);
+          isCalcHeightConstraint = true;
         }
       }
     }
@@ -1055,5 +1067,16 @@ public class Element {
    */
   public void setId(final String newId) {
     this.id = newId;
+  }
+
+  public void remove() {
+    parent.removeChild(this);
+    if (focusHandler != null) {
+      focusHandler.lostFocus(this);
+    }
+  }
+
+  private void removeChild(final Element element) {
+    elements.remove(element);
   }
 }

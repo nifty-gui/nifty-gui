@@ -35,6 +35,15 @@ public class LayoutPart {
   }
 
   /**
+   * copy constructor.
+   * @param src source
+   */
+  public LayoutPart(final LayoutPart src) {
+    this.box = new Box(src.getBox());
+    this.boxConstraints = new BoxConstraints(src.getBoxConstraints());
+  }
+
+  /**
    * Get the box of this LayoutPart.
    * @return the box
    */

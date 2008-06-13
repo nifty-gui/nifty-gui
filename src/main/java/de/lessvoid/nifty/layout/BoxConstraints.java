@@ -43,7 +43,7 @@ public class BoxConstraints {
   private VerticalAlign verticalAlign;
 
   /**
-   * Initalize the BoxConstraints with some reasonable values.
+   * default constructor.
    */
   public BoxConstraints() {
     this.x = null;
@@ -52,6 +52,43 @@ public class BoxConstraints {
     this.height = null;
     this.horizontalAlign = HorizontalAlign.left;
     this.verticalAlign = VerticalAlign.top;
+  }
+
+  /**
+   * create new BoxConstraints.
+   * @param newX x
+   * @param newY y
+   * @param newWidth width
+   * @param newHeight height
+   * @param newHorizontalAlign horizontal align
+   * @param newVerticalAlign vertical align
+   */
+  public BoxConstraints(
+      final SizeValue newX,
+      final SizeValue newY,
+      final SizeValue newWidth,
+      final SizeValue newHeight,
+      final HorizontalAlign newHorizontalAlign,
+      final VerticalAlign newVerticalAlign) {
+    this.x = newX;
+    this.y = newY;
+    this.width = newWidth;
+    this.height = newHeight;
+    this.horizontalAlign = newHorizontalAlign;
+    this.verticalAlign = newVerticalAlign;
+  }
+
+  /**
+   * copy constructor.
+   * @param src source instance to copy from
+   */
+  public BoxConstraints(final BoxConstraints src) {
+    this.x = src.x;
+    this.y = src.y;
+    this.width = src.width;
+    this.height = src.height;
+    this.horizontalAlign = src.horizontalAlign;
+    this.verticalAlign = src.verticalAlign;
   }
 
   /**

@@ -1,12 +1,16 @@
 package de.lessvoid.nifty;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
+import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
+import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderDevice;
 import de.lessvoid.nifty.render.RenderEngine;
@@ -75,6 +79,21 @@ public class Nifty {
   private String removePopupId = null;
 
   /**
+   * nifty loader.
+   */
+  private NiftyLoader loader = new NiftyLoader();
+
+  /**
+   * these controls need to be added.
+   */
+  private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
+
+  /**
+   * these elements need to be removed.
+   */
+  private List < ElementToRemove > elementsToRemove = new ArrayList < ElementToRemove >();
+
+  /**
    * Create nifty for the given RenderDevice and TimeProvider.
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
@@ -137,6 +156,9 @@ public class Nifty {
       final int mouseX,
       final int mouseY,
       final boolean mouseDown) {
+    addControls();
+    removeElements();
+
     if (clearScreen) {
       renderDevice.clear();
     }
@@ -158,7 +180,26 @@ public class Nifty {
       currentScreen.closePopup(popups.get(removePopupId));
       removePopupId = null;
     }
+
     return exit;
+  }
+
+  private void removeElements() {
+    if (!elementsToRemove.isEmpty()) {
+      for (ElementToRemove elementToRemove : elementsToRemove) {
+        elementToRemove.remove();
+      }
+      elementsToRemove.clear();
+    }
+  }
+
+  private void addControls() {
+    if (!controlsToAdd.isEmpty()) {
+      for (ControlToAdd controlToAdd : controlsToAdd) {
+        controlToAdd.createControl();
+      }
+      controlsToAdd.clear();
+    }
   }
 
   /**
@@ -191,7 +232,6 @@ public class Nifty {
       this.currentFile = filename;
       this.exit = false;
 
-      NiftyLoader loader = new NiftyLoader();
       loader.loadXml(this, screens, filename, timeProvider);
     } catch (Exception e) {
       e.printStackTrace();
@@ -359,5 +399,104 @@ public class Nifty {
         }
       });
     }
+  }
+
+  /**
+   * Add a control to this screen and the given parent element.
+   * @param screen screen
+   * @param parent parent element
+   * @param controlName control name to add
+   * @param id id of control
+   */
+  public void addControl(final Screen screen, final Element parent, final String controlName, final String id) {
+    controlsToAdd.add(new ControlToAdd(screen, parent, controlName, id));
+  }
+
+  /**
+   * ControlToAdd helper class.
+   * @author void
+   */
+  private class ControlToAdd {
+    /**
+     * screen.
+     */
+    private Screen screen;
+
+    /**
+     * parent element.
+     */
+    private Element parent;
+
+    /**
+     * control name.
+     */
+    private String controlName;
+
+    /**
+     * control id.
+     */
+    private String controlId;
+
+    /**
+     * create new.
+     * @param newScreen screen
+     * @param newParent parent
+     * @param newControlName control name
+     * @param newId id if control
+     */
+    public ControlToAdd(
+        final Screen newScreen,
+        final Element newParent,
+        final String newControlName,
+        final String newId) {
+      this.screen = newScreen;
+      this.parent = newParent;
+      this.controlName = newControlName;
+      this.controlId = newId;
+    }
+
+    /**
+     * create the control.
+     */
+    public void createControl() {
+      ControlType controlType = new ControlType(controlName);
+      AttributesType attributeType = new AttributesType();
+      attributeType.setId(controlId);
+      controlType.setAttributes(attributeType);
+      controlType.createElement(
+          parent,
+          Nifty.this,
+          screen,
+          loader.getRegisteredEffects(),
+          loader.getRegisteredControls(),
+          loader.getStyleHandler(),
+          timeProvider,
+          null,
+          screen.getScreenController());
+      screen.layoutLayers();
+    }
+  }
+
+  private class ElementToRemove {
+    private Screen screen;
+    private Element element;
+    public ElementToRemove(final Screen screen, final Element element) {
+      this.screen = screen;
+      this.element = element;
+    }
+    
+    public void remove() {
+      element.remove();
+      screen.layoutLayers();
+    }
+  }
+
+  /**
+   * Remove the given element from the given screen.
+   * @param screen screen
+   * @param element element to remove
+   */
+  public void removeElement(final Screen screen, final Element element) {
+    elementsToRemove.add(new ElementToRemove(screen, element));
   }
 }

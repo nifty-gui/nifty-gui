@@ -59,6 +59,17 @@ public class Box {
   }
 
   /**
+   * copy constructor.
+   * @param src src box to copy from
+   */
+  public Box(final Box src) {
+    this.x = src.x;
+    this.y = src.y;
+    this.width = src.width;
+    this.height = src.height;
+  }
+
+  /**
    * Get the horizontal position of the box.
    * @return the horizontal position of the box
    */

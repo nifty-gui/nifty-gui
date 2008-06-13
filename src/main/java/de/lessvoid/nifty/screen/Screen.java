@@ -9,6 +9,7 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MouseFocusHandler;
+import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
 import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -131,7 +132,6 @@ public class Screen implements MouseFocusHandler {
    */
   public final void startScreen() {
     log.info("screen [" + getScreenId() + "] start");
-
     screenController.onStartScreen();
 
     resetLayers();
@@ -341,8 +341,7 @@ public class Screen implements MouseFocusHandler {
       return true;
     }
 
-    boolean canProcessResult = mouseFocusElement == element;
-    return canProcessResult;
+    return mouseFocusElement == element;
   }
 
   /**
@@ -374,6 +373,4 @@ public class Screen implements MouseFocusHandler {
   public ScreenController getScreenController() {
     return screenController;
   }
-
-
 }

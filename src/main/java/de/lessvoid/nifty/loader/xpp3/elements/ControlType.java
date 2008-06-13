@@ -75,7 +75,8 @@ public class ControlType extends ElementType {
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final StyleHandler styleHandler,
       final TimeProvider time,
-      final NiftyInputControl inputControlParam, final ScreenController screenController) {
+      final NiftyInputControl inputControlParam,
+      final ScreenController screenController) {
 
     RegisterControlDefinitionType controlDefinition = registeredControls.get(name);
     if (controlDefinition == null) {
