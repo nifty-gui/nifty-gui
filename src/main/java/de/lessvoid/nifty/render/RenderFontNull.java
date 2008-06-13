@@ -8,19 +8,7 @@ import de.lessvoid.nifty.tools.Color;
  */
 public class RenderFontNull implements RenderFont {
 
-  public int getVisibleCharactersFromStart(String text, int width) {
-    return 0;
-  }
-
-  public int getVisibleCharactersFromEnd(String text, int width) {
-    return 0;
-  }
-
   public int getHeight() {
-    return 0;
-  }
-
-  public int getCharacterIndexFromPixelPosition(String text, int pixel, float size) {
     return 0;
   }
 
@@ -28,12 +16,10 @@ public class RenderFontNull implements RenderFont {
     return 0;
   }
 
-  public void setSelection(int selectionStart, int selectionEnd) {
-  }
-
   public void render(String text, int x, int y, Color color, float size) {
   }
 
-  public void setSize(float size) { 
+  public Integer getCharacterAdvance(char currentCharacter, char nextCharacter, float size) {
+    return null;
   }
 }

@@ -10,6 +10,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.render.helper.FontHelper;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -100,7 +101,7 @@ public class TextFieldControl implements Controller {
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
     this.firstVisibleCharacterIndex = 0;
     this.lastVisibleCharacterIndex =
-      textRenderer.getFont().getVisibleCharactersFromStart(this.textField.getText(), fieldWidth);
+      FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), this.textField.getText(), fieldWidth, 1.0f);
 
     cursorElement.hide();
     updateCursor();
@@ -146,7 +147,7 @@ public class TextFieldControl implements Controller {
    */
   private int getCursorPosFromMouse(final int mouseX, String visibleString) {
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
-    return textRenderer.getFont().getCharacterIndexFromPixelPosition(visibleString, (mouseX-fieldElement.getX()), 1.0f);
+    return FontHelper.getCharacterIndexFromPixelPosition(textRenderer.getFont(), visibleString, (mouseX-fieldElement.getX()), 1.0f);
   }
 
   /**
@@ -242,7 +243,7 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
     if (firstVisibleCharacterIndex > textLen) {
       // re position so that we show at much possible text
       lastVisibleCharacterIndex = textLen;
-      firstVisibleCharacterIndex = textRenderer.getFont().getVisibleCharactersFromEnd(text, fieldWidth);
+      firstVisibleCharacterIndex = FontHelper.getVisibleCharactersFromEnd(textRenderer.getFont(), text, fieldWidth, 1.0f);
     }
   }
 
@@ -253,7 +254,7 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
     String currentText = this.textField.getText();
     if (firstVisibleCharacterIndex < currentText.length()) {
       String textToCheck = currentText.substring(firstVisibleCharacterIndex);
-      int lengthFitting = textRenderer.getFont().getVisibleCharactersFromStart(textToCheck, fieldWidth);
+      int lengthFitting = FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), textToCheck, fieldWidth, 1.0f);
       lastVisibleCharacterIndex = lengthFitting + firstVisibleCharacterIndex;
     } else {
       lastVisibleCharacterIndex = firstVisibleCharacterIndex;

@@ -22,31 +22,6 @@ public interface RenderFont {
   int getHeight();
 
   /**
-   * Get character index into the given text that is no more pixel as the given width.
-   * @param text the string to check
-   * @param width the minimum width
-   * @return the character index into the string.
-   */
-  int getVisibleCharactersFromStart(String text, int width);
-
-  /**
-   * Get character index into the given text that is no more pixel as the given width.
-   * @param text the string to check
-   * @param width the minimum width
-   * @return the character index into the string.
-   */
-  int getVisibleCharactersFromEnd(String text, int width);
-
-  /**
-   * get index into text from a given pixel position.
-   * @param text text string
-   * @param pixel pixel index
-   * @param size font size
-   * @return index into text string
-   */
-  int getCharacterIndexFromPixelPosition(String text, int pixel, float size);
-
-  /**
    * Render the given text at the given position.
    * @param text text to render
    * @param x x position
@@ -55,4 +30,13 @@ public interface RenderFont {
    * @param size size
    */
   void render(String text, int x, int y, Color fontColor, float size);
+
+  /**
+   * Return the advance of the given character including kerning information.
+   * @param currentCharacter current character
+   * @param nextCharacter next character
+   * @param size font size
+   * @return width of the character or null when no information for the character is available
+   */
+  Integer getCharacterAdvance(char currentCharacter, char nextCharacter, float size);
 }

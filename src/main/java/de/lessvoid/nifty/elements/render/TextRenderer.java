@@ -4,6 +4,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderFont;
 import de.lessvoid.nifty.render.RenderFontNull;
+import de.lessvoid.nifty.render.helper.FontHelper;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -121,7 +122,7 @@ public class TextRenderer implements ElementRenderer {
     int y = 0;
     for (String line : textLines) {
       if (Math.abs(xoffsetHack) > 0) {
-        int fittingOffset = font.getVisibleCharactersFromStart(line, Math.abs(xoffsetHack));
+        int fittingOffset = FontHelper.getVisibleCharactersFromStart(font, line, Math.abs(xoffsetHack), 1.0f);
         String cut = line.substring(0, fittingOffset);
         String substring = line.substring(fittingOffset, line.length());
         // font.setSelection(selectionStart - fittingOffset, selectionEnd - fittingOffset);

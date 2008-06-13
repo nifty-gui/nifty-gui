@@ -5,6 +5,9 @@ import java.util.logging.Logger;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import de.lessvoid.nifty.render.helper.FontHelper;
+import de.lessvoid.nifty.render.opengl.RenderFontLwjgl;
+
 
 /**
  * OpenGL display list based Font.
@@ -201,7 +204,7 @@ public class Font {
       int activeTextureIdx = -1;
       for (int i = 0; i < text.length(); i++) {
         char currentc = text.charAt(i);
-        char nextc = getNextCharacter(text, i);
+        char nextc = FontHelper.getNextCharacter(text, i);
 
         CharacterInfo charInfoC = font.getChar((char) currentc);
 
@@ -214,7 +217,7 @@ public class Font {
             textures[ activeTextureIdx ].activate(useAlphaTexture);
           }
 
-          kerning = getKerning(charInfoC, nextc);
+          kerning = RenderFontLwjgl.getKerning(charInfoC, nextc);
           characterWidth = (float) (charInfoC.getXadvance() * size + kerning);
         }
 
@@ -289,125 +292,23 @@ public class Font {
   }
 
   /**
-   * @param text
-   * @param size TODO
-   * @return
+   * @param text text
+   * @param size size
+   * @return length
    */
   private int getStringWidthInternal(final String text, final float size) {
     int length = 0;
 
     for (int i=0; i<text.length(); i++) {
       char currentCharacter = text.charAt(i);
-      char nextCharacter = getNextCharacter(text, i);
+      char nextCharacter = FontHelper.getNextCharacter(text, i);
 
-      CharacterInfo currentCharacterInfo = font.getChar((char)currentCharacter);
-      if (currentCharacterInfo != null) {
-        length += currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter);
+      Integer w = getCharacterWidth(currentCharacter, nextCharacter, size);
+      if (w != null) {
+        length += w;
       }
     }
     return length;
-  }
-
-  public int getLengthFittingPixelSize(final String text, final int width, final float size) {
-    int widthRemaining = width;
-
-    for (int i=0; i<text.length(); i++) {
-      char currentCharacter = text.charAt(i);
-      char nextCharacter = getNextCharacter(text, i);
-
-      CharacterInfo currentCharacterInfo = font.getChar((char)currentCharacter);
-      if (currentCharacterInfo != null) {
-        int w = (int) (currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter));
-        widthRemaining -= w;
-        if (widthRemaining < 0) {
-          // this character will underflow the width. we return the last save index.
-          return i;
-        }
-      }
-    }
-    return text.length();
-  }
-
-  public int getLengthFittingPixelSizeBackwards(final String text, final int width, final float size) {
-    int widthRemaining = width;
-
-    for (int i=text.length()-1; i>=0; i--) {
-      char currentCharacter = text.charAt(i);
-      char prevCharacter = getPrevCharacter(text, i);
-
-      CharacterInfo currentCharacterInfo = font.getChar((char)currentCharacter);
-      if (currentCharacterInfo != null) {
-        int w = (int) (currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, prevCharacter));
-        widthRemaining -= w;
-        if (widthRemaining < 0) {
-          // this character will underflow the width. we return the last save index.
-          return i;
-        }
-      }
-    }
-    return 0;
-  }
-
-  public int getIndexFromPixel(final String text, final int pixel, final float size) {
-    if (pixel < 0) {
-      return -1;
-    }
-
-    int current = 0;
-    for (int i=0; i<text.length(); i++) {
-      char currentCharacter = text.charAt(i);
-      char nextCharacter = getNextCharacter(text, i);
-
-      CharacterInfo currentCharacterInfo = font.getChar((char)currentCharacter);
-      if (currentCharacterInfo != null) {
-        int w = (int) (currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter));
-        if ((pixel >= current) && (pixel <= current + w)) {
-          return i;
-        }
-        current += w;
-      }
-    }
-
-    return text.length();
-  }
-
-  /**
-   * @param text
-   * @param i
-   * @return
-   */
-  private char getNextCharacter(final String text, int i) {
-    char nextc = 0;
-    if (i < text.length() - 1) {
-      nextc = text.charAt(i+1);
-    }
-    return nextc;
-  }
-
-  /**
-   * @param text
-   * @param i
-   * @return
-   */
-  private char getPrevCharacter(final String text, int i) {
-    char prevc = 0;
-    if (i > 0) {
-      prevc = text.charAt(i-1);
-    }
-    return prevc;
-  }
-
-  /**
-   * @param charInfoC
-   * @param nextc
-   * @return
-   */
-  private int getKerning(final CharacterInfo charInfoC, final char nextc) {
-    Integer kern = charInfoC.getKerning().get(Character.valueOf(nextc));
-    if (kern != null) {
-      return kern.intValue();
-    }
-    return 0;
   }
 
   public int getHeight()
@@ -437,4 +338,41 @@ public class Font {
     this.selectionBackgroundA = selectionA;
   }
 
+  /**
+   * get character information.
+   * @param character char
+   * @return CharacterInfo
+   */
+  public CharacterInfo getChar(final char character) {
+    return font.getChar(character);
+  }
+
+  /**
+   * Return the width of the given character including kerning information.
+   * @param currentCharacter current character
+   * @param nextCharacter next character
+   * @param size font size
+   * @return width of the character or null when no information for the character is available
+   */
+  public Integer getCharacterWidth(final char currentCharacter, final char nextCharacter, final float size) {
+    CharacterInfo currentCharacterInfo = font.getChar(currentCharacter);
+    if (currentCharacterInfo == null) {
+      return null;
+    } else {
+      return new Integer((int)(currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter)));
+    }
+  }
+
+  /**
+   * @param charInfoC
+   * @param nextc
+   * @return
+   */
+  public static int getKerning(final CharacterInfo charInfoC, final char nextc) {
+    Integer kern = charInfoC.getKerning().get(Character.valueOf(nextc));
+    if (kern != null) {
+      return kern.intValue();
+    }
+    return 0;
+  }
 }

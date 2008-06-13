@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.render.opengl;
 
+import de.lessvoid.font.CharacterInfo;
 import de.lessvoid.font.Font;
 import de.lessvoid.nifty.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
@@ -51,15 +52,32 @@ public class RenderFontLwjgl implements RenderFont {
     return font.getStringWidth( text );
   }
 
-  public int getVisibleCharactersFromStart(final String text, final int width) {
-    return font.getLengthFittingPixelSize(text, width, 1.0f);
+  /**
+   * @param charInfoC
+   * @param nextc
+   * @return
+   */
+  public static int getKerning(final CharacterInfo charInfoC, final char nextc) {
+    Integer kern = charInfoC.getKerning().get(Character.valueOf(nextc));
+    if (kern != null) {
+      return kern.intValue();
+    }
+    return 0;
   }
 
-  public int getVisibleCharactersFromEnd(final String text, final int width) {
-    return font.getLengthFittingPixelSizeBackwards(text, width, 1.0f);
-  }
-
-  public int getCharacterIndexFromPixelPosition(final String text, final int pixel, final float size) {
-    return font.getIndexFromPixel(text, pixel, size);
+  /**
+   * Return the width of the given character including kerning information.
+   * @param currentCharacter current character
+   * @param nextCharacter next character
+   * @param size font size
+   * @return width of the character or null when no information for the character is available
+   */
+  public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
+    CharacterInfo currentCharacterInfo = font.getChar(currentCharacter);
+    if (currentCharacterInfo == null) {
+      return null;
+    } else {
+      return new Integer((int)(currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter)));
+    }
   }
 }
