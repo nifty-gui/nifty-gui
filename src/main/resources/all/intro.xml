@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nifty.xsd">
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- register effects we want to use -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <registerEffect name="imageSize" class="de.lessvoid.nifty.effects.general.ImageSize" />
+  <registerEffect name="nop" class="de.lessvoid.nifty.effects.general.Nop" />
+  <registerEffect name="fade" class="de.lessvoid.nifty.effects.general.Fade" />
+  <registerEffect name="hide" class="de.lessvoid.nifty.effects.general.Hide" />
+  <registerEffect name="shake" class="de.lessvoid.nifty.effects.general.Shake" />
+  <registerEffect name="playSound" class="de.lessvoid.nifty.effects.general.PlaySound" />
+  <registerEffect name="move" class="de.lessvoid.nifty.effects.general.Move" />
+  <registerEffect name="pulsate" class="de.lessvoid.nifty.effects.general.Pulsate" />
+  <registerEffect name="pulsateHover" class="de.lessvoid.nifty.effects.hover.Pulsate" />
+  <registerEffect name="hint" class="de.lessvoid.nifty.effects.hover.Hint" />
+  
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- register sounds -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <registerSound id="intro" filename="all/intro.wav" />
+
+  <!-- main menu style -->
+  <style id="menu">
+    <attributes childLayout="vertical" align="center" valign="center" height="50%"/>
+    <effect>
+      <onStartScreen name="hide" length="500" inherit="true" startDelay="1000"/>
+      <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" startDelay="500" inherit="true"/>
+      <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" inherit="true"/>
+    </effect>
+  </style>
+
+  <!-- menu item style -->
+  <style id="menu-item">
+    <attributes align="center"/>
+    <hover width="200%" falloffConstraint="horizontal"/>
+    <effect>
+      <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+    </effect>
+  </style>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- intro screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" controller="de.lessvoid.nifty.examples.all.SplashController">
+    <layer id="background" childLayout="center">
+      <panel id="panel" height="100%" width="100%" backgroundColor="#ffff">
+        <effect>
+          <onStartScreen name="fade" startColor="#000f" endColor="#ffff" length="100" post="false"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#000f" length="500" post="false"/>
+        </effect>
+      </panel>
+    </layer>
+    <layer id="logo" childLayout="center">
+      <panel id="panel" height="60%" childLayout="center">
+        <image id="image" filename="all/nifty.png" align="center">
+          <effect>
+            <onStartScreen name="playSound" sound="intro" length="3300"/>
+            <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1700" />
+            <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="1700" />
+            <onStartScreen name="shake" length="4200" startDelay="500" global="false" />
+            <onEndScreen name="move" mode="toPosition" targetElement="image2" length="500"/>
+          </effect>
+        </image>
+      </panel>
+    </layer>
+    <layer id="logo2" childLayout="vertical" visible="false">
+      <panel id="panel2" height="30%" childLayout="center">
+        <image id="image2" filename="all/nifty.png" align="center"/>
+      </panel>
+    </layer>
+  </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- menu screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="menu" controller="de.lessvoid.nifty.examples.all.MenuController">
+    <layer id="top" childLayout="vertical" backgroundColor="#393939ff">
+      <effect>
+        <onStartScreen name="fade" startColor="#000f" endColor="#393939ff" length="500"/>
+        <onEndScreen name="fade" startColor="#393939ff" endColor="#000000ff" length="500"/>
+      </effect>
+      <panel id="panel" height="30%" childLayout="center">
+        <image id="image" filename="all/nifty.png" align="center">
+          <effect>
+            <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" />
+          </effect>
+        </image>
+      </panel>
+    </layer>
+    <layer id="menu" childLayout="vertical">
+      <panel height="20%" childLayout="center"/>
+      <panel height="60%" childLayout="center">
+      <menu id="mainMenu" font="menu.fnt" style="menu">
+        <menuItem id="helloWorld" text="Hello World" style="menu-item">
+          <interact onClick="helloWorld()"/>
+        </menuItem>
+        <menuItem id="textfield" text="Textfield Example" style="menu-item">
+          <interact onClick="textField()"/>
+        </menuItem>
+        <menuItem id="multiplayer" text="Multiplayer Example" style="menu-item">
+          <interact onClick="multiplayer()"/>
+        </menuItem>
+        <menuItem id="exit" text="Exit" style="menu-item">
+          <interact onClick="exit()"/>
+        </menuItem>
+      </menu>
+    </panel>
+      <panel id="hintArea" childLayout="center" align="center" valign="center" height="20%">
+        <text id="hintElement" text="Welcome to Nifty Examples" font="verdana-48-regular.fnt" align="center" valign="center"/>
+      </panel>
+    </layer>
+    <layer id="example" childLayout="absolute">
+      <image x="550px" y="170px" filename="all/examples.png" align="center">
+        <effect>
+          <onStartScreen name="move" direction="right" mode="in" length="800" />
+          <onStartScreen name="fade" startColor="#0000" endColor="#ffff" length="800" />
+          <onEndScreen name="move" direction="right" mode="out" length="800" />
+          <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="800" />
+        </effect>
+      </image>
+    </layer>
+  </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- outro screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="outro" controller="de.lessvoid.nifty.examples.all.OutroController">
+    <layer id="logo" childLayout="center">
+      <image id="image" filename="all/nifty.png" align="center">
+        <effect>
+          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" />
+          <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1000" />
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" />
+          <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="1000" />
+        </effect>
+      </image>
+    </layer>
+  </screen>
+  
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- sure to exit popup -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <popup id="popupExit" childLayout="center" backgroundColor="#000a">
+    <effect>
+      <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="500" />
+      <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="500" />
+    </effect>
+    <image filename="all/popup.png" childLayout="center" align="center" valign="center" height="200px">
+      <effect>
+        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" />
+        <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200"/>
+        <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="200" inherit="true" />
+      </effect>
+      <panel childLayout="vertical" align="center" valign="center">
+        <panel childLayout="center" height="50%">
+          <text text="Really want to Exit?" font="verdana.fnt" align="center" valign="center"/>
+        </panel>
+        <panel childLayout="horizontal" align="center" height="50%">
+          <panel childLayout="center" width="50%">
+            <text text="Yes" font="verdana.fnt" align="center">
+              <interact onClick="popupExit(yes)"/>
+            </text>
+          </panel>
+          <panel childLayout="center" width="50%">
+            <text text="No" font="verdana.fnt" align="center">
+              <interact onClick="popupExit(no)"/>
+            </text>
+          </panel>
+        </panel>
+      </panel>
+    </image>
+  </popup>
+  
+</nifty>
