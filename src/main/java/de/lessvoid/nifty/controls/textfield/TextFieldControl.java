@@ -81,7 +81,7 @@ public class TextFieldControl implements Controller {
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
 
-    this.textField = new TextField("0123456789abcdefghijklmnopqrstuvwxyz", new ClipboardAWT());
+    this.textField = new TextField("", new ClipboardAWT());
     this.textField.toFirstPosition();
   }
 

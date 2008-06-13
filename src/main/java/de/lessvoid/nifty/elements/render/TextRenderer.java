@@ -117,11 +117,6 @@ public class TextRenderer implements ElementRenderer {
    * @param r the renderDevice we should use
    */
   public final void render(final Element w, final RenderEngine r) {
-
-    if (color != null) {
-      // r.setColor(color);
-    }
-
     int x = 0;
     int y = 0;
     for (String line : textLines) {
@@ -139,11 +134,12 @@ public class TextRenderer implements ElementRenderer {
             selectionEnd - fittingOffset,
             textSelectionColor);
       } else {
-        // font.setSelection(selectionStart, selectionEnd);
+        int xx = w.getX() + x + xoffsetHack;
+        xx = w.getX() + (w.getWidth() - font.getWidth(line)) / 2;
         r.renderText(
             font,
             line,
-            w.getX() + x + xoffsetHack,
+            xx,
             w.getY() + y,
             selectionStart,
             selectionEnd,

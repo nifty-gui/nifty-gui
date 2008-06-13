@@ -99,13 +99,13 @@ public class TextType extends ElementType {
     textRenderer.setText(text);
     if (textSelectionColor != null) {
       textRenderer.setTextSelectionColor(new Color(textSelectionColor));
-    }
+    }/*
     if (panel.getConstraintHeight() == null) {
       panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
     }
     if (panel.getConstraintWidth() == null) {
       panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-    }
+    }*/
     parent.add(panel);
     return panel;
   }
