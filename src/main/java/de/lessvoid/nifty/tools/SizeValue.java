@@ -135,4 +135,12 @@ public class SizeValue {
       return value.endsWith(PIXEL);
     }
   }
+
+  /**
+   * toString.
+   * @return value
+   */
+  public String toString() {
+    return value;
+  }
 }
