@@ -1,17 +1,20 @@
-package de.lessvoid.nifty.examples.helloworld;
+package de.lessvoid.nifty.examples.multiplayer;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
- * ScreenController for Hello World Example.
+ * ScreenController for Multiplayer.
  * @author void
  */
-public class HelloWorldStartScreen implements ScreenController {
+public class StartScreenController implements ScreenController {
 
   /** nifty instance. */
   private Nifty nifty;
+  
+  /** screen. */
+  private Screen screen;
 
   /**
    * Bind this ScreenController to a screen.
@@ -20,12 +23,14 @@ public class HelloWorldStartScreen implements ScreenController {
    */
   public final void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
+    this.screen = newScreen;
   }
 
   /**
    * on start screen.
    */
   public final void onStartScreen() {
+    nifty.addControl(screen, screen.findElementByName("box-parent"), "multiplayerPanel", "100000");
   }
 
   /**
@@ -41,7 +46,7 @@ public class HelloWorldStartScreen implements ScreenController {
   }
 
   /**
-   * quit method called from the helloworld.xml.
+   * quit method.
    */
   public final void quit() {
     nifty.exit();

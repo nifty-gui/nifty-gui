@@ -11,26 +11,50 @@
   <registerEffect name="ImageOverlay" class="de.lessvoid.nifty.effects.general.ImageOverlay" />
   <registerEffect name="ImageOverlayPulsate" class="de.lessvoid.nifty.effects.general.ImageOverlayPulsate" />
   <registerEffect name="hint" class="de.lessvoid.nifty.effects.hover.Hint" />
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <!-- styles -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <style id="default-textfield-panel">
+    <attributes backgroundColor="#555f" childLayout="overlay" height="40px" />
+  </style>
+
+  <style id="default-textfield-field">
+    <attributes childLayout="center" visibleToMouse="true" childClip="true" />
+    <effect>
+      <onHover name="colorBarHover" timeType="infinite" color="#7707" post="true"/>
+      <onFocus name="pulsate" period="1500" timeType="infinite" startColor="#770f" endColor="#700f" post="true"/>
+    </effect>
+  </style>
+  
+  <style id="default-textfield-text">
+    <attributes font="verdana-48-regular.fnt" visibleToMouse="false" align="left" />
+  </style>
+
+  <style id="default-textfield-cursor-panel">
+    <attributes childLayout="absolute" />
+  </style>
+
+  <style id="default-textfield-cursor">
+    <attributes filename="textfield/cursor-empty.png" />
+		<effect>
+		  <onActive name="ImageOverlayPulsate" period="300" timeType="infinite" pulsatechildLayout="rectangle" filename="textfield/cursor.png" post="true"/>
+		</effect>
+  </style>
   
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- textfield control -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <controlDefinition name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
-    <panel id="textfield-panel" backgroundColor="#555f" childLayout="overlay" height="40px">
-      <panel id="field" childLayout="center" visibleToMouse="true" childClip="true">
-        <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()"/>
-        <effect>
-          <onHover name="colorBarHover" timeType="infinite" color="#7707" post="true"/>
-          <onFocus name="pulsate" period="1500" timeType="infinite" startColor="#770f" endColor="#700f" post="true"/>
-        </effect>
-        <text id="text" font="verdana-48-regular.fnt" visibleToMouse="false" text="" align="left" />
+    <panel id="textfield-panel" style="default-textfield-panel">
+      <panel id="textfield-field" style="default-textfield-field">
+        <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
+        <text id="textfield-text" style="default-textfield-text" text="">
+          <textSelection textColor="#f0ff" />
+        </text>
       </panel>
-      <panel id="textfield-av" childLayout="absolute">
-        <image id="cursor" filename="textfield/cursor-empty.png">
-          <effect>
-            <onActive name="ImageOverlayPulsate" period="300" timeType="infinite" pulsatechildLayout="rectangle" filename="textfield/cursor.png" post="true"/>
-          </effect>
-        </image>
+      <panel id="textfield-cursor-panel" style="default-textfield-cursor-panel">
+        <image id="textfield-cursor" style="default-textfield-cursor"/>
       </panel>
     </panel>
   </controlDefinition>

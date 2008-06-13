@@ -9,7 +9,6 @@
   </style>
 
   <style id="default-label" base="default-font">
-   
   </style>
 
   <style id="default-label-centered" base="default-label">
@@ -24,15 +23,12 @@
   </style>
 
   <screen id="start" controller="de.lessvoid.nifty.examples.style.label.LabelStartScreen">
-    <layer id="layer"  backgroundColor="#f0ff" childLayout="center">
+    <layer id="layer" backgroundColor="#206f" childLayout="center">
       <label id="label" style="default-label" text="label standard" align="center" valign="center" backgroundColor="#f00f" >
-       <effect>
-         <onStartScreen name="move" direction="bottom" mode="in" length="800" />
-       </effect>
+        <effect>
+          <onStartScreen name="move" direction="bottom" mode="in" length="800" />
+        </effect>
       </label>
-      <!--  
-      <label style="default-label-centered" text="label centered" />
-      -->
     </layer>
   </screen>
 </nifty>
