@@ -83,12 +83,7 @@ public class TextFieldControl implements Controller {
 
     this.textField = new TextField("0123456789abcdefghijklmnopqrstuvwxyz", new ClipboardAWT());
     this.textField.toFirstPosition();
-  }
 
-  /**
-   * On start screen event.
-   */
-  public void onStartScreen() {
     this.textElement = element.findElementByName("textfield-text");
     this.textElement.getRenderer(TextRenderer.class).changeText(textField.getText());
 
@@ -99,10 +94,17 @@ public class TextFieldControl implements Controller {
 
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
     this.firstVisibleCharacterIndex = 0;
-    this.lastVisibleCharacterIndex = textRenderer.getFont().getVisibleCharactersFromStart(this.textField.getText(), fieldWidth);
+    this.lastVisibleCharacterIndex =
+      textRenderer.getFont().getVisibleCharactersFromStart(this.textField.getText(), fieldWidth);
 
     cursorElement.hide();
     updateCursor();
+  }
+
+  /**
+   * On start screen event.
+   */
+  public void onStartScreen() {
   }
 
   /**
@@ -261,11 +263,11 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
 
   public void onFocus(final boolean getFocus) {
 	  if (getFocus) {
-		  cursorElement.show();	  
+		  cursorElement.show();
 	  } else {
-		  cursorElement.hide();	  
+		  cursorElement.hide();
 	  }
-    
+
   }
 
   public void forward(MethodInvoker controllerMethod) {
