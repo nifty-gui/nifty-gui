@@ -83,7 +83,12 @@ public class TextFieldControl implements Controller {
 
     this.textField = new TextField("0123456789abcdefghijklmnopqrstuvwxyz", new ClipboardAWT());
     this.textField.toFirstPosition();
+  }
 
+  /**
+   * On start screen event.
+   */
+  public void onStartScreen() {
     this.textElement = element.findElementByName("textfield-text");
     this.textElement.getRenderer(TextRenderer.class).changeText(textField.getText());
 
@@ -99,12 +104,6 @@ public class TextFieldControl implements Controller {
 
     cursorElement.hide();
     updateCursor();
-  }
-
-  /**
-   * On start screen event.
-   */
-  public void onStartScreen() {
   }
 
   /**

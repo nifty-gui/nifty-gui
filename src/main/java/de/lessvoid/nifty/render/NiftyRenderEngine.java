@@ -196,8 +196,8 @@ public class NiftyRenderEngine implements RenderEngine {
    * @param textColor color
    * @param textSelectionColor textSelectionColor
    * @param textSize text size
-   * @param selectionStart selection start
-   * @param selectionEnd selection end
+   * @param selectionStartParam selection start
+   * @param selectionEndParam selection end
    */
   protected void renderSelectionText(
       final RenderFont font,
@@ -207,8 +207,17 @@ public class NiftyRenderEngine implements RenderEngine {
       final Color textColor,
       final Color textSelectionColor,
       final float textSize,
-      final int selectionStart,
-      final int selectionEnd) {
+      final int selectionStartParam,
+      final int selectionEndParam) {
+    int selectionStart = selectionStartParam;
+    int selectionEnd = selectionEndParam;
+    if (selectionStart < 0) {
+      selectionStart = 0;
+    }
+    if (selectionEnd < 0) {
+      selectionEnd = 0;
+    }
+
     if (isEverythingSelected(text, selectionStart, selectionEnd)) {
       font.render(text, x, y, textSelectionColor, textSize);
     } else if (isSelectionAtBeginning(selectionStart)) {

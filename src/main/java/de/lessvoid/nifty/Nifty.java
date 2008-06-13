@@ -76,6 +76,9 @@ public class Nifty {
    */
   private TimeProvider timeProvider;
 
+  /**
+   * store the popup id we need to remove.
+   */
   private String removePopupId = null;
 
   /**
@@ -184,21 +187,27 @@ public class Nifty {
     return exit;
   }
 
-  private void removeElements() {
-    if (!elementsToRemove.isEmpty()) {
-      for (ElementToRemove elementToRemove : elementsToRemove) {
-        elementToRemove.remove();
-      }
-      elementsToRemove.clear();
-    }
-  }
-
+  /**
+   * add controls.
+   */
   private void addControls() {
     if (!controlsToAdd.isEmpty()) {
       for (ControlToAdd controlToAdd : controlsToAdd) {
         controlToAdd.createControl();
       }
       controlsToAdd.clear();
+    }
+  }
+
+  /**
+   * remove elements.
+   */
+  private void removeElements() {
+    if (!elementsToRemove.isEmpty()) {
+      for (ElementToRemove elementToRemove : elementsToRemove) {
+        elementToRemove.remove();
+      }
+      elementsToRemove.clear();
     }
   }
 
@@ -463,7 +472,7 @@ public class Nifty {
       AttributesType attributeType = new AttributesType();
       attributeType.setId(controlId);
       controlType.setAttributes(attributeType);
-      controlType.createElement(
+      Element newControl = controlType.createElement(
           parent,
           Nifty.this,
           screen,
@@ -474,17 +483,39 @@ public class Nifty {
           null,
           screen.getScreenController());
       screen.layoutLayers();
+
+      newControl.onStartScreen();
     }
   }
 
+  /**
+   * ElementToRemove helper.
+   * @author void
+   */
   private class ElementToRemove {
+    /**
+     * screen.
+     */
     private Screen screen;
+
+    /**
+     * element.
+     */
     private Element element;
-    public ElementToRemove(final Screen screen, final Element element) {
-      this.screen = screen;
-      this.element = element;
+
+    /**
+     * create it.
+     * @param newScreen screen
+     * @param newElement element
+     */
+    public ElementToRemove(final Screen newScreen, final Element newElement) {
+      this.screen = newScreen;
+      this.element = newElement;
     }
-    
+
+    /**
+     * do the actual remove.
+     */
     public void remove() {
       element.remove();
       screen.layoutLayers();
