@@ -19,9 +19,10 @@ public class RegisterStyleProcessor implements XmlElementProcessor {
 
   /**
    * create the processor.
+   * @param newStyleHandler the StyleHandler
    */
-  public RegisterStyleProcessor() {
-    styleHandler = new StyleHandler();
+  public RegisterStyleProcessor(final StyleHandler newStyleHandler) {
+    styleHandler = newStyleHandler;
   }
 
   /**

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
+import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
@@ -33,11 +34,6 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   private RegisterMusicTypeProcessor registerMusicTypeProcessor;
 
   /**
-   * registerStyleTypeProcessor.
-   */
-  private RegisterStyleProcessor registerStyleTypeProcessor;
-
-  /**
    * registerControlDefinitionTypeProcessor.
    */
   private RegisterControlDefinitionTypeProcessor registerControlDefinitionTypeProcessor;
@@ -53,6 +49,29 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   private PopupTypeProcessor popupTypeProcessor;
 
   /**
+   * the style handler.
+   */
+  private StyleHandler styleHandler = new StyleHandler();
+
+  /**
+   * register styles processor.
+   */
+  private RegisterStyleProcessor registerStyleTypeProcessor;
+
+  /**
+   * use styles processor to load style files.
+   */
+  private UseStylesTypeProcessor useStylesTypeProcessor;
+
+  /**
+   * new nifty loader.
+   * @param niftyLoader nifty loader to use
+   */
+  public NiftyTypeProcessor(final NiftyLoader niftyLoader) {
+    useStylesTypeProcessor = new UseStylesTypeProcessor(niftyLoader, styleHandler);
+  }
+
+  /**
    * process.
    * @param xmlParser XmlParser
    * @param attributes attributes
@@ -65,13 +84,13 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
     registerControlDefinitionTypeProcessor = new RegisterControlDefinitionTypeProcessor();
     screenTypeProcessor = new ScreenTypeProcessor();
     popupTypeProcessor = new PopupTypeProcessor();
-    registerStyleTypeProcessor = new RegisterStyleProcessor();
 
     xmlParser.nextTag();
+    xmlParser.zeroOrMore("useStyles", useStylesTypeProcessor);
     xmlParser.zeroOrMore("registerEffect", registerEffectTypeProcessor);
     xmlParser.zeroOrMore("registerSound", registerSoundTypeProcessor);
     xmlParser.zeroOrMore("registerMusic", registerMusicTypeProcessor);
-    xmlParser.zeroOrMore("style", registerStyleTypeProcessor);
+    xmlParser.zeroOrMore("style", new RegisterStyleProcessor(styleHandler));
     xmlParser.zeroOrMore("controlDefinition", registerControlDefinitionTypeProcessor);
     xmlParser.oneOrMore("screen", screenTypeProcessor);
     xmlParser.zeroOrMore("popup", popupTypeProcessor);
@@ -95,24 +114,36 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
         time,
         registerEffectTypeProcessor.getRegisterEffects(),
         registerControlDefinitionTypeProcessor.getRegisteredControls(),
-        registerStyleTypeProcessor.getStyleHandler());
+        styleHandler);
     popupTypeProcessor.registerPopups(
         nifty,
         registerEffectTypeProcessor.getRegisterEffects(),
         registerControlDefinitionTypeProcessor.getRegisteredControls(),
-        registerStyleTypeProcessor.getStyleHandler(),
+        styleHandler,
         time);
   }
 
-  public Map<String, RegisterEffectType> getRegisteredEffects() {
+  /**
+   * get registered effects.
+   * @return map with all registered effects
+   */
+  public Map < String, RegisterEffectType > getRegisteredEffects() {
     return registerEffectTypeProcessor.getRegisterEffects();
   }
 
-  public Map<String, RegisterControlDefinitionType> getRegisteredControls() {
+  /**
+   * get registered controls.
+   * @return map with all registered controls
+   */
+  public Map < String, RegisterControlDefinitionType > getRegisteredControls() {
     return registerControlDefinitionTypeProcessor.getRegisteredControls();
   }
 
+  /**
+   * get the StyleHandler.
+   * @return the style handler
+   */
   public StyleHandler getStyleHandler() {
-    return registerStyleTypeProcessor.getStyleHandler();
+    return styleHandler;
   }
 }

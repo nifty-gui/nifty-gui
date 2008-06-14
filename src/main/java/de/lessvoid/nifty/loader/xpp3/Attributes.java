@@ -204,4 +204,13 @@ public final class Attributes {
     }
     return SubImageSizeModeType.valueOf(value);
   }
+
+  /**
+   * Set an attribute.
+   * @param name name of the attribute to set
+   * @param value value to set attribute to
+   */
+  public void set(final String name, final String value) {
+    attributes.put(name, value);
+  }
 }

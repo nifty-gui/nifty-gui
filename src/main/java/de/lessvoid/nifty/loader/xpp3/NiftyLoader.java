@@ -9,6 +9,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.NiftyStylesTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.NiftyTypeProcessor;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -27,7 +28,12 @@ public class NiftyLoader {
   /**
    * nifty type processor.
    */
-  private NiftyTypeProcessor niftyTypeProcessor = new NiftyTypeProcessor();
+  private NiftyTypeProcessor niftyTypeProcessor;
+
+  /**
+   * nifty style type processor.
+   */
+  private NiftyStylesTypeProcessor niftyStylesTypeProcessor;
 
   /**
    * load xml.
@@ -42,8 +48,11 @@ public class NiftyLoader {
       final Map < String, Screen > screens,
       final String filename,
       final TimeProvider timeProvider) throws Exception {
+    logBlockBegin("loadXml: " + filename);
 
-    log.info("loadXml: " + filename);
+    // create processors
+    niftyTypeProcessor = new NiftyTypeProcessor(this);
+    niftyStylesTypeProcessor = new NiftyStylesTypeProcessor(niftyTypeProcessor.getStyleHandler());
 
     // create parser
     XmlParser parser = new XmlParser(new MXParser());
@@ -55,17 +64,65 @@ public class NiftyLoader {
 
     // create actual nifty objects
     niftyTypeProcessor.create(nifty, screens, timeProvider);
+    logBlockEnd();
   }
 
-  public Map<String, RegisterEffectType> getRegisteredEffects() {
+  /**
+   * Load a Nifty style xml.
+   * @param filename filename to load
+   * @throws Exception exception in case of any errors
+   */
+  public void loadNiftyStyles(final String filename) throws Exception {
+    logBlockBegin("loadNiftyStyles: " + filename);
+
+    // create parser
+    XmlParser parser = new XmlParser(new MXParser());
+    parser.read(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
+
+    // start parsing
+    parser.nextTag();
+    parser.required("nifty-styles", niftyStylesTypeProcessor);
+    logBlockEnd();
+  }
+
+  /**
+   * get registered effects.
+   * @return registered effects map
+   */
+  public Map < String, RegisterEffectType > getRegisteredEffects() {
     return niftyTypeProcessor.getRegisteredEffects();
   }
 
-  public Map<String, RegisterControlDefinitionType> getRegisteredControls() {
+  /**
+   * get registered controls.
+   * @return registered control map
+   */
+  public Map < String, RegisterControlDefinitionType > getRegisteredControls() {
     return niftyTypeProcessor.getRegisteredControls();
   }
 
+  /**
+   * get style handler.
+   * @return style handler
+   */
   public StyleHandler getStyleHandler() {
     return niftyTypeProcessor.getStyleHandler();
+  }
+
+  /**
+   * log some nice header thing into the log.
+   * @param msg message to log
+   */
+  private void logBlockBegin(final String msg) {
+    log.info("========================================================");
+    log.info(msg);
+    log.info("========================================================");
+  }
+
+  /**
+   * log some nice header thing into the log.
+   */
+  private void logBlockEnd() {
+    log.info("--------------------------------------------------------");
   }
 }
