@@ -52,6 +52,16 @@ public class AttributesType {
   private ValignType valign;
 
   /**
+   * text horizontal alignment.
+   */
+  private AlignType textHAlign;
+
+  /**
+   * text vertical alignment.
+   */
+  private ValignType textVAlign;
+
+  /**
    * childLayoutType.
    */
   private LayoutType childLayoutType;
@@ -123,6 +133,8 @@ public class AttributesType {
     color = other.getColor();
     filename = other.getFilename();
     filter = other.getFilter();
+    textHAlign = other.getTextHAlign();
+    textVAlign = other.getTextVAlign();
   }
 
   /**
@@ -430,6 +442,37 @@ public class AttributesType {
   }
 
   /**
+   * set text horizontal align.
+   * @param newTextHAlignType new horizontal align type
+   */
+  public void setTextHAlign(final AlignType newTextHAlignType) {
+    textHAlign = newTextHAlignType;
+  }
+
+  /**
+   * set text vertical align.
+   * @param newTextVAlignType new vertical align type
+   */
+  public void setTextVAlign(final ValignType newTextVAlignType) {
+    textVAlign = newTextVAlignType;
+  }
+
+  /**
+   * get text horizontal alignment.
+   * @return text horizontal alignment
+   */
+  public AlignType getTextHAlign() {
+    return textHAlign;
+  }
+
+  /**
+   * get text vertical alignment.
+   * @return text vertical alignment
+   */
+  public ValignType getTextVAlign() {
+    return textVAlign;
+  }
+  /**
    * return a new AttributesType with is this + attributes from the param.
    * @param attributesParam attributes we should merge
    * @return new AttributesType
@@ -456,6 +499,12 @@ public class AttributesType {
     }
     if (attributesParam.getValign() != null) {
       result.setValign(attributesParam.getValign());
+    }
+    if (attributesParam.getTextHAlign() != null) {
+      result.setTextHAlign(attributesParam.getTextHAlign());
+    }
+    if (attributesParam.getTextVAlign() != null) {
+      result.setTextVAlign(attributesParam.getTextVAlign());
     }
     if (attributesParam.getChildLayoutType() != null) {
       result.setChildLayoutType(attributesParam.getChildLayoutType());

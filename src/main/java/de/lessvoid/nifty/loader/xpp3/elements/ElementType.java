@@ -244,6 +244,14 @@ public class ElementType {
       if (attrib.getColor() != null) {
         textRenderer.setColor(attrib.getColor().createColor());
       }
+      // text horizontal align
+      if (attrib.getTextHAlign() != null) {
+        textRenderer.setTextHAlign(HorizontalAlign.valueOf(attrib.getTextHAlign().getValue()));
+      }
+      // text vertical align
+      if (attrib.getTextVAlign() != null) {
+        textRenderer.setTextVAlign(VerticalAlign.valueOf(attrib.getTextVAlign().getValue()));
+      }
     }
     // panelRenderer
     PanelRenderer panelRenderer = element.getRenderer(PanelRenderer.class);

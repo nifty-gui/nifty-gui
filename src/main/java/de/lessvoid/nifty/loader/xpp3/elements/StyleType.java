@@ -4,7 +4,6 @@ import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**

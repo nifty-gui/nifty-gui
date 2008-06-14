@@ -144,5 +144,13 @@ public final class ProcessorHelper {
     if (attributes.isSet("filter")) {
       attributesType.setFilter(attributes.getAsBoolean("filter"));
     }
+    // text horizontal align
+    if (attributes.isSet("textHAlign")) {
+      attributesType.setTextHAlign(attributes.getAsAlignType("textHAlign"));
+    }
+    // text vertical align
+    if (attributes.isSet("textVAlign")) {
+      attributesType.setTextVAlign(attributes.getAsVAlignType("textVAlign"));
+    }
   }
 }

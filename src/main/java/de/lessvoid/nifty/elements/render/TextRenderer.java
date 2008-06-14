@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.layout.align.HorizontalAlign;
+import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.render.RenderEngine;
 import de.lessvoid.nifty.render.RenderFont;
 import de.lessvoid.nifty.render.RenderFontNull;
@@ -52,6 +54,16 @@ public class TextRenderer implements ElementRenderer {
    * text selection corlor.
    */
   private Color textSelectionColor;
+
+  /**
+   * vertical alignment.
+   */
+  private VerticalAlign textVAlign = VerticalAlign.center;
+
+  /**
+   * horizontal alignment.
+   */
+  private HorizontalAlign textHAlign = HorizontalAlign.center;
 
   /**
    * default constructor.
@@ -118,36 +130,76 @@ public class TextRenderer implements ElementRenderer {
    * @param r the renderDevice we should use
    */
   public final void render(final Element w, final RenderEngine r) {
-    int x = 0;
-    int y = 0;
+    int y = getStartYWithVerticalAlign(textLines.length * font.getHeight(), w.getHeight(), textVAlign);
     for (String line : textLines) {
+      int yy = w.getY() + y;
       if (Math.abs(xoffsetHack) > 0) {
         int fittingOffset = FontHelper.getVisibleCharactersFromStart(font, line, Math.abs(xoffsetHack), 1.0f);
         String cut = line.substring(0, fittingOffset);
         String substring = line.substring(fittingOffset, line.length());
-        // font.setSelection(selectionStart - fittingOffset, selectionEnd - fittingOffset);
-        r.renderText(
-            font,
-            substring,
-            w.getX() + x + xoffsetHack + font.getWidth(cut),
-            w.getY() + y,
-            selectionStart - fittingOffset,
-            selectionEnd - fittingOffset,
-            textSelectionColor);
+        int xx = w.getX() + xoffsetHack + font.getWidth(cut);
+        renderLine(xx, yy, substring, r, selectionStart - fittingOffset, selectionEnd - fittingOffset);
       } else {
-        int xx = w.getX() + x + xoffsetHack;
-        xx = w.getX() + (w.getWidth() - font.getWidth(line)) / 2;
-        r.renderText(
-            font,
-            line,
-            xx,
-            w.getY() + y,
-            selectionStart,
-            selectionEnd,
-            textSelectionColor);
+        int xx = w.getX() + getStartXWithHorizontalAlign(font.getWidth(line), w.getWidth(), textHAlign);
+        renderLine(xx, yy, line, r, selectionStart, selectionEnd);
       }
       y += font.getHeight();
     }
+  }
+
+  /**
+   * Get start Y for text rendering given the textHeight and the elementHeight.
+   * @param textHeight text height
+   * @param elementHeight element height
+   * @param verticalAlign verticalAlign
+   * @return start y for text rendering
+   */
+  protected static int getStartYWithVerticalAlign(
+      final int textHeight,
+      final int elementHeight,
+      final VerticalAlign verticalAlign) {
+    if (VerticalAlign.top == verticalAlign) {
+      return 0;
+    } else if (VerticalAlign.center == verticalAlign) {
+      return (elementHeight - textHeight) / 2;
+    } else if (VerticalAlign.bottom == verticalAlign) {
+      return elementHeight - textHeight;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
+   * Get start x for text rendering given the textWidth and the elementWidth.
+   * @param textWidth text width
+   * @param elementWidth element width
+   * @param horizontalAlign horizontalAlign
+   * @return start x for text rendering
+   */
+  protected static int getStartXWithHorizontalAlign(
+      final int textWidth,
+      final int elementWidth,
+      final HorizontalAlign horizontalAlign) {
+    if (HorizontalAlign.left == horizontalAlign) {
+      return 0;
+    } else if (HorizontalAlign.center == horizontalAlign) {
+      return (elementWidth - textWidth) / 2;
+    } else if (HorizontalAlign.right == horizontalAlign) {
+      return elementWidth - textWidth;
+    } else {
+      return 0;
+    }
+  }
+
+  private void renderLine(int xx, int yy, String line, final RenderEngine r, int selStart, int selEnd) {
+    r.renderText(
+        font,
+        line,
+        xx,
+        yy,
+        selStart,
+        selEnd,
+        textSelectionColor);
   }
 
   /**
@@ -218,5 +270,21 @@ public class TextRenderer implements ElementRenderer {
    */
   public void setTextSelectionColor(final Color textSelectionColorParam) {
     this.textSelectionColor = textSelectionColorParam;
+  }
+
+  /**
+   * set text vertical alignment.
+   * @param newTextVAlign text vertical alignment
+   */
+  public void setTextVAlign(final VerticalAlign newTextVAlign) {
+    this.textVAlign = newTextVAlign;
+  }
+
+  /**
+   * set text horizontal alignment.
+   * @param newTextHAlign text horizontal alignment
+   */
+  public void setTextHAlign(final HorizontalAlign newTextHAlign) {
+    this.textHAlign = newTextHAlign;
   }
 }

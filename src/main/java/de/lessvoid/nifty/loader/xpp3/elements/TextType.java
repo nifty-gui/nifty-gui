@@ -7,11 +7,12 @@ import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.layout.align.HorizontalAlign;
+import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -96,16 +97,18 @@ public class TextType extends ElementType {
         time,
         inputControl,
         screenController);
-    textRenderer.setText(text);
+    ValignType textValignType = getAttributes().getTextVAlign();
+    if (textValignType != null) {
+      textRenderer.setTextVAlign(VerticalAlign.valueOf(textValignType.getValue()));
+    }
+    AlignType textHalignType = getAttributes().getTextHAlign();
+    if (textHalignType != null) {
+      textRenderer.setTextHAlign(HorizontalAlign.valueOf(textHalignType.getValue()));
+    }
     if (textSelectionColor != null) {
       textRenderer.setTextSelectionColor(new Color(textSelectionColor));
-    }/*
-    if (panel.getConstraintHeight() == null) {
-      panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
     }
-    if (panel.getConstraintWidth() == null) {
-      panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-    }*/
+    textRenderer.setText(text);
     parent.add(panel);
     return panel;
   }

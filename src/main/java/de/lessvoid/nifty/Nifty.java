@@ -69,7 +69,7 @@ public class Nifty {
    * @param newRenderDevice RenderDevice
    * @param options options
    */
-  private NiftyDebugConsole console;
+  private NiftyDebugConsole console = new NiftyDebugConsole();
 
   /**
    * The TimeProvider to use.
@@ -97,6 +97,11 @@ public class Nifty {
   private List < ElementToRemove > elementsToRemove = new ArrayList < ElementToRemove >();
 
   /**
+   * use debug console.
+   */
+  private boolean useDebugConsole;
+
+  /**
    * Create nifty for the given RenderDevice and TimeProvider.
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
@@ -114,18 +119,12 @@ public class Nifty {
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
    * @param newTimeProvider the TimeProvider
-   * @param useConsoleParam use debug console or not
    */
   public Nifty(
       final RenderDevice newRenderDevice,
       final SoundSystem newSoundSystem,
-      final TimeProvider newTimeProvider,
-      final boolean useConsoleParam) {
+      final TimeProvider newTimeProvider) {
     initialize(new NiftyRenderEngine(newRenderDevice), newSoundSystem, newTimeProvider);
-
-    if (useConsoleParam) {
-      this.console = new NiftyDebugConsole();
-    }
   }
 
   /**
@@ -142,7 +141,6 @@ public class Nifty {
     this.soundSystem = newSoundSystem;
     this.timeProvider = newTimeProvider;
     this.exit = false;
-    this.console = null;
     this.currentFile = null;
   }
 
@@ -170,7 +168,7 @@ public class Nifty {
       currentScreen.mouseEvent(mouseX, mouseY, mouseDown);
       currentScreen.renderLayers(renderDevice);
 
-      if (console != null) {
+      if (useDebugConsole) {
         console.render(currentScreen, renderDevice);
       }
     }
@@ -529,5 +527,12 @@ public class Nifty {
    */
   public void removeElement(final Screen screen, final Element element) {
     elementsToRemove.add(new ElementToRemove(screen, element));
+  }
+
+  /**
+   * toggle debug console on/off.
+   */
+  public void toggleDebugConsole() {
+    useDebugConsole = !useDebugConsole;
   }
 }
