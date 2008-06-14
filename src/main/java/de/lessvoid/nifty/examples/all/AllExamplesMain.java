@@ -13,6 +13,9 @@ import de.lessvoid.nifty.tools.TimeProvider;
  */
 public final class AllExamplesMain {
 
+  /**
+   * file of the main program.
+   */
   private static final String ALL_INTRO_XML = "all/intro.xml";
 
   /**
@@ -34,18 +37,19 @@ public final class AllExamplesMain {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
-        new TimeProvider(),
-        true);
+        new TimeProvider());
     nifty.fromXml(ALL_INTRO_XML, "start");
 
     boolean done = false;
-    while(!done) {
+    while (!done) {
       LwjglInitHelper.renderLoop(nifty);
-    
+
       // catch the end of the different single demo and loop them back to the menu
       if (nifty.isActive("helloworld/helloworld.xml", "start")) {
         nifty.fromXml(ALL_INTRO_XML, "menu");
       } else if (nifty.isActive("textfield/textfield.xml", "start")) {
+        nifty.fromXml(ALL_INTRO_XML, "menu");
+      } else if (nifty.isActive("textalign/textalign.xml", "start")) {
         nifty.fromXml(ALL_INTRO_XML, "menu");
       } else if (nifty.isActive("multiplayer/multiplayer.xml", "start")) {
         nifty.fromXml(ALL_INTRO_XML, "menu");

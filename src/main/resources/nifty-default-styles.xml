@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- nifty label default style -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <style id="nifty-label">
+    <attributes font="verdana-48-regular.fnt" align="center" />
+  </style>
+
+</nifty-styles>

@@ -32,8 +32,7 @@ public final class HelloWorldExampleMain {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
-        new TimeProvider(),
-        true);
+        new TimeProvider());
     nifty.fromXml("helloworld/helloworld.xml");
 
     // render

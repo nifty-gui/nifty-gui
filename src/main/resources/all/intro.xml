@@ -98,9 +98,14 @@
         <menuItem id="textfield" text="Textfield Example" style="menu-item">
           <interact onClick="textField()"/>
         </menuItem>
+        <menuItem id="textalign" text="Textalign Example" style="menu-item">
+          <interact onClick="textAlign()"/>
+        </menuItem>
+        <!--  
         <menuItem id="multiplayer" text="Multiplayer Example" style="menu-item">
           <interact onClick="multiplayer()"/>
         </menuItem>
+        -->
         <menuItem id="exit" text="Exit" style="menu-item">
           <interact onClick="exit()"/>
         </menuItem>

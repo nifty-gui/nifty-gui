@@ -1,8 +1,4 @@
-/*
- * Created on 12.02.2005
- *  
- */
-package de.lessvoid.nifty.examples.textfield;
+package de.lessvoid.nifty.examples.textalign;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
@@ -12,14 +8,15 @@ import de.lessvoid.nifty.sound.slick.SlickSoundLoader;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
+ * Text Align Example.
  * @author void
  */
-public class TextFieldDemoMain {
+public final class TextAlignExampleMain {
 
   /**
    * Prevent instantiation of this class.
    */
-  private TextFieldDemoMain() {
+  private TextAlignExampleMain() {
   }
 
   /**
@@ -27,7 +24,7 @@ public class TextFieldDemoMain {
    * @param args arguments
    */
   public static void main(final String[] args) {
-    if (!LwjglInitHelper.initSubSystems("Nifty Textfield Demonstation")) {
+    if (!LwjglInitHelper.initSubSystems("Nifty Textalign Example")) {
       System.exit(0);
     }
 
@@ -36,7 +33,7 @@ public class TextFieldDemoMain {
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider());
-    nifty.fromXml("textfield/textfield.xml");
+    nifty.fromXml("textalign/textalign.xml");
 
     // render
     LwjglInitHelper.renderLoop(nifty);

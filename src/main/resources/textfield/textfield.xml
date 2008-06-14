@@ -16,7 +16,7 @@
   <!-- styles -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <style id="default-textfield-panel">
-    <attributes backgroundColor="#555f" childLayout="overlay" height="40px" />
+    <attributes backgroundColor="#55ff" childLayout="overlay" height="40px" />
   </style>
 
   <style id="default-textfield-field">
@@ -28,7 +28,7 @@
   </style>
   
   <style id="default-textfield-text">
-    <attributes font="verdana-48-regular.fnt" visibleToMouse="false" align="left" />
+    <attributes font="verdana-48-regular.fnt" visibleToMouse="false" align="left" textHAlign="left" />
   </style>
 
   <style id="default-textfield-cursor-panel">
@@ -64,20 +64,17 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.textfield.Start">
     <layer id="layer" childLayout="center">
-      <panel childLayout="horizontal" valign="center" height="50%" align="center">
-        <panel width="50px" />
-        <panel backgroundColor="#222f" childLayout="vertical" height="50%" align="center" valign="center">
-          <panel childLayout="horizontal">
-            <text font="verdana-48-regular.fnt" text="Your Name: " width="200px" align="left" />
-            <control id="name" name="textfield" />
-          </panel>
-          <panel childLayout="horizontal">
-            <text font="verdana-48-regular.fnt" text="Your Host: " width="200px" align="left" />
-            <control id="ip" name="textfield" />
-          </panel>
-          <panel width="50px" />
+      <panel backgroundColor="#444f" childLayout="vertical" height="84px" width="80%" align="center" valign="center">
+        <panel childLayout="horizontal" height="40px">
+          <text font="verdana-48-regular.fnt" text="Your Name: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+          <control id="name" name="textfield" />
+        </panel>  
+        <panel childLayout="horizontal" height="4px">
+        </panel>  
+        <panel childLayout="horizontal" height="40px">
+          <text font="verdana-48-regular.fnt" text="Your Host: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+          <control id="ip" name="textfield" />
         </panel>
-        <panel width="50px" />
       </panel>
     </layer>
   </screen>

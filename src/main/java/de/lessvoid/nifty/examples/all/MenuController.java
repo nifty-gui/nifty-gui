@@ -15,16 +15,18 @@ public class MenuController implements ScreenController {
    * the nifty instance.
    */
   private Nifty nifty;
-  
+
   /**
    * the screen this menu belongs to.
    */
   private Screen screen;
 
   /**
-   * 
+   * bind.
+   * @param niftyParam niftyParam
+   * @param screenParam screenParam
    */
-  public void bind(Nifty niftyParam, Screen screenParam) {
+  public void bind(final Nifty niftyParam, final Screen screenParam) {
     this.nifty = niftyParam;
     this.screen = screenParam;
   }
@@ -47,7 +49,10 @@ public class MenuController implements ScreenController {
    */
   public final void onEndScreen() {
   }
-  
+
+  /**
+   * helloWorld.
+   */
   public void helloWorld() {
     nifty.getCurrentScreen().endScreen(new EndNotify() {
       public void perform() {
@@ -56,6 +61,9 @@ public class MenuController implements ScreenController {
     });
   }
 
+  /**
+   * textfield.
+   */
   public void textfield() {
     nifty.getCurrentScreen().endScreen(new EndNotify() {
       public void perform() {
@@ -63,7 +71,20 @@ public class MenuController implements ScreenController {
       }
     });
   }
-  
+
+  /**
+   * textalign.
+   */
+  public void textalign() {
+    nifty.getCurrentScreen().endScreen(new EndNotify() {
+      public void perform() {
+        nifty.fromXml("textalign/textalign.xml");
+      }
+    });
+  }
+  /**
+   * multiplayer.
+   */
   public void multiplayer() {
     nifty.getCurrentScreen().endScreen(new EndNotify() {
       public void perform() {
@@ -78,11 +99,15 @@ public class MenuController implements ScreenController {
   public void exit() {
     nifty.showPopup(screen, "popupExit");
   }
-  
+
+  /**
+   * popupExit.
+   * @param exit exit string
+   */
   public void popupExit(final String exit) {
     nifty.closePopup("popupExit");
     if ("yes".equals(exit)) {
-      nifty.gotoScreen("outro");    
+      nifty.gotoScreen("outro");
     }
   }
 }

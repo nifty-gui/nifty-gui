@@ -60,7 +60,7 @@ public class LwjglInitHelper {
       //  get available modes, and print out
       DisplayMode[] modes = Display.getAvailableDisplayModes();
       log.info("Found " + modes.length + " display modes");
-  
+
       List < DisplayMode > matching = new ArrayList < DisplayMode >();
       for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
@@ -69,43 +69,49 @@ public class LwjglInitHelper {
           matching.add(mode);
         }
       }
-  
+
       DisplayMode[] matchingModes = matching.toArray(new DisplayMode[0]);
-  
+
       // find mode with matching freq
       boolean found = false;
-      for(int i=0; i<matchingModes.length; i++) {
+      for (int i = 0; i < matchingModes.length; i++) {
         if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
-          log.info("using mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
+          log.info("using mode: " + matchingModes[i].getWidth() + ", "
+              + matchingModes[i].getHeight() + ", "
+              + matchingModes[i].getBitsPerPixel() + ", "
+              + matchingModes[i].getFrequency());
           Display.setDisplayMode(matchingModes[i]);
           found = true;
           break;
         }
       }
-  
-      if(!found) {
-        Arrays.sort(matchingModes, new Comparator < DisplayMode >() {  
+
+      if (!found) {
+        Arrays.sort(matchingModes, new Comparator < DisplayMode >() {
           public int compare(final DisplayMode o1, final DisplayMode o2) {
             if (o1.getFrequency() > o2.getFrequency()) {
               return 1;
-            } else if(o1.getFrequency() < o2.getFrequency()) {
+            } else if (o1.getFrequency() < o2.getFrequency()) {
               return -1;
             } else {
               return 0;
             }
           }
         });
-  
-        for (int i=0; i<matchingModes.length; i++) {
-          log.info("using fallback mode: " + matchingModes[i].getWidth() + ", " + matchingModes[i].getHeight() + ", " + matchingModes[i].getBitsPerPixel() + ", " + matchingModes[i].getFrequency());
+
+        for (int i = 0; i < matchingModes.length; i++) {
+          log.info("using fallback mode: " + matchingModes[i].getWidth() + ", "
+              + matchingModes[i].getHeight() + ", "
+              + matchingModes[i].getBitsPerPixel() + ", "
+              + matchingModes[i].getFrequency());
           Display.setDisplayMode(matchingModes[i]);
           break;
         }
       }
-  
+
       int x = 0, y = 0;
       Display.setLocation(x, y);
-  
+
       // Create the actual window
       try {
         Display.setFullscreen(false);
@@ -117,14 +123,14 @@ public class LwjglInitHelper {
         log.warning("Unable to create window!, exiting...");
         System.exit(-1);
       }
-  
+
       log.info(
-          "Width: " + Display.getDisplayMode().getWidth() +
-          ", Height: " + Display.getDisplayMode().getHeight() +
-          ", Bits per pixel: " + Display.getDisplayMode().getBitsPerPixel() +
-          ", Frequency: " + Display.getDisplayMode().getFrequency() +
-          ", Title: " + Display.getTitle());
-  
+          "Width: " + Display.getDisplayMode().getWidth()
+          + ", Height: " + Display.getDisplayMode().getHeight()
+          + ", Bits per pixel: " + Display.getDisplayMode().getBitsPerPixel()
+          + ", Frequency: " + Display.getDisplayMode().getFrequency()
+          + ", Title: " + Display.getTitle());
+
       // just output some infos about the system we're on
       log.info("plattform: " + LWJGLUtil.getPlatformName());
       log.info("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
@@ -192,19 +198,24 @@ public class LwjglInitHelper {
     while (!Display.isCloseRequested() && !done) {
       // show render
       Display.update();
-  
+
       // forward keyboard events to nifty
       while (Keyboard.next()) {
-        nifty.keyEvent(Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
+        boolean eventKeyState = Keyboard.getEventKeyState();
+        int eventKey = Keyboard.getEventKey();
+        nifty.keyEvent(eventKey, Keyboard.getEventCharacter(), eventKeyState);
+        if (eventKeyState && eventKey == Keyboard.KEY_F2) {
+          nifty.toggleDebugConsole();
+        }
       }
-  
+
       // render nifty
       int mouseX = Mouse.getX();
       int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
       if (nifty.render(true, mouseX, mouseY, Mouse.isButtonDown(0))) {
         done = true;
       }
-  
+
       // check gl error at least ones per frame
       int error = GL11.glGetError();
       if (error != GL11.GL_NO_ERROR) {

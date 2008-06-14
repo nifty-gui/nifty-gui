@@ -32,8 +32,7 @@ public final class LabelExampleMain {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
-        new TimeProvider(),
-        true);
+        new TimeProvider());
     nifty.fromXml("style/label/label.xml");
 
     // render
