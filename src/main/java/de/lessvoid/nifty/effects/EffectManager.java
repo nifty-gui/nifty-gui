@@ -164,14 +164,14 @@ public class EffectManager {
         }
         data.append(eventId.toString());
         data.append(":");
-        data.append(" (" + processor.getStateString() + ")");
+        data.append(processor.getStateString());
       }
     }
 
     if (activeProcessors == 0) {
-      return " (no effects)";
+      return "none";
     } else {
-      return " (effects: " + data.toString() + ")";
+      return data.toString();
     }
   }
 

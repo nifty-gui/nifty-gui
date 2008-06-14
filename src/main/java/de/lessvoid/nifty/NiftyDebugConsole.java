@@ -46,17 +46,14 @@ public class NiftyDebugConsole {
    */
   private void outputLayers(final Screen screen, final RenderEngine theRenderDevice) {
     console.clear();
-    console.output("Screen: " + screen.getScreenId());
+    console.output("*[" + screen.getScreenId() + "]");
 
     // render all layers
     for (Element layer : screen.getLayerElements()) {
       layer.render(theRenderDevice);
-      console.output(" Layer: " + getIdText(layer) + ", " + layer.getElementStateString() + outputEffects(layer));
-
-      for (Element w : layer.getElements()) {
-        console.output("  " + getIdText(w) + ", " + w.getElementStateString());
-        outputElement(w, "    ");
-      }
+      console.output(" +" + getIdText(layer) + " => " + layer.getElementStateString());
+      console.output("  " + whitespace(getIdText(layer).length()) + "    " + outputEffects(layer));
+      outputElement(layer, "    ");
     }
 
     screen.debug(console);
@@ -73,9 +70,23 @@ public class NiftyDebugConsole {
    */
   private void outputElement(final Element w, final String offset) {
     for (Element ww : w.getElements()) {
-      console.output(offset + getIdText(ww) + ", " + ww.getElementStateString() + outputEffects(w));
+      console.output(offset + getIdText(ww) + " -> " + ww.getElementStateString());
+      console.output(offset + whitespace(getIdText(ww).length()) + "    " + outputEffects(w));
       outputElement(ww, offset + "  ");
     }
+  }
+
+  /**
+   * output length whitespaces.
+   * @param length number of whitespaces
+   * @return string with whitespaces length times.
+   */
+  private String whitespace(final int length) {
+    StringBuffer b = new StringBuffer();
+    for (int i=0; i<length; i++) {
+      b.append(" ");
+    }
+    return b.toString();
   }
 
   /**
@@ -85,7 +96,7 @@ public class NiftyDebugConsole {
    */
   private String outputEffects(final Element w) {
     EffectManager m = w.getEffectManager();
-    return m.getStateString();
+    return "effect [" + m.getStateString() + "]";
   }
 
   /**
@@ -96,9 +107,9 @@ public class NiftyDebugConsole {
   private String getIdText(final Element ww) {
     String id = ww.getId();
     if (id == null) {
-      return "unknown";
+      return "[unknown]";
     } else {
-      return id;
+      return "[" + id + "]";
     }
   }
 

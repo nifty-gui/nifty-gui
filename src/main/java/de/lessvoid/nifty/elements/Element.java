@@ -267,24 +267,24 @@ public class Element {
    */
   public final String getElementStateString() {
     String pos =
-      "[" + getX() + "," + getY() + ") (" + getWidth() + "," + getHeight() + "] "
-      + "[" + outputSizeValue(layoutPart.getBoxConstraints().getX())
-      + "," + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ") "
-      + "(" + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ","
-      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]";
+      "pos [" + getX() + "," + getY() + "," + getWidth() + "," + getHeight() + "] "
+      + "constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
+      + "," + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ","
+      + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ","
+      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "] state ";
     if (isEffectActive(EffectEventId.onStartScreen)) {
-      return pos + "(starting)";
+      return pos + "[starting]";
     }
 
     if (isEffectActive(EffectEventId.onEndScreen)) {
-      return pos + "(ending)";
+      return pos + "[ending]";
     }
 
     if (!visible) {
-      return pos + "(hidden)";
+      return pos + "[hidden]";
     }
 
-    return pos + "normal";
+    return pos + "[normal]";
   }
 
   /**
