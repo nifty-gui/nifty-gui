@@ -12,6 +12,11 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class TextFieldDemoStartScreen implements ScreenController {
 
   /**
+   * the nifty.
+   */
+  private Nifty nifty;
+
+  /**
    * bind this ScreenController to a screen.
    * @param newRenderDevice RenderDevice
    * @param newNifty nifty
@@ -20,6 +25,7 @@ public class TextFieldDemoStartScreen implements ScreenController {
   public final void bind(
       final Nifty newNifty,
       final Screen newScreen) {
+    nifty = newNifty;
   }
 
   /**
@@ -41,9 +47,10 @@ public class TextFieldDemoStartScreen implements ScreenController {
   }
 
   /**
-   * next.
+   * back.
    */
-  public final void next() {
+  public final void back() {
+    nifty.exit();
   }
 
 }

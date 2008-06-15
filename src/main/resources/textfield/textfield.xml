@@ -5,12 +5,15 @@
   <!-- register effects we want to use -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <registerEffect name="colorBarHover" class="de.lessvoid.nifty.effects.hover.ColorBar" />
+  <registerEffect name="imageSize" class="de.lessvoid.nifty.effects.general.ImageSize" />
   <registerEffect name="pulsateHover" class="de.lessvoid.nifty.effects.hover.Pulsate" />
   <registerEffect name="colorBar" class="de.lessvoid.nifty.effects.general.ColorBar" />
   <registerEffect name="pulsate" class="de.lessvoid.nifty.effects.general.Pulsate" />
   <registerEffect name="ImageOverlay" class="de.lessvoid.nifty.effects.general.ImageOverlay" />
   <registerEffect name="ImageOverlayPulsate" class="de.lessvoid.nifty.effects.general.ImageOverlayPulsate" />
   <registerEffect name="hint" class="de.lessvoid.nifty.effects.hover.Hint" />
+  <registerEffect name="hoverImageOverlay" class="de.lessvoid.nifty.effects.hover.ImageOverlay" />
+  <registerEffect name="fade" class="de.lessvoid.nifty.effects.general.Fade" />
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- styles -->
@@ -64,16 +67,29 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.textfield.TextFieldDemoStartScreen">
     <layer id="layer" childLayout="center">
-      <panel backgroundColor="#444f" childLayout="vertical" height="84px" width="80%" align="center" valign="center">
-        <panel childLayout="horizontal" height="40px">
-          <text font="verdana-48-regular.fnt" text="Your Name: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
-          <control id="name" name="textfield" />
-        </panel>  
-        <panel childLayout="horizontal" height="4px">
-        </panel>  
-        <panel childLayout="horizontal" height="40px">
-          <text font="verdana-48-regular.fnt" text="Your Host: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
-          <control id="ip" name="textfield" />
+      <panel childLayout="vertical">
+        <panel backgroundColor="#444f" childLayout="vertical" height="84px" width="80%" align="center" valign="center">
+          <panel childLayout="horizontal" height="40px">
+            <text font="verdana-48-regular.fnt" text="Your Name: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <control id="name" name="textfield" />
+          </panel>  
+          <panel childLayout="horizontal" height="4px">
+          </panel>  
+          <panel childLayout="horizontal" height="40px">
+            <text font="verdana-48-regular.fnt" text="Your Host: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <control id="ip" name="textfield" />
+          </panel>
+        </panel>
+        <panel height="50px" />
+        <panel backgroundImage="button-red.png" align="center" width="282px" height="50px" childLayout="center" visibleToMouse="true">
+         <interact onClick="back()" /> 
+          <effect>
+            <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="0" inherit="true"/>
+            <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" startDelay="0" inherit="true"/>
+            <onHover name="hoverImageOverlay" timeType="infinite" filename="button-red-hover.png" post="true"/>
+          </effect>
+          <text font="verdana-48-regular.fnt" text="Back to Menu" align="center" valign="center" textHAlign="center" textVAlign="center">
+          </text>
         </panel>
       </panel>
     </layer>
