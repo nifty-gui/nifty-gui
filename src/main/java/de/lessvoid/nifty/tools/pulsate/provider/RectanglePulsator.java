@@ -11,9 +11,9 @@ import de.lessvoid.nifty.tools.pulsate.PulsatorProvider;
 public class RectanglePulsator implements PulsatorProvider {
 
   /**
-   * scale factor for the sinus.
+   * period  for the sinus.
    */
-  private float scaleFactor;
+  private float period;
 
   /**
    * start time.
@@ -25,7 +25,7 @@ public class RectanglePulsator implements PulsatorProvider {
    * @param parameter the parameters
    */
   public void initialize(final Properties parameter) {
-    this.scaleFactor = Float.parseFloat(parameter.getProperty("scaleFactor", "200"));
+    this.period = Float.parseFloat(parameter.getProperty("period", "1000"));
   }
 
   /**
@@ -34,8 +34,7 @@ public class RectanglePulsator implements PulsatorProvider {
    * @return the pulsate value in [0,1] intervall
    */
   public float getValue(final long msTime) {
-    float value = (float) (Math.signum(Math.sin((msTime - startTime) * scaleFactor)) + 1.0f) / 2.0f;
-    return value;
+    return (float) (Math.signum(Math.sin(Math.PI * (msTime - startTime) / period)) + 1.0f) / 2.0f;
   }
 
   /**
