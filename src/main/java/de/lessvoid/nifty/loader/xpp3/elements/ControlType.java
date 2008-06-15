@@ -127,7 +127,7 @@ public class ControlType extends ElementType {
           screenController);
       current.setId(getAttributes().getId());
       super.addElementAttributes(
-          parent,
+          current,
           screen,
           nifty,
           registeredEffects,
