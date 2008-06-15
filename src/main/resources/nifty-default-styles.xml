@@ -4,8 +4,44 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- nifty label default style -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- just some text lavel default -->
   <style id="nifty-label">
     <attributes font="verdana-48-regular.fnt" align="center" />
+  </style>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- nifty textfield default style -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- the background of the textfield -->
+  <style id="nifty-textfield-panel">
+    <attributes backgroundColor="#55ff" childLayout="overlay" height="40px" />
+  </style>
+
+  <!-- the actual input field -->
+  <style id="nifty-textfield-field">
+    <attributes childLayout="center" visibleToMouse="true" childClip="true" />
+    <effect>
+      <onHover name="hoverColorBar" timeType="infinite" color="#7707" post="true"/>
+      <onFocus name="pulsate" period="1500" timeType="infinite" startColor="#770f" endColor="#700f" post="true"/>
+    </effect>
+  </style>
+
+  <!-- the text in the input field -->
+  <style id="nifty-textfield-text">
+    <attributes font="verdana-48-regular.fnt" visibleToMouse="false" align="left" textHAlign="left" />
+  </style>
+
+  <!-- the cursor is rendered in a separate layer on top of the input field and this is the parent panel of this -->
+  <style id="nifty-textfield-cursor-panel">
+    <attributes childLayout="absolute" />
+  </style>
+
+  <!-- the actual cursor -->
+  <style id="nifty-textfield-cursor">
+    <attributes filename="textfield/cursor-empty.png" />
+    <effect>
+      <onActive name="ImageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="textfield/cursor.png" post="true"/>
+    </effect>
   </style>
 
 </nifty-styles>
