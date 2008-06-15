@@ -9,7 +9,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * @author void
  *
  */
-public class Start implements ScreenController {
+public class TextFieldDemoStartScreen implements ScreenController {
 
   /**
    * bind this ScreenController to a screen.

@@ -62,7 +62,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <screen id="start" controller="de.lessvoid.nifty.examples.textfield.Start">
+  <screen id="start" controller="de.lessvoid.nifty.examples.textfield.TextFieldDemoStartScreen">
     <layer id="layer" childLayout="center">
       <panel backgroundColor="#444f" childLayout="vertical" height="84px" width="80%" align="center" valign="center">
         <panel childLayout="horizontal" height="40px">
