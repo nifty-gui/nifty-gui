@@ -7,10 +7,6 @@ import de.lessvoid.nifty.loader.xpp3.ClassHelper;
  * @author void
  */
 public class RegisterEffectType {
-  /**
-   * name.
-   */
-  private String name;
 
   /**
    * class name.
@@ -19,11 +15,9 @@ public class RegisterEffectType {
 
   /**
    * Create new instance.
-   * @param nameParam name
    * @param clazzParam clazz
    */
-  public RegisterEffectType(final String nameParam, final String clazzParam) {
-    this.name = nameParam;
+  public RegisterEffectType(final String clazzParam) {
     this.clazz = clazzParam;
   }
 
@@ -32,9 +26,6 @@ public class RegisterEffectType {
    * @return effect class instance
    */
   public Class < ? > getEffectClass() {
-    Class < ? > cl = ClassHelper.loadClass(clazz);
-    return cl;
-//      log.info("register effect [" + name + "]->[" + clazz + "]");
-//      registerEffects.put(effectName, cl);
+    return ClassHelper.loadClass(clazz);
   }
 }

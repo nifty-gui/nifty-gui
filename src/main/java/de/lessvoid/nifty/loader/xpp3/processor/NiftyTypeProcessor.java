@@ -21,7 +21,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   /**
    * registerEffectTypeProcessor.
    */
-  private RegisterEffectTypeProcessor registerEffectTypeProcessor;
+  private RegisterEffectTypeProcessor registerEffectTypeProcessor = new RegisterEffectTypeProcessor();
 
   /**
    * registerSoundTypeProcessor.
@@ -78,7 +78,6 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    registerEffectTypeProcessor = new RegisterEffectTypeProcessor();
     registerSoundTypeProcessor = new RegisterSoundTypeProcessor();
     registerMusicTypeProcessor = new RegisterMusicTypeProcessor();
     registerControlDefinitionTypeProcessor = new RegisterControlDefinitionTypeProcessor();

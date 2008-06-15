@@ -31,7 +31,6 @@ public class RegisterEffectTypeProcessor implements XmlElementProcessor {
     registeredEffects.put(
         name,
         new RegisterEffectType(
-            name,
             clazz));
 
     xmlParser.nextTag();

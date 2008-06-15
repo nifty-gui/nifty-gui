@@ -54,6 +54,9 @@ public class NiftyLoader {
     niftyTypeProcessor = new NiftyTypeProcessor(this);
     niftyStylesTypeProcessor = new NiftyStylesTypeProcessor(niftyTypeProcessor.getStyleHandler());
 
+    // initialize defaults
+    NiftyDefaults.initDefaultEffects(niftyTypeProcessor.getRegisteredEffects());
+
     // create parser
     XmlParser parser = new XmlParser(new MXParser());
     parser.read(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
