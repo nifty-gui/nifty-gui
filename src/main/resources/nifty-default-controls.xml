@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <!-- textfield control -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <controlDefinition name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
+    <panel id="textfield-panel" style="nifty-textfield-panel">
+      <panel id="textfield-field" style="nifty-textfield-field">
+        <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
+        <text id="textfield-text" style="nifty-textfield-text" text="">
+          <textSelection textColor="#f0ff" />
+        </text>
+      </panel>
+      <panel id="textfield-cursor-panel" style="nifty-textfield-cursor-panel">
+        <image id="textfield-cursor" style="nifty-textfield-cursor"/>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <!-- button control -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <controlDefinition name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl">
+    <panel backgroundImage="button-black.png" align="center" width="270px" height="50px" childLayout="center" visibleToMouse="true">
+      <effect>
+        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="0" inherit="true"/>
+        <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" startDelay="0" inherit="true"/>
+        <onHover name="hoverImageOverlay" timeType="infinite" filename="button-black-hover.png" post="true"/>
+      </effect>
+      <label font="verdana-24-regular.fnt" text="Back to Menu" align="center" valign="center" textHAlign="center" textVAlign="center" />
+    </panel>
+  </controlDefinition>
+
+</nifty-controls>

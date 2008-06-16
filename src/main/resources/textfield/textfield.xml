@@ -2,64 +2,32 @@
 <nifty>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <!-- load styles -->
+  <!-- load default styles and controls -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <useStyles filename="nifty-default-styles.xml" />
-  
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <!-- textfield control -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <controlDefinition name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
-    <panel id="textfield-panel" style="nifty-textfield-panel">
-      <panel id="textfield-field" style="nifty-textfield-field">
-        <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
-        <text id="textfield-text" style="nifty-textfield-text" text="">
-          <textSelection textColor="#f0ff" />
-        </text>
-      </panel>
-      <panel id="textfield-cursor-panel" style="nifty-textfield-cursor-panel">
-        <image id="textfield-cursor" style="nifty-textfield-cursor"/>
-      </panel>
-    </panel>
-  </controlDefinition>
-
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <!-- button control -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <controlDefinition name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl">
-	  <panel backgroundImage="button-red.png" align="center" width="282px" height="50px" childLayout="center" visibleToMouse="true">
-	    <effect>
-	      <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="0" inherit="true"/>
-	      <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" startDelay="0" inherit="true"/>
-	      <onHover name="hoverImageOverlay" timeType="infinite" filename="button-red-hover.png" post="true"/>
-	    </effect>
-	    <text font="verdana-48-regular.fnt" text="Back to Menu" align="center" valign="center" textHAlign="center" textVAlign="center">
-	    </text>
-	  </panel>
-  </controlDefinition>
+  <useControls filename="nifty-default-controls.xml" />
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.textfield.TextFieldDemoStartScreen">
-    <layer id="layer" childLayout="center">
-      <panel childLayout="vertical">
-        <panel backgroundColor="#444f" childLayout="vertical" height="84px" width="80%" align="center" valign="center">
+    <layer id="layer" childLayout="center" backgroundImage="background.png">
+      <panel backgroundImage="dialog.png" imageMode="resize:32,32,32,32,32,32,32,168,32,32,32,32" childLayout="center" width="80%" height="25%" align="center" valign="center">
+        <panel childLayout="vertical" width="95%" height="80%" align="center" valign="center">
           <panel childLayout="horizontal" height="40px">
-            <text font="verdana-48-regular.fnt" text="Your Name: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <label text="Your Name: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="name" name="textfield" />
           </panel>  
-          <panel childLayout="horizontal" height="4px">
-          </panel>  
+          <panel childLayout="horizontal" height="4px" />
           <panel childLayout="horizontal" height="40px">
-            <text font="verdana-48-regular.fnt" text="Your Host: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <label text="Your Host: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="ip" name="textfield" />
           </panel>
+          <panel height="16px" />
+          <control id="backButton" name="button" align="right">
+            <interact onClick="back()" /> 
+          </control>
         </panel>
-        <panel height="50px" />
-        <control id="backButton" name="button">
-          <interact onClick="back()" /> 
-        </control>
       </panel>
     </layer>
   </screen>

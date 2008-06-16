@@ -151,7 +151,7 @@
       <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="500" />
       <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="500" />
     </effect>
-    <image filename="all/popup.png" childLayout="center" align="center" valign="center" height="200px">
+    <image filename="dialog.png" imageMode="resize:32,32,32,32,32,32,32,168,32,32,32,32" childLayout="center" align="center" valign="center" height="250px" width="50%">
       <effect>
         <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" />
         <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200"/>
@@ -159,16 +159,16 @@
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
         <panel childLayout="center" height="50%">
-          <text text="Really want to Exit?" font="verdana.fnt" align="center" valign="center"/>
+          <text text="Really want to Exit?" font="verdana-48-regular.fnt" align="center" valign="center" color="#ff0f"/>
         </panel>
         <panel childLayout="horizontal" align="center" height="50%">
           <panel childLayout="center" width="50%">
-            <text text="Yes" font="verdana.fnt" align="center">
+            <text text="Yes" font="verdana-48-regular.fnt" align="center">
               <interact onClick="popupExit(yes)"/>
             </text>
           </panel>
           <panel childLayout="center" width="50%">
-            <text text="No" font="verdana.fnt" align="center">
+            <text text="No" font="verdana-48-regular.fnt" align="center">
               <interact onClick="popupExit(no)"/>
             </text>
           </panel>
