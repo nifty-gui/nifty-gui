@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 /**
  * TextSize effect.
@@ -39,7 +39,7 @@ public class TextSize implements EffectImpl {
    * @param normalizedTime TimeInterpolator
    * @param r RenderDevice
    */
-  public void execute(final Element element, final float normalizedTime, final RenderEngine r) {
+  public void execute(final Element element, final float normalizedTime, final NiftyRenderEngine r) {
     float t = normalizedTime;
     r.setRenderTextSize(startSize + t * (endSize - startSize));
   }

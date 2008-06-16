@@ -42,7 +42,8 @@ public class PopupType extends PanelType {
     Element element = NiftyCreator.createLayer(
         getAttributes().getId(),
         nifty,
-        screen);
+        screen,
+        getAttributes());
     super.addElementAttributes(
         element,
         screen,

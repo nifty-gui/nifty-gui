@@ -36,12 +36,6 @@ public class ImageTypeProcessor implements XmlElementProcessor {
     if (attributes.isSet("filter")) {
       imageType.setFilter(attributes.getAsBoolean("filer"));
     }
-    if (attributes.isSet("subImageSizeMode")) {
-      imageType.setSubImageSizeMode(attributes.getAsSubImageSizeModeType("subImageSizeMode"));
-    }
-    if (attributes.isSet("resizeHint")) {
-      imageType.setResizeHint(attributes.get("resizeHint"));
-    }
     ProcessorHelper.processElement(xmlParser, imageType, attributes);
     element.addElementType(imageType);
   }

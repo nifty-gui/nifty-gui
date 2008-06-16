@@ -5,6 +5,7 @@ import java.util.Map;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
@@ -46,12 +47,14 @@ public class MenuType extends ElementType {
       final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
-    Element element = NiftyCreator.createPanel(
+    PanelRenderer renderer = new PanelRenderer();
+    Element panel = new Element(
         getAttributes().getId(),
-        nifty,
-        screen,
         parent,
-        false);
+        screen,
+        false,
+        renderer);
+    Element element = panel;
     super.addElementAttributes(
         element,
         screen,

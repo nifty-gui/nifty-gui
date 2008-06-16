@@ -124,6 +124,10 @@ public final class ProcessorHelper {
     if (attributes.isSet("backgroundImage")) {
       attributesType.setBackgroundImage(attributes.get("backgroundImage"));
     }
+    // imageMode
+    if (attributes.isSet("imageMode")) {
+      attributesType.setImageMode(attributes.get("imageMode"));
+    }
     // backgroundColor
     if (attributes.isSet("backgroundColor")) {
       attributesType.setBackgroundColor(new ColorType(attributes.get("backgroundColor")));

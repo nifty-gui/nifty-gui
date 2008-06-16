@@ -1,12 +1,11 @@
 package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderFont;
-import de.lessvoid.nifty.render.RenderFontNull;
-import de.lessvoid.nifty.render.helper.FontHelper;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -30,12 +29,7 @@ public class TextRenderer implements ElementRenderer {
    */
   private int maxWidth;
 
-  /**
-   * the font color.
-   */
-  private Color color;
-
-  /**
+   /**
    * can't remember what this is :>.
    */
   private int xoffsetHack = 0;
@@ -66,6 +60,11 @@ public class TextRenderer implements ElementRenderer {
   private HorizontalAlign textHAlign = HorizontalAlign.center;
 
   /**
+   * color.
+   */
+  private Color color = Color.WHITE;
+
+  /**
    * default constructor.
    */
   public TextRenderer() {
@@ -85,17 +84,6 @@ public class TextRenderer implements ElementRenderer {
    * @param newText the text to use
    */
   public TextRenderer(final RenderFont newFont, final String newText) {
-    init(newFont, newText);
-  }
-
-  /**
-   * create new renderer with the given font, text and color.
-   * @param newFont the font to use
-   * @param newText the text to use
-   * @param newColor the fontColor to use
-   */
-  public TextRenderer(final RenderFont newFont, final String newText, final Color newColor) {
-    this.color = newColor;
     init(newFont, newText);
   }
 
@@ -129,7 +117,7 @@ public class TextRenderer implements ElementRenderer {
    * @param w the widget we're connected to
    * @param r the renderDevice we should use
    */
-  public final void render(final Element w, final RenderEngine r) {
+  public final void render(final Element w, final NiftyRenderEngine r) {
     int y = getStartYWithVerticalAlign(textLines.length * font.getHeight(), w.getHeight(), textVAlign);
     for (String line : textLines) {
       int yy = w.getY() + y;
@@ -191,7 +179,27 @@ public class TextRenderer implements ElementRenderer {
     }
   }
 
-  private void renderLine(int xx, int yy, String line, final RenderEngine r, int selStart, int selEnd) {
+  /**
+   * render line.
+   * @param xx x
+   * @param yy y
+   * @param line line
+   * @param r RenderEngine
+   * @param selStart sel start
+   * @param selEnd sel end
+   */
+  private void renderLine(
+      final int xx,
+      final int yy,
+      final String line,
+      final NiftyRenderEngine r,
+      final int selStart,
+      final int selEnd) {
+    if (!r.isColorChanged()) {
+      r.setColor(color);
+    } else {
+      r.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), r.getColorAlpha()));
+    }
     r.renderText(
         font,
         line,
@@ -226,8 +234,12 @@ public class TextRenderer implements ElementRenderer {
     initText(newText);
   }
 
-  public void setXoffsetHack(int xoffsetHack) {
-    this.xoffsetHack = xoffsetHack;
+  /**
+   * set thing.
+   * @param newXoffsetHack xoffset
+   */
+  public void setXoffsetHack(final int newXoffsetHack) {
+    this.xoffsetHack = newXoffsetHack;
   }
 
   /**
@@ -246,14 +258,6 @@ public class TextRenderer implements ElementRenderer {
   public void setSelection(final int selectionStartParam, final int selectionEndParam) {
     this.selectionStart = selectionStartParam;
     this.selectionEnd = selectionEndParam;
-  }
-
-  /**
-   * set color.
-   * @param colorParam color
-   */
-  public void setColor(final Color colorParam) {
-    this.color = colorParam;
   }
 
   /**
@@ -286,5 +290,58 @@ public class TextRenderer implements ElementRenderer {
    */
   public void setTextHAlign(final HorizontalAlign newTextHAlign) {
     this.textHAlign = newTextHAlign;
+  }
+
+  /**
+   * set color.
+   * @param newColor color
+   */
+  public void setColor(final Color newColor) {
+    this.color = newColor;
+  }
+
+  /**
+   * RenderFont Null Object.
+   * @author void
+   */
+  public class RenderFontNull implements RenderFont {
+    /**
+     * get height.
+     * @return always 0
+     */
+    public int getHeight() {
+      return 0;
+    }
+
+    /**
+     * get width.
+     * @param text text
+     * @return always 0
+     */
+    public int getWidth(final String text) {
+      return 0;
+    }
+
+    /**
+     * render. does nothing.
+     * @param text text
+     * @param x x
+     * @param y y
+     * @param fontColor color
+     * @param size size
+     */
+    public void render(final String text, final int x, final int y, final Color fontColor, final float size) {
+    }
+
+    /**
+     * get character advance null implementation.
+     * @param currentCharacter current char
+     * @param nextCharacter next char
+     * @param size size
+     * @return character advance
+     */
+    public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
+      return null;
+    }
   }
 }

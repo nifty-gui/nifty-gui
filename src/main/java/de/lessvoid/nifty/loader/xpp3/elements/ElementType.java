@@ -13,8 +13,9 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderImage;
+import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.render.NiftyImageMode;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -183,7 +184,7 @@ public class ElementType {
   public static void applyAttributes(
       final AttributesType attrib,
       final Element element,
-      final RenderEngine renderDevice) {
+      final NiftyRenderEngine renderDevice) {
     if (attrib == null) {
       return;
     }
@@ -240,10 +241,6 @@ public class ElementType {
       if (attrib.getFont() != null) {
         textRenderer.setFont(renderDevice.createFont(attrib.getFont()));
       }
-      // font color
-      if (attrib.getColor() != null) {
-        textRenderer.setColor(attrib.getColor().createColor());
-      }
       // text horizontal align
       if (attrib.getTextHAlign() != null) {
         textRenderer.setTextHAlign(HorizontalAlign.valueOf(attrib.getTextHAlign().getValue()));
@@ -251,6 +248,10 @@ public class ElementType {
       // text vertical align
       if (attrib.getTextVAlign() != null) {
         textRenderer.setTextVAlign(VerticalAlign.valueOf(attrib.getTextVAlign().getValue()));
+      }
+      // text color
+      if (attrib.getColor() != null) {
+        textRenderer.setColor(attrib.getColor().createColor());
       }
     }
     // panelRenderer
@@ -260,18 +261,19 @@ public class ElementType {
       if (attrib.getBackgroundColor() != null) {
         panelRenderer.setBackgroundColor(attrib.getBackgroundColor().createColor());
       }
-      // background image
-      if (attrib.getBackgroundImage() != null) {
-        panelRenderer.setBackgroundImage(renderDevice.createImage(attrib.getBackgroundImage(), false));
-      }
     }
     // imageRenderer
     ImageRenderer imageRenderer = element.getRenderer(ImageRenderer.class);
     if (imageRenderer != null) {
       // filename
       if (attrib.getFilename() != null) {
-        RenderImage image = renderDevice.createImage(attrib.getFilename(), attrib.getFilter());
-        imageRenderer.setImage(image);
+        imageRenderer.setImage(renderDevice.createImage(attrib.getFilename(), attrib.getFilter()));
+      }
+      // set imageMode?
+      NiftyImage image = imageRenderer.getImage();
+      String imageMode = attrib.getImageMode();
+      if (image != null && imageMode != null) {
+          image.setImageMode(NiftyImageMode.valueOf(imageMode));
       }
     }
   }

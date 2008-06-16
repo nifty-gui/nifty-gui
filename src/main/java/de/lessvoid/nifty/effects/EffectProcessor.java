@@ -3,8 +3,8 @@ package de.lessvoid.nifty.effects;
 import java.util.Set;
 
 import de.lessvoid.nifty.effects.general.Effect;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 
 /**
  * The EffectProcessor Interface for all EffectProcessors.
@@ -22,20 +22,20 @@ public interface EffectProcessor {
    * render pre effects.
    * @param renderDevice the renderDevice we should use.
    */
-  void renderPre(final RenderEngine renderDevice);
+  void renderPre(final NiftyRenderEngine renderDevice);
 
   /**
    * render post effects.
    * @param renderDevice the renderDevice we should use.
    */
-  void renderPost(final RenderEngine renderDevice);
+  void renderPost(final NiftyRenderEngine renderDevice);
 
   /**
    * Should return a set of all RenderStates that should be saved before doing
    * any rendering.
    * @return set of RenderState to save
    */
-  Set < RenderState > getRenderStatesToSave();
+  Set < RenderStateType > getRenderStatesToSave();
 
   /**
    * checks if the effects are still active.

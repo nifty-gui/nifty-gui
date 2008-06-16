@@ -10,7 +10,7 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MouseFocusHandler;
 import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
-import de.lessvoid.nifty.render.RenderEngine;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -228,7 +228,7 @@ public class Screen implements MouseFocusHandler {
    * render all layers.
    * @param renderDevice the renderDevice to use
    */
-  public final void renderLayers(final RenderEngine renderDevice) {
+  public final void renderLayers(final NiftyRenderEngine renderDevice) {
     // render all layers
     for (Element layer : layerElements) {
       layer.render(renderDevice);

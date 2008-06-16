@@ -4,7 +4,7 @@ package de.lessvoid.nifty.render;
  * RenderStateImpl.
  * @author void
  */
-public interface RenderStateImpl {
+public interface RenderStateSaver {
 
   /**
    * restore this state.

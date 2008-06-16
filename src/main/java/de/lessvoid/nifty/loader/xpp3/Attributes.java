@@ -11,7 +11,6 @@ import de.lessvoid.nifty.loader.xpp3.elements.HoverFalloffConstraintType;
 import de.lessvoid.nifty.loader.xpp3.elements.HoverFalloffType;
 import de.lessvoid.nifty.loader.xpp3.elements.LayoutType;
 import de.lessvoid.nifty.loader.xpp3.elements.OnClickType;
-import de.lessvoid.nifty.loader.xpp3.elements.SubImageSizeModeType;
 import de.lessvoid.nifty.loader.xpp3.elements.ValignType;
 
 /**
@@ -190,19 +189,6 @@ public final class Attributes {
       return null;
     }
     return Integer.valueOf(value);
-  }
-
-  /**
-   * get as SubImageSizeModeType.
-   * @param name name
-   * @return SubImageSizeModeType
-   */
-  public SubImageSizeModeType getAsSubImageSizeModeType(final String name) {
-    String value = get(name);
-    if (value == null) {
-      return null;
-    }
-    return SubImageSizeModeType.valueOf(value);
   }
 
   /**

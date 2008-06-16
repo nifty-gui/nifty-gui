@@ -3,19 +3,19 @@ package de.lessvoid.nifty.effects;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderFont;
-import de.lessvoid.nifty.render.RenderImage;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
+import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
 /**
  * RenderDeviceProxy.
  * @author void
  */
-public class RenderDeviceProxy implements RenderEngine {
+public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
-  private Set < RenderState > renderStates = new HashSet < RenderState > ();
+  private Set < RenderStateType > renderStates = new HashSet < RenderStateType > ();
 
   public void clear() {
   }
@@ -24,7 +24,7 @@ public class RenderDeviceProxy implements RenderEngine {
     return null;
   }
 
-  public RenderImage createImage(String name, boolean filterLinear) {
+  public NiftyImage createImage(String name, boolean filterLinear) {
     return null;
   }
 
@@ -46,11 +46,15 @@ public class RenderDeviceProxy implements RenderEngine {
     return false;
   }
 
-  public void moveTo(float param, float param2) {
-    renderStates.add(RenderState.position);
+  public float getColorAlpha() {
+    return 0.0f;
   }
 
-  public void renderImage(RenderImage image, int x, int y, int width, int height) {
+  public void moveTo(float param, float param2) {
+    renderStates.add(RenderStateType.position);
+  }
+
+  public void renderImage(NiftyImage image, int x, int y, int width, int height) {
   }
 
   public void renderQuad(int x, int y, int width, int height) {
@@ -62,11 +66,11 @@ public class RenderDeviceProxy implements RenderEngine {
   public void restoreState() {
   }
 
-  public void saveState(Set<RenderState> statesToSave) {
+  public void saveState(Set<RenderStateType> statesToSave) {
   }
 
   public void setColor(Color colorParam) {
-    renderStates.add(RenderState.color);
+    renderStates.add(RenderStateType.color);
   }
 
   public void setGlobalPosition(float pos, float pos2) {
@@ -82,7 +86,7 @@ public class RenderDeviceProxy implements RenderEngine {
     renderStates.clear();
   }
 
-  public Set < RenderState > getStates() {
+  public Set < RenderStateType > getStates() {
     return renderStates;
   }
 }

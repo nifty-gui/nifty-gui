@@ -8,8 +8,8 @@ import org.newdawn.slick.particles.ParticleSystem;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 
 /**
  * Particle System effect. FIXME PROVE OF CONCEPT. NOT DONE!
@@ -43,8 +43,8 @@ public class Particle implements EffectImpl {
    * @param normalizedTime TimeInterpolator
    * @param r RenderDevice
    */
-  public void execute(final Element element, final float normalizedTime, final RenderEngine r) {
-    r.saveState(RenderState.allStates());
+  public void execute(final Element element, final float normalizedTime, final NiftyRenderEngine r) {
+    r.saveState(RenderStateType.allStates());
     system.render();
     r.restoreState();
   }

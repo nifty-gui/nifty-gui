@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.render;
+package de.lessvoid.nifty.render.spi;
 
 import de.lessvoid.nifty.tools.Color;
 
@@ -32,24 +32,17 @@ public interface RenderImage {
   void render(int x, int y, int width, int height, Color color, float imageScale);
 
   /**
-   * Set the sub image mode for this image.
-   * @param newSubImageMode the SubImageMode
+   * Render a sub image of this image.
+   * @param x x
+   * @param y y
+   * @param w w
+   * @param h h
+   * @param srcX source x
+   * @param srcY source y
+   * @param srcW source width
+   * @param srcH source height
+   * @param color color
    */
-  void setSubImageMode(RenderImageSubImageMode newSubImageMode);
-
-  /**
-   * Set the sub image dimensions.
-   * @param newSubImageX x
-   * @param newSubImageY y
-   * @param newSubImageW w
-   * @param newSubImageH h
-   */
-  void setSubImage(int newSubImageX, int newSubImageY, int newSubImageW, int newSubImageH);
-
-  /**
-   * Resize hint.
-   * @param resizeHint new String with resize hint information.
-   */
-  void setResizeHint(String resizeHint);
+  void render(int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH, Color color);
 }
 

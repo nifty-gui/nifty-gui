@@ -4,9 +4,9 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderImage;
-import de.lessvoid.nifty.render.RenderImageSubImageMode;
+import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.render.NiftyImageMode;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
@@ -20,7 +20,7 @@ public class ImageOverlayPulsate implements EffectImpl {
   /**
    * overlay image.
    */
-  private RenderImage image;
+  private NiftyImage image;
 
   /**
    * the pulsater.
@@ -35,17 +35,10 @@ public class ImageOverlayPulsate implements EffectImpl {
    */
   public void initialize(final Nifty nifty, final Element element, final Properties parameter) {
     image = nifty.getRenderDevice().createImage(parameter.getProperty("filename"), true);
-    String subImageSizeMode = parameter.getProperty("subImageSizeMode", null);
+    String subImageSizeMode = parameter.getProperty("imageMode", null);
     if (subImageSizeMode != null) {
-      image.setSubImageMode(RenderImageSubImageMode.valueOf(subImageSizeMode));
+      image.setImageMode(NiftyImageMode.valueOf(subImageSizeMode));
     }
-
-    String resizeHint = parameter.getProperty("resizeHint", null);
-    if (resizeHint != null) {
-      image.setResizeHint(resizeHint);
-      image.setSubImageMode(RenderImageSubImageMode.RESIZE());
-    }
-
     this.pulsater = new Pulsator(parameter, new TimeProvider());
   }
 
@@ -58,10 +51,9 @@ public class ImageOverlayPulsate implements EffectImpl {
   public void execute(
       final Element element,
       final float normalizedTime,
-      final RenderEngine r) {
+      final NiftyRenderEngine r) {
     float value = pulsater.update();
     r.setColor(new Color(1.0f, 1.0f, 1.0f, value));
     r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
   }
-
 }

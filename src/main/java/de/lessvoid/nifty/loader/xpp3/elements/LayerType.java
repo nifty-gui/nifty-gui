@@ -42,7 +42,8 @@ public class LayerType extends PanelType {
     Element layer = NiftyCreator.createLayer(
         getAttributes().getId(),
         nifty,
-        screen);
+        screen,
+        getAttributes());
     super.addElementAttributes(
         layer,
         screen,
@@ -51,7 +52,8 @@ public class LayerType extends PanelType {
         registeredControls,
         styleHandler,
         time,
-        inputControl, screenController);
+        inputControl,
+        screenController);
     return layer;
   }
 }

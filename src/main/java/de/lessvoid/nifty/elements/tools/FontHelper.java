@@ -1,6 +1,6 @@
-package de.lessvoid.nifty.render.helper;
+package de.lessvoid.nifty.elements.tools;
 
-import de.lessvoid.nifty.render.RenderFont;
+import de.lessvoid.nifty.render.spi.RenderFont;
 
 public class FontHelper {
 

@@ -107,6 +107,11 @@ public class AttributesType {
   private Boolean filter = false;
 
   /**
+   * image mode.
+   */
+  private String imageMode;
+
+  /**
    * default constructor.
    */
   public AttributesType() {
@@ -135,6 +140,7 @@ public class AttributesType {
     filter = other.getFilter();
     textHAlign = other.getTextHAlign();
     textVAlign = other.getTextVAlign();
+    imageMode = other.getImageMode();
   }
 
   /**
@@ -472,6 +478,23 @@ public class AttributesType {
   public ValignType getTextVAlign() {
     return textVAlign;
   }
+
+  /**
+   * set image mode.
+   * @param newImageMode new mode
+   */
+  public void setImageMode(final String newImageMode) {
+    imageMode = newImageMode;
+  }
+
+  /**
+   * get image mode.
+   * @return image mode.
+   */
+  public String getImageMode() {
+    return imageMode;
+  }
+
   /**
    * return a new AttributesType with is this + attributes from the param.
    * @param attributesParam attributes we should merge
@@ -518,6 +541,9 @@ public class AttributesType {
     if (attributesParam.getBackgroundImage() != null) {
       result.setBackgroundImage(attributesParam.getBackgroundImage());
     }
+    if (attributesParam.getImageMode() != null) {
+      result.setImageMode(attributesParam.getImageMode());
+    }
     if (attributesParam.getVisibleToMouse() != null) {
       result.setVisibleToMouse(attributesParam.getVisibleToMouse());
     }
@@ -535,4 +561,5 @@ public class AttributesType {
     }
     return result;
   }
+
 }

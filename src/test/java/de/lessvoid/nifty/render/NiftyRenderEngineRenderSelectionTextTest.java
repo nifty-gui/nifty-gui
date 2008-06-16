@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.verify;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.expect;
 
+import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import junit.framework.TestCase;
 
@@ -18,11 +19,11 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
   private static final Color TEXT_COLOR = Color.WHITE;
   private static final Color TEXT_SELECTION_COLOR = Color.BLACK;
 
-  private NiftyRenderEngine engine;
+  private NiftyRenderEngineImpl engine;
   private RenderFont font;
 
   public void setUp() {
-    engine = new NiftyRenderEngine(null);
+    engine = new NiftyRenderEngineImpl(null);
     font = createStrictMock(RenderFont.class);
   }
 

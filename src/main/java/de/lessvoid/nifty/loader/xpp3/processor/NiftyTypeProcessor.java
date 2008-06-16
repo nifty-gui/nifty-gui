@@ -36,7 +36,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   /**
    * registerControlDefinitionTypeProcessor.
    */
-  private RegisterControlDefinitionTypeProcessor registerControlDefinitionTypeProcessor;
+  private RegisterControlDefinitionTypeProcessor registerControlDefinitionTypeProcessor = new RegisterControlDefinitionTypeProcessor();
 
   /**
    * screenTypeProcessor.
@@ -54,21 +54,22 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   private StyleHandler styleHandler = new StyleHandler();
 
   /**
-   * register styles processor.
-   */
-  private RegisterStyleProcessor registerStyleTypeProcessor;
-
-  /**
    * use styles processor to load style files.
    */
   private UseStylesTypeProcessor useStylesTypeProcessor;
+
+  /**
+   * use controls processor to load style files.
+   */
+  private UseControlsTypeProcessor useControlsTypeProcessor;
 
   /**
    * new nifty loader.
    * @param niftyLoader nifty loader to use
    */
   public NiftyTypeProcessor(final NiftyLoader niftyLoader) {
-    useStylesTypeProcessor = new UseStylesTypeProcessor(niftyLoader, styleHandler);
+    useStylesTypeProcessor = new UseStylesTypeProcessor(niftyLoader);
+    useControlsTypeProcessor = new UseControlsTypeProcessor(niftyLoader);
   }
 
   /**
@@ -80,12 +81,12 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     registerSoundTypeProcessor = new RegisterSoundTypeProcessor();
     registerMusicTypeProcessor = new RegisterMusicTypeProcessor();
-    registerControlDefinitionTypeProcessor = new RegisterControlDefinitionTypeProcessor();
     screenTypeProcessor = new ScreenTypeProcessor();
     popupTypeProcessor = new PopupTypeProcessor();
 
     xmlParser.nextTag();
     xmlParser.zeroOrMore("useStyles", useStylesTypeProcessor);
+    xmlParser.zeroOrMore("useControls", useControlsTypeProcessor);
     xmlParser.zeroOrMore("registerEffect", registerEffectTypeProcessor);
     xmlParser.zeroOrMore("registerSound", registerSoundTypeProcessor);
     xmlParser.zeroOrMore("registerMusic", registerMusicTypeProcessor);
@@ -144,5 +145,13 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
    */
   public StyleHandler getStyleHandler() {
     return styleHandler;
+  }
+
+  /**
+   * get the RegisterControlDefinitionTypeProcessor.
+   * @return current RegisterControlDefinitionTypeProcessor
+   */
+  public RegisterControlDefinitionTypeProcessor getRegisterControlDefinitionTypeProcessor() {
+    return registerControlDefinitionTypeProcessor;
   }
 }

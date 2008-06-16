@@ -8,7 +8,7 @@ import static org.easymock.EasyMock.verify;
 import junit.framework.TestCase;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
-import de.lessvoid.nifty.render.RenderFont;
+import de.lessvoid.nifty.render.spi.RenderFont;
 
 public class TextRendererTest extends TestCase {
 

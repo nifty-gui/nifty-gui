@@ -16,8 +16,8 @@ import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -351,10 +351,10 @@ public class Element {
    * render this element.
    * @param r the RenderDevice to use
    */
-  public final void render(final RenderEngine r) {
+  public final void render(final NiftyRenderEngine r) {
     // render element only when it is visible
     if (visible) {
-      r.saveState(RenderState.allStates());
+      r.saveState(RenderStateType.allStates());
 
       // begin rendering / pre
       effectManager.begin(r);

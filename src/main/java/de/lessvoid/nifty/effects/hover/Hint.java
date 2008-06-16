@@ -5,7 +5,7 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.render.RenderEngine;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
@@ -60,7 +60,7 @@ public class Hint implements HoverEffectImpl {
       final Element element,
       final float normalizedTime,
       final float normalizedFalloff,
-      final RenderEngine r) {
+      final NiftyRenderEngine r) {
     if (targetElement != null) {
       TextRenderer textRenderer = targetElement.getRenderer(TextRenderer.class);
       textRenderer.changeText(hintText);

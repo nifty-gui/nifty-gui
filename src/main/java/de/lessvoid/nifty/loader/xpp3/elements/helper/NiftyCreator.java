@@ -1,8 +1,16 @@
 package de.lessvoid.nifty.loader.xpp3.elements.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.layout.LayoutPart;
+import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
@@ -18,16 +26,40 @@ public final class NiftyCreator {
   }
 
   /**
+   * get panel renderer.
+   * @param nifty nifty
+   * @param attributes attributes type
+   * @return ElementRenderer array
+   */
+  public static ElementRenderer[] getPanelRenderer(final Nifty nifty, final AttributesType attributes) {
+    // build list of renderer
+    List < ElementRenderer > renderer = new ArrayList < ElementRenderer >();
+
+    // create the image
+    NiftyImage image = null;
+    if (attributes.getBackgroundImage() != null) {
+      image = nifty.getRenderDevice().createImage(attributes.getBackgroundImage(), false);
+      renderer.add(new ImageRenderer(image));
+    }
+
+    // create the image renderer
+    renderer.add(new PanelRenderer());
+    return renderer.toArray(new ElementRenderer[0]);
+  }
+
+  /**
    * Create layer.
    * @param id id
    * @param nifty nifty
    * @param screen screen
+   * @param attributes attributes
    * @return element
    */
   public static Element createLayer(
       final String id,
-      final de.lessvoid.nifty.Nifty nifty,
-      final Screen screen) {
+      final Nifty nifty,
+      final Screen screen,
+      final AttributesType attributes) {
     // create box
     LayoutPart layerLayout = new LayoutPart();
     layerLayout.getBox().setX(0);
@@ -46,33 +78,7 @@ public final class NiftyCreator {
         layerLayout,
         screen,
         false,
-        new PanelRenderer());
+        getPanelRenderer(nifty, attributes));
     return layer;
-  }
-
-  /**
-   * create panel.
-   * @param id id
-   * @param nifty nifty
-   * @param screen screen
-   * @param parent parent
-   * @param visibleToMouse TODO
-   * @return element
-   */
-  public static Element createPanel(
-      final String id,
-      final de.lessvoid.nifty.Nifty nifty,
-      final Screen screen,
-      final Element parent,
-      final boolean visibleToMouse) {
-    PanelRenderer renderer = new PanelRenderer();
-
-    Element panel = new Element(
-        id,
-        parent,
-        screen,
-        visibleToMouse,
-        renderer);
-    return panel;
   }
 }

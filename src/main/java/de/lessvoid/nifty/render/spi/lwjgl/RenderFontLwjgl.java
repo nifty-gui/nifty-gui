@@ -1,8 +1,8 @@
-package de.lessvoid.nifty.render.opengl;
+package de.lessvoid.nifty.render.spi.lwjgl;
 
 import de.lessvoid.font.CharacterInfo;
 import de.lessvoid.font.Font;
-import de.lessvoid.nifty.render.RenderFont;
+import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -44,18 +44,28 @@ public class RenderFontLwjgl implements RenderFont {
     RenderTools.endRender();
   }
 
+  /**
+   * get font height.
+   * @return height
+   */
   public int getHeight() {
     return font.getHeight();
   }
 
-  public int getWidth( String text ) {
-    return font.getStringWidth( text );
+  /**
+   * get font width of the given string.
+   * @param text text
+   * @return width of the given text for the current font
+   */
+  public int getWidth(final String text) {
+    return font.getStringWidth(text);
   }
 
   /**
    * @param charInfoC
-   * @param nextc
-   * @return
+   * @param charInfoC charInfoC
+   * @param nextc character
+   * @return kerning
    */
   public static int getKerning(final CharacterInfo charInfoC, final char nextc) {
     Integer kern = charInfoC.getKerning().get(Character.valueOf(nextc));
@@ -77,7 +87,8 @@ public class RenderFontLwjgl implements RenderFont {
     if (currentCharacterInfo == null) {
       return null;
     } else {
-      return new Integer((int)(currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter)));
+      return new Integer(
+          (int) (currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter)));
     }
   }
 }

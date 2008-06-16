@@ -7,8 +7,7 @@ import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
-import de.lessvoid.nifty.render.RenderImage;
-import de.lessvoid.nifty.render.RenderImageSubImageMode;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -33,18 +32,6 @@ public class ImageType extends ElementType {
   private boolean filter;
 
   /**
-   * subImageSizeMode.
-   * @optional
-   */
-  private SubImageSizeModeType subImageSizeMode;
-
-  /**
-   * resizeHint.
-   * @optional
-   */
-  private String resizeHint;
-
-  /**
    * create it.
    * @param filenameParam filename
    */
@@ -58,22 +45,6 @@ public class ImageType extends ElementType {
    */
   public void setFilter(final Boolean filterParam) {
     this.filter = filterParam;
-  }
-
-  /**
-   * set subImageSizeMode.
-   * @param subImageSizeModeParam mode
-   */
-  public void setSubImageSizeMode(final SubImageSizeModeType subImageSizeModeParam) {
-    this.subImageSizeMode = subImageSizeModeParam;
-  }
-
-  /**
-   * set resize hint.
-   * @param resizeHintParam resize hint
-   */
-  public void setResizeHint(final String resizeHintParam) {
-    this.resizeHint = resizeHintParam;
   }
 
   /**
@@ -100,7 +71,7 @@ public class ImageType extends ElementType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     // create the image
-    RenderImage image = null;
+    NiftyImage image = null;
     if (filename != null) {
       image = nifty.getRenderDevice().createImage(filename, filter);
     }
@@ -110,21 +81,6 @@ public class ImageType extends ElementType {
 
     // create a new element with the given renderer
     Element element = new Element(getAttributes().getId(), parent, screen, true, imageRenderer);
-
-    // sub image enable?
-    if (image != null && subImageSizeMode != null) {
-      if (subImageSizeMode == SubImageSizeModeType.scale) {
-        image.setSubImageMode(RenderImageSubImageMode.SCALE());
-      } else if (subImageSizeMode == SubImageSizeModeType.resizeHint) {
-        image.setSubImageMode(RenderImageSubImageMode.RESIZE());
-      }
-    }
-
-    // resize hint available?
-    if (image != null && resizeHint != null) {
-      image.setResizeHint(resizeHint);
-      image.setSubImageMode(RenderImageSubImageMode.RESIZE());
-    }
     super.addElementAttributes(
         element,
         screen,
@@ -139,11 +95,12 @@ public class ImageType extends ElementType {
     // set width and height to image width and height (for now)
     image = imageRenderer.getImage();
     if (image != null) {
-      element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
-      element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
-    } else {
-      element.setConstraintWidth(new SizeValue("1px"));
-      element.setConstraintHeight(new SizeValue("1px"));
+      if (element.getConstraintWidth() == null) {
+        element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
+      }
+      if (element.getConstraintHeight() == null) {
+        element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
+      }
     }
 
     parent.add(element);

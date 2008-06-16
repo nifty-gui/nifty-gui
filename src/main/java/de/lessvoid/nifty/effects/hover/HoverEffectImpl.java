@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 /**
  * Effect Implementation ... here is the actual fun :>
@@ -27,5 +27,5 @@ public interface HoverEffectImpl {
    * @param normalizedFalloff falloff value
    * @param renderDevice RenderDevice to use
    */
-  void execute(Element element, float normalizedTime, float normalizedFalloff, RenderEngine renderDevice);
+  void execute(Element element, float normalizedTime, float normalizedFalloff, NiftyRenderEngine renderDevice);
 }

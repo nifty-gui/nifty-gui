@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.render.opengl;
+package de.lessvoid.nifty.render.spi.lwjgl;
 
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
@@ -8,9 +8,9 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
-import de.lessvoid.nifty.render.RenderDevice;
-import de.lessvoid.nifty.render.RenderFont;
-import de.lessvoid.nifty.render.RenderImage;
+import de.lessvoid.nifty.render.spi.RenderDevice;
+import de.lessvoid.nifty.render.spi.RenderFont;
+import de.lessvoid.nifty.render.spi.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
 /**

@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderImage;
+import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 /**
  * Image Renderer.
@@ -13,13 +13,13 @@ public class ImageRenderer implements ElementRenderer {
   /**
    * the render image this ElementRenderer will render.
    */
-  private de.lessvoid.nifty.render.RenderImage image;
+  private NiftyImage image;
 
   /**
    * create a new SingleImage instance using the given image.
    * @param newImage the image we should render
    */
-  public ImageRenderer(final RenderImage newImage) {
+  public ImageRenderer(final NiftyImage newImage) {
     this.image = newImage;
   }
 
@@ -28,7 +28,7 @@ public class ImageRenderer implements ElementRenderer {
    * @param element the element this ElementRenderer connects to
    * @param r the RenderDevice
    */
-  public final void render(final Element element, final RenderEngine r) {
+  public final void render(final Element element, final NiftyRenderEngine r) {
     r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
   }
 
@@ -36,7 +36,7 @@ public class ImageRenderer implements ElementRenderer {
    * Get the contained Image.
    * @return the Image
    */
-  public de.lessvoid.nifty.render.RenderImage getImage() {
+  public NiftyImage getImage() {
     return image;
   }
 
@@ -44,7 +44,7 @@ public class ImageRenderer implements ElementRenderer {
    * Set a new image.
    * @param newImage new image
    */
-  public void setImage(final RenderImage newImage) {
+  public void setImage(final NiftyImage newImage) {
     image = newImage;
   }
 }

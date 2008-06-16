@@ -1,12 +1,18 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -38,13 +44,16 @@ public class PanelType extends ElementType {
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final StyleHandler styleHandler,
       final TimeProvider time,
-      final NiftyInputControl inputControl, final ScreenController screenController) {
-    Element element = NiftyCreator.createPanel(
+      final NiftyInputControl inputControl,
+      final ScreenController screenController) {
+    Element panel = new Element(
         getAttributes().getId(),
-        nifty,
-        screen,
         parent,
-        false);
+        screen,
+        false,
+        NiftyCreator.getPanelRenderer(nifty, getAttributes()));
+
+    Element element = panel;
     super.addElementAttributes(
         element,
         screen,

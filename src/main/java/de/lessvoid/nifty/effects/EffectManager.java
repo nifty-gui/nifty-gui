@@ -7,8 +7,8 @@ import java.util.Set;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -71,8 +71,8 @@ public class EffectManager {
    * prepare rendering.
    * @param renderDevice RenderDevice
    */
-  public void begin(final RenderEngine renderDevice) {
-    Set < RenderState > renderStates = RenderState.allStates();
+  public void begin(final NiftyRenderEngine renderDevice) {
+    Set < RenderStateType > renderStates = RenderStateType.allStates();
 
     for (EffectProcessor processor : effects.values()) {
       renderStates.removeAll(processor.getRenderStatesToSave());
@@ -85,7 +85,7 @@ public class EffectManager {
    * finish rendering.
    * @param renderDevice RenderDevice
    */
-  public void end(final RenderEngine renderDevice) {
+  public void end(final NiftyRenderEngine renderDevice) {
     renderDevice.restoreState();
   }
 
@@ -93,7 +93,7 @@ public class EffectManager {
    * render all pre effects.
    * @param renderDevice the renderDevice we should use.
    */
-  public final void renderPre(final RenderEngine renderDevice) {
+  public final void renderPre(final NiftyRenderEngine renderDevice) {
     for (EffectProcessor processor : effects.values()) {
       processor.renderPre(renderDevice);
     }
@@ -103,7 +103,7 @@ public class EffectManager {
    * render all post effects.
    * @param renderDevice the renderDevice we should use.
    */
-  public final void renderPost(final RenderEngine renderDevice) {
+  public final void renderPost(final NiftyRenderEngine renderDevice) {
     for (EffectProcessor processor : effects.values()) {
       processor.renderPost(renderDevice);
     }

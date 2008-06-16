@@ -9,6 +9,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.NiftyControlsTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.NiftyStylesTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.NiftyTypeProcessor;
 import de.lessvoid.nifty.screen.Screen;
@@ -36,6 +37,11 @@ public class NiftyLoader {
   private NiftyStylesTypeProcessor niftyStylesTypeProcessor;
 
   /**
+   * nifty controls type processor.
+   */
+  private NiftyControlsTypeProcessor niftyControlsTypeProcessor;
+
+  /**
    * load xml.
    * @param nifty nifty
    * @param screens screens
@@ -53,6 +59,8 @@ public class NiftyLoader {
     // create processors
     niftyTypeProcessor = new NiftyTypeProcessor(this);
     niftyStylesTypeProcessor = new NiftyStylesTypeProcessor(niftyTypeProcessor.getStyleHandler());
+    niftyControlsTypeProcessor =
+      new NiftyControlsTypeProcessor(niftyTypeProcessor.getRegisterControlDefinitionTypeProcessor());
 
     // initialize defaults
     NiftyDefaults.initDefaultEffects(niftyTypeProcessor.getRegisteredEffects());
@@ -85,6 +93,23 @@ public class NiftyLoader {
     // start parsing
     parser.nextTag();
     parser.required("nifty-styles", niftyStylesTypeProcessor);
+    logBlockEnd();
+  }
+
+  /**
+   * loadNiftyControls.
+   * @param filename filename
+   */
+  public void loadNiftyControls(final String filename) throws Exception {
+    logBlockBegin("loadNiftyControls: " + filename);
+
+    // create parser
+    XmlParser parser = new XmlParser(new MXParser());
+    parser.read(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
+
+    // start parsing
+    parser.nextTag();
+    parser.required("nifty-controls", niftyControlsTypeProcessor);
     logBlockEnd();
   }
 

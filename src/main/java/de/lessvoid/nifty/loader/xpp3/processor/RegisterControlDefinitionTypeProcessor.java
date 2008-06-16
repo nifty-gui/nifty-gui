@@ -21,6 +21,10 @@ public class RegisterControlDefinitionTypeProcessor implements XmlElementProcess
   private Map < String, RegisterControlDefinitionType > registeredControls =
     new Hashtable < String, RegisterControlDefinitionType >();
 
+  public RegisterControlDefinitionTypeProcessor() {
+    
+  }
+
   /**
    * process.
    * @param xmlParser xmlParser

@@ -1,9 +1,8 @@
 package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderImage;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -11,11 +10,6 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class PanelRenderer implements ElementRenderer {
-
-  /**
-   * the background image when used otherwise null.
-   */
-  private RenderImage backgroundImage;
 
   /**
    * the background color when used otherwise null.
@@ -36,29 +30,16 @@ public class PanelRenderer implements ElementRenderer {
    * @param r
    *            the renderDevice we should use
    */
-  public final void render(final Element element, final RenderEngine r) {
-
-    // use background image?
-    if (backgroundImage != null) {
-      r.renderImage(backgroundImage, element.getX(), element.getY(), element.getWidth(), element.getHeight());
-    }
+  public final void render(final Element element, final NiftyRenderEngine r) {
 
     if (backgroundColor != null) {
-      r.saveState(RenderState.allStates());
+      r.saveState(RenderStateType.allStates());
       if (!r.isColorChanged()) {
         r.setColor(backgroundColor);
       }
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
       r.restoreState();
     }
-  }
-
-  /**
-   * set a background image.
-   * @param newBackgroundImage background image
-   */
-  public final void setBackgroundImage(final RenderImage newBackgroundImage) {
-    this.backgroundImage = newBackgroundImage;
   }
 
   /**

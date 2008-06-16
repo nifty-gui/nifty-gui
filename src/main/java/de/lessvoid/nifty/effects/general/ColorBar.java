@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
@@ -45,8 +45,8 @@ public class ColorBar implements EffectImpl {
   public void execute(
       final Element element,
       final float normalizedTime,
-      final RenderEngine r) {
-    r.saveState(RenderState.allStates());
+      final NiftyRenderEngine r) {
+    r.saveState(RenderStateType.allStates());
     r.setColor(color);
     int size = (int) width.getValue(element.getParent().getWidth());
     if (size == -1) {

@@ -1,6 +1,7 @@
-package de.lessvoid.nifty.render.opengl;
+package de.lessvoid.nifty.render;
 
 import de.lessvoid.nifty.layout.Box;
+import de.lessvoid.nifty.render.spi.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -23,14 +24,14 @@ class ResizeHelper {
   /**
    * RenderImage.
    */
-  private RenderImageLwjgl renderImage;
+  private RenderImage renderImage;
 
   /**
    * Create from the given String.
    * @param renderImageParam RenderImage
    * @param resizeString the String in the format: b1,b2,b3,h1,b4,b5,b6,h2,b7,b8,b9,h3
    */
-  public ResizeHelper(final RenderImageLwjgl renderImageParam, final String resizeString) {
+  public ResizeHelper(final RenderImage renderImageParam, final String resizeString) {
     renderImage = renderImageParam;
     parseFromString(resizeString, box);
   }
@@ -114,17 +115,17 @@ class ResizeHelper {
       final Box middle,
       final Box right,
       final Color color) {
-    renderImage.renderScale(
+    renderImage.render(
         x, y, left.getWidth(), left.getHeight() + addHeight,
         left.getX(), left.getY(), left.getWidth(), left.getHeight(),
         color);
 
-    renderImage.renderScale(
+    renderImage.render(
         x + left.getWidth(), y, width - left.getWidth() - right.getWidth(), middle.getHeight() + addHeight,
         middle.getX(), middle.getY(), middle.getWidth(), middle.getHeight(),
         color);
 
-    renderImage.renderScale(
+    renderImage.render(
         x + width - right.getWidth(), y, right.getWidth(), right.getHeight() + addHeight,
         right.getX(), right.getY(), right.getWidth(), right.getHeight(),
         color);

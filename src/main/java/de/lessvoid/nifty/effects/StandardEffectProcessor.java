@@ -7,8 +7,8 @@ import java.util.Set;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.effects.general.Effect;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 
 /**
  * An BaseEffectProcessor handles a single effect type. You can have multiple
@@ -42,7 +42,7 @@ public class StandardEffectProcessor implements EffectProcessor {
   /**
    * RenderDeviceProxy to trick stuff.
    */
-  private RenderDeviceProxy renderDeviceProxy;
+  private NiftyRenderDeviceProxy renderDeviceProxy;
 
   /**
    * never stop rendering.
@@ -56,7 +56,7 @@ public class StandardEffectProcessor implements EffectProcessor {
   public StandardEffectProcessor(final boolean neverEndsValue) {
     this.neverStopRendering = neverEndsValue;
     this.active = false;
-    this.renderDeviceProxy = new RenderDeviceProxy();
+    this.renderDeviceProxy = new NiftyRenderDeviceProxy();
   }
 
   /**
@@ -71,7 +71,7 @@ public class StandardEffectProcessor implements EffectProcessor {
    * render pre.
    * @param renderDevice the renderDevice
    */
-  public final void renderPre(final RenderEngine renderDevice) {
+  public final void renderPre(final NiftyRenderEngine renderDevice) {
     if (!neverStopRendering) {
       if (!active) {
         return;
@@ -92,7 +92,7 @@ public class StandardEffectProcessor implements EffectProcessor {
    * render post.
    * @param renderDevice the RenderDevice
    */
-  public final void renderPost(final RenderEngine renderDevice) {
+  public final void renderPost(final NiftyRenderEngine renderDevice) {
     if (!neverStopRendering) {
       if (!active) {
         return;
@@ -114,10 +114,10 @@ public class StandardEffectProcessor implements EffectProcessor {
    * any rendering.
    * @return set of RenderState to save
    */
-  public Set < RenderState > getRenderStatesToSave() {
+  public Set < RenderStateType > getRenderStatesToSave() {
     if (!neverStopRendering) {
       if (!active) {
-        return new HashSet < RenderState >();
+        return new HashSet < RenderStateType >();
       }
     }
 

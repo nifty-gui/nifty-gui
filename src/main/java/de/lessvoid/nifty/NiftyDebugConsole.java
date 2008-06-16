@@ -3,8 +3,8 @@ package de.lessvoid.nifty;
 import de.lessvoid.console.Console;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.RenderEngine;
-import de.lessvoid.nifty.render.RenderState;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -35,7 +35,7 @@ public class NiftyDebugConsole {
    * @param screen the Screen to output
    * @param renderDevide the RenderDevice to use
    */
-  public void render(final Screen screen, final RenderEngine renderDevide) {
+  public void render(final Screen screen, final NiftyRenderEngine renderDevide) {
     outputLayers(screen, renderDevide);
   }
 
@@ -44,7 +44,7 @@ public class NiftyDebugConsole {
    * @param screen the Screen information should be output
    * @param theRenderDevice the RenderDevice
    */
-  private void outputLayers(final Screen screen, final RenderEngine theRenderDevice) {
+  private void outputLayers(final Screen screen, final NiftyRenderEngine theRenderDevice) {
     console.clear();
     console.output("*[" + screen.getScreenId() + "]");
 
@@ -58,7 +58,7 @@ public class NiftyDebugConsole {
 
     screen.debug(console);
 
-    theRenderDevice.saveState(RenderState.allStates());
+    theRenderDevice.saveState(RenderStateType.allStates());
     console.update();
     theRenderDevice.restoreState();
   }
