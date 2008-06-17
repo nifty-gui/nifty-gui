@@ -24,9 +24,15 @@
             <control id="ip" name="textfield" />
           </panel>
           <panel height="16px" />
-          <control id="backButton" name="button" align="right">
-            <interact onClick="back()" /> 
-          </control>
+          <panel childLayout="horizontal">
+            <control id="backButton" name="button" align="left">
+              <interact onClick="back()" /> 
+            </control>
+            <panel width="*"/>
+            <control id="nextButton" name="button" align="right">
+              <interact onClick="back()" /> 
+            </control>
+          </panel>
         </panel>
       </panel>
     </layer>

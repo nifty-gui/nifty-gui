@@ -10,6 +10,24 @@
   </style>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- nifty button default style -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- style for the button background panel -->
+  <style id="nifty-button-panel">
+    <attributes backgroundImage="button-black.png" align="center" width="270px" height="50px" childLayout="center" visibleToMouse="true" />
+    <effect>
+      <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="0" inherit="true"/>
+      <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" startDelay="0" inherit="true"/>
+      <onHover name="hoverImageOverlay" timeType="infinite" filename="button-black-hover.png" post="true"/>
+    </effect>
+  </style>
+
+  <!-- style for the button text -->
+  <style id="nifty-button-text">
+    <attributes font="verdana-24-regular.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" />
+  </style>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- nifty textfield default style -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- the background of the textfield -->
@@ -21,8 +39,8 @@
   <style id="nifty-textfield-field">
     <attributes childLayout="center" visibleToMouse="true" childClip="true" />
     <effect>
-      <onHover name="hoverColorBar" timeType="infinite" color="#ff0c" post="true"/>
-      <onFocus name="pulsate" period="1000" timeType="infinite" startColor="#ff0c" endColor="#800f" post="true"/>
+      <onHover name="hoverColorBar" timeType="infinite" color="#ff05" post="true"/>
+      <onFocus name="pulsate" period="1500" timeType="infinite" startColor="#ff05" endColor="#8005" post="true"/>
     </effect>
   </style>
 
