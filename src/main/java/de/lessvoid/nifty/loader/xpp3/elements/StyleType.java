@@ -105,17 +105,14 @@ public class StyleType {
     if (baseStyle != null) {
       baseStyle.applyStyle(element, nifty, registeredEffects, time);
     }
-
     // attributes
     if (attributes != null) {
       ElementType.applyAttributes(attributes, element, nifty.getRenderDevice());
     }
-
     // hover
     if (hover != null) {
       hover.initElement(element);
     }
-
     // effects
     if (effects != null) {
       effects.initElement(element, nifty, registeredEffects, time);
