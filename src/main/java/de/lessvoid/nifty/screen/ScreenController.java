@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.screen;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.NiftyInputControl;
 
 /**
  * ScreenController Interface all screen controllers should support.
