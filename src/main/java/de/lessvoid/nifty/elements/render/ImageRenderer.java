@@ -29,7 +29,9 @@ public class ImageRenderer implements ElementRenderer {
    * @param r the RenderDevice
    */
   public final void render(final Element element, final NiftyRenderEngine r) {
-    r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
+    if (this.image != null) {
+      r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
+    }
   }
 
   /**
