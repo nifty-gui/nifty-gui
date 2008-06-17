@@ -46,8 +46,8 @@
     <layer id="background" childLayout="center">
       <panel id="panel" height="100%" width="100%" backgroundColor="#ffff">
         <effect>
-          <onStartScreen name="fade" startColor="#000f" endColor="#ffff" length="100" post="false"/>
-          <onEndScreen name="fade" startColor="#ffff" endColor="#000f" length="500" post="false"/>
+          <onStartScreen name="fade" startColor="#0000" endColor="#ffff" length="100" post="false"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" post="false"/>
         </effect>
       </panel>
     </layer>
@@ -77,8 +77,8 @@
   <screen id="menu" controller="de.lessvoid.nifty.examples.all.MenuController">
     <layer id="top" childLayout="vertical" backgroundColor="#393939ff">
       <effect>
-        <onStartScreen name="fade" startColor="#000f" endColor="#393939ff" length="500"/>
-        <onEndScreen name="fade" startColor="#393939ff" endColor="#000000ff" length="500"/>
+        <onStartScreen name="fade" startColor="#0000" endColor="#393939ff" length="500"/>
+        <onEndScreen name="fade" startColor="#393939ff" endColor="#00000000" length="500"/>
       </effect>
       <panel id="panel" height="30%" childLayout="center">
         <image id="image" filename="all/nifty.png" align="center">
@@ -153,8 +153,8 @@
     </effect>
     <image filename="dialog.png" imageMode="resize:32,32,32,32,32,32,32,168,32,32,32,32" childLayout="center" align="center" valign="center" height="250px" width="50%">
       <effect>
-        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" />
-        <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200"/>
+        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" startDelay="250"/>
+        <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200" startDelay="250"/>
         <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="200" inherit="true" />
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
