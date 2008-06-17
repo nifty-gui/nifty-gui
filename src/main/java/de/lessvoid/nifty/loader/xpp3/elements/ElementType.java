@@ -269,6 +269,9 @@ public class ElementType {
       if (attrib.getFilename() != null) {
         imageRenderer.setImage(renderDevice.createImage(attrib.getFilename(), attrib.getFilter()));
       }
+      if (attrib.getBackgroundImage() != null) {
+        imageRenderer.setImage(renderDevice.createImage(attrib.getBackgroundImage(), attrib.getFilter()));
+      }
       // set imageMode?
       NiftyImage image = imageRenderer.getImage();
       String imageMode = attrib.getImageMode();
