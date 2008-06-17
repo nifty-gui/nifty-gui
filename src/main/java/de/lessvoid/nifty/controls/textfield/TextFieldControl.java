@@ -7,7 +7,6 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -113,7 +112,6 @@ public class TextFieldControl implements Controller {
    * @param mouseY the mouse y position
    */
   public void onClick(final int mouseX, final int mouseY) {
-    System.out.println("onClick: " + mouseX + ", " + mouseY);
     String visibleString = textField.getText().substring(firstVisibleCharacterIndex, lastVisibleCharacterIndex);
     int indexFromPixel = getCursorPosFromMouse(mouseX, visibleString);
     if (indexFromPixel != -1) {
@@ -124,14 +122,17 @@ public class TextFieldControl implements Controller {
     updateCursor();
   }
 
+  /**
+   * on click mouse move.
+   * @param mouseX mouse x
+   * @param mouseY mouse y
+   */
   public void onClickMouseMove(final int mouseX, final int mouseY) {
     String visibleString = textField.getText().substring(firstVisibleCharacterIndex, lastVisibleCharacterIndex);
     int indexFromPixel = getCursorPosFromMouse(mouseX, visibleString);
     if (indexFromPixel != -1) {
       toClickCursorPos = firstVisibleCharacterIndex + indexFromPixel;
     }
-
-    System.out.println("fromClickCursorPos: " + fromClickCursorPos + ", toClickCursorPos: " + toClickCursorPos);
 
     textField.setCursorPosition(fromClickCursorPos);
     textField.startSelecting();
@@ -141,13 +142,15 @@ public class TextFieldControl implements Controller {
   }
 
   /**
-   * @param mouseX
-   * @param visibleString
-   * @return
+   * getCursorPosFromMouse.
+   * @param mouseX mouse x
+   * @param visibleString visible string
+   * @return cursor from mouse
    */
-  private int getCursorPosFromMouse(final int mouseX, String visibleString) {
+  private int getCursorPosFromMouse(final int mouseX, final String visibleString) {
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
-    return FontHelper.getCharacterIndexFromPixelPosition(textRenderer.getFont(), visibleString, (mouseX-fieldElement.getX()), 1.0f);
+    return FontHelper.getCharacterIndexFromPixelPosition(
+        textRenderer.getFont(), visibleString, (mouseX - fieldElement.getX()), 1.0f);
   }
 
   /**
@@ -177,6 +180,8 @@ public class TextFieldControl implements Controller {
       textField.copy();
     } else if (inputEvent == NiftyInputEvent.Paste) {
       textField.put();
+    } else if (inputEvent == NiftyInputEvent.SubmitText) {
+      this.screen.setFocus(null);
     } else if (inputEvent == NiftyInputEvent.Character) {
       textField.insert(inputEvent.getCharacter());
     }
@@ -213,15 +218,14 @@ public class TextFieldControl implements Controller {
     int cursorPixelPos = textWidth - d;
 
     cursorElement.setConstraintX(new SizeValue(cursorPixelPos + "px"));
-    cursorElement.setConstraintY(new SizeValue((element.getHeight() - cursorElement.getHeight())/2 + 3 + "px"));
+    cursorElement.setConstraintY(new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + 3 + "px"));
     cursorElement.startEffect(EffectEventId.onActive, timeProvider, null);
     screen.layoutLayers();
-
-System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVisibleCharacterIndex + " (" + text.substring(firstVisibleCharacterIndex, lastVisibleCharacterIndex));    
   }
 
   /**
-   * @param cursorPos
+   * calcFirstVisibleIndex.
+   * @param cursorPos cursor pos
    */
   private void calcFirstVisibleIndex(final int cursorPos) {
     if (cursorPos > lastVisibleCharacterIndex) {
@@ -235,15 +239,16 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
 
   /**
    * check bounds of first and last visible index according to text.
-   * @param text
-   * @param textRenderer TODO
+   * @param text text
+   * @param textRenderer text renderer
    */
   private void checkBounds(final String text, final TextRenderer textRenderer) {
     int textLen = text.length();
     if (firstVisibleCharacterIndex > textLen) {
       // re position so that we show at much possible text
       lastVisibleCharacterIndex = textLen;
-      firstVisibleCharacterIndex = FontHelper.getVisibleCharactersFromEnd(textRenderer.getFont(), text, fieldWidth, 1.0f);
+      firstVisibleCharacterIndex =
+        FontHelper.getVisibleCharactersFromEnd(textRenderer.getFont(), text, fieldWidth, 1.0f);
     }
   }
 
@@ -254,23 +259,23 @@ System.out.println(cursorPos + ": " + firstVisibleCharacterIndex + ", " + lastVi
     String currentText = this.textField.getText();
     if (firstVisibleCharacterIndex < currentText.length()) {
       String textToCheck = currentText.substring(firstVisibleCharacterIndex);
-      int lengthFitting = FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), textToCheck, fieldWidth, 1.0f);
+      int lengthFitting =
+        FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), textToCheck, fieldWidth, 1.0f);
       lastVisibleCharacterIndex = lengthFitting + firstVisibleCharacterIndex;
     } else {
       lastVisibleCharacterIndex = firstVisibleCharacterIndex;
     }
   }
 
+  /**
+   * on focus event.
+   * @param getFocus get (true) or lose (false) focus
+   */
   public void onFocus(final boolean getFocus) {
-	  if (getFocus) {
-		  cursorElement.show();
-	  } else {
-		  cursorElement.hide();
-	  }
-
+    if (getFocus) {
+      cursorElement.show();
+    } else {
+      cursorElement.hide();
+    }
   }
-
-  public void forward(MethodInvoker controllerMethod) {
-  }
-  
 }

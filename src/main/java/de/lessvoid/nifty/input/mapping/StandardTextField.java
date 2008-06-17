@@ -73,6 +73,8 @@ public class StandardTextField implements NiftyInputMapping {
       return NiftyInputEvent.MoveCursorLeft;
     } else if (eventKey == Keyboard.KEY_RIGHT) {
       return NiftyInputEvent.MoveCursorRight;
+    } else if (eventKey == Keyboard.KEY_RETURN) {
+      return NiftyInputEvent.SubmitText;
     } else if (eventKey == Keyboard.KEY_DELETE) {
       return NiftyInputEvent.Delete;
     } else if (eventKey == Keyboard.KEY_BACK) {
