@@ -9,6 +9,7 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.mapping.NoInputMapping;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 
 /**
  * RegisterControlDefinitionType.
@@ -36,6 +37,11 @@ public class RegisterControlDefinitionType {
   private String inputMapper;
 
   /**
+   * style id.
+   */
+  private String styleId;
+
+  /**
    * elements.
    */
   private Collection < ElementType > elements = new ArrayList < ElementType >();
@@ -45,14 +51,17 @@ public class RegisterControlDefinitionType {
    * @param nameParam name
    * @param controllerParam controller
    * @param inputMapperParam inputMapperParam
+   * @param newStyleId styleId (might be null when not set)
    */
   public RegisterControlDefinitionType(
       final String nameParam,
       final String controllerParam,
-      final String inputMapperParam) {
+      final String inputMapperParam,
+      final String newStyleId) {
     this.name = nameParam;
     this.controller = controllerParam;
     this.inputMapper = inputMapperParam;
+    this.styleId = newStyleId;
   }
 
   /**
@@ -91,5 +100,25 @@ public class RegisterControlDefinitionType {
    */
   public Collection < ElementType > getElements() {
     return elements;
+  }
+
+  /**
+   * process style attributes.
+   * @param styleHandler style handler
+   */
+  public void controlProcessStyleAttributes(final StyleHandler styleHandler) {
+    if (styleId != null) {
+      for (ElementType elementType : elements) {
+        elementType.controlProcessStyleAttributes(styleId, styleHandler);
+      }
+    }
+  }
+
+  /**
+   * set style id.
+   * @param newStyleId style id
+   */
+  public void setStyleId(final String newStyleId) {
+    this.styleId = newStyleId;
   }
 }

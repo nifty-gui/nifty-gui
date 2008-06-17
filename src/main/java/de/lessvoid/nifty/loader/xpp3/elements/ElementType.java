@@ -328,4 +328,35 @@ public class ElementType {
   public void setAttributes(final AttributesType attributesTypeParam) {
     attributes = attributesTypeParam;
   }
+
+  /**
+   * process this elements styleId. this is used for controls and
+   * changes the given styleId and the elements style id to a new
+   * combined one.
+   * @param styleId parent styleId
+   * @param styleHandler style handler
+   */
+  public void controlProcessStyleAttributes(final String styleId, final StyleHandler styleHandler) {
+    String myStyleId = attributes.getStyle();
+    if (myStyleId != null) {
+      // this element has a style id set
+      int indexOfSep = myStyleId.indexOf("#");
+      if (indexOfSep != -1) {
+        String newStyleId = "";
+        if (myStyleId.startsWith("#")) {
+          newStyleId = styleId + myStyleId;
+        } else {
+          newStyleId = styleId + myStyleId.substring(indexOfSep);
+        }
+
+        // check if newStyleId exists and only rewrite it here when it's available
+        if (styleHandler.getStyle(newStyleId) != null) {
+          attributes.setStyle(newStyleId);
+        }
+      }
+    }
+    for (ElementType elementType : elements) {
+      elementType.controlProcessStyleAttributes(styleId, styleHandler);
+    }
+  }
 }

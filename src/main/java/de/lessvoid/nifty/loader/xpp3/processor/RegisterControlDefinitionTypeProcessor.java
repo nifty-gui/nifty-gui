@@ -21,8 +21,10 @@ public class RegisterControlDefinitionTypeProcessor implements XmlElementProcess
   private Map < String, RegisterControlDefinitionType > registeredControls =
     new Hashtable < String, RegisterControlDefinitionType >();
 
+  /**
+   * constructor.
+   */
   public RegisterControlDefinitionTypeProcessor() {
-    
   }
 
   /**
@@ -38,7 +40,8 @@ public class RegisterControlDefinitionTypeProcessor implements XmlElementProcess
     final RegisterControlDefinitionType registerControl = new RegisterControlDefinitionType(
         name,
         controller,
-        inputMapping);
+        inputMapping,
+        attributes.get("style"));
     registeredControls.put(name, registerControl);
 
     ElementType pseudoElement = new ElementType() {
