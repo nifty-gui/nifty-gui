@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.MenuFocusHandler;
+import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.MenuItemControl;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
@@ -33,13 +33,13 @@ public class MenuItemType extends ElementType {
   /**
    * focus handler.
    */
-  private MenuFocusHandler focusHandler;
+  private FocusHandler focusHandler;
 
   /**
    * create it.
    * @param focusHandlerParam focusHandler
    */
-  public MenuItemType(final MenuFocusHandler focusHandlerParam) {
+  public MenuItemType(final FocusHandler focusHandlerParam) {
     this.focusHandler = focusHandlerParam;
   }
 

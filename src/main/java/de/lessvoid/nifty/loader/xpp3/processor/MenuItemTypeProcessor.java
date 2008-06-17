@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.loader.xpp3.processor;
 
-import de.lessvoid.nifty.controls.MenuFocusHandler;
+import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
@@ -21,7 +21,7 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
   /**
    * focus handler.
    */
-  private MenuFocusHandler focusHandler;
+  private FocusHandler focusHandler;
 
   /**
    * default font (inherited from parent menu).
@@ -36,7 +36,7 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
    */
   public MenuItemTypeProcessor(
       final ElementType elementParam,
-      final MenuFocusHandler focusHandlerParam,
+      final FocusHandler focusHandlerParam,
       final String fontParam) {
     this.element = elementParam;
     this.focusHandler = focusHandlerParam;
