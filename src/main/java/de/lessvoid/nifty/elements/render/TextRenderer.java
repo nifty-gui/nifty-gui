@@ -198,7 +198,7 @@ public class TextRenderer implements ElementRenderer {
     if (!r.isColorChanged()) {
       r.setColor(color);
     } else {
-      r.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), r.getColorAlpha()));
+      r.setColor(new Color(color, r.getColorAlpha()));
     }
     r.renderText(
         font,
