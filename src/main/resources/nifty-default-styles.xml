@@ -13,7 +13,7 @@
   <!-- nifty button default style -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- style for the button background panel -->
-  <style id="nifty-button-panel">
+  <style id="nifty-button#panel">
     <attributes backgroundImage="button-black.png" align="center" width="270px" height="50px" childLayout="center" visibleToMouse="true" />
     <effect>
       <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="0" inherit="true"/>
@@ -23,7 +23,7 @@
   </style>
 
   <!-- style for the button text -->
-  <style id="nifty-button-text">
+  <style id="nifty-button#text">
     <attributes font="verdana-24-regular.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" />
   </style>
 

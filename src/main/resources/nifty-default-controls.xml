@@ -21,9 +21,9 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- button control -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <controlDefinition name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl">
-    <panel style="nifty-button-panel">
-      <label style="nifty-button-text" text="$buttonText" />
+  <controlDefinition style="nifty-button" name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl">
+    <panel style="#panel">
+      <label style="#text" text="$buttonText" />
     </panel>
   </controlDefinition>
 
