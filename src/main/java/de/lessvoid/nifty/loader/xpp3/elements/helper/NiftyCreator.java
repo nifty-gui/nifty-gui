@@ -36,11 +36,7 @@ public final class NiftyCreator {
     List < ElementRenderer > renderer = new ArrayList < ElementRenderer >();
 
     // create the image
-    NiftyImage image = null;
-    if (attributes.getBackgroundImage() != null) {
-      image = nifty.getRenderDevice().createImage(attributes.getBackgroundImage(), false);
-      renderer.add(new ImageRenderer(image));
-    }
+    renderer.add(new ImageRenderer(null));
 
     // create the image renderer
     renderer.add(new PanelRenderer());
