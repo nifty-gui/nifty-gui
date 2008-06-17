@@ -87,6 +87,18 @@ public class Color {
   }
 
   /**
+   * Create a color from another color, using the given alpha value.
+   * @param newColor color
+   * @param newAlpha alpha component
+   */
+  public Color(final Color newColor, final float newAlpha) {
+      this.red = newColor.getRed();
+      this.green = newColor.getGreen();
+      this.blue = newColor.getBlue();
+      this.alpha = newAlpha;
+  }
+
+  /**
    * linear interpolate between this color and the given color.
    * @param end end color
    * @param t t in [0,1]
@@ -205,8 +217,12 @@ public class Color {
         blue * factor,
         alpha * factor);
   }
-  
+
+  /**
+   * convert color to string.
+   * @return string representation
+   */
   public String toString() {
-    return red + ":" + green + ":" + blue + ":" + alpha;
+    return "(" + red + "," + green + "," + blue + "," + alpha + ")";
   }
 }
