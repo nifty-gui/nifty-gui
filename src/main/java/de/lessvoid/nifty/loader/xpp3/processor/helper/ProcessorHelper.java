@@ -71,7 +71,6 @@ public final class ProcessorHelper {
       final XmlParser xmlParser,
       final AttributesType attributesType,
       final Attributes attributes) throws Exception {
-
     // id
     if (attributes.isSet("id")) {
       attributesType.setId(attributes.get("id"));
