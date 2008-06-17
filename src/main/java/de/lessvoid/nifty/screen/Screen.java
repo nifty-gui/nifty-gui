@@ -319,7 +319,9 @@ public class Screen implements MouseFocusHandler {
     }
 
     focusElement = newFocusElement;
-    focusElement.startEffect(EffectEventId.onFocus, timeProvider, null);
+    if (focusElement != null) {
+      focusElement.startEffect(EffectEventId.onFocus, timeProvider, null);
+    }
   }
 
   /**
