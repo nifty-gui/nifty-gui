@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import de.lessvoid.nifty.elements.Element;
 
 /**
- * MenuHandler.
+ * FocusHandler.
  * @author void
  */
-public class MenuFocusHandler {
+public class FocusHandler {
 
   /**
    * all elements that this focus handler controls.

@@ -19,9 +19,9 @@ public class MenuItemControl implements Controller {
 
   private Screen screen;
   private Element element;
-  private MenuFocusHandler focusHandler;
+  private FocusHandler focusHandler;
 
-  public MenuItemControl(final MenuFocusHandler focusHandlerParam) {
+  public MenuItemControl(final FocusHandler focusHandlerParam) {
     focusHandler = focusHandlerParam;
   }
   /**
