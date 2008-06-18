@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.loader.xpp3;
 
+import java.io.InputStream;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -43,18 +44,18 @@ public class NiftyLoader {
 
   /**
    * load xml.
+   * @param inputStream TODO
    * @param nifty nifty
    * @param screens screens
-   * @param filename filename
    * @param timeProvider timeProvider
    * @throws Exception exception
    */
   public void loadXml(
+      final InputStream inputStream,
       final Nifty nifty,
       final Map < String, Screen > screens,
-      final String filename,
       final TimeProvider timeProvider) throws Exception {
-    logBlockBegin("loadXml: " + filename);
+    logBlockBegin("processing");
 
     // create processors
     niftyTypeProcessor = new NiftyTypeProcessor(this);
@@ -67,7 +68,7 @@ public class NiftyLoader {
 
     // create parser
     XmlParser parser = new XmlParser(new MXParser());
-    parser.read(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
+    parser.read(inputStream);
 
     // start parsing
     parser.nextTag();

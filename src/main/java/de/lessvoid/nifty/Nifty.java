@@ -1,5 +1,6 @@
 package de.lessvoid.nifty;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -11,8 +12,8 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
 import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
-import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
 import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.SoundSystem;
@@ -57,7 +58,7 @@ public class Nifty {
   /**
    * The current xml file loaded.
    */
-  private String currentFile;
+  private String currentLoaded;
 
   /**
    * When everything is done exit is true.
@@ -141,7 +142,7 @@ public class Nifty {
     this.soundSystem = newSoundSystem;
     this.timeProvider = newTimeProvider;
     this.exit = false;
-    this.currentFile = null;
+    this.currentLoaded = null;
   }
 
   /**
@@ -212,40 +213,55 @@ public class Nifty {
   /**
    * Initialize this Nifty instance from the given xml file.
    * @param filename filename to nifty xml
-   */
-  public void fromXml(final String filename) {
-    start(filename, "start");
-  }
-
-  /**
-   * Initialize this Nifty instance from the given xml file.
-   * @param filename filename to nifty xml
    * @param startScreen screen to start exec
    */
   public void fromXml(final String filename, final String startScreen) {
-    start(filename, startScreen);
+    prepareScreens(filename);
+    loadFromFile(filename);
+    gotoScreen(startScreen);
+  }
+
+  public void fromXml(final String fileId, final InputStream input, final String startScreen) {
+    prepareScreens(fileId);
+    loadFromStream(input);
+    gotoScreen(startScreen);
   }
 
   /**
-   * internal start method.
+   * load from the given file.
    * @param filename filename to load
-   * @param startScreen screen to start exec
    */
-  private void start(final String filename, final String startScreen) {
+  private void loadFromFile(final String filename) {
     try {
-      screens.clear();
-
-      this.currentScreen = null;
-      this.currentFile = filename;
-      this.exit = false;
-
-      loader.loadXml(this, screens, filename, timeProvider);
+      loader.loadXml(
+          Thread.currentThread().getContextClassLoader().getResourceAsStream(filename), this, screens, timeProvider);
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
 
-    // start with first screen
-    gotoScreen(startScreen);
+  /**
+   * load from the given file.
+   * @param filename filename to load
+   */
+  private void loadFromStream(final InputStream stream) {
+    try {
+      loader.loadXml(stream, this, screens, timeProvider);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * prepare/reset screens.
+   * @param xmlId xml id
+   */
+  private void prepareScreens(final String xmlId) {
+    screens.clear();
+
+    this.currentScreen = null;
+    this.currentLoaded = xmlId;
+    this.exit = false;
   }
 
   /**
@@ -361,7 +377,7 @@ public class Nifty {
    * @return true if the given screen is active and false when not
    */
   public boolean isActive(final String filename, final String screenId) {
-    if (currentFile != null && currentFile.equals(filename)) {
+    if (currentLoaded != null && currentLoaded.equals(filename)) {
       if (currentScreen != null && currentScreen.getScreenId().equals(screenId)) {
         return true;
       }
