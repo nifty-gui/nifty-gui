@@ -23,7 +23,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <controlDefinition style="nifty-button" name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl">
     <panel style="#panel">
-      <label style="#text" text="$buttonText" />
+      <label style="#text" text="$buttonLabel" />
     </panel>
   </controlDefinition>
 

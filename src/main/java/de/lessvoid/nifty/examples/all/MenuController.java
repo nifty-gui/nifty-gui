@@ -56,7 +56,7 @@ public class MenuController implements ScreenController {
   public void helloWorld() {
     nifty.getCurrentScreen().endScreen(new EndNotify() {
       public void perform() {
-        nifty.fromXml("helloworld/helloworld.xml");
+        nifty.fromXml("helloworld/helloworld.xml", "start");
       }
     });
   }
@@ -67,7 +67,7 @@ public class MenuController implements ScreenController {
   public void textfield() {
     nifty.getCurrentScreen().endScreen(new EndNotify() {
       public void perform() {
-        nifty.fromXml("textfield/textfield.xml");
+        nifty.fromXml("textfield/textfield.xml", "start");
       }
     });
   }
@@ -78,7 +78,7 @@ public class MenuController implements ScreenController {
   public void textalign() {
     nifty.getCurrentScreen().endScreen(new EndNotify() {
       public void perform() {
-        nifty.fromXml("textalign/textalign.xml");
+        nifty.fromXml("textalign/textalign.xml", "start");
       }
     });
   }
@@ -88,7 +88,7 @@ public class MenuController implements ScreenController {
   public void multiplayer() {
     nifty.getCurrentScreen().endScreen(new EndNotify() {
       public void perform() {
-        nifty.fromXml("multiplayer/multiplayer.xml");
+        nifty.fromXml("multiplayer/multiplayer.xml", "start");
       }
     });
   }

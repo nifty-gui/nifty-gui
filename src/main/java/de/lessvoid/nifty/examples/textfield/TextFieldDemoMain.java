@@ -36,7 +36,7 @@ public class TextFieldDemoMain {
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider());
-    nifty.fromXml("textfield/textfield.xml");
+    nifty.fromXml("textfield/textfield.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty);

@@ -33,7 +33,7 @@ public final class MultiplayerExampleMain {
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider());
-    nifty.fromXml("multiplayer/multiplayer.xml");
+    nifty.fromXml("multiplayer/multiplayer.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty);

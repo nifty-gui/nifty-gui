@@ -33,7 +33,7 @@ public final class HelloWorldExampleMain {
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider());
-    nifty.fromXml("helloworld/helloworld.xml");
+    nifty.fromXml("helloworld/helloworld.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty);

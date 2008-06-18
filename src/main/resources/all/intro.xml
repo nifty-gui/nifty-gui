@@ -153,8 +153,8 @@
     </effect>
     <image filename="dialog.png" imageMode="resize:32,32,32,32,32,32,32,168,32,32,32,32" childLayout="center" align="center" valign="center" height="250px" width="50%">
       <effect>
-        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" startDelay="250"/>
-        <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200" startDelay="250"/>
+        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" startDelay="500"/>
+        <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200" startDelay="500"/>
         <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="200" inherit="true" />
       </effect>
       <panel childLayout="vertical" align="center" valign="center">

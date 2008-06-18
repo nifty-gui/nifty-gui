@@ -30,11 +30,11 @@
           </panel>
           <panel height="16px" />
           <panel childLayout="horizontal">
-            <control id="backButton" name="button" align="left">
+            <control id="backButton" name="button" label="Prev" align="left">
               <interact onClick="back()" /> 
             </control>
             <panel width="*"/>
-            <control id="nextButton" style="my" name="button" align="right">
+            <control id="nextButton" style="my" name="button" label="Next" align="right">
               <interact onClick="back()" /> 
             </control>
           </panel>

@@ -33,7 +33,7 @@ public final class LabelExampleMain {
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider());
-    nifty.fromXml("style/label/label.xml");
+    nifty.fromXml("style/label/label.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty);

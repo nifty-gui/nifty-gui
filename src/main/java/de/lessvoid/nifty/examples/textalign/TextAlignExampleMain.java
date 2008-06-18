@@ -33,7 +33,7 @@ public final class TextAlignExampleMain {
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider());
-    nifty.fromXml("textalign/textalign.xml");
+    nifty.fromXml("textalign/textalign.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty);
