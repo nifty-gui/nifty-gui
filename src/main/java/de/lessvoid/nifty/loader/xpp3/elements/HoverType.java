@@ -32,6 +32,23 @@ public class HoverType {
   private HoverFalloffConstraintType falloffConstraint;
 
   /**
+   * copy constructor.
+   * @param source source
+   */
+  public HoverType(final HoverType source) {
+    this.width = source.width;
+    this.height = source.height;
+    this.falloffType = source.falloffType;
+    this.falloffConstraint = source.falloffConstraint;
+  }
+
+  /**
+   * default constructor.
+   */
+  public HoverType() {
+  }
+
+  /**
    * setWidth.
    * @param widthParam width
    */

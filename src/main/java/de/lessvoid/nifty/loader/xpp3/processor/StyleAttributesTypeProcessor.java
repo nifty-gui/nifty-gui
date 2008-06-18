@@ -33,8 +33,7 @@ public class StyleAttributesTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    AttributesType attributesType = new AttributesType();
-    ProcessorHelper.processAttributes(xmlParser, attributesType, attributes);
+    AttributesType attributesType = new AttributesType(attributes);
     styleType.setAttributes(attributesType);
     xmlParser.nextTag();
   }

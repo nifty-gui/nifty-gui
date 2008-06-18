@@ -40,10 +40,10 @@ public class LayerType extends PanelType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element layer = NiftyCreator.createLayer(
+        this,
         getAttributes().getId(),
         nifty,
-        screen,
-        getAttributes());
+        screen, getAttributes());
     super.addElementAttributes(
         layer,
         screen,

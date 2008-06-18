@@ -23,10 +23,4 @@ public class OnClickTypeTest extends TestCase {
     OnClickType onClick = new OnClickType("quit");
     assertFalse(onClick.isValid());
   }
-
-  public void testInvalidNull() {
-    OnClickType onClick = new OnClickType(null);
-    assertFalse(onClick.isValid());
-  }
-
 }

@@ -62,6 +62,19 @@ public class EffectType {
   }
 
   /**
+   * copy.
+   * @param source source
+   */
+  public EffectType(final EffectType source) {
+    this.name = source.name;
+    this.post = source.post;
+    this.alternateKey = source.alternateKey;
+    this.alternateEnable = source.alternateEnable;
+    this.inherit = source.inherit;
+    this.any = new Attributes(source.any);
+  }
+
+  /**
    * setName.
    * @param nameParam name
    */

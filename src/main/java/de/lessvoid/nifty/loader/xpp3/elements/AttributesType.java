@@ -1,10 +1,19 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
+import java.util.Map;
+
+import de.lessvoid.nifty.loader.xpp3.Attributes;
+
 /**
  * AttributesType.
  * @author void
  */
 public class AttributesType {
+
+  /**
+   * source attributes this attributes instance is based upon.
+   */
+  private Attributes srcAttributes;
 
   /**
    * id.
@@ -112,9 +121,24 @@ public class AttributesType {
   private String imageMode;
 
   /**
+   * text attribute.
+   */
+  private String text;
+
+  /**
    * default constructor.
    */
   public AttributesType() {
+    srcAttributes = null;
+  }
+
+  /**
+   * constructor from attributes.
+   * @param attributes attributes
+   */
+  public AttributesType(final Attributes attributes) {
+    srcAttributes = attributes;
+    processAttributes();
   }
 
   /**
@@ -141,6 +165,8 @@ public class AttributesType {
     textHAlign = other.getTextHAlign();
     textVAlign = other.getTextVAlign();
     imageMode = other.getImageMode();
+    text = other.text;
+    srcAttributes = other.srcAttributes;
   }
 
   /**
@@ -496,70 +522,120 @@ public class AttributesType {
   }
 
   /**
-   * return a new AttributesType with is this + attributes from the param.
-   * @param attributesParam attributes we should merge
-   * @return new AttributesType
+   * process element attributes.
    */
-  public AttributesType merge(final AttributesType attributesParam) {
-    AttributesType result = new AttributesType(this);
-    if (attributesParam.getVisible() != null) {
-      result.setVisible(attributesParam.getVisible());
+  public void processAttributes() {
+    // id
+    if (srcAttributes.isSet("id")) {
+      setId(srcAttributes.get("id"));
     }
-    if (attributesParam.getWidth() != null) {
-      result.setWidth(attributesParam.getWidth());
+    // style
+    if (srcAttributes.isSet("style")) {
+      setStyle(srcAttributes.get("style"));
     }
-    if (attributesParam.getHeight() != null) {
-      result.setHeight(attributesParam.getHeight());
+    // visible
+    if (srcAttributes.isSet("visible")) {
+      setVisible(srcAttributes.getAsBoolean("visible"));
     }
-    if (attributesParam.getX() != null) {
-      result.setX(attributesParam.getX());
+    // height
+    if (srcAttributes.isSet("height")) {
+      setHeight(srcAttributes.get("height"));
     }
-    if (attributesParam.getY() != null) {
-      result.setY(attributesParam.getY());
+    // width
+    if (srcAttributes.isSet("width")) {
+      setWidth(srcAttributes.get("width"));
     }
-    if (attributesParam.getAlign() != null) {
-      result.setAlign(attributesParam.getAlign());
+    // x
+    if (srcAttributes.isSet("x")) {
+      setX(srcAttributes.get("x"));
     }
-    if (attributesParam.getValign() != null) {
-      result.setValign(attributesParam.getValign());
+    // y
+    if (srcAttributes.isSet("y")) {
+      setY(srcAttributes.get("y"));
     }
-    if (attributesParam.getTextHAlign() != null) {
-      result.setTextHAlign(attributesParam.getTextHAlign());
+    // horizontal align
+    if (srcAttributes.isSet("align")) {
+      setAlign(srcAttributes.getAsAlignType("align"));
     }
-    if (attributesParam.getTextVAlign() != null) {
-      result.setTextVAlign(attributesParam.getTextVAlign());
+    // vertical align
+    if (srcAttributes.isSet("valign")) {
+      setValign(srcAttributes.getAsVAlignType("valign"));
     }
-    if (attributesParam.getChildLayoutType() != null) {
-      result.setChildLayoutType(attributesParam.getChildLayoutType());
+    // child clip
+    if (srcAttributes.isSet("childClip")) {
+      setChildClip(srcAttributes.getAsBoolean("childClip"));
     }
-    if (attributesParam.getChildClip() != null) {
-      result.setChildClip(attributesParam.getChildClip());
+    // visibleToMouse
+    if (srcAttributes.isSet("visibleToMouse")) {
+      setVisibleToMouse(srcAttributes.getAsBoolean("visibleToMouse"));
     }
-    if (attributesParam.getBackgroundColor() != null) {
-      result.setBackgroundColor(attributesParam.getBackgroundColor());
+    // childLayout
+    if (srcAttributes.isSet("childLayout")) {
+      setChildLayoutType(srcAttributes.getAsLayoutType("childLayout"));
     }
-    if (attributesParam.getBackgroundImage() != null) {
-      result.setBackgroundImage(attributesParam.getBackgroundImage());
+    // backgroundImage
+    if (srcAttributes.isSet("backgroundImage")) {
+      setBackgroundImage(srcAttributes.get("backgroundImage"));
     }
-    if (attributesParam.getImageMode() != null) {
-      result.setImageMode(attributesParam.getImageMode());
+    // imageMode
+    if (srcAttributes.isSet("imageMode")) {
+      setImageMode(srcAttributes.get("imageMode"));
     }
-    if (attributesParam.getVisibleToMouse() != null) {
-      result.setVisibleToMouse(attributesParam.getVisibleToMouse());
+    // backgroundColor
+    if (srcAttributes.isSet("backgroundColor")) {
+      setBackgroundColor(new ColorType(srcAttributes.get("backgroundColor")));
     }
-    if (attributesParam.getFont() != null) {
-      result.setFont(attributesParam.getFont());
+    // font
+    if (srcAttributes.isSet("font")) {
+      setFont(srcAttributes.get("font"));
     }
-    if (attributesParam.getColor() != null) {
-      result.setColor(attributesParam.getColor());
+    // color
+    if (srcAttributes.isSet("color")) {
+      setColor(new ColorType(srcAttributes.get("color")));
     }
-    if (attributesParam.getFilename() != null) {
-      result.setFilename(attributesParam.getFilename());
+    // filename
+    if (srcAttributes.isSet("filename")) {
+      setFilename(srcAttributes.get("filename"));
     }
-    if (attributesParam.getFilter() != null) {
-      result.setFilter(attributesParam.getFilter());
+    // filter
+    if (srcAttributes.isSet("filter")) {
+      setFilter(srcAttributes.getAsBoolean("filter"));
     }
-    return result;
+    // text horizontal align
+    if (srcAttributes.isSet("textHAlign")) {
+      setTextHAlign(srcAttributes.getAsAlignType("textHAlign"));
+    }
+    // text vertical align
+    if (srcAttributes.isSet("textVAlign")) {
+      setTextVAlign(srcAttributes.getAsVAlignType("textVAlign"));
+    }
+    // text
+    if (srcAttributes.isSet("text")) {
+      text = srcAttributes.get("text");
+    }
   }
 
+  /**
+   * get source attributes.
+   * @return source attributes
+   */
+  public Attributes getSrcAttributes() {
+    return srcAttributes;
+  }
+
+  /**
+   * find parameter attributes.
+   * @return set of parameter attributes
+   */
+  public Map < String, String > findParameterAttributes() {
+    return srcAttributes.getParameterAttributes();
+  }
+
+  /**
+   * get text.
+   * @return text
+   */
+  public String getText() {
+    return text;
+  }
 }

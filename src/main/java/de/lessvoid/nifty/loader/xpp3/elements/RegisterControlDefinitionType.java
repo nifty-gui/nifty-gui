@@ -2,14 +2,18 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.mapping.NoInputMapping;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * RegisterControlDefinitionType.
@@ -37,9 +41,9 @@ public class RegisterControlDefinitionType {
   private String inputMapper;
 
   /**
-   * style id.
+   * attributes.
    */
-  private String styleId;
+  private Attributes controlDefinitionAttributes;
 
   /**
    * elements.
@@ -51,17 +55,17 @@ public class RegisterControlDefinitionType {
    * @param nameParam name
    * @param controllerParam controller
    * @param inputMapperParam inputMapperParam
-   * @param newStyleId styleId (might be null when not set)
+   * @param newAttributes attributes
    */
   public RegisterControlDefinitionType(
       final String nameParam,
       final String controllerParam,
       final String inputMapperParam,
-      final String newStyleId) {
+      final Attributes newAttributes) {
     this.name = nameParam;
     this.controller = controllerParam;
     this.inputMapper = inputMapperParam;
-    this.styleId = newStyleId;
+    this.controlDefinitionAttributes = newAttributes;
   }
 
   /**
@@ -104,21 +108,23 @@ public class RegisterControlDefinitionType {
 
   /**
    * process style attributes.
+   * @param element element
    * @param styleHandler style handler
+   * @param controlAttributes control attributes
+   * @param nifty nifty
+   * @param registeredEffects effects
+   * @param time time
    */
-  public void controlProcessStyleAttributes(final StyleHandler styleHandler) {
-    if (styleId != null) {
-      for (ElementType elementType : elements) {
-        elementType.controlProcessStyleAttributes(styleId, styleHandler);
-      }
+  public void applyControlAttributes(
+      final Element element,
+      final StyleHandler styleHandler,
+      final Attributes controlAttributes,
+      final Nifty nifty,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final TimeProvider time) {
+    for (ElementType elementType : elements) {
+      elementType.applyControlAttributes(
+          element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
     }
-  }
-
-  /**
-   * set style id.
-   * @param newStyleId style id
-   */
-  public void setStyleId(final String newStyleId) {
-    this.styleId = newStyleId;
   }
 }

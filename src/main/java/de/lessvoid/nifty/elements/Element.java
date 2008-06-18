@@ -16,6 +16,7 @@ import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
+import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -42,6 +43,11 @@ public class Element {
    * the logger.
    */
   private static Logger log = Logger.getLogger(Element.class.getName());
+
+  /**
+   * element type.
+   */
+  private ElementType elementType;
 
   /**
    * our identification.
@@ -181,56 +187,62 @@ public class Element {
 
   /**
    * construct new instance of Element.
+   * @param newElementType elementType
    * @param newId the id
    * @param newParent new parent
    * @param newFocusHandler the new focus handler
-   * @param newVisibleToMouseEvents TODO
+   * @param newVisibleToMouseEvents visible to mouse
    * @param newElementRenderer the element renderer
    */
   public Element(
+      final ElementType newElementType,
       final String newId,
       final Element newParent,
       final MouseFocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents,
-      final ElementRenderer ... newElementRenderer) {
-    initialize(newId, newParent, newElementRenderer, new LayoutPart(), newFocusHandler, newVisibleToMouseEvents);
+      final boolean newVisibleToMouseEvents, final ElementRenderer ... newElementRenderer) {
+    initialize(
+        newElementType, newId, newParent,
+        newElementRenderer, new LayoutPart(), newFocusHandler, newVisibleToMouseEvents);
   }
 
   /**
    * construct new instance of Element using the given layoutPart instance.
+   * @param newElementType element type
    * @param newId the id
    * @param newParent new parent
    * @param newLayoutPart the layout part
    * @param newFocusHandler the new focus handler
-   * @param newVisibleToMouseEvents TODO
+   * @param newVisibleToMouseEvents visible to  mouse
    * @param newElementRenderer the element renderer
    */
   public Element(
+      final ElementType newElementType,
       final String newId,
       final Element newParent,
       final LayoutPart newLayoutPart,
       final MouseFocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents,
-      final ElementRenderer ... newElementRenderer) {
-    initialize(newId, newParent, newElementRenderer, newLayoutPart, newFocusHandler, newVisibleToMouseEvents);
+      final boolean newVisibleToMouseEvents, final ElementRenderer ... newElementRenderer) {
+    initialize(newElementType, newId, newParent, newElementRenderer, newLayoutPart, newFocusHandler, newVisibleToMouseEvents);
   }
 
   /**
    * initialize this instance helper.
+   * @param elementType element
    * @param newId the id
-   * @param newParent TODO
+   * @param newParent parent
    * @param newElementRenderer the element renderer to use
    * @param newLayoutPart the layoutPart to use
    * @param newFocusHandler the focus handler that this element is attached to
-   * @param newVisibleToMouseEvents TODO
+   * @param newVisibleToMouseEvents visible to mouse
    */
   private void initialize(
+      final ElementType elementType,
       final String newId,
       final Element newParent,
       final ElementRenderer[] newElementRenderer,
       final LayoutPart newLayoutPart,
-      final MouseFocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents) {
+      final MouseFocusHandler newFocusHandler, final boolean newVisibleToMouseEvents) {
+    this.elementType = elementType;
     this.id = newId;
     this.parent = newParent;
     this.elementRenderer = newElementRenderer;
@@ -267,7 +279,8 @@ public class Element {
    */
   public final String getElementStateString() {
     String pos =
-      "pos [" + getX() + "," + getY() + "," + getWidth() + "," + getHeight() + "] "
+      "style [" + getElementType().getAttributes().getStyle() + "] "
+      + "pos [" + getX() + "," + getY() + "," + getWidth() + "," + getHeight() + "] "
       + "constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
       + "," + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ","
       + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ","
@@ -1078,5 +1091,9 @@ public class Element {
 
   private void removeChild(final Element element) {
     elements.remove(element);
+  }
+
+  public ElementType getElementType() {
+    return elementType;
   }
 }

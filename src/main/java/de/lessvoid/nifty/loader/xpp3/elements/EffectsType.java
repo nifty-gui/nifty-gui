@@ -56,6 +56,40 @@ public class EffectsType {
   private Collection < EffectType > onActive = new ArrayList < EffectType >();
 
   /**
+   * default contructor.
+   */
+  public EffectsType() {
+  }
+
+  /**
+   * copy constructor.
+   * @param source source
+   */
+  public EffectsType(final EffectsType source) {
+    this.effectGroup = source.effectGroup;
+    this.effectGroupOverride = source.effectGroupOverride;
+    this.onStartScreen = copyCollection(source.onStartScreen);
+    this.onEndScreen = copyCollection(source.onEndScreen);
+    this.onHover = copyCollection(source.onHover);
+    this.onClick = copyCollection(source.onClick);
+    this.onFocus = copyCollection(source.onFocus);
+    this.onActive = copyCollection(source.onActive);
+  }
+
+  /**
+   * copy collection.
+   * @param source source
+   * @return new collection that is a copy
+   */
+  private Collection < EffectType > copyCollection(final Collection < EffectType > source) {
+    Collection < EffectType > copy = new ArrayList < EffectType >();
+    for (EffectType effect : source) {
+      copy.add(new EffectType(effect));
+    }
+    return copy;
+  }
+
+  /**
    * setEffectGroup.
    * @param effectGroupParam effectGroup
    */

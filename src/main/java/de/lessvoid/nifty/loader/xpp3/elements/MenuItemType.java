@@ -75,12 +75,12 @@ public class MenuItemType extends ElementType {
       final NiftyInputControl inputControlParam, final ScreenController screenController) {
     TextRenderer textRenderer = new TextRenderer();
     Element menuItem = new Element(
+        this,
         getAttributes().getId(),
         parent,
         screen,
         true,
-        new PanelRenderer(),
-        textRenderer);
+        new PanelRenderer(), textRenderer);
 
     focusHandler.addElement(menuItem);
 

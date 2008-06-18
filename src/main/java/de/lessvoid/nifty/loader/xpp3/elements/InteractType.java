@@ -32,6 +32,23 @@ public class InteractType {
   private String onClickAlternateKey;
 
   /**
+   * copy constructor.
+   * @param source source
+   */
+  public InteractType(final InteractType source) {
+    onClick = new OnClickType(source.onClick);
+    onClickRepeat = new OnClickType(source.onClickRepeat);
+    onClickMouseMove = new OnClickType(source.onClickMouseMove);
+    onClickAlternateKey = source.onClickAlternateKey;
+  }
+
+  /**
+   * default constructor.
+   */
+  public InteractType() {
+  }
+
+  /**
    * Set onClick.
    * @param onClickParam onClick
    */

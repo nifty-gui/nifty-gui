@@ -10,6 +10,7 @@ import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
+import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -45,6 +46,7 @@ public final class NiftyCreator {
 
   /**
    * Create layer.
+   * @param elementType element type
    * @param id id
    * @param nifty nifty
    * @param screen screen
@@ -52,10 +54,10 @@ public final class NiftyCreator {
    * @return element
    */
   public static Element createLayer(
+      final ElementType elementType,
       final String id,
       final Nifty nifty,
-      final Screen screen,
-      final AttributesType attributes) {
+      final Screen screen, final AttributesType attributes) {
     // create box
     LayoutPart layerLayout = new LayoutPart();
     layerLayout.getBox().setX(0);
@@ -69,12 +71,12 @@ public final class NiftyCreator {
 
     // create element
     Element layer = new Element(
+        elementType,
         id,
         null,
         layerLayout,
         screen,
-        false,
-        getPanelRenderer(nifty, attributes));
+        false, getPanelRenderer(nifty, attributes));
     return layer;
   }
 }

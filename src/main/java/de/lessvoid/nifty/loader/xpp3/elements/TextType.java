@@ -81,12 +81,12 @@ public class TextType extends ElementType {
       final ScreenController screenController) {
     TextRenderer textRenderer = new TextRenderer();
     Element panel = new Element(
+        this,
         getAttributes().getId(),
         parent,
         screen,
         false,
-        new PanelRenderer(),
-        textRenderer);
+        new PanelRenderer(), textRenderer);
     super.addElementAttributes(
         panel,
         screen,

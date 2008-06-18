@@ -114,14 +114,6 @@ public class ControlType extends ElementType {
 
     // get very first child if available
     if (controlDefinition.getElements().size() == 1) {
-
-      // process control styles
-      String styleId = getAttributes().getStyle();
-      if (styleId != null) {
-        controlDefinition.setStyleId(styleId);
-      }
-      controlDefinition.controlProcessStyleAttributes(styleHandler);
-
       // create actual element
       ElementType w = controlDefinition.getElements().iterator().next();
       Element current = w.createElement(
@@ -145,6 +137,13 @@ public class ControlType extends ElementType {
           time,
           inputControl,
           screenController);
+      controlDefinition.applyControlAttributes(
+          current,
+          styleHandler,
+          getAttributes().getSrcAttributes(),
+          nifty,
+          registeredEffects,
+          time);
       c.bind(nifty, screen, current, null, listener);
       return current;
     }

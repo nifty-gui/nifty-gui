@@ -40,10 +40,10 @@ public class PopupType extends PanelType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element element = NiftyCreator.createLayer(
+        this,
         getAttributes().getId(),
         nifty,
-        screen,
-        getAttributes());
+        screen, getAttributes());
     super.addElementAttributes(
         element,
         screen,

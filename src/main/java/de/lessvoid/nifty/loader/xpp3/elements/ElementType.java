@@ -3,6 +3,8 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
@@ -12,6 +14,7 @@ import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyImageMode;
@@ -26,6 +29,10 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class ElementType {
+  /**
+   * logger.
+   */
+  private static Logger log = Logger.getLogger(ElementType.class.getName());
 
   /**
    * attributes.
@@ -83,30 +90,6 @@ public class ElementType {
   }
 
   /**
-   * get interact.
-   * @return interact.
-   */
-  protected InteractType getInteract() {
-    return interact;
-  }
-
-  /**
-   * get hover.
-   * @return hover
-   */
-  protected HoverType getHover() {
-    return hover;
-  }
-
-  /**
-   * get effect.
-   * @return effect
-   */
-  protected EffectsType getEffect() {
-    return effects;
-  }
-
-  /**
    * add attributes to the element.
    * @param element element
    * @param screen screen
@@ -133,12 +116,7 @@ public class ElementType {
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
-    if (styleId != null) {
-      StyleType style = styleHandler.getStyle(styleId);
-      if (style != null) {
-        style.applyStyle(element, nifty, registeredEffects, time);
-      }
-    }
+    applyStyle(element, nifty, registeredEffects, styleHandler, time, styleId);
 
     // now apply our own attributes
     applyAttributes(attributes, element, nifty.getRenderDevice());
@@ -172,6 +150,17 @@ public class ElementType {
           time,
           control,
           screenController);
+    }
+  }
+
+  private void applyStyle(final Element element, final Nifty nifty,
+      final Map<String, RegisterEffectType> registeredEffects,
+      final StyleHandler styleHandler, final TimeProvider time, String styleId) {
+    if (styleId != null) {
+      StyleType style = styleHandler.getStyle(styleId);
+      if (style != null) {
+        style.applyStyle(element, nifty, registeredEffects, time);
+      }
     }
   }
 
@@ -253,6 +242,10 @@ public class ElementType {
       if (attrib.getColor() != null) {
         textRenderer.setColor(attrib.getColor().createColor());
       }
+      // text
+      if (attrib.getText() != null) {
+        textRenderer.setText(attrib.getText());
+      }
     }
     // panelRenderer
     PanelRenderer panelRenderer = element.getRenderer(PanelRenderer.class);
@@ -333,30 +326,107 @@ public class ElementType {
    * process this elements styleId. this is used for controls and
    * changes the given styleId and the elements style id to a new
    * combined one.
-   * @param styleId parent styleId
+   * @param element element
    * @param styleHandler style handler
+   * @param controlDefinitionAttributes controlDefinitionAttributes
+   * @param controlAttributes controlAttributes
+   * @param nifty nifty
+   * @param registeredEffects effects
+   * @param time time
    */
-  public void controlProcessStyleAttributes(final String styleId, final StyleHandler styleHandler) {
-    String myStyleId = attributes.getStyle();
+  public static void applyControlAttributes(
+      final Element element,
+      final StyleHandler styleHandler,
+      final Attributes controlDefinitionAttributes,
+      final Attributes controlAttributes,
+      final Nifty nifty,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final TimeProvider time) {
+    controlProcessStyleAttribute(
+        element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
+    controlProcessParameters(
+        element, controlAttributes, nifty.getRenderDevice());
+    for (Element child : element.getElements()) {
+      applyControlAttributes(
+          child, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
+    }
+  }
+
+  /**
+   * process style attribute.
+   * @param element element
+   * @param styleHandler style handler
+   * @param controlDefinitionAttributes control definition attributes
+   * @param controlAttributes control attributes
+   * @param nifty nifty
+   * @param registeredEffects effects
+   * @param time time
+   */
+  private static void controlProcessStyleAttribute(
+      final Element element,
+      final StyleHandler styleHandler,
+      final Attributes controlDefinitionAttributes,
+      final Attributes controlAttributes,
+      final Nifty nifty,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final TimeProvider time) {
+    String myStyleId = element.getElementType().getAttributes().getStyle();
     if (myStyleId != null) {
-      // this element has a style id set
+      // this element has a style id set. is a special substyle?
       int indexOfSep = myStyleId.indexOf("#");
       if (indexOfSep != -1) {
-        String newStyleId = "";
-        if (myStyleId.startsWith("#")) {
-          newStyleId = styleId + myStyleId;
-        } else {
-          newStyleId = styleId + myStyleId.substring(indexOfSep);
+        StyleType style = resolveStyle(styleHandler, myStyleId, controlAttributes.get("style"));
+        if (style == null) {
+          style = resolveStyle(styleHandler, myStyleId, controlDefinitionAttributes.get("style"));
         }
-
-        // check if newStyleId exists and only rewrite it here when it's available
-        if (styleHandler.getStyle(newStyleId) != null) {
-          attributes.setStyle(newStyleId);
+        if (style != null) {
+          style.applyStyle(element, nifty, registeredEffects, time);
         }
       }
     }
-    for (ElementType elementType : elements) {
-      elementType.controlProcessStyleAttributes(styleId, styleHandler);
+  }
+
+  /**
+   * try to resolve style.
+   * @param styleHandler style handler
+   * @param myStyleId my style
+   * @param newStyle new style
+   * @return StyleType when resolved or null on error.
+   */
+  private static StyleType resolveStyle(
+      final StyleHandler styleHandler,
+      final String myStyleId,
+      final String newStyle) {
+    if (myStyleId.startsWith("#")) {
+      String resolvedStyle = newStyle + myStyleId;
+
+      // check if newStyleId exists.
+      return styleHandler.getStyle(resolvedStyle);
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * process parameters.
+   * @param element element
+   * @param controlAttributes control attributes
+   * @param niftyRenderEngine render engine
+   */
+  private static void controlProcessParameters(
+      final Element element,
+      final Attributes controlAttributes,
+      final NiftyRenderEngine niftyRenderEngine) {
+    for (Entry < String, String > entry
+        : element.getElementType().getAttributes().findParameterAttributes().entrySet()) {
+      String value = controlAttributes.get(entry.getValue());
+      if (value == null) {
+        value = "'" + entry.getValue() + "' missing o_O";
+      }
+      log.info("[" + element.getId() + "] setting [" + entry.getKey() + "] to [" + value + "]");
+      Attributes attributes = new Attributes();
+      attributes.overwriteAttribute(entry.getKey(), value);
+      ElementType.applyAttributes(new AttributesType(attributes), element, niftyRenderEngine);
     }
   }
 }

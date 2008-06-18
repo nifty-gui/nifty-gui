@@ -4,7 +4,6 @@ import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.SubstitutionGroup;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
-import de.lessvoid.nifty.loader.xpp3.elements.ColorType;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.loader.xpp3.processor.ControlTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.EffectsTypeProcessor;
@@ -41,8 +40,7 @@ public final class ProcessorHelper {
       final XmlParser xmlParser,
       final ElementType elementType,
       final Attributes attributes) throws Exception {
-    AttributesType attributesType = new AttributesType();
-    processAttributes(xmlParser, attributesType, attributes);
+    AttributesType attributesType = new AttributesType(attributes);
     elementType.setAttributes(attributesType);
 
     xmlParser.nextTag();
@@ -58,102 +56,5 @@ public final class ProcessorHelper {
             add("menu", new MenuTypeProcessor(elementType)).
             add("control", new ControlTypeProcessor(elementType))
             );
-  }
-
-  /**
-   * process element attributes.
-   * @param xmlParser xmlParser
-   * @param attributesType elementType
-   * @param attributes attributes
-   * @throws Exception exception
-   */
-  public static void processAttributes(
-      final XmlParser xmlParser,
-      final AttributesType attributesType,
-      final Attributes attributes) throws Exception {
-    // id
-    if (attributes.isSet("id")) {
-      attributesType.setId(attributes.get("id"));
-    }
-    // style
-    if (attributes.isSet("style")) {
-      attributesType.setStyle(attributes.get("style"));
-    }
-    // visible
-    if (attributes.isSet("visible")) {
-      attributesType.setVisible(attributes.getAsBoolean("visible"));
-    }
-    // height
-    if (attributes.isSet("height")) {
-      attributesType.setHeight(attributes.get("height"));
-    }
-    // width
-    if (attributes.isSet("width")) {
-      attributesType.setWidth(attributes.get("width"));
-    }
-    // x
-    if (attributes.isSet("x")) {
-      attributesType.setX(attributes.get("x"));
-    }
-    // y
-    if (attributes.isSet("y")) {
-      attributesType.setY(attributes.get("y"));
-    }
-    // horizontal align
-    if (attributes.isSet("align")) {
-      attributesType.setAlign(attributes.getAsAlignType("align"));
-    }
-    // vertical align
-    if (attributes.isSet("valign")) {
-      attributesType.setValign(attributes.getAsVAlignType("valign"));
-    }
-    // child clip
-    if (attributes.isSet("childClip")) {
-      attributesType.setChildClip(attributes.getAsBoolean("childClip"));
-    }
-    // visibleToMouse
-    if (attributes.isSet("visibleToMouse")) {
-      attributesType.setVisibleToMouse(attributes.getAsBoolean("visibleToMouse"));
-    }
-    // childLayout
-    if (attributes.isSet("childLayout")) {
-      attributesType.setChildLayoutType(attributes.getAsLayoutType("childLayout"));
-    }
-    // backgroundImage
-    if (attributes.isSet("backgroundImage")) {
-      attributesType.setBackgroundImage(attributes.get("backgroundImage"));
-    }
-    // imageMode
-    if (attributes.isSet("imageMode")) {
-      attributesType.setImageMode(attributes.get("imageMode"));
-    }
-    // backgroundColor
-    if (attributes.isSet("backgroundColor")) {
-      attributesType.setBackgroundColor(new ColorType(attributes.get("backgroundColor")));
-    }
-    // font
-    if (attributes.isSet("font")) {
-      attributesType.setFont(attributes.get("font"));
-    }
-    // color
-    if (attributes.isSet("color")) {
-      attributesType.setColor(new ColorType(attributes.get("color")));
-    }
-    // filename
-    if (attributes.isSet("filename")) {
-      attributesType.setFilename(attributes.get("filename"));
-    }
-    // filter
-    if (attributes.isSet("filter")) {
-      attributesType.setFilter(attributes.getAsBoolean("filter"));
-    }
-    // text horizontal align
-    if (attributes.isSet("textHAlign")) {
-      attributesType.setTextHAlign(attributes.getAsAlignType("textHAlign"));
-    }
-    // text vertical align
-    if (attributes.isSet("textVAlign")) {
-      attributesType.setTextVAlign(attributes.getAsVAlignType("textVAlign"));
-    }
   }
 }

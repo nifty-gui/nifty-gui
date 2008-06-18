@@ -41,7 +41,7 @@ public class RegisterControlDefinitionTypeProcessor implements XmlElementProcess
         name,
         controller,
         inputMapping,
-        attributes.get("style"));
+        attributes);
     registeredControls.put(name, registerControl);
 
     ElementType pseudoElement = new ElementType() {

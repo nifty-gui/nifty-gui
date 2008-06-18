@@ -15,6 +15,14 @@ public class OnClickType {
   private String value;
 
   /**
+   * copy constructor.
+   * @param source source
+   */
+  public OnClickType(final OnClickType source) {
+    this.value = source.value;
+  }
+
+  /**
    * OnClickType.
    * @param valueParam value
    */

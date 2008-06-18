@@ -49,11 +49,11 @@ public class MenuType extends ElementType {
       final ScreenController screenController) {
     PanelRenderer renderer = new PanelRenderer();
     Element panel = new Element(
+        this,
         getAttributes().getId(),
         parent,
         screen,
-        false,
-        renderer);
+        false, renderer);
     Element element = panel;
     super.addElementAttributes(
         element,

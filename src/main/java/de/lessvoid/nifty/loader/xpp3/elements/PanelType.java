@@ -47,11 +47,11 @@ public class PanelType extends ElementType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element panel = new Element(
+        this,
         getAttributes().getId(),
         parent,
         screen,
-        false,
-        NiftyCreator.getPanelRenderer(nifty, getAttributes()));
+        false, NiftyCreator.getPanelRenderer(nifty, getAttributes()));
 
     Element element = panel;
     super.addElementAttributes(

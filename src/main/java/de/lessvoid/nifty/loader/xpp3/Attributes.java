@@ -3,6 +3,7 @@ package de.lessvoid.nifty.loader.xpp3;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -25,11 +26,26 @@ public final class Attributes {
   private Map < String, String > attributes = new Hashtable < String, String >();
 
   /**
+   * default constructor.
+   */
+  public Attributes() {
+  }
+
+  /**
    * Get Attributes from XmlParser.
    * @param xpp xpp
    */
   public Attributes(final XmlPullParser xpp) {
     this.attributes = getAttributes(xpp);
+  }
+
+  /**
+   * copy constructor.
+   * @param source source
+   */
+  public Attributes(final Attributes source) {
+    this.attributes = new Hashtable < String, String >();
+    this.attributes.putAll(source.attributes);
   }
 
   /**
@@ -198,5 +214,19 @@ public final class Attributes {
    */
   public void set(final String name, final String value) {
     attributes.put(name, value);
+  }
+
+  /**
+   * this looks for all attributes with a value of $name.
+   * @return map with attributes
+   */
+  public Map < String, String > getParameterAttributes() {
+    Map < String, String > result = new Hashtable < String, String >();
+    for (Entry < String, String> entry : attributes.entrySet()) {
+      if (entry.getValue().startsWith("$")) {
+        result.put(entry.getKey(), entry.getValue().replaceFirst("\\$", ""));
+      }
+    }
+    return result;
   }
 }
