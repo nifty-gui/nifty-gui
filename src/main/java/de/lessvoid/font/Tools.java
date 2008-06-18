@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.glu.GLU;
+import org.lwjgl.util.glu.GLU;
 
 /**
  * @author void
