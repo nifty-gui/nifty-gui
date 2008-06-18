@@ -7,11 +7,6 @@
   <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
-  <!-- custom style for one of the buttons -->
-  <style id="my#text">
-    <attributes font="verdana-24-regular.fnt" color="#f00f" align="center" valign="center" textHAlign="center" textVAlign="center" />
-  </style>
-
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -30,11 +25,8 @@
           </panel>
           <panel height="16px" />
           <panel childLayout="horizontal">
-            <control id="backButton" name="button" label="Prev" align="left">
-              <interact onClick="back()" /> 
-            </control>
-            <panel width="*"/>
-            <control id="nextButton" style="my" name="button" label="Next" align="right">
+            <panel width="*" />
+            <control id="backButton" name="button" label="Back to Menu" align="right">
               <interact onClick="back()" /> 
             </control>
           </panel>
