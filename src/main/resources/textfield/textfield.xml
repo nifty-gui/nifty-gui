@@ -18,7 +18,8 @@
       </effect>
       <panel id="dialog" backgroundImage="dialog.png" imageMode="resize:32,32,32,32,32,32,32,168,32,32,32,32" childLayout="center" width="80%" height="25%" align="center" valign="center">
         <effect>
-          <onStartScreen name="move" direction="right" mode="in" length="800" startDelay="500" inherit="true"/>
+          <onStartScreen name="move" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
+          <onEndScreen name="move" direction="bottom" mode="out" length="500" startDelay="0" inherit="true"/>
         </effect>
         <panel childLayout="vertical" width="95%" height="80%" align="center" valign="center">
           <panel childLayout="horizontal" height="40px">
