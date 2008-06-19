@@ -1,6 +1,6 @@
 info face="Verdana" size=25 bold=0 italic=0 charset="NEHE" unicode=0 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1
 common lineHeight=35 base=26 scaleW=256 scaleH=256 pages=1 packed=0
-page id=0 file="verdana-24-regular.png"
+page id=0 file="verdana-24-shadow.png"
 chars count=97
 char id=32   x=224     y=187     width=12     height=6     xoffset=0     yoffset=24    xadvance=8     page=0  chnl=0 
 char id=33   x=181     y=60     width=13     height=25     xoffset=0     yoffset=4    xadvance=9     page=0  chnl=0 

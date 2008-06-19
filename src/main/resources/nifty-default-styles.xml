@@ -6,7 +6,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- just some text lavel default -->
   <style id="nifty-label">
-    <attributes font="verdana-48-regular.fnt" align="center" />
+    <attributes font="verdana-24-shadow.fnt" align="center" />
   </style>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -22,7 +22,14 @@
 
   <!-- style for the button text -->
   <style id="nifty-button#text">
-    <attributes font="verdana-24-regular.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" />
+    <attributes font="verdana-24-shadow.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="true"/>
+    <effect>
+      <onHover name="hoverSaveState" />
+      <onHover name="hoverChangeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onHover name="hoverColorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
+      <onHover name="hoverRenderElement" />
+      <onHover name="hoverRestoreState" />
+    </effect>
   </style>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -44,7 +51,7 @@
 
   <!-- the text in the input field -->
   <style id="nifty-textfield-text">
-    <attributes font="verdana-48-regular.fnt" visibleToMouse="false" align="left" textHAlign="left" />
+    <attributes font="verdana-24-shadow.fnt" visibleToMouse="false" align="left" textHAlign="left" />
   </style>
 
   <!-- the cursor is rendered in a separate layer on top of the input field and this is the parent panel of this -->

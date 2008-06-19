@@ -27,7 +27,7 @@
           <panel childLayout="horizontal">
             <panel width="*" />
             <control id="backButton" name="button" label="Back to Menu" align="right">
-              <interact onClick="back()" /> 
+              <interact onClick="back()" />
             </control>
           </panel>
         </panel>

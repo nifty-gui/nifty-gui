@@ -22,7 +22,7 @@
       <label id="text4" height="15%" width="75%" backgroundColor="#fc0f" text="TextHAlign: left, TextVAlign: center" textHAlign="left" textVAlign="center"/>
       <label id="text5" height="15%" width="75%" backgroundColor="#fe0f" text="TextHAlign: center, TextVAlign: center" textHAlign="center" textVAlign="center"/>
       <label id="text6" height="15%" width="75%" backgroundColor="#ff2f" text="TextHAlign: right, TextVAlign: center" textHAlign="right" textVAlign="center"/>
-      <control id="backButton" name="button" align="center">
+      <control id="backButton" name="button" label="Back to Menu" align="center">
         <interact onClick="quit()" /> 
       </control>
     </layer>

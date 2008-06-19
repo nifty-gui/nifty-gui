@@ -39,6 +39,17 @@
     </effect>
   </style>
 
+  <!-- glowing text -->
+  <style id="glowText">
+    <effect>
+      <onHover name="hoverSaveState" />
+      <onHover name="hoverChangeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onHover name="hoverColorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
+      <onHover name="hoverRenderElement" />
+      <onHover name="hoverRestoreState" />
+    </effect>
+  </style>
+
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- intro screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -112,7 +123,7 @@
       </menu>
     </panel>
       <panel id="hintArea" childLayout="center" align="center" valign="center" height="20%">
-        <text id="hintElement" text="Welcome to Nifty Examples" font="verdana-48-regular.fnt" align="center" valign="center"/>
+        <text id="hintElement" text="Welcome to Nifty Examples" font="verdana-24-shadow.fnt" align="center" valign="center"/>
       </panel>
     </layer>
     <layer id="example" childLayout="absolute">
@@ -159,16 +170,16 @@
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
         <panel childLayout="center" height="50%">
-          <text text="Really want to Exit?" font="verdana-48-regular.fnt" align="center" valign="center" color="#ff0f"/>
+          <text text="Really want to Exit?" font="verdana-24-shadow.fnt" align="center" valign="center" color="#ff0f"/>
         </panel>
         <panel childLayout="horizontal" align="center" height="50%">
           <panel childLayout="center" width="50%">
-            <text text="Yes" font="verdana-48-regular.fnt" align="center">
+            <text text="Yes" font="verdana-24-shadow.fnt" style="glowText" align="center">
               <interact onClick="popupExit(yes)"/>
             </text>
           </panel>
           <panel childLayout="center" width="50%">
-            <text text="No" font="verdana-48-regular.fnt" align="center">
+            <text text="No" font="verdana-24-shadow.fnt" style="glowText" align="center">
               <interact onClick="popupExit(no)"/>
             </text>
           </panel>
