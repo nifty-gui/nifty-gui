@@ -2,20 +2,6 @@
 <nifty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nifty.xsd">
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <!-- register effects we want to use -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <registerEffect name="imageSize" class="de.lessvoid.nifty.effects.general.ImageSize" />
-  <registerEffect name="nop" class="de.lessvoid.nifty.effects.general.Nop" />
-  <registerEffect name="fade" class="de.lessvoid.nifty.effects.general.Fade" />
-  <registerEffect name="hide" class="de.lessvoid.nifty.effects.general.Hide" />
-  <registerEffect name="shake" class="de.lessvoid.nifty.effects.general.Shake" />
-  <registerEffect name="playSound" class="de.lessvoid.nifty.effects.general.PlaySound" />
-  <registerEffect name="move" class="de.lessvoid.nifty.effects.general.Move" />
-  <registerEffect name="pulsate" class="de.lessvoid.nifty.effects.general.Pulsate" />
-  <registerEffect name="pulsateHover" class="de.lessvoid.nifty.effects.hover.Pulsate" />
-  <registerEffect name="hint" class="de.lessvoid.nifty.effects.hover.Hint" />
-  
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- register sounds -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <registerSound id="intro" filename="all/intro.wav" />
