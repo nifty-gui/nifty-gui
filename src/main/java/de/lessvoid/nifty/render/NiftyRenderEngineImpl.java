@@ -341,7 +341,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param y1 y1
    */
   public void enableClip(final int x0, final int y0, final int x1, final int y1) {
-    renderDevice.enableClip(x0, y0, x1, y1);
+    renderDevice.enableClip(x0 + getX(), y0 + getY(), x1 + getX(), y1 + getY());
   }
 
   /**
@@ -366,7 +366,6 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   public void setImageScale(final float scale) {
     this.imageScale = scale;
   }
-
   /**
    * @see de.lessvoid.nifty.render.NiftyRenderEngine#setGlobalPosition(float, float)
    * @param xPos x
