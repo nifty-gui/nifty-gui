@@ -28,13 +28,12 @@ public final class NiftyDefaults {
     effects.put("ImageOverlay", new RegisterEffectType("de.lessvoid.nifty.effects.general.ImageOverlay"));
     effects.put("ImageOverlayPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.general.ImageOverlayPulsate"));
     effects.put("fade", new RegisterEffectType("de.lessvoid.nifty.effects.general.Fade"));
-    effects.put("nop", new RegisterEffectType("de.lessvoid.nifty.effects.general."));
-    effects.put("fade", new RegisterEffectType("de.lessvoid.nifty.effects.general.Nop"));
-    effects.put("hide", new RegisterEffectType("de.lessvoid.nifty.effects.general.Fade"));
-    effects.put("shake", new RegisterEffectType("de.lessvoid.nifty.effects.general.Hide"));
-    effects.put("playSound", new RegisterEffectType("de.lessvoid.nifty.effects.general.Shake"));
-    effects.put("move", new RegisterEffectType("de.lessvoid.nifty.effects.general.PlaySound"));
-    effects.put("pulsate", new RegisterEffectType("de.lessvoid.nifty.effects.general.Move"));
+    effects.put("nop", new RegisterEffectType("de.lessvoid.nifty.effects.general.Nop"));
+    effects.put("fade", new RegisterEffectType("de.lessvoid.nifty.effects.general.Fade"));
+    effects.put("hide", new RegisterEffectType("de.lessvoid.nifty.effects.general.Hide"));
+    effects.put("shake", new RegisterEffectType("de.lessvoid.nifty.effects.general.Shake"));
+    effects.put("playSound", new RegisterEffectType("de.lessvoid.nifty.effects.general.PlaySound"));
+    effects.put("move", new RegisterEffectType("de.lessvoid.nifty.effects.general.Move"));
 
     // hover
     effects.put("hoverColorBar", new RegisterEffectType("de.lessvoid.nifty.effects.hover.ColorBar"));
