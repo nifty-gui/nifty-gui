@@ -60,7 +60,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   public void renderQuad(int x, int y, int width, int height) {
   }
 
-  public void renderText(RenderFont font, String text, int x, int y, int selectionStart, int selectionEnd, Color c) {
+  public void renderText(String text, int x, int y, int selectionStart, int selectionEnd, Color c) {
   }
 
   public void restoreState() {
@@ -69,6 +69,13 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   public void saveState(Set<RenderStateType> statesToSave) {
   }
 
+  public void setFont(RenderFont font) {
+    renderStates.add(RenderStateType.font); 
+  }
+
+  public RenderFont getFont() {
+    return null;
+  }
   public void setColor(Color colorParam) {
     renderStates.add(RenderStateType.color);
   }

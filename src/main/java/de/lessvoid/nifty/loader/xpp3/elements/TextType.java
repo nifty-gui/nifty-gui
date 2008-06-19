@@ -13,6 +13,7 @@ import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -86,7 +87,8 @@ public class TextType extends ElementType {
         parent,
         screen,
         false,
-        new PanelRenderer(), textRenderer);
+        new PanelRenderer(),
+        textRenderer);
     super.addElementAttributes(
         panel,
         screen,
@@ -109,6 +111,9 @@ public class TextType extends ElementType {
       textRenderer.setTextSelectionColor(new Color(textSelectionColor));
     }
     textRenderer.setText(text);
+//    panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+//    panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
+
     parent.add(panel);
     return panel;
   }

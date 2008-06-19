@@ -18,7 +18,7 @@ public class FontTest
   private static void init()
   {
     font= new Font();
-    font.init( "verdana-48-regular.fnt" );
+    font.init( "verdana-24-shadow.fnt" );
 
     // init 2d
     GL11.glViewport( 0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());

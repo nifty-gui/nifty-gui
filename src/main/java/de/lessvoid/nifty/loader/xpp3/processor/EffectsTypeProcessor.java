@@ -48,15 +48,6 @@ public class EffectsTypeProcessor implements XmlElementProcessor {
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     EffectsType effectsType = new EffectsType();
-
-    if (attributes.isSet("effectGroup")) {
-      effectsType.setEffectGroup(attributes.get("effectGroup"));
-    }
-
-    if (attributes.isSet("effectGroupOverride")) {
-      effectsType.setEffectGroupOverride(attributes.get("effectGroupOverride"));
-    }
-
     xmlParser.nextTag();
     xmlParser.zeroOrMore("onStartScreen", new EffectTypeProcessor(effectsType, EffectEventId.onStartScreen));
     xmlParser.zeroOrMore("onEndScreen", new EffectTypeProcessor(effectsType, EffectEventId.onEndScreen));

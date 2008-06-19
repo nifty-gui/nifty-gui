@@ -153,9 +153,22 @@ public class ElementType {
     }
   }
 
-  private void applyStyle(final Element element, final Nifty nifty,
-      final Map<String, RegisterEffectType> registeredEffects,
-      final StyleHandler styleHandler, final TimeProvider time, String styleId) {
+  /**
+   * apply style.
+   * @param element element
+   * @param nifty nifty
+   * @param registeredEffects effects
+   * @param styleHandler style handler
+   * @param time time provider
+   * @param styleId style id
+   */
+  private void applyStyle(
+      final Element element,
+      final Nifty nifty,
+      final Map < String, RegisterEffectType > registeredEffects,
+      final StyleHandler styleHandler,
+      final TimeProvider time,
+      final String styleId) {
     if (styleId != null) {
       StyleType style = styleHandler.getStyle(styleId);
       if (style != null) {
@@ -245,6 +258,8 @@ public class ElementType {
       // text
       if (attrib.getText() != null) {
         textRenderer.setText(attrib.getText());
+//        element.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+//        element.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
       }
     }
     // panelRenderer

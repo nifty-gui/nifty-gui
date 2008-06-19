@@ -34,5 +34,10 @@ public final class NiftyDefaults {
     effects.put("hoverPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.hover.Pulsate"));
     effects.put("hoverHint", new RegisterEffectType("de.lessvoid.nifty.effects.hover.Hint"));
     effects.put("hoverImageOverlay", new RegisterEffectType("de.lessvoid.nifty.effects.hover.ImageOverlay"));
+    effects.put("hoverColorPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.hover.ColorPulsate"));
+    effects.put("hoverChangeFont", new RegisterEffectType("de.lessvoid.nifty.effects.hover.ChangeFont"));
+    effects.put("hoverSaveState", new RegisterEffectType("de.lessvoid.nifty.effects.hover.SaveState"));
+    effects.put("hoverRestoreState", new RegisterEffectType("de.lessvoid.nifty.effects.hover.RestoreState"));
+    effects.put("hoverRenderElement", new RegisterEffectType("de.lessvoid.nifty.effects.hover.RenderElement"));
   }
 }

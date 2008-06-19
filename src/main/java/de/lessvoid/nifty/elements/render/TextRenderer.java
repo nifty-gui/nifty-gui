@@ -5,8 +5,10 @@ import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  * The TextRenderer implementation.
@@ -195,19 +197,27 @@ public class TextRenderer implements ElementRenderer {
       final NiftyRenderEngine r,
       final int selStart,
       final int selEnd) {
-    if (!r.isColorChanged()) {
-      r.setColor(color);
-    } else {
+    if (r.isColorChanged()) {
       r.setColor(new Color(color, r.getColorAlpha()));
+    } else {
+      r.setColor(color);
+    }
+    boolean stateSaved = false;
+    if (r.getFont() == null) {
+      r.saveState(RenderStateType.allStates());
+      r.setFont(font);
+      stateSaved = true;
     }
     r.renderText(
-        font,
         line,
         xx,
         yy,
         selStart,
         selEnd,
         textSelectionColor);
+    if (stateSaved) {
+      r.restoreState();
+    }
   }
 
   /**

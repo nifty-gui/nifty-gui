@@ -102,7 +102,6 @@ public class MenuItemType extends ElementType {
         screenController);
 
     textRenderer.setText(text);
-
     menuItem.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
     menuItem.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
 

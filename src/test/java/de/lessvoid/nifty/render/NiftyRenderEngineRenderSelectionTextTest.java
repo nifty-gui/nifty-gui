@@ -1,14 +1,12 @@
 package de.lessvoid.nifty.render;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.createStrictMock;
-import static org.easymock.EasyMock.verify;
-import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.expect;
-
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import junit.framework.TestCase;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
-import junit.framework.TestCase;
 
 public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
 
@@ -30,7 +28,7 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
   public void testCompleteSelection() {
     font.render(TEXT, X, Y, TEXT_SELECTION_COLOR, TEXT_SIZE);
     replay(font);
-    engine.renderSelectionText(font, TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, TEXT.length());
+    engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, TEXT.length());
     verify(font);
   }
 /*
@@ -48,7 +46,7 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
     expect(font.getWidth("H")).andReturn(10);
     font.render("ello World", X + 10, Y, TEXT_COLOR, TEXT_SIZE);
     replay(font);
-    engine.renderSelectionText(font, TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, 1);
+    engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, 1);
     verify(font);
   }
 
@@ -57,7 +55,7 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
     expect(font.getWidth("He")).andReturn(10);
     font.render("llo World", X + 10, Y, TEXT_COLOR, TEXT_SIZE);
     replay(font);
-    engine.renderSelectionText(font, TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, 2);
+    engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, 2);
     verify(font);
   }
 
@@ -66,7 +64,7 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
     expect(font.getWidth("Hello Worl")).andReturn(100);
     font.render("d", X + 100, Y, TEXT_SELECTION_COLOR, TEXT_SIZE);
     replay(font);
-    engine.renderSelectionText(font, TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, TEXT.length() - 1, TEXT.length());
+    engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, TEXT.length() - 1, TEXT.length());
     verify(font);
   }
 
@@ -77,7 +75,7 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
     expect(font.getWidth(" ")).andReturn(10);
     font.render("World", X + 60, Y, TEXT_COLOR, TEXT_SIZE);
     replay(font);
-    engine.renderSelectionText(font, TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 5, 6);
+    engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 5, 6);
     verify(font);
   }
 }

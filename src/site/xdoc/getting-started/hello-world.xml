@@ -122,7 +122,7 @@
     <layer id="layer" backgroundColor="#003f" childLayout="center">
       <panel height="25%" width="35%" align="center" valign="center" backgroundColor="#f60f"
              childLayout="center" visibleToMouse="true">
-        <text font="verdana-48-regular.fnt" text="Hello World!"
+        <text font="verdana-24-shadow.fnt" text="Hello World!"
               align="center" valign="center" />
       </panel>
     </layer>

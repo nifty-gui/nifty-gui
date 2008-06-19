@@ -227,7 +227,7 @@ public class Element {
 
   /**
    * initialize this instance helper.
-   * @param elementType element
+   * @param newElementType element
    * @param newId the id
    * @param newParent parent
    * @param newElementRenderer the element renderer to use
@@ -236,13 +236,13 @@ public class Element {
    * @param newVisibleToMouseEvents visible to mouse
    */
   private void initialize(
-      final ElementType elementType,
+      final ElementType newElementType,
       final String newId,
       final Element newParent,
       final ElementRenderer[] newElementRenderer,
       final LayoutPart newLayoutPart,
       final MouseFocusHandler newFocusHandler, final boolean newVisibleToMouseEvents) {
-    this.elementType = elementType;
+    this.elementType = newElementType;
     this.id = newId;
     this.parent = newParent;
     this.elementRenderer = newElementRenderer;
@@ -1082,6 +1082,9 @@ public class Element {
     this.id = newId;
   }
 
+  /**
+   * remove this from parent.
+   */
   public void remove() {
     parent.removeChild(this);
     if (focusHandler != null) {
@@ -1089,11 +1092,27 @@ public class Element {
     }
   }
 
+  /**
+   * remove given child.
+   * @param element child element to remove
+   */
   private void removeChild(final Element element) {
     elements.remove(element);
   }
 
+  /**
+   * get element type.
+   * @return element type
+   */
   public ElementType getElementType() {
     return elementType;
+  }
+
+  /**
+   * get element renderer.
+   * @return element renderer array
+   */
+  public ElementRenderer[] getElementRenderer() {
+    return elementRenderer;
   }
 }

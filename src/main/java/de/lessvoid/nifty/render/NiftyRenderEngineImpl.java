@@ -43,6 +43,11 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   private float currentY = 0;
 
   /**
+   * font.
+   */
+  private RenderFont font;
+
+  /**
    * current color.
    */
   private Color color;
@@ -88,6 +93,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     renderStatesMap.put(RenderStateType.imageScale, RenderStateImageScale.class);
     renderStatesMap.put(RenderStateType.position, RenderStatePosition.class);
     renderStatesMap.put(RenderStateType.textSize, RenderStateTextSize.class);
+    renderStatesMap.put(RenderStateType.font, RenderStateFont.class);
   }
 
   /**
@@ -133,9 +139,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     if (fontCache.containsKey(filename)) {
       return fontCache.get(filename);
     } else {
-      RenderFont font = renderDevice.createFont(filename);
-      fontCache.put(filename, font);
-      return font;
+      RenderFont newFont = renderDevice.createFont(filename);
+      fontCache.put(filename, newFont);
+      return newFont;
     }
   }
 
@@ -151,7 +157,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   }
 
   /**
-   * @see de.lessvoid.nifty.render.NiftyRenderEngine#renderImage(de.lessvoid.nifty.render.spi.RenderImage, int, int, int, int)
+   * renderImage.
    * @param image image
    * @param x x
    * @param y y
@@ -167,9 +173,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   }
 
   /**
-   * @see
-   * de.lessvoid.nifty.render.NiftyRenderEngine#renderText(de.lessvoid.nifty.render.spi.RenderFont, java.lang.String, int, int)
-   * @param font font
+   * renderText.
    * @param text text
    * @param x x
    * @param y y
@@ -178,7 +182,6 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param textSelectionColor textSelectionColor
    */
   public void renderText(
-      final RenderFont font,
       final String text,
       final int x,
       final int y,
@@ -187,7 +190,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       final Color textSelectionColor) {
     if (isSelection(selectionStart, selectionEnd)) {
       renderSelectionText(
-          font, text, x + getX(), y + getY(), color, textSelectionColor, textScale, selectionStart, selectionEnd);
+          text, x + getX(), y + getY(), color, textSelectionColor, textScale, selectionStart, selectionEnd);
     } else {
       font.render(text, x + getX(), y + getY(), color, textScale);
     }
@@ -195,7 +198,6 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
   /**
    * Render a Text with some text selected.
-   * @param font font
    * @param text text
    * @param x x
    * @param y y
@@ -206,7 +208,6 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param selectionEndParam selection end
    */
   protected void renderSelectionText(
-      final RenderFont font,
       final String text,
       final int x,
       final int y,
@@ -279,6 +280,22 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    */
   private boolean isEverythingSelected(final String text, final int selectionStart, final int selectionEnd) {
     return isSelectionAtBeginning(selectionStart) && isSelectionAtEnd(text, selectionEnd);
+  }
+
+  /**
+   * set font.
+   * @param newFont font
+   */
+  public void setFont(final RenderFont newFont) {
+    this.font = newFont;
+  }
+
+  /**
+   * get font.
+   * @return font
+   */
+  public RenderFont getFont() {
+    return this.font;
   }
 
   /**
@@ -478,6 +495,32 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     public void restore() {
       NiftyRenderEngineImpl.this.color = color;
       NiftyRenderEngineImpl.this.colorChanged = colorChanged;
+    }
+  }
+  
+  /**
+   * RenderStateFont.
+   * @author void
+   */
+  public final class RenderStateFont implements RenderStateSaver {
+    /**
+     * font.
+     */
+    private RenderFont font;
+
+
+    /**
+     * save.
+     */
+    public RenderStateFont() {
+      this.font = NiftyRenderEngineImpl.this.font;
+    }
+
+    /**
+     * restore.
+     */
+    public void restore() {
+      NiftyRenderEngineImpl.this.font = font;
     }
   }
 

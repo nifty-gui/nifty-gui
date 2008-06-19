@@ -71,7 +71,7 @@ public class NiftyDebugConsole {
   private void outputElement(final Element w, final String offset) {
     for (Element ww : w.getElements()) {
       console.output(offset + getIdText(ww) + " -> " + ww.getElementStateString());
-      console.output(offset + whitespace(getIdText(ww).length()) + "    " + outputEffects(w));
+      console.output(offset + whitespace(getIdText(ww).length()) + "    " + outputEffects(ww));
       outputElement(ww, offset + "  ");
     }
   }
@@ -83,7 +83,7 @@ public class NiftyDebugConsole {
    */
   private String whitespace(final int length) {
     StringBuffer b = new StringBuffer();
-    for (int i=0; i<length; i++) {
+    for (int i = 0; i < length; i++) {
       b.append(" ");
     }
     return b.toString();

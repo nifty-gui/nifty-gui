@@ -27,7 +27,12 @@ public enum RenderStateType {
   /**
    * image scale.
    */
-  imageScale;
+  imageScale,
+
+  /**
+   * font.
+   */
+  font;
 
   /**
    * Helper to get all available RenderStates as a set.

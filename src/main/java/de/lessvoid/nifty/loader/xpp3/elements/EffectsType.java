@@ -16,16 +16,6 @@ import de.lessvoid.nifty.tools.TimeProvider;
 public class EffectsType {
 
   /**
-   * effect group.
-   */
-  private String effectGroup;
-
-  /**
-   * effect group override.
-   */
-  private String effectGroupOverride;
-
-  /**
    * onStartScreen.
    */
   private Collection < EffectType > onStartScreen = new ArrayList < EffectType >();
@@ -66,8 +56,6 @@ public class EffectsType {
    * @param source source
    */
   public EffectsType(final EffectsType source) {
-    this.effectGroup = source.effectGroup;
-    this.effectGroupOverride = source.effectGroupOverride;
     this.onStartScreen = copyCollection(source.onStartScreen);
     this.onEndScreen = copyCollection(source.onEndScreen);
     this.onHover = copyCollection(source.onHover);
@@ -87,22 +75,6 @@ public class EffectsType {
       copy.add(new EffectType(effect));
     }
     return copy;
-  }
-
-  /**
-   * setEffectGroup.
-   * @param effectGroupParam effectGroup
-   */
-  public void setEffectGroup(final String effectGroupParam) {
-    this.effectGroup = effectGroupParam;
-  }
-
-  /**
-   * setEffectGroupOverride.
-   * @param effectGroupOverrideParam effectGroupOverride
-   */
-  public void setEffectGroupOverride(final String effectGroupOverrideParam) {
-    this.effectGroupOverride = effectGroupOverrideParam;
   }
 
   /**

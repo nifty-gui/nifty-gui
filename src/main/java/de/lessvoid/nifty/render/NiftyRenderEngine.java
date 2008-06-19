@@ -64,7 +64,6 @@ public interface NiftyRenderEngine {
 
   /**
    * renderText.
-   * @param font font
    * @param text text
    * @param x x
    * @param y y
@@ -72,8 +71,19 @@ public interface NiftyRenderEngine {
    * @param selectionEnd selection end
    * @param textSelectionColor color for text selections
    */
-  void renderText(
-      RenderFont font, String text, int x, int y, int selectionStart, int selectionEnd, Color textSelectionColor);
+  void renderText(String text, int x, int y, int selectionStart, int selectionEnd, Color textSelectionColor);
+
+  /**
+   * set font.
+   * @param font font
+   */
+  void setFont(RenderFont font);
+
+  /**
+   * get font.
+   * @return font
+   */
+  RenderFont getFont();
 
   /**
    * Set a new color.
