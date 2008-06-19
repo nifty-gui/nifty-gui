@@ -21,6 +21,7 @@
     <attributes align="center"/>
     <hover width="200%" falloffConstraint="horizontal"/>
     <effect>
+      <onHover name="hoverHint" targetElement="hintElement" hintText="$hintText" />
       <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
     </effect>
   </style>
@@ -88,27 +89,31 @@
     <layer id="menu" childLayout="vertical">
       <panel height="20%" childLayout="center"/>
       <panel height="60%" childLayout="center">
-      <menu id="mainMenu" font="menu.fnt" style="menu">
-        <menuItem id="helloWorld" text="Hello World" style="menu-item">
-          <interact onClick="helloWorld()"/>
-        </menuItem>
-        <menuItem id="textfield" text="Textfield Example" style="menu-item">
-          <interact onClick="textField()"/>
-        </menuItem>
-        <menuItem id="textalign" text="Textalign Example" style="menu-item">
-          <interact onClick="textAlign()"/>
-        </menuItem>
-        <!--  
-        <menuItem id="multiplayer" text="Multiplayer Example" style="menu-item">
-          <interact onClick="multiplayer()"/>
-        </menuItem>
-        -->
-        <menuItem id="exit" text="Exit" style="menu-item">
-          <interact onClick="exit()"/>
-        </menuItem>
-      </menu>
-    </panel>
+        <menu id="mainMenu" font="menu.fnt" style="menu">
+          <menuItem id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example">
+            <interact onClick="helloWorld()"/>
+          </menuItem>
+          <menuItem id="textfield" text="Textfield Example" style="menu-item" hintText="Textfield Example">
+            <interact onClick="textField()"/>
+          </menuItem>
+          <menuItem id="textalign" text="Textalign Example" style="menu-item" hintText="Textalign Example">
+            <interact onClick="textAlign()"/>
+          </menuItem>
+          <!--  
+          <menuItem id="multiplayer" text="Multiplayer Example" style="menu-item">
+            <interact onClick="multiplayer()"/>
+          </menuItem>
+          -->
+          <menuItem id="exit" text="Exit" style="menu-item" hintText="Exit">
+            <interact onClick="exit()"/>
+          </menuItem>
+        </menu>
+      </panel>
       <panel id="hintArea" childLayout="center" align="center" valign="center" height="20%">
+        <effect>
+          <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" inherit="true" />
+          <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" inherit="true" />
+        </effect>
         <text id="hintElement" text="Welcome to Nifty Examples" font="verdana-24-shadow.fnt" align="center" valign="center"/>
       </panel>
     </layer>
