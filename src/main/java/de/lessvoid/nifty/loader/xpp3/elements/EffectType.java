@@ -54,11 +54,34 @@ public class EffectType {
   private Attributes any;
 
   /**
+   * default constructor.
+   */
+  public EffectType() {
+  }
+
+  /**
    * create it.
    * @param attributes attributes
    */
-  public EffectType(final Attributes attributes) {
+  public void initFromAttributes(final Attributes attributes) {
     any = attributes;
+
+    if (attributes.isSet("name")) {
+      setName(attributes.get("name"));
+    }
+    if (attributes.isSet("inherit")) {
+      setInherit(attributes.getAsBoolean("inherit"));
+    }
+    if (attributes.isSet("post")) {
+      setPost(attributes.getAsBoolean("post"));
+    }
+    if (attributes.isSet("alternateEnable")) {
+      setAlternateKey(attributes.get("alternateEnable"));
+      setAlternateEnable(true);
+    } else if (attributes.isSet("alternateDisable")) {
+      setAlternateKey(attributes.get("alternateDisable"));
+      setAlternateEnable(false);
+    }
   }
 
   /**
@@ -107,11 +130,11 @@ public class EffectType {
   }
 
   /**
-   * setAny.
-   * @param anyParam any
+   * getAny.
+   * @return attributes
    */
-  public void setAny(final Attributes anyParam) {
-    this.any = anyParam;
+  public Attributes getAny() {
+    return any;
   }
 
   /**

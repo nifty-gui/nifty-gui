@@ -122,9 +122,8 @@ public class RegisterControlDefinitionType {
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
       final TimeProvider time) {
-    for (ElementType elementType : elements) {
-      elementType.applyControlAttributes(
-          element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
-    }
+    ElementType.applyControlStyle(
+        element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
+    ElementType.applyControlParameters(element, controlAttributes, nifty);
   }
 }

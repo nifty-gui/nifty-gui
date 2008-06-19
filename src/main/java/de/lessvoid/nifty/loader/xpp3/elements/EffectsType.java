@@ -3,10 +3,13 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -14,6 +17,10 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class EffectsType {
+  /**
+   * logger.
+   */
+  private static Logger log = Logger.getLogger(EffectsType.class.getName());
 
   /**
    * onStartScreen.
@@ -161,7 +168,19 @@ public class EffectsType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Nifty nifty,
       final TimeProvider time) {
-    for (EffectType effectType : effectCollection) {
+    for (EffectType effectTypeSource : effectCollection) {
+      EffectType effectType = new EffectType(effectTypeSource);
+      for (Entry < String, String > entry : effectType.getAny().getParameterAttributes().entrySet()) {
+        String value = element.getElementType().getAttributes().getSrcAttributes().get(entry.getValue());
+        if (value == null) {
+          value = "'" + entry.getValue() + "' missing o_O";
+        }
+        log.info(" initEffect for [" + element.getId() + "] setting [" + entry.getKey() + "] to [" + value + "]");
+        Attributes attributes = effectType.getAny();
+        attributes.overwriteAttribute(entry.getKey(), value);
+        effectType.initFromAttributes(attributes);
+      }
+
       effectType.create(element, nifty, eventId, registeredEffects, time);
     }
   }

@@ -349,7 +349,7 @@ public class ElementType {
    * @param registeredEffects effects
    * @param time time
    */
-  public static void applyControlAttributes(
+  public static void applyControlStyle(
       final Element element,
       final StyleHandler styleHandler,
       final Attributes controlDefinitionAttributes,
@@ -359,11 +359,25 @@ public class ElementType {
       final TimeProvider time) {
     controlProcessStyleAttribute(
         element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
-    controlProcessParameters(
-        element, controlAttributes, nifty.getRenderDevice());
     for (Element child : element.getElements()) {
-      applyControlAttributes(
+      applyControlStyle(
           child, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
+    }
+  }
+
+  /**
+   * apply control parameters.
+   * @param element element
+   * @param controlAttributes control attributes
+   * @param nifty nifty instance
+   */
+  public static void applyControlParameters(
+      final Element element,
+      final Attributes controlAttributes,
+      final Nifty nifty) {
+    controlProcessParameters(element, controlAttributes, nifty.getRenderDevice());
+    for (Element child : element.getElements()) {
+      applyControlParameters(child, controlAttributes, nifty);
     }
   }
 

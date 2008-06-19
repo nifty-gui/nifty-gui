@@ -40,23 +40,8 @@ public class EffectTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    EffectType effectType = new EffectType(attributes);
-    if (attributes.isSet("name")) {
-      effectType.setName(attributes.get("name"));
-    }
-    if (attributes.isSet("inherit")) {
-      effectType.setInherit(attributes.getAsBoolean("inherit"));
-    }
-    if (attributes.isSet("post")) {
-      effectType.setPost(attributes.getAsBoolean("post"));
-    }
-    if (attributes.isSet("alternateEnable")) {
-      effectType.setAlternateKey(attributes.get("alternateEnable"));
-      effectType.setAlternateEnable(true);
-    } else if (attributes.isSet("alternateDisable")) {
-      effectType.setAlternateKey(attributes.get("alternateDisable"));
-      effectType.setAlternateEnable(false);
-    }
+    EffectType effectType = new EffectType();
+    effectType.initFromAttributes(attributes);
     if (effectEventId == EffectEventId.onStartScreen) {
       effectsType.addOnStartScreen(effectType);
     } else if (effectEventId == EffectEventId.onEndScreen) {

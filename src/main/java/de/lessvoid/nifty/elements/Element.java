@@ -623,6 +623,7 @@ public class Element {
     }
 
     if (effectEventId == EffectEventId.onEndScreen) {
+      stopEffect(EffectEventId.onHover);
       done = true;
     }
 

@@ -72,7 +72,8 @@ public class MenuItemType extends ElementType {
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final StyleHandler styleHandler,
       final TimeProvider time,
-      final NiftyInputControl inputControlParam, final ScreenController screenController) {
+      final NiftyInputControl inputControlParam,
+      final ScreenController screenController) {
     TextRenderer textRenderer = new TextRenderer();
     Element menuItem = new Element(
         this,
@@ -108,6 +109,8 @@ public class MenuItemType extends ElementType {
     parent.add(menuItem);
     parent.setConstraintWidth(getMenuMaxWidth(parent.getElements()));
     parent.setConstraintHeight(getMenuMaxHeight(parent.getElements()));
+
+    ElementType.applyControlParameters(menuItem, getAttributes().getSrcAttributes(), nifty);
     return menuItem;
   }
 

@@ -43,7 +43,7 @@ public class Hint implements HoverEffectImpl {
       targetElement = nifty.getCurrentScreen().findElementByName(target);
     }
 
-    String text = parameter.getProperty("text");
+    String text = parameter.getProperty("hintText");
     if (text != null) {
       hintText = text;
     }
@@ -64,7 +64,7 @@ public class Hint implements HoverEffectImpl {
     if (targetElement != null) {
       TextRenderer textRenderer = targetElement.getRenderer(TextRenderer.class);
       textRenderer.changeText(hintText);
-      targetElement.setConstraintWidth(new SizeValue(textRenderer.getTextWidth()+"px"));
+      targetElement.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
       nifty.getCurrentScreen().layoutLayers();
     }
   }
