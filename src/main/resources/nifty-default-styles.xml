@@ -17,6 +17,7 @@
     <attributes backgroundImage="button-black.png" align="center" width="270px" height="50px" childLayout="center" visibleToMouse="true" />
     <effect>
       <onHover name="hoverImageOverlay" timeType="infinite" filename="button-black-hover.png" post="true"/>
+      <onFocus name="pulsate" period="1500" timeType="infinite" startColor="#ff05" endColor="#8005" post="true"/>
     </effect>
   </style>
 
