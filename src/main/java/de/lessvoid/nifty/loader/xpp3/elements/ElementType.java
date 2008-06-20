@@ -111,15 +111,15 @@ public class ElementType {
       final TimeProvider time,
       final NiftyInputControl control,
       final ScreenController screenController) {
-    element.bindToScreen(nifty);
+    element.bindToScreen(screen, nifty);
 
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
-    applyStyle(element, nifty, registeredEffects, styleHandler, time, styleId);
+    applyStyle(element, nifty, registeredEffects, styleHandler, time, styleId, screen);
 
     // now apply our own attributes
-    applyAttributes(attributes, element, nifty.getRenderDevice());
+    applyAttributes(attributes, screen, element, nifty.getRenderDevice());
 
     // interact
     if (interact != null) {
@@ -161,6 +161,7 @@ public class ElementType {
    * @param styleHandler style handler
    * @param time time provider
    * @param styleId style id
+   * @param screen screen
    */
   private void applyStyle(
       final Element element,
@@ -168,11 +169,12 @@ public class ElementType {
       final Map < String, RegisterEffectType > registeredEffects,
       final StyleHandler styleHandler,
       final TimeProvider time,
-      final String styleId) {
+      final String styleId,
+      final Screen screen) {
     if (styleId != null) {
       StyleType style = styleHandler.getStyle(styleId);
       if (style != null) {
-        style.applyStyle(element, nifty, registeredEffects, time);
+        style.applyStyle(element, nifty, registeredEffects, time, screen);
       }
     }
   }
@@ -180,11 +182,13 @@ public class ElementType {
   /**
    * apply given attributes to the element.
    * @param attrib attributes
+   * @param screen screen
    * @param element the element to apply attributes
    * @param renderDevice RenderDevice
    */
   public static void applyAttributes(
       final AttributesType attrib,
+      final Screen screen,
       final Element element,
       final NiftyRenderEngine renderDevice) {
     if (attrib == null) {
@@ -235,6 +239,12 @@ public class ElementType {
     // childLayout
     if (attrib.getChildLayoutType() != null) {
       element.setLayoutManager(attrib.getChildLayoutType().getLayoutManager());
+    }
+    // focusable
+    if (attrib.getFocusable() != null) {
+      if (attrib.getFocusable()) {
+        screen.getFocusHandler().addElement(element);
+      }
     }
     // textRenderer
     TextRenderer textRenderer = element.getRenderer(TextRenderer.class);
@@ -348,6 +358,7 @@ public class ElementType {
    * @param nifty nifty
    * @param registeredEffects effects
    * @param time time
+   * @param screen screen
    */
   public static void applyControlStyle(
       final Element element,
@@ -356,12 +367,13 @@ public class ElementType {
       final Attributes controlAttributes,
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final Screen screen) {
     controlProcessStyleAttribute(
-        element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
+        element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time, screen);
     for (Element child : element.getElements()) {
       applyControlStyle(
-          child, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
+          child, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time, screen);
     }
   }
 
@@ -370,14 +382,17 @@ public class ElementType {
    * @param element element
    * @param controlAttributes control attributes
    * @param nifty nifty instance
+   * @param screen screen
    */
   public static void applyControlParameters(
       final Element element,
       final Attributes controlAttributes,
-      final Nifty nifty) {
-    controlProcessParameters(element, controlAttributes, nifty.getRenderDevice());
+      final Nifty nifty,
+      final Screen screen) {
+    controlProcessParameters(
+        element, controlAttributes, nifty.getRenderDevice(), screen);
     for (Element child : element.getElements()) {
-      applyControlParameters(child, controlAttributes, nifty);
+      applyControlParameters(child, controlAttributes, nifty, screen);
     }
   }
 
@@ -390,6 +405,7 @@ public class ElementType {
    * @param nifty nifty
    * @param registeredEffects effects
    * @param time time
+   * @param screen screen
    */
   private static void controlProcessStyleAttribute(
       final Element element,
@@ -398,7 +414,8 @@ public class ElementType {
       final Attributes controlAttributes,
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final Screen screen) {
     String myStyleId = element.getElementType().getAttributes().getStyle();
     if (myStyleId != null) {
       // this element has a style id set. is a special substyle?
@@ -409,7 +426,7 @@ public class ElementType {
           style = resolveStyle(styleHandler, myStyleId, controlDefinitionAttributes.get("style"));
         }
         if (style != null) {
-          style.applyStyle(element, nifty, registeredEffects, time);
+          style.applyStyle(element, nifty, registeredEffects, time, screen);
         }
       }
     }
@@ -441,11 +458,13 @@ public class ElementType {
    * @param element element
    * @param controlAttributes control attributes
    * @param niftyRenderEngine render engine
+   * @param screen screen
    */
   private static void controlProcessParameters(
       final Element element,
       final Attributes controlAttributes,
-      final NiftyRenderEngine niftyRenderEngine) {
+      final NiftyRenderEngine niftyRenderEngine,
+      final Screen screen) {
     for (Entry < String, String > entry
         : element.getElementType().getAttributes().findParameterAttributes().entrySet()) {
       String value = controlAttributes.get(entry.getValue());
@@ -455,7 +474,7 @@ public class ElementType {
       log.info("[" + element.getId() + "] setting [" + entry.getKey() + "] to [" + value + "]");
       Attributes attributes = new Attributes();
       attributes.overwriteAttribute(entry.getKey(), value);
-      ElementType.applyAttributes(new AttributesType(attributes), element, niftyRenderEngine);
+      ElementType.applyAttributes(new AttributesType(attributes), screen, element, niftyRenderEngine);
     }
   }
 }

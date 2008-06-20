@@ -21,6 +21,11 @@ public enum NiftyInputEvent {
   SubmitText,
 
   /**
+   * activate the control.
+   */
+  Activate,
+
+  /**
    * move cursor left.
    */
   MoveCursorLeft,

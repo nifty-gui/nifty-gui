@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
 /**
  * NiftyInputControl.
@@ -29,13 +30,11 @@ public class NiftyInputControl {
   }
 
   /**
-   * handle key event.
-   * @param eventKey eventKey
-   * @param eventCharacter eventCharacter
-   * @param keyDown keyDown
+   * keyboard event.
+   * @param inputEvent keyboard event
    */
-  public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
-    controller.inputEvent(inputMapper.convert(eventKey, eventCharacter, keyDown));
+  public void keyEvent(final KeyboardInputEvent inputEvent) {
+    controller.inputEvent(inputMapper.convert(inputEvent));
   }
 
   /**

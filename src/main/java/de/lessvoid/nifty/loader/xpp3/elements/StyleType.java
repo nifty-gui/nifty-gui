@@ -4,6 +4,7 @@ import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -95,19 +96,21 @@ public class StyleType {
    * @param nifty nifty
    * @param registeredEffects registered effects
    * @param time time
+   * @param screen screen
    */
   public void applyStyle(
       final Element element,
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final Screen screen) {
     // apply base style if given
     if (baseStyle != null) {
-      baseStyle.applyStyle(element, nifty, registeredEffects, time);
+      baseStyle.applyStyle(element, nifty, registeredEffects, time, screen);
     }
     // attributes
     if (attributes != null) {
-      ElementType.applyAttributes(attributes, element, nifty.getRenderDevice());
+      ElementType.applyAttributes(attributes, screen, element, nifty.getRenderDevice());
     }
     // hover
     if (hover != null) {

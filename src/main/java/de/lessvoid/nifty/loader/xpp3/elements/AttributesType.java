@@ -126,6 +126,11 @@ public class AttributesType {
   private String text;
 
   /**
+   * focusable.
+   */
+  private Boolean focusable = false;
+
+  /**
    * default constructor.
    */
   public AttributesType() {
@@ -166,6 +171,7 @@ public class AttributesType {
     textVAlign = other.getTextVAlign();
     imageMode = other.getImageMode();
     text = other.text;
+    focusable = other.focusable;
     srcAttributes = other.srcAttributes;
   }
 
@@ -613,6 +619,10 @@ public class AttributesType {
     if (srcAttributes.isSet("text")) {
       text = srcAttributes.get("text");
     }
+    // focusable
+    if (srcAttributes.isSet("focusable")) {
+      focusable = srcAttributes.getAsBoolean("focusable");
+    }
   }
 
   /**
@@ -637,5 +647,13 @@ public class AttributesType {
    */
   public String getText() {
     return text;
+  }
+
+  /**
+   * get focusable.
+   * @return focusable
+   */
+  public Boolean getFocusable() {
+    return focusable;
   }
 }

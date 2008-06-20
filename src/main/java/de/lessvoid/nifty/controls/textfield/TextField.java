@@ -47,7 +47,7 @@ public class TextField {
    * @param newText new text
    */
   public TextField(final String newText) {
-    initializeInstance(newText);
+    initWithText(newText);
 
     // init clipboard with null clipboard impl
     clipboard = new Clipboard() {
@@ -67,14 +67,15 @@ public class TextField {
    * @param newClipboard clipboard
    */
   public TextField(final String newText, final Clipboard newClipboard) {
-    initializeInstance(newText);
+    initWithText(newText);
     clipboard = newClipboard;
   }
 
   /**
-   * @param newText
+   * init instance wit the given text.
+   * @param newText new text
    */
-  private void initializeInstance(final String newText) {
+  public void initWithText(final String newText) {
     this.text = new StringBuffer(newText);
     this.cursorPosition = 0;
     this.selectionStart = -1;

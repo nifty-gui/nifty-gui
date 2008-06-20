@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
 /**
  * StandardTextField InputMapping.
@@ -22,85 +23,72 @@ public class StandardTextField implements NiftyInputMapping {
   private static final int MAX_CHAR = 127;
 
   /**
-   * remembers if the control key is pressed.
+   * convert the given KeyboardInputEvent into a neutralized NiftyInputEvent.
+   * @param inputEvent input event
+   * @return NiftInputEvent
    */
-  private boolean controlKeyPressed = false;
-
-  /**
-   * convert.
-   * @param eventKey eventKey
-   * @param eventCharacter eventCharacter
-   * @param keyDown key down
-   * @return NiftyInputEvent
-   */
-  public NiftyInputEvent convert(
-      final int eventKey,
-      final char eventCharacter,
-      final boolean keyDown) {
-    if (keyDown) {
-      return handleKeyDownEvent(eventKey, eventCharacter, keyDown);
+  public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
+    if (inputEvent.isKeyDown()) {
+      return handleKeyDownEvent(inputEvent);
     } else {
-      return handleKeyUpEvent(eventKey);
+      return handleKeyUpEvent(inputEvent);
     }
   }
 
   /**
-   * handle key up event.
-   * @param eventKey event key
+   * handle key down event.
+   * @param inputEvent inputEvent
    * @return NiftyInputEvent
    */
-  private NiftyInputEvent handleKeyUpEvent(final int eventKey) {
-    if (eventKey == Keyboard.KEY_LCONTROL || eventKey == Keyboard.KEY_RCONTROL) {
-      controlKeyPressed = false;
-    } else if (eventKey == Keyboard.KEY_LSHIFT || eventKey == Keyboard.KEY_RSHIFT) {
-      return NiftyInputEvent.SelectionEnd;
+  private NiftyInputEvent handleKeyDownEvent(final KeyboardInputEvent inputEvent) {
+    if (inputEvent.getKey() == Keyboard.KEY_LEFT) {
+      return NiftyInputEvent.MoveCursorLeft;
+    } else if (inputEvent.getKey() == Keyboard.KEY_RIGHT) {
+      return NiftyInputEvent.MoveCursorRight;
+    } else if (inputEvent.getKey() == Keyboard.KEY_RETURN) {
+      return NiftyInputEvent.SubmitText;
+    } else if (inputEvent.getKey() == Keyboard.KEY_DELETE) {
+      return NiftyInputEvent.Delete;
+    } else if (inputEvent.getKey() == Keyboard.KEY_BACK) {
+      return NiftyInputEvent.Backspace;
+    } else if (inputEvent.getKey() == Keyboard.KEY_END) {
+      return NiftyInputEvent.MoveCursorToLastPosition;
+    } else if (inputEvent.getKey() == Keyboard.KEY_HOME) {
+      return NiftyInputEvent.MoveCursorToFirstPosition;
+    } else if (inputEvent.getKey() == Keyboard.KEY_LSHIFT || inputEvent.getKey() == Keyboard.KEY_RSHIFT) {
+      return NiftyInputEvent.SelectionStart;
+    } else if (inputEvent.getKey() == Keyboard.KEY_TAB) {
+      if (inputEvent.isShiftDown()) {
+        return NiftyInputEvent.PrevInputElement;
+      } else {
+        return NiftyInputEvent.NextInputElement;
+      }
+    } else if (inputEvent.getCharacter() > MIN_CHAR && inputEvent.getCharacter() < MAX_CHAR) {
+      NiftyInputEvent character = NiftyInputEvent.Character;
+      character.setCharacter(inputEvent.getCharacter());
+      return character;
+    }
+
+    if (inputEvent.isControlDown()) {
+      if (inputEvent.getKey() == Keyboard.KEY_X) {
+        return NiftyInputEvent.Cut;
+      } else if (inputEvent.getKey() == Keyboard.KEY_C) {
+        return NiftyInputEvent.Copy;
+      } else if (inputEvent.getKey() == Keyboard.KEY_V) {
+        return NiftyInputEvent.Paste;
+      }
     }
     return null;
   }
 
   /**
-   * handle key down event.
-   * @param eventKey event key
-   * @param eventCharacter event character
-   * @param keyDown key down or key up
+   * handle key up event.
+   * @param inputEvent inputEvent
    * @return NiftyInputEvent
    */
-  private NiftyInputEvent handleKeyDownEvent(
-      final int eventKey,
-      final char eventCharacter,
-      final boolean keyDown) {
-    if (eventKey == Keyboard.KEY_LEFT) {
-      return NiftyInputEvent.MoveCursorLeft;
-    } else if (eventKey == Keyboard.KEY_RIGHT) {
-      return NiftyInputEvent.MoveCursorRight;
-    } else if (eventKey == Keyboard.KEY_RETURN) {
-      return NiftyInputEvent.SubmitText;
-    } else if (eventKey == Keyboard.KEY_DELETE) {
-      return NiftyInputEvent.Delete;
-    } else if (eventKey == Keyboard.KEY_BACK) {
-      return NiftyInputEvent.Backspace;
-    } else if (eventKey == Keyboard.KEY_END) {
-      return NiftyInputEvent.MoveCursorToLastPosition;
-    } else if (eventKey == Keyboard.KEY_HOME) {
-      return NiftyInputEvent.MoveCursorToFirstPosition;
-    } else if (eventKey == Keyboard.KEY_LSHIFT || eventKey == Keyboard.KEY_RSHIFT) {
-      return NiftyInputEvent.SelectionStart;
-    } else if (eventKey == Keyboard.KEY_LCONTROL || eventKey == Keyboard.KEY_RCONTROL) {
-      controlKeyPressed = true;
-    } else if (eventCharacter > MIN_CHAR && eventCharacter < MAX_CHAR) {
-      NiftyInputEvent character = NiftyInputEvent.Character;
-      character.setCharacter(eventCharacter);
-      return character;
-    }
-
-    if (controlKeyPressed) {
-      if (eventKey == Keyboard.KEY_X) {
-        return NiftyInputEvent.Cut;
-      } else if (keyDown && (eventKey == Keyboard.KEY_C)) {
-        return NiftyInputEvent.Copy;
-      } else if (keyDown && (eventKey == Keyboard.KEY_V)) {
-        return NiftyInputEvent.Paste;
-      }
+  private NiftyInputEvent handleKeyUpEvent(final KeyboardInputEvent inputEvent) {
+    if (inputEvent.getKey() == Keyboard.KEY_LSHIFT || inputEvent.getKey() == Keyboard.KEY_RSHIFT) {
+      return NiftyInputEvent.SelectionEnd;
     }
     return null;
   }

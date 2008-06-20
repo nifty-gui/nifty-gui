@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.input;
 
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+
 /**
  * NiftyInputMapping.
  * @author void
@@ -7,11 +9,9 @@ package de.lessvoid.nifty.input;
 public interface NiftyInputMapping {
 
   /**
-   * convert the given lwjgl keyboard input data into a NiftyInputEvent.
-   * @param eventKey key
-   * @param eventCharacter character
-   * @param keyDown down
+   * convert the given KeyboardInputEvent into a neutralized NiftyInputEvent.
+   * @param inputEvent input event
    * @return NiftInputEvent
    */
-  NiftyInputEvent convert(final int eventKey, final char eventCharacter, final boolean keyDown);
+  NiftyInputEvent convert(KeyboardInputEvent inputEvent);
 }

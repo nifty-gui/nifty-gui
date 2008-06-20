@@ -12,6 +12,7 @@ import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.shared.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
@@ -19,6 +20,7 @@ import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -107,7 +109,7 @@ public class Element {
   /**
    * The focus handler this element is attached to.
    */
-  private MouseFocusHandler focusHandler;
+  private MouseFocusHandler mouseFocusHandler;
 
   /**
    * enable element.
@@ -199,10 +201,16 @@ public class Element {
       final String newId,
       final Element newParent,
       final MouseFocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents, final ElementRenderer ... newElementRenderer) {
+      final boolean newVisibleToMouseEvents,
+      final ElementRenderer ... newElementRenderer) {
     initialize(
-        newElementType, newId, newParent,
-        newElementRenderer, new LayoutPart(), newFocusHandler, newVisibleToMouseEvents);
+        newElementType,
+        newId,
+        newParent,
+        newElementRenderer,
+        new LayoutPart(),
+        newFocusHandler,
+        newVisibleToMouseEvents);
   }
 
   /**
@@ -221,8 +229,16 @@ public class Element {
       final Element newParent,
       final LayoutPart newLayoutPart,
       final MouseFocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents, final ElementRenderer ... newElementRenderer) {
-    initialize(newElementType, newId, newParent, newElementRenderer, newLayoutPart, newFocusHandler, newVisibleToMouseEvents);
+      final boolean newVisibleToMouseEvents,
+      final ElementRenderer ... newElementRenderer) {
+    initialize(
+        newElementType,
+        newId,
+        newParent,
+        newElementRenderer,
+        newLayoutPart,
+        newFocusHandler,
+        newVisibleToMouseEvents);
   }
 
   /**
@@ -241,7 +257,8 @@ public class Element {
       final Element newParent,
       final ElementRenderer[] newElementRenderer,
       final LayoutPart newLayoutPart,
-      final MouseFocusHandler newFocusHandler, final boolean newVisibleToMouseEvents) {
+      final MouseFocusHandler newFocusHandler,
+      final boolean newVisibleToMouseEvents) {
     this.elementType = newElementType;
     this.id = newId;
     this.parent = newParent;
@@ -252,7 +269,7 @@ public class Element {
     this.visible = true;
     this.done = false;
     this.onClickAlternateKey = null;
-    this.focusHandler = newFocusHandler;
+    this.mouseFocusHandler = newFocusHandler;
     this.visibleToMouseEvents = newVisibleToMouseEvents;
     this.setMouseDown(false, 0);
   }
@@ -284,7 +301,9 @@ public class Element {
       + "constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
       + "," + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ","
       + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ","
-      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "] state ";
+      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "] "
+      + "focusable [ " + elementType.getAttributes().getFocusable() + "] "
+      + "state ";
     if (isEffectActive(EffectEventId.onStartScreen)) {
       return pos + "[starting]";
     }
@@ -758,7 +777,7 @@ public class Element {
 
     if (visibleToMouseEvents) {
       // if some other element has exclusive access to mouse events we are done
-      if (focusHandler != null && !focusHandler.canProcessMouseEvents(this)) {
+      if (mouseFocusHandler != null && !mouseFocusHandler.canProcessMouseEvents(this)) {
         return;
       }
 
@@ -780,8 +799,8 @@ public class Element {
         if (isInside(x, y) && !isMouseDown()) {
           if (leftMouseDown) {
             setMouseDown(true, eventTime);
-            if (focusHandler != null) {
-              focusHandler.requestExclusiveFocus(this);
+            if (mouseFocusHandler != null) {
+              mouseFocusHandler.requestExclusiveFocus(this);
             }
             effectManager.startEffect(EffectEventId.onClick, this, new TimeProvider(), null);
             onClick(x, y);
@@ -789,8 +808,8 @@ public class Element {
         } else if (!leftMouseDown && isMouseDown()) {
             setMouseDown(false, eventTime);
             effectManager.stopEffect(EffectEventId.onClick);
-            if (focusHandler != null) {
-              focusHandler.lostFocus(this);
+            if (mouseFocusHandler != null) {
+              mouseFocusHandler.lostFocus(this);
             }
         }
 
@@ -831,8 +850,8 @@ public class Element {
 
   /**
    * on click method.
-   * @param mouseX TODO
-   * @param mouseY TODO
+   * @param mouseX mouse x
+   * @param mouseY mouse y
    */
   public final void onClick(final int mouseX, final int mouseY) {
     lastMouseX = mouseX;
@@ -852,8 +871,8 @@ public class Element {
 
   /**
    * on click mouse move method.
-   * @param mouseX TODO
-   * @param mouseY TODO
+   * @param mouseX mouse x
+   * @param mouseY mouse y
    */
   private void onClickMouseMove(final int mouseX, final int mouseY) {
     if (lastMouseX == mouseX && lastMouseY == mouseY) {
@@ -907,9 +926,10 @@ public class Element {
 
   /**
    * set screen controller.
+   * @param screen screen
    * @param newNifty the screen
    */
-  public final void bindToScreen(final Nifty newNifty) {
+  public final void bindToScreen(final Screen screen, final Nifty newNifty) {
     this.nifty = newNifty;
   }
 
@@ -999,14 +1019,12 @@ public class Element {
   }
 
   /**
-   * key event.
-   * @param eventKey eventKey
-   * @param eventCharacter eventCharacter
-   * @param keyDown keyDown
+   * keyboard event.
+   * @param inputEvent keyboard event
    */
-  public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
+  public void keyEvent(final KeyboardInputEvent inputEvent) {
     if (attachedInputControl != null) {
-      attachedInputControl.keyEvent(eventKey, eventCharacter, keyDown);
+      attachedInputControl.keyEvent(inputEvent);
     }
   }
 
@@ -1032,12 +1050,21 @@ public class Element {
   public void attachInputControl(final NiftyInputControl newInputControl) {
     attachedInputControl = newInputControl;
   }
-  
+
+  /**
+   * attach popup.
+   * @param screenController screencontroller
+   */
   public void attachPopup(final ScreenController screenController) {
     attach(onClickMethod, screenController);
     attach(onClickMouseMoveMethod, screenController);
   }
 
+  /**
+   * attach method.
+   * @param method method
+   * @param screenController method controller
+   */
   private void attach(final MethodInvoker method, final ScreenController screenController) {
     method.setFirst(screenController);
     for (Element e : elements) {
@@ -1045,15 +1072,34 @@ public class Element {
     }
   }
 
+  /**
+   * LocalEndNotify helper class.
+   * @author void
+   */
   public class LocalEndNotify implements EndNotify {
+    /**
+     * event id.
+     */
     private EffectEventId effectEventId;
+
+    /**
+     * end notify.
+     */
     private EndNotify effectEndNotiy;
 
+    /**
+     * create it.
+     * @param effectEventIdParam event id
+     * @param effectEndNotiyParam end notify
+     */
     public LocalEndNotify(final EffectEventId effectEventIdParam, final EndNotify effectEndNotiyParam) {
       effectEventId = effectEventIdParam;
       effectEndNotiy = effectEndNotiyParam;
     }
 
+    /**
+     * perform.
+     */
     public void perform() {
       // notify parent if:
       // a) the effect is done for ourself
@@ -1088,8 +1134,8 @@ public class Element {
    */
   public void remove() {
     parent.removeChild(this);
-    if (focusHandler != null) {
-      focusHandler.lostFocus(this);
+    if (mouseFocusHandler != null) {
+      mouseFocusHandler.lostFocus(this);
     }
   }
 

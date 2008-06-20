@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
 /**
  * Default.
@@ -12,23 +13,26 @@ import de.lessvoid.nifty.input.NiftyInputMapping;
 public class Default implements NiftyInputMapping {
 
   /**
-   * convert.
-   * @param eventKey eventKey
-   * @param eventCharacter event character
-   * @param keyDown key down
-   * @return NiftyInputEvent
+   * convert the given KeyboardInputEvent into a neutralized NiftyInputEvent.
+   * @param inputEvent input event
+   * @return NiftInputEvent
    */
-  public NiftyInputEvent convert(
-      final int eventKey,
-      final char eventCharacter,
-      final boolean keyDown) {
-    if (keyDown) {
-      if (eventKey == Keyboard.KEY_DOWN) {
+  public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
+    if (inputEvent.isKeyDown()) {
+      if (inputEvent.getKey() == Keyboard.KEY_DOWN) {
         return NiftyInputEvent.NextInputElement;
-      } else if (eventKey == Keyboard.KEY_UP) {
+      } else if (inputEvent.getKey() == Keyboard.KEY_UP) {
         return NiftyInputEvent.PrevInputElement;
-      } else if (eventKey == Keyboard.KEY_RETURN) {
-        return NiftyInputEvent.SubmitText;
+      } else if (inputEvent.getKey() == Keyboard.KEY_RETURN) {
+        return NiftyInputEvent.Activate;
+      } else if (inputEvent.getKey() == Keyboard.KEY_SPACE) {
+        return NiftyInputEvent.Activate;
+      } else if (inputEvent.getKey() == Keyboard.KEY_TAB) {
+        if (inputEvent.isShiftDown()) {
+          return NiftyInputEvent.PrevInputElement;
+        } else {
+          return NiftyInputEvent.NextInputElement;
+        }
       }
     }
     return null;

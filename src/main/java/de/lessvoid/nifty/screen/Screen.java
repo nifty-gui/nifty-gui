@@ -6,10 +6,11 @@ import java.util.logging.Logger;
 
 import de.lessvoid.console.Console;
 import de.lessvoid.nifty.EndNotify;
+import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MouseFocusHandler;
-import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -63,6 +64,11 @@ public class Screen implements MouseFocusHandler {
   private TimeProvider timeProvider;
 
   /**
+   * focus handler.
+   */
+  private FocusHandler focusHandler;
+
+  /**
    * create new screen instance.
    * @param newId new id for the new screen instance.
    * @param newScreenController the new screen controller for this screen
@@ -74,6 +80,7 @@ public class Screen implements MouseFocusHandler {
     this.mouseFocusElement = null;
     this.focusElement = null;
     this.timeProvider = newTimeProvider;
+    this.focusHandler = new FocusHandler();
   }
 
   /**
@@ -348,13 +355,11 @@ public class Screen implements MouseFocusHandler {
 
   /**
    * keyboard event.
-   * @param eventKey eventKey
-   * @param eventCharacter the keyboard character
-   * @param keyDown TODO
+   * @param inputEvent keyboard event
    */
-  public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
+  public void keyEvent(final KeyboardInputEvent inputEvent) {
     if (focusElement != null) {
-      focusElement.keyEvent(eventKey, eventCharacter, keyDown);
+      focusElement.keyEvent(inputEvent);
     }
   }
 
@@ -374,5 +379,13 @@ public class Screen implements MouseFocusHandler {
    */
   public ScreenController getScreenController() {
     return screenController;
+  }
+
+  /**
+   * get the screens focus handler.
+   * @return focus handler
+   */
+  public FocusHandler getFocusHandler() {
+    return focusHandler;
   }
 }

@@ -110,7 +110,7 @@ public class MenuItemType extends ElementType {
     parent.setConstraintWidth(getMenuMaxWidth(parent.getElements()));
     parent.setConstraintHeight(getMenuMaxHeight(parent.getElements()));
 
-    ElementType.applyControlParameters(menuItem, getAttributes().getSrcAttributes(), nifty);
+    ElementType.applyControlParameters(menuItem, getAttributes().getSrcAttributes(), nifty, screen);
     return menuItem;
   }
 

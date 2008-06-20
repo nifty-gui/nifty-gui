@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEventCreator;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
 import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
@@ -103,6 +104,11 @@ public class Nifty {
   private boolean useDebugConsole;
 
   /**
+   * KeyboardInputEventCreator.
+   */
+  private KeyboardInputEventCreator inputEventCreator;
+
+  /**
    * Create nifty for the given RenderDevice and TimeProvider.
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
@@ -143,6 +149,7 @@ public class Nifty {
     this.timeProvider = newTimeProvider;
     this.exit = false;
     this.currentLoaded = null;
+    this.inputEventCreator = new KeyboardInputEventCreator();
   }
 
   /**
@@ -221,6 +228,12 @@ public class Nifty {
     gotoScreen(startScreen);
   }
 
+  /**
+   * fromXml.
+   * @param fileId fileId
+   * @param input inputStream
+   * @param startScreen screen to start
+   */
   public void fromXml(final String fileId, final InputStream input, final String startScreen) {
     prepareScreens(fileId);
     loadFromStream(input);
@@ -242,7 +255,7 @@ public class Nifty {
 
   /**
    * load from the given file.
-   * @param filename filename to load
+   * @param stream stream to load
    */
   private void loadFromStream(final InputStream stream) {
     try {
@@ -338,11 +351,11 @@ public class Nifty {
    * keyboard event.
    * @param eventKey eventKey
    * @param eventCharacter the character
-   * @param keyDown TODO
+   * @param keyDown key down
    */
   public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
     if (currentScreen != null) {
-      currentScreen.keyEvent(eventKey, eventCharacter, keyDown);
+      currentScreen.keyEvent(inputEventCreator.createEvent(eventKey, eventCharacter, keyDown));
     }
   }
 

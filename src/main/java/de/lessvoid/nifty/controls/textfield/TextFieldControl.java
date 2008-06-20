@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -21,6 +22,11 @@ import de.lessvoid.nifty.tools.TimeProvider;
 public class TextFieldControl implements Controller {
 
   /**
+   * cursor y position offset.
+   */
+  private static final int CURSOR_Y = 3;
+
+  /**
    * the screen.
    */
   private Screen screen;
@@ -31,32 +37,63 @@ public class TextFieldControl implements Controller {
   private Element element;
 
   /**
-   * The ControllerEventListener to use.
-   */
-  private ControllerEventListener listener;
-
-  /**
-   * 
+   * text element.
    */
   private Element textElement;
 
+  /**
+   * field element.
+   */
   private Element fieldElement;
 
+  /**
+   * cursor element.
+   */
   private Element cursorElement;
 
+  /**
+   * text field.
+   */
   private TextField textField;
 
+  /**
+   * time provider.
+   */
   private final TimeProvider timeProvider;
 
+  /**
+   * fist visible character index.
+   */
   private int firstVisibleCharacterIndex;
+
+  /**
+   * last visible character index.
+   */
   private int lastVisibleCharacterIndex;
 
+  /**
+   * field width.
+   */
   private int fieldWidth;
 
+  /**
+   * from click cursor position.
+   */
   private int fromClickCursorPos;
 
+  /**
+   * to click cursor position.
+   */
   private int toClickCursorPos;
 
+  /**
+   * the focus handler this control belongs to.
+   */
+  private FocusHandler focusHandler;
+
+  /**
+   * default constructor.
+   */
   public TextFieldControl() {
     timeProvider = new TimeProvider();
   }
@@ -77,9 +114,9 @@ public class TextFieldControl implements Controller {
       final ControllerEventListener newListener) {
     this.screen = newScreen;
     this.element = newElement;
-    this.listener = newListener;
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
+    this.focusHandler = screen.getFocusHandler();
 
     this.textField = new TextField("", new ClipboardAWT());
     this.textField.toFirstPosition();
@@ -90,7 +127,7 @@ public class TextFieldControl implements Controller {
    */
   public void onStartScreen() {
     this.textElement = element.findElementByName("textfield-text");
-    this.textElement.getRenderer(TextRenderer.class).changeText(textField.getText());
+    this.textField.initWithText(textElement.getRenderer(TextRenderer.class).getOriginalText());
 
     this.fieldElement = element.findElementByName("textfield-field");
     this.cursorElement = element.findElementByName("textfield-cursor");
@@ -184,6 +221,14 @@ public class TextFieldControl implements Controller {
       this.screen.setFocus(null);
     } else if (inputEvent == NiftyInputEvent.Character) {
       textField.insert(inputEvent.getCharacter());
+    } else if (inputEvent == NiftyInputEvent.NextInputElement) {
+      if (focusHandler != null) {
+        focusHandler.getNext(fieldElement).setFocus();
+      }
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+      if (focusHandler != null) {
+        focusHandler.getPrev(fieldElement).setFocus();
+      }
     }
 
     updateCursor();
@@ -218,7 +263,8 @@ public class TextFieldControl implements Controller {
     int cursorPixelPos = textWidth - d;
 
     cursorElement.setConstraintX(new SizeValue(cursorPixelPos + "px"));
-    cursorElement.setConstraintY(new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + 3 + "px"));
+    cursorElement.setConstraintY(
+        new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
     cursorElement.startEffect(EffectEventId.onActive, timeProvider, null);
     screen.layoutLayers();
   }

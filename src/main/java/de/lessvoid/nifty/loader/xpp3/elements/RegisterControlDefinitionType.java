@@ -9,10 +9,11 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
-import de.lessvoid.nifty.input.mapping.NoInputMapping;
+import de.lessvoid.nifty.input.mapping.Default;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -93,7 +94,7 @@ public class RegisterControlDefinitionType {
     NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMapper, NiftyInputMapping.class);
     if (inputMapping == null) {
       log.warning("unable to instance inputMapping - fall back to no mapping");
-      inputMapping = new NoInputMapping();
+      inputMapping = new Default();
     }
     return inputMapping;
   }
@@ -111,6 +112,7 @@ public class RegisterControlDefinitionType {
    * @param element element
    * @param styleHandler style handler
    * @param controlAttributes control attributes
+   * @param screen screen
    * @param nifty nifty
    * @param registeredEffects effects
    * @param time time
@@ -119,11 +121,13 @@ public class RegisterControlDefinitionType {
       final Element element,
       final StyleHandler styleHandler,
       final Attributes controlAttributes,
+      final Screen screen,
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
       final TimeProvider time) {
     ElementType.applyControlStyle(
-        element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time);
-    ElementType.applyControlParameters(element, controlAttributes, nifty);
+        element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time, screen);
+    ElementType.applyControlParameters(
+        element, controlAttributes, nifty, screen);
   }
 }

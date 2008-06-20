@@ -2,12 +2,9 @@ package de.lessvoid.nifty.controls;
 
 import java.util.Properties;
 
-import org.lwjgl.input.Keyboard;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.MethodInvoker;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
@@ -17,26 +14,36 @@ import de.lessvoid.nifty.screen.Screen;
  */
 public class MenuItemControl implements Controller {
 
-  private Screen screen;
+  /**
+   * element.
+   */
   private Element element;
+
+  /**
+   * focus handler.
+   */
   private FocusHandler focusHandler;
 
+  /**
+   * constructor.
+   * @param focusHandlerParam focus handler
+   */
   public MenuItemControl(final FocusHandler focusHandlerParam) {
     focusHandler = focusHandlerParam;
   }
   /**
    * Bind this controller to the given element.
+   * @param nifty nifty
    * @param newScreen the new nifty to set
    * @param newElement the new element to set
    * @param properties all attributes of the xml tag we're connected to
    * @param newListener listener
    */
   public void bind(
-      Nifty nifty,
+      final Nifty nifty,
       final Screen newScreen,
       final Element newElement,
       final Properties properties, final ControllerEventListener newListener) {
-    screen = newScreen;
     element = newElement;
   }
 
@@ -46,13 +53,12 @@ public class MenuItemControl implements Controller {
   public void onStartScreen() {
   }
 
-
-  public void onFocus(boolean getFocus) {
+  /**
+   * on focus.
+   * @param getFocus get or lose focus
+   */
+  public void onFocus(final boolean getFocus) {
     System.out.println("*** " + element.getId() + " *** onGetFocus");
-  }
-
-  public void onLostFocus() {
-    System.out.println("*** " + element.getId() + " *** onLostFocus");
   }
 
   /**
@@ -64,12 +70,8 @@ public class MenuItemControl implements Controller {
       focusHandler.getNext(element).setFocus();
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       focusHandler.getPrev(element).setFocus();
-    } else if (inputEvent == NiftyInputEvent.SubmitText) {
+    } else if (inputEvent == NiftyInputEvent.Activate) {
       element.onClick();
     }
-  }
-
-  public void forward(final MethodInvoker controllerMethod) {
-    
   }
 }

@@ -8,7 +8,6 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  * The TextRenderer implementation.
@@ -20,6 +19,11 @@ public class TextRenderer implements ElementRenderer {
    * the font to use.
    */
   private RenderFont font = new RenderFontNull();
+
+  /**
+   * this is the original text.
+   */
+  private String originalText;
 
   /**
    * the text to output.
@@ -103,6 +107,7 @@ public class TextRenderer implements ElementRenderer {
    * @param newText new text
    */
   private void initText(final String newText) {
+    this.originalText = newText;
     this.textLines = newText.split("\n", -1);
 
     maxWidth = 0;
@@ -353,5 +358,13 @@ public class TextRenderer implements ElementRenderer {
     public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
       return null;
     }
+  }
+
+  /**
+   * get original text.
+   * @return original text
+   */
+  public String getOriginalText() {
+    return originalText;
   }
 }

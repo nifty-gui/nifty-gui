@@ -141,6 +141,7 @@ public class ControlType extends ElementType {
           current,
           styleHandler,
           getAttributes().getSrcAttributes(),
+          screen,
           nifty,
           registeredEffects,
           time);
