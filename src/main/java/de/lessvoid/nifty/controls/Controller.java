@@ -17,17 +17,17 @@ public interface Controller {
   /**
    * Bind this Controller to a certain element.
    * @param nifty nifty
-   * @param screen the Screen
    * @param element the Element
    * @param parameter parameters from the xml source to init the controller
    * @param listener the ControllerEventListener
    */
-  void bind(Nifty nifty, Screen screen, Element element, Properties parameter, ControllerEventListener listener);
+  void bind(Nifty nifty, Element element, Properties parameter, ControllerEventListener listener);
 
   /**
    * Called when the screen is started.
+   * @param screen screen
    */
-  void onStartScreen();
+  void onStartScreen(final Screen screen);
 
   /**
    * This controller gets the focus.
@@ -37,7 +37,7 @@ public interface Controller {
 
   /**
    * input event.
- * @param inputEvent the NiftyInputEvent to process
+   * @param inputEvent the NiftyInputEvent to process
    */
   void inputEvent(NiftyInputEvent inputEvent);
 }

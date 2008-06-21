@@ -34,6 +34,11 @@ public final class NiftyDefaults {
     effects.put("shake", new RegisterEffectType("de.lessvoid.nifty.effects.general.Shake"));
     effects.put("playSound", new RegisterEffectType("de.lessvoid.nifty.effects.general.PlaySound"));
     effects.put("move", new RegisterEffectType("de.lessvoid.nifty.effects.general.Move"));
+    effects.put("changeFont", new RegisterEffectType("de.lessvoid.nifty.effects.general.ChangeFont"));
+    effects.put("colorPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.general.ColorPulsate"));
+    effects.put("saveState", new RegisterEffectType("de.lessvoid.nifty.effects.general.SaveState"));
+    effects.put("restoreState", new RegisterEffectType("de.lessvoid.nifty.effects.general.RestoreState"));
+    effects.put("renderElement", new RegisterEffectType("de.lessvoid.nifty.effects.general.RenderElement"));
 
     // hover
     effects.put("hoverColorBar", new RegisterEffectType("de.lessvoid.nifty.effects.hover.ColorBar"));

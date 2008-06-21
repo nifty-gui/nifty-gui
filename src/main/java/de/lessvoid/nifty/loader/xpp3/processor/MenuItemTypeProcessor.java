@@ -19,11 +19,6 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
   private ElementType element;
 
   /**
-   * focus handler.
-   */
-  private FocusHandler focusHandler;
-
-  /**
    * default font (inherited from parent menu).
    */
   private String defaultFont;
@@ -39,7 +34,6 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
       final FocusHandler focusHandlerParam,
       final String fontParam) {
     this.element = elementParam;
-    this.focusHandler = focusHandlerParam;
     this.defaultFont = fontParam;
   }
 
@@ -50,7 +44,7 @@ public class MenuItemTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    MenuItemType menuItemType = new MenuItemType(focusHandler);
+    MenuItemType menuItemType = new MenuItemType();
     menuItemType.setText(attributes.get("text"));
     if (!attributes.isSet("font")) {
       attributes.overwriteAttribute("font", defaultFont);

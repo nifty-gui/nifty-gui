@@ -128,7 +128,7 @@ public class AttributesType {
   /**
    * focusable.
    */
-  private Boolean focusable = false;
+  private Boolean focusable;
 
   /**
    * default constructor.

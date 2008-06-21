@@ -16,6 +16,11 @@ public class FocusHandler {
   private ArrayList < Element > entries = new ArrayList < Element >();
 
   /**
+   * buffer to save stuff.
+   */
+  private ArrayList < ArrayList < Element >> elementBuffer = new ArrayList < ArrayList < Element >>();
+
+  /**
    * add an element to the focus handler.
    * @param element element to add
    */
@@ -65,5 +70,43 @@ public class FocusHandler {
       index = entries.size() - 1;
     }
     return entries.get(index);
+  }
+
+  /**
+   * remove this element.
+   * @param element element
+   */
+  public void remove(final Element element) {
+    entries.remove(element);
+  }
+
+  /**
+   * get first entry.
+   * @return first
+   */
+  public Element getFirstFocusElement() {
+    if (entries.isEmpty()) {
+      return null;
+    }
+    return entries.get(0);
+  }
+
+  /**
+   * save all states.
+   */
+  public void pushState() {
+    ArrayList < Element > copy = new ArrayList < Element >();
+    copy.addAll(entries);
+    elementBuffer.add(copy);
+
+    entries.clear();
+  }
+
+  /**
+   * restore all states.
+   */
+  public void popState() {
+    entries.clear();
+    entries.addAll(elementBuffer.get(elementBuffer.size() - 1));
   }
 }

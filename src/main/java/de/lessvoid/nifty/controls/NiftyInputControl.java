@@ -2,6 +2,7 @@ package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.screen.Screen;
 
 /**
  * NiftyInputControl.
@@ -39,9 +40,10 @@ public class NiftyInputControl {
 
   /**
    * forward the onStartScreen event to the controller.
+   * @param screen screen
    */
-  public void onStartScreen() {
-    controller.onStartScreen();
+  public void onStartScreen(final Screen screen) {
+    controller.onStartScreen(screen);
   }
 
   /**

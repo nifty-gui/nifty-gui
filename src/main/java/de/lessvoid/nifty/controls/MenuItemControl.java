@@ -25,23 +25,14 @@ public class MenuItemControl implements Controller {
   private FocusHandler focusHandler;
 
   /**
-   * constructor.
-   * @param focusHandlerParam focus handler
-   */
-  public MenuItemControl(final FocusHandler focusHandlerParam) {
-    focusHandler = focusHandlerParam;
-  }
-  /**
    * Bind this controller to the given element.
    * @param nifty nifty
-   * @param newScreen the new nifty to set
    * @param newElement the new element to set
    * @param properties all attributes of the xml tag we're connected to
    * @param newListener listener
    */
   public void bind(
       final Nifty nifty,
-      final Screen newScreen,
       final Element newElement,
       final Properties properties, final ControllerEventListener newListener) {
     element = newElement;
@@ -49,8 +40,10 @@ public class MenuItemControl implements Controller {
 
   /**
    * On start screen event.
+   * @param newScreen screen
    */
-  public void onStartScreen() {
+  public void onStartScreen(final Screen newScreen) {
+    focusHandler = newScreen.getFocusHandler();
   }
 
   /**

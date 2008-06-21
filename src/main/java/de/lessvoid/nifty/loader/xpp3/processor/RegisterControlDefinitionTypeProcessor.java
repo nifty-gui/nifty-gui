@@ -11,7 +11,7 @@ import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 
 /**
- * Regîster a control.
+ * Register a control.
  */
 public class RegisterControlDefinitionTypeProcessor implements XmlElementProcessor {
 

@@ -6,7 +6,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
-import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -53,7 +52,8 @@ public class MenuType extends ElementType {
         getAttributes().getId(),
         parent,
         screen,
-        false, renderer);
+        false,
+        renderer);
     Element element = panel;
     super.addElementAttributes(
         element,
@@ -63,7 +63,8 @@ public class MenuType extends ElementType {
         registeredControls,
         styleHandler,
         time,
-        inputControl, screenController);
+        inputControl,
+        screenController);
     parent.add(element);
     return element;
   }

@@ -5,6 +5,7 @@ import java.util.List;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.hover.HoverEffect;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * An EffectProcessor handles a single effect type. You can have multiple
@@ -51,6 +52,7 @@ public class HoverEffectProcessor extends StandardEffectProcessor {
           if (hoverEffect.isInsideFalloff(x, y)) {
             startEffect(hoverEffect, null);
             setActive(true);
+            // element.startEffect(EffectEventId.onFocus, new TimeProvider(), null);
           }
         }
 

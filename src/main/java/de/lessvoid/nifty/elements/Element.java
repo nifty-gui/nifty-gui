@@ -1,11 +1,13 @@
 package de.lessvoid.nifty.elements;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
@@ -186,6 +188,16 @@ public class Element {
    * remember if we've calculated this constraint ourself.
    */
   private boolean isCalcHeightConstraint;
+
+  /**
+   * focusable.
+   */
+  private boolean focusable = false;
+
+  /**
+   * screen we're connected to.
+   */
+  private Screen screen;
 
   /**
    * construct new instance of Element.
@@ -925,15 +937,6 @@ public class Element {
   }
 
   /**
-   * set screen controller.
-   * @param screen screen
-   * @param newNifty the screen
-   */
-  public final void bindToScreen(final Screen screen, final Nifty newNifty) {
-    this.nifty = newNifty;
-  }
-
-  /**
    * find an element by name.
    *
    * @param name the name of the element (id)
@@ -984,14 +987,26 @@ public class Element {
 
   /**
    * On start screen event.
+   * @param newNifty nifty
+   * @param newScreen screen
    */
-  public void onStartScreen() {
+  public void onStartScreen(final Nifty newNifty, final Screen newScreen) {
+    this.nifty = newNifty;
+    this.screen = newScreen;
+
+    if (focusable) {
+      FocusHandler focusHandler = screen.getFocusHandler();
+      if (focusHandler != null) {
+        focusHandler.addElement(this);
+      }
+    }
+
     if (attachedInputControl != null) {
-      attachedInputControl.onStartScreen();
+      attachedInputControl.onStartScreen(screen);
     }
 
     for (Element e : elements) {
-      e.onStartScreen();
+      e.onStartScreen(newNifty, newScreen);
     }
   }
 
@@ -1130,21 +1145,21 @@ public class Element {
   }
 
   /**
-   * remove this from parent.
+   * remove this and all child elements.
    */
   public void remove() {
-    parent.removeChild(this);
+    Iterator < Element > elementIt = elements.iterator();
+    while (elementIt.hasNext()) {
+      Element element = elementIt.next();
+      element.remove();
+      elementIt.remove();
+    }
     if (mouseFocusHandler != null) {
       mouseFocusHandler.lostFocus(this);
     }
-  }
-
-  /**
-   * remove given child.
-   * @param element child element to remove
-   */
-  private void removeChild(final Element element) {
-    elements.remove(element);
+    if (screen.getFocusHandler() != null) {
+      screen.getFocusHandler().remove(this);
+    }
   }
 
   /**
@@ -1161,5 +1176,34 @@ public class Element {
    */
   public ElementRenderer[] getElementRenderer() {
     return elementRenderer;
+  }
+
+  /**
+   * set focusable flag.
+   * @param newFocusable focusable flag
+   */
+  public void setFocusable(final boolean newFocusable) {
+    this.focusable = newFocusable;
+  }
+
+  /**
+   * @return the attachedInputControl
+   */
+  public NiftyInputControl getAttachedInputControl() {
+    return attachedInputControl;
+  }
+
+  /**
+   * remove this and all children from the focushandler.
+   */
+  public void removeFromFocusHandler() {
+    if (screen.getFocusHandler() != null) {
+      if (focusable) {
+        screen.getFocusHandler().remove(this);
+      }
+      for (Element element : elements) {
+        element.removeFromFocusHandler();
+      }
+    }
   }
 }

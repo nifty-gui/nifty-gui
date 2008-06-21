@@ -113,9 +113,9 @@ public class ScreenType {
       final StyleHandler styleHandler) {
     ScreenController screenController = ClassHelper.getScreenController(controller);
     Screen screen = new Screen(
+        nifty,
         id,
-        screenController,
-        timeProvider);
+        screenController, timeProvider);
     screenController.bind(nifty, screen);
     for (LayerType layerType : layers) {
       screen.addLayerElement(

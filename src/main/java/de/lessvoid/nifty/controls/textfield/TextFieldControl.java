@@ -101,22 +101,18 @@ public class TextFieldControl implements Controller {
   /**
    * Bind this controller to the given element.
    * @param niftyParam niftyParam
-   * @param newScreen the new nifty to set
    * @param newElement the new element to set
    * @param properties all attributes of the xml tag we're connected to
    * @param newListener listener
    */
   public void bind(
       final Nifty niftyParam,
-      final Screen newScreen,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener) {
-    this.screen = newScreen;
     this.element = newElement;
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
-    this.focusHandler = screen.getFocusHandler();
 
     this.textField = new TextField("", new ClipboardAWT());
     this.textField.toFirstPosition();
@@ -124,8 +120,12 @@ public class TextFieldControl implements Controller {
 
   /**
    * On start screen event.
+   * @param newScreen screen
    */
-  public void onStartScreen() {
+  public void onStartScreen(final Screen newScreen) {
+    this.screen = newScreen;
+    this.focusHandler = screen.getFocusHandler();
+
     this.textElement = element.findElementByName("textfield-text");
     this.textField.initWithText(textElement.getRenderer(TextRenderer.class).getOriginalText());
 

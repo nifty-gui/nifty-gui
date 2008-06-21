@@ -111,8 +111,6 @@ public class ElementType {
       final TimeProvider time,
       final NiftyInputControl control,
       final ScreenController screenController) {
-    element.bindToScreen(screen, nifty);
-
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
@@ -242,9 +240,7 @@ public class ElementType {
     }
     // focusable
     if (attrib.getFocusable() != null) {
-      if (attrib.getFocusable()) {
-        screen.getFocusHandler().addElement(element);
-      }
+      element.setFocusable(attrib.getFocusable());
     }
     // textRenderer
     TextRenderer textRenderer = element.getRenderer(TextRenderer.class);

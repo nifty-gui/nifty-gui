@@ -145,7 +145,7 @@ public class ControlType extends ElementType {
           nifty,
           registeredEffects,
           time);
-      c.bind(nifty, screen, current, null, listener);
+      c.bind(nifty, current, null, listener);
       return current;
     }
 

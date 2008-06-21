@@ -52,7 +52,8 @@ public class PopupType extends PanelType {
         registeredControls,
         styleHandler,
         time,
-        inputControl, screenController);
+        inputControl,
+        screenController);
     return element;
   }
 }

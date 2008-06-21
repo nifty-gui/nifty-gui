@@ -29,19 +29,16 @@ public class ButtonControl implements Controller {
   /**
    * bind.
    * @param nifty nifty
-   * @param screen screen
    * @param newElement element
    * @param parameter parameter
    * @param listener listener
    */
   public void bind(
       final Nifty nifty,
-      final Screen screen,
       final Element newElement,
       final Properties parameter,
       final ControllerEventListener listener) {
     this.element = newElement;
-    this.focusHandler = screen.getFocusHandler();
   }
 
   /**
@@ -71,7 +68,9 @@ public class ButtonControl implements Controller {
 
   /**
    * onStartScreen.
+   * @param screen screen
    */
-  public void onStartScreen() {
+  public void onStartScreen(final Screen screen) {
+    this.focusHandler = screen.getFocusHandler();
   }
 }

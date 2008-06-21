@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.console.Console;
 import de.lessvoid.nifty.EndNotify;
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
@@ -49,6 +50,11 @@ public class Screen implements MouseFocusHandler {
   private ArrayList < Element > popupElements = new ArrayList < Element >();
 
   /**
+   * saves focusElements for popups.
+   */
+  private ArrayList < Element > focusElementBuffer = new ArrayList < Element >();
+
+  /**
    * the current element that has exclusive access to the mouse or null.
    */
   private Element mouseFocusElement;
@@ -69,12 +75,23 @@ public class Screen implements MouseFocusHandler {
   private FocusHandler focusHandler;
 
   /**
+   * nifty.
+   */
+  private Nifty nifty;
+
+  /**
    * create new screen instance.
+   * @param newNifty nifty
    * @param newId new id for the new screen instance.
    * @param newScreenController the new screen controller for this screen
    * @param newTimeProvider the TimeProvider we should use
    */
-  public Screen(final String newId, final ScreenController newScreenController, final TimeProvider newTimeProvider) {
+  public Screen(
+      final Nifty newNifty,
+      final String newId,
+      final ScreenController newScreenController,
+      final TimeProvider newTimeProvider) {
+    this.nifty = newNifty;
     this.screenId = newId;
     this.screenController = newScreenController;
     this.mouseFocusElement = null;
@@ -112,17 +129,37 @@ public class Screen implements MouseFocusHandler {
    * @param popup popup
    */
   public void addPopup(final Element popup) {
+    // create the callback
+    EndNotify localEndNotify = new EndNotify() {
+      public final void perform() {
+        for (Element w : layerElements) {
+          if (w.isEffectActive(EffectEventId.onStartScreen)) {
+            return;
+          }
+        }
+        setDefaultFocus();
+      }
+    };
+
+    if (focusHandler != null) {
+      focusHandler.pushState();
+    }
+
     // attach screenController to the popup element
     popup.attachPopup(screenController);
 
-    // prepare popup for display
+    // prepare pop up for display
     popup.resetEffects();
     popup.layoutElements();
-    popup.startEffect(EffectEventId.onStartScreen, timeProvider, null);
+    popup.startEffect(EffectEventId.onStartScreen, timeProvider, localEndNotify);
+    popup.onStartScreen(nifty, this);
 
     // add to layers and add as popup
     layerElements.add(popup);
     popupElements.add(popup);
+
+    focusElementBuffer.add(focusElement);
+    focusElement = null;
   }
 
   /**
@@ -132,6 +169,11 @@ public class Screen implements MouseFocusHandler {
   public void closePopup(final Element popup) {
     layerElements.remove(popup);
     popupElements.remove(popup);
+    focusElement = focusElementBuffer.get(focusElementBuffer.size() - 1);
+    focusElementBuffer.remove(focusElementBuffer.size() - 1);
+    if (focusHandler != null) {
+      focusHandler.popState();
+    }
   }
 
   /**
@@ -200,6 +242,7 @@ public class Screen implements MouseFocusHandler {
         if (endNotify != null) {
           endNotify.perform();
         }
+        setDefaultFocus();
       }
     };
 
@@ -211,12 +254,22 @@ public class Screen implements MouseFocusHandler {
           localEndNotify);
 
       if (effectEventId == EffectEventId.onStartScreen) {
-        w.onStartScreen();
+        w.onStartScreen(nifty, this);
       }
     }
 
     // just in case there was no effect activated, we'll check here, if we're already done
     localEndNotify.perform();
+  }
+
+  /**
+   * set default focus.
+   */
+  private void setDefaultFocus() {
+    Element firstFocus = getFocusHandler().getFirstFocusElement();
+    if (firstFocus != null) {
+      firstFocus.setFocus();
+    }
   }
 
   /**

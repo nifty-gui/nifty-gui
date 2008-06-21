@@ -511,7 +511,7 @@ public class Nifty {
           screen.getScreenController());
       screen.layoutLayers();
 
-      newControl.onStartScreen();
+      newControl.onStartScreen(Nifty.this, screen);
     }
   }
 
