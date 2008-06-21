@@ -41,7 +41,6 @@ public class MenuController implements ScreenController {
    * just goto the next screen.
    */
   public final void onStartInteractive() {
-    screen.findElementByName("helloWorld").setFocus();
   }
 
   /**

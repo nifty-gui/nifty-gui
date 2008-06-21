@@ -22,27 +22,24 @@ public class MultiplayerPanelControl implements Controller {
   /**
    * Bind this controller to the given element.
    * @param niftyParam niftyParam
-   * @param newScreen the new nifty to set
    * @param newElement the new element to set
    * @param properties all attributes of the xml tag we're connected to
    * @param newListener listener
    */
   public void bind(
       final Nifty niftyParam,
-      final Screen newScreen,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener) {
     nifty = niftyParam;
-    screen = newScreen;
     element = newElement;
   }
-  
+
   /**
    * Called when the screen is started.
    */
-  public void onStartScreen() {
-    
+  public void onStartScreen(final Screen newScreen) {
+    screen = newScreen;
   }
 
   /**

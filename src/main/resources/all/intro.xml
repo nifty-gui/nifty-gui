@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nifty.xsd">
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- load styles -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- register sounds -->
@@ -34,6 +39,26 @@
       <onHover name="hoverColorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
       <onHover name="hoverRenderElement" />
       <onHover name="hoverRestoreState" />
+    </effect>
+  </style>
+
+  <style id="text-only-button#panel">
+    <attributes align="center" childLayout="center" visibleToMouse="true" />
+  </style>
+  <style id="text-only-button#text">
+    <attributes font="verdana-24-shadow.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="true"/>
+    <effect>
+      <onHover name="hoverSaveState" />
+      <onHover name="hoverChangeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onHover name="hoverColorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
+      <onHover name="hoverRenderElement" />
+      <onHover name="hoverRestoreState" />
+
+      <onFocus timeType="infinite" name="saveState" />
+      <onFocus timeType="infinite" name="changeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onFocus timeType="infinite" name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
+      <onFocus timeType="infinite" name="renderElement" />
+      <onFocus timeType="infinite" name="restoreState" />
     </effect>
   </style>
 
@@ -90,21 +115,21 @@
       <panel height="20%" childLayout="center"/>
       <panel height="60%" childLayout="center">
         <menu id="mainMenu" font="menu.fnt" style="menu">
-          <menuItem id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example">
+          <menuItem id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" focusable="true">
             <interact onClick="helloWorld()"/>
           </menuItem>
-          <menuItem id="textfield" text="Textfield Example" style="menu-item" hintText="Textfield Example">
+          <menuItem id="textfield" text="Textfield Example" style="menu-item" hintText="Textfield Example" focusable="true">
             <interact onClick="textField()"/>
           </menuItem>
-          <menuItem id="textalign" text="Textalign Example" style="menu-item" hintText="Textalign Example">
+          <menuItem id="textalign" text="Textalign Example" style="menu-item" hintText="Textalign Example" focusable="true">
             <interact onClick="textAlign()"/>
           </menuItem>
           <!--  
-          <menuItem id="multiplayer" text="Multiplayer Example" style="menu-item">
+          <menuItem id="multiplayer" text="Multiplayer Example" style="menu-item" focusable="true">
             <interact onClick="multiplayer()"/>
           </menuItem>
           -->
-          <menuItem id="exit" text="Exit" style="menu-item" hintText="Exit">
+          <menuItem id="exit" text="Exit" style="menu-item" hintText="Exit" focusable="true">
             <interact onClick="exit()"/>
           </menuItem>
         </menu>
@@ -165,14 +190,14 @@
         </panel>
         <panel childLayout="horizontal" align="center" height="50%">
           <panel childLayout="center" width="50%">
-            <text text="Yes" font="verdana-24-shadow.fnt" style="glowText" align="center">
-              <interact onClick="popupExit(yes)"/>
-            </text>
+            <control id="yesButton" style="text-only-button" name="button" label="Yes" align="center">
+              <interact onClick="popupExit(yes)" /> 
+            </control>
           </panel>
           <panel childLayout="center" width="50%">
-            <text text="No" font="verdana-24-shadow.fnt" style="glowText" align="center">
-              <interact onClick="popupExit(no)"/>
-            </text>
+            <control id="noButton" style="text-only-button" name="button" label="No" align="center">
+              <interact onClick="popupExit(no)" /> 
+            </control>
           </panel>
         </panel>
       </panel>
