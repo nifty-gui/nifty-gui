@@ -13,19 +13,19 @@
 	</security>
 	<resources>
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-		<jar href="nifty-examples-0.0.3-SNAPSHOT-complete-with-dependencies.jar" main="true"/>
+		<jar href="nifty-examples-0.0.3-complete-with-dependencies.jar" main="true"/>
 	</resources>
 	<resources os="Windows">
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-	    <nativelib href="lib/lwjgl/native/lwjgl-win32-native.jar" />
+	    <nativelib href="lib/lwjgl-2.0rc1/lwjgl-win32-native.jar" />
 	</resources>
 	<resources os="Linux">
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-		<nativelib href="lib/lwjgl/native/lwjgl-linux-native.jar" />
+		<nativelib href="lib/lwjgl-2.0rc1/lwjgl-linux-native.jar" />
 	</resources>
 	<resources os="Mac OS">
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-		<nativelib href="lib/lwjgl/native/lwjgl-macosx-native.jar" />
+		<nativelib href="lib/lwjgl-2.0rc1/lwjgl-macosx-native.jar" />
 	</resources>
 	<application-desc/>
 </jnlp>
