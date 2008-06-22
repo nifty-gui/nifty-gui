@@ -40,7 +40,7 @@
           </descriptors>
           <archive>
             <manifest>
-              <mainClass>de.lessvoid.nifty.examples.AllExamplesMain</mainClass>
+              <mainClass>de.lessvoid.nifty.examples.all.AllExamplesMain</mainClass>
             </manifest>
           </archive>
         </configuration>
