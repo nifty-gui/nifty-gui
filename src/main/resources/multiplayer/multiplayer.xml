@@ -1,86 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty>
-  <registerEffect name="hide" class="de.lessvoid.nifty.effects.general.Hide" />
-  <registerEffect name="textSize" class="de.lessvoid.nifty.effects.hover.TextSize" />
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- load default styles and controls -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
 
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <!-- styles -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <style id="default-textfield-panel">
-    <attributes backgroundColor="#555f" childLayout="overlay" height="40px" />
+  <style id ="selected" base="nifty-label">
+    <attributes backgroundColor="#000f" />
   </style>
 
-  <style id="default-textfield-field">
-    <attributes childLayout="center" visibleToMouse="true" childClip="true" />
+  <style id ="unselected" base="nifty-label">
+    <attributes backgroundColor="#0000" />
     <effect>
-      <onHover name="colorBarHover" timeType="infinite" color="#7707" post="true"/>
-      <onFocus name="pulsate" period="1500" timeType="infinite" startColor="#770f" endColor="#700f" post="true"/>
-    </effect>
-  </style>
-  
-  <style id="default-textfield-text">
-    <attributes font="verdana-24-shadow.fnt" visibleToMouse="false" align="left" />
-  </style>
-
-  <style id="default-textfield-cursor-panel">
-    <attributes childLayout="absolute" />
-  </style>
-
-  <style id="default-textfield-cursor">
-    <attributes filename="textfield/cursor-empty.png" />
-    <effect>
-      <onActive name="ImageOverlayPulsate" period="300" timeType="infinite" pulsatechildLayout="rectangle" filename="textfield/cursor.png" post="true"/>
-    </effect>
-  </style>
-
-  <style id="thing-text">
-    <attributes font="verdana-24-shadow.fnt" align="center" valign="center" width="25%"/>
-    <effect>
-      <onHover name="textSize" maxSize="40%" />
+      <onHover name="hoverPulsate" startColor="#f007" endColor="#ff0f" />
     </effect>
   </style>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <!-- textfield control -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <controlDefinition name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
-    <panel id="textfield-panel" style="default-textfield-panel">
-      <panel id="textfield-field" style="default-textfield-field">
-        <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
-        <text id="textfield-text" style="default-textfield-text" text="">
-            <textSelection textColor="#f0ff" />
-        </text>
+  <!-- nifty ImageSelect control -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <controlDefinition name="imageSelect" controller="de.lessvoid.nifty.examples.multiplayer.ImageSelectControl">
+    <panel align="center" valign="center" childLayout="horizontal" imageList="$imageList">
+      <panel width="32px" align="center" valign="center" childLayout="center">
+        <image id="back" filename="multiplayer/imageSelectArrowLeft.png" align="center" valign="center">
+          <interact onClick="backClick()"/>
+          <effect>
+            <onHover name="hoverImageOverlay" filename="multiplayer/imageSelectArrowLeftHover.png" />
+          </effect>
+        </image>
       </panel>
-      <panel id="textfield-cursor-panel" style="default-textfield-cursor-panel">
-        <image id="textfield-cursor" style="default-textfield-cursor"/>
+      <panel align="center" valign="center" childLayout="center">
+        <image id="image" align="center" valign="center" />
+      </panel>
+      <panel width="32px" align="right" valign="center" childLayout="center">
+        <image id="forward" filename="multiplayer/imageSelectArrowRight.png" align="center" valign="center">
+          <interact onClick="forwardClick()"/>
+          <effect>
+            <onHover name="hoverImageOverlay" filename="multiplayer/imageSelectArrowRightHover.png" />
+          </effect>
+        </image>
       </panel>
     </panel>
   </controlDefinition>
-
+   
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- multiplayerPanel -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <controlDefinition name="multiplayerPanel" controller="de.lessvoid.nifty.examples.multiplayer.MultiplayerPanelControl">
-    <panel align="center" valign="center" backgroundColor="#ff0f" width="70%" height="80px" childLayout="vertical">
-      <panel childLayout="horizontal" height="50%">
-        <text font="verdana-24-shadow.fnt" text="Name:" align="left" width="25%" backgroundColor="#f0ff"/>
-        <control id="name" name="textfield" />
-      </panel>
-      <panel childLayout="horizontal" height="50%">
-        <text text="Difficulty:" font="verdana-24-shadow.fnt" width="25%" align="left" valign="center" />
-        <panel childLayout="horizontal" width="75%" backgroundColor="#00ff">
-          <label text="Easy" style="thing-text">
-            <interact onClick="easyClicked()"/>
-          </label>
-          <text text="Medium" style="thing-text" backgroundColor="#f0ff"> 
-            <interact onClick="mediumClicked()"/>
-          </text>
-          <text text="Hard" style="thing-text">
-            <interact onClick="mediumClicked()"/>
-          </text>
-          <text text="Expert" style="thing-text" backgroundColor="#f0ff">
-            <interact onClick="mediumClicked()"/>
-          </text>
+    <panel style="nifty-panel" align="center" valign="center" width="80%" height="170px" childLayout="center">
+      <effect>
+        <onStartScreen name="move" direction="left" mode="in" length="250" startDelay="0" inherit="true"/>
+      </effect>
+      <panel childLayout="center" width="95%" height="80%" align="center" valign="center">
+        <panel childLayout="vertical" align="center" valign="center">
+          <panel childLayout="horizontal" height="60%">
+            <panel childLayout="vertical" align="left" valign="center">
+              <panel childLayout="horizontal" height="40px">
+                <label text="Name:" align="left" width="25%" textHAlign="left"/>
+                <control id="name" name="textfield" />
+              </panel>
+              <panel childLayout="horizontal" height="4px" />
+              <panel childLayout="horizontal" height="40px">
+                <label text="Difficulty:" width="25%" align="left" textHAlign="left" />
+                <panel childLayout="horizontal" width="75%">
+                  <label id="easy" text="Easy" focusable="true">
+                    <interact onClick="setDifficulty(easy)"/>
+                  </label>
+                  <panel childLayout="horizontal" width="4px" />
+                  <label id="medium" text="Medium" focusable="true"> 
+                    <interact onClick="setDifficulty(medium)"/>
+                  </label>
+                  <panel childLayout="horizontal" width="4px" />
+                  <label id="hard" text="Hard" focusable="true">
+                    <interact onClick="setDifficulty(hard)"/>
+                  </label>
+                  <panel childLayout="horizontal" width="4px" />
+                  <label id="expert" text="Expert" focusable="true">
+                    <interact onClick="setDifficulty(expert)"/>
+                  </label>
+                </panel>
+              </panel>
+            </panel>
+            <panel width="4px" />
+            <panel childLayout="center" width="144px" align="right" valign="top">
+             <control id="avatarSelect" name="imageSelect" align="center" valign="center"
+               imageList="multiplayer/avatar1.png,multiplayer/avatar2.png,multiplayer/avatar3.png,multiplayer/avatar4.png">
+             </control>
+           </panel>
+          </panel>
+          <panel childLayout="horizontal" height="40%">
+            <panel width="*"/>
+            <control id="removeButton" name="button" label="Remove" align="right">
+              <interact onClick="removePanel()" />
+            </control>
+          </panel>
         </panel>
       </panel>
     </panel>
@@ -90,9 +104,21 @@
   <!-- screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <screen id="start" controller="de.lessvoid.nifty.examples.multiplayer.StartScreenController">
-    <layer id="layer" childLayout="center">
-      <panel id="box-parent" childLayout="vertical" align="center" valign="center">
-		  </panel>
+    <layer id="layer" childLayout="center" backgroundImage="background.png">
+      <panel childLayout="vertical">
+        <panel childLayout="center" height="10%" >
+          <panel childLayout="horizontal" align="center" valign="center" width="50%">
+            <control id="addButton" name="button" label="Add Player" align="left">
+              <interact onClick="addPanel()" />
+            </control>
+            <control id="startButton" name="button" label="Start" align="right">
+              <interact onClick="quit()" />
+            </control>
+          </panel>
+        </panel>
+        <panel id="box-parent" childLayout="vertical" align="center" valign="center" height="90%">
+        </panel>
+      </panel>
     </layer>
   </screen>
 </nifty>

@@ -205,7 +205,9 @@ public class LwjglInitHelper {
         int eventKey = Keyboard.getEventKey();
         nifty.keyEvent(eventKey, Keyboard.getEventCharacter(), eventKeyState);
         if (eventKeyState && eventKey == Keyboard.KEY_F2) {
-          nifty.toggleDebugConsole();
+          nifty.toggleDebugConsole(true);
+        } else if (eventKeyState && eventKey == Keyboard.KEY_F3) {
+          nifty.toggleDebugConsole(false);
         }
       }
 

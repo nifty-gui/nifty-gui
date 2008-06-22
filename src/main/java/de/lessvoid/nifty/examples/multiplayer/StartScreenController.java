@@ -12,9 +12,11 @@ public class StartScreenController implements ScreenController {
 
   /** nifty instance. */
   private Nifty nifty;
-  
+
   /** screen. */
   private Screen screen;
+
+  private int id = 10000;
 
   /**
    * Bind this ScreenController to a screen.
@@ -29,8 +31,15 @@ public class StartScreenController implements ScreenController {
   /**
    * on start screen.
    */
-  public final void onStartScreen() {
-    nifty.addControl(screen, screen.findElementByName("box-parent"), "multiplayerPanel", "100000");
+  public void onStartScreen() {
+    addPanel();
+  }
+
+  /**
+   * add panel.
+   */
+  public void addPanel() {
+    nifty.addControl(screen, screen.findElementByName("box-parent"), "multiplayerPanel", "" + id++);
   }
 
   /**

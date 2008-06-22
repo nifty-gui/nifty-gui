@@ -27,7 +27,7 @@
     <hover width="200%" falloffConstraint="horizontal"/>
     <effect>
       <onHover name="hoverHint" targetElement="hintElement" hintText="$hintText" />
-      <onFocus name="pulsate" hoverWidth="200%" width="200%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+      <onFocus name="pulsate" hoverWidth="200%" width="120%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
     </effect>
   </style>
 
@@ -118,17 +118,15 @@
           <menuItem id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" focusable="true">
             <interact onClick="helloWorld()"/>
           </menuItem>
-          <menuItem id="textfield" text="Textfield Example" style="menu-item" hintText="Textfield Example" focusable="true">
-            <interact onClick="textField()"/>
-          </menuItem>
           <menuItem id="textalign" text="Textalign Example" style="menu-item" hintText="Textalign Example" focusable="true">
             <interact onClick="textAlign()"/>
           </menuItem>
-          <!--  
-          <menuItem id="multiplayer" text="Multiplayer Example" style="menu-item" focusable="true">
+          <menuItem id="textfield" text="Textfield Example" style="menu-item" hintText="Textfield Example" focusable="true">
+            <interact onClick="textField()"/>
+          </menuItem>
+          <menuItem id="multiplayer" text="Avatar &amp; Multiplayer Example" hintText="Avatar &amp; Multiplayer Example" style="menu-item" focusable="true">
             <interact onClick="multiplayer()"/>
           </menuItem>
-          -->
           <menuItem id="exit" text="Exit" style="menu-item" hintText="Exit" focusable="true">
             <interact onClick="exit()"/>
           </menuItem>

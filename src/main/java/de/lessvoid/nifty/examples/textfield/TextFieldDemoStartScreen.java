@@ -15,6 +15,7 @@ public class TextFieldDemoStartScreen implements ScreenController {
    * the nifty.
    */
   private Nifty nifty;
+  private Screen screen;
 
   /**
    * bind this ScreenController to a screen.
@@ -25,6 +26,7 @@ public class TextFieldDemoStartScreen implements ScreenController {
   public final void bind(
       final Nifty newNifty,
       final Screen newScreen) {
+    screen = newScreen;
     nifty = newNifty;
   }
 
@@ -32,6 +34,7 @@ public class TextFieldDemoStartScreen implements ScreenController {
    * on start screen.
    */
   public final void onStartScreen() {
+    screen.findElementByName("backButton").setStyle("huhu");
   }
 
   /**
