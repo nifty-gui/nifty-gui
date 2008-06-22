@@ -23,6 +23,7 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
   public void setUp() {
     engine = new NiftyRenderEngineImpl(null);
     font = createStrictMock(RenderFont.class);
+    engine.setFont(font);
   }
 
   public void testCompleteSelection() {
