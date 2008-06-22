@@ -2,7 +2,6 @@ package de.lessvoid.nifty.render.spi.lwjgl;
 
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
@@ -35,17 +34,11 @@ public class RenderDeviceLwjgl implements RenderDevice {
   private static DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
 
   /**
-   * FloatBuffer.
-   */
-  private static FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
-
-  /**
    * Get Width.
    * @return width of display mode
    */
   public int getWidth() {
-    return 1024;
-    // return Display.getDisplayMode().getWidth();
+    return Display.getDisplayMode().getWidth();
   }
 
   /**
@@ -53,8 +46,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return height of display mode
    */
   public int getHeight() {
-    return 768;
-    // return Display.getDisplayMode().getHeight();
+    return Display.getDisplayMode().getHeight();
   }
 
   /**
