@@ -12,6 +12,7 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MouseFocusHandler;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -183,6 +184,7 @@ public class Screen implements MouseFocusHandler {
     log.info("screen [" + getScreenId() + "] start");
     screenController.onStartScreen();
 
+    nifty.getMouseInputEventQueue().reset();
     resetLayers();
     layoutLayers();
     startLayers(
@@ -297,35 +299,31 @@ public class Screen implements MouseFocusHandler {
 
   /**
    * mouse event for this screen. forwards to the layers.
-   * @param x x position of mouse
-   * @param y y position of mouse
-   * @param leftMouseDown mouse button down
+   * @param inputEvent MouseInputEvent
+   * @return true when processed and false when not
    */
-  public final void mouseEvent(final int x, final int y, final boolean leftMouseDown) {
+  public final boolean mouseEvent(final MouseInputEvent inputEvent) {
     // when there are popup elements available this event will only travel to these layers!
     if (!popupElements.isEmpty()) {
-      forwardMouseEventToLayers(popupElements, x, y, leftMouseDown);
+      return forwardMouseEventToLayers(popupElements, inputEvent);
     } else {
-      forwardMouseEventToLayers(layerElements, x, y, leftMouseDown);
+      return forwardMouseEventToLayers(layerElements, inputEvent);
     }
   }
 
   /**
    * forward mouse event to the given layer list.
    * @param layerList layer list
-   * @param x x position of mouse
-   * @param y y position of mouse
-   * @param leftMouseDown mouse button down
+   * @param inputEvent TODO
+   * @return TODO
    */
-  private void forwardMouseEventToLayers(
-      final List < Element > layerList,
-      final int x,
-      final int y,
-      final boolean leftMouseDown) {
+  private boolean forwardMouseEventToLayers(final List < Element > layerList, final MouseInputEvent inputEvent) {
+    boolean eventProcessed = true;
     for (int i = layerList.size() - 1; i >= 0; i--) {
       Element layer = layerList.get(i);
-      layer.mouseEvent(x, y, leftMouseDown, timeProvider.getMsTime());
+      eventProcessed = eventProcessed & layer.mouseEvent(inputEvent, timeProvider.getMsTime());
     }
+    return eventProcessed;
   }
 
   /**
@@ -389,8 +387,10 @@ public class Screen implements MouseFocusHandler {
    * @param elementThatLostFocus elementThatLostFocus
    */
   public void lostFocus(final Element elementThatLostFocus) {
-    log.info("lostFocus: " + elementThatLostFocus.getId());
-    mouseFocusElement = null;
+    if (mouseFocusElement == elementThatLostFocus) {
+      log.info("lostFocus: " + elementThatLostFocus.getId());
+      mouseFocusElement = null;
+    }
   }
 
   /**

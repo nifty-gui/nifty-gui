@@ -88,10 +88,8 @@ public class InteractType {
    */
   public void initWithControl(
       final Element element,
-      final NiftyInputControl control,
-      final ScreenController screenController) {
-    element.attachInputControl(control);
-    initElement(element, control.getController(), screenController);
+      final Object ... controller) {
+    initElement(element, controller);
   }
 
   /**
@@ -102,32 +100,31 @@ public class InteractType {
   public void initWithScreenController(
       final Element element,
       final ScreenController screenController) {
-    initElement(element, null, screenController);
+    initElement(element, screenController);
   }
 
   /**
    * Initialize element.
    * @param element element
-   * @param controlController controlController
    * @param screenController screenController
+   * @param controlController controlController
    */
   private void initElement(
       final Element element,
-      final Controller controlController,
-      final ScreenController screenController) {
+      final Object ... controlController) {
 
     if (onClick != null) {
-      MethodInvoker onClickMethod = onClick.getMethod(controlController, screenController);
+      MethodInvoker onClickMethod = onClick.getMethod(controlController);
       element.setOnClickMethod(onClickMethod, false);
       element.setVisibleToMouseEvents(true);
     }
     if (onClickRepeat != null) {
-      MethodInvoker onClickRepeatMethod = onClickRepeat.getMethod(controlController, screenController);
+      MethodInvoker onClickRepeatMethod = onClickRepeat.getMethod(controlController);
       element.setOnClickMethod(onClickRepeatMethod, true);
       element.setVisibleToMouseEvents(true);
     }
     if (onClickMouseMove != null) {
-      MethodInvoker onClickMouseMoveMethod = onClickMouseMove.getMethod(controlController, screenController);
+      MethodInvoker onClickMouseMoveMethod = onClickMouseMove.getMethod(controlController);
       element.setOnClickMouseMoveMethod(onClickMouseMoveMethod);
       element.setVisibleToMouseEvents(true);
     }

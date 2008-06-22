@@ -20,7 +20,7 @@ public class EffectManager {
   /**
    * all the effects.
    */
-  private Map < EffectEventId, EffectProcessor > effects = new Hashtable < EffectEventId, EffectProcessor > ();
+  private Map < EffectEventId, EffectProcessor > effects = new Hashtable < EffectEventId, EffectProcessor >();
 
   /**
    * alternateKey we should use.

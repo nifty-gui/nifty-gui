@@ -10,9 +10,12 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEventCreator;
+import de.lessvoid.nifty.input.mouse.MouseInputEvent;
+import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
 import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
 import de.lessvoid.nifty.render.spi.RenderDevice;
@@ -109,6 +112,11 @@ public class Nifty {
   private KeyboardInputEventCreator inputEventCreator;
 
   /**
+   * MouseInputEventQueue.
+   */
+  private MouseInputEventQueue mouseInputEventQueue;
+
+  /**
    * Create nifty for the given RenderDevice and TimeProvider.
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
@@ -150,6 +158,7 @@ public class Nifty {
     this.exit = false;
     this.currentLoaded = null;
     this.inputEventCreator = new KeyboardInputEventCreator();
+    this.mouseInputEventQueue = new MouseInputEventQueue();
   }
 
   /**
@@ -165,19 +174,23 @@ public class Nifty {
       final int mouseX,
       final int mouseY,
       final boolean mouseDown) {
-    addControls();
-    removeElements();
 
     if (clearScreen) {
       renderDevice.clear();
     }
 
     if (currentScreen != null) {
-      currentScreen.mouseEvent(mouseX, mouseY, mouseDown);
+      mouseInputEventQueue.process(mouseX, mouseY, mouseDown);
+      MouseInputEvent inputEvent = mouseInputEventQueue.peek();
+      if (inputEvent != null) {
+        if (currentScreen.mouseEvent(inputEvent)) {
+          mouseInputEventQueue.remove();
+        }
+      }
       currentScreen.renderLayers(renderDevice);
 
       if (useDebugConsole) {
-        console.render(currentScreen, renderDevice);
+        console.render(this, currentScreen, renderDevice);
       }
     }
 
@@ -189,7 +202,8 @@ public class Nifty {
       currentScreen.closePopup(popups.get(removePopupId));
       removePopupId = null;
     }
-
+    addControls();
+    removeElements();
     return exit;
   }
 
@@ -429,6 +443,7 @@ public class Nifty {
     if (popup == null) {
       log.warning("missing popup [" + id + "] o_O");
     } else {
+      popup.resetEffects();
       popup.startEffect(EffectEventId.onEndScreen, timeProvider, new EndNotify() {
         public void perform() {
           removePopupId = id;
@@ -495,22 +510,26 @@ public class Nifty {
      * create the control.
      */
     public void createControl() {
-      ControlType controlType = new ControlType(controlName);
+      TypeContext typeContext = new TypeContext(
+          loader.getStyleHandler(),
+          Nifty.this,
+          loader.getRegisteredEffects(),
+          loader.getRegisteredControls(),
+          timeProvider
+          );
+
+      ControlType controlType = new ControlType(typeContext, controlName);
       AttributesType attributeType = new AttributesType();
       attributeType.setId(controlId);
       controlType.setAttributes(attributeType);
       Element newControl = controlType.createElement(
           parent,
-          Nifty.this,
           screen,
-          loader.getRegisteredEffects(),
-          loader.getRegisteredControls(),
-          loader.getStyleHandler(),
-          timeProvider,
           null,
           screen.getScreenController());
       screen.layoutLayers();
 
+      newControl.startEffect(EffectEventId.onStartScreen, new TimeProvider(), null);
       newControl.onStartScreen(Nifty.this, screen);
     }
   }
@@ -545,6 +564,7 @@ public class Nifty {
      */
     public void remove() {
       element.remove();
+      element.removeFromParent();
       screen.layoutLayers();
     }
   }
@@ -560,8 +580,17 @@ public class Nifty {
 
   /**
    * toggle debug console on/off.
+   * @param outputEffects outputEffects
    */
-  public void toggleDebugConsole() {
+  public void toggleDebugConsole(final boolean outputEffects) {
     useDebugConsole = !useDebugConsole;
+    console.setOutputElements(outputEffects);
+  }
+
+  /**
+   * @return the mouseInputEventQueue
+   */
+  public MouseInputEventQueue getMouseInputEventQueue() {
+    return mouseInputEventQueue;
   }
 }

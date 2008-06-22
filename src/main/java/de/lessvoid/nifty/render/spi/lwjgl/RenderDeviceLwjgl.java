@@ -44,7 +44,8 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return width of display mode
    */
   public int getWidth() {
-    return Display.getDisplayMode().getWidth();
+    return 1024;
+    // return Display.getDisplayMode().getWidth();
   }
 
   /**
@@ -52,7 +53,8 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return height of display mode
    */
   public int getHeight() {
-    return Display.getDisplayMode().getHeight();
+    return 768;
+    // return Display.getDisplayMode().getHeight();
   }
 
   /**

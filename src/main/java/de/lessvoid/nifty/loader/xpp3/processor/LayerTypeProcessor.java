@@ -5,6 +5,7 @@ import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.LayerType;
 import de.lessvoid.nifty.loader.xpp3.elements.ScreenType;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.ProcessorHelper;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 
 
 /**
@@ -17,12 +18,14 @@ public class LayerTypeProcessor implements XmlElementProcessor {
    * screen.
    */
   private ScreenType screen;
+  private TypeContext typeContext;
 
   /**
    * LayerTypeProcessor.
    * @param screenParam screen
    */
-  public LayerTypeProcessor(final ScreenType screenParam) {
+  public LayerTypeProcessor(final TypeContext newTypeContext, final ScreenType screenParam) {
+    this.typeContext = newTypeContext;
     this.screen = screenParam;
   }
 
@@ -33,8 +36,8 @@ public class LayerTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    LayerType layer = new LayerType();
-    ProcessorHelper.processElement(xmlParser, layer, attributes);
+    LayerType layer = new LayerType(typeContext);
+    ProcessorHelper.processElement(xmlParser, layer, attributes, typeContext);
     screen.addLayer(layer);
   }
 }

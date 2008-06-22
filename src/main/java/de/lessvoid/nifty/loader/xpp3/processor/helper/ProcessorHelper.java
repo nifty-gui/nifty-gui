@@ -34,12 +34,14 @@ public final class ProcessorHelper {
    * @param xmlParser xmlParser
    * @param elementType elementType
    * @param attributes attributes
+   * @param typeContext typeContext
    * @throws Exception exception
    */
   public static void processElement(
       final XmlParser xmlParser,
       final ElementType elementType,
-      final Attributes attributes) throws Exception {
+      final Attributes attributes,
+      final TypeContext typeContext) throws Exception {
     AttributesType attributesType = new AttributesType(attributes);
     elementType.setAttributes(attributesType);
 
@@ -49,12 +51,12 @@ public final class ProcessorHelper {
     xmlParser.optional("effect", new EffectsTypeProcessor(elementType));
     xmlParser.zeroOrMore(
           new SubstitutionGroup().
-            add("panel", new PanelTypeProcessor(elementType)).
-            add("text", new TextTypeProcessor(elementType)).
-            add("label", new LabelTypeProcessor(elementType)).
-            add("image", new ImageTypeProcessor(elementType)).
-            add("menu", new MenuTypeProcessor(elementType)).
-            add("control", new ControlTypeProcessor(elementType))
+            add("panel", new PanelTypeProcessor(typeContext, elementType)).
+            add("text", new TextTypeProcessor(typeContext, elementType)).
+            add("label", new LabelTypeProcessor(typeContext, elementType)).
+            add("image", new ImageTypeProcessor(typeContext, elementType)).
+            add("menu", new MenuTypeProcessor(typeContext, elementType)).
+            add("control", new ControlTypeProcessor(typeContext, elementType))
             );
   }
 }

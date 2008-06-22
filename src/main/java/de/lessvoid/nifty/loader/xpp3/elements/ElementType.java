@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
@@ -16,6 +17,7 @@ import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
@@ -63,27 +65,25 @@ public class ElementType {
    */
   private Collection < ElementType > elements = new ArrayList < ElementType >();
 
+  protected TypeContext typeContext;
+
+  protected ElementType elementTypeParent;
+
+  public ElementType(final TypeContext newTypeContext) {
+    typeContext = newTypeContext;
+  }
+
   /**
    * Create element.
    * @param parent parent element
-   * @param nifty nifty
    * @param screen screen
-   * @param registeredEffects registeredEffects
-   * @param registeredControls registeredControls
-   * @param styleHandler style handler
-   * @param time time
    * @param inputControl inputControl we should attach to the element (can be null)
    * @param screenController ScreenController
    * @return element
    */
   public Element createElement(
       final Element parent,
-      final Nifty nifty,
       final Screen screen,
-      final Map < String, RegisterEffectType > registeredEffects,
-      final Map < String, RegisterControlDefinitionType > registeredControls,
-      final StyleHandler styleHandler,
-      final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     return null;
@@ -93,37 +93,28 @@ public class ElementType {
    * add attributes to the element.
    * @param element element
    * @param screen screen
-   * @param nifty nifty
-   * @param registeredEffects effects
-   * @param registeredControls registeredControls
-   * @param styleHandler style handler
-   * @param time time
-   * @param control attached control (might be null)
    * @param screenController screenController
+   * @param control attached control (might be null)
    */
   protected void addElementAttributes(
       final Element element,
       final Screen screen,
-      final Nifty nifty,
-      final Map < String, RegisterEffectType > registeredEffects,
-      final Map < String, RegisterControlDefinitionType > registeredControls,
-      final StyleHandler styleHandler,
-      final TimeProvider time,
-      final NiftyInputControl control,
-      final ScreenController screenController) {
+      final ScreenController screenController,
+      final NiftyInputControl ... control) {
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
-    applyStyle(element, nifty, registeredEffects, styleHandler, time, styleId, screen);
+    applyStyle(element, typeContext.nifty, typeContext.registeredEffects, typeContext.styleHandler, typeContext.time, styleId, screen);
 
     // now apply our own attributes
-    applyAttributes(attributes, screen, element, nifty.getRenderDevice());
+    applyAttributes(attributes, screen, element, typeContext.nifty.getRenderDevice());
 
     // interact
     if (interact != null) {
       // control given?
       if (control != null) {
-        interact.initWithControl(element, control, screenController);
+        element.attachInputControl(control[control.length - 1]);
+        interact.initWithControl(element, getControllerArray(control, screenController));
       } else {
         interact.initWithScreenController(element, screenController);
       }
@@ -134,21 +125,29 @@ public class ElementType {
     }
     // effects
     if (effects != null) {
-      effects.initElement(element, nifty, registeredEffects, time);
+      effects.initElement(element, typeContext.nifty, typeContext.registeredEffects, typeContext.time);
     }
     // children
     for (ElementType elementType : elements) {
       elementType.createElement(
           element,
-          nifty,
           screen,
-          registeredEffects,
-          registeredControls,
-          styleHandler,
-          time,
-          control,
+          control[control.length - 1],
           screenController);
     }
+  }
+
+  private Object[] getControllerArray(NiftyInputControl[] control, ScreenController screenController) {
+    ArrayList < Object > controlList = new ArrayList < Object >();
+    for (NiftyInputControl c : control) {
+      if (c != null) {
+        controlList.add(c.getController());
+      }
+    }
+    if (screenController != null) {
+      controlList.add(screenController);
+    }
+    return controlList.toArray(new Object[0]);
   }
 
   /**
@@ -301,6 +300,11 @@ public class ElementType {
    */
   public void addElementType(final ElementType elementType) {
     elements.add(elementType);
+    elementType.setParent(this);
+  }
+
+  private void setParent(final ElementType newElementTypeParent) {
+    elementTypeParent = newElementTypeParent;
   }
 
   /**
@@ -343,6 +347,42 @@ public class ElementType {
     attributes = attributesTypeParam;
   }
 
+  public void applyStyle(
+      final Element element,
+      final Screen screen,
+      final String newStyle) {
+
+    applyStyle(
+        element,
+        typeContext.nifty,
+        typeContext.registeredEffects,
+        typeContext.styleHandler,
+        typeContext.time,
+        newStyle,
+        screen);
+
+    controlProcessStyleAttribute(
+        element,
+        typeContext.styleHandler,
+        null,
+        newStyle,
+        typeContext.nifty,
+        typeContext.registeredEffects,
+        typeContext.time,
+        screen);
+    for (Element child : element.getElements()) {
+      applyControlStyle(
+          child,
+          typeContext.styleHandler,
+          null,
+          newStyle,
+          typeContext.nifty,
+          typeContext.registeredEffects,
+          typeContext.time,
+          screen);
+    }
+  }
+
   /**
    * process this elements styleId. this is used for controls and
    * changes the given styleId and the elements style id to a new
@@ -359,17 +399,31 @@ public class ElementType {
   public static void applyControlStyle(
       final Element element,
       final StyleHandler styleHandler,
-      final Attributes controlDefinitionAttributes,
-      final Attributes controlAttributes,
+      final String controlDefinitionStyle,
+      final String controlStyle,
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
       final TimeProvider time,
       final Screen screen) {
     controlProcessStyleAttribute(
-        element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time, screen);
+        element,
+        styleHandler,
+        controlDefinitionStyle,
+        controlStyle,
+        nifty,
+        registeredEffects,
+        time,
+        screen);
     for (Element child : element.getElements()) {
       applyControlStyle(
-          child, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time, screen);
+          child,
+          styleHandler,
+          controlDefinitionStyle,
+          controlStyle,
+          nifty,
+          registeredEffects,
+          time,
+          screen);
     }
   }
 
@@ -406,8 +460,8 @@ public class ElementType {
   private static void controlProcessStyleAttribute(
       final Element element,
       final StyleHandler styleHandler,
-      final Attributes controlDefinitionAttributes,
-      final Attributes controlAttributes,
+      final String controlDefinitionStyle,
+      final String controlStyle,
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
       final TimeProvider time,
@@ -417,9 +471,9 @@ public class ElementType {
       // this element has a style id set. is a special substyle?
       int indexOfSep = myStyleId.indexOf("#");
       if (indexOfSep != -1) {
-        StyleType style = resolveStyle(styleHandler, myStyleId, controlAttributes.get("style"));
+        StyleType style = resolveStyle(styleHandler, myStyleId, controlStyle);
         if (style == null) {
-          style = resolveStyle(styleHandler, myStyleId, controlDefinitionAttributes.get("style"));
+          style = resolveStyle(styleHandler, myStyleId, controlDefinitionStyle);
         }
         if (style != null) {
           style.applyStyle(element, nifty, registeredEffects, time, screen);

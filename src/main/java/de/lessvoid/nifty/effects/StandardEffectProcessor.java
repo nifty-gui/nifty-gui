@@ -32,7 +32,7 @@ public class StandardEffectProcessor implements EffectProcessor {
   /**
    * flag if this effect is active.
    */
-  private boolean active;
+  protected boolean active;
 
   /**
    * the listener we should inform when something happened.

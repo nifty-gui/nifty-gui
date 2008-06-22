@@ -24,6 +24,11 @@ public class NiftyDebugConsole {
   private Console console;
 
   /**
+   * output elements.
+   */
+  private boolean outputElements = true;
+
+  /**
    * Create new console.
    */
   public NiftyDebugConsole() {
@@ -32,19 +37,25 @@ public class NiftyDebugConsole {
 
   /**
    * Render all Information for the given screen in the console.
+   * @param nifty TODOnifty
    * @param screen the Screen to output
-   * @param renderDevide the RenderDevice to use
+   * @param renderDevice the RenderDevice to use
    */
-  public void render(final Screen screen, final NiftyRenderEngine renderDevide) {
-    outputLayers(screen, renderDevide);
+  public void render(final Nifty nifty, final Screen screen, final NiftyRenderEngine renderDevice) {
+    if (outputElements) {
+      outputElements(nifty, screen, renderDevice);
+    } else {
+      outputEffects(nifty, screen, renderDevice);
+    }
   }
 
   /**
    * Output layers.
+   * @param nifty nifty
    * @param screen the Screen information should be output
    * @param theRenderDevice the RenderDevice
    */
-  private void outputLayers(final Screen screen, final NiftyRenderEngine theRenderDevice) {
+  private void outputElements(final Nifty nifty, final Screen screen, final NiftyRenderEngine theRenderDevice) {
     console.clear();
     console.output("*[" + screen.getScreenId() + "]");
 
@@ -52,17 +63,41 @@ public class NiftyDebugConsole {
     for (Element layer : screen.getLayerElements()) {
       layer.render(theRenderDevice);
       console.output(" +" + getIdText(layer) + " => " + layer.getElementStateString());
-      console.output("  " + whitespace(getIdText(layer).length()) + "    " + outputEffects(layer));
       outputElement(layer, "    ");
     }
 
     screen.debug(console);
+    console.output(nifty.getMouseInputEventQueue().toString());
 
     theRenderDevice.saveState(RenderStateType.allStates());
     console.update();
     theRenderDevice.restoreState();
   }
 
+  /**
+   * Output layers.
+   * @param nifty nifty
+   * @param screen the Screen information should be output
+   * @param theRenderDevice the RenderDevice
+   */
+  private void outputEffects(final Nifty nifty, final Screen screen, final NiftyRenderEngine theRenderDevice) {
+    console.clear();
+    console.output("*[" + screen.getScreenId() + "]");
+
+    // render all layers
+    for (Element layer : screen.getLayerElements()) {
+      layer.render(theRenderDevice);
+      console.output(" +" + getIdText(layer) + " => " + outputEffects(layer));
+      outputEffect(layer, "    ");
+    }
+
+    screen.debug(console);
+    console.output(nifty.getMouseInputEventQueue().toString());
+
+    theRenderDevice.saveState(RenderStateType.allStates());
+    console.update();
+    theRenderDevice.restoreState();
+  }
   /**
    * helper to output information.
    * @param w the element
@@ -71,8 +106,14 @@ public class NiftyDebugConsole {
   private void outputElement(final Element w, final String offset) {
     for (Element ww : w.getElements()) {
       console.output(offset + getIdText(ww) + " -> " + ww.getElementStateString());
-      console.output(offset + whitespace(getIdText(ww).length()) + "    " + outputEffects(ww));
       outputElement(ww, offset + "  ");
+    }
+  }
+
+  private void outputEffect(final Element w, final String offset) {
+    for (Element ww : w.getElements()) {
+      console.output(offset + getIdText(ww) + " -> " + outputEffects(ww));
+      outputEffect(ww, offset + "  ");
     }
   }
 
@@ -111,6 +152,13 @@ public class NiftyDebugConsole {
     } else {
       return "[" + id + "]";
     }
+  }
+
+  /**
+   * @param outputElements the outputElements to set
+   */
+  public void setOutputElements(boolean outputElements) {
+    this.outputElements = outputElements;
   }
 
 }

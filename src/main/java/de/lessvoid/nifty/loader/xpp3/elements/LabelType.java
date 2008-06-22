@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
+
 
 /**
  * LabelType.
@@ -11,7 +13,9 @@ public class LabelType extends TextType {
    * create it.
    * @param textParam filename
    */
-  public LabelType(final String textParam) {
-    super(textParam);
+  public LabelType(
+      final TypeContext typeContext,
+      final String textParam) {
+    super(typeContext, textParam);
   }
 }

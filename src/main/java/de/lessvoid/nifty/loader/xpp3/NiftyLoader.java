@@ -58,7 +58,7 @@ public class NiftyLoader {
     logBlockBegin("processing");
 
     // create processors
-    niftyTypeProcessor = new NiftyTypeProcessor(this);
+    niftyTypeProcessor = new NiftyTypeProcessor(nifty, this, timeProvider);
     niftyStylesTypeProcessor = new NiftyStylesTypeProcessor(niftyTypeProcessor.getStyleHandler());
     niftyControlsTypeProcessor =
       new NiftyControlsTypeProcessor(niftyTypeProcessor.getRegisterControlDefinitionTypeProcessor());

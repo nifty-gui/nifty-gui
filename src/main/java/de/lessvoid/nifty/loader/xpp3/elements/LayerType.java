@@ -7,6 +7,7 @@ import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -17,6 +18,10 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class LayerType extends PanelType {
+
+  public LayerType(final TypeContext typeContext) {
+    super(typeContext);
+  }
 
   /**
    * Create Layer.
@@ -47,13 +52,8 @@ public class LayerType extends PanelType {
     super.addElementAttributes(
         layer,
         screen,
-        nifty,
-        registeredEffects,
-        registeredControls,
-        styleHandler,
-        time,
-        inputControl,
-        screenController);
+        screenController,
+        inputControl);
     return layer;
   }
 }

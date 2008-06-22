@@ -9,6 +9,7 @@ import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -36,7 +37,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   /**
    * registerControlDefinitionTypeProcessor.
    */
-  private RegisterControlDefinitionTypeProcessor registerControlDefinitionTypeProcessor = new RegisterControlDefinitionTypeProcessor();
+  private RegisterControlDefinitionTypeProcessor registerControlDefinitionTypeProcessor;
 
   /**
    * screenTypeProcessor.
@@ -63,13 +64,24 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
    */
   private UseControlsTypeProcessor useControlsTypeProcessor;
 
+  private TypeContext typeContext;
+
   /**
    * new nifty loader.
    * @param niftyLoader nifty loader to use
    */
-  public NiftyTypeProcessor(final NiftyLoader niftyLoader) {
+  public NiftyTypeProcessor(final Nifty nifty, final NiftyLoader niftyLoader, final TimeProvider time) {
+    registerControlDefinitionTypeProcessor = new RegisterControlDefinitionTypeProcessor();
     useStylesTypeProcessor = new UseStylesTypeProcessor(niftyLoader);
     useControlsTypeProcessor = new UseControlsTypeProcessor(niftyLoader);
+
+    typeContext = new TypeContext(
+        styleHandler,
+        nifty,
+        registerEffectTypeProcessor.getRegisterEffects(),
+        registerControlDefinitionTypeProcessor.getRegisteredControls(),
+        time);
+    registerControlDefinitionTypeProcessor.setTypeContext(typeContext);
   }
 
   /**
@@ -81,8 +93,8 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     registerSoundTypeProcessor = new RegisterSoundTypeProcessor();
     registerMusicTypeProcessor = new RegisterMusicTypeProcessor();
-    screenTypeProcessor = new ScreenTypeProcessor();
-    popupTypeProcessor = new PopupTypeProcessor();
+    screenTypeProcessor = new ScreenTypeProcessor(typeContext);
+    popupTypeProcessor = new PopupTypeProcessor(typeContext);
 
     xmlParser.nextTag();
     xmlParser.zeroOrMore("useStyles", useStylesTypeProcessor);

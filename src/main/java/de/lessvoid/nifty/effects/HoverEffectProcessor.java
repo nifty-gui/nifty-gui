@@ -5,7 +5,6 @@ import java.util.List;
 import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.hover.HoverEffect;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * An EffectProcessor handles a single effect type. You can have multiple

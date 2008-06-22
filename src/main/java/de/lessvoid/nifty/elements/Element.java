@@ -15,6 +15,7 @@ import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.effects.shared.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
@@ -539,6 +540,7 @@ public class Element {
    * reset all effects.
    */
   public final void resetEffects() {
+    mouseDown = false;
     effectManager.reset();
 
     for (Element w : elements) {
@@ -750,6 +752,10 @@ public class Element {
    */
   public final void hide() {
     visible = false;
+    resetEffects();
+    if (mouseFocusHandler != null) {
+      mouseFocusHandler.lostFocus(this);
+    }
   }
 
   /**
@@ -770,12 +776,12 @@ public class Element {
 
   /**
    * mouse event handler.
-   * @param x x position of mouse
-   * @param y y position of mouse
-   * @param leftMouseDown leftMouse button down
+   * @param mouseEvent MouseInputEvent
    * @param eventTime time this event occured in ms
+   * @return true or false
    */
-  public final void mouseEvent(final int x, final int y, final boolean leftMouseDown, final long eventTime) {
+  public final boolean mouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
+
     // can't interact while onStartScreen is active
     if (isEffectActive(EffectEventId.onStartScreen)
         ||
@@ -784,40 +790,44 @@ public class Element {
         !visible
         ||
         done) {
-      return;
+      return false;
     }
 
     if (visibleToMouseEvents) {
       // if some other element has exclusive access to mouse events we are done
       if (mouseFocusHandler != null && !mouseFocusHandler.canProcessMouseEvents(this)) {
-        return;
+        return true;
       }
 
       if (!done) {
+        if (!isMouseDown()) {
+          effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
+        }
+
         if (onClickRepeat) {
-          if (isInside(x, y) && isMouseDown() && leftMouseDown) {
+          if (isInside(mouseEvent) && isMouseDown() && mouseEvent.isLeftButton()) {
             long deltaTime = eventTime - mouseDownTime;
             if (deltaTime > REPEATED_CLICK_START_TIME) {
               long pastTime = deltaTime - REPEATED_CLICK_START_TIME;
               long repeatTime = pastTime - lastRepeatStartTime;
               if (repeatTime > REPEATED_CLICK_TIME) {
-                onClick(x, y);
+                onClick(mouseEvent);
                 lastRepeatStartTime = pastTime;
               }
             }
           }
         }
 
-        if (isInside(x, y) && !isMouseDown()) {
-          if (leftMouseDown) {
+        if (isInside(mouseEvent) && !isMouseDown()) {
+          if (mouseEvent.isLeftButton()) {
             setMouseDown(true, eventTime);
             if (mouseFocusHandler != null) {
               mouseFocusHandler.requestExclusiveFocus(this);
             }
             effectManager.startEffect(EffectEventId.onClick, this, new TimeProvider(), null);
-            onClick(x, y);
+            onClick(mouseEvent);
           }
-        } else if (!leftMouseDown && isMouseDown()) {
+        } else if (!mouseEvent.isLeftButton() && isMouseDown()) {
             setMouseDown(false, eventTime);
             effectManager.stopEffect(EffectEventId.onClick);
             if (mouseFocusHandler != null) {
@@ -826,52 +836,47 @@ public class Element {
         }
 
         if (isMouseDown()) {
-          onClickMouseMove(x, y);
+          onClickMouseMove(mouseEvent);
         }
-      }
-
-      if (!isMouseDown()) {
-        effectManager.handleHover(this, x, y);
       }
     }
     for (Element w : getElements()) {
-      w.mouseEvent(x, y, leftMouseDown, eventTime);
+      w.mouseEvent(mouseEvent, eventTime);
     }
+    return true;
   }
 
   /**
    * checks to see if the given mouse position is inside of this element.
-   * @param x the x position
-   * @param y the y position
+   * @param inputEvent MouseInputEvent
    * @return true when inside, false otherwise
    */
-  private boolean isInside(final int x, final int y) {
+  private boolean isInside(final MouseInputEvent inputEvent) {
     if (falloff != null) {
-      return falloff.isInside(this, x, y);
+      return falloff.isInside(this, inputEvent.getMouseX(), inputEvent.getMouseY());
     } else {
       return
-        x >= getX()
+        inputEvent.getMouseX() >= getX()
         &&
-        x <= (getX() + getWidth())
+        inputEvent.getMouseX() <= (getX() + getWidth())
         &&
-        y > (getY())
+        inputEvent.getMouseY() > (getY())
         &&
-        y < (getY() + getHeight());
+        inputEvent.getMouseY() < (getY() + getHeight());
     }
   }
 
   /**
    * on click method.
-   * @param mouseX mouse x
-   * @param mouseY mouse y
+   * @param inputEvent event
    */
-  public final void onClick(final int mouseX, final int mouseY) {
-    lastMouseX = mouseX;
-    lastMouseY = mouseY;
+  public final void onClick(final MouseInputEvent inputEvent) {
+    lastMouseX = inputEvent.getMouseX();
+    lastMouseY = inputEvent.getMouseY();
 
     if (onClickMethod != null) {
       nifty.setAlternateKey(onClickAlternateKey);
-      onClickMethod.invoke(mouseX, mouseY);
+      onClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
     }
   }
 
@@ -883,19 +888,18 @@ public class Element {
 
   /**
    * on click mouse move method.
-   * @param mouseX mouse x
-   * @param mouseY mouse y
+   * @param inputEvent MouseInputEvent
    */
-  private void onClickMouseMove(final int mouseX, final int mouseY) {
-    if (lastMouseX == mouseX && lastMouseY == mouseY) {
+  private void onClickMouseMove(final MouseInputEvent inputEvent) {
+    if (lastMouseX == inputEvent.getMouseX() && lastMouseY == inputEvent.getMouseY()) {
       return;
     }
 
-    lastMouseX = mouseX;
-    lastMouseY = mouseY;
+    lastMouseX = inputEvent.getMouseX();
+    lastMouseY = inputEvent.getMouseY();
 
     if (onClickMouseMoveMethod != null) {
-      onClickMouseMoveMethod.invoke(mouseX, mouseY);
+      onClickMouseMoveMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
     }
   }
 
@@ -1205,5 +1209,22 @@ public class Element {
         element.removeFromFocusHandler();
       }
     }
+  }
+
+  /**
+   * remove this from parent if possible.
+   */
+  public void removeFromParent() {
+    if (parent != null) {
+      parent.elements.remove(this);
+    }
+  }
+
+  /**
+   * set a new style.
+   * @param newStyle new style to set
+   */
+  public void setStyle(final String newStyle) {
+    elementType.applyStyle(this, screen, newStyle);
   }
 }

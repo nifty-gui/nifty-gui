@@ -1,15 +1,12 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
-import java.util.Map;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
-import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * ImageType.
@@ -20,30 +17,22 @@ public class MenuType extends ElementType {
   /**
    * create it.
    */
-  public MenuType() {
+  public MenuType(
+      final TypeContext typeContext) {
+    super(typeContext);
   }
 
   /**
    * create element.
    * @param parent parent
-   * @param nifty nifty
    * @param screen screen
-   * @param registeredEffects registeredEffects
-   * @param registeredControls registeredControls
-   * @param styleHandler styleHandler
-   * @param time time
    * @param inputControl controlController
    * @param screenController screenController
    * @return element
    */
   public Element createElement(
       final Element parent,
-      final Nifty nifty,
       final Screen screen,
-      final Map < String, RegisterEffectType > registeredEffects,
-      final Map < String, RegisterControlDefinitionType > registeredControls,
-      final StyleHandler styleHandler,
-      final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     PanelRenderer renderer = new PanelRenderer();
@@ -58,13 +47,8 @@ public class MenuType extends ElementType {
     super.addElementAttributes(
         element,
         screen,
-        nifty,
-        registeredEffects,
-        registeredControls,
-        styleHandler,
-        time,
-        inputControl,
-        screenController);
+        screenController,
+        inputControl);
     parent.add(element);
     return element;
   }

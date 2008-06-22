@@ -125,9 +125,18 @@ public class RegisterControlDefinitionType {
       final Nifty nifty,
       final Map < String, RegisterEffectType > registeredEffects,
       final TimeProvider time) {
-    ElementType.applyControlStyle(
-        element, styleHandler, controlDefinitionAttributes, controlAttributes, nifty, registeredEffects, time, screen);
-    ElementType.applyControlParameters(
-        element, controlAttributes, nifty, screen);
+    if (controlAttributes != null) {
+      ElementType.applyControlStyle(
+          element,
+          styleHandler,
+          controlDefinitionAttributes.get("style"),
+          controlAttributes.get("style"),
+          nifty,
+          registeredEffects,
+          time,
+          screen);
+      ElementType.applyControlParameters(
+          element, controlAttributes, nifty, screen);
+    }
   }
 }

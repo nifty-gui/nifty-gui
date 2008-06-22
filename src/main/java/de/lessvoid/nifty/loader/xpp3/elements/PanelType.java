@@ -1,21 +1,11 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.ElementRenderer;
-import de.lessvoid.nifty.elements.render.ImageRenderer;
-import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
-import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
-import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * PanelType.
@@ -23,27 +13,21 @@ import de.lessvoid.nifty.tools.TimeProvider;
  */
 public class PanelType extends ElementType {
 
+  public PanelType(final TypeContext typeContext) {
+    super(typeContext);
+  }
+
   /**
    * create element.
    * @param parent parent parent
-   * @param nifty nifty
    * @param screen screen
-   * @param registeredEffects registeredEffects
-   * @param registeredControls registeredControls
-   * @param styleHandler styleHandler
-   * @param time time
    * @param inputControl controlController
    * @param screenController screenController
    * @return element
    */
   public Element createElement(
       final Element parent,
-      final Nifty nifty,
       final Screen screen,
-      final Map < String, RegisterEffectType > registeredEffects,
-      final Map < String, RegisterControlDefinitionType > registeredControls,
-      final StyleHandler styleHandler,
-      final TimeProvider time,
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element panel = new Element(
@@ -51,18 +35,15 @@ public class PanelType extends ElementType {
         getAttributes().getId(),
         parent,
         screen,
-        false, NiftyCreator.getPanelRenderer(nifty, getAttributes()));
+        false,
+        NiftyCreator.getPanelRenderer(typeContext.nifty, getAttributes()));
 
     Element element = panel;
     super.addElementAttributes(
         element,
         screen,
-        nifty,
-        registeredEffects,
-        registeredControls,
-        styleHandler,
-        time,
-        inputControl, screenController);
+        screenController,
+        inputControl);
     parent.add(element);
     return element;
   }

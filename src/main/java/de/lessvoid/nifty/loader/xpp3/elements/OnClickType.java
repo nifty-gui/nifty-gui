@@ -44,13 +44,11 @@ public class OnClickType {
 
   /**
    * get method.
-   * @param controlController controlController
    * @param screenController screenController
+   * @param controlController controlController
    * @return method
    */
-  public MethodInvoker getMethod(
-      final Controller controlController,
-      final ScreenController screenController) {
-    return new MethodInvoker(value, controlController, screenController);
+  public MethodInvoker getMethod(final Object ... controlController) {
+    return new MethodInvoker(value, controlController);
   }
 }

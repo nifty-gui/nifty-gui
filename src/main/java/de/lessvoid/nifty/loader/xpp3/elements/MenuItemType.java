@@ -1,9 +1,7 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
 import java.util.List;
-import java.util.Map;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.MenuItemControl;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
@@ -11,11 +9,10 @@ import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.mapping.Default;
-import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * ImageType.
@@ -32,7 +29,9 @@ public class MenuItemType extends ElementType {
   /**
    * create it.
    */
-  public MenuItemType() {
+  public MenuItemType(
+      final TypeContext typeContext) {
+    super(typeContext);
   }
 
   /**
@@ -46,24 +45,14 @@ public class MenuItemType extends ElementType {
   /**
    * create element.
    * @param parent parent
-   * @param nifty nifty
    * @param screen screen
-   * @param registeredEffects registeredEffects
-   * @param registeredControls registeredControls
-   * @param styleHandler style handler
-   * @param time time
    * @param screenController screenController
    * @param inputControlParam controlController
    * @return element
    */
   public Element createElement(
       final Element parent,
-      final Nifty nifty,
       final Screen screen,
-      final Map < String, RegisterEffectType > registeredEffects,
-      final Map < String, RegisterControlDefinitionType > registeredControls,
-      final StyleHandler styleHandler,
-      final TimeProvider time,
       final NiftyInputControl inputControlParam,
       final ScreenController screenController) {
     TextRenderer textRenderer = new TextRenderer();
@@ -77,7 +66,7 @@ public class MenuItemType extends ElementType {
         textRenderer);
 
     MenuItemControl control = new MenuItemControl();
-    control.bind(nifty, menuItem, null, null);
+    control.bind(typeContext.nifty, menuItem, null, null);
 
     final NiftyInputMapping inputMapping = new Default();
     NiftyInputControl inputControl = new NiftyInputControl(control, inputMapping);
@@ -85,13 +74,8 @@ public class MenuItemType extends ElementType {
     super.addElementAttributes(
         menuItem,
         screen,
-        nifty,
-        registeredEffects,
-        registeredControls,
-        styleHandler,
-        time,
-        inputControl,
-        screenController);
+        screenController,
+        inputControl);
 
     textRenderer.setText(text);
     menuItem.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
@@ -101,7 +85,7 @@ public class MenuItemType extends ElementType {
     parent.setConstraintWidth(getMenuMaxWidth(parent.getElements()));
     parent.setConstraintHeight(getMenuMaxHeight(parent.getElements()));
 
-    ElementType.applyControlParameters(menuItem, getAttributes().getSrcAttributes(), nifty, screen);
+    ElementType.applyControlParameters(menuItem, getAttributes().getSrcAttributes(), typeContext.nifty, screen);
     return menuItem;
   }
 

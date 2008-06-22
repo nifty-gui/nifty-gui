@@ -1,20 +1,18 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Logger;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.tools.MethodResolver;
 import de.lessvoid.nifty.input.NiftyInputMapping;
-import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * ImageType.
@@ -40,9 +38,13 @@ public class ControlType extends ElementType {
 
   /**
    * create it.
+   * @param typeContext typeContext
    * @param nameParam name
    */
-  public ControlType(final String nameParam) {
+  public ControlType(
+      final TypeContext typeContext,
+      final String nameParam) {
+    super(typeContext);
     this.name = nameParam;
   }
 
@@ -57,34 +59,20 @@ public class ControlType extends ElementType {
   /**
    * create element.
    * @param parent parent
-   * @param nifty nifty
    * @param screen screen
-   * @param registeredEffects registeredEffects
-   * @param registeredControls registeredControls
-   * @param styleHandler style handler
-   * @param time time
    * @param screenController screenController
    * @param inputControlParam controlController
    * @return element
    */
   public Element createElement(
       final Element parent,
-      final Nifty nifty,
       final Screen screen,
-      final Map < String, RegisterEffectType > registeredEffects,
-      final Map < String, RegisterControlDefinitionType > registeredControls,
-      final StyleHandler styleHandler,
-      final TimeProvider time,
       final NiftyInputControl inputControlParam,
       final ScreenController screenController) {
 
-    RegisterControlDefinitionType controlDefinition = registeredControls.get(name);
-    if (controlDefinition == null) {
-      log.warning("found no control definition for [" + name + "]");
-      return null;
-    }
+    RegisterControlDefinitionType controlDefinition = getControlDefinition();
 
-    final Controller c = controlDefinition.getControllerInstance(nifty);
+    final Controller c = controlDefinition.getControllerInstance(typeContext.nifty);
     ControllerEventListener listener = null;
 
     // onClick action
@@ -118,37 +106,41 @@ public class ControlType extends ElementType {
       ElementType w = controlDefinition.getElements().iterator().next();
       Element current = w.createElement(
           parent,
-          nifty,
           screen,
-          registeredEffects,
-          registeredControls,
-          styleHandler,
-          time,
           inputControl,
           screenController);
       current.setId(getAttributes().getId());
       super.addElementAttributes(
           current,
           screen,
-          nifty,
-          registeredEffects,
-          registeredControls,
-          styleHandler,
-          time,
-          inputControl,
-          screenController);
+          screenController,
+          inputControlParam,
+          inputControl);
       controlDefinition.applyControlAttributes(
           current,
-          styleHandler,
+          typeContext.styleHandler,
           getAttributes().getSrcAttributes(),
           screen,
-          nifty,
-          registeredEffects,
-          time);
-      c.bind(nifty, current, null, listener);
+          typeContext.nifty,
+          typeContext.registeredEffects,
+          typeContext.time);
+      Properties props = null;
+      if (getAttributes().getSrcAttributes() != null) {
+        props = getAttributes().getSrcAttributes().createProperties();
+      }
+      c.bind(typeContext.nifty, current, props, listener);
       return current;
     }
 
     return null;
+  }
+
+  public RegisterControlDefinitionType getControlDefinition() {
+    RegisterControlDefinitionType controlDefinition = typeContext.registeredControls.get(name);
+    if (controlDefinition == null) {
+      log.warning("found no control definition for [" + name + "]");
+      return null;
+    }
+    return controlDefinition;
   }
 }

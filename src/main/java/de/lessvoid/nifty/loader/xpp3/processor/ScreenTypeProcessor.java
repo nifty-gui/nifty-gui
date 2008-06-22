@@ -10,6 +10,7 @@ import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
 import de.lessvoid.nifty.loader.xpp3.elements.ScreenType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -23,6 +24,14 @@ public class ScreenTypeProcessor implements XmlElementProcessor {
    * screens.
    */
   private Map < String, ScreenType > screens = new Hashtable < String, ScreenType >();
+  private TypeContext typeContext;
+
+  /**
+   * @param newTypeContext
+   */
+  public ScreenTypeProcessor(final TypeContext newTypeContext) {
+    this.typeContext = newTypeContext;
+  }
 
   /**
    * process.
@@ -39,7 +48,7 @@ public class ScreenTypeProcessor implements XmlElementProcessor {
 
     parser.nextTag();
     parser.zeroOrMore("layerGroup", new ScreenTypeLayerGroupTypeProcessor(screen));
-    parser.oneOrMore("layer", new LayerTypeProcessor(screen));
+    parser.oneOrMore("layer", new LayerTypeProcessor(typeContext, screen));
 
     screens.put(id, screen);
   }

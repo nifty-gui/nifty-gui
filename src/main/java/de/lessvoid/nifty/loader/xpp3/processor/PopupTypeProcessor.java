@@ -12,6 +12,7 @@ import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.ProcessorHelper;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.NullScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -32,10 +33,13 @@ public class PopupTypeProcessor implements XmlElementProcessor {
    */
   private Map < String, PopupType > registeredPopups = new Hashtable < String, PopupType >();
 
+  private TypeContext typeContext;
+
   /**
    * LayerTypeProcessor.
    */
-  public PopupTypeProcessor() {
+  public PopupTypeProcessor(final TypeContext newTypeContext) {
+    typeContext = newTypeContext;
   }
 
   /**
@@ -45,8 +49,8 @@ public class PopupTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    PopupType popupType = new PopupType();
-    ProcessorHelper.processElement(xmlParser, popupType, attributes);
+    PopupType popupType = new PopupType(typeContext);
+    ProcessorHelper.processElement(xmlParser, popupType, attributes, typeContext);
 
     String name = attributes.get("id");
     registeredPopups.put(name, popupType);
