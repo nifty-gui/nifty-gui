@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>lessvoid</groupId>
   <artifactId>nifty</artifactId>
   <name>nifty</name>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.3</version>
   <url>http://nifty-gui.sourceforge.net/nifty/project-info.html</url>
   <description>Nifty GUI is a Java Library that supports the building of interactive user interfaces for games or similar applications. It utilizes lwjgl for OpenGL rendering. The configuration of the GUI is stored in xml files with little supporting Java code. In short Nifty helps you to layout stuff, display it in a cool way and interact with it :)</description>
   <scm>
-    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/trunk</connection>
-    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/trunk</developerConnection>
-    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty/</url>
+    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/tags/nifty-0.0.3</connection>
+    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/tags/nifty-0.0.3</developerConnection>
+    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty/tags/nifty-0.0.3</url>
   </scm>
   <developers>
     <developer>
@@ -105,9 +104,9 @@
               <content>
                 <![CDATA[<fileset-config file-format-version="1.2.0" simple-config="true">
   <fileset name="all" enabled="true" check-config-name="Nifty Checkstyle" local="false">
-    <file-match-pattern match-pattern="." include-pattern="true"/>
+    <file-match-pattern match-pattern="." include-pattern="true" />
   </fileset>
-  <filter name="NonSrcDirs" enabled="true"/>
+  <filter name="NonSrcDirs" enabled="true" />
 </fileset-config>]]>
               </content>
             </file>
