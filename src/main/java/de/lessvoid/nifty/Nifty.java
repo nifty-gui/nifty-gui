@@ -2,6 +2,7 @@ package de.lessvoid.nifty;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
 import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -115,6 +117,11 @@ public class Nifty {
    * MouseInputEventQueue.
    */
   private MouseInputEventQueue mouseInputEventQueue;
+
+  /**
+   * collection of registered ScreenController instances.
+   */
+  private Collection < ScreenController > registeredScreenControllers = new ArrayList < ScreenController >();
 
   /**
    * Create nifty for the given RenderDevice and TimeProvider.
@@ -592,5 +599,29 @@ public class Nifty {
    */
   public MouseInputEventQueue getMouseInputEventQueue() {
     return mouseInputEventQueue;
+  }
+
+  /**
+   * Register a ScreenController instance.
+   * @param controllers ScreenController
+   */
+  public void registerScreenController(final ScreenController ... controllers) {
+    for (ScreenController c : controllers) {
+      registeredScreenControllers.add(c);
+    }
+  }
+
+  /**
+   * find a ScreenController instance that matches the given controllerClass name.
+   * @param controllerClass controller class name
+   * @return ScreenController instance
+   */
+  public ScreenController findScreenController(final String controllerClass) {
+    for (ScreenController controller : registeredScreenControllers) {
+      if (controller.getClass().getName().equals(controllerClass)) {
+        return controller;
+      }
+    }
+    return null;
   }
 }
