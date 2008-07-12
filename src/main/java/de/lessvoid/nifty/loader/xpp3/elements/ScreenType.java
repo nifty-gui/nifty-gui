@@ -111,7 +111,10 @@ public class ScreenType {
       final Map < String, RegisterEffectType > registeredEffects,
       final Map < String, RegisterControlDefinitionType > registeredControls,
       final StyleHandler styleHandler) {
-    ScreenController screenController = ClassHelper.getScreenController(controller);
+    ScreenController screenController = nifty.findScreenController(controller);
+    if (screenController == null) {
+      screenController = ClassHelper.getScreenController(controller);
+    }
     Screen screen = new Screen(
         nifty,
         id,

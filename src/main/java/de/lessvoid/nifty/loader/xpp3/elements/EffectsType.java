@@ -153,7 +153,7 @@ public class EffectsType {
   }
 
   /**
-   * init effect.
+   * initialize effect.
    * @param eventId eventId
    * @param effectCollection effectCollection
    * @param element element

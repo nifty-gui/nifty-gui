@@ -24,10 +24,14 @@ public class ScreenTypeProcessor implements XmlElementProcessor {
    * screens.
    */
   private Map < String, ScreenType > screens = new Hashtable < String, ScreenType >();
+
+  /**
+   * type context.
+   */
   private TypeContext typeContext;
 
   /**
-   * @param newTypeContext
+   * @param newTypeContext the TypeContext to use
    */
   public ScreenTypeProcessor(final TypeContext newTypeContext) {
     this.typeContext = newTypeContext;

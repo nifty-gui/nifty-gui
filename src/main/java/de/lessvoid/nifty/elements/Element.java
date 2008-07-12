@@ -542,7 +542,6 @@ public class Element {
   public final void resetEffects() {
     mouseDown = false;
     effectManager.reset();
-
     for (Element w : elements) {
       w.resetEffects();
     }

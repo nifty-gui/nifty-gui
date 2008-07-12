@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
@@ -104,7 +103,14 @@ public class ElementType {
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
-    applyStyle(element, typeContext.nifty, typeContext.registeredEffects, typeContext.styleHandler, typeContext.time, styleId, screen);
+    applyStyle(
+        element,
+        typeContext.nifty,
+        typeContext.registeredEffects,
+        typeContext.styleHandler,
+        typeContext.time,
+        styleId,
+        screen);
 
     // now apply our own attributes
     applyAttributes(attributes, screen, element, typeContext.nifty.getRenderDevice());
@@ -137,7 +143,13 @@ public class ElementType {
     }
   }
 
-  private Object[] getControllerArray(NiftyInputControl[] control, ScreenController screenController) {
+  /**
+   * Get controller array.
+   * @param control input controls
+   * @param screenController screen controller
+   * @return object array
+   */
+  private Object[] getControllerArray(final NiftyInputControl[] control, final ScreenController screenController) {
     ArrayList < Object > controlList = new ArrayList < Object >();
     for (NiftyInputControl c : control) {
       if (c != null) {

@@ -4,7 +4,6 @@ import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
 import de.lessvoid.nifty.loader.xpp3.elements.StyleType;
-import de.lessvoid.nifty.loader.xpp3.processor.helper.ProcessorHelper;
 
 
 /**
