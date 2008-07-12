@@ -196,6 +196,8 @@ public class Font {
     GL11.glMatrixMode(GL11.GL_MODELVIEW);
       GL11.glPushMatrix();
       GL11.glLoadIdentity();
+      
+      GL11.glEnable(GL11.GL_TEXTURE_2D);
 
       int originalWidth = getStringWidthInternal(text, 1.0f);
       int sizedWidth = getStringWidthInternal(text, size);
