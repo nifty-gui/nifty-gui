@@ -42,7 +42,7 @@ public class Shake implements EffectImpl {
   public void execute(final Element element, final float normalizedTime, final NiftyRenderEngine r) {
     float t = normalizedTime;
     if (t > 0.0f) {
-      float d = (1.0f - t) * distance;
+      float d = distance;
       float x = -d + (float) Math.random() * 2 * d;
       float y = -d + (float) Math.random() * 2 * d;
 
