@@ -181,9 +181,11 @@ public class Screen implements MouseFocusHandler {
    * start the screen.
    */
   public final void startScreen() {
-    log.info("screen [" + getScreenId() + "] start");
+    log.info("screen [" + getScreenId() + "] start2");
     screenController.onStartScreen();
 
+    focusElement = null;
+    mouseFocusElement = null;
     nifty.getMouseInputEventQueue().reset();
     resetLayers();
     layoutLayers();
@@ -373,11 +375,13 @@ public class Screen implements MouseFocusHandler {
     }
 
     if (focusElement != null) {
+      focusElement.stopEffect(EffectEventId.onHover);
       focusElement.stopEffect(EffectEventId.onFocus);
     }
 
     focusElement = newFocusElement;
     if (focusElement != null) {
+      focusElement.startEffect(EffectEventId.onHover, timeProvider, null);
       focusElement.startEffect(EffectEventId.onFocus, timeProvider, null);
     }
   }
