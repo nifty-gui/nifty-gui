@@ -181,8 +181,7 @@ public class Screen implements MouseFocusHandler {
    * start the screen.
    */
   public final void startScreen() {
-    log.info("screen [" + getScreenId() + "] start2");
-    screenController.onStartScreen();
+    screenController.bind(nifty, this);
 
     focusElement = null;
     mouseFocusElement = null;
@@ -193,7 +192,7 @@ public class Screen implements MouseFocusHandler {
         EffectEventId.onStartScreen,
         new EndNotify() {
           public final void perform() {
-            screenController.onStartInteractive();
+            screenController.onStartScreen();
           }
         });
     activeEffectStart();

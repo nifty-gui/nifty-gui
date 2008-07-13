@@ -119,7 +119,6 @@ public class ScreenType {
         nifty,
         id,
         screenController, timeProvider);
-    screenController.bind(nifty, screen);
     for (LayerType layerType : layers) {
       screen.addLayerElement(
           layerType.createElement(

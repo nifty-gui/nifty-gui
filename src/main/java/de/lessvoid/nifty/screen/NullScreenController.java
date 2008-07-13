@@ -23,12 +23,6 @@ public class NullScreenController implements ScreenController {
   }
 
   /**
-   * on start screen.
-   */
-  public void onStartInteractive() {
-  }
-
-  /**
    * on end screen.
    */
   public void onEndScreen() {
