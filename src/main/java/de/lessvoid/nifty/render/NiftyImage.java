@@ -1,11 +1,6 @@
 package de.lessvoid.nifty.render;
 
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-
 import de.lessvoid.nifty.render.spi.RenderImage;
-import de.lessvoid.nifty.render.spi.lwjgl.RenderTools;
 import de.lessvoid.nifty.tools.Color;
 
 /**

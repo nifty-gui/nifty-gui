@@ -496,7 +496,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       NiftyRenderEngineImpl.this.colorChanged = colorChanged;
     }
   }
-  
+
   /**
    * RenderStateFont.
    * @author void

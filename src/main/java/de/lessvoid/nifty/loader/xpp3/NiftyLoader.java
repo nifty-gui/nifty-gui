@@ -100,6 +100,7 @@ public class NiftyLoader {
   /**
    * loadNiftyControls.
    * @param filename filename
+   * @throws Exception exception
    */
   public void loadNiftyControls(final String filename) throws Exception {
     logBlockBegin("loadNiftyControls: " + filename);
