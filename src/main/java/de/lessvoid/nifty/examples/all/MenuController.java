@@ -32,15 +32,9 @@ public class MenuController implements ScreenController {
   }
 
   /**
-   * on start screen.
-   */
-  public final void onStartScreen() {
-  }
-
-  /**
    * just goto the next screen.
    */
-  public final void onStartInteractive() {
+  public final void onStartScreen() {
   }
 
   /**

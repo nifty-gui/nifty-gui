@@ -20,19 +20,12 @@ public class LabelStartScreen implements ScreenController {
    */
   public final void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
-    
-  }
-
-  /**
-   * on start screen.
-   */
-  public final void onStartScreen() {
   }
 
   /**
    * on start screen interactive.
    */
-  public final void onStartInteractive() {
+  public final void onStartScreen() {
   }
 
   /**

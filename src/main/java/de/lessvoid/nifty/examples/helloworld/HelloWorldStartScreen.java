@@ -23,15 +23,9 @@ public class HelloWorldStartScreen implements ScreenController {
   }
 
   /**
-   * on start screen.
-   */
-  public final void onStartScreen() {
-  }
-
-  /**
    * on start screen interactive.
    */
-  public final void onStartInteractive() {
+  public final void onStartScreen() {
   }
 
   /**

@@ -26,12 +26,6 @@ public class StartScreenController implements ScreenController {
   public final void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
-  }
-
-  /**
-   * on start screen.
-   */
-  public void onStartScreen() {
     addPanel();
   }
 
@@ -45,7 +39,7 @@ public class StartScreenController implements ScreenController {
   /**
    * on start screen interactive.
    */
-  public final void onStartInteractive() {
+  public final void onStartScreen() {
   }
 
   /**

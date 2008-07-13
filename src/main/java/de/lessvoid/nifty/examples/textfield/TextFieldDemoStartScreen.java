@@ -28,19 +28,13 @@ public class TextFieldDemoStartScreen implements ScreenController {
       final Screen newScreen) {
     screen = newScreen;
     nifty = newNifty;
-  }
-
-  /**
-   * on start screen.
-   */
-  public final void onStartScreen() {
     screen.findElementByName("backButton").setStyle("huhu");
   }
 
   /**
    * just goto the next screen.
    */
-  public final void onStartInteractive() {
+  public final void onStartScreen() {
   }
 
   /**
