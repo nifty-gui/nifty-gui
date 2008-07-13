@@ -25,7 +25,7 @@ public class AngelCodeFont {
    * Key = page index
    * Value = filename of texture
    */
-  private HashMap < Integer, String > textures = new HashMap < Integer, String > ();
+  private HashMap < Integer, String > textures = new HashMap < Integer, String >();
 
   /**
    * width of single font texture page.
@@ -49,82 +49,66 @@ public class AngelCodeFont {
 
   /**
    * load the font with the given name.
-   * @param filename
-   * @return
+   * @param filename file to load
+   * @return true on success and false on any error
    */
-  public boolean load( String filename )
-  {
-    InputStream in= Thread.currentThread().getContextClassLoader().getResourceAsStream( filename );
-    if( in == null )
+  public boolean load(final String filename) {
+    InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+    if (in == null) {
       return false;
-    
-    BufferedReader reader= new BufferedReader( new InputStreamReader( in ));
-    
-    try
-    {
-      while( true )
-      {
-        String line= reader.readLine();
-        if( line == null )
+    }
+
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+    try {
+      while (true) {
+        String line = reader.readLine();
+        if (line == null) {
           break;
-        
-        if( line.startsWith( "info" ))
-        {
-          HashMap<String,String> values= getInfoLine( line );
-          parseInfo( values );
         }
-        else if( line.startsWith( "common" ))
-        {
-          HashMap<String,Integer> values= splitToInteger( line );
-          parseCommon( values );
-        }
-        else if( line.startsWith( "page" ))
-        {
-          HashMap<String,String> values= getPageLine( line );
-          parsePage( values );
-        }
-        else if( line.startsWith( "chars" ))
-        {
-          HashMap<String,Integer> values= splitToInteger( line );
-          parseChars( values );
-        }
-        else if( line.startsWith( "char" ))
-        {
-          HashMap<String,Integer> values= splitToInteger( line );
-          parseChar( values );
-        }
-        else if( line.startsWith( "kernings" ))
-        {
-          HashMap<String,Integer> values= splitToInteger( line );
-          parseKernings( values );
-        }
-        else if( line.startsWith( "kerning" ))
-        {
-          HashMap<String,Integer> values= splitToInteger( line );
-          parseKerning( values );
+
+        if (line.startsWith("info")) {
+          HashMap < String, String > values = getInfoLine(line);
+          parseInfo(values);
+        } else if (line.startsWith("common")) {
+          HashMap < String, Integer > values = splitToInteger(line);
+          parseCommon(values);
+        } else if (line.startsWith("page")) {
+          HashMap < String, String > values = getPageLine(line);
+          parsePage(values);
+        } else if (line.startsWith("chars")) {
+          HashMap < String, Integer > values = splitToInteger(line);
+          parseChars(values);
+        } else if (line.startsWith("char")) {
+          HashMap < String, Integer > values = splitToInteger(line);
+          parseChar(values);
+        } else if (line.startsWith("kernings")) {
+          HashMap < String, Integer > values = splitToInteger(line);
+          parseKernings(values);
+        } else if (line.startsWith("kerning")) {
+          HashMap < String, Integer > values = splitToInteger(line);
+          parseKerning(values);
         }
       }
-    }
-    catch( IOException e )
-    {
+    } catch (IOException e) {
       e.printStackTrace();
       return false;
     }
 
-    
     return true;
   }
-  
-  private void parseInfo( HashMap<String,String> line )
-  {
-    name= line.get( "face" );
+
+  /**
+   * parse info.
+   * @param line line with info
+   */
+  private void parseInfo(final HashMap < String, String > line) {
+    name = line.get("face");
   }
-  
+
   private void parseCommon( HashMap<String,Integer> line )
   {
     width= line.get( "scaleW" );
     height= line.get( "scaleH" );
-    lineHeight= line.get( "lineHeight" );
   }
   
   private void parsePage( HashMap<String,String> line )
@@ -150,6 +134,7 @@ public class AngelCodeFont {
     c.setXadvance(line.get( "xadvance" ));
     c.setPage(line.get( "page" ));
     chars.put( Character.valueOf( (char)c.getId() ), c );
+    lineHeight = Math.max(c.getHeight() + c.getYoffset(), lineHeight);
   }
   
   private void parseKernings( HashMap<String,Integer> line )

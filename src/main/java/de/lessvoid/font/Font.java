@@ -93,12 +93,26 @@ public class Font {
     // load textures of font into array
     textures = new TexData[font.getTextures().length];
     for (int i = 0; i < font.getTextures().length; i++) {
-      textures[i] = new TexData(font.getTextures()[i]);
+      textures[i] = new TexData(extractPath(filename) + font.getTextures()[i]);
     }
 
     // now build open gl display lists for every character in the font
     initDisplayList();
     return true;
+  }
+
+  /**
+   * extract the path from the given filename.
+   * @param filename file
+   * @return path
+   */
+  private String extractPath(final String filename) {
+    int idx = filename.lastIndexOf("/");
+    if (idx == -1) {
+      return "";
+    } else {
+      return filename.substring(0, idx) + "/";
+    }
   }
 
   /**
