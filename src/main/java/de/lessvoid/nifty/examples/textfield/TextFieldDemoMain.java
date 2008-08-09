@@ -39,7 +39,7 @@ public class TextFieldDemoMain {
     nifty.fromXml("textfield/textfield.xml", "start");
 
     // render
-    LwjglInitHelper.renderLoop(nifty);
+    LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();
   }
 }

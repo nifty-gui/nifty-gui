@@ -36,7 +36,7 @@ public final class HelloWorldExampleMain {
     nifty.fromXml("helloworld/helloworld.xml", "start");
 
     // render
-    LwjglInitHelper.renderLoop(nifty);
+    LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();
   }
 }

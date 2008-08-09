@@ -28,7 +28,6 @@ public class TextFieldDemoStartScreen implements ScreenController {
       final Screen newScreen) {
     screen = newScreen;
     nifty = newNifty;
-    screen.findElementByName("backButton").setStyle("huhu");
   }
 
   /**

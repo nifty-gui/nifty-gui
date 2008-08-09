@@ -1,0 +1,103 @@
+package de.lessvoid.nifty.examples.console;
+
+import de.lessvoid.nifty.EndNotify;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.console.ConsoleControl;
+import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.mapping.Default;
+import de.lessvoid.nifty.screen.KeyInputHandler;
+import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.TimeProvider;
+
+/**
+ * MainMenu.
+ * @author void
+ *
+ */
+public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler {
+
+  /**
+   * the nifty.
+   */
+  private Nifty nifty;
+  private Screen screen;
+
+  /**
+   * bind this ScreenController to a screen.
+   * @param newRenderDevice RenderDevice
+   * @param newNifty nifty
+   * @param newScreen screen
+   */
+  public final void bind(
+      final Nifty newNifty,
+      final Screen newScreen) {
+    nifty = newNifty;
+
+    screen = newScreen;
+    screen.addKeyboardInputHandler(new Default(), this);
+
+    final Element element = nifty.getCurrentScreen().findElementByName("console");
+    element.hide();
+
+    final ConsoleControl control = (ConsoleControl) element.getAttachedInputControl().getController();
+    control.output("Nifty Console Demo 1.0");
+  }
+
+  /**
+   * just goto the next screen.
+   */
+  public final void onStartScreen() {
+  }
+
+  /**
+   * on end screen.
+   */
+  public final void onEndScreen() {
+  }
+
+  /**
+   * back.
+   */
+  public final void back() {
+    nifty.exit();
+  }
+
+  /**
+   * process a keyEvent for the whole screen.
+   * @param inputEvent the input event
+   * @return true when consumen and false when not
+   */
+  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.ConsoleToggle) {
+      final Element console = screen.findElementByName("console");
+      if (!console.isVisible()) {
+        console.show();
+        console.setAlternateKey("show");
+        console.startEffect(
+            EffectEventId.onCustom,
+            new TimeProvider(),
+            new EndNotify() {
+              public void perform() {
+                console.setFocus();
+              }
+            });
+      } else {
+        console.setAlternateKey("hide");
+        console.startEffect(
+            EffectEventId.onCustom,
+            new TimeProvider(),
+            new EndNotify() {
+              public void perform() {
+                console.hide();
+              }
+            });
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+}

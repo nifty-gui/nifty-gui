@@ -35,6 +35,7 @@ public class MenuController implements ScreenController {
    * just goto the next screen.
    */
   public final void onStartScreen() {
+    this.screen.setDefaultFocus();
   }
 
   /**

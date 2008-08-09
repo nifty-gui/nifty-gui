@@ -1,22 +1,26 @@
-package de.lessvoid.nifty.examples.multiplayer;
+/*
+ * Created on 12.02.2005
+ *  
+ */
+package de.lessvoid.nifty.examples.console;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
+import de.lessvoid.nifty.examples.LwjglInitHelper.RenderLoopCallback;
 import de.lessvoid.nifty.render.spi.lwjgl.RenderDeviceLwjgl;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.sound.slick.SlickSoundLoader;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
- * The MultiplayerExampleMain.
  * @author void
  */
-public final class MultiplayerExampleMain {
+public final class ConsoleDemoMain {
 
   /**
    * Prevent instantiation of this class.
    */
-  private MultiplayerExampleMain() {
+  private ConsoleDemoMain() {
   }
 
   /**
@@ -24,19 +28,23 @@ public final class MultiplayerExampleMain {
    * @param args arguments
    */
   public static void main(final String[] args) {
-    if (!LwjglInitHelper.initSubSystems("Nifty Multiplayer Example")) {
+    if (!LwjglInitHelper.initSubSystems("Nifty Console Demonstation")) {
       System.exit(0);
     }
 
     // create nifty
-    Nifty nifty = new Nifty(
+    final Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider());
-    nifty.fromXml("multiplayer/multiplayer.xml", "start");
+    nifty.fromXml("console/console.xml", "start");
 
     // render
-    LwjglInitHelper.renderLoop(nifty, null);
+    LwjglInitHelper.renderLoop(nifty, new RenderLoopCallback() {
+      private int bla = 0;
+      public void process() {
+      }
+    });
     LwjglInitHelper.destroy();
   }
 }

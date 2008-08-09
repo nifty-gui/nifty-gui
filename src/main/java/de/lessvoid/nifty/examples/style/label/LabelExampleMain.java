@@ -36,7 +36,7 @@ public final class LabelExampleMain {
     nifty.fromXml("style/label/label.xml", "start");
 
     // render
-    LwjglInitHelper.renderLoop(nifty);
+    LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();
   }
 }

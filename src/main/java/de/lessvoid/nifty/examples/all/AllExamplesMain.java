@@ -42,7 +42,7 @@ public final class AllExamplesMain {
 
     boolean done = false;
     while (!done) {
-      LwjglInitHelper.renderLoop(nifty);
+      LwjglInitHelper.renderLoop(nifty, null);
 
       // catch the end of the different single demo and loop them back to the menu
       if (nifty.isActive("helloworld/helloworld.xml", "start")) {
