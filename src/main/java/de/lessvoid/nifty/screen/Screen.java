@@ -11,6 +11,7 @@ import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MouseFocusHandler;
+import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
@@ -79,6 +80,29 @@ public class Screen implements MouseFocusHandler {
    * nifty.
    */
   private Nifty nifty;
+
+  /**
+   * InputMappingWithMapping helper.
+   * @author void
+   */
+  public class InputHandlerWithMapping {
+    public NiftyInputMapping mapping;
+    public KeyInputHandler handler;
+    public InputHandlerWithMapping(
+        final NiftyInputMapping newMapping,
+        final KeyInputHandler newHandler) {
+      mapping = newMapping;
+      handler = newHandler;
+    }
+    public boolean process(final KeyboardInputEvent inputEvent) {
+      return handler.keyEvent(mapping.convert(inputEvent));
+    }
+  }
+
+  /**
+   * key input handlers.
+   */
+  private List < InputHandlerWithMapping > inputHandlers = new ArrayList < InputHandlerWithMapping >();
 
   /**
    * create new screen instance.
@@ -181,8 +205,6 @@ public class Screen implements MouseFocusHandler {
    * start the screen.
    */
   public final void startScreen() {
-    screenController.bind(nifty, this);
-
     focusElement = null;
     mouseFocusElement = null;
     nifty.getMouseInputEventQueue().reset();
@@ -196,6 +218,8 @@ public class Screen implements MouseFocusHandler {
           }
         });
     activeEffectStart();
+    nifty.addControls();
+    screenController.bind(nifty, this);
   }
 
   /**
@@ -245,7 +269,6 @@ public class Screen implements MouseFocusHandler {
         if (endNotify != null) {
           endNotify.perform();
         }
-        setDefaultFocus();
       }
     };
 
@@ -268,7 +291,7 @@ public class Screen implements MouseFocusHandler {
   /**
    * set default focus.
    */
-  private void setDefaultFocus() {
+  public void setDefaultFocus() {
     Element firstFocus = getFocusHandler().getFirstFocusElement();
     if (firstFocus != null) {
       firstFocus.setFocus();
@@ -417,6 +440,20 @@ public class Screen implements MouseFocusHandler {
     if (focusElement != null) {
       focusElement.keyEvent(inputEvent);
     }
+    for (InputHandlerWithMapping handler : inputHandlers) {
+      if (handler.process(inputEvent)) {
+        break;
+      }
+    }
+  }
+
+  /**
+   * add a keyboard input handler.
+   * @param mapping mapping
+   * @param handler new handler to add
+   */
+  public void addKeyboardInputHandler(final NiftyInputMapping mapping, final KeyInputHandler handler) {
+    inputHandlers.add(new InputHandlerWithMapping(mapping, handler));
   }
 
   /**
@@ -443,5 +480,14 @@ public class Screen implements MouseFocusHandler {
    */
   public FocusHandler getFocusHandler() {
     return focusHandler;
+  }
+
+  /**
+   * Is the focus on the given element.
+   * @param element element to check
+   * @return true, when the element has the focus and false when not
+   */
+  public boolean hasFocus(final Element element) {
+    return focusElement == element;
   }
 }

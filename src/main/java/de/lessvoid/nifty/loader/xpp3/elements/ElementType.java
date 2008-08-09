@@ -303,6 +303,16 @@ public class ElementType {
       if (image != null && imageMode != null) {
           image.setImageMode(NiftyImageMode.valueOf(imageMode));
       }
+      // set width and height to image width and height (for now)
+      image = imageRenderer.getImage();
+      if (image != null) {
+        if (element.getConstraintWidth() == null) {
+          element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
+        }
+        if (element.getConstraintHeight() == null) {
+          element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
+        }
+      }
     }
   }
 

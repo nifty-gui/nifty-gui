@@ -81,9 +81,19 @@ public enum NiftyInputEvent {
   Paste,
 
   /**
+   * escape/cancel.
+   */
+  Escape,
+
+  /**
    * character.
    */
-  Character;
+  Character,
+
+  /**
+   * ConsoleToggle.
+   */
+  ConsoleToggle;
 
   /**
    * additional character data.

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.effects.EffectEventId;
@@ -23,6 +24,7 @@ import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
+import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -315,7 +317,8 @@ public class Element {
       + "," + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ","
       + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ","
       + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "] "
-      + "focusable [ " + elementType.getAttributes().getFocusable() + "] "
+      + "focusable [" + focusable + "] "
+      + "mouse [" + visibleToMouseEvents + "] "
       + "state ";
     if (isEffectActive(EffectEventId.onStartScreen)) {
       return pos + "[starting]";
@@ -744,16 +747,28 @@ public class Element {
    */
   public final void show() {
     visible = true;
+    for (Element element : elements) {
+      element.show();
+    }
   }
 
   /**
    * hide this element.
    */
   public final void hide() {
+    if (screen != null && screen.hasFocus(this)) {
+      screen.setFocus(null);
+    }
+
     visible = false;
     resetEffects();
+
     if (mouseFocusHandler != null) {
       mouseFocusHandler.lostFocus(this);
+    }
+
+    for (Element element : elements) {
+      element.hide();
     }
   }
 
@@ -820,7 +835,7 @@ public class Element {
         if (isInside(mouseEvent) && !isMouseDown()) {
           if (mouseEvent.isLeftButton()) {
             setMouseDown(true, eventTime);
-            if (mouseFocusHandler != null) {
+            if (mouseFocusHandler != null && focusable) {
               mouseFocusHandler.requestExclusiveFocus(this);
             }
             effectManager.startEffect(EffectEventId.onClick, this, new TimeProvider(), null);
@@ -1058,7 +1073,15 @@ public class Element {
    * Set the focus to this element.
    */
   public void setFocus() {
-    nifty.getCurrentScreen().setFocus(this);
+    if (attachedInputControl != null && nifty != null && nifty.getCurrentScreen() != null) {
+      if (focusable) {
+        nifty.getCurrentScreen().setFocus(this);
+      }
+    } else {
+      for (Element element : elements) {
+        element.setFocus();
+      }
+    }
   }
 
   /**
@@ -1187,6 +1210,9 @@ public class Element {
    */
   public void setFocusable(final boolean newFocusable) {
     this.focusable = newFocusable;
+    for (Element e : elements) {
+      e.setFocusable(newFocusable);
+    }
   }
 
   /**
@@ -1225,5 +1251,49 @@ public class Element {
    */
   public void setStyle(final String newStyle) {
     elementType.applyStyle(this, screen, newStyle);
+  }
+
+  /**
+   * add additional input handler to this element or childs of the elements.
+   * @param handler additiona handler
+   */
+  public void addInputHandler(final KeyInputHandler handler) {
+    if (attachedInputControl != null) {
+      attachedInputControl.addInputHandler(handler);
+    }
+    for (Element element : elements) {
+      element.addInputHandler(handler);
+    }
+  }
+
+  /**
+   * Get Control from element.
+   * @param <T> Type
+   * @param requestedControlClass requested class
+   * @return controller or null
+   */
+  public < T extends Controller > T getControl(final Class < T > requestedControlClass) {
+    if (attachedInputControl != null) {
+      T t = attachedInputControl.getControl(requestedControlClass);
+      if (t != null) {
+        return t;
+      }
+    } else {
+      for (Element element : elements) {
+        T t = element.getControl(requestedControlClass);
+        if (t != null) {
+          return t;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * is focusable?
+   * @return focusable
+   */
+  public boolean isFocusable() {
+    return focusable;
   }
 }

@@ -62,8 +62,10 @@ public class RegisterControlDefinitionTypeProcessor implements XmlElementProcess
           new SubstitutionGroup().
             add("panel", new PanelTypeProcessor(typeContext, pseudoElement)).
             add("text", new TextTypeProcessor(typeContext, pseudoElement)).
+            add("label", new LabelTypeProcessor(typeContext, pseudoElement)).
             add("image", new ImageTypeProcessor(typeContext, pseudoElement)).
-            add("menu", new MenuTypeProcessor(typeContext, pseudoElement))
+            add("menu", new MenuTypeProcessor(typeContext, pseudoElement)).
+            add("control", new ControlTypeProcessor(typeContext, pseudoElement))
             );
   }
 

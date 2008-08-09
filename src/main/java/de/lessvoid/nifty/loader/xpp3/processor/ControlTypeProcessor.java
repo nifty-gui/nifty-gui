@@ -26,8 +26,7 @@ public class ControlTypeProcessor implements XmlElementProcessor {
    */
   public ControlTypeProcessor(
       final TypeContext typeContextParam,
-      final ElementType elementParam
-      ) {
+      final ElementType elementParam) {
     this.element = elementParam;
     this.typeContext = typeContextParam;
   }

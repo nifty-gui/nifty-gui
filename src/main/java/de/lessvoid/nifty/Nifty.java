@@ -13,6 +13,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEventCreator;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
 import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
@@ -217,7 +218,7 @@ public class Nifty {
   /**
    * add controls.
    */
-  private void addControls() {
+  public void addControls() {
     if (!controlsToAdd.isEmpty()) {
       for (ControlToAdd controlToAdd : controlsToAdd) {
         controlToAdd.createControl();
@@ -375,6 +376,7 @@ public class Nifty {
    * @param keyDown key down
    */
   public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
+    System.out.println("key " + eventKey + ", charcter " + eventCharacter + ", keyDown: " + keyDown);
     if (currentScreen != null) {
       currentScreen.keyEvent(inputEventCreator.createEvent(eventKey, eventCharacter, keyDown));
     }
@@ -465,9 +467,19 @@ public class Nifty {
    * @param parent parent element
    * @param controlName control name to add
    * @param id id of control
+   * @param style style
+   * @param focusable focusable
    */
-  public void addControl(final Screen screen, final Element parent, final String controlName, final String id) {
-    controlsToAdd.add(new ControlToAdd(screen, parent, controlName, id));
+  public void addControl(
+      final Screen screen,
+      final Element parent,
+      final String controlName,
+      final String id,
+      final String style,
+      final Boolean focusable) {
+    controlsToAdd.add(
+        new ControlToAdd(
+            screen, parent, controlName, id, style, focusable));
   }
 
   /**
@@ -496,21 +508,37 @@ public class Nifty {
     private String controlId;
 
     /**
+     * current style.
+     */
+    private String style;
+
+    /**
+     * focusable.
+     */
+    private Boolean focusable;
+
+    /**
      * create new.
      * @param newScreen screen
      * @param newParent parent
      * @param newControlName control name
      * @param newId id if control
+     * @param newStyle optional style
+     * @param newFocusable TODO
      */
     public ControlToAdd(
         final Screen newScreen,
         final Element newParent,
         final String newControlName,
-        final String newId) {
+        final String newId,
+        final String newStyle,
+        final Boolean newFocusable) {
       this.screen = newScreen;
       this.parent = newParent;
       this.controlName = newControlName;
       this.controlId = newId;
+      this.style = newStyle;
+      this.focusable = newFocusable;
     }
 
     /**
@@ -526,14 +554,22 @@ public class Nifty {
           );
 
       ControlType controlType = new ControlType(typeContext, controlName);
-      AttributesType attributeType = new AttributesType();
-      attributeType.setId(controlId);
+      Attributes attr = new Attributes();
+      attr.overwriteAttribute("id", controlId);
+      if (style != null) {
+        attr.overwriteAttribute("style", style);
+      }
+
+      AttributesType attributeType = new AttributesType(attr);
       controlType.setAttributes(attributeType);
       Element newControl = controlType.createElement(
           parent,
           screen,
           null,
           screen.getScreenController());
+      if (focusable != null) {
+        newControl.setFocusable(focusable);
+      }
       screen.layoutLayers();
 
       newControl.startEffect(EffectEventId.onStartScreen, new TimeProvider(), null);

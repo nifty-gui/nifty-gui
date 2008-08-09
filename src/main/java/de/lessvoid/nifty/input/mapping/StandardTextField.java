@@ -43,6 +43,8 @@ public class StandardTextField implements NiftyInputMapping {
   private NiftyInputEvent handleKeyDownEvent(final KeyboardInputEvent inputEvent) {
     if (inputEvent.getKey() == Keyboard.KEY_LEFT) {
       return NiftyInputEvent.MoveCursorLeft;
+    } else if (inputEvent.getKey() == Keyboard.KEY_BACKSLASH) {
+      return NiftyInputEvent.ConsoleToggle;
     } else if (inputEvent.getKey() == Keyboard.KEY_RIGHT) {
       return NiftyInputEvent.MoveCursorRight;
     } else if (inputEvent.getKey() == Keyboard.KEY_RETURN) {
@@ -89,6 +91,8 @@ public class StandardTextField implements NiftyInputMapping {
   private NiftyInputEvent handleKeyUpEvent(final KeyboardInputEvent inputEvent) {
     if (inputEvent.getKey() == Keyboard.KEY_LSHIFT || inputEvent.getKey() == Keyboard.KEY_RSHIFT) {
       return NiftyInputEvent.SelectionEnd;
+    } else if (inputEvent.getKey() == Keyboard.KEY_ESCAPE) {
+      return NiftyInputEvent.Escape;
     }
     return null;
   }

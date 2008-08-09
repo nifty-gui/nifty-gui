@@ -96,7 +96,9 @@ public class TextType extends ElementType {
       textRenderer.setTextSelectionColor(new Color(textSelectionColor));
     }
     textRenderer.setText(text);
-//    panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+    if (panel.getConstraintHeight() == null) {
+      panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+    }
 //    panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
 
     parent.add(panel);

@@ -47,7 +47,12 @@ public class FocusHandler {
     if (index >= entries.size()) {
       index = 0;
     }
-    return entries.get(index);
+    Element nextElement = entries.get(index);
+    if (nextElement.isFocusable()) {
+      return nextElement;
+    } else {
+      return getNext(nextElement);
+    }
   }
 
   /**
@@ -69,7 +74,12 @@ public class FocusHandler {
     if (index < 0) {
       index = entries.size() - 1;
     }
-    return entries.get(index);
+    Element prevElement = entries.get(index);
+    if (prevElement.isFocusable()) {
+      return prevElement;
+    } else {
+      return getPrev(prevElement);
+    }
   }
 
   /**

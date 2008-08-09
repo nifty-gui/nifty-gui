@@ -54,6 +54,8 @@ public class EffectTypeProcessor implements XmlElementProcessor {
       effectsType.addOnHover(effectType);
     } else if (effectEventId == EffectEventId.onActive) {
       effectsType.addOnActive(effectType);
+    } else if (effectEventId == EffectEventId.onCustom) {
+      effectsType.addOnCustom(effectType);
     }
 
     xmlParser.nextTag();

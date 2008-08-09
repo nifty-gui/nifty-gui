@@ -24,7 +24,7 @@ public class TextFieldControl implements Controller {
   /**
    * cursor y position offset.
    */
-  private static final int CURSOR_Y = 3;
+  private static final int CURSOR_Y = 0;
 
   /**
    * the screen.
@@ -318,10 +318,30 @@ public class TextFieldControl implements Controller {
    * @param getFocus get (true) or lose (false) focus
    */
   public void onFocus(final boolean getFocus) {
-    if (getFocus) {
-      cursorElement.show();
-    } else {
-      cursorElement.hide();
+    if (cursorElement != null) {
+      if (getFocus) {
+        cursorElement.show();
+      } else {
+        cursorElement.hide();
+      }
+      updateCursor();
     }
+  }
+
+  /**
+   * Get Text.
+   * @return text
+   */
+  public String getText() {
+    return textField.getText();
+  }
+
+  /**
+   * set a new text.
+   * @param newText text to set
+   */
+  public void setText(final String newText) {
+    textField.initWithText(newText);
+    updateCursor();
   }
 }

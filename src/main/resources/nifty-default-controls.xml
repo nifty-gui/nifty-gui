@@ -4,16 +4,16 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- textfield control -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <controlDefinition name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
-    <panel id="textfield-panel" style="nifty-textfield-panel">
-      <panel id="textfield-field" style="nifty-textfield-field" focusable="true">
+  <controlDefinition style="nifty-textfield" name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
+    <panel id="textfield-panel" style="#panel">
+      <panel id="textfield-field" style="#field" focusable="true">
         <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
-        <text id="textfield-text" style="nifty-textfield-text" text="">
+        <text id="textfield-text" style="#text" text="">
           <textSelection textColor="#f0ff" />
         </text>
       </panel>
-      <panel id="textfield-cursor-panel" style="nifty-textfield-cursor-panel">
-        <image id="textfield-cursor" style="nifty-textfield-cursor"/>
+      <panel id="textfield-cursor-panel" style="#cursor-panel">
+        <image id="textfield-cursor" style="#cursor"/>
       </panel>
     </panel>
   </controlDefinition>
@@ -53,4 +53,18 @@
       </panel>
     </panel>
   </controlDefinition>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <!-- console control -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <controlDefinition name="nifty-console" controller="de.lessvoid.nifty.controls.console.ConsoleControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
+    <panel style="nifty-console-panel" lines="$lines" focusable="true">
+      <interact/>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="console-line">
+    <label id="label" style="nifty-console-line" text="" align="left" textHAlign="left" textVAlign="center"/>
+  </controlDefinition>
+
 </nifty-controls>

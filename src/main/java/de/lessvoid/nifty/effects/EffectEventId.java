@@ -34,5 +34,10 @@ public enum EffectEventId {
   /**
    * on active.
    */
-  onActive
+  onActive,
+
+  /**
+   * on custom.
+   */
+  onCustom
 }

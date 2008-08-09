@@ -55,6 +55,7 @@ public class EffectsTypeProcessor implements XmlElementProcessor {
     xmlParser.zeroOrMore("onClick", new EffectTypeProcessor(effectsType, EffectEventId.onClick));
     xmlParser.zeroOrMore("onFocus", new EffectTypeProcessor(effectsType, EffectEventId.onFocus));
     xmlParser.zeroOrMore("onActive", new EffectTypeProcessor(effectsType, EffectEventId.onActive));
+    xmlParser.zeroOrMore("onCustom", new EffectTypeProcessor(effectsType, EffectEventId.onCustom));
 
     if (element != null) {
       element.setEffects(effectsType);

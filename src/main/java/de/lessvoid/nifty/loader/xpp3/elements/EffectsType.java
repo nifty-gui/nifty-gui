@@ -53,6 +53,11 @@ public class EffectsType {
   private Collection < EffectType > onActive = new ArrayList < EffectType >();
 
   /**
+   * onCustom.
+   */
+  private Collection < EffectType > onCustom = new ArrayList < EffectType >();
+
+  /**
    * default contructor.
    */
   public EffectsType() {
@@ -69,6 +74,7 @@ public class EffectsType {
     this.onClick = copyCollection(source.onClick);
     this.onFocus = copyCollection(source.onFocus);
     this.onActive = copyCollection(source.onActive);
+    this.onCustom = copyCollection(source.onCustom);
   }
 
   /**
@@ -133,6 +139,14 @@ public class EffectsType {
   }
 
   /**
+   * addOnCustom.
+   * @param effectParam onCustom
+   */
+  public void addOnCustom(final EffectType effectParam) {
+    onCustom.add(effectParam);
+  }
+
+  /**
    * bind to element.
    * @param element element
    * @param nifty nifty
@@ -150,6 +164,7 @@ public class EffectsType {
     initEffect(EffectEventId.onClick, onClick, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onFocus, onFocus, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onActive, onActive, element, registerEffects, nifty, time);
+    initEffect(EffectEventId.onCustom, onCustom, element, registerEffects, nifty, time);
   }
 
   /**

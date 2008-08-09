@@ -39,6 +39,7 @@ public class EffectManager {
     effects.put(EffectEventId.onClick, new StandardEffectProcessor(false));
     effects.put(EffectEventId.onHover, new HoverEffectProcessor());
     effects.put(EffectEventId.onActive, new StandardEffectProcessor(true));
+    effects.put(EffectEventId.onCustom, new StandardEffectProcessor(false));
   }
 
   /**
