@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples.console;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.console.ConsoleCommandHandler;
 import de.lessvoid.nifty.controls.console.ConsoleControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
@@ -23,11 +24,14 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
    * the nifty.
    */
   private Nifty nifty;
+
+  /**
+   * screen.
+   */
   private Screen screen;
 
   /**
    * bind this ScreenController to a screen.
-   * @param newRenderDevice RenderDevice
    * @param newNifty nifty
    * @param newScreen screen
    */
@@ -44,6 +48,12 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
 
     final ConsoleControl control = (ConsoleControl) element.getAttachedInputControl().getController();
     control.output("Nifty Console Demo 1.0");
+    control.addCommandHandler(new ConsoleCommandHandler() {
+      public void execute(final String line) {
+        // just echo to the console
+        control.output("your input was: " + line);
+      }
+    });
   }
 
   /**
