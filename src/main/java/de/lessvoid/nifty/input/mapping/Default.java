@@ -21,7 +21,7 @@ public class Default implements NiftyInputMapping {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == Keyboard.KEY_DOWN) {
         return NiftyInputEvent.NextInputElement;
-      } else if (inputEvent.getKey() == Keyboard.KEY_BACKSLASH) {
+      } else if (inputEvent.getKey() == Keyboard.KEY_F1) {
         return NiftyInputEvent.ConsoleToggle;
       } else if (inputEvent.getKey() == Keyboard.KEY_UP) {
         return NiftyInputEvent.PrevInputElement;

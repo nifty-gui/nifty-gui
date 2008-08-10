@@ -496,7 +496,7 @@ public class Element {
       if (elements.size() == layoutPartChild.size()) {
         SizeValue newWidth = layoutManager.calculateConstraintWidth(layoutPartChild);
         if (newWidth != null) {
-          log.info("pre processed new width for element: " + getId() + ": " + newWidth.getValueAsInt(0));
+          // log.info("pre processed new width for element: " + getId() + ": " + newWidth.getValueAsInt(0));
           setConstraintWidth(newWidth);
           isCalcWidthConstraint = true;
         }
@@ -531,7 +531,7 @@ public class Element {
       if (elements.size() == layoutPartChild.size()) {
         SizeValue newHeight = layoutManager.calculateConstraintHeight(layoutPartChild);
         if (newHeight != null) {
-          log.info("pre processed new height for element: " + getId() + ": " + newHeight.getValueAsInt(0));
+          // log.info("pre processed new height for element: " + getId() + ": " + newHeight.getValueAsInt(0));
           setConstraintHeight(newHeight);
           isCalcHeightConstraint = true;
         }

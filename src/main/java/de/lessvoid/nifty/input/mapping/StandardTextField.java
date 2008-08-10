@@ -43,7 +43,7 @@ public class StandardTextField implements NiftyInputMapping {
   private NiftyInputEvent handleKeyDownEvent(final KeyboardInputEvent inputEvent) {
     if (inputEvent.getKey() == Keyboard.KEY_LEFT) {
       return NiftyInputEvent.MoveCursorLeft;
-    } else if (inputEvent.getKey() == Keyboard.KEY_BACKSLASH) {
+    } else if (inputEvent.getKey() == Keyboard.KEY_F1) {
       return NiftyInputEvent.ConsoleToggle;
     } else if (inputEvent.getKey() == Keyboard.KEY_RIGHT) {
       return NiftyInputEvent.MoveCursorRight;

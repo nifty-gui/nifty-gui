@@ -1,18 +1,17 @@
 package de.lessvoid.nifty.controls.console;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -37,11 +36,6 @@ public class ConsoleControl implements Controller {
   private Element element;
 
   /**
-   * the focus handler this control belongs to.
-   */
-  private FocusHandler focusHandler;
-
-  /**
    * lines.
    */
   private int lines;
@@ -55,6 +49,11 @@ public class ConsoleControl implements Controller {
    * max buffer lines.
    */
   private static final int MAX_BUFFER_LINES = 100;
+
+  /**
+   * command handler.
+   */
+  private Collection < ConsoleCommandHandler > commandHandler = new ArrayList < ConsoleCommandHandler >();
 
   /**
    * default constructor.
@@ -89,7 +88,6 @@ public class ConsoleControl implements Controller {
     }
     this.nifty.addControl(screen, element, "textfield", "console-input", "nifty-console-textfield", false);
     this.screen.layoutLayers();
-    this.focusHandler = screen.getFocusHandler();
   }
 
   /**
@@ -116,9 +114,21 @@ public class ConsoleControl implements Controller {
     TextFieldControl textControl = this.element.findElementByName("console-input").getControl(TextFieldControl.class);
     textControl.inputEvent(inputEvent);
     if (inputEvent == NiftyInputEvent.SubmitText) {
-      output(textControl.getText());
+      String commandLine = textControl.getText();
+      output(commandLine);
       textControl.setText("");
       this.element.setFocus();
+      notifyCommandHandler(commandLine);
+    }
+  }
+
+  /**
+   * notify all commandHandler.
+   * @param commandLine current line
+   */
+  private void notifyCommandHandler(final String commandLine) {
+    for (ConsoleCommandHandler handler : commandHandler) {
+      handler.execute(commandLine);
     }
   }
 
@@ -163,5 +173,13 @@ public class ConsoleControl implements Controller {
         lastLineIdx--;
       }
     }
+  }
+
+  /**
+   * add a command handler.
+   * @param consoleCommandHandler CommandHandler
+   */
+  public void addCommandHandler(final ConsoleCommandHandler consoleCommandHandler) {
+    commandHandler.add(consoleCommandHandler);
   }
 }
