@@ -11,7 +11,6 @@ import de.lessvoid.nifty.input.mapping.Default;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * MainMenu.
@@ -47,7 +46,7 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
     element.hide();
 
     final ConsoleControl control = (ConsoleControl) element.getAttachedInputControl().getController();
-    control.output("Nifty Console Demo 1.0");
+    control.output("Nifty Console Demo\nVersion: 1.0");
     control.addCommandHandler(new ConsoleCommandHandler() {
       public void execute(final String line) {
         // just echo to the console
@@ -88,7 +87,6 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
         console.setAlternateKey("show");
         console.startEffect(
             EffectEventId.onCustom,
-            new TimeProvider(),
             new EndNotify() {
               public void perform() {
                 console.setFocus();
@@ -98,7 +96,6 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
         console.setAlternateKey("hide");
         console.startEffect(
             EffectEventId.onCustom,
-            new TimeProvider(),
             new EndNotify() {
               public void perform() {
                 console.hide();
