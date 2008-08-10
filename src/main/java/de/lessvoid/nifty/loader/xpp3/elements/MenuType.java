@@ -42,6 +42,7 @@ public class MenuType extends ElementType {
         parent,
         screen,
         false,
+        typeContext.time,
         renderer);
     Element element = panel;
     super.addElementAttributes(

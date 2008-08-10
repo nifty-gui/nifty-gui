@@ -62,6 +62,7 @@ public class MenuItemType extends ElementType {
         parent,
         screen,
         true,
+        typeContext.time,
         new PanelRenderer(),
         textRenderer);
 

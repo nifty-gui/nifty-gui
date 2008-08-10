@@ -265,7 +265,7 @@ public class TextFieldControl implements Controller {
     cursorElement.setConstraintX(new SizeValue(cursorPixelPos + "px"));
     cursorElement.setConstraintY(
         new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
-    cursorElement.startEffect(EffectEventId.onActive, timeProvider, null);
+    cursorElement.startEffect(EffectEventId.onActive, null);
     screen.layoutLayers();
   }
 

@@ -77,6 +77,7 @@ public class TextType extends ElementType {
         parent,
         screen,
         false,
+        typeContext.time,
         new PanelRenderer(),
         textRenderer);
     super.addElementAttributes(

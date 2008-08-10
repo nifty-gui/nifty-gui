@@ -48,7 +48,8 @@ public class LayerType extends PanelType {
         this,
         getAttributes().getId(),
         nifty,
-        screen, getAttributes());
+        screen, getAttributes(),
+        typeContext.time);
     super.addElementAttributes(
         layer,
         screen,

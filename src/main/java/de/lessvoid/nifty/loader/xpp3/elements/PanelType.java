@@ -36,6 +36,7 @@ public class PanelType extends ElementType {
         parent,
         screen,
         false,
+        typeContext.time,
         NiftyCreator.getPanelRenderer(typeContext.nifty, getAttributes()));
 
     Element element = panel;

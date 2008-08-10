@@ -453,7 +453,7 @@ public class Nifty {
       log.warning("missing popup [" + id + "] o_O");
     } else {
       popup.resetEffects();
-      popup.startEffect(EffectEventId.onEndScreen, timeProvider, new EndNotify() {
+      popup.startEffect(EffectEventId.onEndScreen, new EndNotify() {
         public void perform() {
           removePopupId = id;
         }
@@ -572,7 +572,7 @@ public class Nifty {
       }
       screen.layoutLayers();
 
-      newControl.startEffect(EffectEventId.onStartScreen, new TimeProvider(), null);
+      newControl.startEffect(EffectEventId.onStartScreen, null);
       newControl.onStartScreen(Nifty.this, screen);
     }
   }

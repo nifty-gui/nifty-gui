@@ -48,7 +48,8 @@ public class PopupType extends PanelType {
         this,
         getAttributes().getId(),
         nifty,
-        screen, getAttributes());
+        screen, getAttributes(),
+        typeContext.time);
     super.addElementAttributes(
         element,
         screen,

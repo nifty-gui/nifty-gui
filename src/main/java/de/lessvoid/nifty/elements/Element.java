@@ -203,12 +203,18 @@ public class Element {
   private Screen screen;
 
   /**
+   * TimeProvider.
+   */
+  private TimeProvider time;
+
+  /**
    * construct new instance of Element.
    * @param newElementType elementType
    * @param newId the id
    * @param newParent new parent
    * @param newFocusHandler the new focus handler
    * @param newVisibleToMouseEvents visible to mouse
+   * @param newTimeProvider TimeProvider
    * @param newElementRenderer the element renderer
    */
   public Element(
@@ -217,6 +223,7 @@ public class Element {
       final Element newParent,
       final MouseFocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
+      final TimeProvider newTimeProvider,
       final ElementRenderer ... newElementRenderer) {
     initialize(
         newElementType,
@@ -225,7 +232,8 @@ public class Element {
         newElementRenderer,
         new LayoutPart(),
         newFocusHandler,
-        newVisibleToMouseEvents);
+        newVisibleToMouseEvents,
+        newTimeProvider);
   }
 
   /**
@@ -236,6 +244,7 @@ public class Element {
    * @param newLayoutPart the layout part
    * @param newFocusHandler the new focus handler
    * @param newVisibleToMouseEvents visible to  mouse
+   * @param newTimeProvider TimeProvider
    * @param newElementRenderer the element renderer
    */
   public Element(
@@ -245,6 +254,7 @@ public class Element {
       final LayoutPart newLayoutPart,
       final MouseFocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
+      final TimeProvider newTimeProvider,
       final ElementRenderer ... newElementRenderer) {
     initialize(
         newElementType,
@@ -253,7 +263,8 @@ public class Element {
         newElementRenderer,
         newLayoutPart,
         newFocusHandler,
-        newVisibleToMouseEvents);
+        newVisibleToMouseEvents,
+        newTimeProvider);
   }
 
   /**
@@ -265,6 +276,7 @@ public class Element {
    * @param newLayoutPart the layoutPart to use
    * @param newFocusHandler the focus handler that this element is attached to
    * @param newVisibleToMouseEvents visible to mouse
+   * @param timeProvider TimeProvider to use
    */
   private void initialize(
       final ElementType newElementType,
@@ -273,7 +285,8 @@ public class Element {
       final ElementRenderer[] newElementRenderer,
       final LayoutPart newLayoutPart,
       final MouseFocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents) {
+      final boolean newVisibleToMouseEvents,
+      final TimeProvider timeProvider) {
     this.elementType = newElementType;
     this.id = newId;
     this.parent = newParent;
@@ -286,6 +299,7 @@ public class Element {
     this.onClickAlternateKey = null;
     this.mouseFocusHandler = newFocusHandler;
     this.visibleToMouseEvents = newVisibleToMouseEvents;
+    this.time = timeProvider;
     this.setMouseDown(false, 0);
   }
 
@@ -645,12 +659,10 @@ public class Element {
   /**
    * on start screen event.
    * @param effectEventId the effect event id to start
-   * @param time current time
    * @param effectEndNotiy the EffectEndNotify event we should activate
    */
   public final void startEffect(
       final EffectEventId effectEventId,
-      final TimeProvider time,
       final EndNotify effectEndNotiy) {
 
     if (effectEventId == EffectEventId.onStartScreen) {
@@ -677,7 +689,7 @@ public class Element {
 
     // notify all child elements of the start effect
     for (Element w : getElements()) {
-      w.startEffect(effectEventId, time, forwardToSelf);
+      w.startEffect(effectEventId, forwardToSelf);
     }
 
     if (effectEventId == EffectEventId.onFocus) {
@@ -838,7 +850,7 @@ public class Element {
             if (mouseFocusHandler != null && focusable) {
               mouseFocusHandler.requestExclusiveFocus(this);
             }
-            effectManager.startEffect(EffectEventId.onClick, this, new TimeProvider(), null);
+            effectManager.startEffect(EffectEventId.onClick, this, time, null);
             onClick(mouseEvent);
           }
         } else if (!mouseEvent.isLeftButton() && isMouseDown()) {

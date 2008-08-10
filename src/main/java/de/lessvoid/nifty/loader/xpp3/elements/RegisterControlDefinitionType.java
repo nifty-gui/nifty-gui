@@ -135,8 +135,17 @@ public class RegisterControlDefinitionType {
           registeredEffects,
           time,
           screen);
+      Attributes attr = new Attributes(controlDefinitionAttributes);
+      attr.merge(controlAttributes);
       ElementType.applyControlParameters(
-          element, controlAttributes, nifty, screen);
+          element, attr, nifty, screen);
     }
+  }
+
+  /**
+   * @return the controlDefinitionAttributes
+   */
+  public Attributes getControlDefinitionAttributes() {
+    return controlDefinitionAttributes;
   }
 }

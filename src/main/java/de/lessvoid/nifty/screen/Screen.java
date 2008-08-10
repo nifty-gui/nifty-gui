@@ -176,7 +176,7 @@ public class Screen implements MouseFocusHandler {
     // prepare pop up for display
     popup.resetEffects();
     popup.layoutElements();
-    popup.startEffect(EffectEventId.onStartScreen, timeProvider, localEndNotify);
+    popup.startEffect(EffectEventId.onStartScreen, localEndNotify);
     popup.onStartScreen(nifty, this);
 
     // add to layers and add as popup
@@ -276,7 +276,6 @@ public class Screen implements MouseFocusHandler {
     for (Element w : layerElements) {
       w.startEffect(
           effectEventId,
-          timeProvider,
           localEndNotify);
 
       if (effectEventId == EffectEventId.onStartScreen) {
@@ -305,7 +304,6 @@ public class Screen implements MouseFocusHandler {
     for (Element w : layerElements) {
       w.startEffect(
         EffectEventId.onActive,
-        timeProvider,
         null);
     }
   }
@@ -403,8 +401,8 @@ public class Screen implements MouseFocusHandler {
 
     focusElement = newFocusElement;
     if (focusElement != null) {
-      focusElement.startEffect(EffectEventId.onHover, timeProvider, null);
-      focusElement.startEffect(EffectEventId.onFocus, timeProvider, null);
+      focusElement.startEffect(EffectEventId.onHover, null);
+      focusElement.startEffect(EffectEventId.onFocus, null);
     }
   }
 

@@ -14,6 +14,7 @@ import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * Helper class to create Nifty objects.
@@ -51,13 +52,16 @@ public final class NiftyCreator {
    * @param nifty nifty
    * @param screen screen
    * @param attributes attributes
+   * @param time TimeProvider
    * @return element
    */
   public static Element createLayer(
       final ElementType elementType,
       final String id,
       final Nifty nifty,
-      final Screen screen, final AttributesType attributes) {
+      final Screen screen,
+      final AttributesType attributes,
+      final TimeProvider time) {
     // create box
     LayoutPart layerLayout = new LayoutPart();
     layerLayout.getBox().setX(0);
@@ -76,7 +80,9 @@ public final class NiftyCreator {
         null,
         layerLayout,
         screen,
-        false, getPanelRenderer(nifty, attributes));
+        false,
+        time,
+        getPanelRenderer(nifty, attributes));
     return layer;
   }
 }

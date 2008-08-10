@@ -542,8 +542,9 @@ public class ElementType {
       String value = controlAttributes.get(entry.getValue());
       if (value == null) {
         value = "'" + entry.getValue() + "' missing o_O";
+        continue;
       }
-      log.info("[" + element.getId() + "] setting [" + entry.getKey() + "] to [" + value + "]");
+      log.info("[" + element.getId() + "{" + element + "}] setting [" + entry.getKey() + "] to [" + value + "]");
       Attributes attributes = new Attributes();
       attributes.overwriteAttribute(entry.getKey(), value);
       ElementType.applyAttributes(new AttributesType(attributes), screen, element, niftyRenderEngine);

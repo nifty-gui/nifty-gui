@@ -69,7 +69,7 @@ public class ImageType extends ElementType {
     ImageRenderer imageRenderer = new ImageRenderer(image);
 
     // create a new element with the given renderer
-    Element element = new Element(this, getAttributes().getId(), parent, screen, true, imageRenderer);
+    Element element = new Element(this, getAttributes().getId(), parent, screen, true, typeContext.time, imageRenderer);
     super.addElementAttributes(
         element,
         screen,

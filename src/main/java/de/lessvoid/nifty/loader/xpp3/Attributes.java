@@ -229,4 +229,12 @@ public final class Attributes {
     }
     return result;
   }
+
+  /**
+   * merge.
+   * @param src source attributes
+   */
+  public void merge(final Attributes src) {
+    attributes.putAll(src.attributes);
+  }
 }
