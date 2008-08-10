@@ -146,12 +146,28 @@ public class ConsoleControl implements Controller {
    * @param line line to output
    */
   public void output(final String line) {
+    if (line != null && line.length() > 0) {
+      if (line.contains("\n")) {
+        String[] splitLines = line.split("\n");
+        for (String l : splitLines) {
+          outputLine(l);
+        }
+      } else {
+        outputLine(line);
+      }
+      showLines();
+    }
+  }
+
+  /**
+   * output a single line.
+   * @param line line
+   */
+  private void outputLine(final String line) {
     buffer.add(line);
     if (buffer.size() > MAX_BUFFER_LINES) {
       buffer.remove(0);
     }
-
-    showLines();
   }
 
   /**
