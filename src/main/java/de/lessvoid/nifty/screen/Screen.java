@@ -207,7 +207,6 @@ public class Screen implements MouseFocusHandler {
   public final void startScreen() {
     focusElement = null;
     mouseFocusElement = null;
-    nifty.getMouseInputEventQueue().reset();
     resetLayers();
     layoutLayers();
     startLayers(
@@ -215,6 +214,7 @@ public class Screen implements MouseFocusHandler {
         new EndNotify() {
           public final void perform() {
             screenController.onStartScreen();
+            nifty.getMouseInputEventQueue().reset();
           }
         });
     activeEffectStart();

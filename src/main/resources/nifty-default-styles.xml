@@ -88,7 +88,7 @@
 
   <!-- console line -->
   <style id="nifty-console-line">
-    <attributes font="console.fnt" backgroundColor="#CCC3" align="left" />
+    <attributes font="console.fnt" backgroundColor="#CCC6" align="left" />
   </style>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -97,7 +97,7 @@
 
   <!-- the background of the textfield -->
   <style id="nifty-console-textfield#panel">
-    <attributes backgroundColor="#CCC3" childLayout="overlay" height="20px" />
+    <attributes backgroundColor="#CCC6" childLayout="overlay" height="20px" />
   </style>
 
   <!-- the actual input field -->
