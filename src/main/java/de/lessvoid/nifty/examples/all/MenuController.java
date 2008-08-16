@@ -76,6 +76,7 @@ public class MenuController implements ScreenController {
       }
     });
   }
+
   /**
    * multiplayer.
    */
@@ -83,6 +84,17 @@ public class MenuController implements ScreenController {
     nifty.getCurrentScreen().endScreen(new EndNotify() {
       public void perform() {
         nifty.fromXml("multiplayer/multiplayer.xml", "start");
+      }
+    });
+  }
+
+  /**
+   * console.
+   */
+  public void console() {
+    nifty.getCurrentScreen().endScreen(new EndNotify() {
+      public void perform() {
+        nifty.fromXml("console/console.xml", "start");
       }
     });
   }

@@ -128,6 +128,9 @@
           <menuItem id="multiplayer" text="Avatar &amp; Multiplayer Example" hintText="Avatar &amp; Multiplayer Example" style="menu-item" focusable="true">
             <interact onClick="multiplayer()"/>
           </menuItem>
+          <menuItem id="console" text="Console Example" hintText="Console Example" style="menu-item" focusable="true">
+            <interact onClick="console()"/>
+          </menuItem>
           <menuItem id="exit" text="Exit" style="menu-item" hintText="Exit" focusable="true">
             <interact onClick="exit()"/>
           </menuItem>

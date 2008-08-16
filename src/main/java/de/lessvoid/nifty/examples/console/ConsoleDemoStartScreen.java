@@ -51,6 +51,9 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
       public void execute(final String line) {
         // just echo to the console
         control.output("your input was: " + line);
+        if ("exit".equals(line.toLowerCase())) {
+          back();
+        }
       }
     });
   }
