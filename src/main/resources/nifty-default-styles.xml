@@ -4,7 +4,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- nifty label default style -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <!-- just some text lavel default -->
+  <!-- just some text label default -->
   <style id="nifty-label">
     <attributes font="verdana-24-shadow.fnt" align="center" />
   </style>
