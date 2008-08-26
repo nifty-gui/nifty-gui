@@ -28,7 +28,7 @@
     <effect>
       <onHover name="hoverFocus" />
       <onHover name="hoverHint" targetElement="hintElement" hintText="$hintText" />
-      <onFocus name="pulsate" hoverWidth="200%" width="120%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+      <onFocus name="pulsate" hoverWidth="100%" width="100%" period="500" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
     </effect>
   </style>
 
@@ -113,8 +113,8 @@
       </panel>
     </layer>
     <layer id="menu" childLayout="vertical">
-      <panel height="20%" childLayout="center"/>
-      <panel height="60%" childLayout="center">
+      <panel height="30%" childLayout="center"/>
+      <panel height="50%" childLayout="center">
         <menu id="mainMenu" font="menu.fnt" style="menu">
           <menuItem id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" focusable="true">
             <interact onClick="helloWorld()"/>
