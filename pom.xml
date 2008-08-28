@@ -20,7 +20,7 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>0.0.4-SNAPSHOT</version>
+      <version>0.0.4</version>
     </dependency>
   </dependencies>
   <build>
@@ -55,14 +55,14 @@
             </manifest>
           </archive>
         </configuration>
-      </plugin>      
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
           <workspaceCodeStylesURL>https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty/trunk/my-checkstyle.xml</workspaceCodeStylesURL>
         </configuration>
-      </plugin>      
+      </plugin>
     </plugins>
     <resources>
       <resource>
