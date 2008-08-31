@@ -107,33 +107,15 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @param y1 y1
    */
   public void enableClip(final int x0, final int y0, final int x1, final int y1) {
-    GL11.glEnable(GL11.GL_CLIP_PLANE0);
-    GL11.glEnable(GL11.GL_CLIP_PLANE1);
-    GL11.glEnable(GL11.GL_CLIP_PLANE2);
-    GL11.glEnable(GL11.GL_CLIP_PLANE3);
-
-    doubleBuffer.clear();
-    doubleBuffer.put(1).put(0).put(0).put(-x0).flip();
-    GL11.glClipPlane(GL11.GL_CLIP_PLANE0, doubleBuffer);
-    doubleBuffer.clear();
-    doubleBuffer.put(-1).put(0).put(0).put(x1).flip();
-    GL11.glClipPlane(GL11.GL_CLIP_PLANE1, doubleBuffer);
-    doubleBuffer.clear();
-    doubleBuffer.put(0).put(1).put(0).put(-y0).flip();
-    GL11.glClipPlane(GL11.GL_CLIP_PLANE2, doubleBuffer);
-    doubleBuffer.clear();
-    doubleBuffer.put(0).put(-1).put(0).put(y1).flip();
-    GL11.glClipPlane(GL11.GL_CLIP_PLANE3, doubleBuffer);
+    GL11.glScissor(x0, getHeight() - y1, x1 - x0, y1 - y0);
+    GL11.glEnable(GL11.GL_SCISSOR_TEST);
   }
 
   /**
    * Disable Clip.
    */
   public void disableClip() {
-    GL11.glDisable(GL11.GL_CLIP_PLANE0);
-    GL11.glDisable(GL11.GL_CLIP_PLANE1);
-    GL11.glDisable(GL11.GL_CLIP_PLANE2);
-    GL11.glDisable(GL11.GL_CLIP_PLANE3);
+    GL11.glDisable(GL11.GL_SCISSOR_TEST);
   }
 
 }
