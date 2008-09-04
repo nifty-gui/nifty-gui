@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <author email="void.AT.lessvoid.DOT.com">void256</author>
+    <title>Nifty Getting Started - Nifty Hello World</title>
+  </properties>
+  <meta name="keyword" content="nifty, hello world"/>
+  <body>
+    <section name="Hello World">
+      <p>In this Mini Tutorial you're going to create a very basic and simple Hello World Application to get used to Nifty.</p>
+      <p><a href="images/nifty-hello-world.png"><img src="images/nifty-hello-world-thumb.png" border="0" alt="Nifty Hello World"/></a></p>
+      <p><a href="http://nifty-gui.sourceforge.net/webstart/nifty-examples-0.0.2.jnlp">Webstart (jnlp)</a></p>
+    </section>
+    <section name="Java Preparation">
+      <p>Create a new Java Project with you favorite IDE. For the sake of simplicity I assume you've downloaded the
+      "complete" version of nifty. Add the nifty jar to your classpath.</p>
+      <p><img src="images/nifty-classpath.png" border="0" alt="Classpath"/></p>
+      <p>Now initialize lwjgl and set the display mode you want to use (This step is not covered here in detail because it is
+      lwjgl-specific and is <a href="http://lwjgl.org/wiki/doku.php">documented elsewhere</a>).</p>
+      <subsection name="Create the Nifty Instance and load a XML-File">
+        <p>Everything you do within Nifty is done with an instance of the Nifty class. To create it you'll need to give
+        it a RenderDevice implementation you want to use. The only supported version is RenderDeviceLwjgl but this might
+        change in the future.</p>
+        <p>Because you can easily add sound to your nifty gui you'll need to give it a SoundSystem implementation too. There's
+        a standard implementation available that uses Slick.</p>
+        <source><![CDATA[Nifty nifty = new Nifty(
+    new RenderDeviceLwjgl(),
+    new SoundSystem(new SlickSoundLoader()),
+    new TimeProvider());]]></source>
+        <p>To load a xml gui file and initializes the rendering you simply use the fromXml() method of your new nifty instance.
+        Creating the actual XML-File is covered below.</p>
+        <source>nifty.fromXml("helloworld/helloworld.xml");</source>
+      </subsection>
+      <subsection name="Lwjgl Renderloop with Nifty">
+        <p>This is your basic lwjgl render loop. You'll need to call the nifty render() method once a frame. And you'll need to
+        forward Keyboard-Events to Nifty so that it can respond to them.</p>
+        <p>This might look like this:</p>
+        <source><![CDATA[
+    boolean done = false;
+    while (!Display.isCloseRequested() && !done) {
+      // show render
+      Display.update();
+  
+      // forward keyboard events to nifty
+      while (Keyboard.next()) {
+        nifty.keyEvent(
+          Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
+      }
+  
+      // render nifty
+      int mouseX = Mouse.getX();
+      int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
+      if (nifty.render(true, mouseX, mouseY, Mouse.isButtonDown(0))) {
+        done = true;
+      }
+    }]]></source>
+      </subsection>
+    </section>
+    <section name="Nifty XML">
+      <p>This shows the basics of the nifty xml definition for the Hello World example.</p>
+      <subsection name="&lt;screen&gt;">
+        <p>The basic building block of a nifty gui is the concept of a Screen. A Screen is everything that is
+        visible on the screen at a certain time or state of your GUI. For examle a Screen could be the
+        &quot;option menu&quot; of your game or the credits screen.</p>
+        <p>Your usual nifty-gui consists of several screens that are interconnected. To identify every screen
+        and to allow switching between screens each screen should have a unique name, the screen id.</p>
+        <p>The following example shows the screen of the Hello World example we're building. The Hello World
+        example consists of only a single screen which is given the name &quot;start&quot;. This name is special
+        because nifty automatically looks for this name and always starts the execution of the gui with the screen
+        named &quot;start&quot;</p>  
+            <source><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+  <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.HelloWorldStartScreen">
+    ...
+  </screen>
+</nifty>]]></source>
+        <p>With the &quot;controller&quot; attribute of the &lt;screen&gt; element you define the controller class for each
+        screen. This class retrieves all events a screen might produce. So for instance if you click on elements you can
+        define an event and this event is sent to the controller class.</p>
+        <p>More on the controller Interface below.</p>
+      </subsection>
+      <subsection name="&lt;layer&gt;">
+        <p>Within a Screen you can have several layers of elements. So you could use a layer for your background. A layer
+        for your menu and another layer on the top to display a logo or something like that. Layers are rendered back to front
+        as they appear in the xml file.</p>
+        <p>For the Hello World example we only need a single layer. To make things a bit interessting we give the layer a
+        background color. With the childLayout attribute we define the way child elements of the layer are being positioned. With
+        &quot;childLayout='center'&quot; we define that the first child element of the layer is centered within the layer.</p>
+        <source><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+  <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.HelloWorldStartScreen">
+    <layer id="layer" backgroundColor="#003f" childLayout="center">
+      ...
+    </layer>
+  </screen>
+</nifty>]]></source>
+      </subsection>
+      <subsection name="&lt;panel&gt;">
+        <p>Panel is one of niftys elements. It is just a rectangular area with a width and a height. For the Hello World
+        example we want a simple orange colored rectangle in the center of the screen. So we use a panel element for this and
+        give it a height of 25% and 35% of the width of the parent element. In this case is the parent element the layer which
+        is always the size of the current display mode.</p>
+        <source><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+  <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.HelloWorldStartScreen">
+    <layer id="layer" backgroundColor="#003f" childLayout="center">
+      <panel height="25%" width="35%" align="center" valign="center" backgroundColor="#f60f"
+             childLayout="center" visibleToMouse="true">
+        ...
+      </panel>
+    </layer>
+  </screen>
+</nifty>]]></source>
+        <p>What we've got so far - a colored rectangle ;)</p>
+        <p><a href="images/nifty-hello-world-basic.png"><img src="images/nifty-hello-world-basic-thumb.png" border="0" alt="Nifty Hello World Basic"/></a></p>
+      </subsection>
+      <subsection name="&lt;text&gt;">
+        <p>The text element let's you output text. So we just add a &quot;Hello World!&quot; text to the panel and center it.</p>
+        <source><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+  <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.HelloWorldStartScreen">
+    <layer id="layer" backgroundColor="#003f" childLayout="center">
+      <panel height="25%" width="35%" align="center" valign="center" backgroundColor="#f60f"
+             childLayout="center" visibleToMouse="true">
+        <text font="verdana-24-shadow.fnt" text="Hello World!"
+              align="center" valign="center" />
+      </panel>
+    </layer>
+  </screen>
+</nifty>]]></source>
+      </subsection>
+    </section>
+    <section name="Nifty Effects">
+      <p>Now comes the actual fun part - adding effects! You can add effects to every element inside a layer.</p>
+      <p>You can add effects for the following events:
+      <ul>
+        <li>onStartScreen</li>
+        <li>onEndScreen</li>
+        <li>onHover</li>
+        <li>onFocus</li>
+        <li>onActive</li>
+      </ul></p>
+      <subsection name="onStartScreen">
+        <p>Let's say we want to move the orange panel from the top of the screen to the center of the screen
+        whenever the screen becomes active. We would add a &quot;move&quot; effect to the panel for the onStartScreen
+        event. So whenever the screen is started the move effects automatically moves the panel into position.</p>
+        <p>Nifty comes with a lot of build-in effects. To use these effects we need to register them. This is done like this:</p>
+        <source><![CDATA[<registerEffect name="move" class="de.lessvoid.nifty.effects.general.Move" />]]></source>
+        <p>As you might have guess is this is a very flexible way to add your own custom effects! Just implement the Effect interface,
+        register the effect with the &lt;registerEffect&gt; Tag and the effect is ready to use!</p>
+        <p>So, the next thing is to add the actual onStartScreen effect to the panel:</p>
+        <source><![CDATA[<panel height="25%" width="35%" ...>
+  <effect>
+    <onStartScreen name="move" mode="in" direction="top" length="300" startDelay="0" inherit="true"/>
+  </effect>]]></source>
+        <p>With the &quot;name&quot; attribute you add the registered effect. All other attributes are effect specific. For the
+        &quot;de.lessvoid.nifty.effects.general.Move&quot; effect you can for example define the direction from where it should move
+        in or out. You can give a start delay and and effect length time in ms. The inherit flag defines if the effect travels to
+        all child elements or if it is limited only to the element you attached the effect too.</p>
+        <p>In the example above the panel moves in from the top of the screen. The effect starts immediately and takes
+        300 ms. The effect is not limited to the panel and moves all child elements. In this example the
+        &quot;Hello World!&quot; text is moved together with the panel.</p>
+      </subsection>
+    </section>
+  </body>
+</document>

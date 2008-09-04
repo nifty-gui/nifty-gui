@@ -9,6 +9,8 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Hashtable;
 
+import org.newdawn.slick.util.ResourceLoader;
+
 /**
  * AngelCodeFont loading.
  * @author void
@@ -53,7 +55,7 @@ public class AngelCodeFont {
    * @return true on success and false on any error
    */
   public boolean load(final String filename) {
-    InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+    InputStream in = ResourceLoader.getResourceAsStream(filename);
     if (in == null) {
       return false;
     }
