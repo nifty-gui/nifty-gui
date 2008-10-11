@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.util.ResourceLoader;
+
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEventCreator;
@@ -268,8 +270,7 @@ public class Nifty {
    */
   private void loadFromFile(final String filename) {
     try {
-      loader.loadXml(
-          Thread.currentThread().getContextClassLoader().getResourceAsStream(filename), this, screens, timeProvider);
+      loader.loadXml(ResourceLoader.getResourceAsStream(filename), this, screens, timeProvider);
     } catch (Exception e) {
       e.printStackTrace();
     }

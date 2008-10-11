@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.util.ResourceLoader;
 import org.xmlpull.mxp1.MXParser;
 
 import de.lessvoid.nifty.Nifty;
@@ -89,7 +90,7 @@ public class NiftyLoader {
 
     // create parser
     XmlParser parser = new XmlParser(new MXParser());
-    parser.read(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
+    parser.read(ResourceLoader.getResourceAsStream(filename));
 
     // start parsing
     parser.nextTag();
@@ -107,7 +108,7 @@ public class NiftyLoader {
 
     // create parser
     XmlParser parser = new XmlParser(new MXParser());
-    parser.read(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
+    parser.read(ResourceLoader.getResourceAsStream(filename));
 
     // start parsing
     parser.nextTag();
