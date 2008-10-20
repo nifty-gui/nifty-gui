@@ -4,7 +4,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- textfield control -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
-  <controlDefinition style="nifty-textfield" name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField">
+  <controlDefinition style="nifty-textfield" name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField" passwordChar="$passwordChar">
     <panel id="textfield-panel" style="#panel">
       <panel id="textfield-field" style="#field" focusable="true">
         <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
