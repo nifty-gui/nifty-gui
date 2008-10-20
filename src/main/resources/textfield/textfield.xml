@@ -16,7 +16,7 @@
         <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0" inherit="true"/>
         <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" startDelay="0" inherit="true"/>
       </effect>
-      <panel id="dialog" style="nifty-panel" childLayout="center" width="80%" height="25%" align="center" valign="center">
+      <panel id="dialog" style="nifty-panel" childLayout="center" width="80%" height="32%" align="center" valign="center">
         <effect>
           <onStartScreen name="move" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
           <onEndScreen name="move" direction="bottom" mode="out" length="500" startDelay="0" inherit="true"/>
@@ -24,12 +24,17 @@
         <panel childLayout="vertical" width="95%" height="80%" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
             <label id="labelName" text="Your Name: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
-            <control id="name" name="textfield" initial="huhu" />
+            <control id="name" name="textfield" initial="huhu" passwordChar="*"/>
           </panel>    
           <panel childLayout="horizontal" height="4px" />
           <panel childLayout="horizontal" height="40px">
             <label text="Your Host: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="ip" name="textfield" />
+          </panel>
+          <panel childLayout="horizontal" height="4px" />
+          <panel childLayout="horizontal" height="40px">
+            <label text="Your Password: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <control id="password" name="textfield" passwordChar="*"/>
           </panel>
           <panel height="16px" />
           <panel childLayout="horizontal">
