@@ -5,6 +5,7 @@ import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
+import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -30,9 +31,10 @@ public class NiftyDebugConsole {
 
   /**
    * Create new console.
+ * @param RenderDevice as specified by the implementation
    */
-  public NiftyDebugConsole() {
-    this.console = new Console(CONSOLE_MAX_LINES, true);
+  public NiftyDebugConsole(RenderDevice device) {
+    this.console = new Console(device, CONSOLE_MAX_LINES, true);
   }
 
   /**

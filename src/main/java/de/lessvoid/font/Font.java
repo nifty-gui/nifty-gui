@@ -6,6 +6,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.elements.tools.FontHelper;
+import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.render.spi.lwjgl.RenderFontLwjgl;
 
 
@@ -53,11 +54,13 @@ public class Font {
   private float selectionG;
   private float selectionB;
   private float selectionA;
-
+  
+  private RenderDevice device;
+  
   /**
    * construct the font.
    */
-  public Font() {
+  public Font(RenderDevice device) {
     selectionStart = -1;
     selectionEnd = -1;
     selectionR = 1.0f;
@@ -68,6 +71,8 @@ public class Font {
     selectionBackgroundG = 1.0f;
     selectionBackgroundB = 0.0f;
     selectionBackgroundA = 1.0f;
+    
+    this.device = device;
   }
   
   /**
@@ -204,9 +209,8 @@ public class Font {
     GL11.glMatrixMode(GL11.GL_PROJECTION);
       GL11.glPushMatrix();
       GL11.glLoadIdentity();
-      GL11.glOrtho(
-          0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight(), 0, -MAX_DISTANCE, MAX_DISTANCE);
-
+    GL11.glOrtho(0, device.getWidth(), device.getHeight(), 0, -MAX_DISTANCE, MAX_DISTANCE);
+    
     GL11.glMatrixMode(GL11.GL_MODELVIEW);
       GL11.glPushMatrix();
       GL11.glLoadIdentity();

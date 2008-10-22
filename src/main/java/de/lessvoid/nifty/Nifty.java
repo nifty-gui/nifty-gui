@@ -79,7 +79,7 @@ public class Nifty {
    * @param newRenderDevice RenderDevice
    * @param options options
    */
-  private NiftyDebugConsole console = new NiftyDebugConsole();
+  private NiftyDebugConsole console;
 
   /**
    * The TimeProvider to use.
@@ -137,6 +137,7 @@ public class Nifty {
       final SoundSystem newSoundSystem,
       final TimeProvider newTimeProvider) {
     initialize(newRenderDevice, newSoundSystem, newTimeProvider);
+    console = new NiftyDebugConsole(null);	// this will cause trouble i'm sure, but i don't care at this point
   }
 
   /**
@@ -150,6 +151,7 @@ public class Nifty {
       final SoundSystem newSoundSystem,
       final TimeProvider newTimeProvider) {
     initialize(new NiftyRenderEngineImpl(newRenderDevice), newSoundSystem, newTimeProvider);
+    console = new NiftyDebugConsole(newRenderDevice);
   }
 
   /**
@@ -185,12 +187,25 @@ public class Nifty {
       final int mouseY,
       final boolean mouseDown) {
 
+	    if (currentScreen != null) {
+	      mouseInputEventQueue.process(mouseX, mouseY, mouseDown);
+	    }
+	    return render(clearScreen);
+  }
+
+  /**
+   * This is a replacement render that does not take a mouse event.
+   * @param clearScreen TODO
+   * @return true when nifty has finished processing the screen and false when rendering should continue.
+   */
+  public boolean render(
+      final boolean clearScreen) {
+
     if (clearScreen) {
       renderDevice.clear();
     }
 
     if (currentScreen != null) {
-      mouseInputEventQueue.process(mouseX, mouseY, mouseDown);
       MouseInputEvent inputEvent = mouseInputEventQueue.peek();
       if (inputEvent != null) {
         if (currentScreen.mouseEvent(inputEvent)) {

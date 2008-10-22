@@ -73,7 +73,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return RenderFont
    */
   public RenderFont createFont(final String filename) {
-    return new RenderFontLwjgl(filename);
+    return new RenderFontLwjgl(filename, this);
   }
 
   /**

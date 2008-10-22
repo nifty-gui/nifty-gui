@@ -2,26 +2,31 @@ package de.lessvoid.console;
 
 import java.util.LinkedList;
 
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.font.Font;
+import de.lessvoid.nifty.render.spi.RenderDevice;
 
 public class Console
 {
   private Font font;
   private int x;
   private int y;
-  private LinkedList<String> data= new LinkedList<String>();
+  private LinkedList<String> data = new LinkedList<String>();
   private boolean left;
   private int maxLines;
   
+  private RenderDevice device;
+  
   /**
    * create console
+   * @param newRenderDevice 
    */
-  public Console( int maxLines, boolean left )
+  public Console(RenderDevice device, int maxLines, boolean left)
   {
-    font= new Font();
+    this.device = device;
+
+    font= new Font(device);
     font.init( "console.fnt" );
     
     this.left= left;
@@ -80,12 +85,12 @@ public class Console
     if( left )
     {
       x= 10;
-      y= Display.getDisplayMode().getHeight() - maxHeight - 10;
+      y= device.getHeight() - maxHeight - 10;
     }
     else
     {
-      x= Display.getDisplayMode().getWidth() - maxWidth - 10;
-      y= Display.getDisplayMode().getHeight() - maxHeight - 10;
+      x= device.getWidth() - maxWidth - 10;
+      y= device.getHeight() - maxHeight - 10;
     }
   }
   

@@ -9,6 +9,8 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import de.lessvoid.nifty.render.spi.RenderDevice;
+
 public class FontTest
 {
   private static Logger log= Logger.getLogger(FontTest.class.getName());
@@ -17,7 +19,7 @@ public class FontTest
   
   private static void init()
   {
-    font= new Font();
+    font= new Font(null);
     font.init( "verdana-24-shadow.fnt" );
 
     // init 2d

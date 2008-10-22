@@ -2,6 +2,7 @@ package de.lessvoid.nifty.render.spi.lwjgl;
 
 import de.lessvoid.font.CharacterInfo;
 import de.lessvoid.font.Font;
+import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
@@ -20,8 +21,8 @@ public class RenderFontLwjgl implements RenderFont {
    * Initialize the font.
    * @param name font filename
    */
-  public RenderFontLwjgl(final String name) {
-    font = new Font();
+  public RenderFontLwjgl(final String name, RenderDevice device) {
+    font = new Font(device);
     font.init(name);
   }
 
