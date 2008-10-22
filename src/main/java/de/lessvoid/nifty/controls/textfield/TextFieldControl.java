@@ -90,7 +90,11 @@ public class TextFieldControl implements Controller {
    * the focus handler this control belongs to.
    */
   private FocusHandler focusHandler;
-
+  
+  private Boolean password;
+  
+  private Character passwordChar;
+  
   /**
    * default constructor.
    */
@@ -116,6 +120,14 @@ public class TextFieldControl implements Controller {
 
     this.textField = new TextField("", new ClipboardAWT());
     this.textField.toFirstPosition();
+    
+    this.password = Boolean.valueOf((String) properties.get("password"));
+    
+    if (properties.containsKey("passwordChar")) {
+      passwordChar = properties.get("passwordChar").toString().charAt(0);
+    } else {
+      passwordChar = '*';
+    }
   }
 
   /**
@@ -244,6 +256,15 @@ public class TextFieldControl implements Controller {
     calcLastVisibleIndex(textRenderer);
 
     // update text
+    if (password) {
+      int numChar = text.length();
+      char[] chars = new char[numChar];
+      for (int i = 0; i < numChar; ++i) {
+        chars[i] = passwordChar;
+      }
+      text = new String(chars);
+    }
+    
     textRenderer.changeText(text);
     textRenderer.setSelection(textField.getSelectionStart(), textField.getSelectionEnd());
 
