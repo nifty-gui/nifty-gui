@@ -78,11 +78,15 @@
   <distributionManagement>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
-      <url>scp://shell.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
+      <url>
+        scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo
+      </url>
     </repository>
     <site>
       <id>nifty.sourceforge.net</id>
-      <url>scp://shell.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-examples</url>
+      <url>
+        scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-examples
+      </url>
     </site>
   </distributionManagement>
   <repositories>
