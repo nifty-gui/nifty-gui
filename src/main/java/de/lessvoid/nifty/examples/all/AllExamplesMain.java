@@ -55,6 +55,8 @@ public final class AllExamplesMain {
         nifty.fromXml(ALL_INTRO_XML, "menu");
       } else if (nifty.isActive("console/console.xml", "start")) {
         nifty.fromXml(ALL_INTRO_XML, "menu");
+      } else if (nifty.isActive("controls/controls.xml", "start")) {
+        nifty.fromXml(ALL_INTRO_XML, "menu");
       } else {
         done = true;
       }

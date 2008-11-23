@@ -7,6 +7,7 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -30,7 +31,8 @@ public class MultiplayerPanelControl implements Controller {
       final Nifty niftyParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener) {
+      final ControllerEventListener newListener,
+      final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
     element = newElement;
   }

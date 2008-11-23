@@ -34,7 +34,7 @@ public class StartScreenController implements ScreenController {
    */
   public void addPanel() {
     nifty.addControl(
-        screen, screen.findElementByName("box-parent"), "multiplayerPanel", "" + id++, null, null);
+        screen, screen.findElementByName("box-parent"), "multiplayerPanel", "" + id++, null, null, null);
   }
 
   /**

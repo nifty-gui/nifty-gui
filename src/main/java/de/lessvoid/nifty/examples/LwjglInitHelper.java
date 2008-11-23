@@ -23,6 +23,9 @@ import de.lessvoid.nifty.Nifty;
  */
 public class LwjglInitHelper {
 
+  private static final int WIDTH = 1024;
+  private static final int HEIGHT = 768;
+
   /** logger. */
   private static Logger log = Logger.getLogger(LwjglInitHelper.class.getName());
 
@@ -75,7 +78,7 @@ public class LwjglInitHelper {
       List < DisplayMode > matching = new ArrayList < DisplayMode >();
       for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
-        if (mode.getWidth() == 1024 && mode.getHeight() == 768 && mode.getBitsPerPixel() == 32 ) {
+        if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT && mode.getBitsPerPixel() == 32 ) {
           log.info(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
           matching.add(mode);
         }
@@ -203,9 +206,12 @@ public class LwjglInitHelper {
 
   /**
    * @param nifty nifty instance
+   * @param editor 
    * @param callback callback
    */
-  public static void renderLoop(final Nifty nifty, final RenderLoopCallback callback) {
+  public static void renderLoop(
+      final Nifty nifty,
+      final RenderLoopCallback callback) {
     boolean done = false;
     while (!Display.isCloseRequested() && !done) {
       if (callback != null) {

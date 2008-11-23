@@ -99,10 +99,19 @@ public class MenuController implements ScreenController {
     });
   }
 
+  public void dropDown() {
+    nifty.getCurrentScreen().endScreen(new EndNotify() {
+      public void perform() {
+        nifty.fromXml("controls/controls.xml", "start");
+      }
+    });
+  }
+
   /**
    * exit.
    */
   public void exit() {
+    nifty.createPopup("popupExit");
     nifty.showPopup(screen, "popupExit");
   }
 

@@ -95,4 +95,27 @@
       <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
     </repository>
   </repositories>
+  <profiles>
+    <profile>
+      <id>editor</id>
+      <build>
+        <plugins>
+          <plugin>
+           <artifactId>maven-assembly-plugin</artifactId>
+           <configuration>
+             <finalName>nifty-editor</finalName>
+             <descriptors>
+               <descriptor>src/assemble/assemble.xml</descriptor>
+             </descriptors>
+             <archive>
+               <manifest>
+                 <mainClass>de.lessvoid.nifty.editor.EditorMain</mainClass>
+               </manifest>
+             </archive>
+           </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
