@@ -32,6 +32,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   public void enableClip(int x0, int y0, int x1, int y1) {
+    renderStates.add(RenderStateType.clip);
   }
 
   public int getHeight() {
