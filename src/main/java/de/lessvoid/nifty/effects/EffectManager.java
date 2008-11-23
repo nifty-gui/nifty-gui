@@ -47,9 +47,7 @@ public class EffectManager {
    * @param id the id
    * @param e the effect
    */
-  public final void registerEffect(
-      final EffectEventId id,
-      final Effect e) {
+  public final void registerEffect(final EffectEventId id, final Effect e) {
     effects.get(id).registerEffect(e);
   }
 
@@ -95,8 +93,12 @@ public class EffectManager {
    * @param renderDevice the renderDevice we should use.
    */
   public final void renderPre(final NiftyRenderEngine renderDevice) {
+    effects.get(EffectEventId.onHover).renderPre(renderDevice);
+
     for (EffectProcessor processor : effects.values()) {
-      processor.renderPre(renderDevice);
+      if (!(processor instanceof HoverEffectProcessor)) {
+        processor.renderPre(renderDevice);
+      }
     }
   }
 
@@ -105,8 +107,12 @@ public class EffectManager {
    * @param renderDevice the renderDevice we should use.
    */
   public final void renderPost(final NiftyRenderEngine renderDevice) {
+    effects.get(EffectEventId.onHover).renderPost(renderDevice);
+
     for (EffectProcessor processor : effects.values()) {
-      processor.renderPost(renderDevice);
+      if (!(processor instanceof HoverEffectProcessor)) {
+        processor.renderPost(renderDevice);
+      }
     }
   }
 
@@ -161,7 +167,7 @@ public class EffectManager {
         activeProcessors++;
 
         if (data.length() != 0) {
-          data.append(", ");
+          data.append(", \n");
         }
         data.append(eventId.toString());
         data.append(":");
