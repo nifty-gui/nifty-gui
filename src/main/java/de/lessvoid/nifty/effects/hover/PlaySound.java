@@ -56,6 +56,12 @@ public class PlaySound implements HoverEffectImpl {
       }
     }
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }
 
 

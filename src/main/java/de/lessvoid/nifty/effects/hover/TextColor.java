@@ -42,4 +42,10 @@ public class TextColor implements HoverEffectImpl {
       final NiftyRenderEngine r) {
     r.setColor(color);
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

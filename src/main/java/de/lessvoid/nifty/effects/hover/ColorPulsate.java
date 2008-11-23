@@ -59,4 +59,9 @@ public class ColorPulsate implements HoverEffectImpl {
     r.setColor(c);
   }
 
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

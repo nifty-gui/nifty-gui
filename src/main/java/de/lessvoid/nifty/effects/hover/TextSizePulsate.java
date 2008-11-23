@@ -59,4 +59,10 @@ public class TextSizePulsate implements HoverEffectImpl {
       (float) Math.pow(normalizedTime, 0.3) * (endSize.getValue(1.0f) - startSize.getValue(1.0f));
     r.setRenderTextSize(1.0f + value);
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

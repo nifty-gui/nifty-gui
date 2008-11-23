@@ -28,4 +28,9 @@ public interface HoverEffectImpl {
    * @param renderDevice RenderDevice to use
    */
   void execute(Element element, float normalizedTime, float normalizedFalloff, NiftyRenderEngine renderDevice);
+
+  /**
+   * deactivate the effect.
+   */
+  void deactivate();
 }

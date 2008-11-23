@@ -42,4 +42,10 @@ public class ChangeFont implements HoverEffectImpl {
       final NiftyRenderEngine r) {
     r.setFont(font);
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

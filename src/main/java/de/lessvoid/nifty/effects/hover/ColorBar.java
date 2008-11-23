@@ -58,4 +58,10 @@ public class ColorBar implements HoverEffectImpl {
     }
     r.restoreState();
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

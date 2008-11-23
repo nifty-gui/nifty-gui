@@ -36,4 +36,10 @@ public class SaveState implements HoverEffectImpl {
       final NiftyRenderEngine r) {
     r.saveState(RenderStateType.allStates());
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

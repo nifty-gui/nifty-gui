@@ -159,8 +159,12 @@ public class HoverEffect implements Effect {
    * @param newActive new active state
    */
   public void setActive(final boolean newActive) {
+    if (this.active && !newActive) {
+      effectImpl.deactivate();
+    }
     this.active = newActive;
   }
+
   /**
    * hover distance.
    * @param x x position

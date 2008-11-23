@@ -46,4 +46,10 @@ public class TextSize implements HoverEffectImpl {
     float scale = 1.0f + normalizedFalloff * textSize.getValue(1.0f);
     r.setRenderTextSize(scale);
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

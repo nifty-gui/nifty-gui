@@ -49,4 +49,10 @@ public class ImageOverlay implements HoverEffectImpl {
     r.setColor(new Color(1.0f, 1.0f, 1.0f, normalizedFalloff));
     r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

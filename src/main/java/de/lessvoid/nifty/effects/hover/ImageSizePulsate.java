@@ -59,4 +59,10 @@ public class ImageSizePulsate implements HoverEffectImpl {
       (float) Math.pow(normalizedTime, 0.3f) * (endSize.getValue(1.0f) - startSize.getValue(1.0f));
     r.setImageScale(1.0f + scale);
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

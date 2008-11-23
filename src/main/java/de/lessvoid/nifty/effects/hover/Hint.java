@@ -69,4 +69,9 @@ public class Hint implements HoverEffectImpl {
     }
   }
 
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

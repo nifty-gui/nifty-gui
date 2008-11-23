@@ -35,4 +35,10 @@ public class Focus implements HoverEffectImpl {
       final NiftyRenderEngine r) {
     element.setFocus();
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

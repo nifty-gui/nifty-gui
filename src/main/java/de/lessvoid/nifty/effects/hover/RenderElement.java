@@ -41,4 +41,10 @@ public class RenderElement implements HoverEffectImpl {
       }
     }
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

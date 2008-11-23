@@ -46,4 +46,10 @@ public class ImageSize implements HoverEffectImpl {
     float scale = 1.0f + normalizedFalloff * imageSize.getValue(1.0f);
     r.setImageScale(scale);
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

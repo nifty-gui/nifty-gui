@@ -35,4 +35,10 @@ public class RestoreState implements HoverEffectImpl {
       final NiftyRenderEngine r) {
     r.restoreState();
   }
+
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }

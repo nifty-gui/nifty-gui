@@ -75,5 +75,10 @@ public class Pulsate implements HoverEffectImpl {
     }
     r.restoreState();
   }
-
+  
+  /**
+   * deactivate the effect.
+   */
+  public void deactivate() {
+  }
 }
