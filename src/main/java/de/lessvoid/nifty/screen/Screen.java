@@ -44,12 +44,24 @@ public class Screen implements MouseFocusHandler {
   private ArrayList < Element > layerElements = new ArrayList < Element >();
 
   /**
+   * layer elements parked to add.
+   */
+  private ArrayList < Element > layerElementsToAdd = new ArrayList < Element >();
+
+  /**
+   * layer elements parked to remove.
+   */
+  private ArrayList < Element > layerElementsToRemove = new ArrayList < Element >();
+
+  /**
    * Popup layers are dynamic layers on top of the normal layers.
    * They are treated as "normal" layers and are added to the layerElements variable. In the
    * popupLayer variable we remember the pop ups additionally, so that we can send
    * input events only to these elements when they are present.
    */
   private ArrayList < Element > popupElements = new ArrayList < Element >();
+  private ArrayList < Element > popupElementsToAdd = new ArrayList < Element >();
+  private ArrayList < Element > popupElementsToRemove = new ArrayList < Element >();
 
   /**
    * saves focusElements for popups.
@@ -77,6 +89,11 @@ public class Screen implements MouseFocusHandler {
   private FocusHandler focusHandler;
 
   /**
+   * The MouseOverHandler.
+   */
+  private MouseOverHandler mouseOverHandler;
+
+  /**
    * nifty.
    */
   private Nifty nifty;
@@ -86,14 +103,33 @@ public class Screen implements MouseFocusHandler {
    * @author void
    */
   public class InputHandlerWithMapping {
-    public NiftyInputMapping mapping;
-    public KeyInputHandler handler;
+    /**
+     * Mapping.
+     */
+    private NiftyInputMapping mapping;
+
+    /**
+     * KeyInputHandler.
+     */
+    private KeyInputHandler handler;
+
+    /**
+     * Create InputHandlerWithMapping.
+     * @param newMapping NiftyInputMapping
+     * @param newHandler KeyInputHandler
+     */
     public InputHandlerWithMapping(
         final NiftyInputMapping newMapping,
         final KeyInputHandler newHandler) {
       mapping = newMapping;
       handler = newHandler;
     }
+
+    /**
+     * Process Keyboard InputEvent.
+     * @param inputEvent KeyboardInputEvent
+     * @return event has been processed or not
+     */
     public boolean process(final KeyboardInputEvent inputEvent) {
       return handler.keyEvent(mapping.convert(inputEvent));
     }
@@ -103,6 +139,11 @@ public class Screen implements MouseFocusHandler {
    * key input handlers.
    */
   private List < InputHandlerWithMapping > inputHandlers = new ArrayList < InputHandlerWithMapping >();
+
+  /**
+   * root element.
+   */
+  private Element rootElement;
 
   /**
    * create new screen instance.
@@ -116,13 +157,24 @@ public class Screen implements MouseFocusHandler {
       final String newId,
       final ScreenController newScreenController,
       final TimeProvider newTimeProvider) {
-    this.nifty = newNifty;
-    this.screenId = newId;
-    this.screenController = newScreenController;
-    this.mouseFocusElement = null;
-    this.focusElement = null;
-    this.timeProvider = newTimeProvider;
-    this.focusHandler = new FocusHandler();
+    nifty = newNifty;
+    screenId = newId;
+    screenController = newScreenController;
+    if (screenController == null) {
+      screenController = new ScreenController() {
+        public void bind(final Nifty niftyParam, final Screen screenParam) {
+        }
+        public void onStartScreen() {
+        }
+        public void onEndScreen() {
+        }
+      };
+    }
+    mouseFocusElement = null;
+    focusElement = null;
+    timeProvider = newTimeProvider;
+    focusHandler = new FocusHandler();
+    mouseOverHandler = new MouseOverHandler();
   }
 
   /**
@@ -146,7 +198,28 @@ public class Screen implements MouseFocusHandler {
    * @param layerElement the layer element to add
    */
   public void addLayerElement(final Element layerElement) {
-    layerElements.add(layerElement);
+    layerElementsToAdd.add(layerElement);
+  }
+
+  /**
+   * remove Layer element.
+   * @param layerElement Element to remove
+   */
+  public void removeLayerElement(final Element layerElement) {
+    layerElementsToRemove.add(layerElement);
+  }
+
+  /**
+   * Remove layer.
+   * @param layerId Layer Id to remove
+   */
+  public void removeLayerElement(final String layerId) {
+    for (Element layer : layerElements) {
+      if (layer.getId().equals(layerId)) {
+        removeLayerElement(layer);
+        return;
+      }
+    }
   }
 
   /**
@@ -154,6 +227,8 @@ public class Screen implements MouseFocusHandler {
    * @param popup popup
    */
   public void addPopup(final Element popup) {
+    resetLayersMouseDown();
+
     // create the callback
     EndNotify localEndNotify = new EndNotify() {
       public final void perform() {
@@ -177,14 +252,22 @@ public class Screen implements MouseFocusHandler {
     popup.resetEffects();
     popup.layoutElements();
     popup.startEffect(EffectEventId.onStartScreen, localEndNotify);
-    popup.onStartScreen(nifty, this);
+    popup.onStartScreen(this);
 
     // add to layers and add as popup
-    layerElements.add(popup);
-    popupElements.add(popup);
+    addLayerElement(popup);
+    addPopupElement(popup);
 
     focusElementBuffer.add(focusElement);
     focusElement = null;
+  }
+
+  /**
+   * Add a Popup Element.
+   * @param popup Popup Element
+   */
+  void addPopupElement(final Element popup) {
+    popupElementsToAdd.add(popup);
   }
 
   /**
@@ -192,13 +275,23 @@ public class Screen implements MouseFocusHandler {
    * @param popup popup to close
    */
   public void closePopup(final Element popup) {
-    layerElements.remove(popup);
-    popupElements.remove(popup);
-    focusElement = focusElementBuffer.get(focusElementBuffer.size() - 1);
+    resetLayers();
+    removeLayerElement(popup);
+    removePopupElement(popup);
+    setFocus(focusElementBuffer.get(focusElementBuffer.size() - 1));
     focusElementBuffer.remove(focusElementBuffer.size() - 1);
     if (focusHandler != null) {
       focusHandler.popState();
     }
+    mouseFocusElement = null;
+  }
+
+  /**
+   * Popup to remove.
+   * @param popup popup
+   */
+  void removePopupElement(final Element popup) {
+    popupElementsToRemove.add(popup);
   }
 
   /**
@@ -249,6 +342,12 @@ public class Screen implements MouseFocusHandler {
     }
   }
 
+  private void resetLayersMouseDown() {
+    for (Element w : layerElements) {
+      w.resetMouseDown();
+    }
+  }
+
   /**
    * send start screen event to all layer elements.
    * @param effectEventId the effect type id
@@ -279,7 +378,7 @@ public class Screen implements MouseFocusHandler {
           localEndNotify);
 
       if (effectEventId == EffectEventId.onStartScreen) {
-        w.onStartScreen(nifty, this);
+        w.onStartScreen(this);
       }
     }
 
@@ -320,7 +419,7 @@ public class Screen implements MouseFocusHandler {
   }
 
   /**
-   * mouse event for this screen. forwards to the layers.
+   * Handle Mouse Events for this screen. Forwards  the event to the layers.
    * @param inputEvent MouseInputEvent
    * @return true when processed and false when not
    */
@@ -340,17 +439,19 @@ public class Screen implements MouseFocusHandler {
    * @return TODO
    */
   private boolean forwardMouseEventToLayers(final List < Element > layerList, final MouseInputEvent inputEvent) {
-    boolean eventProcessed = true;
-    for (int i = layerList.size() - 1; i >= 0; i--) {
-      Element layer = layerList.get(i);
-      eventProcessed = eventProcessed & layer.mouseEvent(inputEvent, timeProvider.getMsTime());
+    mouseOverHandler.reset();
+
+    long eventTime = timeProvider.getMsTime();
+    for (Element layer : layerList) {
+      layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
+      layer.mouseEvent(inputEvent, eventTime);
     }
-    return eventProcessed;
+    mouseOverHandler.processMouseOverEvent(rootElement, inputEvent, eventTime);
+    return false;
   }
 
   /**
    * find an element by name.
-   *
    * @param name the id to find
    * @return the element or null
    */
@@ -427,7 +528,12 @@ public class Screen implements MouseFocusHandler {
       return true;
     }
 
-    return mouseFocusElement == element;
+    boolean canProcess = mouseFocusElement == element;
+    if (!canProcess) {
+      log.info(
+          "denied mouse event for [" + element.getId() + "] because focus is at [" + mouseFocusElement.getId() + "]");
+    }
+    return canProcess;
   }
 
   /**
@@ -459,6 +565,9 @@ public class Screen implements MouseFocusHandler {
    * @param console console
    */
   public void debug(final Console console) {
+    console.output("mouse over elements");
+    console.output(mouseOverHandler.getInfoString());
+
     if (focusElement != null) {
       console.output("focus element: " + focusElement.getId());
     }
@@ -487,5 +596,46 @@ public class Screen implements MouseFocusHandler {
    */
   public boolean hasFocus(final Element element) {
     return focusElement == element;
+  }
+
+  /**
+   * Get RootElement.
+   * @return root element
+   */
+  public Element getRootElement() {
+    return rootElement;
+  }
+
+  /**
+   * Set RootElement.
+   * @param rootElementParam new root element
+   */
+  public void setRootElement(final Element rootElementParam) {
+    rootElement = rootElementParam;
+  }
+
+  /**
+   * Set a new ScreenController.
+   * @param newScreenController ScreenController
+   */
+  public void setScreenController(final ScreenController newScreenController) {
+    screenController = newScreenController;
+  }
+
+  /**
+   * Do things when the current frame has ended.
+   */
+  public void processAddAndRemoveLayerElements() {
+    // add/remove layer elements
+    layerElements.addAll(layerElementsToAdd);
+    layerElements.removeAll(layerElementsToRemove);
+    layerElementsToAdd.clear();
+    layerElementsToRemove.clear();
+
+    // add/remove popup elements
+    popupElements.addAll(popupElementsToAdd);
+    popupElements.removeAll(popupElementsToRemove);
+    popupElementsToAdd.clear();
+    popupElementsToRemove.clear();
   }
 }
