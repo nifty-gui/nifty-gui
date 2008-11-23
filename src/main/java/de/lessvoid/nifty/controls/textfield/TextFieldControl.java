@@ -11,6 +11,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -90,11 +91,11 @@ public class TextFieldControl implements Controller {
    * the focus handler this control belongs to.
    */
   private FocusHandler focusHandler;
-  
+
   private Boolean password;
-  
+
   private Character passwordChar;
-  
+
   /**
    * default constructor.
    */
@@ -113,16 +114,16 @@ public class TextFieldControl implements Controller {
       final Nifty niftyParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener) {
+      final ControllerEventListener newListener,
+      final Attributes controlDefinitionAttributes) {
     this.element = newElement;
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
 
     this.textField = new TextField("", new ClipboardAWT());
     this.textField.toFirstPosition();
-    
     this.password = Boolean.valueOf((String) properties.get("password"));
-    
+
     if (properties.containsKey("passwordChar")) {
       passwordChar = properties.get("passwordChar").toString().charAt(0);
     } else {
