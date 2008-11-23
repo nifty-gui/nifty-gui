@@ -51,4 +51,8 @@ public class MouseInputEvent {
   public boolean isLeftButton() {
     return leftButton;
   }
+
+  public String toString() {
+    return "mouseX = " + mouseX + ", mouseY = " + mouseY + ", leftButton = " + leftButton;
+  }
 }

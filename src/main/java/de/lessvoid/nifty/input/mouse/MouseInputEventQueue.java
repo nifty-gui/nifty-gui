@@ -12,7 +12,7 @@ public class MouseInputEventQueue {
   /**
    * queue.
    */
-  private Queue < MouseInputEvent > queue = new LinkedList < MouseInputEvent >();
+  public Queue < MouseInputEvent > queue = new LinkedList < MouseInputEvent >();
 
   /**
    * last mouse x.
