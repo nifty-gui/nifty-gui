@@ -58,21 +58,28 @@ public class TimeInterpolator {
    */
   public TimeInterpolator(final Properties parameter, final TimeProvider newTimeProvider) {
     this.timeProvider = newTimeProvider;
-
-    this.lengthParam = Long.parseLong(parameter.getProperty("length", "1000"));
     this.startDelayParam = Long.parseLong(parameter.getProperty("startDelay", "0"));
 
-    // check for the given timeType to create the appropriate interpolator
-    String timeType = parameter.getProperty("timeType", "linear");
-    if (timeType.equals("infinite")) {
+    interpolatorProvider = null;
+    if ("infinite".equals(parameter.getProperty("length", null))) {
       interpolatorProvider = new NullTime();
-    } else if (timeType.equals("linear")) {
-      interpolatorProvider = new LinearTime();
-    } else if (timeType.equals("exp")) {
-      interpolatorProvider = new ExpTime();
     } else {
-      log.warning(timeType + " is not supported, using NullTime for fallback. probably not what you want...");
-      interpolatorProvider = new NullTime();
+      this.lengthParam = Long.parseLong(parameter.getProperty("length", "1000"));
+    }
+
+    // check for the given timeType to create the appropriate interpolator
+    if (interpolatorProvider == null) {
+      String timeType = parameter.getProperty("timeType", "linear");
+      if (timeType.equals("infinite")) {
+        interpolatorProvider = new NullTime();
+      } else if (timeType.equals("linear")) {
+        interpolatorProvider = new LinearTime();
+      } else if (timeType.equals("exp")) {
+        interpolatorProvider = new ExpTime();
+      } else {
+        log.warning(timeType + " is not supported, using NullTime for fallback. probably not what you want...");
+        interpolatorProvider = new NullTime();
+      }
     }
 
     // initialize the provider
