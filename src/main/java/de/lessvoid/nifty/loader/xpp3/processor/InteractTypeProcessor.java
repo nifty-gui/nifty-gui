@@ -41,6 +41,9 @@ public class InteractTypeProcessor implements XmlElementProcessor {
     if (attributes.isSet("onClick")) {
       interactType.setOnClick(attributes.getAsOnClickType("onClick"));
     }
+    if (attributes.isSet("onRelease")) {
+      interactType.setOnRelease(attributes.getAsOnClickType("onRelease"));
+    }
     if (attributes.isSet("onClickRepeat")) {
       interactType.setOnClickRepeat(attributes.getAsOnClickType("onClickRepeat"));
     }

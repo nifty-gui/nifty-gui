@@ -11,24 +11,12 @@ import de.lessvoid.nifty.screen.ScreenController;
  * @author void
  */
 public class InteractType {
-  /**
-   * onClick.
-   */
   private OnClickType onClick;
-
-  /**
-   * onClickRepeat.
-   */
+  private OnClickType onRelease;
+  private OnClickType onMouseOver;
   private OnClickType onClickRepeat;
-
-  /**
-   * onClickMouseMove.
-   */
   private OnClickType onClickMouseMove;
 
-  /**
-   * onClickAlternateKey.
-   */
   private String onClickAlternateKey;
 
   /**
@@ -37,23 +25,30 @@ public class InteractType {
    */
   public InteractType(final InteractType source) {
     onClick = new OnClickType(source.onClick);
+    onRelease = new OnClickType(source.onRelease);
     onClickRepeat = new OnClickType(source.onClickRepeat);
     onClickMouseMove = new OnClickType(source.onClickMouseMove);
+    onMouseOver = new OnClickType(source.onMouseOver);
     onClickAlternateKey = source.onClickAlternateKey;
   }
 
-  /**
-   * default constructor.
-   */
   public InteractType() {
   }
 
-  /**
-   * Set onClick.
-   * @param onClickParam onClick
-   */
   public void setOnClick(final OnClickType onClickParam) {
     this.onClick = onClickParam;
+  }
+
+  public void setOnRelease(final OnClickType onReleaseParam) {
+    this.onRelease = onReleaseParam;
+  }
+
+  /**
+   * Set onMouseOver.
+   * @param onMouseOverParam onClick
+   */
+  public void setOnMouseOver(final OnClickType onMouseOverParam) {
+    this.onMouseOver = onMouseOverParam;
   }
 
   /**
@@ -81,10 +76,9 @@ public class InteractType {
   }
 
   /**
-   * init with input control.
+   * initialize with input control.
    * @param element element
-   * @param control input control
-   * @param screenController screen controller
+   * @param controller input controllers
    */
   public void initWithControl(
       final Element element,
@@ -106,7 +100,6 @@ public class InteractType {
   /**
    * Initialize element.
    * @param element element
-   * @param screenController screenController
    * @param controlController controlController
    */
   private void initElement(
@@ -116,6 +109,16 @@ public class InteractType {
     if (onClick != null) {
       MethodInvoker onClickMethod = onClick.getMethod(controlController);
       element.setOnClickMethod(onClickMethod, false);
+      element.setVisibleToMouseEvents(true);
+    }
+    if (onRelease != null) {
+      MethodInvoker onReleaseMethod = onRelease.getMethod(controlController);
+      element.setOnReleaseMethod(onReleaseMethod);
+      element.setVisibleToMouseEvents(true);
+    }
+    if (onMouseOver != null) {
+      MethodInvoker onClickMethod = onMouseOver.getMethod(controlController);
+      element.setOnMouseOverMethod(onClickMethod);
       element.setVisibleToMouseEvents(true);
     }
     if (onClickRepeat != null) {
