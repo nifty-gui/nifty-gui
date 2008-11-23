@@ -9,9 +9,9 @@ import de.lessvoid.nifty.tools.Color;
 /**
  * RenderImageMode supports the following modes.
  *
- * - NORMAL (render the given image to the given image size)
- * - SUBIMAGE (render the given subImage of the image to the given size)
- * - RESIZE (special mode that allows scaling of bitmaps with a predefined schema)
+ * - "normal" (render the given image to the given image size)
+ * - "subImage:" (render the given subImage of the image to the given size)
+ * - "resize:" (special mode that allows scaling of bitmaps with a predefined schema)
  *
  * @author void
  */

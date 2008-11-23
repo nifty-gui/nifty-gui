@@ -6,7 +6,7 @@ import de.lessvoid.nifty.tools.Color;
 
 /**
  * The resize helper adds support for a sub image format that is
- * resizable using different parts of the image.
+ * resize able using different parts of the image.
  * @author void
  */
 class ResizeHelper {
@@ -29,7 +29,8 @@ class ResizeHelper {
   /**
    * Create from the given String.
    * @param renderImageParam RenderImage
-   * @param resizeString the String in the format: b1,b2,b3,h1,b4,b5,b6,h2,b7,b8,b9,h3
+   * @param resizeString the String in the format:
+   *        b1,b2,b3,h1,b4,b5,b6,h2,b7,b8,b9,h3
    */
   public ResizeHelper(final RenderImage renderImageParam, final String resizeString) {
     renderImage = renderImageParam;
