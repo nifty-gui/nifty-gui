@@ -6,6 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
@@ -90,7 +91,9 @@ public class Scrollbar implements Controller {
   public void bind(
       final Nifty nifty,
       final Element newElement,
-      final Properties properties, final ControllerEventListener newListener) {
+      final Properties properties,
+      final ControllerEventListener newListener,
+      final Attributes controlDefinitionAttributes) {
     this.element = newElement;
     this.listener = newListener;
 

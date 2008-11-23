@@ -6,6 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -21,7 +22,12 @@ public interface Controller {
    * @param parameter parameters from the xml source to init the controller
    * @param listener the ControllerEventListener
    */
-  void bind(Nifty nifty, Element element, Properties parameter, ControllerEventListener listener);
+  void bind(
+      Nifty nifty,
+      Element element,
+      Properties parameter,
+      ControllerEventListener listener,
+      Attributes controlDefinitionAttributes);
 
   /**
    * Called when the screen is started.

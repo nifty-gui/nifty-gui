@@ -64,7 +64,12 @@ public class NiftyDebugConsole {
     // render all layers
     for (Element layer : screen.getLayerElements()) {
       layer.render(theRenderDevice);
-      console.output(" +" + getIdText(layer) + " => " + layer.getElementStateString());
+      String layerType = " +";
+      if (!layer.isVisible()) {
+        layerType = " -";
+      }
+      String offsetString = layerType + getIdText(layer) + " => ";
+      console.output(offsetString + layer.getElementStateString(offsetString));
       outputElement(layer, "    ");
     }
 
@@ -107,7 +112,8 @@ public class NiftyDebugConsole {
    */
   private void outputElement(final Element w, final String offset) {
     for (Element ww : w.getElements()) {
-      console.output(offset + getIdText(ww) + " -> " + ww.getElementStateString());
+      String offsetString = offset + getIdText(ww) + " -> ";
+      console.output(offsetString + ww.getElementStateString(offsetString));
       outputElement(ww, offset + "  ");
     }
   }
@@ -159,7 +165,7 @@ public class NiftyDebugConsole {
   /**
    * @param outputElements the outputElements to set
    */
-  public void setOutputElements(boolean outputElements) {
+  public void setOutputElements(final boolean outputElements) {
     this.outputElements = outputElements;
   }
 

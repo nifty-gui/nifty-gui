@@ -6,6 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -34,7 +35,9 @@ public class MenuItemControl implements Controller {
   public void bind(
       final Nifty nifty,
       final Element newElement,
-      final Properties properties, final ControllerEventListener newListener) {
+      final Properties properties,
+      final ControllerEventListener newListener,
+      final Attributes controlDefinitionAttributes) {
     element = newElement;
   }
 

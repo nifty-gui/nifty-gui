@@ -12,6 +12,7 @@ import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -71,7 +72,9 @@ public class ConsoleControl implements Controller {
   public void bind(
       final Nifty niftyParam,
       final Element newElement,
-      final Properties properties, final ControllerEventListener newListener) {
+      final Properties properties,
+      final ControllerEventListener newListener,
+      final Attributes controlDefinitionAttributes) {
     this.nifty = niftyParam;
     this.element = newElement;
     this.lines = Integer.valueOf((String) properties.get("lines"));
@@ -84,9 +87,9 @@ public class ConsoleControl implements Controller {
   public void onStartScreen(final Screen newScreen) {
     this.screen = newScreen;
     for (int i = 0; i < lines; i++) {
-      this.nifty.addControl(screen, element, "console-line", "console-line-" + i, null, null);
+      this.nifty.addControl(screen, element, "console-line", "console-line-" + i, null, null, null);
     }
-    this.nifty.addControl(screen, element, "textfield", "console-input", "nifty-console-textfield", false);
+    this.nifty.addControl(screen, element, "textfield", "console-input", "nifty-console-textfield", false, null);
     this.screen.layoutLayers();
   }
 

@@ -8,6 +8,7 @@ import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -37,7 +38,8 @@ public class ButtonControl implements Controller {
       final Nifty nifty,
       final Element newElement,
       final Properties parameter,
-      final ControllerEventListener listener) {
+      final ControllerEventListener listener,
+      final Attributes controlDefinitionAttributes) {
     this.element = newElement;
   }
 
