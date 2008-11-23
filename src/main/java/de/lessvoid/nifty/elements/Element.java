@@ -25,6 +25,7 @@ import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.screen.KeyInputHandler;
+import de.lessvoid.nifty.screen.MouseOverHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -97,14 +98,9 @@ public class Element {
   private Falloff falloff;
 
   /**
-   * method that should be invoked when someone clicks on this element.
+   * Element interaction.
    */
-  private MethodInvoker onClickMethod = new MethodInvoker();
-
-  /**
-   * method that should be invoked when someone clicks and moves the cursor on this element.
-   */
-  private MethodInvoker onClickMouseMoveMethod = new MethodInvoker();
+  private ElementInteraction interaction;
 
   /**
    * Nifty instance this element is attached to.
@@ -138,11 +134,6 @@ public class Element {
   private boolean mouseDown;
 
   /**
-   * on click alternate key.
-   */
-  private String onClickAlternateKey;
-
-  /**
    * visible to mouse events.
    */
   private boolean visibleToMouseEvents;
@@ -166,11 +157,6 @@ public class Element {
    * Time the last repeat has been activated.
    */
   private long lastRepeatStartTime;
-
-  /**
-   * repeat on click.
-   */
-  private boolean onClickRepeat;
 
   /**
    * clip children.
@@ -209,6 +195,7 @@ public class Element {
 
   /**
    * construct new instance of Element.
+   * @param newNifty Nifty
    * @param newElementType elementType
    * @param newId the id
    * @param newParent new parent
@@ -218,26 +205,27 @@ public class Element {
    * @param newElementRenderer the element renderer
    */
   public Element(
+      final Nifty newNifty,
       final ElementType newElementType,
       final String newId,
       final Element newParent,
       final MouseFocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
-      final TimeProvider newTimeProvider,
-      final ElementRenderer ... newElementRenderer) {
+      final TimeProvider newTimeProvider, final ElementRenderer ... newElementRenderer) {
     initialize(
+        newNifty,
         newElementType,
         newId,
         newParent,
         newElementRenderer,
         new LayoutPart(),
         newFocusHandler,
-        newVisibleToMouseEvents,
-        newTimeProvider);
+        newVisibleToMouseEvents, newTimeProvider);
   }
 
   /**
    * construct new instance of Element using the given layoutPart instance.
+   * @param newNifty Nifty
    * @param newElementType element type
    * @param newId the id
    * @param newParent new parent
@@ -248,27 +236,28 @@ public class Element {
    * @param newElementRenderer the element renderer
    */
   public Element(
+      final Nifty newNifty,
       final ElementType newElementType,
       final String newId,
       final Element newParent,
       final LayoutPart newLayoutPart,
       final MouseFocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
-      final TimeProvider newTimeProvider,
-      final ElementRenderer ... newElementRenderer) {
+      final TimeProvider newTimeProvider, final ElementRenderer ... newElementRenderer) {
     initialize(
+        newNifty,
         newElementType,
         newId,
         newParent,
         newElementRenderer,
         newLayoutPart,
         newFocusHandler,
-        newVisibleToMouseEvents,
-        newTimeProvider);
+        newVisibleToMouseEvents, newTimeProvider);
   }
 
   /**
    * initialize this instance helper.
+   * @param newNifty Nifty
    * @param newElementType element
    * @param newId the id
    * @param newParent parent
@@ -279,6 +268,7 @@ public class Element {
    * @param timeProvider TimeProvider to use
    */
   private void initialize(
+      final Nifty newNifty,
       final ElementType newElementType,
       final String newId,
       final Element newParent,
@@ -287,6 +277,7 @@ public class Element {
       final MouseFocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
       final TimeProvider timeProvider) {
+    this.nifty = newNifty;
     this.elementType = newElementType;
     this.id = newId;
     this.parent = newParent;
@@ -296,11 +287,11 @@ public class Element {
     this.enabled = true;
     this.visible = true;
     this.done = false;
-    this.onClickAlternateKey = null;
     this.mouseFocusHandler = newFocusHandler;
     this.visibleToMouseEvents = newVisibleToMouseEvents;
     this.time = timeProvider;
     this.setMouseDown(false, 0);
+    this.interaction = new ElementInteraction(nifty);
   }
 
   /**
@@ -321,17 +312,19 @@ public class Element {
 
   /**
    * get element state as string.
+   * @param offset offset string
    * @return the element state as string.
    */
-  public final String getElementStateString() {
+  public String getElementStateString(final String offset) {
     String pos =
       "style [" + getElementType().getAttributes().getStyle() + "] "
       + "pos [" + getX() + "," + getY() + "," + getWidth() + "," + getHeight() + "] "
-      + "constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
+      + "con [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
       + "," + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ","
       + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ","
       + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "] "
-      + "focusable [" + focusable + "] "
+      + "\n" + offset
+      + "focus [" + focusable + "] "
       + "mouse [" + visibleToMouseEvents + "] "
       + "state ";
     if (isEffectActive(EffectEventId.onStartScreen)) {
@@ -564,9 +557,16 @@ public class Element {
     }
   }
 
+  public void resetMouseDown() {
+    mouseDown = false;
+    for (Element w : elements) {
+      w.resetMouseDown();
+    }
+  }
+
   /**
    * set new x position constraint.
-   * @param newX new x constaint.
+   * @param newX new x constraint.
    */
   public final void setConstraintX(final SizeValue newX) {
     layoutPart.getBoxConstraints().setX(newX);
@@ -697,6 +697,9 @@ public class Element {
         attachedInputControl.onFocus(true);
       }
     }
+
+    // just in case there was no effect activated, we'll check here, if we're already done
+    forwardToSelf.perform();
   }
 
   /**
@@ -801,75 +804,128 @@ public class Element {
   }
 
   /**
-   * mouse event handler.
-   * @param mouseEvent MouseInputEvent
-   * @param eventTime time this event occured in ms
-   * @return true or false
+   * Checks if this element can handle mouse events.
+   * @return true can handle mouse events, false can't handle them
    */
-  public final boolean mouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
-
-    // can't interact while onStartScreen is active
-    if (isEffectActive(EffectEventId.onStartScreen)
-        ||
-        isEffectActive(EffectEventId.onEndScreen)
-        ||
-        !visible
-        ||
-        done) {
+  boolean canHandleMouseEvents() {
+    if (isEffectActive(EffectEventId.onStartScreen)) {
       return false;
     }
-
-    if (visibleToMouseEvents) {
-      // if some other element has exclusive access to mouse events we are done
-      if (mouseFocusHandler != null && !mouseFocusHandler.canProcessMouseEvents(this)) {
-        return true;
-      }
-
-      if (!done) {
-        if (!isMouseDown()) {
-          effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
-        }
-
-        if (onClickRepeat) {
-          if (isInside(mouseEvent) && isMouseDown() && mouseEvent.isLeftButton()) {
-            long deltaTime = eventTime - mouseDownTime;
-            if (deltaTime > REPEATED_CLICK_START_TIME) {
-              long pastTime = deltaTime - REPEATED_CLICK_START_TIME;
-              long repeatTime = pastTime - lastRepeatStartTime;
-              if (repeatTime > REPEATED_CLICK_TIME) {
-                onClick(mouseEvent);
-                lastRepeatStartTime = pastTime;
-              }
-            }
-          }
-        }
-
-        if (isInside(mouseEvent) && !isMouseDown()) {
-          if (mouseEvent.isLeftButton()) {
-            setMouseDown(true, eventTime);
-            if (mouseFocusHandler != null && focusable) {
-              mouseFocusHandler.requestExclusiveFocus(this);
-            }
-            effectManager.startEffect(EffectEventId.onClick, this, time, null);
-            onClick(mouseEvent);
-          }
-        } else if (!mouseEvent.isLeftButton() && isMouseDown()) {
-            setMouseDown(false, eventTime);
-            effectManager.stopEffect(EffectEventId.onClick);
-            if (mouseFocusHandler != null) {
-              mouseFocusHandler.lostFocus(this);
-            }
-        }
-
-        if (isMouseDown()) {
-          onClickMouseMove(mouseEvent);
-        }
-      }
+    if (isEffectActive(EffectEventId.onEndScreen)) {
+      return false;
     }
-    for (Element w : getElements()) {
-      w.mouseEvent(mouseEvent, eventTime);
+    if (!visible) {
+      return false;
+    }
+    if (done) {
+      return false;
+    }
+    if (!visibleToMouseEvents) {
+      return false;
+    }
+    if (mouseFocusHandler != null && !mouseFocusHandler.canProcessMouseEvents(this)) {
+      return false;
     }
     return true;
+  }
+
+  /**
+   * This should check of the mouse event is inside the current element and if it is
+   * forward the event to it's child. The purpose of this is to build a list of all
+   * elements from front to back that are available for a certain mouse position.
+   * @param mouseEvent MouseInputEvent
+   * @param eventTime time this event occured in ms
+   * @param mouseOverHandler MouseOverHandler to fill
+   */
+  public void buildMouseOverElements(
+      final MouseInputEvent mouseEvent,
+      final long eventTime,
+      final MouseOverHandler mouseOverHandler) {
+    if (!canHandleMouseEvents()) {
+      return;
+    }
+
+    if (isInside(mouseEvent)) {
+      mouseOverHandler.addElement(this);
+      for (Element w : getElements()) {
+        w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
+      }
+    }
+  }
+
+  /**
+   * MouseEvent.
+   * @param mouseEvent mouse event
+   * @param eventTime event time
+   */
+  public boolean mouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
+    for (Element w : getElements()) {
+      if (w.mouseEvent(mouseEvent, eventTime)) {
+        return true;
+      }
+    }
+    if (!canHandleMouseEvents()) {
+      return false;
+    }
+    effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
+    boolean mouseInside = isInside(mouseEvent);
+    // System.out.println(id + ": " + mouseEvent.toString() + " (" + isMouseDown() + ", " + mouseInside + ")");
+    if (interaction.isOnClickRepeat()) {
+      if (mouseInside && isMouseDown() && mouseEvent.isLeftButton()) {
+        long deltaTime = eventTime - mouseDownTime;
+        if (deltaTime > REPEATED_CLICK_START_TIME) {
+          long pastTime = deltaTime - REPEATED_CLICK_START_TIME;
+          long repeatTime = pastTime - lastRepeatStartTime;
+          if (repeatTime > REPEATED_CLICK_TIME) {
+            lastRepeatStartTime = pastTime;
+            if (onClick(mouseEvent)) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    if (mouseInside && !isMouseDown()) {
+      if (mouseEvent.isLeftButton()) {
+        setMouseDown(true, eventTime);
+        if (mouseFocusHandler != null && focusable) {
+          mouseFocusHandler.requestExclusiveFocus(this);
+        }
+        effectManager.startEffect(EffectEventId.onClick, this, time, null);
+        if (onClick(mouseEvent)) {
+          return true;
+        }
+      }
+    } else if (!mouseEvent.isLeftButton() && isMouseDown()) {
+      setMouseDown(false, eventTime);
+      effectManager.stopEffect(EffectEventId.onClick);
+      if (mouseFocusHandler != null) {
+        mouseFocusHandler.lostFocus(this);
+      }
+      if (mouseInside) {
+        onRelease();
+      }
+    }
+    if (isMouseDown()) {
+      onClickMouseMove(mouseEvent);
+    }
+    return false;
+  }
+
+  /**
+   * Handle the MouseOverEvent. Must not call child elements. This is handled by caller.
+   * @param mouseEvent mouse event
+   * @param eventTime event time
+   * @return true the mouse event has been eated and false when the mouse event can be processed further down
+   */
+  public boolean mouseOverEvent(final MouseInputEvent mouseEvent, final long eventTime) {
+    boolean eatMouseEvent = false;
+
+    if (interaction.onMouseOver(this, mouseEvent)) {
+      eatMouseEvent = true;
+    }
+
+    return eatMouseEvent;
   }
 
   /**
@@ -896,20 +952,19 @@ public class Element {
    * on click method.
    * @param inputEvent event
    */
-  public final void onClick(final MouseInputEvent inputEvent) {
+  public boolean onClick(final MouseInputEvent inputEvent) {
     lastMouseX = inputEvent.getMouseX();
     lastMouseY = inputEvent.getMouseY();
 
-    if (onClickMethod != null) {
-      nifty.setAlternateKey(onClickAlternateKey);
-      onClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
-    }
+    return interaction.onClick(inputEvent);
   }
 
-  /**
-   */
   public void onClick() {
-    onClickMethod.invoke();
+    interaction.onClick();
+  }
+
+  public void onRelease() {
+    interaction.onRelease();
   }
 
   /**
@@ -924,9 +979,7 @@ public class Element {
     lastMouseX = inputEvent.getMouseX();
     lastMouseY = inputEvent.getMouseY();
 
-    if (onClickMouseMoveMethod != null) {
-      onClickMouseMoveMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
-    }
+    interaction.onClickMouseMoved(inputEvent);
   }
 
   /**
@@ -934,9 +987,12 @@ public class Element {
    * @param methodInvoker the method to invoke
    * @param useRepeat repeat on click (true) or single event (false)
    */
-  public final void setOnClickMethod(final MethodInvoker methodInvoker, final boolean useRepeat) {
-    this.onClickMethod = methodInvoker;
-    this.onClickRepeat = useRepeat;
+  public void setOnClickMethod(final MethodInvoker methodInvoker, final boolean useRepeat) {
+    interaction.setOnClickMethod(methodInvoker, useRepeat);
+  }
+
+  public void setOnReleaseMethod(MethodInvoker onReleaseMethod) {
+    interaction.setOnReleaseMethod(onReleaseMethod);
   }
 
   /**
@@ -944,7 +1000,7 @@ public class Element {
    * @param methodInvoker the method to invoke
    */
   public void setOnClickMouseMoveMethod(final MethodInvoker methodInvoker) {
-    this.onClickMouseMoveMethod = methodInvoker;
+    interaction.setOnClickMouseMoved(methodInvoker);
   }
 
   /**
@@ -953,6 +1009,7 @@ public class Element {
    * @param eventTime the time in ms the event occured
    */
   private void setMouseDown(final boolean newMouseDown, final long eventTime) {
+    // System.out.println("*** setMouseDown(" + newMouseDown + ") ***");
     this.mouseDownTime = eventTime;
     this.lastRepeatStartTime = 0;
     this.mouseDown = newMouseDown;
@@ -992,7 +1049,7 @@ public class Element {
    * @param newAlternateKey new alternate key to use
    */
   public void setOnClickAlternateKey(final String newAlternateKey) {
-    this.onClickAlternateKey = newAlternateKey;
+    interaction.setAlternateKey(newAlternateKey);
   }
 
   /**
@@ -1016,12 +1073,18 @@ public class Element {
   }
 
   /**
+   * Set a New EffectManager.
+   * @param effectManagerParam new Effectmanager
+   */
+  public void setEffectManager(final EffectManager effectManagerParam) {
+    effectManager = effectManagerParam;
+  }
+
+  /**
    * On start screen event.
-   * @param newNifty nifty
    * @param newScreen screen
    */
-  public void onStartScreen(final Nifty newNifty, final Screen newScreen) {
-    this.nifty = newNifty;
+  public void onStartScreen(final Screen newScreen) {
     this.screen = newScreen;
 
     if (focusable) {
@@ -1036,7 +1099,7 @@ public class Element {
     }
 
     for (Element e : elements) {
-      e.onStartScreen(newNifty, newScreen);
+      e.onStartScreen(newScreen);
     }
   }
 
@@ -1109,8 +1172,9 @@ public class Element {
    * @param screenController screencontroller
    */
   public void attachPopup(final ScreenController screenController) {
-    attach(onClickMethod, screenController);
-    attach(onClickMouseMoveMethod, screenController);
+    attach(interaction.getOnClickMethod(), screenController);
+    attach(interaction.getOnClickMouseMoveMethod(), screenController);
+    attach(interaction.getOnReleaseMethod(), screenController);
   }
 
   /**
@@ -1307,5 +1371,45 @@ public class Element {
    */
   public boolean isFocusable() {
     return focusable;
+  }
+
+  /**
+   * Set onMouseOverMethod.
+   * @param onMouseOverMethod new on mouse over method
+   */
+  public void setOnMouseOverMethod(final MethodInvoker onMouseOverMethod) {
+    this.interaction.setOnMouseOver(onMouseOverMethod);
+  }
+
+  /**
+   * Get LayoutPart.
+   * @return LayoutPart
+   */
+  public LayoutPart getLayoutPart() {
+    return layoutPart;
+  }
+
+  /**
+   * Get Element Interaction.
+   * @return current ElementInteraction
+   */
+  public ElementInteraction getInteraction() {
+    return interaction;
+  }
+
+  /**
+   * Set Element Interaction.
+   * @param elementInteractionParam ElementInteraction
+   */
+  public void setInteraction(final ElementInteraction elementInteractionParam) {
+    interaction = elementInteractionParam;
+  }
+
+  /**
+   * Is this element visible to mouse events.
+   * @return true visible and false not visible
+   */
+  public boolean isVisibleToMouseEvents() {
+    return visibleToMouseEvents;
   }
 }
