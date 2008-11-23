@@ -9,6 +9,7 @@ import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.Screen;
@@ -51,7 +52,8 @@ public class ImageSelectControl implements Controller {
       final Nifty niftyParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener) {
+      final ControllerEventListener newListener,
+      final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
     element = newElement;
 
