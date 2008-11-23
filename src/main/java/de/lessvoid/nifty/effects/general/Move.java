@@ -59,8 +59,12 @@ public class Move implements EffectImpl {
   private int startOffsetX;
 
   private float offsetX;
-  
+
   private boolean withTarget = false;
+
+  private boolean fromOffset = false;
+
+  private boolean toOffset = false;
 
   /**
    * Initialize.
@@ -95,6 +99,18 @@ public class Move implements EffectImpl {
       withTarget = true;
     } else if ("toPosition".equals(mode)) {
       withTarget = true;
+    } else if ("fromOffset".equals(mode)) {
+      fromOffset = true;
+      startOffsetX = Integer.valueOf(parameter.getProperty("offsetX", "0"));
+      startOffsetY = Integer.valueOf(parameter.getProperty("offsetY", "0"));
+      offsetX = Math.abs(startOffsetX);
+      offsetY = Math.abs(startOffsetY);
+    } else if ("toOffset".equals(mode)) {
+      toOffset  = true;
+      startOffsetX = 0;
+      startOffsetY = 0;
+      offsetX = Integer.valueOf(parameter.getProperty("offsetX", "0"));
+      offsetY = Integer.valueOf(parameter.getProperty("offsetY", "0"));
     }
 
     String target = parameter.getProperty("targetElement");
@@ -122,7 +138,11 @@ public class Move implements EffectImpl {
    * @param r RenderDevice
    */
   public void execute(final Element element, final float normalizedTime, final NiftyRenderEngine r) {
-    if (withTarget) {
+    if (fromOffset || toOffset) {
+      float moveToX = startOffsetX + normalizedTime * offsetX;
+      float moveToY = startOffsetY + normalizedTime * offsetY;
+      r.moveTo(moveToX, moveToY);
+    } else if (withTarget) {
       float moveToX = startOffsetX + normalizedTime * offsetX;
       float moveToY = startOffsetY + normalizedTime * offsetY;
       r.moveTo(moveToX, moveToY);

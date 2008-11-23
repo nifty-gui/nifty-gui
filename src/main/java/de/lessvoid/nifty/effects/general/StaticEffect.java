@@ -3,6 +3,7 @@ package de.lessvoid.nifty.effects.general;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -67,26 +68,22 @@ public class StaticEffect implements Effect {
    */
   private Nifty nifty;
 
-  /**
-   * Constructor.
-   * @param newNifty Nifty
-   * @param newInherit inherit changes done to renderStates to child elements
-   * @param newPost post or pre effect
-   * @param newAlternateKey alternate key
-   * @param newAlternateEnable alternate mode (enable or disable effect)
-   */
+  private EffectEventId effectEventId;
+
   public StaticEffect(
       final Nifty newNifty,
       final boolean newInherit,
       final boolean newPost,
       final String newAlternateKey,
-      final boolean newAlternateEnable) {
+      final boolean newAlternateEnable,
+      final EffectEventId effectEventId) {
     this.nifty = newNifty;
     this.inherit = newInherit;
     this.post = newPost;
     this.active = false;
     this.alternateKey = newAlternateKey;
     this.alternateEnable = newAlternateEnable;
+    this.effectEventId = effectEventId;
   }
 
   /**
@@ -104,6 +101,7 @@ public class StaticEffect implements Effect {
     this.effectImpl = newEffectImpl;
     this.element = newElement;
     this.parameter = newParameter;
+    this.parameter.put("effectEventId", effectEventId);
     this.timeInterpolator = new TimeInterpolator(parameter, time);
   }
 
