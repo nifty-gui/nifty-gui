@@ -37,18 +37,33 @@ public class Console
   {
     data.clear();
   }
-  
-  public void output( String s )
-  {
-    data.add( s );
-    
-    if( data.size() > maxLines )
-    {
-      // remove first line to keep max lines constaint
+
+  /**
+   * Output something to the console.
+   * @param newLine line to add
+   */
+  public void output(final String newLine) {
+    String[] lines = newLine.split("\n");
+    for (String line : lines) {
+      addSingleLine(line);
+    }
+  }
+
+  private void addSingleLine(final String newLine) {
+    data.add(newLine);
+    if (maxLinesReached()) {
       data.removeFirst();
     }
   }
-  
+
+  /**
+   * returns true when the max lines limit has been reached.
+   * @return more than max lines
+   */
+  boolean maxLinesReached() {
+    return data.size() > maxLines;
+  }
+
   /**
    * update console
    */
