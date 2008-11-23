@@ -22,13 +22,16 @@ public final class NiftyDefaults {
    */
   public static void initDefaultEffects(final Map < String, RegisterEffectType > effects) {
     // general
+    effects.put("border", new RegisterEffectType("de.lessvoid.nifty.effects.general.Border"));
     effects.put("changeFont", new RegisterEffectType("de.lessvoid.nifty.effects.general.ChangeFont"));
     effects.put("colorBar", new RegisterEffectType("de.lessvoid.nifty.effects.general.ColorBar"));
     effects.put("colorPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.general.ColorPulsate"));
+    effects.put("clip", new RegisterEffectType("de.lessvoid.nifty.effects.general.Clip"));
     effects.put("fade", new RegisterEffectType("de.lessvoid.nifty.effects.general.Fade"));
     effects.put("hide", new RegisterEffectType("de.lessvoid.nifty.effects.general.Hide"));
-    effects.put("ImageOverlay", new RegisterEffectType("de.lessvoid.nifty.effects.general.ImageOverlay"));
-    effects.put("ImageOverlayPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.general.ImageOverlayPulsate"));
+    effects.put("hideElement", new RegisterEffectType("de.lessvoid.nifty.effects.general.HideElement"));
+    effects.put("imageOverlay", new RegisterEffectType("de.lessvoid.nifty.effects.general.ImageOverlay"));
+    effects.put("imageOverlayPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.general.ImageOverlayPulsate"));
     effects.put("imageSize", new RegisterEffectType("de.lessvoid.nifty.effects.general.ImageSize"));
     effects.put("move", new RegisterEffectType("de.lessvoid.nifty.effects.general.Move"));
     effects.put("nop", new RegisterEffectType("de.lessvoid.nifty.effects.general.Nop"));
@@ -37,6 +40,7 @@ public final class NiftyDefaults {
     effects.put("pulsate", new RegisterEffectType("de.lessvoid.nifty.effects.general.Pulsate"));
     effects.put("renderElement", new RegisterEffectType("de.lessvoid.nifty.effects.general.RenderElement"));
     effects.put("restoreState", new RegisterEffectType("de.lessvoid.nifty.effects.general.RestoreState"));
+    effects.put("remote", new RegisterEffectType("de.lessvoid.nifty.effects.general.Remote"));
     effects.put("saveState", new RegisterEffectType("de.lessvoid.nifty.effects.general.SaveState"));
     effects.put("shake", new RegisterEffectType("de.lessvoid.nifty.effects.general.Shake"));
     effects.put("textSize", new RegisterEffectType("de.lessvoid.nifty.effects.general.TextSize"));
