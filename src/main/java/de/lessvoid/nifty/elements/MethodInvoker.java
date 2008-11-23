@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.elements;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.elements.tools.MethodResolver;
@@ -53,18 +54,32 @@ public class MethodInvoker {
     }
     if (target == null) {
       target = new Object[1];
+      target[0] = object;
+    } else {
+      // scan current target array for the given object (is this already attached to the param object?)
+      for (Object o : target) {
+        if (o == object) {
+          // already in -> done
+          return;
+        }
+      }
+
+      // alright object is not already in list -> add as last element to the array
+      Object[] copy = Arrays.copyOf(target, target.length + 1);
+      copy[copy.length - 1] = object;
+      target = copy;
     }
-    this.target[0] = object;
   }
 
   /**
    * invoke method with optional parameters.
    * @param invokeParametersParam parameter array for call
+   * @return result of call
    */
-  public void invoke(final Object ... invokeParametersParam) {
+  public Object invoke(final Object ... invokeParametersParam) {
     // nothing to do?
     if (target == null || target.length == 0 || methodWithName == null) {
-      return;
+      return null;
     }
 
     // process all methods (first one wins)
@@ -86,12 +101,10 @@ public class MethodInvoker {
             // TODO: not only check for the count but check the type too
             if (getMethodParameterCount(method) == invokeParameters.length) {
               log.info("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
-              callMethod(object, method, invokeParameters);
-              return;
+              return callMethod(object, method, invokeParameters);
             } else {
               log.info("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
-              callMethod(object, method, new Object[0]);
-              return;
+              return callMethod(object, method, new Object[0]);
             }
           } else {
             // no invokeParameters encoded. this means we can call the method as is or with the invokeParametersParam
@@ -99,22 +112,21 @@ public class MethodInvoker {
               if (getMethodParameterCount(method) == invokeParametersParam.length) {
                 log.info("invoking method '" + methodWithName + "' with the actual parameters ("
                     + debugParaString(invokeParametersParam) + ")");
-                callMethod(object, method, invokeParametersParam);
-                return;
+                return callMethod(object, method, invokeParametersParam);
               } else {
                 log.info("invoking method '" + methodWithName
                     + "' without parameters (invokeParametersParam mismatch)");
-                callMethod(object, method, null);
+                return callMethod(object, method, null);
               }
             } else {
               log.info("invoking method '" + methodWithName + "' without parameters");
-              callMethod(object, method, null);
+              return callMethod(object, method, null);
             }
           }
-          return;
         }
       }
     }
+    return null;
   }
 
   /**
@@ -122,12 +134,14 @@ public class MethodInvoker {
    * @param targetObject target object to invoke method on
    * @param method method to invoke
    * @param invokeParameters parameters to use
+   * @return result
    */
-  private void callMethod(final Object targetObject, final Method method, final Object[] invokeParameters) {
+  private Object callMethod(final Object targetObject, final Method method, final Object[] invokeParameters) {
     try {
-      method.invoke(targetObject, invokeParameters);
+      return method.invoke(targetObject, invokeParameters);
     } catch (Exception e) {
       log.warning("error: " + e.getMessage());
+      return null;
     }
   }
 
