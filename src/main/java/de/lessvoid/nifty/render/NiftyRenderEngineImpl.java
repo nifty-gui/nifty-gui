@@ -83,6 +83,8 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   private EnumMap < RenderStateType, Class < ? extends RenderStateSaver > > renderStatesMap =
     new EnumMap < RenderStateType, Class < ? extends RenderStateSaver > >(RenderStateType.class);
 
+  private Clip clipEnabled = null;
+
   /**
    * create the device.
    * @param renderDeviceParam RenderDevice
@@ -94,6 +96,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     renderStatesMap.put(RenderStateType.position, RenderStatePosition.class);
     renderStatesMap.put(RenderStateType.textSize, RenderStateTextSize.class);
     renderStatesMap.put(RenderStateType.font, RenderStateFont.class);
+    renderStatesMap.put(RenderStateType.clip, RenderStateClip.class);
   }
 
   /**
@@ -341,16 +344,24 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param y1 y1
    */
   public void enableClip(final int x0, final int y0, final int x1, final int y1) {
-    renderDevice.enableClip(x0 + getX(), y0 + getY(), x1 + getX(), y1 + getY());
+    updateClip(new Clip(x0 + getX(), y0 + getY(), x1 + getX(), y1 + getY()));
   }
 
   /**
    * @see de.lessvoid.nifty.render.NiftyRenderEngine#disableClip()
    */
   public void disableClip() {
-    renderDevice.disableClip();
+    updateClip(null);
   }
 
+  void updateClip(final Clip clip) {
+    clipEnabled = clip;
+    if (clipEnabled == null) {
+      renderDevice.disableClip();
+    } else {
+      clipEnabled.apply();
+    }
+  }
   /**
    * @see de.lessvoid.nifty.render.NiftyRenderEngine#setRenderTextSize(float)
    * @param size size
@@ -572,6 +583,46 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
      */
     public void restore() {
       NiftyRenderEngineImpl.this.imageScale = this.imageScale;
+    }
+  }
+
+  public class RenderStateClip implements RenderStateSaver {
+    /**
+     * font.
+     */
+    private Clip clipEnabled;
+
+
+    /**
+     * save.
+     */
+    public RenderStateClip() {
+      this.clipEnabled = NiftyRenderEngineImpl.this.clipEnabled;
+    }
+
+    /**
+     * restore.
+     */
+    public void restore() {
+      NiftyRenderEngineImpl.this.updateClip(clipEnabled);
+    }
+  }
+
+  public class Clip {
+    private int x0;
+    private int y0;
+    private int x1;
+    private int y1;
+
+    public Clip(final int x0, final int y0, final int x1, final int y1) {
+      this.x0 = x0;
+      this.y0 = y0;
+      this.x1 = x1;
+      this.y1 = y1;
+    }
+
+    public void apply() {
+      renderDevice.enableClip(x0, y0, x1, y1);
     }
   }
 }

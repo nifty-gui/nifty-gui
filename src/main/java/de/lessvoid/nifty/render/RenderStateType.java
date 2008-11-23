@@ -32,7 +32,12 @@ public enum RenderStateType {
   /**
    * font.
    */
-  font;
+  font,
+
+  /**
+   * clip.
+   */
+  clip;
 
   /**
    * Helper to get all available RenderStates as a set.
