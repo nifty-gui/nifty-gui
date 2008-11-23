@@ -9,6 +9,7 @@ import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.mapping.Default;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -57,17 +58,17 @@ public class MenuItemType extends ElementType {
       final ScreenController screenController) {
     TextRenderer textRenderer = new TextRenderer();
     Element menuItem = new Element(
+        typeContext.nifty,
         this,
         getAttributes().getId(),
         parent,
         screen,
         true,
         typeContext.time,
-        new PanelRenderer(),
-        textRenderer);
+        new PanelRenderer(), textRenderer);
 
     MenuItemControl control = new MenuItemControl();
-    control.bind(typeContext.nifty, menuItem, null, null);
+    control.bind(typeContext.nifty, menuItem, null, null, new Attributes());
 
     final NiftyInputMapping inputMapping = new Default();
     NiftyInputControl inputControl = new NiftyInputControl(control, inputMapping);

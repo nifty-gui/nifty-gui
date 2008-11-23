@@ -19,12 +19,17 @@ import de.lessvoid.nifty.tools.TimeProvider;
  */
 public class LayerType extends PanelType {
 
+  /**
+   * Create LayerType.
+   * @param typeContext TypeContext
+   */
   public LayerType(final TypeContext typeContext) {
     super(typeContext);
   }
 
   /**
    * Create Layer.
+   * @param root Root Element to attach to
    * @param nifty nifty
    * @param screen screen
    * @param registeredEffects effects
@@ -36,6 +41,7 @@ public class LayerType extends PanelType {
    * @return element
    */
   public Element createElement(
+      final Element root,
       final Nifty nifty,
       final Screen screen,
       final Map < String, RegisterEffectType > registeredEffects,
@@ -45,16 +51,19 @@ public class LayerType extends PanelType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element layer = NiftyCreator.createLayer(
+        root,
         this,
         getAttributes().getId(),
         nifty,
-        screen, getAttributes(),
+        screen,
+        getAttributes(),
         typeContext.time);
     super.addElementAttributes(
         layer,
         screen,
         screenController,
         inputControl);
+    root.add(layer);
     return layer;
   }
 }

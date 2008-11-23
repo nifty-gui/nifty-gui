@@ -3,8 +3,11 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.input.mapping.Default;
+import de.lessvoid.nifty.loader.xpp3.ClassHelper;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
@@ -19,8 +22,15 @@ import de.lessvoid.nifty.tools.TimeProvider;
  */
 public class PopupType extends PanelType {
 
-  public PopupType(final TypeContext typeContext) {
+  private String controller;
+
+  public PopupType(final TypeContext typeContext, final String controllerParam) {
     super(typeContext);
+    controller = controllerParam;
+  }
+
+  public Controller getControllerInstance(final Nifty nifty) {
+    return ClassHelper.getInstance(controller, Controller.class);
   }
 
   /**
@@ -45,10 +55,12 @@ public class PopupType extends PanelType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element element = NiftyCreator.createLayer(
+        null,
         this,
         getAttributes().getId(),
         nifty,
-        screen, getAttributes(),
+        screen,
+        getAttributes(),
         typeContext.time);
     super.addElementAttributes(
         element,

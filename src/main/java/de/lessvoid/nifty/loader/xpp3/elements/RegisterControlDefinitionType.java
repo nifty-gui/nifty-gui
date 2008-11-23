@@ -8,12 +8,14 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.mapping.Default;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -137,8 +139,20 @@ public class RegisterControlDefinitionType {
           screen);
       Attributes attr = new Attributes(controlDefinitionAttributes);
       attr.merge(controlAttributes);
-      ElementType.applyControlParameters(
-          element, attr, nifty, screen);
+      ElementType.applyControlParameters(element, attr, nifty, screen);
+
+      // textRenderer
+      fixTextRendererHeight(element);
+    }
+  }
+
+  private void fixTextRendererHeight(final Element element) {
+    TextRenderer textRenderer = element.getRenderer(TextRenderer.class);
+    if (textRenderer != null) {
+      element.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
+    }
+    for (Element child : element.getElements()) {
+      fixTextRendererHeight(child);
     }
   }
 

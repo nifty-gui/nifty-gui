@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.input.mapping.Default;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.PopupType;
@@ -49,7 +53,7 @@ public class PopupTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    PopupType popupType = new PopupType(typeContext);
+    PopupType popupType = new PopupType(typeContext, attributes.get("controller"));
     ProcessorHelper.processElement(xmlParser, popupType, attributes, typeContext);
 
     String name = attributes.get("id");
@@ -72,16 +76,7 @@ public class PopupTypeProcessor implements XmlElementProcessor {
       final StyleHandler styleHandler,
       final TimeProvider time) {
     for (PopupType popup : registeredPopups.values()) {
-      nifty.registerPopup(
-          popup.createElement(
-              nifty,
-              null,
-              registeredEffects,
-              registeredControls,
-              styleHandler,
-              time,
-              null,
-              new NullScreenController()));
+      nifty.registerPopup(popup);
     }
   }
 }

@@ -14,6 +14,7 @@ import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.loader.xpp3.processor.NiftyControlsTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.NiftyStylesTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.NiftyTypeProcessor;
+import de.lessvoid.nifty.loader.xpp3.processor.PopupTypeProcessor;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -59,10 +60,15 @@ public class NiftyLoader {
     logBlockBegin("processing");
 
     // create processors
-    niftyTypeProcessor = new NiftyTypeProcessor(nifty, this, timeProvider);
-    niftyStylesTypeProcessor = new NiftyStylesTypeProcessor(niftyTypeProcessor.getStyleHandler());
+    niftyTypeProcessor =
+      new NiftyTypeProcessor(nifty, this, timeProvider);
+    niftyStylesTypeProcessor =
+      new NiftyStylesTypeProcessor(niftyTypeProcessor.getStyleHandler(), this);
     niftyControlsTypeProcessor =
-      new NiftyControlsTypeProcessor(niftyTypeProcessor.getRegisterControlDefinitionTypeProcessor());
+      new NiftyControlsTypeProcessor(
+          niftyTypeProcessor.getRegisterControlDefinitionTypeProcessor(),
+          niftyTypeProcessor.getUseControlsTypeProcessor()
+          );
 
     // initialize defaults
     NiftyDefaults.initDefaultEffects(niftyTypeProcessor.getRegisteredEffects());
@@ -101,14 +107,17 @@ public class NiftyLoader {
   /**
    * loadNiftyControls.
    * @param filename filename
+   * @param popupTypeProcessor 
    * @throws Exception exception
    */
-  public void loadNiftyControls(final String filename) throws Exception {
+  public void loadNiftyControls(final String filename, final PopupTypeProcessor popupTypeProcessor) throws Exception {
     logBlockBegin("loadNiftyControls: " + filename);
 
     // create parser
     XmlParser parser = new XmlParser(new MXParser());
     parser.read(ResourceLoader.getResourceAsStream(filename));
+
+    niftyControlsTypeProcessor.setPopupTypeProcessor(popupTypeProcessor);
 
     // start parsing
     parser.nextTag();

@@ -31,13 +31,13 @@ public class PanelType extends ElementType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     Element panel = new Element(
+        typeContext.nifty,
         this,
         getAttributes().getId(),
         parent,
         screen,
         false,
-        typeContext.time,
-        NiftyCreator.getPanelRenderer(typeContext.nifty, getAttributes()));
+        typeContext.time, NiftyCreator.getPanelRenderer(typeContext.nifty, getAttributes()));
 
     Element element = panel;
     super.addElementAttributes(

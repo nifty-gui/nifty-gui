@@ -21,6 +21,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public final class NiftyCreator {
+
   /**
    * helper class can't be instantiated.
    */
@@ -47,6 +48,7 @@ public final class NiftyCreator {
 
   /**
    * Create layer.
+   * @param root root element
    * @param elementType element type
    * @param id id
    * @param nifty nifty
@@ -56,6 +58,7 @@ public final class NiftyCreator {
    * @return element
    */
   public static Element createLayer(
+      final Element root,
       final ElementType elementType,
       final String id,
       final Nifty nifty,
@@ -75,9 +78,10 @@ public final class NiftyCreator {
 
     // create element
     Element layer = new Element(
+        nifty,
         elementType,
         id,
-        null,
+        root,
         layerLayout,
         screen,
         false,

@@ -37,13 +37,13 @@ public class MenuType extends ElementType {
       final ScreenController screenController) {
     PanelRenderer renderer = new PanelRenderer();
     Element panel = new Element(
+        typeContext.nifty,
         this,
         getAttributes().getId(),
         parent,
         screen,
         false,
-        typeContext.time,
-        renderer);
+        typeContext.time, renderer);
     Element element = panel;
     super.addElementAttributes(
         element,

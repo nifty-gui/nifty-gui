@@ -5,7 +5,10 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -118,10 +121,21 @@ public class ScreenType {
     Screen screen = new Screen(
         nifty,
         id,
-        screenController, timeProvider);
+        screenController,
+        timeProvider);
+    Element rootElement = NiftyCreator.createLayer(
+        null,
+        null,
+        "root",
+        nifty,
+        screen,
+        new AttributesType(),
+        timeProvider);
+    screen.setRootElement(rootElement);
     for (LayerType layerType : layers) {
       screen.addLayerElement(
           layerType.createElement(
+              rootElement,
               nifty,
               screen,
               registeredEffects,
@@ -131,6 +145,7 @@ public class ScreenType {
               null,
               screenController));
     }
+    screen.processAddAndRemoveLayerElements();
     return screen;
   }
 }

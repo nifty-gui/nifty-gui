@@ -14,13 +14,16 @@ public class UseControlsTypeProcessor implements XmlElementProcessor {
    * nifty loader.
    */
   private NiftyLoader niftyLoader;
+  private PopupTypeProcessor popupTypeProcessor;
 
   /**
    * create the processor.
    * @param newNiftyLoader nifty loader
+   * @param newPopupTypeProcessor 
    */
-  public UseControlsTypeProcessor(final NiftyLoader newNiftyLoader) {
+  public UseControlsTypeProcessor(final NiftyLoader newNiftyLoader, final PopupTypeProcessor newPopupTypeProcessor) {
     niftyLoader = newNiftyLoader;
+    popupTypeProcessor = newPopupTypeProcessor;
   }
 
   /**
@@ -31,7 +34,7 @@ public class UseControlsTypeProcessor implements XmlElementProcessor {
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     if (attributes.isSet("filename")) {
-      niftyLoader.loadNiftyControls(attributes.get("filename"));
+      niftyLoader.loadNiftyControls(attributes.get("filename"), popupTypeProcessor);
     }
     xmlParser.nextTag();
   }

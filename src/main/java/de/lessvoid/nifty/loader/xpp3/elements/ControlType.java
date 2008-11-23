@@ -129,7 +129,7 @@ public class ControlType extends ElementType {
         props = getAttributes().getSrcAttributes().createProperties();
       }
       if (c != null) {
-        c.bind(typeContext.nifty, current, props, listener);
+        c.bind(typeContext.nifty, current, props, listener, controlDefinition.getControlDefinitionAttributes());
       }
       return current;
     }

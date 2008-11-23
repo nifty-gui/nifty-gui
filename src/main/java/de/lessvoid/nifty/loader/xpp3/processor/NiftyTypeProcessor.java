@@ -73,7 +73,6 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
   public NiftyTypeProcessor(final Nifty nifty, final NiftyLoader niftyLoader, final TimeProvider time) {
     registerControlDefinitionTypeProcessor = new RegisterControlDefinitionTypeProcessor();
     useStylesTypeProcessor = new UseStylesTypeProcessor(niftyLoader);
-    useControlsTypeProcessor = new UseControlsTypeProcessor(niftyLoader);
 
     typeContext = new TypeContext(
         styleHandler,
@@ -82,6 +81,11 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
         registerControlDefinitionTypeProcessor.getRegisteredControls(),
         time);
     registerControlDefinitionTypeProcessor.setTypeContext(typeContext);
+    registerSoundTypeProcessor = new RegisterSoundTypeProcessor();
+    registerMusicTypeProcessor = new RegisterMusicTypeProcessor();
+    screenTypeProcessor = new ScreenTypeProcessor(typeContext);
+    popupTypeProcessor = new PopupTypeProcessor(typeContext);
+    useControlsTypeProcessor = new UseControlsTypeProcessor(niftyLoader, popupTypeProcessor);
   }
 
   /**
@@ -91,11 +95,6 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    registerSoundTypeProcessor = new RegisterSoundTypeProcessor();
-    registerMusicTypeProcessor = new RegisterMusicTypeProcessor();
-    screenTypeProcessor = new ScreenTypeProcessor(typeContext);
-    popupTypeProcessor = new PopupTypeProcessor(typeContext);
-
     xmlParser.nextTag();
     xmlParser.zeroOrMore("useStyles", useStylesTypeProcessor);
     xmlParser.zeroOrMore("useControls", useControlsTypeProcessor);
@@ -104,6 +103,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
     xmlParser.zeroOrMore("registerMusic", registerMusicTypeProcessor);
     xmlParser.zeroOrMore("style", new RegisterStyleProcessor(styleHandler));
     xmlParser.zeroOrMore("controlDefinition", registerControlDefinitionTypeProcessor);
+    xmlParser.zeroOrMore("popup", popupTypeProcessor);
     xmlParser.oneOrMore("screen", screenTypeProcessor);
     xmlParser.zeroOrMore("popup", popupTypeProcessor);
   }
@@ -165,5 +165,9 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
    */
   public RegisterControlDefinitionTypeProcessor getRegisterControlDefinitionTypeProcessor() {
     return registerControlDefinitionTypeProcessor;
+  }
+
+  public UseControlsTypeProcessor getUseControlsTypeProcessor() {
+    return useControlsTypeProcessor;
   }
 }

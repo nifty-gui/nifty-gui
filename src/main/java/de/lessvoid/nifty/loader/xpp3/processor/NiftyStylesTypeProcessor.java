@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.loader.xpp3.processor;
 
 import de.lessvoid.nifty.loader.xpp3.Attributes;
+import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 
@@ -10,17 +11,12 @@ import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
  */
 public class NiftyStylesTypeProcessor implements XmlElementProcessor {
 
-  /**
-   * the style handler.
-   */
   private StyleHandler styleHandler;
+  private UseStylesTypeProcessor useStylesTypeProcessor;
 
-  /**
-   * create the NiftyStyleTypeProcessor.
-   * @param newStyleHandler connect to this StyleHandler instance
-   */
-  public NiftyStylesTypeProcessor(final StyleHandler newStyleHandler) {
+  public NiftyStylesTypeProcessor(final StyleHandler newStyleHandler, final NiftyLoader niftyLoader) {
     styleHandler = newStyleHandler;
+    useStylesTypeProcessor = new UseStylesTypeProcessor(niftyLoader);
   }
 
   /**
@@ -33,6 +29,7 @@ public class NiftyStylesTypeProcessor implements XmlElementProcessor {
     RegisterStyleProcessor registerStyleTypeProcessor = new RegisterStyleProcessor(styleHandler);
 
     xmlParser.nextTag();
+    xmlParser.zeroOrMore("useStyles", useStylesTypeProcessor);
     xmlParser.zeroOrMore("style", registerStyleTypeProcessor);
   }
 }

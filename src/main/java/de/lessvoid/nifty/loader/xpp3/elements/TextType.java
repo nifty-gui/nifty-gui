@@ -72,14 +72,14 @@ public class TextType extends ElementType {
       final ScreenController screenController) {
     TextRenderer textRenderer = new TextRenderer();
     Element panel = new Element(
+        typeContext.nifty,
         this,
         getAttributes().getId(),
         parent,
         screen,
         false,
         typeContext.time,
-        new PanelRenderer(),
-        textRenderer);
+        new PanelRenderer(), textRenderer);
     super.addElementAttributes(
         panel,
         screen,
@@ -100,7 +100,6 @@ public class TextType extends ElementType {
     if (panel.getConstraintHeight() == null) {
       panel.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
     }
-//    panel.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
 
     parent.add(panel);
     return panel;

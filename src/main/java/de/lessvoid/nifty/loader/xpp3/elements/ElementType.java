@@ -275,8 +275,6 @@ public class ElementType {
       // text
       if (attrib.getText() != null) {
         textRenderer.setText(attrib.getText());
-//        element.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
-//        element.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
       }
     }
     // panelRenderer

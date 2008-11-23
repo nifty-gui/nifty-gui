@@ -180,7 +180,7 @@ public class EffectType {
           time);
       element.registerEffect(effectEventId, hoverEffect);
     } else {
-      StaticEffect effect = new StaticEffect(nifty, inherit, post, alternateKey, alternateEnable);
+      StaticEffect effect = new StaticEffect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId);
       effect.init(
           element,
           createEffectImpl(effectClass),

@@ -1,8 +1,6 @@
 package de.lessvoid.nifty.loader.xpp3.elements;
 
-import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.MethodInvoker;
-import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  * OnClickType.
@@ -44,7 +42,6 @@ public class OnClickType {
 
   /**
    * get method.
-   * @param screenController screenController
    * @param controlController controlController
    * @return method
    */
