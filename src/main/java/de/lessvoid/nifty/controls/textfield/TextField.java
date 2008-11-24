@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.controls.textfield;
 
-
 /**
  * TextField logic.
  * @author void
@@ -156,7 +155,7 @@ public class TextField {
       cursorPosition = selectionStart;
       resetSelection();
     } else {
-      text.delete(cursorPosition, cursorPosition+1);
+      text.delete(cursorPosition, cursorPosition + 1);
     }
   }
 
@@ -203,7 +202,7 @@ public class TextField {
     } else {
       if (cursorPosition > 0) {
         // delete character left of cursor
-        text.delete(cursorPosition-1, cursorPosition);
+        text.delete(cursorPosition - 1, cursorPosition);
         cursorPosition--;
       }
     }

@@ -14,7 +14,6 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * A TextFieldControl.
@@ -58,11 +57,6 @@ public class TextFieldControl implements Controller {
   private TextField textField;
 
   /**
-   * time provider.
-   */
-  private final TimeProvider timeProvider;
-
-  /**
    * fist visible character index.
    */
   private int firstVisibleCharacterIndex;
@@ -100,7 +94,6 @@ public class TextFieldControl implements Controller {
    * default constructor.
    */
   public TextFieldControl() {
-    timeProvider = new TimeProvider();
   }
 
   /**
@@ -122,12 +115,11 @@ public class TextFieldControl implements Controller {
 
     this.textField = new TextField("", new ClipboardAWT());
     this.textField.toFirstPosition();
-    this.password = Boolean.valueOf((String) properties.get("password"));
 
+    password = false;
     if (properties.containsKey("passwordChar")) {
       passwordChar = properties.get("passwordChar").toString().charAt(0);
-    } else {
-      passwordChar = '*';
+      password = true;
     }
   }
 
@@ -265,7 +257,7 @@ public class TextFieldControl implements Controller {
       }
       text = new String(chars);
     }
-    
+
     textRenderer.changeText(text);
     textRenderer.setSelection(textField.getSelectionStart(), textField.getSelectionEnd());
 
