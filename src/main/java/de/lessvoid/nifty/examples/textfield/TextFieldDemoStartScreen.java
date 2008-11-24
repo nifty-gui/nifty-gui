@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.textfield;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -46,6 +47,7 @@ public class TextFieldDemoStartScreen implements ScreenController {
    * back.
    */
   public final void back() {
+    System.out.println(screen.findElementByName("password").getControl(TextFieldControl.class).getText());
     nifty.exit();
   }
 

@@ -16,7 +16,7 @@
         <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0" inherit="true"/>
         <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" startDelay="0" inherit="true"/>
       </effect>
-      <panel id="dialog" style="nifty-panel" childLayout="center" width="80%" height="32%" align="center" valign="center">
+      <panel id="dialog" style="nifty-panel" childLayout="center" width="80%" height="38%" align="center" valign="center">
         <effect>
           <onStartScreen name="move" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
           <onEndScreen name="move" direction="bottom" mode="out" length="500" startDelay="0" inherit="true"/>
@@ -35,6 +35,11 @@
           <panel childLayout="horizontal" height="40px">
             <label text="Your Password: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="password" name="textfield" passwordChar="*" />
+          </panel>
+          <panel childLayout="horizontal" height="4px" />
+          <panel childLayout="horizontal" height="40px">
+            <label text="setMaxLen(5): " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <control id="maxLengthTest" name="textfield" maxLength="5" />
           </panel>
           <panel height="16px" />
           <panel childLayout="horizontal">
