@@ -41,6 +41,8 @@ public class TextField {
    */
   private Clipboard clipboard;
 
+  private int maxLength;
+
   /**
    * Create TextField with clipboard support.
    * @param newText init text
@@ -62,6 +64,7 @@ public class TextField {
     this.selectionEnd = -1;
     this.selecting = false;
     this.selectionStartIndex = -1;
+    this.maxLength = -1;
   }
 
   /**
@@ -195,6 +198,7 @@ public class TextField {
   public void resetSelection() {
     selectionStart = -1;
     selectionEnd = -1;
+    selecting = false;
   }
 
   /**
@@ -207,8 +211,10 @@ public class TextField {
       cursorPosition = selectionStart;
       resetSelection();
     }
-    text.insert(cursorPosition, c);
-    cursorPosition++;
+    if (maxLength == -1 || text.length() < maxLength) {
+      text.insert(cursorPosition, c);
+      cursorPosition++;
+    }
   }
 
   /**
@@ -311,6 +317,17 @@ public class TextField {
     if (clipboardText != null) {
       for (int i = 0; i < clipboardText.length(); i++) {
         insert(clipboardText.charAt(i));
+      }
+    }
+  }
+
+  public void setMaxLength(final int maxLen) {
+    maxLength = maxLen;
+
+    if (maxLength != -1) {
+      if (text.length() > maxLen) {
+        text = text.delete(maxLen, text.length());
+        resetSelection();
       }
     }
   }

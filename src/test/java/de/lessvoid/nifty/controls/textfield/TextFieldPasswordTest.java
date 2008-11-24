@@ -4,7 +4,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import junit.framework.TestCase;
 
-public class TextFieldTest extends TestCase {
+public class TextFieldPasswordTest extends TestCase {
   private static final int MAX_CURSOR_POSITION = 5;
   private TextField textField;
   private Clipboard clipboard;

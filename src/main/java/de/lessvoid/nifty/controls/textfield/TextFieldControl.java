@@ -228,6 +228,7 @@ public class TextFieldControl implements Controller {
         focusHandler.getNext(fieldElement).setFocus();
       }
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+      textField.endSelecting();
       if (focusHandler != null) {
         focusHandler.getPrev(fieldElement).setFocus();
       }
@@ -254,7 +255,6 @@ public class TextFieldControl implements Controller {
       }
       text = new String(chars);
     }
-
     textRenderer.changeText(text);
     textRenderer.setSelection(textField.getSelectionStart(), textField.getSelectionEnd());
 
@@ -358,5 +358,13 @@ public class TextFieldControl implements Controller {
   public void setText(final String newText) {
     textField.initWithText(newText);
     updateCursor();
+  }
+
+  /**
+   * Set MaxLength and constraint the Textfield to the given length.
+   * @param maxLength max length
+   */
+  public void setMaxLength(final int maxLength) {
+    textField.setMaxLength(maxLength);
   }
 }
