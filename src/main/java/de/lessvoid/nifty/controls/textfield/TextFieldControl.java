@@ -86,8 +86,6 @@ public class TextFieldControl implements Controller {
    */
   private FocusHandler focusHandler;
 
-  private Boolean password;
-
   private Character passwordChar;
 
   /**
@@ -116,10 +114,9 @@ public class TextFieldControl implements Controller {
     this.textField = new TextField("", new ClipboardAWT());
     this.textField.toFirstPosition();
 
-    password = false;
+    passwordChar = null;
     if (properties.containsKey("passwordChar")) {
       passwordChar = properties.get("passwordChar").toString().charAt(0);
-      password = true;
     }
   }
 
@@ -217,9 +214,9 @@ public class TextFieldControl implements Controller {
     } else if (inputEvent == NiftyInputEvent.SelectionEnd) {
       textField.endSelecting();
     } else if (inputEvent == NiftyInputEvent.Cut) {
-      textField.cut();
+      textField.cut(passwordChar);
     } else if (inputEvent == NiftyInputEvent.Copy) {
-      textField.copy();
+      textField.copy(passwordChar);
     } else if (inputEvent == NiftyInputEvent.Paste) {
       textField.put();
     } else if (inputEvent == NiftyInputEvent.SubmitText) {
@@ -249,7 +246,7 @@ public class TextFieldControl implements Controller {
     calcLastVisibleIndex(textRenderer);
 
     // update text
-    if (password) {
+    if (isPassword(passwordChar)) {
       int numChar = text.length();
       char[] chars = new char[numChar];
       for (int i = 0; i < numChar; ++i) {
@@ -281,6 +278,10 @@ public class TextFieldControl implements Controller {
         new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
     cursorElement.startEffect(EffectEventId.onActive, null);
     screen.layoutLayers();
+  }
+
+  private boolean isPassword(final Character currentPasswordChar) {
+    return currentPasswordChar != null;
   }
 
   /**

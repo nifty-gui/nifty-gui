@@ -42,25 +42,6 @@ public class TextField {
   private Clipboard clipboard;
 
   /**
-   * Create TextField from the given text string.
-   * @param newText new text
-   */
-  public TextField(final String newText) {
-    initWithText(newText);
-
-    // init clipboard with null clipboard impl
-    clipboard = new Clipboard() {
-
-      public String get() {
-        return null;
-      }
-
-      public void put(final String data) {
-      }
-    };
-  }
-
-  /**
    * Create TextField with clipboard support.
    * @param newText init text
    * @param newClipboard clipboard
@@ -280,14 +261,6 @@ public class TextField {
   }
 
   /**
-   * Cut the selected text into the clipboard.
-   */
-  public void cut() {
-    clipboard.put(getSelectedText());
-    delete();
-  }
-
-  /**
    * Return the selected text or null when there is no selection.
    * @return selected text or null
    */
@@ -299,13 +272,35 @@ public class TextField {
   }
 
   /**
-   * Copy currently selected text to clipboard.
+   * Cut the selected text into the clipboard.
+   * @param passwordChar password character might be null
    */
-  public void copy() {
+  public void cut(final Character passwordChar) {
     String selectedText = getSelectedText();
+    clipboard.put(modifyWithPasswordChar(selectedText, passwordChar));
+    delete();
+  }
+
+  /**
+   * Copy currently selected text to clipboard.
+   * @param passwordChar password character might be null
+   */
+  public void copy(final Character passwordChar) {
+    String selectedText = modifyWithPasswordChar(getSelectedText(), passwordChar);
     if (selectedText != null) {
       clipboard.put(selectedText);
     }
+  }
+
+  String modifyWithPasswordChar(final String selectedText, final Character passwordChar) {
+    if (passwordChar == null) {
+      return selectedText;
+    }
+    if (selectedText == null) {
+      return null;
+    }
+    String result = selectedText;
+    return result.replaceAll(".", new String(new char[]{passwordChar}));
   }
 
   /**
