@@ -23,22 +23,22 @@
         </effect>
         <panel childLayout="vertical" width="95%" height="80%" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
-            <label id="labelName" text="Your Name: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <label id="labelName" text="Your Name: " width="250px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="name" name="textfield" initial="huhu" />
           </panel>    
           <panel childLayout="horizontal" height="4px" />
           <panel childLayout="horizontal" height="40px">
-            <label text="Your Host: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <label text="Your Host: " width="250px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="ip" name="textfield" />
           </panel>
           <panel childLayout="horizontal" height="4px" />
           <panel childLayout="horizontal" height="40px">
-            <label text="Your Password: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <label text="Your Password: " width="250px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="password" name="textfield" passwordChar="*" />
           </panel>
           <panel childLayout="horizontal" height="4px" />
           <panel childLayout="horizontal" height="40px">
-            <label text="setMaxLen(5): " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <label text="setMaxLength(5): " width="250px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="maxLengthTest" name="textfield" maxLength="5" />
           </panel>
           <panel height="16px" />

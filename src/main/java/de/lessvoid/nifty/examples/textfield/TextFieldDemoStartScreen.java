@@ -29,6 +29,7 @@ public class TextFieldDemoStartScreen implements ScreenController {
       final Screen newScreen) {
     screen = newScreen;
     nifty = newNifty;
+    screen.findElementByName("maxLengthTest").getControl(TextFieldControl.class).setMaxLength(5);
   }
 
   /**
