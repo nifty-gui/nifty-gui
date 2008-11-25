@@ -24,7 +24,7 @@
         <panel childLayout="vertical" width="95%" height="80%" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
             <label id="labelName" text="Your Name: " width="250px" align="left" textVAlign="center" textHAlign="left"/>
-            <control id="name" name="textfield" initial="huhu" />
+            <control id="name" name="textfield" text="huhu" />
           </panel>    
           <panel childLayout="horizontal" height="4px" />
           <panel childLayout="horizontal" height="40px">

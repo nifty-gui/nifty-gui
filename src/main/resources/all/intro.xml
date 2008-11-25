@@ -131,7 +131,7 @@
           <menuItem id="console" text="Console Example" hintText="Console Example" style="menu-item" focusable="true">
             <interact onClick="console()"/>
           </menuItem>
-          <menuItem id="dropDown" text="Drop Down List Example" hintText="Drop Down List Example (BETA)" style="menu-item" focusable="true">
+          <menuItem id="dropDown" text="Drop Down List Example" hintText="Drop Down List Example" style="menu-item" focusable="true">
             <interact onClick="dropDown()"/>
           </menuItem>
           <menuItem id="exit" text="Exit" style="menu-item" hintText="Exit" focusable="true">
