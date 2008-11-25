@@ -3,7 +3,7 @@ package de.lessvoid.nifty.loader.xpp3;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -20,14 +20,9 @@ import de.lessvoid.nifty.loader.xpp3.elements.ValignType;
  */
 public final class Attributes {
 
-  /**
-   * attribute map.
-   */
   private Map < String, String > attributes = new Hashtable < String, String >();
+  private Map < String, String > parameters = new Hashtable < String, String >();
 
-  /**
-   * default constructor.
-   */
   public Attributes() {
   }
 
@@ -36,7 +31,7 @@ public final class Attributes {
    * @param xpp xpp
    */
   public Attributes(final XmlPullParser xpp) {
-    this.attributes = getAttributes(xpp);
+    initAttributes(xppToMap(xpp));
   }
 
   /**
@@ -44,8 +39,10 @@ public final class Attributes {
    * @param source source
    */
   public Attributes(final Attributes source) {
-    this.attributes = new Hashtable < String, String >();
-    this.attributes.putAll(source.attributes);
+    attributes = new Hashtable < String, String >();
+    parameters = new Hashtable < String, String >();
+    attributes.putAll(source.attributes);
+    parameters.putAll(source.parameters);
   }
 
   /**
@@ -73,19 +70,6 @@ public final class Attributes {
    */
   public void overwriteAttribute(final String key, final String value) {
     attributes.put(key, value);
-  }
-
-  /**
-   * Get Attributes as Map.
-   * @param xpp xpp
-   * @return Attributes as Map
-   */
-  private static Map < String, String > getAttributes(final XmlPullParser xpp) {
-    Map < String, String > attributeMap = new Hashtable < String, String >();
-    for (int i = 0; i < xpp.getAttributeCount(); i++) {
-      attributeMap.put(xpp.getAttributeName(i), xpp.getAttributeValue(i));
-    }
-    return attributeMap;
   }
 
   /**
@@ -221,13 +205,7 @@ public final class Attributes {
    * @return map with attributes
    */
   public Map < String, String > getParameterAttributes() {
-    Map < String, String > result = new Hashtable < String, String >();
-    for (Entry < String, String> entry : attributes.entrySet()) {
-      if (entry.getValue().startsWith("$")) {
-        result.put(entry.getKey(), entry.getValue().replaceFirst("\\$", ""));
-      }
-    }
-    return result;
+    return parameters;
   }
 
   /**
@@ -236,5 +214,32 @@ public final class Attributes {
    */
   public void merge(final Attributes src) {
     attributes.putAll(src.attributes);
+    parameters.putAll(src.parameters);
+  }
+
+  private Map < String, String > xppToMap(final XmlPullParser xpp) {
+    Map < String, String > result = new Hashtable < String, String >();
+    for (int i = 0; i < xpp.getAttributeCount(); i++) {
+      String key = xpp.getAttributeName(i);
+      String value = xpp.getAttributeValue(i);
+      result.put(key, value);
+    }
+    return result;
+  }
+
+  private void initAttributes(final Map < String, String > source) {
+    attributes = new Hashtable < String, String >();
+    parameters = new Hashtable < String, String >();
+
+    Set < Map.Entry < String, String >> entries = source.entrySet();
+    for (Map.Entry < String, String > entry : entries) {
+      String key = entry.getKey();
+      String value = entry.getValue();
+      if (value.startsWith("$")) {
+        parameters.put(key, value.replaceFirst("\\$", ""));
+        value = "";
+      }
+      attributes.put(key, value);
+    }
   }
 }
