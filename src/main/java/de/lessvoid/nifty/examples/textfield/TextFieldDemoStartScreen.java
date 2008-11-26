@@ -30,6 +30,8 @@ public class TextFieldDemoStartScreen implements ScreenController {
     screen = newScreen;
     nifty = newNifty;
     screen.findElementByName("maxLengthTest").getControl(TextFieldControl.class).setMaxLength(5);
+    screen.findElementByName("name").setFocus();
+    screen.findControl("name", TextFieldControl.class).setCursorPosition(3);
   }
 
   /**
