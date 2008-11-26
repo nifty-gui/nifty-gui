@@ -367,4 +367,15 @@ public class TextFieldControl implements Controller {
   public void setMaxLength(final int maxLength) {
     textField.setMaxLength(maxLength);
   }
+
+  /**
+   * Set the cursor to the given Position with index 0 adressing the
+   * first character. It's not possible to to set the cursor position
+   * to an index beyond the current input length.
+   * @param position position to set
+   */
+  public void setCursorPosition(final int position) {
+    textField.setCursorPosition(position);
+    updateCursor();
+  }
 }
