@@ -7,7 +7,9 @@ import java.util.logging.Logger;
 import de.lessvoid.console.Console;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MouseFocusHandler;
@@ -463,6 +465,16 @@ public class Screen implements MouseFocusHandler {
       }
     }
     return null;
+  }
+
+  public < T extends Controller > T findControl(
+      final String elementName,
+      final Class < T > requestedControlClass) {
+    Element element = findElementByName(elementName);
+    if (element == null) {
+      return null;
+    }
+    return element.getControl(requestedControlClass);
   }
 
   /**
