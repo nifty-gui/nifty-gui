@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.effects.general;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
@@ -11,6 +12,8 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  * @author void
  */
 public class Move implements EffectImpl {
+
+  private Logger log = Logger.getLogger(Move.class.getName());
 
   /**
    * left.
@@ -116,6 +119,10 @@ public class Move implements EffectImpl {
     String target = parameter.getProperty("targetElement");
     if (target != null) {
       Element targetElement = nifty.getCurrentScreen().findElementByName(target);
+      if (targetElement == null) {
+        log.warning("move effect for element [" + element.getId() + "] was unable to find target element [" + target + "] at screen [" + nifty.getCurrentScreen().getScreenId() + "]");
+        return;
+      }
 
       if ("fromPosition".equals(mode)) {
         startOffsetX = targetElement.getX()- element.getX();
