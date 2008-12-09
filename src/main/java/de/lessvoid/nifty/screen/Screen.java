@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.util.Log;
+
 import de.lessvoid.console.Console;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
@@ -229,6 +231,7 @@ public class Screen implements MouseFocusHandler {
    * @param popup popup
    */
   public void addPopup(final Element popup) {
+    log.info("addPopup(" + popup + ")");
     resetLayersMouseDown();
 
     // create the callback
@@ -259,7 +262,7 @@ public class Screen implements MouseFocusHandler {
     // add to layers and add as popup
     addLayerElement(popup);
     addPopupElement(popup);
-
+    log.info("elements added ...");
     focusElementBuffer.add(focusElement);
     focusElement = null;
   }
@@ -296,6 +299,27 @@ public class Screen implements MouseFocusHandler {
     popupElementsToRemove.add(popup);
   }
 
+  public class StartScreenEndNotify implements EndNotify {
+    private boolean bind = false;
+
+    public void perform() {
+      if (!bind) {
+        screenController.bind(nifty, Screen.this);
+        bind = true;
+      }
+      screenController.onStartScreen();
+      nifty.getMouseInputEventQueue().reset();
+    }
+
+    public boolean isBind() {
+      return bind;
+    }
+
+    public void bindDone() {
+      bind = true;
+    }
+  }
+
   /**
    * start the screen.
    */
@@ -304,17 +328,17 @@ public class Screen implements MouseFocusHandler {
     mouseFocusElement = null;
     resetLayers();
     layoutLayers();
-    startLayers(
-        EffectEventId.onStartScreen,
-        new EndNotify() {
-          public final void perform() {
-            screenController.onStartScreen();
-            nifty.getMouseInputEventQueue().reset();
-          }
-        });
+
+    final StartScreenEndNotify endNotify = new StartScreenEndNotify();
+    startLayers(EffectEventId.onStartScreen, endNotify);
+
     activeEffectStart();
     nifty.addControls();
-    screenController.bind(nifty, this);
+
+    if (!endNotify.isBind()) {
+      screenController.bind(nifty, this);
+      endNotify.bindDone();
+    }
   }
 
   /**
@@ -350,6 +374,36 @@ public class Screen implements MouseFocusHandler {
     }
   }
 
+  private class LocalEndNotify implements EndNotify {
+    private boolean enabled = false;
+    private EffectEventId effectEventId = null;
+    private EndNotify endNotify = null;
+    
+    public LocalEndNotify(
+        final EffectEventId effectEventId,
+        final EndNotify endNotify) {
+      this.effectEventId = effectEventId;
+      this.endNotify = endNotify;
+    }
+
+    public void enable() {
+      enabled = true;
+    }
+
+    public void perform() {
+      if (enabled) {
+        for (Element w : layerElements) {
+          if (w.isEffectActive(effectEventId)) {
+            return;
+          }
+        }
+        if (endNotify != null) {
+          endNotify.perform();
+        }
+      }
+    }
+  }
+
   /**
    * send start screen event to all layer elements.
    * @param effectEventId the effect type id
@@ -360,24 +414,11 @@ public class Screen implements MouseFocusHandler {
       final EndNotify endNotify) {
 
     // create the callback
-    EndNotify localEndNotify = new EndNotify() {
-      public final void perform() {
-        for (Element w : layerElements) {
-          if (w.isEffectActive(effectEventId)) {
-            return;
-          }
-        }
-        if (endNotify != null) {
-          endNotify.perform();
-        }
-      }
-    };
+    LocalEndNotify localEndNotify = new LocalEndNotify(effectEventId, endNotify);
 
     // start the effect for all layers
     for (Element w : layerElements) {
-      w.startEffect(
-          effectEventId,
-          localEndNotify);
+      w.startEffect(effectEventId, localEndNotify);
 
       if (effectEventId == EffectEventId.onStartScreen) {
         w.onStartScreen(this);
@@ -385,6 +426,7 @@ public class Screen implements MouseFocusHandler {
     }
 
     // just in case there was no effect activated, we'll check here, if we're already done
+    localEndNotify.enable();
     localEndNotify.perform();
   }
 
@@ -428,6 +470,7 @@ public class Screen implements MouseFocusHandler {
   public final boolean mouseEvent(final MouseInputEvent inputEvent) {
     // when there are popup elements available this event will only travel to these layers!
     if (!popupElements.isEmpty()) {
+      log.info("popupElements.size(): " + popupElements.size());
       return forwardMouseEventToLayers(popupElements, inputEvent);
     } else {
       return forwardMouseEventToLayers(layerElements, inputEvent);
