@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
 import de.lessvoid.nifty.controls.Controller;
@@ -239,10 +240,16 @@ public class Nifty {
     }
 
     if (removePopupId != null) {
-      currentScreen.closePopup(activePopups.get(removePopupId));
+      if (currentScreen != null) {
+        currentScreen.closePopup(activePopups.get(removePopupId));
+      }
       removePopupId = null;
     }
-    currentScreen.processAddAndRemoveLayerElements();
+
+    if (currentScreen != null) {
+      currentScreen.processAddAndRemoveLayerElements();
+    }
+
     addControls();
     removeElements();
     return exit;
@@ -360,7 +367,7 @@ public class Nifty {
   void prepareScreens(final String xmlId) {
     screens.clear();
 
-    this.currentScreen = null;
+    // this.currentScreen = null;
     this.currentLoaded = xmlId;
     this.exit = false;
   }
@@ -515,6 +522,7 @@ public class Nifty {
     if (controllerInstance != null) {
       niftyInputControl = new NiftyInputControl(controllerInstance, new Default());
     }
+    log.info("createPopupFromType: " + controllerInstance + ", " + niftyInputControl);
     Element popupElement = popupType.createElement(
         this,
         null,
