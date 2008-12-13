@@ -5,6 +5,7 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 /**
@@ -13,6 +14,8 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  */
 public class RenderElement implements EffectImpl {
 
+  private String type;
+
   /**
    * initialize.
    * @param nifty Nifty
@@ -20,6 +23,7 @@ public class RenderElement implements EffectImpl {
    * @param parameter Parameter
    */
   public void initialize(final Nifty nifty, final Element element, final Properties parameter) {
+    type = parameter.getProperty("type", null);
   }
 
   /**
@@ -35,7 +39,15 @@ public class RenderElement implements EffectImpl {
     ElementRenderer[] elementRenderer = element.getElementRenderer();
     if (elementRenderer != null) {
       for (ElementRenderer renderer : elementRenderer) {
-        renderer.render(element, r);
+        if (type == null) {
+          renderer.render(element, r);
+        } else {
+          if ("text".equals(type)) {
+            if (renderer instanceof TextRenderer) {
+              renderer.render(element, r);
+            }
+          }
+        }
       }
     }
   }
