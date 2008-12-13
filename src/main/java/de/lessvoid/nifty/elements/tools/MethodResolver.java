@@ -34,6 +34,8 @@ public final class MethodResolver {
     }
 
     String methodNameOnly = methodName.substring(0, methodName.indexOf('('));
+    log.warning(methodNameOnly);
+
     Method[] ms = c.getDeclaredMethods();
     for (Method m : ms) {
       if (methodNameOnly.equalsIgnoreCase(m.getName())) {
