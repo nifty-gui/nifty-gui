@@ -5,11 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.util.Log;
+
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.dropdown.DropDownControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.general.Effect;
@@ -1172,6 +1175,7 @@ public class Element {
    * @param screenController screencontroller
    */
   public void attachPopup(final ScreenController screenController) {
+    log.info("attachPopup(" + screenController + ")");
     attach(interaction.getOnClickMethod(), screenController);
     attach(interaction.getOnClickMouseMoveMethod(), screenController);
     attach(interaction.getOnReleaseMethod(), screenController);

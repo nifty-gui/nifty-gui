@@ -138,9 +138,31 @@ public class MethodInvoker {
    */
   private Object callMethod(final Object targetObject, final Method method, final Object[] invokeParameters) {
     try {
+      log.warning("method: " + method + "on targetObject: " + targetObject + ", parameters: " + invokeParameters);
+      if (method != null) {
+        log.warning(method.getName());
+      }
+      if (invokeParameters != null) {
+        for (Object o : invokeParameters) {
+          log.warning("parameter: " + o);
+        }
+      }
+      log.warning("yeah, calling it now");
       return method.invoke(targetObject, invokeParameters);
     } catch (Exception e) {
       log.warning("error: " + e.getMessage());
+      StackTraceElement[] elements = e.getStackTrace();
+      if (elements == null) {
+        log.warning("stacktrace is null");
+      } else {
+        for (StackTraceElement ee : elements) {
+          log.warning(
+              ee.getClassName()
+              + ":" + ee.getFileName()
+              + ":" + ee.getMethodName()
+              + ":" + ee.getLineNumber());
+        }
+      }
       return null;
     }
   }
