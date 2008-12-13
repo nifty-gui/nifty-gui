@@ -52,4 +52,8 @@ public class DropDownModel {
   public int getSelectedItemIdx() {
     return selectedItemIdx;
   }
+
+  public void clear() {
+    items.clear();
+  }
 }

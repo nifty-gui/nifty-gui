@@ -130,4 +130,8 @@ public class DropDownControl implements Controller {
   public int getSelectedItemIdx() {
     return dropDownModel.getSelectedItemIdx();
   }
+
+  public void clear() {
+    dropDownModel.clear();
+  }
 }
