@@ -693,4 +693,8 @@ public class Screen implements MouseFocusHandler {
     popupElementsToAdd.clear();
     popupElementsToRemove.clear();
   }
+
+  public void nextElementFocus() {
+    focusHandler.getNext(focusElement).setFocus();
+  }
 }

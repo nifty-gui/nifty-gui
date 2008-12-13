@@ -27,6 +27,8 @@ public class ButtonControl implements Controller {
    */
   private FocusHandler focusHandler;
 
+  private Screen screen;
+
   /**
    * bind.
    * @param nifty nifty
@@ -49,9 +51,7 @@ public class ButtonControl implements Controller {
    */
   public void inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
-      if (focusHandler != null) {
-        focusHandler.getNext(element).setFocus();
-      }
+      screen.nextElementFocus();
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       if (focusHandler != null) {
         focusHandler.getPrev(element).setFocus();
@@ -72,7 +72,8 @@ public class ButtonControl implements Controller {
    * onStartScreen.
    * @param screen screen
    */
-  public void onStartScreen(final Screen screen) {
-    this.focusHandler = screen.getFocusHandler();
+  public void onStartScreen(final Screen screenParam) {
+    screen = screenParam;
+    this.focusHandler = screenParam.getFocusHandler();
   }
 }

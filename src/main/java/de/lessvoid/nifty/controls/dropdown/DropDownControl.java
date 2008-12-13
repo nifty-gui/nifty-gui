@@ -1,9 +1,11 @@
 package de.lessvoid.nifty.controls.dropdown;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -14,11 +16,14 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
 public class DropDownControl implements Controller {
+  private Logger log = Logger.getLogger(DropDownControl.class.getName());
   private Nifty nifty;
   private Element element;
   private boolean alreadyOpen = false;
   private DropDownModel dropDownModel = new DropDownModel();
   private Attributes controlDefinitionAttributes;
+  private FocusHandler focusHandler;
+  private Screen screen;
 
   public void bind(
       final Nifty niftyParam,
@@ -31,21 +36,34 @@ public class DropDownControl implements Controller {
     controlDefinitionAttributes = controlDefinitionAttributesParam;
   }
 
-  public void onStartScreen(final Screen newScreen) {
+  public void onStartScreen(final Screen screenParam) {
+    screen = screenParam;
+    focusHandler = screen.getFocusHandler();
   }
 
   public void onFocus(final boolean getFocus) {
   }
 
   public void inputEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
+      screen.nextElementFocus();
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+      if (focusHandler != null) {
+        focusHandler.getPrev(element).setFocus();
+      }
+    } else if (inputEvent == NiftyInputEvent.Activate) {
+      element.onClick();
+    }
   }
 
   public void dropDownClicked() {
+    log.info("dropDownClicked() - " + alreadyOpen);
     if (alreadyOpen) {
       return;
     }
     alreadyOpen = true;
     Element popupLayer = nifty.createPopup("dropDownBoxSelectPopup");
+    log.info("popupLayer: " + popupLayer);
     ElementType.applyControlStyle(
         popupLayer,
         nifty.getStyleHandler(),
@@ -56,6 +74,7 @@ public class DropDownControl implements Controller {
         nifty.getTimeProvider(),
         nifty.getCurrentScreen());
     Element popup = popupLayer.findElementByName("dropDownList");
+    log.info("popup: " + popup);
     popup.setConstraintX(new SizeValue(element.getX() + "px"));
     popup.setConstraintY(new SizeValue(element.getY() + element.getHeight() + "px"));
     popup.setConstraintWidth(new SizeValue(element.getWidth() + "px"));
@@ -65,7 +84,10 @@ public class DropDownControl implements Controller {
     }
 
     dropDownModel.initialize(nifty, nifty.getCurrentScreen(), popup);
+
+    log.info("a");
     nifty.addControls();
+    log.info("b");
 
     int maxHeight = 0;
     for (Element child : popup.getElements()) {
