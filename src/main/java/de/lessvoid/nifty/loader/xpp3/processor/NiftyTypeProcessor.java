@@ -66,6 +66,8 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
 
   private TypeContext typeContext;
 
+  private RegisterStyleProcessor registerStyleProcessor;
+
   /**
    * new nifty loader.
    * @param niftyLoader nifty loader to use
@@ -86,6 +88,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
     screenTypeProcessor = new ScreenTypeProcessor(typeContext);
     popupTypeProcessor = new PopupTypeProcessor(typeContext);
     useControlsTypeProcessor = new UseControlsTypeProcessor(niftyLoader, popupTypeProcessor);
+    registerStyleProcessor = new RegisterStyleProcessor(styleHandler);
   }
 
   /**
@@ -101,7 +104,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
     xmlParser.zeroOrMore("registerEffect", registerEffectTypeProcessor);
     xmlParser.zeroOrMore("registerSound", registerSoundTypeProcessor);
     xmlParser.zeroOrMore("registerMusic", registerMusicTypeProcessor);
-    xmlParser.zeroOrMore("style", new RegisterStyleProcessor(styleHandler));
+    xmlParser.zeroOrMore("style", registerStyleProcessor);
     xmlParser.zeroOrMore("controlDefinition", registerControlDefinitionTypeProcessor);
     xmlParser.zeroOrMore("popup", popupTypeProcessor);
     xmlParser.oneOrMore("screen", screenTypeProcessor);

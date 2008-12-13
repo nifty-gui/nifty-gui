@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.util.Log;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
@@ -100,6 +102,8 @@ public class ElementType {
       final Screen screen,
       final ScreenController screenController,
       final NiftyInputControl ... control) {
+    log.info("addElementAttributes: " + element + ", " + screen + ", " + screenController + ", " + control);
+
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
