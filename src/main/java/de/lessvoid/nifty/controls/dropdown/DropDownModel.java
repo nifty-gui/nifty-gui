@@ -10,17 +10,17 @@ import de.lessvoid.nifty.screen.Screen;
 
 /**
  * The actual Data the DropDownControl handles.
- * 
+ *
  * @author void
  */
 public class DropDownModel {
-  private final List<String> items = new ArrayList<String>();
+  private final List < String > items = new ArrayList < String >();
   private int selectedItemIdx = -1;
-  
+
   public void addItem(final String description) {
     items.add(description);
   }
-  
+
   public void initialize(final Nifty nifty, final Screen currentScreen,
       final Element popup) {
     int count = 0;
@@ -31,23 +31,23 @@ public class DropDownModel {
           popup.getId() + "_" + count++, null, null, attr);
     }
   }
-  
+
   public void setSelectedItemIdx(final int idx) {
     selectedItemIdx = idx;
   }
-  
+
   public void setSelectedItem(final String text) {
     selectedItemIdx = items.indexOf(text);
   }
-  
+
   public String getSelectedItem() {
     return items.get(selectedItemIdx);
   }
-  
+
   public int getSelectedItemIdx() {
     return selectedItemIdx;
   }
-  
+
   public void clear() {
     items.clear();
   }

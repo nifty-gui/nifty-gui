@@ -24,7 +24,7 @@ public class DropDownControl implements Controller {
   private Attributes controlDefinitionAttributes;
   private FocusHandler focusHandler;
   private Screen screen;
-  
+
   public void bind(final Nifty niftyParam, final Element newElement,
       final Properties properties, final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributesParam) {
@@ -32,15 +32,15 @@ public class DropDownControl implements Controller {
     element = newElement;
     controlDefinitionAttributes = controlDefinitionAttributesParam;
   }
-  
+
   public void onStartScreen(final Screen screenParam) {
     screen = screenParam;
     focusHandler = screen.getFocusHandler();
   }
-  
+
   public void onFocus(final boolean getFocus) {
   }
-  
+
   public void inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
       screen.nextElementFocus();
@@ -52,7 +52,7 @@ public class DropDownControl implements Controller {
       element.onClick();
     }
   }
-  
+
   public void dropDownClicked() {
     log.info("dropDownClicked() - " + alreadyOpen);
     if (alreadyOpen) {
@@ -72,17 +72,17 @@ public class DropDownControl implements Controller {
     popup.setConstraintY(new SizeValue(element.getY() + element.getHeight()
         + "px"));
     popup.setConstraintWidth(new SizeValue(element.getWidth() + "px"));
-    
+
     for (Element e : popup.getElements()) {
       nifty.removeElement(nifty.getCurrentScreen(), e);
     }
-    
+
     dropDownModel.initialize(nifty, nifty.getCurrentScreen(), popup);
-    
+
     log.info("a");
     nifty.addControls();
     log.info("b");
-    
+
     int maxHeight = 0;
     for (Element child : popup.getElements()) {
       child.getControl(DropDownControlItem.class).setDropDownControl(element);
@@ -93,39 +93,39 @@ public class DropDownControl implements Controller {
     popupLayer.getControl(DropDownPopup.class).setDropDownElement(element);
     nifty.showPopup(nifty.getCurrentScreen(), "dropDownBoxSelectPopup");
   }
-  
+
   public void reset() {
     alreadyOpen = false;
   }
-  
+
   public void addItem(final String item) {
     dropDownModel.addItem(item);
   }
-  
+
   public void setSelectedItemIdx(final int idx) {
     dropDownModel.setSelectedItemIdx(idx);
     changeSelectedItem(dropDownModel.getSelectedItem());
   }
-  
+
   private void changeSelectedItem(final String selectedItem) {
     TextRenderer text = element.findElementByName("text").getRenderer(
         TextRenderer.class);
     text.setText(selectedItem);
   }
-  
+
   public void setSelectedItem(final String text) {
     dropDownModel.setSelectedItem(text);
     changeSelectedItem(dropDownModel.getSelectedItem());
   }
-  
+
   public String getSelectedItem() {
     return dropDownModel.getSelectedItem();
   }
-  
+
   public int getSelectedItemIdx() {
     return dropDownModel.getSelectedItemIdx();
   }
-  
+
   public void clear() {
     dropDownModel.clear();
   }
