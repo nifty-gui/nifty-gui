@@ -9,7 +9,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * @author void
  *
  */
-public class SplashController implements ScreenController {
+public class SplashController2 implements ScreenController {
 
   /**
    * the nifty instance.
@@ -27,7 +27,7 @@ public class SplashController implements ScreenController {
    * just goto the next screen.
    */
   public final void onStartScreen() {
-    nifty.gotoScreen("start2");
+    nifty.gotoScreen("menu");
   }
 
   /**

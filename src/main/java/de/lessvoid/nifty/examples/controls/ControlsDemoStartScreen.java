@@ -31,11 +31,12 @@ public class ControlsDemoStartScreen implements ScreenController {
   }
 
   private DropDownControl findDropDownControl(final String id) {
-    DropDownControl dropDown1 = screen.findElementByName(id).getControl(DropDownControl.class);
+    DropDownControl dropDown1 = screen.findControl(id, DropDownControl.class);
     return dropDown1;
   }
 
   public void onStartScreen() {
+    screen.findElementByName("backButton").setFocus();
   }
 
   public void onEndScreen() {

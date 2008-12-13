@@ -24,12 +24,12 @@
         <panel childLayout="vertical" width="95%" height="80%" align="center" valign="center">
           <panel childLayout="horizontal" height="4px" />
           <panel id="dropDownPanel1" childLayout="horizontal">
-            <label id="dropDownLabel1" text="DropDown 1: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <label id="dropDownLabel1" text="DropDown 1: " width="200px" align="left" textVAlign="center" textHAlign="left" />
             <control id="dropDown1" name="dropDownControl" />
           </panel>    
           <panel childLayout="horizontal" height="8px" />
           <panel id="dropDownPanel2" childLayout="horizontal">
-            <label id="dropDownLabel2" text="DropDown 2: " width="200px" align="left" textVAlign="center" textHAlign="left"/>
+            <label id="dropDownLabel2" text="DropDown 2: " width="200px" align="left" textVAlign="center" textHAlign="left" />
             <control id="dropDown2" name="dropDownControl" />
           </panel>    
           <panel childLayout="horizontal" height="8px" />

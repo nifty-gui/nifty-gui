@@ -20,12 +20,12 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>0.0.5</version>
+      <version>0.0.6-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-default-styles</artifactId>
-      <version>0.0.1</version>
+      <version>0.0.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>

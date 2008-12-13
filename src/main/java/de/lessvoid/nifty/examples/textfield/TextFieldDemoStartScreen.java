@@ -2,6 +2,8 @@ package de.lessvoid.nifty.examples.textfield;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -32,6 +34,10 @@ public class TextFieldDemoStartScreen implements ScreenController {
     screen.findElementByName("maxLengthTest").getControl(TextFieldControl.class).setMaxLength(5);
     screen.findElementByName("name").setFocus();
     screen.findControl("name", TextFieldControl.class).setCursorPosition(3);
+    
+    Element textElement = screen.findElementByName("my label");
+    TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
+    textRenderer.setText("new Text");
   }
 
   /**
