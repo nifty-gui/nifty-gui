@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.util.Log;
-
 import de.lessvoid.console.Console;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.MouseFocusHandler;
@@ -309,6 +306,7 @@ public class Screen implements MouseFocusHandler {
       }
       screenController.onStartScreen();
       nifty.getMouseInputEventQueue().reset();
+      setDefaultFocus();
     }
 
     public boolean isBind() {
@@ -378,12 +376,10 @@ public class Screen implements MouseFocusHandler {
     private boolean enabled = false;
     private EffectEventId effectEventId = null;
     private EndNotify endNotify = null;
-    
-    public LocalEndNotify(
-        final EffectEventId effectEventId,
-        final EndNotify endNotify) {
-      this.effectEventId = effectEventId;
-      this.endNotify = endNotify;
+
+    public LocalEndNotify(final EffectEventId effectEventIdParam, final EndNotify endNotifyParam) {
+      effectEventId = effectEventIdParam;
+      endNotify = endNotifyParam;
     }
 
     public void enable() {
@@ -409,9 +405,7 @@ public class Screen implements MouseFocusHandler {
    * @param effectEventId the effect type id
    * @param endNotify stuff to execute when this stuff here ended
    */
-  private void startLayers(
-      final EffectEventId effectEventId,
-      final EndNotify endNotify) {
+  private void startLayers(final EffectEventId effectEventId, final EndNotify endNotify) {
 
     // create the callback
     LocalEndNotify localEndNotify = new LocalEndNotify(effectEventId, endNotify);
