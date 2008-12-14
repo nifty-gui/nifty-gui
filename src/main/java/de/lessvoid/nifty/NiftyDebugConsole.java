@@ -89,12 +89,17 @@ public class NiftyDebugConsole {
    */
   private void outputEffects(final Nifty nifty, final Screen screen, final NiftyRenderEngine theRenderDevice) {
     console.clear();
-    console.output("*[" + screen.getScreenId() + "]");
+    if (screen == null) {
+      return;
+    }
+
+    String screenId = screen.getScreenId();
+    console.output("*[" + screenId + "]");
 
     // render all layers
     for (Element layer : screen.getLayerElements()) {
       layer.render(theRenderDevice);
-      console.output(" +" + getIdText(layer) + " => " + outputEffects(layer));
+      console.output(" +" + getIdText(layer) + " => " + outputEffects(layer, "      "));
       outputEffect(layer, "    ");
     }
 
@@ -120,7 +125,7 @@ public class NiftyDebugConsole {
 
   private void outputEffect(final Element w, final String offset) {
     for (Element ww : w.getElements()) {
-      console.output(offset + getIdText(ww) + " -> " + outputEffects(ww));
+      console.output(offset + getIdText(ww) + outputEffects(ww, offset));
       outputEffect(ww, offset + "  ");
     }
   }
@@ -141,11 +146,12 @@ public class NiftyDebugConsole {
   /**
    * output effect helper.
    * @param w the Element
+   * @param offset offset
    * @return the String
    */
-  private String outputEffects(final Element w) {
+  private String outputEffects(final Element w, final String offset) {
     EffectManager m = w.getEffectManager();
-    return "effect [" + m.getStateString() + "]";
+    return m.getStateString(offset);
   }
 
   /**
