@@ -8,6 +8,7 @@ import org.newdawn.slick.util.ResourceLoader;
 import org.xmlpull.mxp1.MXParser;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyDefaults;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterControlDefinitionType;
 import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
