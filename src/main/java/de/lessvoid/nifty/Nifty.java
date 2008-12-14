@@ -423,6 +423,7 @@ public class Nifty {
         new EndNotify() {
           public final void perform() {
             exit = true;
+            currentScreen = null;
           }
         });
   }
