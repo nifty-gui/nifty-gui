@@ -27,12 +27,7 @@ public class RegisterEffectTypeProcessor implements XmlElementProcessor {
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     String name = attributes.get("name");
     String clazz = attributes.get("class");
-
-    registeredEffects.put(
-        name,
-        new RegisterEffectType(
-            clazz));
-
+    registeredEffects.put(name, new RegisterEffectType(clazz));
     xmlParser.nextTag();
   }
 
