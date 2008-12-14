@@ -4,11 +4,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.effects.general.EffectImpl;
-import de.lessvoid.nifty.effects.general.StaticEffect;
-import de.lessvoid.nifty.effects.hover.HoverEffect;
-import de.lessvoid.nifty.effects.hover.HoverEffectImpl;
+import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -171,44 +169,14 @@ public class EffectType {
     }
 
     // create the effect class
+    Effect effect = null;
     if (effectEventId.equals(EffectEventId.onHover)) {
-      HoverEffect hoverEffect = new HoverEffect(nifty, inherit, post, alternateKey, alternateEnable);
-      hoverEffect.init(
-          element,
-          createHoverEffectImpl(effectClass),
-          any.createProperties(),
-          time);
-      element.registerEffect(effectEventId, hoverEffect);
+      effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId, true);
     } else {
-      StaticEffect effect = new StaticEffect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId);
-      effect.init(
-          element,
-          createEffectImpl(effectClass),
-          any.createProperties(),
-          time);
-      element.registerEffect(effectEventId, effect);
+      effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId, false);
     }
-  }
-
-  /**
-   * Create the HoverEffect.
-   * @param effectClass class
-   * @return HoverEffectImpl
-   */
-  private HoverEffectImpl createHoverEffectImpl(final Class < ? > effectClass) {
-    try {
-      if (HoverEffectImpl.class.isAssignableFrom(effectClass)) {
-        return (HoverEffectImpl) effectClass.newInstance();
-      } else {
-        log.warning(
-            "given effect class [" + effectClass.getName()
-            + "] does not implement ["
-            + HoverEffectImpl.class.getName() + "]");
-      }
-    } catch (Exception e) {
-      log.warning("class [" + effectClass + "] could not be instanziated");
-    }
-    return null;
+    effect.init(element, createEffectImpl(effectClass), any.createProperties(), time);
+    element.registerEffect(effectEventId, effect);
   }
 
   /**

@@ -463,8 +463,7 @@ public class ElementType {
       final Attributes controlAttributes,
       final Nifty nifty,
       final Screen screen) {
-    controlProcessParameters(
-        element, controlAttributes, nifty.getRenderDevice(), screen);
+    controlProcessParameters(element, controlAttributes, nifty.getRenderDevice(), screen);
     for (Element child : element.getElements()) {
       applyControlParameters(child, controlAttributes, nifty, screen);
     }

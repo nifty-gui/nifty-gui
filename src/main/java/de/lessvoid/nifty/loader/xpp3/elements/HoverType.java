@@ -2,7 +2,7 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 
 import java.util.Properties;
 
-import de.lessvoid.nifty.effects.shared.Falloff;
+import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 
 /**
