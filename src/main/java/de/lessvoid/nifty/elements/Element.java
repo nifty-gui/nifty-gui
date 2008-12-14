@@ -5,18 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.util.Log;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.controls.dropdown.DropDownControl;
+import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
-import de.lessvoid.nifty.effects.general.Effect;
-import de.lessvoid.nifty.effects.shared.Falloff;
+import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
@@ -994,7 +991,7 @@ public class Element {
     interaction.setOnClickMethod(methodInvoker, useRepeat);
   }
 
-  public void setOnReleaseMethod(MethodInvoker onReleaseMethod) {
+  public void setOnReleaseMethod(final MethodInvoker onReleaseMethod) {
     interaction.setOnReleaseMethod(onReleaseMethod);
   }
 
@@ -1175,7 +1172,7 @@ public class Element {
    * @param screenController screencontroller
    */
   public void attachPopup(final ScreenController screenController) {
-    log.info("attachPopup(" + screenController + ")");
+    log.info("attachPopup(" + screenController + ") to element [" + id + "]");
     attach(interaction.getOnClickMethod(), screenController);
     attach(interaction.getOnClickMouseMoveMethod(), screenController);
     attach(interaction.getOnReleaseMethod(), screenController);
