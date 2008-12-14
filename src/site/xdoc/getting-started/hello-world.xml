@@ -145,7 +145,7 @@
         whenever the screen becomes active. We would add a &quot;move&quot; effect to the panel for the onStartScreen
         event. So whenever the screen is started the move effects automatically moves the panel into position.</p>
         <p>Nifty comes with a lot of build-in effects. To use these effects we need to register them. This is done like this:</p>
-        <source><![CDATA[<registerEffect name="move" class="de.lessvoid.nifty.effects.general.Move" />]]></source>
+        <source><![CDATA[<registerEffect name="move" class="de.lessvoid.nifty.effects.impl.Move" />]]></source>
         <p>As you might have guess is this is a very flexible way to add your own custom effects! Just implement the Effect interface,
         register the effect with the &lt;registerEffect&gt; Tag and the effect is ready to use!</p>
         <p>So, the next thing is to add the actual onStartScreen effect to the panel:</p>
@@ -154,7 +154,7 @@
     <onStartScreen name="move" mode="in" direction="top" length="300" startDelay="0" inherit="true"/>
   </effect>]]></source>
         <p>With the &quot;name&quot; attribute you add the registered effect. All other attributes are effect specific. For the
-        &quot;de.lessvoid.nifty.effects.general.Move&quot; effect you can for example define the direction from where it should move
+        &quot;de.lessvoid.nifty.effects.impl.Move&quot; effect you can for example define the direction from where it should move
         in or out. You can give a start delay and and effect length time in ms. The inherit flag defines if the effect travels to
         all child elements or if it is limited only to the element you attached the effect too.</p>
         <p>In the example above the panel moves in from the top of the screen. The effect starts immediately and takes
