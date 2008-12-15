@@ -35,7 +35,6 @@ public class MenuController implements ScreenController {
    * just goto the next screen.
    */
   public final void onStartScreen() {
-    this.screen.setDefaultFocus();
   }
 
   /**
@@ -48,63 +47,39 @@ public class MenuController implements ScreenController {
    * helloWorld.
    */
   public void helloWorld() {
-    nifty.getCurrentScreen().endScreen(new EndNotify() {
-      public void perform() {
-        nifty.fromXml("helloworld/helloworld.xml", "start");
-      }
-    });
+    nifty.fromXml("helloworld/helloworld.xml", "start");
   }
 
   /**
    * textfield.
    */
   public void textfield() {
-    nifty.getCurrentScreen().endScreen(new EndNotify() {
-      public void perform() {
-        nifty.fromXml("textfield/textfield.xml", "start");
-      }
-    });
+    nifty.fromXml("textfield/textfield.xml", "start");
   }
 
   /**
    * textalign.
    */
   public void textalign() {
-    nifty.getCurrentScreen().endScreen(new EndNotify() {
-      public void perform() {
-        nifty.fromXml("textalign/textalign.xml", "start");
-      }
-    });
+    nifty.fromXml("textalign/textalign.xml", "start");
   }
 
   /**
    * multiplayer.
    */
   public void multiplayer() {
-    nifty.getCurrentScreen().endScreen(new EndNotify() {
-      public void perform() {
-        nifty.fromXml("multiplayer/multiplayer.xml", "start");
-      }
-    });
+    nifty.fromXml("multiplayer/multiplayer.xml", "start");
   }
 
   /**
    * console.
    */
   public void console() {
-    nifty.getCurrentScreen().endScreen(new EndNotify() {
-      public void perform() {
-        nifty.fromXml("console/console.xml", "start");
-      }
-    });
+    nifty.fromXml("console/console.xml", "start");
   }
 
   public void dropDown() {
-    nifty.getCurrentScreen().endScreen(new EndNotify() {
-      public void perform() {
-        nifty.fromXml("controls/controls.xml", "start");
-      }
-    });
+    nifty.fromXml("controls/controls.xml", "start");
   }
 
   /**

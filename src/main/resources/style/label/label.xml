@@ -2,7 +2,7 @@
 <nifty>
 
   <!-- register effects we want to use -->
-  <registerEffect name="move" class="de.lessvoid.nifty.effects.general.Move" />
+  <registerEffect name="move" class="de.lessvoid.nifty.effects.impl.Move" />
 
   <style id="default-font">
     <attributes font="menu.fnt" />

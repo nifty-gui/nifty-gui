@@ -34,10 +34,6 @@ public class TextFieldDemoStartScreen implements ScreenController {
     screen.findElementByName("maxLengthTest").getControl(TextFieldControl.class).setMaxLength(5);
     screen.findElementByName("name").setFocus();
     screen.findControl("name", TextFieldControl.class).setCursorPosition(3);
-    
-    Element textElement = screen.findElementByName("my label");
-    TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
-    textRenderer.setText("new Text");
   }
 
   /**
@@ -57,7 +53,7 @@ public class TextFieldDemoStartScreen implements ScreenController {
    */
   public final void back() {
     System.out.println(screen.findElementByName("password").getControl(TextFieldControl.class).getText());
-    nifty.exit();
+    nifty.fromXml("all/intro.xml", "menu");
   }
 
 }

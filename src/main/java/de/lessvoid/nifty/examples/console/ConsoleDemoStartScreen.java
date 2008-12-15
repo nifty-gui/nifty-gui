@@ -74,7 +74,7 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
    * back.
    */
   public final void back() {
-    nifty.exit();
+    nifty.fromXml("all/intro.xml", "menu");
   }
 
   /**

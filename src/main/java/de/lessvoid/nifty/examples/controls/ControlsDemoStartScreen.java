@@ -47,6 +47,6 @@ public class ControlsDemoStartScreen implements ScreenController {
     System.out.println(dropDown1.getSelectedItemIdx() + ":" + dropDown1.getSelectedItem());
     DropDownControl dropDown2 = findDropDownControl("dropDown2");
     System.out.println(dropDown2.getSelectedItemIdx() + ":" + dropDown2.getSelectedItem());
-    nifty.exit();
+    nifty.fromXml("all/intro.xml", "menu");
   }
 }

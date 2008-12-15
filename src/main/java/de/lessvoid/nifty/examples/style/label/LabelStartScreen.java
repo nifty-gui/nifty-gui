@@ -38,7 +38,7 @@ public class LabelStartScreen implements ScreenController {
    * quit method called from the helloworld.xml.
    */
   public final void quit() {
-    nifty.exit();
+    nifty.fromXml("all/intro.xml", "menu");
   }
 
 }

@@ -26,8 +26,8 @@
     <attributes align="center"/>
     <hover width="200%" falloffConstraint="horizontal"/>
     <effect>
-      <onHover name="hoverFocus" />
-      <onHover name="hoverHint" targetElement="hintElement" hintText="$hintText" />
+      <onHover name="focus" />
+      <onHover name="hint" targetElement="hintElement" hintText="$hintText" />
       <onFocus name="pulsate" hoverWidth="100%" width="100%" period="50" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
     </effect>
   </style>
@@ -35,11 +35,11 @@
   <!-- glowing text -->
   <style id="glowText">
     <effect>
-      <onHover name="hoverSaveState" />
-      <onHover name="hoverChangeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
-      <onHover name="hoverColorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
-      <onHover name="hoverRenderElement" />
-      <onHover name="hoverRestoreState" />
+      <onHover name="saveState" />
+      <onHover name="changeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onHover name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
+      <onHover name="renderElement" />
+      <onHover name="restoreState" />
     </effect>
   </style>
 
@@ -49,11 +49,11 @@
   <style id="text-only-button#text">
     <attributes font="verdana-24-shadow.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="true"/>
     <effect>
-      <onHover name="hoverSaveState" />
-      <onHover name="hoverChangeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
-      <onHover name="hoverColorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
-      <onHover name="hoverRenderElement" />
-      <onHover name="hoverRestoreState" />
+      <onHover name="saveState" />
+      <onHover name="changeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onHover name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
+      <onHover name="renderElement" />
+      <onHover name="restoreState" />
 
       <onFocus timeType="infinite" name="saveState" />
       <onFocus timeType="infinite" name="changeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>

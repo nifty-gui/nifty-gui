@@ -11,28 +11,16 @@ import de.lessvoid.nifty.screen.ScreenController;
  */
 public class SplashController implements ScreenController {
 
-  /**
-   * the nifty instance.
-   */
   private Nifty nifty;
 
-  /**
-   * 
-   */
-  public void bind(Nifty newNifty, Screen screen) {
+  public void bind(final Nifty newNifty, final Screen screen) {
     this.nifty = newNifty;
   }
 
-  /**
-   * just goto the next screen.
-   */
-  public final void onStartScreen() {
+  public void onStartScreen() {
     nifty.gotoScreen("start2");
   }
 
-  /**
-   * on end screen.
-   */
-  public final void onEndScreen() {
+  public void onEndScreen() {
   }
 }

@@ -4,8 +4,8 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- register effects we want to use -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <registerEffect name="move" class="de.lessvoid.nifty.effects.general.Move" />
-  <registerEffect name="pulsateHover" class="de.lessvoid.nifty.effects.hover.Pulsate" />
+  <registerEffect name="move" class="de.lessvoid.nifty.effects.impl.Move" />
+  <registerEffect name="pulsateHover" class="de.lessvoid.nifty.effects.impl.Pulsate" />
   
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->

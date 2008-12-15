@@ -38,28 +38,16 @@ public final class AllExamplesMain {
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundLoader()),
         new TimeProvider());
-    nifty.fromXml(ALL_INTRO_XML, "start");
+    if (args.length == 1) {
+      nifty.fromXml(ALL_INTRO_XML, args[0]);
+    } else {
+      nifty.fromXml(ALL_INTRO_XML, "start");
+    }
 
     boolean done = false;
     while (!done) {
       LwjglInitHelper.renderLoop(nifty, null);
-
-      // catch the end of the different single demo and loop them back to the menu
-      if (nifty.isActive("helloworld/helloworld.xml", "start")) {
-        nifty.fromXml(ALL_INTRO_XML, "menu");
-      } else if (nifty.isActive("textfield/textfield.xml", "start")) {
-        nifty.fromXml(ALL_INTRO_XML, "menu");
-      } else if (nifty.isActive("textalign/textalign.xml", "start")) {
-        nifty.fromXml(ALL_INTRO_XML, "menu");
-      } else if (nifty.isActive("multiplayer/multiplayer.xml", "start")) {
-        nifty.fromXml(ALL_INTRO_XML, "menu");
-      } else if (nifty.isActive("console/console.xml", "start")) {
-        nifty.fromXml(ALL_INTRO_XML, "menu");
-      } else if (nifty.isActive("controls/controls.xml", "start")) {
-        nifty.fromXml(ALL_INTRO_XML, "menu");
-      } else {
-        done = true;
-      }
+      done = true;
     }
 
     LwjglInitHelper.destroy();

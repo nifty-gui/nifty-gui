@@ -7,32 +7,19 @@ import de.lessvoid.nifty.screen.ScreenController;
 /**
  * Outro implementation for the nifty demo Outro screen.
  * @author void
- *
  */
 public class OutroController implements ScreenController {
 
-  /**
-   * the nifty instance.
-   */
   private Nifty nifty;
 
-  /**
-   * 
-   */
-  public void bind(Nifty newNifty, Screen screen) {
+  public void bind(final Nifty newNifty, final Screen screen) {
     this.nifty = newNifty;
   }
 
-  /**
-   * just goto the next screen.
-   */
   public final void onStartScreen() {
     nifty.exit();
   }
 
-  /**
-   * on end screen.
-   */
   public final void onEndScreen() {
   }
 }

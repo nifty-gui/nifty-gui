@@ -13,7 +13,7 @@
   <style id ="unselected" base="nifty-label">
     <attributes backgroundColor="#0000" />
     <effect>
-      <onHover name="hoverPulsate" startColor="#f007" endColor="#ff0f" />
+      <onHover name="pulsate" startColor="#f007" endColor="#ff0f" />
     </effect>
   </style>
    

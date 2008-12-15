@@ -53,7 +53,7 @@ public class StartScreenController implements ScreenController {
    * quit method.
    */
   public final void quit() {
-    nifty.exit();
+    nifty.fromXml("all/intro.xml", "menu");
   }
 
 }
