@@ -3,7 +3,7 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: nifty
+    Checkstyle-Configuration: nifty checkstyle
     Description: none
 -->
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
@@ -89,6 +89,11 @@
         <module name="UpperEll"/>
         <module name="JavadocVariable">
             <property name="severity" value="ignore"/>
+        </module>
+        <module name="JavadocMethod">
+            <property name="severity" value="ignore"/>
+            <property name="logLoadErrors" value="true"/>
+            <property name="suppressLoadErrors" value="true"/>
         </module>
         <module name="JavadocMethod">
             <property name="severity" value="ignore"/>
