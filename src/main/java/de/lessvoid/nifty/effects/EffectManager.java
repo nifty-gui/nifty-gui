@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.lessvoid.nifty.EndNotify;
-import de.lessvoid.nifty.effects.general.Effect;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
@@ -33,13 +32,13 @@ public class EffectManager {
   public EffectManager() {
     this.alternateKey = null;
 
-    effects.put(EffectEventId.onStartScreen, new StandardEffectProcessor(false));
-    effects.put(EffectEventId.onEndScreen, new StandardEffectProcessor(true));
-    effects.put(EffectEventId.onFocus, new StandardEffectProcessor(false));
-    effects.put(EffectEventId.onClick, new StandardEffectProcessor(false));
-    effects.put(EffectEventId.onHover, new HoverEffectProcessor());
-    effects.put(EffectEventId.onActive, new StandardEffectProcessor(true));
-    effects.put(EffectEventId.onCustom, new StandardEffectProcessor(false));
+    effects.put(EffectEventId.onStartScreen, new EffectProcessor(false, false));
+    effects.put(EffectEventId.onEndScreen, new EffectProcessor(true, false));
+    effects.put(EffectEventId.onFocus, new EffectProcessor(true, false));
+    effects.put(EffectEventId.onClick, new EffectProcessor(false, false));
+    effects.put(EffectEventId.onHover, new EffectProcessor(false, true));
+    effects.put(EffectEventId.onActive, new EffectProcessor(true, false));
+    effects.put(EffectEventId.onCustom, new EffectProcessor(false, false));
   }
 
   /**
@@ -63,7 +62,7 @@ public class EffectManager {
       final Element w,
       final TimeProvider time,
       final EndNotify listener) {
-    ((StandardEffectProcessor) effects.get(id)).activate(listener, alternateKey);
+    ((EffectProcessor) effects.get(id)).activate(listener, alternateKey);
   }
 
   /**
@@ -96,7 +95,7 @@ public class EffectManager {
     effects.get(EffectEventId.onHover).renderPre(renderDevice);
 
     for (EffectProcessor processor : effects.values()) {
-      if (!(processor instanceof HoverEffectProcessor)) {
+      if (!processor.isHoverEffect()) {
         processor.renderPre(renderDevice);
       }
     }
@@ -110,7 +109,7 @@ public class EffectManager {
     effects.get(EffectEventId.onHover).renderPost(renderDevice);
 
     for (EffectProcessor processor : effects.values()) {
-      if (!(processor instanceof HoverEffectProcessor)) {
+      if (!processor.isHoverEffect()) {
         processor.renderPost(renderDevice);
       }
     }
@@ -122,8 +121,8 @@ public class EffectManager {
    * @param x mouse x position
    * @param y mouse y position
    */
-  public final void handleHover(final Element element, final int x, final int y) {
-    HoverEffectProcessor processor = (HoverEffectProcessor) effects.get(EffectEventId.onHover);
+  public void handleHover(final Element element, final int x, final int y) {
+    EffectProcessor processor = effects.get(EffectEventId.onHover);
     processor.processHover(element, x, y);
   }
 
@@ -155,9 +154,10 @@ public class EffectManager {
 
   /**
    * get state string.
+   * @param offset offset
    * @return String with state information
    */
-  public String getStateString() {
+  public String getStateString(final String offset) {
     StringBuffer data = new StringBuffer();
 
     int activeProcessors = 0;
@@ -166,17 +166,14 @@ public class EffectManager {
       if (processor.isActive()) {
         activeProcessors++;
 
-        if (data.length() != 0) {
-          data.append(", \n");
-        }
-        data.append(eventId.toString());
-        data.append(":");
+        data.append("\n" + offset);
+        data.append("  {" + eventId.toString() + "} ");
         data.append(processor.getStateString());
       }
     }
 
     if (activeProcessors == 0) {
-      return "none";
+      return "";
     } else {
       return data.toString();
     }
@@ -187,6 +184,6 @@ public class EffectManager {
    * @param effectId effect id to stop
    */
   public void stopEffect(final EffectEventId effectId) {
-    ((StandardEffectProcessor) effects.get(effectId)).setActive(false);
+    ((EffectProcessor) effects.get(effectId)).setActive(false);
   }
 }
