@@ -171,10 +171,17 @@ public class EffectType {
     // create the effect class
     Effect effect = null;
     if (effectEventId.equals(EffectEventId.onHover)) {
-      effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId, true);
+      effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId);
+      effect.enableHover();
+      effect.enableInfinite();
     } else {
-      effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId, false);
+      effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId);
     }
+
+    if (effectEventId.equals(EffectEventId.onFocus)) {
+      effect.enableInfinite();
+    }
+
     effect.init(element, createEffectImpl(effectClass), any.createProperties(), time);
     element.registerEffect(effectEventId, effect);
   }

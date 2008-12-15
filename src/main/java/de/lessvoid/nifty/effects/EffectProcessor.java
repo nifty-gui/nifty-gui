@@ -19,7 +19,7 @@ import de.lessvoid.nifty.render.RenderStateType;
  */
 public class EffectProcessor {
 
-  private List < Effect > effects = new ArrayList < Effect >();
+  private List < Effect > allEffects = new ArrayList < Effect >();
   private List < Effect > activeEffects = new ArrayList < Effect >();
 
   private boolean active;
@@ -31,11 +31,11 @@ public class EffectProcessor {
 
   /**
    * create and initialize a new instance.
-   * @param neverEndsValueParam flag if this event never ends
+   * @param neverStopRenderingParam flag if this event never ends
    * @param hoverEffectParam is hover effect
    */
-  public EffectProcessor(final boolean neverEndsValueParam, final boolean hoverEffectParam) {
-    neverStopRendering = neverEndsValueParam;
+  public EffectProcessor(final boolean neverStopRenderingParam, final boolean hoverEffectParam) {
+    neverStopRendering = neverStopRenderingParam;
     active = false;
     renderDeviceProxy = new NiftyRenderDeviceProxy();
     isHoverEffect = hoverEffectParam;
@@ -46,7 +46,7 @@ public class EffectProcessor {
    * @param e the effect to register.
    */
   public final void registerEffect(final Effect e) {
-    effects.add(e);
+    allEffects.add(e);
   }
 
   /**
@@ -54,8 +54,8 @@ public class EffectProcessor {
    * @param renderDevice the renderDevice
    */
   public final void renderPre(final NiftyRenderEngine renderDevice) {
-    if (!neverStopRendering) {
-      if (!active) {
+    if (!active) {
+      if (!neverStopRendering) {
         return;
       }
     }
@@ -97,8 +97,8 @@ public class EffectProcessor {
    * @return set of RenderState to save
    */
   public Set < RenderStateType > getRenderStatesToSave() {
-    if (!neverStopRendering) {
-      if (!active) {
+    if (!active) {
+      if (!neverStopRendering) {
         return new HashSet < RenderStateType >();
       }
     }
@@ -156,7 +156,7 @@ public class EffectProcessor {
    * reset.
    */
   public final void reset() {
-    this.active = false;
+    active = false;
     for (Effect e : activeEffects) {
       e.setActive(false);
     }
@@ -169,15 +169,15 @@ public class EffectProcessor {
    * @param alternate alternate key to use
    */
   public final void activate(final EndNotify newListener, final String alternate) {
-    this.listener = newListener;
+    listener = newListener;
 
     // activate effects
-    for (Effect e : effects) {
+    for (Effect e : allEffects) {
       startEffect(e, alternate);
     }
 
     if (!activeEffects.isEmpty()) {
-      this.active = true;
+      active = true;
     }
   }
 
@@ -215,7 +215,7 @@ public class EffectProcessor {
    * @return effect list
    */
   protected List < Effect > getEffects() {
-    return effects;
+    return allEffects;
   }
 
   /**
@@ -279,7 +279,6 @@ public class EffectProcessor {
       final int y,
       final List < Effect > effectList) {
     for (Effect e : effectList) {
-      // that's kinda crap but can't help it at the moment...
       if (e.isHoverEffect()) {
         if (!e.isActive()) {
           if (e.isInsideFalloff(x, y)) {

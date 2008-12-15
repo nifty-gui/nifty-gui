@@ -30,6 +30,7 @@ public class Effect {
   private Nifty nifty;
   private boolean hoverEffect;
   private Falloff falloff;
+  private boolean infiniteEffect;
 
   public Effect(
       final Nifty niftyParam,
@@ -37,8 +38,7 @@ public class Effect {
       final boolean postParam,
       final String alternateKeyParam,
       final boolean alternateEnableParam,
-      final EffectEventId effectEventIdParam,
-      final boolean hoverEffectParam) {
+      final EffectEventId effectEventIdParam) {
     nifty = niftyParam;
     inherit = inheritParam;
     post = postParam;
@@ -46,7 +46,16 @@ public class Effect {
     alternateKey = alternateKeyParam;
     alternateEnable = alternateEnableParam;
     effectEventId = effectEventIdParam;
-    hoverEffect = hoverEffectParam;
+    hoverEffect = false;
+    infiniteEffect = false;
+  }
+
+  public void enableHover() {
+    hoverEffect = true;
+  }
+
+  public void enableInfinite() {
+    infiniteEffect = true;
   }
 
   /**
@@ -65,7 +74,7 @@ public class Effect {
     element = elementParam;
     parameter = parameterParam;
     parameter.put("effectEventId", effectEventId);
-    timeInterpolator = new TimeInterpolator(parameter, timeParam);
+    timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
     falloff = new Falloff(parameterParam);
   }
 

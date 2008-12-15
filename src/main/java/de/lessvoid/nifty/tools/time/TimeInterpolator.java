@@ -55,13 +55,19 @@ public class TimeInterpolator {
    *
    * @param parameter parameter props
    * @param newTimeProvider TimeProvider to use
+   * @param infinite infinit effects never end
    */
-  public TimeInterpolator(final Properties parameter, final TimeProvider newTimeProvider) {
-    this.timeProvider = newTimeProvider;
-    this.startDelayParam = Long.parseLong(parameter.getProperty("startDelay", "0"));
+  public TimeInterpolator(final Properties parameter, final TimeProvider newTimeProvider, final boolean infinite) {
+    timeProvider = newTimeProvider;
+    startDelayParam = Long.parseLong(parameter.getProperty("startDelay", "0"));
+
+    String lengthDefault = null;
+    if (infinite) {
+      lengthDefault = "infinite";
+    }
 
     interpolatorProvider = null;
-    if ("infinite".equals(parameter.getProperty("length", null))) {
+    if ("infinite".equals(parameter.getProperty("length", lengthDefault))) {
       interpolatorProvider = new NullTime();
     } else {
       this.lengthParam = Long.parseLong(parameter.getProperty("length", "1000"));

@@ -74,6 +74,6 @@ public class ButtonControl implements Controller {
    */
   public void onStartScreen(final Screen screenParam) {
     screen = screenParam;
-    this.focusHandler = screenParam.getFocusHandler();
+    focusHandler = screenParam.getFocusHandler();
   }
 }

@@ -19,7 +19,7 @@ public class EffectManager {
   /**
    * all the effects.
    */
-  private Map < EffectEventId, EffectProcessor > effects = new Hashtable < EffectEventId, EffectProcessor >();
+  private Map < EffectEventId, EffectProcessor > effectProcessor = new Hashtable < EffectEventId, EffectProcessor >();
 
   /**
    * alternateKey we should use.
@@ -32,13 +32,13 @@ public class EffectManager {
   public EffectManager() {
     this.alternateKey = null;
 
-    effects.put(EffectEventId.onStartScreen, new EffectProcessor(false, false));
-    effects.put(EffectEventId.onEndScreen, new EffectProcessor(true, false));
-    effects.put(EffectEventId.onFocus, new EffectProcessor(true, false));
-    effects.put(EffectEventId.onClick, new EffectProcessor(false, false));
-    effects.put(EffectEventId.onHover, new EffectProcessor(false, true));
-    effects.put(EffectEventId.onActive, new EffectProcessor(true, false));
-    effects.put(EffectEventId.onCustom, new EffectProcessor(false, false));
+    effectProcessor.put(EffectEventId.onStartScreen, new EffectProcessor(false, false));
+    effectProcessor.put(EffectEventId.onEndScreen, new EffectProcessor(true, false));
+    effectProcessor.put(EffectEventId.onFocus, new EffectProcessor(true, false));
+    effectProcessor.put(EffectEventId.onClick, new EffectProcessor(false, false));
+    effectProcessor.put(EffectEventId.onHover, new EffectProcessor(true, true));
+    effectProcessor.put(EffectEventId.onActive, new EffectProcessor(true, false));
+    effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false, false));
   }
 
   /**
@@ -47,7 +47,7 @@ public class EffectManager {
    * @param e the effect
    */
   public final void registerEffect(final EffectEventId id, final Effect e) {
-    effects.get(id).registerEffect(e);
+    effectProcessor.get(id).registerEffect(e);
   }
 
   /**
@@ -62,7 +62,7 @@ public class EffectManager {
       final Element w,
       final TimeProvider time,
       final EndNotify listener) {
-    ((EffectProcessor) effects.get(id)).activate(listener, alternateKey);
+    effectProcessor.get(id).activate(listener, alternateKey);
   }
 
   /**
@@ -72,7 +72,7 @@ public class EffectManager {
   public void begin(final NiftyRenderEngine renderDevice) {
     Set < RenderStateType > renderStates = RenderStateType.allStates();
 
-    for (EffectProcessor processor : effects.values()) {
+    for (EffectProcessor processor : effectProcessor.values()) {
       renderStates.removeAll(processor.getRenderStatesToSave());
     }
 
@@ -91,10 +91,10 @@ public class EffectManager {
    * render all pre effects.
    * @param renderDevice the renderDevice we should use.
    */
-  public final void renderPre(final NiftyRenderEngine renderDevice) {
-    effects.get(EffectEventId.onHover).renderPre(renderDevice);
+  public void renderPre(final NiftyRenderEngine renderDevice) {
+    effectProcessor.get(EffectEventId.onHover).renderPre(renderDevice);
 
-    for (EffectProcessor processor : effects.values()) {
+    for (EffectProcessor processor : effectProcessor.values()) {
       if (!processor.isHoverEffect()) {
         processor.renderPre(renderDevice);
       }
@@ -105,10 +105,10 @@ public class EffectManager {
    * render all post effects.
    * @param renderDevice the renderDevice we should use.
    */
-  public final void renderPost(final NiftyRenderEngine renderDevice) {
-    effects.get(EffectEventId.onHover).renderPost(renderDevice);
+  public void renderPost(final NiftyRenderEngine renderDevice) {
+    effectProcessor.get(EffectEventId.onHover).renderPost(renderDevice);
 
-    for (EffectProcessor processor : effects.values()) {
+    for (EffectProcessor processor : effectProcessor.values()) {
       if (!processor.isHoverEffect()) {
         processor.renderPost(renderDevice);
       }
@@ -122,7 +122,7 @@ public class EffectManager {
    * @param y mouse y position
    */
   public void handleHover(final Element element, final int x, final int y) {
-    EffectProcessor processor = effects.get(EffectEventId.onHover);
+    EffectProcessor processor = effectProcessor.get(EffectEventId.onHover);
     processor.processHover(element, x, y);
   }
 
@@ -132,14 +132,14 @@ public class EffectManager {
    * @return true, if active, false otherwise
    */
   public final boolean isActive(final EffectEventId effectEventId) {
-    return effects.get(effectEventId).isActive();
+    return effectProcessor.get(effectEventId).isActive();
   }
 
   /**
    * reset all effects.
    */
   public final void reset() {
-    for (EffectProcessor processor : effects.values()) {
+    for (EffectProcessor processor : effectProcessor.values()) {
       processor.reset();
     }
   }
@@ -161,8 +161,8 @@ public class EffectManager {
     StringBuffer data = new StringBuffer();
 
     int activeProcessors = 0;
-    for (EffectEventId eventId : effects.keySet()) {
-      EffectProcessor processor = effects.get(eventId);
+    for (EffectEventId eventId : effectProcessor.keySet()) {
+      EffectProcessor processor = effectProcessor.get(eventId);
       if (processor.isActive()) {
         activeProcessors++;
 
@@ -184,6 +184,6 @@ public class EffectManager {
    * @param effectId effect id to stop
    */
   public void stopEffect(final EffectEventId effectId) {
-    ((EffectProcessor) effects.get(effectId)).setActive(false);
+    effectProcessor.get(effectId).setActive(false);
   }
 }

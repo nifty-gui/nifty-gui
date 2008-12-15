@@ -37,7 +37,7 @@ public class ExpTimeTest extends TestCase {
     prop.setProperty( "startDelay", "1000" );
     prop.setProperty( "factor", "2" );
     
-    TimeInterpolator time= new TimeInterpolator( prop, timeProvider );
+    TimeInterpolator time= new TimeInterpolator(prop, timeProvider, false);
     time.start();
     assertEquals( 0.0f, time.getValue());
     
@@ -71,11 +71,11 @@ public class ExpTimeTest extends TestCase {
     prop.setProperty( "length", "200" );
     prop.setProperty( "startDelay", "1000" );
     prop.setProperty( "factor", "0.5" );
-    
-    TimeInterpolator time= new TimeInterpolator(prop, timeProvider );
+
+    TimeInterpolator time = new TimeInterpolator(prop, timeProvider, false);
     time.start();
     assertEquals( 0.0f, time.getValue());
-    
+
     time.update();
     assertEquals( 0.0f, time.getValue());
 
