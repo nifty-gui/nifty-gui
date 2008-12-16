@@ -13,8 +13,13 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  * @author void
  */
 public class Focus implements EffectImpl {
+  private Element targetElement;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
+    String target = parameter.getProperty("targetElement");
+    if (target != null) {
+      targetElement = element.getParent().findElementByName(target);
+    }
   }
 
   public void execute(
@@ -22,7 +27,11 @@ public class Focus implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    element.setFocus();
+    if (targetElement != null) {
+      targetElement.setFocus();
+    } else {
+      element.setFocus();
+    }
   }
 
   public void deactivate() {

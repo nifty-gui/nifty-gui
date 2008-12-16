@@ -545,13 +545,12 @@ public class Screen implements MouseFocusHandler {
     }
 
     if (focusElement != null) {
-      focusElement.stopEffect(EffectEventId.onHover);
       focusElement.stopEffect(EffectEventId.onFocus);
+      focusElement.stopEffect(EffectEventId.onHover);      
     }
 
     focusElement = newFocusElement;
     if (focusElement != null) {
-      focusElement.startEffect(EffectEventId.onHover, null);
       focusElement.startEffect(EffectEventId.onFocus, null);
     }
   }
