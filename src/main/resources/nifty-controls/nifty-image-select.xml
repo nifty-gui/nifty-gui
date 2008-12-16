@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="imageSelect" controller="de.lessvoid.nifty.controls.imageSelect.ImageSelectControl">
+    <panel align="center" valign="center" childLayout="horizontal" imageList="$imageList">
+      <panel width="32px" align="center" valign="center" childLayout="center">
+        <image id="back" filename="imageSelect/imageSelectArrowLeft.png" align="center" valign="center">
+          <interact onClick="backClick()"/>
+          <effect>
+            <onHover name="imageOverlay" filename="imageSelect/imageSelectArrowLeftHover.png" />
+          </effect>
+        </image>
+      </panel>
+      <panel align="center" valign="center" childLayout="center">
+        <image id="image" align="center" valign="center" />
+      </panel>
+      <panel width="32px" align="right" valign="center" childLayout="center">
+        <image id="forward" filename="imageSelect/imageSelectArrowRight.png" align="center" valign="center">
+          <interact onClick="forwardClick()"/>
+          <effect>
+            <onHover name="imageOverlay" filename="imageSelect/imageSelectArrowRightHover.png" />
+          </effect>
+        </image>
+      </panel>
+    </panel>
+  </controlDefinition>
+</nifty-controls>

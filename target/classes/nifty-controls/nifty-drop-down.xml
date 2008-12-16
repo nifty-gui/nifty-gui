@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <!-- DROP DOWN CONTROL -->
+  <controlDefinition style="nifty-drop-down" name="dropDownControl" controller="de.lessvoid.nifty.controls.dropdown.DropDownControl">
+    <panel childLayout="horizontal">
+      <text id="text" style="#text" text="" focusable="true">
+        <interact onClick="dropDownClicked()" />
+      </text>
+      <image id="icon" style="#icon">
+        <interact onClick="dropDownClicked()" />
+      </image>
+    </panel>
+  </controlDefinition>
+
+  <!-- DROP DOWN CONTROL ITEM -->
+  <controlDefinition style="nifty-drop-down" name="dropDownControlItem" controller="de.lessvoid.nifty.controls.dropdown.DropDownControlItem">
+    <text id="text" style="#text-item" text="" focusable="true">
+      <interact onRelease="dropDownItemClicked()"/>
+    </text>
+  </controlDefinition>
+
+  <!-- DROP DOWN BOX POPUP (The Actual List this is) -->
+  <popup id="dropDownBoxSelectPopup" childLayout="absolute" controller="de.lessvoid.nifty.controls.dropdown.DropDownPopup">
+    <interact onRelease="close()" />
+    <panel id="dropDownList" style="#list-panel" />
+  </popup>
+</nifty-controls>
