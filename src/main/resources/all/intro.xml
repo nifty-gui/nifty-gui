@@ -27,7 +27,7 @@
     <hover width="200%" falloffConstraint="horizontal"/>
     <effect>
       <onHover name="focus" />
-      <onHover name="hint" targetElement="hintElement" hintText="$hintText" />
+      <onFocus name="hint" targetElement="hintElement" hintText="$hintText" />
       <onFocus name="pulsate" hoverWidth="100%" width="100%" period="50" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
     </effect>
   </style>
