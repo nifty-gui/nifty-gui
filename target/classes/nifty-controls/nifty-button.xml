@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<nifty-controls>
-  <controlDefinition style="nifty-button" name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl">
-    <panel id="button-panel" style="#panel" focusable="true">
-      <label id="button-text" style="#text" text="$label"/>
-    </panel>
-  </controlDefinition>
-</nifty-controls>
