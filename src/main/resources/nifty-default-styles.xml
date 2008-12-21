@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <useStyles filename="panel/nifty-panel.xml" />
+  <useStyles filename="button/nifty-button.xml" />
+  <useStyles filename="label/nifty-label.xml" />
+  <useStyles filename="textfield/nifty-textfield.xml" />
+  <useStyles filename="dropdown/nifty-drop-down.xml" />
+</nifty-styles>

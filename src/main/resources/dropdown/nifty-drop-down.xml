@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <style id="nifty-drop-down#text">
+    <attributes font="candara-20.fnt" color="#000f" textHAlign="left" textVAlign="center" />
+    <effect>
+      <onClick name="focus" />
+      <onClick name="remote" targetElement="icon" />
+      <onFocus name="imageOverlay" post="false" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
+      <onFocus name="textColor" post="false" color="#ffff" />
+      <onFocus name="remote" targetElement="icon" />
+      <onActive name="imageOverlay" post="false" filename="textfield/field.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
+    </effect>
+  </style>
+  
+  <style id="nifty-drop-down#icon">
+    <attributes filename="dropdown/drop-down-icon-black.png" width="28px" height="28px" imageMode="subImage:0,0,28,28" />
+    <effect>
+      <onClick name="focus" targetElement="text" />
+      <onClick name="imageOverlay" filename="dropdown/drop-down-icon-black.png" width="28px" height="28px" imageMode="subImage:56,0,28,28" post="true" />
+      <onFocus name="imageOverlay" filename="dropdown/drop-down-icon-black.png" width="28px" height="28px" imageMode="subImage:28,0,28,28" post="true" />
+    </effect>
+  </style>
+
+  <style id="nifty-drop-down#list-panel">
+    <attributes childLayout="vertical" />
+    <effect>
+      <onStartScreen name="clip" length="250" inherit="true" post="false" />
+      <onStartScreen name="move" length="250" mode="fromOffset" offsetY="-200" inherit="true"/>
+      <onStartScreen name="fade" length="250" startColor="#0000" endColor="#000c" inherit="true"/>
+      <onEndScreen name="clip" length="250" inherit="true" post="false" />
+      <onEndScreen name="move" length="250" mode="toOffset" offsetY="-200" inherit="true"/>
+      <onActive name="imageOverlay" alpha="#c" post="false" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
+    </effect>
+  </style>
+
+  <style id="nifty-drop-down#text-item">
+    <attributes font="candara-20.fnt" textHAlign="left" textVAlign="center" />
+    <effect>
+      <onHover name="focus" />
+      <onFocus name="colorBar" color="#000f" post="false" />
+    </effect>
+  </style>
+</nifty-styles>
