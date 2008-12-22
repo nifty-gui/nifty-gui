@@ -107,17 +107,16 @@ public class Console
       x= device.getWidth() - maxWidth - 10;
       y= device.getHeight() - maxHeight - 10;
     }
+    GL11.glColor3f(1.0f, 1.0f, 1.0f);
   }
   
   private void endRender()
   {
     GL11.glPopAttrib();
   }
-  
-  private void outputString( String text )
-  {
-    GL11.glColor3f( 1.0f, 1.0f, 1.0f );
-    font.drawString( x, y, text );
+
+  private void outputString(final String text) {
+    font.drawString(x, y, text);
     y += font.getHeight();
   }
 }

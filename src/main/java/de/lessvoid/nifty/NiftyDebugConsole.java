@@ -1,5 +1,7 @@
 package de.lessvoid.nifty;
 
+import java.io.UnsupportedEncodingException;
+
 import de.lessvoid.console.Console;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.elements.Element;
@@ -59,6 +61,7 @@ public class NiftyDebugConsole {
    */
   private void outputElements(final Nifty nifty, final Screen screen, final NiftyRenderEngine theRenderDevice) {
     console.clear();
+    console.output(colorString(0xff, 0xff, 0xff));
     console.output("*[" + screen.getScreenId() + "]");
 
     // render all layers
@@ -81,6 +84,16 @@ public class NiftyDebugConsole {
     theRenderDevice.restoreState();
   }
 
+  private String colorString(final int r, final int g, final int b) {
+    String color = "";
+    try {
+      color = new String(new byte[] {0x01, (byte) r, (byte) g, (byte) b}, "ISO-8859-1");
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
+    return color;
+  }
+
   /**
    * Output layers.
    * @param nifty nifty
@@ -94,6 +107,7 @@ public class NiftyDebugConsole {
     }
 
     String screenId = screen.getScreenId();
+    console.output(colorString(0xff, 0xff, 0xff));
     console.output("*[" + screenId + "]");
 
     // render all layers

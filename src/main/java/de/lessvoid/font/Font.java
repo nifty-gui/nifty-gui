@@ -210,11 +210,11 @@ public class Font {
       GL11.glPushMatrix();
       GL11.glLoadIdentity();
     GL11.glOrtho(0, device.getWidth(), device.getHeight(), 0, -MAX_DISTANCE, MAX_DISTANCE);
-    
+
     GL11.glMatrixMode(GL11.GL_MODELVIEW);
       GL11.glPushMatrix();
       GL11.glLoadIdentity();
-      
+
       GL11.glEnable(GL11.GL_TEXTURE_2D);
 
       int originalWidth = getStringWidthInternal(text, 1.0f);
@@ -222,8 +222,29 @@ public class Font {
       int x = xPos - (sizedWidth - originalWidth) / 2;
 
       int activeTextureIdx = -1;
+      boolean parseColor = false;
+      int parseColorIdx = 0;
+      byte [] color = new byte[3];
+      color[0] = (byte) 0xFF;
+      color[1] = (byte) 0xFF;
+      color[2] = (byte) 0xFF;
+
       for (int i = 0; i < text.length(); i++) {
         char currentc = text.charAt(i);
+        if (isColorBegin(currentc)) {
+          parseColor = true;
+          parseColorIdx = 0;
+          continue;
+        }
+        if (parseColor) {
+          color[parseColorIdx] = (byte) currentc;
+          parseColorIdx++;
+          if (parseColorIdx < 3) {
+            continue;
+          }
+          parseColor = false;
+          GL11.glColor3ub(color[0], color[1], color[2]);        }
+
         char nextc = FontHelper.getNextCharacter(text, i);
 
         CharacterInfo charInfoC = font.getChar((char) currentc);
@@ -290,6 +311,10 @@ public class Font {
 
       GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPopMatrix();
+  }
+
+  private boolean isColorBegin(final char current) {
+    return current == '\1';
   }
 
   /**
