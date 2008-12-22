@@ -110,7 +110,7 @@ public class Element {
   /**
    * The focus handler this element is attached to.
    */
-  private MouseFocusHandler mouseFocusHandler;
+  private FocusHandler focusHandler;
 
   /**
    * enable element.
@@ -209,7 +209,7 @@ public class Element {
       final ElementType newElementType,
       final String newId,
       final Element newParent,
-      final MouseFocusHandler newFocusHandler,
+      final FocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
       final TimeProvider newTimeProvider, final ElementRenderer ... newElementRenderer) {
     initialize(
@@ -241,7 +241,7 @@ public class Element {
       final String newId,
       final Element newParent,
       final LayoutPart newLayoutPart,
-      final MouseFocusHandler newFocusHandler,
+      final FocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
       final TimeProvider newTimeProvider, final ElementRenderer ... newElementRenderer) {
     initialize(
@@ -274,7 +274,7 @@ public class Element {
       final Element newParent,
       final ElementRenderer[] newElementRenderer,
       final LayoutPart newLayoutPart,
-      final MouseFocusHandler newFocusHandler,
+      final FocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
       final TimeProvider timeProvider) {
     this.nifty = newNifty;
@@ -287,7 +287,7 @@ public class Element {
     this.enabled = true;
     this.visible = true;
     this.done = false;
-    this.mouseFocusHandler = newFocusHandler;
+    this.focusHandler = newFocusHandler;
     this.visibleToMouseEvents = newVisibleToMouseEvents;
     this.time = timeProvider;
     this.setMouseDown(false, 0);
@@ -661,16 +661,14 @@ public class Element {
    * @param effectEventId the effect event id to start
    * @param effectEndNotiy the EffectEndNotify event we should activate
    */
-  public final void startEffect(
-      final EffectEventId effectEventId,
-      final EndNotify effectEndNotiy) {
+  public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
 
     if (effectEventId == EffectEventId.onStartScreen) {
       done = false;
     }
 
     if (effectEventId == EffectEventId.onEndScreen) {
-      stopEffect(EffectEventId.onHover);
+//      stopEffect(EffectEventId.onHover);
       done = true;
     }
 
@@ -700,6 +698,10 @@ public class Element {
 
     // just in case there was no effect activated, we'll check here, if we're already done
     forwardToSelf.perform();
+  }
+
+  public void startEffect(final EffectEventId effectEventId) {
+    startEffect(effectEventId, null);
   }
 
   /**
@@ -771,16 +773,11 @@ public class Element {
    * hide this element.
    */
   public final void hide() {
-    if (screen != null && screen.hasFocus(this)) {
-      screen.setFocus(null);
-    }
+    focusHandler.lostKeyboardFocus(this);
+    focusHandler.lostMouseFocus(this);
 
     visible = false;
     resetEffects();
-
-    if (mouseFocusHandler != null) {
-      mouseFocusHandler.lostFocus(this);
-    }
 
     for (Element element : elements) {
       element.hide();
@@ -823,7 +820,7 @@ public class Element {
     if (!visibleToMouseEvents) {
       return false;
     }
-    if (mouseFocusHandler != null && !mouseFocusHandler.canProcessMouseEvents(this)) {
+    if (!focusHandler.canProcessMouseEvents(this)) {
       return false;
     }
     return true;
@@ -888,8 +885,8 @@ public class Element {
     if (mouseInside && !isMouseDown()) {
       if (mouseEvent.isLeftButton()) {
         setMouseDown(true, eventTime);
-        if (mouseFocusHandler != null && focusable) {
-          mouseFocusHandler.requestExclusiveFocus(this);
+        if (focusable) {
+          focusHandler.requestExclusiveMouseFocus(this);
         }
         effectManager.startEffect(EffectEventId.onClick, this, time, null);
         if (onClick(mouseEvent)) {
@@ -899,9 +896,7 @@ public class Element {
     } else if (!mouseEvent.isLeftButton() && isMouseDown()) {
       setMouseDown(false, eventTime);
       effectManager.stopEffect(EffectEventId.onClick);
-      if (mouseFocusHandler != null) {
-        mouseFocusHandler.lostFocus(this);
-      }
+      focusHandler.lostMouseFocus(this);
       if (mouseInside) {
         onRelease();
       }
@@ -1085,13 +1080,10 @@ public class Element {
    * @param newScreen screen
    */
   public void onStartScreen(final Screen newScreen) {
-    this.screen = newScreen;
+    screen = newScreen;
 
     if (focusable) {
-      FocusHandler focusHandler = screen.getFocusHandler();
-      if (focusHandler != null) {
-        focusHandler.addElement(this);
-      }
+      focusHandler.addElement(this);
     }
 
     if (attachedInputControl != null) {
@@ -1150,7 +1142,7 @@ public class Element {
   public void setFocus() {
     if (attachedInputControl != null && nifty != null && nifty.getCurrentScreen() != null) {
       if (focusable) {
-        nifty.getCurrentScreen().setFocus(this);
+        focusHandler.setKeyFocus(this);
       }
     } else {
       for (Element element : elements) {
@@ -1257,12 +1249,7 @@ public class Element {
       element.remove();
       elementIt.remove();
     }
-    if (mouseFocusHandler != null) {
-      mouseFocusHandler.lostFocus(this);
-    }
-    if (screen.getFocusHandler() != null) {
-      screen.getFocusHandler().remove(this);
-    }
+    focusHandler.remove(this);
   }
 
   /**
@@ -1412,5 +1399,25 @@ public class Element {
    */
   public boolean isVisibleToMouseEvents() {
     return visibleToMouseEvents;
+  }
+
+  public void setPaddingLeft(final SizeValue paddingValue) {
+    layoutPart.getBoxConstraints().setPaddingLeft(paddingValue);
+  }
+
+  public void setPaddingRight(final SizeValue paddingValue) {
+    layoutPart.getBoxConstraints().setPaddingRight(paddingValue);
+  }
+
+  public void setPaddingTop(final SizeValue paddingValue) {
+    layoutPart.getBoxConstraints().setPaddingTop(paddingValue);
+  }
+
+  public void setPaddingBottom(final SizeValue paddingValue) {
+    layoutPart.getBoxConstraints().setPaddingBottom(paddingValue);
+  }
+
+  public String toString() {
+    return id + " (" + super.toString() + ")";
   }
 }
