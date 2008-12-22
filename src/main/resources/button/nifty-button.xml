@@ -6,8 +6,8 @@
   <style id="nifty-button#panel">
     <attributes backgroundImage="button/black-button-normal.png" align="center" width="152px" height="32px" childLayout="center" visibleToMouse="true" />
     <effect>
-      <onHover name="imageOverlay" filename="button/black-button-hover.png" post="true" resize="5px" />
-      <onFocus name="imageOverlay" filename="button/black-button-hover.png" post="true" resize="5px" />
+      <onHover name="imageOverlay" filename="button/black-button-hover.png" post="true" inset="-5px" />
+      <onFocus name="imageOverlay" filename="button/black-button-hover.png" post="true" inset="-5px" />
     </effect>
   </style>
 
