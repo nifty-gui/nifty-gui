@@ -9,7 +9,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
@@ -36,9 +36,11 @@ public class ImageOverlayPulsate implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
+    r.saveState(RenderStateType.allStates());
     float value = pulsater.update();
-    r.setColor(new Color(1.0f, 1.0f, 1.0f, value));
+    r.setColorAlpha(value);
     r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
+    r.restoreState();
   }
 
   public void deactivate() {

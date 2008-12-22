@@ -225,4 +225,36 @@ public class Color {
   public String toString() {
     return "(" + red + "," + green + "," + blue + "," + alpha + ")";
   }
+
+  /**
+   * Set color alpha.
+   * @param newColorAlpha new color alpha
+   */
+  public void setAlpha(final float newColorAlpha) {
+    alpha = newColorAlpha;
+  }
+
+  /**
+   * Set red.
+   * @param newRed new red value
+   */
+  public void setRed(final float newRed) {
+    red = newRed;
+  }
+
+  /**
+   * Set green.
+   * @param newGreen new green value
+   */
+  public void setGreen(final float newGreen) {
+    green = newGreen;
+  }
+
+  /**
+   * Set blue.
+   * @param newBlue new blue value
+   */
+  public void setBlue(final float newBlue) {
+    blue = newBlue;
+  }
 }

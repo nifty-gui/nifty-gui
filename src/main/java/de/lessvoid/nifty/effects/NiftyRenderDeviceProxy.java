@@ -15,23 +15,23 @@ import de.lessvoid.nifty.tools.Color;
  */
 public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
-  private Set < RenderStateType > renderStates = new HashSet < RenderStateType > ();
+  private Set < RenderStateType > renderStates = new HashSet < RenderStateType >();
 
   public void clear() {
   }
 
-  public RenderFont createFont(String name) {
+  public RenderFont createFont(final String name) {
     return null;
   }
 
-  public NiftyImage createImage(String name, boolean filterLinear) {
+  public NiftyImage createImage(final String name, final boolean filterLinear) {
     return null;
   }
 
   public void disableClip() {
   }
 
-  public void enableClip(int x0, int y0, int x1, int y1) {
+  public void enableClip(final int x0, final int y0, final int x1, final int y1) {
     renderStates.add(RenderStateType.clip);
   }
 
@@ -43,7 +43,24 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
     return 0;
   }
 
+  public void setColor(final Color colorParam) {
+    renderStates.add(RenderStateType.color);
+    renderStates.add(RenderStateType.alpha);
+  }
+
+  public void setColorAlpha(final float newColorAlpha) {
+    renderStates.add(RenderStateType.alpha);
+  }
+
+  public void setColorIgnoreAlpha(final Color color) {
+    renderStates.add(RenderStateType.color);
+  }
+
   public boolean isColorChanged() {
+    return false;
+  }
+
+  public boolean isColorAlphaChanged() {
     return false;
   }
 
@@ -51,43 +68,46 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
     return 0.0f;
   }
 
-  public void moveTo(float param, float param2) {
+  public void moveTo(final float param, final float param2) {
     renderStates.add(RenderStateType.position);
   }
 
-  public void renderImage(NiftyImage image, int x, int y, int width, int height) {
+  public void renderImage(final NiftyImage image, final int x, final int y, final int width, final int height) {
   }
 
-  public void renderQuad(int x, int y, int width, int height) {
+  public void renderQuad(final int x, final int y, final int width, final int height) {
   }
 
-  public void renderText(String text, int x, int y, int selectionStart, int selectionEnd, Color c) {
+  public void renderText(
+      final String text,
+      final int x,
+      final int y,
+      final int selectionStart,
+      final int selectionEnd,
+      final Color c) {
   }
 
   public void restoreState() {
   }
 
-  public void saveState(Set<RenderStateType> statesToSave) {
+  public void saveState(final Set < RenderStateType > statesToSave) {
   }
 
-  public void setFont(RenderFont font) {
-    renderStates.add(RenderStateType.font); 
+  public void setFont(final RenderFont font) {
+    renderStates.add(RenderStateType.font);
   }
 
   public RenderFont getFont() {
     return null;
   }
-  public void setColor(Color colorParam) {
-    renderStates.add(RenderStateType.color);
+
+  public void setGlobalPosition(final float pos, final float pos2) {
   }
 
-  public void setGlobalPosition(float pos, float pos2) {
+  public void setImageScale(final float scale) {
   }
 
-  public void setImageScale(float scale) {
-  }
-
-  public void setRenderTextSize(float size) {
+  public void setRenderTextSize(final float size) {
   }
 
   public void reset() {

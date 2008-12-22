@@ -92,16 +92,28 @@ public interface NiftyRenderEngine {
   void setColor(Color colorParam);
 
   /**
-   * get color alpha.
-   * @return alpha
+   * set only the color alpha.
+   * @param newColorAlpha new alpha value
    */
-  float getColorAlpha();
+  void setColorAlpha(float newColorAlpha);
+
+  /**
+   * Set only the color component of the given color. This assumes that alpha has already been changed.
+   * @param color color
+   */
+  void setColorIgnoreAlpha(Color color);
 
   /**
    * return true when color has been changed.
    * @return color changed
    */
   boolean isColorChanged();
+
+  /**
+   * return true when color has been changed.
+   * @return color changed
+   */
+  boolean isColorAlphaChanged();
 
   /**
    * Move to the given x/y position.

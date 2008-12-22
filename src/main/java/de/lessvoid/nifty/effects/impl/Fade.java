@@ -28,7 +28,7 @@ public class Fade implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     Color c = start.linear(end, normalizedTime);
-    r.setColor(c);
+    r.setColorAlpha(c.getAlpha());
   }
 
   public void deactivate() {

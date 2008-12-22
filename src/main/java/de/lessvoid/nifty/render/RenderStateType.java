@@ -20,6 +20,11 @@ public enum RenderStateType {
   color,
 
   /**
+   * alpha.
+   */
+  alpha,
+
+  /**
    * text size.
    */
   textSize,

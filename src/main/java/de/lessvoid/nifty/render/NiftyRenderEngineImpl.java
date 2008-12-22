@@ -50,12 +50,17 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   /**
    * current color.
    */
-  private Color color;
+  private Color color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
   /**
    * color changed.
    */
   private boolean colorChanged = false;
+
+  /**
+   * color alpha changed.
+   */
+  private boolean colorAlphaChanged = false;
 
   /**
    * current imageScale.
@@ -92,6 +97,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   public NiftyRenderEngineImpl(final RenderDevice renderDeviceParam) {
     renderDevice = renderDeviceParam;
     renderStatesMap.put(RenderStateType.color, RenderStateColor.class);
+    renderStatesMap.put(RenderStateType.alpha, RenderStateAlpha.class);
     renderStatesMap.put(RenderStateType.imageScale, RenderStateImageScale.class);
     renderStatesMap.put(RenderStateType.position, RenderStatePosition.class);
     renderStatesMap.put(RenderStateType.textSize, RenderStateTextSize.class);
@@ -308,22 +314,43 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   public void setColor(final Color colorParam) {
     color = colorParam;
     colorChanged = true;
+    colorAlphaChanged = true;
   }
 
   /**
-   * get alpha.
-   * @return alpha
+   * set only the color alpha.
+   * @param newColorAlpha new alpha value
    */
-  public float getColorAlpha() {
-    return color.getAlpha();
+  public void setColorAlpha(final float newColorAlpha) {
+    color.setAlpha(newColorAlpha);
+    colorAlphaChanged = true;
   }
 
   /**
-   * @see de.lessvoid.nifty.render.NiftyRenderEngine#isColorChanged()
+   * Set only the color component of the given color. This assumes that alpha has already been changed.
+   * @param newColor color
+   */
+  public void setColorIgnoreAlpha(final Color newColor) {
+    color.setRed(newColor.getRed());
+    color.setGreen(newColor.getGreen());
+    color.setBlue(newColor.getBlue());
+    colorChanged = true;
+  }
+
+  /**
+   * return true when color has been changed.
    * @return color changed
    */
   public boolean isColorChanged() {
     return colorChanged;
+  }
+
+  /**
+   * @see de.lessvoid.nifty.render.NiftyRenderEngine#isColorAlphaChanged()
+   * @return color changed
+   */
+  public boolean isColorAlphaChanged() {
+    return colorAlphaChanged;
   }
 
   /**
@@ -443,11 +470,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
-  /**
-   * RenderStatePositionImpl.
-   * @author void
-   */
-  public final class RenderStatePosition implements RenderStateSaver {
+  public class RenderStatePosition implements RenderStateSaver {
 
     /**
      * saved x.
@@ -476,11 +499,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
-  /**
-   * RenderStateColor.
-   * @author void
-   */
-  public final class RenderStateColor implements RenderStateSaver {
+  public class RenderStateColor implements RenderStateSaver {
     /**
      * Color.
      */
@@ -508,11 +527,22 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
-  /**
-   * RenderStateFont.
-   * @author void
-   */
-  public final class RenderStateFont implements RenderStateSaver {
+  public class RenderStateAlpha implements RenderStateSaver {
+    private float colorAlpha;
+    private boolean colorAlphaChanged;
+
+    public RenderStateAlpha() {
+      this.colorAlpha = NiftyRenderEngineImpl.this.color.getAlpha();
+      this.colorAlphaChanged = NiftyRenderEngineImpl.this.colorAlphaChanged;
+    }
+
+    public void restore() {
+      NiftyRenderEngineImpl.this.color.setAlpha(colorAlpha);
+      NiftyRenderEngineImpl.this.colorAlphaChanged = colorAlphaChanged;
+    }
+  }
+
+  public class RenderStateFont implements RenderStateSaver {
     /**
      * font.
      */
@@ -534,11 +564,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
-  /**
-   * RenderStateTextSize.
-   * @author void
-   */
-  public final class RenderStateTextSize implements RenderStateSaver {
+  public class RenderStateTextSize implements RenderStateSaver {
 
     /**
      * textSize.
@@ -560,11 +586,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
-  /**
-   * RenderStateImageScale.
-   * @author void
-   */
-  public final class RenderStateImageScale implements RenderStateSaver {
+  public class RenderStateImageScale implements RenderStateSaver {
 
     /**
      * imageScale.

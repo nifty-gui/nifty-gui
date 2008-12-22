@@ -202,10 +202,12 @@ public class TextRenderer implements ElementRenderer {
       final NiftyRenderEngine r,
       final int selStart,
       final int selEnd) {
-    if (r.isColorChanged()) {
-      r.setColor(new Color(color, r.getColorAlpha()));
-    } else {
-      r.setColor(color);
+    if (!r.isColorChanged()) {
+      if (r.isColorAlphaChanged()) {
+        r.setColorIgnoreAlpha(color);
+      } else {
+        r.setColor(color);
+      }
     }
     boolean stateSaved = false;
     if (r.getFont() == null) {

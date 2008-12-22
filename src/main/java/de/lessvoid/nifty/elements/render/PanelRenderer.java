@@ -34,10 +34,12 @@ public class PanelRenderer implements ElementRenderer {
 
     if (backgroundColor != null) {
       r.saveState(RenderStateType.allStates());
-      if (r.isColorChanged()) {
-        r.setColor(new Color(backgroundColor, r.getColorAlpha()));
-      } else {
-        r.setColor(backgroundColor);
+      if (!r.isColorChanged()) {
+        if (r.isColorAlphaChanged()) {
+          r.setColorIgnoreAlpha(backgroundColor);
+        } else {
+          r.setColor(backgroundColor);
+        }
       }
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
       r.restoreState();

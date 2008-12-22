@@ -20,10 +20,9 @@ public class Hide implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     if (normalizedTime >= 1.0f) {
-      Color c = Color.WHITE;
-      r.setColor(c);
+      r.setColorAlpha(Color.WHITE.getAlpha());
     } else {
-      r.setColor(Color.NONE);
+      r.setColorAlpha(Color.NONE.getAlpha());
     }
   }
 
