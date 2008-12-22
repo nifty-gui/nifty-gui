@@ -210,7 +210,6 @@ public class Screen {
    * @param popup popup
    */
   public void addPopup(final Element popup, final Element defaultFocusElement) {
-    log.info("addPopup(" + popup + ")");
     resetLayersMouseDown();
 
     // create the callback
@@ -244,7 +243,6 @@ public class Screen {
     // add to layers and add as popup
     addLayerElement(popup);
     addPopupElement(popup);
-    log.info("elements added ...");
   }
 
   /**
@@ -439,9 +437,7 @@ public class Screen {
    * @return true when processed and false when not
    */
   public final boolean mouseEvent(final MouseInputEvent inputEvent) {
-    // when there are popup elements available this event will only travel to these layers!
     if (!popupElements.isEmpty()) {
-      log.info("popupElements.size(): " + popupElements.size());
       return forwardMouseEventToLayers(popupElements, inputEvent);
     } else {
       return forwardMouseEventToLayers(layerElements, inputEvent);

@@ -58,6 +58,8 @@ public class NiftyLoader {
       final Nifty nifty,
       final Map < String, Screen > screens,
       final TimeProvider timeProvider) throws Exception {
+    log.info("loading new xml file...");
+
     // create processors
     niftyTypeProcessor = new NiftyTypeProcessor(nifty, this, timeProvider);
     niftyStylesTypeProcessor = new NiftyStylesTypeProcessor(niftyTypeProcessor.getStyleHandler(), this);

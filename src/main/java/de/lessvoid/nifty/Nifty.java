@@ -530,7 +530,7 @@ public class Nifty {
     if (controllerInstance != null) {
       niftyInputControl = new NiftyInputControl(controllerInstance, new Default());
     }
-    log.info("createPopupFromType: " + controllerInstance + ", " + niftyInputControl);
+    log.fine("createPopupFromType: " + controllerInstance + ", " + niftyInputControl);
     Element popupElement = popupType.createElement(
         this,
         getCurrentScreen(),

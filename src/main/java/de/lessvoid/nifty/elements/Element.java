@@ -1164,7 +1164,7 @@ public class Element {
    * @param screenController screencontroller
    */
   public void attachPopup(final ScreenController screenController) {
-    log.info("attachPopup(" + screenController + ") to element [" + id + "]");
+    log.fine("attachPopup(" + screenController + ") to element [" + id + "]");
     attach(interaction.getOnClickMethod(), screenController);
     attach(interaction.getOnClickMouseMoveMethod(), screenController);
     attach(interaction.getOnReleaseMethod(), screenController);
