@@ -20,6 +20,11 @@ public class Focus implements EffectImpl {
     if (target != null) {
       targetElement = element.getParent().findElementByName(target);
     }
+    if (targetElement != null) {
+      targetElement.setFocus();
+    } else {
+      element.setFocus();
+    }
   }
 
   public void execute(
@@ -27,11 +32,6 @@ public class Focus implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    if (targetElement != null) {
-      targetElement.setFocus();
-    } else {
-      element.setFocus();
-    }
   }
 
   public void deactivate() {
