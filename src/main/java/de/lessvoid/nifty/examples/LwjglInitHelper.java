@@ -67,19 +67,19 @@ public class LwjglInitHelper {
   private static boolean initGraphics(final String title) {
     try {
       DisplayMode currentMode = Display.getDisplayMode();
-      log.info(
+      log.fine(
           "currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", "
           + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
 
       //  get available modes, and print out
       DisplayMode[] modes = Display.getAvailableDisplayModes();
-      log.info("Found " + modes.length + " display modes");
+      log.fine("Found " + modes.length + " display modes");
 
       List < DisplayMode > matching = new ArrayList < DisplayMode >();
       for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
         if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT && mode.getBitsPerPixel() == 32 ) {
-          log.info(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
+          log.fine(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
           matching.add(mode);
         }
       }
@@ -90,7 +90,7 @@ public class LwjglInitHelper {
       boolean found = false;
       for (int i = 0; i < matchingModes.length; i++) {
         if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
-          log.info("using mode: " + matchingModes[i].getWidth() + ", "
+          log.fine("using mode: " + matchingModes[i].getWidth() + ", "
               + matchingModes[i].getHeight() + ", "
               + matchingModes[i].getBitsPerPixel() + ", "
               + matchingModes[i].getFrequency());
@@ -114,7 +114,7 @@ public class LwjglInitHelper {
         });
 
         for (int i = 0; i < matchingModes.length; i++) {
-          log.info("using fallback mode: " + matchingModes[i].getWidth() + ", "
+          log.fine("using fallback mode: " + matchingModes[i].getWidth() + ", "
               + matchingModes[i].getHeight() + ", "
               + matchingModes[i].getBitsPerPixel() + ", "
               + matchingModes[i].getFrequency());
@@ -154,7 +154,7 @@ public class LwjglInitHelper {
       if (extensions != null) {
         String[] ext = extensions.split(" ");
         for (int i = 0; i < ext.length; i++) {
-          log.info("opengl extensions: " + ext[i]);
+          log.fine("opengl extensions: " + ext[i]);
         }
       }
 
