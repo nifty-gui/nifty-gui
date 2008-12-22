@@ -151,6 +151,7 @@ public class RegisterControlDefinitionType {
   private void fixTextRendererHeight(final Element element) {
     TextRenderer textRenderer = element.getRenderer(TextRenderer.class);
     if (textRenderer != null) {
+      if (element.getConstraintHeight() == null || element.getConstraintHeight().toString().equals("0px"))
       element.setConstraintHeight(new SizeValue(textRenderer.getTextHeight() + "px"));
     }
     for (Element child : element.getElements()) {
