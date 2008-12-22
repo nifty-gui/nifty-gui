@@ -2,7 +2,11 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 
 import java.util.Map;
 
+import org.newdawn.slick.util.Log;
+
 import de.lessvoid.nifty.loader.xpp3.Attributes;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.PaddingAttributeParser;
+import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  * AttributesType.
@@ -130,6 +134,11 @@ public class AttributesType {
    */
   private Boolean focusable;
 
+  private String paddingLeft;
+  private String paddingRight;
+  private String paddingTop;
+  private String paddingBottom;
+
   /**
    * default constructor.
    */
@@ -173,6 +182,10 @@ public class AttributesType {
     text = other.text;
     focusable = other.focusable;
     srcAttributes = other.srcAttributes;
+    paddingLeft = other.paddingLeft;
+    paddingRight = other.paddingRight;
+    paddingTop = other.paddingTop;
+    paddingBottom = other.paddingBottom;
   }
 
   /**
@@ -623,6 +636,38 @@ public class AttributesType {
     if (srcAttributes.isSet("focusable")) {
       focusable = srcAttributes.getAsBoolean("focusable");
     }
+    // paddingLeft
+    if (srcAttributes.isSet("paddingLeft")) {
+      paddingLeft = srcAttributes.get("paddingLeft");
+    }
+    // paddingRight
+    if (srcAttributes.isSet("paddingRight")) {
+      paddingRight = srcAttributes.get("paddingRight");
+    }
+    // paddingTop
+    if (srcAttributes.isSet("paddingTop")) {
+      paddingTop = srcAttributes.get("paddingTop");
+    }
+    // paddingBottom
+    if (srcAttributes.isSet("paddingBottom")) {
+      paddingBottom = srcAttributes.get("paddingBottom");
+    }
+    // padding
+    if (srcAttributes.isSet("padding")) {
+      parsePadding(srcAttributes.get("padding"));
+    }
+  }
+
+  private void parsePadding(final String paddingValue) {
+    try {
+      PaddingAttributeParser parser = new PaddingAttributeParser(paddingValue);
+      paddingLeft = parser.getPaddingLeft();
+      paddingRight = parser.getPaddingRight();
+      paddingTop = parser.getPaddingTop();
+      paddingBottom = parser.getPaddingBottom();
+    } catch (Exception e) {
+      Log.error(e);
+    }
   }
 
   /**
@@ -655,5 +700,21 @@ public class AttributesType {
    */
   public Boolean getFocusable() {
     return focusable;
+  }
+
+  public String getPaddingLeft() {
+    return paddingLeft;
+  }
+
+  public String getPaddingRight() {
+    return paddingRight;
+  }
+
+  public String getPaddingTop() {
+    return paddingTop;
+  }
+
+  public String getPaddingBottom() {
+    return paddingBottom;
   }
 }

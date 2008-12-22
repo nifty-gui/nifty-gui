@@ -40,7 +40,7 @@ public class ElementType {
   /**
    * attributes.
    */
-  private AttributesType attributes;
+  protected AttributesType attributes;
 
   /**
    * interact.
@@ -233,6 +233,26 @@ public class ElementType {
     if (attrib.getValign() != null) {
       element.setConstraintVerticalAlign(VerticalAlign.valueOf(attrib.getValign().getValue()));
     }
+    // paddingLeft
+    if (attrib.getPaddingLeft() != null) {
+      SizeValue paddingValue = new SizeValue(attrib.getPaddingLeft());
+      element.setPaddingLeft(paddingValue);
+    }
+    // paddingRight
+    if (attrib.getPaddingRight() != null) {
+      SizeValue paddingValue = new SizeValue(attrib.getPaddingRight());
+      element.setPaddingRight(paddingValue);
+    }
+    // paddingTop
+    if (attrib.getPaddingTop() != null) {
+      SizeValue paddingValue = new SizeValue(attrib.getPaddingTop());
+      element.setPaddingTop(paddingValue);
+    }
+    // paddingBottom
+    if (attrib.getPaddingBottom() != null) {
+      SizeValue paddingValue = new SizeValue(attrib.getPaddingBottom());
+      element.setPaddingBottom(paddingValue);
+    }
     // child clip
     if (attrib.getChildClip() != null) {
       element.setClipChildren(attrib.getChildClip());
@@ -309,10 +329,10 @@ public class ElementType {
       image = imageRenderer.getImage();
       if (image != null) {
         if (element.getConstraintWidth() == null) {
-          element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
+          // element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
         }
         if (element.getConstraintHeight() == null) {
-          element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
+          // element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
         }
       }
     }

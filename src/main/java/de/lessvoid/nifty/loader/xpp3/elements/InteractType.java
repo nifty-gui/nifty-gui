@@ -102,10 +102,7 @@ public class InteractType {
    * @param element element
    * @param controlController controlController
    */
-  private void initElement(
-      final Element element,
-      final Object ... controlController) {
-
+  private void initElement(final Element element, final Object ... controlController) {
     if (onClick != null) {
       MethodInvoker onClickMethod = onClick.getMethod(controlController);
       element.setOnClickMethod(onClickMethod, false);

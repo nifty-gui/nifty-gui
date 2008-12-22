@@ -3,10 +3,11 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.PanelRenderer;
+import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
+import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -71,15 +72,22 @@ public class TextType extends ElementType {
       final NiftyInputControl inputControl,
       final ScreenController screenController) {
     TextRenderer textRenderer = new TextRenderer();
+    ElementRenderer[] panelRenderer = NiftyCreator.getPanelRenderer(typeContext.nifty, attributes);
+    ElementRenderer[] renderer = new ElementRenderer[panelRenderer.length + 1];
+    for (int i = 0; i < panelRenderer.length; i++) {
+      renderer[i] = panelRenderer[i];
+    }
+    renderer[panelRenderer.length] = textRenderer;
+
     Element panel = new Element(
         typeContext.nifty,
         this,
         getAttributes().getId(),
         parent,
-        screen,
+        screen.getFocusHandler(),
         false,
         typeContext.time,
-        new PanelRenderer(), textRenderer);
+        renderer);
     super.addElementAttributes(
         panel,
         screen,

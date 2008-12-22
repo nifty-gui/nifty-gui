@@ -178,7 +178,9 @@ public class EffectType {
       effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId);
     }
 
-    if (effectEventId.equals(EffectEventId.onFocus)) {
+    if (effectEventId.equals(EffectEventId.onFocus)
+        || effectEventId.equals(EffectEventId.onActive)
+        || effectEventId.equals(EffectEventId.onClick)) {
       effect.enableInfinite();
     }
 

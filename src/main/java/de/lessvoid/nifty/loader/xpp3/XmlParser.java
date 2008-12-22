@@ -147,7 +147,7 @@ public class XmlParser {
    * @throws Exception exception
    */
   private void processElement(final XmlElementProcessor xmlElement) throws Exception {
-    log.info("process element: " + xmlElement.getClass().getName());
+//    log.info("process element: " + xmlElement.getClass().getName());
     try {
      xmlElement.process(this, new Attributes(xpp));
     } catch (Exception ex) {

@@ -62,7 +62,7 @@ public class MenuItemType extends ElementType {
         this,
         getAttributes().getId(),
         parent,
-        screen,
+        screen.getFocusHandler(),
         true,
         typeContext.time,
         new PanelRenderer(), textRenderer);
