@@ -84,8 +84,8 @@ public class Move implements EffectImpl {
       }
 
       if ("fromPosition".equals(mode)) {
-        startOffsetX = targetElement.getX()- element.getX();
-        startOffsetY = targetElement.getY()- element.getY();
+        startOffsetX = targetElement.getX() - element.getX();
+        startOffsetY = targetElement.getY() - element.getY();
         offsetX = -(targetElement.getX() - element.getX());
         offsetY = -(targetElement.getY() - element.getY());
       } else if ("toPosition".equals(mode)) {
