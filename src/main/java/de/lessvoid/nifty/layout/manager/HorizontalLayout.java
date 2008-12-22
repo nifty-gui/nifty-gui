@@ -23,10 +23,7 @@ public class HorizontalLayout implements LayoutManager {
    * @param root the root element
    * @param children the children
    */
-  public final void layoutElements(
-      final LayoutPart root,
-      final List < LayoutPart > children
-      ) {
+  public final void layoutElements(final LayoutPart root, final List < LayoutPart > children) {
 
     // check for useful input data
     if (root == null || children == null || children.size() == 0) {

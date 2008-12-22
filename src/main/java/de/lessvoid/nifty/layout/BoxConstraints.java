@@ -42,6 +42,11 @@ public class BoxConstraints {
    */
   private VerticalAlign verticalAlign;
 
+  private SizeValue paddingLeft;
+  private SizeValue paddingRight;
+  private SizeValue paddingTop;
+  private SizeValue paddingBottom;
+
   /**
    * default constructor.
    */
@@ -52,6 +57,10 @@ public class BoxConstraints {
     this.height = null;
     this.horizontalAlign = HorizontalAlign.left;
     this.verticalAlign = VerticalAlign.top;
+    paddingLeft = new SizeValue("0px");
+    paddingRight = new SizeValue("0px");
+    paddingTop = new SizeValue("0px");
+    paddingBottom = new SizeValue("0px");
   }
 
   /**
@@ -189,4 +198,67 @@ public class BoxConstraints {
     this.verticalAlign = newVerticalAlign;
   }
 
+  public SizeValue getPaddingLeft() {
+    return paddingLeft;
+  }
+
+  public SizeValue getPaddingRight() {
+    return paddingRight;
+  }
+
+  public SizeValue getPaddingTop() {
+    return paddingTop;
+  }
+
+  public SizeValue getPaddingBottom() {
+    return paddingBottom;
+  }
+
+  public void setPaddingLeft(final SizeValue paddingLeftParam) {
+    paddingLeft = paddingLeftParam;
+  }
+
+  public void setPaddingRight(final SizeValue paddingRightParam) {
+    paddingRight = paddingRightParam;
+  }
+
+  public void setPaddingTop(final SizeValue paddingTopParam) {
+    paddingTop = paddingTopParam;
+  }
+
+  public void setPaddingBottom(final SizeValue paddingBottomParam) {
+    paddingBottom = paddingBottomParam;
+  }
+
+  public void setPadding(final SizeValue topBottomParam, final SizeValue leftRightParam) {
+    paddingLeft = leftRightParam;
+    paddingRight = leftRightParam;
+    paddingTop = topBottomParam;
+    paddingBottom = topBottomParam;
+  }
+
+  public void setPadding(final SizeValue topParam, final SizeValue leftRightParam, final SizeValue bottomParam) {
+    paddingLeft = leftRightParam;
+    paddingRight = leftRightParam;
+    paddingTop = topParam;
+    paddingBottom = bottomParam;
+  }
+
+  public void setPadding(
+      final SizeValue topParam,
+      final SizeValue rightParam,
+      final SizeValue bottomParam,
+      final SizeValue leftParam) {
+    paddingLeft = leftParam;
+    paddingRight = rightParam;
+    paddingTop = topParam;
+    paddingBottom = bottomParam;
+  }
+
+  public void setPadding(final SizeValue padding) {
+    paddingLeft = padding;
+    paddingRight = padding;
+    paddingTop = padding;
+    paddingBottom = padding;
+  }
 }

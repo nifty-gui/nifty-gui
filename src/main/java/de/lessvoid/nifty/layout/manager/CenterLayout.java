@@ -6,6 +6,7 @@ import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
+import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
@@ -23,9 +24,7 @@ public class CenterLayout implements LayoutManager {
    * @param rootElement @see {@link LayoutManager}
    * @param elements @see {@link LayoutManager}
    */
-  public final void layoutElements(
-      final LayoutPart rootElement,
-      final List < LayoutPart > elements) {
+  public void layoutElements(final LayoutPart rootElement, final List < LayoutPart > elements) {
 
     // check for useful params
     if (rootElement == null || elements == null || elements.size() == 0) {
@@ -34,48 +33,107 @@ public class CenterLayout implements LayoutManager {
 
     // we only support center of the very first element
     Box rootBox = rootElement.getBox();
+    BoxConstraints rootBoxConstraints = rootElement.getBoxConstraints();
 
     Box box = elements.get(0).getBox();
     BoxConstraints constraint = elements.get(0).getBoxConstraints();
 
     // center x
-    if (constraint.getWidth() != null) {
-      if (constraint.getHorizontalAlign() == HorizontalAlign.left) {
-        box.setX(rootBox.getX());
-      } else if (constraint.getHorizontalAlign() == HorizontalAlign.right) {
-        box.setX(
-            rootBox.getX()
-            +
-            rootBox.getWidth()
-            -
-            (int) constraint.getWidth().getValue(rootBox.getWidth()));
-      } else {
-        box.setX(
-            rootBox.getX()
-            +
-            (rootBox.getWidth() - (int) constraint.getWidth().getValue(rootBox.getWidth())) / 2);
-      }
-      box.setWidth((int) constraint.getWidth().getValue(rootBox.getWidth()));
-    } else {
-      box.setX(rootBox.getX());
-      box.setWidth(rootBox.getWidth());
-    }
+    handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
 
     // center y
+    handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
+  }
+
+  void handleVerticalAlignment(
+      final Box rootBox,
+      final BoxConstraints rootBoxConstraints,
+      final Box box,
+      final BoxConstraints constraint) {
     if (constraint.getHeight() != null) {
-      box.setY(rootBox.getY() + (rootBox.getHeight() - (int) constraint.getHeight().getValue(rootBox.getHeight())) / 2);
-      box.setHeight((int) constraint.getHeight().getValue(rootBox.getHeight()));
+      handleHeightConstraint(rootBox, rootBoxConstraints, box, constraint);
     } else {
-      box.setY(rootBox.getY());
-      box.setHeight(rootBox.getHeight());
+      box.setY(
+          rootBox.getY()
+          + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getWidth()));
+      box.setHeight(
+          rootBox.getHeight()
+          - rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getWidth())
+          - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getWidth()));
     }
+  }
+
+  void handleHorizontalAlignment(
+      final Box rootBox,
+      final BoxConstraints rootBoxConstraints,
+      final Box box,
+      final BoxConstraints constraint) {
+    if (constraint.getWidth() != null) {
+      handleWidthConstraint(rootBox, rootBoxConstraints, box, constraint);
+    } else {
+      box.setX(
+          rootBox.getX()
+          + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth()));
+      box.setWidth(
+          rootBox.getWidth()
+          - rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth())
+          - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()));
+    }
+  }
+
+  private void handleWidthConstraint(
+      final Box rootBox,
+      final BoxConstraints rootBoxConstraints,
+      final Box box,
+      final BoxConstraints constraint) {
+    int rootBoxX = rootBox.getX() + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth());
+    int rootBoxWidth = rootBox.getWidth() - rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth()) - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth());
+
+    if (constraint.getHorizontalAlign() == HorizontalAlign.left) {
+      box.setX(rootBoxX);
+    } else if (constraint.getHorizontalAlign() == HorizontalAlign.right) {
+      box.setX(rootBox.getWidth() - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()) - (int) constraint.getWidth().getValue(rootBoxWidth));
+    } else {
+      box.setX(rootBoxX + (rootBoxWidth - (int) constraint.getWidth().getValue(rootBoxWidth)) / 2);
+    }
+
+    box.setWidth((int) constraint.getWidth().getValue(rootBoxWidth));
+  }
+
+  private void handleHeightConstraint(
+      final Box rootBox,
+      final BoxConstraints rootBoxConstraints,
+      final Box box,
+      final BoxConstraints constraint) {
+    int rootBoxY =
+      rootBox.getY()
+      + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight());
+    int rootBoxHeight =
+      rootBox.getHeight()
+      - rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight())
+      - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight());
+
+    if (constraint.getVerticalAlign() == VerticalAlign.top) {
+      box.setY(rootBoxY);
+    } else if (constraint.getVerticalAlign() == VerticalAlign.bottom) {
+      box.setY(
+          rootBox.getHeight()
+          - rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight())
+          - (int) constraint.getHeight().getValue(rootBoxHeight));
+    } else {
+      box.setY(
+          rootBoxY
+          + (rootBoxHeight - (int) constraint.getHeight().getValue(rootBoxHeight)) / 2);
+    }
+
+    box.setHeight((int) constraint.getHeight().getValue(rootBoxHeight));
   }
 
   /**
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public final SizeValue calculateConstraintWidth(final List < LayoutPart > children) {
+  public SizeValue calculateConstraintWidth(final List < LayoutPart > children) {
     return null;
   }
 
@@ -83,7 +141,7 @@ public class CenterLayout implements LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public final SizeValue calculateConstraintHeight(final List < LayoutPart > children) {
+  public SizeValue calculateConstraintHeight(final List < LayoutPart > children) {
     return null;
   }
 }

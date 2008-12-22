@@ -41,13 +41,11 @@ public class AbsolutePositionLayout implements LayoutManager {
       // makes only sense with constraints given
       if (cons != null) {
         if (cons.getX() != null) {
-          box.setX(
-              rootBox.getX() + cons.getX().getValueAsInt(rootBox.getWidth()));
+          box.setX(rootBox.getX() + cons.getX().getValueAsInt(rootBox.getWidth()));
         }
 
         if (cons.getY() != null) {
-          box.setY(
-              rootBox.getY() + cons.getY().getValueAsInt(rootBox.getHeight()));
+          box.setY(rootBox.getY() + cons.getY().getValueAsInt(rootBox.getHeight()));
         }
 
         if (cons.getWidth() != null) {

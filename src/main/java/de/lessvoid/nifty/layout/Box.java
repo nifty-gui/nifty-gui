@@ -3,6 +3,7 @@ package de.lessvoid.nifty.layout;
 /**
  * The Box class represent a rectangular area on the screen.
  * It has a position (x,y) as well as height and weight attributes.
+ * The Box represent and already resolved position in pixel.
  *
  * @author void
  */
@@ -46,12 +47,7 @@ public class Box {
    * @param newWidth the new width of the box
    * @param newHeight the new height of the box
    */
-  public Box(
-      final int newX,
-      final int newY,
-      final int newWidth,
-      final int newHeight
-      ) {
+  public Box(final int newX, final int newY, final int newWidth, final int newHeight) {
     this.x = newX;
     this.y = newY;
     this.width = newWidth;
@@ -132,5 +128,4 @@ public class Box {
   public final void setWidth(final int newWidth) {
     this.width = newWidth;
   }
-
 }
