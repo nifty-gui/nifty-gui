@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles>
-  <style id="nifty-drop-down#text">
-    <attributes font="candara-20.fnt" color="#000f" textHAlign="left" textVAlign="center" />
+  <style id="nifty-drop-down#text" base="base-font">
+    <attributes color="#000f" textHAlign="left" textVAlign="center" height="28px"/>
     <effect>
       <onClick name="focus" />
       <onClick name="remote" targetElement="icon" />
@@ -33,8 +33,8 @@
     </effect>
   </style>
 
-  <style id="nifty-drop-down#text-item">
-    <attributes font="candara-20.fnt" textHAlign="left" textVAlign="center" />
+  <style id="nifty-drop-down#text-item" base="base-font">
+    <attributes textHAlign="left" textVAlign="center" />
     <effect>
       <onHover name="focus" />
       <onFocus name="colorBar" color="#000f" post="false" />

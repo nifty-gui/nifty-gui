@@ -14,7 +14,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++ -->
   <!-- style for the button text -->
   <!-- +++++++++++++++++++++++++++++++++++++ -->
-  <style id="nifty-button#text">
-    <attributes font="candara-18-bold.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="true"/>
+  <style id="nifty-button#text" base="button-font">
+    <attributes align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="true"/>
   </style>
 </nifty-styles>

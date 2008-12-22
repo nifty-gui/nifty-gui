@@ -2,7 +2,7 @@
 <nifty-styles>
 
   <!-- just some text label default -->
-  <style id="nifty-label">
-    <attributes font="candara-20.fnt" align="center" />
+  <style id="nifty-label" base="base-font">
+    <attributes align="center" height="28px" />
   </style>
 </nifty-styles>
