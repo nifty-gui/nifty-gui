@@ -25,7 +25,7 @@
           <panel id="dropDownPanel1" childLayout="horizontal">
             <label id="dropDownLabel1" text="DropDown 1: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control id="dropDown1" name="dropDownControl" />
-          </panel>    
+          </panel>
           <panel childLayout="horizontal" height="8px" />
           <panel id="dropDownPanel2" childLayout="horizontal">
             <label id="dropDownLabel2" text="DropDown 2: " width="120px" align="left" textVAlign="center" textHAlign="left" />

@@ -14,20 +14,24 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     screen = newScreen;
     nifty = newNifty;
     DropDownControl dropDown1 = findDropDownControl("dropDown1");
-    dropDown1.addNotify(this);
-    dropDown1.addItem("Nifty GUI");
-    dropDown1.addItem("Slick2d");
-    dropDown1.addItem("Lwjgl");
-    dropDown1.setSelectedItemIdx(0);
+    if (dropDown1 != null) {
+      dropDown1.addNotify(this);
+      dropDown1.addItem("Nifty GUI");
+      dropDown1.addItem("Slick2d");
+      dropDown1.addItem("Lwjgl");
+      dropDown1.setSelectedItemIdx(0);
+    }
 
     DropDownControl dropDown2 = findDropDownControl("dropDown2");
-    dropDown2.addNotify(this);
-    dropDown2.addItem("rocks!");
-    dropDown2.addItem("rules!");
-    dropDown2.addItem("kicks ass!");
-    dropDown2.addItem("is awesome!");
-    dropDown2.addItem("shizzles :D");
-    dropDown2.setSelectedItem("rocks!");
+    if (dropDown2 != null) {
+      dropDown2.addNotify(this);
+      dropDown2.addItem("rocks!");
+      dropDown2.addItem("rules!");
+      dropDown2.addItem("kicks ass!");
+      dropDown2.addItem("is awesome!");
+      dropDown2.addItem("shizzles :D");
+      dropDown2.setSelectedItem("rocks!");
+    }
   }
 
   private DropDownControl findDropDownControl(final String id) {
@@ -36,7 +40,6 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
   }
 
   public void onStartScreen() {
-    screen.findElementByName("backButton").setFocus();
   }
 
   public void onEndScreen() {
