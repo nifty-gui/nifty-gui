@@ -220,7 +220,7 @@ public class TextFieldControl implements Controller {
     } else if (inputEvent == NiftyInputEvent.Paste) {
       textField.put();
     } else if (inputEvent == NiftyInputEvent.SubmitText) {
-      this.screen.setFocus(null);
+      this.screen.getFocusHandler().resetFocusElements();
     } else if (inputEvent == NiftyInputEvent.Character) {
       textField.insert(inputEvent.getCharacter());
     } else if (inputEvent == NiftyInputEvent.NextInputElement) {
@@ -274,8 +274,7 @@ public class TextFieldControl implements Controller {
     int cursorPixelPos = textWidth - d;
 
     cursorElement.setConstraintX(new SizeValue(cursorPixelPos + "px"));
-    cursorElement.setConstraintY(
-        new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
+    cursorElement.setConstraintY(new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
     cursorElement.startEffect(EffectEventId.onActive, null);
     screen.layoutLayers();
   }

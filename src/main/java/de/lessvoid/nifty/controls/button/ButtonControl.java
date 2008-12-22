@@ -51,11 +51,9 @@ public class ButtonControl implements Controller {
    */
   public void inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
-      screen.nextElementFocus();
+      focusHandler.getNext(element).setFocus();
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-      if (focusHandler != null) {
-        focusHandler.getPrev(element).setFocus();
-      }
+      focusHandler.getPrev(element).setFocus();
     } else if (inputEvent == NiftyInputEvent.Activate) {
       element.onClick();
     }
