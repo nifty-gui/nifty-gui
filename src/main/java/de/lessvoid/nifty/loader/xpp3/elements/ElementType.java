@@ -117,11 +117,14 @@ public class ElementType {
     // now apply our own attributes
     applyAttributes(attributes, screen, element, typeContext.nifty.getRenderDevice());
 
+    // attach input control
+    if (control != null) {
+      element.attachInputControl(control[control.length - 1]);
+    }
+
     // interact
     if (interact != null) {
-      // control given?
       if (control != null) {
-        element.attachInputControl(control[control.length - 1]);
         interact.initWithControl(element, getControllerArray(control, screenController));
       } else {
         interact.initWithScreenController(element, screenController);
@@ -331,6 +334,9 @@ public class ElementType {
         }
         if (element.getConstraintHeight() == null) {
           // element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
+        }
+        if (attrib.getInset() != null) {
+          imageRenderer.setInset(new SizeValue(attrib.getInset()).getValueAsInt(image.getHeight()));
         }
       }
     }
