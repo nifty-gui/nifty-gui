@@ -66,6 +66,14 @@ public class EffectManager {
   }
 
   /**
+   * Stop effects with the given id.
+   * @param effectId effect id to stop
+   */
+  public void stopEffect(final EffectEventId effectId) {
+    effectProcessor.get(effectId).setActive(false);
+  }
+
+  /**
    * prepare rendering.
    * @param renderDevice RenderDevice
    */
@@ -93,12 +101,12 @@ public class EffectManager {
    */
   public void renderPre(final NiftyRenderEngine renderDevice) {
     effectProcessor.get(EffectEventId.onHover).renderPre(renderDevice);
-
-    for (EffectProcessor processor : effectProcessor.values()) {
-      if (!processor.isHoverEffect()) {
-        processor.renderPre(renderDevice);
-      }
-    }
+    effectProcessor.get(EffectEventId.onStartScreen).renderPre(renderDevice);
+    effectProcessor.get(EffectEventId.onEndScreen).renderPre(renderDevice);
+    effectProcessor.get(EffectEventId.onActive).renderPre(renderDevice);
+    effectProcessor.get(EffectEventId.onFocus).renderPre(renderDevice);
+    effectProcessor.get(EffectEventId.onClick).renderPre(renderDevice);
+    effectProcessor.get(EffectEventId.onCustom).renderPre(renderDevice);
   }
 
   /**
@@ -107,12 +115,12 @@ public class EffectManager {
    */
   public void renderPost(final NiftyRenderEngine renderDevice) {
     effectProcessor.get(EffectEventId.onHover).renderPost(renderDevice);
-
-    for (EffectProcessor processor : effectProcessor.values()) {
-      if (!processor.isHoverEffect()) {
-        processor.renderPost(renderDevice);
-      }
-    }
+    effectProcessor.get(EffectEventId.onStartScreen).renderPost(renderDevice);
+    effectProcessor.get(EffectEventId.onEndScreen).renderPost(renderDevice);
+    effectProcessor.get(EffectEventId.onActive).renderPost(renderDevice);
+    effectProcessor.get(EffectEventId.onFocus).renderPost(renderDevice);
+    effectProcessor.get(EffectEventId.onClick).renderPost(renderDevice);
+    effectProcessor.get(EffectEventId.onCustom).renderPost(renderDevice);
   }
 
   /**
@@ -139,9 +147,13 @@ public class EffectManager {
    * reset all effects.
    */
   public final void reset() {
-    for (EffectProcessor processor : effectProcessor.values()) {
-      processor.reset();
-    }
+	// onHover should stay active and is not reset
+	// onActive should stay active and is not reset
+	// onFocus should stay active and is not reset
+    effectProcessor.get(EffectEventId.onStartScreen).reset();
+    effectProcessor.get(EffectEventId.onEndScreen).reset();
+    effectProcessor.get(EffectEventId.onClick).reset();
+    effectProcessor.get(EffectEventId.onCustom).reset();
   }
 
   /**
@@ -177,13 +189,5 @@ public class EffectManager {
     } else {
       return data.toString();
     }
-  }
-
-  /**
-   * Stop effects with the given id.
-   * @param effectId effect id to stop
-   */
-  public void stopEffect(final EffectEventId effectId) {
-    effectProcessor.get(effectId).setActive(false);
   }
 }
