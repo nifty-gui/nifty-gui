@@ -172,6 +172,7 @@ public class Falloff {
   public void updateFalloffValue(final Element element, final int mouseX, final int mouseY) {
     if (falloffConstraint == falloffConstraint.none) {
       falloffValue = 1.0f;
+      return;
     }
 
     int centerX = element.getX() + element.getWidth() / 2;
