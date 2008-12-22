@@ -15,12 +15,18 @@ public class ImageRenderer implements ElementRenderer {
    */
   private NiftyImage image;
 
+  private int inset = 0;
+
   /**
    * create a new SingleImage instance using the given image.
    * @param newImage the image we should render
    */
   public ImageRenderer(final NiftyImage newImage) {
     this.image = newImage;
+  }
+
+  public void setInset(final int insetParam) {
+    inset = insetParam;
   }
 
   /**
@@ -30,7 +36,12 @@ public class ImageRenderer implements ElementRenderer {
    */
   public final void render(final Element element, final NiftyRenderEngine r) {
     if (this.image != null) {
-      r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
+      r.renderImage(
+          image,
+          element.getX() + inset,
+          element.getY() + inset,
+          element.getWidth() - inset*2,
+          element.getHeight() - inset*2);
     }
   }
 

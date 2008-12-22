@@ -6,7 +6,6 @@ import org.newdawn.slick.util.Log;
 
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.PaddingAttributeParser;
-import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  * AttributesType.
@@ -138,6 +137,7 @@ public class AttributesType {
   private String paddingRight;
   private String paddingTop;
   private String paddingBottom;
+  private String inset;
 
   /**
    * default constructor.
@@ -186,6 +186,7 @@ public class AttributesType {
     paddingRight = other.paddingRight;
     paddingTop = other.paddingTop;
     paddingBottom = other.paddingBottom;
+    inset = other.inset;
   }
 
   /**
@@ -656,6 +657,10 @@ public class AttributesType {
     if (srcAttributes.isSet("padding")) {
       parsePadding(srcAttributes.get("padding"));
     }
+    // inset
+    if (srcAttributes.isSet("inset")) {
+      setInset(srcAttributes.get("inset"));
+    }
   }
 
   private void parsePadding(final String paddingValue) {
@@ -716,5 +721,13 @@ public class AttributesType {
 
   public String getPaddingBottom() {
     return paddingBottom;
+  }
+
+  public String getInset() {
+    return inset;
+  }
+
+  public void setInset(final String insetParam) {
+    this.inset = insetParam;
   }
 }

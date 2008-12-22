@@ -16,7 +16,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 public class ImageOverlay implements EffectImpl {
   private NiftyImage image;
   private Alpha alpha;
-  private SizeValue resize;
+  private SizeValue inset;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
     image = nifty.getRenderDevice().createImage(parameter.getProperty("filename"), false);
@@ -25,7 +25,7 @@ public class ImageOverlay implements EffectImpl {
       image.setImageMode(NiftyImageMode.valueOf(imageMode));
     }
     alpha = new Alpha(parameter.getProperty("alpha", "#f"));
-    resize = new SizeValue(parameter.getProperty("resize", "0px"));
+    inset = new SizeValue(parameter.getProperty("inset", "0px"));
   }
 
   public void execute(
@@ -41,13 +41,13 @@ public class ImageOverlay implements EffectImpl {
         r.setColorAlpha(alpha.getAlpha());
       }
     }
-    int resizeOffset = resize.getValueAsInt(element.getWidth());
+    int insetOffset = inset.getValueAsInt(element.getWidth());
     r.renderImage(
         image,
-        element.getX() - resizeOffset,
-        element.getY() - resizeOffset,
-        element.getWidth() + resizeOffset * 2,
-        element.getHeight() + resizeOffset * 2);
+        element.getX() + insetOffset,
+        element.getY() + insetOffset,
+        element.getWidth() - insetOffset * 2,
+        element.getHeight() - insetOffset * 2);
     r.restoreState();
   }
 
