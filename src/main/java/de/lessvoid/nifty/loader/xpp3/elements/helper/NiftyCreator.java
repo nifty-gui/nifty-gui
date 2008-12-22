@@ -83,7 +83,7 @@ public final class NiftyCreator {
         id,
         root,
         layerLayout,
-        screen,
+        screen.getFocusHandler(),
         false,
         time,
         getPanelRenderer(nifty, attributes));
