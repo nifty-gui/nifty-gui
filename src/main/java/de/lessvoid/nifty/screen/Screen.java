@@ -11,7 +11,6 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.MouseFocusHandler;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
@@ -22,7 +21,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * A single screen with elements and input focus.
  * @author void
  */
-public class Screen implements MouseFocusHandler {
+public class Screen {
 
   /**
    * the logger.
@@ -63,21 +62,6 @@ public class Screen implements MouseFocusHandler {
   private ArrayList < Element > popupElements = new ArrayList < Element >();
   private ArrayList < Element > popupElementsToAdd = new ArrayList < Element >();
   private ArrayList < Element > popupElementsToRemove = new ArrayList < Element >();
-
-  /**
-   * saves focusElements for popups.
-   */
-  private ArrayList < Element > focusElementBuffer = new ArrayList < Element >();
-
-  /**
-   * the current element that has exclusive access to the mouse or null.
-   */
-  private Element mouseFocusElement;
-
-  /**
-   * element that has the focus.
-   */
-  private Element focusElement;
 
   /**
    * The TimeProvder.
@@ -171,8 +155,6 @@ public class Screen implements MouseFocusHandler {
         }
       };
     }
-    mouseFocusElement = null;
-    focusElement = null;
     timeProvider = newTimeProvider;
     focusHandler = new FocusHandler();
     mouseOverHandler = new MouseOverHandler();
@@ -227,7 +209,7 @@ public class Screen implements MouseFocusHandler {
    * add a popup layer.
    * @param popup popup
    */
-  public void addPopup(final Element popup) {
+  public void addPopup(final Element popup, final Element defaultFocusElement) {
     log.info("addPopup(" + popup + ")");
     resetLayersMouseDown();
 
@@ -239,13 +221,15 @@ public class Screen implements MouseFocusHandler {
             return;
           }
         }
-        setDefaultFocus();
+        if (defaultFocusElement != null) {
+          defaultFocusElement.setFocus();
+        } else {
+          setDefaultFocus();
+        }
       }
     };
 
-    if (focusHandler != null) {
-      focusHandler.pushState();
-    }
+    focusHandler.pushState();
 
     // attach screenController to the popup element
     popup.attachPopup(screenController);
@@ -254,14 +238,13 @@ public class Screen implements MouseFocusHandler {
     popup.resetEffects();
     popup.layoutElements();
     popup.startEffect(EffectEventId.onStartScreen, localEndNotify);
+    popup.startEffect(EffectEventId.onActive);
     popup.onStartScreen(this);
 
     // add to layers and add as popup
     addLayerElement(popup);
     addPopupElement(popup);
     log.info("elements added ...");
-    focusElementBuffer.add(focusElement);
-    focusElement = null;
   }
 
   /**
@@ -280,12 +263,7 @@ public class Screen implements MouseFocusHandler {
     resetLayers();
     removeLayerElement(popup);
     removePopupElement(popup);
-    setFocus(focusElementBuffer.get(focusElementBuffer.size() - 1));
-    focusElementBuffer.remove(focusElementBuffer.size() - 1);
-    if (focusHandler != null) {
-      focusHandler.popState();
-    }
-    mouseFocusElement = null;
+    focusHandler.popState();
   }
 
   /**
@@ -322,8 +300,7 @@ public class Screen implements MouseFocusHandler {
    * start the screen.
    */
   public final void startScreen() {
-    focusElement = null;
-    mouseFocusElement = null;
+    focusHandler.resetFocusElements();
     resetLayers();
     layoutLayers();
 
@@ -525,73 +502,11 @@ public class Screen implements MouseFocusHandler {
   }
 
   /**
-   * request exclusive focus.
-   * @param newFocusElement element that request focus
-   */
-  public void requestExclusiveFocus(final Element newFocusElement) {
-    log.info("requestExclusiveFocus: " + newFocusElement.getId());
-
-    setFocus(newFocusElement);
-    mouseFocusElement = newFocusElement;
-  }
-
-  /**
-   * set the focus to the given element.
-   * @param newFocusElement new focus element
-   */
-  public void setFocus(final Element newFocusElement) {
-    if (focusElement == newFocusElement) {
-      return;
-    }
-
-    if (focusElement != null) {
-      focusElement.stopEffect(EffectEventId.onFocus);
-      focusElement.stopEffect(EffectEventId.onHover);      
-    }
-
-    focusElement = newFocusElement;
-    if (focusElement != null) {
-      focusElement.startEffect(EffectEventId.onFocus, null);
-    }
-  }
-
-  /**
-   * lost focus.
-   * @param elementThatLostFocus elementThatLostFocus
-   */
-  public void lostFocus(final Element elementThatLostFocus) {
-    if (mouseFocusElement == elementThatLostFocus) {
-      log.info("lostFocus: " + elementThatLostFocus.getId());
-      mouseFocusElement = null;
-    }
-  }
-
-  /**
-   * checks to see if access to mouse event is granted for the given element.
-   * @param element element
-   * @return true or false
-   */
-  public boolean canProcessMouseEvents(final Element element) {
-    if (mouseFocusElement == null) {
-      return true;
-    }
-
-    boolean canProcess = mouseFocusElement == element;
-    if (!canProcess) {
-      log.info(
-          "denied mouse event for [" + element.getId() + "] because focus is at [" + mouseFocusElement.getId() + "]");
-    }
-    return canProcess;
-  }
-
-  /**
    * keyboard event.
    * @param inputEvent keyboard event
    */
   public void keyEvent(final KeyboardInputEvent inputEvent) {
-    if (focusElement != null) {
-      focusElement.keyEvent(inputEvent);
-    }
+    focusHandler.keyEvent(inputEvent);
     for (InputHandlerWithMapping handler : inputHandlers) {
       if (handler.process(inputEvent)) {
         break;
@@ -615,10 +530,7 @@ public class Screen implements MouseFocusHandler {
   public void debug(final Console console) {
     console.output("mouse over elements");
     console.output(mouseOverHandler.getInfoString());
-
-    if (focusElement != null) {
-      console.output("focus element: " + focusElement.getId());
-    }
+    console.output(focusHandler.toString());
   }
 
   /**
@@ -635,15 +547,6 @@ public class Screen implements MouseFocusHandler {
    */
   public FocusHandler getFocusHandler() {
     return focusHandler;
-  }
-
-  /**
-   * Is the focus on the given element.
-   * @param element element to check
-   * @return true, when the element has the focus and false when not
-   */
-  public boolean hasFocus(final Element element) {
-    return focusElement == element;
   }
 
   /**
@@ -685,9 +588,5 @@ public class Screen implements MouseFocusHandler {
     popupElements.removeAll(popupElementsToRemove);
     popupElementsToAdd.clear();
     popupElementsToRemove.clear();
-  }
-
-  public void nextElementFocus() {
-    focusHandler.getNext(focusElement).setFocus();
   }
 }
