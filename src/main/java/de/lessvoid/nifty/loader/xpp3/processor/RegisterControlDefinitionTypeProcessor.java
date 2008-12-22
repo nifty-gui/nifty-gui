@@ -23,8 +23,6 @@ public class RegisterControlDefinitionTypeProcessor implements XmlElementProcess
     new Hashtable < String, RegisterControlDefinitionType >();
   private TypeContext typeContext;
 
-
-
   /**
    * @param newTypeContext
    */
@@ -78,9 +76,9 @@ public class RegisterControlDefinitionTypeProcessor implements XmlElementProcess
   }
 
   /**
-   * @param typeContext the typeContext to set
+   * @param typeContextParam the typeContext to set
    */
-  public void setTypeContext(TypeContext typeContext) {
-    this.typeContext = typeContext;
+  public void setTypeContext(final TypeContext typeContextParam) {
+    this.typeContext = typeContextParam;
   }
 }
