@@ -255,10 +255,17 @@ public class Nifty {
     return exit;
   }
 
-  /**
-   * add controls.
-   */
   public void addControls() {
+    if (!controlsToAdd.isEmpty()) {
+      for (ControlToAdd controlToAdd : controlsToAdd) {
+        Element newControl = controlToAdd.createControl();
+        controlToAdd.startControl(newControl);
+      }
+      controlsToAdd.clear();
+    }
+  }
+
+  public void addControlsWithoutStartScreen() {
     if (!controlsToAdd.isEmpty()) {
       for (ControlToAdd controlToAdd : controlsToAdd) {
         controlToAdd.createControl();
@@ -508,12 +515,12 @@ public class Nifty {
    * @param screen screen
    * @param id id
    */
-  public void showPopup(final Screen screen, final String id) {
+  public void showPopup(final Screen screen, final String id, final Element defaultFocusElement) {
     Element popup = activePopups.get(id);
     if (popup == null) {
       log.warning("missing popup [" + id + "] o_O");
     } else {
-      screen.addPopup(popup);
+      screen.addPopup(popup, defaultFocusElement);
     }
   }
 
@@ -526,7 +533,7 @@ public class Nifty {
     log.info("createPopupFromType: " + controllerInstance + ", " + niftyInputControl);
     Element popupElement = popupType.createElement(
         this,
-        null,
+        getCurrentScreen(),
         getLoader().getRegisteredEffects(),
         getLoader().getRegisteredControls(),
         getStyleHandler(),
@@ -652,10 +659,15 @@ public class Nifty {
       }
     }
 
+    public void startControl(final Element newControl) {
+      newControl.startEffect(EffectEventId.onStartScreen);
+      newControl.onStartScreen(screen);
+    }
+
     /**
      * create the control.
      */
-    public void createControl() {
+    public Element createControl() {
       TypeContext typeContext = new TypeContext(
           loader.getStyleHandler(),
           Nifty.this,
@@ -681,9 +693,7 @@ public class Nifty {
         newControl.setFocusable(focusable);
       }
       screen.layoutLayers();
-
-      newControl.startEffect(EffectEventId.onStartScreen, null);
-      newControl.onStartScreen(screen);
+      return newControl;
     }
   }
 
