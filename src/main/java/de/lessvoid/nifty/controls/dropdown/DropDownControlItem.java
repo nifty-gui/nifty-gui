@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -15,7 +16,8 @@ public class DropDownControlItem implements Controller {
 
   private Nifty nifty;
   private Element dropDownControlItemElement;
-  private Element dropDownControlElement;
+  private FocusHandler focusHandler;
+  private DropDownControl dropDownControl;
 
   public void bind(
       final Nifty niftyParam,
@@ -27,23 +29,33 @@ public class DropDownControlItem implements Controller {
     dropDownControlItemElement = newElement;
   }
 
-  public void onStartScreen(final Screen newScreen) {
+  public void onStartScreen(final Screen screen) {
+    focusHandler = screen.getFocusHandler();
   }
 
   public void onFocus(final boolean getFocus) {
   }
 
   public void inputEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
+      focusHandler.getNext(dropDownControlItemElement).setFocus();
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+      focusHandler.getPrev(dropDownControlItemElement).setFocus();
+    } else if (inputEvent == NiftyInputEvent.Activate) {
+      dropDownItemClicked();
+    } else if (inputEvent == NiftyInputEvent.Escape) {
+      dropDownControl.reset();
+      nifty.closePopup("dropDownBoxSelectPopup");
+    }
   }
 
   public void dropDownItemClicked() {
-    DropDownControl dropDownControl = dropDownControlElement.getControl(DropDownControl.class);
     dropDownControl.reset();
     dropDownControl.setSelectedItem(dropDownControlItemElement.getRenderer(TextRenderer.class).getOriginalText());
     nifty.closePopup("dropDownBoxSelectPopup");
   }
 
   public void setDropDownControl(final Element element) {
-    this.dropDownControlElement = element;
+    dropDownControl = element.getControl(DropDownControl.class);
   }
 }

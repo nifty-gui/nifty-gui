@@ -46,13 +46,11 @@ public class DropDownControl implements Controller {
 
   public void inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
-      screen.nextElementFocus();
+      focusHandler.getNext(element).setFocus();
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-      if (focusHandler != null) {
-        focusHandler.getPrev(element).setFocus();
-      }
+      focusHandler.getPrev(element).setFocus();
     } else if (inputEvent == NiftyInputEvent.Activate) {
-      element.onClick();
+      dropDownClicked();
     }
   }
 
@@ -86,7 +84,7 @@ public class DropDownControl implements Controller {
     dropDownModel.initialize(nifty, nifty.getCurrentScreen(), popup);
 
     log.info("a");
-    nifty.addControls();
+    nifty.addControlsWithoutStartScreen();
     log.info("b");
 
     int maxHeight = 0;
@@ -97,7 +95,23 @@ public class DropDownControl implements Controller {
     popup.layoutElements();
     popup.setConstraintHeight(new SizeValue(maxHeight + "px"));
     popupLayer.getControl(DropDownPopup.class).setDropDownElement(element);
-    nifty.showPopup(nifty.getCurrentScreen(), "dropDownBoxSelectPopup");
+
+    Element selectedElement = convertSelectedItemToElement(popup, dropDownModel.getSelectedItemIdx());
+    nifty.showPopup(nifty.getCurrentScreen(), "dropDownBoxSelectPopup", selectedElement);
+  }
+
+  private Element convertSelectedItemToElement(final Element popup, final int selectedItemIdx) {
+    if (selectedItemIdx == -1) {
+      return null;
+    }
+
+    for (int idx = 0; idx < popup.getElements().size(); idx++) {
+      if (idx == selectedItemIdx) {
+        return popup.getElements().get(idx);
+      }
+    }
+
+    return null;
   }
 
   public void reset() {
