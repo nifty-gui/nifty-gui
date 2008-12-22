@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
   <useControls filename="nifty-controls/nifty-button.xml" />
+  <useControls filename="nifty-controls/nifty-checkbox.xml" />
   <useControls filename="nifty-controls/nifty-console.xml" />
   <useControls filename="nifty-controls/nifty-drop-down.xml" />
   <useControls filename="nifty-controls/nifty-image-select.xml" />
