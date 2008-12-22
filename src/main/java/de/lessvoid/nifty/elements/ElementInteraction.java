@@ -115,9 +115,7 @@ public class ElementInteraction {
    * @param methodInvokerParam MethodInvoker
    * @param useRepeatParam use repeat
    */
-  public void setOnClickMethod(
-      final MethodInvoker methodInvokerParam,
-      final boolean useRepeatParam) {
+  public void setOnClickMethod(final MethodInvoker methodInvokerParam, final boolean useRepeatParam) {
     onClickMethod = methodInvokerParam;
     onClickRepeat = useRepeatParam;
   }

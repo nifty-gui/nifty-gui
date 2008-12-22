@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.elements;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -65,7 +66,8 @@ public class MethodInvoker {
       }
 
       // alright object is not already in list -> add as last element to the array
-      Object[] copy = Arrays.copyOf(target, target.length + 1);
+      Object[] copy = new Object[target.length + 1];
+      System.arraycopy(target, 0, copy, 0, target.length);
       copy[copy.length - 1] = object;
       target = copy;
     }
