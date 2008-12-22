@@ -122,7 +122,6 @@ public class FocusHandler {
    * save all states.
    */
   public void pushState() {
-    log.info("pushState()");
     ArrayList < Element > copy = new ArrayList < Element >();
     copy.addAll(entries);
     elementBuffer.add(copy);
@@ -140,7 +139,6 @@ public class FocusHandler {
    * restore all states.
    */
   public void popState() {
-    log.info("popState()");
     entries.clear();
     entries.addAll(elementBuffer.get(elementBuffer.size() - 1));
 
@@ -176,7 +174,7 @@ public class FocusHandler {
     }
 
     keyboardFocusElement = newFocusElement;
-    log.info("keyboard focus element now changed to [" + keyboardFocusElement.toString() + "]");
+    log.fine("keyboard focus element now changed to [" + keyboardFocusElement.toString() + "]");
 
     if (keyboardFocusElement != null) {
       keyboardFocusElement.startEffect(EffectEventId.onFocus, null);
@@ -184,12 +182,11 @@ public class FocusHandler {
   }
 
   public void lostKeyboardFocus(final Element elementThatLostFocus) {
-    log.info("lostKeyboardFocus for [" + elementThatLostFocus.toString() + "]");
+    log.fine("lostKeyboardFocus for [" + elementThatLostFocus.toString() + "]");
     if (keyboardFocusElement == elementThatLostFocus) {
       keyboardFocusElement.stopEffect(EffectEventId.onFocus);
       keyboardFocusElement.stopEffect(EffectEventId.onHover);
       keyboardFocusElement = null;
-      log.info("keyboard focus lost");
     }
   }
 
@@ -204,26 +201,24 @@ public class FocusHandler {
       return;
     }
     mouseFocusElement = newFocusElement;
-    log.info("requestExclusiveMouseFocus for [" + mouseFocusElement.toString() + "]");
+    log.fine("requestExclusiveMouseFocus for [" + mouseFocusElement.toString() + "]");
   }
 
   public boolean canProcessMouseEvents(final Element element) {
     if (mouseFocusElement == null) {
-      log.info("canProcessMouseEvents with mouseFocusElement == null ==> true");
       return true;
     }
 
     boolean canProcess = mouseFocusElement == element;
-    log.info(
+    log.fine(
         "canProcessMouseEvents for [" + element.toString() + "] ==> "
         + canProcess + " (" + mouseFocusElement.toString() + ")");
     return canProcess;
   }
 
   public void lostMouseFocus(final Element elementThatLostFocus) {
-    log.info("lostMouseFocus for [" + elementThatLostFocus.toString() + "]");
+    log.fine("lostMouseFocus for [" + elementThatLostFocus.toString() + "]");
     if (mouseFocusElement == elementThatLostFocus) {
-      log.info("mouse focus lost");
       mouseFocusElement = null;
     }
   }

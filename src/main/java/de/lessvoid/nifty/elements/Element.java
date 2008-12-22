@@ -652,7 +652,7 @@ public class Element {
   public final void registerEffect(
       final EffectEventId theId,
       final Effect e) {
-    log.info("register: " + theId.toString() + "(" + e.getStateString() + ") for Element: " + this.getId());
+    log.fine("register: " + theId.toString() + "(" + e.getStateString() + ") for Element: " + this.getId());
     effectManager.registerEffect(theId, e);
   }
 

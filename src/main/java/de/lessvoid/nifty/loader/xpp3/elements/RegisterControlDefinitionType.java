@@ -93,9 +93,11 @@ public class RegisterControlDefinitionType {
    * @return NiftyInputMapping
    */
   public NiftyInputMapping getInputMappingInstance() {
+	  if (inputMapper == null) {
+		  return new Default();
+	  }
     NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMapper, NiftyInputMapping.class);
     if (inputMapping == null) {
-      log.warning("unable to instance inputMapping - fall back to no mapping");
       inputMapping = new Default();
     }
     return inputMapping;

@@ -58,7 +58,7 @@ public class PopupTypeProcessor implements XmlElementProcessor {
 
     String name = attributes.get("id");
     registeredPopups.put(name, popupType);
-    logger.info("registering popup [" + name + "]");
+    logger.fine("registering popup [" + name + "]");
   }
 
   /**

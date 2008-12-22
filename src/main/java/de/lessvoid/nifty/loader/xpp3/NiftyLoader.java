@@ -58,8 +58,6 @@ public class NiftyLoader {
       final Nifty nifty,
       final Map < String, Screen > screens,
       final TimeProvider timeProvider) throws Exception {
-    logBlockBegin("processing");
-
     // create processors
     niftyTypeProcessor = new NiftyTypeProcessor(nifty, this, timeProvider);
     niftyStylesTypeProcessor = new NiftyStylesTypeProcessor(niftyTypeProcessor.getStyleHandler(), this);
@@ -152,15 +150,15 @@ public class NiftyLoader {
    * @param msg message to log
    */
   private void logBlockBegin(final String msg) {
-    log.info("========================================================");
+    log.fine("========================================================");
     log.info(msg);
-    log.info("========================================================");
+    log.fine("========================================================");
   }
 
   /**
    * log some nice header thing into the log.
    */
   private void logBlockEnd() {
-    log.info("--------------------------------------------------------");
+    log.fine("--------------------------------------------------------");
   }
 }

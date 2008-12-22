@@ -102,8 +102,6 @@ public class ElementType {
       final Screen screen,
       final ScreenController screenController,
       final NiftyInputControl ... control) {
-    log.info("addElementAttributes: " + element + ", " + screen + ", " + screenController + ", " + control);
-
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
@@ -565,7 +563,7 @@ public class ElementType {
         value = "'" + entry.getValue() + "' missing o_O";
         continue;
       }
-      log.info("[" + element.getId() + "{" + element + "}] setting [" + entry.getKey() + "] to [" + value + "]");
+      log.fine("[" + element.getId() + "{" + element + "}] setting [" + entry.getKey() + "] to [" + value + "]");
       Attributes attributes = new Attributes();
       attributes.overwriteAttribute(entry.getKey(), value);
       ElementType.applyAttributes(new AttributesType(attributes), screen, element, niftyRenderEngine);

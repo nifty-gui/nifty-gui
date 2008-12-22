@@ -147,7 +147,7 @@ public class XmlParser {
    * @throws Exception exception
    */
   private void processElement(final XmlElementProcessor xmlElement) throws Exception {
-//    log.info("process element: " + xmlElement.getClass().getName());
+    log.fine("process element: " + xmlElement.getClass().getName());
     try {
      xmlElement.process(this, new Attributes(xpp));
     } catch (Exception ex) {
@@ -181,10 +181,10 @@ public class XmlParser {
     while (eventType != XmlPullParser.END_DOCUMENT) {
      if (eventType == XmlPullParser.END_TAG) {
        indent();
-       log.info(indent() + "END <" + xpp.getName() + ">");
+       log.fine(indent() + "END <" + xpp.getName() + ">");
        return;
      } else if (eventType == XmlPullParser.START_TAG) {
-       log.info(indent() + "START <" + xpp.getName() + ">");
+       log.fine(indent() + "START <" + xpp.getName() + ">");
        return;
      }
      eventType = xpp.next();

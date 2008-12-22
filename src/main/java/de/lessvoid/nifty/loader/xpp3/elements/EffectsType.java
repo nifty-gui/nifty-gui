@@ -190,7 +190,7 @@ public class EffectsType {
         if (value == null) {
           value = "'" + entry.getValue() + "' missing o_O";
         }
-        log.info(" initEffect for [" + element.getId() + "] setting [" + entry.getKey() + "] to [" + value + "]");
+        log.fine(" initEffect for [" + element.getId() + "] setting [" + entry.getKey() + "] to [" + value + "]");
         Attributes attributes = effectType.getAny();
         attributes.overwriteAttribute(entry.getKey(), value);
         effectType.initFromAttributes(attributes);

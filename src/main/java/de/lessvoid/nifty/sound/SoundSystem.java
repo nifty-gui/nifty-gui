@@ -55,7 +55,7 @@ public class SoundSystem {
    * @return true on success and false when loading the sound failed
    */
   public boolean addSound(final String name, final String filename) {
-    log.info("register sound [" + name + "] for file '" + filename + "'");
+    log.fine("register sound [" + name + "] for file '" + filename + "'");
 
     SoundHandle sound = soundLoader.loadSound(this, filename);
     if (sound == null) {
@@ -73,7 +73,7 @@ public class SoundSystem {
    * @return true on success and false when loading the music file failed
    */
   public boolean addMusic(final String name, final String filename) {
-    log.info("register music [" + name + "] for file '" + filename + "'");
+    log.fine("register music [" + name + "] for file '" + filename + "'");
 
     SoundHandle music = soundLoader.loadMusic(this, filename);
     if (music == null) {
@@ -97,8 +97,8 @@ public class SoundSystem {
 
     SoundHandle sound = soundLookup.get(name);
     if (sound == null) {
-        log.warning("missing sound [" + name + "]");
-        return null;
+      log.warning("missing sound [" + name + "]");
+      return null;
     }
 
     return sound;

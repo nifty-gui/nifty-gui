@@ -102,26 +102,26 @@ public class MethodInvoker {
             // does the method supports the parameters?
             // TODO: not only check for the count but check the type too
             if (getMethodParameterCount(method) == invokeParameters.length) {
-              log.info("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
+              log.fine("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
               return callMethod(object, method, invokeParameters);
             } else {
-              log.info("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
+              log.fine("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
               return callMethod(object, method, new Object[0]);
             }
           } else {
             // no invokeParameters encoded. this means we can call the method as is or with the invokeParametersParam
             if (invokeParametersParam.length > 0) {
               if (getMethodParameterCount(method) == invokeParametersParam.length) {
-                log.info("invoking method '" + methodWithName + "' with the actual parameters ("
+                log.fine("invoking method '" + methodWithName + "' with the actual parameters ("
                     + debugParaString(invokeParametersParam) + ")");
                 return callMethod(object, method, invokeParametersParam);
               } else {
-                log.info("invoking method '" + methodWithName
+                log.fine("invoking method '" + methodWithName
                     + "' without parameters (invokeParametersParam mismatch)");
                 return callMethod(object, method, null);
               }
             } else {
-              log.info("invoking method '" + methodWithName + "' without parameters");
+              log.fine("invoking method '" + methodWithName + "' without parameters");
               return callMethod(object, method, null);
             }
           }
@@ -140,25 +140,24 @@ public class MethodInvoker {
    */
   private Object callMethod(final Object targetObject, final Method method, final Object[] invokeParameters) {
     try {
-      log.warning("method: " + method + "on targetObject: " + targetObject + ", parameters: " + invokeParameters);
+      log.fine("method: " + method + "on targetObject: " + targetObject + ", parameters: " + invokeParameters);
       if (method != null) {
-        log.warning(method.getName());
+        log.fine(method.getName());
       }
       if (invokeParameters != null) {
         for (Object o : invokeParameters) {
-          log.warning("parameter: " + o);
+          log.fine("parameter: " + o);
         }
       }
-      log.warning("yeah, calling it now");
       return method.invoke(targetObject, invokeParameters);
     } catch (Exception e) {
-      log.warning("error: " + e.getMessage());
+      log.fine("error: " + e.getMessage());
       StackTraceElement[] elements = e.getStackTrace();
       if (elements == null) {
-        log.warning("stacktrace is null");
+        log.fine("stacktrace is null");
       } else {
         for (StackTraceElement ee : elements) {
-          log.warning(
+          log.fine(
               ee.getClassName()
               + ":" + ee.getFileName()
               + ":" + ee.getMethodName()
