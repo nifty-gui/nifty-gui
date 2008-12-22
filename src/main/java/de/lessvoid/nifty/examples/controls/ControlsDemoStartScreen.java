@@ -6,13 +6,10 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 public class ControlsDemoStartScreen implements ScreenController {
-
   private Nifty nifty;
   private Screen screen;
 
-  public void bind(
-      final Nifty newNifty,
-      final Screen newScreen) {
+  public void bind(final Nifty newNifty, final Screen newScreen) {
     screen = newScreen;
     nifty = newNifty;
     DropDownControl dropDown1 = findDropDownControl("dropDown1");
