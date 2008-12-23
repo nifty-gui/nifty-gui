@@ -130,12 +130,6 @@ public class DropDownControl implements Controller {
     changeSelectedItem(dropDownModel.getSelectedItem());
   }
 
-  private void changeSelectedItem(final String selectedItem) {
-    TextRenderer text = element.findElementByName("text").getRenderer(TextRenderer.class);
-    text.setText(selectedItem);
-    notifyObservers();
-  }
-
   public void setSelectedItem(final String text) {
     dropDownModel.setSelectedItem(text);
     changeSelectedItem(dropDownModel.getSelectedItem());
@@ -151,7 +145,6 @@ public class DropDownControl implements Controller {
 
   public void clear() {
     dropDownModel.clear();
-    notifyObservers();
   }
 
   public void addNotify(final DropDownControlNotify notity) {
@@ -166,7 +159,12 @@ public class DropDownControl implements Controller {
     observable.deleteObservers();
   }
 
-  private void notifyObservers() {
+  private void changeSelectedItem(final String selectedItem) {
+    TextRenderer text = element.findElementByName("text").getRenderer(TextRenderer.class);
+    text.setText(selectedItem);
+  }
+
+  public void notifyObservers() {
     observable.setChanged();
     observable.notifyObservers();
   }

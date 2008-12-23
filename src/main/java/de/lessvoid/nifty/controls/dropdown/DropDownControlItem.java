@@ -52,6 +52,7 @@ public class DropDownControlItem implements Controller {
   public void dropDownItemClicked() {
     dropDownControl.reset();
     dropDownControl.setSelectedItem(dropDownControlItemElement.getRenderer(TextRenderer.class).getOriginalText());
+    dropDownControl.notifyObservers();
     nifty.closePopup("dropDownBoxSelectPopup");
   }
 
