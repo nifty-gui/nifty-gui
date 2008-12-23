@@ -7,6 +7,7 @@ import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.tools.Alpha;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -14,12 +15,24 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class Fade implements EffectImpl {
-  private Color start = Color.BLACK;
-  private Color end = Color.WHITE;
+  private Alpha start = Alpha.ZERO;
+  private Alpha end = Alpha.FULL;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
-    start = new Color(parameter.getProperty("startColor", "#000000ff"));
-    end = new Color(parameter.getProperty("endColor", "#ffffffff"));
+    // startColor and endColor (only alpha component used) are the old version of this
+    // and are kept here only for backward compatibility. The current attributes are "start" and "end" alpha values.
+    if (parameter.getProperty("startColor") != null) {
+      start = new Alpha(new Color(parameter.getProperty("startColor", "#000000ff")).getAlpha());
+    }
+    if (parameter.getProperty("endColor") != null ) {
+      end = new Alpha(new Color(parameter.getProperty("endColor", "#ffffffff")).getAlpha());
+    }
+    if (parameter.getProperty("start") != null) {
+      start = new Alpha(parameter.getProperty("start"));
+    }
+    if (parameter.getProperty("end") != null) {
+      end = new Alpha(parameter.getProperty("end"));
+    }
   }
 
   public void execute(
@@ -27,8 +40,8 @@ public class Fade implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    Color c = start.linear(end, normalizedTime);
-    r.setColorAlpha(c.getAlpha());
+    Alpha a = start.linear(end, normalizedTime);
+    r.setColorAlpha(a.getAlpha());
   }
 
   public void deactivate() {
