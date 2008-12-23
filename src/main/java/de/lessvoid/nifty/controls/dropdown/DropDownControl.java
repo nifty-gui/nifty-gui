@@ -57,8 +57,10 @@ public class DropDownControl implements Controller {
       dropDownClicked();
     } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
       setSelectedItemIdx(dropDownModel.gotoPrevItem());
+      notifyObservers();
     } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
       setSelectedItemIdx(dropDownModel.gotoNextItem());
+      notifyObservers();
     }
   }
 
