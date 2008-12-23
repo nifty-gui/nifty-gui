@@ -36,6 +36,16 @@ public enum NiftyInputEvent {
   MoveCursorRight,
 
   /**
+   * move cursor up.
+   */
+  MoveCursorUp,
+
+  /**
+   * move cursor down.
+   */
+  MoveCursorDown,
+
+  /**
    * delete.
    */
   Delete,

@@ -55,6 +55,10 @@ public class DropDownControl implements Controller {
       focusHandler.getPrev(element).setFocus();
     } else if (inputEvent == NiftyInputEvent.Activate) {
       dropDownClicked();
+    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+      setSelectedItemIdx(dropDownModel.gotoPrevItem());
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+      setSelectedItemIdx(dropDownModel.gotoNextItem());
     }
   }
 

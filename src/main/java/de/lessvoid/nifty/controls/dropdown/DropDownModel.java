@@ -56,4 +56,22 @@ public class DropDownModel {
   public void clear() {
     items.clear();
   }
+
+  public int gotoNextItem() {
+    if (selectedItemIdx < items.size() - 1) {
+      selectedItemIdx++;
+    } else {
+      selectedItemIdx = 0;
+    }
+    return selectedItemIdx;
+  }
+
+  public int gotoPrevItem() {
+    if (selectedItemIdx > 0) {
+      selectedItemIdx--;
+    } else {
+      selectedItemIdx = items.size() - 1;
+    }
+    return selectedItemIdx;
+  }
 }

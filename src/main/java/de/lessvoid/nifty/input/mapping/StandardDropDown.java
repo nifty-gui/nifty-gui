@@ -15,9 +15,9 @@ public class StandardDropDown implements NiftyInputMapping {
   public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == Keyboard.KEY_DOWN) {
-        return NiftyInputEvent.Activate;
+        return NiftyInputEvent.MoveCursorDown;
       } else if (inputEvent.getKey() == Keyboard.KEY_UP) {
-        return NiftyInputEvent.Escape;
+        return NiftyInputEvent.MoveCursorUp;
       } else if (inputEvent.getKey() == Keyboard.KEY_RETURN) {
         return NiftyInputEvent.Activate;
       } else if (inputEvent.getKey() == Keyboard.KEY_SPACE) {
