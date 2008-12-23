@@ -5,6 +5,9 @@ package de.lessvoid.nifty.tools;
  * @author void
  */
 public class Alpha {
+  public static final Alpha ZERO = new Alpha(0.0f);
+  public static final Alpha FULL = new Alpha(1.0f);
+
   private static final int SCALE_SHORT_MODE = 0x11;
   private static final float MAX_INT_VALUE = 255.0f;
   private static final int HEX_BASE = 16;
