@@ -26,7 +26,7 @@
       </panel>
     </layer>
     <layer id="layer2" childLayout="center">
-      <text id="text" font="verdana-24-shadow.fnt" text="Press F1 to toggle the best console evar :)
+      <text id="text" font="aurulent-sans-17.fnt" text="Press F1 to toggle the best console evar :)
 &#13;&#10;(and enter 'exit' in the console to go back...)" align="center" valign="center" />
     </layer>
   </screen>

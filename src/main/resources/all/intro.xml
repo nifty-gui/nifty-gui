@@ -36,7 +36,7 @@
   <style id="glowText">
     <effect>
       <onHover name="saveState" />
-      <onHover name="changeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onHover name="changeFont" font="aurulent-sans-17.fnt" post="false" inherit="false"/>
       <onHover name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
       <onHover name="renderElement" />
       <onHover name="restoreState" />
@@ -47,16 +47,16 @@
     <attributes align="center" childLayout="center" visibleToMouse="true" />
   </style>
   <style id="text-only-button#text">
-    <attributes font="verdana-24-shadow.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="true"/>
+    <attributes font="aurulent-sans-17.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="true"/>
     <effect>
       <onHover name="saveState" />
-      <onHover name="changeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onHover name="changeFont" font="aurulent-sans-17.fnt" post="false" inherit="false"/>
       <onHover name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
       <onHover name="renderElement" />
       <onHover name="restoreState" />
 
       <onFocus timeType="infinite" name="saveState" />
-      <onFocus timeType="infinite" name="changeFont" font="verdana-24-glow.fnt" post="false" inherit="false"/>
+      <onFocus timeType="infinite" name="changeFont" font="aurulent-sans-17.fnt" post="false" inherit="false"/>
       <onFocus timeType="infinite" name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
       <onFocus timeType="infinite" name="renderElement" />
       <onFocus timeType="infinite" name="restoreState" />
@@ -165,7 +165,7 @@
           <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" inherit="true" />
           <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" inherit="true" />
         </effect>
-        <text id="hintElement" text="Welcome to Nifty Examples" font="verdana-24-shadow.fnt" align="center" valign="center"/>
+        <text id="hintElement" text="Welcome to Nifty Examples" font="aurulent-sans-17.fnt" align="center" valign="center"/>
       </panel>
     </layer>
     <layer id="example" childLayout="absolute">
@@ -212,7 +212,7 @@
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
         <panel childLayout="center" height="50%">
-          <text text="Really want to Exit?" font="verdana-24-shadow.fnt" align="center" valign="center" color="#ff0f"/>
+          <text text="Really want to Exit?" font="aurulent-sans-17.fnt" align="center" valign="center" color="#ff0f"/>
         </panel>
         <panel childLayout="horizontal" align="center" height="50%">
           <panel childLayout="center" width="50%">
