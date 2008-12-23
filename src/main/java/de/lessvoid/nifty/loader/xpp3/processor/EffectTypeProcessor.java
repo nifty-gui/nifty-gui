@@ -54,10 +54,13 @@ public class EffectTypeProcessor implements XmlElementProcessor {
       effectsType.addOnHover(effectType);
     } else if (effectEventId == EffectEventId.onActive) {
       effectsType.addOnActive(effectType);
+    } else if (effectEventId == EffectEventId.onShow) {
+      effectsType.addOnShow(effectType);
+    } else if (effectEventId == EffectEventId.onHide) {
+      effectsType.addOnHide(effectType);
     } else if (effectEventId == EffectEventId.onCustom) {
       effectsType.addOnCustom(effectType);
     }
-
     xmlParser.nextTag();
   }
 }

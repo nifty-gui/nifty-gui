@@ -17,45 +17,17 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class EffectsType {
-  /**
-   * logger.
-   */
   private static Logger log = Logger.getLogger(EffectsType.class.getName());
 
-  /**
-   * onStartScreen.
-   */
   private Collection < EffectType > onStartScreen = new ArrayList < EffectType >();
-
-  /**
-   * onEndScreen.
-   */
   private Collection < EffectType > onEndScreen = new ArrayList < EffectType >();
-
-  /**
-   * onHover.
-   */
   private Collection < EffectType > onHover = new ArrayList < EffectType >();
-
-  /**
-   * onClick.
-   */
   private Collection < EffectType > onClick = new ArrayList < EffectType >();
-
-  /**
-   * onFocus.
-   */
   private Collection < EffectType > onFocus = new ArrayList < EffectType >();
-
-  /**
-   * onActive.
-   */
   private Collection < EffectType > onActive = new ArrayList < EffectType >();
-
-  /**
-   * onCustom.
-   */
   private Collection < EffectType > onCustom = new ArrayList < EffectType >();
+  private Collection < EffectType > onShow = new ArrayList < EffectType >();
+  private Collection < EffectType > onHide = new ArrayList < EffectType >();
 
   /**
    * default contructor.
@@ -75,6 +47,8 @@ public class EffectsType {
     this.onFocus = copyCollection(source.onFocus);
     this.onActive = copyCollection(source.onActive);
     this.onCustom = copyCollection(source.onCustom);
+    this.onShow = copyCollection(source.onShow);
+    this.onHide = copyCollection(source.onHide);
   }
 
   /**
@@ -138,10 +112,14 @@ public class EffectsType {
     onActive.add(effectParam);
   }
 
-  /**
-   * addOnCustom.
-   * @param effectParam onCustom
-   */
+  public void addOnShow(final EffectType effectParam) {
+    onShow.add(effectParam);
+  }
+
+  public void addOnHide(final EffectType effectParam) {
+    onHide.add(effectParam);
+  }
+
   public void addOnCustom(final EffectType effectParam) {
     onCustom.add(effectParam);
   }
@@ -164,6 +142,8 @@ public class EffectsType {
     initEffect(EffectEventId.onClick, onClick, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onFocus, onFocus, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onActive, onActive, element, registerEffects, nifty, time);
+    initEffect(EffectEventId.onShow, onShow, element, registerEffects, nifty, time);
+    initEffect(EffectEventId.onHide, onHide, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onCustom, onCustom, element, registerEffects, nifty, time);
   }
 

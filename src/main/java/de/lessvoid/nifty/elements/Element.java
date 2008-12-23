@@ -762,10 +762,18 @@ public class Element {
   /**
    * show this element.
    */
-  public final void show() {
+  public void show() {
+    internalShow();
+    startEffect(EffectEventId.onShow, new EndNotify() {
+      public void perform() {
+      }
+    });
+  }
+
+  private void internalShow() {
     visible = true;
     for (Element element : elements) {
-      element.show();
+      element.internalShow();
     }
   }
 
@@ -773,14 +781,21 @@ public class Element {
    * hide this element.
    */
   public final void hide() {
-    focusHandler.lostKeyboardFocus(this);
-    focusHandler.lostMouseFocus(this);
+    startEffect(EffectEventId.onHide, new EndNotify() {
+      public void perform() {
+        focusHandler.lostKeyboardFocus(Element.this);
+        focusHandler.lostMouseFocus(Element.this);
 
-    visible = false;
+        internalHide();
+      }
+    });
+  }
+
+  private void internalHide() {
     resetEffects();
-
+    visible = false;
     for (Element element : elements) {
-      element.hide();
+      element.internalHide();
     }
   }
 

@@ -39,6 +39,8 @@ public class EffectManager {
     effectProcessor.put(EffectEventId.onHover, new EffectProcessor(true, true));
     effectProcessor.put(EffectEventId.onActive, new EffectProcessor(true, false));
     effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false, false));
+    effectProcessor.put(EffectEventId.onShow, new EffectProcessor(false, false));
+    effectProcessor.put(EffectEventId.onHide, new EffectProcessor(false, false));
   }
 
   /**
@@ -106,6 +108,8 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onActive).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onFocus).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onClick).renderPre(renderDevice);
+    effectProcessor.get(EffectEventId.onShow).renderPre(renderDevice);
+    effectProcessor.get(EffectEventId.onHide).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onCustom).renderPre(renderDevice);
   }
 
@@ -120,6 +124,8 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onActive).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onFocus).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onClick).renderPost(renderDevice);
+    effectProcessor.get(EffectEventId.onShow).renderPost(renderDevice);
+    effectProcessor.get(EffectEventId.onHide).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onCustom).renderPost(renderDevice);
   }
 
@@ -153,6 +159,8 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onStartScreen).reset();
     effectProcessor.get(EffectEventId.onEndScreen).reset();
     effectProcessor.get(EffectEventId.onClick).reset();
+    effectProcessor.get(EffectEventId.onShow).reset();
+    effectProcessor.get(EffectEventId.onHide).reset();
     effectProcessor.get(EffectEventId.onCustom).reset();
   }
 

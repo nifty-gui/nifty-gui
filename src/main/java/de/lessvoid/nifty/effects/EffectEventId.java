@@ -11,5 +11,7 @@ public enum EffectEventId {
   onClick,
   onHover,
   onActive,
-  onCustom
+  onCustom,
+  onHide,
+  onShow
 }
