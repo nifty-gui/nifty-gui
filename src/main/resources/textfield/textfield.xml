@@ -14,36 +14,35 @@
     <layer id="layer" childLayout="center" backgroundImage="background.png">
       <effect>
         <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0" inherit="true"/>
-        <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" startDelay="0" inherit="true"/>
+        <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" startDelay="0" inherit="false"/>
       </effect>
-      <panel id="dialog" style="nifty-panel" childLayout="center" width="80%" height="38%" align="center" valign="center">
+      <panel id="dialog" style="nifty-panel" padding="18px,28px,28px,16px" childLayout="center" width="50%" height="38%" align="center" valign="center">
         <effect>
-          <onStartScreen name="move" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
-          <onEndScreen name="move" direction="bottom" mode="out" length="500" startDelay="0" inherit="true"/>
+          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
+          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" startDelay="500" inherit="true"/>
         </effect>
-        <panel childLayout="vertical" width="95%" height="80%" align="center" valign="center">
+        <panel childLayout="vertical" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
-            <label id="labelName" text="Your Name: " width="250px" align="left" textVAlign="center" textHAlign="left"/>
+            <label id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="name" name="textfield" text="kevmeister" />
-          </panel>    
-          <panel childLayout="horizontal" height="4px" />
-          <panel childLayout="horizontal" height="40px">
-            <label text="Your Host: " width="250px" align="left" textVAlign="center" textHAlign="left"/>
+          </panel>
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="horizontal">
+            <label text="Your Host: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="ip" name="textfield" />
           </panel>
-          <panel childLayout="horizontal" height="4px" />
-          <panel childLayout="horizontal" height="40px">
-            <label text="Your Password: " width="250px" align="left" textVAlign="center" textHAlign="left"/>
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="horizontal">
+            <label text="Your Password: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="password" name="textfield" passwordChar="*" />
           </panel>
-          <panel childLayout="horizontal" height="4px" />
-          <panel childLayout="horizontal" height="40px">
-            <label text="setMaxLength(5): " width="250px" align="left" textVAlign="center" textHAlign="left"/>
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="horizontal">
+            <label text="setMaxLength(5): " width="150px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="maxLengthTest" name="textfield" maxLength="5" />
           </panel>
-          <panel height="16px" />
-          <panel childLayout="horizontal">
-            <panel width="*" />
+          <panel childLayout="horizontal" height="*" />
+          <panel childLayout="center" width="100%">
             <control id="backButton" name="button" label="Back to Menu" align="right">
               <interact onClick="back()" />
             </control>
