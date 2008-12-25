@@ -330,10 +330,10 @@ public class ElementType {
       image = imageRenderer.getImage();
       if (image != null) {
         if (element.getConstraintWidth() == null) {
-          // element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
+          element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
         }
         if (element.getConstraintHeight() == null) {
-          // element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
+          element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
         }
         if (attrib.getInset() != null) {
           imageRenderer.setInset(new SizeValue(attrib.getInset()).getValueAsInt(image.getHeight()));
