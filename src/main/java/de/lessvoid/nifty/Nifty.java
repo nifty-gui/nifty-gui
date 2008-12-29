@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -420,6 +421,18 @@ public class Nifty {
     for (Screen screen : screens.values()) {
       screen.setAlternateKey(alternateKey);
     }
+  }
+
+  /**
+   * Returns a collection of the name of all screens
+   * @return sn The collection containing the name of all screens
+   */
+  public Collection < String > getAllScreensName() {
+    Collection < String > sn = new LinkedList < String >();
+    for (Screen screen : screens.values()) {
+      sn.add(screen.getScreenId());
+    }
+    return sn;
   }
 
   /**
