@@ -140,8 +140,10 @@ public class ConsoleControl implements Controller {
    * @param getFocus get or lose focus
    */
   public void onFocus(final boolean getFocus) {
-    TextFieldControl control = this.element.findElementByName("console-input").getControl(TextFieldControl.class);
-    control.onFocus(getFocus);
+    TextFieldControl control = this.element.findControl("console-input", TextFieldControl.class);
+    if (control != null) {
+      control.onFocus(getFocus);
+    }
   }
 
   /**
