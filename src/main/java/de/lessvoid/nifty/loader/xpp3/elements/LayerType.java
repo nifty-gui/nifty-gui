@@ -5,6 +5,7 @@ import java.util.Map;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
@@ -23,8 +24,8 @@ public class LayerType extends PanelType {
    * Create LayerType.
    * @param typeContext TypeContext
    */
-  public LayerType(final TypeContext typeContext) {
-    super(typeContext);
+  public LayerType(final TypeContext typeContext, final Attributes attributesParam) {
+    super(typeContext, attributesParam);
   }
 
   /**
@@ -58,7 +59,7 @@ public class LayerType extends PanelType {
         screen,
         getAttributes(),
         typeContext.time);
-    super.addElementAttributes(
+    super.addAllElementAttributes(
         layer,
         screen,
         screenController,

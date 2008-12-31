@@ -84,7 +84,7 @@ public class HoverType {
    * init element.
    * @param element element
    */
-  public void initElement(final Element element) {
+  public Falloff buildFalloff(final Element element) {
     Properties prop = new Properties();
     if (width != null) {
       prop.put(Falloff.HOVER_WIDTH, width);
@@ -99,13 +99,8 @@ public class HoverType {
       prop.put(Falloff.HOVER_FALLOFF_CONSTRAINT, falloffConstraint.toString());
     }
     if (!prop.isEmpty()) {
-      Falloff falloff = element.getFalloff();
-      if (falloff == null) {
-        falloff = new Falloff(prop);
-        element.setHotSpotFalloff(falloff);
-      } else {
-        falloff.applyProperties(prop);
-      }
+      return new Falloff(prop);
     }
+    return null;
   }
 }

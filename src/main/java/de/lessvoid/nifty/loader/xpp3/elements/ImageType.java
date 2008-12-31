@@ -4,6 +4,7 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
@@ -32,9 +33,8 @@ public class ImageType extends ElementType {
    * create it.
    * @param filenameParam filename
    */
-  public ImageType(final TypeContext typeContext,
-      final String filenameParam) {
-    super(typeContext);
+  public ImageType(final TypeContext typeContext, final Attributes attributesParam, final String filenameParam) {
+    super(typeContext, new AttributesType(attributesParam));
     this.filename = filenameParam;
   }
 
@@ -78,22 +78,11 @@ public class ImageType extends ElementType {
         true,
         typeContext.time,
         imageRenderer);
-    super.addElementAttributes(
+    super.addAllElementAttributes(
         element,
         screen,
         screenController,
         inputControl);
-
-    // set width and height to image width and height (for now)
-    image = imageRenderer.getImage();
-    if (image != null) {
-      if (element.getConstraintWidth() == null) {
-        element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
-      }
-      if (element.getConstraintHeight() == null) {
-        element.setConstraintHeight(new SizeValue(image.getHeight() + "px"));
-      }
-    }
 
     parent.add(element);
     return element;

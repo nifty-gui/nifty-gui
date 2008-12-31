@@ -5,11 +5,13 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.DefaultController;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.tools.MethodResolver;
 import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -39,12 +41,14 @@ public class ControlType extends ElementType {
   /**
    * create it.
    * @param typeContext typeContext
+   * @param attributesType 
    * @param nameParam name
    */
   public ControlType(
       final TypeContext typeContext,
+      final Attributes attributesType,
       final String nameParam) {
-    super(typeContext);
+    super(typeContext, new AttributesType(attributesType));
     this.name = nameParam;
   }
 
@@ -72,7 +76,13 @@ public class ControlType extends ElementType {
 
     RegisterControlDefinitionType controlDefinition = getControlDefinition();
 
-    final Controller c = controlDefinition.getControllerInstance(typeContext.nifty);
+    Controller controller =controlDefinition.getControllerInstance(typeContext.nifty);
+    if (controller == null) {
+      log.warning("creating DefaultController instance for [" + name + "]");
+      controller = new DefaultController();
+    }
+
+    final Controller c = controller;
     ControllerEventListener listener = null;
 
     // onClick action
@@ -124,6 +134,15 @@ public class ControlType extends ElementType {
           typeContext.nifty,
           typeContext.registeredEffects,
           typeContext.time);
+      if (!handleControlChildElements(
+          controlDefinition,
+          current,
+          screen,
+          screenController,
+          inputControlParam,
+          inputControl)) {
+        super.addElementAttributesChildren(current, screen, screenController, inputControlParam, inputControl);
+      }
       Properties props = null;
       if (getAttributes().getSrcAttributes() != null) {
         props = getAttributes().getSrcAttributes().createProperties();
@@ -135,6 +154,21 @@ public class ControlType extends ElementType {
     }
 
     return null;
+  }
+
+  private boolean handleControlChildElements(
+      final RegisterControlDefinitionType controlDefinition,
+      final Element current,
+      final Screen screen,
+      final ScreenController screenController,
+      final NiftyInputControl... control) {
+    String childRootId = controlDefinition.getChildRootId();
+    Element childRootElement = current.findElementByName(childRootId);
+    if (childRootElement != null) {
+      super.addElementAttributesChildren(childRootElement, screen, screenController, control);
+      return true;
+    }
+    return false;
   }
 
   public RegisterControlDefinitionType getControlDefinition() {

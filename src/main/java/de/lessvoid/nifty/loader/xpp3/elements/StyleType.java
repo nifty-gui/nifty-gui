@@ -29,12 +29,6 @@ public class StyleType {
   private AttributesType attributes;
 
   /**
-   * hover.
-   * @optional
-   */
-  private HoverType hover;
-
-  /**
    * EffectsType.
    * @optional
    */
@@ -75,14 +69,6 @@ public class StyleType {
   }
 
   /**
-   * Set Hover.
-   * @param hoverTypeParam HoverType
-   */
-  public void setHover(final HoverType hoverTypeParam) {
-    hover = hoverTypeParam;
-  }
-
-  /**
    * Set Effects.
    * @param effectsTypeParam EffectsType
    */
@@ -111,10 +97,6 @@ public class StyleType {
     // attributes
     if (attributes != null) {
       ElementType.applyAttributes(attributes, screen, element, nifty.getRenderDevice());
-    }
-    // hover
-    if (hover != null) {
-      hover.initElement(element);
     }
     // effects
     if (effects != null) {

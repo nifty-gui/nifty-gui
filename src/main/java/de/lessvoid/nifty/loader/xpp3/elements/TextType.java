@@ -7,6 +7,7 @@ import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
@@ -35,10 +36,8 @@ public class TextType extends ElementType {
    * create it.
    * @param textParam filename
    */
-  public TextType(
-      final TypeContext typeContext,
-      final String textParam) {
-    super(typeContext);
+  public TextType(final TypeContext typeContext, final Attributes attributesParam, final String textParam) {
+    super(typeContext, new AttributesType(attributesParam));
     this.text = textParam;
   }
 
@@ -88,7 +87,7 @@ public class TextType extends ElementType {
         false,
         typeContext.time,
         renderer);
-    super.addElementAttributes(
+    super.addAllElementAttributes(
         panel,
         screen,
         screenController,

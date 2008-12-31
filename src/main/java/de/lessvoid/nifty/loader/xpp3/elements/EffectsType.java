@@ -28,11 +28,14 @@ public class EffectsType {
   private Collection < EffectType > onCustom = new ArrayList < EffectType >();
   private Collection < EffectType > onShow = new ArrayList < EffectType >();
   private Collection < EffectType > onHide = new ArrayList < EffectType >();
+  private boolean overlay;
 
   /**
    * default contructor.
+   * @param b 
    */
-  public EffectsType() {
+  public EffectsType(final boolean overlayParam) {
+    overlay = overlayParam;
   }
 
   /**
@@ -49,6 +52,7 @@ public class EffectsType {
     this.onCustom = copyCollection(source.onCustom);
     this.onShow = copyCollection(source.onShow);
     this.onHide = copyCollection(source.onHide);
+    this.overlay = source.overlay;
   }
 
   /**
@@ -176,7 +180,7 @@ public class EffectsType {
         effectType.initFromAttributes(attributes);
       }
 
-      effectType.create(element, nifty, eventId, registeredEffects, time);
+      effectType.create(element, nifty, eventId, registeredEffects, time, overlay);
     }
   }
 }

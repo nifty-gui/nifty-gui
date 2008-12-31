@@ -7,6 +7,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -51,6 +52,8 @@ public class EffectType {
    */
   private Attributes any;
 
+  private HoverType hoverType;
+
   /**
    * default constructor.
    */
@@ -93,6 +96,7 @@ public class EffectType {
     this.alternateEnable = source.alternateEnable;
     this.inherit = source.inherit;
     this.any = new Attributes(source.any);
+    this.hoverType = source.hoverType;
   }
 
   /**
@@ -156,7 +160,8 @@ public class EffectType {
       final Nifty nifty,
       final EffectEventId effectEventId,
       final Map < String, RegisterEffectType > registeredEffects,
-      final TimeProvider time) {
+      final TimeProvider time,
+      final boolean overlayParam) {
     RegisterEffectType registerEffectType = registeredEffects.get(name);
     if (registerEffectType == null) {
       log.warning("unable to convert effect [" + name + "] because no effect with this name has been registered.");
@@ -171,11 +176,16 @@ public class EffectType {
     // create the effect class
     Effect effect = null;
     if (effectEventId.equals(EffectEventId.onHover)) {
-      effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId);
-      effect.enableHover();
+      effect = new Effect(nifty, inherit, post, overlayParam, alternateKey, alternateEnable, effectEventId);
       effect.enableInfinite();
+
+      Falloff falloff = null;
+      if (hoverType != null) {
+        falloff = hoverType.buildFalloff(element);
+      }
+      effect.enableHover(falloff);
     } else {
-      effect = new Effect(nifty, inherit, post, alternateKey, alternateEnable, effectEventId);
+      effect = new Effect(nifty, inherit, post, overlayParam, alternateKey, alternateEnable, effectEventId);
     }
 
     if (effectEventId.equals(EffectEventId.onFocus)
@@ -209,4 +219,7 @@ public class EffectType {
     return null;
   }
 
+  public void setHover(final HoverType hoverTypeParam) {
+    hoverType = hoverTypeParam;
+  }
 }

@@ -2,6 +2,7 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
@@ -13,8 +14,8 @@ import de.lessvoid.nifty.screen.ScreenController;
  */
 public class PanelType extends ElementType {
 
-  public PanelType(final TypeContext typeContext) {
-    super(typeContext);
+  public PanelType(final TypeContext typeContext, final Attributes attributesParam) {
+    super(typeContext, new AttributesType(attributesParam));
   }
 
   /**
@@ -41,7 +42,7 @@ public class PanelType extends ElementType {
         NiftyCreator.getPanelRenderer(typeContext.nifty, getAttributes()));
 
     Element element = panel;
-    super.addElementAttributes(
+    super.addAllElementAttributes(
         element,
         screen,
         screenController,

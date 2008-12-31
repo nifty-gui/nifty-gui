@@ -6,7 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.mapping.Default;
+import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.NiftyCreator;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
@@ -24,8 +24,8 @@ public class PopupType extends PanelType {
 
   private String controller;
 
-  public PopupType(final TypeContext typeContext, final String controllerParam) {
-    super(typeContext);
+  public PopupType(final TypeContext typeContext, final Attributes attributesParam, final String controllerParam) {
+    super(typeContext, attributesParam);
     controller = controllerParam;
   }
 
@@ -62,7 +62,7 @@ public class PopupType extends PanelType {
         screen,
         getAttributes(),
         typeContext.time);
-    super.addElementAttributes(
+    super.addAllElementAttributes(
         element,
         screen,
         screenController,

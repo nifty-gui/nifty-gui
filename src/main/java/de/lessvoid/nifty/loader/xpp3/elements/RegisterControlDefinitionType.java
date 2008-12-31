@@ -32,6 +32,8 @@ public class RegisterControlDefinitionType {
    * name.
    */
   private String name;
+  
+  private String childRootId;
 
   /**
    * controller.
@@ -59,13 +61,16 @@ public class RegisterControlDefinitionType {
    * @param controllerParam controller
    * @param inputMapperParam inputMapperParam
    * @param newAttributes attributes
+   * @param childRootIdParam 
    */
   public RegisterControlDefinitionType(
       final String nameParam,
       final String controllerParam,
       final String inputMapperParam,
-      final Attributes newAttributes) {
+      final Attributes newAttributes,
+      final String childRootIdParam) {
     this.name = nameParam;
+    this.childRootId = childRootIdParam;
     this.controller = controllerParam;
     this.inputMapper = inputMapperParam;
     this.controlDefinitionAttributes = newAttributes;
@@ -164,5 +169,9 @@ public class RegisterControlDefinitionType {
    */
   public Attributes getControlDefinitionAttributes() {
     return controlDefinitionAttributes;
+  }
+
+  public String getChildRootId() {
+    return childRootId;
   }
 }

@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.util.Log;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
@@ -49,12 +47,6 @@ public class ElementType {
   private InteractType interact;
 
   /**
-   * hover.
-   * @optional
-   */
-  private HoverType hover;
-
-  /**
    * EffectsType.
    * @optional
    */
@@ -64,14 +56,15 @@ public class ElementType {
    * elements.
    * @optional
    */
-  private Collection < ElementType > elements = new ArrayList < ElementType >();
+  protected Collection < ElementType > elements = new ArrayList < ElementType >();
 
   protected TypeContext typeContext;
 
   protected ElementType elementTypeParent;
 
-  public ElementType(final TypeContext newTypeContext) {
+  public ElementType(final TypeContext newTypeContext, final AttributesType attributesParam) {
     typeContext = newTypeContext;
+    attributes = attributesParam;
   }
 
   /**
@@ -97,11 +90,20 @@ public class ElementType {
    * @param screenController screenController
    * @param control attached control (might be null)
    */
-  protected void addElementAttributes(
+  protected void addAllElementAttributes(
       final Element element,
       final Screen screen,
       final ScreenController screenController,
       final NiftyInputControl ... control) {
+    addElementAttributes(element, screen, screenController, control);
+    addElementAttributesChildren(element, screen, screenController, control);
+  }
+
+  protected void addElementAttributes(
+      final Element element,
+      final Screen screen,
+      final ScreenController screenController,
+      final NiftyInputControl... control) {
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
@@ -118,8 +120,11 @@ public class ElementType {
     applyAttributes(attributes, screen, element, typeContext.nifty.getRenderDevice());
 
     // attach input control
-    if (control != null) {
-      element.attachInputControl(control[control.length - 1]);
+    if (control != null && control.length >= 1) {
+      NiftyInputControl newInputControl = control[control.length - 1];
+      if (newInputControl != null) {
+        element.attachInputControl(newInputControl);
+      }
     }
 
     // interact
@@ -130,15 +135,18 @@ public class ElementType {
         interact.initWithScreenController(element, screenController);
       }
     }
-    // hover
-    if (hover != null) {
-      hover.initElement(element);
-    }
+
     // effects
     if (effects != null) {
       effects.initElement(element, typeContext.nifty, typeContext.registeredEffects, typeContext.time);
     }
-    // children
+  }
+
+  protected void addElementAttributesChildren(
+      final Element element,
+      final Screen screen,
+      final ScreenController screenController,
+      final NiftyInputControl... control) {
     for (ElementType elementType : elements) {
       elementType.createElement(
           element,
@@ -326,9 +334,10 @@ public class ElementType {
       if (image != null && imageMode != null) {
           image.setImageMode(NiftyImageMode.valueOf(imageMode));
       }
+
       // set width and height to image width and height (for now)
       image = imageRenderer.getImage();
-      if (image != null) {
+      if (image != null && panelRenderer == null) {
         if (element.getConstraintWidth() == null) {
           element.setConstraintWidth(new SizeValue(image.getWidth() + "px"));
         }
@@ -364,14 +373,6 @@ public class ElementType {
   }
 
   /**
-   * set hover.
-   * @param hoverParam hover
-   */
-  public void setHover(final HoverType hoverParam) {
-    this.hover = hoverParam;
-  }
-
-  /**
    * set effects.
    * @param effectsParam effects
    */
@@ -391,9 +392,9 @@ public class ElementType {
    * set attributes.
    * @param attributesTypeParam attributes type to set
    */
-  public void setAttributes(final AttributesType attributesTypeParam) {
-    attributes = attributesTypeParam;
-  }
+//  public void setAttributes(final AttributesType attributesTypeParam) {
+//    attributes = attributesTypeParam;
+//  }
 
   public void applyStyle(
       final Element element,
