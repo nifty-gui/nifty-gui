@@ -36,11 +36,8 @@ public class ImageTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    ImageType imageType = new ImageType(typeContext, attributes.get("filename"));
-    if (attributes.isSet("filter")) {
-      imageType.setFilter(attributes.getAsBoolean("filer"));
-    }
-    ProcessorHelper.processElement(xmlParser, imageType, attributes, typeContext);
+    ImageType imageType = typeContext.createImageType(attributes);
+    ProcessorHelper.processElement(xmlParser, imageType, typeContext);
     element.addElementType(imageType);
   }
 }

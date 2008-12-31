@@ -12,21 +12,14 @@ import de.lessvoid.nifty.loader.xpp3.elements.EffectsType;
  * @author void
  */
 public class EffectTypeProcessor implements XmlElementProcessor {
-
-  /**
-   * EffectEventId.
-   */
   private EffectEventId effectEventId;
-
-  /**
-   * effects type.
-   */
   private EffectsType effectsType;
 
   /**
    * create.
    * @param effectsTypeParam EffectsType
    * @param effectEventIdParam effectEventIdParam
+   * @param element 
    */
   public EffectTypeProcessor(final EffectsType effectsTypeParam, final EffectEventId effectEventIdParam) {
     this.effectsType = effectsTypeParam;
@@ -62,5 +55,6 @@ public class EffectTypeProcessor implements XmlElementProcessor {
       effectsType.addOnCustom(effectType);
     }
     xmlParser.nextTag();
+    xmlParser.zeroOrMore("hover", new HoverTypeProcessor(effectType));
   }
 }

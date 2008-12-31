@@ -5,10 +5,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.mapping.Default;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.PopupType;
@@ -17,7 +13,6 @@ import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.ProcessorHelper;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
-import de.lessvoid.nifty.screen.NullScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 
@@ -53,8 +48,8 @@ public class PopupTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    PopupType popupType = new PopupType(typeContext, attributes.get("controller"));
-    ProcessorHelper.processElement(xmlParser, popupType, attributes, typeContext);
+    PopupType popupType = typeContext.createPopupType(attributes);
+    ProcessorHelper.processElement(xmlParser, popupType, typeContext);
 
     String name = attributes.get("id");
     registeredPopups.put(name, popupType);

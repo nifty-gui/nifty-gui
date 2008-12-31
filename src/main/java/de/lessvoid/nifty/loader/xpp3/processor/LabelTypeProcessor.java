@@ -35,11 +35,8 @@ public class LabelTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    LabelType labelType = new LabelType(typeContext, attributes.get("text"));
-    if (!attributes.isSet("style")) {
-      attributes.set("style", "nifty-label");
-    }
-    ProcessorHelper.processElement(xmlParser, labelType, attributes, typeContext);
+    LabelType labelType = typeContext.createLabelType(attributes);
+    ProcessorHelper.processElement(xmlParser, labelType, typeContext);
     elementType.addElementType(labelType);
   }
 }

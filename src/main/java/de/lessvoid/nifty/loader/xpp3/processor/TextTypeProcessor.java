@@ -35,8 +35,8 @@ public class TextTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    TextType textType = new TextType(typeContext, attributes.get("text"));
-    ProcessorHelper.processElement(xmlParser, textType, attributes, typeContext);
+    TextType textType = typeContext.createTextType(attributes);
+    ProcessorHelper.processElement(xmlParser, textType, typeContext);
     xmlParser.zeroOrMore("textSelection", new TextSelectionTypeProcessor(textType));
     elementType.addElementType(textType);
   }

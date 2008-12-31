@@ -40,7 +40,6 @@ public class RegisterStyleProcessor implements XmlElementProcessor {
     }
     xmlParser.nextTag();
     xmlParser.optional("attributes", new StyleAttributesTypeProcessor(styleType));
-    xmlParser.optional("hover", new HoverTypeProcessor(styleType));
     xmlParser.optional("effect", new EffectsTypeProcessor(styleType));
     styleHandler.register(styleType);
   }

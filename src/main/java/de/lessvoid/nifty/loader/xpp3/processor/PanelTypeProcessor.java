@@ -35,8 +35,8 @@ public class PanelTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    PanelType panel = new PanelType(typeContext);
-    ProcessorHelper.processElement(xmlParser, panel, attributes, typeContext);
+    PanelType panel = typeContext.createPanelType(attributes);
+    ProcessorHelper.processElement(xmlParser, panel, typeContext);
     element.addElementType(panel);
   }
 }

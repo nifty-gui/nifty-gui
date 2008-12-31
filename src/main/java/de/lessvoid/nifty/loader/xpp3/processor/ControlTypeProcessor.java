@@ -17,11 +17,8 @@ public class ControlTypeProcessor implements XmlElementProcessor {
   }
 
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    ControlType controlType = new ControlType(typeContext, attributes.get("name"));
-    if (attributes.isSet("onChange")) {
-      controlType.setOnChange(attributes.get("onChange"));
-    }
-    ProcessorHelper.processElement(xmlParser, controlType, attributes, typeContext);
+    ControlType controlType = typeContext.createControlType(attributes);
+    ProcessorHelper.processElement(xmlParser, controlType, typeContext);
     element.addElementType(controlType);
   }
 }

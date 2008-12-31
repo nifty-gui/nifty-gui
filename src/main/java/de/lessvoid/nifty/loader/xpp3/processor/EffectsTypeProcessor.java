@@ -48,7 +48,7 @@ public class EffectsTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    EffectsType effectsType = new EffectsType();
+    EffectsType effectsType = new EffectsType(attributes.getAsBoolean("overlay", false));
     xmlParser.nextTag();
     xmlParser.zeroOrMore(
         new SubstitutionGroup().

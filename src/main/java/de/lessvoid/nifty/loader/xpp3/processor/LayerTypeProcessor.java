@@ -36,8 +36,8 @@ public class LayerTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    LayerType layer = new LayerType(typeContext);
-    ProcessorHelper.processElement(xmlParser, layer, attributes, typeContext);
+    LayerType layer = typeContext.createLayerType(attributes);
+    ProcessorHelper.processElement(xmlParser, layer, typeContext);
     screen.addLayer(layer);
   }
 }
