@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.scrollbar.impl.ScrollBarImpl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -15,89 +16,55 @@ import de.lessvoid.nifty.tools.SizeValue;
  * A slider control.
  * @author void
  */
-public class Scrollbar implements Controller {
-
-  /**
-   * the screen.
-   */
+public class GeneralScrollbar implements Controller {
   private Screen screen;
-
-  /**
-   * The element we're connected to.
-   */
   private Element element;
-
-  /**
-   * The ControllerEventListener to use.
-   */
   private ControllerEventListener listener;
-
-  /**
-   * The Element that shows the current position.
-   */
   private Element scrollPos;
-
-  /**
-   * min value of scrollbar.
-   */
   private float viewMinValue;
-
-  /**
-   * max value of scrollbar.
-   */
   private float viewMaxValue;
-
-  /**
-   * current value of scrollbar.
-   */
   private float currentValue;
-
-  /**
-   * snap to whole numbers (true) or not (false).
-   */
-  private boolean snap;
-
   private float worldMinValue;
-
   private float worldMaxValue;
-
-  private int startMouseY;
-
+  private int startMouse;
   private float pageSize;
-  
-  private int currentValueView;
+  private ScrollBarImpl scrollBar;
 
-  /**
-   * Bind this controller to the given element.
-   * @param newScreen the new nifty to set
-   * @param newElement the new element to set
-   * @param properties all attributes of the xml tag we're connected to
-   * @param newListener listener
-   */
+  public void setScrollBarControlNotify(final ScrollbarControlNotify scrollBarControlNotifyParam) {
+    listener = new ControllerEventListener() {
+      public void onChangeNotify() {
+        scrollBarControlNotifyParam.positionChanged(currentValue);
+      }
+    };
+  }
+
+  public GeneralScrollbar(final ScrollBarImpl scrollBarImplParam) {
+    scrollBar = scrollBarImplParam;
+  }
+
   public void bind(
       final Nifty newNifty,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
-    this.element = newElement;
-    this.listener = newListener;
+    element = newElement;
+    listener = newListener;
 
-    this.viewMinValue = Float.parseFloat(properties.getProperty("viewMinValue", "0.0"));
-    this.viewMaxValue = Float.parseFloat(properties.getProperty("viewMaxValue", "1.0"));
-    this.worldMinValue = Float.parseFloat(properties.getProperty("worldMinValue", "0.0"));
-    this.worldMaxValue = Float.parseFloat(properties.getProperty("worldMaxValue", "1.0"));
-    this.currentValue = Float.parseFloat(properties.getProperty("currentValue", "0.0"));
-    this.snap = Boolean.parseBoolean(properties.getProperty("snap", "false"));
+    viewMinValue = Float.parseFloat(properties.getProperty("viewMinValue", "0.0"));
+    viewMaxValue = Float.parseFloat(properties.getProperty("viewMaxValue", "1.0"));
+    worldMinValue = Float.parseFloat(properties.getProperty("worldMinValue", "0.0"));
+    worldMaxValue = Float.parseFloat(properties.getProperty("worldMaxValue", "1.0"));
+    currentValue = Float.parseFloat(properties.getProperty("currentValue", "0.0"));
   }
 
   /**
    * On start screen event.
    */
   public void onStartScreen(final Screen screenParam) {
-    this.screen = screenParam;
-    this.scrollPos = element.findElementByName("scrollposition");
-    this.element = element.findElementByName("scrollbar");
+    screen = screenParam;
+    scrollPos = element.findElementByName("nifty-internal-scrollbar-position");
+    element = element.findElementByName("nifty-internal-scrollbar-background");
 
     calcPageSize();
     changeSliderPos(currentValue);
@@ -112,7 +79,7 @@ public class Scrollbar implements Controller {
     }
 
     pageSize = worldSize / pages;
-    scrollPos.setConstraintHeight(new SizeValue((int)(element.getHeight() / pages) + "px"));
+    scrollBar.resizeHandle(scrollPos, new SizeValue((int)(scrollBar.translateValue(element.getWidth(), element.getHeight()) / pages) + "px"));
   }
 
   /**
@@ -121,18 +88,19 @@ public class Scrollbar implements Controller {
    * @param mouseY the mouse y position
    */
   public void click(final int mouseX, final int mouseY) {
-    // check if we're above or below the scrollPos
-    if (mouseY < scrollPos.getY()) {
+    int mouseValue = scrollBar.translateValue(mouseX, mouseY);
+    int scrollValue = scrollBar.translateValue(scrollPos.getX(), scrollPos.getY());
+    if (mouseValue < scrollValue) {
       changeSliderPos(currentValue - pageSize);
     }
-    
-    if (mouseY > scrollPos.getY() + scrollPos.getHeight()) {
+    int scrollSize = scrollBar.translateValue(scrollPos.getWidth(), scrollPos.getHeight());
+    if (mouseValue > scrollValue + scrollSize) {
       changeSliderPos(currentValue + pageSize);
     }
   }
 
   public void mouseMoveStart(final int mouseX, final int mouseY) {
-    startMouseY = mouseY - scrollPos.getY();
+    startMouse = scrollBar.translateValue(mouseX, mouseY) - scrollBar.translateValue(scrollPos.getX(), scrollPos.getY());
   }
 
   /**
@@ -141,7 +109,7 @@ public class Scrollbar implements Controller {
    * @param mouseY the mouse y position
    */
   public void mouseMove(final int mouseX, final int mouseY) {
-    changeSliderPosFromMouse(mouseY);
+    changeSliderPosFromMouse(mouseX, mouseY);
   }
 
   public void upClick(final int mouseX, final int mouseY) {
@@ -156,33 +124,34 @@ public class Scrollbar implements Controller {
 
   /**
    * @param y TODO
+   * @param mouseY 
    */
-  private void changeSliderPosFromMouse(final int y) {
-    int newPos = y - element.getY() - startMouseY;
+  private void changeSliderPosFromMouse(final int mouseX, int mouseY) {
+    int newPos = scrollBar.translateValue(mouseX, mouseY) - scrollBar.translateValue(element.getX(), element.getY()) - startMouse;
 
     if (newPos < 0) {
       newPos = 0;
     }
 
-    if (newPos > element.getHeight() - scrollPos.getHeight()) {
-      newPos = element.getHeight() - scrollPos.getHeight();
+    if (newPos > scrollBar.translateValue(element.getWidth(), element.getHeight()) - scrollBar.translateValue(scrollPos.getWidth(), scrollPos.getHeight())) {
+      newPos = scrollBar.translateValue(element.getWidth(), element.getHeight()) - scrollBar.translateValue(scrollPos.getWidth(), scrollPos.getHeight());
     }
 
-    scrollPos.setConstraintX(new SizeValue(0 + "px"));
-    scrollPos.setConstraintY(new SizeValue(newPos + "px"));
+    scrollBar.setPosition(scrollPos, newPos);
 
-    listener.onChangeNotify();
+    if (listener != null) {
+      listener.onChangeNotify();
+    }
     screen.layoutLayers();
-
     currentValue = viewToWorld(newPos);
   }
 
   private float viewToWorld(float viewValue) {
-    return ((viewValue - 0) / (element.getHeight() - 0)) * (worldMaxValue - worldMinValue) + worldMinValue;
+    return ((viewValue - 0) / (scrollBar.translateValue(element.getWidth(), element.getHeight()) - 0)) * (worldMaxValue - worldMinValue) + worldMinValue;
   }
 
   private float worldToView(float worldValue) {
-    return ((worldValue - worldMinValue) / (worldMaxValue - worldMinValue)) * (element.getHeight() - 0) + 0;
+    return ((worldValue - worldMinValue) / (worldMaxValue - worldMinValue)) * (scrollBar.translateValue(element.getWidth(), element.getHeight()) - 0) + 0;
   }
 
   /**
@@ -199,7 +168,7 @@ public class Scrollbar implements Controller {
       currentValue = 0;
     }
 
-    int s = element.getHeight() - scrollPos.getHeight();
+    int s = scrollBar.translateValue(element.getWidth(), element.getHeight()) - scrollBar.translateValue(scrollPos.getWidth(), scrollPos.getHeight());
     float a = viewToWorld(s);
     if (currentValue > a) {
       currentValue = a;
@@ -207,13 +176,12 @@ public class Scrollbar implements Controller {
 
     float newPos = worldToView(currentValue);
 
-    scrollPos.setConstraintX(new SizeValue(0 + "px"));
-    scrollPos.setConstraintY(new SizeValue((int) newPos + "px"));
+    scrollBar.setPosition(scrollPos, (int)newPos);
 
-    listener.onChangeNotify();
+    if (listener != null) {
+      listener.onChangeNotify();
+    }
     screen.layoutLayers();
-
-    currentValueView = (int) newPos;
   }
 
   /**
@@ -229,5 +197,14 @@ public class Scrollbar implements Controller {
 
   public void inputEvent(final NiftyInputEvent inputEvent) {
   }
-  
+
+  public void setWorldMaxValue(float worldMaxValue) {
+    this.worldMaxValue = worldMaxValue;
+    calcPageSize();
+  }
+
+  public void setViewMaxValue(float viewMaxValue) {
+    this.viewMaxValue = viewMaxValue;
+    calcPageSize();
+  }
 }
