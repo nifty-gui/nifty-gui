@@ -120,12 +120,6 @@ public class ControlType extends ElementType {
           inputControl,
           screenController);
       current.setId(getAttributes().getId());
-      super.addElementAttributes(
-          current,
-          screen,
-          screenController,
-          inputControlParam,
-          inputControl);
       controlDefinition.applyControlAttributes(
           current,
           typeContext.styleHandler,
@@ -134,6 +128,12 @@ public class ControlType extends ElementType {
           typeContext.nifty,
           typeContext.registeredEffects,
           typeContext.time);
+      super.addElementAttributes(
+          current,
+          screen,
+          screenController,
+          inputControlParam,
+          inputControl);
       if (!handleControlChildElements(
           controlDefinition,
           current,

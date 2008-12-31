@@ -5,14 +5,11 @@ import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
 import de.lessvoid.nifty.loader.xpp3.processor.ControlTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.EffectsTypeProcessor;
-import de.lessvoid.nifty.loader.xpp3.processor.HoverTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.ImageTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.InteractTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.LabelTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.PanelTypeProcessor;
 import de.lessvoid.nifty.loader.xpp3.processor.TextTypeProcessor;
-
-
 
 /**
  * ElementType.
