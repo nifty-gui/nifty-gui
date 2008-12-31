@@ -24,24 +24,27 @@ public class Effect {
   private EffectImpl effectImpl;
   private Properties parameter;
   private boolean post;
+  private boolean overlay;
   private String alternateKey;
   private boolean alternateEnable;
   private boolean inherit;
   private Nifty nifty;
   private boolean hoverEffect;
-  private Falloff falloff;
   private boolean infiniteEffect;
+  private Falloff falloff;
 
   public Effect(
       final Nifty niftyParam,
       final boolean inheritParam,
       final boolean postParam,
+      final boolean overlayParam,
       final String alternateKeyParam,
       final boolean alternateEnableParam,
       final EffectEventId effectEventIdParam) {
     nifty = niftyParam;
     inherit = inheritParam;
     post = postParam;
+    overlay = overlayParam;
     active = false;
     alternateKey = alternateKeyParam;
     alternateEnable = alternateEnableParam;
@@ -50,8 +53,9 @@ public class Effect {
     infiniteEffect = false;
   }
 
-  public void enableHover() {
+  public void enableHover(final Falloff falloffParameter) {
     hoverEffect = true;
+    falloff = falloffParameter;
   }
 
   public void enableInfinite() {
@@ -75,7 +79,6 @@ public class Effect {
     parameter = parameterParam;
     parameter.put("effectEventId", effectEventId);
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
-    falloff = new Falloff(parameterParam);
   }
 
   /**
@@ -180,7 +183,9 @@ public class Effect {
    * @param y y position
    */
   public final void hoverDistance(final int x, final int y) {
-    falloff.updateFalloffValue(element, x, y);
+    if (falloff != null) {
+      falloff.updateFalloffValue(element, x, y);
+    }
   }
 
   /**
@@ -190,6 +195,14 @@ public class Effect {
    * @return true, when inside and false otherwise
    */
   public final boolean isInsideFalloff(final int x, final int y) {
-    return falloff.isInside(element, x, y);
+    if (falloff != null) {
+      return falloff.isInside(element, x, y);
+    } else {
+      return element.isMouseInsideElement(x, y);
+    }
+  }
+
+  public boolean isOverlay() {
+    return overlay;
   }
 }

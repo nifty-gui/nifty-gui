@@ -106,6 +106,9 @@ public class Falloff {
     }
   }
 
+  public Falloff() {
+  }
+
   /**
    * apply properties.
    * @param parameter parameter
@@ -145,7 +148,7 @@ public class Falloff {
     if( hoverHeight == null ) {
       return widget.getHeight();
     } else {
-      return hoverHeight.getValueAsInt( widget.getParent().getHeight() );
+      return hoverHeight.getValueAsInt( widget.getHeight() );
     }
   }
 
@@ -158,7 +161,7 @@ public class Falloff {
     if( hoverWidth == null ) {
       return widget.getWidth();
     } else {
-      return hoverWidth.getValueAsInt( widget.getParent().getWidth() );
+      return hoverWidth.getValueAsInt( widget.getWidth() );
     }
   }
 

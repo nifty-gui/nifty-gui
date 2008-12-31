@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import de.lessvoid.nifty.EndNotify;
-import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 
@@ -27,18 +26,18 @@ public class EffectProcessor {
   private NiftyRenderDeviceProxy renderDeviceProxy;
 
   private boolean neverStopRendering;
-  private boolean isHoverEffect;
+  private Falloff hoverFalloff;
+  private boolean hoverEffect;
 
   /**
    * create and initialize a new instance.
    * @param neverStopRenderingParam flag if this event never ends
-   * @param hoverEffectParam is hover effect
    */
-  public EffectProcessor(final boolean neverStopRenderingParam, final boolean hoverEffectParam) {
+  public EffectProcessor(final boolean neverStopRenderingParam) {
     neverStopRendering = neverStopRenderingParam;
     active = false;
     renderDeviceProxy = new NiftyRenderDeviceProxy();
-    isHoverEffect = hoverEffectParam;
+    hoverEffect = false;
   }
 
   /**
@@ -61,7 +60,7 @@ public class EffectProcessor {
     }
 
     for (Effect e : activeEffects) {
-      if (!e.isPost() && (e.isActive() || neverStopRendering)) {
+      if (!e.isOverlay() && !e.isPost() && (e.isActive() || neverStopRendering)) {
         e.update();
         e.execute(renderDevice);
       }
@@ -82,7 +81,7 @@ public class EffectProcessor {
     }
 
     for (Effect e : activeEffects) {
-      if (e.isPost() && (e.isActive() || neverStopRendering)) {
+      if (!e.isOverlay() && e.isPost() && (e.isActive() || neverStopRendering)) {
         e.update();
         e.execute(renderDevice);
       }
@@ -258,23 +257,20 @@ public class EffectProcessor {
 
   /**
    * process hover effect.
-   * @param element the element
    * @param x mouse x position
    * @param y mouse y position
    */
-  public void processHover(final Element element, final int x, final int y) {
-    processHoverInternal(element, x, y, getEffects());
+  public void processHover(final int x, final int y) {
+    processHoverInternal(x, y, getEffects());
   }
 
   /**
    * process hover effects.
-   * @param element the element
    * @param x mouse x position
    * @param y mouse y position
    * @param effectList the effect list to check
    */
   private void processHoverInternal(
-      final Element element,
       final int x,
       final int y,
       final List < Effect > effectList) {
@@ -299,6 +295,35 @@ public class EffectProcessor {
   }
 
   public boolean isHoverEffect() {
-    return isHoverEffect;
+    return hoverEffect;
+  }
+
+  public void renderOverlay(final NiftyRenderEngine renderDevice) {
+    if (!active) {
+      if (!neverStopRendering) {
+        return;
+      }
+    }
+
+    for (Effect e : activeEffects) {
+      if (e.isOverlay() && (e.isActive() || neverStopRendering)) {
+        e.update();
+        e.execute(renderDevice);
+      }
+    }
+
+    checkFinish();
+  }
+
+  public void setHoverEffect() {
+    hoverEffect = true;
+  }
+
+  public void setFalloff(final Falloff falloffParam) {
+    hoverFalloff = falloffParam;
+  }
+
+  public Falloff getFalloff() {
+    return hoverFalloff;
   }
 }

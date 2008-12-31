@@ -32,15 +32,17 @@ public class EffectManager {
   public EffectManager() {
     this.alternateKey = null;
 
-    effectProcessor.put(EffectEventId.onStartScreen, new EffectProcessor(false, false));
-    effectProcessor.put(EffectEventId.onEndScreen, new EffectProcessor(true, false));
-    effectProcessor.put(EffectEventId.onFocus, new EffectProcessor(true, false));
-    effectProcessor.put(EffectEventId.onClick, new EffectProcessor(false, false));
-    effectProcessor.put(EffectEventId.onHover, new EffectProcessor(true, true));
-    effectProcessor.put(EffectEventId.onActive, new EffectProcessor(true, false));
-    effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false, false));
-    effectProcessor.put(EffectEventId.onShow, new EffectProcessor(false, false));
-    effectProcessor.put(EffectEventId.onHide, new EffectProcessor(false, false));
+    effectProcessor.put(EffectEventId.onStartScreen, new EffectProcessor(false));
+    effectProcessor.put(EffectEventId.onEndScreen, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onFocus, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onClick, new EffectProcessor(false));
+    effectProcessor.put(EffectEventId.onHover, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onActive, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false));
+    effectProcessor.put(EffectEventId.onShow, new EffectProcessor(false));
+    effectProcessor.put(EffectEventId.onHide, new EffectProcessor(false));
+
+    effectProcessor.get(EffectEventId.onHover).setHoverEffect();
   }
 
   /**
@@ -79,7 +81,7 @@ public class EffectManager {
    * prepare rendering.
    * @param renderDevice RenderDevice
    */
-  public void begin(final NiftyRenderEngine renderDevice) {
+  public void begin(final NiftyRenderEngine renderDevice, final Element element) {
     Set < RenderStateType > renderStates = RenderStateType.allStates();
 
     for (EffectProcessor processor : effectProcessor.values()) {
@@ -101,7 +103,7 @@ public class EffectManager {
    * render all pre effects.
    * @param renderDevice the renderDevice we should use.
    */
-  public void renderPre(final NiftyRenderEngine renderDevice) {
+  public void renderPre(final NiftyRenderEngine renderDevice, final Element element) {
     effectProcessor.get(EffectEventId.onHover).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onStartScreen).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onEndScreen).renderPre(renderDevice);
@@ -117,7 +119,7 @@ public class EffectManager {
    * render all post effects.
    * @param renderDevice the renderDevice we should use.
    */
-  public void renderPost(final NiftyRenderEngine renderDevice) {
+  public void renderPost(final NiftyRenderEngine renderDevice, final Element element) {
     effectProcessor.get(EffectEventId.onHover).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onStartScreen).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onEndScreen).renderPost(renderDevice);
@@ -137,7 +139,7 @@ public class EffectManager {
    */
   public void handleHover(final Element element, final int x, final int y) {
     EffectProcessor processor = effectProcessor.get(EffectEventId.onHover);
-    processor.processHover(element, x, y);
+    processor.processHover(x, y);
   }
 
   /**
@@ -197,5 +199,25 @@ public class EffectManager {
     } else {
       return data.toString();
     }
+  }
+
+  public void renderOverlay(final NiftyRenderEngine renderDevice, final Element element) {
+    effectProcessor.get(EffectEventId.onHover).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onStartScreen).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onEndScreen).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onFocus).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onClick).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onShow).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onHide).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onActive).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onCustom).renderOverlay(renderDevice);
+  }
+
+  public void setFalloff(final Falloff newFalloff) {
+    effectProcessor.get(EffectEventId.onHover).setFalloff(newFalloff);
+  }
+
+  public Falloff getFalloff() {
+    return effectProcessor.get(EffectEventId.onHover).getFalloff();
   }
 }
