@@ -19,7 +19,7 @@ public class NiftyDebugConsole {
   /**
    * max number of lines in the debug console.
    */
-  private static final int CONSOLE_MAX_LINES = 50;
+  private static final int CONSOLE_MAX_LINES = 60;
 
   /**
    * The actual console is implemented there.
@@ -71,9 +71,9 @@ public class NiftyDebugConsole {
       if (!layer.isVisible()) {
         layerType = " -";
       }
-      String offsetString = layerType + getIdText(layer) + " => ";
-      console.output(offsetString + layer.getElementStateString(offsetString));
-      outputElement(layer, "    ");
+      String offsetString = layerType + getIdText(layer);
+      console.output(offsetString + "\n" + whitespace(layerType.length()) + layer.getElementStateString(whitespace(layerType.length())));
+      outputElement(layer, "   ");
     }
 
     screen.debug(console);
@@ -131,9 +131,10 @@ public class NiftyDebugConsole {
    */
   private void outputElement(final Element w, final String offset) {
     for (Element ww : w.getElements()) {
-      String offsetString = offset + getIdText(ww) + " -> ";
-      console.output(offsetString + ww.getElementStateString(offsetString));
-      outputElement(ww, offset + "  ");
+      String offsetString = offset + colorString(255, 255, 0) + getIdText(ww) + " " + ww.getElementType().getClass().getSimpleName() 
+      + " childLayout [" + ww.getElementType().getAttributes().getChildLayoutType() + "]" + colorString(255, 255, 255);  
+      console.output(offsetString + "\n" + whitespace(offset.length()) + ww.getElementStateString(whitespace(offset.length())));
+      outputElement(ww, offset + " ");
     }
   }
 
@@ -176,7 +177,7 @@ public class NiftyDebugConsole {
   private String getIdText(final Element ww) {
     String id = ww.getId();
     if (id == null) {
-      return "[unknown]";
+      return "[---]";
     } else {
       return "[" + id + "]";
     }
