@@ -6,6 +6,7 @@ import java.util.Set;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
+import de.lessvoid.nifty.render.spi.BlendMode;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
@@ -116,5 +117,9 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
   public Set < RenderStateType > getStates() {
     return renderStates;
+  }
+
+  public void setBlendMode(final BlendMode blendMode) {
+    renderStates.add(RenderStateType.blendMode);
   }
 }
