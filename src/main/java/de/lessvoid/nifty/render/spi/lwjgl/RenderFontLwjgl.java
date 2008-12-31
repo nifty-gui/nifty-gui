@@ -11,17 +11,15 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class RenderFontLwjgl implements RenderFont {
-
-  /**
-   * font.
-   */
   private Font font;
+  private RenderTools renderTools;
 
   /**
    * Initialize the font.
    * @param name font filename
    */
-  public RenderFontLwjgl(final String name, RenderDevice device) {
+  public RenderFontLwjgl(final RenderTools renderToolsParam, final String name, RenderDevice device) {
+    renderTools = renderToolsParam;
     font = new Font(device);
     font.init(name);
   }
@@ -35,14 +33,14 @@ public class RenderFontLwjgl implements RenderFont {
    * @param fontSize size
    */
   public void render(final String text, final int x, final int y, final Color color, final float fontSize) {
-    RenderTools.beginRender();
+    renderTools.beginRender();
     if (color == null) {
       font.drawStringWithSize(x, y, text, fontSize);
     } else {
       font.renderWithSizeAndColor(
           x, y, text, fontSize, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
-    RenderTools.endRender();
+    renderTools.endRender();
   }
 
   /**

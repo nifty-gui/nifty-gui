@@ -13,22 +13,22 @@ import de.lessvoid.nifty.tools.Color;
  */
 public class RenderImageLwjgl implements RenderImage {
 
-  /**
-   * The slick image.
-   */
   private org.newdawn.slick.Image image;
+  private RenderTools renderTools;
 
   /**
    * Create a new RenderImage.
+   * @param renderTools 
    * @param name the name of the resource in the file system
    * @param filterParam use linear filter (true) or nearest filter (false)
    */
-  public RenderImageLwjgl(final String name, final boolean filterParam) {
-      try {
-        int filter = Image.FILTER_NEAREST;
-        if (filterParam) {
-          filter = Image.FILTER_LINEAR;
-        }
+  public RenderImageLwjgl(final RenderTools renderToolsParam, final String name, final boolean filterParam) {
+    renderTools = renderToolsParam;
+    try {
+      int filter = Image.FILTER_NEAREST;
+      if (filterParam) {
+        filter = Image.FILTER_LINEAR;
+      }
       this.image = new org.newdawn.slick.Image(name, false, filter);
     } catch (SlickException e) {
       e.printStackTrace();
@@ -60,15 +60,14 @@ public class RenderImageLwjgl implements RenderImage {
    * @param color color
    * @param scale scale
    */
-  public void render(
-      final int x, final int y, final int width, final int height, final Color color, final float scale) {
-    RenderTools.beginRender();
+  public void render(final int x, final int y, final int width, final int height, final Color color, final float scale) {
+    renderTools.beginRender();
     GL11.glTranslatef(x + width / 2, y + height / 2, 0.0f);
     GL11.glScalef(scale, scale, 1.0f);
     GL11.glTranslatef(-(x + width / 2), -(y + height / 2), 0.0f);
     image.bind();
     image.draw(x, y, width, height, convertToSlickColor(color));
-    RenderTools.endRender();
+    renderTools.endRender();
   }
 
   /**
@@ -93,10 +92,10 @@ public class RenderImageLwjgl implements RenderImage {
       final int srcW,
       final int srcH,
       final Color color) {
-    RenderTools.beginRender();
+    renderTools.beginRender();
     image.bind();
     image.draw(x, y, x + w, y + h, srcX, srcY, srcX + srcW, srcY + srcH, convertToSlickColor(color));
-    RenderTools.endRender();
+    renderTools.endRender();
   }
 
   /**

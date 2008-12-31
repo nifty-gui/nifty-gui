@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import de.lessvoid.nifty.render.spi.BlendMode;
 import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
@@ -16,7 +17,6 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class NiftyRenderEngineImpl implements NiftyRenderEngine {
-
   /**
    * RenderDevice.
    */
@@ -89,6 +89,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     new EnumMap < RenderStateType, Class < ? extends RenderStateSaver > >(RenderStateType.class);
 
   private Clip clipEnabled = null;
+  private BlendMode blendMode = BlendMode.BLEND;
 
   /**
    * create the device.
@@ -103,6 +104,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     renderStatesMap.put(RenderStateType.textSize, RenderStateTextSize.class);
     renderStatesMap.put(RenderStateType.font, RenderStateFont.class);
     renderStatesMap.put(RenderStateType.clip, RenderStateClip.class);
+    renderStatesMap.put(RenderStateType.blendMode, RenderStateBlendMode.class);
   }
 
   /**
@@ -312,7 +314,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param colorParam color
    */
   public void setColor(final Color colorParam) {
-    color = colorParam;
+    color = new Color(colorParam);
     colorChanged = true;
     colorAlphaChanged = true;
   }
@@ -646,5 +648,22 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     public void apply() {
       renderDevice.enableClip(x0, y0, x1, y1);
     }
+  }
+
+  public class RenderStateBlendMode implements RenderStateSaver {
+    private BlendMode blendMode;
+
+    public RenderStateBlendMode() {
+      this.blendMode = NiftyRenderEngineImpl.this.blendMode;
+    }
+
+    public void restore() {
+      NiftyRenderEngineImpl.this.setBlendMode(blendMode);
+    }
+  }
+
+  public void setBlendMode(final BlendMode blendModeParam) {
+    blendMode = blendModeParam;
+    renderDevice.setBlendMode(blendModeParam);
   }
 }

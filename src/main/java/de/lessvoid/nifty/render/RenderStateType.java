@@ -42,7 +42,12 @@ public enum RenderStateType {
   /**
    * clip.
    */
-  clip;
+  clip,
+
+  /**
+   * blend mode.
+   */
+  blendMode;
 
   /**
    * Helper to get all available RenderStates as a set.

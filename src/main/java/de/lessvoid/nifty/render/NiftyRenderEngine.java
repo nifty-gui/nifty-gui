@@ -2,6 +2,7 @@ package de.lessvoid.nifty.render;
 
 import java.util.Set;
 
+import de.lessvoid.nifty.render.spi.BlendMode;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
@@ -114,6 +115,11 @@ public interface NiftyRenderEngine {
    * @return color changed
    */
   boolean isColorAlphaChanged();
+
+  /**
+   * Set BlendMode.
+   */
+  void setBlendMode(BlendMode blendMode);
 
   /**
    * Move to the given x/y position.

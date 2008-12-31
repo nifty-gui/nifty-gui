@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.render.spi.RenderImage;
+import de.lessvoid.nifty.render.spi.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -17,21 +18,14 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class RenderDeviceLwjgl implements RenderDevice {
-
-  /**
-   * Buffersize.
-   */
   private static final int INTERNAL_BUFFERSIZE_IN_BYTES = 1024;
-
-  /**
-   * ByteBuffer.
-   */
   private static ByteBuffer byteBuffer = BufferUtils.createByteBuffer(INTERNAL_BUFFERSIZE_IN_BYTES);
-
-  /**
-   * DoubleBuffer.
-   */
   private static DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
+  private RenderTools renderTools;
+
+  public RenderDeviceLwjgl() {
+    renderTools = new RenderTools();
+  }
 
   /**
    * Get Width.
@@ -64,7 +58,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return RenderImage
    */
   public RenderImage createImage(final String filename, final boolean filterLinear) {
-    return new RenderImageLwjgl(filename, filterLinear);
+    return new RenderImageLwjgl(renderTools, filename, filterLinear);
   }
 
   /**
@@ -73,7 +67,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return RenderFont
    */
   public RenderFont createFont(final String filename) {
-    return new RenderFontLwjgl(filename, this);
+    return new RenderFontLwjgl(renderTools, filename, this);
   }
 
   /**
@@ -85,10 +79,8 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @param color color
    */
   public void renderQuad(final int x, final int y, final int width, final int height, final Color color) {
-    GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_ENABLE_BIT);
+    renderTools.beginRender();
     GL11.glDisable(GL11.GL_TEXTURE_2D);
-    GL11.glEnable(GL11.GL_BLEND);
-    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     GL11.glBegin(GL11.GL_QUADS);
       GL11.glVertex2i(x,         y);
@@ -96,7 +88,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
       GL11.glVertex2i(x + width, y + height);
       GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
-    GL11.glPopAttrib();
+    renderTools.endRender();
   }
 
   /**
@@ -118,4 +110,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
     GL11.glDisable(GL11.GL_SCISSOR_TEST);
   }
 
+  public void setBlendMode(final BlendMode renderMode) {
+    renderTools.changeRenderMode(renderMode);
+  }
 }

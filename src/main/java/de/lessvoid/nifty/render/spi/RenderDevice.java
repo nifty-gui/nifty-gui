@@ -41,6 +41,12 @@ public interface RenderDevice {
   void clear();
 
   /**
+   * Change the RenderMode to the given Mode.
+   * @param renderMode RenderMode
+   */
+  void setBlendMode(BlendMode renderMode);
+
+  /**
    * Render a quad.
    * @param x x
    * @param y y
