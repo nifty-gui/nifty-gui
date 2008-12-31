@@ -16,6 +16,7 @@ public class Shake implements EffectImpl {
 
   private float distance;
   private boolean global;
+  private NiftyRenderEngine renderDevice;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
     distance = Float.parseFloat(parameter.getProperty("distance", "10.0"));
@@ -27,6 +28,7 @@ public class Shake implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
+    renderDevice = r;
     float t = normalizedTime;
     if (t > 0.0f) {
       float d = distance;
