@@ -24,6 +24,7 @@ public class EffectsType {
   private Collection < EffectType > onHover = new ArrayList < EffectType >();
   private Collection < EffectType > onClick = new ArrayList < EffectType >();
   private Collection < EffectType > onFocus = new ArrayList < EffectType >();
+  private Collection < EffectType > onLostFocus = new ArrayList < EffectType >();
   private Collection < EffectType > onActive = new ArrayList < EffectType >();
   private Collection < EffectType > onCustom = new ArrayList < EffectType >();
   private Collection < EffectType > onShow = new ArrayList < EffectType >();
@@ -48,6 +49,7 @@ public class EffectsType {
     this.onHover = copyCollection(source.onHover);
     this.onClick = copyCollection(source.onClick);
     this.onFocus = copyCollection(source.onFocus);
+    this.onLostFocus = copyCollection(source.onLostFocus);
     this.onActive = copyCollection(source.onActive);
     this.onCustom = copyCollection(source.onCustom);
     this.onShow = copyCollection(source.onShow);
@@ -108,6 +110,10 @@ public class EffectsType {
     onFocus.add(effectParam);
   }
 
+  public void addOnLostFocus(final EffectType effectParam) {
+    onLostFocus.add(effectParam);
+  }
+
   /**
    * addOnActive.
    * @param effectParam onActive
@@ -145,6 +151,7 @@ public class EffectsType {
     initEffect(EffectEventId.onHover, onHover, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onClick, onClick, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onFocus, onFocus, element, registerEffects, nifty, time);
+    initEffect(EffectEventId.onLostFocus, onLostFocus, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onActive, onActive, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onShow, onShow, element, registerEffects, nifty, time);
     initEffect(EffectEventId.onHide, onHide, element, registerEffects, nifty, time);

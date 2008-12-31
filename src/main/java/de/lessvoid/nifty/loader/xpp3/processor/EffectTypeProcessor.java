@@ -43,6 +43,8 @@ public class EffectTypeProcessor implements XmlElementProcessor {
       effectsType.addOnClick(effectType);
     } else if (effectEventId == EffectEventId.onFocus) {
       effectsType.addOnFocus(effectType);
+    } else if (effectEventId == EffectEventId.onLostFocus) {
+      effectsType.addOnLostFocus(effectType);
     } else if (effectEventId == EffectEventId.onHover) {
       effectsType.addOnHover(effectType);
     } else if (effectEventId == EffectEventId.onActive) {

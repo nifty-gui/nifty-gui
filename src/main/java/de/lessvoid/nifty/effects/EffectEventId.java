@@ -8,6 +8,7 @@ public enum EffectEventId {
   onStartScreen,
   onEndScreen,
   onFocus,
+  onLostFocus,
   onClick,
   onHover,
   onActive,

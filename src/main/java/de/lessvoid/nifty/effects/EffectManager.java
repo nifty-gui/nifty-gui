@@ -35,6 +35,7 @@ public class EffectManager {
     effectProcessor.put(EffectEventId.onStartScreen, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onEndScreen, new EffectProcessor(true));
     effectProcessor.put(EffectEventId.onFocus, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onLostFocus, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onClick, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onHover, new EffectProcessor(true));
     effectProcessor.put(EffectEventId.onActive, new EffectProcessor(true));
@@ -109,6 +110,7 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onEndScreen).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onActive).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onFocus).renderPre(renderDevice);
+    effectProcessor.get(EffectEventId.onLostFocus).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onClick).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onShow).renderPre(renderDevice);
     effectProcessor.get(EffectEventId.onHide).renderPre(renderDevice);
@@ -125,6 +127,7 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onEndScreen).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onActive).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onFocus).renderPost(renderDevice);
+    effectProcessor.get(EffectEventId.onLostFocus).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onClick).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onShow).renderPost(renderDevice);
     effectProcessor.get(EffectEventId.onHide).renderPost(renderDevice);
@@ -158,6 +161,7 @@ public class EffectManager {
 	// onHover should stay active and is not reset
 	// onActive should stay active and is not reset
 	// onFocus should stay active and is not reset
+  // onLostFocus should stay active and is not reset
     effectProcessor.get(EffectEventId.onStartScreen).reset();
     effectProcessor.get(EffectEventId.onEndScreen).reset();
     effectProcessor.get(EffectEventId.onClick).reset();
@@ -206,6 +210,7 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onStartScreen).renderOverlay(renderDevice);
     effectProcessor.get(EffectEventId.onEndScreen).renderOverlay(renderDevice);
     effectProcessor.get(EffectEventId.onFocus).renderOverlay(renderDevice);
+    effectProcessor.get(EffectEventId.onLostFocus).renderOverlay(renderDevice);
     effectProcessor.get(EffectEventId.onClick).renderOverlay(renderDevice);
     effectProcessor.get(EffectEventId.onShow).renderOverlay(renderDevice);
     effectProcessor.get(EffectEventId.onHide).renderOverlay(renderDevice);

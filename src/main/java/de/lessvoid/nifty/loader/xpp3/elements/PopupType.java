@@ -33,6 +33,10 @@ public class PopupType extends PanelType {
     return ClassHelper.getInstance(controller, Controller.class);
   }
 
+  public boolean hasController() {
+    return controller != null;
+  }
+
   /**
    * Create Layer.
    * @param nifty nifty
