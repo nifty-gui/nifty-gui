@@ -33,9 +33,7 @@ public class NiftyInputControl {
    * @param controllerParam controller
    * @param inputMapperParam input mapper
    */
-  public NiftyInputControl(
-      final Controller controllerParam,
-      final NiftyInputMapping inputMapperParam) {
+  public NiftyInputControl(final Controller controllerParam, final NiftyInputMapping inputMapperParam) {
     this.controller = controllerParam;
     this.inputMapper = inputMapperParam;
   }
