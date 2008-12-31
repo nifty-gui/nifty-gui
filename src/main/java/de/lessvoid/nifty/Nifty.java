@@ -22,7 +22,6 @@ import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
-import de.lessvoid.nifty.loader.xpp3.elements.AttributesType;
 import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
 import de.lessvoid.nifty.loader.xpp3.elements.PopupType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
@@ -96,9 +95,9 @@ public class Nifty {
   private TimeProvider timeProvider;
 
   /**
-   * store the popup id we need to remove.
+   * store the RemovePopUp id we need to remove.
    */
-  private String removePopupId = null;
+  private List < RemovePopUp > removePopupList = new ArrayList < RemovePopUp >();
 
   /**
    * nifty loader.
@@ -246,11 +245,13 @@ public class Nifty {
       renderDevice.clear();
     }
 
-    if (removePopupId != null) {
+    if (!removePopupList.isEmpty()) {
       if (currentScreen != null) {
-        currentScreen.closePopup(activePopups.get(removePopupId));
+        for (RemovePopUp removePopup : removePopupList) {
+          removePopup.close();
+        }
       }
-      removePopupId = null;
+      removePopupList.clear();
     }
 
     if (currentScreen != null) {
@@ -397,7 +398,7 @@ public class Nifty {
       // end current screen
       currentScreen.endScreen(
           new EndNotify() {
-            public final void perform() {
+            public void perform() {
               gotoScreenInternal(id);
             }
           });
@@ -549,9 +550,12 @@ public class Nifty {
 
   private Element createPopupFromType(final PopupType popupType) {
     NiftyInputControl niftyInputControl = null;
-    Controller controllerInstance = popupType.getControllerInstance(this);
-    if (controllerInstance != null) {
-      niftyInputControl = new NiftyInputControl(controllerInstance, new Default());
+    Controller controllerInstance = null;
+    if (popupType.hasController()) {
+      controllerInstance = popupType.getControllerInstance(this);
+      if (controllerInstance != null) {
+        niftyInputControl = new NiftyInputControl(controllerInstance, new Default());
+      }
     }
     log.fine("createPopupFromType: " + controllerInstance + ", " + niftyInputControl);
     Element popupElement = popupType.createElement(
@@ -586,21 +590,34 @@ public class Nifty {
   }
 
   /**
-   * close the given popup on the given screen.
-   * @param id the popup id
+   * Close the Popup with the given id.
+   * @param id id of popup to close
    */
   public void closePopup(final String id) {
+    closePopupInternal(id, null);
+  }
+
+  /**
+   * Close the Popup with the given id. This calls the given EndNotify when the onEndScreen of the popup ends.
+   * @param id id of popup to close
+   * @param closeNotify EndNotify callback
+   */
+  public void closePopup(final String id, final EndNotify closeNotify) {
+    closePopupInternal(id, closeNotify);
+  }
+
+  private void closePopupInternal(final String id, final EndNotify closeNotify) {
     Element popup = activePopups.get(id);
     if (popup == null) {
       log.warning("missing popup [" + id + "] o_O");
-    } else {
-      popup.resetEffects();
-      popup.startEffect(EffectEventId.onEndScreen, new EndNotify() {
-        public void perform() {
-          removePopupId = id;
-        }
-      });
+      return;
     }
+    popup.resetEffects();
+    popup.startEffect(EffectEventId.onEndScreen, new EndNotify() {
+      public void perform() {
+        removePopupList.add(new RemovePopUp(id, closeNotify));
+      }
+    });
   }
 
   /**
@@ -684,6 +701,7 @@ public class Nifty {
 
     public void startControl(final Element newControl) {
       newControl.startEffect(EffectEventId.onStartScreen);
+      newControl.startEffect(EffectEventId.onActive);
       newControl.onStartScreen(screen);
     }
 
@@ -767,7 +785,12 @@ public class Nifty {
    * @param element element to remove
    */
   public void removeElement(final Screen screen, final Element element) {
-    elementsToRemove.add(new ElementToRemove(screen, element));
+    element.removeFromFocusHandler();
+    element.startEffect(EffectEventId.onEndScreen, new EndNotify() {
+      public void perform() {
+        elementsToRemove.add(new ElementToRemove(screen, element));
+      }
+    });
   }
 
   /**
@@ -855,5 +878,22 @@ public class Nifty {
         timeProvider
         );
     return typeContext;
+  }
+
+  public class RemovePopUp {
+    private String removePopupId;
+    private EndNotify closeNotify;
+
+    public RemovePopUp(final String popupId, final EndNotify closeNotifyParam) {
+      removePopupId = popupId;
+      closeNotify = closeNotifyParam;
+    }
+
+    public void close() {
+      currentScreen.closePopup(activePopups.get(removePopupId));
+      if (closeNotify != null) {
+        closeNotify.perform();
+      }
+    }
   }
 }
