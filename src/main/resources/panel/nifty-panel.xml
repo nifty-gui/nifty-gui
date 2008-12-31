@@ -3,6 +3,6 @@
 
   <!-- style for a nifty panel -->
   <style id="nifty-panel">
-    <attributes backgroundImage="panel/new-dialog.png" imageMode="resize:16,202,22,16,16,202,22,208,16,202,22,16" />
+    <attributes backgroundImage="panel/new-dialog.png" imageMode="resize:28,184,28,28,28,184,28,184,28,184,28,28" />
   </style>
 </nifty-styles>

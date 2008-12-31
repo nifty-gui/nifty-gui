@@ -10,11 +10,11 @@
   </style>
   
   <style id="nifty-checkbox-style#select">
-    <attributes width="28px" height="28px" filename="checkbox/checkbox.png" inset="-7px" />
-    <effect>
+    <effect overlay="true">
       <onShow name="imageSize" startSize="2.0" endSize="1.0" length="250" />
       <onShow name="fade" start="#0" end="#f" length="250" />
       <onHide name="fade" start="#f" end="#0" length="250" />
+      <onActive name="imageOverlay" filename="checkbox/checkbox.png" width="28px" height="28px" inset="-7px" />
     </effect>
   </style>
 </nifty-styles>

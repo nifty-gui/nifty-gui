@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+
+  <!-- console panel style -->
+  <style id="nifty-console-panel">
+    <attributes childLayout="vertical" />
+  </style>
+
+  <!-- console line -->
+  <style id="nifty-console-line">
+    <attributes font="console.fnt" backgroundColor="#CCC6" align="left" />
+  </style>
+
+  <!-- the background of the textfield -->
+  <style id="nifty-console-textfield#panel">
+    <attributes backgroundColor="#CCC6" childLayout="overlay" height="20px" />
+  </style>
+
+  <!-- the actual input field -->
+  <style id="nifty-console-textfield#field">
+    <attributes childLayout="center" visibleToMouse="true" childClip="true" />
+  </style>
+
+  <!-- the text in the input field -->
+  <style id="nifty-console-textfield#text">
+    <attributes font="console.fnt" visibleToMouse="false" align="left" textHAlign="left" textVAlign="center" valign="center"/>
+  </style>
+
+  <!-- the cursor is rendered in a separate layer on top of the input field and this is the parent panel of this -->
+  <style id="nifty-console-textfield#cursor-panel">
+    <attributes childLayout="absolute" />
+  </style>
+
+  <!-- the actual cursor -->
+  <style id="nifty-console-textfield#cursor">
+    <attributes filename="console_cursor_empty.png"/>
+    <effect>
+      <onActive name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="console_cursor.png" post="true"/>
+    </effect>
+  </style>
+</nifty-styles>

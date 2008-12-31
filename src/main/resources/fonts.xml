@@ -7,4 +7,8 @@
   <style id="base-font">
     <attributes font="aurulent-sans-17.fnt" />
   </style>
+
+  <style id="menu-font">
+    <attributes font="aurulent-sans-36-bold-with-shadow.fnt" />
+  </style>
 </nifty-styles>
