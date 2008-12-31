@@ -1285,12 +1285,14 @@ public class Element {
    * remove this and all children from the focushandler.
    */
   public void removeFromFocusHandler() {
-    if (screen.getFocusHandler() != null) {
-      if (focusable) {
-        screen.getFocusHandler().remove(this);
-      }
-      for (Element element : elements) {
-        element.removeFromFocusHandler();
+    if (screen != null) {
+      if (screen.getFocusHandler() != null) {
+        if (focusable) {
+          screen.getFocusHandler().remove(this);
+        }
+        for (Element element : elements) {
+          element.removeFromFocusHandler();
+        }
       }
     }
   }
