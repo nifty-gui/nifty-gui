@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><templates><template autoinsert="false" context="catchblock_context" deleted="false" description="Code in new catch blocks" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.catchblock" name="catchblock">${exception_var}.printStackTrace();</template></templates>
