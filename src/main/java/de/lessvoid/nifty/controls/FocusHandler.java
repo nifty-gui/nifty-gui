@@ -170,7 +170,6 @@ public class FocusHandler {
 
     if (keyboardFocusElement != null) {
       keyboardFocusElement.stopEffect(EffectEventId.onFocus);
-      keyboardFocusElement.stopEffect(EffectEventId.onHover);
     }
 
     keyboardFocusElement = newFocusElement;
@@ -185,7 +184,6 @@ public class FocusHandler {
     log.fine("lostKeyboardFocus for [" + elementThatLostFocus.toString() + "]");
     if (keyboardFocusElement == elementThatLostFocus) {
       keyboardFocusElement.stopEffect(EffectEventId.onFocus);
-      keyboardFocusElement.stopEffect(EffectEventId.onHover);
       keyboardFocusElement = null;
     }
   }
