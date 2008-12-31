@@ -82,9 +82,10 @@ public class MenuController implements ScreenController {
     nifty.fromXml("controls/controls.xml", "start");
   }
 
-  /**
-   * exit.
-   */
+  public void scrollpanel() {
+    nifty.fromXml("scroll/scroll.xml", "start");
+  }
+
   public void exit() {
     nifty.createPopup("popupExit");
     nifty.showPopup(screen, "popupExit", null);

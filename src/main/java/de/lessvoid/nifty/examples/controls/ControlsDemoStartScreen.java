@@ -1,8 +1,11 @@
 package de.lessvoid.nifty.examples.controls;
 
+import javax.swing.Scrollable;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dropdown.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.DropDownControlNotify;
+import de.lessvoid.nifty.controls.scrollbar.GeneralScrollbar;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -31,6 +34,10 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       dropDown2.addItem("is awesome!");
       dropDown2.addItem("shizzles :D");
       dropDown2.setSelectedItem("rocks!");
+    }
+
+    GeneralScrollbar scrollbar = screen.findControl("scrollbar", GeneralScrollbar.class);
+    if (scrollbar != null) {
     }
   }
 

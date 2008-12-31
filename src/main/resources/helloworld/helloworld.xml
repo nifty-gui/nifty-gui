@@ -19,7 +19,7 @@
           <onEndScreen name="move" mode="out" direction="bottom" length="300" startDelay="0" inherit="true"/>
           <onHover name="pulsateHover" scaleFactor="0.008" startColor="#f600" endColor="#ffff" post="true"/>
         </effect>
-        <text id="text" font="aurulent-sans-17.fnt" text="Hello World!" align="center" valign="center" />
+        <text id="text" font="aurulent-sans-17.fnt" color="#000f" text="Hello World!" align="center" valign="center" />
       </panel>
     </layer>
   </screen>

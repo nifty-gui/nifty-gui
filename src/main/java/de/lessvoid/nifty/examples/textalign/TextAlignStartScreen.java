@@ -38,6 +38,7 @@ public class TextAlignStartScreen implements ScreenController {
    * quit method called from the helloworld.xml.
    */
   public final void quit() {
+    nifty.setAlternateKeyForNextLoadXml("fade");
     nifty.fromXml("all/intro.xml", "menu");
   }
 

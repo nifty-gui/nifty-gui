@@ -17,6 +17,7 @@ public class SplashController2 implements ScreenController {
   }
 
   public void onStartScreen() {
+    nifty.setAlternateKeyForNextLoadXml("fade");
     nifty.gotoScreen("menu");
   }
 

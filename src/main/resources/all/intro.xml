@@ -11,24 +11,35 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <registerSound id="intro" filename="all/intro.wav" />
 
+  <!-- custom scroll panel style so that we can show off the cool overlay blending shizzle -->
+  <style id="special-scrollpanel#scrollpanel">
+  </style>
+
   <!-- main menu style -->
   <style id="menu">
-    <attributes childLayout="vertical" align="center" valign="center" height="50%"/>
+    <attributes align="left" valign="center" backgroundImage="special-panel.png" width="1024px" height="409px" />
     <effect>
-      <onStartScreen name="hide" length="500" inherit="true" startDelay="1000"/>
-      <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" startDelay="500" inherit="true"/>
-      <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="500" inherit="true"/>
+      <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="1500" inherit="true"/>
+      <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="250" startDelay="1500" inherit="true"/>
+<!--        <onStartScreen name="shake" length="250" startDelay="750" inherit="true" />  -->
+      <onEndScreen name="fade" start="#f" end="#0" length="500" inherit="true"/>
+      <onEndScreen name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="250" inherit="true"/>
     </effect>
   </style>
 
   <!-- menu item style -->
-  <style id="menu-item">
-    <attributes align="center"/>
-    <hover width="200%" falloffConstraint="horizontal"/>
+  <style id="menu-item" base="menu-font">
+    <attributes align="left" textHAlign="left" color="#aaaf" focusable="true" />
     <effect>
-      <onHover name="focus" />
+      <onHover name="focus">
+        <hover falloffType="none" width="120%" />
+      </onHover>
+      <onHover name="textSize" maxSize="25%">
+        <hover falloffType="linear" falloffConstraint="vertical" width="120%" height="200%" />
+      </onHover>
       <onFocus name="hint" targetElement="hintElement" hintText="$hintText" />
-      <onFocus name="pulsate" hoverWidth="100%" width="100%" period="50" startColor="#3c000000" endColor="#ff7c00ff" timeType="infinite" cycle="false"/>
+      <onFocus name="colorBar" width="120%" height="120%" color="#fff5" />
+      <onFocus name="textColor" color="#ffff" />
     </effect>
   </style>
 
@@ -101,13 +112,13 @@
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="500" inherit="true"/>
           <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" startDelay="2500" inherit="true"/>
         </effect>
-        <image x="240px" y="400px" filename="intro-logo.png" align="center">
+        <image x="240px" y="400px" filename="intro-logo-snow.png" align="center">
           <effect>
-            <onStartScreen name="move" direction="top" mode="in" length="500" startDelay="500" />
+            <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" />
             <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="1000" startDelay="2500" />
           </effect>
         </image>
-        <image x="240px" y="600px" filename="intro-logo-mirrored.png" align="center">
+        <image x="240px" y="600px" filename="intro-logo-mirrored-snow.png" align="center">
           <effect>
             <onStartScreen name="move" direction="bottom" mode="in" length="500" startDelay="500" />
           </effect>
@@ -120,63 +131,67 @@
   <!-- menu screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="menu" controller="de.lessvoid.nifty.examples.all.MenuController">
-    <layer id="top" childLayout="vertical" backgroundColor="#393939ff">
+    <layer id="top" childLayout="vertical" backgroundImage="background.png">
       <effect>
-        <onStartScreen name="fade" startColor="#0000" endColor="#393939ff" length="500"/>
-        <onEndScreen name="fade" startColor="#393939ff" endColor="#00000000" length="500"/>
+        <onStartScreen name="fade" start="#0" end="#f" length="500" alternateEnable="fade" />
+        <onEndScreen name="fade" startColor="#393939ff" endColor="#00000000" startDelay="1000" length="500" alternateEnable="fade"/>
       </effect>
       <panel id="panel" height="30%" childLayout="center">
-        <image id="image" filename="all/nifty.png" align="center">
+        <image id="image" filename="demo-logo.png" align="center" valign="center">
           <effect>
-            <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" />
+            <onStartScreen name="fade" start="#0" end="#f" startDelay="500" length="500" />
+            <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" startDelay="500" length="500" />
+            <onEndScreen name="fade" startColor="#ffff" endColor="#0000" startDelay="500" length="500" />
           </effect>
         </image>
       </panel>
     </layer>
     <layer id="menu" childLayout="vertical">
-      <panel height="30%" childLayout="center"/>
-      <panel height="50%" childLayout="center">
-        <menu id="mainMenu" font="menu.fnt" style="menu">
-          <menuItem id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" focusable="true">
-            <interact onClick="helloWorld()"/>
-          </menuItem>
-          <menuItem id="textalign" text="Textalign Example" style="menu-item" hintText="Textalign Example" focusable="true">
-            <interact onClick="textAlign()"/>
-          </menuItem>
-          <menuItem id="textfield" text="Textfield Example" style="menu-item" hintText="Textfield Example" focusable="true">
-            <interact onClick="textField()"/>
-          </menuItem>
-          <menuItem id="multiplayer" text="Avatar &amp; Multiplayer Example" hintText="Avatar &amp; Multiplayer Example" style="menu-item" focusable="true">
-            <interact onClick="multiplayer()"/>
-          </menuItem>
-          <menuItem id="console" text="Console Example" hintText="Console Example" style="menu-item" focusable="true">
-            <interact onClick="console()"/>
-          </menuItem>
-          <menuItem id="dropDown" text="Drop Down List Example" hintText="Drop Down List Example" style="menu-item" focusable="true">
-            <interact onClick="dropDown()"/>
-          </menuItem>
-          <menuItem id="exit" text="Exit" style="menu-item" hintText="Exit" focusable="true">
-            <interact onClick="exit()"/>
-          </menuItem>
-        </menu>
+      <panel height="20%" childLayout="center"/>
+      <panel childLayout="center">
+        <panel id="mainMenu" font="menu.fnt" style="menu" childLayout="center" padding="50px,20px,50px,20px">
+          <panel childLayout="horizontal" width="100%" height="100%">
+            <panel width="50%"></panel>
+            <control name="scrollPanel" style="special-scrollpanel" horizontal="false" height="100%">
+              <panel childLayout="center" width="100%" height="350px" padding="0px,40px,0px,40px">
+                <panel childLayout="vertical" width="100%">
+                  <label id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example">
+                    <interact onClick="helloWorld()" onClickAlternateKey="fade" />
+                  </label>
+                  <label id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example">
+                    <interact onClick="textAlign()" onClickAlternateKey="fade" />
+                  </label>
+                  <label id="textfield" text="Textfield" style="menu-item" hintText="Textfield Example">
+                    <interact onClick="textField()"/>
+                  </label>
+                  <label id="dropDown" text="Drop Down List" hintText="Drop Down List Example" style="menu-item">
+                    <interact onClick="dropDown()"/>
+                  </label>
+                  <label id="scrollpanel" text="Scrollpanel" hintText="Scrollpanel Example" style="menu-item">
+                    <interact onClick="scrollpanel()"/>
+                  </label>
+                  <label id="multiplayer" text="Avatar &amp; Multiplayer" hintText="Avatar &amp; Multiplayer Example" style="menu-item">
+                    <interact onClick="multiplayer()"/>
+                  </label>
+                  <label id="console" text="Console Example" hintText="Console" style="menu-item">
+                    <interact onClick="console()"/>
+                  </label>
+                  <label id="exit" text="Exit" style="menu-item" hintText="Exit">
+                    <interact onClick="exit()"/>
+                  </label>
+                </panel>
+              </panel>            
+            </control>
+          </panel>
+        </panel>
       </panel>
-      <panel id="hintArea" childLayout="center" align="center" valign="center" height="20%">
+      <panel height="10%" id="hintArea" childLayout="center" align="center" valign="center">
         <effect>
           <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" inherit="true" />
           <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" inherit="true" />
         </effect>
-        <text id="hintElement" text="Welcome to Nifty Examples" font="aurulent-sans-17.fnt" align="center" valign="center"/>
+        <text id="hintElement" style="base-font" text="Welcome to Nifty Examples" align="center" valign="center"/>
       </panel>
-    </layer>
-    <layer id="example" childLayout="absolute">
-      <image x="550px" y="170px" filename="all/examples.png" align="center">
-        <effect>
-          <onStartScreen name="move" direction="right" mode="in" length="800" />
-          <onStartScreen name="fade" startColor="#0000" endColor="#ffff" length="800" />
-          <onEndScreen name="move" direction="right" mode="out" length="800" />
-          <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="800" />
-        </effect>
-      </image>
     </layer>
   </screen>
 
@@ -185,7 +200,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="outro" controller="de.lessvoid.nifty.examples.all.OutroController">
     <layer id="logo" childLayout="center">
-      <image id="image" filename="all/nifty.png" align="center">
+      <image id="image" filename="demo-logo.png" align="center" valign="center">
         <effect>
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" />
           <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1000" />
@@ -204,19 +219,19 @@
       <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="500" />
       <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="500" />
     </effect>
-    <image filename="dialog.png" imageMode="resize:32,32,32,32,32,32,32,168,32,32,32,32" childLayout="center" align="center" valign="center" height="250px" width="50%">
+    <panel style="nifty-panel" childLayout="center" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">
       <effect>
         <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" startDelay="500"/>
         <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200" startDelay="500"/>
-        <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="200" inherit="true" />
+        <onEndScreen name="nop" length="2000" />
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
         <panel childLayout="center" height="50%">
-          <text text="Really want to Exit?" font="aurulent-sans-17.fnt" align="center" valign="center" color="#ff0f"/>
+          <text text="Really want to Exit?" font="aurulent-sans-17.fnt" align="center" valign="center" color="#f00f"/>
         </panel>
         <panel childLayout="horizontal" align="center" height="50%">
           <panel childLayout="center" width="50%">
-            <control id="yesButton" style="text-only-button" name="button" label="Yes" align="center">
+            <control id="yesButton" name="button" label="Yes" align="center">
               <interact onClick="popupExit(yes)" /> 
             </control>
           </panel>
@@ -227,7 +242,7 @@
           </panel>
         </panel>
       </panel>
-    </image>
+    </panel>
   </popup>
   
 </nifty>
