@@ -91,8 +91,14 @@ public class RenderImageLwjgl implements RenderImage {
       final int srcY,
       final int srcW,
       final int srcH,
-      final Color color) {
+      final Color color,
+      final float scale,
+      final int centerX,
+      final int centerY) {
     renderTools.beginRender();
+    GL11.glTranslatef(centerX, centerY, 0.0f);
+    GL11.glScalef(scale, scale, 1.0f);
+    GL11.glTranslatef(-(centerX), -(centerY), 0.0f);
     image.bind();
     image.draw(x, y, x + w, y + h, srcX, srcY, srcX + srcW, srcY + srcH, convertToSlickColor(color));
     renderTools.endRender();

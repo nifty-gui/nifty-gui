@@ -43,6 +43,6 @@ public interface RenderImage {
    * @param srcH source height
    * @param color color
    */
-  void render(int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH, Color color);
+  void render(int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH, Color color, float scale, int centerX, int centerY);
 }
 

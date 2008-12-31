@@ -194,16 +194,24 @@ public class NiftyImageMode {
       final int height,
       final Color color,
       final float scale) {
+    int centerX = x + width/2;
+    int centerY = y + height/2;
+
     if (mode == Mode.NORMAL) {
       renderImage.render(x, y, width, height, color, scale);
-    } else if (mode == Mode.SUBIMAGE) {
-      renderImage.render(
-          x, y, width, height,
-          subImageBox.getX(), subImageBox.getY(), subImageBox.getWidth(), subImageBox.getHeight(),
-          color);
-    } else if (mode == Mode.RESIZE) {
-      ResizeHelper resizeHelper = new ResizeHelper(renderImage, this.resizeString);
-      resizeHelper.performRender(x, y, width, height, color);
+    } else {
+      if (mode == Mode.SUBIMAGE) {
+        renderImage.render(
+            x, y, width, height,
+            subImageBox.getX(), subImageBox.getY(), subImageBox.getWidth(), subImageBox.getHeight(),
+            color,
+            scale,
+            centerX,
+            centerY);
+      } else if (mode == Mode.RESIZE) {
+        ResizeHelper resizeHelper = new ResizeHelper(renderImage, this.resizeString);
+        resizeHelper.performRender(x, y, width, height, color, scale, centerX, centerY);
+      }
     }
   }
 }

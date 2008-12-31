@@ -83,18 +83,24 @@ class ResizeHelper {
    * @param width width
    * @param height height
    * @param color color
+   * @param scale 
+   * @param i 
+   * @param j 
    */
   public void performRender(
       final int x,
       final int y,
       final int width,
       final int height,
-      final Color color) {
+      final Color color,
+      final float scale,
+      final int centerX,
+      final int centerY) {
     int middlePartHeight = height - box[0].getHeight() - box[3].getHeight() - box[6].getHeight();
 
-    renderRow(x, y,                      width, 0,                box[0], box[1], box[2], color);
-    renderRow(x, y + box[0].getHeight(), width, middlePartHeight, box[3], box[4], box[5], color);
-    renderRow(x, y + middlePartHeight + box[3].getHeight() + box[0].getHeight(),   width, 0, box[6], box[7], box[8], color);
+    renderRow(x, y,                      width, 0,                box[0], box[1], box[2], color, scale, centerX, centerY);
+    renderRow(x, y + box[0].getHeight(), width, middlePartHeight, box[3], box[4], box[5], color, scale, centerX, centerY);
+    renderRow(x, y + middlePartHeight + box[3].getHeight() + box[0].getHeight(),   width, 0, box[6], box[7], box[8], color, scale, centerX, centerY);
   }
 
   /**
@@ -106,6 +112,9 @@ class ResizeHelper {
    * @param middle middle box
    * @param right right box
    * @param color color
+   * @param scale 
+   * @param centerX 
+   * @param centerY 
    */
   private void renderRow(
       final int x,
@@ -115,20 +124,26 @@ class ResizeHelper {
       final Box left,
       final Box middle,
       final Box right,
-      final Color color) {
+      final Color color,
+      final float scale,
+      final int centerX,
+      final int centerY) {
     renderImage.render(
         x, y, left.getWidth(), left.getHeight() + addHeight,
         left.getX(), left.getY(), left.getWidth(), left.getHeight(),
-        color);
+        color,
+        scale, centerX, centerY);
 
     renderImage.render(
         x + left.getWidth(), y, width - left.getWidth() - right.getWidth(), middle.getHeight() + addHeight,
         middle.getX(), middle.getY(), middle.getWidth(), middle.getHeight(),
-        color);
+        color,
+        scale, centerX, centerY);
 
     renderImage.render(
         x + width - right.getWidth(), y, right.getWidth(), right.getHeight() + addHeight,
         right.getX(), right.getY(), right.getWidth(), right.getHeight(),
-        color);
+        color,
+        scale, centerX, centerY);
   }
 }
