@@ -13,7 +13,7 @@
   <style id ="unselected" base="nifty-label">
     <attributes backgroundColor="#0000" />
     <effect>
-      <onHover name="pulsate" startColor="#f007" endColor="#ff0f" />
+      <onHover name="pulsate" startColor="#f007" endColor="#800f" />
     </effect>
   </style>
    
@@ -21,9 +21,10 @@
   <!-- multiplayerPanel -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <controlDefinition name="multiplayerPanel" controller="de.lessvoid.nifty.examples.multiplayer.MultiplayerPanelControl">
-    <panel style="nifty-panel" align="center" valign="center" width="80%" height="170px" childLayout="center">
+    <panel style="nifty-panel" align="center" valign="center" width="70%" height="170px" childLayout="center">
       <effect>
         <onStartScreen name="move" direction="left" mode="in" length="250" startDelay="0" inherit="true"/>
+        <onEndScreen name="move" direction="right" mode="out" length="250" startDelay="0" inherit="true"/>
       </effect>
       <panel childLayout="center" width="95%" height="80%" align="center" valign="center">
         <panel childLayout="vertical" align="center" valign="center">
@@ -81,12 +82,16 @@
       <panel childLayout="vertical">
         <panel childLayout="center" height="10%" >
           <panel childLayout="horizontal" align="center" valign="center" width="50%">
-            <control id="addButton" name="button" label="Add Player" align="left">
-              <interact onClick="addPanel()" />
-            </control>
-            <control id="startButton" name="button" label="Start" align="right">
-              <interact onClick="quit()" />
-            </control>
+            <panel childLayout="center" width="50%">
+              <control id="addButton" name="button" label="Add Player" align="center" valign="center">
+                <interact onClick="addPanel()" />
+              </control>
+            </panel>
+            <panel childLayout="center" width="50%">
+              <control id="startButton" name="button" label="Start" align="center" valign="center">
+                <interact onClick="quit()" />
+              </control>
+            </panel>
           </panel>
         </panel>
         <panel id="box-parent" childLayout="vertical" align="center" valign="center" height="90%">

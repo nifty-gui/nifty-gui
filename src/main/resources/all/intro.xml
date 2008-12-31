@@ -34,12 +34,11 @@
       <onHover name="focus">
         <hover falloffType="none" width="120%" />
       </onHover>
-      <onHover name="textSize" maxSize="25%">
-        <hover falloffType="linear" falloffConstraint="vertical" width="120%" height="200%" />
-      </onHover>
       <onFocus name="hint" targetElement="hintElement" hintText="$hintText" />
       <onFocus name="colorBar" width="120%" height="120%" color="#fff5" />
       <onFocus name="textColor" color="#ffff" />
+      <onFocus name="textSize" startSize="1.0" endSize="1.25" length="150" />
+      <onLostFocus name="textSize" startSize="1.25" endSize="1.0" length="150" />
     </effect>
   </style>
 
@@ -197,17 +196,22 @@
   <popup id="popupExit" childLayout="center" backgroundColor="#000a">
     <effect>
       <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="500" />
-      <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="500" />
+      <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="500" startDelay="250" />
     </effect>
     <panel style="nifty-panel-red" childLayout="center" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">
       <effect>
-        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" startDelay="500"/>
-        <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200" startDelay="500"/>
-        <onEndScreen name="nop" length="2000" />
+        <onStartScreen name="fade" start="#0" end="#f" length="150" startDelay="500"/>
+        <onStartScreen name="imageSize" timeType="exp" factor="3.5" startSize="1.5" endSize="1.0" inherit="true" length="150" startDelay="500"/>
+        <onEndScreen name="fade" start="#f" end="#0" length="150" startDelay="0"/>
+        <onEndScreen name="imageSize" timeType="exp" factor="3.5" startSize="1.0" endSize="1.5" inherit="true" length="150" startDelay="0"/>
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
+        <effect>
+          <onStartScreen name="hide" length="700" inherit="true" />
+          <onEndScreen name="fade" length="10" start="#f" end="#0" inherit="true" />
+        </effect>
         <panel childLayout="center" height="70%">
-          <text text="Really want to Exit?" font="aurulent-sans-17.fnt" align="center" valign="center" color="#000f"/>
+          <text text="Really want to Exit?" style="base-font" align="center" valign="center" color="#000f"/>
         </panel>
         <panel childLayout="horizontal" align="center" height="30%">
           <panel childLayout="center" width="50%">
@@ -224,5 +228,4 @@
       </panel>
     </panel>
   </popup>
-  
 </nifty>
