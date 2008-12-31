@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.VerticalScrollbar">
+    <panel style="#panel">
+      <image id="nifty-internal-scrollbar-up" style="#up">
+        <interact onClickRepeat="upClick()" />
+      </image>
+      <image id="nifty-internal-scrollbar-background" style="#background">
+        <interact onClick="click()" />
+        <image id="nifty-internal-scrollbar-position" style="#position" align="center">
+          <interact onClick="mouseMoveStart()" onClickMouseMove="mouseMove()"/>
+        </image>
+      </image>
+      <image id="nifty-internal-scrollbar-down" style="#down">
+        <interact onClickRepeat="downClick()" />
+      </image>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.HorizontalScrollbar">
+    <panel style="#panel">
+      <image id="nifty-internal-scrollbar-up" style="#left">
+        <interact onClick="upClick()" />
+      </image>
+      <image id="nifty-internal-scrollbar-background" style="#background">
+        <interact onClickRepeat="click()" />
+        <image id="nifty-internal-scrollbar-position" style="#position">
+          <interact onClick="mouseMoveStart()" onClickMouseMove="mouseMove()"/>
+        </image>
+      </image>
+      <image id="nifty-internal-scrollbar-down" style="#right">
+        <interact onClickRepeat="downClick()" />
+      </image>
+    </panel>
+  </controlDefinition>
+</nifty-controls>
