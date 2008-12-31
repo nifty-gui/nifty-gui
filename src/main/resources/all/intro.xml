@@ -54,26 +54,6 @@
     </effect>
   </style>
 
-  <style id="text-only-button#panel">
-    <attributes align="center" childLayout="center" visibleToMouse="true" />
-  </style>
-  <style id="text-only-button#text">
-    <attributes font="aurulent-sans-17.fnt" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="true"/>
-    <effect>
-      <onHover name="saveState" />
-      <onHover name="changeFont" font="aurulent-sans-17.fnt" post="false" inherit="false"/>
-      <onHover name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
-      <onHover name="renderElement" />
-      <onHover name="restoreState" />
-
-      <onFocus timeType="infinite" name="saveState" />
-      <onFocus timeType="infinite" name="changeFont" font="aurulent-sans-17.fnt" post="false" inherit="false"/>
-      <onFocus timeType="infinite" name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
-      <onFocus timeType="infinite" name="renderElement" />
-      <onFocus timeType="infinite" name="restoreState" />
-    </effect>
-  </style>
-
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- intro screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -219,24 +199,24 @@
       <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="500" />
       <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="500" />
     </effect>
-    <panel style="nifty-panel" childLayout="center" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">
+    <panel style="nifty-panel-red" childLayout="center" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">
       <effect>
         <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="200" inherit="true" startDelay="500"/>
         <onStartScreen name="imageSize" factor="0.5" startSize="0.5" endSize="1.0" length="200" startDelay="500"/>
         <onEndScreen name="nop" length="2000" />
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
-        <panel childLayout="center" height="50%">
-          <text text="Really want to Exit?" font="aurulent-sans-17.fnt" align="center" valign="center" color="#f00f"/>
+        <panel childLayout="center" height="70%">
+          <text text="Really want to Exit?" font="aurulent-sans-17.fnt" align="center" valign="center" color="#000f"/>
         </panel>
-        <panel childLayout="horizontal" align="center" height="50%">
+        <panel childLayout="horizontal" align="center" height="30%">
           <panel childLayout="center" width="50%">
-            <control id="yesButton" name="button" label="Yes" align="center">
+            <control id="yesButton" name="button" label="Yes" width="100px" align="center">
               <interact onClick="popupExit(yes)" /> 
             </control>
           </panel>
           <panel childLayout="center" width="50%">
-            <control id="noButton" style="text-only-button" name="button" label="No" align="center">
+            <control id="noButton" name="button" label="No" width="100px" align="center">
               <interact onClick="popupExit(no)" /> 
             </control>
           </panel>
