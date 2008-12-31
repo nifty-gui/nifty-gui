@@ -477,9 +477,7 @@ public class Screen {
     return null;
   }
 
-  public < T extends Controller > T findControl(
-      final String elementName,
-      final Class < T > requestedControlClass) {
+  public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
     Element element = findElementByName(elementName);
     if (element == null) {
       return null;
