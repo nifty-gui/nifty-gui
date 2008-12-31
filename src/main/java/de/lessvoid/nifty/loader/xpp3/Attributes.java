@@ -139,6 +139,19 @@ public final class Attributes {
     return null;
   }
 
+  public boolean getAsBoolean(final String name, final boolean defaultValue) {
+    String value = get(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    if (value.equals("true")) {
+      return true;
+    } else if (value.equals("false")) {
+      return false;
+    }
+    return defaultValue;
+  }
+
   /**
    * Get value from attributes as AlignType.
    * @param name attribute name
