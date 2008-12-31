@@ -98,6 +98,13 @@ public class Color {
       this.alpha = newAlpha;
   }
 
+  public Color(final Color colorParam) {
+    this.red = colorParam.getRed();
+    this.green = colorParam.getGreen();
+    this.blue = colorParam.getBlue();
+    this.alpha = colorParam.getAlpha();
+  }
+
   /**
    * linear interpolate between this color and the given color.
    * @param end end color
