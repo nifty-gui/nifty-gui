@@ -22,6 +22,7 @@ public final class NiftyDefaults {
    */
   public static void initDefaultEffects(final Map < String, RegisterEffectType > effects) {
     effects.put("border", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Border"));
+    effects.put("blendMode", new RegisterEffectType("de.lessvoid.nifty.effects.impl.BlendMode"));
     effects.put("changeFont", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ChangeFont"));
     effects.put("clip", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Clip"));
     effects.put("colorBar", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ColorBar"));
