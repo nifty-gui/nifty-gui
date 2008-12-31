@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.elements;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -91,11 +90,6 @@ public class Element {
    * the effect manager for this element.
    */
   private EffectManager effectManager;
-
-  /**
-   * the fall off for hover effects.
-   */
-  private Falloff falloff;
 
   /**
    * Element interaction.
@@ -317,29 +311,29 @@ public class Element {
    */
   public String getElementStateString(final String offset) {
     String pos =
-      "style [" + getElementType().getAttributes().getStyle() + "] "
-      + "pos [" + getX() + "," + getY() + "," + getWidth() + "," + getHeight() + "] "
-      + "con [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
-      + "," + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ","
-      + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ","
-      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "] "
-      + "\n" + offset
-      + "focus [" + focusable + "] "
-      + "mouse [" + visibleToMouseEvents + "] "
-      + "state ";
+      " style [" + getElementType().getAttributes().getStyle() + "], state [" + getState() + "],"
+      + " position [" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + "], constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
+      + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", "
+      + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", "
+      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]"
+      + " focusable [" + focusable + "] mouseable [" + visibleToMouseEvents + "]";
+    return pos;
+  }
+
+  private String getState() {
     if (isEffectActive(EffectEventId.onStartScreen)) {
-      return pos + "[starting]";
+      return "starting";
     }
 
     if (isEffectActive(EffectEventId.onEndScreen)) {
-      return pos + "[ending]";
+      return "ending";
     }
 
     if (!visible) {
-      return pos + "[hidden]";
+      return "hidden";
     }
 
-    return pos + "[normal]";
+    return "normal";
   }
 
   /**
@@ -412,8 +406,8 @@ public class Element {
       r.saveState(RenderStateType.allStates());
 
       // begin rendering / pre
-      effectManager.begin(r);
-      effectManager.renderPre(r);
+      effectManager.begin(r, this);
+      effectManager.renderPre(r, this);
 
       // render element
       if (elementRenderer != null) {
@@ -423,7 +417,7 @@ public class Element {
       }
 
       // finish rendering / post
-      effectManager.renderPost(r);
+      effectManager.renderPost(r, this);
       effectManager.end(r);
 
       if (clipChildren) {
@@ -440,6 +434,10 @@ public class Element {
         r.disableClip();
       }
 
+      r.restoreState();
+
+      r.saveState(RenderStateType.allStates());
+      effectManager.renderOverlay(r, this);
       r.restoreState();
     }
   }
@@ -811,8 +809,12 @@ public class Element {
    * set a new Falloff.
    * @param newFalloff new Falloff
    */
-  public final void setHotSpotFalloff(final Falloff newFalloff) {
-    this.falloff = newFalloff;
+  public void setHotSpotFalloff(final Falloff newFalloff) {
+    effectManager.setFalloff(newFalloff);
+  }
+
+  public Falloff getFalloff() {
+    return effectManager.getFalloff();
   }
 
   /**
@@ -881,7 +883,6 @@ public class Element {
     }
     effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
     boolean mouseInside = isInside(mouseEvent);
-    // System.out.println(id + ": " + mouseEvent.toString() + " (" + isMouseDown() + ", " + mouseInside + ")");
     if (interaction.isOnClickRepeat()) {
       if (mouseInside && isMouseDown() && mouseEvent.isLeftButton()) {
         long deltaTime = eventTime - mouseDownTime;
@@ -944,18 +945,18 @@ public class Element {
    * @return true when inside, false otherwise
    */
   private boolean isInside(final MouseInputEvent inputEvent) {
-    if (falloff != null) {
-      return falloff.isInside(this, inputEvent.getMouseX(), inputEvent.getMouseY());
-    } else {
-      return
-        inputEvent.getMouseX() >= getX()
-        &&
-        inputEvent.getMouseX() <= (getX() + getWidth())
-        &&
-        inputEvent.getMouseY() > (getY())
-        &&
-        inputEvent.getMouseY() < (getY() + getHeight());
-    }
+    return isMouseInsideElement(inputEvent.getMouseX(), inputEvent.getMouseY());
+  }
+
+  public boolean isMouseInsideElement(final int mouseX, final int mouseY) {
+    return
+      mouseX >= getX()
+      &&
+      mouseX <= (getX() + getWidth())
+      &&
+      mouseY > (getY())
+      &&
+      mouseY < (getY() + getHeight());
   }
 
   /**
@@ -1155,7 +1156,7 @@ public class Element {
    * Set the focus to this element.
    */
   public void setFocus() {
-    if (attachedInputControl != null && nifty != null && nifty.getCurrentScreen() != null) {
+    if (nifty != null && nifty.getCurrentScreen() != null) {
       if (focusable) {
         focusHandler.setKeyFocus(this);
       }
@@ -1239,32 +1240,11 @@ public class Element {
   }
 
   /**
-   * Get HotSpotFalloff.
-   * @return Falloff
-   */
-  public Falloff getFalloff() {
-    return falloff;
-  }
-
-  /**
    * set id.
    * @param newId new id
    */
   public void setId(final String newId) {
     this.id = newId;
-  }
-
-  /**
-   * remove this and all child elements.
-   */
-  public void remove() {
-    Iterator < Element > elementIt = elements.iterator();
-    while (elementIt.hasNext()) {
-      Element element = elementIt.next();
-      element.remove();
-      elementIt.remove();
-    }
-    focusHandler.remove(this);
   }
 
   /**
@@ -1316,15 +1296,6 @@ public class Element {
   }
 
   /**
-   * remove this from parent if possible.
-   */
-  public void removeFromParent() {
-    if (parent != null) {
-      parent.elements.remove(this);
-    }
-  }
-
-  /**
    * set a new style.
    * @param newStyle new style to set
    */
@@ -1343,6 +1314,14 @@ public class Element {
     for (Element element : elements) {
       element.addInputHandler(handler);
     }
+  }
+
+  public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
+    Element element = findElementByName(elementName);
+    if (element == null) {
+      return null;
+    }
+    return element.getControl(requestedControlClass);
   }
 
   /**
