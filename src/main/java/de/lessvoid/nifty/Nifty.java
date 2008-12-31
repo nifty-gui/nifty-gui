@@ -4,12 +4,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
 import de.lessvoid.nifty.controls.Controller;
@@ -144,6 +144,12 @@ public class Nifty {
    * last y position of mouse.
    */
   private int lastMouseY;
+
+  private String alternateKeyForNextLoadXml;
+
+  public void setAlternateKeyForNextLoadXml(final String alternateKeyForNextLoadXmlParam) {
+    alternateKeyForNextLoadXml = alternateKeyForNextLoadXmlParam;
+  }
 
   /**
    * Create nifty for the given RenderDevice and TimeProvider.
@@ -384,7 +390,7 @@ public class Nifty {
    * goto screen command. this will send first an endScreen event to the current screen.
    * @param id the new screen id we should go to.
    */
-  public final void gotoScreen(final String id) {
+  public void gotoScreen(final String id) {
     if (currentScreen == null) {
       gotoScreenInternal(id);
     } else {
@@ -410,6 +416,10 @@ public class Nifty {
     }
 
     // start the new screen
+    if (alternateKeyForNextLoadXml != null) {
+      currentScreen.setAlternateKey(alternateKeyForNextLoadXml);
+      alternateKeyForNextLoadXml = null;
+    }
     currentScreen.startScreen();
   }
 
@@ -681,22 +691,15 @@ public class Nifty {
      * create the control.
      */
     public Element createControl() {
-      TypeContext typeContext = new TypeContext(
-          loader.getStyleHandler(),
-          Nifty.this,
-          loader.getRegisteredEffects(),
-          loader.getRegisteredControls(),
-          timeProvider
-          );
+      TypeContext typeContext = createTypeContext();
 
-      ControlType controlType = new ControlType(typeContext, controlName);
       attr.overwriteAttribute("id", controlId);
       if (style != null) {
         attr.overwriteAttribute("style", style);
       }
 
-      AttributesType attributeType = new AttributesType(attr);
-      controlType.setAttributes(attributeType);
+      attr.set("name", controlName);
+      ControlType controlType = typeContext.createControlType(attr);
       Element newControl = controlType.createElement(
           parent,
           screen,
@@ -739,9 +742,22 @@ public class Nifty {
      * do the actual remove.
      */
     public void remove() {
-      element.remove();
-      element.removeFromParent();
+      removeSingleElement(element);
+      Element parent = element.getParent();
+      if (parent != null) {
+        parent.getElements().remove(element);
+      }
       screen.layoutLayers();
+    }
+
+    private void removeSingleElement(final Element element) {
+      Iterator < Element > elementIt = element.getElements().iterator();
+      while (elementIt.hasNext()) {
+        Element el = elementIt.next();
+        removeSingleElement(el);
+
+        elementIt.remove();
+      }
     }
   }
 
@@ -828,5 +844,16 @@ public class Nifty {
 
   public TimeProvider getTimeProvider() {
     return timeProvider;
+  }
+
+  public TypeContext createTypeContext() {
+    TypeContext typeContext = new TypeContext(
+        loader.getStyleHandler(),
+        this,
+        loader.getRegisteredEffects(),
+        loader.getRegisteredControls(),
+        timeProvider
+        );
+    return typeContext;
   }
 }
