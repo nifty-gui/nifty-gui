@@ -17,7 +17,7 @@ import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEventCreator;
-import de.lessvoid.nifty.input.mapping.Default;
+import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
@@ -554,7 +554,7 @@ public class Nifty {
     if (popupType.hasController()) {
       controllerInstance = popupType.getControllerInstance(this);
       if (controllerInstance != null) {
-        niftyInputControl = new NiftyInputControl(controllerInstance, new Default());
+        niftyInputControl = new NiftyInputControl(controllerInstance, new DefaultInputMapping());
       }
     }
     log.fine("createPopupFromType: " + controllerInstance + ", " + niftyInputControl);

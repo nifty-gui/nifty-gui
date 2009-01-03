@@ -10,7 +10,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  * Default.
  * @author void
  */
-public class Default implements NiftyInputMapping {
+public class DefaultInputMapping implements NiftyInputMapping {
 
   /**
    * convert the given KeyboardInputEvent into a neutralized NiftyInputEvent.
