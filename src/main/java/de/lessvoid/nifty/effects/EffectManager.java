@@ -164,7 +164,7 @@ public class EffectManager {
   // onLostFocus should stay active and is not reset
     effectProcessor.get(EffectEventId.onStartScreen).reset();
     effectProcessor.get(EffectEventId.onEndScreen).reset();
-    effectProcessor.get(EffectEventId.onClick).reset();
+    //effectProcessor.get(EffectEventId.onClick).reset();
     effectProcessor.get(EffectEventId.onShow).reset();
     effectProcessor.get(EffectEventId.onHide).reset();
     effectProcessor.get(EffectEventId.onCustom).reset();
