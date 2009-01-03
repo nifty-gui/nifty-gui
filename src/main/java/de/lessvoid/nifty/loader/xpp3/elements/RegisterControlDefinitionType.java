@@ -10,7 +10,7 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputMapping;
-import de.lessvoid.nifty.input.mapping.Default;
+import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.ClassHelper;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
@@ -99,11 +99,11 @@ public class RegisterControlDefinitionType {
    */
   public NiftyInputMapping getInputMappingInstance() {
 	  if (inputMapper == null) {
-		  return new Default();
+		  return new DefaultInputMapping();
 	  }
     NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMapper, NiftyInputMapping.class);
     if (inputMapping == null) {
-      inputMapping = new Default();
+      inputMapping = new DefaultInputMapping();
     }
     return inputMapping;
   }

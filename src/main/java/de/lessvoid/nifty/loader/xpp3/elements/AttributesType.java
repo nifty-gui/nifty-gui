@@ -139,6 +139,9 @@ public class AttributesType {
   private String paddingBottom;
   private String inset;
 
+  private String inputController;
+  private String inputMapping;
+
   /**
    * default constructor.
    */
@@ -187,6 +190,8 @@ public class AttributesType {
     paddingTop = other.paddingTop;
     paddingBottom = other.paddingBottom;
     inset = other.inset;
+    inputController = other.inputController;
+    inputMapping = other.inputMapping;
   }
 
   /**
@@ -661,6 +666,12 @@ public class AttributesType {
     if (srcAttributes.isSet("inset")) {
       setInset(srcAttributes.get("inset"));
     }
+    if (srcAttributes.isSet("inputController")) {
+      setInputController(srcAttributes.get("inputController"));
+    }
+    if (srcAttributes.isSet("inputMapping")) {
+      setInputMapping(srcAttributes.get("inputMapping"));
+    }
   }
 
   private void parsePadding(final String paddingValue) {
@@ -729,5 +740,21 @@ public class AttributesType {
 
   public void setInset(final String insetParam) {
     this.inset = insetParam;
+  }
+
+  public String getInputController() {
+    return inputController;
+  }
+
+  private void setInputController(final String controllerParam) {
+    inputController = controllerParam;
+  }
+
+  public String getInputMapping() {
+    return inputMapping;
+  }
+
+  public void setInputMapping(final String inputMappingParam) {
+    this.inputMapping = inputMappingParam;
   }
 }

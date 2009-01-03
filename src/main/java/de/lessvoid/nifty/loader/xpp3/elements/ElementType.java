@@ -3,18 +3,23 @@ package de.lessvoid.nifty.loader.xpp3.elements;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
+import de.lessvoid.nifty.loader.xpp3.ClassHelper;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
 import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.render.NiftyImage;
@@ -104,6 +109,14 @@ public class ElementType {
       final Screen screen,
       final ScreenController screenController,
       final NiftyInputControl... control) {
+    // attach input control
+    if (control != null && control.length >= 1) {
+      NiftyInputControl newInputControl = control[control.length - 1];
+      if (newInputControl != null) {
+        element.attachInputControl(newInputControl);
+      }
+    }
+
     // if the element we process has a style set, we try to apply
     // the style attributes first
     String styleId = attributes.getStyle();
@@ -117,15 +130,7 @@ public class ElementType {
         screen);
 
     // now apply our own attributes
-    applyAttributes(attributes, screen, element, typeContext.nifty.getRenderDevice());
-
-    // attach input control
-    if (control != null && control.length >= 1) {
-      NiftyInputControl newInputControl = control[control.length - 1];
-      if (newInputControl != null) {
-        element.attachInputControl(newInputControl);
-      }
-    }
+    applyAttributes(typeContext, attributes, screen, element, typeContext.nifty.getRenderDevice());
 
     // interact
     if (interact != null) {
@@ -209,6 +214,7 @@ public class ElementType {
    * @param renderDevice RenderDevice
    */
   public static void applyAttributes(
+      final TypeContext typeContext,
       final AttributesType attrib,
       final Screen screen,
       final Element element,
@@ -285,6 +291,20 @@ public class ElementType {
     // focusable
     if (attrib.getFocusable() != null) {
       element.setFocusable(attrib.getFocusable());
+    }
+    if (attrib.getInputController() != null) {
+      Controller controller = ClassHelper.getInstance(attrib.getInputController(), Controller.class);
+      controller.bind(typeContext.nifty, element, new Properties(), null, new Attributes());
+
+      NiftyInputMapping inputMapping = new DefaultInputMapping();
+      String inputMappingValue = attrib.getInputMapping();
+      if (inputMappingValue != null) {
+        inputMapping = ClassHelper.getInstance(inputMappingValue, NiftyInputMapping.class);
+        if (inputMapping == null) {
+          inputMapping = new DefaultInputMapping();
+        }
+      }
+      element.attachInputControl(new NiftyInputControl(controller, inputMapping));
     }
     // textRenderer
     TextRenderer textRenderer = element.getRenderer(TextRenderer.class);
@@ -488,7 +508,7 @@ public class ElementType {
       final Attributes controlAttributes,
       final Nifty nifty,
       final Screen screen) {
-    controlProcessParameters(element, controlAttributes, nifty.getRenderDevice(), screen);
+    controlProcessParameters(nifty.createTypeContext(), element, controlAttributes, nifty.getRenderDevice(), screen);
     for (Element child : element.getElements()) {
       applyControlParameters(child, controlAttributes, nifty, screen);
     }
@@ -559,6 +579,7 @@ public class ElementType {
    * @param screen screen
    */
   private static void controlProcessParameters(
+      final TypeContext typeContext,
       final Element element,
       final Attributes controlAttributes,
       final NiftyRenderEngine niftyRenderEngine,
@@ -573,7 +594,7 @@ public class ElementType {
       log.fine("[" + element.getId() + "{" + element + "}] setting [" + entry.getKey() + "] to [" + value + "]");
       Attributes attributes = new Attributes();
       attributes.overwriteAttribute(entry.getKey(), value);
-      ElementType.applyAttributes(new AttributesType(attributes), screen, element, niftyRenderEngine);
+      ElementType.applyAttributes(typeContext, new AttributesType(attributes), screen, element, niftyRenderEngine);
     }
   }
 }

@@ -76,7 +76,7 @@ public class ControlType extends ElementType {
 
     RegisterControlDefinitionType controlDefinition = getControlDefinition();
 
-    Controller controller =controlDefinition.getControllerInstance(typeContext.nifty);
+    Controller controller = controlDefinition.getControllerInstance(typeContext.nifty);
     if (controller == null) {
       log.warning("creating DefaultController instance for [" + name + "]");
       controller = new DefaultController();
