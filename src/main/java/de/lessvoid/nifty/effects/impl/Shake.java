@@ -35,6 +35,11 @@ public class Shake implements EffectImpl {
       float x = -d + (float) Math.random() * 2 * d;
       float y = -d + (float) Math.random() * 2 * d;
 
+      if (t >= 0.99f) {
+        x = 0;
+        y = 0;
+      }
+
       if (global) {
         r.setGlobalPosition(x, y);
       } else {
