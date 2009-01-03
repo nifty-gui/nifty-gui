@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.helper.NextPrevHelper;
 import de.lessvoid.nifty.controls.scrollbar.impl.ScrollBarImpl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -29,6 +30,7 @@ public class GeneralScrollbar implements Controller {
   private int startMouse;
   private float pageSize;
   private ScrollBarImpl scrollBar;
+  private NextPrevHelper nextPrevHelper;
 
   public void setScrollBarControlNotify(final ScrollbarControlNotify scrollBarControlNotifyParam) {
     listener = new ControllerEventListener() {
@@ -65,6 +67,7 @@ public class GeneralScrollbar implements Controller {
     screen = screenParam;
     scrollPos = element.findElementByName("nifty-internal-scrollbar-position");
     element = element.findElementByName("nifty-internal-scrollbar-background");
+    nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
 
     calcPageSize();
     changeSliderPos(currentValue);
@@ -196,6 +199,14 @@ public class GeneralScrollbar implements Controller {
   }
 
   public void inputEvent(final NiftyInputEvent inputEvent) {
+    if (nextPrevHelper.handleNextPrev(inputEvent)) {
+      return;
+    }
+    if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+      changeSliderPos(currentValue - pageSize);
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+      changeSliderPos(currentValue + pageSize);
+    }
   }
 
   public void setWorldMaxValue(float worldMaxValue) {

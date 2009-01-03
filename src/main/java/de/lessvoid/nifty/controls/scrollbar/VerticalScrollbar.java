@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.scrollbar.impl.ScrollBarImpl;
 import de.lessvoid.nifty.controls.scrollbar.impl.ScrollBarImplVertical;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
