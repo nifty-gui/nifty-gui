@@ -455,6 +455,10 @@ public class Screen {
 
     long eventTime = timeProvider.getMsTime();
     for (Element layer : layerList) {
+      if (layer.isEffectActive(EffectEventId.onStartScreen) ||
+          layer.isEffectActive(EffectEventId.onEndScreen)) {
+        continue;
+      }
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
       layer.mouseEvent(inputEvent, eventTime);
     }
