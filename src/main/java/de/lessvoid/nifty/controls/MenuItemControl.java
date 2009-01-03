@@ -9,29 +9,10 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
 
-/**
- * A TextFieldControl.
- * @author void
- */
 public class MenuItemControl implements Controller {
-
-  /**
-   * element.
-   */
   private Element element;
-
-  /**
-   * focus handler.
-   */
   private FocusHandler focusHandler;
 
-  /**
-   * Bind this controller to the given element.
-   * @param nifty nifty
-   * @param newElement the new element to set
-   * @param properties all attributes of the xml tag we're connected to
-   * @param newListener listener
-   */
   public void bind(
       final Nifty nifty,
       final Element newElement,
@@ -41,33 +22,40 @@ public class MenuItemControl implements Controller {
     element = newElement;
   }
 
-  /**
-   * On start screen event.
-   * @param newScreen screen
-   */
   public void onStartScreen(final Screen newScreen) {
     focusHandler = newScreen.getFocusHandler();
   }
 
-  /**
-   * on focus.
-   * @param getFocus get or lose focus
-   */
-  public void onFocus(final boolean getFocus) {
-    System.out.println("*** " + element.getId() + " *** onGetFocus");
-  }
-
-  /**
-   * process InputEvent.
-   * @param inputEvent input event to process
-   */
   public void inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
-      focusHandler.getNext(element).setFocus();
+      if (focusHandler != null) {
+        Element nextElement = focusHandler.getNext(element);
+        nextElement.setFocus();
+      }
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-      focusHandler.getPrev(element).setFocus();
+      if (focusHandler != null) {
+        Element prevElement = focusHandler.getPrev(element);
+        prevElement.setFocus();
+      }
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+      if (focusHandler != null) {
+        Element nextElement = focusHandler.getNext(element);
+        if (nextElement.getParent().equals(element.getParent())) {
+          nextElement.setFocus();
+        }
+      }
+    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+      if (focusHandler != null) {
+        Element prevElement = focusHandler.getPrev(element);
+        if (prevElement.getParent().equals(element.getParent())) {
+          prevElement.setFocus();
+        }
+      }
     } else if (inputEvent == NiftyInputEvent.Activate) {
       element.onClick();
     }
+  }
+
+  public void onFocus(final boolean getFocus) {
   }
 }
