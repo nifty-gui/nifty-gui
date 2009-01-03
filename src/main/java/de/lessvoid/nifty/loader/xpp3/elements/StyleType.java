@@ -4,6 +4,7 @@ import java.util.Map;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -34,11 +35,14 @@ public class StyleType {
    */
   private EffectsType effects;
 
+  private TypeContext typeContext;
+
   /**
    * create style type.
    * @param idParam id
    */
-  public StyleType(final String idParam) {
+  public StyleType(final TypeContext typeContextParam, final String idParam) {
+    typeContext = typeContextParam;
     id = idParam;
   }
 
@@ -47,7 +51,8 @@ public class StyleType {
    * @param idParam id
    * @param baseStyleParam base style
    */
-  public StyleType(final String idParam, final StyleType baseStyleParam) {
+  public StyleType(final TypeContext typeContextParam, final String idParam, final StyleType baseStyleParam) {
+    typeContext = typeContextParam;
     id = idParam;
     baseStyle = baseStyleParam;
   }
@@ -96,7 +101,7 @@ public class StyleType {
     }
     // attributes
     if (attributes != null) {
-      ElementType.applyAttributes(attributes, screen, element, nifty.getRenderDevice());
+      ElementType.applyAttributes(typeContext, attributes, screen, element, nifty.getRenderDevice());
     }
     // effects
     if (effects != null) {

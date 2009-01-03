@@ -88,7 +88,7 @@ public class NiftyTypeProcessor implements XmlElementProcessor {
     screenTypeProcessor = new ScreenTypeProcessor(typeContext);
     popupTypeProcessor = new PopupTypeProcessor(typeContext);
     useControlsTypeProcessor = new UseControlsTypeProcessor(niftyLoader, popupTypeProcessor);
-    registerStyleProcessor = new RegisterStyleProcessor(styleHandler);
+    registerStyleProcessor = new RegisterStyleProcessor(typeContext, styleHandler);
   }
 
   /**

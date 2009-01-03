@@ -5,6 +5,7 @@ import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.StyleType;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 
 /**
  * RegisterStyleProcessor.
@@ -16,12 +17,14 @@ public class RegisterStyleProcessor implements XmlElementProcessor {
    * style handler.
    */
   private StyleHandler styleHandler;
+  private TypeContext typeContext;
 
   /**
    * create the processor.
    * @param newStyleHandler the StyleHandler
    */
-  public RegisterStyleProcessor(final StyleHandler newStyleHandler) {
+  public RegisterStyleProcessor(final TypeContext typeContextParam, final StyleHandler newStyleHandler) {
+    typeContext = typeContextParam;
     styleHandler = newStyleHandler;
   }
 
@@ -34,9 +37,9 @@ public class RegisterStyleProcessor implements XmlElementProcessor {
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     StyleType styleType = null;
     if (attributes.isSet("base")) {
-      styleType = new StyleType(attributes.get("id"), styleHandler.getStyle(attributes.get("base")));
+      styleType = new StyleType(typeContext, attributes.get("id"), styleHandler.getStyle(attributes.get("base")));
     } else {
-      styleType = new StyleType(attributes.get("id"));
+      styleType = new StyleType(typeContext, attributes.get("id"));
     }
     xmlParser.nextTag();
     xmlParser.optional("attributes", new StyleAttributesTypeProcessor(styleType));

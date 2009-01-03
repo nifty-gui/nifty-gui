@@ -4,6 +4,7 @@ import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
 import de.lessvoid.nifty.loader.xpp3.XmlParser;
 import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
+import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
 
 /**
  * NiftyStyleTypeProcessor.
@@ -13,10 +14,12 @@ public class NiftyStylesTypeProcessor implements XmlElementProcessor {
 
   private StyleHandler styleHandler;
   private UseStylesTypeProcessor useStylesTypeProcessor;
+  private TypeContext typeContext;
 
-  public NiftyStylesTypeProcessor(final StyleHandler newStyleHandler, final NiftyLoader niftyLoader) {
+  public NiftyStylesTypeProcessor(final TypeContext typeContextParam, final StyleHandler newStyleHandler, final NiftyLoader niftyLoader) {
     styleHandler = newStyleHandler;
     useStylesTypeProcessor = new UseStylesTypeProcessor(niftyLoader);
+    typeContext = typeContextParam;
   }
 
   /**
@@ -26,7 +29,7 @@ public class NiftyStylesTypeProcessor implements XmlElementProcessor {
    * @throws Exception exception
    */
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
-    RegisterStyleProcessor registerStyleTypeProcessor = new RegisterStyleProcessor(styleHandler);
+    RegisterStyleProcessor registerStyleTypeProcessor = new RegisterStyleProcessor(typeContext, styleHandler);
 
     xmlParser.nextTag();
     xmlParser.zeroOrMore("useStyles", useStylesTypeProcessor);
