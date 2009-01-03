@@ -904,7 +904,6 @@ public class Element {
         if (focusable) {
           focusHandler.requestExclusiveMouseFocus(this);
         }
-        effectManager.startEffect(EffectEventId.onClick, this, time, null);
         if (onClick(mouseEvent)) {
           return true;
         }
@@ -964,6 +963,7 @@ public class Element {
    * @param inputEvent event
    */
   public boolean onClick(final MouseInputEvent inputEvent) {
+    effectManager.startEffect(EffectEventId.onClick, this, time, null);
     lastMouseX = inputEvent.getMouseX();
     lastMouseY = inputEvent.getMouseY();
 
@@ -971,6 +971,7 @@ public class Element {
   }
 
   public void onClick() {
+    effectManager.startEffect(EffectEventId.onClick, this, time, null);
     interaction.onClick();
   }
 
