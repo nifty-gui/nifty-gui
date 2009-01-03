@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.VerticalScrollbar">
-    <panel style="#panel">
+  <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.VerticalScrollbar" inputMapping="de.lessvoid.nifty.input.mapping.StandardScrollbar">
+    <panel style="#panel" focusable="true">
       <image id="nifty-internal-scrollbar-up" style="#up">
         <interact onClickRepeat="upClick()" />
       </image>
@@ -17,7 +17,7 @@
     </panel>
   </controlDefinition>
 
-  <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.HorizontalScrollbar">
+  <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.HorizontalScrollbar" inputMapping="de.lessvoid.nifty.input.mapping.StandardScrollbar">
     <panel style="#panel">
       <image id="nifty-internal-scrollbar-up" style="#left">
         <interact onClick="upClick()" />
