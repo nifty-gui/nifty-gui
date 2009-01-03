@@ -7,7 +7,7 @@ import de.lessvoid.nifty.controls.console.ConsoleControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.mapping.Default;
+import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -40,7 +40,7 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
     nifty = newNifty;
 
     screen = newScreen;
-    screen.addKeyboardInputHandler(new Default(), this);
+    screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
 
     final Element element = nifty.getCurrentScreen().findElementByName("console");
     element.hide();

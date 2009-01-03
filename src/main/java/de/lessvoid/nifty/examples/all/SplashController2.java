@@ -9,11 +9,12 @@ import de.lessvoid.nifty.screen.ScreenController;
  * @author void
  */
 public class SplashController2 implements ScreenController {
-
   private Nifty nifty;
+  private Screen screen;
 
   public void bind(final Nifty newNifty, final Screen screen) {
     this.nifty = newNifty;
+    this.screen = screen;
   }
 
   public void onStartScreen() {

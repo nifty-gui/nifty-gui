@@ -9,9 +9,14 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- register sounds -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <registerSound id="intro" filename="all/intro.wav" />
+  <registerSound id="gong" filename="sound/19546__tobi123__Gong_mf2.wav" />
+  <registerSound id="ice" filename="sound/36940__Schalkalwis__EisKlirr.wav" />
+  <registerSound id="eagle" filename="sound/27257__kerri__eagle_feather_short.wav" />
+  <registerSound id="panel" filename="sound/34556__Corsica_S__reverse_bass_blip_2.wav" />
+  <registerSound id="activate" filename="sound/activate.wav" />
+  <registerSound id="select" filename="sound/select.wav" />
+  <registerSound id="popup" filename="sound/744__elmomo__MutantJewsArp.wav" />
 
-  <!-- custom scroll panel style so that we can show off the cool overlay blending shizzle -->
   <style id="special-scrollpanel#scrollpanel">
   </style>
 
@@ -19,17 +24,21 @@
   <style id="menu">
     <attributes align="left" valign="center" backgroundImage="special-panel.png" width="1024px" height="409px" />
     <effect>
-      <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="1500" inherit="true"/>
+<!--        <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="1500" inherit="true"/> -->
       <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="250" startDelay="1500" inherit="true"/>
-<!--        <onStartScreen name="shake" length="250" startDelay="750" inherit="true" />  -->
-      <onEndScreen name="fade" start="#f" end="#0" length="500" inherit="true"/>
+<!--        <onStartScreen name="shake" length="250" startDelay="1750" inherit="true" /> -->
+      <onStartScreen name="playSound" sound="panel" startDelay="1650" />
+      
+<!--        <onEndScreen name="fade" start="#f" end="#0" length="500" inherit="true"/> -->
       <onEndScreen name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="250" inherit="true"/>
     </effect>
   </style>
 
   <!-- menu item style -->
   <style id="menu-item" base="menu-font">
-    <attributes align="left" textHAlign="left" color="#aaaf" focusable="true" />
+    <attributes align="left" textHAlign="left" color="#cccf" focusable="true"
+                inputController="de.lessvoid.nifty.controls.MenuItemControl"
+                inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping" />
     <effect>
       <onHover name="focus">
         <hover falloffType="none" width="120%" />
@@ -38,6 +47,7 @@
       <onFocus name="colorBar" width="120%" height="120%" color="#fff5" />
       <onFocus name="textColor" color="#ffff" />
       <onFocus name="textSize" startSize="1.0" endSize="1.25" length="150" />
+      <onFocus name="playSound" sound="select" />
       <onLostFocus name="textSize" startSize="1.25" endSize="1.0" length="150" />
     </effect>
   </style>
@@ -61,6 +71,7 @@
       <panel id="panel" childLayout="center" backgroundImage="intro-background.png">
         <effect>
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" post="false"/> 
+          <onStartScreen name="playSound" sound="gong" startDelay="1400" />
         </effect>
         <panel align="center" valign="center" childLayout="vertical">
           <effect>
@@ -94,6 +105,7 @@
         <image x="240px" y="400px" filename="intro-logo-snow.png" align="center">
           <effect>
             <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" />
+            <onStartScreen name="playSound" sound="eagle" startDelay="900" />
             <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="1000" startDelay="2500" />
           </effect>
         </image>
@@ -102,6 +114,61 @@
             <onStartScreen name="move" direction="bottom" mode="in" length="500" startDelay="500" />
           </effect>
         </image>
+      </panel>
+    </layer>
+    <layer childLayout="vertical">
+      <effect>
+        <onEndScreen name="fade" start="#f" end="#0" length="900" startDelay="6000" inherit="true"/>
+      </effect>
+      <panel childLayout="vertical" align="center" valign="center" width="20%">
+        <panel childLayout="horizontal" height="100px" />
+        <panel childLayout="horizontal">
+          <image filename="checkbox/checkbox.png" style="my-checkmark">
+            <effect>
+              <onStartScreen name="imageSize" startSize="2.0" endSize="1.0" length="250" startDelay="6000" />
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="6000" />
+            </effect>
+          </image>
+          <panel childLayout="horizontal" width="10px" />
+          <image filename="intro/text-layout.png">
+            <effect>
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="6500" />
+              <onStartScreen name="playSound" sound="gong" startDelay="6500" />
+            </effect>
+          </image>
+        </panel>
+        <panel childLayout="horizontal" height="20px" />
+        <panel childLayout="horizontal">
+          <image filename="checkbox/checkbox.png" style="my-checkmark">
+            <effect>
+              <onStartScreen name="imageSize" startSize="2.0" endSize="1.0" length="250" startDelay="8000" />
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="8000" />
+            </effect>
+          </image>
+          <panel childLayout="horizontal" width="10px" />
+          <image filename="intro/text-display.png">
+            <effect>
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="8500" />
+              <onStartScreen name="playSound" sound="gong" startDelay="8500" />
+            </effect>
+          </image>
+        </panel>
+        <panel childLayout="horizontal" height="20px" />
+        <panel childLayout="horizontal">
+          <image filename="checkbox/checkbox.png"  style="my-checkmark">
+            <effect>
+              <onStartScreen name="imageSize" startSize="2.0" endSize="1.0" length="250" startDelay="10000" />
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="10000" />
+            </effect>
+          </image>
+          <panel childLayout="horizontal" width="10px" />
+          <image filename="intro/text-interact.png">
+            <effect>
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="10500" />
+              <onStartScreen name="playSound" sound="gong" startDelay="10500" />
+            </effect>
+          </image>
+        </panel>
       </panel>
     </layer>
   </screen>
@@ -128,7 +195,7 @@
     <layer id="menu" childLayout="vertical">
       <panel height="20%" childLayout="center"/>
       <panel childLayout="center">
-        <panel id="mainMenu" font="menu.fnt" style="menu" childLayout="center" padding="50px,20px,50px,20px">
+        <panel id="mainMenu" font="menu.fnt" style="menu" childLayout="center" padding="50px,20px,60px,20px">
           <panel childLayout="horizontal" width="100%" height="100%">
             <panel width="50%"></panel>
             <control name="scrollPanel" style="special-scrollpanel" horizontal="false" height="100%">
@@ -181,10 +248,11 @@
     <layer id="logo" childLayout="center">
       <image id="image" filename="demo-logo.png" align="center" valign="center">
         <effect>
-          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" />
-          <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1000" />
-          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" />
-          <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="1000" />
+          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="2000" startDelay="500"/>
+          <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="2000" startDelay="500"/>
+          <onStartScreen name="playSound" sound="eagle" />
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="2000" />
+          <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="2000" />
         </effect>
       </image>
     </layer>
@@ -196,6 +264,7 @@
   <popup id="popupExit" childLayout="center" backgroundColor="#000a">
     <effect>
       <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="500" />
+      <onStartScreen name="playSound" sound="popup" startDelay="600" />
       <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="500" startDelay="250" />
     </effect>
     <panel style="nifty-panel-red" childLayout="center" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">

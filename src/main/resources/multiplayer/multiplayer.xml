@@ -14,9 +14,15 @@
     <attributes backgroundColor="#0000" />
     <effect>
       <onHover name="pulsate" startColor="#f007" endColor="#800f" />
+      <onFocus name="pulsate" startColor="#f007" endColor="#800f" />
     </effect>
   </style>
-   
+
+  <!-- menu item style -->
+  <style id="diffStyle">
+    <attributes focusable="true" inputController="de.lessvoid.nifty.controls.DefaultController"/>
+  </style>
+
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
   <!-- multiplayerPanel -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -38,19 +44,19 @@
               <panel childLayout="horizontal" height="40px">
                 <label text="Difficulty:" width="25%" align="left" textHAlign="left" />
                 <panel childLayout="horizontal" width="75%">
-                  <label id="easy" text="Easy" focusable="true">
+                  <label id="easy" text="Easy" style="diffStyle">
                     <interact onClick="setDifficulty(easy)"/>
                   </label>
                   <panel childLayout="horizontal" width="4px" />
-                  <label id="medium" text="Medium" focusable="true"> 
+                  <label id="medium" text="Medium" style="diffStyle"> 
                     <interact onClick="setDifficulty(medium)"/>
                   </label>
                   <panel childLayout="horizontal" width="4px" />
-                  <label id="hard" text="Hard" focusable="true">
+                  <label id="hard" text="Hard" style="diffStyle">
                     <interact onClick="setDifficulty(hard)"/>
                   </label>
                   <panel childLayout="horizontal" width="4px" />
-                  <label id="expert" text="Expert" focusable="true">
+                  <label id="expert" text="Expert" style="diffStyle">
                     <interact onClick="setDifficulty(expert)"/>
                   </label>
                 </panel>
