@@ -4,7 +4,7 @@
   <groupId>lessvoid</groupId>
   <artifactId>nifty-style-black</artifactId>
   <name>Nifty Style Definition (Black)</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <url>http://nifty-gui.sourceforge.net/nifty-style-black/project-info.html</url>
   <scm>
     <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-style-black/trunk</connection>
