@@ -57,6 +57,7 @@ public class EffectsTypeProcessor implements XmlElementProcessor {
           add("onHover", new EffectTypeProcessor(effectsType, EffectEventId.onHover)).
           add("onClick", new EffectTypeProcessor(effectsType, EffectEventId.onClick)).
           add("onFocus", new EffectTypeProcessor(effectsType, EffectEventId.onFocus)).
+          add("onGetFocus", new EffectTypeProcessor(effectsType, EffectEventId.onGetFocus)).
           add("onLostFocus", new EffectTypeProcessor(effectsType, EffectEventId.onLostFocus)).
           add("onActive", new EffectTypeProcessor(effectsType, EffectEventId.onActive)).
           add("onShow", new EffectTypeProcessor(effectsType, EffectEventId.onShow)).
