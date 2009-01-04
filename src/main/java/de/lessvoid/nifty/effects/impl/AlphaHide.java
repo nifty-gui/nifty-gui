@@ -7,15 +7,11 @@ import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.tools.Color;
 
-public class Hide implements EffectImpl {
-  private Element targetElement;
+public class AlphaHide implements EffectImpl {
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
-    String targetElementName = parameter.getProperty("targetElement");
-    if (targetElementName != null) {
-      targetElement = nifty.getCurrentScreen().findElementByName(targetElementName);
-    }
   }
 
   public void execute(
@@ -23,10 +19,10 @@ public class Hide implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    if (targetElement != null) {
-      targetElement.hide();
+    if (normalizedTime >= 1.0f) {
+      r.setColorAlpha(Color.WHITE.getAlpha());
     } else {
-      element.hide();
+      r.setColorAlpha(Color.NONE.getAlpha());
     }
   }
 

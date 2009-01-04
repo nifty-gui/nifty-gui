@@ -8,7 +8,7 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
-public class Hide implements EffectImpl {
+public class Show implements EffectImpl {
   private Element targetElement;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
@@ -24,9 +24,9 @@ public class Hide implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     if (targetElement != null) {
-      targetElement.hide();
+      targetElement.show();
     } else {
-      element.hide();
+      element.show();
     }
   }
 
