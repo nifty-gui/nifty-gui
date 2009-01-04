@@ -30,7 +30,7 @@ public class ScrollPanel implements Controller {
     childRootId = controlDefinitionAttributes.get("childRootId");
     childRootElement = element.findElementByName(childRootId);
   }
-  
+
   public void inputEvent(NiftyInputEvent inputEvent) {
   }
   
@@ -42,6 +42,22 @@ public class ScrollPanel implements Controller {
   }
 
   public void initializeScrollPanel(final Screen screen) {
+    if (!verticalScrollbar) {
+      Element vertical = element.findElementByName("nifty-internal-vertical-scrollbar");
+      if (vertical != null) {
+        nifty.removeElement(screen, vertical);
+      }
+    }
+    if (!horizontalScrollbar) {
+      Element horizontal = element.findElementByName("nifty-internal-horizonal-panel");
+      if (horizontal != null) {
+        nifty.removeElement(screen, horizontal);
+      }
+    }
+
+    nifty.removeElements();
+    screen.layoutLayers();
+
     if (childRootElement != null) {
       final Element scrollElement = childRootElement.getElements().get(0);
       if (scrollElement != null) {
@@ -73,18 +89,5 @@ public class ScrollPanel implements Controller {
         scrollElement.setConstraintY(new SizeValue("0px"));
       }
     }
-    if (!verticalScrollbar) {
-      Element vertical = element.findElementByName("nifty-internal-vertical-scrollbar");
-      if (vertical != null) {
-        nifty.removeElement(screen, vertical);
-      }
-    }
-    if (!horizontalScrollbar) {
-      Element horizontal = element.findElementByName("nifty-internal-horizonal-panel");
-      if (horizontal != null) {
-        nifty.removeElement(screen, horizontal);
-      }
-    }
-    screen.layoutLayers();
   }
 }

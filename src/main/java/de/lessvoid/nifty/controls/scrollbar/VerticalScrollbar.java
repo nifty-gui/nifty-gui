@@ -70,4 +70,28 @@ public class VerticalScrollbar implements Controller {
   public void setViewMaxValue(float viewMaxValue) {
     scrollbar.setViewMaxValue(viewMaxValue);
   }
+
+  public float getCurrentValue() {
+    return scrollbar.getCurrentValue();
+  }
+
+  public void setCurrentValue(final float newValue) {
+    scrollbar.changeSliderPos(newValue);
+  }
+
+  public float getWorldMinValue() {
+    return scrollbar.getWorldMinValue();
+  }
+
+  public float getWorldMaxValue() {
+    return scrollbar.getWorldMaxValue();
+  }
+
+  public float getViewMinValue() {
+    return scrollbar.getViewMinValue();
+  }
+
+  public float getViewMaxValue() {
+    return scrollbar.getViewMaxValue();
+  }
 }

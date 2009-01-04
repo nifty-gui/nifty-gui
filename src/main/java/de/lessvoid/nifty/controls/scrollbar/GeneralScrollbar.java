@@ -161,7 +161,7 @@ public class GeneralScrollbar implements Controller {
    * Set the slider position from the given scroll bar value.
    * @param worldValue the current value of the scroll bar must be in range [minValue, maxValue]
    */
-  private void changeSliderPos(final float worldValue) {
+  public void changeSliderPos(final float worldValue) {
     if (scrollPos == null) {
       return;
     }
@@ -217,5 +217,21 @@ public class GeneralScrollbar implements Controller {
   public void setViewMaxValue(float viewMaxValue) {
     this.viewMaxValue = viewMaxValue;
     calcPageSize();
+  }
+
+  public float getWorldMinValue() {
+    return worldMinValue;
+  }
+
+  public float getWorldMaxValue() {
+    return worldMaxValue;
+  }
+
+  public float getViewMinValue() {
+    return viewMinValue;
+  }
+
+  public float getViewMaxValue() {
+    return viewMaxValue;
   }
 }
