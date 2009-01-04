@@ -761,6 +761,12 @@ public class Element {
    * show this element.
    */
   public void show() {
+    // don't show if show is still in progress
+    if (isEffectActive(EffectEventId.onShow)) {
+      return;
+    }
+
+    // show
     internalShow();
     startEffect(EffectEventId.onShow, new EndNotify() {
       public void perform() {
@@ -778,19 +784,30 @@ public class Element {
   /**
    * hide this element.
    */
-  public final void hide() {
+  public void hide() {
+    // don't hide if not visible
+    if (!isVisible()) {
+      return;
+    }
+
+    // don't hide if hide is still in progress
+    if (isEffectActive(EffectEventId.onHide)) {
+      return;
+    }
+
+    // start effect and shizzle
     startEffect(EffectEventId.onHide, new EndNotify() {
       public void perform() {
         focusHandler.lostKeyboardFocus(Element.this);
         focusHandler.lostMouseFocus(Element.this);
 
+        resetEffects();
         internalHide();
       }
     });
   }
 
   private void internalHide() {
-    resetEffects();
     visible = false;
     for (Element element : elements) {
       element.internalHide();
@@ -1021,7 +1038,6 @@ public class Element {
    * @param eventTime the time in ms the event occured
    */
   private void setMouseDown(final boolean newMouseDown, final long eventTime) {
-    // System.out.println("*** setMouseDown(" + newMouseDown + ") ***");
     this.mouseDownTime = eventTime;
     this.lastRepeatStartTime = 0;
     this.mouseDown = newMouseDown;

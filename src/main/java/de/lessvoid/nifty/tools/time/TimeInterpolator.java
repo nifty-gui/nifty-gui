@@ -8,6 +8,7 @@ import de.lessvoid.nifty.tools.time.interpolator.ExpTime;
 import de.lessvoid.nifty.tools.time.interpolator.Interpolator;
 import de.lessvoid.nifty.tools.time.interpolator.LinearTime;
 import de.lessvoid.nifty.tools.time.interpolator.NullTime;
+import de.lessvoid.nifty.tools.time.interpolator.OneTime;
 
 /**
  * TimeProvider class.
@@ -71,6 +72,9 @@ public class TimeInterpolator {
       interpolatorProvider = new NullTime();
     } else {
       this.lengthParam = Long.parseLong(parameter.getProperty("length", "1000"));
+      if (Boolean.parseBoolean(parameter.getProperty("oneShot"))) {
+        interpolatorProvider = new OneTime();
+      }
     }
 
     // check for the given timeType to create the appropriate interpolator
