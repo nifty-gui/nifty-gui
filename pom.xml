@@ -3,7 +3,7 @@
   <groupId>lessvoid</groupId>
   <artifactId>nifty-examples</artifactId>
   <name>nifty-examples</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <url>http://nifty-gui.sourceforge.net/nifty-examples/project-info.html</url>
   <scm>
     <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-examples/trunk</connection>
@@ -20,17 +20,17 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-style-black</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-default-controls</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>

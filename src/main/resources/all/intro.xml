@@ -49,8 +49,8 @@
       <onFocus name="textColor" color="#ffff" />
       <onFocus name="textSize" startSize="1.0" endSize="1.25" length="150" />
       <onFocus name="playSound" sound="select" />
-      <onGetFocus name="updateScrollpanelPositionToDisplayElement" length="1" target="menuScrollPanel" />
-      <onLostFocus name="textSize" startSize="1.25" endSize="1.0" length="150" />
+      <onGetFocus name="updateScrollpanelPositionToDisplayElement" target="menuScrollPanel" oneShot="true" />
+      <onLostFocus name="textSize" startSize="1.25" endSize="1.0" length="150" oneShot="true" />
     </effect>
   </style>
 
@@ -215,57 +215,57 @@
                   <label id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
                     <effect>
-                      <onGetFocus name="show" length="1" targetElement="thumbHelloWorld" />
-                      <onLostFocus name="hide" length="1" targetElement="thumbHelloWorld" />
+                      <onGetFocus name="show" targetElement="thumbHelloWorld" oneShot="true" />
+                      <onLostFocus name="hide" targetElement="thumbHelloWorld" oneShot="true"  />
                     </effect>
                   </label>
                   <label id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example">
                     <interact onClick="textAlign()" onClickAlternateKey="fade" />
                     <effect>
-                      <onGetFocus name="show" length="1" targetElement="thumbTextAlign" />
-                      <onLostFocus name="hide" length="1" targetElement="thumbTextAlign" />
+                      <onGetFocus name="show" targetElement="thumbTextAlign" oneShot="true" />
+                      <onLostFocus name="hide" targetElement="thumbTextAlign" oneShot="true" />
                     </effect>
                   </label>
                   <label id="textfield" text="Textfield" style="menu-item" hintText="Textfield Example">
                     <interact onClick="textField()"/>
                     <effect>
-                      <onGetFocus name="show" length="1" targetElement="thumbTextField" />
-                      <onLostFocus name="hide" length="1" targetElement="thumbTextField" />
+                      <onGetFocus name="show" targetElement="thumbTextField" oneShot="true" />
+                      <onLostFocus name="hide" targetElement="thumbTextField" oneShot="true" />
                     </effect>
                   </label>
                   <label id="dropDown" text="Drop Down List" hintText="Drop Down List Example" style="menu-item">
                     <interact onClick="dropDown()"/>
                     <effect>
-                      <onGetFocus name="show" length="1" targetElement="thumbDropDownList" />
-                      <onLostFocus name="hide" length="1" targetElement="thumbDropDownList" />
+                      <onGetFocus name="show" targetElement="thumbDropDownList" oneShot="true" />
+                      <onLostFocus name="hide" targetElement="thumbDropDownList" oneShot="true" />
                     </effect>
                   </label>
                   <label id="scrollpanel" text="Scrollpanel" hintText="Scrollpanel Example" style="menu-item">
                     <interact onClick="scrollpanel()"/>
                     <effect>
-                      <onGetFocus name="show" length="1" targetElement="thumbScrollpanel" />
-                      <onLostFocus name="hide" length="1" targetElement="thumbScrollpanel" />
+                      <onGetFocus name="show" targetElement="thumbScrollpanel" oneShot="true" />
+                      <onLostFocus name="hide" targetElement="thumbScrollpanel" oneShot="true" />
                     </effect>
                   </label>
                   <label id="multiplayer" text="Avatar &amp; Multiplayer" hintText="Avatar &amp; Multiplayer Example" style="menu-item">
                     <interact onClick="multiplayer()"/>
                     <effect>
-                      <onGetFocus name="show" length="1" targetElement="thumbMultiplayer" />
-                      <onLostFocus name="hide" length="1" targetElement="thumbMultiplayer" />
+                      <onGetFocus name="show" targetElement="thumbMultiplayer" oneShot="true" />
+                      <onLostFocus name="hide" targetElement="thumbMultiplayer" oneShot="true" />
                     </effect>
                   </label>
                   <label id="console" text="Console Example" hintText="Console" style="menu-item">
                     <interact onClick="console()"/>
                     <effect>
-                      <onGetFocus name="show" length="1" targetElement="thumbConsole" />
-                      <onLostFocus name="hide" length="1" targetElement="thumbConsole" />
+                      <onGetFocus name="show" targetElement="thumbConsole" oneShot="true" />
+                      <onLostFocus name="hide" targetElement="thumbConsole" oneShot="true" />
                     </effect>
                   </label>
                   <label id="exit" text="Exit" style="menu-item" hintText="Exit">
                     <interact onClick="exit()"/>
                     <effect>
-                      <onGetFocus name="show" length="1" targetElement="thumbExit" />
-                      <onLostFocus name="hide" length="1" targetElement="thumbExit" />
+                      <onGetFocus name="show" targetElement="thumbExit" oneShot="true" />
+                      <onLostFocus name="hide" targetElement="thumbExit" oneShot="true" />
                     </effect>
                   </label>
                 </panel>
