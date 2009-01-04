@@ -232,7 +232,9 @@ public class Nifty {
       MouseInputEvent inputEvent = mouseInputEventQueue.peek();
       if (inputEvent != null) {
         currentScreen.mouseEvent(inputEvent);
-        mouseInputEventQueue.remove();
+        if (!mouseInputEventQueue.queue.isEmpty()) {
+          mouseInputEventQueue.remove();
+        }
       }
       currentScreen.renderLayers(renderDevice);
 
