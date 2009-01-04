@@ -46,7 +46,7 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
         delta = minY - currentMinY;
         verticalScrollbar.setCurrentValue(minY - delta);
       }
-      log.warning(minY + ":" + maxY + " - " + currentMinY + ":" + currentMaxY + " - " + delta);
+      log.fine(minY + ":" + maxY + " - " + currentMinY + ":" + currentMaxY + " - " + delta);
     }
   }
 
