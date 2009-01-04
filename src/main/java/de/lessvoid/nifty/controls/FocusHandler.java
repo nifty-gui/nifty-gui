@@ -173,11 +173,19 @@ public class FocusHandler {
       keyboardFocusElement.startEffect(EffectEventId.onLostFocus);
     }
 
+    boolean startOnGetFocus = false;
+    if (keyboardFocusElement != newFocusElement) {
+      startOnGetFocus = true;
+    }
+
     keyboardFocusElement = newFocusElement;
     log.fine("keyboard focus element now changed to [" + keyboardFocusElement.toString() + "]");
 
     if (keyboardFocusElement != null) {
-      keyboardFocusElement.startEffect(EffectEventId.onFocus, null);
+      keyboardFocusElement.startEffect(EffectEventId.onFocus);
+      if (startOnGetFocus) {
+        keyboardFocusElement.startEffect(EffectEventId.onGetFocus);
+      }
     }
   }
 

@@ -21,6 +21,7 @@ public final class NiftyDefaults {
    * @param effects map to register effects.
    */
   public static void initDefaultEffects(final Map < String, RegisterEffectType > effects) {
+    effects.put("alphaHide", new RegisterEffectType("de.lessvoid.nifty.effects.impl.AlphaHide"));
     effects.put("border", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Border"));
     effects.put("blendMode", new RegisterEffectType("de.lessvoid.nifty.effects.impl.BlendMode"));
     effects.put("changeFont", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ChangeFont"));
@@ -45,8 +46,10 @@ public final class NiftyDefaults {
     effects.put("restoreState", new RegisterEffectType("de.lessvoid.nifty.effects.impl.RestoreState"));
     effects.put("saveState", new RegisterEffectType("de.lessvoid.nifty.effects.impl.SaveState"));
     effects.put("shake", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Shake"));
+    effects.put("show", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Show"));
     effects.put("textColor", new RegisterEffectType("de.lessvoid.nifty.effects.impl.TextColor"));
     effects.put("textSize", new RegisterEffectType("de.lessvoid.nifty.effects.impl.TextSize"));
     effects.put("textSizePulsate", new RegisterEffectType("de.lessvoid.nifty.effects.impl.TextSizePulsate"));
+    effects.put("updateScrollpanelPositionToDisplayElement", new RegisterEffectType("de.lessvoid.nifty.effects.impl.UpdateScrollpanelPositionToDisplayElement"));    
   }
 }

@@ -285,7 +285,7 @@ public class Nifty {
   /**
    * remove elements.
    */
-  private void removeElements() {
+  public void removeElements() {
     if (!elementsToRemove.isEmpty()) {
       for (ElementToRemove elementToRemove : elementsToRemove) {
         elementToRemove.remove();
