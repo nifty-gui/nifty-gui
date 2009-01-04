@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples.all;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -29,6 +30,21 @@ public class MenuController implements ScreenController {
   public void bind(final Nifty niftyParam, final Screen screenParam) {
     this.nifty = niftyParam;
     this.screen = screenParam;
+    hideIfThere("thumbHelloWorld");
+    hideIfThere("thumbTextAlign");
+    hideIfThere("thumbTextField");
+    hideIfThere("thumbDropDownList");
+    hideIfThere("thumbScrollpanel");
+    hideIfThere("thumbMultiplayer");
+    hideIfThere("thumbConsole");
+    hideIfThere("thumbExit");
+  }
+
+  private void hideIfThere(final String elementName) {
+    Element element = screen.findElementByName(elementName);
+    if (element != null) {
+      element.hide();
+    }
   }
 
   /**

@@ -10,26 +10,27 @@
   <!-- register sounds -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <registerSound id="gong" filename="sound/19546__tobi123__Gong_mf2.wav" />
-  <registerSound id="ice" filename="sound/36940__Schalkalwis__EisKlirr.wav" />
   <registerSound id="eagle" filename="sound/27257__kerri__eagle_feather_short.wav" />
   <registerSound id="panel" filename="sound/34556__Corsica_S__reverse_bass_blip_2.wav" />
-  <registerSound id="activate" filename="sound/activate.wav" />
   <registerSound id="select" filename="sound/select.wav" />
   <registerSound id="popup" filename="sound/744__elmomo__MutantJewsArp.wav" />
 
   <style id="special-scrollpanel#scrollpanel">
   </style>
 
+  <style id="thumbStyle">
+    <effect>
+      <onShow name="fade" start="#0" end="#f" length="250" />
+      <onHide name="fade" start="#f" end="#0" length="250" />
+    </effect>
+  </style>
+
   <!-- main menu style -->
   <style id="menu">
     <attributes align="left" valign="center" backgroundImage="special-panel.png" width="1024px" height="409px" />
     <effect>
-<!--        <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="1500" inherit="true"/> -->
       <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="250" startDelay="1500" inherit="true"/>
-<!--        <onStartScreen name="shake" length="250" startDelay="1750" inherit="true" /> -->
-      <onStartScreen name="playSound" sound="panel" startDelay="1650" />
-      
-<!--        <onEndScreen name="fade" start="#f" end="#0" length="500" inherit="true"/> -->
+      <onStartScreen name="playSound" sound="panel" length="10" startDelay="1500" />
       <onEndScreen name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="250" inherit="true"/>
     </effect>
   </style>
@@ -48,6 +49,7 @@
       <onFocus name="textColor" color="#ffff" />
       <onFocus name="textSize" startSize="1.0" endSize="1.25" length="150" />
       <onFocus name="playSound" sound="select" />
+      <onGetFocus name="updateScrollpanelPositionToDisplayElement" length="1" target="menuScrollPanel" />
       <onLostFocus name="textSize" startSize="1.25" endSize="1.0" length="150" />
     </effect>
   </style>
@@ -197,33 +199,74 @@
       <panel childLayout="center">
         <panel id="mainMenu" font="menu.fnt" style="menu" childLayout="center" padding="50px,20px,60px,20px">
           <panel childLayout="horizontal" width="100%" height="100%">
-            <panel width="50%"></panel>
-            <control name="scrollPanel" style="special-scrollpanel" horizontal="false" height="100%">
-              <panel childLayout="center" width="100%" height="350px" padding="0px,40px,0px,40px">
+            <panel width="50%" childLayout="absolute">
+              <image id="thumbHelloWorld" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
+              <image id="thumbTextAlign" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textAlign.png" />
+              <image id="thumbTextField" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textField.png" />
+              <image id="thumbDropDownList" style="thumbStyle" x="150px" y="50px" filename="all/thumb-dropDownList.png" />
+              <image id="thumbScrollpanel" style="thumbStyle" x="150px" y="50px" filename="all/thumb-scrollPanel.png" />
+              <image id="thumbMultiplayer" style="thumbStyle" x="150px" y="50px" filename="all/thumb-multiplayer.png" />
+              <image id="thumbConsole" style="thumbStyle" x="150px" y="50px" filename="all/thumb-console.png" />
+              <image id="thumbExit" style="thumbStyle" x="150px" y="50px" filename="all/thumb-exit.png" />
+            </panel>
+            <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" height="100%">
+              <panel childLayout="center" width="100%" height="400px" padding="0px,40px,0px,40px">
                 <panel childLayout="vertical" width="100%">
                   <label id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
+                    <effect>
+                      <onGetFocus name="show" length="1" targetElement="thumbHelloWorld" />
+                      <onLostFocus name="hide" length="1" targetElement="thumbHelloWorld" />
+                    </effect>
                   </label>
                   <label id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example">
                     <interact onClick="textAlign()" onClickAlternateKey="fade" />
+                    <effect>
+                      <onGetFocus name="show" length="1" targetElement="thumbTextAlign" />
+                      <onLostFocus name="hide" length="1" targetElement="thumbTextAlign" />
+                    </effect>
                   </label>
                   <label id="textfield" text="Textfield" style="menu-item" hintText="Textfield Example">
                     <interact onClick="textField()"/>
+                    <effect>
+                      <onGetFocus name="show" length="1" targetElement="thumbTextField" />
+                      <onLostFocus name="hide" length="1" targetElement="thumbTextField" />
+                    </effect>
                   </label>
                   <label id="dropDown" text="Drop Down List" hintText="Drop Down List Example" style="menu-item">
                     <interact onClick="dropDown()"/>
+                    <effect>
+                      <onGetFocus name="show" length="1" targetElement="thumbDropDownList" />
+                      <onLostFocus name="hide" length="1" targetElement="thumbDropDownList" />
+                    </effect>
                   </label>
                   <label id="scrollpanel" text="Scrollpanel" hintText="Scrollpanel Example" style="menu-item">
                     <interact onClick="scrollpanel()"/>
+                    <effect>
+                      <onGetFocus name="show" length="1" targetElement="thumbScrollpanel" />
+                      <onLostFocus name="hide" length="1" targetElement="thumbScrollpanel" />
+                    </effect>
                   </label>
                   <label id="multiplayer" text="Avatar &amp; Multiplayer" hintText="Avatar &amp; Multiplayer Example" style="menu-item">
                     <interact onClick="multiplayer()"/>
+                    <effect>
+                      <onGetFocus name="show" length="1" targetElement="thumbMultiplayer" />
+                      <onLostFocus name="hide" length="1" targetElement="thumbMultiplayer" />
+                    </effect>
                   </label>
                   <label id="console" text="Console Example" hintText="Console" style="menu-item">
                     <interact onClick="console()"/>
+                    <effect>
+                      <onGetFocus name="show" length="1" targetElement="thumbConsole" />
+                      <onLostFocus name="hide" length="1" targetElement="thumbConsole" />
+                    </effect>
                   </label>
                   <label id="exit" text="Exit" style="menu-item" hintText="Exit">
                     <interact onClick="exit()"/>
+                    <effect>
+                      <onGetFocus name="show" length="1" targetElement="thumbExit" />
+                      <onLostFocus name="hide" length="1" targetElement="thumbExit" />
+                    </effect>
                   </label>
                 </panel>
               </panel>            
@@ -276,7 +319,7 @@
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
         <effect>
-          <onStartScreen name="hide" length="700" inherit="true" />
+          <onStartScreen name="alphaHide" length="700" inherit="true" />
           <onEndScreen name="fade" length="10" start="#f" end="#0" inherit="true" />
         </effect>
         <panel childLayout="center" height="70%">
