@@ -236,10 +236,13 @@ public class Nifty {
           mouseInputEventQueue.remove();
         }
       }
-      currentScreen.renderLayers(renderDevice);
+      
+      if (currentScreen != null) {
+        currentScreen.renderLayers(renderDevice);
 
-      if (useDebugConsole) {
-        console.render(this, currentScreen, renderDevice);
+        if (useDebugConsole) {
+          console.render(this, currentScreen, renderDevice);
+        }
       }
     }
 
