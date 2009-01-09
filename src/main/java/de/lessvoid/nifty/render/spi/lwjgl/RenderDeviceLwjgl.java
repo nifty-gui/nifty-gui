@@ -1,16 +1,16 @@
 package de.lessvoid.nifty.render.spi.lwjgl;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
+import java.nio.IntBuffer;
+import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import de.lessvoid.nifty.render.spi.BlendMode;
 import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.render.spi.RenderFont;
 import de.lessvoid.nifty.render.spi.RenderImage;
-import de.lessvoid.nifty.render.spi.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -18,13 +18,18 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class RenderDeviceLwjgl implements RenderDevice {
-  private static final int INTERNAL_BUFFERSIZE_IN_BYTES = 1024;
-  private static ByteBuffer byteBuffer = BufferUtils.createByteBuffer(INTERNAL_BUFFERSIZE_IN_BYTES);
-  private static DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
+  private static Logger log = Logger.getLogger(RenderDeviceLwjgl.class.getName());
+  private static IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4*4);
   private RenderTools renderTools;
+  private int vieportWidth;
+  private int viewportHeight;
 
   public RenderDeviceLwjgl() {
     renderTools = new RenderTools();
+    GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
+    vieportWidth = viewportBuffer.get(2);
+    viewportHeight = viewportBuffer.get(3);
+    log.info("Viewport: " + vieportWidth + ", " + viewportHeight);
   }
 
   /**
@@ -32,7 +37,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return width of display mode
    */
   public int getWidth() {
-    return Display.getDisplayMode().getWidth();
+    return vieportWidth;
   }
 
   /**
@@ -40,7 +45,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return height of display mode
    */
   public int getHeight() {
-    return Display.getDisplayMode().getHeight();
+    return viewportHeight;
   }
 
   /**
