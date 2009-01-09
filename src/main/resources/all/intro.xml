@@ -14,6 +14,7 @@
   <registerSound id="panel" filename="sound/34556__Corsica_S__reverse_bass_blip_2.wav" />
   <registerSound id="select" filename="sound/select.wav" />
   <registerSound id="popup" filename="sound/744__elmomo__MutantJewsArp.wav" />
+  <registerMusic id="outro" filename="sound/a.ogg" />
 
   <style id="special-scrollpanel#scrollpanel">
   </style>
@@ -64,6 +65,68 @@
       <onHover name="restoreState" />
     </effect>
   </style>
+
+  <!-- custom scroll panel style so that we can show off the cool overlay blending shizzle -->
+  <style id="special-scrollpanel#scrollpanel">
+    <attributes />
+    <effect overlay="true">
+      <onActive name="blendMode" blendMode="multiply" post="true" />
+      <onActive name="imageOverlay" filename="all/overlay.png" post="true" />
+    </effect>
+  </style>
+
+  <controlDefinition name="endscroller-page-1">
+    <panel childLayout="vertical">
+      <panel height="600px" childLayout="vertical" />
+      <label style="button-font" text="Nifty GUI&#13;&#10;(Examples)&#13;&#10;&#13;&#10;" align="center" />
+      <label style="button-font" text="written and performed&#13;&#10;by void" align="center" />
+
+      <panel height="100px" childLayout="vertical" />
+        <label style="button-font" text="Nifty is written in Java&#13;&#10;" align="center" />
+        <image filename="all/java.png" align="center" />
+      <panel height="100px" childLayout="vertical" />
+        <label style="button-font" text="Nifty is using the following libs:" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <label style="button-font" text="LWJGL&#13;&#10;" align="center" />
+        <image filename="all/lwjgl.png" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <label style="button-font" text="Slick2D&#13;&#10;" align="center" />
+        <image filename="all/slick.png" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <panel childLayout="horizontal">
+          <panel childLayout="vertical">
+            <label style="button-font" text="OpenGL&#13;&#10;" align="center" />
+            <image filename="all/opengl.png" align="center" />
+          </panel>
+          <panel childLayout="vertical">
+            <label style="button-font" text="OpenAL&#13;&#10;" align="center" />
+            <image filename="all/openal.png" align="center" />
+          </panel>
+        </panel>
+      <panel height="50px" childLayout="vertical" />
+        <label style="button-font" text="Ogg Vorbis with JOrbis&#13;&#10;" align="center" />
+        <image filename="all/oggvorbis.png" align="center" />
+      <panel height="150px" childLayout="vertical" />
+        <label style="button-font" text="This Example uses creative commons licenced sound samples&#13;&#10;and music from the following Sources" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <label style="button-font" text="The Freesound Project&#13;&#10;" align="center" />
+        <image filename="all/freesound.png" align="center" />
+      <panel height="30px" childLayout="vertical" />
+        <label style="button-font" text="...&#13;&#10;
+...&#13;&#10;
+...&#13;&#10;" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <label style="button-font" text="Nine Inch Nails&#13;&#10;" align="center" />
+        <image filename="all/nin.png" align="center" />
+      <panel height="30px" childLayout="vertical" />
+        <label style="button-font" text="...&#13;&#10;
+...&#13;&#10;
+...&#13;&#10;" align="center" />
+      <panel height="100px" childLayout="vertical" />
+        <label style="button-font" text="THE END" align="center" />
+    </panel>
+  </controlDefinition>
+
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- intro screen -->
@@ -284,20 +347,33 @@
     </layer>
   </screen>
 
+
+
+  
+
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- outro screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="outro" controller="de.lessvoid.nifty.examples.all.OutroController">
-    <layer id="logo" childLayout="center">
-      <image id="image" filename="demo-logo.png" align="center" valign="center">
+    <layer id="logo" childLayout="vertical">
+      <panel height="25%" childLayout="center">
+        <image id="image" filename="demo-logo.png" align="center" valign="center">
         <effect>
-          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="2000" startDelay="500"/>
-          <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="2000" startDelay="500"/>
-          <onStartScreen name="playSound" sound="eagle" />
+          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1500" startDelay="500"/>
+          <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1500" startDelay="500"/>
+          <onStartScreen name="playSound" sound="outro" startDelay="0"/>
           <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="2000" />
           <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="2000" />
         </effect>
-      </image>
+        </image>
+      </panel>
+      <control id="scrollbarPanel" style="special-scrollpanel" name="scrollPanel" horizontal="false" vertical="false" height="75%">
+        <panel id="myScrollStuff" childLayout="vertical" width="100%">
+          <effect>
+            <onCustom name="autoScroll" length="75000" start="0" end="-2750" inherit="true" onEndEffect="scrollEnd()" />
+          </effect>
+        </panel>
+      </control>
     </layer>
   </screen>
   
