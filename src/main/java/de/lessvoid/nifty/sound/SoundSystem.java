@@ -4,6 +4,10 @@ package de.lessvoid.nifty.sound;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Music;
+
+import de.lessvoid.nifty.sound.slick.SlickMusicHandle;
+
 /**
  * The SoundManager loads and manages all available Sound and Music Files available to be played.
  * @author void
@@ -134,5 +138,9 @@ public class SoundSystem {
    */
   public void setMusicVolume(final float newMusicVolume) {
     this.musicVolume = newMusicVolume;
+  }
+
+  public void update(final int delta) {
+    Music.poll(delta);
   }
 }

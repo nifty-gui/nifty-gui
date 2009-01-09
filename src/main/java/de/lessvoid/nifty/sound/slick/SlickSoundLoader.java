@@ -44,7 +44,7 @@ public class SlickSoundLoader implements SoundLoader {
    */
   public SoundHandle loadMusic(final SoundSystem soundSystem, final String filename) {
     try {
-      return new SlickMusicHandle(soundSystem, new Music(filename));
+      return new SlickMusicHandle(soundSystem, new Music(filename, true));
     } catch (SlickException e) {
       log.warning("loading of '" + filename + "' failed" + e);
     }
