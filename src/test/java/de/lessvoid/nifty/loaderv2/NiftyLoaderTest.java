@@ -13,6 +13,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 public class NiftyLoaderTest extends TestCase {
   private static String testXml =
@@ -75,7 +76,7 @@ public class NiftyLoaderTest extends TestCase {
         "nifty.nxs",
         new ByteArrayInputStream(testXml.getBytes("ISO-8859-1")),
         nifty,
-        null);
+        new TimeProvider());
     System.out.println(niftyType.output());
   }
 }
