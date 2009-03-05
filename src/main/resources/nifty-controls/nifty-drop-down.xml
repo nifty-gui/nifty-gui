@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
   <!-- DROP DOWN CONTROL -->
-  <controlDefinition style="nifty-drop-down" name="dropDownControl" controller="de.lessvoid.nifty.controls.dropdown.DropDownControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardDropDown">
-    <panel childLayout="horizontal">
-      <text id="text" style="#text" text="" focusable="true">
-        <interact onClick="dropDownClicked()" />
-      </text>
-      <image id="icon" style="#icon">
-        <interact onClick="dropDownClicked()" />
-      </image>
+  <controlDefinition style="nifty-drop-down" name="dropDownControl" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardDropDown">
+    <panel childLayout="horizontal" height="28px" backgroundColor="#0f04" focusable="true">
+      <interact onClick="dropDownClicked()" />
+      <text id="text" style="#text" text="" />
+      <image id="icon" style="#icon" />
     </panel>
   </controlDefinition>
 
   <!-- DROP DOWN CONTROL ITEM -->
-  <controlDefinition style="nifty-drop-down" name="dropDownControlItem" controller="de.lessvoid.nifty.controls.dropdown.DropDownControlItem" inputMapping="de.lessvoid.nifty.input.mapping.StandardDropDownItem">
+  <controlDefinition style="nifty-drop-down" name="dropDownControlItem" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControlItem" inputMapping="de.lessvoid.nifty.input.mapping.StandardDropDownItem">
     <text id="text" style="#text-item" text="" focusable="true">
       <interact onRelease="dropDownItemClicked()"/>
     </text>
   </controlDefinition>
 
   <!-- DROP DOWN BOX POPUP (The Actual List this is) -->
-  <popup id="dropDownBoxSelectPopup" childLayout="absolute" controller="de.lessvoid.nifty.controls.dropdown.DropDownPopup">
+  <popup id="dropDownBoxSelectPopup" style="nifty-drop-down" childLayout="absolute" inputController="de.lessvoid.nifty.controls.dropdown.controller.DropDownPopup">
     <interact onRelease="close()" />
     <panel id="dropDownList" style="#list-panel" />
   </popup>
