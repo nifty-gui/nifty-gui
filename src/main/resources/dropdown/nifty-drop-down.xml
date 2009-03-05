@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles>
   <style id="nifty-drop-down#text" base="base-font">
-    <attributes color="#000f" textHAlign="left" textVAlign="center" height="28px"/>
+    <attributes color="#000f" textHAlign="left" textVAlign="center" height="28px" width="*" />
     <effect>
       <onClick name="focus" />
       <onClick name="remote" targetElement="icon" />
@@ -34,7 +34,7 @@
   </style>
 
   <style id="nifty-drop-down#text-item" base="base-font">
-    <attributes textHAlign="left" textVAlign="center" />
+    <attributes textHAlign="left" textVAlign="center" width="100%" />
     <effect>
       <onHover name="focus" />
       <onFocus name="colorBar" color="#000f" post="false" />
