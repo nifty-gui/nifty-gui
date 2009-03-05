@@ -15,6 +15,11 @@ public interface Interpolator {
   void initialize(Properties parameter);
 
   /**
+   * In case the Interpolator wants to set some value when started.
+   */
+  void start();
+
+  /**
    * get a new value.
    * @param lengthParameter max length of effect in ms
    * @param timePassed time already passed in ms

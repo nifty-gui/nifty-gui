@@ -29,9 +29,11 @@ public class PlaySound implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     if (normalizedTime > 0.0f) {
-      if (soundHandle != null && !done) {
-        soundHandle.play();
-        done = true;
+      if (soundHandle != null) {
+        if (!done) {
+          soundHandle.play();
+          done = true;
+        }
       }
     }
   }

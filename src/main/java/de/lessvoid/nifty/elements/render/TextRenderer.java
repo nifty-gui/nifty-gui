@@ -81,6 +81,9 @@ public class TextRenderer implements ElementRenderer {
    * @param newText text
    */
   public void setText(final String newText) {
+    if (newText == null) {
+      return;
+    }
     initText(newText);
   }
 
@@ -282,6 +285,9 @@ public class TextRenderer implements ElementRenderer {
    * @param fontParam font
    */
   public void setFont(final RenderFont fontParam) {
+    if (fontParam == null) {
+      return;
+    }
     this.font = fontParam;
   }
 
@@ -314,7 +320,9 @@ public class TextRenderer implements ElementRenderer {
    * @param newColor color
    */
   public void setColor(final Color newColor) {
-    this.color = newColor;
+    if (newColor != null) {
+      this.color = newColor;
+    }
   }
 
   /**

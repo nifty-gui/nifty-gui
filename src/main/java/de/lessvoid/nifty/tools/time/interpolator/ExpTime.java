@@ -20,6 +20,9 @@ public class ExpTime implements Interpolator {
     this.factorParam = Float.parseFloat(parameter.getProperty("factor", "1"));
   }
 
+  public void start() {
+  }
+
   /**
    * @param lengthParameter effect length in ms
    * @param timePassed time already passed in ms

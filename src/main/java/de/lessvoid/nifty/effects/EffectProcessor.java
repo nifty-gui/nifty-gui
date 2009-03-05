@@ -62,7 +62,9 @@ public class EffectProcessor {
     for (Effect e : activeEffects) {
       if (!e.isOverlay() && !e.isPost() && (e.isActive() || neverStopRendering)) {
         e.update();
-        e.execute(renderDevice);
+        if (!e.isOverlay() && !e.isPost() && (e.isActive() || neverStopRendering)) {
+          e.execute(renderDevice);
+        }
       }
     }
 
@@ -83,7 +85,9 @@ public class EffectProcessor {
     for (Effect e : activeEffects) {
       if (!e.isOverlay() && e.isPost() && (e.isActive() || neverStopRendering)) {
         e.update();
-        e.execute(renderDevice);
+        if (!e.isOverlay() && e.isPost() && (e.isActive() || neverStopRendering)) {
+          e.execute(renderDevice);
+        }
       }
     }
 
@@ -308,7 +312,9 @@ public class EffectProcessor {
     for (Effect e : activeEffects) {
       if (e.isOverlay() && (e.isActive() || neverStopRendering)) {
         e.update();
-        e.execute(renderDevice);
+        if (e.isOverlay() && (e.isActive() || neverStopRendering)) {
+          e.execute(renderDevice);
+        }
       }
     }
 

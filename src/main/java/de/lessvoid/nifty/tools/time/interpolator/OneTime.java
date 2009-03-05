@@ -8,6 +8,10 @@ public class OneTime implements Interpolator {
   public final void initialize(final Properties parameter) {
   }
 
+  public void start() {
+    hasRun = false;
+  }
+
   public final float getValue(final long lengthParam, final long timePassed) {
     if (!hasRun) {
       hasRun = true;

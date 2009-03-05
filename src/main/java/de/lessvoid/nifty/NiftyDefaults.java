@@ -1,55 +1,43 @@
 package de.lessvoid.nifty;
 
-import java.util.Map;
+import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
 
-import de.lessvoid.nifty.loader.xpp3.elements.RegisterEffectType;
-
-/**
- * NiftyDefaults.
- * @author void
- */
 public final class NiftyDefaults {
 
-  /**
-   * you can't instantiate this class.
-   */
   private NiftyDefaults() {
   }
 
-  /**
-   * register default effects.
-   * @param effects map to register effects.
-   */
-  public static void initDefaultEffects(final Map < String, RegisterEffectType > effects) {
-    effects.put("alphaHide", new RegisterEffectType("de.lessvoid.nifty.effects.impl.AlphaHide"));
-    effects.put("border", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Border"));
-    effects.put("blendMode", new RegisterEffectType("de.lessvoid.nifty.effects.impl.BlendMode"));
-    effects.put("changeFont", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ChangeFont"));
-    effects.put("clip", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Clip"));
-    effects.put("colorBar", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ColorBar"));
-    effects.put("colorPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ColorPulsate"));
-    effects.put("fade", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Fade"));
-    effects.put("focus", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Focus"));
-    effects.put("hide", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Hide"));
-    effects.put("hint", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Hint"));
-    effects.put("imageOverlay", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ImageOverlay"));
-    effects.put("imageOverlayPulsate", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ImageOverlayPulsate"));
-    effects.put("imageSize", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ImageSize"));
-    effects.put("imageSizePulsate", new RegisterEffectType("de.lessvoid.nifty.effects.impl.ImageSizePulsate"));
-    effects.put("move", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Move"));
-    effects.put("nop", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Nop"));
-    effects.put("particle", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Particle"));
-    effects.put("playSound", new RegisterEffectType("de.lessvoid.nifty.effects.impl.PlaySound"));
-    effects.put("pulsate", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Pulsate"));
-    effects.put("remote", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Remote"));
-    effects.put("renderElement", new RegisterEffectType("de.lessvoid.nifty.effects.impl.RenderElement"));
-    effects.put("restoreState", new RegisterEffectType("de.lessvoid.nifty.effects.impl.RestoreState"));
-    effects.put("saveState", new RegisterEffectType("de.lessvoid.nifty.effects.impl.SaveState"));
-    effects.put("shake", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Shake"));
-    effects.put("show", new RegisterEffectType("de.lessvoid.nifty.effects.impl.Show"));
-    effects.put("textColor", new RegisterEffectType("de.lessvoid.nifty.effects.impl.TextColor"));
-    effects.put("textSize", new RegisterEffectType("de.lessvoid.nifty.effects.impl.TextSize"));
-    effects.put("textSizePulsate", new RegisterEffectType("de.lessvoid.nifty.effects.impl.TextSizePulsate"));
-    effects.put("updateScrollpanelPositionToDisplayElement", new RegisterEffectType("de.lessvoid.nifty.effects.impl.UpdateScrollpanelPositionToDisplayElement"));    
+  public static void initDefaultEffects(final Nifty nifty) {
+    nifty.registerEffect(new RegisterEffectType("alphaHide", "de.lessvoid.nifty.effects.impl.AlphaHide"));
+    nifty.registerEffect(new RegisterEffectType("autoScroll", "de.lessvoid.nifty.effects.impl.AutoScroll"));
+    nifty.registerEffect(new RegisterEffectType("border", "de.lessvoid.nifty.effects.impl.Border"));
+    nifty.registerEffect(new RegisterEffectType("blendMode", "de.lessvoid.nifty.effects.impl.BlendMode"));
+    nifty.registerEffect(new RegisterEffectType("changeFont", "de.lessvoid.nifty.effects.impl.ChangeFont"));
+    nifty.registerEffect(new RegisterEffectType("clip", "de.lessvoid.nifty.effects.impl.Clip"));
+    nifty.registerEffect(new RegisterEffectType("colorBar", "de.lessvoid.nifty.effects.impl.ColorBar"));
+    nifty.registerEffect(new RegisterEffectType("colorPulsate", "de.lessvoid.nifty.effects.impl.ColorPulsate"));
+    nifty.registerEffect(new RegisterEffectType("fade", "de.lessvoid.nifty.effects.impl.Fade"));
+    nifty.registerEffect(new RegisterEffectType("focus", "de.lessvoid.nifty.effects.impl.Focus"));
+    nifty.registerEffect(new RegisterEffectType("hide", "de.lessvoid.nifty.effects.impl.Hide"));
+    nifty.registerEffect(new RegisterEffectType("hint", "de.lessvoid.nifty.effects.impl.Hint"));
+    nifty.registerEffect(new RegisterEffectType("imageOverlay", "de.lessvoid.nifty.effects.impl.ImageOverlay"));
+    nifty.registerEffect(new RegisterEffectType("imageOverlayPulsate", "de.lessvoid.nifty.effects.impl.ImageOverlayPulsate"));
+    nifty.registerEffect(new RegisterEffectType("imageSize", "de.lessvoid.nifty.effects.impl.ImageSize"));
+    nifty.registerEffect(new RegisterEffectType("imageSizePulsate", "de.lessvoid.nifty.effects.impl.ImageSizePulsate"));
+    nifty.registerEffect(new RegisterEffectType("move", "de.lessvoid.nifty.effects.impl.Move"));
+    nifty.registerEffect(new RegisterEffectType("nop", "de.lessvoid.nifty.effects.impl.Nop"));
+    nifty.registerEffect(new RegisterEffectType("particle", "de.lessvoid.nifty.effects.impl.Particle"));
+    nifty.registerEffect(new RegisterEffectType("playSound", "de.lessvoid.nifty.effects.impl.PlaySound"));
+    nifty.registerEffect(new RegisterEffectType("pulsate", "de.lessvoid.nifty.effects.impl.Pulsate"));
+    nifty.registerEffect(new RegisterEffectType("remote", "de.lessvoid.nifty.effects.impl.Remote"));
+    nifty.registerEffect(new RegisterEffectType("renderElement", "de.lessvoid.nifty.effects.impl.RenderElement"));
+    nifty.registerEffect(new RegisterEffectType("restoreState", "de.lessvoid.nifty.effects.impl.RestoreState"));
+    nifty.registerEffect(new RegisterEffectType("saveState", "de.lessvoid.nifty.effects.impl.SaveState"));
+    nifty.registerEffect(new RegisterEffectType("shake", "de.lessvoid.nifty.effects.impl.Shake"));
+    nifty.registerEffect(new RegisterEffectType("show", "de.lessvoid.nifty.effects.impl.Show"));
+    nifty.registerEffect(new RegisterEffectType("textColor", "de.lessvoid.nifty.effects.impl.TextColor"));
+    nifty.registerEffect(new RegisterEffectType("textSize", "de.lessvoid.nifty.effects.impl.TextSize"));
+    nifty.registerEffect(new RegisterEffectType("textSizePulsate", "de.lessvoid.nifty.effects.impl.TextSizePulsate"));
+    nifty.registerEffect(new RegisterEffectType("updateScrollpanelPositionToDisplayElement", "de.lessvoid.nifty.effects.impl.UpdateScrollpanelPositionToDisplayElement"));    
   }
 }

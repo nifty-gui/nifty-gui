@@ -23,7 +23,7 @@ public class ImageOverlayPulsate implements EffectImpl {
   private Pulsator pulsater;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
-    image = nifty.getRenderDevice().createImage(parameter.getProperty("filename"), true);
+    image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), true);
     String subImageSizeMode = parameter.getProperty("imageMode", null);
     if (subImageSizeMode != null) {
       image.setImageMode(NiftyImageMode.valueOf(subImageSizeMode));

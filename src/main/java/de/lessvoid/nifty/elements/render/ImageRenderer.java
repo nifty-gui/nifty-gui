@@ -40,8 +40,8 @@ public class ImageRenderer implements ElementRenderer {
           image,
           element.getX() + inset,
           element.getY() + inset,
-          element.getWidth() - inset*2,
-          element.getHeight() - inset*2);
+          element.getWidth() - inset * 2,
+          element.getHeight() - inset * 2);
     }
   }
 

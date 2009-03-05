@@ -15,6 +15,9 @@ public class NullTime implements Interpolator {
   public void initialize(final Properties parameter) {
   }
 
+  public void start() {
+  }
+
   /**
    * get a new value.
    * @param lengthParameter max length of effect in ms

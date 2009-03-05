@@ -20,7 +20,7 @@ import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
-import de.lessvoid.nifty.loader.xpp3.elements.ElementType;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -29,6 +29,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.xml.tools.MethodInvoker;
 
 /**
  * The Element.
@@ -205,7 +206,8 @@ public class Element {
       final Element newParent,
       final FocusHandler newFocusHandler,
       final boolean newVisibleToMouseEvents,
-      final TimeProvider newTimeProvider, final ElementRenderer ... newElementRenderer) {
+      final TimeProvider newTimeProvider,
+      final ElementRenderer ... newElementRenderer) {
     initialize(
         newNifty,
         newElementType,
@@ -311,7 +313,7 @@ public class Element {
    */
   public String getElementStateString(final String offset) {
     String pos =
-      " style [" + getElementType().getAttributes().getStyle() + "], state [" + getState() + "],"
+      " style [" + getElementType().getAttributes().get("style") + "], state [" + getState() + "],"
       + " position [" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + "], constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
       + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", "
       + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", "
@@ -547,11 +549,19 @@ public class Element {
   /**
    * reset all effects.
    */
-  public final void resetEffects() {
+  public void resetEffects() {
     mouseDown = false;
     effectManager.reset();
     for (Element w : elements) {
       w.resetEffects();
+    }
+  }
+
+  public void resetSingleEffect(final EffectEventId effectEventId) {
+    mouseDown = false;
+    effectManager.resetSingleEffect(effectEventId);
+    for (Element w : elements) {
+      w.resetSingleEffect(effectEventId);
     }
   }
 
@@ -650,7 +660,7 @@ public class Element {
   public final void registerEffect(
       final EffectEventId theId,
       final Effect e) {
-    log.fine("register: " + theId.toString() + "(" + e.getStateString() + ") for Element: " + this.getId());
+    log.fine("[" + this.getId() + "] register: " + theId.toString() + "(" + e.getStateString() + ")");
     effectManager.registerEffect(theId, e);
   }
 
@@ -660,16 +670,12 @@ public class Element {
    * @param effectEndNotiy the EffectEndNotify event we should activate
    */
   public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
-
     if (effectEventId == EffectEventId.onStartScreen) {
       done = false;
     }
-
     if (effectEventId == EffectEventId.onEndScreen) {
-//      stopEffect(EffectEventId.onHover);
       done = true;
     }
-
     // whenever the effect ends we forward to this event
     // that checks first, if all child elements are finished
     // and when yes forwards to the actual effectEndNotify event.
@@ -766,12 +772,25 @@ public class Element {
       return;
     }
 
+    // stop any onHide effects when a new onShow effect is about to be started
+    if (isEffectActive(EffectEventId.onHide)) {
+      resetSingleEffect(EffectEventId.onHide);
+    }
+
     // show
     internalShow();
     startEffect(EffectEventId.onShow, new EndNotify() {
       public void perform() {
       }
     });
+  }
+
+  public void setVisible(final boolean visibleParam) {
+    if (visibleParam) {
+      show();
+    } else {
+      hide();
+    }
   }
 
   private void internalShow() {
@@ -793,6 +812,11 @@ public class Element {
     // don't hide if hide is still in progress
     if (isEffectActive(EffectEventId.onHide)) {
       return;
+    }
+
+    // stop any onShow effects when a new onHide effect is about to be started
+    if (isEffectActive(EffectEventId.onShow)) {
+      resetSingleEffect(EffectEventId.onShow);
     }
 
     // start effect and shizzle
@@ -920,6 +944,7 @@ public class Element {
         setMouseDown(true, eventTime);
         if (focusable) {
           focusHandler.requestExclusiveMouseFocus(this);
+          focusHandler.setKeyFocus(this);
         }
         if (onClick(mouseEvent)) {
           return true;
@@ -1115,16 +1140,16 @@ public class Element {
   public void onStartScreen(final Screen newScreen) {
     screen = newScreen;
 
+    for (Element e : elements) {
+      e.onStartScreen(newScreen);
+    }
+
     if (focusable) {
       focusHandler.addElement(this);
     }
 
     if (attachedInputControl != null) {
       attachedInputControl.onStartScreen(screen);
-    }
-
-    for (Element e : elements) {
-      e.onStartScreen(newScreen);
     }
   }
 
@@ -1176,10 +1201,6 @@ public class Element {
     if (nifty != null && nifty.getCurrentScreen() != null) {
       if (focusable) {
         focusHandler.setKeyFocus(this);
-      }
-    } else {
-      for (Element element : elements) {
-        element.setFocus();
       }
     }
   }
@@ -1319,7 +1340,7 @@ public class Element {
    * @param newStyle new style to set
    */
   public void setStyle(final String newStyle) {
-    elementType.applyStyle(this, screen, newStyle);
+    // elementType.applyStyle(this, screen, newStyle, screen.getScreenController());
   }
 
   /**

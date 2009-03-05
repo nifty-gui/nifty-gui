@@ -117,4 +117,18 @@ public class HorizontalLayoutTest extends TestCase {
     assertEquals( 160, right.getBox().getX() );
     assertEquals( 480, right.getBox().getWidth() );
   }
+
+  public void testLayoutWithMixedFixedAndPercentage() throws Exception {
+    left.getBoxConstraints().setWidth( new SizeValue( "40px" ));
+    right.getBoxConstraints().setWidth( new SizeValue( "*" ));
+
+    layout.layoutElements( rootPanel, elements );
+    
+    assertEquals( 0, left.getBox().getX() );
+    assertEquals( 40, left.getBox().getWidth() );
+
+    assertEquals( 40, right.getBox().getX() );
+    assertEquals( 600, right.getBox().getWidth() );
+  }
+
 }

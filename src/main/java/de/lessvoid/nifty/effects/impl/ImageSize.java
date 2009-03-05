@@ -36,13 +36,14 @@ public class ImageSize implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
+    float scale = 1.0f;
     if (falloff == null) {
       float t = normalizedTime;
-      r.setImageScale(startSize + t * (endSize - startSize));
+      scale = startSize + t * (endSize - startSize);
     } else {
-      float scale = 1.0f + falloff.getFalloffValue() * imageSize.getValue(1.0f);
-      r.setImageScale(scale);
+      scale = 1.0f + falloff.getFalloffValue() * imageSize.getValue(1.0f);
     }
+    r.setImageScale(scale);
   }
 
   public void deactivate() {

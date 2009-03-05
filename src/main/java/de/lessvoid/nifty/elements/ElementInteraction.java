@@ -2,6 +2,7 @@ package de.lessvoid.nifty.elements;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
+import de.lessvoid.xml.tools.MethodInvoker;
 
 /**
  * All ElementInteraction is handled in here.

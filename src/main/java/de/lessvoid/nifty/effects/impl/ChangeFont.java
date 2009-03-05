@@ -17,7 +17,7 @@ public class ChangeFont implements EffectImpl {
   private RenderFont font;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
-    font = nifty.getRenderDevice().createFont(parameter.getProperty("font"));
+    font = nifty.getRenderEngine().createFont(parameter.getProperty("font"));
   }
 
   public void execute(

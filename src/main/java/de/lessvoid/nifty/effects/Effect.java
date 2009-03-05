@@ -5,6 +5,7 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
 
@@ -16,7 +17,6 @@ import de.lessvoid.nifty.tools.time.TimeInterpolator;
  * @author void
  */
 public class Effect {
-
   private EffectEventId effectEventId;
   private boolean active;
   private Element element;
@@ -32,6 +32,7 @@ public class Effect {
   private boolean hoverEffect;
   private boolean infiniteEffect;
   private Falloff falloff;
+  private EffectEvents effectEvents;
 
   public Effect(
       final Nifty niftyParam,
@@ -51,6 +52,7 @@ public class Effect {
     effectEventId = effectEventIdParam;
     hoverEffect = false;
     infiniteEffect = false;
+    effectEvents = new EffectEvents();
   }
 
   public void enableHover(final Falloff falloffParameter) {
@@ -73,12 +75,14 @@ public class Effect {
       final Element elementParam,
       final EffectImpl effectImplParam,
       final Properties parameterParam,
-      final TimeProvider timeParam) {
+      final TimeProvider timeParam,
+      final ScreenController screenController) {
     effectImpl = effectImplParam;
     element = elementParam;
     parameter = parameterParam;
     parameter.put("effectEventId", effectEventId);
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
+    effectEvents.init(screenController, parameter);
   }
 
   /**
@@ -94,7 +98,7 @@ public class Effect {
    * update effect.
    */
   public void update() {
-    active = timeInterpolator.update();
+    setActive(timeInterpolator.update());
   }
 
   /**
@@ -122,10 +126,16 @@ public class Effect {
    * @param newActive new active state
    */
   public void setActive(final boolean newActive) {
+    boolean ended = false;
     if (this.active && !newActive) {
       effectImpl.deactivate();
+      ended = true;
     }
     this.active = newActive;
+
+    if (ended) {
+      effectEvents.onEndEffect();
+    }
   }
 
   /**

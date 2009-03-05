@@ -176,9 +176,7 @@ public class BoxConstraints {
    * Set a new horizontal align.
    * @param newHorizontalAlign the new horizontal align
    */
-  public final void setHorizontalAlign(
-      final HorizontalAlign newHorizontalAlign
-      ) {
+  public final void setHorizontalAlign(final HorizontalAlign newHorizontalAlign) {
     this.horizontalAlign = newHorizontalAlign;
   }
 

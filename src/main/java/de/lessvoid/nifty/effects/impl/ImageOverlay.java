@@ -19,7 +19,7 @@ public class ImageOverlay implements EffectImpl {
   private SizeValue inset;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
-    image = nifty.getRenderDevice().createImage(parameter.getProperty("filename"), false);
+    image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
     String imageMode = parameter.getProperty("imageMode", null);
     if (imageMode != null) {
       image.setImageMode(NiftyImageMode.valueOf(imageMode));

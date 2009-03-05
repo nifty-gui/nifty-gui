@@ -7,23 +7,21 @@ import de.lessvoid.nifty.Nifty;
  * @author void
  */
 public interface ScreenController {
-
   /**
    * Bind this ScreenController to a screen. This happens
-   * when the Screen got the onStartScreen() method.
+   * right before the onStartScreen STARTED.
    * @param nifty nifty
    * @param screen screen
    */
   void bind(Nifty nifty, Screen screen);
 
   /**
-   * called when all start effects are ended and the screen
-   * is ready for interactive manipulation.
+   * called right after the onStartScreen event ENDED.
    */
   void onStartScreen();
 
   /**
-   * called when the onEndScreen effects ended and this screen is done.
+   * called right after the onEndScreen event ENDED.
    */
   void onEndScreen();
 }

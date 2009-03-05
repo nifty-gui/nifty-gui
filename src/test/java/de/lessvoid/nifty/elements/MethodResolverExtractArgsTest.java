@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.elements;
 
 import junit.framework.TestCase;
-import de.lessvoid.nifty.elements.tools.MethodResolver;
+import de.lessvoid.xml.tools.MethodResolver;
 
 public class MethodResolverExtractArgsTest extends TestCase {
 

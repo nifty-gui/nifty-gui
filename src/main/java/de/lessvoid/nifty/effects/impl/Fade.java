@@ -24,7 +24,7 @@ public class Fade implements EffectImpl {
     if (parameter.getProperty("startColor") != null) {
       start = new Alpha(new Color(parameter.getProperty("startColor", "#000000ff")).getAlpha());
     }
-    if (parameter.getProperty("endColor") != null ) {
+    if (parameter.getProperty("endColor") != null) {
       end = new Alpha(new Color(parameter.getProperty("endColor", "#ffffffff")).getAlpha());
     }
     if (parameter.getProperty("start") != null) {

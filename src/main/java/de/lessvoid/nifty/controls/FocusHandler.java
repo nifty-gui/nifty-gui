@@ -251,4 +251,13 @@ public class FocusHandler {
   public boolean hasAnyElementTheKeyboardFocus() {
     return keyboardFocusElement != null;
   }
+
+  public Element findElement(final String defaultFocusElementId) {
+    for (Element element : entries) {
+      if (defaultFocusElementId.equals(element.getId())) {
+        return element;
+      }
+    }
+    return null;
+  }
 }

@@ -42,7 +42,7 @@ public class EffectManager {
     effectProcessor.put(EffectEventId.onActive, new EffectProcessor(true));
     effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onShow, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onHide, new EffectProcessor(false));
+    effectProcessor.put(EffectEventId.onHide, new EffectProcessor(true));
 
     effectProcessor.get(EffectEventId.onHover).setHoverEffect();
   }
@@ -160,17 +160,21 @@ public class EffectManager {
   /**
    * reset all effects.
    */
-  public final void reset() {
+  public void reset() {
 	// onHover should stay active and is not reset
 	// onActive should stay active and is not reset
 	// onFocus should stay active and is not reset
   // onLostFocus should stay active and is not reset
+  // onClick should stay active and is not reset
     effectProcessor.get(EffectEventId.onStartScreen).reset();
     effectProcessor.get(EffectEventId.onEndScreen).reset();
-    //effectProcessor.get(EffectEventId.onClick).reset();
     effectProcessor.get(EffectEventId.onShow).reset();
     effectProcessor.get(EffectEventId.onHide).reset();
     effectProcessor.get(EffectEventId.onCustom).reset();
+  }
+
+  public void resetSingleEffect(final EffectEventId effectEventId) {
+    effectProcessor.get(effectEventId).reset();
   }
 
   /**

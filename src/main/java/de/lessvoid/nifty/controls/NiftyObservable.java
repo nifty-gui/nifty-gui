@@ -17,5 +17,4 @@ public class NiftyObservable extends Observable {
   public synchronized void setChanged() {
     super.setChanged();
   }
-  
 }

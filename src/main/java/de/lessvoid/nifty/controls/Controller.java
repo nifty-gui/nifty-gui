@@ -6,8 +6,8 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * Controller.

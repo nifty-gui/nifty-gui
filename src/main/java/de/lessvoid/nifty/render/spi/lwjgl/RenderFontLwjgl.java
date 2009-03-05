@@ -18,7 +18,7 @@ public class RenderFontLwjgl implements RenderFont {
    * Initialize the font.
    * @param name font filename
    */
-  public RenderFontLwjgl(final RenderTools renderToolsParam, final String name, RenderDevice device) {
+  public RenderFontLwjgl(final RenderTools renderToolsParam, final String name, final RenderDevice device) {
     renderTools = renderToolsParam;
     font = new Font(device);
     font.init(name);

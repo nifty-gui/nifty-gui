@@ -9,6 +9,7 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.StringHelper;
 
 /**
  * NiftyDebugConsole can be used to output information for a screen on a console.
@@ -35,7 +36,7 @@ public class NiftyDebugConsole {
    * Create new console.
  * @param RenderDevice as specified by the implementation
    */
-  public NiftyDebugConsole(RenderDevice device) {
+  public NiftyDebugConsole(final RenderDevice device) {
     this.console = new Console(device, CONSOLE_MAX_LINES, true);
   }
 
@@ -64,15 +65,13 @@ public class NiftyDebugConsole {
     console.output(colorString(0xff, 0xff, 0xff));
     console.output("*[" + screen.getScreenId() + "]");
 
-    // render all layers
     for (Element layer : screen.getLayerElements()) {
-      layer.render(theRenderDevice);
       String layerType = " +";
       if (!layer.isVisible()) {
         layerType = " -";
       }
       String offsetString = layerType + getIdText(layer);
-      console.output(offsetString + "\n" + whitespace(layerType.length()) + layer.getElementStateString(whitespace(layerType.length())));
+      console.output(offsetString + "\n" + StringHelper.whitespace(layerType.length()) + layer.getElementStateString(StringHelper.whitespace(layerType.length())));
       outputElement(layer, "   ");
     }
 
@@ -112,7 +111,6 @@ public class NiftyDebugConsole {
 
     // render all layers
     for (Element layer : screen.getLayerElements()) {
-      layer.render(theRenderDevice);
       console.output(" +" + getIdText(layer) + " => " + outputEffects(layer, "      "));
       outputEffect(layer, "    ");
     }
@@ -132,8 +130,8 @@ public class NiftyDebugConsole {
   private void outputElement(final Element w, final String offset) {
     for (Element ww : w.getElements()) {
       String offsetString = offset + colorString(255, 255, 0) + getIdText(ww) + " " + ww.getElementType().getClass().getSimpleName() 
-      + " childLayout [" + ww.getElementType().getAttributes().getChildLayoutType() + "]" + colorString(255, 255, 255);  
-      console.output(offsetString + "\n" + whitespace(offset.length()) + ww.getElementStateString(whitespace(offset.length())));
+      + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]" + colorString(255, 255, 255);  
+      console.output(offsetString + "\n" + StringHelper.whitespace(offset.length()) + ww.getElementStateString(StringHelper.whitespace(offset.length())));
       outputElement(ww, offset + " ");
     }
   }
@@ -143,19 +141,6 @@ public class NiftyDebugConsole {
       console.output(offset + getIdText(ww) + outputEffects(ww, offset));
       outputEffect(ww, offset + "  ");
     }
-  }
-
-  /**
-   * output length whitespaces.
-   * @param length number of whitespaces
-   * @return string with whitespaces length times.
-   */
-  private String whitespace(final int length) {
-    StringBuffer b = new StringBuffer();
-    for (int i = 0; i < length; i++) {
-      b.append(" ");
-    }
-    return b.toString();
   }
 
   /**
@@ -189,5 +174,4 @@ public class NiftyDebugConsole {
   public void setOutputElements(final boolean outputElements) {
     this.outputElements = outputElements;
   }
-
 }

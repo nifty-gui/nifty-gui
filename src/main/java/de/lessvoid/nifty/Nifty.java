@@ -12,24 +12,27 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.util.ResourceLoader;
 
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEventCreator;
-import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
-import de.lessvoid.nifty.loader.xpp3.Attributes;
-import de.lessvoid.nifty.loader.xpp3.NiftyLoader;
-import de.lessvoid.nifty.loader.xpp3.elements.ControlType;
-import de.lessvoid.nifty.loader.xpp3.elements.PopupType;
-import de.lessvoid.nifty.loader.xpp3.elements.helper.StyleHandler;
-import de.lessvoid.nifty.loader.xpp3.processor.helper.TypeContext;
+import de.lessvoid.nifty.layout.LayoutPart;
+import de.lessvoid.nifty.loaderv2.NiftyFactory;
+import de.lessvoid.nifty.loaderv2.NiftyLoader;
+import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
+import de.lessvoid.nifty.loaderv2.types.NiftyType;
+import de.lessvoid.nifty.loaderv2.types.PopupType;
+import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
+import de.lessvoid.nifty.loaderv2.types.StyleType;
+import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolverDefault;
+import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
+import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverControlDefinintion;
+import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverDefault;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
 import de.lessvoid.nifty.render.spi.RenderDevice;
-import de.lessvoid.nifty.screen.NullScreenController;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
@@ -40,115 +43,32 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class Nifty {
-
-  /**
-   * The logger.
-   */
   private Logger log = Logger.getLogger(Nifty.class.getName());
-
-  /**
-   * RenderDevice.
-   */
-  private NiftyRenderEngine renderDevice;
-
-  /**
-   * SoundSystem.
-   */
+  private NiftyRenderEngine renderEngine;
   private SoundSystem soundSystem;
-
-  /**
-   * All screens with Id of screen as the key.
-   */
   private Map < String, Screen > screens = new Hashtable < String, Screen >();
-
-  /**
-   * All popups with Id as the key.
-   */
   private Map < String, PopupType > popups = new Hashtable < String, PopupType >();
   private Map < String, Element > activePopups = new Hashtable < String, Element >();
-
-  /**
-   * The current screen.
-   */
+  private Map < String, StyleType > styles = new Hashtable < String, StyleType >();
+  private Map < String, ControlDefinitionType > controlDefintions = new Hashtable < String, ControlDefinitionType >();
+  private Map < String, RegisterEffectType > registeredEffects = new Hashtable < String, RegisterEffectType >();
   private Screen currentScreen;
-
-  /**
-   * The current xml file loaded.
-   */
   private String currentLoaded;
-
-  /**
-   * When everything is done exit is true.
-   */
   private boolean exit;
-
-  /**
-   * console for debugging purpose.
-   * @param newRenderDevice RenderDevice
-   * @param options options
-   */
   private NiftyDebugConsole console;
-
-  /**
-   * The TimeProvider to use.
-   */
   private TimeProvider timeProvider;
-
-  /**
-   * store the RemovePopUp id we need to remove.
-   */
   private List < RemovePopUp > removePopupList = new ArrayList < RemovePopUp >();
-
-  /**
-   * nifty loader.
-   */
-  private NiftyLoader loader = new NiftyLoader();
-
-  /**
-   * these controls need to be added.
-   */
+  private NiftyLoader loader;
   private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
-
-  /**
-   * these elements need to be removed.
-   */
   private List < ElementToRemove > elementsToRemove = new ArrayList < ElementToRemove >();
-
-  /**
-   * use debug console.
-   */
   private boolean useDebugConsole;
-
-  /**
-   * KeyboardInputEventCreator.
-   */
   private KeyboardInputEventCreator inputEventCreator;
-
-  /**
-   * MouseInputEventQueue.
-   */
   private MouseInputEventQueue mouseInputEventQueue;
-
-  /**
-   * collection of registered ScreenController instances.
-   */
   private Collection < ScreenController > registeredScreenControllers = new ArrayList < ScreenController >();
-
-  /**
-   * last x position of mouse.
-   */
   private int lastMouseX;
-
-  /**
-   * last y position of mouse.
-   */
   private int lastMouseY;
-
   private String alternateKeyForNextLoadXml;
-
-  public void setAlternateKeyForNextLoadXml(final String alternateKeyForNextLoadXmlParam) {
-    alternateKeyForNextLoadXml = alternateKeyForNextLoadXmlParam;
-  }
+  private long lastTime;
 
   /**
    * Create nifty for the given RenderDevice and TimeProvider.
@@ -188,13 +108,27 @@ public class Nifty {
       final NiftyRenderEngine newRenderDevice,
       final SoundSystem newSoundSystem,
       final TimeProvider newTimeProvider) {
-    this.renderDevice = newRenderDevice;
+    this.renderEngine = newRenderDevice;
     this.soundSystem = newSoundSystem;
     this.timeProvider = newTimeProvider;
     this.exit = false;
     this.currentLoaded = null;
     this.inputEventCreator = new KeyboardInputEventCreator();
     this.mouseInputEventQueue = new MouseInputEventQueue();
+    this.lastTime = timeProvider.getMsTime();
+
+    try {
+      loader = new NiftyLoader();
+      loader.registerSchema("nifty.nxs", ResourceLoader.getResourceAsStream("nifty.nxs"));
+      loader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
+      loader.registerSchema("nifty-controls.nxs", ResourceLoader.getResourceAsStream("nifty-controls.nxs"));
+    } catch (Exception e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  public void setAlternateKeyForNextLoadXml(final String alternateKeyForNextLoadXmlParam) {
+    alternateKeyForNextLoadXml = alternateKeyForNextLoadXmlParam;
   }
 
   /**
@@ -225,7 +159,7 @@ public class Nifty {
    */
   public boolean render(final boolean clearScreen) {
     if (clearScreen) {
-      renderDevice.clear();
+      renderEngine.clear();
     }
 
     if (currentScreen != null) {
@@ -236,18 +170,16 @@ public class Nifty {
           mouseInputEventQueue.remove();
         }
       }
-      
-      if (currentScreen != null) {
-        currentScreen.renderLayers(renderDevice);
 
-        if (useDebugConsole) {
-          console.render(this, currentScreen, renderDevice);
-        }
+      currentScreen.renderLayers(renderEngine);
+
+      if (useDebugConsole) {
+        console.render(this, currentScreen, renderEngine);
       }
     }
 
     if (exit) {
-      renderDevice.clear();
+      renderEngine.clear();
     }
 
     if (!removePopupList.isEmpty()) {
@@ -265,14 +197,22 @@ public class Nifty {
 
     addControls();
     removeElements();
+
+    long current = timeProvider.getMsTime();
+    soundSystem.update((int) (current - lastTime));
+    lastTime = current;
+
     return exit;
   }
 
   public void addControls() {
     if (!controlsToAdd.isEmpty()) {
       for (ControlToAdd controlToAdd : controlsToAdd) {
-        Element newControl = controlToAdd.createControl();
-        controlToAdd.startControl(newControl);
+        try {
+          controlToAdd.startControl(controlToAdd.createControl());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
       controlsToAdd.clear();
     }
@@ -281,7 +221,11 @@ public class Nifty {
   public void addControlsWithoutStartScreen() {
     if (!controlsToAdd.isEmpty()) {
       for (ControlToAdd controlToAdd : controlsToAdd) {
-        controlToAdd.createControl();
+        try {
+          controlToAdd.createControl();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
       controlsToAdd.clear();
     }
@@ -362,7 +306,15 @@ public class Nifty {
    */
   void loadFromFile(final String filename) {
     try {
-      loader.loadXml(ResourceLoader.getResourceAsStream(filename), this, screens, timeProvider);
+      long start = timeProvider.getMsTime();
+      NiftyType niftyType = loader.loadNiftyXml(
+          "nifty.nxs",
+          ResourceLoader.getResourceAsStream(filename),
+          this,
+          timeProvider);
+      niftyType.create(this, timeProvider);
+      long end = timeProvider.getMsTime();
+      log.info("loadFromFile took [" + (end - start) + "]");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -372,9 +324,17 @@ public class Nifty {
    * load from the given file.
    * @param stream stream to load
    */
-  private void loadFromStream(final InputStream stream) {
+  void loadFromStream(final InputStream stream) {
     try {
-      loader.loadXml(stream, this, screens, timeProvider);
+      long start = timeProvider.getMsTime();
+      NiftyType niftyType = loader.loadNiftyXml(
+          "nifty.nxs",
+          stream,
+          this,
+          timeProvider);
+      niftyType.create(this, timeProvider);
+      long end = timeProvider.getMsTime();
+      log.info("loadFromStream took [" + (end - start) + "]");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -504,8 +464,8 @@ public class Nifty {
    * Return the RenderDevice.
    * @return RenderDevice
    */
-  public NiftyRenderEngine getRenderDevice() {
-    return renderDevice;
+  public NiftyRenderEngine getRenderEngine() {
+    return renderEngine;
   }
 
   /**
@@ -536,7 +496,7 @@ public class Nifty {
    * @param popup popup
    */
   public void registerPopup(final PopupType popup) {
-    popups.put(popup.getAttributes().getId(), popup);
+    popups.put(popup.getAttributes().get("id"), popup);
   }
 
   /**
@@ -554,33 +514,17 @@ public class Nifty {
   }
 
   private Element createPopupFromType(final PopupType popupType) {
-    NiftyInputControl niftyInputControl = null;
-    Controller controllerInstance = null;
-    if (popupType.hasController()) {
-      controllerInstance = popupType.getControllerInstance(this);
-      if (controllerInstance != null) {
-        niftyInputControl = new NiftyInputControl(controllerInstance, new DefaultInputMapping());
-      }
-    }
-    log.fine("createPopupFromType: " + controllerInstance + ", " + niftyInputControl);
-    Element popupElement = popupType.createElement(
+    Screen screen = getCurrentScreen();
+    LayoutPart layerLayout = NiftyFactory.createRootLayerLayoutPart(this);
+    return popupType.create(
+        screen.getRootElement(),
         this,
-        getCurrentScreen(),
-        getLoader().getRegisteredEffects(),
-        getLoader().getRegisteredControls(),
-        getStyleHandler(),
-        timeProvider,
-        niftyInputControl,
-        new NullScreenController());
-    if (controllerInstance != null) {
-      controllerInstance.bind(
-          this,
-          popupElement,
-          null,
-          null,
-          new Attributes());
-    }
-    return popupElement;
+        screen,
+        layerLayout,
+        new StyleResolverControlDefinintion(getDefaultStyleResolver(), popupType.getAttributes().get("style")),
+        new ParameterResolverDefault(),
+        popupType.getAttributes(),
+        null);
   }
 
   /**
@@ -633,7 +577,6 @@ public class Nifty {
    * @param id id of control
    * @param style style
    * @param focusable focusable
-   */
   public void addControl(
       final Screen screen,
       final Element parent,
@@ -646,42 +589,28 @@ public class Nifty {
         new ControlToAdd(
             screen, parent, controlName, id, style, focusable, attributes));
   }
+   */
+
+  public void addControl(
+      final Screen screen,
+      final Element popup,
+      final StandardControl standardControl) {
+    controlsToAdd.add(new ControlToAdd(screen, popup, standardControl));
+  }
 
   /**
    * ControlToAdd helper class.
    * @author void
    */
   private class ControlToAdd {
-    /**
-     * screen.
-     */
     private Screen screen;
-
-    /**
-     * parent element.
-     */
     private Element parent;
-
-    /**
-     * control name.
-     */
+    private StandardControl control;
+    /*
     private String controlName;
-
-    /**
-     * control id.
-     */
     private String controlId;
-
-    /**
-     * current style.
-     */
     private String style;
-
-    /**
-     * focusable.
-     */
     private Boolean focusable;
-
     private Attributes attr;
 
     public ControlToAdd(
@@ -703,36 +632,24 @@ public class Nifty {
         attr = new Attributes();
       }
     }
+*/
+    public ControlToAdd(
+        final Screen screenParam,
+        final Element parentParam,
+        final StandardControl standardControl) {
+      screen = screenParam;
+      parent = parentParam;
+      control = standardControl;
+    }
+
+    public Element createControl() throws Exception {
+      return control.createControl(Nifty.this, screen, parent);
+    }
 
     public void startControl(final Element newControl) {
       newControl.startEffect(EffectEventId.onStartScreen);
       newControl.startEffect(EffectEventId.onActive);
       newControl.onStartScreen(screen);
-    }
-
-    /**
-     * create the control.
-     */
-    public Element createControl() {
-      TypeContext typeContext = createTypeContext();
-
-      attr.overwriteAttribute("id", controlId);
-      if (style != null) {
-        attr.overwriteAttribute("style", style);
-      }
-
-      attr.set("name", controlName);
-      ControlType controlType = typeContext.createControlType(attr);
-      Element newControl = controlType.createElement(
-          parent,
-          screen,
-          null,
-          screen.getScreenController());
-      if (focusable != null) {
-        newControl.setFocusable(focusable);
-      }
-      screen.layoutLayers();
-      return newControl;
     }
   }
 
@@ -858,9 +775,9 @@ public class Nifty {
    * Get StyleHandler.
    * @return StyleHandler
    */
-  public StyleHandler getStyleHandler() {
-    return loader.getStyleHandler();
-  }
+//  public StyleHandler getStyleHandler() {
+//    return null; // loader.getStyleHandler();
+//  }
 
   /**
    * Get Loader.
@@ -874,16 +791,19 @@ public class Nifty {
     return timeProvider;
   }
 
-  public TypeContext createTypeContext() {
-    TypeContext typeContext = new TypeContext(
-        loader.getStyleHandler(),
-        this,
-        loader.getRegisteredEffects(),
-        loader.getRegisteredControls(),
-        timeProvider
-        );
-    return typeContext;
-  }
+//  public TypeContext createTypeContext() {
+//    /*
+//    TypeContext typeContext = new TypeContext(
+//        loader.getStyleHandler(),
+//        this,
+//        loader.getRegisteredEffects(),
+//        loader.getRegisteredControls(),
+//        timeProvider
+//        );
+//    return typeContext;
+//    */
+//    return null;
+//  }
 
   public class RemovePopUp {
     private String removePopupId;
@@ -900,5 +820,39 @@ public class Nifty {
         closeNotify.perform();
       }
     }
+  }
+
+  public void addScreen(final String id, final Screen screen) {
+    screens.put(id, screen);
+  }
+
+  public void registerStyle(final StyleType style) {
+    styles.put(style.getStyleId(), style);
+  }
+
+  public void registerControlDefintion(final ControlDefinitionType controlDefintion) {
+    controlDefintions.put(controlDefintion.getName(), controlDefintion);
+  }
+
+  public void registerEffect(final RegisterEffectType registerEffectType) {
+    registeredEffects.put(registerEffectType.getName(), registerEffectType);
+  }
+
+  public ControlDefinitionType resolveControlDefinition(final String name) {
+    if (name == null) {
+      return null;
+    }
+    return controlDefintions.get(name);
+  }
+
+  public RegisterEffectType resolveRegisteredEffect(final String name) {
+    if (name == null) {
+      return null;
+    }
+    return registeredEffects.get(name);
+  }
+
+  public StyleResolver getDefaultStyleResolver() {
+    return new StyleResolverDefault(styles);
   }
 }

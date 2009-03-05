@@ -22,35 +22,11 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class Screen {
-
-  /**
-   * the logger.
-   */
-  private static Logger log = Logger.getLogger(Screen.class.getName());
-
-  /**
-   * screen id of this screen.
-   */
   private String screenId;
-
-  /**
-   * screen controller that controls this screen.
-   */
   private ScreenController screenController = new NullScreenController();
 
-  /**
-   * layer elements the root elements of all elements in this screen.
-   */
   private ArrayList < Element > layerElements = new ArrayList < Element >();
-
-  /**
-   * layer elements parked to add.
-   */
   private ArrayList < Element > layerElementsToAdd = new ArrayList < Element >();
-
-  /**
-   * layer elements parked to remove.
-   */
   private ArrayList < Element > layerElementsToRemove = new ArrayList < Element >();
 
   /**
@@ -63,80 +39,14 @@ public class Screen {
   private ArrayList < Element > popupElementsToAdd = new ArrayList < Element >();
   private ArrayList < Element > popupElementsToRemove = new ArrayList < Element >();
 
-  /**
-   * The TimeProvder.
-   */
   private TimeProvider timeProvider;
-
-  /**
-   * focus handler.
-   */
   private FocusHandler focusHandler;
-
-  /**
-   * The MouseOverHandler.
-   */
   private MouseOverHandler mouseOverHandler;
-
-  /**
-   * nifty.
-   */
   private Nifty nifty;
-
-  /**
-   * InputMappingWithMapping helper.
-   * @author void
-   */
-  public class InputHandlerWithMapping {
-    /**
-     * Mapping.
-     */
-    private NiftyInputMapping mapping;
-
-    /**
-     * KeyInputHandler.
-     */
-    private KeyInputHandler handler;
-
-    /**
-     * Create InputHandlerWithMapping.
-     * @param newMapping NiftyInputMapping
-     * @param newHandler KeyInputHandler
-     */
-    public InputHandlerWithMapping(
-        final NiftyInputMapping newMapping,
-        final KeyInputHandler newHandler) {
-      mapping = newMapping;
-      handler = newHandler;
-    }
-
-    /**
-     * Process Keyboard InputEvent.
-     * @param inputEvent KeyboardInputEvent
-     * @return event has been processed or not
-     */
-    public boolean process(final KeyboardInputEvent inputEvent) {
-      return handler.keyEvent(mapping.convert(inputEvent));
-    }
-  }
-
-  /**
-   * key input handlers.
-   */
   private List < InputHandlerWithMapping > inputHandlers = new ArrayList < InputHandlerWithMapping >();
-
-  /**
-   * root element.
-   */
   private Element rootElement;
+  private String defaultFocusElementId;
 
-  /**
-   * create new screen instance.
-   * @param newNifty nifty
-   * @param newId new id for the new screen instance.
-   * @param newScreenController the new screen controller for this screen
-   * @param newTimeProvider the TimeProvider we should use
-   */
   public Screen(
       final Nifty newNifty,
       final String newId,
@@ -160,42 +70,22 @@ public class Screen {
     mouseOverHandler = new MouseOverHandler();
   }
 
-  /**
-   * get the screen id.
-   * @return the screen id
-   */
   public final String getScreenId() {
     return screenId;
   }
 
-  /**
-   * get layer elements.
-   * @return the list of elements
-   */
   public final List < Element > getLayerElements() {
     return layerElements;
   }
 
-  /**
-   * add a layer element to this screen.
-   * @param layerElement the layer element to add
-   */
   public void addLayerElement(final Element layerElement) {
     layerElementsToAdd.add(layerElement);
   }
 
-  /**
-   * remove Layer element.
-   * @param layerElement Element to remove
-   */
   public void removeLayerElement(final Element layerElement) {
     layerElementsToRemove.add(layerElement);
   }
 
-  /**
-   * Remove layer.
-   * @param layerId Layer Id to remove
-   */
   public void removeLayerElement(final String layerId) {
     for (Element layer : layerElements) {
       if (layer.getId().equals(layerId)) {
@@ -205,10 +95,6 @@ public class Screen {
     }
   }
 
-  /**
-   * add a popup layer.
-   * @param popup popup
-   */
   public void addPopup(final Element popup, final Element defaultFocusElement) {
     resetLayersMouseDown();
 
@@ -245,18 +131,10 @@ public class Screen {
     addPopupElement(popup);
   }
 
-  /**
-   * Add a Popup Element.
-   * @param popup Popup Element
-   */
   void addPopupElement(final Element popup) {
     popupElementsToAdd.add(popup);
   }
 
-  /**
-   * close popup.
-   * @param popup popup to close
-   */
   public void closePopup(final Element popup) {
     resetLayers();
     removeLayerElement(popup);
@@ -264,77 +142,39 @@ public class Screen {
     focusHandler.popState();
   }
 
-  /**
-   * Popup to remove.
-   * @param popup popup
-   */
   void removePopupElement(final Element popup) {
     popupElementsToRemove.add(popup);
   }
 
-  public class StartScreenEndNotify implements EndNotify {
-    private boolean bind = false;
-
-    public void perform() {
-      if (!bind) {
-        screenController.bind(nifty, Screen.this);
-        bind = true;
-      }
-      screenController.onStartScreen();
-      nifty.getMouseInputEventQueue().reset();
-      setDefaultFocus();
-    }
-
-    public boolean isBind() {
-      return bind;
-    }
-
-    public void bindDone() {
-      bind = true;
-    }
-  }
-
-  /**
-   * start the screen.
-   */
   public final void startScreen() {
     focusHandler.resetFocusElements();
     resetLayers();
     layoutLayers();
 
+    // bind happens right BEFORE the onStartScreen
+    screenController.bind(nifty, Screen.this);
+
+    // onStartScreen
     final StartScreenEndNotify endNotify = new StartScreenEndNotify();
     startLayers(EffectEventId.onStartScreen, endNotify);
 
-    activeEffectStart();
-    nifty.addControls();
-
-    if (!endNotify.isBind()) {
-      screenController.bind(nifty, this);
-      endNotify.bindDone();
-    }
+    // default focus attribute has been set in onStartScreen
+    // event of the elements. so we have to set the default focus
+    // here after the onStartScreen is started.
+    setDefaultFocus();
   }
 
-  /**
-   * end the screen.
-   * @param callback to call when the end screen effect finished.
-   */
   public final void endScreen(final EndNotify callback) {
     resetLayers();
     startLayers(EffectEventId.onEndScreen, callback);
   }
 
-  /**
-   * layout all the layer elements.
-   */
   public void layoutLayers() {
     for (Element w : layerElements) {
       w.layoutElements();
     }
   }
 
-  /**
-   * reset all the layer elements.
-   */
   private void resetLayers() {
     for (Element w : layerElements) {
       w.resetEffects();
@@ -347,39 +187,6 @@ public class Screen {
     }
   }
 
-  private class LocalEndNotify implements EndNotify {
-    private boolean enabled = false;
-    private EffectEventId effectEventId = null;
-    private EndNotify endNotify = null;
-
-    public LocalEndNotify(final EffectEventId effectEventIdParam, final EndNotify endNotifyParam) {
-      effectEventId = effectEventIdParam;
-      endNotify = endNotifyParam;
-    }
-
-    public void enable() {
-      enabled = true;
-    }
-
-    public void perform() {
-      if (enabled) {
-        for (Element w : layerElements) {
-          if (w.isEffectActive(effectEventId)) {
-            return;
-          }
-        }
-        if (endNotify != null) {
-          endNotify.perform();
-        }
-      }
-    }
-  }
-
-  /**
-   * send start screen event to all layer elements.
-   * @param effectEventId the effect type id
-   * @param endNotify stuff to execute when this stuff here ended
-   */
   private void startLayers(final EffectEventId effectEventId, final EndNotify endNotify) {
 
     // create the callback
@@ -399,10 +206,16 @@ public class Screen {
     localEndNotify.perform();
   }
 
-  /**
-   * set default focus.
-   */
   public void setDefaultFocus() {
+    if (defaultFocusElementId != null) {
+      Element defaultFocus = getFocusHandler().findElement(defaultFocusElementId);
+      if (defaultFocus != null) {
+        defaultFocus.setFocus();
+        return;
+      }
+    }
+
+    // fall back to first element
     Element firstFocus = getFocusHandler().getFirstFocusElement();
     if (firstFocus != null) {
       firstFocus.setFocus();
@@ -425,7 +238,6 @@ public class Screen {
    * @param renderDevice the renderDevice to use
    */
   public final void renderLayers(final NiftyRenderEngine renderDevice) {
-    // render all layers
     for (Element layer : layerElements) {
       layer.render(renderDevice);
     }
@@ -462,6 +274,7 @@ public class Screen {
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
       layer.mouseEvent(inputEvent, eventTime);
     }
+
     mouseOverHandler.processMouseOverEvent(rootElement, inputEvent, eventTime);
     return false;
   }
@@ -586,5 +399,89 @@ public class Screen {
     popupElements.removeAll(popupElementsToRemove);
     popupElementsToAdd.clear();
     popupElementsToRemove.clear();
+  }
+
+  public void setDefaultFocusElement(final String defaultFocusElementIdParam) {
+    defaultFocusElementId = defaultFocusElementIdParam;
+  }
+
+  public class StartScreenEndNotify implements EndNotify {
+    public void perform() {
+      Logger.getAnonymousLogger().info("onStartScreen has ended");
+
+      // onStartScreen has ENDED so call the event.
+      screenController.onStartScreen();
+
+      // add dynamic controls
+      nifty.addControls();
+
+      // activate the onActive event right now
+      activeEffectStart();
+    }
+  }
+
+  private class LocalEndNotify implements EndNotify {
+    private boolean enabled = false;
+    private EffectEventId effectEventId = null;
+    private EndNotify endNotify = null;
+
+    public LocalEndNotify(final EffectEventId effectEventIdParam, final EndNotify endNotifyParam) {
+      effectEventId = effectEventIdParam;
+      endNotify = endNotifyParam;
+    }
+
+    public void enable() {
+      enabled = true;
+    }
+
+    public void perform() {
+      if (enabled) {
+        for (Element w : layerElements) {
+          if (w.isEffectActive(effectEventId)) {
+            return;
+          }
+        }
+        if (endNotify != null) {
+          endNotify.perform();
+        }
+      }
+    }
+  }
+
+  /**
+   * InputMappingWithMapping helper.
+   * @author void
+   */
+  public class InputHandlerWithMapping {
+    /**
+     * Mapping.
+     */
+    private NiftyInputMapping mapping;
+
+    /**
+     * KeyInputHandler.
+     */
+    private KeyInputHandler handler;
+
+    /**
+     * Create InputHandlerWithMapping.
+     * @param newMapping NiftyInputMapping
+     * @param newHandler KeyInputHandler
+     */
+    public InputHandlerWithMapping(
+        final NiftyInputMapping newMapping,
+        final KeyInputHandler newHandler) {
+      mapping = newMapping;
+      handler = newHandler;
+    }
+
+    /**
+     * Process Keyboard InputEvent.
+     * @param inputEvent KeyboardInputEvent
+     * @return event has been processed or not
+     */
+    public boolean process(final KeyboardInputEvent inputEvent) {
+      return handler.keyEvent(mapping.convert(inputEvent));
+    }
   }
 }

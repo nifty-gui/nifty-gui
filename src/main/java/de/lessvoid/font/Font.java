@@ -60,7 +60,7 @@ public class Font {
   /**
    * construct the font.
    */
-  public Font(RenderDevice device) {
+  public Font(final RenderDevice device) {
     selectionStart = -1;
     selectionEnd = -1;
     selectionR = 1.0f;
@@ -206,11 +206,6 @@ public class Font {
       final String text,
       final float size,
       final boolean useAlphaTexture) {
-    GL11.glMatrixMode(GL11.GL_PROJECTION);
-      GL11.glPushMatrix();
-      GL11.glLoadIdentity();
-    GL11.glOrtho(0, device.getWidth(), device.getHeight(), 0, -MAX_DISTANCE, MAX_DISTANCE);
-
     GL11.glMatrixMode(GL11.GL_MODELVIEW);
       GL11.glPushMatrix();
       GL11.glLoadIdentity();
@@ -306,11 +301,7 @@ public class Font {
         x += characterWidth;
       }
 
-      GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glPopMatrix();
-
-      GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glPopMatrix();
+      GL11.glPopMatrix();
   }
 
   private boolean isColorBegin(final char current) {

@@ -1,0 +1,8 @@
+<nxs package="de.lessvoid.nifty.loaderv2.types" root="nifty-controls" type="NiftyControlsType">
+  <include filename="nifty.nxs" />
+  <type name="NiftyControlsType">
+    <element name="useControls" type="UseControlsType" occurs="zeroOrMore" />
+    <element name="controlDefinition" type="ControlDefinitionType" occurs="zeroOrMore" />
+    <element name="popup" type="PopupType" occurs="zeroOrMore" />
+  </type>
+</nxs>

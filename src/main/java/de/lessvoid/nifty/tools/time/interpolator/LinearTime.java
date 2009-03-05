@@ -15,6 +15,9 @@ public class LinearTime implements Interpolator {
   public final void initialize(final Properties parameter) {
   }
 
+  public void start() {
+  }
+
   /**
    * get value.
    * @param lengthParam max length in ms

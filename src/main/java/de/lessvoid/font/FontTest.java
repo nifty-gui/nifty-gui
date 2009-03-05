@@ -20,10 +20,11 @@ public class FontTest
   private static void init()
   {
     font= new Font(null);
-    font.init( "verdana-24-shadow.fnt" );
+    font.init( "console.fnt" );
 
     // init 2d
-    GL11.glViewport( 0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
+//    GL11.glViewport( 0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
+    GL11.glViewport( 0, 0, 1000, 700);
 
     GL11.glMatrixMode( GL11.GL_PROJECTION );
       GL11.glLoadIdentity();
@@ -37,8 +38,8 @@ public class FontTest
     GL11.glDisable( GL11.GL_BLEND );
     GL11.glDisable( GL11.GL_CULL_FACE );
 
-    GL11.glEnable( GL11.GL_ALPHA_TEST );
-    GL11.glAlphaFunc( GL11.GL_NOTEQUAL, 0 );
+//    GL11.glEnable( GL11.GL_ALPHA_TEST );
+//    GL11.glAlphaFunc( GL11.GL_NOTEQUAL, 0 );
 
     GL11.glDisable( GL11.GL_LIGHTING );
     GL11.glEnable( GL11.GL_TEXTURE_2D );
@@ -52,20 +53,21 @@ public class FontTest
     GL11.glClearColor( 0.2f, 0.0f, 0.0f, 1.0f );
     GL11.glClear( GL11.GL_COLOR_BUFFER_BIT );
     
+for (int i = 0; i<100; i++) {
     // GL11.glColor3f( (float)Math.random(), (float)Math.random(), (float)Math.random() );
-    GL11.glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    GL11.glColor4f((float) Math.random(), (float) Math.random(), (float) Math.random(), 1.0f);
     font.drawString(
-        100, // (int)(Math.random() * Display.getDisplayMode().getWidth()),
-        100, // (int)(Math.random() * Display.getDisplayMode().getHeight()),
+        (int) (Math.random() * Display.getDisplayMode().getWidth()),
+        (int) (Math.random() * Display.getDisplayMode().getHeight()),
         "Hallo Welt!" );
     
     font.setSelectionStart(2);
     font.setSelectionEnd(4);
     font.renderWithSizeAndColor( 
-        200, // (int)(Math.random() * Display.getDisplayMode().getWidth()),
-        200, // (int)(Math.random() * Display.getDisplayMode().getHeight()),
-        "Hallo Welt!", 1.0f, 0.0f, 1.0f, 0.0f, 0.5f );
-
+        (int)(Math.random() * Display.getDisplayMode().getWidth()),
+        (int)(Math.random() * Display.getDisplayMode().getHeight()),
+        "Hallo Welt!", 2.0f, 0.0f, 1.0f, 0.0f, 0.5f );
+}
   }
   
   

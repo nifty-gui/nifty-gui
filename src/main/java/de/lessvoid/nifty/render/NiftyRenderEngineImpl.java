@@ -138,6 +138,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @return NiftyImage
    */
   public NiftyImage createImage(final String filename, final boolean filterLinear) {
+    if (filename == null) {
+      return null;
+    }
     return new NiftyImage(renderDevice.createImage(filename, filterLinear));
   }
 
@@ -147,6 +150,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @return RenderFont
    */
   public RenderFont createFont(final String filename) {
+    if (filename == null) {
+      return null;
+    }
     if (fontCache.containsKey(filename)) {
       return fontCache.get(filename);
     } else {

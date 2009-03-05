@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.effects.impl;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
@@ -23,6 +24,7 @@ public class Show implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
+    Logger.getAnonymousLogger().info("show [" + targetElement + "]");
     if (targetElement != null) {
       targetElement.show();
     } else {
