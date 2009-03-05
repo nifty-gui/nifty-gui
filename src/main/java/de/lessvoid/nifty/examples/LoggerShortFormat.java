@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
@@ -11,8 +12,7 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
      return
        record.getMillis() + " " +  
        record.getLevel() + " [" +
-       record.getSourceClassName() + ":" +
-       record.getSourceMethodName() + "] " +
+       record.getSourceClassName() + "] " +
        record.getMessage() + "\n";
   }
   
@@ -23,7 +23,10 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
     for (int i = 0; i < handlers.length; i++) {
       if (handlers[i] instanceof ConsoleHandler) {
         ((ConsoleHandler)handlers[i]).setFormatter(new LoggerShortFormat());
+        ((ConsoleHandler)handlers[i]).setLevel(Level.ALL);
       }
     }
+//    Logger.getLogger("de.lessvoid.xml.xpp3.XmlParser").setLevel(Level.ALL);
+    Logger.getLogger("de.lessvoid").setLevel(Level.ALL);
   }
 }

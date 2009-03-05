@@ -23,8 +23,8 @@
           <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
           <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" startDelay="500" inherit="true"/>
         </effect>
-        <panel childLayout="vertical" align="center" valign="center">
-          <panel childLayout="horizontal">
+        <panel id="a" childLayout="vertical" align="center" valign="center">
+          <panel id="b" childLayout="horizontal">
             <label id="dropDownLabel1" text="DropDown 1: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control id="dropDown1" name="dropDownControl" />
           </panel>

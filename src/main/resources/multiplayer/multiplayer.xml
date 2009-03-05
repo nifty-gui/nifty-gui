@@ -27,23 +27,23 @@
   <!-- multiplayerPanel -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <controlDefinition name="multiplayerPanel" controller="de.lessvoid.nifty.examples.multiplayer.MultiplayerPanelControl">
-    <panel style="nifty-panel" align="center" valign="center" width="70%" height="170px" childLayout="center">
+    <panel id="a" style="nifty-panel" align="center" valign="center" width="70%" height="170px" childLayout="center">
       <effect>
         <onStartScreen name="move" direction="left" mode="in" length="250" startDelay="0" inherit="true"/>
         <onEndScreen name="move" direction="right" mode="out" length="250" startDelay="0" inherit="true"/>
       </effect>
-      <panel childLayout="center" width="95%" height="80%" align="center" valign="center">
-        <panel childLayout="vertical" align="center" valign="center">
-          <panel childLayout="horizontal" height="60%">
-            <panel childLayout="vertical" align="left" valign="center">
-              <panel childLayout="horizontal" height="40px">
-                <label text="Name:" align="left" width="25%" textHAlign="left"/>
+      <panel id="aa" childLayout="center" width="95%" height="80%" align="center" valign="center">
+        <panel id="ab" childLayout="vertical" align="center" valign="center">
+          <panel id="ac" childLayout="horizontal" height="60%">
+            <panel id="ad" childLayout="vertical" align="left" valign="center">
+              <panel id="ae" childLayout="horizontal" height="40px">
+                <label id="af" text="Name:" align="left" width="25%" textHAlign="left"/>
                 <control id="name" name="textfield" />
               </panel>
-              <panel childLayout="horizontal" height="4px" />
-              <panel childLayout="horizontal" height="40px">
-                <label text="Difficulty:" width="25%" align="left" textHAlign="left" />
-                <panel childLayout="horizontal" width="75%">
+              <panel id="ag" childLayout="horizontal" height="4px" />
+              <panel id="ah" childLayout="horizontal" height="40px">
+                <label id="ai" text="Difficulty:" width="25%" align="left" textHAlign="left" />
+                <panel id="aj" childLayout="horizontal" width="75%">
                   <label id="easy" text="Easy" style="diffStyle">
                     <interact onClick="setDifficulty(easy)"/>
                   </label>

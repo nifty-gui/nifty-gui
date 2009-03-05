@@ -21,8 +21,8 @@
 
   <style id="thumbStyle">
     <effect>
-      <onShow name="fade" start="#0" end="#f" length="250" />
-      <onHide name="fade" start="#f" end="#0" length="250" />
+      <onShow name="fade" start="#0" end="#f" length="500" />
+      <onHide name="fade" start="#f" end="#0" length="500" />
     </effect>
   </style>
 
@@ -38,7 +38,8 @@
 
   <!-- menu item style -->
   <style id="menu-item" base="menu-font">
-    <attributes align="left" textHAlign="left" color="#cccf" focusable="true"
+    <attributes align="left" textHAlign="left" color="#cccf" width="100%"
+                focusable="true"
                 inputController="de.lessvoid.nifty.controls.MenuItemControl"
                 inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping" />
     <effect>
@@ -51,7 +52,9 @@
       <onFocus name="textSize" startSize="1.0" endSize="1.25" length="150" />
       <onFocus name="playSound" sound="select" />
       <onGetFocus name="updateScrollpanelPositionToDisplayElement" target="menuScrollPanel" oneShot="true" />
-      <onLostFocus name="textSize" startSize="1.25" endSize="1.0" length="150" oneShot="true" />
+      <onGetFocus name="show" targetElement="$targetElement" oneShot="true" />
+      <onLostFocus name="textSize" startSize="1.25" endSize="1.0" length="150" />
+      <onLostFocus name="hide" targetElement="$targetElement" oneShot="true"  />
     </effect>
   </style>
 
@@ -67,7 +70,7 @@
   </style>
 
   <!-- custom scroll panel style so that we can show off the cool overlay blending shizzle -->
-  <style id="special-scrollpanel#scrollpanel">
+  <style id="autoscroll#scrollpanel">
     <attributes />
     <effect overlay="true">
       <onActive name="blendMode" blendMode="multiply" post="true" />
@@ -188,7 +191,7 @@
       <panel childLayout="vertical" align="center" valign="center" width="20%">
         <panel childLayout="horizontal" height="100px" />
         <panel childLayout="horizontal">
-          <image filename="checkbox/checkbox.png" style="my-checkmark">
+          <image id="first" filename="checkbox/checkbox.png">
             <effect>
               <onStartScreen name="imageSize" startSize="2.0" endSize="1.0" length="250" startDelay="6000" />
               <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="6000" />
@@ -220,7 +223,7 @@
         </panel>
         <panel childLayout="horizontal" height="20px" />
         <panel childLayout="horizontal">
-          <image filename="checkbox/checkbox.png"  style="my-checkmark">
+          <image filename="checkbox/checkbox.png" style="my-checkmark">
             <effect>
               <onStartScreen name="imageSize" startSize="2.0" endSize="1.0" length="250" startDelay="10000" />
               <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="10000" />
@@ -275,61 +278,29 @@
             <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" height="100%">
               <panel childLayout="center" width="100%" height="400px" padding="0px,40px,0px,40px">
                 <panel childLayout="vertical" width="100%">
-                  <label id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example">
+                  <label id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
-                    <effect>
-                      <onGetFocus name="show" targetElement="thumbHelloWorld" oneShot="true" />
-                      <onLostFocus name="hide" targetElement="thumbHelloWorld" oneShot="true"  />
-                    </effect>
                   </label>
-                  <label id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example">
+                  <label id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example" targetElement="thumbTextAlign">
                     <interact onClick="textAlign()" onClickAlternateKey="fade" />
-                    <effect>
-                      <onGetFocus name="show" targetElement="thumbTextAlign" oneShot="true" />
-                      <onLostFocus name="hide" targetElement="thumbTextAlign" oneShot="true" />
-                    </effect>
                   </label>
-                  <label id="textfield" text="Textfield" style="menu-item" hintText="Textfield Example">
+                  <label id="textfield" text="Textfield" style="menu-item" hintText="Textfield Example" targetElement="thumbTextField">
                     <interact onClick="textField()"/>
-                    <effect>
-                      <onGetFocus name="show" targetElement="thumbTextField" oneShot="true" />
-                      <onLostFocus name="hide" targetElement="thumbTextField" oneShot="true" />
-                    </effect>
                   </label>
-                  <label id="dropDown" text="Drop Down List" hintText="Drop Down List Example" style="menu-item">
+                  <label id="dropDown" text="Drop Down List" hintText="Drop Down List Example" style="menu-item" targetElement="thumbDropDownList">
                     <interact onClick="dropDown()"/>
-                    <effect>
-                      <onGetFocus name="show" targetElement="thumbDropDownList" oneShot="true" />
-                      <onLostFocus name="hide" targetElement="thumbDropDownList" oneShot="true" />
-                    </effect>
                   </label>
-                  <label id="scrollpanel" text="Scrollpanel" hintText="Scrollpanel Example" style="menu-item">
+                  <label id="scrollpanel" text="Scrollpanel" hintText="Scrollpanel Example" style="menu-item" targetElement="thumbScrollpanel">
                     <interact onClick="scrollpanel()"/>
-                    <effect>
-                      <onGetFocus name="show" targetElement="thumbScrollpanel" oneShot="true" />
-                      <onLostFocus name="hide" targetElement="thumbScrollpanel" oneShot="true" />
-                    </effect>
                   </label>
-                  <label id="multiplayer" text="Avatar &amp; Multiplayer" hintText="Avatar &amp; Multiplayer Example" style="menu-item">
+                  <label id="multiplayer" text="Avatar &amp; Multiplayer" hintText="Avatar &amp; Multiplayer Example" style="menu-item" targetElement="thumbMultiplayer">
                     <interact onClick="multiplayer()"/>
-                    <effect>
-                      <onGetFocus name="show" targetElement="thumbMultiplayer" oneShot="true" />
-                      <onLostFocus name="hide" targetElement="thumbMultiplayer" oneShot="true" />
-                    </effect>
                   </label>
-                  <label id="console" text="Console Example" hintText="Console" style="menu-item">
+                  <label id="console" text="Console Example" hintText="Console" style="menu-item" targetElement="thumbConsole">
                     <interact onClick="console()"/>
-                    <effect>
-                      <onGetFocus name="show" targetElement="thumbConsole" oneShot="true" />
-                      <onLostFocus name="hide" targetElement="thumbConsole" oneShot="true" />
-                    </effect>
                   </label>
-                  <label id="exit" text="Exit" style="menu-item" hintText="Exit">
+                  <label id="exit" text="Exit" style="menu-item" hintText="Exit" targetElement="thumbExit">
                     <interact onClick="exit()"/>
-                    <effect>
-                      <onGetFocus name="show" targetElement="thumbExit" oneShot="true" />
-                      <onLostFocus name="hide" targetElement="thumbExit" oneShot="true" />
-                    </effect>
                   </label>
                 </panel>
               </panel>            
@@ -367,7 +338,7 @@
         </effect>
         </image>
       </panel>
-      <control id="scrollbarPanel" style="special-scrollpanel" name="scrollPanel" horizontal="false" vertical="false" height="75%">
+      <control id="scrollbarPanel" style="autoscroll" name="scrollPanel" horizontal="false" vertical="false" height="75%">
         <panel id="myScrollStuff" childLayout="vertical" width="100%">
           <effect>
             <onCustom name="autoScroll" length="75000" start="0" end="-2750" inherit="true" onEndEffect="scrollEnd()" />

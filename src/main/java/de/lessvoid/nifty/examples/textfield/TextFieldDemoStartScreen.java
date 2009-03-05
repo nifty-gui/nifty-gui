@@ -2,8 +2,6 @@ package de.lessvoid.nifty.examples.textfield;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -31,15 +29,15 @@ public class TextFieldDemoStartScreen implements ScreenController {
       final Screen newScreen) {
     screen = newScreen;
     nifty = newNifty;
-    screen.findElementByName("maxLengthTest").getControl(TextFieldControl.class).setMaxLength(5);
-    screen.findElementByName("name").setFocus();
-    screen.findControl("name", TextFieldControl.class).setCursorPosition(3);
   }
 
   /**
    * just goto the next screen.
    */
   public final void onStartScreen() {
+//    screen.findElementByName("maxLengthTest").getControl(TextFieldControl.class).setMaxLength(5);
+//    screen.findElementByName("name").setFocus();
+//    screen.findControl("name", TextFieldControl.class).setCursorPosition(3);
   }
 
   /**

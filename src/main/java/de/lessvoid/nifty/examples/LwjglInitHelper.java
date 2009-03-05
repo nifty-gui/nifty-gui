@@ -1,11 +1,13 @@
 package de.lessvoid.nifty.examples;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.input.Keyboard;
@@ -158,10 +160,15 @@ public class LwjglInitHelper {
         }
       }
 
+      IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+      GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
+      int viewportWidth = viewportBuffer.get(2);
+      int viewportHeight = viewportBuffer.get(3);
+
 //      GL11.glViewport(0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
       GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GL11.glOrtho(0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight(), 0, -9999, 9999);
+        GL11.glOrtho(0, viewportWidth, viewportHeight, 0, -9999, 9999);
 
       GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
@@ -235,7 +242,7 @@ public class LwjglInitHelper {
 
       // render nifty
       int mouseX = Mouse.getX();
-      int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
+      int mouseY = nifty.getRenderEngine().getHeight() - Mouse.getY();
       if (nifty.render(true, mouseX, mouseY, Mouse.isButtonDown(0))) {
         done = true;
       }

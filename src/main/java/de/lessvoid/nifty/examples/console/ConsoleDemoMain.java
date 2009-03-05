@@ -41,7 +41,6 @@ public final class ConsoleDemoMain {
 
     // render
     LwjglInitHelper.renderLoop(nifty, new RenderLoopCallback() {
-      private int bla = 0;
       public void process() {
       }
     });
