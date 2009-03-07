@@ -13,16 +13,9 @@ import de.lessvoid.nifty.tools.TimeProvider;
  */
 public final class MultiplayerExampleMain {
 
-  /**
-   * Prevent instantiation of this class.
-   */
   private MultiplayerExampleMain() {
   }
 
-  /**
-   * Main method.
-   * @param args arguments
-   */
   public static void main(final String[] args) {
     if (!LwjglInitHelper.initSubSystems("Nifty Multiplayer Example")) {
       System.exit(0);

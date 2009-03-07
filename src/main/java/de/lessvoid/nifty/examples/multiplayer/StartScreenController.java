@@ -1,59 +1,37 @@
 package de.lessvoid.nifty.examples.multiplayer;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dynamic.CreateCustomControl;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
- * ScreenController for Multiplayer.
+ * StartScreenController for Multiplayer.
  * @author void
  */
 public class StartScreenController implements ScreenController {
-
-  /** nifty instance. */
   private Nifty nifty;
-
-  /** screen. */
   private Screen screen;
-
   private int id = 10000;
 
-  /**
-   * Bind this ScreenController to a screen.
-   * @param newNifty nifty
-   * @param newScreen screen
-   */
-  public final void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
     addPanel();
   }
 
-  /**
-   * add panel.
-   */
-  public void addPanel() {
-    // FIXME control handling
-//    nifty.addControl(
-//        screen, screen.findElementByName("box-parent"), "multiplayerPanel", "" + id++, null, null, null);
+  public void onStartScreen() {
   }
 
-  /**
-   * on start screen interactive.
-   */
-  public final void onStartScreen() {
+  public void onEndScreen() {
   }
 
-  /**
-   * on end screen.
-   */
-  public final void onEndScreen() {
-  }
-
-  /**
-   * quit method.
-   */
-  public final void quit() {
+  public void quit() {
     nifty.fromXml("all/intro.xml", "menu");
+  }
+
+  public void addPanel() {
+    CreateCustomControl createMultiplayerPanel = new CreateCustomControl(String.valueOf(id++), "multiplayerPanel");
+    createMultiplayerPanel.create(nifty, screen, screen.findElementByName("box-parent"));
   }
 }

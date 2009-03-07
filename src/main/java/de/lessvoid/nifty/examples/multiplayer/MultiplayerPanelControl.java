@@ -29,23 +29,15 @@ public class MultiplayerPanelControl implements Controller {
     nifty = niftyParam;
     screen = screenParam;
     element = newElement;
-  }
-
-  public void onStartScreen() {
     setDifficulty("easy");
   }
 
-  /**
-   * This controller gets the focus.
-   * @param getFocus get focus (true) or loose focus (false)
-   */
+  public void onStartScreen() {
+  }
+
   public void onFocus(final boolean getFocus) {
   }
 
-  /**
-   * input event.
- * @param inputEvent the NiftyInputEvent to process
-   */
   public void inputEvent(final NiftyInputEvent inputEvent) {
   }
 

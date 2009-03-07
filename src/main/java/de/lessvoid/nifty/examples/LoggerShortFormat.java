@@ -27,6 +27,6 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
       }
     }
 //    Logger.getLogger("de.lessvoid.xml.xpp3.XmlParser").setLevel(Level.ALL);
-    Logger.getLogger("de.lessvoid").setLevel(Level.ALL);
+//    Logger.getLogger("de.lessvoid").setLevel(Level.ALL);
   }
 }
