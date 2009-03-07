@@ -11,7 +11,7 @@ public class PanelType extends ElementType {
     super();
   }
 
-  public PanelType(final Attributes attributes) throws Exception {
+  public PanelType(final Attributes attributes) {
     super(attributes);
   }
 

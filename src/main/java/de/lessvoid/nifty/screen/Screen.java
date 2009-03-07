@@ -154,6 +154,9 @@ public class Screen {
     // bind happens right BEFORE the onStartScreen
     screenController.bind(nifty, Screen.this);
 
+    // activate the onActive event right now
+    activeEffectStart();
+
     // onStartScreen
     final StartScreenEndNotify endNotify = new StartScreenEndNotify();
     startLayers(EffectEventId.onStartScreen, endNotify);
@@ -414,9 +417,6 @@ public class Screen {
 
       // add dynamic controls
       nifty.addControls();
-
-      // activate the onActive event right now
-      activeEffectStart();
     }
   }
 

@@ -10,20 +10,23 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class MenuItemControl implements Controller {
+  private Screen screen;
   private Element element;
   private FocusHandler focusHandler;
 
   public void bind(
       final Nifty nifty,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     element = newElement;
+    screen = screenParam;
   }
 
-  public void onStartScreen(final Screen newScreen) {
-    focusHandler = newScreen.getFocusHandler();
+  public void onStartScreen() {
+    focusHandler = screen.getFocusHandler();
   }
 
   public void inputEvent(final NiftyInputEvent inputEvent) {

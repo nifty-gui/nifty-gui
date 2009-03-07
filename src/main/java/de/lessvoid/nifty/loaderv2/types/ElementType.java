@@ -129,7 +129,7 @@ public abstract class ElementType extends XmlBaseType {
     Element element = internalCreateElement(parent, nifty, screen, layoutPart, merge);
     StyleResolver controlStyleResolve = getControlStyleResolver(styleResolver, attribControlDefinition, attribControl);
     ParameterResolver controlParaResolv = new ParameterResolverControl(parameterResolver, attribControl);
-    applyStyle(element, merge, screen, nifty, controlStyleResolve, controlParaResolv);
+    applyStyle(element, merge, attrib.get("style"), screen, nifty, controlStyleResolve, controlParaResolv);
     applyAttributes(element, merge, nifty.getRenderEngine(), controlParaResolv);
     applyEffects(element, screen, nifty, controlParaResolv);
 
@@ -143,6 +143,7 @@ public abstract class ElementType extends XmlBaseType {
         controller);
     controller.bind(
         nifty,
+        screen,
         element,
         attribControl.createProperties(),
         listener,
@@ -209,7 +210,7 @@ public abstract class ElementType extends XmlBaseType {
       final Attributes attrib,
       final Element element,
       Controller controller) {
-    applyStyle(element, attrib, screen, nifty, styleResolver, parameterResolver);
+    applyStyle(element, attrib, attrib.get("style"), screen, nifty, styleResolver, parameterResolver);
     applyAttributes(element, attrib, nifty.getRenderEngine(), parameterResolver);
     applyEffects(element, screen, nifty, parameterResolver);
 
@@ -228,6 +229,7 @@ public abstract class ElementType extends XmlBaseType {
           controller);
       controller.bind(
           nifty,
+          screen,
           element,
           attrib.createProperties(),
           listener,
@@ -297,14 +299,15 @@ public abstract class ElementType extends XmlBaseType {
 
   private void applyStyle(
       final Element element,
-      final Attributes attributes,
+      final Attributes result,
+      final String style,
       final Screen screen,
       final Nifty nifty,
       final StyleResolver styleResolver,
       final ParameterResolver parameterResolver) {
-    StyleType styleType = styleResolver.resolve(attributes.get("style"));
+    StyleType styleType = styleResolver.resolve(style);
     if (styleType != null) {
-      styleType.apply(styleResolver, attributes, nifty, element, screen, parameterResolver);
+      styleType.apply(styleResolver, result, nifty, element, screen, parameterResolver);
     }
   }
 

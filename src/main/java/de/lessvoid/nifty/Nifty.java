@@ -593,9 +593,9 @@ public class Nifty {
 
   public void addControl(
       final Screen screen,
-      final Element popup,
+      final Element element,
       final StandardControl standardControl) {
-    controlsToAdd.add(new ControlToAdd(screen, popup, standardControl));
+    controlsToAdd.add(new ControlToAdd(screen, element, standardControl));
   }
 
   /**

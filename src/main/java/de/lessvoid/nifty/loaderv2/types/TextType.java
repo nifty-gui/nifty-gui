@@ -12,7 +12,7 @@ public class TextType extends ElementType {
     super();
   }
 
-  public TextType(final Attributes attributes) throws Exception {
+  public TextType(final Attributes attributes) {
     super(attributes);
   }
 

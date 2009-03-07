@@ -12,7 +12,7 @@ public class ImageType extends ElementType {
     super();
   }
 
-  public ImageType(final Attributes attributes) throws Exception {
+  public ImageType(final Attributes attributes) {
     super(attributes);
   }
 

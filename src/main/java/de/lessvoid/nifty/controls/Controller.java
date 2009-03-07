@@ -24,6 +24,7 @@ public interface Controller {
    */
   void bind(
       Nifty nifty,
+      Screen screen,
       Element element,
       Properties parameter,
       ControllerEventListener listener,
@@ -31,9 +32,8 @@ public interface Controller {
 
   /**
    * Called when the screen is started.
-   * @param screen screen
    */
-  void onStartScreen(final Screen screen);
+  void onStartScreen();
 
   /**
    * This controller gets the focus.

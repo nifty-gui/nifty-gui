@@ -14,19 +14,9 @@ import de.lessvoid.nifty.screen.Screen;
  * @author void
  */
 public class NiftyInputControl {
-  /**
-   * controller.
-   */
   private Controller controller;
-
-  /**
-   * input mapper this control uses.
-   */
   private NiftyInputMapping inputMapper;
 
-  /**
-   * list of additional input handlers.
-   */
   private List < KeyInputHandler > additionalInputHandler = new ArrayList < KeyInputHandler >();
 
   /**
@@ -66,7 +56,7 @@ public class NiftyInputControl {
    * @param screen screen
    */
   public void onStartScreen(final Screen screen) {
-    controller.onStartScreen(screen);
+    controller.onStartScreen();
   }
 
   /**
