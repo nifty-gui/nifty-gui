@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.scrollbar;
+package de.lessvoid.nifty.controls.scrollbar.controller;
 
 import java.util.Properties;
 
@@ -6,7 +6,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -17,65 +16,26 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class SimpleSlider implements Controller {
-
-  /**
-   * the screen.
-   */
   private Screen screen;
-
-  /**
-   * The element we're connected to.
-   */
   private Element element;
-
-  /**
-   * The ControllerEventListener to use.
-   */
   private ControllerEventListener listener;
-
-  /**
-   * The Element that shows the current position.
-   */
   private Element scrollPos;
-
-  /**
-   * min value of scrollbar.
-   */
   private float minValue;
-
-  /**
-   * max value of scrollbar.
-   */
   private float maxValue;
-
-  /**
-   * current value of scrollbar.
-   */
   private float currentValue;
-
-  /**
-   * snap to whole numbers (true) or not (false).
-   */
   private boolean snap;
-
   private boolean fill;
-
   private boolean flip;
 
-  /**
-   * Bind this controller to the given element.
-   * @param newScreen the new nifty to set
-   * @param newElement the new element to set
-   * @param properties all attributes of the xml tag we're connected to
-   * @param newListener listener
-   */
   public void bind(
       final Nifty niftyParam,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     this.element = newElement;
+    this.screen = screenParam;
     this.listener = newListener;
 
     this.minValue = Float.parseFloat(properties.getProperty("minValue", "0.0"));
@@ -86,11 +46,7 @@ public class SimpleSlider implements Controller {
     this.flip = Boolean.parseBoolean(properties.getProperty("flip", "false"));
   }
 
-  /**
-   * On start screen event.
-   */
-  public void onStartScreen(final Screen screenParam) {
-    this.screen = screenParam;
+  public void onStartScreen() {
     this.scrollPos = element.findElementByName("scrollposition");
     changeSliderPos(currentValue);
   }
@@ -187,7 +143,7 @@ public class SimpleSlider implements Controller {
       int height = (int) (newPos);
       scrollPos.setConstraintHeight(new SizeValue(height + "px"));
 
-      ImageRenderer imageRenderer = scrollPos.getRenderer(ImageRenderer.class);
+//      ImageRenderer imageRenderer = scrollPos.getRenderer(ImageRenderer.class);
 //      imageRenderer.getImage().setSubImage(
 //          0,
 //          (int) (y / (float) element.getHeight() * imageRenderer.getImage().getHeight()),

@@ -1,11 +1,11 @@
-package de.lessvoid.nifty.controls.scrollbar;
+package de.lessvoid.nifty.controls.scrollbar.controller;
 
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NextPrevHelper;
-import de.lessvoid.nifty.controls.scrollbar.impl.ScrollBarImpl;
+import de.lessvoid.nifty.controls.scrollbar.controller.impl.ScrollBarImpl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -46,11 +46,13 @@ public class GeneralScrollbar implements Controller {
 
   public void bind(
       final Nifty newNifty,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     element = newElement;
+    screen = screenParam;
     listener = newListener;
 
     viewMinValue = Float.parseFloat(properties.getProperty("viewMinValue", "0.0"));
@@ -60,11 +62,7 @@ public class GeneralScrollbar implements Controller {
     currentValue = Float.parseFloat(properties.getProperty("currentValue", "0.0"));
   }
 
-  /**
-   * On start screen event.
-   */
-  public void onStartScreen(final Screen screenParam) {
-    screen = screenParam;
+  public void onStartScreen() {
     scrollPos = element.findElementByName("nifty-internal-scrollbar-position");
     element = element.findElementByName("nifty-internal-scrollbar-background");
     nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());

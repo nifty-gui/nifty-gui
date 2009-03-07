@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.button;
+package de.lessvoid.nifty.controls.button.controller;
 
 import java.util.Properties;
 
@@ -16,17 +16,8 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class ButtonControl implements Controller {
-
-  /**
-   * the element.
-   */
   private Element element;
-
-  /**
-   * focus handler.
-   */
   private FocusHandler focusHandler;
-
   private Screen screen;
 
   /**
@@ -38,11 +29,17 @@ public class ButtonControl implements Controller {
    */
   public void bind(
       final Nifty nifty,
+      final Screen screenParam,
       final Element newElement,
       final Properties parameter,
       final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
-    this.element = newElement;
+    element = newElement;
+    screen = screenParam;
+  }
+
+  public void onStartScreen() {
+    focusHandler = screen.getFocusHandler();
   }
 
   /**
@@ -64,14 +61,5 @@ public class ButtonControl implements Controller {
    * @param getFocus getFocus
    */
   public void onFocus(final boolean getFocus) {
-  }
-
-  /**
-   * onStartScreen.
-   * @param screen screen
-   */
-  public void onStartScreen(final Screen screenParam) {
-    screen = screenParam;
-    focusHandler = screenParam.getFocusHandler();
   }
 }

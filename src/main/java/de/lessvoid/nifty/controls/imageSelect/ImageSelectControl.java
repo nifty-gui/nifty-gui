@@ -20,41 +20,21 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class ImageSelectControl implements Controller {
-
-  /**
-   * nifty instance.
-   */
   private Nifty nifty;
-
-  /**
-   * element.
-   */
+  private Screen screen;
   private Element element;
-
-  /**
-   * images.
-   */
   private ArrayList < NiftyImage > images;
-
-  /**
-   * currentImageIndex.
-   */
   private int currentImageIndex;
 
-  /**
-   * Bind this controller to the given element.
-   * @param niftyParam niftyParam
-   * @param newElement the new element to set
-   * @param properties all attributes of the xml tag we're connected to
-   * @param newListener listener
-   */
   public void bind(
       final Nifty niftyParam,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
+    screen = screenParam;
     element = newElement;
 
     images = createImages(nifty.getRenderEngine(), properties.getProperty("imageList"));
@@ -106,11 +86,7 @@ public class ImageSelectControl implements Controller {
     return imageList;
   }
 
-  /**
-   * Called when the screen is started.
-   * @param newScreen screen
-   */
-  public void onStartScreen(final Screen newScreen) {
+  public void onStartScreen() {
   }
 
   /**

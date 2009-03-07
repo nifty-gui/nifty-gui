@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield;
+package de.lessvoid.nifty.controls.textfield.controller;
 
 import junit.framework.TestCase;
 

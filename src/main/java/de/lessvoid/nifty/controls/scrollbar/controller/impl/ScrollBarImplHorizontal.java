@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.scrollbar.impl;
+package de.lessvoid.nifty.controls.scrollbar.controller.impl;
 
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;

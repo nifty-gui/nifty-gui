@@ -17,20 +17,23 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 public class CheckboxControl implements Controller {
   private Element element;
+  private Screen screen;
   private boolean checked;
   private FocusHandler focusHandler;
 
   public void bind(
       final Nifty niftyParam,
+      final Screen screenParam,
       final Element elementParam,
       final Properties propertiesParam,
       final ControllerEventListener listenerParam,
       final Attributes controlDefinitionAttributes) {
     element = elementParam;
+    screen = screenParam;
     checked = true;
   }
 
-  public void onStartScreen(final Screen screen) {
+  public void onStartScreen() {
     focusHandler = screen.getFocusHandler();
   }
 

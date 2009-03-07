@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
   <!-- DROP DOWN CONTROL -->
-  <controlDefinition style="nifty-drop-down" name="dropDownControl" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardDropDown">
-    <panel childLayout="horizontal" height="28px" backgroundColor="#0f04" focusable="true">
+  <controlDefinition style="nifty-drop-down" name="dropDownControl" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControl" inputMapping="de.lessvoid.nifty.controls.dropdown.inputmapping.DropDownControlInputMapping">
+    <panel childLayout="horizontal" height="28px" focusable="true">
       <interact onClick="dropDownClicked()" />
       <text id="text" style="#text" text="" />
       <image id="icon" style="#icon" />
@@ -10,7 +10,7 @@
   </controlDefinition>
 
   <!-- DROP DOWN CONTROL ITEM -->
-  <controlDefinition style="nifty-drop-down" name="dropDownControlItem" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControlItem" inputMapping="de.lessvoid.nifty.input.mapping.StandardDropDownItem">
+  <controlDefinition style="nifty-drop-down" name="dropDownControlItem" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControlItem" inputMapping="de.lessvoid.nifty.controls.dropdown.inputmapping.DropDownItemInputMapping">
     <text id="text" style="#text-item" text="" focusable="true">
       <interact onRelease="dropDownItemClicked()"/>
     </text>

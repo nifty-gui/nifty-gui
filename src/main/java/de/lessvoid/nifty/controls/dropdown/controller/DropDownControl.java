@@ -27,16 +27,17 @@ public class DropDownControl implements Controller {
 
   public void bind(
       final Nifty niftyParam,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributesParam) {
     nifty = niftyParam;
+    screen = screenParam;
     element = newElement;
   }
 
-  public void onStartScreen(final Screen screenParam) {
-    screen = screenParam;
+  public void onStartScreen() {
     focusHandler = screen.getFocusHandler();
   }
 

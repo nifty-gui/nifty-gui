@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield;
+package de.lessvoid.nifty.controls.textfield.controller;
 
 import java.util.Properties;
 
@@ -20,99 +20,42 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class TextFieldControl implements Controller {
-
-  /**
-   * cursor y position offset.
-   */
   private static final int CURSOR_Y = 0;
-
-  /**
-   * the screen.
-   */
   private Screen screen;
-
-  /**
-   * The element we're connected to.
-   */
   private Element element;
-
-  /**
-   * text element.
-   */
   private Element textElement;
-
-  /**
-   * field element.
-   */
   private Element fieldElement;
-
-  /**
-   * cursor element.
-   */
   private Element cursorElement;
-
-  /**
-   * text field.
-   */
   private TextField textField;
-
-  /**
-   * fist visible character index.
-   */
   private int firstVisibleCharacterIndex;
-
-  /**
-   * last visible character index.
-   */
   private int lastVisibleCharacterIndex;
-
-  /**
-   * field width.
-   */
   private int fieldWidth;
-
-  /**
-   * from click cursor position.
-   */
   private int fromClickCursorPos;
-
-  /**
-   * to click cursor position.
-   */
   private int toClickCursorPos;
-
-  /**
-   * the focus handler this control belongs to.
-   */
   private FocusHandler focusHandler;
-
   private Character passwordChar;
 
-  /**
-   * default constructor.
-   */
   public TextFieldControl() {
   }
 
-  /**
-   * Bind this controller to the given element.
-   * @param niftyParam niftyParam
-   * @param newElement the new element to set
-   * @param properties all attributes of the xml tag we're connected to
-   * @param newListener listener
-   */
   public void bind(
       final Nifty niftyParam,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     this.element = newElement;
+    this.screen = screenParam;
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
 
     this.textField = new TextField("", new ClipboardAWT());
     this.textField.toFirstPosition();
+
+    this.textElement = element.findElementByName("textfield-text");
+    this.fieldElement = element.findElementByName("textfield-field");
+    this.cursorElement = element.findElementByName("textfield-cursor");
 
     passwordChar = null;
     if (properties.containsKey("passwordChar")) {
@@ -123,20 +66,10 @@ public class TextFieldControl implements Controller {
     }
   }
 
-  /**
-   * On start screen event.
-   * @param newScreen screen
-   */
-  public void onStartScreen(final Screen newScreen) {
-    this.screen = newScreen;
+  public void onStartScreen() {
     this.focusHandler = screen.getFocusHandler();
 
-    this.textElement = element.findElementByName("textfield-text");
     this.textField.initWithText(textElement.getRenderer(TextRenderer.class).getOriginalText());
-
-    this.fieldElement = element.findElementByName("textfield-field");
-    this.cursorElement = element.findElementByName("textfield-cursor");
-
     this.fieldWidth = this.fieldElement.getWidth() - this.cursorElement.getWidth();
 
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
@@ -148,11 +81,6 @@ public class TextFieldControl implements Controller {
     updateCursor();
   }
 
-  /**
-   * click.
-   * @param mouseX the mouse x position
-   * @param mouseY the mouse y position
-   */
   public void onClick(final int mouseX, final int mouseY) {
     String visibleString = textField.getText().substring(firstVisibleCharacterIndex, lastVisibleCharacterIndex);
     int indexFromPixel = getCursorPosFromMouse(mouseX, visibleString);
@@ -164,11 +92,6 @@ public class TextFieldControl implements Controller {
     updateCursor();
   }
 
-  /**
-   * on click mouse move.
-   * @param mouseX mouse x
-   * @param mouseY mouse y
-   */
   public void onClickMouseMove(final int mouseX, final int mouseY) {
     String visibleString = textField.getText().substring(firstVisibleCharacterIndex, lastVisibleCharacterIndex);
     int indexFromPixel = getCursorPosFromMouse(mouseX, visibleString);
@@ -183,22 +106,12 @@ public class TextFieldControl implements Controller {
     updateCursor();
   }
 
-  /**
-   * getCursorPosFromMouse.
-   * @param mouseX mouse x
-   * @param visibleString visible string
-   * @return cursor from mouse
-   */
   private int getCursorPosFromMouse(final int mouseX, final String visibleString) {
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
     return FontHelper.getCharacterIndexFromPixelPosition(
         textRenderer.getFont(), visibleString, (mouseX - fieldElement.getX()), 1.0f);
   }
 
-  /**
-   * handle input event.
-   * @param inputEvent input event
-   */
   public void inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.MoveCursorLeft) {
       textField.cursorLeft();
@@ -240,9 +153,6 @@ public class TextFieldControl implements Controller {
     updateCursor();
   }
 
-  /**
-   *
-   */
   private void updateCursor() {
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
     String text = textField.getText();
@@ -279,17 +189,15 @@ public class TextFieldControl implements Controller {
     cursorElement.setConstraintX(new SizeValue(cursorPixelPos + "px"));
     cursorElement.setConstraintY(new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
     cursorElement.startEffect(EffectEventId.onActive, null);
-    screen.layoutLayers();
+    if (screen != null) {
+      screen.layoutLayers();
+    }
   }
 
   private boolean isPassword(final Character currentPasswordChar) {
     return currentPasswordChar != null;
   }
 
-  /**
-   * calcFirstVisibleIndex.
-   * @param cursorPos cursor pos
-   */
   private void calcFirstVisibleIndex(final int cursorPos) {
     if (cursorPos > lastVisibleCharacterIndex) {
       int cursorPosDelta = cursorPos - lastVisibleCharacterIndex;
@@ -300,11 +208,6 @@ public class TextFieldControl implements Controller {
     }
   }
 
-  /**
-   * check bounds of first and last visible index according to text.
-   * @param text text
-   * @param textRenderer text renderer
-   */
   private void checkBounds(final String text, final TextRenderer textRenderer) {
     int textLen = text.length();
     if (firstVisibleCharacterIndex > textLen) {
@@ -315,9 +218,6 @@ public class TextFieldControl implements Controller {
     }
   }
 
-  /**
-   * @param textRenderer TextRenderer
-   */
   private void calcLastVisibleIndex(final TextRenderer textRenderer) {
     String currentText = this.textField.getText();
     if (firstVisibleCharacterIndex < currentText.length()) {
@@ -330,10 +230,6 @@ public class TextFieldControl implements Controller {
     }
   }
 
-  /**
-   * on focus event.
-   * @param getFocus get (true) or lose (false) focus
-   */
   public void onFocus(final boolean getFocus) {
     if (cursorElement != null) {
       if (getFocus) {
@@ -345,37 +241,19 @@ public class TextFieldControl implements Controller {
     }
   }
 
-  /**
-   * Get Text.
-   * @return text
-   */
   public String getText() {
     return textField.getText();
   }
 
-  /**
-   * set a new text.
-   * @param newText text to set
-   */
   public void setText(final String newText) {
     textField.initWithText(newText);
     updateCursor();
   }
 
-  /**
-   * Set MaxLength and constraint the Textfield to the given length.
-   * @param maxLength max length
-   */
   public void setMaxLength(final int maxLength) {
     textField.setMaxLength(maxLength);
   }
 
-  /**
-   * Set the cursor to the given Position with index 0 adressing the
-   * first character. It's not possible to to set the cursor position
-   * to an index beyond the current input length.
-   * @param position position to set
-   */
   public void setCursorPosition(final int position) {
     textField.setCursorPosition(position);
     updateCursor();

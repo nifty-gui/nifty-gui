@@ -1,34 +1,33 @@
-package de.lessvoid.nifty.controls.scrollbar;
+package de.lessvoid.nifty.controls.scrollbar.controller;
 
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.scrollbar.impl.ScrollBarImplHorizontal;
+import de.lessvoid.nifty.controls.scrollbar.controller.impl.ScrollBarImplHorizontal;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class HorizontalScrollbar implements Controller {
+public class HorizontalScrollbarControl implements Controller {
+  private Screen screen;
   private GeneralScrollbar scrollbar;
 
   public void bind(
       final Nifty newNifty,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     scrollbar = new GeneralScrollbar(new ScrollBarImplHorizontal());
-    scrollbar.bind(newNifty, newElement, properties, newListener, controlDefinitionAttributes);
+    scrollbar.bind(newNifty, screenParam, newElement, properties, newListener, controlDefinitionAttributes);
   }
 
-  /**
-   * On start screen event.
-   */
-  public void onStartScreen(final Screen screenParam) {
-    scrollbar.onStartScreen(screenParam);
+  public void onStartScreen() {
+    scrollbar.onStartScreen();
   }
 
   public void click(final int mouseX, final int mouseY) {

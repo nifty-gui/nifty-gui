@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dropdown.CreateDropDownControlItem;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
@@ -21,14 +22,13 @@ public class DropDownModel {
 
   public void initialize(
       final Nifty nifty,
-      final Screen currentScreen,
-      final Element popup) {
+      final Screen screen,
+      final Element parent) {
     int count = 0;
     for (String item : items) {
-      String id = popup.getId() + "_" + count++;
-      de.lessvoid.nifty.controls.dropdown.DropDownControlItem dropDownItem =
-        new de.lessvoid.nifty.controls.dropdown.DropDownControlItem(id, item);
-      nifty.addControl(currentScreen, popup, dropDownItem);
+      String id = parent.getId() + "_" + count++;
+      CreateDropDownControlItem dropDownItem = new CreateDropDownControlItem(id, item);
+      dropDownItem.create(nifty, screen, parent);
     }
   }
 

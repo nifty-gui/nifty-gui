@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition style="nifty-textfield" name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.input.mapping.StandardTextField" passwordChar="$passwordChar" maxLength="$maxLength">
+  <controlDefinition style="nifty-textfield" name="textfield" controller="de.lessvoid.nifty.controls.textfield.controller.TextFieldControl" inputMapping="de.lessvoid.nifty.controls.textfield.inputmapping.TextFieldInputMapping" passwordChar="$passwordChar" maxLength="$maxLength">
     <panel id="textfield-panel" style="#panel" focusable="true">
       <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
       <panel id="textfield-field" style="#field" visibleToMouse="true">

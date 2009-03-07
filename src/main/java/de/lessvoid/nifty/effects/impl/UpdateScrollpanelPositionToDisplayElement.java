@@ -5,7 +5,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.scrollbar.VerticalScrollbar;
+import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
@@ -28,7 +28,7 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     if (targetElement != null) {
-      VerticalScrollbar verticalScrollbar = targetElement.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbar.class);
+      VerticalScrollbarControl verticalScrollbar = targetElement.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
 
       int minY = (int)verticalScrollbar.getCurrentValue();
       int maxY = (int)verticalScrollbar.getCurrentValue() + (int)verticalScrollbar.getViewMaxValue();

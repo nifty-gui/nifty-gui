@@ -13,23 +13,25 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownControlItem implements Controller {
-
   private Nifty nifty;
+  private Screen screen;
   private Element dropDownControlItemElement;
   private FocusHandler focusHandler;
   private DropDownControl dropDownControl;
 
   public void bind(
       final Nifty niftyParam,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
+    screen = screenParam;
     dropDownControlItemElement = newElement;
   }
 
-  public void onStartScreen(final Screen screen) {
+  public void onStartScreen() {
     focusHandler = screen.getFocusHandler();
   }
 

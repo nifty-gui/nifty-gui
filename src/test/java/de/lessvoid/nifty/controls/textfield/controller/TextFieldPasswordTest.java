@@ -1,7 +1,9 @@
-package de.lessvoid.nifty.controls.textfield;
+package de.lessvoid.nifty.controls.textfield.controller;
 
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
+import de.lessvoid.nifty.controls.textfield.controller.Clipboard;
+import de.lessvoid.nifty.controls.textfield.controller.TextField;
 
 import junit.framework.TestCase;
 

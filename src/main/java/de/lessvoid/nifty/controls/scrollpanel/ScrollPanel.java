@@ -4,9 +4,9 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.scrollbar.HorizontalScrollbar;
-import de.lessvoid.nifty.controls.scrollbar.ScrollbarControlNotify;
-import de.lessvoid.nifty.controls.scrollbar.VerticalScrollbar;
+import de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl;
+import de.lessvoid.nifty.controls.scrollbar.controller.ScrollbarControlNotify;
+import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -16,14 +16,22 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 public class ScrollPanel implements Controller {
   private Nifty nifty;
+  private Screen screen;
   private Element element;
   private boolean verticalScrollbar;
   private boolean horizontalScrollbar;
   private String childRootId;
   private Element childRootElement;
 
-  public void bind(Nifty niftyParam, Element elementParam, Properties parameter, ControllerEventListener listener, Attributes controlDefinitionAttributes) {
+  public void bind(
+      final Nifty niftyParam,
+      final Screen screenParam,
+      final Element elementParam,
+      final Properties parameter,
+      final ControllerEventListener listener,
+      final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
+    screen = screenParam;
     element = elementParam;
     verticalScrollbar = new Boolean(parameter.getProperty("vertical", "true"));
     horizontalScrollbar = new Boolean(parameter.getProperty("horizontal", "true"));
@@ -37,7 +45,7 @@ public class ScrollPanel implements Controller {
   public void onFocus(boolean getFocus) {
   }
 
-  public void onStartScreen(final Screen screen) {
+  public void onStartScreen() {
     initializeScrollPanel(screen);
   }
 
@@ -61,7 +69,7 @@ public class ScrollPanel implements Controller {
     if (childRootElement != null) {
       final Element scrollElement = childRootElement.getElements().get(0);
       if (scrollElement != null) {
-        HorizontalScrollbar horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbar.class);
+        HorizontalScrollbarControl horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
         if (horizontalS != null) {
           horizontalS.setWorldMaxValue(scrollElement.getWidth());
           horizontalS.setViewMaxValue(childRootElement.getWidth());
@@ -73,7 +81,7 @@ public class ScrollPanel implements Controller {
           });
         }
   
-        VerticalScrollbar verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbar.class);
+        VerticalScrollbarControl verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
         if (verticalS != null) {
           verticalS.setWorldMaxValue(scrollElement.getHeight());
           verticalS.setViewMaxValue(childRootElement.getHeight());

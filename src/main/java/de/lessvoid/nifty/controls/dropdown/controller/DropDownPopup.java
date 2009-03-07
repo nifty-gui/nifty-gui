@@ -11,17 +11,19 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownPopup implements Controller {
-
   private Nifty nifty;
+  private Screen screen;
   private Element dropDownElement;
 
   public void bind(
       final Nifty niftyParam,
+      final Screen screenParam,
       final Element element,
       final Properties parameter,
       final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
-    this.nifty = niftyParam;
+    nifty = niftyParam;
+    screen = screenParam;
   }
 
   public void inputEvent(final NiftyInputEvent inputEvent) {
@@ -30,7 +32,7 @@ public class DropDownPopup implements Controller {
   public void onFocus(final boolean getFocus) {
   }
 
-  public void onStartScreen(final Screen screen) {
+  public void onStartScreen() {
   }
 
   public void setDropDownElement(final Element element) {
