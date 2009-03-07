@@ -3,7 +3,6 @@ package de.lessvoid.nifty.loaderv2.types;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.layout.LayoutPart;
@@ -36,12 +35,13 @@ public class ControlType extends ElementType {
       final StyleResolver styleResolver,
       final ParameterResolver parameterResolver,
       final Attributes attrib,
-      final Controller controller) {
+      final Object[] controllers) {
     ControlDefinitionType controlDefinition = nifty.resolveControlDefinition(getName());
     if (controlDefinition == null) {
       log.warning("controlDefinition [" + getName() + "] missing.");
       return null;
     }
+
     ElementType elementType = controlDefinition.getControlElementType();
     Attributes controlDefinitionAttrib = controlDefinition.getAttributes();
     Element control = elementType.createControl(
@@ -53,14 +53,15 @@ public class ControlType extends ElementType {
         parameterResolver,
         elementType.getAttributes(),
         controlDefinitionAttrib,
-        attrib);
+        attrib,
+        controllers);
     applyEffects(control, screen, nifty, parameterResolver);
-    applyInteract(nifty, control, screen.getScreenController(), controller);
+    applyInteract(nifty, control, controllers, screen.getScreenController());
 
     String childRootId = controlDefinitionAttrib.get("childRootId");
     Element childRootElement = control.findElementByName(childRootId);
     if (childRootElement != null) {
-      applyChildren(childRootElement, screen, nifty, styleResolver, parameterResolver, controller);
+      applyChildren(childRootElement, screen, nifty, styleResolver, parameterResolver, controllers);
     }
 
     return control;

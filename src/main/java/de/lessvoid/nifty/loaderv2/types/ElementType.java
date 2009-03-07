@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
@@ -20,13 +19,13 @@ import de.lessvoid.nifty.loaderv2.types.apply.Convert;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolver;
 import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolverControl;
+import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolverDefault;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverControlDefinintion;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.xml.tools.ClassHelper;
-import de.lessvoid.xml.tools.MethodResolver;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public abstract class ElementType extends XmlBaseType {
@@ -34,6 +33,8 @@ public abstract class ElementType extends XmlBaseType {
   private InteractType interact;
   private EffectsType effects;
   private Collection < ElementType > elements = new ArrayList < ElementType >();
+  protected Object[] controllerArray;
+  private boolean refresh;
 
   public ElementType() {
     super();
@@ -101,7 +102,7 @@ public abstract class ElementType extends XmlBaseType {
       final StyleResolver styleResolver,
       final ParameterResolver parameterResolver,
       final Attributes attrib,
-      final Controller controller) {
+      final Object[] controllers) {
     return internalCreate(
         parent,
         nifty,
@@ -110,7 +111,7 @@ public abstract class ElementType extends XmlBaseType {
         styleResolver,
         attrib,
         parameterResolver,
-        controller);
+        controllers);
   }
 
   public Element createControl(
@@ -122,7 +123,8 @@ public abstract class ElementType extends XmlBaseType {
       final ParameterResolver parameterResolver,
       final Attributes attrib,
       final Attributes attribControlDefinition,
-      final Attributes attribControl) {
+      final Attributes attribControl,
+      final Object[] controllersParam) {
     Attributes merge = new Attributes(attribControl);
     merge.merge(attrib);
 
@@ -133,15 +135,16 @@ public abstract class ElementType extends XmlBaseType {
     applyAttributes(element, merge, nifty.getRenderEngine(), controlParaResolv);
     applyEffects(element, screen, nifty, controlParaResolv);
 
-    Controller controller = createController(attribControlDefinition.get("controller"));
-    applyInteract(nifty, element, screen.getScreenController(), controller);
-    applyChildren(element, screen, nifty, controlStyleResolve, controlParaResolv, controller);
+    Controller newControl = createController(attribControlDefinition.get("controller"));
+    Object[] newControllers = getControllerArrayWithAdd(controllersParam, newControl);
+
+    applyInteract(nifty, element, newControllers, screen.getScreenController());
+    applyChildren(element, screen, nifty, controlStyleResolve, controlParaResolv, newControllers);
 
     ControllerEventListener listener = createControllerEventListener(
         attribControl,
-        screen.getScreenController(),
-        controller);
-    controller.bind(
+        newControllers);
+    newControl.bind(
         nifty,
         screen,
         element,
@@ -149,7 +152,7 @@ public abstract class ElementType extends XmlBaseType {
         listener,
         attribControlDefinition);
 
-    NiftyInputControl niftyInputControl = createNiftyInputControl(attribControlDefinition, controller);
+    NiftyInputControl niftyInputControl = createNiftyInputControl(attribControlDefinition, newControl);
     element.attachInputControl(niftyInputControl);
 
     return element;
@@ -175,10 +178,10 @@ public abstract class ElementType extends XmlBaseType {
       final StyleResolver styleResolver,
       final Attributes attrib,
       final ParameterResolver parameterResolverParam,
-      final Controller controller) {
+      final Object[] controllers) {
     ParameterResolver parameterResolver = new ParameterResolverControl(parameterResolverParam, attrib);
     Element element = internalCreateElement(parent, nifty, screen, layoutPart, attrib);
-    applyStandard(nifty, screen, styleResolver, parameterResolver, attrib, element, controller);
+    applyStandard(nifty, screen, styleResolver, parameterResolver, attrib, element, controllers);
     return element;
   }
 
@@ -209,25 +212,25 @@ public abstract class ElementType extends XmlBaseType {
       final ParameterResolver parameterResolver,
       final Attributes attrib,
       final Element element,
-      Controller controller) {
+      final Object[] controllersParam) {
     applyStyle(element, attrib, attrib.get("style"), screen, nifty, styleResolver, parameterResolver);
     applyAttributes(element, attrib, nifty.getRenderEngine(), parameterResolver);
     applyEffects(element, screen, nifty, parameterResolver);
 
+    Object[] newControllers = getControllerArray(controllersParam);
+
     Controller localController = createLocalController(attrib.get("inputController"));
     if (localController != null) {
-      controller = localController;
+      newControllers = getControllerArrayWithAdd(controllersParam, localController);
     }
-
-    applyInteract(nifty, element, screen.getScreenController(), controller);
-    applyChildren(element, screen, nifty, styleResolver, parameterResolver, controller);
+    applyInteract(nifty, element, newControllers, screen.getScreenController());
+    applyChildren(element, screen, nifty, styleResolver, parameterResolver, newControllers);
 
     if (localController != null) {
       ControllerEventListener listener = createControllerEventListener(
           attrib,
-          screen.getScreenController(),
-          controller);
-      controller.bind(
+          (Object[])newControllers);
+      localController.bind(
           nifty,
           screen,
           element,
@@ -235,9 +238,57 @@ public abstract class ElementType extends XmlBaseType {
           listener,
           attrib);
 
-      NiftyInputControl niftyInputControl = createNiftyInputControl(attrib, controller);
+      NiftyInputControl niftyInputControl = createNiftyInputControl(attrib, localController);
       element.attachInputControl(niftyInputControl);
     }
+  }
+
+  Object[] getControllerArray(final Object[] controllersParam) {
+    Object[] newControllers = null;
+    if (controllersParam != null) {
+      newControllers = new Object[controllersParam.length];
+      System.arraycopy(controllersParam, 0, newControllers, 0, controllersParam.length);
+    }
+    return newControllers;
+  }
+
+  Object[] getControllerArrayWithAdd(final Object[] controllersParam, final Object localController) {
+    Object[] newControllers = null;
+    if (controllersParam == null) {
+      newControllers = new Object[1];
+      newControllers[newControllers.length - 1] = localController;
+    } else {
+      newControllers = new Object[controllersParam.length + 1];
+      System.arraycopy(controllersParam, 0, newControllers, 0, controllersParam.length);
+      newControllers[newControllers.length - 1] = localController;
+    }
+    return newControllers;
+  }
+
+  Object[] getControllerArrayWithAddFirst(final Object[] controllersParam, final Object localController) {
+    Object[] newControllers = null;
+    if (controllersParam == null) {
+      newControllers = new Object[1];
+      newControllers[0] = localController;
+    } else {
+      newControllers = new Object[controllersParam.length + 1];
+      System.arraycopy(controllersParam, 0, newControllers, 1, controllersParam.length);
+      newControllers[0] = localController;
+    }
+    return newControllers;
+  }
+
+  Object[] old(final Object[] controllerArray, final ScreenController screenController) {
+    Object[] newControllers = null;
+    if (controllerArray == null) {
+      newControllers = new Object[1];
+      newControllers[0] = screenController;
+    } else {
+      newControllers = new Object[controllerArray.length + 1];
+      System.arraycopy(controllerArray, 0, newControllers, 1, controllerArray.length);
+      newControllers[0] = screenController;
+    }
+    return newControllers;
   }
 
   private Controller createController(final String controllerClassParam) {
@@ -271,12 +322,12 @@ public abstract class ElementType extends XmlBaseType {
 
   private ControllerEventListener createControllerEventListener(
       final Attributes attribControl,
-      final ScreenController screenController,
-      final Controller controller) {
+      final Object[] controllers) {
     ControllerEventListener listener = null;
 
     String onChange = attribControl.get("onChange");
     if (onChange != null) {
+      /** FIXME
       Class screenControllerClass = screenController.getClass();
       final Method onChangeMethod = MethodResolver.findMethod(screenControllerClass, onChange);
       if (onChangeMethod == null) {
@@ -285,13 +336,14 @@ public abstract class ElementType extends XmlBaseType {
         listener = new ControllerEventListener() {
           public void onChangeNotify() {
             try {
-              onChangeMethod.invoke(screenController, controller);
+              onChangeMethod.invoke(screenController, controllers);
             } catch (Exception e) {
               log.warning("ControllerEventListener with error: " + e.getMessage());
             }
           }
         };
       }
+        */
     }
 
     return listener;
@@ -333,9 +385,13 @@ public abstract class ElementType extends XmlBaseType {
   protected void applyInteract(
       final Nifty nifty,
       final Element element,
-      final Object ... controller) {
+      final Object[] controllers,
+      final ScreenController screenController) {
     if (interact != null) {
-      interact.materialize(nifty, element, controller);
+      if (!refresh) {
+        controllerArray = controllers;
+      }
+      interact.materialize(nifty, element, getControllerArrayWithAddFirst(controllers, screenController));
     }
   }
 
@@ -345,7 +401,7 @@ public abstract class ElementType extends XmlBaseType {
       final Nifty nifty,
       final StyleResolver styleResolver,
       final ParameterResolver parameterResolver,
-      final Controller controller) {
+      final Object[] controller) {
     for (ElementType elementType : elements) {
       elementType.create(
           parent,
@@ -357,5 +413,23 @@ public abstract class ElementType extends XmlBaseType {
           elementType.getAttributes(),
           controller);
     }
+  }
+
+  public void refreshAttributes(
+      final Nifty nifty,
+      final Screen screen,
+      final Element element,
+      final Attributes attributes) {
+    Attributes attrib = new Attributes(attributes);
+    attrib.merge(getAttributes());
+
+      // remove all children because we're going to build them again
+    for (Element child : element.getElements()) {
+      nifty.removeElement(screen, child);
+    }
+
+    refresh = true;
+    applyStandard(nifty, screen, nifty.getDefaultStyleResolver(), new ParameterResolverDefault(), attrib, element, controllerArray);
+    screen.layoutLayers();
   }
 }

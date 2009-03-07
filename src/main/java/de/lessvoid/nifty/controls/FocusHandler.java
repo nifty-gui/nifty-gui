@@ -155,8 +155,8 @@ public class FocusHandler {
   }
 
   public void resetFocusElements() {
-    keyboardFocusElement = null;
-    mouseFocusElement = null;
+    lostKeyboardFocus(keyboardFocusElement);
+    lostMouseFocus(mouseFocusElement);
   }
 
   /**
@@ -190,11 +190,13 @@ public class FocusHandler {
   }
 
   public void lostKeyboardFocus(final Element elementThatLostFocus) {
-    log.fine("lostKeyboardFocus for [" + elementThatLostFocus.toString() + "]");
-    if (keyboardFocusElement == elementThatLostFocus) {
-      keyboardFocusElement.stopEffect(EffectEventId.onFocus);
-      keyboardFocusElement.startEffect(EffectEventId.onLostFocus);
-      keyboardFocusElement = null;
+    if (elementThatLostFocus != null) {
+      log.fine("lostKeyboardFocus for [" + elementThatLostFocus.toString() + "]");
+      if (keyboardFocusElement == elementThatLostFocus) {
+        keyboardFocusElement.stopEffect(EffectEventId.onFocus);
+        keyboardFocusElement.startEffect(EffectEventId.onLostFocus);
+        keyboardFocusElement = null;
+      }
     }
   }
 
@@ -225,9 +227,11 @@ public class FocusHandler {
   }
 
   public void lostMouseFocus(final Element elementThatLostFocus) {
-    log.fine("lostMouseFocus for [" + elementThatLostFocus.toString() + "]");
-    if (mouseFocusElement == elementThatLostFocus) {
-      mouseFocusElement = null;
+    if (elementThatLostFocus != null) {
+      log.fine("lostMouseFocus for [" + elementThatLostFocus.toString() + "]");
+      if (mouseFocusElement == elementThatLostFocus) {
+        mouseFocusElement = null;
+      }
     }
   }
 

@@ -27,7 +27,7 @@ public final class MethodResolver {
    */
   public static Method findMethod(final Class < ? > c, final String methodName) {
     if (c == null) {
-      log.warning("trying to resolve method [" + methodName + "] failed");
+      // log.warning("trying to resolve method [" + methodName + "] failed");
       return null;
     }
 

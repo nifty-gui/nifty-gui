@@ -222,7 +222,7 @@ public class Nifty {
     if (!controlsToAdd.isEmpty()) {
       for (ControlToAdd controlToAdd : controlsToAdd) {
         try {
-          controlToAdd.createControl();
+          controlToAdd.startControlWithCheck(controlToAdd.createControl());
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -606,33 +606,7 @@ public class Nifty {
     private Screen screen;
     private Element parent;
     private StandardControl control;
-    /*
-    private String controlName;
-    private String controlId;
-    private String style;
-    private Boolean focusable;
-    private Attributes attr;
 
-    public ControlToAdd(
-        final Screen newScreen,
-        final Element newParent,
-        final String newControlName,
-        final String newId,
-        final String newStyle,
-        final Boolean newFocusable,
-        final Attributes newAttributes) {
-      this.screen = newScreen;
-      this.parent = newParent;
-      this.controlName = newControlName;
-      this.controlId = newId;
-      this.style = newStyle;
-      this.focusable = newFocusable;
-      this.attr = newAttributes;
-      if (attr == null) {
-        attr = new Attributes();
-      }
-    }
-*/
     public ControlToAdd(
         final Screen screenParam,
         final Element parentParam,
@@ -640,6 +614,12 @@ public class Nifty {
       screen = screenParam;
       parent = parentParam;
       control = standardControl;
+    }
+
+    public void startControlWithCheck(final Element element) {
+      if (screen.isRunning()) {
+       startControl(element); 
+      }
     }
 
     public Element createControl() throws Exception {
@@ -771,18 +751,6 @@ public class Nifty {
     return lastMouseY;
   }
 
-  /**
-   * Get StyleHandler.
-   * @return StyleHandler
-   */
-//  public StyleHandler getStyleHandler() {
-//    return null; // loader.getStyleHandler();
-//  }
-
-  /**
-   * Get Loader.
-   * @return NiftyLoader
-   */
   public NiftyLoader getLoader() {
     return loader;
   }
@@ -790,20 +758,6 @@ public class Nifty {
   public TimeProvider getTimeProvider() {
     return timeProvider;
   }
-
-//  public TypeContext createTypeContext() {
-//    /*
-//    TypeContext typeContext = new TypeContext(
-//        loader.getStyleHandler(),
-//        this,
-//        loader.getRegisteredEffects(),
-//        loader.getRegisteredControls(),
-//        timeProvider
-//        );
-//    return typeContext;
-//    */
-//    return null;
-//  }
 
   public class RemovePopUp {
     private String removePopupId;

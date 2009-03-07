@@ -24,11 +24,11 @@ public class DefaultController implements Controller {
       final Attributes controlDefinitionAttributes) {
     this.element = element;
     this.screen = screen;
+    focusHandler = screen.getFocusHandler();
+    nextPrevHelper = new NextPrevHelper(element, focusHandler);
   }
 
   public void onStartScreen() {
-    focusHandler = screen.getFocusHandler();
-    nextPrevHelper = new NextPrevHelper(element, focusHandler);
   }
 
   public void inputEvent(final NiftyInputEvent inputEvent) {

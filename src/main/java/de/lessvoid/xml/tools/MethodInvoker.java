@@ -134,6 +134,7 @@ public class MethodInvoker {
         }
       }
     }
+    log.warning("invoke for method [" + methodWithName + "] failed");
     return null;
   }
 

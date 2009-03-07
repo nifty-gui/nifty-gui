@@ -46,6 +46,7 @@ public class Screen {
   private List < InputHandlerWithMapping > inputHandlers = new ArrayList < InputHandlerWithMapping >();
   private Element rootElement;
   private String defaultFocusElementId;
+  private boolean running = false;
 
   public Screen(
       final Nifty newNifty,
@@ -147,6 +148,8 @@ public class Screen {
   }
 
   public final void startScreen() {
+    running = false;
+
     focusHandler.resetFocusElements();
     resetLayers();
     layoutLayers();
@@ -191,7 +194,6 @@ public class Screen {
   }
 
   private void startLayers(final EffectEventId effectEventId, final EndNotify endNotify) {
-
     // create the callback
     LocalEndNotify localEndNotify = new LocalEndNotify(effectEventId, endNotify);
 
@@ -345,6 +347,7 @@ public class Screen {
     console.output("mouse over elements");
     console.output(mouseOverHandler.getInfoString());
     console.output(focusHandler.toString());
+    console.output("running: " + running);
   }
 
   /**
@@ -417,6 +420,8 @@ public class Screen {
 
       // add dynamic controls
       nifty.addControls();
+
+      running = true;
     }
   }
 
@@ -483,5 +488,9 @@ public class Screen {
     public boolean process(final KeyboardInputEvent inputEvent) {
       return handler.keyEvent(mapping.convert(inputEvent));
     }
+  }
+
+  public boolean isRunning() {
+    return running ;
   }
 }

@@ -31,6 +31,10 @@ public class RenderDeviceLwjgl implements RenderDevice {
     log.info("Viewport: " + viewportWidth + ", " + viewportHeight);
   }
 
+  public RenderTools getRenderTools() {
+    return renderTools;
+  }
+
   /**
    * Get Width.
    * @return width of display mode

@@ -30,6 +30,7 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.xml.tools.MethodInvoker;
+import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The Element.
@@ -1340,7 +1341,9 @@ public class Element {
    * @param newStyle new style to set
    */
   public void setStyle(final String newStyle) {
-    // elementType.applyStyle(this, screen, newStyle, screen.getScreenController());
+    Attributes attributes = new Attributes();
+    attributes.set("style", newStyle);
+    elementType.refreshAttributes(nifty, screen, this, attributes);
   }
 
   /**
@@ -1453,5 +1456,9 @@ public class Element {
 
   public String toString() {
     return id + " (" + super.toString() + ")";
+  }
+
+  public boolean isStarted() {
+    return isEffectActive(EffectEventId.onStartScreen);
   }
 }

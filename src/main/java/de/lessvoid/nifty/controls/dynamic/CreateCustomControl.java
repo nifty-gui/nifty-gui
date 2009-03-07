@@ -21,6 +21,8 @@ public class CreateCustomControl extends ControlAttributes {
       final Nifty nifty,
       final Screen screen,
       final Element parent) {
-    return createControlInternal(nifty, screen, parent);
+    nifty.addControl(screen, parent, getStandardControl());
+    nifty.addControlsWithoutStartScreen();
+    return parent.findElementByName(attributes.get("id"));
   }
 }
