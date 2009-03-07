@@ -136,7 +136,7 @@ public class TextFieldControl implements Controller {
     } else if (inputEvent == NiftyInputEvent.Paste) {
       textField.put();
     } else if (inputEvent == NiftyInputEvent.SubmitText) {
-      this.screen.getFocusHandler().resetFocusElements();
+//      screen.getFocusHandler().resetFocusElements();
     } else if (inputEvent == NiftyInputEvent.Character) {
       textField.insert(inputEvent.getCharacter());
     } else if (inputEvent == NiftyInputEvent.NextInputElement) {
