@@ -15,34 +15,23 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class MultiplayerPanelControl implements Controller {
-
   private Nifty nifty;
   private Screen screen;
   private Element element;
 
-  /**
-   * Bind this controller to the given element.
-   * @param niftyParam niftyParam
-   * @param newElement the new element to set
-   * @param properties all attributes of the xml tag we're connected to
-   * @param newListener listener
-   */
   public void bind(
       final Nifty niftyParam,
+      final Screen screenParam,
       final Element newElement,
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
+    screen = screenParam;
     element = newElement;
   }
 
-  /**
-   * Called when the screen is started.
-   * @param newScreen newScreen
-   */
-  public void onStartScreen(final Screen newScreen) {
-    screen = newScreen;
+  public void onStartScreen() {
     setDifficulty("easy");
   }
 

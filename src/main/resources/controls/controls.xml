@@ -12,16 +12,10 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.controls.ControlsDemoStartScreen">
     <layer id="layer" childLayout="center" backgroundImage="background.png">
-<!--    
-      <effect>
-        <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0" inherit="true"/> 
-        <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" startDelay="0" inherit="false"/>
-      </effect>
--->
       <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="55%" height="32%" align="center" valign="center">
         <effect>
-          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
-          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" startDelay="500" inherit="true"/>
+          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
+          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
         </effect>
         <panel id="a" childLayout="vertical" align="center" valign="center">
           <panel id="b" childLayout="horizontal">
@@ -38,11 +32,10 @@
             <label text="Fo Shizzle: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control name="checkbox" />
           </panel>    
+          <panel id="dynamic-parent" childLayout="vertical">
+          </panel>
           <panel childLayout="horizontal" height="*" />
-          <panel childLayout="vertical">
-            <control id="backButton" name="button" label="Back to Menu" align="right">
-              <interact onClick="back()" />
-            </control>
+          <panel id="buttonPanel" childLayout="vertical">
           </panel>
         </panel>
       </panel>

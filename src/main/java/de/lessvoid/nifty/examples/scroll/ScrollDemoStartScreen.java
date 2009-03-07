@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.examples.scroll;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dynamic.CreateLabel;
 import de.lessvoid.nifty.controls.scrollpanel.ScrollPanel;
-import de.lessvoid.nifty.controls.standard.Label;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -31,8 +31,8 @@ public class ScrollDemoStartScreen implements ScreenController {
   }
 
   private void addLabel(final Element myScrollStuff, final String text) {
-    Label label = new Label(text);
-    label.createElement(nifty, screen, myScrollStuff);
+    CreateLabel label = new CreateLabel(text);
+    label.create(nifty, screen, myScrollStuff);
   }
 
   public void onEndScreen() {

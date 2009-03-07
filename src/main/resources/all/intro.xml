@@ -43,9 +43,7 @@
                 inputController="de.lessvoid.nifty.controls.MenuItemControl"
                 inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping" />
     <effect>
-      <onHover name="focus">
-        <hover falloffType="none" width="120%" />
-      </onHover>
+      <onHover name="focus" />
       <onFocus name="hint" targetElement="hintElement" hintText="$hintText" />
       <onFocus name="colorBar" width="120%" height="120%" color="#fff5" />
       <onFocus name="textColor" color="#ffff" />

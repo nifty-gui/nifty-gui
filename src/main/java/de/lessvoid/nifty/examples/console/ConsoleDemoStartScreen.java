@@ -2,8 +2,8 @@ package de.lessvoid.nifty.examples.console;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.console.ConsoleCommandHandler;
-import de.lessvoid.nifty.controls.console.ConsoleControl;
+import de.lessvoid.nifty.controls.console.controller.ConsoleCommandHandler;
+import de.lessvoid.nifty.controls.console.controller.ConsoleControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -13,39 +13,23 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
- * MainMenu.
+ * ConsoleDemoStartScreen.
  * @author void
- *
  */
 public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler {
-
-  /**
-   * the nifty.
-   */
   private Nifty nifty;
-
-  /**
-   * screen.
-   */
   private Screen screen;
 
-  /**
-   * bind this ScreenController to a screen.
-   * @param newNifty nifty
-   * @param newScreen screen
-   */
-  public final void bind(
-      final Nifty newNifty,
-      final Screen newScreen) {
+  public void bind(final Nifty newNifty, final Screen newScreen) {
     nifty = newNifty;
 
     screen = newScreen;
     screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
 
-    final Element element = nifty.getCurrentScreen().findElementByName("console");
+    final Element element = screen.findElementByName("console");
     element.hide();
 
-    final ConsoleControl control = (ConsoleControl) element.getAttachedInputControl().getController();
+    final ConsoleControl control = screen.findControl("console", ConsoleControl.class);
     control.output("Nifty Console Demo\nVersion: 1.0");
     control.addCommandHandler(new ConsoleCommandHandler() {
       public void execute(final String line) {
@@ -58,30 +42,16 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
     });
   }
 
-  /**
-   * just goto the next screen.
-   */
-  public final void onStartScreen() {
+  public void onStartScreen() {
   }
 
-  /**
-   * on end screen.
-   */
-  public final void onEndScreen() {
+  public void onEndScreen() {
   }
 
-  /**
-   * back.
-   */
-  public final void back() {
+  public void back() {
     nifty.fromXml("all/intro.xml", "menu");
   }
 
-  /**
-   * process a keyEvent for the whole screen.
-   * @param inputEvent the input event
-   * @return true when consumen and false when not
-   */
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.ConsoleToggle) {
       final Element console = screen.findElementByName("console");

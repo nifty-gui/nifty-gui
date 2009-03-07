@@ -14,8 +14,8 @@
     <layer id="layer" childLayout="center" backgroundImage="background.png">
       <panel id="dialog" style="nifty-panel" padding="18px,28px,28px,16px" childLayout="center" width="50%" height="38%" align="center" valign="center">
         <effect>
-          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
-          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" startDelay="500" inherit="true"/>
+          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
+          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
         </effect>
         <panel childLayout="vertical" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
@@ -36,6 +36,8 @@
           <panel childLayout="horizontal">
             <label text="setMaxLength(5): " width="150px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="maxLengthTest" name="textfield" maxLength="5" />
+          </panel>
+          <panel id="dynamic-parent" childLayout="vertical">
           </panel>
           <panel childLayout="horizontal" height="*" />
           <panel childLayout="vertical" width="100%">

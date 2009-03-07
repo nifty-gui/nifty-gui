@@ -1,9 +1,13 @@
 package de.lessvoid.nifty.examples.controls;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.button.CreateButtonControl;
+import de.lessvoid.nifty.controls.dropdown.CreateDropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControlNotify;
-import de.lessvoid.nifty.controls.scrollbar.GeneralScrollbar;
+import de.lessvoid.nifty.controls.dynamic.CreateLabel;
+import de.lessvoid.nifty.controls.dynamic.CreatePanel;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -34,9 +38,39 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       dropDown2.setSelectedItem("rocks!");
     }
 
-    GeneralScrollbar scrollbar = screen.findControl("scrollbar", GeneralScrollbar.class);
-    if (scrollbar != null) {
+    // dynamically add another DropDownControl
+    Element dynamicParent = screen.findElementByName("dynamic-parent");
+
+    CreatePanel createPanel = new CreatePanel();
+    createPanel.setChildLayout("horizontal");
+    createPanel.setHeight("8px");
+    createPanel.create(newNifty, screen, dynamicParent);
+
+    createPanel = new CreatePanel();
+    createPanel.setChildLayout("horizontal");
+    Element row = createPanel.create(newNifty, screen, dynamicParent);
+
+    CreateLabel createLabel = new CreateLabel("Dynamic:");
+    createLabel.setWidth("120px");
+    createLabel.setAlign("left");
+    createLabel.setTextVAlign("center");
+    createLabel.setTextHAlign("left");
+    createLabel.create(newNifty, screen, row);
+
+    CreateDropDownControl dynamicItem = new CreateDropDownControl("dynamicDropDown");
+    DropDownControl dropDown3 = dynamicItem.create(nifty, screen, row);
+    if (dropDown3 != null) {
+      dropDown3.addItem("dynamic drop down");
+      dropDown3.addItem("ftw");
+      dropDown3.setSelectedItem("ftw");
     }
+
+    // dynamically add the backButton for testing purpose
+    CreateButtonControl createButton = new CreateButtonControl("backButton");
+    createButton.set("label", "Back to Menu");
+    createButton.setAlign("right");
+    createButton.setInteractOnClick("back()");
+    createButton.create(newNifty, screen, screen.findElementByName("buttonPanel"));
   }
 
   private DropDownControl findDropDownControl(final String id) {
