@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
- * A BoxThing.
+ * MultiplayerPanelControl.
  * @author void
  */
 public class MultiplayerPanelControl implements Controller {
@@ -29,10 +29,10 @@ public class MultiplayerPanelControl implements Controller {
     nifty = niftyParam;
     screen = screenParam;
     element = newElement;
-    setDifficulty("easy");
   }
 
   public void onStartScreen() {
+    setDifficulty("easy");
   }
 
   public void onFocus(final boolean getFocus) {

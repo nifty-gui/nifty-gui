@@ -21,7 +21,6 @@ public class OutroController implements ScreenController {
   }
 
   public final void onStartScreen() {
-    
     Element myScrollStuff = screen.findElementByName("myScrollStuff");
     if (myScrollStuff != null) {
       CreateCustomControl endScroller = new CreateCustomControl("endscroller-page-1");

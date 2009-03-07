@@ -20,7 +20,7 @@
 
   <!-- menu item style -->
   <style id="diffStyle">
-    <attributes focusable="true" inputController="de.lessvoid.nifty.controls.DefaultController"/>
+    <attributes width="*" focusable="true" inputController="de.lessvoid.nifty.controls.DefaultController"/>
   </style>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  
