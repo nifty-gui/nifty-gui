@@ -113,11 +113,14 @@
         <image filename="all/nin.png" align="center" />
       <panel height="30px" childLayout="vertical" />
         <label style="button-font" text="&quot;The Four of Us are Dying&quot;&#13;&#10;
-from the &quot;creative commons attribution-noncommercial share alike&quot; licensed album&#13;&#10;
+from the&#13;&#10;
+&quot;creative commons attribution-noncommercial share alike&quot;&#13;&#10;
+licensed album&#13;&#10;
 &quot;The Slip&quot;&#13;&#10;
 &#13;&#10;
+&#13;&#10;
 Thank you Trent.&#13;&#10;" align="center" />
-        <panel height="150px" childLayout="vertical" />
+        <panel height="200px" childLayout="vertical" />
         <label style="button-font" text="THE END" align="center" />
         <panel height="20px" childLayout="vertical" />
       </panel>
@@ -318,50 +321,50 @@ Thank you Trent.&#13;&#10;" align="center" />
     <layer id="background" childLayout="absolute">
       <image id="1" filename="all/thumb-helloWorld.png" x="600px" y="400px">
         <effect>
-          <onShow name="fade" start="#0" end="#A" length="5000" startDelay="20000" onEndEffect="shizzleHide(1)"/>
-          <onHide name="fade" start="#A" end="#0" length="5000" startDelay="5000" onEndEffect="shizzleShow(2)"/>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="10000" onEndEffect="shizzleHide(1)"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(2)"/>
         </effect>
       </image>
       <image id="2" filename="all/thumb-textAlign.png" x="100px" y="400px">
         <effect>
-          <onShow name="fade" start="#0" end="#A" length="5000" startDelay="5000" onEndEffect="shizzleHide(2)"/>
-          <onHide name="fade" start="#A" end="#0" length="5000" startDelay="5000" onEndEffect="shizzleShow(3)"/>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(2)"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(3)"/>
         </effect>
       </image>
       <image id="3" filename="all/thumb-textField.png" x="40px" y="500px">
         <effect>
-          <onShow name="fade" start="#0" end="#A" length="5000" startDelay="5000" onEndEffect="shizzleHide(3)"/>
-          <onHide name="fade" start="#A" end="#0" length="5000" startDelay="5000" onEndEffect="shizzleShow(4)"/>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(3)"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(4)"/>
         </effect>
       </image>
       <image id="4" filename="all/thumb-dropDownList.png" x="760px" y="300px">
         <effect>
-          <onShow name="fade" start="#0" end="#A" length="5000" startDelay="5000" onEndEffect="shizzleHide(4)"/>
-          <onHide name="fade" start="#A" end="#0" length="5000" startDelay="5000" onEndEffect="shizzleShow(5)"/>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(4)"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(5)"/>
         </effect>
       </image>
       <image id="5" filename="all/thumb-scrollPanel.png" x="60px" y="550px">
         <effect>
-          <onShow name="fade" start="#0" end="#A" length="5000" startDelay="5000" onEndEffect="shizzleHide(5)"/>
-          <onHide name="fade" start="#A" end="#0" length="5000" startDelay="5000" onEndEffect="shizzleShow(6)"/>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(5)"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(6)"/>
         </effect>
       </image>
       <image id="6" filename="all/thumb-multiplayer.png" x="680px" y="200px">
         <effect>
-          <onShow name="fade" start="#0" end="#A" length="5000" startDelay="5000" onEndEffect="shizzleHide(6)"/>
-          <onHide name="fade" start="#A" end="#0" length="5000" startDelay="5000" onEndEffect="shizzleShow(7)"/>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(6)"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(7)"/>
         </effect>
       </image>
       <image id="7" filename="all/thumb-console.png" x="10px" y="400px">
         <effect>
-          <onShow name="fade" start="#0" end="#A" length="5000" startDelay="5000" onEndEffect="shizzleHide(7)"/>
-          <onHide name="fade" start="#A" end="#0" length="5000" startDelay="5000" onEndEffect="shizzleShow(8)"/>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(7)"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(8)"/>
         </effect>
       </image>
       <image id="8" filename="all/thumb-exit.png" x="70px" y="300px">
         <effect>
-          <onShow name="fade" start="#0" end="#A" length="5000" startDelay="5000" onEndEffect="shizzleHide(8)"/>
-          <onHide name="fade" start="#A" end="#0" length="5000" startDelay="5000" onEndEffect="shizzleShow(end)"/>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(8)"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(end)"/>
         </effect>
       </image>
     </layer>
@@ -380,7 +383,7 @@ Thank you Trent.&#13;&#10;" align="center" />
       <control id="scrollbarPanel" style="autoscroll" name="scrollPanel" horizontal="false" vertical="false" height="75%">
         <panel id="myScrollStuff" childLayout="vertical" width="100%">
           <effect>
-            <onCustom name="autoScroll" length="300000" start="0" end="-3000" inherit="true" onEndEffect="scrollEnd()" />
+            <onCustom name="autoScroll" length="90000" start="0" end="-3100" inherit="true" onEndEffect="scrollEnd()" neverStopRendering="true" />
           </effect>
         </panel>
       </control>
