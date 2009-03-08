@@ -50,6 +50,7 @@ public class ConsoleControl implements Controller {
     }
     CreateTextFieldControl createTextField = new CreateTextFieldControl("console-input");
     createTextField.setStyle("nifty-console-textfield");
+    createTextField.setFocusable("false");
     createTextField.create(nifty, screen, element);
     screen.layoutLayers();
   }

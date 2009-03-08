@@ -7,6 +7,6 @@
   </controlDefinition>
 
   <controlDefinition name="console-line">
-    <label id="label" style="nifty-console-line" text="" align="left" textHAlign="left" textVAlign="center" width="100%" />
+    <label id="label" style="nifty-console-line" text="" align="left" textHAlign="left" textVAlign="center" width="100%"/>
   </controlDefinition>
 </nifty-controls>
