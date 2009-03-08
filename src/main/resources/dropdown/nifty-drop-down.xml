@@ -25,10 +25,11 @@
     <attributes childLayout="vertical" />
     <effect>
       <onStartScreen name="clip" length="250" inherit="true" post="false" />
-      <onStartScreen name="move" length="250" timeType="exp" factor="1.5" mode="fromOffset" offsetY="-200" inherit="true"/>
+      <onStartScreen name="move" length="250" timeType="exp" factor="1.5" mode="fromOffset" offsetY="-100" inherit="true"/>
       <onStartScreen name="fade" length="250" startColor="#0000" endColor="#000c" inherit="true"/>
       <onEndScreen name="clip" length="250" inherit="true" post="false" />
-      <onEndScreen name="move" length="250" timeType="exp" factor="1.5" mode="toOffset" offsetY="-200" inherit="true"/>
+      <onEndScreen name="move" length="250" timeType="exp" factor="1.5" mode="toOffset" offsetY="-100" inherit="true"/>
+      <onEndScreen name="imageOverlay" length="250" alpha="#c" post="false" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
       <onActive name="imageOverlay" alpha="#c" post="false" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
     </effect>
   </style>
