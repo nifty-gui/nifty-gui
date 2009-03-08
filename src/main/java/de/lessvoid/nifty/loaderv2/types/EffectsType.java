@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolver;
@@ -138,4 +139,26 @@ public class EffectsType extends XmlBaseType {
           parameterResolver);
     }
   }
+
+  public void refreshFromAttributes(final ControlEffectsAttributes effects) {
+    effects.refreshEffectsType(this);
+
+//    refreshEffect(EffectEventId.onStartScreen, onStartScreen);
+//    refreshEffect(EffectEventId.onEndScreen, onEndScreen);
+//    refreshEffect(EffectEventId.onHover, onHover);
+//    refreshEffect(EffectEventId.onClick, onClick);
+//    refreshEffect(EffectEventId.onFocus, onFocus);
+//    refreshEffect(EffectEventId.onLostFocus, onLostFocus);
+//    refreshEffect(EffectEventId.onGetFocus, onGetFocus);
+//    refreshEffect(EffectEventId.onActive, onActive);
+//    refreshEffect(EffectEventId.onCustom, onCustom);
+//    refreshEffect(EffectEventId.onShow, onShow);
+//    refreshEffect(EffectEventId.onHide, onHide);
+  }
+
+//  private void refreshEffect(final EffectEventId effectEventId, final Collection < EffectType > effectCollection) {
+//    for (EffectType effectType : effectCollection) {
+//      effectType.r
+//    }
+//  }
 }

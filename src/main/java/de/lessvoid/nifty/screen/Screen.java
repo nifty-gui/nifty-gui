@@ -107,11 +107,6 @@ public class Screen {
             return;
           }
         }
-        if (defaultFocusElement != null) {
-          defaultFocusElement.setFocus();
-        } else {
-          setDefaultFocus();
-        }
       }
     };
 
@@ -126,6 +121,11 @@ public class Screen {
     popup.startEffect(EffectEventId.onStartScreen, localEndNotify);
     popup.startEffect(EffectEventId.onActive);
     popup.onStartScreen(this);
+    if (defaultFocusElement != null) {
+      defaultFocusElement.setFocus();
+    } else {
+      setDefaultFocus();
+    }
 
     // add to layers and add as popup
     addLayerElement(popup);
@@ -184,6 +184,12 @@ public class Screen {
   private void resetLayers() {
     for (Element w : layerElements) {
       w.resetEffects();
+    }
+  }
+
+  private void resetLayersAllEffects() {
+    for (Element w : layerElements) {
+      w.resetAllEffects();
     }
   }
 

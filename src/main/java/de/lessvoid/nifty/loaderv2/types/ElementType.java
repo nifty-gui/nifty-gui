@@ -8,6 +8,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.DefaultController;
 import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
@@ -30,11 +31,10 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 public abstract class ElementType extends XmlBaseType {
   private Logger log = Logger.getLogger(ElementType.class.getName());
+
   private InteractType interact;
   private EffectsType effects;
   private Collection < ElementType > elements = new ArrayList < ElementType >();
-  protected Object[] controllerArray;
-  private boolean refresh;
 
   public ElementType() {
     super();
@@ -311,7 +311,7 @@ public abstract class ElementType extends XmlBaseType {
   private NiftyInputControl createNiftyInputControl(
       final Attributes controlDefinitionAttributes,
       final Controller controller) {
-  String inputMappingClass = controlDefinitionAttributes.get("inputMapping");
+    String inputMappingClass = controlDefinitionAttributes.get("inputMapping");
     if (inputMappingClass == null) {
       inputMappingClass = DefaultInputMapping.class.getName();
     }
@@ -388,9 +388,6 @@ public abstract class ElementType extends XmlBaseType {
       final Object[] controllers,
       final ScreenController screenController) {
     if (interact != null) {
-      if (!refresh) {
-        controllerArray = controllers;
-      }
       interact.materialize(nifty, element, getControllerArrayWithAddFirst(controllers, screenController));
     }
   }
@@ -419,17 +416,17 @@ public abstract class ElementType extends XmlBaseType {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Attributes attributes) {
-    Attributes attrib = new Attributes(attributes);
-    attrib.merge(getAttributes());
+      final ControlAttributes attributes) {
+    Attributes attrib = new Attributes(getAttributes());
+    attributes.refreshAttributes(attrib);
 
-      // remove all children because we're going to build them again
-    for (Element child : element.getElements()) {
-      nifty.removeElement(screen, child);
-    }
+    applyStyle(element, attrib, attrib.get("style"), screen, nifty, nifty.getDefaultStyleResolver(), new ParameterResolverDefault());
+    applyAttributes(element, attrib, nifty.getRenderEngine(), new ParameterResolverDefault());
 
-    refresh = true;
-    applyStandard(nifty, screen, nifty.getDefaultStyleResolver(), new ParameterResolverDefault(), attrib, element, controllerArray);
+    attributes.refreshEffects(effects);
+    applyEffects(element, screen, nifty, new ParameterResolverDefault());
+//    applyInteract(nifty, element, newControllers, screen.getScreenController());
+
     screen.layoutLayers();
   }
 }

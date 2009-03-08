@@ -28,6 +28,8 @@ public class EffectProcessor {
   private boolean neverStopRendering;
   private Falloff hoverFalloff;
   private boolean hoverEffect;
+  private boolean processingActiveEffects;
+  private boolean clearActiveEffectsRequested;
 
   /**
    * create and initialize a new instance.
@@ -59,6 +61,7 @@ public class EffectProcessor {
       }
     }
 
+    processingActiveEffects = true;
     for (Effect e : activeEffects) {
       if (!e.isOverlay() && !e.isPost() && (e.isActive() || neverStopRendering)) {
         e.update();
@@ -82,6 +85,7 @@ public class EffectProcessor {
       }
     }
 
+    processingActiveEffects = true;
     for (Effect e : activeEffects) {
       if (!e.isOverlay() && e.isPost() && (e.isActive() || neverStopRendering)) {
         e.update();
@@ -108,12 +112,13 @@ public class EffectProcessor {
 
     renderDeviceProxy.reset();
 
+    processingActiveEffects = true;
     for (Effect e : activeEffects) {
       if (e.isInherit() && (e.isActive() || neverStopRendering)) {
         e.execute(renderDeviceProxy);
       }
     }
-
+    resetProcessingActiveEffects();
     return renderDeviceProxy.getStates();
   }
 
@@ -130,6 +135,17 @@ public class EffectProcessor {
           listener.perform();
         }
       }
+    }
+    resetProcessingActiveEffects();
+  }
+
+  private void resetProcessingActiveEffects() {
+    if (processingActiveEffects) {
+      if (clearActiveEffectsRequested) {
+        activeEffects.clear();
+        clearActiveEffectsRequested = false;
+      }
+      processingActiveEffects = false;
     }
   }
 
@@ -163,7 +179,11 @@ public class EffectProcessor {
     for (Effect e : activeEffects) {
       e.setActive(false);
     }
-    activeEffects.clear();
+    if (!processingActiveEffects) {
+      activeEffects.clear();
+    } else {
+      clearActiveEffectsRequested = true;
+    }
   }
 
   /**
@@ -309,6 +329,7 @@ public class EffectProcessor {
       }
     }
 
+    processingActiveEffects = true;
     for (Effect e : activeEffects) {
       if (e.isOverlay() && (e.isActive() || neverStopRendering)) {
         e.update();

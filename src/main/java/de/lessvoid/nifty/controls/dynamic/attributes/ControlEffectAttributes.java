@@ -35,4 +35,8 @@ public class ControlEffectAttributes {
     effectType.initFromAttributes(attributes);
     return effectType;
   }
+
+  public void refreshEffectType(final EffectType effectsType) {
+    
+  }
 }

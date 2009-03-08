@@ -9,6 +9,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
@@ -30,7 +31,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.xml.tools.MethodInvoker;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The Element.
@@ -558,6 +558,14 @@ public class Element {
     }
   }
 
+  public void resetAllEffects() {
+    mouseDown = false;
+    effectManager.resetAll();
+    for (Element w : elements) {
+      w.resetAllEffects();
+    }
+  }
+
   public void resetSingleEffect(final EffectEventId effectEventId) {
     mouseDown = false;
     effectManager.resetSingleEffect(effectEventId);
@@ -830,6 +838,19 @@ public class Element {
         internalHide();
       }
     });
+  }
+
+  public void hideWithoutEffect() {
+    // don't hide if not visible
+    if (!isVisible()) {
+      return;
+    }
+
+    focusHandler.lostKeyboardFocus(Element.this);
+    focusHandler.lostMouseFocus(Element.this);
+
+    resetEffects();
+    internalHide();
   }
 
   private void internalHide() {
@@ -1341,8 +1362,8 @@ public class Element {
    * @param newStyle new style to set
    */
   public void setStyle(final String newStyle) {
-    Attributes attributes = new Attributes();
-    attributes.set("style", newStyle);
+    ControlAttributes attributes = new ControlAttributes();
+    attributes.setStyle("style");
     elementType.refreshAttributes(nifty, screen, this, attributes);
   }
 

@@ -5,6 +5,7 @@ import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
+import de.lessvoid.nifty.loaderv2.types.EffectsType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.ImageType;
 import de.lessvoid.nifty.loaderv2.types.LabelType;
@@ -339,5 +340,15 @@ public class ControlAttributes {
         return createControlInternal(nifty, screen, parent);
       }
     };
+  }
+
+  public void refreshAttributes(final Attributes attrib) {
+    attrib.refreshFromAttributes(attributes);
+  }
+
+  public void refreshEffects(final EffectsType effects) {
+    if (this.effects != null) {
+      effects.refreshFromAttributes(this.effects);
+    }
   }
 }

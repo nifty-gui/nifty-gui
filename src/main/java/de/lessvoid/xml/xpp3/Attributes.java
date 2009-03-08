@@ -103,16 +103,27 @@ public class Attributes {
     attributes.put(name, value);
   }
 
-  /**
-   * merge.
-   * @param src source attributes
-   */
   public void merge(final Attributes src) {
     Map < String, String > srcAttributes = src.attributes;
 
     Set < String > srcKeys = srcAttributes.keySet();
     for (String srcKey : srcKeys) {
       if (!attributes.containsKey(srcKey)) {
+        attributes.put(srcKey, srcAttributes.get(srcKey));
+      }
+    }
+  }
+
+  public void refreshFromAttributes(final Attributes src) {
+    Map < String, String > srcAttributes = src.attributes;
+
+    Set < String > srcKeys = srcAttributes.keySet();
+    for (String srcKey : srcKeys) {
+      String srcValue = srcAttributes.get(srcKey);
+      if (srcValue.equals("")) {
+        // this key should be replaced
+        attributes.remove(srcKey);
+      } else {
         attributes.put(srcKey, srcAttributes.get(srcKey));
       }
     }

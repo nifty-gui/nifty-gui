@@ -313,6 +313,7 @@ public class Nifty {
           this,
           timeProvider);
       niftyType.create(this, timeProvider);
+      log.info(niftyType.output());
       long end = timeProvider.getMsTime();
       log.info("loadFromFile took [" + (end - start) + "]");
     } catch (Exception e) {
@@ -333,6 +334,7 @@ public class Nifty {
           this,
           timeProvider);
       niftyType.create(this, timeProvider);
+      log.info(niftyType.output());
       long end = timeProvider.getMsTime();
       log.info("loadFromStream took [" + (end - start) + "]");
     } catch (Exception e) {
@@ -561,7 +563,7 @@ public class Nifty {
       log.warning("missing popup [" + id + "] o_O");
       return;
     }
-    popup.resetEffects();
+    popup.resetAllEffects();
     popup.startEffect(EffectEventId.onEndScreen, new EndNotify() {
       public void perform() {
         removePopupList.add(new RemovePopUp(id, closeNotify));
