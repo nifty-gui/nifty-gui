@@ -33,6 +33,7 @@ public class Effect {
   private boolean infiniteEffect;
   private Falloff falloff;
   private EffectEvents effectEvents;
+  private boolean neverStopRendering;
 
   public Effect(
       final Nifty niftyParam,
@@ -41,6 +42,7 @@ public class Effect {
       final boolean overlayParam,
       final String alternateKeyParam,
       final boolean alternateEnableParam,
+      final boolean neverStopRenderingParam,
       final EffectEventId effectEventIdParam) {
     nifty = niftyParam;
     inherit = inheritParam;
@@ -52,6 +54,7 @@ public class Effect {
     effectEventId = effectEventIdParam;
     hoverEffect = false;
     infiniteEffect = false;
+    neverStopRendering = neverStopRenderingParam;
     effectEvents = new EffectEvents();
   }
 
@@ -214,5 +217,9 @@ public class Effect {
 
   public boolean isOverlay() {
     return overlay;
+  }
+
+  public boolean isNeverStopRendering() {
+    return neverStopRendering;
   }
 }

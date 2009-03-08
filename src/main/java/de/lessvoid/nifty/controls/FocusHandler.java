@@ -264,4 +264,8 @@ public class FocusHandler {
     }
     return null;
   }
+
+  public Element getKeyboardFocusElement() {
+    return keyboardFocusElement;
+  }
 }

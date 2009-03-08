@@ -56,16 +56,16 @@ public class EffectProcessor {
    */
   public final void renderPre(final NiftyRenderEngine renderDevice) {
     if (!active) {
-      if (!neverStopRendering) {
+      if (isNotNeverStopRendering()) {
         return;
       }
     }
 
     processingActiveEffects = true;
     for (Effect e : activeEffects) {
-      if (!e.isOverlay() && !e.isPost() && (e.isActive() || neverStopRendering)) {
+      if (!e.isOverlay() && !e.isPost() && (e.isActive() || e.isNeverStopRendering() || neverStopRendering)) {
         e.update();
-        if (!e.isOverlay() && !e.isPost() && (e.isActive() || neverStopRendering)) {
+        if (!e.isOverlay() && !e.isPost() && (e.isActive() || e.isNeverStopRendering() || neverStopRendering)) {
           e.execute(renderDevice);
         }
       }
@@ -79,7 +79,7 @@ public class EffectProcessor {
    * @param renderDevice the RenderDevice
    */
   public final void renderPost(final NiftyRenderEngine renderDevice) {
-    if (!neverStopRendering) {
+    if (isNotNeverStopRendering()) {
       if (!active) {
         return;
       }
@@ -87,9 +87,9 @@ public class EffectProcessor {
 
     processingActiveEffects = true;
     for (Effect e : activeEffects) {
-      if (!e.isOverlay() && e.isPost() && (e.isActive() || neverStopRendering)) {
+      if (!e.isOverlay() && e.isPost() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
         e.update();
-        if (!e.isOverlay() && e.isPost() && (e.isActive() || neverStopRendering)) {
+        if (!e.isOverlay() && e.isPost() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
           e.execute(renderDevice);
         }
       }
@@ -105,7 +105,7 @@ public class EffectProcessor {
    */
   public Set < RenderStateType > getRenderStatesToSave() {
     if (!active) {
-      if (!neverStopRendering) {
+      if (isNotNeverStopRendering()) {
         return new HashSet < RenderStateType >();
       }
     }
@@ -114,12 +114,25 @@ public class EffectProcessor {
 
     processingActiveEffects = true;
     for (Effect e : activeEffects) {
-      if (e.isInherit() && (e.isActive() || neverStopRendering)) {
+      if (e.isInherit() && (e.isActive() || e.isNeverStopRendering() || neverStopRendering)) {
         e.execute(renderDeviceProxy);
       }
     }
     resetProcessingActiveEffects();
     return renderDeviceProxy.getStates();
+  }
+
+  private boolean isNotNeverStopRendering() {
+    for (Effect e : activeEffects) {
+      if (e.isNeverStopRendering()) {
+        return false;
+      }
+    }
+    if (neverStopRendering) {
+      return false;
+    } else {
+      return true;  
+    }
   }
 
   /**
@@ -324,16 +337,16 @@ public class EffectProcessor {
 
   public void renderOverlay(final NiftyRenderEngine renderDevice) {
     if (!active) {
-      if (!neverStopRendering) {
+      if (isNotNeverStopRendering()) {
         return;
       }
     }
 
     processingActiveEffects = true;
     for (Effect e : activeEffects) {
-      if (e.isOverlay() && (e.isActive() || neverStopRendering)) {
+      if (e.isOverlay() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
         e.update();
-        if (e.isOverlay() && (e.isActive() || neverStopRendering)) {
+        if (e.isOverlay() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
           e.execute(renderDevice);
         }
       }

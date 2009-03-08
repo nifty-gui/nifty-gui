@@ -218,6 +218,10 @@ public class Screen {
   }
 
   public void setDefaultFocus() {
+    if (focusHandler.getKeyboardFocusElement() != null) {
+      return;
+    }
+
     if (defaultFocusElementId != null) {
       Element defaultFocus = getFocusHandler().findElement(defaultFocusElementId);
       if (defaultFocus != null) {
