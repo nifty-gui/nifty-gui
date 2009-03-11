@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.slick;
 
+import java.io.InputStream;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -75,6 +77,18 @@ public class NiftyGameState extends BasicGameState {
     SlickCallable.enterSafeBlock();
     nifty.registerScreenController(controllers);
     nifty.fromXml(filename, "start");
+    SlickCallable.leaveSafeBlock();
+  }
+
+  /**
+   * load xml.
+   * @param filename file to load
+   * @param controllers controllers to use
+   */
+  public void fromXml(final String fileId, final InputStream xmlData, final ScreenController ... controllers) {
+    SlickCallable.enterSafeBlock();
+    nifty.registerScreenController(controllers);
+    nifty.fromXml(fileId, xmlData, "start");
     SlickCallable.leaveSafeBlock();
   }
 
