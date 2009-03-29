@@ -17,7 +17,7 @@
   </controlDefinition>
 
   <!-- DROP DOWN BOX POPUP (The Actual List this is) -->
-  <popup id="dropDownBoxSelectPopup" style="nifty-drop-down" childLayout="absolute" inputController="de.lessvoid.nifty.controls.dropdown.controller.DropDownPopup">
+  <popup id="dropDownBoxSelectPopup" style="nifty-drop-down" childLayout="absolute" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownPopup">
     <interact onRelease="close()" />
     <panel id="dropDownList" style="#list-panel" />
   </popup>

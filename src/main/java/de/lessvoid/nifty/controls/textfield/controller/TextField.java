@@ -59,7 +59,10 @@ public class TextField {
    * @param newText new text
    */
   public void initWithText(final String newText) {
-    this.text = new StringBuffer(newText);
+    this.text = new StringBuffer();
+    if (newText != null) {
+      this.text.append(newText);
+    }
     this.cursorPosition = 0;
     this.selectionStart = -1;
     this.selectionEnd = -1;

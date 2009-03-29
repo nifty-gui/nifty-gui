@@ -7,8 +7,8 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.dynamic.CreateCustomControl;
-import de.lessvoid.nifty.controls.textfield.CreateTextFieldControl;
+import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
+import de.lessvoid.nifty.controls.textfield.TextFieldCreator;
 import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -45,10 +45,10 @@ public class ConsoleControl implements Controller {
     this.element = newElement;
     this.lines = Integer.valueOf((String) properties.get("lines"));
     for (int i = 0; i < lines; i++) {
-      CreateCustomControl createConsoleLine = new CreateCustomControl("console-line-" + i, "console-line");
+      CustomControlCreator createConsoleLine = new CustomControlCreator("console-line-" + i, "console-line");
       createConsoleLine.create(nifty, screen, element);
     }
-    CreateTextFieldControl createTextField = new CreateTextFieldControl("console-input");
+    TextFieldCreator createTextField = new TextFieldCreator("console-input");
     createTextField.setStyle("nifty-console-textfield");
     createTextField.setFocusable("false");
     createTextField.create(nifty, screen, element);

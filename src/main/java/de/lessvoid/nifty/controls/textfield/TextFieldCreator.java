@@ -7,15 +7,15 @@ import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
-public class CreateTextFieldControl extends ControlAttributes {
+public class TextFieldCreator extends ControlAttributes {
   private static final String NAME = "textfield";
 
-  public CreateTextFieldControl() {
+  public TextFieldCreator() {
     setId(NiftyIdCreator.generate());
     setName(NAME);
   }
 
-  public CreateTextFieldControl(final String id) {
+  public TextFieldCreator(final String id) {
     setId(id);
     setName(NAME);
   }
