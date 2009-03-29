@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.elements;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -9,7 +10,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
@@ -1347,9 +1347,7 @@ public class Element {
   public void removeFromFocusHandler() {
     if (screen != null) {
       if (screen.getFocusHandler() != null) {
-        if (focusable) {
-          screen.getFocusHandler().remove(this);
-        }
+        screen.getFocusHandler().remove(this);
         for (Element element : elements) {
           element.removeFromFocusHandler();
         }
@@ -1362,9 +1360,18 @@ public class Element {
    * @param newStyle new style to set
    */
   public void setStyle(final String newStyle) {
-    ControlAttributes attributes = new ControlAttributes();
-    attributes.setStyle("style");
-    elementType.refreshAttributes(nifty, screen, this, attributes);
+    removeStyle(elementType.getAttributes().get("style"));
+    elementType.getAttributes().set("style", newStyle);
+    elementType.applyStyles(nifty.getDefaultStyleResolver());
+    elementType.applyAttributes(this, elementType.getAttributes(), nifty.getRenderEngine());
+    elementType.applyEffects(nifty, screen, this);
+    elementType.applyInteract(nifty, screen, this);
+//    log.info("after setStyle [" + newStyle + "]\n" + elementType.output(0));
+  }
+
+  void removeStyle(final String style) {
+    elementType.getAttributes().removeWithTag(style);
+//    log.info("after removeStyle [" + style + "]\n" + elementType.output(0));
   }
 
   /**

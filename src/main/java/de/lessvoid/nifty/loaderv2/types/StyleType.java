@@ -1,12 +1,7 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolver;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
-import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.StringHelper;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class StyleType extends XmlBaseType {
   private AttributesType attributesType;
@@ -47,47 +42,31 @@ public class StyleType extends XmlBaseType {
     return getAttributes().get("base");
   }
 
-  /**
-   * Apply the this style to the given result attributes using
-   * the given nifty instance to resolve other styles.
-   * @param styleResolver Nifty to resolve styles
-   * @param result attributes to apply the style to
-   */
-  public void apply(
-      final StyleResolver styleResolver,
-      final Attributes result,
-      final Nifty nifty,
-      final Element element,
-      final Screen screen,
-      final ParameterResolver parameterResolver) {
-    applyBaseStyle(styleResolver, result, nifty, element, screen, parameterResolver);
-    applyStyle(result, nifty, element, screen, parameterResolver);
+  public void applyTo(
+      final ElementType elementType,
+      final StyleResolver styleResolver) {
+    applyToBaseStyleInternal(styleResolver, elementType);
+    applyToInternal(elementType);
   }
 
-  private void applyBaseStyle(
-      final StyleResolver styleResolver,
-      final Attributes result,
-      final Nifty nifty,
-      final Element element,
-      final Screen screen,
-      final ParameterResolver parameterResolver) {
-    StyleType baseStyle = styleResolver.resolve(getBaseStyleId());
-    if (baseStyle != null) {
-      baseStyle.apply(styleResolver, result, nifty, element, screen, parameterResolver);
-    }
-  }
-
-  private void applyStyle(
-      final Attributes result,
-      final Nifty nifty,
-      final Element element,
-      final Screen screen,
-      final ParameterResolver parameterResolver) {
+  void applyToInternal(final ElementType elementType) {
     if (attributesType != null) {
-      attributesType.apply(result);
+      attributesType.apply(elementType.getAttributes(), getStyleId());
     }
     if (effectsType != null) {
-      effectsType.materialize(nifty, element, screen, parameterResolver);
+      effectsType.apply(elementType.getEffects());
+    }
+    if (interactType != null) {
+      interactType.apply(elementType.getInteract());
+    }
+  }
+
+  void applyToBaseStyleInternal(
+      final StyleResolver styleResolver,
+      final ElementType elementType) {
+    StyleType baseStyle = styleResolver.resolve(getBaseStyleId());
+    if (baseStyle != null) {
+      baseStyle.applyTo(elementType, styleResolver);
     }
   }
 }

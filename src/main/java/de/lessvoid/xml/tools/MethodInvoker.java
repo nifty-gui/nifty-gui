@@ -48,6 +48,10 @@ public class MethodInvoker {
         this.target[idx] = o;
         idx--;
       }
+//      log.info("target objects for [" + methodWithName + "]");
+//      for (Object o : target) {
+//        log.info(o.toString());
+//      }
     }
   }
 

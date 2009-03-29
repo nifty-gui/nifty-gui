@@ -58,15 +58,18 @@ public class FocusHandler {
       return current;
     }
 
-    index++;
-    if (index >= entries.size()) {
-      index = 0;
-    }
-    Element nextElement = entries.get(index);
-    if (nextElement.isFocusable()) {
-      return nextElement;
-    } else {
-      return getNext(nextElement);
+    while (true) {
+      index++;
+      if (index >= entries.size()) {
+        index = 0;
+      }
+      Element nextElement = entries.get(index);
+      if (nextElement == current) {
+        return current;
+      }
+      if (nextElement.isFocusable()) {
+        return nextElement;
+      }
     }
   }
 
@@ -85,15 +88,18 @@ public class FocusHandler {
       return current;
     }
 
-    index--;
-    if (index < 0) {
-      index = entries.size() - 1;
-    }
-    Element prevElement = entries.get(index);
-    if (prevElement.isFocusable()) {
-      return prevElement;
-    } else {
-      return getPrev(prevElement);
+    while (true) {
+      index--;
+      if (index < 0) {
+        index = entries.size() - 1;
+      }
+      Element prevElement = entries.get(index);
+      if (prevElement == current) {
+        return current;
+      }
+      if (prevElement.isFocusable()) {
+        return prevElement;
+      }
     }
   }
 

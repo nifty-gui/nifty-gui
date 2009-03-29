@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.loaderv2.types;
 
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
@@ -7,8 +8,6 @@ import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolver;
-import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class EffectType extends XmlBaseType {
@@ -18,17 +17,27 @@ public class EffectType extends XmlBaseType {
   private static final boolean DEFAULT_POST = false;
   private static final boolean DEFAULT_OVERLAY = false;
 
+  public EffectType() {
+  }
+
+  public EffectType(final EffectType e) {
+    super(e);
+  }
+
+  public EffectType clone() {
+    return new EffectType(this);
+  }
+
   public void materialize(
       final Nifty nifty,
-      final ScreenController screenController,
       final Element element,
       final EffectEventId effectEventId,
       final Attributes effectsTypeAttibutes,
-      final ParameterResolver parameterResolver) {
+      final LinkedList < Object > controllers) {
     Attributes effectAttributes = new Attributes(getAttributes());
     effectAttributes.merge(effectsTypeAttibutes);
 
-    Attributes attributes = parameterResolver.resolve(effectAttributes);
+    Attributes attributes = effectAttributes;
 
     RegisterEffectType registerEffectType = getRegisteredEffectType(nifty, attributes);
     if (registerEffectType == null) {
@@ -46,7 +55,7 @@ public class EffectType extends XmlBaseType {
         createEffectImpl(effectClass),
         attributes.createProperties(),
         nifty.getTimeProvider(),
-        screenController);
+        controllers);
     element.registerEffect(effectEventId, effect);
   }
 
@@ -103,7 +112,7 @@ public class EffectType extends XmlBaseType {
   }
 
   protected void initializeEffect(final Effect effect, final EffectEventId effectEventId) {
-    if (EffectEventId.onFocus.equals(effectEventId)) {
+    if (EffectEventId.onFocus.equals(effectEventId) || EffectEventId.onActive.equals(effectEventId)) {
       effect.enableInfinite();
     }
   }
@@ -126,5 +135,9 @@ public class EffectType extends XmlBaseType {
 
   private String getEffectName(final Attributes attributes) {
     return attributes.get("name");
+  }
+
+  public void resolveParameters(final Attributes src) {
+    getAttributes().resolveParameters(src);
   }
 }

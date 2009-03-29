@@ -5,7 +5,19 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.Falloff;
 
 public class EffectTypeOnHover extends EffectType {
-  private HoverType hoverType;
+  private HoverType hoverType = new HoverType();
+
+  public EffectTypeOnHover(final EffectTypeOnHover src) {
+    super(src);
+    hoverType = new HoverType(src.hoverType);
+  }
+
+  public EffectTypeOnHover() {
+  }
+
+  public EffectTypeOnHover clone() {
+    return new EffectTypeOnHover(this);
+  }
 
   public void setHover(final HoverType hoverTypeParam) {
     this.hoverType = hoverTypeParam;

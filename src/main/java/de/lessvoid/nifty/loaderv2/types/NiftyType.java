@@ -73,6 +73,7 @@ public class NiftyType extends XmlBaseType {
 
     stopWatch.start();
     for (ControlDefinitionType controlDefintion : controlDefinitions) {
+      controlDefintion.makeFlat();
       nifty.registerControlDefintion(controlDefintion);
     }
     log.info("registerControlDefinition [" + stopWatch.stop() + "]");

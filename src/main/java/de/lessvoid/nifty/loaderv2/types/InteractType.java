@@ -5,8 +5,21 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.helper.OnClickType;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.tools.MethodInvoker;
+import de.lessvoid.xml.xpp3.Attributes;
 
 public class InteractType extends XmlBaseType {
+  public InteractType() {
+    super();
+  }
+
+  public InteractType(final InteractType src) {
+    super(src);
+  }
+
+  public void mergeFromInteractType(final InteractType interact) {
+    mergeFromAttributes(interact.getAttributes());
+  }
+
   public String output(final int offset) {
     return StringHelper.whitespace(offset) + "<interact> " + super.output(offset);
   }
@@ -57,5 +70,13 @@ public class InteractType extends XmlBaseType {
       return null;
     }
     return new OnClickType(onClick);
+  }
+
+  public void apply(final InteractType interact) {
+    interact.getAttributes().merge(getAttributes());
+  }
+
+  public void resolveParameters(final Attributes src) {
+    getAttributes().resolveParameters(src);
   }
 }

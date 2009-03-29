@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.effects;
 
+import java.util.LinkedList;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
@@ -79,13 +80,13 @@ public class Effect {
       final EffectImpl effectImplParam,
       final Properties parameterParam,
       final TimeProvider timeParam,
-      final ScreenController screenController) {
+      final LinkedList < Object > controllers) {
     effectImpl = effectImplParam;
     element = elementParam;
     parameter = parameterParam;
     parameter.put("effectEventId", effectEventId);
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
-    effectEvents.init(screenController, parameter);
+    effectEvents.init(controllers, parameter);
   }
 
   /**
@@ -94,6 +95,7 @@ public class Effect {
   public void start() {
     active = true;
     timeInterpolator.start();
+    effectEvents.onStartEffect(parameter);
     effectImpl.activate(nifty, element, parameter);
   }
 

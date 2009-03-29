@@ -2,12 +2,12 @@ package de.lessvoid.nifty.loaderv2.types;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolver;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -17,17 +17,81 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class EffectsType extends XmlBaseType {
-  private Collection < EffectType > onStartScreen = new ArrayList < EffectType >();
-  private Collection < EffectType > onEndScreen = new ArrayList < EffectType >();
-  private Collection < EffectType > onHover = new ArrayList < EffectType >();
-  private Collection < EffectType > onClick = new ArrayList < EffectType >();
-  private Collection < EffectType > onFocus = new ArrayList < EffectType >();
-  private Collection < EffectType > onLostFocus = new ArrayList < EffectType >();
-  private Collection < EffectType > onGetFocus = new ArrayList < EffectType >();
-  private Collection < EffectType > onActive = new ArrayList < EffectType >();
-  private Collection < EffectType > onCustom = new ArrayList < EffectType >();
-  private Collection < EffectType > onShow = new ArrayList < EffectType >();
-  private Collection < EffectType > onHide = new ArrayList < EffectType >();
+  protected Collection < EffectType > onStartScreen = new ArrayList < EffectType >();
+  protected Collection < EffectType > onEndScreen = new ArrayList < EffectType >();
+  protected Collection < EffectType > onHover = new ArrayList < EffectType >();
+  protected Collection < EffectType > onClick = new ArrayList < EffectType >();
+  protected Collection < EffectType > onFocus = new ArrayList < EffectType >();
+  protected Collection < EffectType > onLostFocus = new ArrayList < EffectType >();
+  protected Collection < EffectType > onGetFocus = new ArrayList < EffectType >();
+  protected Collection < EffectType > onActive = new ArrayList < EffectType >();
+  protected Collection < EffectType > onCustom = new ArrayList < EffectType >();
+  protected Collection < EffectType > onShow = new ArrayList < EffectType >();
+  protected Collection < EffectType > onHide = new ArrayList < EffectType >();
+
+  public EffectsType() {
+  }
+
+  public EffectsType(final EffectsType src) {
+    super(src);
+    copyEffects(src);
+  }
+
+  public void mergeFromEffectsType(final EffectsType src) {
+    mergeFromAttributes(src.getAttributes());
+    mergeEffects(src);
+  }
+
+  void copyEffects(final EffectsType src) {
+    copyCollection(onStartScreen, src.onStartScreen);
+    copyCollection(onEndScreen, src.onEndScreen);
+    copyCollection(onHover, src.onHover);
+    copyCollection(onClick, src.onClick);
+    copyCollection(onFocus, src.onFocus);
+    copyCollection(onLostFocus, src.onLostFocus);
+    copyCollection(onGetFocus, src.onGetFocus);
+    copyCollection(onActive, src.onActive);
+    copyCollection(onCustom, src.onCustom);
+    copyCollection(onShow, src.onShow);
+    copyCollection(onHide, src.onHide);
+  }
+
+  void mergeEffects(final EffectsType src) {
+    mergeCollection(onStartScreen, src.onStartScreen);
+    mergeCollection(onEndScreen, src.onEndScreen);
+    mergeCollection(onHover, src.onHover);
+    mergeCollection(onClick, src.onClick);
+    mergeCollection(onFocus, src.onFocus);
+    mergeCollection(onLostFocus, src.onLostFocus);
+    mergeCollection(onGetFocus, src.onGetFocus);
+    mergeCollection(onActive, src.onActive);
+    mergeCollection(onCustom, src.onCustom);
+    mergeCollection(onShow, src.onShow);
+    mergeCollection(onHide, src.onHide);
+  }
+
+  Collection < EffectType > copyCollection(
+      final Collection < EffectType > dst,
+      final Collection < EffectType > src) {
+    dst.clear();
+    copyEffects(dst, src);
+    return dst;
+  }
+
+  Collection < EffectType > mergeCollection(
+      final Collection < EffectType > dst,
+      final Collection < EffectType > src) {
+    copyEffects(dst, src);
+    return dst;
+  }
+
+  void copyEffects(
+      final Collection < EffectType > dst,
+      final Collection < EffectType > src) {
+    for (EffectType e : src) {
+      dst.add(e.clone());
+    }
+  }
 
   public void addOnStartScreen(final EffectType effectParam) {
     onStartScreen.add(effectParam);
@@ -106,19 +170,19 @@ public class EffectsType extends XmlBaseType {
       final Nifty nifty,
       final Element element,
       final Screen screen,
-      final ParameterResolver parameterResolver) {
-    Attributes attributes = parameterResolver.resolve(getAttributes());
-    initEffect(EffectEventId.onStartScreen, onStartScreen, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onEndScreen, onEndScreen, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onHover, onHover, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onClick, onClick, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onFocus, onFocus, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onLostFocus, onLostFocus, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onGetFocus, onGetFocus, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onActive, onActive, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onCustom, onCustom, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onShow, onShow, element, nifty, screen, attributes, parameterResolver);
-    initEffect(EffectEventId.onHide, onHide, element, nifty, screen, attributes, parameterResolver);
+      final LinkedList < Object > controllers) {
+    Attributes attributes = getAttributes();
+    initEffect(EffectEventId.onStartScreen, onStartScreen, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onEndScreen, onEndScreen, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onHover, onHover, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onClick, onClick, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onFocus, onFocus, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onLostFocus, onLostFocus, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onGetFocus, onGetFocus, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onActive, onActive, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onCustom, onCustom, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onShow, onShow, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onHide, onHide, element, nifty, screen, attributes, controllers);
   }
 
   private void initEffect(
@@ -128,15 +192,14 @@ public class EffectsType extends XmlBaseType {
       final Nifty nifty,
       final Screen screen,
       final Attributes effectsTypeAttributes,
-      final ParameterResolver parameterResolver) {
+      final LinkedList < Object > controllers) {
     for (EffectType effectType : effectCollection) {
       effectType.materialize(
           nifty,
-          screen.getScreenController(),
           element,
           eventId,
           effectsTypeAttributes,
-          parameterResolver);
+          controllers);
     }
   }
 
@@ -156,9 +219,47 @@ public class EffectsType extends XmlBaseType {
 //    refreshEffect(EffectEventId.onHide, onHide);
   }
 
-//  private void refreshEffect(final EffectEventId effectEventId, final Collection < EffectType > effectCollection) {
-//    for (EffectType effectType : effectCollection) {
-//      effectType.r
-//    }
-//  }
+  public void apply(final EffectsType effects) {
+    applyEffectCollection(onStartScreen, effects.onStartScreen);
+    applyEffectCollection(onEndScreen, effects.onEndScreen);
+    applyEffectCollection(onHover, effects.onHover);
+    applyEffectCollection(onClick, effects.onClick);
+    applyEffectCollection(onFocus, effects.onFocus);
+    applyEffectCollection(onLostFocus, effects.onLostFocus);
+    applyEffectCollection(onGetFocus, effects.onGetFocus);
+    applyEffectCollection(onActive, effects.onActive);
+    applyEffectCollection(onCustom, effects.onCustom);
+    applyEffectCollection(onShow, effects.onShow);
+    applyEffectCollection(onHide, effects.onHide);
+  }
+
+  void applyEffectCollection(
+      final Collection < EffectType > src,
+      final Collection < EffectType > dst) {
+    for (EffectType effectType : src) {
+      dst.add(effectType);
+    }
+  }
+
+  public void resolveParameters(final Attributes src) {
+    resolveParameterCollection(onStartScreen, src);
+    resolveParameterCollection(onEndScreen, src);
+    resolveParameterCollection(onHover, src);
+    resolveParameterCollection(onClick, src);
+    resolveParameterCollection(onFocus, src);
+    resolveParameterCollection(onLostFocus, src);
+    resolveParameterCollection(onGetFocus, src);
+    resolveParameterCollection(onActive, src);
+    resolveParameterCollection(onCustom, src);
+    resolveParameterCollection(onShow, src);
+    resolveParameterCollection(onHide, src);
+  }
+
+  void resolveParameterCollection(
+      final Collection < EffectType > dst,
+      final Attributes src) {
+    for (EffectType e : dst) {
+      e.resolveParameters(src);
+    }
+  }
 }

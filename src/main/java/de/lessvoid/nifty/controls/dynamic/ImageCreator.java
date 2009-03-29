@@ -7,15 +7,13 @@ import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
-public class CreateLabel extends ControlAttributes {
-  public CreateLabel(final String text) {
+public class ImageCreator extends ControlAttributes {
+  public ImageCreator() {
     setId(NiftyIdCreator.generate());
-    setText(text);
   }
 
-  public CreateLabel(final String id, final String text) {
+  public ImageCreator(final String id) {
     setId(id);
-    setText(text);
   }
 
   public Element create(
@@ -24,7 +22,7 @@ public class CreateLabel extends ControlAttributes {
       final Element parent) {
     nifty.addControl(screen, parent, new StandardControl() {
       public Element createControl(final Nifty nifty, final Screen screen, final Element parent) throws Exception {
-        return createLabel(nifty, screen, parent);
+        return createImage(nifty, screen, parent);
       }
     });
     nifty.addControlsWithoutStartScreen();

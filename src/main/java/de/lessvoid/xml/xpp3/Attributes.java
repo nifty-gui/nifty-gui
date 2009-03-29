@@ -1,5 +1,6 @@
 package de.lessvoid.xml.xpp3;
 
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
@@ -13,6 +14,7 @@ import org.xmlpull.v1.XmlPullParser;
  */
 public class Attributes {
   private Map < String, String > attributes = new Hashtable < String, String >();
+  private Map < String, Set < String >> taggedAttributes = new Hashtable < String, Set < String >>();
 
   public Attributes() {
   }
@@ -32,6 +34,9 @@ public class Attributes {
   public Attributes(final Attributes source) {
     attributes = new Hashtable < String, String >();
     attributes.putAll(source.attributes);
+
+    taggedAttributes = new Hashtable < String, Set < String >>();
+    taggedAttributes.putAll(source.taggedAttributes);
   }
 
   /**
@@ -50,6 +55,14 @@ public class Attributes {
    */
   public String get(final String name) {
     return attributes.get(name);
+  }
+
+  public String getWithDefault(final String name, final String defaultValue) {
+    String value = attributes.get(name);
+    if (value == null) {
+      value = defaultValue;
+    }
+    return value;
   }
 
   /**
@@ -110,6 +123,35 @@ public class Attributes {
     for (String srcKey : srcKeys) {
       if (!attributes.containsKey(srcKey)) {
         attributes.put(srcKey, srcAttributes.get(srcKey));
+
+        for (Map.Entry < String, Set < String >> tag : src.taggedAttributes.entrySet()) {
+          if (tag.getValue().contains(srcKey)) {
+            Set < String > attribForTag = taggedAttributes.get(tag.getKey());
+            if (attribForTag == null) {
+              attribForTag = new HashSet < String >();
+              taggedAttributes.put(tag.getKey(), attribForTag);
+            }
+            attribForTag.add(srcKey);
+          }
+        }
+      }
+    }
+  }
+
+  public void mergeAndTag(final Attributes src, final String tag) {
+    Map < String, String > srcAttributes = src.attributes;
+
+    Set < String > srcKeys = srcAttributes.keySet();
+    for (String srcKey : srcKeys) {
+      if (!attributes.containsKey(srcKey)) {
+        String value = srcAttributes.get(srcKey);
+        attributes.put(srcKey, value);
+        Set < String > attribForTag = taggedAttributes.get(tag);
+        if (attribForTag == null) {
+          attribForTag = new HashSet < String >();
+          taggedAttributes.put(tag, attribForTag);
+        }
+        attribForTag.add(srcKey);
       }
     }
   }
@@ -161,8 +203,22 @@ public class Attributes {
         first = false;
       }
       result += key + " => " + attributes.get(key);
+
+      String tag = resolveTag(key);
+      if (tag != null) {
+        result += " {" + tag + "}";
+      }
     }
     return result;
+  }
+
+  private String resolveTag(final String key) {
+    for (Map.Entry < String, Set < String >> tag : taggedAttributes.entrySet()) {
+      if (tag.getValue().contains(key)) {
+        return tag.getKey();
+      }
+    }
+    return null;
   }
 
   public Properties extractParameters() {
@@ -185,5 +241,42 @@ public class Attributes {
 
   public void remove(final String key) {
     attributes.remove(key);
+  }
+
+  public String getWithTag(final String name, final String tag) {
+    Set < String > attributesWithTag = taggedAttributes.get(tag);
+    if (attributesWithTag == null) {
+      return null;
+    }
+    if (!attributesWithTag.contains(name)) {
+      return null;
+    }
+    return attributes.get(name);
+  }
+
+  public void resolveParameters(final Attributes attributes) {
+    Set < Map.Entry < Object, Object >> entrySet = getParameterSet();
+    for (Map.Entry < Object, Object > entry : entrySet) {
+      String key = (String) entry.getKey();
+      String value = (String) entry.getValue();
+      if (attributes.isSet(key)) {
+        set(value, attributes.get(key));
+      } else {
+        remove(value);
+      }
+    }
+  }
+
+  Set < Map.Entry < Object, Object >> getParameterSet() {
+    return extractParameters().entrySet();
+  }
+
+  public void removeWithTag(final String tag) {
+    Set < String > tagged = taggedAttributes.get(tag);
+    if (tagged != null) {
+      for (String key : tagged) {
+        remove(key);
+      }
+    }
   }
 }

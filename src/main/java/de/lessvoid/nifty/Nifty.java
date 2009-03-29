@@ -22,13 +22,12 @@ import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.NiftyFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
 import de.lessvoid.nifty.loaderv2.types.StyleType;
-import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolverDefault;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
-import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverControlDefinintion;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverDefault;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
@@ -313,7 +312,7 @@ public class Nifty {
           this,
           timeProvider);
       niftyType.create(this, timeProvider);
-      log.info(niftyType.output());
+//      log.info(niftyType.output());
       long end = timeProvider.getMsTime();
       log.info("loadFromFile took [" + (end - start) + "]");
     } catch (Exception e) {
@@ -334,7 +333,7 @@ public class Nifty {
           this,
           timeProvider);
       niftyType.create(this, timeProvider);
-      log.info(niftyType.output());
+//      log.info(niftyType.output());
       long end = timeProvider.getMsTime();
       log.info("loadFromStream took [" + (end - start) + "]");
     } catch (Exception e) {
@@ -515,18 +514,16 @@ public class Nifty {
     }
   }
 
-  private Element createPopupFromType(final PopupType popupType) {
+  private Element createPopupFromType(final PopupType popupTypeParam) {
     Screen screen = getCurrentScreen();
     LayoutPart layerLayout = NiftyFactory.createRootLayerLayoutPart(this);
+    PopupType popupType = new PopupType(popupTypeParam);
+    popupType.prepare(this, screen.getRootElement().getElementType());
     return popupType.create(
         screen.getRootElement(),
         this,
         screen,
-        layerLayout,
-        new StyleResolverControlDefinintion(getDefaultStyleResolver(), popupType.getAttributes().get("style")),
-        new ParameterResolverDefault(),
-        popupType.getAttributes(),
-        null);
+        layerLayout);
   }
 
   /**
@@ -538,6 +535,10 @@ public class Nifty {
     Element popupElement = createPopupFromType(popups.get(id));
     activePopups.put(id, popupElement);
     return popupElement;
+  }
+
+  public Element findActivePopupByName(final String id) {
+    return activePopups.get(id);
   }
 
   /**
@@ -620,7 +621,8 @@ public class Nifty {
 
     public void startControlWithCheck(final Element element) {
       if (screen.isRunning()) {
-       startControl(element); 
+//        element.startEffect(EffectEventId.onStartScreen);
+//        element.startEffect(EffectEventId.onActive);
       }
     }
 
@@ -697,13 +699,14 @@ public class Nifty {
     });
   }
 
-  /**
-   * toggle debug console on/off.
-   * @param outputEffects outputEffects
-   */
-  public void toggleDebugConsole(final boolean outputEffects) {
+  public void toggleElementsDebugConsole() {
     useDebugConsole = !useDebugConsole;
-    console.setOutputElements(outputEffects);
+    console.setOutputElements(true);
+  }
+
+  public void toggleEffectsDebugConsole() {
+    useDebugConsole = !useDebugConsole;
+    console.setOutputElements(false);
   }
 
   /**

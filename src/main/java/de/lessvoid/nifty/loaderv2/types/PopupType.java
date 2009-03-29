@@ -3,7 +3,7 @@ package de.lessvoid.nifty.loaderv2.types;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.loaderv2.NiftyFactory;
-import de.lessvoid.nifty.tools.StringHelper;
+import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class PopupType extends ElementType {
@@ -11,15 +11,25 @@ public class PopupType extends ElementType {
     super();
   }
 
+  public PopupType(final PopupType src) {
+    super(src);
+  }
+
+  public PopupType copy() {
+    return new PopupType(this);
+  }
+
   public PopupType(final Attributes attributes) throws Exception {
     super(attributes);
   }
 
-  public String output(final int offset) {
-    return StringHelper.whitespace(offset) + "<popup> " + super.output(offset);
-  }
-
-  protected ElementRenderer[] createElementRenderer(final Nifty nifty) {
-    return NiftyFactory.getPanelRenderer();
+  protected void makeFlat() {
+    super.makeFlat();
+    setTagName("<popup>");
+    setElementRendererCreator(new ElementRendererCreator() {
+      public ElementRenderer[] createElementRenderer(final Nifty nifty) {
+        return NiftyFactory.getPanelRenderer();
+      }
+    });
   }
 }

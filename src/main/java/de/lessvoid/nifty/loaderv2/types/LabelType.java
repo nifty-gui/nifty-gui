@@ -1,5 +1,10 @@
 package de.lessvoid.nifty.loaderv2.types;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.loaderv2.NiftyFactory;
+import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -12,9 +17,26 @@ public class LabelType extends TextType {
     initFromAttributes(attributes);
   }
 
-  public String output(final int offset) {
-    return StringHelper.whitespace(offset) + "<label> " + super.output(offset);
+  protected void makeFlat() {
+    super.makeFlat();
+    setTagName("<label>");
+    setElementRendererCreator(new ElementRendererCreator() {
+      public ElementRenderer[] createElementRenderer(final Nifty nifty) {
+        TextRenderer textRenderer = new TextRenderer();
+        ElementRenderer[] panelRenderer = NiftyFactory.getPanelRenderer();
+        ElementRenderer[] renderer = new ElementRenderer[panelRenderer.length + 1];
+        for (int i = 0; i < panelRenderer.length; i++) {
+          renderer[i] = panelRenderer[i];
+        }
+        renderer[panelRenderer.length] = textRenderer;
+        return renderer;
+      }
+    });
   }
+
+//  public String output(final int offset) {
+//    return StringHelper.whitespace(offset) + "<label> " + super.output(offset);
+//  }
 
   public void initFromAttributes(final Attributes attributesParam) {
     super.initFromAttributes(attributesParam);

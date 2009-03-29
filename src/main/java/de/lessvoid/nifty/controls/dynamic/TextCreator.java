@@ -7,13 +7,13 @@ import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
-public class CreateText extends ControlAttributes {
-  public CreateText(final String text) {
+public class TextCreator extends ControlAttributes {
+  public TextCreator(final String text) {
     setId(NiftyIdCreator.generate());
     setText(text);
   }
 
-  public CreateText(final String id, final String text) {
+  public TextCreator(final String id, final String text) {
     setId(id);
     setText(text);
   }

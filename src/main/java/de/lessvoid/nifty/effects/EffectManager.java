@@ -8,6 +8,7 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
+import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -15,6 +16,10 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class EffectManager {
+
+  interface RenderPhase {
+    public void render(EffectProcessor effectProcessor);
+  }
 
   /**
    * all the effects.
@@ -101,40 +106,42 @@ public class EffectManager {
     renderDevice.restoreState();
   }
 
-  /**
-   * render all pre effects.
-   * @param renderDevice the renderDevice we should use.
-   */
-  public void renderPre(final NiftyRenderEngine renderDevice, final Element element) {
-    effectProcessor.get(EffectEventId.onHover).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onStartScreen).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onEndScreen).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onActive).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onFocus).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onLostFocus).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onGetFocus).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onClick).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onShow).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onHide).renderPre(renderDevice);
-    effectProcessor.get(EffectEventId.onCustom).renderPre(renderDevice);
+  private void render(final Element element, final RenderPhase phase) {
+    phase.render(effectProcessor.get(EffectEventId.onShow));
+    phase.render(effectProcessor.get(EffectEventId.onHide));
+    phase.render(effectProcessor.get(EffectEventId.onStartScreen));
+    phase.render(effectProcessor.get(EffectEventId.onEndScreen));
+    phase.render(effectProcessor.get(EffectEventId.onActive));
+    phase.render(effectProcessor.get(EffectEventId.onHover));
+    phase.render(effectProcessor.get(EffectEventId.onFocus));
+    phase.render(effectProcessor.get(EffectEventId.onLostFocus));
+    phase.render(effectProcessor.get(EffectEventId.onGetFocus));
+    phase.render(effectProcessor.get(EffectEventId.onClick));
+    phase.render(effectProcessor.get(EffectEventId.onCustom));
   }
 
-  /**
-   * render all post effects.
-   * @param renderDevice the renderDevice we should use.
-   */
-  public void renderPost(final NiftyRenderEngine renderDevice, final Element element) {
-    effectProcessor.get(EffectEventId.onHover).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onStartScreen).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onEndScreen).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onActive).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onFocus).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onLostFocus).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onGetFocus).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onClick).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onShow).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onHide).renderPost(renderDevice);
-    effectProcessor.get(EffectEventId.onCustom).renderPost(renderDevice);
+  public void renderPre(final NiftyRenderEngine renderEngine, final Element element) {
+    render(element, new RenderPhase() {
+      public void render(final EffectProcessor processor) {
+        processor.renderPre(renderEngine);
+      }
+    });
+  }
+
+  public void renderPost(final NiftyRenderEngine renderEngine, final Element element) {
+    render(element, new RenderPhase() {
+      public void render(final EffectProcessor processor) {
+        processor.renderPost(renderEngine);
+      }
+    });
+  }
+
+  public void renderOverlay(final NiftyRenderEngine renderEngine, final Element element) {
+    render(element, new RenderPhase() {
+      public void render(final EffectProcessor processor) {
+        processor.renderOverlay(renderEngine);
+      }
+    });
   }
 
   /**
@@ -221,20 +228,6 @@ public class EffectManager {
     } else {
       return data.toString();
     }
-  }
-
-  public void renderOverlay(final NiftyRenderEngine renderDevice, final Element element) {
-    effectProcessor.get(EffectEventId.onHover).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onStartScreen).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onEndScreen).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onFocus).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onLostFocus).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onGetFocus).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onClick).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onShow).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onHide).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onActive).renderOverlay(renderDevice);
-    effectProcessor.get(EffectEventId.onCustom).renderOverlay(renderDevice);
   }
 
   public void setFalloff(final Falloff newFalloff) {

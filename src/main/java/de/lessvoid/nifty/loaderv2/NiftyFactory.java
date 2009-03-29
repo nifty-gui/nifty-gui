@@ -9,6 +9,7 @@ import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.layout.LayoutPart;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -24,7 +25,7 @@ public final class NiftyFactory {
       final TimeProvider time) {
     Element layer = new Element(
         nifty,
-        null,
+        new ElementType(),
         id,
         null,
         createRootLayerLayoutPart(nifty),

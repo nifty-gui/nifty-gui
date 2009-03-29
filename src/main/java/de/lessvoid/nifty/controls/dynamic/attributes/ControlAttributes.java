@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.dynamic.attributes;
 
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.elements.Element;
@@ -11,9 +12,6 @@ import de.lessvoid.nifty.loaderv2.types.ImageType;
 import de.lessvoid.nifty.loaderv2.types.LabelType;
 import de.lessvoid.nifty.loaderv2.types.PanelType;
 import de.lessvoid.nifty.loaderv2.types.TextType;
-import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolverControl;
-import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolverDefault;
-import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverControlDefinintion;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -321,15 +319,12 @@ public class ControlAttributes {
     if (interact != null) {
       elementType.setInteract(interact.create());
     }
+    elementType.prepare(nifty, parent.getElementType());
     Element element = elementType.create(
       parent,
       nifty,
       screen,
-      new LayoutPart(),
-      new StyleResolverControlDefinintion(nifty.getDefaultStyleResolver(), attributes.get("style")),
-      new ParameterResolverControl(new ParameterResolverDefault(), attributes),
-      attributes,
-      null);
+      new LayoutPart());
     screen.layoutLayers();
     return element;
   }

@@ -10,7 +10,6 @@ import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.loaderv2.types.helper.PaddingAttributeParser;
-import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolver;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -35,30 +34,28 @@ public class ApplyAttributes {
 
   public void perform(
       final Element element,
-      final NiftyRenderEngine renderEngine,
-      final ParameterResolver parameterResolver) {
+      final NiftyRenderEngine renderEngine) {
     if (attributes == null) {
       return;
     }
-    Attributes resolved = parameterResolver.resolve(attributes);
-    element.setConstraintHeight(convert.sizeValue(resolved.get("height")));
-    element.setConstraintWidth(convert.sizeValue(resolved.get("width")));
-    element.setConstraintX(convert.sizeValue(resolved.get("x")));
-    element.setConstraintY(convert.sizeValue(resolved.get("y")));
-    element.setConstraintHorizontalAlign(convert.horizontalAlign(resolved.get("align")));
-    element.setConstraintVerticalAlign(convert.verticalAlign(resolved.get("valign")));
-    element.setPaddingLeft(convert.paddingSizeValue(resolved.get("paddingLeft")));
-    element.setPaddingRight(convert.paddingSizeValue(resolved.get("paddingRight")));
-    element.setPaddingTop(convert.paddingSizeValue(resolved.get("paddingTop")));
-    element.setPaddingBottom(convert.paddingSizeValue(resolved.get("paddingBottom")));
-    processPadding(element, resolved);
-    element.setClipChildren(resolved.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP));
-    element.setVisible(resolved.getAsBoolean("visible", Convert.DEFAULT_VISIBLE));
-    element.setVisibleToMouseEvents(resolved.getAsBoolean("visibleToMouse", Convert.DEFAULT_VISIBLE_TO_MOUSE));
-    element.setLayoutManager(convert.layoutManager(resolved.get("childLayout")));
-    element.setFocusable(resolved.getAsBoolean("focusable", Convert.DEFAULT_FOCUSABLE));
+    element.setConstraintHeight(convert.sizeValue(attributes.get("height")));
+    element.setConstraintWidth(convert.sizeValue(attributes.get("width")));
+    element.setConstraintX(convert.sizeValue(attributes.get("x")));
+    element.setConstraintY(convert.sizeValue(attributes.get("y")));
+    element.setConstraintHorizontalAlign(convert.horizontalAlign(attributes.get("align")));
+    element.setConstraintVerticalAlign(convert.verticalAlign(attributes.get("valign")));
+    element.setPaddingLeft(convert.paddingSizeValue(attributes.get("paddingLeft")));
+    element.setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight")));
+    element.setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop")));
+    element.setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom")));
+    processPadding(element, attributes);
+    element.setClipChildren(attributes.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP));
+    element.setVisible(attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE));
+    element.setVisibleToMouseEvents(attributes.getAsBoolean("visibleToMouse", Convert.DEFAULT_VISIBLE_TO_MOUSE));
+    element.setLayoutManager(convert.layoutManager(attributes.get("childLayout")));
+    element.setFocusable(attributes.getAsBoolean("focusable", Convert.DEFAULT_FOCUSABLE));
 
-    applyRenderer(element, renderEngine, resolved);
+    applyRenderer(element, renderEngine, attributes);
   }
 
   private void processPadding(final Element element, final Attributes resolved) {

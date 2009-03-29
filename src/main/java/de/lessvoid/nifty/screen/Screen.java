@@ -187,12 +187,6 @@ public class Screen {
     }
   }
 
-  private void resetLayersAllEffects() {
-    for (Element w : layerElements) {
-      w.resetAllEffects();
-    }
-  }
-
   private void resetLayersMouseDown() {
     for (Element w : layerElements) {
       w.resetMouseDown();
