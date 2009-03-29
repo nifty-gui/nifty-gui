@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.examples.all;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dynamic.CreateCustomControl;
+import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -32,7 +32,7 @@ public class OutroController implements ScreenController {
   public final void onStartScreen() {
     Element myScrollStuff = screen.findElementByName("myScrollStuff");
     if (myScrollStuff != null) {
-      CreateCustomControl endScroller = new CreateCustomControl("endscroller-page-1");
+      CustomControlCreator endScroller = new CustomControlCreator("endscroller-page-1");
       endScroller.create(nifty, screen, myScrollStuff);
       myScrollStuff.startEffect(EffectEventId.onCustom);
       screen.findElementByName("1").show();

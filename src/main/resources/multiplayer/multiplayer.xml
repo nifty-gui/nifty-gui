@@ -6,11 +6,11 @@
   <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
-  <style id ="selected" base="nifty-label">
+  <style id ="selected" base="diffStyle">
     <attributes backgroundColor="#000f" />
   </style>
 
-  <style id ="unselected" base="nifty-label">
+  <style id ="unselected" base="diffStyle">
     <attributes backgroundColor="#0000" />
     <effect>
       <onHover name="pulsate" startColor="#f007" endColor="#800f" />
@@ -19,8 +19,8 @@
   </style>
 
   <!-- menu item style -->
-  <style id="diffStyle">
-    <attributes width="*" focusable="true" inputController="de.lessvoid.nifty.controls.DefaultController"/>
+  <style id="diffStyle" base="nifty-label">
+    <attributes width="*" focusable="true" controller="de.lessvoid.nifty.controls.DefaultController"/>
   </style>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->  

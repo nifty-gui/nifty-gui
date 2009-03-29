@@ -40,7 +40,7 @@
   <style id="menu-item" base="menu-font">
     <attributes align="left" textHAlign="left" color="#cccf" width="100%"
                 focusable="true"
-                inputController="de.lessvoid.nifty.controls.MenuItemControl"
+                controller="de.lessvoid.nifty.controls.MenuItemControl"
                 inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping" />
     <effect>
       <onHover name="focus" />
@@ -272,8 +272,8 @@ Thank you Trent.&#13;&#10;" align="center" />
               <image id="thumbExit" style="thumbStyle" x="150px" y="50px" filename="all/thumb-exit.png" />
             </panel>
             <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" height="100%">
-              <panel childLayout="center" width="100%" height="400px" padding="0px,40px,0px,40px">
-                <panel childLayout="vertical" width="100%">
+              <panel id="huhu-1" childLayout="center" width="100%" height="400px" padding="0px,40px,0px,40px">
+                <panel id="huhu-2" childLayout="vertical" width="100%">
                   <label id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
                   </label>

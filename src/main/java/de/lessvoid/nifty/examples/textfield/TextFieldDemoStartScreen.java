@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.examples.textfield;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dynamic.CreateLabel;
-import de.lessvoid.nifty.controls.dynamic.CreatePanel;
-import de.lessvoid.nifty.controls.textfield.CreateTextFieldControl;
+import de.lessvoid.nifty.controls.dynamic.LabelCreator;
+import de.lessvoid.nifty.controls.dynamic.PanelCreator;
+import de.lessvoid.nifty.controls.textfield.TextFieldCreator;
 import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -24,24 +24,25 @@ public class TextFieldDemoStartScreen implements ScreenController {
     // dynamically add another Textfield
     Element dynamicParent = screen.findElementByName("dynamic-parent");
 
-    CreatePanel createPanel = new CreatePanel();
-    createPanel.setChildLayout("horizontal");
-    createPanel.setHeight("8px");
-    createPanel.create(newNifty, screen, dynamicParent);
+    PanelCreator panelCreator = new PanelCreator();
+    panelCreator.setChildLayout("horizontal");
+    panelCreator.setHeight("8px");
+    panelCreator.create(newNifty, screen, dynamicParent);
 
-    createPanel = new CreatePanel();
-    createPanel.setChildLayout("horizontal");
-    Element row = createPanel.create(newNifty, screen, dynamicParent);
+    panelCreator = new PanelCreator();
+    panelCreator.setId("bla");
+    panelCreator.setChildLayout("horizontal");
+    Element row = panelCreator.create(newNifty, screen, dynamicParent);
 
-    CreateLabel createLabel = new CreateLabel("Dynamic:");
-    createLabel.setWidth("150px");
-    createLabel.setAlign("left");
-    createLabel.setTextVAlign("center");
-    createLabel.setTextHAlign("left");
-    createLabel.create(newNifty, screen, row);
+    LabelCreator labelCreator = new LabelCreator("Dynamic:");
+    labelCreator.setWidth("150px");
+    labelCreator.setAlign("left");
+    labelCreator.setTextVAlign("center");
+    labelCreator.setTextHAlign("left");
+    labelCreator.create(newNifty, screen, row);
 
-    CreateTextFieldControl dynamicItem = new CreateTextFieldControl();
-    TextFieldControl textFieldControl = dynamicItem.create(nifty, screen, row);
+    TextFieldCreator textFieldCreator = new TextFieldCreator();
+    TextFieldControl textFieldControl = textFieldCreator.create(nifty, screen, row);
     textFieldControl.setText("Dynamically created TextField");
   }
 

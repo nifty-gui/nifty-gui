@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty>
-
-  <!-- register effects we want to use -->
-  <registerEffect name="move" class="de.lessvoid.nifty.effects.impl.Move" />
-
-  <style id="default-font">
+  <style id="base-font-style">
     <attributes font="menu.fnt" />
   </style>
 
-  <style id="default-label" base="default-font">
+  <style id="base-label-style" base="base-font-style">
+    <attributes align="center" valign="center" backgroundColor="#f00f"/>
   </style>
 
-  <style id="default-label-centered" base="default-label">
+  <style id="base-label-style-center-with-effect" base="base-label-style">
     <attributes align="center"/>
     <effect>
       <onStartScreen name="move" direction="right" mode="in" length="800" />
     </effect>
   </style>
 
-  <style id="layer-style">
-    <attributes backgroundColor="#00ff" />
-  </style>
-
   <screen id="start" controller="de.lessvoid.nifty.examples.style.label.LabelStartScreen">
-    <layer id="layer" backgroundColor="#206f" childLayout="center">
-      <label id="label" style="default-label" text="label standard" align="center" valign="center" backgroundColor="#f00f" >
+    <layer id="layer" backgroundColor="#206f" childLayout="vertical">
+      <label id="label1" style="base-label-style-center-with-effect" text="base-label-style-center-with-effect" />
+      <label id="label2" style="base-label-style" text="base-label-style" />
+      <label id="label3" style="base-label-style" text="base-label-style (custom color and effects)" backgroundColor="#0f0f" >
+        <effect>
+          <onStartScreen name="move" direction="bottom" mode="in" length="800" />
+        </effect>
+      </label>
+      <label id="label4" style="base-label-style-center-with-effect" text="base-label-style-center-with-effect (+ custom effects)" backgroundColor="#0f0f" >
         <effect>
           <onStartScreen name="move" direction="bottom" mode="in" length="800" />
         </effect>

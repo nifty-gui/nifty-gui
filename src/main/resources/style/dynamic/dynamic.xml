@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <style id="style a">
+    <attributes backgroundColor="#0f0f" />
+  </style>
+
+  <style id="style b">
+    <attributes backgroundColor="#f00f"/>
+  </style>
+
+  <screen id="start" controller="de.lessvoid.nifty.examples.style.dynamic.DynamicStyleStartScreen">
+    <layer id="layer" childLayout="vertical">
+      <panel width="100%" height="50%" childLayout="center">
+        <panel id="panel" width="20%" height="50%" style="style a" align="center" valign="center" />
+      </panel>
+      <panel width="100%" height="50" childLayout="horizontal">
+        <panel with="50%" childLayout="center">
+          <control id="setStyleA" name="button" label="Style A" align="center" valign="center">
+            <interact onClick="setStyle(style a)" /> 
+          </control>
+        </panel>
+        <panel id="helper-panel" with="50%" childLayout="center">
+          <control id="setStyleB" name="button" label="Style B" align="center" valign="center">
+            <interact onClick="setStyle(style b)" /> 
+          </control>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

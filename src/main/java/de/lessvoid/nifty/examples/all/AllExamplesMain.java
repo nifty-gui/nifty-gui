@@ -11,7 +11,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * The Nifty Examples.
  * @author void
  */
-public final class AllExamplesMain {
+public class AllExamplesMain {
 
   /**
    * file of the main program.

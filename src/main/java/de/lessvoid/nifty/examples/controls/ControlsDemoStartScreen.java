@@ -5,8 +5,8 @@ import de.lessvoid.nifty.controls.button.CreateButtonControl;
 import de.lessvoid.nifty.controls.dropdown.CreateDropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControlNotify;
-import de.lessvoid.nifty.controls.dynamic.CreateLabel;
-import de.lessvoid.nifty.controls.dynamic.CreatePanel;
+import de.lessvoid.nifty.controls.dynamic.LabelCreator;
+import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -41,16 +41,16 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     // dynamically add another DropDownControl
     Element dynamicParent = screen.findElementByName("dynamic-parent");
 
-    CreatePanel createPanel = new CreatePanel();
+    PanelCreator createPanel = new PanelCreator();
     createPanel.setChildLayout("horizontal");
     createPanel.setHeight("8px");
     createPanel.create(newNifty, screen, dynamicParent);
 
-    createPanel = new CreatePanel();
+    createPanel = new PanelCreator();
     createPanel.setChildLayout("horizontal");
     Element row = createPanel.create(newNifty, screen, dynamicParent);
 
-    CreateLabel createLabel = new CreateLabel("Dynamic:");
+    LabelCreator createLabel = new LabelCreator("Dynamic:");
     createLabel.setWidth("120px");
     createLabel.setAlign("left");
     createLabel.setTextVAlign("center");

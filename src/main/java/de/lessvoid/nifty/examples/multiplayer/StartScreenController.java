@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.examples.multiplayer;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dynamic.CreateCustomControl;
+import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -17,10 +17,10 @@ public class StartScreenController implements ScreenController {
   public void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
-    addPanel();
   }
 
   public void onStartScreen() {
+    addPanel();
   }
 
   public void onEndScreen() {
@@ -31,7 +31,7 @@ public class StartScreenController implements ScreenController {
   }
 
   public void addPanel() {
-    CreateCustomControl createMultiplayerPanel = new CreateCustomControl(String.valueOf(id++), "multiplayerPanel");
+    CustomControlCreator createMultiplayerPanel = new CustomControlCreator(String.valueOf(id++), "multiplayerPanel");
     createMultiplayerPanel.create(nifty, screen, screen.findElementByName("box-parent"));
   }
 }
