@@ -9,7 +9,7 @@ import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.examples.LwjglInitHelper.RenderLoopCallback;
 import de.lessvoid.nifty.render.spi.lwjgl.RenderDeviceLwjgl;
 import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.sound.slick.SlickSoundLoader;
+import de.lessvoid.nifty.sound.spi.slick.SlickSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -35,7 +35,7 @@ public final class ConsoleDemoMain {
     // create nifty
     final Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
-        new SoundSystem(new SlickSoundLoader()),
+        new SoundSystem(new SlickSoundDevice()),
         new TimeProvider());
     nifty.fromXml("console/console.xml", "start");
 
