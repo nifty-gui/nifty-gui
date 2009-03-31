@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.sound.slick;
+package de.lessvoid.nifty.sound.spi.slick;
 
 import junit.framework.TestCase;
 
@@ -6,7 +6,7 @@ import org.easymock.classextension.EasyMock;
 import org.newdawn.slick.Sound;
 
 import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.sound.slick.SlickSoundHandle;
+import de.lessvoid.nifty.sound.spi.slick.SlickSoundHandle;
 
 public class SlickSoundHandleTest extends TestCase {
   

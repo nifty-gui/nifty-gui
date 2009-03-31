@@ -5,7 +5,6 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.util.ResourceLoader;
 import org.xmlpull.mxp1.MXParser;
 
 import de.lessvoid.nifty.Nifty;
@@ -14,6 +13,7 @@ import de.lessvoid.nifty.loaderv2.types.NiftyControlsType;
 import de.lessvoid.nifty.loaderv2.types.NiftyStylesType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 import de.lessvoid.xml.lwxs.Schema;
 import de.lessvoid.xml.xpp3.XmlParser;
 

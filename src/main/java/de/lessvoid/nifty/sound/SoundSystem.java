@@ -4,45 +4,28 @@ package de.lessvoid.nifty.sound;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.Music;
+import de.lessvoid.nifty.sound.spi.SoundHandle;
+import de.lessvoid.nifty.sound.spi.SoundDevice;
 
 /**
  * The SoundManager loads and manages all available Sound and Music Files available to be played.
  * @author void
  */
 public class SoundSystem {
-
-  /**
-   * The logger.
-   */
   private static Logger log = Logger.getLogger(SoundSystem.class.getName());
 
-  /**
-   * The SoundLoader we should use.
-   */
-  private SoundLoader soundLoader;
-
-  /**
-   * All loaded sounds.
-   */
+  private SoundDevice soundDevice;
   private Hashtable < String, SoundHandle > soundLookup;
 
-  /**
-   * The current set sound volume.
-   */
   private float soundVolume;
-
-  /**
-   * The current set music volume.
-   */
   private float musicVolume;
 
   /**
    * create new sound manager.
    * @param newSoundLoader the SoundLoader we should use
    */
-  public SoundSystem(final SoundLoader newSoundLoader) {
-    soundLoader = newSoundLoader;
+  public SoundSystem(final SoundDevice newSoundLoader) {
+    soundDevice = newSoundLoader;
 
     soundVolume = 1.0f;
     musicVolume = 1.0f;
@@ -59,7 +42,7 @@ public class SoundSystem {
   public boolean addSound(final String name, final String filename) {
     log.fine("register sound [" + name + "] for file '" + filename + "'");
 
-    SoundHandle sound = soundLoader.loadSound(this, filename);
+    SoundHandle sound = soundDevice.loadSound(this, filename);
     if (sound == null) {
       return false;
     }
@@ -77,7 +60,7 @@ public class SoundSystem {
   public boolean addMusic(final String name, final String filename) {
     log.fine("register music [" + name + "] for file '" + filename + "'");
 
-    SoundHandle music = soundLoader.loadMusic(this, filename);
+    SoundHandle music = soundDevice.loadMusic(this, filename);
     if (music == null) {
       return false;
     }
@@ -139,6 +122,6 @@ public class SoundSystem {
   }
 
   public void update(final int delta) {
-    Music.poll(delta);
+    soundDevice.update(delta);
   }
 }

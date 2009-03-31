@@ -2,9 +2,9 @@ package de.lessvoid.nifty.sound;
 
 import org.easymock.EasyMock;
 
-import de.lessvoid.nifty.sound.SoundHandle;
-import de.lessvoid.nifty.sound.SoundLoader;
 import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.sound.spi.SoundHandle;
+import de.lessvoid.nifty.sound.spi.SoundDevice;
 
 import junit.framework.TestCase;
 
@@ -14,11 +14,11 @@ public class SoundSystemTest extends TestCase {
     System.setProperty("org.apache.commons.logging.simplelog.defaultlog", "debug");
   }
 
-  private SoundLoader soundLoader;
+  private SoundDevice soundLoader;
   private SoundSystem soundSystem;
   
   public void setUp() {
-    soundLoader = EasyMock.createMock(SoundLoader.class);
+    soundLoader = EasyMock.createMock(SoundDevice.class);
     soundSystem = new SoundSystem(soundLoader);
   }
   

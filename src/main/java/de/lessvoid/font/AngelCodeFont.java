@@ -9,7 +9,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Hashtable;
 
-import org.newdawn.slick.util.ResourceLoader;
+import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
 /**
  * AngelCodeFont loading.

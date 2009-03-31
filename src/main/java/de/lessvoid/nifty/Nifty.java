@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.util.ResourceLoader;
-
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
@@ -22,7 +20,6 @@ import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.NiftyFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
-import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
@@ -36,6 +33,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
 /**
  * The main Nifty class.

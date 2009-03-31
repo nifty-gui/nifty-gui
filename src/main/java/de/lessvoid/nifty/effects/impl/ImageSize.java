@@ -2,8 +2,6 @@ package de.lessvoid.nifty.effects.impl;
 
 import java.util.Properties;
 
-import org.newdawn.slick.util.Log;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.Falloff;

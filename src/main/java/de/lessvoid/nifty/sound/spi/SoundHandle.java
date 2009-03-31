@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.sound;
+package de.lessvoid.nifty.sound.spi;
 
 /**
  * A interface to a piece of sound. Ready to be played.

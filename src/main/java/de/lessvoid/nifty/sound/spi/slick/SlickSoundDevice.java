@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.sound.slick;
+package de.lessvoid.nifty.sound.spi.slick;
 
 import java.util.logging.Logger;
 
@@ -6,15 +6,15 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
-import de.lessvoid.nifty.sound.SoundHandle;
-import de.lessvoid.nifty.sound.SoundLoader;
 import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.sound.spi.SoundDevice;
+import de.lessvoid.nifty.sound.spi.SoundHandle;
 
 /**
  * Slick Implementation of the SoundLoader.
  * @author void
  */
-public class SlickSoundLoader implements SoundLoader {
+public class SlickSoundDevice implements SoundDevice {
 
   /**
    * The logger.
@@ -51,4 +51,7 @@ public class SlickSoundLoader implements SoundLoader {
     return null;
   }
 
+  public void update(final int delta) {
+    Music.poll(delta);
+  }
 }

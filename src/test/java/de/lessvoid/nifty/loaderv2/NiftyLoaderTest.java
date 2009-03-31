@@ -6,14 +6,12 @@ import static org.easymock.classextension.EasyMock.replay;
 import java.io.ByteArrayInputStream;
 
 import junit.framework.TestCase;
-
-import org.newdawn.slick.util.ResourceLoader;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
 public class NiftyLoaderTest extends TestCase {
   private static String testXml =

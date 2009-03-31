@@ -3,9 +3,9 @@ package de.lessvoid.xml.lwxs.processor;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.newdawn.slick.util.ResourceLoader;
 import org.xmlpull.mxp1.MXParser;
 
+import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 import de.lessvoid.xml.lwxs.Schema;
 import de.lessvoid.xml.lwxs.elements.Type;
 import de.lessvoid.xml.xpp3.Attributes;

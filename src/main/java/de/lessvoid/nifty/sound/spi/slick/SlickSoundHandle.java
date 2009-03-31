@@ -1,10 +1,10 @@
-package de.lessvoid.nifty.sound.slick;
+package de.lessvoid.nifty.sound.spi.slick;
 
 
 import org.newdawn.slick.Sound;
 
-import de.lessvoid.nifty.sound.SoundHandle;
 import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.sound.spi.SoundHandle;
 
 /**
  * A Slick handle to sound.

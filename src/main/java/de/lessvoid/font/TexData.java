@@ -15,6 +15,7 @@ import org.newdawn.slick.opengl.ImageData;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureImpl;
 
+
 /**
  * TextData helper class contains the actual texture and the alpha map.
  * @author void

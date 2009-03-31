@@ -1,10 +1,12 @@
-package de.lessvoid.nifty.sound;
+package de.lessvoid.nifty.sound.spi;
+
+import de.lessvoid.nifty.sound.SoundSystem;
 
 /**
  * SoundLoader loads sounds and music.
  * @author void
  */
-public interface SoundLoader {
+public interface SoundDevice {
 
   /**
    * Load the Sound with the given name.
@@ -21,4 +23,11 @@ public interface SoundLoader {
    * @return initialized SoundHandle or null in case of any errors
    */
   SoundHandle loadMusic(SoundSystem soundSystem, String filename);
+
+  /**
+   * Called from the SoundSystem in regular intervals with the given
+   * delta time in ms.
+   * @param delta delta from last call in ms
+   */
+  void update(int delta);
 }
