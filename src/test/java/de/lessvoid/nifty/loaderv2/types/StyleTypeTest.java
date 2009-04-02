@@ -5,13 +5,17 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.xml.xpp3.Attributes;
+import static org.easymock.classextension.EasyMock.*;
 
 public class StyleTypeTest {
   private StyleType styleType = new StyleType();
 
   @Before
   public void setUp() {
+    styleType.getAttributes().set("id", "my-style");
+
     AttributesType attributesType = new AttributesType();
     Attributes attributes = new Attributes();
     attributes.set("height", "10%");
@@ -35,8 +39,10 @@ public class StyleTypeTest {
 
   @Test
   public void testApply() {
+    StyleResolver styleResolver = createNiceMock(StyleResolver.class);
+
     ElementType elementType = new PanelType();
-    styleType.applyTo(elementType, null);
+    styleType.applyTo(elementType, styleResolver);
 
     assertEquals("10%", elementType.getAttributes().get("height"));
 

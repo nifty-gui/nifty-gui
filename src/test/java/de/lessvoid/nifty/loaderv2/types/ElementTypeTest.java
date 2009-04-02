@@ -63,11 +63,12 @@ public class ElementTypeTest {
 
   @Test
   public void testApplyStyleInternalWithStyle() {
+    styleResolver = createMock(StyleResolver.class);
+
     StyleType myStyle = createMock(StyleType.class);
     myStyle.applyTo(elementType, styleResolver);
     replay(myStyle);
 
-    styleResolver = createMock(StyleResolver.class);
     expect(styleResolver.resolve("myStyle")).andReturn(myStyle);
     replay(styleResolver);
 
