@@ -62,7 +62,6 @@ public class NiftyType extends XmlBaseType {
   public void create(final Nifty nifty, final TimeProvider timeProvider) {
     StopWatch stopWatch = new StopWatch(timeProvider);
     stopWatch.start();
-    // log.info(output());
     log.info("debug out [" + stopWatch.stop() + "]");
 
     stopWatch.start();
