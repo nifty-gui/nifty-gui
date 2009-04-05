@@ -6,7 +6,6 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
 
@@ -26,8 +25,8 @@ public class Effect {
   private Properties parameter;
   private boolean post;
   private boolean overlay;
-  private String alternateKey;
-  private boolean alternateEnable;
+  private String alternateEnable;
+  private String alternateDisable;
   private boolean inherit;
   private Nifty nifty;
   private boolean hoverEffect;
@@ -41,8 +40,8 @@ public class Effect {
       final boolean inheritParam,
       final boolean postParam,
       final boolean overlayParam,
-      final String alternateKeyParam,
-      final boolean alternateEnableParam,
+      final String alternateEnableParam,
+      final String alternateDisableParam,
       final boolean neverStopRenderingParam,
       final EffectEventId effectEventIdParam) {
     nifty = niftyParam;
@@ -50,8 +49,8 @@ public class Effect {
     post = postParam;
     overlay = overlayParam;
     active = false;
-    alternateKey = alternateKeyParam;
     alternateEnable = alternateEnableParam;
+    alternateDisable = alternateDisableParam;
     effectEventId = effectEventIdParam;
     hoverEffect = false;
     infiniteEffect = false;
@@ -151,20 +150,20 @@ public class Effect {
     return post;
   }
 
-  /**
-   * alternate key.
-   * @return alternateKey
-   */
-  public String alternateKey() {
-    return alternateKey;
+  public boolean isAlternateEnable() {
+    return (alternateEnable != null);
   }
 
-  /**
-   * alternate enable or disable.
-   * @return enable (true) or disable (false) mode
-   */
-  public boolean isAlternateEnable() {
-    return alternateEnable;
+  public boolean isAlternateDisable() {
+    return (alternateDisable != null);
+  }
+
+  public boolean alternateEnableMatches(final String alternate) {
+    return alternate != null && alternate.equals(alternateEnable);
+  }
+
+  public boolean alternateDisableMatches(final String alternate) {
+    return alternate != null && alternate.equals(alternateDisable);
   }
 
   /**

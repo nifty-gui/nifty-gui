@@ -75,8 +75,8 @@ public class EffectType extends XmlBaseType {
         getInherit(attributes),
         getPost(attributes),
         getOverlay(attributes),
-        getAlternateKey(attributes),
         getAlternateEnable(attributes),
+        getAlternateDisable(attributes),
         getNeverStopRendering(attributes),
         effectEventId);
     initializeEffect(effect, effectEventId);
@@ -95,20 +95,16 @@ public class EffectType extends XmlBaseType {
     return attributes.getAsBoolean("overlay", DEFAULT_OVERLAY);
   }
 
-  private boolean getAlternateEnable(final Attributes attributes) {
-    String alternateEnable = attributes.get("alternateEnable");
-    if (alternateEnable == null) {
-      return false;
-    }
-    return true;
+  private String getAlternateEnable(final Attributes attributes) {
+    return attributes.get("alternateEnable");
+  }
+
+  private String getAlternateDisable(final Attributes attributes) {
+    return attributes.get("alternateDisable");
   }
 
   private boolean getNeverStopRendering(final Attributes attributes) {
     return attributes.getAsBoolean("neverStopRendering", false);
-  }
-
-  private String getAlternateKey(final Attributes attributes) {
-    return attributes.get("alternateEnable");
   }
 
   protected void initializeEffect(final Effect effect, final EffectEventId effectEventId) {

@@ -224,17 +224,20 @@ public class EffectProcessor {
    */
   protected void startEffect(final Effect e, final String alternate) {
     if (alternate == null) {
-      if (e.alternateKey() != null && e.isAlternateEnable()) {
-        // don't start this effect. it has an alternateKey set and should be used for enable only
+      // no alternate key given
+
+      // don't start this effect when it has an alternateKey set.
+      if (e.isAlternateEnable()) {
         return;
       }
     } else {
-      if (e.alternateKey() != null && !e.isAlternateEnable()) {
-        // don't start this effect. it has an alternateKey set and should be used for disable only
+      // we have an alternate key
+      if (e.isAlternateDisable() && e.alternateDisableMatches(alternate)) {
+        // don't start this effect. it has an alternateKey set and should be used for disable matches only
         return;
       }
 
-      if (e.isAlternateEnable() && !alternate.equals(e.alternateKey())) {
+      if (e.isAlternateEnable() && !e.alternateEnableMatches(alternate)) {
         // start with alternateEnable but names don't match ... don't start
         return;
       }
