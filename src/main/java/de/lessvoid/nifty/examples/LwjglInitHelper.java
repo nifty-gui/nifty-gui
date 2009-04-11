@@ -241,9 +241,7 @@ public class LwjglInitHelper {
       }
 
       // render nifty
-      int mouseX = Mouse.getX();
-      int mouseY = nifty.getRenderEngine().getHeight() - Mouse.getY();
-      if (nifty.render(true, mouseX, mouseY, Mouse.isButtonDown(0))) {
+      if (nifty.render(true)) {
         done = true;
       }
 

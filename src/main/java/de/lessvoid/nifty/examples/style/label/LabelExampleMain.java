@@ -2,9 +2,10 @@ package de.lessvoid.nifty.examples.style.label;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
-import de.lessvoid.nifty.render.spi.lwjgl.RenderDeviceLwjgl;
+import de.lessvoid.nifty.lwjglslick.input.LwjglInputSystem;
+import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
+import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
 import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.sound.spi.slick.SlickSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -32,7 +33,7 @@ public final class LabelExampleMain {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundDevice()),
-        new TimeProvider());
+        new LwjglInputSystem(), new TimeProvider());
     nifty.fromXml("style/label/label.xml", "start");
 
     // render
