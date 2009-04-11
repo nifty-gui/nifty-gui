@@ -29,6 +29,7 @@ import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverDefault;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
 import de.lessvoid.nifty.render.spi.RenderDevice;
+import de.lessvoid.nifty.screen.NullScreen;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
@@ -472,7 +473,10 @@ public class Nifty {
    * @return current screen
    */
   public Screen getCurrentScreen() {
-    return currentScreen;
+    if (currentScreen != null) {
+      return currentScreen;
+    }
+    return new NullScreen();
   }
 
   /**
