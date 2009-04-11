@@ -11,16 +11,8 @@ import de.lessvoid.nifty.sound.spi.SoundHandle;
  * @author void
  */
 public class SlickMusicHandle implements SoundHandle {
-
-  /**
-   * internal Music handle.
-   */
-  private Music slickMusic;
-
-  /**
-   * SoundSystem.
-   */
   private SoundSystem soundSystem;
+  private Music slickMusic;
 
   /**
    * Create new instance.
@@ -32,10 +24,15 @@ public class SlickMusicHandle implements SoundHandle {
     this.slickMusic = newSlickMusic;
   }
 
-  /**
-   * Play the music.
-   */
   public void play() {
     slickMusic.play(1.0f, soundSystem.getMusicVolume());
+  }
+
+  public void stop() {
+    slickMusic.stop();
+  }
+
+  public void setVolume(final float volume) {
+    slickMusic.setVolume(volume);
   }
 }

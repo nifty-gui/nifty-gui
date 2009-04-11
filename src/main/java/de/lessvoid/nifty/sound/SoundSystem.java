@@ -69,14 +69,24 @@ public class SoundSystem {
     return true;
   }
 
-  /**
-   * Get the sound with the given name.
-   * @param name name of sound
-   * @return the SoundHandle
-   */
   public SoundHandle getSound(final String name) {
     if (name == null) {
       log.warning("unknown sound name given [" + name + "]?");
+      return null;
+    }
+
+    SoundHandle sound = soundLookup.get(name);
+    if (sound == null) {
+      log.warning("missing sound [" + name + "]");
+      return null;
+    }
+
+    return sound;
+  }
+
+  public SoundHandle getMusic(final String name) {
+    if (name == null) {
+      log.warning("unknown music name given [" + name + "]?");
       return null;
     }
 

@@ -32,10 +32,15 @@ public class SlickSoundHandle implements SoundHandle {
     this.slickSound = newSlickSound;
   }
 
-  /**
-   * Play the sound.
-   */
   public void play() {
     slickSound.play(1.0f, soundSystem.getSoundVolume());
+  }
+
+  public void stop() {
+    slickSound.stop();
+  }
+
+  public void setVolume(final float volume) {
+    // can't change volume of sound that is currently playing with slick
   }
 }
