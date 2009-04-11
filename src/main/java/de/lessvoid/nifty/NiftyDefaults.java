@@ -17,6 +17,7 @@ public final class NiftyDefaults {
     nifty.registerEffect(new RegisterEffectType("colorBar", "de.lessvoid.nifty.effects.impl.ColorBar"));
     nifty.registerEffect(new RegisterEffectType("colorPulsate", "de.lessvoid.nifty.effects.impl.ColorPulsate"));
     nifty.registerEffect(new RegisterEffectType("fade", "de.lessvoid.nifty.effects.impl.Fade"));
+    nifty.registerEffect(new RegisterEffectType("fadeSound", "de.lessvoid.nifty.effects.impl.FadeSound"));
     nifty.registerEffect(new RegisterEffectType("focus", "de.lessvoid.nifty.effects.impl.Focus"));
     nifty.registerEffect(new RegisterEffectType("hide", "de.lessvoid.nifty.effects.impl.Hide"));
     nifty.registerEffect(new RegisterEffectType("hint", "de.lessvoid.nifty.effects.impl.Hint"));
