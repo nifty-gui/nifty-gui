@@ -9,7 +9,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import de.lessvoid.nifty.render.spi.RenderDevice;
+import de.lessvoid.nifty.spi.render.RenderDevice;
 
 public class FontTest
 {

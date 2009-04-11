@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.font.Font;
-import de.lessvoid.nifty.render.spi.RenderDevice;
+import de.lessvoid.nifty.spi.render.RenderDevice;
 
 public class Console
 {

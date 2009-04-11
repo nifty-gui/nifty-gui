@@ -3,8 +3,8 @@ package de.lessvoid.nifty.sound;
 import org.easymock.EasyMock;
 
 import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.sound.spi.SoundHandle;
-import de.lessvoid.nifty.sound.spi.SoundDevice;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
+import de.lessvoid.nifty.spi.sound.SoundHandle;
 
 import junit.framework.TestCase;
 

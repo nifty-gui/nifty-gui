@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.input.mouse;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -8,67 +9,49 @@ import java.util.Queue;
  * @author void
  */
 public class MouseInputEventQueue {
-
-  /**
-   * queue.
-   */
   public Queue < MouseInputEvent > queue = new LinkedList < MouseInputEvent >();
-
-  /**
-   * last mouse x.
-   */
   private int lastMouseX = 0;
-
-  /**
-   * last mouse y.
-   */
   private int lastMouseY = 0;
-
-  /**
-   * last mouse down.
-   */
   private boolean lastMouseDown = false;
+  private int displayWidth;
+  private int displayHeight;
 
-  /**
-   * process the given mouse events.
-   * @param mouseX mouse x
-   * @param mouseY mouse y
-   * @param mouseDown mouse down
-   */
-  public void process(
-      final int mouseX,
-      final int mouseY,
-      final boolean mouseDown) {
-    if (mouseX != lastMouseX || mouseY != lastMouseY || mouseDown != lastMouseDown) {
-      lastMouseX = mouseX;
-      lastMouseY = mouseY;
-      lastMouseDown = mouseDown;
-
-      MouseInputEvent event = new MouseInputEvent(mouseX, mouseY, mouseDown);
-      queue.add(event);
-    }
+  public MouseInputEventQueue(final int displayWidthParam, final int displayHeightParam) {
+    displayWidth = displayWidthParam;
+    displayHeight = displayHeightParam;
   }
 
-  /**
-   * peek from the queue.
-   * @return MouseInputEvent
-   */
   public MouseInputEvent peek() {
     return queue.peek();
   }
 
-  /**
-   * poll from the queue.
-   * @return MouseInputEvent
-   */
   public MouseInputEvent remove() {
     return queue.remove();
   }
 
-  /**
-   * output event queue for debugging purpose.
-   * @return string representing this queue.
-   */
+  public void reset() {
+    queue.clear();
+  }
+
+  public void process(final List < MouseInputEvent > mouseEvents) {
+    for (MouseInputEvent mouse : mouseEvents) {
+      processInternal(mouse);
+    }
+  }
+
+  void processInternal(final MouseInputEvent mouse) {
+    int mouseX = mouse.getMouseX();
+    int mouseY = displayHeight - mouse.getMouseY();
+    boolean leftButton = mouse.isLeftButton();
+
+    if (mouseX != lastMouseX || mouseY != lastMouseY || leftButton != lastMouseDown) {
+      lastMouseX = mouseX;
+      lastMouseY = mouseY;
+      lastMouseDown = leftButton;
+      queue.add(new MouseInputEvent(mouseX, mouseY, leftButton));
+    }
+  }
+
   public String toString() {
     StringBuffer buffer = new StringBuffer();
     buffer.append("MouseEvents: size: " + queue.size());
@@ -76,12 +59,5 @@ public class MouseInputEventQueue {
       buffer.append(" [" + e.getMouseX() + "," + e.getMouseY() + "," + e.isLeftButton() + "]");
     }
     return buffer.toString();
-  }
-
-  /**
-   * reset the queue.
-   */
-  public void reset() {
-    queue.clear();
   }
 }

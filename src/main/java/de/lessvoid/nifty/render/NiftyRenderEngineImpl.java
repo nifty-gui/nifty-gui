@@ -7,9 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import de.lessvoid.nifty.render.spi.BlendMode;
-import de.lessvoid.nifty.render.spi.RenderDevice;
-import de.lessvoid.nifty.render.spi.RenderFont;
+import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
 /**

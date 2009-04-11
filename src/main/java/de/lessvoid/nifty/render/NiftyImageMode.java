@@ -3,7 +3,7 @@ package de.lessvoid.nifty.render;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.layout.Box;
-import de.lessvoid.nifty.render.spi.RenderImage;
+import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
 /**

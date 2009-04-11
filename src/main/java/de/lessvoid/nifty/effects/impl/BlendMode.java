@@ -10,15 +10,15 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 
 public class BlendMode implements EffectImpl {
-  de.lessvoid.nifty.render.spi.BlendMode blendMode = null;
+  de.lessvoid.nifty.render.BlendMode blendMode = null;
 
   public void activate(final Nifty nifty, final Element element, final Properties parameter) {
     String blendMode = parameter.getProperty("blendMode");
     if (blendMode != null) {
       if (blendMode.toLowerCase().equals("blend")) {
-        this.blendMode = de.lessvoid.nifty.render.spi.BlendMode.BLEND;
+        this.blendMode = de.lessvoid.nifty.render.BlendMode.BLEND;
       } else if (blendMode.toLowerCase().equals("multiply")) {
-        this.blendMode = de.lessvoid.nifty.render.spi.BlendMode.MULIPLY;
+        this.blendMode = de.lessvoid.nifty.render.BlendMode.MULIPLY;
       }
     }
   }

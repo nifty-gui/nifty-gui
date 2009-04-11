@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.sound.spi.slick;
+package de.lessvoid.nifty.lwjglslick.sound;
 
 import java.util.logging.Logger;
 
@@ -7,8 +7,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.sound.spi.SoundDevice;
-import de.lessvoid.nifty.sound.spi.SoundHandle;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
+import de.lessvoid.nifty.spi.sound.SoundHandle;
 
 /**
  * Slick Implementation of the SoundLoader.

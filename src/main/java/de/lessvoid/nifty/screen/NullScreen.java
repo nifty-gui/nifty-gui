@@ -4,4 +4,8 @@ public class NullScreen extends Screen {
   public NullScreen() {
     super(null, null, null, null);
   }
+
+  public boolean isNull() {
+    return true;
+  }
 }

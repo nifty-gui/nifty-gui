@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.render.spi;
+package de.lessvoid.nifty.render;
 
 public enum BlendMode {
   BLEND,

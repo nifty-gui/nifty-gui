@@ -4,8 +4,8 @@ package de.lessvoid.nifty.sound;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import de.lessvoid.nifty.sound.spi.SoundHandle;
-import de.lessvoid.nifty.sound.spi.SoundDevice;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
+import de.lessvoid.nifty.spi.sound.SoundHandle;
 
 /**
  * The SoundManager loads and manages all available Sound and Music Files available to be played.

@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.render.spi;
+package de.lessvoid.nifty.spi.render;
 
 import de.lessvoid.nifty.tools.Color;
 

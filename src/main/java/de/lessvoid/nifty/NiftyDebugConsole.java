@@ -7,8 +7,8 @@ import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
-import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.StringHelper;
 
 /**

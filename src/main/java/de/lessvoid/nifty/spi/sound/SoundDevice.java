@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.sound.spi;
+package de.lessvoid.nifty.spi.sound;
 
 import de.lessvoid.nifty.sound.SoundSystem;
 

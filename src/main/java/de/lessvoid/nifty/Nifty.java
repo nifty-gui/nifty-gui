@@ -28,11 +28,12 @@ import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverDefault;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
-import de.lessvoid.nifty.render.spi.RenderDevice;
 import de.lessvoid.nifty.screen.NullScreen;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.spi.input.InputSystem;
+import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
@@ -50,7 +51,7 @@ public class Nifty {
   private Map < String, StyleType > styles = new Hashtable < String, StyleType >();
   private Map < String, ControlDefinitionType > controlDefintions = new Hashtable < String, ControlDefinitionType >();
   private Map < String, RegisterEffectType > registeredEffects = new Hashtable < String, RegisterEffectType >();
-  private Screen currentScreen;
+  private Screen currentScreen = new NullScreen();
   private String currentLoaded;
   private boolean exit;
   private NiftyDebugConsole console;
@@ -67,18 +68,21 @@ public class Nifty {
   private int lastMouseY;
   private String alternateKeyForNextLoadXml;
   private long lastTime;
+  private InputSystem inputSystem;
 
   /**
    * Create nifty for the given RenderDevice and TimeProvider.
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
+   * @param newInputSystem TODO
    * @param newTimeProvider the TimeProvider
    */
   public Nifty(
       final NiftyRenderEngine newRenderDevice,
       final SoundSystem newSoundSystem,
+      final InputSystem newInputSystem,
       final TimeProvider newTimeProvider) {
-    initialize(newRenderDevice, newSoundSystem, newTimeProvider);
+    initialize(newRenderDevice, newSoundSystem, newInputSystem, newTimeProvider);
     console = new NiftyDebugConsole(null); // this will cause trouble i'm sure, but i don't care at this point
   }
 
@@ -86,13 +90,15 @@ public class Nifty {
    * Create nifty with optional console parameter.
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
+   * @param inputSystem TODO
    * @param newTimeProvider the TimeProvider
    */
   public Nifty(
       final RenderDevice newRenderDevice,
       final SoundSystem newSoundSystem,
+      final InputSystem newInputSystem,
       final TimeProvider newTimeProvider) {
-    initialize(new NiftyRenderEngineImpl(newRenderDevice), newSoundSystem, newTimeProvider);
+    initialize(new NiftyRenderEngineImpl(newRenderDevice), newSoundSystem, newInputSystem, newTimeProvider);
     console = new NiftyDebugConsole(newRenderDevice);
   }
 
@@ -100,22 +106,27 @@ public class Nifty {
    * Initialize this instance.
    * @param newRenderDevice RenderDevice
    * @param newSoundSystem SoundSystem
+   * @param newInputSystem TODO
    * @param newTimeProvider TimeProvider
    */
   private void initialize(
       final NiftyRenderEngine newRenderDevice,
       final SoundSystem newSoundSystem,
+      final InputSystem newInputSystem,
       final TimeProvider newTimeProvider) {
     this.renderEngine = newRenderDevice;
     this.soundSystem = newSoundSystem;
+    this.inputSystem = newInputSystem;
     this.timeProvider = newTimeProvider;
     this.exit = false;
     this.currentLoaded = null;
     this.inputEventCreator = new KeyboardInputEventCreator();
-    this.mouseInputEventQueue = new MouseInputEventQueue();
+    this.mouseInputEventQueue = new MouseInputEventQueue(renderEngine.getWidth(), renderEngine.getHeight());
     this.lastTime = timeProvider.getMsTime();
 
     try {
+      inputSystem.startup();
+
       loader = new NiftyLoader();
       loader.registerSchema("nifty.nxs", ResourceLoader.getResourceAsStream("nifty.nxs"));
       loader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
@@ -131,28 +142,7 @@ public class Nifty {
 
   /**
    * Render all stuff in the current Screen.
-   * @param clearScreen TODO
-   * @param mouseX TODO
-   * @param mouseY TODO
-   * @param mouseDown TODO
-   * @return true when nifty has finished processing the screen and false when rendering should continue.
-   */
-  public boolean render(
-      final boolean clearScreen,
-      final int mouseX,
-      final int mouseY,
-      final boolean mouseDown) {
-    if (currentScreen != null) {
-        mouseInputEventQueue.process(mouseX, mouseY, mouseDown);
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
-    }
-    return render(clearScreen);
-  }
-
-  /**
-   * This is a replacement render that does not take a mouse event.
-   * @param clearScreen TODO
+   * @param clearScreen true if nifty should clean the screen and false when you've done that already.
    * @return true when nifty has finished processing the screen and false when rendering should continue.
    */
   public boolean render(final boolean clearScreen) {
@@ -160,20 +150,22 @@ public class Nifty {
       renderEngine.clear();
     }
 
-    if (currentScreen != null) {
-      MouseInputEvent inputEvent = mouseInputEventQueue.peek();
-      if (inputEvent != null) {
-        currentScreen.mouseEvent(inputEvent);
-        if (!mouseInputEventQueue.queue.isEmpty()) {
+    if (!currentScreen.isNull()) {
+        mouseInputEventQueue.process(inputSystem.getMouseEvents());
+
+        MouseInputEvent inputEvent = mouseInputEventQueue.peek();
+        if (inputEvent != null) {
+          currentScreen.mouseEvent(inputEvent);
           mouseInputEventQueue.remove();
         }
-      }
 
-      currentScreen.renderLayers(renderEngine);
+        if (!currentScreen.isNull()) {
+          currentScreen.renderLayers(renderEngine);
+        }
 
-      if (useDebugConsole) {
-        console.render(this, currentScreen, renderEngine);
-      }
+        if (useDebugConsole) {
+          console.render(this, currentScreen, renderEngine);
+        }
     }
 
     if (exit) {
@@ -181,7 +173,7 @@ public class Nifty {
     }
 
     if (!removePopupList.isEmpty()) {
-      if (currentScreen != null) {
+      if (!currentScreen.isNull()) {
         for (RemovePopUp removePopup : removePopupList) {
           removePopup.close();
         }
@@ -189,7 +181,7 @@ public class Nifty {
       removePopupList.clear();
     }
 
-    if (currentScreen != null) {
+    if (!currentScreen.isNull()) {
       currentScreen.processAddAndRemoveLayerElements();
     }
 
@@ -199,6 +191,10 @@ public class Nifty {
     long current = timeProvider.getMsTime();
     soundSystem.update((int) (current - lastTime));
     lastTime = current;
+
+    if (exit) {
+      inputSystem.shutdown();
+    }
 
     return exit;
   }
@@ -357,7 +353,7 @@ public class Nifty {
    * @param id the new screen id we should go to.
    */
   public void gotoScreen(final String id) {
-    if (currentScreen == null) {
+    if (currentScreen.isNull()) {
       gotoScreenInternal(id);
     } else {
       // end current screen
@@ -377,6 +373,7 @@ public class Nifty {
   private void gotoScreenInternal(final String id) {
     currentScreen = screens.get(id);
     if (currentScreen == null) {
+      currentScreen = new NullScreen();
       log.warning("screen [" + id + "] not found");
       return;
     }
@@ -419,7 +416,7 @@ public class Nifty {
         new EndNotify() {
           public final void perform() {
             exit = true;
-            currentScreen = null;
+            currentScreen = new NullScreen();
           }
         });
   }
@@ -447,7 +444,7 @@ public class Nifty {
    */
   public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
 //    System.out.println("key " + eventKey + ", character " + eventCharacter + ", keyDown: " + keyDown);
-    if (currentScreen != null) {
+    if (!currentScreen.isNull()) {
       currentScreen.keyEvent(inputEventCreator.createEvent(eventKey, eventCharacter, keyDown));
     }
   }
@@ -473,10 +470,7 @@ public class Nifty {
    * @return current screen
    */
   public Screen getCurrentScreen() {
-    if (currentScreen != null) {
-      return currentScreen;
-    }
-    return new NullScreen();
+    return currentScreen;
   }
 
   /**
@@ -487,7 +481,7 @@ public class Nifty {
    */
   public boolean isActive(final String filename, final String screenId) {
     if (currentLoaded != null && currentLoaded.equals(filename)) {
-      if (currentScreen != null && currentScreen.getScreenId().equals(screenId)) {
+      if (!currentScreen.isNull() && currentScreen.getScreenId().equals(screenId)) {
         return true;
       }
     }
@@ -740,22 +734,6 @@ public class Nifty {
       }
     }
     return null;
-  }
-
-  /**
-   * get last mouse x.
-   * @return mouse x
-   */
-  public int getLastMouseX() {
-    return lastMouseX;
-  }
-
-  /**
-   * get last mouse y.
-   * @return mouse x
-   */
-  public int getLastMouseY() {
-    return lastMouseY;
   }
 
   public NiftyLoader getLoader() {

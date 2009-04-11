@@ -1,9 +1,9 @@
-package de.lessvoid.nifty.render.spi.lwjgl;
+package de.lessvoid.nifty.lwjglslick.render;
 
 import de.lessvoid.font.CharacterInfo;
 import de.lessvoid.font.Font;
-import de.lessvoid.nifty.render.spi.RenderDevice;
-import de.lessvoid.nifty.render.spi.RenderFont;
+import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
 /**

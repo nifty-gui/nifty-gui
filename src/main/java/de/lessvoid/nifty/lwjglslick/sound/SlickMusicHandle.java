@@ -1,10 +1,10 @@
-package de.lessvoid.nifty.sound.spi.slick;
+package de.lessvoid.nifty.lwjglslick.sound;
 
 
 import org.newdawn.slick.Music;
 
 import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.sound.spi.SoundHandle;
+import de.lessvoid.nifty.spi.sound.SoundHandle;
 
 /**
  * A Slick handle to music.

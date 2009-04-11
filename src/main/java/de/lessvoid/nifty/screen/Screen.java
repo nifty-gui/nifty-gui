@@ -495,6 +495,10 @@ public class Screen {
   }
 
   public boolean isRunning() {
-    return running ;
+    return running;
+  }
+
+  public boolean isNull() {
+    return false;
   }
 }

@@ -6,8 +6,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.elements.tools.FontHelper;
-import de.lessvoid.nifty.render.spi.RenderDevice;
-import de.lessvoid.nifty.render.spi.lwjgl.RenderFontLwjgl;
+import de.lessvoid.nifty.lwjglslick.render.RenderFontLwjgl;
+import de.lessvoid.nifty.spi.render.RenderDevice;
 
 
 /**

@@ -7,7 +7,7 @@ import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.sound.spi.SoundHandle;
+import de.lessvoid.nifty.spi.sound.SoundHandle;
 
 /**
  * Play a sound.

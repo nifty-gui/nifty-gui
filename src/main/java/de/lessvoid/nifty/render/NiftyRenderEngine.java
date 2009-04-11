@@ -2,8 +2,7 @@ package de.lessvoid.nifty.render;
 
 import java.util.Set;
 
-import de.lessvoid.nifty.render.spi.BlendMode;
-import de.lessvoid.nifty.render.spi.RenderFont;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
 /**

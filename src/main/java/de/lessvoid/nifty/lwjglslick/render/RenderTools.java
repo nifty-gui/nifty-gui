@@ -1,8 +1,8 @@
-package de.lessvoid.nifty.render.spi.lwjgl;
+package de.lessvoid.nifty.lwjglslick.render;
 
 import org.lwjgl.opengl.GL11;
 
-import de.lessvoid.nifty.render.spi.BlendMode;
+import de.lessvoid.nifty.render.BlendMode;
 
 /**
  * RenderTools.

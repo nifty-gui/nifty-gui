@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.render;
 
-import de.lessvoid.nifty.render.spi.RenderImage;
+import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
 /**

@@ -11,10 +11,11 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.render.spi.lwjgl.RenderDeviceLwjgl;
+import de.lessvoid.nifty.lwjglslick.input.LwjglInputSystem;
+import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
+import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.sound.spi.slick.SlickSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -64,6 +65,7 @@ public class NiftyGameState extends BasicGameState {
     this.nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundDevice()),
+        new LwjglInputSystem(),
         new TimeProvider());
     SlickCallable.leaveSafeBlock();
   }
@@ -126,7 +128,7 @@ public class NiftyGameState extends BasicGameState {
    */
   public void render(final GameContainer container, final StateBasedGame game, final Graphics g) throws SlickException {
     SlickCallable.enterSafeBlock();
-    nifty.render(false, mouseX, mouseY, mouseDown);
+    nifty.render(false);
     SlickCallable.leaveSafeBlock();
 
     if (mouseImage != null) {
