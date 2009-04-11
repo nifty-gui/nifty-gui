@@ -30,6 +30,12 @@ public class OutroController implements ScreenController {
   }
 
   public final void onStartScreen() {
+    Element theEndLabel = screen.findElementByName("theEndLabel");
+    if (theEndLabel != null) {
+      theEndLabel.startEffect(EffectEventId.onCustom);
+      theEndLabel.show();
+    }
+
     Element myScrollStuff = screen.findElementByName("myScrollStuff");
     if (myScrollStuff != null) {
       CustomControlCreator endScroller = new CustomControlCreator("endscroller-page-1");
@@ -40,10 +46,15 @@ public class OutroController implements ScreenController {
   }
 
   public void scrollEnd() {
+    Element theEndLabel = screen.findElementByName("theEndLabel");
+    if (theEndLabel != null) {
+      theEndLabel.stopEffect(EffectEventId.onCustom);
+    }
+
     Element myScrollStuff = screen.findElementByName("myScrollStuff");
     if (myScrollStuff != null) {
-      System.out.println("has ended");
-//      myScrollStuff.startEffect(EffectEventId.onCustom);
+      nifty.setAlternateKeyForNextLoadXml("fade");
+      nifty.gotoScreen("menu");
     }
   }
 

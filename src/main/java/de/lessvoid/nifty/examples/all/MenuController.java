@@ -37,6 +37,7 @@ public class MenuController implements ScreenController {
     hideIfThere("thumbScrollpanel");
     hideIfThere("thumbMultiplayer");
     hideIfThere("thumbConsole");
+    hideIfThere("thumbCredits");
     hideIfThere("thumbExit");
   }
 
@@ -53,43 +54,25 @@ public class MenuController implements ScreenController {
   public final void onStartScreen() {
   }
 
-  /**
-   * on end screen.
-   */
   public final void onEndScreen() {
   }
 
-  /**
-   * helloWorld.
-   */
   public void helloWorld() {
     nifty.fromXml("helloworld/helloworld.xml", "start");
   }
 
-  /**
-   * textfield.
-   */
   public void textfield() {
     nifty.fromXml("textfield/textfield.xml", "start");
   }
 
-  /**
-   * textalign.
-   */
   public void textalign() {
     nifty.fromXml("textalign/textalign.xml", "start");
   }
 
-  /**
-   * multiplayer.
-   */
   public void multiplayer() {
     nifty.fromXml("multiplayer/multiplayer.xml", "start");
   }
 
-  /**
-   * console.
-   */
   public void console() {
     nifty.fromXml("console/console.xml", "start");
   }
@@ -100,6 +83,10 @@ public class MenuController implements ScreenController {
 
   public void scrollpanel() {
     nifty.fromXml("scroll/scroll.xml", "start");
+  }
+
+  public void credits() {
+    nifty.gotoScreen("outro");
   }
 
   public void exit() {
@@ -115,7 +102,8 @@ public class MenuController implements ScreenController {
     nifty.closePopup("popupExit", new EndNotify() {
       public void perform() {
         if ("yes".equals(exit)) {
-          nifty.gotoScreen("outro");
+          nifty.setAlternateKey("fade");
+          nifty.exit();
         }
       }
     }

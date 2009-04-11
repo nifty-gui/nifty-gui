@@ -126,7 +126,6 @@ Thank you Trent.&#13;&#10;" align="center" />
       </panel>
   </controlDefinition>
 
-
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- intro screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -269,10 +268,11 @@ Thank you Trent.&#13;&#10;" align="center" />
               <image id="thumbScrollpanel" style="thumbStyle" x="150px" y="50px" filename="all/thumb-scrollPanel.png" />
               <image id="thumbMultiplayer" style="thumbStyle" x="150px" y="50px" filename="all/thumb-multiplayer.png" />
               <image id="thumbConsole" style="thumbStyle" x="150px" y="50px" filename="all/thumb-console.png" />
+              <image id="thumbCredits" style="thumbStyle" x="150px" y="50px" filename="all/thumb-credits.png" />
               <image id="thumbExit" style="thumbStyle" x="150px" y="50px" filename="all/thumb-exit.png" />
             </panel>
             <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" height="100%">
-              <panel id="huhu-1" childLayout="center" width="100%" height="400px" padding="0px,40px,0px,40px">
+              <panel id="huhu-1" childLayout="center" width="100%" height="420px" padding="0px,40px,0px,40px">
                 <panel id="huhu-2" childLayout="vertical" width="100%">
                   <label id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
@@ -294,6 +294,9 @@ Thank you Trent.&#13;&#10;" align="center" />
                   </label>
                   <label id="console" text="Console Example" hintText="Console" style="menu-item" targetElement="thumbConsole">
                     <interact onClick="console()"/>
+                  </label>
+                  <label id="credits" text="Credits" style="menu-item" hintText="Exit" targetElement="thumbCredits">
+                    <interact onClick="credits()"/>
                   </label>
                   <label id="exit" text="Exit" style="menu-item" hintText="Exit" targetElement="thumbExit">
                     <interact onClick="exit()"/>
@@ -375,8 +378,8 @@ Thank you Trent.&#13;&#10;" align="center" />
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1500" startDelay="500"/>
           <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1500" startDelay="500"/>
           <onStartScreen name="playSound" sound="outro" startDelay="0"/>
-          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="2000" />
-          <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="2000" />
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="2000" startDelay="5000" />
+          <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="2000" startDelay="5000" />
         </effect>
         </image>
       </panel>
@@ -388,7 +391,7 @@ Thank you Trent.&#13;&#10;" align="center" />
         </panel>
       </control>
     </layer>
-    <layer  childLayout="vertical">
+    <layer childLayout="vertical">
       <panel height="25%" childLayout="center" />
       <panel height="75%" childLayout="vertical">
         <panel height="64px" childLayout="vertical">
@@ -398,6 +401,15 @@ Thank you Trent.&#13;&#10;" align="center" />
           </effect>
         </panel>
       </panel>
+    </layer>
+    <layer childLayout="absolute">
+      <label id="theEndLabel" x="477px" y="394px" align="center" valign="center" style="button-font" text="THE END" visible="false">
+        <effect>
+          <onCustom name="alphaHide" length="20000000" />
+          <onEndScreen name="fade" start="#f" end="#0" startDelay="7000" length="2000" />
+          <onEndScreen name="fadeSound" sound="outro" startDelay="7000" length="5000" />
+        </effect>
+      </label>
     </layer>
   </screen>
   
