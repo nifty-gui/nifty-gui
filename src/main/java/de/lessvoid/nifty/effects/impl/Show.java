@@ -35,5 +35,3 @@ public class Show implements EffectImpl {
   public void deactivate() {
   }
 }
-
-
