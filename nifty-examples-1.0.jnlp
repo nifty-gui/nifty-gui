@@ -16,15 +16,19 @@
 	</resources>
 	<resources os="Windows">
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-	    <nativelib href="lib/lwjgl-2.0rc1/lwjgl-win32-native.jar" />
+	    <nativelib href="lib/lwjgl-2.0.1/lwjgl-win32-native.jar" />
 	</resources>
 	<resources os="Linux">
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-		<nativelib href="lib/lwjgl-2.0rc1/lwjgl-linux-native.jar" />
+		<nativelib href="lib/lwjgl-2.0.1/lwjgl-linux-native.jar" />
 	</resources>
+    <resources os="Solaris">
+        <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+        <nativelib href="lib/lwjgl-2.0.1/lwjgl-solaris-native.jar" />
+    </resources>
 	<resources os="Mac OS">
 		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-		<nativelib href="lib/lwjgl-2.0rc1/lwjgl-macosx-native.jar" />
+		<nativelib href="lib/lwjgl-2.0.1/lwjgl-macosx-native.jar" />
 	</resources>
 	<application-desc/>
 </jnlp>
