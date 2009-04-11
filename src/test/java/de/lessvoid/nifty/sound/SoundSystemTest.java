@@ -25,6 +25,8 @@ public class SoundSystemTest extends TestCase {
   public void testAddSoundLoadOk() {
     SoundHandle soundHandle = new SoundHandle() {
       public void play() {}
+      public void stop() {}
+      public void setVolume(float volume) {}
     };
     prepareSoundLoader(soundHandle);
 
@@ -46,6 +48,8 @@ public class SoundSystemTest extends TestCase {
   public void testAddMusicLoadOk() {
     SoundHandle soundHandle = new SoundHandle() {
       public void play() {}
+      public void stop() {}
+      public void setVolume(float volume) {}
     };
     prepareMusicLoader(soundHandle);
 
