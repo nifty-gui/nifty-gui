@@ -64,11 +64,10 @@ public class Nifty {
   private KeyboardInputEventCreator inputEventCreator;
   private MouseInputEventQueue mouseInputEventQueue;
   private Collection < ScreenController > registeredScreenControllers = new ArrayList < ScreenController >();
-  private int lastMouseX;
-  private int lastMouseY;
   private String alternateKeyForNextLoadXml;
   private long lastTime;
   private InputSystem inputSystem;
+  private boolean gotoScreenInProgess;
 
   /**
    * Create nifty for the given RenderDevice and TimeProvider.
@@ -353,6 +352,12 @@ public class Nifty {
    * @param id the new screen id we should go to.
    */
   public void gotoScreen(final String id) {
+    if (gotoScreenInProgess) {
+      return;
+    }
+
+    gotoScreenInProgess = true;
+
     if (currentScreen.isNull()) {
       gotoScreenInternal(id);
     } else {
@@ -375,6 +380,7 @@ public class Nifty {
     if (currentScreen == null) {
       currentScreen = new NullScreen();
       log.warning("screen [" + id + "] not found");
+      gotoScreenInProgess = false;
       return;
     }
 
@@ -384,6 +390,7 @@ public class Nifty {
       alternateKeyForNextLoadXml = null;
     }
     currentScreen.startScreen();
+    gotoScreenInProgess = false;
   }
 
   /**

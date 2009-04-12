@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.util.Log;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.NiftyFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
+import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.StopWatch;
@@ -41,10 +45,20 @@ public class ScreenType extends XmlBaseType {
     if (screenController == null) {
       screenController = ClassHelper.getInstance(controller, ScreenController.class);
     }
-
+    
     String id = getAttributes().get("id");
     Screen screen = new Screen(nifty, id, screenController, timeProvider);
     screen.setDefaultFocusElement(getAttributes().get("defaultFocusElement"));
+
+    String inputMappingClass = getAttributes().get("inputMapping");
+    if (inputMappingClass != null) {
+      NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
+      if (!(screenController instanceof KeyInputHandler)) {
+        Log.warn("class [" + controller + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
+      } else {
+        screen.addKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
+      }
+    }
 
     Element rootElement = NiftyFactory.createRootLayer("root", nifty, screen, timeProvider);
     screen.setRootElement(rootElement);
@@ -55,7 +69,6 @@ public class ScreenType extends XmlBaseType {
       layerType.prepare(nifty, rootElement.getElementType());
     }
     Logger.getLogger(NiftyLoader.class.getName()).info("internal prepare screen (" + id + ") [" + stopWatch.stop() + "]");
-//    Logger.getLogger(this.getClass().getName()).info("after prepare\n" + niftyType.output());
 
     stopWatch.start();
     for (LayerType layerType : layers) {
