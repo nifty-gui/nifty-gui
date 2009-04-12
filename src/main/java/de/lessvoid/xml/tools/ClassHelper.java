@@ -51,7 +51,7 @@ public final class ClassHelper {
             "given class [" + className + "] does not implement [" + type.getName() + "]");
       }
     } catch (Exception e) {
-      log.warning("class [" + className + "] could not be instanziated");
+      log.warning("class [" + className + "] could not be instanziated (" + e.toString() + ")");
     }
     return null;
   }
