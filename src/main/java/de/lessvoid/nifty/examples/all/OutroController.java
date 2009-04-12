@@ -4,6 +4,8 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -11,7 +13,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Outro implementation for the nifty demo Outro screen.
  * @author void
  */
-public class OutroController implements ScreenController {
+public class OutroController implements ScreenController, KeyInputHandler {
   private Nifty nifty;
   private Screen screen;
 
@@ -53,7 +55,8 @@ public class OutroController implements ScreenController {
 
     Element myScrollStuff = screen.findElementByName("myScrollStuff");
     if (myScrollStuff != null) {
-      nifty.setAlternateKeyForNextLoadXml("fade");
+//      nifty.setAlternateKeyForNextLoadXml("fade");
+//      nifty.fromXml("all/intro.xml", "menu");
       nifty.gotoScreen("menu");
     }
   }
@@ -69,5 +72,15 @@ public class OutroController implements ScreenController {
     if (!id.equals("end")) {
       screen.findElementByName(id).show();
     }
+  }
+
+  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.Escape) {
+      nifty.setAlternateKey("exit");
+      nifty.setAlternateKeyForNextLoadXml("fade");
+      nifty.fromXml("all/intro.xml", "menu");
+      return true;
+    }
+    return false;
   }
 }

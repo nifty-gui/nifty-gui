@@ -1,10 +1,12 @@
 package de.lessvoid.nifty.examples.all;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class SplashController implements ScreenController {
+public class SplashController implements ScreenController, KeyInputHandler {
   private Nifty nifty;
 
   public void bind(final Nifty newNifty, final Screen screen) {
@@ -16,5 +18,14 @@ public class SplashController implements ScreenController {
   }
 
   public void onEndScreen() {
+  }
+
+  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.Escape) {
+      nifty.setAlternateKey("exit");
+      nifty.gotoScreen("menu");
+      return true;
+    }
+    return false;
   }
 }

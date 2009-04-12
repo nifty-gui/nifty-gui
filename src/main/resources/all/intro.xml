@@ -129,8 +129,11 @@ Thank you Trent.&#13;&#10;" align="center" />
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- intro screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <screen id="start" controller="de.lessvoid.nifty.examples.all.SplashController">
+  <screen id="start" controller="de.lessvoid.nifty.examples.all.SplashController" inputMapping="de.lessvoid.nifty.input.mapping.DefaultScreenMapping">
     <layer id="background" childLayout="center" backgroundColor="#000f">
+      <effect>
+        <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true" alternateEnable="exit"/>
+      </effect>
       <panel id="panel" childLayout="center" backgroundImage="intro-background.png">
         <effect>
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" post="false"/> 
@@ -155,21 +158,22 @@ Thank you Trent.&#13;&#10;" align="center" />
     </layer>
   </screen>
 
-  <screen id="start2" controller="de.lessvoid.nifty.examples.all.SplashController2">
+  <screen id="start2" controller="de.lessvoid.nifty.examples.all.SplashController2" inputMapping="de.lessvoid.nifty.input.mapping.DefaultScreenMapping">
     <layer id="background" childLayout="center" backgroundImage="intro-background.png">
       <effect>
-        <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1500" startDelay="3500" inherit="true"/>
+        <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1500" startDelay="3500" inherit="true" alternateDisable="exit"/>
+        <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true" alternateEnable="exit" />
       </effect>
       <panel childLayout="absolute">
         <effect>
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="500" inherit="true"/>
-          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" startDelay="2500" inherit="true"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" startDelay="2500" inherit="true" alternateDisable="exit" />
         </effect>
         <image x="240px" y="400px" filename="intro-logo-snow.png" align="center">
           <effect>
             <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" />
             <onStartScreen name="playSound" sound="eagle" startDelay="900" />
-            <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="1000" startDelay="2500" />
+            <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="1000" startDelay="2500" alternateDisable="exit" />
           </effect>
         </image>
         <image x="240px" y="600px" filename="intro-logo-mirrored-snow.png" align="center">
@@ -181,7 +185,8 @@ Thank you Trent.&#13;&#10;" align="center" />
     </layer>
     <layer childLayout="vertical">
       <effect>
-        <onEndScreen name="fade" start="#f" end="#0" length="900" startDelay="6000" inherit="true"/>
+        <onEndScreen name="fade" start="#f" end="#0" length="900" startDelay="6000" inherit="true" alternateDisable="exit" />
+        <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true" alternateEnable="exit" />
       </effect>
       <panel childLayout="vertical" align="center" valign="center" width="20%">
         <panel childLayout="horizontal" height="100px" />
@@ -320,7 +325,7 @@ Thank you Trent.&#13;&#10;" align="center" />
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- outro screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <screen id="outro" controller="de.lessvoid.nifty.examples.all.OutroController">
+  <screen id="outro" controller="de.lessvoid.nifty.examples.all.OutroController" inputMapping="de.lessvoid.nifty.input.mapping.DefaultScreenMapping">
     <layer id="background" childLayout="absolute">
       <image id="1" filename="all/thumb-helloWorld.png" x="600px" y="400px">
         <effect>
@@ -374,13 +379,13 @@ Thank you Trent.&#13;&#10;" align="center" />
     <layer id="logo" childLayout="vertical">
       <panel height="25%" childLayout="center">
         <image id="image" filename="demo-logo.png" align="center" valign="center">
-        <effect>
-          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1500" startDelay="500"/>
-          <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1500" startDelay="500"/>
-          <onStartScreen name="playSound" sound="outro" startDelay="0"/>
-          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="2000" startDelay="5000" />
-          <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="2000" startDelay="5000" />
-        </effect>
+	        <effect>
+	          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1500" startDelay="500"/>
+	          <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1500" startDelay="500"/>
+	          <onStartScreen name="playSound" sound="outro" startDelay="0"/>
+	          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="2000" startDelay="5000" alternateDisable="exit" />
+	          <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="2000" startDelay="5000" alternateDisable="exit" />
+	        </effect>
         </image>
       </panel>
       <control id="scrollbarPanel" style="autoscroll" name="scrollPanel" horizontal="false" vertical="false" height="75%">
@@ -406,7 +411,7 @@ Thank you Trent.&#13;&#10;" align="center" />
       <label id="theEndLabel" x="477px" y="394px" align="center" valign="center" style="button-font" text="THE END" visible="false">
         <effect>
           <onCustom name="alphaHide" length="20000000" />
-          <onEndScreen name="fade" start="#f" end="#0" startDelay="7000" length="2000" />
+          <onEndScreen name="fade" start="#f" end="#0" startDelay="7000" length="2000" alternateDisable="exit" />
           <onEndScreen name="fadeSound" sound="outro" startDelay="7000" length="5000" />
         </effect>
       </label>
