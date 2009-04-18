@@ -16,6 +16,7 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class OutroController implements ScreenController, KeyInputHandler {
   private Nifty nifty;
   private Screen screen;
+  private boolean escape;
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
@@ -48,6 +49,9 @@ public class OutroController implements ScreenController, KeyInputHandler {
   }
 
   public void scrollEnd() {
+    if (escape) {
+      return;
+    }
     Element theEndLabel = screen.findElementByName("theEndLabel");
     if (theEndLabel != null) {
       theEndLabel.stopEffect(EffectEventId.onCustom);
@@ -55,8 +59,7 @@ public class OutroController implements ScreenController, KeyInputHandler {
 
     Element myScrollStuff = screen.findElementByName("myScrollStuff");
     if (myScrollStuff != null) {
-//      nifty.setAlternateKeyForNextLoadXml("fade");
-//      nifty.fromXml("all/intro.xml", "menu");
+      nifty.setAlternateKeyForNextLoadXml("fade");
       nifty.gotoScreen("menu");
     }
   }
@@ -65,10 +68,12 @@ public class OutroController implements ScreenController, KeyInputHandler {
   }
 
   public void shizzleHide(final String id) {
+    if (escape) return;
     screen.findElementByName(id).hide();
   }
 
   public void shizzleShow(final String id) {
+    if (escape) return;
     if (!id.equals("end")) {
       screen.findElementByName(id).show();
     }
@@ -76,6 +81,7 @@ public class OutroController implements ScreenController, KeyInputHandler {
 
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.Escape) {
+      escape = true;
       nifty.setAlternateKey("exit");
       nifty.setAlternateKeyForNextLoadXml("fade");
       nifty.fromXml("all/intro.xml", "menu");
