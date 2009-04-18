@@ -23,7 +23,7 @@ public class ScrollDemoStartScreen implements ScreenController {
       screen.layoutLayers();
 
       ScrollPanel scrollPanel = screen.findControl("scrollbarPanel", ScrollPanel.class);
-      scrollPanel.initializeScrollPanel(screen);
+      scrollPanel.initializeScrollPanel(screen, 0, myScrollStuff.getHeight() / 100.f);
     }
   }
 
