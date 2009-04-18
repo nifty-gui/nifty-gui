@@ -132,11 +132,7 @@ public class ElementType extends XmlBaseType {
     result += "\n" + CollectionLogger.out(offset + 1, elements, "elements");
     return result;
   }
-  
-  
-  
-  
-  
+
   public Element create(
       final Element parent,
       final Nifty nifty,
@@ -291,14 +287,8 @@ public class ElementType extends XmlBaseType {
       final ControlAttributes attributes) {
     Attributes attrib = new Attributes(getAttributes());
     attributes.refreshAttributes(attrib);
-
-//    applyStyle(element, attrib, attrib.get("style"), screen, nifty, nifty.getDefaultStyleResolver(), new ParameterResolverDefault());
     applyAttributes(element, attrib, nifty.getRenderEngine());
-
     attributes.refreshEffects(effects);
-//    applyEffects(element, screen, nifty);
-//    applyInteract(nifty, element, newControllers, screen.getScreenController());
-
     screen.layoutLayers();
   }
 
@@ -313,14 +303,6 @@ public class ElementType extends XmlBaseType {
   public Collection < ElementType > getElements() {
     return elements;
   }
-
-
-
-
-
-
-
-
 
   public void prepare(final Nifty nifty, final ElementType rootElementType) {
     makeFlat();
