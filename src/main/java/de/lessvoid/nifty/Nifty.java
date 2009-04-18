@@ -120,7 +120,7 @@ public class Nifty {
     this.exit = false;
     this.currentLoaded = null;
     this.inputEventCreator = new KeyboardInputEventCreator();
-    this.mouseInputEventQueue = new MouseInputEventQueue(renderEngine.getWidth(), renderEngine.getHeight());
+    this.mouseInputEventQueue = new MouseInputEventQueue(renderEngine.getWidth(), renderEngine.getHeight(), newTimeProvider);
     this.lastTime = timeProvider.getMsTime();
 
     try {
@@ -188,7 +188,8 @@ public class Nifty {
     removeElements();
 
     long current = timeProvider.getMsTime();
-    soundSystem.update((int) (current - lastTime));
+    int delta = (int) (current - lastTime);
+    soundSystem.update(delta);
     lastTime = current;
 
     if (exit) {
@@ -298,6 +299,8 @@ public class Nifty {
    * @param filename filename to load
    */
   void loadFromFile(final String filename) {
+    log.info("loadFromFile [" + filename + "]");
+
     try {
       long start = timeProvider.getMsTime();
       NiftyType niftyType = loader.loadNiftyXml(
@@ -319,6 +322,8 @@ public class Nifty {
    * @param stream stream to load
    */
   void loadFromStream(final InputStream stream) {
+    log.info("loadFromStream []");
+
     try {
       long start = timeProvider.getMsTime();
       NiftyType niftyType = loader.loadNiftyXml(
@@ -352,6 +357,8 @@ public class Nifty {
    * @param id the new screen id we should go to.
    */
   public void gotoScreen(final String id) {
+    log.info("gotoScreen [" + id + "]");
+
     if (gotoScreenInProgess) {
       return;
     }
@@ -376,6 +383,8 @@ public class Nifty {
    * @param id the new screen id we should go to.
    */
   private void gotoScreenInternal(final String id) {
+    log.info("gotoScreenInternal [" + id + "]");
+
     currentScreen = screens.get(id);
     if (currentScreen == null) {
       currentScreen = new NullScreen();

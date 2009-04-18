@@ -2,6 +2,8 @@ package de.lessvoid.nifty.elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
@@ -40,12 +42,12 @@ public class Element {
   /**
    * Time before we start an automated click when mouse button is holded.
    */
-  private static final long REPEATED_CLICK_START_TIME = 350;
+  private static final long REPEATED_CLICK_START_TIME = 100;
 
   /**
    * The time between automatic clicks.
    */
-  private static final long REPEATED_CLICK_TIME = 150;
+  private static final long REPEATED_CLICK_TIME = 100;
 
   /**
    * the logger.
@@ -967,9 +969,7 @@ public class Element {
           focusHandler.requestExclusiveMouseFocus(this);
           focusHandler.setKeyFocus(this);
         }
-        if (onClick(mouseEvent)) {
-          return true;
-        }
+        return onClick(mouseEvent);
       }
     } else if (!mouseEvent.isLeftButton() && isMouseDown()) {
       setMouseDown(false, eventTime);

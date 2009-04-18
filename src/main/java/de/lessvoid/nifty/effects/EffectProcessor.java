@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
+
+import org.newdawn.slick.util.Log;
 
 import de.lessvoid.nifty.EndNotify;
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 
@@ -17,7 +21,7 @@ import de.lessvoid.nifty.render.RenderStateType;
  * @author void
  */
 public class EffectProcessor {
-
+  private Logger log = Logger.getLogger(EffectProcessor.class.getName());
   private List < Effect > allEffects = new ArrayList < Effect >();
   private List < Effect > activeEffects = new ArrayList < Effect >();
 
@@ -228,21 +232,25 @@ public class EffectProcessor {
 
       // don't start this effect when it has an alternateKey set.
       if (e.isAlternateEnable()) {
+        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] and effect isAlternateEnable()");
         return;
       }
     } else {
       // we have an alternate key
       if (e.isAlternateDisable() && e.alternateDisableMatches(alternate)) {
         // don't start this effect. it has an alternateKey set and should be used for disable matches only
+        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] matches alternateDisableMatches()");
         return;
       }
 
       if (e.isAlternateEnable() && !e.alternateEnableMatches(alternate)) {
         // start with alternateEnable but names don't match ... don't start
+        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] does not match alternateEnableMatches()");
         return;
       }
     }
 
+    log.info("starting effect [" + e.getStateString() + "]");
     e.start();
     if (!activeEffects.contains(e)) {
       activeEffects.add(e);
