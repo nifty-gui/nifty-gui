@@ -92,4 +92,8 @@ public class VerticalScrollbarControl implements Controller {
   public float getViewMaxValue() {
     return scrollbar.getViewMaxValue();
   }
+
+  public void setPerClickChange(final float perClickChange) {
+    scrollbar.setPerClickChange(perClickChange);
+  }
 }

@@ -27,6 +27,7 @@ public class GeneralScrollbar implements Controller {
   private float currentValue;
   private float worldMinValue;
   private float worldMaxValue;
+  private float perClickChange = 1.0f;
   private int startMouse;
   private float pageSize;
   private ScrollBarImpl scrollBar;
@@ -114,12 +115,12 @@ public class GeneralScrollbar implements Controller {
   }
 
   public void upClick(final int mouseX, final int mouseY) {
-    currentValue--;
+    currentValue -= perClickChange;
     changeSliderPos(currentValue);
   }
 
   public void downClick(final int mouseX, final int mouseY) {
-    currentValue++;
+    currentValue += perClickChange;
     changeSliderPos(currentValue);
   }
 
@@ -231,5 +232,9 @@ public class GeneralScrollbar implements Controller {
 
   public float getViewMaxValue() {
     return viewMaxValue;
+  }
+
+  public void setPerClickChange(final float perClickChange) {
+    this.perClickChange = perClickChange;
   }
 }

@@ -22,6 +22,8 @@ public class ScrollPanel implements Controller {
   private boolean horizontalScrollbar;
   private String childRootId;
   private Element childRootElement;
+  private float stepSizeX;
+  private float stepSizeY;
 
   public void bind(
       final Nifty niftyParam,
@@ -37,6 +39,8 @@ public class ScrollPanel implements Controller {
     horizontalScrollbar = new Boolean(parameter.getProperty("horizontal", "true"));
     childRootId = controlDefinitionAttributes.get("childRootId");
     childRootElement = element.findElementByName(childRootId);
+    stepSizeX = new Float(parameter.getProperty("stepSizeX", "1.0"));
+    stepSizeY = new Float(parameter.getProperty("stepSizeY", "1.0"));
   }
 
   public void inputEvent(NiftyInputEvent inputEvent) {
@@ -46,10 +50,13 @@ public class ScrollPanel implements Controller {
   }
 
   public void onStartScreen() {
-    initializeScrollPanel(screen);
+    initializeScrollPanel(screen, stepSizeX, stepSizeY);
   }
 
-  public void initializeScrollPanel(final Screen screen) {
+  public void initializeScrollPanel(final Screen screen, final float stepSizeX, final float stepSizeY) {
+    this.stepSizeX = stepSizeX;
+    this.stepSizeY = stepSizeY;
+
     if (!verticalScrollbar) {
       Element vertical = element.findElementByName("nifty-internal-vertical-scrollbar");
       if (vertical != null) {
@@ -73,6 +80,7 @@ public class ScrollPanel implements Controller {
         if (horizontalS != null) {
           horizontalS.setWorldMaxValue(scrollElement.getWidth());
           horizontalS.setViewMaxValue(childRootElement.getWidth());
+          horizontalS.setPerClickChange(stepSizeX);
           horizontalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
             public void positionChanged(final float currentValue) {
               scrollElement.setConstraintX(new SizeValue(-(int)currentValue + "px"));
@@ -85,6 +93,7 @@ public class ScrollPanel implements Controller {
         if (verticalS != null) {
           verticalS.setWorldMaxValue(scrollElement.getHeight());
           verticalS.setViewMaxValue(childRootElement.getHeight());
+          verticalS.setPerClickChange(stepSizeY);
           verticalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
             public void positionChanged(final float currentValue) {
               scrollElement.setConstraintY(new SizeValue(-(int)currentValue + "px"));

@@ -12,7 +12,6 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class HorizontalScrollbarControl implements Controller {
-  private Screen screen;
   private GeneralScrollbar scrollbar;
 
   public void bind(
@@ -68,5 +67,9 @@ public class HorizontalScrollbarControl implements Controller {
 
   public void setViewMaxValue(float viewMaxValue) {
     scrollbar.setViewMaxValue(viewMaxValue);
+  }
+
+  public void setPerClickChange(final float perClickChange) {
+    scrollbar.setPerClickChange(perClickChange);
   }
 }
