@@ -10,4 +10,5 @@
   <useStyles filename="scrollbar/nifty-scrollbar-style.xml" />
   <useStyles filename="scrollpanel/nifty-scrollpanel-style.xml" />
   <useStyles filename="console/nifty-console-style.xml" />
+  <useStyles filename="listbox/nifty-listbox-style.xml" />
 </nifty-styles>
