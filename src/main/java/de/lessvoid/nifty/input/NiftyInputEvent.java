@@ -125,4 +125,26 @@ public enum NiftyInputEvent {
   public char getCharacter() {
     return character;
   }
+
+  /**
+   * additional key data.
+   */
+  private int key;
+
+  /**
+   * set additional key data.
+   * @param key integer value of the key as defined by LWJGL
+   */
+  public void setKey(final int key) {
+    this.key = key;
+  }
+
+  /**
+   * get character.
+   * @return character
+   */
+  public int getKey() {
+    return key;
+  }
+
 }
