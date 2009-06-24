@@ -10,6 +10,7 @@ import de.lessvoid.nifty.spi.input.InputSystem;
 
 public class LwjglInputSystem implements InputSystem {
   private boolean lastLeftMouseDown = false;
+
   public void startup() throws Exception {
     Mouse.create();
   }

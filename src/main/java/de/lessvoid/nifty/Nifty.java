@@ -124,8 +124,6 @@ public class Nifty {
     this.lastTime = timeProvider.getMsTime();
 
     try {
-      inputSystem.startup();
-
       loader = new NiftyLoader();
       loader.registerSchema("nifty.nxs", ResourceLoader.getResourceAsStream("nifty.nxs"));
       loader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
@@ -191,10 +189,6 @@ public class Nifty {
     int delta = (int) (current - lastTime);
     soundSystem.update(delta);
     lastTime = current;
-
-    if (exit) {
-      inputSystem.shutdown();
-    }
 
     return exit;
   }
