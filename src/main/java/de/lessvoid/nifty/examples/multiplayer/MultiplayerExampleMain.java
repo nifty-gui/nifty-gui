@@ -26,7 +26,8 @@ public final class MultiplayerExampleMain {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundDevice()),
-        new LwjglInputSystem(), new TimeProvider());
+        LwjglInitHelper.getInputSystem(),
+        new TimeProvider());
     nifty.fromXml("multiplayer/multiplayer.xml", "start");
 
     // render

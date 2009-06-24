@@ -38,7 +38,7 @@ public class AllExamplesMain {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundDevice()),
-        new LwjglInputSystem(),
+        LwjglInitHelper.getInputSystem(),
         new TimeProvider());
     if (args.length == 1) {
       nifty.fromXml(ALL_INTRO_XML, args[0]);

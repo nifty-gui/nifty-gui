@@ -11,13 +11,13 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.lwjglslick.input.LwjglInputSystem;
 
 /**
  * Helper class shared by all the examples to initialize lwjgl and stuff.
@@ -30,6 +30,12 @@ public class LwjglInitHelper {
 
   /** logger. */
   private static Logger log = Logger.getLogger(LwjglInitHelper.class.getName());
+
+  private static LwjglInputSystem inputSystem;
+
+  public static LwjglInputSystem getInputSystem() {
+    return inputSystem;
+  }
 
   /**
    * RenderLoopCallback.
@@ -203,6 +209,8 @@ public class LwjglInitHelper {
     try {
       Keyboard.create();
       Keyboard.enableRepeatEvents(true);
+      inputSystem = new LwjglInputSystem();
+      inputSystem.startup();
       return true;
     } catch (Exception e) {
       e.printStackTrace();
@@ -258,6 +266,7 @@ public class LwjglInitHelper {
    * destroy all and quit.
    */
   public static void destroy() {
+    inputSystem.shutdown();
     Display.destroy();
     System.exit(0);
   }

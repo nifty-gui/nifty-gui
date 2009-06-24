@@ -22,7 +22,8 @@ public class DynamicStyleExampleMain {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundDevice()),
-        new LwjglInputSystem(), new TimeProvider());
+        LwjglInitHelper.getInputSystem(),
+        new TimeProvider());
     nifty.fromXml("style/dynamic/dynamic.xml", "start");
 
     // render

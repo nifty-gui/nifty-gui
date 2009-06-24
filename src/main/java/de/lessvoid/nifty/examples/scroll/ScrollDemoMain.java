@@ -32,7 +32,8 @@ public final class ScrollDemoMain {
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundDevice()),
-        new LwjglInputSystem(), new TimeProvider());
+        LwjglInitHelper.getInputSystem(),
+        new TimeProvider());
     nifty.fromXml("scroll/scroll.xml", "start");
     return nifty;
   }
