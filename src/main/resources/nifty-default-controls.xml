@@ -8,4 +8,5 @@
   <useControls filename="nifty-controls/nifty-textfield.xml" />
   <useControls filename="nifty-controls/nifty-scrollbar-control.xml" />
   <useControls filename="nifty-controls/nifty-scrollpanel.xml" />
+  <useControls filename="nifty-controls/nifty-listbox.xml" />
 </nifty-controls>
