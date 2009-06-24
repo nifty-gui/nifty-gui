@@ -79,7 +79,7 @@ public class MouseInputEventQueue {
     lastMouseY = mouseY;
     lastMouseDown = leftButton;
     lastMouseTime = timeProvider.getMsTime();
-    System.out.println(lastMouseX + ", " + lastMouseY + ", " + lastMouseDown);
+    //System.out.println(lastMouseX + ", " + lastMouseY + ", " + lastMouseDown);
     queue.add(new MouseInputEvent(mouseX, mouseY, leftButton));
   }
 
