@@ -190,6 +190,12 @@ public class Element {
    */
   private TimeProvider time;
 
+  private boolean parentClipArea = false;
+  private int parentClipX;
+  private int parentClipY;
+  private int parentClipWidth;
+  private int parentClipHeight;
+
   /**
    * construct new instance of Element.
    * @param newNifty Nifty
@@ -475,6 +481,24 @@ public class Element {
       for (Element w : elements) {
         w.layoutElements();
       }
+    }
+
+    if (clipChildren) {
+      for (Element w : elements) {
+        w.setParentClipArea(getX(), getY(), getWidth(), getHeight());
+      }
+    }
+  }
+
+  private void setParentClipArea(final int x, final int y, final int width, final int height) {
+    parentClipArea = true;
+    parentClipX = x;
+    parentClipY = y;
+    parentClipWidth = width;
+    parentClipHeight = height;
+
+    for (Element w : elements) {
+      w.setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
     }
   }
 
@@ -1011,14 +1035,37 @@ public class Element {
   }
 
   public boolean isMouseInsideElement(final int mouseX, final int mouseY) {
-    return
-      mouseX >= getX()
-      &&
-      mouseX <= (getX() + getWidth())
-      &&
-      mouseY > (getY())
-      &&
-      mouseY < (getY() + getHeight());
+    if (parentClipArea) {
+//      System.out.println("x: " + mouseX + ", y: " + mouseY + " [" + this.id + "] " + getX() + ", " + getY() + ", " + (getX() + getWidth()) + ", " + (getY() + getHeight()) + " [" + parentWithClipChildred.getId() + "] " + parentWithClipChildred.getX() + ", " + parentWithClipChildred.getY() + ", " + (parentWithClipChildred.getX() + parentWithClipChildred.getWidth()) + ", " + (parentWithClipChildred.getY() + parentWithClipChildred.getHeight()));
+      // must be inside the parent to continue
+      if (mouseX >= parentClipX
+        &&
+        mouseX <= (parentClipX + parentClipWidth)
+        &&
+        mouseY > (parentClipY)
+        &&
+        mouseY < (parentClipY + parentClipHeight)) {
+          return
+          mouseX >= getX()
+          &&
+          mouseX <= (getX() + getWidth())
+          &&
+          mouseY > (getY())
+          &&
+          mouseY < (getY() + getHeight());
+        } else {
+          return false;
+        }
+    } else {
+      return
+        mouseX >= getX()
+        &&
+        mouseX <= (getX() + getWidth())
+        &&
+        mouseY > (getY())
+        &&
+        mouseY < (getY() + getHeight());
+    }
   }
 
   /**
@@ -1213,6 +1260,14 @@ public class Element {
    */
   public void setClipChildren(final boolean clipChildrenParam) {
     this.clipChildren = clipChildrenParam;
+  }
+
+  /**
+   * Is clip children enabled?
+   * @return clip children
+   */
+  public boolean isClipChildren() {
+    return this.clipChildren;
   }
 
   /**
