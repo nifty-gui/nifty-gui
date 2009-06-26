@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl;
 import de.lessvoid.nifty.controls.scrollbar.controller.ScrollbarControlNotify;
 import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
@@ -26,9 +25,6 @@ public class ListBox implements Controller {
   private Element childRootElement;
   private float stepSizeX;
   private float stepSizeY;
-  private FocusHandler focusHandler;
-  private int selectedItem;
-  private int maxSelectedItems;
 
   public void bind(
       final Nifty niftyParam,
@@ -46,38 +42,16 @@ public class ListBox implements Controller {
     childRootElement = element.findElementByName(childRootId);
     stepSizeX = new Float(parameter.getProperty("stepSizeX", "1.0"));
     stepSizeY = new Float(parameter.getProperty("stepSizeY", "1.0"));
-    selectedItem = 0;
-    maxSelectedItems = 0;
   }
 
   public void inputEvent(NiftyInputEvent inputEvent) {
-	  if (inputEvent == NiftyInputEvent.NextInputElement) {
-	        if (focusHandler != null) {
-	          Element nextElement = focusHandler.getNext(element);
-	          nextElement.setFocus();
-	        }
-	      } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-	        if (focusHandler != null) {
-	          Element prevElement = focusHandler.getPrev(element);
-	          prevElement.setFocus();
-	        }
-	      } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
-	    	  if (selectedItem < maxSelectedItems - 1) {
-	    		  changeSelection(selectedItem + 1);
-	    	  }
-	      } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
-	    	  if (selectedItem > 0) {
-	    		  changeSelection(selectedItem - 1);
-	    	  }
-	      }
   }
-  
+
   public void onFocus(boolean getFocus) {
   }
 
   public void onStartScreen() {
     initializeScrollPanel(screen, stepSizeX, stepSizeY);
-    focusHandler = screen.getFocusHandler();
   }
 
   public void initializeScrollPanel(final Screen screen, final float stepSizeX, final float stepSizeY) {
@@ -111,7 +85,7 @@ public class ListBox implements Controller {
           horizontalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
             public void positionChanged(final float currentValue) {
               scrollElement.setConstraintX(new SizeValue(-(int)currentValue + "px"));
-              screen.layoutLayers();
+              scrollElement.getParent().layoutElements();
             }
           });
         }
@@ -124,41 +98,19 @@ public class ListBox implements Controller {
           verticalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
             public void positionChanged(final float currentValue) {
               scrollElement.setConstraintY(new SizeValue(-(int)currentValue + "px"));
-              screen.layoutLayers();
+              scrollElement.getParent().layoutElements();
             }
           });
         }
   
         scrollElement.setConstraintX(new SizeValue("0px"));
         scrollElement.setConstraintY(new SizeValue("0px"));
-
-        selectedItem = 0;
-        maxSelectedItems = scrollElement.getElements().size();
-        updateSelection(selectedItem);
       }
     }
   }
 
-  private Element getScrollElement() {
-	  if (childRootElement != null) {
-		  return childRootElement.getElements().get(0);
-	  }
-	  return null;
-  }
-
-  private void updateSelection(final int selectedItem) {
-	  Element scrollElement = getScrollElement();
-	  if (scrollElement != null) {
-		  scrollElement.getElements().get(selectedItem).startEffect(EffectEventId.onCustom, null);
-		  this.selectedItem = selectedItem;
-	  }
-  }
-
   public void changeSelection(final int newSelectedItemIndex) {
-	  Element scrollElement = getScrollElement();
-	  if (scrollElement != null) {
-		  scrollElement.getElements().get(selectedItem).stopEffect(EffectEventId.onCustom);
-		  updateSelection(newSelectedItemIndex);
-	  }
+    ListBoxPanel listBoxPanel = childRootElement.getControl(ListBoxPanel.class);
+    listBoxPanel.changeSelection(newSelectedItemIndex);
   }
 }
