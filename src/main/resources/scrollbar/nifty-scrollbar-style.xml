@@ -2,7 +2,7 @@
 <nifty-styles>
   <!-- vertical -->
   <style id="nifty-vertical-scrollbar#panel">
-    <attributes childLayout="vertical" width="28px" align="center" />
+    <attributes childLayout="vertical" width="28px" align="center" focusable="true" />
   </style>
   <style id="nifty-vertical-scrollbar#up">
     <attributes filename="scrollbar/scrollbar-vertical.png" width="28px" height="28px" imageMode="subImage:84,0,28,28"/>
