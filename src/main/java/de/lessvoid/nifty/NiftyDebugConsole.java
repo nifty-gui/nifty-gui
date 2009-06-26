@@ -75,6 +75,7 @@ public class NiftyDebugConsole {
       outputElement(layer, "   ");
     }
 
+    console.output(colorString(0xff, 0x00, 0x00));
     screen.debug(console);
     console.output(nifty.getMouseInputEventQueue().toString());
 
