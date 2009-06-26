@@ -84,7 +84,7 @@ public class ScrollPanel implements Controller {
           horizontalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
             public void positionChanged(final float currentValue) {
               scrollElement.setConstraintX(new SizeValue(-(int)currentValue + "px"));
-              screen.layoutLayers();
+              scrollElement.getParent().layoutElements();
             }
           });
         }
@@ -97,7 +97,7 @@ public class ScrollPanel implements Controller {
           verticalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
             public void positionChanged(final float currentValue) {
               scrollElement.setConstraintY(new SizeValue(-(int)currentValue + "px"));
-              screen.layoutLayers();
+              scrollElement.getParent().layoutElements();
             }
           });
         }

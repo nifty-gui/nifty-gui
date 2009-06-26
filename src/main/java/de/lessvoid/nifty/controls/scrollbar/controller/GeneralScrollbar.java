@@ -129,6 +129,7 @@ public class GeneralScrollbar implements Controller {
    * @param mouseY 
    */
   private void changeSliderPosFromMouse(final int mouseX, int mouseY) {
+//    System.out.println("changeSliderPosFromMouse(" + mouseX + ", " + mouseY + ")");
     int newPos = scrollBar.translateValue(mouseX, mouseY) - scrollBar.translateValue(element.getX(), element.getY()) - startMouse;
 
     if (newPos < 0) {
@@ -141,11 +142,11 @@ public class GeneralScrollbar implements Controller {
 
     scrollBar.setPosition(scrollPos, newPos);
 
+    currentValue = viewToWorld(newPos);
     if (listener != null) {
       listener.onChangeNotify();
     }
-    screen.layoutLayers();
-    currentValue = viewToWorld(newPos);
+    element.layoutElements();
   }
 
   private float viewToWorld(float viewValue) {
