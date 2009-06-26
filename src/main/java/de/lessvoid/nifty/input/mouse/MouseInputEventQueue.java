@@ -34,8 +34,8 @@ public class MouseInputEventQueue {
     return queue.peek();
   }
 
-  public MouseInputEvent remove() {
-    return queue.remove();
+  public MouseInputEvent poll() {
+    return queue.poll();
   }
 
   public void reset() {

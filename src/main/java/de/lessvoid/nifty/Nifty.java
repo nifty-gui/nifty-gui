@@ -150,10 +150,10 @@ public class Nifty {
     if (!currentScreen.isNull()) {
         mouseInputEventQueue.process(inputSystem.getMouseEvents());
 
-        MouseInputEvent inputEvent = mouseInputEventQueue.peek();
-        if (inputEvent != null) {
+        MouseInputEvent inputEvent = mouseInputEventQueue.poll();
+        while (inputEvent != null) {
           currentScreen.mouseEvent(inputEvent);
-          mouseInputEventQueue.remove();
+          inputEvent = mouseInputEventQueue.poll();
         }
 
         if (!currentScreen.isNull()) {
