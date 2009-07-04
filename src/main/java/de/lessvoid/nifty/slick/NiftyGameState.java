@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.slick;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,11 +13,12 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.lwjglslick.input.LwjglInputSystem;
+import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
 import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -55,6 +58,16 @@ public class NiftyGameState extends BasicGameState {
   private Image mouseImage;
 
   /**
+   * Mouse events.
+   */
+  private List < MouseInputEvent > mouseEvents = new ArrayList < MouseInputEvent >();
+
+  /**
+   * GameContainer
+   */
+  private GameContainer container;
+
+  /**
    * create the nifty game state.
    * @param slickGameStateId the slick gamestate id for this state
    */
@@ -65,7 +78,13 @@ public class NiftyGameState extends BasicGameState {
     this.nifty = new Nifty(
         new RenderDeviceLwjgl(),
         new SoundSystem(new SlickSoundDevice()),
-        new LwjglInputSystem(),
+        new InputSystem() {
+          public List < MouseInputEvent > getMouseEvents() {
+            ArrayList < MouseInputEvent > result = new ArrayList < MouseInputEvent > (mouseEvents);
+            mouseEvents.clear();
+            return result;
+          }
+        },
         new TimeProvider());
     SlickCallable.leaveSafeBlock();
   }
@@ -117,6 +136,7 @@ public class NiftyGameState extends BasicGameState {
    * @throws SlickException exception
    */
   public void init(final GameContainer container, final StateBasedGame game) throws SlickException {
+    this.container = container;
   }
 
   /**
@@ -166,6 +186,7 @@ public class NiftyGameState extends BasicGameState {
   public void mouseMoved(final int oldx, final int oldy, final int newx, final int newy) {
     mouseX = newx;
     mouseY = newy;
+    forwardMouseEventToNifty(mouseX, mouseY, mouseDown);
   }
 
   /**
@@ -175,6 +196,7 @@ public class NiftyGameState extends BasicGameState {
     mouseX = x;
     mouseY = y;
     mouseDown = true;
+    forwardMouseEventToNifty(mouseX, mouseY, mouseDown);
   }
 
   /**
@@ -184,6 +206,7 @@ public class NiftyGameState extends BasicGameState {
     mouseX = x;
     mouseY = y;
     mouseDown = false;
+    forwardMouseEventToNifty(mouseX, mouseY, mouseDown);
   }
 
   /**
@@ -196,5 +219,15 @@ public class NiftyGameState extends BasicGameState {
     nifty.getCurrentScreen().startScreen();
     mouseDown = false;
     SlickCallable.leaveSafeBlock();
+  }
+
+  /**
+   * 
+   * @param mouseX
+   * @param mouseY
+   * @param mouseDown
+   */
+  private void forwardMouseEventToNifty(final int mouseX, final int mouseY, final boolean mouseDown) {
+    mouseEvents.add(new MouseInputEvent(mouseX, container.getHeight() - mouseY, mouseDown));
   }
 }
