@@ -153,6 +153,7 @@ public class Nifty {
         MouseInputEvent inputEvent = mouseInputEventQueue.poll();
         while (inputEvent != null) {
           currentScreen.mouseEvent(inputEvent);
+          handleDynamicElements();
           inputEvent = mouseInputEventQueue.poll();
         }
 
@@ -169,6 +170,30 @@ public class Nifty {
       renderEngine.clear();
     }
 
+    handleDynamicElements();
+
+    long current = timeProvider.getMsTime();
+    int delta = (int) (current - lastTime);
+    soundSystem.update(delta);
+    lastTime = current;
+
+    return exit;
+  }
+
+  private void handleDynamicElements() {
+    removePopUps();
+    removeLayerElements();
+    addControls();
+    removeElements();
+  }
+
+  private void removeLayerElements() {
+    if (!currentScreen.isNull()) {
+      currentScreen.processAddAndRemoveLayerElements();
+    }
+  }
+
+  private void removePopUps() {
     if (!removePopupList.isEmpty()) {
       if (!currentScreen.isNull()) {
         for (RemovePopUp removePopup : removePopupList) {
@@ -177,20 +202,6 @@ public class Nifty {
       }
       removePopupList.clear();
     }
-
-    if (!currentScreen.isNull()) {
-      currentScreen.processAddAndRemoveLayerElements();
-    }
-
-    addControls();
-    removeElements();
-
-    long current = timeProvider.getMsTime();
-    int delta = (int) (current - lastTime);
-    soundSystem.update(delta);
-    lastTime = current;
-
-    return exit;
   }
 
   public void addControls() {
