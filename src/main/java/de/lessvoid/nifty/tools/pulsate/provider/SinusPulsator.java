@@ -23,7 +23,7 @@ public class SinusPulsator implements PulsatorProvider {
   /**
    * start time.
    */
-  private float startTime;
+  private long startTime;
 
   /**
    * cycle (true) or one shot (false).
@@ -45,7 +45,7 @@ public class SinusPulsator implements PulsatorProvider {
    * @return the pulsate value in [0,1] interval
    */
   public float getValue(final long msTime) {
-    float t = msTime - startTime;
+    long t = msTime - startTime;
     if (cycle) {
       return getSinusValue(t);
     } else {
@@ -62,7 +62,7 @@ public class SinusPulsator implements PulsatorProvider {
    * @param x input
    * @return sinus
    */
-  private float getSinusValue(final float x) {
+  private float getSinusValue(final long x) {
     return (float) Math.abs(Math.sin((Math.PI * x / period)));
   }
 
