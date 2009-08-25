@@ -33,47 +33,47 @@ public class ControlEffectsAttributes {
   }
 
   public void addOnStartScreen(final ControlEffectAttributes effectParam) {
-    addOnStartScreen(effectParam);
+    onStartScreen.add(effectParam);
   }
 
   public void addOnEndScreen(final ControlEffectAttributes effectParam) {
-    addOnEndScreen(effectParam);
+    onEndScreen.add(effectParam);
   }
 
   public void addOnHover(final ControlEffectOnHoverAttributes effectParam) {
-    addOnHover(effectParam);
+    onHover.add(effectParam);
   }
 
   public void addOnClick(final ControlEffectAttributes effectParam) {
-    addOnClick(effectParam);
+    onClick.add(effectParam);
   }
 
   public void addOnFocus(final ControlEffectAttributes effectParam) {
-    addOnFocus(effectParam);
+    onFocus.add(effectParam);
   }
 
   public void addOnLostFocus(final ControlEffectAttributes effectParam) {
-    addOnLostFocus(effectParam);
+    onLostFocus.add(effectParam);
   }
 
   public void addOnGetFocus(final ControlEffectAttributes effectParam) {
-    addOnGetFocus(effectParam);
+    onGetFocus.add(effectParam);
   }
 
   public void addOnActive(final ControlEffectAttributes effectParam) {
-    addOnActive(effectParam);
+    onActive.add(effectParam);
   }
 
   public void addOnShow(final ControlEffectAttributes effectParam) {
-    addOnShow(effectParam);
+    onShow.add(effectParam);
   }
 
   public void addOnHide(final ControlEffectAttributes effectParam) {
-    addOnHide(effectParam);
+    onHide.add(effectParam);
   }
 
   public void addOnCustom(final ControlEffectAttributes effectParam) {
-    addOnCustom(effectParam);
+    onCustom.add(effectParam);
   }
 
   public EffectsType create() {

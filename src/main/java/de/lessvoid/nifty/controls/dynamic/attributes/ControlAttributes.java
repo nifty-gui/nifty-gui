@@ -144,8 +144,8 @@ public class ControlAttributes {
     attributes.set("inset", inset);
   }
 
-  public void setInputController(final String inputController) {
-    attributes.set("inputController", inputController);
+  public void setController(final String controller) {
+    attributes.set("controller", controller);
   }
 
   public void setInputMapping(final String inputMapping) {
