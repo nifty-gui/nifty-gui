@@ -12,7 +12,6 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownPopup implements Controller {
   private Nifty nifty;
-  private Screen screen;
   private Element dropDownElement;
 
   public void bind(
@@ -23,7 +22,6 @@ public class DropDownPopup implements Controller {
       final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
-    screen = screenParam;
   }
 
   public void inputEvent(final NiftyInputEvent inputEvent) {
