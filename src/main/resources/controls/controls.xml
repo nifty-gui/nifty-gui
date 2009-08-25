@@ -12,7 +12,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.controls.ControlsDemoStartScreen">
     <layer id="layer" childLayout="center" backgroundImage="background.png">
-      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="55%" height="32%" align="center" valign="center">
+      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="55%" height="44%" align="center" valign="center">
         <effect>
           <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
           <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
@@ -34,7 +34,14 @@
           </panel>    
           <panel id="dynamic-parent" childLayout="vertical">
           </panel>
-          <panel childLayout="horizontal" height="*" />
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="horizontal" height="*">
+            <label text="ListBox: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <control id="listBoxPanel" name="listBox" horizontal="false" width="*" height="100%" childLayout="vertical" visibleToMouse="true">
+              <panel id="listBoxDataParent" width="100%" childLayout="vertical" visibleToMouse="true" />
+            </control>
+          </panel>
+          <panel childLayout="horizontal" height="8px" />
           <panel id="buttonPanel" childLayout="vertical">
           </panel>
         </panel>
