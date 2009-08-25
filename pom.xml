@@ -42,4 +42,10 @@
       </plugin>
     </plugins>
   </build>
+  <distributionManagement>
+  	<repository>
+  		<id>nifty-maven-repo.sourceforge.net</id>
+  		<url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
+  	</repository>
+  </distributionManagement>
 </project>
