@@ -7,6 +7,9 @@ import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControlNotify;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
+import de.lessvoid.nifty.controls.listbox.ListBoxControl;
+import de.lessvoid.nifty.effects.EffectType;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -71,6 +74,45 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     createButton.setAlign("right");
     createButton.setInteractOnClick("back()");
     createButton.create(newNifty, screen, screen.findElementByName("buttonPanel"));
+
+    // dynamically populate the Listbox with labels
+    Element listBoxDataParent = screen.findElementByName("listBoxDataParent");
+    for (int i=0; i<10; i++) {
+      createLabel = new LabelCreator("Listbox Item: " + i);
+      createLabel.setWidth("100%");
+      createLabel.setAlign("left");
+      createLabel.setTextVAlign("center");
+      createLabel.setTextHAlign("left");
+      createLabel.setColor("#000f");
+
+      ControlEffectAttributes effectParam = new ControlEffectAttributes();
+      effectParam.setName("imageOverlay");
+      effectParam.setAttribute("post", "false");
+      effectParam.setAttribute("filename", "textfield/field-selected.png");
+      effectParam.setAttribute("imageMode", "resize:1,30,1,1,1,30,1,30,1,30,1,1");
+      effectParam.setAttribute("neverStopRendering", "true");
+      createLabel.addEffectsOnCustom(effectParam);
+
+      effectParam = new ControlEffectAttributes();
+      effectParam.setName("textColor");
+      effectParam.setAttribute("color", "#ffff");
+      effectParam.setAttribute("post", "false");
+      effectParam.setAttribute("neverStopRendering", "true");
+      createLabel.addEffectsOnCustom(effectParam);
+
+      effectParam = new ControlEffectAttributes();
+      effectParam.setName("updateScrollpanelPositionToDisplayElement");
+      effectParam.setAttribute("target", "listBoxPanel");
+      effectParam.setAttribute("oneShot", "true");
+      createLabel.addEffectsOnCustom(effectParam);
+
+      createLabel.setController("de.lessvoid.nifty.controls.listbox.ListBoxItemController");
+      createLabel.setInputMapping("de.lessvoid.nifty.input.mapping.MenuInputMapping");
+      createLabel.setVisibleToMouse("true");
+      createLabel.create(newNifty, screen, listBoxDataParent);
+    }
+    ListBoxControl listBox = screen.findControl("listBoxPanel", ListBoxControl.class);
+    listBox.changeSelection(0);
   }
 
   private DropDownControl findDropDownControl(final String id) {
