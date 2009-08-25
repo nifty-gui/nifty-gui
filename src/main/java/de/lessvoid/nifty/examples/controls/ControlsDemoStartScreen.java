@@ -9,7 +9,7 @@ import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
-import de.lessvoid.nifty.effects.EffectType;
+import de.lessvoid.nifty.controls.listbox.ListBoxItemController;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -76,6 +76,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     createButton.create(newNifty, screen, screen.findElementByName("buttonPanel"));
 
     // dynamically populate the Listbox with labels
+    ListBoxControl listBox = screen.findControl("listBoxPanel", ListBoxControl.class);
     Element listBoxDataParent = screen.findElementByName("listBoxDataParent");
     for (int i=0; i<10; i++) {
       createLabel = new LabelCreator("Listbox Item: " + i);
@@ -84,6 +85,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       createLabel.setTextVAlign("center");
       createLabel.setTextHAlign("left");
       createLabel.setColor("#000f");
+      createLabel.setInteractOnClick("listBoxItemClicked()");
 
       ControlEffectAttributes effectParam = new ControlEffectAttributes();
       effectParam.setName("imageOverlay");
@@ -91,6 +93,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       effectParam.setAttribute("filename", "textfield/field-selected.png");
       effectParam.setAttribute("imageMode", "resize:1,30,1,1,1,30,1,30,1,30,1,1");
       effectParam.setAttribute("neverStopRendering", "true");
+      effectParam.setAttribute("timeType", "infinite");
       createLabel.addEffectsOnCustom(effectParam);
 
       effectParam = new ControlEffectAttributes();
@@ -98,6 +101,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       effectParam.setAttribute("color", "#ffff");
       effectParam.setAttribute("post", "false");
       effectParam.setAttribute("neverStopRendering", "true");
+      effectParam.setAttribute("timeType", "infinite");
       createLabel.addEffectsOnCustom(effectParam);
 
       effectParam = new ControlEffectAttributes();
@@ -109,9 +113,10 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       createLabel.setController("de.lessvoid.nifty.controls.listbox.ListBoxItemController");
       createLabel.setInputMapping("de.lessvoid.nifty.input.mapping.MenuInputMapping");
       createLabel.setVisibleToMouse("true");
-      createLabel.create(newNifty, screen, listBoxDataParent);
+      Element newLabel = createLabel.create(newNifty, screen, listBoxDataParent);
+      ListBoxItemController newLabelController = newLabel.getControl(ListBoxItemController.class);
+      newLabelController.setListBox(listBox);
     }
-    ListBoxControl listBox = screen.findControl("listBoxPanel", ListBoxControl.class);
     listBox.changeSelection(0);
   }
 
