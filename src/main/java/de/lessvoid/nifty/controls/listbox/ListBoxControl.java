@@ -114,4 +114,13 @@ public class ListBoxControl implements Controller {
     ListBoxPanel listBoxPanel = childRootElement.getControl(ListBoxPanel.class);
     listBoxPanel.changeSelection(newSelectedItemIndex);
   }
+
+  public void changeSelection(final Element element) {
+    ListBoxPanel listBoxPanel = childRootElement.getControl(ListBoxPanel.class);
+    listBoxPanel.changeSelection(element);
+  }
+
+  public void setFocus() {
+    childRootElement.setFocus();
+  }
 }

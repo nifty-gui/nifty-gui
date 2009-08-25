@@ -49,5 +49,11 @@ public class ListBoxItemController implements Controller {
 
   public void listBoxItemClicked() {
     System.out.println("listBoxItemClicked");
+    listBoxControl.setFocus();
+    listBoxControl.changeSelection(listBoxControlItemElement);
+  }
+
+  public void setListBox(final ListBoxControl listBox) {
+    listBoxControl = listBox;
   }
 }

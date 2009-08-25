@@ -114,4 +114,8 @@ public class ListBoxPanel implements Controller {
   public boolean hasElements() {
     return getElementCount() > 0;
   }
+
+  public void changeSelection(final Element element) {
+    changeSelection(this.element.getElements().get(0).getElements().indexOf(element));
+  }
 }
