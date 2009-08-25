@@ -15,7 +15,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class ListBox implements Controller {
+public class ListBoxControl implements Controller {
   private Nifty nifty;
   private Screen screen;
   private Element element;
@@ -107,6 +107,7 @@ public class ListBox implements Controller {
         scrollElement.setConstraintY(new SizeValue("0px"));
       }
     }
+    screen.layoutLayers();
   }
 
   public void changeSelection(final int newSelectedItemIndex) {

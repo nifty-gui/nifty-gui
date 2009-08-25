@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="listBox" style="nifty-listbox" childRootId="nifty-listbox-child-root" controller="de.lessvoid.nifty.controls.listbox.ListBox">
+  <controlDefinition name="listBox" style="nifty-listbox" childRootId="nifty-listbox-child-root" controller="de.lessvoid.nifty.controls.listbox.ListBoxControl">
     <panel childLayout="vertical">
       <panel childLayout="horizontal">
         <panel id="nifty-listbox-child-root" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
