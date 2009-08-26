@@ -5,6 +5,7 @@
   <!-- load default styles and controls -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <useStyles filename="nifty-default-styles.xml" />
+  <useStyles filename="console/custom-console-style.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
