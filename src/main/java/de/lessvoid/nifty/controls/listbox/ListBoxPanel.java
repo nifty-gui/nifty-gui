@@ -64,6 +64,46 @@ public class ListBoxPanel implements Controller {
   public void onFocus(boolean getFocus) {
   }
 
+  public void changeSelection(final int newSelectedItemIndex) {
+    updateSelection(newSelectedItemIndex);
+  }
+
+  public void changeSelection(final Element element) {
+    changeSelection(getListBoxElements().indexOf(element));
+  }
+
+  public int getSelectedItemIndex() {
+    return selectedItem;
+  }
+
+  public Element getSelectedElement() {
+    return getListBoxElements().get(selectedItem);
+  }
+
+  public int getElementCount() {
+    if (element != null) {
+      return getListBoxElements().size();
+    }
+    return 0;
+  }
+
+  public boolean hasElements() {
+    return getElementCount() > 0;
+  }
+
+  public void linkChildsToListBoxControl(final ListBoxControl listBoxControl) {
+    if (!hasElements()) {
+      return;
+    }
+    List < Element > elements = getListBoxElements();
+    for (Element e : elements) {
+      ListBoxItemController listBoxItem = e.getControl(ListBoxItemController.class);
+      if (listBoxItem != null) {
+        listBoxItem.setListBox(listBoxControl);
+      }
+    }
+  }
+
   private Element getScrollElement() {
     if (element != null) {
       return element.getElements().get(0);
@@ -101,39 +141,7 @@ public class ListBoxPanel implements Controller {
     }
   }
 
-  public void changeSelection(final int newSelectedItemIndex) {
-    updateSelection(newSelectedItemIndex);
-  }
-
-  public int getElementCount() {
-    if (element != null) {
-      return getListBoxElements().size();
-    }
-    return 0;
-  }
-
-  private List<Element> getListBoxElements() {
+  private List < Element > getListBoxElements() {
     return element.getElements().get(0).getElements();
-  }
-
-  public boolean hasElements() {
-    return getElementCount() > 0;
-  }
-
-  public void changeSelection(final Element element) {
-    changeSelection(this.element.getElements().get(0).getElements().indexOf(element));
-  }
-
-  public void linkChildsToListBoxControl(final ListBoxControl listBoxControl) {
-    if (!hasElements()) {
-      return;
-    }
-    List < Element > elements = getListBoxElements();
-    for (Element e : elements) {
-      ListBoxItemController listBoxItem = e.getControl(ListBoxItemController.class);
-      if (listBoxItem != null) {
-        listBoxItem.setListBox(listBoxControl);
-      }
-    }
   }
 }

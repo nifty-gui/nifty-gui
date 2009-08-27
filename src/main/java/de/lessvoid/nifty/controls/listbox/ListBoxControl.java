@@ -7,7 +7,6 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl;
 import de.lessvoid.nifty.controls.scrollbar.controller.ScrollbarControlNotify;
 import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
-import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -105,7 +104,6 @@ public class ListBoxControl implements Controller {
             }
           });
         }
-  
         scrollElement.setConstraintX(new SizeValue("0px"));
         scrollElement.setConstraintY(new SizeValue("0px"));
       }
@@ -121,6 +119,16 @@ public class ListBoxControl implements Controller {
   public void changeSelection(final Element element) {
     ListBoxPanel listBoxPanel = getListBoxPanel();
     listBoxPanel.changeSelection(element);
+  }
+
+  public int getSelectedItemIndex() {
+    ListBoxPanel listBoxPanel = getListBoxPanel();
+    return listBoxPanel.getSelectedItemIndex();
+  }
+
+  public Element getSelectedElement() {
+    ListBoxPanel listBoxPanel = getListBoxPanel();
+    return listBoxPanel.getSelectedElement();
   }
 
   public void setFocus() {
