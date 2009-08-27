@@ -85,44 +85,25 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       createLabel.setTextVAlign("center");
       createLabel.setTextHAlign("left");
       createLabel.setColor("#000f");
-      createLabel.setInteractOnClick("listBoxItemClicked()");
+      createLabel.setStyle("nifty-listbox-item");
 
       ControlEffectAttributes effectParam = new ControlEffectAttributes();
-      effectParam.setName("imageOverlay");
-      effectParam.setAttribute("post", "false");
-      effectParam.setAttribute("filename", "textfield/field-selected.png");
-      effectParam.setAttribute("imageMode", "resize:1,30,1,1,1,30,1,30,1,30,1,1");
-      effectParam.setAttribute("neverStopRendering", "true");
-      effectParam.setAttribute("timeType", "infinite");
-      createLabel.addEffectsOnCustom(effectParam);
-
-      effectParam = new ControlEffectAttributes();
-      effectParam.setName("textColor");
-      effectParam.setAttribute("color", "#ffff");
-      effectParam.setAttribute("post", "false");
-      effectParam.setAttribute("neverStopRendering", "true");
-      effectParam.setAttribute("timeType", "infinite");
-      createLabel.addEffectsOnCustom(effectParam);
-
-      effectParam = new ControlEffectAttributes();
       effectParam.setName("updateScrollpanelPositionToDisplayElement");
       effectParam.setAttribute("target", "listBoxPanel");
       effectParam.setAttribute("oneShot", "true");
       createLabel.addEffectsOnCustom(effectParam);
 
-      createLabel.setController("de.lessvoid.nifty.controls.listbox.ListBoxItemController");
-      createLabel.setInputMapping("de.lessvoid.nifty.input.mapping.MenuInputMapping");
-      createLabel.setVisibleToMouse("true");
       Element newLabel = createLabel.create(newNifty, screen, listBoxDataParent);
+
+      // connect the new item with the parent ListBox because this is not happening automatically yet
       ListBoxItemController newLabelController = newLabel.getControl(ListBoxItemController.class);
       newLabelController.setListBox(listBox);
     }
     listBox.changeSelection(0);
-  }
 
-  private DropDownControl findDropDownControl(final String id) {
-    DropDownControl dropDown1 = screen.findControl(id, DropDownControl.class);
-    return dropDown1;
+    // select first item on the static listbox too
+    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
+    listBoxStatic.changeSelection(0);
   }
 
   public void onStartScreen() {
@@ -132,10 +113,14 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
   }
 
   public void back() {
+    // this demonstrates how to access selected items
     DropDownControl dropDown1 = findDropDownControl("dropDown1");
     System.out.println(dropDown1.getSelectedItemIdx() + ":" + dropDown1.getSelectedItem());
+
     DropDownControl dropDown2 = findDropDownControl("dropDown2");
     System.out.println(dropDown2.getSelectedItemIdx() + ":" + dropDown2.getSelectedItem());
+
+    // go back to another page
     nifty.fromXml("all/intro.xml", "menu");
   }
 
@@ -144,5 +129,10 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
         "changed selection on [" + dropDownControl.toString() + "]"
         + " to [" + dropDownControl.getSelectedItemIdx() + "]"
         + " = [" + dropDownControl.getSelectedItem() + "]");
+  }
+
+  private DropDownControl findDropDownControl(final String id) {
+    DropDownControl dropDown1 = screen.findControl(id, DropDownControl.class);
+    return dropDown1;
   }
 }

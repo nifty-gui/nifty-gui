@@ -7,12 +7,19 @@
   <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
+  <!-- this style is needed for the updateScrollpanelPositionToDisplayElement stuff -->
+  <style id="my-listbox-item-style" base="nifty-listbox-item">
+    <effect>
+      <onCustom name="updateScrollpanelPositionToDisplayElement" target="listBoxStatic" oneShot="true" />
+    </effect>
+  </style>
+
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.controls.ControlsDemoStartScreen">
     <layer id="layer" childLayout="center" backgroundImage="background.png">
-      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="55%" height="44%" align="center" valign="center">
+      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="55%" height="54%" align="center" valign="center">
         <effect>
           <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
           <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
@@ -36,7 +43,19 @@
           </panel>
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal" height="*">
-            <label text="ListBox: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <label text="Listbox Static: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <control id="listBoxStatic" name="listBox" horizontal="false" width="*" height="100%" childLayout="vertical" visibleToMouse="true">
+              <panel id="listBoxStaticData" width="100%" childLayout="vertical" visibleToMouse="true">
+                <label text="Static Item I" color="#000f" width="100%" align="left" textVAlign="center" textHAlign="left" style="my-listbox-item-style" />
+                <label text="Fo Shizzle" color="#000f" width="100%" align="left" textVAlign="center" textHAlign="left" style="my-listbox-item-style" />
+                <label text="Static Item III" color="#000f" width="100%" align="left" textVAlign="center" textHAlign="left" style="my-listbox-item-style" />
+                <label text="Static Items ftw" color="#000f" width="100%" align="left" textVAlign="center" textHAlign="left" style="my-listbox-item-style" />
+              </panel>
+            </control>
+          </panel>
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="horizontal" height="*">
+            <label text="Listbox Dyn.: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control id="listBoxPanel" name="listBox" horizontal="false" width="*" height="100%" childLayout="vertical" visibleToMouse="true">
               <panel id="listBoxDataParent" width="100%" childLayout="vertical" visibleToMouse="true" />
             </control>
