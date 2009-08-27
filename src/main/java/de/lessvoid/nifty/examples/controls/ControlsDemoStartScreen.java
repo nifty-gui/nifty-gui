@@ -120,6 +120,9 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     DropDownControl dropDown2 = findDropDownControl("dropDown2");
     System.out.println(dropDown2.getSelectedItemIdx() + ":" + dropDown2.getSelectedItem());
 
+    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
+    System.out.println("listBoxStatic selectedItemIndex: " + listBoxStatic.getSelectedItemIndex() + ", selectedItem: " + listBoxStatic.getSelectedElement());
+ 
     // go back to another page
     nifty.fromXml("all/intro.xml", "menu");
   }
