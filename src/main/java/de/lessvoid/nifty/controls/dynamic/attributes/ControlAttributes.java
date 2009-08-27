@@ -10,6 +10,7 @@ import de.lessvoid.nifty.loaderv2.types.EffectsType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.ImageType;
 import de.lessvoid.nifty.loaderv2.types.LabelType;
+import de.lessvoid.nifty.loaderv2.types.LayerType;
 import de.lessvoid.nifty.loaderv2.types.PanelType;
 import de.lessvoid.nifty.loaderv2.types.TextType;
 import de.lessvoid.nifty.screen.Screen;
@@ -298,6 +299,14 @@ public class ControlAttributes {
       final Element parent) {
     PanelType panelType = new PanelType(attributes);
     return buildControl(nifty, screen, parent, panelType);
+  }
+
+  protected Element createLayer(
+      final Nifty nifty,
+      final Screen screen,
+      final Element parent) {
+    LayerType layerType = new LayerType(attributes);
+    return buildControl(nifty, screen, parent, layerType);
   }
 
   protected Element createImage(

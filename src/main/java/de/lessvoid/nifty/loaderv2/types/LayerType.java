@@ -19,7 +19,7 @@ public class LayerType extends ElementType {
     return new LayerType(this);
   }
 
-  public LayerType(final Attributes attributes) throws Exception {
+  public LayerType(final Attributes attributes) {
     super(attributes);
   }
 
@@ -32,16 +32,4 @@ public class LayerType extends ElementType {
       }
     });
   }
-
-//  public String output(final int offset) {
-//    return StringHelper.whitespace(offset) + "<layer> " + super.output(offset + 1);
-//  }
-
-//  public ElementRendererCreator getElementRendererBuilder() {
-//    return new ElementRendererCreator() {
-//      public ElementRenderer[] createElementRenderer(final Nifty nifty) {
-//        return NiftyFactory.getPanelRenderer();
-//      }
-//    };
-//  }
 }
