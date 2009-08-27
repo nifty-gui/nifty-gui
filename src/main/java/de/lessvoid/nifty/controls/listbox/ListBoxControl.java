@@ -42,6 +42,9 @@ public class ListBoxControl implements Controller {
     childRootElement = element.findElementByName(childRootId);
     stepSizeX = new Float(parameter.getProperty("stepSizeX", "1.0"));
     stepSizeY = new Float(parameter.getProperty("stepSizeY", "1.0"));
+
+    ListBoxPanel listBoxPanel = getListBoxPanel();
+    listBoxPanel.linkChildsToListBoxControl(this);
   }
 
   public void inputEvent(NiftyInputEvent inputEvent) {
@@ -111,16 +114,21 @@ public class ListBoxControl implements Controller {
   }
 
   public void changeSelection(final int newSelectedItemIndex) {
-    ListBoxPanel listBoxPanel = childRootElement.getControl(ListBoxPanel.class);
+    ListBoxPanel listBoxPanel = getListBoxPanel();
     listBoxPanel.changeSelection(newSelectedItemIndex);
   }
 
   public void changeSelection(final Element element) {
-    ListBoxPanel listBoxPanel = childRootElement.getControl(ListBoxPanel.class);
+    ListBoxPanel listBoxPanel = getListBoxPanel();
     listBoxPanel.changeSelection(element);
   }
 
   public void setFocus() {
     childRootElement.setFocus();
+  }
+
+  private ListBoxPanel getListBoxPanel() {
+    ListBoxPanel listBoxPanel = childRootElement.getControl(ListBoxPanel.class);
+    return listBoxPanel;
   }
 }
