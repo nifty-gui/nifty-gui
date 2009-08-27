@@ -787,6 +787,7 @@ public class Nifty {
   }
 
   public void registerStyle(final StyleType style) {
+    log.fine("registerStyle " + style.getStyleId());
     styles.put(style.getStyleId(), style);
   }
 
