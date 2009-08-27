@@ -91,4 +91,16 @@ public class MouseInputEventQueue {
     }
     return buffer.toString();
   }
+
+  public int getLastMouseX() {
+    return lastMouseX;
+  }
+
+  public int getLastMouseY() {
+    return lastMouseY;
+  }
+
+  public boolean isLastMouseDown() {
+    return lastMouseDown;
+  }
 }
