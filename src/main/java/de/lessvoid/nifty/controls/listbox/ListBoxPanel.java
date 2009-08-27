@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import java.util.List;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
@@ -106,9 +107,13 @@ public class ListBoxPanel implements Controller {
 
   public int getElementCount() {
     if (element != null) {
-      return element.getElements().get(0).getElements().size();
+      return getListBoxElements().size();
     }
     return 0;
+  }
+
+  private List<Element> getListBoxElements() {
+    return element.getElements().get(0).getElements();
   }
 
   public boolean hasElements() {
@@ -117,5 +122,18 @@ public class ListBoxPanel implements Controller {
 
   public void changeSelection(final Element element) {
     changeSelection(this.element.getElements().get(0).getElements().indexOf(element));
+  }
+
+  public void linkChildsToListBoxControl(final ListBoxControl listBoxControl) {
+    if (!hasElements()) {
+      return;
+    }
+    List < Element > elements = getListBoxElements();
+    for (Element e : elements) {
+      ListBoxItemController listBoxItem = e.getControl(ListBoxItemController.class);
+      if (listBoxItem != null) {
+        listBoxItem.setListBox(listBoxControl);
+      }
+    }
   }
 }
