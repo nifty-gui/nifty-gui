@@ -10,7 +10,6 @@ import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
 import de.lessvoid.nifty.controls.listbox.CreateListBoxControl;
 import de.lessvoid.nifty.controls.listbox.controller.ListBoxControl;
-import de.lessvoid.nifty.controls.listbox.controller.ListBoxItemController;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -82,8 +81,8 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     // create new panel for label and drop down
     createPanel = new PanelCreator();
     createPanel.setChildLayout("horizontal");
-    createPanel.setHeight("*");
-    row = createPanel.create(newNifty, screen, dynamicParent);
+    createPanel.setHeight("80px");
+    Element secondRow = createPanel.create(newNifty, screen, dynamicParent);
 
       // create label
       createLabel = new LabelCreator("Listbox Dyn.:");
@@ -91,15 +90,33 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       createLabel.setAlign("left");
       createLabel.setTextVAlign("center");
       createLabel.setTextHAlign("left");
-      createLabel.create(newNifty, screen, row);
+      createLabel.create(newNifty, screen, secondRow);
 
       // create a list box
       CreateListBoxControl dynamicListboxCreate = new CreateListBoxControl("listBoxDynamic");
       dynamicListboxCreate.set("horizontal", "false");
       dynamicListboxCreate.setWidth("*");
-      dynamicListboxCreate.setHeight("50px");
+      dynamicListboxCreate.setHeight("100%");
       dynamicListboxCreate.setChildLayout("vertical");
-      ListBoxControl dynamicListbox = dynamicListboxCreate.create(nifty, screen, row);
+      ListBoxControl dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
+      for (int i=0; i<10; i++) {
+        dynamicListbox.addItem("Listbox Item: " + i);
+      }
+      // you can add elements too :)
+      createLabel = new LabelCreator("show off element add");
+      createLabel.setStyle("nifty-listbox-item");
+
+      ControlEffectAttributes effectParam = new ControlEffectAttributes();
+      effectParam.setName("updateScrollpanelPositionToDisplayElement");
+      effectParam.setAttribute("target", "listBoxDynamic");
+      effectParam.setAttribute("oneShot", "true");
+      createLabel.addEffectsOnCustom(effectParam);
+
+      Element listBoxDataParent = screen.findElementByName("listBoxDynamicData");
+      dynamicListbox.addElement(createLabel.create(nifty, screen, listBoxDataParent));
+
+      // select first element
+      dynamicListbox.changeSelection(0);
 
     // dynamically add the backButton for testing purpose
     CreateButtonControl createButton = new CreateButtonControl("backButton");
@@ -107,32 +124,6 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     createButton.setAlign("right");
     createButton.setInteractOnClick("back()");
     createButton.create(newNifty, screen, screen.findElementByName("buttonPanel"));
-
-    // dynamically populate the Listbox with labels
-    ListBoxControl listBox = screen.findControl("listBoxDynamic", ListBoxControl.class);
-    Element listBoxDataParent = screen.findElementByName("listBoxDynamicData");
-    for (int i=0; i<10; i++) {
-      createLabel = new LabelCreator("Listbox Item: " + i);
-      createLabel.setWidth("100%");
-      createLabel.setAlign("left");
-      createLabel.setTextVAlign("center");
-      createLabel.setTextHAlign("left");
-      createLabel.setColor("#000f");
-      createLabel.setStyle("nifty-listbox-item");
-
-      ControlEffectAttributes effectParam = new ControlEffectAttributes();
-      effectParam.setName("updateScrollpanelPositionToDisplayElement");
-      effectParam.setAttribute("target", "listBoxPanel");
-      effectParam.setAttribute("oneShot", "true");
-      createLabel.addEffectsOnCustom(effectParam);
-
-      Element newLabel = createLabel.create(newNifty, screen, listBoxDataParent);
-
-      // connect the new item with the parent ListBox because this is not happening automatically yet
-      ListBoxItemController newLabelController = newLabel.getControl(ListBoxItemController.class);
-      newLabelController.setListBox(listBox);
-    }
-    listBox.changeSelection(0);
 
     // select first item on the static listbox too
     ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
