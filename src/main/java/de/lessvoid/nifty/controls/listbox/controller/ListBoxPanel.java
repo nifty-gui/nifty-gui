@@ -142,7 +142,11 @@ public class ListBoxPanel implements Controller {
     }
   }
 
-  private List < Element > getListBoxElements() {
+  private int getListBoxElementsCount() {
+    return getListBoxElements().size();
+  }
+
+  public List < Element > getListBoxElements() {
     if (element.getElements().isEmpty()) {
       return new ArrayList < Element > ();
     }

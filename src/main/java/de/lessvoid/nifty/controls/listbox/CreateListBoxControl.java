@@ -25,12 +25,13 @@ public class CreateListBoxControl extends ControlAttributes {
       final Element parent) {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControlsWithoutStartScreen();
+
     Element controlElement = parent.findElementByName(attributes.get("id"));
     Element childRoot = controlElement.findElementByName("nifty-listbox-child-root");
 
     PanelCreator createPanel = new PanelCreator(attributes.get("id") + "Data");
-    createPanel.setChildLayout("horizontal");
-    createPanel.setHeight("*");
+    createPanel.setChildLayout("vertical");
+    createPanel.setWidth("100%");
     createPanel.create(nifty, screen, childRoot);
 
     return parent.findControl(attributes.get("id"), ListBoxControl.class);
