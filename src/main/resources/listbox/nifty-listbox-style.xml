@@ -15,11 +15,13 @@
     <attributes width="28px" height="280px" />
   </style>
   <style id="nifty-listbox-item" base="nifty-label">
-    <attributes controller="de.lessvoid.nifty.controls.listbox.controller.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping" />
+    <attributes controller="de.lessvoid.nifty.controls.listbox.controller.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"
+                color="#000f" width="100%" align="left" textVAlign="center" textHAlign="left" />
     <interact onClick="listBoxItemClicked()" />
     <effect>
       <onCustom name="imageOverlay" post="false" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" neverStopRendering="true" timeType="infinite" />
       <onCustom name="textColor" post="false" color="#ffff" neverStopRendering="true" timeType="infinite" />
+      <onHover name="textColor" post="false" color="#ffff" />
     </effect>
   </style>
 </nifty-styles>
