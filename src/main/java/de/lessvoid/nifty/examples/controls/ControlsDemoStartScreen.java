@@ -8,8 +8,9 @@ import de.lessvoid.nifty.controls.dropdown.controller.DropDownControlNotify;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
-import de.lessvoid.nifty.controls.listbox.ListBoxControl;
-import de.lessvoid.nifty.controls.listbox.ListBoxItemController;
+import de.lessvoid.nifty.controls.listbox.CreateListBoxControl;
+import de.lessvoid.nifty.controls.listbox.controller.ListBoxControl;
+import de.lessvoid.nifty.controls.listbox.controller.ListBoxItemController;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -44,29 +45,61 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     // dynamically add another DropDownControl
     Element dynamicParent = screen.findElementByName("dynamic-parent");
 
+    // create 8px height panel
     PanelCreator createPanel = new PanelCreator();
     createPanel.setChildLayout("horizontal");
     createPanel.setHeight("8px");
     createPanel.create(newNifty, screen, dynamicParent);
 
+    // create new panel for label and drop down
     createPanel = new PanelCreator();
     createPanel.setChildLayout("horizontal");
     Element row = createPanel.create(newNifty, screen, dynamicParent);
 
-    LabelCreator createLabel = new LabelCreator("Dynamic:");
-    createLabel.setWidth("120px");
-    createLabel.setAlign("left");
-    createLabel.setTextVAlign("center");
-    createLabel.setTextHAlign("left");
-    createLabel.create(newNifty, screen, row);
+      // create label
+      LabelCreator createLabel = new LabelCreator("Dynamic:");
+      createLabel.setWidth("120px");
+      createLabel.setAlign("left");
+      createLabel.setTextVAlign("center");
+      createLabel.setTextHAlign("left");
+      createLabel.create(newNifty, screen, row);
 
-    CreateDropDownControl dynamicItem = new CreateDropDownControl("dynamicDropDown");
-    DropDownControl dropDown3 = dynamicItem.create(nifty, screen, row);
-    if (dropDown3 != null) {
-      dropDown3.addItem("dynamic drop down");
-      dropDown3.addItem("ftw");
-      dropDown3.setSelectedItem("ftw");
-    }
+      // create drop down
+      CreateDropDownControl dynamicItem = new CreateDropDownControl("dynamicDropDown");
+      DropDownControl dropDown3 = dynamicItem.create(nifty, screen, row);
+      if (dropDown3 != null) {
+        dropDown3.addItem("dynamic drop down");
+        dropDown3.addItem("ftw");
+        dropDown3.setSelectedItem("ftw");
+      }
+
+    // create 8px height panel
+    createPanel = new PanelCreator();
+    createPanel.setChildLayout("horizontal");
+    createPanel.setHeight("8px");
+    createPanel.create(newNifty, screen, dynamicParent);
+
+    // create new panel for label and drop down
+    createPanel = new PanelCreator();
+    createPanel.setChildLayout("horizontal");
+    createPanel.setHeight("*");
+    row = createPanel.create(newNifty, screen, dynamicParent);
+
+      // create label
+      createLabel = new LabelCreator("Listbox Dyn.:");
+      createLabel.setWidth("120px");
+      createLabel.setAlign("left");
+      createLabel.setTextVAlign("center");
+      createLabel.setTextHAlign("left");
+      createLabel.create(newNifty, screen, row);
+
+      // create a list box
+      CreateListBoxControl dynamicListboxCreate = new CreateListBoxControl("listBoxDynamic");
+      dynamicListboxCreate.set("horizontal", "false");
+      dynamicListboxCreate.setWidth("*");
+      dynamicListboxCreate.setHeight("50px");
+      dynamicListboxCreate.setChildLayout("vertical");
+      ListBoxControl dynamicListbox = dynamicListboxCreate.create(nifty, screen, row);
 
     // dynamically add the backButton for testing purpose
     CreateButtonControl createButton = new CreateButtonControl("backButton");
@@ -76,8 +109,8 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     createButton.create(newNifty, screen, screen.findElementByName("buttonPanel"));
 
     // dynamically populate the Listbox with labels
-    ListBoxControl listBox = screen.findControl("listBoxPanel", ListBoxControl.class);
-    Element listBoxDataParent = screen.findElementByName("listBoxDataParent");
+    ListBoxControl listBox = screen.findControl("listBoxDynamic", ListBoxControl.class);
+    Element listBoxDataParent = screen.findElementByName("listBoxDynamicData");
     for (int i=0; i<10; i++) {
       createLabel = new LabelCreator("Listbox Item: " + i);
       createLabel.setWidth("100%");

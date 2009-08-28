@@ -53,6 +53,7 @@
               </panel>
             </control>
           </panel>
+          <!--  
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal" height="*">
             <label text="Listbox Dyn.: " width="120px" align="left" textVAlign="center" textHAlign="left" />
@@ -60,6 +61,7 @@
               <panel id="listBoxDataParent" width="100%" childLayout="vertical" visibleToMouse="true" />
             </control>
           </panel>
+          -->
           <panel childLayout="horizontal" height="8px" />
           <panel id="buttonPanel" childLayout="vertical">
           </panel>
