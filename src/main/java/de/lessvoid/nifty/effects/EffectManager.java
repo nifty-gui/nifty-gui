@@ -174,7 +174,7 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onEndScreen).reset();
     effectProcessor.get(EffectEventId.onShow).reset();
     effectProcessor.get(EffectEventId.onHide).reset();
-    effectProcessor.get(EffectEventId.onCustom).reset();
+  //  effectProcessor.get(EffectEventId.onCustom).reset();
   }
 
   public void resetAll() {
