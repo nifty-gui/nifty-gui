@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.listbox;
+package de.lessvoid.nifty.controls.listbox.controller;
 
 import java.util.Properties;
 
@@ -77,35 +77,37 @@ public class ListBoxControl implements Controller {
     screen.layoutLayers();
 
     if (childRootElement != null) {
-      final Element scrollElement = childRootElement.getElements().get(0);
-      if (scrollElement != null) {
-        HorizontalScrollbarControl horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
-        if (horizontalS != null) {
-          horizontalS.setWorldMaxValue(scrollElement.getWidth());
-          horizontalS.setViewMaxValue(childRootElement.getWidth());
-          horizontalS.setPerClickChange(stepSizeX);
-          horizontalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
-            public void positionChanged(final float currentValue) {
-              scrollElement.setConstraintX(new SizeValue(-(int)currentValue + "px"));
-              scrollElement.getParent().layoutElements();
-            }
-          });
+      if (!childRootElement.getElements().isEmpty()) {
+        final Element scrollElement = childRootElement.getElements().get(0);
+        if (scrollElement != null) {
+          HorizontalScrollbarControl horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
+          if (horizontalS != null) {
+            horizontalS.setWorldMaxValue(scrollElement.getWidth());
+            horizontalS.setViewMaxValue(childRootElement.getWidth());
+            horizontalS.setPerClickChange(stepSizeX);
+            horizontalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
+              public void positionChanged(final float currentValue) {
+                scrollElement.setConstraintX(new SizeValue(-(int)currentValue + "px"));
+                scrollElement.getParent().layoutElements();
+              }
+            });
+          }
+    
+          VerticalScrollbarControl verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
+          if (verticalS != null) {
+            verticalS.setWorldMaxValue(scrollElement.getHeight());
+            verticalS.setViewMaxValue(childRootElement.getHeight());
+            verticalS.setPerClickChange(stepSizeY);
+            verticalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
+              public void positionChanged(final float currentValue) {
+                scrollElement.setConstraintY(new SizeValue(-(int)currentValue + "px"));
+                scrollElement.getParent().layoutElements();
+              }
+            });
+          }
+          scrollElement.setConstraintX(new SizeValue("0px"));
+          scrollElement.setConstraintY(new SizeValue("0px"));
         }
-  
-        VerticalScrollbarControl verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
-        if (verticalS != null) {
-          verticalS.setWorldMaxValue(scrollElement.getHeight());
-          verticalS.setViewMaxValue(childRootElement.getHeight());
-          verticalS.setPerClickChange(stepSizeY);
-          verticalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
-            public void positionChanged(final float currentValue) {
-              scrollElement.setConstraintY(new SizeValue(-(int)currentValue + "px"));
-              scrollElement.getParent().layoutElements();
-            }
-          });
-        }
-        scrollElement.setConstraintX(new SizeValue("0px"));
-        scrollElement.setConstraintY(new SizeValue("0px"));
       }
     }
     screen.layoutLayers();

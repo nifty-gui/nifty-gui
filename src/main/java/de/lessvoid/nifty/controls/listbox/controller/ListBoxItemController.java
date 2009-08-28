@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.listbox;
+package de.lessvoid.nifty.controls.listbox.controller;
 
 import java.util.Properties;
 

@@ -1,5 +1,6 @@
-package de.lessvoid.nifty.controls.listbox;
+package de.lessvoid.nifty.controls.listbox.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -142,6 +143,12 @@ public class ListBoxPanel implements Controller {
   }
 
   private List < Element > getListBoxElements() {
+    if (element.getElements().isEmpty()) {
+      return new ArrayList < Element > ();
+    }
+    if (element.getElements().get(0).getElements().isEmpty()) {
+      return new ArrayList < Element > ();
+    }
     return element.getElements().get(0).getElements();
   }
 }
