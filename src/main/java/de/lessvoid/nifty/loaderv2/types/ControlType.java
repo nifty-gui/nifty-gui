@@ -5,12 +5,7 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.types.helper.NullElementRendererCreator;
-import de.lessvoid.nifty.loaderv2.types.resolver.parameter.ParameterResolver;
-import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
-import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ControlType extends ElementType {
