@@ -6,6 +6,11 @@
   <name>Nifty Default Controls</name>
   <version>1.0-SNAPSHOT</version>
   <description/>
+  <scm>
+    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-default-controls/trunk</connection>
+    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-default-controls/trunk</developerConnection>
+    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-default-controls/</url>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>lessvoid</groupId>
