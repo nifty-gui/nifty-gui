@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>lessvoid</groupId>
   <artifactId>nifty-style-black</artifactId>
   <name>Nifty Style Definition (Black)</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <url>http://nifty-gui.sourceforge.net/nifty-style-black/project-info.html</url>
   <scm>
-    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-style-black/trunk</connection>
-    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-style-black/trunk</developerConnection>
-    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-style-black</url>
+    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-style-black/tags/nifty-style-black-1.0</connection>
+    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-style-black/tags/nifty-style-black-1.0</developerConnection>
+    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-style-black/tags/nifty-style-black-1.0</url>
   </scm>
-  <description/>
+  <description />
   <repositories>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
