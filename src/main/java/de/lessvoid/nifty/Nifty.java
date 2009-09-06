@@ -362,12 +362,12 @@ public class Nifty {
    * @param id the new screen id we should go to.
    */
   public void gotoScreen(final String id) {
-    log.info("gotoScreen [" + id + "]");
-
     if (gotoScreenInProgess) {
+      log.info("gotoScreen [" + id + "] aborted because still in gotoScreenInProgress phase");
       return;
     }
 
+    log.info("gotoScreen [" + id + "]");
     gotoScreenInProgess = true;
 
     if (currentScreen.isNull()) {
@@ -403,8 +403,11 @@ public class Nifty {
       currentScreen.setAlternateKey(alternateKeyForNextLoadXml);
       alternateKeyForNextLoadXml = null;
     }
-    currentScreen.startScreen();
-    gotoScreenInProgess = false;
+    currentScreen.startScreen(new EndNotify() {
+      public void perform() {
+        gotoScreenInProgess = false;
+      }
+    });
   }
 
   /**

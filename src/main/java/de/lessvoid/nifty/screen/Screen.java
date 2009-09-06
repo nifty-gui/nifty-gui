@@ -147,7 +147,11 @@ public class Screen {
     popupElementsToRemove.add(popup);
   }
 
-  public final void startScreen() {
+  public void startScreen() {
+    startScreen(null);
+  }
+
+  public void startScreen(final EndNotify startScreenEndNotify) {
     running = false;
 
     focusHandler.resetFocusElements();
@@ -161,7 +165,7 @@ public class Screen {
     activeEffectStart();
 
     // onStartScreen
-    final StartScreenEndNotify endNotify = new StartScreenEndNotify();
+    final StartScreenEndNotify endNotify = createScreenStartEndNotify(startScreenEndNotify);
     startLayers(EffectEventId.onStartScreen, endNotify);
 
     // default focus attribute has been set in onStartScreen
@@ -415,20 +419,6 @@ public class Screen {
     defaultFocusElementId = defaultFocusElementIdParam;
   }
 
-  public class StartScreenEndNotify implements EndNotify {
-    public void perform() {
-      Logger.getAnonymousLogger().info("onStartScreen has ended");
-
-      // onStartScreen has ENDED so call the event.
-      screenController.onStartScreen();
-
-      // add dynamic controls
-      nifty.addControls();
-
-      running = true;
-    }
-  }
-
   private class LocalEndNotify implements EndNotify {
     private boolean enabled = false;
     private EffectEventId effectEventId = null;
@@ -454,6 +444,28 @@ public class Screen {
           endNotify.perform();
         }
       }
+    }
+  }
+
+  StartScreenEndNotify createScreenStartEndNotify(final EndNotify startScreenEndNotify) {
+    return new StartScreenEndNotify(startScreenEndNotify);
+  }
+
+  class StartScreenEndNotify implements EndNotify {
+    private EndNotify additionalEndNotify;
+
+    public StartScreenEndNotify(final EndNotify additionalEndNotify) {
+      this.additionalEndNotify = additionalEndNotify;
+    }
+
+    public void perform() {
+      Logger.getAnonymousLogger().info("onStartScreen has ended");
+
+      if (additionalEndNotify != null) {
+        additionalEndNotify.perform();
+      }
+
+      onStartScreenHasEnded();      
     }
   }
 
@@ -500,5 +512,14 @@ public class Screen {
 
   public boolean isNull() {
     return false;
+  }
+
+  void onStartScreenHasEnded() {
+    // onStartScreen has ENDED so call the event.
+    screenController.onStartScreen();
+
+    // add dynamic controls
+    nifty.addControls();
+    running = true;
   }
 }
