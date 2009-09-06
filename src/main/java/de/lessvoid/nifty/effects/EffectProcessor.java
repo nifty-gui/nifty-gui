@@ -218,6 +218,7 @@ public class EffectProcessor {
 
     if (!activeEffects.isEmpty()) {
       active = true;
+      clearActiveEffectsRequested = false;
     }
   }
 
