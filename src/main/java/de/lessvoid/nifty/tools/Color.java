@@ -1,10 +1,13 @@
 package de.lessvoid.nifty.tools;
 
+import java.util.logging.Logger;
+
 /**
  * Color helper class to manage colors.
  * @author void
  */
 public class Color {
+  private Logger log = Logger.getLogger(Color.class.getName());
 
   /**
    * scale short mode factor (converts 0x5 to 0x55).
@@ -55,6 +58,7 @@ public class Color {
    * alpha component.
    */
   private float alpha = 0.0f;
+  private ColorValidator colorValidator = new ColorValidator();
 
   /**
    * Create a color from a color String formated like in html
@@ -62,10 +66,27 @@ public class Color {
    * @param color the color string
    */
   public Color(final String color) {
-      this.red = getRFromString(color);
-      this.green = getGFromString(color);
-      this.blue = getBFromString(color);
-      this.alpha = getAFromString(color);
+    if (colorValidator.isShortModeWithoutAlpha(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+      alpha = 1.0f;
+      log.fine("found short mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#f]");
+    } else if (colorValidator.isLongModeWithoutAlpha(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+      alpha = 1.0f;
+      log.fine("found long mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#ff]");
+    } else if (colorValidator.isValid(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+      alpha = getAFromString(color);
+    } else {
+      log.fine("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
+      red = green = blue = alpha = 1.0f;
+    }
   }
 
   /**
@@ -209,7 +230,7 @@ public class Color {
    * @return true or false
    */
   private boolean isShortMode(final String color) {
-    return color.length() == 5;
+    return colorValidator.isShortMode(color) || colorValidator.isShortModeWithoutAlpha(color);
   }
 
   /**
