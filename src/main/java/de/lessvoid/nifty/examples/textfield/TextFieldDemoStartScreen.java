@@ -53,6 +53,7 @@ public class TextFieldDemoStartScreen implements ScreenController {
   }
 
   public void onEndScreen() {
+    System.out.println("ip: " + screen.findControl("ip", TextFieldControl.class).getText());
   }
 
   public void back() {
