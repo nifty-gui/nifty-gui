@@ -186,6 +186,8 @@ public class Screen {
   }
 
   private void resetLayers() {
+    nifty.resetEvents();
+
     for (Element w : layerElements) {
       w.resetEffects();
     }

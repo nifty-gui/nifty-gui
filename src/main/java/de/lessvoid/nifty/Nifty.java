@@ -120,7 +120,7 @@ public class Nifty {
     this.exit = false;
     this.currentLoaded = null;
     this.inputEventCreator = new KeyboardInputEventCreator();
-    this.mouseInputEventQueue = new MouseInputEventQueue(renderEngine.getWidth(), renderEngine.getHeight(), newTimeProvider);
+    this.mouseInputEventQueue = new MouseInputEventQueue(renderEngine.getHeight());
     this.lastTime = timeProvider.getMsTime();
 
     try {
@@ -178,6 +178,10 @@ public class Nifty {
     lastTime = current;
 
     return exit;
+  }
+
+  public void resetEvents() {
+    mouseInputEventQueue.reset();
   }
 
   private void handleDynamicElements() {
