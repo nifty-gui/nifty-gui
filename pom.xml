@@ -123,5 +123,37 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>slick-webstart</id>
+      <build>
+        <plugins>
+          <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-jar-plugin</artifactId>
+           <configuration>
+             <includes>
+               <include>**/slick/**</include>
+               <include>**/menu.fnt</include>
+               <include>**/menu.png</include>
+             </includes>
+            </configuration>
+          </plugin>
+          <plugin>
+           <artifactId>maven-assembly-plugin</artifactId>
+           <configuration>
+             <finalName>slick-webstart</finalName>
+             <descriptors>
+               <descriptor>src/assemble/assemble.xml</descriptor>
+             </descriptors>
+             <archive>
+               <manifest>
+                 <mainClass>de.lessvoid.nifty.examples.slick.niftyoverlay.OverlayMain</mainClass>
+               </manifest>
+             </archive>
+           </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>

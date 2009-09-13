@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+  <!-- we don't have to use a style for this but this makes it easier -->
+  <style id="shake">
+    <effect>
+      <onCustom name="shake" global="false" length="1000" />
+    </effect>
+  </style>
+
+  <!-- one simple screen for this example -->
+  <screen id="start" controller="de.lessvoid.nifty.examples.slick.niftyoverlay.TestState1">
+
+    <!-- this layer comes straight from the hello world example -->
+    <layer id="layer" childLayout="center">
+      <panel id="panel" height="10%" width="35%" align="center" valign="center" backgroundColor="#f60c" childLayout="center" visibleToMouse="true">
+        <interact onClick="quit()"/>
+        <effect>
+          <onStartScreen name="move" mode="in" direction="top" length="600" startDelay="0" inherit="true"/>
+          <onEndScreen name="move" mode="out" direction="bottom" length="600" startDelay="0" inherit="true"/>
+          <onHover name="pulsate" scaleFactor="0.008" startColor="#f600" endColor="#ffff" post="true"/>
+        </effect>
+        <text id="text" font="aurulent-sans-17.fnt" color="#000f" text="... and this is Nifty on top&#13;&#10;... click this with mouse to quit" align="center" valign="center" />
+      </panel>
+    </layer>
+
+    <!-- this layer shows three boxes that shake when triggered from java -->
+    <layer id="boxes" childLayout="vertical">
+      <panel height="80%"/>
+      <panel height="*" childLayout="center" backgroundColor="#888c">
+        <effect>
+          <onStartScreen name="move" mode="in" direction="left" length="600" startDelay="0" inherit="true"/>
+          <onEndScreen name="move" mode="out" direction="left" length="600" startDelay="0" inherit="true"/>
+        </effect>
+        <panel width="90%" height="70%" align="center" valign="center" childLayout="horizontal">
+          <panel id="red" width="9%" height="70%" backgroundColor="#f00f" valign="center" style="shake" />
+          <panel id="green" width="9%" height="70%" backgroundColor="#0f0f" valign="center" style="shake" />
+          <panel id="blue" width="9%" height="70%" backgroundColor="#00ff" valign="center" style="shake" />
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty>
