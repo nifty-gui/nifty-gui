@@ -97,7 +97,7 @@ public class NiftyGameState extends BasicGameState {
   public void fromXml(final String filename, final ScreenController ... controllers) {
     SlickCallable.enterSafeBlock();
     nifty.registerScreenController(controllers);
-    nifty.fromXml(filename, "start");
+    nifty.fromXmlWithoutStartScreen(filename);
     SlickCallable.leaveSafeBlock();
   }
 
@@ -109,10 +109,10 @@ public class NiftyGameState extends BasicGameState {
   public void fromXml(final String fileId, final InputStream xmlData, final ScreenController ... controllers) {
     SlickCallable.enterSafeBlock();
     nifty.registerScreenController(controllers);
-    nifty.fromXml(fileId, xmlData, "start");
+    nifty.fromXmlWithoutStartScreen(fileId, xmlData);
     SlickCallable.leaveSafeBlock();
   }
-
+  
   /**
    * Enable overlay mouse cursor image.
    * @param newMouseImage image
@@ -216,9 +216,21 @@ public class NiftyGameState extends BasicGameState {
    */
   public void enter(final GameContainer container, final StateBasedGame game) throws SlickException {
     SlickCallable.enterSafeBlock();
-    nifty.getCurrentScreen().startScreen();
+    if (nifty.getCurrentScreen().isNull()) {
+      nifty.gotoScreen("start");
+    } else {
+      nifty.getCurrentScreen().startScreen();
+    }
     mouseDown = false;
     SlickCallable.leaveSafeBlock();
+  }
+
+  /**
+   * Activate the given ScreenId.
+   * @param screenId
+   */
+  public void gotoScreen(final String screenId) {
+    nifty.gotoScreen(screenId);
   }
 
   /**
@@ -229,5 +241,9 @@ public class NiftyGameState extends BasicGameState {
    */
   private void forwardMouseEventToNifty(final int mouseX, final int mouseY, final boolean mouseDown) {
     mouseEvents.add(new MouseInputEvent(mouseX, container.getHeight() - mouseY, mouseDown));
+  }
+
+  public Nifty getNifty() {
+    return nifty;
   }
 }

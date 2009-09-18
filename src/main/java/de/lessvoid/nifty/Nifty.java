@@ -260,6 +260,15 @@ public class Nifty {
   /**
    * Initialize this Nifty instance from the given xml file.
    * @param filename filename to nifty xml
+   */
+  public void fromXmlWithoutStartScreen(final String filename) {
+    prepareScreens(filename);
+    loadFromFile(filename);
+  }
+
+  /**
+   * Initialize this Nifty instance from the given xml file.
+   * @param filename filename to nifty xml
    * @param startScreen screen to start exec
    * @param controllers controllers to use
    */
@@ -283,6 +292,16 @@ public class Nifty {
     prepareScreens(fileId);
     loadFromStream(input);
     gotoScreen(startScreen);
+  }
+
+  /**
+   * fromXmlWithoutStartScreen.
+   * @param fileId fileId
+   * @param input inputStream
+   */
+  public void fromXmlWithoutStartScreen(final String fileId, final InputStream input) {
+    prepareScreens(fileId);
+    loadFromStream(input);
   }
 
   /**
