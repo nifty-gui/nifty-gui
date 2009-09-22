@@ -19,7 +19,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.controls.ControlsDemoStartScreen">
     <layer id="layer" childLayout="center" backgroundImage="background.png">
-      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="55%" height="52%" align="center" valign="center">
+      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="55%" height="58%" align="center" valign="center">
         <effect>
           <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
           <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
@@ -37,7 +37,7 @@
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal">
             <label text="Fo Shizzle: " width="120px" align="left" textVAlign="center" textHAlign="left" />
-            <control name="checkbox" />
+            <control id="checkbox" name="checkbox" />
           </panel>    
           <panel id="dynamic-parent" childLayout="vertical">
           </panel>

@@ -2,6 +2,8 @@ package de.lessvoid.nifty.examples.controls;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.button.CreateButtonControl;
+import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
+import de.lessvoid.nifty.controls.checkbox.CreateCheckBoxControl;
 import de.lessvoid.nifty.controls.dropdown.CreateDropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControlNotify;
@@ -50,13 +52,35 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     createPanel.setHeight("8px");
     createPanel.create(newNifty, screen, dynamicParent);
 
-    // create new panel for label and drop down
+    // create new panel for label and checkbox
     createPanel = new PanelCreator();
     createPanel.setChildLayout("horizontal");
     Element row = createPanel.create(newNifty, screen, dynamicParent);
 
       // create label
-      LabelCreator createLabel = new LabelCreator("Dynamic:");
+      LabelCreator createLabel = new LabelCreator("Dyn. Checkbox:");
+      createLabel.setWidth("120px");
+      createLabel.setAlign("left");
+      createLabel.setTextVAlign("center");
+      createLabel.setTextHAlign("left");
+      createLabel.create(newNifty, screen, row);
+
+      CreateCheckBoxControl createCheckBoxControl = new CreateCheckBoxControl();
+      createCheckBoxControl.create(nifty, screen, row);
+
+    // create 8px height panel
+    createPanel = new PanelCreator();
+    createPanel.setChildLayout("horizontal");
+    createPanel.setHeight("8px");
+    createPanel.create(newNifty, screen, dynamicParent);
+
+    // create new panel for label and drop down
+    createPanel = new PanelCreator();
+    createPanel.setChildLayout("horizontal");
+    row = createPanel.create(newNifty, screen, dynamicParent);
+
+      // create label
+      createLabel = new LabelCreator("Dynamic:");
       createLabel.setWidth("120px");
       createLabel.setAlign("left");
       createLabel.setTextVAlign("center");
@@ -128,6 +152,10 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     // select first item on the static listbox too
     ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
     listBoxStatic.changeSelection(0);
+
+    // check the checkbox
+    CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
+    checkBoxControl.uncheck();
   }
 
   public void onStartScreen() {
@@ -147,6 +175,9 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
     System.out.println("listBoxStatic selectedItemIndex: " + listBoxStatic.getSelectedItemIndex() + ", selectedItem: " + listBoxStatic.getSelectedElement());
  
+    CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
+    System.out.println("checkbox: " + checkBoxControl.isChecked());
+    
     // go back to another page
     nifty.fromXml("all/intro.xml", "menu");
   }

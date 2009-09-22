@@ -7,6 +7,10 @@
   <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
+  <style id="my" base="button-font">
+    <attributes font="menu.fnt" color="#f00f"/>
+  </style>
+
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -19,7 +23,7 @@
         </effect>
         <panel childLayout="vertical" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
-            <label id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
+            <label id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left" style="my"/>
             <control id="name" name="textfield" text="kevmeister" />
           </panel>
           <panel childLayout="horizontal" height="8px" />
