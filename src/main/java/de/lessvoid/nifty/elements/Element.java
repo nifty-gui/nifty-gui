@@ -302,7 +302,7 @@ public class Element {
    * get the id of this element.
    * @return the id
    */
-  public final String getId() {
+  public String getId() {
     return id;
   }
 
@@ -310,7 +310,7 @@ public class Element {
    * get parent.
    * @return parent
    */
-  public final Element getParent() {
+  public Element getParent() {
     return parent;
   }
 
@@ -362,7 +362,7 @@ public class Element {
    * get x.
    * @return x position of this element.
    */
-  public final int getX() {
+  public int getX() {
     return layoutPart.getBox().getX();
   }
 
@@ -370,7 +370,7 @@ public class Element {
    * get y.
    * @return the y position of this element.
    */
-  public final int getY() {
+  public int getY() {
     return layoutPart.getBox().getY();
   }
 
@@ -378,7 +378,7 @@ public class Element {
    * get height.
    * @return the height of this element.
    */
-  public final int getHeight() {
+  public int getHeight() {
     return layoutPart.getBox().getHeight();
   }
 
@@ -386,7 +386,7 @@ public class Element {
    * get width.
    * @return the width of this element.
    */
-  public final int getWidth() {
+  public int getWidth() {
     return layoutPart.getBox().getWidth();
   }
 
@@ -394,7 +394,7 @@ public class Element {
    * get all child elements of this element.
    * @return the list of child elements
    */
-  public final List < Element > getElements() {
+  public List < Element > getElements() {
     return elements;
   }
 
@@ -402,7 +402,7 @@ public class Element {
    * add a child element.
    * @param widget the child to add
    */
-  public final void add(final Element widget) {
+  public void add(final Element widget) {
     elements.add(widget);
   }
 
@@ -410,7 +410,7 @@ public class Element {
    * render this element.
    * @param r the RenderDevice to use
    */
-  public final void render(final NiftyRenderEngine r) {
+  public void render(final NiftyRenderEngine r) {
     // render element only when it is visible
     if (visible) {
       r.saveState(RenderStateType.allStates());
@@ -456,14 +456,14 @@ public class Element {
    * Set a new LayoutManager.
    * @param newLayout the new LayoutManager to use.
    */
-  public final void setLayoutManager(final LayoutManager newLayout) {
+  public void setLayoutManager(final LayoutManager newLayout) {
     this.layoutManager = newLayout;
   }
 
   /**
    * layout this element and all it's children.
    */
-  public final void layoutElements() {
+  public void layoutElements() {
     preProcessConstraintWidth();
     preProcessConstraintHeight();
 
@@ -610,7 +610,7 @@ public class Element {
    * set new x position constraint.
    * @param newX new x constraint.
    */
-  public final void setConstraintX(final SizeValue newX) {
+  public void setConstraintX(final SizeValue newX) {
     layoutPart.getBoxConstraints().setX(newX);
   }
 
@@ -618,7 +618,7 @@ public class Element {
    * set new y position constraint.
    * @param newY new y constaint.
    */
-  public final void setConstraintY(final SizeValue newY) {
+  public void setConstraintY(final SizeValue newY) {
     layoutPart.getBoxConstraints().setY(newY);
   }
 
@@ -626,7 +626,7 @@ public class Element {
    * set new width constraint.
    * @param newWidth new width constraint.
    */
-  public final void setConstraintWidth(final SizeValue newWidth) {
+  public void setConstraintWidth(final SizeValue newWidth) {
     layoutPart.getBoxConstraints().setWidth(newWidth);
   }
 
@@ -634,7 +634,7 @@ public class Element {
    * set new height constraint.
    * @param newHeight new height constraint.
    */
-  public final void setConstraintHeight(final SizeValue newHeight) {
+  public void setConstraintHeight(final SizeValue newHeight) {
     layoutPart.getBoxConstraints().setHeight(newHeight);
   }
 
@@ -642,7 +642,7 @@ public class Element {
    * get current width constraint.
    * @return current width constraint
    */
-  public final SizeValue getConstraintWidth() {
+  public SizeValue getConstraintWidth() {
     return layoutPart.getBoxConstraints().getWidth();
   }
 
@@ -650,7 +650,7 @@ public class Element {
    * get current height constraint.
    * @return current height constraint.
    */
-  public final SizeValue getConstraintHeight() {
+  public SizeValue getConstraintHeight() {
     return layoutPart.getBoxConstraints().getHeight();
   }
 
@@ -658,7 +658,7 @@ public class Element {
    * set new horizontal align.
    * @param newHorizontalAlign new horizontal align.
    */
-  public final void setConstraintHorizontalAlign(final HorizontalAlign newHorizontalAlign) {
+  public void setConstraintHorizontalAlign(final HorizontalAlign newHorizontalAlign) {
     layoutPart.getBoxConstraints().setHorizontalAlign(newHorizontalAlign);
   }
 
@@ -666,7 +666,7 @@ public class Element {
    * set new vertical align.
    * @param newVerticalAlign new vertical align.
    */
-  public final void setConstraintVerticalAlign(final VerticalAlign newVerticalAlign) {
+  public void setConstraintVerticalAlign(final VerticalAlign newVerticalAlign) {
     layoutPart.getBoxConstraints().setVerticalAlign(newVerticalAlign);
   }
 
@@ -674,7 +674,7 @@ public class Element {
    * get current horizontal align.
    * @return current horizontal align.
    */
-  public final HorizontalAlign getConstraintHorizontalAlign() {
+  public HorizontalAlign getConstraintHorizontalAlign() {
     return layoutPart.getBoxConstraints().getHorizontalAlign();
   }
 
@@ -682,7 +682,7 @@ public class Element {
    * get current vertical align.
    * @return current vertical align.
    */
-  public final VerticalAlign getConstraintVerticalAlign() {
+  public VerticalAlign getConstraintVerticalAlign() {
     return layoutPart.getBoxConstraints().getVerticalAlign();
   }
 
@@ -691,7 +691,7 @@ public class Element {
    * @param theId the effect id
    * @param e the effect
    */
-  public final void registerEffect(
+  public void registerEffect(
       final EffectEventId theId,
       final Effect e) {
     log.fine("[" + this.getId() + "] register: " + theId.toString() + "(" + e.getStateString() + ")");
@@ -746,7 +746,7 @@ public class Element {
    * stop the given effect.
    * @param effectEventId effect event id to stop
    */
-  public final void stopEffect(final EffectEventId effectEventId) {
+  public void stopEffect(final EffectEventId effectEventId) {
     effectManager.stopEffect(effectEventId);
 
     // notify all child elements of the start effect
@@ -766,7 +766,7 @@ public class Element {
    * @param effectEventId the effect type id to check
    * @return true, if the effect has ended and false otherwise
    */
-  public final boolean isEffectActive(final EffectEventId effectEventId) {
+  public boolean isEffectActive(final EffectEventId effectEventId) {
     for (Element w : getElements()) {
       if (w.isEffectActive(effectEventId)) {
         return true;
@@ -778,14 +778,14 @@ public class Element {
   /**
    * enable this element.
    */
-  public final void enable() {
+  public void enable() {
     enabled = true;
   }
 
   /**
    * disable this element.
    */
-  public final void disable() {
+  public void disable() {
     enabled = false;
   }
 
@@ -793,7 +793,7 @@ public class Element {
    * is this element enabled?
    * @return true, if enabled and false otherwise.
    */
-  public final boolean isEnabled() {
+  public boolean isEnabled() {
     return enabled;
   }
 
@@ -889,7 +889,7 @@ public class Element {
    * check if this element is visible.
    * @return true, if this element is visible and false otherwise.
    */
-  public final boolean isVisible() {
+  public boolean isVisible() {
     return visible;
   }
 
@@ -1150,7 +1150,7 @@ public class Element {
    * @param name the name of the element (id)
    * @return the element or null
    */
-  public final Element findElementByName(final String name) {
+  public Element findElementByName(final String name) {
     if (id != null && id.equals(name)) {
       return this;
     }
