@@ -52,12 +52,30 @@ public class CheckboxControl implements Controller {
 
   public boolean onClick() {
     checked = !checked;
+    updateVisualState();
+    return true;
+  }
+
+  public boolean isChecked() {
+    return checked;
+  }
+
+  public void check() {
+    this.checked = true;
+    updateVisualState();
+  }
+
+  public void uncheck() {
+    this.checked = false;
+    updateVisualState();
+  }
+
+  private void updateVisualState() {
     Element selectImage = element.findElementByName("select");
     if (checked) {
       selectImage.show();
     } else {
       selectImage.hide();
     }
-    return true;
   }
 }
