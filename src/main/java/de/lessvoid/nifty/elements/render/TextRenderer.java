@@ -77,6 +77,15 @@ public class TextRenderer implements ElementRenderer {
   }
 
   /**
+   * create new renderer with the given font and text.
+   * @param newFont the font to use
+   * @param newText the text to use
+   */
+  public TextRenderer(final RenderFont newFont, final String newText) {
+    init(newFont, newText);
+  }
+
+  /**
    * set Text.
    * @param newText text
    */
@@ -85,15 +94,6 @@ public class TextRenderer implements ElementRenderer {
       return;
     }
     initText(newText);
-  }
-
-  /**
-   * create new renderer with the given font and text.
-   * @param newFont the font to use
-   * @param newText the text to use
-   */
-  public TextRenderer(final RenderFont newFont, final String newText) {
-    init(newFont, newText);
   }
 
   /**
@@ -128,6 +128,10 @@ public class TextRenderer implements ElementRenderer {
    * @param r the renderDevice we should use
    */
   public final void render(final Element w, final NiftyRenderEngine r) {
+    RenderFont font = r.getFont();
+    if (font == null) {
+      font = this.font;
+    }
     int y = getStartYWithVerticalAlign(textLines.length * font.getHeight(), w.getHeight(), textVAlign);
     for (String line : textLines) {
       int yy = w.getY() + y;
