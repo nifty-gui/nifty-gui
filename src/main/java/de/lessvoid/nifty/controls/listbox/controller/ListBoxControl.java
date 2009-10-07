@@ -180,7 +180,7 @@ public class ListBoxControl implements Controller {
   }
 
   private void connectElement(Element newLabel) {
-    ListBoxControl listBox = screen.findControl("listBoxDynamic", ListBoxControl.class);
+    ListBoxControl listBox = screen.findControl(element.getId(), ListBoxControl.class);
     ListBoxItemController newLabelController = newLabel.getControl(ListBoxItemController.class);
     newLabelController.setListBox(listBox);
   }
