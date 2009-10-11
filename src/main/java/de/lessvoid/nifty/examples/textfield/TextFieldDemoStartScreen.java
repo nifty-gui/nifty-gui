@@ -47,8 +47,8 @@ public class TextFieldDemoStartScreen implements ScreenController {
     TextFieldControl textFieldControl = textFieldCreator.create(nifty, screen, row);
     textFieldControl.setText("Dynamically created TextField");
 
-    Element element = screen.findElementByName("labelId");
-    element.getRenderer(TextRenderer.class).setText("newText");
+    Element element = screen.findElementByName("labelName");
+    element.getRenderer(TextRenderer.class).setText("Name:");
   }
 
   public void onStartScreen() {
