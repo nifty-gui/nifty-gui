@@ -143,17 +143,19 @@ public class Attributes {
 
     Set < String > srcKeys = srcAttributes.keySet();
     for (String srcKey : srcKeys) {
-      if (!attributes.containsKey(srcKey)) {
-        String value = srcAttributes.get(srcKey);
-        attributes.put(srcKey, value);
-        Set < String > attribForTag = taggedAttributes.get(tag);
-        if (attribForTag == null) {
-          attribForTag = new HashSet < String >();
-          taggedAttributes.put(tag, attribForTag);
-        }
-        attribForTag.add(srcKey);
-      }
+      String value = srcAttributes.get(srcKey);
+      attributes.put(srcKey, value);
+      tagAttribute(srcKey, tag);
     }
+  }
+
+  private void tagAttribute(final String srcKey, final String tag) {
+    Set < String > attribForTag = taggedAttributes.get(tag);
+    if (attribForTag == null) {
+      attribForTag = new HashSet < String >();
+      taggedAttributes.put(tag, attribForTag);
+    }
+    attribForTag.add(srcKey);
   }
 
   public void refreshFromAttributes(final Attributes src) {

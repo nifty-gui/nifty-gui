@@ -1,6 +1,7 @@
 package de.lessvoid.xml.xpp3;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
@@ -21,6 +22,7 @@ public class AttributesMergeAndTagTest {
     attributes.mergeAndTag(src, "tag");
     assertNull(attributes.getWithTag("testKey", "tag"));
     assertEquals("newValue", attributes.getWithTag("newKey", "tag"));
+    assertEquals("testValue", attributes.get("testKey"));
   }
 
   @Test
@@ -28,7 +30,8 @@ public class AttributesMergeAndTagTest {
     Attributes src = new Attributes();
     src.set("testKey", "newValue");
     attributes.mergeAndTag(src, "tag");
-    assertEquals("testValue", attributes.get("testKey"));
-    assertNull(attributes.getWithTag("testKey", "tag"));
+    assertEquals("newValue", attributes.get("testKey"));
+    assertNotNull(attributes.getWithTag("testKey", "tag"));
+    assertEquals("newValue", attributes.getWithTag("testKey", "tag"));
   }
 }
