@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+  <screen id="start" controller="de.lessvoid.nifty.examples.test.TestScreen">
+    <layer id="stuff" childLayout="center">
+      <panel height="50%" width="50%" childLayout="center" align="center" valign="center" backgroundColor="#800f">
+        <text font="aurulent-sans-17.fnt" text="hallo" align="center" valign="center" focusable="true" visibleToMouse="true">
+          <effect>
+            <onClick name="changeFont" font="menu.fnt" />
+          </effect>
+        </text>
+      </panel>
+    </layer>
+  </screen>
+</nifty>
