@@ -144,8 +144,12 @@ public class Attributes {
     Set < String > srcKeys = srcAttributes.keySet();
     for (String srcKey : srcKeys) {
       String value = srcAttributes.get(srcKey);
-      attributes.put(srcKey, value);
-      tagAttribute(srcKey, tag);
+
+      // you can only overwrite keys when they don't exist yet
+      if (!attributes.containsKey(srcKey)) {
+        attributes.put(srcKey, value);
+        tagAttribute(srcKey, tag);
+      }
     }
   }
 
