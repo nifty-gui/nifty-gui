@@ -2,12 +2,14 @@
 <nifty>
   <screen id="start" controller="de.lessvoid.nifty.examples.test.TestScreen">
     <layer id="stuff" childLayout="center">
-      <panel height="50%" width="50%" childLayout="center" align="center" valign="center" backgroundColor="#800f">
-        <text font="aurulent-sans-17.fnt" text="hallo" align="center" valign="center" focusable="true" visibleToMouse="true">
-          <effect>
-            <onClick name="changeFont" font="menu.fnt" />
-          </effect>
-        </text>
+      <panel height="50%" width="50%" childLayout="vertical" align="center" valign="center" backgroundColor="#800f">
+        <panel height="10%" width="10%" align="center" valign="top" backgroundColor="#000f" visibleToMouse="true">
+          <effect><onHover name="hide" targetElement="logo" /></effect>
+        </panel>
+        <panel height="10%" width="10%" align="center" valign="top" backgroundColor="#ffff" visibleToMouse="true">
+          <effect><onHover name="show" targetElement="logo" /></effect>
+        </panel>
+        <image id="logo" filename="intro-logo.png" align="center" valign="bottom" />
       </panel>
     </layer>
   </screen>
