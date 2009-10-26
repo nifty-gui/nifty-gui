@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.effects.impl;
 
-import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyImage;
@@ -18,7 +18,7 @@ public class ImageOverlay implements EffectImpl {
   private Alpha alpha;
   private SizeValue inset;
 
-  public void activate(final Nifty nifty, final Element element, final Properties parameter) {
+  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
     String imageMode = parameter.getProperty("imageMode", null);
     if (imageMode != null) {

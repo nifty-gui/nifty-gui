@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.loaderv2.types;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -7,7 +8,9 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class EffectType extends XmlBaseType {
@@ -17,11 +20,14 @@ public class EffectType extends XmlBaseType {
   private static final boolean DEFAULT_POST = false;
   private static final boolean DEFAULT_OVERLAY = false;
 
+  private ArrayList < EffectValueType > effectValues = new ArrayList < EffectValueType > ();
+
   public EffectType() {
   }
 
   public EffectType(final EffectType e) {
     super(e);
+    this.effectValues = new ArrayList < EffectValueType > (e.effectValues);
   }
 
   public EffectType clone() {
@@ -49,11 +55,14 @@ public class EffectType extends XmlBaseType {
       return;
     }
 
+    EffectProperties effectProperties = new EffectProperties(attributes.createProperties());
+    applyEffectValues(effectProperties);
+
     Effect effect = createEffect(nifty, effectEventId, attributes);
     effect.init(
         element,
         createEffectImpl(effectClass),
-        attributes.createProperties(),
+        effectProperties,
         nifty.getTimeProvider(),
         controllers);
     element.registerEffect(effectEventId, effect);
@@ -135,5 +144,20 @@ public class EffectType extends XmlBaseType {
 
   public void resolveParameters(final Attributes src) {
     getAttributes().resolveParameters(src);
+  }
+
+  public void addValue(final EffectValueType elmentValueType) {
+	  effectValues.add(elmentValueType);
+  }
+
+  void applyEffectValues(final EffectProperties effectProperties) {
+    if (!effectValues.isEmpty()) {
+      LinearInterpolator interpolator = new LinearInterpolator();
+      for (EffectValueType e : effectValues) {
+        interpolator.addPoint(e.getAttributes().getAsFloat("time"), e.getAttributes().getAsFloat("value"));
+      }
+      effectProperties.setProperty("length", String.valueOf((long)interpolator.prepare()));
+      effectProperties.setInterpolator(interpolator);
+    }
   }
 }

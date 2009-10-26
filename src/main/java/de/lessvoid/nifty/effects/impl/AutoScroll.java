@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.effects.impl;
 
-import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
@@ -12,7 +12,7 @@ public class AutoScroll implements EffectImpl {
   private float distance = 100;
   private float start = 0;
 
-  public void activate(final Nifty nifty, final Element element, final Properties parameter) {
+  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     int startValue = Integer.parseInt(parameter.getProperty("start", "0"));
     int endValue = Integer.parseInt(parameter.getProperty("end", "0"));
     distance = endValue - startValue;

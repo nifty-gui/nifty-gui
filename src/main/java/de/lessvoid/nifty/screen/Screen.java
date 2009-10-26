@@ -467,7 +467,7 @@ public class Screen {
         additionalEndNotify.perform();
       }
 
-      onStartScreenHasEnded();      
+      onStartScreenHasEnded();
     }
   }
 

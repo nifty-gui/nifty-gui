@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
@@ -18,7 +17,7 @@ public interface EffectImpl {
    * @param element Element
    * @param parameter parameters
    */
-  void activate(Nifty nifty, Element element, Properties parameter);
+  void activate(Nifty nifty, Element element, EffectProperties parameter);
 
   /**
    * execute the effect.

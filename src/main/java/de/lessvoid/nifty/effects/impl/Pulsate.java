@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.effects.impl;
 
-import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
@@ -24,7 +24,7 @@ public class Pulsate implements EffectImpl {
   private SizeValue width;
   private Pulsator pulsater;
 
-  public void activate(final Nifty nifty, final Element element, final Properties parameter) {
+  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     startColor = new Color(parameter.getProperty("startColor", "#00000000"));
     endColor = new Color(parameter.getProperty("endColor", "#ffffffff"));
     width = new SizeValue(parameter.getProperty("width"));

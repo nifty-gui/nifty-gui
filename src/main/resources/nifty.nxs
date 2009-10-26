@@ -6,7 +6,10 @@
   <type name="RegisterMusicType" />
   <type name="AttributesType" />
   <type name="InteractType" />
-  <type name="EffectType" />
+  <type name="EffectValueType" />
+  <type name="EffectType">
+    <element name="value" type="EffectValueType" occurs="zeroOrMore" />
+  </type>
   <type name="HoverType" />
   <type name="EffectTypeOnHover">
     <element name="hover" type="HoverType" occurs="optional" />

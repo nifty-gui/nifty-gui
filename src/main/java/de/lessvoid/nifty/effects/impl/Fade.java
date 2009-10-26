@@ -1,14 +1,15 @@
 package de.lessvoid.nifty.effects.impl;
 
-import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Alpha;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.LinearInterpolator;
 
 /**
  * Fade effect - blend stuff in or out.
@@ -17,8 +18,9 @@ import de.lessvoid.nifty.tools.Color;
 public class Fade implements EffectImpl {
   private Alpha start = Alpha.ZERO;
   private Alpha end = Alpha.FULL;
+  private LinearInterpolator interpolator;
 
-  public void activate(final Nifty nifty, final Element element, final Properties parameter) {
+  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     // startColor and endColor (only alpha component used) are the old version of this
     // and are kept here only for backward compatibility. The current attributes are "start" and "end" alpha values.
     if (parameter.getProperty("startColor") != null) {
@@ -33,6 +35,7 @@ public class Fade implements EffectImpl {
     if (parameter.getProperty("end") != null) {
       end = new Alpha(parameter.getProperty("end"));
     }
+    interpolator = parameter.getInterpolator();
   }
 
   public void execute(
@@ -40,8 +43,12 @@ public class Fade implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    Alpha a = start.linear(end, normalizedTime);
-    r.setColorAlpha(a.getAlpha());
+    if (interpolator != null) {
+      r.setColorAlpha(interpolator.getValue(normalizedTime));
+    } else {
+      Alpha a = start.linear(end, normalizedTime);
+      r.setColorAlpha(a.getAlpha());
+    }
   }
 
   public void deactivate() {

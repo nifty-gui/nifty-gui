@@ -35,6 +35,8 @@ public class Type {
     ArrayList < Element > elements = new ArrayList < Element >();
 
     Type typeParent = getTypeParent(schema);
+	System.out.println(this + " - " + typeParent);
+
     if (typeParent != null) {
       substitutionGroups.addAll(typeParent.getSubstituitionGroup());
       elements.addAll(typeParent.getElements());
@@ -86,5 +88,9 @@ public class Type {
         tagType,
         occurs);
     processor.addElementProcessor(child);
+  }
+
+  public String getClassName() {
+    return className;
   }
 }

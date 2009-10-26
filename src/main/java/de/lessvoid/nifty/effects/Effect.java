@@ -22,7 +22,7 @@ public class Effect {
   private Element element;
   private TimeInterpolator timeInterpolator;
   private EffectImpl effectImpl;
-  private Properties parameter;
+  private EffectProperties parameter;
   private boolean post;
   private boolean overlay;
   private String alternateEnable;
@@ -77,7 +77,7 @@ public class Effect {
   public void init(
       final Element elementParam,
       final EffectImpl effectImplParam,
-      final Properties parameterParam,
+      final EffectProperties parameterParam,
       final TimeProvider timeParam,
       final LinkedList < Object > controllers) {
     effectImpl = effectImplParam;

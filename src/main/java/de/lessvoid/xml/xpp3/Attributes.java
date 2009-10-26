@@ -107,6 +107,14 @@ public class Attributes {
     return Integer.valueOf(value);
   }
 
+  public Float getAsFloat(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return Float.valueOf(value);
+  }
+
   /**
    * Set an attribute.
    * @param name name of the attribute to set

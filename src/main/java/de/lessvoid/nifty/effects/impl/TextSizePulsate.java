@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.effects.impl;
 
-import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
@@ -31,7 +31,7 @@ public class TextSizePulsate implements EffectImpl {
    * @param element Element
    * @param parameter Parameter
    */
-  public void activate(final Nifty nifty, final Element element, final Properties parameter) {
+  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     String startSizeString = parameter.getProperty("startSize");
     if (startSizeString != null) {
       startSize = new SizeValue(startSizeString);
