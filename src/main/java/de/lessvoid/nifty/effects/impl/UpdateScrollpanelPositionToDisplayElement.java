@@ -1,12 +1,12 @@
 package de.lessvoid.nifty.effects.impl;
 
 
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
 import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
@@ -15,7 +15,7 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
   private Logger log = Logger.getLogger(UpdateScrollpanelPositionToDisplayElement.class.getName());
   private Element targetElement;
 
-  public void activate(final Nifty nifty, final Element elementParameter, final Properties parameter) {
+  public void activate(final Nifty nifty, final Element elementParameter, final EffectProperties parameter) {
     String target = parameter.getProperty("target");
     if (target != null) {
       targetElement = nifty.getCurrentScreen().findElementByName(target);
