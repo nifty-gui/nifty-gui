@@ -38,5 +38,14 @@
         </panel>
       </panel>
     </layer>
+
+    <!-- this layer shows a image in the upper left corner which is toggled from java -->
+    <layer childLayout="absolute">
+      <image id="inventar" x="940px" y="20px" filename="slick/niftyoverlay/icon1.png" align="center" valign="bottom">
+        <effect>
+          <onCustom name="imageSize" startSize="1.7" endSize="1.0" length="150" />
+        </effect>
+      </image>
+    </layer>
   </screen>
 </nifty>

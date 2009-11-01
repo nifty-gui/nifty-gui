@@ -18,9 +18,11 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
 import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
@@ -44,6 +46,9 @@ public class TestState1 extends BasicGameState implements ScreenController {
   private int mouseX;
   private int mouseY;
   private boolean mouseDown;
+  private NiftyImage icon1;
+  private NiftyImage icon2;
+  private NiftyImage icon3;
   
   public int getID() {
     return ID;
@@ -63,6 +68,9 @@ public class TestState1 extends BasicGameState implements ScreenController {
       }
     }, new TimeProvider());
     nifty.fromXml("slick/niftyoverlay/overlay.xml", "start", this);
+    icon1 = nifty.getRenderEngine().createImage("slick/niftyoverlay/icon1.png", false);
+    icon2 = nifty.getRenderEngine().createImage("slick/niftyoverlay/icon2.png", false);
+    icon3 = nifty.getRenderEngine().createImage("slick/niftyoverlay/icon3.png", false);
   }
 
   public void render(GameContainer container, StateBasedGame game, Graphics g) {
@@ -70,6 +78,7 @@ public class TestState1 extends BasicGameState implements ScreenController {
     g.setColor(currentColor);
     g.drawString("State Based Game Test", 100, 100);
     g.drawString("1-3 will switch between colors", 100, 300);
+    g.drawString("a-c will switch between images", 100, 350);
     g.drawString("(this is all slick rendering!)", 100, 400);
     g.drawString("and this is more slick text", 360, 650);
     g.drawString("below (!) a nifty-gui overlay", 360, 700);
@@ -86,15 +95,24 @@ public class TestState1 extends BasicGameState implements ScreenController {
     if (key == Input.KEY_1) {
       currentColor = Color.red;
       getElement("red").startEffect(EffectEventId.onCustom);
-    }
-    if (key == Input.KEY_2) {
+    } else if (key == Input.KEY_2) {
       currentColor = Color.green;
       getElement("green").startEffect(EffectEventId.onCustom);
-    }
-    if (key == Input.KEY_3) {
+    } else if (key == Input.KEY_3) {
       currentColor = Color.blue;
       getElement("blue").startEffect(EffectEventId.onCustom);
+    } else if (key == Input.KEY_A) {
+      switchIcon(icon1);
+    } else if (key == Input.KEY_B) {
+      switchIcon(icon2);
+    } else if (key == Input.KEY_C) {
+      switchIcon(icon3);
     }
+  }
+
+  private void switchIcon(final NiftyImage icon) {
+    getElement("inventar").getRenderer(ImageRenderer.class).setImage(icon);
+    getElement("inventar").startEffect(EffectEventId.onCustom);
   }
 
   private Element getElement(final String id) {
