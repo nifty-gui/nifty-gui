@@ -3,6 +3,7 @@
   <registerSound id="select" filename="tutorial/select.wav" />
   <registerSound id="intro" filename="tutorial/intro.wav" />
   <registerSound id="hover" filename="tutorial/hover.wav" />
+  <registerEffect name="gradient" class="de.lessvoid.nifty.effects.impl.Gradient" />
 
   <screen id="start" controller="de.lessvoid.nifty.examples.tutorial.screen.Splash">
     <layer id="logo" childLayout="center">
@@ -27,6 +28,13 @@
   </screen>
 
   <screen id="page1" controller="de.lessvoid.nifty.examples.tutorial.screen.Page1">
+    <layer id="logo" childLayout="center">
+      <panel height="60%" width="60%" childLayout="center" valign="center" align="center" backgroundColor="#f00f">
+        <effect>
+          <onActive name="gradient" color1="#f00f" color2="#f00f" color3="#ff0f" color4="#ff0f" post="true" />
+        </effect>
+      </panel>
+    </layer>
   </screen>
 
 </nifty>
