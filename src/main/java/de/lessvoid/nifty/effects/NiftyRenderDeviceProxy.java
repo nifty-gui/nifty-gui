@@ -79,6 +79,9 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   public void renderQuad(final int x, final int y, final int width, final int height) {
   }
 
+  public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
+  }
+
   public void renderText(
       final String text,
       final int x,

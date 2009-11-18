@@ -99,6 +99,22 @@ public class RenderDeviceLwjgl implements RenderDevice {
     renderTools.endRender();
   }
 
+  public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
+    renderTools.beginRender();
+    GL11.glDisable(GL11.GL_TEXTURE_2D);
+    GL11.glBegin(GL11.GL_QUADS);
+      GL11.glColor4f(topLeft.getRed(), topLeft.getGreen(), topLeft.getBlue(), topLeft.getAlpha());
+      GL11.glVertex2i(x,         y);
+      GL11.glColor4f(topRight.getRed(), topRight.getGreen(), topRight.getBlue(), topRight.getAlpha());
+      GL11.glVertex2i(x + width, y);
+      GL11.glColor4f(bottomRight.getRed(), bottomRight.getGreen(), bottomRight.getBlue(), bottomRight.getAlpha());
+      GL11.glVertex2i(x + width, y + height);
+      GL11.glColor4f(bottomLeft.getRed(), bottomLeft.getGreen(), bottomLeft.getBlue(), bottomLeft.getAlpha());
+      GL11.glVertex2i(x,         y + height);
+    GL11.glEnd();
+    renderTools.endRender();
+  }
+
   /**
    * Enable clipping to the given region.
    * @param x0 x0

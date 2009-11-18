@@ -172,6 +172,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     renderDevice.renderQuad(x + getX(), y + getY(), width, height, color);
   }
 
+  public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
+    renderDevice.renderQuad(x, y, width, height, topLeft, topRight, bottomRight, bottomLeft);
+  }
+
   /**
    * renderImage.
    * @param image image

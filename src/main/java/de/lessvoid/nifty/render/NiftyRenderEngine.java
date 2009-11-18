@@ -53,6 +53,19 @@ public interface NiftyRenderEngine {
   void renderQuad(int x, int y, int width, int height);
 
   /**
+   * Renders a quad with different colors at the quad vertices.
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param topLeft
+   * @param topRight
+   * @param bottomRight
+   * @param bottomLeft
+   */
+  void renderQuad(int x, int y, int width, int height, Color topLeft, Color topRight, Color bottomRight, Color bottomLeft);
+
+  /**
    * Render Image.
    * @param image the image to render
    * @param x the x position on the screen

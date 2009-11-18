@@ -58,6 +58,19 @@ public interface RenderDevice {
   void renderQuad(int x, int y, int width, int height, Color color);
 
   /**
+   * Render a quad with different colors at the vertices.
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param topLeft
+   * @param topRight
+   * @param bottomRight
+   * @param bottomLeft
+   */
+  void renderQuad(int x, int y, int width, int height, Color topLeft, Color topRight, Color bottomRight, Color bottomLeft);
+
+  /**
    * Enable clipping to the given region.
    * @param x0 x0
    * @param y0 y0
