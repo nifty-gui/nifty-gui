@@ -9,18 +9,22 @@ import java.util.ArrayList;
  */
 public class LinearInterpolator {
   private ArrayList<Point> curve = new ArrayList<Point>();
+  private float maxX = 0;
   
   public void addPoint(final float x, final float y) {
     curve.add(new Point(x, y));
   }
 
-  public float prepare() {
-    float maxX = calcMaxX(curve);
+  public void prepare() {
+    maxX = calcMaxX(curve);
     for (Point p : curve) {
       p.x = p.x / maxX;
     }
-    return maxX;
   }
+
+  public float getMaxX() {
+    return maxX;
+  } 
 
   public float getValue(final float x) {
     Point p0 = curve.get(0);
