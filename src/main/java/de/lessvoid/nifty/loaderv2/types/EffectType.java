@@ -152,12 +152,13 @@ public class EffectType extends XmlBaseType {
 
   void applyEffectValues(final EffectProperties effectProperties) {
     if (!effectValues.isEmpty()) {
-      LinearInterpolator interpolator = new LinearInterpolator();
-      for (EffectValueType e : effectValues) {
-        interpolator.addPoint(e.getAttributes().getAsFloat("time"), e.getAttributes().getAsFloat("value"));
+      for (EffectValueType effectValueType : effectValues) {
+        effectProperties.addEffectValue(effectValueType.getAttributes());
       }
-      effectProperties.setProperty("length", String.valueOf((long)interpolator.prepare()));
-      effectProperties.setInterpolator(interpolator);
+      if (effectProperties.isTimeInterpolator()) {
+        LinearInterpolator interpolator = effectProperties.getInterpolator();
+        effectProperties.setProperty("length", String.valueOf((long)interpolator.getMaxX()));
+      }
     }
   }
 }
