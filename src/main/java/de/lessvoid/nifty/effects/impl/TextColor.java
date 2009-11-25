@@ -42,7 +42,11 @@ public class TextColor implements EffectImpl {
       final float normalizedTime,
       final Falloff fFalloff,
       final NiftyRenderEngine r) {
-    r.setColor(color);
+    if (r.isColorAlphaChanged()) {
+      r.setColorIgnoreAlpha(color);
+    } else {
+      r.setColor(color);
+    }
   }
 
   /**
