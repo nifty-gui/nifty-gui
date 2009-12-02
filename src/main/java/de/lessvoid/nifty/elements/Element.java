@@ -16,6 +16,7 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
@@ -461,48 +462,6 @@ public class Element {
   }
 
   /**
-   * layout this element and all it's children.
-   */
-  public void layoutElements() {
-    preProcessConstraintWidth();
-    preProcessConstraintHeight();
-
-    if (layoutManager != null) {
-      // we need a list of LayoutPart and not of Element, so we'll build one on the fly here
-      List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
-      for (Element w : elements) {
-        layoutPartChild.add(w.layoutPart);
-      }
-
-      // use out layoutManager to layout our children
-      layoutManager.layoutElements(layoutPart, layoutPartChild);
-
-      // repeat this step for all child elements
-      for (Element w : elements) {
-        w.layoutElements();
-      }
-    }
-
-    if (clipChildren) {
-      for (Element w : elements) {
-        w.setParentClipArea(getX(), getY(), getWidth(), getHeight());
-      }
-    }
-  }
-
-  private void setParentClipArea(final int x, final int y, final int width, final int height) {
-    parentClipArea = true;
-    parentClipX = x;
-    parentClipY = y;
-    parentClipWidth = width;
-    parentClipHeight = height;
-
-    for (Element w : elements) {
-      w.setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
-    }
-  }
-
-  /**
    * pre-process constraint width.
    */
   private void preProcessConstraintWidth() {
@@ -569,6 +528,62 @@ public class Element {
           isCalcHeightConstraint = true;
         }
       }
+    }
+  }
+
+  public void processLayout() {
+    for (Element w : elements) {
+      TextRenderer textRenderer = w.getRenderer(TextRenderer.class);
+      if (textRenderer != null) {
+        textRenderer.setWidthConstraint(w, w.getConstraintWidth(), getWidth(), nifty.getRenderEngine());
+      }
+    }
+
+    if (layoutManager != null) {
+      // we need a list of LayoutPart and not of Element, so we'll build one on the fly here
+      List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
+      for (Element w : elements) {
+        layoutPartChild.add(w.layoutPart);
+      }
+
+      // use out layoutManager to layout our children
+      layoutManager.layoutElements(layoutPart, layoutPartChild);
+      
+      // repeat this step for all child elements
+      for (Element w : elements) {
+        w.processLayout();
+      }
+    }
+
+    if (clipChildren) {
+      for (Element w : elements) {
+        w.setParentClipArea(getX(), getY(), getWidth(), getHeight());
+      }
+    }
+  }
+
+  /**
+   * layout this element and all it's children.
+   */
+  public void layoutElements() {
+    prepareLayout();
+    processLayout();
+  }
+
+  private void prepareLayout() {
+    preProcessConstraintWidth();
+    preProcessConstraintHeight();
+  }
+
+  private void setParentClipArea(final int x, final int y, final int width, final int height) {
+    parentClipArea = true;
+    parentClipX = x;
+    parentClipY = y;
+    parentClipWidth = width;
+    parentClipHeight = height;
+
+    for (Element w : elements) {
+      w.setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
     }
   }
 
@@ -863,6 +878,10 @@ public class Element {
         internalHide();
       }
     });
+  }
+
+  public void showWithoutEffects() {
+    internalShow();
   }
 
   public void hideWithoutEffect() {
