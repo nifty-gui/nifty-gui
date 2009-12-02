@@ -37,7 +37,7 @@
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal">
             <label text="Fo Shizzle: " width="120px" align="left" textVAlign="center" textHAlign="left" />
-            <control id="checkbox" name="checkbox" />
+            <control id="checkbox" name="checkbox" checked="false" />
           </panel>    
           <panel id="dynamic-parent" childLayout="vertical">
           </panel>

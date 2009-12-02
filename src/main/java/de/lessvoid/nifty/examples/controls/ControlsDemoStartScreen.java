@@ -154,8 +154,8 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     listBoxStatic.changeSelection(0);
 
     // check the checkbox
-    CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
-    checkBoxControl.uncheck();
+//    CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
+//    checkBoxControl.uncheck();
   }
 
   public void onStartScreen() {
