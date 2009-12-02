@@ -30,7 +30,13 @@ public class CheckboxControl implements Controller {
       final Attributes controlDefinitionAttributes) {
     element = elementParam;
     screen = screenParam;
-    checked = true;
+    checked = new Boolean(propertiesParam.getProperty("checked", "true"));
+    Element selectImage = element.findElementByName("select");
+    if (checked) {
+      selectImage.showWithoutEffects();
+    } else {
+      selectImage.hideWithoutEffect();
+    }
   }
 
   public void onStartScreen() {
