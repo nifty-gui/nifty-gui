@@ -17,6 +17,10 @@ public class EffectProperties extends Properties {
     effectValues.add(effectProperties);
   }
 
+  public EffectPropertiesValues getEffectValues() {
+    return effectValues;
+  }
+
   public boolean isTimeInterpolator() {
     return effectValues.containsTimeValues();
   }

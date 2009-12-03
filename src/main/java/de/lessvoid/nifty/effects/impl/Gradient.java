@@ -1,33 +1,34 @@
 package de.lessvoid.nifty.effects.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * Color - color overlay.
  * @author void
  */
 public class Gradient implements EffectImpl {
-  private Color color1;
-  private Color color2;
-  private Color color3;
-  private Color color4;
-  private SizeValue width;
+  private List < Entry > entries = new ArrayList < Entry > ();
+  private boolean horizontal = false;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    color1 = new Color(parameter.getProperty("color1", "#ffffffff"));
-    color2 = new Color(parameter.getProperty("color2", "#ffffffff"));
-    color3 = new Color(parameter.getProperty("color3", "#ffffffff"));
-    color4 = new Color(parameter.getProperty("color4", "#ffffffff"));
-    width = new SizeValue(parameter.getProperty("width"));
+    for (Attributes entry : parameter.getEffectValues().getValues()) {
+      SizeValue offset = new SizeValue(entry.get("offset"));
+      Color color = entry.getAsColor("color");
+      entries.add(new Entry(offset, color));
+    }
+    horizontal = "horizontal".equals(parameter.getProperty("direction", "vertical"));
   }
 
   public void execute(
@@ -35,12 +36,49 @@ public class Gradient implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    r.saveState(RenderStateType.allStates());
-    r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight() / 2, color1, color2, color3, color4);
-    r.renderQuad(element.getX(), element.getY() + element.getHeight() / 2, element.getWidth(), element.getHeight() / 2, color3, color4, color1, color2);
-    r.restoreState();
+    if (horizontal) {
+      for (int i=1; i<entries.size(); i++) {
+        Entry entry1 = entries.get(i-1);
+        Entry entry2 = entries.get(i);
+        r.renderQuad(
+            (int)Math.round(element.getX() + entry1.offset.getValue(element.getWidth())),
+            element.getY(),
+            (int)Math.round(entry2.offset.getValue(element.getWidth()) - entry1.offset.getValue(element.getWidth())),
+            element.getHeight(),
+            entry1.color,
+            entry2.color,
+            entry2.color,
+            entry1.color);
+      }
+    } else {
+      for (int i=1; i<entries.size(); i++) {
+        Entry entry1 = entries.get(i-1);
+        Entry entry2 = entries.get(i);
+        int yStart = (int)Math.round(element.getY() + entry1.offset.getValue(element.getHeight()));
+        int yEnd = (int)Math.round(element.getY() + entry2.offset.getValue(element.getHeight()));
+        r.renderQuad(
+            element.getX(),
+            yStart,
+            element.getWidth(),
+            yEnd - yStart,
+            entry1.color,
+            entry1.color,
+            entry2.color,
+            entry2.color);
+      }
+    }
+  }
+  
+  public void deactivate() {
   }
 
-  public void deactivate() {
+  private class Entry {
+    public SizeValue offset;
+    public Color color;
+
+    public Entry(final SizeValue offset, final Color color) {
+      this.offset = offset;
+      this.color = color;
+    }
   }
 }
