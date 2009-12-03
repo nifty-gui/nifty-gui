@@ -42,7 +42,7 @@ public class CenterLayoutHorizontalFixedWithBorderTest extends TestCase {
   public void testHorizontalAlignRightFixedWidth() {
     constraint.setHorizontalAlign(HorizontalAlign.right);
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
-    CenterLayoutTest.assertBoxLeftWidth(box, 640 - 100 - 50, 100);
+    CenterLayoutTest.assertBoxLeftWidth(box, 640 - 100, 100);
   }
 
   public void testHorizontalAlignCenterFixedWidth() {

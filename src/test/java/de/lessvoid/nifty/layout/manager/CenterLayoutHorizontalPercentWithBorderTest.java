@@ -38,7 +38,7 @@ public class CenterLayoutHorizontalPercentWithBorderTest extends TestCase {
     constraint.setHorizontalAlign(HorizontalAlign.right);
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     int width = (640 - 100) / 2;
-    CenterLayoutTest.assertBoxLeftWidth(box, 640 - width - 50, width);
+    CenterLayoutTest.assertBoxLeftWidth(box, 640 - width, width);
   }
 
   public void testHorizontalAlignCenterPercentWidth() {
