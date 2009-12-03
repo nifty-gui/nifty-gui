@@ -7,6 +7,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.provider.NullPulsator;
 import de.lessvoid.nifty.tools.pulsate.provider.RectanglePulsator;
 import de.lessvoid.nifty.tools.pulsate.provider.SinusPulsator;
+import de.lessvoid.nifty.tools.pulsate.provider.SinusRaisedPulsator;
 
 /**
  * Pulsator class.
@@ -42,6 +43,8 @@ public class Pulsator {
     String pulsateType = parameter.getProperty("pulsateType", "sin");
     if (pulsateType.equals("sin")) {
       pulsateProvider = new SinusPulsator();
+    } else if (pulsateType.equals("sinRaised")) {
+      pulsateProvider = new SinusRaisedPulsator();
     } else if (pulsateType.equals("rectangle")) {
       pulsateProvider = new RectanglePulsator();
     } else {
