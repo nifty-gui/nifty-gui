@@ -92,7 +92,7 @@ public class CenterLayout implements LayoutManager {
     if (constraint.getHorizontalAlign() == HorizontalAlign.left) {
       box.setX(rootBoxX);
     } else if (constraint.getHorizontalAlign() == HorizontalAlign.right) {
-      box.setX(rootBox.getWidth() - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()) - (int) constraint.getWidth().getValue(rootBoxWidth));
+      box.setX(rootBoxX + rootBox.getWidth() - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()) - (int) constraint.getWidth().getValue(rootBoxWidth));
     } else {
       box.setX(rootBoxX + (rootBoxWidth - (int) constraint.getWidth().getValue(rootBoxWidth)) / 2);
     }
