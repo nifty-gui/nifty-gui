@@ -173,7 +173,15 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   }
 
   public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
-    renderDevice.renderQuad(x, y, width, height, topLeft, topRight, bottomRight, bottomLeft);
+    if (isColorAlphaChanged()) {
+      Color a = new Color(topLeft, color.getAlpha());
+      Color b = new Color(topRight, color.getAlpha());
+      Color c = new Color(bottomRight, color.getAlpha());
+      Color d = new Color(bottomLeft, color.getAlpha());
+      renderDevice.renderQuad(x, y, width, height, a, b, c, d);
+    } else {
+      renderDevice.renderQuad(x, y, width, height, topLeft, topRight, bottomRight, bottomLeft);
+    }
   }
 
   /**
