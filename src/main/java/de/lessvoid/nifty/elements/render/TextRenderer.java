@@ -1,13 +1,18 @@
 package de.lessvoid.nifty.elements.render;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.tools.FontHelper;
+import de.lessvoid.nifty.elements.tools.TextBreak;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  * The TextRenderer implementation.
@@ -71,6 +76,13 @@ public class TextRenderer implements ElementRenderer {
   private Color color = Color.WHITE;
 
   /**
+   * This TextRenderer will automatically wrap lines when the element it is
+   * attached to has a width constraint.
+   */
+  private boolean lineWrapping = false;
+  private boolean isCalculatedLineWrapping = false;
+
+  /**
    * default constructor.
    */
   public TextRenderer() {
@@ -127,13 +139,14 @@ public class TextRenderer implements ElementRenderer {
    * @param w the widget we're connected to
    * @param r the renderDevice we should use
    */
-  public final void render(final Element w, final NiftyRenderEngine r) {
-    RenderFont font = r.getFont();
-    if (font == null) {
-      font = this.font;
-    }
-    int y = getStartYWithVerticalAlign(textLines.length * font.getHeight(), w.getHeight(), textVAlign);
-    for (String line : textLines) {
+  public void render(final Element w, final NiftyRenderEngine r) {
+    renderLines(w, r, textLines);
+  }
+
+  private void renderLines(final Element w, final NiftyRenderEngine r, String[] lines) {
+    RenderFont font = ensureFont(r);
+    int y = getStartYWithVerticalAlign(lines.length * font.getHeight(), w.getHeight(), textVAlign);
+    for (String line : lines) {
       int yy = w.getY() + y;
       if (Math.abs(xoffsetHack) > 0) {
         int fittingOffset = FontHelper.getVisibleCharactersFromStart(font, line, Math.abs(xoffsetHack), 1.0f);
@@ -147,6 +160,14 @@ public class TextRenderer implements ElementRenderer {
       }
       y += font.getHeight();
     }
+  }
+
+  private RenderFont ensureFont(final NiftyRenderEngine r) {
+    RenderFont font = r.getFont();
+    if (font == null) {
+      font = this.font;
+    }
+    return font;
   }
 
   /**
@@ -238,7 +259,7 @@ public class TextRenderer implements ElementRenderer {
    * Helper method to get width of text.
    * @return the width in pixel of the current set text.
    */
-  public final int getTextWidth() {
+  public int getTextWidth() {
     return maxWidth;
   }
 
@@ -246,7 +267,7 @@ public class TextRenderer implements ElementRenderer {
    * Helper method to get height of text.
    * @return the height in pixel of the current set text.
    */
-  public final int getTextHeight() {
+  public int getTextHeight() {
     return font.getHeight() * textLines.length;
   }
 
@@ -254,7 +275,7 @@ public class TextRenderer implements ElementRenderer {
    * Change the text.
    * @param newText the new text
    */
-  public final void changeText(final String newText) {
+  public void changeText(final String newText) {
     initText(newText);
   }
 
@@ -330,55 +351,65 @@ public class TextRenderer implements ElementRenderer {
   }
 
   /**
-   * RenderFont Null Object.
-   * @author void
-   */
-  public class RenderFontNull implements RenderFont {
-    /**
-     * get height.
-     * @return always 0
-     */
-    public int getHeight() {
-      return 0;
-    }
-
-    /**
-     * get width.
-     * @param text text
-     * @return always 0
-     */
-    public int getWidth(final String text) {
-      return 0;
-    }
-
-    /**
-     * render. does nothing.
-     * @param text text
-     * @param x x
-     * @param y y
-     * @param fontColor color
-     * @param size size
-     */
-    public void render(final String text, final int x, final int y, final Color fontColor, final float size) {
-    }
-
-    /**
-     * get character advance null implementation.
-     * @param currentCharacter current char
-     * @param nextCharacter next char
-     * @param size size
-     * @return character advance
-     */
-    public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
-      return null;
-    }
-  }
-
-  /**
    * get original text.
    * @return original text
    */
   public String getOriginalText() {
     return originalText;
+  }
+
+  /**
+   * RenderFont Null Object.
+   * @author void
+   */
+  public class RenderFontNull implements RenderFont {
+    public int getHeight() {
+      return 0;
+    }
+    public int getWidth(final String text) {
+      return 0;
+    }
+    public void render(final String text, final int x, final int y, final Color fontColor, final float size) {
+    }
+    public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
+      return null;
+    }
+  }
+
+  private String[] bla(final int width, final NiftyRenderEngine r, final String[] textLines) {
+    RenderFont font = ensureFont(r);
+    List < String > lines = new ArrayList < String > ();
+    for (String line : textLines) {
+      int lineLengthInPixel = font.getWidth(line);
+      if (lineLengthInPixel > width) {
+        lines.addAll(new TextBreak(line, width, font).split());
+      } else {
+        lines.add(line);
+      }
+    }
+    return lines.toArray(new String[0]);
+  }
+
+  public void setWidthConstraint(final Element element, final SizeValue constraintWidth, final int width, final NiftyRenderEngine renderEngine) {
+    if (constraintWidth == null || width == 0 || !lineWrapping || isCalculatedLineWrapping) {
+      return;
+    }
+    int valueAsInt = constraintWidth.getValueAsInt(width);
+    System.out.println("recalc: " + constraintWidth + ", " + width + " (" + valueAsInt + ") ");
+    this.textLines = bla(valueAsInt, renderEngine, originalText.split("\n", -1));
+    maxWidth = 0;
+    for (String line : textLines) {
+      int lineWidth = font.getWidth(line);
+      if (lineWidth > maxWidth) {
+        maxWidth = lineWidth;
+      }
+    }
+    element.setConstraintWidth(new SizeValue(getTextWidth() + "px"));
+    element.setConstraintHeight(new SizeValue(getTextHeight() + "px"));
+    isCalculatedLineWrapping = true;
+  }
+
+  public void setLineWrapping(final boolean lineWrapping) {
+    this.lineWrapping = lineWrapping; 
   }
 }

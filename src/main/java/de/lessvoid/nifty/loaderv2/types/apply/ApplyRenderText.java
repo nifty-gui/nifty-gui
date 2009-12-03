@@ -26,12 +26,16 @@ public class ApplyRenderText implements ApplyRenderer {
     textRenderer.setColor(convert.color(attributes.get("color")));
     textRenderer.setTextSelectionColor(convert.color(attributes.get("selectionColor")));
     textRenderer.setText(attributes.get("text"));
+    boolean wrap = attributes.getAsBoolean("wrap", false);
+    textRenderer.setLineWrapping(wrap);
 
-    if (element.getConstraintWidth() == null) {
-      element.setConstraintWidth(convert.sizeValue(textRenderer.getTextWidth() + "px"));
-    }
-    if (element.getConstraintHeight() == null) {
-      element.setConstraintHeight(convert.sizeValue(textRenderer.getTextHeight() + "px"));
+    if (!wrap) {
+      if (element.getConstraintWidth() == null) {
+        element.setConstraintWidth(convert.sizeValue(textRenderer.getTextWidth() + "px"));
+      }
+      if (element.getConstraintHeight() == null) {
+        element.setConstraintHeight(convert.sizeValue(textRenderer.getTextHeight() + "px"));
+      }
     }
   }
 }
