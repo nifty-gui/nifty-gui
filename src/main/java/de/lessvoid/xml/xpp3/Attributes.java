@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import de.lessvoid.nifty.tools.Color;
+
 /**
  * XPP Attributes in a nicer form.
  * @author void
@@ -113,6 +115,14 @@ public class Attributes {
       return null;
     }
     return Float.valueOf(value);
+  }
+
+  public Color getAsColor(final String name) {
+    String value = get(name);
+    if (value == null) {
+      return null;
+    }
+    return new Color(value);
   }
 
   /**
