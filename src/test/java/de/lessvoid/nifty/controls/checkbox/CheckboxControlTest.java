@@ -1,12 +1,15 @@
 package de.lessvoid.nifty.controls.checkbox;
 
+import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Properties;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,62 +23,80 @@ public class CheckboxControlTest {
   private Screen screenMock;
   private Element elementMock;
   private Element selectImageMock;
-  private FocusHandler focusHandler;
+  private FocusHandler focusHandlerMock;
 
   @Before
   public void setup() {
+    selectImageMock = createMock(Element.class);
+    selectImageMock.showWithoutEffects();
     screenMock = createMock(Screen.class);
     elementMock = createMock(Element.class);
-    selectImageMock = createMock(Element.class);
-    focusHandler = createMock(FocusHandler.class);
+    expect(elementMock.findElementByName("select")).andReturn(selectImageMock);
+    focusHandlerMock = createMock(FocusHandler.class);
     checkBoxControl = new CheckboxControl();
-    checkBoxControl.bind(null, screenMock, elementMock, null, null, null);
+  }
+
+  @After
+  public void after() {
+    verify(screenMock);
+    verify(selectImageMock);
+    verify(elementMock);
+    verify(focusHandlerMock);
   }
 
   @Test
   public void testDefaultChecked() {
+    replayAllMocks();
+
+    bindCheckBoxControl();
     assertTrue(checkBoxControl.isChecked());
   }
 
   @Test
   public void testOnStartScreen() {
-    expect(screenMock.getFocusHandler()).andReturn(focusHandler);
+    expect(screenMock.getFocusHandler()).andReturn(focusHandlerMock);
     replay(screenMock);
+    replay(elementMock);
+    replay(selectImageMock);
+    replay(focusHandlerMock);
 
+    bindCheckBoxControl();
     checkBoxControl.onStartScreen();
-
-    verify(screenMock);
   }
 
 
   @Test
   public void testInputEventNext() {
-    expect(screenMock.getFocusHandler()).andReturn(focusHandler);
+    expect(screenMock.getFocusHandler()).andReturn(focusHandlerMock);
     replay(screenMock);
 
-    expect(focusHandler.getNext(elementMock)).andReturn(elementMock);
-    replay(focusHandler);
+    expect(focusHandlerMock.getNext(elementMock)).andReturn(elementMock);
+    replay(focusHandlerMock);
 
+    elementMock.setFocus();
+    replay(elementMock);
+    replay(selectImageMock);
+
+    bindCheckBoxControl();
     checkBoxControl.onStartScreen();
     checkBoxControl.inputEvent(NiftyInputEvent.NextInputElement);
-
-    verify(screenMock);
-    verify(focusHandler);
   }
 
   @Test
   public void testInputEventPrev() {
-    expect(screenMock.getFocusHandler()).andReturn(focusHandler);
+    expect(screenMock.getFocusHandler()).andReturn(focusHandlerMock);
     replay(screenMock);
 
-    expect(focusHandler.getPrev(elementMock)).andReturn(elementMock);
-    replay(focusHandler);
+    expect(focusHandlerMock.getPrev(elementMock)).andReturn(elementMock);
+    replay(focusHandlerMock);
 
+    elementMock.setFocus();
+    replay(elementMock);
+    replay(selectImageMock);
+
+    bindCheckBoxControl();
     checkBoxControl.onStartScreen();
     checkBoxControl.inputEvent(NiftyInputEvent.PrevInputElement);
-
-    verify(screenMock);
-    verify(focusHandler);
   }
 
   @Test
@@ -85,12 +106,12 @@ public class CheckboxControlTest {
 
     selectImageMock.hide();
     replay(selectImageMock);
+    replay(screenMock);
+    replay(focusHandlerMock);
 
+    bindCheckBoxControl();
     checkBoxControl.inputEvent(NiftyInputEvent.Activate);
     assertFalse(checkBoxControl.isChecked());
-
-    verify(elementMock);
-    verify(selectImageMock);
   }
 
   @Test
@@ -100,12 +121,12 @@ public class CheckboxControlTest {
 
     selectImageMock.hide();
     replay(selectImageMock);
+    replay(screenMock);
+    replay(focusHandlerMock);
 
+    bindCheckBoxControl();
     checkBoxControl.onClick();
     assertFalse(checkBoxControl.isChecked());
-
-    verify(elementMock);
-    verify(selectImageMock);
   }
 
   @Test
@@ -116,15 +137,15 @@ public class CheckboxControlTest {
     selectImageMock.hide();
     selectImageMock.show();
     replay(selectImageMock);
+    replay(screenMock);
+    replay(focusHandlerMock);
 
+    bindCheckBoxControl();
     checkBoxControl.onClick();
     assertFalse(checkBoxControl.isChecked());
 
     checkBoxControl.onClick();
     assertTrue(checkBoxControl.isChecked());
-
-    verify(elementMock);
-    verify(selectImageMock);
   }
 
   @Test
@@ -134,12 +155,12 @@ public class CheckboxControlTest {
 
     selectImageMock.show();
     replay(selectImageMock);
+    replay(screenMock);
+    replay(focusHandlerMock);
 
+    bindCheckBoxControl();
     checkBoxControl.check();
     assertTrue(checkBoxControl.isChecked());
-
-    verify(elementMock);
-    verify(selectImageMock);
   }
 
   @Test
@@ -149,12 +170,22 @@ public class CheckboxControlTest {
 
     selectImageMock.hide();
     replay(selectImageMock);
+    replay(screenMock);
+    replay(focusHandlerMock);
 
+    bindCheckBoxControl();
     checkBoxControl.uncheck();
     assertFalse(checkBoxControl.isChecked());
-
-    verify(elementMock);
-    verify(selectImageMock);
   }
 
+  private void replayAllMocks() {
+    replay(elementMock);
+    replay(selectImageMock);
+    replay(screenMock);
+    replay(focusHandlerMock);
+  }
+
+  private void bindCheckBoxControl() {
+    checkBoxControl.bind(null, screenMock, elementMock, new Properties(), null, null);
+  }
 }
