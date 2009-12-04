@@ -1012,7 +1012,6 @@ public class Element {
           focusHandler.requestExclusiveMouseFocus(this);
           focusHandler.setKeyFocus(this);
         }
-        setMouseDown(false, eventTime);
         return onClick(mouseEvent);
       }
     } else if (!mouseEvent.isLeftButton() && isMouseDown()) {
