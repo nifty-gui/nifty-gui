@@ -685,24 +685,20 @@ public class Nifty {
    * @author void
    */
   private class ElementToRemove {
-    /**
-     * screen.
-     */
     private Screen screen;
-
-    /**
-     * element.
-     */
     private Element element;
+    private EndNotify endNotify;
 
     /**
      * create it.
      * @param newScreen screen
      * @param newElement element
+     * @param endNotify 
      */
-    public ElementToRemove(final Screen newScreen, final Element newElement) {
+    public ElementToRemove(final Screen newScreen, final Element newElement, final EndNotify endNotify) {
       this.screen = newScreen;
       this.element = newElement;
+      this.endNotify = endNotify;
     }
 
     /**
@@ -715,6 +711,9 @@ public class Nifty {
         parent.getElements().remove(element);
       }
       screen.layoutLayers();
+      if (endNotify != null) {
+        endNotify.perform();
+      }
     }
 
     private void removeSingleElement(final Element element) {
@@ -737,7 +736,16 @@ public class Nifty {
     element.removeFromFocusHandler();
     element.startEffect(EffectEventId.onEndScreen, new EndNotify() {
       public void perform() {
-        elementsToRemove.add(new ElementToRemove(screen, element));
+        elementsToRemove.add(new ElementToRemove(screen, element, null));
+      }
+    });
+  }
+
+  public void removeElement(final Screen screen, final Element element, final EndNotify endNotify) {
+    element.removeFromFocusHandler();
+    element.startEffect(EffectEventId.onEndScreen, new EndNotify() {
+      public void perform() {
+        elementsToRemove.add(new ElementToRemove(screen, element, endNotify));
       }
     });
   }
