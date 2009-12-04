@@ -75,6 +75,11 @@ public class CheckboxControl implements Controller {
     this.checked = false;
     updateVisualState();
   }
+  
+  public void setChecked(boolean state){
+	  this.checked = state;
+	  updateVisualState();
+  }
 
   private void updateVisualState() {
     Element selectImage = element.findElementByName("select");
