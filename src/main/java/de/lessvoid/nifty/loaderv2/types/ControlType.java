@@ -33,54 +33,19 @@ public class ControlType extends ElementType {
     setElementRendererCreator(new NullElementRendererCreator());
   }
 
-//  public Element create(
-//      final Element parent,
-//      final Nifty nifty,
-//      final Screen screen,
-//      final LayoutPart layoutPart,
-//      final StyleResolver styleResolver,
-//      final ParameterResolver parameterResolver,
-//      final Attributes attrib,
-//      final Object[] controllers) {
-//    ControlDefinitionType controlDefinition = nifty.resolveControlDefinition(getName());
-//    if (controlDefinition == null) {
-//      log.warning("controlDefinition [" + getName() + "] missing.");
-//      return null;
-//    }
-//
-//    ElementType elementType = controlDefinition.getControlElementType();
-//    Attributes controlDefinitionAttrib = controlDefinition.getAttributes();
-//    Element control = elementType.createControl(
-//        parent,
-//        nifty,
-//        screen,
-//        layoutPart,
-//        styleResolver,
-//        parameterResolver,
-//        elementType.getAttributes(),
-//        controlDefinitionAttrib,
-//        attrib,
-//        controllers);
-//    applyEffects(control, screen, nifty, parameterResolver);
-//    applyInteract(nifty, control, controllers, screen.getScreenController());
-//
-//    String childRootId = controlDefinitionAttrib.get("childRootId");
-//    Element childRootElement = control.findElementByName(childRootId);
-//    if (childRootElement != null) {
-//      applyChildren(childRootElement, screen, nifty, styleResolver, parameterResolver, controllers);
-//    }
-//
-//    return control;
-//  }
+  private String getType() {
+    String type = getAttributes().get("type");
+    if (type != null) {
+      return type;
+    }
 
-  private String getName() {
     return getAttributes().get("name");
   }
 
   void internalApplyControl(final Nifty nifty) {
-    ControlDefinitionType controlDefinition = nifty.resolveControlDefinition(getName());
+    ControlDefinitionType controlDefinition = nifty.resolveControlDefinition(getType());
     if (controlDefinition == null) {
-      log.warning("controlDefinition [" + getName() + "] missing.");
+      log.warning("controlDefinition [" + getType() + "] missing.");
       return;
     }
 
@@ -100,19 +65,6 @@ public class ControlType extends ElementType {
   void makeFlatControlsInternal() {
     mergeFromElementType(elements.iterator().next());
   }
-
-//    mergeFromElementType(controlDefinition);
-//    String baseStyle = getAttributes().get("style");
-//    mergeFromElementType(controlDefinition.getControlElementType());
-//    setTagName("(control) " + tagName);
-//
-//    String style = controlDefinition.getControlElementType().getAttributes().get("style");
-//    if (style != null) {
-//      if (style.startsWith("#")) {
-//        getAttributes().set("style", baseStyle + style);
-//      }
-//    }
-//  }
 
   private boolean addChildrenToChildRoot(
       final ElementType elementType,
