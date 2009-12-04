@@ -13,7 +13,7 @@
         <value offset="20%" color="#0aff" />
         <value offset="100%" color="#000f" />
       </onActive>
-      <onActive name="pulsate" period="25000" pulsateType="sinRaised" startColor="#0000" endColor="#000f" />
+      <onActive name="pulsate" period="25000" pulsateType="sinRaised" startColor="#0000" endColor="#000f" changeColorOnly="true" />
       <onActive name="gradient" direction="vertical">
         <value offset="0%" color="#000f" />
         <value offset="80%" color="#f00f" />
