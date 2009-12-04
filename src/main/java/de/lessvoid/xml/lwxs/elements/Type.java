@@ -35,7 +35,6 @@ public class Type {
     ArrayList < Element > elements = new ArrayList < Element >();
 
     Type typeParent = getTypeParent(schema);
-	System.out.println(this + " - " + typeParent);
 
     if (typeParent != null) {
       substitutionGroups.addAll(typeParent.getSubstituitionGroup());
