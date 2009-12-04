@@ -5,6 +5,77 @@
   <registerSound id="hover" filename="tutorial/hover.wav" />
   <registerEffect name="gradient" class="de.lessvoid.nifty.effects.impl.Gradient" />
 
+  <style id="background">
+    <attributes childLayout="vertical" width="100%" height="100%" />
+    <effect>
+      <onActive name="gradient" direction="vertical">
+        <value offset="0%" color="#000f" />
+        <value offset="20%" color="#0aff" />
+        <value offset="100%" color="#000f" />
+      </onActive>
+      <onActive name="pulsate" period="25000" pulsateType="sinRaised" startColor="#0000" endColor="#000f" />
+      <onActive name="gradient" direction="vertical">
+        <value offset="0%" color="#000f" />
+        <value offset="80%" color="#f00f" />
+        <value offset="100%" color="#000f" />
+      </onActive>
+      <onStartScreen name="fade" start="#0" end="#f" length="1000" />
+    </effect>
+  </style>
+
+  <style id="top">
+    <attributes width="100%" height="14%"/>
+    <effect>
+      <onActive name="gradient" direction="vertical" post="true">
+        <value offset="99%" color="#000f" />
+        <value offset="100%" color="#ffff" />
+      </onActive>
+    </effect>
+  </style>
+
+  <style id="main">
+    <attributes width="100%" height="*" childLayout="center" valign="center" align="center" />
+  </style>
+
+  <style id="bottom">
+    <attributes width="100%" height="14%" childLayout="center" align="center" />
+    <effect>
+      <onActive name="gradient" direction="vertical" post="true">
+        <value offset="0%" color="#ffff" />
+        <value offset="1%" color="#000f" />
+      </onActive>
+    </effect>
+  </style>
+
+  <style id="nextButton">
+    <attributes filename="tutorial/next.tga" align="right" valign="center" visibleToMouse="true" />
+    <effect>
+      <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="1000"/>
+      <onHover name="imageOverlay" post="true" filename="tutorial/next-hover.tga"/>
+      <onHover name="imageOverlay" post="true" filename="tutorial/next-hover-ring.tga">
+        <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="228px" hoverHeight="228px"/>
+      </onHover> 
+      <onClick name="playSound" sound="select" />
+    </effect>
+  </style>
+
+  <style id="captionFont">
+    <attributes font="tutorial/caption.fnt" />
+  </style>
+
+  <style id="textFont">
+    <attributes font="tutorial/text.fnt" />
+  </style>
+
+  <style id="middlePanel">
+	  <effect>
+	    <onStartScreen name="move" mode="in" direction="right" length="400" startDelay="100" inherit="true" />
+ 	    <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0" inherit="true" />
+      <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" inherit="true" />
+      <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0" inherit="true" />
+	  </effect>
+	</style>
+
   <screen id="start" controller="de.lessvoid.nifty.examples.tutorial.screen.Splash">
     <layer id="logo" childLayout="center">
       <panel height="60%" childLayout="center" valign="center">
@@ -26,15 +97,96 @@
       </panel>
     </layer>
   </screen>
-
   <screen id="page1" controller="de.lessvoid.nifty.examples.tutorial.screen.Page1">
-    <layer id="logo" childLayout="center">
-      <panel height="60%" width="60%" childLayout="center" valign="center" align="center" backgroundColor="#f00f">
-        <effect>
-          <onActive name="gradient" color1="#f00f" color2="#f00f" color3="#ff0f" color4="#ff0f" post="true" />
-        </effect>
+    <layer childLayout="center">
+      <panel style="background">
+        <panel style="top"/>
+        <panel style="main">
+          <panel id="pp" childLayout="overlay" valign="center" align="center">
+            <control id="page_0" name="page1" />
+          </panel>
+        </panel>
+        <panel style="bottom">
+          <image style="nextButton">
+            <interact onClick="next()" />
+          </image>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+  <controlDefinition name="page1" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+    <panel childLayout="center" valign="center" align="center">
+		  <panel childLayout="vertical" valign="center" align="center">
+		    <text style="captionFont" align="center" text="Nifty 1.0 Introduction &amp; Tutorial">
+		      <effect>
+		        <onStartScreen name="textSize" length="300" startDelay="800" factor="2" startSize="1.5" endSize="1.0"/>
+		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="300" startDelay="800"/>
+		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0"/>
+		        <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0"/>
+		      </effect>
+		    </text>
+		    <text style="textFont" align="center" text="(written with Nifty 1.0)&#10;press next in the bottom right corner to continue">
+		      <effect>
+		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="1000" startDelay="1000"/>
+		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0"/>
+		        <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0"/>
+		      </effect>
+		    </text>
+		  </panel>
+		</panel>
+	</controlDefinition>
+  <controlDefinition name="page2" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+    <panel childLayout="center" valign="center" align="center" width="100%" height="100%">
+	    <panel style="middlePanel" childLayout="vertical" width="95%" height="92%" align="center" valign="center">
+	      <text style="captionFont" width="100%" textHAlign="left" text="So what exactly is Nifty GUI?" />
+	      <text style="textFont" width="100%" textHAlign="left" wrap="true" text="Nifty GUI is a Java Library that supports the building of interactive user interfaces for games or similar applications. It utilizes lwjgl for OpenGL rendering. The configuration of the GUI is stored in xml files with little supporting Java code.&#10;&#10;In short Nifty layouts and displays elements on a screen and allows to interact with them.&#10;"/>
+	      <text style="captionFont" width="100%" textHAlign="left" text="And what is it not?"/>
+	      <text style="textFont" width="100%" textHAlign="left" wrap="true" text="Nifty is not a complete Widget Toolkit (like AWT, SWT or Swing) or an application framework. If you're looking for a more traditional approach (e.g. use Java to create and manage the UI) or if you need a solution with windows, dialog boxes, lots of controls and so on, you might want to look somewhere else.&#10;&#10;Two great options are:&#10;&#10;- fenggui (http://www.fenggui.org/doku.php)&#10;- twl (http://twl.l33tlabs.org/)&#10;&#10;So Nifty might or might not me the right tool for the task. Watch the remaining Pages and decide for yourself."/>
+	    </panel>
+	  </panel>
+  </controlDefinition>
+  <controlDefinition name="page3" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+    <panel childLayout="center" valign="center" align="center" width="100%" height="100%">
+      <panel style="middlePanel" childLayout="vertical" width="95%" height="92%" align="center" valign="center">
+        <text style="captionFont" width="100%" textHAlign="left" text="WooHoo" />
+      </panel>
+    </panel>
+  </controlDefinition>
+
+<!--  
+
+http://www.fenggui.org/doku.php
+http://twl.l33tlabs.org/
+  <screen id="introduction" controller="de.lessvoid.nifty.examples.tutorial.screen.Introduction">
+    <layer childLayout="center">
+      <panel style="background">
+        <panel style="top"/>
+        <panel style="main">
+        </panel>
+        <panel style="bottom">
+          <image style="nextButton" />
+        </panel>
       </panel>
     </layer>
   </screen>
 
+      <panel height="106px" layout="center">
+      </panel>
+      <panel height="556px" layout="center">
+        <panel layout="vertical">
+          <panel height="46px" layout="center"/>
+          <panel layout="vertical">
+          </panel>
+          <panel height="64px" layout="horizontal">
+            <image filename="tutorial/back.tga" align="left" onClick="back" onClickAlternate="back" effectGroup="backButtonHover"/>
+            <panel/>
+            <image id="intro-next" filename="tutorial/next.tga" align="right" onClick="next" effectGroup="nextButtonHover"/>
+          </panel>
+        </panel>
+      </panel>
+      <panel height="106px" layout="center">
+      </panel>
+    </layer>
+  </screen>
+  -->
 </nifty>
