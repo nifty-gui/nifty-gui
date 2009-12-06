@@ -68,6 +68,7 @@ public class Nifty {
   private long lastTime;
   private InputSystem inputSystem;
   private boolean gotoScreenInProgess;
+  private String alternateKey;
 
   /**
    * Create nifty for the given RenderDevice and TimeProvider.
@@ -438,6 +439,7 @@ public class Nifty {
    * @param alternateKey the new alternate key to use
    */
   public void setAlternateKey(final String alternateKey) {
+    this.alternateKey = alternateKey;
     for (Screen screen : screens.values()) {
       screen.setAlternateKey(alternateKey);
     }
@@ -490,7 +492,6 @@ public class Nifty {
    * @param keyDown key down
    */
   public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
-//    System.out.println("key " + eventKey + ", character " + eventCharacter + ", keyDown: " + keyDown);
     if (!currentScreen.isNull()) {
       currentScreen.keyEvent(inputEventCreator.createEvent(eventKey, eventCharacter, keyDown));
     }
@@ -849,5 +850,9 @@ public class Nifty {
 
   public StyleResolver getDefaultStyleResolver() {
     return new StyleResolverDefault(styles);
+  }
+
+  public String getAlternateKey() {
+    return alternateKey;
   }
 }

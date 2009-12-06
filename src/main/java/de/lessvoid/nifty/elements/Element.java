@@ -2,8 +2,6 @@ package de.lessvoid.nifty.elements;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
@@ -288,6 +286,7 @@ public class Element {
     this.parent = newParent;
     this.elementRenderer = newElementRenderer;
     this.effectManager = new EffectManager();
+    this.effectManager.setAlternateKey(nifty.getAlternateKey());
     this.layoutPart = newLayoutPart;
     this.enabled = true;
     this.visible = true;
@@ -720,9 +719,15 @@ public class Element {
    */
   public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
     if (effectEventId == EffectEventId.onStartScreen) {
+      if (!visible) {
+        return;
+      }
       done = false;
     }
     if (effectEventId == EffectEventId.onEndScreen) {
+      if (!visible) {
+        return;
+      }
       done = true;
     }
     // whenever the effect ends we forward to this event
@@ -762,6 +767,11 @@ public class Element {
    * @param effectEventId effect event id to stop
    */
   public void stopEffect(final EffectEventId effectEventId) {
+    if (EffectEventId.onStartScreen == effectEventId || EffectEventId.onEndScreen == effectEventId) {
+      if (!visible) {
+        return;
+      }
+    }
     effectManager.stopEffect(effectEventId);
 
     // notify all child elements of the start effect
@@ -1055,7 +1065,6 @@ public class Element {
 
   public boolean isMouseInsideElement(final int mouseX, final int mouseY) {
     if (parentClipArea) {
-//      System.out.println("x: " + mouseX + ", y: " + mouseY + " [" + this.id + "] " + getX() + ", " + getY() + ", " + (getX() + getWidth()) + ", " + (getY() + getHeight()) + " [" + parentWithClipChildred.getId() + "] " + parentWithClipChildred.getX() + ", " + parentWithClipChildred.getY() + ", " + (parentWithClipChildred.getX() + parentWithClipChildred.getWidth()) + ", " + (parentWithClipChildred.getY() + parentWithClipChildred.getHeight()));
       // must be inside the parent to continue
       if (mouseX >= parentClipX
         &&
@@ -1092,16 +1101,26 @@ public class Element {
    * @param inputEvent event
    */
   public boolean onClick(final MouseInputEvent inputEvent) {
-    effectManager.startEffect(EffectEventId.onClick, this, time, null);
-    lastMouseX = inputEvent.getMouseX();
-    lastMouseY = inputEvent.getMouseY();
+    if (canHandleInteraction()) {
+      effectManager.startEffect(EffectEventId.onClick, this, time, null);
+      lastMouseX = inputEvent.getMouseX();
+      lastMouseY = inputEvent.getMouseY();
 
-    return interaction.onClick(inputEvent);
+      return interaction.onClick(inputEvent);
+    } else {
+      return false;
+    }
   }
 
   public void onClick() {
-    effectManager.startEffect(EffectEventId.onClick, this, time, null);
-    interaction.onClick();
+    if (canHandleInteraction()) {
+      effectManager.startEffect(EffectEventId.onClick, this, time, null);
+      interaction.onClick();
+    }
+  }
+
+  private boolean canHandleInteraction() {
+    return !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId.onEndScreen);
   }
 
   public void onRelease() {

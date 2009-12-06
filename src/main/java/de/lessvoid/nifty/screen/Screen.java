@@ -242,9 +242,7 @@ public class Screen {
    */
   private void activeEffectStart() {
     for (Element w : layerElements) {
-      w.startEffect(
-        EffectEventId.onActive,
-        null);
+      w.startEffect(EffectEventId.onActive, null);
     }
   }
 
@@ -280,18 +278,19 @@ public class Screen {
   private boolean forwardMouseEventToLayers(final List < Element > layerList, final MouseInputEvent inputEvent) {
     mouseOverHandler.reset();
 
+    boolean result = false;
     long eventTime = timeProvider.getMsTime();
     for (Element layer : layerList) {
-      if (layer.isEffectActive(EffectEventId.onStartScreen) ||
-          layer.isEffectActive(EffectEventId.onEndScreen)) {
-        continue;
-      }
+//      if (layer.isEffectActive(EffectEventId.onStartScreen) ||
+//          layer.isEffectActive(EffectEventId.onEndScreen)) {
+//        continue;
+//      }
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
-      layer.mouseEvent(inputEvent, eventTime);
+      result = layer.mouseEvent(inputEvent, eventTime);
     }
 
     mouseOverHandler.processMouseOverEvent(rootElement, inputEvent, eventTime);
-    return false;
+    return result;
   }
 
   /**
@@ -523,5 +522,22 @@ public class Screen {
     // add dynamic controls
     nifty.addControls();
     running = true;
+  }
+
+  public boolean isEffectActive(final EffectEventId effectEventId) {
+    if (!popupElements.isEmpty()) {
+      return isEffectActive(popupElements, effectEventId);
+    } else {
+      return isEffectActive(layerElements, effectEventId);
+    }
+  }
+
+  private boolean isEffectActive(final List < Element > elements, final EffectEventId effectEventId) {
+    for (Element element : elements) {
+      if (element.isEffectActive(effectEventId)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
