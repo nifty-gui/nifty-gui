@@ -4,7 +4,6 @@
   <registerSound id="intro" filename="tutorial/intro.wav" />
   <registerSound id="hover" filename="tutorial/hover.wav" />
   <registerEffect name="gradient" class="de.lessvoid.nifty.effects.impl.Gradient" />
-
   <style id="background">
     <attributes childLayout="vertical" width="100%" height="100%" />
     <effect>
@@ -22,7 +21,6 @@
       <onStartScreen name="fade" start="#0" end="#f" length="1000" />
     </effect>
   </style>
-
   <style id="top">
     <attributes width="100%" height="14%"/>
     <effect>
@@ -32,13 +30,11 @@
       </onActive>
     </effect>
   </style>
-
   <style id="main">
     <attributes width="100%" height="*" childLayout="center" valign="center" align="center" />
   </style>
-
   <style id="bottom">
-    <attributes width="100%" height="14%" childLayout="center" align="center" />
+    <attributes width="100%" height="14%" childLayout="center" align="center" valign="center" />
     <effect>
       <onActive name="gradient" direction="vertical" post="true">
         <value offset="0%" color="#ffff" />
@@ -46,36 +42,47 @@
       </onActive>
     </effect>
   </style>
-
-  <style id="nextButton">
-    <attributes filename="tutorial/next.tga" align="right" valign="center" visibleToMouse="true" />
+  <style id="bottomInternal">
+    <attributes width="95%" height="100%" childLayout="horizontal" align="center" valign="center" />
+  </style>
+  <style id="backButton">
+    <attributes filename="tutorial/back.png" align="left" valign="center" visibleToMouse="true" visible="false" />
+    <interact onClick="back()" />
     <effect>
       <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="1000"/>
-      <onHover name="imageOverlay" post="true" filename="tutorial/next-hover.tga"/>
-      <onHover name="imageOverlay" post="true" filename="tutorial/next-hover-ring.tga">
+      <onClick name="imageOverlay" post="true" filename="tutorial/back-click.png"/>
+      <onHover name="imageOverlay" post="true" filename="tutorial/back-hover.png">
         <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="228px" hoverHeight="228px"/>
       </onHover> 
       <onClick name="playSound" sound="select" />
     </effect>
   </style>
-
+  <style id="nextButton">
+    <attributes filename="tutorial/next.png" align="right" valign="center" visibleToMouse="true" />
+    <interact onClick="next()" />
+    <effect>
+      <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="1000"/>
+      <onClick name="imageOverlay" post="true" filename="tutorial/next-click.png"/>
+      <onHover name="imageOverlay" post="true" filename="tutorial/next-hover.png">
+        <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="228px" hoverHeight="228px"/>
+      </onHover> 
+      <onClick name="playSound" sound="select" />
+    </effect>
+  </style>
   <style id="captionFont">
     <attributes font="tutorial/caption.fnt" />
   </style>
-
   <style id="textFont">
     <attributes font="tutorial/text.fnt" />
   </style>
-
   <style id="middlePanel">
 	  <effect>
-	    <onStartScreen name="move" mode="in" direction="right" length="400" startDelay="100" inherit="true" />
  	    <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0" inherit="true" />
-      <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" inherit="true" />
+      <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" inherit="true" alternateDisable="back" />
+      <onEndScreen name="move" mode="out" direction="right" length="500" startDelay="0" inherit="true" alternateEnable="back" /> 
       <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0" inherit="true" />
 	  </effect>
 	</style>
-
   <screen id="start" controller="de.lessvoid.nifty.examples.tutorial.screen.Splash">
     <layer id="logo" childLayout="center">
       <panel height="60%" childLayout="center" valign="center">
@@ -107,9 +114,11 @@
           </panel>
         </panel>
         <panel style="bottom">
-          <image style="nextButton">
-            <interact onClick="next()" />
-          </image>
+          <panel style="bottomInternal">
+            <image id="backButton" style="backButton" />
+            <panel width="*" />
+            <image id="nextButton" style="nextButton" />
+          </panel>
         </panel>
       </panel>
     </layer>
@@ -121,15 +130,17 @@
 		      <effect>
 		        <onStartScreen name="textSize" length="300" startDelay="800" factor="2" startSize="1.5" endSize="1.0"/>
 		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="300" startDelay="800"/>
-		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0"/>
-		        <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0"/>
+            <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0"/>
+		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back" />
+            <onEndScreen name="move" mode="out" direction="right" length="500" startDelay="0" alternateEnable="back" />
 		      </effect>
 		    </text>
 		    <text style="textFont" align="center" text="(written with Nifty 1.0)&#10;press next in the bottom right corner to continue">
 		      <effect>
 		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="1000" startDelay="1000"/>
-		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0"/>
-		        <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0"/>
+            <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0"/>
+		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back"/>
+            <onEndScreen name="move" mode="out" direction="right" length="500" startDelay="0" alternateEnable="back"/>
 		      </effect>
 		    </text>
 		  </panel>

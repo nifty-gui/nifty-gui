@@ -1,11 +1,9 @@
 package de.lessvoid.nifty.examples.tutorial.screen;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -37,11 +35,31 @@ public class Page1 implements ScreenController {
   public void onEndScreen() {
   }
 
+  public void back() {
+    pageIndex--;
+    if (pageIndex < 0) {
+      pageIndex = pages.size() - 1;
+    }
+
+    nifty.setAlternateKey("back");
+
+    CreateButtonControl buttonControl = new CreateButtonControl(pages.get(pageIndex), "page_" + pageIndex);
+    buttonControl.create(nifty, screen, screen.findElementByName("pp"));
+
+    nifty.removeElement(screen, screen.findElementByName("page_" + lastPageIndex), new EndNotify() {
+      public void perform() {
+      }
+    });
+    lastPageIndex = pageIndex;
+  }
+
   public void next() {
     pageIndex++;
     if (pageIndex >= pages.size()) {
       pageIndex = 0;
     }
+
+    nifty.setAlternateKey(null);
 
     CreateButtonControl buttonControl = new CreateButtonControl(pages.get(pageIndex), "page_" + pageIndex);
     buttonControl.create(nifty, screen, screen.findElementByName("pp"));
