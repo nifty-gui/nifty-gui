@@ -19,6 +19,7 @@ public final class NiftyDefaults {
     nifty.registerEffect(new RegisterEffectType("fade", "de.lessvoid.nifty.effects.impl.Fade"));
     nifty.registerEffect(new RegisterEffectType("fadeSound", "de.lessvoid.nifty.effects.impl.FadeSound"));
     nifty.registerEffect(new RegisterEffectType("focus", "de.lessvoid.nifty.effects.impl.Focus"));
+    nifty.registerEffect(new RegisterEffectType("gradient", "de.lessvoid.nifty.effects.impl.Gradient"));
     nifty.registerEffect(new RegisterEffectType("hide", "de.lessvoid.nifty.effects.impl.Hide"));
     nifty.registerEffect(new RegisterEffectType("hint", "de.lessvoid.nifty.effects.impl.Hint"));
     nifty.registerEffect(new RegisterEffectType("imageOverlay", "de.lessvoid.nifty.effects.impl.ImageOverlay"));

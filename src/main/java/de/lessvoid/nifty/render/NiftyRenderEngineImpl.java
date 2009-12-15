@@ -178,9 +178,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       Color b = new Color(topRight, color.getAlpha());
       Color c = new Color(bottomRight, color.getAlpha());
       Color d = new Color(bottomLeft, color.getAlpha());
-      renderDevice.renderQuad(x, y, width, height, a, b, c, d);
+      renderDevice.renderQuad(x + getX(), y + getY(), width, height, a, b, c, d);
     } else {
-      renderDevice.renderQuad(x, y, width, height, topLeft, topRight, bottomRight, bottomLeft);
+      renderDevice.renderQuad(x + getX(), y + getY(), width, height, topLeft, topRight, bottomRight, bottomLeft);
     }
   }
 
