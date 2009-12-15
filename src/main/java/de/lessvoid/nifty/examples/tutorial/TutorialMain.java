@@ -23,7 +23,7 @@ public final class TutorialMain {
         new SoundSystem(new SlickSoundDevice()),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
-    nifty.fromXml("tutorial/tutorial.xml", "page1");
+    nifty.fromXml("tutorial/tutorial.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty, null);

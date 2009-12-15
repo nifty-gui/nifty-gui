@@ -9,7 +9,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class Page1 implements ScreenController {
+public class MainPage implements ScreenController {
   private Nifty nifty;
   private Screen screen;
 

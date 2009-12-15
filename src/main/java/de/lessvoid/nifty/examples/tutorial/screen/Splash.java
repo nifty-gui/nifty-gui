@@ -12,7 +12,7 @@ public class Splash implements ScreenController {
   }
 
   public void onStartScreen() {
-	  nifty.gotoScreen("page1");
+	  nifty.gotoScreen("mainPage");
   }
 
   public void onEndScreen() {
