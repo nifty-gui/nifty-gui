@@ -354,6 +354,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     color.setGreen(newColor.getGreen());
     color.setBlue(newColor.getBlue());
     colorChanged = true;
+
+    if (colorAlphaChanged && color.getAlpha() > newColor.getAlpha()) {
+      color.setAlpha(newColor.getAlpha());
+    }
   }
 
   /**
