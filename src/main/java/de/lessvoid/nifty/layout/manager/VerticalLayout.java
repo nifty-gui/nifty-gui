@@ -35,7 +35,7 @@ public class VerticalLayout implements LayoutManager {
     // now do the layout
     Box rootBox = root.getBox();
 
-    int y = rootBox.getY();
+    int y = rootBox.getY() + root.getBoxConstraints().getPaddingTop().getValueAsInt(0);
     for (int i = 0; i < children.size(); i++) {
       LayoutPart current = children.get(i);
       Box box = current.getBox();
@@ -149,7 +149,7 @@ public class VerticalLayout implements LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public final SizeValue calculateConstraintWidth(final List < LayoutPart > children) {
+  public final SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
     return null;
   }
 
@@ -157,11 +157,14 @@ public class VerticalLayout implements LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public final SizeValue calculateConstraintHeight(final List < LayoutPart > children) {
+  public final SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
     int newHeight = 0;
     for (LayoutPart e : children) {
       newHeight += e.getBoxConstraints().getHeight().getValueAsInt(0);
     }
+    newHeight += root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight());
+    newHeight += root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
+
     return new SizeValue(newHeight + "px");
   }
 }

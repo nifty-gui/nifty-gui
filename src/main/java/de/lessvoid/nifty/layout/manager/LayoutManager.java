@@ -33,7 +33,7 @@ public interface LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  SizeValue calculateConstraintWidth(List < LayoutPart > children);
+  SizeValue calculateConstraintWidth(LayoutPart root, List < LayoutPart > children);
 
   /**
    * Calculates a new Height constraint. Note that it is the callers
@@ -44,5 +44,5 @@ public interface LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  SizeValue calculateConstraintHeight(List < LayoutPart > children);
+  SizeValue calculateConstraintHeight(LayoutPart root, List < LayoutPart > children);
 }

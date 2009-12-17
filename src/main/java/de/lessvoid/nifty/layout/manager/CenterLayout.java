@@ -133,7 +133,7 @@ public class CenterLayout implements LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public SizeValue calculateConstraintWidth(final List < LayoutPart > children) {
+  public SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
     return null;
   }
 
@@ -141,7 +141,7 @@ public class CenterLayout implements LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public SizeValue calculateConstraintHeight(final List < LayoutPart > children) {
+  public SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
     return null;
   }
 }

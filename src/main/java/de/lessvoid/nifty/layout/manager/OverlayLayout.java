@@ -46,7 +46,7 @@ public class OverlayLayout implements LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public final SizeValue calculateConstraintWidth(final List < LayoutPart > children) {
+  public final SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
     return null;
   }
 
@@ -54,7 +54,7 @@ public class OverlayLayout implements LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public final SizeValue calculateConstraintHeight(final List < LayoutPart > children) {
+  public final SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
     return null;
   }
 }

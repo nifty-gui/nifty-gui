@@ -325,7 +325,11 @@ public class Element {
       + " position [" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + "], constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
       + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", "
       + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", "
-      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]"
+      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + " ("
+      + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ","
+      + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ","
+      + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ","
+      + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + ")]"
       + " focusable [" + focusable + "] mouseable [" + visibleToMouseEvents + "]";
     return pos;
   }
@@ -485,7 +489,7 @@ public class Element {
 
       // if all (!) child elements have a pixel fixed width we can calculate a new width constraint for this element!
       if (elements.size() == layoutPartChild.size()) {
-        SizeValue newWidth = layoutManager.calculateConstraintWidth(layoutPartChild);
+        SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
         if (newWidth != null) {
           // log.info("pre processed new width for element: " + getId() + ": " + newWidth.getValueAsInt(0));
           setConstraintWidth(newWidth);
@@ -508,7 +512,6 @@ public class Element {
 
     // is it empty and we have an layoutManager there's still hope for a height constraint
     if (layoutManager != null && (myHeight == null || isCalcHeightConstraint)) {
-
       // collect all child layoutPart that have a fixed px size in a list
       List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
       for (Element e : elements) {
@@ -520,9 +523,8 @@ public class Element {
 
       // if all (!) child elements have a px fixed height we can calculate a new height constraint for this element!
       if (elements.size() == layoutPartChild.size()) {
-        SizeValue newHeight = layoutManager.calculateConstraintHeight(layoutPartChild);
+        SizeValue newHeight = layoutManager.calculateConstraintHeight(this.layoutPart, layoutPartChild);
         if (newHeight != null) {
-          // log.info("pre processed new height for element: " + getId() + ": " + newHeight.getValueAsInt(0));
           setConstraintHeight(newHeight);
           isCalcHeightConstraint = true;
         }
