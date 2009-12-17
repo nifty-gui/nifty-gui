@@ -63,7 +63,7 @@ public class SinusRaisedPulsator implements PulsatorProvider {
    * @return sinus
    */
   private float getSinusValue(final long x) {
-    return (float) ((Math.sin(Math.PI * x / period) + 1.0f) / 2.0f);
+    return (float) ((Math.sin(Math.PI * x / period - Math.PI / 2.0f) + 1.0f) / 2.0f);
   }
 
   /**
