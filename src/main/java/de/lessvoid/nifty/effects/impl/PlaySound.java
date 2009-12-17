@@ -15,10 +15,12 @@ import de.lessvoid.nifty.spi.sound.SoundHandle;
  */
 public class PlaySound implements EffectImpl {
   private boolean done;
+  private boolean repeat;
   private SoundHandle soundHandle;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     soundHandle = nifty.getSoundSystem().getSound(parameter.getProperty("sound"));
+    repeat = Boolean.valueOf(parameter.getProperty("repeat", "false"));
     done = false;
   }
 
@@ -32,6 +34,13 @@ public class PlaySound implements EffectImpl {
         if (!done) {
           soundHandle.play();
           done = true;
+        } else {
+          // in repeat mode, when the sound is not playing anymore we'll simply start it again
+          if (repeat) {
+            if (!soundHandle.isPlaying()) {
+              soundHandle.play();
+            }
+          }
         }
       }
     }
