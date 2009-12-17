@@ -37,8 +37,7 @@ public class RenderFontLwjgl implements RenderFont {
     if (color == null) {
       font.drawStringWithSize(x, y, text, fontSize);
     } else {
-      font.renderWithSizeAndColor(
-          x, y, text, fontSize, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+      font.renderWithSizeAndColor(x, y, text, fontSize, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
     renderTools.endRender();
   }
