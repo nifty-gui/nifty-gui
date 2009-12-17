@@ -24,6 +24,7 @@ public class Pulsate implements EffectImpl {
   private SizeValue width;
   private Pulsator pulsater;
   private boolean changeColorOnly = false;
+  private boolean activated = false;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     startColor = new Color(parameter.getProperty("startColor", "#00000000"));
@@ -38,28 +39,36 @@ public class Pulsate implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    if (!changeColorOnly) {
-      r.saveState(RenderStateType.allStates());
+    if (!activated && normalizedTime > 0.0f) {
+      activated = true;
+      pulsater.reset();
     }
 
-    float value = pulsater.update();
-    Color c = startColor.linear(endColor, value);
-    r.setColor(c);
-
-    if (!changeColorOnly) {
-      int size = (int) width.getValue(element.getParent().getWidth());
-      if (size == -1) {
-        r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
-      } else {
-        r.renderQuad((element.getX() + element.getWidth() / 2) - size / 2, element.getY(), size, element.getHeight());
+    if (activated) {
+      if (!changeColorOnly) {
+        r.saveState(RenderStateType.allStates());
       }
-    }
 
-    if (!changeColorOnly) {
-      r.restoreState();
+      float value = pulsater.update();
+      Color c = startColor.linear(endColor, value);
+      r.setColor(c);
+  
+      if (!changeColorOnly) {
+        int size = (int) width.getValue(element.getParent().getWidth());
+        if (size == -1) {
+          r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
+        } else {
+          r.renderQuad((element.getX() + element.getWidth() / 2) - size / 2, element.getY(), size, element.getHeight());
+        }
+      }
+  
+      if (!changeColorOnly) {
+        r.restoreState();
+      }
     }
   }
 
   public void deactivate() {
+    activated = true;
   }
 }
