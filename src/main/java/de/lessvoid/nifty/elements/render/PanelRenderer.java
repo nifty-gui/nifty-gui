@@ -31,7 +31,6 @@ public class PanelRenderer implements ElementRenderer {
    *            the renderDevice we should use
    */
   public final void render(final Element element, final NiftyRenderEngine r) {
-
     if (backgroundColor != null) {
       r.saveState(RenderStateType.allStates());
       if (!r.isColorChanged()) {
