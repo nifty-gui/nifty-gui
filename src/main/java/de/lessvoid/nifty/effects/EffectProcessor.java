@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.util.Log;
-
 import de.lessvoid.nifty.EndNotify;
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
 
