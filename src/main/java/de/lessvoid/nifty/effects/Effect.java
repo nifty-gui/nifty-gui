@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.effects;
 
 import java.util.LinkedList;
-import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
