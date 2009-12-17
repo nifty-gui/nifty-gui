@@ -35,10 +35,10 @@ public class Border implements EffectImpl {
     if (w == -1) {
       w = 1;
     }
-    r.renderQuad(element.getX() - w, element.getY() - w, element.getWidth() + 2 * w, w);
-    r.renderQuad(element.getX() - w, element.getY() + element.getHeight() + w, element.getWidth() + 2 * w, w);
-    r.renderQuad(element.getX() - w, element.getY() - w, w, element.getHeight() + 2 * w);
-    r.renderQuad(element.getX() + element.getWidth() + w, element.getY() - w, w, element.getHeight() + 2 * w);
+    r.renderQuad(element.getX() - w,                  element.getY() - w,                   element.getWidth() + 2 * w, w);
+    r.renderQuad(element.getX() - w,                  element.getY() + element.getHeight(), element.getWidth() + 2 * w, w);
+    r.renderQuad(element.getX() - w,                  element.getY(),                       w,                          element.getHeight());
+    r.renderQuad(element.getX() + element.getWidth(), element.getY(),                       w,                          element.getHeight());
     r.restoreState();
   }
 
