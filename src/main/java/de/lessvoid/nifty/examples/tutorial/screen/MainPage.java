@@ -26,7 +26,8 @@ public class MainPage implements ScreenController {
     pages.add("page3");
 
     pageIndex = 0;
-    lastPageIndex = 0;
+    lastPageIndex = -1;
+    updatePage();
   }
   
   public void onStartScreen() {
@@ -42,15 +43,7 @@ public class MainPage implements ScreenController {
     }
 
     nifty.setAlternateKey("back");
-
-    CreateButtonControl buttonControl = new CreateButtonControl(pages.get(pageIndex), "page_" + pageIndex);
-    buttonControl.create(nifty, screen, screen.findElementByName("pp"));
-
-    nifty.removeElement(screen, screen.findElementByName("page_" + lastPageIndex), new EndNotify() {
-      public void perform() {
-      }
-    });
-    lastPageIndex = pageIndex;
+    updatePage();
   }
 
   public void next() {
@@ -60,14 +53,21 @@ public class MainPage implements ScreenController {
     }
 
     nifty.setAlternateKey(null);
+    updatePage();
+  }
 
+  private void updatePage() {
+    System.out.println("updatePage");
     CreateButtonControl buttonControl = new CreateButtonControl(pages.get(pageIndex), "page_" + pageIndex);
     buttonControl.create(nifty, screen, screen.findElementByName("pp"));
 
-    nifty.removeElement(screen, screen.findElementByName("page_" + lastPageIndex), new EndNotify() {
-      public void perform() {
-      }
-    });
+    Element element = screen.findElementByName("page_" + lastPageIndex);
+    if (element != null) {
+      nifty.removeElement(screen, element, new EndNotify() {
+        public void perform() {
+        }
+      });
+    }
     lastPageIndex = pageIndex;
   }
 

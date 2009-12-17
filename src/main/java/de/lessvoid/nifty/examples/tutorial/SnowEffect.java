@@ -61,8 +61,12 @@ public class SnowEffect implements EffectImpl {
     public Snowflake(final long startTime) {
       initPosition(startTime);
       y = random.nextInt(screenHeight);
-      speed = random.nextInt(12000) + 10000;
+      speed = getNewSpeed();
       this.startTime = startTime + random.nextInt((int)speed);
+    }
+
+    private int getNewSpeed() {
+      return random.nextInt(5000) + 10000;
     }
 
     private void initPosition(final long currentTime) {
@@ -94,7 +98,7 @@ public class SnowEffect implements EffectImpl {
           sizeY = 5;
           break;
       }
-      speed = random.nextInt(12000) + 10000;
+      speed = getNewSpeed();
       initWind();
       startTime = currentTime;
     }

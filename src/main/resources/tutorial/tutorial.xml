@@ -3,59 +3,66 @@
   <registerSound id="select" filename="tutorial/select.wav" />
   <registerSound id="intro" filename="tutorial/intro.wav" />
   <registerSound id="hover" filename="tutorial/hover.wav" />
+  <registerMusic id="music" filename="tutorial/echoed_-_L.O.R.D..ogg" />
   <registerEffect name="snowEffect" class="de.lessvoid.nifty.examples.tutorial.SnowEffect" />
+
   <!-- background style -->
   <style id="background">
     <attributes childLayout="vertical" width="100%" height="100%" />
     <effect>
-      <onStartScreen name="fade" start="#0" end="#f" length="500" />
-      <onActive name="gradient" direction="vertical">
-        <value offset="0%" color="#000f" />
-        <value offset="20%" color="#0aff" />
-        <value offset="100%" color="#000f" />
-      </onActive>
-      <onActive name="pulsate" period="25000" pulsateType="sinRaised" startColor="#0000" endColor="#000f" changeColorOnly="true" />
+      <onStartScreen name="fade" start="#0" end="#f" length="750" startDelay="1000" />
       <onActive name="gradient" direction="vertical">
         <value offset="0%" color="#000f" />
         <value offset="80%" color="#f00f" />
         <value offset="100%" color="#000f" />
       </onActive>
+      <onActive name="pulsate" period="25000" pulsateType="sinRaised" startColor="#0000" endColor="#000f" changeColorOnly="true" startDelay="2000" />
+      <onActive name="gradient" direction="vertical" startDelay="2000">
+        <value offset="0%" color="#000f" />
+        <value offset="20%" color="#0aff" />
+        <value offset="100%" color="#000f" />
+      </onActive>
     </effect>
   </style>
+
   <!-- top style -->
   <style id="top">
     <attributes width="100%" height="14%"/>
     <effect>
-      <onStartScreen name="move" mode="in" direction="right" length="500" inherit="true" post="true" />
+      <onStartScreen name="move" mode="in" direction="right" length="750" startDelay="1000" inherit="true" post="true" />
       <onActive name="gradient" direction="vertical" post="true">
         <value offset="99%" color="#000f" />
         <value offset="100%" color="#ffff" />
       </onActive>
     </effect>
   </style>
+
   <!-- main style -->
   <style id="main">
     <attributes width="100%" height="*" childLayout="center" valign="center" align="center" />
   </style>
+
   <!-- bottom style -->
   <style id="bottom">
     <attributes width="100%" height="14%" childLayout="center" align="center" valign="center" />
     <effect>
-      <onStartScreen name="move" mode="in" direction="left" length="500" inherit="true" post="true" />
+      <onStartScreen name="move" mode="in" direction="left" length="750" startDelay="1000" inherit="true" post="true" />
       <onActive name="gradient" direction="vertical" post="true">
         <value offset="0%" color="#ffff" />
         <value offset="1%" color="#000f" />
       </onActive>
     </effect>
   </style>
+
   <style id="bottomInternal">
     <attributes width="95%" height="100%" childLayout="horizontal" align="center" valign="center" />
   </style>
+
   <style id="backButton">
     <attributes filename="tutorial/back.png" align="left" valign="center" visibleToMouse="true" visible="false" />
     <interact onClick="back()" />
     <effect>
-      <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="1000"/>
+      <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="2000"/>
       <onClick name="imageOverlay" post="true" filename="tutorial/back-click.png"/>
       <onHover name="imageOverlay" post="true" filename="tutorial/back-hover.png">
         <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="228px" hoverHeight="228px"/>
@@ -63,11 +70,12 @@
       <onClick name="playSound" sound="select" />
     </effect>
   </style>
+
   <style id="nextButton">
     <attributes filename="tutorial/next.png" align="right" valign="center" visibleToMouse="true" />
     <interact onClick="next()" />
     <effect>
-      <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="1000"/>
+      <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="2000"/>
       <onClick name="imageOverlay" post="true" filename="tutorial/next-click.png"/>
       <onHover name="imageOverlay" post="true" filename="tutorial/next-hover.png">
         <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="228px" hoverHeight="228px"/>
@@ -75,13 +83,36 @@
       <onClick name="playSound" sound="select" />
     </effect>
   </style>
+
   <style id="captionFont">
-    <attributes font="tutorial/caption.fnt" />
+    <attributes font="tutorial/caption.fnt" width="100%" textHAlign="left" />
   </style>
+
   <style id="textFont">
-    <attributes font="tutorial/text.fnt" />
+    <attributes font="tutorial/text.fnt" width="100%" textHAlign="left" wrap="true" />
   </style>
+
+  <style id="codeFont">
+    <attributes font="tutorial/code.fnt" width="100%" textHAlign="left" />
+  </style>
+
+  <style id="codeBlock">
+    <attributes childLayout="vertical" padding="5px" />
+    <effect>
+      <onActive name="border" post="true" color="#000f" border="1px" />
+      <onActive name="gradient" direction="vertical">
+        <value offset="0%" color="#eeef" />
+        <value offset="100%" color="#999f" />
+      </onActive>
+    </effect>
+  </style>
+
+  <style id="pagePanel">
+    <attributes childLayout="center" valign="center" align="center" width="100%" height="100%" />
+  </style>
+
   <style id="middlePanel">
+    <attributes childLayout="vertical" width="95%" height="92%" align="center" valign="center" />
 	  <effect>
  	    <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0" inherit="true" />
       <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" inherit="true" alternateDisable="back" />
@@ -89,6 +120,7 @@
       <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0" inherit="true" />
 	  </effect>
 	</style>
+
 	<!-- splash -->
   <screen id="start" controller="de.lessvoid.nifty.examples.tutorial.screen.Splash">
     <layer id="logo" childLayout="center">
@@ -111,15 +143,14 @@
       </panel>
     </layer>
   </screen>
+
   <!-- main page screen -->
   <screen id="mainPage" controller="de.lessvoid.nifty.examples.tutorial.screen.MainPage">
     <layer childLayout="center">
       <panel style="background">
-        <panel style="top"/>
-        <panel style="main">
-          <panel id="pp" childLayout="overlay" valign="center" align="center">
-            <control id="page_0" name="page1" />
-          </panel>
+        <panel style="top" />
+        <panel style="main" >
+          <panel id="pp" childLayout="overlay" valign="center" align="center" width="100%" height="100%" />
         </panel>
         <panel style="bottom">
           <panel style="bottomInternal">
@@ -129,6 +160,9 @@
           </panel>
         </panel>
       </panel>
+      <effect>
+         <onActive name="playSound" sound="music" post="true" repeat="true" />
+      </effect>
     </layer>
     <layer id="snow">
       <effect>
@@ -136,48 +170,60 @@
       </effect>
     </layer>
   </screen>
+
   <!-- page 1 -->
   <controlDefinition name="page1" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
-    <panel childLayout="center" valign="center" align="center">
-		  <panel childLayout="vertical" valign="center" align="center">
-		    <text style="captionFont" align="center" text="Nifty 1.0 Introduction &amp; Tutorial">
+    <panel style="pagePanel">
+		  <panel childLayout="vertical" align="center" valign="center">
+		    <text style="captionFont" textHAlign="center" align="center" text="Nifty GUI - Introduction &amp; Tutorial">
 		      <effect>
-		        <onStartScreen name="textSize" length="300" startDelay="800" factor="2" startSize="1.5" endSize="1.0"/>
-		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="300" startDelay="800"/>
-            <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0"/>
+		        <onStartScreen name="textSize" length="300" startDelay="800" factor="2" startSize="1.5" endSize="1.0" />
+		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="300" startDelay="800" />
+            <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0" />
 		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back" />
             <onEndScreen name="move" mode="out" direction="right" length="500" startDelay="0" alternateEnable="back" />
 		      </effect>
 		    </text>
-		    <text style="textFont" align="center" text="(written with Nifty 1.0)&#10;press next in the bottom right corner to continue">
+		    <text style="textFont" textHAlign="center" align="center" wrap="false" text="&#01;&#200;&#200;&#00;(written with Nifty 1.1)&#10;&#01;&#200;&#200;&#00;press next in the bottom right corner to continue">
 		      <effect>
-		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="1000" startDelay="1000"/>
-            <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0"/>
-		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back"/>
-            <onEndScreen name="move" mode="out" direction="right" length="500" startDelay="0" alternateEnable="back"/>
+		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="1000" startDelay="1000" />
+            <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0" />
+		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back" />
+            <onEndScreen name="move" mode="out" direction="right" length="500" startDelay="0" alternateEnable="back" />
 		      </effect>
 		    </text>
 		  </panel>
 		</panel>
 	</controlDefinition>
+
 	<!-- page 2 -->
   <controlDefinition name="page2" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
-    <panel childLayout="center" valign="center" align="center" width="100%" height="100%">
-	    <panel style="middlePanel" childLayout="vertical" width="95%" height="92%" align="center" valign="center">
-	      <text style="captionFont" width="100%" textHAlign="left" text="So what exactly is Nifty GUI?" />
-	      <text style="textFont" width="100%" textHAlign="left" wrap="true" text="Nifty GUI is a Java Library that supports the creation of interactive user interfaces for games or similar applications. It utilizes lwjgl for OpenGL rendering. The configuration of the GUI is stored in xml with supporting Java code.&#10;&#10;In short, Nifty layouts and displays elements on a screen and allows to interact with them.&#10;"/>
-	      <text style="captionFont" width="100%" textHAlign="left" text="And what is it not?"/>
-	      <text style="textFont" width="100%" textHAlign="left" wrap="true" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you are looking for a more traditional approach or if you need a solution with lots of windows, dialog boxes, lots of controls and so on, you might want to look somewhere else.&#10;&#10;Two great options are:&#10;&#10;- fenggui (http://www.fenggui.org/doku.php)&#10;- twl (http://twl.l33tlabs.org/)&#10;" />
-        <text style="captionFont" width="100%" textHAlign="left" text="Nifty is different"/>
-        <text style="textFont" width="100%" textHAlign="left" wrap="true" text="In contrast to those libraries Nifty is probably less standard but it provides more creative freedom and in my humble opinion generally more stuff to play with :) So take this into account when you decide if Nifty is the right tool for you.&#10;&#10;The remaining Pages will give a overview how Nifty works and how you can use it."/>
+    <panel style="pagePanel">
+	    <panel style="middlePanel">
+	      <text style="captionFont" text="So what exactly is Nifty GUI?" />
+	      <text style="textFont" text="Nifty GUI is a Java Library that supports the creation of interactive user interfaces for games or similar applications. It utilizes lwjgl for OpenGL rendering. The configuration of the GUI is stored in xml with supporting Java code.&#10;&#10;In short, Nifty layouts and displays elements on a screen and allows to interact with them.&#10;"/>
+	      <text style="captionFont" text="And what is it not?"/>
+	      <text style="textFont" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you are looking for a more traditional approach or if you need a solution with lots of windows, dialog boxes, lots of controls and so on, you might want to look somewhere else.&#10;&#10;Two great options are:&#10;&#10;- fenggui (http://www.fenggui.org/doku.php)&#10;- twl (http://twl.l33tlabs.org/)&#10;" />
+        <text style="captionFont" text="Nifty is different"/>
+        <text style="textFont" text="In contrast to those libraries Nifty is probably less standard but it provides more creative freedom and in my humble opinion generally more stuff to play with :) So take this into account when you decide if Nifty is the right tool for you.&#10;&#10;The remaining Pages will give an overview how Nifty works and how you can use it."/>
 	    </panel>
 	  </panel>
   </controlDefinition>
+
   <!-- page 3 -->
   <controlDefinition name="page3" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
-    <panel childLayout="center" valign="center" align="center" width="100%" height="100%">
-      <panel style="middlePanel" childLayout="vertical" width="95%" height="92%" align="center" valign="center">
-        <text style="captionFont" width="100%" textHAlign="left" text="WooHoo" />
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="How does it work: The Java side" />
+        <text style="textFont" text="Nifty is a jar File. So all you need is &quot;nifty.jar&quot; (and depending on what you've downloaded some supporting libraries like slick and lwjgl) in your classpath. Initializing lwjgl and setting the display mode is up to you. Nifty assumes that you've set up 2d ortho mode. You can see the examples in the nifty-examples project on how to do that.&#10;&#10;The main interface on how to use Nifty is the Nifty class that you'll need to instantiate first:&#10;"/>
+        <panel style="codeBlock">
+<!--            <text style="codeFont" text="&#1;&#69;&#69;&#193;// create nifty&#10;&#1;&#0;&#0;&#0;Nifty nifty = A&#1;&#138;&#16;&#77;B     new&#1;&#0;&#0;&#0; Nifty(&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; RenderDeviceLwjgl(),&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; SoundSystem(&#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; SlickSoundDevice()),&#10;    LwjglInitHelper.getInputSystem(),&#10;    &#1;&#138;&#16;&#77;new &#1;&#0;&#0;&#0; TimeProvider());" /> -->
+          <text style="codeFont" text="A&#1;&#138;&#16;&#77;B" />
+        </panel>
+        <text style="textFont" text="&#10;It is important that you initialize the lwjgl display mode before you call nifty, because the loader uses the dimension&#10;of the current lwjgl display mode for initialisation.&#10;&#10;All what is left to do now, is to call the render method of nifty in your render loop:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="// render nifty&#10;while (!done) {&#10;  if (nifty.render()) {&#10;    // nifty has reached the end point ... stop the rendering loop or change state&#10;  }&#10;  // ... &#10;}"/>
+        </panel>
       </panel>
     </panel>
   </controlDefinition>
