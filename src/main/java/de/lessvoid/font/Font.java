@@ -176,20 +176,20 @@ public class Font {
    */
   public void drawString( int x, int y, String text ) {
     enableBlend();
-    internalRenderText( x, y, text, 1.0f, false );
+    internalRenderText(x, y, text, 1.0f, false, 1.0f);
     disableBlend();
   }
 
   public void drawStringWithSize( int x, int y, String text, float size ) {
     enableBlend();
-    internalRenderText( x, y, text, size, false );
+    internalRenderText(x, y, text, size, false, 1.0f);
     disableBlend();
   }
 
   public void renderWithSizeAndColor( int x, int y, String text, float size, float r, float g, float b, float a ) {
     enableBlend();
-    GL11.glColor4f( r, g, b, a );
-    internalRenderText( x, y, text, size, false );
+    GL11.glColor4f(r, g, b, a);
+    internalRenderText( x, y, text, size, false, a);
     disableBlend();
   }
   
@@ -199,13 +199,15 @@ public class Font {
    * @param text text
    * @param size size
    * @param useAlphaTexture use alpha
+   * @param a 
    */
   private void internalRenderText(
       final int xPos,
       final int yPos,
       final String text,
       final float size,
-      final boolean useAlphaTexture) {
+      final boolean useAlphaTexture,
+      final float alpha) {
     GL11.glMatrixMode(GL11.GL_MODELVIEW);
       GL11.glPushMatrix();
       GL11.glLoadIdentity();
@@ -219,26 +221,30 @@ public class Font {
       int activeTextureIdx = -1;
       boolean parseColor = false;
       int parseColorIdx = 0;
-      byte [] color = new byte[3];
-      color[0] = (byte) 0xFF;
-      color[1] = (byte) 0xFF;
-      color[2] = (byte) 0xFF;
+      float [] color = new float[3];
+      color[0] = 1.0f;
+      color[1] = 1.0f;
+      color[2] = 1.0f;
 
+      System.out.println("text: " + text);
       for (int i = 0; i < text.length(); i++) {
         char currentc = text.charAt(i);
+        System.out.println("char: " + (int)currentc);
         if (isColorBegin(currentc)) {
           parseColor = true;
           parseColorIdx = 0;
           continue;
         }
         if (parseColor) {
-          color[parseColorIdx] = (byte) currentc;
+          color[parseColorIdx] = (float)(currentc) / 255.0f;
           parseColorIdx++;
           if (parseColorIdx < 3) {
             continue;
           }
           parseColor = false;
-          GL11.glColor3ub(color[0], color[1], color[2]);        }
+          GL11.glColor4f(color[0], color[1], color[2], alpha);
+          continue;
+        }
 
         char nextc = FontHelper.getNextCharacter(text, i);
 
