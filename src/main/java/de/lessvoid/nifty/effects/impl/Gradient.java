@@ -36,35 +36,37 @@ public class Gradient implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    if (horizontal) {
-      for (int i=1; i<entries.size(); i++) {
-        Entry entry1 = entries.get(i-1);
-        Entry entry2 = entries.get(i);
-        r.renderQuad(
-            (int)Math.round(element.getX() + entry1.offset.getValue(element.getWidth())),
-            element.getY(),
-            (int)Math.round(entry2.offset.getValue(element.getWidth()) - entry1.offset.getValue(element.getWidth())),
-            element.getHeight(),
-            entry1.color,
-            entry2.color,
-            entry2.color,
-            entry1.color);
-      }
-    } else {
-      for (int i=1; i<entries.size(); i++) {
-        Entry entry1 = entries.get(i-1);
-        Entry entry2 = entries.get(i);
-        int yStart = (int)Math.round(element.getY() + entry1.offset.getValue(element.getHeight()));
-        int yEnd = (int)Math.round(element.getY() + entry2.offset.getValue(element.getHeight()));
-        r.renderQuad(
-            element.getX(),
-            yStart,
-            element.getWidth(),
-            yEnd - yStart,
-            entry1.color,
-            entry1.color,
-            entry2.color,
-            entry2.color);
+    if (normalizedTime > 0.0f) {
+      if (horizontal) {
+        for (int i=1; i<entries.size(); i++) {
+          Entry entry1 = entries.get(i-1);
+          Entry entry2 = entries.get(i);
+          r.renderQuad(
+              (int)Math.round(element.getX() + entry1.offset.getValue(element.getWidth())),
+              element.getY(),
+              (int)Math.round(entry2.offset.getValue(element.getWidth()) - entry1.offset.getValue(element.getWidth())),
+              element.getHeight(),
+              entry1.color,
+              entry2.color,
+              entry2.color,
+              entry1.color);
+        }
+      } else {
+        for (int i=1; i<entries.size(); i++) {
+          Entry entry1 = entries.get(i-1);
+          Entry entry2 = entries.get(i);
+          int yStart = (int)Math.round(element.getY() + entry1.offset.getValue(element.getHeight()));
+          int yEnd = (int)Math.round(element.getY() + entry2.offset.getValue(element.getHeight()));
+          r.renderQuad(
+              element.getX(),
+              yStart,
+              element.getWidth(),
+              yEnd - yStart,
+              entry1.color,
+              entry1.color,
+              entry2.color,
+              entry2.color);
+        }
       }
     }
   }
