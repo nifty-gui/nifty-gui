@@ -2,7 +2,6 @@ package de.lessvoid.font;
 
 import java.util.logging.Logger;
 
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.elements.tools.FontHelper;
@@ -226,10 +225,8 @@ public class Font {
       color[1] = 1.0f;
       color[2] = 1.0f;
 
-      System.out.println("text: " + text);
       for (int i = 0; i < text.length(); i++) {
         char currentc = text.charAt(i);
-        System.out.println("char: " + (int)currentc);
         if (isColorBegin(currentc)) {
           parseColor = true;
           parseColorIdx = 0;
