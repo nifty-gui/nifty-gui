@@ -8,6 +8,7 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
+import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  * Play a sound.
@@ -16,11 +17,13 @@ import de.lessvoid.nifty.spi.sound.SoundHandle;
 public class PlaySound implements EffectImpl {
   private boolean done;
   private boolean repeat;
+  private SizeValue volume;
   private SoundHandle soundHandle;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     soundHandle = nifty.getSoundSystem().getSound(parameter.getProperty("sound"));
     repeat = Boolean.valueOf(parameter.getProperty("repeat", "false"));
+    volume = new SizeValue(parameter.getProperty("volume", "100%"));
     done = false;
   }
 
@@ -32,18 +35,23 @@ public class PlaySound implements EffectImpl {
     if (normalizedTime > 0.0f) {
       if (soundHandle != null) {
         if (!done) {
-          soundHandle.play();
+          playSound();
           done = true;
         } else {
           // in repeat mode, when the sound is not playing anymore we'll simply start it again
           if (repeat) {
             if (!soundHandle.isPlaying()) {
-              soundHandle.play();
+              playSound();
             }
           }
         }
       }
     }
+  }
+
+  private void playSound() {
+    soundHandle.play();
+    soundHandle.setVolume(volume.getValue(1.0f));
   }
 
   public void deactivate() {
