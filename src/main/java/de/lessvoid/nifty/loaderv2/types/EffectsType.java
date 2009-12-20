@@ -233,9 +233,7 @@ public class EffectsType extends XmlBaseType {
     applyEffectCollection(onHide, effects.onHide);
   }
 
-  void applyEffectCollection(
-      final Collection < EffectType > src,
-      final Collection < EffectType > dst) {
+  void applyEffectCollection(final Collection < EffectType > src, final Collection < EffectType > dst) {
     for (EffectType effectType : src) {
       dst.add(effectType);
     }
