@@ -11,98 +11,66 @@ import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
 
 public class HorizontalLayoutTest extends TestCase {
-  
-  private HorizontalLayout layout= new HorizontalLayout();
+  private HorizontalLayout layout = new HorizontalLayout();
   private LayoutPart rootPanel;
-  private List<LayoutPart> elements;
+  private List <LayoutPart> elements;
   private LayoutPart left;
   private LayoutPart right;
   
   protected void setUp() throws Exception {
-    Box box = new Box( 0, 0, 640, 480 );
-    BoxConstraints boxConstraint = new BoxConstraints();
-    rootPanel= new LayoutPart( box, boxConstraint );
+    rootPanel= new LayoutPart(new Box(0, 0, 640, 480), new BoxConstraints());
+    left = new LayoutPart(new Box(), new BoxConstraints());
+    right = new LayoutPart(new Box(), new BoxConstraints());
 
-    box = new Box();
-    boxConstraint = new BoxConstraints();
-    left= new LayoutPart( box, boxConstraint );
-
-    box = new Box();
-    boxConstraint = new BoxConstraints();
-    right= new LayoutPart( box, boxConstraint );
-
-    elements= new ArrayList<LayoutPart>();
-    elements.add( left );
-    elements.add( right );
+    elements = new ArrayList <LayoutPart>();
+    elements.add(left);
+    elements.add(right);
   }
 
   public void testUpdateEmpty() throws Exception {
-    layout.layoutElements( null, null );
+    layout.layoutElements(null, null);
   }
 
   public void testUpdateWithNullEntriesMakeNoTrouble() {
-    layout.layoutElements( rootPanel, null );
+    layout.layoutElements(rootPanel, null);
   }
 
   public void testLayoutDefault() {
-    layout.layoutElements( rootPanel, elements );
-    
-    assertEquals( 0, left.getBox().getX() );
-    assertEquals( 0, left.getBox().getY() );
-    assertEquals( 320, left.getBox().getWidth() );
-    assertEquals( 480, left.getBox().getHeight() );
+    layout.layoutElements(rootPanel, elements);
 
-    assertEquals( 320, right.getBox().getX() );
-    assertEquals( 0, right.getBox().getY() );
-    assertEquals( 320, right.getBox().getWidth() );
-    assertEquals( 480, right.getBox().getHeight() );
+    assertBox(left.getBox(), 0, 0, 320, 480);
+    assertBox(right.getBox(), 320, 0, 320, 480);
   }
 
   public void testLayoutFixedHeight() {
     left.getBoxConstraints().setHeight( new SizeValue( "20px" ));
     layout.layoutElements( rootPanel, elements );
-    
-    assertEquals( 0, left.getBox().getX() );
-    assertEquals( 0, left.getBox().getY() );
-    assertEquals( 320, left.getBox().getWidth() );
-    assertEquals( 20, left.getBox().getHeight() );
 
-    assertEquals( 320, right.getBox().getX() );
-    assertEquals( 0, right.getBox().getY() );
-    assertEquals( 320, right.getBox().getWidth() );
-    assertEquals( 480, right.getBox().getHeight() );
+    assertBox(left.getBox(), 0, 0, 320, 20);
+    assertBox(right.getBox(), 320, 0, 320, 480);
   }
 
   public void testLayoutFixedWidth() {
     left.getBoxConstraints().setWidth( new SizeValue( "20px" ));
     layout.layoutElements( rootPanel, elements );
-    
-    assertEquals( 0, left.getBox().getX() );
-    assertEquals( 0, left.getBox().getY() );
-    assertEquals( 20, left.getBox().getWidth() );
-    assertEquals( 480, left.getBox().getHeight() );
+
+    assertBox(left.getBox(), 0, 0, 20, 480);
   }
 
   public void testLayoutFixedWidthTopAlign() {
     left.getBoxConstraints().setWidth( new SizeValue( "20px" ));
     left.getBoxConstraints().setVerticalAlign(VerticalAlign.top);
     layout.layoutElements( rootPanel, elements );
-    
-    assertEquals( 0, left.getBox().getX() );
-    assertEquals( 0, left.getBox().getY() );
-    assertEquals( 20, left.getBox().getWidth() );
-    assertEquals( 480, left.getBox().getHeight() );
+
+    assertBox(left.getBox(), 0, 0, 20, 480);
   }
 
   public void testLayoutFixedHeightCenterAlign() {
     left.getBoxConstraints().setHeight( new SizeValue( "20px" ));
     left.getBoxConstraints().setVerticalAlign(VerticalAlign.center);
     layout.layoutElements( rootPanel, elements );
-    
-    assertEquals( 0, left.getBox().getX() );
-    assertEquals( 230, left.getBox().getY() );
-    assertEquals( 320, left.getBox().getWidth() );
-    assertEquals( 20, left.getBox().getHeight() );
+
+    assertBox(left.getBox(), 0, 230, 320, 20);
   }
 
   public void testLayoutWithPercentage() throws Exception {
@@ -110,12 +78,9 @@ public class HorizontalLayoutTest extends TestCase {
     right.getBoxConstraints().setWidth( new SizeValue( "75%" ));
 
     layout.layoutElements( rootPanel, elements );
-    
-    assertEquals( 0, left.getBox().getX() );
-    assertEquals( 160, left.getBox().getWidth() );
 
-    assertEquals( 160, right.getBox().getX() );
-    assertEquals( 480, right.getBox().getWidth() );
+    assertBox(left.getBox(), 0, 0, 160, 480);
+    assertBox(right.getBox(), 160, 0, 480, 480);
   }
 
   public void testLayoutWithMixedFixedAndPercentage() throws Exception {
@@ -123,12 +88,23 @@ public class HorizontalLayoutTest extends TestCase {
     right.getBoxConstraints().setWidth( new SizeValue( "*" ));
 
     layout.layoutElements( rootPanel, elements );
-    
-    assertEquals( 0, left.getBox().getX() );
-    assertEquals( 40, left.getBox().getWidth() );
 
-    assertEquals( 40, right.getBox().getX() );
-    assertEquals( 600, right.getBox().getWidth() );
+    assertBox(left.getBox(), 0, 0, 40, 480);
+    assertBox(right.getBox(), 40, 0, 600, 480);
   }
 
+  public void testLayoutDefaultWithAllEqualPadding() {
+    rootPanel.getBoxConstraints().setPadding(new SizeValue("10px"));
+    layout.layoutElements(rootPanel, elements);
+
+    assertBox(left.getBox(), 10, 10, 310, 460);
+    assertBox(right.getBox(), 320, 10, 310, 460);
+  }
+
+  private void assertBox(final Box box, final int x, final int y, final int width, final int height) {
+    assertEquals(x, box.getX());
+    assertEquals(y, box.getY());
+    assertEquals(width, box.getWidth());
+    assertEquals(height, box.getHeight());
+  }
 }
