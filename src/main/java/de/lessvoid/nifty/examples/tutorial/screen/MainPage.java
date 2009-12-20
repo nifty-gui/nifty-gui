@@ -12,6 +12,7 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class MainPage implements ScreenController {
   private Nifty nifty;
   private Screen screen;
+  private boolean mute = false;
 
   private ArrayList <String> pages = new ArrayList <String> ();
   private int pageIndex = 0;
@@ -24,6 +25,7 @@ public class MainPage implements ScreenController {
     pages.add("page1");
     pages.add("page2");
     pages.add("page3");
+    pages.add("page4");
 
     pageIndex = 0;
     lastPageIndex = -1;
@@ -54,6 +56,10 @@ public class MainPage implements ScreenController {
 
     nifty.setAlternateKey(null);
     updatePage();
+  }
+
+  public void toggleMute() {
+    screen.findElementByName("muteButton").setStyle("muteButtonSoundOff");
   }
 
   private void updatePage() {

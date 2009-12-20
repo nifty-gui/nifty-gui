@@ -73,11 +73,14 @@ public class LwjglInitHelper {
    * @return true on success and false otherwise
    */
   private static boolean initGraphics(final String title) {
+    int width = 1024;
+    int height = 768;
     try {
       DisplayMode currentMode = Display.getDisplayMode();
-      log.fine(
-          "currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", "
-          + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
+      log.fine("currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", " + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
+
+      width = currentMode.getWidth();
+      height = currentMode.getHeight();
 
       //  get available modes, and print out
       DisplayMode[] modes = Display.getAvailableDisplayModes();
@@ -131,7 +134,8 @@ public class LwjglInitHelper {
         }
       }
 
-      int x = 0, y = 0;
+      int x = (width - Display.getDisplayMode().getWidth()) / 2;
+      int y = (height - Display.getDisplayMode().getHeight()) / 2;
       Display.setLocation(x, y);
 
       // Create the actual window

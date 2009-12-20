@@ -66,7 +66,7 @@ public class SnowEffect implements EffectImpl {
     }
 
     private int getNewSpeed() {
-      return random.nextInt(5000) + 10000;
+      return random.nextInt(5000) + 8000;
     }
 
     private void initPosition(final long currentTime) {

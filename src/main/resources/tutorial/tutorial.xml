@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty>
-  <registerSound id="select" filename="tutorial/select.wav" />
-  <registerSound id="intro" filename="tutorial/intro.wav" />
-  <registerSound id="hover" filename="tutorial/hover.wav" />
-  <registerMusic id="music" filename="tutorial/echoed_-_L.O.R.D..ogg" />
+  <registerSound id="select" filename="tutorial/sound/select.wav" />
+  <registerSound id="intro" filename="tutorial/sound/intro.wav" />
+  <registerSound id="hover" filename="tutorial/sound/hover.wav" />
+  <registerMusic id="music" filename="tutorial/sound/echoed_-_L.O.R.D..ogg" />
   <registerEffect name="snowEffect" class="de.lessvoid.nifty.examples.tutorial.SnowEffect" />
 
   <!-- background style -->
@@ -27,7 +27,7 @@
 
   <!-- top style -->
   <style id="top">
-    <attributes width="100%" height="14%"/>
+    <attributes width="100%" height="14%" childLayout="center" align="center" valign="center"/>
     <effect>
       <onStartScreen name="move" mode="in" direction="right" length="750" startDelay="1000" inherit="true" post="true" />
       <onActive name="gradient" direction="vertical" post="true">
@@ -35,6 +35,10 @@
         <value offset="100%" color="#ffff" />
       </onActive>
     </effect>
+  </style>
+
+  <style id="topInternal">
+    <attributes width="95%" height="100%" childLayout="horizontal" align="center" valign="center" />
   </style>
 
   <!-- main style -->
@@ -59,45 +63,71 @@
   </style>
 
   <style id="backButton">
-    <attributes filename="tutorial/back.png" align="left" valign="center" visibleToMouse="true" visible="false" />
+    <attributes filename="tutorial/buttons/back.png" align="left" valign="center" visibleToMouse="true" visible="false" />
     <interact onClick="back()" />
     <effect>
       <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="2000"/>
-      <onClick name="imageOverlay" post="true" filename="tutorial/back-click.png"/>
-      <onHover name="imageOverlay" post="true" filename="tutorial/back-hover.png">
-        <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="228px" hoverHeight="228px"/>
+      <onClick name="imageOverlay" post="true" filename="tutorial/buttons/back-click.png"/>
+      <onHover name="imageOverlay" post="true" filename="tutorial/buttons/back-hover.png">
+        <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%"/>
       </onHover> 
       <onClick name="playSound" sound="select" />
     </effect>
   </style>
 
   <style id="nextButton">
-    <attributes filename="tutorial/next.png" align="right" valign="center" visibleToMouse="true" />
+    <attributes filename="tutorial/buttons/next.png" align="right" valign="center" visibleToMouse="true" />
     <interact onClick="next()" />
     <effect>
       <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="2000"/>
-      <onClick name="imageOverlay" post="true" filename="tutorial/next-click.png"/>
-      <onHover name="imageOverlay" post="true" filename="tutorial/next-hover.png">
-        <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="228px" hoverHeight="228px"/>
+      <onClick name="imageOverlay" post="true" filename="tutorial/buttons/next-click.png"/>
+      <onHover name="imageOverlay" post="true" filename="tutorial/buttons/next-hover.png">
+        <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%"/>
       </onHover> 
       <onClick name="playSound" sound="select" />
     </effect>
   </style>
 
+  <style id="muteButtonSoundOn">
+    <attributes filename="tutorial/buttons/mute-off.png" align="right" valign="center" visibleToMouse="true" />
+    <interact onClick="toggleMute()" />
+    <effect>
+      <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="2000"/>
+      <onHover name="imageOverlay" post="true" filename="tutorial/buttons/mute-hover.png">
+        <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%"/>
+      </onHover> 
+      <onClick name="imageOverlay" post="true" filename="tutorial/buttons/mute-off-click.png"/>
+      <onClick name="playSound" sound="select" />
+    </effect>
+  </style>
+
+  <style id="muteButtonSoundOff">
+    <attributes filename="tutorial/buttons/mute-on.png" align="right" valign="center" visibleToMouse="true" />
+    <interact onClick="toggleMute()" />
+    <effect>
+      <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="2000"/>
+      <onHover name="imageOverlay" post="true" filename="tutorial/buttons/mute-hover.png">
+        <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%"/>
+      </onHover> 
+      <onClick name="imageOverlay" post="true" filename="tutorial/buttons/mute-on-click.png"/>
+      <onClick name="playSound" sound="select" />
+    </effect>
+  </style>
+
   <style id="captionFont">
-    <attributes font="tutorial/caption.fnt" width="100%" textHAlign="left" />
+    <attributes font="tutorial/fonts/caption.fnt" width="100%" textHAlign="left" />
   </style>
 
   <style id="textFont">
-    <attributes font="tutorial/text.fnt" width="100%" textHAlign="left" wrap="true" />
+    <attributes font="tutorial/fonts/text.fnt" width="100%" textHAlign="left" wrap="true" />
   </style>
 
   <style id="codeFont">
-    <attributes font="tutorial/code.fnt" width="100%" textHAlign="left" />
+    <attributes font="tutorial/fonts/code.fnt" width="100%" textHAlign="left" />
   </style>
 
   <style id="codeBlock">
-    <attributes childLayout="vertical" padding="5px" />
+    <attributes childLayout="vertical" padding="8px" />
     <effect>
       <onActive name="border" post="true" color="#000f" border="1px" />
       <onActive name="gradient" direction="vertical">
@@ -148,7 +178,14 @@
   <screen id="mainPage" controller="de.lessvoid.nifty.examples.tutorial.screen.MainPage">
     <layer childLayout="center">
       <panel style="background">
-        <panel style="top" />
+        <panel style="top">
+          <panel style="topInternal">
+            <panel width="*" />
+            <image id="nextButton2" style="nextButton" />
+            <panel width="8px" />
+            <image id="muteButton" style="muteButtonSoundOn" />
+          </panel>
+        </panel>
         <panel style="main" >
           <panel id="pp" childLayout="overlay" valign="center" align="center" width="100%" height="100%" />
         </panel>
@@ -161,7 +198,7 @@
         </panel>
       </panel>
       <effect>
-         <onActive name="playSound" sound="music" post="true" repeat="true" />
+         <onActive name="playSound" sound="music" post="true" repeat="true" volume="25%" />
       </effect>
     </layer>
     <layer id="snow">
@@ -175,7 +212,7 @@
   <controlDefinition name="page1" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
     <panel style="pagePanel">
 		  <panel childLayout="vertical" align="center" valign="center">
-		    <text style="captionFont" textHAlign="center" align="center" text="Nifty GUI - Introduction &amp; Tutorial">
+		    <text style="captionFont" textHAlign="center" align="center" text="Nifty GUI, Introduction &amp; Tutorial">
 		      <effect>
 		        <onStartScreen name="textSize" length="300" startDelay="800" factor="2" startSize="1.5" endSize="1.0" />
 		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="300" startDelay="800" />
@@ -215,53 +252,32 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="How does it work: The Java side" />
-        <text style="textFont" text="Nifty is a jar File. So all you need is &quot;nifty.jar&quot; (and depending on what you've downloaded some supporting libraries like slick and lwjgl) in your classpath. Initializing lwjgl and setting the display mode is up to you. Nifty assumes that you've set up 2d ortho mode. You can see the examples in the nifty-examples project on how to do that.&#10;&#10;The main interface on how to use Nifty is the Nifty class that you'll need to instantiate first:&#10;"/>
+        <text style="textFont" text="Nifty is a jar File. So all you need is &quot;nifty.jar&quot; (and depending on what you've downloaded libraries like slick and lwjgl) in your classpath. Initializing lwjgl and setting the display mode is up to you. Nifty assumes that you've set up 2d ortho mode. You can see the examples in the nifty-examples project on how to do that.&#10;&#10;To work with Nifty you'll need to instantiate Nifty first:&#10;"/>
         <panel style="codeBlock">
-<!--            <text style="codeFont" text="&#1;&#69;&#69;&#193;// create nifty&#10;&#1;&#0;&#0;&#0;Nifty nifty = A&#1;&#138;&#16;&#77;B     new&#1;&#0;&#0;&#0; Nifty(&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; RenderDeviceLwjgl(),&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; SoundSystem(&#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; SlickSoundDevice()),&#10;    LwjglInitHelper.getInputSystem(),&#10;    &#1;&#138;&#16;&#77;new &#1;&#0;&#0;&#0; TimeProvider());" /> -->
-          <text style="codeFont" text="A&#1;&#138;&#16;&#77;B" />
+          <text style="codeFont" text="&#1;&#69;&#69;&#193;// create nifty&#10;&#1;&#0;&#0;&#0;Nifty nifty = &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; Nifty(&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; RenderDeviceLwjgl(),&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; SoundSystem(&#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; SlickSoundDevice()),&#10;&#1;&#0;&#0;&#0;    LwjglInitHelper.getInputSystem(),&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; TimeProvider());" />
         </panel>
-        <text style="textFont" text="&#10;It is important that you initialize the lwjgl display mode before you call nifty, because the loader uses the dimension&#10;of the current lwjgl display mode for initialisation.&#10;&#10;All what is left to do now, is to call the render method of nifty in your render loop:&#10;"/>
-        <panel style="codeBlock">
-          <text style="codeFont" text="// render nifty&#10;while (!done) {&#10;  if (nifty.render()) {&#10;    // nifty has reached the end point ... stop the rendering loop or change state&#10;  }&#10;  // ... &#10;}"/>
-        </panel>
+        <text style="textFont" text="&#10;The Nifty class constructor requires a couple of Subsystem-Implementations for Rendering, Input, Sound and so on. The current Implementations use lwjgl but that might change in the future or it can be changed by yourself to integrate Nifty with other systems.&#10;"/>
+        <text style="textFont" text="At the moment it is important that you initialize lwjgl and the lwjgl display mode you want to use before you call Nifty. The loader already uses the dimension of the current display mode for initialisation.&#10;&#10;And now that you've set up Nifty you can call it's render method in your render loop."/>
       </panel>
     </panel>
   </controlDefinition>
 
-<!--  
+  <!-- page 4 -->
+  <controlDefinition name="page4" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="How does it work: The Java side, Render Loop" />
+        <text style="textFont" text="For easy integration with your existing lwjgl code, Nifty assumes that you're handling the lwjgl render loop on your own (calling Display.update() for instance). So all you need to do is call nifty.render() at the appropriate time in the render loop. Example:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="&#1;&#69;&#69;&#193;// render nifty&#10;&#1;&#0;&#0;&#0;&#1;&#138;&#16;&#77;while&#1;&#0;&#0;&#0; (!done) {&#10;    &#1;&#138;&#16;&#77;if&#1;&#0;&#0;&#0; (nifty.render()) {&#10;        &#1;&#69;&#69;&#193;// nifty has reached the end point, stop the rendering loop, change state or do whatever should happen now =)&#10;    &#1;&#0;&#0;&#0;}&#10;    &#1;&#69;&#69;&#193;// render other stuff, call Display.update() and so on&#10;&#1;&#0;&#0;&#0;}"/>
+        </panel>
+        <text style="textFont" text="&#10;The standard way to define GUIs with Nifty is to store them in xml files and load them from Java. It is now possible to create GUI elements on the fly in Java too but this process is covered later in this tutorial. To load a xml file you can use one of the fromXml() Methods the Nifty instance provides:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="&#1;&#138;&#16;&#77;public void&#1;&#0;&#0;&#0; fromXml(String filename, String startScreen)&#10;&#1;&#138;&#16;&#77;public void&#1;&#0;&#0;&#0; fromXml(String fileId, InputStream input, String startScreen)" />
+        </panel>
+        <text style="textFont" text="&#10;This should be self explaining: The first method loads a nifty xml file from a file and the second from an inputStream. The parameter startScreen is the so called screenId of the Nifty screen and tells nifty with which screen the GUI should start. The fileId parameter in the second method is used to identify the loaded xml file in case Nifty needs to decide if a given file has already been loaded. In the first method the filename is used for this purpose.&#10;&#10;And now that you know how to load xml files we'll continue on the next page and show how to actually write Nifty XML!" /> 
+      </panel>
+    </panel>
+  </controlDefinition>
 
-http://www.fenggui.org/doku.php
-http://twl.l33tlabs.org/
-  <screen id="introduction" controller="de.lessvoid.nifty.examples.tutorial.screen.Introduction">
-    <layer childLayout="center">
-      <panel style="background">
-        <panel style="top"/>
-        <panel style="main">
-        </panel>
-        <panel style="bottom">
-          <image style="nextButton" />
-        </panel>
-      </panel>
-    </layer>
-  </screen>
-
-      <panel height="106px" layout="center">
-      </panel>
-      <panel height="556px" layout="center">
-        <panel layout="vertical">
-          <panel height="46px" layout="center"/>
-          <panel layout="vertical">
-          </panel>
-          <panel height="64px" layout="horizontal">
-            <image filename="tutorial/back.tga" align="left" onClick="back" onClickAlternate="back" effectGroup="backButtonHover"/>
-            <panel/>
-            <image id="intro-next" filename="tutorial/next.tga" align="right" onClick="next" effectGroup="nextButtonHover"/>
-          </panel>
-        </panel>
-      </panel>
-      <panel height="106px" layout="center">
-      </panel>
-    </layer>
-  </screen>
-  -->
 </nifty>
