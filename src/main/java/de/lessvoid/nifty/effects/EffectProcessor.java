@@ -375,4 +375,9 @@ public class EffectProcessor {
   public Falloff getFalloff() {
     return hoverFalloff;
   }
+
+  public void removeAllEffects() {
+    allEffects.clear();
+    activeEffects.clear();
+  }
 }

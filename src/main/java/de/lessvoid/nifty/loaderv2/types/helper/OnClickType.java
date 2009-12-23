@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.loaderv2.types.helper;
 
-import de.lessvoid.xml.tools.MethodInvoker;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyMethodInvoker;
 
 public class OnClickType {
   private String value;
@@ -17,7 +18,7 @@ public class OnClickType {
     return value.matches("\\w+\\((|\\w+(,\\s*\\w+)*)\\)");
   }
 
-  public MethodInvoker getMethod(final Object ... controlController) {
-    return new MethodInvoker(value, controlController);
+  public NiftyMethodInvoker getMethod(final Nifty nifty, final Object ... controlController) {
+    return new NiftyMethodInvoker(nifty, value, controlController);
   }
 }

@@ -84,7 +84,7 @@ public class Effect {
     parameter = parameterParam;
     parameter.put("effectEventId", effectEventId);
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
-    effectEvents.init(controllers, parameter);
+    effectEvents.init(nifty, controllers, parameter);
   }
 
   /**

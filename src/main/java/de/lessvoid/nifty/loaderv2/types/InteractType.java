@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.loaderv2.types;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.helper.OnClickType;
 import de.lessvoid.nifty.tools.StringHelper;
-import de.lessvoid.xml.tools.MethodInvoker;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class InteractType extends XmlBaseType {
@@ -30,31 +30,31 @@ public class InteractType extends XmlBaseType {
       final Object ... controller) {
     OnClickType onClick = getOnClickType("onClick");
     if (onClick != null) {
-      MethodInvoker onClickMethod = onClick.getMethod(controller);
+      NiftyMethodInvoker onClickMethod = onClick.getMethod(nifty, controller);
       element.setOnClickMethod(onClickMethod, false);
       element.setVisibleToMouseEvents(true);
     }
     OnClickType onRelease = getOnClickType("onRelease");
     if (onRelease != null) {
-      MethodInvoker onReleaseMethod = onRelease.getMethod(controller);
+      NiftyMethodInvoker onReleaseMethod = onRelease.getMethod(nifty, controller);
       element.setOnReleaseMethod(onReleaseMethod);
       element.setVisibleToMouseEvents(true);
     }
     OnClickType onMouseOver = getOnClickType("onMouseOver");
     if (onMouseOver != null) {
-      MethodInvoker onClickMethod = onMouseOver.getMethod(controller);
+      NiftyMethodInvoker onClickMethod = onMouseOver.getMethod(nifty, controller);
       element.setOnMouseOverMethod(onClickMethod);
       element.setVisibleToMouseEvents(true);
     }
     OnClickType onClickRepeat = getOnClickType("onClickRepeat");
     if (onClickRepeat != null) {
-      MethodInvoker onClickRepeatMethod = onClickRepeat.getMethod(controller);
+      NiftyMethodInvoker onClickRepeatMethod = onClickRepeat.getMethod(nifty, controller);
       element.setOnClickMethod(onClickRepeatMethod, true);
       element.setVisibleToMouseEvents(true);
     }
     OnClickType onClickMouseMove = getOnClickType("onClickMouseMove");
     if (onClickMouseMove != null) {
-      MethodInvoker onClickMouseMoveMethod = onClickMouseMove.getMethod(controller);
+      NiftyMethodInvoker onClickMouseMoveMethod = onClickMouseMove.getMethod(nifty, controller);
       element.setOnClickMouseMoveMethod(onClickMouseMoveMethod);
       element.setVisibleToMouseEvents(true);
     }
@@ -72,8 +72,8 @@ public class InteractType extends XmlBaseType {
     return new OnClickType(onClick);
   }
 
-  public void apply(final InteractType interact) {
-    interact.getAttributes().merge(getAttributes());
+  public void apply(final InteractType interact, final String styleId) {
+    interact.getAttributes().mergeAndTag(getAttributes(), styleId);
   }
 
   public void resolveParameters(final Attributes src) {

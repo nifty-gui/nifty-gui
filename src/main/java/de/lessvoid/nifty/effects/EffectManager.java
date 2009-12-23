@@ -237,4 +237,10 @@ public class EffectManager {
   public Falloff getFalloff() {
     return effectProcessor.get(EffectEventId.onHover).getFalloff();
   }
+
+  public void removeAllEffects() {
+    for (EffectProcessor processor : effectProcessor.values()) {
+      processor.removeAllEffects();
+    }
+  }
 }

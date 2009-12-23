@@ -21,6 +21,7 @@ public class EffectType extends XmlBaseType {
   private static final boolean DEFAULT_OVERLAY = false;
 
   private ArrayList < EffectValueType > effectValues = new ArrayList < EffectValueType > ();
+  private String styleId;
 
   public EffectType() {
   }
@@ -160,5 +161,13 @@ public class EffectType extends XmlBaseType {
         effectProperties.setProperty("length", String.valueOf((long)interpolator.getMaxX()));
       }
     }
+  }
+
+  public void setStyleId(final String styleId) {
+    this.styleId = styleId;
+  }
+
+  public String getStyleId() {
+    return styleId;
   }
 }

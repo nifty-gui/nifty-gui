@@ -69,6 +69,7 @@ public class Nifty {
   private InputSystem inputSystem;
   private boolean gotoScreenInProgess;
   private String alternateKey;
+  private Collection < DelayedMethodInvoke > delayedMethodInvokes = new ArrayList < DelayedMethodInvoke > (); 
 
   /**
    * Create nifty for the given RenderDevice and TimeProvider.
@@ -186,6 +187,7 @@ public class Nifty {
   }
 
   private void handleDynamicElements() {
+    invokeMethods();
     removePopUps();
     removeLayerElements();
     addControls();
@@ -854,5 +856,39 @@ public class Nifty {
 
   public String getAlternateKey() {
     return alternateKey;
+  }
+
+  public void delayedMethodInvoke(final NiftyDelayedMethodInvoke method, final Object[] params) {
+    delayedMethodInvokes.add(new DelayedMethodInvoke(method, params));
+  }
+
+  public void invokeMethods() {
+    // make working copy in case a method invoke will create addtional method calls
+    Collection < DelayedMethodInvoke > workingCopy = new ArrayList < DelayedMethodInvoke > (delayedMethodInvokes);
+
+    // clean current List
+    delayedMethodInvokes.clear();
+
+    // process the working copy
+    for (DelayedMethodInvoke method : workingCopy) {
+      method.perform();
+    }
+
+    // the delayedMethodInvokes list is empty now or it has new entries that resulted from method.perform calls
+    // in that case these methods will be processed next frame
+  }
+
+  private class DelayedMethodInvoke {
+    private NiftyDelayedMethodInvoke method;
+    private Object[] params;
+
+    public DelayedMethodInvoke(final NiftyDelayedMethodInvoke method, final Object[] params) {
+      this.method = method;
+      this.params = params;
+    }
+
+    public void perform() {
+      method.performInvoke(params);
+    }
   }
 }

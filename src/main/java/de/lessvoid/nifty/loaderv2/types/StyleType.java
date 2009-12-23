@@ -42,9 +42,7 @@ public class StyleType extends XmlBaseType {
     return getAttributes().get("base");
   }
 
-  public void applyTo(
-      final ElementType elementType,
-      final StyleResolver styleResolver) {
+  public void applyTo(final ElementType elementType, final StyleResolver styleResolver) {
     applyToBaseStyleInternal(styleResolver, elementType);
     applyToInternal(elementType);
   }
@@ -54,16 +52,14 @@ public class StyleType extends XmlBaseType {
       attributesType.apply(elementType.getAttributes(), getStyleId());
     }
     if (effectsType != null) {
-      effectsType.apply(elementType.getEffects());
+      effectsType.apply(elementType.getEffects(), getStyleId());
     }
     if (interactType != null) {
-      interactType.apply(elementType.getInteract());
+      interactType.apply(elementType.getInteract(), getStyleId());
     }
   }
 
-  void applyToBaseStyleInternal(
-      final StyleResolver styleResolver,
-      final ElementType elementType) {
+  void applyToBaseStyleInternal(final StyleResolver styleResolver, final ElementType elementType) {
     StyleType baseStyle = styleResolver.resolve(getBaseStyleId());
     if (baseStyle != null) {
       baseStyle.applyTo(elementType, styleResolver);

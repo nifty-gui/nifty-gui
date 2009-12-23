@@ -1,29 +1,32 @@
 package de.lessvoid.nifty.elements;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
-import de.lessvoid.xml.tools.MethodInvoker;
 
 /**
  * All ElementInteraction is handled in here.
  * @author void
  */
 public class ElementInteraction {
-
   private Nifty nifty;
-
-  private MethodInvoker onClickMethod = new MethodInvoker();
   private boolean onClickRepeat;
   private String onClickAlternateKey;
-  private MethodInvoker onReleaseMethod = new MethodInvoker();
-  private MethodInvoker onClickMouseMoveMethod = new MethodInvoker();
-  private MethodInvoker onMouseOverMethod = new MethodInvoker();
+  private NiftyMethodInvoker onClickMethod;
+  private NiftyMethodInvoker onReleaseMethod;
+  private NiftyMethodInvoker onClickMouseMoveMethod;
+  private NiftyMethodInvoker onMouseOverMethod;
 
   /**
    * Create the ElemenInteraction.
    * @param niftyParam nifty
    */
   public ElementInteraction(final Nifty niftyParam) {
+    onClickMethod = new NiftyMethodInvoker(niftyParam);
+    onReleaseMethod = new NiftyMethodInvoker(niftyParam);
+    onClickMouseMoveMethod = new NiftyMethodInvoker(niftyParam);
+    onMouseOverMethod = new NiftyMethodInvoker(niftyParam);
+
     nifty = niftyParam;
     onClickAlternateKey = null;
   }
@@ -51,9 +54,8 @@ public class ElementInteraction {
       if (nifty != null) {
         nifty.setAlternateKey(onClickAlternateKey);
       }
-      if (onClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY()) != null) {
-        return true;
-      }
+      onClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
+      return true;
     }
     return false;
   }
@@ -96,19 +98,9 @@ public class ElementInteraction {
    */
   public boolean onMouseOver(final Element element, final MouseInputEvent inputEvent) {
     if (onMouseOverMethod != null) {
-      Object result = onMouseOverMethod.invoke(element, inputEvent);
-      if (result == null) {
-        return false;
-      } else {
-        if (result instanceof Boolean) {
-          return (Boolean) result;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return false;
+      onMouseOverMethod.invoke(element, inputEvent);
     }
+    return false;
   }
 
   /**
@@ -116,12 +108,12 @@ public class ElementInteraction {
    * @param methodInvokerParam MethodInvoker
    * @param useRepeatParam use repeat
    */
-  public void setOnClickMethod(final MethodInvoker methodInvokerParam, final boolean useRepeatParam) {
+  public void setOnClickMethod(final NiftyMethodInvoker methodInvokerParam, final boolean useRepeatParam) {
     onClickMethod = methodInvokerParam;
     onClickRepeat = useRepeatParam;
   }
 
-  public void setOnReleaseMethod(final MethodInvoker onRelease) {
+  public void setOnReleaseMethod(final NiftyMethodInvoker onRelease) {
     onReleaseMethod = onRelease;
   }
 
@@ -129,7 +121,7 @@ public class ElementInteraction {
    * Set onClickMouseMoved.
    * @param methodInvoker MethodInvoker
    */
-  public void setOnClickMouseMoved(final MethodInvoker methodInvoker) {
+  public void setOnClickMouseMoved(final NiftyMethodInvoker methodInvoker) {
     onClickMouseMoveMethod = methodInvoker;
   }
 
@@ -137,7 +129,7 @@ public class ElementInteraction {
    * Set onMouseOver.
    * @param methodInvoker MethodInvoker
    */
-  public void setOnMouseOver(final MethodInvoker methodInvoker) {
+  public void setOnMouseOver(final NiftyMethodInvoker methodInvoker) {
     onMouseOverMethod = methodInvoker;
   }
 
@@ -153,7 +145,7 @@ public class ElementInteraction {
    * Get onClickMethod.
    * @return on click method
    */
-  public MethodInvoker getOnClickMethod() {
+  public NiftyMethodInvoker getOnClickMethod() {
     return onClickMethod;
   }
 
@@ -161,11 +153,11 @@ public class ElementInteraction {
    * Get onClickMouseMovedMethod.
    * @return on click mouse moved
    */
-  public MethodInvoker getOnClickMouseMoveMethod() {
+  public NiftyMethodInvoker getOnClickMouseMoveMethod() {
     return onClickMouseMoveMethod;
   }
 
-  public MethodInvoker getOnReleaseMethod() {
+  public NiftyMethodInvoker getOnReleaseMethod() {
     return onReleaseMethod;
   }
 }

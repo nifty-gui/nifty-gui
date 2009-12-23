@@ -2,11 +2,13 @@ package de.lessvoid.nifty.loaderv2.types;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.StringHelper;
@@ -162,6 +164,9 @@ public class EffectsType extends XmlBaseType {
     String result = "";
     for (EffectType effect : effectCollection) {
       result += "\n" + StringHelper.whitespace(offset) + "<" + name + "> " + effect.output(offset);
+      if (effect.getStyleId() != null) {
+        result += " {" + effect.getStyleId() + "}";
+      }
     }
     return result;
   }
@@ -219,23 +224,25 @@ public class EffectsType extends XmlBaseType {
 //    refreshEffect(EffectEventId.onHide, onHide);
   }
 
-  public void apply(final EffectsType effects) {
-    applyEffectCollection(onStartScreen, effects.onStartScreen);
-    applyEffectCollection(onEndScreen, effects.onEndScreen);
-    applyEffectCollection(onHover, effects.onHover);
-    applyEffectCollection(onClick, effects.onClick);
-    applyEffectCollection(onFocus, effects.onFocus);
-    applyEffectCollection(onLostFocus, effects.onLostFocus);
-    applyEffectCollection(onGetFocus, effects.onGetFocus);
-    applyEffectCollection(onActive, effects.onActive);
-    applyEffectCollection(onCustom, effects.onCustom);
-    applyEffectCollection(onShow, effects.onShow);
-    applyEffectCollection(onHide, effects.onHide);
+  public void apply(final EffectsType effects, final String styleId) {
+    applyEffectCollection(onStartScreen, effects.onStartScreen, styleId);
+    applyEffectCollection(onEndScreen, effects.onEndScreen, styleId);
+    applyEffectCollection(onHover, effects.onHover, styleId);
+    applyEffectCollection(onClick, effects.onClick, styleId);
+    applyEffectCollection(onFocus, effects.onFocus, styleId);
+    applyEffectCollection(onLostFocus, effects.onLostFocus, styleId);
+    applyEffectCollection(onGetFocus, effects.onGetFocus, styleId);
+    applyEffectCollection(onActive, effects.onActive, styleId);
+    applyEffectCollection(onCustom, effects.onCustom, styleId);
+    applyEffectCollection(onShow, effects.onShow, styleId);
+    applyEffectCollection(onHide, effects.onHide, styleId);
   }
 
-  void applyEffectCollection(final Collection < EffectType > src, final Collection < EffectType > dst) {
+  void applyEffectCollection(final Collection < EffectType > src, final Collection < EffectType > dst, final String styleId) {
     for (EffectType effectType : src) {
-      dst.add(effectType);
+      EffectType copy = effectType.clone();
+      copy.setStyleId(styleId);
+      dst.add(copy);
     }
   }
 
@@ -258,6 +265,31 @@ public class EffectsType extends XmlBaseType {
       final Attributes src) {
     for (EffectType e : dst) {
       e.resolveParameters(src);
+    }
+  }
+
+  public void removeWithTag(final String styleId) {
+    getAttributes().removeWithTag(styleId);
+    removeAllEffectsWithStyleId(onStartScreen, styleId);
+    removeAllEffectsWithStyleId(onEndScreen, styleId);
+    removeAllEffectsWithStyleId(onHover, styleId);
+    removeAllEffectsWithStyleId(onClick, styleId);
+    removeAllEffectsWithStyleId(onFocus, styleId);
+    removeAllEffectsWithStyleId(onLostFocus, styleId);
+    removeAllEffectsWithStyleId(onGetFocus, styleId);
+    removeAllEffectsWithStyleId(onActive, styleId);
+    removeAllEffectsWithStyleId(onCustom, styleId);
+    removeAllEffectsWithStyleId(onShow, styleId);
+    removeAllEffectsWithStyleId(onHide, styleId);
+  }
+
+  private void removeAllEffectsWithStyleId(final Collection < EffectType > source, final String styleId) {
+    Iterator < EffectType > iter = source.iterator();
+    while (iter.hasNext()) {
+      EffectType current = iter.next();
+      if (styleId.equals(current.getStyleId())) {
+        iter.remove();
+      }
     }
   }
 }

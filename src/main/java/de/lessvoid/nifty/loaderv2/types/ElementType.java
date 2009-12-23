@@ -8,6 +8,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
+import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
@@ -377,5 +378,11 @@ public class ElementType extends XmlBaseType {
     for (ElementType elementType : elements) {
       elementType.resolveControllers(controllers);
     }
+  }
+
+  public void removeWithTag(final String styleId) {
+    getAttributes().removeWithTag(styleId);
+    effects.removeWithTag(styleId);
+    interact.getAttributes().removeWithTag(styleId);
   }
 }

@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyInputControl;
@@ -30,7 +31,6 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.xml.tools.MethodInvoker;
 
 /**
  * The Element.
@@ -1149,11 +1149,11 @@ public class Element {
    * @param methodInvoker the method to invoke
    * @param useRepeat repeat on click (true) or single event (false)
    */
-  public void setOnClickMethod(final MethodInvoker methodInvoker, final boolean useRepeat) {
+  public void setOnClickMethod(final NiftyMethodInvoker methodInvoker, final boolean useRepeat) {
     interaction.setOnClickMethod(methodInvoker, useRepeat);
   }
 
-  public void setOnReleaseMethod(final MethodInvoker onReleaseMethod) {
+  public void setOnReleaseMethod(final NiftyMethodInvoker onReleaseMethod) {
     interaction.setOnReleaseMethod(onReleaseMethod);
   }
 
@@ -1161,7 +1161,7 @@ public class Element {
    * Set on click mouse move method.
    * @param methodInvoker the method to invoke
    */
-  public void setOnClickMouseMoveMethod(final MethodInvoker methodInvoker) {
+  public void setOnClickMouseMoveMethod(final NiftyMethodInvoker methodInvoker) {
     interaction.setOnClickMouseMoved(methodInvoker);
   }
 
@@ -1345,7 +1345,7 @@ public class Element {
    * @param method method
    * @param screenController method controller
    */
-  private void attach(final MethodInvoker method, final ScreenController screenController) {
+  private void attach(final NiftyMethodInvoker method, final ScreenController screenController) {
     method.setFirst(screenController);
     for (Element e : elements) {
       e.attachPopup(screenController);
@@ -1455,17 +1455,23 @@ public class Element {
    */
   public void setStyle(final String newStyle) {
     removeStyle(elementType.getAttributes().get("style"));
+
     elementType.getAttributes().set("style", newStyle);
     elementType.applyStyles(nifty.getDefaultStyleResolver());
     elementType.applyAttributes(this, elementType.getAttributes(), nifty.getRenderEngine());
     elementType.applyEffects(nifty, screen, this);
     elementType.applyInteract(nifty, screen, this);
-//    log.info("after setStyle [" + newStyle + "]\n" + elementType.output(0));
+
+    log.info("after setStyle [" + newStyle + "]\n" + elementType.output(0));
   }
 
   void removeStyle(final String style) {
-    elementType.getAttributes().removeWithTag(style);
-//    log.info("after removeStyle [" + style + "]\n" + elementType.output(0));
+    log.info("before removeStyle [" + style + "]\n" + elementType.output(0));
+
+    elementType.removeWithTag(style);
+    effectManager.removeAllEffects();
+
+    log.info("after removeStyle [" + style + "]\n" + elementType.output(0));
   }
 
   /**
@@ -1524,7 +1530,7 @@ public class Element {
    * Set onMouseOverMethod.
    * @param onMouseOverMethod new on mouse over method
    */
-  public void setOnMouseOverMethod(final MethodInvoker onMouseOverMethod) {
+  public void setOnMouseOverMethod(final NiftyMethodInvoker onMouseOverMethod) {
     this.interaction.setOnMouseOver(onMouseOverMethod);
   }
 
