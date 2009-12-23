@@ -27,6 +27,7 @@ public class SoundSystemTest extends TestCase {
       public void play() {}
       public void stop() {}
       public void setVolume(float volume) {}
+      public float getVolume() {return 0.0f;}
       public boolean isPlaying() { return false; }
     };
     prepareSoundLoader(soundHandle);
@@ -51,6 +52,7 @@ public class SoundSystemTest extends TestCase {
       public void play() {}
       public void stop() {}
       public void setVolume(float volume) {}
+      public float getVolume() {return 0.0f;}
       public boolean isPlaying() { return false; }
     };
     prepareMusicLoader(soundHandle);
