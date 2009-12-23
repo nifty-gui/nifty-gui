@@ -176,7 +176,8 @@ public class Screen {
 
   public final void endScreen(final EndNotify callback) {
     resetLayers();
-    startLayers(EffectEventId.onEndScreen, callback);
+    final EndScreenEndNotify endNotify = createScreenEndNotify(callback);
+    startLayers(EffectEventId.onEndScreen, endNotify);
   }
 
   public void layoutLayers() {
@@ -470,6 +471,28 @@ public class Screen {
     }
   }
 
+  EndScreenEndNotify createScreenEndNotify(final EndNotify endScreenEndNotify) {
+    return new EndScreenEndNotify(endScreenEndNotify);
+  }
+
+  class EndScreenEndNotify implements EndNotify {
+    private EndNotify additionalEndNotify;
+
+    public EndScreenEndNotify(final EndNotify additionalEndNotify) {
+      this.additionalEndNotify = additionalEndNotify;
+    }
+
+    public void perform() {
+      Logger.getAnonymousLogger().info("onEndScreen has ended");
+
+      if (additionalEndNotify != null) {
+        additionalEndNotify.perform();
+      }
+
+      onEndScreenHasEnded();
+    }
+  }
+
   /**
    * InputMappingWithMapping helper.
    * @author void
@@ -522,6 +545,11 @@ public class Screen {
     // add dynamic controls
     nifty.addControls();
     running = true;
+  }
+
+  void onEndScreenHasEnded() {
+    // onEndScreen has ENDED so call the event.
+    screenController.onEndScreen();
   }
 
   public boolean isEffectActive(final EffectEventId effectEventId) {
