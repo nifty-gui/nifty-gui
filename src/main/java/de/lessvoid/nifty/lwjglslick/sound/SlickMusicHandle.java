@@ -36,6 +36,10 @@ public class SlickMusicHandle implements SoundHandle {
     slickMusic.setVolume(volume);
   }
 
+  public float getVolume() {
+    return slickMusic.getVolume();
+  }
+
   public boolean isPlaying() {
     return slickMusic.playing();
   }

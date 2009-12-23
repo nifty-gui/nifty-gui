@@ -21,6 +21,7 @@ public interface SoundHandle {
    * @param volume new value in range 0 to 1
    */
   void setVolume(float volume);
+  float getVolume();
 
   /**
    * Checks if this sound is still playing.
