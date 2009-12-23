@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -22,10 +23,11 @@ public class MainPage implements ScreenController {
     this.nifty = nifty;
     this.screen = screen;
 
-    pages.add("page1");
-    pages.add("page2");
-    pages.add("page3");
-    pages.add("page4");
+//    pages.add("page1");
+//    pages.add("page2");
+//    pages.add("page3");
+//    pages.add("page4");
+    pages.add("page5");
 
     pageIndex = 0;
     lastPageIndex = -1;
@@ -59,7 +61,15 @@ public class MainPage implements ScreenController {
   }
 
   public void toggleMute() {
-    screen.findElementByName("muteButton").setStyle("muteButtonSoundOff");
+    System.out.println("toggleMute");
+    mute = !mute;
+    if (mute) {
+      screen.findElementByName("muteButton").setStyle("muteButtonSoundOff");
+      screen.findElementByName("muteButton").startEffect(EffectEventId.onCustom);
+    } else {
+      screen.findElementByName("muteButton").setStyle("muteButtonSoundOn");
+      screen.findElementByName("muteButton").startEffect(EffectEventId.onCustom);
+    }
   }
 
   private void updatePage() {
