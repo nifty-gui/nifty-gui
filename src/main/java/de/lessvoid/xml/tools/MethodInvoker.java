@@ -9,19 +9,9 @@ import java.util.logging.Logger;
  * @author void
  */
 public class MethodInvoker {
-  /**
-   * logger.
-   */
   private static Logger log = Logger.getLogger(MethodInvoker.class.getName());
 
-  /**
-   * object.
-   */
   private Object[] target;
-
-  /**
-   * method.
-   */
   private String methodWithName;
 
   /**

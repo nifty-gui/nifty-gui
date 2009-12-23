@@ -13,8 +13,7 @@ import de.lessvoid.xml.xpp3.XmlProcessor;
 public class XmlProcessorType implements XmlProcessor {
   private String fullClassName;
   private Collection < XmlProcessorElement > elements = new ArrayList < XmlProcessorElement >();
-  private Collection < XmlProcessorSubstituitionGroup > substGroups =
-    new ArrayList < XmlProcessorSubstituitionGroup >();
+  private Collection < XmlProcessorSubstituitionGroup > substGroups = new ArrayList < XmlProcessorSubstituitionGroup >();
   private XmlType xmlTypeParentSingle;
   private XmlType xmlTypeParentMultiple;
   private String xmlTypeParentName;

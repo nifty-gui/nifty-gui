@@ -32,9 +32,7 @@ public class ApplyAttributes {
     rendererApplier.put(PanelRenderer.class, new ApplyRendererPanel(convert));
   }
 
-  public void perform(
-      final Element element,
-      final NiftyRenderEngine renderEngine) {
+  public void perform(final Element element, final NiftyRenderEngine renderEngine) {
     if (attributes == null) {
       return;
     }
