@@ -54,7 +54,7 @@
             </control>
           </panel>
           <panel childLayout="horizontal" height="8px" />
-          <panel id="buttonPanel" childLayout="vertical">
+          <panel id="buttonPanel" childLayout="vertical" width="100%">
           </panel>
         </panel>
       </panel>

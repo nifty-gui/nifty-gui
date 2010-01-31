@@ -72,6 +72,8 @@
         <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%"/>
       </onHover> 
       <onClick name="playSound" sound="select" />
+      <onHide name="fade" start="#f" end="#0" length="500" />
+      <onShow name="fade" start="#0" end="#f" length="500" />
     </effect>
   </style>
 
@@ -116,7 +118,7 @@
   </style>
 
   <style id="captionFont">
-    <attributes font="tutorial/fonts/caption.fnt" width="100%" textHAlign="left" />
+    <attributes font="tutorial/fonts/caption.fnt" textHAlign="left" />
   </style>
 
   <style id="textFont">
@@ -135,6 +137,13 @@
         <value offset="0%" color="#eeef" />
         <value offset="100%" color="#999f" />
       </onActive>
+    </effect>
+  </style>
+
+  <style id="imageBlock">
+    <attributes childLayout="vertical" backgroundColor="#f00f"/>
+    <effect>
+      <onActive name="border" post="true" color="#000f" border="1px" />
     </effect>
   </style>
 
@@ -186,12 +195,19 @@
           </panel>
         </panel>
         <panel style="main" >
-          <panel id="pp" childLayout="overlay" valign="center" align="center" width="100%" height="100%" />
+          <panel id="pp" childLayout="overlay" valign="center" align="center" width="100%" height="100%">
+          </panel>
         </panel>
         <panel style="bottom">
           <panel style="bottomInternal">
             <image id="backButton" style="backButton" />
-            <panel width="*" />
+            <panel width="*" childLayout="center">
+              <text id="curPage" style="captionFont" align="center" valign="center" textHAlign="center" textVAlign="center" text="1">
+                <effect>
+                  <onCustom name="textSize" length="150" factor="4" startSize="1.6" endSize="1.0" />
+                </effect>
+              </text>
+            </panel>
             <image id="nextButton" style="nextButton" />
           </panel>
         </panel>
@@ -209,7 +225,7 @@
   </screen>
 
   <!-- page 1 -->
-  <controlDefinition name="page1" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+  <controlDefinition name="page1">
     <panel style="pagePanel">
 		  <panel childLayout="vertical" align="center" valign="center">
 		    <text style="captionFont" textHAlign="center" align="center" text="Nifty GUI, Introduction &amp; Tutorial">
@@ -234,7 +250,7 @@
 	</controlDefinition>
 
 	<!-- page 2 -->
-  <controlDefinition name="page2" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+  <controlDefinition name="page2">
     <panel style="pagePanel">
 	    <panel style="middlePanel">
 	      <text style="captionFont" text="So what exactly is Nifty GUI?" />
@@ -248,10 +264,10 @@
   </controlDefinition>
 
   <!-- page 3 -->
-  <controlDefinition name="page3" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+  <controlDefinition name="page3">
     <panel style="pagePanel">
       <panel style="middlePanel">
-        <text style="captionFont" text="How does it work: The Java side" />
+        <text style="captionFont" text="How does it work: Basics, The Java side" />
         <text style="textFont" text="Nifty is a jar File. So all you need is &quot;nifty.jar&quot; (and depending on what you've downloaded libraries like slick and lwjgl) in your classpath. Initializing lwjgl and setting the display mode is up to you. Nifty assumes that you've set up 2d ortho mode. You can see the examples in the nifty-examples project on how to do that.&#10;&#10;To work with Nifty you'll need to instantiate Nifty first:&#10;"/>
         <panel style="codeBlock">
           <text style="codeFont" text="&#1;&#69;&#69;&#193;// create nifty&#10;&#1;&#0;&#0;&#0;Nifty nifty = &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; Nifty(&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; RenderDeviceLwjgl(),&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; SoundSystem(&#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; SlickSoundDevice()),&#10;&#1;&#0;&#0;&#0;    LwjglInitHelper.getInputSystem(),&#10;    &#1;&#138;&#16;&#77;new&#1;&#0;&#0;&#0; TimeProvider());" />
@@ -263,10 +279,10 @@
   </controlDefinition>
 
   <!-- page 4 -->
-  <controlDefinition name="page4" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+  <controlDefinition name="page4">
     <panel style="pagePanel">
       <panel style="middlePanel">
-        <text style="captionFont" text="How does it work: The Java side, Render Loop" />
+        <text style="captionFont" text="How does it work: Basics, The Java side, Render Loop" />
         <text style="textFont" text="For easy integration with your existing lwjgl code, Nifty assumes that you're handling the lwjgl render loop on your own (calling Display.update() for instance). So all you need to do is call nifty.render() at the appropriate time in the render loop. Example:&#10;"/>
         <panel style="codeBlock">
           <text style="codeFont" text="&#1;&#69;&#69;&#193;// render nifty&#10;&#1;&#0;&#0;&#0;&#1;&#138;&#16;&#77;while&#1;&#0;&#0;&#0; (!done) {&#10;    &#1;&#138;&#16;&#77;if&#1;&#0;&#0;&#0; (nifty.render()) {&#10;        &#1;&#69;&#69;&#193;// nifty has reached the end point, stop the rendering loop, change state or do whatever should happen now =)&#10;    &#1;&#0;&#0;&#0;}&#10;    &#1;&#69;&#69;&#193;// render other stuff, call Display.update() and so on&#10;&#1;&#0;&#0;&#0;}"/>
@@ -281,10 +297,10 @@
   </controlDefinition>
 
   <!-- page 5 -->
-  <controlDefinition name="page5" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+  <controlDefinition name="page5">
     <panel style="pagePanel">
       <panel style="middlePanel">
-        <text style="captionFont" text="How does it work: Nifty XML"/>
+        <text style="captionFont" text="How does it work: Basics, Nifty XML, Screen"/>
         <text style="textFont" text="Nifty stores the definition of your GUI (position of elements, effects and so on) in xml files. So you can easily modify the xml and change your GUI without the need to recompile everything.&#10;"/>
         <text style="textFont" text="The basic building block of your XML file is the concept of a screen. Everything you can see on the screen at a given time is defined in a &lt;screen&gt; element. A Nifty GUI consists of several screens that are interconnected.&#10;"/>
         <text style="textFont" text="Every screen must be given a unique name with the id attribute of the screen tag. This way every screen can be identified and referenced. As you've seen you can tell Nifty with the fromXml() method the screenId where your GUI should start. You can switch screens from Java with the nifty.gotoScreen() method which requires the target screenId as a parameter.&#10;" />
@@ -297,21 +313,271 @@
   </controlDefinition>
 
   <!-- page 6 -->
-  <controlDefinition name="page6" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+  <controlDefinition name="page6">
     <panel style="pagePanel">
       <panel style="middlePanel">
-        <text style="captionFont" text="How does it work: Nifty XML, continued"/>
+        <text style="captionFont" text="How does it work: Basics, Nifty XML, Layer"/>
         <text style="textFont" text="Within a screen you can have several layers of elements. So you could use a layer for your background and another layer on top to display additional elements. Layers are rendered as they appear in the xml file. So you should define your background layer first and all other layers after the background layer.&#10;"/>
-        <text style="textFont" text="XML with Layers:&#10;"/>
-        <panel style="codeBlock">
-          <text style="codeFont" text="...&#10;&#01;&#63;&#127;&#127;&lt;screen &#1;&#138;&#16;&#77;id&#1;&#0;&#0;&#0;=&#1;&#69;&#69;&#193;&quot;start&#1;&#69;&#69;&#193;&quot;&#01;&#63;&#127;&#127;&gt;&#10;  &#01;&#63;&#127;&#127;&lt;layer id=&quot;background&quot;&gt;&#10;   ...&#10;  &lt;/layer&gt;&#10;  &lt;layer&gt;&#10;   ...&#10;  &lt;/layer&gt;&#10;&lt;/screen&gt;&#10;" />
+        <panel align="left" childLayout="horizontal">
+          <panel align="left" childLayout="vertical" width="50%">
+            <text style="textFont" text="XML with Layers:"/>
+            <panel style="codeBlock">
+              <text style="codeFont" text="&#01;&#00;&#00;&#00;...&#10;&#01;&#63;&#127;&#127;&lt;screen &#1;&#138;&#16;&#77;id&#1;&#0;&#0;&#0;=&#1;&#69;&#69;&#193;&quot;start&#1;&#69;&#69;&#193;&quot;&#01;&#63;&#127;&#127;&gt;&#10;  &#01;&#63;&#127;&#127;&lt;layer &#01;&#138;&#16;&#77;id=&#01;&#69;&#69;&#193;&quot;background&quot;&#01;&#63;&#127;&#127;&gt;&#10;   &#01;&#00;&#00;&#00;...&#10;  &#01;&#63;&#127;&#127;&lt;/layer&gt;&#10;  &#01;&#63;&#127;&#127;&lt;layer&gt; &lt;!-- layer without id, perfectly fine too --&gt;&#10;   &#01;&#00;&#00;&#00;...&#10;  &#01;&#63;&#127;&#127;&lt;/layer&#01;&#63;&#127;&#127;&gt;&#10;&#01;&#63;&#127;&#127;&lt;/screen&gt;&#10;&#01;&#00;&#00;&#00;..."/>
+            </panel>
+          </panel>
+          <panel width="20px" height="10px"/>
+          <panel align="left" childLayout="vertical" width="*">
+            <text style="textFont" text="Some Image of what is going on:"/>
+            <panel style="imageBlock">
+              <image height="200px" filename="tutorial/images/layers.tga" align="left"/>
+            </panel>
+          </panel>
         </panel>
-        <text style="textFont" text="Some Image of what is going on:&#10;" />
-        <image filename="tutorial/layers.tga" align="left" />
-        <text style="textFont" text="Opposite to screen definitions you don't have to name layers with an id attribute. You can give it a name if you need to reference them later, from java for instance."/>
+        <text style="textFont" text="&#10;Opposite to screen definitions you don't have to name layers with an id attribute. You can give it a name if you need to reference them later though (for use from within java for instance)." />
       </panel>
     </panel>
   </controlDefinition>
+
+  <!-- page 7 -->
+  <controlDefinition name="page7">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="How does it work: Basics, Nifty XML, Layout"/>
+        <text style="textFont" text="Now that you have a Layer you can begin to arrange Elements on it. Elements are images, text or invisible helper objects (panels).&#10;&#10;The key to understanding layout in Nifty is, that every Element can have a certain number of children and that the parent element decides how the child elements are arranged within that element. The layer you've already defined is basically the root Element and it has by default the width and height of the screen."/>
+        <text style="textFont" text="&#10;Currently Nifty supports the following layouts.&#10;"/>
+        <panel align="left" childLayout="horizontal">
+          <panel align="left" childLayout="vertical">
+            <text style="textFont" text="Vertical:"/>
+            <panel style="imageBlock">
+              <image filename="tutorial/images/layout-vertical.tga" align="left"/>
+            </panel>
+          </panel>
+          <panel align="left" childLayout="vertical">
+            <text style="textFont" text="Horizontal:"/>
+            <panel style="imageBlock">
+              <image filename="tutorial/images/layout-horizontal.tga" align="left"/>
+            </panel>
+          </panel>
+        </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 8 -->
+  <controlDefinition name="page8">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+	      <text style="captionFont" text="How does it work: Basics, Nifty XML, Layout, cont."/>
+        <text style="textFont" text="There are two more Layout types."/>
+	      <panel align="left" childLayout="horizontal">
+	        <panel align="left" childLayout="vertical">
+	          <text style="textFont" text="Center:"/>
+	          <panel style="imageBlock">
+	            <image filename="tutorial/images/layout-center.tga" align="left"/>
+	          </panel>
+	        </panel>
+	        <panel align="left" childLayout="vertical">
+	          <text style="textFont" text="Absolute:"/>
+	          <panel style="imageBlock">
+	            <image filename="tutorial/images/layout-absolute.tga" align="left"/>
+	          </panel>
+	        </panel>
+	      </panel>
+        <text style="textFont" text="&#10;The &quot;center&quot; Layout currently only supports one child element. It takes this first and only child element and centeres it in its area."/>
+        <text style="textFont" text="&#10;The &quot;absolute&quot; Layout does not layout elements at all. It allows you to specifiy the position of the child elements with the &quot;x&quot; and &quot;y&quot; attributes as well as the width and height of the element with the &quot;width&quot; and &quot;height&quot; attributes. The absolute layout will just take these values and apply them to the elements."/>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 9 -->
+  <controlDefinition name="page9">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+	      <text style="captionFont" text="How does it work: Basics, Nifty XML, Layout, Example"/>
+	      <text style="textFont" text="Let's say you have a panel with a childLayout of &quot;vertical&quot; and three child elements. The child elements are two panels with different background colors and one text element without a background color in the middle of the two panels.&#10;&#10;So your Nifty xml file will look something like this:&#10;"/>
+        <panel style="codeBlock">
+	        <text style="codeFont" text="&#01;&#63;&#127;&#127;&lt;panel &#01;&#138;&#16;&#77;childLayout=&#01;&#69;&#69;&#193;&quot;vertical&quot; &#01;&#138;&#16;&#77;backgroundColor=&#01;&#69;&#69;&#193;&quot;#0f0f&quot;&#01;&#63;&#127;&#127;&gt;&#10;  &#01;&#63;&#127;&#127;&lt;panel &#01;&#138;&#16;&#77;backgroundColor=&#01;&#69;&#69;&#193;&quot;#080f&quot;&#01;&#63;&#127;&#127;/&gt;&#10;  &#01;&#63;&#127;&#127;&lt;text &#01;&#138;&#16;&#77;font=&#01;&#69;&#69;&#193;&quot;regular.fnt&quot; &#01;&#138;&#16;&#77;text=&#01;&#69;&#69;&#193;&quot;&amp;#10;Hello Nifty World!&amp;#10;&quot; &#01;&#138;&#16;&#77;align=&#01;&#69;&#69;&#193;&quot;center&quot; &#01;&#138;&#16;&#77;color=&#01;&#69;&#69;&#193;&quot;#000f&quot;/&#01;&#63;&#127;&#127;&gt;&#10;  &#01;&#63;&#127;&#127;&lt;panel &#01;&#138;&#16;&#77;backgroundColor=&#01;&#69;&#69;&#193;&quot;#080f&quot;/&#01;&#138;&#16;&#77;&gt;&#10;&#01;&#63;&#127;&#127;&lt;/panel&gt;"/>
+	      </panel>
+	      <text style="textFont" text="&#10;And the result will be this:&#10;"/>
+	      <panel childLayout="vertical" height="150px" backgroundColor="#0f0f">
+	        <panel backgroundColor="#080f"/>
+	        <text style="textFont" text="&#10;Hello Nifty World!&#10;" color="#000f"/>
+	        <panel backgroundColor="#080f"/>
+	      </panel>                
+	      <text style="textFont" text="&#10;Wow, that was not that bad, wasn't it? =)"/>
+	    </panel>
+	  </panel>
+	</controlDefinition>
+
+  <!-- page 10 -->
+  <controlDefinition name="page10">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+	      <text style="captionFont" text="How does it work: Basics, Effects"/>
+	      <text style="textFont" text="Well, now that you have all your elements arranged nicely on a screen you can add effects to it. An effect is just some change of render state before or after an element is rendered. Most effects are time aware and can therfore change over time.&#10;" />
+	      <text style="textFont" text="You can attach effects to any element for the following events:" />
+	      <text style="textFont" text="    - onStartScreen: The screen the element is part of starts.&#10;    - onEndScreen: The screen the element is part of ends.&#10;    - onFocus: The element has the keyboard/input focus.&#10;    - onGetFocus: The element just got the keyboard/input focus.&#10;    - onLostFocus The element just lost the keyboard/input focus.&#10;    - onClick: The element has been clicked by the mouse or is activated by keyboard interaction.&#10;    - onHover: The mouse cursor is currently hovering the element.&#10;    - onActive: The element has been initialized and is now ready for input.&#10;    - onCustom: You can trigger this effect type from java.&#10;    - onHide: The element is about to be hidden.&#10;    - onShow: The element is shown again (after first being hidden).&#10;"/>
+	      <panel style="codeBlock">
+	        <text style="codeFont" text="&#01;&#63;&#127;&#127;&lt;text &#01;&#138;&#16;&#77;font=&#01;&#69;&#69;&#193;&quot;regular.fnt&quot; &#01;&#138;&#16;&#77;align=&#01;&#69;&#69;&#193;&quot;center&quot; &#01;&#138;&#16;&#77;text=&#01;&#69;&#69;&#193;&quot;&amp;#10;Hello Nifty World!&amp;#10;&quot; &#01;&#138;&#16;&#77;color=&#01;&#69;&#69;&#193;&quot;#000f&quot;&gt;&#10;  &#01;&#63;&#127;&#127;&lt;effect&gt;&#10;    &#01;&#63;&#127;&#127;&lt;onStartScreen &#01;&#138;&#16;&#77;name=&#01;&#69;&#69;&#193;&quot;move&quot; &#01;&#138;&#16;&#77;mode=&#01;&#69;&#69;&#193;&quot;in&quot; &#01;&#138;&#16;&#77;direction=&#01;&#69;&#69;&#193;&quot;left&quot; &#01;&#138;&#16;&#77;length=&#01;&#69;&#69;&#193;&quot;5000&quot;/&#01;&#63;&#127;&#127;&gt;&#10;  &#01;&#63;&#127;&#127;&lt;/effect&gt;&#10;&#01;&#63;&#127;&#127;&lt;/text&gt;" />
+	      </panel>
+	      <text style="textFont" text="&#10;You can see this example in action on the next screen."/>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 11 -->
+  <controlDefinition name="page11">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+	      <text style="captionFont" text="How does it work: Basics, Effects, continued"/>
+	      <text style="textFont" text="The example in action:&#10;"/>                
+	      <panel childLayout="vertical" height="150px" backgroundColor="#0f0f" childClip="true">
+	        <panel backgroundColor="#080f"/>
+	        <text style="textFont" textHAlign="center" wrap="false" text="&#10;Hello Nifty World!&#10;" color="#000f">
+	          <effect>
+	            <onStartScreen name="move" mode="in" direction="left" length="2500" />
+	          </effect>
+	        </text>
+	        <panel backgroundColor="#080f"/>
+	      </panel>
+	      <text style="textFont" text="&#10;One thing to note is that all move effects are currently based on the final position of the element. So when you use some move effect - like in the example above - the final position of the element will always be the position you have definied within layout.&#10;"/>
+	      <text style="textFont" text="Effect tags can all have individual attributes but they all have a name and a post flag. The post flag decides if the effect has to be applied before the element is rendered. In this case post should be set to false which is the default value when you omit it. If you set post to &quot;true&quot; the effect is applied after the element is rendered. This could be used for overlays for instance.&#10;" />
+	      <text style="textFont" text="Most effects are time aware which means that they change over time."/>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 12 --> 
+  <controlDefinition name="page12">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="How does it work: Basics, Effects, hover effects"/>
+        <text style="textFont" text="&#10;Hover effects are a special kind of an effect. Additional to the normal effect parameters they can take the distance of the mouse cursor position into account and change some effect parameter accordingly.&#10;&#10;Starting with Nifty 1.0 all effects can be used as hover effects. However not all effects support the hover mode.&#10;" />
+        <text style="textFont" text="Here is an example:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="&#01;&#63;&#127;&#127;&lt;onHover &#01;&#138;&#16;&#77;name=&#01;&#69;&#69;&#193;&quot;textSize&quot; &#01;&#138;&#16;&#77;maxSize=&#01;&#69;&#69;&#193;&quot;120%&quot;&#01;&#63;&#127;&#127;&gt;&#10;  &#01;&#63;&#127;&#127;&lt;hover &#01;&#138;&#16;&#77;hoverFalloffType=&#01;&#69;&#69;&#193;&quot;linear&quot; &#01;&#138;&#16;&#77;hoverFalloffConstraint=&#01;&#69;&#69;&#193;&quot;both&quot; &#01;&#138;&#16;&#77;hoverWidth=&#01;&#69;&#69;&#193;&quot;200%&quot; &#01;&#138;&#16;&#77;hoverHeight=&#01;&#69;&#69;&#193;&quot;200%&quot; &#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#63;&#127;&#127;&lt;/onHover&gt;"/>
+        </panel>
+        <text style="textFont" text="&#10;And it looks like this in action (use your mouse cursor):&#10;"/>
+        <panel style="codeBlock" width="100%">
+          <text style="textFont" text="&#10;Hello Nifty Hover Effect!&#10;" color="#000f" visibleToMouse="true" textHAlign="center" align="center" valign="center">
+            <effect>
+              <onHover name="textSize" maxSize="120%">
+                <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="200%" hoverHeight="200%" />
+              </onHover>
+            </effect>
+          </text>
+        </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 13 -->
+  <controlDefinition name="page13">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+	      <text style="captionFont" text="How does it work: Basics, Connecting Java with the Nifty XML"/>
+	      <text style="textFont" text="There's one thing missing in your basic knowledge about Nifty, the Screencontroller instance.&#10;&#10;Each screen has a Screencontroller attached to it. Whenever something interessting is happening to the screen a method on the Screencontroller is called. The Screencontroller is also the place where Nifty will look for additional callback methods as you will see on the next page.&#10;&#10;Screencontroller is an interface that you can implement. The interface looks like this:&#10;"/>
+	      <panel style="codeBlock">
+	        <text style="codeFont" text="&#01;&#138;&#16;&#77;public interface &#01;&#00;&#00;&#00;ScreenController {&#10;  &#01;&#138;&#16;&#77;void &#01;&#00;&#00;&#00;bind(Nifty nifty, Screen screen);&#10;  &#01;&#138;&#16;&#77;void &#01;&#00;&#00;&#00;onStartScreen();&#10;  &#01;&#138;&#16;&#77;void &#01;&#00;&#00;&#00;onEndScreen();&#10;&#01;&#00;&#00;&#00;}"/>
+	      </panel>
+	      <text style="textFont" text="&#10;The Screencontroller interface also gives you access to the screen class, the java representation of the active screen as well as the main events in the screen life cycle like the starting and ending of a screen. You can connect a Screencontroller to a screen with the controller attribute of the Nifty xml screen tag:&#10;"/>
+	      <panel style="codeBlock">
+	        <text style="codeFont" text="&#01;&#63;&#127;&#127;&lt;screen &#01;&#138;&#16;&#77;id=&#01;&#69;&#69;&#193;&quot;start&quot; &#01;&#138;&#16;&#77;controller=&#01;&#69;&#69;&#193;&quot;de.lessvoid.nifty.demo.tutorial.Start&quot;&#01;&#63;&#127;&#127;&gt;&#10;   &#01;&#00;&#00;&#00;...&#10;&#01;&#63;&#127;&#127;&lt;/screen&gt;"/>
+	      </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 14 -->
+  <controlDefinition name="page14">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+	      <text style="captionFont" text="How does it work: Basics, Interaction"/>
+	      <text style="textFont" text="A GUI makes only sense if you can interact with it. At the moment Nifty supports the following mouse events." />
+        <text style="textFont" text="- onClick&#10;- onRelease&#10;- onClickMouseMove&#10;- onMouseOver&#10;" />
+        <text style="textFont" text="So whenever you click on some element you can tell Nifty to call a method on the Screencontroller of the current screen.&#10;&#10;The way this is realized is with java reflection. Say you have a button that should trigger some event. You'll first add an onClick method call to the element:&#10;"/>
+	      <panel style="codeBlock">
+	        <text style="codeFont" text="&#01;&#63;&#127;&#127;&lt;image &#01;&#138;&#16;&#77;filename=&#01;&#69;&#69;&#193;&quot;tutorial/next.tga&quot; &#01;&#138;&#16;&#77;onClick=&#01;&#69;&#69;&#193;&quot;next()&quot;&#01;&#63;&#127;&#127;/&gt;"/>
+	      </panel>
+	      <text style="textFont" text="&#10;Whenever Nifty encounters an &quot;onClick&quot; attribute it looks for an appropriate method at the Screencontroller class of the current screen and calls it:&#10;"/>
+	      <panel style="codeBlock">
+	        <text style="codeFont" text="&#01;&#138;&#16;&#77;public class &#01;&#00;&#00;&#00;Start &#01;&#138;&#16;&#77;implements &#01;&#00;&#00;&#00;ScreenController {&#10;  &#01;&#00;&#00;&#00;...&#10;  &#01;&#63;&#127;&#127;// the callback.&#10;  &#01;&#138;&#16;&#77;public void &#01;&#00;&#00;&#00;next() {&#10;    &#01;&#00;&#00;&#00;System.out.println(&quot;next() called \o/&quot;);&#10;  &#01;&#00;&#00;&#00;}&#10;&#01;&#00;&#00;&#00;}" />
+	      </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 15 -->
+  <controlDefinition name="page15" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+	      <text style="captionFont" text="Wow, that was a lot!"/>
+	      <text style="textFont" text="So, that's all with the basics! Of course there is still a lot more to learn about Nifty. For instance how to build your own effects, how to use the build in controls and how to create your own. How to integrate Nifty with Slick is an interessting topic too. And what's best, we'll take a look at all of these topics NOW! :D&#10;"/>
+	      <text style="textFont" text="So grab a cup of coffee or whatever your energy source is (it might be coke if your name is kevin ...). And then take a deep breath because we've still some more to cover in the following Nifty Advanced chapters!"/>
+	      <text style="textFont" textHAlign="right" align="right" wrap="false" text="&#10;&#01;&#200;&#200;&#00;Press next in the bottom right corner to begin advanced lessons ..." />
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 16 -->
+  <controlDefinition name="page16" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="Advanced Nifty, Styles"/>
+        <text style="textFont" text="If you have lots of elements on your screen that all share some common attributes, styles are a way to reduce the duplication and make your xml more manageable.&#10;" />
+        <text style="Let's assume we have several captions in our texts and we want the caption text to have a red background and a special bigger font.&#10;"/>
+        <text style="textFont" text="Without style definitions your Nifty XML might look somewhat like this:&#10;" />
+        <panel style="codeBlock">
+          <text style="codeFont" text="&#01;&#00;&#00;&#00;...&#10;&#01;&#63;&#127;&#127;&lt;text &#01;&#138;&#16;&#77;font=&#01;&#69;&#69;&#193;&quot;mybigfont.fnt&quot; &#01;&#138;&#16;&#77;backgroundColor=&#01;&#69;&#69;&#193;&quot;#f00f&quot; &#01;&#138;&#16;&#77;text=&#01;&#69;&#69;&#193;&quot;caption 1&quot;&#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#00;&#00;&#00;...&#10;&#01;&#63;&#127;&#127;&lt;text &#01;&#138;&#16;&#77;font=&#01;&#69;&#69;&#193;&quot;mybigfont.fnt&quot; &#01;&#138;&#16;&#77;backgroundColor=&#01;&#69;&#69;&#193;&quot;#f00f&quot; &#01;&#138;&#16;&#77;text=&#01;&#69;&#69;&#193;&quot;caption 2&quot;&#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#00;&#00;&#00;...&#10;&#01;&#69;&#69;&#193;// and so on ..." />
+        </panel>
+        <text style="textFont" text="&#10;If we have lots of attributes or lots of places where we need to use them, it would be difficult to change them all at once. If I want a green background instead of the red one I need to find all the places where I've used the original color and replace it with the new one.&#10;"/>
+        <text style="textFont" text="With Nifty styles we extract all the attributes that we need to use multiple times and define them just once. This definition is called a style and it can be applied to all elements we want to apply the original attributes to.&#10;" />
+        <text style="textFont" text="To define the style we use the &lt;style&gt; tag and give it a name with the &quot;id&quot; attribute:&#10;" />
+        <panel style="codeBlock">
+          <text style="codeFont" text="&#01;&#63;&#127;&#127;&lt;style &#01;&#138;&#16;&#77;id=&#01;&#69;&#69;&#193;&quot;redBackgroundCaption&quot;&#01;&#63;&#127;&#127;&gt;&#10;  &#01;&#63;&#127;&#127;&lt;attributes &#01;&#138;&#16;&#77;font=&#01;&#69;&#69;&#193;&quot;mybigfont.fnt&quot; &#01;&#138;&#16;&#77;backgroundColor=&#01;&#69;&#69;&#193;&quot;#f00f&quot;&#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#63;&#127;&#127;&lt;/style&gt;" />
+        </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 17 -->
+  <controlDefinition name="page17" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="Advanced Nifty, Styles, cont."/>
+        <text style="textFont" text="With the style definition in place we can rewrite our original example code to use the style.&#10;" />
+        <panel style="codeBlock">
+          <text style="codeFont" text="&#01;&#00;&#00;&#00;...&#10;&#01;&#63;&#127;&#127;&lt;text &#01;&#138;&#16;&#77;style=&#01;&#69;&#69;&#193;&quot;redBackgroundCaption&quot; &#01;&#138;&#16;&#77;text=&#01;&#69;&#69;&#193;&quot;caption 1&quot;&#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#00;&#00;&#00;...&#10;&#01;&#63;&#127;&#127;&lt;text &#01;&#138;&#16;&#77;style=&#01;&#69;&#69;&#193;&quot;redBackgroundCaption&quot; &#01;&#138;&#16;&#77;text=&#01;&#69;&#69;&#193;&quot;caption 2&quot;&#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#00;&#00;&#00;...&#10;&#01;&#69;&#69;&#193;// and so on ..." />
+        </panel>
+        <text style="textFont" text="&#10;Nifty will now apply the attributes from the style definition to the elements. And we can now simply change the style definition and all elements the style is applied to will automatically update. Besides the benefit of reducing duplication it makes the xml simpler and easier to read.&#10;"/>
+        <text style="textFont" text="It is possible to use the same attributes you've used in the style definition directly on the element too. This will override the style definition. This allows you to use a basic style for your elements and if you need to use a different attribute value for a special element you can still use the base style and just add your changed attribute on top.&#10;" />
+        <panel style="codeBlock">
+          <text style="codeFont" text="&#01;&#63;&#127;&#127;&lt;text &#01;&#138;&#16;&#77;style=&#01;&#69;&#69;&#193;&quot;redBackgroundCaption&quot; &#01;&#138;&#16;&#77;text=&#01;&#69;&#69;&#193;&quot;caption 1&quot;&#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#00;&#00;&#00;...&#10;&#01;&#63;&#127;&#127;&lt;text &#01;&#138;&#16;&#77;style=&#01;&#69;&#69;&#193;&quot;redBackgroundCaption&quot; &#01;&#138;&#16;&#77;text=&#01;&#69;&#69;&#193;&quot;caption 2&quot; &#01;&#138;&#16;&#77;backgroundColor=&#01;&#69;&#69;&#193;&quot;#0f0f&quot; &#01;&#63;&#127;&#127;/&gt;" />
+        </panel>
+        <text style="textFont" text="&#10;The second text element in this example uses a green background but it will still get the original font attribute from the &quot;redBackgroundCaption&quot;style." />
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- page 
+  <controlDefinition name="page12" controller="de.lessvoid.nifty.controls.button.controller.ButtonControl">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="How does it work: Basics, Effects, make your own"/>
+        <text style="textFont" text="Nifty comes with a lot of build-in effects. But you're not limited to these effects, you can define your own.&#10;" />
+        <text style="textFont" text="The name of an effect links the effect to its implementing class. All you need to do for your own effect is to implement the Nifty &quot;Effect&quot; interface and define a name for your new effect with the &quot;registerEffect&quot; element:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="&#01;&#63;&#127;&#127;&lt;registerEffect &#01;&#138;&#16;&#77;name=&#01;&#69;&#69;&#193;&quot;my-cool-effect&quot; &#01;&#138;&#16;&#77;class=&#01;&#69;&#69;&#193;&quot;my.package.MyCoolEffect&quot; &#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#00;&#00;&#00;...&#10;&#01;&#63;&#127;&#127;&lt;effect&gt;&#10;  &#01;&#63;&#127;&#127;&lt;onStartScreen &#01;&#138;&#16;&#77;name=&#01;&#69;&#69;&#193;&quot;my-cool-effect&quot; &#01;&#00;&#00;&#00;... &#01;&#63;&#127;&#127;/&gt;&#10;&#01;&#63;&#127;&#127;&lt;/effect&gt;"/>
+        </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+  -->
+
+  <!-- CONTROLS -->
+  <!-- SLICK -->
+
+
 
 
 </nifty>

@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.examples.textfield;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.textfield.TextFieldCreator;
@@ -41,12 +40,13 @@ public class TextFieldDemoStartScreen implements ScreenController {
     labelCreator.setAlign("left");
     labelCreator.setTextVAlign("center");
     labelCreator.setTextHAlign("left");
-    Element e = labelCreator.create(newNifty, screen, row);
+    labelCreator.create(newNifty, screen, row);
 
     TextFieldCreator textFieldCreator = new TextFieldCreator();
     TextFieldControl textFieldControl = textFieldCreator.create(nifty, screen, row);
     textFieldControl.setText("Dynamically created TextField");
 
+    // dynamically change a label name
     Element element = screen.findElementByName("labelName");
     element.getRenderer(TextRenderer.class).setText("Name:");
   }
