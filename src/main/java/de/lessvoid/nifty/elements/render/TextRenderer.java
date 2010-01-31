@@ -9,7 +9,6 @@ import de.lessvoid.nifty.elements.tools.TextBreak;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -242,7 +241,7 @@ public class TextRenderer implements ElementRenderer {
     }
     boolean stateSaved = false;
     if (r.getFont() == null) {
-      r.saveState(RenderStateType.allStates());
+      r.saveState(null);
       r.setFont(font);
       stateSaved = true;
     }

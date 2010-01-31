@@ -36,7 +36,7 @@ public class ImageOverlayPulsate implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    r.saveState(RenderStateType.allStates());
+    r.saveState(null);
     float value = pulsater.update();
     r.setColorAlpha(value);
     r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());

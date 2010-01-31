@@ -455,9 +455,6 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     stack.pop().restore();
   }
 
-  public void startFrame() {
-  }
-
   public void setBlendMode(final BlendMode blendModeParam) {
     blendMode = blendModeParam;
     renderDevice.setBlendMode(blendModeParam);
@@ -494,7 +491,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     private boolean restoreAll = false;
 
     public SavedRenderState(final Set<RenderStateType> statesToSave) {
-      if (statesToSave.size() == RenderStateType.values().length) {
+      if (statesToSave == null) {
         savePosition();
         saveColor();
         saveColorAlpha();

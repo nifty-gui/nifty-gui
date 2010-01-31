@@ -23,7 +23,7 @@ public class SaveState implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    r.saveState(RenderStateType.allStates());
+    r.saveState(null);
   }
 
   public void deactivate() {

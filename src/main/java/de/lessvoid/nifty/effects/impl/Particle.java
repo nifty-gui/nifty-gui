@@ -35,7 +35,7 @@ public class Particle implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    r.saveState(RenderStateType.allStates());
+    r.saveState(null);
     system.render();
     r.restoreState();
   }

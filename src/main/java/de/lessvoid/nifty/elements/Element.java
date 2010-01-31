@@ -24,7 +24,6 @@ import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.MouseOverHandler;
 import de.lessvoid.nifty.screen.Screen;
@@ -412,50 +411,49 @@ public class Element {
    * @param r the RenderDevice to use
    */
   public void render(final NiftyRenderEngine r) {
-    // render element only when it is visible
     if (visible) {
-      r.saveState(RenderStateType.allStates());
-
-      // begin rendering / pre
-      if (!effectManager.isEmpty()) {
+      if (effectManager.isEmpty()) {
+        r.saveState(null);
+        renderElement(r);
+        renderChildren(r);
+        r.restoreState();
+      } else {
+        r.saveState(null);
         effectManager.begin(r, this);
         effectManager.renderPre(r, this);
-      }
-
-      // render element
-      if (elementRenderer != null) {
-        for (ElementRenderer renderer : elementRenderer) {
-          renderer.render(this, r);
-        }
-      }
-
-      // finish rendering / post
-      if (!effectManager.isEmpty()) {
+        renderElement(r);
         effectManager.renderPost(r, this);
         effectManager.end(r);
-      }
-
-      if (clipChildren) {
-        r.enableClip(getX(), getY(), getX() + getWidth(), getY() + getHeight());
-      }
-
-      // now render child elements
-      for (int i = 0; i < elements.size(); i++) {
-        Element p = elements.get(i);
-        p.render(r);
-      }
-
-      if (clipChildren) {
-        r.disableClip();
-      }
-
-      r.restoreState();
-
-      if (!effectManager.isEmpty()) {
-        r.saveState(RenderStateType.allStates());
+        renderChildren(r);
+        r.restoreState();
+        r.saveState(null);
         effectManager.renderOverlay(r, this);
         r.restoreState();
       }
+    }
+  }
+
+  private void renderElement(final NiftyRenderEngine r) {
+    if (elementRenderer != null) {
+      for (ElementRenderer renderer : elementRenderer) {
+        renderer.render(this, r);
+      }
+    }
+  }
+
+  private void renderChildren(final NiftyRenderEngine r) {
+    if (clipChildren) {
+      r.enableClip(getX(), getY(), getX() + getWidth(), getY() + getHeight());
+      renderInternalChildElements(r);
+      r.disableClip();
+    } else {
+      renderInternalChildElements(r);
+    }
+  }
+
+  private void renderInternalChildElements(final NiftyRenderEngine r) {
+    for (Element p : elements) {
+      p.render(r);
     }
   }
 

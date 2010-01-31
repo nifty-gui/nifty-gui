@@ -79,7 +79,7 @@ public class NiftyDebugConsole {
     screen.debug(console);
     console.output(nifty.getMouseInputEventQueue().toString());
 
-    theRenderDevice.saveState(RenderStateType.allStates());
+    theRenderDevice.saveState(null);
     console.update();
     theRenderDevice.restoreState();
   }
@@ -119,7 +119,7 @@ public class NiftyDebugConsole {
     screen.debug(console);
     console.output(nifty.getMouseInputEventQueue().toString());
 
-    theRenderDevice.saveState(RenderStateType.allStates());
+    theRenderDevice.saveState(null);
     console.update();
     theRenderDevice.restoreState();
   }

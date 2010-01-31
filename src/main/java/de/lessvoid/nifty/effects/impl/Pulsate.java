@@ -46,7 +46,7 @@ public class Pulsate implements EffectImpl {
 
     if (activated) {
       if (!changeColorOnly) {
-        r.saveState(RenderStateType.allStates());
+        r.saveState(null);
       }
 
       float value = pulsater.update();

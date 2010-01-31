@@ -29,7 +29,7 @@ public class Border implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    r.saveState(RenderStateType.allStates());
+    r.saveState(null);
     r.setColor(borderColor);
     int w = (int) borderWidth.getValue(element.getParent().getWidth());
     if (w == -1) {

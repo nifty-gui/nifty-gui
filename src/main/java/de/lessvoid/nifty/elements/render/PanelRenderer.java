@@ -2,7 +2,6 @@ package de.lessvoid.nifty.elements.render;
 
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -32,7 +31,7 @@ public class PanelRenderer implements ElementRenderer {
    */
   public final void render(final Element element, final NiftyRenderEngine r) {
     if (backgroundColor != null) {
-      r.saveState(RenderStateType.allStates());
+      r.saveState(null);
       if (!r.isColorChanged()) {
         if (r.isColorAlphaChanged()) {
           r.setColorIgnoreAlpha(backgroundColor);

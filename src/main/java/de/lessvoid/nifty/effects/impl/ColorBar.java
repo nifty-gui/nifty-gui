@@ -29,7 +29,7 @@ public class ColorBar implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    r.saveState(RenderStateType.allStates());
+    r.saveState(null);
     if (falloff == null) {
       r.setColor(color);
     } else {
