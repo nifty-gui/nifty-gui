@@ -3,17 +3,17 @@
 
   <!-- console panel style -->
   <style id="nifty-console-panel">
-    <attributes childLayout="vertical" />
+    <attributes childLayout="vertical" backgroundColor="#CCC6"/>
   </style>
 
   <!-- console line -->
   <style id="nifty-console-line">
-    <attributes font="console.fnt" backgroundColor="#CCC6" align="left" />
+    <attributes font="console.fnt" align="left" />
   </style>
 
   <!-- the background of the textfield -->
   <style id="nifty-console-textfield#panel">
-    <attributes backgroundColor="#CCC6" childLayout="overlay" height="20px" />
+    <attributes childLayout="overlay" height="20px" />
   </style>
 
   <!-- the actual input field -->
