@@ -131,7 +131,7 @@ public class NiftyDebugConsole {
   private void outputElement(final Element w, final String offset) {
     for (Element ww : w.getElements()) {
       String offsetString = offset + colorString(255, 255, 0) + getIdText(ww) + " " + ww.getElementType().getClass().getSimpleName() 
-      + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]" + colorString(255, 255, 255);  
+      + "\n" + offset + "childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]" + colorString(255, 255, 255);  
       console.output(offsetString + "\n" + StringHelper.whitespace(offset.length()) + ww.getElementStateString(StringHelper.whitespace(offset.length())));
       outputElement(ww, offset + " ");
     }
