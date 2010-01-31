@@ -15,6 +15,7 @@ import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -358,6 +359,38 @@ public class Screen {
     console.output(mouseOverHandler.getInfoString());
     console.output(focusHandler.toString());
     console.output("running: " + running);
+  }
+
+  public String debugOutput() {
+    StringBuffer result = new StringBuffer();
+    for (Element layer : getLayerElements()) {
+      String layerType = " +";
+      if (!layer.isVisible()) {
+        layerType = " -";
+      }
+      result.append("\n" + layerType + getIdText(layer) + "\n" + StringHelper.whitespace(layerType.length()) + layer.getElementStateString(StringHelper.whitespace(layerType.length())));
+      result.append(outputElement(layer, "   "));
+    }
+    return result.toString();
+  }
+
+  private String outputElement(final Element w, final String offset) {
+    StringBuffer result = new StringBuffer();
+    for (Element ww : w.getElements()) {
+      result.append("\n" + offset + getIdText(ww) + " " + ww.getElementType().getClass().getSimpleName() + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]");  
+      result.append("\n" + StringHelper.whitespace(offset.length()) + ww.getElementStateString(StringHelper.whitespace(offset.length())));
+      result.append(outputElement(ww, offset + " "));
+    }
+    return result.toString();
+  }
+
+  private String getIdText(final Element ww) {
+    String id = ww.getId();
+    if (id == null) {
+      return "[---]";
+    } else {
+      return "[" + id + "]";
+    }
   }
 
   /**

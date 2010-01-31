@@ -8,7 +8,6 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStateType;
-import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -30,6 +29,7 @@ public class EffectManager {
    * alternateKey we should use.
    */
   private String alternateKey;
+  private boolean isEmpty = true;
 
   /**
    * create a new effectManager with the given listener.
@@ -59,6 +59,7 @@ public class EffectManager {
    */
   public final void registerEffect(final EffectEventId id, final Effect e) {
     effectProcessor.get(id).registerEffect(e);
+    isEmpty = false;
   }
 
   /**
@@ -89,12 +90,10 @@ public class EffectManager {
    * @param renderDevice RenderDevice
    */
   public void begin(final NiftyRenderEngine renderDevice, final Element element) {
-    Set < RenderStateType > renderStates = RenderStateType.allStates();
-
+    Set < RenderStateType > renderStates = RenderStateType.allStatesCopy();
     for (EffectProcessor processor : effectProcessor.values()) {
       renderStates.removeAll(processor.getRenderStatesToSave());
     }
-
     renderDevice.saveState(renderStates);
   }
 
@@ -242,5 +241,10 @@ public class EffectManager {
     for (EffectProcessor processor : effectProcessor.values()) {
       processor.removeAllEffects();
     }
+    isEmpty = true;
+  }
+
+  public boolean isEmpty() {
+    return isEmpty;
   }
 }

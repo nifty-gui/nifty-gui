@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.render;
 
-import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
@@ -79,13 +77,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   /**
    * stack to save data.
    */
-  private Stack < Set < RenderStateSaver > > stack = new Stack < Set < RenderStateSaver > >();
-
-  /**
-   * renderStates mapping.
-   */
-  private EnumMap < RenderStateType, Class < ? extends RenderStateSaver > > renderStatesMap =
-    new EnumMap < RenderStateType, Class < ? extends RenderStateSaver > >(RenderStateType.class);
+  private Stack < SavedRenderState > stack = new Stack < SavedRenderState >();
 
   private Clip clipEnabled = null;
   private BlendMode blendMode = BlendMode.BLEND;
@@ -96,14 +88,6 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    */
   public NiftyRenderEngineImpl(final RenderDevice renderDeviceParam) {
     renderDevice = renderDeviceParam;
-    renderStatesMap.put(RenderStateType.color, RenderStateColor.class);
-    renderStatesMap.put(RenderStateType.alpha, RenderStateAlpha.class);
-    renderStatesMap.put(RenderStateType.imageScale, RenderStateImageScale.class);
-    renderStatesMap.put(RenderStateType.position, RenderStatePosition.class);
-    renderStatesMap.put(RenderStateType.textSize, RenderStateTextSize.class);
-    renderStatesMap.put(RenderStateType.font, RenderStateFont.class);
-    renderStatesMap.put(RenderStateType.clip, RenderStateClip.class);
-    renderStatesMap.put(RenderStateType.blendMode, RenderStateBlendMode.class);
   }
 
   /**
@@ -463,193 +447,200 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return !(selectionStart == -1 && selectionEnd == -1);
   }
 
-  /**
-   * @see de.lessvoid.nifty.render.NiftyRenderEngine#saveState(java.util.Set)
-   * @param statesToSave states to save
-   */
   public void saveState(final Set < RenderStateType > statesToSave) {
-    Set < RenderStateSaver > renderStateImpl = new HashSet < RenderStateSaver >();
+    stack.push(new SavedRenderState(statesToSave));
+  }
 
-    for (RenderStateType state : statesToSave) {
-      try {
-        Class < ? extends RenderStateSaver > clazz = renderStatesMap.get(state);
-        renderStateImpl.add(clazz.getConstructor(new Class[] {NiftyRenderEngineImpl.class }).newInstance(this));
-      } catch (Exception e) {
-        e.printStackTrace();
+  public void restoreState() {
+    stack.pop().restore();
+  }
+
+  public void startFrame() {
+  }
+
+  public void setBlendMode(final BlendMode blendModeParam) {
+    blendMode = blendModeParam;
+    renderDevice.setBlendMode(blendModeParam);
+  }
+
+  private class SavedRenderState {
+    private float x;
+    private float y;
+    private boolean statePositionChanged;
+
+    private Color color;
+    private boolean colorChanged;
+    private boolean stateColorChanged;
+    
+    private float colorAlpha;
+    private boolean colorAlphaChanged;
+    private boolean stateAlphaChanged;
+    
+    private RenderFont font;
+    private boolean stateFontChanged;
+    
+    private float textSize;
+    private boolean stateTextSizeChanged;
+    
+    private float imageScale;
+    private boolean stateImageScaleChanged;
+    
+    private Clip clipEnabled;
+    private boolean stateClipChanged;
+    
+    private BlendMode blendMode;
+    private boolean stateBlendModeChanged;
+
+    private boolean restoreAll = false;
+
+    public SavedRenderState(final Set<RenderStateType> statesToSave) {
+      if (statesToSave.size() == RenderStateType.values().length) {
+        savePosition();
+        saveColor();
+        saveColorAlpha();
+        saveTextSize();
+        saveImageSize();
+        saveFont();
+        saveClipEnabled();
+        saveBlendMode();
+        restoreAll = true;
+        return;
+      }
+      for (RenderStateType state : statesToSave) {
+        if (RenderStateType.position.equals(state)) {
+          savePosition();
+        } else if (RenderStateType.color.equals(state)) {
+          saveColor();
+        } else if (RenderStateType.alpha.equals(state)) {
+          saveColorAlpha();
+        } else if (RenderStateType.textSize.equals(state)) {
+          saveTextSize();
+        } else if (RenderStateType.imageScale.equals(state)) {
+          saveImageSize();
+        } else if (RenderStateType.font.equals(state)) {
+          saveFont();
+        } else if (RenderStateType.clip.equals(state)) {
+          saveClipEnabled();
+        } else if (RenderStateType.blendMode.equals(state)) {
+          saveBlendMode();
+        }
       }
     }
 
-    stack.push(renderStateImpl);
-  }
-
-  /**
-   * @see de.lessvoid.nifty.render.NiftyRenderEngine#restoreState()
-   */
-  public void restoreState() {
-    Set < RenderStateSaver > renderStateImpl = stack.pop();
-
-    for (RenderStateSaver impl : renderStateImpl) {
-      impl.restore();
-    }
-  }
-
-  public class RenderStatePosition implements RenderStateSaver {
-
-    /**
-     * saved x.
-     */
-    private float x;
-
-    /**
-     * saved y.
-     */
-    private float y;
-
-    /**
-     * store this state.
-     */
-    public RenderStatePosition() {
-      this.x = NiftyRenderEngineImpl.this.currentX;
-      this.y = NiftyRenderEngineImpl.this.currentY;
-    }
-
-    /**
-     * restore this state.
-     */
     public void restore() {
-      NiftyRenderEngineImpl.this.currentX = this.x;
-      NiftyRenderEngineImpl.this.currentY = this.y;
-    }
-  }
-
-  public class RenderStateColor implements RenderStateSaver {
-    /**
-     * Color.
-     */
-    private Color color;
-
-    /**
-     * color changed.
-     */
-    private boolean colorChanged;
-
-    /**
-     * save.
-     */
-    public RenderStateColor() {
-      this.color = NiftyRenderEngineImpl.this.color;
-      this.colorChanged = NiftyRenderEngineImpl.this.colorChanged;
-    }
-
-    /**
-     * restore.
-     */
-    public void restore() {
-      NiftyRenderEngineImpl.this.color = color;
-      NiftyRenderEngineImpl.this.colorChanged = colorChanged;
-    }
-  }
-
-  public class RenderStateAlpha implements RenderStateSaver {
-    private float colorAlpha;
-    private boolean colorAlphaChanged;
-
-    public RenderStateAlpha() {
-      this.colorAlpha = NiftyRenderEngineImpl.this.color.getAlpha();
-      this.colorAlphaChanged = NiftyRenderEngineImpl.this.colorAlphaChanged;
+      if (restoreAll) {
+        restorePosition();
+        restoreColor();
+        restoreAlpha();
+        restoreFont();
+        restoreTextSize();
+        restoreImageScale();
+        restoreClip();
+        restoreBlend();
+        return;
+      }
+      if (statePositionChanged) {
+        restorePosition();
+      }
+      if (stateColorChanged) {
+        restoreColor();
+      }
+      if (stateAlphaChanged) {
+        restoreAlpha();
+      }
+      if (stateFontChanged) {
+        restoreFont();
+      }
+      if (stateTextSizeChanged) {
+        restoreTextSize();
+      }
+      if (stateImageScaleChanged) {
+        restoreImageScale();
+      }
+      if (stateClipChanged) {
+        restoreClip();
+      }
+      if (stateBlendModeChanged) {
+        restoreBlend();
+      }
     }
 
-    public void restore() {
+    private void restoreBlend() {
+      NiftyRenderEngineImpl.this.setBlendMode(blendMode);
+    }
+
+    private void restoreClip() {
+      NiftyRenderEngineImpl.this.updateClip(clipEnabled);
+    }
+
+    private void restoreImageScale() {
+      NiftyRenderEngineImpl.this.imageScale = this.imageScale;
+    }
+
+    private void restoreTextSize() {
+      NiftyRenderEngineImpl.this.textScale = this.textSize;
+    }
+
+    private void restoreFont() {
+      NiftyRenderEngineImpl.this.font = font;
+    }
+
+    private void restoreAlpha() {
       NiftyRenderEngineImpl.this.color.setAlpha(colorAlpha);
       NiftyRenderEngineImpl.this.colorAlphaChanged = colorAlphaChanged;
     }
-  }
 
-  public class RenderStateFont implements RenderStateSaver {
-    /**
-     * font.
-     */
-    private RenderFont font;
-
-
-    /**
-     * save.
-     */
-    public RenderStateFont() {
-      this.font = NiftyRenderEngineImpl.this.font;
+    private void restoreColor() {
+      NiftyRenderEngineImpl.this.color = color;
+      NiftyRenderEngineImpl.this.colorChanged = colorChanged;
     }
 
-    /**
-     * restore.
-     */
-    public void restore() {
-      NiftyRenderEngineImpl.this.font = font;
-    }
-  }
-
-  public class RenderStateTextSize implements RenderStateSaver {
-
-    /**
-     * textSize.
-     */
-    private float textSize;
-
-    /**
-     * save.
-     */
-    public RenderStateTextSize() {
-      this.textSize = NiftyRenderEngineImpl.this.textScale;
+    private void restorePosition() {
+      NiftyRenderEngineImpl.this.currentX = this.x;
+      NiftyRenderEngineImpl.this.currentY = this.y;
     }
 
-    /**
-     * restore.
-     */
-    public void restore() {
-      NiftyRenderEngineImpl.this.textScale = this.textSize;
-    }
-  }
-
-  public class RenderStateImageScale implements RenderStateSaver {
-
-    /**
-     * imageScale.
-     */
-    private float imageScale;
-
-    /**
-     * save.
-     */
-    public RenderStateImageScale() {
-      this.imageScale = NiftyRenderEngineImpl.this.imageScale;
+    private void saveBlendMode() {
+      blendMode = NiftyRenderEngineImpl.this.blendMode;
+      stateBlendModeChanged = true;
     }
 
-    /**
-     * restore.
-     */
-    public void restore() {
-      NiftyRenderEngineImpl.this.imageScale = this.imageScale;
-    }
-  }
-
-  public class RenderStateClip implements RenderStateSaver {
-    /**
-     * font.
-     */
-    private Clip clipEnabled;
-
-
-    /**
-     * save.
-     */
-    public RenderStateClip() {
-      this.clipEnabled = NiftyRenderEngineImpl.this.clipEnabled;
+    private void saveClipEnabled() {
+      clipEnabled = NiftyRenderEngineImpl.this.clipEnabled;
+      stateClipChanged = true;
     }
 
-    /**
-     * restore.
-     */
-    public void restore() {
-      NiftyRenderEngineImpl.this.updateClip(clipEnabled);
+    private void saveFont() {
+      font = NiftyRenderEngineImpl.this.font;
+      stateFontChanged = true;
+    }
+
+    private void saveImageSize() {
+      imageScale = NiftyRenderEngineImpl.this.imageScale;
+      stateImageScaleChanged = true;
+    }
+
+    private void saveTextSize() {
+      textSize = NiftyRenderEngineImpl.this.textScale;
+      stateTextSizeChanged = true;
+    }
+
+    private void saveColorAlpha() {
+      colorAlpha = NiftyRenderEngineImpl.this.color.getAlpha();
+      colorAlphaChanged = NiftyRenderEngineImpl.this.colorAlphaChanged;
+      stateAlphaChanged = true;
+    }
+
+    private void saveColor() {
+      color = NiftyRenderEngineImpl.this.color;
+      colorChanged = NiftyRenderEngineImpl.this.colorChanged;
+      stateColorChanged = true;
+    }
+
+    private void savePosition() {
+      x = NiftyRenderEngineImpl.this.currentX;
+      y = NiftyRenderEngineImpl.this.currentY;
+      statePositionChanged = true;
     }
   }
 
@@ -669,22 +660,5 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     public void apply() {
       renderDevice.enableClip(x0, y0, x1, y1);
     }
-  }
-
-  public class RenderStateBlendMode implements RenderStateSaver {
-    private BlendMode blendMode;
-
-    public RenderStateBlendMode() {
-      this.blendMode = NiftyRenderEngineImpl.this.blendMode;
-    }
-
-    public void restore() {
-      NiftyRenderEngineImpl.this.setBlendMode(blendMode);
-    }
-  }
-
-  public void setBlendMode(final BlendMode blendModeParam) {
-    blendMode = blendModeParam;
-    renderDevice.setBlendMode(blendModeParam);
   }
 }

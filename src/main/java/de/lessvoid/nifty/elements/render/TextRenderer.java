@@ -140,6 +140,9 @@ public class TextRenderer implements ElementRenderer {
    * @param r the renderDevice we should use
    */
   public void render(final Element w, final NiftyRenderEngine r) {
+    if (textLines.length == 0 || (textLines.length == 1 && textLines[0].length() == 0)) {
+      return;
+    }
     renderLines(w, r, textLines);
   }
 
@@ -390,12 +393,11 @@ public class TextRenderer implements ElementRenderer {
     return lines.toArray(new String[0]);
   }
 
-  public void setWidthConstraint(final Element element, final SizeValue constraintWidth, final int width, final NiftyRenderEngine renderEngine) {
-    if (constraintWidth == null || width == 0 || !lineWrapping || isCalculatedLineWrapping) {
+  public void setWidthConstraint(final Element element, final SizeValue elementConstraintWidth, final int parentWidth, final NiftyRenderEngine renderEngine) {
+    if (elementConstraintWidth == null || parentWidth == 0 || !lineWrapping || isCalculatedLineWrapping) {
       return;
     }
-    int valueAsInt = constraintWidth.getValueAsInt(width);
-    System.out.println("recalc: " + constraintWidth + ", " + width + " (" + valueAsInt + ") ");
+    int valueAsInt = elementConstraintWidth.getValueAsInt(parentWidth);
     this.textLines = bla(valueAsInt, renderEngine, originalText.split("\n", -1));
     maxWidth = 0;
     for (String line : textLines) {

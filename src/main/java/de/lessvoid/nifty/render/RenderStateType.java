@@ -54,12 +54,18 @@ public enum RenderStateType {
    * @return the set of all available render states.
    */
   public static Set < RenderStateType > allStates() {
-    Set < RenderStateType > allStates = new HashSet < RenderStateType >();
+    return allStates;
+  }
 
+  public static Set<RenderStateType> allStatesCopy() {
+    return new HashSet<RenderStateType>(allStates());
+  }
+
+  private static Set < RenderStateType > allStates = new HashSet < RenderStateType >();
+
+  static {
     for (RenderStateType state : RenderStateType.values()) {
       allStates.add(state);
     }
-
-    return allStates;
   }
 }

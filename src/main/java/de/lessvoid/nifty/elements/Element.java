@@ -320,17 +320,14 @@ public class Element {
    * @return the element state as string.
    */
   public String getElementStateString(final String offset) {
-    String pos =
-      " style [" + getElementType().getAttributes().get("style") + "], state [" + getState() + "],"
-      + " position [" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + "], constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX())
-      + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", "
-      + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", "
-      + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + " ("
-      + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ","
-      + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ","
-      + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ","
-      + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + ")]"
-      + " focusable [" + focusable + "] mouseable [" + visibleToMouseEvents + "]";
+    String pos = ""
+      + " style [" + getElementType().getAttributes().get("style") + "]\n" + offset
+      + " state [" + getState() + "]\n" + offset
+      + " position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]\n" + offset
+      + " constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]\n" + offset
+      + " padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]\n" + offset
+      + " focusable [" + focusable + "]\n" + offset
+      + " mouseable [" + visibleToMouseEvents + "]";
     return pos;
   }
 
@@ -420,8 +417,10 @@ public class Element {
       r.saveState(RenderStateType.allStates());
 
       // begin rendering / pre
-      effectManager.begin(r, this);
-      effectManager.renderPre(r, this);
+      if (!effectManager.isEmpty()) {
+        effectManager.begin(r, this);
+        effectManager.renderPre(r, this);
+      }
 
       // render element
       if (elementRenderer != null) {
@@ -431,8 +430,10 @@ public class Element {
       }
 
       // finish rendering / post
-      effectManager.renderPost(r, this);
-      effectManager.end(r);
+      if (!effectManager.isEmpty()) {
+        effectManager.renderPost(r, this);
+        effectManager.end(r);
+      }
 
       if (clipChildren) {
         r.enableClip(getX(), getY(), getX() + getWidth(), getY() + getHeight());
@@ -450,9 +451,11 @@ public class Element {
 
       r.restoreState();
 
-      r.saveState(RenderStateType.allStates());
-      effectManager.renderOverlay(r, this);
-      r.restoreState();
+      if (!effectManager.isEmpty()) {
+        r.saveState(RenderStateType.allStates());
+        effectManager.renderOverlay(r, this);
+        r.restoreState();
+      }
     }
   }
 
@@ -464,14 +467,15 @@ public class Element {
     this.layoutManager = newLayout;
   }
 
-  /**
-   * pre-process constraint width.
-   */
   private void preProcessConstraintWidth() {
     for (Element e : elements) {
       e.preProcessConstraintWidth();
     }
 
+    preProcessConstraintWidthThisLevel();
+  }
+
+  private void preProcessConstraintWidthThisLevel() {
     // try the original width value first
     SizeValue myWidth = getConstraintWidth();
 
@@ -491,7 +495,6 @@ public class Element {
       if (elements.size() == layoutPartChild.size()) {
         SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
         if (newWidth != null) {
-          // log.info("pre processed new width for element: " + getId() + ": " + newWidth.getValueAsInt(0));
           setConstraintWidth(newWidth);
           isCalcWidthConstraint = true;
         }
@@ -499,14 +502,15 @@ public class Element {
     }
   }
 
-  /**
-   * pre process constraint height.
-   */
   private void preProcessConstraintHeight() {
     for (Element e : elements) {
       e.preProcessConstraintHeight();
     }
 
+    preProcessConstraintHeightThisLevel();
+  }
+
+  private void preProcessConstraintHeightThisLevel() {
     // try the original height value first
     SizeValue myHeight = getConstraintHeight();
 
@@ -534,11 +538,21 @@ public class Element {
 
   public void processLayout() {
     for (Element w : elements) {
+      w.processLayout();
+    }
+  }
+
+  private void processLayoutInternal() {
+    for (Element w : elements) {
       TextRenderer textRenderer = w.getRenderer(TextRenderer.class);
       if (textRenderer != null) {
         textRenderer.setWidthConstraint(w, w.getConstraintWidth(), getWidth(), nifty.getRenderEngine());
       }
     }
+  }
+
+  private void processL() {
+    processLayoutInternal();
 
     if (layoutManager != null) {
       // we need a list of LayoutPart and not of Element, so we'll build one on the fly here
@@ -552,7 +566,7 @@ public class Element {
       
       // repeat this step for all child elements
       for (Element w : elements) {
-        w.processLayout();
+        w.processL();
       }
     }
 
@@ -563,12 +577,14 @@ public class Element {
     }
   }
 
-  /**
-   * layout this element and all it's children.
-   */
   public void layoutElements() {
     prepareLayout();
     processLayout();
+    processL();
+
+    prepareLayout();
+    processLayout();
+    processL();
   }
 
   private void prepareLayout() {
