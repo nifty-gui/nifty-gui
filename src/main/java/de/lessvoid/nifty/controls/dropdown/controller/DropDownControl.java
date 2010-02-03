@@ -75,7 +75,7 @@ public class DropDownControl implements Controller {
       nifty.removeElement(nifty.getCurrentScreen(), e);
     }
 
-    dropDownModel.initialize(nifty, nifty.getCurrentScreen(), popup);
+    dropDownModel.initialize(nifty, nifty.getCurrentScreen(), popup, element.getElementType().getAttributes().get("style"));
     nifty.addControlsWithoutStartScreen();
 
     int maxHeight = getMaxHeight(popup);

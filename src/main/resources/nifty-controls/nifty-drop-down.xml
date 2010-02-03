@@ -10,7 +10,7 @@
   </controlDefinition>
 
   <!-- DROP DOWN CONTROL ITEM -->
-  <controlDefinition style="nifty-drop-down" name="dropDownControlItem" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControlItem" inputMapping="de.lessvoid.nifty.controls.dropdown.inputmapping.DropDownItemInputMapping">
+  <controlDefinition name="dropDownControlItem" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControlItem" inputMapping="de.lessvoid.nifty.controls.dropdown.inputmapping.DropDownItemInputMapping">
     <text id="text" style="#text-item" text="" focusable="true">
       <interact onRelease="dropDownItemClicked()"/>
     </text>

@@ -23,12 +23,13 @@ public class DropDownModel {
   public void initialize(
       final Nifty nifty,
       final Screen screen,
-      final Element parent) {
+      final Element parent,
+      final String style) {
     int count = 0;
     for (String item : items) {
       String id = parent.getId() + "_" + count++;
       CreateDropDownControlItem dropDownItem = new CreateDropDownControlItem(id, item);
-      dropDownItem.create(nifty, screen, parent);
+      dropDownItem.create(nifty, screen, parent, style);
     }
   }
 
