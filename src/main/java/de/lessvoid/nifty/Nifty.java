@@ -572,13 +572,18 @@ public class Nifty {
         layerLayout);
   }
 
-  /**
-   * Get Popup.
-   * @param id get id
-   * @return popup element
-   */
   public Element createPopup(final String id) {
-    Element popupElement = createPopupFromType(popups.get(id));
+    return createAndAddPopup(id, popups.get(id));
+  }
+
+  public Element createPopupWithStyle(final String id, final String style) {
+    PopupType popupType = popups.get(id);
+    popupType.getAttributes().set("style", style);
+    return createAndAddPopup(id, popupType);
+  }
+
+  private Element createAndAddPopup(final String id, PopupType popupType) {
+    Element popupElement = createPopupFromType(popupType);
     activePopups.put(id, popupElement);
     return popupElement;
   }
