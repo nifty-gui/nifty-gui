@@ -65,7 +65,9 @@ public class DropDownControl implements Controller {
       return;
     }
     alreadyOpen = true;
-    Element popupLayer = nifty.createPopup("dropDownBoxSelectPopup");
+
+    String parentStyle = element.getElementType().getAttributes().get("style");
+    Element popupLayer = nifty.createPopupWithStyle("dropDownBoxSelectPopup", parentStyle);
     Element popup = popupLayer.findElementByName("dropDownList");
     popup.setConstraintX(new SizeValue(element.getX() + "px"));
     popup.setConstraintY(new SizeValue(element.getY() + element.getHeight() + "px"));
@@ -75,7 +77,7 @@ public class DropDownControl implements Controller {
       nifty.removeElement(nifty.getCurrentScreen(), e);
     }
 
-    dropDownModel.initialize(nifty, nifty.getCurrentScreen(), popup, element.getElementType().getAttributes().get("style"));
+    dropDownModel.initialize(nifty, nifty.getCurrentScreen(), popup, parentStyle);
     nifty.addControlsWithoutStartScreen();
 
     int maxHeight = getMaxHeight(popup);
