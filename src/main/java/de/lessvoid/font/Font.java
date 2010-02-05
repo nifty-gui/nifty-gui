@@ -1,5 +1,7 @@
 package de.lessvoid.font;
 
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.lwjgl.opengl.GL11;
@@ -55,6 +57,7 @@ public class Font {
   private float selectionA;
   
   private RenderDevice device;
+  private Map<Character, Integer> displayListMap = new Hashtable<Character, Integer>();
   
   /**
    * construct the font.
@@ -124,19 +127,20 @@ public class Font {
    */
   private void initDisplayList()
   {
+    displayListMap.clear();
+
     // create new list
-    listId= GL11.glGenLists( 256 );
-    Tools.checkGLError( "glGenLists" );
+    listId = GL11.glGenLists(font.getChars().size());
+    Tools.checkGLError("glGenLists");
     
     // create the list
-    for( int i=0; i<256; i++ )
-    {
-      GL11.glNewList( listId + i, GL11.GL_COMPILE );
-      Tools.checkGLError( "glNewList" );
-      
-      CharacterInfo charInfo= font.getChar( (char)i );
-      if( charInfo != null )
-      {
+    int i = 0;
+    for (Map.Entry<Character, CharacterInfo> entry : font.getChars().entrySet()) {
+      displayListMap.put(entry.getKey(), listId + i);
+      GL11.glNewList(listId + i, GL11.GL_COMPILE);
+      Tools.checkGLError("glNewList");
+      CharacterInfo charInfo = entry.getValue();
+      if (charInfo != null) {
         GL11.glBegin( GL11.GL_QUADS );
         Tools.checkGLError( "glBegin" );
     
@@ -164,6 +168,7 @@ public class Font {
       // end list
       GL11.glEndList();
       Tools.checkGLError( "glEndList" );
+      i++;
     }
   }
 
@@ -288,7 +293,7 @@ public class Font {
               enableBlend();
 
               GL11.glColor4f(selectionR, selectionG, selectionB, selectionA);
-              GL11.glCallList(listId + currentc);
+              GL11.glCallList(displayListMap.get(currentc));
               Tools.checkGLError("glCallList");
               GL11.glPopAttrib();
 
@@ -297,7 +302,7 @@ public class Font {
           }
 
         if (!characterDone) {
-          GL11.glCallList(listId + currentc);
+          GL11.glCallList(displayListMap.get(currentc));
           Tools.checkGLError("glCallList");
         }
 

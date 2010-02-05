@@ -50,22 +50,22 @@ public class FontTest
   
   private static void frame()
   {
-    GL11.glClearColor( 0.2f, 0.0f, 0.0f, 1.0f );
-    GL11.glClear( GL11.GL_COLOR_BUFFER_BIT );
+//    GL11.glClearColor( 0.2f, 0.0f, 0.0f, 1.0f );
+//    GL11.glClear( GL11.GL_COLOR_BUFFER_BIT );
     
-for (int i = 0; i<100; i++) {
+for (int i = 0; i<1; i++) {
     // GL11.glColor3f( (float)Math.random(), (float)Math.random(), (float)Math.random() );
     GL11.glColor4f((float) Math.random(), (float) Math.random(), (float) Math.random(), 1.0f);
     font.drawString(
-        (int) (Math.random() * Display.getDisplayMode().getWidth()),
-        (int) (Math.random() * Display.getDisplayMode().getHeight()),
+        200, //(int) (Math.random() * Display.getDisplayMode().getWidth()),
+        200, // (int) (Math.random() * Display.getDisplayMode().getHeight()),
         "Hallo Welt!" );
     
     font.setSelectionStart(2);
     font.setSelectionEnd(4);
     font.renderWithSizeAndColor( 
-        (int)(Math.random() * Display.getDisplayMode().getWidth()),
-        (int)(Math.random() * Display.getDisplayMode().getHeight()),
+        100, //(int)(Math.random() * Display.getDisplayMode().getWidth()),
+        100, //(int)(Math.random() * Display.getDisplayMode().getHeight()),
         "Hallo Welt!", 2.0f, 0.0f, 1.0f, 0.0f, 0.5f );
 }
   }
