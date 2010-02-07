@@ -13,16 +13,6 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 public class TextFieldInputMapping implements NiftyInputMapping {
 
   /**
-   * min char constant.
-   */
-  private static final int MIN_CHAR = 31;
-
-  /**
-   * max char constant.
-   */
-  private static final int MAX_CHAR = 127;
-
-  /**
    * convert the given KeyboardInputEvent into a neutralized NiftyInputEvent.
    * @param inputEvent input event
    * @return NiftInputEvent
@@ -65,7 +55,7 @@ public class TextFieldInputMapping implements NiftyInputMapping {
       } else {
         return NiftyInputEvent.NextInputElement;
       }
-    } else if (inputEvent.getCharacter() > MIN_CHAR && inputEvent.getCharacter() < MAX_CHAR) {
+    } else if (!Character.isISOControl(inputEvent.getCharacter())) {
       NiftyInputEvent character = NiftyInputEvent.Character;
       character.setCharacter(inputEvent.getCharacter());
       return character;
