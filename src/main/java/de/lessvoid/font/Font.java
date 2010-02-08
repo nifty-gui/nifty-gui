@@ -2,7 +2,6 @@ package de.lessvoid.font;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.lwjgl.opengl.GL11;
 
@@ -16,17 +15,6 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
  * @author void
  */
 public class Font {
-
-  /**
-   * max distance.
-   */
-  private static final int MAX_DISTANCE = 9999;
-
-  /**
-   * the logger.
-   */
-  private static Logger log = Logger.getLogger(Font.class.getName());
-
   /**
    * the font reader.
    */
@@ -56,7 +44,6 @@ public class Font {
   private float selectionB;
   private float selectionA;
   
-  private RenderDevice device;
   private Map<Character, Integer> displayListMap = new Hashtable<Character, Integer>();
   
   /**
@@ -73,8 +60,6 @@ public class Font {
     selectionBackgroundG = 1.0f;
     selectionBackgroundB = 0.0f;
     selectionBackgroundA = 1.0f;
-    
-    this.device = device;
   }
   
   /**
@@ -263,50 +248,50 @@ public class Font {
 
           kerning = RenderFontLwjgl.getKerning(charInfoC, nextc);
           characterWidth = (float) (charInfoC.getXadvance() * size + kerning);
-        }
 
-        GL11.glLoadIdentity();
-        GL11.glTranslatef(x, yPos, 0.0f);
-
-        GL11.glTranslatef(0.0f, getHeight() / 2, 0.0f);
-        GL11.glScalef(size, size, 1.0f);
-        GL11.glTranslatef(0.0f, -getHeight() / 2, 0.0f);
-
-        boolean characterDone = false;
-          if (isSelection()) {
-            if (i >= selectionStart && i < selectionEnd) {
-              GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
-
-              disableBlend();
-              GL11.glDisable(GL11.GL_TEXTURE_2D);
-
-              GL11.glColor4f(selectionBackgroundR, selectionBackgroundG, selectionBackgroundB, selectionBackgroundA);
-              GL11.glBegin(GL11.GL_QUADS);
-
-                GL11.glVertex2i(0, 0);
-                GL11.glVertex2i((int) characterWidth, 0);
-                GL11.glVertex2i((int) characterWidth, 0 + getHeight());
-                GL11.glVertex2i(0, 0 + getHeight());
-
-              GL11.glEnd();
-              GL11.glEnable(GL11.GL_TEXTURE_2D);
-              enableBlend();
-
-              GL11.glColor4f(selectionR, selectionG, selectionB, selectionA);
-              GL11.glCallList(displayListMap.get(currentc));
-              Tools.checkGLError("glCallList");
-              GL11.glPopAttrib();
-
-              characterDone = true;
+          GL11.glLoadIdentity();
+          GL11.glTranslatef(x, yPos, 0.0f);
+  
+          GL11.glTranslatef(0.0f, getHeight() / 2, 0.0f);
+          GL11.glScalef(size, size, 1.0f);
+          GL11.glTranslatef(0.0f, -getHeight() / 2, 0.0f);
+  
+          boolean characterDone = false;
+            if (isSelection()) {
+              if (i >= selectionStart && i < selectionEnd) {
+                GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
+  
+                disableBlend();
+                GL11.glDisable(GL11.GL_TEXTURE_2D);
+  
+                GL11.glColor4f(selectionBackgroundR, selectionBackgroundG, selectionBackgroundB, selectionBackgroundA);
+                GL11.glBegin(GL11.GL_QUADS);
+  
+                  GL11.glVertex2i(0, 0);
+                  GL11.glVertex2i((int) characterWidth, 0);
+                  GL11.glVertex2i((int) characterWidth, 0 + getHeight());
+                  GL11.glVertex2i(0, 0 + getHeight());
+  
+                GL11.glEnd();
+                GL11.glEnable(GL11.GL_TEXTURE_2D);
+                enableBlend();
+  
+                GL11.glColor4f(selectionR, selectionG, selectionB, selectionA);
+                GL11.glCallList(displayListMap.get(currentc));
+                Tools.checkGLError("glCallList");
+                GL11.glPopAttrib();
+  
+                characterDone = true;
+              }
             }
+  
+          if (!characterDone) {
+            GL11.glCallList(displayListMap.get(currentc));
+            Tools.checkGLError("glCallList");
           }
-
-        if (!characterDone) {
-          GL11.glCallList(displayListMap.get(currentc));
-          Tools.checkGLError("glCallList");
+  
+          x += characterWidth;
         }
-
-        x += characterWidth;
       }
 
       GL11.glPopMatrix();
