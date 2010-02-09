@@ -121,6 +121,10 @@ public class TextRenderer implements ElementRenderer {
    * @param newText new text
    */
   private void initText(final String newText) {
+    if (lineWrapping && isCalculatedLineWrapping) {
+      isCalculatedLineWrapping = false;
+    }
+
     this.originalText = newText;
     this.textLines = newText.split("\n", -1);
 
