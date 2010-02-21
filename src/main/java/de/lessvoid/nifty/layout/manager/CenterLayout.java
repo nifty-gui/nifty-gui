@@ -134,7 +134,18 @@ public class CenterLayout implements LayoutManager {
    * @return new calculated SizeValue
    */
   public SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
-    return null;
+    if (children.isEmpty()) {
+      return null;
+    }
+    LayoutPart firstChild = children.get(0);
+    if (firstChild == null) {
+      return null;
+    }
+    BoxConstraints constraint = firstChild.getBoxConstraints();
+    if (constraint == null) {
+      return null;
+    }
+    return constraint.getWidth();
   }
 
   /**

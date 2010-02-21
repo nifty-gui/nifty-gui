@@ -79,6 +79,7 @@ public class TextRenderer implements ElementRenderer {
    * attached to has a width constraint.
    */
   private boolean lineWrapping = false;
+
   private boolean isCalculatedLineWrapping = false;
 
   /**
@@ -416,5 +417,9 @@ public class TextRenderer implements ElementRenderer {
 
   public void setLineWrapping(final boolean lineWrapping) {
     this.lineWrapping = lineWrapping; 
+  }
+
+  public boolean isLineWrapping() {
+    return lineWrapping;
   }
 }
