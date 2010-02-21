@@ -39,7 +39,7 @@
             </control>
           </panel>
           <panel childLayout="horizontal" height="*" />
-          <panel childLayout="vertical">
+          <panel childLayout="vertical" width="100%">
             <control id="backButton" name="button" label="Back to Menu" align="right">
               <interact onClick="back()" />
             </control>

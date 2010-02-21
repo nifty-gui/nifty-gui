@@ -68,7 +68,7 @@
   </style>
 
   <controlDefinition name="endscroller-page-1">
-    <panel childLayout="vertical">
+    <panel childLayout="vertical" width="100%">
       <panel height="600px" childLayout="vertical" />
       <label style="button-font" text="Nifty GUI&#13;&#10;(Examples/Demo)" align="center" />
       <panel height="100px" childLayout="vertical" />
@@ -85,7 +85,7 @@
         <label style="button-font" text="Slick2D&#13;&#10;" align="center" />
         <image filename="all/slick.png" align="center" />
       <panel height="50px" childLayout="vertical" />
-        <panel childLayout="horizontal">
+        <panel childLayout="horizontal" align="center">
           <panel childLayout="vertical">
             <label style="button-font" text="OpenGL&#13;&#10;" align="center" />
             <image filename="all/opengl.png" align="center" />
@@ -134,7 +134,7 @@ Thank you Trent.&#13;&#10;" align="center" />
       <effect>
         <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true" alternateEnable="exit"/>
       </effect>
-      <panel id="panel" childLayout="center" backgroundImage="intro-background.png">
+      <panel id="panel" childLayout="center" backgroundImage="intro-background.png" width="100%">
         <effect>
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" post="false"/> 
           <onStartScreen name="playSound" sound="gong" startDelay="1400" />
@@ -250,7 +250,7 @@ Thank you Trent.&#13;&#10;" align="center" />
         <onStartScreen name="fade" start="#0" end="#f" length="500" alternateEnable="fade" />
         <onEndScreen name="fade" startColor="#393939ff" endColor="#00000000" startDelay="1000" length="500" alternateEnable="fade"/>
       </effect>
-      <panel id="panel" height="30%" childLayout="center">
+      <panel id="panel" width="100%" height="30%" childLayout="center">
         <image id="image" filename="demo-logo.png" align="center" valign="center">
           <effect>
             <onStartScreen name="fade" start="#0" end="#f" startDelay="500" length="500" />
@@ -380,7 +380,7 @@ Thank you Trent.&#13;&#10;" align="center" />
       </image>
     </layer>
     <layer id="logo" childLayout="vertical">
-      <panel height="25%" childLayout="center">
+      <panel height="25%" childLayout="center" width="100%">
         <image id="image" filename="demo-logo.png" align="center" valign="center">
 	      <effect>
 	        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1500" startDelay="500"/>
@@ -442,7 +442,7 @@ Thank you Trent.&#13;&#10;" align="center" />
           <onStartScreen name="alphaHide" length="700" inherit="true" />
           <onEndScreen name="fade" length="10" start="#f" end="#0" inherit="true" />
         </effect>
-        <panel childLayout="center" height="70%">
+        <panel childLayout="center" height="70%" width="100%">
           <text text="Really want to Exit?" style="base-font" align="center" valign="center" color="#000f"/>
         </panel>
         <panel childLayout="horizontal" align="center" height="30%">
