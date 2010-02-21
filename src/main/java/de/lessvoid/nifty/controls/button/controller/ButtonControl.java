@@ -7,8 +7,14 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.layout.align.HorizontalAlign;
+import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.spi.render.RenderFont;
+import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
@@ -20,13 +26,6 @@ public class ButtonControl implements Controller {
   private FocusHandler focusHandler;
   private Screen screen;
 
-  /**
-   * bind.
-   * @param nifty nifty
-   * @param newElement element
-   * @param parameter parameter
-   * @param listener listener
-   */
   public void bind(
       final Nifty nifty,
       final Screen screenParam,
@@ -42,10 +41,9 @@ public class ButtonControl implements Controller {
     focusHandler = screen.getFocusHandler();
   }
 
-  /**
-   * inputEvent.
-   * @param inputEvent inputEvent
-   */
+  public void onFocus(final boolean getFocus) {
+  }
+
   public void inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
       focusHandler.getNext(element).setFocus();
@@ -70,10 +68,47 @@ public class ButtonControl implements Controller {
     }
   }
 
-  /**
-   * onFocus.
-   * @param getFocus getFocus
-   */
-  public void onFocus(final boolean getFocus) {
+  public void setText(final String text) {
+    TextRenderer textRenderer = getButtonTextRenderer();
+    textRenderer.setText(text);
+    if (!textRenderer.isLineWrapping()) {
+      buttonTextElement().setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
+    }
+  }
+
+  public int getTextWidth() {
+    return getButtonTextRenderer().getTextWidth();
+  }
+
+  public int getTextHeight() {
+    return getButtonTextRenderer().getTextHeight();
+  }
+
+  public RenderFont getFont() {
+    return getButtonTextRenderer().getFont();
+  }
+
+  public void setFont(final RenderFont fontParam) {
+    getButtonTextRenderer().setFont(fontParam);
+  }
+
+  public void setTextVAlign(final VerticalAlign newTextVAlign) {
+    getButtonTextRenderer().setTextVAlign(newTextVAlign);
+  }
+
+  public void setTextHAlign(final HorizontalAlign newTextHAlign) {
+    getButtonTextRenderer().setTextHAlign(newTextHAlign);
+  }
+
+  public void setColor(final Color newColor) {
+    getButtonTextRenderer().setColor(newColor);
+  }
+
+  private TextRenderer getButtonTextRenderer() {
+    return buttonTextElement().getRenderer(TextRenderer.class);
+  }
+
+  private Element buttonTextElement() {
+    return element.findElementByName("button-text");
   }
 }
