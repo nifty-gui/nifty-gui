@@ -122,4 +122,9 @@ public class ImageSelectControl implements Controller {
       updateVisuals();
     }
   }
+
+  public void addImage(NiftyImage image) {
+    images.add(image);
+    updateVisuals();
+  }
 }
