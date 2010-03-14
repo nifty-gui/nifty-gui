@@ -40,9 +40,16 @@ public class MainPage implements ScreenController {
     pages.add("page13");
     pages.add("page14");
     pages.add("page15");
-    */
     pages.add("page16");
     pages.add("page17");
+    pages.add("page18");
+    */
+    pages.add("page19");
+    pages.add("page20");
+    pages.add("page21");
+    pages.add("page22");
+    pages.add("page23");
+    pages.add("page24");
 
     pageIndex = 0;
     lastPageIndex = -1;
