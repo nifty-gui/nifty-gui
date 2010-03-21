@@ -68,9 +68,9 @@ public class KeyboardInputEventCreatorTest extends TestCase {
    */
   public void testControlDown() {
     KeyboardInputEvent event = this.creator.createEvent(Keyboard.KEY_LCONTROL, ' ', true);
-    assertEvent(event, Keyboard.KEY_LCONTROL, ' ', true, false, true);
+    assertEvent(event, Keyboard.KEY_LCONTROL, (char)0, true, false, true);
     event = this.creator.createEvent(Keyboard.KEY_RCONTROL, ' ', true);
-    assertEvent(event, Keyboard.KEY_RCONTROL, ' ', true, false, true);
+    assertEvent(event, Keyboard.KEY_RCONTROL, (char)0, true, false, true);
   }
 
   /**
@@ -88,9 +88,9 @@ public class KeyboardInputEventCreatorTest extends TestCase {
    */
   public void testControlDownKeySequence() {
     KeyboardInputEvent event = this.creator.createEvent(Keyboard.KEY_LCONTROL, ' ', true);
-    assertEvent(event, Keyboard.KEY_LCONTROL, ' ', true, false, true);
+    assertEvent(event, Keyboard.KEY_LCONTROL, (char)0, true, false, true);
     event = this.creator.createEvent(Keyboard.KEY_A, 'a', true);
-    assertEvent(event, Keyboard.KEY_A, 'a', true, false, true);
+    assertEvent(event, Keyboard.KEY_A, (char)0, true, false, true);
     event = this.creator.createEvent(Keyboard.KEY_LCONTROL, ' ', false);
     assertEvent(event, Keyboard.KEY_LCONTROL, ' ', false, false, false);
     event = this.creator.createEvent(Keyboard.KEY_A, 'a', true);
