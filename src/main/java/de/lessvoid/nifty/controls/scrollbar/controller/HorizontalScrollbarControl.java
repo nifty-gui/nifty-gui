@@ -72,4 +72,8 @@ public class HorizontalScrollbarControl implements Controller {
   public void setPerClickChange(final float perClickChange) {
     scrollbar.setPerClickChange(perClickChange);
   }
+
+  public void setCurrentValue(final float f) {
+    scrollbar.changeSliderPos(f);
+  }
 }

@@ -81,6 +81,7 @@ public class ScrollPanel implements Controller {
           horizontalS.setWorldMaxValue(scrollElement.getWidth());
           horizontalS.setViewMaxValue(childRootElement.getWidth());
           horizontalS.setPerClickChange(stepSizeX);
+          horizontalS.setCurrentValue(0.0f);
           horizontalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
             public void positionChanged(final float currentValue) {
               scrollElement.setConstraintX(new SizeValue(-(int)currentValue + "px"));
@@ -94,6 +95,7 @@ public class ScrollPanel implements Controller {
           verticalS.setWorldMaxValue(scrollElement.getHeight());
           verticalS.setViewMaxValue(childRootElement.getHeight());
           verticalS.setPerClickChange(stepSizeY);
+          verticalS.setCurrentValue(0.0f);
           verticalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
             public void positionChanged(final float currentValue) {
               scrollElement.setConstraintY(new SizeValue(-(int)currentValue + "px"));
@@ -106,5 +108,7 @@ public class ScrollPanel implements Controller {
         scrollElement.setConstraintY(new SizeValue("0px"));
       }
     }
+
+    screen.layoutLayers();
   }
 }

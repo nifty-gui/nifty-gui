@@ -6,7 +6,7 @@
         <panel id="nifty-scrollpanel-child-root" childLayout="absolute" childClip="true" style="#scrollpanel" visibleToMouse="true" />
         <control id="nifty-internal-vertical-scrollbar" name="verticalScrollbar" />
       </panel>
-      <panel id="nifty-internal-horizonal-panel" childLayout="horizontal" backgroundColor="#f00f" >
+      <panel id="nifty-internal-horizonal-panel" childLayout="horizontal">
         <control id="nifty-internal-horizontal-scrollbar" name="horizontalScrollbar" />
         <panel align="right" style="#bottom-right" />
       </panel>
