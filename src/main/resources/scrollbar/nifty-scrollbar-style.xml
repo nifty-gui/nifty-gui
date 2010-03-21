@@ -34,7 +34,7 @@
 
   <!-- horizontal -->
   <style id="nifty-horizontal-scrollbar#panel">
-    <attributes childLayout="horizontal" height="28px" backgroundColor="#0f0f" align="center" />
+    <attributes childLayout="horizontal" height="28px" align="center" />
   </style>
   <style id="nifty-horizontal-scrollbar#left">
     <attributes filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:0,0,28,28"/>
