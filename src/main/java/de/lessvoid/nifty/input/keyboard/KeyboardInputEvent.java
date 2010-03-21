@@ -49,6 +49,9 @@ public class KeyboardInputEvent {
     this.keyDown = newKeyDown;
     this.shiftDown = newShiftDown;
     this.controlDown = newControlDown;
+    if (controlDown) {
+      this.character = 0;
+    }
   }
 
   /**

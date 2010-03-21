@@ -73,7 +73,7 @@ public class KeyboardInputEventCreator {
    * @return true left or right control key pressed and false otherwise
    */
   private boolean isControlKey(final int key) {
-    return key == Keyboard.KEY_RCONTROL || key == Keyboard.KEY_LCONTROL;
+    return key == Keyboard.KEY_RCONTROL || key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_LMETA || key == Keyboard.KEY_RMETA;
   }
 
   /**
