@@ -24,32 +24,47 @@ public class MainPage implements ScreenController {
   public void bind(final Nifty nifty, final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
-    /*
-    pages.add("page1");
-    pages.add("page2");
-    pages.add("page3");
-    pages.add("page4");
-    pages.add("page5");
-    pages.add("page6");
-    pages.add("page7");
-    pages.add("page8");
-    pages.add("page9");
-    pages.add("page10");
-    pages.add("page11");
-    pages.add("page12");
-    pages.add("page13");
-    pages.add("page14");
-    pages.add("page15");
-    pages.add("page16");
-    pages.add("page17");
-    pages.add("page18");
-    */
-    pages.add("page19");
-    pages.add("page20");
-    pages.add("page21");
-    pages.add("page22");
-    pages.add("page23");
-    pages.add("page24");
+
+    pages.add("pageWelcome");
+    pages.add("pageIntro");
+    pages.add("pageChapterI");
+    pages.add("pageBasicsJava1");
+    pages.add("pageBasicsJava2");
+    pages.add("pageBasicsXML1");
+    pages.add("pageBasicsXML2");
+    pages.add("pageBasicsXMLLayout1");
+    pages.add("pageBasicsXMLLayout2");
+    pages.add("pageBasicsXMLLayout3");
+    pages.add("pageChapterII");
+    pages.add("pageEffects1");
+    pages.add("pageEffects2");
+    pages.add("pageEffects3");
+    pages.add("pageChapterIII");
+    pages.add("pageConnecting1");
+    pages.add("pageConnecting2");
+    pages.add("pageBasicsEnd");
+    pages.add("pageChapterIV");
+    pages.add("pageAdvancedStyles1");
+    pages.add("pageAdvancedStyles2");
+    pages.add("pageAdvancedStyles3");
+    pages.add("pageChapterV");
+    pages.add("pageAdvancedControls1");
+    pages.add("pageAdvancedControls2");
+    pages.add("pageAdvancedControls3");
+    pages.add("pageAdvancedControls4");
+    pages.add("pageAdvancedControls5");
+    pages.add("pageAdvancedControls6");
+    pages.add("pageAdvancedControls7");
+    pages.add("pageAdvancedControls8");
+    pages.add("pageAdvancedControls9");
+    pages.add("pageChapterVI");
+    pages.add("pageCustomEffects1");
+    pages.add("pageChapterVII");
+    pages.add("pageSlick1");
+    pages.add("pageSlick2");
+    pages.add("pageSlick3");
+    pages.add("pageChapterVIII");
+    pages.add("pageTheEnd");
 
     pageIndex = 0;
     lastPageIndex = -1;
@@ -116,7 +131,8 @@ public class MainPage implements ScreenController {
   }
 
   private void updatePage() {
-    CreateButtonControl buttonControl = new CreateButtonControl(pages.get(pageIndex), "page_" + pageIndex);
+    String pageName = pages.get(pageIndex);
+    CreateButtonControl buttonControl = new CreateButtonControl(pageName, "page_" + pageIndex);
     buttonControl.create(nifty, screen, screen.findElementByName("pp"));
 
     Element element = screen.findElementByName("page_" + lastPageIndex);
