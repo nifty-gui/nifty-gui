@@ -20,7 +20,7 @@
       </panel>
     </layer>
     <layer id="layer" childLayout="vertical">
-      <panel id="top" height="40%" childLayout="center">
+      <panel id="top" height="40%" width="100%" childLayout="center">
         <image id="logo" filename="slick/gravitron.png" align="center" valign="center">
           <effect>
             <onStartScreen name="move" direction="top" mode="in" length="250"/>
@@ -38,7 +38,7 @@
       <panel id="panel" height="100%" width="100%" backgroundImage="slick/menu-background.png"/>
     </layer>
     <layer id="layer" childLayout="vertical">
-      <panel id="top" height="40%" childLayout="center">
+      <panel id="top" height="40%" width="100%" childLayout="center">
         <image id="logo" filename="slick/gravitron.png" align="center" valign="center"/>
       </panel>
       <panel id="menu" height="20%" align="center" valign="center" childLayout="center">

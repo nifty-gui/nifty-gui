@@ -19,7 +19,9 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
+import de.lessvoid.nifty.lwjglslick.input.LwjglKeyboardInputEventCreator;
 import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
 import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
 import de.lessvoid.nifty.render.NiftyImage;
@@ -43,6 +45,8 @@ public class TestState1 extends BasicGameState implements ScreenController {
   private Color currentColor;
   private Nifty nifty;
   private List<MouseInputEvent> mouseEvents = new ArrayList<MouseInputEvent>();
+  private List < KeyboardInputEvent > keyEvents = new ArrayList < KeyboardInputEvent >();
+  private LwjglKeyboardInputEventCreator inputEventCreator = new LwjglKeyboardInputEventCreator(); 
   private int mouseX;
   private int mouseY;
   private boolean mouseDown;
@@ -64,6 +68,12 @@ public class TestState1 extends BasicGameState implements ScreenController {
       public List<MouseInputEvent> getMouseEvents() {
         ArrayList<MouseInputEvent> result = new ArrayList<MouseInputEvent>(mouseEvents);
         mouseEvents.clear();
+        return result;
+      }
+
+      public List<KeyboardInputEvent> getKeyboardEvents() {
+        ArrayList < KeyboardInputEvent > result = new ArrayList < KeyboardInputEvent > (keyEvents);
+        keyEvents.clear();
         return result;
       }
     }, new TimeProvider());
@@ -108,6 +118,16 @@ public class TestState1 extends BasicGameState implements ScreenController {
     } else if (key == Input.KEY_C) {
       switchIcon(icon3);
     }
+
+    // for this example it's not necessary that key events are forwarded to nifty
+    // because we directly handle them in the code above. if your application needs
+    // nifty keyboard events this is how to forward them (see also the InputSystem
+    // above where we initialized nifty)
+    keyEvents.add(inputEventCreator.createEvent(key, c, false));
+  }
+
+  public void keyPressed(final int key, final char c) {
+    keyEvents.add(inputEventCreator.createEvent(key, c, true));
   }
 
   private void switchIcon(final NiftyImage icon) {

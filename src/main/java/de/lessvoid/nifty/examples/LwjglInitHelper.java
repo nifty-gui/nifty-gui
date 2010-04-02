@@ -240,18 +240,6 @@ public class LwjglInitHelper {
       // show render
       Display.update();
 
-      // forward keyboard events to nifty
-      while (Keyboard.next()) {
-        boolean eventKeyState = Keyboard.getEventKeyState();
-        int eventKey = Keyboard.getEventKey();
-        nifty.keyEvent(eventKey, Keyboard.getEventCharacter(), eventKeyState);
-        if (eventKeyState && eventKey == Keyboard.KEY_F2) {
-          nifty.toggleElementsDebugConsole();
-        } else if (eventKeyState && eventKey == Keyboard.KEY_F3) {
-          nifty.toggleEffectsDebugConsole();
-        }
-      }
-
       // render nifty
       if (nifty.render(true)) {
         done = true;
