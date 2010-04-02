@@ -1,8 +1,6 @@
 package de.lessvoid.nifty.effects.impl;
 
 
-import org.newdawn.slick.util.Log;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
@@ -32,7 +30,7 @@ public class FadeSound implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     if (soundHandle == null) {
-      Log.error("missing sound [" + soundId + "]");
+      return;
     }
     soundHandle.setVolume(1.0f - normalizedTime);
     if (normalizedTime >= 1.0f) {

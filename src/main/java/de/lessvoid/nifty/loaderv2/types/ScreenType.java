@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.util.Log;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
@@ -22,6 +20,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.xml.tools.ClassHelper;
 
 public class ScreenType extends XmlBaseType {
+  private Logger log = Logger.getLogger(ScreenType.class.getName());
   private Collection < LayerType > layers = new ArrayList < LayerType >();
 
   public void addLayer(final LayerType layer) {
@@ -54,7 +53,7 @@ public class ScreenType extends XmlBaseType {
     if (inputMappingClass != null) {
       NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
       if (!(screenController instanceof KeyInputHandler)) {
-        Log.warn("class [" + controller + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
+        log.info("class [" + controller + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
       } else {
         screen.addKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
       }

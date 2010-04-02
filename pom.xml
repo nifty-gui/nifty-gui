@@ -42,26 +42,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>lwjgl</groupId>
-      <artifactId>lwjgl</artifactId>
-      <version>2.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>lwjgl</groupId>
-      <artifactId>jinput</artifactId>
-      <version>2.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>lwjgl</groupId>
-      <artifactId>lwjgl-util</artifactId>
-      <version>2.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>slick</groupId>
-      <artifactId>slick</artifactId>
-      <version>239</version>
-    </dependency>
-    <dependency>
       <groupId>xpp3</groupId>
       <artifactId>xpp3</artifactId>
       <version>1.1.4c</version>

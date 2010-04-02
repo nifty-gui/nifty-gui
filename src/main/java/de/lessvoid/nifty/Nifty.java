@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEventCreator;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
 import de.lessvoid.nifty.layout.LayoutPart;
@@ -61,7 +61,6 @@ public class Nifty {
   private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
   private List < ElementToRemove > elementsToRemove = new ArrayList < ElementToRemove >();
   private boolean useDebugConsole;
-  private KeyboardInputEventCreator inputEventCreator;
   private MouseInputEventQueue mouseInputEventQueue;
   private Collection < ScreenController > registeredScreenControllers = new ArrayList < ScreenController >();
   private String alternateKeyForNextLoadXml;
@@ -121,7 +120,6 @@ public class Nifty {
     this.timeProvider = newTimeProvider;
     this.exit = false;
     this.currentLoaded = null;
-    this.inputEventCreator = new KeyboardInputEventCreator();
     this.mouseInputEventQueue = new MouseInputEventQueue(renderEngine.getHeight());
     this.lastTime = timeProvider.getMsTime();
 
@@ -157,6 +155,12 @@ public class Nifty {
           currentScreen.mouseEvent(inputEvent);
           handleDynamicElements();
           inputEvent = mouseInputEventQueue.poll();
+        }
+
+        for (KeyboardInputEvent keyEvent : inputSystem.getKeyboardEvents()) {
+          if (!currentScreen.isNull()) {
+            currentScreen.keyEvent(keyEvent);
+          }
         }
 
         if (!currentScreen.isNull()) {
@@ -485,18 +489,6 @@ public class Nifty {
     }
 
     return screen;
-  }
-
-  /**
-   * keyboard event.
-   * @param eventKey eventKey
-   * @param eventCharacter the character
-   * @param keyDown key down
-   */
-  public void keyEvent(final int eventKey, final char eventCharacter, final boolean keyDown) {
-    if (!currentScreen.isNull()) {
-      currentScreen.keyEvent(inputEventCreator.createEvent(eventKey, eventCharacter, keyDown));
-    }
   }
 
   /**
