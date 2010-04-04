@@ -7,7 +7,6 @@ package de.lessvoid.nifty.examples.console;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.examples.LwjglInitHelper.RenderLoopCallback;
-import de.lessvoid.nifty.lwjglslick.input.LwjglInputSystem;
 import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
 import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
 import de.lessvoid.nifty.sound.SoundSystem;
