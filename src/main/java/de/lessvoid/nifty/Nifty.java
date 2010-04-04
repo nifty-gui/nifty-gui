@@ -143,6 +143,7 @@ public class Nifty {
    * @return true when nifty has finished processing the screen and false when rendering should continue.
    */
   public boolean render(final boolean clearScreen) {
+    renderEngine.beginFrame();
     if (clearScreen) {
       renderEngine.clear();
     }
@@ -177,6 +178,7 @@ public class Nifty {
     }
 
     handleDynamicElements();
+    renderEngine.endFrame();
 
     long current = timeProvider.getMsTime();
     int delta = (int) (current - lastTime);

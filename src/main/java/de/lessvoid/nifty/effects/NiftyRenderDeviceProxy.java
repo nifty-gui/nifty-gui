@@ -18,6 +18,12 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
   private Set < RenderStateType > renderStates = new HashSet < RenderStateType >();
 
+  public void beginFrame() {
+  }
+
+  public void endFrame() {
+  }
+
   public void clear() {
   }
 

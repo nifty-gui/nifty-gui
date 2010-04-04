@@ -3,6 +3,7 @@ package de.lessvoid.nifty.render;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.layout.Box;
+import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
@@ -187,6 +188,7 @@ public class NiftyImageMode {
    * @param scale scale
    */
   public void render(
+      final RenderDevice renderDevice,
       final RenderImage renderImage,
       final int x,
       final int y,
@@ -198,10 +200,11 @@ public class NiftyImageMode {
     int centerY = y + height/2;
 
     if (mode == Mode.NORMAL) {
-      renderImage.render(x, y, width, height, color, scale);
+      renderDevice.renderImage(renderImage, x, y, width, height, color, scale);
     } else {
       if (mode == Mode.SUBIMAGE) {
-        renderImage.render(
+        renderDevice.renderImage(
+            renderImage,
             x, y, width, height,
             subImageBox.getX(), subImageBox.getY(), subImageBox.getWidth(), subImageBox.getHeight(),
             color,
@@ -209,7 +212,7 @@ public class NiftyImageMode {
             centerX,
             centerY);
       } else if (mode == Mode.RESIZE) {
-        ResizeHelper resizeHelper = new ResizeHelper(renderImage, this.resizeString);
+        ResizeHelper resizeHelper = new ResizeHelper(renderDevice, renderImage, this.resizeString);
         resizeHelper.performRender(x, y, width, height, color, scale, centerX, centerY);
       }
     }

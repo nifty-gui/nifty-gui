@@ -37,7 +37,17 @@ public interface RenderDevice {
   int getHeight();
 
   /**
-   * Clear the Screen.
+   * Called every begin frame.
+   */
+  void beginFrame();
+
+  /**
+   * Called every end frame.
+   */
+  void endFrame();
+
+  /**
+   * clear screen.
    */
   void clear();
 
@@ -69,6 +79,31 @@ public interface RenderDevice {
    * @param bottomLeft
    */
   void renderQuad(int x, int y, int width, int height, Color topLeft, Color topRight, Color bottomRight, Color bottomLeft);
+
+  /**
+   * Render the image.
+   * @param x x
+   * @param y y
+   * @param width w
+   * @param height h
+   * @param color color
+   * @param imageScale image scale
+   */
+  void renderImage(RenderImage image, int x, int y, int width, int height, Color color, float imageScale);
+
+  /**
+   * Render a sub image of this image.
+   * @param x x
+   * @param y y
+   * @param w w
+   * @param h h
+   * @param srcX source x
+   * @param srcY source y
+   * @param srcW source width
+   * @param srcH source height
+   * @param color color
+   */
+  void renderImage(RenderImage image, int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH, Color color, float scale, int centerX, int centerY);
 
   /**
    * Enable clipping to the given region.

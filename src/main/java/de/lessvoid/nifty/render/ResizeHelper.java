@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.render;
 
 import de.lessvoid.nifty.layout.Box;
+import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
@@ -25,6 +26,7 @@ class ResizeHelper {
    * RenderImage.
    */
   private RenderImage renderImage;
+  private RenderDevice renderDevice;
 
   /**
    * Create from the given String.
@@ -32,8 +34,9 @@ class ResizeHelper {
    * @param resizeString the String in the format:
    *        b1,b2,b3,h1,b4,b5,b6,h2,b7,b8,b9,h3
    */
-  public ResizeHelper(final RenderImage renderImageParam, final String resizeString) {
-    renderImage = renderImageParam;
+  public ResizeHelper(final RenderDevice renderDevice, final RenderImage renderImageParam, final String resizeString) {
+    this.renderDevice = renderDevice;
+    this.renderImage = renderImageParam;
     parseFromString(resizeString, box);
   }
 
@@ -128,19 +131,22 @@ class ResizeHelper {
       final float scale,
       final int centerX,
       final int centerY) {
-    renderImage.render(
+    renderDevice.renderImage(
+        renderImage,
         x, y, left.getWidth(), left.getHeight() + addHeight,
         left.getX(), left.getY(), left.getWidth(), left.getHeight(),
         color,
         scale, centerX, centerY);
 
-    renderImage.render(
+    renderDevice.renderImage(
+        renderImage,
         x + left.getWidth(), y, width - left.getWidth() - right.getWidth(), middle.getHeight() + addHeight,
         middle.getX(), middle.getY(), middle.getWidth(), middle.getHeight(),
         color,
         scale, centerX, centerY);
 
-    renderImage.render(
+    renderDevice.renderImage(
+        renderImage,
         x + width - right.getWidth(), y, right.getWidth(), right.getHeight() + addHeight,
         right.getX(), right.getY(), right.getWidth(), right.getHeight(),
         color,

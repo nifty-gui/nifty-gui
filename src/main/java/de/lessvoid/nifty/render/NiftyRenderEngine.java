@@ -24,6 +24,16 @@ public interface NiftyRenderEngine {
   int getHeight();
 
   /**
+   * Called when a frame begins.
+   */
+  void beginFrame();
+
+  /**
+   * Called when a frame ends.
+   */
+  void endFrame();
+
+  /**
    * Clear the screen.
    */
   void clear();

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.render;
 
+import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
@@ -18,12 +19,14 @@ public class NiftyImage {
    * sub image type to use.
    */
   private NiftyImageMode subImageMode;
+  private RenderDevice renderDevice;
 
   /**
    * create new NiftyImage.
    * @param createImage RenderImage
    */
-  public NiftyImage(final RenderImage createImage) {
+  public NiftyImage(final RenderDevice renderDevice, final RenderImage createImage) {
+    this.renderDevice = renderDevice;
     this.image = createImage;
     this.subImageMode = NiftyImageMode.normal();
   }
@@ -55,7 +58,7 @@ public class NiftyImage {
    */
   public void render(
       final int x, final int y, final int width, final int height, final Color color, final float scale) {
-    subImageMode.render(image, x, y, width, height, color, scale);
+    subImageMode.render(renderDevice, image, x, y, width, height, color, scale);
   }
 
   /**

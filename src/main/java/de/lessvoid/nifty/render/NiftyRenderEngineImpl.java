@@ -106,12 +106,16 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return renderDevice.getHeight();
   }
 
-  /**
-   * @see de.lessvoid.nifty.render.NiftyRenderEngine#clear()
-   */
+  public void beginFrame() {
+    renderDevice.beginFrame();
+    colorChanged = false;
+  }
+
+  public void endFrame() {
+  }
+
   public void clear() {
     renderDevice.clear();
-    colorChanged = false;
   }
 
   /**
@@ -124,7 +128,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     if (filename == null) {
       return null;
     }
-    return new NiftyImage(renderDevice.createImage(filename, filterLinear));
+    return new NiftyImage(renderDevice, renderDevice.createImage(filename, filterLinear));
   }
 
   /**
