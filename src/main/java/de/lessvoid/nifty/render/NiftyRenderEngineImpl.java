@@ -112,6 +112,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   }
 
   public void endFrame() {
+    renderDevice.endFrame();
   }
 
   public void clear() {
