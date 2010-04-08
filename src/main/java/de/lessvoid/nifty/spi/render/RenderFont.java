@@ -22,16 +22,6 @@ public interface RenderFont {
   int getHeight();
 
   /**
-   * Render the given text at the given position.
-   * @param text text to render
-   * @param x x position
-   * @param y y position
-   * @param fontColor font color
-   * @param size size
-   */
-  void render(String text, int x, int y, Color fontColor, float size);
-
-  /**
    * Return the advance of the given character including kerning information.
    * @param currentCharacter current character
    * @param nextCharacter next character

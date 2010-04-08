@@ -106,6 +106,16 @@ public interface RenderDevice {
   void renderImage(RenderImage image, int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH, Color color, float scale, int centerX, int centerY);
 
   /**
+   * Render the given text at the given position.
+   * @param text text to render
+   * @param x x position
+   * @param y y position
+   * @param fontColor font color
+   * @param size size
+   */
+  void renderFont(RenderFont font, String text, int x, int y, Color fontColor, float size);
+
+  /**
    * Enable clipping to the given region.
    * @param x0 x0
    * @param y0 y0

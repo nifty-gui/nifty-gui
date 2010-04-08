@@ -209,7 +209,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       renderSelectionText(
           text, x + getX(), y + getY(), color, textSelectionColor, textScale, selectionStart, selectionEnd);
     } else {
-      font.render(text, x + getX(), y + getY(), color, textScale);
+      renderDevice.renderFont(font, text, x + getX(), y + getY(), color, textScale);
     }
   }
 
@@ -243,29 +243,29 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
 
     if (isEverythingSelected(text, selectionStart, selectionEnd)) {
-      font.render(text, x, y, textSelectionColor, textSize);
+      renderDevice.renderFont(font, text, x, y, textSelectionColor, textSize);
     } else if (isSelectionAtBeginning(selectionStart)) {
       String selectedString = text.substring(selectionStart, selectionEnd);
       String unselectedString = text.substring(selectionEnd);
 
-      font.render(selectedString, x, y, textSelectionColor, textSize);
-      font.render(unselectedString, x + font.getWidth(selectedString), y, textColor, textSize);
+      renderDevice.renderFont(font, selectedString, x, y, textSelectionColor, textSize);
+      renderDevice.renderFont(font, unselectedString, x + font.getWidth(selectedString), y, textColor, textSize);
     } else if (isSelectionAtEnd(text, selectionEnd)) {
       String unselectedString = text.substring(0, selectionStart);
       String selectedString = text.substring(selectionStart, selectionEnd);
 
-      font.render(unselectedString, x, y, textColor, textSize);
-      font.render(selectedString, x + font.getWidth(unselectedString), y, textSelectionColor, textSize);
+      renderDevice.renderFont(font, unselectedString, x, y, textColor, textSize);
+      renderDevice.renderFont(font, selectedString, x + font.getWidth(unselectedString), y, textSelectionColor, textSize);
     } else {
       String unselectedString1 = text.substring(0, selectionStart);
       String selectedString = text.substring(selectionStart, selectionEnd);
       String unselectedString2 = text.substring(selectionEnd, text.length());
 
-      font.render(unselectedString1, x, y, textColor, textSize);
+      renderDevice.renderFont(font, unselectedString1, x, y, textColor, textSize);
       int unselectedString1Len = font.getWidth(unselectedString1);
-      font.render(selectedString, x + unselectedString1Len, y, textSelectionColor, textSize);
+      renderDevice.renderFont(font, selectedString, x + unselectedString1Len, y, textSelectionColor, textSize);
       int selectedStringLen = font.getWidth(selectedString);
-      font.render(unselectedString2, x + unselectedString1Len + selectedStringLen, y, textColor, textSize);
+      renderDevice.renderFont(font, unselectedString2, x + unselectedString1Len + selectedStringLen, y, textColor, textSize);
     }
   }
 
