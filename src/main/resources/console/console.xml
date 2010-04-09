@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty>
+<nifty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd">
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- load default styles and controls -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <useStyles filename="console/custom-console-style.xml" />
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -24,12 +31,4 @@
       </text>
     </layer>
   </screen>
-
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <!-- load default styles and controls -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <useControls filename="nifty-default-controls.xml" />
-  <useStyles filename="console/custom-console-style.xml" />
-  <useStyles filename="nifty-default-styles.xml" />
-
 </nifty>

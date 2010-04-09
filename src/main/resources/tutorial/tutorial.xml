@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty>
+<nifty  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd">
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
   <registerSound id="select" filename="tutorial/sound/select.wav" />
   <registerSound id="intro" filename="tutorial/sound/intro.wav" />
   <registerSound id="hover" filename="tutorial/sound/hover.wav" />
-  <registerMusic id="music" filename="tutorial/sound/echoed_-_L.O.R.D..ogg" />
   <registerEffect name="snowEffect" class="de.lessvoid.nifty.examples.tutorial.SnowEffect" />
-
-  <useStyles filename="nifty-default-styles.xml" />
-  <useControls filename="nifty-default-controls.xml" />
+  <registerMusic id="music" filename="tutorial/sound/echoed_-_L.O.R.D..ogg" />
 
   <!-- background style -->
   <style id="backgroundNoEffects">
@@ -186,90 +186,6 @@
       <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0" inherit="true" />
     </effect>
   </style>
-
-	<!-- splash -->
-  <screen id="start" controller="de.lessvoid.nifty.examples.tutorial.screen.Splash">
-    <layer id="logo" childLayout="center" backgroundColor="#ffff">
-	    <effect>
-	      <onStartScreen name="fade" neverStopRendering="true">
-	        <value time="0" value="0.0" />
-	        <value time="500" value="1.0" />
-	        <value time="1700" value="1.0" />
-          <value time="2200" value="0.0" />
-	      </onStartScreen>
-	    </effect>
-      <panel width="100%" height="60%" childLayout="center" valign="center">
-        <image filename="intro-logo.png" valign="center" align="center">
-          <effect>
-            <onStartScreen name="playSound" sound="intro" length="1200" startDelay="500"/>
-            <onStartScreen name="fade" neverStopRendering="true" startDelay="500">
-              <value time="0" value="0.0" />
-              <value time="600" value="1.0" />
-              <value time="1200" value="0.0" />
-              <value time="2200" value="0.0" />
-            </onStartScreen>
-            <onStartScreen name="imageSize" neverStopRendering="true" startDelay="500">
-              <value time="0" value="0.7" />
-              <value time="600" value="1.0" />
-              <value time="1200" value="1.3" />
-              <value time="2200" value="0.0" />
-            </onStartScreen>
-          </effect>
-        </image>
-      </panel>
-    </layer>
-  </screen>
-
-  <!-- main page screen -->
-  <screen id="mainPage" controller="de.lessvoid.nifty.examples.tutorial.screen.MainPage">
-    <layer childLayout="center">
-      <panel style="background">
-        <panel style="top">
-          <panel style="topInternal">
-            <panel width="*" />
-            <image id="muteButton" style="muteButtonSoundOn" />
-          </panel>
-        </panel>
-        <panel style="main" >
-          <panel id="pp" childLayout="overlay" valign="center" align="center" width="100%" height="100%">
-          </panel>
-        </panel>
-        <panel style="bottom">
-          <panel style="bottomInternal">
-            <image id="backButton" style="backButton" />
-            <panel width="*" childLayout="center" />
-            <image id="nextButton" style="nextButton" />
-          </panel>
-        </panel>
-      </panel>
-      <effect>
-         <onStartScreen name="fadeMusic" length="2500" sound="music" from="0%" to="25%" />
-         <onActive name="playSound" sound="music" post="true" repeat="true" />
-      </effect>
-    </layer>
-    <layer childLayout="center">
-      <panel style="backgroundNoEffects">
-        <panel height="*" />
-        <panel style="bottomNoEffects">
-          <panel style="bottomInternal">
-            <panel width="*" childLayout="center">
-              <text id="curPage" style="captionFont" align="center" valign="center" textHAlign="center" textVAlign="center" text="1">
-                <effect>
-                  <onCustom name="textSize" length="150" factor="4" startSize="1.6" endSize="1.0" />
-                  <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="1500" />
-                </effect>
-              </text>
-            </panel>
-          </panel>
-        </panel>
-      </panel>
-    </layer>
-    <layer id="snow">
-      <effect>
-        <onActive name="snowEffect" post="true" />
-      </effect>
-    </layer>
-  </screen>
 
   <controlDefinition name="pageWelcome">
     <panel style="pagePanel">
@@ -954,4 +870,89 @@
       </panel>
     </panel>
   </controlDefinition>
+
+  <!-- splash -->
+  <screen id="start" controller="de.lessvoid.nifty.examples.tutorial.screen.Splash">
+    <layer id="logo" childLayout="center" backgroundColor="#ffff">
+      <effect>
+        <onStartScreen name="fade" neverStopRendering="true">
+          <value time="0" value="0.0" />
+          <value time="500" value="1.0" />
+          <value time="1700" value="1.0" />
+          <value time="2200" value="0.0" />
+        </onStartScreen>
+      </effect>
+      <panel width="100%" height="60%" childLayout="center" valign="center">
+        <image filename="intro-logo.png" valign="center" align="center">
+          <effect>
+            <onStartScreen name="playSound" sound="intro" length="1200" startDelay="500"/>
+            <onStartScreen name="fade" neverStopRendering="true" startDelay="500">
+              <value time="0" value="0.0" />
+              <value time="600" value="1.0" />
+              <value time="1200" value="0.0" />
+              <value time="2200" value="0.0" />
+            </onStartScreen>
+            <onStartScreen name="imageSize" neverStopRendering="true" startDelay="500">
+              <value time="0" value="0.7" />
+              <value time="600" value="1.0" />
+              <value time="1200" value="1.3" />
+              <value time="2200" value="0.0" />
+            </onStartScreen>
+          </effect>
+        </image>
+      </panel>
+    </layer>
+  </screen>
+
+  <!-- main page screen -->
+  <screen id="mainPage" controller="de.lessvoid.nifty.examples.tutorial.screen.MainPage">
+    <layer childLayout="center">
+      <effect>
+         <onStartScreen name="fadeMusic" length="2500" sound="music" from="0%" to="25%" />
+         <onActive name="playSound" sound="music" post="true" repeat="true" />
+      </effect>
+      <panel style="background">
+        <panel style="top">
+          <panel style="topInternal">
+            <panel width="*" />
+            <image id="muteButton" style="muteButtonSoundOn" />
+          </panel>
+        </panel>
+        <panel style="main" >
+          <panel id="pp" childLayout="overlay" valign="center" align="center" width="100%" height="100%">
+          </panel>
+        </panel>
+        <panel style="bottom">
+          <panel style="bottomInternal">
+            <image id="backButton" style="backButton" />
+            <panel width="*" childLayout="center" />
+            <image id="nextButton" style="nextButton" />
+          </panel>
+        </panel>
+      </panel>
+    </layer>
+    <layer childLayout="center">
+      <panel style="backgroundNoEffects">
+        <panel height="*" />
+        <panel style="bottomNoEffects">
+          <panel style="bottomInternal">
+            <panel width="*" childLayout="center">
+              <text id="curPage" style="captionFont" align="center" valign="center" textHAlign="center" textVAlign="center" text="1">
+                <effect>
+                  <onCustom name="textSize" length="150" factor="4" startSize="1.6" endSize="1.0" />
+                  <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="1500" />
+                </effect>
+              </text>
+            </panel>
+          </panel>
+        </panel>
+      </panel>
+    </layer>
+    <layer id="snow">
+      <effect>
+        <onActive name="snowEffect" post="true" />
+      </effect>
+    </layer>
+  </screen>
+
 </nifty>
