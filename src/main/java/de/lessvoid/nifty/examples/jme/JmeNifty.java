@@ -1,50 +1,41 @@
 package de.lessvoid.nifty.examples.jme;
 
-import java.io.File;
 import java.net.URL;
+
+import org.lwjgl.input.Mouse;
 
 import com.jme.app.SimpleGame;
 import com.jme.bounding.BoundingBox;
 import com.jme.image.Texture;
+import com.jme.input.MouseInput;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
-import com.jme.renderer.Renderer;
-import com.jme.scene.Node;
-import com.jme.scene.Spatial;
 import com.jme.scene.Spatial.CullHint;
 import com.jme.scene.shape.Sphere;
 import com.jme.scene.state.BlendState;
 import com.jme.scene.state.TextureState;
-import com.jme.system.DisplaySystem;
 import com.jme.util.TextureManager;
 import com.jme.util.resource.ClasspathResourceLocator;
-import com.jme.util.resource.MultiFormatResourceLocator;
 import com.jme.util.resource.ResourceLocatorTool;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.jme.input.JmeInputSystem;
-import de.lessvoid.nifty.jme.render.JmeRenderDevice;
-import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
-import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.jme.render.NiftyNode;
+
 
 public class JmeNifty extends SimpleGame {
   private Quaternion rotQuat = new Quaternion();
   private float angle = 0;
   private Sphere sphere;
-  private Node niftyNode;
-  private Nifty nifty;
+  private NiftyNode niftyNode;
 
   public static void main(final String[] args) {
     JmeNifty app = new JmeNifty();
-    //app.setConfigShowMode(ConfigShowMode.AlwaysShow);
+    app.setConfigShowMode(ConfigShowMode.AlwaysShow);
     app.start();
   }
-
-  protected void simpleUpdate() {
-    nifty.render(true);
-
-    if (tpf < 1) {
+  
+  protected void simpleUpdate() 
+  {
+     if (tpf < 1) {
       angle = angle + (tpf * 1);
       if (angle > 360) {
         angle = 0;
@@ -55,7 +46,15 @@ public class JmeNifty extends SimpleGame {
   }
 
   protected void simpleInitGame() {
-    display.setTitle("jME - Sphere");
+    display.setTitle("Nifty render test for JME2");
+    
+    // Allow mouse to leave the game window (very useful on debugging :)
+    Mouse.setGrabbed(false);        
+    // Set mouse cursor
+//  MouseInput.get().setHardwareCursor(JmeNifty.class.getClassLoader().getResource("jmetest/data/cursor/cursor1.png"));
+  
+
+   
 
     sphere = new Sphere("Sphere", 63, 50, 25);
     sphere.setLocalTranslation(new Vector3f(0,0,-40));
@@ -64,14 +63,12 @@ public class JmeNifty extends SimpleGame {
     sphere.setCullHint(CullHint.Dynamic);
 
     try {
-      MultiFormatResourceLocator loc2 = new MultiFormatResourceLocator(new File("c:/").toURI(), ".jpg", ".png", ".tga");
-        ResourceLocatorTool.addResourceLocator(ResourceLocatorTool.TYPE_TEXTURE, loc2);
         ResourceLocatorTool.addResourceLocator(ResourceLocatorTool.TYPE_TEXTURE, new ClasspathResourceLocator());
     } catch (Exception e) {
         e.printStackTrace();
     }
 
-    URL u = ResourceLocatorTool.locateResource(ResourceLocatorTool.TYPE_TEXTURE, "/model/grass.gif");
+    URL u = ResourceLocatorTool.locateResource(ResourceLocatorTool.TYPE_TEXTURE, "model/grass.gif");
     System.err.println("FOUND URL: "+u);
 
     TextureState ts = display.getRenderer().createTextureState();
@@ -87,22 +84,13 @@ public class JmeNifty extends SimpleGame {
     blend.setTestFunction(BlendState.TestFunction.GreaterThan);
     blend.setEnabled(true);
     sphere.setRenderState(blend);
-
-    niftyNode = new Node("hudNode");
-    niftyNode.setRenderQueueMode(Renderer.QUEUE_ORTHO);
-    niftyNode.setLocalTranslation(DisplaySystem.getDisplaySystem().getWidth()/2.0f, DisplaySystem.getDisplaySystem().getHeight()/2.0f, 0.0f);
-    niftyNode.setLightCombineMode(Spatial.LightCombineMode.Off);
-    niftyNode.updateRenderState();
-
-    rootNode.setCullHint(CullHint.Never);
     rootNode.attachChild(sphere);
-    rootNode.attachChild(niftyNode);
 
-    nifty = new Nifty(
-        new JmeRenderDevice(niftyNode),
-        new SoundSystem(new SlickSoundDevice()),
-        new JmeInputSystem(),
-        new TimeProvider());
-    nifty.fromXml("jme/overlay.xml", "start");
+    
+    // Create the NiftyGUI
+    niftyNode = new NiftyNode("GUI:NIFTYNODE", "console/console.xml", "start");
+    rootNode.attachChild(niftyNode);
+    
+    rootNode.setCullHint(CullHint.Never);
   }
 }
