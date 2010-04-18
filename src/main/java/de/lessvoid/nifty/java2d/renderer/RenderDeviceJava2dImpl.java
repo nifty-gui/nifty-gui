@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.java2d.renderer;
 
 import java.awt.Canvas;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -60,19 +59,15 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		graphics.clearRect(0, 0, getWidth(), getHeight());
 	}
 
+	private FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
+	
+	public void setFontProvider(FontProviderJava2dImpl fontProvider) {
+		this.fontProvider = fontProvider;
+	}
+
 	@Override
 	public RenderFont createFont(String filename) {
-		// try {
-		java.awt.Font font = new Font(filename, Font.BOLD, 17);
-		// java.awt.Font font = Font.createFont(Font.TYPE1_FONT, Thread
-		// .currentThread().getContextClassLoader().getResource(
-		// filename).openStream());
-		return new RenderFontJava2dImpl(this, font);
-		// } catch (FontFormatException e) {
-		// throw new RuntimeException("", e);
-		// } catch (IOException e) {
-		// throw new RuntimeException("", e);
-		// }
+		return new RenderFontJava2dImpl(this, fontProvider.getFont(filename));
 	}
 
 	@Override

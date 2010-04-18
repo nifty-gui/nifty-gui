@@ -24,6 +24,7 @@ public class RenderFontJava2dImpl implements RenderFont {
 	@Override
 	public Integer getCharacterAdvance(char currentCharacter,
 			char nextCharacter, float size) {
+		// I don't know exactly what to do here.
 		return getFont().getSize();
 	}
 
