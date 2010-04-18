@@ -1,12 +1,8 @@
-/**
- * 
- */
 package de.lessvoid.nifty.java2d.renderer;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-
 
 import de.lessvoid.nifty.spi.render.RenderFont;
 
@@ -20,8 +16,7 @@ public class RenderFontJava2dImpl implements RenderFont {
 		return font;
 	}
 
-	public RenderFontJava2dImpl(
-			RenderDeviceJava2dImpl renderDevice, Font font) {
+	public RenderFontJava2dImpl(RenderDeviceJava2dImpl renderDevice, Font font) {
 		this.renderDevice = renderDevice;
 		this.font = font;
 	}
@@ -29,7 +24,7 @@ public class RenderFontJava2dImpl implements RenderFont {
 	@Override
 	public Integer getCharacterAdvance(char currentCharacter,
 			char nextCharacter, float size) {
-		return null;
+		return getFont().getSize();
 	}
 
 	@Override
@@ -40,8 +35,7 @@ public class RenderFontJava2dImpl implements RenderFont {
 			return 0;
 
 		FontMetrics fontMetrics = graphics.getFontMetrics(font);
-		double height = fontMetrics.getStringBounds("A", graphics)
-				.getHeight();
+		double height = fontMetrics.getStringBounds("A", graphics).getHeight();
 		return (int) height;
 	}
 
@@ -53,8 +47,7 @@ public class RenderFontJava2dImpl implements RenderFont {
 			return 0;
 
 		FontMetrics fontMetrics = graphics.getFontMetrics(font);
-		double width = fontMetrics.getStringBounds(text, graphics)
-				.getWidth();
+		double width = fontMetrics.getStringBounds(text, graphics).getWidth();
 		return (int) width;
 	}
 

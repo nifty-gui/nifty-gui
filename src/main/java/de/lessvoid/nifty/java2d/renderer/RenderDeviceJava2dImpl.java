@@ -55,7 +55,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	@Override
 	public RenderFont createFont(String filename) {
 		// try {
-		java.awt.Font font = new Font("aurulent", Font.BOLD, 17);
+		java.awt.Font font = new Font("arial", Font.BOLD, 17);
 		// java.awt.Font font = Font.createFont(Font.TYPE1_FONT, Thread
 		// .currentThread().getContextClassLoader().getResource(
 		// filename).openStream());
