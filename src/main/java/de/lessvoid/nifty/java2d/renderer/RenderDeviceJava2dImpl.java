@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -21,6 +22,13 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	private final Canvas canvas;
 
 	private BufferedImage offscreenImage;
+
+	private Rectangle clipRectangle = null;
+
+	private java.awt.Color convertNiftyColor(Color color) {
+		return new java.awt.Color(color.getRed(), color.getGreen(), color
+				.getBlue(), color.getAlpha());
+	}
 
 	public RenderDeviceJava2dImpl(Canvas canvas) {
 		this.canvas = canvas;
@@ -55,7 +63,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	@Override
 	public RenderFont createFont(String filename) {
 		// try {
-		java.awt.Font font = new Font("arial", Font.BOLD, 17);
+		java.awt.Font font = new Font(filename, Font.BOLD, 17);
 		// java.awt.Font font = Font.createFont(Font.TYPE1_FONT, Thread
 		// .currentThread().getContextClassLoader().getResource(
 		// filename).openStream());
@@ -78,12 +86,12 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 	@Override
 	public void disableClip() {
-
+		clipRectangle = null;
 	}
 
 	@Override
 	public void enableClip(int x0, int y0, int x1, int y1) {
-
+		clipRectangle = new Rectangle(x0, y1, x1 - x0, y1 - y0);
 	}
 
 	@Override
@@ -104,7 +112,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 			return;
 
 		RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
-		// graphics.drawImage(renderImage.image, x, y, null);
+		graphics.setClip(clipRectangle);
 		graphics.drawImage(renderImage.image, x, y, x + width, y + height, 0,
 				0, renderImage.getWidth(), renderImage.getHeight(), null);
 	}
@@ -118,26 +126,25 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 			return;
 
 		RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
+		graphics.setClip(clipRectangle);
 		graphics.drawImage(renderImage.image, x, y, x + w, y + h, srcX, srcY,
 				srcX + srcW, srcY + srcH, null);
 
 	}
 
-	public java.awt.Color convertNiftyColor(Color color) {
-		return new java.awt.Color(color.getRed(), color.getGreen(), color
-				.getBlue(), color.getAlpha());
-	}
-
 	@Override
 	public void renderQuad(int x, int y, int width, int height, Color color) {
+		graphics.setClip(clipRectangle);
 		graphics.setColor(convertNiftyColor(color));
 		graphics.fillRect(x, y, width, height);
 	}
 
 	@Override
-	public void renderQuad(int x, int y, int width, int height, Color topLeft, Color topRight, Color bottomRight, Color bottomLeft) {
-    graphics.setColor(convertNiftyColor(topLeft));
-    graphics.fillRect(x, y, width, height);
+	public void renderQuad(int x, int y, int width, int height, Color topLeft,
+			Color topRight, Color bottomRight, Color bottomLeft) {
+		graphics.setClip(clipRectangle);
+		graphics.setColor(convertNiftyColor(topLeft));
+		graphics.fillRect(x, y, width, height);
 	}
 
 	@Override
@@ -153,7 +160,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 			return;
 
 		RenderFontJava2dImpl renderFont = (RenderFontJava2dImpl) font;
-
+		graphics.setClip(clipRectangle);
 		graphics.setFont(renderFont.getFont());
 		graphics.setColor(convertNiftyColor(fontColor));
 		graphics.drawString(text, x, y);
