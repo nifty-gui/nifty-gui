@@ -1,8 +1,11 @@
 package de.lessvoid.nifty.java2d.renderer;
 
 import java.awt.Canvas;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -25,28 +28,24 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	private Rectangle clipRectangle = null;
 
 	private java.awt.Color convertNiftyColor(Color color) {
-		return new java.awt.Color(color.getRed(), color.getGreen(), color
-				.getBlue(), color.getAlpha());
+		return new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 	}
 
 	public RenderDeviceJava2dImpl(Canvas canvas) {
 		this.canvas = canvas;
-		offscreenImage = (BufferedImage) canvas.createImage(getWidth(),
-				getHeight());
+		offscreenImage = (BufferedImage) canvas.createImage(getWidth(), getHeight());
 	}
 
 	@Override
 	public void beginFrame() {
 
 		if (screenSizeHasChanged())
-			offscreenImage = (BufferedImage) canvas.createImage(getWidth(),
-					getHeight());
+			offscreenImage = (BufferedImage) canvas.createImage(getWidth(), getHeight());
 		graphics = offscreenImage.getGraphics();
 	}
 
 	private boolean screenSizeHasChanged() {
-		return (offscreenImage.getWidth() != getWidth() || offscreenImage
-				.getHeight() != getHeight());
+		return (offscreenImage.getWidth() != getWidth() || offscreenImage.getHeight() != getHeight());
 	}
 
 	@Override
@@ -60,7 +59,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	}
 
 	private FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
-	
+
 	public void setFontProvider(FontProviderJava2dImpl fontProvider) {
 		this.fontProvider = fontProvider;
 	}
@@ -72,8 +71,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 	@Override
 	public RenderImage createImage(String filename, boolean filterLinear) {
-		URL imageUrl = Thread.currentThread().getContextClassLoader()
-				.getResource(filename);
+		URL imageUrl = Thread.currentThread().getContextClassLoader().getResource(filename);
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		Image image = tk.getImage(imageUrl);
 		return new RenderImageJava2dImpl(image);
@@ -100,30 +98,27 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	}
 
 	@Override
-	public void renderImage(RenderImage image, int x, int y, int width,
-			int height, Color color, float imageScale) {
+	public void renderImage(RenderImage image, int x, int y, int width, int height, Color color, float imageScale) {
 
 		if (!(image instanceof RenderImageJava2dImpl))
 			return;
 
 		RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
 		graphics.setClip(clipRectangle);
-		graphics.drawImage(renderImage.image, x, y, x + width, y + height, 0,
-				0, renderImage.getWidth(), renderImage.getHeight(), null);
+		graphics.setColor(convertNiftyColor(color));
+		graphics.drawImage(renderImage.image, x, y, x + width, y + height, 0, 0, renderImage.getWidth(), renderImage.getHeight(), null);
 	}
 
 	@Override
-	public void renderImage(RenderImage image, int x, int y, int w, int h,
-			int srcX, int srcY, int srcW, int srcH, Color color, float scale,
-			int centerX, int centerY) {
+	public void renderImage(RenderImage image, int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH, Color color, float scale, int centerX, int centerY) {
 
 		if (!(image instanceof RenderImageJava2dImpl))
 			return;
 
 		RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
 		graphics.setClip(clipRectangle);
-		graphics.drawImage(renderImage.image, x, y, x + w, y + h, srcX, srcY,
-				srcX + srcW, srcY + srcH, null);
+		graphics.setColor(convertNiftyColor(color));
+		graphics.drawImage(renderImage.image, x, y, x + w, y + h, srcX, srcY, srcX + srcW, srcY + srcH, null);
 
 	}
 
@@ -135,10 +130,13 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	}
 
 	@Override
-	public void renderQuad(int x, int y, int width, int height, Color topLeft,
-			Color topRight, Color bottomRight, Color bottomLeft) {
+	public void renderQuad(int x, int y, int width, int height, Color topLeft, Color topRight, Color bottomRight, Color bottomLeft) {
 		graphics.setClip(clipRectangle);
-		graphics.setColor(convertNiftyColor(topLeft));
+		
+		Graphics2D graphics2d = (Graphics2D) graphics;
+		GradientPaint grad = new GradientPaint(new Point(x, y), convertNiftyColor(topLeft), new Point(x + width, y), convertNiftyColor(bottomRight));
+		graphics2d.setPaint(grad);
+		
 		graphics.fillRect(x, y, width, height);
 	}
 
@@ -148,8 +146,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	}
 
 	@Override
-	public void renderFont(RenderFont font, String text, int x, int y,
-			Color fontColor, float size) {
+	public void renderFont(RenderFont font, String text, int x, int y, Color fontColor, float size) {
 
 		if (!(font instanceof RenderFontJava2dImpl))
 			return;

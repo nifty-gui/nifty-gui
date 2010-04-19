@@ -6,8 +6,10 @@ import de.lessvoid.nifty.screen.ScreenController;
 
 public class HelloWorldMainScreenController implements ScreenController {
 
-	public void bind(Nifty nifty, Screen screen) {
+	private Nifty nifty;
 
+	public void bind(Nifty nifty, Screen screen) {
+		this.nifty = nifty;
 	}
 
 	public void onStartScreen() {
@@ -19,12 +21,10 @@ public class HelloWorldMainScreenController implements ScreenController {
 	}
 	
 	public void quit() {
-		System.out.println("quit");
+	    nifty.setAlternateKeyForNextLoadXml("fade");
+	    nifty.fromXml("helloworld.xml", "start");
 	}
 	
-	public void back() {
-		System.out.println("back");
-	}
 
 
 }

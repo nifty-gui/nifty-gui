@@ -21,7 +21,7 @@ public class HelloWorldTest {
 
 		InputSystemAwtImpl inputSystem = new InputSystemAwtImpl();
 
-		Dimension dimension = new Dimension(1024, 768);
+		Dimension dimension = new Dimension(800, 600);
 
 		final Canvas canvas = new Canvas();
 		canvas.addMouseMotionListener(inputSystem);
@@ -55,9 +55,8 @@ public class HelloWorldTest {
 		renderDevice.setFontProvider(fontProvider);
 
 		Nifty nifty = new Nifty(renderDevice, new SoundSystem(new SoundDeviceNullImpl()), inputSystem, new TimeProvider());
-
 		nifty.fromXml("helloworld.xml", "start");
-
+		
 		boolean done = false;
 
 		long time = System.currentTimeMillis();
