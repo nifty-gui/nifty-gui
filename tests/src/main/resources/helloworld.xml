@@ -3,8 +3,6 @@
 	<!-- +++++++++++++++++++++++++++++++++++++++ -->
 	<!-- start screen -->
 	<!-- +++++++++++++++++++++++++++++++++++++++ -->
-
-
 	<screen id="start"
 		controller="de.lessvoid.nifty.java2d.tests.controllers.HelloWorldMainScreenController">
 		<layer id="layer" backgroundColor="#003f" childLayout="center">
@@ -26,3 +24,26 @@
 		</layer>
 	</screen>
 </nifty>
+
+  <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.HelloWorldStartScreen">
+    <layer backgroundColor="#003f" childLayout="absolute">
+      <panel height="25%" width="35%" align="center" valign="center" childLayout="center" x="100px" y="100px" visibleToMouse="true" childClip="true">
+        <panel height="50%" width="50%" backgroundColor="#f00f" align="center" valign="center" visibleToMouse="true">
+          <effect>
+            <onHover name="move" direction="left" mode="out" length="1000">
+              <hover hoverFalloffType="linear" hoverWidth="100%" hoverHeight="100%" hoverFalloffConstraint="vertical" />
+            </onHover>
+          </effect>
+        </panel>
+        <effect>
+          <onActive name="gradient" direction="vertical">
+            <value offset="0%" color="#f00f" />
+            <value offset="20%" color="#0f0f" />
+            <value offset="60%" color="#00ff" />
+            <value offset="70%" color="#ff0f" />
+            <value offset="100%" color="#ffff" />
+          </onActive>
+        </effect>
+      </panel>
+    </layer>
+  </screen>

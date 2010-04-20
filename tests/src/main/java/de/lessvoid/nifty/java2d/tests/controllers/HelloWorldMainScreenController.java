@@ -19,12 +19,10 @@ public class HelloWorldMainScreenController implements ScreenController {
 	public void onEndScreen() {
 		System.out.println("onend");
 	}
-	
-	public void quit() {
-	    nifty.setAlternateKeyForNextLoadXml("fade");
-	    nifty.fromXml("helloworld.xml", "start");
-	}
-	
 
+	public void quit() {
+		nifty.setAlternateKeyForNextLoadXml("fade");
+		nifty.fromXml("helloworld.xml", "start");
+	}
 
 }

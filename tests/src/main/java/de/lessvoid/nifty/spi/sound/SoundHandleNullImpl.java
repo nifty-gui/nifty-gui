@@ -1,8 +1,7 @@
 package de.lessvoid.nifty.spi.sound;
 
 /**
- * @author acoppes
- * Null implementation of SoundHandle
+ * @author acoppes Null implementation of SoundHandle
  */
 public class SoundHandleNullImpl implements SoundHandle {
 

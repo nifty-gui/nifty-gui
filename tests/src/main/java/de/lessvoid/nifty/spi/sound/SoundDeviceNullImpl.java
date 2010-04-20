@@ -3,8 +3,7 @@ package de.lessvoid.nifty.spi.sound;
 import de.lessvoid.nifty.sound.SoundSystem;
 
 /**
- * @author acoppes
- * Null implementation of SoundDevice
+ * @author acoppes Null implementation of SoundDevice
  */
 public class SoundDeviceNullImpl implements SoundDevice {
 
