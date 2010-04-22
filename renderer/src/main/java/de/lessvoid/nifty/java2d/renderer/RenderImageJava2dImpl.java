@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.lessvoid.nifty.java2d.renderer;
 
 import java.awt.Image;

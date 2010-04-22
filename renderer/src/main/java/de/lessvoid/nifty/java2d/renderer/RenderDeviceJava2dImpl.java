@@ -31,6 +31,10 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 	private Rectangle clipRectangle = null;
 
+	private FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
+
+	// TODO: BlendMode?
+
 	private java.awt.Color convertNiftyColor(Color color) {
 		return new java.awt.Color(color.getRed(), color.getGreen(), color
 				.getBlue(), color.getAlpha());
@@ -66,8 +70,6 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		graphics.clearRect(0, 0, getWidth(), getHeight());
 	}
 
-	private FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
-
 	public void setFontProvider(FontProviderJava2dImpl fontProvider) {
 		this.fontProvider = fontProvider;
 	}
@@ -89,15 +91,11 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	@Override
 	public void disableClip() {
 		clipRectangle = null;
-		// logger.info("unsetting clipRectangle");
 	}
 
 	@Override
 	public void enableClip(int x0, int y0, int x1, int y1) {
-		// logger.info("" + x0 + "," + y0 + "," + x1 + "," + y1 + ",");
-		// renderQuad(x0, y0, x1 - x0, y1 - y0, Color.WHITE);
 		clipRectangle = new Rectangle(x0, y0, x1 - x0, y1 - y0);
-		// logger.info("setting clipRectangle: " + clipRectangle);
 	}
 
 	@Override
@@ -117,11 +115,15 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		if (!(image instanceof RenderImageJava2dImpl))
 			return;
 
+		// TODO: use imageScale
+
 		RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
 		graphics.setClip(clipRectangle);
 		graphics.setColor(convertNiftyColor(color));
+		// graphics.drawImage(renderImage.image, x, y, width, height, null);
 		graphics.drawImage(renderImage.image, x, y, x + width, y + height, 0,
-				0, renderImage.getWidth(), renderImage.getHeight(), null);
+				0, (int) (renderImage.getWidth() * imageScale),
+				(int) (renderImage.getHeight() * imageScale), null);
 	}
 
 	@Override
@@ -170,7 +172,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 				convertNiftyColor(topLeft), new Point(x + width, y),
 				convertNiftyColor(bottomRight));
 
-		// horizontal gradient if not
+		// else horizontal gradient
 		if (sameColor(topLeft, topRight)) {
 			grad = new GradientPaint(new Point(x, y),
 					convertNiftyColor(topLeft), new Point(x, y + height),
@@ -182,7 +184,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	}
 
 	@Override
-	public void setBlendMode(BlendMode renderMode) {
+	public void setBlendMode(BlendMode blendMode) {
 
 	}
 

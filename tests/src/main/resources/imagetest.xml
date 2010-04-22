@@ -53,6 +53,15 @@
 					</effect>
 				</panel>
 			</panel>
+
+			<panel id="panel5" height="50px" width="100px" align="center"
+				valign="center" backgroundColor="#00f5" x="50px" y="150px">
+			</panel>
+			
+			<panel id="panel6" height="50px" width="100px" align="center"
+				valign="center" backgroundColor="#0f05" x="100px" y="175px">
+			</panel>
+						
 		</layer>
 	</screen>
 </nifty>
