@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.lessvoid.nifty.renderer</groupId>
+  <artifactId>nifty-slick-renderer</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <scm>
+    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-slick-renderer/trunk</connection>
+    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-slick-renderer/trunk</developerConnection>
+    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-slick-renderer</url>
+  </scm>
+  <repositories>
+    <repository>
+      <id>nifty-maven-repo.sourceforge.net</id>
+      <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
+    </repository>
+  </repositories>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build> 
+  <distributionManagement>
+    <repository>
+      <id>nifty-maven-repo.sourceforge.net</id>
+      <url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
+    </repository>
+  </distributionManagement>
+</project>
