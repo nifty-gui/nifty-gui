@@ -13,6 +13,10 @@
       <id>nifty-maven-repo.sourceforge.net</id>
       <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
     </repository>
+    <repository>
+      <id>slick-maven-repo</id>
+      <url>http://slick.cokeandcode.com/mavenrepo</url>
+    </repository>
   </repositories>
   <build>
     <plugins>
@@ -24,11 +28,17 @@
         </configuration>
       </plugin>
     </plugins>
-  </build> 
-  <distributionManagement>
-    <repository>
-      <id>nifty-maven-repo.sourceforge.net</id>
-      <url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
-    </repository>
-  </distributionManagement>
+  </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>lessvoid</groupId>
+  		<artifactId>nifty</artifactId>
+  		<version>1.2-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>slick</groupId>
+  		<artifactId>slick</artifactId>
+  		<version>270</version>
+  	</dependency>
+  </dependencies> 
 </project>
