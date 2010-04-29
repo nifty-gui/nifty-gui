@@ -34,6 +34,7 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
@@ -71,19 +72,21 @@ public class Nifty {
   private Collection < DelayedMethodInvoke > delayedMethodInvokes = new ArrayList < DelayedMethodInvoke > (); 
 
   /**
-   * Create nifty for the given RenderDevice and TimeProvider.
+   * Create nifty. This is now deprecated because it's way easier to use the other
+   * constructor that simply takes a SoundDevice instead of a SoundSystem.
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
-   * @param newInputSystem TODO
+   * @param inputSystem InputSystem
    * @param newTimeProvider the TimeProvider
    */
+  @Deprecated
   public Nifty(
-      final NiftyRenderEngine newRenderDevice,
+      final RenderDevice newRenderDevice,
       final SoundSystem newSoundSystem,
       final InputSystem newInputSystem,
       final TimeProvider newTimeProvider) {
-    initialize(newRenderDevice, newSoundSystem, newInputSystem, newTimeProvider);
-    console = new NiftyDebugConsole(null); // this will cause trouble i'm sure, but i don't care at this point
+    initialize(new NiftyRenderEngineImpl(newRenderDevice), newSoundSystem, newInputSystem, newTimeProvider);
+    console = new NiftyDebugConsole(newRenderDevice);
   }
 
   /**
@@ -95,10 +98,10 @@ public class Nifty {
    */
   public Nifty(
       final RenderDevice newRenderDevice,
-      final SoundSystem newSoundSystem,
+      final SoundDevice newSoundDevice,
       final InputSystem newInputSystem,
       final TimeProvider newTimeProvider) {
-    initialize(new NiftyRenderEngineImpl(newRenderDevice), newSoundSystem, newInputSystem, newTimeProvider);
+    initialize(new NiftyRenderEngineImpl(newRenderDevice), new SoundSystem(newSoundDevice), newInputSystem, newTimeProvider);
     console = new NiftyDebugConsole(newRenderDevice);
   }
 
