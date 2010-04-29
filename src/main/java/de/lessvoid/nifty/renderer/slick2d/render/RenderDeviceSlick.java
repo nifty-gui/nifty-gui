@@ -11,10 +11,6 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
-/**
- * Lwjgl RenderDevice Implementation.
- * @author void
- */
 public class RenderDeviceSlick implements RenderDevice {
   private GameContainer gameContainer;
 
@@ -135,7 +131,7 @@ public class RenderDeviceSlick implements RenderDevice {
 
   public void setBlendMode(final BlendMode renderMode) {
     if (BlendMode.BLEND.equals(renderMode)) {
-      gameContainer.getGraphics().setDrawMode(Graphics.MODE_ALPHA_BLEND);
+      gameContainer.getGraphics().setDrawMode(Graphics.MODE_NORMAL);
     } else if (BlendMode.MULIPLY.equals(renderMode)) {
       gameContainer.getGraphics().setDrawMode(Graphics.MODE_COLOR_MULTIPLY);
     }
