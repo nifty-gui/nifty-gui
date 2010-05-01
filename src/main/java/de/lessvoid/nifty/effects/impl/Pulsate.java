@@ -7,7 +7,6 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.render.RenderStateType;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -22,7 +21,7 @@ public class Pulsate implements EffectImpl {
   private Color startColor;
   private Color endColor;
   private SizeValue width;
-  private Pulsator pulsater;
+  private Pulsator pulsator;
   private boolean changeColorOnly = false;
   private boolean activated = false;
 
@@ -31,7 +30,7 @@ public class Pulsate implements EffectImpl {
     endColor = new Color(parameter.getProperty("endColor", "#ffffffff"));
     width = new SizeValue(parameter.getProperty("width"));
     changeColorOnly = new Boolean(parameter.getProperty("changeColorOnly", "false"));
-    pulsater = new Pulsator(parameter, new TimeProvider());
+    pulsator = new Pulsator(parameter, new TimeProvider());
   }
 
   public void execute(
@@ -41,7 +40,7 @@ public class Pulsate implements EffectImpl {
       final NiftyRenderEngine r) {
     if (!activated && normalizedTime > 0.0f) {
       activated = true;
-      pulsater.reset();
+      pulsator.reset();
     }
 
     if (activated) {
@@ -49,7 +48,7 @@ public class Pulsate implements EffectImpl {
         r.saveState(null);
       }
 
-      float value = pulsater.update();
+      float value = pulsator.update();
       Color c = startColor.linear(endColor, value);
       r.setColor(c);
   

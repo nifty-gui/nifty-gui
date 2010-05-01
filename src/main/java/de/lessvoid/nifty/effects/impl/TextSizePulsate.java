@@ -8,6 +8,8 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 /**
  * text size pulsate.
@@ -26,11 +28,16 @@ public class TextSizePulsate implements EffectImpl {
   private SizeValue endSize = new SizeValue("100%");
 
   /**
-   * initialize.
-   * @param nifty Nifty
-   * @param element Element
-   * @param parameter Parameter
+   * Pulsator to use.
    */
+  private Pulsator pulsator;
+
+  /**
+   * flag to remember if this effect is activated or not. this is used
+   * to reset the pulsator.
+   */
+  private boolean activated = false;
+
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     String startSizeString = parameter.getProperty("startSize");
     if (startSizeString != null) {
@@ -41,30 +48,28 @@ public class TextSizePulsate implements EffectImpl {
     if (endSizeString != null) {
       endSize = new SizeValue(endSizeString);
     }
+    pulsator = new Pulsator(parameter, new TimeProvider());
   }
 
-  /**
-   * execute the effect.
-   * @param element the Element
-   * @param normalizedTime TimeInterpolator to use
-   * @param normalizedFalloff falloff value
-   * @param r RenderDevice to use
-   */
   public void execute(
       final Element element,
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    float value =
-      startSize.getValue(1.0f)
-      +
-      (float) Math.pow(normalizedTime, 0.3) * (endSize.getValue(1.0f) - startSize.getValue(1.0f));
-    r.setRenderTextSize(1.0f + value);
+    if (!activated && normalizedTime > 0.0f) {
+      activated = true;
+      pulsator.reset();
+    }
+
+    if (activated) {
+      float value = pulsator.update();
+      float size = startSize.getValue(1.0f) + value * (endSize.getValue(1.0f) - startSize.getValue(1.0f));
+      r.setRenderTextSize(size);
+    }
   }
 
-  /**
-   * deactivate the effect.
-   */
   public void deactivate() {
+    activated = true;
+    System.out.println("deacti");
   }
 }
