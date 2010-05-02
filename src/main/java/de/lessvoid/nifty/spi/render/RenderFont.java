@@ -28,4 +28,10 @@ public interface RenderFont {
    * @return width of the character or null when no information for the character is available
    */
   Integer getCharacterAdvance(char currentCharacter, char nextCharacter, float size);
+
+  /**
+   * This RenderFont is not needed anymore. You should dispose
+   * any resources you allocated for this font.
+   */
+  void purge();
 }

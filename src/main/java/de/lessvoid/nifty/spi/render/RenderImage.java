@@ -18,5 +18,11 @@ public interface RenderImage {
    * @return height of image in pixel
    */
   int getHeight();
+
+  /**
+   * This RenderImage is not needed anymore. You should dispose
+   * any resources you allocated for this image.
+   */
+  void purge();
 }
 

@@ -28,4 +28,9 @@ public interface SoundHandle {
    * @return true if the sound is playing and false if not
    */
   boolean isPlaying();
+
+  /**
+   * This Sound is not needed anymore and should be removed from the system.
+   */
+  void purge();
 }

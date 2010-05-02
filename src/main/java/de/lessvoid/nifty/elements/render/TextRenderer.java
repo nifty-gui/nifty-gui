@@ -381,6 +381,8 @@ public class TextRenderer implements ElementRenderer {
     public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
       return null;
     }
+    public void purge() {
+    }
   }
 
   private String[] bla(final int width, final NiftyRenderEngine r, final String[] textLines) {
