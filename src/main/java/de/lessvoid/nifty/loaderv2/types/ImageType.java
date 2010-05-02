@@ -31,11 +31,12 @@ public class ImageType extends ElementType {
       public ElementRenderer[] createElementRenderer(final Nifty nifty) {
         ElementRenderer[] renderer = new ElementRenderer[1];
         NiftyImage niftyImage = null;
-        String filename = getFilename();
-        if (filename != null) {
-          niftyImage = nifty.getRenderEngine().createImage(filename, false); // FIXME filter
-        }
-        renderer[0] = new ImageRenderer(niftyImage);
+//        String filename = getFilename();
+//        if (filename != null) {
+//          niftyImage = nifty.getRenderEngine().createImage(filename, false); // FIXME filter
+//        }
+//        renderer[0] = new ImageRenderer(niftyImage);
+        renderer[0] = new ImageRenderer();
         return renderer;
       }
     });

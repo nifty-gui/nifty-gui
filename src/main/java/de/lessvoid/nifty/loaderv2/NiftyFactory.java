@@ -38,7 +38,7 @@ public final class NiftyFactory {
 
   public static ElementRenderer[] getPanelRenderer() {
     List < ElementRenderer > renderer = new ArrayList < ElementRenderer >();
-    renderer.add(new ImageRenderer(null));
+    renderer.add(new ImageRenderer());
     renderer.add(new PanelRenderer());
     return renderer.toArray(new ElementRenderer[0]);
   }

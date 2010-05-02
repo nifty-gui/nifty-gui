@@ -9,22 +9,13 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  * @author void
  */
 public class ImageRenderer implements ElementRenderer {
-
-  /**
-   * the render image this ElementRenderer will render.
-   */
-  private NiftyImage image;
-
+  private NiftyImage image = null;
   private int inset = 0;
 
   /**
-   * create a new SingleImage instance using the given image.
-   * @param newImage the image we should render
+   * Set Insert.
+   * @param insetParam
    */
-  public ImageRenderer(final NiftyImage newImage) {
-    this.image = newImage;
-  }
-
   public void setInset(final int insetParam) {
     inset = insetParam;
   }

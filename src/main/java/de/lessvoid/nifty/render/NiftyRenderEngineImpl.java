@@ -81,6 +81,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
   private Clip clipEnabled = null;
   private BlendMode blendMode = BlendMode.BLEND;
+  private NiftyImageManager imageManager;
 
   /**
    * create the device.
@@ -88,6 +89,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    */
   public NiftyRenderEngineImpl(final RenderDevice renderDeviceParam) {
     renderDevice = renderDeviceParam;
+    imageManager = new NiftyImageManager(renderDeviceParam);
   }
 
   /**
@@ -129,7 +131,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     if (filename == null) {
       return null;
     }
-    return new NiftyImage(renderDevice, renderDevice.createImage(filename, filterLinear));
+    return new NiftyImage(renderDevice, imageManager.getImage(filename, filterLinear));
   }
 
   /**
