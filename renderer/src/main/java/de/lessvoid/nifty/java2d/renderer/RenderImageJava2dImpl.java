@@ -24,4 +24,6 @@ public class RenderImageJava2dImpl implements RenderImage {
 		return image.getWidth(null);
 	}
 
+  public void dispose() {
+  }  
 }

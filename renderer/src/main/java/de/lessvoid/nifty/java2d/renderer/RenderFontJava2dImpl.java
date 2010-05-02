@@ -56,4 +56,6 @@ public class RenderFontJava2dImpl implements RenderFont {
 		return renderDevice.graphics;
 	}
 
+  public void dispose() {
+  }  
 }
