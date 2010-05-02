@@ -51,4 +51,7 @@ public class SlickSoundHandle implements SoundHandle {
   public boolean isPlaying() {
     return slickSound.playing();
   }
+
+  public void dispose() {
+  }  
 }
