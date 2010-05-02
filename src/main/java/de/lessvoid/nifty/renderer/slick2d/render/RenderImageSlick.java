@@ -49,4 +49,9 @@ public class RenderImageSlick implements RenderImage {
   public org.newdawn.slick.Image getImage() {
     return image;
   }
+
+  public void dispose() {
+    
+  }
+
 }

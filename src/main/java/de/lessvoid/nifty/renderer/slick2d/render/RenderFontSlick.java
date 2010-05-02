@@ -59,4 +59,8 @@ public class RenderFontSlick implements RenderFont {
   public Font getFont() {
     return font;
   }
+
+  public void dispose() {
+    
+  }
 }
