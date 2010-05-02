@@ -30,4 +30,6 @@ public class SoundHandleNullImpl implements SoundHandle {
 
 	}
 
+  public void dispose() {
+  }  
 }
