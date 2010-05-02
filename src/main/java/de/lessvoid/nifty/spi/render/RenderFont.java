@@ -33,5 +33,5 @@ public interface RenderFont {
    * This RenderFont is not needed anymore. You should dispose
    * any resources you allocated for this font.
    */
-  void purge();
+  void dispose();
 }

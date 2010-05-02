@@ -32,5 +32,5 @@ public interface SoundHandle {
   /**
    * This Sound is not needed anymore and should be removed from the system.
    */
-  void purge();
+  void dispose();
 }
