@@ -142,7 +142,7 @@ public class LwjglInitHelper {
       try {
         Display.setFullscreen(false);
         Display.create();
-        Display.setVSyncEnabled(true);
+        Display.setVSyncEnabled(false);
         Display.setTitle(title);
       } catch (Exception e) {
         e.printStackTrace();
