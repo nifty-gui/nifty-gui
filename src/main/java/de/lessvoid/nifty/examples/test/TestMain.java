@@ -20,7 +20,7 @@ public final class TestMain {
     // create nifty
     Nifty nifty = new Nifty(
         new RenderDeviceLwjgl(),
-        new SoundSystem(new SlickSoundDevice()),
+        new SlickSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
     nifty.fromXml("test/test.xml", "start");
