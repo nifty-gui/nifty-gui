@@ -280,19 +280,15 @@ public class Screen {
   private boolean forwardMouseEventToLayers(final List < Element > layerList, final MouseInputEvent inputEvent) {
     mouseOverHandler.reset();
 
-    boolean result = false;
     long eventTime = timeProvider.getMsTime();
     for (Element layer : layerList) {
-//      if (layer.isEffectActive(EffectEventId.onStartScreen) ||
-//          layer.isEffectActive(EffectEventId.onEndScreen)) {
-//        continue;
-//      }
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
-      result = layer.mouseEvent(inputEvent, eventTime);
+      layer.mouseEvent(inputEvent, eventTime);
     }
 
+//    System.out.println(mouseOverHandler.getInfoString());
     mouseOverHandler.processMouseOverEvent(rootElement, inputEvent, eventTime);
-    return result;
+    return mouseOverHandler.hitsElement();
   }
 
   /**

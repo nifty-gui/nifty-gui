@@ -66,4 +66,8 @@ public class MouseOverHandler {
       }
     }
   }
+
+  public boolean hitsElement() {
+    return !elements.isEmpty();
+  }
 }

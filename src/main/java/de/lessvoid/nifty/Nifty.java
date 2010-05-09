@@ -156,7 +156,9 @@ public class Nifty {
 
         MouseInputEvent inputEvent = mouseInputEventQueue.poll();
         while (inputEvent != null) {
-          currentScreen.mouseEvent(inputEvent);
+          if (currentScreen.mouseEvent(inputEvent)) {
+//            System.out.println("eats event");
+          }
           handleDynamicElements();
           inputEvent = mouseInputEventQueue.poll();
         }
