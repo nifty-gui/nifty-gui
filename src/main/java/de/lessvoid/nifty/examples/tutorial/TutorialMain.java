@@ -19,8 +19,8 @@ public final class TutorialMain {
 
     // create nifty
     Nifty nifty = new Nifty(
-        new RenderDeviceLwjgl(),
-        new SoundSystem(new SlickSoundDevice()),
+        new RenderDeviceLwjgl(false),
+        new SlickSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
     nifty.fromXml("tutorial/tutorial.xml", "start");
