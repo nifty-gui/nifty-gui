@@ -87,6 +87,7 @@ public class EffectType extends XmlBaseType {
         getOverlay(attributes),
         getAlternateEnable(attributes),
         getAlternateDisable(attributes),
+        getCustomKey(attributes),
         getNeverStopRendering(attributes),
         effectEventId);
     initializeEffect(effect, effectEventId);
@@ -111,6 +112,10 @@ public class EffectType extends XmlBaseType {
 
   private String getAlternateDisable(final Attributes attributes) {
     return attributes.get("alternateDisable");
+  }
+
+  private String getCustomKey(final Attributes attributes) {
+    return attributes.get("customKey");
   }
 
   private boolean getNeverStopRendering(final Attributes attributes) {

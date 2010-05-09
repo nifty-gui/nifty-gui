@@ -728,11 +728,10 @@ public class Element {
     effectManager.registerEffect(theId, e);
   }
 
-  /**
-   * on start screen event.
-   * @param effectEventId the effect event id to start
-   * @param effectEndNotiy the EffectEndNotify event we should activate
-   */
+  public void startEffect(final EffectEventId effectEventId) {
+    startEffect(effectEventId, null);
+  }
+
   public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
     if (effectEventId == EffectEventId.onStartScreen) {
       if (!visible) {
@@ -774,8 +773,45 @@ public class Element {
     forwardToSelf.perform();
   }
 
-  public void startEffect(final EffectEventId effectEventId) {
-    startEffect(effectEventId, null);
+  public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
+    if (effectEventId == EffectEventId.onStartScreen) {
+      if (!visible) {
+        return;
+      }
+      done = false;
+    }
+    if (effectEventId == EffectEventId.onEndScreen) {
+      if (!visible) {
+        return;
+      }
+      done = true;
+    }
+    // whenever the effect ends we forward to this event
+    // that checks first, if all child elements are finished
+    // and when yes forwards to the actual effectEndNotify event.
+    //
+    // this way we ensure that all child finished the effects
+    // before forwarding this to the real event handler.
+    //
+    // little bit tricky though :/
+    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotiy);
+
+    // start the effect for ourself
+    effectManager.startEffect(effectEventId, this, time, forwardToSelf, customKey);
+
+    // notify all child elements of the start effect
+    for (Element w : getElements()) {
+      w.startEffect(effectEventId, forwardToSelf, customKey);
+    }
+
+    if (effectEventId == EffectEventId.onFocus) {
+      if (attachedInputControl != null) {
+        attachedInputControl.onFocus(true);
+      }
+    }
+
+    // just in case there was no effect activated, we'll check here, if we're already done
+    forwardToSelf.perform();
   }
 
   /**
@@ -783,7 +819,8 @@ public class Element {
    * @param effectEventId effect event id to stop
    */
   public void stopEffect(final EffectEventId effectEventId) {
-    if (EffectEventId.onStartScreen == effectEventId || EffectEventId.onEndScreen == effectEventId) {
+    if (EffectEventId.onStartScreen == effectEventId ||
+        EffectEventId.onEndScreen == effectEventId) {
       if (!visible) {
         return;
       }
@@ -854,10 +891,14 @@ public class Element {
 
     // show
     internalShow();
-    startEffect(EffectEventId.onShow, new EndNotify() {
-      public void perform() {
-      }
-    });
+    startEffect(EffectEventId.onShow);
+  }
+
+  private void internalShow() {
+    visible = true;
+    for (Element element : elements) {
+      element.internalShow();
+    }
   }
 
   public void setVisible(final boolean visibleParam) {
@@ -865,13 +906,6 @@ public class Element {
       show();
     } else {
       hide();
-    }
-  }
-
-  private void internalShow() {
-    visible = true;
-    for (Element element : elements) {
-      element.internalShow();
     }
   }
 
@@ -988,12 +1022,10 @@ public class Element {
       final MouseInputEvent mouseEvent,
       final long eventTime,
       final MouseOverHandler mouseOverHandler) {
-    if (!canHandleMouseEvents()) {
-      return;
-    }
-
     if (isInside(mouseEvent)) {
-      mouseOverHandler.addElement(this);
+      if (visibleToMouseEvents) {
+        mouseOverHandler.addElement(this);
+      }
       for (Element w : getElements()) {
         w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
       }

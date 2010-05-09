@@ -77,10 +77,15 @@ public class EffectManager {
     effectProcessor.get(id).activate(listener, alternateKey);
   }
 
-  /**
-   * Stop effects with the given id.
-   * @param effectId effect id to stop
-   */
+  public void startEffect(
+      final EffectEventId id,
+      final Element w,
+      final TimeProvider time,
+      final EndNotify listener,
+      final String customKey) {
+    effectProcessor.get(id).activate(listener, alternateKey, customKey);
+  }
+
   public void stopEffect(final EffectEventId effectId) {
     effectProcessor.get(effectId).setActive(false);
   }
@@ -110,13 +115,13 @@ public class EffectManager {
     phase.render(effectProcessor.get(EffectEventId.onHide));
     phase.render(effectProcessor.get(EffectEventId.onStartScreen));
     phase.render(effectProcessor.get(EffectEventId.onEndScreen));
+    phase.render(effectProcessor.get(EffectEventId.onCustom));
     phase.render(effectProcessor.get(EffectEventId.onActive));
     phase.render(effectProcessor.get(EffectEventId.onHover));
     phase.render(effectProcessor.get(EffectEventId.onFocus));
     phase.render(effectProcessor.get(EffectEventId.onLostFocus));
     phase.render(effectProcessor.get(EffectEventId.onGetFocus));
     phase.render(effectProcessor.get(EffectEventId.onClick));
-    phase.render(effectProcessor.get(EffectEventId.onCustom));
   }
 
   public void renderPre(final NiftyRenderEngine renderEngine, final Element element) {

@@ -26,6 +26,7 @@ public class Effect {
   private boolean overlay;
   private String alternateEnable;
   private String alternateDisable;
+  private String customKey;
   private boolean inherit;
   private Nifty nifty;
   private boolean hoverEffect;
@@ -41,6 +42,7 @@ public class Effect {
       final boolean overlayParam,
       final String alternateEnableParam,
       final String alternateDisableParam,
+      final String customKeyParam,
       final boolean neverStopRenderingParam,
       final EffectEventId effectEventIdParam) {
     nifty = niftyParam;
@@ -50,6 +52,7 @@ public class Effect {
     active = false;
     alternateEnable = alternateEnableParam;
     alternateDisable = alternateDisableParam;
+    customKey = customKeyParam;
     effectEventId = effectEventIdParam;
     hoverEffect = false;
     infiniteEffect = false;
@@ -163,6 +166,22 @@ public class Effect {
 
   public boolean alternateDisableMatches(final String alternate) {
     return alternate != null && alternate.equals(alternateDisable);
+  }
+
+  public boolean customKeyMatches(final String currentKey) {
+    if (currentKey == null) {
+      if (customKey == null) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      if (currentKey.equals(customKey)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   /**

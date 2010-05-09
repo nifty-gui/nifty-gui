@@ -88,9 +88,9 @@ public class EffectProcessor {
 
     processingActiveEffects = true;
     for (Effect e : activeEffects) {
-      if (!e.isOverlay() && e.isPost() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
+      if (!e.isOverlay() && e.isPost() && (e.isActive() || e.isNeverStopRendering() || neverStopRendering)) {
         e.update();
-        if (!e.isOverlay() && e.isPost() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
+        if (!e.isOverlay() && e.isPost() && (e.isActive() || e.isNeverStopRendering() || neverStopRendering)) {
           e.execute(renderDevice);
         }
       }
@@ -216,6 +216,62 @@ public class EffectProcessor {
     if (!activeEffects.isEmpty()) {
       active = true;
       clearActiveEffectsRequested = false;
+    }
+  }
+
+  public void activate(final EndNotify newListener, final String alternate, final String customKey) {
+    listener = newListener;
+
+    // activate effects
+    for (Effect e : allEffects) {
+      startEffect(e, alternate, customKey);
+    }
+
+    if (!activeEffects.isEmpty()) {
+      active = true;
+      clearActiveEffectsRequested = false;
+    }
+  }
+
+  /**
+   * Helper method to start an effect.
+   * @param e Effect to start
+   * @param alternate alternate key to use
+   * @param customKey 
+   */
+  protected void startEffect(final Effect e, final String alternate, final String customKey) {
+    if (alternate == null) {
+      // no alternate key given
+
+      // don't start this effect when it has an alternateKey set.
+      if (e.isAlternateEnable()) {
+        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] and effect isAlternateEnable()");
+        return;
+      }
+    } else {
+      // we have an alternate key
+      if (e.isAlternateDisable() && e.alternateDisableMatches(alternate)) {
+        // don't start this effect. it has an alternateKey set and should be used for disable matches only
+        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] matches alternateDisableMatches()");
+        return;
+      }
+
+      if (e.isAlternateEnable() && !e.alternateEnableMatches(alternate)) {
+        // start with alternateEnable but names don't match ... don't start
+        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] does not match alternateEnableMatches()");
+        return;
+      }
+    }
+
+    if (!e.customKeyMatches(customKey)) {
+      log.info("starting effect [" + e.getStateString() + "] canceled because customKey [" + customKey + "] does not match key set at the effect");
+      return;
+    }
+
+    log.info("starting effect [" + e.getStateString() + "]");
+    e.start();
+    if (!activeEffects.contains(e)) {
+      activeEffects.add(e);
     }
   }
 
