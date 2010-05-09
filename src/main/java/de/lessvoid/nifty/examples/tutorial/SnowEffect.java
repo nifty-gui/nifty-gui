@@ -35,6 +35,7 @@ public class SnowEffect implements EffectImpl {
   }
 
   public void deactivate() {
+    niftyImage.dispose();
   }
 
   public void execute(final Element element, final float effectTime, final Falloff falloff, final NiftyRenderEngine r) {
