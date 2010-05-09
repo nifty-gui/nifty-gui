@@ -44,5 +44,6 @@ public class ImageOverlayPulsate implements EffectImpl {
   }
 
   public void deactivate() {
+    image.dispose();
   }
 }
