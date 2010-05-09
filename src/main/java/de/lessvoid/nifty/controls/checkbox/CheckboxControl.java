@@ -2,9 +2,11 @@ package de.lessvoid.nifty.controls.checkbox;
 
 import java.util.Properties;
 
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -31,12 +33,7 @@ public class CheckboxControl implements Controller {
     element = elementParam;
     screen = screenParam;
     checked = new Boolean(propertiesParam.getProperty("checked", "true"));
-    Element selectImage = element.findElementByName("select");
-    if (checked) {
-      selectImage.showWithoutEffects();
-    } else {
-      selectImage.hideWithoutEffect();
-    }
+    updateVisualState();
   }
 
   public void onStartScreen() {
@@ -82,11 +79,13 @@ public class CheckboxControl implements Controller {
   }
 
   private void updateVisualState() {
-    Element selectImage = element.findElementByName("select");
+    final Element selectImage = element.findElementByName("select");
     if (checked) {
-      selectImage.show();
+      selectImage.stopEffect(EffectEventId.onCustom);
+      selectImage.startEffect(EffectEventId.onCustom, new EndNotify() {public void perform() {}}, "show");
     } else {
-      selectImage.hide();
+      selectImage.stopEffect(EffectEventId.onCustom);
+      selectImage.startEffect(EffectEventId.onCustom, new EndNotify() {public void perform() {}}, "hide");
     }
   }
 }
