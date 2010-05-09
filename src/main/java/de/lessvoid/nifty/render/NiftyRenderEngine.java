@@ -2,7 +2,9 @@ package de.lessvoid.nifty.render;
 
 import java.util.Set;
 
+import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
+import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -193,4 +195,16 @@ public interface NiftyRenderEngine {
    * restore states.
    */
   void restoreState();
+
+  /**
+   * Get RenderDevice.
+   * @return
+   */
+  RenderDevice getRenderDevice();
+
+  /**
+   * Dispose image.
+   * @param image image to dispose
+   */
+  void disposeImage(RenderImage image);
 }

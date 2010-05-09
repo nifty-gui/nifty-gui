@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
+import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -115,6 +116,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
   public void endFrame() {
     renderDevice.endFrame();
+//    System.out.println(imageManager.getInfoString());
   }
 
   public void clear() {
@@ -131,7 +133,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     if (filename == null) {
       return null;
     }
-    return new NiftyImage(renderDevice, imageManager.getImage(filename, filterLinear));
+    return new NiftyImage(this, imageManager.getImage(filename, filterLinear));
   }
 
   /**
@@ -465,6 +467,14 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   public void setBlendMode(final BlendMode blendModeParam) {
     blendMode = blendModeParam;
     renderDevice.setBlendMode(blendModeParam);
+  }
+
+  public RenderDevice getRenderDevice() {
+    return renderDevice;
+  }
+
+  public void disposeImage(final RenderImage image) {
+    imageManager.dispose(image);
   }
 
   private class SavedRenderState {
