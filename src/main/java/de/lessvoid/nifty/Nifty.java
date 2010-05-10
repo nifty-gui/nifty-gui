@@ -42,7 +42,7 @@ import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
  * The main Nifty class.
  * @author void
  */
-public class Nifty {
+public class Nifty implements NiftyInputConsumer {
   private Logger log = Logger.getLogger(Nifty.class.getName());
   private NiftyRenderEngine renderEngine;
   private SoundSystem soundSystem;
@@ -123,7 +123,7 @@ public class Nifty {
     this.timeProvider = newTimeProvider;
     this.exit = false;
     this.currentLoaded = null;
-    this.mouseInputEventQueue = new MouseInputEventQueue(renderEngine.getHeight());
+    this.mouseInputEventQueue = new MouseInputEventQueue();
     this.lastTime = timeProvider.getMsTime();
 
     try {
@@ -152,30 +152,15 @@ public class Nifty {
     }
 
     if (!currentScreen.isNull()) {
-        mouseInputEventQueue.process(inputSystem.getMouseEvents());
-
-        MouseInputEvent inputEvent = mouseInputEventQueue.poll();
-        while (inputEvent != null) {
-          if (currentScreen.mouseEvent(inputEvent)) {
-//            System.out.println("eats event");
-          }
-          handleDynamicElements();
-          inputEvent = mouseInputEventQueue.poll();
-        }
-
-        for (KeyboardInputEvent keyEvent : inputSystem.getKeyboardEvents()) {
-          if (!currentScreen.isNull()) {
-            currentScreen.keyEvent(keyEvent);
-          }
-        }
-
-        if (!currentScreen.isNull()) {
-          currentScreen.renderLayers(renderEngine);
-        }
-
-        if (useDebugConsole) {
-          console.render(this, currentScreen, renderEngine);
-        }
+      mouseInputEventQueue.begin();
+      inputSystem.forwardEvents(this);
+      if (mouseInputEventQueue.hasLastMouseDownEvent()) {
+        currentScreen.mouseEvent(mouseInputEventQueue.getLastMouseDownEvent());
+      }
+      currentScreen.renderLayers(renderEngine);
+      if (useDebugConsole) {
+        console.render(this, currentScreen, renderEngine);
+      }
     }
 
     if (exit) {
@@ -191,6 +176,23 @@ public class Nifty {
     lastTime = current;
 
     return exit;
+  }
+
+  public boolean processMouseEvent(final MouseInputEvent mouseEvent) {
+    boolean handled = true;
+    if (mouseInputEventQueue.canProcess(mouseEvent)) {
+      mouseInputEventQueue.process(mouseEvent);
+      handled = currentScreen.mouseEvent(mouseEvent);
+      handleDynamicElements();
+    }
+    return handled;
+  }
+
+  public boolean processKeyboardEvent(final KeyboardInputEvent keyEvent) {
+    if (!currentScreen.isNull()) {
+      currentScreen.keyEvent(keyEvent);
+    }
+    return true;
   }
 
   public void resetEvents() {

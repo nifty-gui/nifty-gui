@@ -1,25 +1,19 @@
 package de.lessvoid.nifty.spi.input;
 
-import java.util.List;
-
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
+import de.lessvoid.nifty.NiftyInputConsumer;
 
 /**
- * Interface for InputSystem for Nifty.
+ * Interface for Niftys InputSystem.
  * @author void
  */
 public interface InputSystem {
 
   /**
-   * Get all available MouseEvents into a List.
-   * @return List of MouseInputEvent for Nifty to process.
+   * This method is called by Nifty when it's ready to process input events. The
+   * InputSystem implementation should call the methods on the given NiftyInputConsumer
+   * to forward events to Nifty.
+   *
+   * @param inputEventConsumer the NiftyInputConsumer to forward input events to
    */
-  List < MouseInputEvent > getMouseEvents();
-
-  /**
-   * Get all available KeyboardInputEvents into a List.
-   * @return List of KeyboardInputEvent for Nifty to process.
-   */
-  List < KeyboardInputEvent > getKeyboardEvents();
+  void forwardEvents(NiftyInputConsumer inputEventConsumer);
 }
