@@ -127,7 +127,7 @@ public class Nifty implements NiftyInputConsumer {
     this.lastTime = timeProvider.getMsTime();
 
     try {
-      loader = new NiftyLoader();
+      loader = new NiftyLoader(timeProvider);
       loader.registerSchema("nifty.nxs", ResourceLoader.getResourceAsStream("nifty.nxs"));
       loader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
       loader.registerSchema("nifty-controls.nxs", ResourceLoader.getResourceAsStream("nifty-controls.nxs"));
@@ -339,6 +339,26 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   /**
+   * Load and validate the given filename. If the file is valid, nothing happens. If it
+   * is invalid you'll get an exception explaining the error.
+   * @param filename filename to check
+   * @throws Exception exception describing the error
+   */
+  public void validateXml(final String filename) throws Exception {
+    loader.validateNiftyXml(ResourceLoader.getResourceAsStream(filename));
+  }
+
+  /**
+   * Load and validate the given stream. If the stream is valid, nothing happens. If it
+   * is invalid you'll get an exception explaining the error.
+   * @param filename filename to check
+   * @throws Exception exception describing the error
+   */
+  public void validateXml(final InputStream stream) throws Exception {
+    loader.validateNiftyXml(stream);
+  }
+
+  /**
    * load from the given file.
    * @param filename filename to load
    */
@@ -347,11 +367,7 @@ public class Nifty implements NiftyInputConsumer {
 
     try {
       long start = timeProvider.getMsTime();
-      NiftyType niftyType = loader.loadNiftyXml(
-          "nifty.nxs",
-          ResourceLoader.getResourceAsStream(filename),
-          this,
-          timeProvider);
+      NiftyType niftyType = loader.loadNiftyXml("nifty.nxs", ResourceLoader.getResourceAsStream(filename), this);
       niftyType.create(this, timeProvider);
 //      log.info(niftyType.output());
       long end = timeProvider.getMsTime();
@@ -370,11 +386,7 @@ public class Nifty implements NiftyInputConsumer {
 
     try {
       long start = timeProvider.getMsTime();
-      NiftyType niftyType = loader.loadNiftyXml(
-          "nifty.nxs",
-          stream,
-          this,
-          timeProvider);
+      NiftyType niftyType = loader.loadNiftyXml("nifty.nxs", stream, this);
       niftyType.create(this, timeProvider);
 //      log.info(niftyType.output());
       long end = timeProvider.getMsTime();

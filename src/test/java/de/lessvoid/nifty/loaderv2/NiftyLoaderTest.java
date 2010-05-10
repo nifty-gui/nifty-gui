@@ -63,18 +63,14 @@ public class NiftyLoaderTest extends TestCase {
   }
 
   public void testLoader() throws Exception {
-    NiftyLoader niftyLoader = new NiftyLoader();
+    NiftyLoader niftyLoader = new NiftyLoader(new TimeProvider());
     niftyLoader.registerSchema("nifty.nxs", ResourceLoader.getResourceAsStream("nifty.nxs"));
     niftyLoader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
 
     Nifty nifty = createNiceMock(Nifty.class);
     replay(nifty);
 
-    NiftyType niftyType = niftyLoader.loadNiftyXml(
-        "nifty.nxs",
-        new ByteArrayInputStream(testXml.getBytes("ISO-8859-1")),
-        nifty,
-        new TimeProvider());
+    NiftyType niftyType = niftyLoader.loadNiftyXml("nifty.nxs", new ByteArrayInputStream(testXml.getBytes("ISO-8859-1")), nifty);
     System.out.println(niftyType.output());
   }
 }
