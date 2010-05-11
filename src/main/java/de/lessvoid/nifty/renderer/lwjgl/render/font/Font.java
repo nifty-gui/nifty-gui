@@ -6,7 +6,8 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.elements.tools.FontHelper;
-import de.lessvoid.nifty.renderer.lwjgl.render.RenderFontLwjgl;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderFont;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 
 
@@ -28,7 +29,7 @@ public class Font {
   /**
    * textures.
    */
-  private TexData[] textures;
+  private LwjglRenderImage[] textures;
 
   private int selectionStart;
   
@@ -83,9 +84,9 @@ public class Font {
     }
 
     // load textures of font into array
-    textures = new TexData[font.getTextures().length];
+    textures = new LwjglRenderImage[font.getTextures().length];
     for (int i = 0; i < font.getTextures().length; i++) {
-      textures[i] = new TexData(extractPath(filename) + font.getTextures()[i]);
+      textures[i] = new LwjglRenderImage(extractPath(filename) + font.getTextures()[i], true);
     }
 
     // now build open gl display lists for every character in the font
@@ -243,10 +244,10 @@ public class Font {
           int texId = charInfoC.getPage();
           if (activeTextureIdx != texId) {
             activeTextureIdx = texId;
-            textures[ activeTextureIdx ].activate(useAlphaTexture);
+            textures[activeTextureIdx].bind();
           }
 
-          kerning = RenderFontLwjgl.getKerning(charInfoC, nextc);
+          kerning = LwjglRenderFont.getKerning(charInfoC, nextc);
           characterWidth = (float) (charInfoC.getXadvance() * size + kerning);
 
           GL11.glLoadIdentity();

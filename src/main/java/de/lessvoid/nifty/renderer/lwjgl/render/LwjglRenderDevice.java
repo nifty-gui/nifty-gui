@@ -16,8 +16,8 @@ import de.lessvoid.nifty.tools.Color;
  * Lwjgl RenderDevice Implementation.
  * @author void
  */
-public class RenderDeviceLwjgl implements RenderDevice {
-  private static Logger log = Logger.getLogger(RenderDeviceLwjgl.class.getName());
+public class LwjglRenderDevice implements RenderDevice {
+  private static Logger log = Logger.getLogger(LwjglRenderDevice.class.getName());
   private static IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
   private int viewportWidth;
   private int viewportHeight;
@@ -37,7 +37,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
   private int currentClippingX1 = 0;
   private int currentClippingY1 = 0;
 
-  public RenderDeviceLwjgl() {
+  public LwjglRenderDevice() {
     GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
     viewportWidth = viewportBuffer.get(2);
     viewportHeight = viewportBuffer.get(3);
@@ -47,7 +47,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
     frames = 0;
   }
 
-  public RenderDeviceLwjgl(final boolean displayFPS) {
+  public LwjglRenderDevice(final boolean displayFPS) {
     this();
     this.displayFPS = displayFPS;
     if (this.displayFPS) {
@@ -119,7 +119,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return RenderImage
    */
   public RenderImage createImage(final String filename, final boolean filterLinear) {
-    return new RenderImageLwjgl(filename, filterLinear);
+    return new LwjglRenderImage(filename, filterLinear);
   }
 
   /**
@@ -128,7 +128,7 @@ public class RenderDeviceLwjgl implements RenderDevice {
    * @return RenderFont
    */
   public RenderFont createFont(final String filename) {
-    return new RenderFontLwjgl(filename, this);
+    return new LwjglRenderFont(filename, this);
   }
 
   /**
@@ -186,7 +186,6 @@ public class RenderDeviceLwjgl implements RenderDevice {
    */
   public void renderImage(final RenderImage image, final int x, final int y, final int width, final int height, final Color color, final float scale) {
     log.fine("renderImage()");
-
     if (!currentTexturing) {
       GL11.glEnable(GL11.GL_TEXTURE_2D);
       currentTexturing = true;
@@ -195,8 +194,20 @@ public class RenderDeviceLwjgl implements RenderDevice {
     GL11.glTranslatef(x + width / 2, y + height / 2, 0.0f);
     GL11.glScalef(scale, scale, 1.0f);
     GL11.glTranslatef(-(x + width / 2), -(y + height / 2), 0.0f);
-    ((RenderImageLwjgl)image).getImage().bind();
-    ((RenderImageLwjgl)image).getImage().draw(x, y, width, height, convertToSlickColor(color));
+
+    LwjglRenderImage internalImage = (LwjglRenderImage) image;
+    internalImage.bind();
+
+    float u1 = internalImage.getWidth() / (float)internalImage.getTextureWidth();
+    float v1 = internalImage.getHeight() / (float)internalImage.getTextureHeight();
+
+    GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    GL11.glBegin(GL11.GL_QUADS);
+      GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex2i(x,         y);
+      GL11.glTexCoord2f(  u1, 0.0f); GL11.glVertex2i(x + width, y);
+      GL11.glTexCoord2f(  u1,   v1); GL11.glVertex2i(x + width, y + height);
+      GL11.glTexCoord2f(0.0f,   v1); GL11.glVertex2i(x,         y + height);
+    GL11.glEnd();
     GL11.glPopMatrix();
   }
 
@@ -236,8 +247,23 @@ public class RenderDeviceLwjgl implements RenderDevice {
     GL11.glTranslatef(centerX, centerY, 0.0f);
     GL11.glScalef(scale, scale, 1.0f);
     GL11.glTranslatef(-(centerX), -(centerY), 0.0f);
-    ((RenderImageLwjgl)image).getImage().bind();
-    ((RenderImageLwjgl)image).getImage().draw(x, y, x + w, y + h, srcX, srcY, srcX + srcW, srcY + srcH, convertToSlickColor(color));
+
+    LwjglRenderImage internalImage = (LwjglRenderImage) image;
+    internalImage.bind();
+
+    float u0 = srcX / (float)internalImage.getTextureWidth();
+    float v0 = srcY / (float)internalImage.getTextureHeight();
+    float u1 = srcW / (float)internalImage.getTextureWidth();
+    float v1 = srcH / (float)internalImage.getTextureHeight();
+
+    GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    GL11.glBegin(GL11.GL_QUADS);
+      GL11.glTexCoord2f(u0, v0); GL11.glVertex2i(x,     y);
+      GL11.glTexCoord2f(u1, v0); GL11.glVertex2i(x + w, y);
+      GL11.glTexCoord2f(u1, v1); GL11.glVertex2i(x + w, y + h);
+      GL11.glTexCoord2f(u0, v1); GL11.glVertex2i(x,     y + h);
+    GL11.glEnd();
+
     GL11.glPopMatrix();
   }
 
@@ -258,9 +284,9 @@ public class RenderDeviceLwjgl implements RenderDevice {
     }
     setBlendMode(BlendMode.BLEND);
     if (color == null) {
-      ((RenderFontLwjgl)font).getFont().drawStringWithSize(x, y, text, fontSize);
+      ((LwjglRenderFont)font).getFont().drawStringWithSize(x, y, text, fontSize);
     } else {
-      ((RenderFontLwjgl)font).getFont().renderWithSizeAndColor(x, y, text, fontSize, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+      ((LwjglRenderFont)font).getFont().renderWithSizeAndColor(x, y, text, fontSize, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
   }
 
@@ -316,18 +342,4 @@ public class RenderDeviceLwjgl implements RenderDevice {
       GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ZERO);
     }
   }
-
-  /**
-   * Convert a Nifty color to a Slick color.
-   * @param color nifty color
-   * @return slick color
-   */
-  private org.newdawn.slick.Color convertToSlickColor(final Color color) {
-    if (color != null) {
-      return new org.newdawn.slick.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-    } else {
-      return new org.newdawn.slick.Color(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-  }
-
 }
