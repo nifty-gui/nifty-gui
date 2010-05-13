@@ -30,7 +30,10 @@ public class AbsolutePositionLayout implements LayoutManager {
     }
 
     // get the root box
-    Box rootBox = rootElement.getBox();
+    int rootBoxX = getRootBoxX(rootElement);
+    int rootBoxY = getRootBoxY(rootElement);
+    int rootBoxWidth = getRootBoxWidth(rootElement);
+    int rootBoxHeight = getRootBoxHeight(rootElement);
 
     // now do the layout
     for (int i = 0; i < elements.size(); i++) {
@@ -41,19 +44,19 @@ public class AbsolutePositionLayout implements LayoutManager {
       // makes only sense with constraints given
       if (cons != null) {
         if (cons.getX() != null) {
-          box.setX(rootBox.getX() + cons.getX().getValueAsInt(rootBox.getWidth()));
+          box.setX(rootBoxX + cons.getX().getValueAsInt(rootBoxWidth));
         }
 
         if (cons.getY() != null) {
-          box.setY(rootBox.getY() + cons.getY().getValueAsInt(rootBox.getHeight()));
+          box.setY(rootBoxY + cons.getY().getValueAsInt(rootBoxHeight));
         }
 
         if (cons.getWidth() != null) {
-          box.setWidth(cons.getWidth().getValueAsInt(rootBox.getWidth()));
+          box.setWidth(cons.getWidth().getValueAsInt(rootBoxWidth));
         }
 
         if (cons.getHeight() != null) {
-          box.setHeight(cons.getHeight().getValueAsInt(rootBox.getHeight()));
+          box.setHeight(cons.getHeight().getValueAsInt(rootBoxHeight));
         }
       }
     }
@@ -73,5 +76,21 @@ public class AbsolutePositionLayout implements LayoutManager {
    */
   public final SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
     return null;
+  }
+
+  private int getRootBoxX(final LayoutPart root) {
+    return root.getBox().getX() + root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth());
+  }
+
+  private int getRootBoxY(final LayoutPart root) {
+    return root.getBox().getY() + root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight());
+  }
+
+  private int getRootBoxWidth(final LayoutPart root) {
+    return root.getBox().getWidth() - root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth()) - root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth());
+  }
+
+  private int getRootBoxHeight(final LayoutPart root) {
+    return root.getBox().getHeight() - root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight()) - root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
   }
 }
