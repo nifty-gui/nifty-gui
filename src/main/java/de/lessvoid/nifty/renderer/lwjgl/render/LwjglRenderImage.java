@@ -9,7 +9,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageLoader;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
@@ -25,13 +25,13 @@ public class LwjglRenderImage implements RenderImage {
   public LwjglRenderImage(final String name, final boolean filterParam) {
     try {
       log.fine("loading image: " + name);
-      ImageLoader imageLoader = new ImageLoader(name, ResourceLoader.getResourceAsStream(name));
-      ByteBuffer imageData = imageLoader.getImageData();
+      ImageIOImageData imageLoader = new ImageIOImageData();
+      ByteBuffer imageData = imageLoader.loadImage(ResourceLoader.getResourceAsStream(name));
       imageData.rewind();
       width = imageLoader.getWidth();
       height = imageLoader.getHeight();
-      textureWidth = imageLoader.getTextureWidth();
-      textureHeight = imageLoader.getTextureHeight();
+      textureWidth = imageLoader.getTexWidth();
+      textureHeight = imageLoader.getTexHeight();
       createTexture(imageData, textureWidth, textureHeight, 0, GL11.GL_RGBA);
     } catch (Exception e) {
       e.printStackTrace();

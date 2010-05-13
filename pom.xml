@@ -29,11 +29,6 @@
       <artifactId>nifty</artifactId>
       <version>1.2-SNAPSHOT</version>
     </dependency>
-    <dependency>
-    	<groupId>net.sourceforge</groupId>
-    	<artifactId>java-png</artifactId>
-    	<version>1.0-SNAPSHOT</version>
-    </dependency>
   </dependencies>
   <repositories>
     <repository>
