@@ -12,7 +12,7 @@ public class LinearTime implements Interpolator {
    * initialize.
    * @param parameter Properties
    */
-  public final void initialize(final Properties parameter) {
+  public void initialize(final Properties parameter) {
   }
 
   public void start() {

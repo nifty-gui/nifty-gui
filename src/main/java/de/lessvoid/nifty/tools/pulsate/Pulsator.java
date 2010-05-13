@@ -68,7 +68,7 @@ public class Pulsator {
    * update the value.
    * @return true when still active and false when done
    */
-  public final float update() {
+  public float update() {
     return pulsateProvider.getValue(timeProvider.getMsTime());
   }
 }

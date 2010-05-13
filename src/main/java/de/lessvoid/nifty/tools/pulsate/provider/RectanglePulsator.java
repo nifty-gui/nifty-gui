@@ -34,7 +34,12 @@ public class RectanglePulsator implements PulsatorProvider {
    * @return the pulsate value in [0,1] intervall
    */
   public float getValue(final long msTime) {
-    return (float) (Math.signum(Math.sin(Math.PI * (msTime - startTime) / period)) + 1.0f) / 2.0f;
+    float delta = msTime - (long)startTime;
+    double t = Math.PI * delta / period;
+    double sin = Math.sin(t);
+    double signum = Math.signum(sin);
+    double s = signum + 1.0f;
+    return (float) s / 2.0f;
   }
 
   /**

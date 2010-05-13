@@ -99,7 +99,7 @@ public class TimeInterpolator {
   /**
    * start the interpolation.
    */
-  public final void start() {
+  public void start() {
     interpolatorProvider.start();
     value = 0.0f;
     startTime = timeProvider.getMsTime() + startDelayParam;
