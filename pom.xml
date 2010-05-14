@@ -30,15 +30,29 @@
     </plugins>
   </build>
   <dependencies>
-  	<dependency>
-  		<groupId>lessvoid</groupId>
-  		<artifactId>nifty</artifactId>
-  		<version>1.2-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>slick</groupId>
-  		<artifactId>slick</artifactId>
-  		<version>270</version>
-  	</dependency>
-  </dependencies> 
+    <dependency>
+      <groupId>lessvoid</groupId>
+      <artifactId>nifty</artifactId>
+      <version>1.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>slick</groupId>
+      <artifactId>slick</artifactId>
+      <version>270</version>
+    </dependency>
+  </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>nifty-maven-repo.sourceforge.net</id>
+      <url>
+        scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo
+      </url>
+    </repository>
+    <site>
+      <id>nifty.sourceforge.net</id>
+      <url>
+        scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-slick-renderer
+      </url>
+    </site>
+  </distributionManagement>
 </project>
