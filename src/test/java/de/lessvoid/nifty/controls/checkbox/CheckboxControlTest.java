@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.controls.checkbox;
 
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
@@ -13,7 +15,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -28,7 +32,6 @@ public class CheckboxControlTest {
   @Before
   public void setup() {
     selectImageMock = createMock(Element.class);
-    selectImageMock.showWithoutEffects();
     screenMock = createMock(Screen.class);
     elementMock = createMock(Element.class);
     expect(elementMock.findElementByName("select")).andReturn(selectImageMock);
@@ -46,6 +49,7 @@ public class CheckboxControlTest {
 
   @Test
   public void testDefaultChecked() {
+    expectShow();
     replayAllMocks();
 
     bindCheckBoxControl();
@@ -54,6 +58,7 @@ public class CheckboxControlTest {
 
   @Test
   public void testOnStartScreen() {
+    expectShow();
     expect(screenMock.getFocusHandler()).andReturn(focusHandlerMock);
     replay(screenMock);
     replay(elementMock);
@@ -67,6 +72,7 @@ public class CheckboxControlTest {
 
   @Test
   public void testInputEventNext() {
+    expectShow();
     expect(screenMock.getFocusHandler()).andReturn(focusHandlerMock);
     replay(screenMock);
 
@@ -84,6 +90,7 @@ public class CheckboxControlTest {
 
   @Test
   public void testInputEventPrev() {
+    expectShow();
     expect(screenMock.getFocusHandler()).andReturn(focusHandlerMock);
     replay(screenMock);
 
@@ -104,7 +111,8 @@ public class CheckboxControlTest {
     expect(elementMock.findElementByName("select")).andReturn(selectImageMock);
     replay(elementMock);
 
-    selectImageMock.hide();
+    expectShow();
+    expectHide();
     replay(selectImageMock);
     replay(screenMock);
     replay(focusHandlerMock);
@@ -119,7 +127,8 @@ public class CheckboxControlTest {
     expect(elementMock.findElementByName("select")).andReturn(selectImageMock);
     replay(elementMock);
 
-    selectImageMock.hide();
+    expectShow();
+    expectHide();
     replay(selectImageMock);
     replay(screenMock);
     replay(focusHandlerMock);
@@ -134,8 +143,9 @@ public class CheckboxControlTest {
     expect(elementMock.findElementByName("select")).andReturn(selectImageMock).times(2);
     replay(elementMock);
 
-    selectImageMock.hide();
-    selectImageMock.show();
+    expectShow();
+    expectHide();
+    expectShow();
     replay(selectImageMock);
     replay(screenMock);
     replay(focusHandlerMock);
@@ -153,7 +163,8 @@ public class CheckboxControlTest {
     expect(elementMock.findElementByName("select")).andReturn(selectImageMock);
     replay(elementMock);
 
-    selectImageMock.show();
+    expectShow();
+    expectShow();
     replay(selectImageMock);
     replay(screenMock);
     replay(focusHandlerMock);
@@ -168,7 +179,8 @@ public class CheckboxControlTest {
     expect(elementMock.findElementByName("select")).andReturn(selectImageMock);
     replay(elementMock);
 
-    selectImageMock.hide();
+    expectShow();
+    expectHide();
     replay(selectImageMock);
     replay(screenMock);
     replay(focusHandlerMock);
@@ -188,4 +200,15 @@ public class CheckboxControlTest {
   private void bindCheckBoxControl() {
     checkBoxControl.bind(null, screenMock, elementMock, new Properties(), null, null);
   }
+
+  private void expectShow() {
+    selectImageMock.stopEffect(EffectEventId.onCustom);
+    selectImageMock.startEffect(eq(EffectEventId.onCustom), isA(EndNotify.class), eq("show"));
+  }
+
+  private void expectHide() {
+    selectImageMock.stopEffect(EffectEventId.onCustom);
+    selectImageMock.startEffect(eq(EffectEventId.onCustom), isA(EndNotify.class), eq("hide"));
+  }
+
 }
