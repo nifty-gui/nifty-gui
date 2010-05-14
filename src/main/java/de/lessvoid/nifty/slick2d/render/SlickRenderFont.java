@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.renderer.slick2d.render;
+package de.lessvoid.nifty.slick2d.render;
 
 import org.newdawn.slick.Font;
 
@@ -9,14 +9,14 @@ import de.lessvoid.nifty.spi.render.RenderFont;
  * RenderFontLwjgl.
  * @author void
  */
-public class RenderFontSlick implements RenderFont {
+public class SlickRenderFont implements RenderFont {
   private Font font;
 
   /**
    * Initialize the font.
    * @param name font filename
    */
-  public RenderFontSlick(final String name, final RenderDevice device) {
+  public SlickRenderFont(final String name, final RenderDevice device) {
 //    font = new Font(device);
 //    font.init(name);
   }

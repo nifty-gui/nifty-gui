@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.renderer.slick2d.render;
+package de.lessvoid.nifty.slick2d.render;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -9,7 +9,7 @@ import de.lessvoid.nifty.spi.render.RenderImage;
  * Lwjgl/Slick implementation for the RenderImage interface.
  * @author void
  */
-public class RenderImageSlick implements RenderImage {
+public class SlickRenderImage implements RenderImage {
   private org.newdawn.slick.Image image;
 
   /**
@@ -18,7 +18,7 @@ public class RenderImageSlick implements RenderImage {
    * @param name the name of the resource in the file system
    * @param filterParam use linear filter (true) or nearest filter (false)
    */
-  public RenderImageSlick(final String name, final boolean filterParam) {
+  public SlickRenderImage(final String name, final boolean filterParam) {
     try {
       int filter = Image.FILTER_NEAREST;
       if (filterParam) {

@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.renderer.slick2d.render;
+package de.lessvoid.nifty.slick2d.render;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,10 +11,10 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
-public class RenderDeviceSlick implements RenderDevice {
+public class SlickRenderDevice implements RenderDevice {
   private GameContainer gameContainer;
 
-  public RenderDeviceSlick(final GameContainer gameContainer) {
+  public SlickRenderDevice(final GameContainer gameContainer) {
     this.gameContainer = gameContainer;
   }
 
@@ -38,11 +38,11 @@ public class RenderDeviceSlick implements RenderDevice {
   }
 
   public RenderImage createImage(final String filename, final boolean filterLinear) {
-    return new RenderImageSlick(filename, filterLinear);
+    return new SlickRenderImage(filename, filterLinear);
   }
 
   public RenderFont createFont(final String filename) {
-    return new RenderFontSlick(filename, this);
+    return new SlickRenderFont(filename, this);
   }
 
   public void renderQuad(final int x, final int y, final int width, final int height, final Color color) {
