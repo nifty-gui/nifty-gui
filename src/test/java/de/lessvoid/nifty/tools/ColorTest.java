@@ -3,6 +3,8 @@ package de.lessvoid.nifty.tools;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ColorTest {
 
@@ -31,6 +33,16 @@ public class ColorTest {
     checkColor(c, 1.0f, 1.0f, 1.0f, 1.0f);
     c = new Color("1");
     checkColor(c, 1.0f, 1.0f, 1.0f, 1.0f);
+  }
+
+  @Test
+  public void testCheckColorInvalid() {
+    assertFalse(Color.check("#1"));
+  }
+
+  @Test
+  public void testCheckColorValid() {
+    assertTrue(Color.check("#FFF"));
   }
 
   @Test

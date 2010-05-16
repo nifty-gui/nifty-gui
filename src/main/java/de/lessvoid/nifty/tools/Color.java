@@ -58,7 +58,7 @@ public class Color {
    * alpha component.
    */
   private float alpha = 0.0f;
-  private ColorValidator colorValidator = new ColorValidator();
+  private static ColorValidator colorValidator = new ColorValidator();
 
   /**
    * Create a color from a color String formated like in html
@@ -284,5 +284,14 @@ public class Color {
    */
   public void setBlue(final float newBlue) {
     blue = newBlue;
+  }
+
+  public static boolean check(final String color) {
+    if (colorValidator.isShortModeWithoutAlpha(color) ||
+        colorValidator.isLongModeWithoutAlpha(color) ||
+        colorValidator.isValid(color)) {
+      return true;
+    }
+    return false;
   }
 }
