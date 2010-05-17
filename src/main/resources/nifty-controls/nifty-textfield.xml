@@ -4,7 +4,7 @@
     <panel id="textfield-panel" style="#panel" focusable="true">
       <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
       <panel id="textfield-field" style="#field" visibleToMouse="true">
-        <text id="textfield-text" style="#text" text="$text" selectionColor="#000f"/>
+        <text id="textfield-text" style="#text" text="$text" />
       </panel>
       <panel id="textfield-cursor-panel" style="#cursor-panel">
         <image id="textfield-cursor" style="#cursor"/>
