@@ -175,7 +175,7 @@ public class Screen {
     setDefaultFocus();
   }
 
-  public final void endScreen(final EndNotify callback) {
+  public void endScreen(final EndNotify callback) {
     resetLayers();
     final EndScreenEndNotify endNotify = createScreenEndNotify(callback);
     startLayers(EffectEventId.onEndScreen, endNotify);
