@@ -43,7 +43,7 @@
     <xs:attribute name="backgroundColor" type="colorType" />
     <xs:attribute name="visibleToMouse" type="xs:boolean" />
     <xs:attribute name="style" type="xs:string" />
-    <xs:anyAttribute processContents="skip" namespace="##targetNamespace" />
+    <xs:anyAttribute processContents="skip" namespace="##any" />
   </xs:complexType>
 
   <xs:complexType name="layerType">
@@ -108,14 +108,14 @@
   </xs:simpleType>
 
   <xs:complexType name="textType">
-  	<xs:complexContent>
-  		<xs:extension base="elementType">
-  			<xs:attribute name="text" type="xs:string" use="required"></xs:attribute>
-  			<xs:attribute name="layout" type="layoutType" use="optional"></xs:attribute>
-  			<xs:attribute name="font" type="xs:string"></xs:attribute>
-  			<xs:attribute name="color" type="colorType"></xs:attribute>
-  		</xs:extension>
-  	</xs:complexContent>
+    <xs:complexContent>
+      <xs:extension base="elementType">
+        <xs:attribute name="text" type="xs:string" use="required"></xs:attribute>
+        <xs:attribute name="layout" type="layoutType" use="optional"></xs:attribute>
+        <xs:attribute name="font" type="xs:string"></xs:attribute>
+        <xs:attribute name="color" type="colorType"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="labelType">
@@ -162,7 +162,7 @@
       <xs:extension base="elementType">
         <xs:attribute name="name" type="xs:string"></xs:attribute>
         <xs:attribute name="onChange" type="xs:string"></xs:attribute>
-        <xs:anyAttribute processContents="skip" namespace="##targetNamespace" />
+        <xs:anyAttribute processContents="skip" namespace="##any" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -256,7 +256,7 @@
     <xs:attribute name="alternateDisable" type="xs:string" />
     <xs:attribute name="onStartEffect" type="onClickType" />
     <xs:attribute name="onEndEffect" type="onClickType" />
-    <xs:anyAttribute namespace="##local" processContents="skip" />
+    <xs:anyAttribute namespace="##any" processContents="skip" />
   </xs:complexType>
 
   <xs:complexType name="singleEffectType">
