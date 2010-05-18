@@ -2,10 +2,14 @@
 <nifty-controls>
   <!-- DROP DOWN CONTROL -->
   <controlDefinition style="nifty-drop-down" name="dropDownControl" controller="de.lessvoid.nifty.controls.dropdown.controller.DropDownControl" inputMapping="de.lessvoid.nifty.controls.dropdown.inputmapping.DropDownControlInputMapping">
-    <panel childLayout="horizontal" height="28px" focusable="true">
+    <panel style="#panel">
+      <panel style="#panel-text">
+        <text id="text" style="#text" text="" />
+      </panel>
+      <panel style="#panel-icon">
+        <image id="icon" style="#icon" />
+      </panel>
       <interact onClick="dropDownClicked()" />
-      <text id="text" style="#text" text="" />
-      <image id="icon" style="#icon" />
     </panel>
   </controlDefinition>
 
