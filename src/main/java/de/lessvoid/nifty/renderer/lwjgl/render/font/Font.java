@@ -215,13 +215,14 @@ public class Font {
 
       for (int i = 0; i < text.length(); i++) {
         Result result = colorValueParser.isColor(text, i);
-        if (result.isColor()) {
+        while (result.isColor()) {
           Color color = result.getColor();
           GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
           i = result.getNextIndex();
           if (i >= text.length()) {
             break;
           }
+          result = colorValueParser.isColor(text, i);
         }
 
         char currentc = text.charAt(i);
