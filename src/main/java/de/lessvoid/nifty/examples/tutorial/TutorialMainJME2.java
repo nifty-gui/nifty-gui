@@ -25,7 +25,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.jme.input.JmeInputSystem;
 import de.lessvoid.nifty.jme.render.JmeRenderDevice;
 import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
-import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 public class TutorialMainJME2 extends SimpleGame {
@@ -99,8 +98,8 @@ public class TutorialMainJME2 extends SimpleGame {
     rootNode.attachChild(niftyNode);
 
     nifty = new Nifty(
-        new JmeRenderDevice(niftyNode),
-        new SoundSystem(new SlickSoundDevice()),
+        new JmeRenderDevice(),
+        new SlickSoundDevice(),
         new JmeInputSystem(),
         new TimeProvider());
     nifty.fromXml("tutorial/tutorial.xml", "start");

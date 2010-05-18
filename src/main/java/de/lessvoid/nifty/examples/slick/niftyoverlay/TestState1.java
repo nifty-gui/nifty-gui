@@ -16,6 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
@@ -27,7 +28,6 @@ import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -64,19 +64,21 @@ public class TestState1 extends BasicGameState implements ScreenController {
     currentColor = Color.white;
 
     // create nifty
-    nifty = new Nifty(new RenderDeviceLwjgl(), new SoundSystem(new SlickSoundDevice()), new InputSystem() {
-      public List<MouseInputEvent> getMouseEvents() {
-        ArrayList<MouseInputEvent> result = new ArrayList<MouseInputEvent>(mouseEvents);
-        mouseEvents.clear();
-        return result;
-      }
-
-      public List<KeyboardInputEvent> getKeyboardEvents() {
-        ArrayList < KeyboardInputEvent > result = new ArrayList < KeyboardInputEvent > (keyEvents);
-        keyEvents.clear();
-        return result;
-      }
-    }, new TimeProvider());
+    nifty = new Nifty(
+        new RenderDeviceLwjgl(),
+        new SlickSoundDevice(),
+        new InputSystem() {
+          public void forwardEvents(NiftyInputConsumer inputEventConsumer) {
+            for (MouseInputEvent event : mouseEvents) {
+              inputEventConsumer.processMouseEvent(event);
+            }
+            mouseEvents.clear();
+            for (KeyboardInputEvent event : keyEvents) {
+              inputEventConsumer.processKeyboardEvent(event);
+            }
+            keyEvents.clear();
+          }
+        }, new TimeProvider());
     nifty.fromXml("slick/niftyoverlay/overlay.xml", "start", this);
     icon1 = nifty.getRenderEngine().createImage("slick/niftyoverlay/icon1.png", false);
     icon2 = nifty.getRenderEngine().createImage("slick/niftyoverlay/icon2.png", false);
