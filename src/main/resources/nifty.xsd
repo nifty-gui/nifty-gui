@@ -61,7 +61,7 @@
   <xs:complexType name="imageType">
     <xs:complexContent>
       <xs:extension base="elementType">
-        <xs:attribute type="xs:string" name="filename" use="required" />
+        <xs:attribute type="xs:string" name="filename" use="optional" />
         <xs:attribute name="x" type="xs:string" use="optional"></xs:attribute>
         <xs:attribute name="y" type="xs:string" use="optional"></xs:attribute>
         <xs:attribute name="filter" type="xs:boolean" use="optional"></xs:attribute>
@@ -110,7 +110,7 @@
   <xs:complexType name="textType">
     <xs:complexContent>
       <xs:extension base="elementType">
-        <xs:attribute name="text" type="xs:string" use="required"></xs:attribute>
+        <xs:attribute name="text" type="xs:string" use="optional"></xs:attribute>
         <xs:attribute name="layout" type="layoutType" use="optional"></xs:attribute>
         <xs:attribute name="font" type="xs:string"></xs:attribute>
         <xs:attribute name="color" type="colorType"></xs:attribute>
