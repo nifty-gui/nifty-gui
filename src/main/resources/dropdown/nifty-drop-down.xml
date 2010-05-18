@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles>
+  <style id="nifty-drop-down#panel">
+    <attributes childLayout="horizontal" height="28px" focusable="true"/>
+  </style>
+
+  <style id="nifty-drop-down#panel-text">
+    <attributes childLayout="overlay" width="*" />
+    <effect>
+      <onClick name="focus" targetElement="icon" />
+      <onClick name="focus" targetElement="text" />
+    </effect>
+  </style>
+
+  <style id="nifty-drop-down#panel-icon">
+    <attributes childLayout="overlay" width="28px" height="28px" />
+    <effect>
+      <onClick name="focus" targetElement="icon" />
+      <onClick name="focus" targetElement="text" />
+    </effect>
+  </style>
+
   <style id="nifty-drop-down#text" base="base-font">
     <attributes color="#000f" textHAlign="left" textVAlign="center" height="28px" width="*" />
     <effect>
-      <onClick name="focus" />
-      <onClick name="remote" targetElement="icon" />
       <onFocus name="imageOverlay" post="false" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
       <onFocus name="textColor" post="false" color="#ffff" />
-      <onFocus name="remote" targetElement="icon" />
       <onActive name="imageOverlay" post="false" filename="textfield/field.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
     </effect>
   </style>
@@ -15,7 +32,6 @@
   <style id="nifty-drop-down#icon">
     <attributes filename="dropdown/drop-down-icon-black.png" width="28px" height="28px" imageMode="subImage:0,0,28,28" />
     <effect>
-      <onClick name="focus" targetElement="text" />
       <onClick name="imageOverlay" filename="dropdown/drop-down-icon-black.png" width="28px" height="28px" imageMode="subImage:56,0,28,28" post="true" />
       <onFocus name="imageOverlay" filename="dropdown/drop-down-icon-black.png" width="28px" height="28px" imageMode="subImage:28,0,28,28" post="true" />
     </effect>
