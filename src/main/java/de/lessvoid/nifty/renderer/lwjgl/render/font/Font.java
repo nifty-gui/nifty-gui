@@ -8,7 +8,9 @@ import org.lwjgl.opengl.GL11;
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderFont;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
+import de.lessvoid.nifty.renderer.lwjgl.render.font.ColorValueParser.Result;
 import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.tools.Color;
 
 
 /**
@@ -46,7 +48,8 @@ public class Font {
   private float selectionA;
   
   private Map<Character, Integer> displayListMap = new Hashtable<Character, Integer>();
-  
+  private ColorValueParser colorValueParser = new ColorValueParser();
+
   /**
    * construct the font.
    */
@@ -209,35 +212,21 @@ public class Font {
       int x = xPos - (sizedWidth - originalWidth) / 2;
 
       int activeTextureIdx = -1;
-      boolean parseColor = false;
-      int parseColorIdx = 0;
-      float [] color = new float[3];
-      color[0] = 1.0f;
-      color[1] = 1.0f;
-      color[2] = 1.0f;
 
       for (int i = 0; i < text.length(); i++) {
-        char currentc = text.charAt(i);
-        if (isColorBegin(currentc)) {
-          parseColor = true;
-          parseColorIdx = 0;
-          continue;
-        }
-        if (parseColor) {
-          color[parseColorIdx] = (float)(currentc) / 255.0f;
-          parseColorIdx++;
-          if (parseColorIdx < 3) {
-            continue;
+        Result result = colorValueParser.isColor(text, i);
+        if (result.isColor()) {
+          Color color = result.getColor();
+          GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+          i = result.getNextIndex();
+          if (i >= text.length()) {
+            break;
           }
-          parseColor = false;
-          GL11.glColor4f(color[0], color[1], color[2], alpha);
-          continue;
         }
 
+        char currentc = text.charAt(i);
         char nextc = FontHelper.getNextCharacter(text, i);
-
         CharacterInfo charInfoC = font.getChar((char) currentc);
-
         int kerning = 0;
         float characterWidth = 0;
         if (charInfoC != null) {
@@ -298,10 +287,6 @@ public class Font {
       GL11.glPopMatrix();
   }
 
-  private boolean isColorBegin(final char current) {
-    return current == '\1';
-  }
-
   /**
    * 
    */
@@ -330,6 +315,13 @@ public class Font {
     int length = 0;
 
     for (int i=0; i<text.length(); i++) {
+      Result result = colorValueParser.isColor(text, i);
+      if (result.isColor()) {
+        i = result.getNextIndex();
+        if (i >= text.length()) {
+          break;
+        }
+      }
       char currentCharacter = text.charAt(i);
       char nextCharacter = FontHelper.getNextCharacter(text, i);
 
