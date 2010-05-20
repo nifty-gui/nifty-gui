@@ -18,7 +18,7 @@
 
   <!-- the text in the input field -->
   <style id="nifty-textfield#text" base="base-font">
-    <attributes color="#000f" visibleToMouse="false" align="left" valign="center" textHAlign="left" />
+    <attributes color="#000f" selectionColor="#000f" visibleToMouse="false" align="left" valign="center" textHAlign="left" />
     <effect>
       <onFocus name="textColor" post="false" color="#ffff" />
     </effect>
