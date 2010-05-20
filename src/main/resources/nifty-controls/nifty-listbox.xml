@@ -4,7 +4,7 @@
     <panel childLayout="vertical">
       <panel childLayout="horizontal">
         <panel id="nifty-listbox-child-root" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.controller.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping" />
-        <control id="nifty-internal-vertical-scrollbar" name="verticalScrollbar"/>
+        <control id="nifty-internal-vertical-scrollbar" name="verticalScrollbar" style="nifty-vertical-scrollbar-for-listbox"/>
       </panel>
       <panel id="nifty-internal-horizonal-panel" childLayout="horizontal" backgroundColor="#f00f" >
         <control id="nifty-internal-horizontal-scrollbar" name="horizontalScrollbar" />
