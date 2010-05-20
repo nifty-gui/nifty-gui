@@ -224,6 +224,9 @@ public class Font {
           }
           result = colorValueParser.isColor(text, i);
         }
+        if (i >= text.length()) {
+          break;
+        }
 
         char currentc = text.charAt(i);
         char nextc = FontHelper.getNextCharacter(text, i);
