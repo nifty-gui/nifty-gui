@@ -4,7 +4,8 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- load default styles and controls -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <useStyles filename="jme3-style/nifty-jme3-styles.xml" />
+  <useStyles filename="nifty-default-styles.xml" />
+<!--    <useStyles filename="jme3-style/nifty-jme3-styles.xml" />-->
   <useControls filename="nifty-default-controls.xml" />
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -12,7 +13,7 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.allcontrols.AllControlsDemoStartScreen">
     <layer id="layer" childLayout="center" backgroundColor="#ccccccff"> <!--  backgroundImage="background.png">   -->
-      <panel id="dialog" style="nifty-panel" childLayout="center" width="50%" height="38%" align="center" valign="center" visibleToMouse="true">
+      <panel id="dialog" style="nifty-panel" childLayout="center" width="50%" height="60%" align="center" valign="center" visibleToMouse="true">
         <effect>
           <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
           <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
@@ -26,7 +27,7 @@
           <panel childLayout="horizontal">
             <label text="Checkbox: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control id="checkbox" name="checkbox" checked="false" />
-          </panel>    
+          </panel>
           <panel childLayout="horizontal" height="10px" />
           <panel childLayout="horizontal">
             <label text="DropDown: " width="100px" align="left" textVAlign="center" textHAlign="left" />
@@ -36,6 +37,18 @@
           <panel childLayout="horizontal">
             <label text="Scrollbar H.: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control name="horizontalScrollbar" worldMaxValue="10.0" />
+          </panel>
+          <panel childLayout="horizontal" height="10px" />
+          <panel childLayout="horizontal">
+            <label text="Scrollbar V.: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <control name="verticalScrollbar" height="100px" worldMaxValue="5.0" />
+          </panel>
+          <panel childLayout="horizontal" height="10px" />
+          <panel childLayout="horizontal">
+            <label text="Listbox: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <control id="listBox" name="listBox" horizontal="false" width="*" height="100px">
+              <panel id="listBoxData" width="100%" childLayout="vertical" visibleToMouse="true" />
+            </control>
           </panel>
           <panel childLayout="horizontal" height="*" />
           <panel childLayout="center" width="100%" height="50px">
