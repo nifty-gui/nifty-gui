@@ -7,16 +7,16 @@
   <style id="nifty-drop-down#panel-text">
     <attributes childLayout="overlay" width="*" />
     <effect>
-      <onClick name="focus" targetElement="icon" />
-      <onClick name="focus" targetElement="text" />
+      <onClick name="focus" targetElement="#parent#icon" />
+      <onClick name="focus" targetElement="#parent#text" />
     </effect>
   </style>
 
   <style id="nifty-drop-down#panel-icon">
     <attributes childLayout="overlay" width="28px" height="28px" />
     <effect>
-      <onClick name="focus" targetElement="icon" />
-      <onClick name="focus" targetElement="text" />
+      <onClick name="focus" targetElement="#parent#icon" />
+      <onClick name="focus" targetElement="#parent#text" />
     </effect>
   </style>
 
