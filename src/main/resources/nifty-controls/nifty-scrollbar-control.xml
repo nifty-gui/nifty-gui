@@ -20,7 +20,7 @@
   <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.inputmapping.ScrollbarInputMapping">
     <panel style="#panel">
       <image id="nifty-internal-scrollbar-up" style="#left">
-        <interact onClick="upClick()" />
+        <interact onClickRepeat="upClick()" />
       </image>
       <image id="nifty-internal-scrollbar-background" style="#background">
         <interact onClickRepeat="click()" />

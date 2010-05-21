@@ -82,6 +82,7 @@ public class GeneralScrollbar implements Controller {
 
     pageSize = worldSize / pages;
     scrollBar.resizeHandle(scrollPos, new SizeValue((int)(scrollBar.translateValue(element.getWidth(), element.getHeight()) / pages) + "px"));
+    scrollPos.getParent().layoutElements();
   }
 
   /**
@@ -171,7 +172,8 @@ public class GeneralScrollbar implements Controller {
       currentValue = 0;
     }
 
-    int s = scrollBar.translateValue(element.getWidth(), element.getHeight()) - scrollBar.translateValue(scrollPos.getWidth(), scrollPos.getHeight());
+    int s = scrollBar.translateValue(element.getWidth(), element.getHeight()) -
+            scrollBar.translateValue(scrollPos.getWidth(), scrollPos.getHeight());
     float a = viewToWorld(s);
     if (currentValue > a) {
       currentValue = a;
@@ -202,9 +204,9 @@ public class GeneralScrollbar implements Controller {
     if (nextPrevHelper.handleNextPrev(inputEvent)) {
       return;
     }
-    if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+    if (inputEvent == NiftyInputEvent.MoveCursorUp || inputEvent == NiftyInputEvent.MoveCursorLeft) {
       changeSliderPos(currentValue - pageSize);
-    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown || inputEvent == NiftyInputEvent.MoveCursorRight) {
       changeSliderPos(currentValue + pageSize);
     }
   }

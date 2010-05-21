@@ -12,6 +12,10 @@ public class ScrollbarInputMapping implements NiftyInputMapping {
         return NiftyInputEvent.MoveCursorDown;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
         return NiftyInputEvent.MoveCursorUp;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
+          return NiftyInputEvent.MoveCursorLeft;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RIGHT) {
+          return NiftyInputEvent.MoveCursorRight;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_TAB) {
         if (inputEvent.isShiftDown()) {
           return NiftyInputEvent.PrevInputElement;
