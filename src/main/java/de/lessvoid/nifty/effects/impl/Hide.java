@@ -8,15 +8,14 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.tools.TargetElementResolver;
 
 public class Hide implements EffectImpl {
   private Element targetElement;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    String targetElementName = parameter.getProperty("targetElement");
-    if (targetElementName != null) {
-      targetElement = nifty.getCurrentScreen().findElementByName(targetElementName);
-    }
+    TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
+    targetElement = resolver.resolve(parameter.getProperty("targetElement"));
   }
 
   public void execute(

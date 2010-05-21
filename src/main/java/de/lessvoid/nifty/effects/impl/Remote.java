@@ -8,6 +8,7 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.tools.TargetElementResolver;
 
 public class Remote implements EffectImpl {
 
@@ -15,9 +16,9 @@ public class Remote implements EffectImpl {
   private EffectEventId effectEventId;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    String target = parameter.getProperty("targetElement");
-    if (target != null) {
-      targetElement = element.getParent().findElementByName(target);
+    TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
+    targetElement = resolver.resolve(parameter.getProperty("targetElement"));
+    if (targetElement != null) {
       effectEventId = (EffectEventId) parameter.get("effectEventId");
       targetElement.startEffect(effectEventId, null);
     }

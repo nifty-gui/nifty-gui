@@ -7,6 +7,7 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.tools.TargetElementResolver;
 
 /**
  * focus on hover.
@@ -16,10 +17,9 @@ public class Focus implements EffectImpl {
   private Element targetElement;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    String target = parameter.getProperty("targetElement");
-    if (target != null) {
-      targetElement = element.getParent().findElementByName(target);
-    }
+    TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
+    targetElement = resolver.resolve(parameter.getProperty("targetElement"));
+
     if (targetElement != null) {
       targetElement.setFocus();
     } else {

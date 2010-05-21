@@ -8,6 +8,7 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.tools.TargetElementResolver;
 
 /**
  * Move - move stuff around.
@@ -77,7 +78,8 @@ public class Move implements EffectImpl {
 
     String target = parameter.getProperty("targetElement");
     if (target != null) {
-      Element targetElement = nifty.getCurrentScreen().findElementByName(target);
+      TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
+      Element targetElement = resolver.resolve(target);
       if (targetElement == null) {
         log.warning("move effect for element [" + element.getId() + "] was unable to find target element [" + target + "] at screen [" + nifty.getCurrentScreen().getScreenId() + "]");
         return;

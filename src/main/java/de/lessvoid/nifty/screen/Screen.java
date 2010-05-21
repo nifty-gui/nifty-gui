@@ -296,7 +296,7 @@ public class Screen {
    * @param name the id to find
    * @return the element or null
    */
-  public final Element findElementByName(final String name) {
+  public Element findElementByName(final String name) {
     for (Element layer : layerElements) {
       Element found = layer.findElementByName(name);
       if (found != null) {

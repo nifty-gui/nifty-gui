@@ -9,6 +9,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.nifty.tools.TargetElementResolver;
 
 /**
  * Hint - show hint.
@@ -40,10 +41,8 @@ public class Hint implements EffectImpl {
   public void activate(final Nifty niftyParam, final Element element, final EffectProperties parameter) {
     this.nifty = niftyParam;
 
-    String target = parameter.getProperty("targetElement");
-    if (target != null) {
-      targetElement = nifty.getCurrentScreen().findElementByName(target);
-    }
+    TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
+    targetElement = resolver.resolve(parameter.getProperty("targetElement"));
 
     String text = parameter.getProperty("hintText");
     if (text != null) {
