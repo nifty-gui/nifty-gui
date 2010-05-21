@@ -7,7 +7,6 @@ import org.lwjgl.input.Mouse;
 import com.jme.app.SimpleGame;
 import com.jme.bounding.BoundingBox;
 import com.jme.image.Texture;
-import com.jme.input.MouseInput;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import com.jme.scene.Spatial.CullHint;
@@ -50,12 +49,9 @@ public class JmeNifty extends SimpleGame {
     
     // Allow mouse to leave the game window (very useful on debugging :)
     Mouse.setGrabbed(false);        
-    // Set mouse cursor
-//  MouseInput.get().setHardwareCursor(JmeNifty.class.getClassLoader().getResource("jmetest/data/cursor/cursor1.png"));
-  
 
-   
-
+    
+    // Create a spinning monkey ball
     sphere = new Sphere("Sphere", 63, 50, 25);
     sphere.setLocalTranslation(new Vector3f(0,0,-40));
     sphere.setModelBound(new BoundingBox());
@@ -68,9 +64,7 @@ public class JmeNifty extends SimpleGame {
         e.printStackTrace();
     }
 
-    URL u = ResourceLocatorTool.locateResource(ResourceLocatorTool.TYPE_TEXTURE, "model/grass.gif");
-    System.err.println("FOUND URL: "+u);
-
+    URL u = ResourceLocatorTool.locateResource(ResourceLocatorTool.TYPE_TEXTURE, "/jmetest/data/images/Monkey.png");
     TextureState ts = display.getRenderer().createTextureState();
     ts.setEnabled(true);
     ts.setTexture(TextureManager.loadTexture(u, Texture.MinificationFilter.Trilinear, Texture.MagnificationFilter.Bilinear));
