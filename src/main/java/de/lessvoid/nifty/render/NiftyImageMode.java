@@ -24,20 +24,29 @@ public class NiftyImageMode {
   private static final String RESIZE_STRING = "resize:";
   private static final String SUB_IMAGE_STRING = "subImage:";
   private static final String REPEAT_STRING = "repeat:";
+  private static final String SPRITE_STRING = "sprite:";
+  private static final String SPRITE_RESIZE_STRING = "sprite-resize:";
 
   private static final int SUBIMAGE_ARGS_COUNT = 4;
   private static final int REPEAT_ARGS_COUNT = 4;
+  private static final int SPRITE_ARGS_COUNT = 3;
+  private static final int SPRITE_RESIZE_ARGS_COUNT = 15;
 
   private enum Mode {
     NORMAL,
     SUBIMAGE,
     RESIZE,
-    REPEAT
+    REPEAT,
+    SPRITE,
+    SPRITE_RESIZE
   };
 
   private Mode mode;
   private Box subImageBox;
   private Box repeatBox;
+  private int spriteBoxW;
+  private int spriteBoxH;
+  private int spriteIdx;
   private String resizeString;
 
   /**
@@ -74,6 +83,10 @@ public class NiftyImageMode {
       return handleResize(imageMode);
     } else if (imageMode.startsWith(REPEAT_STRING)) {
       return handleRepeat(imageMode);
+    } else if (imageMode.startsWith(SPRITE_STRING)) {
+      return handleSprite(imageMode);
+    } else if (imageMode.startsWith(SPRITE_RESIZE_STRING)) {
+      return handleSpriteResize(imageMode);
     } else {
       return NiftyImageMode.normal();
     }
@@ -124,6 +137,25 @@ public class NiftyImageMode {
     } else if (mode == Mode.RESIZE) {
       ResizeHelper resizeHelper = new ResizeHelper(renderDevice, renderImage, this.resizeString);
       resizeHelper.performRender(x, y, width, height, color, scale, centerX, centerY);
+    } else if (mode == Mode.SPRITE) {
+      int imageWidth = renderImage.getWidth();
+      int imageHeight = renderImage.getHeight();
+      int imagesPerLine = imageWidth / spriteBoxW;
+      int imageY = spriteIdx / imagesPerLine;
+      int imageX = spriteIdx % imagesPerLine;
+      int sx = imageX * spriteBoxW;
+      int sy = imageY * spriteBoxH;
+      renderDevice.renderImage(renderImage, x, y, width, height, sx, sy, spriteBoxW, spriteBoxH, color, 1.0f, centerX, centerY);
+    } else if (mode == Mode.SPRITE_RESIZE) {
+      int imageWidth = renderImage.getWidth();
+      int imageHeight = renderImage.getHeight();
+      int imagesPerLine = imageWidth / spriteBoxW;
+      int imageY = spriteIdx / imagesPerLine;
+      int imageX = spriteIdx % imagesPerLine;
+      int sx = imageX * spriteBoxW;
+      int sy = imageY * spriteBoxH;
+      ResizeHelper resizeHelper = new ResizeHelper(renderDevice, renderImage, this.resizeString, sx, sy);
+      resizeHelper.performRender(x, y, width, height, color, scale, centerX, centerY);
     } else {
       renderDevice.renderImage(renderImage, x, y, width, height, color, scale);
     }
@@ -162,16 +194,12 @@ public class NiftyImageMode {
   private static NiftyImageMode handleSubImage(final String imageMode) {
     String parameters = imageMode.replaceFirst(SUB_IMAGE_STRING, "");
     if (parameters == null || parameters.length() == 0) {
-      log.warning(
-          "trying to parse imageMode [" + imageMode
-          + "] but missing sub image definition! using default RenderImageMode normal.");
+      log.warning("trying to parse imageMode [" + imageMode + "] but missing sub image definition! using default RenderImageMode normal.");
       return NiftyImageMode.normal();
     }
     String[] args = parameters.split(",");
     if (args.length != SUBIMAGE_ARGS_COUNT) {
-      log.warning(
-          "expecting exactly 4 parameters but got only " + args.length
-          + " using default RenderImageMode normal.");
+      log.warning("expecting exactly 4 parameters but got only " + args.length + " using default RenderImageMode normal.");
       return NiftyImageMode.normal();
     }
     int index = 0;
@@ -210,6 +238,67 @@ public class NiftyImageMode {
     return result;
   }
 
+  private static NiftyImageMode handleSprite(final String imageMode) {
+    String parameters = imageMode.replaceFirst(SPRITE_STRING, "");
+    if (parameters == null || parameters.length() == 0) {
+      log.warning("trying to parse imageMode [" + imageMode + "] but missing sprite definition! using default RenderImageMode normal.");
+      return NiftyImageMode.normal();
+    }
+    String[] args = parameters.split(",");
+    if (args.length != SPRITE_ARGS_COUNT) {
+      log.warning("expecting exactly " + SPRITE_ARGS_COUNT + " parameters but got only " + args.length + " using default RenderImageMode normal.");
+      return NiftyImageMode.normal();
+    }
+    int index = 0;
+    int w = Integer.valueOf(args[index++]);
+    int h = Integer.valueOf(args[index++]);
+    int idx = Integer.valueOf(args[index++]);
+
+    NiftyImageMode result = new NiftyImageMode();
+    result.mode = Mode.SPRITE;
+    result.spriteBoxW = w;
+    result.spriteBoxH = h;
+    result.spriteIdx = idx;
+    return result;
+  }
+
+  private static NiftyImageMode handleSpriteResize(final String imageMode) {
+    String parameters = imageMode.replaceFirst(SPRITE_RESIZE_STRING, "");
+    if (parameters == null || parameters.length() == 0) {
+      log.warning("trying to parse imageMode [" + imageMode + "] but missing sprite definition! using default RenderImageMode normal.");
+      return NiftyImageMode.normal();
+    }
+    String[] args = parameters.split(",");
+    if (args.length != SPRITE_RESIZE_ARGS_COUNT) {
+      log.warning("expecting exactly " + SPRITE_RESIZE_ARGS_COUNT + " parameters but got only " + args.length + " using default RenderImageMode normal.");
+      return NiftyImageMode.normal();
+    }
+    int index = 0;
+    int w = Integer.valueOf(args[index++]);
+    int h = Integer.valueOf(args[index++]);
+    int idx = Integer.valueOf(args[index++]);
+
+    NiftyImageMode result = new NiftyImageMode();
+    result.mode = Mode.SPRITE_RESIZE;
+    result.spriteBoxW = w;
+    result.spriteBoxH = h;
+    result.spriteIdx = idx;
+    result.resizeString =
+      args[index++] + "," +
+      args[index++] + "," +
+      args[index++] + "," + 
+      args[index++] + "," + 
+      args[index++] + "," + 
+      args[index++] + "," + 
+      args[index++] + "," + 
+      args[index++] + "," + 
+      args[index++] + "," + 
+      args[index++] + "," + 
+      args[index++] + "," + 
+      args[index++];
+    return result;
+  }
+
   /**
    * handle resize.
    * @param imageMode image mode
@@ -218,9 +307,7 @@ public class NiftyImageMode {
   private static NiftyImageMode handleResize(final String imageMode) {
     String parameters = imageMode.replaceFirst(RESIZE_STRING, "");
     if (parameters == null || parameters.length() == 0) {
-      log.warning(
-          "trying to parse imageMode [" + imageMode
-          + "] but missing resize definition! using default RenderImageMode normal.");
+      log.warning("trying to parse imageMode [" + imageMode + "] but missing resize definition! using default RenderImageMode normal.");
       return NiftyImageMode.normal();
     }
     return new NiftyImageMode(parameters);
@@ -260,5 +347,21 @@ public class NiftyImageMode {
           centerX,
           centerY);
     }
+  }
+
+  public boolean isWidthOverwrite() {
+    return mode == Mode.SPRITE;
+  }
+
+  public boolean isHeightOverwrite() {
+    return mode == Mode.SPRITE;
+  }
+
+  public int getWidthOverwrite() {
+    return spriteBoxW;
+  }
+
+  public int getHeightOverwrite() {
+    return spriteBoxH;
   }
 }

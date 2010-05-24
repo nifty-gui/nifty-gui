@@ -27,6 +27,8 @@ class ResizeHelper {
    */
   private RenderImage renderImage;
   private RenderDevice renderDevice;
+  private int sourceX = 0;
+  private int sourceY = 0;
 
   /**
    * Create from the given String.
@@ -37,6 +39,16 @@ class ResizeHelper {
   public ResizeHelper(final RenderDevice renderDevice, final RenderImage renderImageParam, final String resizeString) {
     this.renderDevice = renderDevice;
     this.renderImage = renderImageParam;
+    this.sourceX = 0;
+    this.sourceY = 0;
+    parseFromString(resizeString, box);
+  }
+
+  public ResizeHelper(final RenderDevice renderDevice, final RenderImage renderImageParam, final String resizeString, final int sx, final int sy) {
+    this.renderDevice = renderDevice;
+    this.renderImage = renderImageParam;
+    this.sourceX = sx;
+    this.sourceY = sy;
     parseFromString(resizeString, box);
   }
 
@@ -71,9 +83,9 @@ class ResizeHelper {
     int rightWidth = Integer.parseInt(data[offsetData + 2]);
     int height = Integer.parseInt(data[offsetData + 3]);
 
-    boxArray[offsetBox + 0] = new Box(0, y, leftWidth, height);
-    boxArray[offsetBox + 1] = new Box(leftWidth, y, middleWidth, height);
-    boxArray[offsetBox + 2] = new Box(leftWidth + middleWidth, y, rightWidth, height);
+    boxArray[offsetBox + 0] = new Box(sourceX + 0,                       sourceY + y, leftWidth, height);
+    boxArray[offsetBox + 1] = new Box(sourceX + leftWidth,               sourceY + y, middleWidth, height);
+    boxArray[offsetBox + 2] = new Box(sourceX + leftWidth + middleWidth, sourceY + y, rightWidth, height);
 
     return y + height;
   }
