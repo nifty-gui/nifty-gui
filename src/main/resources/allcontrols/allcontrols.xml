@@ -4,16 +4,22 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- load default styles and controls -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <useStyles filename="nifty-default-styles.xml" />
-<!--    <useStyles filename="jme3-style/nifty-jme3-styles.xml" />-->
+<!--   <useStyles filename="nifty-default-styles.xml" />   -->
+  <useStyles filename="jme3-style/nifty-jme3-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.allcontrols.AllControlsDemoStartScreen">
-    <layer id="layer" childLayout="center" backgroundColor="#ccccccff"> <!--  backgroundImage="background.png">   -->
-      <panel id="dialog" style="nifty-panel" childLayout="center" width="50%" height="60%" align="center" valign="center" visibleToMouse="true">
+    <layer id="layer" childLayout="center">
+      <effect>
+        <onActive name="gradient">
+          <value offset="0%" color="#2220" />
+          <value offset="100%" color="#555f" />
+        </onActive>
+      </effect>
+      <panel id="dialog" style="nifty-panel" childLayout="center" width="50%" height="80%" align="center" valign="center" visibleToMouse="true">
         <effect>
           <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
           <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
@@ -48,6 +54,15 @@
             <label text="Listbox: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control id="listBox" name="listBox" horizontal="false" width="*" height="100px">
               <panel id="listBoxData" width="100%" childLayout="vertical" visibleToMouse="true" />
+            </control>
+          </panel>
+          <panel childLayout="horizontal" height="10px" />
+          <panel childLayout="horizontal">
+            <label text="Scrollpanel: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <control name="scrollPanel" width="*" height="120px">
+              <panel width="544px" height="158px" childLayout="center">
+                <image filename="intro-logo.png" />
+              </panel>
             </control>
           </panel>
           <panel childLayout="horizontal" height="*" />
