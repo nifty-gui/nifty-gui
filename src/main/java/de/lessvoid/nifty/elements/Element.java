@@ -1287,6 +1287,13 @@ public class Element {
     effectManager = effectManagerParam;
   }
 
+  public void bindToScreen(final Screen newScreen) {
+    screen = newScreen;
+    for (Element e : elements) {
+      e.bindToScreen(newScreen);
+    }
+  }
+
   /**
    * On start screen event.
    * @param newScreen screen

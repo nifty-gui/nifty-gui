@@ -684,10 +684,7 @@ public class Nifty implements NiftyInputConsumer {
     }
 
     public void startControlWithCheck(final Element element) {
-      if (screen.isRunning()) {
-//        element.startEffect(EffectEventId.onStartScreen);
-//        element.startEffect(EffectEventId.onActive);
-      }
+      element.bindToScreen(screen);
     }
 
     public Element createControl() throws Exception {
