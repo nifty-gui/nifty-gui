@@ -61,13 +61,13 @@ public class GeneralScrollbar implements Controller {
     worldMinValue = Float.parseFloat(properties.getProperty("worldMinValue", "0.0"));
     worldMaxValue = Float.parseFloat(properties.getProperty("worldMaxValue", "1.0"));
     currentValue = Float.parseFloat(properties.getProperty("currentValue", "0.0"));
-  }
 
-  public void onStartScreen() {
     scrollPos = element.findElementByName("nifty-internal-scrollbar-position");
     element = element.findElementByName("nifty-internal-scrollbar-background");
     nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
+  }
 
+  public void onStartScreen() {
     calcPageSize();
     changeSliderPos(currentValue);
   }
@@ -82,7 +82,10 @@ public class GeneralScrollbar implements Controller {
 
     pageSize = worldSize / pages;
     scrollBar.resizeHandle(scrollPos, new SizeValue((int)(scrollBar.translateValue(element.getWidth(), element.getHeight()) / pages) + "px"));
-    scrollPos.getParent().layoutElements();
+    Element parent = scrollPos.getParent();
+    if (parent != null) {
+      parent.layoutElements();
+    }
   }
 
   /**
