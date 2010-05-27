@@ -54,7 +54,7 @@
     </dependency>
     <dependency>
     	<groupId>lessvoid</groupId>
-    	<artifactId>nifty-jme3-style</artifactId>
+    	<artifactId>nifty-grey-style</artifactId>
     	<version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
