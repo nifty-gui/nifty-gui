@@ -173,7 +173,7 @@ public class Falloff {
    * @return the falloff distance as normalized value [0,1]
    */
   public void updateFalloffValue(final Element element, final int mouseX, final int mouseY) {
-    if (falloffConstraint == falloffConstraint.none) {
+    if (falloffConstraint == HoverFalloffConstraint.none) {
       falloffValue = 1.0f;
       return;
     }
@@ -184,19 +184,26 @@ public class Falloff {
     float dx = mouseX - centerX;
     float dy = mouseY - centerY;
 
-    int falloff = 0;
-    if (falloffConstraint == falloffConstraint.vertical) {
+    //int falloff = 0;
+    float falloff = 0; 
+    if (falloffConstraint == HoverFalloffConstraint.vertical) {
       dx = 0;
       falloff = getVerticalHover(element) / 2;
     }
 
-    if (falloffConstraint == falloffConstraint.horizontal) {
+    if (falloffConstraint == HoverFalloffConstraint.horizontal) {
       dy = 0;
       falloff = getHorizontalHover(element) / 2;
     }
 
-    if (falloffConstraint == falloffConstraint.both) {
-      falloff = Math.max(getHorizontalHover(element) / 2, getVerticalHover(element) / 2);
+    if (falloffConstraint == HoverFalloffConstraint.both) {
+      double dA = Math.atan((dy / dx)); //angle from centre to current mouse position
+      float elA = element.getWidth() / 2;
+      float elB = element.getHeight() / 2;
+
+      //distance to a point on the elipse circumference that is on the same angle.....
+      //formula from http://www.nlreg.com/ellipse.htm
+      falloff = (float)Math.sqrt( (Math.pow(elA,2) * Math.pow(elB,2)) / ( Math.pow((elA * Math.sin(dA)),2)  + Math.pow(( elB * Math.cos(dA)),2) ) );
     }
 
     float d = (float) Math.hypot(dx, dy);
@@ -204,7 +211,7 @@ public class Falloff {
       falloffValue = 0.0f;
     }
 
-    falloffValue = 1.0f - (float) d / (float) falloff;
+    falloffValue = Math.abs(1.0f - (float) d / (float) falloff);
   }
 
   public float getFalloffValue() {
