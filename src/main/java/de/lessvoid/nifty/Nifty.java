@@ -175,6 +175,8 @@ public class Nifty implements NiftyInputConsumer {
     soundSystem.update(delta);
     lastTime = current;
 
+//    System.out.println("--> screen output");
+//    System.out.println(currentScreen.debugOutput());
     return exit;
   }
 

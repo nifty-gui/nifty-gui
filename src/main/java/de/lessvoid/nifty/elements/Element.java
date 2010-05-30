@@ -124,6 +124,13 @@ public class Element {
   private boolean done;
 
   /**
+   * this is set to true when there's no interaction with this element possibe.
+   * (as long as onStartScreen and onEndScreen events are active even when this
+   * element is not using the onStartScreen effect at all but a parent element did)
+   */
+  private boolean interactionBlocked;
+
+  /**
    * mouse down flag.
    */
   private boolean mouseDown;
@@ -290,6 +297,7 @@ public class Element {
     this.enabled = true;
     this.visible = true;
     this.done = false;
+    this.interactionBlocked = false;
     this.focusHandler = newFocusHandler;
     this.visibleToMouseEvents = newVisibleToMouseEvents;
     this.time = timeProvider;
@@ -341,6 +349,10 @@ public class Element {
 
     if (!visible) {
       return "hidden";
+    }
+
+    if (interactionBlocked) {
+      return "interactionBlocked";
     }
 
     return "normal";
@@ -738,12 +750,14 @@ public class Element {
         return;
       }
       done = false;
+      interactionBlocked = true;
     }
     if (effectEventId == EffectEventId.onEndScreen) {
       if (!visible) {
         return;
       }
       done = true;
+      interactionBlocked = true;
     }
     // whenever the effect ends we forward to this event
     // that checks first, if all child elements are finished
@@ -779,12 +793,14 @@ public class Element {
         return;
       }
       done = false;
+      interactionBlocked = true;
     }
     if (effectEventId == EffectEventId.onEndScreen) {
       if (!visible) {
         return;
       }
       done = true;
+      interactionBlocked = true;
     }
     // whenever the effect ends we forward to this event
     // that checks first, if all child elements are finished
@@ -821,6 +837,7 @@ public class Element {
   public void stopEffect(final EffectEventId effectEventId) {
     if (EffectEventId.onStartScreen == effectEventId ||
         EffectEventId.onEndScreen == effectEventId) {
+      interactionBlocked = false;
       if (!visible) {
         return;
       }
@@ -1005,6 +1022,9 @@ public class Element {
       return false;
     }
     if (!focusHandler.canProcessMouseEvents(this)) {
+      return false;
+    }
+    if (interactionBlocked) {
       return false;
     }
     return true;
@@ -1405,6 +1425,23 @@ public class Element {
     }
   }
 
+  private boolean hasParentActiveOnStartOrOnEndScreenEffect() {
+    if (parent != null) {
+      return
+        parent.effectManager.isActive(EffectEventId.onStartScreen) ||
+        parent.effectManager.isActive(EffectEventId.onEndScreen) ||
+        parent.hasParentActiveOnStartOrOnEndScreenEffect();
+    }
+    return false;
+  }
+
+  private void resetInteractionBlocked() {
+    interactionBlocked = false;
+    for (Element e : elements) {
+      e.resetInteractionBlocked();
+    }
+  }
+
   /**
    * LocalEndNotify helper class.
    * @author void
@@ -1434,10 +1471,19 @@ public class Element {
      * perform.
      */
     public void perform() {
+      if (effectEventId.equals(EffectEventId.onStartScreen) || effectEventId.equals(EffectEventId.onEndScreen)) {
+        if (interactionBlocked &&
+            !hasParentActiveOnStartOrOnEndScreenEffect() &&
+            !isEffectActive(effectEventId)) {
+          resetInteractionBlocked();
+        }
+      }
+
       // notify parent if:
       // a) the effect is done for ourself
       // b) the effect is done for all of our children
       if (!isEffectActive(effectEventId)) {
+
         // all fine. we can notify the actual event handler
         if (effectEndNotiy != null) {
           effectEndNotiy.perform();
