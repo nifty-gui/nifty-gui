@@ -25,6 +25,15 @@ public class ScrollPanel implements Controller {
   private float stepSizeX;
   private float stepSizeY;
 
+  private HorizontalScrollbarControl horizontalS;
+  private VerticalScrollbarControl verticalS;
+
+  public enum VerticalAlign {
+    top,
+    center,
+    bottom
+  }
+
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -76,7 +85,7 @@ public class ScrollPanel implements Controller {
     if (childRootElement != null) {
       final Element scrollElement = childRootElement.getElements().get(0);
       if (scrollElement != null) {
-        HorizontalScrollbarControl horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
+        horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class); 
         if (horizontalS != null) {
           horizontalS.setWorldMaxValue(scrollElement.getWidth());
           horizontalS.setViewMaxValue(childRootElement.getWidth());
@@ -90,7 +99,7 @@ public class ScrollPanel implements Controller {
           });
         }
   
-        VerticalScrollbarControl verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
+        verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
         if (verticalS != null) {
           verticalS.setWorldMaxValue(scrollElement.getHeight());
           verticalS.setViewMaxValue(childRootElement.getHeight());
@@ -110,5 +119,53 @@ public class ScrollPanel implements Controller {
     }
 
     screen.layoutLayers();
+  }
+
+  /**
+   * sets the scrollPanel to the specified vertical position
+   * @param yPos
+   */
+  public void setVerticalPos(float yPos) {
+    if (verticalS != null && verticalScrollbar) {
+      verticalS.setCurrentValue(yPos);
+    }
+    System.out.println("set vpos to " + yPos);
+  }
+  
+  /**
+   * sets the vertical position so you see the specified element (elemCount) For
+   * that stepSizeY have to be exactly the height of one element
+   * @param elemCount
+   */
+  public void showElementVertical(int elemCount) {
+    showElementVertical(elemCount, VerticalAlign.center);
+  }
+
+  /**
+   * sets the vertical position so you see the specified element (elemCount) you
+   * can choose between three different vertical alignments (top,middle,bottom)
+   * 
+   * For that function to work stepSizeY have to be exactly the height of one
+   * element
+   * 
+   * @param elemCount
+   * @param valign: top,middle,bottom
+   */
+  public void showElementVertical(int elemCount, VerticalAlign valign) {
+    float newPos;
+    switch (valign) {
+    case top:
+      newPos = stepSizeY * elemCount;
+      break;
+    case center:
+      newPos = stepSizeY * elemCount - element.getHeight() / 2;
+      break;
+    case bottom:
+      newPos = stepSizeY * elemCount - element.getHeight();
+      break;
+    default:
+      newPos = 0;
+    }
+    setVerticalPos(newPos);
   }
 }
