@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty>
   <style id="textFont">
-    <attributes font="menu.fnt" />
+    <attributes font="verdana-small-regular.fnt" />
   </style>
   <style id="bgColor1">
     <attributes backgroundColor="#003f00" />
