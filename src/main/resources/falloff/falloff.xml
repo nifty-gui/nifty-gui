@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+  <style id="textFont">
+    <attributes font="menu.fnt" />
+  </style>
+  <style id="bgColor1">
+    <attributes backgroundColor="#003f00" />
+  </style>
+  <style id="bgColor2">
+    <attributes backgroundColor="#efefef" />
+  </style>
+  <screen id="start">
+    <layer id="layer" backgroundColor="#003f00" childLayout="vertical">
+      <panel backgroundColor="#efefef" height="33%" width="400px" align="center" valign="center" childLayout="center">
+        <effect>
+          <onStartScreen name="move" mode="in" direction="top" length="300" startDelay="800" inherit="true" />
+        </effect>
+        <text style="textFont" text="+ - 100% - + - - - + - - - + - 100% - +" color="#000f" visibleToMouse="true" textHAlign="center" align="center" valign="center" backgroundColor="#f00f">
+          <effect>
+            <onHover name="textSize" maxSize="120%">
+              <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="100%" hoverHeight="100%" />
+            </onHover>
+          </effect>
+        </text>
+      </panel>
+      <panel backgroundColor="#0000ef" height="33%" width="400px" align="center" valign="center" childLayout="center">
+        <effect>
+          <onStartScreen name="move" mode="in" direction="top" length="300" startDelay="800" inherit="true" />
+        </effect>
+        <text style="textFont" text="+ - 150% - + - - - + - - - + - 150% - +" color="#000f" visibleToMouse="true" textHAlign="center" align="center" valign="center" backgroundColor="#f00f">
+          <effect>
+            <onHover name="textSize" maxSize="120%">
+              <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%" />
+            </onHover>
+          </effect>
+        </text>
+      </panel>
+      <panel backgroundColor="#ef7000" height="33%" width="400px" align="center" valign="center" childLayout="center">
+        <effect>
+          <onStartScreen name="move" mode="in" direction="top" length="300" startDelay="800" inherit="true" />
+        </effect>
+        <text style="textFont" text="+ - 200% - + - - - + - - - + - 200% - +" color="#000f" visibleToMouse="true" textHAlign="center" align="center" valign="center" backgroundColor="#f00f">
+          <effect>
+            <onHover name="textSize" maxSize="120%">
+              <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="200%" hoverHeight="200%" />
+            </onHover>
+          </effect>
+        </text>
+      </panel>
+    </layer>
+  </screen>
+</nifty>
