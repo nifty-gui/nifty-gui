@@ -197,13 +197,21 @@ public class Falloff {
     }
 
     if (falloffConstraint == HoverFalloffConstraint.both) {
-      double dA = Math.atan((dy / dx)); //angle from centre to current mouse position
-      float elA = element.getWidth() / 2;
-      float elB = element.getHeight() / 2;
+      /* determine the angle from centre of element to current mouse position.
+       * NOTE: if dy and dy are zero it is not possible to determine the angle.
+       * Assume an angle of zero degrees if dy AND dx are 0 */
+      double dA = 0;
+      if (dy ==0 && dx == 0) {
+        dA = 0;
+      } else {
+        Math.atan((dy / dx));
+      }
+      float elA = getHorizontalHover(element) / 2;
+      float elB = getVerticalHover(element) / 2;
 
-      //distance to a point on the elipse circumference that is on the same angle.....
-      //formula from http://www.nlreg.com/ellipse.htm
-      falloff = (float)Math.sqrt( (Math.pow(elA,2) * Math.pow(elB,2)) / ( Math.pow((elA * Math.sin(dA)),2)  + Math.pow(( elB * Math.cos(dA)),2) ) );
+      // distance to a point on the elipse circumference that is on the same angle
+      // formula from http://www.nlreg.com/ellipse.htm
+      falloff = (float)Math.sqrt( (Math.pow(elA,2) * Math.pow(elB,2)) / ( Math.pow((elA * Math.sin(dA)),2) + Math.pow(( elB * Math.cos(dA)),2) ) );
     }
 
     float d = (float) Math.hypot(dx, dy);
