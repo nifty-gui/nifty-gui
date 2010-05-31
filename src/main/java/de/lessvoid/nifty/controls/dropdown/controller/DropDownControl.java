@@ -163,4 +163,8 @@ public class DropDownControl implements Controller {
     observable.setChanged();
     observable.notifyObservers();
   }
+
+  public Element getElement() {
+    return element;
+  }
 }
