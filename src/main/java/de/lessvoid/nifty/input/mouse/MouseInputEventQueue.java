@@ -33,6 +33,9 @@ public class MouseInputEventQueue {
   }
 
   public void process(final MouseInputEvent mouse) {
+    if (!lastMouseDown && mouse.isLeftButton()) {
+      mouse.setInitialLeftButtonDown();
+    }
     lastMouseX = mouse.getMouseX();
     lastMouseY = mouse.getMouseY();
     lastMouseDown = mouse.isLeftButton();

@@ -38,7 +38,7 @@ public class Screen {
    */
   private ArrayList < Element > popupElements = new ArrayList < Element >();
   private ArrayList < Element > popupElementsToAdd = new ArrayList < Element >();
-  private ArrayList < Element > popupElementsToRemove = new ArrayList < Element >();
+  private ArrayList < ElementWithEndNotify > popupElementsToRemove = new ArrayList < ElementWithEndNotify >();
 
   private TimeProvider timeProvider;
   private FocusHandler focusHandler;
@@ -98,7 +98,8 @@ public class Screen {
   }
 
   public void addPopup(final Element popup, final Element defaultFocusElement) {
-    resetLayersMouseDown();
+//    resetLayersMouseDown();
+    nifty.resetEvents();
 
     // create the callback
     EndNotify localEndNotify = new EndNotify() {
@@ -137,15 +138,14 @@ public class Screen {
     popupElementsToAdd.add(popup);
   }
 
-  public void closePopup(final Element popup) {
+  public void closePopup(final Element popup, final EndNotify closeNotify) {
     resetLayers();
     removeLayerElement(popup);
-    removePopupElement(popup);
-    focusHandler.popState();
+    schedulePopupElementRemoval(new ElementWithEndNotify(popup, closeNotify));
   }
 
-  void removePopupElement(final Element popup) {
-    popupElementsToRemove.add(popup);
+  private void schedulePopupElementRemoval(final ElementWithEndNotify elementWithEndNotify) {
+    popupElementsToRemove.add(elementWithEndNotify);
   }
 
   public void startScreen() {
@@ -441,8 +441,11 @@ public class Screen {
 
     // add/remove popup elements
     popupElements.addAll(popupElementsToAdd);
-    popupElements.removeAll(popupElementsToRemove);
     popupElementsToAdd.clear();
+
+    for (ElementWithEndNotify e : popupElementsToRemove) {
+      e.remove();
+    }
     popupElementsToRemove.clear();
   }
 
@@ -596,5 +599,30 @@ public class Screen {
       }
     }
     return false;
+  }
+
+  public Element getTopMostPopup() {
+    if (popupElements.isEmpty()) {
+      return null;
+    }
+    return popupElements.get(popupElements.size() - 1);
+  }
+
+  public class ElementWithEndNotify {
+    private Element element;
+    private EndNotify closeNotify;
+
+    public ElementWithEndNotify(final Element element, final EndNotify closeNotify) {
+      this.element = element;
+      this.closeNotify = closeNotify;
+    }
+
+    public void remove() {
+      popupElements.remove(element);
+      focusHandler.popState();
+      if (closeNotify != null) {
+        closeNotify.perform();
+      }
+    }
   }
 }

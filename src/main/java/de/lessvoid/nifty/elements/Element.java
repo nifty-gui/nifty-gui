@@ -618,7 +618,7 @@ public class Element {
    * reset all effects.
    */
   public void resetEffects() {
-    mouseDown = false;
+//    mouseDown = false;
     effectManager.reset();
     for (Element w : elements) {
       w.resetEffects();
@@ -626,7 +626,7 @@ public class Element {
   }
 
   public void resetAllEffects() {
-    mouseDown = false;
+//    mouseDown = false;
     effectManager.resetAll();
     for (Element w : elements) {
       w.resetAllEffects();
@@ -634,7 +634,7 @@ public class Element {
   }
 
   public void resetSingleEffect(final EffectEventId effectEventId) {
-    mouseDown = false;
+//    mouseDown = false;
     effectManager.resetSingleEffect(effectEventId);
     for (Element w : elements) {
       w.resetSingleEffect(effectEventId);
@@ -642,7 +642,7 @@ public class Element {
   }
 
   public void resetMouseDown() {
-    mouseDown = false;
+//    mouseDown = false;
     for (Element w : elements) {
       w.resetMouseDown();
     }
@@ -774,7 +774,7 @@ public class Element {
 
     // notify all child elements of the start effect
     for (Element w : getElements()) {
-      w.startEffect(effectEventId, forwardToSelf);
+      w.startEffectInternal(effectEventId, forwardToSelf);
     }
 
     if (effectEventId == EffectEventId.onFocus) {
@@ -817,7 +817,7 @@ public class Element {
 
     // notify all child elements of the start effect
     for (Element w : getElements()) {
-      w.startEffect(effectEventId, forwardToSelf, customKey);
+      w.startEffectInternal(effectEventId, forwardToSelf, customKey);
     }
 
     if (effectEventId == EffectEventId.onFocus) {
@@ -828,6 +828,86 @@ public class Element {
 
     // just in case there was no effect activated, we'll check here, if we're already done
     forwardToSelf.perform();
+  }
+
+  public void startEffectInternal(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
+    if (effectEventId == EffectEventId.onStartScreen) {
+      if (!visible) {
+        return;
+      }
+      done = false;
+      interactionBlocked = true;
+    }
+    if (effectEventId == EffectEventId.onEndScreen) {
+      if (!visible) {
+        return;
+      }
+      done = true;
+      interactionBlocked = true;
+    }
+    // whenever the effect ends we forward to this event
+    // that checks first, if all child elements are finished
+    // and when yes forwards to the actual effectEndNotify event.
+    //
+    // this way we ensure that all child finished the effects
+    // before forwarding this to the real event handler.
+    //
+    // little bit tricky though :/
+    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotiy);
+
+    // start the effect for ourself
+    effectManager.startEffect(effectEventId, this, time, forwardToSelf);
+
+    // notify all child elements of the start effect
+    for (Element w : getElements()) {
+      w.startEffectInternal(effectEventId, forwardToSelf);
+    }
+
+    if (effectEventId == EffectEventId.onFocus) {
+      if (attachedInputControl != null) {
+        attachedInputControl.onFocus(true);
+      }
+    }
+  }
+
+  public void startEffectInternal(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
+    if (effectEventId == EffectEventId.onStartScreen) {
+      if (!visible) {
+        return;
+      }
+      done = false;
+      interactionBlocked = true;
+    }
+    if (effectEventId == EffectEventId.onEndScreen) {
+      if (!visible) {
+        return;
+      }
+      done = true;
+      interactionBlocked = true;
+    }
+    // whenever the effect ends we forward to this event
+    // that checks first, if all child elements are finished
+    // and when yes forwards to the actual effectEndNotify event.
+    //
+    // this way we ensure that all child finished the effects
+    // before forwarding this to the real event handler.
+    //
+    // little bit tricky though :/
+    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotiy);
+
+    // start the effect for ourself
+    effectManager.startEffect(effectEventId, this, time, forwardToSelf, customKey);
+
+    // notify all child elements of the start effect
+    for (Element w : getElements()) {
+      w.startEffectInternal(effectEventId, forwardToSelf, customKey);
+    }
+
+    if (effectEventId == EffectEventId.onFocus) {
+      if (attachedInputControl != null) {
+        attachedInputControl.onFocus(true);
+      }
+    }
   }
 
   /**
@@ -1084,7 +1164,7 @@ public class Element {
       }
     }
     if (mouseInside && !isMouseDown()) {
-      if (mouseEvent.isLeftButton()) {
+      if (mouseEvent.isInitialLeftButtonDown()) {
         setMouseDown(true, eventTime);
         if (focusable) {
           focusHandler.requestExclusiveMouseFocus(this);

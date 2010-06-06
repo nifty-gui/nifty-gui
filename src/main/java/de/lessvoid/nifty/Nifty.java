@@ -591,6 +591,10 @@ public class Nifty implements NiftyInputConsumer {
     return createAndAddPopup(id, popups.get(id));
   }
 
+  public Element createPopupWithId(final String popupId) {
+    return createAndAddPopup(NiftyIdCreator.generate(), popups.get(popupId));
+  }
+
   public Element createPopupWithStyle(final String id, final String style) {
     PopupType popupType = popups.get(id);
     popupType.getAttributes().set("style", style);
@@ -599,12 +603,20 @@ public class Nifty implements NiftyInputConsumer {
 
   private Element createAndAddPopup(final String id, PopupType popupType) {
     Element popupElement = createPopupFromType(popupType);
+    popupElement.setId(id);
     activePopups.put(id, popupElement);
     return popupElement;
   }
 
   public Element findActivePopupByName(final String id) {
     return activePopups.get(id);
+  }
+
+  public Element getTopMostPopup() {
+    if (currentScreen != null) {
+      return currentScreen.getTopMostPopup();
+    }
+    return null;
   }
 
   /**
@@ -829,10 +841,7 @@ public class Nifty implements NiftyInputConsumer {
     }
 
     public void close() {
-      currentScreen.closePopup(activePopups.get(removePopupId));
-      if (closeNotify != null) {
-        closeNotify.perform();
-      }
+      currentScreen.closePopup(activePopups.get(removePopupId), closeNotify);
     }
   }
 

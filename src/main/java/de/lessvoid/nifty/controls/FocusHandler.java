@@ -185,7 +185,7 @@ public class FocusHandler {
     }
 
     keyboardFocusElement = newFocusElement;
-    log.fine("keyboard focus element now changed to [" + keyboardFocusElement.toString() + "]");
+    log.fine("keyboard focus element now changed to [" + (keyboardFocusElement == null ? "" : keyboardFocusElement.toString()) + "]");
 
     if (keyboardFocusElement != null) {
       keyboardFocusElement.startEffect(EffectEventId.onFocus);

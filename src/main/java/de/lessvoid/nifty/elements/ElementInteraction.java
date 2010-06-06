@@ -54,8 +54,7 @@ public class ElementInteraction {
       if (nifty != null) {
         nifty.setAlternateKey(onClickAlternateKey);
       }
-      onClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
-      return true;
+      return onClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
     }
     return false;
   }

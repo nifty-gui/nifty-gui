@@ -53,6 +53,24 @@ public class MouseInputEvent {
   }
 
   public String toString() {
-    return "mouseX = " + mouseX + ", mouseY = " + mouseY + ", leftButton = " + leftButton;
+    return "mouseX = " + mouseX + ", mouseY = " + mouseY + ", leftButton = " + leftButton + ", initialLeftButtonDown = " + initialLeftButtonDown;
+  }
+
+  /**
+   * This is a workaround and needs to be cleaned up. This class MouseInputEvent really should only
+   * transport the event from the InputSystem into Nifty and needs to be translated into a
+   * NiftyMouseInputEvent in Nifty which does not yet exsist. This needs to be fixed post Nifty 1.2
+   * but will work for now.
+   * NOTE: This method is called by Nifty. If you write a InputSystem implementation for Nifty
+   * you can simply ignore it.
+   */
+  private boolean initialLeftButtonDown = false;
+
+  public void setInitialLeftButtonDown() {
+    initialLeftButtonDown = true;
+  }
+
+  public boolean isInitialLeftButtonDown() {
+    return initialLeftButtonDown;
   }
 }

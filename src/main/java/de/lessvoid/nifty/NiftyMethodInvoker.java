@@ -80,15 +80,16 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
   /**
    * invoke method with optional parameters.
    * @param invokeParametersParam parameter array for call
-   * @return result of call
+   * @return true, method has been scheduled and false, method couldn't be called
    */
-  public void invoke(final Object ... invokeParametersParam) {
+  public boolean invoke(final Object ... invokeParametersParam) {
     // nothing to do?
     if (target == null || target.length == 0 || methodWithName == null) {
-      return;
+      return false;
     }
 
     nifty.delayedMethodInvoke(this, invokeParametersParam);
+    return true;
   }
 
   public void performInvoke(final Object ... invokeParametersParam) {
