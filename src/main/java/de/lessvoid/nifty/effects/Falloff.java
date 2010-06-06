@@ -204,7 +204,7 @@ public class Falloff {
       if (dy ==0 && dx == 0) {
         dA = 0;
       } else {
-        Math.atan((dy / dx));
+        dA = Math.atan((dy / dx));
       }
       float elA = getHorizontalHover(element) / 2;
       float elB = getVerticalHover(element) / 2;
