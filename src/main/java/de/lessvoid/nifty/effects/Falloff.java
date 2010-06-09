@@ -204,14 +204,21 @@ public class Falloff {
       if (dy ==0 && dx == 0) {
         dA = 0;
       } else {
-        dA = Math.atan((dy / dx));
+        dA = Math.abs(Math.atan((dy / dx)));
       }
-      float elA = getHorizontalHover(element) / 2;
-      float elB = getVerticalHover(element) / 2;
-
-      // distance to a point on the elipse circumference that is on the same angle
-      // formula from http://www.nlreg.com/ellipse.htm
-      falloff = (float)Math.sqrt( (Math.pow(elA,2) * Math.pow(elB,2)) / ( Math.pow((elA * Math.sin(dA)),2) + Math.pow(( elB * Math.cos(dA)),2) ) );
+      /*determine the angle from the centre of the object to one of its corners to find the flip / cutoff angle */
+      float elA = (float)(getHorizontalHover(element) / 2);
+      float elB = (float)(getVerticalHover(element) / 2);
+      double dB = 0;
+      dB = Math.abs(Math.atan( ( elB / elA ) ));
+      if ((Math.abs(Math.toDegrees(dA)) >= 0) && ( Math.abs(Math.toDegrees(dA)) <= Math.abs(Math.toDegrees(dB)) ) ){
+        //use cos(dA) = adj / hyp: so hyp = adj / cos(dA)
+        falloff = (float)(elA / Math.cos(dA));
+      }
+      if ((Math.abs(Math.toDegrees(dA)) > Math.abs(Math.toDegrees(dB))) && ( Math.abs(Math.toDegrees(dA)) <= 90 ) ){
+        //use sin(dA) = opp / hyp: so hyp = opp / sin(dA)
+        falloff = (float)(elB / Math.sin(dA));
+      }
     }
 
     float d = (float) Math.hypot(dx, dy);
