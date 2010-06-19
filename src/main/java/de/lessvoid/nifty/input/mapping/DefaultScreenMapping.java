@@ -10,6 +10,14 @@ public class DefaultScreenMapping implements NiftyInputMapping {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == KeyboardInputEvent.KEY_ESCAPE) {
         return NiftyInputEvent.Escape;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
+        return NiftyInputEvent.MoveCursorLeft;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RIGHT) {
+        return NiftyInputEvent.MoveCursorRight;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
+        return NiftyInputEvent.MoveCursorUp;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_DOWN) {
+        return NiftyInputEvent.MoveCursorDown;
       }
     }
     return null;
