@@ -4,11 +4,15 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.xml.tools.SpecialValuesReplace;
 
 /**
  * XPP Attributes in a nicer form.
@@ -17,6 +21,7 @@ import de.lessvoid.nifty.tools.Color;
 public class Attributes {
   private Map < String, String > attributes = new Hashtable < String, String >();
   private Map < String, Set < String >> taggedAttributes = new Hashtable < String, Set < String >>();
+  private Map < String, String > attributesBackup = new Hashtable < String, String >();
 
   public Attributes() {
   }
@@ -39,6 +44,13 @@ public class Attributes {
 
     taggedAttributes = new Hashtable < String, Set < String >>();
     taggedAttributes.putAll(source.taggedAttributes);
+  }
+
+  public void translateSpecialValues(final Map<String, ResourceBundle> resourceBundle, final ScreenController screenController, final Properties globalProperties) {
+    attributesBackup = new Hashtable < String, String >(attributes);
+    for (Map.Entry<String, String> value : attributes.entrySet()) {
+      attributes.put(value.getKey(), SpecialValuesReplace.replace(value.getValue(), resourceBundle, screenController, globalProperties));
+    }
   }
 
   /**
@@ -131,7 +143,7 @@ public class Attributes {
    * @param value value to set attribute to
    */
   public void set(final String name, final String value) {
-    attributes.put(name, value);
+    setAttribute(name, value);
   }
 
   public void merge(final Attributes src) {
@@ -165,7 +177,7 @@ public class Attributes {
 
       // you can only overwrite keys when they don't exist yet
       if (!attributes.containsKey(srcKey)) {
-        attributes.put(srcKey, value);
+        setAttribute(srcKey, value);
         tagAttribute(srcKey, tag);
       }
     }
@@ -212,8 +224,12 @@ public class Attributes {
     for (Map.Entry < String, String > entry : entries) {
       String key = entry.getKey();
       String value = entry.getValue();
-      attributes.put(key, value);
+      setAttribute(key, value);
     }
+  }
+
+  private void setAttribute(final String key, final String value) {
+    attributes.put(key, value);
   }
 
   public String toString() {
@@ -251,8 +267,10 @@ public class Attributes {
     for (Map.Entry < String, String > entry : attributes.entrySet()) {
       String key = entry.getKey(); // like key="$value"
       String value = entry.getValue();
-      if (value.startsWith("$")) {
-        parameters.put(value.replaceFirst("\\$", ""), key);
+      if (!value.startsWith("${")) {
+        if (value.startsWith("$")) {
+          parameters.put(value.replaceFirst("\\$", ""), key);
+        }
       }
     }
 

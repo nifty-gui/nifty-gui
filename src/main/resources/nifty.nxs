@@ -4,6 +4,7 @@
   <type name="RegisterSoundType" />
   <type name="RegisterEffectType" />
   <type name="RegisterMusicType" />
+  <type name="ResourceBundleType" />
   <type name="AttributesType" />
   <type name="InteractType" />
   <type name="EffectValueType" />
@@ -66,16 +67,17 @@
     </group>
   </type>
   <type name="NiftyType">
-  	<group>
-    	<element name="useStyles" type="UseStylesType" occurs="zeroOrMore" />
-    	<element name="useControls" type="UseControlsType" occurs="zeroOrMore" />
-    	<element name="registerSound" type="RegisterSoundType" occurs="zeroOrMore" />
-    	<element name="registerEffect" type="RegisterEffectType" occurs="zeroOrMore" />
-    	<element name="registerMusic" type="RegisterMusicType" occurs="zeroOrMore" />
-    	<element name="style" type="StyleType" occurs="zeroOrMore" />
-    	<element name="controlDefinition" type="ControlDefinitionType" occurs="zeroOrMore" />
-    	<element name="screen" type="ScreenType" occurs="oneOrMore" />
-    	<element name="popup" type="PopupType" occurs="zeroOrMore" />
+    <group>
+      <element name="useStyles" type="UseStylesType" occurs="zeroOrMore" />
+      <element name="useControls" type="UseControlsType" occurs="zeroOrMore" />
+      <element name="registerSound" type="RegisterSoundType" occurs="zeroOrMore" />
+      <element name="registerEffect" type="RegisterEffectType" occurs="zeroOrMore" />
+      <element name="registerMusic" type="RegisterMusicType" occurs="zeroOrMore" />
+      <element name="resourceBundle" type="ResourceBundleType" occurs="zeroOrMore" />
+      <element name="style" type="StyleType" occurs="zeroOrMore" />
+      <element name="controlDefinition" type="ControlDefinitionType" occurs="zeroOrMore" />
+      <element name="screen" type="ScreenType" occurs="oneOrMore" />
+      <element name="popup" type="PopupType" occurs="zeroOrMore" />
     </group>
   </type>
 </nxs>

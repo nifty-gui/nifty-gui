@@ -7,7 +7,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.controls.StandardControl;
@@ -69,7 +72,11 @@ public class Nifty implements NiftyInputConsumer {
   private InputSystem inputSystem;
   private boolean gotoScreenInProgess;
   private String alternateKey;
-  private Collection < DelayedMethodInvoke > delayedMethodInvokes = new ArrayList < DelayedMethodInvoke > (); 
+  private Collection < DelayedMethodInvoke > delayedMethodInvokes = new ArrayList < DelayedMethodInvoke > ();
+  private Map<String, String> resourceBundleSource = new Hashtable<String, String>();
+  private Map<String, ResourceBundle> resourceBundles = new Hashtable<String, ResourceBundle>();
+  private Locale locale = Locale.getDefault();
+  private Properties globalProperties;
 
   /**
    * Create nifty. This is now deprecated because it's way easier to use the other
@@ -916,5 +923,26 @@ public class Nifty implements NiftyInputConsumer {
     public void perform() {
       method.performInvoke(params);
     }
+  }
+
+  public void setLocale(final Locale locale) {
+    this.locale = locale;
+  }
+
+  public Map<String, ResourceBundle> getResourceBundles() {
+    return resourceBundles;
+  }
+
+  public void addResourceBundle(final String id, final String filename) {
+    resourceBundleSource.put(id, filename);
+    resourceBundles.put(id, ResourceBundle.getBundle(filename, locale));
+  }
+
+  public Properties getGlobalProperties() {
+    return globalProperties;
+  }
+
+  public void setGlobalProperties(Properties globalProperties) {
+    this.globalProperties = globalProperties;
   }
 }

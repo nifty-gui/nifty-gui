@@ -168,6 +168,7 @@ public class ElementType extends XmlBaseType {
       final Nifty nifty,
       final Screen screen,
       final Element element) {
+    getAttributes().translateSpecialValues(nifty.getResourceBundles(), screen.getScreenController(), nifty.getGlobalProperties());
     applyAttributes(element, getAttributes(), nifty.getRenderEngine());
     applyEffects(nifty, screen, element);
     applyInteract(nifty, screen, element);

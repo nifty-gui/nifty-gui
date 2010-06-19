@@ -1,18 +1,12 @@
 package de.lessvoid.xml.tools;
 
 import java.lang.reflect.Method;
-import java.util.logging.Logger;
 
 /**
  * MethodResolver helper class.
  * @author void
  */
-public final class MethodResolver {
-  /**
-   * logger.
-   */
-  private static Logger log = Logger.getLogger(MethodResolver.class.getName());
-
+public class MethodResolver {
   /**
    * you can't instantiate this class it's a helper class.
    */
@@ -27,7 +21,6 @@ public final class MethodResolver {
    */
   public static Method findMethod(final Class < ? > c, final String methodName) {
     if (c == null) {
-      // log.warning("trying to resolve method [" + methodName + "] failed");
       return null;
     }
 

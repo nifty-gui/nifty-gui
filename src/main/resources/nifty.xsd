@@ -190,23 +190,28 @@
     <xs:attribute name="filename" type="xs:string" use="required" />
   </xs:complexType>
 
+  <xs:complexType name="resourceBundleType">
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="filename" type="xs:string" use="required" />
+  </xs:complexType>
+
   <xs:complexType name="attributesType">
-	  <xs:attribute name="height" type="xs:string" />
-	  <xs:attribute name="width" type="xs:string" />
-	  <xs:attribute name="x" type="xs:string" />
-	  <xs:attribute name="y" type="xs:string" />
-	  <xs:attribute name="align" type="xs:string" />
-	  <xs:attribute name="valign" type="xs:string" />
-	  <xs:attribute name="paddingLeft" type="xs:string" />
-	  <xs:attribute name="paddingRight" type="xs:string" />
-	  <xs:attribute name="paddingTop" type="xs:string" />
-	  <xs:attribute name="paddingBottom" type="xs:string" />
-	  <xs:attribute name="padding" type="xs:string" />
-	  <xs:attribute name="childClip" type="xs:string" />
-	  <xs:attribute name="visible" type="xs:string" />
-	  <xs:attribute name="visibleToMouse" type="xs:string" />
-	  <xs:attribute name="childLayout" type="xs:string" />
-	  <xs:attribute name="focusable" type="xs:string" />
+    <xs:attribute name="height" type="xs:string" />
+    <xs:attribute name="width" type="xs:string" />
+    <xs:attribute name="x" type="xs:string" />
+    <xs:attribute name="y" type="xs:string" />
+    <xs:attribute name="align" type="xs:string" />
+    <xs:attribute name="valign" type="xs:string" />
+    <xs:attribute name="paddingLeft" type="xs:string" />
+    <xs:attribute name="paddingRight" type="xs:string" />
+    <xs:attribute name="paddingTop" type="xs:string" />
+    <xs:attribute name="paddingBottom" type="xs:string" />
+    <xs:attribute name="padding" type="xs:string" />
+    <xs:attribute name="childClip" type="xs:string" />
+    <xs:attribute name="visible" type="xs:string" />
+    <xs:attribute name="visibleToMouse" type="xs:string" />
+    <xs:attribute name="childLayout" type="xs:string" />
+    <xs:attribute name="focusable" type="xs:string" />
     <xs:attribute name="backgroundImage" type="xs:string" />
     <xs:attribute name="backgroundColor" type="xs:string" />
     <xs:attribute name="color" type="xs:string" />
@@ -296,11 +301,11 @@
 
   <xs:complexType name="styleType">
     <xs:sequence>
-	    <xs:element name="attributes" type="attributesType" maxOccurs="unbounded" minOccurs="0" />
-	    <xs:element name="interact" type="interactType" maxOccurs="unbounded" minOccurs="0" />
-	    <xs:element name="effect" type="effectsType" maxOccurs="unbounded" minOccurs="0" />
-	  </xs:sequence>
-	  <xs:attribute name="id" type="xs:string" />
+      <xs:element name="attributes" type="attributesType" maxOccurs="unbounded" minOccurs="0" />
+      <xs:element name="interact" type="interactType" maxOccurs="unbounded" minOccurs="0" />
+      <xs:element name="effect" type="effectsType" maxOccurs="unbounded" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
     <xs:attribute name="base" type="xs:string" />
   </xs:complexType>
  
@@ -327,6 +332,7 @@
       <xs:element name="registerSound" type="registerSoundType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="registerEffect" type="registerEffectType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="registerMusic" type="registerMusicType" maxOccurs="unbounded" minOccurs="0" />
+      <xs:element name="resourceBundle" type="resourceBundleType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="style" type="styleType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="controlDefinition" type="controlDefinition" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="screen" type="screenType" maxOccurs="unbounded" minOccurs="1" />
