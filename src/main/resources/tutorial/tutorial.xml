@@ -6,7 +6,7 @@
   <registerSound id="select" filename="tutorial/sound/select.wav" />
   <registerSound id="intro" filename="tutorial/sound/intro.wav" />
   <registerSound id="hover" filename="tutorial/sound/hover.wav" />
-  <registerEffect name="snowEffect" class="de.lessvoid.nifty.examples.tutorial.SnowEffect" />
+  <registerEffect name="bubblesEffect" class="de.lessvoid.nifty.examples.tutorial.BubblesEffect" />
   <registerMusic id="music" filename="tutorial/sound/echoed_-_L.O.R.D..ogg" />
 
   <!-- background style -->
@@ -18,15 +18,16 @@
     <effect>
       <onStartScreen name="fade" start="#0" end="#f" length="750" startDelay="1000" />
       <onActive name="gradient" direction="vertical">
-        <value offset="0%" color="#000f" />
-        <value offset="80%" color="#f00f" />
-        <value offset="100%" color="#000f" />
+        <value offset="0%" color="#004f" />
+        <value offset="50%" color="#55ff" />
+        <value offset="100%" color="#fccf" />
       </onActive>
       <onActive name="pulsate" period="25000" pulsateType="sinRaised" startColor="#0000" endColor="#000f" changeColorOnly="true" startDelay="2000" />
       <onActive name="gradient" direction="vertical" startDelay="2000">
-        <value offset="0%" color="#000f" />
-        <value offset="20%" color="#0aff" />
-        <value offset="100%" color="#000f" />
+        <value offset="0%" color="#001f" />
+        <value offset="50%" color="#404f" />
+        <value offset="80%" color="#f00f" />
+        <value offset="100%" color="#ffaf" />
       </onActive>
     </effect>
   </style>
@@ -79,7 +80,7 @@
     <interact onClick="back()" />
     <effect>
       <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="2000"/>
-      <onClick name="imageOverlay" post="true" filename="tutorial/buttons/back-click.png"/>
+      <onClick name="imageOverlay" post="true" filename="tutorial/buttons/back-click.png" length="150" />
       <onHover name="imageOverlay" post="true" filename="tutorial/buttons/back-hover.png">
         <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%"/>
       </onHover> 
@@ -94,7 +95,7 @@
     <interact onClick="next()" />
     <effect>
       <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="2000"/>
-      <onClick name="imageOverlay" post="true" filename="tutorial/buttons/next-click.png"/>
+      <onClick name="imageOverlay" post="true" filename="tutorial/buttons/next-click.png" length="150" />
       <onHover name="imageOverlay" post="true" filename="tutorial/buttons/next-hover.png">
         <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%"/>
       </onHover> 
@@ -189,39 +190,53 @@
 
   <controlDefinition name="pageWelcome">
     <panel style="pagePanel">
-		  <panel style="centerPagePanelFirstPage">
-		    <text style="captionFont" textHAlign="center" align="center" text="Nifty GUI, Introduction &amp; Tutorial">
-		      <effect>
-		        <onStartScreen name="textSize" length="300" startDelay="800" factor="2" startSize="1.5" endSize="1.0" />
-		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="300" startDelay="800" />
+      <panel style="centerPagePanelFirstPage">
+<!--          <text style="captionFont" textHAlign="center" align="center" text="Nifty GUI, Introduction &amp; Tutorial">  -->
+        <text style="captionFont" textHAlign="center" align="center" text="${LOC.id.caption}">
+          <effect>
+            <onStartScreen name="textSize" length="300" startDelay="800" factor="2" startSize="1.5" endSize="1.0" />
+            <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="300" startDelay="800" />
             <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0" />
-		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back" />
+            <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back" />
             <onEndScreen name="move" mode="out" direction="right" length="500" startDelay="0" alternateEnable="back" />
-		      </effect>
-		    </text>
-		    <text style="textFont" textHAlign="center" align="center" wrap="false" text="\#C8C800#(written with Nifty 1.1)&#10;\#C8C800#press next in the bottom right corner to continue">
-		      <effect>
-		        <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="1000" startDelay="1000" />
+          </effect>
+        </text>
+        <text style="textFont" textHAlign="center" align="center" wrap="false" text="\#c8c800#(The &quot;2010 Summer-Edition&quot; pimped with Nifty 1.2)&#10;\#C8C800#press next in the bottom right corner to continue">
+          <effect>
+            <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="1000" startDelay="1000" />
             <onEndScreen name="fade" startColor="#ffffffff" endColor="#ffffff00" length="500" startDelay="0" />
-		        <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back" />
+            <onEndScreen name="move" mode="out" direction="left" length="500" startDelay="0" alternateDisable="back" />
             <onEndScreen name="move" mode="out" direction="right" length="500" startDelay="0" alternateEnable="back" />
-		      </effect>
-		    </text>
-		  </panel>
-		</panel>
-	</controlDefinition>
+          </effect>
+        </text>
+      </panel>
+    </panel>
+  </controlDefinition>
 
   <controlDefinition name="pageIntro">
     <panel style="pagePanel">
-	    <panel style="middlePanel">
-	      <text style="captionFont" text="So what exactly is Nifty GUI?" />
-	      <text style="textFont" text="Nifty GUI is a Java Library that supports the creation of interactive user interfaces for games or similar applications. It utilizes lwjgl for OpenGL rendering. The configuration of the GUI is stored in xml with supporting Java code.&#10;&#10;In short, Nifty layouts and displays elements on a screen and allows to interact with them.&#10;"/>
-	      <text style="captionFont" text="And what is it not?"/>
-	      <text style="textFont" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you are looking for a more traditional approach or if you need a solution with lots of windows, dialog boxes, lots of controls and so on, you might want to look somewhere else.&#10;&#10;Two great options are:&#10;&#10;- fenggui (http://www.fenggui.org/doku.php)&#10;- twl (http://twl.l33tlabs.org/)&#10;" />
-        <text style="captionFont" text="Nifty is different"/>
-        <text style="textFont" text="In contrast to those libraries Nifty is probably less standard but it provides more creative freedom and in my humble opinion generally more stuff to play with :) So take this into account when you decide if Nifty is the right tool for you.&#10;&#10;The remaining Pages will give an overview how Nifty works and how you can use it."/>
-	    </panel>
-	  </panel>
+      <panel style="middlePanel">
+        <text style="captionFont" text="So what exactly is Nifty GUI?" />
+        <text style="textFont" text="Nifty GUI is a Java Library that supports the creation of interactive user interfaces for games or similar applications. The actual GUI is stored in xml-Files with supporting Java code.&#10;&#10;Nifty can easily be integrated into different rendering systems. There are Rendering Backend Implementations available for Lwjgl, Slick2d and the Java Monkey Engine (for both JME2 and JME3). The Rendering Interface you need to implement is simple, so Nifty can be integrated into other systems quite easily too.&#10;&#10;To summarize Nifty in one sentence: Nifty layouts and displays elements on a screen and allows you to interact with them.&#10;" />
+        <text style="captionFont" text="And what is it not?" />
+        <text style="textFont" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you need a solution with lots of controls, windows, dialog boxes and so on, you might want to look somewhere else.&#10;&#10;A great option for this kind of applications is TWL (http://twl.l33tlabs.org/)&#10;" />
+        <text style="captionFont" text="But Nifty is different" />
+        <text style="textFont" text="In contrast to TWL and more tradional approaches in creating GUIs Nifty provides more creative freedom and more stuff to play with :)&#10;&#10;The remaining Pages will give an overview how Nifty works and how it can be used." />
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="pageChapterWhatsNewInNifty1.2">
+    <panel style="pagePanel">
+      <panel style="centerPagePanel">
+        <text style="captionFont" text="What's new in Nifty 1.2" />
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="pageNifty1.2">
+    <panel style="pagePanel">
+    </panel>
   </controlDefinition>
 
   <controlDefinition name="pageChapterI">
@@ -905,7 +920,7 @@
   </screen>
 
   <!-- main page screen -->
-  <screen id="mainPage" controller="de.lessvoid.nifty.examples.tutorial.screen.MainPage">
+  <screen id="mainPage" controller="de.lessvoid.nifty.examples.tutorial.screen.MainPage" inputMapping="de.lessvoid.nifty.input.mapping.DefaultScreenMapping">
     <layer childLayout="center">
       <effect>
          <onStartScreen name="fadeMusic" length="2500" sound="music" from="0%" to="25%" />
@@ -914,6 +929,9 @@
       <panel style="background">
         <panel style="top">
           <panel style="topInternal">
+            <panel childLayout="absolute">
+              <image filename="tutorial/logo.png" x="0px" y="30px" />
+            </panel>
             <panel width="*" />
             <image id="muteButton" style="muteButtonSoundOn" />
           </panel>
@@ -950,7 +968,7 @@
     </layer>
     <layer id="snow">
       <effect>
-        <onActive name="snowEffect" post="true" />
+        <onActive name="bubblesEffect" post="true" />
       </effect>
     </layer>
   </screen>

@@ -8,10 +8,14 @@ import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class MainPage implements ScreenController {
+public class MainPage implements ScreenController, KeyInputHandler {
   private Nifty nifty;
   private Screen screen;
   private boolean mute = false;
@@ -27,6 +31,8 @@ public class MainPage implements ScreenController {
 
     pages.add("pageWelcome");
     pages.add("pageIntro");
+    pages.add("pageChapterWhatsNewInNifty1.2");
+    pages.add("pageNifty1.2");
     pages.add("pageChapterI");
     pages.add("pageBasicsJava1");
     pages.add("pageBasicsJava2");
@@ -157,5 +163,16 @@ public class MainPage implements ScreenController {
         final Element parent) {
       nifty.addControl(screen, parent, getStandardControl());
     }
+  }
+
+  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+    if (NiftyInputEvent.MoveCursorRight.equals(inputEvent)) {
+      screen.findElementByName("nextButton").onClick();
+      return true;
+    } else if (NiftyInputEvent.MoveCursorLeft.equals(inputEvent)) {
+      screen.findElementByName("backButton").onClick();
+      return true;
+    }
+    return false;
   }
 }
