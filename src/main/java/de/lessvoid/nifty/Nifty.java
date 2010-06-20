@@ -63,7 +63,7 @@ public class Nifty implements NiftyInputConsumer {
   private List < RemovePopUp > removePopupList = new ArrayList < RemovePopUp >();
   private NiftyLoader loader;
   private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
-  private List < ElementToRemove > elementsToRemove = new ArrayList < ElementToRemove >();
+  private List < EndOfFrameElementAction > endOfFrameElementActions = new ArrayList < EndOfFrameElementAction >();
   private boolean useDebugConsole;
   private MouseInputEventQueue mouseInputEventQueue;
   private Collection < ScreenController > registeredScreenControllers = new ArrayList < ScreenController >();
@@ -213,7 +213,7 @@ public class Nifty implements NiftyInputConsumer {
     removePopUps();
     removeLayerElements();
     addControls();
-    removeElements();
+    executeEndOfFrameElementActions();
   }
 
   private void removeLayerElements() {
@@ -259,15 +259,12 @@ public class Nifty implements NiftyInputConsumer {
     }
   }
 
-  /**
-   * remove elements.
-   */
-  public void removeElements() {
-    if (!elementsToRemove.isEmpty()) {
-      for (ElementToRemove elementToRemove : elementsToRemove) {
-        elementToRemove.remove();
+  public void executeEndOfFrameElementActions() {
+    if (!endOfFrameElementActions.isEmpty()) {
+      for (EndOfFrameElementAction elementAction : endOfFrameElementActions) {
+        elementAction.perform();
       }
-      elementsToRemove.clear();
+      endOfFrameElementActions.clear();
     }
   }
 
@@ -719,40 +716,18 @@ public class Nifty implements NiftyInputConsumer {
     }
   }
 
-  /**
-   * ElementToRemove helper.
-   * @author void
-   */
-  private class ElementToRemove {
-    private Screen screen;
-    private Element element;
-    private EndNotify endNotify;
+  private interface Action {
+    void perform(Screen screen, Element element);
+  }
 
-    /**
-     * create it.
-     * @param newScreen screen
-     * @param newElement element
-     * @param endNotify 
-     */
-    public ElementToRemove(final Screen newScreen, final Element newElement, final EndNotify endNotify) {
-      this.screen = newScreen;
-      this.element = newElement;
-      this.endNotify = endNotify;
-    }
-
-    /**
-     * do the actual remove.
-     */
-    public void remove() {
+  public class ElementRemoveAction implements Action {
+    public void perform(final Screen screen, final Element element) {
       removeSingleElement(element);
       Element parent = element.getParent();
       if (parent != null) {
         parent.getElements().remove(element);
       }
       screen.layoutLayers();
-      if (endNotify != null) {
-        endNotify.perform();
-      }
     }
 
     private void removeSingleElement(final Element element) {
@@ -760,31 +735,68 @@ public class Nifty implements NiftyInputConsumer {
       while (elementIt.hasNext()) {
         Element el = elementIt.next();
         removeSingleElement(el);
-
         elementIt.remove();
       }
     }
   }
 
-  /**
-   * Remove the given element from the given screen.
-   * @param screen screen
-   * @param element element to remove
-   */
-  public void removeElement(final Screen screen, final Element element) {
-    element.removeFromFocusHandler();
-    element.startEffect(EffectEventId.onEndScreen, new EndNotify() {
-      public void perform() {
-        elementsToRemove.add(new ElementToRemove(screen, element, null));
+  public class ElementMoveAction implements Action {
+    private Element destinationElement;
+
+    public ElementMoveAction(final Element destinationElement) {
+      this.destinationElement = destinationElement;
+    }
+
+    public void perform(final Screen screen, final Element element) {
+      Element parent = element.getParent();
+      if (parent != null) {
+        parent.getElements().remove(element);
       }
-    });
+      element.setParent(destinationElement);
+      destinationElement.add(element);
+      screen.layoutLayers();
+    }
+  }
+
+  private class EndOfFrameElementAction {
+    private Screen screen;
+    private Element element;
+    private Action action;
+    private EndNotify endNotify;
+
+    public EndOfFrameElementAction(final Screen newScreen, final Element newElement, final Action action, final EndNotify endNotify) {
+      this.screen = newScreen;
+      this.element = newElement;
+      this.action = action;
+      this.endNotify = endNotify;
+    }
+
+    public void perform() {
+      action.perform(screen, element);
+      if (endNotify != null) {
+        endNotify.perform();
+      }
+    }
+  }
+
+  public void removeElement(final Screen screen, final Element element) {
+    removeElement(screen, element, null);
   }
 
   public void removeElement(final Screen screen, final Element element, final EndNotify endNotify) {
     element.removeFromFocusHandler();
     element.startEffect(EffectEventId.onEndScreen, new EndNotify() {
       public void perform() {
-        elementsToRemove.add(new ElementToRemove(screen, element, endNotify));
+        endOfFrameElementActions.add(new EndOfFrameElementAction(screen, element, new ElementRemoveAction(), endNotify));
+      }
+    });
+  }
+
+  public void moveElement(final Screen screen, final Element elementToMove, final Element destination, final EndNotify endNotify) {
+    elementToMove.removeFromFocusHandler();
+    elementToMove.startEffect(EffectEventId.onEndScreen, new EndNotify() {
+      public void perform() {
+        endOfFrameElementActions.add(new EndOfFrameElementAction(screen, elementToMove, new ElementMoveAction(destination), endNotify));
       }
     });
   }

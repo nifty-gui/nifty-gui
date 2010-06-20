@@ -98,7 +98,6 @@ public class Screen {
   }
 
   public void addPopup(final Element popup, final Element defaultFocusElement) {
-//    resetLayersMouseDown();
     nifty.resetEvents();
 
     // create the callback

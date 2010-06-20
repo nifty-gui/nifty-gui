@@ -321,6 +321,10 @@ public class Element {
     return parent;
   }
 
+  public void setParent(final Element element) {
+    parent = element;
+  }
+
   /**
    * get element state as string.
    * @param offset offset string
@@ -1767,5 +1771,28 @@ public class Element {
 
   public boolean isStarted() {
     return isEffectActive(EffectEventId.onStartScreen);
+  }
+
+  public void markForRemoval() {
+    markForRemoval(null);
+  }
+
+  public void markForRemoval(final EndNotify endNotify) {
+    nifty.removeElement(screen, this, endNotify);
+  }
+
+  public void markForMove(final Element destination) {
+    markForMove(destination, null);
+  }
+
+  public void markForMove(final Element destination, final EndNotify endNotify) {
+    nifty.moveElement(screen, this, destination, endNotify);
+  }
+
+  public void reactivate() {
+    done = false;
+    for (Element element : elements) {
+      element.reactivate();
+    }
   }
 }
