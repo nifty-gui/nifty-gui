@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+  <useControls filename="dragndrop/nifty-dragndrop-controls.xml" />
+
+  <screen id="dragndropExample" defaultFocusElement="backButton">
+    <layer id="layer" childLayout="center">
+      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="80%" height="90%" align="center" valign="center">
+        <panel childLayout="vertical" align="center" valign="center">
+          <panel childLayout="horizontal" height="*">
+            <control id="MyDraggable" name="draggable" visibleToMouse="true" />
+          </panel>
+          <panel childLayout="horizontal" height="*">
+            <control id="MyDroppable" name="droppable" visibleToMouse="true" />
+          </panel>
+          <panel childLayout="vertical" width="100%">
+            <control id="backButton" name="button" label="Back to Menu" align="right">
+            </control>
+          </panel>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty> 
