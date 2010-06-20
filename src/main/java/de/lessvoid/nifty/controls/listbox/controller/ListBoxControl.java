@@ -89,7 +89,7 @@ public class ListBoxControl implements Controller {
       }
     }
 
-    nifty.removeElements();
+    nifty.executeEndOfFrameElementActions();
     screen.layoutLayers();
 
     if (childRootElement != null) {

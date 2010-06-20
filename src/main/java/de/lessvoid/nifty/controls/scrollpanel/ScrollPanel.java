@@ -79,7 +79,7 @@ public class ScrollPanel implements Controller {
       }
     }
 
-    nifty.removeElements();
+    nifty.executeEndOfFrameElementActions();
     screen.layoutLayers();
 
     if (childRootElement != null) {
