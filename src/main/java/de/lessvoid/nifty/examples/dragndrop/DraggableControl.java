@@ -3,6 +3,7 @@ package de.lessvoid.nifty.examples.dragndrop;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
@@ -26,15 +27,16 @@ public class DraggableControl implements Controller {
   private int originalPositionY;
   private int dragStartX;
   private int dragStartY;
-  
+
   @Override
   public void bind(Nifty nifty, Screen screen, Element element, Properties parameter, ControllerEventListener listener, Attributes controlDefinitionAttributes) {
     this.nifty = nifty;
     this.screen = screen;
     draggable = element;
   }
-  
+
   public void dragStart(int mouseX, int mouseY) {
+    System.out.println("dragStart(" + dragged + ")");
     if (dragged)
       return;
     dragged = true;
@@ -44,13 +46,18 @@ public class DraggableControl implements Controller {
     originalPositionY = draggable.getY();
     dragStartX = mouseX;
     dragStartY = mouseY;
-//    nifty.removeElement(screen, draggable);
+
     popup = nifty.createPopup(POPUP);
-    popup.add(draggable);
-    nifty.showPopup(screen, POPUP, null);
+    draggable.markForMove(popup, new EndNotify() {
+      @Override
+      public void perform() {
+        nifty.showPopup(screen, POPUP, null);
+      }
+    });
   }
-  
+
   public void drag(int mouseX, int mouseY) {
+    System.out.println("drag(" + dragged + ")");
     if (!dragged)
       return;
     logger.fine(String.format("drag(mouseX=%s, mouseY=%s)", mouseX, mouseY));
@@ -68,8 +75,7 @@ public class DraggableControl implements Controller {
     if (!dragged)
       return;
     logger.fine("dragStop()");
-    // logger.fine(String.format("dragStop(mouseX=%s, mouseY=%s)", mouseX,
-    // mouseY));
+    // logger.fine(String.format("dragStop(mouseX=%s, mouseY=%s)", mouseX, mouseY));
     Element droppable = findDroppableAtCurrentCoordinates();
     if (droppable == originalParent) {
       draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
@@ -78,11 +84,19 @@ public class DraggableControl implements Controller {
       draggable.setConstraintX(new SizeValue(droppable.getX() + "px"));
       draggable.setConstraintY(new SizeValue(droppable.getY() + "px"));
     }
-    droppable.add(draggable);
-    droppable.layoutElements();
-    // element.setVisibleToMouseEvents(true);
-    nifty.closePopup(POPUP);
-    dragged = false;
+    draggable.markForMove(droppable, new EndNotify() {
+      @Override
+      public void perform() {
+        nifty.closePopup(POPUP, new EndNotify() {
+          @Override
+          public void perform() {
+            dragged = false;
+            draggable.reactivate();
+            System.out.println(screen.debugOutput());
+          }
+        });
+      }
+    });
   }
   
   private Element findDroppableAtCurrentCoordinates() {

@@ -1,12 +1,9 @@
 package de.lessvoid.nifty.examples.tutorial;
 
-import java.util.Locale;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
 import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
-import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 public final class TutorialMain {
@@ -25,7 +22,6 @@ public final class TutorialMain {
         new SlickSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
-    nifty.setLocale(Locale.GERMAN);
     nifty.fromXml("tutorial/tutorial.xml", "mainPage");
 
     // render

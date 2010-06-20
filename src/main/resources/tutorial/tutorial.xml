@@ -8,6 +8,7 @@
   <registerSound id="hover" filename="tutorial/sound/hover.wav" />
   <registerEffect name="bubblesEffect" class="de.lessvoid.nifty.examples.tutorial.BubblesEffect" />
   <registerMusic id="music" filename="tutorial/sound/echoed_-_L.O.R.D..ogg" />
+  <resourceBundle id="welcome" filename="tutorial/locale/welcome" />
 
   <!-- background style -->
   <style id="backgroundNoEffects">
@@ -191,8 +192,7 @@
   <controlDefinition name="pageWelcome">
     <panel style="pagePanel">
       <panel style="centerPagePanelFirstPage">
-<!--          <text style="captionFont" textHAlign="center" align="center" text="Nifty GUI, Introduction &amp; Tutorial">  -->
-        <text style="captionFont" textHAlign="center" align="center" text="${LOC.id.caption}">
+        <text style="captionFont" textHAlign="center" align="center" text="${welcome.caption}">
           <effect>
             <onStartScreen name="textSize" length="300" startDelay="800" factor="2" startSize="1.5" endSize="1.0" />
             <onStartScreen name="fade" startColor="#ffffff00" endColor="#ffffffff" length="300" startDelay="800" />
@@ -236,6 +236,12 @@
 
   <controlDefinition name="pageNifty1.2">
     <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="What's new in Nifty 1.2" />
+        <text style="textFont" text="Besides lots of Bugfixes and Improvements the core new things in Nifty 1.2 are:" />
+        <text style="textFont" text="- Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice has been completed. The main Nifty Core is now independent of Lwjgl or Slick2d dependencies! You can now choose a Renderer " />
+        <text style="textFont" text="- B" />
+      </panel>
     </panel>
   </controlDefinition>
 

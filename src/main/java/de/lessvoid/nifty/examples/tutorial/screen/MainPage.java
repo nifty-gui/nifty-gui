@@ -29,9 +29,9 @@ public class MainPage implements ScreenController, KeyInputHandler {
     this.nifty = nifty;
     this.screen = screen;
 
-    pages.add("pageWelcome");
-    pages.add("pageIntro");
-    pages.add("pageChapterWhatsNewInNifty1.2");
+//    pages.add("pageWelcome");
+//    pages.add("pageIntro");
+//    pages.add("pageChapterWhatsNewInNifty1.2");
     pages.add("pageNifty1.2");
     pages.add("pageChapterI");
     pages.add("pageBasicsJava1");
