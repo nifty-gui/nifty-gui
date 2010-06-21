@@ -124,17 +124,26 @@ public class SpecialValuesReplace {
 
   private static String handleProperties(final String input, final Properties properties) {
     String name = removeQuotes(input).substring(KEY_PROP.length());
-    Properties props = properties;
-    if (props == null) {
-      props = System.getProperties();
+    String value = readFromProperties(name, properties);
+    if (value == null) {
+      value = readFromProperties(name, System.getProperties());
     }
-    if (props.containsKey(name)) {
-      String value = props.getProperty(name);
-      if (value != null && value.length() > 0) {
-        return value;
-      }
+    if (value != null) {
+      return value;
     }
     return input;
+  }
+
+  private static String readFromProperties(final String name, final Properties properties) {
+    if (properties != null) {
+      if (properties.containsKey(name)) {
+        String value = properties.getProperty(name);
+        if (value != null && value.length() > 0) {
+          return value;
+        }
+      }
+    }
+    return null;
   }
 
   private static String handleCall(final String value, final Object object) {
