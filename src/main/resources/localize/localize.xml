@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+  <registerMusic id="outro" filename="${PROP.credits}" />
   <resourceBundle id="dialog" filename="localize/dialog" />
   <screen id="start" controller="de.lessvoid.nifty.examples.localize.LocalizeTestScreen">
     <layer id="stuff" childLayout="center">
+      <effect>
+        <onActive name="playSound" sound="outro" post="true" repeat="true" />
+      </effect>
       <panel height="50%" width="100%" childLayout="vertical" align="center" valign="center" backgroundColor="#800f">
         <text font="menu.fnt" text="${dialog.hello}" align="center" valign="center" />
         <text font="verdana-small-regular.fnt" text="\${ENV.HOME} test: your $HOME = &quot;${ENV.HOME}&quot;" align="center" valign="center" />
@@ -10,6 +14,7 @@
         <text font="verdana-small-regular.fnt" text="\${PROP.void} test: custom property 'void' = &quot;${PROP.void}&quot;" align="center" valign="center" />
         <text font="verdana-small-regular.fnt" text="\${CALL.method1()} test: method initializer = &quot;${CALL.method1()}&quot;" align="center" valign="center" />
         <text font="verdana-small-regular.fnt" text="\${CALL.method2(:P)} test: method initializer = &quot;${CALL.method2(:P)}&quot;" align="center" valign="center" />
+        <label id="label" text="${dialog.hello}" font="verdana-small-regular.fnt" align="center" valign="center" hintText="${dialog.hello}" />
       </panel>
     </layer>
   </screen>
