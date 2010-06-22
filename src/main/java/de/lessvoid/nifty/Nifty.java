@@ -583,7 +583,7 @@ public class Nifty implements NiftyInputConsumer {
     Screen screen = getCurrentScreen();
     LayoutPart layerLayout = NiftyFactory.createRootLayerLayoutPart(this);
     PopupType popupType = new PopupType(popupTypeParam);
-    popupType.prepare(this, screen.getRootElement().getElementType());
+    popupType.prepare(this, screen, screen.getRootElement().getElementType());
     return popupType.create(
         screen.getRootElement(),
         this,

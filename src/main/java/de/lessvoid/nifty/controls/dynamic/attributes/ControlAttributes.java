@@ -328,7 +328,7 @@ public class ControlAttributes {
     if (interact != null) {
       elementType.setInteract(interact.create());
     }
-    elementType.prepare(nifty, parent.getElementType());
+    elementType.prepare(nifty, screen, parent.getElementType());
     Element element = elementType.create(
       parent,
       nifty,

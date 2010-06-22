@@ -65,7 +65,7 @@ public class ScreenType extends XmlBaseType {
     StopWatch stopWatch = new StopWatch(timeProvider);
     stopWatch.start();
     for (LayerType layerType : layers) {
-      layerType.prepare(nifty, rootElement.getElementType());
+      layerType.prepare(nifty, screen, rootElement.getElementType());
     }
     Logger.getLogger(NiftyLoader.class.getName()).info("internal prepare screen (" + id + ") [" + stopWatch.stop() + "]");
 
