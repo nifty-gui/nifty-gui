@@ -35,13 +35,14 @@ public class DraggableControl implements Controller {
     draggable = element;
   }
 
-  public void dragStart(int mouseX, int mouseY) {
+  public void dragStart(final int mouseX, final int mouseY) {
     System.out.println("dragStart(" + dragged + ")");
     if (dragged)
       return;
     dragged = true;
     logger.fine(String.format("dragStart(mouseX=%s, mouseY=%s), draggable.id=%s, draggable.x=%s, draggable.y=%s", mouseX, mouseY, draggable.getId(), draggable.getX(), draggable.getY()));
     originalParent = draggable.getParent();
+    System.out.println("dragStart: " + originalParent.toString());
     originalPositionX = draggable.getX();
     originalPositionY = draggable.getY();
     dragStartX = mouseX;
@@ -52,6 +53,11 @@ public class DraggableControl implements Controller {
       @Override
       public void perform() {
         nifty.showPopup(screen, POPUP, null);
+        int newPositionX = originalPositionX + mouseX - dragStartX;
+        int newPositionY = originalPositionY + mouseY - dragStartY;
+        draggable.setConstraintX(new SizeValue(newPositionX + "px"));
+        draggable.setConstraintY(new SizeValue(newPositionY + "px"));
+        popup.layoutElements();
       }
     });
   }
@@ -80,23 +86,35 @@ public class DraggableControl implements Controller {
     if (droppable == originalParent) {
       draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
       draggable.setConstraintY(new SizeValue(originalPositionY + "px"));
+      draggable.markForMove(originalParent, new EndNotify() {
+        @Override
+        public void perform() {
+          nifty.closePopup(POPUP, new EndNotify() {
+            @Override
+            public void perform() {
+              draggable.reactivate();
+              System.out.println(screen.debugOutput());
+            }
+          });
+        }
+      });
     } else {
       draggable.setConstraintX(new SizeValue(droppable.getX() + "px"));
       draggable.setConstraintY(new SizeValue(droppable.getY() + "px"));
+      draggable.markForMove(droppable, new EndNotify() {
+        @Override
+        public void perform() {
+          nifty.closePopup(POPUP, new EndNotify() {
+            @Override
+            public void perform() {
+              draggable.reactivate();
+              System.out.println(screen.debugOutput());
+            }
+          });
+        }
+      });
     }
-    draggable.markForMove(droppable, new EndNotify() {
-      @Override
-      public void perform() {
-        nifty.closePopup(POPUP, new EndNotify() {
-          @Override
-          public void perform() {
-            dragged = false;
-            draggable.reactivate();
-            System.out.println(screen.debugOutput());
-          }
-        });
-      }
-    });
+    dragged = false;
   }
   
   private Element findDroppableAtCurrentCoordinates() {

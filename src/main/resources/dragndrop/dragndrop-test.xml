@@ -8,13 +8,13 @@
     <layer id="layer" childLayout="center">
       <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="80%" height="90%" align="center" valign="center">
         <panel childLayout="vertical" align="center" valign="center">
-          <panel childLayout="horizontal" height="*">
+          <panel id="1" childLayout="horizontal" height="*">
             <control id="MyDraggable" name="draggable" visibleToMouse="true" />
           </panel>
-          <panel childLayout="horizontal" height="*">
+          <panel id="2" childLayout="horizontal" height="*">
             <control id="MyDroppable" name="droppable" visibleToMouse="true" />
           </panel>
-          <panel childLayout="vertical" width="100%">
+          <panel id="3" childLayout="vertical" width="100%">
             <control id="backButton" name="button" label="Back to Menu" align="right">
             </control>
           </panel>
