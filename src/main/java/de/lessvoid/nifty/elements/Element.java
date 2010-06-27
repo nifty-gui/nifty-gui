@@ -684,6 +684,14 @@ public class Element {
     layoutPart.getBoxConstraints().setHeight(newHeight);
   }
 
+  public SizeValue getConstraintX() {
+    return layoutPart.getBoxConstraints().getX();
+  }
+
+  public SizeValue getConstraintY() {
+    return layoutPart.getBoxConstraints().getY();
+  } 
+
   /**
    * get current width constraint.
    * @return current width constraint
