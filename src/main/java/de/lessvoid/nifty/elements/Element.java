@@ -1134,13 +1134,15 @@ public class Element {
       final MouseInputEvent mouseEvent,
       final long eventTime,
       final MouseOverHandler mouseOverHandler) {
-    if (isInside(mouseEvent)) {
-      if (visibleToMouseEvents) {
-        mouseOverHandler.addElement(this);
+    if (canHandleMouseEvents()) {
+      if (isInside(mouseEvent)) {
+        mouseOverHandler.addMouseOverElement(this);
+      } else {
+        mouseOverHandler.addMouseElement(this);
       }
-      for (Element w : getElements()) {
-        w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
-      }
+    }
+    for (Element w : getElements()) {
+      w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
     }
   }
 
@@ -1150,14 +1152,6 @@ public class Element {
    * @param eventTime event time
    */
   public boolean mouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
-    for (Element w : getElements()) {
-      if (w.mouseEvent(mouseEvent, eventTime)) {
-        return true;
-      }
-    }
-    if (!canHandleMouseEvents()) {
-      return false;
-    }
     effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
     boolean mouseInside = isInside(mouseEvent);
     if (interaction.isOnClickRepeat()) {

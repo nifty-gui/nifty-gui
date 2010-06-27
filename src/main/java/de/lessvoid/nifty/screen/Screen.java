@@ -282,11 +282,12 @@ public class Screen {
     long eventTime = timeProvider.getMsTime();
     for (Element layer : layerList) {
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
-      layer.mouseEvent(inputEvent, eventTime);
     }
 
 //    System.out.println(mouseOverHandler.getInfoString());
     mouseOverHandler.processMouseOverEvent(rootElement, inputEvent, eventTime);
+    mouseOverHandler.processMouseEvent(inputEvent, eventTime);
+
     return mouseOverHandler.hitsElement();
   }
 

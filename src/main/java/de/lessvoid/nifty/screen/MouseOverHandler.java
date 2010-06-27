@@ -14,21 +14,27 @@ public class MouseOverHandler {
   /**
    * Elements with mouse over.
    */
-  private ArrayList < Element > elements = new ArrayList < Element >();
+  private ArrayList < Element > mouseOverElements = new ArrayList < Element >();
+
+  /**
+   * Elements that can handle mouse events but have no mouse over.
+   */
+  private ArrayList < Element > mouseElements = new ArrayList < Element >();
 
   /**
    * Reset mouse over elements.
    */
   public void reset() {
-    elements.clear();
+    mouseOverElements.clear();
+    mouseElements.clear();
   }
 
   /**
    * Add Element.
    * @param element Element
    */
-  public void addElement(final Element element) {
-    elements.add(element);
+  public void addMouseOverElement(final Element element) {
+    mouseOverElements.add(element);
   }
 
   /**
@@ -36,38 +42,58 @@ public class MouseOverHandler {
    * @return info
    */
   public String getInfoString() {
+    StringBuffer result = new StringBuffer();
+    outputEvents(result, mouseOverElements);
+    result.append(" : ");
+    outputEvents(result, mouseElements);
+    return result.toString();
+  }
+
+  private void outputEvents(final StringBuffer result, final ArrayList<Element> elements) {
     if (elements.isEmpty()) {
-      return "  ---";
+      result.append("  ---");
     } else {
-      StringBuffer result = new StringBuffer();
       for (int i = elements.size() - 1; i >= 0; i--) {
         Element element = elements.get(i);
         result.append("  " + element.getId());
       }
-      return result.toString();
     }
   }
 
 
-  /**
-   * Process Event.
-   * @param rootElement element
-   * @param mouseEvent mouse event
-   * @param eventTime time
-   */
   public void processMouseOverEvent(
       final Element rootElement,
       final MouseInputEvent mouseEvent,
       final long eventTime) {
-    for (int i = elements.size() - 1; i >= 0; i--) {
-      Element element = elements.get(i);
+    for (int i = mouseOverElements.size() - 1; i >= 0; i--) {
+      Element element = mouseOverElements.get(i);
       if (element.mouseOverEvent(mouseEvent, eventTime)) {
         return;
       }
     }
   }
 
+  public void processMouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
+    for (int i = mouseOverElements.size() - 1; i >= 0; i--) {
+      Element element = mouseOverElements.get(i);
+      if (element.mouseEvent(mouseEvent, eventTime)) {
+        return;
+      }
+    }
+
+    for (int i = mouseElements.size() - 1; i >= 0; i--) {
+      Element element = mouseElements.get(i);
+      if (element.mouseEvent(mouseEvent, eventTime)) {
+        return;
+      }
+    }
+}
+
   public boolean hitsElement() {
-    return !elements.isEmpty();
+    return !mouseOverElements.isEmpty();
+  }
+
+  public void addMouseElement(final Element element) {
+    mouseElements.add(element);
   }
 }
