@@ -54,29 +54,17 @@
       </panel>
     </layer>
     <layer id="windows" childLayout="absolute">
-      <control id="window1" name="draggable" style="window" width="320px" height="120px" childLayout="vertical" valign="top" 
-               revert="false" drop="false" handle="windowBar">
-        <panel id="windowBar" style="windowBar">
-          <label text="Drag Me!" valign="center" />
-        </panel>
-        <panel style="windowContent">
-          <label text="I'm A Window!" valign="center" />
-        </panel>
+      <control name="window" title="Drag Me!" width="320px" height="120px">
+        <label text="I'm A Window!" valign="center" />
       </control>
-      <control id="window2" name="draggable" style="window" width="460px" height="240px" childLayout="vertical" valign="top" 
-               revert="false" drop="false" handle="windowBar">
-        <panel id="windowBar" style="windowBar">
-          <label text="Drag Me!" valign="center" />
-        </panel>
-        <panel style="windowContent">
-          <control id="MyDroppable2" name="droppable" style="dropArea" width="140px" height="140px" align="center" valign="center">
-              <label text="Drop Here!" color="#000f" valign="center" />
-            </control>
-        </panel>
+      <control name="window" title="Drag Me!" width="460px" height="240px" y="60%">
+        <control id="MyDroppable2" name="droppable" style="dropArea" width="140px" height="140px" align="center" valign="center">
+          <label text="Drop Here!" color="#000f" valign="center" />
+        </control>
       </control>
-      <!-- <control id="window2" x="200" y="300" name="window">
+      <control name="window" title="Please Drag Me Too!" width="500px" height="400px" x="400px">
         <label text="I'm Another Window!" valign="center" />
-      </control>-->
+      </control>
     </layer>
   </screen>
 </nifty> 

@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.examples.dragndrop;
 
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -133,24 +135,34 @@ public class DraggableControl implements Controller {
     if (drop) {
       int dragAnkerX = draggable.getX() + draggable.getWidth() / 2;
       int dragAnkerY = draggable.getY() + draggable.getHeight() / 2;
-      for (Element layer : screen.getLayerElements()) {
-        Element droppable = findDroppableAtCoordinates(layer, dragAnkerX, dragAnkerY);
-        if (droppable != null)
-          return droppable;
+      List<Element> layers = screen.getLayerElements();
+      ListIterator<Element> iter = layers.listIterator(layers.size()); 
+      while (iter.hasPrevious()) {
+        Element layer = iter.previous();
+        if (layer != popup) {
+          Element droppable = findDroppableAtCoordinates(layer, dragAnkerX, dragAnkerY);
+          if (droppable != null)
+            return droppable;
+        }
       }
     }
     return originalParent;
   }
   
   private Element findDroppableAtCoordinates(Element context, int x, int y) {
-    for (Element element : context.getElements())
-      if (isDroppable(element) && element.isMouseInsideElement(x, y))
+    List<Element> elements = context.getElements();
+    ListIterator<Element> iter = elements.listIterator(elements.size());
+    while (iter.hasPrevious()) {
+      Element element = iter.previous();
+      boolean mouseInside = element.isMouseInsideElement(x, y);
+      if (mouseInside && isDroppable(element))
         return element;
-      else {
-        Element droppable = findDroppableAtCoordinates(element, x, y);
-        if (droppable != null)
-          return droppable;
-      }
+      Element droppable = findDroppableAtCoordinates(element, x, y);
+      if (droppable != null)
+        return droppable;
+      if (mouseInside) 
+        return originalParent;
+    }
     return null;
   }
   
