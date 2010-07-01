@@ -449,6 +449,13 @@ public class Screen {
     popupElementsToRemove.clear();
   }
 
+  public boolean hasDynamicElements() {
+    if (!layerElementsToAdd.isEmpty() || !layerElementsToRemove.isEmpty() || !popupElementsToAdd.isEmpty() || !popupElementsToRemove.isEmpty()) {
+      return true;
+    }
+    return false;
+  }
+
   public void setDefaultFocusElement(final String defaultFocusElementIdParam) {
     defaultFocusElementId = defaultFocusElementIdParam;
   }

@@ -209,11 +209,24 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   private void handleDynamicElements() {
-    invokeMethods();
-    removePopUps();
-    removeLayerElements();
-    addControls();
-    executeEndOfFrameElementActions();
+    while (hasDynamics()) {
+      invokeMethods();
+      removePopUps();
+      removeLayerElements();
+      addControls();
+      executeEndOfFrameElementActions();
+    }
+  }
+
+  private boolean hasDynamics() {
+    return hasInvokeMethods() || hasRemovePopups() || hasRemoveLayerElements() || hasControlsToAdd() || hasEndOfFrameElementActions();
+  }
+
+  private boolean hasRemoveLayerElements() {
+    if (!currentScreen.isNull()) {
+      return currentScreen.hasDynamicElements();
+    }
+    return false;
   }
 
   private void removeLayerElements() {
@@ -223,7 +236,7 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   private void removePopUps() {
-    if (!removePopupList.isEmpty()) {
+    if (hasRemovePopups()) {
       if (!currentScreen.isNull()) {
         for (RemovePopUp removePopup : removePopupList) {
           removePopup.close();
@@ -233,8 +246,12 @@ public class Nifty implements NiftyInputConsumer {
     }
   }
 
+  private boolean hasRemovePopups() {
+    return !removePopupList.isEmpty();
+  }
+
   public void addControls() {
-    if (!controlsToAdd.isEmpty()) {
+    if (hasControlsToAdd()) {
       for (ControlToAdd controlToAdd : controlsToAdd) {
         try {
           controlToAdd.startControl(controlToAdd.createControl());
@@ -246,8 +263,12 @@ public class Nifty implements NiftyInputConsumer {
     }
   }
 
+  private boolean hasControlsToAdd() {
+    return !controlsToAdd.isEmpty();
+  }
+
   public void addControlsWithoutStartScreen() {
-    if (!controlsToAdd.isEmpty()) {
+    if (hasControlsToAdd()) {
       for (ControlToAdd controlToAdd : controlsToAdd) {
         try {
           controlToAdd.startControlWithCheck(controlToAdd.createControl());
@@ -260,12 +281,16 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   public void executeEndOfFrameElementActions() {
-    if (!endOfFrameElementActions.isEmpty()) {
+    if (hasEndOfFrameElementActions()) {
       for (EndOfFrameElementAction elementAction : endOfFrameElementActions) {
         elementAction.perform();
       }
       endOfFrameElementActions.clear();
     }
+  }
+
+  private boolean hasEndOfFrameElementActions() {
+    return !endOfFrameElementActions.isEmpty();
   }
 
   /**
@@ -908,19 +933,25 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   public void invokeMethods() {
-    // make working copy in case a method invoke will create addtional method calls
-    Collection < DelayedMethodInvoke > workingCopy = new ArrayList < DelayedMethodInvoke > (delayedMethodInvokes);
+    if (hasInvokeMethods()) {
+      // make working copy in case a method invoke will create addtional method calls
+      Collection < DelayedMethodInvoke > workingCopy = new ArrayList < DelayedMethodInvoke > (delayedMethodInvokes);
 
-    // clean current List
-    delayedMethodInvokes.clear();
+      // clean current List
+      delayedMethodInvokes.clear();
 
-    // process the working copy
-    for (DelayedMethodInvoke method : workingCopy) {
-      method.perform();
+      // process the working copy
+      for (DelayedMethodInvoke method : workingCopy) {
+        method.perform();
+      }
+
+      // the delayedMethodInvokes list is empty now or it has new entries that resulted from method.perform calls
+      // in that case these methods will be processed next frame
     }
+  }
 
-    // the delayedMethodInvokes list is empty now or it has new entries that resulted from method.perform calls
-    // in that case these methods will be processed next frame
+  private boolean hasInvokeMethods() {
+    return !delayedMethodInvokes.isEmpty();
   }
 
   private class DelayedMethodInvoke {
