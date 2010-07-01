@@ -67,12 +67,12 @@ public class DraggableControl implements Controller {
     dragStartY = mouseY;
 
     popup = nifty.createPopup(POPUP);
+    
     draggable.markForMove(popup, new EndNotify() {
       @Override
       public void perform() {
         draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
         draggable.setConstraintY(new SizeValue(originalPositionY + "px"));
-        // popup.layoutElements();
         nifty.showPopup(screen, POPUP, null);
       }
     });
@@ -100,8 +100,6 @@ public class DraggableControl implements Controller {
         draggable.setConstraintX(originalConstraintX);
         draggable.setConstraintY(originalConstraintY);
       } else {
-        SizeValue newConstraintX = translateValue(originalConstraintX, draggable.getX() - originalPositionX);
-        SizeValue newConstraintY = translateValue(originalConstraintY, draggable.getY() - originalPositionY);
         draggable.setConstraintX(new SizeValue(draggable.getX() + "px"));
         draggable.setConstraintY(new SizeValue(draggable.getY() + "px"));
       }
@@ -124,13 +122,6 @@ public class DraggableControl implements Controller {
     dragged = false;
   }
   
-  private SizeValue translateValue(SizeValue value,
-      int movement) {
-    int oldValue = (value != null) ? value.getValueAsInt(1.0f) : 0;
-    oldValue = 0;
-    return new SizeValue(oldValue + movement +  "px");
-  }
-
   private Element findDroppableAtCurrentCoordinates() {
     if (drop) {
       int dragAnkerX = draggable.getX() + draggable.getWidth() / 2;
