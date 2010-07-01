@@ -238,9 +238,13 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="What's new in Nifty 1.2" />
-        <text style="textFont" text="Besides lots of Bugfixes and Improvements the core new things in Nifty 1.2 are:" />
-        <text style="textFont" text="- Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice has been completed. The main Nifty Core is now independent of Lwjgl or Slick2d dependencies! You can now choose a Renderer " />
-        <text style="textFont" text="- B" />
+        <text style="textFont" text="Besides lots of Bugfixes and Improvements the core new things in Nifty 1.2 are:&#10;" />
+        <text style="textFont" text="Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice completed: The Nifty core is now independent of Lwjgl and Slick2d. There are now separate renderer implementations available that interface Nifty with LWJGL, Slick2D, Java Monkey Engine 1 and 2. You can find an overview of all available renderers in the Nifty wiki at http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices.&#10;" />
+        <text style="textFont" text="A nifty XSD (XML Schema) file has been added and you can now validate your nifty.xml files using new methods on the main Nifty class.&#10;" />
+        <text style="textFont" text="The InputSystem interface has been changed too. It now allows Nifty to inform the InputSystem if the event has been handled by Nifty. It's now possible to send events to other parts of your application when the GUI did not handle the event.&#10;" />
+        <text style="textFont" text="New Image Modes have been added to support repeat image rendering (repeating pattern) as well as rendering of sprite sheets.&#10;" />
+        <text style="textFont" text="Java callbacks for attribute initialization from java as well as from environment variables and properties added. Basis localization support is now available too. Both features use the ${...} syntax in xml attributes.&#10;" />
+        <text style="textFont" text="There is now a new style set available. The Nifty Grey Style gives Nifty a great shiny new look. You can use the old one tho if you like that more.&#10;" />
       </panel>
     </panel>
   </controlDefinition>
@@ -257,7 +261,11 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="How does it work: Basics, The Java side" />
-        <text style="textFont" text="Nifty is a jar File. So all you need is &quot;nifty.jar&quot; (and depending on what you've downloaded libraries like slick and lwjgl) in your classpath. Initializing lwjgl and setting the display mode is up to you. Nifty assumes that you've set up 2d ortho mode. You can see the examples in the nifty-examples project on how to do that.&#10;&#10;To work with Nifty you'll need to instantiate Nifty first:&#10;"/>
+        <text style="textFont" text="Nifty is a jar File. So all you need is &quot;nifty-&lt;version&gt;.jar&quot; in your classpath. Starting with Nifty 1.2 you'll need an appropriate &quot;nifty-&lt;system&gt;-renderer.jar&quot; too. If you're not using maven you'll need to manually find the libs that your renderer requires. Chances are, that your project already uses them tho. For instance if you use &quot;nifty-slick-renderer-1.0.jar&quot; you'll need slick2d.jar in your classpath which you probably already have when you're using that renderer.&#10;&#10;Please note: most renderers assume that you've already setup the rendering system before you initialize Nifty. When you use &quot;nifty-lwjgl-renderer-1.0.jar&quot; it is up to you to initialize lwjgl for 2d ortho mode rendering before calling any of Niftys methods. If you think about it, then this makes sense because Nifty is probably not the only subsystem that needs to render things. You have probably other parts (your game engine for instance) that need rendering and so Nifty lets you decide to setup everything up.&#10;&#10;To actually access Nifty you'll need to instantiate the main Nifty class. Here is its constructor:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="\#8A104D#public\#000# Nifty(&#10;    \#8A104D#final\#000# RenderDevice newRenderDevice,&#10;    \#8A104D#final\#000# SoundDevice newSoundDevice,&#10;    \#8A104D#final\#000# InputSystem newInputSystem,&#10;    \#8A104D#final\#000# TimeProvider newTimeProvider);" />
+        </panel>
+
         <panel style="codeBlock">
           <text style="codeFont" text="\#4545C1#// create nifty&#10;\#000#Nifty nifty = \#8A104D#new\#000# Nifty(&#10;    \#8A104D#new\#000# RenderDeviceLwjgl(),&#10;    \#8A104D#new\#000# SoundSystem(\#8A104D#new\#000# SlickSoundDevice()),&#10;\#000#    LwjglInitHelper.getInputSystem(),&#10;    \#8A104D#new\#000# TimeProvider());" />
         </panel>

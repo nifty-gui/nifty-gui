@@ -63,7 +63,7 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.5</source>
+          <source>1.6</source>
           <target>1.5</target>
         </configuration>
       </plugin>
