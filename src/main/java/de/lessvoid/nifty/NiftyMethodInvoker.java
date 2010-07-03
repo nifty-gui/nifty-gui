@@ -198,10 +198,10 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
    */
   private String debugParaString(final Object[] invokeParameters) {
     StringBuffer paraStringBuffer = new StringBuffer();
-    paraStringBuffer.append(invokeParameters[0].toString());
+    paraStringBuffer.append(invokeParameters[0]);
     for (int i = 1; i < invokeParameters.length; i++) {
       paraStringBuffer.append(", ");
-      paraStringBuffer.append(invokeParameters[i].toString());
+      paraStringBuffer.append(invokeParameters[i]);
     }
     return paraStringBuffer.toString();
   }

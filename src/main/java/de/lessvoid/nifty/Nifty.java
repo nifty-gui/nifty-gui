@@ -282,7 +282,7 @@ public class Nifty implements NiftyInputConsumer {
 
   public void executeEndOfFrameElementActions() {
     if (hasEndOfFrameElementActions()) {
-      for (EndOfFrameElementAction elementAction : endOfFrameElementActions) {
+      for (EndOfFrameElementAction elementAction : new ArrayList<EndOfFrameElementAction>(endOfFrameElementActions)) {
         elementAction.perform();
       }
       endOfFrameElementActions.clear();
