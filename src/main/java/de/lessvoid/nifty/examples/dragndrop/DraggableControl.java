@@ -3,10 +3,12 @@ package de.lessvoid.nifty.examples.dragndrop;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
@@ -26,7 +28,9 @@ public class DraggableControl implements Controller {
   private Element popup;
   private Element handle;
   private boolean revert;
-  private boolean drop;
+  private boolean dropEnabled;
+  
+  private List<DragNotify> notifies = new CopyOnWriteArrayList<DragNotify>();
   
   private boolean dragged = false;
   private int originalPositionX;
@@ -35,6 +39,8 @@ public class DraggableControl implements Controller {
   private SizeValue originalConstraintY;
   private int dragStartX;
   private int dragStartY;
+  
+  private DroppableControl droppable;
   
   @Override
   public void bind(Nifty nifty, Screen screen, Element element, Properties parameter, ControllerEventListener listener, Attributes controlDefinitionAttributes) {
@@ -47,17 +53,41 @@ public class DraggableControl implements Controller {
     if (handle == null) 
       handle = draggable;
     revert = controlDefinitionAttributes.getAsBoolean("revert", true);
-    drop = controlDefinitionAttributes.getAsBoolean("drop", true);
+    dropEnabled = controlDefinitionAttributes.getAsBoolean("drop", true);
+    
+    addOnDragStartMethodNotify(controlDefinitionAttributes.get("onDragStart"));
+    addOnDragCancelMethodNotify(controlDefinitionAttributes.get("onDragCancel"));
+  }
+  
+  private void addOnDragStartMethodNotify(String methodName) {
+    if (methodName != null) {
+      addNotify(new OnDragStartMethodNotify(methodName));
+    }
+  }
+  
+  private void addOnDragCancelMethodNotify(String methodName) {
+    if (methodName != null) {
+      addNotify(new OnDragCancelMethodNotify(methodName));
+    }
+  }
+  
+  @Override
+  public void inputEvent(NiftyInputEvent inputEvent) {
+  }
+  
+  @Override
+  public void onFocus(boolean getFocus) {
+  }
+  
+  @Override
+  public void onStartScreen() {
   }
 
   public void dragStart(final int mouseX, final int mouseY) {
     System.out.println("dragStart(" + dragged + ")");
     if (dragged)
       return;
-    if (!handle.isMouseInsideElement(mouseX, mouseY))
-      return;
-    dragged = true;
-    logger.fine(String.format("dragStart(mouseX=%s, mouseY=%s), draggable.id=%s, draggable.x=%s, draggable.y=%s", mouseX, mouseY, draggable.getId(), draggable.getX(), draggable.getY()));
+    
     originalParent = draggable.getParent();
     originalPositionX = draggable.getX();
     originalPositionY = draggable.getY();
@@ -65,7 +95,17 @@ public class DraggableControl implements Controller {
     originalConstraintY = draggable.getConstraintY();
     dragStartX = mouseX;
     dragStartY = mouseY;
+    
+    if (handle.isMouseInsideElement(mouseX, mouseY))  {
+      moveDraggableToPopup();
+      dragged = true;
+      notifyObserversDragStarted();
+    } else {
+      moveDraggableOnTop();
+    }
+  }
 
+  private void moveDraggableToPopup() {
     popup = nifty.createPopup(POPUP);
     
     draggable.markForMove(popup, new EndNotify() {
@@ -74,6 +114,15 @@ public class DraggableControl implements Controller {
         draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
         draggable.setConstraintY(new SizeValue(originalPositionY + "px"));
         nifty.showPopup(screen, POPUP, null);
+      }
+    });
+  }
+  
+  private void moveDraggableOnTop() {
+    draggable.markForMove(originalParent, new EndNotify() {
+      @Override
+      public void perform() {
+        draggable.reactivate();
       }
     });
   }
@@ -94,21 +143,34 @@ public class DraggableControl implements Controller {
     if (!dragged)
       return;
     logger.fine("dragStop()");
-    Element droppable = findDroppableAtCurrentCoordinates();
-    if (droppable == originalParent) {
-      if (revert) {
-        draggable.setConstraintX(originalConstraintX);
-        draggable.setConstraintY(originalConstraintY);
-      } else {
-        draggable.setConstraintX(new SizeValue(draggable.getX() + "px"));
-        draggable.setConstraintY(new SizeValue(draggable.getY() + "px"));
-      }
+    Element newDroppable = findDroppableAtCurrentCoordinates();
+    if (newDroppable == originalParent) {
+      dragCancel();
     } else {
-      draggable.setConstraintX(new SizeValue("0px"));
-      draggable.setConstraintY(new SizeValue("0px"));
+      DroppableControl droppableControl = newDroppable.getControl(DroppableControl.class);
+      if (droppableControl.accept(droppable, this))
+        droppableControl.drop(this, closePopup());
+      else
+        dragCancel();
     }
+    dragged = false;
+  }
 
-    draggable.markForMove(droppable, new EndNotify() {
+  private void dragCancel() {
+    if (revert) {
+      draggable.setConstraintX(originalConstraintX);
+      draggable.setConstraintY(originalConstraintY);
+    } else {
+      draggable.setConstraintX(new SizeValue(draggable.getX() + "px"));
+      draggable.setConstraintY(new SizeValue(draggable.getY() + "px"));
+    }
+    moveDraggableBackToOriginalParent();
+    notifyObserversDragCanceled();
+  }
+  
+  private EndNotify closePopup()
+  {
+    return new EndNotify() {
       @Override
       public void perform() {
         nifty.closePopup(POPUP, new EndNotify() {
@@ -118,12 +180,15 @@ public class DraggableControl implements Controller {
           }
         });
       }
-    });
-    dragged = false;
+    };
+  }
+
+  private void moveDraggableBackToOriginalParent() {
+    draggable.markForMove(originalParent, closePopup());
   }
   
   private Element findDroppableAtCurrentCoordinates() {
-    if (drop) {
+    if (dropEnabled) {
       int dragAnkerX = draggable.getX() + draggable.getWidth() / 2;
       int dragAnkerY = draggable.getY() + draggable.getHeight() / 2;
       List<Element> layers = screen.getLayerElements();
@@ -164,15 +229,77 @@ public class DraggableControl implements Controller {
     return false;
   }
   
-  @Override
-  public void inputEvent(NiftyInputEvent inputEvent) {
+  public Element getElement() {
+    return draggable;
   }
   
-  @Override
-  public void onFocus(boolean getFocus) {
+  public DroppableControl getDroppable() {
+    return droppable;
   }
   
-  @Override
-  public void onStartScreen() {
+  protected void setDroppable(DroppableControl droppable) {
+    this.droppable = droppable;
+  }
+  
+  public void addNotify(DragNotify notify) {
+    notifies.add(notify);
+  }
+
+  public void removeNotify(DragNotify notify) {
+    notifies.remove(notify);
+  }
+
+  public void removeAllNotifies() {
+    notifies.clear();
+  }
+
+  private void notifyObserversDragStarted() {
+    for (DragNotify notify : notifies)
+      notify.dragStarted(droppable, this);
+  }
+  
+  private void notifyObserversDragCanceled() {
+    for (DragNotify notify : notifies)
+      notify.dragCanceled(droppable, this);
+  }
+  
+  private class OnDragStartMethodNotify implements DragNotify {
+
+    private String methodName;
+
+    public OnDragStartMethodNotify(String methodName) {
+      this.methodName = methodName;
+    }
+
+    @Override
+    public void dragStarted(DroppableControl source, DraggableControl draggable) {
+      NiftyMethodInvoker methodInvoker = new NiftyMethodInvoker(nifty,
+          methodName, screen.getScreenController());
+      methodInvoker.invoke(source, draggable);
+    }
+
+    @Override
+    public void dragCanceled(DroppableControl source, DraggableControl draggable) {
+    }
+  }
+
+  private class OnDragCancelMethodNotify implements DragNotify {
+
+    private String methodName;
+
+    public OnDragCancelMethodNotify(String methodName) {
+      this.methodName = methodName;
+    }
+
+    @Override
+    public void dragStarted(DroppableControl source, DraggableControl draggable) {
+    }
+
+    @Override
+    public void dragCanceled(DroppableControl source, DraggableControl draggable) {
+      NiftyMethodInvoker methodInvoker = new NiftyMethodInvoker(nifty,
+          methodName, screen.getScreenController());
+      methodInvoker.invoke(source, draggable);
+    }
   }
 }

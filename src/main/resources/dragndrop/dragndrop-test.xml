@@ -19,36 +19,71 @@
   </style>
   
   <style id="windowBar">
-    <attributes width="100%" height="20px" backgroundColor="#333f" childLayout="center" />
+    <attributes width="100%" height="20px" padding="2px" backgroundColor="#333f" childLayout="horizontal" />
   </style>
   
   <style id="windowContent">
     <attributes width="100%" height="*" padding="8px" backgroundColor="#9996" childLayout="center" />
   </style>
+  
+  <style id="windowCloseButton">
+    <attributes width="12px" height="12px" padding="1px" align="center" valign="center" />
+    <effect>
+      <onActive name="border" post="true" color="#ffff" border="1px" />
+    </effect>
+  </style>
 
-  <screen id="dragndropExample" defaultFocusElement="backButton">
+  <screen id="dragndropExample" defaultFocusElement="backButton" controller="de.lessvoid.nifty.examples.dragndrop.DragDropScreen">
     <layer id="layer" childLayout="center">
       <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="80%" height="90%" align="center" valign="center">
         <panel childLayout="vertical" align="center" valign="center">
-          <panel id="1" childLayout="horizontal" height="*">
-            <control id="MyDraggable1" name="draggable" backgroundColor="#f60f" width="120px" height="120px" childLayout="center" valign="top">
+          <panel id="draggables" childLayout="horizontal" height="*">
+            <control id="MyDroppable3" name="droppable" style="dropArea" width="140px" height="140px" align="center" valign="top">
+              <label text="Drop Here!" color="#000f" valign="center" />
+              <control id="MyDraggable1" name="draggable" backgroundColor="#f60f" width="120px" height="120px" childLayout="center" valign="top"
+                       onDragStart="showDragStartStatus()" onDragCancel="showDragCancelStatus()">
+                <label text="Drag Me!" valign="center" />
+              </control>
+            </control>
+            <control id="MyDraggable2" name="draggable" backgroundColor="#0f6f" width="120px" height="120px" childLayout="center" valign="top"
+                     onDragStart="showDragStartStatus()" onDragCancel="showDragCancelStatus()">
               <label text="Drag Me!" valign="center" />
             </control>
-            <control id="MyDraggable2" name="draggable" backgroundColor="#0f6f" width="120px" height="120px" childLayout="center" valign="top">
-              <label text="Drag Me!" valign="center" />
-            </control>
-            <control id="MyDraggable3" name="draggable" backgroundColor="#6f04" width="120px" height="120px" childLayout="center" valign="top">
+            <control id="MyDraggable3" name="draggable" backgroundColor="#6f04" width="120px" height="120px" childLayout="center" valign="top"
+                     onDragStart="showDragStartStatus()" onDragCancel="showDragCancelStatus()">
               <label text="Drag Me!" valign="center" />
             </control>
           </panel>
-          <panel id="2" childLayout="horizontal" height="*">
-            <control id="MyDroppable" name="droppable" style="dropArea" width="140px" height="140px">
+          <panel id="droppables" childLayout="horizontal" height="*">
+            <control id="MyDroppable2" name="droppable" style="dropArea" width="140px" height="140px" onDrop="showDropStatus()">
               <label text="Drop Here!" color="#000f" valign="center" />
             </control>
-          </panel>
-          <panel id="3" childLayout="vertical" width="100%">
-            <control id="backButton" name="button" label="Back to Menu" align="right">
+            <panel width="10px"/>
+            <control id="GoodStuff" name="droppable" style="dropArea" backgroundColor="#ffff" width="140px" height="140px" onDrop="showDropStatus()">
+              <label text="Good Stuff" color="#000f" valign="center" />
             </control>
+            <panel width="10px"/>
+            <control id="EvilStuff" name="droppable" style="dropArea" backgroundColor="#222f" width="140px" height="140px" onDrop="showDropStatus()">
+              <label text="Evil Stuff" color="#000f" valign="center" />
+            </control>
+            <panel width="*"/>
+            <control id="Trash" name="droppable" style="dropArea" width="140px" height="140px" onDrop="showDropStatus()">
+              <label text="Discard Here!" color="#000f" valign="center" />
+            </control>
+          </panel>
+          <panel id="buttons" childLayout="vertical" width="100%">
+            <control id="spawnDraggableButton" name="button" label="Spawn Draggable" align="right">
+              <interact onClick="spawnDraggable()" /> 
+            </control>
+            <control id="spawnWindowButton" name="button" label="Spawn Window" align="right">
+              <interact onClick="spawnWindow()" /> 
+            </control>
+            <control id="backButton" name="button" label="Back to Menu" align="right">
+              <interact onClick="quit()" /> 
+            </control>
+          </panel>
+          <panel id="statusPanel" childLayout="center" width="100%" height="40px">
+            <label id="status" text="Nifty Drag And Drop Demo" color="#000f" valign="center" />
           </panel>
         </panel>
       </panel>
@@ -58,7 +93,7 @@
         <label text="I'm A Window!" valign="center" />
       </control>
       <control id="2" name="window" title="Drag Me!" width="460px" height="240px" y="60%">
-        <control id="MyDroppable2" name="droppable" style="dropArea" width="140px" height="140px" align="center" valign="center">
+        <control id="MyDroppable3" name="droppable" style="dropArea" width="140px" height="140px" align="center" valign="center" onDrop="showDropStatus()">
           <label text="Drop Here!" color="#000f" valign="center" />
         </control>
       </control>
