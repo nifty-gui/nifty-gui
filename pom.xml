@@ -2,6 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>lessvoid</groupId>
   <artifactId>nifty-pauls-soundsystem</artifactId>
+  <name>Nifty GUI Pauls Soundsystem Adapter</name>
   <version>1.0-SNAPSHOT</version>
   <scm>
     <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-pauls-soundsystem/trunk</connection>
