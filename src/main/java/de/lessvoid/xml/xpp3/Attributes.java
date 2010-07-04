@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.xml.tools.SpecialValuesReplace;
@@ -21,7 +20,6 @@ import de.lessvoid.xml.tools.SpecialValuesReplace;
 public class Attributes {
   private Map < String, String > attributes = new Hashtable < String, String >();
   private Map < String, Set < String >> taggedAttributes = new Hashtable < String, Set < String >>();
-  private Map < String, String > attributesBackup = new Hashtable < String, String >();
 
   public Attributes() {
   }
@@ -47,7 +45,6 @@ public class Attributes {
   }
 
   public void translateSpecialValues(final Map<String, ResourceBundle> resourceBundle, final ScreenController screenController, final Properties globalProperties) {
-    attributesBackup = new Hashtable < String, String >(attributes);
     for (Map.Entry<String, String> value : attributes.entrySet()) {
       attributes.put(value.getKey(), SpecialValuesReplace.replace(value.getValue(), resourceBundle, screenController, globalProperties));
     }

@@ -306,7 +306,7 @@ public class ElementType extends XmlBaseType {
   }
 
   public void prepare(final Nifty nifty, final Screen screen, final ElementType rootElementType) {
-    translateSpecialValuesForAll(nifty, screen);
+    translateSpecialValues(nifty, screen);
     makeFlat();
     applyControls(nifty);
     applyStyles(nifty.getDefaultStyleResolver());
@@ -315,10 +315,10 @@ public class ElementType extends XmlBaseType {
     resolveControllers(new LinkedList < Object >());
   }
 
-  private void translateSpecialValuesForAll(final Nifty nifty, final Screen screen) {
-    translateSpecialValues(nifty, screen);
+  public void translateSpecialValues(final Nifty nifty, final Screen screen) {
+    super.translateSpecialValues(nifty, screen);
     for (ElementType e : elements) {
-      e.translateSpecialValuesForAll(nifty, screen);
+      e.translateSpecialValues(nifty, screen);
     }
   }
 
