@@ -9,7 +9,9 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
 import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
@@ -25,14 +27,19 @@ public class LwjglRenderImage implements RenderImage {
   public LwjglRenderImage(final String name, final boolean filterParam) {
     try {
       log.fine("loading image: " + name);
-      ImageIOImageData imageLoader = new ImageIOImageData();
+      ImageData imageLoader;
+      if (name.endsWith(".tga")) {
+        imageLoader = new TGAImageData();
+      } else {
+        imageLoader = new ImageIOImageData();
+      }
       ByteBuffer imageData = imageLoader.loadImage(ResourceLoader.getResourceAsStream(name));
       imageData.rewind();
       width = imageLoader.getWidth();
       height = imageLoader.getHeight();
       textureWidth = imageLoader.getTexWidth();
       textureHeight = imageLoader.getTexHeight();
-      createTexture(imageData, textureWidth, textureHeight, 0, GL11.GL_RGBA);
+      createTexture(imageData, textureWidth, textureHeight, 0, imageLoader.getDepth() == 32 ? GL11.GL_RGBA : GL11.GL_RGB);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -55,8 +62,8 @@ public class LwjglRenderImage implements RenderImage {
   }
 
   public void dispose() {
-    GL11.glDeleteTextures(textureId);
-    checkGLError();
+//    GL11.glDeleteTextures(textureId);
+//    checkGLError();
   }  
 
   private void createTexture(final ByteBuffer textureBuffer, final int width, final int height, final int filter, final int srcPixelFormat) throws Exception {

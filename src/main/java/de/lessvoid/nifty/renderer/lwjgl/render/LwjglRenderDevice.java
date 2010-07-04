@@ -186,6 +186,7 @@ public class LwjglRenderDevice implements RenderDevice {
    */
   public void renderImage(final RenderImage image, final int x, final int y, final int width, final int height, final Color color, final float scale) {
     log.fine("renderImage()");
+
     if (!currentTexturing) {
       GL11.glEnable(GL11.GL_TEXTURE_2D);
       currentTexturing = true;
@@ -198,8 +199,13 @@ public class LwjglRenderDevice implements RenderDevice {
     LwjglRenderImage internalImage = (LwjglRenderImage) image;
     internalImage.bind();
 
-    float u1 = internalImage.getWidth() / (float)internalImage.getTextureWidth();
-    float v1 = internalImage.getHeight() / (float)internalImage.getTextureHeight();
+    float textureWidth = (float)internalImage.getTextureWidth();
+    float textureHeight = (float)internalImage.getTextureHeight();
+    float imageWidth = (float)internalImage.getWidth();
+    float imageHeight = (float)internalImage.getHeight();
+
+    float u1 = imageWidth / textureWidth;
+    float v1 = imageHeight / textureHeight;
 
     GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     GL11.glBegin(GL11.GL_QUADS);
@@ -251,10 +257,13 @@ public class LwjglRenderDevice implements RenderDevice {
     LwjglRenderImage internalImage = (LwjglRenderImage) image;
     internalImage.bind();
 
-    float u0 = srcX / (float)internalImage.getTextureWidth();
-    float v0 = srcY / (float)internalImage.getTextureHeight();
-    float u1 = srcW / (float)internalImage.getTextureWidth();
-    float v1 = srcH / (float)internalImage.getTextureHeight();
+    float textureWidth = (float)internalImage.getTextureWidth();
+    float textureHeight = (float)internalImage.getTextureHeight();
+
+    float u0 = srcX / textureWidth;
+    float v0 = srcY / textureHeight;
+    float u1 = (srcX + srcW) / textureWidth;
+    float v1 = (srcY + srcH) / textureHeight;
 
     GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     GL11.glBegin(GL11.GL_QUADS);

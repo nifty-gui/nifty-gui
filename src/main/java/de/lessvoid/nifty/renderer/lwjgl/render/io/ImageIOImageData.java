@@ -25,7 +25,7 @@ import javax.imageio.ImageIO;
  * 
  * @author kevin
  */
-public class ImageIOImageData {
+public class ImageIOImageData implements ImageData {
   private static final ColorModel glAlphaColorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), new int[] { 8, 8, 8, 8 }, true, false, ComponentColorModel.TRANSLUCENT, DataBuffer.TYPE_BYTE);
   private static final ColorModel glColorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), new int[] { 8, 8, 8, 0 }, false, false, ComponentColorModel.OPAQUE, DataBuffer.TYPE_BYTE);
   private int depth;
@@ -35,22 +35,37 @@ public class ImageIOImageData {
   private int texHeight;
   private boolean edging = true;
   
+  /* (non-Javadoc)
+   * @see de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData#getDepth()
+   */
   public int getDepth() {
     return depth;
   }
   
+  /* (non-Javadoc)
+   * @see de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData#getHeight()
+   */
   public int getHeight() {
     return height;
   }
   
+  /* (non-Javadoc)
+   * @see de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData#getTexHeight()
+   */
   public int getTexHeight() {
     return texHeight;
   }
   
+  /* (non-Javadoc)
+   * @see de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData#getTexWidth()
+   */
   public int getTexWidth() {
     return texWidth;
   }
   
+  /* (non-Javadoc)
+   * @see de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData#getWidth()
+   */
   public int getWidth() {
     return width;
   }
@@ -164,6 +179,9 @@ public class ImageIOImageData {
     return imageBuffer;
   }
   
+  /* (non-Javadoc)
+   * @see de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData#getImageBufferData()
+   */
   public ByteBuffer getImageBufferData() {
     throw new RuntimeException("ImageIOImageData doesn't store it's image.");
   }
