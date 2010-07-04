@@ -261,16 +261,42 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="How does it work: Basics, The Java side" />
-        <text style="textFont" text="Nifty is a jar File. So all you need is &quot;nifty-&lt;version&gt;.jar&quot; in your classpath. Starting with Nifty 1.2 you'll need an appropriate &quot;nifty-&lt;system&gt;-renderer.jar&quot; too. If you're not using maven you'll need to manually find the libs that your renderer requires. Chances are, that your project already uses them tho. For instance if you use &quot;nifty-slick-renderer-1.0.jar&quot; you'll need slick2d.jar in your classpath which you probably already have when you're using that renderer.&#10;&#10;Please note: most renderers assume that you've already setup the rendering system before you initialize Nifty. When you use &quot;nifty-lwjgl-renderer-1.0.jar&quot; it is up to you to initialize lwjgl for 2d ortho mode rendering before calling any of Niftys methods. If you think about it, then this makes sense because Nifty is probably not the only subsystem that needs to render things. You have probably other parts (your game engine for instance) that need rendering and so Nifty lets you decide to setup everything up.&#10;&#10;To actually access Nifty you'll need to instantiate the main Nifty class. Here is its constructor:&#10;"/>
+        <text style="textFont" text="Nifty is a jar File. So all you need is &quot;nifty-&lt;version&gt;.jar&quot; in your classpath. Starting with Nifty 1.2 you'll need an appropriate &quot;nifty-&lt;system&gt;-renderer.jar&quot; too. If you're not using maven you'll need to manually find the libraries that your renderer needs. But chances are, that your project already uses the required libraries. For instance, if you use &quot;nifty-lwjgl-renderer-1.0.jar&quot; you'll need lwjgl.jar in your classpath, which you probably already use when you're using that renderer.&#10;"/>
+        <text style="textFont" text="Please note: most renderers assume that you've already setup the rendering system before you initialize Nifty. When you use &quot;nifty-lwjgl-renderer-1.0.jar&quot; it is up to you to initialize lwjgl for 2d ortho mode rendering before you call any of Niftys methods. If you think about it, then this makes sense because Nifty is probably not the only system that needs to render things. You have probably other parts (your game engine for instance) that need rendering and so Nifty lets you decide when and how you setup things.&#10;"/>
+        <text style="textFont" text="To actually access and use Nifty you'll need to instantiate the main Nifty class. Here is Niftys constructor:&#10;"/>
         <panel style="codeBlock">
-          <text style="codeFont" text="\#8A104D#public\#000# Nifty(&#10;    \#8A104D#final\#000# RenderDevice newRenderDevice,&#10;    \#8A104D#final\#000# SoundDevice newSoundDevice,&#10;    \#8A104D#final\#000# InputSystem newInputSystem,&#10;    \#8A104D#final\#000# TimeProvider newTimeProvider);" />
+          <text style="codeFont" text="\#8A104D#public\#000# Nifty(&#10;    \#8A104D#final\#000# RenderDevice renderDevice,&#10;    \#8A104D#final\#000# SoundDevice soundDevice,&#10;    \#8A104D#final\#000# InputSystem inputSystem,&#10;    \#8A104D#final\#000# TimeProvider timeProvider);" />
         </panel>
+        <text style="textFont" text="&#10;The Nifty constructor requires three Subsystem Implementations for RenderDevice, SoundDevice and InputSystem as well as a TimeProvider instance. The TimeProvider is part of Nifty and is just a tool for accessing the current system time without scattering &quot;new Date()&quot; calls all over the system.&#10;"/>
+        <text style="textFont" text="Currently most &quot;nifty-&lt;system&gt;-renderer.jar&quot; provide implementations for all three subsystems because they are often related to each other. Usually all you need is the renderer.jar of your choice and you'll have all implementations you'll need.&#10;"/>
+      </panel>
+    </panel>
+  </controlDefinition>
 
+  <controlDefinition name="pageBasicsJava1b">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="How does it work: Basics, The Java side, Renderers" />
+        <text style="textFont" text="But because RenderDevice, SoundDevice and InputSystem are separated you can mix them too. For instance, the native Lwjgl renderer doesn't require slick2d anymore. So the &quot;nifty-lwjgl-renderer-1.0.jar&quot; gives you a RenderDevice implementation as well as an InputSystem implementation that both use Lwjgl. For sound support it doesn't provide an implementation. But you can use &quot;nifty-pauls-soundsystem-1.0.jar&quot; instead. This jar is the adapter between Nifty and Pauls Soundsystem (see http://www.paulscode.com for details).&#10;"/>
+        <text style="textFont" text="And now let's see some examples on how to instantiate Nifty using different renderers.&#10;"/>
+        <text style="textFont" text="Example 1: Using the Jme2 Renderer:&#10;"/>
         <panel style="codeBlock">
-          <text style="codeFont" text="\#4545C1#// create nifty&#10;\#000#Nifty nifty = \#8A104D#new\#000# Nifty(&#10;    \#8A104D#new\#000# RenderDeviceLwjgl(),&#10;    \#8A104D#new\#000# SoundSystem(\#8A104D#new\#000# SlickSoundDevice()),&#10;\#000#    LwjglInitHelper.getInputSystem(),&#10;    \#8A104D#new\#000# TimeProvider());" />
+          <text style="codeFont" text="\#4545C1#// create nifty&#10;\#000#Nifty nifty = \#8A104D#new\#000# Nifty(&#10;    \#8A104D#new\#000# JmeRenderDevice(),&#10;    \#8A104D#new\#000# JmeSoundDevice(),&#10;\#000#    \#8A104D#new\#000# JmeInputSystem(),&#10;    \#8A104D#new\#000# TimeProvider());" />
         </panel>
-        <text style="textFont" text="&#10;The Nifty class constructor requires a couple of Subsystem-Implementations for Rendering, Input, Sound and so on. The current Implementations use lwjgl but that might change in the future or it can be changed by yourself to integrate Nifty with other systems.&#10;"/>
-        <text style="textFont" text="At the moment it is important that you initialize lwjgl and the lwjgl display mode you want to use before you call Nifty. The loader already uses the dimension of the current display mode for initialisation.&#10;&#10;And now that you've set up Nifty you can call it's render method in your render loop."/>
+        <text style="textFont" text="&#10;Example 2: Using the pure Lwjgl Renderer together with Pauls Soundsystem:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="\#4545C1#// create nifty&#10;\#000#Nifty nifty = \#8A104D#new\#000# Nifty(&#10;    \#8A104D#new\#000# LwjglRenderDevice(),&#10;    \#8A104D#new\#000# PaulsSoundsystemSoundDevice(\#8A104D#new\#000# LibraryLWJGLOpenAL\#8A104D#.class\#000#), \#4545C1#// use Lwjgl OpenAL specfic lib for pauls soundsystem&#10;\#000#    \#8A104D#new\#000# LwjglInputSystem(),&#10;    \#8A104D#new\#000# TimeProvider());" />
+        </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="pageBasicsJava1c">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="How does it work: Basics, The Java side, Renderers, cont." />
+        <text style="textFont" text="You can find an updated list of all available Renderes in the Nifty Wiki: http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices&#10;"/>
+        <text style="textFont" text="Once you have created the Nifty instance you can start using it which we will look at next. &#10;"/>
       </panel>
     </panel>
   </controlDefinition>
@@ -279,7 +305,7 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="How does it work: Basics, The Java side, Render Loop" />
-        <text style="textFont" text="For easy integration with your existing lwjgl code, Nifty assumes that you're handling the lwjgl render loop on your own (calling Display.update() for instance). So all you need to do is call nifty.render() at the appropriate time in the render loop. Example:&#10;"/>
+        <text style="textFont" text="Nifty assumes that you're handling the render loop on your own (calling Display.update() in case of Lwjgl for instance). So all you need to do is to call nifty.render() at the appropriate time in your render loop. One Example for Lwjgl based rendering:&#10;"/>
         <panel style="codeBlock">
           <text style="codeFont" text="\#4545C1#// render nifty&#10;\#000#\#8A104D#while\#000# (!done) {&#10;    \#8A104D#if\#000# (nifty.render()) {&#10;        \#4545C1#// nifty has reached the end point, stop the rendering loop, change state or do whatever should happen now =)&#10;    \#000#}&#10;    \#4545C1#// render other stuff, call Display.update() and so on&#10;\#000#}"/>
         </panel>

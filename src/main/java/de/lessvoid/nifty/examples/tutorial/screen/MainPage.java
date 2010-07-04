@@ -9,8 +9,6 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyInputMapping;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -29,12 +27,14 @@ public class MainPage implements ScreenController, KeyInputHandler {
     this.nifty = nifty;
     this.screen = screen;
 
-//    pages.add("pageWelcome");
-//    pages.add("pageIntro");
-//    pages.add("pageChapterWhatsNewInNifty1.2");
+    pages.add("pageWelcome");
+    pages.add("pageIntro");
+    pages.add("pageChapterWhatsNewInNifty1.2");
     pages.add("pageNifty1.2");
     pages.add("pageChapterI");
     pages.add("pageBasicsJava1");
+    pages.add("pageBasicsJava1b");
+    pages.add("pageBasicsJava1c");
     pages.add("pageBasicsJava2");
     pages.add("pageBasicsXML1");
     pages.add("pageBasicsXML2");

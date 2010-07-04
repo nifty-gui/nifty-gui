@@ -6,9 +6,9 @@ import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
 import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
-public final class TutorialMain {
+public final class TutorialMainSlickLwjgl {
 
-  private TutorialMain() {
+  private TutorialMainSlickLwjgl() {
   }
 
   public static void main(final String[] args) {
@@ -18,7 +18,7 @@ public final class TutorialMain {
 
     // create nifty
     Nifty nifty = new Nifty(
-        new RenderDeviceLwjgl(false),
+        new RenderDeviceLwjgl(),
         new SlickSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
