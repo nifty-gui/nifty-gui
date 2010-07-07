@@ -5,6 +5,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.layout.LayoutPart;
+import de.lessvoid.nifty.loaderv2.NiftyFactory;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.EffectsType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
@@ -274,7 +275,7 @@ public class ControlAttributes {
       final Screen screen,
       final Element parent) {
     ControlType controlType = new ControlType(attributes);
-    return buildControl(nifty, screen, parent, controlType);
+    return buildControl(nifty, screen, parent, controlType, new LayoutPart());
   }
 
   protected Element createLabel(
@@ -282,7 +283,7 @@ public class ControlAttributes {
       final Screen screen,
       final Element parent) {
     LabelType labelType = new LabelType(attributes);
-    return buildControl(nifty, screen, parent, labelType);
+    return buildControl(nifty, screen, parent, labelType, new LayoutPart());
   }
 
   protected Element createText(
@@ -290,7 +291,7 @@ public class ControlAttributes {
       final Screen screen,
       final Element parent) {
     TextType textType = new TextType(attributes);
-    return buildControl(nifty, screen, parent, textType);
+    return buildControl(nifty, screen, parent, textType, new LayoutPart());
   }
 
   protected Element createPanel(
@@ -298,7 +299,7 @@ public class ControlAttributes {
       final Screen screen,
       final Element parent) {
     PanelType panelType = new PanelType(attributes);
-    return buildControl(nifty, screen, parent, panelType);
+    return buildControl(nifty, screen, parent, panelType, new LayoutPart());
   }
 
   protected Element createLayer(
@@ -306,7 +307,7 @@ public class ControlAttributes {
       final Screen screen,
       final Element parent) {
     LayerType layerType = new LayerType(attributes);
-    return buildControl(nifty, screen, parent, layerType);
+    return buildControl(nifty, screen, parent, layerType, NiftyFactory.createRootLayerLayoutPart(nifty));
   }
 
   protected Element createImage(
@@ -314,14 +315,15 @@ public class ControlAttributes {
       final Screen screen,
       final Element parent) {
     ImageType imageType = new ImageType(attributes);
-    return buildControl(nifty, screen, parent, imageType);
+    return buildControl(nifty, screen, parent, imageType, new LayoutPart());
   }
 
   private Element buildControl(
       final Nifty nifty,
       final Screen screen,
       final Element parent,
-      final ElementType elementType) {
+      final ElementType elementType,
+      final LayoutPart layoutPart) {
     if (effects != null) {
       elementType.setEffect(effects.create());
     }
@@ -333,7 +335,7 @@ public class ControlAttributes {
       parent,
       nifty,
       screen,
-      new LayoutPart());
+      layoutPart);
     screen.layoutLayers();
     return element;
   }
