@@ -32,12 +32,30 @@ public class VerticalLayout implements LayoutManager {
       Box currentBox = children.get(i).getBox();
       BoxConstraints currentBoxConstraints = children.get(i).getBoxConstraints();
 
-      currentBox.setWidth(processWidthConstaints(rootBoxWidth, currentBoxConstraints));
+      int elementHeight;
+
+      if (hasHeightConstraint(currentBoxConstraints) && currentBoxConstraints.getHeight().hasWidthSuffix()) {
+        int elementWidth = processWidthConstraints(rootBoxWidth, currentBoxConstraints, 0);
+        currentBox.setWidth(elementWidth);
+
+        elementHeight = calcElementHeight(children, rootBoxHeight, currentBoxConstraints, elementWidth);
+        currentBox.setHeight(elementHeight);
+      } else if (hasWidthConstraint(currentBoxConstraints) && currentBoxConstraints.getWidth().hasHeightSuffix()) {
+        elementHeight = calcElementHeight(children, rootBoxHeight, currentBoxConstraints, 0);
+        currentBox.setHeight(elementHeight);
+
+        int elementWidth = processWidthConstraints(rootBoxWidth, currentBoxConstraints, elementHeight);
+        currentBox.setWidth(elementWidth);
+      } else {
+        int elementWidth = processWidthConstraints(rootBoxWidth, currentBoxConstraints, 0);
+        currentBox.setWidth(elementWidth);
+
+        elementHeight = calcElementHeight(children, rootBoxHeight, currentBoxConstraints, 0);
+        currentBox.setHeight(elementHeight);
+      }
+
       currentBox.setX(processHorizontalAlignment(rootBoxX, rootBoxWidth, currentBox.getWidth(), currentBoxConstraints));
       currentBox.setY(y);
-
-      int elementHeight = calcElementHeight(children, rootBoxHeight, currentBoxConstraints);
-      currentBox.setHeight(elementHeight);
 
       y += elementHeight;
     }
@@ -68,8 +86,11 @@ public class VerticalLayout implements LayoutManager {
     return new SizeValue(newHeight + "px");
   }
 
-  private int processWidthConstaints(final int rootBoxWidth, final BoxConstraints constraints) {
+  private int processWidthConstraints(final int rootBoxWidth, final BoxConstraints constraints, final int elementHeight) {
     if (hasWidthConstraint(constraints)) {
+      if (constraints.getWidth().hasHeightSuffix()) {
+        return constraints.getWidth().getValueAsInt(elementHeight);
+      }
       return constraints.getWidth().getValueAsInt(rootBoxWidth);
     } else {
       return rootBoxWidth;
@@ -88,9 +109,14 @@ public class VerticalLayout implements LayoutManager {
     }
   }
 
-  private int calcElementHeight(final List < LayoutPart > children, final int rootBoxHeight, final BoxConstraints boxConstraints) {
+  private int calcElementHeight(final List < LayoutPart > children, final int rootBoxHeight, final BoxConstraints boxConstraints, final int boxWidth) {
     if (hasHeightConstraint(boxConstraints)) {
-      int h = boxConstraints.getHeight().getValueAsInt(rootBoxHeight);
+      int h;
+      if (boxConstraints.getHeight().hasWidthSuffix()) {
+        h = boxConstraints.getHeight().getValueAsInt(boxWidth);
+      } else {
+        h = boxConstraints.getHeight().getValueAsInt(rootBoxHeight);
+      }
       if (h != -1) {
         return h;
       }

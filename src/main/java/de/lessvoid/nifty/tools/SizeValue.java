@@ -28,6 +28,22 @@ public class SizeValue {
   private static final float MAX_PERCENT = 100.0f;
 
   /**
+   * Add a WIDTH_SUFFIX to some size value to indicate that this value
+   * will be calculated in respect to the Width of an element. This
+   * is only appropriate to a height attribute and this class can only
+   * detect it's present. Handling must be performed outside of this class.
+   */
+  private static final String WIDTH_SUFFIX = "w";
+
+  /**
+   * Add a HEIGHT_SUFFIX to some size value to indicate that this value
+   * will be calculated in respect to the Height of an element. This
+   * is only appropriate to a width attribute and this class can only
+   * detect it's present. Handling must be performed outside of this class.
+   */
+  private static final String HEIGHT_SUFFIX = "h";
+
+  /**
    * The current value that has been set.
    */
   private String value;
@@ -42,12 +58,27 @@ public class SizeValue {
    */
   private float pixelValue;
 
+  private boolean hasWidthSuffix;
+  private boolean hasHeightSuffix;
+
   /**
    * Create a new instance using the given value.
    * @param valueParam the String value
    */
   public SizeValue(final String valueParam) {
-    this.value = valueParam;
+    if (valueParam != null) {
+      if (valueParam.endsWith(PERCENT + WIDTH_SUFFIX)) {
+        hasWidthSuffix = true;
+        this.value = valueParam.substring(0, valueParam.length() - 1);
+      } else if (valueParam.endsWith(PERCENT + HEIGHT_SUFFIX)) {
+        hasHeightSuffix = true;
+        this.value = valueParam.substring(0, valueParam.length() - 1);
+      } else {
+        this.value = valueParam;
+      }
+    } else {
+      this.value = valueParam;
+    }
     this.percentValue = getPercentValue();
     this.pixelValue = getPixelValue();
   }
@@ -142,5 +173,13 @@ public class SizeValue {
    */
   public String toString() {
     return value;
+  }
+
+  public boolean hasWidthSuffix() {
+    return hasWidthSuffix;
+  }
+
+  public boolean hasHeightSuffix() {
+    return hasHeightSuffix;
   }
 }
