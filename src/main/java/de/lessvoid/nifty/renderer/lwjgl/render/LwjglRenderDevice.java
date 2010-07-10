@@ -25,6 +25,7 @@ public class LwjglRenderDevice implements RenderDevice {
   private long frames;
   private long lastFrames;
   private boolean displayFPS = false;
+  private boolean logFPS = false;
   private RenderFont fpsFont;
 
   // we keep track of which GL states we've already set to make sure we don't set
@@ -37,6 +38,10 @@ public class LwjglRenderDevice implements RenderDevice {
   private int currentClippingX1 = 0;
   private int currentClippingY1 = 0;
 
+  /**
+   * The standard constructor. You'll use this in production code. Using this
+   * constructor will configure the RenderDevice to not log FPS on System.out.
+   */
   public LwjglRenderDevice() {
     GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
     viewportWidth = viewportBuffer.get(2);
@@ -47,8 +52,15 @@ public class LwjglRenderDevice implements RenderDevice {
     frames = 0;
   }
 
+  /**
+   * The development mode constructor allows to display the FPS on screen when
+   * the given flag is set to true. Note that setting displayFPS to false will
+   * still log the FPS on System.out every couple of frames.
+   * @param displayFPS
+   */
   public LwjglRenderDevice(final boolean displayFPS) {
     this();
+    this.logFPS = true;
     this.displayFPS = displayFPS;
     if (this.displayFPS) {
       fpsFont = createFont("fps.fnt");
@@ -97,7 +109,9 @@ public class LwjglRenderDevice implements RenderDevice {
     if (diff >= 1000) {
       time += diff;
       lastFrames = frames;
-      System.out.println("fps: " + frames);
+      if (logFPS) {
+        System.out.println("fps: " + frames);
+      }
       frames = 0;
     }
     if (displayFPS) {
