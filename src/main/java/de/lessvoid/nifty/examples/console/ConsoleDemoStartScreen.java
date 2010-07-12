@@ -4,7 +4,6 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.console.controller.ConsoleCommandHandler;
 import de.lessvoid.nifty.controls.console.controller.ConsoleControl;
-import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
@@ -19,27 +18,13 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler {
   private Nifty nifty;
   private Screen screen;
+  private boolean consoleVisible = false;
+  private boolean allowConsoleToggle = true;
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
     nifty = newNifty;
-
     screen = newScreen;
     screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
-
-    final Element element = screen.findElementByName("console");
-    element.hide();
-
-    final ConsoleControl control = screen.findControl("console", ConsoleControl.class);
-    control.output("Nifty Console Demo\nVersion: 1.0");
-    control.addCommandHandler(new ConsoleCommandHandler() {
-      public void execute(final String line) {
-        // just echo to the console
-        control.output("your input was: " + line);
-        if ("exit".equals(line.toLowerCase())) {
-          back();
-        }
-      }
-    });
   }
 
   public void onStartScreen() {
@@ -54,30 +39,51 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
 
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.ConsoleToggle) {
-      final Element console = screen.findElementByName("console");
-      if (!console.isVisible()) {
-        console.show();
-        console.setAlternateKey("show");
-        console.startEffect(
-            EffectEventId.onCustom,
-            new EndNotify() {
-              public void perform() {
-                console.setFocus();
-              }
-            });
-      } else {
-        console.setAlternateKey("hide");
-        console.startEffect(
-            EffectEventId.onCustom,
-            new EndNotify() {
-              public void perform() {
-                console.hide();
-              }
-            });
-      }
+      toggleConsole();
       return true;
     } else {
       return false;
     }
+  }
+
+  private void toggleConsole() {
+    if (allowConsoleToggle) {
+      allowConsoleToggle = false;
+      if (consoleVisible) {
+        closeConsole();
+      } else {
+        openConsole();
+      }
+    }
+  }
+
+  private void openConsole() {
+    Element popup = nifty.createPopup("consolePopup");
+
+    final ConsoleControl control = popup.findControl("console", ConsoleControl.class);
+    control.output("Nifty Console Demo\nVersion: 1.0");
+    control.addCommandHandler(new ConsoleCommandHandler() {
+      public void execute(final String line) {
+        // just echo to the console
+        control.output("your input was: " + line);
+        if ("exit".equals(line.toLowerCase())) {
+          back();
+        }
+      }
+    });
+
+    nifty.showPopup(screen, "consolePopup", null);
+    consoleVisible = true;
+    allowConsoleToggle = true;
+  }
+
+  private void closeConsole() {
+    nifty.closePopup("consolePopup", new EndNotify() {
+      @Override
+      public void perform() {
+        consoleVisible = false;
+        allowConsoleToggle = true;
+      }
+    });
   }
 }

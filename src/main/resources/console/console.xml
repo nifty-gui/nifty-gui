@@ -10,25 +10,46 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- start screen -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <screen id="start" controller="de.lessvoid.nifty.examples.console.ConsoleDemoStartScreen">
+  <screen id="start" controller="de.lessvoid.nifty.examples.console.ConsoleDemoStartScreen" defaultFocusElement="name">
     <layer id="layer" childLayout="center" backgroundImage="background.png">
-      <panel childLayout="center" width="95%" align="center" valign="center">
-        <control id="console" name="nifty-console" lines="40" align="center" valign="center">
-          <effect>
-            <onCustom name="move" direction="top" mode="in" length="200" startDelay="0" inherit="true" alternateEnable="show"/>
-            <onCustom name="move" direction="top" mode="out" length="200" startDelay="0" inherit="true" alternateEnable="hide"/>
-          </effect>
-        </control>
-      </panel>
     </layer>
     <layer id="layer2" childLayout="center">
-      <text id="text" font="aurulent-sans-17.fnt" text="Press F1 to toggle the best console evar :)
-&#13;&#10;(and enter 'exit' in the console to go back...)" align="center" valign="center">
+      <panel id="dialog" style="nifty-panel" padding="18px,28px,28px,16px" childLayout="center" width="50%" height="38%" align="center" valign="center">
         <effect>
-          <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0" inherit="true"/>
-          <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" startDelay="0" inherit="true"/>
+          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
+          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
         </effect>
-      </text>
+        <panel childLayout="vertical" align="center" valign="center">
+          <panel id="namePanel" childLayout="horizontal">
+            <label id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left" />
+            <control id="name" name="textfield" text="press F1 to toggle console" />
+          </panel>
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="vertical" width="100%">
+            <control id="backButton" name="button" label="Back to Menu" align="right">
+              <interact onClick="back()" />
+            </control>
+          </panel>
+        </panel>
+      </panel>
     </layer>
   </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- the console popup -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <popup id="consolePopup" childLayout="center" backgroundColor="#000a">
+    <effect>
+      <onStartScreen name="fade" start="#0" end="#a" length="200" inherit="true" />
+      <onEndScreen name="fade" start="#a" end="#0" length="200" startDelay="100" inherit="true" />
+    </effect>
+    <panel childLayout="center" width="95%" align="center" valign="center">
+      <control id="console" name="nifty-console" lines="40" align="center" valign="center">
+        <effect>
+          <onStartScreen name="move" direction="top" mode="in" length="200" startDelay="100" inherit="true" />
+          <onEndScreen name="move" direction="top" mode="out" length="200" startDelay="0" inherit="true" />
+        </effect>
+      </control>
+    </panel>
+  </popup>
 </nifty>
