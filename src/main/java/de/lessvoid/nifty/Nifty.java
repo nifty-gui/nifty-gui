@@ -252,14 +252,16 @@ public class Nifty implements NiftyInputConsumer {
 
   public void addControls() {
     if (hasControlsToAdd()) {
-      for (ControlToAdd controlToAdd : controlsToAdd) {
+      List < ControlToAdd > copy = new ArrayList < ControlToAdd >(controlsToAdd);
+      controlsToAdd.clear();
+
+      for (ControlToAdd controlToAdd : copy) {
         try {
           controlToAdd.startControl(controlToAdd.createControl());
         } catch (Exception e) {
           e.printStackTrace();
         }
       }
-      controlsToAdd.clear();
     }
   }
 
@@ -886,6 +888,7 @@ public class Nifty implements NiftyInputConsumer {
 
     public void close() {
       currentScreen.closePopup(activePopups.get(removePopupId), closeNotify);
+      activePopups.remove(removePopupId);
     }
   }
 
