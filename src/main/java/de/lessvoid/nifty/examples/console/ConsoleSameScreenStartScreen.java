@@ -22,11 +22,17 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
   private boolean consoleVisible = false;
   private boolean allowConsoleToggle = true;
   private Element oldFocusElement;
+  private Element consoleElement;
+  private Element consoleLayer;
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
     nifty = newNifty;
     screen = newScreen;
     screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
+
+    consoleElement = screen.findElementByName("console");
+    consoleLayer = screen.findElementByName("consoleLayer");
+
     final ConsoleControl control = screen.findControl("console", ConsoleControl.class);
     control.output("Nifty Console Demo\nVersion: 1.0");
     control.addCommandHandler(new ConsoleCommandHandler() {
@@ -41,6 +47,7 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
   }
 
   public void onStartScreen() {
+    removeConsoleElementFromFocusHandler();
   }
 
   public void onEndScreen() {
@@ -71,14 +78,13 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
   }
 
   private void openConsole() {
-    Element consoleLayer = screen.findElementByName("consoleLayer");
     consoleLayer.showWithoutEffects();
     consoleLayer.startEffect(EffectEventId.onStartScreen, new EndNotify() {
       @Override
       public void perform() {
         oldFocusElement = screen.getFocusHandler().getKeyboardFocusElement();
-
-        Element consoleElement = screen.findElementByName("console");
+        // add the consoleElement to the focushandler, when it's not yet added already
+        addConsoleElementToFocusHandler();
         consoleElement.setFocus();
 
         consoleVisible = true;
@@ -88,17 +94,30 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
   }
 
   private void closeConsole() {
-    final Element consoleLayer = screen.findElementByName("consoleLayer");
     consoleLayer.startEffect(EffectEventId.onEndScreen, new EndNotify() {
       @Override
       public void perform() {
+        consoleLayer.hideWithoutEffect();
+
         consoleVisible = false;
         allowConsoleToggle = true;
+
         if (oldFocusElement != null) {
           oldFocusElement.setFocus();
         }
-        consoleLayer.hideWithoutEffect();
+
+        removeConsoleElementFromFocusHandler();
       }
     });
+  }
+
+  private void addConsoleElementToFocusHandler() {
+    if (screen.getFocusHandler().findElement(consoleElement.getId()) == null) {
+      screen.getFocusHandler().addElement(consoleElement);
+    }
+  }
+
+  private void removeConsoleElementFromFocusHandler() {
+    screen.getFocusHandler().remove(consoleElement);
   }
 }
