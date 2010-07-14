@@ -39,7 +39,7 @@
         <onEndScreen name="move" inherit="true" direction="top" mode="out" length="500"/>
       </effect>
       <panel id="consoleParent" childLayout="center" width="95%" height="20%" align="center" valign="center">
-<!--          <control id="console" name="nifty-console" lines="20" align="center" valign="center" />  -->
+        <control id="console" name="nifty-console" lines="20" align="center" valign="center" />
       </panel>
     </layer>
   </screen>
