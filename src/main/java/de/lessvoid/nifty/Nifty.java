@@ -50,8 +50,8 @@ public class Nifty implements NiftyInputConsumer {
   private NiftyRenderEngine renderEngine;
   private SoundSystem soundSystem;
   private Map < String, Screen > screens = new Hashtable < String, Screen >();
-  private Map < String, PopupType > popups = new Hashtable < String, PopupType >();
-  private Map < String, Element > activePopups = new Hashtable < String, Element >();
+  private Map < String, PopupType > popupTypes = new Hashtable < String, PopupType >();
+  private Map < String, Element > popups = new Hashtable < String, Element >();
   private Map < String, StyleType > styles = new Hashtable < String, StyleType >();
   private Map < String, ControlDefinitionType > controlDefintions = new Hashtable < String, ControlDefinitionType >();
   private Map < String, RegisterEffectType > registeredEffects = new Hashtable < String, RegisterEffectType >();
@@ -60,7 +60,7 @@ public class Nifty implements NiftyInputConsumer {
   private boolean exit;
   private NiftyDebugConsole console;
   private TimeProvider timeProvider;
-  private List < RemovePopUp > removePopupList = new ArrayList < RemovePopUp >();
+  private List < ClosePopUp > closePopupList = new ArrayList < ClosePopUp >();
   private NiftyLoader loader;
   private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
   private List < EndOfFrameElementAction > endOfFrameElementActions = new ArrayList < EndOfFrameElementAction >();
@@ -211,7 +211,7 @@ public class Nifty implements NiftyInputConsumer {
   private void handleDynamicElements() {
     while (hasDynamics()) {
       invokeMethods();
-      removePopUps();
+      closePopUps();
       removeLayerElements();
       addControls();
       executeEndOfFrameElementActions();
@@ -219,7 +219,7 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   private boolean hasDynamics() {
-    return hasInvokeMethods() || hasRemovePopups() || hasRemoveLayerElements() || hasControlsToAdd() || hasEndOfFrameElementActions();
+    return hasInvokeMethods() || hasClosePopups() || hasRemoveLayerElements() || hasControlsToAdd() || hasEndOfFrameElementActions();
   }
 
   private boolean hasRemoveLayerElements() {
@@ -235,19 +235,21 @@ public class Nifty implements NiftyInputConsumer {
     }
   }
 
-  private void removePopUps() {
-    if (hasRemovePopups()) {
-      if (!currentScreen.isNull()) {
-        for (RemovePopUp removePopup : removePopupList) {
-          removePopup.close();
-        }
-      }
-      removePopupList.clear();
-    }
+  private boolean hasClosePopups() {
+    return !closePopupList.isEmpty();
   }
 
-  private boolean hasRemovePopups() {
-    return !removePopupList.isEmpty();
+  private void closePopUps() {
+    if (hasClosePopups()) {
+      if (!currentScreen.isNull()) {
+        ArrayList <ClosePopUp> copy = new ArrayList <ClosePopUp>(closePopupList);
+        closePopupList.clear();
+
+        for (ClosePopUp closePopup : copy) {
+          closePopup.close();
+        }
+      }
+    }
   }
 
   public void addControls() {
@@ -589,7 +591,7 @@ public class Nifty implements NiftyInputConsumer {
    * @param popup popup
    */
   public void registerPopup(final PopupType popup) {
-    popups.put(popup.getAttributes().get("id"), popup);
+    popupTypes.put(popup.getAttributes().get("id"), popup);
   }
 
   /**
@@ -598,7 +600,7 @@ public class Nifty implements NiftyInputConsumer {
    * @param id id
    */
   public void showPopup(final Screen screen, final String id, final Element defaultFocusElement) {
-    Element popup = activePopups.get(id);
+    Element popup = popups.get(id);
     if (popup == null) {
       log.warning("missing popup [" + id + "] o_O");
     } else {
@@ -619,15 +621,15 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   public Element createPopup(final String id) {
-    return createAndAddPopup(id, popups.get(id));
+    return createAndAddPopup(id, popupTypes.get(id));
   }
 
   public Element createPopupWithId(final String popupId) {
-    return createAndAddPopup(NiftyIdCreator.generate(), popups.get(popupId));
+    return createAndAddPopup(NiftyIdCreator.generate(), popupTypes.get(popupId));
   }
 
   public Element createPopupWithStyle(final String id, final String style) {
-    PopupType popupType = popups.get(id);
+    PopupType popupType = popupTypes.get(id);
     popupType.getAttributes().set("style", style);
     return createAndAddPopup(id, popupType);
   }
@@ -635,12 +637,12 @@ public class Nifty implements NiftyInputConsumer {
   private Element createAndAddPopup(final String id, PopupType popupType) {
     Element popupElement = createPopupFromType(popupType);
     popupElement.setId(id);
-    activePopups.put(id, popupElement);
+    popups.put(id, popupElement);
     return popupElement;
   }
 
-  public Element findActivePopupByName(final String id) {
-    return activePopups.get(id);
+  public Element findPopupByName(final String id) {
+    return popups.get(id);
   }
 
   public Element getTopMostPopup() {
@@ -668,7 +670,7 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   private void closePopupInternal(final String id, final EndNotify closeNotify) {
-    Element popup = activePopups.get(id);
+    Element popup = popups.get(id);
     if (popup == null) {
       log.warning("missing popup [" + id + "] o_O");
       return;
@@ -676,32 +678,10 @@ public class Nifty implements NiftyInputConsumer {
     popup.resetAllEffects();
     popup.startEffect(EffectEventId.onEndScreen, new EndNotify() {
       public void perform() {
-        removePopupList.add(new RemovePopUp(id, closeNotify));
+        closePopupList.add(new ClosePopUp(id, closeNotify));
       }
     });
   }
-
-  /**
-   * Add a control to this screen and the given parent element.
-   * @param screen screen
-   * @param parent parent element
-   * @param controlName control name to add
-   * @param id id of control
-   * @param style style
-   * @param focusable focusable
-  public void addControl(
-      final Screen screen,
-      final Element parent,
-      final String controlName,
-      final String id,
-      final String style,
-      final Boolean focusable,
-      final Attributes attributes) {
-    controlsToAdd.add(
-        new ControlToAdd(
-            screen, parent, controlName, id, style, focusable, attributes));
-  }
-   */
 
   public void addControl(
       final Screen screen,
@@ -877,18 +857,17 @@ public class Nifty implements NiftyInputConsumer {
     return timeProvider;
   }
 
-  public class RemovePopUp {
+  public class ClosePopUp {
     private String removePopupId;
     private EndNotify closeNotify;
 
-    public RemovePopUp(final String popupId, final EndNotify closeNotifyParam) {
+    public ClosePopUp(final String popupId, final EndNotify closeNotifyParam) {
       removePopupId = popupId;
       closeNotify = closeNotifyParam;
     }
 
     public void close() {
-      currentScreen.closePopup(activePopups.get(removePopupId), closeNotify);
-      activePopups.remove(removePopupId);
+      currentScreen.closePopup(popups.get(removePopupId), closeNotify);
     }
   }
 
