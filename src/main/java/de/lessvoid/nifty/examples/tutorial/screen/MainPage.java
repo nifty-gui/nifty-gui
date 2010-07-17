@@ -1,10 +1,14 @@
 package de.lessvoid.nifty.examples.tutorial.screen;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -19,9 +23,12 @@ public class MainPage implements ScreenController, KeyInputHandler {
   private boolean mute = false;
 
   private ArrayList <String> pages = new ArrayList <String> ();
+  private ArrayList <String> chapterCaption = new ArrayList <String> ();
+  private Map <String, Integer> chapterPageMap = new Hashtable <String, Integer> ();
   private int pageIndex = 0;
   private int lastPageIndex = 0;
   private boolean lastPageWasActive = false;
+  private Element chapterSelectPopup;
   
   public void bind(final Nifty nifty, final Screen screen) {
     this.nifty = nifty;
@@ -72,6 +79,57 @@ public class MainPage implements ScreenController, KeyInputHandler {
     pages.add("pageChapterVIII");
     pages.add("pageTheEnd");
 
+    chapterCaption.add("a. Welcome");
+    chapterPageMap.put("0", pages.indexOf("pageWelcome"));
+
+    chapterCaption.add("b. What's new in Nifty 1.2"); // ""
+    chapterPageMap.put("1", pages.indexOf("pageChapterWhatsNewInNifty1.2"));
+
+    chapterCaption.add("1. Nifty Basics"); // ""
+    chapterPageMap.put("2", pages.indexOf("pageChapterI"));
+
+    chapterCaption.add("2. Nifty Effects"); // ""
+    chapterPageMap.put("3", pages.indexOf("pageChapterII"));
+
+    chapterCaption.add("3. Connecting Java and Nifty XML"); // ""
+    chapterPageMap.put("4", pages.indexOf("pageChapterIII"));
+
+    chapterCaption.add("4. Advanced Nifty, Styles"); // ""
+    chapterPageMap.put("5", pages.indexOf("pageChapterIV"));
+
+    chapterCaption.add("5. Advanced Nifty, Controls"); // ""
+    chapterPageMap.put("6", pages.indexOf("pageChapterV"));
+
+    chapterCaption.add("6. Advanced Nifty, Custom Effects"); // ""
+    chapterPageMap.put("7", pages.indexOf("pageChapterVI"));
+
+    chapterCaption.add("7. Advanced Nifty, Slick2d Integration"); // ""
+    chapterPageMap.put("8", pages.indexOf("pageChapterVII"));
+
+    chapterCaption.add("8. The End"); // ""
+    chapterPageMap.put("9", pages.indexOf("pageChapterVIII"));
+
+    ControlEffectOnHoverAttributes textColorEffect = new ControlEffectOnHoverAttributes();
+    textColorEffect.setName("textColor");
+    textColorEffect.setAttribute("color", "#a22f");
+
+    chapterSelectPopup = nifty.createPopup("chapterSelectPopup");
+    Element chapterSelectElement = chapterSelectPopup.findElementByName("chapterSelect");
+    int idx = 0;
+    for (String label : chapterCaption) {
+      LabelCreator createLabel = new LabelCreator(label);
+      createLabel.setAlign("left");
+      createLabel.setTextVAlign("center");
+      createLabel.setTextHAlign("left");
+      createLabel.setColor("#000f");
+      createLabel.setStyle("menuFont");
+      createLabel.setVisibleToMouse("true");
+      createLabel.addEffectsOnHover(textColorEffect);
+      createLabel.setInteractOnClick("chapterSelect(" + idx + ")");
+      createLabel.create(nifty, screen, chapterSelectElement);
+      idx++;
+    }
+
     pageIndex = 0;
     lastPageIndex = -1;
     updatePage();
@@ -107,6 +165,10 @@ public class MainPage implements ScreenController, KeyInputHandler {
     updatePage();
   }
 
+  public void showChapterSelect() {
+    nifty.showPopup(screen, "chapterSelectPopup", null);
+  }
+
   private void updateBackButtonVisibility() {
     Element backButtonElement = screen.findElementByName("backButton");
     if (pageIndex == 0) {
@@ -114,14 +176,19 @@ public class MainPage implements ScreenController, KeyInputHandler {
         backButtonElement.setVisible(false);
       }
     } else if (pageIndex == 1) {
-      if (!backButtonElement.isVisible()) {
-        backButtonElement.setVisible(true);
-      }
+      showBackButton();
     }
 
     Element currentPageElement = screen.findElementByName("curPage");
     currentPageElement.startEffect(EffectEventId.onCustom);
     currentPageElement.getRenderer(TextRenderer.class).changeText(String.valueOf(pageIndex + 1) + " / " + pages.size());
+  }
+
+  private void showBackButton() {
+    Element backButtonElement = screen.findElementByName("backButton");
+    if (!backButtonElement.isVisible()) {
+      backButtonElement.setVisible(true);
+    }
   }
 
   public void toggleMute() {
@@ -174,5 +241,17 @@ public class MainPage implements ScreenController, KeyInputHandler {
       return true;
     }
     return false;
+  }
+
+  public void chapterSelect(final String chapterLabel) {
+    nifty.closePopup(chapterSelectPopup.getId(), new EndNotify() {
+      @Override
+      public void perform() {
+        pageIndex = chapterPageMap.get(chapterLabel);
+        showBackButton();
+        updatePage();
+        updateBackButtonVisibility();
+      }
+    });
   }
 }

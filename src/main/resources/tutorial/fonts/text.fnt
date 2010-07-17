@@ -58,7 +58,7 @@ char id=86   x=100     y=35     width=17     height=14     xoffset=-2     yoffse
 char id=84   x=117     y=35     width=15     height=14     xoffset=-2     yoffset=3    xadvance=9     page=0  chnl=0 
 char id=82   x=132     y=35     width=13     height=14     xoffset=0     yoffset=3    xadvance=10     page=0  chnl=0 
 char id=80   x=145     y=35     width=11     height=14     xoffset=0     yoffset=3    xadvance=9     page=0  chnl=0 
-char id=78   x=156     y=35     width=12     height=14     xoffset=0     yoffset=3    xadvance=11     page=0  chnl=0 
+char id=78   x=156     y=35     width=12     height=14     xoffset=0     yoffset=3    xadvance=10     page=0  chnl=0 
 char id=77   x=168     y=35     width=14     height=14     xoffset=0     yoffset=3    xadvance=12     page=0  chnl=0 
 char id=76   x=182     y=35     width=11     height=14     xoffset=0     yoffset=3    xadvance=8     page=0  chnl=0 
 char id=75   x=193     y=35     width=14     height=14     xoffset=0     yoffset=3    xadvance=9     page=0  chnl=0 

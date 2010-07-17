@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
-  <useStyles filename="nifty-default-styles.xml" />
+<!--    <useStyles filename="nifty-default-styles.xml" />  -->
+  <useStyles filename="grey-style/nifty-grey-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
   <registerSound id="select" filename="tutorial/sound/select.wav" />
@@ -139,6 +140,10 @@
     <attributes font="tutorial/fonts/text.fnt" width="100%" textHAlign="left" wrap="true" />
   </style>
 
+  <style id="menuFont">
+    <attributes font="tutorial/fonts/menu-font.fnt" width="100%" textHAlign="left" wrap="true" />
+  </style>
+
   <style id="codeFont">
     <attributes font="tutorial/fonts/code.fnt" width="100%" textHAlign="left" />
   </style>
@@ -221,7 +226,7 @@
         <text style="captionFont" text="And what is it not?" />
         <text style="textFont" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you need a solution with lots of controls, windows, dialog boxes and so on, you might want to look somewhere else.&#10;&#10;A great option for this kind of applications is TWL (http://twl.l33tlabs.org/)&#10;" />
         <text style="captionFont" text="But Nifty is different" />
-        <text style="textFont" text="In contrast to TWL and more tradional approaches in creating GUIs Nifty provides more creative freedom and more stuff to play with :)&#10;&#10;The remaining Pages will give an overview how Nifty works and how it can be used." />
+        <text style="textFont" text="In contrast to TWL and more tradional approaches in creating GUIs Nifty provides more creative freedom and more stuff to play with :) In that respect Nifty is probably less standard or what you would usually expect from a Java based GUI system. On the other hand it allows you to create GUIs that are more visually stunning and exciting.&#10;&#10;The remaining Pages will give an overview how Nifty works and how it can be used." />
       </panel>
     </panel>
   </controlDefinition>
@@ -277,7 +282,7 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="How does it work: Basics, The Java side, Renderers" />
-        <text style="textFont" text="But because RenderDevice, SoundDevice and InputSystem are separated you can mix them too. For instance, the native Lwjgl renderer doesn't require slick2d anymore. So the &quot;nifty-lwjgl-renderer-1.0.jar&quot; gives you a RenderDevice implementation as well as an InputSystem implementation that both use Lwjgl. For sound support it doesn't provide an implementation. But you can use &quot;nifty-pauls-soundsystem-1.0.jar&quot; instead. This jar is the adapter between Nifty and Pauls Soundsystem (see http://www.paulscode.com for details).&#10;"/>
+        <text style="textFont" text="But because RenderDevice, SoundDevice and InputSystem are separated interfaces, you can mix them too. For instance, the native Lwjgl renderer doesn't require slick2d anymore. So the &quot;nifty-lwjgl-renderer-1.0.jar&quot; gives you a RenderDevice implementation as well as an InputSystem implementation that both use Lwjgl. For sound support it doesn't provide an implementation. But you can use &quot;nifty-pauls-soundsystem-1.0.jar&quot; instead. This jar is the adapter between Nifty and Pauls Soundsystem (see http://www.paulscode.com for details).&#10;"/>
         <text style="textFont" text="And now let's see some examples on how to instantiate Nifty using different renderers.&#10;"/>
         <text style="textFont" text="Example 1: Using the Jme2 Renderer:&#10;"/>
         <panel style="codeBlock">
@@ -285,7 +290,7 @@
         </panel>
         <text style="textFont" text="&#10;Example 2: Using the pure Lwjgl Renderer together with Pauls Soundsystem:&#10;"/>
         <panel style="codeBlock">
-          <text style="codeFont" text="\#4545C1#// create nifty&#10;\#000#Nifty nifty = \#8A104D#new\#000# Nifty(&#10;    \#8A104D#new\#000# LwjglRenderDevice(),&#10;    \#8A104D#new\#000# PaulsSoundsystemSoundDevice(\#8A104D#new\#000# LibraryLWJGLOpenAL\#8A104D#.class\#000#), \#4545C1#// use Lwjgl OpenAL specfic lib for pauls soundsystem&#10;\#000#    \#8A104D#new\#000# LwjglInputSystem(),&#10;    \#8A104D#new\#000# TimeProvider());" />
+          <text style="codeFont" text="\#4545C1#// create nifty&#10;\#000#Nifty nifty = \#8A104D#new\#000# Nifty(&#10;    \#8A104D#new\#000# LwjglRenderDevice(),&#10;    \#8A104D#new\#000# PaulsSoundsystemSoundDevice(LibraryLWJGLOpenAL\#8A104D#.class\#000#), \#4545C1#// use Lwjgl OpenAL specfic lib for pauls soundsystem&#10;\#000#    \#8A104D#new\#000# LwjglInputSystem(),&#10;    \#8A104D#new\#000# TimeProvider());" />
         </panel>
       </panel>
     </panel>
@@ -654,24 +659,24 @@
             <panel childLayout="horizontal" height="8px" />
             <control name="textfield" text="Textfield" width="50%" />
             <panel childLayout="horizontal" height="8px" />
-		        <control id="dropDownControl" name="dropDownControl" width="50%" />
-		        <panel childLayout="horizontal" height="8px" />
-		        <control name="listBox" horizontal="false" width="50%" height="20%" childLayout="vertical" visibleToMouse="true">
-		          <panel width="100%" childLayout="vertical" visibleToMouse="true">
-		            <label text="Static Item I" style="nifty-listbox-item" />
-		            <label text="Fo Shizzle"  style="nifty-listbox-item" />
-		            <label text="Static Item III" style="nifty-listbox-item" />
-		            <label text="Static Items ftw" style="nifty-listbox-item" />
-		          </panel>
-		        </control>
+            <control id="dropDownControl" name="dropDownControl" width="50%" />
+            <panel childLayout="horizontal" height="8px" />
+            <control name="listBox" horizontal="false" width="50%" height="20%" childLayout="vertical" visibleToMouse="true">
+              <panel width="100%" childLayout="vertical" visibleToMouse="true">
+                <label text="Static Item I" style="nifty-listbox-item" />
+                <label text="Fo Shizzle"  style="nifty-listbox-item" />
+                <label text="Static Item III" style="nifty-listbox-item" />
+                <label text="Static Items ftw" style="nifty-listbox-item" />
+              </panel>
+            </control>
             <panel childLayout="horizontal" height="8px" />
             <control name="scrollPanel" width="50%" height="25%">
               <panel width="544px" height="158px" childLayout="center">
                 <image filename="intro-logo.png" />
               </panel>
             </control>
-		      </panel>
-	      </panel>
+          </panel>
+        </panel>
       </panel>
     </panel>
   </controlDefinition>
@@ -970,7 +975,12 @@
         <panel style="top">
           <panel style="topInternal">
             <panel childLayout="absolute">
-              <image filename="tutorial/logo.png" x="0px" y="30px" />
+              <image filename="tutorial/logo.png" x="0px" y="30px">
+                <effect>
+                  <onStartScreen name="fade" startColor="#0000" endColor="#ffff" length="750" startDelay="1750" />
+                  <onStartScreen name="move" mode="in" direction="top" length="500" startDelay="1750" inherit="false" post="false" />
+                </effect>
+              </image>
             </panel>
             <panel width="*" />
             <image id="muteButton" style="muteButtonSoundOn" />
@@ -995,7 +1005,8 @@
         <panel style="bottomNoEffects">
           <panel style="bottomInternal">
             <panel width="*" childLayout="center">
-              <text id="curPage" style="captionFont" align="center" valign="center" textHAlign="center" textVAlign="center" text="1">
+              <text id="curPage" style="captionFont" align="center" valign="center" textHAlign="center" textVAlign="center" text="1 / 40" visibleToMouse="true">
+                <interact onClick="showChapterSelect()" />
                 <effect>
                   <onCustom name="textSize" length="150" factor="4" startSize="1.6" endSize="1.0" />
                   <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="1500" />
@@ -1011,6 +1022,46 @@
         <onActive name="bubblesEffect" post="true" />
       </effect>
     </layer>
+    <!-- 
+    <layer id="chapterSelectLayer" childLayout="vertical" visible="false">
+      <panel height="14%" />
+      <panel id="chapterSelect" childLayout="vertical" width="30%" height="*" align="left" valign="center" padding="10px">
+        <effect>
+          <onStartScreen name="move" mode="in" direction="left" length="500" inherit="true" post="false" />
+          <onActive name="gradient" direction="horizontal">
+            <value offset="0%" color="#eeef" />
+            <value offset="50%" color="#eeee" />
+            <value offset="70%" color="#cccc" />
+            <value offset="100%" color="#8880" />
+          </onActive>
+        </effect>
+      </panel>
+      <panel height="14%" />
+    </layer>
+     -->
   </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- the chapterSelectPopup popup -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <popup id="chapterSelectPopup" childLayout="vertical" backgroundColor="#000a">
+    <effect>
+      <onStartScreen name="fade" start="#0" end="#a" length="200" inherit="true" />
+      <onEndScreen name="fade" start="#a" end="#0" length="200" startDelay="100" inherit="true" />
+    </effect>
+    <panel height="14%" />
+    <panel id="chapterSelect" childLayout="vertical" width="30%" height="*" align="left" valign="center" padding="10px">
+      <effect>
+        <onStartScreen name="move" mode="in" direction="left" length="500" inherit="true" post="false" />
+        <onActive name="gradient" direction="horizontal">
+          <value offset="0%" color="#eeef" />
+          <value offset="50%" color="#eeee" />
+          <value offset="70%" color="#cccc" />
+          <value offset="100%" color="#8880" />
+        </onActive>
+      </effect>
+    </panel>
+    <panel height="14%" />
+  </popup>
 
 </nifty>

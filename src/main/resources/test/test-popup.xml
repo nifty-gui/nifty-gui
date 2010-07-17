@@ -4,8 +4,8 @@
   <useControls filename="nifty-default-controls.xml" />
 
   <screen id="start" controller="de.lessvoid.nifty.examples.test.TestScreen">
-    <layer id="stuff" childLayout="center">
-      <panel height="10%" width="10%" align="center" valign="top" backgroundColor="#f0ff" visibleToMouse="true">
+    <layer id="stuff" childLayout="horizontal">
+      <panel width="50%" height="50%w" valign="bottom" backgroundColor="#f0ff" visibleToMouse="true">
         <interact onClick="popup()"/>
       </panel>
     </layer>
