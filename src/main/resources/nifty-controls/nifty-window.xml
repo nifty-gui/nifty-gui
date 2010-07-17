@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <!-- WINDOW CONTROL -->
+  <controlDefinition name="window" style="nifty-window" childRootId="window-content" controller="de.lessvoid.nifty.controls.window.controller.WindowControl"
+    revert="false" drop="false" handle="window-bar">
+    <interact onClick="dragStart()" onClickMouseMove="drag()" onRelease="dragStop()" />
+    <panel style="#frame" childLayout="vertical" valign="top">
+      <panel id="window-bar" style="#bar">
+        <label id="window-title" style="#title" text="$title"  />
+        <panel id="window-close-button" style="#close-button">
+          <interact onClick="closeWindow()" />
+        </panel>
+      </panel>
+      <panel id="window-content" style="#content" />
+    </panel>
+  </controlDefinition>
+</nifty-controls>
