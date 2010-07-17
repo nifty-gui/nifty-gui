@@ -123,6 +123,12 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       dynamicListboxCreate.setHeight("100%");
       dynamicListboxCreate.setChildLayout("vertical");
       ListBoxControl dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
+      dynamicListbox.addSelectionListener(new ListBoxControl.SelectionListener() {
+        @Override
+        public void onSelectionChanged(final ListBoxControl listBoxControl, final int newIndex) {
+          System.out.println("Selection Changed on ListBoxControl: " + listBoxControl.getElement().getId() + " to index: " + newIndex);
+        }
+      });
       for (int i=0; i<10; i++) {
         dynamicListbox.addItem("Listbox Item: " + i);
       }
