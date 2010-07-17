@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.listbox.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -18,6 +19,10 @@ import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ListBoxControl implements Controller {
+  public interface SelectionListener {
+    public void onSelectionChanged(ListBoxControl listBoxControl, int newIndex);
+  }
+
   private Nifty nifty;
   private Screen screen;
   private Element element;
@@ -28,6 +33,7 @@ public class ListBoxControl implements Controller {
   private Properties parameter;
   private float stepSizeX;
   private float stepSizeY;
+  private List<SelectionListener> listeners = new ArrayList<SelectionListener>();
 
   public void bind(
       final Nifty niftyParam,
@@ -132,11 +138,15 @@ public class ListBoxControl implements Controller {
   public void changeSelection(final int newSelectedItemIndex) {
     ListBoxPanel listBoxPanel = getListBoxPanel();
     listBoxPanel.changeSelection(newSelectedItemIndex);
+
+    fireOnSelectionChanged(getSelectedItemIndex());
   }
 
   public void changeSelection(final Element element) {
     ListBoxPanel listBoxPanel = getListBoxPanel();
     listBoxPanel.changeSelection(element);
+
+    fireOnSelectionChanged(getSelectedItemIndex());
   }
 
   public int getSelectedItemIndex() {
@@ -154,8 +164,7 @@ public class ListBoxControl implements Controller {
   }
 
   private ListBoxPanel getListBoxPanel() {
-    ListBoxPanel listBoxPanel = childRootElement.getControl(ListBoxPanel.class);
-    return listBoxPanel;
+    return childRootElement.getControl(ListBoxPanel.class);
   }
 
   public void addItem(final String text) {
@@ -183,5 +192,22 @@ public class ListBoxControl implements Controller {
     ListBoxControl listBox = screen.findControl(element.getId(), ListBoxControl.class);
     ListBoxItemController newLabelController = newLabel.getControl(ListBoxItemController.class);
     newLabelController.setListBox(listBox);
+  }
+
+  public Element getElement() {
+    return element;
+  }
+
+  public void addSelectionListener(final SelectionListener listener) {
+    listeners.add(listener);
+ }
+
+ public void removeSelectionListener(final SelectionListener listener) {
+    listeners.remove(listener);
+ }
+
+  void fireOnSelectionChanged(final int i) {
+     for (SelectionListener listener : listeners)
+        listener.onSelectionChanged(this, i);
   }
 }
