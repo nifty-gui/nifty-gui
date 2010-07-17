@@ -43,7 +43,7 @@ public class DropDownPopup implements Controller {
   }
 
   public void fixOffset(final Properties parameter) {
-    Element popup = nifty.findActivePopupByName("dropDownBoxSelectPopup");
+    Element popup = nifty.findPopupByName("dropDownBoxSelectPopup");
     Element popupControl = popup.findElementByName("dropDownList");
     parameter.put("offsetY", new String("-" + popupControl.getConstraintHeight().getValueAsInt(1.0f)));
   }
