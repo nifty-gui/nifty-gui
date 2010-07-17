@@ -2,8 +2,6 @@
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
   <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
-  <useControls filename="dragndrop/nifty-dragndrop-controls.xml" />
-  <useControls filename="dragndrop/nifty-window-controls.xml" />
   
   <style id="dropArea">
     <attributes padding="10px" />
@@ -92,7 +90,7 @@
       <control id="1" name="window" title="Drag Me!" width="320px" height="120px">
         <label text="I'm A Window!" valign="center" />
       </control>
-      <control id="2" name="window" title="Drag Me!" width="460px" height="240px" y="60%">
+      <control id="2" name="window" title="Drag Me!" width="460px" height="240px" y="60%" closeable="false">
         <control id="MyDroppable3" name="droppable" style="dropArea" width="140px" height="140px" align="center" valign="center" onDrop="showDropStatus()">
           <label text="Drop Here!" color="#000f" valign="center" />
         </control>

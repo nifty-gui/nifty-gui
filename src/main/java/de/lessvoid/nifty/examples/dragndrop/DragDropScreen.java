@@ -4,6 +4,13 @@ import java.util.Random;
 
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dragndrop.CreateDraggableControl;
+import de.lessvoid.nifty.controls.dragndrop.controller.DraggableControl;
+import de.lessvoid.nifty.controls.dragndrop.controller.DropFilter;
+import de.lessvoid.nifty.controls.dragndrop.controller.DropNotify;
+import de.lessvoid.nifty.controls.dragndrop.controller.DroppableControl;
+import de.lessvoid.nifty.controls.window.CreateWindowControl;
+import de.lessvoid.nifty.controls.window.controller.WindowControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
@@ -56,6 +63,14 @@ public class DragDropScreen implements ScreenController {
   @Override
   public void onEndScreen() {
 
+  }
+  
+  /**
+   * quit method called from the dragndrop.xml.
+   */
+  public final void quit() {
+    nifty.setAlternateKeyForNextLoadXml("fade");
+    nifty.fromXml("all/intro.xml", "menu");
   }
 
   public void spawnDraggable() {
