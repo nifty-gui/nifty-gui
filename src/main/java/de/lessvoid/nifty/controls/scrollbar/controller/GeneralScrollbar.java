@@ -203,15 +203,18 @@ public class GeneralScrollbar implements Controller {
   public void onFocus(final boolean getFocus) {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (nextPrevHelper.handleNextPrev(inputEvent)) {
-      return;
+      return true;
     }
     if (inputEvent == NiftyInputEvent.MoveCursorUp || inputEvent == NiftyInputEvent.MoveCursorLeft) {
       changeSliderPos(currentValue - pageSize);
+      return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorDown || inputEvent == NiftyInputEvent.MoveCursorRight) {
       changeSliderPos(currentValue + pageSize);
+      return true;
     }
+    return false;
   }
 
   public void setWorldMaxValue(float worldMaxValue) {

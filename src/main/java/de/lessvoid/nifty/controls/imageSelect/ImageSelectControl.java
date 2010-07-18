@@ -100,7 +100,8 @@ public class ImageSelectControl implements Controller {
    * input event.
  * @param inputEvent the NiftyInputEvent to process
    */
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return false;
   }
 
   /**

@@ -53,8 +53,8 @@ public class VerticalScrollbarControl implements Controller {
     scrollbar.onFocus(getFocus);
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
-    scrollbar.inputEvent(inputEvent);
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return scrollbar.inputEvent(inputEvent);
   }
 
   public void setScrollBarControlNotify(final ScrollbarControlNotify scrollBarControlNotifyParam) {

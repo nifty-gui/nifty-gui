@@ -55,7 +55,8 @@ public class ListBoxControl implements Controller {
     listBoxPanel.linkChildsToListBoxControl(this);
   }
 
-  public void inputEvent(NiftyInputEvent inputEvent) {
+  public boolean inputEvent(NiftyInputEvent inputEvent) {
+    return false;
   }
 
   public void onFocus(boolean getFocus) {

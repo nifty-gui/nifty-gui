@@ -45,7 +45,8 @@ public class DroppableControl implements Controller {
   }
 
   @Override
-  public void inputEvent(NiftyInputEvent inputEvent) {
+  public boolean inputEvent(NiftyInputEvent inputEvent) {
+    return false;
   }
 
   @Override

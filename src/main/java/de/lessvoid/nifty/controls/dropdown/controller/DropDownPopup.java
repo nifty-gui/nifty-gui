@@ -24,7 +24,8 @@ public class DropDownPopup implements Controller {
     nifty = niftyParam;
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return false;
   }
 
   public void onFocus(final boolean getFocus) {

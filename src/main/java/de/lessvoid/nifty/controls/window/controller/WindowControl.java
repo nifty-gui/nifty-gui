@@ -28,8 +28,8 @@ public class WindowControl implements Controller {
     removeCloseButton = !controlDefinitionAttributes.getAsBoolean("closeable", true);
   }
 
-  public void inputEvent(NiftyInputEvent inputEvent) {
-    draggableControl.inputEvent(inputEvent);
+  public boolean inputEvent(NiftyInputEvent inputEvent) {
+    return draggableControl.inputEvent(inputEvent);
   }
 
   public void onFocus(boolean getFocus) {

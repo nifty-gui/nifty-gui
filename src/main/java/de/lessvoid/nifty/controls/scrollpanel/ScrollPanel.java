@@ -52,7 +52,8 @@ public class ScrollPanel implements Controller {
     stepSizeY = new Float(parameter.getProperty("stepSizeY", "1.0"));
   }
 
-  public void inputEvent(NiftyInputEvent inputEvent) {
+  public boolean inputEvent(NiftyInputEvent inputEvent) {
+    return false;
   }
   
   public void onFocus(boolean getFocus) {

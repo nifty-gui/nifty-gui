@@ -112,45 +112,74 @@ public class TextFieldControl implements Controller {
         textRenderer.getFont(), visibleString, (mouseX - fieldElement.getX()), 1.0f);
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.MoveCursorLeft) {
       textField.cursorLeft();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorRight) {
       textField.cursorRight();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Delete) {
       textField.delete();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Backspace) {
       textField.backspace();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorToLastPosition) {
       textField.toLastPosition();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorToFirstPosition) {
       textField.toFirstPosition();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.SelectionStart) {
       textField.startSelecting();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.SelectionEnd) {
       textField.endSelecting();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Cut) {
       textField.cut(passwordChar);
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Copy) {
       textField.copy(passwordChar);
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Paste) {
       textField.put();
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.SubmitText) {
 //      screen.getFocusHandler().resetFocusElements();
     } else if (inputEvent == NiftyInputEvent.Character) {
       textField.insert(inputEvent.getCharacter());
+      updateCursor();
+      return true;
     } else if (inputEvent == NiftyInputEvent.NextInputElement) {
       if (focusHandler != null) {
         focusHandler.getNext(fieldElement).setFocus();
+        updateCursor();
+        return true;
       }
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       textField.endSelecting();
       if (focusHandler != null) {
         focusHandler.getPrev(fieldElement).setFocus();
+        updateCursor();
+        return true;
       }
     }
 
     updateCursor();
+    return false;
   }
 
   private void updateCursor() {

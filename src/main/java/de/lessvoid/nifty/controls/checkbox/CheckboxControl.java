@@ -43,14 +43,18 @@ public class CheckboxControl implements Controller {
   public void onFocus(final boolean getFocus) {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
       focusHandler.getNext(element).setFocus();
+      return true;
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       focusHandler.getPrev(element).setFocus();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Activate) {
       onClick();
+      return true;
     }
+    return false;
   }
 
   public boolean onClick() {

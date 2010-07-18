@@ -37,14 +37,18 @@ public class ListBoxItemController implements Controller {
   public void onFocus(final boolean getFocus) {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
       focusHandler.getNext(listBoxControlItemElement).setFocus();
+      return true;
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       focusHandler.getPrev(listBoxControlItemElement).setFocus();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Activate) {
       listBoxItemClicked();
+      return true;
     }
+    return false;
   }
 
   public void listBoxItemClicked() {

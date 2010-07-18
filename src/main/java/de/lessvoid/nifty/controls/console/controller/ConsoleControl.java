@@ -68,16 +68,20 @@ public class ConsoleControl implements Controller {
   public void onClickMouseMove(final int mouseX, final int mouseY) {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     TextFieldControl textControl = this.element.findElementByName("console-input").getControl(TextFieldControl.class);
-    textControl.inputEvent(inputEvent);
+    if (textControl.inputEvent(inputEvent)) {
+      return true;
+    }
     if (inputEvent == NiftyInputEvent.SubmitText) {
       String commandLine = textControl.getText();
       output(commandLine);
       textControl.setText("");
       this.element.setFocus();
       notifyCommandHandler(commandLine);
+      return true;
     }
+    return false;
   }
 
   private void notifyCommandHandler(final String commandLine) {

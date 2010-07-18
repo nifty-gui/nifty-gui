@@ -38,17 +38,22 @@ public class DropDownControlItem implements Controller {
   public void onFocus(final boolean getFocus) {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
       focusHandler.getNext(dropDownControlItemElement).setFocus();
+      return true;
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       focusHandler.getPrev(dropDownControlItemElement).setFocus();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Activate) {
       dropDownItemClicked();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Escape) {
       dropDownControl.reset();
       nifty.closePopup("dropDownBoxSelectPopup");
+      return true;
     }
+    return false;
   }
 
   public void dropDownItemClicked() {

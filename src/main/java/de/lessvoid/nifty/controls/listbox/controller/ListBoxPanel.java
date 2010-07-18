@@ -36,30 +36,35 @@ public class ListBoxPanel implements Controller {
     focusHandler = screen.getFocusHandler();
   }
 
-  public void inputEvent(NiftyInputEvent inputEvent) {
+  public boolean inputEvent(NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
       if (focusHandler != null) {
         Element nextElement = focusHandler.getNext(element);
         nextElement.setFocus();
+        return true;
       }
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       if (focusHandler != null) {
         Element prevElement = focusHandler.getPrev(element);
         prevElement.setFocus();
+        return true;
       }
     } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
       if (hasElements()) {
         if (selectedItem < getElementCount() - 1) {
           changeSelection(selectedItem + 1);
+          return true;
         }
       }
     } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
       if (hasElements()) {
         if (selectedItem > 0) {
           changeSelection(selectedItem - 1);
+          return true;
         }
       }
     }
+    return false;
   }
 
   public void onFocus(boolean getFocus) {
