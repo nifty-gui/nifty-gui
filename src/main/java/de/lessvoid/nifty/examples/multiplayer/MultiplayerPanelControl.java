@@ -38,7 +38,8 @@ public class MultiplayerPanelControl implements Controller {
   public void onFocus(final boolean getFocus) {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return false;
   }
 
   public void removePanel() {

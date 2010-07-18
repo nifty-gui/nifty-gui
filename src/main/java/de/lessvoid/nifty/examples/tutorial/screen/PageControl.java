@@ -38,18 +38,22 @@ public class PageControl implements Controller {
   public void onFocus(final boolean getFocus) {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
       focusHandler.getNext(element).setFocus();
+      return true;
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       focusHandler.getPrev(element).setFocus();
+      return true;
     } else if (inputEvent == NiftyInputEvent.Activate) {
       element.onClick();
+      return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
       if (focusHandler != null) {
         Element nextElement = focusHandler.getNext(element);
         if (nextElement.getParent().equals(element.getParent())) {
           nextElement.setFocus();
+          return true;
         }
       }
     } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
@@ -57,8 +61,10 @@ public class PageControl implements Controller {
         Element prevElement = focusHandler.getPrev(element);
         if (prevElement.getParent().equals(element.getParent())) {
           prevElement.setFocus();
+          return true;
         }
       }
     }
+    return false;
   }
 }

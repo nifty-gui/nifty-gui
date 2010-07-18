@@ -44,8 +44,9 @@ public class ChatPanelController implements Controller, KeyInputHandler {
   public void onFocus(final boolean getFocus) {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     System.out.println("woah");
+    return true;
   }
 
   public void removePanel() {
