@@ -141,7 +141,7 @@
   </style>
 
   <style id="menuFont">
-    <attributes font="tutorial/fonts/menu-font.fnt" width="100%" textHAlign="left" wrap="true" />
+    <attributes font="tutorial/fonts/text.fnt" width="100%" textHAlign="left" wrap="true" />
   </style>
 
   <style id="codeFont">
@@ -194,6 +194,11 @@
     </effect>
   </style>
 
+  <!-- style for a nifty panel -->
+  <style id="special-panel">
+    <attributes backgroundImage="tutorial/special-panel.png" imageMode="resize:125,6,125,125,125,6,125,6,125,6,125,125" padding="23px"/>
+  </style>
+
   <controlDefinition name="pageWelcome">
     <panel style="pagePanel">
       <panel style="centerPagePanelFirstPage">
@@ -244,12 +249,30 @@
       <panel style="middlePanel">
         <text style="captionFont" text="What's new in Nifty 1.2" />
         <text style="textFont" text="Besides lots of Bugfixes and Improvements the core new things in Nifty 1.2 are:&#10;" />
-        <text style="textFont" text="Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice completed: The Nifty core is now independent of Lwjgl and Slick2d. There are now separate renderer implementations available that interface Nifty with LWJGL, Slick2D, Java Monkey Engine 1 and 2. You can find an overview of all available renderers in the Nifty wiki at http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices.&#10;" />
-        <text style="textFont" text="A nifty XSD (XML Schema) file has been added and you can now validate your nifty.xml files using new methods on the main Nifty class.&#10;" />
-        <text style="textFont" text="The InputSystem interface has been changed too. It now allows Nifty to inform the InputSystem if the event has been handled by Nifty. It's now possible to send events to other parts of your application when the GUI did not handle the event.&#10;" />
-        <text style="textFont" text="New Image Modes have been added to support repeat image rendering (repeating pattern) as well as rendering of sprite sheets.&#10;" />
-        <text style="textFont" text="Java callbacks for attribute initialization from java as well as from environment variables and properties added. Basis localization support is now available too. Both features use the ${...} syntax in xml attributes.&#10;" />
-        <text style="textFont" text="There is now a new style set available. The Nifty Grey Style gives Nifty a great shiny new look. You can use the old one tho if you like that more.&#10;" />
+        <panel childLayout="horizontal">
+          <image filename="tutorial/bullet-point.png" />
+          <text width="97%" style="textFont" text="Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice completed: The Nifty core is now independent of Lwjgl and Slick2d. There are now separate renderer implementations available that interface Nifty with LWJGL, Slick2D, Java Monkey Engine 1 and 2. You can find an overview of all available renderers in the Nifty wiki at http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices.&#10;" />
+        </panel>
+        <panel childLayout="horizontal">
+          <image filename="tutorial/bullet-point.png" />
+          <text width="97%" style="textFont" text="A nifty XSD (XML Schema) file has been added and you can now validate your nifty.xml files using new methods on the main Nifty class.&#10;" />
+        </panel>
+        <panel childLayout="horizontal">
+          <image filename="tutorial/bullet-point.png" />
+          <text width="97%" style="textFont" text="The InputSystem interface has been changed too. It now allows Nifty to inform the InputSystem if the event has been handled by Nifty. It's now possible to send events to other parts of your application when the GUI did not handle the event.&#10;" />
+        </panel>
+        <panel childLayout="horizontal">
+          <image filename="tutorial/bullet-point.png" />
+          <text width="97%" style="textFont" text="New Image Modes have been added to support repeat image rendering (repeating pattern) as well as rendering of sprite sheets.&#10;" />
+        </panel>
+        <panel childLayout="horizontal">
+          <image filename="tutorial/bullet-point.png" />
+          <text width="97%" style="textFont" text="Java callbacks for attribute initialization from java as well as from environment variables and properties added. Basis localization support is now available too. Both features use the ${...} syntax in xml attributes.&#10;" />
+        </panel>
+        <panel childLayout="horizontal">
+          <image filename="tutorial/bullet-point.png" />
+          <text width="97%" style="textFont" text="There is now a new style set available. The Nifty Grey Style gives Nifty a great shiny new look. You can use the old one tho if you like that more.&#10;" />
+        </panel>
       </panel>
     </panel>
   </controlDefinition>
@@ -1005,11 +1028,15 @@
         <panel style="bottomNoEffects">
           <panel style="bottomInternal">
             <panel width="*" childLayout="center">
-              <text id="curPage" style="captionFont" align="center" valign="center" textHAlign="center" textVAlign="center" text="1 / 40" visibleToMouse="true">
+              <text id="curPage" style="captionFont" align="center" valign="center" textHAlign="center" textVAlign="center" text="40 / 40" visibleToMouse="true">
                 <interact onClick="showChapterSelect()" />
                 <effect>
                   <onCustom name="textSize" length="150" factor="4" startSize="1.6" endSize="1.0" />
                   <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="1500" />
+                  <onHover name="imageOverlay" post="true" filename="tutorial/captionSelectHover.png" inset="-5px">
+                    <hover hoverFalloffType="linear" hoverFalloffConstraint="both" hoverWidth="150%" hoverHeight="150%"/>
+                  </onHover> 
+                  <onClick name="playSound" sound="select" />
                 </effect>
               </text>
             </panel>
@@ -1022,44 +1049,29 @@
         <onActive name="bubblesEffect" post="true" />
       </effect>
     </layer>
-    <!-- 
-    <layer id="chapterSelectLayer" childLayout="vertical" visible="false">
-      <panel height="14%" />
-      <panel id="chapterSelect" childLayout="vertical" width="30%" height="*" align="left" valign="center" padding="10px">
-        <effect>
-          <onStartScreen name="move" mode="in" direction="left" length="500" inherit="true" post="false" />
-          <onActive name="gradient" direction="horizontal">
-            <value offset="0%" color="#eeef" />
-            <value offset="50%" color="#eeee" />
-            <value offset="70%" color="#cccc" />
-            <value offset="100%" color="#8880" />
-          </onActive>
-        </effect>
-      </panel>
-      <panel height="14%" />
-    </layer>
-     -->
   </screen>
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- the chapterSelectPopup popup -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <popup id="chapterSelectPopup" childLayout="vertical" backgroundColor="#000a">
+  <popup id="chapterSelectPopup" childLayout="vertical" backgroundColor="#0008">
     <effect>
-      <onStartScreen name="fade" start="#0" end="#a" length="200" inherit="true" />
-      <onEndScreen name="fade" start="#a" end="#0" length="200" startDelay="100" inherit="true" />
+      <onStartScreen name="fade" start="#0" end="#8" length="200" />
+      <onEndScreen name="fade" start="#8" end="#0" length="200" startDelay="100" inherit="true" /> 
     </effect>
     <panel height="14%" />
-    <panel id="chapterSelect" childLayout="vertical" width="30%" height="*" align="left" valign="center" padding="10px">
-      <effect>
-        <onStartScreen name="move" mode="in" direction="left" length="500" inherit="true" post="false" />
-        <onActive name="gradient" direction="horizontal">
-          <value offset="0%" color="#eeef" />
-          <value offset="50%" color="#eeee" />
-          <value offset="70%" color="#cccc" />
-          <value offset="100%" color="#8880" />
-        </onActive>
-      </effect>
+    <panel childLayout="center" width="100%" height="*" align="left" valign="center">
+      <panel id="chapterSelect" style="special-panel" childLayout="vertical" width="40%" height="50%" align="center" valign="center" padding="25px">
+        <effect>
+          <onStartScreen name="fade" start="#0" end="#f" length="100" startDelay="250" inherit="true" post="false" />
+          <onStartScreen name="imageSize" timeType="exp" factor="3.5" startSize="2.0" endSize="1.0" inherit="true" length="250" startDelay="100" post="false"/>
+          <onStartScreen name="textSize" timeType="exp" factor="3.5" startSize="2.0" endSize="1.0" inherit="true" length="250" startDelay="100" post="false"/>
+          <onStartScreen name="shake" length="150" distance="10" startDelay="350" inherit="true" post="false" global="false" />
+          <onEndScreen name="fade" start="#f" end="#0" length="110" startDelay="150" inherit="true" post="false" />
+          <onEndScreen name="imageSize" timeType="exp" factor="3.5" startSize="1.0" endSize="2.0" inherit="true" length="250" startDelay="0" post="false"/>
+          <onEndScreen name="textSize" timeType="exp" factor="3.5" startSize="1.0" endSize="2.0" inherit="true" length="250" startDelay="0" post="false"/>
+        </effect>
+      </panel>
     </panel>
     <panel height="14%" />
   </popup>

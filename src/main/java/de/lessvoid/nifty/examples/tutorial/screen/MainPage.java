@@ -79,34 +79,34 @@ public class MainPage implements ScreenController, KeyInputHandler {
     pages.add("pageChapterVIII");
     pages.add("pageTheEnd");
 
-    chapterCaption.add("a. Welcome");
+    chapterCaption.add("Welcome");
     chapterPageMap.put("0", pages.indexOf("pageWelcome"));
 
-    chapterCaption.add("b. What's new in Nifty 1.2"); // ""
+    chapterCaption.add("What's new in Nifty 1.2"); // ""
     chapterPageMap.put("1", pages.indexOf("pageChapterWhatsNewInNifty1.2"));
 
-    chapterCaption.add("1. Nifty Basics"); // ""
+    chapterCaption.add("Nifty Basics"); // ""
     chapterPageMap.put("2", pages.indexOf("pageChapterI"));
 
-    chapterCaption.add("2. Nifty Effects"); // ""
+    chapterCaption.add("Nifty Effects"); // ""
     chapterPageMap.put("3", pages.indexOf("pageChapterII"));
 
-    chapterCaption.add("3. Connecting Java and Nifty XML"); // ""
+    chapterCaption.add("Connecting Java and Nifty XML"); // ""
     chapterPageMap.put("4", pages.indexOf("pageChapterIII"));
 
-    chapterCaption.add("4. Advanced Nifty, Styles"); // ""
+    chapterCaption.add("Advanced Nifty, Styles"); // ""
     chapterPageMap.put("5", pages.indexOf("pageChapterIV"));
 
-    chapterCaption.add("5. Advanced Nifty, Controls"); // ""
+    chapterCaption.add("Advanced Nifty, Controls"); // ""
     chapterPageMap.put("6", pages.indexOf("pageChapterV"));
 
-    chapterCaption.add("6. Advanced Nifty, Custom Effects"); // ""
+    chapterCaption.add("Advanced Nifty, Custom Effects"); // ""
     chapterPageMap.put("7", pages.indexOf("pageChapterVI"));
 
-    chapterCaption.add("7. Advanced Nifty, Slick2d Integration"); // ""
+    chapterCaption.add("Advanced Nifty, Slick2d Integration"); // ""
     chapterPageMap.put("8", pages.indexOf("pageChapterVII"));
 
-    chapterCaption.add("8. The End"); // ""
+    chapterCaption.add("The End"); // ""
     chapterPageMap.put("9", pages.indexOf("pageChapterVIII"));
 
     ControlEffectOnHoverAttributes textColorEffect = new ControlEffectOnHoverAttributes();
@@ -118,10 +118,10 @@ public class MainPage implements ScreenController, KeyInputHandler {
     int idx = 0;
     for (String label : chapterCaption) {
       LabelCreator createLabel = new LabelCreator(label);
-      createLabel.setAlign("left");
+      createLabel.setAlign("center");
       createLabel.setTextVAlign("center");
-      createLabel.setTextHAlign("left");
-      createLabel.setColor("#000f");
+      createLabel.setTextHAlign("center");
+      createLabel.setColor("#ccce");
       createLabel.setStyle("menuFont");
       createLabel.setVisibleToMouse("true");
       createLabel.addEffectsOnHover(textColorEffect);
