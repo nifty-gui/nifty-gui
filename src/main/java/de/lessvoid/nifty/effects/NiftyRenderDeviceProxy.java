@@ -114,12 +114,15 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   public void setGlobalPosition(final float pos, final float pos2) {
+    renderStates.add(RenderStateType.position);
   }
 
   public void setImageScale(final float scale) {
+    renderStates.add(RenderStateType.imageScale);
   }
 
   public void setRenderTextSize(final float size) {
+    renderStates.add(RenderStateType.textSize);
   }
 
   public void reset() {
