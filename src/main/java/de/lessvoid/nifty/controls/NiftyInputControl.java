@@ -31,16 +31,20 @@ public class NiftyInputControl {
   /**
    * keyboard event.
    * @param inputEvent keyboard event
+   * @return return true when the input event has been processed and false when it has not been handled
    */
-  public void keyEvent(final KeyboardInputEvent inputEvent) {
+  public boolean keyEvent(final KeyboardInputEvent inputEvent) {
     NiftyInputEvent converted = inputMapper.convert(inputEvent);
-    controller.inputEvent(converted);
+    if (controller.inputEvent(converted)) {
+      return true;
+    }
 
     for (KeyInputHandler handler : additionalInputHandler) {
       if (handler.keyEvent(converted)) {
-        break;
+        return true;
       }
     }
+    return false;
   }
 
   /**

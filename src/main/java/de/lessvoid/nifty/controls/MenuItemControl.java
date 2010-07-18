@@ -29,22 +29,25 @@ public class MenuItemControl implements Controller {
     focusHandler = screen.getFocusHandler();
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
       if (focusHandler != null) {
         Element nextElement = focusHandler.getNext(element);
         nextElement.setFocus();
+        return true;
       }
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       if (focusHandler != null) {
         Element prevElement = focusHandler.getPrev(element);
         prevElement.setFocus();
+        return true;
       }
     } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
       if (focusHandler != null) {
         Element nextElement = focusHandler.getNext(element);
         if (nextElement.getParent().equals(element.getParent())) {
           nextElement.setFocus();
+          return true;
         }
       }
     } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
@@ -52,11 +55,14 @@ public class MenuItemControl implements Controller {
         Element prevElement = focusHandler.getPrev(element);
         if (prevElement.getParent().equals(element.getParent())) {
           prevElement.setFocus();
+          return true;
         }
       }
     } else if (inputEvent == NiftyInputEvent.Activate) {
       element.onClick();
+      return true;
     }
+    return false;
   }
 
   public void onFocus(final boolean getFocus) {

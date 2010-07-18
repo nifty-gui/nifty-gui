@@ -44,6 +44,7 @@ public interface Controller {
   /**
    * input event.
    * @param inputEvent the NiftyInputEvent to process
+   * @return true, the event has been handled and false, the event has not been handled
    */
-  void inputEvent(NiftyInputEvent inputEvent);
+  boolean inputEvent(NiftyInputEvent inputEvent);
 }

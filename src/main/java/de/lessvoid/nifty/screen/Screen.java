@@ -328,13 +328,16 @@ public class Screen {
    * keyboard event.
    * @param inputEvent keyboard event
    */
-  public void keyEvent(final KeyboardInputEvent inputEvent) {
-    focusHandler.keyEvent(inputEvent);
+  public boolean keyEvent(final KeyboardInputEvent inputEvent) {
+    if (focusHandler.keyEvent(inputEvent)) {
+      return true;
+    }
     for (InputHandlerWithMapping handler : inputHandlers) {
       if (handler.process(inputEvent)) {
-        break;
+        return true;
       }
     }
+    return false;
   }
 
   /**

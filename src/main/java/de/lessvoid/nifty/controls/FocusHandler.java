@@ -206,10 +206,11 @@ public class FocusHandler {
     }
   }
 
-  public void keyEvent(final KeyboardInputEvent inputEvent) {
+  public boolean keyEvent(final KeyboardInputEvent inputEvent) {
     if (keyboardFocusElement != null) {
-      keyboardFocusElement.keyEvent(inputEvent);
+      return keyboardFocusElement.keyEvent(inputEvent);
     }
+    return false;
   }
 
   public void requestExclusiveMouseFocus(final Element newFocusElement) {

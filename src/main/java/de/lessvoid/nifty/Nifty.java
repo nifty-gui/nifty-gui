@@ -199,9 +199,9 @@ public class Nifty implements NiftyInputConsumer {
 
   public boolean processKeyboardEvent(final KeyboardInputEvent keyEvent) {
     if (!currentScreen.isNull()) {
-      currentScreen.keyEvent(keyEvent);
+      return currentScreen.keyEvent(keyEvent);
     }
-    return true;
+    return false;
   }
 
   public void resetEvents() {

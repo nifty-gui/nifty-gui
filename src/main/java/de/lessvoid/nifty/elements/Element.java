@@ -1447,10 +1447,11 @@ public class Element {
    * keyboard event.
    * @param inputEvent keyboard event
    */
-  public void keyEvent(final KeyboardInputEvent inputEvent) {
+  public boolean keyEvent(final KeyboardInputEvent inputEvent) {
     if (attachedInputControl != null) {
-      attachedInputControl.keyEvent(inputEvent);
+      return attachedInputControl.keyEvent(inputEvent);
     }
+    return false;
   }
 
   /**

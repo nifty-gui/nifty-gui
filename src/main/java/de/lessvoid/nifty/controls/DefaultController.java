@@ -31,12 +31,14 @@ public class DefaultController implements Controller {
   public void onStartScreen() {
   }
 
-  public void inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (nextPrevHelper.handleNextPrev(inputEvent)) {
-      return;
+      return true;
     } else if (inputEvent == NiftyInputEvent.Activate) {
       element.onClick();
+      return true;
     }
+    return false;
   }
   
   public void onFocus(final boolean getFocus) {
