@@ -188,7 +188,12 @@ public class EffectManager {
       effectProcessor.get(EffectEventId.onHide).reset();
       effectProcessor.get(EffectEventId.onCustom).reset();
       effectProcessor.get(EffectEventId.onHover).reset();
-      effectProcessor.get(EffectEventId.onActive).reset();
+// onActive is currently used by the nifty-panel style. when we reset that effect here
+// we would not be able to use the nifty-panel in popups. when a popup is being closed
+// all effects will be reset. which makes sense but probably not for the onActive effect.
+// we need to check later if this uncommenting has any bad influence on other controls.
+//
+//      effectProcessor.get(EffectEventId.onActive).reset();
       effectProcessor.get(EffectEventId.onFocus).reset();
       effectProcessor.get(EffectEventId.onLostFocus).reset();
       effectProcessor.get(EffectEventId.onGetFocus).reset();
