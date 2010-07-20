@@ -141,7 +141,6 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
         log.warning("target object is null");
       }
     }
-    log.warning("invoke for method [" + methodWithName + "] failed");
   }
 
   /**
