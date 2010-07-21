@@ -19,10 +19,13 @@ public class LwjglInputSystem implements InputSystem {
 
   public void startup() throws Exception {
     Mouse.create();
+    Keyboard.create();
+    Keyboard.enableRepeatEvents(true);
   }
 
   public void shutdown() {
     Mouse.destroy();
+    Keyboard.destroy();
   }
 
   public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
