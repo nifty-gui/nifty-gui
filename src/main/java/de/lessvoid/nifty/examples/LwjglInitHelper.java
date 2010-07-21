@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -211,8 +210,6 @@ public class LwjglInitHelper {
    */
   private static boolean initInput() {
     try {
-      Keyboard.create();
-      Keyboard.enableRepeatEvents(true);
       inputSystem = new LwjglInputSystem();
       inputSystem.startup();
       return true;
