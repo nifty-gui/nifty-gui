@@ -217,15 +217,16 @@
     <xs:attribute name="color" type="xs:string" />
     <xs:attribute name="controller" type="xs:string" />
     <xs:attribute name="inputMapping" type="xs:string" />
-    <xs:attribute name="textHAlign" type="xs:string"/>
-    <xs:attribute name="font" type="xs:string"/>
-    <xs:attribute name="filename" type="xs:string"/>
-    <xs:attribute name="wrap" type="xs:boolean"/>
-	</xs:complexType>
+    <xs:attribute name="textHAlign" type="xs:string" />
+    <xs:attribute name="font" type="xs:string" />
+    <xs:attribute name="filename" type="xs:string" />
+    <xs:attribute name="wrap" type="xs:boolean" />
+    <xs:attribute name="imageMode" type="xs:string"></xs:attribute>
+  </xs:complexType>
 
   <xs:simpleType name="onClickType">
     <xs:restriction base="xs:string">
-      <xs:pattern value="\w+\((|[\w| ]+(,\s*[\w| ]+)*)\)"></xs:pattern>
+      <xs:pattern value="[\p{P}|\p{L}|\p{N}|\p{M}|\p{S}]+\((|[\p{P}|\p{L}|\p{N}|\p{M}|\p{S}| ]+(,\s*[\p{P}|\p{L}|\p{N}|\p{M}|\p{S}| ]+)*)\)"></xs:pattern>
     </xs:restriction>
   </xs:simpleType>
 
