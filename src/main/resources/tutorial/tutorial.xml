@@ -140,6 +140,11 @@
     <attributes font="tutorial/fonts/text.fnt" width="100%" textHAlign="left" wrap="true" />
   </style>
 
+  <style id="textFontLink" base="textFont">
+    <attributes color="#8fff" />
+    <interact onClick="$action" />
+  </style>
+
   <style id="menuFont">
     <attributes font="tutorial/fonts/text.fnt" width="100%" textHAlign="left" wrap="true" />
   </style>
@@ -229,7 +234,12 @@
         <text style="captionFont" text="So what exactly is Nifty GUI?" />
         <text style="textFont" text="Nifty GUI is a Java Library that supports the creation of interactive user interfaces for games or similar applications. The actual GUI is stored in xml-Files with supporting Java code.&#10;&#10;Nifty can easily be integrated into different rendering systems. There are Rendering Backend Implementations available for Lwjgl, Slick2d and the Java Monkey Engine (for both JME2 and JME3). The Rendering Interface you need to implement is simple, so Nifty can be integrated into other systems quite easily too.&#10;&#10;To summarize Nifty in one sentence: Nifty layouts and displays elements on a screen and allows you to interact with them.&#10;" />
         <text style="captionFont" text="And what is it not?" />
-        <text style="textFont" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you need a solution with lots of controls, windows, dialog boxes and so on, you might want to look somewhere else.&#10;&#10;A great option for this kind of applications is TWL (http://twl.l33tlabs.org/)&#10;" />
+        <text style="textFont" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you need a solution with lots of controls, windows, dialog boxes and so on, you might want to look somewhere else.&#10;"/>
+        <panel childLayout="horizontal">
+          <text style="textFont" text="A great option for this kind of applications is TWL (" />
+          <text style="textFontLink" text="http://twl.l33tlabs.org/" action="openLink(http://twl.l33tlabs.org/)" />
+          <text style="textFont" text=")&#10;" />
+        </panel>
         <text style="captionFont" text="But Nifty is different" />
         <text style="textFont" text="In contrast to TWL and more tradional approaches in creating GUIs Nifty provides more creative freedom and more stuff to play with :) In that respect Nifty is probably less standard or what you would usually expect from a Java based GUI system. On the other hand it allows you to create GUIs that are more visually stunning and exciting.&#10;&#10;The remaining Pages will give an overview how Nifty works and how it can be used." />
       </panel>
@@ -251,7 +261,10 @@
         <text style="textFont" text="Besides lots of Bugfixes and Improvements the core new things in Nifty 1.2 are:&#10;" />
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
-          <text width="97%" style="textFont" text="Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice completed: The Nifty core is now independent of Lwjgl and Slick2d. There are now separate renderer implementations available that interface Nifty with LWJGL, Slick2D, Java Monkey Engine 1 and 2. You can find an overview of all available renderers in the Nifty wiki at http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices.&#10;" />
+          <panel width="97%" childLayout="vertical">
+            <text style="textFont" text="Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice completed: The Nifty core is now independent of Lwjgl and Slick2d. There are now separate renderer implementations available that interface Nifty with LWJGL, Slick2D, Java Monkey Engine 1 and 2. You can find an overview of all available renderers in the Nifty wiki at" />
+            <text style="textFontLink" text="http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices&#10;" action="openLink(http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices)" />
+          </panel>
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
@@ -305,7 +318,11 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="How does it work: Basics, The Java side, Renderers" />
-        <text style="textFont" text="But because RenderDevice, SoundDevice and InputSystem are separated interfaces, you can mix them too. For instance, the native Lwjgl renderer doesn't require slick2d anymore. So the &quot;nifty-lwjgl-renderer-1.0.jar&quot; gives you a RenderDevice implementation as well as an InputSystem implementation that both use Lwjgl. For sound support it doesn't provide an implementation. But you can use &quot;nifty-pauls-soundsystem-1.0.jar&quot; instead. This jar is the adapter between Nifty and Pauls Soundsystem (see http://www.paulscode.com for details).&#10;"/>
+        <text style="textFont" text="But because RenderDevice, SoundDevice and InputSystem are separated interfaces, you can mix them too. For instance, the native Lwjgl renderer doesn't require slick2d anymore. So the &quot;nifty-lwjgl-renderer-1.0.jar&quot; gives you a RenderDevice implementation as well as an InputSystem implementation that both use Lwjgl. For sound support it doesn't provide an implementation. But you can use &quot;nifty-pauls-soundsystem-1.0.jar&quot; instead. This jar is the adapter between Nifty and Pauls Soundsystem (see "/>
+        <panel childLayout="horizontal">
+          <text style="textFontLink" text="http://www.paulscode.com" action="openLink(http://www.paulscode.com)" />
+          <text style="textFont" text=" for details).&#10;"/>
+        </panel>
         <text style="textFont" text="And now let's see some examples on how to instantiate Nifty using different renderers.&#10;"/>
         <text style="textFont" text="Example 1: Using the Jme2 Renderer:&#10;"/>
         <panel style="codeBlock">
@@ -323,7 +340,8 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="How does it work: Basics, The Java side, Renderers, cont." />
-        <text style="textFont" text="You can find an updated list of all available Renderes in the Nifty Wiki: http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices&#10;"/>
+        <text style="textFont" text="You can find an updated list of all available Renderes in the Nifty Wiki:" />
+        <text style="textFontLink" text="http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices&#10;" action="openLink(http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices)" />
         <text style="textFont" text="Once you have created the Nifty instance you can start using it which we will look at next. &#10;"/>
       </panel>
     </panel>
@@ -926,29 +944,42 @@
         <panel childLayout="vertical" width="100%">
           <panel childLayout="horizontal" width="100%">
             <text style="textFont" text="Main Nifty Place at sf.net:" width="30%" wrap="false"/>
-            <text style="textFont" text="http://sourceforge.net/projects/nifty-gui/" width="70%" wrap="false"/>
+            <text style="textFontLink" width="70%" wrap="false" text="http://sourceforge.net/projects/nifty-gui/" action="openLink(http://sourceforge.net/projects/nifty-gui/)" />
           </panel>
           <panel childLayout="horizontal" width="100%">
             <text style="textFont" text="Nifty Documentation Wiki:" width="30%" wrap="false"/>
-            <text style="textFont" text="http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Main_Page" width="70%" wrap="false"/>
+            <text style="textFontLink" width="70%" wrap="false" text="http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Main_Page" action="openLink(http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Main_Page)" />
           </panel>
           <panel childLayout="horizontal" width="100%">
             <text style="textFont" text="Nifty Blog:" width="30%" wrap="false"/>
-            <text style="textFont" text="http://nifty-gui.lessvoid.com/" width="70%" wrap="false"/>
+            <text style="textFontLink" width="70%" wrap="false" text="http://nifty-gui.lessvoid.com/" action="openLink(http://nifty-gui.lessvoid.com/)" />
           </panel>
           <panel childLayout="horizontal" width="100%">
             <text style="textFont" text="&#10;Follow Nifty GUI at twitter:" width="30%" wrap="false"/>
-            <text style="textFont" text="&#10;http://twitter.com/niftygui" width="70%" wrap="false"/>
+            <text style="textFontLink" width="70%" wrap="false" text="&#10;http://twitter.com/niftygui" action="openLink(http://twitter.com/niftygui)" />
           </panel>
           <panel childLayout="horizontal" width="100%">
             <text style="textFont" text="Add it to your software stack:" width="30%" wrap="false"/>
-            <text style="textFont" text="https://www.ohloh.net/p/nifty-gui" width="70%" wrap="false"/>
+            <text style="textFontLink" width="70%" wrap="false" text="https://www.ohloh.net/p/nifty-gui" action="openLink(https://www.ohloh.net/p/nifty-gui)" />
           </panel>
         </panel>
         <text style="textFont" text="&#10;Happy Coding! :)"/>
         <text style="captionFont" text="&#10;Credits for this Tutorial/Demo"/>
-        <text style="textFont" text="Background Music: &quot;L.O.R.D.&quot; by &quot;echoed&quot; (http://ccmixter.org/files/echoed/23071), creative commons Attribution-Noncommercial 3.0 license (http://creativecommons.org/licenses/by-nc/3.0/)&#10;"/>
-        <text style="textFont" text="Nifty GUI, colored logo design: blubbelOo (http://blubbeloo.deviantart.com/)&#10;"/>
+        <panel childLayout="horizontal">
+          <text style="textFont" text="Background Music: &quot;L.O.R.D.&quot; by &quot;echoed&quot; ("/>
+          <text style="textFontLink" text="http://ccmixter.org/files/echoed/23071" action="openLink(http://ccmixter.org/files/echoed/23071)" />
+          <text style="textFont" text="), creative commons Attribution-Noncommercial 3.0"/>
+        </panel>
+        <panel childLayout="horizontal">
+          <text style="textFont" text="license ("/>
+          <text style="textFontLink" text="http://creativecommons.org/licenses/by-nc/3.0/" action="openLink(http://creativecommons.org/licenses/by-nc/3.0/)" />
+          <text style="textFont" text=")&#10;"/>
+        </panel>
+        <panel childLayout="horizontal">
+          <text style="textFont" text="Nifty GUI, colored logo design: blubbelOo ()&#10;"/>
+          <text style="textFontLink" text="http://blubbeloo.deviantart.com/" action="openLink(http://blubbeloo.deviantart.com/)" />
+          <text style="textFont" text=")&#10;"/>
+        </panel>
         <text style="textFont" text="Soundeffects, Coding, Nifty GUI and everything else: void. That's me :)"/>
       </panel>
     </panel>
