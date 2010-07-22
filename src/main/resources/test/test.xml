@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd">
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
   <screen id="start" controller="de.lessvoid.nifty.examples.test.TestScreen">
     <layer id="stuff" childLayout="center">
       <panel height="50%" width="50%" childLayout="vertical" align="center" valign="center" backgroundColor="#800f">
