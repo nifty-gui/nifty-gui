@@ -225,9 +225,7 @@
   </xs:complexType>
 
   <xs:simpleType name="onClickType">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="[\p{P}|\p{L}|\p{N}|\p{M}|\p{S}]+\((|[\p{P}|\p{L}|\p{N}|\p{M}|\p{S}| ]+(,\s*[\p{P}|\p{L}|\p{N}|\p{M}|\p{S}| ]+)*)\)"></xs:pattern>
-    </xs:restriction>
+    <xs:restriction base="xs:string" />
   </xs:simpleType>
 
   <xs:complexType name="interactType">
