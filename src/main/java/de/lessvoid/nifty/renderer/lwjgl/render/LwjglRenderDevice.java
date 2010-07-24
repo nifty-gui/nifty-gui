@@ -43,11 +43,6 @@ public class LwjglRenderDevice implements RenderDevice {
    * constructor will configure the RenderDevice to not log FPS on System.out.
    */
   public LwjglRenderDevice() {
-    GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
-    viewportWidth = viewportBuffer.get(2);
-    viewportHeight = viewportBuffer.get(3);
-    log.info("Viewport: " + viewportWidth + ", " + viewportHeight);
-
     time = System.currentTimeMillis();
     frames = 0;
   }
@@ -72,6 +67,8 @@ public class LwjglRenderDevice implements RenderDevice {
    * @return width of display mode
    */
   public int getWidth() {
+    if (viewportWidth == 0)
+      getViewport();
     return viewportWidth;
   }
 
@@ -80,7 +77,16 @@ public class LwjglRenderDevice implements RenderDevice {
    * @return height of display mode
    */
   public int getHeight() {
+    if (viewportHeight == 0)
+      getViewport();
     return viewportHeight;
+  }
+  
+  private void getViewport() {
+    GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
+    viewportWidth = viewportBuffer.get(2);
+    viewportHeight = viewportBuffer.get(3);
+    log.info("Viewport: " + viewportWidth + ", " + viewportHeight);
   }
 
   public void beginFrame() {
