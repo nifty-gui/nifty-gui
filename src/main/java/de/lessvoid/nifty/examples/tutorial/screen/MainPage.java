@@ -77,6 +77,9 @@ public class MainPage implements ScreenController, KeyInputHandler {
     pages.add("pageSlick2");
     pages.add("pageSlick3");
     pages.add("pageChapterVIII");
+    pages.add("pageDnD1");
+    pages.add("pageDnD2");
+    pages.add("pageTheEndTeaser");
     pages.add("pageTheEnd");
 
     chapterCaption.add("Welcome");
@@ -106,8 +109,11 @@ public class MainPage implements ScreenController, KeyInputHandler {
     chapterCaption.add("Advanced Nifty, Slick2d Integration"); // ""
     chapterPageMap.put("8", pages.indexOf("pageChapterVII"));
 
-    chapterCaption.add("The End"); // ""
+    chapterCaption.add("Advanced Nifty, Drag and Drop"); // ""
     chapterPageMap.put("9", pages.indexOf("pageChapterVIII"));
+
+    chapterCaption.add("The End"); // ""
+    chapterPageMap.put("10", pages.indexOf("pageTheEndTeaser"));
 
     ControlEffectOnHoverAttributes textColorEffect = new ControlEffectOnHoverAttributes();
     textColorEffect.setName("textColor");

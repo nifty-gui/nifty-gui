@@ -550,15 +550,15 @@
   <controlDefinition name="pageConnecting1">
     <panel style="pagePanel">
       <panel style="middlePanel">
-	      <text style="captionFont" text="How does it work: Basics, Connecting Java and Nifty XML"/>
-	      <text style="textFont" text="There's one thing missing in your basic knowledge about Nifty, the Screencontroller instance.&#10;&#10;Each screen has a Screencontroller attached to it. Whenever something interessting is happening to the screen a method on the Screencontroller is called. The Screencontroller is also the place where Nifty will look for additional callback methods as you will see on the next page.&#10;&#10;Screencontroller is an interface that you can implement. The interface looks like this:&#10;"/>
-	      <panel style="codeBlock">
-	        <text style="codeFont" text="\#8A104D#public interface \#000#ScreenController {&#10;  \#8A104D#void \#000#bind(Nifty nifty, Screen screen);&#10;  \#8A104D#void \#000#onStartScreen();&#10;  \#8A104D#void \#000#onEndScreen();&#10;\#000#}"/>
-	      </panel>
-	      <text style="textFont" text="&#10;The Screencontroller interface also gives you access to the screen class, the java representation of the active screen as well as the main events in the screen life cycle like the starting and ending of a screen. You can connect a Screencontroller to a screen with the controller attribute of the Nifty xml screen tag:&#10;"/>
-	      <panel style="codeBlock">
-	        <text style="codeFont" text="\#3F7F7F#&lt;screen \#8A104D#id=\#45458B#&quot;start&quot; \#8A104D#controller=\#45458B#&quot;de.lessvoid.nifty.demo.tutorial.Start&quot;\#3F7F7F#&gt;&#10;   \#000#...&#10;\#3F7F7F#&lt;/screen&gt;"/>
-	      </panel>
+        <text style="captionFont" text="How does it work: Basics, Connecting Java and Nifty XML"/>
+        <text style="textFont" text="There's one thing missing in your basic knowledge about Nifty, the Screencontroller instance.&#10;&#10;Each screen has a Screencontroller attached to it. Whenever something interessting is happening to the screen a method on the Screencontroller is called. The Screencontroller is also the place where Nifty will look for additional callback methods as you will see on the next page.&#10;&#10;Screencontroller is an interface that you can implement. The interface looks like this:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="\#8A104D#public interface \#000#ScreenController {&#10;  \#8A104D#void \#000#bind(Nifty nifty, Screen screen);&#10;  \#8A104D#void \#000#onStartScreen();&#10;  \#8A104D#void \#000#onEndScreen();&#10;\#000#}"/>
+        </panel>
+        <text style="textFont" text="&#10;The Screencontroller interface also gives you access to the screen class, the java representation of the active screen as well as the main events in the screen life cycle like the starting and ending of a screen. You can connect a Screencontroller to a screen with the controller attribute of the Nifty xml screen tag:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="\#3F7F7F#&lt;screen \#8A104D#id=\#45458B#&quot;start&quot; \#8A104D#controller=\#45458B#&quot;de.lessvoid.nifty.demo.tutorial.Start&quot;\#3F7F7F#&gt;&#10;   \#000#...&#10;\#3F7F7F#&lt;/screen&gt;"/>
+        </panel>
       </panel>
     </panel>
   </controlDefinition>
@@ -566,17 +566,17 @@
   <controlDefinition name="pageConnecting2">
     <panel style="pagePanel">
       <panel style="middlePanel">
-	      <text style="captionFont" text="How does it work: Basics, Interaction"/>
-	      <text style="textFont" text="A GUI makes only sense if you can interact with it. At the moment Nifty supports the following mouse events." />
+        <text style="captionFont" text="How does it work: Basics, Interaction"/>
+        <text style="textFont" text="A GUI makes only sense if you can interact with it. At the moment Nifty supports the following mouse events." />
         <text style="textFont" text="- onClick&#10;- onRelease&#10;- onClickMouseMove&#10;- onMouseOver&#10;" />
         <text style="textFont" text="So whenever you click on some element you can tell Nifty to call a method on the Screencontroller of the current screen.&#10;&#10;The way this is realized is with java reflection. Say you have a button that should trigger some event. You'll first add an onClick method call to the element:&#10;"/>
-	      <panel style="codeBlock">
-	        <text style="codeFont" text="\#3F7F7F#&lt;image \#8A104D#filename=\#45458B#&quot;tutorial/next.tga&quot; \#8A104D#onClick=\#45458B#&quot;next()&quot;\#3F7F7F#/&gt;"/>
-	      </panel>
-	      <text style="textFont" text="&#10;Whenever Nifty encounters an &quot;onClick&quot; attribute it looks for an appropriate method at the Screencontroller class of the current screen and calls it:&#10;"/>
-	      <panel style="codeBlock">
-	        <text style="codeFont" text="\#8A104D#public class \#000#Start \#8A104D#implements \#000#ScreenController {&#10;  \#000#...&#10;  \#3F7F7F#// the callback.&#10;  \#8A104D#public void \#000#next() {&#10;    \#000#System.out.println(&quot;next() called \o/&quot;);&#10;  \#000#}&#10;\#000#}" />
-	      </panel>
+        <panel style="codeBlock">
+          <text style="codeFont" text="\#3F7F7F#&lt;image \#8A104D#filename=\#45458B#&quot;tutorial/next.tga&quot; \#8A104D#onClick=\#45458B#&quot;next()&quot;\#3F7F7F#/&gt;"/>
+        </panel>
+        <text style="textFont" text="&#10;Whenever Nifty encounters an &quot;onClick&quot; attribute it looks for an appropriate method at the Screencontroller class of the current screen and calls it:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="\#8A104D#public class \#000#Start \#8A104D#implements \#000#ScreenController {&#10;  \#000#...&#10;  \#3F7F7F#// the callback.&#10;  \#8A104D#public void \#000#next() {&#10;    \#000#System.out.println(&quot;next() called \o/&quot;);&#10;  \#000#}&#10;\#000#}" />
+        </panel>
       </panel>
     </panel>
   </controlDefinition>
@@ -584,11 +584,11 @@
   <controlDefinition name="pageBasicsEnd">
     <panel style="pagePanel">
       <panel style="middlePanel">
-	      <text style="captionFont" text="Wow, that was a lot!"/>
-	      <text style="textFont" text="So, that's all with the basics! Of course there is still a lot more to learn about Nifty. For instance how to use and create styles, how to use and build Nifty controls and how to build your own Nifty effects. How to integrate Nifty with Slick is an interessting topic too.&#10;"/>
-	      <text style="textFont" text="And what's best, we'll take a look at all of these topics NOW! :D&#10;"/>
-	      <text style="textFont" text="So grab a cup of coffee or whatever your energy source is (it might be coke if your name is kev :D). And then take a deep breath because we've still some more to cover in the following Nifty Advanced chapters!"/>
-	      <text style="textFont" textHAlign="right" align="right" wrap="false" text="&#10;\#C8C800#Press next in the bottom right corner to begin advanced lessons ..." />
+        <text style="captionFont" text="Wow, that was a lot!"/>
+        <text style="textFont" text="So, that's all with the basics! Of course there is still a lot more to learn about Nifty. For instance how to use and create styles, how to use and build Nifty controls and how to build your own Nifty effects. How to integrate Nifty with Slick is an interessting topic too.&#10;"/>
+        <text style="textFont" text="And what's best, we'll take a look at all of these topics NOW! :D&#10;"/>
+        <text style="textFont" text="So grab a cup of coffee or whatever your energy source is (it might be coke if your name is kev :D). And then take a deep breath because we've still some more to cover in the following Nifty Advanced chapters!"/>
+        <text style="textFont" textHAlign="right" align="right" wrap="false" text="&#10;\#C8C800#Press next in the bottom right corner to begin advanced lessons ..." />
       </panel>
     </panel>
   </controlDefinition>
@@ -928,6 +928,56 @@
   </controlDefinition>
 
   <controlDefinition name="pageChapterVIII">
+    <panel style="pagePanel">
+      <panel style="centerPagePanel">
+        <text style="captionFont" text="Part VIII - Advanced Nifty, Drag and Drop" />
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="pageDnD1">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="Advanced Nifty, Drag and Drop"/>
+        <text style="textFont" text="As of Nifty 1.2, Drag and Drop support is part of the Nifty standard controls project!"/>
+        <text style="textFont" text="&#10;To include Drag and Drop in your GUI, you just have to define the draggable elements and the possible drop areas in your nifty xml.&#10;You can create draggable elements simply by using the new &quot;draggable&quot; standard control where you add your draggable content."/>
+        <text style="textFont" text="&#10;Create a Draggable Control:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="\#3F7F7F#&lt;control \#8A104D#name=\#45458B#&quot;draggable\#45458B#&quot; \#8A104D#backgroundColor=\#45458B#&quot;#f60f&quot; \#8A104D#width=\#45458B#&quot;120px&quot; \#8A104D#height=\#45458B#&quot;120px&quot; \#8A104D#childLayout=\#45458B#&quot;center&quot; \#8A104D#valign=\#45458B#&quot;top&quot; \#3F7F7F#&gt;&#10;  \#3F7F7F#&lt;label \#8A104D#text=\#45458B#&quot;Drag Me!&quot; \#8A104D#valign=\#45458B#&quot;center&quot; \#3F7F7F#/&gt;&#10;\#3F7F7F#&lt;/control&gt;"/>
+        </panel>
+        <text style="textFont" text="&#10;You can define a drop area with a corresponding droppable control. Again, the control may contain any nifty content to provide the visual representation of the drop area."/>
+        <text style="textFont" text="&#10;Create a Drop Area:&#10;"/>
+        <panel style="codeBlock">
+          <text style="codeFont" text="\#3F7F7F#&lt;control \#8A104D#name=\#45458B#&quot;droppable&quot; \#8A104D#width=\#45458B#&quot;140px&quot; \#8A104D#height=\#45458B#&quot;140px&quot; &gt;&#10;  \#3F7F7F#&lt;label \#8A104D#text=\#45458B#&quot;Drop Here!&quot; \#8A104D#color=\#45458B#&quot;#000f&quot; \#8A104D#valign=\#45458B#&quot;center&quot; /&gt;&#10;\#3F7F7F#&lt;/control&gt;" />
+        </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="pageDnD2">
+    <panel style="pagePanel">
+      <panel style="middlePanel">
+        <text style="captionFont" text="Advanced Nifty, Drag and Drop Example"/>
+        <text style="textFont" text="Here is a little Example of Basis Drag and Drop:&#10;"/>
+        <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
+          <control id="draggable" name="draggable" backgroundColor="#f60f" width="120px" height="120px" childLayout="center" align="center" valign="center">
+            <label text="Drag Me!" valign="center" color="#000f" />
+          </control>
+        </panel>
+        <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
+          <control id="droppable1" name="droppable" backgroundColor="#c88f" width="140px" height="140px">
+            <label text="Drop Here!" color="#000f" valign="center" />
+          </control>
+          <panel width="*" />
+          <control id="droppable2" name="droppable" backgroundColor="#8c8f" width="140px" height="140px">
+            <label text="Or Drop Here!" color="#000f" valign="center" />
+          </control>
+        </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="pageTheEndTeaser">
     <panel style="pagePanel">
       <panel style="centerPagePanel">
         <text style="captionFont" text="The End is on the next Page ..." />
