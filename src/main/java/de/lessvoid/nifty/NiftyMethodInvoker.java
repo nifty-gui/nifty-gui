@@ -135,7 +135,7 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
             }
           }
         } else {
-          log.warning("method [" + methodWithName + "] not found at object class [" + object.getClass() + "]");
+          log.fine("method [" + methodWithName + "] not found at object class [" + object.getClass() + "]");
         }
       } else {
         log.warning("target object is null");
