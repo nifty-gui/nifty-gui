@@ -217,7 +217,7 @@ public class DraggableControl implements Controller {
       Element droppable = findDroppableAtCoordinates(element, x, y);
       if (droppable != null)
         return droppable;
-      if (mouseInside) 
+      if (mouseInside && element.isVisibleToMouseEvents()) 
         return originalParent;
     }
     return null;
