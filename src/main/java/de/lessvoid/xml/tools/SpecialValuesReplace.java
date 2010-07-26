@@ -3,6 +3,7 @@ package de.lessvoid.xml.tools;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -165,7 +166,14 @@ public class SpecialValuesReplace {
       String resourceKey = removedQuotes.substring(removedQuotes.indexOf(".") + 1);
       ResourceBundle res = resourceBundles.get(resourceSelector);
       if (res != null) {
-        return res.getString(resourceKey);
+          try {
+              return res.getString(resourceKey);
+          } catch(MissingResourceException e) {
+              if (log.isLoggable(Level.WARNING)) {
+                  log.warning("Missing resource: " + resourceSelector + "." + resourceKey);
+                }
+              return "<" + resourceKey + ">";
+          }
       }
     }
     return value;
