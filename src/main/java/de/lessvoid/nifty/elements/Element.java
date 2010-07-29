@@ -644,6 +644,14 @@ public class Element {
       w.resetSingleEffect(effectEventId);
     }
   }
+  
+  public void resetSingleEffect(final EffectEventId effectEventId, final String customKey) {
+//    mouseDown = false;
+    effectManager.resetSingleEffect(effectEventId, customKey);
+    for (Element w : elements) {
+      w.resetSingleEffect(effectEventId, customKey);
+    }
+  }
 
   public void resetMouseDown() {
 //    mouseDown = false;

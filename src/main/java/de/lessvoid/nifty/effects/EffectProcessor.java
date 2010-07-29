@@ -200,6 +200,27 @@ public class EffectProcessor {
     }
   }
 
+    
+   /**
+    * Resets the effect with the given customKey (if it exists)
+    */
+     public final void reset(final String customKey) {
+       boolean matches = false;
+       for (Effect e : activeEffects) {
+         if(e.customKeyMatches(customKey)) {
+           e.setActive(false);
+           matches = true;
+         }
+       }
+       if(matches) {
+         if(!processingActiveEffects) {
+           activeEffects.clear();
+         } else {
+           clearActiveEffectsRequested = true;
+         }
+       }
+    }
+
   /**
    * activate an effect for an element.
    * @param newListener the EndNotify

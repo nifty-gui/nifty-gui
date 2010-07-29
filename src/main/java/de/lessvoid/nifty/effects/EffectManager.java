@@ -203,6 +203,10 @@ public class EffectManager {
   public void resetSingleEffect(final EffectEventId effectEventId) {
     effectProcessor.get(effectEventId).reset();
   }
+  
+  public void resetSingleEffect(final EffectEventId effectEventId, final String customKey) {
+	  effectProcessor.get(effectEventId).reset(customKey);
+  }
 
   /**
    * set the alternate key.
