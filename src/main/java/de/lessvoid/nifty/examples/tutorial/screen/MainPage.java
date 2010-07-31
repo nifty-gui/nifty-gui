@@ -42,25 +42,27 @@ public class MainPage implements ScreenController, KeyInputHandler {
     pages.add("pageBasicsJava1");
     pages.add("pageBasicsJava1b");
     pages.add("pageBasicsJava1c");
-    pages.add("pageBasicsJava2");
+    pages.add("pageBasicsLoadXml");
+    pages.add("pageChapterII");
     pages.add("pageBasicsXML1");
     pages.add("pageBasicsXML2");
     pages.add("pageBasicsXMLLayout1");
     pages.add("pageBasicsXMLLayout2");
     pages.add("pageBasicsXMLLayout3");
-    pages.add("pageChapterII");
+    pages.add("pageChapterIII");
     pages.add("pageEffects1");
     pages.add("pageEffects2");
     pages.add("pageEffects3");
-    pages.add("pageChapterIII");
+    pages.add("pageCustomEffects1");
+    pages.add("pageChapterIV");
     pages.add("pageConnecting1");
     pages.add("pageConnecting2");
     pages.add("pageBasicsEnd");
-    pages.add("pageChapterIV");
+    pages.add("pageChapterV");
     pages.add("pageAdvancedStyles1");
     pages.add("pageAdvancedStyles2");
     pages.add("pageAdvancedStyles3");
-    pages.add("pageChapterV");
+    pages.add("pageChapterVI");
     pages.add("pageAdvancedControls1");
     pages.add("pageAdvancedControls2");
     pages.add("pageAdvancedControls3");
@@ -70,50 +72,29 @@ public class MainPage implements ScreenController, KeyInputHandler {
     pages.add("pageAdvancedControls7");
     pages.add("pageAdvancedControls8");
     pages.add("pageAdvancedControls9");
-    pages.add("pageChapterVI");
-    pages.add("pageCustomEffects1");
     pages.add("pageChapterVII");
+    pages.add("pageDnD1");
+    pages.add("pageDnD2");
+    pages.add("pageChapterVIII");
     pages.add("pageSlick1");
     pages.add("pageSlick2");
     pages.add("pageSlick3");
-    pages.add("pageChapterVIII");
-    pages.add("pageDnD1");
-    pages.add("pageDnD2");
     pages.add("pageTheEndTeaser");
     pages.add("pageTheEnd");
+    pages.add("pageCredits");
 
-    chapterCaption.add("Welcome");
-    chapterPageMap.put("0", pages.indexOf("pageWelcome"));
-
-    chapterCaption.add("What's new in Nifty 1.2"); // ""
-    chapterPageMap.put("1", pages.indexOf("pageChapterWhatsNewInNifty1.2"));
-
-    chapterCaption.add("Nifty Basics"); // ""
-    chapterPageMap.put("2", pages.indexOf("pageChapterI"));
-
-    chapterCaption.add("Nifty Effects"); // ""
-    chapterPageMap.put("3", pages.indexOf("pageChapterII"));
-
-    chapterCaption.add("Connecting Java and Nifty XML"); // ""
-    chapterPageMap.put("4", pages.indexOf("pageChapterIII"));
-
-    chapterCaption.add("Advanced Nifty, Styles"); // ""
-    chapterPageMap.put("5", pages.indexOf("pageChapterIV"));
-
-    chapterCaption.add("Advanced Nifty, Controls"); // ""
-    chapterPageMap.put("6", pages.indexOf("pageChapterV"));
-
-    chapterCaption.add("Advanced Nifty, Custom Effects"); // ""
-    chapterPageMap.put("7", pages.indexOf("pageChapterVI"));
-
-    chapterCaption.add("Advanced Nifty, Slick2d Integration"); // ""
-    chapterPageMap.put("8", pages.indexOf("pageChapterVII"));
-
-    chapterCaption.add("Advanced Nifty, Drag and Drop"); // ""
-    chapterPageMap.put("9", pages.indexOf("pageChapterVIII"));
-
-    chapterCaption.add("The End"); // ""
-    chapterPageMap.put("10", pages.indexOf("pageTheEndTeaser"));
+    addChapter("Welcome", "pageWelcome");
+    addChapter("What's new in Nifty 1.2", "pageChapterWhatsNewInNifty1.2");
+    addChapter("Nifty Basics: Java", "pageChapterI");
+    addChapter("Nifty Basics: Writing XML", "pageChapterII");
+    addChapter("Nifty Basics: Effects", "pageChapterIII");
+    addChapter("Nifty Basics: Connect Java with Nifty XML", "pageChapterIV");
+    addChapter("Advanced Nifty: Styles", "pageChapterV");
+    addChapter("Advanced Nifty: Controls", "pageChapterVI");
+    addChapter("Advanced Nifty: Drag and Drop", "pageChapterVII");
+    addChapter("Integrate Nifty with: Slick2d", "pageChapterVIII");
+    addChapter("The End", "pageTheEndTeaser");
+    addChapter("Credits", "pageCredits");
 
     ControlEffectOnHoverAttributes textColorEffect = new ControlEffectOnHoverAttributes();
     textColorEffect.setName("textColor");
@@ -124,7 +105,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
     int idx = 0;
     for (String label : chapterCaption) {
       LabelCreator createLabel = new LabelCreator(label);
-      createLabel.setAlign("center");
+      createLabel.setAlign("left");
       createLabel.setTextVAlign("center");
       createLabel.setTextHAlign("center");
       createLabel.setColor("#ccce");
@@ -140,6 +121,11 @@ public class MainPage implements ScreenController, KeyInputHandler {
     lastPageIndex = -1;
     updatePage();
     updateBackButtonVisibility();
+  }
+
+  private void addChapter(final String chapter, final String page) {
+    chapterCaption.add(chapter);
+    chapterPageMap.put(String.valueOf(chapterCaption.size() - 1), pages.indexOf(page));
   }
   
   public void onStartScreen() {
