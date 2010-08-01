@@ -6,6 +6,8 @@ import java.util.Map;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dragndrop.controller.DraggableControl;
+import de.lessvoid.nifty.controls.dragndrop.controller.DroppableControl;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
@@ -49,6 +51,8 @@ public class MainPage implements ScreenController, KeyInputHandler {
     pages.add("pageBasicsXMLLayout1");
     pages.add("pageBasicsXMLLayout2");
     pages.add("pageBasicsXMLLayout3");
+    pages.add("pageBasicsXMLMarkup");
+    pages.add("pageBasicsXMLLocalization");
     pages.add("pageChapterIII");
     pages.add("pageEffects1");
     pages.add("pageEffects2");
@@ -57,6 +61,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
     pages.add("pageChapterIV");
     pages.add("pageConnecting1");
     pages.add("pageConnecting2");
+    pages.add("pageConnecting3");
     pages.add("pageBasicsEnd");
     pages.add("pageChapterV");
     pages.add("pageAdvancedStyles1");
@@ -75,6 +80,8 @@ public class MainPage implements ScreenController, KeyInputHandler {
     pages.add("pageChapterVII");
     pages.add("pageDnD1");
     pages.add("pageDnD2");
+    pages.add("pageDnD3");
+    pages.add("pageDnD4");
     pages.add("pageChapterVIII");
     pages.add("pageSlick1");
     pages.add("pageSlick2");
@@ -265,5 +272,41 @@ public class MainPage implements ScreenController, KeyInputHandler {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public void dragStart(final DroppableControl source, final DraggableControl draggable) {
+    changeInfoText("dragStart() for source: " + getDroppableId(source) + " with draggable: " + getDraggableId(draggable));
+  }
+
+  public void dragCancel(final DroppableControl source, final DraggableControl draggable) {
+    changeInfoText("dragCancel() for source: " + getDroppableId(source) + " with draggable: " + getDraggableId(draggable));
+  }
+
+  public void drop(final DroppableControl source, final DraggableControl draggable, final DroppableControl target) {
+    changeInfoText("drop() for source: " + getDroppableId(source) + " with draggable: " + getDraggableId(draggable) + " on target: " + getDroppableId(target));
+  }
+
+  private String getDroppableId(final DroppableControl source) {
+    if (source == null) {
+      return "null";
+    }
+    if (source.getElement() == null) {
+      return "null element";
+    }
+    return source.getElement().getId();
+  }
+
+  private String getDraggableId(final DraggableControl draggable) {
+    if (draggable == null) {
+      return "null";
+    }
+    if (draggable.getElement() == null) {
+      return "null element";
+    }
+    return draggable.getElement().getId();
+  }
+
+  private void changeInfoText(final String text) {
+    screen.findElementByName("DragAndDropInfoText").getRenderer(TextRenderer.class).setText(text);
   }
 }
