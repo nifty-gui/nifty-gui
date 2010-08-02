@@ -21,4 +21,8 @@ public class LocalizeTestScreen implements ScreenController {
   public String method2(final String param) {
     return "param: " + param;
   }
+
+  public String sound() {
+    return "outro";
+  }
 }

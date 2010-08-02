@@ -5,7 +5,7 @@
   <screen id="start" controller="de.lessvoid.nifty.examples.localize.LocalizeTestScreen">
     <layer id="stuff" childLayout="center">
       <effect>
-        <onActive name="playSound" sound="outro" post="true" repeat="true" />
+        <onActive name="playSound" sound="${CALL.sound()}" post="true" repeat="true" />
       </effect>
       <panel height="50%" width="100%" childLayout="vertical" align="center" valign="center" backgroundColor="#800f">
         <text font="menu.fnt" text="${dialog.hello}" align="center" valign="center" />
