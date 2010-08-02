@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- main menu style -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <style id="menu">
+    <attributes childLayout="vertical" align="center" valign="center" height="50%" />
+    <effect>
+      <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="250" startDelay="0" inherit="true"/>
+      <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="250" inherit="true"/>
+    </effect>
+  </style>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- menu item style --> 
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <style id="menu-item">
+    <attributes align="center"
+    font="slick/small-font-unselected.fnt"
+                focusable="true"
+                controller="de.lessvoid.nifty.controls.MenuItemControl"
+                inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
+    <effect>
+      <onHover name="focus" />
+      <onFocus name="shake" global="false" length="1000" distance="3" post="false"/>
+      <onFocus name="changeFont" font="slick/small-font-selected.fnt" timeType="infinite"/>
+    </effect>
+  </style>
+</nifty-styles>
