@@ -317,6 +317,8 @@ public class ElementType extends XmlBaseType {
 
   public void translateSpecialValues(final Nifty nifty, final Screen screen) {
     super.translateSpecialValues(nifty, screen);
+    interact.translateSpecialValues(nifty, screen);
+    effects.translateSpecialValues(nifty, screen);
     for (ElementType e : elements) {
       e.translateSpecialValues(nifty, screen);
     }

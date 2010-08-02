@@ -95,6 +95,18 @@ public class EffectsType extends XmlBaseType {
     }
   }
 
+  public void translateSpecialValues(final Nifty nifty, final Screen screen) {
+    super.translateSpecialValues(nifty, screen);
+    
+    for (Collection<EffectType> col : new Collection[]{
+        onStartScreen, onEndScreen, onHover, onClick, onFocus,
+        onLostFocus, onGetFocus, onActive, onCustom, onShow, onHide}) {
+      for (EffectType e : col) {
+        e.translateSpecialValues(nifty, screen);
+      }
+    }
+  }
+
   public void addOnStartScreen(final EffectType effectParam) {
     onStartScreen.add(effectParam);
   }
