@@ -3,11 +3,11 @@
   <groupId>lessvoid</groupId>
   <artifactId>nifty-pauls-soundsystem</artifactId>
   <name>Nifty GUI Pauls Soundsystem Adapter</name>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <scm>
-    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-pauls-soundsystem/tags/nifty-pauls-soundsystem-1.0</connection>
-    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-pauls-soundsystem/tags/nifty-pauls-soundsystem-1.0</developerConnection>
-    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-pauls-soundsystem/tags/nifty-pauls-soundsystem-1.0</url>
+    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-pauls-soundsystem/trunk</connection>
+    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-pauls-soundsystem/trunk</developerConnection>
+    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-pauls-soundsystem</url>
   </scm>
   <dependencies>
     <dependency>
