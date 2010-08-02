@@ -14,7 +14,7 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>1.2-SNAPSHOT</version>
+      <version>1.2</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -39,6 +39,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.1</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
@@ -46,10 +47,28 @@
       </plugin>
     </plugins>
   </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.1.2</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+              <report>summary</report>
+              <report>dependencies</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
   <distributionManagement>
-  	<repository>
-  		<id>nifty-maven-repo.sourceforge.net</id>
-  		<url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
-  	</repository>
+    <repository>
+      <id>nifty-maven-repo.sourceforge.net</id>
+      <url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
+    </repository>
   </distributionManagement>
 </project>
