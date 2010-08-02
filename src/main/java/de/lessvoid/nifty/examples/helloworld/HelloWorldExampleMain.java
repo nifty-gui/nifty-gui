@@ -2,9 +2,8 @@ package de.lessvoid.nifty.examples.helloworld;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
-import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
-import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
-import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
@@ -30,8 +29,8 @@ public final class HelloWorldExampleMain {
 
     // create nifty
     Nifty nifty = new Nifty(
-        new RenderDeviceLwjgl(),
-        new SoundSystem(new SlickSoundDevice()),
+        new LwjglRenderDevice(),
+        new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
     nifty.fromXml("helloworld/helloworld.xml", "start");

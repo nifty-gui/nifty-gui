@@ -1,21 +1,12 @@
 package de.lessvoid.nifty.examples.tutorial;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.java2d.input.InputSystemAwtImpl;
-import de.lessvoid.nifty.java2d.renderer.RenderDeviceJava2dImpl;
-import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
-import de.lessvoid.nifty.sound.SoundSystem;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 public final class TutorialMainJava2d {
 
   public static void main(final String[] args) {
+    // The Java2d Renderer is still work in progress and have been disabled for the nifty-examples 1.2 release for now
+
+    /*
     InputSystemAwtImpl inputSystem = new InputSystemAwtImpl();
 
     Dimension dimension = new Dimension(1024, 768);
@@ -63,6 +54,6 @@ public final class TutorialMainJava2d {
         frames = 0;
       }
     }
-
+*/
   }
 }

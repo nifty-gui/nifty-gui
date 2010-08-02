@@ -1,26 +1,10 @@
 package de.lessvoid.nifty.examples.jme;
 
-import java.net.URL;
 
-import org.lwjgl.input.Mouse;
+// The JME2 Renderer is still work in progress and have been disabled for the nifty-examples 1.2 release for now
 
-import com.jme.app.SimpleGame;
-import com.jme.bounding.BoundingBox;
-import com.jme.image.Texture;
-import com.jme.math.Quaternion;
-import com.jme.math.Vector3f;
-import com.jme.scene.Spatial.CullHint;
-import com.jme.scene.shape.Sphere;
-import com.jme.scene.state.BlendState;
-import com.jme.scene.state.TextureState;
-import com.jme.util.TextureManager;
-import com.jme.util.resource.ClasspathResourceLocator;
-import com.jme.util.resource.ResourceLocatorTool;
-
-import de.lessvoid.nifty.jme.render.NiftyNode;
-
-
-public class JmeNifty extends SimpleGame {
+public class JmeNifty { //extends SimpleGame {
+  /*
   private Quaternion rotQuat = new Quaternion();
   private float angle = 0;
   private Sphere sphere;
@@ -87,4 +71,5 @@ public class JmeNifty extends SimpleGame {
     
     rootNode.setCullHint(CullHint.Never);
   }
+  */
 }

@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.lwjglslick.input.LwjglInputSystem;
+import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
 
 /**
  * Helper class shared by all the examples to initialize lwjgl and stuff.

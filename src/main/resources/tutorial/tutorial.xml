@@ -233,7 +233,11 @@
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
-          <text style="textFont" text="As well as every Nifty user as well as all the Nifty critics. All feedback has been greatly appreciated" />
+          <text style="textFont" text="Joakim Lindskog for sending lots of patches and continuing to improve Nifty" />
+        </panel>
+        <panel childLayout="horizontal">
+          <image filename="tutorial/bullet-point.png" />
+          <text style="textFont" text="As well as every Nifty user and especially all of Niftys critics. All feedback has been greatly appreciated and will be considered in future versions." />
         </panel>
         <text style="captionFont" text="&#10;And even more special people" />
         <panel childLayout="horizontal">

@@ -1,33 +1,10 @@
 package de.lessvoid.nifty.examples.tutorial;
 
-import java.io.File;
-import java.net.URL;
 
-import com.jme.app.SimpleGame;
-import com.jme.bounding.BoundingBox;
-import com.jme.image.Texture;
-import com.jme.math.Quaternion;
-import com.jme.math.Vector3f;
-import com.jme.renderer.Renderer;
-import com.jme.scene.Node;
-import com.jme.scene.Spatial;
-import com.jme.scene.Spatial.CullHint;
-import com.jme.scene.shape.Sphere;
-import com.jme.scene.state.BlendState;
-import com.jme.scene.state.TextureState;
-import com.jme.system.DisplaySystem;
-import com.jme.util.TextureManager;
-import com.jme.util.resource.ClasspathResourceLocator;
-import com.jme.util.resource.MultiFormatResourceLocator;
-import com.jme.util.resource.ResourceLocatorTool;
+public class TutorialMainJME2 { //extends SimpleGame {
+  // The JME2 Renderer is still work in progress and have been disabled for the nifty-examples 1.2 release for now
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.jme.input.JmeInputSystem;
-import de.lessvoid.nifty.jme.render.JmeRenderDevice;
-import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
-
-public class TutorialMainJME2 extends SimpleGame {
+  /*
   private Quaternion rotQuat = new Quaternion();
   private float angle = 0;
   private Sphere sphere;
@@ -104,5 +81,5 @@ public class TutorialMainJME2 extends SimpleGame {
         new TimeProvider());
     nifty.fromXml("tutorial/tutorial.xml", "start");
   }
-
+*/
 }

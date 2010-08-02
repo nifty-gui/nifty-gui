@@ -6,8 +6,8 @@ package de.lessvoid.nifty.examples.allcontrols;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
-import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
-import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 public class AllControlsDemoMain {
@@ -19,8 +19,8 @@ public class AllControlsDemoMain {
 
     // create nifty
     Nifty nifty = new Nifty(
-        new RenderDeviceLwjgl(),
-        new SlickSoundDevice(),
+        new LwjglRenderDevice(),
+        new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
     nifty.validateXml("allcontrols/allcontrols.xml");
