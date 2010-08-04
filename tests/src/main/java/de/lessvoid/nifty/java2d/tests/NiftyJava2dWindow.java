@@ -10,7 +10,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.java2d.input.InputSystemAwtImpl;
 import de.lessvoid.nifty.java2d.renderer.FontProviderJava2dImpl;
 import de.lessvoid.nifty.java2d.renderer.RenderDeviceJava2dImpl;
-import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundDeviceNullImpl;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -54,8 +53,8 @@ public class NiftyJava2dWindow {
 		RenderDeviceJava2dImpl renderDevice = new RenderDeviceJava2dImpl(canvas);
 		renderDevice.setFontProvider(fontProvider);
 
-		nifty = new Nifty(renderDevice, new SoundSystem(
-				new SoundDeviceNullImpl()), inputSystem, new TimeProvider());
+		nifty = new Nifty(renderDevice, new SoundDeviceNullImpl(), inputSystem,
+				new TimeProvider());
 		nifty.fromXml(filename, screenName);
 	}
 

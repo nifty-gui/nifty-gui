@@ -6,6 +6,7 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<name>Nifty Java2d</name>
 	<description>Java2d renderer for Nifty-gui</description>
 
 	<modules>
@@ -71,7 +72,7 @@
 			<dependency>
 				<groupId>lessvoid</groupId>
 				<artifactId>nifty</artifactId>
-				<version>1.2-SNAPSHOT</version>
+				<version>1.2</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
