@@ -39,9 +39,10 @@
 	</developers>
 
 	<scm>
-		<connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-java2d/trunk</connection>
-		<developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-java2d/trunk</developerConnection>
-		<url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-java2d</url>
+	
+		<url>http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-java2d-renderer</url>
+		<connection>scm:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-java2d-renderer/trunk/</connection>
+		<developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-java2d-renderer/trunk/</developerConnection>
 	</scm>
 
 	<distributionManagement>
