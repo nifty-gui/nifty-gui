@@ -4,13 +4,13 @@
 	<parent>
 		<groupId>lessvoid</groupId>
 		<artifactId>nifty-java2d</artifactId>
-		<version>1.0</version>
+		<version>1.1-SNAPSHOT</version>
 	</parent>
 
 	<name>Nifty Java2d - Renderer</name>
 	<groupId>${project.parent.groupId}</groupId>
 	<artifactId>nifty-java2d-renderer</artifactId>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
