@@ -11,7 +11,7 @@ public class TextBreak {
   private RenderFont font;
 
   public TextBreak(final String line, final int width, final RenderFont font) {
-    this.words = line.split(" ");
+    this.words = line.split(" ", -1);
     this.width = width;
     this.font = font;
   }
