@@ -135,11 +135,22 @@
     <attributes font="tutorial/fonts/caption.fnt" textHAlign="left" />
   </style>
 
-  <style id="textFont">
-    <attributes font="tutorial/fonts/text.fnt" width="100%" textHAlign="left" wrap="true" />
+  <!-- this gets the font fixed -->
+  <style id="textFontBase">
+    <attributes font="tutorial/fonts/text.fnt" textHAlign="left" />
   </style>
 
-  <style id="textFontLink" base="textFont">
+  <!-- the standard font with wrapping and 100% width for most of the text -->
+  <style id="textFont" base="textFontBase">
+    <attributes width="100%" wrap="true" />
+  </style>
+
+  <!-- text font with no wrapping -->
+  <style id="textFontNoWrap" base="textFontBase">
+  </style>
+
+  <!-- text font clickable -->
+  <style id="textFontLink" base="textFontBase">
     <attributes color="#8fff" />
     <interact onClick="$action" />
   </style>
@@ -211,9 +222,9 @@
         <text style="textFont" text="They are in no particular order.&#10;" />
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
-          <text style="textFont" text="Ariel Coppes and Ruben Garat of Germserk (" />
+          <text style="textFontNoWrap" text="Ariel Coppes and Ruben Garat of Germserk (" />
           <text style="textFontLink" text="http://blog.gemserk.com/" action="openLink(http://blog.gemserk.com/)" />
-          <text style="textFont" text=")" />
+          <text style="textFontNoWrap" text=")" />
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
@@ -242,21 +253,21 @@
         <text style="captionFont" text="&#10;And even more special people" />
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
-          <text style="textFont" text="Erlend, Kirill, Normen, Skye and Ruth of jMonkeyEngine (" />
+          <text style="textFontNoWrap" text="Erlend, Kirill, Normen, Skye and Ruth of jMonkeyEngine (" />
           <text style="textFontLink" text="http://www.jmonkeyengine.com/home/" action="openLink(http://www.jmonkeyengine.com/home/)" />
-          <text style="textFont" text=")" />
+          <text style="textFontNoWrap" text=")" />
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
-          <text style="textFont" text="The awesome Kevin Glass for creating Slick2d (" />
+          <text style="textFontNoWrap" text="The awesome Kevin Glass for creating Slick2d (" />
           <text style="textFontLink" text="http://slick.cokeandcode.com/" action="openLink(http://slick.cokeandcode.com/)" />
-          <text style="textFont" text=") and for being a great person. Thanks Kev! :&gt;" />
+          <text style="textFontNoWrap" text=") and for being a great person. Thanks Kev! :&gt;" />
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
-          <text style="textFont" text="Brian Matzon, Elias Naur, Caspian Rychlik-Prince for lwjgl (" />
+          <text style="textFontNoWrap" text="Brian Matzon, Elias Naur, Caspian Rychlik-Prince for lwjgl (" />
           <text style="textFontLink" text="http://www.lwjgl.org/" action="openLink(http://www.lwjgl.org/)" />
-          <text style="textFont" text=")" />
+          <text style="textFontNoWrap" text=")" />
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
@@ -264,9 +275,9 @@
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
-          <text style="textFont" text="Marc &quot;Lefty&quot; Faulise for early adopting Nifty for his game XSpace (" />
+          <text style="textFontNoWrap" text="Marc &quot;Lefty&quot; Faulise for early adopting Nifty for his game XSpace (" />
           <text style="textFontLink" text="http://lefty2shoes.com/" action="openLink(http://lefty2shoes.com/)" />
-          <text style="textFont" text=")" />
+          <text style="textFontNoWrap" text=")" />
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
@@ -309,9 +320,9 @@
         <text style="captionFont" text="And what is it not?" />
         <text style="textFont" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you need a solution with lots of controls, windows, dialog boxes and so on, you might want to look somewhere else.&#10;"/>
         <panel childLayout="horizontal">
-          <text style="textFont" text="A great option for this kind of applications is TWL (" />
+          <text style="textFontNoWrap" text="A great option for this kind of applications is TWL (" />
           <text style="textFontLink" text="http://twl.l33tlabs.org/" action="openLink(http://twl.l33tlabs.org/)" />
-          <text style="textFont" text=")&#10;" />
+          <text style="textFontNoWrap" text=")&#10;" />
         </panel>
         <text style="captionFont" text="But Nifty is different" />
         <text style="textFont" text="In contrast to TWL and more tradional approaches in creating GUIs Nifty provides more creative freedom and more stuff to play with :) In that respect Nifty is probably less standard or what you would usually expect from a Java based GUI system. On the other hand it allows you to create GUIs that are more visually stunning and exciting.&#10;&#10;The remaining Pages will give an overview how Nifty works and how it can be used." />
@@ -397,9 +408,9 @@
         <text style="captionFont" text="Nifty Basics: Java, Renderers" />
         <text style="textFont" text="But it is possible that you can mix some of the Device implementations. A perfect example would be the native Lwjgl renderer &quot;nifty-lwjgl-renderer-1.0.jar&quot;. This jar gives you a RenderDevice and an InputSystem implementation (both use Lwjgl). It doesn't provide an implementation for the SoundDevice. To add sound you can use &quot;nifty-pauls-soundsystem-1.0.jar&quot;, which is the" />
         <panel childLayout="horizontal">
-          <text style="textFont" text="adapter between Nifty and Pauls Soundsystem (see "/>
+          <text style="textFontNoWrap" text="adapter between Nifty and Pauls Soundsystem (see "/>
           <text style="textFontLink" text="http://www.paulscode.com" action="openLink(http://www.paulscode.com)" />
-          <text style="textFont" text=" for details) or you can use the" />
+          <text style="textFontNoWrap" text=" for details) or you can use the" />
         </panel>
         <text style="textFont" text="&quot;nifty-openal-soundsystem-1.0.jar&quot; which is based directly on OpenAL/lwjgl.&#10;"/>
         <text style="textFont" text="Here are two examples on how to instantiate Nifty using different renderers.&#10;"/>
@@ -441,9 +452,9 @@
         </panel>
         <text style="textFont" text="&#10;This should be self explaining: The first method loads a nifty xml file from a file and the second from an inputStream. The parameter startScreen is the Id of the first screen that Nifty should display. The fileId parameter in the second method is used to identify the loaded xml file in case Nifty needs to decide if a given file has already been loaded. In the first method the filename is used for this purpose.&#10;" />
         <panel childLayout="horizontal">
-          <text style="textFont" text="Validating a Nifty XML File against the XML-Schema XSD (" />
+          <text style="textFontNoWrap" text="Validating a Nifty XML File against the XML-Schema XSD (" />
           <text style="textFontLink" text="http://nifty-gui.sourceforge.net/nifty.xsd" action="openLink(http://nifty-gui.sourceforge.net/nifty.xsd)" />
-          <text style="textFont" text=") is an optional step and is available" />
+          <text style="textFontNoWrap" text=") is an optional step and is available" />
         </panel>
         <text style="textFont" text="starting with Nifty 1.2. You can use the following methods to validate Nifty XML Files:&#10;" />
         <panel style="codeBlock">
@@ -510,13 +521,13 @@
         <text style="textFont" text="Now that you have a Layer you can begin to arrange Elements on it. Elements are images, text or invisible helper objects (panels).&#10;&#10;The key to understanding layout in Nifty is, that every Element can have a certain number of children and that the parent element decides how the child elements are arranged within that element. The layer you've already defined is basically the root Element and it has by default the width and height of the screen."/>
         <text style="textFont" text="&#10;Currently Nifty supports the following layouts.&#10;"/>
         <panel align="left" childLayout="horizontal">
-          <panel align="left" childLayout="vertical">
+          <panel align="left" childLayout="vertical" width="50%">
             <text style="textFont" text="Vertical:"/>
             <panel style="imageBlock">
               <image filename="tutorial/images/layout-vertical.tga" align="left"/>
             </panel>
           </panel>
-          <panel align="left" childLayout="vertical">
+          <panel align="left" childLayout="vertical" width="50%">
             <text style="textFont" text="Horizontal:"/>
             <panel style="imageBlock">
               <image filename="tutorial/images/layout-horizontal.tga" align="left"/>
@@ -533,13 +544,13 @@
 	      <text style="captionFont" text="Nifty Basics: Writing XML, Layout, cont."/>
         <text style="textFont" text="And there are two more Layout types.&#10;"/>
 	      <panel align="left" childLayout="horizontal">
-	        <panel align="left" childLayout="vertical">
+	        <panel width="50%" align="left" childLayout="vertical">
 	          <text style="textFont" text="Center:"/>
 	          <panel style="imageBlock">
 	            <image filename="tutorial/images/layout-center.tga" align="left"/>
 	          </panel>
 	        </panel>
-	        <panel align="left" childLayout="vertical">
+	        <panel width="50%" align="left" childLayout="vertical">
 	          <text style="textFont" text="Absolute:"/>
 	          <panel style="imageBlock">
 	            <image filename="tutorial/images/layout-absolute.tga" align="left"/>
@@ -563,7 +574,7 @@
         <text style="textFont" text="&#10;And the result will be this:&#10;"/>
         <panel childLayout="vertical" height="150px" backgroundColor="#0f0f">
           <panel backgroundColor="#080f"/>
-          <text style="textFont" text="&#10;Hello Nifty World!&#10;" align="center" color="#000f"/>
+          <text style="textFontNoWrap" text="&#10;Hello Nifty World!&#10;" align="center" color="#000f"/>
           <panel backgroundColor="#080f"/>
         </panel>
         <text style="textFont" text="&#10;Wow, that was not that bad, wasn't it? =)"/>
@@ -1196,42 +1207,42 @@
         <text style="textFont" text="You now know a lot about Nifty GUI and how to create your own GUIs with it. You also know the internal workings of Nifty controls as well as how Nifty effects work and how you can create your own. You should keep an eye of the following resources for further informations about Nifty GUI development:&#10;"/>
         <panel childLayout="vertical" width="100%">
           <panel childLayout="horizontal" width="100%">
-            <text style="textFont" text="Main Nifty Place at sf.net:" width="30%" wrap="false"/>
+            <text style="textFontNoWrap" text="Main Nifty Place at sf.net:" width="30%" wrap="false"/>
             <text style="textFontLink" width="70%" wrap="false" text="http://sourceforge.net/projects/nifty-gui/" action="openLink(http://sourceforge.net/projects/nifty-gui/)" />
           </panel>
           <panel childLayout="horizontal" width="100%">
-            <text style="textFont" text="Nifty Documentation Wiki:" width="30%" wrap="false"/>
+            <text style="textFontNoWrap" text="Nifty Documentation Wiki:" width="30%" wrap="false"/>
             <text style="textFontLink" width="70%" wrap="false" text="http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Main_Page" action="openLink(http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Main_Page)" />
           </panel>
           <panel childLayout="horizontal" width="100%">
-            <text style="textFont" text="Nifty Blog:" width="30%" wrap="false"/>
+            <text style="textFontNoWrap" text="Nifty Blog:" width="30%" wrap="false"/>
             <text style="textFontLink" width="70%" wrap="false" text="http://nifty-gui.lessvoid.com/" action="openLink(http://nifty-gui.lessvoid.com/)" />
           </panel>
           <panel childLayout="horizontal" width="100%">
-            <text style="textFont" text="&#10;Follow Nifty GUI at twitter:" width="30%" wrap="false"/>
+            <text style="textFontNoWrap" text="&#10;Follow Nifty GUI at twitter:" width="30%" wrap="false"/>
             <text style="textFontLink" width="70%" wrap="false" text="&#10;http://twitter.com/niftygui" action="openLink(http://twitter.com/niftygui)" />
           </panel>
           <panel childLayout="horizontal" width="100%">
-            <text style="textFont" text="Add it to your software stack:" width="30%" wrap="false"/>
+            <text style="textFontNoWrap" text="Add it to your software stack:" width="30%" wrap="false"/>
             <text style="textFontLink" width="70%" wrap="false" text="https://www.ohloh.net/p/nifty-gui" action="openLink(https://www.ohloh.net/p/nifty-gui)" />
           </panel>
         </panel>
         <text style="textFont" text="&#10;Happy Coding! :)"/>
         <text style="captionFont" text="&#10;Credits for this Tutorial/Demo"/>
         <panel childLayout="horizontal">
-          <text style="textFont" text="Background Music: &quot;L.O.R.D.&quot; by &quot;echoed&quot; ("/>
+          <text style="textFontNoWrap" text="Background Music: &quot;L.O.R.D.&quot; by &quot;echoed&quot; ("/>
           <text style="textFontLink" text="http://ccmixter.org/files/echoed/23071" action="openLink(http://ccmixter.org/files/echoed/23071)" />
-          <text style="textFont" text="), creative commons Attribution-Noncommercial 3.0"/>
+          <text style="textFontNoWrap" text="), creative commons Attribution-Noncommercial 3.0"/>
         </panel>
         <panel childLayout="horizontal">
-          <text style="textFont" text="license ("/>
+          <text style="textFontNoWrap" text="license ("/>
           <text style="textFontLink" text="http://creativecommons.org/licenses/by-nc/3.0/" action="openLink(http://creativecommons.org/licenses/by-nc/3.0/)" />
-          <text style="textFont" text=")&#10;"/>
+          <text style="textFontNoWrap" text=")&#10;"/>
         </panel>
         <panel childLayout="horizontal">
-          <text style="textFont" text="Nifty GUI, colored logo design: blubbelOo ()&#10;"/>
+          <text style="textFontNoWrap" text="Nifty GUI, colored logo design: blubbelOo ()&#10;"/>
           <text style="textFontLink" text="http://blubbeloo.deviantart.com/" action="openLink(http://blubbeloo.deviantart.com/)" />
-          <text style="textFont" text=")&#10;"/>
+          <text style="textFontNoWrap" text=")&#10;"/>
         </panel>
         <text style="textFont" text="Soundeffects, Coding, Nifty GUI and everything else: void. That's me :)"/>
       </panel>
