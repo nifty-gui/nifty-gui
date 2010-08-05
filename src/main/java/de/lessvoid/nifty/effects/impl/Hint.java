@@ -64,7 +64,7 @@ public class Hint implements EffectImpl {
       final NiftyRenderEngine r) {
     if (targetElement != null) {
       TextRenderer textRenderer = targetElement.getRenderer(TextRenderer.class);
-      textRenderer.changeText(hintText);
+      textRenderer.setText(hintText);
       targetElement.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
       nifty.getCurrentScreen().layoutLayers();
     }

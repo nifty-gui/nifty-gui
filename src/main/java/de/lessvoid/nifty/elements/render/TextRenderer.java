@@ -86,6 +86,7 @@ public class TextRenderer implements ElementRenderer {
    * default constructor.
    */
   public TextRenderer() {
+	  originalText = "";
   }
 
   /**
@@ -279,14 +280,6 @@ public class TextRenderer implements ElementRenderer {
   }
 
   /**
-   * Change the text.
-   * @param newText the new text
-   */
-  public void changeText(final String newText) {
-    initText(newText);
-  }
-
-  /**
    * set thing.
    * @param newXoffsetHack xoffset
    */
@@ -363,6 +356,17 @@ public class TextRenderer implements ElementRenderer {
    */
   public String getOriginalText() {
     return originalText;
+  }
+  
+  public String getWrappedText() {
+	  StringBuffer result = new StringBuffer();
+	    if (textLines.length > 0) {
+	        result.append(textLines[0]);
+	        for (int i=1; i<textLines.length; i++) {
+	            result.append('\n'+textLines[i]);
+	        }
+	    }
+	    return result.toString();
   }
 
   /**
