@@ -180,7 +180,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
 
     Element currentPageElement = screen.findElementByName("curPage");
     currentPageElement.startEffect(EffectEventId.onCustom);
-    currentPageElement.getRenderer(TextRenderer.class).changeText(String.valueOf(pageIndex + 1) + " / " + pages.size());
+    currentPageElement.getRenderer(TextRenderer.class).setText(String.valueOf(pageIndex + 1) + " / " + pages.size());
   }
 
   private void showBackButton() {
