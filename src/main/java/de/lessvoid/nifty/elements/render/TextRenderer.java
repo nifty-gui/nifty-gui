@@ -389,7 +389,7 @@ public class TextRenderer implements ElementRenderer {
     }
   }
 
-  private String[] bla(final int width, final NiftyRenderEngine r, final String[] textLines) {
+  private String[] wrapText(final int width, final NiftyRenderEngine r, final String[] textLines) {
     RenderFont font = ensureFont(r);
     List < String > lines = new ArrayList < String > ();
     for (String line : textLines) {
@@ -404,21 +404,25 @@ public class TextRenderer implements ElementRenderer {
   }
 
   public void setWidthConstraint(final Element element, final SizeValue elementConstraintWidth, final int parentWidth, final NiftyRenderEngine renderEngine) {
+    System.out.println("before " + element.getId() + ": " + elementConstraintWidth + ", " + parentWidth + ", " + lineWrapping + ", " + isCalculatedLineWrapping + " -> " + element.getElementType().getAttributes().toString());
     if (elementConstraintWidth == null || parentWidth == 0 || !lineWrapping || isCalculatedLineWrapping) {
       return;
     }
     int valueAsInt = elementConstraintWidth.getValueAsInt(parentWidth);
-    this.textLines = bla(valueAsInt, renderEngine, originalText.split("\n", -1));
-    maxWidth = 0;
-    for (String line : textLines) {
-      int lineWidth = font.getWidth(line);
-      if (lineWidth > maxWidth) {
-        maxWidth = lineWidth;
-      }
+    this.textLines = wrapText(valueAsInt, renderEngine, originalText.split("\n", -1));
+    maxWidth = valueAsInt;
+    if(maxWidth == 0) {
+	    for (String line : textLines) {
+	      int lineWidth = font.getWidth(line);
+	      if (lineWidth > maxWidth) {
+	        maxWidth = lineWidth;
+	      }
+	    }
     }
     element.setConstraintWidth(new SizeValue(getTextWidth() + "px"));
     element.setConstraintHeight(new SizeValue(getTextHeight() + "px"));
     isCalculatedLineWrapping = true;
+    System.out.println("after " + element.getId() + ": " + elementConstraintWidth + ", " + parentWidth + ", " + lineWrapping + ", " + isCalculatedLineWrapping + " -> " + element.getElementType().getAttributes().toString());
   }
 
   public void setLineWrapping(final boolean lineWrapping) {

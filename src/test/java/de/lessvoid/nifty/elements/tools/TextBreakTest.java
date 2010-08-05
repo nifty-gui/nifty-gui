@@ -33,6 +33,7 @@ public class TextBreakTest {
 
   @Test
   public void testNoSplit() {
+    expect(renderFontMock.getWidth("abcdef")).andReturn(12);
     replay(elementMock);
     replay(renderFontMock);
 

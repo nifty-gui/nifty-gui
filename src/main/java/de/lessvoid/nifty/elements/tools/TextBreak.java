@@ -20,7 +20,6 @@ public class TextBreak {
     if (isSingleLine()) {
       return singleResult();
     }
-
     return processWords();
   }
 
@@ -32,19 +31,41 @@ public class TextBreak {
 
   private List < String > processWords() {
     List < String > result = new ArrayList < String > ();
-    int i = 0;
+    int i = 0, length;
+    String currentWord = "";
+    StringBuffer currentLine = new StringBuffer();
     while (isValidIndex(i)) {
-      StringBuffer currentLine = new StringBuffer();
-      int length = 0;
+    	//Empty StringBuffer
+      currentLine.setLength(0);
+      length = 0;
       while (isBelowLimit(length) && isValidIndex(i)) {
-        String currentWord = getWord(i);
+        currentWord = getWord(i);
         length += font.getWidth(currentWord);
         if (isBelowLimit(length)) {
           currentLine.append(currentWord);
           i++;
         }
       }
-      result.add(currentLine.toString());
+      if(currentLine.length() > 0) {
+    	  result.add(currentLine.toString());
+      }
+      else { //If we get here the word itself is longer than the wrapping width
+    	  //We break it up
+    	  String wordPart = currentWord;
+    	  int p;
+    	  do {
+    		  p = 0;
+	    	  while(!isBelowLimit(font.getWidth(wordPart))) {
+	    		  //Remove one character from the end and see if the new word fits
+	    		  wordPart = wordPart.substring(0, wordPart.length()-1);
+	    		  p++;
+	    	  }
+	    	  result.add(wordPart);
+	    	  //Set the new word part to the rest of the word
+	    	  wordPart = currentWord.substring(currentWord.length()-p);
+    	  } while(p > 0);
+    	  i++;
+      }
     }
     return result;
   }
@@ -66,6 +87,7 @@ public class TextBreak {
   }
 
   private boolean isSingleLine() {
-    return words.length == 1;
+	//Check if there is only one word and it fits in one line
+    return (words.length == 1 && isBelowLimit(font.getWidth(words[0])));
   }
 }
