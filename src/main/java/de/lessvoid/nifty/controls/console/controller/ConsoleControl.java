@@ -129,7 +129,7 @@ public class ConsoleControl implements Controller {
         String line = buffer.get(lastLineIdx);
         Element el = element.findElementByName("console-line-" + i);
         if (el != null) {
-          el.getRenderer(TextRenderer.class).changeText(line);
+          el.getRenderer(TextRenderer.class).setText(line);
         }
         lastLineIdx--;
       }

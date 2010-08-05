@@ -197,7 +197,7 @@ public class TextFieldControl implements Controller {
       }
       text = new String(chars);
     }
-    textRenderer.changeText(text);
+    textRenderer.setText(text);
     textRenderer.setSelection(textField.getSelectionStart(), textField.getSelectionEnd());
 
     // calc cursor position
