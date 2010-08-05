@@ -404,7 +404,6 @@ public class TextRenderer implements ElementRenderer {
   }
 
   public void setWidthConstraint(final Element element, final SizeValue elementConstraintWidth, final int parentWidth, final NiftyRenderEngine renderEngine) {
-    System.out.println("before " + element.getId() + ": " + elementConstraintWidth + ", " + parentWidth + ", " + lineWrapping + ", " + isCalculatedLineWrapping + " -> " + element.getElementType().getAttributes().toString());
     if (elementConstraintWidth == null || parentWidth == 0 || !lineWrapping || isCalculatedLineWrapping) {
       return;
     }
@@ -422,7 +421,6 @@ public class TextRenderer implements ElementRenderer {
     element.setConstraintWidth(new SizeValue(getTextWidth() + "px"));
     element.setConstraintHeight(new SizeValue(getTextHeight() + "px"));
     isCalculatedLineWrapping = true;
-    System.out.println("after " + element.getId() + ": " + elementConstraintWidth + ", " + parentWidth + ", " + lineWrapping + ", " + isCalculatedLineWrapping + " -> " + element.getElementType().getAttributes().toString());
   }
 
   public void setLineWrapping(final boolean lineWrapping) {
