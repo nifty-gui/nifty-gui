@@ -286,10 +286,12 @@ public class Nifty implements NiftyInputConsumer {
 
   public void executeEndOfFrameElementActions() {
     if (hasEndOfFrameElementActions()) {
-      for (EndOfFrameElementAction elementAction : new ArrayList<EndOfFrameElementAction>(endOfFrameElementActions)) {
+      ArrayList<EndOfFrameElementAction> listCopy = new ArrayList<EndOfFrameElementAction>(endOfFrameElementActions);
+      endOfFrameElementActions.clear();
+
+      for (EndOfFrameElementAction elementAction : listCopy) {
         elementAction.perform();
       }
-      endOfFrameElementActions.clear();
     }
   }
 
@@ -801,11 +803,7 @@ public class Nifty implements NiftyInputConsumer {
 
   public void moveElement(final Screen screen, final Element elementToMove, final Element destination, final EndNotify endNotify) {
     elementToMove.removeFromFocusHandler();
-    elementToMove.startEffect(EffectEventId.onEndScreen, new EndNotify() {
-      public void perform() {
-        endOfFrameElementActions.add(new EndOfFrameElementAction(screen, elementToMove, new ElementMoveAction(destination), endNotify));
-      }
-    });
+    endOfFrameElementActions.add(new EndOfFrameElementAction(screen, elementToMove, new ElementMoveAction(destination), endNotify));
   }
 
   public void toggleElementsDebugConsole() {
