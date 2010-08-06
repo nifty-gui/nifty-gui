@@ -3,7 +3,8 @@ package de.lessvoid.nifty.spi.sound;
 import de.lessvoid.nifty.sound.SoundSystem;
 
 /**
- * @author acoppes Null implementation of SoundDevice
+ * @author acoppes Null implementation of SoundDevice used in java2d-renderer
+ *         tests
  */
 public class SoundDeviceNullImpl implements SoundDevice {
 

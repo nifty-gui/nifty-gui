@@ -1,7 +1,8 @@
 package de.lessvoid.nifty.spi.sound;
 
 /**
- * @author acoppes Null implementation of SoundHandle
+ * @author acoppes Null implementation of SoundHandle used in java2d-renderer
+ *         tests
  */
 public class SoundHandleNullImpl implements SoundHandle {
 
@@ -30,6 +31,7 @@ public class SoundHandleNullImpl implements SoundHandle {
 
 	}
 
-  public void dispose() {
-  }  
+	public void dispose() {
+
+	}
 }

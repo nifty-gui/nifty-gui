@@ -32,11 +32,11 @@ public class FontProviderJava2dImpl {
 	}
 
 	private Font getDefaultFont(String name) {
-		logger.info("cannot found " + name
-				+ " font, using default font instead");
+		logger.info("font " + name
+				+ " not found, using default font instead");
 		if (defaultFont != null)
 			return defaultFont;
-		throw new RuntimeException("cannot found " + name + " font");
+		throw new RuntimeException("font " + name + " not found");
 	}
 
 }

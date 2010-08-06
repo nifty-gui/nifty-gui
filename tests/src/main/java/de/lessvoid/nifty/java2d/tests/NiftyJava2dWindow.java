@@ -10,6 +10,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.java2d.input.InputSystemAwtImpl;
 import de.lessvoid.nifty.java2d.renderer.FontProviderJava2dImpl;
 import de.lessvoid.nifty.java2d.renderer.RenderDeviceJava2dImpl;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundDeviceNullImpl;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -19,6 +20,13 @@ public class NiftyJava2dWindow {
 
 	public NiftyJava2dWindow(String title, int width, int height,
 			String filename, String screenName) {
+		this(title, width, height, filename, screenName,
+				new SoundDeviceNullImpl());
+	}
+
+	public NiftyJava2dWindow(String title, int width, int height,
+			String filename, String screenName, SoundDevice soundDevice) {
+
 		InputSystemAwtImpl inputSystem = new InputSystemAwtImpl();
 
 		final Canvas canvas = new Canvas();
@@ -53,13 +61,23 @@ public class NiftyJava2dWindow {
 		RenderDeviceJava2dImpl renderDevice = new RenderDeviceJava2dImpl(canvas);
 		renderDevice.setFontProvider(fontProvider);
 
-		nifty = new Nifty(renderDevice, new SoundDeviceNullImpl(), inputSystem,
+		nifty = new Nifty(renderDevice, soundDevice, inputSystem,
 				new TimeProvider());
 		nifty.fromXml(filename, screenName);
 	}
 
 	protected void registerFonts(FontProviderJava2dImpl fontProviderJava2dImpl) {
 
+	}
+	
+	long fps = 0;
+	
+	public long getFrameTime() {
+		return 1000 / getFramesPerSecond();
+	}
+	
+	public long getFramesPerSecond() {
+		return fps;
 	}
 
 	public void start() {
@@ -75,8 +93,9 @@ public class NiftyJava2dWindow {
 
 			long diff = System.currentTimeMillis() - time;
 			if (diff >= 1000) {
+				fps = frames;
 				time += diff;
-				System.out.println("fps: " + frames);
+//				System.out.println("fps: " + frames);
 				frames = 0;
 			}
 		}
