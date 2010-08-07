@@ -6,8 +6,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.IOException;
+import java.util.Stack;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -26,7 +30,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	protected static final Logger logger = Logger
 			.getLogger(RenderDeviceJava2dImpl.class.getName());
 
-	Graphics graphics;
+	Graphics2D graphics;
 
 	private final Canvas canvas;
 
@@ -55,7 +59,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		if (screenSizeHasChanged())
 			offscreenImage = (BufferedImage) canvas.createImage(getWidth(),
 					getHeight());
-		graphics = offscreenImage.getGraphics();
+		graphics = (Graphics2D) offscreenImage.getGraphics();
 	}
 
 	private boolean screenSizeHasChanged() {
@@ -99,8 +103,15 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	@Override
 	public RenderImage createImage(String filename, boolean filterLinear) {
 		try {
-			return new RenderImageJava2dImpl(ImageIO.read(ResourceLoader
-					.getResource(filename)));
+			BufferedImage image = ImageIO.read(ResourceLoader
+					.getResource(filename));
+			// convert the image to ARGB model
+			BufferedImage bufferedImage = new BufferedImage(image
+					.getWidth(null), image.getHeight(null),
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics g = bufferedImage.getGraphics();
+			g.drawImage(image, 0, 0, null);
+			return new RenderImageJava2dImpl(bufferedImage);
 		} catch (IOException e) {
 			throw new RuntimeException("failed to create image " + filename, e);
 		}
@@ -138,20 +149,48 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		graphics.setClip(clipRectangle);
 		graphics.setColor(convertNiftyColor(color));
 
-		int dstCenterX = x + width / 2;
-		int dstCenterY = y + height / 2;
+		width = renderImage.getWidth();
+		height = renderImage.getHeight();
 
-		float scaledWidth = imageScale * width / 2f;
-		float scaledHeight = imageScale * height / 2f;
+		RescaleOp rop = new RescaleOp(getColorScales(color), new float[4],
+				new RenderingHints(RenderingHints.KEY_RENDERING,
+						RenderingHints.VALUE_RENDER_SPEED));
 
-		int dstX1 = (int) (dstCenterX - scaledWidth);
-		int dstX2 = (int) (dstCenterX + scaledWidth);
+		AffineTransform transform = new AffineTransform();
 
-		int dstY1 = (int) (dstCenterY - scaledHeight);
-		int dstY2 = (int) (dstCenterY + scaledHeight);
-		
-		graphics.drawImage(renderImage.image, dstX1, dstY1, dstX2, dstY2, 0, 0,
-				renderImage.getWidth(), renderImage.getHeight(), null);
+		AffineTransform translateTransform = AffineTransform
+				.getTranslateInstance(-width / 2, -height / 2);
+		AffineTransform scaleTransform = AffineTransform.getScaleInstance(
+				imageScale, imageScale);
+		AffineTransform inverseTranslateTransform = AffineTransform
+				.getTranslateInstance(x + width / 2, y + height / 2);
+
+		transform.concatenate(inverseTranslateTransform);
+		transform.concatenate(scaleTransform);
+		transform.concatenate(translateTransform);
+
+		pushTransform();
+		{
+			graphics.transform(transform);
+			graphics.drawImage(renderImage.image, rop, 0, 0);
+		}
+		popTransform();
+	}
+
+	Stack<AffineTransform> transformStack = new Stack<AffineTransform>();
+
+	private void pushTransform() {
+		transformStack.push(graphics.getTransform());
+	}
+
+	private void popTransform() {
+		graphics.setTransform(transformStack.pop());
+	}
+
+	private float[] getColorScales(Color color) {
+		float[] scales = { color.getRed(), color.getGreen(), color.getBlue(),
+				color.getAlpha() };
+		return scales;
 	}
 
 	@Override

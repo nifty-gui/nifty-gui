@@ -1,18 +1,18 @@
 package de.lessvoid.nifty.java2d.renderer;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import de.lessvoid.nifty.spi.render.RenderImage;
 
 public class RenderImageJava2dImpl implements RenderImage {
 
-	final Image image;
+	final BufferedImage image;
 
-	Image getImage() {
+	BufferedImage getImage() {
 		return image;
 	}
 
-	public RenderImageJava2dImpl(Image image) {
+	public RenderImageJava2dImpl(BufferedImage image) {
 		this.image = image;
 	}
 
@@ -24,6 +24,6 @@ public class RenderImageJava2dImpl implements RenderImage {
 		return image.getWidth(null);
 	}
 
-  public void dispose() {
-  }  
+	public void dispose() {
+	}
 }

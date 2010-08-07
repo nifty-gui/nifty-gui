@@ -88,14 +88,14 @@ public class NiftyJava2dWindow {
 
 		while (!done) {
 
-			done = nifty.render(false);
+			done = nifty.render(true);
 			frames++;
 
 			long diff = System.currentTimeMillis() - time;
 			if (diff >= 1000) {
 				fps = frames;
 				time += diff;
-//				System.out.println("fps: " + frames);
+				System.out.println("fps: " + frames);
 				frames = 0;
 			}
 		}
