@@ -1,15 +1,14 @@
 package de.lessvoid.nifty.java2d.renderer;
 
+import java.awt.AlphaComposite;
 import java.awt.Canvas;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 import java.awt.image.VolatileImage;
 import java.io.IOException;
 import java.util.Stack;
@@ -59,7 +58,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		if (screenSizeHasChanged())
 			offscreenImage = (VolatileImage) canvas.createVolatileImage(
 					getWidth(), getHeight());
-		graphics = (Graphics2D) offscreenImage.getGraphics();
+		graphics = offscreenImage.createGraphics();
 		graphics2dHelper = new Graphics2dHelper(graphics);
 	}
 
@@ -148,14 +147,9 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
 
 		graphics.setClip(clipRectangle);
-		graphics.setColor(convertNiftyColor(color));
 
 		width = renderImage.getWidth();
 		height = renderImage.getHeight();
-
-		RescaleOp rop = new RescaleOp(getColorScales(color), new float[4],
-				new RenderingHints(RenderingHints.KEY_RENDERING,
-						RenderingHints.VALUE_RENDER_SPEED));
 
 		AffineTransform transform = new AffineTransform();
 
@@ -173,10 +167,8 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		graphics2dHelper.pushTransform();
 		{
 			graphics.transform(transform);
-			if (color.getAlpha() != 1.0f)
-				graphics.drawImage(renderImage.image, rop, 0, 0);
-			else
-				graphics.drawImage(renderImage.image, 0, 0, null);
+			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, color.getAlpha()));
+			graphics.drawImage(renderImage.image, 0, 0, null);
 		}
 		graphics2dHelper.popTransform();
 	}
@@ -200,12 +192,6 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		}
 	}
 
-	private float[] getColorScales(Color color) {
-		float[] scales = { color.getRed(), color.getGreen(), color.getBlue(),
-				color.getAlpha() };
-		return scales;
-	}
-
 	@Override
 	public void renderImage(RenderImage image, int x, int y, int w, int h,
 			int srcX, int srcY, int srcW, int srcH, Color color, float scale,
@@ -216,7 +202,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 		RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
 		graphics.setClip(clipRectangle);
-		graphics.setColor(convertNiftyColor(color));
+		graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, color.getAlpha()));
 		graphics.drawImage(renderImage.image, x, y, x + w, y + h, srcX, srcY,
 				srcX + srcW, srcY + srcH, null);
 
@@ -244,7 +230,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 			Color topRight, Color bottomRight, Color bottomLeft) {
 		graphics.setClip(clipRectangle);
 
-		// TODO: know how to do gradient of 4 colors
+		// TODO: learn how to do gradient of 4 colors
 		Graphics2D graphics2d = (Graphics2D) graphics;
 
 		// vertical gradient is by default
