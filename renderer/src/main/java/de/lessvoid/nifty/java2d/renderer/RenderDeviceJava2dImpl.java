@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
+import java.awt.image.VolatileImage;
 import java.io.IOException;
 import java.util.Stack;
 import java.util.logging.Logger;
@@ -32,15 +33,15 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 	Graphics2D graphics;
 
+	Graphics2dHelper graphics2dHelper;
+
 	private final Canvas canvas;
 
-	private BufferedImage offscreenImage;
+	private VolatileImage offscreenImage;
 
 	private Rectangle clipRectangle = null;
 
 	private FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
-
-	// TODO: BlendMode?
 
 	private java.awt.Color convertNiftyColor(Color color) {
 		return new java.awt.Color(color.getRed(), color.getGreen(), color
@@ -49,17 +50,17 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 	public RenderDeviceJava2dImpl(Canvas canvas) {
 		this.canvas = canvas;
-		offscreenImage = (BufferedImage) canvas.createImage(getWidth(),
+		offscreenImage = (VolatileImage) canvas.createVolatileImage(getWidth(),
 				getHeight());
 	}
 
 	@Override
 	public void beginFrame() {
-
 		if (screenSizeHasChanged())
-			offscreenImage = (BufferedImage) canvas.createImage(getWidth(),
-					getHeight());
+			offscreenImage = (VolatileImage) canvas.createVolatileImage(
+					getWidth(), getHeight());
 		graphics = (Graphics2D) offscreenImage.getGraphics();
+		graphics2dHelper = new Graphics2dHelper(graphics);
 	}
 
 	private boolean screenSizeHasChanged() {
@@ -169,22 +170,34 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		transform.concatenate(scaleTransform);
 		transform.concatenate(translateTransform);
 
-		pushTransform();
+		graphics2dHelper.pushTransform();
 		{
 			graphics.transform(transform);
-			graphics.drawImage(renderImage.image, rop, 0, 0);
+			if (color.getAlpha() != 1.0f)
+				graphics.drawImage(renderImage.image, rop, 0, 0);
+			else
+				graphics.drawImage(renderImage.image, 0, 0, null);
 		}
-		popTransform();
+		graphics2dHelper.popTransform();
 	}
 
-	Stack<AffineTransform> transformStack = new Stack<AffineTransform>();
+	class Graphics2dHelper {
 
-	private void pushTransform() {
-		transformStack.push(graphics.getTransform());
-	}
+		Stack<AffineTransform> transformStack = new Stack<AffineTransform>();
 
-	private void popTransform() {
-		graphics.setTransform(transformStack.pop());
+		private final Graphics2D graphics;
+
+		public Graphics2dHelper(Graphics2D graphics) {
+			this.graphics = graphics;
+		}
+
+		public void pushTransform() {
+			transformStack.push(graphics.getTransform());
+		}
+
+		public void popTransform() {
+			graphics.setTransform(transformStack.pop());
+		}
 	}
 
 	private float[] getColorScales(Color color) {
