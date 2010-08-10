@@ -33,7 +33,8 @@ public class NiftyJava2dWindow {
 
 		canvas.addMouseMotionListener(inputSystem);
 		canvas.addMouseListener(inputSystem);
-
+		canvas.addKeyListener(inputSystem);
+		
 		Frame f = new Frame(title);
 
 		f.addWindowListener(new WindowAdapter() {
