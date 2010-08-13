@@ -6,6 +6,9 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.java2d.input.InputSystemAwtImpl;
 import de.lessvoid.nifty.java2d.renderer.FontProviderJava2dImpl;
@@ -16,6 +19,9 @@ import de.lessvoid.nifty.tools.TimeProvider;
 
 public class NiftyJava2dWindow {
 
+	protected static final Logger logger = LoggerFactory
+			.getLogger(NiftyJava2dWindow.class);
+	
 	protected Nifty nifty;
 
 	public NiftyJava2dWindow(String title, int width, int height,
@@ -39,13 +45,8 @@ public class NiftyJava2dWindow {
 
 		f.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
+				logger.info("exit from main window");
 				System.exit(0);
-			}
-
-			public void windowDeiconified(WindowEvent e) {
-			}
-
-			public void windowIconified(WindowEvent e) {
 			}
 		});
 
