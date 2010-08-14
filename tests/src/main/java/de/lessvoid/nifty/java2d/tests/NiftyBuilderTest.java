@@ -13,8 +13,13 @@ import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.TextCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlInteractAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.java2d.renderer.FontProviderJava2dImpl;
+import de.lessvoid.nifty.java2d.tests.NiftyBuilderTest.ElementBuilder.Align;
+import de.lessvoid.nifty.java2d.tests.NiftyBuilderTest.ElementBuilder.LayoutType;
+import de.lessvoid.nifty.java2d.tests.NiftyBuilderTest.ElementBuilder.VAlign;
 import de.lessvoid.nifty.java2d.tests.controllers.HelloWorldMainScreenController;
 import de.lessvoid.nifty.loaderv2.NiftyFactory;
 import de.lessvoid.nifty.screen.Screen;
@@ -38,15 +43,27 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 				Font.BOLD, 24));
 	}
 
-	public static final class LayoutType {
-		public static String Vertical = "vertical";
-		public static String Horizontal = "horizontal";
-		public static String Center = "center";
-		public static String Absolute = "absolute";
-		public static String Overlay = "overlay";
-	}
+	abstract static class ElementBuilder {
 
-	abstract class ElementBuilder {
+		public static final class LayoutType {
+			public static String Vertical = "vertical";
+			public static String Horizontal = "horizontal";
+			public static String Center = "center";
+			public static String Absolute = "absolute";
+			public static String Overlay = "overlay";
+		}
+
+		public static final class Align {
+			public static String Left = "left";
+			public static String Right = "right";
+			public static String Center = "center";
+		}
+
+		public static final class VAlign {
+			public static String Top = "top";
+			public static String Bottom = "bottom";
+			public static String Center = "center";
+		}
 
 		protected Screen screen = null;
 
@@ -72,6 +89,15 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 			elementAttributes.put("backgroundColor", backgroundColor);
 		}
 
+		public void color(String color) {
+			elementAttributes.put("color", color);
+		}
+
+		// I can't ....
+		// public void color(Color color) {
+		// elementAttributes.put("color", color.toString());
+		// }
+
 		/**
 		 * @param childLayout
 		 *            use LayoutType.
@@ -88,10 +114,20 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 			elementAttributes.put("width", width);
 		}
 
+		/**
+		 * Use Align static members
+		 * 
+		 * @param align
+		 */
 		public void align(String align) {
 			elementAttributes.put("align", align);
 		}
 
+		/**
+		 * Use VAlign static members
+		 * 
+		 * @param valign
+		 */
 		public void valign(String valign) {
 			elementAttributes.put("valign", valign);
 		}
@@ -100,105 +136,155 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 			elementAttributes.put("visibleToMouse", visibleToMouse);
 		}
 
-		public void interactOnClick(String method) {
-
+		public void font(String font) {
+			elementAttributes.put("font", font);
 		}
 
-		public abstract Element build();
-
-		// / temporal
-
-		protected ControlEffectAttributes onStartScreenEffect = null;
-
-		protected ControlEffectOnHoverAttributes onHoverEffect = null;
-
-		public void onStartScreenEffect(
-				ControlEffectAttributes onStartScreenEffect) {
-			this.onStartScreenEffect = onStartScreenEffect;
-		}
-
-		public void onHoverEffect(ControlEffectOnHoverAttributes onHoverEffect) {
-			this.onHoverEffect = onHoverEffect;
-
-		}
-	}
-
-	class PanelBuilder extends ElementBuilder {
-
-		@Override
-		public Element build() {
-
-			if (id == null)
-				throw new RuntimeException("id is a required value for a panel");
-
-			if (screen == null)
-				throw new RuntimeException(
-						"screen is a required value for a panel");
-
-			if (parent == null)
-				throw new RuntimeException(
-						"parent is a required value for a panel");
-
-			return new PanelCreator(id) {
-				{
-					for (String name : elementAttributes.keySet())
-						set(name, elementAttributes.get(name));
-
-					if (onStartScreenEffect != null)
-						addEffectsOnStartScreen(onStartScreenEffect);
-
-					if (onHoverEffect != null)
-						addEffectsOnHover(onHoverEffect);
-				}
-			}.create(nifty, screen, parent);
-		}
-
-	}
-
-	class LayerBuilder extends ElementBuilder {
+		// children
 
 		private List<ElementBuilder> elementBuilders = new ArrayList<ElementBuilder>();
 
-		public Element build() {
-
-			if (id == null)
-				throw new RuntimeException("id is a required value for a layer");
-
-			if (screen == null)
-				throw new RuntimeException(
-						"screen is a required value for a layer");
-
-			if (parent == null)
-				throw new RuntimeException(
-						"parent is a required value for a layer");
-
-			Element layer = new LayerCreator(id) {
-				{
-					for (String name : elementAttributes.keySet())
-						set(name, elementAttributes.get(name));
-				}
-			}.create(nifty, screen, parent);
-
+		protected void addChildrenFor(Nifty nifty, Element element) {
 			for (ElementBuilder elementBuilder : elementBuilders) {
 
-				elementBuilder.parent(layer);
+				elementBuilder.parent(element);
 				elementBuilder.screen(screen);
 
-				Element childElement = elementBuilder.build();
+				Element childElement = elementBuilder.build(nifty);
 
-				layer.add(childElement);
+				element.add(childElement);
 			}
-
-			return layer;
 		}
 
 		public void panel(PanelBuilder panelBuilder) {
 			elementBuilders.add(panelBuilder);
 		}
 
+		public void text(TextBuilder textBuilder) {
+			elementBuilders.add(textBuilder);
+		}
+
+		public abstract Element build(Nifty nifty);
+
+		protected void validate() {
+			if (id == null)
+				throw new RuntimeException(
+						"id is a required value for an element");
+
+			if (screen == null)
+				throw new RuntimeException(
+						"screen is a required value for an element");
+
+			if (parent == null)
+				throw new RuntimeException(
+						"parent is a required value for an element");
+		}
+
+		// effects...
+
+		ControlEffectsAttributes effectsAttributes = new ControlEffectsAttributes();
+
+		public void onStartScreenEffect(
+				ControlEffectAttributes onStartScreenEffect) {
+			effectsAttributes.addOnStartScreen(onStartScreenEffect);
+		}
+
+		public void onHoverEffect(ControlEffectOnHoverAttributes onHoverEffect) {
+			effectsAttributes.addOnHover(onHoverEffect);
+		}
+
+		public void onEndScreenEffect(ControlEffectAttributes onEndScreenEffect) {
+			effectsAttributes.addOnEndScreen(onEndScreenEffect);
+		}
+
+		// interact
+
+		ControlInteractAttributes interactAttributes = new ControlInteractAttributes();
+
+		public void interactOnClick(String method) {
+			interactAttributes.setOnClick(method);
+		}
 	}
 
-	class ScreenBuilder {
+	static class TextBuilder extends ElementBuilder {
+
+		protected String text;
+
+		@Override
+		public Element build(Nifty nifty) {
+
+			validate();
+
+			Element text = new TextCreator(id, this.text) {
+				{
+					for (String name : elementAttributes.keySet())
+						set(name, elementAttributes.get(name));
+
+					setEffects(effectsAttributes);
+					setInteract(interactAttributes);
+
+				}
+			}.create(nifty, screen, parent);
+
+			addChildrenFor(nifty, text);
+
+			return text;
+		}
+
+		public void text(String text) {
+			this.text = text;
+		}
+
+	}
+
+	static class PanelBuilder extends ElementBuilder {
+
+		@Override
+		public Element build(Nifty nifty) {
+
+			validate();
+
+			Element panel = new PanelCreator(id) {
+				{
+					for (String name : elementAttributes.keySet())
+						set(name, elementAttributes.get(name));
+
+					setEffects(effectsAttributes);
+					setInteract(interactAttributes);
+				}
+			}.create(nifty, screen, parent);
+
+			addChildrenFor(nifty, panel);
+
+			return panel;
+		}
+
+	}
+
+	static class LayerBuilder extends ElementBuilder {
+
+		public Element build(Nifty nifty) {
+
+			validate();
+
+			Element layer = new LayerCreator(id) {
+				{
+					for (String name : elementAttributes.keySet())
+						set(name, elementAttributes.get(name));
+
+					setEffects(effectsAttributes);
+					setInteract(interactAttributes);
+				}
+			}.create(nifty, screen, parent);
+
+			addChildrenFor(nifty, layer);
+
+			return layer;
+		}
+
+	}
+
+	static class ScreenBuilder {
 
 		private final Nifty nifty;
 
@@ -224,13 +310,7 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 
 			// validation
 
-			if (id == null)
-				throw new RuntimeException(
-						"id is a required value for a screen");
-
-			if (controller == null)
-				throw new RuntimeException(
-						"controller is a required value for a screen");
+			validate();
 
 			Screen screen = new Screen(nifty, id, controller, nifty
 					.getTimeProvider());
@@ -245,13 +325,23 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 					layerBuilder.parent(rootElement);
 
 				// already inserts the layer element in LAyerCreator
-				layerBuilder.build();
+				layerBuilder.build(nifty);
 
 				// screen.addLayerElement(layer);
 				// screen.processAddAndRemoveLayerElements();
 			}
 
 			return screen;
+		}
+
+		protected void validate() {
+			if (id == null)
+				throw new RuntimeException(
+						"id is a required value for a screen");
+
+			if (controller == null)
+				throw new RuntimeException(
+						"controller is a required value for a screen");
 		}
 
 		public void layer(LayerBuilder layerBuilder) {
@@ -267,7 +357,6 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 
 		Screen screen = new ScreenBuilder(nifty) {
 			{
-
 				id("screen");
 
 				controller(new HelloWorldMainScreenController());
@@ -276,6 +365,7 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 					{
 						id("layer");
 
+						// I want backgroundColor to be a Color but I dunno how
 						backgroundColor("#003f");
 						childLayout(LayoutType.Center);
 
@@ -285,28 +375,32 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 
 								height("25%");
 								width("80%");
-								align("center");
-								valign("center");
+								align(Align.Center);
+								valign(VAlign.Center);
 								backgroundColor("#f60f");
 								childLayout(LayoutType.Center);
 
 								visibleToMouse("true");
 
-								interactOnClick("quit()"); // unimplemented!!
-								// could be directly
-								// a callable?
-
-								// effects {
-								// onStartScreen {
-								//										
-								// }
-								// }
+								// I want this to be a callable maybe
+								interactOnClick("quit()");
 
 								onStartScreenEffect(new ControlEffectAttributes() {
 									{
 										setAttribute("name", "move");
 										setAttribute("mode", "in");
 										setAttribute("direction", "top");
+										setAttribute("length", "300");
+										setAttribute("startDelay", "0");
+										setAttribute("inherit", "true");
+									}
+								});
+
+								onEndScreenEffect(new ControlEffectAttributes() {
+									{
+										setAttribute("name", "move");
+										setAttribute("mode", "out");
+										setAttribute("direction", "bottom");
 										setAttribute("length", "300");
 										setAttribute("startDelay", "0");
 										setAttribute("inherit", "true");
@@ -322,7 +416,19 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 										setAttribute("post", "true");
 									}
 								});
-								
+
+								text(new TextBuilder() {
+									{
+										id("text1");
+										text("Hello World!!");
+
+										font("arial.fnt");
+										color("#000f");
+										align(Align.Center);
+										valign(VAlign.Center);
+									}
+								});
+
 							}
 						});
 					}
@@ -330,83 +436,6 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 
 			}
 		}.build();
-
-		// Screen screen = new Screen(nifty, "start",
-		// new HelloWorldMainScreenController(), nifty.getTimeProvider());
-
-		List<Element> layerElements = screen.getLayerElements();
-		Element layer = layerElements.get(0);
-
-		Element panel = layer.getElements().get(0);
-
-		// Element rootLayer = NiftyFactory.createRootLayer("layer", nifty,
-		// screen, nifty.getTimeProvider());
-		//
-		// Element layer = new LayerCreator("layer") {
-		// {
-		// setBackgroundColor("#003f");
-		// setChildLayout("center");
-		// }
-		// }.create(nifty, screen, rootLayer);
-
-		// Element panel = new PanelCreator("panel") {
-		// {
-		// setHeight("25%");
-		// setWidth("80%");
-		// setAlign("center");
-		// setVAlign("center");
-		// setBackgroundColor("#f60f");
-		// setChildLayout("center");
-		// setVisibleToMouse("true");
-		// setInteractOnClick("quit()");
-		//
-		// addEffectsOnStartScreen(new ControlEffectAttributes() {
-		// {
-		// setAttribute("name", "move");
-		// setAttribute("mode", "in");
-		// setAttribute("direction", "top");
-		// setAttribute("length", "300");
-		// setAttribute("startDelay", "0");
-		// setAttribute("inherit", "true");
-		// }
-		// });
-		//
-		// addEffectsOnEndScreen(new ControlEffectAttributes() {
-		// {
-		// setAttribute("name", "move");
-		// setAttribute("mode", "out");
-		// setAttribute("direction", "bottom");
-		// setAttribute("length", "300");
-		// setAttribute("startDelay", "0");
-		// setAttribute("inherit", "true");
-		// }
-		// });
-		//
-		// addEffectsOnHover(new ControlEffectOnHoverAttributes() {
-		// {
-		// setAttribute("name", "pulsate");
-		// setAttribute("scaleFactor", "0.008");
-		// setAttribute("startColor", "#f600");
-		// setAttribute("endColor", "#ffff");
-		// setAttribute("post", "true");
-		// }
-		// });
-		//
-		// }
-		// }.create(nifty, screen, layer);
-
-		panel.add(new TextCreator("text", "Hello World!") {
-			{
-				setFont("arial.fnt");
-				setColor("#000f");
-				setAlign("center");
-				setVAlign("center");
-			}
-		}.create(nifty, screen, panel));
-
-		layer.add(panel);
-
-		screen.addLayerElement(layer);
 
 		nifty.addScreen("start", screen);
 		nifty.gotoScreen("start");
