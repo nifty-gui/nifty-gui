@@ -21,8 +21,7 @@ public class HelloWorldMainScreenController implements ScreenController {
 	}
 
 	public void quit() {
-		nifty.setAlternateKeyForNextLoadXml("fade");
-		nifty.fromXml("helloworld.xml", "start");
+		nifty.gotoScreen("start");
 	}
 
 }

@@ -17,21 +17,19 @@ import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundDeviceNullImpl;
 import de.lessvoid.nifty.tools.TimeProvider;
 
-public class NiftyJava2dWindow {
+public abstract class NiftyJava2dWindow {
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(NiftyJava2dWindow.class);
-	
+
 	protected Nifty nifty;
 
-	public NiftyJava2dWindow(String title, int width, int height,
-			String filename, String screenName) {
-		this(title, width, height, filename, screenName,
-				new SoundDeviceNullImpl());
+	public NiftyJava2dWindow(String title, int width, int height) {
+		this(title, width, height, new SoundDeviceNullImpl());
 	}
 
 	public NiftyJava2dWindow(String title, int width, int height,
-			String filename, String screenName, SoundDevice soundDevice) {
+			SoundDevice soundDevice) {
 
 		InputSystemAwtImpl inputSystem = new InputSystemAwtImpl();
 
@@ -40,7 +38,7 @@ public class NiftyJava2dWindow {
 		canvas.addMouseMotionListener(inputSystem);
 		canvas.addMouseListener(inputSystem);
 		canvas.addKeyListener(inputSystem);
-		
+
 		Frame f = new Frame(title);
 
 		f.addWindowListener(new WindowAdapter() {
@@ -65,19 +63,26 @@ public class NiftyJava2dWindow {
 
 		nifty = new Nifty(renderDevice, soundDevice, inputSystem,
 				new TimeProvider());
-		nifty.fromXml(filename, screenName);
+		init();
+		// init(filename, screenName);
 	}
+
+	// protected void init(String filename, String screenName) {
+	// nifty.fromXml(filename, screenName);
+	// }
+
+	protected abstract void init();
 
 	protected void registerFonts(FontProviderJava2dImpl fontProviderJava2dImpl) {
 
 	}
-	
+
 	long fps = 0;
-	
+
 	public long getFrameTime() {
 		return 1000 / getFramesPerSecond();
 	}
-	
+
 	public long getFramesPerSecond() {
 		return fps;
 	}
