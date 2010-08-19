@@ -6,7 +6,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  * The BoxConstraints class represent a rectangular area on the screen.
- * It has a position (x,y) as well as height and weight attributes.
+ * It has a position (x,y) as well as height and width attributes.
  *
  * @author void
  */
@@ -33,12 +33,12 @@ public class BoxConstraints {
   private SizeValue height;
 
   /**
-   * Horizontal Alignment Constrain.
+   * Horizontal Alignment Constraint.
    */
   private HorizontalAlign horizontalAlign;
 
   /**
-   * Vertical Alignment Constrain.
+   * Vertical Alignment Constraint.
    */
   private VerticalAlign verticalAlign;
 
@@ -110,7 +110,7 @@ public class BoxConstraints {
 
   /**
    * Get the horizontal position constraint of the box.
-   * @param newX the vertical position of the box
+   * @param newX the horizontal position of the box
    */
   public final void setX(final SizeValue newX) {
     this.x = newX;
