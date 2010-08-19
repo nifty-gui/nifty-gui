@@ -106,6 +106,11 @@ public class Element {
    * The focus handler this element is attached to.
    */
   private FocusHandler focusHandler;
+  
+  /**
+   * Listeners listening for changes to this element
+   */
+  private List<ElementChangeListener> listeners;
 
   /**
    * enable element.
@@ -405,6 +410,22 @@ public class Element {
   public int getWidth() {
     return layoutPart.getBox().getWidth();
   }
+  
+  /**
+   * Sets the height of this element
+   * @param height the new height in pixels
+   */
+  public void setHeight(int height) {
+	  layoutPart.getBox().setHeight(height);
+  }
+  
+  /**
+   * Sets the width of this element
+   * @param width the new width in pixels
+   */
+  public void setWidth(int width) {
+	  layoutPart.getBox().setWidth(width);
+  }
 
   /**
    * get all child elements of this element.
@@ -616,6 +637,7 @@ public class Element {
     for (Element w : elements) {
       w.setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
     }
+    notifyListeners();
   }
 
   /**
@@ -666,6 +688,7 @@ public class Element {
    */
   public void setConstraintX(final SizeValue newX) {
     layoutPart.getBoxConstraints().setX(newX);
+    notifyListeners();
   }
 
   /**
@@ -674,6 +697,7 @@ public class Element {
    */
   public void setConstraintY(final SizeValue newY) {
     layoutPart.getBoxConstraints().setY(newY);
+    notifyListeners();
   }
 
   /**
@@ -682,6 +706,7 @@ public class Element {
    */
   public void setConstraintWidth(final SizeValue newWidth) {
     layoutPart.getBoxConstraints().setWidth(newWidth);
+    notifyListeners();
   }
 
   /**
@@ -690,6 +715,7 @@ public class Element {
    */
   public void setConstraintHeight(final SizeValue newHeight) {
     layoutPart.getBoxConstraints().setHeight(newHeight);
+    notifyListeners();
   }
 
   public SizeValue getConstraintX() {
@@ -1657,6 +1683,7 @@ public class Element {
     elementType.applyInteract(nifty, screen, this);
 
     log.info("after setStyle [" + newStyle + "]\n" + elementType.output(0));
+    notifyListeners();
   }
 
   void removeStyle(final String style) {
@@ -1666,6 +1693,7 @@ public class Element {
     effectManager.removeAllEffects();
 
     log.info("after removeStyle [" + style + "]\n" + elementType.output(0));
+    notifyListeners();
   }
 
   /**
@@ -1762,18 +1790,22 @@ public class Element {
 
   public void setPaddingLeft(final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingLeft(paddingValue);
+    notifyListeners();
   }
 
   public void setPaddingRight(final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingRight(paddingValue);
+    notifyListeners();
   }
 
   public void setPaddingTop(final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingTop(paddingValue);
+    notifyListeners();
   }
 
   public void setPaddingBottom(final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingBottom(paddingValue);
+    notifyListeners();
   }
 
   public String toString() {
@@ -1805,5 +1837,22 @@ public class Element {
     for (Element element : elements) {
       element.reactivate();
     }
+  }
+  
+  public void addElementChangeListener(ElementChangeListener listener) {
+	  if(listeners == null) listeners = new ArrayList<ElementChangeListener>();
+	  listeners.add(listener);
+  }
+  
+  public void removeElementChangeListener(ElementChangeListener listener) {
+	  if(listeners == null) return;
+	  listeners.remove(listener);
+  }
+  
+  private void notifyListeners() {
+	  if(listeners == null) return;
+	  for(ElementChangeListener listener : listeners) {
+		  listener.elementChanged(this);
+	  }
   }
 }
