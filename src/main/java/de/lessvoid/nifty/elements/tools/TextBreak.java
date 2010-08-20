@@ -55,7 +55,7 @@ public class TextBreak {
     	  int p;
     	  do {
     		  p = 0;
-	    	  while(!isBelowLimit(font.getWidth(wordPart))) {
+	    	  while(!isBelowLimit(font.getWidth(wordPart)) && wordPart.length() > 0) {
 	    		  //Remove one character from the end and see if the new word fits
 	    		  wordPart = wordPart.substring(0, wordPart.length()-1);
 	    		  p++;
