@@ -76,4 +76,20 @@ public class HorizontalScrollbarControl implements Controller {
   public void setCurrentValue(final float f) {
     scrollbar.changeSliderPos(f);
   }
+  
+  public float getWorldMinValue() {
+    return scrollbar.getWorldMinValue();
+  }
+
+  public float getWorldMaxValue() {
+    return scrollbar.getWorldMaxValue();
+  }
+
+  public float getViewMinValue() {
+    return scrollbar.getViewMinValue();
+  }
+
+  public float getViewMaxValue() {
+    return scrollbar.getViewMaxValue();
+  }
 }
