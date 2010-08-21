@@ -20,7 +20,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
 import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.loaderv2.NiftyFactory;
+import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
@@ -77,6 +77,7 @@ public class Nifty implements NiftyInputConsumer {
   private Map<String, ResourceBundle> resourceBundles = new Hashtable<String, ResourceBundle>();
   private Locale locale = Locale.getDefault();
   private Properties globalProperties;
+  private RootLayerFactory rootLayerFactory = new RootLayerFactory();
 
   /**
    * Create nifty. This is now deprecated because it's way easier to use the other
@@ -612,7 +613,7 @@ public class Nifty implements NiftyInputConsumer {
 
   private Element createPopupFromType(final PopupType popupTypeParam) {
     Screen screen = getCurrentScreen();
-    LayoutPart layerLayout = NiftyFactory.createRootLayerLayoutPart(this);
+    LayoutPart layerLayout = rootLayerFactory.createRootLayerLayoutPart(this);
     PopupType popupType = new PopupType(popupTypeParam);
     popupType.prepare(this, screen, screen.getRootElement().getElementType());
     return popupType.create(
@@ -967,5 +968,9 @@ public class Nifty implements NiftyInputConsumer {
 
   public void setGlobalProperties(Properties globalProperties) {
     this.globalProperties = globalProperties;
+  }
+
+  public RootLayerFactory getRootLayerFactory() {
+    return rootLayerFactory;
   }
 }

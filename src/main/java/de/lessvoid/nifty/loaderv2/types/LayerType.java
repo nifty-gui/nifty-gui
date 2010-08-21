@@ -2,7 +2,7 @@ package de.lessvoid.nifty.loaderv2.types;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
-import de.lessvoid.nifty.loaderv2.NiftyFactory;
+import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -28,7 +28,7 @@ public class LayerType extends ElementType {
     setTagName("<layer>");
     setElementRendererCreator(new ElementRendererCreator() {
       public ElementRenderer[] createElementRenderer(final Nifty nifty) {
-        return NiftyFactory.getPanelRenderer();
+        return nifty.getRootLayerFactory().createPanelRenderer();
       }
     });
   }

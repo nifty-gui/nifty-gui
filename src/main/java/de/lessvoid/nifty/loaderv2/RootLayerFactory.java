@@ -14,11 +14,8 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 
-public final class NiftyFactory {
-  private NiftyFactory() {
-  }
-
-  public static Element createRootLayer(
+public class RootLayerFactory {
+  public Element createRootLayer(
       final String id,
       final Nifty nifty,
       final Screen screen,
@@ -32,18 +29,18 @@ public final class NiftyFactory {
         screen.getFocusHandler(),
         false,
         time,
-        getPanelRenderer());
+        createPanelRenderer());
     return layer;
   }
 
-  public static ElementRenderer[] getPanelRenderer() {
+  public ElementRenderer[] createPanelRenderer() {
     List < ElementRenderer > renderer = new ArrayList < ElementRenderer >();
     renderer.add(new ImageRenderer());
     renderer.add(new PanelRenderer());
     return renderer.toArray(new ElementRenderer[0]);
   }
 
-  public static LayoutPart createRootLayerLayoutPart(final Nifty nifty) {
+  public LayoutPart createRootLayerLayoutPart(final Nifty nifty) {
     LayoutPart layerLayout = new LayoutPart();
     layerLayout.getBox().setX(0);
     layerLayout.getBox().setY(0);

@@ -5,7 +5,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.loaderv2.NiftyFactory;
+import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.EffectsType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
@@ -307,7 +307,7 @@ public class ControlAttributes {
       final Screen screen,
       final Element parent) {
     LayerType layerType = new LayerType(attributes);
-    return buildControl(nifty, screen, parent, layerType, NiftyFactory.createRootLayerLayoutPart(nifty));
+    return buildControl(nifty, screen, parent, layerType, nifty.getRootLayerFactory().createRootLayerLayoutPart(nifty));
   }
 
   protected Element createImage(

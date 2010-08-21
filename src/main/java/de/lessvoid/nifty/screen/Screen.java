@@ -58,14 +58,7 @@ public class Screen {
     screenId = newId;
     screenController = newScreenController;
     if (screenController == null) {
-      screenController = new ScreenController() {
-        public void bind(final Nifty niftyParam, final Screen screenParam) {
-        }
-        public void onStartScreen() {
-        }
-        public void onEndScreen() {
-        }
-      };
+      screenController = new DefaultScreenController();
     }
     timeProvider = newTimeProvider;
     focusHandler = new FocusHandler();
@@ -284,7 +277,7 @@ public class Screen {
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
     }
 
-//    System.out.println(mouseOverHandler.getInfoString());
+    //System.out.println(mouseOverHandler.getInfoString());
     mouseOverHandler.processMouseOverEvent(rootElement, inputEvent, eventTime);
     mouseOverHandler.processMouseEvent(inputEvent, eventTime);
 
@@ -461,6 +454,10 @@ public class Screen {
 
   public void setDefaultFocusElement(final String defaultFocusElementIdParam) {
     defaultFocusElementId = defaultFocusElementIdParam;
+  }
+
+  public String getDefaultFocusElementId() {
+    return defaultFocusElementId;
   }
 
   private class LocalEndNotify implements EndNotify {

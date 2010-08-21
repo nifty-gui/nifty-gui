@@ -8,7 +8,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.loaderv2.NiftyFactory;
+import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -59,7 +59,7 @@ public class ScreenType extends XmlBaseType {
       }
     }
 
-    Element rootElement = NiftyFactory.createRootLayer("root", nifty, screen, timeProvider);
+    Element rootElement = nifty.getRootLayerFactory().createRootLayer("root", nifty, screen, timeProvider);
     screen.setRootElement(rootElement);
 
     StopWatch stopWatch = new StopWatch(timeProvider);
@@ -71,7 +71,7 @@ public class ScreenType extends XmlBaseType {
 
     stopWatch.start();
     for (LayerType layerType : layers) {
-      LayoutPart layerLayout = NiftyFactory.createRootLayerLayoutPart(nifty);
+      LayoutPart layerLayout = nifty.getRootLayerFactory().createRootLayerLayoutPart(nifty);
       screen.addLayerElement(
           layerType.create(
               rootElement,
