@@ -21,7 +21,7 @@ import de.lessvoid.nifty.java2d.tests.NiftyBuilderTest.ElementBuilder.Align;
 import de.lessvoid.nifty.java2d.tests.NiftyBuilderTest.ElementBuilder.LayoutType;
 import de.lessvoid.nifty.java2d.tests.NiftyBuilderTest.ElementBuilder.VAlign;
 import de.lessvoid.nifty.java2d.tests.controllers.HelloWorldMainScreenController;
-import de.lessvoid.nifty.loaderv2.NiftyFactory;
+import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.spi.sound.SoundDeviceNullImpl;
@@ -314,7 +314,7 @@ public class NiftyBuilderTest extends NiftyJava2dWindow {
 
 			Screen screen = new Screen(nifty, id, controller, nifty
 					.getTimeProvider());
-			Element rootElement = NiftyFactory.createRootLayer("layer", nifty,
+			Element rootElement = nifty.getRootLayerFactory().createRootLayer("layer", nifty,
 					screen, nifty.getTimeProvider());
 			screen.setRootElement(rootElement);
 
