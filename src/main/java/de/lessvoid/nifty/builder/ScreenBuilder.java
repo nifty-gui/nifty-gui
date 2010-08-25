@@ -49,7 +49,7 @@ public class ScreenBuilder {
         layerBuilder.parent(screenRootElement);
       }
 
-      layerBuilder.build(nifty);
+      layerBuilder.build(nifty, screen, screenRootElement);
     }
 
     return screen;

@@ -3,25 +3,22 @@ package de.lessvoid.nifty.builder;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.LayerCreator;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.screen.Screen;
 
 public class LayerBuilder extends ElementBuilder {
+  private LayerCreator creator = new LayerCreator();
 
-  public Element build(Nifty nifty) {
+  public LayerBuilder() {
+    initialize(creator);
+  }
 
-    validate();
+  public LayerBuilder(final String id) {
+    this();
+    this.id(id);
+  }
 
-    Element layer = new LayerCreator(id) {
-      {
-        for (String name : elementAttributes.keySet())
-          set(name, elementAttributes.get(name));
-
-        setEffects(effectsAttributes);
-        setInteract(interactAttributes);
-      }
-    }.create(nifty, screen, parent);
-
-    addChildrenFor(nifty, layer);
-
-    return layer;
+  @Override
+  protected Element buildInternal(final Nifty nifty, final Screen screen, final Element parent) {
+    return creator.create(nifty, screen, parent);
   }
 }

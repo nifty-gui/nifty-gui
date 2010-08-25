@@ -3,27 +3,22 @@ package de.lessvoid.nifty.builder;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.screen.Screen;
 
 public class PanelBuilder extends ElementBuilder {
+  private PanelCreator creator = new PanelCreator();
 
-  @Override
-  public Element build(Nifty nifty) {
-
-    validate();
-
-    Element panel = new PanelCreator(id) {
-      {
-        for (String name : elementAttributes.keySet())
-          set(name, elementAttributes.get(name));
-
-        setEffects(effectsAttributes);
-        setInteract(interactAttributes);
-      }
-    }.create(nifty, screen, parent);
-
-    addChildrenFor(nifty, panel);
-
-    return panel;
+  public PanelBuilder() {
+    initialize(creator);
   }
 
+  public PanelBuilder(final String id) {
+    this();
+    this.id(id);
+  }
+
+  @Override
+  protected Element buildInternal(final Nifty nifty, final Screen screen, final Element parent) {
+    return creator.create(nifty, screen, parent);
+  }
 }

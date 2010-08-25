@@ -3,34 +3,26 @@ package de.lessvoid.nifty.builder;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.TextCreator;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.screen.Screen;
 
 public class TextBuilder extends ElementBuilder {
+  private TextCreator creator = new TextCreator("");
 
-  protected String text;
+  public TextBuilder() {
+    initialize(creator);
+  }
+
+  public TextBuilder(final String id) {
+    this();
+    this.id(id);
+  }
+
+  public void text(final String text) {
+    creator.setText(text);
+  }
 
   @Override
-  public Element build(Nifty nifty) {
-
-    validate();
-
-    Element text = new TextCreator(id, this.text) {
-      {
-        for (String name : elementAttributes.keySet())
-          set(name, elementAttributes.get(name));
-
-        setEffects(effectsAttributes);
-        setInteract(interactAttributes);
-
-      }
-    }.create(nifty, screen, parent);
-
-    addChildrenFor(nifty, text);
-
-    return text;
+  protected Element buildInternal(final Nifty nifty, final Screen screen, final Element parent) {
+    return creator.create(nifty, screen, parent);
   }
-
-  public void text(String text) {
-    this.text = text;
-  }
-
 }
