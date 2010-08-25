@@ -178,5 +178,19 @@ public abstract class ElementBuilder {
   public boolean hasParent() {
     return parent != null;
   }
+  
+  // helpers
+  
+  public String percentage(int percentage) {
+    return Integer.toString(percentage) + "%";
+  }
+	
+  public String pixels(int px) {
+    return Integer.toString(px) + "px";
+  }
+	
+  public String color(float r, float g, float b, float a) {
+    throw new RuntimeException("not implemented yet");
+  }
 }
 
