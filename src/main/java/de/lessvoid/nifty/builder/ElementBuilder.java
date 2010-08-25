@@ -145,7 +145,7 @@ public abstract class ElementBuilder {
       throw new RuntimeException(
           "screen is a required value for an element");
 
-    if (parent == null)
+    if (!hasParent())
       throw new RuntimeException(
           "parent is a required value for an element");
   }
@@ -176,7 +176,7 @@ public abstract class ElementBuilder {
   }
 
   public boolean hasParent() {
-    return parent == null;
+    return parent != null;
   }
 }
 
