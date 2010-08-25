@@ -8,7 +8,7 @@ import de.lessvoid.nifty.spi.sound.SoundDeviceNullImpl;
 public class AllExamplesJava2d extends NiftyJava2dWindow {
 
 	public static void main(String[] args) throws InterruptedException {
-		new AllExamplesJava2d("Nifty Java2d Renderer - HelloWolrd example",
+		new AllExamplesJava2d("Nifty Java2d Renderer - HelloWorld example",
 				1024, 768).start();
 	}
 
