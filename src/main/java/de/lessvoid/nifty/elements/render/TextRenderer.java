@@ -407,7 +407,13 @@ public class TextRenderer implements ElementRenderer {
     if (elementConstraintWidth == null || parentWidth == 0 || !lineWrapping || isCalculatedLineWrapping) {
       return;
     }
-    int valueAsInt = elementConstraintWidth.getValueAsInt(parentWidth);
+    int valueAsInt = element.getWidth();
+    if (valueAsInt == 0) {
+      valueAsInt = elementConstraintWidth.getValueAsInt(parentWidth);
+    }
+    if (valueAsInt <= 0) {
+      return;
+    }
     this.textLines = wrapText(valueAsInt, renderEngine, originalText.split("\n", -1));
     maxWidth = valueAsInt;
     if(maxWidth == 0) {
