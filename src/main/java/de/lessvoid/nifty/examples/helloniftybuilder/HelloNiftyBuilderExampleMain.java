@@ -1,13 +1,13 @@
 package de.lessvoid.nifty.examples.helloniftybuilder;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.EffectBuilder;
+import de.lessvoid.nifty.builder.HoverEffectBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
-import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
@@ -55,30 +55,27 @@ public class HelloNiftyBuilderExampleMain implements ScreenController {
           interactOnClick("quit()");
           padding("10px");
 
-          onStartScreenEffect(new ControlEffectAttributes() {{
-            setAttribute("name", "move");
-            setAttribute("mode", "in");
-            setAttribute("direction", "top");
-            setAttribute("length", "300");
-            setAttribute("startDelay", "0");
-            setAttribute("inherit", "true");
+          onStartScreenEffect(new EffectBuilder("move") {{
+            parameter("mode", "in");
+            parameter("direction", "top");
+            length(300);
+            startDelay(0);
+            inherit(true);
           }});
 
-          onEndScreenEffect(new ControlEffectAttributes() {{
-            setAttribute("name", "move");
-            setAttribute("mode", "out");
-            setAttribute("direction", "bottom");
-            setAttribute("length", "300");
-            setAttribute("startDelay", "0");
-            setAttribute("inherit", "true");
+          onEndScreenEffect(new EffectBuilder("move") {{
+            parameter("mode", "out");
+            parameter("direction", "bottom");
+            length(300);
+            startDelay(0);
+            inherit(true);
           }});
 
-          onHoverEffect(new ControlEffectOnHoverAttributes() {{
-            setAttribute("name", "pulsate");
-            setAttribute("scaleFactor", "0.008");
-            setAttribute("startColor", "#f600");
-            setAttribute("endColor", "#ffff");
-            setAttribute("post", "true");
+          onHoverEffect(new HoverEffectBuilder("pulsate") {{
+            parameter("scaleFactor", "0.008");
+            parameter("startColor", "#f600");
+            parameter("endColor", "#ffff");
+            post(true);
           }});
 
           panel(new PanelBuilder() {{
