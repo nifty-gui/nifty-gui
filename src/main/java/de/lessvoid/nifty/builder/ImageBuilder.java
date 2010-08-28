@@ -1,18 +1,18 @@
 package de.lessvoid.nifty.builder;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dynamic.TextCreator;
+import de.lessvoid.nifty.controls.dynamic.ImageCreator;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
-public class TextBuilder extends ElementBuilder {
-  private TextCreator creator = new TextCreator("");
+public class ImageBuilder extends ElementBuilder {
+  private ImageCreator creator = new ImageCreator();
 
-  public TextBuilder() {
+  public ImageBuilder() {
     initialize(creator);
   }
 
-  public TextBuilder(final String id) {
+  public ImageBuilder(final String id) {
     this();
     this.id(id);
   }

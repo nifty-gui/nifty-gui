@@ -65,6 +65,10 @@ public class ControlAttributes {
     attributes.set("valign", valign);
   }
 
+  public void setPadding(final String padding) {
+    attributes.set("padding", padding);
+  }
+
   public void setPaddingLeft(final String paddingLeft) {
     attributes.set("paddingLeft", paddingLeft);
   }
