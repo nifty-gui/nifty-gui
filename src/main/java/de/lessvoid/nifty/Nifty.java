@@ -139,6 +139,7 @@ public class Nifty implements NiftyInputConsumer {
       loader.registerSchema("nifty.nxs", ResourceLoader.getResourceAsStream("nifty.nxs"));
       loader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
       loader.registerSchema("nifty-controls.nxs", ResourceLoader.getResourceAsStream("nifty-controls.nxs"));
+      NiftyDefaults.initDefaultEffects(this);
     } catch (Exception e) {
       log.warning(e.getMessage());
     }

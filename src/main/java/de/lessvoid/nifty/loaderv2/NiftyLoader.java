@@ -17,7 +17,6 @@ import org.w3c.dom.Document;
 import org.xmlpull.mxp1.MXParser;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyDefaults;
 import de.lessvoid.nifty.loaderv2.types.NiftyControlsType;
 import de.lessvoid.nifty.loaderv2.types.NiftyStylesType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
@@ -41,8 +40,6 @@ public class NiftyLoader {
       final Nifty nifty) throws Exception {
     long start = timeProvider.getMsTime();
     log.info("loading new nifty xml file with schemaId [" + schemaId + "]");
-
-    NiftyDefaults.initDefaultEffects(nifty);
 
     XmlParser parser = new XmlParser(new MXParser());
     parser.read(inputStreamXml);
