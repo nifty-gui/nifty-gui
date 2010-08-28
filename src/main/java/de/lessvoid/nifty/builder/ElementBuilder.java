@@ -1,12 +1,11 @@
 package de.lessvoid.nifty.builder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
-import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
-import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlInteractAttributes;
 import de.lessvoid.nifty.elements.Element;
@@ -15,57 +14,64 @@ import de.lessvoid.nifty.tools.Color;
 
 public abstract class ElementBuilder {
   private ControlAttributes attributes;
-  private ControlEffectsAttributes effectsAttributes = new ControlEffectsAttributes();
   private ControlInteractAttributes interactAttributes = new ControlInteractAttributes();
   private List<ElementBuilder> elementBuilders = new ArrayList<ElementBuilder>();
+  private Collection<EffectBuilder> onStartScreen = new ArrayList<EffectBuilder>();
+  private Collection<EffectBuilder> onEndScreen = new ArrayList<EffectBuilder>();
+  private Collection<HoverEffectBuilder> onHover = new ArrayList<HoverEffectBuilder>();
+  private Collection<EffectBuilder> onClick = new ArrayList<EffectBuilder>();
+  private Collection<EffectBuilder> onFocus = new ArrayList<EffectBuilder>();
+  private Collection<EffectBuilder> onLostFocus = new ArrayList<EffectBuilder>();
+  private Collection<EffectBuilder> onGetFocus = new ArrayList<EffectBuilder>();
+  private Collection<EffectBuilder> onActive = new ArrayList<EffectBuilder>();
+  private Collection<EffectBuilder> onCustom = new ArrayList<EffectBuilder>();
+  private Collection<EffectBuilder> onShow = new ArrayList<EffectBuilder>();
+  private Collection<EffectBuilder> onHide = new ArrayList<EffectBuilder>();
   protected Screen screen = null;
   protected Element parent = null;
 
   protected void initialize(final ControlAttributes attributes) {
     this.attributes = attributes;
-    this.attributes.setEffects(effectsAttributes);
     this.attributes.setInteract(interactAttributes);
   }
 
   public enum ChildLayoutType {
-    Vertical("vertical"),
-    Horizontal("horizontal"),
-    Center("center"),
-    Absolute("absolute"),
-    Overlay("overlay");
-
+    Vertical("vertical"), Horizontal("horizontal"), Center("center"), Absolute("absolute"), Overlay("overlay");
+    
     private String layout;
+    
     private ChildLayoutType(final String layout) {
       this.layout = layout;
     }
+    
     public String getLayout() {
       return layout;
     }
   }
 
   public enum Align {
-    Left("left"),
-    Right("right"),
-    Center("center");
-
+    Left("left"), Right("right"), Center("center");
+    
     private String align;
+    
     private Align(final String align) {
       this.align = align;
     }
+    
     public String getLayout() {
       return align;
     }
   }
 
   public enum VAlign {
-    Top("top"),
-    Bottom("bottom"),
-    Center("center");
-
+    Top("top"), Bottom("bottom"), Center("center");
+    
     private String valign;
+    
     private VAlign(final String valign) {
       this.valign = valign;
     }
+    
     public String getLayout() {
       return valign;
     }
@@ -307,48 +313,48 @@ public abstract class ElementBuilder {
     elementBuilders.add(imageBuilder);
   }
 
-  public void onStartScreenEffect(final ControlEffectAttributes onStartScreenEffect) {
-    effectsAttributes.addOnStartScreen(onStartScreenEffect);
+  public void onStartScreenEffect(final EffectBuilder onStartScreenEffect) {
+    onStartScreen.add(onStartScreenEffect);
   }
 
-  public void onEndScreenEffect(final ControlEffectAttributes onEndScreenEffect) {
-    effectsAttributes.addOnEndScreen(onEndScreenEffect);
+  public void onEndScreenEffect(final EffectBuilder onEndScreenEffect) {
+    onEndScreen.add(onEndScreenEffect);
   }
 
-  public void onHoverEffect(final ControlEffectOnHoverAttributes onHoverEffect) {
-    effectsAttributes.addOnHover(onHoverEffect);
+  public void onHoverEffect(final HoverEffectBuilder onHoverEffect) {
+    onHover.add(onHoverEffect);
   }
 
-  public void onEffectsOnClick(final ControlEffectAttributes onClickEffect) {
-    effectsAttributes.addOnClick(onClickEffect);
+  public void onEffectsOnClick(final EffectBuilder onClickEffect) {
+    onClick.add(onClickEffect);
   }
 
-  public void onEffectsOnFocus(final ControlEffectAttributes onFocus) {
-    effectsAttributes.addOnFocus(onFocus);
+  public void onEffectsOnFocus(final EffectBuilder onFocusEffect) {
+    onFocus.add(onFocusEffect);
   }
 
-  public void onEffectsOnLostFocus(final ControlEffectAttributes onLostFocus) {
-    effectsAttributes.addOnLostFocus(onLostFocus);
+  public void onEffectsOnLostFocus(final EffectBuilder onLostFocusEffect) {
+    onLostFocus.add(onLostFocusEffect);
   }
 
-  public void onEffectsOnGetFocus(final ControlEffectAttributes onGetFocus) {
-    effectsAttributes.addOnGetFocus(onGetFocus);
+  public void onEffectsOnGetFocus(final EffectBuilder onGetFocusEffect) {
+    onGetFocus.add(onGetFocusEffect);
   }
 
-  public void onEffectsOnActive(final ControlEffectAttributes onActive) {
-    effectsAttributes.addOnActive(onActive);
+  public void onEffectsOnActive(final EffectBuilder onActiveEffect) {
+    onActive.add(onActiveEffect);
   }
 
-  public void onEffectsOnShow(final ControlEffectAttributes onShow) {
-    effectsAttributes.addOnShow(onShow);
+  public void onEffectsOnShow(final EffectBuilder onShowEffect) {
+    onShow.add(onShowEffect);
   }
 
-  public void onEffectsOnHide(final ControlEffectAttributes onHide) {
-    effectsAttributes.addOnShow(onHide);
+  public void onEffectsOnHide(final EffectBuilder onHideEffect) {
+    onHide.add(onHideEffect);
   }
 
-  public void onEffectsOnCustom(final ControlEffectAttributes onCustom) {
-    effectsAttributes.addOnCustom(onCustom);
+  public void onEffectsOnCustom(final EffectBuilder onCustomEffect) {
+    onCustom.add(onCustomEffect);
   }
 
   public void interactOnClick(String method) {
@@ -390,12 +396,45 @@ public abstract class ElementBuilder {
   protected abstract Element buildInternal(Nifty nifty, Screen screen, Element parent);
 
   public Element build(final Nifty nifty, final Screen screen, final Element parent) {
+    attributes.setEffects(createEffects());
+    for (EffectBuilder effectBuild : onStartScreen) {
+      attributes.addEffectsOnStartScreen(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onEndScreen) {
+      attributes.addEffectsOnEndScreen(effectBuild.getAttributes());
+    }
+    for (HoverEffectBuilder effectBuild : onHover) {
+      attributes.addEffectsOnHover(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onClick) {
+      attributes.addEffectsOnClick(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onFocus) {
+      attributes.addEffectsOnFocus(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onLostFocus) {
+      attributes.addEffectsOnLostFocus(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onGetFocus) {
+      attributes.addEffectsOnGetFocus(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onActive) {
+      attributes.addEffectsOnActive(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onCustom) {
+      attributes.addEffectsOnCustom(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onShow) {
+      attributes.addEffectsOnShow(effectBuild.getAttributes());
+    }
+    for (EffectBuilder effectBuild : onHide) {
+      attributes.addEffectsOnHide(effectBuild.getAttributes());
+    }
     Element element = buildInternal(nifty, screen, parent);
-
     for (ElementBuilder elementBuilder : elementBuilders) {
       elementBuilder.parent(element);
       elementBuilder.screen(screen);
-
+      
       Element childElement = elementBuilder.build(nifty, screen, parent);
       element.add(childElement);
     }
@@ -403,12 +442,16 @@ public abstract class ElementBuilder {
     return element;
   }
 
+  private ControlEffectsAttributes createEffects() {
+    ControlEffectsAttributes attributes = new ControlEffectsAttributes();
+    return attributes;
+  }
+
   protected void validate() {
     if (screen == null)
       throw new RuntimeException("screen is a required value for an element");
-
+    
     if (!hasParent())
       throw new RuntimeException("parent is a required value for an element");
   }
 }
-
