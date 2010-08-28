@@ -52,6 +52,54 @@ public class HelloWorldJava2dWithBuilder extends NiftyJava2dWindow {
 		fontProviderJava2dImpl.addFont("arial.fnt", new Font("arial",
 				Font.BOLD, 24));
 	}
+	
+	public static class MoveEffectBuilder extends EffectBuilder {
+
+		public MoveEffectBuilder() {
+			super("move");
+		}
+		
+		/**
+		 * Possible values are "in" and "out"
+		 * @param mode
+		 */
+		public void mode(String mode) {
+			parameter("mode", mode);
+		}
+		
+		public String inMode() {
+			return "in";
+		}
+
+		public String outMode() {
+			return "out";
+		}
+		
+		/**
+		 * Possible values are "top", "bottom", "left", "right"
+		 * @param direction
+		 */
+		public void direction(String direction) {
+			parameter("direction", direction);
+		}
+		
+		public String topDirection() {
+			return "top";
+		}
+
+		public String bottomDirection() {
+			return "bottom";
+		}
+		
+		public String leftDirection() {
+			return "left";
+		}
+		
+		public String rightDirection() {
+			return "right";
+		}
+		
+	}
 
 	@Override
 	protected void init() {
@@ -78,20 +126,28 @@ public class HelloWorldJava2dWithBuilder extends NiftyJava2dWindow {
 								interactOnClick("quit()");
 								padding("10px");
 
-								onStartScreenEffect(new EffectBuilder("move") {
+								onStartScreenEffect(new MoveEffectBuilder() {
 									{
-										parameter("mode", "in");
-										parameter("direction", "top");
+										mode(inMode());
+										direction(topDirection());
+										
+//										parameter("mode", "in");
+//										parameter("direction", "top");
+										
 										length(300);
 										startDelay(0);
 										inherit(true);
 									}
 								});
 
-								onEndScreenEffect(new EffectBuilder("move") {
+								onEndScreenEffect(new MoveEffectBuilder() {
 									{
-										parameter("mode", "out");
-										parameter("direction", "bottom");
+										mode(outMode());
+										direction(bottomDirection());
+										
+//										parameter("mode", "out");
+//										parameter("direction", "bottom");
+										
 										length(300);
 										startDelay(0);
 										inherit(true);
