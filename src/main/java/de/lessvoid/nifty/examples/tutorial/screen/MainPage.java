@@ -114,7 +114,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
       LabelCreator createLabel = new LabelCreator(label);
       createLabel.setAlign("left");
       createLabel.setTextVAlign("center");
-      createLabel.setTextHAlign("center");
+      createLabel.setTextHAlign("left");
       createLabel.setColor("#ccce");
       createLabel.setStyle("menuFont");
       createLabel.setVisibleToMouse("true");

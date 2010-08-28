@@ -72,8 +72,8 @@ public class LwjglInitHelper {
    * @return true on success and false otherwise
    */
   private static boolean initGraphics(final String title) {
-    int width = 1024;
-    int height = 768;
+    int width = 1920;
+    int height = 1200;
     try {
       DisplayMode currentMode = Display.getDisplayMode();
       log.fine("currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", " + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
