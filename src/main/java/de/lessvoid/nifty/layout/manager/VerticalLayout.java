@@ -148,7 +148,7 @@ public class VerticalLayout implements LayoutManager {
   }
 
   private boolean hasWidthConstraint(final BoxConstraints constraints) {
-    return constraints != null && constraints.getWidth() != null;
+    return constraints != null && constraints.getWidth() != null && !constraints.getWidth().hasWildcard();
   }
 
   private boolean hasHeightConstraint(final BoxConstraints boxConstraints) {

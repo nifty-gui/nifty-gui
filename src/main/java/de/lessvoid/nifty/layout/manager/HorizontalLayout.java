@@ -46,7 +46,7 @@ public class HorizontalLayout implements LayoutManager {
 
         elementWidth = calcElementWidth(children, rootBoxWidth, boxConstraints, elementHeight);
         box.setWidth(elementWidth);
-      } else if (boxConstraints.getHeight() != null && boxConstraints.getHeight().hasWidthSuffix()) {
+      } else if (hasHeightConstraint(boxConstraints) && boxConstraints.getHeight().hasWidthSuffix()) {
         elementWidth = calcElementWidth(children, rootBoxWidth, boxConstraints, 0);
         box.setWidth(elementWidth);
 
@@ -68,7 +68,7 @@ public class HorizontalLayout implements LayoutManager {
   }
 
   private int processHeightConstraint(final int rootBoxHeight, final Box box, final BoxConstraints constraint, final int elementWidth) {
-    if (constraint.getHeight() != null) {
+    if (hasHeightConstraint(constraint)) {
       if (constraint.getHeight().hasWidthSuffix()) {
         return constraint.getHeight().getValueAsInt(elementWidth);
       }
@@ -76,6 +76,10 @@ public class HorizontalLayout implements LayoutManager {
     } else {
       return rootBoxHeight;
     }
+  }
+
+  private boolean hasHeightConstraint(final BoxConstraints constraint) {
+    return constraint != null && constraint.getHeight() != null && !constraint.getHeight().hasWildcard();
   }
 
   private int calcElementWidth(final List < LayoutPart > children, final int rootBoxWidth, final BoxConstraints boxConstraints, final int elementHeight) {

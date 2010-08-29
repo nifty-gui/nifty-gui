@@ -50,6 +50,22 @@ public class HorizontalLayoutTest extends TestCase {
     assertBox(right.getBox(), 320, 0, 320, 480);
   }
 
+  public void testLayoutMaxHeight() {
+    left.getBoxConstraints().setHeight(new SizeValue("100%"));
+    layout.layoutElements( rootPanel, elements );
+
+    assertBox(left.getBox(), 0, 0, 320, 480);
+    assertBox(right.getBox(), 320, 0, 320, 480);
+  }
+
+  public void testLayoutMaxHeightWildcard() {
+    left.getBoxConstraints().setHeight(new SizeValue("*"));
+    layout.layoutElements( rootPanel, elements );
+
+    assertBox(left.getBox(), 0, 0, 320, 480);
+    assertBox(right.getBox(), 320, 0, 320, 480);
+  }
+
   public void testLayoutFixedWidth() {
     left.getBoxConstraints().setWidth( new SizeValue( "20px" ));
     layout.layoutElements( rootPanel, elements );

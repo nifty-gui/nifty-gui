@@ -56,6 +56,18 @@ public class VerticalLayoutTest extends TestCase {
     assertBox(top.getBox(), 0, 0, 20, 240);
   }
 
+  public void testLayoutMaxWidth() {
+    top.getBoxConstraints().setWidth(new SizeValue("100%"));
+    performLayout();
+    assertBox(top.getBox(), 0, 0, 640, 240);
+  }
+
+  public void testLayoutMaxWidthWildcard() {
+    top.getBoxConstraints().setWidth(new SizeValue("*"));
+    performLayout();
+    assertBox(top.getBox(), 0, 0, 640, 240);
+  }
+
   public void testLayoutFixedWidthRightAlign() {
     top.getBoxConstraints().setWidth(new SizeValue("20px"));
     top.getBoxConstraints().setHorizontalAlign(HorizontalAlign.right);

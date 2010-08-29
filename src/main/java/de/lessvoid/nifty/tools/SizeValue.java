@@ -108,7 +108,7 @@ public class SizeValue {
 
   /**
    * Get the value as int.
-   * @param range range the size that percent values are calculared from.
+   * @param range range the size that percent values are calculated from.
    * @return the result value as int
    */
   public final int getValueAsInt(final float range) {
@@ -181,5 +181,9 @@ public class SizeValue {
 
   public boolean hasHeightSuffix() {
     return hasHeightSuffix;
+  }
+
+  public boolean hasWildcard() {
+    return "*".equals(value);
   }
 }
