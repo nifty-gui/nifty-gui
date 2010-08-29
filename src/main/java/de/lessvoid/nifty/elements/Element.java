@@ -571,12 +571,6 @@ public class Element {
     }
   }
 
-  public void processLayout() {
-    for (Element w : elements) {
-      w.processLayout();
-    }
-  }
-
   private void processLayoutInternal() {
     for (Element w : elements) {
       TextRenderer textRenderer = w.getRenderer(TextRenderer.class);
@@ -586,7 +580,7 @@ public class Element {
     }
   }
 
-  private void processL() {
+  private void processLayout() {
     processLayoutInternal();
 
     if (layoutManager != null) {
@@ -601,7 +595,7 @@ public class Element {
       
       // repeat this step for all child elements
       for (Element w : elements) {
-        w.processL();
+        w.processLayout();
       }
     }
 
@@ -615,11 +609,9 @@ public class Element {
   public void layoutElements() {
     prepareLayout();
     processLayout();
-    processL();
 
     prepareLayout();
     processLayout();
-    processL();
   }
 
   private void prepareLayout() {
