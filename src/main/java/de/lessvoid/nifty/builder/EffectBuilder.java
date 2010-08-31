@@ -3,7 +3,7 @@ package de.lessvoid.nifty.builder;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
 
 public class EffectBuilder {
-  private ControlEffectAttributes attributes = new ControlEffectAttributes();
+  protected ControlEffectAttributes attributes = new ControlEffectAttributes();
   
   public EffectBuilder(final String effectName) {
     attributes.setName(effectName);

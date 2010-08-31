@@ -312,6 +312,10 @@ public abstract class ElementBuilder {
   public void image(final ImageBuilder imageBuilder) {
     elementBuilders.add(imageBuilder);
   }
+  
+  public void control(ControlBuilder controlBuilder) {
+    elementBuilders.add(controlBuilder);
+  }
 
   public void onStartScreenEffect(final EffectBuilder onStartScreenEffect) {
     onStartScreen.add(onStartScreenEffect);
@@ -454,4 +458,5 @@ public abstract class ElementBuilder {
     if (!hasParent())
       throw new RuntimeException("parent is a required value for an element");
   }
+  
 }
