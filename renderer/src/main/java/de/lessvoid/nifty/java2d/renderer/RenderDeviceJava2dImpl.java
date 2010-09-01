@@ -308,11 +308,11 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	}
 
 	private void renderFontJava2dImpl(String text, int x, int y,
-			Color fontColor, RenderFontJava2dImpl renderFont) {
+			Color fontColor, RenderFontJava2dImpl font) {
 		graphics.setClip(clipRectangle);
-		graphics.setFont(renderFont.getFont());
+		graphics.setFont(font.getFont());
 		graphics.setColor(convertNiftyColor(fontColor));
-		graphics.drawString(text, x, y);
+		graphics.drawString(text, x, y + font.getHeight()/2);
 	}
 
 }
