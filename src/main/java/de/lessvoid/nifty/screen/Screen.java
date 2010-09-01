@@ -418,14 +418,6 @@ public class Screen {
   }
 
   /**
-   * Set a new ScreenController.
-   * @param newScreenController ScreenController
-   */
-  public void setScreenController(final ScreenController newScreenController) {
-    screenController = newScreenController;
-  }
-
-  /**
    * Do things when the current frame has ended.
    */
   public void processAddAndRemoveLayerElements() {
