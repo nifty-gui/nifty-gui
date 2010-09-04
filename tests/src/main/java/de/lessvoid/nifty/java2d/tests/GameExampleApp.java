@@ -10,6 +10,7 @@ import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.button.ButtonBuilder;
 import de.lessvoid.nifty.java2d.renderer.FontProviderJava2dImpl;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
@@ -433,78 +434,58 @@ public class GameExampleApp extends NiftyJava2dWindow {
 										valignCenter();
 										width(percentage(100));
 
-										control(new ControlBuilder(
-												"playButton", "button") {
+										control(new ButtonBuilder("Play", "playButton") {
 											{
-
-												set("label", "Play");
 												width(pixels(100));
 
 												alignCenter();
 												valignCenter();
 
 												interactOnClick("play()");
-
 											}
 										});
 
-										control(new ControlBuilder(
-												"optionsButton", "button") {
+										control(new ButtonBuilder("Options", "optionsButton") {
 											{
-
-												set("label", "Options");
 												width(pixels(100));
 
 												alignCenter();
 												valignCenter();
 
 												interactOnClick("options()");
-
 											}
 										});
 
-										control(new ControlBuilder(
-												"highscoresButton", "button") {
+										control(new ButtonBuilder("Highscores", "highscoresButton") {
 											{
-
-												set("label", "Highscores");
 												width(pixels(100));
 
 												alignCenter();
 												valignCenter();
 
 												interactOnClick("highscores()");
-
 											}
 										});
 
-										control(new ControlBuilder(
-												"creditsButton", "button") {
+										control(new ButtonBuilder("Credits", "creditsButton") {
 											{
-
-												set("label", "Credits");
 												width(pixels(100));
 
 												alignCenter();
 												valignCenter();
 
 												interactOnClick("credits()");
-
 											}
 										});
 
-										control(new ControlBuilder(
-												"exitButton", "button") {
+										control(new ButtonBuilder( "Exit", "exitButton") {
 											{
-
-												set("label", "Exit");
 												width(pixels(100));
 
 												alignCenter();
 												valignCenter();
 
 												interactOnClick("exit()");
-
 											}
 										});
 
