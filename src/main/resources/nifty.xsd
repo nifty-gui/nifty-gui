@@ -37,7 +37,7 @@
     <xs:attribute name="height" type="heightType" />
     <xs:attribute name="align" type="alignType" />
     <xs:attribute name="valign" type="valignType" />
-    <xs:attribute name="childLayout" type="layoutType" />
+    <xs:attribute name="childLayout" type="layoutType" use="required"/>
     <xs:attribute name="childClip" type="xs:boolean" />
     <xs:attribute name="backgroundImage" type="xs:string" />
     <xs:attribute name="backgroundColor" type="colorType" />
