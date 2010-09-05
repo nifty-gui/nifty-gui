@@ -23,6 +23,8 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class Screen {
+  private Logger log = Logger.getLogger(Screen.class.getName());
+
   private String screenId;
   private ScreenController screenController = new NullScreenController();
 
@@ -58,6 +60,7 @@ public class Screen {
     screenId = newId;
     screenController = newScreenController;
     if (screenController == null) {
+      log.info("Missing ScreenController for screen [" + newId + "] using DefaultScreenController() instead but this might not be what you want.");
       screenController = new DefaultScreenController();
     }
     timeProvider = newTimeProvider;

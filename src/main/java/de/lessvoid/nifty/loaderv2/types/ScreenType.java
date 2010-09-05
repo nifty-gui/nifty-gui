@@ -8,7 +8,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -40,10 +39,7 @@ public class ScreenType extends XmlBaseType {
       final NiftyType niftyType,
       final TimeProvider timeProvider) {
     String controller = getAttributes().get("controller");
-    ScreenController screenController = nifty.findScreenController(controller);
-    if (screenController == null) {
-      screenController = ClassHelper.getInstance(controller, ScreenController.class);
-    }
+    ScreenController screenController = resolveScreenController(nifty, controller);
     
     String id = getAttributes().get("id");
     Screen screen = new Screen(nifty, id, screenController, timeProvider);
@@ -83,5 +79,16 @@ public class ScreenType extends XmlBaseType {
 
     screen.processAddAndRemoveLayerElements();
     nifty.addScreen(id, screen);
+  }
+
+  private ScreenController resolveScreenController(final Nifty nifty, final String controller) {
+    ScreenController screenController = null;
+    if (controller != null) {
+      screenController = nifty.findScreenController(controller);
+      if (screenController == null) {
+        screenController = ClassHelper.getInstance(controller, ScreenController.class);
+      }
+    }
+    return screenController;
   }
 }
