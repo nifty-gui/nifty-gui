@@ -30,7 +30,7 @@ public class RenderFontJava2dImpl implements RenderFont {
 
 	@Override
 	public int getHeight() {
-		Graphics graphics = getGraphics();
+		Graphics graphics = renderDevice.getGraphics();
 
 		if (graphics == null)
 			return 0;
@@ -42,7 +42,7 @@ public class RenderFontJava2dImpl implements RenderFont {
 
 	@Override
 	public int getWidth(String text) {
-		Graphics graphics = getGraphics();
+		Graphics graphics = renderDevice.getGraphics();
 
 		if (graphics == null)
 			return 0;
@@ -50,10 +50,6 @@ public class RenderFontJava2dImpl implements RenderFont {
 		FontMetrics fontMetrics = graphics.getFontMetrics(font);
 		double width = fontMetrics.getStringBounds(text, graphics).getWidth();
 		return (int) width;
-	}
-
-	private Graphics getGraphics() {
-		return renderDevice.graphics;
 	}
 
 	public void dispose() {

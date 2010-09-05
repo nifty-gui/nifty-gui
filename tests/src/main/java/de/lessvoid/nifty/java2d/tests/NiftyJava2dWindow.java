@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.java2d.input.InputSystemAwtImpl;
 import de.lessvoid.nifty.java2d.renderer.FontProviderJava2dImpl;
+import de.lessvoid.nifty.java2d.renderer.GraphicsWrapperDefaultImpl;
 import de.lessvoid.nifty.java2d.renderer.RenderDeviceJava2dImpl;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundDeviceNullImpl;
@@ -58,7 +59,7 @@ public abstract class NiftyJava2dWindow {
 		FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
 		registerFonts(fontProvider);
 
-		RenderDeviceJava2dImpl renderDevice = new RenderDeviceJava2dImpl(canvas);
+		RenderDeviceJava2dImpl renderDevice = new RenderDeviceJava2dImpl(new GraphicsWrapperDefaultImpl(canvas));
 		renderDevice.setFontProvider(fontProvider);
 
 		nifty = new Nifty(renderDevice, soundDevice, inputSystem,

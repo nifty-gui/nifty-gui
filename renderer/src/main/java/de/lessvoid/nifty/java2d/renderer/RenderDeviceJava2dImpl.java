@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.java2d.renderer;
 
 import java.awt.AlphaComposite;
-import java.awt.Canvas;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,7 +8,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.image.VolatileImage;
 import java.io.IOException;
 import java.util.Stack;
 import java.util.logging.Logger;
@@ -30,46 +28,38 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	protected static final Logger logger = Logger
 			.getLogger(RenderDeviceJava2dImpl.class.getName());
 
-	Graphics2D graphics;
+	private Graphics2D graphics;
 
-	Graphics2dHelper graphics2dHelper;
-
-	private final Canvas canvas;
-
-	private VolatileImage offscreenImage;
+	private Graphics2dHelper graphics2dHelper;
 
 	private Rectangle clipRectangle = null;
 
 	private FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
+
+	private GraphicsWrapper graphicsWrapper;
+	
+	protected Graphics2D getGraphics() {
+		return graphics;
+	}
 
 	private java.awt.Color convertNiftyColor(Color color) {
 		return new java.awt.Color(color.getRed(), color.getGreen(), color
 				.getBlue(), color.getAlpha());
 	}
 
-	public RenderDeviceJava2dImpl(Canvas canvas) {
-		this.canvas = canvas;
-		offscreenImage = (VolatileImage) canvas.createVolatileImage(getWidth(),
-				getHeight());
+	public RenderDeviceJava2dImpl(GraphicsWrapper graphicsWrapper) {
+		this.graphicsWrapper = graphicsWrapper;
 	}
 
 	@Override
 	public void beginFrame() {
-		if (screenSizeHasChanged())
-			offscreenImage = (VolatileImage) canvas.createVolatileImage(
-					getWidth(), getHeight());
-		graphics = offscreenImage.createGraphics();
+		graphics = graphicsWrapper.beginFrame();
 		graphics2dHelper = new Graphics2dHelper(graphics);
-	}
-
-	private boolean screenSizeHasChanged() {
-		return (offscreenImage.getWidth() != getWidth() || offscreenImage
-				.getHeight() != getHeight());
 	}
 
 	@Override
 	public void endFrame() {
-		canvas.getGraphics().drawImage(offscreenImage, 0, 0, null);
+		graphicsWrapper.endFrame();
 	}
 
 	@Override
@@ -129,12 +119,12 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 	@Override
 	public int getHeight() {
-		return canvas.getSize().height;
+		return graphicsWrapper.getHeight();
 	}
 
 	@Override
 	public int getWidth() {
-		return canvas.getSize().width;
+		return graphicsWrapper.getWidth();
 	}
 
 	@Override
@@ -167,7 +157,8 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		graphics2dHelper.pushTransform();
 		{
 			graphics.transform(transform);
-			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, color.getAlpha()));
+			graphics.setComposite(AlphaComposite.getInstance(
+					AlphaComposite.SRC_OVER, color.getAlpha()));
 			graphics.drawImage(renderImage.image, 0, 0, null);
 		}
 		graphics2dHelper.popTransform();
@@ -202,7 +193,8 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 		RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
 		graphics.setClip(clipRectangle);
-		graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, color.getAlpha()));
+		graphics.setComposite(AlphaComposite.getInstance(
+				AlphaComposite.SRC_OVER, color.getAlpha()));
 		graphics.drawImage(renderImage.image, x, y, x + w, y + h, srcX, srcY,
 				srcX + srcW, srcY + srcH, null);
 
@@ -312,7 +304,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		graphics.setClip(clipRectangle);
 		graphics.setFont(font.getFont());
 		graphics.setColor(convertNiftyColor(fontColor));
-		graphics.drawString(text, x, y + font.getHeight()/2);
+		graphics.drawString(text, x, y + font.getHeight() / 2);
 	}
 
 }
