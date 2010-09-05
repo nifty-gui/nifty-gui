@@ -172,6 +172,7 @@ public class ElementType extends XmlBaseType {
     applyEffects(nifty, screen, element);
     applyInteract(nifty, screen, element);
     applyChildren(element, screen, nifty);
+    enforceChildLayout(getAttributes(), elements.size());
 
     if (controller != null) {
       ControllerEventListener listener = createControllerEventListener(screen);
@@ -186,6 +187,12 @@ public class ElementType extends XmlBaseType {
 
       NiftyInputControl niftyInputControl = createNiftyInputControl(getAttributes(), controller);
       element.attachInputControl(niftyInputControl);
+    }
+  }
+
+  private void enforceChildLayout(final Attributes attributes, final int childCount) {
+    if (!attributes.isSet("childLayout") && childCount > 0) {
+      throw new RuntimeException("missing childLayout attribute for an element with [" + childCount + "] child elements. Attributes of error element [" + attributes.toString() + "]");
     }
   }
 
