@@ -23,11 +23,6 @@ public class SizeValue {
   private static final String PERCENT = "%";
 
   /**
-   * Max percent constant.
-   */
-  private static final float MAX_PERCENT = 100.0f;
-
-  /**
    * Add a WIDTH_SUFFIX to some size value to indicate that this value
    * will be calculated in respect to the Width of an element. This
    * is only appropriate to a height attribute and this class can only
@@ -44,6 +39,17 @@ public class SizeValue {
   private static final String HEIGHT_SUFFIX = "h";
 
   /**
+   * The WILDCARD value will not really be handled by the SizeValue class.
+   * Its used to use the maximum available space by some layout managers.
+   */
+  private static final String WILDCARD = "*";
+
+  /**
+   * Max percent constant.
+   */
+  private static final float MAX_PERCENT = 100.0f;
+
+  /**
    * The current value that has been set.
    */
   private String value;
@@ -58,7 +64,14 @@ public class SizeValue {
    */
   private float pixelValue;
 
+  /**
+   * value has WIDTH_SUFFIX attached.
+   */
   private boolean hasWidthSuffix;
+
+  /**
+   * value has HEIGHT_SUFFIX attached.
+   */
   private boolean hasHeightSuffix;
 
   /**
@@ -87,7 +100,7 @@ public class SizeValue {
    * Checks if the value contains either PERCENT or PIXEL.
    * @return true when either PERCENT or PIXEL is given.
    */
-  public final boolean isPercentOrPixel() {
+  public boolean isPercentOrPixel() {
     return isPercent() || isPixel();
   }
 
@@ -96,7 +109,7 @@ public class SizeValue {
    * @param range the size that percent values are calculated from.
    * @return the result value as float
    */
-  public final float getValue(final float range) {
+  public float getValue(final float range) {
     if (isPercent()) {
       return (range / MAX_PERCENT) * percentValue;
     } else if (isPixel()) {
@@ -111,7 +124,7 @@ public class SizeValue {
    * @param range range the size that percent values are calculated from.
    * @return the result value as int
    */
-  public final int getValueAsInt(final float range) {
+  public int getValueAsInt(final float range) {
     return (int) getValue(range);
   }
 
@@ -134,6 +147,9 @@ public class SizeValue {
    */
   private int getPixelValue() {
     if (isPixel()) {
+      if (hasNoSuffix()) {
+        return Integer.valueOf(value);
+      }
       String pixel = value.substring(0, value.length() - PIXEL.length());
       return Integer.valueOf(pixel);
     } else {
@@ -159,12 +175,26 @@ public class SizeValue {
    * @return true if the given string value ends with PIXEL
    * and false otherwise
    */
-  public final boolean isPixel() {
+  public boolean isPixel() {
     if (value == null) {
       return false;
     } else {
-      return value.endsWith(PIXEL);
+      return !value.equals(WILDCARD) && (value.endsWith(PIXEL) || hasNoSuffix());
     }
+  }
+
+  private boolean hasNoSuffix() {
+    if (value == null) {
+      return false;
+    }
+
+    if (value.endsWith(PIXEL) ||
+        value.endsWith(PERCENT) ||
+        value.endsWith(WIDTH_SUFFIX) ||
+        value.endsWith(HEIGHT_SUFFIX)) {
+      return false;
+    }
+    return true;
   }
 
   /**

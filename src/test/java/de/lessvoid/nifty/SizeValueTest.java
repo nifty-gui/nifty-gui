@@ -9,9 +9,6 @@ import junit.framework.TestCase;
  */
 public class SizeValueTest extends TestCase {
 
-  /**
-   * Test percent.
-   */
   public void testPercent() {
     SizeValue value = new SizeValue("10%");
     assertEquals(10, value.getValueAsInt(100));
@@ -19,9 +16,6 @@ public class SizeValueTest extends TestCase {
     assertTrue(value.isPercentOrPixel());
   }
 
-  /**
-   * Test default values.
-   */
   public void testDefault() {
     SizeValue value = new SizeValue(null);
     assertEquals(-1, value.getValueAsInt(1000));
@@ -29,14 +23,25 @@ public class SizeValueTest extends TestCase {
     assertFalse(value.isPercentOrPixel());
   }
 
-  /**
-   * Test pixel value.
-   */
   public void testPixel() {
     SizeValue value = new SizeValue("10px");
     assertEquals(10, value.getValueAsInt(1000));
     assertEquals(10, value.getValueAsInt(100));
     assertTrue(value.isPercentOrPixel());
+  }
+
+  public void testPixelWithoutPx() {
+    SizeValue value = new SizeValue("10");
+    assertEquals(10, value.getValueAsInt(1000));
+    assertEquals(10, value.getValueAsInt(100));
+    assertTrue(value.isPercentOrPixel());
+  }
+
+  public void testWildcard() {
+    SizeValue value = new SizeValue("*");
+    assertEquals(-1, value.getValueAsInt(1000));
+    assertEquals(-1, value.getValueAsInt(100));
+    assertFalse(value.isPercentOrPixel());
   }
 
   public void testWidthSuffix() {
