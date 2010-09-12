@@ -53,13 +53,13 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 	@Override
 	public void beginFrame() {
-		graphics = graphicsWrapper.beginFrame();
+		graphics = graphicsWrapper.getGraphics2d();
 		graphics2dHelper = new Graphics2dHelper(graphics);
 	}
 
 	@Override
 	public void endFrame() {
-		graphicsWrapper.endFrame();
+//		graphicsWrapper.endFrame();
 	}
 
 	@Override

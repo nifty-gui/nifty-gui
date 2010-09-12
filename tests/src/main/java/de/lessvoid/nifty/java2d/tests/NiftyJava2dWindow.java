@@ -3,8 +3,10 @@ package de.lessvoid.nifty.java2d.tests;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferStrategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,18 +14,20 @@ import org.slf4j.LoggerFactory;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.java2d.input.InputSystemAwtImpl;
 import de.lessvoid.nifty.java2d.renderer.FontProviderJava2dImpl;
-import de.lessvoid.nifty.java2d.renderer.GraphicsWrapperDefaultImpl;
+import de.lessvoid.nifty.java2d.renderer.GraphicsWrapper;
 import de.lessvoid.nifty.java2d.renderer.RenderDeviceJava2dImpl;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundDeviceNullImpl;
 import de.lessvoid.nifty.tools.TimeProvider;
 
-public abstract class NiftyJava2dWindow {
+public abstract class NiftyJava2dWindow implements GraphicsWrapper {
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(NiftyJava2dWindow.class);
 
 	protected Nifty nifty;
+
+    private final Canvas canvas;
 
 	public NiftyJava2dWindow(String title, int width, int height) {
 		this(title, width, height, new SoundDeviceNullImpl());
@@ -34,7 +38,7 @@ public abstract class NiftyJava2dWindow {
 
 		InputSystemAwtImpl inputSystem = new InputSystemAwtImpl();
 
-		final Canvas canvas = new Canvas();
+		canvas = new Canvas();
 
 		canvas.addMouseMotionListener(inputSystem);
 		canvas.addMouseListener(inputSystem);
@@ -56,10 +60,12 @@ public abstract class NiftyJava2dWindow {
 		// f.setIgnoreRepaint(true);
 		// canvas.setIgnoreRepaint(true);
 
-		FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
+        canvas.createBufferStrategy(2);
+
+        FontProviderJava2dImpl fontProvider = new FontProviderJava2dImpl();
 		registerFonts(fontProvider);
 
-		RenderDeviceJava2dImpl renderDevice = new RenderDeviceJava2dImpl(new GraphicsWrapperDefaultImpl(canvas));
+		RenderDeviceJava2dImpl renderDevice = new RenderDeviceJava2dImpl(this);
 		renderDevice.setFontProvider(fontProvider);
 
 		nifty = new Nifty(renderDevice, soundDevice, inputSystem,
@@ -80,6 +86,8 @@ public abstract class NiftyJava2dWindow {
 
 	long fps = 0;
 
+    private Graphics2D graphics2D;
+
 	public long getFrameTime() {
 		return 1000 / getFramesPerSecond();
 	}
@@ -96,7 +104,15 @@ public abstract class NiftyJava2dWindow {
 
 		while (!done) {
 
+	        BufferStrategy bufferStrategy = canvas.getBufferStrategy();
+            graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
+
 			done = nifty.render(true);
+
+			bufferStrategy.show();
+			graphics2D.dispose();
+			graphics2D = null;
+
 			frames++;
 
 			long diff = System.currentTimeMillis() - time;
@@ -108,5 +124,20 @@ public abstract class NiftyJava2dWindow {
 			}
 		}
 	}
+
+    @Override
+    public Graphics2D getGraphics2d() {
+        return graphics2D;
+    }
+
+    @Override
+    public int getHeight() {
+        return canvas.getHeight();
+    }
+
+    @Override
+    public int getWidth() {
+        return canvas.getWidth();
+    }
 
 }

@@ -10,12 +10,10 @@ import java.awt.Graphics2D;
  */
 public interface GraphicsWrapper {
 
-	Graphics2D beginFrame();
+	Graphics2D getGraphics2d();
 
 	int getHeight();
 
 	int getWidth();
-
-	void endFrame();
 
 }
