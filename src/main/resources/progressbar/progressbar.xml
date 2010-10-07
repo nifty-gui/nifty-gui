@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+  <controlDefinition name="progressbar" controller="de.lessvoid.nifty.examples.progressbar.ProgressbarControl">
+    <image filename="progressbar/progressbar-outer.png" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15" childLayout="absolute">
+      <image id="progress" x="0" y="0" filename="progressbar/progressbar-inner.png" width="322px" align="center" valign="center" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15" />
+    </image>
+  </controlDefinition>
+
+  <screen id="start">
+    <layer id="layer" backgroundColor="#003f" childLayout="center">
+      <control id="progressExample" name="progressbar" align="center" valign="center" width="400px" />
+    </layer>
+  </screen>
+</nifty>
