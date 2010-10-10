@@ -6,6 +6,7 @@ import java.util.List;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dropdown.CreateDropDownControlItem;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -27,9 +28,11 @@ public class DropDownModel {
       final String style) {
     int count = 0;
     for (String item : items) {
-      String id = parent.getId() + "_" + count++;
+      String id = parent.getId() + "_" + count;
       CreateDropDownControlItem dropDownItem = new CreateDropDownControlItem(id, item);
       dropDownItem.create(nifty, screen, parent, style);
+      items.set(count, parent.findElementByName(id).getRenderer(TextRenderer.class).getOriginalText());
+      count++;
     }
   }
 
