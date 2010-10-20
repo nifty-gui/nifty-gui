@@ -77,7 +77,6 @@ public class TextFieldControl implements Controller {
     this.lastVisibleCharacterIndex =
       FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), this.textField.getText(), fieldWidth, 1.0f);
 
-    cursorElement.hide();
     updateCursor();
   }
 
@@ -262,9 +261,9 @@ public class TextFieldControl implements Controller {
   public void onFocus(final boolean getFocus) {
     if (cursorElement != null) {
       if (getFocus) {
-        cursorElement.show();
+        cursorElement.startEffect(EffectEventId.onCustom);
       } else {
-        cursorElement.hide();
+        cursorElement.stopEffect(EffectEventId.onCustom);
       }
       updateCursor();
     }
