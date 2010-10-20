@@ -40,15 +40,15 @@ public class ProgressbarMain {
     private RenderLoop(final Nifty nifty) {
       this.nifty = nifty;
     }
-    
+
     @Override
     public void process() {
       long now = new Date().getTime();
-      if (now - start > 100) { // add one percent every 100 ms
+      if (now - start > 50) { // add one percent every 50 ms
         start = now;
 
         progress++;
-        nifty.getScreen("start").findControl("progressExample", ProgressbarControl.class).setProgress(progress / 100.0f);
+        nifty.getScreen("start").findControl("my-progress", ProgressbarControl.class).setProgress(progress / 100.0f);
 
         if (progress >= 100) {
           System.out.println("done");
