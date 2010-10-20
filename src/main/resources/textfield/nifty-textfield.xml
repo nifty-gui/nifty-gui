@@ -33,7 +33,7 @@
   <style id="nifty-textfield#cursor">
     <attributes filename="textfield/cursor-empty.png" />
     <effect>
-      <onActive name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="textfield/cursor.png" post="true"/>
+      <onCustom name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="textfield/cursor.png" post="true"/>
     </effect>
   </style>
   </nifty-styles>
