@@ -1085,15 +1085,16 @@ public class Element {
       return;
     }
 
-    focusHandler.lostKeyboardFocus(Element.this);
-    focusHandler.lostMouseFocus(Element.this);
-
     resetEffects();
     internalHide();
   }
 
   private void internalHide() {
     visible = false;
+
+    focusHandler.lostKeyboardFocus(Element.this);
+    focusHandler.lostMouseFocus(Element.this);
+
     for (Element element : elements) {
       element.internalHide();
     }
