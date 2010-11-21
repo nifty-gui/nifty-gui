@@ -15,10 +15,17 @@ import de.lessvoid.nifty.screen.Screen;
  */
 public class DropDownModel {
   private List < String > items = new ArrayList < String >();
+  private List < Object > objects = new ArrayList < Object >();
   private int selectedItemIdx = -1;
 
   public void addItem(final String description) {
-    items.add(description);
+	  items.add(description);
+	  objects.add(null);
+  }
+  
+  public void addItem(final String description, Object object) {
+	  items.add(description);
+	  objects.add(object);
   }
 
   public void initialize(
@@ -47,6 +54,10 @@ public class DropDownModel {
   public String getSelectedItem() {
     return items.get(selectedItemIdx);
   }
+  
+  public Object getSelectedObject() {
+	  return objects.get(selectedItemIdx);
+  }
 
   public int getSelectedItemIdx() {
     return selectedItemIdx;
@@ -54,6 +65,7 @@ public class DropDownModel {
 
   public void clear() {
     items.clear();
+    objects.clear();
   }
 
   public int gotoNextItem() {

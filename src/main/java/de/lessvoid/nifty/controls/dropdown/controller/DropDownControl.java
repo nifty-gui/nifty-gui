@@ -125,6 +125,15 @@ public class DropDownControl implements Controller {
   public void addItem(final String item) {
     dropDownModel.addItem(item);
   }
+  
+  /**
+   * Adds an object to the dropdown control with the given description
+   * @param description the label to show in the dropdown
+   * @param object the object that this item should refer to
+   */
+  public void addItem(final String description, Object object) {
+	  dropDownModel.addItem(description, object);
+  }
 
   public void setSelectedItemIdx(final int idx) {
     dropDownModel.setSelectedItemIdx(idx);
@@ -138,6 +147,10 @@ public class DropDownControl implements Controller {
 
   public String getSelectedItem() {
     return dropDownModel.getSelectedItem();
+  }
+  
+  public Object getSelectedObject() {
+	  return dropDownModel.getSelectedObject();
   }
 
   public int getSelectedItemIdx() {
