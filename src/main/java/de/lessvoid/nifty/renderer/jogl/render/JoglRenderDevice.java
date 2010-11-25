@@ -18,7 +18,7 @@ import de.lessvoid.nifty.tools.Color;
 public class JoglRenderDevice implements RenderDevice {
     private static Logger log = Logger.getLogger(JoglRenderDevice.class.getName());
 
-    private static IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4 * 4);
+    private static IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4);
 
     private int viewportWidth;
 
