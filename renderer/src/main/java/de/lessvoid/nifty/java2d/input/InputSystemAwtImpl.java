@@ -61,14 +61,19 @@ public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
 	}
 
 	@Override
-	public void mousePressed(MouseEvent mouseEvent) {
-
+  public void mousePressed(MouseEvent mouseEvent) {
+	  // at the moment we only care about the BUTTON1
+	  if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+	    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), true));
+	  }
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
-		mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent
-				.getY(), mouseEvent.getButton() == MouseEvent.BUTTON1));
+	  // at the moment we only care about the BUTTON1
+	  if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+	    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), false));
+	  }
 	}
 
 	@Override
