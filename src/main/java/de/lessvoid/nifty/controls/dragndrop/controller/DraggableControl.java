@@ -85,7 +85,6 @@ public class DraggableControl implements Controller {
   }
 
   public void dragStart(final int mouseX, final int mouseY) {
-    System.out.println("dragStart(" + dragged + ")");
     if (dragged)
       return;
     
