@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.renderer.jogl.input;
 
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -39,13 +40,19 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
-
+        // at the moment we only care about the BUTTON1
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1
+                || mouseEvent.getModifiers() == InputEvent.BUTTON1_MASK) {
+            mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), true));
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
-        mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), mouseEvent
-                .getButton() == MouseEvent.BUTTON1));
+        // at the moment we only care about the BUTTON1
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+            mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), true));
+        }
     }
 
     @Override
