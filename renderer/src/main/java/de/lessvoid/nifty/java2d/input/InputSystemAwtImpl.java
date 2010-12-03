@@ -36,13 +36,12 @@ public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
 
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
-
+    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getButton() == MouseEvent.BUTTON1));
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent mouseEvent) {
-		mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent
-				.getY(), mouseEvent.getButton() == MouseEvent.BUTTON1));
+		mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getButton() == MouseEvent.BUTTON1));
 	}
 
 	@Override
