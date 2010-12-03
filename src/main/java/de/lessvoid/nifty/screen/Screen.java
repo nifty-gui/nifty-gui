@@ -9,6 +9,7 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
@@ -310,6 +311,14 @@ public class Screen {
     return element.getControl(requestedControlClass);
   }
 
+  public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
+    Element element = findElementByName(elementName);
+    if (element == null) {
+      return null;
+    }
+    return element.getNiftyControl(requestedControlClass);
+  }
+
   /**
    * set alternate key.
    * @param alternateKey alternate key to set
@@ -369,7 +378,7 @@ public class Screen {
     return result.toString();
   }
 
-  private String outputElement(final Element w, final String offset) {
+  public String outputElement(final Element w, final String offset) {
     StringBuffer result = new StringBuffer();
     for (Element ww : w.getElements()) {
       result.append("\n" + offset + getIdText(ww) + " " + ww.getElementType().getClass().getSimpleName() + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]");  

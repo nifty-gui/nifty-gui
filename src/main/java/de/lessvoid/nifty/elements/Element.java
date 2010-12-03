@@ -9,6 +9,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
@@ -1722,12 +1723,27 @@ public class Element {
       if (t != null) {
         return t;
       }
-    } else {
-      for (Element element : elements) {
-        T t = element.getControl(requestedControlClass);
-        if (t != null) {
-          return t;
-        }
+    }
+    for (Element element : elements) {
+      T t = element.getControl(requestedControlClass);
+      if (t != null) {
+        return t;
+      }
+    }
+    return null;
+  }
+
+  public < T extends NiftyControl > T getNiftyControl(final Class < T > requestedControlClass) {
+    if (attachedInputControl != null) {
+      T t = attachedInputControl.getNiftyControl(requestedControlClass);
+      if (t != null) {
+        return t;
+      }
+    }
+    for (Element element : elements) {
+      T t = element.getNiftyControl(requestedControlClass);
+      if (t != null) {
+        return t;
       }
     }
     return null;

@@ -91,4 +91,11 @@ public class NiftyInputControl {
     }
     return null;
   }
+
+  public < T extends NiftyControl > T getNiftyControl(final Class < T > requestedControlClass) {
+    if (requestedControlClass.isInstance(controller)) {
+      return requestedControlClass.cast(controller);
+    }
+    return null;
+  }
 }
