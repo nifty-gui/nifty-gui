@@ -43,12 +43,6 @@ public class ScreenBuilder {
 
     Element screenRootElement = screen.getRootElement();
     for (LayerBuilder layerBuilder : layerBuilders) {
-      layerBuilder.screen(screen);
-
-      if (!layerBuilder.hasParent()) {
-        layerBuilder.parent(screenRootElement);
-      }
-
       layerBuilder.build(nifty, screen, screenRootElement);
     }
 

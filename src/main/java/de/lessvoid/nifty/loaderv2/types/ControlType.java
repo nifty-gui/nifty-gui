@@ -74,10 +74,8 @@ public class ControlType extends ElementType {
       if (childRootId.equals(element.getAttributes().get("id"))) {
         element.elements.addAll(children);
         return true;
-      } else {
-        if (addChildrenToChildRoot(element, childRootId, children)) {
+      } else if (addChildrenToChildRoot(element, childRootId, children)) {
           return true;
-        }
       }
     }
     return false;

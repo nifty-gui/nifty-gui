@@ -89,9 +89,6 @@ public class ScreenBuilderWithLayerTest {
 
   private LayerBuilder createLayerBuilder() {
     LayerBuilder layerBuilder = createMock(LayerBuilder.class);
-    layerBuilder.screen(screen);
-    expect(layerBuilder.hasParent()).andReturn(false);
-    layerBuilder.parent(screenRootElement);
     expect(layerBuilder.build(niftyMock, screen, screenRootElement)).andReturn(layerElement);
     replay(layerBuilder);
     return layerBuilder;
@@ -99,8 +96,6 @@ public class ScreenBuilderWithLayerTest {
 
   private LayerBuilder createLayerBuilderWithParent() {
     LayerBuilder layerBuilder = createMock(LayerBuilder.class);
-    layerBuilder.screen(screen);
-    expect(layerBuilder.hasParent()).andReturn(true);
     expect(layerBuilder.build(niftyMock, screen, screenRootElement)).andReturn(layerElement);
     replay(layerBuilder);
     return layerBuilder;

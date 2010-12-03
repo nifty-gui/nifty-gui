@@ -27,8 +27,6 @@ public abstract class ElementBuilder {
   private Collection<EffectBuilder> onCustom = new ArrayList<EffectBuilder>();
   private Collection<EffectBuilder> onShow = new ArrayList<EffectBuilder>();
   private Collection<EffectBuilder> onHide = new ArrayList<EffectBuilder>();
-  protected Screen screen = null;
-  protected Element parent = null;
 
   protected void initialize(final ControlAttributes attributes) {
     this.attributes = attributes;
@@ -75,14 +73,6 @@ public abstract class ElementBuilder {
     public String getLayout() {
       return valign;
     }
-  }
-
-  public void screen(final Screen screen) {
-    this.screen = screen;
-  }
-
-  public void parent(final Element parent) {
-    this.parent = parent;
   }
 
   public void id(final String id) {
@@ -305,6 +295,10 @@ public abstract class ElementBuilder {
     elementBuilders.add(panelBuilder);
   }
 
+  public void label(final LabelBuilder labelBuilder) {
+    elementBuilders.add(labelBuilder);
+  }
+
   public void text(final TextBuilder textBuilder) {
     elementBuilders.add(textBuilder);
   }
@@ -385,10 +379,6 @@ public abstract class ElementBuilder {
     interactAttributes.setOnClickAlternateKey(onClickAlternateKey);
   }
 
-  public boolean hasParent() {
-    return parent != null;
-  }
-
   public String percentage(final int percentage) {
     return Integer.toString(percentage) + "%";
   }
@@ -436,27 +426,12 @@ public abstract class ElementBuilder {
     }
     Element element = buildInternal(nifty, screen, parent);
     for (ElementBuilder elementBuilder : elementBuilders) {
-      elementBuilder.parent(element);
-      elementBuilder.screen(screen);
-      
-      Element childElement = elementBuilder.build(nifty, screen, parent);
-      element.add(childElement);
+      elementBuilder.build(nifty, screen, element);
     }
-
     return element;
   }
 
   private ControlEffectsAttributes createEffects() {
-    ControlEffectsAttributes attributes = new ControlEffectsAttributes();
-    return attributes;
+    return new ControlEffectsAttributes();
   }
-
-  protected void validate() {
-    if (screen == null)
-      throw new RuntimeException("screen is a required value for an element");
-    
-    if (!hasParent())
-      throw new RuntimeException("parent is a required value for an element");
-  }
-  
 }
