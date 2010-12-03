@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.dragndrop.controller.DragNotify;
 import de.lessvoid.nifty.controls.dragndrop.controller.DraggableControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -80,4 +81,15 @@ public class WindowControl implements Controller {
     return element.findElementByName("window-content");
   }
 
+  public void addNotify(final DragNotify notify) {
+    draggableControl.addNotify(notify);
+  }
+
+  public void removeNotify(final DragNotify notify) {
+    draggableControl.removeNotify(notify);
+  }
+
+  public void removeAllNotifies() {
+    draggableControl.removeAllNotifies();
+  }
 }
