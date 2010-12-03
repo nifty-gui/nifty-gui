@@ -974,4 +974,24 @@ public class Nifty implements NiftyInputConsumer {
   public RootLayerFactory getRootLayerFactory() {
     return rootLayerFactory;
   }
+
+  public void loadStyleFile(final String styleFile) {
+    try {
+      NiftyType niftyType = new NiftyType();
+      loader.loadStyleFile("nifty-styles.nxs", styleFile, niftyType);
+      niftyType.create(this, getTimeProvider());
+    } catch (Exception e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  public void loadControlFile(final String controlFile) {
+    try {
+      NiftyType niftyType = new NiftyType();
+      loader.loadControlFile("nifty-controls.nxs", controlFile, niftyType);
+      niftyType.create(this, getTimeProvider());
+    } catch (Exception e) {
+      log.warning(e.getMessage());
+    }
+  }
 }
