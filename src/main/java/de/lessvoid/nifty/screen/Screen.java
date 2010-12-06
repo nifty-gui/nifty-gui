@@ -2,6 +2,7 @@ package de.lessvoid.nifty.screen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.lessvoid.console.Console;
@@ -281,7 +282,10 @@ public class Screen {
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
     }
 
-    //System.out.println(mouseOverHandler.getInfoString());
+    if (log.isLoggable(Level.FINE)) {
+      log.fine(mouseOverHandler.getInfoString());
+    }
+
     mouseOverHandler.processMouseOverEvent(rootElement, inputEvent, eventTime);
     mouseOverHandler.processMouseEvent(inputEvent, eventTime);
 
@@ -504,7 +508,7 @@ public class Screen {
     }
 
     public void perform() {
-      Logger.getAnonymousLogger().info("onStartScreen has ended");
+      log.info("onStartScreen has ended");
 
       if (additionalEndNotify != null) {
         additionalEndNotify.perform();
