@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.controls.StandardControl;
@@ -20,12 +21,15 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
 import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
+import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
+import de.lessvoid.nifty.loaderv2.types.RegisterMusicType;
+import de.lessvoid.nifty.loaderv2.types.RegisterSoundType;
+import de.lessvoid.nifty.loaderv2.types.ResourceBundleType;
 import de.lessvoid.nifty.loaderv2.types.StyleType;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverDefault;
@@ -190,6 +194,9 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   public boolean processMouseEvent(final MouseInputEvent mouseEvent) {
+    if (log.isLoggable(Level.INFO)) {
+      log.info(mouseEvent.toString());
+    }
     boolean handled = true;
     if (mouseInputEventQueue.canProcess(mouseEvent)) {
       mouseInputEventQueue.process(mouseEvent);
@@ -645,6 +652,12 @@ public class Nifty implements NiftyInputConsumer {
     return popupElement;
   }
 
+  public Element addPopupElement(final String id, final Element popupElement) {
+    popupElement.setId(id);
+    popups.put(id, popupElement);
+    return popupElement;
+  }
+
   public Element findPopupByName(final String id) {
     return popups.get(id);
   }
@@ -989,6 +1002,56 @@ public class Nifty implements NiftyInputConsumer {
     try {
       NiftyType niftyType = new NiftyType();
       loader.loadControlFile("nifty-controls.nxs", controlFile, niftyType);
+      niftyType.create(this, getTimeProvider());
+    } catch (Exception e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  public void registerResourceBundle(final String id, final String filename) {
+    try {
+      NiftyType niftyType = new NiftyType();
+      ResourceBundleType resourceBundle = new ResourceBundleType();
+      resourceBundle.getAttributes().set("id", id);
+      resourceBundle.getAttributes().set("filename", filename);
+      niftyType.addResourceBundle(resourceBundle);
+      niftyType.create(this, getTimeProvider());
+    } catch (Exception e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  public void registerEffect(final String name, final String classParam) {
+    try {
+      NiftyType niftyType = new NiftyType();
+      RegisterEffectType registerEffect = new RegisterEffectType(name, classParam);
+      niftyType.addRegisterEffect(registerEffect);
+      niftyType.create(this, getTimeProvider());
+    } catch (Exception e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  public void registerSound(final String id, final String filename) {
+    try {
+      NiftyType niftyType = new NiftyType();
+      RegisterSoundType registerSound = new RegisterSoundType();
+      registerSound.getAttributes().set("id", id);
+      registerSound.getAttributes().set("filename", filename);
+      niftyType.addRegisterSound(registerSound);
+      niftyType.create(this, getTimeProvider());
+    } catch (Exception e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  public void registerMusic(final String id, final String filename) {
+    try {
+      NiftyType niftyType = new NiftyType();
+      RegisterMusicType registerMusic = new RegisterMusicType();
+      registerMusic.getAttributes().set("id", id);
+      registerMusic.getAttributes().set("filename", filename);
+      niftyType.addRegisterMusic(registerMusic);
       niftyType.create(this, getTimeProvider());
     } catch (Exception e) {
       log.warning(e.getMessage());
