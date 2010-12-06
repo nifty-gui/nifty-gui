@@ -12,6 +12,7 @@ import de.lessvoid.nifty.loaderv2.types.ImageType;
 import de.lessvoid.nifty.loaderv2.types.LabelType;
 import de.lessvoid.nifty.loaderv2.types.LayerType;
 import de.lessvoid.nifty.loaderv2.types.PanelType;
+import de.lessvoid.nifty.loaderv2.types.PopupType;
 import de.lessvoid.nifty.loaderv2.types.TextType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -303,6 +304,11 @@ public class ControlAttributes {
       final Element parent) {
     PanelType panelType = new PanelType(attributes);
     return buildControl(nifty, screen, parent, panelType, new LayoutPart());
+  }
+
+  protected Element createPopup(final Nifty nifty, final Screen screen, final Element parent) {
+    PopupType popupType = new PopupType(attributes);
+    return buildControl(nifty, screen, parent, popupType, nifty.getRootLayerFactory().createRootLayerLayoutPart(nifty));
   }
 
   protected Element createLayer(
