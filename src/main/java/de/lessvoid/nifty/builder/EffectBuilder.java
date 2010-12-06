@@ -9,60 +9,79 @@ public class EffectBuilder {
     attributes.setName(effectName);
   }
   
-  public void inherit(final boolean inherit) {
+  public EffectBuilder inherit(final boolean inherit) {
     attributes.setInherit(String.valueOf(inherit));
+    return this;
   }
-  
-  public void post(final boolean post) {
+
+  public EffectBuilder inherit() {
+    attributes.setInherit("true");
+    return this;
+  }
+
+  public EffectBuilder post(final boolean post) {
     attributes.setPost(String.valueOf(post));
+    return this;
   }
   
-  public void overlay(final boolean overlay) {
+  public EffectBuilder overlay(final boolean overlay) {
     attributes.setOverlay(String.valueOf(overlay));
+    return this;
   }
   
-  public void alternateEnable(final String alternateEnable) {
+  public EffectBuilder alternateEnable(final String alternateEnable) {
     attributes.setAlternateEnable(alternateEnable);
+    return this;
   }
   
-  public void alternateDisable(final String alternateDisable) {
+  public EffectBuilder alternateDisable(final String alternateDisable) {
     attributes.setAlternateDisable(alternateDisable);
+    return this;
   }
   
-  public void customKey(final String customKey) {
+  public EffectBuilder customKey(final String customKey) {
     attributes.setCustomKey(customKey);
+    return this;
   }
   
-  public void neverStopRendering(final boolean neverStopRendering) {
+  public EffectBuilder neverStopRendering(final boolean neverStopRendering) {
     attributes.setNeverStopRendering(String.valueOf(neverStopRendering));
+    return this;
   }
 
-  public void parameter(final String key, final String value) {
+  public EffectBuilder parameter(final String key, final String value) {
     attributes.setAttribute(key, value);
+    return this;
   }
 
-  public void startDelay(final int ms) {
+  public EffectBuilder startDelay(final int ms) {
     attributes.setStartDelay(String.valueOf(ms));
+    return this;
   }
 
-  public void length(final int ms) {
+  public EffectBuilder length(final int ms) {
     attributes.setLength(String.valueOf(ms));
+    return this;
   }
 
-  public void oneShot(final boolean oneShot) {
+  public EffectBuilder oneShot(final boolean oneShot) {
     attributes.setOneShot(String.valueOf(oneShot));
+    return this;
   }
 
-  public void timeType(final String timeType) {
+  public EffectBuilder timeType(final String timeType) {
     attributes.setTimeType(timeType);
+    return this;
   }
 
-  public void onStartEffectCallback(final String callback) {
+  public EffectBuilder onStartEffectCallback(final String callback) {
     attributes.setOnStartEffectCallback(callback);
+    return this;
   }
 
-  public void onEndEffectCallback(final String callback) {
+  public EffectBuilder onEndEffectCallback(final String callback) {
     attributes.setOnEndEffectCallback(callback);
+    return this;
   }
 
   public ControlEffectAttributes getAttributes() {
