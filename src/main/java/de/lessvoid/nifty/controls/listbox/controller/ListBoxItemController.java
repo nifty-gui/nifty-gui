@@ -4,19 +4,16 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class ListBoxItemController implements Controller {
-  private Nifty nifty;
-  private Screen screen;
-  private Element listBoxControlItemElement;
-  private FocusHandler focusHandler;
-  private ListBoxControl listBoxControl;
+public class ListBoxItemController<T> implements Controller {
+  private ListBoxImpl<T> listBox;
+  private int visualItemIndex;
 
   public void bind(
       final Nifty niftyParam,
@@ -25,39 +22,32 @@ public class ListBoxItemController implements Controller {
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
-    nifty = niftyParam;
-    screen = screenParam;
-    listBoxControlItemElement = newElement;
   }
 
   public void onStartScreen() {
-    focusHandler = screen.getFocusHandler();
   }
 
   public void onFocus(final boolean getFocus) {
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyInputEvent.NextInputElement) {
-      focusHandler.getNext(listBoxControlItemElement).setFocus();
-      return true;
-    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-      focusHandler.getPrev(listBoxControlItemElement).setFocus();
-      return true;
-    } else if (inputEvent == NiftyInputEvent.Activate) {
-      listBoxItemClicked();
-      return true;
-    }
     return false;
   }
 
   public void listBoxItemClicked() {
-    System.out.println("listBoxItemClicked");
-    listBoxControl.setFocus();
-    listBoxControl.changeSelection(listBoxControlItemElement);
+    T item = listBox.getItemByVisualIndex(visualItemIndex);
+    if (listBox.getSelection().contains(item)) {
+      listBox.deselectItemByVisualIndex(visualItemIndex);
+    } else {
+      listBox.selectItemByVisualIndex(visualItemIndex);
+    }
   }
 
-  public void setListBox(final ListBoxControl listBox) {
-    listBoxControl = listBox;
+  public void setListBox(final ListBoxImpl<T> listBox) {
+    this.listBox = listBox;
+  }
+
+  public void setItemIndex(final int visualItemIndex) {
+    this.visualItemIndex = visualItemIndex;
   }
 }
