@@ -119,4 +119,45 @@
       <onHover name="imageOverlay" filename="scrollbar/scrollbar-horizontal-handle2.png" width="28px" height="28px" imageMode="resize:1,26,1,1,1,26,1,26,1,26,1,1" post="true" />
     </effect>
   </style>
+
+  <!-- ++++++++++++++++++++++ -->
+  <!-- horizontal-for-listbox -->
+  <!-- ++++++++++++++++++++++ -->
+  <style id="nifty-horizontal-scrollbar-for-listbox#panel">
+    <attributes childLayout="horizontal" height="28px" align="center" focusable="true" />
+  </style>
+  <style id="nifty-horizontal-scrollbar-for-listbox#left">
+    <attributes filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:0,0,28,28"/>
+    <effect>
+      <onClick name="focus" targetElement="#parent" />
+      <onClick name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:56,0,28,28" post="true" />
+      <onFocus name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:28,0,28,28" post="true" />
+      <onHover name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:28,0,28,28" post="true" />
+    </effect>
+  </style>
+  <style id="nifty-horizontal-scrollbar-for-listbox#right">
+    <attributes filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:84,0,28,28"/>
+    <effect>
+      <onClick name="focus" targetElement="#parent" />
+      <onClick name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:140,0,28,28" post="true" />
+      <onFocus name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:112,0,28,28" post="true" />
+      <onHover name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:112,0,28,28" post="true" />
+    </effect>
+  </style>
+  <style id="nifty-horizontal-scrollbar-for-listbox#background">
+    <attributes filename="scrollbar/scrollbar-horizontal-back.png" width="*" height="28px" childLayout="absolute"/>
+    <effect>
+      <onClick name="focus" targetElement="#parent" />
+    </effect>
+  </style>
+  <style id="nifty-horizontal-scrollbar-for-listbox#position">
+    <attributes filename="scrollbar/scrollbar-horizontal-handle.png" width="28px" height="28px" imageMode="resize:1,26,1,1,1,26,1,26,1,26,1,1" />
+    <effect>
+      <onClick name="focus" targetElement="#parent" />
+      <onClick name="imageOverlay" filename="scrollbar/scrollbar-horizontal-handle2.png" width="28px" height="28px" imageMode="resize:1,26,1,1,1,26,1,26,1,26,1,1" post="true" />
+      <onFocus name="imageOverlay" filename="scrollbar/scrollbar-horizontal-handle2.png" width="28px" height="28px" imageMode="resize:1,26,1,1,1,26,1,26,1,26,1,1" post="true" />
+      <onHover name="imageOverlay" filename="scrollbar/scrollbar-horizontal-handle2.png" width="28px" height="28px" imageMode="resize:1,26,1,1,1,26,1,26,1,26,1,1" post="true" />
+    </effect>
+  </style>
+
 </nifty-styles>
