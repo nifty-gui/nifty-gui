@@ -131,6 +131,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
     @Override
     public void onFocus(boolean getFocus) {
+        super.onFocus(getFocus);
     }
 
     public void onStartScreen() {

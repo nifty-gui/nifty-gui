@@ -48,6 +48,7 @@ public class VerticalScrollbarControl extends AbstractController {
 
     @Override
     public void onFocus(final boolean getFocus) {
+        super.onFocus(getFocus);
         scrollbar.onFocus(getFocus);
     }
 

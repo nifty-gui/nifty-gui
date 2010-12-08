@@ -26,6 +26,7 @@ public class ListBoxItemController<T> extends AbstractController {
 
     @Override
     public void onFocus(final boolean getFocus) {
+        super.onFocus(getFocus);
     }
 
     public boolean inputEvent(final NiftyInputEvent inputEvent) {

@@ -36,6 +36,7 @@ public class WindowControl extends AbstractController {
 
     @Override
     public void onFocus(boolean getFocus) {
+        super.onFocus(getFocus);
         draggableControl.onFocus(getFocus);
     }
 

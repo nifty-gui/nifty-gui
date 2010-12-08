@@ -290,6 +290,7 @@ public class TextFieldControl extends AbstractController {
     @Override
     public void onFocus(final boolean getFocus) {
         if (cursorElement != null) {
+            super.onFocus(getFocus);
             if (getFocus) {
                 cursorElement.startEffect(EffectEventId.onCustom);
             }

@@ -53,6 +53,7 @@ public class DroppableControl extends AbstractController {
 
     @Override
     public void onFocus(boolean getFocus) {
+        super.onFocus(getFocus);
     }
 
     @Override

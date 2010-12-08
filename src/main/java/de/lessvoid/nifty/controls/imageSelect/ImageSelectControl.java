@@ -103,6 +103,7 @@ public class ImageSelectControl extends AbstractController {
      */
     @Override
     public void onFocus(final boolean getFocus) {
+        super.onFocus(getFocus);
     }
 
     /**

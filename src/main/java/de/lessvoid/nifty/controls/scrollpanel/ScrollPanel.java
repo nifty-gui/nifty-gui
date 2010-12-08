@@ -96,6 +96,7 @@ public class ScrollPanel extends AbstractController {
 
     @Override
     public void onFocus(boolean getFocus) {
+        super.onFocus(getFocus);
     }
 
     public void onStartScreen() {

@@ -101,6 +101,7 @@ public class ConsoleControl extends AbstractController {
         TextFieldControl control = this.element
                 .findControl("console-input", TextFieldControl.class);
         if (control != null) {
+            super.onFocus(getFocus);
             control.onFocus(getFocus);
         }
     }
