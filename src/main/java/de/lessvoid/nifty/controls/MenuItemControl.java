@@ -69,5 +69,6 @@ public class MenuItemControl extends AbstractController {
 
     @Override
     public void onFocus(final boolean getFocus) {
+        super.onFocus(getFocus);
     }
 }
