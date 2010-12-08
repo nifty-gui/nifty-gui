@@ -21,6 +21,7 @@ public class EffectProcessor {
   private Logger log = Logger.getLogger(EffectProcessor.class.getName());
   private List < Effect > allEffects = new ArrayList < Effect >();
   private List < Effect > activeEffects = new ArrayList < Effect >();
+  private List <Effect> activeEffectsToRemove = new ArrayList < Effect >();
 
   private boolean active;
   private EndNotify listener;
@@ -205,18 +206,24 @@ public class EffectProcessor {
     * Resets the effect with the given customKey (if it exists)
     */
      public final void reset(final String customKey) {
-       boolean matches = false;
+       activeEffectsToRemove.clear();
+
        for (Effect e : activeEffects) {
-         if(e.customKeyMatches(customKey)) {
+         if (e.customKeyMatches(customKey)) {
            e.setActive(false);
-           matches = true;
+           activeEffectsToRemove.add(e);
          }
        }
-       if(matches) {
-         if(!processingActiveEffects) {
+
+       if (activeEffectsToRemove.size() == activeEffects.size()) {
+         if (!processingActiveEffects) {
            activeEffects.clear();
          } else {
            clearActiveEffectsRequested = true;
+         }
+       } else {
+         for (Effect e : activeEffectsToRemove) {
+           activeEffects.remove(e);
          }
        }
     }
@@ -289,10 +296,13 @@ public class EffectProcessor {
       return;
     }
 
-    log.info("starting effect [" + e.getStateString() + "]");
+    log.info("starting effect [" + e.getStateString() + "] with customKey [" + customKey + "]");
     e.start();
     if (!activeEffects.contains(e)) {
+      log.info("adding effect as active");
       activeEffects.add(e);
+    } else {
+      log.info("NOT adding effect as active");
     }
   }
 
@@ -357,7 +367,7 @@ public class EffectProcessor {
    */
   public String getStateString() {
     if (activeEffects.isEmpty()) {
-      return "";
+      return "no active effects";
     } else {
       StringBuffer data = new StringBuffer();
       for (Effect e : activeEffects) {

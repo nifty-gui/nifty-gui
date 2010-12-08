@@ -230,14 +230,14 @@ public class EffectManager {
       if (processor.isActive()) {
         activeProcessors++;
 
-        data.append("\n" + offset);
+        data.append(offset);
         data.append("  {" + eventId.toString() + "} ");
         data.append(processor.getStateString());
       }
     }
 
     if (activeProcessors == 0) {
-      return "";
+      return "{}";
     } else {
       return data.toString();
     }

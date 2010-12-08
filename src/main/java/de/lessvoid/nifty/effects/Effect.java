@@ -168,15 +168,15 @@ public class Effect {
     return alternate != null && alternate.equals(alternateDisable);
   }
 
-  public boolean customKeyMatches(final String currentKey) {
-    if (currentKey == null) {
+  public boolean customKeyMatches(final String customKeyToCheck) {
+    if (customKeyToCheck == null) {
       if (customKey == null) {
         return true;
       } else {
         return false;
       }
     } else {
-      if (currentKey.equals(customKey)) {
+      if (customKeyToCheck.equals(customKey)) {
         return true;
       } else {
         return false;
@@ -189,12 +189,7 @@ public class Effect {
    * @return state string
    */
   public String getStateString() {
-    return
-      "("
-      +
-      effectImpl.getClass().getSimpleName()
-      +
-      ")";
+    return "(" + effectImpl.getClass().getSimpleName() + "[" + customKey + "]" + ")";
   }
 
   /**
