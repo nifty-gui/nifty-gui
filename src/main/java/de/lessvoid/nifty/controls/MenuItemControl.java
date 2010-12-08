@@ -9,62 +9,65 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class MenuItemControl implements Controller {
-  private Screen screen;
-  private Element element;
-  private FocusHandler focusHandler;
+public class MenuItemControl extends AbstractController {
+    private Screen screen;
 
-  public void bind(
-      final Nifty nifty,
-      final Screen screenParam,
-      final Element newElement,
-      final Properties properties,
-      final ControllerEventListener newListener,
-      final Attributes controlDefinitionAttributes) {
-    element = newElement;
-    screen = screenParam;
-  }
+    private Element element;
 
-  public void onStartScreen() {
-    focusHandler = screen.getFocusHandler();
-  }
+    private FocusHandler focusHandler;
 
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyInputEvent.NextInputElement) {
-      if (focusHandler != null) {
-        Element nextElement = focusHandler.getNext(element);
-        nextElement.setFocus();
-        return true;
-      }
-    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-      if (focusHandler != null) {
-        Element prevElement = focusHandler.getPrev(element);
-        prevElement.setFocus();
-        return true;
-      }
-    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
-      if (focusHandler != null) {
-        Element nextElement = focusHandler.getNext(element);
-        if (nextElement.getParent().equals(element.getParent())) {
-          nextElement.setFocus();
-          return true;
-        }
-      }
-    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
-      if (focusHandler != null) {
-        Element prevElement = focusHandler.getPrev(element);
-        if (prevElement.getParent().equals(element.getParent())) {
-          prevElement.setFocus();
-          return true;
-        }
-      }
-    } else if (inputEvent == NiftyInputEvent.Activate) {
-      element.onClick();
-      return true;
+    public void bind(final Nifty nifty, final Screen screenParam, final Element newElement,
+            final Properties properties, final ControllerEventListener newListener,
+            final Attributes controlDefinitionAttributes) {
+        element = newElement;
+        screen = screenParam;
     }
-    return false;
-  }
 
-  public void onFocus(final boolean getFocus) {
-  }
+    public void onStartScreen() {
+        focusHandler = screen.getFocusHandler();
+    }
+
+    public boolean inputEvent(final NiftyInputEvent inputEvent) {
+        if (inputEvent == NiftyInputEvent.NextInputElement) {
+            if (focusHandler != null) {
+                Element nextElement = focusHandler.getNext(element);
+                nextElement.setFocus();
+                return true;
+            }
+        }
+        else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+            if (focusHandler != null) {
+                Element prevElement = focusHandler.getPrev(element);
+                prevElement.setFocus();
+                return true;
+            }
+        }
+        else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+            if (focusHandler != null) {
+                Element nextElement = focusHandler.getNext(element);
+                if (nextElement.getParent().equals(element.getParent())) {
+                    nextElement.setFocus();
+                    return true;
+                }
+            }
+        }
+        else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+            if (focusHandler != null) {
+                Element prevElement = focusHandler.getPrev(element);
+                if (prevElement.getParent().equals(element.getParent())) {
+                    prevElement.setFocus();
+                    return true;
+                }
+            }
+        }
+        else if (inputEvent == NiftyInputEvent.Activate) {
+            element.onClick();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onFocus(final boolean getFocus) {
+    }
 }
