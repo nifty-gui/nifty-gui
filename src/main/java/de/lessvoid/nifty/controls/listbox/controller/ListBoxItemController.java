@@ -3,7 +3,7 @@ package de.lessvoid.nifty.controls.listbox.controller;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -11,43 +11,42 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class ListBoxItemController<T> implements Controller {
-  private ListBoxImpl<T> listBox;
-  private int visualItemIndex;
+public class ListBoxItemController<T> extends AbstractController {
+    private ListBoxImpl<T> listBox;
 
-  public void bind(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element newElement,
-      final Properties properties,
-      final ControllerEventListener newListener,
-      final Attributes controlDefinitionAttributes) {
-  }
+    private int visualItemIndex;
 
-  public void onStartScreen() {
-  }
-
-  public void onFocus(final boolean getFocus) {
-  }
-
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    return false;
-  }
-
-  public void listBoxItemClicked() {
-    T item = listBox.getItemByVisualIndex(visualItemIndex);
-    if (listBox.getSelection().contains(item)) {
-      listBox.deselectItemByVisualIndex(visualItemIndex);
-    } else {
-      listBox.selectItemByVisualIndex(visualItemIndex);
+    public void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement,
+            final Properties properties, final ControllerEventListener newListener,
+            final Attributes controlDefinitionAttributes) {
     }
-  }
 
-  public void setListBox(final ListBoxImpl<T> listBox) {
-    this.listBox = listBox;
-  }
+    public void onStartScreen() {
+    }
 
-  public void setItemIndex(final int visualItemIndex) {
-    this.visualItemIndex = visualItemIndex;
-  }
+    @Override
+    public void onFocus(final boolean getFocus) {
+    }
+
+    public boolean inputEvent(final NiftyInputEvent inputEvent) {
+        return false;
+    }
+
+    public void listBoxItemClicked() {
+        T item = listBox.getItemByVisualIndex(visualItemIndex);
+        if (listBox.getSelection().contains(item)) {
+            listBox.deselectItemByVisualIndex(visualItemIndex);
+        }
+        else {
+            listBox.selectItemByVisualIndex(visualItemIndex);
+        }
+    }
+
+    public void setListBox(final ListBoxImpl<T> listBox) {
+        this.listBox = listBox;
+    }
+
+    public void setItemIndex(final int visualItemIndex) {
+        this.visualItemIndex = visualItemIndex;
+    }
 }
