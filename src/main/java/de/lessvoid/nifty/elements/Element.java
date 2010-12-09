@@ -793,6 +793,9 @@ public class Element {
     }
     if (effectEventId == EffectEventId.onEndScreen) {
       if (!visible) {
+        // it doesn't make sense to start the onEndScreen effect when the element is hidden
+        // just call the effectEndNotify directly and quit
+        effectEndNotiy.perform();
         return;
       }
       done = true;
