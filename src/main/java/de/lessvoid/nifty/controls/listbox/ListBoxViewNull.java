@@ -18,6 +18,6 @@ public class ListBoxViewNull<T> implements ListBoxView<T> {
   }
 
   @Override
-  public void scrollTo(int newPosition) {
+  public void scrollTo(final int newPosition) {
   }
 }

@@ -18,7 +18,7 @@ public class ScrollBarImplVertical implements ScrollBarImpl {
     }
   }
   
-  public int translateValue(int mouseX, int mouseY) {
+  public int translateValue(final int mouseX, final int mouseY) {
     return mouseY;
   }
 }

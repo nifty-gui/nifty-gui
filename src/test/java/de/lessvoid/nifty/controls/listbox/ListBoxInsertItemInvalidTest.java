@@ -1,11 +1,8 @@
 package de.lessvoid.nifty.controls.listbox;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
-
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 
 public class ListBoxInsertItemInvalidTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
@@ -24,13 +21,9 @@ public class ListBoxInsertItemInvalidTest {
     assertListBoxContent();
   }
 
-  @Test
+  @Test(expected=UnsupportedOperationException.class)
   public void testCantModifyGetItems() {
-    try {
-      listBox.getItems().add(o1);
-      fail("UnsupportedOperationException exception");
-    } catch (UnsupportedOperationException e) {
-    }
+    listBox.getItems().add(o1);
   }
 
   private void assertListBoxContent(final TestItem ... expected) {

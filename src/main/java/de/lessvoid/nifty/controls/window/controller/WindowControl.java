@@ -14,86 +14,87 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class WindowControl extends AbstractController {
+  private DraggableControl draggableControl = new DraggableControl();
+  private Element element;
+  private boolean removeCloseButton;
 
-    private DraggableControl draggableControl = new DraggableControl();
+  public void bind(
+      final Nifty nifty,
+      final Screen screen,
+      final Element element,
+      final Properties parameter,
+      final ControllerEventListener listener,
+      final Attributes controlDefinitionAttributes) {
+    draggableControl.bind(nifty, screen, element, parameter, listener, controlDefinitionAttributes);
+    this.element = element;
 
-    private Element element;
+    removeCloseButton = !controlDefinitionAttributes.getAsBoolean("closeable", true);
+  }
 
-    private boolean removeCloseButton;
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return draggableControl.inputEvent(inputEvent);
+  }
 
-    public void bind(Nifty nifty, Screen screen, Element element, Properties parameter,
-            ControllerEventListener listener, Attributes controlDefinitionAttributes) {
-        draggableControl.bind(nifty, screen, element, parameter, listener,
-                controlDefinitionAttributes);
-        this.element = element;
+  @Override
+  public void onFocus(final boolean getFocus) {
+    super.onFocus(getFocus);
+    draggableControl.onFocus(getFocus);
+  }
 
-        removeCloseButton = !controlDefinitionAttributes.getAsBoolean("closeable", true);
+  public void onStartScreen() {
+    draggableControl.onStartScreen();
+    if (removeCloseButton) {
+      getCloseButton().markForRemoval();
+      removeCloseButton = false;
     }
+  }
 
-    public boolean inputEvent(NiftyInputEvent inputEvent) {
-        return draggableControl.inputEvent(inputEvent);
-    }
+  public void dragStart(final int mouseX, final int mouseY) {
+    draggableControl.dragStart(mouseX, mouseY);
+  }
 
-    @Override
-    public void onFocus(boolean getFocus) {
-        super.onFocus(getFocus);
-        draggableControl.onFocus(getFocus);
-    }
+  public void drag(final int mouseX, final int mouseY) {
+    draggableControl.drag(mouseX, mouseY);
+  }
 
-    public void onStartScreen() {
-        draggableControl.onStartScreen();
-        if (removeCloseButton) {
-            getCloseButton().markForRemoval();
-            removeCloseButton = false;
-        }
-    }
+  public void dragStop() {
+    draggableControl.dragStop();
+  }
 
-    public void dragStart(int mouseX, int mouseY) {
-        draggableControl.dragStart(mouseX, mouseY);
-    }
+  public void closeWindow() {
+    element.markForRemoval();
+  }
 
-    public void drag(int mouseX, int mouseY) {
-        draggableControl.drag(mouseX, mouseY);
-    }
+  public String getTitle() {
+    return getTitleElement().getRenderer(TextRenderer.class).getOriginalText();
+  }
 
-    public void dragStop() {
-        draggableControl.dragStop();
-    }
+  public void setTitle(final String title) {
+    getTitleElement().getRenderer(TextRenderer.class).setText(title);
+  }
 
-    public void closeWindow() {
-        element.markForRemoval();
-    }
+  private Element getTitleElement() {
+    return element.findElementByName("window-title");
+  }
 
-    public String getTitle() {
-        return getTitleElement().getRenderer(TextRenderer.class).getOriginalText();
-    }
+  private Element getCloseButton() {
+    return element.findElementByName("window-close-button");
+  }
 
-    public void setTitle(String title) {
-        getTitleElement().getRenderer(TextRenderer.class).setText(title);
-    }
+  public Element getContent() {
+    return element.findElementByName("window-content");
+  }
 
-    private Element getTitleElement() {
-        return element.findElementByName("window-title");
-    }
+  public void addNotify(final DragNotify notify) {
+    draggableControl.addNotify(notify);
+  }
 
-    private Element getCloseButton() {
-        return element.findElementByName("window-close-button");
-    }
+  public void removeNotify(final DragNotify notify) {
+    draggableControl.removeNotify(notify);
+  }
 
-    public Element getContent() {
-        return element.findElementByName("window-content");
-    }
-
-    public void addNotify(final DragNotify notify) {
-        draggableControl.addNotify(notify);
-    }
-
-    public void removeNotify(final DragNotify notify) {
-        draggableControl.removeNotify(notify);
-    }
-
-    @Override
-    public void removeAllNotifies() {
-        draggableControl.removeAllNotifies();
-    }
+  @Override
+  public void removeAllNotifies() {
+    draggableControl.removeAllNotifies();
+  }
 }

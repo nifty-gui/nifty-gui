@@ -8,9 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxView;
-
 public class ListBoxShowItemTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
@@ -19,6 +16,7 @@ public class ListBoxShowItemTest {
   private TestItem o4 = new TestItem("o4");
   private ListBoxView<TestItem> viewMock;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     listBox.addItem(o1);

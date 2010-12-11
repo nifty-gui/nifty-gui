@@ -11,9 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxView;
-
 public class ListBoxViewMoveTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
@@ -21,6 +18,7 @@ public class ListBoxViewMoveTest {
   private TestItem o3 = new TestItem("o3");
   private ListBoxView<TestItem> view;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     view = createMock(ListBoxView.class);

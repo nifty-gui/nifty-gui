@@ -11,41 +11,43 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownPopup extends AbstractController {
-    private Nifty nifty;
+  private Nifty nifty;
+  private Element dropDownElement;
 
-    private Element dropDownElement;
+  public void bind(
+      final Nifty niftyParam,
+      final Screen screenParam,
+      final Element element,
+      final Properties parameter,
+      final ControllerEventListener listener,
+      final Attributes controlDefinitionAttributes) {
+    nifty = niftyParam;
+  }
 
-    public void bind(final Nifty niftyParam, final Screen screenParam, final Element element,
-            final Properties parameter, final ControllerEventListener listener,
-            final Attributes controlDefinitionAttributes) {
-        nifty = niftyParam;
-    }
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return false;
+  }
 
-    public boolean inputEvent(final NiftyInputEvent inputEvent) {
-        return false;
-    }
+  @Override
+  public void onFocus(final boolean getFocus) {
+    super.onFocus(getFocus);
+  }
 
-    @Override
-    public void onFocus(final boolean getFocus) {
-        super.onFocus(getFocus);
-    }
+  public void onStartScreen() {
+  }
 
-    public void onStartScreen() {
-    }
+  public void setDropDownElement(final Element element) {
+    dropDownElement = element;
+  }
 
-    public void setDropDownElement(final Element element) {
-        dropDownElement = element;
-    }
+  public void close() {
+    dropDownElement.getControl(DropDownControl.class).reset();
+    nifty.closePopup("dropDownBoxSelectPopup");
+  }
 
-    public void close() {
-        dropDownElement.getControl(DropDownControl.class).reset();
-        nifty.closePopup("dropDownBoxSelectPopup");
-    }
-
-    public void fixOffset(final Properties parameter) {
-        Element popup = nifty.findPopupByName("dropDownBoxSelectPopup");
-        Element popupControl = popup.findElementByName("dropDownList");
-        parameter.put("offsetY",
-                new String("-" + popupControl.getConstraintHeight().getValueAsInt(1.0f)));
-    }
+  public void fixOffset(final Properties parameter) {
+    Element popup = nifty.findPopupByName("dropDownBoxSelectPopup");
+    Element popupControl = popup.findElementByName("dropDownList");
+    parameter.put("offsetY", new String("-" + popupControl.getConstraintHeight().getValueAsInt(1.0f)));
+  }
 }

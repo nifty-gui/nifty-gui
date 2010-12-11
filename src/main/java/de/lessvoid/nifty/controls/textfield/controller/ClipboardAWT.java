@@ -52,6 +52,6 @@ public class ClipboardAWT implements Clipboard, ClipboardOwner {
   /**
    * not used...
    */
-  public void lostOwnership(java.awt.datatransfer.Clipboard arg0, Transferable arg1) {
+  public void lostOwnership(final java.awt.datatransfer.Clipboard arg0, final Transferable arg1) {
   }
 }

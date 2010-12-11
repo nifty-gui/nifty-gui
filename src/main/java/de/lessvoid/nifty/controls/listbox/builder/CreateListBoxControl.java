@@ -19,6 +19,7 @@ public class CreateListBoxControl extends ControlAttributes {
     setName("listBox");
   }
 
+  @SuppressWarnings("rawtypes")
   public ListBoxControl create(
       final Nifty nifty,
       final Screen screen,

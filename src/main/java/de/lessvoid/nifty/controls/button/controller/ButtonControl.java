@@ -23,104 +23,101 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class ButtonControl extends AbstractController {
-    private Element element;
+  private Element element;
+  private FocusHandler focusHandler;
+  private Screen screen;
 
-    private FocusHandler focusHandler;
+  public void bind(
+      final Nifty nifty,
+      final Screen screenParam,
+      final Element newElement,
+      final Properties parameter,
+      final ControllerEventListener listener,
+      final Attributes controlDefinitionAttributes) {
+    element = newElement;
+    screen = screenParam;
+  }
 
-    private Screen screen;
+  public void onStartScreen() {
+    focusHandler = screen.getFocusHandler();
+  }
 
-    public void bind(final Nifty nifty, final Screen screenParam, final Element newElement,
-            final Properties parameter, final ControllerEventListener listener,
-            final Attributes controlDefinitionAttributes) {
-        element = newElement;
-        screen = screenParam;
-    }
+  @Override
+  public void onFocus(final boolean getFocus) {
+    super.onFocus(getFocus);
+  }
 
-    public void onStartScreen() {
-        focusHandler = screen.getFocusHandler();
-    }
-
-    @Override
-    public void onFocus(final boolean getFocus) {
-        super.onFocus(getFocus);
-    }
-
-    public boolean inputEvent(final NiftyInputEvent inputEvent) {
-        if (inputEvent == NiftyInputEvent.NextInputElement) {
-            focusHandler.getNext(element).setFocus();
-            return true;
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
+      focusHandler.getNext(element).setFocus();
+      return true;
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+      focusHandler.getPrev(element).setFocus();
+      return true;
+    } else if (inputEvent == NiftyInputEvent.Activate) {
+      element.onClick();
+      return true;
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+      if (focusHandler != null) {
+        Element nextElement = focusHandler.getNext(element);
+        if (nextElement.getParent().equals(element.getParent())) {
+          nextElement.setFocus();
+          return true;
         }
-        else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-            focusHandler.getPrev(element).setFocus();
-            return true;
+      }
+    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+      if (focusHandler != null) {
+        Element prevElement = focusHandler.getPrev(element);
+        if (prevElement.getParent().equals(element.getParent())) {
+          prevElement.setFocus();
+          return true;
         }
-        else if (inputEvent == NiftyInputEvent.Activate) {
-            element.onClick();
-            return true;
-        }
-        else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
-            if (focusHandler != null) {
-                Element nextElement = focusHandler.getNext(element);
-                if (nextElement.getParent().equals(element.getParent())) {
-                    nextElement.setFocus();
-                    return true;
-                }
-            }
-        }
-        else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
-            if (focusHandler != null) {
-                Element prevElement = focusHandler.getPrev(element);
-                if (prevElement.getParent().equals(element.getParent())) {
-                    prevElement.setFocus();
-                    return true;
-                }
-            }
-        }
-        return false;
+      }
     }
+    return false;
+  }
 
-    public void setText(final String text) {
-        TextRenderer textRenderer = getButtonTextRenderer();
-        textRenderer.setText(text);
-        if (!textRenderer.isLineWrapping()) {
-            buttonTextElement().setConstraintWidth(
-                    new SizeValue(textRenderer.getTextWidth() + "px"));
-        }
+  public void setText(final String text) {
+    TextRenderer textRenderer = getButtonTextRenderer();
+    textRenderer.setText(text);
+    if (!textRenderer.isLineWrapping()) {
+      buttonTextElement().setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
     }
+  }
 
-    public int getTextWidth() {
-        return getButtonTextRenderer().getTextWidth();
-    }
+  public int getTextWidth() {
+    return getButtonTextRenderer().getTextWidth();
+  }
 
-    public int getTextHeight() {
-        return getButtonTextRenderer().getTextHeight();
-    }
+  public int getTextHeight() {
+    return getButtonTextRenderer().getTextHeight();
+  }
 
-    public RenderFont getFont() {
-        return getButtonTextRenderer().getFont();
-    }
+  public RenderFont getFont() {
+    return getButtonTextRenderer().getFont();
+  }
 
-    public void setFont(final RenderFont fontParam) {
-        getButtonTextRenderer().setFont(fontParam);
-    }
+  public void setFont(final RenderFont fontParam) {
+    getButtonTextRenderer().setFont(fontParam);
+  }
 
-    public void setTextVAlign(final VerticalAlign newTextVAlign) {
-        getButtonTextRenderer().setTextVAlign(newTextVAlign);
-    }
+  public void setTextVAlign(final VerticalAlign newTextVAlign) {
+    getButtonTextRenderer().setTextVAlign(newTextVAlign);
+  }
 
-    public void setTextHAlign(final HorizontalAlign newTextHAlign) {
-        getButtonTextRenderer().setTextHAlign(newTextHAlign);
-    }
+  public void setTextHAlign(final HorizontalAlign newTextHAlign) {
+    getButtonTextRenderer().setTextHAlign(newTextHAlign);
+  }
 
-    public void setColor(final Color newColor) {
-        getButtonTextRenderer().setColor(newColor);
-    }
+  public void setColor(final Color newColor) {
+    getButtonTextRenderer().setColor(newColor);
+  }
 
-    private TextRenderer getButtonTextRenderer() {
-        return buttonTextElement().getRenderer(TextRenderer.class);
-    }
+  private TextRenderer getButtonTextRenderer() {
+    return buttonTextElement().getRenderer(TextRenderer.class);
+  }
 
-    private Element buttonTextElement() {
-        return element.findElementByName("button-text");
-    }
+  private Element buttonTextElement() {
+    return element.findElementByName("button-text");
+  }
 }

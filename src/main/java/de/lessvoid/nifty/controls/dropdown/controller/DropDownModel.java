@@ -23,7 +23,7 @@ public class DropDownModel {
 	  objects.add(null);
   }
   
-  public void addItem(final String description, Object object) {
+  public void addItem(final String description, final Object object) {
 	  items.add(description);
 	  objects.add(object);
   }

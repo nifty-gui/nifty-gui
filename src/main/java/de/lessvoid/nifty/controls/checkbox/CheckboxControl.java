@@ -19,88 +19,80 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class CheckboxControl extends AbstractController {
-    private Element element;
+  private Element element;
+  private Screen screen;
+  private boolean checked;
+  private FocusHandler focusHandler;
 
-    private Screen screen;
+  public void bind(
+      final Nifty niftyParam,
+      final Screen screenParam,
+      final Element elementParam,
+      final Properties propertiesParam,
+      final ControllerEventListener listenerParam,
+      final Attributes controlDefinitionAttributes) {
+    element = elementParam;
+    screen = screenParam;
+    checked = new Boolean(propertiesParam.getProperty("checked", "true"));
+    updateVisualState();
+  }
 
-    private boolean checked;
+  public void onStartScreen() {
+    focusHandler = screen.getFocusHandler();
+  }
 
-    private FocusHandler focusHandler;
+  @Override
+  public void onFocus(final boolean getFocus) {
+    super.onFocus(getFocus);
+  }
 
-    public void bind(final Nifty niftyParam, final Screen screenParam, final Element elementParam,
-            final Properties propertiesParam, final ControllerEventListener listenerParam,
-            final Attributes controlDefinitionAttributes) {
-        element = elementParam;
-        screen = screenParam;
-        checked = new Boolean(propertiesParam.getProperty("checked", "true"));
-        updateVisualState();
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
+      focusHandler.getNext(element).setFocus();
+      return true;
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+      focusHandler.getPrev(element).setFocus();
+      return true;
+    } else if (inputEvent == NiftyInputEvent.Activate) {
+      onClick();
+      return true;
     }
+    return false;
+  }
 
-    public void onStartScreen() {
-        focusHandler = screen.getFocusHandler();
-    }
+  public boolean onClick() {
+    checked = !checked;
+    updateVisualState();
+    return true;
+  }
 
-    @Override
-    public void onFocus(final boolean getFocus) {
-        super.onFocus(getFocus);
-    }
+  public boolean isChecked() {
+    return checked;
+  }
 
-    public boolean inputEvent(final NiftyInputEvent inputEvent) {
-        if (inputEvent == NiftyInputEvent.NextInputElement) {
-            focusHandler.getNext(element).setFocus();
-            return true;
-        }
-        else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-            focusHandler.getPrev(element).setFocus();
-            return true;
-        }
-        else if (inputEvent == NiftyInputEvent.Activate) {
-            onClick();
-            return true;
-        }
-        return false;
-    }
+  public void check() {
+    this.checked = true;
+    updateVisualState();
+  }
 
-    public boolean onClick() {
-        checked = !checked;
-        updateVisualState();
-        return true;
-    }
+  public void uncheck() {
+    this.checked = false;
+    updateVisualState();
+  }
 
-    public boolean isChecked() {
-        return checked;
-    }
+  public void setChecked(final boolean state) {
+    this.checked = state;
+    updateVisualState();
+  }
 
-    public void check() {
-        this.checked = true;
-        updateVisualState();
+  private void updateVisualState() {
+    final Element selectImage = element.findElementByName("select");
+    if (checked) {
+      selectImage.stopEffect(EffectEventId.onCustom);
+      selectImage.startEffect(EffectEventId.onCustom, new EndNotify() { public void perform() { } }, "show");
+    } else {
+      selectImage.stopEffect(EffectEventId.onCustom);
+      selectImage.startEffect(EffectEventId.onCustom, new EndNotify() { public void perform() { } }, "hide");
     }
-
-    public void uncheck() {
-        this.checked = false;
-        updateVisualState();
-    }
-
-    public void setChecked(boolean state) {
-        this.checked = state;
-        updateVisualState();
-    }
-
-    private void updateVisualState() {
-        final Element selectImage = element.findElementByName("select");
-        if (checked) {
-            selectImage.stopEffect(EffectEventId.onCustom);
-            selectImage.startEffect(EffectEventId.onCustom, new EndNotify() {
-                public void perform() {
-                }
-            }, "show");
-        }
-        else {
-            selectImage.stopEffect(EffectEventId.onCustom);
-            selectImage.startEffect(EffectEventId.onCustom, new EndNotify() {
-                public void perform() {
-                }
-            }, "hide");
-        }
-    }
+  }
 }

@@ -12,10 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxView;
-
 public class ListBoxFocusElementTest {
+  private static final int TOO_LARGE_INDEX = 4;
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
@@ -23,6 +21,7 @@ public class ListBoxFocusElementTest {
   private TestItem o4 = new TestItem("o4");
   private ListBoxView<TestItem> viewMock;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     listBox.addItem(o1);
@@ -55,7 +54,7 @@ public class ListBoxFocusElementTest {
   @Test
   public void testSetFocusItemByIndexTooLarge() {
     replay(viewMock);
-    listBox.setFocusItemByIndex(4);
+    listBox.setFocusItemByIndex(TOO_LARGE_INDEX);
     assertEquals(0, listBox.getFocusItemIndex());
   }
 

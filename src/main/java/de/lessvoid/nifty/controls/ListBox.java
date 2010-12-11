@@ -2,9 +2,7 @@ package de.lessvoid.nifty.controls;
 
 import java.util.List;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxMultiSelectionMode;
 import de.lessvoid.nifty.controls.listbox.ListBoxSelectionMode;
-import de.lessvoid.nifty.controls.listbox.ListBoxSingleSelectionMode;
 import de.lessvoid.nifty.controls.listbox.ListBoxViewConverter;
 
 /**

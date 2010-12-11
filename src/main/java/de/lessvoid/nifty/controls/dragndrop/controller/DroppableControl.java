@@ -17,165 +17,161 @@ import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class DroppableControl extends AbstractController {
+  private Nifty nifty;
+  private Screen screen;
+  private List<DropNotify> notifies = new CopyOnWriteArrayList<DropNotify>();
+  private List<DropFilter> filters = new CopyOnWriteArrayList<DropFilter>();
+  private Element droppable;
+  private DraggableControl draggable;
 
-    private Nifty nifty;
+  @Override
+  public void bind(
+      final Nifty nifty,
+      final Screen screen,
+      final Element element,
+      final Properties parameter,
+      final ControllerEventListener listener,
+      final Attributes controlDefinitionAttributes) {
+    this.nifty = nifty;
+    this.screen = screen;
+    droppable = element;
 
-    private Screen screen;
+    addOnDropMethodNotify(controlDefinitionAttributes.get("onDrop"));
+  }
 
-    private List<DropNotify> notifies = new CopyOnWriteArrayList<DropNotify>();
-
-    private List<DropFilter> filters = new CopyOnWriteArrayList<DropFilter>();
-
-    private Element droppable;
-
-    private DraggableControl draggable;
-
-    @Override
-    public void bind(Nifty nifty, Screen screen, Element element, Properties parameter,
-            ControllerEventListener listener, Attributes controlDefinitionAttributes) {
-        this.nifty = nifty;
-        this.screen = screen;
-        droppable = element;
-
-        addOnDropMethodNotify(controlDefinitionAttributes.get("onDrop"));
+  private void addOnDropMethodNotify(final String methodName) {
+    if (methodName != null) {
+      addNotify(new OnDropMethodNotify(methodName));
     }
+  }
 
-    private void addOnDropMethodNotify(String methodName) {
-        if (methodName != null) {
-            addNotify(new OnDropMethodNotify(methodName));
-        }
+  @Override
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return false;
+  }
+
+  @Override
+  public void onFocus(final boolean getFocus) {
+    super.onFocus(getFocus);
+  }
+
+  @Override
+  public void onStartScreen() {
+    draggable = findDraggableChild(droppable);
+    if (draggable != null) {
+      drop(draggable, reactivate(draggable.getElement()), false);
     }
+  }
 
-    @Override
-    public boolean inputEvent(NiftyInputEvent inputEvent) {
-        return false;
-    }
+  private EndNotify reactivate(final Element element) {
+    return new EndNotify() {
 
-    @Override
-    public void onFocus(boolean getFocus) {
-        super.onFocus(getFocus);
-    }
+      @Override
+      public void perform() {
+        element.reactivate();
+      }
+    };
+  }
 
-    @Override
-    public void onStartScreen() {
-        draggable = findDraggableChild(droppable);
-        if (draggable != null) {
-            drop(draggable, reactivate(draggable.getElement()), false);
-        }
-    }
-
-    private EndNotify reactivate(final Element element) {
-        return new EndNotify() {
-
-            @Override
-            public void perform() {
-                element.reactivate();
-            }
-        };
-    }
-
-    private DraggableControl findDraggableChild(Element element) {
-        for (Element child : element.getElements()) {
-            if (isDraggable(child)) {
-                return child.getControl(DraggableControl.class);
-            }
-            DraggableControl draggable = findDraggableChild(child);
-            if (draggable != null) {
-                return draggable;
-            }
-        }
-        return null;
-    }
-
-    private boolean isDraggable(Element element) {
-        NiftyInputControl control = element.getAttachedInputControl();
-        if (control != null) {
-            return control.getController() instanceof DraggableControl;
-        }
-        return false;
-    }
-
-    protected void drop(DraggableControl droppedDraggable, EndNotify endNotify) {
-        drop(droppedDraggable, endNotify, true);
-    }
-
-    private void drop(DraggableControl droppedDraggable, EndNotify endNotify,
-            boolean notifyObservers) {
-        draggable = droppedDraggable;
-        draggable.getElement().setConstraintX(new SizeValue("0px"));
-        draggable.getElement().setConstraintY(new SizeValue("0px"));
-        draggable.getElement().markForMove(droppable, endNotify);
-
-        DroppableControl source = droppedDraggable.getDroppable();
-        droppedDraggable.setDroppable(this);
-
-        if (notifyObservers) {
-            notifyObservers(source, droppedDraggable);
-        }
-    }
-
-    public DraggableControl getDraggable() {
+  private DraggableControl findDraggableChild(final Element element) {
+    for (Element child : element.getElements()) {
+      if (isDraggable(child)) {
+        return child.getControl(DraggableControl.class);
+      }
+      DraggableControl draggable = findDraggableChild(child);
+      if (draggable != null) {
         return draggable;
+      }
     }
+    return null;
+  }
 
-    public void addNotify(DropNotify notify) {
-        notifies.add(notify);
+  private boolean isDraggable(final Element element) {
+    NiftyInputControl control = element.getAttachedInputControl();
+    if (control != null) {
+      return control.getController() instanceof DraggableControl;
     }
+    return false;
+  }
 
-    public void removeNotify(DropNotify notify) {
-        notifies.remove(notify);
+  protected void drop(final DraggableControl droppedDraggable, final EndNotify endNotify) {
+    drop(droppedDraggable, endNotify, true);
+  }
+
+  private void drop(final DraggableControl droppedDraggable, final EndNotify endNotify, final boolean notifyObservers) {
+    draggable = droppedDraggable;
+    draggable.getElement().setConstraintX(new SizeValue("0px"));
+    draggable.getElement().setConstraintY(new SizeValue("0px"));
+    draggable.getElement().markForMove(droppable, endNotify);
+
+    DroppableControl source = droppedDraggable.getDroppable();
+    droppedDraggable.setDroppable(this);
+
+    if (notifyObservers) {
+      notifyObservers(source, droppedDraggable);
+    }
+  }
+
+  public DraggableControl getDraggable() {
+    return draggable;
+  }
+
+  public void addNotify(final DropNotify notify) {
+    notifies.add(notify);
+  }
+
+  public void removeNotify(final DropNotify notify) {
+    notifies.remove(notify);
+  }
+
+  @Override
+  public void removeAllNotifies() {
+    notifies.clear();
+  }
+
+  private void notifyObservers(final DroppableControl source, final DraggableControl droppedDraggable) {
+    for (DropNotify notify : notifies) {
+      notify.dropped(source, droppedDraggable, this);
+    }
+  }
+
+  public void addFilter(final DropFilter filter) {
+    filters.add(filter);
+  }
+
+  public void removeFilter(final DropFilter filter) {
+    filters.remove(filter);
+  }
+
+  public void removeAllFilters() {
+    filters.clear();
+  }
+
+  protected boolean accept(final DroppableControl source, final DraggableControl draggable) {
+    for (DropFilter filter : filters) {
+      if (!filter.accept(source, draggable, this)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public Element getElement() {
+    return droppable;
+  }
+
+  private class OnDropMethodNotify implements DropNotify {
+
+    private String methodName;
+
+    public OnDropMethodNotify(final String methodName) {
+      this.methodName = methodName;
     }
 
     @Override
-    public void removeAllNotifies() {
-        notifies.clear();
+    public void dropped(final DroppableControl source, final DraggableControl draggable, final DroppableControl target) {
+      NiftyMethodInvoker methodInvoker = new NiftyMethodInvoker(nifty, methodName, screen.getScreenController());
+      methodInvoker.invoke(source, draggable, target);
     }
-
-    private void notifyObservers(DroppableControl source, DraggableControl droppedDraggable) {
-        for (DropNotify notify : notifies) {
-            notify.dropped(source, droppedDraggable, this);
-        }
-    }
-
-    public void addFilter(DropFilter filter) {
-        filters.add(filter);
-    }
-
-    public void removeFilter(DropFilter filter) {
-        filters.remove(filter);
-    }
-
-    public void removeAllFilters() {
-        filters.clear();
-    }
-
-    protected boolean accept(DroppableControl source, DraggableControl draggable) {
-        for (DropFilter filter : filters) {
-            if (!filter.accept(source, draggable, this)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public Element getElement() {
-        return droppable;
-    }
-
-    private class OnDropMethodNotify implements DropNotify {
-
-        private String methodName;
-
-        public OnDropMethodNotify(String methodName) {
-            this.methodName = methodName;
-        }
-
-        @Override
-        public void dropped(DroppableControl source, DraggableControl draggable,
-                DroppableControl target) {
-            NiftyMethodInvoker methodInvoker = new NiftyMethodInvoker(nifty, methodName,
-                    screen.getScreenController());
-            methodInvoker.invoke(source, draggable, target);
-        }
-    }
+  }
 }

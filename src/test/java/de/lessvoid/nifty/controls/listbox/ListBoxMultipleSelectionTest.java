@@ -6,8 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxMultiSelectionMode;
 
 public class ListBoxMultipleSelectionTest {
   private ListBox<TestItem> listBox = new ListBoxImpl<TestItem>();

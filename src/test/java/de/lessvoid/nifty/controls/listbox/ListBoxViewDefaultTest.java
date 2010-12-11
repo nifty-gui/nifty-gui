@@ -11,13 +11,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxView;
-
 public class ListBoxViewDefaultTest {
   private ListBoxImpl<String> listBox = new ListBoxImpl<String>();
   private ListBoxView<String> view;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     view = createMock(ListBoxView.class);

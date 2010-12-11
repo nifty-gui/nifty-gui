@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 
 public class ListBoxItemTest {
   private ListBox<TestItem> listBox = new ListBoxImpl<TestItem>();

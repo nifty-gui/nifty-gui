@@ -41,6 +41,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private int displayItems;
   private ListBoxViewConverter<T> viewConverter = new SimpleListBoxViewConverter<T>();
 
+  @SuppressWarnings("unchecked")
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -54,7 +55,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     parameter = parameterParam;
     verticalScrollbar = new Boolean(parameter.getProperty("vertical", "true"));
     horizontalScrollbar = new Boolean(parameter.getProperty("horizontal", "true"));
-    displayItems = new Integer(parameter.getProperty("displayItems", "1"));
+    displayItems = new Integer(parameter.getProperty("displayItems", "2"));
     childRootElement = element.findElementByName(controlDefinitionAttributes.get("childRootId"));
     labelTemplateElement = childRootElement.getElements().get(0);
     labelElements = new Element[displayItems];
@@ -178,6 +179,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   // ListBoxView Interface implementation
 
+  @SuppressWarnings("unchecked")
   @Override
   public void display(final List<T> visibleItems, final int focusElement, final List<Integer> selectedElements) {
     for (int i = 0; i < visibleItems.size(); i++) {

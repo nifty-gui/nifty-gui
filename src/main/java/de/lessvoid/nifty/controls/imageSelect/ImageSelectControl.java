@@ -22,20 +22,14 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 public class ImageSelectControl extends AbstractController {
     private Nifty nifty;
-
-    private Screen screen;
-
     private Element element;
-
     private ArrayList<NiftyImage> images;
-
     private int currentImageIndex;
 
     public void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement,
             final Properties properties, final ControllerEventListener newListener,
             final Attributes controlDefinitionAttributes) {
         nifty = niftyParam;
-        screen = screenParam;
         element = newElement;
 
         images = createImages(nifty.getRenderEngine(), properties.getProperty("imageList"));
@@ -61,15 +55,13 @@ public class ImageSelectControl extends AbstractController {
 
         if (currentImageIndex == 0) {
             element.findElementByName("back").hide();
-        }
-        else {
+        } else {
             element.findElementByName("back").show();
         }
 
         if (currentImageIndex == (images.size() - 1)) {
             element.findElementByName("forward").hide();
-        }
-        else {
+        } else {
             element.findElementByName("forward").show();
         }
     }
@@ -135,7 +127,7 @@ public class ImageSelectControl extends AbstractController {
         }
     }
 
-    public void addImage(NiftyImage image) {
+    public void addImage(final NiftyImage image) {
         images.add(image);
         updateVisuals();
     }

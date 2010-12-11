@@ -13,63 +13,59 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownControlItem extends AbstractController {
-    private Nifty nifty;
+  private Nifty nifty;
+  private Screen screen;
+  private Element dropDownControlItemElement;
+  private FocusHandler focusHandler;
+  private DropDownControl dropDownControl;
 
-    private Screen screen;
+  public void bind(
+      final Nifty niftyParam,
+      final Screen screenParam,
+      final Element newElement,
+      final Properties properties,
+      final ControllerEventListener newListener,
+      final Attributes controlDefinitionAttributes) {
+    nifty = niftyParam;
+    screen = screenParam;
+    dropDownControlItemElement = newElement;
+  }
 
-    private Element dropDownControlItemElement;
+  public void onStartScreen() {
+    focusHandler = screen.getFocusHandler();
+  }
 
-    private FocusHandler focusHandler;
+  @Override
+  public void onFocus(final boolean getFocus) {
+    super.onFocus(getFocus);
+  }
 
-    private DropDownControl dropDownControl;
-
-    public void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement,
-            final Properties properties, final ControllerEventListener newListener,
-            final Attributes controlDefinitionAttributes) {
-        nifty = niftyParam;
-        screen = screenParam;
-        dropDownControlItemElement = newElement;
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
+      focusHandler.getNext(dropDownControlItemElement).setFocus();
+      return true;
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+      focusHandler.getPrev(dropDownControlItemElement).setFocus();
+      return true;
+    } else if (inputEvent == NiftyInputEvent.Activate) {
+      dropDownItemClicked();
+      return true;
+    } else if (inputEvent == NiftyInputEvent.Escape) {
+      dropDownControl.reset();
+      nifty.closePopup("dropDownBoxSelectPopup");
+      return true;
     }
+    return false;
+  }
 
-    public void onStartScreen() {
-        focusHandler = screen.getFocusHandler();
-    }
+  public void dropDownItemClicked() {
+    dropDownControl.reset();
+    dropDownControl.setSelectedItem(dropDownControlItemElement.getRenderer(TextRenderer.class).getOriginalText());
+    dropDownControl.notifyObservers();
+    nifty.closePopup("dropDownBoxSelectPopup");
+  }
 
-    @Override
-    public void onFocus(final boolean getFocus) {
-        super.onFocus(getFocus);
-    }
-
-    public boolean inputEvent(final NiftyInputEvent inputEvent) {
-        if (inputEvent == NiftyInputEvent.NextInputElement) {
-            focusHandler.getNext(dropDownControlItemElement).setFocus();
-            return true;
-        }
-        else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-            focusHandler.getPrev(dropDownControlItemElement).setFocus();
-            return true;
-        }
-        else if (inputEvent == NiftyInputEvent.Activate) {
-            dropDownItemClicked();
-            return true;
-        }
-        else if (inputEvent == NiftyInputEvent.Escape) {
-            dropDownControl.reset();
-            nifty.closePopup("dropDownBoxSelectPopup");
-            return true;
-        }
-        return false;
-    }
-
-    public void dropDownItemClicked() {
-        dropDownControl.reset();
-        dropDownControl.setSelectedItem(dropDownControlItemElement.getRenderer(TextRenderer.class)
-                .getOriginalText());
-        dropDownControl.notifyObservers();
-        nifty.closePopup("dropDownBoxSelectPopup");
-    }
-
-    public void setDropDownControl(final Element element) {
-        dropDownControl = element.getControl(DropDownControl.class);
-    }
+  public void setDropDownControl(final Element element) {
+    dropDownControl = element.getControl(DropDownControl.class);
+  }
 }
