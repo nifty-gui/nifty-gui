@@ -30,6 +30,10 @@ public class ListBoxImpl<T> implements ListBox<T> {
     updateView();
   }
 
+  public void updateView() {
+    listBoxView.display(updateCaptions(), getFocusItemForDisplay(), getSelectionElementsForDisplay());
+  }
+
   public void selectItemByVisualIndex(final int selectionIndex) {
     if (invalidVisualIndex(selectionIndex)) {
       return;
@@ -200,10 +204,6 @@ public class ListBoxImpl<T> implements ListBox<T> {
     updateView();
   }
 
-  private void updateView() {
-    listBoxView.display(updateCaptions(), getFocusItemForDisplay(), getSelectionElementsForDisplay());
-  }
-
   private List<Integer> getSelectionElementsForDisplay() {
     selectedItemsForDisplay.clear();
     List<T> selectionList = selection.getSelection();
@@ -277,7 +277,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
   private void focusItemIndexUpdate() {
     if (items.size() == 1) {
       focusItemIndex = 0;
-    } else if (items.size() == 0){
+    } else if (items.size() == 0) {
       focusItemIndex = -1;
     }
   }
