@@ -2,7 +2,6 @@ package de.lessvoid.nifty.controls;
 
 import java.util.List;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxViewConverter;
 
 /**
  * The ListBox interface is the Nifty control API view of a Nifty ListBox control.

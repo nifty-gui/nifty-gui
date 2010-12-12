@@ -9,6 +9,7 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.ListBoxSelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionModeSingle;
+import de.lessvoid.nifty.controls.ListBoxViewConverter;
 
 public class ListBoxImpl<T> implements ListBox<T> {
   private List<T> items = new ArrayList<T>();

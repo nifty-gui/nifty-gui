@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.listbox;
+package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -10,7 +10,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
  *
  * @param <T>
  */
-public class SimpleListBoxViewConverter<T> implements ListBoxViewConverter<T> {
+public class ListBoxViewConverterSimple<T> implements ListBoxViewConverter<T> {
 
   @Override
   public void display(final Element element, final T item) {

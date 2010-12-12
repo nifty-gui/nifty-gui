@@ -2,6 +2,7 @@ package de.lessvoid.nifty.controls.listbox.controller;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
@@ -11,11 +12,11 @@ import de.lessvoid.nifty.controls.ListBoxSelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionModeDisabled;
 import de.lessvoid.nifty.controls.ListBoxSelectionModeMulti;
 import de.lessvoid.nifty.controls.ListBoxSelectionModeSingle;
+import de.lessvoid.nifty.controls.ListBoxViewConverter;
+import de.lessvoid.nifty.controls.ListBoxViewConverterSimple;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.controls.listbox.ListBoxView;
-import de.lessvoid.nifty.controls.listbox.ListBoxViewConverter;
-import de.lessvoid.nifty.controls.listbox.SimpleListBoxViewConverter;
 import de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl;
 import de.lessvoid.nifty.controls.scrollbar.controller.ScrollbarControlNotify;
 import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
@@ -28,6 +29,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ListBoxControl<T> extends AbstractController implements ListBox<T>, ListBoxView<T> {
+  private Logger log = Logger.getLogger(ListBoxControl.class.getName());
   private ListBoxImpl<T> listBoxImpl = new ListBoxImpl<T>();
   private Element[] labelElements;
   private Nifty nifty;
@@ -43,7 +45,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private String labelTemplateInputMapping;
   private Properties parameter;
   private int displayItems;
-  private ListBoxViewConverter<T> viewConverter = new SimpleListBoxViewConverter<T>();
+  private ListBoxViewConverter<T> viewConverter = new ListBoxViewConverterSimple<T>();
 
   @SuppressWarnings("unchecked")
   public void bind(
@@ -116,8 +118,11 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
       listBoxImpl.changeSelectionMode(new ListBoxSelectionModeSingle<T>());
     } else if (selectionMode.equals("multiple")) {
       listBoxImpl.changeSelectionMode(new ListBoxSelectionModeMulti<T>());
-    } else {
+    } else if (selectionMode.equals("none")) {
       listBoxImpl.changeSelectionMode(new ListBoxSelectionModeDisabled<T>());
+    } else {
+      listBoxImpl.changeSelectionMode(new ListBoxSelectionModeSingle<T>());
+      log.warning("Unsupported value for selectionMode [" + selectionMode + "]. Fall back to using single selection mode.");
     }
   }
 
