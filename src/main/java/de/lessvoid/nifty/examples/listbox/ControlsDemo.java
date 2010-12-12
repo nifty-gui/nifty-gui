@@ -68,7 +68,6 @@ public final class ControlsDemo {
               set("vertical", "true");
               set("horizontal", "false");
               width("*");
-              childLayoutVertical();
             }});
           }});
           panel(spacer());
