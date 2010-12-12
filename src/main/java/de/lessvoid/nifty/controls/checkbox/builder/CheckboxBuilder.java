@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.checkbox;
+package de.lessvoid.nifty.controls.checkbox.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 

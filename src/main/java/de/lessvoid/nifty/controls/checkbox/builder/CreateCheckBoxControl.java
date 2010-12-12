@@ -1,7 +1,8 @@
-package de.lessvoid.nifty.controls.checkbox;
+package de.lessvoid.nifty.controls.checkbox.builder;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
+import de.lessvoid.nifty.controls.checkbox.controller.CheckboxControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;

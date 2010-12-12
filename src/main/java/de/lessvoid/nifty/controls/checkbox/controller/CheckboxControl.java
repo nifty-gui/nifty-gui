@@ -1,11 +1,15 @@
-package de.lessvoid.nifty.controls.checkbox;
+package de.lessvoid.nifty.controls.checkbox.controller;
 
 import java.util.Properties;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.CheckBox;
+import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.checkbox.CheckBoxImpl;
+import de.lessvoid.nifty.controls.checkbox.CheckBoxView;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -15,13 +19,13 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * A CheckboxControl.
- * 
  * @author void
  */
-public class CheckboxControl extends AbstractController {
+public class CheckboxControl extends AbstractController implements CheckBox, CheckBoxView {
+  private CheckBoxImpl checkBoxImpl = new CheckBoxImpl();
+  private Nifty nifty;
   private Element element;
   private Screen screen;
-  private boolean checked;
   private FocusHandler focusHandler;
 
   public void bind(
@@ -31,10 +35,11 @@ public class CheckboxControl extends AbstractController {
       final Properties propertiesParam,
       final ControllerEventListener listenerParam,
       final Attributes controlDefinitionAttributes) {
+    nifty = niftyParam;
     element = elementParam;
     screen = screenParam;
-    checked = new Boolean(propertiesParam.getProperty("checked", "true"));
-    updateVisualState();
+    checkBoxImpl.bindToView(this);
+    checkBoxImpl.setChecked(new Boolean(propertiesParam.getProperty("checked", "true")));
   }
 
   public void onStartScreen() {
@@ -61,31 +66,14 @@ public class CheckboxControl extends AbstractController {
   }
 
   public boolean onClick() {
-    checked = !checked;
-    updateVisualState();
+    checkBoxImpl.toggle();
     return true;
   }
 
-  public boolean isChecked() {
-    return checked;
-  }
+  // CheckBoxView Implementation
 
-  public void check() {
-    this.checked = true;
-    updateVisualState();
-  }
-
-  public void uncheck() {
-    this.checked = false;
-    updateVisualState();
-  }
-
-  public void setChecked(final boolean state) {
-    this.checked = state;
-    updateVisualState();
-  }
-
-  private void updateVisualState() {
+  @Override
+  public void update(final boolean checked) {
     final Element selectImage = element.findElementByName("select");
     if (checked) {
       selectImage.stopEffect(EffectEventId.onCustom);
@@ -94,5 +82,37 @@ public class CheckboxControl extends AbstractController {
       selectImage.stopEffect(EffectEventId.onCustom);
       selectImage.startEffect(EffectEventId.onCustom, new EndNotify() { public void perform() { } }, "hide");
     }
+  }
+
+  @Override
+  public void publish(final CheckBoxStateChangedEvent event) {
+    nifty.publishEvent(element.getId(), event);
+  }
+
+  // CheckBox Implementation
+
+  @Override
+  public void check() {
+    checkBoxImpl.check();
+  }
+
+  @Override
+  public void uncheck() {
+    checkBoxImpl.uncheck();
+  }
+
+  @Override
+  public void setChecked(final boolean state) {
+    checkBoxImpl.setChecked(state);
+  }
+
+  @Override
+  public boolean isChecked() {
+    return checkBoxImpl.isChecked();
+  }
+
+  @Override
+  public void toggle() {
+    checkBoxImpl.toggle();
   }
 }
