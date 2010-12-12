@@ -9,6 +9,7 @@
       <onActive name="blendMode" blendMode="multiply" post="true" />
       <onActive name="imageOverlay" filename="blackborder.png" imageMode="resize:1,30,1,1,1,30,1,1,1,30,1,1" post="true" />
       <onActive name="imageOverlay" post="false" filename="textfield/field.png" imageMode="resize:1,30,1,1,1,30,1,25,1,30,1,5" />
+      <onFocus name="border" border="1px" color="#f006" />
     </effect>
   </style>
   <style id="nifty-listbox#bottom-right">
@@ -19,6 +20,7 @@
     <interact onClick="listBoxItemClicked()" />
     <effect>
       <onCustom customKey="focus" name="imageOverlay" post="false" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" neverStopRendering="true" timeType="infinite" />
+      <onCustom customKey="select" name="imageOverlay" post="false" alpha="#4" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" neverStopRendering="true" timeType="infinite" />
       <onCustom customKey="select" name="textColor" post="false" color="#fc0f" neverStopRendering="true" timeType="infinite" />
       <onHover name="textColor" post="false" color="#ffff" />
       <onClick name="focus" targetElement="#parent#parent"/>

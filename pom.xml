@@ -17,6 +17,18 @@
       <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
     </repository>
   </repositories>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <reporting>
     <plugins>
       <plugin>

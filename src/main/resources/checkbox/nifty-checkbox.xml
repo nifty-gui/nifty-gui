@@ -4,7 +4,7 @@
     <attributes width="28px" height="28px" childLayout="center"/>
     <effect>
       <onHover name="imageOverlay" post="true" filename="textfield/field-hover.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" inset="-5px" />
-      <onFocus name="imageOverlay" post="true" filename="textfield/field-hover.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" inset="-5px" />
+      <onFocus name="imageOverlay" post="true" filename="textfield/field-focus.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" inset="-5px" />
       <onActive name="imageOverlay" post="false" filename="textfield/field.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
     </effect>
   </style>

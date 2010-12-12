@@ -10,7 +10,7 @@
     <attributes childLayout="center" visibleToMouse="true" childClip="true" />
     <effect>
       <onClick name="focus" />
-      <onFocus name="imageOverlay" post="false" filename="textfield/field-selected.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
+      <onFocus name="imageOverlay" post="false" filename="textfield/field-focus.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" inset="-5px"/>
       <onActive name="imageOverlay" post="false" filename="textfield/field.png" imageMode="resize:1,30,1,1,1,30,1,30,1,30,1,1" />
       <onHover name="imageOverlay" filename="textfield/field-hover.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" post="true" inset="-5px" />
     </effect>

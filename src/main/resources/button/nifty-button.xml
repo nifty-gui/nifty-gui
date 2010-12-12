@@ -7,7 +7,7 @@
     <attributes backgroundImage="button/black-button-normal.png" imageMode="resize:2,148,2,2,2,148,2,28,2,148,2,2" width="152px" height="32px" childLayout="center" visibleToMouse="true" />
     <effect>
       <onHover name="imageOverlay" filename="button/black-button-hover.png" imageMode="resize:7,148,7,7,7,148,7,28,7,148,7,7" post="true" inset="-5px" />
-      <onFocus name="imageOverlay" filename="button/black-button-hover.png" imageMode="resize:7,148,7,7,7,148,7,28,7,148,7,7" post="true" inset="-5px" />
+      <onFocus name="imageOverlay" filename="button/black-button-focus.png" imageMode="resize:7,148,7,7,7,148,7,28,7,148,7,7" post="true" inset="-5px" />
     </effect>
   </style>
 
