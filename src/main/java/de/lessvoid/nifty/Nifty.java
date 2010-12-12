@@ -14,6 +14,10 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bushe.swing.event.EventServiceExistsException;
+import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.ThreadSafeEventService;
+
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
@@ -144,9 +148,19 @@ public class Nifty implements NiftyInputConsumer {
       loader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
       loader.registerSchema("nifty-controls.nxs", ResourceLoader.getResourceAsStream("nifty-controls.nxs"));
       NiftyDefaults.initDefaultEffects(this);
+
+      initalizeEventBus();
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
+  }
+
+  private void initalizeEventBus() throws EventServiceExistsException {
+    EventServiceLocator.setEventService("NiftyEventBus", new ThreadSafeEventService());
+  }
+
+  public void publishEvent(final String id, final NiftyEvent event) {
+    EventServiceLocator.getEventService("NiftyEventBus").publish(id, event);
   }
 
   public void setAlternateKeyForNextLoadXml(final String alternateKeyForNextLoadXmlParam) {
@@ -415,7 +429,9 @@ public class Nifty implements NiftyInputConsumer {
       long start = timeProvider.getMsTime();
       NiftyType niftyType = loader.loadNiftyXml("nifty.nxs", ResourceLoader.getResourceAsStream(filename), this);
       niftyType.create(this, timeProvider);
-//      log.info(niftyType.output());
+      if (log.isLoggable(Level.INFO)) {
+        log.info(niftyType.output());
+      }
       long end = timeProvider.getMsTime();
       log.info("loadFromFile took [" + (end - start) + "]");
     } catch (Exception e) {
@@ -434,7 +450,9 @@ public class Nifty implements NiftyInputConsumer {
       long start = timeProvider.getMsTime();
       NiftyType niftyType = loader.loadNiftyXml("nifty.nxs", stream, this);
       niftyType.create(this, timeProvider);
-//      log.info(niftyType.output());
+      if (log.isLoggable(Level.INFO)) {
+        log.info(niftyType.output());
+      }
       long end = timeProvider.getMsTime();
       log.info("loadFromStream took [" + (end - start) + "]");
     } catch (Exception e) {
@@ -993,6 +1011,10 @@ public class Nifty implements NiftyInputConsumer {
       NiftyType niftyType = new NiftyType();
       loader.loadStyleFile("nifty-styles.nxs", styleFile, niftyType);
       niftyType.create(this, getTimeProvider());
+      if (log.isLoggable(Level.INFO)) {
+        log.info("loadStyleFile");
+        log.info(niftyType.output());
+      }
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
@@ -1003,6 +1025,10 @@ public class Nifty implements NiftyInputConsumer {
       NiftyType niftyType = new NiftyType();
       loader.loadControlFile("nifty-controls.nxs", controlFile, niftyType);
       niftyType.create(this, getTimeProvider());
+      if (log.isLoggable(Level.INFO)) {
+        log.info("loadControlFile");
+        log.info(niftyType.output());
+      }
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
@@ -1016,6 +1042,10 @@ public class Nifty implements NiftyInputConsumer {
       resourceBundle.getAttributes().set("filename", filename);
       niftyType.addResourceBundle(resourceBundle);
       niftyType.create(this, getTimeProvider());
+      if (log.isLoggable(Level.INFO)) {
+        log.info("registerResourceBundle");
+        log.info(niftyType.output());
+      }
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
@@ -1027,6 +1057,10 @@ public class Nifty implements NiftyInputConsumer {
       RegisterEffectType registerEffect = new RegisterEffectType(name, classParam);
       niftyType.addRegisterEffect(registerEffect);
       niftyType.create(this, getTimeProvider());
+      if (log.isLoggable(Level.INFO)) {
+        log.info("registerEffect");
+        log.info(niftyType.output());
+      }
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
@@ -1040,6 +1074,10 @@ public class Nifty implements NiftyInputConsumer {
       registerSound.getAttributes().set("filename", filename);
       niftyType.addRegisterSound(registerSound);
       niftyType.create(this, getTimeProvider());
+      if (log.isLoggable(Level.INFO)) {
+        log.info("registerSound");
+        log.info(niftyType.output());
+      }
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
@@ -1053,6 +1091,10 @@ public class Nifty implements NiftyInputConsumer {
       registerMusic.getAttributes().set("filename", filename);
       niftyType.addRegisterMusic(registerMusic);
       niftyType.create(this, getTimeProvider());
+      if (log.isLoggable(Level.INFO)) {
+        log.info("registerMusic");
+        log.info(niftyType.output());
+      }
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
