@@ -19,12 +19,19 @@ public class TargetElementResolver {
       return null;
     }
     if (id.startsWith(PARENT)) {
-      String subParentId = id.replaceFirst(PARENT, "");
-      if (subParentId.startsWith("#")) {
-        return base.getParent().findElementByName(subParentId.replaceFirst("#", ""));
-      }
-      return base.getParent();
+      return resolveParents(id, base.getParent());
     }
     return screen.findElementByName(id);
+  }
+
+  private Element resolveParents(final String id, final Element parent) {
+    String subParentId = id.replaceFirst(PARENT, "");
+    if (!subParentId.startsWith(PARENT)) {
+      if (subParentId.startsWith("#")) {
+        return parent.findElementByName(subParentId.replaceFirst("#", ""));
+      }
+      return parent;
+    }
+    return resolveParents(subParentId, parent.getParent());
   }  
 }
