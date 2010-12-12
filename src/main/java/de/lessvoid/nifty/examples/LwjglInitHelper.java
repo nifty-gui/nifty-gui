@@ -123,12 +123,12 @@ public class LwjglInitHelper {
           }
         });
 
-        for (int i = 0; i < matchingModes.length; i++) {
-          log.fine("using fallback mode: " + matchingModes[i].getWidth() + ", "
-              + matchingModes[i].getHeight() + ", "
-              + matchingModes[i].getBitsPerPixel() + ", "
-              + matchingModes[i].getFrequency());
-          Display.setDisplayMode(matchingModes[i]);
+        for (DisplayMode mode : matchingModes) {
+          log.fine("using fallback mode: " + mode.getWidth() + ", "
+              + mode.getHeight() + ", "
+              + mode.getBitsPerPixel() + ", "
+              + mode.getFrequency());
+          Display.setDisplayMode(mode);
           break;
         }
       }

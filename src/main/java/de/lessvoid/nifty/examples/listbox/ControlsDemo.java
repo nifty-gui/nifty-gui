@@ -55,20 +55,14 @@ public final class ControlsDemo {
           childLayoutVertical();
           padding("18px,28px,28px,16px");
           width("55%");
-          height("58%");
+          height("60%");
           alignCenter();
           valignCenter();
           onStartScreenEffect(createMoveEffect("in", "top"));
           onEndScreenEffect(createMoveEffect("out", "bottom"));
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
-            label(new LabelBuilder() {{
-              text("ListBox:");
-              width("120px");
-              alignLeft();
-              textVAlignCenter();
-              textHAlignLeft();
-            }});
+            label(createLabel("ListBox:"));
             control(new ControlBuilder("listBox", "listBox") {{
               set("displayItems", "4");
               set("vertical", "true");
@@ -77,21 +71,11 @@ public final class ControlsDemo {
               childLayoutVertical();
             }});
           }});
+          panel(spacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
-            height("12px");
-          }});
-          panel(new PanelBuilder() {{
-            childLayoutHorizontal();
-            label(new LabelBuilder() {{
-              text("Append:");
-              width("120px");
-              alignLeft();
-              textVAlignCenter();
-              textHAlignLeft();
-            }});
-            control(new ControlBuilder("addTextField", "textfield") {{
-            }});
+            label(createLabel("Append:"));
+            control(new ControlBuilder("addTextField", "textfield"));
             panel(new PanelBuilder() {{
               width("8px");
             }});
@@ -100,6 +84,45 @@ public final class ControlsDemo {
               width("100px");
               height("28px");
               interactOnClick("addListBoxItem()");
+            }});
+          }});
+          panel(spacer());
+          panel(new PanelBuilder() {{
+            childLayoutHorizontal();
+            label(createLabel("Multi Selection:"));
+            control(new ControlBuilder("multiSelectionCheckBox", "checkbox") {{
+              set("checked", "false"); // start with uncheck
+            }});
+          }});
+          panel(spacer());
+          panel(new PanelBuilder() {{
+            childLayoutHorizontal();
+            label(createLabel("Disable Sel.:"));
+            control(new ControlBuilder("disableSelectionCheckBox", "checkbox") {{
+              set("checked", "false"); // start with uncheck
+            }});
+          }});
+          panel(spacer());
+          panel(new PanelBuilder() {{
+            childLayoutHorizontal();
+            label(createLabel("Current Sel.:"));
+            control(new ControlBuilder("selectionListBox", "listBox") {{
+              set("displayItems", "4");
+              set("selectionMode", "disabled");
+              set("vertical", "true");
+              set("horizontal", "false");
+              width("*");
+              childLayoutVertical();
+            }});
+          }});
+          panel(spacer());
+          panel(new PanelBuilder() {{
+            childLayoutHorizontal();
+            label(createLabel("Remove Sel.:"));
+            control(new ControlBuilder("removeSelectionAction", "button") {{
+              set("label", "Remove Selection From ListBox");
+              width("280px");
+              interactOnClick("removeSelectionAction()");
             }});
           }});
         }});
@@ -117,6 +140,23 @@ public final class ControlsDemo {
       length(500);
       startDelay(0);
       inherit(true);
+    }};
+  }
+
+  private static PanelBuilder spacer() {
+    return new PanelBuilder() {{
+      childLayoutHorizontal();
+      height("12px");
+    }};
+  }
+
+  private static LabelBuilder createLabel(final String name) {
+    return new LabelBuilder() {{
+      text(name);
+      width("120px");
+      alignLeft();
+      textVAlignCenter();
+      textHAlignLeft();
     }};
   }
 }
