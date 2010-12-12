@@ -63,6 +63,20 @@ public class ListBoxAddItemTest {
     assertListBoxContent(o1);
   }
 
+  @Test
+  public void testAddAllItems() {
+    viewMock.updateTotalCount(2);
+    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection());
+    replay(viewMock);
+
+    List<TestItem> itemsToAdd = new ArrayList<TestItem>();
+    itemsToAdd.add(o1);
+    itemsToAdd.add(o2);
+    listBox.addAllItems(itemsToAdd);
+
+    assertListBoxContent(o1, o2);
+  }
+
   private void assertListBoxContent(final TestItem ... expected) {
     assertEquals(expected.length, listBox.getItems().size());
     int i = 0;

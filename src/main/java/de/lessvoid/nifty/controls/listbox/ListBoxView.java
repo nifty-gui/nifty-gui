@@ -2,12 +2,13 @@ package de.lessvoid.nifty.controls.listbox;
 
 import java.util.List;
 
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+
 /**
  * The representation of a ListBoxView from the world of a ListBox.
  * @author void
  *
  * @param <T> The Item this class is a view for.
- * @param <C> A ListBoxViewItem which can display a T item in the ListBox.
  */
 public interface ListBoxView<T> {
 
@@ -29,4 +30,10 @@ public interface ListBoxView<T> {
    * @param newPosition the new index to scroll to
    */
   void scrollTo(int newPosition);
+
+  /**
+   * Publish this event.
+   * @param event the event to publish
+   */
+  void publish(ListBoxSelectionChangedEvent<T> event);
 }

@@ -2,9 +2,11 @@ package de.lessvoid.nifty.controls.listbox;
 
 import java.util.List;
 
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+
 
 /**
- * A Null implementation of ListBoxViewNull that does nothing.
+ * A Null implementation of ListBoxView that does nothing.
  * @author void
  */
 public class ListBoxViewNull<T> implements ListBoxView<T> {
@@ -19,5 +21,9 @@ public class ListBoxViewNull<T> implements ListBoxView<T> {
 
   @Override
   public void scrollTo(final int newPosition) {
+  }
+
+  @Override
+  public void publish(final ListBoxSelectionChangedEvent<T> event) {
   }
 }

@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.listbox;
+package de.lessvoid.nifty.controls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * @author void
  * @param <T>
  */
-public class ListBoxSingleSelectionMode<T> implements ListBoxSelectionMode<T> {
+public class ListBoxSelectionModeSingle<T> implements ListBoxSelectionMode<T> {
   private List<T> selection = new ArrayList<T>();
 
   @Override

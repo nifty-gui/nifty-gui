@@ -2,11 +2,10 @@ package de.lessvoid.nifty.controls;
 
 import java.util.List;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxSelectionMode;
 import de.lessvoid.nifty.controls.listbox.ListBoxViewConverter;
 
 /**
- * The ListBox interface is the Nifty control API view of a NiftyListBox control.
+ * The ListBox interface is the Nifty control API view of a Nifty ListBox control.
  * @author void
  * @param <T>
  */
@@ -16,7 +15,7 @@ public interface ListBox<T> extends NiftyControl {
    * Change the {@link ListBoxSelectionMode} to a new one.
    * @param listBoxSelectionMode the new {@link ListBoxSelectionMode} to use
    */
-  void setSelectionMode(ListBoxSelectionMode<T> listBoxSelectionMode);
+  void changeSelectionMode(ListBoxSelectionMode<T> listBoxSelectionMode);
 
   /**
    * Change the ListBoxViewConverter for this ListBox.
@@ -136,4 +135,10 @@ public interface ListBox<T> extends NiftyControl {
    * @return the index of the current focus item.
    */
   int getFocusItemIndex();
+
+  /**
+   * Add all items to the ListBox.
+   * @param itemsToAdd all items to add
+   */
+  void addAllItems(List<T> itemsToAdd);
 }

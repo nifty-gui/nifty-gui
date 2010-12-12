@@ -3,13 +3,17 @@ package de.lessvoid.nifty.controls.listbox;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.ListBoxSelectionMode;
+import de.lessvoid.nifty.controls.ListBoxSelectionModeSingle;
 
 public class ListBoxImpl<T> implements ListBox<T> {
   private List<T> items = new ArrayList<T>();
-  private ListBoxSelectionMode<T> selection = new ListBoxSingleSelectionMode<T>();
-  private ListBoxView<T> listBoxView = new ListBoxViewNull<T>();
+  private ListBoxSelectionMode<T> selection = new ListBoxSelectionModeSingle<T>();
+  private ListBoxView<T> view = new ListBoxViewNull<T>();
   private int viewOffset = 0;
   private int viewDisplayItemCount = 0;
   private int focusItemIndex = -1;
@@ -17,7 +21,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
   private List<Integer> selectedItemsForDisplay = new ArrayList<Integer>();
 
   public int bindToView(final ListBoxView<T> newListBoxView, final int viewDisplayItemCount) {
-    this.listBoxView = newListBoxView;
+    this.view = newListBoxView;
     this.viewDisplayItemCount = viewDisplayItemCount;
     return items.size();
   }
@@ -31,7 +35,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
   }
 
   public void updateView() {
-    listBoxView.display(updateCaptions(), getFocusItemForDisplay(), getSelectionElementsForDisplay());
+    view.display(updateCaptions(), getFocusItemForDisplay(), getSelectionElementsForDisplay());
   }
 
   public void selectItemByVisualIndex(final int selectionIndex) {
@@ -56,8 +60,18 @@ public class ListBoxImpl<T> implements ListBox<T> {
   }
 
   @Override
-  public void setSelectionMode(final ListBoxSelectionMode<T> listBoxSelectionMode) {
+  public void changeSelectionMode(final ListBoxSelectionMode<T> listBoxSelectionMode) {
+    List<T> oldSelection = getSelection();
+
     selection = listBoxSelectionMode;
+
+    ListIterator<T> it = oldSelection.listIterator(oldSelection.size());
+    while (it.hasPrevious()) {
+      selection.add(it.previous());
+    }
+
+    updateView();
+    selectionChangedEvent(oldSelection);
   }
 
   @Override
@@ -74,10 +88,12 @@ public class ListBoxImpl<T> implements ListBox<T> {
 
   @Override
   public void clear() {
+    List<T> oldSelection = getSelection();
     items.clear();
     selection.clear();
     focusItemIndexUpdate();
     updateViewTotalCount();
+    selectionChangedEvent(oldSelection);
   }
 
   @Override
@@ -85,8 +101,10 @@ public class ListBoxImpl<T> implements ListBox<T> {
     if (invalidIndex(selectionIndex)) {
       return;
     }
+    List<T> oldSelection = getSelection();
     selection.add(items.get(selectionIndex));
     updateView();
+    selectionChangedEvent(oldSelection);
   }
 
   @Override
@@ -96,7 +114,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
 
   @Override
   public List<T> getSelection() {
-    return selection.getSelection();
+    return new ArrayList<T>(selection.getSelection());
   }
 
   @Override
@@ -104,10 +122,12 @@ public class ListBoxImpl<T> implements ListBox<T> {
     if (invalidIndex(itemIndex)) {
       return;
     }
+    List<T> oldSelection = getSelection();
     selection.remove(items.get(itemIndex));
     items.remove(itemIndex);
     focusItemIndexUpdate();
     updateViewTotalCount();
+    selectionChangedEvent(oldSelection);
   }
 
   @Override
@@ -115,9 +135,11 @@ public class ListBoxImpl<T> implements ListBox<T> {
     if (!items.remove(item)) {
       return;
     }
+    List<T> oldSelection = getSelection();
     selection.remove(item);
     focusItemIndexUpdate();
     updateViewTotalCount();
+    selectionChangedEvent(oldSelection);
   }
 
   @Override
@@ -125,8 +147,10 @@ public class ListBoxImpl<T> implements ListBox<T> {
     if (invalidIndex(itemIndex)) {
       return;
     }
+    List<T> oldSelection = getSelection();
     selection.remove(items.get(itemIndex));
     updateView();
+    selectionChangedEvent(oldSelection);
   }
 
   @Override
@@ -160,9 +184,9 @@ public class ListBoxImpl<T> implements ListBox<T> {
       return;
     }
     if (itemIndex > items.size() - viewDisplayItemCount) {
-      listBoxView.scrollTo(items.size() - viewDisplayItemCount);
+      view.scrollTo(items.size() - viewDisplayItemCount);
     } else {
-      listBoxView.scrollTo(itemIndex);
+      view.scrollTo(itemIndex);
     }
   }
 
@@ -180,7 +204,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
     updateView();
 
     if (focusItemIndex >= viewOffset + viewDisplayItemCount) {
-      listBoxView.scrollTo(focusItemIndex - viewDisplayItemCount + 1);
+      view.scrollTo(focusItemIndex - viewDisplayItemCount + 1);
     } else if (focusItemIndex < viewOffset) {
       showItemByIndex(focusItemIndex);
     }
@@ -199,8 +223,20 @@ public class ListBoxImpl<T> implements ListBox<T> {
     return focusItemIndex;
   }
 
+  @Override
+  public void setListBoxViewConverter(final ListBoxViewConverter<T> viewConverter) {
+    // handled in ListBoxControl directly
+  }
+
+  @Override
+  public void addAllItems(final List<T> itemsToAdd) {
+    items.addAll(itemsToAdd);
+    focusItemIndexUpdate();
+    updateViewTotalCount();
+  }
+
   private void updateViewTotalCount() {
-    listBoxView.updateTotalCount(items.size());
+    view.updateTotalCount(items.size());
     updateView();
   }
 
@@ -251,6 +287,9 @@ public class ListBoxImpl<T> implements ListBox<T> {
     if (selectionIndex >= viewDisplayItemCount) {
       return true;
     }
+    if (selectionIndex >= itemCount()) {
+      return true;
+    }
     return false;
   }
 
@@ -279,10 +318,28 @@ public class ListBoxImpl<T> implements ListBox<T> {
       focusItemIndex = 0;
     } else if (items.size() == 0) {
       focusItemIndex = -1;
+    } else if (focusItemIndex == -1) {
+      focusItemIndex = 0;
     }
   }
 
-  @Override
-  public void setListBoxViewConverter(final ListBoxViewConverter<T> viewConverter) {
+  private void selectionChangedEvent(final List<T> oldSelection) {
+    if (isSelectionReallyChanged(oldSelection)) {
+      view.publish(new ListBoxSelectionChangedEvent<T>(Collections.unmodifiableList(selection.getSelection())));
+    }
+  }
+
+  private boolean isSelectionReallyChanged(final List<T> oldSelection) {
+    if (selection.getSelection().size() != oldSelection.size()) {
+      return true;
+    }
+    for (int i=0; i<selection.getSelection().size(); i++) {
+      T current = selection.getSelection().get(i);
+      T old = oldSelection.get(i);
+      if (!current.equals(old)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

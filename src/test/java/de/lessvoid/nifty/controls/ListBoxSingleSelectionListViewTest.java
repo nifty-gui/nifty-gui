@@ -1,5 +1,6 @@
-package de.lessvoid.nifty.controls.listbox;
+package de.lessvoid.nifty.controls;
 
+import static org.easymock.EasyMock.isA;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
@@ -10,6 +11,11 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
+import de.lessvoid.nifty.controls.listbox.ListBoxView;
+import de.lessvoid.nifty.controls.listbox.TestItem;
 
 public class ListBoxSingleSelectionListViewTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
@@ -35,44 +41,57 @@ public class ListBoxSingleSelectionListViewTest {
     verify(viewMock);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testSelectFirstItem() {
     viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testSelectDoubleItem() {
     viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(1));
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
     listBox.selectItemByIndex(1);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testSelectOutOfDisplayItem() {
     viewMock.display(buildValues(o1, o2), 0, buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(2);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testClearWithSelection() {
     viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.updateTotalCount(0);
     viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
     listBox.clear();
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testRemoveItemWithSelection() {
     viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.updateTotalCount(3);
     viewMock.display(buildValues(o2, o3), 0, buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
     listBox.removeItemByIndex(0);

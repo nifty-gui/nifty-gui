@@ -9,10 +9,10 @@
             <label text="Template" style="nifty-listbox-item" controller="de.lessvoid.nifty.controls.listbox.controller.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
           </panel>
         </panel>
-        <control id="nifty-internal-vertical-scrollbar" name="verticalScrollbar" style="nifty-vertical-scrollbar-for-listbox"/>
+        <control id="nifty-internal-vertical-scrollbar" name="verticalScrollbar" style="nifty-vertical-scrollbar"/>
       </panel>
       <panel childLayout="horizontal">
-        <control id="nifty-internal-horizontal-scrollbar" name="horizontalScrollbar" style="nifty-horizontal-scrollbar-for-listbox"/>
+        <control id="nifty-internal-horizontal-scrollbar" name="horizontalScrollbar" style="nifty-horizontal-scrollbar"/>
         <panel align="right" style="#bottom-right" />
       </panel>
     </panel>

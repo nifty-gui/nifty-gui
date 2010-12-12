@@ -6,9 +6,13 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.ListBoxSelectionMode;
+import de.lessvoid.nifty.controls.ListBoxSelectionModeDisabled;
+import de.lessvoid.nifty.controls.ListBoxSelectionModeMulti;
+import de.lessvoid.nifty.controls.ListBoxSelectionModeSingle;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxSelectionMode;
 import de.lessvoid.nifty.controls.listbox.ListBoxView;
 import de.lessvoid.nifty.controls.listbox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.listbox.SimpleListBoxViewConverter;
@@ -24,7 +28,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ListBoxControl<T> extends AbstractController implements ListBox<T>, ListBoxView<T> {
-  private ListBoxImpl<T> listBox = new ListBoxImpl<T>();
+  private ListBoxImpl<T> listBoxImpl = new ListBoxImpl<T>();
   private Element[] labelElements;
   private Nifty nifty;
   private Screen screen;
@@ -60,10 +64,12 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     labelTemplateElement = childRootElement.getElements().get(0);
     labelElements = new Element[displayItems];
 
-    ListBoxPanel<T> listBoxPanel = element.findControl("nifty-listbox-panel", ListBoxPanel.class);
-    listBoxPanel.setListBox(listBox);
+    initSelectionMode(listBoxImpl, parameter.getProperty("selectionMode", "single"));
 
-    int itemCount = listBox.bindToView(this, displayItems);
+    ListBoxPanel<T> listBoxPanel = element.findControl("nifty-listbox-panel", ListBoxPanel.class);
+    listBoxPanel.setListBox(listBoxImpl);
+
+    int itemCount = listBoxImpl.bindToView(this, displayItems);
     if (displayItems == 1) {
       verticalScrollbar = false;
     }
@@ -98,11 +104,21 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
       // connect it to this listbox
       ListBoxItemController<T> listBoxItemController = labelElements[i].getControl(ListBoxItemController.class);
-      listBoxItemController.setListBox(listBox);
+      listBoxItemController.setListBox(listBoxImpl);
     }
 
     updateScrollPanel(screen, 1.0f, labelTemplateHeight, itemCount);
-    listBox.updateView(0);
+    listBoxImpl.updateView(0);
+  }
+
+  private void initSelectionMode(final ListBoxImpl<T> listBoxImpl, final String selectionMode) {
+    if (selectionMode.equals("single")) {
+      listBoxImpl.changeSelectionMode(new ListBoxSelectionModeSingle<T>());
+    } else if (selectionMode.equals("multiple")) {
+      listBoxImpl.changeSelectionMode(new ListBoxSelectionModeMulti<T>());
+    } else {
+      listBoxImpl.changeSelectionMode(new ListBoxSelectionModeDisabled<T>());
+    }
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
@@ -165,7 +181,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
         verticalS.setPerClickChange(labelTemplateHeight);
         verticalS.setScrollBarControlNotify(new ScrollbarControlNotify() {
           public void positionChanged(final float currentValue) {
-            listBox.updateView((int) (currentValue / labelTemplateHeight));
+            listBoxImpl.updateView((int) (currentValue / labelTemplateHeight));
           }
         });
       }
@@ -224,102 +240,112 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   // ListBox Interface Implementation
 
   @Override
-  public void setSelectionMode(final ListBoxSelectionMode<T> listBoxSelectionMode) {
-    listBox.setSelectionMode(listBoxSelectionMode);
+  public void changeSelectionMode(final ListBoxSelectionMode<T> listBoxSelectionMode) {
+    listBoxImpl.changeSelectionMode(listBoxSelectionMode);
   }
 
   @Override
   public void addItem(final T newItem) {
-    listBox.addItem(newItem);
+    listBoxImpl.addItem(newItem);
   }
 
   @Override
   public void insertItem(final T item, final int index) {
-    listBox.insertItem(item, index);
+    listBoxImpl.insertItem(item, index);
   }
 
   @Override
   public int itemCount() {
-    return listBox.itemCount();
+    return listBoxImpl.itemCount();
   }
 
   @Override
   public void clear() {
-    listBox.clear();
+    listBoxImpl.clear();
   }
 
   @Override
   public void selectItemByIndex(final int selectionIndex) {
-    listBox.selectItemByIndex(selectionIndex);
+    listBoxImpl.selectItemByIndex(selectionIndex);
   }
 
   @Override
   public void selectItem(final T item) {
-    listBox.selectItem(item);
+    listBoxImpl.selectItem(item);
   }
 
   @Override
   public void deselectItemByIndex(final int itemIndex) {
-    listBox.deselectItemByIndex(itemIndex);
+    listBoxImpl.deselectItemByIndex(itemIndex);
   }
 
   @Override
   public void deselectItem(final T item) {
-    listBox.deselectItem(item);
+    listBoxImpl.deselectItem(item);
   }
 
   @Override
   public List<T> getSelection() {
-    return listBox.getSelection();
+    return listBoxImpl.getSelection();
   }
 
   @Override
   public void removeItemByIndex(final int itemIndex) {
-    listBox.removeItemByIndex(itemIndex);
+    listBoxImpl.removeItemByIndex(itemIndex);
   }
 
   @Override
   public void removeItem(final T item) {
-    listBox.removeItem(item);
+    listBoxImpl.removeItem(item);
   }
 
   @Override
   public List<T> getItems() {
-    return listBox.getItems();
+    return listBoxImpl.getItems();
   }
 
   @Override
   public void showItem(final T item) {
-    listBox.showItem(item);
+    listBoxImpl.showItem(item);
   }
 
   @Override
   public void showItemByIndex(final int itemIndex) {
-    listBox.showItemByIndex(itemIndex);
+    listBoxImpl.showItemByIndex(itemIndex);
   }
 
   @Override
   public void setFocusItem(final T item) {
-    listBox.setFocusItem(item);
+    listBoxImpl.setFocusItem(item);
   }
 
   @Override
   public void setFocusItemByIndex(final int itemIndex) {
-    listBox.setFocusItemByIndex(itemIndex);
+    listBoxImpl.setFocusItemByIndex(itemIndex);
   }
 
   @Override
   public T getFocusItem() {
-    return listBox.getFocusItem();
+    return listBoxImpl.getFocusItem();
   }
 
   @Override
   public int getFocusItemIndex() {
-    return listBox.getFocusItemIndex();
+    return listBoxImpl.getFocusItemIndex();
   }
 
   @Override
   public void setListBoxViewConverter(final ListBoxViewConverter<T> viewConverter) {
     this.viewConverter = viewConverter;
+  }
+
+  @Override
+  public void publish(final ListBoxSelectionChangedEvent<T> event) {
+    nifty.publishEvent(element.getId(), event);
+  }
+
+  @Override
+  public void addAllItems(final List<T> itemsToAdd) {
+    listBoxImpl.addAllItems(itemsToAdd);
   }
 }
