@@ -86,7 +86,9 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
 
   @Override
   public void publish(final CheckBoxStateChangedEvent event) {
-    nifty.publishEvent(element.getId(), event);
+    if (element.getId() != null) {
+      nifty.publishEvent(element.getId(), event);
+    }
   }
 
   // CheckBox Implementation

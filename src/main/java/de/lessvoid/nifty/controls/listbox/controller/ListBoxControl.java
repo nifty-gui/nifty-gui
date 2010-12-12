@@ -346,7 +346,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @Override
   public void publish(final ListBoxSelectionChangedEvent<T> event) {
-    nifty.publishEvent(element.getId(), event);
+    if (element.getId() != null) {
+      nifty.publishEvent(element.getId(), event);
+    }
   }
 
   @Override
