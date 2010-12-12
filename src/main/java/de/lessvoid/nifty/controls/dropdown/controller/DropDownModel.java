@@ -19,13 +19,13 @@ public class DropDownModel {
   private int selectedItemIdx = -1;
 
   public void addItem(final String description) {
-	  items.add(description);
-	  objects.add(null);
+    items.add(description);
+    objects.add(null);
   }
   
   public void addItem(final String description, final Object object) {
-	  items.add(description);
-	  objects.add(object);
+    items.add(description);
+    objects.add(object);
   }
 
   public void initialize(
@@ -56,7 +56,7 @@ public class DropDownModel {
   }
   
   public Object getSelectedObject() {
-	  return objects.get(selectedItemIdx);
+    return objects.get(selectedItemIdx);
   }
 
   public int getSelectedItemIdx() {
