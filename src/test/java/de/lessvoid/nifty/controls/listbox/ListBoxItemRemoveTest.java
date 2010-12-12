@@ -69,7 +69,7 @@ public class ListBoxItemRemoveTest {
   }
 
   @Test
-  public void testRemoveAllItem() {
+  public void testRemoveAllItemManual() {
     viewMock.updateTotalCount(1);
     viewMock.display(buildValues(o2, null), 0, buildValuesSelection());
     viewMock.updateTotalCount(0);
@@ -78,6 +78,20 @@ public class ListBoxItemRemoveTest {
 
     listBox.removeItem(o1);
     listBox.removeItem(o2);
+    assertListBoxCount(0);
+  }
+
+  @Test
+  public void testRemoveAllItems() {
+    viewMock.updateTotalCount(0);
+    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    replay(viewMock);
+
+    List<TestItem> itemsToRemove = new ArrayList<TestItem>();
+    itemsToRemove.add(o1);
+    itemsToRemove.add(o2);
+    listBox.removeAllItems(itemsToRemove);
+
     assertListBoxCount(0);
   }
 

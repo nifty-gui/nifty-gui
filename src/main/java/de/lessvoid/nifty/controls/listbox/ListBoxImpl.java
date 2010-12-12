@@ -235,6 +235,20 @@ public class ListBoxImpl<T> implements ListBox<T> {
     updateViewTotalCount();
   }
 
+  @Override
+  public void removeAllItems(final List<T> itemsToRemove) {
+    List<T> oldSelection = getSelection();
+
+    items.removeAll(itemsToRemove);
+    for (T item : selection.getSelection()) {
+      selection.remove(item);
+    }
+
+    focusItemIndexUpdate();
+    updateViewTotalCount();
+    selectionChangedEvent(oldSelection);
+  }
+
   private void updateViewTotalCount() {
     view.updateTotalCount(items.size());
     updateView();

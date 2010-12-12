@@ -19,7 +19,7 @@ public class ListBoxSelectionModeMulti<T> implements ListBoxSelectionMode<T> {
 
   @Override
   public List<T> getSelection() {
-    return selection;
+    return new ArrayList<T>(selection);
   }
 
   @Override

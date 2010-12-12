@@ -348,4 +348,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   public void addAllItems(final List<T> itemsToAdd) {
     listBoxImpl.addAllItems(itemsToAdd);
   }
+
+  @Override
+  public void removeAllItems(final List<T> itemsToRemove) {
+    listBoxImpl.removeAllItems(itemsToRemove);
+  }
 }

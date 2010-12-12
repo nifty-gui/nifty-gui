@@ -141,4 +141,10 @@ public interface ListBox<T> extends NiftyControl {
    * @param itemsToAdd all items to add
    */
   void addAllItems(List<T> itemsToAdd);
+
+  /**
+   * Remove all items given in the List from this ListBox.
+   * @param itemsToRemove list of items to remove
+   */
+  void removeAllItems(List<T> itemsToRemove);
 }
