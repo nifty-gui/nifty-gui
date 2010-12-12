@@ -46,6 +46,13 @@
       <artifactId>xpp3</artifactId>
       <version>1.1.4c</version>
     </dependency>
+    <dependency>
+    	<groupId>org.bushe</groupId>
+    	<artifactId>eventbus</artifactId>
+    	<version>1.4</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -53,8 +60,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.1</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
       </plugin>
       <plugin>
