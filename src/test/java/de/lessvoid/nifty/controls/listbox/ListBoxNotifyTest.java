@@ -6,9 +6,6 @@ import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.easymock.Capture;
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +37,7 @@ public class ListBoxNotifyTest {
 
   @Test
   public void testSelectByItem() {
-    view.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     view.publish(capture(lastEvent));
     replay(view);
 
@@ -52,7 +49,7 @@ public class ListBoxNotifyTest {
 
   @Test
   public void testSelectByItemIndex() {
-    view.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     view.publish(capture(lastEvent));
     replay(view);
 
@@ -60,21 +57,5 @@ public class ListBoxNotifyTest {
 
     assertEquals(1, lastEvent.getValue().getSelection().size());
     assertEquals(o1, lastEvent.getValue().getSelection().get(0));
-  }
-
-  private List<TestItem> buildValues(final TestItem ... values) {
-    List<TestItem> result = new ArrayList<TestItem>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
-  private List<Integer> buildValuesSelection(final Integer ... values) {
-    List<Integer> result = new ArrayList<Integer>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
   }
 }

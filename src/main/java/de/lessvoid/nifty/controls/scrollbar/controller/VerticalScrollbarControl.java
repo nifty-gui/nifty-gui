@@ -79,6 +79,10 @@ public class VerticalScrollbarControl extends AbstractController {
     scrollbar.changeSliderPos(newValue);
   }
 
+  public void setCurrentValueWithoutNotify(final float newValue) {
+    scrollbar.changeSliderPosWithoutNotify(newValue);
+  }
+
   public float getWorldMinValue() {
     return scrollbar.getWorldMinValue();
   }

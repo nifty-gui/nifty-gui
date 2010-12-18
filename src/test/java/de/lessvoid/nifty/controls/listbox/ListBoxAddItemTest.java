@@ -33,7 +33,7 @@ public class ListBoxAddItemTest {
   @Test
   public void testAddItem() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.addItem(o1);
@@ -43,9 +43,9 @@ public class ListBoxAddItemTest {
   @Test
   public void testAddItemTwice() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.updateTotalCount(2);
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.addItem(o1);
@@ -56,7 +56,7 @@ public class ListBoxAddItemTest {
   @Test
   public void testInsertItem() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.insertItem(o1, 0);
@@ -66,7 +66,7 @@ public class ListBoxAddItemTest {
   @Test
   public void testAddAllItems() {
     viewMock.updateTotalCount(2);
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     List<TestItem> itemsToAdd = new ArrayList<TestItem>();
@@ -84,21 +84,5 @@ public class ListBoxAddItemTest {
       assertEquals(e, listBox.getItems().get(i));
       i++;
     }
-  }
-
-  private List<TestItem> buildValues(final TestItem ... values) {
-    List<TestItem> result = new ArrayList<TestItem>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
-  private List<Integer> buildValuesSelection(final Integer ... values) {
-    List<Integer> result = new ArrayList<Integer>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
   }
 }

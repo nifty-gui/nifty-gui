@@ -35,7 +35,7 @@ public class ListBoxItemRemoveTest {
   @Test
   public void testClear() {
     viewMock.updateTotalCount(0);
-    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.clear();
@@ -45,7 +45,8 @@ public class ListBoxItemRemoveTest {
   @Test
   public void testRemoveItemByIndex() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o2, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o2, null), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.scrollTo(0);
     replay(viewMock);
 
     listBox.removeItemByIndex(0);
@@ -71,9 +72,10 @@ public class ListBoxItemRemoveTest {
   @Test
   public void testRemoveAllItemManual() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o2, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o2, null), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.scrollTo(0);
     viewMock.updateTotalCount(0);
-    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.removeItem(o1);
@@ -84,7 +86,7 @@ public class ListBoxItemRemoveTest {
   @Test
   public void testRemoveAllItems() {
     viewMock.updateTotalCount(0);
-    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     List<TestItem> itemsToRemove = new ArrayList<TestItem>();
@@ -93,6 +95,32 @@ public class ListBoxItemRemoveTest {
     listBox.removeAllItems(itemsToRemove);
 
     assertListBoxCount(0);
+  }
+
+  @Test
+  public void testRemoveAllItemsAtBackOfList() {
+    TestItem o3 = new TestItem("o3");
+    TestItem o4 = new TestItem("o4");
+
+    viewMock.updateTotalCount(3);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.updateTotalCount(4);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.scrollTo(2);
+    viewMock.display(ListBoxTestTool.buildValues(o3, o4), -1, ListBoxTestTool.buildValuesSelection());
+    viewMock.updateTotalCount(2);
+    viewMock.scrollTo(0);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+    replay(viewMock);
+
+    listBox.addItem(o3);
+    listBox.addItem(o4);
+    listBox.showItem(o3);
+
+    List<TestItem> itemsToRemove = new ArrayList<TestItem>();
+    itemsToRemove.add(o3);
+    itemsToRemove.add(o4);
+    listBox.removeAllItems(itemsToRemove);
   }
 
   @Test
@@ -105,21 +133,5 @@ public class ListBoxItemRemoveTest {
 
   private void assertListBoxCount(final int expected) {
     assertEquals(expected, listBox.itemCount());
-  }
-
-  private List<TestItem> buildValues(final TestItem ... values) {
-    List<TestItem> result = new ArrayList<TestItem>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
-  private List<Integer> buildValuesSelection(final Integer ... values) {
-    List<Integer> result = new ArrayList<Integer>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
   }
 }

@@ -49,6 +49,7 @@ public class ListBoxShowItemTest {
   @Test
   public void testShowItemByIndex() {
     viewMock.scrollTo(0);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.showItemByIndex(0);
@@ -57,6 +58,7 @@ public class ListBoxShowItemTest {
   @Test
   public void testShowItemByLastIndex() {
     viewMock.scrollTo(2);
+    viewMock.display(ListBoxTestTool.buildValues(o3, o4), -1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.showItemByIndex(3);
@@ -65,6 +67,7 @@ public class ListBoxShowItemTest {
   @Test
   public void testShowItem() {
     viewMock.scrollTo(2);
+    viewMock.display(ListBoxTestTool.buildValues(o3, o4), -1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.showItem(o4);
@@ -76,5 +79,4 @@ public class ListBoxShowItemTest {
 
     listBox.showItem(new TestItem("test"));
   }
-
 }

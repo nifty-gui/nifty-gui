@@ -1,7 +1,11 @@
 package de.lessvoid.nifty.controls;
 
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.capture;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
+import de.lessvoid.nifty.controls.listbox.ListBoxTestTool;
 import de.lessvoid.nifty.controls.listbox.ListBoxView;
 import de.lessvoid.nifty.controls.listbox.TestItem;
-import static org.easymock.EasyMock.capture;
-import static org.easymock.classextension.EasyMock.*;
 
 public class ListBoxMultipleSelectionViewTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
@@ -44,7 +47,7 @@ public class ListBoxMultipleSelectionViewTest {
   @Test
   public void testRemoveAllItemsWithSelection() {
     viewMock.updateTotalCount(0);
-    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     viewMock.publish(capture(lastEvent));
     replay(viewMock);
 
@@ -57,21 +60,4 @@ public class ListBoxMultipleSelectionViewTest {
     assertTrue(listBox.getSelection().isEmpty());
     assertEquals(0, lastEvent.getValue().getSelection().size());
   }
-
-  private List<TestItem> buildValues(final TestItem ... values) {
-    List<TestItem> result = new ArrayList<TestItem>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
-  private List<Integer> buildValuesSelection(final Integer ... values) {
-    List<Integer> result = new ArrayList<Integer>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
 }

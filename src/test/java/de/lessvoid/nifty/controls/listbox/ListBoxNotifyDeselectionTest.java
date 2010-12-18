@@ -6,9 +6,6 @@ import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.easymock.Capture;
 import org.junit.After;
 import org.junit.Before;
@@ -41,7 +38,7 @@ public class ListBoxNotifyDeselectionTest {
 
   @Test
   public void testDeselectItem() {
-    view.display(buildValues(o1, o2), 0, buildValuesSelection());
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     view.publish(capture(lastEvent));
     replay(view);
 
@@ -52,7 +49,7 @@ public class ListBoxNotifyDeselectionTest {
 
   @Test
   public void testDeselectByIndex() {
-    view.display(buildValues(o1, o2), 0, buildValuesSelection());
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     view.publish(capture(lastEvent));
     replay(view);
 
@@ -63,8 +60,9 @@ public class ListBoxNotifyDeselectionTest {
 
   @Test
   public void testRemoveSelectedItem() {
+    view.scrollTo(0);
     view.updateTotalCount(1);
-    view.display(buildValues(o2, null), 0, buildValuesSelection());
+    view.display(ListBoxTestTool.buildValues(o2, null), 0, ListBoxTestTool.buildValuesSelection());
     view.publish(capture(lastEvent));
     replay(view);
 
@@ -75,8 +73,9 @@ public class ListBoxNotifyDeselectionTest {
 
   @Test
   public void testRemoveSelectedItemByIndex() {
+    view.scrollTo(0);
     view.updateTotalCount(1);
-    view.display(buildValues(o2, null), 0, buildValuesSelection());
+    view.display(ListBoxTestTool.buildValues(o2, null), 0, ListBoxTestTool.buildValuesSelection());
     view.publish(capture(lastEvent));
     replay(view);
 
@@ -88,28 +87,12 @@ public class ListBoxNotifyDeselectionTest {
   @Test
   public void testRemoveSelectionByClear() {
     view.updateTotalCount(0);
-    view.display(buildValues(null, null), -1, buildValuesSelection());
+    view.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     view.publish(capture(lastEvent));
     replay(view);
 
     listBox.clear();
 
     assertEquals(0, lastEvent.getValue().getSelection().size());
-  }
-
-  private List<TestItem> buildValues(final TestItem ... values) {
-    List<TestItem> result = new ArrayList<TestItem>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
-  private List<Integer> buildValuesSelection(final Integer ... values) {
-    List<Integer> result = new ArrayList<Integer>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
   }
 }

@@ -6,9 +6,6 @@ import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +38,7 @@ public class ListBoxFocusElementEmptyTest {
   @Test
   public void testGetFocusAfterAddItem() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
     listBox.addItem(o1);
     assertEquals(0, listBox.getFocusItemIndex());
@@ -51,9 +48,9 @@ public class ListBoxFocusElementEmptyTest {
   @Test
   public void testGetFocusAfterTwoAddItems() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.updateTotalCount(2);
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
     listBox.addItem(o1);
     listBox.addItem(o2);
@@ -64,7 +61,7 @@ public class ListBoxFocusElementEmptyTest {
   @Test
   public void testGetFocusAfterInsertItem() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
     listBox.insertItem(o1, 0);
     assertEquals(0, listBox.getFocusItemIndex());
@@ -74,9 +71,9 @@ public class ListBoxFocusElementEmptyTest {
   @Test
   public void testGetFocusAfterSecondInsertItem() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.updateTotalCount(2);
-    viewMock.display(buildValues(o2, o1), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o2, o1), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
     listBox.insertItem(o1, 0);
     listBox.insertItem(o2, 0);
@@ -87,11 +84,11 @@ public class ListBoxFocusElementEmptyTest {
   @Test
   public void testGetFocusAfterClear() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.updateTotalCount(2);
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.updateTotalCount(0);
-    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
     listBox.addItem(o1);
     listBox.addItem(o2);
@@ -103,9 +100,9 @@ public class ListBoxFocusElementEmptyTest {
   @Test
   public void testGetFocusAfterRemoveItem() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.updateTotalCount(0);
-    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
     listBox.addItem(o1);
     listBox.removeItem(o1);
@@ -116,29 +113,13 @@ public class ListBoxFocusElementEmptyTest {
   @Test
   public void testGetFocusAfterRemoveItemByIndex() {
     viewMock.updateTotalCount(1);
-    viewMock.display(buildValues(o1, null), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.updateTotalCount(0);
-    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
     listBox.addItem(o1);
     listBox.removeItemByIndex(0);
     assertEquals(-1, listBox.getFocusItemIndex());
     assertNull(listBox.getFocusItem());
-  }
-
-  private List<TestItem> buildValues(final TestItem ... values) {
-    List<TestItem> result = new ArrayList<TestItem>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
-  private List<Integer> buildValuesSelection(final Integer ... values) {
-    List<Integer> result = new ArrayList<Integer>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
   }
 }

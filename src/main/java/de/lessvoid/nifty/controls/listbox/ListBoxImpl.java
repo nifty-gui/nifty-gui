@@ -20,6 +20,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
   private int focusItemIndex = -1;
   private List<T> visibleItemsForDisplay = new ArrayList<T>();
   private List<Integer> selectedItemsForDisplay = new ArrayList<Integer>();
+  private ListBoxFocusItem listBoxFocusItem = new ListBoxFocusItem();
 
   public int bindToView(final ListBoxView<T> newListBoxView, final int viewDisplayItemCount) {
     this.view = newListBoxView;
@@ -124,22 +125,58 @@ public class ListBoxImpl<T> implements ListBox<T> {
       return;
     }
     List<T> oldSelection = getSelection();
+    int oldCount = itemCount();
+
     selection.remove(items.get(itemIndex));
     items.remove(itemIndex);
-    focusItemIndexUpdate();
-    updateViewTotalCount();
-    selectionChangedEvent(oldSelection);
+
+    listBoxFocusItem.prepare();
+    listBoxFocusItem.registerIndex(itemIndex);
+
+    updateAfterRemove(oldSelection, oldCount);
   }
 
   @Override
   public void removeItem(final T item) {
-    if (!items.remove(item)) {
+    removeItemByIndex(items.indexOf(item));
+  }
+
+  @Override
+  public void removeAllItems(final List<T> itemsToRemove) {
+    List<T> oldSelection = getSelection();
+    int oldCount = itemCount();
+
+    listBoxFocusItem.prepare();
+    for (T item : itemsToRemove) {
+      listBoxFocusItem.registerIndex(items.indexOf(item));
+    }
+
+    if (!items.removeAll(itemsToRemove)) {
       return;
     }
-    List<T> oldSelection = getSelection();
-    selection.remove(item);
+
+    for (T item : selection.getSelection()) {
+      selection.remove(item);
+    }
+
+    updateAfterRemove(oldSelection, oldCount);
+  }
+
+  private void updateAfterRemove(final List<T> oldSelection, final int oldItemCount) {
+    focusItemIndex = listBoxFocusItem.resolve(focusItemIndex, oldItemCount);
     focusItemIndexUpdate();
-    updateViewTotalCount();
+
+    view.updateTotalCount(items.size());
+
+    if (viewOffset + viewDisplayItemCount > itemCount()) {
+      if (itemCount() > 0) {
+        showItemByIndex(itemCount() - 1);
+        selectionChangedEvent(oldSelection);
+        return;
+      }
+    }
+
+    updateView();
     selectionChangedEvent(oldSelection);
   }
 
@@ -184,11 +221,14 @@ public class ListBoxImpl<T> implements ListBox<T> {
     if (invalidIndex(itemIndex)) {
       return;
     }
-    if (itemIndex > items.size() - viewDisplayItemCount) {
-      view.scrollTo(items.size() - viewDisplayItemCount);
-    } else {
-      view.scrollTo(itemIndex);
+    viewOffset = itemIndex;
+    if (itemCount() <= viewDisplayItemCount) {
+      viewOffset = 0;
+    } else if (itemIndex > items.size() - viewDisplayItemCount) {
+      viewOffset = items.size() - viewDisplayItemCount;
     }
+    view.scrollTo(viewOffset);
+    updateView();
   }
 
   @Override
@@ -202,12 +242,15 @@ public class ListBoxImpl<T> implements ListBox<T> {
       return;
     }
     focusItemIndex = itemIndex;
-    updateView();
 
     if (focusItemIndex >= viewOffset + viewDisplayItemCount) {
-      view.scrollTo(focusItemIndex - viewDisplayItemCount + 1);
+      viewOffset = focusItemIndex - viewDisplayItemCount + 1;
+      view.scrollTo(viewOffset);
+      updateView();
     } else if (focusItemIndex < viewOffset) {
       showItemByIndex(focusItemIndex);
+    } else {
+      updateView();
     }
   }
 
@@ -234,20 +277,6 @@ public class ListBoxImpl<T> implements ListBox<T> {
     items.addAll(itemsToAdd);
     focusItemIndexUpdate();
     updateViewTotalCount();
-  }
-
-  @Override
-  public void removeAllItems(final List<T> itemsToRemove) {
-    List<T> oldSelection = getSelection();
-
-    items.removeAll(itemsToRemove);
-    for (T item : selection.getSelection()) {
-      selection.remove(item);
-    }
-
-    focusItemIndexUpdate();
-    updateViewTotalCount();
-    selectionChangedEvent(oldSelection);
   }
 
   private void updateViewTotalCount() {
@@ -329,11 +358,15 @@ public class ListBoxImpl<T> implements ListBox<T> {
   }
 
   private void focusItemIndexUpdate() {
+    if (items.size() == 0) {
+      focusItemIndex = -1;
+      return;
+    }
     if (items.size() == 1) {
       focusItemIndex = 0;
-    } else if (items.size() == 0) {
-      focusItemIndex = -1;
-    } else if (focusItemIndex == -1) {
+      return;
+    }
+    if (focusItemIndex == -1 && itemCount() > 0) {
       focusItemIndex = 0;
     }
   }

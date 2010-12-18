@@ -178,26 +178,19 @@ public class GeneralScrollbar extends AbstractController {
       return;
     }
 
-    this.currentValue = worldValue;
-    if (currentValue < 0) {
-      currentValue = 0;
-    }
-
-    int s = scrollBar.translateValue(element.getWidth(), element.getHeight())
-        - scrollBar.translateValue(scrollPos.getWidth(), scrollPos.getHeight());
-    float a = viewToWorld(s);
-    if (currentValue > a) {
-      currentValue = a;
-    }
-
-    float newPos = worldToView(currentValue);
-
-    scrollBar.setPosition(scrollPos, (int) newPos);
+    updatePosition(worldValue);
 
     if (listener != null) {
       listener.onChangeNotify();
     }
-    screen.layoutLayers();
+  }
+
+  public void changeSliderPosWithoutNotify(final float worldValue) {
+    if (scrollPos == null) {
+      return;
+    }
+
+    updatePosition(worldValue);
   }
 
   /**
@@ -256,5 +249,24 @@ public class GeneralScrollbar extends AbstractController {
 
   public void setPerClickChange(final float perClickChange) {
     this.perClickChange = perClickChange;
+  }
+
+  private void updatePosition(final float worldValue) {
+    this.currentValue = worldValue;
+    if (currentValue < 0) {
+      currentValue = 0;
+    }
+
+    int s = scrollBar.translateValue(element.getWidth(), element.getHeight())
+        - scrollBar.translateValue(scrollPos.getWidth(), scrollPos.getHeight());
+    float a = viewToWorld(s);
+    if (currentValue > a) {
+      currentValue = a;
+    }
+
+    float newPos = worldToView(currentValue);
+
+    scrollBar.setPosition(scrollPos, (int) newPos);
+    screen.layoutLayers();
   }
 }

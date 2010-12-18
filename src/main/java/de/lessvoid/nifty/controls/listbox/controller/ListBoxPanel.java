@@ -87,6 +87,7 @@ public class ListBoxPanel<T> extends AbstractController {
     super.onFocus(getFocus);
 
     hasFocus = getFocus;
+    listBox.updateView();
   }
 
   public void setListBox(final ListBoxImpl<T> listBox) {

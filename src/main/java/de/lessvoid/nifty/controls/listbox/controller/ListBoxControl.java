@@ -238,7 +238,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   public void scrollTo(final int newPosition) {
     VerticalScrollbarControl verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
     if (verticalS != null) {
-      verticalS.setCurrentValue(newPosition * labelTemplateHeight);
+      verticalS.setCurrentValueWithoutNotify(newPosition * labelTemplateHeight);
     }
   }
 

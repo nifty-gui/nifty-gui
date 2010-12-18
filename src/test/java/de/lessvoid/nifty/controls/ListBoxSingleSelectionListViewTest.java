@@ -5,14 +5,12 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
+import de.lessvoid.nifty.controls.listbox.ListBoxTestTool;
 import de.lessvoid.nifty.controls.listbox.ListBoxView;
 import de.lessvoid.nifty.controls.listbox.TestItem;
 
@@ -43,7 +41,7 @@ public class ListBoxSingleSelectionListViewTest {
   @SuppressWarnings("unchecked")
   @Test
   public void testSelectFirstItem() {
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
@@ -52,9 +50,9 @@ public class ListBoxSingleSelectionListViewTest {
   @SuppressWarnings("unchecked")
   @Test
   public void testSelectDoubleItem() {
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(1));
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(1));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
@@ -64,7 +62,7 @@ public class ListBoxSingleSelectionListViewTest {
   @SuppressWarnings("unchecked")
   @Test
   public void testSelectOutOfDisplayItem() {
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(2);
@@ -73,10 +71,10 @@ public class ListBoxSingleSelectionListViewTest {
   @SuppressWarnings("unchecked")
   @Test
   public void testClearWithSelection() {
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.updateTotalCount(0);
-    viewMock.display(buildValues(null, null), -1, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
@@ -86,29 +84,13 @@ public class ListBoxSingleSelectionListViewTest {
   @SuppressWarnings("unchecked")
   @Test
   public void testRemoveItemWithSelection() {
-    viewMock.display(buildValues(o1, o2), 0, buildValuesSelection(0));
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.updateTotalCount(3);
-    viewMock.display(buildValues(o2, o3), 0, buildValuesSelection());
+    viewMock.display(ListBoxTestTool.buildValues(o2, o3), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
     listBox.removeItemByIndex(0);
-  }
-
-  private List<TestItem> buildValues(final TestItem ... values) {
-    List<TestItem> result = new ArrayList<TestItem>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
-  private List<Integer> buildValuesSelection(final Integer ... values) {
-    List<Integer> result = new ArrayList<Integer>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
   }
 }
