@@ -162,21 +162,29 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
         }
       }
       return method.invoke(targetObject, invokeParameters);
-    } catch (Exception e) {
-      log.warning("error: " + e.getMessage());
-      StackTraceElement[] elements = e.getStackTrace();
-      if (elements == null) {
-        log.warning("stacktrace is null");
-      } else {
-        for (StackTraceElement ee : elements) {
-          log.warning(
-              ee.getClassName()
-              + ":" + ee.getFileName()
-              + ":" + ee.getMethodName()
-              + ":" + ee.getLineNumber());
-        }
-      }
+    } catch (RuntimeException e) {
+      log.warning("RuntimeException: " + e.toString());
+      logException(e);
       return null;
+    } catch (Exception e) {
+      log.warning("Exception: " + e.toString());
+      logException(e);
+      return null;
+    }
+  }
+
+  private void logException(final Throwable e) {
+    StackTraceElement[] elements = e.getStackTrace();
+    if (elements == null) {
+      log.warning("stacktrace is null");
+    } else {
+      for (StackTraceElement ee : elements) {
+        log.warning(ee.getClassName() + " " + ee.getMethodName() + " (" + ee.getFileName() + ":" + ee.getLineNumber() + ")");
+      }
+    }
+    if (e.getCause() != null) {
+      log.warning("Root Cause: " + e.getCause().toString());
+      logException(e.getCause());
     }
   }
 
