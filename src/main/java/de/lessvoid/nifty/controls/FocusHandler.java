@@ -135,10 +135,10 @@ public class FocusHandler {
     entries.clear();
 
     keyboardFocusElementBuffer.add(keyboardFocusElement);
-    keyboardFocusElement = null;
+    lostKeyboardFocus(keyboardFocusElement);
 
     mouseFocusElementBuffer.add(mouseFocusElement);
-    mouseFocusElement = null;
+    lostMouseFocus(mouseFocusElement);
   }
 
   /**
