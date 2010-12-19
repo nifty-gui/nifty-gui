@@ -17,4 +17,13 @@ public interface ListBoxViewConverter<T> {
    * @param item the item to display
    */
   void display(Element element, T item);
+
+  /**
+   * Return the width in pixel of the given item rendered
+   * for the given element.
+   * @param element the element to render
+   * @param item the item to render
+   * @return the width of the element after the item has been applied to it
+   */
+  int getWidth(Element element, T item);
 }

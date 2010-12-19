@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ListBoxViewTest {
+public class ListBoxViewWidthTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
@@ -30,26 +30,33 @@ public class ListBoxViewTest {
   }
 
   @Test
-  public void testAddItemWithUpdateWidth() {
-    view.updateTotalCount(1);
-    view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+  public void testUpdateViewWithEmptyList() {
+    view.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
+    replay(view);
+
+    listBox.updateView(0);
+  }
+
+  @Test
+  public void testSingleEntry() {
     expect(view.getWidth(o1)).andReturn(100);
     view.updateTotalWidth(100);
+    view.updateTotalCount(1);
+    view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(view);
 
     listBox.addItem(o1);
   }
 
   @Test
-  public void testAddTwoItemsWithUpdateWidth() {
-    view.updateTotalCount(1);
-    view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
-    view.updateTotalCount(2);
-    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+  public void testTwoEntries() {
     expect(view.getWidth(o1)).andReturn(100);
     view.updateTotalWidth(100);
-    expect(view.getWidth(o2)).andReturn(150);
-    view.updateTotalWidth(150);
+    view.updateTotalCount(1);
+    view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+    expect(view.getWidth(o2)).andReturn(100);
+    view.updateTotalCount(2);
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(view);
 
     listBox.addItem(o1);
@@ -57,17 +64,21 @@ public class ListBoxViewTest {
   }
 
   @Test
-  public void testAddTwoItemsWithNoUpdateWidth() {
-    view.updateTotalCount(1);
-    view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
-    view.updateTotalCount(2);
-    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+  public void testThreeEntries() {
     expect(view.getWidth(o1)).andReturn(100);
     view.updateTotalWidth(100);
-    expect(view.getWidth(o2)).andReturn(50);
+    view.updateTotalCount(1);
+    view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+    expect(view.getWidth(o2)).andReturn(100);
+    view.updateTotalCount(2);
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+    expect(view.getWidth(o3)).andReturn(100);
+    view.updateTotalCount(3);
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(view);
 
     listBox.addItem(o1);
     listBox.addItem(o2);
+    listBox.addItem(o3);
   }
 }

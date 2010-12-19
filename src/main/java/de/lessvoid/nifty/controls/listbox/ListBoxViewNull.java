@@ -26,4 +26,13 @@ public class ListBoxViewNull<T> implements ListBoxView<T> {
   @Override
   public void publish(final ListBoxSelectionChangedEvent<T> event) {
   }
+
+  @Override
+  public void updateTotalWidth(final int newWidth) {
+  }
+
+  @Override
+  public int getWidth(final T item) {
+    return 0;
+  }
 }

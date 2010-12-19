@@ -71,6 +71,7 @@ public class ListBoxSingleSelectionListViewTest {
   @SuppressWarnings("unchecked")
   @Test
   public void testClearWithSelection() {
+    viewMock.updateTotalWidth(0);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.updateTotalCount(0);

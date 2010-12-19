@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
@@ -29,8 +30,11 @@ public class ListBoxViewDefaultTest {
 
   @Test
   public void testUpdateViewWithEmptyList() {
+    expect(view.getWidth("a")).andReturn(100);
+    view.updateTotalWidth(100);
     view.updateTotalCount(1);
     view.display(buildValues("a", null), 0, buildValuesSelection());
+    expect(view.getWidth("b")).andReturn(100);
     view.updateTotalCount(2);
     view.display(buildValues("a", "b"), 0, buildValuesSelection());
     view.display(buildValues("a", "b"), 0, buildValuesSelection());

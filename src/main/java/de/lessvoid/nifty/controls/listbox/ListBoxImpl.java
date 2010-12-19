@@ -13,6 +13,7 @@ import de.lessvoid.nifty.controls.ListBoxViewConverter;
 
 public class ListBoxImpl<T> implements ListBox<T> {
   private List<T> items = new ArrayList<T>();
+  private List<ItemWidth> widthList = new ArrayList<ItemWidth>();
   private ListBoxSelectionMode<T> selection = new ListBoxSelectionModeSingle<T>();
   private ListBoxView<T> view = new ListBoxViewNull<T>();
   private int viewOffset = 0;
@@ -21,6 +22,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
   private List<T> visibleItemsForDisplay = new ArrayList<T>();
   private List<Integer> selectedItemsForDisplay = new ArrayList<Integer>();
   private ListBoxFocusItem listBoxFocusItem = new ListBoxFocusItem();
+  private int lastMaxWidth = 0;
 
   public int bindToView(final ListBoxView<T> newListBoxView, final int viewDisplayItemCount) {
     this.view = newListBoxView;
@@ -78,7 +80,9 @@ public class ListBoxImpl<T> implements ListBox<T> {
 
   @Override
   public void addItem(final T newItem) {
+    widthList.add(new ItemWidth(newItem));
     items.add(newItem);
+    widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
   }
@@ -93,6 +97,11 @@ public class ListBoxImpl<T> implements ListBox<T> {
     List<T> oldSelection = getSelection();
     items.clear();
     selection.clear();
+
+    widthList.clear();
+    lastMaxWidth = 0;
+    view.updateTotalWidth(lastMaxWidth);
+
     focusItemIndexUpdate();
     updateViewTotalCount();
     selectionChangedEvent(oldSelection);
@@ -127,8 +136,11 @@ public class ListBoxImpl<T> implements ListBox<T> {
     List<T> oldSelection = getSelection();
     int oldCount = itemCount();
 
-    selection.remove(items.get(itemIndex));
+    T item = items.get(itemIndex);
+    selection.remove(item);
     items.remove(itemIndex);
+    widthList.remove(findItemIndexInWidthList(item));
+    widthUpdate();
 
     listBoxFocusItem.prepare();
     listBoxFocusItem.registerIndex(itemIndex);
@@ -149,7 +161,10 @@ public class ListBoxImpl<T> implements ListBox<T> {
     listBoxFocusItem.prepare();
     for (T item : itemsToRemove) {
       listBoxFocusItem.registerIndex(items.indexOf(item));
+      widthList.remove(findItemIndexInWidthList(item));
     }
+
+    widthUpdate();
 
     if (!items.removeAll(itemsToRemove)) {
       return;
@@ -160,24 +175,6 @@ public class ListBoxImpl<T> implements ListBox<T> {
     }
 
     updateAfterRemove(oldSelection, oldCount);
-  }
-
-  private void updateAfterRemove(final List<T> oldSelection, final int oldItemCount) {
-    focusItemIndex = listBoxFocusItem.resolve(focusItemIndex, oldItemCount);
-    focusItemIndexUpdate();
-
-    view.updateTotalCount(items.size());
-
-    if (viewOffset + viewDisplayItemCount > itemCount()) {
-      if (itemCount() > 0) {
-        showItemByIndex(itemCount() - 1);
-        selectionChangedEvent(oldSelection);
-        return;
-      }
-    }
-
-    updateView();
-    selectionChangedEvent(oldSelection);
   }
 
   @Override
@@ -206,7 +203,9 @@ public class ListBoxImpl<T> implements ListBox<T> {
     if (invalidIndexForInsert(index)) {
       return;
     }
+    widthList.add(new ItemWidth(item));
     items.add(index, item);
+    widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
   }
@@ -274,7 +273,11 @@ public class ListBoxImpl<T> implements ListBox<T> {
 
   @Override
   public void addAllItems(final List<T> itemsToAdd) {
+    for (T item : itemsToAdd) {
+      widthList.add(new ItemWidth(item));
+    }
     items.addAll(itemsToAdd);
+    widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
   }
@@ -389,5 +392,82 @@ public class ListBoxImpl<T> implements ListBox<T> {
       }
     }
     return false;
+  }
+
+  private void updateAfterRemove(final List<T> oldSelection, final int oldItemCount) {
+    focusItemIndex = listBoxFocusItem.resolve(focusItemIndex, oldItemCount);
+    focusItemIndexUpdate();
+
+    view.updateTotalCount(items.size());
+
+    if (viewOffset + viewDisplayItemCount > itemCount()) {
+      if (itemCount() > 0) {
+        showItemByIndex(itemCount() - 1);
+        selectionChangedEvent(oldSelection);
+        return;
+      }
+    }
+
+    updateView();
+    selectionChangedEvent(oldSelection);
+  }
+
+  private void widthUpdate() {
+    if (widthList.isEmpty()) {
+      if (lastMaxWidth != 0) {
+        lastMaxWidth = 0;
+        view.updateTotalWidth(0);
+      }
+      return;
+    }
+    Collections.sort(widthList);
+
+    if (widthList.get(widthList.size() - 1).getWidth() != lastMaxWidth) {
+      lastMaxWidth = widthList.get(widthList.size() - 1).getWidth();
+      view.updateTotalWidth(lastMaxWidth);
+    }
+  }
+
+  private int findItemIndexInWidthList(final T item) {
+    for (int i=0; i<widthList.size(); i++) {
+      ItemWidth itemWidth = widthList.get(i);
+      if (itemWidth.getItem().equals(item)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  public class ItemWidth implements Comparable<ItemWidth> {
+    private T item;
+    private int width;
+
+    public ItemWidth(final T item) {
+      this.item = item;
+      this.width = view.getWidth(item);
+    }
+
+    @Override
+    public int compareTo(final ItemWidth a) {
+      return Integer.valueOf(width).compareTo(a.width);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      return item.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+      return item.hashCode();
+    }
+
+    public T getItem() {
+      return item;
+    }
+
+    public int getWidth() {
+      return width;
+    }
   }
 }

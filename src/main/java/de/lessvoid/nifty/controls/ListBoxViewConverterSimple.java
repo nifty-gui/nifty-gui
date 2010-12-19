@@ -20,4 +20,9 @@ public class ListBoxViewConverterSimple<T> implements ListBoxViewConverter<T> {
       element.getRenderer(TextRenderer.class).setText("");
     }
   }
+
+  @Override
+  public int getWidth(final Element element, final T item) {
+    return element.getRenderer(TextRenderer.class).getFont().getWidth(item.toString());
+  }
 }

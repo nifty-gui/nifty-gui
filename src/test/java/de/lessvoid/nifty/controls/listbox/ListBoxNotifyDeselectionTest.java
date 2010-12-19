@@ -86,6 +86,7 @@ public class ListBoxNotifyDeselectionTest {
 
   @Test
   public void testRemoveSelectionByClear() {
+    view.updateTotalWidth(0);
     view.updateTotalCount(0);
     view.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
     view.publish(capture(lastEvent));

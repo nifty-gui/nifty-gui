@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
@@ -32,6 +33,8 @@ public class ListBoxAddItemTest {
 
   @Test
   public void testAddItem() {
+    expect(viewMock.getWidth(o1)).andReturn(100);
+    viewMock.updateTotalWidth(100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
@@ -42,8 +45,11 @@ public class ListBoxAddItemTest {
 
   @Test
   public void testAddItemTwice() {
+    expect(viewMock.getWidth(o1)).andReturn(100);
+    viewMock.updateTotalWidth(100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+    expect(viewMock.getWidth(o2)).andReturn(100);
     viewMock.updateTotalCount(2);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
@@ -55,6 +61,8 @@ public class ListBoxAddItemTest {
 
   @Test
   public void testInsertItem() {
+    expect(viewMock.getWidth(o1)).andReturn(100);
+    viewMock.updateTotalWidth(100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
@@ -65,8 +73,11 @@ public class ListBoxAddItemTest {
 
   @Test
   public void testAddAllItems() {
+    expect(viewMock.getWidth(o1)).andReturn(100);
     viewMock.updateTotalCount(2);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+    expect(viewMock.getWidth(o2)).andReturn(101);
+    viewMock.updateTotalWidth(101);
     replay(viewMock);
 
     List<TestItem> itemsToAdd = new ArrayList<TestItem>();
