@@ -1,17 +1,24 @@
 package de.lessvoid.nifty.loaderv2.types.helper;
 
+/**
+ * one value:    [applied to all]
+ * two values:   [top and bottom], [left and right]
+ * three values: [top], [left and right], [bottom]
+ * four values:  [top], [right], [bottom], [left]
+ * @author void
+ */
 public class PaddingAttributeParser {
-  private String paddingLeft;
-  private String paddingRight;
-  private String paddingTop;
-  private String paddingBottom;
+  private String left;
+  private String right;
+  private String top;
+  private String bottom;
 
-  public PaddingAttributeParser(final String paddingString) throws Exception {
-    if (paddingString == null) {
+  public PaddingAttributeParser(final String input) throws Exception {
+    if (input == null) {
       throw new Exception("parsing error, paddingString is null");
     }
 
-    String[] values = paddingString.split(",");
+    String[] values = input.split(",");
     if (values == null || values.length == 0) {
       throw new Exception("parsing error, paddingString is empty");
     }
@@ -21,43 +28,43 @@ public class PaddingAttributeParser {
       if (values[0].length() == 0) {
         throw new Exception("parsing error, paddingString is empty");
       }
-      paddingLeft = values[0];
-      paddingRight = values[0];
-      paddingTop = values[0];
-      paddingBottom = values[0];
+      left = values[0];
+      right = values[0];
+      top = values[0];
+      bottom = values[0];
     } else if (valueCount == 2) {
-      paddingLeft = values[1];
-      paddingRight = values[1];
-      paddingTop = values[0];
-      paddingBottom = values[0];
+      left = values[1];
+      right = values[1];
+      top = values[0];
+      bottom = values[0];
     } else if (valueCount == 3) {
-      paddingLeft = values[1];
-      paddingRight = values[1];
-      paddingTop = values[0];
-      paddingBottom = values[2];
+      left = values[1];
+      right = values[1];
+      top = values[0];
+      bottom = values[2];
     } else if (valueCount == 4) {
-      paddingLeft = values[3];
-      paddingRight = values[1];
-      paddingTop = values[0];
-      paddingBottom = values[2];
+      left = values[3];
+      right = values[1];
+      top = values[0];
+      bottom = values[2];
     } else {
       throw new Exception("parsing error, paddingString count error (" + valueCount + ") expecting value from 1 to 4");
     }
   }
 
-  public String getPaddingLeft() {
-    return paddingLeft;
+  public String getLeft() {
+    return left;
   }
 
-  public String getPaddingTop() {
-    return paddingTop;
+  public String getTop() {
+    return top;
   }
 
-  public String getPaddingRight() {
-    return paddingRight;
+  public String getRight() {
+    return right;
   }
 
-  public String getPaddingBottom() {
-    return paddingBottom;
+  public String getBottom() {
+    return bottom;
   }
 }

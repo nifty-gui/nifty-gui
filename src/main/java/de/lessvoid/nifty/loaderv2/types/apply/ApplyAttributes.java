@@ -60,10 +60,10 @@ public class ApplyAttributes {
     if (resolved.isSet("padding")) {
       try {
         PaddingAttributeParser paddingParser = new PaddingAttributeParser(resolved.get("padding"));
-        element.setPaddingLeft(convert.paddingSizeValue(paddingParser.getPaddingLeft()));
-        element.setPaddingRight(convert.paddingSizeValue(paddingParser.getPaddingRight()));
-        element.setPaddingTop(convert.paddingSizeValue(paddingParser.getPaddingTop()));
-        element.setPaddingBottom(convert.paddingSizeValue(paddingParser.getPaddingBottom()));
+        element.setPaddingLeft(convert.paddingSizeValue(paddingParser.getLeft()));
+        element.setPaddingRight(convert.paddingSizeValue(paddingParser.getRight()));
+        element.setPaddingTop(convert.paddingSizeValue(paddingParser.getTop()));
+        element.setPaddingBottom(convert.paddingSizeValue(paddingParser.getBottom()));
       } catch (final Exception e) {
         log.warning(e.getMessage());
       }
