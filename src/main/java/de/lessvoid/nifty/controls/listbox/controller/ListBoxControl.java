@@ -243,17 +243,14 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @Override
   public void updateTotalWidth(final int newWidth) {
-    System.out.println(element.getId() + " -> newWidth: " + newWidth);
     HorizontalScrollbarControl horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
     if (horizontalS != null) {
-      float oldWorldMaxValue = horizontalS.getWorldMaxValue();
       horizontalS.setWorldMaxValue(newWidth);
       horizontalS.setCurrentValue(0);
     }
 
     // resize labels and panel to the new width or the min width
     int width = listBoxPanelElement.getWidth();
-    System.out.println(element.getId() + ", " + width);
     SizeValue newWidthSizeValue = new SizeValue(Math.max(width, newWidth) + "px");
     for (Element element : labelElements) {
       element.setConstraintWidth(newWidthSizeValue);
