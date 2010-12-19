@@ -55,7 +55,7 @@ public final class ControlsDemo {
           childLayoutVertical();
           padding("18px,28px,28px,16px");
           width("55%");
-          height("60%");
+          height("65%");
           alignCenter();
           valignCenter();
           onStartScreenEffect(createMoveEffect("in", "top"));
@@ -66,7 +66,7 @@ public final class ControlsDemo {
             control(new ControlBuilder("listBox", "listBox") {{
               set("displayItems", "4");
               set("vertical", "true");
-              set("horizontal", "false");
+              set("horizontal", "true");
               width("*");
             }});
           }});
@@ -107,7 +107,7 @@ public final class ControlsDemo {
             label(createLabel("Current Sel.:"));
             control(new ControlBuilder("selectionListBox", "listBox") {{
               set("displayItems", "4");
-              set("selectionMode", "disabled");
+              set("selectionMode", "none");
               set("vertical", "true");
               set("horizontal", "false");
               width("*");
