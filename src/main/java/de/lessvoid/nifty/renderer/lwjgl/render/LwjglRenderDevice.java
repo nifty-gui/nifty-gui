@@ -1,16 +1,26 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
+import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
 /**
  * Lwjgl RenderDevice Implementation.
@@ -370,5 +380,45 @@ public class LwjglRenderDevice implements RenderDevice {
     } else if (currentBlendMode.equals(BlendMode.MULIPLY)) {
       GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ZERO);
     }
+  }
+
+  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) throws IOException {
+    return new LwjglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
+  }
+
+  public void enableMouseCursor(final MouseCursor mouseCursor) {
+    try {
+      Mouse.setNativeCursor(((LwjglMouseCursor) mouseCursor).getCursor());
+    } catch (LWJGLException e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  public void disableMouseCursor() {
+    try {
+      Mouse.setNativeCursor(null);
+    } catch (LWJGLException e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  private Cursor loadMouseCursor(final String name, final int hotspotX, final int hotspotY) throws IOException {
+    ImageData imageLoader = createImageLoader(name);
+    ByteBuffer imageData = imageLoader.loadMouseCursorImage(ResourceLoader.getResourceAsStream(name));
+    imageData.rewind();
+    int width = imageLoader.getWidth();
+    int height = imageLoader.getHeight();
+    try {
+      return new Cursor(width, height, hotspotX, height - hotspotY - 1, 1, imageData.asIntBuffer(), null);
+    } catch (LWJGLException e) {
+      throw new IOException(e);
+    }
+  }
+
+  private ImageData createImageLoader(final String name) {
+    if (name.endsWith(".tga")) {
+      return new TGAImageData();
+    }
+    return new ImageIOImageData();
   }
 }

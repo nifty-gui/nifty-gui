@@ -73,36 +73,45 @@ public class ImageIOImageData implements ImageData {
   public ByteBuffer loadImage(InputStream fis) throws IOException {
     return loadImage(fis, false, null);
   }
-  
+
   public ByteBuffer loadImage(InputStream fis, boolean flipped, int[] transparent) throws IOException {
     return loadImage(fis, flipped, false, transparent);
   }
-  
+
   public ByteBuffer loadImage(InputStream fis, boolean flipped, boolean forceAlpha, int[] transparent) throws IOException {
     if (transparent != null) {
       forceAlpha = true;
     }
 
     BufferedImage bufferedImage = ImageIO.read(fis);
-    return imageToByteBuffer(bufferedImage, flipped, forceAlpha, transparent);
+    return imageToByteBuffer(bufferedImage, flipped, forceAlpha, transparent, true, false);
   }
-  
-  public ByteBuffer imageToByteBuffer(BufferedImage image, boolean flipped, boolean forceAlpha, int[] transparent) {
+
+  public ByteBuffer loadMouseCursorImage(InputStream fis) throws IOException {
+    BufferedImage bufferedImage = ImageIO.read(fis);
+    return imageToByteBuffer(bufferedImage, true, true, null, false, true);
+  }
+
+  public ByteBuffer imageToByteBuffer(BufferedImage image, boolean flipped, boolean forceAlpha, int[] transparent, boolean powerOfTwoSupport, boolean modeARGB) {
     ByteBuffer imageBuffer = null;
     WritableRaster raster;
     BufferedImage texImage;
 
-    int texWidth = 2;
-    int texHeight = 2;
+    int texWidth = image.getWidth();
+    int texHeight = image.getHeight();
 
-    // find the closest power of 2 for the width and height
-    // of the produced texture
-    
-    while (texWidth < image.getWidth()) {
-      texWidth *= 2;
-    }
-    while (texHeight < image.getHeight()) {
-      texHeight *= 2;
+    if (powerOfTwoSupport) {
+      // find the closest power of 2 for the width and height
+      // of the produced texture
+      texWidth = 2;
+      texHeight = 2;
+
+      while (texWidth < image.getWidth()) {
+        texWidth *= 2;
+      }
+      while (texHeight < image.getHeight()) {
+        texHeight *= 2;
+      }
     }
     
     this.width = image.getWidth();
@@ -167,6 +176,18 @@ public class ImageIOImageData implements ImageData {
         if (match) {
           data[i + 3] = 0;
         }
+      }
+    }
+    if (modeARGB) {
+      for (int i = 0; i < data.length; i += 4) {
+        byte rr = data[i + 0];
+        byte gg = data[i + 1];
+        byte bb = data[i + 2];
+        byte aa = data[i + 3];
+        data[i + 0] = bb;
+        data[i + 1] = gg;
+        data[i + 2] = rr;
+        data[i + 3] = aa;
       }
     }
     

@@ -83,24 +83,23 @@ public class TGAImageData implements ImageData {
 		return texHeight;
 	}
 	
-	/**
-	 * @see org.newdawn.slick.opengl.LoadableImageData#loadImage(java.io.InputStream)
-	 */
 	public ByteBuffer loadImage(InputStream fis) throws IOException {
 		return loadImage(fis, false, null);
 	}
 	
-	/**
-	 * @see org.newdawn.slick.opengl.LoadableImageData#loadImage(java.io.InputStream, boolean, int[])
-	 */
 	public ByteBuffer loadImage(InputStream fis, boolean flipped, int[] transparent) throws IOException {
 		return loadImage(fis, flipped, true, transparent);
 	}
 	
-	/**
-	 * @see org.newdawn.slick.opengl.LoadableImageData#loadImage(java.io.InputStream, boolean, boolean, int[])
-	 */
 	public ByteBuffer loadImage(InputStream fis, boolean flipped, boolean forceAlpha, int[] transparent) throws IOException {
+	  return loadImageInternal(fis, flipped, forceAlpha, transparent, true, false);
+	}
+
+	public ByteBuffer loadMouseCursorImage(InputStream fis) throws IOException {
+    return loadImageInternal(fis, true, false, null, false, true);
+  }
+
+	private ByteBuffer loadImageInternal(InputStream fis, boolean flipped, boolean forceAlpha, int[] transparent, boolean forceNonePowerOfTwo, boolean modeARGB) throws IOException {
 		if (transparent != null) { 
 			forceAlpha = true;
 		}
@@ -128,9 +127,13 @@ public class TGAImageData implements ImageData {
 		if (pixelDepth == 32) {
 			forceAlpha = false;
 		}
-		
-		texWidth = get2Fold(width);
-		texHeight = get2Fold(height);
+
+    texWidth = width;
+    texHeight = height;
+    if (forceNonePowerOfTwo) {
+      texWidth = get2Fold(width);
+      texHeight = get2Fold(height);
+    }
 		
 		short imageDescriptor = (short) dis.read();
 		if ((imageDescriptor & 0x0020) == 0) {
