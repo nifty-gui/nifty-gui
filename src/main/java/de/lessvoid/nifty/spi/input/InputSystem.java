@@ -16,4 +16,12 @@ public interface InputSystem {
    * @param inputEventConsumer the NiftyInputConsumer to forward input events to
    */
   void forwardEvents(NiftyInputConsumer inputEventConsumer);
+
+  /**
+   * This allows Nifty to set the position of the mouse to the given coordinate with
+   * (0,0) being the upper left corner of the screen.
+   * @param x x coordinate of mouse
+   * @param y y coordinate of mouse
+   */
+  void setMousePosition(final int x, final int y);
 }

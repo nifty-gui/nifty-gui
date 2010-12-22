@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.spi.render;
 
+import java.io.IOException;
+
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 
@@ -128,4 +130,24 @@ public interface RenderDevice {
    * Disable Clipping.
    */
   void disableClip();
+
+  /**
+   * Create a new mouse cursor.
+   * @param filename image file for the cursor
+   * @param hotspotX hotspot x with 0 being left of the screen
+   * @param hotspotY hotspot y with 0 being top of the screen 
+   * @return the loaded mouse cursor resource ready to be applied
+   */
+  MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY) throws IOException;
+
+  /**
+   * Enable the given mouse cursor.
+   * @param mouseCursor the mouse cursor to enable
+   */
+  void enableMouseCursor(MouseCursor mouseCursor);
+
+  /**
+   * Disable the current mouse cursor.
+   */
+  void disableMouseCursor();
 }

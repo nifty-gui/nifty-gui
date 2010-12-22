@@ -37,6 +37,7 @@ import de.lessvoid.nifty.loaderv2.types.ResourceBundleType;
 import de.lessvoid.nifty.loaderv2.types.StyleType;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverDefault;
+import de.lessvoid.nifty.render.NiftyMouseImpl;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
 import de.lessvoid.nifty.screen.NullScreen;
@@ -86,30 +87,13 @@ public class Nifty implements NiftyInputConsumer {
   private Locale locale = Locale.getDefault();
   private Properties globalProperties;
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
-
-  /**
-   * Create nifty. This is now deprecated because it's way easier to use the other
-   * constructor that simply takes a SoundDevice instead of a SoundSystem.
-   * @param newRenderDevice the RenderDevice
-   * @param newSoundSystem SoundSystem
-   * @param inputSystem InputSystem
-   * @param newTimeProvider the TimeProvider
-   */
-  @Deprecated
-  public Nifty(
-      final RenderDevice newRenderDevice,
-      final SoundSystem newSoundSystem,
-      final InputSystem newInputSystem,
-      final TimeProvider newTimeProvider) {
-    initialize(new NiftyRenderEngineImpl(newRenderDevice), newSoundSystem, newInputSystem, newTimeProvider);
-    console = new NiftyDebugConsole(newRenderDevice);
-  }
+  private NiftyMouse niftyMouse;
 
   /**
    * Create nifty with optional console parameter.
    * @param newRenderDevice the RenderDevice
    * @param newSoundSystem SoundSystem
-   * @param inputSystem TODO
+   * @param newInputSystem InputSystem
    * @param newTimeProvider the TimeProvider
    */
   public Nifty(
@@ -125,7 +109,7 @@ public class Nifty implements NiftyInputConsumer {
    * Initialize this instance.
    * @param newRenderDevice RenderDevice
    * @param newSoundSystem SoundSystem
-   * @param newInputSystem TODO
+   * @param newInputSystem InputSystem
    * @param newTimeProvider TimeProvider
    */
   private void initialize(
@@ -141,6 +125,7 @@ public class Nifty implements NiftyInputConsumer {
     this.currentLoaded = null;
     this.mouseInputEventQueue = new MouseInputEventQueue();
     this.lastTime = timeProvider.getMsTime();
+    this.niftyMouse = new NiftyMouseImpl(newRenderDevice.getRenderDevice(), inputSystem);
 
     try {
       loader = new NiftyLoader(timeProvider);
@@ -159,6 +144,7 @@ public class Nifty implements NiftyInputConsumer {
     EventServiceLocator.setEventService("NiftyEventBus", new ThreadSafeEventService());
   }
 
+  @SuppressWarnings("rawtypes")
   public void publishEvent(final String id, final NiftyEvent event) {
     EventServiceLocator.getEventService("NiftyEventBus").publish(id, event);
   }
@@ -1098,5 +1084,9 @@ public class Nifty implements NiftyInputConsumer {
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
+  }
+
+  public NiftyMouse getNiftyMouse() {
+    return niftyMouse;
   }
 }

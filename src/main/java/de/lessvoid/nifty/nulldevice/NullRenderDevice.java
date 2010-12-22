@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.nulldevice;
 
 import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -24,7 +25,7 @@ public class NullRenderDevice implements RenderDevice {
   public RenderImage createImage(String filename, boolean filterLinear) {
     return null;
   }
-  
+
   public void disableClip() {
   }
   
@@ -55,5 +56,18 @@ public class NullRenderDevice implements RenderDevice {
   }
   
   public void setBlendMode(BlendMode renderMode) {
+  }
+
+  @Override
+  public MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY) {
+    return null;
   }  
+
+  @Override
+  public void enableMouseCursor(MouseCursor mouseCursor) {
+  }
+
+  @Override
+  public void disableMouseCursor() {
+  }
 }
