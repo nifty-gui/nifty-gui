@@ -28,35 +28,39 @@ public class EffectProcessor {
   private NiftyRenderDeviceProxy renderDeviceProxy;
 
   private boolean neverStopRendering;
-  private Falloff hoverFalloff;
-  private boolean hoverEffect;
   private boolean processingActiveEffects;
   private boolean clearActiveEffectsRequested;
 
-  /**
-   * create and initialize a new instance.
-   * @param neverStopRenderingParam flag if this event never ends
-   */
   public EffectProcessor(final boolean neverStopRenderingParam) {
     neverStopRendering = neverStopRenderingParam;
     active = false;
     renderDeviceProxy = new NiftyRenderDeviceProxy();
-    hoverEffect = false;
   }
 
-  /**
-   * register pre effect.
-   * @param e the effect to register.
-   */
-  public final void registerEffect(final Effect e) {
+  public void registerEffect(final Effect e) {
     allEffects.add(e);
   }
 
-  /**
-   * render pre.
-   * @param renderDevice the renderDevice
-   */
-  public final void renderPre(final NiftyRenderEngine renderDevice) {
+  public Set <RenderStateType> getRenderStatesToSave() {
+    if (!active) {
+      if (isNotNeverStopRendering()) {
+        return new HashSet < RenderStateType >();
+      }
+    }
+
+    renderDeviceProxy.reset();
+
+    processingActiveEffects = true;
+    for (Effect e : activeEffects) {
+      if (e.isInherit() && (e.isActive() || e.isNeverStopRendering() || neverStopRendering)) {
+        e.execute(renderDeviceProxy);
+      }
+    }
+    resetProcessingActiveEffects();
+    return renderDeviceProxy.getStates();
+  }
+
+  public void renderPre(final NiftyRenderEngine renderDevice) {
     if (!active) {
       if (isNotNeverStopRendering()) {
         return;
@@ -76,11 +80,7 @@ public class EffectProcessor {
     checkFinish();
   }
 
-  /**
-   * render post.
-   * @param renderDevice the RenderDevice
-   */
-  public final void renderPost(final NiftyRenderEngine renderDevice) {
+  public void renderPost(final NiftyRenderEngine renderDevice) {
     if (isNotNeverStopRendering()) {
       if (!active) {
         return;
@@ -100,96 +100,31 @@ public class EffectProcessor {
     checkFinish();
   }
 
-  /**
-   * Should return a set of all RenderStates that should be saved before doing
-   * any rendering.
-   * @return set of RenderState to save
-   */
-  public Set < RenderStateType > getRenderStatesToSave() {
+  public void renderOverlay(final NiftyRenderEngine renderDevice) {
     if (!active) {
       if (isNotNeverStopRendering()) {
-        return new HashSet < RenderStateType >();
+        return;
       }
     }
-
-    renderDeviceProxy.reset();
 
     processingActiveEffects = true;
     for (Effect e : activeEffects) {
-      if (e.isInherit() && (e.isActive() || e.isNeverStopRendering() || neverStopRendering)) {
-        e.execute(renderDeviceProxy);
-      }
-    }
-    resetProcessingActiveEffects();
-    return renderDeviceProxy.getStates();
-  }
-
-  private boolean isNotNeverStopRendering() {
-    for (Effect e : activeEffects) {
-      if (e.isNeverStopRendering()) {
-        return false;
-      }
-    }
-    if (neverStopRendering) {
-      return false;
-    } else {
-      return true;  
-    }
-  }
-
-  /**
-   * checks if all effects are done and changes the active flag accordingly.
-   */
-  private void checkFinish() {
-    if (active) {
-      if (!isActive(activeEffects)) {
-        // done!
-        active = false;
-
-        if (listener != null) {
-          listener.perform();
+      if (e.isOverlay() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
+        e.update();
+        if (e.isOverlay() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
+          e.execute(renderDevice);
         }
       }
     }
-    resetProcessingActiveEffects();
+
+    checkFinish();
   }
 
-  private void resetProcessingActiveEffects() {
-    if (processingActiveEffects) {
-      if (clearActiveEffectsRequested) {
-        activeEffects.clear();
-        clearActiveEffectsRequested = false;
-      }
-      processingActiveEffects = false;
-    }
-  }
-
-  /**
-   * checks if the given list if effects contains at least one active effect.
-   * @param effectList the effectList to check for active entries.
-   * @return true, if at least one effect ist still active and false otherwise.
-   */
-  private boolean isActive(final List < Effect >  effectList) {
-    for (Effect e : effectList) {
-      if (e.isActive()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * checks if the effect is active.
-   * @return true, when active and false otherwise
-   */
-  public final boolean isActive() {
+  public boolean isActive() {
     return active;
   }
 
-  /**
-   * reset.
-   */
-  public final void reset() {
+  public void reset() {
     active = false;
     for (Effect e : activeEffects) {
       e.setActive(false);
@@ -201,39 +136,30 @@ public class EffectProcessor {
     }
   }
 
-    
-   /**
-    * Resets the effect with the given customKey (if it exists)
-    */
-     public final void reset(final String customKey) {
-       activeEffectsToRemove.clear();
+  public void reset(final String customKey) {
+     activeEffectsToRemove.clear();
 
-       for (Effect e : activeEffects) {
-         if (e.customKeyMatches(customKey)) {
-           e.setActive(false);
-           activeEffectsToRemove.add(e);
-         }
+     for (Effect e : activeEffects) {
+       if (e.customKeyMatches(customKey)) {
+         e.setActive(false);
+         activeEffectsToRemove.add(e);
        }
+     }
 
-       if (activeEffectsToRemove.size() == activeEffects.size()) {
-         if (!processingActiveEffects) {
-           activeEffects.clear();
-         } else {
-           clearActiveEffectsRequested = true;
-         }
+     if (activeEffectsToRemove.size() == activeEffects.size()) {
+       if (!processingActiveEffects) {
+         activeEffects.clear();
        } else {
-         for (Effect e : activeEffectsToRemove) {
-           activeEffects.remove(e);
-         }
+         clearActiveEffectsRequested = true;
        }
-    }
+     } else {
+       for (Effect e : activeEffectsToRemove) {
+         activeEffects.remove(e);
+       }
+     }
+  }
 
-  /**
-   * activate an effect for an element.
-   * @param newListener the EndNotify
-   * @param alternate alternate key to use
-   */
-  public final void activate(final EndNotify newListener, final String alternate) {
+  public void activate(final EndNotify newListener, final String alternate) {
     listener = newListener;
 
     // activate effects
@@ -261,13 +187,33 @@ public class EffectProcessor {
     }
   }
 
-  /**
-   * Helper method to start an effect.
-   * @param e Effect to start
-   * @param alternate alternate key to use
-   * @param customKey 
-   */
-  protected void startEffect(final Effect e, final String alternate, final String customKey) {
+  public String getStateString() {
+    if (activeEffects.isEmpty()) {
+      return "no active effects";
+    } else {
+      StringBuffer data = new StringBuffer();
+      for (Effect e : activeEffects) {
+        if (data.length() != 0) {
+          data.append(", ");
+        }
+        data.append(e.getStateString());
+      }
+      return data.toString();
+    }
+  }
+
+  public void setActive(final boolean newActive) {
+    active = newActive;
+    if (!active) {
+      reset();
+    }
+  }
+
+  public void processHover(final int x, final int y) {
+    processHoverInternal(x, y, allEffects);
+  }
+
+  private void startEffect(final Effect e, final String alternate, final String customKey) {
     if (alternate == null) {
       // no alternate key given
 
@@ -308,71 +254,7 @@ public class EffectProcessor {
     }
   }
 
-  /**
-   * get effects list.
-   * @return effect list
-   */
-  protected List < Effect > getEffects() {
-    return allEffects;
-  }
-
-  /**
-   * set activate.
-   * @param newActive new state
-   */
-  protected void setActive(final boolean newActive) {
-    active = newActive;
-    if (!active) {
-      reset();
-    }
-  }
-
-  /**
-   * get state string.
-   * @return String with state information
-   */
-  public String getStateString() {
-    if (activeEffects.isEmpty()) {
-      return "no active effects";
-    } else {
-      StringBuffer data = new StringBuffer();
-      for (Effect e : activeEffects) {
-        if (data.length() != 0) {
-          data.append(", ");
-        }
-        data.append(e.getStateString());
-      }
-      return data.toString();
-    }
-  }
-
-  /**
-   * get list of active effects.
-   * @return active effect list
-   */
-  public List < Effect > getActiveEffects() {
-    return activeEffects;
-  }
-
-  /**
-   * process hover effect.
-   * @param x mouse x position
-   * @param y mouse y position
-   */
-  public void processHover(final int x, final int y) {
-    processHoverInternal(x, y, getEffects());
-  }
-
-  /**
-   * process hover effects.
-   * @param x mouse x position
-   * @param y mouse y position
-   * @param effectList the effect list to check
-   */
-  private void processHoverInternal(
-      final int x,
-      final int y,
-      final List < Effect > effectList) {
+  private void processHoverInternal(final int x, final int y, final List < Effect > effectList) {
     for (Effect e : effectList) {
       if (e.isHoverEffect()) {
         if (!e.isActive()) {
@@ -384,7 +266,7 @@ public class EffectProcessor {
         if (e.isActive()) {
           if (!e.isInsideFalloff(x, y)) {
             e.setActive(false);
-            getActiveEffects().remove(e);
+            activeEffects.remove(e);
           } else {
             e.hoverDistance(x, y);
           }
@@ -393,44 +275,54 @@ public class EffectProcessor {
     }
   }
 
-  public boolean isHoverEffect() {
-    return hoverEffect;
-  }
-
-  public void renderOverlay(final NiftyRenderEngine renderDevice) {
-    if (!active) {
-      if (isNotNeverStopRendering()) {
-        return;
-      }
-    }
-
-    processingActiveEffects = true;
-    for (Effect e : activeEffects) {
-      if (e.isOverlay() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
-        e.update();
-        if (e.isOverlay() && (e.isActive() || e.isNeverStopRendering()|| neverStopRendering)) {
-          e.execute(renderDevice);
-        }
-      }
-    }
-
-    checkFinish();
-  }
-
-  public void setHoverEffect() {
-    hoverEffect = true;
-  }
-
-  public void setFalloff(final Falloff falloffParam) {
-    hoverFalloff = falloffParam;
-  }
-
-  public Falloff getFalloff() {
-    return hoverFalloff;
-  }
-
   public void removeAllEffects() {
     allEffects.clear();
     activeEffects.clear();
+  }
+
+  private boolean isNotNeverStopRendering() {
+    for (Effect e : activeEffects) {
+      if (e.isNeverStopRendering()) {
+        return false;
+      }
+    }
+    if (neverStopRendering) {
+      return false;
+    } else {
+      return true;  
+    }
+  }
+
+  private void checkFinish() {
+    if (active) {
+      if (!isActive(activeEffects)) {
+        // done!
+        active = false;
+
+        if (listener != null) {
+          listener.perform();
+        }
+      }
+    }
+    resetProcessingActiveEffects();
+  }
+
+  private void resetProcessingActiveEffects() {
+    if (processingActiveEffects) {
+      if (clearActiveEffectsRequested) {
+        activeEffects.clear();
+        clearActiveEffectsRequested = false;
+      }
+      processingActiveEffects = false;
+    }
+  }
+
+  private boolean isActive(final List < Effect >  effectList) {
+    for (Effect e : effectList) {
+      if (e.isActive()) {
+        return true;
+      }
+    }
+    return false;
   }
 }

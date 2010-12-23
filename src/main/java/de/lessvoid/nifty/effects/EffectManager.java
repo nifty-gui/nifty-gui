@@ -24,6 +24,7 @@ public class EffectManager {
    * all the effects.
    */
   private Map < EffectEventId, EffectProcessor > effectProcessor = new Hashtable < EffectEventId, EffectProcessor >();
+  private Falloff hoverFalloff;
 
   /**
    * alternateKey we should use.
@@ -48,8 +49,6 @@ public class EffectManager {
     effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onShow, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onHide, new EffectProcessor(true));
-
-    effectProcessor.get(EffectEventId.onHover).setHoverEffect();
   }
 
   /**
@@ -244,11 +243,11 @@ public class EffectManager {
   }
 
   public void setFalloff(final Falloff newFalloff) {
-    effectProcessor.get(EffectEventId.onHover).setFalloff(newFalloff);
+    hoverFalloff = newFalloff;
   }
 
   public Falloff getFalloff() {
-    return effectProcessor.get(EffectEventId.onHover).getFalloff();
+    return hoverFalloff;
   }
 
   public void removeAllEffects() {
