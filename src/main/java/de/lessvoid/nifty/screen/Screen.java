@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.lessvoid.console.Console;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
@@ -356,17 +355,6 @@ public class Screen {
    */
   public void addKeyboardInputHandler(final NiftyInputMapping mapping, final KeyInputHandler handler) {
     inputHandlers.add(new InputHandlerWithMapping(mapping, handler));
-  }
-
-  /**
-   * Debug output to the console.
-   * @param console console
-   */
-  public void debug(final Console console) {
-    console.output("mouse over elements");
-    console.output(mouseOverHandler.getInfoString());
-    console.output(focusHandler.toString());
-    console.output("running: " + running);
   }
 
   public String debugOutput() {

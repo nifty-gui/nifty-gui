@@ -67,13 +67,11 @@ public class Nifty implements NiftyInputConsumer {
   private Screen currentScreen = new NullScreen();
   private String currentLoaded;
   private boolean exit;
-  private NiftyDebugConsole console;
   private TimeProvider timeProvider;
   private List < ClosePopUp > closePopupList = new ArrayList < ClosePopUp >();
   private NiftyLoader loader;
   private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
   private List < EndOfFrameElementAction > endOfFrameElementActions = new ArrayList < EndOfFrameElementAction >();
-  private boolean useDebugConsole;
   private MouseInputEventQueue mouseInputEventQueue;
   private Collection < ScreenController > registeredScreenControllers = new ArrayList < ScreenController >();
   private String alternateKeyForNextLoadXml;
@@ -102,7 +100,6 @@ public class Nifty implements NiftyInputConsumer {
       final InputSystem newInputSystem,
       final TimeProvider newTimeProvider) {
     initialize(new NiftyRenderEngineImpl(newRenderDevice), new SoundSystem(newSoundDevice), newInputSystem, newTimeProvider);
-    console = new NiftyDebugConsole(newRenderDevice);
   }
 
   /**
@@ -171,9 +168,6 @@ public class Nifty implements NiftyInputConsumer {
         currentScreen.mouseEvent(mouseInputEventQueue.getLastMouseDownEvent());
       }
       currentScreen.renderLayers(renderEngine);
-      if (useDebugConsole) {
-        console.render(this, currentScreen, renderEngine);
-      }
     }
 
     if (exit) {
@@ -823,16 +817,6 @@ public class Nifty implements NiftyInputConsumer {
   public void moveElement(final Screen screen, final Element elementToMove, final Element destination, final EndNotify endNotify) {
     elementToMove.removeFromFocusHandler();
     endOfFrameElementActions.add(new EndOfFrameElementAction(screen, elementToMove, new ElementMoveAction(destination), endNotify));
-  }
-
-  public void toggleElementsDebugConsole() {
-    useDebugConsole = !useDebugConsole;
-    console.setOutputElements(true);
-  }
-
-  public void toggleEffectsDebugConsole() {
-    useDebugConsole = !useDebugConsole;
-    console.setOutputElements(false);
   }
 
   /**
