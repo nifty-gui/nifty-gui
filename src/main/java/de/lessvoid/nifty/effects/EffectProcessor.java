@@ -238,7 +238,7 @@ public class EffectProcessor {
 
     // activate effects
     for (Effect e : allEffects) {
-      startEffect(e, alternate);
+      startEffect(e, alternate, null);
     }
 
     if (!activeEffects.isEmpty()) {
@@ -291,9 +291,11 @@ public class EffectProcessor {
       }
     }
 
-    if (!e.customKeyMatches(customKey)) {
-      log.info("starting effect [" + e.getStateString() + "] canceled because customKey [" + customKey + "] does not match key set at the effect");
-      return;
+    if (customKey != null) {
+      if (!e.customKeyMatches(customKey)) {
+        log.info("starting effect [" + e.getStateString() + "] canceled because customKey [" + customKey + "] does not match key set at the effect");
+        return;
+      }
     }
 
     log.info("starting effect [" + e.getStateString() + "] with customKey [" + customKey + "]");
@@ -303,42 +305,6 @@ public class EffectProcessor {
       activeEffects.add(e);
     } else {
       log.info("NOT adding effect as active");
-    }
-  }
-
-  /**
-   * Helper method to start an effect.
-   * @param e Effect to start
-   * @param alternate alternate key to use
-   */
-  protected void startEffect(final Effect e, final String alternate) {
-    if (alternate == null) {
-      // no alternate key given
-
-      // don't start this effect when it has an alternateKey set.
-      if (e.isAlternateEnable()) {
-        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] and effect isAlternateEnable()");
-        return;
-      }
-    } else {
-      // we have an alternate key
-      if (e.isAlternateDisable() && e.alternateDisableMatches(alternate)) {
-        // don't start this effect. it has an alternateKey set and should be used for disable matches only
-        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] matches alternateDisableMatches()");
-        return;
-      }
-
-      if (e.isAlternateEnable() && !e.alternateEnableMatches(alternate)) {
-        // start with alternateEnable but names don't match ... don't start
-        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] does not match alternateEnableMatches()");
-        return;
-      }
-    }
-
-    log.info("starting effect [" + e.getStateString() + "]");
-    e.start();
-    if (!activeEffects.contains(e)) {
-      activeEffects.add(e);
     }
   }
 
@@ -411,7 +377,7 @@ public class EffectProcessor {
       if (e.isHoverEffect()) {
         if (!e.isActive()) {
           if (e.isInsideFalloff(x, y)) {
-            startEffect(e, null);
+            startEffect(e, null, null);
             setActive(true);
           }
         }
