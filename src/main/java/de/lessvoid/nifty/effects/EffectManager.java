@@ -73,7 +73,7 @@ public class EffectManager {
       final Element w,
       final TimeProvider time,
       final EndNotify listener) {
-    effectProcessor.get(id).activate(listener, alternateKey);
+    effectProcessor.get(id).activate(listener, alternateKey, null);
   }
 
   public void startEffect(
