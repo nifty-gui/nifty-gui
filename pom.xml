@@ -12,17 +12,17 @@
     <dependency>
       <groupId>lwjgl</groupId>
       <artifactId>lwjgl</artifactId>
-      <version>2.4.2</version>
+      <version>2.6</version>
     </dependency>
     <dependency>
       <groupId>lwjgl</groupId>
       <artifactId>jinput</artifactId>
-      <version>2.4.2</version>
+      <version>2.6</version>
     </dependency>
     <dependency>
       <groupId>lwjgl</groupId>
       <artifactId>lwjgl-util</artifactId>
-      <version>2.4.2</version>
+      <version>2.6</version>
     </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
