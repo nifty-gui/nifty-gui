@@ -20,15 +20,9 @@ public class EffectManager {
     public void render(EffectProcessor effectProcessor);
   }
 
-  /**
-   * all the effects.
-   */
   private Map < EffectEventId, EffectProcessor > effectProcessor = new Hashtable < EffectEventId, EffectProcessor >();
   private Falloff hoverFalloff;
-
-  /**
-   * alternateKey we should use.
-   */
+  private NiftyRenderDeviceProxy renderDeviceProxy = new NiftyRenderDeviceProxy();
   private String alternateKey;
   private boolean isEmpty = true;
 
@@ -56,7 +50,7 @@ public class EffectManager {
    * @param id the id
    * @param e the effect
    */
-  public final void registerEffect(final EffectEventId id, final Effect e) {
+  public void registerEffect(final EffectEventId id, final Effect e) {
     effectProcessor.get(id).registerEffect(e);
     isEmpty = false;
   }
@@ -68,7 +62,7 @@ public class EffectManager {
    * @param time TimeProvider
    * @param listener the {@link EndNotify} to use.
    */
-  public final void startEffect(
+  public void startEffect(
       final EffectEventId id,
       final Element w,
       final TimeProvider time,
@@ -96,7 +90,8 @@ public class EffectManager {
   public void begin(final NiftyRenderEngine renderDevice, final Element element) {
     Set < RenderStateType > renderStates = RenderStateType.allStatesCopy();
     for (EffectProcessor processor : effectProcessor.values()) {
-      renderStates.removeAll(processor.getRenderStatesToSave());
+      processor.getRenderStatesToSave(renderDeviceProxy);
+      renderStates.removeAll(renderDeviceProxy.getStates());
     }
     renderDevice.saveState(renderStates);
   }
