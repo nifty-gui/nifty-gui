@@ -117,7 +117,7 @@ public class Element {
    * enable element.
    */
   private boolean enabled;
-
+  
   /**
    * visible element.
    */
@@ -344,6 +344,7 @@ public class Element {
       + " constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]\n" + offset
       + " padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]\n" + offset
       + " focusable [" + focusable + "]\n" + offset
+      + " enabled [" + enabled + "]\n" + offset
       + " mouseable [" + visibleToMouseEvents + "]";
     return pos;
   }
@@ -363,6 +364,10 @@ public class Element {
 
     if (interactionBlocked) {
       return "interactionBlocked";
+    }
+    
+    if (!enabled) {
+    	return "disabled";
     }
 
     return "normal";
@@ -784,49 +789,7 @@ public class Element {
   }
 
   public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
-    if (effectEventId == EffectEventId.onStartScreen) {
-      if (!visible) {
-        return;
-      }
-      done = false;
-      interactionBlocked = true;
-    }
-    if (effectEventId == EffectEventId.onEndScreen) {
-      if (!visible) {
-        // it doesn't make sense to start the onEndScreen effect when the element is hidden
-        // just call the effectEndNotify directly and quit
-        effectEndNotiy.perform();
-        return;
-      }
-      done = true;
-      interactionBlocked = true;
-    }
-    // whenever the effect ends we forward to this event
-    // that checks first, if all child elements are finished
-    // and when yes forwards to the actual effectEndNotify event.
-    //
-    // this way we ensure that all child finished the effects
-    // before forwarding this to the real event handler.
-    //
-    // little bit tricky though :/
-    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotiy);
-
-    // start the effect for ourself
-    effectManager.startEffect(effectEventId, this, time, forwardToSelf);
-
-    // notify all child elements of the start effect
-    for (Element w : getElements()) {
-      w.startEffectInternal(effectEventId, forwardToSelf);
-    }
-
-    if (effectEventId == EffectEventId.onFocus) {
-      if (attachedInputControl != null) {
-        attachedInputControl.onFocus(true);
-      }
-    }
-
-    // just in case there was no effect activated, we'll check here, if we're already done
-    forwardToSelf.perform();
+    startEffect(effectEventId, effectEndNotiy, null);
   }
 
   public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
@@ -839,6 +802,9 @@ public class Element {
     }
     if (effectEventId == EffectEventId.onEndScreen) {
       if (!visible) {
+        // it doesn't make sense to start the onEndScreen effect when the element is hidden
+        // just call the effectEndNotify directly and quit
+        effectEndNotiy.perform();
         return;
       }
       done = true;
@@ -872,47 +838,7 @@ public class Element {
     forwardToSelf.perform();
   }
 
-  public void startEffectInternal(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
-    if (effectEventId == EffectEventId.onStartScreen) {
-      if (!visible) {
-        return;
-      }
-      done = false;
-      interactionBlocked = true;
-    }
-    if (effectEventId == EffectEventId.onEndScreen) {
-      if (!visible) {
-        return;
-      }
-      done = true;
-      interactionBlocked = true;
-    }
-    // whenever the effect ends we forward to this event
-    // that checks first, if all child elements are finished
-    // and when yes forwards to the actual effectEndNotify event.
-    //
-    // this way we ensure that all child finished the effects
-    // before forwarding this to the real event handler.
-    //
-    // little bit tricky though :/
-    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotiy);
-
-    // start the effect for ourself
-    effectManager.startEffect(effectEventId, this, time, forwardToSelf);
-
-    // notify all child elements of the start effect
-    for (Element w : getElements()) {
-      w.startEffectInternal(effectEventId, forwardToSelf);
-    }
-
-    if (effectEventId == EffectEventId.onFocus) {
-      if (attachedInputControl != null) {
-        attachedInputControl.onFocus(true);
-      }
-    }
-  }
-
-  public void startEffectInternal(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
+  private void startEffectInternal(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
     if (effectEventId == EffectEventId.onStartScreen) {
       if (!visible) {
         return;
@@ -996,14 +922,44 @@ public class Element {
    * enable this element.
    */
   public void enable() {
+    if (enabled) {
+      return;
+    }
+    internalEnable();
+    stopEffect(EffectEventId.onDisabled);
+    startEffect(EffectEventId.onEnabled);
+  }
+
+  private void internalEnable() {
     enabled = true;
+    if (focusable) {
+      screen.getFocusHandler().addElement(this);
+    }
+    for (int i=0; i<elements.size(); i++) {
+      elements.get(i).internalEnable();
+    }
   }
 
   /**
    * disable this element.
    */
   public void disable() {
+    if (!enabled) {
+      return;
+    }
+    internalDisable();
+    stopEffect(EffectEventId.onEnabled);
+    startEffect(EffectEventId.onDisabled);
+  }
+
+  private void internalDisable() {
     enabled = false;
+    if (focusable) {
+      removeFromFocusHandler();
+    }
+    for (int i=0; i<elements.size(); i++) {
+      elements.get(i).disable();
+    }
   }
 
   /**
@@ -1148,6 +1104,9 @@ public class Element {
       return false;
     }
     if (interactionBlocked) {
+      return false;
+    }
+    if (!enabled) {
       return false;
     }
     return true;
@@ -1305,7 +1264,7 @@ public class Element {
   }
 
   private boolean canHandleInteraction() {
-    return !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId.onEndScreen);
+    return enabled && !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId.onEndScreen);
   }
 
   public void onRelease() {

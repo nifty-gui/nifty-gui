@@ -123,7 +123,10 @@ public class EffectType extends XmlBaseType {
   }
 
   protected void initializeEffect(final Effect effect, final EffectEventId effectEventId) {
-    if (EffectEventId.onFocus.equals(effectEventId) || EffectEventId.onActive.equals(effectEventId)) {
+    if (EffectEventId.onFocus.equals(effectEventId) ||
+        EffectEventId.onActive.equals(effectEventId) ||
+        EffectEventId.onEnabled.equals(effectEventId) ||
+        EffectEventId.onDisabled.equals(effectEventId)) {
       effect.enableInfinite();
     }
   }

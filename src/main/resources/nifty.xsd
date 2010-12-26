@@ -25,6 +25,8 @@
   <xs:element name="onCustom" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onShow" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onHide" type="singleEffectType" substitutionGroup="singleEffectbase" />
+  <xs:element name="onEnabled" type="singleEffectType" substitutionGroup="singleEffectbase" />
+  <xs:element name="onDisabled" type="singleEffectType" substitutionGroup="singleEffectbase" />
 
   <xs:complexType name="elementType">
     <xs:sequence>

@@ -241,6 +241,11 @@ public class Screen {
   private void activeEffectStart() {
     for (Element w : layerElements) {
       w.startEffect(EffectEventId.onActive, null);
+
+      // in case this element is disabled we will start the disabled effect right here.
+      if (!w.isEnabled()) {
+        w.startEffect(EffectEventId.onDisabled, null);
+      }
     }
   }
 

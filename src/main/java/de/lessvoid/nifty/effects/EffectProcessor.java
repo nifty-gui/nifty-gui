@@ -165,43 +165,15 @@ public class EffectProcessor {
   }
 
   private void startEffect(final Effect e, final String alternate, final String customKey) {
-    if (alternate == null) {
-      // no alternate key given
-
-      // don't start this effect when it has an alternateKey set.
-      if (e.isAlternateEnable()) {
-        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] and effect isAlternateEnable()");
-        return;
-      }
-    } else {
-      // we have an alternate key
-      if (e.isAlternateDisable() && e.alternateDisableMatches(alternate)) {
-        // don't start this effect. it has an alternateKey set and should be used for disable matches only
-        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] matches alternateDisableMatches()");
-        return;
-      }
-
-      if (e.isAlternateEnable() && !e.alternateEnableMatches(alternate)) {
-        // start with alternateEnable but names don't match ... don't start
-        log.info("starting effect [" + e.getStateString() + "] canceled because alternateKey [" + alternate + "] does not match alternateEnableMatches()");
-        return;
-      }
+    if (!e.start(alternate, customKey)) {
+      return;
     }
 
-    if (customKey != null) {
-      if (!e.customKeyMatches(customKey)) {
-        log.info("starting effect [" + e.getStateString() + "] canceled because customKey [" + customKey + "] does not match key set at the effect");
-        return;
-      }
-    }
-
-    log.info("starting effect [" + e.getStateString() + "] with customKey [" + customKey + "]");
-    e.start();
     if (!activeEffects.contains(e)) {
       log.info("adding effect as active");
       activeEffects.add(e);
     } else {
-      log.info("NOT adding effect as active");
+      log.info("NOT adding effect as active because it's already registered as active");
     }
   }
 

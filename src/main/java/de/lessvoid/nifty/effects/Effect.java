@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.effects;
 
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
@@ -16,6 +17,7 @@ import de.lessvoid.nifty.tools.time.TimeInterpolator;
  * @author void
  */
 public class Effect {
+  private static Logger log = Logger.getLogger(Effect.class.getName());
   private EffectEventId effectEventId;
   private boolean active;
   private Element element;
@@ -69,48 +71,41 @@ public class Effect {
     infiniteEffect = true;
   }
 
-  /**
-   * initialize the effect.
-   * @param elementParam Element
-   * @param effectImplParam EffectImpl
-   * @param parameterParam Properties
-   * @param timeParam TimeProvider
-   */
   public void init(
       final Element elementParam,
       final EffectImpl effectImplParam,
       final EffectProperties parameterParam,
       final TimeProvider timeParam,
       final LinkedList < Object > controllers) {
-    effectImpl = effectImplParam;
     element = elementParam;
+    effectImpl = effectImplParam;
     parameter = parameterParam;
     parameter.put("effectEventId", effectEventId);
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
     effectEvents.init(nifty, controllers, parameter);
   }
 
-  /**
-   * start the effect.
-   */
-  public void start() {
+  public boolean start(final String alternate, final String customKey) {
+    if (!canStartEffect(alternate, customKey)) {
+      return false;
+    }
+
+    log.info("starting effect [" + getStateString() + "] with customKey [" + customKey + "]");
+    internalStart();
+    return true;
+  }
+
+  private void internalStart() {
     active = true;
     timeInterpolator.start();
     effectEvents.onStartEffect(parameter);
     effectImpl.activate(nifty, element, parameter);
   }
 
-  /**
-   * update effect.
-   */
   public void update() {
     setActive(timeInterpolator.update());
   }
 
-  /**
-   * execute the effect.
-   * @param r RenderDevice
-   */
   public void execute(final NiftyRenderEngine r) {
     if (isHoverEffect()) {
       effectImpl.execute(element, timeInterpolator.getValue(), falloff, r);
@@ -119,18 +114,10 @@ public class Effect {
     }
   }
 
-  /**
-   * is this effect still active?
-   * @return active flag
-   */
   public boolean isActive() {
     return active;
   }
 
-  /**
-   * change the effects active state.
-   * @param newActive new active state
-   */
   public void setActive(final boolean newActive) {
     boolean ended = false;
     if (this.active && !newActive) {
@@ -144,28 +131,12 @@ public class Effect {
     }
   }
 
-  /**
-   * post or pre mode.
-   * @return post, true or pre, false
-   */
   public boolean isPost() {
     return post;
   }
 
-  public boolean isAlternateEnable() {
-    return (alternateEnable != null);
-  }
-
   public boolean isAlternateDisable() {
     return (alternateDisable != null);
-  }
-
-  public boolean alternateEnableMatches(final String alternate) {
-    return alternate != null && alternate.equals(alternateEnable);
-  }
-
-  public boolean alternateDisableMatches(final String alternate) {
-    return alternate != null && alternate.equals(alternateDisable);
   }
 
   public boolean customKeyMatches(final String customKeyToCheck) {
@@ -175,27 +146,16 @@ public class Effect {
       } else {
         return false;
       }
-    } else {
-      if (customKeyToCheck.equals(customKey)) {
-        return true;
-      } else {
-        return false;
-      }
+    } else if (customKeyToCheck.equals(customKey)) {
+      return true;
     }
+    return false;
   }
 
-  /**
-   * get state string.
-   * @return state string
-   */
   public String getStateString() {
     return "(" + effectImpl.getClass().getSimpleName() + "[" + customKey + "]" + ")";
   }
 
-  /**
-   * should this effect inherit to children.
-   * @return true, when yes and false, when not
-   */
   public boolean isInherit() {
     return inherit;
   }
@@ -204,24 +164,13 @@ public class Effect {
     return hoverEffect;
   }
 
-  /**
-   * hover distance.
-   * @param x x position
-   * @param y y position
-   */
-  public final void hoverDistance(final int x, final int y) {
+  public void hoverDistance(final int x, final int y) {
     if (falloff != null) {
       falloff.updateFalloffValue(element, x, y);
     }
   }
 
-  /**
-   * checks to see if the given mouse position is inside the hover falloff.
-   * @param x x position of cursor
-   * @param y y position of cursor
-   * @return true, when inside and false otherwise
-   */
-  public final boolean isInsideFalloff(final int x, final int y) {
+  public boolean isInsideFalloff(final int x, final int y) {
     if (falloff != null) {
       return falloff.isInside(element, x, y);
     } else {
@@ -235,5 +184,49 @@ public class Effect {
 
   public boolean isNeverStopRendering() {
     return neverStopRendering;
+  }
+
+  private boolean canStartEffect(final String alternate, final String customKey) {
+    if (alternate == null) {
+      // no alternate key given
+
+      // don't start this effect when it has an alternateKey set.
+      if (isAlternateEnable()) {
+        log.info("starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] and effect isAlternateEnable()");
+        return false;
+      }
+    } else {
+      // we have an alternate key
+      if (isAlternateDisable() && alternateDisableMatches(alternate)) {
+        // don't start this effect. it has an alternateKey set and should be used for disable matches only
+        log.info("starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] matches alternateDisableMatches()");
+        return false;
+      }
+
+      if (isAlternateEnable() && !alternateEnableMatches(alternate)) {
+        // start with alternateEnable but names don't match ... don't start
+        log.info("starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] does not match alternateEnableMatches()");
+        return false;
+      }
+    }
+
+    if (!customKeyMatches(customKey)) {
+      log.info("starting effect [" + getStateString() + "] canceled because customKey [" + customKey + "] does not match key set at the effect");
+      return false;
+    }
+
+    return true;
+  }
+
+  private boolean isAlternateEnable() {
+    return (alternateEnable != null);
+  }
+
+  private boolean alternateEnableMatches(final String alternate) {
+    return alternate != null && alternate.equals(alternateEnable);
+  }
+
+  private boolean alternateDisableMatches(final String alternate) {
+    return alternate != null && alternate.equals(alternateDisable);
   }
 }

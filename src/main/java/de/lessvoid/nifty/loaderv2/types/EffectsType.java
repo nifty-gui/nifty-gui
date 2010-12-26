@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.StringHelper;
@@ -30,6 +29,8 @@ public class EffectsType extends XmlBaseType {
   protected Collection < EffectType > onCustom = new ArrayList < EffectType >();
   protected Collection < EffectType > onShow = new ArrayList < EffectType >();
   protected Collection < EffectType > onHide = new ArrayList < EffectType >();
+  protected Collection < EffectType > onEnabled = new ArrayList < EffectType >();
+  protected Collection < EffectType > onDisabled = new ArrayList < EffectType >();
 
   public EffectsType() {
   }
@@ -56,6 +57,8 @@ public class EffectsType extends XmlBaseType {
     copyCollection(onCustom, src.onCustom);
     copyCollection(onShow, src.onShow);
     copyCollection(onHide, src.onHide);
+    copyCollection(onEnabled, src.onEnabled);
+    copyCollection(onDisabled, src.onDisabled);
   }
 
   void mergeEffects(final EffectsType src) {
@@ -70,6 +73,8 @@ public class EffectsType extends XmlBaseType {
     mergeCollection(onCustom, src.onCustom);
     mergeCollection(onShow, src.onShow);
     mergeCollection(onHide, src.onHide);
+    mergeCollection(onEnabled, src.onEnabled);
+    mergeCollection(onDisabled, src.onDisabled);
   }
 
   Collection < EffectType > copyCollection(
@@ -100,7 +105,7 @@ public class EffectsType extends XmlBaseType {
     
     for (Collection<EffectType> col : new Collection[]{
         onStartScreen, onEndScreen, onHover, onClick, onFocus,
-        onLostFocus, onGetFocus, onActive, onCustom, onShow, onHide}) {
+        onLostFocus, onGetFocus, onActive, onCustom, onShow, onHide, onEnabled, onDisabled}) {
       for (EffectType e : col) {
         e.translateSpecialValues(nifty, screen);
       }
@@ -151,6 +156,14 @@ public class EffectsType extends XmlBaseType {
     onCustom.add(effectParam);
   }
 
+  public void addOnDisabled(final EffectType effectParam) {
+    onDisabled.add(effectParam);
+  }
+
+  public void addOnEnabled(final EffectType effectParam) {
+    onEnabled.add(effectParam);
+  }
+
   public String output(final int offset) {
     return StringHelper.whitespace(offset) + "<effects> (" + getAttributes().toString() + ")"
       + getCollectionString("onStartScreen", onStartScreen, offset + 1)
@@ -163,7 +176,9 @@ public class EffectsType extends XmlBaseType {
       + getCollectionString("onActive", onActive, offset + 1)
       + getCollectionString("onCustom", onCustom, offset + 1)
       + getCollectionString("onShow", onShow, offset + 1)
-      + getCollectionString("onHide", onHide, offset + 1);
+      + getCollectionString("onHide", onHide, offset + 1)
+      + getCollectionString("onEnabled", onEnabled, offset + 1)
+      + getCollectionString("onDisabled", onDisabled, offset + 1);
   }
 
   private String getCollectionString(
@@ -200,6 +215,8 @@ public class EffectsType extends XmlBaseType {
     initEffect(EffectEventId.onCustom, onCustom, element, nifty, screen, attributes, controllers);
     initEffect(EffectEventId.onShow, onShow, element, nifty, screen, attributes, controllers);
     initEffect(EffectEventId.onHide, onHide, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onEnabled, onEnabled, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onDisabled, onDisabled, element, nifty, screen, attributes, controllers);
   }
 
   private void initEffect(
@@ -222,18 +239,6 @@ public class EffectsType extends XmlBaseType {
 
   public void refreshFromAttributes(final ControlEffectsAttributes effects) {
     effects.refreshEffectsType(this);
-
-//    refreshEffect(EffectEventId.onStartScreen, onStartScreen);
-//    refreshEffect(EffectEventId.onEndScreen, onEndScreen);
-//    refreshEffect(EffectEventId.onHover, onHover);
-//    refreshEffect(EffectEventId.onClick, onClick);
-//    refreshEffect(EffectEventId.onFocus, onFocus);
-//    refreshEffect(EffectEventId.onLostFocus, onLostFocus);
-//    refreshEffect(EffectEventId.onGetFocus, onGetFocus);
-//    refreshEffect(EffectEventId.onActive, onActive);
-//    refreshEffect(EffectEventId.onCustom, onCustom);
-//    refreshEffect(EffectEventId.onShow, onShow);
-//    refreshEffect(EffectEventId.onHide, onHide);
   }
 
   public void apply(final EffectsType effects, final String styleId) {
@@ -248,6 +253,8 @@ public class EffectsType extends XmlBaseType {
     applyEffectCollection(onCustom, effects.onCustom, styleId);
     applyEffectCollection(onShow, effects.onShow, styleId);
     applyEffectCollection(onHide, effects.onHide, styleId);
+    applyEffectCollection(onEnabled, effects.onEnabled, styleId);
+    applyEffectCollection(onDisabled, effects.onDisabled, styleId);
   }
 
   void applyEffectCollection(final Collection < EffectType > src, final Collection < EffectType > dst, final String styleId) {
@@ -270,6 +277,8 @@ public class EffectsType extends XmlBaseType {
     resolveParameterCollection(onCustom, src);
     resolveParameterCollection(onShow, src);
     resolveParameterCollection(onHide, src);
+    resolveParameterCollection(onEnabled, src);
+    resolveParameterCollection(onDisabled, src);
   }
 
   void resolveParameterCollection(
@@ -293,6 +302,8 @@ public class EffectsType extends XmlBaseType {
     removeAllEffectsWithStyleId(onCustom, styleId);
     removeAllEffectsWithStyleId(onShow, styleId);
     removeAllEffectsWithStyleId(onHide, styleId);
+    removeAllEffectsWithStyleId(onEnabled, styleId);
+    removeAllEffectsWithStyleId(onDisabled, styleId);
   }
 
   private void removeAllEffectsWithStyleId(final Collection < EffectType > source, final String styleId) {

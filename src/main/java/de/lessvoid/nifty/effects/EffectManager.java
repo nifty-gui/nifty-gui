@@ -43,6 +43,8 @@ public class EffectManager {
     effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onShow, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onHide, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onEnabled, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onDisabled, new EffectProcessor(true));
   }
 
   /**
@@ -116,6 +118,8 @@ public class EffectManager {
     phase.render(effectProcessor.get(EffectEventId.onLostFocus));
     phase.render(effectProcessor.get(EffectEventId.onGetFocus));
     phase.render(effectProcessor.get(EffectEventId.onClick));
+    phase.render(effectProcessor.get(EffectEventId.onEnabled));
+    phase.render(effectProcessor.get(EffectEventId.onDisabled));
   }
 
   public void renderPre(final NiftyRenderEngine renderEngine, final Element element) {

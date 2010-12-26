@@ -28,6 +28,8 @@
       <element name="onCustom" type="EffectType" occurs="zeroOrMore" />
       <element name="onShow" type="EffectType" occurs="zeroOrMore" />
       <element name="onHide" type="EffectType" occurs="zeroOrMore" />
+      <element name="onEnabled" type="EffectType" occurs="zeroOrMore" />
+      <element name="onDisabled" type="EffectType" occurs="zeroOrMore" />
     </group>
   </type>
   <type name="StyleType">
