@@ -35,11 +35,13 @@ public final class NiftyDefaults {
     nifty.registerEffect(new RegisterEffectType("pulsate", "de.lessvoid.nifty.effects.impl.Pulsate"));
     nifty.registerEffect(new RegisterEffectType("remote", "de.lessvoid.nifty.effects.impl.Remote"));
     nifty.registerEffect(new RegisterEffectType("renderElement", "de.lessvoid.nifty.effects.impl.RenderElement"));
+    nifty.registerEffect(new RegisterEffectType("renderQuad", "de.lessvoid.nifty.effects.impl.RenderQuad"));
     nifty.registerEffect(new RegisterEffectType("restoreState", "de.lessvoid.nifty.effects.impl.RestoreState"));
     nifty.registerEffect(new RegisterEffectType("saveState", "de.lessvoid.nifty.effects.impl.SaveState"));
     nifty.registerEffect(new RegisterEffectType("shake", "de.lessvoid.nifty.effects.impl.Shake"));
     nifty.registerEffect(new RegisterEffectType("show", "de.lessvoid.nifty.effects.impl.Show"));
     nifty.registerEffect(new RegisterEffectType("textColor", "de.lessvoid.nifty.effects.impl.TextColor"));
+    nifty.registerEffect(new RegisterEffectType("textColorAnimated", "de.lessvoid.nifty.effects.impl.TextColorAnimated"));
     nifty.registerEffect(new RegisterEffectType("textSize", "de.lessvoid.nifty.effects.impl.TextSize"));
     nifty.registerEffect(new RegisterEffectType("textSizePulsate", "de.lessvoid.nifty.effects.impl.TextSizePulsate"));
     nifty.registerEffect(new RegisterEffectType("updateScrollpanelPositionToDisplayElement", "de.lessvoid.nifty.effects.impl.UpdateScrollpanelPositionToDisplayElement"));    

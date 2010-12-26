@@ -13,11 +13,13 @@ import de.lessvoid.nifty.tools.Color;
  * TextColor Effect.
  * @author void
  */
-public class TextColor implements EffectImpl {
-  private Color color;
+public class TextColorAnimated implements EffectImpl {
+  private Color startColor;
+  private Color endColor;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    color = new de.lessvoid.nifty.tools.Color(parameter.getProperty("color", "#ffff"));
+    startColor = new Color(parameter.getProperty("startColor", "#0000"));
+    endColor = new Color(parameter.getProperty("endColor", "#ffff"));
   }
 
   public void execute(
@@ -25,6 +27,15 @@ public class TextColor implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
+    Color color = startColor.linear(endColor, normalizedTime);
+    if (falloff == null) {
+      setColor(r, color);
+    } else {
+      setColor(r, color.mutiply(falloff.getFalloffValue()));
+    }
+  }
+
+  private void setColor(final NiftyRenderEngine r, final Color color) {
     if (r.isColorAlphaChanged()) {
       r.setColorIgnoreAlpha(color);
     } else {

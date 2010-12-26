@@ -11,15 +11,18 @@ import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
- * Color - color overlay.
+ * This renders a quad AND interpolates the color between startColor and endColor
+ * over the lifetime of the effect.
  * @author void
  */
-public class ColorBar implements EffectImpl {
-  private Color color;
+public class RenderQuad implements EffectImpl {
+  private Color startColor;
+  private Color endColor;
   private SizeValue width;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    color = new Color(parameter.getProperty("color", "#ffffffff"));
+    startColor = new Color(parameter.getProperty("startColor", "#0000"));
+    endColor = new Color(parameter.getProperty("endColor", "#ffff"));
     width = new SizeValue(parameter.getProperty("width"));
   }
 
@@ -29,17 +32,21 @@ public class ColorBar implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     r.saveState(null);
+
+    Color color = startColor.linear(endColor, normalizedTime);
     if (falloff == null) {
       r.setColor(color);
     } else {
       r.setColor(color.mutiply(falloff.getFalloffValue()));
     }
+
     int size = (int) width.getValue(element.getParent().getWidth());
     if (size == -1) {
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
     } else {
       r.renderQuad((element.getX() + element.getWidth() / 2) - size / 2, element.getY(), size, element.getHeight());
     }
+
     r.restoreState();
   }
 
