@@ -188,8 +188,8 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   public boolean processMouseEvent(final MouseInputEvent mouseEvent) {
-    if (log.isLoggable(Level.INFO)) {
-      log.info(mouseEvent.toString());
+    if (log.isLoggable(Level.FINE)) {
+      log.fine(mouseEvent.toString());
     }
     boolean handled = true;
     if (mouseInputEventQueue.canProcess(mouseEvent)) {
