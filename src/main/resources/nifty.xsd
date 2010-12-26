@@ -192,6 +192,13 @@
     <xs:attribute name="filename" type="xs:string" use="required" />
   </xs:complexType>
 
+  <xs:complexType name="registerMouseCursorType">
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="filename" type="xs:string" use="required" />
+    <xs:attribute name="hotspotX" type="xs:string" use="optional" />
+    <xs:attribute name="hotspotY" type="xs:string" use="optional" />
+  </xs:complexType>
+
   <xs:complexType name="resourceBundleType">
     <xs:attribute name="id" type="xs:string" use="required" />
     <xs:attribute name="filename" type="xs:string" use="required" />
@@ -333,6 +340,7 @@
       <xs:element name="registerSound" type="registerSoundType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="registerEffect" type="registerEffectType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="registerMusic" type="registerMusicType" maxOccurs="unbounded" minOccurs="0" />
+      <xs:element name="registerMouseCursor" type="registerMouseCursorType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="resourceBundle" type="resourceBundleType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="style" type="styleType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="controlDefinition" type="controlDefinition" maxOccurs="unbounded" minOccurs="0" />

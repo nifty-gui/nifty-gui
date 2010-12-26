@@ -4,6 +4,7 @@
   <type name="RegisterSoundType" />
   <type name="RegisterEffectType" />
   <type name="RegisterMusicType" />
+  <type name="RegisterMouseCursorType" />
   <type name="ResourceBundleType" />
   <type name="AttributesType" />
   <type name="InteractType" />
@@ -75,6 +76,7 @@
       <element name="registerSound" type="RegisterSoundType" occurs="zeroOrMore" />
       <element name="registerEffect" type="RegisterEffectType" occurs="zeroOrMore" />
       <element name="registerMusic" type="RegisterMusicType" occurs="zeroOrMore" />
+      <element name="registerMouseCursor" type="RegisterMouseCursorType" occurs="zeroOrMore" />
       <element name="resourceBundle" type="ResourceBundleType" occurs="zeroOrMore" />
       <element name="style" type="StyleType" occurs="zeroOrMore" />
       <element name="controlDefinition" type="ControlDefinitionType" occurs="zeroOrMore" />

@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.render;
 
 import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
 
 import de.lessvoid.nifty.NiftyMouse;
 import de.lessvoid.nifty.spi.input.InputSystem;
@@ -10,6 +12,8 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 public class NiftyMouseImpl implements NiftyMouse {
   private RenderDevice renderDevice;
   private InputSystem inputSystem;
+  private Map < String, MouseCursor > registeredMouseCursors = new Hashtable < String, MouseCursor >();
+  private String currentId;
 
   public NiftyMouseImpl(final RenderDevice renderDevice, final InputSystem inputSystem) {
     this.renderDevice = renderDevice;
@@ -17,18 +21,41 @@ public class NiftyMouseImpl implements NiftyMouse {
   }
 
   @Override
-  public MouseCursor registerMouseCursor(final String filename, final int hotspotX, final int hotspotY) throws IOException {
-    return renderDevice.createMouseCursor(filename, hotspotX, hotspotY);
+  public void registerMouseCursor(final String id, final String filename, final int hotspotX, final int hotspotY) throws IOException {
+    MouseCursor mouseCursor = renderDevice.createMouseCursor(filename, hotspotX, hotspotY);
+    registeredMouseCursors.put(id, mouseCursor);
+  }
+
+  @Override
+  public String getCurrentId() {
+    return currentId;
+  }
+
+  @Override
+  public void unregisterAll() {
+    for (MouseCursor cursor : registeredMouseCursors.values()) {
+      cursor.dispose();
+    }
+    registeredMouseCursors.clear();
   }
 
   @Override
   public void resetMouseCursor() {
+    currentId = null;
     renderDevice.disableMouseCursor();
   }
 
   @Override
-  public void enableMouseCursor(final MouseCursor cursor) {
-    renderDevice.enableMouseCursor(cursor);
+  public void enableMouseCursor(final String id) {
+    if (id == null) {
+      resetMouseCursor();
+      return;
+    }
+    if (id.equals(currentId)) {
+      return;
+    }
+    renderDevice.enableMouseCursor(registeredMouseCursors.get(id));
+    currentId = id;
   }
 
   @Override

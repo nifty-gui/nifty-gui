@@ -105,15 +105,18 @@ public class Attributes {
     return defaultValue;
   }
 
-  /**
-   * get as integer.
-   * @param name name
-   * @return Integer
-   */
   public Integer getAsInteger(final String name) {
     String value = get(name);
     if (value == null) {
       return null;
+    }
+    return Integer.valueOf(value);
+  }
+
+  public Integer getAsInteger(final String name, final int defaultValue) {
+    String value = get(name);
+    if (value == null) {
+      return defaultValue;
     }
     return Integer.valueOf(value);
   }

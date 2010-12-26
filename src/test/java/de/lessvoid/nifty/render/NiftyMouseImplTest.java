@@ -5,6 +5,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 
@@ -32,11 +33,17 @@ public class NiftyMouseImplTest {
   }
 
   @Test
+  public void testGetCurrentMouseCursorDefaults() {
+    replay(renderDeviceMock);
+    assertNull(niftyMouse.getCurrentId());
+  }
+
+  @Test
   public void testRegisterMouseCursor() throws IOException {
     expect(renderDeviceMock.createMouseCursor("test", 10, 20)).andReturn(mouseCursor);
     replay(renderDeviceMock);
 
-    assertEquals(mouseCursor, niftyMouse.registerMouseCursor("test", 10, 20));
+    niftyMouse.registerMouseCursor("id", "test", 10, 20);
   }
 
   @Test(expected = IOException.class)
@@ -44,7 +51,7 @@ public class NiftyMouseImplTest {
     expect(renderDeviceMock.createMouseCursor("test", 10, 20)).andThrow(new IOException("load error"));
     replay(renderDeviceMock);
 
-    niftyMouse.registerMouseCursor("test", 10, 20);
+    niftyMouse.registerMouseCursor("id", "test", 10, 20);
   }
 
   @Test
@@ -53,6 +60,8 @@ public class NiftyMouseImplTest {
     replay(renderDeviceMock);
 
     niftyMouse.resetMouseCursor();
+
+    assertNull(niftyMouse.getCurrentId());
   }
 
   @Test
@@ -61,7 +70,60 @@ public class NiftyMouseImplTest {
     renderDeviceMock.enableMouseCursor(mouseCursor);
     replay(renderDeviceMock);
 
-    niftyMouse.enableMouseCursor(niftyMouse.registerMouseCursor("test", 10, 20));
+    niftyMouse.registerMouseCursor("id", "test", 10, 20);
+    niftyMouse.enableMouseCursor("id");
+
+    assertEquals("id", niftyMouse.getCurrentId());
+  }
+
+  @Test
+  public void testEnableMouseCursorTwice() throws IOException {
+    expect(renderDeviceMock.createMouseCursor("test", 10, 20)).andReturn(mouseCursor);
+    renderDeviceMock.enableMouseCursor(mouseCursor); // only called once
+    replay(renderDeviceMock);
+
+    niftyMouse.registerMouseCursor("id", "test", 10, 20);
+    niftyMouse.enableMouseCursor("id");
+    niftyMouse.enableMouseCursor("id");
+
+    assertEquals("id", niftyMouse.getCurrentId());
+  }
+
+  @Test
+  public void testEnableMouseCursorTwiceWithId() throws IOException {
+    expect(renderDeviceMock.createMouseCursor("test", 10, 20)).andReturn(mouseCursor);
+    renderDeviceMock.enableMouseCursor(mouseCursor); // only called once
+    replay(renderDeviceMock);
+
+    niftyMouse.registerMouseCursor("id", "test", 10, 20);
+    niftyMouse.enableMouseCursor("id");
+    niftyMouse.enableMouseCursor("id");
+
+    assertEquals("id", niftyMouse.getCurrentId());
+  }
+
+  @Test
+  public void testEnableMouseCursorAndReset() throws IOException {
+    expect(renderDeviceMock.createMouseCursor("test", 10, 20)).andReturn(mouseCursor);
+    renderDeviceMock.enableMouseCursor(mouseCursor);
+    renderDeviceMock.disableMouseCursor();
+    replay(renderDeviceMock);
+
+    niftyMouse.registerMouseCursor("id", "test", 10, 20);
+    niftyMouse.enableMouseCursor("id");
+    niftyMouse.resetMouseCursor();
+
+    assertNull(niftyMouse.getCurrentId());
+  }
+
+  @Test
+  public void testEnableMouseCursorNullId() throws IOException {
+    renderDeviceMock.disableMouseCursor();
+    replay(renderDeviceMock);
+
+    niftyMouse.enableMouseCursor((String) null);
+
+    assertNull(niftyMouse.getCurrentId());
   }
 
   public class TestMouseCursor implements MouseCursor {

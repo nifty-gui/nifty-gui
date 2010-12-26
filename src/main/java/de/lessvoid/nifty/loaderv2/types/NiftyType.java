@@ -18,6 +18,7 @@ public class NiftyType extends XmlBaseType {
   private Collection < UseControlsType > useControls = new ArrayList < UseControlsType >();
   private Collection < RegisterSoundType > registeredSounds = new ArrayList < RegisterSoundType >();
   private Collection < RegisterMusicType > registeredMusic = new ArrayList < RegisterMusicType >();
+  private Collection < RegisterMouseCursorType > registeredMouseCursor = new ArrayList < RegisterMouseCursorType >();
   private Collection < RegisterEffectType > registeredEffect = new ArrayList < RegisterEffectType >();
   private Collection < ResourceBundleType > resourceBundles = new ArrayList < ResourceBundleType >();
   private Collection < PopupType > popups = new ArrayList < PopupType >();
@@ -42,6 +43,10 @@ public class NiftyType extends XmlBaseType {
 
   public void addRegisterMusic(final RegisterMusicType registerMusic) {
     registeredMusic.add(registerMusic);
+  }
+
+  public void addRegisterMouseCursor(final RegisterMouseCursorType registerMouseCursor) {
+    registeredMouseCursor.add(registerMouseCursor);
   }
 
   public void addResourceBundle(final ResourceBundleType resourceBundle) {
@@ -111,6 +116,13 @@ public class NiftyType extends XmlBaseType {
       registerMusicType.materialize(nifty.getSoundSystem());
     }
     log.info("registerMusic [" + stopWatch.stop() + "]");
+
+    stopWatch.start();
+    for (RegisterMouseCursorType registerMouseCursorType : registeredMouseCursor) {
+      registerMouseCursorType.translateSpecialValues(nifty, null);
+      registerMouseCursorType.materialize(nifty, log);
+    }
+    log.info("registerMouseCursor [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (ScreenType screen : screens) {
