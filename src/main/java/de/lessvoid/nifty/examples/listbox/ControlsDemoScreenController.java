@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.listbox;
 
 import org.bushe.swing.event.annotation.AnnotationProcessor;
+import org.bushe.swing.event.annotation.EventTopicPatternSubscriber;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 
 import de.lessvoid.nifty.Nifty;
@@ -12,11 +13,8 @@ import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.ListBoxSelectionMode;
-import de.lessvoid.nifty.controls.ListBoxSelectionModeDisabled;
-import de.lessvoid.nifty.controls.ListBoxSelectionModeMulti;
-import de.lessvoid.nifty.controls.ListBoxSelectionModeSingle;
 import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -27,6 +25,8 @@ public class ControlsDemoScreenController implements ScreenController {
   private ListBox<JustAnExampleModelClass> listBox;
   private ListBox<JustAnExampleModelClass> selectionListBox;
   private CheckBox multiSelectionCheckBox;
+  private CheckBox disableSelectionCheckBox;
+  private CheckBox forceSelectionCheckBox;
   private TextFieldControl addTextField;
 
   @Override
@@ -39,6 +39,8 @@ public class ControlsDemoScreenController implements ScreenController {
     selectionListBox = getListBox("selectionListBox");
     addTextField = screen.findControl("addTextField", TextFieldControl.class);
     multiSelectionCheckBox = screen.findNiftyControl("multiSelectionCheckBox", CheckBox.class);
+    disableSelectionCheckBox = screen.findNiftyControl("disableSelectionCheckBox", CheckBox.class);
+    forceSelectionCheckBox  = screen.findNiftyControl("forceSelectionCheckBox", CheckBox.class);
 
     // just add some items to the listbox
     listBox.addItem(new JustAnExampleModelClass("You can add more lines to this ListBox."));
@@ -54,6 +56,11 @@ public class ControlsDemoScreenController implements ScreenController {
 
   @Override
   public void onEndScreen() {
+  }
+
+  public void changeStyle(final String styleName) {
+    nifty.loadStyleFile(styleName);
+    nifty.gotoScreen("start");
   }
 
   /**
@@ -83,14 +90,15 @@ public class ControlsDemoScreenController implements ScreenController {
     listBox.removeAllItems(listBox.getSelection());
   }
 
-  @EventTopicSubscriber(topic="multiSelectionCheckBox", eventServiceName="NiftyEventBus")
-  public void onMultiSelectionCheckBoxChanged(final String id, final CheckBoxStateChangedEvent event) {
-    listBox.changeSelectionMode(decideSelectionModeMulti(event.isChecked()));
-  }
-
-  @EventTopicSubscriber(topic="disableSelectionCheckBox", eventServiceName="NiftyEventBus")
-  public void onDisableSelectionCheckBoxChanged(final String id, final CheckBoxStateChangedEvent event) {
-    listBox.changeSelectionMode(decideSelectionModeDisabled(event.isChecked(), multiSelectionCheckBox.isChecked()));
+  /**
+   * This is an example how we could use a regular expression to select the topics we're interested in.
+   * In this example all of our CheckBox Nifty Ids end with "CheckBox" and - in this example - all Checkboxes
+   * influence the SelectionMode of the ListBox. All CheckBoxes really do the same here so we can take
+   * this shortcut and on the other hand demonstrate the @EventTopicPatternSubscriber annotation :) 
+   */
+  @EventTopicPatternSubscriber(topicPattern=".*CheckBox", eventServiceName="NiftyEventBus")
+  public void onAllCheckBoxChanged(final String id, final CheckBoxStateChangedEvent event) {
+    changeSelectionMode();
   }
 
   @EventTopicSubscriber(topic="listBox", eventServiceName="NiftyEventBus")
@@ -152,6 +160,20 @@ public class ControlsDemoScreenController implements ScreenController {
     return (ListBox<JustAnExampleModelClass>) screen.findNiftyControl(name, ListBox.class);
   }
 
+  private void changeSelectionMode() {
+    listBox.changeSelectionMode(getSelectionMode(), forceSelectionCheckBox.isChecked());
+  }
+
+  private SelectionMode getSelectionMode() {
+    if (disableSelectionCheckBox.isChecked()) {
+      return SelectionMode.Disabled;
+    }
+    if (multiSelectionCheckBox.isChecked()) {
+      return SelectionMode.Multiple;
+    }
+    return SelectionMode.Single;
+  }
+
   /**
    * This is just an example. This should really be your own model. The ListBox does call toString() on this
    * to get the label it should display. But you can use your own ListBoxViewConverter if you want to use more
@@ -167,22 +189,6 @@ public class ControlsDemoScreenController implements ScreenController {
 
     public String toString() {
       return label;
-    }
-  }
-
-  private ListBoxSelectionMode<JustAnExampleModelClass> decideSelectionModeMulti(final boolean isMultiSelection) {
-    if (isMultiSelection) {
-      return new ListBoxSelectionModeMulti<JustAnExampleModelClass>();
-    } else {
-      return new ListBoxSelectionModeSingle<JustAnExampleModelClass>();
-    }
-  }
-
-  private ListBoxSelectionMode<JustAnExampleModelClass> decideSelectionModeDisabled(final boolean isDisabled, final boolean isMulti) {
-    if (isDisabled) {
-      return new ListBoxSelectionModeDisabled<JustAnExampleModelClass>();
-    } else {
-      return decideSelectionModeMulti(isMulti);
     }
   }
 }

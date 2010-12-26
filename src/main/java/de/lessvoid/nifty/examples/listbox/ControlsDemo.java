@@ -70,7 +70,7 @@ public final class ControlsDemo {
               width("*");
             }});
           }});
-          panel(spacer());
+          panel(vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
             label(createLabel("Append:"));
@@ -85,36 +85,40 @@ public final class ControlsDemo {
               interactOnClick("addListBoxItem()");
             }});
           }});
-          panel(spacer());
+          panel(vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
             label(createLabel("Multi Selection:"));
             control(new ControlBuilder("multiSelectionCheckBox", "checkbox") {{
               set("checked", "false"); // start with uncheck
             }});
-          }});
-          panel(spacer());
-          panel(new PanelBuilder() {{
-            childLayoutHorizontal();
-            label(createLabel("Disable Sel.:"));
+            panel(hspacer("20px"));
+            label(createShortLabel("Force Selection:"));
+            panel(hspacer("6px"));
+            control(new ControlBuilder("forceSelectionCheckBox", "checkbox") {{
+              set("checked", "false"); // start with uncheck
+            }});
+            panel(hspacer("20px"));
+            label(createShortLabel("Disable Selection:"));
+            panel(hspacer("6px"));
             control(new ControlBuilder("disableSelectionCheckBox", "checkbox") {{
               set("checked", "false"); // start with uncheck
             }});
           }});
-          panel(spacer());
+          panel(vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
             label(createLabel("Current Sel.:"));
             control(new ControlBuilder("selectionListBox", "listBox") {{
               set("displayItems", "4");
-              set("selectionMode", "none");
+              set("selectionMode", "Disabled");
               set("vertical", "true");
               set("horizontal", "false");
               width("*");
               childLayoutVertical();
             }});
           }});
-          panel(spacer());
+          panel(vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
             label(createLabel("Remove Sel.:"));
@@ -123,6 +127,18 @@ public final class ControlsDemo {
               width("280px");
               interactOnClick("removeSelectionAction()");
             }});
+          }});
+        }});
+      }});
+      layer(new LayerBuilder("navigation") {{
+        childLayoutVertical();
+        panel(new PanelBuilder() {{
+          backgroundColor("#f002");
+          height("10%");
+          childLayoutHorizontal();
+          control(new ControlBuilder("removeSelectionAction", "button") {{
+            set("label", "Change");
+            interactOnClick("changeStyle(grey-style/nifty-grey-styles.xml)");
           }});
         }});
       }});
@@ -142,10 +158,16 @@ public final class ControlsDemo {
     }};
   }
 
-  private static PanelBuilder spacer() {
+  private static PanelBuilder vspacer() {
     return new PanelBuilder() {{
       childLayoutHorizontal();
       height("12px");
+    }};
+  }
+
+  private static PanelBuilder hspacer(final String width) {
+    return new PanelBuilder() {{
+      width(width);
     }};
   }
 
@@ -153,6 +175,15 @@ public final class ControlsDemo {
     return new LabelBuilder() {{
       text(name);
       width("120px");
+      alignLeft();
+      textVAlignCenter();
+      textHAlignLeft();
+    }};
+  }
+
+  private static LabelBuilder createShortLabel(final String name) {
+    return new LabelBuilder() {{
+      text(name);
       alignLeft();
       textVAlignCenter();
       textHAlignLeft();
