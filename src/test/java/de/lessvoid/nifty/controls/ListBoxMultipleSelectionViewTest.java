@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.controls.listbox.ListBoxTestTool;
 import de.lessvoid.nifty.controls.listbox.ListBoxView;
@@ -27,11 +28,12 @@ public class ListBoxMultipleSelectionViewTest {
   private TestItem o2 = new TestItem("o2");
   private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = new Capture<ListBoxSelectionChangedEvent<TestItem>>();
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     listBox.addItem(o1);
     listBox.addItem(o2);
-    listBox.changeSelectionMode(new ListBoxSelectionModeMulti<TestItem>());
+    listBox.changeSelectionMode(SelectionMode.Multiple, false);
     listBox.selectItem(o1);
     listBox.selectItem(o2);
 

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.ListBoxSelectionModeDisabled;
+import de.lessvoid.nifty.controls.listbox.ListBoxSelectionModeDisabled;
 import de.lessvoid.nifty.controls.listbox.TestItem;
 
 

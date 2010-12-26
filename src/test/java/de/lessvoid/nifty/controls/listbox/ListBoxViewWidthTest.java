@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ListBoxViewWidthTest {
+  private static final int WIDTH_100 = 100;
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
@@ -39,8 +40,8 @@ public class ListBoxViewWidthTest {
 
   @Test
   public void testSingleEntry() {
-    expect(view.getWidth(o1)).andReturn(100);
-    view.updateTotalWidth(100);
+    expect(view.getWidth(o1)).andReturn(WIDTH_100);
+    view.updateTotalWidth(WIDTH_100);
     view.updateTotalCount(1);
     view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(view);
@@ -50,11 +51,11 @@ public class ListBoxViewWidthTest {
 
   @Test
   public void testTwoEntries() {
-    expect(view.getWidth(o1)).andReturn(100);
-    view.updateTotalWidth(100);
+    expect(view.getWidth(o1)).andReturn(WIDTH_100);
+    view.updateTotalWidth(WIDTH_100);
     view.updateTotalCount(1);
     view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
-    expect(view.getWidth(o2)).andReturn(100);
+    expect(view.getWidth(o2)).andReturn(WIDTH_100);
     view.updateTotalCount(2);
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(view);
@@ -65,14 +66,14 @@ public class ListBoxViewWidthTest {
 
   @Test
   public void testThreeEntries() {
-    expect(view.getWidth(o1)).andReturn(100);
-    view.updateTotalWidth(100);
+    expect(view.getWidth(o1)).andReturn(WIDTH_100);
+    view.updateTotalWidth(WIDTH_100);
     view.updateTotalCount(1);
     view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
-    expect(view.getWidth(o2)).andReturn(100);
+    expect(view.getWidth(o2)).andReturn(WIDTH_100);
     view.updateTotalCount(2);
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
-    expect(view.getWidth(o3)).andReturn(100);
+    expect(view.getWidth(o3)).andReturn(WIDTH_100);
     view.updateTotalCount(3);
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(view);

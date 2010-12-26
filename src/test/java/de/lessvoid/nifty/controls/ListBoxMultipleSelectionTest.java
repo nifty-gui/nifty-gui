@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.controls.listbox.TestItem;
 
@@ -17,7 +18,7 @@ public class ListBoxMultipleSelectionTest {
   public void before() {
     listBox.addItem(o1);
     listBox.addItem(o2);
-    listBox.changeSelectionMode(new ListBoxSelectionModeMulti<TestItem>());
+    listBox.changeSelectionMode(SelectionMode.Multiple, false);
   }
 
   @Test
@@ -137,6 +138,15 @@ public class ListBoxMultipleSelectionTest {
   public void testDeselectionWithoutSelection() {
     listBox.deselectItem(o1);
     assertSelection();
+  }
+
+  @Test
+  public void testChangeToForceSelectionWithItems() {
+    listBox.changeSelectionMode(SelectionMode.Multiple, false);
+    listBox.addItem(o1);
+    listBox.addItem(o2);
+    listBox.changeSelectionMode(SelectionMode.Multiple, true);
+    assertSelection(o1);
   }
 
   private void assertSelection(final Object ... selection) {

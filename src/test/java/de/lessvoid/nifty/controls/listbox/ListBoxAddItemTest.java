@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ListBoxAddItemTest {
+  private static final int WIDTH_101 = 101;
+  private static final int WIDTH_100 = 100;
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
@@ -33,8 +35,8 @@ public class ListBoxAddItemTest {
 
   @Test
   public void testAddItem() {
-    expect(viewMock.getWidth(o1)).andReturn(100);
-    viewMock.updateTotalWidth(100);
+    expect(viewMock.getWidth(o1)).andReturn(WIDTH_100);
+    viewMock.updateTotalWidth(WIDTH_100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
@@ -45,11 +47,11 @@ public class ListBoxAddItemTest {
 
   @Test
   public void testAddItemTwice() {
-    expect(viewMock.getWidth(o1)).andReturn(100);
-    viewMock.updateTotalWidth(100);
+    expect(viewMock.getWidth(o1)).andReturn(WIDTH_100);
+    viewMock.updateTotalWidth(WIDTH_100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
-    expect(viewMock.getWidth(o2)).andReturn(100);
+    expect(viewMock.getWidth(o2)).andReturn(WIDTH_100);
     viewMock.updateTotalCount(2);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
@@ -61,8 +63,8 @@ public class ListBoxAddItemTest {
 
   @Test
   public void testInsertItem() {
-    expect(viewMock.getWidth(o1)).andReturn(100);
-    viewMock.updateTotalWidth(100);
+    expect(viewMock.getWidth(o1)).andReturn(WIDTH_100);
+    viewMock.updateTotalWidth(WIDTH_100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
@@ -73,11 +75,11 @@ public class ListBoxAddItemTest {
 
   @Test
   public void testAddAllItems() {
-    expect(viewMock.getWidth(o1)).andReturn(100);
+    expect(viewMock.getWidth(o1)).andReturn(WIDTH_100);
     viewMock.updateTotalCount(2);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
-    expect(viewMock.getWidth(o2)).andReturn(101);
-    viewMock.updateTotalWidth(101);
+    expect(viewMock.getWidth(o2)).andReturn(WIDTH_101);
+    viewMock.updateTotalWidth(WIDTH_101);
     replay(viewMock);
 
     List<TestItem> itemsToAdd = new ArrayList<TestItem>();

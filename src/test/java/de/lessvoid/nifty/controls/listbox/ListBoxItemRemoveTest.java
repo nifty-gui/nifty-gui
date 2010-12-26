@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ListBoxItemRemoveTest {
+  private static final int WIDTH_100 = 100;
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
@@ -104,11 +105,11 @@ public class ListBoxItemRemoveTest {
     TestItem o3 = new TestItem("o3");
     TestItem o4 = new TestItem("o4");
 
-    expect(viewMock.getWidth(o3)).andReturn(100);
-    viewMock.updateTotalWidth(100);
+    expect(viewMock.getWidth(o3)).andReturn(WIDTH_100);
+    viewMock.updateTotalWidth(WIDTH_100);
     viewMock.updateTotalCount(3);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
-    expect(viewMock.getWidth(o4)).andReturn(100);
+    expect(viewMock.getWidth(o4)).andReturn(WIDTH_100);
     viewMock.updateTotalCount(4);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.scrollTo(2);

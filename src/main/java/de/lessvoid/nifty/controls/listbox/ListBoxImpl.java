@@ -7,8 +7,6 @@ import java.util.ListIterator;
 
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.ListBoxSelectionMode;
-import de.lessvoid.nifty.controls.ListBoxSelectionModeSingle;
 import de.lessvoid.nifty.controls.ListBoxViewConverter;
 
 public class ListBoxImpl<T> implements ListBox<T> {
@@ -64,14 +62,19 @@ public class ListBoxImpl<T> implements ListBox<T> {
   }
 
   @Override
-  public void changeSelectionMode(final ListBoxSelectionMode<T> listBoxSelectionMode) {
+  public void changeSelectionMode(final SelectionMode listBoxSelectionMode, final boolean forceSelection) {
     List<T> oldSelection = getSelection();
 
-    selection = listBoxSelectionMode;
+    selection = createSelectionMode(listBoxSelectionMode);
+    selection.enableRequiresSelection(forceSelection);
 
     ListIterator<T> it = oldSelection.listIterator(oldSelection.size());
     while (it.hasPrevious()) {
       selection.add(it.previous());
+    }
+
+    if (selection.requiresAutoSelection() && itemCount() > 0) {
+      selection.add(items.get(0));
     }
 
     updateView();
@@ -85,6 +88,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
     widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
+    ensureAutoSelection(newItem);
   }
 
   @Override
@@ -137,7 +141,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
     int oldCount = itemCount();
 
     T item = items.get(itemIndex);
-    selection.remove(item);
+    selection.removeForced(item);
     items.remove(itemIndex);
     widthList.remove(findItemIndexInWidthList(item));
     widthUpdate();
@@ -171,7 +175,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
     }
 
     for (T item : selection.getSelection()) {
-      selection.remove(item);
+      selection.removeForced(item);
     }
 
     updateAfterRemove(oldSelection, oldCount);
@@ -208,6 +212,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
     widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
+    ensureAutoSelection(item);
   }
 
   @Override
@@ -273,6 +278,9 @@ public class ListBoxImpl<T> implements ListBox<T> {
 
   @Override
   public void addAllItems(final List<T> itemsToAdd) {
+    if (itemsToAdd.isEmpty()) {
+      return;
+    }
     for (T item : itemsToAdd) {
       widthList.add(new ItemWidth(item));
     }
@@ -280,6 +288,7 @@ public class ListBoxImpl<T> implements ListBox<T> {
     widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
+    ensureAutoSelection(itemsToAdd.get(0));
   }
 
   private void updateViewTotalCount() {
@@ -398,6 +407,10 @@ public class ListBoxImpl<T> implements ListBox<T> {
     focusItemIndex = listBoxFocusItem.resolve(focusItemIndex, oldItemCount);
     focusItemIndexUpdate();
 
+    if (selection.requiresAutoSelection() && itemCount() > 0 && focusItemIndex > -1) {
+      selection.add(items.get(focusItemIndex));
+    }
+
     view.updateTotalCount(items.size());
 
     if (viewOffset + viewDisplayItemCount > itemCount()) {
@@ -436,6 +449,28 @@ public class ListBoxImpl<T> implements ListBox<T> {
       }
     }
     return -1;
+  }
+
+  private void ensureAutoSelection(final T newItem) {
+    if (selection.requiresAutoSelection()) {
+      selectItem(newItem);
+    }
+  }
+
+  private ListBoxSelectionMode<T> createSelectionMode(final SelectionMode selectionMode) {
+    switch (selectionMode) {
+      case Single:
+        return new ListBoxSelectionModeSingle<T>();
+
+      case Multiple:
+        return new ListBoxSelectionModeMulti<T>();
+
+      case Disabled:
+        return new ListBoxSelectionModeDisabled<T>();
+
+      default:
+        return new ListBoxSelectionModeSingle<T>();
+    }
   }
 
   public class ItemWidth implements Comparable<ItemWidth> {

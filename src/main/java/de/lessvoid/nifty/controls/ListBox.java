@@ -11,10 +11,13 @@ import java.util.List;
 public interface ListBox<T> extends NiftyControl {
 
   /**
-   * Change the {@link ListBoxSelectionMode} to a new one.
-   * @param listBoxSelectionMode the new {@link ListBoxSelectionMode} to use
+   * Change the {@link SelectionMode} to a new one.
+   * @param listBoxSelectionMode the new {@link SelectionMode} to use
+   * @param forceSelection if set to true will not allow de selecting the last item in the selection and
+   *        it will automatically select the first item added. when set to false it's possible to have no
+   *        selection at all.
    */
-  void changeSelectionMode(ListBoxSelectionMode<T> listBoxSelectionMode);
+  void changeSelectionMode(SelectionMode listBoxSelectionMode, boolean forceSelection);
 
   /**
    * Change the ListBoxViewConverter for this ListBox.
@@ -146,4 +149,26 @@ public interface ListBox<T> extends NiftyControl {
    * @param itemsToRemove list of items to remove
    */
   void removeAllItems(List<T> itemsToRemove);
+
+  /**
+   * The ListBoxSelectionMode determines how the ListBox handles selections.
+   * @author void
+   */
+  public enum SelectionMode {
+    /**
+     * Allows only a single item to be selected.
+     * This is the default selection mode.
+     */
+    Single,
+
+    /**
+     * Allows multiple items to be selected.
+     */
+    Multiple,
+
+    /**
+     * Does not allow any selection at all.
+     */
+    Disabled
+  }
 }

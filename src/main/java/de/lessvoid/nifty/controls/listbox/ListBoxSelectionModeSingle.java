@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls;
+package de.lessvoid.nifty.controls.listbox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class ListBoxSelectionModeSingle<T> implements ListBoxSelectionMode<T> {
   private List<T> selection = new ArrayList<T>();
+  private boolean requiresSelection = false;
 
   @Override
   public void clear() {
@@ -24,6 +25,16 @@ public class ListBoxSelectionModeSingle<T> implements ListBoxSelectionMode<T> {
 
   @Override
   public void remove(final T item) {
+    if (requiresSelection) {
+      return;
+    }
+    if (isPartOfSelection(item)) {
+      removeFromSelection(item);
+    }
+  }
+
+  @Override
+  public void removeForced(final T item) {
     if (isPartOfSelection(item)) {
       removeFromSelection(item);
     }
@@ -33,6 +44,16 @@ public class ListBoxSelectionModeSingle<T> implements ListBoxSelectionMode<T> {
   public void add(final T item) {
     selection.clear();
     selection.add(item);
+  }
+
+  @Override
+  public void enableRequiresSelection(final boolean enable) {
+    requiresSelection = enable;
+  }
+
+  @Override
+  public boolean requiresAutoSelection() {
+    return requiresSelection && selection.isEmpty();
   }
 
   private boolean isPartOfSelection(final T item) {

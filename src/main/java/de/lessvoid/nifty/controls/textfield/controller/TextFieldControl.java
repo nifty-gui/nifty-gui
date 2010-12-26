@@ -214,8 +214,7 @@ public class TextFieldControl extends AbstractController {
     int cursorPixelPos = textWidth - d;
 
     cursorElement.setConstraintX(new SizeValue(cursorPixelPos + "px"));
-    cursorElement
-        .setConstraintY(new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
+    cursorElement.setConstraintY(new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
     cursorElement.startEffect(EffectEventId.onActive, null);
     if (screen != null) {
       screen.layoutLayers();

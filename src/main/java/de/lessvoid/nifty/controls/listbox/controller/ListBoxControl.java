@@ -8,10 +8,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.ListBoxSelectionMode;
-import de.lessvoid.nifty.controls.ListBoxSelectionModeDisabled;
-import de.lessvoid.nifty.controls.ListBoxSelectionModeMulti;
-import de.lessvoid.nifty.controls.ListBoxSelectionModeSingle;
 import de.lessvoid.nifty.controls.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.ListBoxViewConverterSimple;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
@@ -67,7 +63,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     labelElements = new Element[displayItems];
     listBoxPanelElement = element.findElementByName("nifty-listbox-panel");
 
-    initSelectionMode(listBoxImpl, parameter.getProperty("selectionMode", "single"));
+    initSelectionMode(listBoxImpl, parameter.getProperty("selectionMode", "Single"), parameter.getProperty("forceSelection", "false"));
     connectListBoxAndListBoxPanel();
     int itemCount = listBoxImpl.bindToView(this, displayItems);
     ensureVerticalScrollbar();
@@ -103,6 +99,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   public void display(final List<T> visibleItems, final int focusElement, final List<Integer> selectedElements) {
     for (int i = 0; i < visibleItems.size(); i++) {
       T item = visibleItems.get(i);
+      labelElements[i].setVisible(item != null);
       displayElement(i, item);
       setListBoxItemIndex(i);
       handleElementFocus(i, focusElement);
@@ -148,8 +145,8 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   // ListBox Interface Implementation
 
   @Override
-  public void changeSelectionMode(final ListBoxSelectionMode<T> listBoxSelectionMode) {
-    listBoxImpl.changeSelectionMode(listBoxSelectionMode);
+  public void changeSelectionMode(final SelectionMode listBoxSelectionMode, final boolean forceSelection) {
+    listBoxImpl.changeSelectionMode(listBoxSelectionMode, forceSelection);
   }
 
   @Override
@@ -266,17 +263,15 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   // internals 
 
-  private void initSelectionMode(final ListBoxImpl<T> listBoxImpl, final String selectionMode) {
-    if (selectionMode.equals("single")) {
-      listBoxImpl.changeSelectionMode(new ListBoxSelectionModeSingle<T>());
-    } else if (selectionMode.equals("multiple")) {
-      listBoxImpl.changeSelectionMode(new ListBoxSelectionModeMulti<T>());
-    } else if (selectionMode.equals("none")) {
-      listBoxImpl.changeSelectionMode(new ListBoxSelectionModeDisabled<T>());
-    } else {
-      listBoxImpl.changeSelectionMode(new ListBoxSelectionModeSingle<T>());
+  private void initSelectionMode(final ListBoxImpl<T> listBoxImpl, final String selectionMode, final String forceSelection) {
+    SelectionMode listBoxSelectionMode = SelectionMode.Single;
+    try {
+      listBoxSelectionMode = SelectionMode.valueOf(selectionMode);
+    } catch (RuntimeException e) {
       log.warning("Unsupported value for selectionMode [" + selectionMode + "]. Fall back to using single selection mode.");
     }
+
+    listBoxImpl.changeSelectionMode(listBoxSelectionMode, "true".equalsIgnoreCase(forceSelection));
   }
 
   private void initializeScrollPanel(final Screen screen) {

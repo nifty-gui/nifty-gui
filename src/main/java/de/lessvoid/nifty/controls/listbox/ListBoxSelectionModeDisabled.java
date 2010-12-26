@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls;
+package de.lessvoid.nifty.controls.listbox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,19 @@ public class ListBoxSelectionModeDisabled<T> implements ListBoxSelectionMode<T> 
   }
 
   @Override
+  public void removeForced(final T item) {
+  }
+
+  @Override
   public void add(final T item) {
+  }
+
+  @Override
+  public void enableRequiresSelection(final boolean enable) {
+  }
+
+  @Override
+  public boolean requiresAutoSelection() {
+    return false;
   }
 }

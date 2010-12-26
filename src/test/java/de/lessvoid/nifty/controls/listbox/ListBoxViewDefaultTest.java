@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ListBoxViewDefaultTest {
+  private static final int WIDTH_100 = 100;
   private ListBoxImpl<String> listBox = new ListBoxImpl<String>();
   private ListBoxView<String> view;
 
@@ -30,11 +31,11 @@ public class ListBoxViewDefaultTest {
 
   @Test
   public void testUpdateViewWithEmptyList() {
-    expect(view.getWidth("a")).andReturn(100);
-    view.updateTotalWidth(100);
+    expect(view.getWidth("a")).andReturn(WIDTH_100);
+    view.updateTotalWidth(WIDTH_100);
     view.updateTotalCount(1);
     view.display(buildValues("a", null), 0, buildValuesSelection());
-    expect(view.getWidth("b")).andReturn(100);
+    expect(view.getWidth("b")).andReturn(WIDTH_100);
     view.updateTotalCount(2);
     view.display(buildValues("a", "b"), 0, buildValuesSelection());
     view.display(buildValues("a", "b"), 0, buildValuesSelection());

@@ -11,10 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ListBoxViewTest {
+  private static final int WIDTH_50 = 50;
+  private static final int WIDTH_150 = 150;
+  private static final int WIDTH_100 = 100;
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
-  private TestItem o3 = new TestItem("o3");
   private ListBoxView<TestItem> view;
 
   @SuppressWarnings("unchecked")
@@ -33,8 +35,8 @@ public class ListBoxViewTest {
   public void testAddItemWithUpdateWidth() {
     view.updateTotalCount(1);
     view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
-    expect(view.getWidth(o1)).andReturn(100);
-    view.updateTotalWidth(100);
+    expect(view.getWidth(o1)).andReturn(WIDTH_100);
+    view.updateTotalWidth(WIDTH_100);
     replay(view);
 
     listBox.addItem(o1);
@@ -46,10 +48,10 @@ public class ListBoxViewTest {
     view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     view.updateTotalCount(2);
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
-    expect(view.getWidth(o1)).andReturn(100);
-    view.updateTotalWidth(100);
-    expect(view.getWidth(o2)).andReturn(150);
-    view.updateTotalWidth(150);
+    expect(view.getWidth(o1)).andReturn(WIDTH_100);
+    view.updateTotalWidth(WIDTH_100);
+    expect(view.getWidth(o2)).andReturn(WIDTH_150);
+    view.updateTotalWidth(WIDTH_150);
     replay(view);
 
     listBox.addItem(o1);
@@ -62,9 +64,9 @@ public class ListBoxViewTest {
     view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
     view.updateTotalCount(2);
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
-    expect(view.getWidth(o1)).andReturn(100);
-    view.updateTotalWidth(100);
-    expect(view.getWidth(o2)).andReturn(50);
+    expect(view.getWidth(o1)).andReturn(WIDTH_100);
+    view.updateTotalWidth(WIDTH_100);
+    expect(view.getWidth(o2)).andReturn(WIDTH_50);
     replay(view);
 
     listBox.addItem(o1);
