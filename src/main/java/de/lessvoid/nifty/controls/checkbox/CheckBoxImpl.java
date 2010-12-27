@@ -3,7 +3,7 @@ package de.lessvoid.nifty.controls.checkbox;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 
-public class CheckBoxImpl implements CheckBox {
+public class CheckBoxImpl extends EmptyNiftyControlImpl implements CheckBox {
   private boolean checked;
   private CheckBoxView view = new CheckBoxViewNull();
 

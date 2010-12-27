@@ -2,6 +2,9 @@ package de.lessvoid.nifty.controls;
 
 import java.util.List;
 
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
+
 
 /**
  * The ListBox interface is the Nifty control API view of a Nifty ListBox control.
@@ -170,5 +173,55 @@ public interface ListBox<T> extends NiftyControl {
      * Does not allow any selection at all.
      */
     Disabled
+  }
+
+  /**
+   * You'll need to implement this interface to change the way your model class T needs
+   * to be displayed in the given element. If you omit it then Nifty will use its default
+   * implementation which simply calls T.toString();
+   * @author void
+   * @param <T>
+   */
+  public interface ListBoxViewConverter<T> {
+
+    /**
+     * Display the given item in the given element.
+     * @param element the element to display the item in
+     * @param item the item to display
+     */
+    void display(Element element, T item);
+
+    /**
+     * Return the width in pixel of the given item rendered
+     * for the given element.
+     * @param element the element to render
+     * @param item the item to render
+     * @return the width of the element after the item has been applied to it
+     */
+    int getWidth(Element element, T item);
+  }
+
+  /**
+   * A simple implementation of ListBoxViewConverter that will just use item.toString().
+   * This is the default SimpleListBoxViewConverter used when you don't set a different implementation.
+   * @author void
+   *
+   * @param <T>
+   */
+  public class ListBoxViewConverterSimple<T> implements ListBoxViewConverter<T> {
+
+    @Override
+    public void display(final Element element, final T item) {
+      if (item != null) {
+        element.getRenderer(TextRenderer.class).setText(item.toString());
+      } else {
+        element.getRenderer(TextRenderer.class).setText("");
+      }
+    }
+
+    @Override
+    public int getWidth(final Element element, final T item) {
+      return element.getRenderer(TextRenderer.class).getFont().getWidth(item.toString());
+    }
   }
 }

@@ -24,7 +24,6 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class CheckboxControl extends AbstractController implements CheckBox, CheckBoxView {
   private CheckBoxImpl checkBoxImpl = new CheckBoxImpl();
   private Nifty nifty;
-  private Element element;
   private Screen screen;
   private FocusHandler focusHandler;
 
@@ -35,8 +34,8 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
       final Properties propertiesParam,
       final ControllerEventListener listenerParam,
       final Attributes controlDefinitionAttributes) {
+    super.bind(elementParam);
     nifty = niftyParam;
-    element = elementParam;
     screen = screenParam;
     checkBoxImpl.bindToView(this);
     checkBoxImpl.setChecked(new Boolean(propertiesParam.getProperty("checked", "true")));
@@ -53,10 +52,10 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.NextInputElement) {
-      focusHandler.getNext(element).setFocus();
+      focusHandler.getNext(getElement()).setFocus();
       return true;
     } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
-      focusHandler.getPrev(element).setFocus();
+      focusHandler.getPrev(getElement()).setFocus();
       return true;
     } else if (inputEvent == NiftyInputEvent.Activate) {
       onClick();
@@ -74,7 +73,7 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
 
   @Override
   public void update(final boolean checked) {
-    final Element selectImage = element.findElementByName("select");
+    final Element selectImage = getElement().findElementByName("select");
     if (checked) {
       selectImage.stopEffect(EffectEventId.onCustom);
       selectImage.startEffect(EffectEventId.onCustom, new EndNotify() { public void perform() { } }, "show");
@@ -86,8 +85,8 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
 
   @Override
   public void publish(final CheckBoxStateChangedEvent event) {
-    if (element.getId() != null) {
-      nifty.publishEvent(element.getId(), event);
+    if (getElement().getId() != null) {
+      nifty.publishEvent(getElement().getId(), event);
     }
   }
 

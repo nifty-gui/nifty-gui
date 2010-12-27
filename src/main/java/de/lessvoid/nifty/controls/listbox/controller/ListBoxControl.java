@@ -8,8 +8,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.ListBoxViewConverter;
-import de.lessvoid.nifty.controls.ListBoxViewConverterSimple;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.controls.listbox.ListBoxView;
@@ -30,7 +28,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private Element[] labelElements;
   private Nifty nifty;
   private Screen screen;
-  private Element element;
   private boolean verticalScrollbar;
   private boolean horizontalScrollbar;
   private Element childRootElement;
@@ -51,17 +48,17 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
       final Properties parameterParam,
       final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
+    super.bind(elementParam);
     nifty = niftyParam;
     screen = screenParam;
-    element = elementParam;
     parameter = parameterParam;
     verticalScrollbar = new Boolean(parameter.getProperty("vertical", "true"));
     horizontalScrollbar = new Boolean(parameter.getProperty("horizontal", "true"));
     displayItems = new Integer(parameter.getProperty("displayItems", "2"));
-    childRootElement = element.findElementByName(controlDefinitionAttributes.get("childRootId"));
+    childRootElement = getElement().findElementByName(controlDefinitionAttributes.get("childRootId"));
     labelTemplateElement = childRootElement.getElements().get(0);
     labelElements = new Element[displayItems];
-    listBoxPanelElement = element.findElementByName("nifty-listbox-panel");
+    listBoxPanelElement = getElement().findElementByName("nifty-listbox-panel");
 
     initSelectionMode(listBoxImpl, parameter.getProperty("selectionMode", "Single"), parameter.getProperty("forceSelection", "false"));
     connectListBoxAndListBoxPanel();
@@ -114,7 +111,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @Override
   public void scrollTo(final int newPosition) {
-    VerticalScrollbarControl verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
+    VerticalScrollbarControl verticalS = getElement().findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
     if (verticalS != null) {
       verticalS.setCurrentValueWithoutNotify(newPosition * labelTemplateHeight);
     }
@@ -122,7 +119,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @Override
   public void updateTotalWidth(final int newWidth) {
-    HorizontalScrollbarControl horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
+    HorizontalScrollbarControl horizontalS = getElement().findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
     if (horizontalS != null) {
       horizontalS.setWorldMaxValue(newWidth);
       horizontalS.setCurrentValue(0);
@@ -246,8 +243,8 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @Override
   public void publish(final ListBoxSelectionChangedEvent<T> event) {
-    if (element.getId() != null) {
-      nifty.publishEvent(element.getId(), event);
+    if (getElement().getId() != null) {
+      nifty.publishEvent(getElement().getId(), event);
     }
   }
 
@@ -276,19 +273,19 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   private void initializeScrollPanel(final Screen screen) {
     if (!horizontalScrollbar) {
-      Element horizontal = element.findElementByName("nifty-internal-horizontal-scrollbar");
+      Element horizontal = getElement().findElementByName("nifty-internal-horizontal-scrollbar");
       if (horizontal != null) {
         nifty.removeElement(screen, horizontal);
       }
     }
     if (!verticalScrollbar) {
-      Element vertical = element.findElementByName("nifty-internal-vertical-scrollbar");
+      Element vertical = getElement().findElementByName("nifty-internal-vertical-scrollbar");
       if (vertical != null) {
         nifty.removeElement(screen, vertical);
       }
     }
 
-    Element scrollElement = element.findElementByName("nifty-listbox-child-root");
+    Element scrollElement = getElement().findElementByName("nifty-listbox-child-root");
     scrollElement.setConstraintX(new SizeValue("0px"));
     scrollElement.setConstraintY(new SizeValue("0px"));
 
@@ -298,7 +295,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   private void updateScrollPanel(final Screen screen, final float labelTemplateHeight, final int itemCount) {
     if (childRootElement != null) {
-      VerticalScrollbarControl verticalS = element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
+      VerticalScrollbarControl verticalS = getElement().findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
       if (verticalS != null) {
         verticalS.setWorldMaxValue(itemCount * labelTemplateHeight);
         verticalS.setViewMaxValue(childRootElement.getHeight());
@@ -314,7 +311,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void initializeHorizontalScrollbar() {
-    HorizontalScrollbarControl horizontalS = element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
+    HorizontalScrollbarControl horizontalS = getElement().findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
     if (horizontalS != null) {
       horizontalS.setViewMaxValue(childRootElement.getWidth());
       horizontalS.setPerClickChange(1.0f);
@@ -346,7 +343,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void initializeScrollElementHeight() {
-    Element scrollElement = element.findElementByName("nifty-listbox-scrollpanel");
+    Element scrollElement = getElement().findElementByName("nifty-listbox-scrollpanel");
     scrollElement.setConstraintHeight(new SizeValue(displayItems * labelTemplateHeight + "px"));
   }
 
@@ -357,12 +354,12 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void calculateElementHeight(final int horizontalScrollbarElementHeight) {
-    element.setConstraintHeight(new SizeValue(displayItems * labelTemplateHeight + horizontalScrollbarElementHeight + "px"));
+    getElement().setConstraintHeight(new SizeValue(displayItems * labelTemplateHeight + horizontalScrollbarElementHeight + "px"));
   }
 
   private int findHorizontalScrollbarHeight() {
     int horizontalScrollbarElementHeight = 0;
-    Element horizontalScrollbarElement = element.findElementByName("nifty-internal-horizontal-scrollbar");
+    Element horizontalScrollbarElement = getElement().findElementByName("nifty-internal-horizontal-scrollbar");
     if (horizontalScrollbarElement != null) {
       horizontalScrollbarElementHeight = horizontalScrollbarElement.getHeight();
     }
@@ -399,7 +396,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @SuppressWarnings("unchecked")
   private void handleElementFocus(final int index, final int focusElement) {
-    ListBoxPanel<T> listBoxPanel = element.findControl("nifty-listbox-panel", ListBoxPanel.class);
+    ListBoxPanel<T> listBoxPanel = getElement().findControl("nifty-listbox-panel", ListBoxPanel.class);
     if (listBoxPanel.hasFocus()) {
       if (focusElement == index) {
         labelElements[index].startEffect(EffectEventId.onCustom, null, "focus");

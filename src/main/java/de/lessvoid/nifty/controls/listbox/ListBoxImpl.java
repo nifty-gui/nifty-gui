@@ -7,9 +7,9 @@ import java.util.ListIterator;
 
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.ListBoxViewConverter;
+import de.lessvoid.nifty.controls.checkbox.EmptyNiftyControlImpl;
 
-public class ListBoxImpl<T> implements ListBox<T> {
+public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> {
   private List<T> items = new ArrayList<T>();
   private List<ItemWidth> widthList = new ArrayList<ItemWidth>();
   private ListBoxSelectionMode<T> selection = new ListBoxSelectionModeSingle<T>();
