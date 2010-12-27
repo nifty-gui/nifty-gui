@@ -436,4 +436,16 @@ public class TextRenderer implements ElementRenderer {
   public boolean isLineWrapping() {
     return lineWrapping;
   }
+
+  public VerticalAlign getTextVAlign() {
+    return textVAlign;
+  }
+
+  public HorizontalAlign getTextHAlign() {
+    return textHAlign;
+  }
+
+  public Color getColor() {
+    return color;
+  }
 }

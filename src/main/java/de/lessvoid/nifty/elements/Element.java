@@ -345,7 +345,8 @@ public class Element {
       + " padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]\n" + offset
       + " focusable [" + focusable + "]\n" + offset
       + " enabled [" + enabled + "]\n" + offset
-      + " mouseable [" + visibleToMouseEvents + "]";
+      + " mouseable [" + visibleToMouseEvents + "]\n" + offset
+      + " effects: \n" + effectManager.getStateString(offset);
     return pos;
   }
 
@@ -932,9 +933,6 @@ public class Element {
 
   private void internalEnable() {
     enabled = true;
-    if (focusable) {
-      screen.getFocusHandler().addElement(this);
-    }
     for (int i=0; i<elements.size(); i++) {
       elements.get(i).internalEnable();
     }
@@ -945,6 +943,9 @@ public class Element {
    */
   public void disable() {
     if (!enabled) {
+      for (int i=0; i<elements.size(); i++) {
+        elements.get(i).disable();
+      }
       return;
     }
     internalDisable();
@@ -954,11 +955,8 @@ public class Element {
 
   private void internalDisable() {
     enabled = false;
-    if (focusable) {
-      removeFromFocusHandler();
-    }
     for (int i=0; i<elements.size(); i++) {
-      elements.get(i).disable();
+      elements.get(i).internalDisable();
     }
   }
 
@@ -1401,7 +1399,7 @@ public class Element {
       e.onStartScreen(newScreen);
     }
 
-    if (isFocusable()) {
+    if (focusable) {
       focusHandler.addElement(this);
     }
 
@@ -1439,7 +1437,7 @@ public class Element {
    */
   public boolean keyEvent(final KeyboardInputEvent inputEvent) {
     if (attachedInputControl != null) {
-      return attachedInputControl.keyEvent(inputEvent);
+      return attachedInputControl.keyEvent(nifty, inputEvent);
     }
     return false;
   }
@@ -1615,13 +1613,9 @@ public class Element {
    * remove this and all children from the focushandler.
    */
   public void removeFromFocusHandler() {
-    if (screen != null) {
-      if (screen.getFocusHandler() != null) {
-        screen.getFocusHandler().remove(this);
-        for (Element element : elements) {
-          element.removeFromFocusHandler();
-        }
-      }
+    focusHandler.remove(this);
+    for (Element element : elements) {
+      element.removeFromFocusHandler();
     }
   }
 
@@ -1640,6 +1634,10 @@ public class Element {
 
     log.info("after setStyle [" + newStyle + "]\n" + elementType.output(0));
     notifyListeners();
+  }
+
+  public String getStyle() {
+    return elementType.getAttributes().get("style");
   }
 
   void removeStyle(final String style) {
