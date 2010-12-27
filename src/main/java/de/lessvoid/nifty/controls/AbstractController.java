@@ -3,7 +3,9 @@ package de.lessvoid.nifty.controls;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public abstract class AbstractController implements Controller {
+import de.lessvoid.nifty.elements.Element;
+
+public abstract class AbstractController implements Controller, NiftyControl {
 
     private List<FocusNotify> notifies = new CopyOnWriteArrayList<FocusNotify>();
 
@@ -40,4 +42,31 @@ public abstract class AbstractController implements Controller {
             notify.focusLost(this);
         }
     }
+
+    // NEW
+    private Element element;
+
+    protected void bind(final Element element) {
+      this.element = element;
+    }
+
+    protected Element getElement() {
+      return element;
+    }
+
+    @Override
+    public void enable() {
+      element.enable();
+    }
+
+    @Override
+    public void disable() {
+      element.disable();
+    }
+
+    @Override
+    public boolean isEnabled() {
+      return element.isEnabled();
+    }
+
 }
