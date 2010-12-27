@@ -27,6 +27,10 @@ public class Border implements EffectImpl {
   private SizeValue borderRight = new SizeValue("1px");
   private SizeValue borderTop = new SizeValue("1px");
   private SizeValue borderBottom = new SizeValue("1px");
+  private SizeValue insetLeft = new SizeValue("0px");
+  private SizeValue insetRight = new SizeValue("0px");
+  private SizeValue insetTop = new SizeValue("0px");
+  private SizeValue insetBottom = new SizeValue("0px");
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     try {
@@ -41,6 +45,12 @@ public class Border implements EffectImpl {
       colorRight = new Color(parser.getRight());
       colorTop = new Color(parser.getTop());
       colorBottom = new Color(parser.getBottom());
+
+      parser = new PaddingAttributeParser(parameter.getProperty("inset", "0px"));
+      insetLeft = new SizeValue(parser.getLeft());
+      insetRight = new SizeValue(parser.getRight());
+      insetTop = new SizeValue(parser.getTop());
+      insetBottom = new SizeValue(parser.getBottom());
     } catch (Exception e) {
       log.warning(e.getMessage());
     }
@@ -56,22 +66,42 @@ public class Border implements EffectImpl {
     int right = getBorder(element, borderRight);
     int top = getBorder(element, borderTop);
     int bottom = getBorder(element, borderBottom);
+    int insetOffsetLeft = insetLeft.getValueAsInt(element.getWidth());
+    int insetOffsetRight = insetRight.getValueAsInt(element.getWidth());
+    int insetOffsetTop = insetTop.getValueAsInt(element.getHeight());
+    int insetOffsetBottom = insetBottom.getValueAsInt(element.getHeight());
 
     if (left > 0) {
       r.setColor(colorLeft);
-      r.renderQuad(element.getX() - left, element.getY() - top, left, element.getHeight() + top + bottom);
+      r.renderQuad(
+          element.getX() - left + insetOffsetLeft,
+          element.getY() - top + insetOffsetTop,
+          left,
+          element.getHeight() + top + bottom - insetOffsetTop - insetOffsetBottom);
     }
     if (right > 0) {
       r.setColor(colorRight);
-      r.renderQuad(element.getX() + element.getWidth(), element.getY() - top, right, element.getHeight() + top + bottom);
+      r.renderQuad(
+          element.getX() + element.getWidth() - insetOffsetRight,
+          element.getY() - top + insetOffsetTop,
+          right,
+          element.getHeight() + top + bottom - insetOffsetTop - insetOffsetBottom);
     }
     if (top > 0) {
       r.setColor(colorTop);
-      r.renderQuad(element.getX() - left, element.getY() - top, element.getWidth() + left + right, top);
+      r.renderQuad(
+          element.getX() - left + insetOffsetLeft,
+          element.getY() - top + insetOffsetTop,
+          element.getWidth() + left + right - insetOffsetLeft - insetOffsetRight,
+          top);
     }
     if (bottom > 0) {
       r.setColor(colorBottom);
-      r.renderQuad(element.getX() - left, element.getY() + element.getHeight(), element.getWidth() + left + right, bottom);
+      r.renderQuad(
+          element.getX() - left + insetOffsetLeft,
+          element.getY() + element.getHeight() - insetOffsetBottom,
+          element.getWidth() + left + right - insetOffsetLeft - insetOffsetRight,
+          bottom);
     }
     r.restoreState();
   }
