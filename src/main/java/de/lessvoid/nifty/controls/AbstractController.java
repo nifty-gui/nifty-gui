@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.tools.SizeValue;
 
 public abstract class AbstractController implements Controller, NiftyControl {
 
@@ -69,4 +70,43 @@ public abstract class AbstractController implements Controller, NiftyControl {
       return element.isEnabled();
     }
 
+    @Override
+    public String getId() {
+      return element.getId();
+    }
+
+    @Override
+    public void setId(final String id) {
+      element.setId(id);
+    }
+
+    @Override
+    public SizeValue getWidth() {
+      return element.getConstraintWidth();
+    }
+
+    @Override
+    public void setWidth(final SizeValue width) {
+      element.setConstraintWidth(width);
+    }
+
+    @Override
+    public SizeValue getHeight() {
+      return element.getConstraintHeight();
+    }
+
+    @Override
+    public void setHeight(final SizeValue height) {
+      element.setConstraintHeight(height);
+    }
+
+    @Override
+    public String getStyle() {
+      return element.getStyle();
+    }
+
+    @Override
+    public void setStyle(final String style) {
+     element.setStyle(style); 
+    }
 }
