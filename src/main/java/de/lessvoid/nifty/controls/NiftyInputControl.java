@@ -3,6 +3,7 @@ package de.lessvoid.nifty.controls;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
@@ -14,27 +15,36 @@ import de.lessvoid.nifty.screen.Screen;
  * @author void
  */
 public class NiftyInputControl {
+  private String elementId;
   private Controller controller;
   private NiftyInputMapping inputMapper;
 
   private List < KeyInputHandler > additionalInputHandler = new ArrayList < KeyInputHandler >();
 
   /**
+   * @param elementId elementId this NiftyInputControl is attached to
    * @param controllerParam controller
    * @param inputMapperParam input mapper
    */
-  public NiftyInputControl(final Controller controllerParam, final NiftyInputMapping inputMapperParam) {
+  public NiftyInputControl(final String elementId, final Controller controllerParam, final NiftyInputMapping inputMapperParam) {
+    this.elementId = elementId;
     this.controller = controllerParam;
     this.inputMapper = inputMapperParam;
   }
 
   /**
    * keyboard event.
+   * @param nifty nifty
    * @param inputEvent keyboard event
    * @return return true when the input event has been processed and false when it has not been handled
    */
-  public boolean keyEvent(final KeyboardInputEvent inputEvent) {
+  public boolean keyEvent(final Nifty nifty, final KeyboardInputEvent inputEvent) {
     NiftyInputEvent converted = inputMapper.convert(inputEvent);
+
+    if (converted != null) {
+        nifty.publishEvent(elementId, new de.lessvoid.nifty.controls.NiftyInputControlEvent(converted));
+    }
+
     if (controller.inputEvent(converted)) {
       return true;
     }

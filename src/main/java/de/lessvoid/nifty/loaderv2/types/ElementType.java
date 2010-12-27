@@ -185,7 +185,7 @@ public class ElementType extends XmlBaseType {
           listener,
           getAttributes());
 
-      NiftyInputControl niftyInputControl = createNiftyInputControl(getAttributes(), controller);
+      NiftyInputControl niftyInputControl = createNiftyInputControl(element.getId(), getAttributes(), controller);
       element.attachInputControl(niftyInputControl);
     }
   }
@@ -209,16 +209,14 @@ public class ElementType extends XmlBaseType {
     return ClassHelper.getInstance(controllerClassParam, Controller.class);
   }
 
-  private NiftyInputControl createNiftyInputControl(
-      final Attributes controlDefinitionAttributes,
-      final Controller controller) {
+  private NiftyInputControl createNiftyInputControl(final String elementId, final Attributes controlDefinitionAttributes, final Controller controller) {
     String inputMappingClass = controlDefinitionAttributes.get("inputMapping");
     if (inputMappingClass == null) {
       inputMappingClass = DefaultInputMapping.class.getName();
     }
 
     NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
-    return new NiftyInputControl(controller, inputMapping);
+    return new NiftyInputControl(elementId, controller, inputMapping);
   }
 
   private ControllerEventListener createControllerEventListener(final Screen screen) {
