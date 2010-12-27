@@ -1162,7 +1162,7 @@ public class Element {
     if (mouseInside && !isMouseDown()) {
       if (mouseEvent.isInitialLeftButtonDown()) {
         setMouseDown(true, eventTime);
-        if (focusable) {
+        if (isFocusable()) {
           focusHandler.requestExclusiveMouseFocus(this);
           focusHandler.setKeyFocus(this);
         }
@@ -1401,7 +1401,7 @@ public class Element {
       e.onStartScreen(newScreen);
     }
 
-    if (focusable) {
+    if (isFocusable()) {
       focusHandler.addElement(this);
     }
 
@@ -1465,7 +1465,7 @@ public class Element {
    */
   public void setFocus() {
     if (nifty != null && nifty.getCurrentScreen() != null) {
-      if (focusable) {
+      if (isFocusable()) {
         focusHandler.setKeyFocus(this);
       }
     }
@@ -1716,7 +1716,7 @@ public class Element {
    * @return focusable
    */
   public boolean isFocusable() {
-    return focusable;
+    return focusable && enabled;
   }
 
   /**
