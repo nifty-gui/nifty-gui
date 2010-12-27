@@ -13,6 +13,8 @@
       <onClick name="imageOverlay" filename="scrollbar/scrollbar-vertical.png" width="28px" height="28px" imageMode="subImage:140,0,28,28" post="true" />
       <onFocus name="imageOverlay" filename="scrollbar/scrollbar-vertical.png" width="28px" height="28px" imageMode="subImage:112,0,28,28" post="true" />
       <onHover name="imageOverlay" filename="textfield/field-hover.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" post="true" inset="-5px" />
+      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
   </style>
   <style id="nifty-vertical-scrollbar#down">
@@ -22,6 +24,8 @@
       <onClick name="imageOverlay" filename="scrollbar/scrollbar-vertical.png" width="28px" height="28px" imageMode="subImage:56,0,28,28" post="true" />
       <onFocus name="imageOverlay" filename="scrollbar/scrollbar-vertical.png" width="28px" height="28px" imageMode="subImage:28,0,28,28" post="true" />
       <onHover name="imageOverlay" filename="textfield/field-hover.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" post="true" inset="-5px" />
+      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
   </style>
   <style id="nifty-vertical-scrollbar#background">
@@ -37,6 +41,8 @@
       <onClick name="imageOverlay" filename="scrollbar/scrollbar-vertical-handle2.png" width="28px" height="28px" imageMode="resize:0,28,0,2,0,28,0,24,0,28,0,2" post="true" />
       <onFocus name="imageOverlay" filename="scrollbar/scrollbar-vertical-handle2.png" width="28px" height="28px" imageMode="resize:0,28,0,2,0,28,0,24,0,28,0,2" post="true" />
       <onHover name="imageOverlay" filename="scrollbar/scrollbar-vertical-handle2.png" width="28px" height="28px" imageMode="resize:0,28,0,2,0,28,0,24,0,28,0,2" post="true" />
+      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
   </style>
 
@@ -53,6 +59,8 @@
       <onClick name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:56,0,28,28" post="true" />
       <onFocus name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:28,0,28,28" post="true" />
       <onHover name="imageOverlay" filename="textfield/field-hover.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" post="true" inset="-5px" />
+      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
   </style>
   <style id="nifty-horizontal-scrollbar#right">
@@ -62,6 +70,8 @@
       <onClick name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:140,0,28,28" post="true" />
       <onFocus name="imageOverlay" filename="scrollbar/scrollbar-horizontal.png" width="28px" height="28px" imageMode="subImage:112,0,28,28" post="true" />
       <onHover name="imageOverlay" filename="textfield/field-hover.png" imageMode="resize:6,30,6,6,6,30,6,30,6,30,6,6" post="true" inset="-5px" />
+      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
   </style>
   <style id="nifty-horizontal-scrollbar#background">
@@ -77,6 +87,8 @@
       <onClick name="imageOverlay" filename="scrollbar/scrollbar-horizontal-handle2.png" width="28px" height="28px" imageMode="resize:1,26,1,1,1,26,1,26,1,26,1,1" post="true" />
       <onFocus name="imageOverlay" filename="scrollbar/scrollbar-horizontal-handle2.png" width="28px" height="28px" imageMode="resize:1,26,1,1,1,26,1,26,1,26,1,1" post="true" />
       <onHover name="imageOverlay" filename="scrollbar/scrollbar-horizontal-handle2.png" width="28px" height="28px" imageMode="resize:1,26,1,1,1,26,1,26,1,26,1,1" post="true" />
+      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
   </style>
 </nifty-styles>

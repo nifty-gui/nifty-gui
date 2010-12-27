@@ -8,6 +8,8 @@
     <effect>
       <onHover name="imageOverlay" filename="button/black-button-hover.png" imageMode="resize:7,148,7,7,7,148,7,28,7,148,7,7" post="true" inset="-5px" />
       <onFocus name="imageOverlay" filename="button/black-button-focus.png" imageMode="resize:7,148,7,7,7,148,7,28,7,148,7,7" post="true" inset="-5px" />
+      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
   </style>
 
@@ -16,5 +18,9 @@
   <!-- +++++++++++++++++++++++++++++++++++++ -->
   <style id="nifty-button#text" base="button-font">
     <attributes align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="false"/>
+    <effect>
+      <onEnabled name="textColorAnimated" startColor="#8886" endColor="#ffff" post="false" length="150" />
+      <onDisabled name="textColorAnimated" startColor="#ffff" endColor="#8886" post="false" length="150" />
+    </effect>
   </style>
 </nifty-styles>
