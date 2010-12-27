@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield;
+package de.lessvoid.nifty.controls.textfield.builder;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;

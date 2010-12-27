@@ -6,13 +6,13 @@ import junit.framework.TestCase;
 
 public class TextFieldPasswordTest extends TestCase {
   private static final int MAX_CURSOR_POSITION = 5;
-  private TextField textField;
+  private TextFieldLogic textField;
   private Clipboard clipboard;
 
   public void setUp() {
     clipboard = createMock(Clipboard.class);
 
-    textField = new TextField("hello", clipboard);
+    textField = new TextFieldLogic("hello", clipboard);
     textField.setCursorPosition(0);
     textField.startSelecting();
     textField.setCursorPosition(MAX_CURSOR_POSITION);

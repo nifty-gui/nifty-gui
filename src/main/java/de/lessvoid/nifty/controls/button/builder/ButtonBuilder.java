@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.button;
+package de.lessvoid.nifty.controls.button.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 

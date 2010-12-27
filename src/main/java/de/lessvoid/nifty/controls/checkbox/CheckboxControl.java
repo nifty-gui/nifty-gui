@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.checkbox.controller;
+package de.lessvoid.nifty.controls.checkbox;
 
 import java.util.Properties;
 
@@ -8,8 +8,6 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.checkbox.CheckBoxImpl;
-import de.lessvoid.nifty.controls.checkbox.CheckBoxView;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -76,10 +74,10 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
     final Element selectImage = getElement().findElementByName("select");
     if (checked) {
       selectImage.stopEffect(EffectEventId.onCustom);
-      selectImage.startEffect(EffectEventId.onCustom, new EndNotify() { public void perform() { } }, "show");
+      selectImage.startEffect(EffectEventId.onCustom, null, "show");
     } else {
       selectImage.stopEffect(EffectEventId.onCustom);
-      selectImage.startEffect(EffectEventId.onCustom, new EndNotify() { public void perform() { } }, "hide");
+      selectImage.startEffect(EffectEventId.onCustom, null, "hide");
     }
   }
 

@@ -7,12 +7,12 @@ import junit.framework.TestCase;
 public class TextFieldMaxLenTest extends TestCase {
 
   private static final int MAX_LEN = 5;
-  private TextField textField;
+  private TextFieldLogic textField;
   private ClipboardAWT clipboard;
 
   public void setUp() {
     clipboard = new ClipboardAWT();
-    textField = new TextField("12345", clipboard);
+    textField = new TextFieldLogic("12345", clipboard);
     textField.setMaxLength(MAX_LEN);
   }
 

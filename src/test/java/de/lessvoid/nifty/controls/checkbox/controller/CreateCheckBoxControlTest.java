@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.StandardControl;
+import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
 import de.lessvoid.nifty.controls.checkbox.builder.CreateCheckBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;

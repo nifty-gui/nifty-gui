@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.listbox.controller;
+package de.lessvoid.nifty.controls.listbox;
 
 import java.util.List;
 import java.util.Properties;
@@ -9,8 +9,6 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxView;
 import de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl;
 import de.lessvoid.nifty.controls.scrollbar.controller.ScrollbarControlNotify;
 import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;

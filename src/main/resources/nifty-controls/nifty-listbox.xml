@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="listBox" style="nifty-listbox" childRootId="nifty-listbox-child-root" controller="de.lessvoid.nifty.controls.listbox.controller.ListBoxControl">
+  <controlDefinition name="listBox" style="nifty-listbox" childRootId="nifty-listbox-child-root" controller="de.lessvoid.nifty.controls.listbox.ListBoxControl">
     <panel childLayout="vertical">
       <panel childLayout="horizontal" id="nifty-listbox-scrollpanel">
-        <panel id="nifty-listbox-panel" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.controller.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
+        <panel id="nifty-listbox-panel" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
           <panel id="nifty-listbox-child-root" width="100%" childLayout="vertical" visibleToMouse="true">
             <!-- this is the template element used for the listbox items -->
-            <label text="Template" style="nifty-listbox-item" controller="de.lessvoid.nifty.controls.listbox.controller.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
+            <label text="Template" style="nifty-listbox-item" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
           </panel>
         </panel>
         <control id="nifty-internal-vertical-scrollbar" name="verticalScrollbar" style="nifty-vertical-scrollbar"/>

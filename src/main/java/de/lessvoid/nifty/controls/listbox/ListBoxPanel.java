@@ -1,11 +1,10 @@
-package de.lessvoid.nifty.controls.listbox.controller;
+package de.lessvoid.nifty.controls.listbox;
 
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;

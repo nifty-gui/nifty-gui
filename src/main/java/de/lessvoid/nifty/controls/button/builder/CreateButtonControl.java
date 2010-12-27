@@ -1,8 +1,8 @@
-package de.lessvoid.nifty.controls.button;
+package de.lessvoid.nifty.controls.button.builder;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
-import de.lessvoid.nifty.controls.button.controller.ButtonControl;
+import de.lessvoid.nifty.controls.button.ButtonControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;

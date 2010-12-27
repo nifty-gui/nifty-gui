@@ -4,7 +4,7 @@ package de.lessvoid.nifty.controls.textfield.controller;
  * TextField logic.
  * @author void
  */
-public class TextField {
+public class TextFieldLogic {
 
   /**
    * the text.
@@ -48,7 +48,7 @@ public class TextField {
    * @param newText init text
    * @param newClipboard clipboard
    */
-  public TextField(final String newText, final Clipboard newClipboard) {
+  public TextFieldLogic(final String newText, final Clipboard newClipboard) {
     initWithText(newText);
     clipboard = newClipboard;
     maxLength = -1;

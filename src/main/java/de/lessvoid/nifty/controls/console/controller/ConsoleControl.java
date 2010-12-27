@@ -8,7 +8,7 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
-import de.lessvoid.nifty.controls.textfield.TextFieldCreator;
+import de.lessvoid.nifty.controls.textfield.builder.TextFieldCreator;
 import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;

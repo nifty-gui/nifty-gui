@@ -5,6 +5,7 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -20,14 +21,13 @@ import de.lessvoid.xml.xpp3.Attributes;
  * 
  * @author void
  */
-public class TextFieldControl extends AbstractController {
+public class TextFieldControl extends AbstractController implements TextField {
   private static final int CURSOR_Y = 0;
   private Screen screen;
-  private Element element;
   private Element textElement;
   private Element fieldElement;
   private Element cursorElement;
-  private TextField textField;
+  private TextFieldLogic textField;
   private int firstVisibleCharacterIndex;
   private int lastVisibleCharacterIndex;
   private int fieldWidth;
@@ -46,17 +46,17 @@ public class TextFieldControl extends AbstractController {
       final Properties properties,
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
-    this.element = newElement;
+    super.bind(newElement);
     this.screen = screenParam;
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
 
-    this.textField = new TextField("", new ClipboardAWT());
+    this.textField = new TextFieldLogic("", new ClipboardAWT());
     this.textField.toFirstPosition();
 
-    this.textElement = element.findElementByName("textfield-text");
-    this.fieldElement = element.findElementByName("textfield-field");
-    this.cursorElement = element.findElementByName("textfield-cursor");
+    this.textElement = getElement().findElementByName("textfield-text");
+    this.fieldElement = getElement().findElementByName("textfield-field");
+    this.cursorElement = getElement().findElementByName("textfield-cursor");
 
     passwordChar = null;
     if (properties.containsKey("passwordChar")) {
@@ -214,7 +214,7 @@ public class TextFieldControl extends AbstractController {
     int cursorPixelPos = textWidth - d;
 
     cursorElement.setConstraintX(new SizeValue(cursorPixelPos + "px"));
-    cursorElement.setConstraintY(new SizeValue((element.getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
+    cursorElement.setConstraintY(new SizeValue((getElement().getHeight() - cursorElement.getHeight()) / 2 + CURSOR_Y + "px"));
     cursorElement.startEffect(EffectEventId.onActive, null);
     if (screen != null) {
       screen.layoutLayers();
@@ -270,19 +270,23 @@ public class TextFieldControl extends AbstractController {
     }
   }
 
+  @Override
   public String getText() {
     return textField.getText();
   }
 
+  @Override
   public void setText(final String newText) {
     textField.initWithText(newText);
     updateCursor();
   }
 
+  @Override
   public void setMaxLength(final int maxLength) {
     textField.setMaxLength(maxLength);
   }
 
+  @Override
   public void setCursorPosition(final int position) {
     textField.setCursorPosition(position);
     updateCursor();
