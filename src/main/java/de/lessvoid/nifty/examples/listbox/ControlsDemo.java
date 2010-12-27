@@ -11,6 +11,7 @@ import de.lessvoid.nifty.builder.LabelBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
@@ -136,13 +137,20 @@ public final class ControlsDemo {
           backgroundColor("#f002");
           height("10%");
           childLayoutHorizontal();
-          control(new ControlBuilder("removeSelectionAction", "button") {{
+          control(new ControlBuilder("changeButton", "button") {{
             set("label", "Change");
             interactOnClick("changeStyle(grey-style/nifty-grey-styles.xml)");
           }});
         }});
       }});
     }}.build(nifty);
+
+    // just add some items to the listbox
+    @SuppressWarnings("unchecked")
+    ListBox<JustAnExampleModelClass> listBox = (ListBox<JustAnExampleModelClass>) screen.findNiftyControl("listBox", ListBox.class);
+    listBox.addItem(new JustAnExampleModelClass("You can add more lines to this ListBox."));
+    listBox.addItem(new JustAnExampleModelClass("Use the append button to do this."));
+
     return screen;
   }
 

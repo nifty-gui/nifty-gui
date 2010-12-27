@@ -1,21 +1,21 @@
 package de.lessvoid.nifty.examples.listbox;
 
-import org.bushe.swing.event.annotation.AnnotationProcessor;
-import org.bushe.swing.event.annotation.EventTopicPatternSubscriber;
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventAnnotationProcessor;
+import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.LabelBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.PopupBuilder;
+import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
+import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -24,10 +24,12 @@ public class ControlsDemoScreenController implements ScreenController {
   private Screen screen;
   private ListBox<JustAnExampleModelClass> listBox;
   private ListBox<JustAnExampleModelClass> selectionListBox;
+  private Element dialogPanel;
   private CheckBox multiSelectionCheckBox;
   private CheckBox disableSelectionCheckBox;
   private CheckBox forceSelectionCheckBox;
-  private TextFieldControl addTextField;
+  private Button appendButton;
+  private TextField appendTextField;
 
   @Override
   public void bind(final Nifty nifty, final Screen screen) {
@@ -35,39 +37,44 @@ public class ControlsDemoScreenController implements ScreenController {
     this.screen = screen;
 
     // get the controls right here and save them for later use
+    dialogPanel = screen.findElementByName("dialog");
     listBox = getListBox("listBox");
     selectionListBox = getListBox("selectionListBox");
-    addTextField = screen.findControl("addTextField", TextFieldControl.class);
+    appendTextField = screen.findNiftyControl("addTextField", TextField.class);
     multiSelectionCheckBox = screen.findNiftyControl("multiSelectionCheckBox", CheckBox.class);
     disableSelectionCheckBox = screen.findNiftyControl("disableSelectionCheckBox", CheckBox.class);
     forceSelectionCheckBox  = screen.findNiftyControl("forceSelectionCheckBox", CheckBox.class);
+    appendButton = screen.findNiftyControl("addAction", Button.class);
 
-    // just add some items to the listbox
-    listBox.addItem(new JustAnExampleModelClass("You can add more lines to this ListBox."));
-    listBox.addItem(new JustAnExampleModelClass("Use the append button to do this."));
-
-    // important to enable the EvenBus annotations
-    AnnotationProcessor.process(this);
+    appendFieldAndButtonUpdate();
   }
 
   @Override
   public void onStartScreen() {
+    // We can have the event annotations on every class! it's not required to be a ScreenController or something
+    // even related to Nifty. We only need to make sure to call this method to enable the annotations.
+    NiftyEventAnnotationProcessor.process(this);    
   }
 
   @Override
   public void onEndScreen() {
+    NiftyEventAnnotationProcessor.unprocess(this);    
   }
 
   public void changeStyle(final String styleName) {
-    nifty.loadStyleFile(styleName);
-    nifty.gotoScreen("start");
+    if (dialogPanel.isEnabled()) {
+      dialogPanel.disable();
+    } else {
+      dialogPanel.enable();
+    }
+    System.out.println(screen.debugOutput());
   }
 
   /**
    * Called from Nifty on the button press. Add a new Item to the ListBox. 
    */
   public void addListBoxItem() {
-    String newItemContent = addTextField.getText();
+    String newItemContent = appendTextField.getText();
     if (newItemContent.length() == 0) {
       showPopup("You'll need to enter some text in the Append field first!");
       return;
@@ -90,18 +97,35 @@ public class ControlsDemoScreenController implements ScreenController {
     listBox.removeAllItems(listBox.getSelection());
   }
 
+  
+//  @NiftyEventSubscriber(pattern=".*")
+//  public void onNiftyInputControlEvent(final String id, final NiftyInputControlEvent event) {
+//    System.out.println("[" + id + "] sent NiftyInputControlEvent " + event);
+//  }
+//
+//  @NiftyEventSubscriber(id="addTextField")
+//  public void onAppendTextFieldEvent(final String id, final NiftyInputControlEvent event) {
+//    System.out.println("direct addTextField sent NiftyInputControlEvent " + event);
+//  }
+  
   /**
-   * This is an example how we could use a regular expression to select the topics we're interested in.
+   * This is an example how we could use a regular expression to select the elements we're interested in.
    * In this example all of our CheckBox Nifty Ids end with "CheckBox" and - in this example - all Checkboxes
    * influence the SelectionMode of the ListBox. All CheckBoxes really do the same here so we can take
-   * this shortcut and on the other hand demonstrate the @EventTopicPatternSubscriber annotation :) 
+   * this shortcut of handling all checkboxes equal.
+   *
+   * And we can demonstrate the @NiftyEventSubscriber annotation in pattern mode :) 
    */
-  @EventTopicPatternSubscriber(topicPattern=".*CheckBox", eventServiceName="NiftyEventBus")
+  @NiftyEventSubscriber(pattern=".*CheckBox")
   public void onAllCheckBoxChanged(final String id, final CheckBoxStateChangedEvent event) {
     changeSelectionMode();
   }
 
-  @EventTopicSubscriber(topic="listBox", eventServiceName="NiftyEventBus")
+  /**
+   * This event handler is directly listening to ListBoxSelectionChangedEvent of a single Control
+   * (the one with the Nifty id "listBox").
+   */
+  @NiftyEventSubscriber(id="listBox")
   public void onListBoxSelectionChanged(final String id, final ListBoxSelectionChangedEvent<JustAnExampleModelClass> changed) {
     // Now take the new selection of the listBox and apply it to the selectionListBox to show the current selection
     selectionListBox.clear();
@@ -174,21 +198,7 @@ public class ControlsDemoScreenController implements ScreenController {
     return SelectionMode.Single;
   }
 
-  /**
-   * This is just an example. This should really be your own model. The ListBox does call toString() on this
-   * to get the label it should display. But you can use your own ListBoxViewConverter if you want to use more
-   * sophisticated mechanism.
-   * @author void
-   */
-  private class JustAnExampleModelClass {
-    private String label;
-
-    public JustAnExampleModelClass(final String label) {
-      this.label = label;
-    }
-
-    public String toString() {
-      return label;
-    }
+  private void appendFieldAndButtonUpdate() {
+    appendButton.disable();
   }
 }
