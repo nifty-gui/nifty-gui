@@ -372,6 +372,7 @@ public class Screen {
       result.append("\n" + layerType + getIdText(layer) + "\n" + StringHelper.whitespace(layerType.length()) + layer.getElementStateString(StringHelper.whitespace(layerType.length())));
       result.append(outputElement(layer, "   "));
     }
+    result.append(focusHandler.toString());
     return result.toString();
   }
 

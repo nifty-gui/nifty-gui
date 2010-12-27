@@ -235,7 +235,7 @@ public class EffectManager {
     }
 
     if (activeProcessors == 0) {
-      return "{}";
+      return offset + "{}";
     } else {
       return data.toString();
     }

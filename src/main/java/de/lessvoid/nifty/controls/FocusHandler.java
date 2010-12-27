@@ -14,14 +14,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 public class FocusHandler {
   private Logger log = Logger.getLogger(FocusHandler.class.getName());
 
-  /**
-   * all elements that this focus handler controls.
-   */
   private ArrayList < Element > entries = new ArrayList < Element >();
-
-  /**
-   * buffer to save stuff.
-   */
   private ArrayList < ArrayList < Element >> elementBuffer = new ArrayList < ArrayList < Element >>();
 
   private Element mouseFocusElement;
@@ -253,10 +246,19 @@ public class FocusHandler {
       keyboardFocusString = keyboardFocusElement.toString();
     }
 
+    StringBuffer focusElements = new StringBuffer();
+    for (int i=0; i<entries.size(); i++) {
+      Element e = entries.get(i);
+      if (i > 0) {
+        focusElements.append(", ");
+      }
+      focusElements.append(e.getId());
+    }
     return
-         "focus element (mouse):    " + mouseFocusString + "\n"
+      "\n"
+       + "focus element (mouse):    " + mouseFocusString + "\n"
        + "focus element (keyboard): " + keyboardFocusString + "\n"
-       + "focus element size: " + entries.size();
+       + "focus element size: " + entries.size() + " [" + focusElements.toString() + "]";
   }
 
   public boolean hasAnyElementTheKeyboardFocus() {

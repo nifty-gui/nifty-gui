@@ -182,8 +182,9 @@ public class Nifty implements NiftyInputConsumer {
     soundSystem.update(delta);
     lastTime = current;
 
-//    System.out.println("--> screen output");
-//    System.out.println(currentScreen.debugOutput());
+    if (log.isLoggable(Level.FINE)) {
+      log.fine(currentScreen.debugOutput());
+    }
     return exit;
   }
 
@@ -734,7 +735,14 @@ public class Nifty implements NiftyInputConsumer {
     public void startControl(final Element newControl) {
       newControl.startEffect(EffectEventId.onStartScreen);
       newControl.startEffect(EffectEventId.onActive);
-      newControl.onStartScreen(screen);
+
+      // if this startControl is called with a screen that is already running (which means
+      // that the onStartScreen Event has been called already before) we have to call
+      // onStartScreen on the newControl here manually. It won't be called by the screen
+      // anymore.
+      if (screen.isRunning()) {
+        newControl.onStartScreen(screen);
+      }
     }
   }
 
