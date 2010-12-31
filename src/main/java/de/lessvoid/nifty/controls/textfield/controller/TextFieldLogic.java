@@ -43,13 +43,16 @@ public class TextFieldLogic {
 
   private int maxLength = -1;
 
+  private TextFieldView view;
+
   /**
    * Create TextField with clipboard support.
    * @param newText init text
    * @param newClipboard clipboard
    */
-  public TextFieldLogic(final String newText, final Clipboard newClipboard) {
-    initWithText(newText);
+  public TextFieldLogic(final String newText, final Clipboard newClipboard, final TextFieldView textFieldView) {
+    this.view = textFieldView;
+    initText(newText);
     clipboard = newClipboard;
     maxLength = -1;
   }
@@ -59,6 +62,14 @@ public class TextFieldLogic {
    * @param newText new text
    */
   public void initWithText(final String newText) {
+    initText(newText);
+
+    if (newText != null && newText.length() > 0) {
+      view.textChangeEvent(newText);
+    }
+  }
+
+  private void initText(final String newText) {
     this.text = new StringBuffer();
     if (newText != null) {
       this.text.append(newText);
@@ -137,6 +148,7 @@ public class TextFieldLogic {
    * Delete the character at the cursor position.
    */
   public void delete() {
+    String old = text.toString();
     if (hasSelection()) {
       text.delete(selectionStart, selectionEnd);
       cursorPosition = selectionStart;
@@ -144,6 +156,7 @@ public class TextFieldLogic {
     } else {
       text.delete(cursorPosition, cursorPosition + 1);
     }
+    notifyTextChange(old);
   }
 
   /**
@@ -182,6 +195,7 @@ public class TextFieldLogic {
    * Backspace.
    */
   public void backspace() {
+    String old = text.toString();
     if (hasSelection()) {
       text.delete(selectionStart, selectionEnd);
       cursorPosition = selectionStart;
@@ -193,6 +207,7 @@ public class TextFieldLogic {
         cursorPosition--;
       }
     }
+    notifyTextChange(old);
   }
 
   /**
@@ -209,6 +224,7 @@ public class TextFieldLogic {
    * @param c
    */
   public void insert(final char c) {
+    String old = text.toString();
     if (hasSelection()) {
       text.delete(selectionStart, selectionEnd);
       cursorPosition = selectionStart;
@@ -218,6 +234,7 @@ public class TextFieldLogic {
       text.insert(cursorPosition, c);
       cursorPosition++;
     }
+    notifyTextChange(old);
   }
 
   /**
@@ -286,6 +303,9 @@ public class TextFieldLogic {
    */
   public void cut(final Character passwordChar) {
     String selectedText = getSelectedText();
+    if (selectedText == null) {
+      return;
+    }
     clipboard.put(modifyWithPasswordChar(selectedText, passwordChar));
     delete();
   }
@@ -329,9 +349,19 @@ public class TextFieldLogic {
 
     if (maxLength != -1) {
       if (text.length() > maxLen) {
+        String old = text.toString();
         text = text.delete(maxLen, text.length());
         resetSelection();
+        notifyTextChange(old);
       }
     }
+  }
+
+  private void notifyTextChange(final String old) {
+    String current = text.toString();
+    if (old.equals(current)) {
+      return;
+    }
+    view.textChangeEvent(current);
   }
 }

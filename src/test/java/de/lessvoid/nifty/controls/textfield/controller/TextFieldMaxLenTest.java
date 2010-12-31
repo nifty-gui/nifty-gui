@@ -2,28 +2,18 @@ package de.lessvoid.nifty.controls.textfield.controller;
 
 import junit.framework.TestCase;
 
-
-
 public class TextFieldMaxLenTest extends TestCase {
 
   private static final int MAX_LEN = 5;
   private TextFieldLogic textField;
-  private ClipboardAWT clipboard;
 
   public void setUp() {
-    clipboard = new ClipboardAWT();
-    textField = new TextFieldLogic("12345", clipboard);
+    textField = new TextFieldLogic("12345", null, new EmptyTextFieldView());
     textField.setMaxLength(MAX_LEN);
   }
 
   public void testInsertWithMaxLength() {
     textField.insert('A');
-    assertEquals("12345", textField.getText());
-  }
-
-  public void testInsertWithPutMaxLength() {
-    clipboard.put("abcdef");
-    textField.put();
     assertEquals("12345", textField.getText());
   }
 
@@ -50,12 +40,5 @@ public class TextFieldMaxLenTest extends TestCase {
     textField.initWithText("");
     textField.setMaxLength(1);
     assertEquals("", textField.getText());
-  }
-
-  public void testMaxLengthCopyWithoutMaxLen() {
-    textField.setMaxLength(-1);
-    clipboard.put("abcdef");
-    textField.put();
-    assertEquals("abcdef12345", textField.getText());
   }
 }

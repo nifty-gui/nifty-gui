@@ -6,6 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
@@ -21,8 +22,9 @@ import de.lessvoid.xml.xpp3.Attributes;
  * 
  * @author void
  */
-public class TextFieldControl extends AbstractController implements TextField {
+public class TextFieldControl extends AbstractController implements TextField, TextFieldView {
   private static final int CURSOR_Y = 0;
+  private Nifty nifty;
   private Screen screen;
   private Element textElement;
   private Element fieldElement;
@@ -36,9 +38,6 @@ public class TextFieldControl extends AbstractController implements TextField {
   private FocusHandler focusHandler;
   private Character passwordChar;
 
-  public TextFieldControl() {
-  }
-
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -47,11 +46,12 @@ public class TextFieldControl extends AbstractController implements TextField {
       final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     super.bind(newElement);
+    this.nifty = niftyParam;
     this.screen = screenParam;
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
 
-    this.textField = new TextFieldLogic("", new ClipboardAWT());
+    this.textField = new TextFieldLogic("", new ClipboardAWT(), this);
     this.textField.toFirstPosition();
 
     this.textElement = getElement().findElementByName("textfield-text");
@@ -157,6 +157,15 @@ public class TextFieldControl extends AbstractController implements TextField {
       textField.put();
       updateCursor();
       return true;
+    } else if (inputEvent == NiftyInputEvent.SelectAll) {
+      if (textField.getText().length() > 0) {
+        textField.setCursorPosition(0);
+        textField.startSelecting();
+        textField.setCursorPosition(textField.getText().length());
+        textField.endSelecting();
+        updateCursor();
+        return true;
+      }
     } else if (inputEvent == NiftyInputEvent.Character) {
       textField.insert(inputEvent.getCharacter());
       updateCursor();
@@ -290,5 +299,10 @@ public class TextFieldControl extends AbstractController implements TextField {
   public void setCursorPosition(final int position) {
     textField.setCursorPosition(position);
     updateCursor();
+  }
+
+  @Override
+  public void textChangeEvent(final String newText) {
+    nifty.publishEvent(getElement().getId(), new TextFieldChangedEvent(newText));
   }
 }

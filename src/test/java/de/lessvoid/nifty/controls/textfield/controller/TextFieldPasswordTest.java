@@ -12,7 +12,7 @@ public class TextFieldPasswordTest extends TestCase {
   public void setUp() {
     clipboard = createMock(Clipboard.class);
 
-    textField = new TextFieldLogic("hello", clipboard);
+    textField = new TextFieldLogic("hello", clipboard, new EmptyTextFieldView());
     textField.setCursorPosition(0);
     textField.startSelecting();
     textField.setCursorPosition(MAX_CURSOR_POSITION);

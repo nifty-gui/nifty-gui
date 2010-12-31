@@ -66,6 +66,8 @@ public class TextFieldInputMapping implements NiftyInputMapping {
         return NiftyInputEvent.Copy;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_V) {
         return NiftyInputEvent.Paste;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_A) {
+        return NiftyInputEvent.SelectAll;
       }
     }
     return null;
