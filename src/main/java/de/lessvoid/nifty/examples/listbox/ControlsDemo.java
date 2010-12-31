@@ -79,7 +79,7 @@ public final class ControlsDemo {
             panel(new PanelBuilder() {{
               width("8px");
             }});
-            control(new ControlBuilder("addAction", "button") {{
+            control(new ControlBuilder("appendButton", "button") {{
               set("label", "Append");
               width("100px");
               height("28px");
@@ -123,7 +123,7 @@ public final class ControlsDemo {
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
             label(createLabel("Remove Sel.:"));
-            control(new ControlBuilder("removeSelectionAction", "button") {{
+            control(new ControlBuilder("removeSelectionButton", "button") {{
               set("label", "Remove Selection From ListBox");
               width("280px");
               interactOnClick("removeSelectionAction()");

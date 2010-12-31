@@ -15,7 +15,10 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -29,7 +32,9 @@ public class ControlsDemoScreenController implements ScreenController {
   private CheckBox disableSelectionCheckBox;
   private CheckBox forceSelectionCheckBox;
   private Button appendButton;
-  private TextField appendTextField;
+  private Button removeSelectionButton;
+  private TextField addTextField;
+  private Element popup;
 
   @Override
   public void bind(final Nifty nifty, final Screen screen) {
@@ -40,18 +45,22 @@ public class ControlsDemoScreenController implements ScreenController {
     dialogPanel = screen.findElementByName("dialog");
     listBox = getListBox("listBox");
     selectionListBox = getListBox("selectionListBox");
-    appendTextField = screen.findNiftyControl("addTextField", TextField.class);
+    addTextField = screen.findNiftyControl("addTextField", TextField.class);
     multiSelectionCheckBox = screen.findNiftyControl("multiSelectionCheckBox", CheckBox.class);
     disableSelectionCheckBox = screen.findNiftyControl("disableSelectionCheckBox", CheckBox.class);
     forceSelectionCheckBox  = screen.findNiftyControl("forceSelectionCheckBox", CheckBox.class);
-    appendButton = screen.findNiftyControl("addAction", Button.class);
+    appendButton = screen.findNiftyControl("appendButton", Button.class);
+    removeSelectionButton = screen.findNiftyControl("removeSelectionButton", Button.class);
 
-    appendFieldAndButtonUpdate();
+    popup = registerPopup();
+
+    setAppendButtonState();
+    setRemoveSelectionButtonState();
   }
 
   @Override
   public void onStartScreen() {
-    // We can have the event annotations on every class! it's not required to be a ScreenController or something
+    // We can have the event annotations on every class! It's not required to be a ScreenController or something
     // even related to Nifty. We only need to make sure to call this method to enable the annotations.
     NiftyEventAnnotationProcessor.process(this);    
   }
@@ -67,21 +76,15 @@ public class ControlsDemoScreenController implements ScreenController {
     } else {
       dialogPanel.enable();
     }
-    System.out.println(screen.debugOutput());
+    System.out.println(screen.debugOutput(".*enabled.*"));
   }
 
   /**
    * Called from Nifty on the button press. Add a new Item to the ListBox. 
    */
   public void addListBoxItem() {
-    String newItemContent = appendTextField.getText();
-    if (newItemContent.length() == 0) {
-      showPopup("You'll need to enter some text in the Append field first!");
-      return;
-    }
-
     // add the item and make sure that the last item is shown
-    listBox.addItem(new JustAnExampleModelClass(newItemContent));
+    listBox.addItem(new JustAnExampleModelClass(addTextField.getText()));
     listBox.showItemByIndex(listBox.itemCount() - 1);
   }
 
@@ -97,17 +100,6 @@ public class ControlsDemoScreenController implements ScreenController {
     listBox.removeAllItems(listBox.getSelection());
   }
 
-  
-//  @NiftyEventSubscriber(pattern=".*")
-//  public void onNiftyInputControlEvent(final String id, final NiftyInputControlEvent event) {
-//    System.out.println("[" + id + "] sent NiftyInputControlEvent " + event);
-//  }
-//
-//  @NiftyEventSubscriber(id="addTextField")
-//  public void onAppendTextFieldEvent(final String id, final NiftyInputControlEvent event) {
-//    System.out.println("direct addTextField sent NiftyInputControlEvent " + event);
-//  }
-  
   /**
    * This is an example how we could use a regular expression to select the elements we're interested in.
    * In this example all of our CheckBox Nifty Ids end with "CheckBox" and - in this example - all Checkboxes
@@ -130,6 +122,24 @@ public class ControlsDemoScreenController implements ScreenController {
     // Now take the new selection of the listBox and apply it to the selectionListBox to show the current selection
     selectionListBox.clear();
     selectionListBox.addAllItems(changed.getSelection());
+    setRemoveSelectionButtonState();
+  }
+
+  @NiftyEventSubscriber(id="addTextField")
+  public void onAppendTextFieldChanged(final String id, final TextFieldChangedEvent event) {
+    setAppendButtonState();
+  }
+
+  @NiftyEventSubscriber(id="addTextField")
+  public void onAddTextFieldInputEvent(final String id, final NiftyInputEvent event) {
+    if (NiftyInputEvent.SubmitText.equals(event)) {
+      if (addTextField.getText().length() == 0) {
+        showPopup("Yeah, nice idea! This will work when you've entered some text first! :)");
+        return;
+      }
+
+      appendButton.activate();
+    }
   }
 
   public void closePopup() {
@@ -137,7 +147,12 @@ public class ControlsDemoScreenController implements ScreenController {
   }
 
   private void showPopup(final String message) {
-    new PopupBuilder("test") {{
+    popup.findElementByName("message").getRenderer(TextRenderer.class).setText(message);
+    nifty.showPopup(screen, "test", null);
+  }
+
+  private Element registerPopup() {
+    return new PopupBuilder("test") {{
       backgroundColor("#000a");
       childLayoutCenter();
       onStartScreenEffect(new EffectBuilder("fade").length(150).parameter("start", "#0").parameter("end", "#a"));
@@ -148,7 +163,7 @@ public class ControlsDemoScreenController implements ScreenController {
         alignCenter();
         valignCenter();
         style("nifty-panel-red");
-        width("45%");
+        width("55%");
         height("20%");
         onStartScreenEffect(new EffectBuilder("fade").length(100).startDelay(150).parameter("start", "#0").parameter("end", "#f").inherit());
         onStartScreenEffect(new EffectBuilder("imageSize").length(100).startDelay(150).timeType("exp").parameter("factor", "3.5").parameter("startSize", "1.5").parameter("endSize", "1.0").inherit());
@@ -160,9 +175,9 @@ public class ControlsDemoScreenController implements ScreenController {
           valignCenter();
           onStartScreenEffect(new EffectBuilder("fade").length(50).startDelay(350).parameter("start", "#0").parameter("end", "#f").inherit());
           onEndScreenEffect(new EffectBuilder("fade").length(50).startDelay(0).parameter("start", "#f").parameter("end", "#0").inherit());
-          label(new LabelBuilder() {{
+          label(new LabelBuilder("message") {{
             alignCenter();
-            text(message);
+            text("");
           }});
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
@@ -175,8 +190,7 @@ public class ControlsDemoScreenController implements ScreenController {
           }});
         }});
       }});
-    }}.build(nifty, screen, null);
-    nifty.showPopup(screen, "test", null);
+    }}.registerPopup(nifty);
   }
 
   @SuppressWarnings("unchecked")
@@ -198,7 +212,21 @@ public class ControlsDemoScreenController implements ScreenController {
     return SelectionMode.Single;
   }
 
-  private void appendFieldAndButtonUpdate() {
-    appendButton.disable();
+  private void setAppendButtonState() {
+    if (addTextField.getText().isEmpty()) {
+      appendButton.disable();
+    } else {
+      appendButton.enable();
+    }
+    System.out.println(screen.debugOutput(".*enabled.*"));
+  }
+
+  private void setRemoveSelectionButtonState() {
+    if (selectionListBox.itemCount() == 0) {
+      removeSelectionButton.disable();
+    } else {
+      removeSelectionButton.enable();
+    }
+    System.out.println(screen.debugOutput(".*enabled.*"));
   }
 }
