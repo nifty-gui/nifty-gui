@@ -5,6 +5,8 @@ import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loaderv2.types.ControlType;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 
 public class CreateCheckBoxControl extends ControlAttributes {
@@ -27,5 +29,10 @@ public class CreateCheckBoxControl extends ControlAttributes {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControlsWithoutStartScreen();
     return parent.findControl(attributes.get("id"), CheckboxControl.class);
+  }
+
+  @Override
+  public ElementType createType() {
+    return new ControlType(attributes);
   }
 }
