@@ -1,10 +1,12 @@
 package de.lessvoid.nifty.input;
 
+import de.lessvoid.nifty.NiftyEvent;
+
 /**
  * a nifty input event.
  * @author void
  */
-public enum NiftyInputEvent {
+public enum NiftyInputEvent implements NiftyEvent<Void> {
   /**
    * goto next input element.
    */
@@ -74,6 +76,11 @@ public enum NiftyInputEvent {
    * selection end.
    */
   SelectionEnd,
+
+  /**
+   * select all.
+   */
+  SelectAll,
 
   /**
    * cut.

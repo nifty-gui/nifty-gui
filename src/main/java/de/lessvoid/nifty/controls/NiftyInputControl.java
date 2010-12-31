@@ -42,7 +42,7 @@ public class NiftyInputControl {
     NiftyInputEvent converted = inputMapper.convert(inputEvent);
 
     if (converted != null) {
-        nifty.publishEvent(elementId, new de.lessvoid.nifty.controls.NiftyInputControlEvent(converted));
+        nifty.publishEvent(elementId, converted);
     }
 
     if (controller.inputEvent(converted)) {
