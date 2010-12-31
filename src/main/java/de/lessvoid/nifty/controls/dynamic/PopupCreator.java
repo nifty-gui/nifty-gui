@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.controls.dynamic;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
+import de.lessvoid.nifty.loaderv2.types.PopupType;
 
 public class PopupCreator extends ControlAttributes {
   public PopupCreator() {
@@ -15,9 +14,8 @@ public class PopupCreator extends ControlAttributes {
     setId(id);
   }
 
-  public Element create(final Nifty nifty, final Screen screen) {
-    Element popup = createPopup(nifty, screen, screen.getRootElement());
-    nifty.addPopupElement(attributes.get("id"), popup);
-    return popup;
+  @Override
+  public ElementType createType() {
+    return new PopupType(attributes);
   }
 }

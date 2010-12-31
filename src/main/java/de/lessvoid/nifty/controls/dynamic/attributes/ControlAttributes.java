@@ -17,7 +17,7 @@ import de.lessvoid.nifty.loaderv2.types.TextType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class ControlAttributes {
+public abstract class ControlAttributes {
   protected Attributes attributes = new Attributes();
   private ControlInteractAttributes interact;
   private ControlEffectsAttributes effects;
@@ -306,9 +306,10 @@ public class ControlAttributes {
     return buildControl(nifty, screen, parent, panelType, new LayoutPart());
   }
 
-  protected Element createPopup(final Nifty nifty, final Screen screen, final Element parent) {
+  protected void registerPopup(final Nifty nifty) {
     PopupType popupType = new PopupType(attributes);
-    return buildControl(nifty, screen, parent, popupType, nifty.getRootLayerFactory().createRootLayerLayoutPart(nifty));
+    popupType.translateSpecialValues(nifty, null);
+    nifty.registerPopup(popupType);
   }
 
   protected Element createLayer(
@@ -364,6 +365,17 @@ public class ControlAttributes {
   public void refreshEffects(final EffectsType effects) {
     if (this.effects != null) {
       effects.refreshFromAttributes(this.effects);
+    }
+  }
+
+  public abstract ElementType createType();
+
+  public void connect(final ElementType e) {
+    if (effects != null) {
+      e.setEffect(effects.create());
+    }
+    if (interact != null) {
+      e.setInteract(interact.create());
     }
   }
 }

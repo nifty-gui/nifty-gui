@@ -8,7 +8,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
-import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
@@ -92,6 +91,10 @@ public class ElementType extends XmlBaseType {
 
   public ElementType getFirstElement() {
     return elements.iterator().next();
+  }
+
+  public void addElementType(final ElementType type) {
+    elements.add(type);
   }
 
   public void addPanel(final ElementType panel) {

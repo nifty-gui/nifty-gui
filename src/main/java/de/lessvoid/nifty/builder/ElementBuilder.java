@@ -9,6 +9,7 @@ import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlInteractAttributes;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
 
@@ -390,6 +391,25 @@ public abstract class ElementBuilder {
   protected abstract Element buildInternal(Nifty nifty, Screen screen, Element parent);
 
   public Element build(final Nifty nifty, final Screen screen, final Element parent) {
+    connectAttributes();
+    Element element = buildInternal(nifty, screen, parent);
+    for (ElementBuilder elementBuilder : elementBuilders) {
+      elementBuilder.build(nifty, screen, element);
+    }
+    return element;
+  }
+
+  protected ElementType buildElementType() {
+    connectAttributes();
+    ElementType thisType = attributes.createType();
+    attributes.connect(thisType);
+    for (ElementBuilder elementBuilder : elementBuilders) {
+      thisType.addElementType(elementBuilder.buildElementType());
+    }
+    return thisType;
+  }
+
+  private void connectAttributes() {
     attributes.setEffects(createEffects());
     for (EffectBuilder effectBuild : onStartScreen) {
       attributes.addEffectsOnStartScreen(effectBuild.getAttributes());
@@ -424,11 +444,6 @@ public abstract class ElementBuilder {
     for (EffectBuilder effectBuild : onHide) {
       attributes.addEffectsOnHide(effectBuild.getAttributes());
     }
-    Element element = buildInternal(nifty, screen, parent);
-    for (ElementBuilder elementBuilder : elementBuilders) {
-      elementBuilder.build(nifty, screen, element);
-    }
-    return element;
   }
 
   private ControlEffectsAttributes createEffects() {

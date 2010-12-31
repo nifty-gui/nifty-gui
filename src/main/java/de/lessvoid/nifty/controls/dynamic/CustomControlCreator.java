@@ -4,6 +4,8 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loaderv2.types.ControlType;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 
 public class CustomControlCreator extends ControlAttributes {
@@ -24,5 +26,10 @@ public class CustomControlCreator extends ControlAttributes {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControls();
     return parent.findElementByName(attributes.get("id"));
+  }
+
+  @Override
+  public ElementType createType() {
+    return new ControlType(attributes);
   }
 }

@@ -5,6 +5,8 @@ import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
+import de.lessvoid.nifty.loaderv2.types.TextType;
 import de.lessvoid.nifty.screen.Screen;
 
 public class TextCreator extends ControlAttributes {
@@ -29,5 +31,10 @@ public class TextCreator extends ControlAttributes {
     });
     nifty.addControlsWithoutStartScreen();
     return parent.findElementByName(attributes.get("id"));
+  }
+
+  @Override
+  public ElementType createType() {
+    return new TextType(attributes);
   }
 }
