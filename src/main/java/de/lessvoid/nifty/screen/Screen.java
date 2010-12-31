@@ -363,25 +363,31 @@ public class Screen {
   }
 
   public String debugOutput() {
+    return debugOutput(".*");
+  }
+
+  public String debugOutput(final String regexp) {
     StringBuffer result = new StringBuffer();
     for (Element layer : getLayerElements()) {
       String layerType = " +";
       if (!layer.isVisible()) {
         layerType = " -";
       }
-      result.append("\n" + layerType + getIdText(layer) + "\n" + StringHelper.whitespace(layerType.length()) + layer.getElementStateString(StringHelper.whitespace(layerType.length())));
-      result.append(outputElement(layer, "   "));
+      result.append(
+          "\n" + layerType + getIdText(layer) +
+          "\n" + StringHelper.whitespace(layerType.length()) + layer.getElementStateString(StringHelper.whitespace(layerType.length()), regexp));
+      result.append(outputElement(layer, "   ", regexp));
     }
     result.append(focusHandler.toString());
     return result.toString();
   }
 
-  public String outputElement(final Element w, final String offset) {
+  public String outputElement(final Element w, final String offset, final String regexp) {
     StringBuffer result = new StringBuffer();
     for (Element ww : w.getElements()) {
       result.append("\n" + offset + getIdText(ww) + " " + ww.getElementType().getClass().getSimpleName() + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]");  
-      result.append("\n" + StringHelper.whitespace(offset.length()) + ww.getElementStateString(StringHelper.whitespace(offset.length())));
-      result.append(outputElement(ww, offset + " "));
+      result.append("\n" + StringHelper.whitespace(offset.length()) + ww.getElementStateString(StringHelper.whitespace(offset.length()), regexp));
+      result.append(outputElement(ww, offset + " ", regexp));
     }
     return result.toString();
   }

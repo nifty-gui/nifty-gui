@@ -117,6 +117,12 @@ public class Element {
    * enable element.
    */
   private boolean enabled;
+
+  /**
+   * This helps us to keep track when you enable or disable this multiple times. We don't want
+   * to start the onEnabled/onDisabled effects when the element is already enabled/disabled.
+   */
+  private int enabledCount;
   
   /**
    * visible element.
@@ -200,6 +206,9 @@ public class Element {
    * TimeProvider.
    */
   private TimeProvider time;
+
+  private List<String> elementDebugOut = new ArrayList<String>();
+  private StringBuffer elementDebug = new StringBuffer();
 
   private boolean parentClipArea = false;
   private int parentClipX;
@@ -301,6 +310,7 @@ public class Element {
     this.effectManager.setAlternateKey(nifty.getAlternateKey());
     this.layoutPart = newLayoutPart;
     this.enabled = true;
+    this.enabledCount = 0;
     this.visible = true;
     this.done = false;
     this.interactionBlocked = false;
@@ -334,20 +344,37 @@ public class Element {
   /**
    * get element state as string.
    * @param offset offset string
+   * @param regex 
    * @return the element state as string.
    */
   public String getElementStateString(final String offset) {
-    String pos = ""
-      + " style [" + getElementType().getAttributes().get("style") + "]\n" + offset
-      + " state [" + getState() + "]\n" + offset
-      + " position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]\n" + offset
-      + " constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]\n" + offset
-      + " padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]\n" + offset
-      + " focusable [" + focusable + "]\n" + offset
-      + " enabled [" + enabled + "]\n" + offset
-      + " mouseable [" + visibleToMouseEvents + "]\n" + offset
-      + " effects: \n" + effectManager.getStateString(offset);
-    return pos;
+    return getElementStateString(offset, ".*");
+  }
+
+  public String getElementStateString(final String offset, final String regex) {
+    elementDebugOut.clear();
+    elementDebugOut.add(" style [" + getElementType().getAttributes().get("style") + "]");
+    elementDebugOut.add(" state [" + getState() + "]");
+    elementDebugOut.add(" position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]");
+    elementDebugOut.add(" constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]");
+    elementDebugOut.add(" padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]");
+    elementDebugOut.add(" focusable [" + focusable + "]");
+    elementDebugOut.add(" enabled [" + enabled + "(" + enabledCount + ")]");
+    elementDebugOut.add(" mouseable [" + visibleToMouseEvents + "]");
+    elementDebugOut.add(" effects: [" + effectManager.getStateString(offset) + "]");
+
+    elementDebug.delete(0, elementDebug.length());
+    for (int i=0; i<elementDebugOut.size(); i++) {
+      String line = elementDebugOut.get(i);
+      if (line.matches(regex)) {
+        if (elementDebug.length() > 0) {
+          elementDebug.append("\n" + offset);
+        }
+        elementDebug.append(line);
+      }
+    }
+    System.out.println("{" + elementDebug.toString() + "}");
+    return elementDebug.toString();
   }
 
   private String getState() {
@@ -643,7 +670,6 @@ public class Element {
    * reset all effects.
    */
   public void resetEffects() {
-//    mouseDown = false;
     effectManager.reset();
     for (Element w : elements) {
       w.resetEffects();
@@ -651,7 +677,6 @@ public class Element {
   }
 
   public void resetAllEffects() {
-//    mouseDown = false;
     effectManager.resetAll();
     for (Element w : elements) {
       w.resetAllEffects();
@@ -659,7 +684,6 @@ public class Element {
   }
 
   public void resetSingleEffect(final EffectEventId effectEventId) {
-//    mouseDown = false;
     effectManager.resetSingleEffect(effectEventId);
     for (Element w : elements) {
       w.resetSingleEffect(effectEventId);
@@ -667,7 +691,6 @@ public class Element {
   }
   
   public void resetSingleEffect(final EffectEventId effectEventId, final String customKey) {
-//    mouseDown = false;
     effectManager.resetSingleEffect(effectEventId, customKey);
     for (Element w : elements) {
       w.resetSingleEffect(effectEventId, customKey);
@@ -675,7 +698,6 @@ public class Element {
   }
 
   public void resetMouseDown() {
-//    mouseDown = false;
     for (Element w : elements) {
       w.resetMouseDown();
     }
@@ -794,6 +816,22 @@ public class Element {
   }
 
   public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
+    startEffectDoIt(effectEventId, effectEndNotiy, customKey, true);
+  }
+
+  public void startEffectWithoutChildren(final EffectEventId effectEventId) {
+    startEffectWithoutChildren(effectEventId, null);
+  }
+
+  public void startEffectWithoutChildren(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
+    startEffectWithoutChildren(effectEventId, effectEndNotiy, null);
+  }
+
+  public void startEffectWithoutChildren(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
+    startEffectDoIt(effectEventId, effectEndNotiy, customKey, false);
+  }
+
+  private void startEffectDoIt(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey, final boolean withChildren) {
     if (effectEventId == EffectEventId.onStartScreen) {
       if (!visible) {
         return;
@@ -825,8 +863,10 @@ public class Element {
     effectManager.startEffect(effectEventId, this, time, forwardToSelf, customKey);
 
     // notify all child elements of the start effect
-    for (Element w : getElements()) {
-      w.startEffectInternal(effectEventId, forwardToSelf, customKey);
+    if (withChildren) {
+      for (Element w : getElements()) {
+        w.startEffectInternal(effectEventId, forwardToSelf, customKey);
+      }
     }
 
     if (effectEventId == EffectEventId.onFocus) {
@@ -884,6 +924,14 @@ public class Element {
    * @param effectEventId effect event id to stop
    */
   public void stopEffect(final EffectEventId effectEventId) {
+    stopEffectInternal(effectEventId, true);
+  }
+
+  public void stopEffectWithoutChildren(final EffectEventId effectEventId) {
+    stopEffectInternal(effectEventId, false);
+  }
+
+  private void stopEffectInternal(final EffectEventId effectEventId, final boolean withChildren) {
     if (EffectEventId.onStartScreen == effectEventId ||
         EffectEventId.onEndScreen == effectEventId) {
       interactionBlocked = false;
@@ -894,8 +942,10 @@ public class Element {
     effectManager.stopEffect(effectEventId);
 
     // notify all child elements of the start effect
-    for (Element w : getElements()) {
-      w.stopEffect(effectEventId);
+    if (withChildren) {
+      for (Element w : getElements()) {
+        w.stopEffect(effectEventId);
+      }
     }
 
     if (effectEventId == EffectEventId.onFocus) {
@@ -923,41 +973,73 @@ public class Element {
    * enable this element.
    */
   public void enable() {
-    if (enabled) {
-      return;
+    // when the element that gets the direct enable() call is disabled it will
+    // always be reset to enabled no matter how many times it has been enabled or
+    // disabled before.
+    if (!enabled) {
+      enabledCount = -1;
     }
-    internalEnable();
-    stopEffect(EffectEventId.onDisabled);
-    startEffect(EffectEventId.onEnabled);
+    secondaryEnable();
   }
 
-  private void internalEnable() {
-    enabled = true;
-    for (int i=0; i<elements.size(); i++) {
-      elements.get(i).internalEnable();
+  private void secondaryEnable() {
+    enabledCount++;
+    if (enabledCount == 0) {
+      enabled = true;
+      enableEffect();
+
+      for (int i=0; i<elements.size(); i++) {
+        elements.get(i).secondaryEnable();
+      }
     }
+  }
+
+  void enableEffect() {
+    stopEffectWithoutChildren(EffectEventId.onDisabled);
+    startEffectWithoutChildren(EffectEventId.onEnabled);
   }
 
   /**
    * disable this element.
    */
   public void disable() {
-    if (!enabled) {
-      for (int i=0; i<elements.size(); i++) {
-        elements.get(i).disable();
-      }
-      return;
+    // when the element that gets the direct disable() call is enabled it will
+    // always been disabled no matter how many times it has been enabled or
+    // disabled before.
+    if (enabled) {
+      enabledCount = 0;
     }
-    internalDisable();
-    stopEffect(EffectEventId.onEnabled);
-    startEffect(EffectEventId.onDisabled);
+    secondaryDisable();
   }
 
-  private void internalDisable() {
-    enabled = false;
-    for (int i=0; i<elements.size(); i++) {
-      elements.get(i).internalDisable();
+  /**
+   * The secondaryDisable() will travel down the hierarchy of child elements.
+   */
+  private void secondaryDisable() {
+    enabledCount--;
+    if (enabledCount == -1) {
+      enabled = false;
+      disableFocus();
+      disableEffect();
+      for (int i=0; i<elements.size(); i++) {
+        elements.get(i).secondaryDisable();
+      }
     }
+  }
+
+  void disableFocus() {
+    focusHandler.lostKeyboardFocus(Element.this);
+    focusHandler.lostMouseFocus(Element.this);
+  }
+
+  void disableEffect() {
+    stopEffectWithoutChildren(EffectEventId.onHover);
+    stopEffectWithoutChildren(EffectEventId.onEnabled);
+    startEffectWithoutChildren(EffectEventId.onDisabled);
+  }
+
+  private boolean isAlreadyDisabled() {
+    return !enabled;
   }
 
   /**
@@ -1024,8 +1106,7 @@ public class Element {
     // start effect and shizzle
     startEffect(EffectEventId.onHide, new EndNotify() {
       public void perform() {
-        focusHandler.lostKeyboardFocus(Element.this);
-        focusHandler.lostMouseFocus(Element.this);
+        disableFocus();
 
         resetEffects();
         internalHide();
@@ -1050,8 +1131,7 @@ public class Element {
   private void internalHide() {
     visible = false;
 
-    focusHandler.lostKeyboardFocus(Element.this);
-    focusHandler.lostMouseFocus(Element.this);
+    disableFocus();
 
     for (Element element : elements) {
       element.internalHide();
