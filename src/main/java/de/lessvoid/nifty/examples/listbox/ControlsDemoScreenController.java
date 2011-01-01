@@ -76,7 +76,7 @@ public class ControlsDemoScreenController implements ScreenController {
     } else {
       dialogPanel.enable();
     }
-    System.out.println(screen.debugOutput(".*enabled.*"));
+    System.out.println(screen.debugOutput(".*", ".*enabled.*"));
   }
 
   /**
@@ -218,7 +218,7 @@ public class ControlsDemoScreenController implements ScreenController {
     } else {
       appendButton.enable();
     }
-    System.out.println(screen.debugOutput(".*enabled.*"));
+    System.out.println(screen.debugOutput(".*Button.*", ".*enabled.*"));
   }
 
   private void setRemoveSelectionButtonState() {
@@ -227,6 +227,6 @@ public class ControlsDemoScreenController implements ScreenController {
     } else {
       removeSelectionButton.enable();
     }
-    System.out.println(screen.debugOutput(".*enabled.*"));
+    System.out.println(screen.debugOutput(".*Button.*", ".*enabled.*"));
   }
 }
