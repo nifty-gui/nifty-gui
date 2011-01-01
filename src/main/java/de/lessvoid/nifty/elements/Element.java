@@ -973,23 +973,23 @@ public class Element {
    * enable this element.
    */
   public void enable() {
-    // when the element that gets the direct enable() call is disabled it will
-    // always be reset to enabled no matter how many times it has been enabled or
-    // disabled before.
-    if (!enabled) {
-      enabledCount = -1;
+    if (enabled) {
+      enabledCount = 0;
+      for (int i=0; i<elements.size(); i++) {
+        elements.get(i).enable();
+      }
+      return;
     }
-    secondaryEnable();
-  }
-
-  private void secondaryEnable() {
     enabledCount++;
     if (enabledCount == 0) {
       enabled = true;
       enableEffect();
-
       for (int i=0; i<elements.size(); i++) {
-        elements.get(i).secondaryEnable();
+        elements.get(i).enable();
+      }
+    } else {
+      for (int i=0; i<elements.size(); i++) {
+        elements.get(i).enable();
       }
     }
   }
@@ -1003,26 +1003,17 @@ public class Element {
    * disable this element.
    */
   public void disable() {
-    // when the element that gets the direct disable() call is enabled it will
-    // always been disabled no matter how many times it has been enabled or
-    // disabled before.
-    if (enabled) {
-      enabledCount = 0;
-    }
-    secondaryDisable();
-  }
-
-  /**
-   * The secondaryDisable() will travel down the hierarchy of child elements.
-   */
-  private void secondaryDisable() {
     enabledCount--;
     if (enabledCount == -1) {
       enabled = false;
       disableFocus();
       disableEffect();
       for (int i=0; i<elements.size(); i++) {
-        elements.get(i).secondaryDisable();
+        elements.get(i).disable();
+      }
+    } else {
+      for (int i=0; i<elements.size(); i++) {
+        elements.get(i).disable();
       }
     }
   }

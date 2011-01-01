@@ -91,6 +91,7 @@ public class ElementEnableDisableTest {
     e2.disable();
     e2.disable();
     e2.enable();
+    e2.enable();
   }
 
   @Test
