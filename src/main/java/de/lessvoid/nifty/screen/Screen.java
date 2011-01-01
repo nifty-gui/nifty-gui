@@ -363,10 +363,10 @@ public class Screen {
   }
 
   public String debugOutput() {
-    return debugOutput(".*");
+    return debugOutput(".*", ".*");
   }
 
-  public String debugOutput(final String regexp) {
+  public String debugOutput(final String regexpElement, final String regexpAttribute) {
     StringBuffer result = new StringBuffer();
     for (Element layer : getLayerElements()) {
       String layerType = " +";
@@ -375,19 +375,24 @@ public class Screen {
       }
       result.append(
           "\n" + layerType + getIdText(layer) +
-          "\n" + StringHelper.whitespace(layerType.length()) + layer.getElementStateString(StringHelper.whitespace(layerType.length()), regexp));
-      result.append(outputElement(layer, "   ", regexp));
+          "\n" + StringHelper.whitespace(layerType.length()) + layer.getElementStateString(StringHelper.whitespace(layerType.length()), regexpAttribute));
+      result.append(outputElement(layer, "   ", regexpElement, regexpAttribute));
     }
     result.append(focusHandler.toString());
     return result.toString();
   }
 
-  public String outputElement(final Element w, final String offset, final String regexp) {
+  public String outputElement(final Element w, final String offset, final String regexpElement, final String regexpAttribute) {
     StringBuffer result = new StringBuffer();
     for (Element ww : w.getElements()) {
-      result.append("\n" + offset + getIdText(ww) + " " + ww.getElementType().getClass().getSimpleName() + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]");  
-      result.append("\n" + StringHelper.whitespace(offset.length()) + ww.getElementStateString(StringHelper.whitespace(offset.length()), regexp));
-      result.append(outputElement(ww, offset + " ", regexp));
+      String elementId = getIdText(ww);
+      if (elementId.matches(regexpElement)) {
+        result.append("\n" + offset + elementId + " " + ww.getElementType().getClass().getSimpleName() + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]");  
+        result.append("\n" + StringHelper.whitespace(offset.length()) + ww.getElementStateString(StringHelper.whitespace(offset.length()), regexpAttribute));
+        result.append(outputElement(ww, offset + " ", ".*", regexpAttribute));
+      } else {
+        result.append(outputElement(ww, offset + " ", regexpElement, regexpAttribute));
+      }
     }
     return result.toString();
   }
