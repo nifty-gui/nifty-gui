@@ -43,19 +43,20 @@ public class MouseOverHandler {
    */
   public String getInfoString() {
     StringBuffer result = new StringBuffer();
-    outputEvents(result, mouseOverElements);
-    result.append(" : ");
-    outputEvents(result, mouseElements);
+    result.append("mouse over elements: ");
+    outputElements(result, mouseOverElements);
+    result.append(" mouse elements: ");
+    outputElements(result, mouseElements);
     return result.toString();
   }
 
-  private void outputEvents(final StringBuffer result, final ArrayList<Element> elements) {
+  private void outputElements(final StringBuffer result, final ArrayList<Element> elements) {
     if (elements.isEmpty()) {
-      result.append("  ---");
+      result.append("---");
     } else {
       for (int i = elements.size() - 1; i >= 0; i--) {
         Element element = elements.get(i);
-        result.append("  " + element.getId());
+        result.append("[" + element.getId() + "]");
       }
     }
   }

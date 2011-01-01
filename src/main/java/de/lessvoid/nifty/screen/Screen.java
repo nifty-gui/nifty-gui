@@ -628,6 +628,26 @@ public class Screen {
     return popupElements.get(popupElements.size() - 1);
   }
 
+  /**
+   * Checks if the mouse currently hovers any element that is able to handle mouse events.
+   * 
+   * @return true if the mouse hovers an element that is visibleToMouse and
+   *         false if the mouse would hit the background and not any element at all
+   */
+  public boolean isMouseOverElement() {
+    return mouseOverHandler.hitsElement();
+  }
+
+  /**
+   * This returns an informational String containing all elements that Nifty is aware of that
+   * could handle mouse events with the ones currently hovering the mouse sorted from top to
+   * bottom.
+   * @return String for debug output purpose
+   */
+  public String getMouseOverInfoString() {
+    return mouseOverHandler.getInfoString();
+  }
+
   public class ElementWithEndNotify {
     private Element element;
     private EndNotify closeNotify;
