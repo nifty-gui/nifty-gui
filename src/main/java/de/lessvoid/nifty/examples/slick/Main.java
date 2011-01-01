@@ -14,7 +14,11 @@ public class Main extends StateBasedGame {
 
   @Override
   public void initStatesList(final GameContainer container) throws SlickException {
-    menuState = new MenuState(container, this, "slick/mainmenu.xml");
+    try {
+      menuState = new MenuState(container, this, "slick/mainmenu.xml");
+    } catch (Exception e) {
+      throw new SlickException("failed", e);
+    }
     addState(menuState);
   }
 
@@ -25,7 +29,6 @@ public class Main extends StateBasedGame {
       container.setTargetFrameRate(1000);
       container.setMinimumLogicUpdateInterval(1);
       container.setMinimumLogicUpdateInterval(2);
-      container.setMouseGrabbed(true);
       container.start();
     } catch (SlickException e) {
       e.printStackTrace();

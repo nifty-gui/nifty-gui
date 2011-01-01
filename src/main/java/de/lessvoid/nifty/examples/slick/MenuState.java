@@ -22,12 +22,13 @@ public class MenuState extends NiftyGameState implements ScreenController {
       final GameContainer newContainer,
       final StateBasedGame newGame,
       final String filename)
-      throws SlickException {
+      throws Exception {
     super(id);
     game = newGame;
     container = newContainer;
     fromXml(filename, this);
-    enableMouseImage(new Image("slick/crosshair.png"));
+    nifty.getNiftyMouse().registerMouseCursor("crosshair", "slick/crosshair.png", 16, 16);
+    nifty.getNiftyMouse().enableMouseCursor("crosshair");
   }
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
