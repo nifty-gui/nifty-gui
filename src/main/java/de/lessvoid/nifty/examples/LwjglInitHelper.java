@@ -237,10 +237,11 @@ public class LwjglInitHelper {
       // show render
       Display.update();
 
-      // render nifty
-      if (nifty.render(true)) {
+      if (nifty.update()) {
         done = true;
       }
+
+      nifty.render(true);
 
       // check gl error at least ones per frame
       int error = GL11.glGetError();
