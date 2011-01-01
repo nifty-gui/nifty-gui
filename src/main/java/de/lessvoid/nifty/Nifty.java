@@ -54,7 +54,7 @@ import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
  * The main Nifty class.
  * @author void
  */
-public class Nifty implements NiftyInputConsumer {
+public class Nifty {
   private Logger log = Logger.getLogger(Nifty.class.getName());
   private NiftyRenderEngine renderEngine;
   private SoundSystem soundSystem;
@@ -86,6 +86,7 @@ public class Nifty implements NiftyInputConsumer {
   private Properties globalProperties;
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
   private NiftyMouse niftyMouse;
+  private NiftyInputConsumer niftyInputConsumer = new NiftyInputConsumerImpl();
 
   /**
    * Create nifty with optional console parameter.
@@ -151,61 +152,50 @@ public class Nifty implements NiftyInputConsumer {
   }
 
   /**
-   * Render all stuff in the current Screen.
-   * @param clearScreen true if nifty should clean the screen and false when you've done that already.
+   * Update Nifty.
    * @return true when nifty has finished processing the screen and false when rendering should continue.
    */
-  public boolean render(final boolean clearScreen) {
-    renderEngine.beginFrame();
-    if (clearScreen) {
-      renderEngine.clear();
-    }
-
+  public boolean update() {
     if (!currentScreen.isNull()) {
       mouseInputEventQueue.begin();
-      inputSystem.forwardEvents(this);
+      inputSystem.forwardEvents(niftyInputConsumer);
       if (mouseInputEventQueue.hasLastMouseDownEvent()) {
         currentScreen.mouseEvent(mouseInputEventQueue.getLastMouseDownEvent());
       }
-      currentScreen.renderLayers(renderEngine);
     }
-
-    if (exit) {
-      renderEngine.clear();
-    }
-
     handleDynamicElements();
-    renderEngine.endFrame();
-
-    long current = timeProvider.getMsTime();
-    int delta = (int) (current - lastTime);
-    soundSystem.update(delta);
-    lastTime = current;
-
+    updateSoundSystem();
     if (log.isLoggable(Level.FINE)) {
       log.fine(currentScreen.debugOutput());
     }
     return exit;
   }
 
-  public boolean processMouseEvent(final MouseInputEvent mouseEvent) {
-    if (log.isLoggable(Level.FINE)) {
-      log.fine(mouseEvent.toString());
+  /**
+   * Render Nifty.
+   * @param clearScreen true if nifty should clean the screen and false when you've done that already.
+   */
+  public void render(final boolean clearScreen) {
+    renderEngine.beginFrame();
+    if (clearScreen) {
+      renderEngine.clear();
     }
-    boolean handled = true;
-    if (mouseInputEventQueue.canProcess(mouseEvent)) {
-      mouseInputEventQueue.process(mouseEvent);
-      handled = currentScreen.mouseEvent(mouseEvent);
-      handleDynamicElements();
+
+    if (!currentScreen.isNull()) {
+      currentScreen.renderLayers(renderEngine);
     }
-    return handled;
+
+    if (exit) {
+      renderEngine.clear();
+    }
+    renderEngine.endFrame();
   }
 
-  public boolean processKeyboardEvent(final KeyboardInputEvent keyEvent) {
-    if (!currentScreen.isNull()) {
-      return currentScreen.keyEvent(keyEvent);
-    }
-    return false;
+  private void updateSoundSystem() {
+    long current = timeProvider.getMsTime();
+    int delta = (int) (current - lastTime);
+    soundSystem.update(delta);
+    lastTime = current;
   }
 
   public void resetEvents() {
@@ -1080,5 +1070,34 @@ public class Nifty implements NiftyInputConsumer {
 
   public NiftyMouse getNiftyMouse() {
     return niftyMouse;
+  }
+
+  /**
+   * This is now an inner class to make sure no one calls it from the outside directly.
+   * All InputSystem processing should go through the InputSystem.
+   * @author void
+   */
+  private class NiftyInputConsumerImpl implements NiftyInputConsumer {
+    @Override
+    public boolean processMouseEvent(final MouseInputEvent mouseEvent) {
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(mouseEvent.toString());
+      }
+      boolean handled = true;
+      if (mouseInputEventQueue.canProcess(mouseEvent)) {
+        mouseInputEventQueue.process(mouseEvent);
+        handled = currentScreen.mouseEvent(mouseEvent);
+        handleDynamicElements();
+      }
+      return handled;
+    }
+
+    @Override
+    public boolean processKeyboardEvent(final KeyboardInputEvent keyEvent) {
+      if (!currentScreen.isNull()) {
+        return currentScreen.keyEvent(keyEvent);
+      }
+      return false;
+    }
   }
 }
