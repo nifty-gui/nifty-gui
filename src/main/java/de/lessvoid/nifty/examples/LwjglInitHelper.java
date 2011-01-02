@@ -243,6 +243,10 @@ public class LwjglInitHelper {
 
       nifty.render(true);
 
+      System.out.println(nifty.getCurrentScreen().isMouseOverElement());
+      System.out.println(nifty.getCurrentScreen().getMouseOverInfoString());
+
+
       // check gl error at least ones per frame
       int error = GL11.glGetError();
       if (error != GL11.GL_NO_ERROR) {

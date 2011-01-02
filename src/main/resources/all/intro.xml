@@ -36,6 +36,10 @@
     </effect>
   </style>
 
+  <style id="menu-font">
+    <attributes font="aurulent-sans-36-bold-with-shadow.fnt" />
+  </style>
+
   <!-- menu item style -->
   <style id="menu-item" base="menu-font">
     <attributes align="left" textHAlign="left" color="#cccf" width="100%"

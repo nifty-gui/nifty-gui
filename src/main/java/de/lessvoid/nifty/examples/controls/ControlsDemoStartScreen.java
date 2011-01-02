@@ -1,17 +1,17 @@
 package de.lessvoid.nifty.examples.controls;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.button.CreateButtonControl;
+import de.lessvoid.nifty.controls.button.builder.CreateButtonControl;
 import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
-import de.lessvoid.nifty.controls.checkbox.CreateCheckBoxControl;
+import de.lessvoid.nifty.controls.checkbox.builder.CreateCheckBoxControl;
 import de.lessvoid.nifty.controls.dropdown.CreateDropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControlNotify;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
-import de.lessvoid.nifty.controls.listbox.CreateListBoxControl;
-import de.lessvoid.nifty.controls.listbox.controller.ListBoxControl;
+import de.lessvoid.nifty.controls.listbox.ListBoxControl;
+import de.lessvoid.nifty.controls.listbox.builder.CreateListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -123,12 +123,6 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       dynamicListboxCreate.setHeight("100%");
       dynamicListboxCreate.setChildLayout("vertical");
       ListBoxControl dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
-      dynamicListbox.addSelectionListener(new ListBoxControl.SelectionListener() {
-        @Override
-        public void onSelectionChanged(final ListBoxControl listBoxControl, final int newIndex) {
-          System.out.println("Selection Changed on ListBoxControl: " + listBoxControl.getElement().getId() + " to index: " + newIndex);
-        }
-      });
       for (int i=0; i<10; i++) {
         dynamicListbox.addItem("Listbox Item: " + i);
       }
@@ -142,11 +136,11 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       effectParam.setAttribute("oneShot", "true");
       createLabel.addEffectsOnCustom(effectParam);
 
-      Element listBoxDataParent = screen.findElementByName("listBoxDynamicData");
-      dynamicListbox.addElement(createLabel.create(nifty, screen, listBoxDataParent));
-
-      // select first element
-      dynamicListbox.changeSelection(0);
+//      Element listBoxDataParent = screen.findElementByName("listBoxDynamicData");
+//      dynamicListbox.addElement(createLabel.create(nifty, screen, listBoxDataParent));
+//
+//      // select first element
+//      dynamicListbox.changeSelection(0);
 
     // dynamically add the backButton for testing purpose
     CreateButtonControl createButton = new CreateButtonControl("backButton");
@@ -156,8 +150,8 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     createButton.create(newNifty, screen, screen.findElementByName("buttonPanel"));
 
     // select first item on the static listbox too
-    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
-    listBoxStatic.changeSelection(0);
+//    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
+//    listBoxStatic.changeSelection(0);
 
     // check the checkbox
 //    CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
@@ -178,8 +172,8 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     DropDownControl dropDown2 = findDropDownControl("dropDown2");
     System.out.println(dropDown2.getSelectedItemIdx() + ":" + dropDown2.getSelectedItem());
 
-    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
-    System.out.println("listBoxStatic selectedItemIndex: " + listBoxStatic.getSelectedItemIndex() + ", selectedItem: " + listBoxStatic.getSelectedElement());
+//    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
+//    System.out.println("listBoxStatic selectedItemIndex: " + listBoxStatic.getSelectedItemIndex() + ", selectedItem: " + listBoxStatic.getSelectedElement());
  
     CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
     System.out.println("checkbox: " + checkBoxControl.isChecked());

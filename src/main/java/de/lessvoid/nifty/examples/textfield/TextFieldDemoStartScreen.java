@@ -3,7 +3,7 @@ package de.lessvoid.nifty.examples.textfield;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
-import de.lessvoid.nifty.controls.textfield.TextFieldCreator;
+import de.lessvoid.nifty.controls.textfield.builder.TextFieldCreator;
 import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;

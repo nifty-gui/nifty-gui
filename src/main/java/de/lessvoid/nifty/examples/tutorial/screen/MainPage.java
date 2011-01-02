@@ -15,6 +15,7 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -228,6 +229,11 @@ public class MainPage implements ScreenController, KeyInputHandler {
         final Screen screen,
         final Element parent) {
       nifty.addControl(screen, parent, getStandardControl());
+    }
+
+    @Override
+    public ElementType createType() {
+      return null;
     }
   }
 

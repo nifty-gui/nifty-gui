@@ -2,7 +2,7 @@ package de.lessvoid.nifty.examples.allcontrols;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
-import de.lessvoid.nifty.controls.listbox.controller.ListBoxControl;
+import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
