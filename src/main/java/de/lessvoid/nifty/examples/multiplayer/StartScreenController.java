@@ -17,10 +17,10 @@ public class StartScreenController implements ScreenController {
   public void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
+    addPanel();
   }
 
   public void onStartScreen() {
-    addPanel();
   }
 
   public void onEndScreen() {
