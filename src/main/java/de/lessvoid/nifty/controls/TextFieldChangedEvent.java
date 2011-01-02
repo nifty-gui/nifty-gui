@@ -13,7 +13,7 @@ public class TextFieldChangedEvent implements NiftyEvent<Void> {
     this.currentText = currentText;
   }
 
-  public String getSelection() {
+  public String getText() {
     return currentText;
   }
 }
