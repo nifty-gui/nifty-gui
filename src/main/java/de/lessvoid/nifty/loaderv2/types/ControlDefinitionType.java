@@ -16,11 +16,11 @@ public class ControlDefinitionType extends ElementType {
     return new ControlDefinitionType(this);
   }
 
-  public ControlDefinitionType(final Attributes attributes) throws Exception {
+  public ControlDefinitionType(final Attributes attributes) {
     super(attributes);
   }
 
-  protected void makeFlat() {
+  public void makeFlat() {
     super.makeFlat();
     setTagName("<controlDefinition>");
     setElementRendererCreator(new NullElementRendererCreator());
