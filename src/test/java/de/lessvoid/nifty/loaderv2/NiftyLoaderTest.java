@@ -71,6 +71,5 @@ public class NiftyLoaderTest extends TestCase {
     replay(nifty);
 
     NiftyType niftyType = niftyLoader.loadNiftyXml("nifty.nxs", new ByteArrayInputStream(testXml.getBytes("ISO-8859-1")), nifty);
-    System.out.println(niftyType.output());
   }
 }

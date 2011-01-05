@@ -24,7 +24,6 @@ public class PopupBuilder extends ElementBuilder {
 
   public Element registerPopup(final Nifty nifty) {
     PopupType popupType = (PopupType) buildElementType();
-    System.out.println(popupType.output(0));
     nifty.registerPopup(popupType);
     return nifty.createPopup(popupType.getAttributes().get("id"));
   }

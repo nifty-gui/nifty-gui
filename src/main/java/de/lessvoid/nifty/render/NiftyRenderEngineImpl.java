@@ -116,7 +116,6 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
   public void endFrame() {
     renderDevice.endFrame();
-//    System.out.println(imageManager.getInfoString());
   }
 
   public void clear() {

@@ -70,6 +70,5 @@ public class TextSizePulsate implements EffectImpl {
 
   public void deactivate() {
     activated = true;
-    System.out.println("deacti");
   }
 }

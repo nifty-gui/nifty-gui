@@ -373,7 +373,6 @@ public class Element {
         elementDebug.append(line);
       }
     }
-    System.out.println("{" + elementDebug.toString() + "}");
     return elementDebug.toString();
   }
 
