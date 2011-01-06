@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.builder;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.dynamic.ControlDefinitionCreator;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
@@ -12,6 +13,10 @@ public class ControlDefinitionBuilder extends ElementBuilder {
   public ControlDefinitionBuilder(String name) {
     creator = new ControlDefinitionCreator(name);
     initialize(creator);
+  }
+
+  public void controller(final Controller controller) {
+    creator.setController(controller.getClass().getName());
   }
 
   public void registerControlDefintion(final Nifty nifty) {
