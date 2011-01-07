@@ -318,7 +318,7 @@ public class Element {
     this.visibleToMouseEvents = newVisibleToMouseEvents;
     this.time = timeProvider;
     this.setMouseDown(false, 0);
-    this.interaction = new ElementInteraction(nifty);
+    this.interaction = new ElementInteraction(nifty, id);
   }
 
   /**

@@ -144,7 +144,10 @@ public class Nifty {
 
   @SuppressWarnings("rawtypes")
   public void publishEvent(final String id, final NiftyEvent event) {
-    EventServiceLocator.getEventService("NiftyEventBus").publish(id, event);
+    // we can't publish events for elements without an id
+    if (id != null) {
+      EventServiceLocator.getEventService("NiftyEventBus").publish(id, event);
+    }
   }
 
   public void setAlternateKeyForNextLoadXml(final String alternateKeyForNextLoadXmlParam) {

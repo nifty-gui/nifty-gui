@@ -2,6 +2,7 @@ package de.lessvoid.nifty.elements;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
+import de.lessvoid.nifty.input.NiftyMouseClickedEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 
 /**
@@ -10,6 +11,7 @@ import de.lessvoid.nifty.input.mouse.MouseInputEvent;
  */
 public class ElementInteraction {
   private Nifty nifty;
+  private String elementId;
   private boolean onClickRepeat;
   private String onClickAlternateKey;
   private NiftyMethodInvoker onClickMethod;
@@ -20,8 +22,9 @@ public class ElementInteraction {
   /**
    * Create the ElemenInteraction.
    * @param niftyParam nifty
+   * @param elementId 
    */
-  public ElementInteraction(final Nifty niftyParam) {
+  public ElementInteraction(final Nifty niftyParam, final String elementId) {
     onClickMethod = new NiftyMethodInvoker(niftyParam);
     onReleaseMethod = new NiftyMethodInvoker(niftyParam);
     onClickMouseMoveMethod = new NiftyMethodInvoker(niftyParam);
@@ -29,6 +32,7 @@ public class ElementInteraction {
 
     nifty = niftyParam;
     onClickAlternateKey = null;
+    this.elementId = elementId;
   }
 
   /**
@@ -37,6 +41,7 @@ public class ElementInteraction {
    */
   public ElementInteraction(final ElementInteraction source) {
     this.nifty = source.nifty;
+    this.elementId = source.elementId;
     this.onClickMethod = source.onClickMethod;
     this.onReleaseMethod = source.onReleaseMethod;
     this.onClickMouseMoveMethod = source.onClickMouseMoveMethod;
@@ -50,6 +55,8 @@ public class ElementInteraction {
    * @param inputEvent mouse input
    */
   public boolean onClick(final MouseInputEvent inputEvent) {
+    nifty.publishEvent(elementId, new NiftyMouseClickedEvent());
+
     if (onClickMethod != null) {
       if (nifty != null) {
         nifty.setAlternateKey(onClickAlternateKey);
@@ -60,6 +67,8 @@ public class ElementInteraction {
   }
 
   public void onClick() {
+    nifty.publishEvent(elementId, new NiftyMouseClickedEvent());
+
     if (onClickMethod != null) {
       onClickMethod.invoke();
     }
