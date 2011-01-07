@@ -228,7 +228,6 @@ public class ScrollPanel extends AbstractController {
     if (verticalS != null && verticalScrollbar) {
       verticalS.setCurrentValue(yPos);
     }
-    System.out.println("set vpos to " + yPos);
   }
 
   /**

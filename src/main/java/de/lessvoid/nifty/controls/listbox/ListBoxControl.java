@@ -8,7 +8,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl;
 import de.lessvoid.nifty.controls.scrollbar.controller.ScrollbarControlNotify;
 import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
@@ -16,6 +15,8 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.layout.LayoutPart;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -32,9 +33,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private Element labelTemplateElement;
   private Element listBoxPanelElement;
   private int labelTemplateHeight;
-  private String labelTemplateStyle;
-  private String labelTemplateController;
-  private String labelTemplateInputMapping;
   private Properties parameter;
   private int displayItems;
   private ListBoxViewConverter<T> viewConverter = new ListBoxViewConverterSimple<T>();
@@ -63,10 +61,10 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     int itemCount = listBoxImpl.bindToView(this, displayItems);
     ensureVerticalScrollbar();
     initLabelTemplateData();
+    createLabels();
     initializeScrollPanel(screen);
     calculateElementHeight(findHorizontalScrollbarHeight());
     initializeScrollElementHeight();
-    createLabels();
     initializeHorizontalScrollbar();
     updateScrollPanel(screen, labelTemplateHeight, itemCount);
     listBoxImpl.updateView(0);
@@ -327,12 +325,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   @SuppressWarnings("unchecked")
   private void createLabels() {
     for (int i = 0; i < displayItems; i++) {
-      // create the label
-      LabelCreator createLabel = new LabelCreator("label: " + i);
-      createLabel.setStyle(labelTemplateStyle);
-      createLabel.setController(labelTemplateController);
-      createLabel.setInputMapping(labelTemplateInputMapping);
-      labelElements[i] = createLabel.create(nifty, screen, childRootElement);
+      ElementType templateType = labelTemplateElement.getElementType().copy();
+      templateType.prepare(nifty, screen, screen.getRootElement().getElementType());
+      labelElements[i] = templateType.create(childRootElement, nifty, screen, new LayoutPart());
 
       // connect it to this listbox
       ListBoxItemController<T> listBoxItemController = labelElements[i].getControl(ListBoxItemController.class);
@@ -367,10 +362,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private void initLabelTemplateData() {
     labelTemplateElement.getParent().layoutElements();
     labelTemplateHeight = labelTemplateElement.getHeight();
-    labelTemplateStyle = labelTemplateElement.getElementType().getAttributes().get("style");
-    labelTemplateController = labelTemplateElement.getElementType().getAttributes().get("controller");
-    labelTemplateInputMapping = labelTemplateElement.getElementType().getAttributes().get("inputMapping");
-
     nifty.removeElement(screen, labelTemplateElement);
   }
 
