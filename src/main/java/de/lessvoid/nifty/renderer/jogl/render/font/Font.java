@@ -404,7 +404,7 @@ public class Font {
             return null;
         }
         else {
-            return new Integer((int) (currentCharacterInfo.getXadvance() * size + getKerning(
+            return Integer.valueOf((int) (currentCharacterInfo.getXadvance() * size + getKerning(
                     currentCharacterInfo, nextCharacter)));
         }
     }
