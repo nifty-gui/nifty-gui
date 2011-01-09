@@ -68,6 +68,12 @@ public interface NiftyControl {
   void disable();
 
   /**
+   * Set the enabled state from the given boolean.
+   * @param enabled the new enabled state
+   */
+  void setEnabled(boolean enabled);
+
+  /**
    * Get the current enabled state of the control.
    * @return
    */

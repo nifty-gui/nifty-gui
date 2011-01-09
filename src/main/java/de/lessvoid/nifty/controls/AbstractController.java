@@ -66,6 +66,15 @@ public abstract class AbstractController implements Controller, NiftyControl {
     }
 
     @Override
+    public void setEnabled(final boolean enabled) {
+      if (enabled) {
+        element.enable();
+      } else {
+        element.disable();
+      }
+    }
+
+    @Override
     public boolean isEnabled() {
       return element.isEnabled();
     }
