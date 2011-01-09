@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEvent;
 import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
@@ -36,7 +37,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * The Element.
  * @author void
  */
-public class Element {
+public class Element implements NiftyEvent<Void> {
 
   /**
    * Time before we start an automated click when mouse button is holded.
@@ -108,11 +109,6 @@ public class Element {
    */
   private FocusHandler focusHandler;
   
-  /**
-   * Listeners listening for changes to this element
-   */
-  private List<ElementChangeListener> listeners;
-
   /**
    * enable element.
    */
@@ -1878,20 +1874,11 @@ public class Element {
     }
   }
   
-  public void addElementChangeListener(ElementChangeListener listener) {
-	  if(listeners == null) listeners = new ArrayList<ElementChangeListener>();
-	  listeners.add(listener);
-  }
-  
-  public void removeElementChangeListener(ElementChangeListener listener) {
-	  if(listeners == null) return;
-	  listeners.remove(listener);
-  }
-  
   private void notifyListeners() {
-	  if(listeners == null) return;
-	  for(ElementChangeListener listener : listeners) {
-		  listener.elementChanged(this);
-	  }
+    nifty.publishEvent(id, this);
+  }
+
+  public Nifty getNifty() {
+    return nifty;
   }
 }
