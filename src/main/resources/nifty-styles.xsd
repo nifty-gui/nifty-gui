@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://nifty-gui.sourceforge.net/nifty-style-file.xsd" targetNamespace="http://nifty-gui.sourceforge.net/nifty-style-file.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns="http://nifty-gui.sourceforge.net/nifty-styles.xsd" targetNamespace="http://nifty-gui.sourceforge.net/nifty-styles.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="nifty-styles" type="niftyStylesType"></xs:element>
 
@@ -18,6 +18,13 @@
   <xs:element name="onHide" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onEnabled" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onDisabled" type="singleEffectType" substitutionGroup="singleEffectbase" />
+
+  <xs:complexType name="registerMouseCursorType">
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="filename" type="xs:string" use="required" />
+    <xs:attribute name="hotspotX" type="xs:string" use="optional" />
+    <xs:attribute name="hotspotY" type="xs:string" use="optional" />
+  </xs:complexType>
 
   <xs:simpleType name="colorType">
     <xs:restriction base="xs:string">
@@ -102,6 +109,7 @@
     <xs:attribute name="filename" type="xs:string" />
     <xs:attribute name="wrap" type="xs:boolean" />
     <xs:attribute name="imageMode" type="xs:string"></xs:attribute>
+    <xs:anyAttribute namespace="##any" processContents="skip" />
   </xs:complexType>
 
   <xs:simpleType name="onClickType">
@@ -190,6 +198,7 @@
 
   <xs:complexType name="niftyStylesType">
     <xs:sequence>
+      <xs:element name="registerMouseCursor" type="registerMouseCursorType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="useStyles" type="useStylesType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="style" type="styleType" maxOccurs="unbounded" minOccurs="0" />
     </xs:sequence>

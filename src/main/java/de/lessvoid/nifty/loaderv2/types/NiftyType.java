@@ -139,9 +139,9 @@ public class NiftyType extends XmlBaseType {
     log.info("registerPopup [" + stopWatch.stop() + "]");
   }
 
-  public void loadStyles(final NiftyLoader niftyLoader) throws Exception {
+  public void loadStyles(final NiftyLoader niftyLoader, final Nifty nifty) throws Exception {
     for (UseStylesType useStyle : useStyles) {
-      useStyle.loadStyle(niftyLoader, this);
+      useStyle.loadStyle(niftyLoader, this, nifty);
     }
   }
 

@@ -45,7 +45,7 @@ public class NiftyLoader {
     parser.read(inputStreamXml);
 
     NiftyType niftyType = (NiftyType) getSchema(schemaId).loadXml(parser);
-    niftyType.loadStyles(this);
+    niftyType.loadStyles(this, nifty);
     niftyType.loadControls(this);
 
     long end = timeProvider.getMsTime();
@@ -81,14 +81,15 @@ public class NiftyLoader {
   public void loadStyleFile(
       final String schemaId,
       final String styleFilename,
-      final NiftyType niftyType) throws Exception {
+      final NiftyType niftyType,
+      final Nifty nifty) throws Exception {
     log.info("loading new nifty style xml file [" + styleFilename + "] with schemaId [" + schemaId + "]");
 
     XmlParser parser = new XmlParser(new MXParser());
     parser.read(ResourceLoader.getResourceAsStream(styleFilename));
 
     NiftyStylesType niftyStylesType = (NiftyStylesType) getSchema(schemaId).loadXml(parser);
-    niftyStylesType.loadStyles(this, niftyType);
+    niftyStylesType.loadStyles(this, niftyType, nifty, log);
   }
 
   public void loadControlFile(

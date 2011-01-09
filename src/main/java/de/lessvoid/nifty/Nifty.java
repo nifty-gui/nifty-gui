@@ -980,7 +980,7 @@ public class Nifty {
   public void loadStyleFile(final String styleFile) {
     try {
       NiftyType niftyType = new NiftyType();
-      loader.loadStyleFile("nifty-styles.nxs", styleFile, niftyType);
+      loader.loadStyleFile("nifty-styles.nxs", styleFile, niftyType, this);
       niftyType.create(this, getTimeProvider());
       if (log.isLoggable(Level.INFO)) {
         log.info("loadStyleFile");
