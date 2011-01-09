@@ -70,8 +70,12 @@ public class ControlType extends ElementType {
       final ElementType elementType,
       final String childRootId,
       final Collection < ElementType > children) {
+    if (children.isEmpty()) {
+      return true;
+    }
     for (ElementType element : elementType.elements) {
       if (childRootId.equals(element.getAttributes().get("id"))) {
+        element.elements.clear();
         element.elements.addAll(children);
         return true;
       } else if (addChildrenToChildRoot(element, childRootId, children)) {
