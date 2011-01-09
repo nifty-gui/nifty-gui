@@ -6,22 +6,24 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
 public class ControlBuilder extends ElementBuilder {
-  
   private CustomControlCreator creator;
   
-  public ControlBuilder(String name) {
+  public ControlBuilder(final String name) {
     creator = new CustomControlCreator(name);
     initialize(creator);
   }
   
-  public ControlBuilder(String id, String name) {
+  public ControlBuilder(final String id, final String name) {
     creator = new CustomControlCreator(id, name);
     initialize(creator);
   }
-  
+
+  public void parameter(final String name, final String value) {
+    creator.parameter(name, value);
+  }
+
   @Override
   protected Element buildInternal(Nifty nifty, Screen screen, Element parent) {
     return creator.create(nifty, screen, parent);
   }
-  
 }

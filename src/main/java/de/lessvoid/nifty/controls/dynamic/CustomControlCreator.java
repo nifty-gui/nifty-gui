@@ -19,6 +19,10 @@ public class CustomControlCreator extends ControlAttributes {
     setName(name);
   }
 
+  public void parameter(final String name, final String value) {
+    set(name, value);
+  }
+
   public Element create(
       final Nifty nifty,
       final Screen screen,
