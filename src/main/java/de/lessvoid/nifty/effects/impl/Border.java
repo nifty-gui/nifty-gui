@@ -34,7 +34,7 @@ public class Border implements EffectImpl {
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     try {
-      PaddingAttributeParser parser = new PaddingAttributeParser(parameter.getProperty("border"));
+      PaddingAttributeParser parser = new PaddingAttributeParser(parameter.getProperty("border", "1px"));
       borderLeft = new SizeValue(parser.getLeft());
       borderRight = new SizeValue(parser.getRight());
       borderTop = new SizeValue(parser.getTop());
