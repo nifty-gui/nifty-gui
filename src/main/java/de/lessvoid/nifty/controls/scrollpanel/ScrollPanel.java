@@ -2,6 +2,8 @@ package de.lessvoid.nifty.controls.scrollpanel;
 
 import java.util.Properties;
 
+import org.bushe.swing.event.EventTopicSubscriber;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl;
@@ -9,13 +11,12 @@ import de.lessvoid.nifty.controls.scrollbar.controller.ScrollbarControlNotify;
 import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.ElementChangeListener;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class ScrollPanel extends AbstractController {
+public class ScrollPanel extends AbstractController implements EventTopicSubscriber<Element> {
   private Nifty nifty;
   private Screen screen;
   private Element element;
@@ -82,6 +83,7 @@ public class ScrollPanel extends AbstractController {
     stepSizeX = new Float(parameter.getProperty("stepSizeX", "1.0"));
     stepSizeY = new Float(parameter.getProperty("stepSizeY", "1.0"));
     autoScroll = AutoScroll.parse(parameter.getProperty("autoScroll", "off"));
+    nifty.getEventService().subscribe(getScrollElementId(), this);
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
@@ -150,23 +152,6 @@ public class ScrollPanel extends AbstractController {
 
         scrollElement.setConstraintX(new SizeValue("0px"));
         scrollElement.setConstraintY(new SizeValue("0px"));
-
-        // Set this scroll panel to listen to changes to the scroll element
-        scrollElement.addElementChangeListener(new ElementChangeListener() {
-          @Override
-          public void elementChanged(final Element element) {
-            horizontalS = ScrollPanel.this.element.findControl("nifty-internal-horizontal-scrollbar",
-                HorizontalScrollbarControl.class);
-            verticalS = ScrollPanel.this.element.findControl("nifty-internal-vertical-scrollbar",
-                VerticalScrollbarControl.class);
-            if (horizontalS != null && horizontalS.getWorldMaxValue() != element.getWidth()) {
-              updateWorldH();
-            }
-            if (verticalS != null && verticalS.getWorldMaxValue() != element.getHeight()) {
-              updateWorldV();
-            }
-          }
-        });
       }
     }
 
@@ -284,5 +269,30 @@ public class ScrollPanel extends AbstractController {
    */
   public AutoScroll getAutoScroll() {
     return autoScroll;
+  }
+
+  @Override
+  public void onEvent(final String id, final Element data) {
+    String scrollElementId = getScrollElementId();
+    if (id != null && id.equals(scrollElementId)) {
+      horizontalS = ScrollPanel.this.element.findControl("nifty-internal-horizontal-scrollbar", HorizontalScrollbarControl.class);
+      verticalS = ScrollPanel.this.element.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
+      if (horizontalS != null && horizontalS.getWorldMaxValue() != element.getWidth()) {
+        updateWorldH();
+      }
+      if (verticalS != null && verticalS.getWorldMaxValue() != element.getHeight()) {
+        updateWorldV();
+      }
+    }
+  }
+
+  private String getScrollElementId() {
+    if (childRootElement != null) {
+      final Element scrollElement = childRootElement.getElements().get(0);
+      if (scrollElement != null) {
+        return scrollElement.getId();
+      }
+    }
+    return null;
   }
 }
