@@ -5,7 +5,7 @@
       <panel childLayout="horizontal" id="nifty-listbox-scrollpanel">
         <panel id="nifty-listbox-panel" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
           <panel id="nifty-listbox-child-root" width="100%" childLayout="vertical" visibleToMouse="true">
-            <!-- this is the template element used for the listbox items -->
+            <!-- this is the template element used for the listbox items --> 
             <label text="Template" style="nifty-listbox-item" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
           </panel>
         </panel>

@@ -35,7 +35,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private int labelTemplateHeight;
   private Properties parameter;
   private int displayItems;
-  private ListBoxViewConverter<T> viewConverter = new ListBoxViewConverterSimple<T>();
+  private ListBoxViewConverter<T> viewConverter;
 
   public void bind(
       final Nifty niftyParam,
@@ -48,11 +48,15 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     nifty = niftyParam;
     screen = screenParam;
     parameter = parameterParam;
+    viewConverter = createViewConverter(parameter.getProperty("viewConverterClass", ListBoxViewConverterSimple.class.getName()));
+    viewConverter.bind(elementParam);
     verticalScrollbar = new Boolean(parameter.getProperty("vertical", "true"));
     horizontalScrollbar = new Boolean(parameter.getProperty("horizontal", "true"));
     displayItems = new Integer(parameter.getProperty("displayItems", "2"));
-    childRootElement = getElement().findElementByName(controlDefinitionAttributes.get("childRootId"));
-    labelTemplateElement = childRootElement.getElements().get(0);
+    childRootElement = getElement().findElementByName("nifty-listbox-child-root");
+    if (!childRootElement.getElements().isEmpty()) {
+      labelTemplateElement = childRootElement.getElements().get(0);
+    }
     labelElements = new Element[displayItems];
     listBoxPanelElement = getElement().findElementByName("nifty-listbox-panel");
 
@@ -86,17 +90,30 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     childRootElement.setFocus();
   }
 
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  private ListBoxViewConverter<T> createViewConverter(final String className) {
+    try {
+      return (ListBoxViewConverter<T>) Class.forName(className).newInstance();
+    } catch (Exception e) {
+      log.warning("Unable to instantiate given class [" + className + "] with error: " + e.getMessage());
+      e.printStackTrace();
+      return new ListBoxViewConverterSimple();
+    }
+  }
+
   // ListBoxView Interface implementation
 
   @Override
   public void display(final List<T> visibleItems, final int focusElement, final List<Integer> selectedElements) {
     for (int i = 0; i < visibleItems.size(); i++) {
       T item = visibleItems.get(i);
-      labelElements[i].setVisible(item != null);
-      displayElement(i, item);
-      setListBoxItemIndex(i);
-      handleElementFocus(i, focusElement);
-      handleElementSelection(i, item, selectedElements);
+      if (labelElements[i] != null) {
+        labelElements[i].setVisible(item != null);
+        displayElement(i, item);
+        setListBoxItemIndex(i);
+        handleElementFocus(i, focusElement);
+        handleElementSelection(i, item, selectedElements);
+      }
     }
   }
 
@@ -281,9 +298,8 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
       }
     }
 
-    Element scrollElement = getElement().findElementByName("nifty-listbox-child-root");
-    scrollElement.setConstraintX(new SizeValue("0px"));
-    scrollElement.setConstraintY(new SizeValue("0px"));
+    childRootElement.setConstraintX(new SizeValue("0px"));
+    childRootElement.setConstraintY(new SizeValue("0px"));
 
     nifty.executeEndOfFrameElementActions();
     screen.layoutLayers();
@@ -324,6 +340,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @SuppressWarnings("unchecked")
   private void createLabels() {
+    if (labelTemplateElement == null) {
+      return;
+    }
     for (int i = 0; i < displayItems; i++) {
       ElementType templateType = labelTemplateElement.getElementType().copy();
       templateType.prepare(nifty, screen, screen.getRootElement().getElementType());
@@ -331,7 +350,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
       // connect it to this listbox
       ListBoxItemController<T> listBoxItemController = labelElements[i].getControl(ListBoxItemController.class);
-      listBoxItemController.setListBox(listBoxImpl);
+      if (listBoxItemController != null) {
+        listBoxItemController.setListBox(listBoxImpl);
+      }
     }
   }
 
@@ -360,6 +381,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void initLabelTemplateData() {
+    if (labelTemplateElement == null) {
+      return;
+    }
     labelTemplateElement.getParent().layoutElements();
     labelTemplateHeight = labelTemplateElement.getHeight();
     nifty.removeElement(screen, labelTemplateElement);
@@ -400,6 +424,8 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   @SuppressWarnings("unchecked")
   private void setListBoxItemIndex(final int itemIndex) {
     ListBoxItemController<T> listBoxItemController = labelElements[itemIndex].getControl(ListBoxItemController.class);
-    listBoxItemController.setItemIndex(itemIndex);
+    if (listBoxItemController != null) {
+      listBoxItemController.setItemIndex(itemIndex);
+    }
   }
 }

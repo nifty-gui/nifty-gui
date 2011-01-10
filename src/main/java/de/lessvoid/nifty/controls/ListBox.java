@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.controls;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -185,12 +186,18 @@ public interface ListBox<T> extends NiftyControl {
   public interface ListBoxViewConverter<T> {
 
     /**
+     * Allows to initialize the ListBoxViewConverter.
+     * @param listBox the element of the ListBo
+     */
+    void bind(Element listBox);
+
+    /**
      * Display the given item in the given element.
      *
-     * @param element the element to display the item in
+     * @param listBoxItem the element to display the item in
      * @param item the item to display
      */
-    void display(Element element, T item);
+    void display(Element listBoxItem, T item);
 
     /**
      * Return the width in pixel of the given item rendered for the given element.
@@ -210,19 +217,40 @@ public interface ListBox<T> extends NiftyControl {
    * @param <T>
    */
   public class ListBoxViewConverterSimple<T> implements ListBoxViewConverter<T> {
+    private Logger log = Logger.getLogger(ListBoxViewConverterSimple.class.getName());
+
+    @Override
+    public void bind(final Element listBox) {
+    }
 
     @Override
     public void display(final Element element, final T item) {
+      TextRenderer renderer = element.getRenderer(TextRenderer.class);
+      if (renderer == null) {
+        log.warning(
+              "you're using the ListBoxViewConverterSimple but there is no TextRenderer on the listBoxElement."
+            + "You've probably changed the item template but did not provided your own "
+            + "ListBoxViewConverter to the ListBox.");
+        return;
+      }
       if (item != null) {
-        element.getRenderer(TextRenderer.class).setText(item.toString());
+        renderer.setText(item.toString());
       } else {
-        element.getRenderer(TextRenderer.class).setText("");
+        renderer.setText("");
       }
     }
 
     @Override
     public int getWidth(final Element element, final T item) {
-      return element.getRenderer(TextRenderer.class).getFont().getWidth(item.toString());
+      TextRenderer renderer = element.getRenderer(TextRenderer.class);
+      if (renderer == null) {
+        log.warning(
+              "you're using the ListBoxViewConverterSimple but there is no TextRenderer on the listBoxElement."
+            + "You've probably changed the item template but did not provided your own "
+            + "ListBoxViewConverter to the ListBox.");
+        return 0;
+      }
+     return element.getRenderer(TextRenderer.class).getFont().getWidth(item.toString());
     }
   }
 }
