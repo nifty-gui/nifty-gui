@@ -25,4 +25,21 @@ public interface TextField extends NiftyControl {
    * @param position new cursor position
    */
   void setCursorPosition(int position);
+
+  /**
+   * Enable a password character that is displayed instead of the actual text. 
+   * @param passwordChar charcter to use, like '*'
+   */
+  void enablePasswordChar(final char passwordChar);
+
+  /**
+   * Disable the password character which displays the text again,
+   */
+  void disablePasswordChar();
+
+  /**
+   * Checks if a password character is currently enabled.
+   * @return true if password character is enabled and false if not.
+   */
+  boolean isPasswordCharEnabled();
 }

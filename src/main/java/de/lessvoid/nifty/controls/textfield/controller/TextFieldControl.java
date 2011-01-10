@@ -305,4 +305,21 @@ public class TextFieldControl extends AbstractController implements TextField, T
   public void textChangeEvent(final String newText) {
     nifty.publishEvent(getElement().getId(), new TextFieldChangedEvent(newText));
   }
+
+  @Override
+  public void enablePasswordChar(final char passwordChar) {
+    this.passwordChar = passwordChar;
+    updateCursor();
+  }
+
+  @Override
+  public void disablePasswordChar() {
+    this.passwordChar = null;
+    updateCursor();
+  }
+
+  @Override
+  public boolean isPasswordCharEnabled() {
+    return passwordChar != null;
+  }
 }
