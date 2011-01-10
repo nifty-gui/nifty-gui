@@ -109,4 +109,9 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
 
     }
 
+    @Override
+    public void setMousePosition(int x, int y) {
+        // TODO implement this method later
+    }
+
 }

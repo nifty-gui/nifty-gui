@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
+import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.logging.Logger;
 
@@ -10,6 +11,7 @@ import javax.media.opengl.GLContext;
 import com.jogamp.common.nio.Buffers;
 
 import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -411,5 +413,22 @@ public class JoglRenderDevice implements RenderDevice {
         else if (currentBlendMode.equals(BlendMode.MULIPLY)) {
             gl.glBlendFunc(GL.GL_DST_COLOR, GL.GL_ZERO);
         }
+    }
+
+    @Override
+    public MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY)
+            throws IOException {
+        // TODO implement this method later
+        return null;
+    }
+
+    @Override
+    public void enableMouseCursor(MouseCursor mouseCursor) {
+        // TODO implement this method later
+    }
+
+    @Override
+    public void disableMouseCursor() {
+        // TODO implement this method later
     }
 }
