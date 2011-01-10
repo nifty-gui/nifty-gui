@@ -6,16 +6,26 @@ import de.lessvoid.nifty.tools.SizeValue;
 /**
  * The methods that NiftyControl provides are implemented in the Control class but also
  * in the *Impl classes where we would only add empty methods.
+ *
+ * This class is only abstract to prevent instantiation.
+ *
  * @author void
  */
 public abstract class EmptyNiftyControlImpl implements NiftyControl {
 
+  @Override
   public void enable() {
   }
 
+  @Override
   public void disable() {
   }
 
+  @Override
+  public void setEnabled(final boolean enabled) {
+  }
+
+  @Override
   public boolean isEnabled() {
     return false;
   }
