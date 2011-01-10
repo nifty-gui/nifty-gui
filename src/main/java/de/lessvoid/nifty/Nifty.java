@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceExistsException;
 import org.bushe.swing.event.EventServiceLocator;
 import org.bushe.swing.event.ThreadSafeEventService;
@@ -140,6 +141,10 @@ public class Nifty {
 
   private void initalizeEventBus() throws EventServiceExistsException {
     EventServiceLocator.setEventService("NiftyEventBus", new ThreadSafeEventService());
+  }
+
+  public EventService getEventService() {
+    return EventServiceLocator.getEventService("NiftyEventBus");
   }
 
   @SuppressWarnings("rawtypes")
