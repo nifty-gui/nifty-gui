@@ -3,7 +3,9 @@ package de.lessvoid.nifty.renderer.lwjgl.render.font;
 import de.lessvoid.nifty.tools.Color;
 
 public class ColorValueParser {
-  public class Result {
+  private static final Result noColor = new Result();
+
+  public static class Result {
     private boolean isColor;
     private int nextIndex;
     private Color color;
@@ -44,7 +46,7 @@ public class ColorValueParser {
         return new Result(text.substring(startIdx + 1, endIdx), endIdx + 1);
       }
     }
-    return new Result();
+    return noColor;
   }
 
 }
