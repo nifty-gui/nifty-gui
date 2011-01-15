@@ -18,6 +18,8 @@ public class ImageOverlay implements EffectImpl {
   private SizeValue inset;
   private SizeValue width;
   private SizeValue height;
+  private boolean center;
+  private boolean hideIfNotEnoughSpace;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
@@ -29,6 +31,8 @@ public class ImageOverlay implements EffectImpl {
     inset = new SizeValue(parameter.getProperty("inset", "0px"));
     width = new SizeValue(parameter.getProperty("width", element.getWidth() + "px"));
     height = new SizeValue(parameter.getProperty("height", element.getHeight() + "px"));
+    center = Boolean.valueOf(parameter.getProperty("center", "false"));
+    hideIfNotEnoughSpace = Boolean.valueOf(parameter.getProperty("hideIfNotEnoughSpace", "false"));
   }
 
   public void execute(
@@ -36,6 +40,16 @@ public class ImageOverlay implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
+    int insetOffset = inset.getValueAsInt(element.getWidth());
+    int imageX = element.getX() + insetOffset;
+    int imageY = element.getY() + insetOffset;
+    int imageWidth = width.getValueAsInt(element.getWidth()) - insetOffset * 2;
+    int imageHeight = height.getValueAsInt(element.getHeight()) - insetOffset * 2;
+    if (hideIfNotEnoughSpace) {
+      if (imageWidth > element.getWidth() || imageHeight > element.getHeight()) {
+        return;
+      }
+    }
     r.saveState(null);
     if (falloff != null) {
       r.setColorAlpha(alpha.mutiply(falloff.getFalloffValue()).getAlpha());
@@ -44,13 +58,11 @@ public class ImageOverlay implements EffectImpl {
         r.setColorAlpha(alpha.getAlpha());
       }
     }
-    int insetOffset = inset.getValueAsInt(element.getWidth());
-    r.renderImage(
-        image,
-        element.getX() + insetOffset,
-        element.getY() + insetOffset,
-        width.getValueAsInt(element.getWidth()) - insetOffset * 2,
-        height.getValueAsInt(element.getHeight()) - insetOffset * 2);
+    if (center) {
+      r.renderImage(image, element.getX() + (element.getWidth() - imageWidth) / 2, element.getY() + (element.getHeight() - imageHeight) / 2, imageWidth, imageHeight);
+    } else {
+      r.renderImage(image, imageX, imageY, imageWidth, imageHeight);
+    }
     r.restoreState();
   }
 
