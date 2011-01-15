@@ -13,7 +13,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyAttributes;
 import de.lessvoid.nifty.loaderv2.types.apply.Convert;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
@@ -33,6 +32,7 @@ public class ElementType extends XmlBaseType {
   protected Collection < ElementType > elements = new ArrayList < ElementType >();
   protected LinkedList < Object > controllers = new LinkedList < Object >();
   protected Controller controller;
+  private static Convert convert = new Convert();
 
   public ElementType() {
     super();
@@ -176,6 +176,7 @@ public class ElementType extends XmlBaseType {
     applyInteract(nifty, screen, element);
     applyChildren(element, screen, nifty);
     enforceChildLayout(getAttributes(), elements.size());
+    applyPostAttributes(element, getAttributes(), nifty.getRenderEngine());
 
     if (controller != null) {
       ControllerEventListener listener = createControllerEventListener(screen);
@@ -250,12 +251,18 @@ public class ElementType extends XmlBaseType {
     return listener;
   }
 
-  public void applyAttributes(
-      final Element element,
-      final Attributes work,
-      final NiftyRenderEngine renderEngine) {
-    ApplyAttributes apply = new ApplyAttributes(new Convert(), work);
-    apply.perform(element, renderEngine);
+  public void applyAttributes(final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {
+    if (work == null) {
+      return;
+    }
+    element.initializeFromAttributes(work, renderEngine);
+  }
+
+  public void applyPostAttributes(final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {
+    if (work == null) {
+      return;
+    }
+    element.initializeFromPostAttributes(work);
   }
 
   public void applyEffects(
@@ -297,6 +304,7 @@ public class ElementType extends XmlBaseType {
     Attributes attrib = new Attributes(getAttributes());
     attributes.refreshAttributes(attrib);
     applyAttributes(element, attrib, nifty.getRenderEngine());
+    applyPostAttributes(element, attrib, nifty.getRenderEngine());
     attributes.refreshEffects(effects);
     screen.layoutLayers();
   }

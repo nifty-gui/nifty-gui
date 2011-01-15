@@ -1,7 +1,9 @@
 package de.lessvoid.nifty.elements;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
@@ -17,6 +19,8 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
@@ -25,6 +29,12 @@ import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderer;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererImage;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererPanel;
+import de.lessvoid.nifty.loaderv2.types.apply.Convert;
+import de.lessvoid.nifty.loaderv2.types.helper.PaddingAttributeParser;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.MouseOverHandler;
@@ -32,6 +42,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The Element.
@@ -212,6 +223,14 @@ public class Element implements NiftyEvent<Void> {
   private int parentClipWidth;
   private int parentClipHeight;
 
+  private static Convert convert = new Convert();
+  private static Map < Class < ? extends ElementRenderer >, ApplyRenderer > rendererApplier = new Hashtable < Class < ? extends ElementRenderer>, ApplyRenderer >();
+  {
+    rendererApplier.put(TextRenderer.class, new ApplyRenderText(convert));
+    rendererApplier.put(ImageRenderer.class, new ApplyRendererImage(convert));
+    rendererApplier.put(PanelRenderer.class, new ApplyRendererPanel(convert));
+  }
+
   /**
    * construct new instance of Element.
    * @param newNifty Nifty
@@ -273,6 +292,62 @@ public class Element implements NiftyEvent<Void> {
         newLayoutPart,
         newFocusHandler,
         newVisibleToMouseEvents, newTimeProvider);
+  }
+
+  /**
+   * This is used when the element is being created from an ElementType in the loading process. 
+   */
+  public void initializeFromAttributes(final Attributes attributes, final NiftyRenderEngine renderEngine) {
+    layoutPart.getBoxConstraints().setHeight(convert.sizeValue(attributes.get("height")));
+    layoutPart.getBoxConstraints().setWidth(convert.sizeValue(attributes.get("width")));
+    layoutPart.getBoxConstraints().setX(convert.sizeValue(attributes.get("x")));
+    layoutPart.getBoxConstraints().setY(convert.sizeValue(attributes.get("y")));
+    layoutPart.getBoxConstraints().setHorizontalAlign(convert.horizontalAlign(attributes.get("align")));
+    layoutPart.getBoxConstraints().setVerticalAlign(convert.verticalAlign(attributes.get("valign")));
+    layoutPart.getBoxConstraints().setPaddingLeft(convert.paddingSizeValue(attributes.get("paddingLeft")));
+    layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight")));
+    layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop")));
+    layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom")));
+    if (attributes.isSet("padding")) {
+      try {
+        PaddingAttributeParser paddingParser = new PaddingAttributeParser(attributes.get("padding"));
+        layoutPart.getBoxConstraints().setPaddingLeft(convert.paddingSizeValue(paddingParser.getLeft()));
+        layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(paddingParser.getRight()));
+        layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(paddingParser.getTop()));
+        layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(paddingParser.getBottom()));
+      } catch (Exception e) {
+        log.warning(e.getMessage());
+      }
+    }
+    this.clipChildren = attributes.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP);
+    boolean visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
+    if (visible) {
+      this.visible = true;
+    }
+    this.visibleToMouseEvents = attributes.getAsBoolean("visibleToMouse", Convert.DEFAULT_VISIBLE_TO_MOUSE);
+    this.layoutManager = convert.layoutManager(attributes.get("childLayout"));
+    this.focusable = attributes.getAsBoolean("focusable", Convert.DEFAULT_FOCUSABLE);
+    if (elementRenderer == null) {
+      return;
+    }
+    for (ElementRenderer renderer : elementRenderer) {
+      ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
+      rendererApply.apply(this, attributes, renderEngine);
+    }
+  }
+
+  public void initializeFromPostAttributes(final Attributes attributes) {
+    boolean visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
+    if (!visible) {
+      hideWithChildren();
+    }
+  }
+
+  private void hideWithChildren() {
+    visible = false;
+    for (Element element : elements) {
+      element.hideWithChildren();
+    }
   }
 
   /**
@@ -349,6 +424,7 @@ public class Element implements NiftyEvent<Void> {
 
   public String getElementStateString(final String offset, final String regex) {
     elementDebugOut.clear();
+    elementDebugOut.add(" type: [" + elementType.output(offset.length()) + "]");
     elementDebugOut.add(" style [" + getElementType().getAttributes().get("style") + "]");
     elementDebugOut.add(" state [" + getState() + "]");
     elementDebugOut.add(" position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]");
@@ -356,6 +432,7 @@ public class Element implements NiftyEvent<Void> {
     elementDebugOut.add(" padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]");
     elementDebugOut.add(" focusable [" + focusable + "]");
     elementDebugOut.add(" enabled [" + enabled + "(" + enabledCount + ")]");
+    elementDebugOut.add(" visible [" + visible + "]");
     elementDebugOut.add(" mouseable [" + visibleToMouseEvents + "]");
     elementDebugOut.add(" effects: [" + effectManager.getStateString(offset) + "]");
 
@@ -1024,10 +1101,6 @@ public class Element implements NiftyEvent<Void> {
     startEffectWithoutChildren(EffectEventId.onDisabled);
   }
 
-  private boolean isAlreadyDisabled() {
-    return !enabled;
-  }
-
   /**
    * is this element enabled?
    * @return true, if enabled and false otherwise.
@@ -1092,8 +1165,6 @@ public class Element implements NiftyEvent<Void> {
     // start effect and shizzle
     startEffect(EffectEventId.onHide, new EndNotify() {
       public void perform() {
-        disableFocus();
-
         resetEffects();
         internalHide();
       }
@@ -1114,9 +1185,8 @@ public class Element implements NiftyEvent<Void> {
     internalHide();
   }
 
-  private void internalHide() {
+  public void internalHide() {
     visible = false;
-
     disableFocus();
 
     for (Element element : elements) {
@@ -1780,7 +1850,7 @@ public class Element implements NiftyEvent<Void> {
    * @return focusable
    */
   public boolean isFocusable() {
-    return focusable && enabled;
+    return focusable && enabled && visible;
   }
 
   /**
