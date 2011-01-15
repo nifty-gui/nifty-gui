@@ -7,7 +7,7 @@
       </image>
       <image id="nifty-internal-scrollbar-background" style="#background">
         <interact onClick="click()" />
-        <image id="nifty-internal-scrollbar-position" style="#position" align="center">
+        <image id="nifty-internal-scrollbar-position" style="#position">
           <interact onClick="mouseMoveStart()" onClickMouseMove="mouseMove()"/>
         </image>
       </image>
