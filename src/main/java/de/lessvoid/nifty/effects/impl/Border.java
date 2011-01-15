@@ -72,7 +72,7 @@ public class Border implements EffectImpl {
     int insetOffsetBottom = insetBottom.getValueAsInt(element.getHeight());
 
     if (left > 0) {
-      r.setColor(colorLeft);
+      setAlphaSaveColor(r, colorLeft);
       r.renderQuad(
           element.getX() - left + insetOffsetLeft,
           element.getY() - top + insetOffsetTop,
@@ -80,7 +80,7 @@ public class Border implements EffectImpl {
           element.getHeight() + top + bottom - insetOffsetTop - insetOffsetBottom);
     }
     if (right > 0) {
-      r.setColor(colorRight);
+      setAlphaSaveColor(r, colorRight);
       r.renderQuad(
           element.getX() + element.getWidth() - insetOffsetRight,
           element.getY() - top + insetOffsetTop,
@@ -88,7 +88,7 @@ public class Border implements EffectImpl {
           element.getHeight() + top + bottom - insetOffsetTop - insetOffsetBottom);
     }
     if (top > 0) {
-      r.setColor(colorTop);
+      setAlphaSaveColor(r, colorTop);
       r.renderQuad(
           element.getX() - left + insetOffsetLeft,
           element.getY() - top + insetOffsetTop,
@@ -96,7 +96,7 @@ public class Border implements EffectImpl {
           top);
     }
     if (bottom > 0) {
-      r.setColor(colorBottom);
+      setAlphaSaveColor(r, colorBottom);
       r.renderQuad(
           element.getX() - left + insetOffsetLeft,
           element.getY() + element.getHeight() - insetOffsetBottom,
@@ -104,6 +104,14 @@ public class Border implements EffectImpl {
           bottom);
     }
     r.restoreState();
+  }
+
+  private void setAlphaSaveColor(final NiftyRenderEngine r, final Color color) {
+    if (r.isColorAlphaChanged()) {
+      r.setColorIgnoreAlpha(color);
+    } else {
+      r.setColor(color);
+    }
   }
 
   private int getBorder(final Element element, final SizeValue sizeValue) {

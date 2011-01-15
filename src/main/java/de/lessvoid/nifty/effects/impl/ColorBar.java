@@ -46,10 +46,18 @@ public class ColorBar implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     r.saveState(null);
-    if (falloff == null) {
-      r.setColor(color);
+    if (r.isColorAlphaChanged()) {
+      if (falloff == null) {
+        r.setColorIgnoreAlpha(color);
+      } else {
+        r.setColorIgnoreAlpha(color.mutiply(falloff.getFalloffValue()));
+      }
     } else {
-      r.setColor(color.mutiply(falloff.getFalloffValue()));
+      if (falloff == null) {
+        r.setColor(color);
+      } else {
+        r.setColor(color.mutiply(falloff.getFalloffValue()));
+      }
     }
 
     int insetOffsetLeft = insetLeft.getValueAsInt(element.getWidth());
