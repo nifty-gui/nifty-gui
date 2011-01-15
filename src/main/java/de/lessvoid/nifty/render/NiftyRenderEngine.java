@@ -135,7 +135,7 @@ public interface NiftyRenderEngine {
   boolean isColorChanged();
 
   /**
-   * return true when color has been changed.
+   * return true when color alpha has been changed.
    * @return color changed
    */
   boolean isColorAlphaChanged();

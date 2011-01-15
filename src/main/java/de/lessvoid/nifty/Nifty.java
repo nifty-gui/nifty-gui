@@ -1,5 +1,6 @@
 package de.lessvoid.nifty;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1072,6 +1073,14 @@ public class Nifty {
         log.info(niftyType.output());
       }
     } catch (Exception e) {
+      log.warning(e.getMessage());
+    }
+  }
+
+  public void registerMouseCursor(final String id, final String filename, final int hotspotX, final int hotspotY) {
+    try {
+      getNiftyMouse().registerMouseCursor(id, filename, hotspotX, hotspotY);
+    } catch (IOException e) {
       log.warning(e.getMessage());
     }
   }
