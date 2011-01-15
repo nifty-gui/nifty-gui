@@ -3,6 +3,6 @@
 
   <!-- just some text label default -->
   <style id="nifty-label" base="base-font">
-    <attributes align="center" height="28px" />
+    <attributes align="center" height="23px" />
   </style>
 </nifty-styles>
