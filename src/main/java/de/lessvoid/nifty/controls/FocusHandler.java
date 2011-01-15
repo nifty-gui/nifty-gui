@@ -252,7 +252,7 @@ public class FocusHandler {
       if (i > 0) {
         focusElements.append(", ");
       }
-      focusElements.append(e.getId());
+      focusElements.append(e.getId() + (!e.isFocusable() ? "*" : ""));
     }
     return
       "\n"
