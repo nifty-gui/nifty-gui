@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.examples;
+package de.lessvoid.nifty.examples.controls.common;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
@@ -28,6 +28,7 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
     }
 
     Logger.getLogger("de.lessvoid").setLevel(Level.WARNING);
+//    Logger.getLogger("de.lessvoid.nifty.screen.Screen").setLevel(Level.FINE);
 //    Logger.getLogger("org.bushe.swing.event.EventService").setLevel(Level.ALL);
 //    Logger.getLogger("de.lessvoid.nifty.examples.listbox.NiftyAnnotationProcessor").setLevel(Level.ALL);
     

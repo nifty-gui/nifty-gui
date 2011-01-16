@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.examples;
+package de.lessvoid.nifty.examples.controls.common;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
