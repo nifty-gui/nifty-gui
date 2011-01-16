@@ -267,14 +267,16 @@ public class Attributes {
     for (Map.Entry < String, String > entry : attributes.entrySet()) {
       String key = entry.getKey(); // like key="$value"
       String value = entry.getValue();
-      if (!value.startsWith("${")) {
-        if (value.startsWith("$")) {
-          parameters.put(value.replaceFirst("\\$", ""), key);
-        }
+      if (isParameterDefinition(value)) {
+        parameters.put(value.replaceFirst("\\$", ""), key);
       }
     }
 
     return parameters;
+  }
+
+  private boolean isParameterDefinition(final String value) {
+    return !value.startsWith("${") && (value.startsWith("$"));
   }
 
   public Map < String, String > getAttributes() {
@@ -301,8 +303,12 @@ public class Attributes {
     for (Map.Entry < Object, Object > entry : entrySet) {
       String key = (String) entry.getKey();
       String value = (String) entry.getValue();
+
+      // first check the given attributes and then check our own
       if (attributes.isSet(key)) {
         set(value, attributes.get(key));
+      } else if (isSet(key) && !isParameterDefinition(get(key))) {
+        set(value, get(key));
       } else {
         remove(value);
       }
