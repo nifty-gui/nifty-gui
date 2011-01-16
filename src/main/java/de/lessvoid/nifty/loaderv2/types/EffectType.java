@@ -14,7 +14,7 @@ import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class EffectType extends XmlBaseType {
-  private Logger logger = Logger.getLogger(EffectType.class.getName());
+  private static Logger logger = Logger.getLogger(EffectType.class.getName());
 
   private static final boolean DEFAULT_INHERIT = false;
   private static final boolean DEFAULT_POST = false;

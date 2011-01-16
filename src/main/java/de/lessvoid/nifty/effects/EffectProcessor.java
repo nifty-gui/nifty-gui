@@ -203,6 +203,24 @@ public class EffectProcessor {
     activeEffects.clear();
   }
 
+  /**
+   * Return a List of all Effects that use the given EffectImpl.
+   * @param <T>
+   * @param requestedClass
+   * @return
+   */
+  public <T extends EffectImpl> List<Effect> getEffects(final Class<T> requestedClass) {
+    List<Effect> result = new ArrayList<Effect>();
+    for (int i=0; i<allEffects.size(); i++) {
+      Effect effect = allEffects.get(i);
+      T effectImpl = effect.getEffectImpl(requestedClass);
+      if (effectImpl != null) {
+        result.add(effect);
+      }
+    }
+    return result;
+  }
+
   private void checkFinish() {
     if (active) {
       if (!activeEffects.containsActiveEffects()) {

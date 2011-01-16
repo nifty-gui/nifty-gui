@@ -156,6 +156,13 @@ public class Effect {
     return "(" + effectImpl.getClass().getSimpleName() + "[" + customKey + "]" + ")";
   }
 
+  public <T extends EffectImpl> T getEffectImpl(final Class <T> requestedClass) {
+    if (requestedClass.isInstance(effectImpl)) {
+      return requestedClass.cast(effectImpl);
+    }
+    return null;
+  }
+
   public boolean isInherit() {
     return inherit;
   }
@@ -184,6 +191,10 @@ public class Effect {
 
   public boolean isNeverStopRendering() {
     return neverStopRendering;
+  }
+
+  public EffectProperties getParameters() {
+    return parameter;
   }
 
   private boolean canStartEffect(final String alternate, final String customKey) {

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.effects;
 
+import java.util.Map;
 import java.util.Properties;
 
 import de.lessvoid.nifty.tools.LinearInterpolator;
@@ -10,7 +11,11 @@ public class EffectProperties extends Properties {
   private EffectPropertiesValues effectValues = new EffectPropertiesValues();
   
   public EffectProperties(final Properties createProperties) {
-    super(createProperties);
+    super();
+
+    for (Map.Entry<Object, Object> entry : createProperties.entrySet()) {
+      put(entry.getKey(), entry.getValue());
+    }
   }
 
   public void addEffectValue(final Attributes effectProperties) {

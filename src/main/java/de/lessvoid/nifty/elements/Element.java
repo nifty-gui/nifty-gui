@@ -16,6 +16,7 @@ import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
@@ -1950,5 +1951,9 @@ public class Element implements NiftyEvent<Void> {
 
   public Nifty getNifty() {
     return nifty;
+  }
+
+  public <T extends EffectImpl> List<Effect> getEffects(final EffectEventId effectEventId, final Class<T> requestedClass) {
+    return effectManager.getEffects(effectEventId, requestedClass);
   }
 }

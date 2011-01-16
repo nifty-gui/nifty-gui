@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.effects;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -258,5 +259,9 @@ public class EffectManager {
 
   public boolean isEmpty() {
     return isEmpty;
+  }
+
+  public <T extends EffectImpl> List<Effect> getEffects(final EffectEventId effectEventId, final Class<T> requestedClass) {
+    return effectProcessor.get(effectEventId).getEffects(requestedClass);
   }
 }
