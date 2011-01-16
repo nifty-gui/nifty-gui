@@ -1,10 +1,15 @@
 package de.lessvoid.nifty.controls.dynamic.attributes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.lessvoid.nifty.loaderv2.types.EffectType;
+import de.lessvoid.nifty.loaderv2.types.EffectValueType;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ControlEffectAttributes {
   protected Attributes attributes = new Attributes();
+  protected List<EffectValueType> effectValues = new ArrayList<EffectValueType>();
 
   public void setAttribute(final String name, final String value) {
     attributes.set(name, value);
@@ -69,9 +74,16 @@ public class ControlEffectAttributes {
     attributes.set("onEndEffect", value);
   }
 
+  public void addEffectValues(final EffectValueType value) {
+    effectValues.add(value);
+  }
+
   public EffectType create() {
     EffectType effectType = new EffectType();
     effectType.initFromAttributes(attributes);
+    for (int i=0; i<effectValues.size(); i++) {
+      effectType.addValue(effectValues.get(i));
+    }
     return effectType;
   }
 }

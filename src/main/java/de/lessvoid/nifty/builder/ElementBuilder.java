@@ -324,35 +324,35 @@ public abstract class ElementBuilder {
     onHover.add(onHoverEffect);
   }
 
-  public void onEffectsOnClick(final EffectBuilder onClickEffect) {
+  public void onClickEffect(final EffectBuilder onClickEffect) {
     onClick.add(onClickEffect);
   }
 
-  public void onEffectsOnFocus(final EffectBuilder onFocusEffect) {
+  public void onFocusEffect(final EffectBuilder onFocusEffect) {
     onFocus.add(onFocusEffect);
   }
 
-  public void onEffectsOnLostFocus(final EffectBuilder onLostFocusEffect) {
+  public void onLostFocusEffect(final EffectBuilder onLostFocusEffect) {
     onLostFocus.add(onLostFocusEffect);
   }
 
-  public void onEffectsOnGetFocus(final EffectBuilder onGetFocusEffect) {
+  public void onGetFocusEffect(final EffectBuilder onGetFocusEffect) {
     onGetFocus.add(onGetFocusEffect);
   }
 
-  public void onEffectsOnActive(final EffectBuilder onActiveEffect) {
+  public void onActiveEffect(final EffectBuilder onActiveEffect) {
     onActive.add(onActiveEffect);
   }
 
-  public void onEffectsOnShow(final EffectBuilder onShowEffect) {
+  public void onShowEffect(final EffectBuilder onShowEffect) {
     onShow.add(onShowEffect);
   }
 
-  public void onEffectsOnHide(final EffectBuilder onHideEffect) {
+  public void onHideEffect(final EffectBuilder onHideEffect) {
     onHide.add(onHideEffect);
   }
 
-  public void onEffectsOnCustom(final EffectBuilder onCustomEffect) {
+  public void onCustomEffect(final EffectBuilder onCustomEffect) {
     onCustom.add(onCustomEffect);
   }
 

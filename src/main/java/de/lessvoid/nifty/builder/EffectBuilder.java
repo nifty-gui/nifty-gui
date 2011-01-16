@@ -1,10 +1,14 @@
 package de.lessvoid.nifty.builder;
 
+import java.util.logging.Logger;
+
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
+import de.lessvoid.nifty.loaderv2.types.EffectValueType;
 
 public class EffectBuilder {
+  private static Logger logger = Logger.getLogger(EffectBuilder.class.getName());
   protected ControlEffectAttributes attributes = new ControlEffectAttributes();
-  
+
   public EffectBuilder(final String effectName) {
     attributes.setName(effectName);
   }
@@ -86,5 +90,20 @@ public class EffectBuilder {
 
   public ControlEffectAttributes getAttributes() {
     return attributes;
+  }
+
+  public EffectBuilder effectValue(final String ... values) {
+    if (values == null || values.length % 2 != 0) {
+      logger.warning("effect values must be given in pairs, example: effectValue(\"color\", \"#f00f\")");
+      return this;
+    }
+    EffectValueType effectValue = new EffectValueType();
+    for (int i=0; i<values.length/2; i++) {
+      String key = values[i*2+0];
+      String value = values[i*2+1];
+      effectValue.getAttributes().set(key, value);
+    }
+    attributes.addEffectValues(effectValue);
+    return this;
   }
 }

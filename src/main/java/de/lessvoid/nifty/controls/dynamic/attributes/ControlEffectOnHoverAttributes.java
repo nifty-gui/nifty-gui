@@ -12,6 +12,9 @@ public class ControlEffectOnHoverAttributes extends ControlEffectAttributes {
   public EffectTypeOnHover create() {
     EffectTypeOnHover effectTypeOnHover = new EffectTypeOnHover();
     effectTypeOnHover.initFromAttributes(attributes);
+    for (int i=0; i<effectValues.size(); i++) {
+      effectTypeOnHover.addValue(effectValues.get(i));
+    }
     if (controlHoverAttributes != null) {
       effectTypeOnHover.setHover(controlHoverAttributes.create());
     }
