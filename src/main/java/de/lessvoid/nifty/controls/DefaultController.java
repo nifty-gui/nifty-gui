@@ -10,7 +10,6 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class DefaultController implements Controller {
-  private Screen screen;
   private FocusHandler focusHandler;
   private Element element;
   private NextPrevHelper nextPrevHelper;
@@ -23,7 +22,6 @@ public class DefaultController implements Controller {
       final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
     this.element = element;
-    this.screen = screen;
     focusHandler = screen.getFocusHandler();
     nextPrevHelper = new NextPrevHelper(element, focusHandler);
   }
