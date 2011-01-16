@@ -331,7 +331,8 @@ public class Element implements NiftyEvent<Void> {
     if (elementRenderer == null) {
       return;
     }
-    for (ElementRenderer renderer : elementRenderer) {
+    for (int i=0; i<elementRenderer.length; i++) {
+      ElementRenderer renderer = elementRenderer[i];
       ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
       rendererApply.apply(this, attributes, renderEngine);
     }
@@ -346,7 +347,8 @@ public class Element implements NiftyEvent<Void> {
 
   private void hideWithChildren() {
     visible = false;
-    for (Element element : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element element = elements.get(i);
       element.hideWithChildren();
     }
   }
@@ -579,7 +581,8 @@ public class Element implements NiftyEvent<Void> {
 
   private void renderElement(final NiftyRenderEngine r) {
     if (elementRenderer != null) {
-      for (ElementRenderer renderer : elementRenderer) {
+      for (int i=0; i<elementRenderer.length; i++) {
+        ElementRenderer renderer = elementRenderer[i];
         renderer.render(this, r);
       }
     }
@@ -596,7 +599,8 @@ public class Element implements NiftyEvent<Void> {
   }
 
   private void renderInternalChildElements(final NiftyRenderEngine r) {
-    for (Element p : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element p = elements.get(i);
       p.render(r);
     }
   }
@@ -610,7 +614,8 @@ public class Element implements NiftyEvent<Void> {
   }
 
   private void preProcessConstraintWidth() {
-    for (Element e : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element e = elements.get(i);
       e.preProcessConstraintWidth();
     }
 
@@ -626,7 +631,8 @@ public class Element implements NiftyEvent<Void> {
 
       // collect all child layoutPart that have a fixed pixel size in a list
       List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
-      for (Element e : elements) {
+      for (int i=0; i<elements.size(); i++) {
+        Element e = elements.get(i);
         SizeValue childWidth = e.getConstraintWidth();
         if (childWidth != null && childWidth.isPixel()) {
           layoutPartChild.add(e.layoutPart);
@@ -645,7 +651,8 @@ public class Element implements NiftyEvent<Void> {
   }
 
   private void preProcessConstraintHeight() {
-    for (Element e : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element e = elements.get(i);
       e.preProcessConstraintHeight();
     }
 
@@ -660,7 +667,8 @@ public class Element implements NiftyEvent<Void> {
     if (layoutManager != null && (myHeight == null || isCalcHeightConstraint)) {
       // collect all child layoutPart that have a fixed px size in a list
       List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
-      for (Element e : elements) {
+      for (int i=0; i<elements.size(); i++) {
+        Element e = elements.get(i);
         SizeValue childHeight = e.getConstraintHeight();
         if (childHeight != null && childHeight.isPixel()) {
           layoutPartChild.add(e.layoutPart);
@@ -679,7 +687,8 @@ public class Element implements NiftyEvent<Void> {
   }
 
   private void processLayoutInternal() {
-    for (Element w : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       TextRenderer textRenderer = w.getRenderer(TextRenderer.class);
       if (textRenderer != null) {
         textRenderer.setWidthConstraint(w, w.getConstraintWidth(), getWidth(), nifty.getRenderEngine());
@@ -693,7 +702,8 @@ public class Element implements NiftyEvent<Void> {
     if (layoutManager != null) {
       // we need a list of LayoutPart and not of Element, so we'll build one on the fly here
       List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
-      for (Element w : elements) {
+      for (int i=0; i<elements.size(); i++) {
+        Element w = elements.get(i);
         layoutPartChild.add(w.layoutPart);
       }
 
@@ -701,13 +711,15 @@ public class Element implements NiftyEvent<Void> {
       layoutManager.layoutElements(layoutPart, layoutPartChild);
       
       // repeat this step for all child elements
-      for (Element w : elements) {
+      for (int i=0; i<elements.size(); i++) {
+        Element w = elements.get(i);
         w.processLayout();
       }
     }
 
     if (clipChildren) {
-      for (Element w : elements) {
+      for (int i=0; i<elements.size(); i++) {
+        Element w = elements.get(i);
         w.setParentClipArea(getX(), getY(), getWidth(), getHeight());
       }
     }
@@ -733,7 +745,8 @@ public class Element implements NiftyEvent<Void> {
     parentClipWidth = width;
     parentClipHeight = height;
 
-    for (Element w : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       w.setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
     }
     notifyListeners();
@@ -744,34 +757,39 @@ public class Element implements NiftyEvent<Void> {
    */
   public void resetEffects() {
     effectManager.reset();
-    for (Element w : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       w.resetEffects();
     }
   }
 
   public void resetAllEffects() {
     effectManager.resetAll();
-    for (Element w : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       w.resetAllEffects();
     }
   }
 
   public void resetSingleEffect(final EffectEventId effectEventId) {
     effectManager.resetSingleEffect(effectEventId);
-    for (Element w : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       w.resetSingleEffect(effectEventId);
     }
   }
   
   public void resetSingleEffect(final EffectEventId effectEventId, final String customKey) {
     effectManager.resetSingleEffect(effectEventId, customKey);
-    for (Element w : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       w.resetSingleEffect(effectEventId, customKey);
     }
   }
 
   public void resetMouseDown() {
-    for (Element w : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       w.resetMouseDown();
     }
   }
@@ -937,7 +955,8 @@ public class Element implements NiftyEvent<Void> {
 
     // notify all child elements of the start effect
     if (withChildren) {
-      for (Element w : getElements()) {
+      for (int i=0; i<elements.size(); i++) {
+        Element w = elements.get(i);
         w.startEffectInternal(effectEventId, forwardToSelf, customKey);
       }
     }
@@ -981,7 +1000,8 @@ public class Element implements NiftyEvent<Void> {
     effectManager.startEffect(effectEventId, this, time, forwardToSelf, customKey);
 
     // notify all child elements of the start effect
-    for (Element w : getElements()) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       w.startEffectInternal(effectEventId, forwardToSelf, customKey);
     }
 
@@ -1016,7 +1036,8 @@ public class Element implements NiftyEvent<Void> {
 
     // notify all child elements of the start effect
     if (withChildren) {
-      for (Element w : getElements()) {
+      for (int i=0; i<elements.size(); i++) {
+        Element w = elements.get(i);
         w.stopEffect(effectEventId);
       }
     }
@@ -1034,7 +1055,8 @@ public class Element implements NiftyEvent<Void> {
    * @return true, if the effect has ended and false otherwise
    */
   public boolean isEffectActive(final EffectEventId effectEventId) {
-    for (Element w : getElements()) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       if (w.isEffectActive(effectEventId)) {
         return true;
       }
@@ -1131,7 +1153,8 @@ public class Element implements NiftyEvent<Void> {
 
   private void internalShow() {
     visible = true;
-    for (Element element : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element element = elements.get(i);
       element.internalShow();
     }
   }
@@ -1190,7 +1213,8 @@ public class Element implements NiftyEvent<Void> {
     visible = false;
     disableFocus();
 
-    for (Element element : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element element = elements.get(i);
       element.internalHide();
     }
   }
@@ -1266,7 +1290,8 @@ public class Element implements NiftyEvent<Void> {
         mouseOverHandler.addMouseElement(this);
       }
     }
-    for (Element w : getElements()) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
       w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
     }
   }
@@ -1472,7 +1497,8 @@ public class Element implements NiftyEvent<Void> {
       return this;
     }
 
-    for (Element e : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element e = elements.get(i);
       Element found = e.findElementByName(name);
       if (found != null) {
         return found;
@@ -1497,7 +1523,8 @@ public class Element implements NiftyEvent<Void> {
   public void setAlternateKey(final String alternateKey) {
     effectManager.setAlternateKey(alternateKey);
 
-    for (Element e : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element e = elements.get(i);
       e.setAlternateKey(alternateKey);
     }
   }
@@ -1520,7 +1547,8 @@ public class Element implements NiftyEvent<Void> {
 
   public void bindToScreen(final Screen newScreen) {
     screen = newScreen;
-    for (Element e : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element e = elements.get(i);
       e.bindToScreen(newScreen);
     }
   }
@@ -1532,7 +1560,8 @@ public class Element implements NiftyEvent<Void> {
   public void onStartScreen(final Screen newScreen) {
     screen = newScreen;
 
-    for (Element e : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element e = elements.get(i);
       e.onStartScreen(newScreen);
     }
 
@@ -1552,7 +1581,8 @@ public class Element implements NiftyEvent<Void> {
    * @return the ElementRenderer that matches the class
    */
   public < T extends ElementRenderer > T getRenderer(final Class < T > requestedRendererClass) {
-    for (ElementRenderer renderer : elementRenderer) {
+    for (int i=0; i<elementRenderer.length; i++) {
+      ElementRenderer renderer = elementRenderer[i];
       if (requestedRendererClass.isInstance(renderer)) {
         return requestedRendererClass.cast(renderer);
       }

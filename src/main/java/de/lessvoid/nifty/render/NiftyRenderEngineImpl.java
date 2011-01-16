@@ -9,6 +9,8 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.ObjectPool;
+import de.lessvoid.nifty.tools.ObjectPool.Factory;
 
 /**
  * The Nifty RenderEngine.
@@ -79,6 +81,16 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * stack to save data.
    */
   private Stack < SavedRenderState > stack = new Stack < SavedRenderState >();
+
+  /**
+   * ObjectPool to reuse SavedRenderState instances.
+   */
+  private ObjectPool<SavedRenderState> pool = new ObjectPool<SavedRenderState>(32, new Factory<SavedRenderState>() {
+    @Override
+    public SavedRenderState createNew() {
+      return new SavedRenderState();
+    }
+  });
 
   private Clip clipEnabled = null;
   private BlendMode blendMode = BlendMode.BLEND;
@@ -456,11 +468,15 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   }
 
   public void saveState(final Set < RenderStateType > statesToSave) {
-    stack.push(new SavedRenderState(statesToSave));
+    SavedRenderState savedRenderState = pool.allocate();
+    savedRenderState.save(statesToSave);
+    stack.push(savedRenderState);
   }
 
   public void restoreState() {
-    stack.pop().restore();
+    SavedRenderState restored = stack.pop();
+    restored.restore();
+    pool.free(restored);
   }
 
   public void setBlendMode(final BlendMode blendModeParam) {
@@ -506,7 +522,20 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
     private boolean restoreAll = false;
 
-    public SavedRenderState(final Set<RenderStateType> statesToSave) {
+    public SavedRenderState() {
+    }
+
+    public void save(final Set<RenderStateType> statesToSave) {
+      statePositionChanged = false;
+      stateColorChanged = false;
+      stateAlphaChanged = false;
+      stateFontChanged = false;
+      stateTextSizeChanged = false;
+      stateImageScaleChanged = false;
+      stateClipChanged = false;
+      stateBlendModeChanged = false;
+      restoreAll = false;
+
       if (statesToSave == null) {
         savePosition();
         saveColor();

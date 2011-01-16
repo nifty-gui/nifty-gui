@@ -73,7 +73,7 @@ public class Screen {
     return screenId;
   }
 
-  public final List < Element > getLayerElements() {
+  public List<Element> getLayerElements() {
     return layerElements;
   }
 
@@ -86,7 +86,8 @@ public class Screen {
   }
 
   public void removeLayerElement(final String layerId) {
-    for (Element layer : layerElements) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element layer = layerElements.get(i);
       if (layer.getId().equals(layerId)) {
         removeLayerElement(layer);
         return;
@@ -100,7 +101,8 @@ public class Screen {
     // create the callback
     EndNotify localEndNotify = new EndNotify() {
       public final void perform() {
-        for (Element w : layerElements) {
+        for (int i=0; i<layerElements.size(); i++) {
+          Element w = layerElements.get(i);
           if (w.isEffectActive(EffectEventId.onStartScreen)) {
             return;
           }
@@ -178,7 +180,8 @@ public class Screen {
   }
 
   public void layoutLayers() {
-    for (Element w : layerElements) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element w = layerElements.get(i);
       w.layoutElements();
     }
   }
@@ -186,14 +189,9 @@ public class Screen {
   private void resetLayers() {
     nifty.resetEvents();
 
-    for (Element w : layerElements) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element w = layerElements.get(i);
       w.resetEffects();
-    }
-  }
-
-  private void resetLayersMouseDown() {
-    for (Element w : layerElements) {
-      w.resetMouseDown();
     }
   }
 
@@ -202,7 +200,8 @@ public class Screen {
     LocalEndNotify localEndNotify = new LocalEndNotify(effectEventId, endNotify);
 
     // start the effect for all layers
-    for (Element w : layerElements) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element w = layerElements.get(i);
       w.startEffect(effectEventId, localEndNotify);
 
       if (effectEventId == EffectEventId.onStartScreen) {
@@ -239,7 +238,8 @@ public class Screen {
    * Start the onActive effect.
    */
   private void activeEffectStart() {
-    for (Element w : layerElements) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element w = layerElements.get(i);
       w.startEffect(EffectEventId.onActive, null);
 
       // in case this element is disabled we will start the disabled effect right here.
@@ -254,7 +254,8 @@ public class Screen {
    * @param renderDevice the renderDevice to use
    */
   public final void renderLayers(final NiftyRenderEngine renderDevice) {
-    for (Element layer : layerElements) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element layer = layerElements.get(i);
       layer.render(renderDevice);
     }
   }
@@ -282,7 +283,8 @@ public class Screen {
     mouseOverHandler.reset();
 
     long eventTime = timeProvider.getMsTime();
-    for (Element layer : layerList) {
+    for (int i=0; i<layerList.size(); i++) {
+      Element layer = layerList.get(i);
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
     }
 
@@ -302,7 +304,8 @@ public class Screen {
    * @return the element or null
    */
   public Element findElementByName(final String name) {
-    for (Element layer : layerElements) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element layer = layerElements.get(i);
       Element found = layer.findElementByName(name);
       if (found != null) {
         return found;
@@ -332,7 +335,8 @@ public class Screen {
    * @param alternateKey alternate key to set
    */
   public void setAlternateKey(final String alternateKey) {
-    for (Element layer : layerElements) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element layer = layerElements.get(i);
       layer.setAlternateKey(alternateKey);
     }
   }
@@ -345,7 +349,8 @@ public class Screen {
     if (focusHandler.keyEvent(inputEvent)) {
       return true;
     }
-    for (InputHandlerWithMapping handler : inputHandlers) {
+    for (int i=0; i<inputHandlers.size(); i++) {
+      InputHandlerWithMapping handler = inputHandlers.get(i);
       if (handler.process(inputEvent)) {
         return true;
       }
@@ -368,7 +373,8 @@ public class Screen {
 
   public String debugOutput(final String regexpElement, final String regexpAttribute) {
     StringBuffer result = new StringBuffer();
-    for (Element layer : getLayerElements()) {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element layer = layerElements.get(i);
       String layerType = " +";
       if (!layer.isVisible()) {
         layerType = " -";
@@ -384,7 +390,9 @@ public class Screen {
 
   public String outputElement(final Element w, final String offset, final String regexpElement, final String regexpAttribute) {
     StringBuffer result = new StringBuffer();
-    for (Element ww : w.getElements()) {
+    List<Element> wwElements = w.getElements();
+    for (int i=0; i<wwElements.size(); i++) {
+      Element ww = wwElements.get(i);
       String elementId = getIdText(ww);
       if (elementId.matches(regexpElement)) {
         result.append("\n" + offset + elementId + " " + ww.getElementType().getClass().getSimpleName() + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]");  
@@ -452,7 +460,8 @@ public class Screen {
     popupElements.addAll(popupElementsToAdd);
     popupElementsToAdd.clear();
 
-    for (ElementWithEndNotify e : popupElementsToRemove) {
+    for (int i=0; i<popupElementsToRemove.size(); i++) {
+      ElementWithEndNotify e = popupElementsToRemove.get(i);
       e.remove();
     }
     popupElementsToRemove.clear();
@@ -489,7 +498,8 @@ public class Screen {
 
     public void perform() {
       if (enabled) {
-        for (Element w : layerElements) {
+        for (int i=0; i<layerElements.size(); i++) {
+          Element w = layerElements.get(i);
           if (w.isEffectActive(effectEventId)) {
             return;
           }
@@ -613,7 +623,8 @@ public class Screen {
   }
 
   private boolean isEffectActive(final List < Element > elements, final EffectEventId effectEventId) {
-    for (Element element : elements) {
+    for (int i=0; i<elements.size(); i++) {
+      Element element = elements.get(i);
       if (element.isEffectActive(effectEventId)) {
         return true;
       }

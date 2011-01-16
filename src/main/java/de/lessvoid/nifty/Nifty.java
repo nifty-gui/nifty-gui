@@ -248,7 +248,8 @@ public class Nifty {
         ArrayList <ClosePopUp> copy = new ArrayList <ClosePopUp>(closePopupList);
         closePopupList.clear();
 
-        for (ClosePopUp closePopup : copy) {
+        for (int i=0; i<copy.size(); i++) {
+          ClosePopUp closePopup = copy.get(i);
           closePopup.close();
         }
       }
@@ -260,7 +261,8 @@ public class Nifty {
       List < ControlToAdd > copy = new ArrayList < ControlToAdd >(controlsToAdd);
       controlsToAdd.clear();
 
-      for (ControlToAdd controlToAdd : copy) {
+      for (int i=0; i<copy.size(); i++) {
+        ControlToAdd controlToAdd = copy.get(i);
         try {
           controlToAdd.startControl(controlToAdd.createControl());
         } catch (Exception e) {
@@ -276,7 +278,8 @@ public class Nifty {
 
   public void addControlsWithoutStartScreen() {
     if (hasControlsToAdd()) {
-      for (ControlToAdd controlToAdd : controlsToAdd) {
+      for (int i=0; i<controlsToAdd.size(); i++) {
+        ControlToAdd controlToAdd = controlsToAdd.get(i);
         try {
           controlToAdd.startControlWithCheck(controlToAdd.createControl());
         } catch (Exception e) {
@@ -291,8 +294,8 @@ public class Nifty {
     if (hasEndOfFrameElementActions()) {
       ArrayList<EndOfFrameElementAction> listCopy = new ArrayList<EndOfFrameElementAction>(endOfFrameElementActions);
       endOfFrameElementActions.clear();
-
-      for (EndOfFrameElementAction elementAction : listCopy) {
+      for (int i=0; i<listCopy.size(); i++) {
+        EndOfFrameElementAction elementAction = listCopy.get(i);
         elementAction.perform();
       }
     }

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.effects;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +17,15 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class EffectManager {
-
-  interface RenderPhase {
-    public void render(EffectProcessor effectProcessor);
-  }
-
-  private Map < EffectEventId, EffectProcessor > effectProcessor = new Hashtable < EffectEventId, EffectProcessor >();
+  private Map<EffectEventId, EffectProcessor> effectProcessor = new Hashtable<EffectEventId, EffectProcessor>();
+  private List<EffectProcessor> effectProcessorList;
   private Falloff hoverFalloff;
   private NiftyRenderDeviceProxy renderDeviceProxy = new NiftyRenderDeviceProxy();
   private String alternateKey;
   private boolean isEmpty = true;
+  private RenderPhase renderPhasePre = new RenderPhasePre();
+  private RenderPhase renderPhasePost = new RenderPhasePost();
+  private RenderPhase renderPhaseOverlay = new RenderPhaseOverlay();
 
   /**
    * create a new effectManager with the given listener.
@@ -46,6 +46,9 @@ public class EffectManager {
     effectProcessor.put(EffectEventId.onHide, new EffectProcessor(true));
     effectProcessor.put(EffectEventId.onEnabled, new EffectProcessor(true));
     effectProcessor.put(EffectEventId.onDisabled, new EffectProcessor(true));
+
+    // we'll need to iterate over all effectProcessors later and so we keep them here in an ArrayList
+    effectProcessorList = new ArrayList<EffectProcessor>(effectProcessor.values());
   }
 
   /**
@@ -92,7 +95,8 @@ public class EffectManager {
    */
   public void begin(final NiftyRenderEngine renderDevice, final Element element) {
     Set < RenderStateType > renderStates = RenderStateType.allStatesCopy();
-    for (EffectProcessor processor : effectProcessor.values()) {
+    for (int i=0; i<effectProcessorList.size(); i++) {
+      EffectProcessor processor = effectProcessorList.get(i);
       processor.getRenderStatesToSave(renderDeviceProxy);
       renderStates.removeAll(renderDeviceProxy.getStates());
     }
@@ -107,44 +111,32 @@ public class EffectManager {
     renderDevice.restoreState();
   }
 
-  private void render(final Element element, final RenderPhase phase) {
-    phase.render(effectProcessor.get(EffectEventId.onShow));
-    phase.render(effectProcessor.get(EffectEventId.onHide));
-    phase.render(effectProcessor.get(EffectEventId.onStartScreen));
-    phase.render(effectProcessor.get(EffectEventId.onEndScreen));
-    phase.render(effectProcessor.get(EffectEventId.onCustom));
-    phase.render(effectProcessor.get(EffectEventId.onActive));
-    phase.render(effectProcessor.get(EffectEventId.onHover));
-    phase.render(effectProcessor.get(EffectEventId.onFocus));
-    phase.render(effectProcessor.get(EffectEventId.onLostFocus));
-    phase.render(effectProcessor.get(EffectEventId.onGetFocus));
-    phase.render(effectProcessor.get(EffectEventId.onClick));
-    phase.render(effectProcessor.get(EffectEventId.onEnabled));
-    phase.render(effectProcessor.get(EffectEventId.onDisabled));
+  private void render(final Element element, final NiftyRenderEngine renderEngine, final RenderPhase phase) {
+    phase.render(effectProcessor.get(EffectEventId.onShow), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onHide), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onStartScreen), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onEndScreen), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onCustom), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onActive), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onHover), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onFocus), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onLostFocus), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onGetFocus), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onClick), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onEnabled), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onDisabled), renderEngine);
   }
 
   public void renderPre(final NiftyRenderEngine renderEngine, final Element element) {
-    render(element, new RenderPhase() {
-      public void render(final EffectProcessor processor) {
-        processor.renderPre(renderEngine);
-      }
-    });
+    render(element, renderEngine, renderPhasePre);
   }
 
   public void renderPost(final NiftyRenderEngine renderEngine, final Element element) {
-    render(element, new RenderPhase() {
-      public void render(final EffectProcessor processor) {
-        processor.renderPost(renderEngine);
-      }
-    });
+    render(element, renderEngine, renderPhasePost);
   }
 
   public void renderOverlay(final NiftyRenderEngine renderEngine, final Element element) {
-    render(element, new RenderPhase() {
-      public void render(final EffectProcessor processor) {
-        processor.renderOverlay(renderEngine);
-      }
-    });
+    render(element, renderEngine, renderPhaseOverlay);
   }
 
   /**
@@ -251,7 +243,8 @@ public class EffectManager {
   }
 
   public void removeAllEffects() {
-    for (EffectProcessor processor : effectProcessor.values()) {
+    for (int i=0; i<effectProcessorList.size(); i++) {
+      EffectProcessor processor = effectProcessorList.get(i);
       processor.removeAllEffects();
     }
     isEmpty = true;
@@ -263,5 +256,27 @@ public class EffectManager {
 
   public <T extends EffectImpl> List<Effect> getEffects(final EffectEventId effectEventId, final Class<T> requestedClass) {
     return effectProcessor.get(effectEventId).getEffects(requestedClass);
+  }
+
+  interface RenderPhase {
+    public void render(EffectProcessor effectProcessor,  NiftyRenderEngine renderEngine);
+  }
+
+  private final static class RenderPhasePre implements RenderPhase {
+    public void render(final EffectProcessor processor, final NiftyRenderEngine renderEngine) {
+      processor.renderPre(renderEngine);
+    }
+  }
+
+  private final static class RenderPhasePost implements RenderPhase {
+    public void render(final EffectProcessor processor, final NiftyRenderEngine renderEngine) {
+      processor.renderPost(renderEngine);
+    }
+  }
+
+  private final static class RenderPhaseOverlay implements RenderPhase {
+    public void render(final EffectProcessor processor, final NiftyRenderEngine renderEngine) {
+      processor.renderOverlay(renderEngine);
+    }
   }
 }
