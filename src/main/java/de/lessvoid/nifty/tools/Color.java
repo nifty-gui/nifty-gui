@@ -59,6 +59,7 @@ public class Color {
    */
   private float alpha = 0.0f;
   private static ColorValidator colorValidator = new ColorValidator();
+  private String colorString;
 
   /**
    * Create a color from a color String formated like in html
@@ -66,27 +67,7 @@ public class Color {
    * @param color the color string
    */
   public Color(final String color) {
-    if (colorValidator.isShortModeWithoutAlpha(color)) {
-      red = getRFromString(color);
-      green = getGFromString(color);
-      blue = getBFromString(color);
-      alpha = 1.0f;
-      log.fine("found short mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#f]");
-    } else if (colorValidator.isLongModeWithoutAlpha(color)) {
-      red = getRFromString(color);
-      green = getGFromString(color);
-      blue = getBFromString(color);
-      alpha = 1.0f;
-      log.fine("found long mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#ff]");
-    } else if (colorValidator.isValid(color)) {
-      red = getRFromString(color);
-      green = getGFromString(color);
-      blue = getBFromString(color);
-      alpha = getAFromString(color);
-    } else {
-      log.fine("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
-      red = green = blue = alpha = 1.0f;
-    }
+    fromString(color);
   }
 
   /**
@@ -96,15 +77,12 @@ public class Color {
    * @param newBlue blue component
    * @param newAlpha alpha component
    */
-  public Color(
-          final float newRed,
-          final float newGreen,
-          final float newBlue,
-          final float newAlpha) {
+  public Color(final float newRed, final float newGreen, final float newBlue, final float newAlpha) {
       this.red = newRed;
       this.green = newGreen;
       this.blue = newBlue;
       this.alpha = newAlpha;
+      this.colorString = fromRGBA(red, green, blue, alpha);
   }
 
   /**
@@ -117,6 +95,7 @@ public class Color {
       this.green = newColor.getGreen();
       this.blue = newColor.getBlue();
       this.alpha = newAlpha;
+      this.colorString = fromRGBA(red, green, blue, alpha);
   }
 
   public Color(final Color colorParam) {
@@ -124,27 +103,49 @@ public class Color {
     this.green = colorParam.getGreen();
     this.blue = colorParam.getBlue();
     this.alpha = colorParam.getAlpha();
+    this.colorString = colorParam.getColorString();
+  }
+
+  private String fromRGBA(float redValue, float greenValue, float blueValue, float alphaValue) {
+    StringBuffer result = new StringBuffer();
+    result.append('#');
+    result.append(toHex(redValue));
+    result.append(toHex(greenValue));
+    result.append(toHex(blueValue));
+    result.append(toHex(alphaValue));
+    return result.toString();
+  }
+
+  private String toHex(final float redValue) {
+    return Integer.toHexString((int) (redValue * 15));
+  }
+
+  public String getColorString() {
+    return colorString;
+  }
+
+  public String getColorStringWithoutAlpha() {
+    return colorString.substring(0, colorString.length() - 1);
   }
 
   /**
-   * linear interpolate between this color and the given color.
+   * linear interpolate between the start color and the end color and updates this color.
+   * @param start start color
    * @param end end color
    * @param t t in [0,1]
-   * @return linear interpolated color
    */
-  public final Color linear(final Color end, final float t) {
-      return new Color(
-              this.red + t * (end.red - this.red),
-              this.green + t * (end.green - this.green),
-              this.blue + t * (end.blue - this.blue),
-              this.alpha + t * (end.alpha - this.alpha));
+  public void linear(final Color start, final Color end, final float t) {
+    this.red = start.getRed() + t * (end.red - start.getRed());
+    this.green = start.getGreen() + t * (end.green - start.getGreen());
+    this.blue = start.getBlue() + t * (end.blue - start.getBlue());
+    this.alpha = start.getAlpha() + t * (end.alpha - start.getAlpha());
   }
 
   /**
    * get the red component.
    * @return red
    */
-  public final float getRed() {
+  public float getRed() {
       return red;
   }
 
@@ -152,7 +153,7 @@ public class Color {
    * get the green component.
    * @return green
    */
-  public final float getGreen() {
+  public float getGreen() {
       return green;
   }
 
@@ -160,7 +161,7 @@ public class Color {
    * get the blue component.
    * @return blue
    */
-  public final float getBlue() {
+  public float getBlue() {
       return blue;
   }
 
@@ -168,7 +169,7 @@ public class Color {
    * get alpha value.
    * @return alpha
    */
-  public final float getAlpha() {
+  public float getAlpha() {
       return alpha;
   }
 
@@ -238,12 +239,11 @@ public class Color {
    * @param factor factor to multiply
    * @return new Color with factor applied
    */
-  public Color mutiply(final float factor) {
-    return new Color(
-        red * factor,
-        green * factor,
-        blue * factor,
-        alpha * factor);
+  public void mutiply(final Color color, final float factor) {
+    red = color.red * factor;
+    green = color.green * factor;
+    blue = color.blue * factor;
+    alpha = color.alpha * factor;
   }
 
   /**
@@ -293,5 +293,49 @@ public class Color {
       return true;
     }
     return false;
+  }
+
+  public void fromString(final String color) {
+    colorString = color;
+    if (colorValidator.isShortModeWithoutAlpha(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+      alpha = 1.0f;
+      log.fine("found short mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#f]");
+    } else if (colorValidator.isLongModeWithoutAlpha(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+      alpha = 1.0f;
+      log.fine("found long mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#ff]");
+    } else if (colorValidator.isValid(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+      alpha = getAFromString(color);
+    } else {
+      log.fine("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
+      red = green = blue = alpha = 1.0f;
+    }
+  }
+
+  public void fromStringWithoutAlpha(final String color) {
+    colorString = color + toHex(alpha);
+    if (colorValidator.isShortModeWithoutAlpha(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+    } else if (colorValidator.isLongModeWithoutAlpha(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+    } else if (colorValidator.isValid(color)) {
+      red = getRFromString(color);
+      green = getGFromString(color);
+      blue = getBFromString(color);
+    } else {
+      red = green = blue = 1.0f;
+    }
   }
 }

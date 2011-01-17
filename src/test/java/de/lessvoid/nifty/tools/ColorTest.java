@@ -11,7 +11,8 @@ public class ColorTest {
   @Test
   public void testMultiply() {
     Color c = new Color(1.0f, 0.5f, 0.6f, 0.8f);
-    Color m = c.mutiply(0.5f);
+    Color m = new Color("#000f");
+    m.mutiply(c, 0.5f);
     checkColor(m, 0.5f, 0.25f, 0.3f, 0.4f);
   }
 
@@ -52,6 +53,12 @@ public class ColorTest {
 
     c = new Color("#10203080");
     checkColor(c, 0.1f, 0.2f, 0.3f, 0.8f);
+  }
+
+  @Test
+  public void testColorStringFromValues() {
+    Color c = new Color(0.0f, 1.0f, 0.5f, 1.0f);
+    assertEquals("#0f7f", c.getColorString());
   }
 
   private void checkColor(Color m, float red, float green, float blue, float alpha) {

@@ -20,6 +20,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 public class ColorBar implements EffectImpl {
   private Logger log = Logger.getLogger(ColorBar.class.getName());
   private Color color;
+  private Color tempColor = new Color("#000f");
   private SizeValue width;
   private SizeValue insetLeft = new SizeValue("0px");
   private SizeValue insetRight = new SizeValue("0px");
@@ -50,13 +51,15 @@ public class ColorBar implements EffectImpl {
       if (falloff == null) {
         r.setColorIgnoreAlpha(color);
       } else {
-        r.setColorIgnoreAlpha(color.mutiply(falloff.getFalloffValue()));
+        tempColor.mutiply(color, falloff.getFalloffValue());
+        r.setColorIgnoreAlpha(tempColor);
       }
     } else {
       if (falloff == null) {
         r.setColor(color);
       } else {
-        r.setColor(color.mutiply(falloff.getFalloffValue()));
+        tempColor.mutiply(color, falloff.getFalloffValue());
+        r.setColor(tempColor);
       }
     }
 

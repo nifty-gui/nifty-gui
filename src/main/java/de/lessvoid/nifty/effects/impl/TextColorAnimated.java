@@ -14,6 +14,8 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class TextColorAnimated implements EffectImpl {
+  private Color currentColor = new Color("#000f");
+  private Color tempColor = new Color("#000f");
   private Color startColor;
   private Color endColor;
 
@@ -27,11 +29,12 @@ public class TextColorAnimated implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    Color color = startColor.linear(endColor, normalizedTime);
+    currentColor.linear(startColor, endColor, normalizedTime);
     if (falloff == null) {
-      setColor(r, color);
+      setColor(r, currentColor);
     } else {
-      setColor(r, color.mutiply(falloff.getFalloffValue()));
+      tempColor.mutiply(currentColor, falloff.getFalloffValue());
+      setColor(r, tempColor);
     }
   }
 

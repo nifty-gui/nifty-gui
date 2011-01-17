@@ -19,6 +19,7 @@ public class ColorPulsate implements EffectImpl {
   private Color startColor;
   private Color endColor;
   private Pulsator pulsator;
+  private Color currentColor = new Color("#000f");
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     startColor = new Color(parameter.getProperty("startColor", "#00000000"));
@@ -32,8 +33,8 @@ public class ColorPulsate implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     float value = pulsator.update();
-    Color c = startColor.linear(endColor, value);
-    r.setColor(c);
+    currentColor.linear(startColor, endColor, value);
+    r.setColor(currentColor);
   }
 
   public void deactivate() {

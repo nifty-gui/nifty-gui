@@ -16,6 +16,8 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class RenderQuad implements EffectImpl {
+  private Color currentColor = new Color("#000f");
+  private Color tempColor = new Color("#000f");
   private Color startColor;
   private Color endColor;
   private SizeValue width;
@@ -33,11 +35,12 @@ public class RenderQuad implements EffectImpl {
       final NiftyRenderEngine r) {
     r.saveState(null);
 
-    Color color = startColor.linear(endColor, normalizedTime);
+    currentColor.linear(startColor, endColor, normalizedTime);
     if (falloff == null) {
-      r.setColor(color);
+      r.setColor(currentColor);
     } else {
-      r.setColor(color.mutiply(falloff.getFalloffValue()));
+      tempColor.mutiply(currentColor, falloff.getFalloffValue());
+      r.setColor(tempColor);
     }
 
     int size = (int) width.getValue(element.getParent().getWidth());

@@ -17,7 +17,7 @@ import de.lessvoid.nifty.tools.pulsate.Pulsator;
  * @author void
  */
 public class Pulsate implements EffectImpl {
-
+  private Color currentColor = new Color("#000f");
   private Color startColor;
   private Color endColor;
   private SizeValue width;
@@ -49,8 +49,8 @@ public class Pulsate implements EffectImpl {
       }
 
       float value = pulsator.update();
-      Color c = startColor.linear(endColor, value);
-      r.setColor(c);
+      currentColor.linear(startColor, endColor, value);
+      r.setColor(currentColor);
   
       if (!changeColorOnly) {
         int size = (int) width.getValue(element.getParent().getWidth());
