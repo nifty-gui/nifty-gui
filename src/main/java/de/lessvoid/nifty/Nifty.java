@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceExistsException;
 import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.EventSubscriber;
 import org.bushe.swing.event.ThreadSafeEventService;
 
 import de.lessvoid.nifty.controls.StandardControl;
@@ -153,6 +154,20 @@ public class Nifty {
     // we can't publish events for elements without an id
     if (id != null) {
       EventServiceLocator.getEventService("NiftyEventBus").publish(id, event);
+    }
+  }
+
+  public void subscribe(final String elementId, final Object object) {
+    NiftyEventAnnotationProcessor.process(object);
+  }
+
+  public void unsubscribe(final String elementId, final Object object) {
+    // This handles annotations
+    NiftyEventAnnotationProcessor.unprocess(object);
+
+    // This handles direct subscription
+    if (object instanceof EventSubscriber<?>) {
+      getEventService().unsubscribe(elementId, (EventSubscriber<?>) object);
     }
   }
 

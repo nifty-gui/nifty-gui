@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventAnnotationProcessor;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
@@ -65,12 +66,13 @@ public class NiftyInputControl {
     additionalInputHandler.add(handler);
   }
 
-  /**
-   * forward the onStartScreen event to the controller.
-   * @param screen screen
-   */
-  public void onStartScreen(final Screen screen) {
+  public void onStartScreen(final Nifty nifty, final Screen screen) {
+    nifty.subscribe(elementId, controller);
     controller.onStartScreen();
+  }
+
+  public void onEndScreen(final Nifty nifty, final Screen screen) {
+    nifty.unsubscribe(elementId, controller);
   }
 
   /**

@@ -1570,7 +1570,7 @@ public class Element implements NiftyEvent<Void> {
     }
 
     if (attachedInputControl != null) {
-      attachedInputControl.onStartScreen(screen);
+      attachedInputControl.onStartScreen(nifty, screen);
     }
   }
 
@@ -1985,5 +1985,14 @@ public class Element implements NiftyEvent<Void> {
 
   public <T extends EffectImpl> List<Effect> getEffects(final EffectEventId effectEventId, final Class<T> requestedClass) {
     return effectManager.getEffects(effectEventId, requestedClass);
+  }
+
+  public void onEndScreen(final Screen screen) {
+    if (attachedInputControl != null) {
+      attachedInputControl.onEndScreen(nifty, screen);
+    }
+    for (Element element : elements) {
+      element.onEndScreen(screen);
+    }
   }
 }

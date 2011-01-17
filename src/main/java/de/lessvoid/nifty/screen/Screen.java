@@ -601,6 +601,8 @@ public class Screen {
   }
 
   void onStartScreenHasEnded() {
+    nifty.subscribe(screenId, screenController);
+
     // onStartScreen has ENDED so call the event.
     screenController.onStartScreen();
 
@@ -610,8 +612,14 @@ public class Screen {
   }
 
   void onEndScreenHasEnded() {
+    nifty.unsubscribe(screenId, screenController);
+
     // onEndScreen has ENDED so call the event.
     screenController.onEndScreen();
+
+    for (int i=0; i<layerElements.size(); i++) {
+      layerElements.get(i).onEndScreen(this);
+    }
   }
 
   public boolean isEffectActive(final EffectEventId effectEventId) {

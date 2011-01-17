@@ -29,7 +29,7 @@ public class PanelRenderer implements ElementRenderer {
    * @param r
    *            the renderDevice we should use
    */
-  public final void render(final Element element, final NiftyRenderEngine r) {
+  public void render(final Element element, final NiftyRenderEngine r) {
     if (backgroundColor != null) {
       r.saveState(null);
       if (!r.isColorChanged()) {
@@ -48,7 +48,7 @@ public class PanelRenderer implements ElementRenderer {
    * set a background color.
    * @param newBackgroundColor background color
    */
-  public final void setBackgroundColor(final Color newBackgroundColor) {
+  public void setBackgroundColor(final Color newBackgroundColor) {
     this.backgroundColor = newBackgroundColor;
   }
 }

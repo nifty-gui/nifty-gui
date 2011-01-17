@@ -24,11 +24,12 @@ public class ScreenTest {
 
   @Before
   public void before() {
+    screenControllerMock = createMock(ScreenController.class);
     niftyMock = createMock(Nifty.class);
     niftyMock.addControls();
+    niftyMock.subscribe("id", screenControllerMock);
     replay(niftyMock);
 
-    screenControllerMock = createMock(ScreenController.class);
     screenControllerMock.onStartScreen();
     replay(screenControllerMock);
 
