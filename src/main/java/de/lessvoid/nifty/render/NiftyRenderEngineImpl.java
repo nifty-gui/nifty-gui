@@ -361,6 +361,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
     if (colorAlphaChanged && color.getAlpha() > newColor.getAlpha()) {
       color.setAlpha(newColor.getAlpha());
+      colorAlphaChanged = true;
     }
   }
 
@@ -497,7 +498,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     private float y;
     private boolean statePositionChanged;
 
-    private Color color;
+    private String color;
     private boolean colorChanged;
     private boolean stateColorChanged;
     
@@ -607,41 +608,6 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       }
     }
 
-    private void restoreBlend() {
-      NiftyRenderEngineImpl.this.setBlendMode(blendMode);
-    }
-
-    private void restoreClip() {
-      NiftyRenderEngineImpl.this.updateClip(clipEnabled);
-    }
-
-    private void restoreImageScale() {
-      NiftyRenderEngineImpl.this.imageScale = this.imageScale;
-    }
-
-    private void restoreTextSize() {
-      NiftyRenderEngineImpl.this.textScale = this.textSize;
-    }
-
-    private void restoreFont() {
-      NiftyRenderEngineImpl.this.font = font;
-    }
-
-    private void restoreAlpha() {
-      NiftyRenderEngineImpl.this.color.setAlpha(colorAlpha);
-      NiftyRenderEngineImpl.this.colorAlphaChanged = colorAlphaChanged;
-    }
-
-    private void restoreColor() {
-      NiftyRenderEngineImpl.this.color = color;
-      NiftyRenderEngineImpl.this.colorChanged = colorChanged;
-    }
-
-    private void restorePosition() {
-      NiftyRenderEngineImpl.this.currentX = this.x;
-      NiftyRenderEngineImpl.this.currentY = this.y;
-    }
-
     private void saveBlendMode() {
       blendMode = NiftyRenderEngineImpl.this.blendMode;
       stateBlendModeChanged = true;
@@ -674,7 +640,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
 
     private void saveColor() {
-      color = NiftyRenderEngineImpl.this.color;
+      color = NiftyRenderEngineImpl.this.color.getColorStringWithoutAlpha();
       colorChanged = NiftyRenderEngineImpl.this.colorChanged;
       stateColorChanged = true;
     }
@@ -683,6 +649,41 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       x = NiftyRenderEngineImpl.this.currentX;
       y = NiftyRenderEngineImpl.this.currentY;
       statePositionChanged = true;
+    }
+
+    private void restoreBlend() {
+      NiftyRenderEngineImpl.this.setBlendMode(blendMode);
+    }
+
+    private void restoreClip() {
+      NiftyRenderEngineImpl.this.updateClip(clipEnabled);
+    }
+
+    private void restoreImageScale() {
+      NiftyRenderEngineImpl.this.imageScale = this.imageScale;
+    }
+
+    private void restoreTextSize() {
+      NiftyRenderEngineImpl.this.textScale = this.textSize;
+    }
+
+    private void restoreFont() {
+      NiftyRenderEngineImpl.this.font = font;
+    }
+
+    private void restoreAlpha() {
+      NiftyRenderEngineImpl.this.color.setAlpha(colorAlpha);
+      NiftyRenderEngineImpl.this.colorAlphaChanged = colorAlphaChanged;
+    }
+
+    private void restoreColor() {
+      NiftyRenderEngineImpl.this.color.fromStringWithoutAlpha(color);
+      NiftyRenderEngineImpl.this.colorChanged = colorChanged;
+    }
+
+    private void restorePosition() {
+      NiftyRenderEngineImpl.this.currentX = this.x;
+      NiftyRenderEngineImpl.this.currentY = this.y;
     }
   }
 
