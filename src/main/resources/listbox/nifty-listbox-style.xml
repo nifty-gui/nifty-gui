@@ -20,10 +20,10 @@
     <attributes color="#000f" width="100%" align="left" textVAlign="center" textHAlign="left" />
     <interact onClick="listBoxItemClicked()" />
     <effect>
-      <onCustom customKey="focus" name="colorBar" post="false" color="#4448" neverStopRendering="true" timeType="infinite" />
+      <onCustom customKey="focus" name="colorBar" post="false" color="#444f" neverStopRendering="true" timeType="infinite" />
       <onCustom customKey="select" name="colorBar" post="false" color="#444f" neverStopRendering="true" timeType="infinite" />
       <onCustom customKey="select" name="textColor" post="false" color="#fc0f" neverStopRendering="true" timeType="infinite" />
-      <onHover name="colorBar" color="#4444" post="false" neverStopRendering="true" timeType="infinite" inset="1px"/>
+      <onHover name="colorBar" color="#444f" post="false" neverStopRendering="true" timeType="infinite" inset="1px"/>
       <onClick name="focus" targetElement="#parent#parent"/>
     </effect>
   </style>
