@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventAnnotationProcessor;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
@@ -19,7 +18,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 
 public class ControlsDemoScreenController implements ScreenController {
   private static Logger logger = Logger.getLogger(ControlsDemoScreenController.class.getName());
-  private Nifty nifty;
   private Screen screen;
 
   // This simply maps the IDs of the MenuButton elements to the corresponding Dialog elements we'd
@@ -42,9 +40,7 @@ public class ControlsDemoScreenController implements ScreenController {
         String menuButtonId = mapping[i*2+0];
         String dialogId = mapping[i*2+1];
         buttonToDialogMap.put(menuButtonId, dialogId);
-
         buttonIdList.add(menuButtonId);
-
         if (i == 0) {
           currentMenuButtonId = menuButtonId;
         }
@@ -54,9 +50,7 @@ public class ControlsDemoScreenController implements ScreenController {
 
   @Override
   public void bind(final Nifty nifty, final Screen screen) {
-    this.nifty = nifty;
     this.screen = screen;
-    NiftyEventAnnotationProcessor.process(this);
   }
 
   @Override
@@ -67,7 +61,6 @@ public class ControlsDemoScreenController implements ScreenController {
 
   @Override
   public void onEndScreen() {
-    NiftyEventAnnotationProcessor.unprocess(this);    
   }
 
   @NiftyEventSubscriber(pattern="menuButton.*")
@@ -77,22 +70,23 @@ public class ControlsDemoScreenController implements ScreenController {
       int nextIndex = buttonIdList.indexOf(id);
 
       Element nextElement = screen.findElementByName(buttonToDialogMap.get(id));
-      List<Effect> moveEffects = nextElement.findElementByName("effectPanel").getEffects(EffectEventId.onShow, Move.class);
-      if (!moveEffects.isEmpty()) {
-        moveEffects.get(0).getParameters().put("direction", currentIndex < nextIndex ? "right" : "left");
-      }
+      modifyMoveEffect(EffectEventId.onShow, nextElement, currentIndex < nextIndex ? "right" : "left");
       nextElement.show();
 
       Element currentElement = screen.findElementByName(buttonToDialogMap.get(currentMenuButtonId));
-      moveEffects = currentElement.findElementByName("effectPanel").getEffects(EffectEventId.onHide, Move.class);
-      if (!moveEffects.isEmpty()) {
-        moveEffects.get(0).getParameters().put("direction", currentIndex < nextIndex ? "left" : "right");
-      }
+      modifyMoveEffect(EffectEventId.onHide, currentElement, currentIndex < nextIndex ? "left" : "right");
       currentElement.hide();
 
       screen.findElementByName(currentMenuButtonId).stopEffect(EffectEventId.onCustom);
       screen.findElementByName(id).startEffect(EffectEventId.onCustom, null, "selected");
       currentMenuButtonId = id;
+    }
+  }
+
+  private void modifyMoveEffect(final EffectEventId effectEventId, final Element element, final String direction) {
+    List<Effect> moveEffects = element.findElementByName("effectPanel").getEffects(effectEventId, Move.class);
+    if (!moveEffects.isEmpty()) {
+      moveEffects.get(0).getParameters().put("direction", direction);
     }
   }
 }

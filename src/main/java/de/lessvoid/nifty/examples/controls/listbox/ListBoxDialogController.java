@@ -65,10 +65,6 @@ public class ListBoxDialogController implements Controller {
 
     setAppendButtonState();
     setRemoveSelectionButtonState();
-
-    // We can have the event annotations on every class! It's not required to be a ScreenController or something
-    // even related to Nifty. We only need to make sure to call this method to enable the annotations.
-    NiftyEventAnnotationProcessor.process(this);    
   }
 
   @Override

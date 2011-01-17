@@ -3,7 +3,6 @@ package de.lessvoid.nifty.examples.controls.textfield;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventAnnotationProcessor;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
@@ -48,10 +47,6 @@ public class TextFieldDialogController implements Controller {
 //    this.keyEventLabel = screen.findNiftyControl("keyEventLabel", Label.class);
     setPasswordCharTextFieldEnableState();
     setMaxLengthFieldEnableState();
-
-    // We can have the event annotations on every class! It's not required to be a ScreenController or something
-    // even related to Nifty. We only need to make sure to call this method to enable the annotations.
-    NiftyEventAnnotationProcessor.process(this);    
   }
 
   @Override
