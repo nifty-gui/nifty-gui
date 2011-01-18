@@ -3,14 +3,13 @@ package de.lessvoid.nifty.examples.controls.listbox;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventAnnotationProcessor;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
@@ -19,7 +18,6 @@ import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyMouseClickedEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -122,14 +120,14 @@ public class ListBoxDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="appendButton")
-  public void onAppendButtonClicked(final String id, final NiftyMouseClickedEvent event) {
+  public void onAppendButtonClicked(final String id, final ButtonClickedEvent event) {
     // add the item and make sure that the last item is shown
     listBox.addItem(new JustAnExampleModelClass(addTextField.getText()));
     listBox.showItemByIndex(listBox.itemCount() - 1);
   }
 
   @NiftyEventSubscriber(id="removeSelectionButton")
-  public void onRemoveSelectionButtonClicked(final String id, final NiftyMouseClickedEvent event) {
+  public void onRemoveSelectionButtonClicked(final String id, final ButtonClickedEvent event) {
     if (!listBox.getSelection().isEmpty()) {
       listBox.removeAllItems(listBox.getSelection());
     }
