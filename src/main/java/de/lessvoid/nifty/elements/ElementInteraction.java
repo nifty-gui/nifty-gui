@@ -63,6 +63,7 @@ public class ElementInteraction {
       }
       return onClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
     }
+
     return false;
   }
 

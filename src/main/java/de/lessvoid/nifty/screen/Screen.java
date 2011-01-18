@@ -601,7 +601,7 @@ public class Screen {
   }
 
   void onStartScreenHasEnded() {
-    nifty.subscribe(screenId, screenController);
+    nifty.processAnnotations(screenController);
 
     // onStartScreen has ENDED so call the event.
     screenController.onStartScreen();

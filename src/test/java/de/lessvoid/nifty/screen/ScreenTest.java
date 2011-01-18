@@ -27,7 +27,7 @@ public class ScreenTest {
     screenControllerMock = createMock(ScreenController.class);
     niftyMock = createMock(Nifty.class);
     niftyMock.addControls();
-    niftyMock.subscribe("id", screenControllerMock);
+    niftyMock.processAnnotations(screenControllerMock);
     replay(niftyMock);
 
     screenControllerMock.onStartScreen();

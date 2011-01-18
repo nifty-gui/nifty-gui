@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceExistsException;
 import org.bushe.swing.event.EventServiceLocator;
-import org.bushe.swing.event.EventSubscriber;
+import org.bushe.swing.event.EventTopicSubscriber;
 import org.bushe.swing.event.ThreadSafeEventService;
 
 import de.lessvoid.nifty.controls.StandardControl;
@@ -157,7 +157,7 @@ public class Nifty {
     }
   }
 
-  public void subscribe(final String elementId, final Object object) {
+  public void processAnnotations(final Object object) {
     NiftyEventAnnotationProcessor.process(object);
   }
 
@@ -166,9 +166,13 @@ public class Nifty {
     NiftyEventAnnotationProcessor.unprocess(object);
 
     // This handles direct subscription
-    if (object instanceof EventSubscriber<?>) {
-      getEventService().unsubscribe(elementId, (EventSubscriber<?>) object);
+    if (object instanceof EventTopicSubscriber<?>) {
+      getEventService().unsubscribe(elementId, (EventTopicSubscriber<?>) object);
     }
+  }
+
+  public <T> void subscribe(final String elementId, final Class<T> eventClass, final EventTopicSubscriber<T> subscriber) {
+    getEventService().subscribeStrongly(elementId, new ClassSaveEventTopicSubscriber(subscriber, eventClass));
   }
 
   public void setAlternateKeyForNextLoadXml(final String alternateKeyForNextLoadXmlParam) {
@@ -1133,6 +1137,25 @@ public class Nifty {
         return currentScreen.keyEvent(keyEvent);
       }
       return false;
+    }
+  }
+
+  @SuppressWarnings("rawtypes")
+  private static class ClassSaveEventTopicSubscriber implements EventTopicSubscriber {
+    private final EventTopicSubscriber target;
+    private final Class eventClass;
+
+    private ClassSaveEventTopicSubscriber(final EventTopicSubscriber target, final Class eventClass) {
+      this.target = target;
+      this.eventClass = eventClass;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onEvent(final String topic, final Object data) {
+      if (eventClass.isInstance(data)) {
+        target.onEvent(topic, data);
+      }
     }
   }
 }
