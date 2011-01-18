@@ -2,14 +2,18 @@ package de.lessvoid.nifty.controls.button;
 
 import java.util.Properties;
 
+import org.bushe.swing.event.EventTopicSubscriber;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyMouseClickedEvent;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.screen.Screen;
@@ -39,6 +43,13 @@ public class ButtonControl extends AbstractController implements Button {
     screen = screenParam;
     buttonTextElement = getElement().findElementByName("button-text");
     buttonTextRenderer = buttonTextElement.getRenderer(TextRenderer.class);
+
+    niftyParam.subscribe(newElement.getId(), NiftyMouseClickedEvent.class, new EventTopicSubscriber<NiftyMouseClickedEvent>() {
+      @Override
+      public void onEvent(final String topic, final NiftyMouseClickedEvent data) {
+        niftyParam.publishEvent(topic, new ButtonClickedEvent());
+      }
+    });
   }
 
   public void onStartScreen() {
