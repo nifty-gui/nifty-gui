@@ -36,20 +36,20 @@ public class Move implements EffectImpl {
   private boolean toOffset = false;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+    String mode = parameter.getProperty("mode");
     direction = parameter.getProperty("direction");
     if (LEFT.equals(direction)) {
       offset = element.getX() + element.getWidth();
     } else if (RIGHT.equals(direction)) {
-      offset = element.getX() + element.getWidth();
+      offset = nifty.getRenderEngine().getWidth() - element.getX();
     } else if (TOP.equals(direction)) {
       offset = element.getY() + element.getHeight();
     } else if (BOTTOM.equals(direction)) {
-      offset = element.getY() + element.getHeight();
+      offset = nifty.getRenderEngine().getHeight() - element.getY();
     } else {
       offset = 0;
     }
 
-    String mode = parameter.getProperty("mode");
     if ("out".equals(mode)) {
       startOffset = 0;
       offsetDir = -1;
