@@ -8,6 +8,7 @@
   <useStyles filename="dropdown/nifty-drop-down.xml" />
   <useStyles filename="checkbox/nifty-checkbox.xml" />
   <useStyles filename="scrollbar/nifty-scrollbar-style.xml" />
+  <useStyles filename="slider/nifty-slider-style.xml" />
   <useStyles filename="scrollpanel/nifty-scrollpanel-style.xml" />
   <useStyles filename="console/nifty-console-style.xml" />
   <useStyles filename="listbox/nifty-listbox-style.xml" />
