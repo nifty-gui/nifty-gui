@@ -1,5 +1,9 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.logging.Logger;
@@ -11,11 +15,15 @@ import javax.media.opengl.GLContext;
 import com.jogamp.common.nio.Buffers;
 
 import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.renderer.jogl.render.io.ImageData;
+import de.lessvoid.nifty.renderer.jogl.render.io.ImageIOImageData;
+import de.lessvoid.nifty.renderer.jogl.render.io.TGAImageData;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
 public class JoglRenderDevice implements RenderDevice {
     private static Logger log = Logger.getLogger(JoglRenderDevice.class.getName());
@@ -418,8 +426,7 @@ public class JoglRenderDevice implements RenderDevice {
     @Override
     public MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY)
             throws IOException {
-        // TODO implement this method later
-        return null;
+        return new JoglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
     }
 
     @Override
@@ -430,5 +437,18 @@ public class JoglRenderDevice implements RenderDevice {
     @Override
     public void disableMouseCursor() {
         // TODO implement this method later
+    }
+    
+    private Cursor loadMouseCursor(final String name, final int hotspotX, final int hotspotY) throws IOException {
+        ImageData imageLoader = createImageLoader(name);
+        BufferedImage image = imageLoader.loadMouseCursorImage(ResourceLoader.getResourceAsStream(name));       
+        return Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(hotspotX,hotspotY), name);
+    }
+    
+    private ImageData createImageLoader(final String name) {
+        if (name.endsWith(".tga")) {
+            return new TGAImageData();
+        }
+        return new ImageIOImageData();
     }
 }

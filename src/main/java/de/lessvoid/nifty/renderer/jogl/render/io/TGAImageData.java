@@ -1,11 +1,14 @@
 package de.lessvoid.nifty.renderer.jogl.render.io;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+import javax.imageio.ImageIO;
 
 import com.jogamp.common.nio.Buffers;
 
@@ -302,6 +305,10 @@ public class TGAImageData implements ImageData {
         return scratch;
     }
 
+    public BufferedImage loadMouseCursorImage(InputStream fis) throws IOException {
+      return ImageIO.read(fis);
+    }
+    
     /**
      * Get the closest greater power of 2 to the fold number
      * 
