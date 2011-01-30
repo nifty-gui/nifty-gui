@@ -2,7 +2,6 @@ package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.tools.SizeValue;
 
-
 /**
  * Interface for all Nifty Controls.
  * @author void

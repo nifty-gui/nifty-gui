@@ -9,7 +9,6 @@ import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.EffectsType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.ImageType;
-import de.lessvoid.nifty.loaderv2.types.LabelType;
 import de.lessvoid.nifty.loaderv2.types.LayerType;
 import de.lessvoid.nifty.loaderv2.types.PanelType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
@@ -280,14 +279,6 @@ public abstract class ControlAttributes {
       final Element parent) {
     ControlType controlType = new ControlType(attributes);
     return buildControl(nifty, screen, parent, controlType, new LayoutPart());
-  }
-
-  protected Element createLabel(
-      final Nifty nifty,
-      final Screen screen,
-      final Element parent) {
-    LabelType labelType = new LabelType(attributes);
-    return buildControl(nifty, screen, parent, labelType, new LayoutPart());
   }
 
   protected Element createText(

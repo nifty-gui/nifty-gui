@@ -44,7 +44,6 @@
       <element name="effect" type="EffectsType" occurs="optional" />
       <element name="panel" type="PanelType" occurs="zeroOrMore" />
       <element name="image" type="ImageType" occurs="zeroOrMore" />
-      <element name="label" type="LabelType" occurs="zeroOrMore" />
       <element name="text" type="TextType" occurs="zeroOrMore" />
       <element name="control" type="ControlType" occurs="zeroOrMore" />
     </group>
@@ -53,7 +52,6 @@
   <type name="ImageType" extends="ElementType" />
   <type name="TextType" extends="ElementType" />
   <type name="ControlType" extends="ElementType" />
-  <type name="LabelType" extends="ElementType" />
   <type name="LayerType" extends="ElementType" />
   <type name="PopupType" extends="ElementType" />
   <type name="ScreenType">
@@ -65,7 +63,6 @@
       <element name="effect" type="EffectsType" occurs="optional" />
       <element name="panel" type="PanelType" occurs="zeroOrMore" />
       <element name="image" type="ImageType" occurs="zeroOrMore" />
-      <element name="label" type="LabelType" occurs="zeroOrMore" />
       <element name="text" type="TextType" occurs="zeroOrMore" />
     </group>
   </type>

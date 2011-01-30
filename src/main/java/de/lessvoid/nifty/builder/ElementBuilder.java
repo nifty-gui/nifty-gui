@@ -296,10 +296,6 @@ public abstract class ElementBuilder {
     elementBuilders.add(panelBuilder);
   }
 
-  public void label(final LabelBuilder labelBuilder) {
-    elementBuilders.add(labelBuilder);
-  }
-
   public void text(final TextBuilder textBuilder) {
     elementBuilders.add(textBuilder);
   }
