@@ -3,14 +3,13 @@ package de.lessvoid.nifty.controls.button.builder;
 import de.lessvoid.nifty.builder.ControlBuilder;
 
 public class ButtonBuilder extends ControlBuilder {
-  public ButtonBuilder(final String name) {
-    super("button");
-    label(name);
+  public ButtonBuilder(final String id) {
+    super(id, "button");
   }
 
-  public ButtonBuilder(final String name, final String id) {
+  public ButtonBuilder(final String id, final String buttonLabel) {
     super(id, "button");
-    label(name);
+    label(buttonLabel);
   }
 
   public void label(final String label) {

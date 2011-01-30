@@ -2,7 +2,7 @@
 <nifty-controls>
   <controlDefinition style="nifty-button" name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
     <panel id="button-panel" style="#panel" focusable="true">
-      <label id="button-text" style="#text" text="$label"/>
+      <text id="button-text" style="#text" text="$label"/>
     </panel>
   </controlDefinition>
 </nifty-controls>
