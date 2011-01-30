@@ -7,6 +7,16 @@ package de.lessvoid.nifty.controls;
 public interface Slider extends NiftyControl {
 
   /**
+   * Set all attributes at once.
+   * @param min minimum value
+   * @param max maximum value
+   * @param current current value
+   * @param stepSize step size
+   * @param buttonStepSize button step size
+   */
+  void setup(float min, float max, float current, float stepSize, float buttonStepSize);
+
+  /**
    * Set the Slider value to a new value.
    * @param value the new value for the slider
    */

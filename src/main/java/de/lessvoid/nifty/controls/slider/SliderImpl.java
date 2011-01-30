@@ -87,6 +87,16 @@ public class SliderImpl {
     updateView();
   }
 
+  public void setup(final float min, final float max, final float current, final float stepSize, final float buttonStepSize) {
+    this.min = min;
+    this.max = max;
+    this.value = current;
+    this.stepSize = stepSize;
+    this.buttonStepSize = buttonStepSize;
+    changeValue(value);
+    updateView();
+  }
+
   private void changeValue(final float newValue) {
     value = newValue;    
     if (value > max) {

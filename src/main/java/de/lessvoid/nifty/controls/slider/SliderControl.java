@@ -96,6 +96,7 @@ public class SliderControl extends AbstractController implements Slider {
 
   @Override
   public void setValue(final float value) {
+    sliderImpl.setValue(value);
   }
 
   @Override
@@ -141,6 +142,11 @@ public class SliderControl extends AbstractController implements Slider {
   @Override
   public float getButtonStepSize() {
     return sliderImpl.getButtonStepSize();
+  }
+
+  @Override
+  public void setup(final float min, final float max, final float current, final float stepSize, final float buttonStepSize) {
+    sliderImpl.setup(min, max, current, stepSize, buttonStepSize);
   }
 
   // SliderView implementation
