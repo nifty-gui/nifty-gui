@@ -112,7 +112,6 @@ public class ListBoxDialogController implements Controller {
   public void onAddTextFieldInputEvent(final String id, final NiftyInputEvent event) {
     if (NiftyInputEvent.SubmitText.equals(event)) {
       if (addTextField.getText().length() == 0) {
-        showPopup("Yeah, nice idea! This will work when you've entered some text first! :)");
         return;
       }
       appendButton.activate();
@@ -131,11 +130,6 @@ public class ListBoxDialogController implements Controller {
     if (!listBox.getSelection().isEmpty()) {
       listBox.removeAllItems(listBox.getSelection());
     }
-  }
-
-  private void showPopup(final String message) {
-    popup.findElementByName("message").getRenderer(TextRenderer.class).setText(message);
-    nifty.showPopup(screen, "test", null);
   }
 
   private SelectionMode getSelectionMode() {

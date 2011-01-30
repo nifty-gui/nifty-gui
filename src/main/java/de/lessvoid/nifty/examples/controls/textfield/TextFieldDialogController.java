@@ -7,12 +7,14 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
@@ -20,13 +22,13 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class TextFieldDialogController implements Controller {
-  private Nifty nifty;
-  private Screen screen;
   private TextField mainTextField;
   private CheckBox passwordCharCheckBox;
   private TextField passwordCharTextField;
   private CheckBox maxLengthEnableCheckBox;
   private TextField maxLengthTextField;
+  private Label textChangedLabel;
+  private Label keyEventLabel;
   
   @Override
   public void bind(
@@ -36,15 +38,18 @@ public class TextFieldDialogController implements Controller {
       Properties parameter,
       ControllerEventListener listener,
       Attributes controlDefinitionAttributes) {
-    this.nifty = nifty;
-    this.screen = screen;
     this.mainTextField = screen.findNiftyControl("mainTextField", TextField.class);
     this.passwordCharCheckBox = screen.findNiftyControl("passwordCharCheckBox", CheckBox.class);
     this.passwordCharTextField = screen.findNiftyControl("passwordCharTextField", TextField.class);
     this.maxLengthEnableCheckBox = screen.findNiftyControl("maxLengthEnableCheckBox", CheckBox.class);
     this.maxLengthTextField = screen.findNiftyControl("maxLengthTextField", TextField.class);
-//    this.textChangedLabel = screen.findNiftyControl("textChangedLabel", Label.class);
-//    this.keyEventLabel = screen.findNiftyControl("keyEventLabel", Label.class);
+    this.textChangedLabel = screen.findNiftyControl("textChangedLabel", Label.class);
+    this.keyEventLabel = screen.findNiftyControl("keyEventLabel", Label.class);
+    passwordCharTextField.setText("*");
+    maxLengthTextField.setText("5");
+    textChangedLabel.setText("---");
+    keyEventLabel.setText("---");
+    keyEventLabel.setColor(new Color("#ff0f"));
     setPasswordCharTextFieldEnableState();
     setMaxLengthFieldEnableState();
   }
@@ -67,9 +72,36 @@ public class TextFieldDialogController implements Controller {
     setPasswordCharTextFieldEnableState();
   }
 
+  @NiftyEventSubscriber(id="maxLengthEnableCheckBox")
+  public void onMaxLengthEnableCheckBoxChanged(final String id, final CheckBoxStateChangedEvent event) {
+    setMaxLengthFieldEnableState();
+  }
+
   @NiftyEventSubscriber(id="passwordCharTextField")
   public void onPasswordCharTextFieldChanged(final String id, final TextFieldChangedEvent event) {
     updatePasswordChar();
+  }
+
+  @NiftyEventSubscriber(id="mainTextField")
+  public void onTextChanged(final String id, final TextFieldChangedEvent event) {
+    textChangedLabel.setText(event.getText());
+  }
+
+  @NiftyEventSubscriber(id="maxLengthTextField")
+  public void onMaxLengthTextChanged(final String id, final TextFieldChangedEvent event) {
+    setMaxLength(event.getText());
+  }
+
+  private void setMaxLength(final String text) {
+    try {
+      mainTextField.setMaxLength(Integer.valueOf(text));
+    } catch (Exception e) {
+    }
+  }
+
+  @NiftyEventSubscriber(id="mainTextField")
+  public void onTextChanged(final String id, final NiftyInputEvent event) {
+    keyEventLabel.setText(event.toString() + " [" + event.getCharacter() + "]");
   }
 
   private void setPasswordCharTextFieldEnableState() {
@@ -89,12 +121,12 @@ public class TextFieldDialogController implements Controller {
     }
   }
 
-  @NiftyEventSubscriber(id="maxLengthEnableCheckBox")
-  public void onMaxLengthEnableCheckBoxChanged(final String id, final CheckBoxStateChangedEvent event) {
-    setMaxLengthFieldEnableState();
-  }
-
   private void setMaxLengthFieldEnableState() {
     maxLengthTextField.setEnabled(maxLengthEnableCheckBox.isChecked());
+    if (maxLengthEnableCheckBox.isChecked()) {
+      setMaxLength(maxLengthTextField.getText());
+    } else {
+      mainTextField.setMaxLength(-1);
+    }
   }
 }

@@ -5,8 +5,8 @@ import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
 import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.HoverEffectBuilder;
-import de.lessvoid.nifty.builder.LabelBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 
 public class MenuButtonBuilder {
   private static final String CONTROL_NAME = "menuButtonControl";
@@ -17,7 +17,7 @@ public class MenuButtonBuilder {
       controller(new MenuButtonController());
       panel(new PanelBuilder() {{
         backgroundColor("#55fa");
-        width("100px");
+        width("123px");
         alignCenter();
         valignCenter();
         childLayoutCenter();
@@ -47,7 +47,7 @@ public class MenuButtonBuilder {
           effectValue("offset", "0%", "color", "#222f");
           effectValue("offset", "100%", "color", "#eeff");
         }});
-        label(new LabelBuilder() {{
+        control(new LabelBuilder() {{
           color("#222f");
           text(controlParameter(PARAM_LABEL));
           alignCenter();

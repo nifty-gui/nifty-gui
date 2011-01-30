@@ -4,6 +4,9 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
+import de.lessvoid.nifty.controls.checkbox.builder.CheckboxBuilder;
+import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 
 /**
@@ -50,53 +53,52 @@ public class ListBoxDialogBuilder {
           onHideEffect(builders.createFadeEffect());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
-            label(builders.createLabel("ListBox:"));
-            control(new ControlBuilder("listBox", "listBox") {{
-              set("displayItems", "4");
-              set("vertical", "true");
-              set("horizontal", "true");
+            control(builders.createLabel("ListBox:"));
+            control(new ListBoxBuilder("listBox") {{
+              displayItems(4);
+              selectionModeSingle();
+              showVerticalScrollbar();
+              showHorizontalScrollbar();
               width("*");
             }});
           }});
           panel(builders.vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
-            label(builders.createLabel("Append:"));
+            control(builders.createLabel("Append:"));
             control(new ControlBuilder("addTextField", "textfield"));
             panel(builders.hspacer("9px"));
-            control(new ControlBuilder("appendButton", "button") {{
-              set("label", "Append");
+            control(new ButtonBuilder("appendButton", "Append"));
+          }});
+          panel(builders.vspacer());
+          panel(new PanelBuilder() {{
+            childLayoutHorizontal();
+            control(builders.createLabel("Multi Selection:"));
+            control(new CheckboxBuilder("multiSelectionCheckBox") {{
+              checked(false); // start with uncheck
+            }});
+            panel(builders.hspacer("17px"));
+            control(builders.createShortLabel("Force Selection:"));
+            panel(builders.hspacer("9px"));
+            control(new CheckboxBuilder("forceSelectionCheckBox") {{
+              checked(false); // start with uncheck
+            }});
+            panel(builders.hspacer("17px"));
+            control(builders.createShortLabel("Disable Selection:"));
+            panel(builders.hspacer("9px"));
+            control(new CheckboxBuilder("disableSelectionCheckBox") {{
+              checked(false); // start with uncheck
             }});
           }});
           panel(builders.vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
-            label(builders.createLabel("Multi Selection:"));
-            control(new ControlBuilder("multiSelectionCheckBox", "checkbox") {{
-              set("checked", "false"); // start with uncheck
-            }});
-            panel(builders.hspacer("17px"));
-            label(builders.createShortLabel("Force Selection:"));
-            panel(builders.hspacer("9px"));
-            control(new ControlBuilder("forceSelectionCheckBox", "checkbox") {{
-              set("checked", "false"); // start with uncheck
-            }});
-            panel(builders.hspacer("17px"));
-            label(builders.createShortLabel("Disable Selection:"));
-            panel(builders.hspacer("9px"));
-            control(new ControlBuilder("disableSelectionCheckBox", "checkbox") {{
-              set("checked", "false"); // start with uncheck
-            }});
-          }});
-          panel(builders.vspacer());
-          panel(new PanelBuilder() {{
-            childLayoutHorizontal();
-            label(builders.createLabel("Current Sel.:"));
-            control(new ControlBuilder("selectionListBox", "listBox") {{
-              set("displayItems", "4");
-              set("selectionMode", "Disabled");
-              set("vertical", "true");
-              set("horizontal", "false");
+            control(builders.createLabel("Current Sel.:"));
+            control(new ListBoxBuilder("selectionListBox") {{
+              displayItems(4);
+              selectionModeDisabled();
+              hideHorizontalScrollbar();
+              hideVerticalScrollbar();
               width("*");
               childLayoutVertical();
             }});
@@ -104,7 +106,7 @@ public class ListBoxDialogBuilder {
           panel(builders.vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
-            label(builders.createLabel("Remove Sel.:"));
+            control(builders.createLabel("Remove Sel.:"));
             control(new ControlBuilder("removeSelectionButton", "button") {{
               set("label", "Remove Selection From ListBox");
               width("250px");

@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.examples.controls.common;
 
 import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.LabelBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 
 /**
  * This is a helper class of reused builders so that we don't repeat ourself too much.
@@ -48,9 +48,22 @@ public class CommonBuilders {
   }
 
   public LabelBuilder createLabel(final String text) {
+    return createLabel(text, "100px");
+  }
+
+  public LabelBuilder createLabel(final String text, final String width) {
     return new LabelBuilder() {{
       text(text);
-      width("100px");
+      width(width);
+      alignLeft();
+      textVAlignCenter();
+      textHAlignLeft();
+    }};
+  }
+
+  public LabelBuilder createLabel(final String id, final String text, final String width) {
+    return new LabelBuilder(id, text) {{
+      width(width);
       alignLeft();
       textVAlignCenter();
       textHAlignLeft();
