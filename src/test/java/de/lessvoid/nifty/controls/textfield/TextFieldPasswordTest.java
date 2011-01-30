@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield.controller;
+package de.lessvoid.nifty.controls.textfield;
 
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;

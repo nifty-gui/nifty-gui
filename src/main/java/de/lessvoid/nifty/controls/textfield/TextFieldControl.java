@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield.controller;
+package de.lessvoid.nifty.controls.textfield;
 
 import java.util.Properties;
 
@@ -51,7 +51,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
 
-    this.textField = new TextFieldLogic("", new ClipboardAWT(), this);
+    this.textField = new TextFieldLogic(properties.getProperty("text", ""), new ClipboardAWT(), this);
     this.textField.toFirstPosition();
 
     this.textElement = getElement().findElementByName("textfield-text");
@@ -293,6 +293,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
   @Override
   public void setMaxLength(final int maxLength) {
     textField.setMaxLength(maxLength);
+    updateCursor();
   }
 
   @Override

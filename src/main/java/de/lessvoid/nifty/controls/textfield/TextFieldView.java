@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield.controller;
+package de.lessvoid.nifty.controls.textfield;
 
 public interface TextFieldView {
 

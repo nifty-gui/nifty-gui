@@ -3,7 +3,7 @@ package de.lessvoid.nifty.controls.textfield.builder;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
-import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
+import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;

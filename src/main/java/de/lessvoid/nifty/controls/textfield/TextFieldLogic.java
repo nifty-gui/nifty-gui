@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield.controller;
+package de.lessvoid.nifty.controls.textfield;
 
 /**
  * TextField logic.
@@ -349,10 +349,10 @@ public class TextFieldLogic {
 
     if (maxLength != -1) {
       if (text.length() > maxLen) {
-        String old = text.toString();
-        text = text.delete(maxLen, text.length());
-        resetSelection();
-        notifyTextChange(old);
+        setCursorPosition(maxLen);
+        startSelecting();
+        setCursorPosition(text.length());
+        delete();
       }
     }
   }

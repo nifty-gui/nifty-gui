@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield.inputmapping;
+package de.lessvoid.nifty.controls.textfield;
 
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;

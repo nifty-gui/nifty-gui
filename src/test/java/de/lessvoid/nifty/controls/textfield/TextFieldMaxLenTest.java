@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield.controller;
+package de.lessvoid.nifty.controls.textfield;
 
 import junit.framework.TestCase;
 
@@ -40,5 +40,11 @@ public class TextFieldMaxLenTest extends TestCase {
     textField.initWithText("");
     textField.setMaxLength(1);
     assertEquals("", textField.getText());
+  }
+
+  public void testMakingMaxLengthShorter() {
+    textField.initWithText("123456");
+    textField.setMaxLength(2);
+    assertEquals("12", textField.getText());
   }
 }
