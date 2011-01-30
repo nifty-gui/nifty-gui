@@ -6,7 +6,7 @@
     <interact onClick="dragStart()" onClickMouseMove="drag()" onRelease="dragStop()" />
     <panel style="#frame" childLayout="vertical" valign="top">
       <panel id="window-bar" style="#bar">
-        <label id="window-title" style="#title" text="$title"  />
+        <text id="window-title" style="#title" text="$title"  />
         <panel id="window-close-button" style="#close-button">
           <interact onClick="closeWindow()" />
         </panel>
