@@ -1,11 +1,14 @@
 package de.lessvoid.nifty.slick2d.render;
 
+import java.io.IOException;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -155,4 +158,16 @@ public class SlickRenderDevice implements RenderDevice {
     return false;
   }
 
+  @Override
+  public MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY) throws IOException {
+    return null;
+  }
+
+  @Override
+  public void enableMouseCursor(MouseCursor mouseCursor) {
+  }
+
+  @Override
+  public void disableMouseCursor() {
+  }
 }

@@ -51,4 +51,8 @@ public class LwjglInputSystem implements InputSystem {
       inputEventConsumer.processKeyboardEvent(keyboardEventCreator.createEvent(Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState()));
     }
   }
+
+  @Override
+  public void setMousePosition(int x, int y) {
+  }
 }

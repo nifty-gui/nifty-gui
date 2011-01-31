@@ -98,6 +98,10 @@ public class NiftyGameState extends BasicGameState {
             }
             keyEvents.clear();
           }
+
+          @Override
+          public void setMousePosition(int x, int y) {
+          }
         },
         new TimeProvider());
     SlickCallable.leaveSafeBlock();
