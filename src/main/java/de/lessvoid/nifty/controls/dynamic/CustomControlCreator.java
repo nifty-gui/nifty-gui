@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.controls.dynamic;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
@@ -10,7 +9,6 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class CustomControlCreator extends ControlAttributes {
   public CustomControlCreator(final String name) {
-    setId(NiftyIdCreator.generate());
     setName(name);
   }
 
