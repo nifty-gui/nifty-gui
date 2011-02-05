@@ -4,5 +4,8 @@
   <!-- just some text label default -->
   <style id="nifty-label" base="base-font">
     <attributes align="center" height="23px" />
+    <effect>
+      <onActive name="clip" post="false" />
+    </effect>
   </style>
 </nifty-styles>

@@ -4,7 +4,7 @@
   <!-- vertical -->
   <!-- ++++++++ -->
   <style id="nifty-vertical-slider#panel">
-    <attributes childLayout="vertical" width="28px" align="center" focusable="true" />
+    <attributes childLayout="vertical" width="23px" align="center" focusable="true" />
   </style>
   <style id="nifty-vertical-slider#up">
     <attributes filename="slider/slider.png" width="23px" height="23px" imageMode="sprite:23,23,3"/>
@@ -49,7 +49,7 @@
   <!-- horizontal -->
   <!-- ++++++++++ -->
   <style id="nifty-horizontal-slider#panel">
-    <attributes childLayout="horizontal" height="28px" align="center" focusable="true" />
+    <attributes childLayout="horizontal" height="23px" align="center" focusable="true" />
   </style>
   <style id="nifty-horizontal-slider#left">
     <attributes filename="slider/slider.png" width="23px" height="23px" imageMode="sprite:23,23,6"/>
