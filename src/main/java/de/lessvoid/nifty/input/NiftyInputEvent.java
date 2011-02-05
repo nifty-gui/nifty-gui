@@ -48,6 +48,16 @@ public enum NiftyInputEvent implements NiftyEvent<Void> {
   MoveCursorDown,
 
   /**
+   * move cursor page up.
+   */
+  MoveCursorPageUp,
+
+  /**
+   * move cursor page down.
+   */
+  MoveCursorPageDown,
+
+  /**
    * delete.
    */
   Delete,
