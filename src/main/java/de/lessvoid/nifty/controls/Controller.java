@@ -3,7 +3,6 @@ package de.lessvoid.nifty.controls;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -27,8 +26,14 @@ public interface Controller {
       Screen screen,
       Element element,
       Properties parameter,
-      ControllerEventListener listener,
       Attributes controlDefinitionAttributes);
+
+  /**
+   * Init the Controller. You can assume that bind() has been called for all other controls on the screen.
+   * @param parameter
+   * @param controlDefinitionAttributes
+   */
+  void init(Properties parameter, Attributes controlDefinitionAttributes);
 
   /**
    * Called when the screen is started.

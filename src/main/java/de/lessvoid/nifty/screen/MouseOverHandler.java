@@ -75,6 +75,19 @@ public class MouseOverHandler {
   }
 
   public void processMouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
+    // first step is to preprocess hover effects for all elements
+    // this will deactivate all hover effects that are not active anymore
+    // Note: This will make sure that all hover effects will be deactivated before a new
+    // hover effect will be activated. This was necessary for the ChangeMouseCursor effect to
+    // work correctly when you quickly changed hover from one element to another it was possible
+    // that the hover effect for the new element started before the old one was deactivated so
+    // the reset of the mousecursor (see ChangeMouseCursor effect) did not worked correctly.
+    for (int i = mouseElements.size() - 1; i >= 0; i--) {
+      Element element = mouseElements.get(i);
+      element.mouseEventHoverPreprocess(mouseEvent, eventTime);
+    }
+
+    // second step is to process mouse over elements first
     for (int i = mouseOverElements.size() - 1; i >= 0; i--) {
       Element element = mouseOverElements.get(i);
       if (element.mouseEvent(mouseEvent, eventTime)) {
@@ -82,6 +95,7 @@ public class MouseOverHandler {
       }
     }
 
+    // last step is to process all other elements.
     for (int i = mouseElements.size() - 1; i >= 0; i--) {
       Element element = mouseElements.get(i);
       if (element.mouseEvent(mouseEvent, eventTime)) {

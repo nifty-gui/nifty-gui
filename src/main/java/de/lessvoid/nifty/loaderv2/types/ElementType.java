@@ -8,12 +8,10 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.loaderv2.types.apply.Convert;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
@@ -32,7 +30,6 @@ public class ElementType extends XmlBaseType {
   protected Collection < ElementType > elements = new ArrayList < ElementType >();
   protected LinkedList < Object > controllers = new LinkedList < Object >();
   protected Controller controller;
-  private static Convert convert = new Convert();
 
   public ElementType() {
     super();
@@ -144,6 +141,7 @@ public class ElementType extends XmlBaseType {
       final LayoutPart layoutPart) {
     Element element = internalCreateElement(parent, nifty, screen, layoutPart, getAttributes());
     applyStandard(nifty, screen, element);
+    element.bindToScreen(screen);
     return element;
   }
 
@@ -179,16 +177,6 @@ public class ElementType extends XmlBaseType {
     applyPostAttributes(element, getAttributes(), nifty.getRenderEngine());
 
     if (controller != null) {
-      ControllerEventListener listener = createControllerEventListener(screen);
-
-      controller.bind(
-          nifty,
-          screen,
-          element,
-          getAttributes().createProperties(),
-          listener,
-          getAttributes());
-
       NiftyInputControl niftyInputControl = createNiftyInputControl(element.getId(), getAttributes(), controller);
       element.attachInputControl(niftyInputControl);
     }
@@ -221,34 +209,6 @@ public class ElementType extends XmlBaseType {
 
     NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
     return new NiftyInputControl(elementId, controller, inputMapping);
-  }
-
-  private ControllerEventListener createControllerEventListener(final Screen screen) {
-    LinkedList < Object > withScreenController = getControllersWithScreenController(screen);
-    ControllerEventListener listener = null;
-
-    String onChange = getAttributes().get("onChange");
-    if (onChange != null) {
-      /** FIXME
-      Class screenControllerClass = screenController.getClass();
-      final Method onChangeMethod = MethodResolver.findMethod(screenControllerClass, onChange);
-      if (onChangeMethod == null) {
-        log.warning("method [" + onChange + "] not found in class [" + screenControllerClass.getName() + "]");
-      } else if (onChangeMethod != null) {
-        listener = new ControllerEventListener() {
-          public void onChangeNotify() {
-            try {
-              onChangeMethod.invoke(screenController, controllers);
-            } catch (Exception e) {
-              log.warning("ControllerEventListener with error: " + e.getMessage());
-            }
-          }
-        };
-      }
-        */
-    }
-
-    return listener;
   }
 
   public void applyAttributes(final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {

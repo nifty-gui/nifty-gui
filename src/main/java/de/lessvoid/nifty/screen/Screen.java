@@ -1,7 +1,9 @@
 package de.lessvoid.nifty.screen;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +53,7 @@ public class Screen {
   private Element rootElement;
   private String defaultFocusElementId;
   private boolean running = false;
+  private Set<String> registeredIds = new HashSet<String>();
 
   public Screen(
       final Nifty newNifty,
@@ -67,6 +70,14 @@ public class Screen {
     timeProvider = newTimeProvider;
     focusHandler = new FocusHandler();
     mouseOverHandler = new MouseOverHandler();
+  }
+
+  public void registerElementId(final String id) {
+    if (id != null && registeredIds.contains(id)) {
+      log.warning("Possible conflicting id [" + id + "] detected. Consider making all Ids unique or use #id in control-definitions.");
+    } else {
+      registeredIds.add(id);
+    }
   }
 
   public final String getScreenId() {
@@ -120,7 +131,7 @@ public class Screen {
     popup.layoutElements();
     popup.startEffect(EffectEventId.onStartScreen, localEndNotify);
     popup.startEffect(EffectEventId.onActive);
-    popup.onStartScreen(this);
+    popup.onStartScreen();
     if (defaultFocusElement != null) {
       defaultFocusElement.setFocus();
     } else {
@@ -205,7 +216,7 @@ public class Screen {
       w.startEffect(effectEventId, localEndNotify);
 
       if (effectEventId == EffectEventId.onStartScreen) {
-        w.onStartScreen(this);
+        w.onStartScreen();
       }
     }
 
@@ -682,6 +693,15 @@ public class Screen {
       if (closeNotify != null) {
         closeNotify.perform();
       }
+    }
+  }
+
+  public void bindControls() {
+    for (int i=0; i<layerElements.size(); i++) {
+      layerElements.get(i).bindControls();
+    }
+    for (int i=0; i<layerElements.size(); i++) {
+      layerElements.get(i).initControls();
     }
   }
 }

@@ -161,24 +161,7 @@ public class EffectProcessor {
   }
 
   public void processHover(final int x, final int y) {
-    processHoverInternal(x, y, allEffects);
-  }
-
-  private void startEffect(final Effect e, final String alternate, final String customKey) {
-    if (!e.start(alternate, customKey)) {
-      return;
-    }
-
-    if (!activeEffects.contains(e)) {
-      log.info("adding effect as active");
-      activeEffects.add(e);
-    } else {
-      log.info("NOT adding effect as active because it's already registered as active");
-    }
-  }
-
-  private void processHoverInternal(final int x, final int y, final List <Effect> effectList) {
-    for (Effect e : effectList) {
+    for (Effect e : allEffects) {
       if (e.isHoverEffect()) {
         if (!e.isActive()) {
           if (e.isInsideFalloff(x, y)) {
@@ -195,6 +178,32 @@ public class EffectProcessor {
           }
         }
       }
+    }
+  }
+
+  public void processHoverDeactivate(final int x, final int y) {
+    for (Effect e : allEffects) {
+      if (e.isHoverEffect()) {
+        if (e.isActive()) {
+          if (!e.isInsideFalloff(x, y)) {
+            e.setActive(false);
+            activeEffects.remove(e);
+          }
+        }
+      }
+    }
+  }
+
+  private void startEffect(final Effect e, final String alternate, final String customKey) {
+    if (!e.start(alternate, customKey)) {
+      return;
+    }
+
+    if (!activeEffects.contains(e)) {
+      log.info("adding effect as active");
+      activeEffects.add(e);
+    } else {
+      log.info("NOT adding effect as active because it's already registered as active");
     }
   }
 

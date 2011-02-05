@@ -78,6 +78,7 @@ public class ScreenType extends XmlBaseType {
     Logger.getLogger(NiftyLoader.class.getName()).info("internal create screen (" + id + ") [" + stopWatch.stop() + "]");
 
     screen.processAddAndRemoveLayerElements();
+    screen.bindControls();
     nifty.addScreen(id, screen);
   }
 

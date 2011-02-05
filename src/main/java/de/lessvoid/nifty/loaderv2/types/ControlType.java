@@ -42,6 +42,7 @@ public class ControlType extends ElementType {
     return getAttributes().get("name");
   }
 
+  @Override
   void internalApplyControl(final Nifty nifty) {
     ControlDefinitionType controlDefinition = nifty.resolveControlDefinition(getType());
     if (controlDefinition == null) {
@@ -64,6 +65,22 @@ public class ControlType extends ElementType {
 
   void makeFlatControlsInternal() {
     mergeFromElementType(elements.iterator().next());
+    resolveIds(this, getAttributes().get("id"));
+  }
+
+  private void resolveIds(final ElementType parent, final String grantParentId) {
+    for (ElementType element : parent.elements) {
+      String id = element.getAttributes().get("id");
+      if (id != null && id.startsWith("#")) {
+        String parentId = parent.getAttributes().get("id");
+        if (parentId != null) {
+          element.getAttributes().set("id", parentId + id);
+        } else if (grantParentId != null) {
+          element.getAttributes().set("id", grantParentId + id);
+        }
+      }
+      resolveIds(element, grantParentId);
+    }
   }
 
   private boolean addChildrenToChildRoot(

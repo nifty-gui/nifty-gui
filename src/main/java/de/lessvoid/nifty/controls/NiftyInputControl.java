@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventAnnotationProcessor;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * NiftyInputControl.
@@ -109,5 +110,22 @@ public class NiftyInputControl {
       return requestedControlClass.cast(controller);
     }
     return null;
+  }
+
+  public void bindControl(final Nifty nifty, final Screen screen, final Element element, final Attributes attributes) {
+    if (controller != null) {
+      controller.bind(
+          nifty,
+          screen,
+          element,
+          attributes.createProperties(),
+          attributes);
+    }
+  }
+
+  public void initControl(final Attributes attributes) {
+    if (controller != null) {
+      controller.init(attributes.createProperties(), attributes);
+    }
   }
 }

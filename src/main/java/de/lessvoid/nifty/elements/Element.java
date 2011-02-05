@@ -470,7 +470,7 @@ public class Element implements NiftyEvent<Void> {
     }
     
     if (!enabled) {
-    	return "disabled";
+      return "disabled";
     }
 
     return "normal";
@@ -525,7 +525,7 @@ public class Element implements NiftyEvent<Void> {
    * @param height the new height in pixels
    */
   public void setHeight(int height) {
-	  layoutPart.getBox().setHeight(height);
+    layoutPart.getBox().setHeight(height);
   }
   
   /**
@@ -533,7 +533,7 @@ public class Element implements NiftyEvent<Void> {
    * @param width the new width in pixels
    */
   public void setWidth(int width) {
-	  layoutPart.getBox().setWidth(width);
+    layoutPart.getBox().setWidth(width);
   }
 
   /**
@@ -1296,6 +1296,10 @@ public class Element implements NiftyEvent<Void> {
     }
   }
 
+  public void mouseEventHoverPreprocess(final MouseInputEvent mouseEvent, final long eventTime) {
+    effectManager.handleHoverDeactivate(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
+  }
+
   /**
    * MouseEvent.
    * @param mouseEvent mouse event
@@ -1497,6 +1501,10 @@ public class Element implements NiftyEvent<Void> {
       return this;
     }
 
+    if (childIdMatch(name, id)) {
+      return this;
+    }
+
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
       Element found = e.findElementByName(name);
@@ -1506,6 +1514,15 @@ public class Element implements NiftyEvent<Void> {
     }
 
     return null;
+  }
+
+  private boolean childIdMatch(final String name, final String id) {
+    if (name.startsWith("#")) {
+      if (id != null && id.endsWith(name)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -1547,22 +1564,16 @@ public class Element implements NiftyEvent<Void> {
 
   public void bindToScreen(final Screen newScreen) {
     screen = newScreen;
-    for (int i=0; i<elements.size(); i++) {
-      Element e = elements.get(i);
-      e.bindToScreen(newScreen);
-    }
+    screen.registerElementId(id);
   }
 
   /**
    * On start screen event.
-   * @param newScreen screen
    */
-  public void onStartScreen(final Screen newScreen) {
-    screen = newScreen;
-
+  public void onStartScreen() {
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
-      e.onStartScreen(newScreen);
+      e.onStartScreen();
     }
 
     if (focusable) {
@@ -1776,6 +1787,24 @@ public class Element implements NiftyEvent<Void> {
     return attachedInputControl;
   }
 
+  public void bindControls() {
+    if (attachedInputControl != null) {
+      attachedInputControl.bindControl(nifty, screen, this, elementType.getAttributes());
+    }
+    for (Element element : elements) {
+      element.bindControls();
+    }
+  }
+
+  public void initControls() {
+    if (attachedInputControl != null) {
+      attachedInputControl.initControl(elementType.getAttributes());
+    }
+    for (Element element : elements) {
+      element.initControls();
+    }
+  }
+
   /**
    * remove this and all children from the focushandler.
    */
@@ -1830,20 +1859,22 @@ public class Element implements NiftyEvent<Void> {
     }
   }
 
-  public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
+//  public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
+//    Element element = findElementByName(elementName);
+//    if (element == null) {
+//      return null;
+//    }
+//    return element.getControl(requestedControlClass);
+//  }
+
+  public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
     Element element = findElementByName(elementName);
     if (element == null) {
       return null;
     }
-    return element.getControl(requestedControlClass);
+    return element.getNiftyControl(requestedControlClass);
   }
 
-  /**
-   * Get Control from element.
-   * @param <T> Type
-   * @param requestedControlClass requested class
-   * @return controller or null
-   */
   public < T extends Controller > T getControl(final Class < T > requestedControlClass) {
     if (attachedInputControl != null) {
       T t = attachedInputControl.getControl(requestedControlClass);

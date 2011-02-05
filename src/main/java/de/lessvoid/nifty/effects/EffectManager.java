@@ -150,6 +150,11 @@ public class EffectManager {
     processor.processHover(x, y);
   }
 
+  public void handleHoverDeactivate(final Element element, final int x, final int y) {
+    EffectProcessor processor = effectProcessor.get(EffectEventId.onHover);
+    processor.processHoverDeactivate(x, y);
+  }
+
   /**
    * checks if a certain effect is active.
    * @param effectEventId the effectEventId to check

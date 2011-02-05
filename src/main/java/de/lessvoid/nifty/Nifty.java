@@ -746,7 +746,6 @@ public class Nifty {
     }
 
     public void startControlWithCheck(final Element element) {
-      element.bindToScreen(screen);
     }
 
     public Element createControl() throws Exception {
@@ -754,6 +753,8 @@ public class Nifty {
     }
 
     public void startControl(final Element newControl) {
+      newControl.bindControls();
+      newControl.initControls();
       newControl.startEffect(EffectEventId.onStartScreen);
       newControl.startEffect(EffectEventId.onActive);
 
@@ -762,7 +763,7 @@ public class Nifty {
       // onStartScreen on the newControl here manually. It won't be called by the screen
       // anymore.
       if (screen.isRunning()) {
-        newControl.onStartScreen(screen);
+        newControl.onStartScreen();
       }
     }
   }
