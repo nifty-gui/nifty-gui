@@ -31,6 +31,7 @@ import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
@@ -774,9 +775,7 @@ public class Nifty {
 
   public class ElementRemoveAction implements Action {
     public void perform(final Screen screen, final Element element) {
-      screen.unregisterElementId(element.getId());
-
-      removeSingleElement(element);
+      removeSingleElement(screen, element);
       Element parent = element.getParent();
       if (parent != null) {
         parent.getElements().remove(element);
@@ -784,11 +783,13 @@ public class Nifty {
       screen.layoutLayers();
     }
 
-    private void removeSingleElement(final Element element) {
+    private void removeSingleElement(final Screen screen, final Element element) {
+      screen.unregisterElementId(element.getId());
+
       Iterator < Element > elementIt = element.getElements().iterator();
       while (elementIt.hasNext()) {
         Element el = elementIt.next();
-        removeSingleElement(el);
+        removeSingleElement(screen, el);
         elementIt.remove();
       }
     }
@@ -1160,5 +1161,20 @@ public class Nifty {
         target.onEvent(topic, data);
       }
     }
+  }
+
+  public Element createElementFromType(final Screen screen, final Element parent, final ElementType type) {
+    ElementType elementType = type.copy();
+    elementType.prepare(this, screen, screen.getRootElement().getElementType());
+    Element element = elementType.create(parent, this, screen, new LayoutPart());
+    screen.layoutLayers();
+    element.bindControls();
+    element.initControls();
+    element.startEffect(EffectEventId.onStartScreen);
+    element.startEffect(EffectEventId.onActive);
+    if (screen.isRunning()) {
+      element.onStartScreen();
+    }
+    return element;
   }
 }
