@@ -11,9 +11,9 @@
         </panel>
         <control id="#vertical-scrollbar" name="verticalScrollbar" style="nifty-vertical-scrollbar"/>
       </panel>
-      <panel childLayout="horizontal">
+      <panel id="#horizontal-scrollbar-parent" childLayout="horizontal">
         <control id="#horizontal-scrollbar" name="horizontalScrollbar" style="nifty-horizontal-scrollbar"/>
-        <panel style="#bottom-right" />
+        <panel id="#bottom-right" style="#bottom-right" />
       </panel>
     </panel>
   </controlDefinition>

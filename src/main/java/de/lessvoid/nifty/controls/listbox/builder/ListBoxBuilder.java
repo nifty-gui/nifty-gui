@@ -28,19 +28,27 @@ public class ListBoxBuilder extends ControlBuilder {
   }
 
   public void showVerticalScrollbar() {
-    set("vertical", "true");
+    set("vertical", "on");
   }
 
   public void showHorizontalScrollbar() {
-    set("horizontal", "true");
+    set("horizontal", "on");
   }
 
   public void hideVerticalScrollbar() {
-    set("vertical", "false");
+    set("vertical", "off");
   }
 
   public void hideHorizontalScrollbar() {
-    set("horizontal", "false");
+    set("horizontal", "off");
+  }
+
+  public void optionalVerticalScrollbar() {
+    set("vertical", "optional");
+  }
+
+  public void optionalHorizontalScrollbar() {
+    set("horizontal", "optional");
   }
 
   public void viewConverterClass(final Class<?> clazz) {
