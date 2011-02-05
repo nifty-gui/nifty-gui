@@ -269,11 +269,11 @@ public class ElementType extends XmlBaseType {
     screen.layoutLayers();
   }
 
-  protected InteractType getInteract() {
+  public InteractType getInteract() {
     return interact;
   }
 
-  protected EffectsType getEffects() {
+  public EffectsType getEffects() {
     return effects;
   }
 

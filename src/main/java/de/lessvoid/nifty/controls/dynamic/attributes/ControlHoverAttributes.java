@@ -6,6 +6,13 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class ControlHoverAttributes {
   private Attributes attributes = new Attributes();
 
+  public ControlHoverAttributes() {
+  }
+
+  public ControlHoverAttributes(final HoverType hoverType) {
+    this.attributes = new Attributes(hoverType.getAttributes());
+  }
+
   public void set(final String key, final String value) {
     attributes.set(key, value);
   }

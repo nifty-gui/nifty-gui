@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.loaderv2.types;
 
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.Falloff;
@@ -17,6 +18,14 @@ public class EffectTypeOnHover extends EffectType {
 
   public EffectTypeOnHover clone() {
     return new EffectTypeOnHover(this);
+  }
+
+  /**
+   * This supports creating CustomControlCreator.
+   * @return
+   */
+  public ControlEffectOnHoverAttributes convert() {
+    return new ControlEffectOnHoverAttributes(getAttributes(), effectValues, hoverType);
   }
 
   public void setHover(final HoverType hoverTypeParam) {

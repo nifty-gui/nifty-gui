@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.controls.dynamic.attributes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.lessvoid.nifty.loaderv2.types.EffectType;
@@ -10,6 +11,15 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class ControlEffectAttributes {
   protected Attributes attributes = new Attributes();
   protected List<EffectValueType> effectValues = new ArrayList<EffectValueType>();
+
+  public ControlEffectAttributes() {
+  }
+
+  public ControlEffectAttributes(final Attributes attributes, final ArrayList<EffectValueType> effectValues) {
+    this.attributes = new Attributes(attributes);
+    this.effectValues = new ArrayList<EffectValueType>(effectValues);
+    Collections.copy(this.effectValues, effectValues);
+  }
 
   public void setAttribute(final String name, final String value) {
     attributes.set(name, value);

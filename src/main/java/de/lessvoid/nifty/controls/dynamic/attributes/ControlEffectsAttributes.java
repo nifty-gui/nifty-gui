@@ -20,6 +20,28 @@ public class ControlEffectsAttributes {
   private Collection < ControlEffectAttributes > onShow = new ArrayList < ControlEffectAttributes >();
   private Collection < ControlEffectAttributes > onHide = new ArrayList < ControlEffectAttributes >();
 
+  public ControlEffectsAttributes() {
+  }
+
+  /**
+   * Support for CustomControlCreator
+   * @param source
+   */
+  public ControlEffectsAttributes(final EffectsType source) {
+    this.attributes = new Attributes(source.getAttributes());
+    this.onStartScreen = source.getOnStartScreen();
+    this.onEndScreen = source.getOnEndScreen();
+    this.onHover = source.getOnHover();
+    this.onClick = source.getOnClick();
+    this.onFocus = source.getOnFocus();
+    this.onLostFocus = source.getLostFocus();
+    this.onGetFocus = source.getOnGetFocus();
+    this.onActive = source.getOnActive();
+    this.onCustom = source.getOnCustom();
+    this.onShow = source.getOnShow();
+    this.onHide = source.getOnHide();
+  }
+
   public Attributes getAttributes() {
     return attributes;
   }

@@ -18,8 +18,8 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 public abstract class ControlAttributes {
   protected Attributes attributes = new Attributes();
-  private ControlInteractAttributes interact;
-  private ControlEffectsAttributes effects;
+  protected ControlInteractAttributes interact;
+  protected ControlEffectsAttributes effects;
   
   public void setInteract(final ControlInteractAttributes controlInteract) {
     interact = controlInteract;

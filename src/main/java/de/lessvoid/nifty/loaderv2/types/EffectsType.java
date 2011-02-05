@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
@@ -314,5 +316,65 @@ public class EffectsType extends XmlBaseType {
         iter.remove();
       }
     }
+  }
+
+  Collection<ControlEffectAttributes> convertCopy(final Collection < EffectType > src) {
+    Collection<ControlEffectAttributes> result = new ArrayList<ControlEffectAttributes>();
+    for (EffectType e : src) {
+      result.add(e.convert());
+    }
+    return result;
+  }
+
+  Collection<ControlEffectOnHoverAttributes> convertCopyHover(final Collection < EffectType > src) {
+    Collection<ControlEffectOnHoverAttributes> result = new ArrayList<ControlEffectOnHoverAttributes>();
+    for (EffectType e : src) {
+      result.add(((EffectTypeOnHover) e).convert());
+    }
+    return result;
+  }
+
+  public Collection<ControlEffectAttributes> getOnStartScreen() {
+    return convertCopy(onStartScreen);
+  }
+
+  public Collection<ControlEffectAttributes> getOnEndScreen() {
+    return convertCopy(onEndScreen);
+  }
+
+  public Collection<ControlEffectOnHoverAttributes> getOnHover() {
+    return convertCopyHover(onHover);
+  }
+
+  public Collection<ControlEffectAttributes> getOnClick() {
+    return convertCopy(onClick);
+  }
+
+  public Collection<ControlEffectAttributes> getOnFocus() {
+    return convertCopy(onFocus);
+  }
+
+  public Collection<ControlEffectAttributes> getLostFocus() {
+    return convertCopy(onLostFocus);
+  }
+
+  public Collection<ControlEffectAttributes> getOnGetFocus() {
+    return convertCopy(onGetFocus);
+  }
+
+  public Collection<ControlEffectAttributes> getOnActive() {
+    return convertCopy(onActive);
+  }
+
+  public Collection<ControlEffectAttributes> getOnCustom() {
+    return convertCopy(onCustom);
+  }
+
+  public Collection<ControlEffectAttributes> getOnShow() {
+    return convertCopy(onShow);
+  }
+
+  public Collection<ControlEffectAttributes> getOnHide() {
+    return convertCopy(onHide);
   }
 }

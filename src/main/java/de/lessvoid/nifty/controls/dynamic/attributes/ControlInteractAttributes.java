@@ -6,6 +6,17 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class ControlInteractAttributes {
   protected Attributes attributes = new Attributes();
 
+  public ControlInteractAttributes() {
+  }
+
+  /**
+   * Support for CustomControlCreator
+   * @param interact
+   */
+  public ControlInteractAttributes(final InteractType interact) {
+    this.attributes = new Attributes(interact.getAttributes());
+  }
+
   public void setAttribute(final String name, final String value) {
     attributes.set(name, value);
   }

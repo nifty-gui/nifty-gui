@@ -2,12 +2,21 @@ package de.lessvoid.nifty.controls.dynamic;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlInteractAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.xml.xpp3.Attributes;
 
 public class CustomControlCreator extends ControlAttributes {
+  public CustomControlCreator(final ControlType source) {
+    attributes = new Attributes(source.getAttributes());
+    interact = new ControlInteractAttributes(source.getInteract());
+    effects = new ControlEffectsAttributes(source.getEffects());
+  }
+
   public CustomControlCreator(final String name) {
     setName(name);
   }

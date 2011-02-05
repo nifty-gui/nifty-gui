@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
@@ -20,7 +21,7 @@ public class EffectType extends XmlBaseType {
   private static final boolean DEFAULT_POST = false;
   private static final boolean DEFAULT_OVERLAY = false;
 
-  private ArrayList < EffectValueType > effectValues = new ArrayList < EffectValueType > ();
+  protected ArrayList < EffectValueType > effectValues = new ArrayList < EffectValueType > ();
   private String styleId;
 
   public EffectType() {
@@ -33,6 +34,14 @@ public class EffectType extends XmlBaseType {
 
   public EffectType clone() {
     return new EffectType(this);
+  }
+
+  /**
+   * This supports creating CustomControlCreator.
+   * @return
+   */
+  public ControlEffectAttributes convert() {
+    return new ControlEffectAttributes(getAttributes(), effectValues);
   }
 
   public void materialize(
