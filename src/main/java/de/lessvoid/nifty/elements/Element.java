@@ -433,11 +433,40 @@ public class Element implements NiftyEvent<Void> {
     elementDebugOut.add(" position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]");
     elementDebugOut.add(" constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]");
     elementDebugOut.add(" padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]");
-    elementDebugOut.add(" focusable [" + focusable + "]");
-    elementDebugOut.add(" enabled [" + enabled + "(" + enabledCount + ")]");
-    elementDebugOut.add(" visible [" + visible + "]");
-    elementDebugOut.add(" mouseable [" + visibleToMouseEvents + "]");
-    elementDebugOut.add(" effects: [" + effectManager.getStateString(offset) + "]");
+    StringBuffer state = new StringBuffer();
+    if (focusable) {
+      state.append(" focusable");
+    }
+    if (enabled) {
+      if (state.length() > 0) {
+        state.append(",");
+      }
+      state.append(" enabled(" + enabledCount + ")");
+    }
+    if (visible) {
+      if (state.length() > 0) {
+        state.append(",");
+      }
+      state.append(" visible");
+    }
+    if (visibleToMouseEvents) {
+      if (state.length() > 0) {
+        state.append(",");
+      }
+      state.append(" mouseable");
+    }
+    if (clipChildren) {
+      if (state.length() > 0) {
+        state.append(",");
+      }
+      state.append(" clipChildren");
+    }
+    elementDebugOut.add(" flags [" + state + "]");
+    elementDebugOut.add(" effects [" + effectManager.getStateString(offset) + "]");
+
+    if (parentClipArea) {
+      elementDebugOut.add(" parent clip [x=" + parentClipX + ", y=" + parentClipY + ", w=" + parentClipWidth + ", h=" + parentClipHeight + "]");
+    }
 
     elementDebug.delete(0, elementDebug.length());
     for (int i=0; i<elementDebugOut.size(); i++) {
@@ -1306,7 +1335,8 @@ public class Element implements NiftyEvent<Void> {
    * @param eventTime event time
    */
   public boolean mouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
-    effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
+    mouseEventHover(mouseEvent);
+
     boolean mouseInside = isInside(mouseEvent);
     if (interaction.isOnClickRepeat()) {
       if (mouseInside && isMouseDown() && mouseEvent.isLeftButton()) {
@@ -1346,6 +1376,10 @@ public class Element implements NiftyEvent<Void> {
     return false;
   }
 
+  private void mouseEventHover(final MouseInputEvent mouseEvent) {
+    effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
+  }
+
   /**
    * Handle the MouseOverEvent. Must not call child elements. This is handled by caller.
    * @param mouseEvent mouse event
@@ -1374,34 +1408,29 @@ public class Element implements NiftyEvent<Void> {
   public boolean isMouseInsideElement(final int mouseX, final int mouseY) {
     if (parentClipArea) {
       // must be inside the parent to continue
-      if (mouseX >= parentClipX
-        &&
-        mouseX <= (parentClipX + parentClipWidth)
-        &&
-        mouseY > (parentClipY)
-        &&
-        mouseY < (parentClipY + parentClipHeight)) {
+      if (isInsideParentClipArea(mouseX, mouseY)) {
           return
-          mouseX >= getX()
-          &&
-          mouseX <= (getX() + getWidth())
-          &&
-          mouseY > (getY())
-          &&
-          mouseY < (getY() + getHeight());
+            mouseX >= getX() &&
+            mouseX <= (getX() + getWidth()) &&
+            mouseY > (getY()) &&
+            mouseY < (getY() + getHeight());
         } else {
           return false;
         }
     } else {
       return
-        mouseX >= getX()
-        &&
-        mouseX <= (getX() + getWidth())
-        &&
-        mouseY > (getY())
-        &&
+        mouseX >= getX() &&
+        mouseX <= (getX() + getWidth()) &&
+        mouseY > (getY()) &&
         mouseY < (getY() + getHeight());
     }
+  }
+
+  private boolean isInsideParentClipArea(final int mouseX, final int mouseY) {
+    return mouseX >= parentClipX &&
+        mouseX <= (parentClipX + parentClipWidth) &&
+        mouseY > (parentClipY) &&
+        mouseY < (parentClipY + parentClipHeight);
   }
 
   /**

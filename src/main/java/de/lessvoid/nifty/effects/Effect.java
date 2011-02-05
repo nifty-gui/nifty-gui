@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.effects.Falloff.HoverFalloffConstraint;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -178,7 +179,7 @@ public class Effect {
   }
 
   public boolean isInsideFalloff(final int x, final int y) {
-    if (falloff != null) {
+    if (falloff != null && falloff.getFalloffConstraint() != HoverFalloffConstraint.none) {
       return falloff.isInside(element, x, y);
     } else {
       return element.isMouseInsideElement(x, y);

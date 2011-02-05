@@ -232,4 +232,8 @@ public class Falloff {
   public float getFalloffValue() {
     return falloffValue;
   }
+
+  public HoverFalloffConstraint getFalloffConstraint() {
+    return falloffConstraint;
+  }
 }
