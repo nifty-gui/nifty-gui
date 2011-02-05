@@ -8,7 +8,6 @@ import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.elements.tools.FontHelper;
@@ -43,7 +42,6 @@ public class TextFieldControl extends AbstractController implements TextField, T
       final Screen screenParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     super.bind(newElement);
     this.nifty = niftyParam;
@@ -54,9 +52,9 @@ public class TextFieldControl extends AbstractController implements TextField, T
     this.textField = new TextFieldLogic(properties.getProperty("text", ""), new ClipboardAWT(), this);
     this.textField.toFirstPosition();
 
-    this.textElement = getElement().findElementByName("textfield-text");
-    this.fieldElement = getElement().findElementByName("textfield-field");
-    this.cursorElement = getElement().findElementByName("textfield-cursor");
+    this.textElement = getElement().findElementByName("#text");
+    this.fieldElement = getElement().findElementByName("#field");
+    this.cursorElement = getElement().findElementByName("#cursor");
 
     passwordChar = null;
     if (properties.containsKey("passwordChar")) {
@@ -67,7 +65,8 @@ public class TextFieldControl extends AbstractController implements TextField, T
     }
   }
 
-  public void onStartScreen() {
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     this.focusHandler = screen.getFocusHandler();
 
     this.textField.initWithText(textElement.getRenderer(TextRenderer.class).getOriginalText());
@@ -79,6 +78,9 @@ public class TextFieldControl extends AbstractController implements TextField, T
         this.textField.getText(), fieldWidth, 1.0f);
 
     updateCursor();
+  }
+
+  public void onStartScreen() {
   }
 
   public void onClick(final int mouseX, final int mouseY) {
