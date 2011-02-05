@@ -45,6 +45,6 @@ public final class NiftyDefaults {
     nifty.registerEffect(new RegisterEffectType("textColorAnimated", "de.lessvoid.nifty.effects.impl.TextColorAnimated"));
     nifty.registerEffect(new RegisterEffectType("textSize", "de.lessvoid.nifty.effects.impl.TextSize"));
     nifty.registerEffect(new RegisterEffectType("textSizePulsate", "de.lessvoid.nifty.effects.impl.TextSizePulsate"));
-    nifty.registerEffect(new RegisterEffectType("updateScrollpanelPositionToDisplayElement", "de.lessvoid.nifty.effects.impl.UpdateScrollpanelPositionToDisplayElement"));    
+    nifty.registerEffect(new RegisterEffectType("updateScrollpanelPositionToDisplayElement", "de.lessvoid.nifty.controls.scrollbar.UpdateScrollpanelPositionToDisplayElement"));    
   }
 }
