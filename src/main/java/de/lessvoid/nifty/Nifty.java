@@ -774,6 +774,8 @@ public class Nifty {
 
   public class ElementRemoveAction implements Action {
     public void perform(final Screen screen, final Element element) {
+      screen.unregisterElementId(element.getId());
+
       removeSingleElement(element);
       Element parent = element.getParent();
       if (parent != null) {

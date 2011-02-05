@@ -80,6 +80,10 @@ public class Screen {
     }
   }
 
+  public void unregisterElementId(final String id) {
+    registeredIds.remove(id);
+  }
+
   public final String getScreenId() {
     return screenId;
   }
