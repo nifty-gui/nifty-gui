@@ -399,6 +399,11 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param y1 y1
    */
   public void enableClip(final int x0, final int y0, final int x1, final int y1) {
+    // in case there already is a clipping area set we can't override it. not sure if this is correct tho but it
+    // fixes issues when some parent element has set a clipping area in which child elements should not be able to override the area.
+    if (clipEnabled != null) {
+      return;
+    }
     updateClip(new Clip(x0 + getX(), y0 + getY(), x1 + getX(), y1 + getY()));
   }
 
