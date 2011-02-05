@@ -14,9 +14,7 @@ import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -26,7 +24,6 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class ListBoxDialogController implements Controller {
-  private Nifty nifty;
   private Screen screen;
   private ListBox<JustAnExampleModelClass> listBox;
   private ListBox<JustAnExampleModelClass> selectionListBox;
@@ -36,17 +33,14 @@ public class ListBoxDialogController implements Controller {
   private Button appendButton;
   private Button removeSelectionButton;
   private TextField addTextField;
-  private Element popup;
 
   @Override
   public void bind(
-      Nifty nifty,
-      Screen screen,
-      Element element,
-      Properties parameter,
-      ControllerEventListener listener,
-      Attributes controlDefinitionAttributes) {
-    this.nifty = nifty;
+      final Nifty nifty,
+      final Screen screen,
+      final Element element,
+      final Properties parameter,
+      final Attributes controlDefinitionAttributes) {
     this.screen = screen;
     this.listBox = getListBox("listBox");
     this.selectionListBox = getListBox("selectionListBox");
@@ -56,7 +50,10 @@ public class ListBoxDialogController implements Controller {
     this.forceSelectionCheckBox  = screen.findNiftyControl("forceSelectionCheckBox", CheckBox.class);
     this.appendButton = screen.findNiftyControl("appendButton", Button.class);
     this.removeSelectionButton = screen.findNiftyControl("removeSelectionButton", Button.class);
+  }
 
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     // just add some items to the listbox
     listBox.addItem(new JustAnExampleModelClass("You can add more lines to this ListBox."));
     listBox.addItem(new JustAnExampleModelClass("Use the append button to do this."));
@@ -111,15 +108,16 @@ public class ListBoxDialogController implements Controller {
   @NiftyEventSubscriber(id="addTextField")
   public void onAddTextFieldInputEvent(final String id, final NiftyInputEvent event) {
     if (NiftyInputEvent.SubmitText.equals(event)) {
-      if (addTextField.getText().length() == 0) {
-        return;
-      }
       appendButton.activate();
     }
   }
 
   @NiftyEventSubscriber(id="appendButton")
   public void onAppendButtonClicked(final String id, final ButtonClickedEvent event) {
+    if (addTextField.getText().length() == 0) {
+      return;
+    }
+
     // add the item and make sure that the last item is shown
     listBox.addItem(new JustAnExampleModelClass(addTextField.getText()));
     listBox.showItemByIndex(listBox.itemCount() - 1);

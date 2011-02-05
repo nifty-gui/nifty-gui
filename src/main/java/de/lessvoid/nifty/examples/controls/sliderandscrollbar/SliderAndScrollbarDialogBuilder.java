@@ -41,7 +41,7 @@ public class SliderAndScrollbarDialogBuilder {
       panel(new PanelBuilder() {{
         visible(false);
         childLayoutCenter();
-        panel(new PanelBuilder("effectPanel") {{
+        panel(new PanelBuilder("#effectPanel") {{
           style("nifty-panel");
           childLayoutVertical();
           alignCenter();
@@ -142,6 +142,7 @@ public class SliderAndScrollbarDialogBuilder {
             panel(builders.hspacer("9px"));
           }});
           panel(builders.vspacer());
+          panel(builders.vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
             control(builders.createLabel("Horizontal:"));
@@ -149,6 +150,7 @@ public class SliderAndScrollbarDialogBuilder {
               width("*");
             }});
           }});
+          panel(builders.vspacer());
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
             control(builders.createLabel("Current Value:"));

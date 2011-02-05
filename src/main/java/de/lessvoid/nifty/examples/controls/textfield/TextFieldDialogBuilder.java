@@ -30,7 +30,7 @@ public class TextFieldDialogBuilder {
       panel(new PanelBuilder() {{
         visible(false);
         childLayoutCenter();
-        panel(new PanelBuilder("effectPanel") {{
+        panel(new PanelBuilder("#effectPanel") {{
           style("nifty-panel");
           childLayoutVertical();
           padding("18px,28px,28px,16px");

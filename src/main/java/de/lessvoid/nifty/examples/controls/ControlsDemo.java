@@ -45,6 +45,8 @@ public class ControlsDemo {
     nifty.addScreen("start", screen);
     nifty.gotoScreen("start");
 
+    System.out.println(screen.debugOutput());
+
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();

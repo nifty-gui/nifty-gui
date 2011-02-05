@@ -40,7 +40,7 @@ public class ListBoxDialogBuilder {
       panel(new PanelBuilder() {{
         visible(false);
         childLayoutCenter();
-        panel(new PanelBuilder("effectPanel") {{
+        panel(new PanelBuilder("#effectPanel") {{
           style("nifty-panel");
           childLayoutVertical();
           alignCenter();

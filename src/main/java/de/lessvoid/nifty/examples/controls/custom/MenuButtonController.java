@@ -5,7 +5,6 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -17,18 +16,21 @@ public class MenuButtonController implements Controller {
 
   @Override
   public void bind(
-      Nifty nifty,
-      Screen screen,
-      Element element,
-      Properties parameter,
-      ControllerEventListener listener,
-      Attributes controlDefinitionAttributes) {
+      final Nifty nifty,
+      final Screen screen,
+      final Element element,
+      final Properties parameter,
+      final Attributes controlDefinitionAttributes) {
     this.element = element;
     this.focusHandler = screen.getFocusHandler();
   }
 
   @Override
   public void onStartScreen() {
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   @Override

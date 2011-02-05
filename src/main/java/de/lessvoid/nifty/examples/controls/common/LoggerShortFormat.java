@@ -28,7 +28,7 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
     }
 
     Logger.getLogger("de.lessvoid").setLevel(Level.WARNING);
-//    Logger.getLogger("de.lessvoid.nifty.screen.Screen").setLevel(Level.FINE);
+    Logger.getLogger("de.lessvoid.nifty.screen.Screen").setLevel(Level.WARNING);
 //    Logger.getLogger("org.bushe.swing.event.EventService").setLevel(Level.ALL);
 //    Logger.getLogger("de.lessvoid.nifty.examples.listbox.NiftyAnnotationProcessor").setLevel(Level.ALL);
     

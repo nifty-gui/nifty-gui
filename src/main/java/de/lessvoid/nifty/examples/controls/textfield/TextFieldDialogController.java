@@ -10,7 +10,6 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -32,12 +31,11 @@ public class TextFieldDialogController implements Controller {
   
   @Override
   public void bind(
-      Nifty nifty,
-      Screen screen,
-      Element element,
-      Properties parameter,
-      ControllerEventListener listener,
-      Attributes controlDefinitionAttributes) {
+      final Nifty nifty,
+      final Screen screen,
+      final Element element,
+      final Properties parameter,
+      final Attributes controlDefinitionAttributes) {
     this.mainTextField = screen.findNiftyControl("mainTextField", TextField.class);
     this.passwordCharCheckBox = screen.findNiftyControl("passwordCharCheckBox", CheckBox.class);
     this.passwordCharTextField = screen.findNiftyControl("passwordCharTextField", TextField.class);
@@ -45,6 +43,10 @@ public class TextFieldDialogController implements Controller {
     this.maxLengthTextField = screen.findNiftyControl("maxLengthTextField", TextField.class);
     this.textChangedLabel = screen.findNiftyControl("textChangedLabel", Label.class);
     this.keyEventLabel = screen.findNiftyControl("keyEventLabel", Label.class);
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     passwordCharTextField.setText("*");
     maxLengthTextField.setText("5");
     textChangedLabel.setText("---");

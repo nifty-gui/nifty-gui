@@ -7,10 +7,10 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.Scrollbar;
+import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.controls.Slider;
 import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -23,7 +23,6 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class SliderAndScrollbarDialogController implements Controller {
-  private Nifty nifty;
   private Screen screen;
   private Element color;
   private float red;
@@ -33,28 +32,31 @@ public class SliderAndScrollbarDialogController implements Controller {
 
   @Override
   public void bind(
-      Nifty nifty,
-      Screen screen,
-      Element element,
-      Properties parameter,
-      ControllerEventListener listener,
-      Attributes controlDefinitionAttributes) {
-    this.nifty = nifty;
+      final Nifty nifty,
+      final Screen screen,
+      final Element element,
+      final Properties parameter,
+      final Attributes controlDefinitionAttributes) {
     this.screen = screen;
     this.color = screen.findElementByName("color");
     this.red = 0.f;
     this.green = 0.f;
     this.blue = 0.f;
-    changeColor();
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   @Override
   public void onStartScreen() {
-    getSlider("sliderR").setup(0.f, 255.f, 0.f, 1.f, 10.f);
-    getSlider("sliderG").setup(0.f, 255.f, 0.f, 1.f, 10.f);
-    getSlider("sliderB").setup(0.f, 255.f, 0.f, 1.f, 10.f);
+    getSlider("sliderR").setup(0.f, 255.f,   0.f, 1.f, 10.f);
+    getSlider("sliderG").setup(0.f, 255.f,   0.f, 1.f, 10.f);
+    getSlider("sliderB").setup(0.f, 255.f,   0.f, 1.f, 10.f);
     getSlider("sliderA").setup(0.f, 255.f, 255.f, 1.f, 10.f);
-    getTextfield("scrollbarHMaxValue").setText(String.valueOf((int)getScrollbar("scrollbarH").getMax()));
+
+    getScrollbar("scrollbarH").setWorldMax(1000.f);
+    getTextfield("scrollbarHMaxValue").setText(String.valueOf((int)getScrollbar("scrollbarH").getWorldMax()));
     getTextfield("scrollbarHValue").setText(String.valueOf((int)getScrollbar("scrollbarH").getValue()));
   }
 
@@ -89,6 +91,11 @@ public class SliderAndScrollbarDialogController implements Controller {
   public void onAlphaSliderChange(final String id, final SliderChangedEvent event) {
     alpha = event.getValue();
     changeColor();
+  }
+
+  @NiftyEventSubscriber(id="scrollbarH")
+  public void onScrollbarHChanged(final String id, final ScrollbarChangedEvent event) {
+    getTextfield("scrollbarHValue").setText(String.valueOf(event.getValue()));
   }
 
   private void changeColor() {
