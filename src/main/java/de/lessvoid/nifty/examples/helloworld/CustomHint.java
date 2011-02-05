@@ -30,7 +30,7 @@ public class CustomHint implements EffectImpl {
   public void execute(final Element element, final float normalizedTime, final Falloff falloff, final NiftyRenderEngine r) {
     if (targetElement != null) {
       if (hintText != null) {
-        Element el = targetElement.findElementByName("content");
+        Element el = targetElement.findElementByName("#content");
         if (el != null) {
           el.getRenderer(TextRenderer.class).setText(hintText);
         }

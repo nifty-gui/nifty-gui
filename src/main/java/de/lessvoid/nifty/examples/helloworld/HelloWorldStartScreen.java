@@ -1,11 +1,13 @@
 package de.lessvoid.nifty.examples.helloworld;
 
+import java.util.Date;
+
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.ButtonClickedEvent;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  * ScreenController for Hello World Example.
@@ -27,68 +29,33 @@ public class HelloWorldStartScreen implements ScreenController {
     this.screen = newScreen;
   }
 
+  @NiftyEventSubscriber(id="add")
+  public void onAddClicked(final String id, final ButtonClickedEvent event) {
+    ListBox listbox = screen.findElementByName("listbox").getNiftyControl(ListBox.class);
+    listbox.addItem(new Date().getTime() + "ewroiwueroiuweoiruoiweuroiwedkfhdkhdfkjghdkfjghkdjfhgkjdhfgkjdhfkjghdoiewuroiwueroiuweroiuweoiruwoeiruowieuroiweuoiwuer");
+    screen.findElementByName("panel").hide();
+    screen.findElementByName("panel").show();
+
+  }
+
+  @NiftyEventSubscriber(id="remove")
+  public void onRemoveClicked(final String id, final ButtonClickedEvent event) {
+    ListBox listbox = screen.findElementByName("listbox").getNiftyControl(ListBox.class);
+    listbox.removeItemByIndex(0);
+  }
+
   /**
    * on start screen interactive.
    */
   public void onStartScreen() {
+    System.out.println(screen.debugOutput());
+
+    ListBox listbox = screen.findElementByName("listbox").getNiftyControl(ListBox.class);
+    listbox.addItem(new Object());
+
   }
 
-  void resize(final int w, final int h) {
-    Screen screen = nifty.getCurrentScreen();
-
-    // change root element
-    Element root = screen.getRootElement();
-    root.setWidth(w);
-    root.setHeight(h);
-    root.setConstraintWidth(new SizeValue(String.valueOf(w) + "px"));
-    root.setConstraintHeight(new SizeValue(String.valueOf(h) + "px"));
-
-    // change all layer element
-    for (Element e : screen.getLayerElements()) {
-      e.setWidth(w);
-      e.setHeight(h);
-      e.setConstraintWidth(new SizeValue(String.valueOf(w) + "px"));
-      e.setConstraintHeight(new SizeValue(String.valueOf(h) + "px"));
-    }
-
-    // make sure all elements of the screen get updated
-    screen.layoutLayers();
-  } 
-
-  public void enable() {
-    resize(300, 300);
-  }
-
-  public void disable() {
-    screen.findElementByName("panel").disable();
-    screen.findElementByName("testButton").disable();
-  }
-
-  public void testButtonClick() {
-    System.out.println("testButtonClick()");
-  }
-
-  public void mouseMove(final Element element, final MouseInputEvent inputEvent) {
-  }
-
-  /**
-   * on end screen.
-   */
+  @Override
   public void onEndScreen() {
-  }
-
-  public void bla() {
-    nifty.getCurrentScreen().findElementByName("haha").hide();
-  }
-
-  public void bla2() {
-    nifty.getCurrentScreen().findElementByName("haha").show();
-  }
-
-  /**
-   * quit method called from the helloworld.xml.
-   */
-  public final void quit() {
-    System.out.println("quit()");
   }
 }

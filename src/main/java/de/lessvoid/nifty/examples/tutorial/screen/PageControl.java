@@ -6,7 +6,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -22,13 +21,16 @@ public class PageControl implements Controller {
       final Screen screenParam,
       final Element newElement,
       final Properties parameter,
-      final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
     element = newElement;
     screen = screenParam;
     screen.findControl("dropDownControl", DropDownControl.class).addItem("a");
     screen.findControl("dropDownControl", DropDownControl.class).addItem("b");
     screen.findControl("dropDownControl", DropDownControl.class).addItem("c");
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public void onStartScreen() {

@@ -4,8 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
-import de.lessvoid.nifty.elements.ControllerEventListener;
+import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
@@ -22,7 +21,6 @@ public class ChatPanelController implements Controller, KeyInputHandler {
 
   public void bind(final Nifty niftyParam, final Screen screenParam,
       final Element newElement, final Properties properties,
-      final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
 
     nifty = niftyParam;
@@ -31,6 +29,10 @@ public class ChatPanelController implements Controller, KeyInputHandler {
     chatField = screen.findElementByName("chatfield");
 
     System.out.println("Setup chat field:" + chatField.getId());
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public void onStartScreen() {

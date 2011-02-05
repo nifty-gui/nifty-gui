@@ -1,8 +1,7 @@
 package de.lessvoid.nifty.examples.scroll;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dynamic.LabelCreator;
-import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
+import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
 import de.lessvoid.nifty.controls.scrollpanel.ScrollPanel;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -30,11 +29,12 @@ public class ScrollDemoStartScreen implements ScreenController {
 
   public void onStartScreen() {
     Element myScrollStuff = screen.findElementByName("myScrollStuff");
-    screen.findElementByName("scrollbarPanel").findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class).setCurrentValue(myScrollStuff.getHeight());
+// FIXME new controls
+//    screen.findElementByName("scrollbarPanel").findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class).setCurrentValue(myScrollStuff.getHeight());
   }
 
   private void addLabel(final Element myScrollStuff, final String text) {
-    LabelCreator label = new LabelCreator(text);
+    CreateLabelControl label = new CreateLabelControl(text);
     label.create(nifty, screen, myScrollStuff);
   }
 

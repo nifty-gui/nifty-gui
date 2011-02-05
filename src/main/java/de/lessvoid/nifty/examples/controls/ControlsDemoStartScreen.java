@@ -7,9 +7,9 @@ import de.lessvoid.nifty.controls.checkbox.builder.CreateCheckBoxControl;
 import de.lessvoid.nifty.controls.dropdown.CreateDropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.controller.DropDownControlNotify;
-import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
+import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.controls.listbox.builder.CreateListBoxControl;
 import de.lessvoid.nifty.elements.Element;
@@ -58,7 +58,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     Element row = createPanel.create(newNifty, screen, dynamicParent);
 
       // create label
-      LabelCreator createLabel = new LabelCreator("Dyn. Checkbox:");
+      CreateLabelControl createLabel = new CreateLabelControl("Dyn. Checkbox:");
       createLabel.setWidth("120px");
       createLabel.setAlign("left");
       createLabel.setTextVAlign("center");
@@ -80,7 +80,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     row = createPanel.create(newNifty, screen, dynamicParent);
 
       // create label
-      createLabel = new LabelCreator("Dynamic:");
+      createLabel = new CreateLabelControl("Dynamic:");
       createLabel.setWidth("120px");
       createLabel.setAlign("left");
       createLabel.setTextVAlign("center");
@@ -109,7 +109,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     Element secondRow = createPanel.create(newNifty, screen, dynamicParent);
 
       // create label
-      createLabel = new LabelCreator("Listbox Dyn.:");
+      createLabel = new CreateLabelControl("Listbox Dyn.:");
       createLabel.setWidth("120px");
       createLabel.setAlign("left");
       createLabel.setTextVAlign("center");
@@ -122,12 +122,13 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
       dynamicListboxCreate.setWidth("*");
       dynamicListboxCreate.setHeight("100%");
       dynamicListboxCreate.setChildLayout("vertical");
-      ListBoxControl dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
-      for (int i=0; i<10; i++) {
-        dynamicListbox.addItem("Listbox Item: " + i);
-      }
+// FIXME new controls
+//      ListBoxControl dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
+//      for (int i=0; i<10; i++) {
+//        dynamicListbox.addItem("Listbox Item: " + i);
+//      }
       // you can add elements too :)
-      createLabel = new LabelCreator("show off element add");
+      createLabel = new CreateLabelControl("show off element add");
       createLabel.setStyle("nifty-listbox-item");
 
       ControlEffectAttributes effectParam = new ControlEffectAttributes();

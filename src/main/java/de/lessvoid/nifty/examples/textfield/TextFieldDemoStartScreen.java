@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.examples.textfield;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
+import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
+import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldCreator;
-import de.lessvoid.nifty.controls.textfield.controller.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
@@ -35,16 +35,17 @@ public class TextFieldDemoStartScreen implements ScreenController {
     panelCreator.setChildLayout("horizontal");
     Element row = panelCreator.create(newNifty, screen, dynamicParent);
 
-    LabelCreator labelCreator = new LabelCreator("Dynamic:");
+    CreateLabelControl labelCreator = new CreateLabelControl("Dynamic:");
     labelCreator.setWidth("150px");
     labelCreator.setAlign("left");
     labelCreator.setTextVAlign("center");
     labelCreator.setTextHAlign("left");
     labelCreator.create(newNifty, screen, row);
 
-    TextFieldCreator textFieldCreator = new TextFieldCreator();
-    TextFieldControl textFieldControl = textFieldCreator.create(nifty, screen, row);
-    textFieldControl.setText("Dynamically created TextField");
+// FIXME new controls
+//    TextFieldCreator textFieldCreator = new TextFieldCreator();
+//    TextFieldControl textFieldControl = textFieldCreator.create(nifty, screen, row);
+//    textFieldControl.setText("Dynamically created TextField");
 
     // dynamically change a label name
     Element element = screen.findElementByName("labelName");

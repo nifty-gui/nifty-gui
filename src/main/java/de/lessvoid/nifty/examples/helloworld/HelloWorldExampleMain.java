@@ -4,10 +4,11 @@ import java.io.IOException;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMouse;
+import de.lessvoid.nifty.controls.button.ButtonControl;
+import de.lessvoid.nifty.controls.button.builder.CreateButtonControl;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**

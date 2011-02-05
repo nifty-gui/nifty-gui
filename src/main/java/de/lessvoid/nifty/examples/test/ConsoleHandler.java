@@ -64,21 +64,22 @@ public class ConsoleHandler implements ScreenController, KeyInputHandler {
      private void openConsole() {
        Element popup = nifty.createPopup("consolePopup");
 
-       final ConsoleControl control = popup.findControl("console", ConsoleControl.class);
-       control.output("Nifty Console Demo\nVersion: 1.0");
-       control.addCommandHandler(new ConsoleCommandHandler() {
-         public void execute(final String line) {
-           // just echo to the console
-           control.output("your input was: " + line);
-           if ("exit".equals(line.toLowerCase())) {
-             back();
-           }
-         }
-       });
-
-       nifty.showPopup(screen, "consolePopup", null);
-       consoleVisible = true;
-       allowConsoleToggle = true;
+// FIXME new controls
+//       final ConsoleControl control = popup.findControl("console", ConsoleControl.class);
+//       control.output("Nifty Console Demo\nVersion: 1.0");
+//       control.addCommandHandler(new ConsoleCommandHandler() {
+//         public void execute(final String line) {
+//           // just echo to the console
+//           control.output("your input was: " + line);
+//           if ("exit".equals(line.toLowerCase())) {
+//             back();
+//           }
+//         }
+//       });
+//
+//       nifty.showPopup(screen, "consolePopup", null);
+//       consoleVisible = true;
+//       allowConsoleToggle = true;
      }
 
      private void closeConsole() {

@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -21,10 +20,13 @@ public class ProgressbarControl implements Controller {
       final Screen screenParam,
       final Element element,
       final Properties parameter,
-      final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
-    progressBarElement = element.findElementByName("progress");
-    progressTextElement = element.findElementByName("progress-text");
+    progressBarElement = element.findElementByName("#progress");
+    progressTextElement = element.findElementByName("#progress-text");
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public void onStartScreen() {

@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
-  <useStyles filename="grey-style/nifty-grey-styles.xml" />
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+<!--    <useStyles filename="grey-style/nifty-grey-styles.xml" />  -->
+  <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
   <registerEffect name="scrollingPanel" class="de.lessvoid.nifty.examples.helloworld.ScrollingPanel"/>
+
   <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.HelloWorldStartScreen">
     <layer id="layer" backgroundColor="#003f" childLayout="center" visibleToMouse="false">
-      <panel id="panel" height="25%" width="35%" align="center" valign="center" childLayout="vertical" visibleToMouse="true">
-        <effect>
-          <onActive name="scrollingPanel" filename="nifty-logo-150x150.png" imageMode="repeat:0,0,150,150" xspeed="1000" yspeed="5000" />
-        </effect>
-        <label id="label" text="HELLO NIFTY WORLD :)" align="left" textHAlign="left" visibleToMouse="true">
-          <effect>
-            <onActive name="textSize" startSize="2.0" endSize="2.0" />
-          </effect>
-        </label>
+      <panel id="panel" height="25%" width="35%" align="center" valign="center" childLayout="vertical" backgroundColor="#f00f">
+        <control id="listbox" name="listBox" displayItems="4" />
+        <control id="add" name="button" label="Add"/>
       </panel>
     </layer>
   </screen>

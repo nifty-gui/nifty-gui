@@ -8,9 +8,9 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dragndrop.controller.DraggableControl;
 import de.lessvoid.nifty.controls.dragndrop.controller.DroppableControl;
-import de.lessvoid.nifty.controls.dynamic.LabelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
+import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -109,10 +109,10 @@ public class MainPage implements ScreenController, KeyInputHandler {
     textColorEffect.setAttribute("color", "#a22f");
 
     chapterSelectPopup = nifty.createPopup("chapterSelectPopup");
-    Element chapterSelectElement = chapterSelectPopup.findElementByName("chapterSelect");
+    Element chapterSelectElement = chapterSelectPopup.findElementByName("#chapterSelect");
     int idx = 0;
     for (String label : chapterCaption) {
-      LabelCreator createLabel = new LabelCreator(label);
+      CreateLabelControl createLabel = new CreateLabelControl(label);
       createLabel.setAlign("left");
       createLabel.setTextVAlign("center");
       createLabel.setTextHAlign("left");

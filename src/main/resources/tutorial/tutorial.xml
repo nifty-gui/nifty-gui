@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
   <useStyles filename="grey-style/nifty-grey-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
@@ -453,7 +453,7 @@
         <text style="textFont" text="&#10;This should be self explaining: The first method loads a nifty xml file from a file and the second from an inputStream. The parameter startScreen is the Id of the first screen that Nifty should display. The fileId parameter in the second method is used to identify the loaded xml file in case Nifty needs to decide if a given file has already been loaded. In the first method the filename is used for this purpose.&#10;" />
         <panel childLayout="horizontal">
           <text style="textFontNoWrap" text="Validating a Nifty XML File against the XML-Schema XSD (" />
-          <text style="textFontLink" text="http://nifty-gui.sourceforge.net/nifty.xsd" action="openLink(http://nifty-gui.sourceforge.net/nifty.xsd)" />
+          <text style="textFontLink" text="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" action="openLink(http://nifty-gui.sourceforge.net/nifty-1.3.xsd)" />
           <text style="textFontNoWrap" text=") is an optional step and is available" />
         </panel>
         <text style="textFont" text="starting with Nifty 1.2. You can use the following methods to validate Nifty XML Files:&#10;" />

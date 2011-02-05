@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -24,11 +23,14 @@ public class MultiplayerPanelControl implements Controller {
       final Screen screenParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
     screen = screenParam;
     element = newElement;
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public void onStartScreen() {
@@ -47,19 +49,19 @@ public class MultiplayerPanelControl implements Controller {
   }
 
   public void setDifficulty(final String mode) {
-    element.findElementByName("easy").setStyle("unselected");
-    element.findElementByName("medium").setStyle("unselected");
-    element.findElementByName("hard").setStyle("unselected");
-    element.findElementByName("expert").setStyle("unselected");
+    element.findElementByName("#easy").setStyle("unselected");
+    element.findElementByName("#medium").setStyle("unselected");
+    element.findElementByName("#hard").setStyle("unselected");
+    element.findElementByName("#expert").setStyle("unselected");
 
     if ("easy".equals(mode)) {
-      element.findElementByName("easy").setStyle("selected");
+      element.findElementByName("#easy").setStyle("selected");
     } else if ("medium".equals(mode)) {
-      element.findElementByName("medium").setStyle("selected");
+      element.findElementByName("#medium").setStyle("selected");
     } else if ("hard".equals(mode)) {
-      element.findElementByName("hard").setStyle("selected");
+      element.findElementByName("#hard").setStyle("selected");
     } else if ("expert".equals(mode)) {
-      element.findElementByName("expert").setStyle("selected");
+      element.findElementByName("#expert").setStyle("selected");
     }
   }
 }
