@@ -125,18 +125,18 @@ public class NiftyType extends XmlBaseType {
     log.info("registerMouseCursor [" + stopWatch.stop() + "]");
 
     stopWatch.start();
-    for (ScreenType screen : screens) {
-      screen.translateSpecialValues(nifty, null);
-      screen.create(nifty, this, timeProvider);
-    }
-    log.info("create Screens [" + stopWatch.stop() + "]");
-
-    stopWatch.start();
     for (PopupType popup : popups) {
       popup.translateSpecialValues(nifty, null);
       nifty.registerPopup(popup);
     }
     log.info("registerPopup [" + stopWatch.stop() + "]");
+
+    stopWatch.start();
+    for (ScreenType screen : screens) {
+      screen.translateSpecialValues(nifty, null);
+      screen.create(nifty, this, timeProvider);
+    }
+    log.info("create Screens [" + stopWatch.stop() + "]");
   }
 
   public void loadStyles(final NiftyLoader niftyLoader, final Nifty nifty) throws Exception {

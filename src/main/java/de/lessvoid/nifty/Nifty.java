@@ -521,6 +521,7 @@ public class Nifty {
       currentScreen.setAlternateKey(alternateKeyForNextLoadXml);
       alternateKeyForNextLoadXml = null;
     }
+    currentScreen.bindControls();
     currentScreen.startScreen(new EndNotify() {
       public void perform() {
         gotoScreenInProgess = false;
@@ -645,11 +646,15 @@ public class Nifty {
     LayoutPart layerLayout = rootLayerFactory.createRootLayerLayoutPart(this);
     PopupType popupType = new PopupType(popupTypeParam);
     popupType.prepare(this, screen, screen.getRootElement().getElementType());
-    return popupType.create(
-        screen.getRootElement(),
-        this,
-        screen,
-        layerLayout);
+    Element element = popupType.create(screen.getRootElement(), this, screen, layerLayout);
+    element.bindControls();
+    element.initControls();
+    element.startEffect(EffectEventId.onStartScreen);
+    element.startEffect(EffectEventId.onActive);
+    if (screen.isRunning()) {
+      element.onStartScreen();
+    }
+    return element;
   }
 
   public Element createPopup(final String id) {
