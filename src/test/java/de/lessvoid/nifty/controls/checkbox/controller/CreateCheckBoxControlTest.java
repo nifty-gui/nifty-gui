@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
 import de.lessvoid.nifty.controls.checkbox.builder.CreateCheckBoxControl;
@@ -42,7 +43,7 @@ public class CreateCheckBoxControlTest {
     niftyMock.addControlsWithoutStartScreen();
     replay(niftyMock);
 
-    expect(parentMock.findControl("0815", CheckboxControl.class)).andReturn(checkBoxControlMock);
+    expect(parentMock.findNiftyControl("0815", CheckBox.class)).andReturn(checkBoxControlMock);
     replay(parentMock);
 
     CreateCheckBoxControl createCheckBoxControl = new CreateCheckBoxControl("0815") {
@@ -52,7 +53,7 @@ public class CreateCheckBoxControlTest {
       }
     };
 
-    CheckboxControl checkBoxControl = createCheckBoxControl.create(niftyMock, screenMock, parentMock);
+    CheckBox checkBoxControl = createCheckBoxControl.create(niftyMock, screenMock, parentMock);
     assertEquals(checkBoxControlMock, checkBoxControl);
 
     verify(niftyMock);

@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="verticalSlider" style="nifty-vertical-slider" controller="de.lessvoid.nifty.controls.slider.SliderControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.inputmapping.ScrollbarInputMapping">
+  <controlDefinition name="verticalSlider" style="nifty-vertical-slider" controller="de.lessvoid.nifty.controls.slider.SliderControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel" focusable="true">
-      <image id="nifty-internal-slider-up" style="#up">
+      <image style="#up">
         <interact onClickRepeat="upClick()" />
       </image>
-      <image id="nifty-internal-slider-background" style="#background">
+      <image id="#background" style="#background">
         <interact onClick="mouseClick()" onClickMouseMove="mouseClick()" />
-        <image id="nifty-internal-slider-position" style="#position">
+        <image id="#position" style="#position">
           <interact onClick="mouseClick()" onClickMouseMove="mouseClick()" />
         </image>
       </image>
-      <image id="nifty-internal-slider-down" style="#down">
+      <image style="#down">
         <interact onClickRepeat="downClick()" />
       </image>
     </panel>
   </controlDefinition>
 
-  <controlDefinition name="horizontalSlider" style="nifty-horizontal-slider" controller="de.lessvoid.nifty.controls.slider.SliderControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.inputmapping.ScrollbarInputMapping">
+  <controlDefinition name="horizontalSlider" style="nifty-horizontal-slider" controller="de.lessvoid.nifty.controls.slider.SliderControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel">
-      <image id="nifty-internal-slider-up" style="#left">
+      <image style="#left">
         <interact onClickRepeat="upClick()" />
       </image>
-      <image id="nifty-internal-slider-background" style="#background">
+      <image id="#background" style="#background">
         <interact onClick="mouseClick()" onClickMouseMove="mouseClick()" />
-        <image id="nifty-internal-slider-position" style="#position">
+        <image id="#position" style="#position">
           <interact onClick="mouseClick()" onClickMouseMove="mouseClick()" />
         </image>
       </image>
-      <image id="nifty-internal-slider-down" style="#right">
+      <image style="#right">
         <interact onClickRepeat="downClick()" />
       </image>
     </panel>

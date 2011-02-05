@@ -5,7 +5,6 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -21,9 +20,12 @@ public class LabelControl extends AbstractController implements Label {
       final Screen screen,
       final Element element,
       final Properties parameter,
-      final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
     super.bind(element);
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   @Override

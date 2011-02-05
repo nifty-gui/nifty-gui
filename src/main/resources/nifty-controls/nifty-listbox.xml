@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="listBox" style="nifty-listbox" childRootId="nifty-listbox-child-root" controller="de.lessvoid.nifty.controls.listbox.ListBoxControl">
+  <controlDefinition name="listBox" style="nifty-listbox" childRootId="#child-root" controller="de.lessvoid.nifty.controls.listbox.ListBoxControl">
     <panel childLayout="vertical">
-      <panel childLayout="horizontal" id="nifty-listbox-scrollpanel">
-        <panel id="nifty-listbox-panel" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
-          <panel id="nifty-listbox-child-root" width="100%" childLayout="vertical" visibleToMouse="true">
+      <panel id="#scrollpanel" childLayout="horizontal">
+        <panel id="#panel" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
+          <panel id="#child-root" width="100%" childLayout="vertical" visibleToMouse="true">
             <!-- this is the template element used for the listbox items --> 
             <text text="Template" style="nifty-listbox-item" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
           </panel>
         </panel>
-        <control id="nifty-internal-vertical-scrollbar" name="verticalScrollbar" style="nifty-vertical-scrollbar"/>
+        <control id="#vertical-scrollbar" name="verticalScrollbar" style="nifty-vertical-scrollbar"/>
       </panel>
       <panel childLayout="horizontal">
-        <control id="nifty-internal-horizontal-scrollbar" name="horizontalScrollbar" style="nifty-horizontal-scrollbar"/>
+        <control id="#horizontal-scrollbar" name="horizontalScrollbar" style="nifty-horizontal-scrollbar"/>
         <panel style="#bottom-right" />
       </panel>
     </panel>

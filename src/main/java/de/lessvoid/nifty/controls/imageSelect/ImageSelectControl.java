@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -27,7 +26,7 @@ public class ImageSelectControl extends AbstractController {
     private int currentImageIndex;
 
     public void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement,
-            final Properties properties, final ControllerEventListener newListener,
+            final Properties properties,
             final Attributes controlDefinitionAttributes) {
         nifty = niftyParam;
         element = newElement;
@@ -35,6 +34,10 @@ public class ImageSelectControl extends AbstractController {
         images = createImages(nifty.getRenderEngine(), properties.getProperty("imageList"));
         currentImageIndex = 0;
         updateVisuals();
+    }
+
+    @Override
+    public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     }
 
     /**

@@ -4,10 +4,18 @@ import de.lessvoid.nifty.builder.ControlBuilder;
 
 public class SliderBuilder extends ControlBuilder {
   public SliderBuilder(final boolean vertical) {
-    super(vertical ? "verticalSlider" : "horizontalSlider");
+    super(getName(vertical));
   }
 
   public SliderBuilder(final String id, final boolean vertical) {
-    super(id, vertical ? "verticalSlider" : "horizontalSlider");
+    super(id, getName(vertical));
+  }
+
+  private static String getName(final boolean vertical) {
+    if (vertical) {
+      return "verticalSlider";
+    } else {
+      return "horizontalSlider";
+    }
   }
 }

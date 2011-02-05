@@ -4,10 +4,18 @@ import de.lessvoid.nifty.builder.ControlBuilder;
 
 public class ScrollbarBuilder extends ControlBuilder {
   public ScrollbarBuilder(final boolean vertical) {
-    super(vertical ? "verticalScrollbar" : "horizontalScrollbar");
+    super(getName(vertical));
   }
 
   public ScrollbarBuilder(final String id, final boolean vertical) {
-    super(id, vertical ? "verticalScrollbar" : "horizontalScrollbar");
+    super(id, getName(vertical));
+  }
+
+  private static String getName(final boolean vertical) {
+    if (vertical) {
+      return "verticalScrollbar";
+    } else {
+      return "horizontalScrollbar";
+    }
   }
 }

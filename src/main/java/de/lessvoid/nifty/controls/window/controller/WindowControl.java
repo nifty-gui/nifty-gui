@@ -6,7 +6,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.dragndrop.controller.DragNotify;
 import de.lessvoid.nifty.controls.dragndrop.controller.DraggableControl;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -23,12 +22,15 @@ public class WindowControl extends AbstractController {
       final Screen screen,
       final Element element,
       final Properties parameter,
-      final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
-    draggableControl.bind(nifty, screen, element, parameter, listener, controlDefinitionAttributes);
+    draggableControl.bind(nifty, screen, element, parameter, controlDefinitionAttributes);
     this.element = element;
 
     removeCloseButton = !controlDefinitionAttributes.getAsBoolean("closeable", true);
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {

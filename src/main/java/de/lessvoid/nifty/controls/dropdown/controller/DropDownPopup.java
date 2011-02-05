@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -19,9 +18,12 @@ public class DropDownPopup extends AbstractController {
       final Screen screenParam,
       final Element element,
       final Properties parameter,
-      final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {

@@ -7,7 +7,6 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.NextPrevHelper;
 import de.lessvoid.nifty.controls.Slider;
 import de.lessvoid.nifty.controls.SliderChangedEvent;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -34,14 +33,13 @@ public class SliderControl extends AbstractController implements Slider {
       final Screen screen,
       final Element element,
       final Properties parameter,
-      final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
     super.bind(element);
 
     this.nifty = nifty;
     this.element = element;
-    elementBackground = element.findElementByName("nifty-internal-slider-background");
-    elementPosition = element.findElementByName("nifty-internal-slider-position");
+    elementBackground = element.findElementByName("#background");
+    elementPosition = element.findElementByName("#position");
     nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
 
     if ("verticalSlider".equals(parameter.getProperty("name"))) {
@@ -55,12 +53,16 @@ public class SliderControl extends AbstractController implements Slider {
     initial = Float.valueOf(parameter.getProperty("initial", "0.0"));
     stepSize = Float.valueOf(parameter.getProperty("stepSize", "1.0"));
     buttonStepSize = Float.valueOf(parameter.getProperty("buttonStepSize", "25.0"));
+    sliderImpl.bindToView(sliderView, min, max, stepSize, buttonStepSize);
+    sliderImpl.setValue(initial);
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   @Override
   public void onStartScreen() {
-    sliderImpl.bindToView(sliderView, min, max, stepSize, buttonStepSize);
-    sliderImpl.setValue(initial);
   }
 
   @Override
@@ -170,7 +172,9 @@ public class SliderControl extends AbstractController implements Slider {
 
     @Override
     public void valueChanged(final float value) {
-      nifty.publishEvent(element.getId(), new SliderChangedEvent(value));
+      if (element.getId() != null) {
+        nifty.publishEvent(element.getId(), new SliderChangedEvent(value));
+      }
     }
   }
 
@@ -193,7 +197,9 @@ public class SliderControl extends AbstractController implements Slider {
 
     @Override
     public void valueChanged(final float value) {
-      nifty.publishEvent(element.getId(), new SliderChangedEvent(value));
+      if (element.getId() != null) {
+        nifty.publishEvent(element.getId(), new SliderChangedEvent(value));
+      }
     }
   }
 }

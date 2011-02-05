@@ -1,10 +1,9 @@
-package de.lessvoid.nifty.effects.impl;
+package de.lessvoid.nifty.controls.scrollbar;
 
 
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
@@ -28,6 +27,8 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     if (targetElement != null) {
+      // FIXME
+      /*
       VerticalScrollbarControl verticalScrollbar = targetElement.findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class);
 
       int minY = (int) verticalScrollbar.getCurrentValue();
@@ -48,6 +49,7 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
         verticalScrollbar.setCurrentValue(minY - delta);
       }
       log.fine(minY + ":" + maxY + " - " + currentMinY + ":" + currentMaxY + " - " + delta);
+      */
     }
   }
 

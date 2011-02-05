@@ -6,17 +6,19 @@ public class ScrollbarImpl {
   private float value;
   private float oldValue;
   private float min = 0.f;
-  private float max;
+  private float worldMax;
+  private float viewMax;
   private float buttonStepSize;
   private float pageStepSize;
   private boolean moveTheHandle;
-  private int moveTheHandleStartPos;
+  private float moveTheHandleStartPos;
 
-  public void bindToView(final ScrollbarView view, final float value, final float max, final float buttonStepSize, final float pageStepSize) {
+  public void bindToView(final ScrollbarView view, final float value, final float worldMax, final float viewMax, final float buttonStepSize, final float pageStepSize) {
     this.view = view;
     this.value = value;
     this.oldValue = -1;
-    this.max = max;
+    this.worldMax = worldMax;
+    this.viewMax = viewMax;
     this.buttonStepSize = buttonStepSize;
     this.pageStepSize = pageStepSize;
     this.moveTheHandle = false;
@@ -24,9 +26,10 @@ public class ScrollbarImpl {
     changeValue(this.value);
   }
 
-  public void setup(final float value, final float max, final float buttonStepSize, final float pageStepSize) {
+  public void setup(final float value, final float worldMax, final float viewMax, final float buttonStepSize, final float pageStepSize) {
     this.value = value;
-    this.max = max;
+    this.worldMax = worldMax;
+    this.viewMax = viewMax;
     this.buttonStepSize = buttonStepSize;
     this.pageStepSize = pageStepSize;
     changeValue(value);
@@ -62,12 +65,22 @@ public class ScrollbarImpl {
     updateView();
   }
 
-  public float getMax() {
-    return max;
+  public float getWorldMax() {
+    return worldMax;
   }
 
-  public void setMax(final float max) {
-    this.max = max;
+  public void setWorldMax(final float max) {
+    this.worldMax = max;
+    changeValue(value);
+    updateView();
+  }
+
+  public float getViewMax() {
+    return viewMax;
+  }
+
+  public void setViewMax(final float viewMax) {
+    this.viewMax = viewMax;
     changeValue(value);
     updateView();
   }
@@ -94,10 +107,9 @@ public class ScrollbarImpl {
     int viewSize = view.getSize();
     int handleSize = calcHandleSize(viewSize);
     int handlePosition = calcHandlePosition(viewSize, handleSize);
-
     if (hitsHandle(handlePosition, handleSize, viewValueClicked)) {
       moveTheHandle = true;
-      moveTheHandleStartPos = viewValueClicked;
+      moveTheHandleStartPos = viewToWorld(viewValueClicked, viewSize) - value;
     } else {
       moveTheHandle = false;
       if (viewValueClicked < handlePosition && viewValueClicked > 0) {
@@ -113,21 +125,23 @@ public class ScrollbarImpl {
       return;
     }
     int viewSize = view.getSize();
-    float startPos = viewToWorld(moveTheHandleStartPos, viewSize);
-    float newPos = viewToWorld(viewValue, viewSize);
-    float delta = newPos - startPos;
-    changeValue(value + delta);
+    float newPos = viewToWorld(viewValue, viewSize) - moveTheHandleStartPos;
+
+    changeValue(newPos);
     updateView();
   }
 
   private boolean hitsHandle(final int handlePosition, final int handleSize, final int viewValueClicked) {
-    return viewValueClicked > handlePosition && viewValueClicked < handlePosition + handleSize;
+    return viewValueClicked > handlePosition && viewValueClicked < (handlePosition + handleSize);
   }
 
   private void changeValue(final float newValue) {
-    value = newValue;    
-    if (value > max) {
-      value = max;
+    int viewSize = view.getSize();
+    float handleSizeWorld = viewToWorld(calcHandleSize(viewSize), viewSize);
+
+    value = newValue;
+    if (value > (worldMax - handleSizeWorld)) {
+      value = worldMax - handleSizeWorld;
     } else if (newValue < min) {
       value = min;
     }
@@ -151,12 +165,14 @@ public class ScrollbarImpl {
     return viewMin;
   }
 
+  // checked
   private int calcHandleSize(final float viewSize) {
-    return (int) Math.floor(viewSize / calcPageCount(viewSize));
+    return (int) Math.floor(viewSize / calcPageCount());
   }
 
-  private float calcPageCount(final float viewSize) {
-    float pages = max / viewSize;
+  // checked
+  private float calcPageCount() {
+    float pages = worldMax / viewMax;
     if (pages < 1.0f) {
       pages = 1.0f;
     }
@@ -164,13 +180,13 @@ public class ScrollbarImpl {
   }
 
   private float viewToWorld(final float value, final float viewSize) {
-    return value / viewSize * max;
+    return value / viewSize * worldMax;
   }
 
   private float worldToView(final float value, final float viewSize) {
-    if (max == 0.f) {
+    if (worldMax == 0.f) {
       return 0.f;
     }
-    return value / max * viewSize;
+    return value / worldMax * viewSize;
   }
 }

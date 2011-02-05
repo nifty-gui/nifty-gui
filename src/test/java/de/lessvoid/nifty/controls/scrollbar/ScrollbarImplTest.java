@@ -1,17 +1,14 @@
 package de.lessvoid.nifty.controls.scrollbar;
 
+import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
-
-import javax.xml.ws.handler.MessageContext.Scope;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.*;
-
-import de.lessvoid.nifty.controls.slider.SliderView;
 
 /**
  * Test the ScrollbarImpl.
@@ -20,6 +17,7 @@ import de.lessvoid.nifty.controls.slider.SliderView;
 public class ScrollbarImplTest {
   private ScrollbarImpl scrollbar = new ScrollbarImpl();
   private ScrollbarView view;
+  private float viewSize = 4.f;
 
   @Before
   public void before() {
@@ -38,7 +36,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 0.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 0.f, viewSize, 1.f, 4.f);
     assertEquals(0.f, scrollbar.getValue());
   }
 
@@ -48,7 +46,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 4.f, 1.f, 4.f); 
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f); 
   }
 
   @Test
@@ -57,7 +55,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 8.f, 1.f, 4.f); 
+    scrollbar.bindToView(view, 0.f, 8.f, viewSize, 1.f, 4.f); 
   }
 
   @Test
@@ -66,25 +64,25 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 16.f, 1.f, 4.f); 
+    scrollbar.bindToView(view, 0.f, 16.f, viewSize, 1.f, 4.f); 
   }
 
   @Test
   public void testCurrentValueTooBigValue() {
     view.setHandle(0, 4);
-    view.valueChanged(1.f);
+    view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 1.f, 4.f, 1.f, 4.f); 
+    scrollbar.bindToView(view, 1.f, 4.f, viewSize, 1.f, 4.f); 
   }
 
   @Test
   public void testCurrentValueMaximumValue() {
     view.setHandle(0, 4);
-    view.valueChanged(4.f);
+    view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 4.f, 4.f, 1.f, 4.f); 
+    scrollbar.bindToView(view, 4.f, 4.f, viewSize, 1.f, 4.f); 
   }
 
   @Test
@@ -93,7 +91,7 @@ public class ScrollbarImplTest {
     view.valueChanged(8.f);
     replay(view);
 
-    scrollbar.bindToView(view, 8.f, 16.f, 1.f, 4.f); 
+    scrollbar.bindToView(view, 8.f, 16.f, viewSize, 1.f, 4.f); 
   }
 
   @Test
@@ -104,18 +102,18 @@ public class ScrollbarImplTest {
     view.valueChanged(2.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 8.f, 2.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 8.f, viewSize, 2.f, 4.f);
     scrollbar.stepUp();
   }
 
   @Test
   public void testStepUpLimit() {
     view.setHandle(2, 2);
-    view.valueChanged(8.f);
+    view.valueChanged(4.f);
     view.setHandle(2, 2);
     replay(view);
 
-    scrollbar.bindToView(view, 8.f, 8.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 8.f, 8.f, viewSize, 1.f, 4.f);
     scrollbar.stepUp();
   }
 
@@ -126,7 +124,7 @@ public class ScrollbarImplTest {
     view.setHandle(0, 2);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 8.f, 2.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 8.f, viewSize, 2.f, 4.f);
     scrollbar.stepDown();
   }
 
@@ -138,7 +136,7 @@ public class ScrollbarImplTest {
     view.valueChanged(2.f);
     replay(view);
 
-    scrollbar.bindToView(view, 4.f, 8.f, 2.f, 4.f);
+    scrollbar.bindToView(view, 4.f, 8.f, viewSize, 2.f, 4.f);
     scrollbar.stepDown();
   }
 
@@ -150,18 +148,18 @@ public class ScrollbarImplTest {
     view.valueChanged(4.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 8.f, 2.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 8.f, viewSize, 2.f, 4.f);
     scrollbar.stepPageUp();
   }
 
   @Test
   public void testPageUpLimit() {
     view.setHandle(2, 2);
-    view.valueChanged(8.f);
+    view.valueChanged(4.f);
     view.setHandle(2, 2);
     replay(view);
 
-    scrollbar.bindToView(view, 8.f, 8.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 8.f, 8.f, viewSize, 1.f, 4.f);
     scrollbar.stepPageUp();
   }
 
@@ -172,7 +170,7 @@ public class ScrollbarImplTest {
     view.setHandle(0, 2);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 8.f, 2.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 8.f, viewSize, 2.f, 4.f);
     scrollbar.stepPageDown();
   }
 
@@ -184,7 +182,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 4.f, 8.f, 2.f, 4.f);
+    scrollbar.bindToView(view, 4.f, 8.f, viewSize, 2.f, 4.f);
     scrollbar.stepPageDown();
   }
 
@@ -193,12 +191,11 @@ public class ScrollbarImplTest {
     view.setHandle(0, 4);
     view.valueChanged(0.f);
     view.setHandle(0, 4);
-    view.valueChanged(4.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 4.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.setValue(4.f);
-    assertEquals(4.f, scrollbar.getValue());
+    assertEquals(0.f, scrollbar.getValue());
   }
 
   @Test
@@ -208,7 +205,7 @@ public class ScrollbarImplTest {
     view.setHandle(0, 4);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 4.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.setValue(-4.f);
     assertEquals(0.f, scrollbar.getValue());
   }
@@ -218,12 +215,11 @@ public class ScrollbarImplTest {
     view.setHandle(0, 4);
     view.valueChanged(0.f);
     view.setHandle(0, 4);
-    view.valueChanged(4.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 4.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.setValue(40.f);
-    assertEquals(4.f, scrollbar.getValue());
+    assertEquals(0.f, scrollbar.getValue());
   }
 
   @Test
@@ -234,8 +230,8 @@ public class ScrollbarImplTest {
     view.valueChanged(4.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 4.f, 1.f, 4.f);
-    scrollbar.setup(4.f, 8.f, 2.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
+    scrollbar.setup(4.f, 8.f, viewSize, 2.f, 4.f);
     assertEquals(2.f, scrollbar.getButtonStepSize());
     assertEquals(4.f, scrollbar.getValue());
     assertEquals(4.f, scrollbar.getPageStepSize());
@@ -248,9 +244,9 @@ public class ScrollbarImplTest {
     view.setHandle(0, 2);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 4.f, 1.f, 4.f);
-    scrollbar.setMax(8.f);
-    assertEquals(8.f, scrollbar.getMax());
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
+    scrollbar.setWorldMax(8.f);
+    assertEquals(8.f, scrollbar.getWorldMax());
   }
 
   @Test
@@ -266,7 +262,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 4.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.interactionClick(3);
   }
 
@@ -278,7 +274,7 @@ public class ScrollbarImplTest {
     view.valueChanged(4);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 8.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 8.f, viewSize, 1.f, 4.f);
     scrollbar.interactionClick(3);
   }
 
@@ -290,7 +286,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 4.f, 8.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 4.f, 8.f, viewSize, 1.f, 4.f);
     scrollbar.interactionClick(1);
   }
 
@@ -302,7 +298,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 4.f, 8.f, 1.f, 4.f);
+    scrollbar.bindToView(view, 4.f, 8.f, viewSize, 1.f, 4.f);
     scrollbar.interactionClick(3);
     scrollbar.interactionMove(0);
   }

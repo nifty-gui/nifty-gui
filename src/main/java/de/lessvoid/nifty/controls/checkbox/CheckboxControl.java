@@ -2,14 +2,12 @@ package de.lessvoid.nifty.controls.checkbox;
 
 import java.util.Properties;
 
-import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -30,7 +28,6 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
       final Screen screenParam,
       final Element elementParam,
       final Properties propertiesParam,
-      final ControllerEventListener listenerParam,
       final Attributes controlDefinitionAttributes) {
     super.bind(elementParam);
     nifty = niftyParam;
@@ -39,8 +36,12 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
     checkBoxImpl.setChecked(new Boolean(propertiesParam.getProperty("checked", "true")));
   }
 
-  public void onStartScreen() {
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     focusHandler = screen.getFocusHandler();
+  }
+
+  public void onStartScreen() {
   }
 
   @Override
@@ -71,7 +72,7 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
 
   @Override
   public void update(final boolean checked) {
-    final Element selectImage = getElement().findElementByName("select");
+    final Element selectImage = getElement().findElementByName("#select");
     if (checked) {
       selectImage.stopEffect(EffectEventId.onCustom);
       selectImage.startEffect(EffectEventId.onCustom, null, "show");

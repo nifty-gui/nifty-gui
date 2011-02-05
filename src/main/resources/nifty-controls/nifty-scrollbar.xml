@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.controller.VerticalScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.inputmapping.ScrollbarInputMapping">
+  <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel" focusable="true">
-      <image id="nifty-internal-scrollbar-up" style="#up">
+      <image style="#up">
         <interact onClickRepeat="upClick()" />
       </image>
-      <image id="nifty-internal-scrollbar-background" style="#background">
+      <image id="#background" style="#background">
         <interact onClick="click()" />
-        <image id="nifty-internal-scrollbar-position" style="#position">
+        <image id="#position" style="#position">
           <interact onClick="mouseMoveStart()" onClickMouseMove="mouseMove()"/>
         </image>
       </image>
-      <image id="nifty-internal-scrollbar-down" style="#down">
+      <image style="#down">
         <interact onClickRepeat="downClick()" />
       </image>
     </panel>
   </controlDefinition>
 
-  <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.controller.HorizontalScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.inputmapping.ScrollbarInputMapping">
+  <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel">
-      <image id="nifty-internal-scrollbar-up" style="#left">
+      <image style="#left">
         <interact onClickRepeat="upClick()" />
       </image>
-      <image id="nifty-internal-scrollbar-background" style="#background">
+      <image id="#background" style="#background">
         <interact onClickRepeat="click()" />
-        <image id="nifty-internal-scrollbar-position" style="#position">
+        <image id="#position" style="#position">
           <interact onClick="mouseMoveStart()" onClickMouseMove="mouseMove()"/>
         </image>
       </image>
-      <image id="nifty-internal-scrollbar-down" style="#right">
+      <image style="#right">
         <interact onClickRepeat="downClick()" />
       </image>
     </panel>

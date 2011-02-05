@@ -5,7 +5,6 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -24,11 +23,14 @@ public class DropDownControlItem extends AbstractController {
       final Screen screenParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     nifty = niftyParam;
     screen = screenParam;
     dropDownControlItemElement = newElement;
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public void onStartScreen() {

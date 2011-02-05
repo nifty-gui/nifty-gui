@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.scrollbar.inputmapping;
+package de.lessvoid.nifty.controls.scrollbar;
 
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
@@ -12,6 +12,10 @@ public class ScrollbarInputMapping implements NiftyInputMapping {
         return NiftyInputEvent.MoveCursorDown;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
         return NiftyInputEvent.MoveCursorUp;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
+        return NiftyInputEvent.MoveCursorPageDown;
+      } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
+        return NiftyInputEvent.MoveCursorPageUp;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
           return NiftyInputEvent.MoveCursorLeft;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RIGHT) {

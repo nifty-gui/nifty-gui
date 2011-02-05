@@ -2,8 +2,8 @@ package de.lessvoid.nifty.controls.scrollbar.builder;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
-import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
@@ -29,13 +29,13 @@ public class CreateScrollbarControl extends ControlAttributes {
   }
 
   @SuppressWarnings("rawtypes")
-  public ListBoxControl create(
+  public ListBox create(
       final Nifty nifty,
       final Screen screen,
       final Element parent) {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControlsWithoutStartScreen();
-    return parent.findControl(attributes.get("id"), ListBoxControl.class);
+    return parent.findNiftyControl(attributes.get("id"), ListBox.class);
   }
 
   @Override

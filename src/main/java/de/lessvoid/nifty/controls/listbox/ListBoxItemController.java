@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -19,8 +18,11 @@ public class ListBoxItemController<T> extends AbstractController {
       final Screen screenParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public void onStartScreen() {

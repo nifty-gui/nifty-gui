@@ -26,7 +26,9 @@ public class CreateWindowControl extends ControlAttributes {
       final Element parent) {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControlsWithoutStartScreen();
-    return parent.findControl(attributes.get("id"), WindowControl.class);
+    // FIXME
+    // return parent.findControl(attributes.get("id"), WindowControl.class);
+    return null;
   }
 
   @Override

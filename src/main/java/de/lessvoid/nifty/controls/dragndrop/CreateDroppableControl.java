@@ -26,7 +26,9 @@ public class CreateDroppableControl extends ControlAttributes {
       final Element parent) {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControlsWithoutStartScreen();
-    return parent.findControl(attributes.get("id"), DroppableControl.class);
+    // FIXME
+    // return parent.findControl(attributes.get("id"), DroppableControl.class);
+    return null;
   }
 
   @Override

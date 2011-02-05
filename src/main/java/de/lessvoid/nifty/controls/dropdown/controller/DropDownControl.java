@@ -8,7 +8,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyObservable;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -20,7 +19,6 @@ public class DropDownControl extends AbstractController {
   private Nifty nifty;
   private Element element;
   private boolean alreadyOpen = false;
-  private DropDownModel dropDownModel = new DropDownModel();
   private FocusHandler focusHandler;
   private Screen screen;
   private NiftyObservable observable = new NiftyObservable();
@@ -30,11 +28,14 @@ public class DropDownControl extends AbstractController {
       final Screen screenParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributesParam) {
     nifty = niftyParam;
     screen = screenParam;
     element = newElement;
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   public void onStartScreen() {
@@ -57,12 +58,12 @@ public class DropDownControl extends AbstractController {
       dropDownClicked();
       return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
-      setSelectedItemIdx(dropDownModel.gotoPrevItem());
-      notifyObservers();
+//      setSelectedItemIdx(dropDownModel.gotoPrevItem());
+//      notifyObservers();
       return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
-      setSelectedItemIdx(dropDownModel.gotoNextItem());
-      notifyObservers();
+//      setSelectedItemIdx(dropDownModel.gotoNextItem());
+//      notifyObservers();
       return true;
     }
     return false;
@@ -79,31 +80,19 @@ public class DropDownControl extends AbstractController {
     Element popup = popupLayer.findElementByName("dropDownList");
     popup.setConstraintX(new SizeValue(element.getX() + "px"));
     popup.setConstraintY(new SizeValue(element.getY() + element.getHeight() + "px"));
-    popup.setConstraintWidth(new SizeValue(element.getWidth() + "px"));
-
-    for (Element e : popup.getElements()) {
-      nifty.removeElement(nifty.getCurrentScreen(), e);
-    }
-
-    dropDownModel.initialize(nifty, nifty.getCurrentScreen(), popup, parentStyle);
-    nifty.addControlsWithoutStartScreen();
+    popup.setConstraintWidth(new SizeValue(element.getWidth() + 50 + "px"));
 
     int maxHeight = getMaxHeight(popup);
     popup.layoutElements();
     popup.setConstraintHeight(new SizeValue(maxHeight + "px"));
     popupLayer.getControl(DropDownPopup.class).setDropDownElement(element);
 
-    Element selectedElement = convertSelectedItemToElement(popup, dropDownModel.getSelectedItemIdx());
-    nifty.showPopup(nifty.getCurrentScreen(), "dropDownBoxSelectPopup", selectedElement);
+//    Element selectedElement = convertSelectedItemToElement(popup, dropDownModel.getSelectedItemIdx());
+    nifty.showPopup(nifty.getCurrentScreen(), "dropDownBoxSelectPopup", null);
   }
 
   int getMaxHeight(final Element popup) {
-    int maxHeight = 0;
-    for (Element child : popup.getElements()) {
-      child.getControl(DropDownControlItem.class).setDropDownControl(element);
-      maxHeight += child.getHeight();
-    }
-    return maxHeight;
+    return 200;
   }
 
   private Element convertSelectedItemToElement(final Element popup, final int selectedItemIdx) {
@@ -125,7 +114,7 @@ public class DropDownControl extends AbstractController {
   }
 
   public void addItem(final String item) {
-    dropDownModel.addItem(item);
+//    dropDownModel.addItem(item);
   }
 
   /**
@@ -137,33 +126,36 @@ public class DropDownControl extends AbstractController {
    *          the object that this item should refer to
    */
   public void addItem(final String description, final Object object) {
-    dropDownModel.addItem(description, object);
+//    dropDownModel.addItem(description, object);
   }
 
   public void setSelectedItemIdx(final int idx) {
-    dropDownModel.setSelectedItemIdx(idx);
-    changeSelectedItem(dropDownModel.getSelectedItem());
+//    dropDownModel.setSelectedItemIdx(idx);
+//    changeSelectedItem(dropDownModel.getSelectedItem());
   }
 
   public void setSelectedItem(final String text) {
-    dropDownModel.setSelectedItem(text);
-    changeSelectedItem(dropDownModel.getSelectedItem());
+//    dropDownModel.setSelectedItem(text);
+//    changeSelectedItem(dropDownModel.getSelectedItem());
   }
 
   public String getSelectedItem() {
-    return dropDownModel.getSelectedItem();
+//    return dropDownModel.getSelectedItem();
+    return "";
   }
 
   public Object getSelectedObject() {
-    return dropDownModel.getSelectedObject();
+//    return dropDownModel.getSelectedObject();
+    return null;
   }
 
   public int getSelectedItemIdx() {
-    return dropDownModel.getSelectedItemIdx();
+//    return dropDownModel.getSelectedItemIdx();
+    return 0;
   }
 
   public void clear() {
-    dropDownModel.clear();
+//    dropDownModel.clear();
   }
 
   public void addNotify(final DropDownControlNotify notity) {

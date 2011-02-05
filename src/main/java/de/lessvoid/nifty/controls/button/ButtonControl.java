@@ -9,7 +9,6 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -37,11 +36,10 @@ public class ButtonControl extends AbstractController implements Button {
       final Screen screenParam,
       final Element newElement,
       final Properties parameter,
-      final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
     super.bind(newElement);
     screen = screenParam;
-    buttonTextElement = getElement().findElementByName("button-text");
+    buttonTextElement = getElement().findElementByName("#text");
     buttonTextRenderer = buttonTextElement.getRenderer(TextRenderer.class);
 
     niftyParam.subscribe(newElement.getId(), NiftyMouseClickedEvent.class, new EventTopicSubscriber<NiftyMouseClickedEvent>() {
@@ -52,8 +50,12 @@ public class ButtonControl extends AbstractController implements Button {
     });
   }
 
-  public void onStartScreen() {
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     focusHandler = screen.getFocusHandler();
+  }
+
+  public void onStartScreen() {
   }
 
   @Override

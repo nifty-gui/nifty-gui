@@ -26,7 +26,9 @@ public class CreateDropDownControl extends ControlAttributes {
       final Element parent) {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControlsWithoutStartScreen();
-    return parent.findControl(attributes.get("id"), DropDownControl.class);
+    // FIXME
+    // return parent.findControl(attributes.get("id"), DropDownControl.class);
+    return null;
   }
 
   @Override

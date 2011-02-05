@@ -186,12 +186,6 @@ public interface ListBox<T> extends NiftyControl {
   public interface ListBoxViewConverter<T> {
 
     /**
-     * Allows to initialize the ListBoxViewConverter.
-     * @param listBox the element of the ListBo
-     */
-    void bind(Element listBox);
-
-    /**
      * Display the given item in the given element.
      *
      * @param listBoxItem the element to display the item in
@@ -218,10 +212,6 @@ public interface ListBox<T> extends NiftyControl {
    */
   public class ListBoxViewConverterSimple<T> implements ListBoxViewConverter<T> {
     private Logger log = Logger.getLogger(ListBoxViewConverterSimple.class.getName());
-
-    @Override
-    public void bind(final Element listBox) {
-    }
 
     @Override
     public void display(final Element element, final T item) {

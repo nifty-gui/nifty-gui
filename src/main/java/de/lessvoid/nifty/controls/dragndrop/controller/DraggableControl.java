@@ -11,7 +11,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -45,7 +44,6 @@ public class DraggableControl extends AbstractController {
       final Screen screen,
       final Element element,
       final Properties parameter,
-      final ControllerEventListener listener,
       final Attributes controlDefinitionAttributes) {
     this.nifty = nifty;
     this.screen = screen;
@@ -61,6 +59,10 @@ public class DraggableControl extends AbstractController {
 
     addOnDragStartMethodNotify(controlDefinitionAttributes.get("onDragStart"));
     addOnDragCancelMethodNotify(controlDefinitionAttributes.get("onDragCancel"));
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   private void addOnDragStartMethodNotify(final String methodName) {

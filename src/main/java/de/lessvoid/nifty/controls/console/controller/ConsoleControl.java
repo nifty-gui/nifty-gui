@@ -7,10 +7,10 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldCreator;
-import de.lessvoid.nifty.elements.ControllerEventListener;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -39,7 +39,6 @@ public class ConsoleControl extends AbstractController {
       final Screen screenParam,
       final Element newElement,
       final Properties properties,
-      final ControllerEventListener newListener,
       final Attributes controlDefinitionAttributes) {
     this.nifty = niftyParam;
     this.screen = screenParam;
@@ -54,6 +53,10 @@ public class ConsoleControl extends AbstractController {
     createTextField.setFocusable("false");
     createTextField.create(nifty, screen, element);
     screen.layoutLayers();
+  }
+
+  @Override
+  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
   /**
@@ -95,10 +98,11 @@ public class ConsoleControl extends AbstractController {
 
   @Override
   public void onFocus(final boolean getFocus) {
-    TextFieldControl control = this.element.findControl("console-input", TextFieldControl.class);
+    TextField control = this.element.findNiftyControl("console-input", TextField.class);
     if (control != null) {
       super.onFocus(getFocus);
-      control.onFocus(getFocus);
+      // FIXME
+//      control.onFocus(getFocus);
     }
   }
 
