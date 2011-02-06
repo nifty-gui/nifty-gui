@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.dropdown.inputmapping;
+package de.lessvoid.nifty.controls.dropdown;
 
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
