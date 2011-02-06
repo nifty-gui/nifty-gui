@@ -53,6 +53,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The main Nifty class.
@@ -521,7 +522,6 @@ public class Nifty {
       currentScreen.setAlternateKey(alternateKeyForNextLoadXml);
       alternateKeyForNextLoadXml = null;
     }
-    currentScreen.bindControls();
     currentScreen.startScreen(new EndNotify() {
       public void perform() {
         gotoScreenInProgess = false;
@@ -647,28 +647,37 @@ public class Nifty {
     PopupType popupType = new PopupType(popupTypeParam);
     popupType.prepare(this, screen, screen.getRootElement().getElementType());
     Element element = popupType.create(screen.getRootElement(), this, screen, layerLayout);
-    element.bindControls();
-    element.initControls();
-    element.startEffect(EffectEventId.onStartScreen);
-    element.startEffect(EffectEventId.onActive);
-    if (screen.isRunning()) {
-      element.onStartScreen();
+    if (screen.isBound()) {
+      element.layoutElements();
+      element.bindControls();
+      element.initControls();
     }
     return element;
   }
 
-  public Element createPopup(final String id) {
-    return createAndAddPopup(id, popupTypes.get(id));
-  }
-
-  public Element createPopupWithId(final String popupId) {
+  public Element createPopup(final String popupId) {
     return createAndAddPopup(NiftyIdCreator.generate(), popupTypes.get(popupId));
   }
 
-  public Element createPopupWithStyle(final String id, final String style) {
-    PopupType popupType = popupTypes.get(id);
+  public Element createPopupWithId(final String popupId, final String id) {
+    return createAndAddPopup(id, popupTypes.get(popupId));
+  }
+
+  public Element createPopupWithStyle(final String popupId, final String id, final String style) {
+    PopupType popupType = popupTypes.get(popupId);
     popupType.getAttributes().set("style", style);
     return createAndAddPopup(id, popupType);
+  }
+
+  public Element createPopupWithStyle(final String popupId, final String style) {
+    return createPopupWithStyle(popupId, style, new Attributes());
+  }
+
+  public Element createPopupWithStyle(final String popupId, final String style, final Attributes parameters) {
+    PopupType popupType = popupTypes.get(popupId);
+    popupType.getAttributes().set("style", style);
+    popupType.getAttributes().merge(parameters);
+    return createAndAddPopup(NiftyIdCreator.generate(), popupType);
   }
 
   private Element createAndAddPopup(final String id, PopupType popupType) {
@@ -678,11 +687,11 @@ public class Nifty {
     return popupElement;
   }
 
-  public Element addPopupElement(final String id, final Element popupElement) {
-    popupElement.setId(id);
-    popups.put(id, popupElement);
-    return popupElement;
-  }
+//  public Element addPopupElement(final String id, final Element popupElement) {
+//    popupElement.setId(id);
+//    popups.put(id, popupElement);
+//    return popupElement;
+//  }
 
   public Element findPopupByName(final String id) {
     return popups.get(id);
@@ -759,16 +768,15 @@ public class Nifty {
     }
 
     public void startControl(final Element newControl) {
-      newControl.bindControls();
-      newControl.initControls();
-      newControl.startEffect(EffectEventId.onStartScreen);
-      newControl.startEffect(EffectEventId.onActive);
-
       // if this startControl is called with a screen that is already running (which means
       // that the onStartScreen Event has been called already before) we have to call
       // onStartScreen on the newControl here manually. It won't be called by the screen
       // anymore.
-      if (screen.isRunning()) {
+      if (screen.isBound()) {
+        newControl.bindControls();
+        newControl.initControls();
+        newControl.startEffect(EffectEventId.onStartScreen);
+        newControl.startEffect(EffectEventId.onActive);
         newControl.onStartScreen();
       }
     }
@@ -1172,12 +1180,12 @@ public class Nifty {
     ElementType elementType = type.copy();
     elementType.prepare(this, screen, screen.getRootElement().getElementType());
     Element element = elementType.create(parent, this, screen, new LayoutPart());
-    screen.layoutLayers();
-    element.bindControls();
-    element.initControls();
-    element.startEffect(EffectEventId.onStartScreen);
-    element.startEffect(EffectEventId.onActive);
-    if (screen.isRunning()) {
+    if (screen.isBound()) {
+      screen.layoutLayers();
+      element.bindControls();
+      element.initControls();
+      element.startEffect(EffectEventId.onStartScreen);
+      element.startEffect(EffectEventId.onActive);
       element.onStartScreen();
     }
     return element;

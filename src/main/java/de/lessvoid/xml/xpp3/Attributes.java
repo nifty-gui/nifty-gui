@@ -24,6 +24,12 @@ public class Attributes {
   public Attributes() {
   }
 
+  public Attributes(final String ... values) {
+    for (int i=0; i<values.length/2; i++) {
+      set(values[i*2+0], values[i*2+1]);
+    }
+  }
+
   /**
    * Get Attributes from XmlParser.
    * @param xpp xpp

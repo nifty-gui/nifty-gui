@@ -55,6 +55,8 @@ public class Screen {
   private boolean running = false;
   private Set<String> registeredIds = new HashSet<String>();
 
+  private boolean bound;
+
   public Screen(
       final Nifty newNifty,
       final String newId,
@@ -171,6 +173,7 @@ public class Screen {
     focusHandler.resetFocusElements();
     resetLayers();
     layoutLayers();
+    bindControls();
 
     // bind happens right BEFORE the onStartScreen
     screenController.bind(nifty, Screen.this);
@@ -700,12 +703,17 @@ public class Screen {
     }
   }
 
-  public void bindControls() {
+  private void bindControls() {
+    bound = true;
     for (int i=0; i<layerElements.size(); i++) {
       layerElements.get(i).bindControls();
     }
     for (int i=0; i<layerElements.size(); i++) {
       layerElements.get(i).initControls();
     }
+  }
+
+  public boolean isBound() {
+    return bound;
   }
 }
