@@ -101,6 +101,8 @@ public class ListBoxDialogBuilder {
               hideVerticalScrollbar();
               width("*");
               childLayoutVertical();
+              optionalHorizontalScrollbar();
+              optionalVerticalScrollbar();
             }});
           }});
           panel(builders.vspacer());

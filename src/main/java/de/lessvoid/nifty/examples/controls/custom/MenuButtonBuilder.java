@@ -52,8 +52,11 @@ public class MenuButtonBuilder {
           text(controlParameter(PARAM_LABEL));
           alignCenter();
           valignCenter();
-          onFocusEffect(new EffectBuilder("textColor") {{
+          onCustomEffect(new EffectBuilder("textColor") {{
             parameter("color", "#eeef");
+            parameter("customKey", "selected");
+            parameter("timeType", "infinite");
+            parameter("neverStopRendering", "true");
           }});
         }});
       }});

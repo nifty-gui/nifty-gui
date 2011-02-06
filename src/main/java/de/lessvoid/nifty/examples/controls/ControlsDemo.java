@@ -11,6 +11,7 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 import de.lessvoid.nifty.examples.controls.common.LwjglInitHelper;
 import de.lessvoid.nifty.examples.controls.custom.MenuButtonBuilder;
+import de.lessvoid.nifty.examples.controls.dropdown.DropDownDialogBuilder;
 import de.lessvoid.nifty.examples.controls.listbox.ListBoxDialogBuilder;
 import de.lessvoid.nifty.examples.controls.sliderandscrollbar.SliderAndScrollbarDialogBuilder;
 import de.lessvoid.nifty.examples.controls.textfield.TextFieldDialogBuilder;
@@ -37,6 +38,7 @@ public class ControlsDemo {
 
     // register the dialogs
     new ListBoxDialogBuilder(nifty);
+    new DropDownDialogBuilder(nifty);
     new TextFieldDialogBuilder(nifty);
     new SliderAndScrollbarDialogBuilder(nifty);
 
@@ -44,8 +46,6 @@ public class ControlsDemo {
     Screen screen = createScreen(nifty);
     nifty.addScreen("start", screen);
     nifty.gotoScreen("start");
-
-    System.out.println(screen.debugOutput());
 
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);
@@ -58,6 +58,7 @@ public class ControlsDemo {
     Screen screen = new ScreenBuilder("start") {{
       controller(new ControlsDemoScreenController(
           "menuButtonListBox", "dialogListBox",
+          "menuButtonDropDown", "dialogDropDown",
           "menuButtonTextField", "dialogTextField",
           "menuButtonSlider", "dialogSliderAndScrollbar"));
       layer(new LayerBuilder("layer") {{
@@ -71,6 +72,8 @@ public class ControlsDemo {
           padding("20px");
           control(menuButtonBuilder.getControlBuilder("menuButtonListBox", "ListBox"));
           panel(builders.hspacer("10px"));
+          control(menuButtonBuilder.getControlBuilder("menuButtonDropDown", "DropDown"));
+          panel(builders.hspacer("10px"));
           control(menuButtonBuilder.getControlBuilder("menuButtonTextField", "TextField"));
           panel(builders.hspacer("10px"));
           control(menuButtonBuilder.getControlBuilder("menuButtonSlider", "Slider & Scrollbars"));
@@ -83,6 +86,7 @@ public class ControlsDemo {
           control(ListBoxDialogBuilder.getControlBuilder("dialogListBox"));
           control(TextFieldDialogBuilder.getControlBuilder("dialogTextField"));
           control(SliderAndScrollbarDialogBuilder.getControlBuilder("dialogSliderAndScrollbar"));
+          control(DropDownDialogBuilder.getControlBuilder("dialogDropDown"));
         }});
       }});
     }}.build(nifty);
