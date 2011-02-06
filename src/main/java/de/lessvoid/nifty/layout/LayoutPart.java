@@ -58,4 +58,10 @@ public class LayoutPart {
   public final BoxConstraints getBoxConstraints() {
     return boxConstraints;
   }
+
+  public String toString() {
+    StringBuffer result = new StringBuffer();
+    result.append("box [" + box.getX() + ", " + box.getY() + ", " + box.getWidth() + ", " + box.getHeight() + "] with constraints [" + boxConstraints.getX() + ", " + boxConstraints.getY() + ", " + boxConstraints.getWidth() + ", " + boxConstraints.getHeight() + "]");
+    return result.toString();
+  }
 }
