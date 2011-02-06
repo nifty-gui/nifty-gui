@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.controls.listbox;
 
 import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.*;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -10,6 +10,8 @@ import static org.junit.Assert.assertNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 
 public class ListBoxFocusElementEmptyTest {
   private static final int WIDTH_100 = 100;
@@ -105,6 +107,7 @@ public class ListBoxFocusElementEmptyTest {
     viewMock.updateTotalCount(0);
     viewMock.updateTotalWidth(0);
     viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.addItem(o1);
     listBox.addItem(o2);
@@ -122,6 +125,7 @@ public class ListBoxFocusElementEmptyTest {
     viewMock.updateTotalWidth(0);
     viewMock.updateTotalCount(0);
     viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.addItem(o1);
     listBox.removeItem(o1);
@@ -138,6 +142,7 @@ public class ListBoxFocusElementEmptyTest {
     viewMock.updateTotalWidth(0);
     viewMock.updateTotalCount(0);
     viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.addItem(o1);
     listBox.removeItemByIndex(0);

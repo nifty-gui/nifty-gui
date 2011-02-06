@@ -165,6 +165,10 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     }
   }
 
+  public ListBoxViewConverter<T> getViewConverter() {
+    return viewConverter;
+  }
+
   // ListBoxView Interface implementation
 
   @Override
@@ -308,6 +312,16 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   @Override
+  public void selectNext() {
+    listBoxImpl.selectNext();
+  }
+
+  @Override
+  public void selectPrevious() {
+    listBoxImpl.selectPrevious();
+  }
+
+  @Override
   public void deselectItemByIndex(final int itemIndex) {
     listBoxImpl.deselectItemByIndex(itemIndex);
   }
@@ -428,16 +442,18 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     Element horizontal = getElement().findElementByName("#horizontal-scrollbar-parent");
     Element vertical = getElement().findElementByName("#vertical-scrollbar");
     Element bottomRight = getElement().findElementByName("#bottom-right");
-    if (horizontal != null && vertical == null) {
-      if (bottomRight != null) {
-        nifty.removeElement(screen, bottomRight);
-        nifty.executeEndOfFrameElementActions();
-        initializeHorizontalScrollbar();
-      }
-    } else {
-      if (bottomRight == null) {
-        nifty.createElementFromType(screen, horizontal, bottomRightTemplate.getElementType());
-        initializeHorizontalScrollbar();
+    if (horizontal != null) {
+      if (vertical == null) {
+        if (bottomRight != null) {
+          nifty.removeElement(screen, bottomRight);
+          nifty.executeEndOfFrameElementActions();
+          initializeHorizontalScrollbar();
+        }
+      } else {
+        if (bottomRight == null) {
+          nifty.createElementFromType(screen, horizontal, bottomRightTemplate.getElementType());
+          initializeHorizontalScrollbar();
+        }
       }
     }
   }
@@ -464,6 +480,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     if (labelTemplateElement == null) {
       return;
     }
+    for (Element e : childRootElement.getElements()) {
+      nifty.removeElement(screen, e);
+    }    
     for (int i = 0; i < displayItems; i++) {
       ElementType templateType = labelTemplateElement.getElementType().copy();
       templateType.prepare(nifty, screen, screen.getRootElement().getElementType());

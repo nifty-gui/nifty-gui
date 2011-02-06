@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.controls.listbox;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
@@ -12,6 +13,8 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 
 public class ListBoxItemRemoveTest {
   private static final int WIDTH_100 = 100;
@@ -39,6 +42,7 @@ public class ListBoxItemRemoveTest {
     viewMock.updateTotalCount(0);
     viewMock.updateTotalWidth(0);
     viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
 
     listBox.clear();
@@ -49,6 +53,7 @@ public class ListBoxItemRemoveTest {
   public void testRemoveItemByIndex() {
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o2, null), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.scrollTo(0);
     replay(viewMock);
 
@@ -79,6 +84,8 @@ public class ListBoxItemRemoveTest {
     viewMock.scrollTo(0);
     viewMock.updateTotalCount(0);
     viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
 
     listBox.removeItem(o1);
@@ -90,6 +97,7 @@ public class ListBoxItemRemoveTest {
   public void testRemoveAllItems() {
     viewMock.updateTotalCount(0);
     viewMock.display(ListBoxTestTool.buildValues(null, null), -1, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
 
     List<TestItem> itemsToRemove = new ArrayList<TestItem>();
@@ -117,6 +125,7 @@ public class ListBoxItemRemoveTest {
     viewMock.updateTotalCount(2);
     viewMock.scrollTo(0);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.updateTotalWidth(0);
     replay(viewMock);
 

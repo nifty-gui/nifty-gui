@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import static org.easymock.EasyMock.isA;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
@@ -8,6 +9,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 
 public class ListBoxFocusElementTest {
   private static final int TOO_LARGE_INDEX = 4;
@@ -116,6 +119,7 @@ public class ListBoxFocusElementTest {
   public void testFocusItemAfterDelete() {
     viewMock.updateTotalCount(3);
     viewMock.display(ListBoxTestTool.buildValues(o2, o3), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
 
     listBox.removeItem(o1);
@@ -131,6 +135,7 @@ public class ListBoxFocusElementTest {
     viewMock.updateTotalCount(3);
     viewMock.scrollTo(1);
     viewMock.display(ListBoxTestTool.buildValues(o2, o3), 1, ListBoxTestTool.buildValuesSelection());
+    viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
 
     listBox.setFocusItem(o4);

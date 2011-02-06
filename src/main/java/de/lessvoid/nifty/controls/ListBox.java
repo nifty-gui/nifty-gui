@@ -68,6 +68,18 @@ public interface ListBox<T> extends NiftyControl {
   void selectItem(final T item);
 
   /**
+   * Select the next item. This will only work in SingleSelection mode and when there currently
+   * is an element selected.
+   */
+  void selectNext();
+
+  /**
+   * Select the previous item. This will only work in SingleSelection mode and when there currently
+   * is an element selected.
+   */
+  void selectPrevious();
+
+  /**
    * Deselect the item with the given itemIndex.
    * @param itemIndex item index to deselect
    */

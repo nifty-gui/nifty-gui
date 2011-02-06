@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.swing.SingleSelectionModel;
+
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.shared.EmptyNiftyControlImpl;
@@ -125,6 +127,46 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
   @Override
   public void selectItem(final T item) {
     selectItemByIndex(items.indexOf(item));
+  }
+
+  @Override
+  public void selectNext() {
+    if (!(selection instanceof ListBoxSelectionModeSingle)) {
+      return;
+    }
+    if (selection.getSelection().isEmpty()) {
+      return;
+    }
+    int selectionIndex = items.indexOf(selection.getSelection().get(0));
+    if (invalidIndex(selectionIndex)) {
+      return;
+    }
+    selectionIndex++;
+    if (invalidIndex(selectionIndex)) {
+      return;
+    }
+    selectItemByIndex(selectionIndex);
+    setFocusItemByIndex(selectionIndex);
+  }
+
+  @Override
+  public void selectPrevious() {
+    if (!(selection instanceof ListBoxSelectionModeSingle)) {
+      return;
+    }
+    if (selection.getSelection().isEmpty()) {
+      return;
+    }
+    int selectionIndex = items.indexOf(selection.getSelection().get(0));
+    if (invalidIndex(selectionIndex)) {
+      return;
+    }
+    selectionIndex--;
+    if (invalidIndex(selectionIndex)) {
+      return;
+    }
+    selectItemByIndex(selectionIndex);
+    setFocusItemByIndex(selectionIndex);
   }
 
   @Override
@@ -384,9 +426,9 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
   }
 
   private void selectionChangedEvent(final List<T> oldSelection) {
-    if (isSelectionReallyChanged(oldSelection)) {
+//    if (isSelectionReallyChanged(oldSelection)) {
       view.publish(new ListBoxSelectionChangedEvent<T>(Collections.unmodifiableList(selection.getSelection())));
-    }
+//    }
   }
 
   private boolean isSelectionReallyChanged(final List<T> oldSelection) {
