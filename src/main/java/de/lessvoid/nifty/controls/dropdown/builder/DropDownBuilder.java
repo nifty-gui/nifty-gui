@@ -5,6 +5,6 @@ import de.lessvoid.nifty.builder.ControlBuilder;
 
 public class DropDownBuilder extends ControlBuilder {
   public DropDownBuilder(final String id) {
-    super(NiftyIdCreator.generate(), "dropDown");
+    super(id, "dropDown");
   }
 }

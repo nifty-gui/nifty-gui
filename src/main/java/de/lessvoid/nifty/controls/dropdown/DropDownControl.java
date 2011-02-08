@@ -9,6 +9,7 @@ import org.bushe.swing.event.EventTopicSubscriber;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
@@ -40,7 +41,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     screen = screenParam;
     focusHandler = screen.getFocusHandler();
 
-    String elementId = getElement().getId();
+    final String elementId = getElement().getId();
     if (elementId == null) {
       log.warning("The DropDownControl requires an id but this one is missing it.");
       return;
@@ -55,8 +56,12 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     nifty.subscribe(listBox.getId(), ListBoxSelectionChangedEvent.class, new EventTopicSubscriber<ListBoxSelectionChangedEvent>() {
       @Override
       public void onEvent(final String topic, final ListBoxSelectionChangedEvent data) {
+        Object selectedItem = getSelectedItem(data.getSelection());
+
         ListBoxControl listBoxControl = (ListBoxControl) listBox;
-        listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), getSelectedItem(data.getSelection()));
+        listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), selectedItem);
+
+        nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(selectedItem));
         close();
       }
 
