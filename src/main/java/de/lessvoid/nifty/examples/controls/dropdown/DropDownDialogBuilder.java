@@ -4,7 +4,9 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
+import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 
 /**
@@ -41,6 +43,27 @@ public class DropDownDialogBuilder {
             control(new DropDownBuilder("dropDown") {{
               width("*");
             }});
+          }});
+          panel(builders.vspacer());
+          panel(new PanelBuilder() {{
+            childLayoutHorizontal();
+            control(builders.createLabel("Append:"));
+            control(new ControlBuilder("addDropDownItemText", "textfield"));
+            panel(builders.hspacer("9px"));
+            control(new ButtonBuilder("addDropDownItemButton", "Append"));
+          }});
+          panel(builders.vspacer());
+          panel(new PanelBuilder() {{
+            childLayoutHorizontal();
+            control(builders.createLabel("Changed Event:"));
+            control(new LabelBuilder("selectedItem") {{
+              width("*");
+              alignLeft();
+              textVAlignCenter();
+              textHAlignLeft();
+            }});
+            panel(builders.hspacer("9px"));
+            control(new ButtonBuilder("removeDropDownItemButton", "Remove"));
           }});
         }});
       }});

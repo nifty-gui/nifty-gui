@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.examples.controls.listbox;
+package de.lessvoid.nifty.examples.controls.common;
 
 /**
  * This is just an example. This should really be your own model. The ListBox does call toString() on this
@@ -6,7 +6,7 @@ package de.lessvoid.nifty.examples.controls.listbox;
  * sophisticated mechanism.
  * @author void
  */
-class JustAnExampleModelClass {
+public class JustAnExampleModelClass {
   private String label;
 
   public JustAnExampleModelClass(final String label) {

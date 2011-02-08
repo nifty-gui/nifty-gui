@@ -6,21 +6,26 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.CheckBox;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.ListBox.SelectionMode;
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
+import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.examples.controls.common.JustAnExampleModelClass;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownDialogController implements Controller {
+  private TextField addDropDownItemText;
+  private Button addDropDownItemButton;
+  private DropDown<JustAnExampleModelClass> dropDown;
+  private Label selectedItem;
+  private Button removeDropDownItemButton;
 
+  @SuppressWarnings("unchecked")
   @Override
   public void bind(
       final Nifty nifty,
@@ -28,10 +33,17 @@ public class DropDownDialogController implements Controller {
       final Element element,
       final Properties parameter,
       final Attributes controlDefinitionAttributes) {
+    this.addDropDownItemText = screen.findNiftyControl("addDropDownItemText", TextField.class);
+    this.addDropDownItemButton = screen.findNiftyControl("addDropDownItemButton", Button.class);
+    this.dropDown = screen.findNiftyControl("dropDown", DropDown.class);
+    this.selectedItem = screen.findNiftyControl("selectedItem", Label.class);
+    this.removeDropDownItemButton = screen.findNiftyControl("removeDropDownItemButton", Button.class);
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+    setDropDownItemButtonState();
+    setRemoveDropDownItemButtonState(null);
   }
 
   @Override
@@ -45,5 +57,60 @@ public class DropDownDialogController implements Controller {
   @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     return false;
+  }
+
+  @NiftyEventSubscriber(id="addDropDownItemText")
+  public void onAppendTextFieldChanged(final String id, final TextFieldChangedEvent event) {
+    setDropDownItemButtonState();
+  }
+
+  @NiftyEventSubscriber(id="addDropDownItemText")
+  public void onAddTextFieldInputEvent(final String id, final NiftyInputEvent event) {
+    if (NiftyInputEvent.SubmitText.equals(event)) {
+      addDropDownItemButton.activate();
+    }
+  }
+
+  @NiftyEventSubscriber(id="addDropDownItemButton")
+  public void onAppendButtonClicked(final String id, final ButtonClickedEvent event) {
+    if (addDropDownItemText.getText().length() == 0) {
+      return;
+    }
+
+    // add the item and make sure that the last item is shown
+    JustAnExampleModelClass newItem = new JustAnExampleModelClass(addDropDownItemText.getText());
+    dropDown.addItem(newItem);
+    dropDown.selectItem(newItem);
+  }
+
+  @NiftyEventSubscriber(id="dropDown")
+  public void onDropDownSelectionChanged(final String id, final DropDownSelectionChangedEvent<JustAnExampleModelClass> event) {
+    if (event.getSelection() == null) {
+      selectedItem.setText("");
+    } else {
+      selectedItem.setText(event.getSelection().toString());
+    }
+    setRemoveDropDownItemButtonState(event.getSelection());
+  }
+
+  @NiftyEventSubscriber(id="removeDropDownItemButton")
+  public void onRemoveDropDownItemClicked(final String id, final ButtonClickedEvent event) {
+    dropDown.removeItem(dropDown.getSelection());
+  }
+
+  private void setDropDownItemButtonState() {
+    if (addDropDownItemText.getText().isEmpty()) {
+      addDropDownItemButton.disable();
+    } else {
+      addDropDownItemButton.enable();
+    }
+  }
+
+  private void setRemoveDropDownItemButtonState(final JustAnExampleModelClass item) {
+    if (item == null) {
+      removeDropDownItemButton.disable();
+    } else {
+      removeDropDownItemButton.enable();
+    }
   }
 }
