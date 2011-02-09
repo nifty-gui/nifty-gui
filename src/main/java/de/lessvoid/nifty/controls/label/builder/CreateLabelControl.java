@@ -29,7 +29,7 @@ public class CreateLabelControl extends ControlAttributes {
       final Element parent) {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControlsWithoutStartScreen();
-    return parent.findElementByName(attributes.get("id")).getNiftyControl(Label.class);
+    return parent.findNiftyControl(attributes.get("id"), Label.class);
   }
 
   @Override

@@ -79,7 +79,7 @@ public class ScrollPanel extends AbstractController implements EventTopicSubscri
     stepSizeX = new Float(parameter.getProperty("stepSizeX", "1.0"));
     stepSizeY = new Float(parameter.getProperty("stepSizeY", "1.0"));
     autoScroll = AutoScroll.parse(parameter.getProperty("autoScroll", "off"));
-    nifty.getEventService().subscribe(getScrollElementId(), this);
+//    nifty.getEventService().subscribe(getScrollElementId(), this);
   }
 
   @Override
