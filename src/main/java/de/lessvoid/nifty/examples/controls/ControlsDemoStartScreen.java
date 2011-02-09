@@ -4,44 +4,44 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.button.builder.CreateButtonControl;
 import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
 import de.lessvoid.nifty.controls.checkbox.builder.CreateCheckBoxControl;
-import de.lessvoid.nifty.controls.dropdown.CreateDropDownControl;
-import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
-import de.lessvoid.nifty.controls.dropdown.controller.DropDownControlNotify;
+import de.lessvoid.nifty.controls.dropdown.DropDownControl;
+import de.lessvoid.nifty.controls.dropdown.builder.CreateDropDownControl;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
 import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
-import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.controls.listbox.builder.CreateListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class ControlsDemoStartScreen implements ScreenController, DropDownControlNotify {
+public class ControlsDemoStartScreen implements ScreenController {
   private Nifty nifty;
   private Screen screen;
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
-    screen = newScreen;
-    nifty = newNifty;
-    DropDownControl dropDown1 = findDropDownControl("dropDown1");
-    if (dropDown1 != null) {
-      dropDown1.addNotify(this);
-      dropDown1.addItem("Nifty GUI");
-      dropDown1.addItem("Slick2d");
-      dropDown1.addItem("Lwjgl");
-      dropDown1.setSelectedItemIdx(0);
-    }
-
-    DropDownControl dropDown2 = findDropDownControl("dropDown2");
-    if (dropDown2 != null) {
-      dropDown2.addNotify(this);
-      dropDown2.addItem("rocks!");
-      dropDown2.addItem("rules!");
-      dropDown2.addItem("kicks ass!");
-      dropDown2.addItem("is awesome!");
-      dropDown2.addItem("shizzles :D");
-      dropDown2.setSelectedItem("rocks!");
-    }
+    /*
+// FIXME
+//    screen = newScreen;
+//    nifty = newNifty;
+//    DropDownControl dropDown1 = findDropDownControl("dropDown1");
+//    if (dropDown1 != null) {
+//      dropDown1.addNotify(this);
+//      dropDown1.addItem("Nifty GUI");
+//      dropDown1.addItem("Slick2d");
+//      dropDown1.addItem("Lwjgl");
+//      dropDown1.setSelectedItemIdx(0);
+//    }
+//
+//    DropDownControl dropDown2 = findDropDownControl("dropDown2");
+//    if (dropDown2 != null) {
+//      dropDown2.addNotify(this);
+//      dropDown2.addItem("rocks!");
+//      dropDown2.addItem("rules!");
+//      dropDown2.addItem("kicks ass!");
+//      dropDown2.addItem("is awesome!");
+//      dropDown2.addItem("shizzles :D");
+//      dropDown2.setSelectedItem("rocks!");
+//    }
 
     // dynamically add another DropDownControl
     Element dynamicParent = screen.findElementByName("dynamic-parent");
@@ -157,6 +157,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     // check the checkbox
 //    CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
 //    checkBoxControl.uncheck();
+ * */
   }
 
   public void onStartScreen() {
@@ -166,6 +167,7 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
   }
 
   public void back() {
+    /*
     // this demonstrates how to access selected items
     DropDownControl dropDown1 = findDropDownControl("dropDown1");
     System.out.println(dropDown1.getSelectedItemIdx() + ":" + dropDown1.getSelectedItem());
@@ -181,13 +183,16 @@ public class ControlsDemoStartScreen implements ScreenController, DropDownContro
     
     // go back to another page
     nifty.fromXml("all/intro.xml", "menu");
+    */
   }
 
   public void dropDownSelectionChanged(final DropDownControl dropDownControl) {
+    /*
     System.out.println(
         "changed selection on [" + dropDownControl.toString() + "]"
         + " to [" + dropDownControl.getSelectedItemIdx() + "]"
         + " = [" + dropDownControl.getSelectedItem() + "]");
+        */
   }
 
   private DropDownControl findDropDownControl(final String id) {

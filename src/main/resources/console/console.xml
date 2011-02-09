@@ -21,7 +21,7 @@
         </effect>
         <panel childLayout="vertical" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
-            <label id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left" />
+            <text id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left" />
             <control id="name" name="textfield" text="press F1 to toggle console" />
           </panel>
           <panel childLayout="horizontal" height="8px" />

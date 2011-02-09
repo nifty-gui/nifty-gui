@@ -26,39 +26,39 @@
         </effect>
         <panel childLayout="vertical" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
-            <label id="labelName" text="Textfield: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <text id="labelName" text="Textfield: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control id="name" name="textfield" text="Text Input" />
           </panel>
           <panel childLayout="horizontal" height="10px" />
           <panel childLayout="horizontal">
-            <label text="Checkbox: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <text text="Checkbox: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control id="checkbox" name="checkbox" checked="false" />
           </panel>
           <panel childLayout="horizontal" height="10px" />
           <panel childLayout="horizontal">
-            <label text="DropDown: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <text text="DropDown: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control id="dropDown" name="dropDownControl" />
           </panel>
           <panel childLayout="horizontal" height="10px" />
           <panel childLayout="horizontal">
-            <label text="Scrollbar H.: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <text text="Scrollbar H.: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control name="horizontalScrollbar" worldMaxValue="10.0" />
           </panel>
           <panel childLayout="horizontal" height="10px" />
           <panel childLayout="horizontal">
-            <label text="Scrollbar V.: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <text text="Scrollbar V.: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control name="verticalScrollbar" height="100px" worldMaxValue="5.0" />
           </panel>
           <panel childLayout="horizontal" height="10px" />
           <panel childLayout="horizontal">
-            <label text="Listbox: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <text text="Listbox: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control id="listBox" name="listBox" horizontal="false" width="*" height="100px">
               <panel id="listBoxData" width="100%" childLayout="vertical" visibleToMouse="true" />
             </control>
           </panel>
           <panel childLayout="horizontal" height="10px" />
           <panel childLayout="horizontal">
-            <label text="Scrollpanel: " width="100px" align="left" textVAlign="center" textHAlign="left" />
+            <text text="Scrollpanel: " width="100px" align="left" textVAlign="center" textHAlign="left" />
             <control name="scrollPanel" width="*" height="120px">
               <panel width="544px" height="158px" childLayout="center">
                 <image filename="intro-logo.png" />

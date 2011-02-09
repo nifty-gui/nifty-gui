@@ -37,28 +37,28 @@
           <panel id="ac" childLayout="horizontal" height="60%">
             <panel id="ad" childLayout="vertical" align="left" valign="center">
               <panel id="ae" childLayout="horizontal" height="40px">
-                <label id="af" text="Name:" align="left" width="25%" textHAlign="left"/>
+                <text id="af" text="Name:" align="left" width="25%" textHAlign="left"/>
                 <control id="name" name="textfield" />
               </panel>
               <panel id="ag" childLayout="horizontal" height="4px" />
               <panel id="ah" childLayout="horizontal" height="40px">
-                <label id="ai" text="Difficulty:" width="25%" align="left" textHAlign="left" />
+                <text id="ai" text="Difficulty:" width="25%" align="left" textHAlign="left" />
                 <panel id="aj" childLayout="horizontal" width="75%">
-                  <label id="easy" text="Easy" style="diffStyle">
+                  <text id="easy" text="Easy" style="diffStyle">
                     <interact onClick="setDifficulty(easy)"/>
-                  </label>
+                  </text>
                   <panel childLayout="horizontal" width="4px" />
-                  <label id="medium" text="Medium" style="diffStyle"> 
+                  <text id="medium" text="Medium" style="diffStyle"> 
                     <interact onClick="setDifficulty(medium)"/>
-                  </label>
+                  </text>
                   <panel childLayout="horizontal" width="4px" />
-                  <label id="hard" text="Hard" style="diffStyle">
+                  <text id="hard" text="Hard" style="diffStyle">
                     <interact onClick="setDifficulty(hard)"/>
-                  </label>
+                  </text>
                   <panel childLayout="horizontal" width="4px" />
-                  <label id="expert" text="Expert" style="diffStyle">
+                  <text id="expert" text="Expert" style="diffStyle">
                     <interact onClick="setDifficulty(expert)"/>
-                  </label>
+                  </text>
                 </panel>
               </panel>
             </panel>

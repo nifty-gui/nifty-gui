@@ -26,30 +26,30 @@
         </effect>
         <panel id="a" childLayout="vertical" align="center" valign="center">
           <panel id="b" childLayout="horizontal">
-            <label id="dropDownLabel1" text="DropDown 1: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <text id="dropDownLabel1" text="DropDown 1: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control id="dropDown1" name="dropDownControl" />
           </panel>
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal">
-            <label id="dropDownLabel2" text="DropDown 2: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <text id="dropDownLabel2" text="DropDown 2: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control id="dropDown2" name="dropDownControl" />
           </panel>    
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal">
-            <label text="Fo Shizzle: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <text text="Fo Shizzle: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control id="checkbox" name="checkbox" checked="false" />
           </panel>    
           <panel id="dynamic-parent" childLayout="vertical">
           </panel>
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal" height="80px">
-            <label text="Listbox Static: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <text text="Listbox Static: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control id="listBoxStatic" name="listBox" horizontal="false" width="*" height="100%" childLayout="vertical" visibleToMouse="true">
               <panel id="listBoxStaticData" width="100%" childLayout="vertical" visibleToMouse="true">
-                <label text="Static Item I" style="my-listbox-item-style" />
-                <label text="Fo Shizzle" style="my-listbox-item-style" />
-                <label text="Static Item III" style="my-listbox-item-style" />
-                <label text="Static Items ftw" style="my-listbox-item-style" />
+                <text text="Static Item I" style="my-listbox-item-style" />
+                <text text="Fo Shizzle" style="my-listbox-item-style" />
+                <text text="Static Item III" style="my-listbox-item-style" />
+                <text text="Static Items ftw" style="my-listbox-item-style" />
               </panel>
             </control>
           </panel>

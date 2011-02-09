@@ -9,6 +9,10 @@ import java.util.logging.Logger;
 public class LoggerShortFormat extends java.util.logging.Formatter {
   // inefficient implementation
   public String format(LogRecord record) {
+    Throwable throwable = record.getThrown();
+    if (throwable != null) {
+      throwable.printStackTrace();
+    }
      return
        record.getMillis() + " " +  
        record.getLevel() + " [" +

@@ -5,7 +5,7 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.dropdown.controller.DropDownControl;
+import de.lessvoid.nifty.controls.dropdown.DropDownControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;

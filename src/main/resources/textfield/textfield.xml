@@ -23,22 +23,22 @@
         </effect>
         <panel childLayout="vertical" align="center" valign="center">
           <panel id="namePanel" childLayout="horizontal">
-            <label id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left" style="my"/>
+            <text id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left" style="my"/>
             <control id="name" name="textfield" text="kevmeister" />
           </panel>
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal">
-            <label text="Your Host: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
+            <text style="nifty-label" text="Your Host: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="ip" name="textfield" />
           </panel>
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal">
-            <label text="Your Password: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
+            <text style="nifty-label" text="Your Password: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="password" name="textfield" passwordChar="*" />
           </panel>
           <panel childLayout="horizontal" height="8px" />
           <panel childLayout="horizontal">
-            <label text="setMaxLength(5): " width="150px" align="left" textVAlign="center" textHAlign="left"/>
+            <text style="nifty-label" text="setMaxLength(5): " width="150px" align="left" textVAlign="center" textHAlign="left"/>
             <control id="maxLengthTest" name="textfield" maxLength="5" />
           </panel>
           <panel id="dynamic-parent" childLayout="vertical">

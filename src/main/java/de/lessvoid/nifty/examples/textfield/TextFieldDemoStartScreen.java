@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.textfield;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
@@ -42,20 +43,19 @@ public class TextFieldDemoStartScreen implements ScreenController {
     labelCreator.setTextHAlign("left");
     labelCreator.create(newNifty, screen, row);
 
-// FIXME new controls
-//    TextFieldCreator textFieldCreator = new TextFieldCreator();
-//    TextFieldControl textFieldControl = textFieldCreator.create(nifty, screen, row);
-//    textFieldControl.setText("Dynamically created TextField");
+    TextFieldCreator textFieldCreator = new TextFieldCreator();
+    TextField textField = textFieldCreator.create(nifty, screen, row);
+    textField.setText("Dynamically created TextField");
 
-    // dynamically change a label name
     Element element = screen.findElementByName("labelName");
     element.getRenderer(TextRenderer.class).setText("Name:");
   }
 
   public void onStartScreen() {
-//    screen.findElementByName("maxLengthTest").getControl(TextFieldControl.class).setMaxLength(5);
-//    screen.findElementByName("name").setFocus();
-//    screen.findControl("name", TextFieldControl.class).setCursorPosition(3);
+    screen.findNiftyControl("maxLengthTest", TextField.class).setMaxLength(5);
+    screen.findElementByName("name").setFocus();
+    screen.findNiftyControl("name", TextField.class).setCursorPosition(3);
+    System.out.println(screen.getFocusHandler().toString());
   }
 
   public void onEndScreen() {

@@ -17,18 +17,18 @@
 
   <screen id="start" controller="de.lessvoid.nifty.examples.style.label.LabelStartScreen">
     <layer id="layer" backgroundColor="#206f" childLayout="vertical">
-      <label id="label1" style="base-label-style-center-with-effect" text="base-label-style-center-with-effect" />
-      <label id="label2" style="base-label-style" text="base-label-style" />
-      <label id="label3" style="base-label-style" text="base-label-style (custom color and effects)" backgroundColor="#0f0f" >
+      <text id="label1" style="base-label-style-center-with-effect" text="base-label-style-center-with-effect" />
+      <text id="label2" style="base-label-style" text="base-label-style" />
+      <text id="label3" style="base-label-style" text="base-label-style (custom color and effects)" backgroundColor="#0f0f" >
         <effect>
           <onStartScreen name="move" direction="bottom" mode="in" length="800" />
         </effect>
-      </label>
-      <label id="label4" style="base-label-style-center-with-effect" text="base-label-style-center-with-effect (+ custom effects)" backgroundColor="#0f0f" >
+      </text>
+      <text id="label4" style="base-label-style-center-with-effect" text="base-label-style-center-with-effect (+ custom effects)" backgroundColor="#0f0f" >
         <effect>
           <onStartScreen name="move" direction="bottom" mode="in" length="800" />
         </effect>
-      </label>
+      </text>
     </layer>
   </screen>
 </nifty>

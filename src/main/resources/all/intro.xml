@@ -74,49 +74,49 @@
   <controlDefinition name="endscroller-page-1">
     <panel childLayout="vertical" width="100%">
       <panel height="600px" childLayout="vertical" />
-      <label style="button-font" text="Nifty GUI&#13;&#10;(Examples/Demo)" align="center" />
+      <text style="button-font" text="Nifty GUI&#13;&#10;(Examples/Demo)" align="center" />
       <panel height="100px" childLayout="vertical" />
-      <label style="button-font" text="written and performed&#13;&#10;by void" align="center" />
+      <text style="button-font" text="written and performed&#13;&#10;by void" align="center" />
       <panel height="100px" childLayout="vertical" />
-        <label style="button-font" text="Nifty is written in Java&#13;&#10;" align="center" />
+        <text style="button-font" text="Nifty is written in Java&#13;&#10;" align="center" />
         <image filename="all/java.png" align="center" />
       <panel height="100px" childLayout="vertical" />
-        <label style="button-font" text="Nifty is using the following libs:" align="center" />
+        <text style="button-font" text="Nifty is using the following libs:" align="center" />
       <panel height="50px" childLayout="vertical" />
-        <label style="button-font" text="LWJGL&#13;&#10;" align="center" />
+        <text style="button-font" text="LWJGL&#13;&#10;" align="center" />
         <image filename="all/lwjgl.png" align="center" />
       <panel height="50px" childLayout="vertical" />
-        <label style="button-font" text="Slick2D&#13;&#10;" align="center" />
+        <text style="button-font" text="Slick2D&#13;&#10;" align="center" />
         <image filename="all/slick.png" align="center" />
       <panel height="50px" childLayout="vertical" />
         <panel childLayout="horizontal" align="center">
           <panel childLayout="vertical">
-            <label style="button-font" text="OpenGL&#13;&#10;" align="center" />
+            <text style="button-font" text="OpenGL&#13;&#10;" align="center" />
             <image filename="all/opengl.png" align="center" />
           </panel>
           <panel childLayout="vertical">
-            <label style="button-font" text="OpenAL&#13;&#10;" align="center" />
+            <text style="button-font" text="OpenAL&#13;&#10;" align="center" />
             <image filename="all/openal.png" align="center" />
           </panel>
         </panel>
       <panel height="50px" childLayout="vertical" />
-        <label style="button-font" text="Ogg Vorbis with JOrbis&#13;&#10;" align="center" />
+        <text style="button-font" text="Ogg Vorbis with JOrbis&#13;&#10;" align="center" />
         <image filename="all/oggvorbis.png" align="center" />
       <panel height="150px" childLayout="vertical" />
-        <label style="button-font" text="This Example uses creative commons licenced sound samples&#13;&#10;and music from the following Sources" align="center" />
+        <text style="button-font" text="This Example uses creative commons licenced sound samples&#13;&#10;and music from the following Sources" align="center" />
       <panel height="50px" childLayout="vertical" />
-        <label style="button-font" text="The Freesound Project&#13;&#10;" align="center" />
+        <text style="button-font" text="The Freesound Project&#13;&#10;" align="center" />
         <image filename="all/freesound.png" align="center" />
       <panel height="30px" childLayout="vertical" />
-        <label style="button-font" text="19546__tobi123__Gong_mf2.wav&#13;&#10;
+        <text style="button-font" text="19546__tobi123__Gong_mf2.wav&#13;&#10;
 27257__kerri__eagle_feather_short.wav&#13;&#10;
 34556__Corsica_S__reverse_bass_blip_2.wav&#13;&#10;
 744__elmomo__MutantJewsArp.wav&#13;&#10;" align="center" />
       <panel height="50px" childLayout="vertical" />
-        <label style="button-font" text="Nine Inch Nails&#13;&#10;" align="center" />
+        <text style="button-font" text="Nine Inch Nails&#13;&#10;" align="center" />
         <image filename="all/nin.png" align="center" />
       <panel height="30px" childLayout="vertical" />
-        <label style="button-font" text="&quot;The Four of Us are Dying&quot;&#13;&#10;
+        <text style="button-font" text="&quot;The Four of Us are Dying&quot;&#13;&#10;
 from the&#13;&#10;
 &quot;creative commons attribution-noncommercial share alike&quot;&#13;&#10;
 licensed album&#13;&#10;
@@ -125,7 +125,7 @@ licensed album&#13;&#10;
 &#13;&#10;
 Thank you Trent.&#13;&#10;" align="center" />
         <panel height="200px" childLayout="vertical" />
-        <label style="button-font" text="THE END" align="center" />
+        <text style="button-font" text="THE END" align="center" />
         <panel height="20px" childLayout="vertical" />
       </panel>
   </controlDefinition>
@@ -283,33 +283,33 @@ Thank you Trent.&#13;&#10;" align="center" />
             <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" stepSizeY="30" height="100%">
               <panel id="huhu-1" childLayout="center" width="100%" height="420px" padding="0px,40px,0px,40px">
                 <panel id="huhu-2" childLayout="vertical" width="100%">
-                  <label id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
+                  <text id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
-                  </label>
-                  <label id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example" targetElement="thumbTextAlign">
+                  </text>
+                  <text id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example" targetElement="thumbTextAlign">
                     <interact onClick="textAlign()" onClickAlternateKey="fade" />
-                  </label>
-                  <label id="textfield" text="Textfield" style="menu-item" hintText="Textfield Example" targetElement="thumbTextField">
+                  </text>
+                  <text id="textfield" text="Textfield" style="menu-item" hintText="Textfield Example" targetElement="thumbTextField">
                     <interact onClick="textField()"/>
-                  </label>
-                  <label id="dropDown" text="Drop Down List" hintText="Drop Down List Example" style="menu-item" targetElement="thumbDropDownList">
+                  </text>
+                  <text id="dropDown" text="Drop Down List" hintText="Drop Down List Example" style="menu-item" targetElement="thumbDropDownList">
                     <interact onClick="dropDown()"/>
-                  </label>
-                  <label id="scrollpanel" text="Scrollpanel" hintText="Scrollpanel Example" style="menu-item" targetElement="thumbScrollpanel">
+                  </text>
+                  <text id="scrollpanel" text="Scrollpanel" hintText="Scrollpanel Example" style="menu-item" targetElement="thumbScrollpanel">
                     <interact onClick="scrollpanel()"/>
-                  </label>
-                  <label id="multiplayer" text="Avatar &amp; Multiplayer" hintText="Avatar &amp; Multiplayer Example" style="menu-item" targetElement="thumbMultiplayer">
+                  </text>
+                  <text id="multiplayer" text="Avatar &amp; Multiplayer" hintText="Avatar &amp; Multiplayer Example" style="menu-item" targetElement="thumbMultiplayer">
                     <interact onClick="multiplayer()"/>
-                  </label>
-                  <label id="console" text="Console Example" hintText="Console" style="menu-item" targetElement="thumbConsole">
+                  </text>
+                  <text id="console" text="Console Example" hintText="Console" style="menu-item" targetElement="thumbConsole">
                     <interact onClick="console()"/>
-                  </label>
-                  <label id="credits" text="Credits" style="menu-item" hintText="Exit" targetElement="thumbCredits">
+                  </text>
+                  <text id="credits" text="Credits" style="menu-item" hintText="Exit" targetElement="thumbCredits">
                     <interact onClick="credits()"/>
-                  </label>
-                  <label id="exit" text="Exit" style="menu-item" hintText="Exit" targetElement="thumbExit">
+                  </text>
+                  <text id="exit" text="Exit" style="menu-item" hintText="Exit" targetElement="thumbExit">
                     <interact onClick="exit()"/>
-                  </label>
+                  </text>
                 </panel>
               </panel>            
             </control>
@@ -415,13 +415,13 @@ Thank you Trent.&#13;&#10;" align="center" />
       </panel>
     </layer>
     <layer childLayout="absolute">
-      <label id="theEndLabel" x="477px" y="394px" align="center" valign="center" style="button-font" text="THE END" visible="false">
+      <text id="theEndLabel" x="477px" y="394px" align="center" valign="center" style="button-font" text="THE END" visible="false">
         <effect>
           <onCustom name="alphaHide" length="20000000" />
           <onEndScreen name="fade" start="#f" end="#0" startDelay="7000" length="2000" alternateDisable="exit" />
           <onEndScreen name="fadeSound" sound="outro" startDelay="7000" length="5000" alternateDisable="exit" />
         </effect>
-      </label>
+      </text>
     </layer>
   </screen>
   

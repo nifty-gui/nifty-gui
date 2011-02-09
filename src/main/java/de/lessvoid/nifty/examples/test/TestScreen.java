@@ -21,13 +21,13 @@ public class TestScreen implements ScreenController {
   }
 
   public void popup() {
-    Element element = nifty.createPopupWithId("popupExit");
+    Element element = nifty.createPopup("popupExit");
     nifty.showPopup(screen, element.getId(), null);
   }
 
   public void popupExit(final String exit) {
     if ("yes".equals(exit)) {
-      Element element = nifty.createPopupWithId("popupExit");
+      Element element = nifty.createPopup("popupExit");
       nifty.showPopup(screen, element.getId(), null);
     } else if ("no".equals(exit)) {
       nifty.closePopup(screen.getTopMostPopup().getId(), null);

@@ -33,7 +33,7 @@
         </effect>
         <panel childLayout="vertical" align="center" valign="center">
           <panel childLayout="horizontal">
-            <label id="scrollbarLabel" text="Scrollbar: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <text id="scrollbarLabel" text="Scrollbar: " width="120px" align="left" textVAlign="center" textHAlign="left" />
             <control id="scrollbarPanel" style="special-scrollpanel" name="scrollPanel" horizontal="false" height="225px">
               <panel id="myScrollStuff" width="370px" childLayout="vertical" />
             </control>

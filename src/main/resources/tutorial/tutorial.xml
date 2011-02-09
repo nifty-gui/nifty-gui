@@ -904,10 +904,10 @@
             <panel childLayout="horizontal" height="8px" />
             <control id="listBox" name="listBox" horizontal="false" width="50%" height="20%" childLayout="vertical" visibleToMouse="true">
               <panel id="listBoxData" width="100%" childLayout="vertical" visibleToMouse="true">
-                <label text="Static Item I" style="nifty-listbox-item" />
-                <label text="Fo Shizzle"  style="nifty-listbox-item" />
-                <label text="Static Item III" style="nifty-listbox-item" />
-                <label text="Static Items ftw" style="nifty-listbox-item" />
+                <text text="Static Item I" style="nifty-listbox-item" />
+                <text text="Fo Shizzle"  style="nifty-listbox-item" />
+                <text text="Static Item III" style="nifty-listbox-item" />
+                <text text="Static Items ftw" style="nifty-listbox-item" />
               </panel>
             </control>
             <panel childLayout="horizontal" height="8px" />
@@ -1081,16 +1081,16 @@
         <text style="textFont" text="Here is a little Example of Basic Drag and Drop:&#10;"/>
         <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
           <control id="draggable" name="draggable" backgroundColor="#f60f" width="120px" height="120px" childLayout="center" align="center" valign="center">
-            <label text="Drag Me!" valign="center" color="#000f" />
+            <text text="Drag Me!" valign="center" color="#000f" />
           </control>
         </panel>
         <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
           <control id="droppable1" name="droppable" backgroundColor="#c88f" width="140px" height="140px" padding="10px">
-            <label text="Drop Here!" color="#000f" valign="center" />
+            <text text="Drop Here!" color="#000f" valign="center" />
           </control>
           <panel width="*" />
           <control id="droppable2" name="droppable" backgroundColor="#8c8f" width="140px" height="140px" padding="10px">
-            <label text="Or Drop Here!" color="#000f" valign="center" />
+            <text text="Or Drop Here!" color="#000f" valign="center" />
           </control>
         </panel>
       </panel>
@@ -1120,16 +1120,16 @@
         <text style="textFont" text="Here is a little Example of Basic Drag and Drop using the Events:&#10;"/>
         <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
           <control id="draggable" name="draggable" backgroundColor="#f60f" width="120px" height="120px" childLayout="center" align="center" valign="center" onDragStart="dragStart()" onDragCancel="dragCancel()">
-            <label text="Drag Me!" valign="center" color="#000f" />
+            <text text="Drag Me!" valign="center" color="#000f" />
           </control>
         </panel>
         <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
           <control id="droppable1" name="droppable" backgroundColor="#c88f" width="140px" height="140px" padding="10px" onDrop="drop()">
-            <label text="Drop Here!" color="#000f" valign="center" />
+            <text text="Drop Here!" color="#000f" valign="center" />
           </control>
           <panel width="*" />
           <control id="droppable2" name="droppable" backgroundColor="#8c8f" width="140px" height="140px" padding="10px" onDrop="drop()">
-            <label text="Or Drop Here!" color="#000f" valign="center" />
+            <text text="Or Drop Here!" color="#000f" valign="center" />
           </control>
         </panel>
         <text id="DragAndDropInfoText" style="textFont" text="" wrap="false" />
@@ -1356,7 +1356,7 @@
     </effect>
     <panel height="14%" />
     <panel childLayout="center" width="100%" height="*" align="left" valign="center">
-      <panel id="chapterSelect" style="special-panel" childLayout="vertical" width="40%" height="60%" align="center" valign="center" padding="25px">
+      <panel id="#chapterSelect" style="special-panel" childLayout="vertical" width="40%" height="60%" align="center" valign="center" padding="25px">
         <effect>
           <onStartScreen name="fade" start="#0" end="#f" length="100" startDelay="250" inherit="true" post="false" />
           <onStartScreen name="imageSize" timeType="exp" factor="3.5" startSize="2.0" endSize="1.0" inherit="true" length="250" startDelay="100" post="false"/>
