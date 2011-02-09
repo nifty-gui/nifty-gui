@@ -4,7 +4,9 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Logger;
 
+import de.lessvoid.nifty.elements.render.TextRenderer.RenderFontNull;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -17,6 +19,8 @@ import de.lessvoid.nifty.tools.ObjectPool.Factory;
  * @author void
  */
 public class NiftyRenderEngineImpl implements NiftyRenderEngine {
+  private Logger log = Logger.getLogger(NiftyRenderEngineImpl.class.getName());
+
   /**
    * RenderDevice.
    */
@@ -224,6 +228,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       renderSelectionText(
           text, x + getX(), y + getY(), color, textSelectionColor, textScale, selectionStart, selectionEnd);
     } else {
+      if (font == null || font instanceof RenderFontNull) {
+        log.warning("missing font in renderText! could it be that you're using <text> elements without a font or style attribute? in case you've replaced <label> with <text> you're probably missing style='nifty-label' :)");
+        return;
+      }
       renderDevice.renderFont(font, text, x + getX(), y + getY(), color, textScale);
     }
   }
