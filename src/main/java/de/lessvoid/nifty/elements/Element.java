@@ -1526,6 +1526,10 @@ public class Element implements NiftyEvent<Void> {
    * @return the element or null
    */
   public Element findElementByName(final String name) {
+    if (name == null) {
+      return null;
+    }
+
     if (id != null && id.equals(name)) {
       return this;
     }
