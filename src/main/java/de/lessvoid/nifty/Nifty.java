@@ -302,7 +302,7 @@ public class Nifty {
       for (int i=0; i<controlsToAdd.size(); i++) {
         ControlToAdd controlToAdd = controlsToAdd.get(i);
         try {
-          controlToAdd.startControlWithCheck(controlToAdd.createControl());
+          controlToAdd.startControl(controlToAdd.createControl());
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -760,9 +760,6 @@ public class Nifty {
       control = standardControl;
     }
 
-    public void startControlWithCheck(final Element element) {
-    }
-
     public Element createControl() throws Exception {
       return control.createControl(Nifty.this, screen, parent);
     }
@@ -775,6 +772,8 @@ public class Nifty {
       if (screen.isBound()) {
         newControl.bindControls();
         newControl.initControls();
+      }
+      if (screen.isRunning()) {
         newControl.startEffect(EffectEventId.onStartScreen);
         newControl.startEffect(EffectEventId.onActive);
         newControl.onStartScreen();
