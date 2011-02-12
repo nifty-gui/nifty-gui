@@ -641,18 +641,32 @@ public class Nifty {
     }
   }
 
-  private Element createPopupFromType(final PopupType popupTypeParam) {
+  private Element createPopupFromType(final PopupType popupTypeParam, final String id) {
     Screen screen = getCurrentScreen();
     LayoutPart layerLayout = rootLayerFactory.createRootLayerLayoutPart(this);
     PopupType popupType = new PopupType(popupTypeParam);
     popupType.prepare(this, screen, screen.getRootElement().getElementType());
     Element element = popupType.create(screen.getRootElement(), this, screen, layerLayout);
+    element.setId(id);
+    fixupSubIds(element, id);
     if (screen.isBound()) {
       element.layoutElements();
       element.bindControls();
       element.initControls();
     }
     return element;
+  }
+
+  private void fixupSubIds(final Element element, final String id) {
+    String newId = element.getId();
+    if (newId != null && newId.startsWith("#")) {
+      newId = id + element.getId();
+      element.setId(newId);
+    }
+    for (int i=0; i<element.getElements().size(); i++) {
+      Element e = element.getElements().get(i);
+      fixupSubIds(e, newId);
+    }
   }
 
   public Element createPopup(final String popupId) {
@@ -674,15 +688,14 @@ public class Nifty {
   }
 
   public Element createPopupWithStyle(final String popupId, final String style, final Attributes parameters) {
-    PopupType popupType = popupTypes.get(popupId);
+    PopupType popupType = new PopupType(popupTypes.get(popupId));
     popupType.getAttributes().set("style", style);
     popupType.getAttributes().merge(parameters);
     return createAndAddPopup(NiftyIdCreator.generate(), popupType);
   }
 
   private Element createAndAddPopup(final String id, PopupType popupType) {
-    Element popupElement = createPopupFromType(popupType);
-    popupElement.setId(id);
+    Element popupElement = createPopupFromType(popupType, id);
     popups.put(id, popupElement);
     return popupElement;
   }
@@ -787,6 +800,12 @@ public class Nifty {
 
   public class ElementRemoveAction implements Action {
     public void perform(final Screen screen, final Element element) {
+      // we'll now resetAllEffects here when an element is removed. this was especially
+      // introduced to reset all onHover effects that were used for changing the mouse cursor image.
+      // without this reset the mouse cursor image might hang when elements are being removed
+      // that changed the image.
+      element.resetAllEffects();
+
       removeSingleElement(screen, element);
       Element parent = element.getParent();
       if (parent != null) {
