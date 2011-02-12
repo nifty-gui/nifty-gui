@@ -90,7 +90,7 @@ public class MenuController implements ScreenController {
   }
 
   public void exit() {
-    nifty.createPopup("popupExit");
+    nifty.createPopupWithId("popupExit", "popupExit");
     nifty.showPopup(screen, "popupExit", null);
   }
 

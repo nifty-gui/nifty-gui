@@ -19,43 +19,34 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="de.lessvoid.nifty.examples.controls.ControlsDemoStartScreen">
     <layer id="layer" childLayout="center" backgroundImage="background.png">
-      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="55%" height="58%" align="center" valign="center">
+      <panel id="dialog" style="nifty-panel" childLayout="vertical" padding="18px,28px,28px,16px" width="55%" height="58%" align="center" valign="center">
         <effect>
           <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
           <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
         </effect>
-        <panel id="a" childLayout="vertical" align="center" valign="center">
-          <panel id="b" childLayout="horizontal">
-            <text id="dropDownLabel1" text="DropDown 1: " width="120px" align="left" textVAlign="center" textHAlign="left" />
-            <control id="dropDown1" name="dropDownControl" />
-          </panel>
-          <panel childLayout="horizontal" height="8px" />
-          <panel childLayout="horizontal">
-            <text id="dropDownLabel2" text="DropDown 2: " width="120px" align="left" textVAlign="center" textHAlign="left" />
-            <control id="dropDown2" name="dropDownControl" />
-          </panel>    
-          <panel childLayout="horizontal" height="8px" />
-          <panel childLayout="horizontal">
-            <text text="Fo Shizzle: " width="120px" align="left" textVAlign="center" textHAlign="left" />
-            <control id="checkbox" name="checkbox" checked="false" />
-          </panel>    
-          <panel id="dynamic-parent" childLayout="vertical">
-          </panel>
-          <panel childLayout="horizontal" height="8px" />
-          <panel childLayout="horizontal" height="80px">
-            <text text="Listbox Static: " width="120px" align="left" textVAlign="center" textHAlign="left" />
-            <control id="listBoxStatic" name="listBox" horizontal="false" width="*" height="100%" childLayout="vertical" visibleToMouse="true">
-              <panel id="listBoxStaticData" width="100%" childLayout="vertical" visibleToMouse="true">
-                <text text="Static Item I" style="my-listbox-item-style" />
-                <text text="Fo Shizzle" style="my-listbox-item-style" />
-                <text text="Static Item III" style="my-listbox-item-style" />
-                <text text="Static Items ftw" style="my-listbox-item-style" />
-              </panel>
-            </control>
-          </panel>
-          <panel childLayout="horizontal" height="8px" />
-          <panel id="buttonPanel" childLayout="vertical" width="100%">
-          </panel>
+        <panel id="b" childLayout="horizontal">
+          <text id="dropDownLabel1" style="nifty-label" text="DropDown 1: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+          <control id="dropDown1" name="dropDown" />
+        </panel>
+        <panel childLayout="horizontal" height="8px" />
+        <panel childLayout="horizontal">
+          <text id="dropDownLabel2" style="nifty-label" text="DropDown 2: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+          <control id="dropDown2" name="dropDown" />
+        </panel>
+        <panel childLayout="horizontal" height="8px" />
+        <panel childLayout="horizontal">
+          <text text="Fo Shizzle: " style="nifty-label" width="120px" align="left" textVAlign="center" textHAlign="left" />
+          <control id="checkbox" name="checkbox" checked="false" />
+        </panel>    
+        <panel id="dynamic-parent" childLayout="vertical">
+        </panel>
+        <panel childLayout="horizontal" height="8px" />
+        <panel childLayout="horizontal">
+          <text text="Listbox Static: " style="nifty-label" width="120px" align="left" textVAlign="center" textHAlign="left" />
+          <control id="listBoxStatic" name="listBox" horizontal="off" width="*" height="100%" displayItems="2" />
+        </panel>
+        <panel childLayout="horizontal" height="8px" />
+        <panel id="buttonPanel" childLayout="vertical" width="100%">
         </panel>
       </panel>
     </layer>

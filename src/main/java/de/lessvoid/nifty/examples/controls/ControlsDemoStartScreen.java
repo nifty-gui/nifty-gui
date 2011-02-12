@@ -1,8 +1,9 @@
 package de.lessvoid.nifty.examples.controls;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.button.builder.CreateButtonControl;
-import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
 import de.lessvoid.nifty.controls.checkbox.builder.CreateCheckBoxControl;
 import de.lessvoid.nifty.controls.dropdown.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.builder.CreateDropDownControl;
@@ -19,29 +20,31 @@ public class ControlsDemoStartScreen implements ScreenController {
   private Screen screen;
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
-    /*
-// FIXME
-//    screen = newScreen;
-//    nifty = newNifty;
-//    DropDownControl dropDown1 = findDropDownControl("dropDown1");
-//    if (dropDown1 != null) {
-//      dropDown1.addNotify(this);
-//      dropDown1.addItem("Nifty GUI");
-//      dropDown1.addItem("Slick2d");
-//      dropDown1.addItem("Lwjgl");
-//      dropDown1.setSelectedItemIdx(0);
-//    }
-//
-//    DropDownControl dropDown2 = findDropDownControl("dropDown2");
-//    if (dropDown2 != null) {
-//      dropDown2.addNotify(this);
-//      dropDown2.addItem("rocks!");
-//      dropDown2.addItem("rules!");
-//      dropDown2.addItem("kicks ass!");
-//      dropDown2.addItem("is awesome!");
-//      dropDown2.addItem("shizzles :D");
-//      dropDown2.setSelectedItem("rocks!");
-//    }
+    screen = newScreen;
+    nifty = newNifty;
+
+    DropDown dropDown1 = findDropDownControl("dropDown1");
+    if (dropDown1 != null) {
+      dropDown1.addItem("Nifty GUI");
+      dropDown1.addItem("Slick2d");
+      dropDown1.addItem("Lwjgl");
+      dropDown1.selectItemByIndex(0);
+    }
+
+    DropDown dropDown2 = findDropDownControl("dropDown2");
+    if (dropDown2 != null) {
+      dropDown2.addItem("rocks!");
+      dropDown2.addItem("rules!");
+      dropDown2.addItem("kicks ass!");
+      dropDown2.addItem("is awesome!");
+      dropDown2.addItem("shizzles :D");
+      dropDown2.selectItem("rocks!");
+    }
+
+    ListBox listBoxStatic = screen.findNiftyControl("listBoxStatic", ListBox.class);
+    for (int i=0; i<5; i++) {
+      listBoxStatic.addItem("Listbox Item: " + i);
+    }
 
     // dynamically add another DropDownControl
     Element dynamicParent = screen.findElementByName("dynamic-parent");
@@ -89,11 +92,11 @@ public class ControlsDemoStartScreen implements ScreenController {
 
       // create drop down
       CreateDropDownControl dynamicItem = new CreateDropDownControl("dynamicDropDown");
-      DropDownControl dropDown3 = dynamicItem.create(nifty, screen, row);
+      DropDown dropDown3 = dynamicItem.create(nifty, screen, row);
       if (dropDown3 != null) {
         dropDown3.addItem("dynamic drop down");
         dropDown3.addItem("ftw");
-        dropDown3.setSelectedItem("ftw");
+        dropDown3.selectItem("ftw");
       }
 
     // create 8px height panel
@@ -105,7 +108,6 @@ public class ControlsDemoStartScreen implements ScreenController {
     // create new panel for label and drop down
     createPanel = new PanelCreator();
     createPanel.setChildLayout("horizontal");
-    createPanel.setHeight("80px");
     Element secondRow = createPanel.create(newNifty, screen, dynamicParent);
 
       // create label
@@ -121,12 +123,15 @@ public class ControlsDemoStartScreen implements ScreenController {
       dynamicListboxCreate.set("horizontal", "false");
       dynamicListboxCreate.setWidth("*");
       dynamicListboxCreate.setHeight("100%");
+      dynamicListboxCreate.set("displayItems", "3");
+      dynamicListboxCreate.set("horizontal", "off");
       dynamicListboxCreate.setChildLayout("vertical");
-// FIXME new controls
-//      ListBoxControl dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
-//      for (int i=0; i<10; i++) {
-//        dynamicListbox.addItem("Listbox Item: " + i);
-//      }
+
+      ListBox dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
+      for (int i=0; i<10; i++) {
+        dynamicListbox.addItem("Listbox Item: " + i);
+      }
+
       // you can add elements too :)
       createLabel = new CreateLabelControl("show off element add");
       createLabel.setStyle("nifty-listbox-item");
@@ -149,7 +154,7 @@ public class ControlsDemoStartScreen implements ScreenController {
     createButton.setAlign("right");
     createButton.setInteractOnClick("back()");
     createButton.create(newNifty, screen, screen.findElementByName("buttonPanel"));
-
+/*
     // select first item on the static listbox too
 //    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
 //    listBoxStatic.changeSelection(0);
@@ -161,6 +166,7 @@ public class ControlsDemoStartScreen implements ScreenController {
   }
 
   public void onStartScreen() {
+    System.out.println(screen.debugOutput());
   }
 
   public void onEndScreen() {
@@ -180,10 +186,9 @@ public class ControlsDemoStartScreen implements ScreenController {
  
     CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
     System.out.println("checkbox: " + checkBoxControl.isChecked());
-    
+    */
     // go back to another page
     nifty.fromXml("all/intro.xml", "menu");
-    */
   }
 
   public void dropDownSelectionChanged(final DropDownControl dropDownControl) {
@@ -195,8 +200,7 @@ public class ControlsDemoStartScreen implements ScreenController {
         */
   }
 
-  private DropDownControl findDropDownControl(final String id) {
-    DropDownControl dropDown1 = screen.findControl(id, DropDownControl.class);
-    return dropDown1;
+  private DropDown findDropDownControl(final String id) {
+    return screen.findNiftyControl(id, DropDown.class);
   }
 }

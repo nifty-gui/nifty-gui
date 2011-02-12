@@ -430,20 +430,20 @@ Thank you Trent.&#13;&#10;" align="center" />
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <popup id="popupExit" childLayout="center" backgroundColor="#000a">
     <effect>
-      <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="500" />
-      <onStartScreen name="playSound" sound="popup" startDelay="600" />
-      <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="500" startDelay="250" />
+      <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="250" />
+      <onStartScreen name="playSound" sound="popup" startDelay="250" />
+      <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="250" startDelay="250" />
     </effect>
     <panel style="nifty-panel-red" childLayout="center" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">
       <effect>
-        <onStartScreen name="fade" start="#0" end="#f" length="150" startDelay="500"/>
-        <onStartScreen name="imageSize" timeType="exp" factor="3.5" startSize="1.5" endSize="1.0" inherit="true" length="150" startDelay="500"/>
+        <onStartScreen name="fade" start="#0" end="#f" length="150" startDelay="250"/>
+        <onStartScreen name="imageSize" timeType="exp" factor="3.5" startSize="1.5" endSize="1.0" inherit="true" length="150" startDelay="250"/>
         <onEndScreen name="fade" start="#f" end="#0" length="150" startDelay="0"/>
         <onEndScreen name="imageSize" timeType="exp" factor="3.5" startSize="1.0" endSize="1.5" inherit="true" length="150" startDelay="0"/>
       </effect>
       <panel childLayout="vertical" align="center" valign="center">
         <effect>
-          <onStartScreen name="alphaHide" length="700" inherit="true" />
+          <onStartScreen name="alphaHide" length="500" inherit="true" />
           <onEndScreen name="fade" length="10" start="#f" end="#0" inherit="true" />
         </effect>
         <panel childLayout="center" height="70%" width="100%">
