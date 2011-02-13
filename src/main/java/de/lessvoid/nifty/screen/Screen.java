@@ -18,6 +18,7 @@ import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.tools.NullObjectFactory;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -343,7 +344,7 @@ public class Screen {
   public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
     Element element = findElementByName(elementName);
     if (element == null) {
-      return null;
+      return NullObjectFactory.createNull(elementName, requestedControlClass, log);
     }
     return element.getNiftyControl(requestedControlClass);
   }

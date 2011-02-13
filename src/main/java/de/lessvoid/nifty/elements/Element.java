@@ -41,6 +41,7 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.MouseOverHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.NullObjectFactory;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -1937,7 +1938,7 @@ public class Element implements NiftyEvent<Void> {
         return t;
       }
     }
-    return null;
+    return NullObjectFactory.createNull(getId(), requestedControlClass, log);
   }
 
   /**
