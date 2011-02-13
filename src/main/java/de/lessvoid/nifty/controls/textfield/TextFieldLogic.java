@@ -62,7 +62,7 @@ public class TextFieldLogic {
    * @param newText new text
    */
   public void initWithText(final String newText) {
-    initText(newText);
+    changeText(newText);
 
     if (newText != null && newText.length() > 0) {
       view.textChangeEvent(newText);
@@ -75,6 +75,21 @@ public class TextFieldLogic {
       this.text.append(newText);
     }
     this.cursorPosition = 0;
+    this.selectionStart = -1;
+    this.selectionEnd = -1;
+    this.selecting = false;
+    this.selectionStartIndex = -1;
+  }
+
+  private void changeText(final String newText) {
+    this.text = new StringBuffer();
+    if (newText != null) {
+      this.text.append(newText);
+    }
+    // only reset the cursorposition if the old one is not valid anymore
+    if (this.cursorPosition > this.text.length()) {
+      this.cursorPosition = 0;
+    }
     this.selectionStart = -1;
     this.selectionEnd = -1;
     this.selecting = false;
