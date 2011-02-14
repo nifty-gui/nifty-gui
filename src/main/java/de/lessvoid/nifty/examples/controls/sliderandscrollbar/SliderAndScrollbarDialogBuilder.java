@@ -154,18 +154,50 @@ public class SliderAndScrollbarDialogBuilder {
           panel(new PanelBuilder() {{
             childLayoutHorizontal();
             control(builders.createLabel("Current Value:"));
-            control(new TextFieldBuilder("scrollbarHValue") {{
+            control(new TextFieldBuilder("scrollbarH_CurrentValue_Textfield") {{
               width("50px");
             }});
-            panel(builders.hspacer("15px"));
+            panel(builders.hspacer("20px"));
             control(new LabelBuilder() {{
-              text("Max Value:");
+              text("World Max:");
+              alignLeft();
+              textVAlignCenter();
+              textHAlignLeft();
+              width("70px");
+            }});
+            panel(builders.hspacer("15px"));
+            control(new TextFieldBuilder("scrollbarH_WorldMax_Textfield") {{
+              width("50px");
+            }});
+            panel(builders.hspacer("20px"));
+            control(new LabelBuilder() {{
+              text("View Max:");
               alignLeft();
               textVAlignCenter();
               textHAlignLeft();
             }});
             panel(builders.hspacer("15px"));
-            control(new TextFieldBuilder("scrollbarHMaxValue") {{
+            control(new TextFieldBuilder("scrollbarH_ViewMax_Textfield") {{
+              width("50px");
+            }});
+          }});
+          panel(builders.vspacer());
+          panel(new PanelBuilder() {{
+            childLayoutHorizontal();
+            control(builders.createLabel("Button Step:"));
+            control(new TextFieldBuilder("scrollbarH_ButtonStepSize_Textfield") {{
+              width("50px");
+            }});
+            panel(builders.hspacer("20px"));
+            control(new LabelBuilder() {{
+              text("Page Step:");
+              alignLeft();
+              textVAlignCenter();
+              textHAlignLeft();
+              width("70px");
+            }});
+            panel(builders.hspacer("15px"));
+            control(new TextFieldBuilder("scrollbarH_PageStepSize_Textfield") {{
               width("50px");
             }});
           }});

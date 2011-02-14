@@ -11,6 +11,7 @@ import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.controls.Slider;
 import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -56,8 +57,11 @@ public class SliderAndScrollbarDialogController implements Controller {
     getSlider("sliderA").setup(0.f, 255.f, 255.f, 1.f, 10.f);
 
     getScrollbar("scrollbarH").setWorldMax(1000.f);
-    getTextfield("scrollbarHMaxValue").setText(String.valueOf((int)getScrollbar("scrollbarH").getWorldMax()));
-    getTextfield("scrollbarHValue").setText(String.valueOf((int)getScrollbar("scrollbarH").getValue()));
+    getTextfield("scrollbarH_WorldMax_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getWorldMax()));
+    getTextfield("scrollbarH_CurrentValue_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getValue()));
+    getTextfield("scrollbarH_ViewMax_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getViewMax()));
+    getTextfield("scrollbarH_ButtonStepSize_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getButtonStepSize()));
+    getTextfield("scrollbarH_PageStepSize_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getPageStepSize()));
   }
 
   @Override
@@ -95,7 +99,57 @@ public class SliderAndScrollbarDialogController implements Controller {
 
   @NiftyEventSubscriber(id="scrollbarH")
   public void onScrollbarHChanged(final String id, final ScrollbarChangedEvent event) {
-    getTextfield("scrollbarHValue").setText(String.valueOf(event.getValue()));
+    getTextfield("scrollbarH_CurrentValue_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getValue()));
+  }
+
+  @NiftyEventSubscriber(id="scrollbarH_WorldMax_Textfield")
+  public void onMaxValueChanged(final String id, final TextFieldChangedEvent event) {
+    try {
+      float f = Float.valueOf(event.getText());
+      Scrollbar scrollbar = getScrollbar("scrollbarH");
+      scrollbar.setWorldMax(f);
+    } catch (NumberFormatException e) {
+    }
+  }
+
+  @NiftyEventSubscriber(id="scrollbarH_ViewMax_Textfield")
+  public void onViewMaxValueChanged(final String id, final TextFieldChangedEvent event) {
+    try {
+      float f = Float.valueOf(event.getText());
+      Scrollbar scrollbar = getScrollbar("scrollbarH");
+      scrollbar.setViewMax(f);
+    } catch (NumberFormatException e) {
+    }
+  }
+
+  @NiftyEventSubscriber(id="scrollbarH_CurrentValue_Textfield")
+  public void onCurrentValueChanged(final String id, final TextFieldChangedEvent event) {
+    try {
+      float f = Float.valueOf(event.getText());
+      Scrollbar scrollbar = getScrollbar("scrollbarH");
+      scrollbar.setValue(f);
+    } catch (NumberFormatException e) {
+    }
+  }
+
+  @NiftyEventSubscriber(id="scrollbarH_ButtonStepSize_Textfield")
+  public void onButtonStepSizeChanged(final String id, final TextFieldChangedEvent event) {
+    try {
+      float f = Float.valueOf(event.getText());
+      Scrollbar scrollbar = getScrollbar("scrollbarH");
+      scrollbar.setButtonStepSize(f);
+    } catch (NumberFormatException e) {
+    }
+  }
+
+  @NiftyEventSubscriber(id="scrollbarH_PageStepSize_Textfield")
+  public void onPageStepSizeChanged(final String id, final TextFieldChangedEvent event) {
+    try {
+      float f = Float.valueOf(event.getText());
+      Scrollbar scrollbar = getScrollbar("scrollbarH");
+      scrollbar.setPageStepSize(f);
+    } catch (NumberFormatException e) {
+    }
   }
 
   private void changeColor() {
