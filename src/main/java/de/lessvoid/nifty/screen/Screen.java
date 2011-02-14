@@ -344,7 +344,8 @@ public class Screen {
   public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
     Element element = findElementByName(elementName);
     if (element == null) {
-      return NullObjectFactory.createNull(elementName, requestedControlClass, log);
+      log.warning("missing element/control with id [" + elementName + "] for requested control class [" + requestedControlClass.getName() + "]");
+      return NullObjectFactory.createNull(requestedControlClass);
     }
     return element.getNiftyControl(requestedControlClass);
   }

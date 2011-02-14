@@ -1938,7 +1938,8 @@ public class Element implements NiftyEvent<Void> {
         return t;
       }
     }
-    return NullObjectFactory.createNull(getId(), requestedControlClass, log);
+    log.warning("missing element/control with id [" + getId() + "] for requested control class [" + requestedControlClass.getName() + "]");
+    return NullObjectFactory.createNull(requestedControlClass);
   }
 
   /**
