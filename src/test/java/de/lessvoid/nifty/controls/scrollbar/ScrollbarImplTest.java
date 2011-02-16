@@ -22,7 +22,8 @@ public class ScrollbarImplTest {
   @Before
   public void before() {
     view = createMock(ScrollbarView.class);
-    expect(view.getSize()).andReturn(4).anyTimes();
+    expect(view.getAreaSize()).andReturn(4).anyTimes();
+    expect(view.getMinHandleSize()).andReturn(1).anyTimes();
   }
 
   @After

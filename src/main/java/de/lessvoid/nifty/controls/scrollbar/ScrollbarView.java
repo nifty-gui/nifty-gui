@@ -7,11 +7,18 @@ package de.lessvoid.nifty.controls.scrollbar;
 public interface ScrollbarView {
 
   /**
-   * Get the size of the Slider area. This is the area in pixel that is available to
+   * Get the size of the Scrollbar area. This is the area in pixel that is available to
    * scroll around.
    * @return pixel size value
    */
-  int getSize();
+  int getAreaSize();
+
+  /**
+   * Returns the minimum size this View can show the handle without distortion. The handle
+   * will never be smaller than this value.
+   * @return minimum handle size
+   */
+  int getMinHandleSize();
 
   /**
    * Set the position and the size of the handle.

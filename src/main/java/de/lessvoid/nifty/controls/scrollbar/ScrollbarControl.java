@@ -43,9 +43,9 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     this.nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
 
     if ("verticalScrollbar".equals(parameter.getProperty("name"))) {
-      scrollbarView = new ScrollbarViewVertical();
+      this.scrollbarView = new ScrollbarViewVertical(elementPosition.getHeight());
     } else if ("horizontalScrollbar".equals(parameter.getProperty("name"))) {
-      scrollbarView = new ScrollbarViewHorizontal();
+      this.scrollbarView = new ScrollbarViewHorizontal(elementPosition.getWidth());
     }
 
     worldMax = Float.valueOf(parameter.getProperty("worldMax", "100.0"));
@@ -159,16 +159,32 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   // ScrollbarView implementations
 
   private class ScrollbarViewVertical implements ScrollbarView {
+    private int minHandleSize;
+
+    public ScrollbarViewVertical(final int minHandleSize) {
+      this.minHandleSize = minHandleSize;
+    }
+
     @Override
-    public int getSize() {
+    public int getAreaSize() {
       return elementBackground.getHeight();
     }
 
     @Override
+    public int getMinHandleSize() {
+      return minHandleSize;
+    }
+
+    @Override
     public void setHandle(final int pos, final int size) {
-      elementPosition.setConstraintY(new SizeValue(pos + "px"));
-      elementPosition.setConstraintHeight(new SizeValue(size + "px"));
-      elementBackground.layoutElements();
+      if (size == 0) {
+        elementPosition.hide();
+      } else {
+        elementPosition.show();
+        elementPosition.setConstraintY(new SizeValue(pos + "px"));
+        elementPosition.setConstraintHeight(new SizeValue(size + "px"));
+        elementBackground.layoutElements();
+      }
     }
 
     @Override
@@ -185,9 +201,20 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   }
 
   private class ScrollbarViewHorizontal implements ScrollbarView {
+    private int minHandleSize;
+
+    public ScrollbarViewHorizontal(final int minHandleSize) {
+      this.minHandleSize = minHandleSize;
+    }
+
     @Override
-    public int getSize() {
+    public int getAreaSize() {
       return elementBackground.getWidth();
+    }
+
+    @Override
+    public int getMinHandleSize() {
+      return minHandleSize;
     }
 
     @Override

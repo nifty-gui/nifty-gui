@@ -104,7 +104,7 @@ public class ScrollbarImpl {
   }
 
   public void interactionClick(final int viewValueClicked) {
-    int viewSize = view.getSize();
+    int viewSize = view.getAreaSize();
     int handleSize = calcHandleSize(viewSize);
     int handlePosition = calcHandlePosition(viewSize, handleSize);
     if (hitsHandle(handlePosition, handleSize, viewValueClicked)) {
@@ -124,7 +124,7 @@ public class ScrollbarImpl {
     if (!moveTheHandle) {
       return;
     }
-    int viewSize = view.getSize();
+    int viewSize = view.getAreaSize();
     float newPos = viewToWorld(viewValue, viewSize) - moveTheHandleStartPos;
 
     changeValue(newPos);
@@ -136,7 +136,7 @@ public class ScrollbarImpl {
   }
 
   private void changeValue(final float newValue) {
-    int viewSize = view.getSize();
+    int viewSize = view.getAreaSize();
     float handleSizeWorld = viewToWorld(calcHandleSize(viewSize), viewSize);
 
     value = newValue;
@@ -152,25 +152,28 @@ public class ScrollbarImpl {
   }
 
   private void updateView() {
-    int viewSize = view.getSize();
+    int viewSize = view.getAreaSize();
     int handleSize = calcHandleSize(viewSize);
     view.setHandle(calcHandlePosition(viewSize, handleSize), handleSize);
   }
 
   private int calcHandlePosition(final int viewSize, final int handleSize) {
-    int viewMin = (int) Math.floor(worldToView(value, viewSize));
+    int viewMin = (int) Math.round(worldToView(value, viewSize));
     if (viewMin + handleSize > viewSize) {
       viewMin = viewSize - handleSize;
     }
     return viewMin;
   }
 
-  // checked
   private int calcHandleSize(final float viewSize) {
-    return (int) Math.floor(viewSize / calcPageCount());
+    int handleSize = (int) Math.round(viewSize / calcPageCount());
+    int minHandleSize = view.getMinHandleSize(); 
+    if (handleSize < minHandleSize) {
+      return minHandleSize;
+    }
+    return handleSize;
   }
 
-  // checked
   private float calcPageCount() {
     float pages = worldMax / viewMax;
     if (pages < 1.0f) {
