@@ -35,7 +35,7 @@
     </effect>
   </style>
   <style id="nifty-vertical-scrollbar#position">
-    <attributes filename="scrollbar/scrollbar.png" x="0px" y="0px" width="23px" height="23px" imageMode="sprite-resize:23,23,13,4,15,4,4,4,15,4,15,4,15,4,4" childLayout="center" />
+    <attributes filename="scrollbar/scrollbar.png" x="0px" y="0px" width="23px" height="8px" imageMode="sprite-resize:23,23,13,4,15,4,4,4,15,4,15,4,15,4,4" childLayout="center" />
     <effect>
       <onActive name="imageOverlay" filename="scrollbar/scrollbar.png" width="7px" height="8px" imageMode="subImage:468,0,7,8" post="true" overlay="true" center="true" hideIfNotEnoughSpace="true" />
       <onClick name="focus" targetElement="#parent#parent" />
@@ -81,7 +81,7 @@
     </effect>
   </style>
   <style id="nifty-horizontal-scrollbar#position">
-    <attributes filename="scrollbar/scrollbar.png" x="0px" y="0px" width="23px" height="23px" imageMode="sprite-resize:23,23,17,4,15,4,4,4,15,4,15,4,15,4,4" />
+    <attributes filename="scrollbar/scrollbar.png" x="0px" y="0px" width="8px" height="23px" imageMode="sprite-resize:23,23,17,4,15,4,4,4,15,4,15,4,15,4,4" />
     <effect>
       <onActive name="imageOverlay" filename="scrollbar/scrollbar.png" width="8px" height="7px" imageMode="subImage:490,8,8,7" post="true" overlay="true" center="true" hideIfNotEnoughSpace="true" />
       <onClick name="focus" targetElement="#parent#parent" />
