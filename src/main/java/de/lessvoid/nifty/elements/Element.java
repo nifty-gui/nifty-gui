@@ -1596,7 +1596,7 @@ public class Element implements NiftyEvent<Void> {
     effectManager = effectManagerParam;
   }
 
-  public void bindToScreen(final Screen newScreen) {
+  private void bindToScreen(final Screen newScreen) {
     screen = newScreen;
     screen.registerElementId(id);
   }
@@ -1821,12 +1821,15 @@ public class Element implements NiftyEvent<Void> {
     return attachedInputControl;
   }
 
-  public void bindControls() {
+  public void bindControls(final Screen target) {
+    bindToScreen(target);
+
     if (attachedInputControl != null) {
-      attachedInputControl.bindControl(nifty, screen, this, elementType.getAttributes());
+      attachedInputControl.bindControl(nifty, target, this, elementType.getAttributes());
     }
+
     for (Element element : elements) {
-      element.bindControls();
+      element.bindControls(target);
     }
   }
 

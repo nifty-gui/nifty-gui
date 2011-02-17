@@ -141,7 +141,6 @@ public class ElementType extends XmlBaseType {
       final LayoutPart layoutPart) {
     Element element = internalCreateElement(parent, nifty, screen, layoutPart, getAttributes());
     applyStandard(nifty, screen, element);
-    element.bindToScreen(screen);
     return element;
   }
 

@@ -708,7 +708,7 @@ public class Screen {
   private void bindControls() {
     bound = true;
     for (int i=0; i<layerElements.size(); i++) {
-      layerElements.get(i).bindControls();
+      layerElements.get(i).bindControls(this);
     }
     for (int i=0; i<layerElements.size(); i++) {
       layerElements.get(i).initControls();

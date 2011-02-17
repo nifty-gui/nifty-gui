@@ -651,7 +651,7 @@ public class Nifty {
     fixupSubIds(element, id);
     if (screen.isBound()) {
       element.layoutElements();
-      element.bindControls();
+      element.bindControls(screen);
       element.initControls();
     }
     return element;
@@ -783,7 +783,7 @@ public class Nifty {
       // onStartScreen on the newControl here manually. It won't be called by the screen
       // anymore.
       if (screen.isBound()) {
-        newControl.bindControls();
+        newControl.bindControls(screen);
         newControl.initControls();
       }
       if (screen.isRunning()) {
@@ -1200,7 +1200,7 @@ public class Nifty {
     Element element = elementType.create(parent, this, screen, new LayoutPart());
     if (screen.isBound()) {
       screen.layoutLayers();
-      element.bindControls();
+      element.bindControls(screen);
       element.initControls();
       element.startEffect(EffectEventId.onStartScreen);
       element.startEffect(EffectEventId.onActive);
