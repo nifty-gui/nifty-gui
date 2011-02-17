@@ -136,8 +136,13 @@ public class ScrollbarImpl {
   }
 
   private void changeValue(final float newValue) {
+    float handleSizeWorld;
     int viewSize = view.getAreaSize();
-    float handleSizeWorld = viewToWorld(calcHandleSize(viewSize), viewSize);
+    if (viewSize == 0) {
+      handleSizeWorld = 0.0f;
+    } else {
+      handleSizeWorld = viewToWorld(calcHandleSize(viewSize), viewSize);
+    }
 
     value = newValue;
     if (value > (worldMax - handleSizeWorld)) {
@@ -158,7 +163,7 @@ public class ScrollbarImpl {
   }
 
   private int calcHandlePosition(final int viewSize, final int handleSize) {
-    int viewMin = (int) Math.round(worldToView(value, viewSize));
+    int viewMin = (int) Math.floor(worldToView(value, viewSize));
     if (viewMin + handleSize > viewSize) {
       viewMin = viewSize - handleSize;
     }
@@ -166,7 +171,7 @@ public class ScrollbarImpl {
   }
 
   private int calcHandleSize(final float viewSize) {
-    int handleSize = (int) Math.round(viewSize / calcPageCount());
+    int handleSize = (int) Math.floor(viewSize / calcPageCount());
     int minHandleSize = view.getMinHandleSize(); 
     if (handleSize < minHandleSize) {
       return minHandleSize;
@@ -182,14 +187,14 @@ public class ScrollbarImpl {
     return pages;
   }
 
-  private float viewToWorld(final float value, final float viewSize) {
-    return value / viewSize * worldMax;
+  private float viewToWorld(final float viewValue, final float viewSize) {
+    return viewValue / viewSize * worldMax;
   }
 
-  private float worldToView(final float value, final float viewSize) {
+  private float worldToView(final float worldValue, final float viewSize) {
     if (worldMax == 0.f) {
       return 0.f;
     }
-    return value / worldMax * viewSize;
+    return (int) Math.round(worldValue / worldMax * viewSize);
   }
 }
