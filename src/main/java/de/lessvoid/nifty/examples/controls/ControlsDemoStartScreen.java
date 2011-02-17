@@ -1,15 +1,15 @@
 package de.lessvoid.nifty.examples.controls;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.button.builder.CreateButtonControl;
 import de.lessvoid.nifty.controls.checkbox.builder.CreateCheckBoxControl;
-import de.lessvoid.nifty.controls.dropdown.DropDownControl;
 import de.lessvoid.nifty.controls.dropdown.builder.CreateDropDownControl;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
-import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
 import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
+import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.controls.listbox.builder.CreateListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -28,6 +28,7 @@ public class ControlsDemoStartScreen implements ScreenController {
       dropDown1.addItem("Nifty GUI");
       dropDown1.addItem("Slick2d");
       dropDown1.addItem("Lwjgl");
+
       dropDown1.selectItemByIndex(0);
     }
 
@@ -38,6 +39,7 @@ public class ControlsDemoStartScreen implements ScreenController {
       dropDown2.addItem("kicks ass!");
       dropDown2.addItem("is awesome!");
       dropDown2.addItem("shizzles :D");
+
       dropDown2.selectItem("rocks!");
     }
 
@@ -132,21 +134,8 @@ public class ControlsDemoStartScreen implements ScreenController {
         dynamicListbox.addItem("Listbox Item: " + i);
       }
 
-      // you can add elements too :)
-      createLabel = new CreateLabelControl("show off element add");
-      createLabel.setStyle("nifty-listbox-item");
-
-      ControlEffectAttributes effectParam = new ControlEffectAttributes();
-      effectParam.setName("updateScrollpanelPositionToDisplayElement");
-      effectParam.setAttribute("target", "listBoxDynamic");
-      effectParam.setAttribute("oneShot", "true");
-      createLabel.addEffectsOnCustom(effectParam);
-
-//      Element listBoxDataParent = screen.findElementByName("listBoxDynamicData");
-//      dynamicListbox.addElement(createLabel.create(nifty, screen, listBoxDataParent));
-//
-//      // select first element
-//      dynamicListbox.changeSelection(0);
+      // select first element
+      dynamicListbox.selectItemByIndex(0);
 
     // dynamically add the backButton for testing purpose
     CreateButtonControl createButton = new CreateButtonControl("backButton");
@@ -154,15 +143,6 @@ public class ControlsDemoStartScreen implements ScreenController {
     createButton.setAlign("right");
     createButton.setInteractOnClick("back()");
     createButton.create(newNifty, screen, screen.findElementByName("buttonPanel"));
-/*
-    // select first item on the static listbox too
-//    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
-//    listBoxStatic.changeSelection(0);
-
-    // check the checkbox
-//    CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
-//    checkBoxControl.uncheck();
- * */
   }
 
   public void onStartScreen() {
@@ -173,31 +153,21 @@ public class ControlsDemoStartScreen implements ScreenController {
   }
 
   public void back() {
-    /*
     // this demonstrates how to access selected items
-    DropDownControl dropDown1 = findDropDownControl("dropDown1");
-    System.out.println(dropDown1.getSelectedItemIdx() + ":" + dropDown1.getSelectedItem());
+    DropDown dropDown1 = findDropDownControl("dropDown1");
+    System.out.println(dropDown1.getSelection());
 
-    DropDownControl dropDown2 = findDropDownControl("dropDown2");
-    System.out.println(dropDown2.getSelectedItemIdx() + ":" + dropDown2.getSelectedItem());
+    DropDown dropDown2 = findDropDownControl("dropDown2");
+    System.out.println(dropDown2.getSelection());
 
-//    ListBoxControl listBoxStatic = screen.findControl("listBoxStatic", ListBoxControl.class);
-//    System.out.println("listBoxStatic selectedItemIndex: " + listBoxStatic.getSelectedItemIndex() + ", selectedItem: " + listBoxStatic.getSelectedElement());
+    ListBox listBoxStatic = screen.findNiftyControl("listBoxStatic", ListBoxControl.class);
+    System.out.println("listBoxStatic selectedItemIndex: " + listBoxStatic.getSelection());
  
-    CheckboxControl checkBoxControl = screen.findControl("checkbox", CheckboxControl.class);
+    CheckBox checkBoxControl = screen.findNiftyControl("checkbox", CheckBox.class);
     System.out.println("checkbox: " + checkBoxControl.isChecked());
-    */
+
     // go back to another page
     nifty.fromXml("all/intro.xml", "menu");
-  }
-
-  public void dropDownSelectionChanged(final DropDownControl dropDownControl) {
-    /*
-    System.out.println(
-        "changed selection on [" + dropDownControl.toString() + "]"
-        + " to [" + dropDownControl.getSelectedItemIdx() + "]"
-        + " = [" + dropDownControl.getSelectedItem() + "]");
-        */
   }
 
   private DropDown findDropDownControl(final String id) {

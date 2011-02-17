@@ -43,7 +43,7 @@
         <panel childLayout="horizontal" height="8px" />
         <panel childLayout="horizontal">
           <text text="Listbox Static: " style="nifty-label" width="120px" align="left" textVAlign="center" textHAlign="left" />
-          <control id="listBoxStatic" name="listBox" horizontal="off" width="*" height="100%" displayItems="2" />
+          <control id="listBoxStatic" name="listBox" horizontal="off" width="*" height="100%" displayItems="3" />
         </panel>
         <panel childLayout="horizontal" height="8px" />
         <panel id="buttonPanel" childLayout="vertical" width="100%">
