@@ -83,8 +83,12 @@ public class ImageIOImageData implements ImageData {
       forceAlpha = true;
     }
 
-    BufferedImage bufferedImage = ImageIO.read(fis);
-    return imageToByteBuffer(bufferedImage, flipped, forceAlpha, transparent, true, false);
+    try {
+      BufferedImage bufferedImage = ImageIO.read(fis);
+      return imageToByteBuffer(bufferedImage, flipped, forceAlpha, transparent, true, false);
+    } finally {
+      fis.close();
+    }
   }
 
   public ByteBuffer loadMouseCursorImage(InputStream fis) throws IOException {

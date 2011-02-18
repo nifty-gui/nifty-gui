@@ -60,43 +60,50 @@ public class AngelCodeFont {
       return false;
     }
 
-    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
     try {
-      while (true) {
-        String line = reader.readLine();
-        if (line == null) {
-          break;
-        }
+      BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+      try {
+        while (true) {
+          String line = reader.readLine();
+          if (line == null) {
+            break;
+          }
 
-        if (line.startsWith("info")) {
-          HashMap < String, String > values = getInfoLine(line);
-          parseInfo(values);
-        } else if (line.startsWith("common")) {
-          HashMap < String, Integer > values = splitToInteger(line);
-          parseCommon(values);
-        } else if (line.startsWith("page")) {
-          HashMap < String, String > values = getPageLine(line);
-          parsePage(values);
-        } else if (line.startsWith("chars")) {
-          HashMap < String, Integer > values = splitToInteger(line);
-          parseChars(values);
-        } else if (line.startsWith("char")) {
-          HashMap < String, Integer > values = splitToInteger(line);
-          parseChar(values);
-        } else if (line.startsWith("kernings")) {
-          HashMap < String, Integer > values = splitToInteger(line);
-          parseKernings(values);
-        } else if (line.startsWith("kerning")) {
-          HashMap < String, Integer > values = splitToInteger(line);
-          parseKerning(values);
+          if (line.startsWith("info")) {
+            HashMap < String, String > values = getInfoLine(line);
+            parseInfo(values);
+          } else if (line.startsWith("common")) {
+            HashMap < String, Integer > values = splitToInteger(line);
+            parseCommon(values);
+          } else if (line.startsWith("page")) {
+            HashMap < String, String > values = getPageLine(line);
+            parsePage(values);
+          } else if (line.startsWith("chars")) {
+            HashMap < String, Integer > values = splitToInteger(line);
+            parseChars(values);
+          } else if (line.startsWith("char")) {
+            HashMap < String, Integer > values = splitToInteger(line);
+            parseChar(values);
+          } else if (line.startsWith("kernings")) {
+            HashMap < String, Integer > values = splitToInteger(line);
+            parseKernings(values);
+          } else if (line.startsWith("kerning")) {
+            HashMap < String, Integer > values = splitToInteger(line);
+            parseKerning(values);
+          }
         }
+      } catch (IOException e) {
+        e.printStackTrace();
+        return false;
       }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return false;
-    }
 
-    return true;
+      return true;
+    } finally {
+      try {
+        in.close();
+      } catch (IOException e) {
+      }
+    }
   }
 
   /**
