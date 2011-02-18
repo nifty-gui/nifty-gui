@@ -90,8 +90,8 @@ public abstract class AbstractController implements Controller, NiftyControl {
     }
 
     @Override
-    public SizeValue getWidth() {
-      return element.getConstraintWidth();
+    public int getWidth() {
+      return element.getWidth();
     }
 
     @Override
@@ -100,8 +100,8 @@ public abstract class AbstractController implements Controller, NiftyControl {
     }
 
     @Override
-    public SizeValue getHeight() {
-      return element.getConstraintHeight();
+    public int getHeight() {
+      return element.getHeight();
     }
 
     @Override

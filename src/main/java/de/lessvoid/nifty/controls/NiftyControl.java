@@ -24,7 +24,7 @@ public interface NiftyControl {
    * Get width as SizeValue.
    * @return width
    */
-  SizeValue getWidth();
+  int getWidth();
 
   /**
    * Set width as SizeValue.
@@ -36,7 +36,7 @@ public interface NiftyControl {
    * Get height as SizeValue.
    * @return height
    */
-  SizeValue getHeight();
+  int getHeight();
 
   /**
    * Set Height as SizeValue.
