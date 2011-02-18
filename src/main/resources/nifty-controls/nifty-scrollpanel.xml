@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="scrollPanel" style="nifty-scrollpanel" childRootId="nifty-scrollpanel-child-root" controller="de.lessvoid.nifty.controls.scrollpanel.ScrollPanel">
+  <controlDefinition name="scrollPanel" style="nifty-scrollpanel" childRootId="#nifty-scrollpanel-child-root" controller="de.lessvoid.nifty.controls.scrollpanel.ScrollPanel">
     <panel childLayout="vertical" visibleToMouse="true">
       <panel childLayout="horizontal" visibleToMouse="true">
-        <panel id="nifty-scrollpanel-child-root" childLayout="absolute" childClip="true" style="#scrollpanel" visibleToMouse="true" />
-        <control id="nifty-internal-vertical-scrollbar" name="verticalScrollbar" />
+        <panel id="#nifty-scrollpanel-child-root" childLayout="absolute" childClip="true" style="#scrollpanel" visibleToMouse="true" />
+        <control id="#nifty-internal-vertical-scrollbar" name="verticalScrollbar" />
       </panel>
-      <panel id="nifty-internal-horizonal-panel" childLayout="horizontal">
-        <control id="nifty-internal-horizontal-scrollbar" name="horizontalScrollbar" />
+      <panel id="#nifty-internal-horizonal-panel" childLayout="horizontal">
+        <control id="#nifty-internal-horizontal-scrollbar" name="horizontalScrollbar" />
         <panel align="right" style="#bottom-right" />
       </panel>
     </panel>

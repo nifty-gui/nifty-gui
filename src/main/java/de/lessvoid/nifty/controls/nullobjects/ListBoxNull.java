@@ -17,8 +17,8 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public SizeValue getWidth() {
-    return null;
+  public int getWidth() {
+    return 0;
   }
 
   @Override
@@ -26,8 +26,8 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public SizeValue getHeight() {
-    return null;
+  public int getHeight() {
+    return 0;
   }
 
   @Override

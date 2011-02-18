@@ -16,8 +16,8 @@ public class LabelNull implements Label {
   }
 
   @Override
-  public SizeValue getWidth() {
-    return null;
+  public int getWidth() {
+    return 0;
   }
 
   @Override
@@ -25,8 +25,8 @@ public class LabelNull implements Label {
   }
 
   @Override
-  public SizeValue getHeight() {
-    return null;
+  public int getHeight() {
+    return 0;
   }
 
   @Override
