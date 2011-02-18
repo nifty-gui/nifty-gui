@@ -1,5 +1,6 @@
 package de.lessvoid.xml.lwxs.processor;
 
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -26,11 +27,16 @@ public class IncludeProcessor implements XmlProcessor {
 
     Schema niftyXmlSchema = new Schema();
     XmlParser parser = new XmlParser(new MXParser());
-    parser.read(ResourceLoader.getResourceAsStream(filename));
-    parser.nextTag();
-    parser.required("nxs", niftyXmlSchema);
+    InputStream stream = ResourceLoader.getResourceAsStream(filename);
+    try {
+      parser.read(stream);
+      parser.nextTag();
+      parser.required("nxs", niftyXmlSchema);
 
-    types.putAll(niftyXmlSchema.getTypes());
-    xmlParser.nextTag();
+      types.putAll(niftyXmlSchema.getTypes());
+      xmlParser.nextTag();
+    } finally {
+      stream.close();
+    }
   }
 }

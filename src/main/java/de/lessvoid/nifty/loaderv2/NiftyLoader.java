@@ -38,20 +38,24 @@ public class NiftyLoader {
       final String schemaId,
       final InputStream inputStreamXml,
       final Nifty nifty) throws Exception {
-    long start = timeProvider.getMsTime();
-    log.info("loading new nifty xml file with schemaId [" + schemaId + "]");
+    try {
+      long start = timeProvider.getMsTime();
+      log.info("loading new nifty xml file with schemaId [" + schemaId + "]");
 
-    XmlParser parser = new XmlParser(new MXParser());
-    parser.read(inputStreamXml);
+      XmlParser parser = new XmlParser(new MXParser());
+      parser.read(inputStreamXml);
 
-    NiftyType niftyType = (NiftyType) getSchema(schemaId).loadXml(parser);
-    niftyType.loadStyles(this, nifty);
-    niftyType.loadControls(this);
+      NiftyType niftyType = (NiftyType) getSchema(schemaId).loadXml(parser);
+      niftyType.loadStyles(this, nifty);
+      niftyType.loadControls(this);
 
-    long end = timeProvider.getMsTime();
-    log.info("loaded nifty xml file with schemaId [" + schemaId + "] took [" + (end - start) + " ms]");
+      long end = timeProvider.getMsTime();
+      log.info("loaded nifty xml file with schemaId [" + schemaId + "] took [" + (end - start) + " ms]");
 
-    return niftyType;
+      return niftyType;
+    } finally {
+      inputStreamXml.close();
+    }
   }
 
   public boolean validateNiftyXml(final InputStream inputStreamXml) throws Exception {
@@ -66,16 +70,25 @@ public class NiftyLoader {
   }
   
   private void validate(final InputStream inputStreamXml) throws Exception {
-    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-    documentBuilderFactory.setNamespaceAware(true);
-    DocumentBuilder parser = documentBuilderFactory.newDocumentBuilder(); 
-    Document document = parser.parse(inputStreamXml);
+    try {
+      DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+      documentBuilderFactory.setNamespaceAware(true);
+      DocumentBuilder parser = documentBuilderFactory.newDocumentBuilder(); 
+      Document document = parser.parse(inputStreamXml);
 
-    SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    Source schemaFile = new StreamSource(ResourceLoader.getResourceAsStream("nifty-1.3.xsd"));
-    javax.xml.validation.Schema schema = factory.newSchema(schemaFile);
-    javax.xml.validation.Validator validator = schema.newValidator();
-    validator.validate(new DOMSource(document));
+      SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+      InputStream schemaStream = ResourceLoader.getResourceAsStream("nifty-1.3.xsd");
+      try {
+        Source schemaFile = new StreamSource(schemaStream);
+        javax.xml.validation.Schema schema = factory.newSchema(schemaFile);
+        javax.xml.validation.Validator validator = schema.newValidator();
+        validator.validate(new DOMSource(document));
+      } finally {
+        schemaStream.close();
+      }
+    } finally {
+      inputStreamXml.close();
+    }
   }
 
   public void loadStyleFile(
@@ -86,10 +99,14 @@ public class NiftyLoader {
     log.info("loading new nifty style xml file [" + styleFilename + "] with schemaId [" + schemaId + "]");
 
     XmlParser parser = new XmlParser(new MXParser());
-    parser.read(ResourceLoader.getResourceAsStream(styleFilename));
-
-    NiftyStylesType niftyStylesType = (NiftyStylesType) getSchema(schemaId).loadXml(parser);
-    niftyStylesType.loadStyles(this, niftyType, nifty, log);
+    InputStream stream = ResourceLoader.getResourceAsStream(styleFilename);
+    try {
+      parser.read(stream);
+      NiftyStylesType niftyStylesType = (NiftyStylesType) getSchema(schemaId).loadXml(parser);
+      niftyStylesType.loadStyles(this, niftyType, nifty, log);
+    } finally {
+      stream.close();
+    }
   }
 
   public void loadControlFile(
@@ -99,19 +116,27 @@ public class NiftyLoader {
     log.info("loading new nifty controls xml file [" + controlFilename + "] with schemaId [" + schemaId + "]");
 
     XmlParser parser = new XmlParser(new MXParser());
-    parser.read(ResourceLoader.getResourceAsStream(controlFilename));
-
-    NiftyControlsType niftyControlsType = (NiftyControlsType) getSchema(schemaId).loadXml(parser);
-    niftyControlsType.loadControls(this, niftyType);
+    InputStream stream = ResourceLoader.getResourceAsStream(controlFilename);
+    try {
+      parser.read(stream);
+      NiftyControlsType niftyControlsType = (NiftyControlsType) getSchema(schemaId).loadXml(parser);
+      niftyControlsType.loadControls(this, niftyType);
+    } finally {
+      stream.close();
+    }
   }
 
   public void registerSchema(final String schemaId, final InputStream inputStreamSchema) throws Exception {
-    Schema niftyXmlSchema = new Schema();
-    XmlParser parser = new XmlParser(new MXParser());
-    parser.read(inputStreamSchema);
-    parser.nextTag();
-    parser.required("nxs", niftyXmlSchema);
-    schemes.put(schemaId, niftyXmlSchema);
+    try {
+      Schema niftyXmlSchema = new Schema();
+      XmlParser parser = new XmlParser(new MXParser());
+      parser.read(inputStreamSchema);
+      parser.nextTag();
+      parser.required("nxs", niftyXmlSchema);
+      schemes.put(schemaId, niftyXmlSchema);
+    } finally {
+      inputStreamSchema.close();
+    }
   }
 
   private Schema getSchema(final String schemaId) throws Exception {
