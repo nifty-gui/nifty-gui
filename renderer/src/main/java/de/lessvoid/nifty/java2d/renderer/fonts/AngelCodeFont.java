@@ -99,6 +99,11 @@ public class AngelCodeFont {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+		  try {
+	      in.close();
+		  } catch (IOException e) {
+		  }
 		}
 
 		return true;
