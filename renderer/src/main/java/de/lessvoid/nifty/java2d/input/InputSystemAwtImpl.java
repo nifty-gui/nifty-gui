@@ -97,4 +97,9 @@ public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
 	public void keyTyped(KeyEvent e) {
 		
 	}
+
+  @Override
+  public void setMousePosition(int x, int y) {
+    // TODO Auto-generated method stub
+  }
 }

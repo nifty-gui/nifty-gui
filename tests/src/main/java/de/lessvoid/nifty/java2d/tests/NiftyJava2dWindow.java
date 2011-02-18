@@ -107,7 +107,8 @@ public abstract class NiftyJava2dWindow implements GraphicsWrapper {
 	        BufferStrategy bufferStrategy = canvas.getBufferStrategy();
             graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
 
-			done = nifty.render(true);
+			done = nifty.update();
+			nifty.render(true);
 
 			bufferStrategy.show();
 			graphics2D.dispose();

@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import de.lessvoid.nifty.java2d.renderer.fonts.AngelCodeFont;
 import de.lessvoid.nifty.java2d.renderer.fonts.CharacterInfo;
 import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -306,5 +307,23 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		graphics.setColor(convertNiftyColor(fontColor));
 		graphics.drawString(text, x, y + font.getHeight() / 2);
 	}
+
+  @Override
+  public MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY) throws IOException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void enableMouseCursor(MouseCursor mouseCursor) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void disableMouseCursor() {
+    // TODO Auto-generated method stub
+    
+  }
 
 }

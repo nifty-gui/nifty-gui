@@ -11,7 +11,7 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.builder.ElementBuilder.Align;
 import de.lessvoid.nifty.builder.ElementBuilder.VAlign;
-import de.lessvoid.nifty.controls.button.ButtonBuilder;
+import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.java2d.renderer.FontProviderJava2dImpl;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
@@ -220,8 +220,7 @@ public class GameExampleApp extends NiftyJava2dWindow {
 		 **/
 		try {
 			NiftyLoader niftyLoader = nifty.getLoader();
-			niftyLoader.loadStyleFile("nifty-styles.nxs",
-					"nifty-default-styles.xml", niftyType);
+			niftyLoader.loadStyleFile("nifty-styles.nxs", "nifty-default-styles.xml", niftyType, nifty);
 			niftyLoader.loadControlFile("nifty-controls.nxs",
 					"nifty-default-controls.xml", niftyType);
 			niftyType.create(nifty, nifty.getTimeProvider());
@@ -380,7 +379,7 @@ public class GameExampleApp extends NiftyJava2dWindow {
 						valignCenter();
 						width(percentage(100));
 
-						control(new ButtonBuilder("Play", "playButton") {{
+						control(new ButtonBuilder("playButton", "Play") {{
 							width(pixels(100));
 
 							alignCenter();
@@ -389,7 +388,7 @@ public class GameExampleApp extends NiftyJava2dWindow {
 							interactOnClick("play()");
 						}});
 
-						control(new ButtonBuilder("Options", "optionsButton") {{
+						control(new ButtonBuilder("optionsButton", "Options") {{
 							width(pixels(100));
 
 							alignCenter();
@@ -398,7 +397,7 @@ public class GameExampleApp extends NiftyJava2dWindow {
 							interactOnClick("options()");
 						}});
 
-						control(new ButtonBuilder("Highscores", "highscoresButton") {{
+						control(new ButtonBuilder("highscoresButton", "Highscores") {{
 							width(pixels(100));
 
 							alignCenter();
@@ -407,7 +406,7 @@ public class GameExampleApp extends NiftyJava2dWindow {
 							interactOnClick("highscores()");
 						}});
 
-						control(new ButtonBuilder("Credits", "creditsButton") {{
+						control(new ButtonBuilder("creditsButton", "Credits") {{
 							width(pixels(100));
 
 							alignCenter();
@@ -416,7 +415,7 @@ public class GameExampleApp extends NiftyJava2dWindow {
 							interactOnClick("credits()");
 						}});
 
-						control(new ButtonBuilder("Exit", "exitButton") {{
+						control(new ButtonBuilder("exitButton", "Exit") {{
 							width(pixels(100));
 
 							alignCenter();
