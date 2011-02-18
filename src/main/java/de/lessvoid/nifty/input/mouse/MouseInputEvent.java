@@ -73,4 +73,16 @@ public class MouseInputEvent {
   public boolean isInitialLeftButtonDown() {
     return initialLeftButtonDown;
   }
+
+  public void setMouseX(final int mouseX) {
+    this.mouseX = mouseX;
+  }
+
+  public void setMouseY(final int mouseY) {
+    this.mouseY = mouseY;
+  }
+
+  public void setLeftButton(final boolean leftButton) {
+    this.leftButton = leftButton;
+  }
 }
