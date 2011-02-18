@@ -82,6 +82,14 @@ public class LwjglRenderImage implements RenderImage {
     if ((width > max) || (height > max)) {
       throw new Exception("Attempt to allocate a texture to big for the current hardware");
     }
+    if (width < 0) {
+      log.warning("Attempt to allocate a texture with negative width");
+      return;
+    }
+    if (height < 0) {
+      log.warning("Attempt to allocate a texture with negative height");
+      return;
+    }
 
     GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, minFilter); 
     GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, magFilter); 

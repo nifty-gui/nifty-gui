@@ -217,6 +217,15 @@ public class LwjglRenderDevice implements RenderDevice {
   public void renderImage(final RenderImage image, final int x, final int y, final int width, final int height, final Color color, final float scale) {
     log.fine("renderImage()");
 
+    if (width < 0) {
+      log.warning("Attempt to render image with negative width");
+      return;
+    }
+    if (height < 0) {
+      log.warning("Attempt to render image with negative height");
+      return;
+    }
+
     if (!currentTexturing) {
       GL11.glEnable(GL11.GL_TEXTURE_2D);
       currentTexturing = true;
@@ -274,6 +283,15 @@ public class LwjglRenderDevice implements RenderDevice {
       final int centerX,
       final int centerY) {
     log.fine("renderImage2()");
+
+    if (w < 0) {
+      log.warning("Attempt to render image with negative width");
+      return;
+    }
+    if (h < 0) {
+      log.warning("Attempt to render image with negative height");
+      return;
+    }
 
     if (!currentTexturing) {
       GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -348,6 +366,7 @@ public class LwjglRenderDevice implements RenderDevice {
     currentClippingX1 = x1;
     currentClippingY1 = y1;
     GL11.glScissor(x0, getHeight() - y1, x1 - x0, y1 - y0);
+//    GL11.glScissor(333, 100, 400, 500);
     GL11.glEnable(GL11.GL_SCISSOR_TEST);
   }
 
@@ -387,8 +406,12 @@ public class LwjglRenderDevice implements RenderDevice {
   }
 
   public void enableMouseCursor(final MouseCursor mouseCursor) {
+    Cursor nativeCursor = null;
+    if (mouseCursor != null) {
+      nativeCursor = ((LwjglMouseCursor) mouseCursor).getCursor(); 
+    }
     try {
-      Mouse.setNativeCursor(((LwjglMouseCursor) mouseCursor).getCursor());
+      Mouse.setNativeCursor(nativeCursor);
     } catch (LWJGLException e) {
       log.warning(e.getMessage());
     }
