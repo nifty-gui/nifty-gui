@@ -13,6 +13,7 @@ import de.lessvoid.nifty.examples.controls.common.LwjglInitHelper;
 import de.lessvoid.nifty.examples.controls.custom.MenuButtonBuilder;
 import de.lessvoid.nifty.examples.controls.dropdown.DropDownDialogBuilder;
 import de.lessvoid.nifty.examples.controls.listbox.ListBoxDialogBuilder;
+import de.lessvoid.nifty.examples.controls.scrollpanel.ScrollPanelDialogBuilder;
 import de.lessvoid.nifty.examples.controls.sliderandscrollbar.SliderAndScrollbarDialogBuilder;
 import de.lessvoid.nifty.examples.controls.textfield.TextFieldDialogBuilder;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
@@ -41,6 +42,7 @@ public class ControlsDemo {
     new DropDownDialogBuilder(nifty);
     new TextFieldDialogBuilder(nifty);
     new SliderAndScrollbarDialogBuilder(nifty);
+    new ScrollPanelDialogBuilder(nifty);
 
     // create a screen and add it to nifty and then start the screen
     Screen screen = createScreen(nifty);
@@ -60,7 +62,9 @@ public class ControlsDemo {
           "menuButtonListBox", "dialogListBox",
           "menuButtonDropDown", "dialogDropDown",
           "menuButtonTextField", "dialogTextField",
-          "menuButtonSlider", "dialogSliderAndScrollbar"));
+          "menuButtonSlider", "dialogSliderAndScrollbar",
+          "menuButtonScrollPanel", "dialogScrollPanel"
+      ));
       layer(new LayerBuilder("layer") {{
         backgroundImage("background-new.png");
         childLayoutVertical();
@@ -77,6 +81,8 @@ public class ControlsDemo {
           control(menuButtonBuilder.getControlBuilder("menuButtonTextField", "TextField"));
           panel(builders.hspacer("10px"));
           control(menuButtonBuilder.getControlBuilder("menuButtonSlider", "Slider & Scrollbars"));
+          panel(builders.hspacer("10px"));
+          control(menuButtonBuilder.getControlBuilder("menuButtonScrollPanel", "ScrollPanel"));
         }});
         panel(new PanelBuilder("dialogParent") {{
           childLayoutOverlay();
@@ -87,6 +93,7 @@ public class ControlsDemo {
           control(TextFieldDialogBuilder.getControlBuilder("dialogTextField"));
           control(SliderAndScrollbarDialogBuilder.getControlBuilder("dialogSliderAndScrollbar"));
           control(DropDownDialogBuilder.getControlBuilder("dialogDropDown"));
+          control(ScrollPanelDialogBuilder.getControlBuilder("dialogScrollPanel"));
         }});
       }});
     }}.build(nifty);
