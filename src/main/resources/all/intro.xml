@@ -17,6 +17,7 @@
   <registerMusic id="outro" filename="sound/a.ogg" />
 
   <style id="special-scrollpanel#scrollpanel">
+    <attributes />
   </style>
 
   <style id="thumbStyle">
@@ -407,9 +408,9 @@ Thank you Trent.&#13;&#10;" align="center" />
       <panel height="25%" childLayout="center" />
       <panel height="75%" childLayout="vertical">
         <panel height="64px" childLayout="vertical">
-          <effect overlay="true">
-            <onActive name="blendMode" blendMode="multiply" post="true" />
-            <onActive name="imageOverlay" filename="all/overlay-outro.png" post="true"/>
+          <effect>
+            <onActive overlay="true" name="blendMode" blendMode="multiply" post="true" />
+            <onActive overlay="true" name="imageOverlay" filename="all/overlay-outro.png" post="true"/>
           </effect>
         </panel>
       </panel>

@@ -1,8 +1,9 @@
 package de.lessvoid.nifty.examples.scroll;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.ScrollPanel.AutoScroll;
 import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
-import de.lessvoid.nifty.controls.scrollpanel.ScrollPanel;
+import de.lessvoid.nifty.controls.scrollpanel.ScrollPanelControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -22,20 +23,13 @@ public class ScrollDemoStartScreen implements ScreenController {
       }
       screen.layoutLayers();
 
-      ScrollPanel scrollPanel = screen.findControl("scrollbarPanel", ScrollPanel.class);
-      scrollPanel.initializeScrollPanel(screen, 0, myScrollStuff.getHeight() / 100.f);
+      ScrollPanelControl scrollPanel = screen.findControl("scrollbarPanel", ScrollPanelControl.class);
+      scrollPanel.setUp(0, myScrollStuff.getHeight() / 100.f, 0, myScrollStuff.getHeight() / 10.f, AutoScroll.OFF);
+      scrollPanel.setVerticalPos(0.0f);
     }
   }
 
   public void onStartScreen() {
-    Element myScrollStuff = screen.findElementByName("myScrollStuff");
-// FIXME new controls
-//    screen.findElementByName("scrollbarPanel").findControl("nifty-internal-vertical-scrollbar", VerticalScrollbarControl.class).setCurrentValue(myScrollStuff.getHeight());
-  }
-
-  private void addLabel(final Element myScrollStuff, final String text) {
-    CreateLabelControl label = new CreateLabelControl(text);
-    label.create(nifty, screen, myScrollStuff);
   }
 
   public void onEndScreen() {
@@ -43,5 +37,10 @@ public class ScrollDemoStartScreen implements ScreenController {
 
   public void back() {
     nifty.fromXml("all/intro.xml", "menu");
+  }
+
+  private void addLabel(final Element myScrollStuff, final String text) {
+    CreateLabelControl label = new CreateLabelControl(text);
+    label.create(nifty, screen, myScrollStuff);
   }
 }
