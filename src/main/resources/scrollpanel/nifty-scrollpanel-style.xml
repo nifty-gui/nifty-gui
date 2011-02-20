@@ -8,6 +8,6 @@
     </effect>
   </style>
   <style id="nifty-scrollpanel#bottom-right">
-    <attributes width="28px" height="28px" />
+    <attributes width="23px" height="23px" />
   </style>
 </nifty-styles>
