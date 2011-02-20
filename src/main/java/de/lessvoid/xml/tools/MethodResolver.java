@@ -26,7 +26,7 @@ public class MethodResolver {
 
     String methodNameOnly = methodName.substring(0, methodName.indexOf('('));
 
-    Method[] ms = c.getDeclaredMethods();
+    Method[] ms = c.getMethods();
     for (Method m : ms) {
       if (methodNameOnly.equalsIgnoreCase(m.getName())) {
         return m;
