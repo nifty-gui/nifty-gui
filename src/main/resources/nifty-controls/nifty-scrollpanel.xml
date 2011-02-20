@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="scrollPanel" style="nifty-scrollpanel" childRootId="#nifty-scrollpanel-child-root" controller="de.lessvoid.nifty.controls.scrollpanel.ScrollPanel">
+  <controlDefinition name="scrollPanel" style="nifty-scrollpanel" childRootId="#nifty-scrollpanel-child-root" controller="de.lessvoid.nifty.controls.scrollpanel.ScrollPanelControl">
     <panel childLayout="vertical" visibleToMouse="true">
       <panel childLayout="horizontal" visibleToMouse="true">
         <panel id="#nifty-scrollpanel-child-root" childLayout="absolute" childClip="true" style="#scrollpanel" visibleToMouse="true" />
