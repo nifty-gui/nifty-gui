@@ -16,7 +16,7 @@ public class MenuButtonBuilder {
     new ControlDefinitionBuilder(CONTROL_NAME) {{
       controller(new MenuButtonController());
       panel(new PanelBuilder() {{
-        backgroundColor("#55fa");
+        backgroundColor("#800a");
         width("123px");
         alignCenter();
         valignCenter();
@@ -34,21 +34,21 @@ public class MenuButtonBuilder {
         }});
         onHoverEffect(new HoverEffectBuilder("gradient") {{
           effectValue("offset", "0%", "color", "#222f");
-          effectValue("offset", "100%", "color", "#77ff");
+          effectValue("offset", "100%", "color", "#f77f");
         }});
         onFocusEffect(new EffectBuilder("gradient") {{
           effectValue("offset", "0%", "color", "#222f");
-          effectValue("offset", "100%", "color", "#eeff");
+          effectValue("offset", "100%", "color", "#feef");
         }});
         onCustomEffect(new EffectBuilder("gradient") {{
           parameter("customKey", "selected");
           parameter("timeType", "infinite");
           parameter("neverStopRendering", "true");
           effectValue("offset", "0%", "color", "#222f");
-          effectValue("offset", "100%", "color", "#eeff");
+          effectValue("offset", "100%", "color", "#feef");
         }});
         control(new LabelBuilder() {{
-          color("#222f");
+          color("#000f");
           text(controlParameter(PARAM_LABEL));
           alignCenter();
           valignCenter();
