@@ -203,28 +203,14 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   private void subscribeVerticalScrollbar() {
     Element scrollbar = getElement().findElementByName("#nifty-internal-vertical-scrollbar");
     if (scrollbar != null) {
-      nifty.subscribe(scrollbar.getId(), ScrollbarChangedEvent.class, verticalScrollbarSubscriber);
+      nifty.subscribe(screen, scrollbar.getId(), ScrollbarChangedEvent.class, verticalScrollbarSubscriber);
     }
   }
 
   private void subscribeHorizontalScrollbar() {
     Element scrollbar = getElement().findElementByName("#nifty-internal-horizontal-scrollbar");
     if (scrollbar != null) {
-      nifty.subscribe(scrollbar.getId(), ScrollbarChangedEvent.class, horizontalScrollbarSubscriber);
-    }
-  }
-
-  private void unsubscribeVerticalScrollbar() {
-    Element scrollbar = getElement().findElementByName("#nifty-internal-vertical-scrollbar");
-    if (scrollbar != null) {
-      nifty.unsubscribe(scrollbar.getId(), verticalScrollbarSubscriber);
-    }
-  }
-
-  private void unsubscribeHorizontalScrollbar() {
-    Element scrollbar = getElement().findElementByName("#nifty-internal-horizontal-scrollbar");
-    if (scrollbar != null) {
-      nifty.unsubscribe(scrollbar.getId(), horizontalScrollbarSubscriber);
+      nifty.subscribe(screen, scrollbar.getId(), ScrollbarChangedEvent.class, horizontalScrollbarSubscriber);
     }
   }
 

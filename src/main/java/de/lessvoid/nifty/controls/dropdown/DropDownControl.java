@@ -53,7 +53,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
 
     popup.getControl(DropDownPopup.class).setDropDownElement(this);
     listBox = popup.findNiftyControl("#listBox", ListBox.class);
-    nifty.subscribe(listBox.getId(), ListBoxSelectionChangedEvent.class, new EventTopicSubscriber<ListBoxSelectionChangedEvent>() {
+    nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class, new EventTopicSubscriber<ListBoxSelectionChangedEvent>() {
       @Override
       public void onEvent(final String topic, final ListBoxSelectionChangedEvent data) {
         Object selectedItem = getSelectedItem(data.getSelection());

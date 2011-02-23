@@ -62,7 +62,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private EventTopicSubscriber<ElementShowEvent> listBoxControlShowEventSubscriber = new EventTopicSubscriber<ElementShowEvent>() {
     @Override
     public void onEvent(final String id, final ElementShowEvent event) {
-      System.out.println("B");
       listBoxImpl.updateView();
     }
   };
@@ -108,7 +107,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     subscribeHorizontalScrollbar();
     subscribeVerticalScrollbar();
     listBoxImpl.updateView(0);
-    nifty.subscribe(getId(), ElementShowEvent.class, listBoxControlShowEventSubscriber);
+    nifty.subscribe(screen, getId(), ElementShowEvent.class, listBoxControlShowEventSubscriber);
   }
 
   @Override
@@ -124,14 +123,14 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private void subscribeVerticalScrollbar() {
     Element scrollbar = getElement().findElementByName("#vertical-scrollbar");
     if (scrollbar != null) {
-      nifty.subscribe(scrollbar.getId(), ScrollbarChangedEvent.class, verticalScrollbarSubscriber);
+      nifty.subscribe(screen, scrollbar.getId(), ScrollbarChangedEvent.class, verticalScrollbarSubscriber);
     }
   }
 
   private void subscribeHorizontalScrollbar() {
     Element scrollbar = getElement().findElementByName("#horizontal-scrollbar");
     if (scrollbar != null) {
-      nifty.subscribe(scrollbar.getId(), ScrollbarChangedEvent.class, horizontalScrollbarSubscriber);
+      nifty.subscribe(screen, scrollbar.getId(), ScrollbarChangedEvent.class, horizontalScrollbarSubscriber);
     }
   }
 

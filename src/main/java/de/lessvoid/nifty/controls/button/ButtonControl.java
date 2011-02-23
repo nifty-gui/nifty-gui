@@ -42,12 +42,13 @@ public class ButtonControl extends AbstractController implements Button {
     buttonTextElement = getElement().findElementByName("#text");
     buttonTextRenderer = buttonTextElement.getRenderer(TextRenderer.class);
 
-    niftyParam.subscribe(newElement.getId(), NiftyMouseClickedEvent.class, new EventTopicSubscriber<NiftyMouseClickedEvent>() {
+    EventTopicSubscriber<NiftyMouseClickedEvent> mouseClickedSubscriber = new EventTopicSubscriber<NiftyMouseClickedEvent>() {
       @Override
       public void onEvent(final String topic, final NiftyMouseClickedEvent data) {
         niftyParam.publishEvent(topic, new ButtonClickedEvent());
       }
-    });
+    };
+    niftyParam.subscribe(screen, newElement.getId(), NiftyMouseClickedEvent.class, mouseClickedSubscriber);
   }
 
   @Override
