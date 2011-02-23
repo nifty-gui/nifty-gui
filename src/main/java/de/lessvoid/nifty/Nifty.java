@@ -19,7 +19,9 @@ import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceExistsException;
 import org.bushe.swing.event.EventServiceLocator;
 import org.bushe.swing.event.EventTopicSubscriber;
+import org.bushe.swing.event.ProxySubscriber;
 import org.bushe.swing.event.ThreadSafeEventService;
+import org.bushe.swing.event.annotation.ReferenceStrength;
 
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
@@ -92,6 +94,7 @@ public class Nifty {
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
   private NiftyMouse niftyMouse;
   private NiftyInputConsumer niftyInputConsumer = new NiftyInputConsumerImpl();
+  private Map < Screen, List < ClassSaveEventTopicSubscriber >> screenBasedSubscribers = new Hashtable < Screen, List < ClassSaveEventTopicSubscriber >>();
 
   /**
    * Create nifty with optional console parameter.
@@ -163,6 +166,21 @@ public class Nifty {
     NiftyEventAnnotationProcessor.process(object);
   }
 
+  public <T> void subscribe(final Screen screen, final String elementId, final Class<T> eventClass, final EventTopicSubscriber<T> subscriber) {
+    ClassSaveEventTopicSubscriber theSubscriber = new ClassSaveEventTopicSubscriber(elementId, subscriber, eventClass);
+    getEventService().subscribeStrongly(elementId, theSubscriber);
+    registerSubscriberForScreen(screen, theSubscriber);
+  }
+
+  private void registerSubscriberForScreen(final Screen screen, final ClassSaveEventTopicSubscriber theSubscriber) {
+    List < ClassSaveEventTopicSubscriber > list = screenBasedSubscribers.get(screen);
+    if (list == null) {
+      list = new ArrayList < ClassSaveEventTopicSubscriber >();
+      screenBasedSubscribers.put(screen, list);
+    }
+    list.add(theSubscriber);
+  }
+
   public void unsubscribe(final String elementId, final Object object) {
     // This handles annotations
     NiftyEventAnnotationProcessor.unprocess(object);
@@ -173,8 +191,15 @@ public class Nifty {
     }
   }
 
-  public <T> void subscribe(final String elementId, final Class<T> eventClass, final EventTopicSubscriber<T> subscriber) {
-    getEventService().subscribeStrongly(elementId, new ClassSaveEventTopicSubscriber(subscriber, eventClass));
+  public void unsubscribeAll(final Screen screen) {
+    List < ClassSaveEventTopicSubscriber > list = screenBasedSubscribers.get(screen);
+    if (list != null && !list.isEmpty()) {
+      for (int i=0; i<list.size(); i++) {
+        ClassSaveEventTopicSubscriber subscriber = list.get(i);
+        getEventService().unsubscribe(subscriber.getElementId(), subscriber);
+      }
+      list.clear();
+    }
   }
 
   public void setAlternateKeyForNextLoadXml(final String alternateKeyForNextLoadXmlParam) {
@@ -1176,11 +1201,13 @@ public class Nifty {
   }
 
   @SuppressWarnings("rawtypes")
-  private static class ClassSaveEventTopicSubscriber implements EventTopicSubscriber {
-    private final EventTopicSubscriber target;
-    private final Class eventClass;
+  private static class ClassSaveEventTopicSubscriber implements EventTopicSubscriber, ProxySubscriber {
+    private String elementId;
+    private EventTopicSubscriber target;
+    private Class eventClass;
 
-    private ClassSaveEventTopicSubscriber(final EventTopicSubscriber target, final Class eventClass) {
+    private ClassSaveEventTopicSubscriber(final String elementId, final EventTopicSubscriber target, final Class eventClass) {
+      this.elementId = elementId;
       this.target = target;
       this.eventClass = eventClass;
     }
@@ -1191,6 +1218,25 @@ public class Nifty {
       if (eventClass.isInstance(data)) {
         target.onEvent(topic, data);
       }
+    }
+
+    public String getElementId() {
+      return elementId;
+    }
+
+    @Override
+    public Object getProxiedSubscriber() {
+      return target;
+    }
+
+    @Override
+    public void proxyUnsubscribed() {
+      this.target = null;
+    }
+
+    @Override
+    public ReferenceStrength getReferenceStrength() {
+      return ReferenceStrength.STRONG;
     }
   }
 

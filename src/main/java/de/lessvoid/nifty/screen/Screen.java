@@ -633,6 +633,7 @@ public class Screen {
 
   void onEndScreenHasEnded() {
     nifty.unsubscribe(screenId, screenController);
+    nifty.unsubscribeAll(this);
 
     // onEndScreen has ENDED so call the event.
     screenController.onEndScreen();
