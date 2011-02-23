@@ -15,6 +15,7 @@ import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
@@ -56,6 +57,13 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
         childRootElement.setConstraintX(new SizeValue(-(int) event.getValue() + "px"));
         childRootElement.getParent().layoutElements();
       }
+    }
+  };
+  private EventTopicSubscriber<ElementShowEvent> listBoxControlShowEventSubscriber = new EventTopicSubscriber<ElementShowEvent>() {
+    @Override
+    public void onEvent(final String id, final ElementShowEvent event) {
+      System.out.println("B");
+      listBoxImpl.updateView();
     }
   };
   private int lastMaxWidth;
@@ -100,6 +108,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     subscribeHorizontalScrollbar();
     subscribeVerticalScrollbar();
     listBoxImpl.updateView(0);
+    nifty.subscribe(getId(), ElementShowEvent.class, listBoxControlShowEventSubscriber);
   }
 
   @Override
@@ -176,7 +185,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     for (int i = 0; i < visibleItems.size(); i++) {
       T item = visibleItems.get(i);
       if (labelElements[i] != null) {
-        labelElements[i].setVisible(item != null);
+        labelElements[i].setVisible(item != null && getElement().isVisible());
         if (item != null) {
           displayElement(i, item);
           setListBoxItemIndex(i);

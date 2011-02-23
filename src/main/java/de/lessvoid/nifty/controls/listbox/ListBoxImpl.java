@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.swing.SingleSelectionModel;
-
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.shared.EmptyNiftyControlImpl;

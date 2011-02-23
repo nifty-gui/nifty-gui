@@ -178,9 +178,13 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     @Override
     public void setHandle(final int pos, final int size) {
       if (elementBackground.getHeight() < minHandleSize) {
-        elementPosition.hide();
+        if (getElement().isVisible()) {
+          elementPosition.hide();
+        }
       } else {
-        elementPosition.show();
+        if (getElement().isVisible()) {
+          elementPosition.show();
+        }
         elementPosition.setConstraintY(new SizeValue(pos + "px"));
         elementPosition.setConstraintHeight(new SizeValue(size + "px"));
         elementBackground.layoutElements();
@@ -220,8 +224,13 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     @Override
     public void setHandle(final int pos, final int size) {
       if (elementBackground.getWidth() < minHandleSize) {
-        elementPosition.hide();
+        if (getElement().isVisible()) {
+          elementPosition.hide();
+        }
       } else {
+        if (getElement().isVisible()) {
+          elementPosition.show();
+        }
         elementPosition.setConstraintX(new SizeValue(pos + "px"));
         elementPosition.setConstraintWidth(new SizeValue(size + "px"));
         elementBackground.layoutElements();
