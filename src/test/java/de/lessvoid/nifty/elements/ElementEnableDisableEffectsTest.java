@@ -4,7 +4,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.*;
 
 import org.easymock.classextension.ConstructorArgs;
 import org.junit.After;
@@ -17,11 +16,10 @@ import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.tools.TimeProvider;
 
-public class ElementEnableDisableTest {
+public class ElementEnableDisableEffectsTest {
   private Nifty niftyMock;
   private Element e1;
   private Element e2;
-  private FocusHandler focusHandler = new FocusHandler();
 
   @Before
   public void before() throws Exception {
@@ -34,17 +32,21 @@ public class ElementEnableDisableTest {
         new ConstructorArgs(
             Element.class.getConstructor(
                 Nifty.class, ElementType.class, String.class, Element.class, FocusHandler.class, boolean.class, TimeProvider.class, ElementRenderer[].class),
-                niftyMock, null, "e1", null, focusHandler, false, null, null));
+                niftyMock, null, "e1", null, null, false, null, null),
+        Element.class.getDeclaredMethod("enableEffect"),
+        Element.class.getDeclaredMethod("disableEffect"),
+        Element.class.getDeclaredMethod("disableFocus"));
     
     e2 = createMock(
         Element.class,
         new ConstructorArgs(
             Element.class.getConstructor(
                 Nifty.class, ElementType.class, String.class, Element.class, FocusHandler.class, boolean.class, TimeProvider.class, ElementRenderer[].class),
-                niftyMock, null, "e1", null, focusHandler, false, null, null));
+                niftyMock, null, "e1", null, null, false, null, null),
+        Element.class.getDeclaredMethod("enableEffect"),
+        Element.class.getDeclaredMethod("disableEffect"),
+        Element.class.getDeclaredMethod("disableFocus"));
     e1.add(e2);
-    replay(e1);
-    replay(e2);
   }
 
   @After
@@ -56,88 +58,113 @@ public class ElementEnableDisableTest {
 
   @Test
   public void testSimpleDisable() {
-    e2.disable();
+    replay(e1);
 
-    assertTrue(e1.isEnabled());
-    assertFalse(e2.isEnabled());
+    e2.disableFocus();
+    e2.disableEffect();
+    replay(e2);
+
+    e2.disable();
   }
 
   @Test
   public void testDisableTwice() {
+    replay(e1);
+
+    e2.disableFocus();
+    e2.disableEffect();
+    replay(e2);
+
     e2.disable();
     e2.disable();
-
-    assertTrue(e1.isEnabled());
-    assertFalse(e2.isEnabled());
-
-    e2.enable();
-    assertTrue(e2.isEnabled());
   }
 
   @Test
   public void testDisableTwiceAndThenEnable() {
+    replay(e1);
+
+    e2.disableFocus();
+    e2.disableEffect();
+    e2.enableEffect();
+    replay(e2);
+
     e2.disable();
     e2.disable();
     e2.enable();
-
-    assertTrue(e1.isEnabled());
-    assertTrue(e2.isEnabled());
+    e2.enable();
   }
 
   @Test
   public void testSimpleEnable() {
-    e2.enable();
+    replay(e1);
+    replay(e2);
 
-    assertTrue(e1.isEnabled());
-    assertTrue(e2.isEnabled());
+    e2.enable();
   }
 
   @Test
   public void testEnableTwice() {
-    e2.enable();
-    e2.enable();
+    replay(e1);
+    replay(e2);
 
-    assertTrue(e1.isEnabled());
-    assertTrue(e2.isEnabled());
+    e2.enable();
+    e2.enable();
   }
 
   @Test
   public void testEnableTwiceAndThenDisable() {
+    replay(e1);
+
+    e2.disableFocus();
+    e2.disableEffect();
+    replay(e2);
+
     e2.enable();
     e2.enable();
     e2.disable();
-
-    assertTrue(e1.isEnabled());
-    assertFalse(e2.isEnabled());
   }
 
   @Test
   public void testParentDisable() {
-    e1.disable();
+    e1.disableFocus();
+    e1.disableEffect();
+    replay(e1);
 
-    assertFalse(e1.isEnabled());
-    assertFalse(e2.isEnabled());
+    e2.disableFocus();
+    e2.disableEffect();
+    replay(e2);
+
+    e1.disable();
   }
 
   @Test
   public void testParentDisableWithDisabledChild() {
+    e1.disableFocus();
+    e1.disableEffect();
+    replay(e1);
+
+    e2.disableFocus();
+    e2.disableEffect();
+    replay(e2);
+
     e2.disable();
     e1.disable();
-
-    assertFalse(e1.isEnabled());
-    assertFalse(e2.isEnabled());
   }
 
   @Test
   public void testParentDisableWithDisabledChildAndParentEnable() {
+    e1.disableFocus();
+    e1.disableEffect();
+    e1.enableEffect();
+    replay(e1);
+
+    e2.disableFocus();
+    e2.disableEffect();
+    replay(e2);
+
     e2.disable();
     e1.disable();
     e1.enable();
-
-    assertTrue(e1.isEnabled());
-    assertFalse(e2.isEnabled());
-
-    e2.enable();
-    assertTrue(e2.isEnabled());
   }
+
 }

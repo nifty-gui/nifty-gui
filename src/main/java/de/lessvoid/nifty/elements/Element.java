@@ -1099,22 +1099,22 @@ public class Element implements NiftyEvent<Void> {
    */
   public void enable() {
     if (enabled) {
-      enabledCount = 0;
-      for (int i=0; i<elements.size(); i++) {
-        elements.get(i).enable();
-      }
       return;
     }
+    enableInternal();
+  }
+
+  public void enableInternal() {
     enabledCount++;
     if (enabledCount == 0) {
       enabled = true;
       enableEffect();
       for (int i=0; i<elements.size(); i++) {
-        elements.get(i).enable();
+        elements.get(i).enableInternal();
       }
     } else {
       for (int i=0; i<elements.size(); i++) {
-        elements.get(i).enable();
+        elements.get(i).enableInternal();
       }
     }
   }
@@ -1128,17 +1128,24 @@ public class Element implements NiftyEvent<Void> {
    * disable this element.
    */
   public void disable() {
+    if (!enabled) {
+      return;
+    }
+    disableInternal();
+  }
+
+  private void disableInternal() {
     enabledCount--;
     if (enabledCount == -1) {
       enabled = false;
       disableFocus();
       disableEffect();
       for (int i=0; i<elements.size(); i++) {
-        elements.get(i).disable();
+        elements.get(i).disableInternal();
       }
     } else {
       for (int i=0; i<elements.size(); i++) {
-        elements.get(i).disable();
+        elements.get(i).disableInternal();
       }
     }
   }
@@ -1187,6 +1194,7 @@ public class Element implements NiftyEvent<Void> {
       Element element = elements.get(i);
       element.internalShow();
     }
+    nifty.publishEvent(getId(), new ElementShowEvent());
   }
 
   public void setVisible(final boolean visibleParam) {
@@ -1247,6 +1255,8 @@ public class Element implements NiftyEvent<Void> {
       Element element = elements.get(i);
       element.internalHide();
     }
+
+    nifty.publishEvent(getId(), new ElementHideEvent());
   }
 
   /**

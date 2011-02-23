@@ -2,9 +2,11 @@ package de.lessvoid.nifty.elements;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.createNiceMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.easymock.classextension.ConstructorArgs;
 import org.junit.After;
@@ -17,7 +19,7 @@ import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.tools.TimeProvider;
 
-public class ElementEnableDisableTest {
+public class ElementShowHideTest {
   private Nifty niftyMock;
   private Element e1;
   private Element e2;
@@ -25,7 +27,7 @@ public class ElementEnableDisableTest {
 
   @Before
   public void before() throws Exception {
-    niftyMock = createMock(Nifty.class);
+    niftyMock = createNiceMock(Nifty.class);
     expect(niftyMock.getAlternateKey()).andReturn(null).times(2);
     replay(niftyMock);
 
@@ -55,89 +57,74 @@ public class ElementEnableDisableTest {
   }
 
   @Test
-  public void testSimpleDisable() {
-    e2.disable();
+  public void testSimpleShow() {
+    e2.show();
 
-    assertTrue(e1.isEnabled());
-    assertFalse(e2.isEnabled());
+    assertTrue(e1.isVisible());
+    assertTrue(e2.isVisible());
   }
 
   @Test
-  public void testDisableTwice() {
-    e2.disable();
-    e2.disable();
+  public void testSimpleHide() {
+    e2.hide();
 
-    assertTrue(e1.isEnabled());
-    assertFalse(e2.isEnabled());
-
-    e2.enable();
-    assertTrue(e2.isEnabled());
+    assertTrue(e1.isVisible());
+    assertFalse(e2.isVisible());
   }
 
   @Test
-  public void testDisableTwiceAndThenEnable() {
-    e2.disable();
-    e2.disable();
-    e2.enable();
+  public void testSimpleHideTwice() {
+    e2.hide();
+    e2.hide();
 
-    assertTrue(e1.isEnabled());
-    assertTrue(e2.isEnabled());
+    assertTrue(e1.isVisible());
+    assertFalse(e2.isVisible());
   }
 
   @Test
-  public void testSimpleEnable() {
-    e2.enable();
+  public void testHideMutipleAndShow() {
+    e2.hide();
+    e2.hide();
+    e2.hide();
+    e2.hide();
+    e2.hide();
+    e2.show();
 
-    assertTrue(e1.isEnabled());
-    assertTrue(e2.isEnabled());
+    assertTrue(e1.isVisible());
+    assertTrue(e2.isVisible());
   }
 
   @Test
-  public void testEnableTwice() {
-    e2.enable();
-    e2.enable();
+  public void testSimpleParentHide() {
+    e1.hide();
 
-    assertTrue(e1.isEnabled());
-    assertTrue(e2.isEnabled());
+    assertFalse(e1.isVisible());
+    assertFalse(e2.isVisible());
   }
 
   @Test
-  public void testEnableTwiceAndThenDisable() {
-    e2.enable();
-    e2.enable();
-    e2.disable();
+  public void testSimpleParentHideWithChildHidden() {
+    e2.hide();
+    e1.hide();
 
-    assertTrue(e1.isEnabled());
-    assertFalse(e2.isEnabled());
+    assertFalse(e1.isVisible());
+    assertFalse(e2.isVisible());
+
+    e1.show();
+    assertTrue(e1.isVisible());
+    assertTrue(e2.isVisible()); // visible will currently override all child elements!
+
+    e2.show();
+    assertTrue(e2.isVisible());
   }
 
   @Test
-  public void testParentDisable() {
-    e1.disable();
+  public void testChildHiddenAndParentShow() {
+    e2.hide();
+    e1.show();
 
-    assertFalse(e1.isEnabled());
-    assertFalse(e2.isEnabled());
+    assertTrue(e1.isVisible());
+    assertTrue(e2.isVisible()); // visible will currently override all child elements!
   }
 
-  @Test
-  public void testParentDisableWithDisabledChild() {
-    e2.disable();
-    e1.disable();
-
-    assertFalse(e1.isEnabled());
-    assertFalse(e2.isEnabled());
-  }
-
-  @Test
-  public void testParentDisableWithDisabledChildAndParentEnable() {
-    e2.disable();
-    e1.disable();
-    e1.enable();
-
-    assertTrue(e1.isEnabled());
-    assertFalse(e2.isEnabled());
-
-    e2.enable();
-    assertTrue(e2.isEnabled());
-  }
 }
