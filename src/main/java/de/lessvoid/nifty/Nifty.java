@@ -167,6 +167,10 @@ public class Nifty {
   }
 
   public <T> void subscribe(final Screen screen, final String elementId, final Class<T> eventClass, final EventTopicSubscriber<T> subscriber) {
+    if (elementId == null) {
+      log.warning("trying to subscribe events for an element with elementId = null. this won't work. offending class \"" + eventClass + "\" and offending subscriber \"" + subscriber + "\". try to find the offending element/control and give it an id!");
+      return;
+    }
     ClassSaveEventTopicSubscriber theSubscriber = new ClassSaveEventTopicSubscriber(elementId, subscriber, eventClass);
     getEventService().subscribeStrongly(elementId, theSubscriber);
     registerSubscriberForScreen(screen, theSubscriber);
@@ -187,6 +191,10 @@ public class Nifty {
 
     // This handles direct subscription
     if (object instanceof EventTopicSubscriber<?>) {
+      if (elementId == null) {
+        log.warning("trying to unsubscribe events for an element with elementId = null. this won't work. offending object \"" + object + "\". try to find the offending element and give it an id!");
+        return;
+      }
       getEventService().unsubscribe(elementId, (EventTopicSubscriber<?>) object);
     }
   }
