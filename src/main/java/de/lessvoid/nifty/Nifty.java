@@ -843,6 +843,11 @@ public class Nifty {
       Element parent = element.getParent();
       if (parent != null) {
         parent.getElements().remove(element);
+
+        // when the parent is the root element then the element we're removing is a layer element
+        if (parent == screen.getRootElement()) {
+          screen.removeLayerElement(element);
+        }
       }
       screen.layoutLayers();
     }
