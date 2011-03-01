@@ -1,78 +1,84 @@
 package de.lessvoid.nifty.effects.impl;
 
-
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyIdCreator;
+import de.lessvoid.nifty.builder.EffectBuilder;
+import de.lessvoid.nifty.builder.LayerBuilder;
+import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.nifty.tools.TargetElementResolver;
 
 /**
- * Hint - show hint.
+ * Hint - show a hint, a nifty hint!
  * @author void
  */
 public class Hint implements EffectImpl {
-
-  /**
-   * nifty.
-   */
   private Nifty nifty;
+  private String hintLayerId;
+  private String hintPanelId;
+  private String hintTextId;
 
-  /**
-   * target element.
-   */
-  private Element targetElement;
-
-  /**
-   * hint text.
-   */
-  private String hintText;
-
-  /**
-   * initialize.
-   * @param niftyParam Nifty
-   * @param element Element
-   * @param parameter Parameter
-   */
   public void activate(final Nifty niftyParam, final Element element, final EffectProperties parameter) {
     this.nifty = niftyParam;
 
-    TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
-    targetElement = resolver.resolve(parameter.getProperty("targetElement"));
+    // we'll create a new layer on the fly for the hint and because we could really
+    // have lots of hints we'll generate a unique id for this new layer
+    this.hintLayerId = NiftyIdCreator.generate();
+    this.hintPanelId = hintLayerId + "#hint-panel";
+    this.hintTextId = hintLayerId + "#hint-text";
 
-    String text = parameter.getProperty("hintText");
-    if (text != null) {
-      hintText = text;
-    }
+    final String text = parameter.getProperty("hintText", "");
+
+    new LayerBuilder(hintLayerId) {{
+      childLayoutAbsolute();
+      visible(false);
+      panel(new PanelBuilder(hintPanelId) {{
+        style("nifty-panel-hint");
+        text(new TextBuilder(hintTextId) {{
+          text(text);
+        }});
+      }});
+    }}.build(niftyParam, niftyParam.getCurrentScreen(), niftyParam.getCurrentScreen().getRootElement());
   }
 
-  /**
-   * execute the effect.
-   * @param element the Element
-   * @param normalizedTime TimeInterpolator to use
-   * @param normalizedFalloff falloff value
-   * @param r RenderDevice to use
-   */
   public void execute(
       final Element element,
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    if (targetElement != null) {
-      TextRenderer textRenderer = targetElement.getRenderer(TextRenderer.class);
-      textRenderer.setText(hintText);
-      targetElement.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-      nifty.getCurrentScreen().layoutLayers();
+    if (normalizedTime > 0.0) {
+      Element hintLayer = nifty.getCurrentScreen().findElementByName(hintLayerId);
+      if (!hintLayer.isVisible()) {
+        Element hintPanel = hintLayer.findElementByName(hintPanelId);
+        if (hintPanel != null) {
+          hintPanel.setConstraintX(new SizeValue(element.getX() + "px"));
+          hintPanel.setConstraintY(new SizeValue(element.getY() + 40 + "px"));
+
+          hintLayer.layoutElements();
+          hintLayer.show();
+        }
+      }
     }
   }
 
-  /**
-   * deactivate the effect.
-   */
   public void deactivate() {
+    final Element hintLayer = nifty.getCurrentScreen().findElementByName(hintLayerId);
+    if (hintLayer.isVisible()) {
+      hintLayer.startEffect(EffectEventId.onCustom, new EndNotify() {
+        @Override
+        public void perform() {
+          hintLayer.markForRemoval();
+        }
+      });
+    } else {
+      hintLayer.markForRemoval();
+    }
   }
 }
