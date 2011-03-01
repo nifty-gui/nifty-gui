@@ -53,7 +53,7 @@ public class EffectBuilder {
     return this;
   }
 
-  public EffectBuilder parameter(final String key, final String value) {
+  public EffectBuilder effectParameter(final String key, final String value) {
     attributes.setAttribute(key, value);
     return this;
   }
