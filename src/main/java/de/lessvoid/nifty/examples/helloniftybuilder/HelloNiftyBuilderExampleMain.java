@@ -56,16 +56,16 @@ public class HelloNiftyBuilderExampleMain implements ScreenController {
           padding("10px");
 
           onStartScreenEffect(new EffectBuilder("move") {{
-            parameter("mode", "in");
-            parameter("direction", "top");
+            effectParameter("mode", "in");
+            effectParameter("direction", "top");
             length(300);
             startDelay(0);
             inherit(true);
           }});
 
           onEndScreenEffect(new EffectBuilder("move") {{
-            parameter("mode", "out");
-            parameter("direction", "bottom");
+            effectParameter("mode", "out");
+            effectParameter("direction", "bottom");
             length(300);
             startDelay(0);
             inherit(true);
