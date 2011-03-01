@@ -78,11 +78,11 @@ public class CenterLayout implements LayoutManager {
     } else {
       box.setY(
           rootBox.getY()
-          + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getWidth()));
+          + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight()));
       box.setHeight(
           rootBox.getHeight()
-          - rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getWidth())
-          - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getWidth()));
+          - rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight())
+          - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight()));
     }
   }
 
@@ -148,7 +148,11 @@ public class CenterLayout implements LayoutManager {
     if (constraint == null) {
       return null;
     }
-    return constraint.getWidth();
+    return
+      new SizeValue(
+          constraint.getWidth().getValueAsInt(0) +
+          root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth()) +
+          root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth()) + "px");
   }
 
   /**
@@ -156,6 +160,22 @@ public class CenterLayout implements LayoutManager {
    * @return new calculated SizeValue
    */
   public SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
-    return null;
+    if (children.isEmpty()) {
+      return null;
+    }
+    LayoutPart firstChild = children.get(0);
+    if (firstChild == null) {
+      return null;
+    }
+    BoxConstraints constraint = firstChild.getBoxConstraints();
+    if (constraint == null) {
+      return null;
+    }
+    return
+      new SizeValue(
+          constraint.getHeight().getValueAsInt(0) +
+          root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight()) +
+          root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight()) + "px");
+
   }
 }
