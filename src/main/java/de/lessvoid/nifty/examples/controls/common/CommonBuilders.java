@@ -12,10 +12,10 @@ public class CommonBuilders {
 
   public EffectBuilder createMoveEffect(final String mode, final String direction, final int length) {
     return new EffectBuilder("move") {{
-      parameter("mode", mode);
-      parameter("direction", direction);
-      parameter("timeType", "exp");
-      parameter("factor", "3.5");
+      effectParameter("mode", mode);
+      effectParameter("direction", direction);
+      effectParameter("timeType", "exp");
+      effectParameter("factor", "3.5");
       length(length);
       startDelay(0);
       inherit(true);
@@ -24,8 +24,8 @@ public class CommonBuilders {
 
   public EffectBuilder createFadeEffect() {
     return new EffectBuilder("fade") {{
-      parameter("start", "#f");
-      parameter("end", "#0");
+      effectParameter("start", "#f");
+      effectParameter("end", "#0");
       length(300);
       startDelay(300);
       inherit(true);

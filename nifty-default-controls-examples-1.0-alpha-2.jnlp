@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.0+" codebase="http://nifty-gui.sourceforge.net/webstart/" href="nifty-default-controls-examples-1.0.jnlp">
+<jnlp spec="1.0+" codebase="http://nifty-gui.sourceforge.net/webstart/" href="nifty-default-controls-examples-1.0-alpha-2.jnlp">
   <information>
     <title>nifty-default-controls-examples</title>
     <vendor>void</vendor>
@@ -12,19 +12,19 @@
   </security>
   <resources>
     <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-    <jar href="nifty-default-controls-examples-1.0-SNAPSHOT-complete-with-dependencies.jar" />
+    <jar href="nifty-default-controls-examples-1.0-SNAPSHOT-alpha-2-complete-with-dependencies.jar" />
   </resources>
   <resources os="Windows">
     <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-    <nativelib href="lib/lwjgl-2.4.2/lwjgl-2.4.2-natives-win.jar" />
+    <nativelib href="lib/lwjgl-2.6/lwjgl-2.6-natives-win.jar" />
   </resources>
   <resources os="Linux">
     <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-    <nativelib href="lib/lwjgl-2.4.2/lwjgl-2.4.2-natives-linux.jar" />
+    <nativelib href="lib/lwjgl-2.6/lwjgl-2.6-natives-linux.jar" />
   </resources>
   <resources os="Mac OS">
     <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-    <nativelib href="lib/lwjgl-2.4.2/lwjgl-2.4.2-natives-mac.jar" />
+    <nativelib href="lib/lwjgl-2.6/lwjgl-2.6-natives-mac.jar" />
   </resources>
-  <application-desc main-class="de.lessvoid.nifty.examples.listbox.ControlsDemo"/>
+  <application-desc main-class="de.lessvoid.nifty.examples.controls.ControlsDemo"/>
 </jnlp>

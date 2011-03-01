@@ -24,7 +24,7 @@ public class MenuButtonBuilder {
         focusable(true);
         visibleToMouse();
         onActiveEffect(new EffectBuilder("border") {{
-          parameter("color", "#112f");
+          effectParameter("color", "#112f");
         }});
         onHoverEffect(new HoverEffectBuilder("changeMouseCursor") {{
           parameter("id", "hand");
@@ -41,9 +41,9 @@ public class MenuButtonBuilder {
           effectValue("offset", "100%", "color", "#feef");
         }});
         onCustomEffect(new EffectBuilder("gradient") {{
-          parameter("customKey", "selected");
-          parameter("timeType", "infinite");
-          parameter("neverStopRendering", "true");
+          effectParameter("customKey", "selected");
+          effectParameter("timeType", "infinite");
+          effectParameter("neverStopRendering", "true");
           effectValue("offset", "0%", "color", "#222f");
           effectValue("offset", "100%", "color", "#feef");
         }});
@@ -53,10 +53,10 @@ public class MenuButtonBuilder {
           alignCenter();
           valignCenter();
           onCustomEffect(new EffectBuilder("textColor") {{
-            parameter("color", "#eeef");
-            parameter("customKey", "selected");
-            parameter("timeType", "infinite");
-            parameter("neverStopRendering", "true");
+            effectParameter("color", "#eeef");
+            effectParameter("customKey", "selected");
+            effectParameter("timeType", "infinite");
+            effectParameter("neverStopRendering", "true");
           }});
         }});
       }});
