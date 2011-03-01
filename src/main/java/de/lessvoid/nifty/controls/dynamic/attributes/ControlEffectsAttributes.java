@@ -11,6 +11,8 @@ public class ControlEffectsAttributes {
   private Collection < ControlEffectAttributes > onStartScreen = new ArrayList < ControlEffectAttributes >();
   private Collection < ControlEffectAttributes > onEndScreen = new ArrayList < ControlEffectAttributes >();
   private Collection < ControlEffectOnHoverAttributes > onHover = new ArrayList < ControlEffectOnHoverAttributes >();
+  private Collection < ControlEffectOnHoverAttributes > onStartHover = new ArrayList < ControlEffectOnHoverAttributes >();
+  private Collection < ControlEffectOnHoverAttributes > onEndHover = new ArrayList < ControlEffectOnHoverAttributes >();
   private Collection < ControlEffectAttributes > onClick = new ArrayList < ControlEffectAttributes >();
   private Collection < ControlEffectAttributes > onFocus = new ArrayList < ControlEffectAttributes >();
   private Collection < ControlEffectAttributes > onLostFocus = new ArrayList < ControlEffectAttributes >();
@@ -32,6 +34,8 @@ public class ControlEffectsAttributes {
     this.onStartScreen = source.getOnStartScreen();
     this.onEndScreen = source.getOnEndScreen();
     this.onHover = source.getOnHover();
+    this.onStartHover = source.getOnStartHover();
+    this.onEndHover = source.getOnEndHover();
     this.onClick = source.getOnClick();
     this.onFocus = source.getOnFocus();
     this.onLostFocus = source.getLostFocus();
@@ -64,6 +68,14 @@ public class ControlEffectsAttributes {
 
   public void addOnHover(final ControlEffectOnHoverAttributes effectParam) {
     onHover.add(effectParam);
+  }
+
+  public void addOnStartHover(final ControlEffectOnHoverAttributes effectParam) {
+    onStartHover.add(effectParam);
+  }
+
+  public void addOnEndHover(final ControlEffectOnHoverAttributes effectParam) {
+    onEndHover.add(effectParam);
   }
 
   public void addOnClick(final ControlEffectAttributes effectParam) {
@@ -104,6 +116,8 @@ public class ControlEffectsAttributes {
     addOnStartScreen(effectsType, onStartScreen);
     addOnEndScreen(effectsType, onEndScreen);
     addOnHover(effectsType, onHover);
+    addOnStartHover(effectsType, onStartHover);
+    addOnEndHover(effectsType, onEndHover);
     addOnClick(effectsType, onClick);
     addOnFocus(effectsType, onFocus);
     addOnLostFocus(effectsType, onLostFocus);
@@ -130,6 +144,18 @@ public class ControlEffectsAttributes {
   private void addOnHover(final EffectsType effectsType, final Collection < ControlEffectOnHoverAttributes > effectCol) {
     for (ControlEffectOnHoverAttributes effectParam : effectCol) {
       effectsType.addOnHover(effectParam.create());
+    }
+  }
+
+  private void addOnStartHover(final EffectsType effectsType, final Collection < ControlEffectOnHoverAttributes > effectCol) {
+    for (ControlEffectOnHoverAttributes effectParam : effectCol) {
+      effectsType.addOnStartHover(effectParam.create());
+    }
+  }
+
+  private void addOnEndHover(final EffectsType effectsType, final Collection < ControlEffectOnHoverAttributes > effectCol) {
+    for (ControlEffectOnHoverAttributes effectParam : effectCol) {
+      effectsType.addOnEndHover(effectParam.create());
     }
   }
 

@@ -40,6 +40,8 @@ public class EffectManager {
     effectProcessor.put(EffectEventId.onLostFocus, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onClick, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onHover, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onStartHover, new EffectProcessor(false));
+    effectProcessor.put(EffectEventId.onEndHover, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onActive, new EffectProcessor(true));
     effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false));
     effectProcessor.put(EffectEventId.onShow, new EffectProcessor(false));
@@ -119,6 +121,8 @@ public class EffectManager {
     phase.render(effectProcessor.get(EffectEventId.onCustom), renderEngine);
     phase.render(effectProcessor.get(EffectEventId.onActive), renderEngine);
     phase.render(effectProcessor.get(EffectEventId.onHover), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onStartHover), renderEngine);
+    phase.render(effectProcessor.get(EffectEventId.onEndHover), renderEngine);
     phase.render(effectProcessor.get(EffectEventId.onFocus), renderEngine);
     phase.render(effectProcessor.get(EffectEventId.onLostFocus), renderEngine);
     phase.render(effectProcessor.get(EffectEventId.onGetFocus), renderEngine);
@@ -149,6 +153,14 @@ public class EffectManager {
     EffectProcessor processor = effectProcessor.get(EffectEventId.onHover);
     processor.processHover(x, y);
   }
+
+  public void handleHoverStartAndEnd(final Element element, final int x, final int y) {
+    EffectProcessor processor = effectProcessor.get(EffectEventId.onStartHover);
+    processor.processStartHover(x, y);
+
+    processor = effectProcessor.get(EffectEventId.onEndHover);
+    processor.processEndHover(x, y);
+}
 
   public void handleHoverDeactivate(final Element element, final int x, final int y) {
     EffectProcessor processor = effectProcessor.get(EffectEventId.onHover);
@@ -184,6 +196,8 @@ public class EffectManager {
       effectProcessor.get(EffectEventId.onHide).reset();
       effectProcessor.get(EffectEventId.onCustom).reset();
       effectProcessor.get(EffectEventId.onHover).reset();
+      effectProcessor.get(EffectEventId.onStartHover).reset();
+      effectProcessor.get(EffectEventId.onEndHover).reset();
 // onActive is currently used by the nifty-panel style. when we reset that effect here
 // we would not be able to use the nifty-panel in popups. when a popup is being closed
 // all effects will be reset. which makes sense but probably not for the onActive effect.

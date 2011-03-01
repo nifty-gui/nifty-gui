@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://nifty-gui.sourceforge.net/nifty-styles.xsd" targetNamespace="http://nifty-gui.sourceforge.net/nifty-styles.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns="http://nifty-gui.sourceforge.net/nifty-styles-1.3.xsd" targetNamespace="http://nifty-gui.sourceforge.net/nifty-styles-1.3.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="nifty-styles" type="niftyStylesType"></xs:element>
 
@@ -8,6 +8,8 @@
   <xs:element name="onStartScreen" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onEndScreen" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onHover" type="singleEffectTypeOnHover" substitutionGroup="singleEffectbase" />
+  <xs:element name="onStartHover" type="singleEffectType" substitutionGroup="singleEffectbase" />
+  <xs:element name="onEndHover" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onClick" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onFocus" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onLostFocus" type="singleEffectType" substitutionGroup="singleEffectbase" />

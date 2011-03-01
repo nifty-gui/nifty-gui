@@ -23,6 +23,8 @@ public class EffectsType extends XmlBaseType {
   protected Collection < EffectType > onStartScreen = new ArrayList < EffectType >();
   protected Collection < EffectType > onEndScreen = new ArrayList < EffectType >();
   protected Collection < EffectType > onHover = new ArrayList < EffectType >();
+  protected Collection < EffectType > onStartHover = new ArrayList < EffectType >();
+  protected Collection < EffectType > onEndHover = new ArrayList < EffectType >();
   protected Collection < EffectType > onClick = new ArrayList < EffectType >();
   protected Collection < EffectType > onFocus = new ArrayList < EffectType >();
   protected Collection < EffectType > onLostFocus = new ArrayList < EffectType >();
@@ -51,6 +53,8 @@ public class EffectsType extends XmlBaseType {
     copyCollection(onStartScreen, src.onStartScreen);
     copyCollection(onEndScreen, src.onEndScreen);
     copyCollection(onHover, src.onHover);
+    copyCollection(onStartHover, src.onStartHover);
+    copyCollection(onEndHover, src.onEndHover);
     copyCollection(onClick, src.onClick);
     copyCollection(onFocus, src.onFocus);
     copyCollection(onLostFocus, src.onLostFocus);
@@ -67,6 +71,8 @@ public class EffectsType extends XmlBaseType {
     mergeCollection(onStartScreen, src.onStartScreen);
     mergeCollection(onEndScreen, src.onEndScreen);
     mergeCollection(onHover, src.onHover);
+    mergeCollection(onStartHover, src.onStartHover);
+    mergeCollection(onEndHover, src.onEndHover);
     mergeCollection(onClick, src.onClick);
     mergeCollection(onFocus, src.onFocus);
     mergeCollection(onLostFocus, src.onLostFocus);
@@ -106,7 +112,7 @@ public class EffectsType extends XmlBaseType {
     super.translateSpecialValues(nifty, screen);
     
     for (Collection<EffectType> col : new Collection[]{
-        onStartScreen, onEndScreen, onHover, onClick, onFocus,
+        onStartScreen, onEndScreen, onHover, onStartHover, onEndHover, onClick, onFocus,
         onLostFocus, onGetFocus, onActive, onCustom, onShow, onHide, onEnabled, onDisabled}) {
       for (EffectType e : col) {
         e.translateSpecialValues(nifty, screen);
@@ -124,6 +130,14 @@ public class EffectsType extends XmlBaseType {
 
   public void addOnHover(final EffectTypeOnHover effectParam) {
     onHover.add(effectParam);
+  }
+
+  public void addOnStartHover(final EffectType effectParam) {
+    onStartHover.add(effectParam);
+  }
+
+  public void addOnEndHover(final EffectType effectParam) {
+    onEndHover.add(effectParam);
   }
 
   public void addOnClick(final EffectType effectParam) {
@@ -171,6 +185,8 @@ public class EffectsType extends XmlBaseType {
       + getCollectionString("onStartScreen", onStartScreen, offset + 1)
       + getCollectionString("onEndScreen", onEndScreen, offset + 1)
       + getCollectionString("onHover", onHover, offset + 1)
+      + getCollectionString("onStartHover", onStartHover, offset + 1)
+      + getCollectionString("onEndHover", onEndHover, offset + 1)
       + getCollectionString("onClick", onClick, offset + 1)
       + getCollectionString("onFocus", onFocus, offset + 1)
       + getCollectionString("onLostFocus", onLostFocus, offset + 1)
@@ -209,6 +225,8 @@ public class EffectsType extends XmlBaseType {
     initEffect(EffectEventId.onStartScreen, onStartScreen, element, nifty, screen, attributes, controllers);
     initEffect(EffectEventId.onEndScreen, onEndScreen, element, nifty, screen, attributes, controllers);
     initEffect(EffectEventId.onHover, onHover, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onStartHover, onStartHover, element, nifty, screen, attributes, controllers);
+    initEffect(EffectEventId.onEndHover, onEndHover, element, nifty, screen, attributes, controllers);
     initEffect(EffectEventId.onClick, onClick, element, nifty, screen, attributes, controllers);
     initEffect(EffectEventId.onFocus, onFocus, element, nifty, screen, attributes, controllers);
     initEffect(EffectEventId.onLostFocus, onLostFocus, element, nifty, screen, attributes, controllers);
@@ -247,6 +265,8 @@ public class EffectsType extends XmlBaseType {
     applyEffectCollection(onStartScreen, effects.onStartScreen, styleId);
     applyEffectCollection(onEndScreen, effects.onEndScreen, styleId);
     applyEffectCollection(onHover, effects.onHover, styleId);
+    applyEffectCollection(onStartHover, effects.onStartHover, styleId);
+    applyEffectCollection(onEndHover, effects.onEndHover, styleId);
     applyEffectCollection(onClick, effects.onClick, styleId);
     applyEffectCollection(onFocus, effects.onFocus, styleId);
     applyEffectCollection(onLostFocus, effects.onLostFocus, styleId);
@@ -271,6 +291,8 @@ public class EffectsType extends XmlBaseType {
     resolveParameterCollection(onStartScreen, src);
     resolveParameterCollection(onEndScreen, src);
     resolveParameterCollection(onHover, src);
+    resolveParameterCollection(onStartHover, src);
+    resolveParameterCollection(onEndHover, src);
     resolveParameterCollection(onClick, src);
     resolveParameterCollection(onFocus, src);
     resolveParameterCollection(onLostFocus, src);
@@ -296,6 +318,8 @@ public class EffectsType extends XmlBaseType {
     removeAllEffectsWithStyleId(onStartScreen, styleId);
     removeAllEffectsWithStyleId(onEndScreen, styleId);
     removeAllEffectsWithStyleId(onHover, styleId);
+    removeAllEffectsWithStyleId(onStartHover, styleId);
+    removeAllEffectsWithStyleId(onEndHover, styleId);
     removeAllEffectsWithStyleId(onClick, styleId);
     removeAllEffectsWithStyleId(onFocus, styleId);
     removeAllEffectsWithStyleId(onLostFocus, styleId);
@@ -344,6 +368,14 @@ public class EffectsType extends XmlBaseType {
 
   public Collection<ControlEffectOnHoverAttributes> getOnHover() {
     return convertCopyHover(onHover);
+  }
+
+  public Collection<ControlEffectOnHoverAttributes> getOnStartHover() {
+    return convertCopyHover(onStartHover);
+  }
+
+  public Collection<ControlEffectOnHoverAttributes> getOnEndHover() {
+    return convertCopyHover(onEndHover);
   }
 
   public Collection<ControlEffectAttributes> getOnClick() {

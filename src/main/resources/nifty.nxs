@@ -21,6 +21,8 @@
       <element name="onStartScreen" type="EffectType" occurs="zeroOrMore" />
       <element name="onEndScreen" type="EffectType" occurs="zeroOrMore" />
       <element name="onHover" type="EffectTypeOnHover" occurs="zeroOrMore" />
+      <element name="onStartHover" type="EffectTypeOnHover" occurs="zeroOrMore" />
+      <element name="onEndHover" type="EffectTypeOnHover" occurs="zeroOrMore" />
       <element name="onClick" type="EffectType" occurs="zeroOrMore" />
       <element name="onFocus" type="EffectType" occurs="zeroOrMore" />
       <element name="onLostFocus" type="EffectType" occurs="zeroOrMore" />

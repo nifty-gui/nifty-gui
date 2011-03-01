@@ -37,6 +37,7 @@ public class Effect {
   private Falloff falloff;
   private EffectEvents effectEvents;
   private boolean neverStopRendering;
+  private boolean customFlag;
 
   public Effect(
       final Nifty niftyParam,
@@ -61,6 +62,7 @@ public class Effect {
     infiniteEffect = false;
     neverStopRendering = neverStopRenderingParam;
     effectEvents = new EffectEvents();
+    customFlag = false;
   }
 
   public void enableHover(final Falloff falloffParameter) {
@@ -84,6 +86,7 @@ public class Effect {
     parameter.put("effectEventId", effectEventId);
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
     effectEvents.init(nifty, controllers, parameter);
+    customFlag = false;
   }
 
   public boolean start(final String alternate, final String customKey) {
@@ -240,5 +243,13 @@ public class Effect {
 
   private boolean alternateDisableMatches(final String alternate) {
     return alternate != null && alternate.equals(alternateDisable);
+  }
+
+  public boolean getCustomFlag() {
+    return customFlag;
+  }
+
+  public void setCustomFlag(final boolean customFlag) {
+    this.customFlag = customFlag;
   }
 }

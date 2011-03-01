@@ -12,6 +12,8 @@ public enum EffectEventId {
   onLostFocus,
   onClick,
   onHover,
+  onStartHover,
+  onEndHover,
   onActive,
   onCustom,
   onHide,

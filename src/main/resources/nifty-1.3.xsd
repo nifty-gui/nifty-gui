@@ -16,6 +16,8 @@
   <xs:element name="onStartScreen" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onEndScreen" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onHover" type="singleEffectTypeOnHover" substitutionGroup="singleEffectbase" />
+  <xs:element name="onStartHover" type="singleEffectType" substitutionGroup="singleEffectbase" />
+  <xs:element name="onEndHover" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onClick" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onFocus" type="singleEffectType" substitutionGroup="singleEffectbase" />
   <xs:element name="onLostFocus" type="singleEffectType" substitutionGroup="singleEffectbase" />

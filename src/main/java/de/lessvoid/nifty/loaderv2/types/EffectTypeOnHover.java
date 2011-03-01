@@ -46,6 +46,8 @@ public class EffectTypeOnHover extends EffectType {
       falloff = hoverType.materialize();
     }
     effect.enableHover(falloff);
-    effect.enableInfinite();
+    if (!EffectEventId.onEndHover.equals(effectEventId)) {
+      effect.enableInfinite();
+    }
   }
 }

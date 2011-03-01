@@ -181,6 +181,44 @@ public class EffectProcessor {
     }
   }
 
+  public void processStartHover(final int x, final int y) {
+    for (Effect e : allEffects) {
+      if (e.isHoverEffect()) {
+        if (!e.isActive()) {
+          if (e.isInsideFalloff(x, y) && !e.getCustomFlag()) {
+            startEffect(e, null, null);
+            setActive(true);
+            e.setCustomFlag(true);
+          }
+        }
+        if (!e.isInsideFalloff(x, y) && e.getCustomFlag()) {
+          e.setCustomFlag(false);
+          if (e.isActive()) {
+            e.setActive(false);
+            activeEffects.remove(e);
+          }
+        }
+      }
+    }
+  }
+
+  public void processEndHover(final int x, final int y) {
+    for (Effect e : allEffects) {
+      if (e.isHoverEffect()) {
+        if (!e.isActive()) {
+          if (e.isInsideFalloff(x, y)) {
+            e.setCustomFlag(true);
+          }
+          if (!e.isInsideFalloff(x, y) && e.getCustomFlag()) {
+            startEffect(e, null, null);
+            setActive(true);
+            e.setCustomFlag(false);
+          }
+        }
+      }
+    }
+  }
+
   public void processHoverDeactivate(final int x, final int y) {
     for (Effect e : allEffects) {
       if (e.isHoverEffect()) {

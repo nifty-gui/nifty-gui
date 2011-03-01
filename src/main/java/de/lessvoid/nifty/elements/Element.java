@@ -1157,6 +1157,8 @@ public class Element implements NiftyEvent<Void> {
 
   void disableEffect() {
     stopEffectWithoutChildren(EffectEventId.onHover);
+    stopEffectWithoutChildren(EffectEventId.onStartHover);
+    stopEffectWithoutChildren(EffectEventId.onEndHover);
     stopEffectWithoutChildren(EffectEventId.onEnabled);
     startEffectWithoutChildren(EffectEventId.onDisabled);
   }
@@ -1389,6 +1391,7 @@ public class Element implements NiftyEvent<Void> {
 
   private void mouseEventHover(final MouseInputEvent mouseEvent) {
     effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
+    effectManager.handleHoverStartAndEnd(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
   }
 
   /**

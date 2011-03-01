@@ -227,6 +227,16 @@ public abstract class ControlAttributes {
     effects.addOnHover(effectParam);
   }
 
+  public void addEffectsOnStartHover(final ControlEffectOnHoverAttributes effectParam) {
+    ensureEffects();
+    effects.addOnStartHover(effectParam);
+  }
+
+  public void addEffectsOnEndHover(final ControlEffectOnHoverAttributes effectParam) {
+    ensureEffects();
+    effects.addOnEndHover(effectParam);
+  }
+
   public void addEffectsOnClick(final ControlEffectAttributes effectParam) {
     ensureEffects();
     effects.addOnClick(effectParam);

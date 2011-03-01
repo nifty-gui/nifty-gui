@@ -20,6 +20,8 @@ public abstract class ElementBuilder {
   private Collection<EffectBuilder> onStartScreen = new ArrayList<EffectBuilder>();
   private Collection<EffectBuilder> onEndScreen = new ArrayList<EffectBuilder>();
   private Collection<HoverEffectBuilder> onHover = new ArrayList<HoverEffectBuilder>();
+  private Collection<HoverEffectBuilder> onStartHover = new ArrayList<HoverEffectBuilder>();
+  private Collection<HoverEffectBuilder> onEndHover = new ArrayList<HoverEffectBuilder>();
   private Collection<EffectBuilder> onClick = new ArrayList<EffectBuilder>();
   private Collection<EffectBuilder> onFocus = new ArrayList<EffectBuilder>();
   private Collection<EffectBuilder> onLostFocus = new ArrayList<EffectBuilder>();
@@ -320,6 +322,14 @@ public abstract class ElementBuilder {
     onHover.add(onHoverEffect);
   }
 
+  public void onStartHoverEffect(final HoverEffectBuilder onStartHoverEffect) {
+    onStartHover.add(onStartHoverEffect);
+  }
+
+  public void onEndHoverEffect(final HoverEffectBuilder onEndHoverEffect) {
+    onEndHover.add(onEndHoverEffect);
+  }
+
   public void onClickEffect(final EffectBuilder onClickEffect) {
     onClick.add(onClickEffect);
   }
@@ -415,6 +425,12 @@ public abstract class ElementBuilder {
     }
     for (HoverEffectBuilder effectBuild : onHover) {
       attributes.addEffectsOnHover(effectBuild.getAttributes());
+    }
+    for (HoverEffectBuilder effectBuild : onStartHover) {
+      attributes.addEffectsOnStartHover(effectBuild.getAttributes());
+    }
+    for (HoverEffectBuilder effectBuild : onEndHover) {
+      attributes.addEffectsOnEndHover(effectBuild.getAttributes());
     }
     for (EffectBuilder effectBuild : onClick) {
       attributes.addEffectsOnClick(effectBuild.getAttributes());
