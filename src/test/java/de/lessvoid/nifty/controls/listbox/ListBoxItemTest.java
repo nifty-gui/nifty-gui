@@ -4,10 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.ListBox;
-
 public class ListBoxItemTest {
-  private ListBox<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
 
   @Test
   public void testDefault() {

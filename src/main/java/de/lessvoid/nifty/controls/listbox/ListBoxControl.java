@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -409,6 +410,16 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   @Override
   public void removeAllItems(final List<T> itemsToRemove) {
     listBoxImpl.removeAllItems(itemsToRemove);
+  }
+
+  @Override
+  public void sortAllItems() {
+    listBoxImpl.sortItems(null);
+  }
+
+  @Override
+  public void sortAllItems(final Comparator<T> comperator) {
+    listBoxImpl.sortItems(comperator);
   }
 
   // internals 

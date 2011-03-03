@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.nullobjects;
 
+import java.util.Comparator;
 import java.util.List;
 
 import de.lessvoid.nifty.controls.ListBox;
@@ -159,5 +160,13 @@ public class ListBoxNull implements ListBox {
 
   @Override
   public void removeAllItems(final List itemsToRemove) {
+  }
+
+  @Override
+  public void sortAllItems() {
+  }
+
+  @Override
+  public void sortAllItems(final Comparator comperator) {
   }
 }

@@ -10,7 +10,7 @@ import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.controls.listbox.TestItem;
 
 public class ListBoxChangeSelectionModeTest {
-  private ListBox<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
 

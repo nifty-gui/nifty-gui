@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -165,6 +166,17 @@ public interface ListBox<T> extends NiftyControl {
    * @param itemsToRemove list of items to remove
    */
   void removeAllItems(List<T> itemsToRemove);
+
+  /**
+   * Sort all items using natural ordering.
+   */
+  void sortAllItems();
+
+  /**
+   * Sort all items using the given comperator.
+   * @param comperator
+   */
+  void sortAllItems(Comparator<T> comperator);
 
   /**
    * The ListBoxSelectionMode determines how the ListBox handles selections.

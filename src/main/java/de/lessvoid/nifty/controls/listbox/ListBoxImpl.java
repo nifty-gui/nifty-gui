@@ -2,14 +2,16 @@ package de.lessvoid.nifty.controls.listbox;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
-import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
+import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.shared.EmptyNiftyControlImpl;
 
-public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> {
+public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
   private List<T> items = new ArrayList<T>();
   private List<ItemWidth> widthList = new ArrayList<ItemWidth>();
   private ListBoxSelectionMode<T> selection = new ListBoxSelectionModeSingle<T>();
@@ -61,7 +63,6 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     return items.get(viewOffset + selectionIndex);
   }
 
-  @Override
   public void changeSelectionMode(final SelectionMode listBoxSelectionMode, final boolean forceSelection) {
     List<T> oldSelection = getSelection();
 
@@ -81,7 +82,6 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     selectionChangedEvent(oldSelection);
   }
 
-  @Override
   public void addItem(final T newItem) {
     widthList.add(new ItemWidth(newItem));
     items.add(newItem);
@@ -91,12 +91,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     ensureAutoSelection(newItem);
   }
 
-  @Override
   public int itemCount() {
     return items.size();
   }
 
-  @Override
   public void clear() {
     List<T> oldSelection = getSelection();
     items.clear();
@@ -111,7 +109,6 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     selectionChangedEvent(oldSelection);
   }
 
-  @Override
   public void selectItemByIndex(final int selectionIndex) {
     if (invalidIndex(selectionIndex)) {
       return;
@@ -122,12 +119,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     selectionChangedEvent(oldSelection);
   }
 
-  @Override
   public void selectItem(final T item) {
     selectItemByIndex(items.indexOf(item));
   }
 
-  @Override
   public void selectNext() {
     if (!(selection instanceof ListBoxSelectionModeSingle)) {
       return;
@@ -147,7 +142,6 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     setFocusItemByIndex(selectionIndex);
   }
 
-  @Override
   public void selectPrevious() {
     if (!(selection instanceof ListBoxSelectionModeSingle)) {
       return;
@@ -167,12 +161,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     setFocusItemByIndex(selectionIndex);
   }
 
-  @Override
   public List<T> getSelection() {
     return new ArrayList<T>(selection.getSelection());
   }
 
-  @Override
   public void removeItemByIndex(final int itemIndex) {
     if (invalidIndex(itemIndex)) {
       return;
@@ -192,12 +184,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     updateAfterRemove(oldSelection, oldCount);
   }
 
-  @Override
   public void removeItem(final T item) {
     removeItemByIndex(items.indexOf(item));
   }
 
-  @Override
   public void removeAllItems(final List<T> itemsToRemove) {
     List<T> oldSelection = getSelection();
     int oldCount = itemCount();
@@ -221,7 +211,6 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     updateAfterRemove(oldSelection, oldCount);
   }
 
-  @Override
   public void deselectItemByIndex(final int itemIndex) {
     if (invalidIndex(itemIndex)) {
       return;
@@ -232,17 +221,14 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     selectionChangedEvent(oldSelection);
   }
 
-  @Override
   public void deselectItem(final T item) {
     deselectItemByIndex(items.indexOf(item));
   }
 
-  @Override
   public List<T> getItems() {
     return Collections.unmodifiableList(items);
   }
 
-  @Override
   public void insertItem(final T item, final int index) {
     if (invalidIndexForInsert(index)) {
       return;
@@ -255,12 +241,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     ensureAutoSelection(item);
   }
 
-  @Override
   public void showItem(final T item) {
     showItemByIndex(items.indexOf(item));
   }
 
-  @Override
   public void showItemByIndex(final int itemIndex) {
     if (invalidIndex(itemIndex)) {
       return;
@@ -275,12 +259,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     updateView();
   }
 
-  @Override
   public void setFocusItem(final T item) {
     setFocusItemByIndex(items.indexOf(item));
   }
 
-  @Override
   public void setFocusItemByIndex(final int itemIndex) {
     if (invalidIndex(itemIndex)) {
       return;
@@ -298,7 +280,6 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     }
   }
 
-  @Override
   public T getFocusItem() {
     if (focusItemIndex == -1) {
       return null;
@@ -306,17 +287,14 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     return items.get(focusItemIndex);
   }
 
-  @Override
   public int getFocusItemIndex() {
     return focusItemIndex;
   }
 
-  @Override
   public void setListBoxViewConverter(final ListBoxViewConverter<T> viewConverter) {
     // handled in ListBoxControl directly
   }
 
-  @Override
   public void addAllItems(final List<T> itemsToAdd) {
     if (itemsToAdd.isEmpty()) {
       return;
@@ -329,6 +307,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
     focusItemIndexUpdate();
     updateViewTotalCount();
     ensureAutoSelection(itemsToAdd.get(0));
+  }
+
+  public void sortItems(final Comparator<T> comperator) {
+    Collections.sort(items, comperator);
   }
 
   private void updateViewTotalCount() {
@@ -424,23 +406,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl implements ListBox<T> 
   }
 
   private void selectionChangedEvent(final List<T> oldSelection) {
-//    if (isSelectionReallyChanged(oldSelection)) {
-      view.publish(new ListBoxSelectionChangedEvent<T>(Collections.unmodifiableList(selection.getSelection())));
-//    }
-  }
-
-  private boolean isSelectionReallyChanged(final List<T> oldSelection) {
-    if (selection.getSelection().size() != oldSelection.size()) {
-      return true;
-    }
-    for (int i=0; i<selection.getSelection().size(); i++) {
-      T current = selection.getSelection().get(i);
-      T old = oldSelection.get(i);
-      if (!current.equals(old)) {
-        return true;
-      }
-    }
-    return false;
+    view.publish(new ListBoxSelectionChangedEvent<T>(Collections.unmodifiableList(selection.getSelection())));
   }
 
   private void updateAfterRemove(final List<T> oldSelection, final int oldItemCount) {
