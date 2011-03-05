@@ -31,6 +31,7 @@ public class MenuController implements ScreenController {
     this.nifty = niftyParam;
     this.screen = screenParam;
     hideIfThere("thumbHelloWorld");
+    hideIfThere("thumbHint");
     hideIfThere("thumbTextAlign");
     hideIfThere("thumbTextField");
     hideIfThere("thumbDropDownList");
@@ -59,6 +60,10 @@ public class MenuController implements ScreenController {
 
   public void helloWorld() {
     nifty.fromXml("helloworld/helloworld.xml", "start");
+  }
+
+  public void hint() {
+    nifty.fromXml("hint/hint.xml", "start");
   }
 
   public void textfield() {

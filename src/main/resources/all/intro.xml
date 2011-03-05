@@ -49,7 +49,7 @@
                 inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping" />
     <effect>
       <onHover name="focus" />
-      <onFocus name="hint" targetElement="hintElement" hintText="$hintText" />
+      <onFocus name="simpleHint" targetElement="hintElement" hintText="$hintText" />
       <onFocus name="colorBar" width="120%" height="120%" color="#fff5" />
       <onFocus name="textColor" color="#ffff" />
       <onFocus name="textSize" startSize="1.0" endSize="1.25" length="150" />
@@ -267,11 +267,12 @@ Thank you Trent.&#13;&#10;" align="center" />
     </layer>
     <layer id="menu" childLayout="vertical">
       <panel height="20%" childLayout="center"/>
-      <panel childLayout="center">
+      <panel height="*" childLayout="center">
         <panel id="mainMenu" font="menu.fnt" style="menu" childLayout="center" padding="50px,20px,60px,20px">
           <panel childLayout="horizontal" width="100%" height="100%">
             <panel width="50%" childLayout="absolute">
               <image id="thumbHelloWorld" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
+              <image id="thumbHint" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
               <image id="thumbTextAlign" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textAlign.png" />
               <image id="thumbTextField" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textField.png" />
               <image id="thumbDropDownList" style="thumbStyle" x="150px" y="50px" filename="all/thumb-dropDownList.png" />
@@ -286,6 +287,9 @@ Thank you Trent.&#13;&#10;" align="center" />
                 <panel id="huhu-2" childLayout="vertical" width="100%">
                   <text id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="hint" text="Panels and Hint (1.3)" style="menu-item" hintText="Panels and Hint Demonstration (Nifty 1.3)" targetElement="thumbHint">
+                    <interact onClick="hint()" onClickAlternateKey="fade" />
                   </text>
                   <text id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example" targetElement="thumbTextAlign">
                     <interact onClick="textAlign()" onClickAlternateKey="fade" />
