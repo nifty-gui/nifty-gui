@@ -153,6 +153,9 @@ public class TextRenderer implements ElementRenderer {
 
   private void renderLines(final Element w, final NiftyRenderEngine r, String[] lines) {
     RenderFont font = ensureFont(r);
+
+    boolean stateSaved = prepareRenderEngine(r, font);
+
     int y = getStartYWithVerticalAlign(lines.length * font.getHeight(), w.getHeight(), textVAlign);
     for (String line : lines) {
       int yy = w.getY() + y;
@@ -167,6 +170,31 @@ public class TextRenderer implements ElementRenderer {
         renderLine(xx, yy, line, r, selectionStart, selectionEnd);
       }
       y += font.getHeight();
+    }
+
+    restoreRenderEngine(r, stateSaved);
+  }
+
+  private boolean prepareRenderEngine(final NiftyRenderEngine r, RenderFont font) {
+    if (!r.isColorChanged()) {
+      if (r.isColorAlphaChanged()) {
+        r.setColorIgnoreAlpha(color);
+      } else {
+        r.setColor(color);
+      }
+    }
+    boolean stateSaved = false;
+    if (r.getFont() == null) {
+      r.saveState(null);
+      r.setFont(font);
+      stateSaved = true;
+    }
+    return stateSaved;
+  }
+
+  private void restoreRenderEngine(final NiftyRenderEngine r, final boolean stateSaved) {
+    if (stateSaved) {
+      r.restoreState();
     }
   }
 
@@ -238,19 +266,6 @@ public class TextRenderer implements ElementRenderer {
       final NiftyRenderEngine r,
       final int selStart,
       final int selEnd) {
-    if (!r.isColorChanged()) {
-      if (r.isColorAlphaChanged()) {
-        r.setColorIgnoreAlpha(color);
-      } else {
-        r.setColor(color);
-      }
-    }
-    boolean stateSaved = false;
-    if (r.getFont() == null) {
-      r.saveState(null);
-      r.setFont(font);
-      stateSaved = true;
-    }
     r.renderText(
         line,
         xx,
@@ -258,9 +273,6 @@ public class TextRenderer implements ElementRenderer {
         selStart,
         selEnd,
         textSelectionColor);
-    if (stateSaved) {
-      r.restoreState();
-    }
   }
 
   /**
