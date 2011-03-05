@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles xmlns="http://nifty-gui.sourceforge.net/nifty-styles.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-styles.xsd http://nifty-gui.sourceforge.net/nifty-styles.xsd">
+<nifty-styles xmlns="http://nifty-gui.sourceforge.net/nifty-styles-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-styles-1.3.xsd http://nifty-gui.sourceforge.net/nifty-styles-1.3.xsd">
   <registerMouseCursor id="textFieldCursor" filename="textfield/mouse-cursor-textfield.png" hotspotX="3" hotspotY="12"/>
 
   <!-- the background of the textfield -->
