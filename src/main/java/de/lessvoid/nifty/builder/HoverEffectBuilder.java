@@ -22,6 +22,11 @@ public class HoverEffectBuilder {
     return this;
   }
 
+  public HoverEffectBuilder inherit() {
+    attributes.setInherit("true");
+    return this;
+  }
+
   public HoverEffectBuilder post(final boolean post) {
     attributes.setPost(String.valueOf(post));
     return this;
@@ -52,7 +57,7 @@ public class HoverEffectBuilder {
     return this;
   }
 
-  public HoverEffectBuilder parameter(final String key, final String value) {
+  public HoverEffectBuilder effectParameter(final String key, final String value) {
     attributes.setAttribute(key, value);
     return this;
   }
