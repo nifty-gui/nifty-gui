@@ -2,11 +2,19 @@ package de.lessvoid.nifty.loaderv2.types;
 
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.tools.StringHelper;
+import de.lessvoid.xml.xpp3.Attributes;
 
 public class StyleType extends XmlBaseType {
   private AttributesType attributesType;
   private EffectsType effectsType;
   private InteractType interactType;
+
+  public StyleType() {
+  }
+
+  public StyleType(final Attributes attributes) {
+    super(attributes);
+  }
 
   public void setAttributes(final AttributesType styleAttributesTypeParam) {
     attributesType = styleAttributesTypeParam;

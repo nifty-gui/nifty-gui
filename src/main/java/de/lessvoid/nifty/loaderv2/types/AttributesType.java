@@ -7,6 +7,10 @@ public class AttributesType extends XmlBaseType {
   public AttributesType() {
   }
 
+  public AttributesType(final Attributes attributes) {
+    super(attributes);
+  }
+
   public AttributesType(final AttributesType src) {
     super(src);
   }

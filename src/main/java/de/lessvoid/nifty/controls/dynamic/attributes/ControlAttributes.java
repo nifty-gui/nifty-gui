@@ -5,6 +5,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.layout.LayoutPart;
+import de.lessvoid.nifty.loaderv2.types.AttributesType;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.EffectsType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
@@ -12,11 +13,12 @@ import de.lessvoid.nifty.loaderv2.types.ImageType;
 import de.lessvoid.nifty.loaderv2.types.LayerType;
 import de.lessvoid.nifty.loaderv2.types.PanelType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
+import de.lessvoid.nifty.loaderv2.types.StyleType;
 import de.lessvoid.nifty.loaderv2.types.TextType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public abstract class ControlAttributes {
+public class ControlAttributes {
   protected Attributes attributes = new Attributes();
   protected ControlInteractAttributes interact;
   protected ControlEffectsAttributes effects;
@@ -369,7 +371,10 @@ public abstract class ControlAttributes {
     }
   }
 
-  public abstract ElementType createType();
+  public ElementType createType() {
+    // you'll need to implement this in a sub class
+    return null;
+  }
 
   public void connect(final ElementType e) {
     if (effects != null) {
@@ -378,5 +383,19 @@ public abstract class ControlAttributes {
     if (interact != null) {
       e.setInteract(interact.create());
     }
+  }
+
+  public StyleType createStyleType(final Attributes styleAttributes) {
+    StyleType styleType = new StyleType(styleAttributes);
+    if (attributes != null) {
+      styleType.setAttributes(new AttributesType(attributes));
+    }
+    if (effects != null) {
+      styleType.setEffect(effects.create());
+    }
+    if (interact != null) {
+      styleType.setInteract(interact.create());
+    }
+    return styleType;
   }
 }
