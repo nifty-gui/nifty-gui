@@ -72,9 +72,9 @@ public class HelloNiftyBuilderExampleMain implements ScreenController {
           }});
 
           onHoverEffect(new HoverEffectBuilder("pulsate") {{
-            parameter("scaleFactor", "0.008");
-            parameter("startColor", "#f600");
-            parameter("endColor", "#ffff");
+            effectParameter("scaleFactor", "0.008");
+            effectParameter("startColor", "#f600");
+            effectParameter("endColor", "#ffff");
             post(true);
           }});
 
