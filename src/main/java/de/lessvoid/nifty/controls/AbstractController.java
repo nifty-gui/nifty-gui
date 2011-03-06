@@ -118,4 +118,14 @@ public abstract class AbstractController implements Controller, NiftyControl {
     public void setStyle(final String style) {
      element.setStyle(style); 
     }
+
+    @Override
+    public void setFocus() {
+      element.setFocus();
+    }
+
+    @Override
+    public void setFocusable(final boolean focusable) {
+      element.setFocusable(focusable);
+    }
 }

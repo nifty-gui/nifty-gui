@@ -77,4 +77,16 @@ public interface NiftyControl {
    * @return
    */
   boolean isEnabled();
+
+  /**
+   * Set the focus to this control.
+   */
+  void setFocus();
+
+  /**
+   * Change if this control is focusable (if it can get the focus or not). Usually controls are set up
+   * with focusable="true" but you can change this here if necessary. 
+   * @param focusable true when this element can get the focus and false when not
+   */
+  void setFocusable(boolean focusable);
 }
