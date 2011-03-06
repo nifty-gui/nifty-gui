@@ -27,10 +27,10 @@ public class MenuButtonBuilder {
           effectParameter("color", "#112f");
         }});
         onHoverEffect(new HoverEffectBuilder("changeMouseCursor") {{
-          parameter("id", "hand");
+          effectParameter("id", "hand");
         }});
         onHoverEffect(new HoverEffectBuilder("border") {{
-          parameter("color", "#800f");
+          effectParameter("color", "#800f");
         }});
         onHoverEffect(new HoverEffectBuilder("gradient") {{
           effectValue("offset", "0%", "color", "#222f");
@@ -46,6 +46,11 @@ public class MenuButtonBuilder {
           effectParameter("neverStopRendering", "true");
           effectValue("offset", "0%", "color", "#222f");
           effectValue("offset", "100%", "color", "#feef");
+        }});
+        onHoverEffect(new HoverEffectBuilder("hint") {{
+          effectParameter("hintText", controlParameter(PARAM_LABEL));
+          effectParameter("hintStyle", "special-hint");
+          effectParameter("hintDelay", "1000");
         }});
         control(new LabelBuilder() {{
           color("#000f");

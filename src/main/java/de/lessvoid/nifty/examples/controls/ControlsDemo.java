@@ -5,9 +5,11 @@
 package de.lessvoid.nifty.examples.controls;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
+import de.lessvoid.nifty.builder.StyleBuilder;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 import de.lessvoid.nifty.examples.controls.common.LwjglInitHelper;
 import de.lessvoid.nifty.examples.controls.custom.MenuButtonBuilder;
@@ -19,6 +21,7 @@ import de.lessvoid.nifty.examples.controls.textfield.TextFieldDialogBuilder;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
+import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 public class ControlsDemo {
@@ -36,6 +39,7 @@ public class ControlsDemo {
     nifty.loadControlFile("nifty-default-controls.xml");
     nifty.registerSound("popup", "sound/744__elmomo__MutantJewsArp.wav");
     nifty.registerMouseCursor("hand", "mouse-cursor-hand.png", 5, 4);
+    registerMenuButtonHintStyle(nifty);
 
     // register the dialogs
     new ListBoxDialogBuilder(nifty);
@@ -98,5 +102,36 @@ public class ControlsDemo {
       }});
     }}.build(nifty);
     return screen;
+  }
+
+  private static void registerMenuButtonHintStyle(final Nifty nifty) {
+    new StyleBuilder() {{
+      id("special-hint");
+      base("nifty-panel-simple");
+      childLayoutCenter();
+      onShowEffect(new EffectBuilder("fade") {{
+        length(150);
+        effectParameter("start", "#0");
+        effectParameter("end", "#d");
+        inherit();
+        neverStopRendering(true);
+      }});
+      onCustomEffect(new EffectBuilder("fade") {{
+        length(150);
+        effectParameter("start", "#d");
+        effectParameter("end", "#0");
+        inherit();
+        neverStopRendering(true);
+      }});
+    }}.build(nifty);
+
+    new StyleBuilder() {{
+      id("special-hint#hint-text");
+      base("base-font");
+      alignLeft();
+      valignCenter();
+      textHAlignLeft();
+      color(new Color("#111f"));
+    }}.build(nifty);
   }
 }
