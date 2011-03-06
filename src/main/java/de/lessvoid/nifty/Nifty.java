@@ -92,7 +92,7 @@ public class Nifty {
   private Locale locale = Locale.getDefault();
   private Properties globalProperties;
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
-  private NiftyMouse niftyMouse;
+  private NiftyMouseImpl niftyMouse;
   private NiftyInputConsumer niftyInputConsumer = new NiftyInputConsumerImpl();
   private Map < Screen, List < ClassSaveEventTopicSubscriber >> screenBasedSubscribers = new Hashtable < Screen, List < ClassSaveEventTopicSubscriber >>();
 
@@ -131,7 +131,7 @@ public class Nifty {
     this.currentLoaded = null;
     this.mouseInputEventQueue = new MouseInputEventQueue();
     this.lastTime = timeProvider.getMsTime();
-    this.niftyMouse = new NiftyMouseImpl(newRenderDevice.getRenderDevice(), inputSystem);
+    this.niftyMouse = new NiftyMouseImpl(newRenderDevice.getRenderDevice(), inputSystem, timeProvider);
 
     try {
       loader = new NiftyLoader(timeProvider);
@@ -223,7 +223,7 @@ public class Nifty {
       mouseInputEventQueue.begin();
       inputSystem.forwardEvents(niftyInputConsumer);
       if (mouseInputEventQueue.hasLastMouseDownEvent()) {
-        currentScreen.mouseEvent(mouseInputEventQueue.getLastMouseDownEvent());
+        forwardMouseEventToScreen(mouseInputEventQueue.getLastMouseDownEvent());
       }
     }
     handleDynamicElements();
@@ -1198,7 +1198,7 @@ public class Nifty {
       boolean handled = true;
       if (mouseInputEventQueue.canProcess(mouseEvent)) {
         mouseInputEventQueue.process(mouseEvent);
-        handled = currentScreen.mouseEvent(mouseEvent);
+        handled = forwardMouseEventToScreen(mouseEvent);
         handleDynamicElements();
       }
       return handled;
@@ -1266,5 +1266,13 @@ public class Nifty {
       element.onStartScreen();
     }
     return element;
+  }
+
+  private boolean forwardMouseEventToScreen(final MouseInputEvent mouseEvent) {
+    // update the nifty mouse that keeps track of the current mouse position too 
+    niftyMouse.updateMousePosition(mouseEvent.getMouseX(), mouseEvent.getMouseY());
+
+    // and forward the event to the current screen
+    return currentScreen.mouseEvent(mouseEvent);
   }
 }

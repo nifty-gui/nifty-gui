@@ -9,6 +9,7 @@ import de.lessvoid.nifty.NiftyMouse;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 public class NiftyMouseImpl implements NiftyMouse {
   private Logger log = Logger.getLogger(NiftyMouseImpl.class.getName());
@@ -16,10 +17,16 @@ public class NiftyMouseImpl implements NiftyMouse {
   private InputSystem inputSystem;
   private Map < String, MouseCursor > registeredMouseCursors = new Hashtable < String, MouseCursor >();
   private String currentId;
+  private int mouseX;
+  private int mouseY;
+  private TimeProvider timeProvider;
+  private long lastMouseMoveEventTime;
 
-  public NiftyMouseImpl(final RenderDevice renderDevice, final InputSystem inputSystem) {
+  public NiftyMouseImpl(final RenderDevice renderDevice, final InputSystem inputSystem, final TimeProvider timeProvider) {
     this.renderDevice = renderDevice;
     this.inputSystem = inputSystem;
+    this.timeProvider = timeProvider;
+    lastMouseMoveEventTime = timeProvider.getMsTime();
   }
 
   @Override
@@ -67,5 +74,34 @@ public class NiftyMouseImpl implements NiftyMouse {
   @Override
   public void setMousePosition(final int x, final int y) {
     inputSystem.setMousePosition(x, y);
+    updateMousePosition(x, y);
+  }
+
+  @Override
+  public int getX() {
+    return mouseX;
+  }
+
+  @Override
+  public int getY() {
+    return mouseY;
+  }
+
+  @Override
+  public long getNoMouseMovementTime() {
+    long now = timeProvider.getMsTime();
+    return now - lastMouseMoveEventTime;
+  }
+
+  public void updateMousePosition(final int x, final int y) {
+    if (positionChanged(x, y)) {
+      lastMouseMoveEventTime = timeProvider.getMsTime();
+    }
+    mouseX = x;
+    mouseY = y;
+  }
+
+  private boolean positionChanged(final int x, final int y) {
+    return x != mouseX || y != mouseY;
   }
 }

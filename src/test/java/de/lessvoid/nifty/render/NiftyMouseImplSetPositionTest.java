@@ -1,18 +1,15 @@
 package de.lessvoid.nifty.render;
 
-import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.spi.input.InputSystem;
-import de.lessvoid.nifty.spi.render.MouseCursor;
-import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 public class NiftyMouseImplSetPositionTest {
   private NiftyMouseImpl niftyMouse;
@@ -21,7 +18,7 @@ public class NiftyMouseImplSetPositionTest {
   @Before
   public void before() {
     inputSystemMock = createMock(InputSystem.class);
-    niftyMouse = new NiftyMouseImpl(null, inputSystemMock);
+    niftyMouse = new NiftyMouseImpl(null, inputSystemMock, new TimeProvider());
   }
 
   @After

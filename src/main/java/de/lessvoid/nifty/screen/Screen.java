@@ -284,7 +284,7 @@ public class Screen {
    * @param inputEvent MouseInputEvent
    * @return true when processed and false when not
    */
-  public final boolean mouseEvent(final MouseInputEvent inputEvent) {
+  public boolean mouseEvent(final MouseInputEvent inputEvent) {
     if (!popupElements.isEmpty()) {
       return forwardMouseEventToLayers(popupElements, inputEvent);
     } else {

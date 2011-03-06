@@ -49,4 +49,22 @@ public interface NiftyMouse {
    * @param y y coordinage
    */
   void setMousePosition(int x, int y);
+
+  /**
+   * Get the current mouse position x coordinate.
+   * @return x mouse x coordinate
+   */
+  int getX();
+
+  /**
+   * Get the current mouse position y coordinate.
+   * @return y mouse y coordinate
+   */
+  int getY();
+
+  /**
+   * This returns the time in ms that no mouse movement has occurred.
+   * @return the time in ms between now and the last time the mouse have been moved
+   */
+  long getNoMouseMovementTime();
 }

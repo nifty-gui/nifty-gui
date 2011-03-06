@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.tools.TimeProvider;
 
 public class NiftyMouseImplRegisterTest {
   private NiftyMouseImpl niftyMouse;
@@ -22,7 +23,7 @@ public class NiftyMouseImplRegisterTest {
   @Before
   public void before() {
     renderDeviceMock = createMock(RenderDevice.class);
-    niftyMouse = new NiftyMouseImpl(renderDeviceMock, null);
+    niftyMouse = new NiftyMouseImpl(renderDeviceMock, null, new TimeProvider());
     mouseCursor = createMock(MouseCursor.class);
   }
 
