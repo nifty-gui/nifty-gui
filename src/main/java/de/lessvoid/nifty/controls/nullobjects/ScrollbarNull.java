@@ -107,4 +107,11 @@ public class ScrollbarNull implements Scrollbar {
     return 0;
   }
 
+  @Override
+  public void setFocus() {
+  }
+
+  @Override
+  public void setFocusable(final boolean focusable) {
+  }
 }

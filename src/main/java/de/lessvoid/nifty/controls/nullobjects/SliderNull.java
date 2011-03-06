@@ -106,4 +106,12 @@ public class SliderNull implements Slider {
   public float getButtonStepSize() {
     return 0;
   }
+
+  @Override
+  public void setFocus() {
+  }
+
+  @Override
+  public void setFocusable(final boolean focusable) {
+  }
 }

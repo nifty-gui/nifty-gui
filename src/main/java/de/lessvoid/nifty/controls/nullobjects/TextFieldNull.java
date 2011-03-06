@@ -92,4 +92,12 @@ public class TextFieldNull implements TextField {
   public boolean isPasswordCharEnabled() {
     return false;
   }
+
+  @Override
+  public void setFocus() {
+  }
+
+  @Override
+  public void setFocusable(final boolean focusable) {
+  }
 }

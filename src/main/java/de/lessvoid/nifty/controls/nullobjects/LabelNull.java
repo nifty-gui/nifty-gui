@@ -76,4 +76,12 @@ public class LabelNull implements Label {
   public Color getColor() {
     return null;
   }
+
+  @Override
+  public void setFocus() {
+  }
+
+  @Override
+  public void setFocusable(final boolean focusable) {
+  }
 }

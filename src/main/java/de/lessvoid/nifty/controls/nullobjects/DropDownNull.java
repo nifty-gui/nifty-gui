@@ -114,4 +114,12 @@ public class DropDownNull implements DropDown {
   @Override
   public void removeAllItems(final List itemsToRemove) {
   }
+
+  @Override
+  public void setFocus() {
+  }
+
+  @Override
+  public void setFocusable(final boolean focusable) {
+  }
 }

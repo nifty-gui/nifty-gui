@@ -65,4 +65,12 @@ public abstract class EmptyNiftyControlImpl implements NiftyControl {
   @Override
   public void setStyle(final String style) {
   }
+
+  @Override
+  public void setFocus() {
+  }
+
+  @Override
+  public void setFocusable(final boolean focusable) {
+  }
 }

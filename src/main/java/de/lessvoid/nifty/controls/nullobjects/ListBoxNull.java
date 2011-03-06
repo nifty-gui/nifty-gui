@@ -169,4 +169,12 @@ public class ListBoxNull implements ListBox {
   @Override
   public void sortAllItems(final Comparator comperator) {
   }
+
+  @Override
+  public void setFocus() {
+  }
+
+  @Override
+  public void setFocusable(final boolean focusable) {
+  }
 }

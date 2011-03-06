@@ -120,4 +120,12 @@ public class ButtonNull implements Button {
   @Override
   public void setTextColor(final Color newColor) {
   }
+
+  @Override
+  public void setFocus() {
+  }
+
+  @Override
+  public void setFocusable(final boolean focusable) {
+  }
 }
