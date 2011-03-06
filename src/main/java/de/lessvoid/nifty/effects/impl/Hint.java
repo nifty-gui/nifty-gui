@@ -27,6 +27,7 @@ public class Hint implements EffectImpl {
     this.nifty = niftyParam;
 
     final String hintControl = parameter.getProperty("hintControl", "nifty-default-hint");
+    final String hintStyle = parameter.getProperty("hintStyle", null);
     final String hintText = parameter.getProperty("hintText", "hint: add a 'hintText' attribute to the hint effect :)");
     hintDelay = Integer.valueOf(parameter.getProperty("hintDelay", "0"));
 
@@ -40,6 +41,9 @@ public class Hint implements EffectImpl {
       visible(false);
       control(new ControlBuilder(hintPanelId, hintControl) {{
         parameter("hintText", hintText);
+        if (hintStyle != null) {
+          style(hintStyle);
+        }
       }});
     }}.build(niftyParam, niftyParam.getCurrentScreen(), niftyParam.getCurrentScreen().getRootElement());
   }
