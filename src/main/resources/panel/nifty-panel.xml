@@ -6,7 +6,7 @@
   </style>
 
   <style id="nifty-panel-red">
-    <attributes padding="8px,16px,24px,16px" backgroundImage="panel/nifty-panel-red.png" imageMode="resize:28,184,28,28,28,184,28,154,28,184,28,58" />
+    <attributes padding="8px,16px,24px,16px" backgroundImage="panel/nifty-panel-red.png" imageMode="resize:28,184,28,8,28,184,28,174,28,184,28,58" />
   </style>
 
   <style id="nifty-panel-no-shadow">
@@ -22,25 +22,6 @@
   </style>
 
   <style id="nifty-panel-bright">
-    <attributes padding="5px" backgroundImage="panel/nifty-panel-hint.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8" childLayout="center" />
-  </style>
-
-  <style id="nifty-panel-hint">
-    <attributes padding="5px" backgroundImage="panel/nifty-panel-hint.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8" childLayout="center" />
-    <effect>
-      <onShow name="fade" length="150" start="#0" end="#d" inherit="true" neverStopRendering="true" />
-      <!--  
-      <onShow name="move" length="150" mode="fromOffset" offsetX="0" offsetY="-20" inherit="true" neverStopRendering="true" />
-      -->
-      <onCustom name="fade" length="150" start="#d" end="#0" inherit="true" neverStopRendering="true" />
-      <onActive name="followMouse" />
-      <!-- 
-      <onCustom name="move" length="150" mode="toOffset" offsetX="0" offsetY="-20" inherit="true" neverStopRendering="true" />
-       -->
-    </effect>
-  </style>
-
-  <style id="nifty-panel-hint#hint-text" base="base-font">
-    <attributes align="left" valign="center" textHAlign="left" color="#111f" />
+    <attributes padding="5px" backgroundImage="panel/nifty-panel-hint.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8" />
   </style>
 </nifty-styles>
