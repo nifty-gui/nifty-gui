@@ -78,15 +78,15 @@ public class ControlsDemo {
           backgroundColor("#5588");
           childLayoutHorizontal();
           padding("20px");
-          control(menuButtonBuilder.getControlBuilder("menuButtonListBox", "ListBox"));
+          control(menuButtonBuilder.getControlBuilder("menuButtonListBox", "ListBox", "This demonstrates the ListBox control.\n\nThis example shows adding and removing items from a ListBox\nas well as the different selection modes that are available."));
           panel(builders.hspacer("10px"));
-          control(menuButtonBuilder.getControlBuilder("menuButtonDropDown", "DropDown"));
+          control(menuButtonBuilder.getControlBuilder("menuButtonDropDown", "DropDown", "The DropDown demonstration.\n\nThis shows how to dynamically add items to the\nDropDown control as well as the change event."));
           panel(builders.hspacer("10px"));
-          control(menuButtonBuilder.getControlBuilder("menuButtonTextField", "TextField"));
+          control(menuButtonBuilder.getControlBuilder("menuButtonTextField", "TextField", "The TextField demonstration.\n\nThis example demonstrates the Textfield example using the password\nmode and the input length restriction. It also demonstrates\nall of the new events the Textfield publishes on the Eventbus."));
           panel(builders.hspacer("10px"));
-          control(menuButtonBuilder.getControlBuilder("menuButtonSlider", "Slider & Scrollbars"));
+          control(menuButtonBuilder.getControlBuilder("menuButtonSlider", "Slider & Scrollbars", "Sliders and Scrollbars example.\n\nThis creates sliders to change a RGBA value and it\ndisplays a scrollbar that can be customized."));
           panel(builders.hspacer("10px"));
-          control(menuButtonBuilder.getControlBuilder("menuButtonScrollPanel", "ScrollPanel"));
+          control(menuButtonBuilder.getControlBuilder("menuButtonScrollPanel", "ScrollPanel", "ScrollPanel demonstration.\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
         }});
         panel(new PanelBuilder("dialogParent") {{
           childLayoutOverlay();
@@ -107,7 +107,7 @@ public class ControlsDemo {
   private static void registerMenuButtonHintStyle(final Nifty nifty) {
     new StyleBuilder() {{
       id("special-hint");
-      base("nifty-panel-simple");
+      base("nifty-panel-bright");
       childLayoutCenter();
       onShowEffect(new EffectBuilder("fade") {{
         length(150);
@@ -116,12 +116,26 @@ public class ControlsDemo {
         inherit();
         neverStopRendering(true);
       }});
+      onShowEffect(new EffectBuilder("move") {{
+        length(150);
+        inherit();
+        neverStopRendering(true);
+        effectParameter("mode", "fromOffset");
+        effectParameter("offsetY", "-15");
+      }});
       onCustomEffect(new EffectBuilder("fade") {{
         length(150);
         effectParameter("start", "#d");
         effectParameter("end", "#0");
         inherit();
         neverStopRendering(true);
+      }});
+      onCustomEffect(new EffectBuilder("move") {{
+        length(150);
+        inherit();
+        neverStopRendering(true);
+        effectParameter("mode", "toOffset");
+        effectParameter("offsetY", "-15");
       }});
     }}.build(nifty);
 
@@ -131,7 +145,7 @@ public class ControlsDemo {
       alignLeft();
       valignCenter();
       textHAlignLeft();
-      color(new Color("#111f"));
+      color(new Color("#000f"));
     }}.build(nifty);
   }
 }

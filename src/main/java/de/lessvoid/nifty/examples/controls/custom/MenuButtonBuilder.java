@@ -11,6 +11,7 @@ import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 public class MenuButtonBuilder {
   private static final String CONTROL_NAME = "menuButtonControl";
   private static final String PARAM_LABEL = "menuButtonLabel";
+  private static final String PARAM_HINT = "menuButtonHint";
 
   public MenuButtonBuilder(final Nifty nifty) {
     new ControlDefinitionBuilder(CONTROL_NAME) {{
@@ -48,9 +49,11 @@ public class MenuButtonBuilder {
           effectValue("offset", "100%", "color", "#feef");
         }});
         onHoverEffect(new HoverEffectBuilder("hint") {{
-          effectParameter("hintText", controlParameter(PARAM_LABEL));
+          effectParameter("hintText", controlParameter(PARAM_HINT));
           effectParameter("hintStyle", "special-hint");
-          effectParameter("hintDelay", "1000");
+          effectParameter("hintDelay", "750");
+          effectParameter("offsetX", "center");
+          effectParameter("offsetY", "50");
         }});
         control(new LabelBuilder() {{
           color("#000f");
@@ -68,9 +71,10 @@ public class MenuButtonBuilder {
     }}.registerControlDefintion(nifty);
   }
 
-  public ControlBuilder getControlBuilder(final String id, final String text) {
+  public ControlBuilder getControlBuilder(final String id, final String text, final String hintText) {
     return new ControlBuilder(id, CONTROL_NAME) {{
       parameter(PARAM_LABEL, text);
+      parameter(PARAM_HINT, hintText);
     }};
   }
 }
