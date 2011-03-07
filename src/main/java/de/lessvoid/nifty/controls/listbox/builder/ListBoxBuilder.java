@@ -12,7 +12,7 @@ public class ListBoxBuilder extends ControlBuilder {
   }
 
   public void displayItems(final int displayItems) {
-    set("displayItems", "4");
+    set("displayItems", String.valueOf(displayItems));
   }
 
   public void selectionModeSingle() {
