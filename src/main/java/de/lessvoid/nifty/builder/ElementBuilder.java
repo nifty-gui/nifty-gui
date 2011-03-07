@@ -91,7 +91,7 @@ public abstract class ElementBuilder {
   }
 
   public void backgroundColor(final Color backgroundColor) {
-    attributes.setBackgroundColor(backgroundColor.toString());
+    attributes.setBackgroundColor(backgroundColor.getColorString());
   }
 
   public void color(final String color) {
@@ -99,7 +99,7 @@ public abstract class ElementBuilder {
   }
 
   public void color(final Color color) {
-    attributes.setColor(color.toString());
+    attributes.setColor(color.getColorString());
   }
 
   public void selectionColor(final String color) {
@@ -107,7 +107,7 @@ public abstract class ElementBuilder {
   }
 
   public void selectionColor(final Color color) {
-    attributes.setSelectionColor(color.toString());
+    attributes.setSelectionColor(color.getColorString());
   }
 
   public void text(final String text) {
