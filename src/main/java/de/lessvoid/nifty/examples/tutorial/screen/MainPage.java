@@ -166,7 +166,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
   }
 
   public void showChapterSelect() {
-    nifty.showPopup(screen, "chapterSelectPopup", null);
+    nifty.showPopup(screen, chapterSelectPopup.getId(), null);
   }
 
   private void updateBackButtonVisibility() {
