@@ -22,6 +22,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * 
  * @author void
  */
+@Deprecated
 public class ConsoleControl extends AbstractController {
   private static final int MAX_BUFFER_LINES = 100;
   private Nifty nifty;

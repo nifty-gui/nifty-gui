@@ -12,6 +12,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.xml.xpp3.Attributes;
 
+@Deprecated
 public class LabelControl extends AbstractController implements Label {
 
   @Override

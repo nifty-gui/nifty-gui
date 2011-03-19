@@ -19,6 +19,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * 
  * @author void
  */
+@Deprecated
 public class ImageSelectControl extends AbstractController {
     private Nifty nifty;
     private Element element;

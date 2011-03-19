@@ -21,6 +21,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * 
  * @author void
  */
+@Deprecated
 public class TextFieldControl extends AbstractController implements TextField, TextFieldView {
   private static final int CURSOR_Y = 0;
   private Nifty nifty;

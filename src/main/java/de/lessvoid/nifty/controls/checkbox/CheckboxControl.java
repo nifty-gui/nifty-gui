@@ -17,6 +17,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * A CheckboxControl.
  * @author void
  */
+@Deprecated
 public class CheckboxControl extends AbstractController implements CheckBox, CheckBoxView {
   private CheckBoxImpl checkBoxImpl = new CheckBoxImpl();
   private Nifty nifty;

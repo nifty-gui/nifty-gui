@@ -17,6 +17,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
+@Deprecated
 public class ScrollPanelControl extends AbstractController implements ScrollPanel {
   private Nifty nifty;
   private Screen screen;

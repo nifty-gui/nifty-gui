@@ -20,6 +20,7 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
+@Deprecated
 public class DropDownControl<T> extends AbstractController implements DropDown<T> {
   private static Logger log = Logger.getLogger(DropDownControl.class.getName());
 

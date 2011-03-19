@@ -13,6 +13,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
+@Deprecated
 public class ScrollbarControl extends AbstractController implements Scrollbar {
   private ScrollbarImpl scrollbarImpl = new ScrollbarImpl();
   private ScrollbarView scrollbarView;

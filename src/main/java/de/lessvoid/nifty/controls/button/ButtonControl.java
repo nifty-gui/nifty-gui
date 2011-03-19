@@ -25,6 +25,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * Implementation of the TextButton Control.
  * @author void
  */
+@Deprecated
 public class ButtonControl extends AbstractController implements Button {
   private Screen screen;
   private FocusHandler focusHandler;
