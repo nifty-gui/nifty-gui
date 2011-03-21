@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.render;
 
+import de.lessvoid.nifty.render.image.ImageMode;
+import de.lessvoid.nifty.render.image.ImageModeFactory;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
@@ -9,7 +11,7 @@ import de.lessvoid.nifty.tools.Color;
  */
 public class NiftyImage {
   private RenderImage image;
-  private NiftyImageMode subImageMode;
+  private ImageMode imageMode;
   private NiftyRenderEngine niftyRenderEngine;
 
   /**
@@ -19,7 +21,7 @@ public class NiftyImage {
   public NiftyImage(final NiftyRenderEngine niftyRenderEngine, final RenderImage createImage) {
     this.niftyRenderEngine = niftyRenderEngine;
     this.image = createImage;
-    this.subImageMode = NiftyImageMode.normal();
+    this.imageMode = ImageModeFactory.getSharedInstance().createImageMode(null, null);
   }
 
   /**
@@ -49,15 +51,15 @@ public class NiftyImage {
    */
   public void render(
       final int x, final int y, final int width, final int height, final Color color, final float scale) {
-    subImageMode.render(niftyRenderEngine.getRenderDevice(), image, x, y, width, height, color, scale);
+    imageMode.render(niftyRenderEngine.getRenderDevice(), image, x, y, width, height, color, scale);
   }
 
   /**
    * Set a new sub image active state.
-   * @param newSubImageMode new type
+   * @param imageMode new type
    */
-  public void setImageMode(final NiftyImageMode newSubImageMode) {
-    this.subImageMode = newSubImageMode;
+  public void setImageMode(final ImageMode imageMode) {
+    this.imageMode = imageMode;
   }
 
   public void dispose() {

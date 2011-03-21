@@ -7,8 +7,9 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyImage;
-import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.image.ImageModeFactory;
+import de.lessvoid.nifty.render.image.ImageModeHelper;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
@@ -23,10 +24,12 @@ public class ImageOverlayPulsate implements EffectImpl {
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), true);
-    String subImageSizeMode = parameter.getProperty("imageMode", null);
-    if (subImageSizeMode != null) {
-      image.setImageMode(NiftyImageMode.valueOf(subImageSizeMode));
-    }
+
+    String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(parameter);
+    String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(parameter);
+    image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
+    		renderStrategyProperty));
+
     this.pulsater = new Pulsator(parameter, new TimeProvider());
   }
 

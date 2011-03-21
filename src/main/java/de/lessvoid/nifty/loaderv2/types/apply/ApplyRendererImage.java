@@ -1,11 +1,12 @@
 package de.lessvoid.nifty.loaderv2.types.apply;
 
+import de.lessvoid.nifty.Size;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
-import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.image.ImageMode;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ApplyRendererImage implements ApplyRenderer {
@@ -38,23 +39,16 @@ public class ApplyRendererImage implements ApplyRenderer {
       return;
     }
     imageRenderer.setImage(image);
-    NiftyImageMode imageMode = convert.imageMode(attributes.get("imageMode"));
+    ImageMode imageMode = convert.imageMode(attributes.get("imageMode"));
     image.setImageMode(imageMode);
     imageRenderer.setInset(convert.insetSizeValue(attributes.get("inset"), image.getHeight()));
 
+    Size imageDimension = imageMode.getImageNativeSize(image);
     if (element.getConstraintWidth() == null) {
-      if (imageMode.isWidthOverwrite()) {
-        element.setConstraintWidth(convert.sizeValue(imageMode.getWidthOverwrite() + "px"));
-      } else {
-        element.setConstraintWidth(convert.sizeValue(image.getWidth() + "px"));
-      }
+    	element.setConstraintWidth(convert.sizeValue(imageDimension.getWidth() + "px"));
     }
     if (element.getConstraintHeight() == null) {
-      if (imageMode.isHeightOverwrite()) {
-        element.setConstraintHeight(convert.sizeValue(imageMode.getHeightOverwrite() + "px"));
-      } else {
-        element.setConstraintHeight(convert.sizeValue(image.getHeight() + "px"));
-      }
+    	element.setConstraintHeight(convert.sizeValue(imageDimension.getHeight() + "px"));
     }
   }
 }

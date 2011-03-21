@@ -9,8 +9,9 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
-import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.image.ImageModeFactory;
+import de.lessvoid.nifty.render.image.ImageModeHelper;
 
 /**
  * This can be applied to an image element. This will change the original image of the
@@ -42,10 +43,12 @@ public class ChangeImage implements EffectImpl {
 
   private NiftyImage loadImage(final String name, final Nifty nifty, final EffectProperties parameter) {
     NiftyImage image = nifty.getRenderEngine().createImage(parameter.getProperty(name), false);
-    String imageMode = parameter.getProperty("imageMode", null);
-    if (imageMode != null) {
-      image.setImageMode(NiftyImageMode.valueOf(imageMode));
-    }
+
+    String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(parameter);
+    String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(parameter);
+    image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
+    		renderStrategyProperty));
+
     return image;
   }
 

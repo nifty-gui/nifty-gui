@@ -7,8 +7,9 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyImage;
-import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.image.ImageModeFactory;
+import de.lessvoid.nifty.render.image.ImageModeHelper;
 import de.lessvoid.nifty.tools.Alpha;
 import de.lessvoid.nifty.tools.SizeValue;
 
@@ -23,10 +24,12 @@ public class ImageOverlay implements EffectImpl {
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
-    String imageMode = parameter.getProperty("imageMode", null);
-    if (imageMode != null) {
-      image.setImageMode(NiftyImageMode.valueOf(imageMode));
-    }
+    
+    String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(parameter);
+    String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(parameter);
+    image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
+    		renderStrategyProperty));
+
     alpha = new Alpha(parameter.getProperty("alpha", "#f"));
     inset = new SizeValue(parameter.getProperty("inset", "0px"));
     width = new SizeValue(parameter.getProperty("width", element.getWidth() + "px"));

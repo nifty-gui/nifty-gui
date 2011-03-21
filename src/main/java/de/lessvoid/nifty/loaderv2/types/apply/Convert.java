@@ -8,8 +8,10 @@ import de.lessvoid.nifty.layout.manager.HorizontalLayout;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.layout.manager.OverlayLayout;
 import de.lessvoid.nifty.layout.manager.VerticalLayout;
-import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.image.ImageMode;
+import de.lessvoid.nifty.render.image.ImageModeFactory;
+import de.lessvoid.nifty.render.image.ImageModeHelper;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -20,7 +22,6 @@ public class Convert {
   public static final VerticalAlign DEFAULT_VERTICAL_ALIGN = VerticalAlign.top;
   public static final HorizontalAlign DEFAULT_TEXT_HORIZONTAL_ALIGN = HorizontalAlign.center;
   public static final VerticalAlign DEFAULT_TEXT_VERTICAL_ALIGN = VerticalAlign.center;
-  public static final NiftyImageMode DEFAULT_IMAGE_MODE = NiftyImageMode.normal();
   public static final boolean DEFAULT_IMAGE_FILTER = false;
   public static final boolean DEFAULT_FOCUSABLE = false;
   public static final boolean DEFAULT_VISIBLE_TO_MOUSE = false;
@@ -106,11 +107,11 @@ public class Convert {
     return new Color(value);
   }
 
-  public NiftyImageMode imageMode(final String value) {
-    if (value == null) {
-      return DEFAULT_IMAGE_MODE;
-    }
-    return NiftyImageMode.valueOf(value);
+  public ImageMode imageMode(final String value) {
+	String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(value);
+	String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(value);
+
+	return ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty, renderStrategyProperty);
   }
 
   public int insetSizeValue(final String value, final int imageHeight) {
