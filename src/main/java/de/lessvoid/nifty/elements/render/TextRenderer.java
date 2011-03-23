@@ -83,6 +83,18 @@ public class TextRenderer implements ElementRenderer {
   private boolean isCalculatedLineWrapping = false;
 
   /**
+   * If the textLineHeight property is set it will override the font.getHeight() when
+   * calculating the height of the text.
+   */
+  private SizeValue textLineHeight;
+
+  /**
+   * If the textMinLineHeight property is set the text will always be at least textMinLineHeight
+   * pixel height.
+   */
+  private SizeValue textMinHeight;
+
+  /**
    * default constructor.
    */
   public TextRenderer() {
@@ -288,7 +300,16 @@ public class TextRenderer implements ElementRenderer {
    * @return the height in pixel of the current set text.
    */
   public int getTextHeight() {
-    return font.getHeight() * textLines.length;
+    int calculatedHeight = font.getHeight() * textLines.length;
+    if (textLineHeight != null) {
+      calculatedHeight = textLineHeight.getValueAsInt(1.0f) * textLines.length;
+    }
+    if (textMinHeight != null) {
+      if (calculatedHeight < textMinHeight.getValueAsInt(1.0f)) {
+        return textMinHeight.getValueAsInt(1.0f);
+      }
+    }
+    return calculatedHeight;
   }
 
   /**
@@ -379,6 +400,14 @@ public class TextRenderer implements ElementRenderer {
 	        }
 	    }
 	    return result.toString();
+  }
+
+  public void setTextLineHeight(final SizeValue textLineHeight) {
+    this.textLineHeight = textLineHeight;
+  }
+
+  public void setTextMinHeight(final SizeValue textMinHeight) {
+    this.textMinHeight = textMinHeight;
   }
 
   /**

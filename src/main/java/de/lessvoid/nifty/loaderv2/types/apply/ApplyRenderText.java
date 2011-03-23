@@ -26,6 +26,8 @@ public class ApplyRenderText implements ApplyRenderer {
     textRenderer.setColor(convert.color(attributes.get("color")));
     textRenderer.setTextSelectionColor(convert.color(attributes.get("selectionColor")));
     textRenderer.setText(attributes.get("text"));
+    textRenderer.setTextLineHeight(convert.sizeValue(attributes.get("textLineHeight")));
+    textRenderer.setTextMinHeight(convert.sizeValue(attributes.get("textMinHeight")));
     boolean wrap = attributes.getAsBoolean("wrap", false);
     textRenderer.setLineWrapping(wrap);
 
