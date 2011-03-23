@@ -2,171 +2,80 @@ package de.lessvoid.nifty.elements;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
-import de.lessvoid.nifty.input.NiftyMouseClickedEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
 /**
  * All ElementInteraction is handled in here.
  * @author void
  */
 public class ElementInteraction {
-  private Nifty nifty;
-  private String elementId;
-  private boolean onClickRepeat;
   private String onClickAlternateKey;
-  private NiftyMethodInvoker onClickMethod;
-  private NiftyMethodInvoker onReleaseMethod;
-  private NiftyMethodInvoker onClickMouseMoveMethod;
   private NiftyMethodInvoker onMouseOverMethod;
+  private NiftyMethodInvoker onMouseWheelMethod;
 
-  /**
-   * Create the ElemenInteraction.
-   * @param niftyParam nifty
-   * @param elementId 
-   */
-  public ElementInteraction(final Nifty niftyParam, final String elementId) {
-    onClickMethod = new NiftyMethodInvoker(niftyParam);
-    onReleaseMethod = new NiftyMethodInvoker(niftyParam);
-    onClickMouseMoveMethod = new NiftyMethodInvoker(niftyParam);
-    onMouseOverMethod = new NiftyMethodInvoker(niftyParam);
+  private ElementInteractionClickHandler primary;
+  private ElementInteractionClickHandler secondary;
+  private ElementInteractionClickHandler tertiary;
+  private ElementInteractionMoveHandler move;
 
-    nifty = niftyParam;
-    onClickAlternateKey = null;
-    this.elementId = elementId;
+  public ElementInteraction(final Nifty niftyParam, final Element element) {
+    primary = new ElementInteractionClickHandler(niftyParam, element, new PrimaryClickMouseMethods(element));
+    secondary = new ElementInteractionClickHandler(niftyParam, element, new SecondaryClickMouseMethods(element));
+    tertiary = new ElementInteractionClickHandler(niftyParam, element, new TertiaryClickMouseMethods(element));
+    move = new ElementInteractionMoveHandler(niftyParam, element);
   }
 
-  /**
-   * Copy constructor.
-   * @param source source to copy from
-   */
-  public ElementInteraction(final ElementInteraction source) {
-    this.nifty = source.nifty;
-    this.elementId = source.elementId;
-    this.onClickMethod = source.onClickMethod;
-    this.onReleaseMethod = source.onReleaseMethod;
-    this.onClickMouseMoveMethod = source.onClickMouseMoveMethod;
-    this.onClickRepeat = source.onClickRepeat;
-    this.onClickAlternateKey = source.onClickAlternateKey;
-    this.onMouseOverMethod = source.onMouseOverMethod;
+  public ElementInteractionClickHandler getPrimary() {
+    return primary;
   }
 
-  /**
-   * on click.
-   * @param inputEvent mouse input
-   */
-  public boolean onClick(final MouseInputEvent inputEvent) {
-    nifty.publishEvent(elementId, new NiftyMouseClickedEvent());
-
-    if (onClickMethod != null) {
-      if (nifty != null) {
-        nifty.setAlternateKey(onClickAlternateKey);
-      }
-      return onClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
-    }
-
-    return false;
+  public ElementInteractionClickHandler getSecondary() {
+    return secondary;
   }
 
-  public void onClick() {
-    nifty.publishEvent(elementId, new NiftyMouseClickedEvent());
-
-    if (onClickMethod != null) {
-      onClickMethod.invoke();
-    }
+  public ElementInteractionClickHandler getTertiary() {
+    return tertiary;
   }
 
-  public void onRelease() {
-    if (onReleaseMethod != null) {
-      onReleaseMethod.invoke();
-    }
+  public void setOnMouseOver(final NiftyMethodInvoker method) {
+    onMouseOverMethod = method;
   }
 
-  /**
-   * OnClick while mouse is moved.
-   * @param inputEvent InputEvent
-   */
-  public void onClickMouseMoved(final MouseInputEvent inputEvent) {
-    if (onClickMouseMoveMethod != null) {
-      onClickMouseMoveMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
-    }
+  public void setOnMouseWheelMethod(final NiftyMethodInvoker method) {
+    onMouseWheelMethod = method;
   }
 
-  /**
-   * Return onClickRepeat.
-   * @return onClickRepeat
-   */
-  public boolean isOnClickRepeat() {
-    return onClickRepeat;
+  public void setFirstMethod(Object first) {
+    primary.setFirst(first);
   }
 
-  /**
-   * Mouse Over.
-   * @param element Element
-   * @param inputEvent mouse event
-   * @return true (event eaten) false (forward event to children)
-   */
-  public boolean onMouseOver(final Element element, final MouseInputEvent inputEvent) {
+  public boolean onMouseOver(final Element element, final NiftyMouseInputEvent inputEvent) {
     if (onMouseOverMethod != null) {
       onMouseOverMethod.invoke(element, inputEvent);
     }
     return false;
   }
 
-  /**
-   * Set onClickMethod.
-   * @param methodInvokerParam MethodInvoker
-   * @param useRepeatParam use repeat
-   */
-  public void setOnClickMethod(final NiftyMethodInvoker methodInvokerParam, final boolean useRepeatParam) {
-    onClickMethod = methodInvokerParam;
-    onClickRepeat = useRepeatParam;
+  public boolean onMouseWheel(final Element element, final NiftyMouseInputEvent inputEvent) {
+    if (onMouseWheelMethod != null) {
+      onMouseWheelMethod.invoke(element, inputEvent);
+    }
+    return false;
   }
 
-  public void setOnReleaseMethod(final NiftyMethodInvoker onRelease) {
-    onReleaseMethod = onRelease;
-  }
-
-  /**
-   * Set onClickMouseMoved.
-   * @param methodInvoker MethodInvoker
-   */
-  public void setOnClickMouseMoved(final NiftyMethodInvoker methodInvoker) {
-    onClickMouseMoveMethod = methodInvoker;
-  }
-
-  /**
-   * Set onMouseOver.
-   * @param methodInvoker MethodInvoker
-   */
-  public void setOnMouseOver(final NiftyMethodInvoker methodInvoker) {
-    onMouseOverMethod = methodInvoker;
-  }
-
-  /**
-   * Set alternate key.
-   * @param newAlternateKey new alternate key
-   */
   public void setAlternateKey(final String newAlternateKey) {
     onClickAlternateKey = newAlternateKey;
   }
 
-  /**
-   * Get onClickMethod.
-   * @return on click method
-   */
-  public NiftyMethodInvoker getOnClickMethod() {
-    return onClickMethod;
+  public boolean process(final NiftyMouseInputEvent mouseEvent, final long eventTime, final boolean mouseInside, final boolean canHandleInteraction) {
+    move.process(canHandleInteraction, mouseInside, mouseEvent);
+    return
+      primary.process(mouseEvent, mouseEvent.isButton0Down(), mouseEvent.isButton0InitialDown(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey) ||
+      secondary.process(mouseEvent, mouseEvent.isButton1Down(), mouseEvent.isButton1InitialDown(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey) ||
+      tertiary.process(mouseEvent, mouseEvent.isButton2Down(), mouseEvent.isButton2InitialDown(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey);
   }
 
-  /**
-   * Get onClickMouseMovedMethod.
-   * @return on click mouse moved
-   */
-  public NiftyMethodInvoker getOnClickMouseMoveMethod() {
-    return onClickMouseMoveMethod;
-  }
-
-  public NiftyMethodInvoker getOnReleaseMethod() {
-    return onReleaseMethod;
+  public void activate(final Nifty nifty) {
+    primary.activate(nifty);
   }
 }

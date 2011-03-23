@@ -1,12 +1,16 @@
 package de.lessvoid.xml.tools;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * MethodResolver helper class.
  * @author void
  */
 public class MethodResolver {
+  private static Logger log = Logger.getLogger(MethodResolver.class.getName());
+
   /**
    * you can't instantiate this class it's a helper class.
    */
@@ -23,17 +27,38 @@ public class MethodResolver {
     if (c == null) {
       return null;
     }
-
-    String methodNameOnly = methodName.substring(0, methodName.indexOf('('));
-
+    String methodNameOnly = extractMethodName(methodName);
+    if (methodNameOnly == null) {
+      log.warning("Could not extract method from [" + methodName + "]");
+      return null;
+    }
     Method[] ms = c.getMethods();
     for (Method m : ms) {
       if (methodNameOnly.equalsIgnoreCase(m.getName())) {
         return m;
       }
     }
-
     return findMethod(c.getSuperclass(), methodName);
+  }
+
+  public static Method findMethodWithArgs(final Class<?> c, final String methodName, final Class<?> ... parameters) {
+    if (c == null) {
+      return null;
+    }
+    String methodNameOnly = extractMethodName(methodName);
+    if (methodNameOnly == null) {
+      log.warning("Could not extract method from [" + methodName + "]");
+      return null;
+    }
+    Method[] ms = c.getMethods();
+    for (Method m : ms) {
+      if (methodNameOnly.equalsIgnoreCase(m.getName())) {
+        if (Arrays.equals(m.getParameterTypes(), parameters)) {
+          return m;
+        }
+      }
+    }
+    return null;
   }
 
   /**
@@ -66,5 +91,12 @@ public class MethodResolver {
       return "";
     }
     return methodName.substring(startIdx + 1, endIdx);
+  }
+
+  private static String extractMethodName(final String methodName) {
+    if (!methodName.contains("(")) {
+      return null;
+    }
+    return methodName.substring(0, methodName.indexOf('('));
   }
 }

@@ -19,12 +19,14 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.Falloff;
+import de.lessvoid.nifty.elements.events.ElementHideEvent;
+import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
@@ -51,16 +53,6 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class Element implements NiftyEvent<Void> {
-
-  /**
-   * Time before we start an automated click when mouse button is holded.
-   */
-  private static final long REPEATED_CLICK_START_TIME = 100;
-
-  /**
-   * The time between automatic clicks.
-   */
-  private static final long REPEATED_CLICK_TIME = 100;
 
   /**
    * the logger.
@@ -152,34 +144,9 @@ public class Element implements NiftyEvent<Void> {
   private boolean interactionBlocked;
 
   /**
-   * mouse down flag.
-   */
-  private boolean mouseDown;
-
-  /**
    * visible to mouse events.
    */
   private boolean visibleToMouseEvents;
-
-  /**
-   * Last position of mouse X.
-   */
-  private int lastMouseX;
-
-  /**
-   * Last position of mouse Y.
-   */
-  private int lastMouseY;
-
-  /**
-   * mouse first click down time.
-   */
-  private long mouseDownTime;
-
-  /**
-   * Time the last repeat has been activated.
-   */
-  private long lastRepeatStartTime;
 
   /**
    * clip children.
@@ -392,8 +359,7 @@ public class Element implements NiftyEvent<Void> {
     this.focusHandler = newFocusHandler;
     this.visibleToMouseEvents = newVisibleToMouseEvents;
     this.time = timeProvider;
-    this.setMouseDown(false, 0);
-    this.interaction = new ElementInteraction(nifty, id);
+    this.interaction = new ElementInteraction(nifty, this);
   }
 
   /**
@@ -1229,7 +1195,7 @@ public class Element implements NiftyEvent<Void> {
     // start effect and shizzle
     startEffect(EffectEventId.onHide, new EndNotify() {
       public void perform() {
-        resetEffects();
+        resetAllEffects();
         internalHide();
       }
     });
@@ -1314,15 +1280,12 @@ public class Element implements NiftyEvent<Void> {
   }
 
   /**
-   * This should check of the mouse event is inside the current element and if it is
+   * This should check if the mouse event is inside the current element and if it is
    * forward the event to it's child. The purpose of this is to build a list of all
    * elements from front to back that are available for a certain mouse position.
-   * @param mouseEvent MouseInputEvent
-   * @param eventTime time this event occured in ms
-   * @param mouseOverHandler MouseOverHandler to fill
    */
   public void buildMouseOverElements(
-      final MouseInputEvent mouseEvent,
+      final NiftyMouseInputEvent mouseEvent,
       final long eventTime,
       final MouseOverHandler mouseOverHandler) {
     if (canHandleMouseEvents()) {
@@ -1338,7 +1301,7 @@ public class Element implements NiftyEvent<Void> {
     }
   }
 
-  public void mouseEventHoverPreprocess(final MouseInputEvent mouseEvent, final long eventTime) {
+  public void mouseEventHoverPreprocess(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     effectManager.handleHoverDeactivate(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
   }
 
@@ -1347,49 +1310,12 @@ public class Element implements NiftyEvent<Void> {
    * @param mouseEvent mouse event
    * @param eventTime event time
    */
-  public boolean mouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
+  public boolean mouseEvent(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     mouseEventHover(mouseEvent);
-
-    boolean mouseInside = isInside(mouseEvent);
-    if (interaction.isOnClickRepeat()) {
-      if (mouseInside && isMouseDown() && mouseEvent.isLeftButton()) {
-        long deltaTime = eventTime - mouseDownTime;
-        if (deltaTime > REPEATED_CLICK_START_TIME) {
-          long pastTime = deltaTime - REPEATED_CLICK_START_TIME;
-          long repeatTime = pastTime - lastRepeatStartTime;
-          if (repeatTime > REPEATED_CLICK_TIME) {
-            lastRepeatStartTime = pastTime;
-            if (onClick(mouseEvent)) {
-              return true;
-            }
-          }
-        }
-      }
-    }
-    if (mouseInside && !isMouseDown()) {
-      if (mouseEvent.isInitialLeftButtonDown()) {
-        setMouseDown(true, eventTime);
-        if (isFocusable()) {
-          focusHandler.requestExclusiveMouseFocus(this);
-          focusHandler.setKeyFocus(this);
-        }
-        return onClick(mouseEvent);
-      }
-    } else if (!mouseEvent.isLeftButton() && isMouseDown()) {
-      setMouseDown(false, eventTime);
-      effectManager.stopEffect(EffectEventId.onClick);
-      focusHandler.lostMouseFocus(this);
-      if (mouseInside) {
-        onRelease();
-      }
-    }
-    if (isMouseDown()) {
-      onClickMouseMove(mouseEvent);
-    }
-    return false;
+    return interaction.process(mouseEvent, eventTime, isInside(mouseEvent), canHandleInteraction());
   }
 
-  private void mouseEventHover(final MouseInputEvent mouseEvent) {
+  private void mouseEventHover(final NiftyMouseInputEvent mouseEvent) {
     effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
     effectManager.handleHoverStartAndEnd(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
   }
@@ -1400,13 +1326,14 @@ public class Element implements NiftyEvent<Void> {
    * @param eventTime event time
    * @return true the mouse event has been eated and false when the mouse event can be processed further down
    */
-  public boolean mouseOverEvent(final MouseInputEvent mouseEvent, final long eventTime) {
+  public boolean mouseOverEvent(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     boolean eatMouseEvent = false;
-
     if (interaction.onMouseOver(this, mouseEvent)) {
       eatMouseEvent = true;
     }
-
+    if (interaction.onMouseWheel(this, mouseEvent)) {
+      eatMouseEvent = true;
+    }
     return eatMouseEvent;
   }
 
@@ -1415,7 +1342,7 @@ public class Element implements NiftyEvent<Void> {
    * @param inputEvent MouseInputEvent
    * @return true when inside, false otherwise
    */
-  private boolean isInside(final MouseInputEvent inputEvent) {
+  private boolean isInside(final NiftyMouseInputEvent inputEvent) {
     return isMouseInsideElement(inputEvent.getMouseX(), inputEvent.getMouseY());
   }
 
@@ -1447,90 +1374,14 @@ public class Element implements NiftyEvent<Void> {
         mouseY < (parentClipY + parentClipHeight);
   }
 
-  /**
-   * on click method.
-   * @param inputEvent event
-   */
-  public boolean onClick(final MouseInputEvent inputEvent) {
-    if (canHandleInteraction()) {
-      effectManager.startEffect(EffectEventId.onClick, this, time, null);
-      lastMouseX = inputEvent.getMouseX();
-      lastMouseY = inputEvent.getMouseY();
-
-      return interaction.onClick(inputEvent);
-    } else {
-      return false;
-    }
-  }
-
   public void onClick() {
     if (canHandleInteraction()) {
-      effectManager.startEffect(EffectEventId.onClick, this, time, null);
-      interaction.onClick();
+      interaction.activate(nifty);
     }
   }
 
   private boolean canHandleInteraction() {
     return enabled && !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId.onEndScreen);
-  }
-
-  public void onRelease() {
-    interaction.onRelease();
-  }
-
-  /**
-   * on click mouse move method.
-   * @param inputEvent MouseInputEvent
-   */
-  private void onClickMouseMove(final MouseInputEvent inputEvent) {
-    if (lastMouseX == inputEvent.getMouseX() && lastMouseY == inputEvent.getMouseY()) {
-      return;
-    }
-
-    lastMouseX = inputEvent.getMouseX();
-    lastMouseY = inputEvent.getMouseY();
-
-    interaction.onClickMouseMoved(inputEvent);
-  }
-
-  /**
-   * set on click method for the given screen.
-   * @param methodInvoker the method to invoke
-   * @param useRepeat repeat on click (true) or single event (false)
-   */
-  public void setOnClickMethod(final NiftyMethodInvoker methodInvoker, final boolean useRepeat) {
-    interaction.setOnClickMethod(methodInvoker, useRepeat);
-  }
-
-  public void setOnReleaseMethod(final NiftyMethodInvoker onReleaseMethod) {
-    interaction.setOnReleaseMethod(onReleaseMethod);
-  }
-
-  /**
-   * Set on click mouse move method.
-   * @param methodInvoker the method to invoke
-   */
-  public void setOnClickMouseMoveMethod(final NiftyMethodInvoker methodInvoker) {
-    interaction.setOnClickMouseMoved(methodInvoker);
-  }
-
-  /**
-   * set mouse down.
-   * @param newMouseDown new state of mouse button.
-   * @param eventTime the time in ms the event occured
-   */
-  private void setMouseDown(final boolean newMouseDown, final long eventTime) {
-    this.mouseDownTime = eventTime;
-    this.lastRepeatStartTime = 0;
-    this.mouseDown = newMouseDown;
-  }
-
-  /**
-   * is mouse down.
-   * @return mouse down state.
-   */
-  private boolean isMouseDown() {
-    return mouseDown;
   }
 
   /**
@@ -1708,18 +1559,7 @@ public class Element implements NiftyEvent<Void> {
    */
   public void attachPopup(final ScreenController screenController) {
     log.fine("attachPopup(" + screenController + ") to element [" + id + "]");
-    attach(interaction.getOnClickMethod(), screenController);
-    attach(interaction.getOnClickMouseMoveMethod(), screenController);
-    attach(interaction.getOnReleaseMethod(), screenController);
-  }
-
-  /**
-   * attach method.
-   * @param method method
-   * @param screenController method controller
-   */
-  private void attach(final NiftyMethodInvoker method, final ScreenController screenController) {
-    method.setFirst(screenController);
+    interaction.setFirstMethod(screenController);
     for (Element e : elements) {
       e.attachPopup(screenController);
     }
@@ -1865,6 +1705,10 @@ public class Element implements NiftyEvent<Void> {
     }
   }
 
+  public FocusHandler getFocusHandler() {
+    return focusHandler;
+  }
+
   /**
    * set a new style.
    * @param newStyle new style to set
@@ -1909,13 +1753,13 @@ public class Element implements NiftyEvent<Void> {
     }
   }
 
-//  public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
-//    Element element = findElementByName(elementName);
-//    if (element == null) {
-//      return null;
-//    }
-//    return element.getControl(requestedControlClass);
-//  }
+  public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
+    Element element = findElementByName(elementName);
+    if (element == null) {
+      return null;
+    }
+    return element.getControl(requestedControlClass);
+  }
 
   public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
     Element element = findElementByName(elementName);
@@ -1980,22 +1824,6 @@ public class Element implements NiftyEvent<Void> {
    */
   public LayoutPart getLayoutPart() {
     return layoutPart;
-  }
-
-  /**
-   * Get Element Interaction.
-   * @return current ElementInteraction
-   */
-  public ElementInteraction getInteraction() {
-    return interaction;
-  }
-
-  /**
-   * Set Element Interaction.
-   * @param elementInteractionParam ElementInteraction
-   */
-  public void setInteraction(final ElementInteraction elementInteractionParam) {
-    interaction = elementInteractionParam;
   }
 
   /**
@@ -2076,5 +1904,9 @@ public class Element implements NiftyEvent<Void> {
     for (Element element : elements) {
       element.onEndScreen(screen);
     }
+  }
+
+  public ElementInteraction getElementInteraction() {
+    return interaction;
   }
 }

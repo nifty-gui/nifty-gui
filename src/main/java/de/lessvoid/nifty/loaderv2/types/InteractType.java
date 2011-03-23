@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.loaderv2.types;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.ElementInteractionClickHandler;
 import de.lessvoid.nifty.loaderv2.types.helper.OnClickType;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -28,39 +28,61 @@ public class InteractType extends XmlBaseType {
       final Nifty nifty,
       final Element element,
       final Object ... controller) {
-    OnClickType onClick = getOnClickType("onClick");
-    if (onClick != null) {
-      NiftyMethodInvoker onClickMethod = onClick.getMethod(nifty, controller);
-      element.setOnClickMethod(onClickMethod, false);
-      element.setVisibleToMouseEvents(true);
-    }
-    OnClickType onRelease = getOnClickType("onRelease");
-    if (onRelease != null) {
-      NiftyMethodInvoker onReleaseMethod = onRelease.getMethod(nifty, controller);
-      element.setOnReleaseMethod(onReleaseMethod);
-      element.setVisibleToMouseEvents(true);
-    }
+    materializeMethods(nifty, element, element.getElementInteraction().getPrimary(),
+        "onClick", "onClickRepeat", "onRelease", "onClickMouseMove", controller);
+    materializeMethods(nifty, element, element.getElementInteraction().getPrimary(),
+        "onPrimaryClick", "onPrimaryClickRepeat", "onPrimaryRelease", "onPrimaryClickMouseMove", controller);
+    materializeMethods(nifty, element, element.getElementInteraction().getSecondary(),
+        "onSecondaryClick", "onSecondaryClickRepeat", "onSecondaryRelease", "onSecondaryClickMouseMove", controller);
+    materializeMethods(nifty, element, element.getElementInteraction().getTertiary(),
+        "onTertiaryClick", "onTertiaryClickRepeat", "onTertiaryRelease", "onTertiaryClickMouseMove", controller);
+
     OnClickType onMouseOver = getOnClickType("onMouseOver");
     if (onMouseOver != null) {
-      NiftyMethodInvoker onClickMethod = onMouseOver.getMethod(nifty, controller);
-      element.setOnMouseOverMethod(onClickMethod);
+      element.setOnMouseOverMethod(onMouseOver.getMethod(nifty, controller));
       element.setVisibleToMouseEvents(true);
     }
-    OnClickType onClickRepeat = getOnClickType("onClickRepeat");
-    if (onClickRepeat != null) {
-      NiftyMethodInvoker onClickRepeatMethod = onClickRepeat.getMethod(nifty, controller);
-      element.setOnClickMethod(onClickRepeatMethod, true);
-      element.setVisibleToMouseEvents(true);
-    }
-    OnClickType onClickMouseMove = getOnClickType("onClickMouseMove");
-    if (onClickMouseMove != null) {
-      NiftyMethodInvoker onClickMouseMoveMethod = onClickMouseMove.getMethod(nifty, controller);
-      element.setOnClickMouseMoveMethod(onClickMouseMoveMethod);
+    OnClickType onMouseWheel = getOnClickType("onMouseWheel");
+    if (onMouseWheel != null) {
+      element.getElementInteraction().setOnMouseWheelMethod(onMouseWheel.getMethod(nifty, controller));
       element.setVisibleToMouseEvents(true);
     }
     String onClickAlternateKey = getAttributes().get("onClickAlternateKey");
     if (onClickAlternateKey != null) {
       element.setOnClickAlternateKey(onClickAlternateKey);
+    }
+  }
+
+  private void materializeMethods(
+      final Nifty nifty,
+      final Element element,
+      final ElementInteractionClickHandler handler,
+      final String onClickName,
+      final String onClickRepeatName,
+      final String onReleaseName,
+      final String onClickMouseMoveName,
+      final Object... controller) {
+    OnClickType onClick = getOnClickType(onClickName);
+    if (onClick != null) {
+      handler.setOnClickMethod(onClick.getMethod(nifty, controller));
+      handler.setOnClickRepeatEnabled(false);
+      element.setVisibleToMouseEvents(true);
+    }
+    OnClickType onClickRepeat = getOnClickType(onClickRepeatName);
+    if (onClickRepeat != null) {
+      handler.setOnClickMethod(onClickRepeat.getMethod(nifty, controller));
+      handler.setOnClickRepeatEnabled(true);
+      element.setVisibleToMouseEvents(true);
+    }
+    OnClickType onClickMouseMove = getOnClickType(onClickMouseMoveName);
+    if (onClickMouseMove != null) {
+      handler.setOnClickMouseMoveMethod(onClickMouseMove.getMethod(nifty, controller));
+      element.setVisibleToMouseEvents(true);
+    }
+    OnClickType onRelease = getOnClickType(onReleaseName);
+    if (onRelease != null) {
+      handler.setOnReleaseMethod(onRelease.getMethod(nifty, controller));
+      element.setVisibleToMouseEvents(true);
     }
   }
 

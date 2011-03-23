@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.elements;
+package de.lessvoid.nifty.elements.events;
 
 import de.lessvoid.nifty.NiftyEvent;
 

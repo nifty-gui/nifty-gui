@@ -15,8 +15,8 @@ import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.NullObjectFactory;
 import de.lessvoid.nifty.tools.StringHelper;
@@ -284,7 +284,7 @@ public class Screen {
    * @param inputEvent MouseInputEvent
    * @return true when processed and false when not
    */
-  public boolean mouseEvent(final MouseInputEvent inputEvent) {
+  public boolean mouseEvent(final NiftyMouseInputEvent inputEvent) {
     if (!popupElements.isEmpty()) {
       return forwardMouseEventToLayers(popupElements, inputEvent);
     } else {
@@ -298,7 +298,7 @@ public class Screen {
    * @param inputEvent TODO
    * @return TODO
    */
-  private boolean forwardMouseEventToLayers(final List < Element > layerList, final MouseInputEvent inputEvent) {
+  private boolean forwardMouseEventToLayers(final List < Element > layerList, final NiftyMouseInputEvent inputEvent) {
     mouseOverHandler.reset();
 
     long eventTime = timeProvider.getMsTime();

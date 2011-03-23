@@ -26,8 +26,8 @@ import org.bushe.swing.event.annotation.ReferenceStrength;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
@@ -53,6 +53,8 @@ import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
+import de.lessvoid.nifty.tools.ObjectPool;
+import de.lessvoid.nifty.tools.ObjectPool.Factory;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -232,6 +234,14 @@ public class Nifty {
       log.fine(currentScreen.debugOutput());
     }
     return exit;
+  }
+
+  private boolean forwardMouseEventToScreen(final NiftyMouseInputEvent mouseEvent) {
+    // update the nifty mouse that keeps track of the current mouse position too 
+    niftyMouse.updateMousePosition(mouseEvent.getMouseX(), mouseEvent.getMouseY());
+
+    // and forward the event to the current screen
+    return currentScreen.mouseEvent(mouseEvent);
   }
 
   /**
@@ -1190,18 +1200,22 @@ public class Nifty {
    * @author void
    */
   private class NiftyInputConsumerImpl implements NiftyInputConsumer {
+    private ObjectPool<NiftyMouseInputEvent> pool = new ObjectPool<NiftyMouseInputEvent>(32, new Factory<NiftyMouseInputEvent>() {
+      @Override
+      public NiftyMouseInputEvent createNew() {
+        return new NiftyMouseInputEvent();
+      }
+    });
+    private boolean button0Down = false;
+    private boolean button1Down = false;
+    private boolean button2Down = false;
+
     @Override
-    public boolean processMouseEvent(final MouseInputEvent mouseEvent) {
+    public boolean processMouseEvent(final int mouseX, final int mouseY, final int mouseWheel, final int button, final boolean buttonDown) {
       if (log.isLoggable(Level.FINE)) {
-        log.fine(mouseEvent.toString());
+        log.fine("processMouseEvent: " + mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown);
       }
-      boolean handled = true;
-      if (mouseInputEventQueue.canProcess(mouseEvent)) {
-        mouseInputEventQueue.process(mouseEvent);
-        handled = forwardMouseEventToScreen(mouseEvent);
-        handleDynamicElements();
-      }
-      return handled;
+      return processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
     }
 
     @Override
@@ -1211,8 +1225,35 @@ public class Nifty {
       }
       return false;
     }
+
+    private NiftyMouseInputEvent createEvent(final int mouseX, final int mouseY, final int mouseWheel, final int button, final boolean buttonDown) {
+      switch (button) {
+        case 0: button0Down = buttonDown; break;
+        case 1: button1Down = buttonDown; break;
+        case 2: button2Down = buttonDown; break;
+      }
+
+      NiftyMouseInputEvent result = pool.allocate();
+      result.initialize(mouseX, mouseY, mouseWheel, button0Down, button1Down, button2Down);
+      return result;
+    }
+
+    private boolean processEvent(final NiftyMouseInputEvent mouseInputEvent) {
+      boolean handled = true;
+      if (mouseInputEventQueue.canProcess(mouseInputEvent)) {
+        mouseInputEventQueue.process(mouseInputEvent);
+        handled = forwardMouseEventToScreen(mouseInputEvent);
+        handleDynamicElements();
+      }
+      pool.free(mouseInputEvent);
+      return handled;
+    }
   }
 
+  /**
+   * Helper class to connect better to the eventbus.
+   * @author void
+   */
   @SuppressWarnings("rawtypes")
   private static class ClassSaveEventTopicSubscriber implements EventTopicSubscriber, ProxySubscriber {
     private String elementId;
@@ -1266,13 +1307,5 @@ public class Nifty {
       element.onStartScreen();
     }
     return element;
-  }
-
-  private boolean forwardMouseEventToScreen(final MouseInputEvent mouseEvent) {
-    // update the nifty mouse that keeps track of the current mouse position too 
-    niftyMouse.updateMousePosition(mouseEvent.getMouseX(), mouseEvent.getMouseY());
-
-    // and forward the event to the current screen
-    return currentScreen.mouseEvent(mouseEvent);
   }
 }

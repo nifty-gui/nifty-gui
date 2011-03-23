@@ -47,6 +47,10 @@ public class ObjectPool<T> {
     free.add(index);
   }
 
+  public int getFreeCount() {
+    return pool.size() - free.size();
+  }
+
   public interface Factory<T> {
     T createNew();
   }

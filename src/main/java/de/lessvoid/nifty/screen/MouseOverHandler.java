@@ -3,7 +3,7 @@ package de.lessvoid.nifty.screen;
 import java.util.ArrayList;
 
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
 /**
  * The MouseOverHandler manages mouse over elements.
@@ -64,7 +64,7 @@ public class MouseOverHandler {
 
   public void processMouseOverEvent(
       final Element rootElement,
-      final MouseInputEvent mouseEvent,
+      final NiftyMouseInputEvent mouseEvent,
       final long eventTime) {
     for (int i = mouseOverElements.size() - 1; i >= 0; i--) {
       Element element = mouseOverElements.get(i);
@@ -74,7 +74,7 @@ public class MouseOverHandler {
     }
   }
 
-  public void processMouseEvent(final MouseInputEvent mouseEvent, final long eventTime) {
+  public void processMouseEvent(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     // first step is to preprocess hover effects for all elements
     // this will deactivate all hover effects that are not active anymore
     // Note: This will make sure that all hover effects will be deactivated before a new

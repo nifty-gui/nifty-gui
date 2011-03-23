@@ -87,7 +87,6 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
     if (target == null || target.length == 0 || methodWithName == null) {
       return false;
     }
-
     nifty.delayedMethodInvoke(this, invokeParametersParam);
     return true;
   }
@@ -100,9 +99,11 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
         if (method != null) {
           // we've found a method with the given name. now we need to match the parameters.
           //
-          // 1) if the target method has parameters encoded we ignore the invokeParametersParam we've been
-          //    called with and call the method as is.
-          // 2) if the target method has no parameters there are two possibilities:
+          // 1) if the method we want to call (the string from the xml that is!) has parameters
+          //    encoded we ignore the actual invokeParametersParam we've been called with and
+          //    call the method as is.
+          //
+          // 2) if the method we want to call has no parameters there are two possibilities:
           //    2a) invokeParametersParam are given, in this case we'll try to forward them to the method
           //        if this is not possible we fall back to 2b)
           //    2b) just call the method without any parameters
@@ -121,12 +122,10 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
             // no invokeParameters encoded. this means we can call the method as is or with the invokeParametersParam
             if (invokeParametersParam.length > 0) {
               if (getMethodParameterCount(method) == invokeParametersParam.length) {
-                log.fine("invoking method '" + methodWithName + "' with the actual parameters ("
-                    + debugParaString(invokeParametersParam) + ")");
+                log.fine("invoking method '" + methodWithName + "' with the actual parameters (" + debugParaString(invokeParametersParam) + ")");
                 callMethod(object, method, invokeParametersParam);
               } else {
-                log.fine("invoking method '" + methodWithName
-                    + "' without parameters (invokeParametersParam mismatch)");
+                log.fine("invoking method '" + methodWithName + "' without parameters (invokeParametersParam mismatch)");
                 callMethod(object, method, null);
               }
             } else {
