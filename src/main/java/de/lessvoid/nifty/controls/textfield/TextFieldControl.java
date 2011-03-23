@@ -20,6 +20,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * A TextFieldControl.
  * 
  * @author void
+ * @deprecated Please use {@link de.lessvoid.nifty.controls.TextField} when accessing NiftyControls.
  */
 @Deprecated
 public class TextFieldControl extends AbstractController implements TextField, TextFieldView {

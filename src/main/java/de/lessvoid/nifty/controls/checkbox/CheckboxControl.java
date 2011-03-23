@@ -16,6 +16,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 /**
  * A CheckboxControl.
  * @author void
+ * @deprecated Please use {@link de.lessvoid.nifty.controls.CheckBox} when accessing NiftyControls.
  */
 @Deprecated
 public class CheckboxControl extends AbstractController implements CheckBox, CheckBoxView {

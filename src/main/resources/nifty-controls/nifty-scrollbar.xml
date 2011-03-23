@@ -3,16 +3,16 @@
   <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel" focusable="true">
       <image style="#up">
-        <interact onClickRepeat="upClick()" />
+        <interact onPrimaryClickRepeat="upClick()" />
       </image>
       <image id="#background" style="#background">
-        <interact onClick="click()" />
+        <interact onPrimaryClick="click()" />
         <image id="#position" style="#position">
-          <interact onClick="mouseMoveStart()" onClickMouseMove="mouseMove()"/>
+          <interact onPrimaryClick="mouseMoveStart()" onPrimaryClickMouseMove="mouseMove()"/>
         </image>
       </image>
       <image style="#down">
-        <interact onClickRepeat="downClick()" />
+        <interact onPrimaryClickRepeat="downClick()" />
       </image>
     </panel>
   </controlDefinition>
@@ -20,16 +20,16 @@
   <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel">
       <image style="#left">
-        <interact onClickRepeat="upClick()" />
+        <interact onPrimaryClickRepeat="upClick()" />
       </image>
       <image id="#background" style="#background">
-        <interact onClickRepeat="click()" />
+        <interact onPrimaryClickRepeat="click()" />
         <image id="#position" style="#position">
-          <interact onClick="mouseMoveStart()" onClickMouseMove="mouseMove()"/>
+          <interact onPrimaryClick="mouseMoveStart()" onPrimaryClickMouseMove="mouseMove()"/>
         </image>
       </image>
       <image style="#right">
-        <interact onClickRepeat="downClick()" />
+        <interact onPrimaryClickRepeat="downClick()" />
       </image>
     </panel>
   </controlDefinition>

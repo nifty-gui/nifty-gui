@@ -17,6 +17,9 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * @deprecated Please use {@link de.lessvoid.nifty.controls.ScrollPanel} when accessing NiftyControls.
+ */
 @Deprecated
 public class ScrollPanelControl extends AbstractController implements ScrollPanel {
   private Nifty nifty;

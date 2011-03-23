@@ -18,6 +18,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * ImageSelectControl.
  * 
  * @author void
+ * @deprecated Please use {@link de.lessvoid.nifty.controls.ImageSelect} when accessing NiftyControls.
  */
 @Deprecated
 public class ImageSelectControl extends AbstractController {

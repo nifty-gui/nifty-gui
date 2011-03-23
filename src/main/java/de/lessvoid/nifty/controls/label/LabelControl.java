@@ -12,6 +12,9 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * @deprecated Please directly use {@link de.lessvoid.nifty.controls.Label} when accessing NiftyControls.
+ */
 @Deprecated
 public class LabelControl extends AbstractController implements Label {
 

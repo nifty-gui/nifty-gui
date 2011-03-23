@@ -16,7 +16,7 @@ import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.ElementShowEvent;
+import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
@@ -25,6 +25,9 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * @deprecated Please use {@link de.lessvoid.nifty.controls.ListBox} when accessing NiftyControls.
+ */
 @Deprecated
 public class ListBoxControl<T> extends AbstractController implements ListBox<T>, ListBoxView<T> {
   private Logger log = Logger.getLogger(ListBoxControl.class.getName());

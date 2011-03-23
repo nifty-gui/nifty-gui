@@ -10,9 +10,9 @@ import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyMouseClickedEvent;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.screen.Screen;
@@ -24,6 +24,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 /**
  * Implementation of the TextButton Control.
  * @author void
+ * @deprecated Please use {@link de.lessvoid.nifty.controls.Button} when accessing NiftyControls.
  */
 @Deprecated
 public class ButtonControl extends AbstractController implements Button {
@@ -43,13 +44,13 @@ public class ButtonControl extends AbstractController implements Button {
     buttonTextElement = getElement().findElementByName("#text");
     buttonTextRenderer = buttonTextElement.getRenderer(TextRenderer.class);
 
-    EventTopicSubscriber<NiftyMouseClickedEvent> mouseClickedSubscriber = new EventTopicSubscriber<NiftyMouseClickedEvent>() {
+    EventTopicSubscriber<NiftyMousePrimaryClickedEvent> mouseClickedSubscriber = new EventTopicSubscriber<NiftyMousePrimaryClickedEvent>() {
       @Override
-      public void onEvent(final String topic, final NiftyMouseClickedEvent data) {
+      public void onEvent(final String topic, final NiftyMousePrimaryClickedEvent data) {
         niftyParam.publishEvent(topic, new ButtonClickedEvent());
       }
     };
-    niftyParam.subscribe(screen, newElement.getId(), NiftyMouseClickedEvent.class, mouseClickedSubscriber);
+    niftyParam.subscribe(screen, newElement.getId(), NiftyMousePrimaryClickedEvent.class, mouseClickedSubscriber);
   }
 
   @Override

@@ -21,6 +21,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * A ConsoleControl.
  * 
  * @author void
+ * @deprecated Please use {@link de.lessvoid.nifty.controls.Console} when accessing NiftyControls.
  */
 @Deprecated
 public class ConsoleControl extends AbstractController {

@@ -13,6 +13,9 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * @deprecated Please use {@link de.lessvoid.nifty.controls.Slider} when accessing NiftyControls.
+ */
 @Deprecated
 public class SliderControl extends AbstractController implements Slider {
   private SliderImpl sliderImpl = new SliderImpl();
