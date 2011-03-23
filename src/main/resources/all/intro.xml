@@ -65,7 +65,7 @@
   <style id="glowText">
     <effect>
       <onHover name="saveState" />
-      <onHover name="changeFont" font="aurulent-sans-17.fnt" post="false" inherit="false"/>
+      <onHover name="changeFont" font="aurulent-sans-16.fnt" post="false" inherit="false"/>
       <onHover name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
       <onHover name="renderElement" />
       <onHover name="restoreState" />
@@ -283,7 +283,7 @@ Thank you Trent.&#13;&#10;" align="center" />
               <image id="thumbExit" style="thumbStyle" x="150px" y="50px" filename="all/thumb-exit.png" />
             </panel>
             <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" stepSizeY="30" height="100%">
-              <panel id="huhu-1" childLayout="center" width="100%" height="420px" padding="0px,40px,0px,40px">
+              <panel id="huhu-1" childLayout="center" width="100%" height="480px" padding="0px,40px,0px,40px">
                 <panel id="huhu-2" childLayout="vertical" width="100%">
                   <text id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
