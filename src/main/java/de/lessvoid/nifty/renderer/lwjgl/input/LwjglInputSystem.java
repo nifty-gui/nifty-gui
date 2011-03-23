@@ -13,12 +13,10 @@ import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
 
 public class LwjglInputSystem implements InputSystem {
   private static Logger log = Logger.getLogger(LwjglInputSystem.class.getName());
-  private boolean lastLeftMouseDown = false;
   private LwjglKeyboardInputEventCreator keyboardEventCreator = new LwjglKeyboardInputEventCreator();
   private List<KeyboardInputEvent> keyboardEvents = new ArrayList<KeyboardInputEvent>();
   private IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
@@ -52,14 +50,10 @@ public class LwjglInputSystem implements InputSystem {
     while (Mouse.next()) {
       int mouseX = Mouse.getEventX();
       int mouseY = viewportHeight - Mouse.getEventY();
-      if (Mouse.getEventButton() == 0) {
-        boolean leftMouseButton = Mouse.getEventButtonState();
-        if (leftMouseButton != lastLeftMouseDown) {
-          lastLeftMouseDown = leftMouseButton;
-        }
-      }
-      MouseInputEvent inputEvent = new MouseInputEvent(mouseX, mouseY, lastLeftMouseDown);
-      inputEventConsumer.processMouseEvent(inputEvent);
+      int mouseWheel = Mouse.getEventDWheel() / 120; // not sure about that 120 here. works on my system and makes this return 1 if the wheel is moved the minimal amount.
+      int button = Mouse.getEventButton();
+      boolean buttonDown = Mouse.getEventButtonState();
+      inputEventConsumer.processMouseEvent(mouseX, mouseY, mouseWheel, button, buttonDown);
     }
   }
 
