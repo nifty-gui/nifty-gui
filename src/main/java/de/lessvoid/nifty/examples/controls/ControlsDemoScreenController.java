@@ -12,7 +12,7 @@ import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.impl.Move;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.NiftyMouseClickedEvent;
+import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -64,7 +64,7 @@ public class ControlsDemoScreenController implements ScreenController {
   }
 
   @NiftyEventSubscriber(pattern="menuButton.*")
-  public void onMenuButtonListBoxClick(final String id, final NiftyMouseClickedEvent clickedEvent) {
+  public void onMenuButtonListBoxClick(final String id, final NiftyMousePrimaryClickedEvent clickedEvent) {
     if (!id.equals(currentMenuButtonId)) {
       int currentIndex = buttonIdList.indexOf(currentMenuButtonId);
       int nextIndex = buttonIdList.indexOf(id);
