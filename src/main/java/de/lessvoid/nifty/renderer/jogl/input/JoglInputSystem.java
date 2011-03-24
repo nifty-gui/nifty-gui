@@ -10,7 +10,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
 
 /**
@@ -19,15 +18,15 @@ import de.lessvoid.nifty.spi.input.InputSystem;
 public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseListener,
         KeyListener {
 
-    private ConcurrentLinkedQueue<MouseInputEvent> mouseEvents = new ConcurrentLinkedQueue<MouseInputEvent>();
+    private ConcurrentLinkedQueue<MouseEventData> mouseEvents = new ConcurrentLinkedQueue<MouseEventData>();
 
     private ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEvents = new ConcurrentLinkedQueue<KeyboardInputEvent>();
 
     @Override
     public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
-        MouseInputEvent mouseEvent = mouseEvents.poll();
+      MouseEventData mouseEvent = mouseEvents.poll();
         while (mouseEvent != null) {
-            inputEventConsumer.processMouseEvent(mouseEvent);
+            mouseEvent.processMouseEvents(inputEventConsumer);
             mouseEvent = mouseEvents.poll();
         }
 
@@ -43,7 +42,7 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
         // at the moment we only care about the BUTTON1
         if (mouseEvent.getButton() == MouseEvent.BUTTON1
                 || mouseEvent.getModifiers() == InputEvent.BUTTON1_MASK) {
-            mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), true));
+            mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(), true, 0));
         }
     }
 
@@ -51,7 +50,7 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
     public void mouseMoved(MouseEvent mouseEvent) {
         // at the moment we only care about the BUTTON1
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-            mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), true));
+            mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(), true, 0));
         }
     }
 
@@ -74,7 +73,7 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
     public void mousePressed(MouseEvent mouseEvent) {
         // at the moment we only care about the BUTTON1
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-            mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), true));
+            mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(), true, 0));
         }
     }
 
@@ -82,7 +81,7 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
     public void mouseReleased(MouseEvent mouseEvent) {
         // at the moment we only care about the BUTTON1
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-            mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), false));
+            mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(), false, 0));
         }
     }
 
@@ -114,4 +113,23 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
         // TODO implement this method later
     }
 
+    private class MouseEventData {
+      private int mouseX;
+      private int mouseY;
+      private int mouseWheel;
+      private int button;
+      private boolean buttonDown;
+
+      public MouseEventData(final int mouseX, final int mouseY, final boolean mouseDown, final int mouseButton) {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+        this.buttonDown = mouseDown;
+        this.button = mouseButton;
+        this.mouseWheel = 0;
+      }
+
+      public void processMouseEvents(final NiftyInputConsumer inputEventConsumer) {
+        inputEventConsumer.processMouseEvent(mouseX, mouseY, mouseWheel, button, buttonDown);
+      }
+    }
 }
