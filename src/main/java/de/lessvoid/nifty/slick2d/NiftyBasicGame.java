@@ -14,7 +14,6 @@ import org.newdawn.slick.opengl.SlickCallable;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.slick2d.input.LwjglKeyboardInputEventCreator;
 import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
@@ -39,7 +38,7 @@ public abstract class NiftyBasicGame implements Game, InputListener {
   /** The state of the button controlls */
   protected boolean[][] controllerButton = new boolean[MAX_CONTROLLERS][MAX_CONTROLLER_BUTTONS];
   protected Nifty nifty = null;
-  private List<MouseInputEvent> mouseEvents = new ArrayList<MouseInputEvent>();
+  private List<MouseEvent> mouseEvents = new ArrayList<MouseEvent>();
   private List<KeyboardInputEvent> keyEvents = new ArrayList<KeyboardInputEvent>();
   private LwjglKeyboardInputEventCreator inputEventCreator = new LwjglKeyboardInputEventCreator();
   private boolean mouseDown;
@@ -77,8 +76,8 @@ public abstract class NiftyBasicGame implements Game, InputListener {
   public void init(GameContainer container) throws SlickException {
     nifty = new Nifty(new SlickRenderDevice(container), new SlickSoundDevice(), new InputSystem() {
       public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
-        for (MouseInputEvent event : mouseEvents) {
-          inputEventConsumer.processMouseEvent(event);
+        for (MouseEvent event : mouseEvents) {
+          event.processMouseEvents(inputEventConsumer);
         }
         mouseEvents.clear();
         for (KeyboardInputEvent event : keyEvents) {
@@ -133,7 +132,8 @@ public abstract class NiftyBasicGame implements Game, InputListener {
   }
 
   private void forwardMouseEventToNifty(final int mouseX, final int mouseY, final boolean mouseDown) {
-    mouseEvents.add(new MouseInputEvent(mouseX, height - mouseY, mouseDown));
+    // FIXME: Add support for more mouse buttons (this assumes left mouse button clicks currently)
+    mouseEvents.add(new MouseEvent(mouseX, height - mouseY, mouseDown, 0));
   }
 
   protected void setHeight(final int height) {

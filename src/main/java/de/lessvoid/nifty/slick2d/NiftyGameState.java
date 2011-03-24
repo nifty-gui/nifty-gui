@@ -15,7 +15,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.slick2d.input.LwjglKeyboardInputEventCreator;
 import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
@@ -69,7 +68,7 @@ public class NiftyGameState extends BasicGameState {
    */
   private Image mouseImage;
 
-  private List < MouseInputEvent > mouseEvents = new ArrayList < MouseInputEvent >();
+  private List < MouseEvent > mouseEvents = new ArrayList < MouseEvent >();
   private List < KeyboardInputEvent > keyEvents = new ArrayList < KeyboardInputEvent >();
 
   private GameContainer container;
@@ -88,8 +87,8 @@ public class NiftyGameState extends BasicGameState {
         new SlickSoundDevice(),
         new InputSystem() {
           public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
-            for (MouseInputEvent event : mouseEvents) {
-              inputEventConsumer.processMouseEvent(event);
+            for (MouseEvent event : mouseEvents) {
+              event.processMouseEvents(inputEventConsumer);
             }
             mouseEvents.clear();
 
@@ -272,7 +271,8 @@ public class NiftyGameState extends BasicGameState {
    * @param mouseDown
    */
   private void forwardMouseEventToNifty(final int mouseX, final int mouseY, final boolean mouseDown) {
-    mouseEvents.add(new MouseInputEvent(mouseX, container.getHeight() - mouseY, mouseDown));
+    // FIXME: add support for more mouse buttons (this assumes left mouse button click currently)
+    mouseEvents.add(new MouseEvent(mouseX, container.getHeight() - mouseY, mouseDown, 0));
   }
 
   public Nifty getNifty() {
