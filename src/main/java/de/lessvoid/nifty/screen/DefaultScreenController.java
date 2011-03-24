@@ -7,7 +7,10 @@ import de.lessvoid.nifty.Nifty;
  * It does nothing at the moment.
  */
 public class DefaultScreenController implements ScreenController {
-  public void bind(Nifty nifty, Screen screen) {
+  Nifty nifty;
+
+  public void bind(final Nifty nifty, final Screen screen) {
+    this.nifty = nifty;
   }
 
   public void onStartScreen() {
@@ -15,5 +18,8 @@ public class DefaultScreenController implements ScreenController {
 
   public void onEndScreen() {
   }
-  
+
+  public void gotoScreen(final String screenId) {
+    nifty.gotoScreen(screenId);
+  }
 }
