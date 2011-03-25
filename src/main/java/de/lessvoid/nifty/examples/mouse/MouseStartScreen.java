@@ -65,6 +65,11 @@ public class MouseStartScreen implements ScreenController {
   public void onEndScreen() {
   }
 
+  public void quit() {
+    nifty.setAlternateKeyForNextLoadXml("fade");
+    nifty.fromXml("all/intro.xml", "menu");
+  }
+
   // the old regular interact kinda way
 
   // primay

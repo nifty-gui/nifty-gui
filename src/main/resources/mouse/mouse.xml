@@ -65,16 +65,11 @@
         </panel>
       </panel>
 
-      <panel width="100%" height="60px" paddingTop="25px" paddingBottom="25px" childLayout="vertical">
-        <panel width="100%" height="100%" backgroundColor="#4444">
-          <effect>
-            <onStartScreen name="move" mode="in" direction="left" length="1000" startDelay="500" inherit="true"/>
-            <onEndScreen name="move" mode="out" direction="right" length="1000" startDelay="500" inherit="true"/>
-          </effect>
-        </panel>
+      <panel width="100%" height="5%" paddingTop="25px" paddingBottom="25px" childLayout="vertical">
+        <panel width="100%" height="100%" backgroundColor="#4444" />
       </panel>
 
-      <panel childLayout="horizontal" height="50%" padding="20px">
+      <panel childLayout="horizontal" height="45%" padding="20px">
         <panel id="mouseEvents" style="nifty-panel-red-no-shadow" height="100%" width="50%" align="center" valign="center" childLayout="center" visibleToMouse="true">
           <effect>
             <onStartScreen name="move" mode="in" direction="left" length="300" startDelay="0" inherit="true"/>
@@ -114,6 +109,12 @@
           <control align="right" name="label" text="NiftyMouseWheelEvent" color="#000f" />
           <control align="right" name="label" text="NiftyMouseEvent" color="#000f" />
         </panel>
+      </panel>
+
+      <panel childLayout="center" width="100%" height="10%" backgroundColor="#f002">
+        <control id="backButton" name="button" label="Back to Menu" align="center" valign="center">
+          <interact onClick="quit()" /> 
+        </control>
       </panel>
     </layer>
   </screen>

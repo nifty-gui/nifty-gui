@@ -273,6 +273,7 @@ Thank you Trent.&#13;&#10;" align="center" />
             <panel width="50%" childLayout="absolute">
               <image id="thumbHelloWorld" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
               <image id="thumbHint" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
+              <image id="thumbMouse" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
               <image id="thumbTextAlign" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textAlign.png" />
               <image id="thumbTextField" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textField.png" />
               <image id="thumbDropDownList" style="thumbStyle" x="150px" y="50px" filename="all/thumb-dropDownList.png" />
@@ -290,6 +291,9 @@ Thank you Trent.&#13;&#10;" align="center" />
                   </text>
                   <text id="hint" text="Panels and Hint (1.3)" style="menu-item" hintText="Panels and Hint Demonstration (Nifty 1.3)" targetElement="thumbHint">
                     <interact onClick="hint()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="mouse" text="Mouse Update (1.3)" style="menu-item" hintText="Multiple Mouse Buttons/Events Support (Nifty 1.3)" targetElement="thumbMouse">
+                    <interact onClick="mouse()" onClickAlternateKey="fade" />
                   </text>
                   <text id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example" targetElement="thumbTextAlign">
                     <interact onClick="textAlign()" onClickAlternateKey="fade" />

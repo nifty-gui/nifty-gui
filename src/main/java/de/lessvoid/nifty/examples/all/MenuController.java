@@ -66,6 +66,10 @@ public class MenuController implements ScreenController {
     nifty.fromXml("hint/hint.xml", "start");
   }
 
+  public void mouse() {
+    nifty.fromXml("mouse/mouse.xml", "start");
+  }
+
   public void textfield() {
     nifty.fromXml("textfield/textfield.xml", "start");
   }
