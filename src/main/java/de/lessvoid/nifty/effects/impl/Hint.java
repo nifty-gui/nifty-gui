@@ -59,7 +59,7 @@ public class Hint implements EffectImpl {
       final NiftyRenderEngine r) {
     if (normalizedTime > 0.0) {
       final Element hintLayer = nifty.getCurrentScreen().findElementByName(hintLayerId);
-      if (!hintLayer.isVisible()) {
+      if (hintLayer != null && !hintLayer.isVisible()) {
         // decide if we can already show the hint
         if (nifty.getNiftyMouse().getNoMouseMovementTime() > hintDelay) {
           Element hintPanel = hintLayer.findElementByName(hintPanelId);
