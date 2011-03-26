@@ -1898,6 +1898,8 @@ public class Element implements NiftyEvent<Void> {
   }
 
   public void onEndScreen(final Screen screen) {
+    screen.unregisterElementId(id);
+
     if (attachedInputControl != null) {
       attachedInputControl.onEndScreen(nifty, screen);
     }

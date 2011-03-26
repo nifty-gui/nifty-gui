@@ -566,12 +566,10 @@ public class Screen {
 
     public void perform() {
       Logger.getAnonymousLogger().info("onEndScreen has ended");
-
+      onEndScreenHasEnded();
       if (additionalEndNotify != null) {
         additionalEndNotify.perform();
       }
-
-      onEndScreenHasEnded();
     }
   }
 
