@@ -111,7 +111,7 @@
         </panel>
       </panel>
 
-      <panel childLayout="center" width="100%" height="10%" backgroundColor="#f002">
+      <panel childLayout="center" width="100%" height="10%">
         <control id="backButton" name="button" label="Back to Menu" align="center" valign="center">
           <interact onClick="quit()" /> 
         </control>

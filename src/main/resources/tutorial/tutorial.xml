@@ -4,8 +4,7 @@
   <useControls filename="nifty-default-controls.xml" />
 
   <registerSound id="select" filename="tutorial/sound/select.wav" />
-  <registerSound id="intro" filename="tutorial/sound/intro.wav" />
-  <registerSound id="hover" filename="tutorial/sound/hover.wav" />
+  <registerSound id="intro" filename="tutorial/sound/intro.ogg" />
   <registerEffect name="bubblesEffect" class="de.lessvoid.nifty.examples.tutorial.BubblesEffect" />
   <registerMusic id="music" filename="tutorial/sound/echoed_-_L.O.R.D..ogg" />
   <resourceBundle id="welcome" filename="tutorial/locale/welcome" />
@@ -505,7 +504,7 @@
           <panel align="left" childLayout="vertical" width="*">
             <text style="textFont" text="Some Image of what is going on:"/>
             <panel style="imageBlock">
-              <image height="200px" filename="tutorial/images/layers.tga" align="left"/>
+              <image height="200px" filename="tutorial/images/layers.png" align="left"/>
             </panel>
           </panel>
         </panel>
@@ -524,13 +523,13 @@
           <panel align="left" childLayout="vertical" width="50%">
             <text style="textFont" text="Vertical:"/>
             <panel style="imageBlock">
-              <image filename="tutorial/images/layout-vertical.tga" align="left"/>
+              <image filename="tutorial/images/layout-vertical.png" align="left"/>
             </panel>
           </panel>
           <panel align="left" childLayout="vertical" width="50%">
             <text style="textFont" text="Horizontal:"/>
             <panel style="imageBlock">
-              <image filename="tutorial/images/layout-horizontal.tga" align="left"/>
+              <image filename="tutorial/images/layout-horizontal.png" align="left"/>
             </panel>
           </panel>
         </panel>
@@ -547,13 +546,13 @@
 	        <panel width="50%" align="left" childLayout="vertical">
 	          <text style="textFont" text="Center:"/>
 	          <panel style="imageBlock">
-	            <image filename="tutorial/images/layout-center.tga" align="left"/>
+	            <image filename="tutorial/images/layout-center.png" align="left"/>
 	          </panel>
 	        </panel>
 	        <panel width="50%" align="left" childLayout="vertical">
 	          <text style="textFont" text="Absolute:"/>
 	          <panel style="imageBlock">
-	            <image filename="tutorial/images/layout-absolute.tga" align="left"/>
+	            <image filename="tutorial/images/layout-absolute.png" align="left"/>
 	          </panel>
 	        </panel>
 	      </panel>

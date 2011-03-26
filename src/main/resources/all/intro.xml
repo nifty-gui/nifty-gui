@@ -9,11 +9,11 @@
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
   <!-- register sounds -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <registerSound id="gong" filename="sound/19546__tobi123__Gong_mf2.wav" />
-  <registerSound id="eagle" filename="sound/27257__kerri__eagle_feather_short.wav" />
+  <registerSound id="gong" filename="sound/19546__tobi123__Gong_mf2.ogg" />
+  <registerSound id="eagle" filename="sound/27257__kerri__eagle_feather_short.ogg" />
   <registerSound id="panel" filename="sound/34556__Corsica_S__reverse_bass_blip_2.wav" />
   <registerSound id="select" filename="sound/select.wav" />
-  <registerSound id="popup" filename="sound/744__elmomo__MutantJewsArp.wav" />
+  <registerSound id="popup" filename="sound/744__elmomo__MutantJewsArp.ogg" />
   <registerMusic id="outro" filename="sound/a.ogg" />
 
   <style id="special-scrollpanel#scrollpanel">
@@ -139,7 +139,7 @@ Thank you Trent.&#13;&#10;" align="center" />
       <effect>
         <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true" alternateEnable="exit"/>
       </effect>
-      <panel id="panel" childLayout="center" backgroundImage="intro-background.png" width="100%">
+      <panel id="panel" childLayout="center" backgroundImage="intro-background.png" width="100%" height="100%">
         <effect>
           <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" post="false"/> 
           <onStartScreen name="playSound" sound="gong" startDelay="1400" />
@@ -272,8 +272,8 @@ Thank you Trent.&#13;&#10;" align="center" />
           <panel childLayout="horizontal" width="100%" height="100%">
             <panel width="50%" childLayout="absolute">
               <image id="thumbHelloWorld" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
-              <image id="thumbHint" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
-              <image id="thumbMouse" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
+              <image id="thumbHint" style="thumbStyle" x="150px" y="50px" filename="all/thumb-hint.png" />
+              <image id="thumbMouse" style="thumbStyle" x="150px" y="50px" filename="all/thumb-mouse.png" />
               <image id="thumbTextAlign" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textAlign.png" />
               <image id="thumbTextField" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textField.png" />
               <image id="thumbDropDownList" style="thumbStyle" x="150px" y="50px" filename="all/thumb-dropDownList.png" />
@@ -284,7 +284,7 @@ Thank you Trent.&#13;&#10;" align="center" />
               <image id="thumbExit" style="thumbStyle" x="150px" y="50px" filename="all/thumb-exit.png" />
             </panel>
             <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" stepSizeY="30" height="100%">
-              <panel id="huhu-1" childLayout="center" width="100%" height="480px" padding="0px,40px,0px,40px">
+              <panel id="huhu-1" childLayout="center" width="100%" height="520px" padding="0px,40px,0px,40px">
                 <panel id="huhu-2" childLayout="vertical" width="100%">
                   <text id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />

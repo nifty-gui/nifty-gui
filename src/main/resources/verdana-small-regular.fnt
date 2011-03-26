@@ -1,6 +1,6 @@
 info face="Verdana" size=20 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=4 padding=2,8,8,2 spacing=2,2 outline=0
 common lineHeight=20 base=16 scaleW=256 scaleH=256 pages=1 packed=0 encoded=0
-page id=0 file="verdana-small-regular_00.tga"
+page id=0 file="verdana-small-regular_00.png"
 chars count=95
 char id=32   x=243   y=150   width=11    height=10    xoffset=-2    yoffset=18    xadvance=6     page=0  chnl=15
 char id=33   x=241   y=27    width=12    height=23    xoffset=0     yoffset=2     xadvance=6     page=0  chnl=15

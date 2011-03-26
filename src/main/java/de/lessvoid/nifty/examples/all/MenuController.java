@@ -32,6 +32,7 @@ public class MenuController implements ScreenController {
     this.screen = screenParam;
     hideIfThere("thumbHelloWorld");
     hideIfThere("thumbHint");
+    hideIfThere("thumbMouse");
     hideIfThere("thumbTextAlign");
     hideIfThere("thumbTextField");
     hideIfThere("thumbDropDownList");

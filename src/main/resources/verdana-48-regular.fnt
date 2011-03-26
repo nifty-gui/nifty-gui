@@ -1,7 +1,7 @@
 info face="Verdana" size=35 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=4 padding=2,8,8,2 spacing=1,1 outline=0
 common lineHeight=35 base=29 scaleW=256 scaleH=256 pages=2 packed=0 encoded=0
-page id=0 file="verdana-48-regular_00.tga"
-page id=1 file="verdana-48-regular_01.tga"
+page id=0 file="verdana-48-regular_00.png"
+page id=1 file="verdana-48-regular_01.png"
 chars count=95
 char id=32   x=244   y=106   width=11    height=10    xoffset=-2    yoffset=33    xadvance=10    page=0  chnl=15
 char id=33   x=164   y=204   width=13    height=31    xoffset=2     yoffset=6     xadvance=11    page=0  chnl=15
