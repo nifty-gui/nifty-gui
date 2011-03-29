@@ -1,11 +1,15 @@
 package de.lessvoid.nifty.render.image.renderstrategy;
 
+import java.util.logging.Logger;
+
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
 public class NinePartResizeStrategy implements RenderStrategy {
+	private static Logger log = Logger.getLogger(NinePartResizeStrategy.class.getName());
+
 	private static final int NINE_PART_RESIZE_ARGS_COUNT = 12;
 
 	private NinePartResizeRow m_row0;
@@ -46,7 +50,7 @@ public class NinePartResizeStrategy implements RenderStrategy {
 		final int srcW = sourceArea.getWidth();
 
 		if ((m_row0.getWidth() > srcW) || (m_row1.getWidth() > srcW) || (m_row2.getWidth() > srcW)) {
-			throw new IllegalArgumentException("Defined nine-part resize strategy goes out of source area's bounds.");
+			log.warning("Defined nine-part resize strategy goes out of source area's bounds.");
 		}
 
 		final int srcH0 = m_row0.getHeight();

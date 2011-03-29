@@ -107,10 +107,7 @@ public class Convert {
     return new Color(value);
   }
 
-  public ImageMode imageMode(final String value) {
-	String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(value);
-	String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(value);
-
+  public ImageMode imageMode(final String areaProviderProperty, final String renderStrategyProperty) {
 	return ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty, renderStrategyProperty);
   }
 

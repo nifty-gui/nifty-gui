@@ -24,11 +24,13 @@ public class ImageOverlay implements EffectImpl {
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
-    
+
     String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(parameter);
     String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(parameter);
-    image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
-    		renderStrategyProperty));
+    if ((areaProviderProperty != null) || (renderStrategyProperty != null)) {
+	    image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
+	    		renderStrategyProperty));
+    }
 
     alpha = new Alpha(parameter.getProperty("alpha", "#f"));
     inset = new SizeValue(parameter.getProperty("inset", "0px"));

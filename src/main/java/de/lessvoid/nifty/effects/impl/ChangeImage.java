@@ -46,8 +46,10 @@ public class ChangeImage implements EffectImpl {
 
     String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(parameter);
     String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(parameter);
-    image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
-    		renderStrategyProperty));
+    if ((areaProviderProperty != null) || (renderStrategyProperty != null)) {
+    	image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
+    			renderStrategyProperty));
+    }
 
     return image;
   }

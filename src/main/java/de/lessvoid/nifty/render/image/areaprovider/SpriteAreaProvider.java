@@ -1,11 +1,15 @@
 package de.lessvoid.nifty.render.image.areaprovider;
 
+import java.util.logging.Logger;
+
 import de.lessvoid.nifty.Size;
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
 public class SpriteAreaProvider implements AreaProvider {
+	private static Logger log = Logger.getLogger(SpriteAreaProvider.class.getName());
+
 	private static final int SPRITE_ARGS_COUNT = 3;
 
 	private int m_index;
@@ -49,7 +53,7 @@ public class SpriteAreaProvider implements AreaProvider {
 		int imageY = spriteY * m_height;
 
 		if (((imageX + m_width) > imageWidth) || ((imageY + m_height) > imageHeight)) {
-			throw new IllegalArgumentException("Sprite's area exceeds image's bounds.");
+			log.warning("Sprite's area exceeds image's bounds.");
 		}
 
 		return new Box(imageX, imageY, m_width, m_height);

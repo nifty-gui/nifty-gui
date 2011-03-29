@@ -1,11 +1,15 @@
 package de.lessvoid.nifty.render.image.areaprovider;
 
+import java.util.logging.Logger;
+
 import de.lessvoid.nifty.Size;
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
 public class SubImageAreaProvider implements AreaProvider {
+	private static Logger log = Logger.getLogger(SubImageAreaProvider.class.getName());
+
 	private static final int SUBIMAGE_ARGS_COUNT = 4;
 
 	private Box m_subImageArea;
@@ -44,7 +48,7 @@ public class SubImageAreaProvider implements AreaProvider {
 
 		if (((m_subImageArea.getX() + m_subImageArea.getWidth()) > imageWidth)
 				|| ((m_subImageArea.getY() + m_subImageArea.getHeight()) > imageHeight)) {
-			throw new IllegalArgumentException("subImage's area exceeds image's bounds.");
+			log.warning("subImage's area exceeds image's bounds.");
 		}
 
 		return m_subImageArea;

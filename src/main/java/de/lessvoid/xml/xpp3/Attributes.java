@@ -17,6 +17,8 @@ import de.lessvoid.xml.tools.SpecialValuesReplace;
  * XPP Attributes in a nicer form.
  * @author void
  */
+// TODO: This class should be modified to implement the Map<String, String> interface (renaming all concerned method),
+// and should not expose its attributes member anymore.
 public class Attributes {
   private Map < String, String > attributes = new Hashtable < String, String >();
   private Map < String, Set < String >> taggedAttributes = new Hashtable < String, Set < String >>();

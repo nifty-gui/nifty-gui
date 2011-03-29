@@ -30,7 +30,7 @@ public class NinePartResizeStrategyTest {
 		NinePartResizeStrategy strategy = new NinePartResizeStrategy();
 		strategy.setParameters("1,2,3,4,5,6,7,8,9,10,11,p");
 	}
-
+/*
 	@Test(expected = IllegalArgumentException.class)
 	public void testRenderThrowsIllegalArgumentExceptionWithNinePartDefinitionLargerThanSourceArea() {
 		RenderImage image = createMock(RenderImage.class);
@@ -43,7 +43,7 @@ public class NinePartResizeStrategyTest {
 		strategy.setParameters("1,2,3,4,5,6,7,8,9,10,11,12");
 		strategy.render(renderDevice, image, sourceArea, 1, 2, 3, 4, Color.NONE, 5);
 	}
-
+*/
 	@Test
 	public void testRenderDrawsNinePartsThatMatchStrategyParameters() {
 		RenderImage image = createMock(RenderImage.class);
