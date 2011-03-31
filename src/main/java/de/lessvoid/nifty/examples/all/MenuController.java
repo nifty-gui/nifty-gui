@@ -33,6 +33,7 @@ public class MenuController implements ScreenController {
     hideIfThere("thumbHelloWorld");
     hideIfThere("thumbHint");
     hideIfThere("thumbMouse");
+    hideIfThere("thumbMenu");
     hideIfThere("thumbTextAlign");
     hideIfThere("thumbTextField");
     hideIfThere("thumbDropDownList");
@@ -69,6 +70,10 @@ public class MenuController implements ScreenController {
 
   public void mouse() {
     nifty.fromXml("mouse/mouse.xml", "start");
+  }
+
+  public void menu() {
+    nifty.fromXml("menu/menu.xml", "start");
   }
 
   public void textfield() {

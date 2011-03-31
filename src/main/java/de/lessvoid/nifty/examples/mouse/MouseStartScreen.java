@@ -198,6 +198,9 @@ public class MouseStartScreen implements ScreenController {
 
   @NiftyEventSubscriber(id="mouseEvents")
   public void onElementMouse(final String id, final NiftyMouseEvent event) {
-    mouseEventsText.setText(id + " -> " + event.getMouseX() + ", " + event.getMouseY() + ", " + event.getMouseWheel() + "\n" + event.isButton0Down() + ", " + event.isButton1Down() + ", " + event.isButton2Down());
+    mouseEventsText.setText(
+        id + " -> " + event.getMouseX() + ", " + event.getMouseY() + ", " + event.getMouseWheel() + "\n" +
+        event.isButton0Down() + ", " + event.isButton1Down() + ", " + event.isButton2Down() + "\n" +
+        event.isButton0Release() + ", " + event.isButton1Release() + ", " + event.isButton2Release());
   }
 }

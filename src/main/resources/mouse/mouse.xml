@@ -16,7 +16,7 @@
         </onActive>
       </effect>
 
-      <panel childLayout="horizontal" height="40%" width="100%" padding="20px">
+      <panel childLayout="horizontal" height="38%" width="100%" padding="20px">
         <panel childLayout="center" height="100%">
           <panel childLayout="vertical" align="left" valign="center" height="100%" width="100%">
             <effect>
@@ -69,7 +69,7 @@
         <panel width="100%" height="100%" backgroundColor="#4444" />
       </panel>
 
-      <panel childLayout="horizontal" height="45%" padding="20px">
+      <panel childLayout="horizontal" height="47%" padding="20px">
         <panel id="mouseEvents" style="nifty-panel-red-no-shadow" height="100%" width="50%" align="center" valign="center" childLayout="center" visibleToMouse="true">
           <effect>
             <onStartScreen name="move" mode="in" direction="left" length="300" startDelay="0" inherit="true"/>
