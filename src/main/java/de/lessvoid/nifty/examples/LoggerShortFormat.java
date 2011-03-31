@@ -31,13 +31,12 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
       }
     }
 
-    Logger.getLogger("de.lessvoid.nifty").setLevel(Level.INFO);
-//    Logger.getLogger("de.lessvoid.nifty.effects.EffectProcessor").setLevel(Level.ALL);
-
-    // log xml parser related
-//    Logger.getLogger("de.lessvoid.xml.xpp3.XmlParser").setLevel(Level.ALL);
-
-    // log nifty method invoker related
-    Logger.getLogger("de.lessvoid.nifty.NiftyMethodInvoker").setLevel(Level.ALL);
+    Logger.getLogger("de.lessvoid.nifty").setLevel(Level.OFF);
+    Logger.getLogger("de.lessvoid.nifty.effects.EffectProcessor").setLevel(Level.OFF);
+    Logger.getLogger("de.lessvoid.xml.xpp3.XmlParser").setLevel(Level.OFF);
+    Logger.getLogger("de.lessvoid.nifty.NiftyMethodInvoker").setLevel(Level.OFF);
+    Logger.getLogger("de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice").setLevel(Level.OFF);
+    Logger.getLogger("de.lessvoid.nifty.Nifty").setLevel(Level.OFF);
+    Logger.getLogger("de.lessvoid.nifty.screen.Screen").setLevel(Level.OFF);
   }
 }
