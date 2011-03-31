@@ -43,6 +43,7 @@ public class PrimaryClickMouseMethods extends MouseClickMethods {
   @Override
   public void onMouseRelease(final Nifty nifty, final NiftyMouseInputEvent mouseEvent) {
     publishEvent(nifty, new NiftyMousePrimaryReleaseEvent(mouseEvent));
+    super.onMouseRelease(nifty, mouseEvent);
     element.stopEffect(EffectEventId.onClick);
     element.getFocusHandler().lostMouseFocus(element);
   }

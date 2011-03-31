@@ -13,6 +13,9 @@ public class NiftyMouseEvent implements NiftyEvent<Void> {
   private boolean button0InitialDown;
   private boolean button1InitialDown;
   private boolean button2InitialDown;
+  private boolean button0Release;
+  private boolean button1Release;
+  private boolean button2Release;
 
   public NiftyMouseEvent() {
     this.mouseX = 0;
@@ -24,6 +27,9 @@ public class NiftyMouseEvent implements NiftyEvent<Void> {
     this.button0InitialDown = false;
     this.button1InitialDown = false;
     this.button2InitialDown = false;
+    this.button0Release = false;
+    this.button1Release = false;
+    this.button2Release = false;
   }
 
   public NiftyMouseEvent(final NiftyMouseInputEvent source) {
@@ -36,6 +42,9 @@ public class NiftyMouseEvent implements NiftyEvent<Void> {
     this.button0InitialDown = source.isButton0InitialDown();
     this.button1InitialDown = source.isButton1InitialDown();
     this.button2InitialDown = source.isButton2InitialDown();
+    this.button0Release = source.isButton0Release();
+    this.button1Release = source.isButton1Release();
+    this.button2Release = source.isButton2Release();
   }
 
   public int getMouseX() {
@@ -78,6 +87,18 @@ public class NiftyMouseEvent implements NiftyEvent<Void> {
     return button2InitialDown;
   }
 
+  public boolean isButton0Release() {
+    return button0Release;
+  }
+
+  public boolean isButton1Release() {
+    return button1Release;
+  }
+
+  public boolean isButton2Release() {
+    return button2Release;
+  }
+
   public String toString() {
     return
       "mouseX = " + mouseX + ", " +
@@ -87,6 +108,9 @@ public class NiftyMouseEvent implements NiftyEvent<Void> {
       "button2Down = " + button2Down + ", " +
       "button0InitialDown = " + button0InitialDown + ", " +
       "button1InitialDown = " + button1InitialDown + ", " +
-      "button2InitialDown = " + button2InitialDown;
+      "button2InitialDown = " + button2InitialDown + ", " +
+      "button0Release = " + button0Release + ", " +
+      "button1Release = " + button1Release + ", " +
+      "button2Release = " + button2Release;
   }
 }

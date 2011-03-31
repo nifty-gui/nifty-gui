@@ -41,6 +41,7 @@ public class ElementInteractionClickHandler {
       final NiftyMouseInputEvent mouseEvent,
       final boolean isButtonDown,
       final boolean isInitialButtonDown,
+      final boolean isButtonRelease,
       final long eventTime,
       final boolean mouseInside,
       final boolean canHandleInteraction,
@@ -68,9 +69,10 @@ public class ElementInteractionClickHandler {
       }
     } else if (!isButtonDown && isMouseDown) {
       setMouseDown(false, eventTime);
-      onMouseRelease(mouseEvent);
+    }
+    if (isButtonRelease) {
       if (mouseInside) {
-        onMouseReleaseInside(mouseEvent);
+        onMouseRelease(mouseEvent);
       }
     }
     if (isMouseDown) {
@@ -113,14 +115,6 @@ public class ElementInteractionClickHandler {
 
   private void onMouseRelease(final NiftyMouseInputEvent mouseEvent) {
     mouseMethods.onMouseRelease(nifty, mouseEvent);
-  }
-
-  private void onMouseReleaseInside(final NiftyMouseInputEvent mouseEvent) {
-    mouseMethods.onMouseReleaseInside(mouseEvent);
-  }
-
-  public void setFirst(final Object first) {
-    mouseMethods.setFirst(first);
   }
 
   public void activate(final Nifty nifty) {

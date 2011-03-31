@@ -15,10 +15,13 @@ public class NiftyMouseInputEvent {
   private int mouseWheel;
   private boolean button0Down;
   private boolean button0InitialDown;
+  private boolean button0Release;
   private boolean button1Down;
   private boolean button1InitialDown;
+  private boolean button1Release;
   private boolean button2Down;
   private boolean button2InitialDown;
+  private boolean button2Release;
 
   public void initialize(final int mouseX, final int mouseY, final int mouseWheel, final boolean button0Down, final boolean button1Down, final boolean button2Down) {
     this.mouseX = mouseX;
@@ -26,10 +29,13 @@ public class NiftyMouseInputEvent {
     this.mouseWheel = mouseWheel;
     this.button0Down = button0Down;
     this.button0InitialDown = false;
+    this.button0Release = false;
     this.button1Down = button1Down;
     this.button1InitialDown = false;
+    this.button1Release = false;
     this.button2Down = button2Down;
     this.button2InitialDown = false;
+    this.button2Release = false;
   }
 
   public int getMouseX() {
@@ -80,6 +86,30 @@ public class NiftyMouseInputEvent {
     this.button2InitialDown = button2InitialDown;
   }
 
+  public boolean isButton0Release() {
+    return button0Release;
+  }
+
+  public void setButton0Release(final boolean button0Release) {
+    this.button0Release = button0Release;
+  }
+
+  public boolean isButton1Release() {
+    return button1Release;
+  }
+
+  public void setButton1Release(final boolean button1Release) {
+    this.button1Release = button1Release;
+  }
+
+  public boolean isButton2Release() {
+    return button2Release;
+  }
+
+  public void setButton2Release(final boolean button2Release) {
+    this.button2Release = button2Release;
+  }
+
   public String toString() {
     return
       "mouseX = " + mouseX + ", " +
@@ -90,6 +120,9 @@ public class NiftyMouseInputEvent {
       "button2Down = " + button2Down + ", " + 
       "button0InitialDown = " + button0InitialDown + ", " +
       "button1InitialDown = " + button1InitialDown + ", " +
-      "button2InitialDown = " + button2InitialDown;
+      "button2InitialDown = " + button2InitialDown + ", " +
+      "button0Release = " + button0Release + ", " +
+      "button1Release = " + button1Release + ", " +
+      "button2Release = " + button2Release; 
   }
 }

@@ -45,20 +45,16 @@ public class ElementInteraction {
     onMouseWheelMethod = method;
   }
 
-  public void setFirstMethod(Object first) {
-    primary.setFirst(first);
-  }
-
   public boolean onMouseOver(final Element element, final NiftyMouseInputEvent inputEvent) {
     if (onMouseOverMethod != null) {
-      onMouseOverMethod.invoke(element, inputEvent);
+      return onMouseOverMethod.invoke(element, inputEvent);
     }
     return false;
   }
 
   public boolean onMouseWheel(final Element element, final NiftyMouseInputEvent inputEvent) {
     if (onMouseWheelMethod != null) {
-      onMouseWheelMethod.invoke(element, inputEvent);
+      return onMouseWheelMethod.invoke(element, inputEvent);
     }
     return false;
   }
@@ -70,9 +66,9 @@ public class ElementInteraction {
   public boolean process(final NiftyMouseInputEvent mouseEvent, final long eventTime, final boolean mouseInside, final boolean canHandleInteraction) {
     move.process(canHandleInteraction, mouseInside, mouseEvent);
     return
-      primary.process(mouseEvent, mouseEvent.isButton0Down(), mouseEvent.isButton0InitialDown(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey) ||
-      secondary.process(mouseEvent, mouseEvent.isButton1Down(), mouseEvent.isButton1InitialDown(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey) ||
-      tertiary.process(mouseEvent, mouseEvent.isButton2Down(), mouseEvent.isButton2InitialDown(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey);
+      primary.process(mouseEvent, mouseEvent.isButton0Down(), mouseEvent.isButton0InitialDown(), mouseEvent.isButton0Release(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey) ||
+      secondary.process(mouseEvent, mouseEvent.isButton1Down(), mouseEvent.isButton1InitialDown(), mouseEvent.isButton1Release(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey) ||
+      tertiary.process(mouseEvent, mouseEvent.isButton2Down(), mouseEvent.isButton2InitialDown(), mouseEvent.isButton2Release(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey);
   }
 
   public void activate(final Nifty nifty) {
