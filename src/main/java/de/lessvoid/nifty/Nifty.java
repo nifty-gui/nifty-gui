@@ -28,7 +28,7 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEventQueue;
+import de.lessvoid.nifty.input.mouse.MouseInputEventProcessor;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.RootLayerFactory;
@@ -81,7 +81,7 @@ public class Nifty {
   private NiftyLoader loader;
   private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
   private List < EndOfFrameElementAction > endOfFrameElementActions = new ArrayList < EndOfFrameElementAction >();
-  private MouseInputEventQueue mouseInputEventQueue;
+  private MouseInputEventProcessor mouseInputEventProcessor;
   private Collection < ScreenController > registeredScreenControllers = new ArrayList < ScreenController >();
   private String alternateKeyForNextLoadXml;
   private long lastTime;
@@ -131,7 +131,7 @@ public class Nifty {
     this.timeProvider = newTimeProvider;
     this.exit = false;
     this.currentLoaded = null;
-    this.mouseInputEventQueue = new MouseInputEventQueue();
+    this.mouseInputEventProcessor = new MouseInputEventProcessor();
     this.lastTime = timeProvider.getMsTime();
     this.niftyMouse = new NiftyMouseImpl(newRenderDevice.getRenderDevice(), inputSystem, timeProvider);
 
@@ -222,10 +222,10 @@ public class Nifty {
    */
   public boolean update() {
     if (!currentScreen.isNull()) {
-      mouseInputEventQueue.begin();
+      mouseInputEventProcessor.begin();
       inputSystem.forwardEvents(niftyInputConsumer);
-      if (mouseInputEventQueue.hasLastMouseDownEvent()) {
-        forwardMouseEventToScreen(mouseInputEventQueue.getLastMouseDownEvent());
+      if (mouseInputEventProcessor.hasLastMouseDownEvent()) {
+        forwardMouseEventToScreen(mouseInputEventProcessor.getLastMouseDownEvent());
       }
     }
     handleDynamicElements();
@@ -272,7 +272,7 @@ public class Nifty {
   }
 
   public void resetEvents() {
-    mouseInputEventQueue.reset();
+    mouseInputEventProcessor.reset();
   }
 
   private void handleDynamicElements() {
@@ -743,12 +743,6 @@ public class Nifty {
     return popupElement;
   }
 
-//  public Element addPopupElement(final String id, final Element popupElement) {
-//    popupElement.setId(id);
-//    popups.put(id, popupElement);
-//    return popupElement;
-//  }
-
   public Element findPopupByName(final String id) {
     return popups.get(id);
   }
@@ -822,9 +816,8 @@ public class Nifty {
 
     public void startControl(final Element newControl) {
       // if this startControl is called with a screen that is already running (which means
-      // that the onStartScreen Event has been called already before) we have to call
-      // onStartScreen on the newControl here manually. It won't be called by the screen
-      // anymore.
+      // that the onStartScreen Event has already been called) we have to call onStartScreen
+      // on the newControl here manually. It won't be called by the screen anymore.
       if (screen.isBound()) {
         newControl.bindControls(screen);
         newControl.initControls();
@@ -934,8 +927,8 @@ public class Nifty {
   /**
    * @return the mouseInputEventQueue
    */
-  public MouseInputEventQueue getMouseInputEventQueue() {
-    return mouseInputEventQueue;
+  public MouseInputEventProcessor getMouseInputEventQueue() {
+    return mouseInputEventProcessor;
   }
 
   /**
@@ -1240,8 +1233,8 @@ public class Nifty {
 
     private boolean processEvent(final NiftyMouseInputEvent mouseInputEvent) {
       boolean handled = true;
-      if (mouseInputEventQueue.canProcess(mouseInputEvent)) {
-        mouseInputEventQueue.process(mouseInputEvent);
+      if (mouseInputEventProcessor.canProcess(mouseInputEvent)) {
+        mouseInputEventProcessor.process(mouseInputEvent);
         handled = forwardMouseEventToScreen(mouseInputEvent);
         handleDynamicElements();
       }

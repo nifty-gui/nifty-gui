@@ -4,10 +4,10 @@ import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
 
 /**
- * MouseInputEventQueue.
+ * The MouseInputEventProcessor keeps track of mouse event state.
  * @author void
  */
-public class MouseInputEventQueue {
+public class MouseInputEventProcessor {
   private int lastMouseX = 0;
   private int lastMouseY = 0;
   private int lastMouseWheel = 0;
@@ -50,8 +50,11 @@ public class MouseInputEventQueue {
 
   public void process(final NiftyMouseInputEvent mouse) {
     mouse.setButton0InitialDown(!lastButtonDown0 && mouse.isButton0Down());
+    mouse.setButton0Release(lastButtonDown0 && !mouse.isButton0Down());
     mouse.setButton1InitialDown(!lastButtonDown1 && mouse.isButton1Down());
+    mouse.setButton1Release(lastButtonDown1 && !mouse.isButton1Down());
     mouse.setButton2InitialDown(!lastButtonDown2 && mouse.isButton2Down());
+    mouse.setButton2Release(lastButtonDown2 && !mouse.isButton2Down());
     lastMouseX = mouse.getMouseX();
     lastMouseY = mouse.getMouseY();
     lastMouseWheel = mouse.getMouseWheel();
