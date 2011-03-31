@@ -130,9 +130,6 @@ public class Screen {
 
     focusHandler.pushState();
 
-    // attach screenController to the popup element
-    popup.attachPopup(screenController);
-
     // prepare pop up for display
     popup.resetEffects();
     popup.layoutElements();

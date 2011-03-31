@@ -2,6 +2,8 @@ package de.lessvoid.nifty.controls.dynamic.attributes;
 
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.layout.LayoutPart;
@@ -344,11 +346,13 @@ public class ControlAttributes {
       elementType.setInteract(interact.create());
     }
     elementType.prepare(nifty, screen, parent.getElementType());
+    elementType.connectParentControls(parent);
     Element element = elementType.create(
       parent,
       nifty,
       screen,
       layoutPart);
+
     screen.layoutLayers();
     return element;
   }

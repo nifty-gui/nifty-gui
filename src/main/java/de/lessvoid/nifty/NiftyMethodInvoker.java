@@ -37,43 +37,12 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
       this.target = null;
     } else {
       this.target = new Object[targetParam.length];
-      int idx = this.target.length - 1;
-      for (Object o : targetParam) {
-        this.target[idx] = o;
-        idx--;
-      }
-//      log.info("target objects for [" + methodWithName + "]");
-//      for (Object o : target) {
-//        log.info(o.toString());
-//      }
-    }
-  }
+      System.arraycopy(targetParam, 0, target, 0, targetParam.length);
 
-  /**
-   * Set first.
-   * @param object object
-   */
-  public void setFirst(final Object object) {
-    if (methodWithName == null) {
-      return;
-    }
-    if (target == null) {
-      target = new Object[1];
-      target[0] = object;
-    } else {
-      // scan current target array for the given object (is this already attached to the param object?)
+      log.info("target objects for [" + methodWithName + "]");
       for (Object o : target) {
-        if (o == object) {
-          // already in -> done
-          return;
-        }
+        log.info(o.toString());
       }
-
-      // alright object is not already in list -> add as last element to the array
-      Object[] copy = new Object[target.length + 1];
-      System.arraycopy(target, 0, copy, 0, target.length);
-      copy[copy.length - 1] = object;
-      target = copy;
     }
   }
 
@@ -107,31 +76,39 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
           //    2a) invokeParametersParam are given, in this case we'll try to forward them to the method
           //        if this is not possible we fall back to 2b)
           //    2b) just call the method without any parameters
+          Object methodResult = null;
           Object[] invokeParameters = MethodResolver.extractParameters(methodWithName);
           if (invokeParameters.length > 0) {
             // does the method supports the parameters?
             // TODO: not only check for the count but check the type too
             if (getMethodParameterCount(method) == invokeParameters.length) {
               log.fine("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
-              callMethod(object, method, invokeParameters);
+              methodResult = callMethod(object, method, invokeParameters);
             } else {
               log.fine("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
-              callMethod(object, method, new Object[0]);
+              methodResult = callMethod(object, method, new Object[0]);
             }
           } else {
             // no invokeParameters encoded. this means we can call the method as is or with the invokeParametersParam
             if (invokeParametersParam.length > 0) {
               if (getMethodParameterCount(method) == invokeParametersParam.length) {
                 log.fine("invoking method '" + methodWithName + "' with the actual parameters (" + debugParaString(invokeParametersParam) + ")");
-                callMethod(object, method, invokeParametersParam);
+                methodResult = callMethod(object, method, invokeParametersParam);
               } else {
                 log.fine("invoking method '" + methodWithName + "' without parameters (invokeParametersParam mismatch)");
-                callMethod(object, method, null);
+                methodResult = callMethod(object, method, null);
               }
             } else {
               log.fine("invoking method '" + methodWithName + "' without parameters");
-              callMethod(object, method, null);
+              methodResult = callMethod(object, method, null);
             }
+          }
+          if (methodResult != null && (methodResult.getClass().equals(Boolean.class))) {
+            if ((Boolean) methodResult) {
+              log.fine("method invoke for '" + methodWithName + "' returns true. by definition this means we're not calling any other targets for this method.");
+              return;
+            }
+            
           }
         } else {
           log.fine("method [" + methodWithName + "] not found at object class [" + object.getClass() + "]");

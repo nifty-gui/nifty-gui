@@ -189,7 +189,7 @@ public class ElementType extends XmlBaseType {
 
   LinkedList < Object > getControllersWithScreenController(final Screen screen) {
     LinkedList < Object > withScreenController = new LinkedList < Object > (controllers);
-    withScreenController.addFirst(screen.getScreenController());
+    withScreenController.addLast(screen.getScreenController());
     return withScreenController;
   }
 
@@ -369,5 +369,32 @@ public class ElementType extends XmlBaseType {
     getAttributes().removeWithTag(styleId);
     effects.removeWithTag(styleId);
     interact.getAttributes().removeWithTag(styleId);
+  }
+
+  /**
+   * usually when elements (incl. controls) are loaded they are all present when the xml
+   * is being transformed into the runtime element tree. during this process each interact
+   * method is being resolved, tracing all controllers from top to bottom leading a list
+   * of controller instances for each method.
+   * 
+   * when we're creating elements dynamically then every element below in the hierachry is
+   * resolved the same way but everything above us (the parent and parent.parent and so on)
+   * is not being linked, which leads to controllers missing.
+   * 
+   * this call will now travel up the hierachry and collect all controllers and add them
+   * to the element we're currently processing.
+   */
+  public void connectParentControls(final Element parent) {
+    if (parent == null) {
+      return;
+    }
+    NiftyInputControl control = parent.getAttachedInputControl();
+    if (control != null) {
+      Controller controller = control.getController();
+      if (controller != null) {
+        controllers.addLast(controller);
+      }
+    }
+    connectParentControls(parent.getParent());
   }
 }

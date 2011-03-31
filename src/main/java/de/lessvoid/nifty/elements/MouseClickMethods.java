@@ -45,18 +45,6 @@ public abstract class MouseClickMethods {
     }
   }
 
-  public void setFirst(final Object first) {
-    if (onClickMethod != null) {
-      onClickMethod.setFirst(first);
-    }
-    if (onClickMouseMoveMethod != null) {
-      onClickMouseMoveMethod.setFirst(first);
-    }
-    if (onReleaseMethod != null) {
-      onReleaseMethod.setFirst(first);
-    }
-  }
-
   public void onClickMouseMove(final Nifty nifty, final NiftyMouseInputEvent inputEvent) {
     if (onClickMouseMoveMethod != null) {
       onClickMouseMoveMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
@@ -64,9 +52,6 @@ public abstract class MouseClickMethods {
   }
 
   public void onMouseRelease(final Nifty nifty, final NiftyMouseInputEvent mouseEvent) {
-  }
-
-  public void onMouseReleaseInside(final NiftyMouseInputEvent mouseEvent) {
     if (onReleaseMethod != null) {
       onReleaseMethod.invoke();
     }
