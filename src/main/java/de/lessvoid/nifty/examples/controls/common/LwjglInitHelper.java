@@ -229,6 +229,7 @@ public class LwjglInitHelper {
       final Nifty nifty,
       final RenderLoopCallback callback) {
     boolean done = false;
+    Display.setVSyncEnabled(true);
     while (!Display.isCloseRequested() && !done) {
       if (callback != null) {
         callback.process();
