@@ -273,21 +273,26 @@ public class Element implements NiftyEvent<Void> {
     layoutPart.getBoxConstraints().setY(convert.sizeValue(attributes.get("y")));
     layoutPart.getBoxConstraints().setHorizontalAlign(convert.horizontalAlign(attributes.get("align")));
     layoutPart.getBoxConstraints().setVerticalAlign(convert.verticalAlign(attributes.get("valign")));
-    layoutPart.getBoxConstraints().setPaddingLeft(convert.paddingSizeValue(attributes.get("paddingLeft")));
-    layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight")));
-    layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop")));
-    layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom")));
+
+    String paddingLeft = Convert.DEFAULT_PADDING;
+    String paddingRight = Convert.DEFAULT_PADDING;
+    String paddingTop = Convert.DEFAULT_PADDING;
+    String paddingBottom = Convert.DEFAULT_PADDING;
     if (attributes.isSet("padding")) {
       try {
         PaddingAttributeParser paddingParser = new PaddingAttributeParser(attributes.get("padding"));
-        layoutPart.getBoxConstraints().setPaddingLeft(convert.paddingSizeValue(paddingParser.getLeft()));
-        layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(paddingParser.getRight()));
-        layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(paddingParser.getTop()));
-        layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(paddingParser.getBottom()));
+        paddingLeft = paddingParser.getLeft();
+        paddingRight = paddingParser.getRight();
+        paddingTop = paddingParser.getTop();
+        paddingBottom = paddingParser.getBottom();
       } catch (Exception e) {
         log.warning(e.getMessage());
       }
     }
+    layoutPart.getBoxConstraints().setPaddingLeft(convert.paddingSizeValue(attributes.get("paddingLeft"), paddingLeft));
+    layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight"), paddingRight));
+    layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop"), paddingTop));
+    layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom"), paddingBottom));
     this.clipChildren = attributes.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP);
     boolean visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
     if (visible) {
@@ -1551,18 +1556,6 @@ public class Element implements NiftyEvent<Void> {
    */
   public void attachInputControl(final NiftyInputControl newInputControl) {
     attachedInputControl = newInputControl;
-  }
-
-  /**
-   * attach popup.
-   * @param screenController screencontroller
-   */
-  public void attachPopup(final ScreenController screenController) {
-    log.fine("attachPopup(" + screenController + ") to element [" + id + "]");
-    interaction.setFirstMethod(screenController);
-    for (Element e : elements) {
-      e.attachPopup(screenController);
-    }
   }
 
   private boolean hasParentActiveOnStartOrOnEndScreenEffect() {

@@ -17,7 +17,7 @@ import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
 public class Convert {
-  public static final SizeValue DEFAULT_PADDING = new SizeValue("0px");
+  public static final String DEFAULT_PADDING = "0px";
   public static final HorizontalAlign DEFAULT_HORIZONTAL_ALIGN = HorizontalAlign.left;
   public static final VerticalAlign DEFAULT_VERTICAL_ALIGN = VerticalAlign.top;
   public static final HorizontalAlign DEFAULT_TEXT_HORIZONTAL_ALIGN = HorizontalAlign.center;
@@ -48,7 +48,14 @@ public class Convert {
 
   public SizeValue paddingSizeValue(final String value) {
     if (value == null) {
-      return DEFAULT_PADDING;
+      return new SizeValue(DEFAULT_PADDING);
+    }
+    return new SizeValue(value);
+  }
+
+  public SizeValue paddingSizeValue(final String value, final String defaultValue) {
+    if (value == null) {
+      return new SizeValue(defaultValue);
     }
     return new SizeValue(value);
   }
