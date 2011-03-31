@@ -1,7 +1,9 @@
 package de.lessvoid.xml.xpp3;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -269,14 +271,32 @@ public class Attributes {
     return null;
   }
 
-  public Properties extractParameters() {
-    Properties parameters = new Properties();
+  public class Entry {
+    private String key;
+    private String value;
+
+    private Entry(final String key, final String value) {
+      this.key = key;
+      this.value = value;
+    }
+
+    public String getKey() {
+      return key;
+    }
+
+    public String getValue() {
+      return value;
+    }
+  }
+
+  public List<Entry> extractParameters() {
+    List<Entry> parameters = new ArrayList<Entry>();
 
     for (Map.Entry < String, String > entry : attributes.entrySet()) {
       String key = entry.getKey(); // like key="$value"
       String value = entry.getValue();
       if (isParameterDefinition(value)) {
-        parameters.put(value.replaceFirst("\\$", ""), key);
+        parameters.add(new Entry(value.replaceFirst("\\$", ""), key));
       }
     }
 
@@ -307,10 +327,10 @@ public class Attributes {
   }
 
   public void resolveParameters(final Attributes attributes) {
-    Set < Map.Entry < Object, Object >> entrySet = getParameterSet();
-    for (Map.Entry < Object, Object > entry : entrySet) {
-      String key = (String) entry.getKey();
-      String value = (String) entry.getValue();
+    List<Entry> entrySet = getParameterSet();
+    for (Entry entry : entrySet) {
+      String key = entry.getKey();
+      String value = entry.getValue();
 
       // first check the given attributes and then check our own
       if (attributes.isSet(key)) {
@@ -323,8 +343,8 @@ public class Attributes {
     }
   }
 
-  Set < Map.Entry < Object, Object >> getParameterSet() {
-    return extractParameters().entrySet();
+  List<Entry> getParameterSet() {
+    return extractParameters();
   }
 
   public void removeWithTag(final String tag) {

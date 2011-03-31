@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.loaderv2.types.resolver.parameter;
 
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.List;
 
 import de.lessvoid.xml.xpp3.Attributes;
+import de.lessvoid.xml.xpp3.Attributes.Entry;
 
 public class ParameterResolverControl implements ParameterResolver {
   private ParameterResolver parent;
@@ -20,8 +19,7 @@ public class ParameterResolverControl implements ParameterResolver {
   public Attributes resolve(final Attributes attributes) {
     Attributes result = new Attributes(attributes);
 
-    Set < Map.Entry < Object, Object >> entrySet = getParameterSet(attributes);
-    for (Map.Entry < Object, Object > entry : entrySet) {
+    for (Entry entry : getParameterSet(attributes)) {
       String key = (String) entry.getKey();
       String value = (String) entry.getValue();
       if (controlAttributes.isSet(key)) {
@@ -30,16 +28,14 @@ public class ParameterResolverControl implements ParameterResolver {
     }
 
     Attributes res = parent.resolve(result);
-    entrySet = getParameterSet(attributes);
-    for (Map.Entry < Object, Object > entry : entrySet) {
+    for (Entry entry : getParameterSet(attributes)) {
       String value = (String) entry.getValue();
       result.set(value, "");
     }
     return res;
   }
 
-  private Set < Map.Entry < Object, Object >> getParameterSet(final Attributes attributes) {
-    Properties parameters = attributes.extractParameters();
-    return parameters.entrySet();
+  private List<Entry> getParameterSet(final Attributes attributes) {
+    return attributes.extractParameters();
   }
 }
