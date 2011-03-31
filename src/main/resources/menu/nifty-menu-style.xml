@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <!-- nifty menu item style -->
+  <style id="niftyMenuItemStyle">
+    <attributes width="100%" childLayout="horizontal" focusable="true" />
+    <effect>
+      <onHover name="focus" />
+      <onFocus name="colorBar" color="#4448" />
+    </effect>
+  </style>  
+
+  <style id="niftyMenuItemStyle#text" base="nifty-label">
+    <attributes textHAlign="left" width="*" color="#222f" />
+  </style>  
+
+  <!-- nifty menu item separator style -->
+  <style id="niftyMenuItemSeparatorStyle">
+    <attributes width="100%" height="10px" childLayout="center" paddingLeft="5px" paddingRight="5px" />
+  </style>  
+
+  <style id="niftyMenuItemSeparatorStyle#line">
+    <attributes width="100%" height="1px" align="center" valign="center" backgroundColor="#777f" />
+  </style>
+</nifty-styles>
