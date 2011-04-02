@@ -5,6 +5,7 @@
 package de.lessvoid.nifty.examples.controls;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -12,14 +13,15 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.StyleBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.examples.controls.chatcontrol.ChatControlDialogRegister;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
-import de.lessvoid.nifty.examples.controls.common.LwjglInitHelper;
-import de.lessvoid.nifty.examples.controls.custom.MenuButtonBuilder;
-import de.lessvoid.nifty.examples.controls.dropdown.DropDownDialogBuilder;
-import de.lessvoid.nifty.examples.controls.listbox.ListBoxDialogBuilder;
-import de.lessvoid.nifty.examples.controls.scrollpanel.ScrollPanelDialogBuilder;
-import de.lessvoid.nifty.examples.controls.sliderandscrollbar.SliderAndScrollbarDialogBuilder;
-import de.lessvoid.nifty.examples.controls.textfield.TextFieldDialogBuilder;
+import de.lessvoid.nifty.examples.controls.common.DialogPanelControlDefinition;
+import de.lessvoid.nifty.examples.controls.common.MenuButtonControlDefinition;
+import de.lessvoid.nifty.examples.controls.dropdown.DropDownDialogControlDefinition;
+import de.lessvoid.nifty.examples.controls.listbox.ListBoxDialogControlDefinition;
+import de.lessvoid.nifty.examples.controls.scrollpanel.ScrollPanelDialogControlDefinition;
+import de.lessvoid.nifty.examples.controls.sliderandscrollbar.SliderAndScrollbarDialogControlDefinition;
+import de.lessvoid.nifty.examples.controls.textfield.TextFieldDialogControlDefinition;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
@@ -45,16 +47,21 @@ public class ControlsDemo {
     nifty.registerMouseCursor("hand", "mouse-cursor-hand.png", 5, 4);
     registerMenuButtonHintStyle(nifty);
 
-    // register the dialogs
-    new ListBoxDialogBuilder(nifty);
-    new DropDownDialogBuilder(nifty);
-    new TextFieldDialogBuilder(nifty);
-    new SliderAndScrollbarDialogBuilder(nifty);
-    new ScrollPanelDialogBuilder(nifty);
+    // register some helper controls
+    MenuButtonControlDefinition.register(nifty);
+    DialogPanelControlDefinition.register(nifty);
 
+    // register the dialog controls
+    ListBoxDialogControlDefinition.register(nifty);
+    DropDownDialogControlDefinition.register(nifty);
+    ScrollPanelDialogControlDefinition.register(nifty);
+    ChatControlDialogRegister.register(nifty);
+    TextFieldDialogControlDefinition.register(nifty);
+    SliderAndScrollbarDialogControlDefinition.register(nifty);
+    
     nifty.addScreen("start", createIntroScreen(nifty));
     nifty.addScreen("demo", createDemoScreen(nifty));
-    nifty.gotoScreen("start");
+    nifty.gotoScreen("demo");
 
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);
@@ -196,14 +203,14 @@ public class ControlsDemo {
   }
 
   private static Screen createDemoScreen(final Nifty nifty) {
-    final MenuButtonBuilder menuButtonBuilder = new MenuButtonBuilder(nifty);
     Screen screen = new ScreenBuilder("demo") {{
       controller(new ControlsDemoScreenController(
           "menuButtonListBox", "dialogListBox",
           "menuButtonDropDown", "dialogDropDown",
           "menuButtonTextField", "dialogTextField",
           "menuButtonSlider", "dialogSliderAndScrollbar",
-          "menuButtonScrollPanel", "dialogScrollPanel"
+          "menuButtonScrollPanel", "dialogScrollPanel",
+          "menuButtonChatControl", "dialogChatControl"
       ));
       layer(new LayerBuilder("layer") {{
         backgroundImage("background-new.png");
@@ -214,26 +221,29 @@ public class ControlsDemo {
           backgroundColor("#5588");
           childLayoutHorizontal();
           padding("20px");
-          control(menuButtonBuilder.getControlBuilder("menuButtonListBox", "ListBox", "This demonstrates the ListBox control.\n\nThis example shows adding and removing items from a ListBox\nas well as the different selection modes that are available."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonListBox", "ListBox", "This demonstrates the ListBox control.\n\nThis example shows adding and removing items from a ListBox\nas well as the different selection modes that are available."));
           panel(builders.hspacer("10px"));
-          control(menuButtonBuilder.getControlBuilder("menuButtonDropDown", "DropDown", "The DropDown demonstration.\n\nThis shows how to dynamically add items to the\nDropDown control as well as the change event."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonDropDown", "DropDown", "The DropDown demonstration.\n\nThis shows how to dynamically add items to the\nDropDown control as well as the change event."));
           panel(builders.hspacer("10px"));
-          control(menuButtonBuilder.getControlBuilder("menuButtonTextField", "TextField", "The TextField demonstration.\n\nThis example demonstrates the Textfield example using the password\nmode and the input length restriction. It also demonstrates\nall of the new events the Textfield publishes on the Eventbus."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonTextField", "TextField", "The TextField demonstration.\n\nThis example demonstrates the Textfield example using the password\nmode and the input length restriction. It also demonstrates\nall of the new events the Textfield publishes on the Eventbus."));
           panel(builders.hspacer("10px"));
-          control(menuButtonBuilder.getControlBuilder("menuButtonSlider", "Slider & Scrollbars", "Sliders and Scrollbars example.\n\nThis creates sliders to change a RGBA value and it\ndisplays a scrollbar that can be customized."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonSlider", "Slider & Scrollbars", "Sliders and Scrollbars example.\n\nThis creates sliders to change a RGBA value and it\ndisplays a scrollbar that can be customized."));
           panel(builders.hspacer("10px"));
-          control(menuButtonBuilder.getControlBuilder("menuButtonScrollPanel", "ScrollPanel", "ScrollPanel demonstration.\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonScrollPanel", "ScrollPanel", "ScrollPanel demonstration.\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
+          panel(builders.hspacer("10px"));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonChatControl", "ChatControl", "Nifty User ractoc contributed a chat control"));
         }});
         panel(new PanelBuilder("dialogParent") {{
           childLayoutOverlay();
           width("100%");
           alignCenter();
           valignCenter();
-          control(ListBoxDialogBuilder.getControlBuilder("dialogListBox"));
-          control(TextFieldDialogBuilder.getControlBuilder("dialogTextField"));
-          control(SliderAndScrollbarDialogBuilder.getControlBuilder("dialogSliderAndScrollbar"));
-          control(DropDownDialogBuilder.getControlBuilder("dialogDropDown"));
-          control(ScrollPanelDialogBuilder.getControlBuilder("dialogScrollPanel"));
+          control(new ControlBuilder("dialogListBox", ListBoxDialogControlDefinition.NAME));
+          control(new ControlBuilder("dialogTextField", TextFieldDialogControlDefinition.NAME));
+          control(new ControlBuilder("dialogSliderAndScrollbar", SliderAndScrollbarDialogControlDefinition.NAME));
+          control(new ControlBuilder("dialogDropDown", DropDownDialogControlDefinition.NAME));
+          control(new ControlBuilder("dialogScrollPanel", ScrollPanelDialogControlDefinition.NAME));
+          control(new ControlBuilder("dialogChatControl", ChatControlDialogRegister.NAME));
         }});
       }});
     }}.build(nifty);

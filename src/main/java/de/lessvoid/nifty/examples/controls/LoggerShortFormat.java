@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.examples.controls.common;
+package de.lessvoid.nifty.examples.controls;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;

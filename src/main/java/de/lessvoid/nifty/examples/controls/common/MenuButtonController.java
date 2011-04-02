@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.examples.controls.custom;
+package de.lessvoid.nifty.examples.controls.common;
 
 import java.util.Properties;
 

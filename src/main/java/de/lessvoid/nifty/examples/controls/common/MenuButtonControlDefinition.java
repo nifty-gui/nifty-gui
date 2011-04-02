@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.examples.controls.custom;
+package de.lessvoid.nifty.examples.controls.common;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
@@ -8,13 +8,13 @@ import de.lessvoid.nifty.builder.HoverEffectBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 
-public class MenuButtonBuilder {
-  private static final String CONTROL_NAME = "menuButtonControl";
-  private static final String PARAM_LABEL = "menuButtonLabel";
-  private static final String PARAM_HINT = "menuButtonHint";
+public class MenuButtonControlDefinition {
+  private static final String NAME = "menuButtonControl";
+  private static final String PARAMETER_LABEL = "menuButtonLabel";
+  private static final String PARAMETER_HINT = "menuButtonHint";
 
-  public MenuButtonBuilder(final Nifty nifty) {
-    new ControlDefinitionBuilder(CONTROL_NAME) {{
+  public static void register(final Nifty nifty) {
+    new ControlDefinitionBuilder(NAME) {{
       controller(new MenuButtonController());
       panel(new PanelBuilder() {{
         backgroundColor("#800a");
@@ -49,7 +49,7 @@ public class MenuButtonBuilder {
           effectValue("offset", "100%", "color", "#feef");
         }});
         onHoverEffect(new HoverEffectBuilder("hint") {{
-          effectParameter("hintText", controlParameter(PARAM_HINT));
+          effectParameter("hintText", controlParameter(PARAMETER_HINT));
           effectParameter("hintStyle", "special-hint");
           effectParameter("hintDelay", "750");
           effectParameter("offsetX", "center");
@@ -57,7 +57,7 @@ public class MenuButtonBuilder {
         }});
         control(new LabelBuilder() {{
           color("#000f");
-          text(controlParameter(PARAM_LABEL));
+          text(controlParameter(PARAMETER_LABEL));
           alignCenter();
           valignCenter();
           onCustomEffect(new EffectBuilder("textColor") {{
@@ -71,10 +71,10 @@ public class MenuButtonBuilder {
     }}.registerControlDefintion(nifty);
   }
 
-  public ControlBuilder getControlBuilder(final String id, final String text, final String hintText) {
-    return new ControlBuilder(id, CONTROL_NAME) {{
-      parameter(PARAM_LABEL, text);
-      parameter(PARAM_HINT, hintText);
+  public static ControlBuilder getControlBuilder(final String id, final String text, final String hintText) {
+    return new ControlBuilder(id, NAME) {{
+      parameter(PARAMETER_LABEL, text);
+      parameter(PARAMETER_HINT, hintText);
     }};
   }
 }
