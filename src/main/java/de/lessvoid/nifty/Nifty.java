@@ -168,7 +168,7 @@ public class Nifty {
     NiftyEventAnnotationProcessor.process(object);
   }
 
-  public <T> void subscribe(final Screen screen, final String elementId, final Class<T> eventClass, final EventTopicSubscriber<T> subscriber) {
+  public <T, S extends EventTopicSubscriber<? extends T>> void subscribe(final Screen screen, final String elementId, final Class<T> eventClass, final S subscriber) {
     if (elementId == null) {
       log.warning("trying to subscribe events for an element with elementId = null. this won't work. offending class \"" + eventClass + "\" and offending subscriber \"" + subscriber + "\". try to find the offending element/control and give it an id!");
       return;
