@@ -405,9 +405,36 @@ public abstract class ElementBuilder {
     return element;
   }
 
+  /**
+   * This method is called whenever we need the ElementType instead of a real
+   * Element instance. This is currently used for ControlDefinition and Popup
+   * registering dynamically from Java using the Builder pattern.
+   *
+   * It is not used for the general Java builder call that generates real instances.
+   * 
+   * @return the ElementType representation for this ElementBuilder
+   */
   protected ElementType buildElementType() {
     connectAttributes();
     ElementType thisType = attributes.createType();
+
+    // this is quite complicated: when we use the builder stuff then all of the
+    // builders will create automatically an id for the element it builds. this
+    // is a required feature when the builders are used to create actual elements.
+    //
+    // in this case here we're creating a type and not an actual element instance.
+    // this is used for instance in controldefinitions. therefore we need to make
+    // sure that the automatically generated id is being removed again. otherwise
+    // we would end up with controldefinitions with ids. when we later use these
+    // control definitions in multiple controls these ids will be reused which
+    // could cause trouble when we have the same id multiple times.
+    //
+    // so here we make sure that when we have an automatically generated id
+    // that we remove it again.
+    if (attributes.isAutoId()) {
+      thisType.getAttributes().remove("id");
+    }
+
     attributes.connect(thisType);
     for (ElementBuilder elementBuilder : elementBuilders) {
       thisType.addElementType(elementBuilder.buildElementType());

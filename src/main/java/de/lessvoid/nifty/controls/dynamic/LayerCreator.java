@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class LayerCreator extends ControlAttributes {
   public LayerCreator() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
   }
 
   public LayerCreator(final String id) {

@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class TextCreator extends ControlAttributes {
   public TextCreator(final String text) {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setText(text);
   }
 

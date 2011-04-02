@@ -2,8 +2,6 @@ package de.lessvoid.nifty.controls.dynamic.attributes;
 
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.layout.LayoutPart;
@@ -24,6 +22,7 @@ public class ControlAttributes {
   protected Attributes attributes = new Attributes();
   protected ControlInteractAttributes interact;
   protected ControlEffectsAttributes effects;
+  private boolean isAutoId = false;
   
   public void setInteract(final ControlInteractAttributes controlInteract) {
     interact = controlInteract;
@@ -38,7 +37,17 @@ public class ControlAttributes {
   }
 
   public void setId(final String id) {
+    isAutoId = false;
     attributes.set("id", id);
+  }
+
+  public void setAutoId(final String id) {
+    isAutoId = true;
+    attributes.set("id", id);
+  }
+
+  public boolean isAutoId() {
+    return isAutoId;
   }
 
   public void setName(final String name) {

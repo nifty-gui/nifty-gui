@@ -7,7 +7,7 @@ import de.lessvoid.nifty.loaderv2.types.PopupType;
 
 public class PopupCreator extends ControlAttributes {
   public PopupCreator() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
   }
 
   public PopupCreator(final String id) {

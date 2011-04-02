@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class PanelCreator extends ControlAttributes {
   public PanelCreator() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
   }
 
   public PanelCreator(final String id) {

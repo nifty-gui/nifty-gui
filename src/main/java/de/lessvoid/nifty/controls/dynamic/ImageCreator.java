@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class ImageCreator extends ControlAttributes {
   public ImageCreator() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
   }
 
   public ImageCreator(final String id) {
