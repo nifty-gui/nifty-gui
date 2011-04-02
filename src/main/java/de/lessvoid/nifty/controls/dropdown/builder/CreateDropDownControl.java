@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class CreateDropDownControl extends ControlAttributes {
   public CreateDropDownControl() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setName("dropDown");
   }
 

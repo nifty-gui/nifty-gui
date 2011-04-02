@@ -14,7 +14,7 @@ public class CreateCheckBoxControl extends ControlAttributes {
   private static final String NAME = "checkbox";
 
   public CreateCheckBoxControl() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setName(NAME);
   }
 

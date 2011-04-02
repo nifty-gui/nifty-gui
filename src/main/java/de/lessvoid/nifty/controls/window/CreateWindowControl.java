@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class CreateWindowControl extends ControlAttributes {
   public CreateWindowControl() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setName("window");
   }
 

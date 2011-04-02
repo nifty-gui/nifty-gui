@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class CreateSliderControl extends ControlAttributes {
   public CreateSliderControl(final boolean vertical) {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     initName(vertical);
   }
 

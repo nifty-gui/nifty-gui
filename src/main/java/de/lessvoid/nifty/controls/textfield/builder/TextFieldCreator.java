@@ -13,7 +13,7 @@ public class TextFieldCreator extends ControlAttributes {
   private static final String NAME = "textfield";
 
   public TextFieldCreator() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setName(NAME);
   }
 

@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class CreateScrollPanelControl extends ControlAttributes {
   public CreateScrollPanelControl() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
   }
 
   public CreateScrollPanelControl(final String id) {

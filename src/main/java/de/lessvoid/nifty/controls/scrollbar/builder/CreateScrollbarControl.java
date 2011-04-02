@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class CreateScrollbarControl extends ControlAttributes {
   public CreateScrollbarControl(final boolean vertical) {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     initName(vertical);
   }
 

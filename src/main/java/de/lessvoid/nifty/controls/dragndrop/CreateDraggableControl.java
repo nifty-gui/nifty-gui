@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class CreateDraggableControl extends ControlAttributes {
   public CreateDraggableControl() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setName("draggable");
   }
 

@@ -12,7 +12,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class CreateListBoxControl extends ControlAttributes {
   public CreateListBoxControl() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setName("listBox");
   }
 

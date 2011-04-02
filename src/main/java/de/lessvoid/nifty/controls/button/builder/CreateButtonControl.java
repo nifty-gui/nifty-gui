@@ -13,7 +13,7 @@ public class CreateButtonControl extends ControlAttributes {
   private static final String NAME = "button";
 
   public CreateButtonControl() {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setName(NAME);
   }
 

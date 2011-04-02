@@ -13,7 +13,7 @@ public class CreateLabelControl extends ControlAttributes {
   private static final String NAME = "label";
 
   public CreateLabelControl(final String text) {
-    setId(NiftyIdCreator.generate());
+    setAutoId(NiftyIdCreator.generate());
     setName(NAME);
     setText(text);
   }
