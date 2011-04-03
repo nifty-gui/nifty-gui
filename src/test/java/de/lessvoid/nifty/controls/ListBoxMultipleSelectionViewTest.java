@@ -27,6 +27,7 @@ public class ListBoxMultipleSelectionViewTest {
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = new Capture<ListBoxSelectionChangedEvent<TestItem>>();
+  private SelectionCheck selectionCheck = new SelectionCheck(listBox);
 
   @SuppressWarnings("unchecked")
   @Before
@@ -59,7 +60,8 @@ public class ListBoxMultipleSelectionViewTest {
     listBox.removeAllItems(itemsToRemove);
 
     assertTrue(listBox.getItems().isEmpty());
-    assertTrue(listBox.getSelection().isEmpty());
-    assertEquals(0, lastEvent.getValue().getSelection().size());
+    selectionCheck.assertSelection();
+    selectionCheck.assertChangedEventSelection(lastEvent.getValue());
+    selectionCheck.assertChangedEventSelectionIndices(lastEvent.getValue());
   }
 }

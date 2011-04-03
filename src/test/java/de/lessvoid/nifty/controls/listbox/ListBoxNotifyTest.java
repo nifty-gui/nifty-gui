@@ -4,7 +4,6 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
 
 import org.easymock.Capture;
 import org.junit.After;
@@ -12,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.SelectionCheck;
 
 public class ListBoxNotifyTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
@@ -19,7 +19,8 @@ public class ListBoxNotifyTest {
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = new Capture<ListBoxSelectionChangedEvent<TestItem>>();
-  
+  private SelectionCheck selectionCheck = new SelectionCheck(listBox);
+
   @SuppressWarnings("unchecked")
   @Before
   public void before() {
@@ -43,8 +44,8 @@ public class ListBoxNotifyTest {
 
     listBox.selectItem(o1);
 
-    assertEquals(1, lastEvent.getValue().getSelection().size());
-    assertEquals(o1, lastEvent.getValue().getSelection().get(0));
+    selectionCheck.assertChangedEventSelection(lastEvent.getValue(), o1);
+    selectionCheck.assertChangedEventSelectionIndices(lastEvent.getValue(), 0);
   }
 
   @Test
@@ -55,7 +56,7 @@ public class ListBoxNotifyTest {
 
     listBox.selectItemByIndex(0);
 
-    assertEquals(1, lastEvent.getValue().getSelection().size());
-    assertEquals(o1, lastEvent.getValue().getSelection().get(0));
+    selectionCheck.assertChangedEventSelection(lastEvent.getValue(), o1);
+    selectionCheck.assertChangedEventSelectionIndices(lastEvent.getValue(), 0);
   }
 }

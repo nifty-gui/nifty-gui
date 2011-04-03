@@ -29,4 +29,20 @@ public class SelectionCheck {
     }
   }
 
+  public void assertChangedEventSelection(final ListBoxSelectionChangedEvent<TestItem> selectionChangedEvent, final TestItem ... expected) {
+    assertEquals(expected.length, selectionChangedEvent.getSelection().size());
+    int i = 0;
+    for (TestItem item : expected) {
+      assertEquals(item, selectionChangedEvent.getSelection().get(i++));
+    }
+  }
+
+  public void assertChangedEventSelectionIndices(final ListBoxSelectionChangedEvent<TestItem> selectionChangedEvent, final int ... expected) {
+    assertEquals(expected.length, selectionChangedEvent.getSelectionIndices().size());
+    int i = 0;
+    for (int item : expected) {
+      assertEquals(item, selectionChangedEvent.getSelectionIndices().get(i++));
+    }
+  }
+
 }

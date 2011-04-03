@@ -8,12 +8,18 @@ import de.lessvoid.nifty.NiftyEvent;
  */
 public class DropDownSelectionChangedEvent<T> implements NiftyEvent<T> {
   private T selection;
+  private int selectionItemIndex;
 
-  public DropDownSelectionChangedEvent(final T selection) {
+  public DropDownSelectionChangedEvent(final T selection, final int selectionItemIndex) {
     this.selection = selection;
+    this.selectionItemIndex = selectionItemIndex;
   }
 
   public T getSelection() {
     return selection;
+  }
+
+  public int getSelectionItemIndex() {
+    return selectionItemIndex;
   }
 }

@@ -65,7 +65,12 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
         ListBoxControl listBoxControl = (ListBoxControl) listBox;
         listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), selectedItem);
 
-        nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(selectedItem));
+        int selectedItemIndex = -1;
+        List<Integer> selectionIndices = data.getSelectionIndices();
+        if (!selectionIndices.isEmpty()) {
+          selectedItemIndex = selectionIndices.get(0);
+        }
+        nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(selectedItem, selectedItemIndex));
         close();
       }
 

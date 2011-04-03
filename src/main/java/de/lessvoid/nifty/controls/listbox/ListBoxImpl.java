@@ -162,15 +162,16 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
   }
 
   public List<T> getSelection() {
-    return new ArrayList<T>(selection.getSelection());
+    return Collections.unmodifiableList(selection.getSelection());
   }
 
   public List<Integer> getSelectedIndices() {
     List<T> sel = selection.getSelection();
-    List<Integer> result = new ArrayList<Integer>();
     if (sel.isEmpty()) {
-      return result;
+      return new ArrayList<Integer>();
     }
+
+    List<Integer> result = new ArrayList<Integer>();
     for (T selItem : sel) {
       result.add(items.indexOf(selItem));
     }
@@ -418,7 +419,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
   }
 
   private void selectionChangedEvent(final List<T> oldSelection) {
-    view.publish(new ListBoxSelectionChangedEvent<T>(Collections.unmodifiableList(selection.getSelection())));
+    view.publish(new ListBoxSelectionChangedEvent<T>(getSelection(), getSelectedIndices()));
   }
 
   private void updateAfterRemove(final List<T> oldSelection, final int oldItemCount) {

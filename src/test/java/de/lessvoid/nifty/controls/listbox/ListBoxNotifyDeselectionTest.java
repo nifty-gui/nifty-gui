@@ -4,7 +4,6 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
 
 import org.easymock.Capture;
 import org.junit.After;
@@ -12,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.SelectionCheck;
 
 public class ListBoxNotifyDeselectionTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
@@ -19,7 +19,8 @@ public class ListBoxNotifyDeselectionTest {
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = new Capture<ListBoxSelectionChangedEvent<TestItem>>();
-  
+  private SelectionCheck selectionCheck = new SelectionCheck(listBox);
+
   @SuppressWarnings("unchecked")
   @Before
   public void before() {
@@ -44,7 +45,8 @@ public class ListBoxNotifyDeselectionTest {
 
     listBox.deselectItem(o1);
 
-    assertEquals(0, lastEvent.getValue().getSelection().size());
+    selectionCheck.assertChangedEventSelection(lastEvent.getValue());
+    selectionCheck.assertChangedEventSelectionIndices(lastEvent.getValue());
   }
 
   @Test
@@ -55,7 +57,8 @@ public class ListBoxNotifyDeselectionTest {
 
     listBox.deselectItemByIndex(0);
 
-    assertEquals(0, lastEvent.getValue().getSelection().size());
+    selectionCheck.assertChangedEventSelection(lastEvent.getValue());
+    selectionCheck.assertChangedEventSelectionIndices(lastEvent.getValue());
   }
 
   @Test
@@ -68,7 +71,8 @@ public class ListBoxNotifyDeselectionTest {
 
     listBox.removeItem(o1);
 
-    assertEquals(0, lastEvent.getValue().getSelection().size());
+    selectionCheck.assertChangedEventSelection(lastEvent.getValue());
+    selectionCheck.assertChangedEventSelectionIndices(lastEvent.getValue());
   }
 
   @Test
@@ -81,7 +85,8 @@ public class ListBoxNotifyDeselectionTest {
 
     listBox.removeItemByIndex(0);
 
-    assertEquals(0, lastEvent.getValue().getSelection().size());
+    selectionCheck.assertChangedEventSelection(lastEvent.getValue());
+    selectionCheck.assertChangedEventSelectionIndices(lastEvent.getValue());
   }
 
   @Test
@@ -94,6 +99,7 @@ public class ListBoxNotifyDeselectionTest {
 
     listBox.clear();
 
-    assertEquals(0, lastEvent.getValue().getSelection().size());
+    selectionCheck.assertChangedEventSelection(lastEvent.getValue());
+    selectionCheck.assertChangedEventSelectionIndices(lastEvent.getValue());
   }
 }
