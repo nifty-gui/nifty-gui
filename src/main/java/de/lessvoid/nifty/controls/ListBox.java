@@ -99,6 +99,12 @@ public interface ListBox<T> extends NiftyControl {
   List<T> getSelection();
 
   /**
+   * Get the current selection as a list of indices.
+   * @return list of indices for the current selection
+   */
+  List<Integer> getSelectedIndices();
+
+  /**
    * Remove an item from the ListBox by index.
    * @param itemIndex remove the item with the given index from the ListBox
    */

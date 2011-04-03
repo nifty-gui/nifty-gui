@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.controls;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +11,7 @@ public class ListBoxDisabledSelectionTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
+  private SelectionCheck selectionCheck = new SelectionCheck(listBox);
 
   @Before
   public void before() {
@@ -24,21 +23,14 @@ public class ListBoxDisabledSelectionTest {
   @Test
   public void testSelectWithItemIndexTooLarge() {
     listBox.selectItemByIndex(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testSelectFirstItem() {
     listBox.selectItem(o1);
-    assertSelection();
-  }
-
-  private void assertSelection(final Object ... selection) {
-    assertEquals(selection.length, listBox.getSelection().size());
-    int i = 0;
-    for (Object o : selection) {
-      assertEquals(o, listBox.getSelection().get(i));
-      i++;
-    }
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 }

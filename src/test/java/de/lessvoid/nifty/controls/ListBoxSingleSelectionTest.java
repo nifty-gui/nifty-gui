@@ -11,49 +11,55 @@ public class ListBoxSingleSelectionTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
+  private SelectionCheck selectionCheck = new SelectionCheck(listBox);
 
   @Test
   public void testDefault() {
-    assertSelection();
+    selectionCheck.assertSelection();
   }
 
   @Test
   public void testAddItem() {
     listBox.addItem(o1);
-    assertSelection();
+    selectionCheck.assertSelection();
   }
 
   @Test
   public void testSelectWithoutItems() {
     listBox.selectItemByIndex(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testSelectWithItemIndexTooLarge() {
     listBox.addItem(o1);
     listBox.selectItemByIndex(1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testSelectWithNegativeIndex() {
     listBox.selectItemByIndex(-1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testSelectFirstItemByIndex() {
     listBox.addItem(o1);
     listBox.selectItemByIndex(0);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
   public void testSelectFirstItem() {
     listBox.addItem(o1);
     listBox.selectItem(o1);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
@@ -62,7 +68,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o2);
     listBox.selectItemByIndex(0);
     listBox.selectItemByIndex(1);
-    assertSelection(o2);
+    selectionCheck.assertSelection(o2);
+    selectionCheck.assertSelectionIndices(1);
   }
 
   @Test
@@ -71,7 +78,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o2);
     listBox.selectItem(o1);
     listBox.selectItem(o2);
-    assertSelection(o2);
+    selectionCheck.assertSelection(o2);
+    selectionCheck.assertSelectionIndices(1);
   }
 
   @Test
@@ -80,7 +88,8 @@ public class ListBoxSingleSelectionTest {
     listBox.selectItemByIndex(0);
     listBox.clear();
     assertListBoxCount(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
@@ -97,7 +106,8 @@ public class ListBoxSingleSelectionTest {
     listBox.selectItemByIndex(0);
 
     listBox.removeItemByIndex(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
     assertListBoxCount(0);
   }
 
@@ -105,7 +115,8 @@ public class ListBoxSingleSelectionTest {
   public void testRemoveUnselectedIndex() {
     listBox.addItem(o1);
     listBox.removeItemByIndex(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
     assertListBoxCount(0);
   }
 
@@ -114,7 +125,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o1);
     listBox.selectItem(o1);
     listBox.removeItem(o1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
@@ -122,7 +134,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o1);
     listBox.selectItem(o1);
     listBox.removeItem(o2);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
@@ -131,7 +144,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o2);
     listBox.selectItem(o1);
     listBox.removeItem(o1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
@@ -139,7 +153,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o1);
     listBox.selectItemByIndex(0);
     listBox.deselectItemByIndex(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
@@ -147,7 +162,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o1);
     listBox.selectItemByIndex(0);
     listBox.deselectItemByIndex(1);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
@@ -155,7 +171,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o1);
     listBox.selectItemByIndex(0);
     listBox.deselectItemByIndex(-1);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
@@ -163,7 +180,8 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o1);
     listBox.selectItem(o1);
     listBox.deselectItem(o1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
@@ -171,26 +189,19 @@ public class ListBoxSingleSelectionTest {
     listBox.addItem(o1);
     listBox.selectItem(o1);
     listBox.deselectItem(o2);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
   public void testDeselectionWithoutSelection() {
     listBox.addItem(o1);
     listBox.deselectItem(o1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   private void assertListBoxCount(final int expected) {
     assertEquals(expected, listBox.itemCount());
-  }
-  
-  private void assertSelection(final Object ... selection) {
-    assertEquals(selection.length, listBox.getSelection().size());
-    int i = 0;
-    for (Object o : selection) {
-      assertEquals(o, listBox.getSelection().get(i));
-      i++;
-    }
   }
 }

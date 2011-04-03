@@ -190,6 +190,15 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   }
 
   @Override
+  public int getSelectedIndex() {
+    List<Integer> selection = listBox.getSelectedIndices();
+    if (selection.isEmpty()) {
+      return -1;
+    }
+    return selection.get(0);
+  }
+
+  @Override
   public void removeItemByIndex(final int itemIndex) {
     listBox.removeItemByIndex(itemIndex);
     updateEnabled();

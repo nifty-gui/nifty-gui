@@ -95,6 +95,11 @@ public class DropDownNull implements DropDown {
   }
 
   @Override
+  public int getSelectedIndex() {
+    return -1;
+  }
+
+  @Override
   public void removeItemByIndex(final int itemIndex) {
   }
 

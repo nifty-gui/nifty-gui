@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.controls;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +11,7 @@ public class ListBoxMultipleSelectionTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
+  private SelectionCheck selectionCheck = new SelectionCheck(listBox);
 
   @Before
   public void before() {
@@ -23,100 +22,115 @@ public class ListBoxMultipleSelectionTest {
 
   @Test
   public void testDefault() {
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testSelectWithItemIndexTooLarge() {
     listBox.selectItemByIndex(2);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testSelectWithNegativeIndex() {
     listBox.selectItemByIndex(-1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testSelectFirstItemByIndex() {
     listBox.selectItemByIndex(0);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
   public void testSelectFirstItem() {
     listBox.selectItem(o1);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
   public void testMultipleSelection() {
     listBox.selectItemByIndex(0);
     listBox.selectItemByIndex(1);
-    assertSelection(o1, o2);
+    selectionCheck.assertSelection(o1, o2);
+    selectionCheck.assertSelectionIndices(0, 1);
   }
 
   @Test
   public void testMultipleSelectionWithItem() {
     listBox.selectItem(o1);
     listBox.selectItem(o2);
-    assertSelection(o1, o2);
+    selectionCheck.assertSelection(o1, o2);
+    selectionCheck.assertSelectionIndices(0, 1);
   }
 
   @Test
   public void testClearWithSelection() {
     listBox.selectItemByIndex(0);
     listBox.clear();
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testRemoveItemWithSelection() {
     listBox.selectItemByIndex(0);
     listBox.removeItemByIndex(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testRemoveItemWithAnItemNotPartOfTheList() {
     listBox.selectItem(o1);
     listBox.removeItem(o2);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
   public void testRemoveUnselectedIndex() {
     listBox.removeItemByIndex(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testDeselectionByIndex() {
     listBox.selectItemByIndex(0);
     listBox.deselectItemByIndex(0);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
   public void testDeselectionByIndexTooLarge() {
     listBox.selectItemByIndex(0);
     listBox.deselectItemByIndex(1);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
   public void testDeselectionByNegativIndex() {
     listBox.selectItemByIndex(0);
     listBox.deselectItemByIndex(-1);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
   public void testDeselection() {
     listBox.selectItem(o1);
     listBox.deselectItem(o1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
@@ -124,20 +138,23 @@ public class ListBoxMultipleSelectionTest {
     listBox.selectItem(o1);
     listBox.selectItem(o2);
     listBox.deselectItem(o1);
-    assertSelection(o2);
+    selectionCheck.assertSelection(o2);
+    selectionCheck.assertSelectionIndices(1);
   }
 
   @Test
   public void testDeselectionByNotAddedItem() {
     listBox.selectItem(o1);
     listBox.deselectItem(o2);
-    assertSelection(o1);
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 
   @Test
   public void testDeselectionWithoutSelection() {
     listBox.deselectItem(o1);
-    assertSelection();
+    selectionCheck.assertSelection();
+    selectionCheck.assertSelectionIndices();
   }
 
   @Test
@@ -146,15 +163,7 @@ public class ListBoxMultipleSelectionTest {
     listBox.addItem(o1);
     listBox.addItem(o2);
     listBox.changeSelectionMode(SelectionMode.Multiple, true);
-    assertSelection(o1);
-  }
-
-  private void assertSelection(final Object ... selection) {
-    assertEquals(selection.length, listBox.getSelection().size());
-    int i = 0;
-    for (Object o : selection) {
-      assertEquals(o, listBox.getSelection().get(i));
-      i++;
-    }
+    selectionCheck.assertSelection(o1);
+    selectionCheck.assertSelectionIndices(0);
   }
 }

@@ -165,6 +165,18 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     return new ArrayList<T>(selection.getSelection());
   }
 
+  public List<Integer> getSelectedIndices() {
+    List<T> sel = selection.getSelection();
+    List<Integer> result = new ArrayList<Integer>();
+    if (sel.isEmpty()) {
+      return result;
+    }
+    for (T selItem : sel) {
+      result.add(items.indexOf(selItem));
+    }
+    return result;
+  }
+
   public void removeItemByIndex(final int itemIndex) {
     if (invalidIndex(itemIndex)) {
       return;

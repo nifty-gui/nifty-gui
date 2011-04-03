@@ -350,6 +350,11 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   @Override
+  public List<Integer> getSelectedIndices() {
+    return listBoxImpl.getSelectedIndices();
+  }
+
+  @Override
   public void removeItemByIndex(final int itemIndex) {
     listBoxImpl.removeItemByIndex(itemIndex);
   }

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.nullobjects;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -176,5 +177,10 @@ public class ListBoxNull implements ListBox {
 
   @Override
   public void setFocusable(final boolean focusable) {
+  }
+
+  @Override
+  public List<Integer> getSelectedIndices() {
+    return new ArrayList<Integer>();
   }
 }

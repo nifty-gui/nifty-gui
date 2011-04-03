@@ -63,6 +63,12 @@ public interface DropDown<T> extends NiftyControl {
   T getSelection();
 
   /**
+   * Returns the index of the current selected item in the list of all items.
+   * @return selected item index
+   */
+  int getSelectedIndex();
+
+  /**
    * Remove an item from the DropDown by index.
    * @param itemIndex remove the item with the given index from the DropDown
    */
