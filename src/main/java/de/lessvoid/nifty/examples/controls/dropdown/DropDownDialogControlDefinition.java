@@ -24,6 +24,8 @@ public class DropDownDialogControlDefinition {
     new ControlDefinitionBuilder(NAME) {{
       controller(new DropDownDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
+
+        // here is the drop down control
         panel(new PanelBuilder() {{
           childLayoutHorizontal();
           control(builders.createLabel("DropDown:"));
@@ -31,6 +33,8 @@ public class DropDownDialogControlDefinition {
             width("*");
           }});
         }});
+
+        // and the append button to add more items to the drop down
         panel(builders.vspacer());
         panel(new PanelBuilder() {{
           childLayoutHorizontal();
@@ -39,6 +43,8 @@ public class DropDownDialogControlDefinition {
           panel(builders.hspacer("9px"));
           control(new ButtonBuilder("addDropDownItemButton", "Append"));
         }});
+
+        // the changed event and the remove item button
         panel(builders.vspacer());
         panel(new PanelBuilder() {{
           childLayoutHorizontal();
@@ -51,6 +57,18 @@ public class DropDownDialogControlDefinition {
           }});
           panel(builders.hspacer("9px"));
           control(new ButtonBuilder("removeDropDownItemButton", "Remove"));
+        }});
+
+        // and additionally the index of the selected item
+        panel(builders.vspacer());
+        panel(new PanelBuilder() {{
+          childLayoutHorizontal();
+          control(builders.createLabel("Current Sel. Idx.:"));
+          control(new ControlBuilder("#selectedIndices", "label") {{
+            alignLeft();
+            textHAlignLeft();
+            width("250px");
+          }});
         }});
       }});
     }}.registerControlDefintion(nifty);

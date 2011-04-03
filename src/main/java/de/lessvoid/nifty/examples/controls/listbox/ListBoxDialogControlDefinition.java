@@ -24,6 +24,8 @@ public class ListBoxDialogControlDefinition {
     new ControlDefinitionBuilder(NAME) {{
       controller(new ListBoxDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
+
+        // the actual list box panel at the top
         panel(new PanelBuilder() {{
           childLayoutHorizontal();
           control(builders.createLabel("ListBox:"));
@@ -35,6 +37,8 @@ public class ListBoxDialogControlDefinition {
             width("*");
           }});
         }});
+
+        // the panel for the append button
         panel(builders.vspacer());
         panel(new PanelBuilder() {{
           childLayoutHorizontal();
@@ -43,6 +47,8 @@ public class ListBoxDialogControlDefinition {
           panel(builders.hspacer("9px"));
           control(new ButtonBuilder("appendButton", "Append"));
         }});
+
+        // the panel for the checkbox to select multi selection and stuff
         panel(builders.vspacer());
         panel(new PanelBuilder() {{
           childLayoutHorizontal();
@@ -63,6 +69,8 @@ public class ListBoxDialogControlDefinition {
             checked(false);
           }});
         }});
+
+        // another listbox to display the current selection
         panel(builders.vspacer());
         panel(new PanelBuilder() {{
           childLayoutHorizontal();
@@ -78,6 +86,20 @@ public class ListBoxDialogControlDefinition {
             optionalVerticalScrollbar();
           }});
         }});
+
+        // a simple label to display the new item index feature for selections
+        panel(builders.vspacer());
+        panel(new PanelBuilder() {{
+          childLayoutHorizontal();
+          control(builders.createLabel("Current Sel. Idx.:"));
+          control(new ControlBuilder("selectedIndices", "label") {{
+            alignLeft();
+            textHAlignLeft();
+            width("250px");
+          }});
+        }});
+
+        // the remove selection button
         panel(builders.vspacer());
         panel(new PanelBuilder() {{
           childLayoutHorizontal();

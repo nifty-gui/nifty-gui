@@ -12,7 +12,6 @@ import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
-import de.lessvoid.nifty.controls.button.ButtonControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.examples.controls.common.JustAnExampleModelClass;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -25,6 +24,7 @@ public class DropDownDialogController implements Controller {
   private DropDown<JustAnExampleModelClass> dropDown;
   private Label selectedItem;
   private Button removeDropDownItemButton;
+  private Label selectedIndices;
 
   @SuppressWarnings("unchecked")
   @Override
@@ -39,12 +39,14 @@ public class DropDownDialogController implements Controller {
     this.dropDown = screen.findNiftyControl("dropDown", DropDown.class);
     this.selectedItem = screen.findNiftyControl("selectedItem", Label.class);
     this.removeDropDownItemButton = screen.findNiftyControl("removeDropDownItemButton", Button.class);
+    this.selectedIndices = element.findNiftyControl("#selectedIndices", Label.class);
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     setDropDownItemButtonState();
     setRemoveDropDownItemButtonState(null);
+    updateSelectedIndexLabel(dropDown.getSelectedIndex());
   }
 
   @Override
@@ -92,6 +94,7 @@ public class DropDownDialogController implements Controller {
       selectedItem.setText(event.getSelection().toString());
     }
     setRemoveDropDownItemButtonState(event.getSelection());
+    updateSelectedIndexLabel(event.getSelectionItemIndex());
   }
 
   @NiftyEventSubscriber(id="removeDropDownItemButton")
@@ -113,5 +116,13 @@ public class DropDownDialogController implements Controller {
     } else {
       removeDropDownItemButton.enable();
     }
+  }
+
+  private void updateSelectedIndexLabel(final int selectedItemIndex) {
+    if (selectedItemIndex == -1) {
+      selectedIndices.setText("N/A");
+      return;
+    }
+    selectedIndices.setText(String.valueOf(selectedItemIndex));
   }
 }

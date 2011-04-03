@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.examples.controls.listbox;
 
+import java.util.List;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
@@ -9,6 +10,7 @@ import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
@@ -34,6 +36,7 @@ public class ListBoxDialogController implements Controller {
   private Button appendButton;
   private Button removeSelectionButton;
   private TextField addTextField;
+  private Label selectedIndices;
 
   @Override
   public void bind(
@@ -51,6 +54,7 @@ public class ListBoxDialogController implements Controller {
     this.forceSelectionCheckBox  = screen.findNiftyControl("forceSelectionCheckBox", CheckBox.class);
     this.appendButton = screen.findNiftyControl("appendButton", Button.class);
     this.removeSelectionButton = screen.findNiftyControl("removeSelectionButton", Button.class);
+    this.selectedIndices = screen.findNiftyControl("selectedIndices", Label.class);
   }
 
   @Override
@@ -59,6 +63,7 @@ public class ListBoxDialogController implements Controller {
     listBox.addItem(new JustAnExampleModelClass("You can add more lines to this ListBox."));
     listBox.addItem(new JustAnExampleModelClass("Use the append button to do this."));
 
+    updateSelectedIndexLabel(listBox.getSelectedIndices());
     setAppendButtonState();
     setRemoveSelectionButtonState();
   }
@@ -98,6 +103,8 @@ public class ListBoxDialogController implements Controller {
     // Now take the new selection of the listBox and apply it to the selectionListBox to show the current selection
     selectionListBox.clear();
     selectionListBox.addAllItems(changed.getSelection());
+
+    updateSelectedIndexLabel(changed.getSelectionIndices());
     setRemoveSelectionButtonState();
   }
 
@@ -155,6 +162,25 @@ public class ListBoxDialogController implements Controller {
     } else {
       removeSelectionButton.enable();
     }
+  }
+
+  private void updateSelectedIndexLabel(final List<Integer> selectionIndices) {
+    if (selectionIndices == null || selectionIndices.isEmpty()) {
+      selectedIndices.setText("N/A");
+      return;
+    }
+    StringBuffer text = new StringBuffer();
+    boolean first = true;
+    for (Integer i : selectionIndices) {
+      if (first) {
+        first = false;
+        text.append(i);
+        continue;
+      }
+      text.append(", ");
+      text.append(i);
+    }
+    selectedIndices.setText(text.toString());
   }
 
   @SuppressWarnings("unchecked")
