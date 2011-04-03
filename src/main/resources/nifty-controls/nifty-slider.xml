@@ -2,6 +2,7 @@
 <nifty-controls>
   <controlDefinition name="verticalSlider" style="nifty-vertical-slider" controller="de.lessvoid.nifty.controls.slider.SliderControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel" focusable="true">
+      <interact onMouseWheel="mouseWheel()" />
       <image style="#up">
         <interact onClickRepeat="upClick()" />
       </image>
@@ -19,6 +20,7 @@
 
   <controlDefinition name="horizontalSlider" style="nifty-horizontal-slider" controller="de.lessvoid.nifty.controls.slider.SliderControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel">
+      <interact onMouseWheel="mouseWheel()" />
       <image style="#left">
         <interact onClickRepeat="upClick()" />
       </image>

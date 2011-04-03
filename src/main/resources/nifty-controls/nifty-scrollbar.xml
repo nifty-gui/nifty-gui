@@ -2,6 +2,7 @@
 <nifty-controls>
   <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel" focusable="true">
+      <interact onMouseWheel="mouseWheel()" />
       <image style="#up">
         <interact onPrimaryClickRepeat="upClick()" />
       </image>
@@ -19,6 +20,7 @@
 
   <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel">
+      <interact onMouseWheel="mouseWheel()" />
       <image style="#left">
         <interact onPrimaryClickRepeat="upClick()" />
       </image>

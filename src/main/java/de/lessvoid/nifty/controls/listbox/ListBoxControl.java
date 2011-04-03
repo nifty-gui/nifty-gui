@@ -18,6 +18,7 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
@@ -123,6 +124,19 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @Override
   public void onStartScreen() {
+  }
+
+  public void mouseWheel(final Element e, final NiftyMouseInputEvent inputEvent) {
+    int mouseWheel = inputEvent.getMouseWheel();
+    Scrollbar scrollbar = getVerticalScrollbar();
+    if (scrollbar != null) {
+      float currentValue = scrollbar.getValue();
+      if (mouseWheel < 0) {
+        scrollbar.setValue(currentValue - scrollbar.getButtonStepSize() * mouseWheel);
+      } else if (mouseWheel > 0) {
+        scrollbar.setValue(currentValue - scrollbar.getButtonStepSize() * mouseWheel);
+      }
+    }
   }
 
   private void subscribeVerticalScrollbar() {

@@ -9,6 +9,7 @@ import de.lessvoid.nifty.controls.Slider;
 import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -96,6 +97,16 @@ public class SliderControl extends AbstractController implements Slider {
     sliderImpl.setValueFromPosition(
         mouseX - elementBackground.getX() - elementPosition.getWidth() / 2,
         mouseY - elementBackground.getY() - elementPosition.getHeight() / 2);
+  }
+
+  public void mouseWheel(final Element element, final NiftyMouseInputEvent inputEvent) {
+    int mouseWheel = inputEvent.getMouseWheel();
+    float currentValue = sliderImpl.getValue();
+    if (mouseWheel < 0) {
+      sliderImpl.setValue(currentValue - sliderImpl.getButtonStepSize() * mouseWheel);
+    } else if (mouseWheel > 0) {
+      sliderImpl.setValue(currentValue - sliderImpl.getButtonStepSize() * mouseWheel);
+    }
   }
 
   // Slider implementation

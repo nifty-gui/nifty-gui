@@ -3,7 +3,9 @@
   <controlDefinition name="scrollPanel" style="nifty-scrollpanel" childRootId="#nifty-scrollpanel-child-root" controller="de.lessvoid.nifty.controls.scrollpanel.ScrollPanelControl">
     <panel childLayout="vertical" visibleToMouse="true">
       <panel childLayout="horizontal" visibleToMouse="true">
-        <panel id="#nifty-scrollpanel-child-root" childLayout="absolute" childClip="true" style="#scrollpanel" visibleToMouse="true" />
+        <panel id="#nifty-scrollpanel-child-root" childLayout="absolute" childClip="true" style="#scrollpanel" visibleToMouse="true">
+          <interact onMouseWheel="mouseWheel()" />
+        </panel>
         <control id="#nifty-internal-vertical-scrollbar" name="verticalScrollbar" />
       </panel>
       <panel id="#nifty-internal-horizonal-panel" childLayout="horizontal">

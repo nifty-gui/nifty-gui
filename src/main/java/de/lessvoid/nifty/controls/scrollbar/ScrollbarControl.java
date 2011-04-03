@@ -9,6 +9,7 @@ import de.lessvoid.nifty.controls.Scrollbar;
 import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -101,6 +102,16 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
 
   public void mouseMove(final int mouseX, final int mouseY) {
     scrollbarImpl.interactionMove(scrollbarView.filter(mouseX, mouseY));
+  }
+
+  public void mouseWheel(final Element element, final NiftyMouseInputEvent inputEvent) {
+    int mouseWheel = inputEvent.getMouseWheel();
+    float currentValue = scrollbarImpl.getValue();
+    if (mouseWheel < 0) {
+      scrollbarImpl.setValue(currentValue - scrollbarImpl.getButtonStepSize() * mouseWheel);
+    } else if (mouseWheel > 0) {
+      scrollbarImpl.setValue(currentValue - scrollbarImpl.getButtonStepSize() * mouseWheel);
+    }
   }
 
   // Scrollbar implementation

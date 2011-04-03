@@ -13,6 +13,7 @@ import de.lessvoid.nifty.controls.Scrollbar;
 import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -107,17 +108,17 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   @Override
   public void setHorizontalPos(final float xPos) {
-    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
-    if (verticalS != null && verticalScrollbar) {
-      verticalS.setValue(xPos);
+    Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+    if (horizontalS != null && verticalScrollbar) {
+      horizontalS.setValue(xPos);
     }
   }
 
   @Override
   public float getHorizontalPos() {
-    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
-    if (verticalS != null && verticalScrollbar) {
-      return verticalS.getValue();
+    Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+    if (horizontalS != null && verticalScrollbar) {
+      return horizontalS.getValue();
     }
     return 0.f;
   }
@@ -201,6 +202,19 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
     Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
     if (verticalS != null) {
       verticalS.setPageStepSize(pageSizeY);
+    }
+  }
+
+  public void mouseWheel(final Element e, final NiftyMouseInputEvent inputEvent) {
+    int mouseWheel = inputEvent.getMouseWheel();
+    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+    if (verticalS != null) {
+      float currentValue = verticalS.getValue();
+      if (mouseWheel < 0) {
+        verticalS.setValue(currentValue - verticalS.getButtonStepSize() * mouseWheel);
+      } else if (mouseWheel > 0) {
+        verticalS.setValue(currentValue - verticalS.getButtonStepSize() * mouseWheel);
+      }
     }
   }
 
