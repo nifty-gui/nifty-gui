@@ -220,7 +220,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
 
   public class CreateButtonControl extends ControlAttributes {
     public CreateButtonControl(final String name, final String id) {
-      setId(id);
+      setAutoId(id);
       setName(name);
     }
 
