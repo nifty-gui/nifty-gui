@@ -25,7 +25,7 @@
   </controlDefinition>
 
   <!-- and the popup -->
-  <popup id="niftyPopupMenu" childLayout="absolute" controller="de.lessvoid.nifty.controls.menu.PopupMenuControl">
+  <popup id="niftyPopupMenu" childLayout="absolute-inside" controller="de.lessvoid.nifty.controls.menu.PopupMenuControl">
     <interact onClick="closePopup()" onSecondaryClick="closePopup()" onTertiaryClick="closePopup()"/>
     <control id="menu" name="niftyMenu" />
   </popup>
