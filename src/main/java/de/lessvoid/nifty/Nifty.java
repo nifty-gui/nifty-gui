@@ -596,6 +596,14 @@ public class Nifty {
   }
 
   /**
+   * This returns all the style names currently registed with nifty.
+   * @return Collection of all style names
+   */
+  public Collection < String > getAllStylesName() {
+    return styles.keySet();
+  }
+
+  /**
    * exit.
    */
   public void exit() {
