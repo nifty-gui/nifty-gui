@@ -14,13 +14,22 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class AbsolutePositionLayout implements LayoutManager {
+  private PostProcess post;
+
+  public AbsolutePositionLayout() {
+    this.post = new DefaultPostProcess();
+  }
+
+  public AbsolutePositionLayout(final PostProcess post) {
+    this.post = post;
+  }
 
   /**
    * layoutElements.
    * @param rootElement @see {@link LayoutManager}
    * @param elements @see {@link LayoutManager}
    */
-  public final void layoutElements(
+  public void layoutElements(
       final LayoutPart rootElement,
       final List < LayoutPart > elements) {
 
@@ -69,6 +78,8 @@ public class AbsolutePositionLayout implements LayoutManager {
             box.setHeight(cons.getHeight().getValueAsInt(rootBoxHeight));
           }
         }
+
+        post.process(rootBoxX, rootBoxY, rootBoxWidth, rootBoxHeight, box);
       }
     }
   }
@@ -103,5 +114,35 @@ public class AbsolutePositionLayout implements LayoutManager {
 
   private int getRootBoxHeight(final LayoutPart root) {
     return root.getBox().getHeight() - root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight()) - root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
+  }
+
+  public interface PostProcess {
+    void process(int rootBoxX, int rootBoxY, int rootBoxWidth, int rootBoxHeight, Box box);
+  }
+
+  public static class DefaultPostProcess implements PostProcess {
+    @Override
+    public void process(final int rootBoxX, final int rootBoxY, final int rootBoxWidth, final int rootBoxHeight, final Box box) {
+    }
+  }
+
+  public static class KeepInsidePostProcess implements PostProcess {
+    @Override
+    public void process(final int rootBoxX, final int rootBoxY, final int rootBoxWidth, final int rootBoxHeight, final Box box) {
+      int width = rootBoxWidth - box.getWidth();
+      int height = rootBoxHeight - box.getHeight();
+      if (box.getX() < rootBoxX) {
+        box.setX(rootBoxX);
+      }
+      if (box.getX() > width) {
+        box.setX(width);
+      }
+      if (box.getY() < rootBoxY) {
+        box.setY(rootBoxY);
+      }
+      if (box.getY() > height) {
+        box.setY(height);
+      } 
+    }
   }
 }

@@ -11,7 +11,6 @@ import de.lessvoid.nifty.layout.manager.VerticalLayout;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.image.ImageMode;
 import de.lessvoid.nifty.render.image.ImageModeFactory;
-import de.lessvoid.nifty.render.image.ImageModeHelper;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -103,7 +102,10 @@ public class Convert {
       return new OverlayLayout();
     } else if (typeCompare.equals("absolute")) {
       return new AbsolutePositionLayout();
+    } else if (typeCompare.equals("absolute-inside")) {
+      return new AbsolutePositionLayout(new AbsolutePositionLayout.KeepInsidePostProcess());
     }
+    
     return null;
   }
 
