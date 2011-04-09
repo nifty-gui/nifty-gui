@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="nifty-console" controller="de.lessvoid.nifty.controls.console.controller.ConsoleControl" inputMapping="de.lessvoid.nifty.controls.textfield.inputmapping.TextFieldInputMapping">
-    <panel style="nifty-console-panel" lines="$lines" focusable="true">
-      <interact/>
+  <controlDefinition name="nifty-console" controller="de.lessvoid.nifty.controls.console.controller.ConsoleControl">
+    <panel style="nifty-console-panel">
+      <control id="#listBox" name="listBox" style="nifty-console-listbox" displayItems="$lines" selectionMode="Disabled" horizontal="off" vertical="Optional">
+        <text text="Template" style="nifty-console-listbox-item" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
+      </control>
+      <control id="#textInput" name="textfield" style="nifty-console-textfield" />
     </panel>
-  </controlDefinition>
-
-  <controlDefinition name="console-line">
-    <text id="label" style="nifty-console-line" text="" align="left" textHAlign="left" textVAlign="center" width="100%"/>
   </controlDefinition>
 </nifty-controls>

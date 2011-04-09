@@ -1,18 +1,16 @@
 package de.lessvoid.nifty.controls.console.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Properties;
+
+import org.bushe.swing.event.EventTopicSubscriber;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Console;
+import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
-import de.lessvoid.nifty.controls.textfield.builder.TextFieldCreator;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -24,18 +22,15 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @deprecated Please use {@link de.lessvoid.nifty.controls.Console} when accessing NiftyControls.
  */
 @Deprecated
-public class ConsoleControl extends AbstractController {
-  private static final int MAX_BUFFER_LINES = 100;
+public class ConsoleControl extends AbstractController implements Console, EventTopicSubscriber<NiftyInputEvent> {
   private Nifty nifty;
   private Screen screen;
   private Element element;
-  private int lines;
-  private List<String> buffer = new ArrayList<String>();
-  private Collection<ConsoleCommandHandler> commandHandler = new ArrayList<ConsoleCommandHandler>();
+  private ListBox<String> listBox;
+  private TextField textfield;
 
-  public ConsoleControl() {
-  }
-
+  @SuppressWarnings("unchecked")
+  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -45,109 +40,60 @@ public class ConsoleControl extends AbstractController {
     this.nifty = niftyParam;
     this.screen = screenParam;
     this.element = newElement;
-    this.lines = Integer.valueOf((String) properties.get("lines"));
-    for (int i = 0; i < lines; i++) {
-      CustomControlCreator createConsoleLine = new CustomControlCreator("console-line-" + i, "console-line");
-      createConsoleLine.create(nifty, screen, element);
-    }
-    TextFieldCreator createTextField = new TextFieldCreator("console-input");
-    createTextField.setStyle("nifty-console-textfield");
-    createTextField.setFocusable("false");
-    createTextField.create(nifty, screen, element);
-    screen.layoutLayers();
+    this.listBox = element.findNiftyControl("#listBox", ListBox.class);
+    this.textfield = element.findNiftyControl("#textInput", TextField.class);
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+    nifty.subscribe(screen, textfield.getId(), NiftyInputEvent.class, this);
   }
 
-  /**
-   * On start screen event.
-   * 
-   * @param newScreen
-   *          screen
-   */
+  @Override
   public void onStartScreen() {
+    initialFill();
   }
 
-  public void onClick(final int mouseX, final int mouseY) {
-  }
-
-  public void onClickMouseMove(final int mouseX, final int mouseY) {
-  }
-
+  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    TextFieldControl textControl = this.element.findElementByName("console-input").getControl(TextFieldControl.class);
-    if (textControl.inputEvent(inputEvent)) {
-      return true;
-    }
-    if (inputEvent == NiftyInputEvent.SubmitText) {
-      String commandLine = textControl.getText();
-      output(commandLine);
-      textControl.setText("");
-      this.element.setFocus();
-      notifyCommandHandler(commandLine);
-      return true;
-    }
     return false;
   }
 
-  private void notifyCommandHandler(final String commandLine) {
-    for (ConsoleCommandHandler handler : commandHandler) {
-      handler.execute(commandLine);
+  @Override
+  public void onEvent(final String topic, final NiftyInputEvent data) {
+    if (data.equals(NiftyInputEvent.SubmitText)) {
+      String text = textfield.getText();
+      listBox.addItem(text);
+      listBox.showItemByIndex(listBox.itemCount() - 1);
+
+      textfield.setText("");
+      nifty.publishEvent(element.getId(), new ConsoleExecuteCommandEvent(text));
     }
   }
 
   @Override
-  public void onFocus(final boolean getFocus) {
-    TextField control = this.element.findNiftyControl("console-input", TextField.class);
-    if (control != null) {
-      super.onFocus(getFocus);
-      // FIXME
-//      control.onFocus(getFocus);
+  public void output(final String value) {
+    String[] lines = value.split("\n");
+    for (String line : lines) {
+      listBox.addItem(line);
+      listBox.showItemByIndex(listBox.itemCount() - 1);
     }
   }
 
-  public void output(final String line) {
-    if (line != null && line.length() > 0) {
-      if (line.contains("\n")) {
-        String[] splitLines = line.split("\n");
-        for (String l : splitLines) {
-          outputLine(l);
-        }
-      } else {
-        outputLine(line);
-      }
-      showLines();
-    }
+  @Override
+  public String[] getConsoleContent() {
+    return listBox.getItems().toArray(new String[0]);
   }
 
-  private void outputLine(final String line) {
-    buffer.add(line);
-    if (buffer.size() > MAX_BUFFER_LINES) {
-      buffer.remove(0);
-    }
+  @Override
+  public void clear() {
+    listBox.clear();
+    initialFill();
   }
 
-  private void showLines() {
-    if (buffer.isEmpty()) {
-      return;
+  private void initialFill() {
+    for (int i=0; i<listBox.getDisplayItemCount(); i++) {
+      listBox.addItem("");
     }
-
-    int lastLineIdx = buffer.size() - 1;
-    for (int i = lines - 1; i >= 0; i--) {
-      if (lastLineIdx >= 0) {
-        String line = buffer.get(lastLineIdx);
-        Element el = element.findElementByName("console-line-" + i);
-        if (el != null) {
-          el.getRenderer(TextRenderer.class).setText(line);
-        }
-        lastLineIdx--;
-      }
-    }
-  }
-
-  public void addCommandHandler(final ConsoleCommandHandler consoleCommandHandler) {
-    commandHandler.add(consoleCommandHandler);
   }
 }
