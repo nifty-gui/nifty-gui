@@ -44,7 +44,7 @@
       <onEndScreen name="fade" start="#a" end="#0" length="200" startDelay="100" inherit="true" />
     </effect>
     <panel childLayout="center" width="95%" align="center" valign="center">
-      <control id="console" name="nifty-console" lines="40" align="center" valign="center">
+      <control id="console" name="nifty-console" lines="10" align="center" valign="center">
         <effect>
           <onStartScreen name="move" direction="top" mode="in" length="200" startDelay="100" inherit="true" />
           <onEndScreen name="move" direction="top" mode="out" length="200" startDelay="0" inherit="true" />

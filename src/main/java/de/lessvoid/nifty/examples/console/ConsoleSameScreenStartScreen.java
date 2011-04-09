@@ -2,8 +2,9 @@ package de.lessvoid.nifty.examples.console;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.console.controller.ConsoleCommandHandler;
-import de.lessvoid.nifty.controls.console.controller.ConsoleControl;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.Console;
+import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -23,6 +24,7 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
   private boolean allowConsoleToggle = true;
   private Element oldFocusElement;
   private Element consoleElement;
+  private Element consoleElementFocus;
   private Element consoleLayer;
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
@@ -31,19 +33,8 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
     screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
 
     consoleElement = screen.findElementByName("console");
+    consoleElementFocus = consoleElement.findElementByName("#textInput");
     consoleLayer = screen.findElementByName("consoleLayer");
-
-    final ConsoleControl control = screen.findControl("console", ConsoleControl.class);
-    control.output("Nifty Console Demo\nVersion: 1.0");
-    control.addCommandHandler(new ConsoleCommandHandler() {
-      public void execute(final String line) {
-        // just echo to the console
-        control.output("your input was: " + line);
-        if ("exit".equals(line.toLowerCase())) {
-          back();
-        }
-      }
-    });
   }
 
   public void onStartScreen() {
@@ -66,6 +57,15 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
     }
   }
 
+  @NiftyEventSubscriber(id="console")
+  public void onConsoleCommand(final String id, final ConsoleExecuteCommandEvent command) {
+    Console console = screen.findNiftyControl("console", Console.class);
+    console.output("your input was: " + command.getCommandLine() + " [" + command.getArgumentCount() + " parameter(s)]");
+    if ("exit".equals(command.getCommand())) {
+      back();
+    }
+  }
+
   private void toggleConsole() {
     if (allowConsoleToggle) {
       allowConsoleToggle = false;
@@ -83,9 +83,10 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
       @Override
       public void perform() {
         oldFocusElement = screen.getFocusHandler().getKeyboardFocusElement();
+
         // add the consoleElement to the focushandler, when it's not yet added already
         addConsoleElementToFocusHandler();
-        consoleElement.setFocus();
+        consoleElementFocus.setFocus();
 
         consoleVisible = true;
         allowConsoleToggle = true;
@@ -112,12 +113,12 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
   }
 
   private void addConsoleElementToFocusHandler() {
-    if (screen.getFocusHandler().findElement(consoleElement.getId()) == null) {
-      screen.getFocusHandler().addElement(consoleElement);
+    if (screen.getFocusHandler().findElement(consoleElementFocus.getId()) == null) {
+      screen.getFocusHandler().addElement(consoleElementFocus);
     }
   }
 
   private void removeConsoleElementFromFocusHandler() {
-    screen.getFocusHandler().remove(consoleElement);
+    screen.getFocusHandler().remove(consoleElementFocus);
   }
 }

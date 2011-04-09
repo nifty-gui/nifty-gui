@@ -2,8 +2,9 @@ package de.lessvoid.nifty.examples.console;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.console.controller.ConsoleCommandHandler;
-import de.lessvoid.nifty.controls.console.controller.ConsoleControl;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.Console;
+import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
@@ -18,13 +19,16 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler {
   private Nifty nifty;
   private Screen screen;
+  private Element consolePopup;
   private boolean consoleVisible = false;
   private boolean allowConsoleToggle = true;
+  private boolean firstConsoleShow = true;
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
     nifty = newNifty;
     screen = newScreen;
     screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
+    consolePopup = nifty.createPopup("consolePopup");
   }
 
   public void onStartScreen() {
@@ -58,33 +62,35 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
   }
 
   private void openConsole() {
-    Element popup = nifty.createPopup("consolePopup");
+    nifty.showPopup(screen, consolePopup.getId(), consolePopup.findElementByName("console#textInput"));
+    screen.processAddAndRemoveLayerElements();
 
-// FIXME new controls
-//    final ConsoleControl control = popup.findControl("console", ConsoleControl.class);
-//    control.output("Nifty Console Demo\nVersion: 1.0");
-//    control.addCommandHandler(new ConsoleCommandHandler() {
-//      public void execute(final String line) {
-//        // just echo to the console
-//        control.output("your input was: " + line);
-//        if ("exit".equals(line.toLowerCase())) {
-//          back();
-//        }
-//      }
-//    });
-//
-//    nifty.showPopup(screen, "consolePopup", null);
-//    consoleVisible = true;
-//    allowConsoleToggle = true;
+    if (firstConsoleShow) {
+      firstConsoleShow = false;
+      Console console = screen.findNiftyControl("console", Console.class);
+      console.output("Nifty Console Demo\nVersion: 2.0");
+    }
+
+    consoleVisible = true;
+    allowConsoleToggle = true;
   }
 
   private void closeConsole() {
-    nifty.closePopup("consolePopup", new EndNotify() {
+    nifty.closePopup(consolePopup.getId(), new EndNotify() {
       @Override
       public void perform() {
         consoleVisible = false;
         allowConsoleToggle = true;
       }
     });
+  }
+
+  @NiftyEventSubscriber(id="console")
+  public void onConsoleCommand(final String id, final ConsoleExecuteCommandEvent command) {
+    Console console = screen.findNiftyControl("console", Console.class);
+    console.output("your input was: " + command.getCommandLine() + " [" + command.getArgumentCount() + " parameter(s)]");
+    if ("exit".equals(command.getCommand())) {
+      back();
+    }
   }
 }
