@@ -21,6 +21,9 @@ public class TargetElementResolver {
     if (id.startsWith(PARENT)) {
       return resolveParents(id, base.getParent());
     }
+    if (id.startsWith("#")) {
+      return base.findElementByName(id);
+    }
     return screen.findElementByName(id);
   }
 
