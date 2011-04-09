@@ -183,4 +183,9 @@ public class ListBoxNull implements ListBox {
   public List<Integer> getSelectedIndices() {
     return new ArrayList<Integer>();
   }
+
+  @Override
+  public int getDisplayItemCount() {
+    return 0;
+  }
 }

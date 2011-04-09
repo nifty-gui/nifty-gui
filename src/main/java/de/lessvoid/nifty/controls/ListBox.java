@@ -179,6 +179,12 @@ public interface ListBox<T> extends NiftyControl {
   void sortAllItems();
 
   /**
+   * Returns the number of items this ListBox can display without being scrolled.
+   * @return number of display items
+   */
+  int getDisplayItemCount();
+
+  /**
    * Sort all items using the given comperator.
    * @param comperator
    */

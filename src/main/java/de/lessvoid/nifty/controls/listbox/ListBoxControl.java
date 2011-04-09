@@ -445,6 +445,11 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     listBoxImpl.sortItems(comperator);
   }
 
+  @Override
+  public int getDisplayItemCount() {
+    return displayItems;
+  }
+
   // internals 
 
   private void initSelectionMode(final ListBoxImpl<T> listBoxImpl, final String selectionMode, final String forceSelection) {
