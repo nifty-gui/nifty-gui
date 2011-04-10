@@ -5,9 +5,15 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 public class ListBoxNull implements ListBox {
+
+  @Override
+  public Element getElement() {
+    return null;
+  }
 
   @Override
   public String getId() {

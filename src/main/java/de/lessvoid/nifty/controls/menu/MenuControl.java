@@ -93,6 +93,11 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
   // NiftyControl implementation
 
   @Override
+  public Element getElement() {
+    return element;
+  }
+
+  @Override
   public void enable() {
     element.enable();
   }

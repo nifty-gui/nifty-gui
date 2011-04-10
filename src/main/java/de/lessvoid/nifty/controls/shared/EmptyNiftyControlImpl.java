@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.controls.shared;
 
 import de.lessvoid.nifty.controls.NiftyControl;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
@@ -12,6 +13,11 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public abstract class EmptyNiftyControlImpl implements NiftyControl {
+
+  @Override
+  public Element getElement() {
+    return null;
+  }
 
   @Override
   public void enable() {

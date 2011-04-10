@@ -1,9 +1,15 @@
 package de.lessvoid.nifty.controls.nullobjects;
 
 import de.lessvoid.nifty.controls.Slider;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 public class SliderNull implements Slider {
+
+  @Override
+  public Element getElement() {
+    return null;
+  }
 
   @Override
   public String getId() {

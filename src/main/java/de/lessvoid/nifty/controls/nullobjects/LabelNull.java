@@ -1,10 +1,16 @@
 package de.lessvoid.nifty.controls.nullobjects;
 
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
 public class LabelNull implements Label {
+
+  @Override
+  public Element getElement() {
+    return null;
+  }
 
   @Override
   public String getId() {

@@ -3,9 +3,15 @@ package de.lessvoid.nifty.controls.nullobjects;
 import java.util.List;
 
 import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 public class DropDownNull implements DropDown {
+
+  @Override
+  public Element getElement() {
+    return null;
+  }
 
   @Override
   public String getId() {

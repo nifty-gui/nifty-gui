@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.controls.nullobjects;
 
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
@@ -9,6 +10,11 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class TextFieldNull implements TextField {
+
+  @Override
+  public Element getElement() {
+    return null;
+  }
 
   @Override
   public String getId() {
