@@ -52,8 +52,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     }
     popup = nifty.createPopupWithStyle(
         "dropDownBoxSelectPopup",
-        getElement().getElementType().getAttributes().get("style"),
-        new Attributes("dropDownControlId", elementId));
+        getElement().getElementType().getAttributes().get("style"));
 
     popup.getControl(DropDownPopup.class).setDropDownElement(this);
     listBox = popup.findNiftyControl("#listBox", ListBox.class);

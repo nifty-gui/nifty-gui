@@ -4,16 +4,16 @@
     <panel style="#panel" focusable="true">
       <interact onMouseWheel="mouseWheel()" />
       <image style="#up">
-        <interact onPrimaryClickRepeat="upClick()" />
+        <interact onPrimaryClickRepeat="upClick()" onRelease="consumeRelease()" />
       </image>
       <image id="#background" style="#background">
-        <interact onPrimaryClick="click()" />
+        <interact onPrimaryClick="click()"  onRelease="consumeRelease()" />
         <image id="#position" style="#position">
-          <interact onPrimaryClick="mouseMoveStart()" onPrimaryClickMouseMove="mouseMove()"/>
+          <interact onPrimaryClick="mouseMoveStart()" onPrimaryClickMouseMove="mouseMove()"  onRelease="consumeRelease()" />
         </image>
       </image>
       <image style="#down">
-        <interact onPrimaryClickRepeat="downClick()" />
+        <interact onPrimaryClickRepeat="downClick()"  onRelease="consumeRelease()" />
       </image>
     </panel>
   </controlDefinition>
@@ -22,16 +22,16 @@
     <panel style="#panel">
       <interact onMouseWheel="mouseWheel()" />
       <image style="#left">
-        <interact onPrimaryClickRepeat="upClick()" />
+        <interact onPrimaryClickRepeat="upClick()"  onRelease="consumeRelease()" />
       </image>
       <image id="#background" style="#background">
-        <interact onPrimaryClickRepeat="click()" />
+        <interact onPrimaryClickRepeat="click()"  onRelease="consumeRelease()" />
         <image id="#position" style="#position">
-          <interact onPrimaryClick="mouseMoveStart()" onPrimaryClickMouseMove="mouseMove()"/>
+          <interact onPrimaryClick="mouseMoveStart()" onPrimaryClickMouseMove="mouseMove()"  onRelease="consumeRelease()" />
         </image>
       </image>
       <image style="#right">
-        <interact onPrimaryClickRepeat="downClick()" />
+        <interact onPrimaryClickRepeat="downClick()"  onRelease="consumeRelease()" />
       </image>
     </panel>
   </controlDefinition>

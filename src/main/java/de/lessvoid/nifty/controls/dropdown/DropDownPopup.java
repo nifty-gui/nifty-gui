@@ -15,6 +15,7 @@ public class DropDownPopup<T> extends AbstractController {
   private static Logger log = Logger.getLogger(DropDownPopup.class.getName());
 
   private Nifty nifty;
+  private Element element;
   private DropDownControl<T> dropDownControl;
 
   public void bind(
@@ -25,17 +26,7 @@ public class DropDownPopup<T> extends AbstractController {
       final Attributes controlDefinitionAttributes) {
     super.bind(element);
     nifty = niftyParam;
-
-    Element dropDownControl = screenParam.findElementByName(parameter.getProperty("dropDownControlId"));
-    if (dropDownControl == null) {
-      log.warning("missing DropDownPopup parameter 'dropDownControlId'");
-      return;
-    }
-    Element panel = element.findElementByName("#panel");
-    panel.setConstraintX(new SizeValue(dropDownControl.getX() + "px"));
-    panel.setConstraintY(new SizeValue(dropDownControl.getY() +dropDownControl.getHeight() + "px"));
-    panel.setConstraintWidth(new SizeValue(dropDownControl.getWidth() + "px"));
-    element.layoutElements();
+    this.element = element;
   }
 
   @Override
@@ -52,6 +43,11 @@ public class DropDownPopup<T> extends AbstractController {
 
   public void setDropDownElement(final DropDownControl<T> dropDownControl) {
     this.dropDownControl = dropDownControl;
+    Element panel = element.findElementByName("#panel");
+    panel.setConstraintX(new SizeValue(dropDownControl.getElement().getX() + "px"));
+    panel.setConstraintY(new SizeValue(dropDownControl.getElement().getY() +dropDownControl.getHeight() + "px"));
+    panel.setConstraintWidth(new SizeValue(dropDownControl.getWidth() + "px"));
+    element.layoutElements();
   }
 
   public void close() {

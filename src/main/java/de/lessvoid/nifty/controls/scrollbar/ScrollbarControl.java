@@ -104,6 +104,10 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     scrollbarImpl.interactionMove(scrollbarView.filter(mouseX, mouseY));
   }
 
+  public boolean consumeRelease() {
+    return true;
+  }
+
   public void mouseWheel(final Element element, final NiftyMouseInputEvent inputEvent) {
     int mouseWheel = inputEvent.getMouseWheel();
     float currentValue = scrollbarImpl.getValue();
