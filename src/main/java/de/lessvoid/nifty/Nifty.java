@@ -708,15 +708,18 @@ public class Nifty {
     return element;
   }
 
-  private void fixupSubIds(final Element element, final String id) {
-    String newId = element.getId();
-    if (newId != null && newId.startsWith("#")) {
-      newId = id + element.getId();
-      element.setId(newId);
+  private void fixupSubIds(final Element element, final String parentId) {
+    String currentId = element.getId();
+    if (currentId != null && currentId.startsWith("#")) {
+      currentId = parentId + element.getId();
+      element.setId(currentId);
+    }
+    if (currentId == null) {
+      currentId = parentId;
     }
     for (int i=0; i<element.getElements().size(); i++) {
       Element e = element.getElements().get(i);
-      fixupSubIds(e, newId);
+      fixupSubIds(e, currentId);
     }
   }
 
