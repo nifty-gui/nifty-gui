@@ -37,7 +37,7 @@ public abstract class ElementBuilder {
   }
 
   public enum ChildLayoutType {
-    Vertical("vertical"), Horizontal("horizontal"), Center("center"), Absolute("absolute"), Overlay("overlay");
+    Vertical("vertical"), Horizontal("horizontal"), Center("center"), Absolute("absolute"), AbsoluteInside("absolute-inside"), Overlay("overlay");
     
     private String layout;
     

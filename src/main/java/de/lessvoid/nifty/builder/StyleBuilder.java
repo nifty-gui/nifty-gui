@@ -28,7 +28,7 @@ public class StyleBuilder {
   private Collection<EffectBuilder> onHide = new ArrayList<EffectBuilder>();
 
   public enum ChildLayoutType {
-    Vertical("vertical"), Horizontal("horizontal"), Center("center"), Absolute("absolute"), Overlay("overlay");
+    Vertical("vertical"), Horizontal("horizontal"), Center("center"), Absolute("absolute"), AbsoluteInside("absolute-inside"), Overlay("overlay");
     
     private String layout;
     
