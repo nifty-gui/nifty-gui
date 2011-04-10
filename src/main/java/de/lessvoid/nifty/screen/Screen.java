@@ -2,6 +2,7 @@ package de.lessvoid.nifty.screen;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -33,9 +34,9 @@ public class Screen {
   private ScreenController screenController = new NullScreenController();
 
   private ArrayList < Element > layerElements = new ArrayList < Element >();
-  private ArrayList < Element > layerElementsToAdd = new ArrayList < Element >();
-  private ArrayList < Element > layerElementsToRemove = new ArrayList < Element >();
-
+  private LinkedList < Element > layerElementsToAdd = new LinkedList < Element >();
+  private LinkedList < Element > layerElementsToRemove = new LinkedList < Element >();
+  
   /**
    * Popup layers are dynamic layers on top of the normal layers.
    * They are treated as "normal" layers and are added to the layerElements variable. In the
@@ -43,9 +44,9 @@ public class Screen {
    * input events only to these elements when they are present.
    */
   private ArrayList < Element > popupElements = new ArrayList < Element >();
-  private ArrayList < Element > popupElementsToAdd = new ArrayList < Element >();
-  private ArrayList < ElementWithEndNotify > popupElementsToRemove = new ArrayList < ElementWithEndNotify >();
-
+  private LinkedList < Element > popupElementsToAdd = new LinkedList < Element >();
+  private LinkedList<ElementWithEndNotify> popupElementsToRemove = new LinkedList < ElementWithEndNotify >(); 
+  
   private TimeProvider timeProvider;
   private FocusHandler focusHandler;
   private MouseOverHandler mouseOverHandler;
@@ -482,11 +483,10 @@ public class Screen {
     popupElements.addAll(popupElementsToAdd);
     popupElementsToAdd.clear();
 
-    for (int i=0; i<popupElementsToRemove.size(); i++) {
-      ElementWithEndNotify e = popupElementsToRemove.get(i);
+    while (!popupElementsToRemove.isEmpty()) {
+      ElementWithEndNotify e = popupElementsToRemove.remove(0);
       e.remove();
     }
-    popupElementsToRemove.clear();
   }
 
   public boolean hasDynamicElements() {
