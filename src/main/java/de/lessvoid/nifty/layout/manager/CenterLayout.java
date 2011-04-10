@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.layout.manager;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
@@ -18,6 +19,7 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class CenterLayout implements LayoutManager {
+  private Logger log = Logger.getLogger(CenterLayout.class.getName());
 
   /**
    * layoutElements.
@@ -29,6 +31,10 @@ public class CenterLayout implements LayoutManager {
     // check for useful params
     if (rootElement == null || elements == null || elements.size() == 0) {
       return;
+    }
+
+    if (elements.size() > 1) {
+      log.warning("You're using a centerLayout element but you've added more than one child element to it. centerLayout only supports one element! Odd things will happen when used with more than one element :)");
     }
 
     // we only support center of the very first element
