@@ -57,6 +57,11 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
       return false;
     }
     nifty.delayedMethodInvoke(this, invokeParametersParam);
+
+    // this true means we are super optimistic that the actual call will be successful
+    // and therefore the event will be processed. returning true in here does ultimately mean
+    // that the caller will stop the processing of the event (when the source for the invoke
+    // was an event that is).
     return true;
   }
 

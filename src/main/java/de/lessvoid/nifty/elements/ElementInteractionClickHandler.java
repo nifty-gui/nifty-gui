@@ -61,24 +61,25 @@ public class ElementInteractionClickHandler {
         }
       }
     }
+    boolean processed = false;
     if (mouseInside && !isMouseDown) {
       if (isButtonDown && isInitialButtonDown) {
         setMouseDown(true, eventTime);
         onInitialClick();
-        return onClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey);
+        processed = onClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey) || processed;
       }
     } else if (!isButtonDown && isMouseDown) {
       setMouseDown(false, eventTime);
     }
     if (isButtonRelease) {
       if (mouseInside) {
-        onMouseRelease(mouseEvent);
+        processed = onMouseRelease(mouseEvent) || processed;
       }
     }
     if (isMouseDown) {
-      onClickMouseMove(mouseEvent);
+      processed = onClickMouseMove(mouseEvent) || processed;
     }
-    return false;
+    return processed;
   }
 
   private void setMouseDown(final boolean newMouseDown, final long eventTime) {
@@ -101,20 +102,20 @@ public class ElementInteractionClickHandler {
     return false;
   }
 
-  private void onClickMouseMove(final NiftyMouseInputEvent inputEvent) {
+  private boolean onClickMouseMove(final NiftyMouseInputEvent inputEvent) {
     if (lastMouseX == inputEvent.getMouseX() &&
         lastMouseY == inputEvent.getMouseY()) {
-      return;
+      return false;
     }
 
     lastMouseX = inputEvent.getMouseX();
     lastMouseY = inputEvent.getMouseY();
 
-    mouseMethods.onClickMouseMove(nifty, inputEvent);
+    return mouseMethods.onClickMouseMove(nifty, inputEvent);
   }
 
-  private void onMouseRelease(final NiftyMouseInputEvent mouseEvent) {
-    mouseMethods.onMouseRelease(nifty, mouseEvent);
+  private boolean onMouseRelease(final NiftyMouseInputEvent mouseEvent) {
+    return mouseMethods.onMouseRelease(nifty, mouseEvent);
   }
 
   public void activate(final Nifty nifty) {

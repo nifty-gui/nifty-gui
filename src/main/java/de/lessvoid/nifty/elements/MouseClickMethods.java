@@ -45,15 +45,17 @@ public abstract class MouseClickMethods {
     }
   }
 
-  public void onClickMouseMove(final Nifty nifty, final NiftyMouseInputEvent inputEvent) {
+  public boolean onClickMouseMove(final Nifty nifty, final NiftyMouseInputEvent inputEvent) {
     if (onClickMouseMoveMethod != null) {
-      onClickMouseMoveMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
+      return onClickMouseMoveMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY());
     }
+    return false;
   }
 
-  public void onMouseRelease(final Nifty nifty, final NiftyMouseInputEvent mouseEvent) {
+  public boolean onMouseRelease(final Nifty nifty, final NiftyMouseInputEvent mouseEvent) {
     if (onReleaseMethod != null) {
-      onReleaseMethod.invoke();
+      return onReleaseMethod.invoke();
     }
+    return false;
   }
 }
