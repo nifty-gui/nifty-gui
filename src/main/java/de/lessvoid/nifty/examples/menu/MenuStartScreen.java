@@ -37,7 +37,7 @@ public class MenuStartScreen implements ScreenController {
   private void createPopup() {
     this.popup = nifty.createPopup("niftyPopupMenu");
   
-    Menu<ThisReallyCouldBeAnyClassYouWant> popupMenu = popup.findNiftyControl("menu", Menu.class);
+    Menu<ThisReallyCouldBeAnyClassYouWant> popupMenu = popup.findNiftyControl("#menu", Menu.class);
     nifty.subscribe(screen, popupMenu.getId(), MenuItemActivatedEvent.class, new MenuItemActivatedEventSubscriber());
   
     popupMenu.setWidth(new SizeValue("250px"));
