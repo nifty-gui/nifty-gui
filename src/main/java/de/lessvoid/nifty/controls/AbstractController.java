@@ -51,7 +51,8 @@ public abstract class AbstractController implements Controller, NiftyControl {
       this.element = element;
     }
 
-    protected Element getElement() {
+    @Override
+    public Element getElement() {
       return element;
     }
 

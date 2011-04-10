@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls;
 
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
@@ -7,6 +8,12 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public interface NiftyControl {
+
+  /**
+   * Get the attached internal Nifty element for this Nifty control.
+   * @return the element
+   */
+  Element getElement();
 
   /**
    * Get the id.
