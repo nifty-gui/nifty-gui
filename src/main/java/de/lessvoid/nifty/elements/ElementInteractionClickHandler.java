@@ -45,6 +45,7 @@ public class ElementInteractionClickHandler {
       final long eventTime,
       final boolean mouseInside,
       final boolean canHandleInteraction,
+      final boolean hasMouseAccess,
       final String onClickAlternateKey) {
     if (onClickRepeatEnabled) {
       if (mouseInside && isMouseDown && isButtonDown) {
@@ -72,7 +73,7 @@ public class ElementInteractionClickHandler {
       setMouseDown(false, eventTime);
     }
     if (isButtonRelease) {
-      if (mouseInside) {
+      if (mouseInside || hasMouseAccess) {
         processed = onMouseRelease(mouseEvent) || processed;
       }
     }

@@ -63,12 +63,17 @@ public class ElementInteraction {
     onClickAlternateKey = newAlternateKey;
   }
 
-  public boolean process(final NiftyMouseInputEvent mouseEvent, final long eventTime, final boolean mouseInside, final boolean canHandleInteraction) {
-    move.process(canHandleInteraction, mouseInside, mouseEvent);
+  public boolean process(
+      final NiftyMouseInputEvent mouseEvent,
+      final long eventTime,
+      final boolean mouseInside,
+      final boolean canHandleInteraction,
+      final boolean hasMouseAccess) {
+    move.process(canHandleInteraction, mouseInside, hasMouseAccess, mouseEvent);
     return
-      primary.process(mouseEvent, mouseEvent.isButton0Down(), mouseEvent.isButton0InitialDown(), mouseEvent.isButton0Release(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey) ||
-      secondary.process(mouseEvent, mouseEvent.isButton1Down(), mouseEvent.isButton1InitialDown(), mouseEvent.isButton1Release(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey) ||
-      tertiary.process(mouseEvent, mouseEvent.isButton2Down(), mouseEvent.isButton2InitialDown(), mouseEvent.isButton2Release(), eventTime, mouseInside, canHandleInteraction, onClickAlternateKey);
+      primary.process(mouseEvent, mouseEvent.isButton0Down(), mouseEvent.isButton0InitialDown(), mouseEvent.isButton0Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey) ||
+      secondary.process(mouseEvent, mouseEvent.isButton1Down(), mouseEvent.isButton1InitialDown(), mouseEvent.isButton1Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey) ||
+      tertiary.process(mouseEvent, mouseEvent.isButton2Down(), mouseEvent.isButton2InitialDown(), mouseEvent.isButton2Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey);
   }
 
   public void activate(final Nifty nifty) {

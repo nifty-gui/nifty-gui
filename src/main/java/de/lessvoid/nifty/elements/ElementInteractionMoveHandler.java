@@ -25,7 +25,7 @@ public class ElementInteractionMoveHandler {
     this.lastButton2Down = false;
   }
 
-  public void process(final boolean canHandleInteraction, final boolean mouseInside, final NiftyMouseInputEvent mouseEvent) {
+  public void process(final boolean canHandleInteraction, final boolean mouseInside, final boolean hasMouseAccess, final NiftyMouseInputEvent mouseEvent) {
     if (canHandleInteraction && mouseInside) {
       boolean moved = handleMoveEvent(mouseEvent);
       boolean wheel = handleWheelEvent(mouseEvent);

@@ -214,6 +214,10 @@ public class FocusHandler {
     log.fine("requestExclusiveMouseFocus for [" + mouseFocusElement.toString() + "]");
   }
 
+  public boolean hasExclusiveMouseFocus(final Element element) {
+    return element.equals(mouseFocusElement);
+  }
+
   public boolean canProcessMouseEvents(final Element element) {
     if (mouseFocusElement == null) {
       return true;

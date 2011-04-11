@@ -42,7 +42,6 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.MouseOverHandler;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.NullObjectFactory;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
@@ -1317,7 +1316,7 @@ public class Element implements NiftyEvent<Void> {
    */
   public boolean mouseEvent(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     mouseEventHover(mouseEvent);
-    return interaction.process(mouseEvent, eventTime, isInside(mouseEvent), canHandleInteraction());
+    return interaction.process(mouseEvent, eventTime, isInside(mouseEvent), canHandleInteraction(), focusHandler.hasExclusiveMouseFocus(this));
   }
 
   private void mouseEventHover(final NiftyMouseInputEvent mouseEvent) {
