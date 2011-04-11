@@ -668,6 +668,19 @@ public class Screen {
     return popupElements.get(popupElements.size() - 1);
   }
 
+  public boolean isActivePopup(final String id) {
+    for (int i=0; i<popupElements.size(); i++) {
+      if (id.equals(popupElements.get(i).getId())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean isActivePopup(final Element element) {
+    return popupElements.contains(element);
+  }
+
   /**
    * Checks if the mouse currently hovers any element that is able to handle mouse events.
    * 
