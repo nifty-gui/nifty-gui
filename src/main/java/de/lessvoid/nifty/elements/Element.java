@@ -1745,6 +1745,19 @@ public class Element implements NiftyEvent<Void> {
     }
   }
 
+  /**
+   * add additional input handler to this element or childs of the elements.
+   * @param handler additiona handler
+   */
+  public void addPreInputHandler(final KeyInputHandler handler) {
+    if (attachedInputControl != null) {
+      attachedInputControl.addPreInputHandler(handler);
+    }
+    for (Element element : elements) {
+      element.addPreInputHandler(handler);
+    }
+  }
+
   public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
     Element element = findElementByName(elementName);
     if (element == null) {

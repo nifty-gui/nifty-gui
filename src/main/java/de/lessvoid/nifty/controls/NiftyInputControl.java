@@ -21,7 +21,8 @@ public class NiftyInputControl {
   private Controller controller;
   private NiftyInputMapping inputMapper;
 
-  private List < KeyInputHandler > additionalInputHandler = new ArrayList < KeyInputHandler >();
+  private List < KeyInputHandler > preInputHandler = new ArrayList < KeyInputHandler >();
+  private List < KeyInputHandler > postInputHandler = new ArrayList < KeyInputHandler >();
 
   /**
    * @param elementId elementId this NiftyInputControl is attached to
@@ -43,6 +44,12 @@ public class NiftyInputControl {
   public boolean keyEvent(final Nifty nifty, final KeyboardInputEvent inputEvent) {
     NiftyInputEvent converted = inputMapper.convert(inputEvent);
 
+    for (KeyInputHandler handler : preInputHandler) {
+      if (handler.keyEvent(converted)) {
+        return true;
+      }
+    }
+
     if (converted != null) {
         nifty.publishEvent(elementId, converted);
     }
@@ -51,7 +58,7 @@ public class NiftyInputControl {
       return true;
     }
 
-    for (KeyInputHandler handler : additionalInputHandler) {
+    for (KeyInputHandler handler : postInputHandler) {
       if (handler.keyEvent(converted)) {
         return true;
       }
@@ -59,12 +66,12 @@ public class NiftyInputControl {
     return false;
   }
 
-  /**
-   * add an additional input handler.
-   * @param handler KeyInputHandler
-   */
   public void addInputHandler(final KeyInputHandler handler) {
-    additionalInputHandler.add(handler);
+    postInputHandler.add(handler);
+  }
+
+  public void addPreInputHandler(final KeyInputHandler handler) {
+    preInputHandler.add(handler);
   }
 
   public void onStartScreen(final Nifty nifty, final Screen screen) {
