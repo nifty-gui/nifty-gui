@@ -29,7 +29,11 @@ public class TextFieldInputMapping implements NiftyInputMapping {
    * @return NiftyInputEvent
    */
   private NiftyInputEvent handleKeyDownEvent(final KeyboardInputEvent inputEvent) {
-    if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
+    if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
+      return NiftyInputEvent.MoveCursorUp;
+    } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_DOWN) {
+      return NiftyInputEvent.MoveCursorDown;
+    } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
       return NiftyInputEvent.MoveCursorLeft;
     } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_F1) {
       return NiftyInputEvent.ConsoleToggle;

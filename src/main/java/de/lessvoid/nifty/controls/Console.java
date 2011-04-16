@@ -2,6 +2,7 @@ package de.lessvoid.nifty.controls;
 
 
 
+
 /**
  * The Console interface is the Nifty control API view of a Nifty Console control.
  * @author void
@@ -24,4 +25,10 @@ public interface Console extends NiftyControl {
    * Clear the console.
    */
   void clear();
+
+  /**
+   * This gives you access to the Textfield that the Console uses for text input.
+   * @return the Nifty TextField control
+   */
+  TextField getTextField();
 }

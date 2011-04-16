@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.console.controller;
+package de.lessvoid.nifty.controls.console;
 
 import java.util.Properties;
 
@@ -16,8 +16,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
- * A ConsoleControl.
- * 
+ * A Nifty Control that represents a input console.
  * @author void
  * @deprecated Please use {@link de.lessvoid.nifty.controls.Console} when accessing NiftyControls.
  */
@@ -37,6 +36,7 @@ public class ConsoleControl extends AbstractController implements Console, Event
       final Element newElement,
       final Properties properties,
       final Attributes controlDefinitionAttributes) {
+    super.bind(newElement);
     this.nifty = niftyParam;
     this.screen = screenParam;
     this.element = newElement;
@@ -47,11 +47,17 @@ public class ConsoleControl extends AbstractController implements Console, Event
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     nifty.subscribe(screen, textfield.getId(), NiftyInputEvent.class, this);
+    initialFill();
   }
 
   @Override
   public void onStartScreen() {
-    initialFill();
+    element.findElementByName("#textInput").setFocus();
+  }
+
+  @Override
+  public TextField getTextField() {
+    return textfield;
   }
 
   @Override
