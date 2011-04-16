@@ -22,10 +22,9 @@ public class PopupBuilder extends ElementBuilder {
     throw new RuntimeException("you can't build popups using the PopupBuilder. Please call register() instead to dynamically register popups with Nifty.");
   }
 
-  public Element registerPopup(final Nifty nifty) {
+  public void registerPopup(final Nifty nifty) {
     PopupType popupType = (PopupType) buildElementType();
     nifty.registerPopup(popupType);
-    return nifty.createPopup(popupType.getAttributes().get("id"));
   }
 
   @Override
