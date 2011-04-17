@@ -13,7 +13,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -128,8 +127,8 @@ public class TestStateTwo extends NiftyOverlayGameState {
 	 * @return true if you consumed the event, false if not 
 	 */
 	@Override
-	public boolean processMouseEvent(MouseInputEvent event) {
-		System.out.println("*mous* "+event.getMouseX()+" "+event.getMouseY()+" "+event.isLeftButton());
+	 public boolean processMouseEvent(int mouseX, int mouseY, int mouseWheel, int button, boolean buttonDown) {
+    System.out.println("*mous* "+mouseX+" "+mouseY+" "+mouseX+" "+buttonDown);
 		return false;
 	}
 

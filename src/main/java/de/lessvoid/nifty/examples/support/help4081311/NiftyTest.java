@@ -13,16 +13,16 @@ import org.newdawn.slick.opengl.SlickCallable;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.lwjglslick.input.LwjglKeyboardInputEventCreator;
 import de.lessvoid.nifty.lwjglslick.render.RenderDeviceLwjgl;
 import de.lessvoid.nifty.lwjglslick.sound.SlickSoundDevice;
+import de.lessvoid.nifty.slick.MouseEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 public class NiftyTest extends BasicGame {
   private Nifty nifty = null;
-  private List < MouseInputEvent > mouseEvents = new ArrayList < MouseInputEvent >();
+  private List < MouseEvent > mouseEvents = new ArrayList < MouseEvent >();
   private List < KeyboardInputEvent > keyEvents = new ArrayList < KeyboardInputEvent >();
   private LwjglKeyboardInputEventCreator inputEventCreator = new LwjglKeyboardInputEventCreator(); 
   private boolean mouseDown;
@@ -39,8 +39,8 @@ public class NiftyTest extends BasicGame {
         new SlickSoundDevice(),
         new InputSystem() {
           public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
-            for (MouseInputEvent event : mouseEvents) {
-              inputEventConsumer.processMouseEvent(event);
+            for (MouseEvent event : mouseEvents) {
+              inputEventConsumer.processMouseEvent(event.mouseX, event.mouseY, event.mouseWheel, event.button, event.buttonDown);
             }
             mouseEvents.clear();
     
@@ -97,7 +97,7 @@ public class NiftyTest extends BasicGame {
   }
 
   private void forwardMouseEventToNifty(final int mouseX, final int mouseY, final boolean mouseDown) {
-    mouseEvents.add(new MouseInputEvent(mouseX, height - mouseY, mouseDown));
+    mouseEvents.add(new MouseEvent(mouseX, height - mouseY, mouseDown, 1));
   }
 
   private void setHeight(final int height) {
