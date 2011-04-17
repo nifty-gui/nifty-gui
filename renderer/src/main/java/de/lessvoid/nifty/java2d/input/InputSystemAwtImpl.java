@@ -9,21 +9,20 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.input.mouse.MouseInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
 
 public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
 		MouseListener, KeyListener {
 
-	private ConcurrentLinkedQueue<MouseInputEvent> mouseEvents = new ConcurrentLinkedQueue<MouseInputEvent>();
+	private ConcurrentLinkedQueue<MouseEvent> mouseEvents = new ConcurrentLinkedQueue<MouseEvent>();
 
 	private ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEvents = new ConcurrentLinkedQueue<KeyboardInputEvent>();
 
 	@Override
 	public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
-		MouseInputEvent mouseEvent = mouseEvents.poll();
+	  MouseEvent mouseEvent = mouseEvents.poll();
 		while (mouseEvent != null) {
-			inputEventConsumer.processMouseEvent(mouseEvent);
+			inputEventConsumer.processMouseEvent(mouseEvent.getX(), mouseEvent.getY(), 0, mouseEvent.getButton() - 1, mouseEvent.getButton() != MouseEvent.NOBUTTON);
 			mouseEvent = mouseEvents.poll();
 		}
 
@@ -36,12 +35,12 @@ public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
 
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
-    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getButton() == MouseEvent.BUTTON1));
+    mouseEvents.add(mouseEvent);
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent mouseEvent) {
-		mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getButton() == MouseEvent.BUTTON1));
+		mouseEvents.add(mouseEvent);
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
   public void mousePressed(MouseEvent mouseEvent) {
 	  // at the moment we only care about the BUTTON1
 	  if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-	    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), true));
+	    mouseEvents.add(mouseEvent);
 	  }
 	}
 
@@ -71,7 +70,7 @@ public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
 	public void mouseReleased(MouseEvent mouseEvent) {
 	  // at the moment we only care about the BUTTON1
 	  if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-	    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), false));
+	    mouseEvents.add(mouseEvent);
 	  }
 	}
 

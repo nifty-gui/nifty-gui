@@ -151,7 +151,7 @@ public class GameExampleApp extends NiftyJava2dWindow {
 		 * @param mode
 		 */
 		public void mode(String mode) {
-			parameter("mode", mode);
+			effectParameter("mode", mode);
 		}
 
 		public String inMode() {
@@ -168,7 +168,7 @@ public class GameExampleApp extends NiftyJava2dWindow {
 		 * @param direction
 		 */
 		public void direction(String direction) {
-			parameter("direction", direction);
+			effectParameter("direction", direction);
 		}
 
 		public String topDirection() {

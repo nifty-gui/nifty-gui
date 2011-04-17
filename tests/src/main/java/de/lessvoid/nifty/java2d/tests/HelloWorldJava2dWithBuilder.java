@@ -64,7 +64,7 @@ public class HelloWorldJava2dWithBuilder extends NiftyJava2dWindow {
 		 * @param mode
 		 */
 		public void mode(String mode) {
-			parameter("mode", mode);
+			effectParameter("mode", mode);
 		}
 		
 		public String inMode() {
@@ -80,7 +80,7 @@ public class HelloWorldJava2dWithBuilder extends NiftyJava2dWindow {
 		 * @param direction
 		 */
 		public void direction(String direction) {
-			parameter("direction", direction);
+			effectParameter("direction", direction);
 		}
 		
 		public String topDirection() {
@@ -156,9 +156,9 @@ public class HelloWorldJava2dWithBuilder extends NiftyJava2dWindow {
 
 								onHoverEffect(new HoverEffectBuilder("pulsate") {
 									{
-										parameter("scaleFactor", "0.008");
-										parameter("startColor", "#f600");
-										parameter("endColor", "#ffff");
+										effectParameter("scaleFactor", "0.008");
+										effectParameter("startColor", "#f600");
+										effectParameter("endColor", "#ffff");
 										post(true);
 									}
 								});
