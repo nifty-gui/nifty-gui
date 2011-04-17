@@ -13,6 +13,7 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
@@ -27,6 +28,8 @@ public class ConsoleControl extends AbstractController implements Console, Event
   private Element element;
   private ListBox<String> listBox;
   private TextField textfield;
+  private Color standardColor = null;
+  private Color errorColor = new Color("#f00a");
 
   @SuppressWarnings("unchecked")
   @Override
@@ -79,11 +82,17 @@ public class ConsoleControl extends AbstractController implements Console, Event
 
   @Override
   public void output(final String value) {
-    String[] lines = value.split("\n");
-    for (String line : lines) {
-      listBox.addItem(line);
-      listBox.showItemByIndex(listBox.itemCount() - 1);
-    }
+    out(value, standardColor);
+  }
+
+  @Override
+  public void output(final String value, final Color color) {
+    out(value, color);
+  }
+
+  @Override
+  public void outputError(final String value) {
+    out(value, errorColor);
   }
 
   @Override
@@ -97,9 +106,27 @@ public class ConsoleControl extends AbstractController implements Console, Event
     initialFill();
   }
 
+  @Override
+  public void changeColors(final Color standardColor, final Color errorColor) {
+    this.standardColor = standardColor;
+    this.errorColor = errorColor;
+  }
+
   private void initialFill() {
     for (int i=0; i<listBox.getDisplayItemCount(); i++) {
       listBox.addItem("");
+    }
+  }
+
+  private void out(final String value, final Color color) {
+    String[] lines = value.split("\n");
+    for (String line : lines) {
+      if (color != null) {
+        listBox.addItem("\\" + color.getColorString() + "#" + line);
+      } else {
+        listBox.addItem(line);
+      }
+      listBox.showItemByIndex(listBox.itemCount() - 1);
     }
   }
 }

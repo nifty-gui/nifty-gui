@@ -144,7 +144,7 @@ public class ConsoleCommands implements KeyInputHandler {
         }
       }
 
-      console.output("\\#f008#" + "Unknown command: " + text);
+      console.outputError("Unknown command: " + text);
 
       // this means we have not found an appropriate command in the registered commands
       // we'll publish this now as the original console would do. this way you can still
