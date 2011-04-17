@@ -8,17 +8,28 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.Console;
+import de.lessvoid.nifty.controls.ConsoleCommands;
+import de.lessvoid.nifty.controls.ConsoleCommands.ConsoleCommand;
+import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.impl.Move;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
+import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class ControlsDemoScreenController implements ScreenController {
+public class ControlsDemoScreenController implements ScreenController, KeyInputHandler {
   private static Logger logger = Logger.getLogger(ControlsDemoScreenController.class.getName());
+
+  private Nifty nifty;
   private Screen screen;
+  private Element consolePopup;
+  private Console console;
+  private ConsoleCommands consoleCommands;
 
   // This simply maps the IDs of the MenuButton elements to the corresponding Dialog elements we'd
   // like to show with the given MenuButton. This map will make our life a little bit easier when
@@ -50,7 +61,32 @@ public class ControlsDemoScreenController implements ScreenController {
 
   @Override
   public void bind(final Nifty nifty, final Screen screen) {
+    this.nifty = nifty;
     this.screen = screen;
+    this.consolePopup = nifty.createPopup("consolePopup");
+    this.console = this.consolePopup.findNiftyControl("console", Console.class);
+    this.console.output("Humble Nifty Console Demonstration :)\nYou can toggle the console on/off with the F1 key\nEnter 'help' to show all available commands");
+
+    // this is not required when you only want to use the simple console
+    // but when you want some support for commands this is how
+    consoleCommands = new ConsoleCommands(nifty, console);
+
+    ConsoleCommand showCommand = new ShowCommand();
+    consoleCommands.registerCommand("show listbox", showCommand);
+    consoleCommands.registerCommand("show dropdown", showCommand);
+    consoleCommands.registerCommand("show textfield", showCommand);
+    consoleCommands.registerCommand("show slider", showCommand);
+    consoleCommands.registerCommand("show scrollpanel", showCommand);
+    consoleCommands.registerCommand("show chatcontrol", showCommand);
+
+    ConsoleCommand helpCommand = new HelpCommand();
+    consoleCommands.registerCommand("help", helpCommand);
+
+    ConsoleCommand exitCommand = new ExitCommand();
+    consoleCommands.registerCommand("exit", exitCommand);
+
+    // enable the nifty command line completion
+    consoleCommands.enableCommandCompletion(true);
   }
 
   @Override
@@ -61,6 +97,27 @@ public class ControlsDemoScreenController implements ScreenController {
 
   @Override
   public void onEndScreen() {
+  }
+
+  @Override
+  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.ConsoleToggle) {
+      if (screen.isActivePopup(consolePopup)) {
+        nifty.closePopup(consolePopup.getId());
+      } else {
+        nifty.showPopup(screen, consolePopup.getId(), null);
+      }
+      return true;
+    }
+    return false;
+  }
+
+
+  private void modifyMoveEffect(final EffectEventId effectEventId, final Element element, final String direction) {
+    List<Effect> moveEffects = element.findElementByName("#effectPanel").getEffects(effectEventId, Move.class);
+    if (!moveEffects.isEmpty()) {
+      moveEffects.get(0).getParameters().put("direction", direction);
+    }
   }
 
   @NiftyEventSubscriber(pattern="menuButton.*")
@@ -83,10 +140,35 @@ public class ControlsDemoScreenController implements ScreenController {
     }
   }
 
-  private void modifyMoveEffect(final EffectEventId effectEventId, final Element element, final String direction) {
-    List<Effect> moveEffects = element.findElementByName("#effectPanel").getEffects(effectEventId, Move.class);
-    if (!moveEffects.isEmpty()) {
-      moveEffects.get(0).getParameters().put("direction", direction);
+  @NiftyEventSubscriber(id="console")
+  public void onConsoleEvent(final String id, final ConsoleExecuteCommandEvent executeCommandEvent) {
+    System.out.println(executeCommandEvent.getCommandLine());
+  }
+
+  private class ShowCommand implements ConsoleCommand {
+    @Override
+    public void execute(final String[] args) {
+      System.out.println("show " + args.length);
     }
   }
+
+  private class HelpCommand implements ConsoleCommand {
+    @Override
+    public void execute(final String[] args) {
+      console.output("\\#ff08#" + "---------------------------");
+      console.output("\\#ff08#" + "Supported commands");
+      console.output("\\#ff08#" + "---------------------------");
+      for (String command : consoleCommands.getRegisteredCommands()) {
+        console.output("\\#ff08#" + command);
+      }
+    }
+  }
+
+  private class ExitCommand implements ConsoleCommand {
+    @Override
+    public void execute(final String[] args) {
+      System.out.println("exit " + args.length);
+    }
+  }
+
 }

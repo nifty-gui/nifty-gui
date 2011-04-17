@@ -10,9 +10,12 @@ import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.StyleBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.examples.controls.chatcontrol.ChatControlDialogRegister;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 import de.lessvoid.nifty.examples.controls.common.DialogPanelControlDefinition;
@@ -46,6 +49,7 @@ public class ControlsDemo {
     nifty.registerSound("intro", "sound/19546__tobi123__Gong_mf2.wav");
     nifty.registerMouseCursor("hand", "mouse-cursor-hand.png", 5, 4);
     registerMenuButtonHintStyle(nifty);
+    registerConsolePopup(nifty);
 
     // register some helper controls
     MenuButtonControlDefinition.register(nifty);
@@ -212,6 +216,7 @@ public class ControlsDemo {
           "menuButtonScrollPanel", "dialogScrollPanel",
           "menuButtonChatControl", "dialogChatControl"
       ));
+      inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping"); // this will enable Keyboard events for the screen controller
       layer(new LayerBuilder("layer") {{
         backgroundImage("background-new.png");
         childLayoutVertical();
@@ -293,5 +298,38 @@ public class ControlsDemo {
       textHAlignLeft();
       color(new Color("#000f"));
     }}.build(nifty);
+  }
+
+  private static void registerConsolePopup(Nifty nifty) {
+    new PopupBuilder("consolePopup") {{
+      childLayoutAbsolute();
+      panel(new PanelBuilder() {{
+        childLayoutCenter();
+        width("100%");
+        height("100%");
+        alignCenter();
+        valignCenter();
+        control(new ConsoleBuilder("console") {{
+          width("80%");
+          lines(25);
+          alignCenter();
+          valignCenter();
+          onStartScreenEffect(new EffectBuilder("move") {{
+            length(150);
+            inherit();
+            neverStopRendering(true);
+            effectParameter("mode", "in");
+            effectParameter("direction", "top");
+          }});
+          onEndScreenEffect(new EffectBuilder("move") {{
+            length(150);
+            inherit();
+            neverStopRendering(true);
+            effectParameter("mode", "out");
+            effectParameter("direction", "top");
+          }});
+        }});
+      }});
+    }}.registerPopup(nifty);
   }
 }
