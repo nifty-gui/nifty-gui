@@ -11,8 +11,17 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 
+/**
+ * This adds all the nifty command line features to the console control:
+ * - command line completion (for all registered commands)
+ * - command history
+ * - command processing which detects commands and directly calls your registered commands (via the ConsoleCommand interface)
+ * @author void
+ */
 public class ConsoleCommands implements KeyInputHandler {
   private boolean commandCompletion = false;
+
+  private ConsoleCommandSplitter splitter = new ConsoleCommandSplitter();
 
   private Map<String, ConsoleCommand> commands = new TreeMap<String, ConsoleCommand>();
   private List<String> commandHistory = new ArrayList<String>();
@@ -22,7 +31,18 @@ public class ConsoleCommands implements KeyInputHandler {
   private Console console;
   private TextField textfield;
 
+  /**
+   * You can implement this interface for individual commands and Nifty will call them
+   * when the registered command has been detected.
+   * @author void
+   */
   public interface ConsoleCommand {
+    /**
+     * Execute the command. You'll get an array of all parameters. This works the
+     * same as with java main, which means the first entry in the array will be the
+     * command and all other array entries are the actual parameters.
+     * @param args command and arguments
+     */
     void execute(String[] args);
   }
 
@@ -105,7 +125,7 @@ public class ConsoleCommands implements KeyInputHandler {
       textfield.setText("");
 
       // find command
-      String[] split = text.split(" ");
+      String[] split = splitter.split(text);
       if (split.length != 0) {
         String command = split[0];
 
@@ -116,7 +136,7 @@ public class ConsoleCommands implements KeyInputHandler {
             String start = s[0];
             if (command.equals(start)) {
               ConsoleCommand consoleCommand = registeredCommand.getValue();
-              consoleCommand.execute(extractArgs(split));
+              consoleCommand.execute(split);
               addCommandToHistory(text);
               return true;
             }
@@ -145,13 +165,6 @@ public class ConsoleCommands implements KeyInputHandler {
   private void addCommandToHistory(final String text) {
     commandHistory.add(text);
     commandHistoryLastCommand = commandHistory.size();
-  }
-
-  private String[] extractArgs(final String[] split) {
-    if (split.length > 1) {
-      return Arrays.copyOfRange(split, 1, split.length);
-    }
-    return new String[0];
   }
 
   List<String> findMatches(final String text) {
