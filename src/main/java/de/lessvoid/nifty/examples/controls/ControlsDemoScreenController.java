@@ -21,9 +21,11 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.Color;
 
 public class ControlsDemoScreenController implements ScreenController, KeyInputHandler {
   private static Logger logger = Logger.getLogger(ControlsDemoScreenController.class.getName());
+  private static final Color HELP_COLOR = new Color("#aaaf");
 
   private Nifty nifty;
   private Screen screen;
@@ -72,12 +74,12 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
     consoleCommands = new ConsoleCommands(nifty, console);
 
     ConsoleCommand showCommand = new ShowCommand();
-    consoleCommands.registerCommand("show listbox", showCommand);
-    consoleCommands.registerCommand("show dropdown", showCommand);
-    consoleCommands.registerCommand("show textfield", showCommand);
-    consoleCommands.registerCommand("show slider", showCommand);
-    consoleCommands.registerCommand("show scrollpanel", showCommand);
-    consoleCommands.registerCommand("show chatcontrol", showCommand);
+    consoleCommands.registerCommand("show ListBox", showCommand);
+    consoleCommands.registerCommand("show DropDown", showCommand);
+    consoleCommands.registerCommand("show TextField", showCommand);
+    consoleCommands.registerCommand("show Slider", showCommand);
+    consoleCommands.registerCommand("show ScrollPanel", showCommand);
+    consoleCommands.registerCommand("show ChatControl", showCommand);
 
     ConsoleCommand helpCommand = new HelpCommand();
     consoleCommands.registerCommand("help", helpCommand);
@@ -122,6 +124,10 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
 
   @NiftyEventSubscriber(pattern="menuButton.*")
   public void onMenuButtonListBoxClick(final String id, final NiftyMousePrimaryClickedEvent clickedEvent) {
+    changeDialogTo(id);
+  }
+
+  private void changeDialogTo(final String id) {
     if (!id.equals(currentMenuButtonId)) {
       int currentIndex = buttonIdList.indexOf(currentMenuButtonId);
       int nextIndex = buttonIdList.indexOf(id);
@@ -148,18 +154,36 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   private class ShowCommand implements ConsoleCommand {
     @Override
     public void execute(final String[] args) {
-      System.out.println("show " + args.length);
+      if (args.length != 2) {
+        console.outputError("command argument error");
+        return;
+      }
+      // this really is a hack to get from the command argument, like: "ListBox" to the matching "menuButtonId" 
+      String menuButtonId = "menuButton" + args[1];
+      if (!buttonToDialogMap.containsKey(menuButtonId)) {
+        console.outputError("'" + menuButtonId + "' is not a registered dialog.");
+        return;
+      }
+
+      // just a gimmick
+      if (menuButtonId.equals(currentMenuButtonId)) {
+        console.outputError("Hah! Already there! I'm smart... :>");
+        return;
+      }
+
+      // finally switch
+      changeDialogTo(menuButtonId);
     }
   }
 
   private class HelpCommand implements ConsoleCommand {
     @Override
     public void execute(final String[] args) {
-      console.output("\\#ff08#" + "---------------------------");
-      console.output("\\#ff08#" + "Supported commands");
-      console.output("\\#ff08#" + "---------------------------");
+      console.output("---------------------------", HELP_COLOR);
+      console.output("Supported commands", HELP_COLOR);
+      console.output("---------------------------", HELP_COLOR);
       for (String command : consoleCommands.getRegisteredCommands()) {
-        console.output("\\#ff08#" + command);
+        console.output(command, HELP_COLOR);
       }
     }
   }
@@ -167,7 +191,8 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   private class ExitCommand implements ConsoleCommand {
     @Override
     public void execute(final String[] args) {
-      System.out.println("exit " + args.length);
+      console.output("good bye");
+      nifty.closePopup(consolePopup.getId());
     }
   }
 
