@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.controls.dynamic;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlInteractAttributes;
@@ -18,6 +19,7 @@ public class CustomControlCreator extends ControlAttributes {
   }
 
   public CustomControlCreator(final String name) {
+    setAutoId(NiftyIdCreator.generate());
     setName(name);
   }
 
