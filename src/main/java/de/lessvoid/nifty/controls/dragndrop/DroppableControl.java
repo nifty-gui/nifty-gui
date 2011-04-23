@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.dragndrop.controller;
+package de.lessvoid.nifty.controls.dragndrop;
 
 import java.util.List;
 import java.util.Properties;
@@ -6,8 +6,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Droppable;
+import de.lessvoid.nifty.controls.DroppableDropFilter;
+import de.lessvoid.nifty.controls.DroppableDroppedEvent;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -15,11 +17,9 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class DroppableControl extends AbstractController {
+public class DroppableControl extends AbstractController implements Droppable {
   private Nifty nifty;
-  private Screen screen;
-  private List<DropNotify> notifies = new CopyOnWriteArrayList<DropNotify>();
-  private List<DropFilter> filters = new CopyOnWriteArrayList<DropFilter>();
+  private List<DroppableDropFilter> filters = new CopyOnWriteArrayList<DroppableDropFilter>();
   private Element droppable;
   private DraggableControl draggable;
 
@@ -30,31 +30,13 @@ public class DroppableControl extends AbstractController {
       final Element element,
       final Properties parameter,
       final Attributes controlDefinitionAttributes) {
+    super.bind(element);
     this.nifty = nifty;
-    this.screen = screen;
     droppable = element;
-
-    addOnDropMethodNotify(controlDefinitionAttributes.get("onDrop"));
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
-  private void addOnDropMethodNotify(final String methodName) {
-    if (methodName != null) {
-      addNotify(new OnDropMethodNotify(methodName));
-    }
-  }
-
-  @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    return false;
-  }
-
-  @Override
-  public void onFocus(final boolean getFocus) {
-    super.onFocus(getFocus);
   }
 
   @Override
@@ -65,9 +47,13 @@ public class DroppableControl extends AbstractController {
     }
   }
 
+  @Override
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return false;
+  }
+
   private EndNotify reactivate(final Element element) {
     return new EndNotify() {
-
       @Override
       public void perform() {
         element.reactivate();
@@ -118,30 +104,15 @@ public class DroppableControl extends AbstractController {
     return draggable;
   }
 
-  public void addNotify(final DropNotify notify) {
-    notifies.add(notify);
-  }
-
-  public void removeNotify(final DropNotify notify) {
-    notifies.remove(notify);
-  }
-
-  @Override
-  public void removeAllNotifies() {
-    notifies.clear();
-  }
-
   private void notifyObservers(final DroppableControl source, final DraggableControl droppedDraggable) {
-    for (DropNotify notify : notifies) {
-      notify.dropped(source, droppedDraggable, this);
-    }
+    nifty.publishEvent(getElement().getId(), new DroppableDroppedEvent(source, droppedDraggable, this));
   }
 
-  public void addFilter(final DropFilter filter) {
+  public void addFilter(final DroppableDropFilter filter) {
     filters.add(filter);
   }
 
-  public void removeFilter(final DropFilter filter) {
+  public void removeFilter(final DroppableDropFilter filter) {
     filters.remove(filter);
   }
 
@@ -150,30 +121,11 @@ public class DroppableControl extends AbstractController {
   }
 
   protected boolean accept(final DroppableControl source, final DraggableControl draggable) {
-    for (DropFilter filter : filters) {
+    for (DroppableDropFilter filter : filters) {
       if (!filter.accept(source, draggable, this)) {
         return false;
       }
     }
     return true;
-  }
-
-  public Element getElement() {
-    return droppable;
-  }
-
-  private class OnDropMethodNotify implements DropNotify {
-
-    private String methodName;
-
-    public OnDropMethodNotify(final String methodName) {
-      this.methodName = methodName;
-    }
-
-    @Override
-    public void dropped(final DroppableControl source, final DraggableControl draggable, final DroppableControl target) {
-      NiftyMethodInvoker methodInvoker = new NiftyMethodInvoker(nifty, methodName, screen.getScreenController());
-      methodInvoker.invoke(source, draggable, target);
-    }
   }
 }

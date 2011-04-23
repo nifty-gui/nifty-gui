@@ -1,20 +1,19 @@
-package de.lessvoid.nifty.controls.window.controller;
+package de.lessvoid.nifty.controls.window;
 
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.dragndrop.controller.DragNotify;
-import de.lessvoid.nifty.controls.dragndrop.controller.DraggableControl;
+import de.lessvoid.nifty.controls.Window;
+import de.lessvoid.nifty.controls.dragndrop.DraggableControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class WindowControl extends AbstractController {
+public class WindowControl extends AbstractController implements Window {
   private DraggableControl draggableControl = new DraggableControl();
-  private Element element;
   private boolean removeCloseButton;
 
   public void bind(
@@ -23,9 +22,8 @@ public class WindowControl extends AbstractController {
       final Element element,
       final Properties parameter,
       final Attributes controlDefinitionAttributes) {
+    super.bind(element);
     draggableControl.bind(nifty, screen, element, parameter, controlDefinitionAttributes);
-    this.element = element;
-
     removeCloseButton = !controlDefinitionAttributes.getAsBoolean("closeable", true);
   }
 
@@ -33,6 +31,16 @@ public class WindowControl extends AbstractController {
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
   }
 
+  @Override
+  public void onStartScreen() {
+    draggableControl.onStartScreen();
+    if (removeCloseButton) {
+      getCloseButton().markForRemoval();
+      removeCloseButton = false;
+    }
+  }
+
+  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     return draggableControl.inputEvent(inputEvent);
   }
@@ -41,14 +49,6 @@ public class WindowControl extends AbstractController {
   public void onFocus(final boolean getFocus) {
     super.onFocus(getFocus);
     draggableControl.onFocus(getFocus);
-  }
-
-  public void onStartScreen() {
-    draggableControl.onStartScreen();
-    if (removeCloseButton) {
-      getCloseButton().markForRemoval();
-      removeCloseButton = false;
-    }
   }
 
   public void dragStart(final int mouseX, final int mouseY) {
@@ -63,40 +63,32 @@ public class WindowControl extends AbstractController {
     draggableControl.dragStop();
   }
 
-  public void closeWindow() {
-    element.markForRemoval();
+  private Element getTitleElement() {
+    return getElement().findElementByName("#window-title");
   }
 
+  private Element getCloseButton() {
+    return getElement().findElementByName("#window-close-button");
+  }
+
+  public Element getContent() {
+    return getElement().findElementByName("#window-content");
+  }
+
+  // Window implementation
+
+  @Override
   public String getTitle() {
     return getTitleElement().getRenderer(TextRenderer.class).getOriginalText();
   }
 
+  @Override
   public void setTitle(final String title) {
     getTitleElement().getRenderer(TextRenderer.class).setText(title);
   }
 
-  private Element getTitleElement() {
-    return element.findElementByName("window-title");
-  }
-
-  private Element getCloseButton() {
-    return element.findElementByName("window-close-button");
-  }
-
-  public Element getContent() {
-    return element.findElementByName("window-content");
-  }
-
-  public void addNotify(final DragNotify notify) {
-    draggableControl.addNotify(notify);
-  }
-
-  public void removeNotify(final DragNotify notify) {
-    draggableControl.removeNotify(notify);
-  }
-
   @Override
-  public void removeAllNotifies() {
-    draggableControl.removeAllNotifies();
+  public void closeWindow() {
+    getElement().markForRemoval();
   }
 }

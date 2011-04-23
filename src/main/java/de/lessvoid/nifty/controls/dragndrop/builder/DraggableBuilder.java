@@ -1,13 +1,13 @@
-package de.lessvoid.nifty.controls.dragndrop;
+package de.lessvoid.nifty.controls.dragndrop.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 
 public class DraggableBuilder extends ControlBuilder {
-  public DraggableBuilder(final String name) {
+  public DraggableBuilder() {
     super("draggable");
   }
 
-  public DraggableBuilder(final String name, final String id) {
+  public DraggableBuilder(final String id) {
     super(id, "draggable");
   }
 }
