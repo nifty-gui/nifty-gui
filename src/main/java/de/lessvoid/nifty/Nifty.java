@@ -271,7 +271,7 @@ public class Nifty {
     lastTime = current;
   }
 
-  public void resetEvents() {
+  public void resetMouseInputEvents() {
     mouseInputEventProcessor.reset();
   }
 

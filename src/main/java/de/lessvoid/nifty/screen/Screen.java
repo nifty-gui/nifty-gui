@@ -115,7 +115,24 @@ public class Screen {
   }
 
   public void addPopup(final Element popup, final Element defaultFocusElement) {
-    nifty.resetEvents();
+
+    // This enforced all mouse buttons to the released state when a new popup
+    // is about to be created. But I can't remember what that was for :)
+    //
+    // It made problems in the drop down example where the window controls have
+    // been used. Since drop down controls are temporarily moved to a popup layer
+    // so that they can be moved around above all other stuff this resetEvents()
+    // call had one odd side effect: If you would click on a window title bar (to
+    // move it around) - in this moment the control is being moved to the popup layer -
+    // and then you would release the button this release would never been detected
+    // by the window title bar (because the button has already been released by
+    // this call to resetEvents() in here). In this case the window got stuck in the
+    // popup until you'd press and release the mouse button again.
+    //
+    // Not calling resetEvents() in here fixes this issue but might break something
+    // else although I'm currently not sure what that might be :)
+    //
+    // nifty.resetEvents();
 
     // create the callback
     EndNotify localEndNotify = new EndNotify() {
@@ -204,7 +221,7 @@ public class Screen {
   }
 
   private void resetLayers() {
-    nifty.resetEvents();
+    nifty.resetMouseInputEvents();
 
     for (int i=0; i<layerElements.size(); i++) {
       Element w = layerElements.get(i);
@@ -283,6 +300,9 @@ public class Screen {
    * @return true when processed and false when not
    */
   public boolean mouseEvent(final NiftyMouseInputEvent inputEvent) {
+    if (log.isLoggable(Level.FINE)) {
+      log.fine(inputEvent.toString());
+    }
     if (!popupElements.isEmpty()) {
       return forwardMouseEventToLayers(popupElements, inputEvent);
     } else {
