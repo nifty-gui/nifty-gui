@@ -22,7 +22,7 @@ public final class DragDropMain {
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
-    nifty.fromXml("dragndrop/dragndrop.xml", "dragndropExample");
+    nifty.fromXml("dragndrop/dragndrop.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty, null);

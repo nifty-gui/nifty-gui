@@ -274,7 +274,8 @@ Thank you Trent.&#13;&#10;" align="center" />
               <image id="thumbHelloWorld" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
               <image id="thumbHint" style="thumbStyle" x="150px" y="50px" filename="all/thumb-hint.png" />
               <image id="thumbMouse" style="thumbStyle" x="150px" y="50px" filename="all/thumb-mouse.png" />
-              <image id="thumbMenu" style="thumbStyle" x="150px" y="50px" filename="all/thumb-mouse.png" />
+              <image id="thumbMenu" style="thumbStyle" x="150px" y="50px" filename="all/thumb-menu.png" />
+              <image id="thumbDragAndDrop" style="thumbStyle" x="150px" y="50px" filename="all/thumb-drag-and-drop.png" />
               <image id="thumbTextAlign" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textAlign.png" />
               <image id="thumbTextField" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textField.png" />
               <image id="thumbDropDownList" style="thumbStyle" x="150px" y="50px" filename="all/thumb-dropDownList.png" />
@@ -285,7 +286,7 @@ Thank you Trent.&#13;&#10;" align="center" />
               <image id="thumbExit" style="thumbStyle" x="150px" y="50px" filename="all/thumb-exit.png" />
             </panel>
             <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" stepSizeY="30" height="100%">
-              <panel id="huhu-1" childLayout="center" width="100%" height="550px" padding="0px,40px,0px,40px">
+              <panel id="huhu-1" childLayout="center" width="100%" height="620px" padding="0px,40px,0px,40px">
                 <panel id="huhu-2" childLayout="vertical" width="100%">
                   <text id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
                     <interact onClick="helloWorld()" onClickAlternateKey="fade" />
@@ -296,8 +297,11 @@ Thank you Trent.&#13;&#10;" align="center" />
                   <text id="mouse" text="Mouse Update (1.3)" style="menu-item" hintText="Multiple Mouse Buttons/Events Support (Nifty 1.3)" targetElement="thumbMouse">
                     <interact onClick="mouse()" onClickAlternateKey="fade" />
                   </text>
-                  <text id="menu" text="Popup Menu (1.3)" style="menu-item" hintText="Basic Popup Menu Support (Nifty 1.3)" targetElement="thumbMenu">
+                  <text id="popupMenu" text="Popup Menu (1.3)" style="menu-item" hintText="Basic Popup Menu Support (Nifty 1.3)" targetElement="thumbMenu">
                     <interact onClick="menu()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="dragndrop" text="Drag'n'Drop (1.2/1.3)" style="menu-item" hintText="Drag'n'Drop Support (Extended in Nifty 1.3)" targetElement="thumbDragAndDrop">
+                    <interact onClick="dragAndDrop()" onClickAlternateKey="fade" />
                   </text>
                   <text id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example" targetElement="thumbTextAlign">
                     <interact onClick="textAlign()" onClickAlternateKey="fade" />

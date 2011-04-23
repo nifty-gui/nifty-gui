@@ -6,8 +6,8 @@ import java.util.Map;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dragndrop.controller.DraggableControl;
-import de.lessvoid.nifty.controls.dragndrop.controller.DroppableControl;
+import de.lessvoid.nifty.controls.dragndrop.DraggableControl;
+import de.lessvoid.nifty.controls.dragndrop.DroppableControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
 import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;

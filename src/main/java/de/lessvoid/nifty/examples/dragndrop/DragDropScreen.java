@@ -2,17 +2,20 @@ package de.lessvoid.nifty.examples.dragndrop;
 
 import java.util.Random;
 
-
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dragndrop.CreateDraggableControl;
-import de.lessvoid.nifty.controls.dragndrop.controller.DraggableControl;
-import de.lessvoid.nifty.controls.dragndrop.controller.DropFilter;
-import de.lessvoid.nifty.controls.dragndrop.controller.DropNotify;
-import de.lessvoid.nifty.controls.dragndrop.controller.DroppableControl;
-import de.lessvoid.nifty.controls.window.CreateWindowControl;
-import de.lessvoid.nifty.controls.window.controller.WindowControl;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.NiftyIdCreator;
+import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.Draggable;
+import de.lessvoid.nifty.controls.DraggableDragCanceledEvent;
+import de.lessvoid.nifty.controls.DraggableDragStartedEvent;
+import de.lessvoid.nifty.controls.Droppable;
+import de.lessvoid.nifty.controls.DroppableDropFilter;
+import de.lessvoid.nifty.controls.DroppableDroppedEvent;
+import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.controls.dragndrop.builder.DraggableBuilder;
+import de.lessvoid.nifty.controls.window.builder.CreateWindow;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -22,12 +25,12 @@ public class DragDropScreen implements ScreenController {
   private Screen screen;
   private Random random = new Random();
   
-  private DroppableControl trash;
-  private DroppableControl goodStuff;
-  private DroppableControl evilStuff;
+  private Droppable trash;
+  private Droppable goodStuff;
+  private Droppable evilStuff;
 
   @Override
-  public void bind(Nifty nifty, Screen screen) {
+  public void bind(final Nifty nifty, final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
 
@@ -35,36 +38,24 @@ public class DragDropScreen implements ScreenController {
     goodStuff = findDroppable("GoodStuff");
     evilStuff = findDroppable("EvilStuff");
     
-    trash.addNotify(new DropNotify() {
-
+    // this filter demonstrates a drop filter. in this case you can't drag something from the "EvilStuff"
+    // dropable to the "GoodStuff" dropable
+    goodStuff.addFilter(new DroppableDropFilter() {
       @Override
-      public void dropped(DroppableControl source, DraggableControl draggable,
-          DroppableControl target) {
-        draggable.getElement().markForRemoval();
-      }
-    });
-    
-    goodStuff.addFilter(new DropFilter() {
-      
-      @Override
-      public boolean accept(DroppableControl source, DraggableControl draggable,
-          DroppableControl target) {
+      public boolean accept(final Droppable source, final Draggable draggable, final Droppable target) {
         return source != evilStuff;
       }
     });
-    
   }
 
   @Override
   public void onStartScreen() {
-
   }
 
   @Override
   public void onEndScreen() {
-
   }
-  
+
   /**
    * quit method called from the dragndrop.xml.
    */
@@ -74,71 +65,92 @@ public class DragDropScreen implements ScreenController {
   }
 
   public void spawnDraggable() {
-    Element draggables = screen.findElementByName("draggables");
+    DraggableBuilder builder = new DraggableBuilder() {{
+      width("120px");
+      height("120px");
+      backgroundColor(randomColor());
+      childLayoutCenter();
+      valignTop();
+      text(new TextBuilder() {{
+        text("Drag Me!");
+        style("descriptionText");
+      }});
+    }};
 
-    CreateDraggableControl draggableAttributes = new CreateDraggableControl();
-    draggableAttributes.setWidth("120px");
-    draggableAttributes.setHeight("120px");
-    draggableAttributes.set("onDragStart", "showDragStartStatus()");
-    draggableAttributes.set("onDragCancel", "showDragCancelStatus()");
-    draggableAttributes.setBackgroundColor(randomColor());
-    draggableAttributes.create(nifty, screen, draggables);
+    Element draggables = screen.findElementByName("draggables");
+    builder.build(nifty, screen, draggables);
   }
   
   public void spawnWindow() {
     Element windows = screen.findElementByName("windows");
 
-    CreateWindowControl windowAttributes = new CreateWindowControl();
+    String windowId = NiftyIdCreator.generate() + 1000;
+    CreateWindow windowAttributes = new CreateWindow("window-" + windowId, "New Window [" + windowId + "]");
     windowAttributes.setWidth("360px");
     windowAttributes.setHeight("240px");
-    windowAttributes.set("title", "New Window");
-    WindowControl window = windowAttributes.create(nifty, screen, windows);
-//    window.setTitle("New Window");
+    windowAttributes.create(nifty, screen, windows);
   }
   
   private String randomColor() {
-    return "#" + Integer.toHexString(random.nextInt(255 * 255));
+    return "#" + Integer.toHexString(random.nextInt(200)) + Integer.toHexString(random.nextInt(200)) + Integer.toHexString(random.nextInt(200)) + "ff";
   }
   
-  public void showDragStartStatus(DroppableControl source, DraggableControl draggable) {
-    setStatus("dragging " + getId(draggable) + " from "  + getId(source));
+  /**
+   * Called for all Draggables when the Drag operation starts.
+   * @param event the DraggableDragStartedEvent
+   */
+  @NiftyEventSubscriber(pattern=".*")
+  public void showDragStartStatus(final String id, final DraggableDragStartedEvent event) {
+    setStatus("Dragging [" + getId(event.getDraggable()) + "] from ["  + getId(event.getSource()) + "].");
   }
-  
-  public void showDragCancelStatus(DroppableControl source, DraggableControl draggable) {
-    setStatus("canceled " + getId(draggable) + " reverting back to "  + getId(source));
+
+  /**
+   * Called for all Draggables when the Drag operation stops.
+   * @param event the DraggableDragCanceledEvent
+   */
+  @NiftyEventSubscriber(pattern=".*")
+  public void showDragCancelStatus(final String id, final DraggableDragCanceledEvent event) {
+    setStatus("Canceled [" + getId(event.getDraggable()) + "] reverting back to ["  + getId(event.getSource()) + "].");
   }
-  
-  public void showDropStatus(DroppableControl source, DraggableControl draggable,
-      DroppableControl target) {
-    if ((target == trash) && (source == evilStuff))
-      setStatus("evil " + getId(draggable) + " has been eliminated");
-    else if (target == evilStuff)
-      setStatus(getId(draggable) + " has become evil");
-    else
-      setStatus("dropped " + getId(draggable) + " on "  + getId(target));
+
+  /**
+   * Called for all Dropables when something is dropped on them.
+   * @param event the DropableDroppedEvent
+   */
+  @NiftyEventSubscriber(pattern=".*")
+  public void showDropStatus(final String id, final DroppableDroppedEvent event) {
+    if ((event.getTarget() == trash) && (event.getSource() == evilStuff)) {
+      setStatus("Evil [" + getId(event.getDraggable()) + "] has been eliminated.");
+    } else if (event.getTarget() == evilStuff) {
+      setStatus("[" + getId(event.getDraggable()) + "] has become evil");
+    } else {
+      setStatus("Dropped [" + getId(event.getDraggable()) + "] on ["  + getId(event.getTarget()) + "].");
+    }
   }
-  
-  private String getId(DroppableControl droppable) {
+
+  /**
+   * Called when something is dropped on the Trash.
+   * @param event the DropableDroppedEvent
+   */
+  @NiftyEventSubscriber(id="Trash")
+  public void onTrashDrop(final String id, final DroppableDroppedEvent event) {
+    event.getDraggable().getElement().markForRemoval();
+  }
+
+  private String getId(final Droppable droppable) {
     return (droppable != null) ? droppable.getElement().getId() : null;
   }
 
-  private String getId(DraggableControl draggable) {
+  private String getId(final Draggable draggable) {
     return (draggable != null) ? draggable.getElement().getId() : null;
   }
 
-  private void setStatus(String text)
-  {
-    System.out.println(text);
-    Element status = screen.findElementByName("status");
-    status.getRenderer(TextRenderer.class).setText(text);
+  private void setStatus(final String text) {
+    Label status = screen.findNiftyControl("status", Label.class);
+    status.setText(text);
   }
 
-  private DroppableControl findDroppable(final String id) {
-    return screen.findControl(id, DroppableControl.class);
+  private Droppable findDroppable(final String id) {
+    return screen.findNiftyControl(id, Droppable.class);
   }
-
-  private DraggableControl findDraggable(final String id) {
-    return screen.findControl(id, DraggableControl.class);
-  }
-
 }
