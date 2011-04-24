@@ -90,4 +90,9 @@ public class LabelNull implements Label {
   @Override
   public void setFocusable(final boolean focusable) {
   }
+
+  @Override
+  public boolean hasFocus() {
+    return false;
+  }
 }

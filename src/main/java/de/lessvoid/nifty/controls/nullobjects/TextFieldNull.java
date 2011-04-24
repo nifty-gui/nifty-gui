@@ -106,4 +106,9 @@ public class TextFieldNull implements TextField {
   @Override
   public void setFocusable(final boolean focusable) {
   }
+
+  @Override
+  public boolean hasFocus() {
+    return false;
+  }
 }

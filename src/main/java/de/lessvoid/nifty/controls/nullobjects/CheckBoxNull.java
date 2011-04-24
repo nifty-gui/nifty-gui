@@ -92,4 +92,9 @@ public class CheckBoxNull implements CheckBox {
   @Override
   public void setFocusable(final boolean focusable) {
   }
+
+  @Override
+  public boolean hasFocus() {
+    return false;
+  }
 }

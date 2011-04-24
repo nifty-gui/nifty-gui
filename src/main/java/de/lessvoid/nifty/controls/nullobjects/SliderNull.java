@@ -120,4 +120,9 @@ public class SliderNull implements Slider {
   @Override
   public void setFocusable(final boolean focusable) {
   }
+
+  @Override
+  public boolean hasFocus() {
+    return false;
+  }
 }

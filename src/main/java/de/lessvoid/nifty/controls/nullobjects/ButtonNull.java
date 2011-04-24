@@ -134,4 +134,9 @@ public class ButtonNull implements Button {
   @Override
   public void setFocusable(final boolean focusable) {
   }
+
+  @Override
+  public boolean hasFocus() {
+    return false;
+  }
 }

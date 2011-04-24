@@ -169,6 +169,11 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
   public void setFocusable(final boolean focusable) {
   }
 
+  @Override
+  public boolean hasFocus() {
+    return false;
+  }
+
   public String toString() {
     return super.toString() + " {" + (element == null ? "" : element.getId()) + "}";
   }

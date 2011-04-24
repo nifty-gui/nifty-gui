@@ -194,4 +194,9 @@ public class ListBoxNull implements ListBox {
   public int getDisplayItemCount() {
     return 0;
   }
+
+  @Override
+  public boolean hasFocus() {
+    return false;
+  }
 }
