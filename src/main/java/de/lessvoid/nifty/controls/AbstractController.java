@@ -7,7 +7,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 public abstract class AbstractController implements Controller, NiftyControl {
-
     private List<FocusNotify> notifies = new CopyOnWriteArrayList<FocusNotify>();
 
     @Override
@@ -128,5 +127,13 @@ public abstract class AbstractController implements Controller, NiftyControl {
     @Override
     public void setFocusable(final boolean focusable) {
       element.setFocusable(focusable);
+    }
+
+    @Override
+    public boolean hasFocus() {
+      if (getElement() == null) {
+        return false;
+      }
+      return getElement() == getElement().getFocusHandler().getKeyboardFocusElement();
     }
 }

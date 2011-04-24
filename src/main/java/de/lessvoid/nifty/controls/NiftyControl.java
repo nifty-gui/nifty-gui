@@ -96,4 +96,10 @@ public interface NiftyControl {
    * @param focusable true when this element can get the focus and false when not
    */
   void setFocusable(boolean focusable);
+
+  /**
+   * Returns true if this control has the focus.
+   * @return true, when the control has the focus and false if not
+   */
+  boolean hasFocus();
 }
