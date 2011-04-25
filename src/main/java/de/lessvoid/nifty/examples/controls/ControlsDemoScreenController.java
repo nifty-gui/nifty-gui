@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.controls;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,10 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
     consoleCommands.registerCommand("show Slider", showCommand);
     consoleCommands.registerCommand("show ScrollPanel", showCommand);
     consoleCommands.registerCommand("show ChatControl", showCommand);
+    consoleCommands.registerCommand("show DragAndDrop", showCommand);
+
+    NiftyCommand niftyCommand = new NiftyCommand();
+    consoleCommands.registerCommand("nifty screen", niftyCommand);
 
     ConsoleCommand helpCommand = new HelpCommand();
     consoleCommands.registerCommand("help", helpCommand);
@@ -114,6 +119,25 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
     return false;
   }
 
+  public void openLink(final String url) {
+    if (!java.awt.Desktop.isDesktopSupported()) {
+      System.err.println("Desktop is not supported (Can't open link)");
+      return;
+    }
+
+    java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+    if (!desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
+      System.err.println("Desktop (BROWSE) is not supported (Can't open link)");
+      return;
+    }
+
+    try {
+      java.net.URI uri = new java.net.URI(url);
+      desktop.browse(uri);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
   private void modifyMoveEffect(final EffectEventId effectEventId, final Element element, final String direction) {
     List<Effect> moveEffects = element.findElementByName("#effectPanel").getEffects(effectEventId, Move.class);
@@ -173,6 +197,28 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
 
       // finally switch
       changeDialogTo(menuButtonId);
+    }
+  }
+
+  private class NiftyCommand implements ConsoleCommand {
+    @Override
+    public void execute(final String[] args) {
+      if (args.length != 2) {
+        console.outputError("command argument error");
+        return;
+      }
+      String param = args[1];
+      if ("screen".equals(param)) {
+        Date now = new Date();
+        String screenDebugOutput = nifty.getCurrentScreen().debugOutput();
+        System.out.println(new Date().getTime() - now.getTime());
+
+        now = new Date();
+        console.output(screenDebugOutput);
+        System.out.println(new Date().getTime() - now.getTime());
+      } else {
+        console.outputError("unknown parameter [" + args[1] + "]");
+      }
     }
   }
 

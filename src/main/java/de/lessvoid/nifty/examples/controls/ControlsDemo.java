@@ -7,6 +7,7 @@ package de.lessvoid.nifty.examples.controls;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.EffectBuilder;
+import de.lessvoid.nifty.builder.HoverEffectBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -15,11 +16,11 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.StyleBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.examples.controls.chatcontrol.ChatControlDialogRegister;
+import de.lessvoid.nifty.examples.controls.chatcontrol.ChatControlDialogDefinition;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 import de.lessvoid.nifty.examples.controls.common.DialogPanelControlDefinition;
 import de.lessvoid.nifty.examples.controls.common.MenuButtonControlDefinition;
+import de.lessvoid.nifty.examples.controls.dragndrop.DragAndDropDialogDefinition;
 import de.lessvoid.nifty.examples.controls.dropdown.DropDownDialogControlDefinition;
 import de.lessvoid.nifty.examples.controls.listbox.ListBoxDialogControlDefinition;
 import de.lessvoid.nifty.examples.controls.scrollpanel.ScrollPanelDialogControlDefinition;
@@ -49,6 +50,7 @@ public class ControlsDemo {
     nifty.registerSound("intro", "sound/19546__tobi123__Gong_mf2.wav");
     nifty.registerMouseCursor("hand", "mouse-cursor-hand.png", 5, 4);
     registerMenuButtonHintStyle(nifty);
+    registerTextLinkStyle(nifty);
     registerConsolePopup(nifty);
 
     // register some helper controls
@@ -59,9 +61,10 @@ public class ControlsDemo {
     ListBoxDialogControlDefinition.register(nifty);
     DropDownDialogControlDefinition.register(nifty);
     ScrollPanelDialogControlDefinition.register(nifty);
-    ChatControlDialogRegister.register(nifty);
+    ChatControlDialogDefinition.register(nifty);
     TextFieldDialogControlDefinition.register(nifty);
     SliderAndScrollbarDialogControlDefinition.register(nifty);
+    DragAndDropDialogDefinition.register(nifty);
     
     nifty.addScreen("start", createIntroScreen(nifty));
     nifty.addScreen("demo", createDemoScreen(nifty));
@@ -214,7 +217,8 @@ public class ControlsDemo {
           "menuButtonTextField", "dialogTextField",
           "menuButtonSlider", "dialogSliderAndScrollbar",
           "menuButtonScrollPanel", "dialogScrollPanel",
-          "menuButtonChatControl", "dialogChatControl"
+          "menuButtonChatControl", "dialogChatControl",
+          "menuButtonDragAndDrop", "dialogDragAndDrop"
       ));
       inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping"); // this will enable Keyboard events for the screen controller
       layer(new LayerBuilder("layer") {{
@@ -237,6 +241,8 @@ public class ControlsDemo {
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonScrollPanel", "ScrollPanel", "ScrollPanel demonstration.\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonChatControl", "ChatControl", "Nifty User ractoc contributed a chat control"));
+          panel(builders.hspacer("10px"));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonDragAndDrop", "Drag and Drop", "Demonstration of the extended Drag and Drop possibilities with Nifty 1.3"));
         }});
         panel(new PanelBuilder("dialogParent") {{
           childLayoutOverlay();
@@ -248,7 +254,8 @@ public class ControlsDemo {
           control(new ControlBuilder("dialogSliderAndScrollbar", SliderAndScrollbarDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogDropDown", DropDownDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogScrollPanel", ScrollPanelDialogControlDefinition.NAME));
-          control(new ControlBuilder("dialogChatControl", ChatControlDialogRegister.NAME));
+          control(new ControlBuilder("dialogChatControl", ChatControlDialogDefinition.NAME));
+          control(new ControlBuilder("dialogDragAndDrop", DragAndDropDialogDefinition.NAME));
         }});
       }});
     }}.build(nifty);
@@ -297,6 +304,19 @@ public class ControlsDemo {
       valignCenter();
       textHAlignLeft();
       color(new Color("#000f"));
+    }}.build(nifty);
+  }
+
+  private static void registerTextLinkStyle(final Nifty nifty) {
+    // add a special style we use for the link
+    new StyleBuilder() {{
+      id("base-font-link");
+      base("base-font");
+      color("#8fff");
+      interactOnRelease("$action");
+      onHoverEffect(new HoverEffectBuilder("changeMouseCursor") {{
+        effectParameter("id", "hand");
+      }});
     }}.build(nifty);
   }
 

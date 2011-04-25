@@ -11,7 +11,7 @@ import de.lessvoid.nifty.examples.controls.common.DialogPanelControlDefinition;
  * 
  * @author void
  */
-public class ChatControlDialogRegister {
+public class ChatControlDialogDefinition {
   public static String NAME = "chatControlDialogControl";
 
   public static void register(final Nifty nifty) {
