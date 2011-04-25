@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.controls.console;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.bushe.swing.event.EventTopicSubscriber;
@@ -120,13 +122,15 @@ public class ConsoleControl extends AbstractController implements Console, Event
 
   private void out(final String value, final Color color) {
     String[] lines = value.split("\n");
+    List<String> list = new ArrayList<String>(lines.length);
     for (String line : lines) {
       if (color != null) {
-        listBox.addItem("\\" + color.getColorString() + "#" + line);
+        list.add("\\" + color.getColorString() + "#" + line);
       } else {
-        listBox.addItem(line);
+        list.add(line);
       }
-      listBox.showItemByIndex(listBox.itemCount() - 1);
     }
+    listBox.addAllItems(list);
+    listBox.showItemByIndex(listBox.itemCount() - 1);
   }
 }
