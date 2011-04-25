@@ -362,6 +362,7 @@ public class ControlAttributes {
       screen,
       layoutPart);
 
+    parent.layoutElements();
     screen.layoutLayers();
     return element;
   }
