@@ -15,4 +15,8 @@ public class LabelBuilder extends ControlBuilder {
     super(id, "label");
     text(text);
   }
+
+  public void label(final String label) {
+    text(label);
+  }
 }
