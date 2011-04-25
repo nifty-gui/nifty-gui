@@ -3,12 +3,11 @@ package de.lessvoid.nifty.controls.window.builder;
 import de.lessvoid.nifty.builder.ControlBuilder;
 
 public class WindowBuilder extends ControlBuilder {
-  public WindowBuilder(final String title) {
+  public WindowBuilder() {
     super("window");
-    set("title", title);
   }
 
-  public WindowBuilder(final String title, final String id) {
+  public WindowBuilder(final String id, final String title) {
     super(id, "window");
     set("title", title);
   }
