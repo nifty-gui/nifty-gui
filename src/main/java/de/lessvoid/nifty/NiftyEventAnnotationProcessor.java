@@ -109,7 +109,7 @@ public class NiftyEventAnnotationProcessor {
         try {
           method.invoke(obj, topic, eventClass.cast(data));
         } catch (Throwable e) {
-          log.log(Level.WARNING, "failed to invoke method [" + method + "] with Exception [" + e.getMessage() + "]", e);
+          log.log(Level.WARNING, "failed to invoke method [" + method + "] with Exception [" + e.getMessage() + "][" + e.getCause() + "]", e);
         }
       }
     }
