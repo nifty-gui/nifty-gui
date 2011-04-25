@@ -43,6 +43,7 @@ import de.lessvoid.nifty.loaderv2.types.ResourceBundleType;
 import de.lessvoid.nifty.loaderv2.types.StyleType;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverDefault;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyMouseImpl;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
@@ -1312,4 +1313,15 @@ public class Nifty {
     }
     return element;
   }
+
+  /**
+   * Create a new Image. This is a helper method so that you don't need to get the RenderEngine.
+   * @param name file name to use
+   * @param filterLinear filter
+   * @return RenderImage instance
+   */
+  public NiftyImage createImage(final String name, final boolean filterLinear) {
+    return renderEngine.createImage(name, filterLinear);
+  }
+
 }
