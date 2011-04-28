@@ -1,23 +1,20 @@
-<project name="Nifty GUI">
-  <skin>
-    <groupId>lessvoid</groupId>
-    <artifactId>maven-nifty-skin</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
-  </skin>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Nifty GUI - nifty">
   <bannerLeft>
-    <name></name>
+    <name>Nifty</name>
+    <href>http://nifty-gui.sourceforge.net/projects/nifty/</href>
   </bannerLeft>
-  <publishDate format="dd.MM.yyyy" />
+  <publishDate format="dd.MM.yyyy" position="left" />
+  <version position="left" />
   <body>
     <links>
+      <item name="[Nifty Default Controls]" href="../nifty-default-controls/project-reports.html" />
       <item name="[Blog]" href="http://nifty-gui.lessvoid.com"/>
     </links>
-    <head>
-    </head>
-    <menu name="Getting Started">
-      <item name="Introduction" href="getting-started/introduction.html" />
-      <item name="Hello World" href="getting-started/hello-world.html" />
-    </menu>
-    ${reports}
+    <breadcrumbs>
+      <item name="${project.name}" />
+    </breadcrumbs>
+    <menu ref="reports"/>
+    <menu ref="modules" />
   </body>
 </project>
