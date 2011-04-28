@@ -4,12 +4,15 @@
   <artifactId>nifty-default-controls</artifactId>
   <name>Nifty Default Controls</name>
   <version>1.3-SNAPSHOT</version>
+  <url>http://nifty-gui.sourceforge.net/projects/nifty-default-controls/</url>
   <description />
+
   <scm>
     <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-default-controls/trunk</connection>
     <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-default-controls/trunk</developerConnection>
     <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-default-controls/</url>
   </scm>
+
   <dependencies>
     <dependency>
       <groupId>lessvoid</groupId>
@@ -42,6 +45,7 @@
       <scope>compile</scope>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -51,6 +55,11 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.0-beta-3</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -67,28 +76,53 @@
       </plugin>
     </plugins>
   </build>
+
   <reporting>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.1.2</version>
+        <version>2.3.1</version>
         <reportSets>
           <reportSet>
             <reports>
-              <report>index</report>
-              <report>summary</report>
               <report>dependencies</report>
+              <report>project-team</report>
+<!--                <report>mailing-list</report>  
+              <report>cim</report>
+              <report>issue-tracking</report>
+              <report>license</report>-->
+              <report>scm</report>
             </reports>
           </reportSet>
         </reportSets>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.5</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <links>
+            <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+          </links>
+        </configuration>
+      </plugin>
     </plugins>
   </reporting>
+
   <distributionManagement>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
       <url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
     </repository>
+    <site>
+      <id>nifty.sourceforge.net</id>
+      <url>scp://shell.sourceforge.net/home/project-web/nifty-gui/htdocs/projects/nifty-default-controls</url>
+    </site>
   </distributionManagement>
 </project>
