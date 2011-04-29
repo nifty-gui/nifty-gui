@@ -48,13 +48,4 @@ public interface Chat extends NiftyControl {
      */
     void removePlayer(String playerName);
     
-   /**
-     * Sets the SendTextEventListener. This listener is used for a callback when
-     * the player wants to send a chat message.
-     * 
-     * @param sendTextEventListener
-     *            The SendTextEventListener which is used for a callback when
-     *            the player wants to send a message.
-     */
-    public void setSendTextEventListener(SendTextEventListener sendTextEventListener);  
 }

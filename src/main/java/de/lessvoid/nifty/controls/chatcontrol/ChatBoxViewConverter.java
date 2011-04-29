@@ -11,7 +11,6 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
  * @version 0.1
  */
 public class ChatBoxViewConverter implements ListBoxViewConverter<ChatEntryModelClass> {
-    
     private static final String CHAT_LINE_ICON = "#chat-line-icon";
     private static final String CHAT_LINE_TEXT = "#chat-line-text";
 

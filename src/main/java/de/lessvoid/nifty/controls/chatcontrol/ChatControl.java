@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Chat;
+import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
@@ -24,15 +25,15 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 public class ChatControl extends AbstractController implements Chat {
 
-    private static final String CHAT_BOX = "chatBox-panel";
-    private static final String PLAYER_LIST = "playerList";
+    private static final String CHAT_BOX = "#chatBox-panel";
+    private static final String PLAYER_LIST = "#playerList";
     private static final String CHAT_TEXT_INPUT = "#chat-text-input";
-    private static final Logger logger = Logger.getLogger(ChatControl.class.getName());
-    private SendTextEventListener listener;
+    private static final Logger LOGGER = Logger.getLogger(ChatControl.class.getName());
     private Screen screen;
     private Element element;
     private TextField textControl;
     private PlayerComparator playerComparator = new PlayerComparator();
+    private Nifty nifty;
 
     /**
      * Default constructor.
@@ -53,7 +54,8 @@ public class ChatControl extends AbstractController implements Chat {
     @Override
     public final void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement,
             final Properties properties, final Attributes controlDefinitionAttributes) {
-        logger.fine("binding chat control");
+        LOGGER.fine("binding chat control");
+        nifty = niftyParam;
         screen = screenParam;
         element = newElement;
 
@@ -72,7 +74,7 @@ public class ChatControl extends AbstractController implements Chat {
      */
     @Override
     public final void onStartScreen() {
-        logger.fine("starting chat screen");
+        LOGGER.fine("starting chat screen");
         textControl = this.element.findNiftyControl(CHAT_TEXT_INPUT, TextField.class);
         //TODO: figure how to set this the right way.
         //element.findElementByName(CHAT_TEXT_INPUT).addInputHandler(this);
@@ -84,7 +86,7 @@ public class ChatControl extends AbstractController implements Chat {
     @Override
     public final void receivedChatLine(final String text, final NiftyImage icon) {
         final ListBox<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
-        logger.log(Level.FINE, "adding message {0}", (chatBox.itemCount() + 1));
+        LOGGER.log(Level.FINE, "adding message {0}", (chatBox.itemCount() + 1));
         final ChatEntryModelClass item = new ChatEntryModelClass(text, icon);
         chatBox.addItem(item);
         chatBox.showItem(item);
@@ -96,7 +98,7 @@ public class ChatControl extends AbstractController implements Chat {
     @Override
     public final void addPlayer(final String playerName, final NiftyImage playerIcon) {
         final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
-        logger.log(Level.FINE, "adding player {0}", (playerList.itemCount() + 1));
+        LOGGER.log(Level.FINE, "adding player {0}", (playerList.itemCount() + 1));
         final ChatEntryModelClass item = new ChatEntryModelClass(playerName, playerIcon);
         playerList.addItem(item);
         playerList.sortAllItems(playerComparator);
@@ -109,7 +111,7 @@ public class ChatControl extends AbstractController implements Chat {
     @Override
     public final void removePlayer(final String playerName) {
         final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
-        logger.log(Level.FINE, "removing player {0}", playerName);
+        LOGGER.log(Level.FINE, "removing player {0}", playerName);
         final ChatEntryModelClass item = new ChatEntryModelClass(playerName, null);
         playerList.removeItem(item);
     }
@@ -120,7 +122,7 @@ public class ChatControl extends AbstractController implements Chat {
      */
     public final void sendText() {
         final String text = textControl.getText();
-        listener.sendText(text);
+        nifty.publishEvent(getId(), new ChatTextSendEvent(text));
         textControl.setText("");
     }
 
@@ -166,11 +168,4 @@ public class ChatControl extends AbstractController implements Chat {
         }
     }
 
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public final void setSendTextEventListener(final SendTextEventListener sendTextEventListener) {
-        listener = sendTextEventListener;
-    }
 }

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
-
   <controlDefinition name="nifty-chat" controller="de.lessvoid.nifty.controls.chatcontrol.ChatControl">
     <panel childLayout="horizontal" width="100%" height="100%" align="center">
       <panel childLayout="vertical" width="75%" height="100%">
-        <panel childLayout="horizontal" align="left" width="100%" height="*" id="chatBox-panel">
-          <control backgroundColor="#f00f" id="chatBox" name="listBox" vertical="optional" horizontal="off"
-            displayItems="16" selection="Disabled" viewConverterClass="de.lessvoid.nifty.controls.chatcontrol.ChatBoxViewConverter">
-            <control id="chatline" name="nifty-chat-line" />
+        <panel id="#chatBox-panel" childLayout="horizontal" align="left" width="100%" height="*">
+          <control id="#chatBox" backgroundColor="#f00f" name="listBox" vertical="optional" horizontal="off"
+            displayItems="$lines" selection="Disabled" viewConverterClass="de.lessvoid.nifty.controls.chatcontrol.ChatBoxViewConverter">
+            <control id="#chatline" name="nifty-chat-line" />
           </control>
         </panel>
-        <panel backgroundColor="#f0ff" childLayout="horizontal" align="left" width="100%" height="25px" id="chat-text-line">
+        <panel id="#chat-text-line" backgroundColor="#f0ff" childLayout="horizontal" align="left" width="100%" height="25px">
           <control id="#chat-text-input" name="textfield" width="85%" height="25px" />
           <control id="#chat-text-button" name="button" label="send" width="15%" height="25px">
             <interact onClick="sendText()" />
@@ -19,9 +18,9 @@
         </panel>
       </panel>
       <panel childLayout="vertical" width="25%" height="100%">
-        <control id="playerList" name="listBox" vertical="optional" horizontal="off" displayItems="16"
+        <control id="#playerList" name="listBox" vertical="optional" horizontal="off" displayItems="$lines"
           selection="Disabled" height="100%" viewConverterClass="de.lessvoid.nifty.controls.chatcontrol.ChatBoxViewConverter">
-          <control id="playerLine" name="nifty-chat-line" />
+          <control id="#playerLine" name="nifty-chat-line" />
         </control>
       </panel>
     </panel>
