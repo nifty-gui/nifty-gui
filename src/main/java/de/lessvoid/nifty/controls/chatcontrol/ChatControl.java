@@ -2,17 +2,17 @@ package de.lessvoid.nifty.controls.chatcontrol;
 
 import java.util.Comparator;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Chat;
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.listbox.ListBoxControl;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
-import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -22,29 +22,22 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author Mark
  * @version 0.1
  */
-public class ChatController implements Controller, KeyInputHandler {
+public class ChatControl extends AbstractController implements Chat {
 
-    private static final String CHAT_BOX = "chatBox";
-
+    private static final String CHAT_BOX = "chatBox-panel";
     private static final String PLAYER_LIST = "playerList";
-
-    private static final String CHAT_TEXT_INPUT = "chat-text-input";
-
-    private static Logger logger = Logger.getLogger(ChatController.class.getName());
-
+    private static final String CHAT_TEXT_INPUT = "#chat-text-input";
+    private static final Logger logger = Logger.getLogger(ChatControl.class.getName());
     private SendTextEventListener listener;
-
     private Screen screen;
     private Element element;
-
-    private TextFieldControl textControl;
-
+    private TextField textControl;
     private PlayerComparator playerComparator = new PlayerComparator();
 
     /**
      * Default constructor.
      */
-    public ChatController() {
+    public ChatControl() {
     }
 
     /**
@@ -70,15 +63,8 @@ public class ChatController implements Controller, KeyInputHandler {
      * {@inheritDoc}
      */
     @Override
-    public final boolean inputEvent(final NiftyInputEvent inputEvent) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void onFocus(final boolean arg0) {
+        textControl.setFocus();
     }
 
     /**
@@ -87,44 +73,30 @@ public class ChatController implements Controller, KeyInputHandler {
     @Override
     public final void onStartScreen() {
         logger.fine("starting chat screen");
-//        textControl = this.element.findElementByName(CHAT_TEXT_INPUT).getControl(TextFieldControl.class);
-//        element.findElementByName(CHAT_TEXT_INPUT).addInputHandler(this);
+        textControl = this.element.findNiftyControl(CHAT_TEXT_INPUT, TextField.class);
+        //TODO: figure how to set this the right way.
+        //element.findElementByName(CHAT_TEXT_INPUT).addInputHandler(this);
     }
 
     /**
-     * This method is called when text is received which should be displayed in
-     * the chat control.
-     * 
-     * @param text
-     *            The text to display.
-     * @param icon
-     *            Optionally, an icon can be supplied which is then displayed at
-     *            the start of the chat line.
+     * {@inheritDoc 
      */
-    public final void receivedText(final String text, final NiftyImage icon) {
-
-        final ListBoxControl<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
-        logger.fine("adding message " + (chatBox.itemCount() + 1));
+    @Override
+    public final void receivedChatLine(final String text, final NiftyImage icon) {
+        final ListBox<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
+        logger.log(Level.FINE, "adding message {0}", (chatBox.itemCount() + 1));
         final ChatEntryModelClass item = new ChatEntryModelClass(text, icon);
         chatBox.addItem(item);
         chatBox.showItem(item);
     }
 
     /**
-     * This method is called when a new player enters the room. This adds that
-     * player to the list of players already in the room. If more then one
-     * player needs to be added, this method will have to be called multiple
-     * times.
-     * 
-     * @param playerName
-     *            The player to add.
-     * @param playerIcon
-     *            Optionally, an icon can be supplied which is then displayed in
-     *            front of the player name.
+     * {@inheritDoc 
      */
+    @Override
     public final void addPlayer(final String playerName, final NiftyImage playerIcon) {
-        final ListBoxControl<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
-        logger.fine("adding player " + (playerList.itemCount() + 1));
+        final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
+        logger.log(Level.FINE, "adding player {0}", (playerList.itemCount() + 1));
         final ChatEntryModelClass item = new ChatEntryModelClass(playerName, playerIcon);
         playerList.addItem(item);
         playerList.sortAllItems(playerComparator);
@@ -132,15 +104,12 @@ public class ChatController implements Controller, KeyInputHandler {
     }
 
     /**
-     * This method is called when a player leaves the rome and needs to be
-     * removed from the list.
-     * 
-     * @param playerName
-     *            The player name to remove.
+     * {@inheritDoc 
      */
+    @Override
     public final void removePlayer(final String playerName) {
-        final ListBoxControl<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
-        logger.fine("removing player " + playerName);
+        final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
+        logger.log(Level.FINE, "removing player {0}", playerName);
         final ChatEntryModelClass item = new ChatEntryModelClass(playerName, null);
         playerList.removeItem(item);
     }
@@ -159,7 +128,7 @@ public class ChatController implements Controller, KeyInputHandler {
      * {@inheritDoc}
      */
     @Override
-    public final boolean keyEvent(final NiftyInputEvent inputEvent) {
+    public boolean inputEvent(final NiftyInputEvent inputEvent) {
         if (inputEvent == NiftyInputEvent.SubmitText) {
             sendText();
             return true;
@@ -168,10 +137,10 @@ public class ChatController implements Controller, KeyInputHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private ListBoxControl<ChatEntryModelClass> getListBox(final String name) {
+    private ListBox<ChatEntryModelClass> getListBox(final String name) {
         final ListBox<ChatEntryModelClass> listBox = (ListBox<ChatEntryModelClass>) screen.findNiftyControl(name,
                 ListBox.class);
-        return (ListBoxControl<ChatEntryModelClass>) listBox;
+        return listBox;
     }
 
     /**
@@ -198,13 +167,9 @@ public class ChatController implements Controller, KeyInputHandler {
     }
 
     /**
-     * Sets the SendTextEventListener. This listener is used for a callback when
-     * the player wants to send a chat message.
-     * 
-     * @param sendTextEventListener
-     *            The SendTextEventListener which is used for a callback when
-     *            the player wants to send a message.
+     * {@inheritDoc }
      */
+    @Override
     public final void setSendTextEventListener(final SendTextEventListener sendTextEventListener) {
         listener = sendTextEventListener;
     }

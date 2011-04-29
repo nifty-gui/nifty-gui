@@ -52,7 +52,7 @@ public final class ChatEntryModelClass {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (obj == null) {
+        if (obj == null || !(obj instanceof ChatEntryModelClass)) {
             return false;
         }
         return this.getLabel().equalsIgnoreCase(((ChatEntryModelClass) obj).getLabel());
