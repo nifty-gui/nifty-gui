@@ -43,19 +43,18 @@
       </panel>
       <panel id="menu" height="20%" align="center" valign="center" childLayout="center">
         <panel id="mainMenu" style="menu">
-        	<control name="textfield" />
-          <label id="newGame" text="New Game" style="menu-item" hintText="Start a New Game">
+          <control name="label" id="newGame" text="New Game" style="menu-item" hintText="Start a New Game">
             <interact onClick="newGame()"/>
-          </label>
-          <label id="hostGame" text="Host Game" style="menu-item" hintText="Host a New Game">
+          </control>
+          <control name="label" id="hostGame" text="Host Game" style="menu-item" hintText="Host a New Game">
             <interact onClick="hostGame()"/>
-          </label>
-          <label id="joinGame" text="Join Game" style="menu-item" hintText="Join a Network Game">
+          </control>
+          <control name="label" id="joinGame" text="Join Game" style="menu-item" hintText="Join a Network Game">
             <interact onClick="joinGame()"/>
-          </label>
-          <label id="exit" text="Exit" style="menu-item" hintText="Exit the Game">
+          </control>
+          <control name="label" id="exit" text="Exit" style="menu-item" hintText="Exit the Game">
             <interact onClick="exit()"/>
-          </label>
+          </control>
         </panel>
       </panel>
       <panel id="bottom" height="40%">

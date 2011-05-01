@@ -140,11 +140,6 @@ public class TestStateTwo extends NiftyOverlayGameState {
 	    currentColor = Color.white;
 	}
 
-	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-			throws SlickException {
-	}
-
 	/**
 	 * Override the render method with your own Slick render logic, but make sure
 	 * to call it's superclass to render the Nifty overlay.
