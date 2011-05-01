@@ -42,7 +42,16 @@
       <version>1.0</version>
     </dependency>
   </dependencies>
+
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0-beta-7</version>
+      </extension>
+    </extensions>
+
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -100,12 +109,14 @@
         </configuration>
       </plugin>
     </plugins>
+
     <resources>
       <resource>
         <directory>src/main/resources</directory>
       </resource>
     </resources>
   </build>
+
   <distributionManagement>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
@@ -116,6 +127,7 @@
       <url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-default-controls-examples</url>
     </site>
   </distributionManagement>
+
   <repositories>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
