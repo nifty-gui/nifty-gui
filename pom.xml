@@ -96,7 +96,7 @@
   <distributionManagement>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
-      <url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
+      <url>sftp://web.sourceforge.net/home/project-web/nifty-gui/htdocs/nifty-maven-repo</url>
     </repository>
   </distributionManagement>
 </project>
