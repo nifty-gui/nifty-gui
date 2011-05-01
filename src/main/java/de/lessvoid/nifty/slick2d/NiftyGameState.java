@@ -195,6 +195,7 @@ public class NiftyGameState extends BasicGameState {
    * @throws SlickException exception
    */
   public void update(final GameContainer container, final StateBasedGame game, final int d) throws SlickException {
+    nifty.update();
   }
 
   /**
