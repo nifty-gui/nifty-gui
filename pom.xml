@@ -8,6 +8,7 @@
     <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-slick-renderer/trunk</developerConnection>
     <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-slick-renderer</url>
   </scm>
+
   <repositories>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
@@ -18,7 +19,16 @@
       <url>http://slick.cokeandcode.com/mavenrepo</url>
     </repository>
   </repositories>
+
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0-beta-7</version>
+      </extension>
+    </extensions>
+
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -42,6 +52,7 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>lessvoid</groupId>
@@ -54,18 +65,15 @@
       <version>270</version>
     </dependency>
   </dependencies>
+
   <distributionManagement>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
-      <url>
-        scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo
-      </url>
+      <url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-maven-repo</url>
     </repository>
     <site>
       <id>nifty.sourceforge.net</id>
-      <url>
-        scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-slick-renderer
-      </url>
+      <url>scp://web.sourceforge.net/home/groups/n/ni/nifty-gui/htdocs/nifty-slick-renderer</url>
     </site>
   </distributionManagement>
 </project>
