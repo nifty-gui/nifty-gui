@@ -14,6 +14,7 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -23,7 +24,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author Mark
  * @version 0.1
  */
-public class ChatControl extends AbstractController implements Chat {
+public class ChatControl extends AbstractController implements Chat, KeyInputHandler {
 
     private static final String CHAT_BOX = "#chatBox-panel";
     private static final String PLAYER_LIST = "#playerList";
@@ -76,8 +77,7 @@ public class ChatControl extends AbstractController implements Chat {
     public final void onStartScreen() {
         LOGGER.fine("starting chat screen");
         textControl = this.element.findNiftyControl(CHAT_TEXT_INPUT, TextField.class);
-        //TODO: figure how to set this the right way.
-        //element.findElementByName(CHAT_TEXT_INPUT).addInputHandler(this);
+        textControl.getElement().addInputHandler(this);
     }
 
     /**
@@ -122,20 +122,9 @@ public class ChatControl extends AbstractController implements Chat {
      */
     public final void sendText() {
         final String text = textControl.getText();
-        nifty.publishEvent(getId(), new ChatTextSendEvent(text));
+        LOGGER.log(Level.INFO, "sending text {0}", text);
+        nifty.publishEvent(element.getId(), new ChatTextSendEvent(text));
         textControl.setText("");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean inputEvent(final NiftyInputEvent inputEvent) {
-        if (inputEvent == NiftyInputEvent.SubmitText) {
-            sendText();
-            return true;
-        }
-        return false;
     }
 
     @SuppressWarnings("unchecked")
@@ -143,6 +132,22 @@ public class ChatControl extends AbstractController implements Chat {
         final ListBox<ChatEntryModelClass> listBox = (ListBox<ChatEntryModelClass>) screen.findNiftyControl(name,
                 ListBox.class);
         return listBox;
+    }
+
+    @Override
+    public boolean keyEvent(NiftyInputEvent inputEvent) {
+        LOGGER.log(Level.INFO, "event received: {0}", inputEvent);
+        
+        if (inputEvent == NiftyInputEvent.SubmitText) {
+            sendText();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean inputEvent(NiftyInputEvent inputEvent) {
+        return keyEvent(inputEvent);
     }
 
     /**

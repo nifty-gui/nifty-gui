@@ -12,8 +12,7 @@
         </panel>
         <panel id="#chat-text-line" backgroundColor="#f0ff" childLayout="horizontal" align="left" width="100%" height="25px">
           <control id="#chat-text-input" name="textfield" width="85%" height="25px" />
-          <control id="#chat-text-button" name="button" label="send" width="15%" height="25px">
-            <interact onClick="sendText()" />
+          <control id="#chat-text-button" name="button" label="$sendlabel" width="15%" height="25px">            <interact onClick="sendText()" />
           </control>
         </panel>
       </panel>
