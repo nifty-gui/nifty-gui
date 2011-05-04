@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.tools;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -83,6 +84,18 @@ public class Color {
       this.blue = newBlue;
       this.alpha = newAlpha;
       this.colorString = fromRGBA(red, green, blue, alpha);
+  }
+
+  /**
+   * Create a color from an encoded int value alpha + R + G + B.
+   * @param color color value
+   */
+  public Color(final int color) {
+    this.alpha = (color >> 24) & 0xFF;
+    this.red = (color >> 16) & 0xFF;
+    this.green = (color >> 8) & 0xFF;
+    this.blue = (color >> 0) & 0xFF;
+    this.colorString = fromRGBA(red, green, blue, alpha);
   }
 
   /**
@@ -258,8 +271,9 @@ public class Color {
    * Set color alpha.
    * @param newColorAlpha new color alpha
    */
-  public void setAlpha(final float newColorAlpha) {
+  public Color setAlpha(final float newColorAlpha) {
     alpha = newColorAlpha;
+    return this;
   }
 
   /**
@@ -337,5 +351,10 @@ public class Color {
     } else {
       red = green = blue = 1.0f;
     }
+  }
+
+  public static Color randomColor() {
+    Random random = new Random();
+    return new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1.f);
   }
 }

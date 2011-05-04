@@ -98,6 +98,7 @@ public class Nifty {
   private NiftyMouseImpl niftyMouse;
   private NiftyInputConsumer niftyInputConsumer = new NiftyInputConsumerImpl();
   private Map < Screen, List < ClassSaveEventTopicSubscriber >> screenBasedSubscribers = new Hashtable < Screen, List < ClassSaveEventTopicSubscriber >>();
+  private boolean debugOptionPanelColors;
 
   /**
    * Create nifty with optional console parameter.
@@ -1324,4 +1325,16 @@ public class Nifty {
     return renderEngine.createImage(name, filterLinear);
   }
 
+  /**
+   * You can set this option to true to let Nifty automatically render all panels in random
+   * background colors for debugging purposes.
+   * @param option enable (true) or disable (false) this feature
+   */
+  public void setDebugOptionPanelColors(final boolean option) {
+    this.debugOptionPanelColors = option;
+  }
+
+  public boolean isDebugOptionPanelColors() {
+    return debugOptionPanelColors;
+  }
 }
