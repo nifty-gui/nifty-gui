@@ -175,7 +175,7 @@ public class EffectManager {
   public final boolean isActive(final EffectEventId effectEventId) {
     return effectProcessor.get(effectEventId).isActive();
   }
-
+/*
   public void reset() {
 	// onHover should stay active and is not reset
 	// onActive should stay active and is not reset
@@ -188,7 +188,7 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onHide).reset();
   //  effectProcessor.get(EffectEventId.onCustom).reset();
   }
-
+*/
   public void resetAll() {
       effectProcessor.get(EffectEventId.onStartScreen).reset();
       effectProcessor.get(EffectEventId.onEndScreen).reset();
@@ -209,6 +209,38 @@ public class EffectManager {
       effectProcessor.get(EffectEventId.onGetFocus).reset();
       effectProcessor.get(EffectEventId.onClick).reset();
     }
+
+  public void resetForHide() {
+    effectProcessor.get(EffectEventId.onStartScreen).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onEndScreen).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onShow).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onHide).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onCustom).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onHover).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onStartHover).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onEndHover).saveActiveNeverStopRenderingEffects();
+// not sure about this one yet :)
+//    effectProcessor.get(EffectEventId.onActive).pushNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onFocus).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onLostFocus).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onGetFocus).saveActiveNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onClick).saveActiveNeverStopRenderingEffects();
+  }
+
+  public void restoreForShow() {
+    effectProcessor.get(EffectEventId.onStartScreen).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onEndScreen).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onShow).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onHide).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onCustom).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onHover).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onStartHover).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onEndHover).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onFocus).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onLostFocus).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onGetFocus).restoreNeverStopRenderingEffects();
+    effectProcessor.get(EffectEventId.onClick).restoreNeverStopRenderingEffects();
+  }
 
   public void resetSingleEffect(final EffectEventId effectEventId) {
     effectProcessor.get(effectEventId).reset();

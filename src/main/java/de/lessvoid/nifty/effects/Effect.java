@@ -29,6 +29,7 @@ public class Effect {
   private boolean overlay;
   private String alternateEnable;
   private String alternateDisable;
+  private String alternate;
   private String customKey;
   private boolean inherit;
   private Nifty nifty;
@@ -56,6 +57,7 @@ public class Effect {
     active = false;
     alternateEnable = alternateEnableParam;
     alternateDisable = alternateDisableParam;
+    alternate = null;
     customKey = customKeyParam;
     effectEventId = effectEventIdParam;
     hoverEffect = false;
@@ -90,6 +92,7 @@ public class Effect {
   }
 
   public boolean start(final String alternate, final String customKey) {
+    this.alternate = alternate;
     if (!canStartEffect(alternate, customKey)) {
       return false;
     }
@@ -199,6 +202,14 @@ public class Effect {
 
   public EffectProperties getParameters() {
     return parameter;
+  }
+
+  public String getAlternate() {
+    return alternate;
+  }
+
+  public String getCustomKey() {
+    return customKey;
   }
 
   private boolean canStartEffect(final String alternate, final String customKey) {

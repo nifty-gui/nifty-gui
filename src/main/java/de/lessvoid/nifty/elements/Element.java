@@ -756,7 +756,7 @@ public class Element implements NiftyEvent<Void> {
    * reset all effects.
    */
   public void resetEffects() {
-    effectManager.reset();
+    effectManager.resetAll();
     for (int i=0; i<elements.size(); i++) {
       Element w = elements.get(i);
       w.resetEffects();
@@ -768,6 +768,14 @@ public class Element implements NiftyEvent<Void> {
     for (int i=0; i<elements.size(); i++) {
       Element w = elements.get(i);
       w.resetAllEffects();
+    }
+  }
+
+  public void resetForHide() {
+    effectManager.resetForHide();
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
+      w.resetForHide();
     }
   }
 
@@ -1162,10 +1170,13 @@ public class Element implements NiftyEvent<Void> {
 
   private void internalShow() {
     visible = true;
+    effectManager.restoreForShow();
+
     for (int i=0; i<elements.size(); i++) {
       Element element = elements.get(i);
       element.internalShow();
     }
+
     nifty.publishEvent(getId(), new ElementShowEvent());
   }
 
@@ -1199,7 +1210,7 @@ public class Element implements NiftyEvent<Void> {
     // start effect and shizzle
     startEffect(EffectEventId.onHide, new EndNotify() {
       public void perform() {
-        resetAllEffects();
+        resetForHide();
         internalHide();
       }
     });

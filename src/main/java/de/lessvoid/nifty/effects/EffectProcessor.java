@@ -19,6 +19,7 @@ public class EffectProcessor {
   private List<Effect> allEffects = new ArrayList<Effect>();
   private ActiveEffects activeEffects = new ActiveEffects();
   private List<Effect> activeEffectsToRemove = new ArrayList<Effect>();
+  private List<Effect> pushedEffects = new ArrayList<Effect>();
 
   private boolean active = false;
   private EndNotify listener;
@@ -86,6 +87,26 @@ public class EffectProcessor {
 
   public boolean isActive() {
     return active;
+  }
+
+  public void saveActiveNeverStopRenderingEffects() {
+    pushedEffects.clear();
+
+    for (int i=0; i<activeEffects.getActive().size(); i++) {
+      Effect e = activeEffects.getActive().get(i);
+      if (e.isNeverStopRendering()) {
+        pushedEffects.add(e);
+      }
+    }
+
+    reset();
+  }
+
+  public void restoreNeverStopRenderingEffects() {
+    for (int i=0; i<pushedEffects.size(); i++) {
+      Effect e = pushedEffects.get(i);
+      activate(listener, e.getAlternate(), e.getCustomKey());
+    }
   }
 
   public void reset() {
