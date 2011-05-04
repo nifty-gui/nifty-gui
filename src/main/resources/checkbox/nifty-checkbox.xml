@@ -3,9 +3,9 @@
   <style id="nifty-checkbox-style#panel">
     <attributes width="23px" height="23px" childLayout="center" backgroundColor="#666f" />
     <effect>
-	  <onActive name="border" color="#222f" post="true" inset="1px" />
-	  <onFocus name="colorBar" color="#800f" post="true" inset="1px" />
-	  <onHover name="border" color="#822f" post="true" />
+      <onActive name="border" color="#222f" post="true" inset="1px" />
+      <onFocus name="colorBar" color="#800f" post="true" inset="1px" />
+      <onHover name="border" color="#822f" post="true" />
       <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
       <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
