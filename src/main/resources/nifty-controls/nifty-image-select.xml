@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="imageSelect" controller="de.lessvoid.nifty.controls.imageSelect.ImageSelectControl">
-    <panel align="center" valign="center" childLayout="horizontal" imageList="$imageList">
-      <panel width="32px" align="center" valign="center" childLayout="center">
-        <image id="back" filename="imageSelect/imageSelectArrowLeft.png" align="center" valign="center">
-          <interact onClick="backClick()"/>
-          <effect>
-            <onHover name="imageOverlay" filename="imageSelect/imageSelectArrowLeftHover.png" />
-          </effect>
-        </image>
+  <controlDefinition name="imageSelect" style="nifty-image-select" controller="de.lessvoid.nifty.controls.imageSelect.ImageSelectControl" inputMapping="de.lessvoid.nifty.controls.imageSelect.ImageSelectInputMapping">
+    <panel imageList="$imageList" height="$image-height">
+
+      <!-- back button -->
+      <panel id="#back-button" style="#back-button">
+        <image id="#back" style="#back-button-image" />
       </panel>
-      <panel align="center" valign="center" childLayout="center">
-        <image id="image" align="center" valign="center" />
+
+      <!-- the actual image -->
+      <panel style="#image-panel" width="$image-width" height="$image-height">
+        <image id="#image" style="#image" />
+        <image id="#image-2" style="#image-2" />
       </panel>
-      <panel width="32px" align="right" valign="center" childLayout="center">
-        <image id="forward" filename="imageSelect/imageSelectArrowRight.png" align="center" valign="center">
-          <interact onClick="forwardClick()"/>
-          <effect>
-            <onHover name="imageOverlay" filename="imageSelect/imageSelectArrowRightHover.png" />
-          </effect>
-        </image>
+
+      <!-- forward button -->
+      <panel id="#forward-button" style="#forward-button">
+        <image id="#forward" style="#forward-button-image" />
       </panel>
+
     </panel>
   </controlDefinition>
 </nifty-controls>
