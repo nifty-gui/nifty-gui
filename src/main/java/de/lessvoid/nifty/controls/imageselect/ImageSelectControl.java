@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.imageSelect;
+package de.lessvoid.nifty.controls.imageselect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.Properties;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.ImageSelectSelectionChangedEvent;
 import de.lessvoid.nifty.controls.NextPrevHelper;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
@@ -29,7 +30,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @deprecated Please use {@link de.lessvoid.nifty.controls.ImageSelect} when accessing NiftyControls.
  */
 @Deprecated
-public class ImageSelectControl extends AbstractController {
+public class ImageSelectControl extends AbstractController implements de.lessvoid.nifty.controls.ImageSelect {
     private Nifty nifty;
     private Element element;
     private ArrayList<NiftyImage> images;
@@ -55,8 +56,8 @@ public class ImageSelectControl extends AbstractController {
         element = newElement;
         images = createImages(nifty.getRenderEngine(), properties.getProperty("imageList"));
         currentImageIndex = 0;
-        imageWidth = new SizeValue(properties.getProperty("image-width", "0px")).getValueAsInt(1.0f);
-        imageHeight = new SizeValue(properties.getProperty("image-height", "0px")).getValueAsInt(1.0f);
+        imageWidth = new SizeValue(properties.getProperty("imageWidth", "0px")).getValueAsInt(1.0f);
+        imageHeight = new SizeValue(properties.getProperty("imageHeight", "0px")).getValueAsInt(1.0f);
         nextPrevHelper = new NextPrevHelper(element, screenParam.getFocusHandler());
         backButtonElement = element.findElementByName("#back-button");
         forwardButtonElement = element.findElementByName("#forward-button");
@@ -92,6 +93,155 @@ public class ImageSelectControl extends AbstractController {
     @Override
     public void onStartScreen() {
     }
+
+    /**
+     * input event.
+     * 
+     * @param inputEvent the NiftyInputEvent to process
+     */
+    public boolean inputEvent(final NiftyInputEvent inputEvent) {
+      if (NiftyInputEvent.MoveCursorLeft == inputEvent) {
+        backClick();
+      } else if (NiftyInputEvent.MoveCursorRight == inputEvent) {
+        forwardClick();
+      } else if (nextPrevHelper.handleNextPrev(inputEvent)) {
+        return true;
+      } else if (inputEvent == NiftyInputEvent.Activate) {
+        element.onClick();
+        return true;
+      }
+      return false;
+    }
+
+    @Override
+    public void onFocus(final boolean getFocus) {
+      if (getFocus) {
+        backButtonElement.startEffect(EffectEventId.onCustom);
+        forwardButtonElement.startEffect(EffectEventId.onCustom);
+      } else {
+        backButtonElement.stopEffect(EffectEventId.onCustom);
+        forwardButtonElement.stopEffect(EffectEventId.onCustom);
+      }
+
+      super.onFocus(getFocus);
+    }
+
+    // ImageSelect implementation
+
+    /**
+     * back click.
+     */
+    @Override
+    public void backClick() {
+      if (block) {
+        return;
+      }
+
+      if (currentImageIndex > 0) {
+        block = true;
+
+        imageElement2.getRenderer(ImageRenderer.class).setImage(imageElement.getRenderer(ImageRenderer.class).getImage());
+        imageElement2.setConstraintWidth(new SizeValue(imageElement.getWidth() + "px"));
+        imageElement2.setConstraintHeight(new SizeValue(imageElement.getHeight() + "px"));
+        imageElement2.layoutElements();
+        imageElement2.show();
+
+        imageElement.hide();
+        currentImageIndex--;
+        imageIndexChanged();
+        updateVisuals();
+        imageElement.stopEffect(EffectEventId.onCustom);
+        imageElement.startEffect(EffectEventId.onCustom, new EndNotify() {
+          @Override
+          public void perform() {
+            block = false;
+          }
+        }, "back");
+        imageElement.show();
+
+        imageElement2.stopEffect(EffectEventId.onCustom);
+        imageElement2.startEffect(EffectEventId.onCustom, new EndNotify() {
+          @Override
+          public void perform() {
+            imageElement2.hide();
+          }
+        }, "back");
+      }
+    }
+
+    /**
+     * forward click.
+     */
+    @Override
+    public void forwardClick() {
+      if (block) {
+        return;
+      }
+      if (currentImageIndex < images.size() - 1) {
+        block = true;
+
+        imageElement2.getRenderer(ImageRenderer.class).setImage(imageElement.getRenderer(ImageRenderer.class).getImage());
+        imageElement2.setConstraintWidth(new SizeValue(imageElement.getWidth() + "px"));
+        imageElement2.setConstraintHeight(new SizeValue(imageElement.getHeight() + "px"));
+        imageElement2.layoutElements();
+        imageElement2.show();
+
+        imageElement.hide();
+        currentImageIndex++;
+        imageIndexChanged();
+        updateVisuals();
+        imageElement.stopEffect(EffectEventId.onCustom);
+        imageElement.startEffect(EffectEventId.onCustom, new EndNotify() {
+          @Override
+          public void perform() {
+            block = false;
+          }
+        }, "forward");
+        imageElement.show();
+
+        imageElement2.stopEffect(EffectEventId.onCustom);
+        imageElement2.startEffect(EffectEventId.onCustom, new EndNotify() {
+          @Override
+          public void perform() {
+            imageElement2.hide();
+          }
+        }, "forward");
+      }
+    }
+
+    /**
+     * Add Image.
+     * @param image image
+     */
+    @Override
+    public void addImage(final NiftyImage image) {
+        images.add(image);
+        updateVisuals();
+    }
+
+    /**
+     * Get the selected image index.
+     * @return selected image index
+     */
+    @Override
+    public int getSelectedImageIndex() {
+      return currentImageIndex;
+    }
+
+    /**
+     * Set the selected image index.
+     * @param imageIndex the new image index
+     */
+    @Override
+    public void setSelectedImageIndex(final int imageIndex) {
+      if (imageIndex < 0 || imageIndex > images.size()) {
+        return;
+      }
+      currentImageIndex = imageIndex;
+      imageIndexChanged();
+    }
+
+    // privat stuff
 
     /**
      * update visuals.
@@ -142,140 +292,7 @@ public class ImageSelectControl extends AbstractController {
         return imageList;
     }
 
-    /**
-     * input event.
-     * 
-     * @param inputEvent the NiftyInputEvent to process
-     */
-    public boolean inputEvent(final NiftyInputEvent inputEvent) {
-      if (NiftyInputEvent.MoveCursorLeft == inputEvent) {
-        backClick();
-      } else if (NiftyInputEvent.MoveCursorRight == inputEvent) {
-        forwardClick();
-      } else if (nextPrevHelper.handleNextPrev(inputEvent)) {
-        return true;
-      } else if (inputEvent == NiftyInputEvent.Activate) {
-        element.onClick();
-        return true;
-      }
-      return false;
-    }
-
-    @Override
-    public void onFocus(final boolean getFocus) {
-      if (getFocus) {
-        backButtonElement.startEffect(EffectEventId.onCustom);
-        forwardButtonElement.startEffect(EffectEventId.onCustom);
-      } else {
-        backButtonElement.stopEffect(EffectEventId.onCustom);
-        forwardButtonElement.stopEffect(EffectEventId.onCustom);
-      }
-
-      super.onFocus(getFocus);
-    }
-
-    /**
-     * back click.
-     */
-    public void backClick() {
-      if (block) {
-        return;
-      }
-
-        if (currentImageIndex > 0) {
-          block = true;
-
-          imageElement2.getRenderer(ImageRenderer.class).setImage(imageElement.getRenderer(ImageRenderer.class).getImage());
-          imageElement2.setConstraintWidth(new SizeValue(imageElement.getWidth() + "px"));
-          imageElement2.setConstraintHeight(new SizeValue(imageElement.getHeight() + "px"));
-          imageElement2.layoutElements();
-          imageElement2.show();
-
-          imageElement.hide();
-          currentImageIndex--;
-          updateVisuals();
-          imageElement.stopEffect(EffectEventId.onCustom);
-          imageElement.startEffect(EffectEventId.onCustom, new EndNotify() {
-            @Override
-            public void perform() {
-              block = false;
-            }
-          }, "back");
-          imageElement.show();
-
-          imageElement2.stopEffect(EffectEventId.onCustom);
-          imageElement2.startEffect(EffectEventId.onCustom, new EndNotify() {
-            @Override
-            public void perform() {
-              imageElement2.hide();
-            }
-          }, "back");
-        }
-    }
-
-    /**
-     * forward click.
-     */
-    public void forwardClick() {
-      if (block) {
-        return;
-      }
-        if (currentImageIndex < images.size() - 1) {
-          block = true;
-
-          imageElement2.getRenderer(ImageRenderer.class).setImage(imageElement.getRenderer(ImageRenderer.class).getImage());
-          imageElement2.setConstraintWidth(new SizeValue(imageElement.getWidth() + "px"));
-          imageElement2.setConstraintHeight(new SizeValue(imageElement.getHeight() + "px"));
-          imageElement2.layoutElements();
-          imageElement2.show();
-
-          imageElement.hide();
-          currentImageIndex++;
-          updateVisuals();
-          imageElement.stopEffect(EffectEventId.onCustom);
-          imageElement.startEffect(EffectEventId.onCustom, new EndNotify() {
-            @Override
-            public void perform() {
-              block = false;
-            }
-          }, "forward");
-          imageElement.show();
-
-          imageElement2.stopEffect(EffectEventId.onCustom);
-          imageElement2.startEffect(EffectEventId.onCustom, new EndNotify() {
-            @Override
-            public void perform() {
-              imageElement2.hide();
-            }
-          }, "forward");
-        }
-    }
-
-    /**
-     * Add Image.
-     * @param image image
-     */
-    public void addImage(final NiftyImage image) {
-        images.add(image);
-        updateVisuals();
-    }
-
-    /**
-     * Get the selected image index.
-     * @return selected image index
-     */
-    public int getSelectedImageIndex() {
-      return currentImageIndex;
-    }
-
-    /**
-     * Set the selected image index.
-     * @param imageIndex the new image index
-     */
-    public void setSelectedImageIndex(final int imageIndex) {
-      if (imageIndex < 0 || imageIndex > images.size()) {
-        return;
-      }
-      currentImageIndex = imageIndex;
+    private void imageIndexChanged() {
+      nifty.publishEvent(element.getId(), new ImageSelectSelectionChangedEvent(currentImageIndex));
     }
 }

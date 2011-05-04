@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.imageSelect;
+package de.lessvoid.nifty.controls.imageselect;
 
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;

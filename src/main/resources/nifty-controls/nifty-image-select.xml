@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-  <controlDefinition name="imageSelect" style="nifty-image-select" controller="de.lessvoid.nifty.controls.imageSelect.ImageSelectControl" inputMapping="de.lessvoid.nifty.controls.imageSelect.ImageSelectInputMapping">
-    <panel imageList="$imageList" height="$image-height">
+  <controlDefinition name="imageSelect" style="nifty-image-select" controller="de.lessvoid.nifty.controls.imageselect.ImageSelectControl" inputMapping="de.lessvoid.nifty.controls.imageselect.ImageSelectInputMapping">
+    <panel imageList="$imageList" height="$imageHeight">
 
       <!-- back button -->
       <panel id="#back-button" style="#back-button">
@@ -9,7 +9,7 @@
       </panel>
 
       <!-- the actual image -->
-      <panel style="#image-panel" width="$image-width" height="$image-height">
+      <panel style="#image-panel" width="$imageWidth" height="$imageHeight">
         <image id="#image" style="#image" />
         <image id="#image-2" style="#image-2" />
       </panel>
