@@ -82,6 +82,7 @@ public class DragAndDropDialogController implements Controller {
     screen.findNiftyControl("dragAndDropDescription", Label.class).setText("Well Done!");
     dragAndDropDescription.setText("Drop the Key on the Chest to open it.");
     chestOpenElement.show();
+    chestOpenElement.stopEffect(EffectEventId.onCustom);
     new DraggableBuilder("key") {{
       childLayoutCenter();
       image(new ImageBuilder() {{
