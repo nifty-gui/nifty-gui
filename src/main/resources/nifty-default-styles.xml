@@ -6,6 +6,7 @@
   <useStyles filename="label/nifty-label.xml" />
   <useStyles filename="textfield/nifty-textfield.xml" />
   <useStyles filename="dropdown/nifty-drop-down.xml" />
+  <useStyles filename="imageselect/nifty-image-select.xml" />
   <useStyles filename="checkbox/nifty-checkbox.xml" />
   <useStyles filename="scrollbar/nifty-scrollbar-style.xml" />
   <useStyles filename="slider/nifty-slider-style.xml" />
