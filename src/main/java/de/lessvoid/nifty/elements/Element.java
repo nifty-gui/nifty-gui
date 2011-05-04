@@ -756,7 +756,7 @@ public class Element implements NiftyEvent<Void> {
    * reset all effects.
    */
   public void resetEffects() {
-    effectManager.resetAll();
+    effectManager.reset();
     for (int i=0; i<elements.size(); i++) {
       Element w = elements.get(i);
       w.resetEffects();

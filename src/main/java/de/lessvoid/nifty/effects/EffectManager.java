@@ -175,7 +175,7 @@ public class EffectManager {
   public final boolean isActive(final EffectEventId effectEventId) {
     return effectProcessor.get(effectEventId).isActive();
   }
-/*
+
   public void reset() {
 	// onHover should stay active and is not reset
 	// onActive should stay active and is not reset
@@ -188,7 +188,7 @@ public class EffectManager {
     effectProcessor.get(EffectEventId.onHide).reset();
   //  effectProcessor.get(EffectEventId.onCustom).reset();
   }
-*/
+
   public void resetAll() {
       effectProcessor.get(EffectEventId.onStartScreen).reset();
       effectProcessor.get(EffectEventId.onEndScreen).reset();
