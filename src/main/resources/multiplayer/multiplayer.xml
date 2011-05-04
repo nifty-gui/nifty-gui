@@ -66,7 +66,7 @@
             </control>
           </panel>
           <panel width="12px" valign="top" />
-          <control name="imageSelect" width="126px" image-width="80px" image-height="80px" imageList="multiplayer/avatar1.png,multiplayer/avatar2.png,multiplayer/avatar3.png,multiplayer/avatar4.png" />
+          <control id="#imageSelect" name="imageSelect" width="126px" imageWidth="80px" imageHeight="80px" imageList="multiplayer/avatar1.png,multiplayer/avatar2.png,multiplayer/avatar3.png,multiplayer/avatar4.png" />
         </panel>
       </panel>
     </panel>

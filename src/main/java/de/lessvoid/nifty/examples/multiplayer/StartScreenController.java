@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.examples.multiplayer;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.ImageSelectSelectionChangedEvent;
 import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -33,5 +35,10 @@ public class StartScreenController implements ScreenController {
   public void addPanel() {
     CustomControlCreator createMultiplayerPanel = new CustomControlCreator(String.valueOf(id++), "multiplayerPanel");
     createMultiplayerPanel.create(nifty, screen, screen.findElementByName("box-parent"));
+  }
+
+  @NiftyEventSubscriber(pattern=".*#imageSelect")
+  public void onImageSelectSelectionChanged(final String id, final ImageSelectSelectionChangedEvent event) {
+    System.out.println("ImageSelect [" + id + "] changed selection to [" + event.getSelectedIndex() + "]");
   }
 }
