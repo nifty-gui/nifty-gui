@@ -66,8 +66,8 @@ public class Move implements EffectImpl {
       fromOffset = true;
       startOffsetX = Integer.valueOf(parameter.getProperty("offsetX", "0"));
       startOffsetY = Integer.valueOf(parameter.getProperty("offsetY", "0"));
-      offsetX = Math.abs(startOffsetX);
-      offsetY = Math.abs(startOffsetY);
+      offsetX = startOffsetX * -1;
+      offsetY = startOffsetY * -1;
     } else if ("toOffset".equals(mode)) {
       toOffset  = true;
       startOffsetX = 0;
