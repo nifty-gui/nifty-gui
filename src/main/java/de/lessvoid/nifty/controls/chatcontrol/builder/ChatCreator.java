@@ -30,7 +30,7 @@ public class ChatCreator extends ControlAttributes {
   }
 
   public void setSendLabel(final String sendLabel) {
-    set("sendlabel", sendLabel);
+    set("sendLabel", sendLabel);
   }
 
   public void setChatLineIconWidth(final SizeValue value) {

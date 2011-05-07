@@ -22,12 +22,8 @@ public class ChatBuilder extends ControlBuilder {
     set("lines", String.valueOf(lines));
   }
 
-  public void sendlabel(final String sendlabel) {
-    set("sendlabel", sendlabel);
-  }
-
-  public void text(final String text) {
-    set("text", text);
+  public void sendLabel(final String sendLabel) {
+    set("sendLabel", sendLabel);
   }
 
   public void chatLineIconWidth(final SizeValue value) {
