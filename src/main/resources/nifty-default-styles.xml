@@ -12,6 +12,7 @@
   <useStyles filename="slider/nifty-slider-style.xml" />
   <useStyles filename="scrollpanel/nifty-scrollpanel-style.xml" />
   <useStyles filename="console/nifty-console-style.xml" />
+  <useStyles filename="chat-control/nifty-chat-control.xml" />
   <useStyles filename="menu/nifty-menu-style.xml" />
   <useStyles filename="listbox/nifty-listbox-style.xml" />
   <useStyles filename="window/nifty-window.xml" />
