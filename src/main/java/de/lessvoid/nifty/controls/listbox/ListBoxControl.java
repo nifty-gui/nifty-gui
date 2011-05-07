@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.bushe.swing.event.EventTopicSubscriber;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
@@ -532,6 +533,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     }    
     for (int i = 0; i < displayItems; i++) {
       ElementType templateType = labelTemplateElement.getElementType().copy();
+      templateType.getAttributes().set("id", NiftyIdCreator.generate());
       templateType.prepare(nifty, screen, screen.getRootElement().getElementType());
       labelElements[i] = templateType.create(childRootElement, nifty, screen, new LayoutPart());
 
