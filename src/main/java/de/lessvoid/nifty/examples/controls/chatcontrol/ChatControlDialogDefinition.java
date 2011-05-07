@@ -3,6 +3,7 @@ package de.lessvoid.nifty.examples.controls.chatcontrol;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
+import de.lessvoid.nifty.controls.chatcontrol.builder.ChatBuilder;
 import de.lessvoid.nifty.examples.controls.common.DialogPanelControlDefinition;
 
 /**
@@ -18,7 +19,8 @@ public class ChatControlDialogDefinition {
     new ControlDefinitionBuilder(NAME) {{
       controller(new ChatControlDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
-        control(new ControlBuilder("chat-control") {{
+        control(new ChatBuilder("chat", 14) {{
+          sendlabel("Send Message");
         }});
       }});
     }}.registerControlDefintion(nifty);
