@@ -26,12 +26,10 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 public class ChatControl extends AbstractController implements Chat, KeyInputHandler {
 
-    private static final String CHAT_BOX = "#chatBox-panel";
+    private static final String CHAT_BOX = "#chatBox";
     private static final String PLAYER_LIST = "#playerList";
     private static final String CHAT_TEXT_INPUT = "#chat-text-input";
     private static final Logger LOGGER = Logger.getLogger(ChatControl.class.getName());
-    private Screen screen;
-    private Element element;
     private TextField textControl;
     private PlayerComparator playerComparator = new PlayerComparator();
     private Nifty nifty;
@@ -53,13 +51,10 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
      * {@inheritDoc}
      */
     @Override
-    public final void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement,
-            final Properties properties, final Attributes controlDefinitionAttributes) {
-        LOGGER.fine("binding chat control");
-        nifty = niftyParam;
-        screen = screenParam;
-        element = newElement;
-
+    public final void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement, final Properties properties, final Attributes controlDefinitionAttributes) {
+      super.bind(newElement);
+      LOGGER.fine("binding chat control");
+      nifty = niftyParam;
     }
 
     /**
@@ -76,7 +71,7 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     @Override
     public final void onStartScreen() {
         LOGGER.fine("starting chat screen");
-        textControl = this.element.findNiftyControl(CHAT_TEXT_INPUT, TextField.class);
+        textControl = getElement().findNiftyControl(CHAT_TEXT_INPUT, TextField.class);
         textControl.getElement().addInputHandler(this);
     }
 
@@ -89,7 +84,7 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
         LOGGER.log(Level.FINE, "adding message {0}", (chatBox.itemCount() + 1));
         final ChatEntryModelClass item = new ChatEntryModelClass(text, icon);
         chatBox.addItem(item);
-        chatBox.showItem(item);
+        chatBox.showItemByIndex(chatBox.itemCount() - 1);
     }
 
     /**
@@ -123,21 +118,18 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     public final void sendText() {
         final String text = textControl.getText();
         LOGGER.log(Level.INFO, "sending text {0}", text);
-        nifty.publishEvent(element.getId(), new ChatTextSendEvent(text));
+        nifty.publishEvent(getId(), new ChatTextSendEvent(text));
         textControl.setText("");
     }
 
     @SuppressWarnings("unchecked")
     private ListBox<ChatEntryModelClass> getListBox(final String name) {
-        final ListBox<ChatEntryModelClass> listBox = (ListBox<ChatEntryModelClass>) screen.findNiftyControl(name,
-                ListBox.class);
-        return listBox;
+        return (ListBox<ChatEntryModelClass>) getElement().findNiftyControl(name, ListBox.class);
     }
 
     @Override
-    public boolean keyEvent(NiftyInputEvent inputEvent) {
+    public boolean keyEvent(final NiftyInputEvent inputEvent) {
         LOGGER.log(Level.INFO, "event received: {0}", inputEvent);
-        
         if (inputEvent == NiftyInputEvent.SubmitText) {
             sendText();
             return true;
@@ -146,7 +138,7 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     }
 
     @Override
-    public boolean inputEvent(NiftyInputEvent inputEvent) {
+    public boolean inputEvent(final NiftyInputEvent inputEvent) {
         return keyEvent(inputEvent);
     }
 

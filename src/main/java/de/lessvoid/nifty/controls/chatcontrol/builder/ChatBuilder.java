@@ -1,18 +1,44 @@
 package de.lessvoid.nifty.controls.chatcontrol.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
+import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  *
  * @author ractoc
  */
 public class ChatBuilder extends ControlBuilder {
-  public ChatBuilder() {
-    super("chat");
+  public ChatBuilder(final int lines) {
+    super("nifty-chat");
+    lines(lines);
   }
 
-  public ChatBuilder(final String id) {
-    super(id, "chat");
+  public ChatBuilder(final String id, final int lines) {
+    super(id, "nifty-chat");
+    lines(lines);
   }
-    
+
+  public void lines(final int lines) {
+    set("lines", String.valueOf(lines));
+  }
+
+  public void sendlabel(final String sendlabel) {
+    set("sendlabel", sendlabel);
+  }
+
+  public void text(final String text) {
+    set("text", text);
+  }
+
+  public void chatLineIconWidth(final SizeValue value) {
+    set("chatLineIconWidth", value.toString());
+  }
+
+  public void chatLineIconHeight(final SizeValue value) {
+    set("chatLineIconHeight", value.toString());
+  }
+
+  public void chatLineHeight(final SizeValue value) {
+    set("chatLineHeight", value.toString());
+  }
 }

@@ -4,7 +4,6 @@
  */
 package de.lessvoid.nifty.controls;
 
-import de.lessvoid.nifty.controls.chatcontrol.SendTextEventListener;
 import de.lessvoid.nifty.render.NiftyImage;
 
 /**

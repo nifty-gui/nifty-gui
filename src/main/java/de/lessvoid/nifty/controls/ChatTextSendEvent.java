@@ -14,8 +14,8 @@ public class ChatTextSendEvent implements NiftyEvent<Void> {
     
     private String text;
 
-    public ChatTextSendEvent(String textParam) {
-        text = textParam;
+    public ChatTextSendEvent(final String textParam) {
+      text = textParam;
     }
     
     public String getText() {
