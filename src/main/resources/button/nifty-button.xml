@@ -4,7 +4,7 @@
   <!-- style for the button background panel -->
   <!-- +++++++++++++++++++++++++++++++++++++ -->
   <style id="nifty-button#panel">
-    <attributes backgroundImage="button/button.png" imageMode="sprite-resize:100,23,0,2,96,2,2,2,96,2,19,2,96,2,2" width="100px" height="23px" childLayout="center" visibleToMouse="true" />
+    <attributes backgroundImage="button/button.png" imageMode="sprite-resize:100,23,0,2,96,2,2,2,96,2,19,2,96,2,2" paddingLeft="7px" paddingRight="7px" width="100px" height="23px" childLayout="center" visibleToMouse="true" />
     <effect>
       <onHover name="border" color="#822f" post="true" />
       <onFocus name="imageOverlay" filename="button/button.png" imageMode="sprite-resize:100,23,1,2,96,2,2,2,96,2,19,2,96,2,2" post="true" />
