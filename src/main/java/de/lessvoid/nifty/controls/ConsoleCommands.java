@@ -116,6 +116,7 @@ public class ConsoleCommands implements KeyInputHandler {
         commandHistoryLastCommand++;
         changeText(commandHistory.get(commandHistoryLastCommand));
       } else {
+        commandHistoryLastCommand = commandHistory.size();
         changeText("");
       }
       return true;
