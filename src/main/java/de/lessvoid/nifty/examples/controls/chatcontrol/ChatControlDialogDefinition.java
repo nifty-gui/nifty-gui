@@ -20,7 +20,7 @@ public class ChatControlDialogDefinition {
       controller(new ChatControlDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
         control(new ChatBuilder("chat", 14) {{
-          sendlabel("Send Message");
+          sendLabel("Send Message");
         }});
       }});
     }}.registerControlDefintion(nifty);
