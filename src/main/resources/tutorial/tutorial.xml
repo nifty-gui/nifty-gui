@@ -540,22 +540,22 @@
   <controlDefinition name="pageBasicsXMLLayout2">
     <panel style="pagePanel">
       <panel style="middlePanel">
-	      <text style="captionFont" text="Nifty Basics: Writing XML, Layout, cont."/>
+        <text style="captionFont" text="Nifty Basics: Writing XML, Layout, cont."/>
         <text style="textFont" text="And there are two more Layout types.&#10;"/>
-	      <panel align="left" childLayout="horizontal">
-	        <panel width="50%" align="left" childLayout="vertical">
-	          <text style="textFont" text="Center:"/>
-	          <panel style="imageBlock">
-	            <image filename="tutorial/images/layout-center.png" align="left"/>
-	          </panel>
-	        </panel>
-	        <panel width="50%" align="left" childLayout="vertical">
-	          <text style="textFont" text="Absolute:"/>
-	          <panel style="imageBlock">
-	            <image filename="tutorial/images/layout-absolute.png" align="left"/>
-	          </panel>
-	        </panel>
-	      </panel>
+          <panel align="left" childLayout="horizontal">
+            <panel width="50%" align="left" childLayout="vertical">
+              <text style="textFont" text="Center:"/>
+              <panel style="imageBlock">
+                <image filename="tutorial/images/layout-center.png" align="left"/>
+              </panel>
+            </panel>
+            <panel width="50%" align="left" childLayout="vertical">
+              <text style="textFont" text="Absolute:"/>
+              <panel style="imageBlock">
+                <image filename="tutorial/images/layout-absolute.png" align="left"/>
+              </panel>
+            </panel>
+          </panel>
         <text style="textFont" text="&#10;The &quot;center&quot; Layout currently only supports one child element. It takes this first and only child element and centeres it in its area."/>
         <text style="textFont" text="&#10;The &quot;absolute&quot; Layout does not layout elements at all. It allows you to specifiy the position of the child elements with the &quot;x&quot; and &quot;y&quot; attributes as well as the width and height of the element with the &quot;width&quot; and &quot;height&quot; attributes. The absolute layout will just take these values and apply them to the elements."/>
       </panel>
@@ -1073,16 +1073,16 @@
         <text style="textFont" text="Here is a little Example of Basic Drag and Drop:&#10;"/>
         <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
           <control id="draggable" name="draggable" backgroundColor="#f60f" width="120px" height="120px" childLayout="center" align="center" valign="center">
-            <text text="Drag Me!" valign="center" color="#000f" />
+            <text text="Drag Me!" style="base-font" align="center" valign="center" color="#000f" />
           </control>
         </panel>
         <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
           <control id="droppable1" name="droppable" backgroundColor="#c88f" width="140px" height="140px" padding="10px">
-            <text text="Drop Here!" color="#000f" valign="center" />
+            <text text="Drop Here!" style="base-font" align="center" color="#000f" valign="center" />
           </control>
           <panel width="*" />
           <control id="droppable2" name="droppable" backgroundColor="#8c8f" width="140px" height="140px" padding="10px">
-            <text text="Or Drop Here!" color="#000f" valign="center" />
+            <text text="Or Drop Here!" style="base-font" align="center" color="#000f" valign="center" />
           </control>
         </panel>
       </panel>
@@ -1111,17 +1111,17 @@
         <text style="captionFont" text="Advanced Nifty, Drag and Drop Example with Events"/>
         <text style="textFont" text="Here is a little Example of Basic Drag and Drop using the Events:&#10;"/>
         <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
-          <control id="draggable" name="draggable" backgroundColor="#f60f" width="120px" height="120px" childLayout="center" align="center" valign="center" onDragStart="dragStart()" onDragCancel="dragCancel()">
-            <text text="Drag Me!" valign="center" color="#000f" />
+          <control id="draggable" name="draggable" backgroundColor="#f60f" width="120px" height="120px" childLayout="center" align="center" valign="center">
+            <text text="Drag Me!" style="base-font" align="center" valign="center" color="#000f" />
           </control>
         </panel>
         <panel childLayout="horizontal" width="100%" padding="10px" height="40%">
-          <control id="droppable1" name="droppable" backgroundColor="#c88f" width="140px" height="140px" padding="10px" onDrop="drop()">
-            <text text="Drop Here!" color="#000f" valign="center" />
+          <control id="droppable1" name="droppable" backgroundColor="#c88f" width="140px" height="140px" padding="10px">
+            <text text="Drop Here!" style="base-font" align="center" color="#000f" valign="center" />
           </control>
           <panel width="*" />
-          <control id="droppable2" name="droppable" backgroundColor="#8c8f" width="140px" height="140px" padding="10px" onDrop="drop()">
-            <text text="Or Drop Here!" color="#000f" valign="center" />
+          <control id="droppable2" name="droppable" backgroundColor="#8c8f" width="140px" height="140px" padding="10px">
+            <text text="Or Drop Here!" style="base-font" align="center" color="#000f" valign="center" />
           </control>
         </panel>
         <text id="DragAndDropInfoText" style="textFont" text="" wrap="false" />

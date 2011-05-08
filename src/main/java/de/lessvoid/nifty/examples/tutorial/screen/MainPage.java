@@ -6,8 +6,12 @@ import java.util.Map;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.dragndrop.DraggableControl;
-import de.lessvoid.nifty.controls.dragndrop.DroppableControl;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.Draggable;
+import de.lessvoid.nifty.controls.DraggableDragCanceledEvent;
+import de.lessvoid.nifty.controls.DraggableDragStartedEvent;
+import de.lessvoid.nifty.controls.Droppable;
+import de.lessvoid.nifty.controls.DroppableDroppedEvent;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
 import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
@@ -129,6 +133,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
     lastPageIndex = -1;
     updatePage();
     updateBackButtonVisibility();
+    nifty.addControls();
   }
 
   private void addChapter(final String chapter, final String page) {
@@ -205,8 +210,8 @@ public class MainPage implements ScreenController, KeyInputHandler {
 
   private void updatePage() {
     String pageName = pages.get(pageIndex);
-    CreateButtonControl buttonControl = new CreateButtonControl(pageName, "page_" + pageIndex);
-    buttonControl.create(nifty, screen, screen.findElementByName("pp"));
+    CreatePageControl createControl = new CreatePageControl(pageName, "page_" + pageIndex);
+    createControl.create(nifty, screen, screen.findElementByName("pp"));
 
     Element element = screen.findElementByName("page_" + lastPageIndex);
     if (element != null) {
@@ -218,8 +223,8 @@ public class MainPage implements ScreenController, KeyInputHandler {
     lastPageIndex = pageIndex;
   }
 
-  public class CreateButtonControl extends ControlAttributes {
-    public CreateButtonControl(final String name, final String id) {
+  public class CreatePageControl extends ControlAttributes {
+    public CreatePageControl(final String name, final String id) {
       setAutoId(id);
       setName(name);
     }
@@ -280,19 +285,22 @@ public class MainPage implements ScreenController, KeyInputHandler {
     }
   }
 
-  public void dragStart(final DroppableControl source, final DraggableControl draggable) {
-    changeInfoText("dragStart() for source: " + getDroppableId(source) + " with draggable: " + getDraggableId(draggable));
+  @NiftyEventSubscriber(id="draggable")
+  public void onDragStart(final String id, final DraggableDragStartedEvent event) {
+    changeInfoText("dragStart() for source: " + getDroppableId(event.getSource()) + " with draggable: " + getDraggableId(event.getDraggable()));
   }
 
-  public void dragCancel(final DroppableControl source, final DraggableControl draggable) {
-    changeInfoText("dragCancel() for source: " + getDroppableId(source) + " with draggable: " + getDraggableId(draggable));
+  @NiftyEventSubscriber(id="draggable")
+  public void onDragCancel(final String id, final DraggableDragCanceledEvent event) {
+    changeInfoText("dragCancel() for source: " + getDroppableId(event.getSource()) + " with draggable: " + getDraggableId(event.getDraggable()));
   }
 
-  public void drop(final DroppableControl source, final DraggableControl draggable, final DroppableControl target) {
-    changeInfoText("drop() for source: " + getDroppableId(source) + " with draggable: " + getDraggableId(draggable) + " on target: " + getDroppableId(target));
+  @NiftyEventSubscriber(pattern="droppable.") // this is a regexp matching both droppable1 and droppable2
+  public void onDropped(final String id, final DroppableDroppedEvent event) {
+    changeInfoText("drop() for source: " + getDroppableId(event.getSource()) + " with draggable: " + getDraggableId(event.getDraggable()) + " on target: " + getDroppableId(event.getTarget()));
   }
 
-  private String getDroppableId(final DroppableControl source) {
+  private String getDroppableId(final Droppable source) {
     if (source == null) {
       return "null";
     }
@@ -302,7 +310,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
     return source.getElement().getId();
   }
 
-  private String getDraggableId(final DraggableControl draggable) {
+  private String getDraggableId(final Draggable draggable) {
     if (draggable == null) {
       return "null";
     }
@@ -313,6 +321,9 @@ public class MainPage implements ScreenController, KeyInputHandler {
   }
 
   private void changeInfoText(final String text) {
-    screen.findElementByName("DragAndDropInfoText").getRenderer(TextRenderer.class).setText(text);
+    Element infoText = screen.findElementByName("DragAndDropInfoText");
+    if (infoText != null) {
+      infoText.getRenderer(TextRenderer.class).setText(text);
+    }
   }
 }

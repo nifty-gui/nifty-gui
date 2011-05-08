@@ -23,7 +23,7 @@ public final class TutorialMainNativeLwjgl {
         new OpenALSoundDevice(),
         new LwjglInputSystem(),
         new TimeProvider());
-    nifty.fromXml("tutorial/tutorial.xml", "mainPage");
+    nifty.fromXml("tutorial/tutorial.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty, null);
