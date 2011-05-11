@@ -25,6 +25,12 @@ public class ElementInteraction {
     move = new ElementInteractionMoveHandler(niftyParam, element);
   }
 
+  public void resetMouseDown() {
+    primary.resetMouseDown();
+    secondary.resetMouseDown();
+    tertiary.resetMouseDown();
+  }
+
   public ElementInteractionClickHandler getPrimary() {
     return primary;
   }

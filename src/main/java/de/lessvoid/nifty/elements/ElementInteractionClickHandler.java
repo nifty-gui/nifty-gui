@@ -89,6 +89,10 @@ public class ElementInteractionClickHandler {
     this.isMouseDown = newMouseDown;
   }
 
+  public void resetMouseDown() {
+    this.isMouseDown = false;
+  }
+
   private void onInitialClick() {
     mouseMethods.onInitialClick();
   }

@@ -796,6 +796,7 @@ public class Element implements NiftyEvent<Void> {
   }
 
   public void resetMouseDown() {
+    interaction.resetMouseDown();
     for (int i=0; i<elements.size(); i++) {
       Element w = elements.get(i);
       w.resetMouseDown();

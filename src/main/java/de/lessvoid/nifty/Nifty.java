@@ -275,6 +275,7 @@ public class Nifty {
 
   public void resetMouseInputEvents() {
     mouseInputEventProcessor.reset();
+    currentScreen.resetMouseDown();
   }
 
   private void handleDynamicElements() {

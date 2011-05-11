@@ -752,4 +752,11 @@ public class Screen {
   public boolean isBound() {
     return bound;
   }
+
+  public void resetMouseDown() {
+    for (Element layer : layerElements) {
+      layer.resetMouseDown();
+    }
+    
+  }
 }
