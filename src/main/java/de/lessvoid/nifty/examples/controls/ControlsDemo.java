@@ -260,6 +260,12 @@ public class ControlsDemo {
           control(new ControlBuilder("dialogChatControl", ChatControlDialogDefinition.NAME));
           control(new ControlBuilder("dialogDragAndDrop", DragAndDropDialogDefinition.NAME));
         }});
+      }});
+      layer(new LayerBuilder() {{
+        childLayoutVertical();
+        panel(new PanelBuilder() {{
+          height("*");
+        }});
         panel(new PanelBuilder() {{
           childLayoutCenter();
           height("50px");
