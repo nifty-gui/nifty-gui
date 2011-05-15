@@ -59,8 +59,7 @@ public class LwjglInputSystem implements InputSystem {
 
   private int getViewportHeight() {
     GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
-    int viewportHeight = viewportBuffer.get(3);
-    return viewportHeight;
+    return viewportBuffer.get(3);
   }
 
   private void processKeyboardEvents(final NiftyInputConsumer inputEventConsumer) {

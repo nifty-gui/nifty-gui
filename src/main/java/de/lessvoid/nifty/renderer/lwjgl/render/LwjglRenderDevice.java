@@ -77,8 +77,7 @@ public class LwjglRenderDevice implements RenderDevice {
    * @return width of display mode
    */
   public int getWidth() {
-    if (viewportWidth == 0)
-      getViewport();
+    getViewport();
     return viewportWidth;
   }
 
@@ -87,8 +86,7 @@ public class LwjglRenderDevice implements RenderDevice {
    * @return height of display mode
    */
   public int getHeight() {
-    if (viewportHeight == 0)
-      getViewport();
+    getViewport();
     return viewportHeight;
   }
   
