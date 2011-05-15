@@ -16,7 +16,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownPopup<T> extends AbstractController {
-  private Element element;
+  private Nifty nifty;
   @SuppressWarnings("deprecation") private DropDownControl<T> dropDownControl;
 
   public void bind(
@@ -26,7 +26,7 @@ public class DropDownPopup<T> extends AbstractController {
       final Properties parameter,
       final Attributes controlDefinitionAttributes) {
     super.bind(element);
-    this.element = element;
+    this.nifty = niftyParam;
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
@@ -45,27 +45,38 @@ public class DropDownPopup<T> extends AbstractController {
     linkPopupToDropDownPosition(dropDownControl);
   }
 
-  @SuppressWarnings("deprecation")
+  @SuppressWarnings({ "deprecation", "rawtypes" })
   private void linkPopupToDropDownPosition(final DropDownControl<T> dropDownControl) {
-    Element panel = element.findElementByName("#panel");
+    Element panel = getElement().findElementByName("#panel");
     panel.setConstraintX(new SizeValue(dropDownControl.getElement().getX() + "px"));
     panel.setConstraintWidth(new SizeValue(dropDownControl.getWidth() + "px"));
-    element.layoutElements();
+    getElement().layoutElements();
 
-    ListBoxControl listBox = element.findNiftyControl("#listBox", ListBoxControl.class);
+    ListBoxControl listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
     listBox.ensureWidthConstraints();
-    panel.setConstraintY(new SizeValue(dropDownControl.getElement().getY() - listBox.getHeight() /* dropDownControl.getHeight() */ + "px"));
-    panel.setConstraintHeight(new SizeValue(listBox.getHeight() + "px"));
-    element.layoutElements();
 
-    List<Effect> moveEffects = element.findElementByName("#panel").getEffects(EffectEventId.onStartScreen, Move.class);
+    panel.setConstraintHeight(new SizeValue(listBox.getHeight() + "px"));
+
+    if ((dropDownControl.getElement().getY() + listBox.getHeight()) > nifty.getRenderEngine().getHeight()) {
+      panel.setConstraintY(new SizeValue(dropDownControl.getElement().getY() - listBox.getHeight() + "px"));
+      updateMoveEffect(listBox, 1);
+    } else {
+      panel.setConstraintY(new SizeValue(dropDownControl.getElement().getY() + dropDownControl.getHeight() + "px"));
+      updateMoveEffect(listBox, -1);
+    }
+    getElement().layoutElements();
+  }
+
+  @SuppressWarnings({ "deprecation", "rawtypes" })
+  private void updateMoveEffect(final ListBoxControl listBox, final int direction) {
+    List<Effect> moveEffects = getElement().findElementByName("#panel").getEffects(EffectEventId.onStartScreen, Move.class);
     if (!moveEffects.isEmpty()) {
-      moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(listBox.getHeight()));
+      moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));
       moveEffects.get(0).getParameters().setProperty("mode", "fromOffset");
     }
-    moveEffects = element.findElementByName("#panel").getEffects(EffectEventId.onEndScreen, Move.class);
+    moveEffects = getElement().findElementByName("#panel").getEffects(EffectEventId.onEndScreen, Move.class);
     if (!moveEffects.isEmpty()) {
-      moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(listBox.getHeight()));
+      moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));
       moveEffects.get(0).getParameters().setProperty("mode", "toOffset");
     }
   }
