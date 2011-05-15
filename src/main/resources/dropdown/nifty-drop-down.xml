@@ -10,8 +10,8 @@
   <style id="nifty-drop-down#panel-text">
     <attributes childLayout="center" visibleToMouse="true" childClip="true" backgroundColor="#666f" padding="0px,2px" width="*" />
     <effect>
-	  <onActive name="border" color="#222f" post="true" inset="1px" />
-	  <onFocus name="colorBar" color="#800f" post="true" inset="1px" />
+      <onActive name="border" color="#222f" post="true" inset="1px" />
+      <onFocus name="colorBar" color="#800f" post="true" inset="1px" />
       <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
       <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
@@ -43,10 +43,10 @@
     <attributes childLayout="vertical" width="*" />
     <effect>
       <onStartScreen name="clip" length="150" inherit="true" post="false" />
-      <onStartScreen name="move" length="150" timeType="exp" factor="2.5" mode="fromOffset" offsetY="-100" inherit="true" onStartEffect="fixOffset()"/>
+      <onStartScreen name="move" length="150" timeType="exp" factor="2.5" mode="fromOffset" offsetY="-100" inherit="true" />
       <onStartScreen name="fade" length="150" startColor="#0000" endColor="#000c" inherit="true"/>
       <onEndScreen name="clip" length="150" inherit="true" post="false" />
-      <onEndScreen name="move" length="150" timeType="exp" factor="2.5" mode="toOffset" offsetY="-100" onStartEffect="fixOffset()" inherit="true"/>
+      <onEndScreen name="move" length="150" timeType="exp" factor="2.5" mode="toOffset" offsetY="-100" inherit="true"/>
     </effect>
   </style>
 
