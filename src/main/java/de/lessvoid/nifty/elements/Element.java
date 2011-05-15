@@ -613,6 +613,16 @@ public class Element implements NiftyEvent<Void> {
     this.layoutManager = newLayout;
   }
 
+  public void resetLayout() {
+    isCalcWidthConstraint = false;
+    isCalcHeightConstraint = false;
+
+    for (int i=0; i<elements.size(); i++) {
+      Element e = elements.get(i);
+      e.resetLayout();
+    }
+  }
+
   private void preProcessConstraintWidth() {
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
@@ -709,7 +719,16 @@ public class Element implements NiftyEvent<Void> {
 
       // use out layoutManager to layout our children
       layoutManager.layoutElements(layoutPart, layoutPartChild);
-      
+
+      if (attachedInputControl != null) {
+        NiftyControl niftyControl = attachedInputControl.getNiftyControl(NiftyControl.class);
+        if (niftyControl != null) {
+          if (niftyControl.isBound()) {
+            niftyControl.layoutCallback();
+          }
+        }
+      }
+
       // repeat this step for all child elements
       for (int i=0; i<elements.size(); i++) {
         Element w = elements.get(i);

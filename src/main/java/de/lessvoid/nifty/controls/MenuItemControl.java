@@ -23,10 +23,6 @@ public class MenuItemControl extends AbstractController {
     screen = screenParam;
   }
 
-  @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
   public void onStartScreen() {
     focusHandler = screen.getFocusHandler();
   }

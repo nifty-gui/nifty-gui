@@ -102,4 +102,17 @@ public interface NiftyControl {
    * @return true, when the control has the focus and false if not
    */
   boolean hasFocus();
+
+  /**
+   * This method is called after the element this control is attached too has been layouted. This
+   * callback allows the control to update any layout related things if necessary. 
+   */
+  void layoutCallback();
+
+  /**
+   * Returns true when this NiftyControl is already bound (e.g. its Controllers bind() method has
+   * been called). 
+   * @return true if bound and false if not
+   */
+  boolean isBound();
 }

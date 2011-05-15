@@ -88,7 +88,7 @@ public class Screen {
     registeredIds.remove(id);
   }
 
-  public final String getScreenId() {
+  public String getScreenId() {
     return screenId;
   }
 
@@ -294,6 +294,13 @@ public class Screen {
     }
   }
 
+  public void resetLayout() {
+    for (int i=0; i<layerElements.size(); i++) {
+      Element layer = layerElements.get(i);
+      layer.resetLayout();
+    }
+  }
+
   /**
    * Handle Mouse Events for this screen. Forwards  the event to the layers.
    * @param inputEvent MouseInputEvent
@@ -301,7 +308,7 @@ public class Screen {
    */
   public boolean mouseEvent(final NiftyMouseInputEvent inputEvent) {
     if (log.isLoggable(Level.FINE)) {
-      log.fine(inputEvent.toString());
+      log.fine("screen mouseEvent: " + inputEvent.toString());
     }
     if (!popupElements.isEmpty()) {
       return forwardMouseEventToLayers(popupElements, inputEvent);

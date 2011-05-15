@@ -1,10 +1,12 @@
 package de.lessvoid.nifty.controls;
 
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.xml.xpp3.Attributes;
 
 public abstract class AbstractController implements Controller, NiftyControl {
     private List<FocusNotify> notifies = new CopyOnWriteArrayList<FocusNotify>();
@@ -45,9 +47,15 @@ public abstract class AbstractController implements Controller, NiftyControl {
 
     // NEW
     private Element element;
+    private boolean bound = false;
 
     protected void bind(final Element element) {
       this.element = element;
+    }
+
+    @Override
+    public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+      this.bound = true;
     }
 
     @Override
@@ -135,5 +143,14 @@ public abstract class AbstractController implements Controller, NiftyControl {
         return false;
       }
       return getElement() == getElement().getFocusHandler().getKeyboardFocusElement();
+    }
+
+    @Override
+    public void layoutCallback() {
+    }
+
+    @Override
+    public boolean isBound() {
+      return bound;
     }
 }

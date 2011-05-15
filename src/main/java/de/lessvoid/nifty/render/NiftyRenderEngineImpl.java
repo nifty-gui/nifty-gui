@@ -27,6 +27,12 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   private RenderDevice renderDevice;
 
   /**
+   * Display width and height.
+   */
+  private int displayWidth;
+  private int displayHeight;
+
+  /**
    * global position x.
    */
   private float globalPosX = 0;
@@ -106,6 +112,8 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    */
   public NiftyRenderEngineImpl(final RenderDevice renderDeviceParam) {
     renderDevice = renderDeviceParam;
+    displayWidth = renderDevice.getWidth();
+    displayHeight = renderDevice.getHeight();
     imageManager = new NiftyImageManager(renderDeviceParam);
   }
 
@@ -114,7 +122,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @return width
    */
   public int getWidth() {
-    return renderDevice.getWidth();
+    return displayWidth;
   }
 
   /**
@@ -122,7 +130,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @return height
    */
   public int getHeight() {
-    return renderDevice.getHeight();
+    return displayHeight;
   }
 
   public void beginFrame() {
@@ -453,6 +461,12 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   public void setGlobalPosition(final float xPos, final float yPos) {
     globalPosX = xPos;
     globalPosY = yPos;
+  }
+
+  @Override
+  public void displayResolutionChanged() {
+    displayWidth = renderDevice.getWidth();
+    displayHeight = renderDevice.getHeight();
   }
 
   /**

@@ -29,6 +29,8 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventProcessor;
+import de.lessvoid.nifty.layout.Box;
+import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.RootLayerFactory;
@@ -56,6 +58,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.tools.ObjectPool;
 import de.lessvoid.nifty.tools.ObjectPool.Factory;
+import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -77,6 +80,7 @@ public class Nifty {
   private Screen currentScreen = new NullScreen();
   private String currentLoaded;
   private boolean exit;
+  private boolean resolutionChanged;
   private TimeProvider timeProvider;
   private List < ClosePopUp > closePopupList = new ArrayList < ClosePopUp >();
   private NiftyLoader loader;
@@ -96,7 +100,7 @@ public class Nifty {
   private Properties globalProperties;
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
   private NiftyMouseImpl niftyMouse;
-  private NiftyInputConsumer niftyInputConsumer = new NiftyInputConsumerImpl();
+  private NiftyInputConsumerImpl niftyInputConsumer = new NiftyInputConsumerImpl();
   private Map < Screen, List < ClassSaveEventTopicSubscriber >> screenBasedSubscribers = new Hashtable < Screen, List < ClassSaveEventTopicSubscriber >>();
   private boolean debugOptionPanelColors;
 
@@ -132,6 +136,7 @@ public class Nifty {
     this.inputSystem = newInputSystem;
     this.timeProvider = newTimeProvider;
     this.exit = false;
+    this.resolutionChanged = false;
     this.currentLoaded = null;
     this.mouseInputEventProcessor = new MouseInputEventProcessor();
     this.lastTime = timeProvider.getMsTime();
@@ -232,7 +237,7 @@ public class Nifty {
     }
     handleDynamicElements();
     updateSoundSystem();
-    if (log.isLoggable(Level.FINE)) {
+    if (log.isLoggable(Level.FINER)) {
       log.fine(currentScreen.debugOutput());
     }
     return exit;
@@ -264,6 +269,12 @@ public class Nifty {
       renderEngine.clear();
     }
     renderEngine.endFrame();
+
+    // now that the frame is complete we can reset the renderdevice in case of the resolution change
+    if (resolutionChanged) {
+      resolutionChanged = false;
+      displayResolutionChanged();
+    }
   }
 
   private void updateSoundSystem() {
@@ -274,8 +285,11 @@ public class Nifty {
   }
 
   public void resetMouseInputEvents() {
+    niftyInputConsumer.resetMouseDown();
     mouseInputEventProcessor.reset();
-    currentScreen.resetMouseDown();
+    if (!currentScreen.isNull()) {
+      currentScreen.resetMouseDown();
+    }
   }
 
   private void handleDynamicElements() {
@@ -293,10 +307,10 @@ public class Nifty {
   }
 
   private boolean hasRemoveLayerElements() {
-    if (!currentScreen.isNull()) {
-      return currentScreen.hasDynamicElements();
+    if (currentScreen.isNull()) {
+      return false;
     }
-    return false;
+    return currentScreen.hasDynamicElements();
   }
 
   private void removeLayerElements() {
@@ -311,14 +325,16 @@ public class Nifty {
 
   private void closePopUps() {
     if (hasClosePopups()) {
-      if (!currentScreen.isNull()) {
-        ArrayList <ClosePopUp> copy = new ArrayList <ClosePopUp>(closePopupList);
+      if (currentScreen.isNull()) {
         closePopupList.clear();
+        return;
+      }
+      ArrayList <ClosePopUp> copy = new ArrayList <ClosePopUp>(closePopupList);
+      closePopupList.clear();
 
-        for (int i=0; i<copy.size(); i++) {
-          ClosePopUp closePopup = copy.get(i);
-          closePopup.close();
-        }
+      for (int i=0; i<copy.size(); i++) {
+        ClosePopUp closePopup = copy.get(i);
+        closePopup.close();
       }
     }
   }
@@ -554,7 +570,7 @@ public class Nifty {
    */
   private void gotoScreenInternal(final String id) {
     log.info("gotoScreenInternal [" + id + "]");
-
+ 
     currentScreen = screens.get(id);
     if (currentScreen == null) {
       currentScreen = new NullScreen();
@@ -617,6 +633,40 @@ public class Nifty {
             currentScreen = new NullScreen();
           }
         });
+  }
+
+  public void resolutionChanged() {
+    resolutionChanged = true;
+  }
+
+  private void displayResolutionChanged() {
+    getRenderEngine().displayResolutionChanged();
+
+    int newWidth = getRenderEngine().getWidth();
+    int newHeight = getRenderEngine().getHeight();
+    updateLayoutPart(currentScreen.getRootElement().getLayoutPart(), newWidth, newHeight);
+
+    for (Element e : currentScreen.getLayerElements()) {
+      updateLayoutPart(e.getLayoutPart(), newWidth, newHeight);
+    }
+
+    for (Element e : popups.values()) {
+      updateLayoutPart(e.getLayoutPart(), newWidth, newHeight);
+    }
+
+    resetMouseInputEvents();
+
+    currentScreen.resetLayout();
+    currentScreen.layoutLayers();
+  }
+
+  private void updateLayoutPart(final LayoutPart layoutPart, final int width, final int height) {
+    Box box = layoutPart.getBox();
+    box.setWidth(width);
+    box.setHeight(height);
+    BoxConstraints boxConstraints = layoutPart.getBoxConstraints();
+    boxConstraints.setWidth(new SizeValue(width + "px"));
+    boxConstraints.setHeight(new SizeValue(height + "px"));
   }
 
   /**
@@ -1227,10 +1277,16 @@ public class Nifty {
 
     @Override
     public boolean processKeyboardEvent(final KeyboardInputEvent keyEvent) {
-      if (!currentScreen.isNull()) {
-        return currentScreen.keyEvent(keyEvent);
+      if (currentScreen.isNull()) {
+        return false;
       }
-      return false;
+      return currentScreen.keyEvent(keyEvent);
+    }
+
+    void resetMouseDown() {
+      button0Down = false;
+      button1Down = false;
+      button2Down = false;
     }
 
     private NiftyMouseInputEvent createEvent(final int mouseX, final int mouseY, final int mouseWheel, final int button, final boolean buttonDown) {

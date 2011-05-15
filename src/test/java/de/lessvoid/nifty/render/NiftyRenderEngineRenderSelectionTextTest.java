@@ -25,15 +25,20 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
 
   public void setUp() {
     renderDeviceMock = createMock(RenderDevice.class);
-    engine = new NiftyRenderEngineImpl(renderDeviceMock);
+    expect(renderDeviceMock.getWidth()).andReturn(1024);
+    expect(renderDeviceMock.getHeight()).andReturn(768);
+
     font = createStrictMock(RenderFont.class);
-    engine.setFont(font);
   }
 
   public void testCompleteSelection() {
     replay(font);
 
     renderDeviceMock.renderFont(font, TEXT, X, Y, TEXT_SELECTION_COLOR, TEXT_SIZE);
+    replay(renderDeviceMock);
+
+    engine = new NiftyRenderEngineImpl(renderDeviceMock);
+    engine.setFont(font);
     engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, TEXT.length());
     verify(font);
   }
@@ -43,6 +48,11 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
     expect(font.getWidth("H")).andReturn(10);
     renderDeviceMock.renderFont(font, "ello World", X + 10, Y, TEXT_COLOR, TEXT_SIZE);
     replay(font);
+
+    replay(renderDeviceMock);
+
+    engine = new NiftyRenderEngineImpl(renderDeviceMock);
+    engine.setFont(font);
     engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, 1);
     verify(font);
   }
@@ -52,6 +62,10 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
     expect(font.getWidth("He")).andReturn(10);
     renderDeviceMock.renderFont(font, "llo World", X + 10, Y, TEXT_COLOR, TEXT_SIZE);
     replay(font);
+    replay(renderDeviceMock);
+
+    engine = new NiftyRenderEngineImpl(renderDeviceMock);
+    engine.setFont(font);
     engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 0, 2);
     verify(font);
   }
@@ -61,6 +75,10 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
     expect(font.getWidth("Hello Worl")).andReturn(100);
     renderDeviceMock.renderFont(font, "d", X + 100, Y, TEXT_SELECTION_COLOR, TEXT_SIZE);
     replay(font);
+    replay(renderDeviceMock);
+
+    engine = new NiftyRenderEngineImpl(renderDeviceMock);
+    engine.setFont(font);
     engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, TEXT.length() - 1, TEXT.length());
     verify(font);
   }
@@ -72,6 +90,10 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
     expect(font.getWidth(" ")).andReturn(10);
     renderDeviceMock.renderFont(font, "World", X + 60, Y, TEXT_COLOR, TEXT_SIZE);
     replay(font);
+    replay(renderDeviceMock);
+
+    engine = new NiftyRenderEngineImpl(renderDeviceMock);
+    engine.setFont(font);
     engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, 5, 6);
     verify(font);
   }
