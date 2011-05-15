@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceLocator;
 import org.bushe.swing.event.EventTopicSubscriber;
+import org.bushe.swing.event.ProxySubscriber;
+import org.bushe.swing.event.annotation.ReferenceStrength;
 
 public class NiftyEventAnnotationProcessor {
   private static Logger log = Logger.getLogger(NiftyEventAnnotationProcessor.class.getName());
@@ -92,7 +94,7 @@ public class NiftyEventAnnotationProcessor {
     return EventServiceLocator.getEventService("NiftyEventBus");
   }
 
-  private static class Subscriber implements EventTopicSubscriber<Object> {
+  private static class Subscriber implements EventTopicSubscriber<Object>, ProxySubscriber {
     private final Object obj;
     private final Method method;
     private final Class<?> eventClass;
@@ -112,6 +114,20 @@ public class NiftyEventAnnotationProcessor {
           log.log(Level.WARNING, "failed to invoke method [" + method + "] with Exception [" + e.getMessage() + "][" + e.getCause() + "]", e);
         }
       }
+    }
+
+    @Override
+    public Object getProxiedSubscriber() {
+      return obj;
+    }
+
+    @Override
+    public void proxyUnsubscribed() {
+    }
+
+    @Override
+    public ReferenceStrength getReferenceStrength() {
+      return ReferenceStrength.STRONG;
     }
   }
 }
