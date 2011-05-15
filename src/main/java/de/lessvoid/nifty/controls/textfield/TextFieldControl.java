@@ -46,6 +46,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
       final Properties properties,
       final Attributes controlDefinitionAttributes) {
     super.bind(newElement);
+
     this.nifty = niftyParam;
     this.screen = screenParam;
     this.fromClickCursorPos = -1;
@@ -76,13 +77,18 @@ public class TextFieldControl extends AbstractController implements TextField, T
 
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
     this.firstVisibleCharacterIndex = 0;
-    this.lastVisibleCharacterIndex = FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(),
-        this.textField.getText(), fieldWidth, 1.0f);
+    this.lastVisibleCharacterIndex = FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), this.textField.getText(), fieldWidth, 1.0f);
 
     updateCursor();
+    super.init(parameter, controlDefinitionAttributes);
   }
 
   public void onStartScreen() {
+  }
+
+  @Override
+  public void layoutCallback() {
+    this.fieldWidth = this.fieldElement.getWidth() - this.cursorElement.getWidth();
   }
 
   public void onClick(final int mouseX, final int mouseY) {
@@ -253,8 +259,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
     if (firstVisibleCharacterIndex > textLen) {
       // re position so that we show at much possible text
       lastVisibleCharacterIndex = textLen;
-      firstVisibleCharacterIndex = FontHelper.getVisibleCharactersFromEnd(textRenderer.getFont(), text, fieldWidth,
-          1.0f);
+      firstVisibleCharacterIndex = FontHelper.getVisibleCharactersFromEnd(textRenderer.getFont(), text, fieldWidth, 1.0f);
     }
   }
 
@@ -262,8 +267,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
     String currentText = this.textField.getText();
     if (firstVisibleCharacterIndex < currentText.length()) {
       String textToCheck = currentText.substring(firstVisibleCharacterIndex);
-      int lengthFitting = FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), textToCheck, fieldWidth,
-          1.0f);
+      int lengthFitting = FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), textToCheck, fieldWidth, 1.0f);
       lastVisibleCharacterIndex = lengthFitting + firstVisibleCharacterIndex;
     } else {
       lastVisibleCharacterIndex = firstVisibleCharacterIndex;

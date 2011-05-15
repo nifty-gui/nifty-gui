@@ -199,4 +199,13 @@ public class ListBoxNull implements ListBox {
   public boolean hasFocus() {
     return false;
   }
+
+  @Override
+  public void layoutCallback() {
+  }
+
+  @Override
+  public boolean isBound() {
+    return false;
+  }
 }

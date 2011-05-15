@@ -21,10 +21,6 @@ public class ListBoxItemController<T> extends AbstractController {
       final Attributes controlDefinitionAttributes) {
   }
 
-  @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
   public void onStartScreen() {
   }
 

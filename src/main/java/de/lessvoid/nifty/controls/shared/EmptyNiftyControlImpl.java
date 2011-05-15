@@ -84,4 +84,13 @@ public abstract class EmptyNiftyControlImpl implements NiftyControl {
   public boolean hasFocus() {
     return false;
   }
+
+  @Override
+  public void layoutCallback() {
+  }
+
+  @Override
+  public boolean isBound() {
+    return false;
+  }
 }

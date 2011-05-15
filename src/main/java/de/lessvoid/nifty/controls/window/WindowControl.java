@@ -28,10 +28,6 @@ public class WindowControl extends AbstractController implements Window {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
-  @Override
   public void onStartScreen() {
     draggableControl.onStartScreen();
     if (removeCloseButton) {

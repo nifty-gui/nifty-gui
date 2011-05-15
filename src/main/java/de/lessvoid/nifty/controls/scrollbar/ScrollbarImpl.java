@@ -156,7 +156,7 @@ public class ScrollbarImpl {
     }
   }
 
-  private void updateView() {
+  public void updateView() {
     int viewSize = view.getAreaSize();
     int handleSize = calcHandleSize(viewSize);
     view.setHandle(calcHandlePosition(viewSize, handleSize), handleSize);

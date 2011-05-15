@@ -41,6 +41,7 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     focusHandler = screen.getFocusHandler();
+    super.init(parameter, controlDefinitionAttributes);
   }
 
   public void onStartScreen() {

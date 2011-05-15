@@ -125,4 +125,13 @@ public class SliderNull implements Slider {
   public boolean hasFocus() {
     return false;
   }
+
+  @Override
+  public void layoutCallback() {
+  }
+
+  @Override
+  public boolean isBound() {
+    return false;
+  }
 }

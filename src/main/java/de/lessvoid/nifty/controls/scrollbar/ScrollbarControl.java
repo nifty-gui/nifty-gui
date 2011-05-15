@@ -22,7 +22,6 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   private ScrollbarImpl scrollbarImpl = new ScrollbarImpl();
   private ScrollbarView scrollbarView;
   private Nifty nifty;
-  private Element element;
   private Element elementBackground;
   private Element elementPosition;
   private NextPrevHelper nextPrevHelper;
@@ -42,7 +41,6 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     super.bind(element);
 
     this.nifty = nifty;
-    this.element = element;
     this.elementBackground = element.findElementByName("#background");
     this.elementPosition = element.findElementByName("#position");
     this.nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
@@ -62,11 +60,12 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void onStartScreen() {
   }
 
   @Override
-  public void onStartScreen() {
+  public void layoutCallback() {
+    scrollbarImpl.updateView();
   }
 
   @Override
@@ -212,8 +211,8 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
 
     @Override
     public void valueChanged(final float value) {
-      if (element.getId() != null) {
-        nifty.publishEvent(element.getId(), new ScrollbarChangedEvent(value));
+      if (getElement().getId() != null) {
+        nifty.publishEvent(getElement().getId(), new ScrollbarChangedEvent(value));
       }
     }
 
@@ -258,8 +257,8 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
 
     @Override
     public void valueChanged(final float value) {
-      if (element.getId() != null) {
-        nifty.publishEvent(element.getId(), new ScrollbarChangedEvent(value));
+      if (getElement().getId() != null) {
+        nifty.publishEvent(getElement().getId(), new ScrollbarChangedEvent(value));
       }
     }
 

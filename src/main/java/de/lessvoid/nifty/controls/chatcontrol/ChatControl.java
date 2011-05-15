@@ -44,13 +44,6 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
      * {@inheritDoc}
      */
     @Override
-    public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public final void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement, final Properties properties, final Attributes controlDefinitionAttributes) {
       super.bind(newElement);
       LOGGER.fine("binding chat control");

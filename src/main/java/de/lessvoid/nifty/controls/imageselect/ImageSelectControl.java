@@ -87,10 +87,6 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
     }
 
     @Override
-    public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-    }
-
-    @Override
     public void onStartScreen() {
     }
 

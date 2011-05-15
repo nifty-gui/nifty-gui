@@ -53,6 +53,7 @@ public class ConsoleControl extends AbstractController implements Console, Event
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     nifty.subscribe(screen, textfield.getId(), NiftyInputEvent.class, this);
     initialFill();
+    super.init(parameter, controlDefinitionAttributes);
   }
 
   @Override

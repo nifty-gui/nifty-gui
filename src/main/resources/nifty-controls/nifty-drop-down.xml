@@ -15,7 +15,6 @@
 
   <!-- DROP DOWN BOX POPUP (The Actual List this is) -->
   <popup id="dropDownBoxSelectPopup" style="nifty-drop-down" childLayout="absolute" controller="de.lessvoid.nifty.controls.dropdown.DropDownPopup">
-<!--      <interact onRelease="close()" />   -->
     <interact onClick="close()" /> 
     <panel id="#panel" style="#list-panel" height="200px">
       <control id="#listBox" name="listBox" horizontal="optional" displayItems="4" selectionMode="Single" forceSelection="true" />

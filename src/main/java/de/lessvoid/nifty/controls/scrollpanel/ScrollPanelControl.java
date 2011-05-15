@@ -25,7 +25,6 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class ScrollPanelControl extends AbstractController implements ScrollPanel {
   private Nifty nifty;
   private Screen screen;
-  private Element element;
   private boolean verticalScrollbar;
   private boolean horizontalScrollbar;
   private Element childRootElement;
@@ -44,11 +43,11 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
         scrollElement.getParent().layoutElements();
 
         float yPos = 0.f;
-        Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+        Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
         if (verticalS != null && verticalScrollbar) {
           yPos = verticalS.getValue();
         }
-        nifty.publishEvent(element.getId(), new ScrollPanelChangedEvent(event.getValue(), yPos));
+        nifty.publishEvent(getElement().getId(), new ScrollPanelChangedEvent(event.getValue(), yPos));
       }
     }
   };
@@ -62,11 +61,11 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
         scrollElement.getParent().layoutElements();
 
         float xPos = 0.f;
-        Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+        Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
         if (horizontalS != null && horizontalScrollbar) {
           xPos = horizontalS.getValue();
         }
-        nifty.publishEvent(element.getId(), new ScrollPanelChangedEvent(xPos, event.getValue()));
+        nifty.publishEvent(getElement().getId(), new ScrollPanelChangedEvent(xPos, event.getValue()));
       }
     }
   };
@@ -80,10 +79,9 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
     super.bind(elementParam);
     nifty = niftyParam;
     screen = screenParam;
-    element = elementParam;
     verticalScrollbar = new Boolean(parameter.getProperty("vertical", "true"));
     horizontalScrollbar = new Boolean(parameter.getProperty("horizontal", "true"));
-    childRootElement = element.findElementByName(controlDefinitionAttributes.get("childRootId"));
+    childRootElement = getElement().findElementByName(controlDefinitionAttributes.get("childRootId"));
     stepSizeX = new Float(parameter.getProperty("stepSizeX", "1.0"));
     stepSizeY = new Float(parameter.getProperty("stepSizeY", "1.0"));
     pageSizeX = new Float(parameter.getProperty("pageSizeX", "1.0"));
@@ -97,9 +95,36 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
     initializeScrollbars();
     subscribeHorizontalScrollbar();
     subscribeVerticalScrollbar();
+    super.init(parameter, controlDefinitionAttributes);
   }
 
   public void onStartScreen() {
+  }
+
+  @Override
+  public void layoutCallback() {
+    if (childRootElement != null) {
+      List<Element> elements = childRootElement.getElements();
+      if (elements.isEmpty()) {
+        return;
+      }
+      final Element scrollElement = elements.get(0);
+      if (scrollElement != null) {
+        Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+        if (horizontalS != null) {
+          horizontalS.setWorldMax(scrollElement.getWidth());
+          horizontalS.setViewMax(horizontalS.getWidth());
+          updateWorldH();
+        }
+
+        Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+        if (verticalS != null) {
+          verticalS.setWorldMax(scrollElement.getHeight());
+          verticalS.setViewMax(verticalS.getHeight());
+          updateWorldV();
+        }
+      }
+    }
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
@@ -108,7 +133,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   @Override
   public void setHorizontalPos(final float xPos) {
-    Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+    Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
     if (horizontalS != null && verticalScrollbar) {
       horizontalS.setValue(xPos);
     }
@@ -116,7 +141,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   @Override
   public float getHorizontalPos() {
-    Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+    Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
     if (horizontalS != null && verticalScrollbar) {
       return horizontalS.getValue();
     }
@@ -125,7 +150,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   @Override
   public void setVerticalPos(final float yPos) {
-    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+    Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
     if (verticalS != null && verticalScrollbar) {
       verticalS.setValue(yPos);
     }
@@ -133,7 +158,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   @Override
   public float getVerticalPos() {
-    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+    Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
     if (verticalS != null && verticalScrollbar) {
       return verticalS.getValue();
     }
@@ -172,7 +197,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   @Override
   public void setStepSizeX(final float stepSizeX) {
     this.stepSizeX = stepSizeX;
-    Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+    Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
     if (horizontalS != null) {
       horizontalS.setButtonStepSize(stepSizeX);
     }
@@ -181,7 +206,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   @Override
   public void setStepSizeY(final float stepSizeY) {
     this.stepSizeY = stepSizeY;
-    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+    Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
     if (verticalS != null) {
       verticalS.setButtonStepSize(stepSizeY);
     }
@@ -190,7 +215,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   @Override
   public void setPageSizeX(final float pageSizeX) {
     this.pageSizeX = pageSizeX;
-    Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+    Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
     if (horizontalS != null) {
       horizontalS.setPageStepSize(pageSizeX);
     }
@@ -199,7 +224,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   @Override
   public void setPageSizeY(final float pageSizeY) {
     this.pageSizeY = pageSizeY;
-    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+    Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
     if (verticalS != null) {
       verticalS.setPageStepSize(pageSizeY);
     }
@@ -207,7 +232,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   public void mouseWheel(final Element e, final NiftyMouseInputEvent inputEvent) {
     int mouseWheel = inputEvent.getMouseWheel();
-    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+    Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
     if (verticalS != null) {
       float currentValue = verticalS.getValue();
       if (mouseWheel < 0) {
@@ -234,13 +259,13 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   private void initializeScrollPanel() {
     if (!verticalScrollbar) {
-      Element vertical = element.findElementByName("#nifty-internal-vertical-scrollbar");
+      Element vertical = getElement().findElementByName("#nifty-internal-vertical-scrollbar");
       if (vertical != null) {
         nifty.removeElement(screen, vertical);
       }
     }
     if (!horizontalScrollbar) {
-      Element horizontal = element.findElementByName("#nifty-internal-horizonal-panel");
+      Element horizontal = getElement().findElementByName("#nifty-internal-horizonal-panel");
       if (horizontal != null) {
         nifty.removeElement(screen, horizontal);
       }
@@ -257,7 +282,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
       }
       final Element scrollElement = elements.get(0);
       if (scrollElement != null) {
-        Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+        Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
         if (horizontalS != null) {
           horizontalS.setWorldMax(scrollElement.getWidth());
           updateWorldH();
@@ -267,7 +292,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
           horizontalS.setPageStepSize(pageSizeX);
         }
 
-        Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+        Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
         if (verticalS != null) {
           verticalS.setWorldMax(scrollElement.getHeight());
           updateWorldV();
@@ -279,12 +304,12 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
         scrollElement.setConstraintX(new SizeValue("0px"));
         scrollElement.setConstraintY(new SizeValue("0px"));
       }
+      scrollElement.layoutElements();
     }
-    screen.layoutLayers();
   }
 
   private void updateWorldH() {
-    Scrollbar horizontalS = element.findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+    Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
     if (horizontalS != null) {
       if (autoScroll == AutoScroll.RIGHT || autoScroll == AutoScroll.BOTTOM_RIGHT || autoScroll == AutoScroll.TOP_RIGHT) {
         horizontalS.setValue(horizontalS.getWorldMax());
@@ -295,7 +320,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   }
 
   private void updateWorldV() {
-    Scrollbar verticalS = element.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+    Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
     if (verticalS != null) {
       if (autoScroll == AutoScroll.BOTTOM || autoScroll == AutoScroll.BOTTOM_LEFT || autoScroll == AutoScroll.BOTTOM_RIGHT) {
         verticalS.setValue(verticalS.getWorldMax());
@@ -312,10 +337,10 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
       newPos = stepSizeY * elemCount;
       break;
     case center:
-      newPos = stepSizeY * elemCount - element.getHeight() / 2;
+      newPos = stepSizeY * elemCount - getElement().getHeight() / 2;
       break;
     case bottom:
-      newPos = stepSizeY * elemCount - element.getHeight();
+      newPos = stepSizeY * elemCount - getElement().getHeight();
       break;
     default:
       newPos = 0;

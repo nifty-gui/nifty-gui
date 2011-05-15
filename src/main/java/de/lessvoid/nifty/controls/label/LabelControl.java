@@ -29,10 +29,6 @@ public class LabelControl extends AbstractController implements Label {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
-  @Override
   public void onStartScreen() {
   }
 

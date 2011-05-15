@@ -36,10 +36,6 @@ public class DroppableControl extends AbstractController implements Droppable {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
-  @Override
   public void onStartScreen() {
     draggable = findDraggableChild(droppable);
     if (draggable != null) {

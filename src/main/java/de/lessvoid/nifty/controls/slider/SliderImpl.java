@@ -111,7 +111,7 @@ public class SliderImpl {
     }
   }
 
-  private void updateView() {
+  public void updateView() {
     view.update((int) worldToView(value));
   }
 

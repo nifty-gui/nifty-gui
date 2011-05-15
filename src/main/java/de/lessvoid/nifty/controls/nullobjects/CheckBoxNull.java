@@ -97,4 +97,13 @@ public class CheckBoxNull implements CheckBox {
   public boolean hasFocus() {
     return false;
   }
+
+  @Override
+  public void layoutCallback() {
+  }
+
+  @Override
+  public boolean isBound() {
+    return false;
+  }
 }

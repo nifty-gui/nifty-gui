@@ -60,10 +60,6 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
-  @Override
   public void onStartScreen() {
   }
 

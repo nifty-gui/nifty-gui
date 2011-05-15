@@ -28,10 +28,6 @@ public class ListBoxPanel<T> extends AbstractController {
     focusHandler = screen.getFocusHandler();
   }
 
-  @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
   public void onStartScreen() {
   }
 

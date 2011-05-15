@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.bushe.swing.event.EventTopicSubscriber;
 
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.DropDown;
@@ -34,6 +35,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   private Element popup;
   private ListBox<T> listBox;
 
+  @SuppressWarnings("unchecked")
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -50,27 +52,48 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
       log.warning("The DropDownControl requires an id but this one is missing it.");
       return;
     }
-    popup = nifty.createPopupWithStyle(
-        "dropDownBoxSelectPopup",
-        getElement().getElementType().getAttributes().get("style"));
-
+    popup = nifty.createPopupWithStyle("dropDownBoxSelectPopup", getElement().getElementType().getAttributes().get("style"));
     popup.getControl(DropDownPopup.class).setDropDownElement(this);
     listBox = popup.findNiftyControl("#listBox", ListBox.class);
+  }
+
+  @SuppressWarnings("rawtypes")
+  public void onStartScreen() {
+    updateEnabled();
+
+    ListBoxControl listBoxControl = (ListBoxControl) listBox;
+    listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), getSelection());
+
+    final String elementId = getElement().getId();
     nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class, new EventTopicSubscriber<ListBoxSelectionChangedEvent>() {
+      @SuppressWarnings("unchecked")
       @Override
       public void onEvent(final String topic, final ListBoxSelectionChangedEvent data) {
-        Object selectedItem = getSelectedItem(data.getSelection());
+        final Object selectedItem = getSelectedItem(data.getSelection());
 
         ListBoxControl listBoxControl = (ListBoxControl) listBox;
         listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), selectedItem);
 
+        final int selectedItemIndex = getSelectedIndex(data);
+        if (screen.isActivePopup(popup)) {
+          close(new EndNotify() {
+            @Override
+            public void perform() {
+              nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(selectedItem, selectedItemIndex));
+            }
+          });
+        } else {
+          nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(selectedItem, selectedItemIndex));
+        }
+      }
+
+      private int getSelectedIndex(final ListBoxSelectionChangedEvent data) {
         int selectedItemIndex = -1;
         List<Integer> selectionIndices = data.getSelectionIndices();
         if (!selectionIndices.isEmpty()) {
           selectedItemIndex = selectionIndices.get(0);
         }
-        nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(selectedItem, selectedItemIndex));
-        close();
+        return selectedItemIndex;
       }
 
       private Object getSelectedItem(final List selection) {
@@ -80,14 +103,6 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
         return selection.get(0);
       }
     });
-  }
-
-  @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-  }
-
-  public void onStartScreen() {
-    updateEnabled();
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
@@ -125,6 +140,11 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   public void close() {
     alreadyOpen = false;
     nifty.closePopup(popup.getId());
+  }
+
+  public void close(final EndNotify endNotify) {
+    alreadyOpen = false;
+    nifty.closePopup(popup.getId(), endNotify);
   }
 
   public void refresh() {

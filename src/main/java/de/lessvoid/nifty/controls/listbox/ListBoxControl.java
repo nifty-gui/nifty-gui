@@ -73,6 +73,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     }
   };
   private int lastMaxWidth;
+  private int applyWidthConstraintsLastWidth = -1;
 
   public void bind(
       final Nifty niftyParam,
@@ -93,6 +94,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     bottomRightTemplate = getElement().findElementByName("#bottom-right");
     displayItems = new Integer(parameter.getProperty("displayItems", "2"));
     scrollElement = getElement().findElementByName("#scrollpanel");
+    applyWidthConstraintsLastWidth = -1;
 
     childRootElement = getElement().findElementByName("#child-root");
     if (!childRootElement.getElements().isEmpty()) {
@@ -121,6 +123,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     initializeHorizontalScrollbar();
     initializeVerticalScrollbar(screen, labelTemplateHeight, itemCount);
+    super.init(parameter, controlDefinitionAttributes);
   }
 
   @Override
@@ -201,6 +204,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   @Override
   public void display(final List<T> visibleItems, final int focusElement, final List<Integer> selectedElements) {
+    ensureWidthConstraints();
     for (int i = 0; i < visibleItems.size(); i++) {
       T item = visibleItems.get(i);
       if (labelElements[i] != null) {
@@ -276,11 +280,25 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     ensureWidthConstraints();
   }
 
-  private void ensureWidthConstraints() {
+  public void ensureWidthConstraints() {
     applyWidthConstraints(Math.max(lastMaxWidth, listBoxPanelElement.getWidth()));
   }
 
+  @Override
+  public void layoutCallback() {
+    if (listBoxPanelElement == null) {
+      return;
+    }
+    ensureWidthConstraints();
+    initializeHorizontalScrollbar();
+  }
+
   private void applyWidthConstraints(final int width) {
+    if (applyWidthConstraintsLastWidth  == width) {
+      return;
+    }
+
+    applyWidthConstraintsLastWidth = width;
     SizeValue newWidthSizeValue = new SizeValue(width + "px");
     for (Element element : labelElements) {
       element.setConstraintWidth(newWidthSizeValue);
@@ -508,7 +526,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   private void initializeHorizontalScrollbar() {
     Scrollbar horizontalS = getHorizontalScrollbar();
-    if (horizontalS != null) {
+    if (horizontalS != null && horizontalS.isBound()) {
       horizontalS.setWorldMax(lastMaxWidth);
       horizontalS.setViewMax(listBoxPanelElement.getWidth());
     }
@@ -516,7 +534,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   private void initializeVerticalScrollbar(final Screen screen, final float labelTemplateHeight, final int itemCount) {
     Scrollbar verticalS = getVerticalScrollbar();
-    if (verticalS != null) {
+    if (verticalS != null && verticalS.isBound()) {
       verticalS.setWorldMax(itemCount * labelTemplateHeight);
       verticalS.setViewMax(displayItems * labelTemplateHeight);
       verticalS.setButtonStepSize(labelTemplateHeight);

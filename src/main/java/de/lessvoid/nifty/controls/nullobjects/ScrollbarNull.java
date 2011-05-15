@@ -125,4 +125,13 @@ public class ScrollbarNull implements Scrollbar {
   public boolean hasFocus() {
     return false;
   }
+
+  @Override
+  public void layoutCallback() {
+  }
+
+  @Override
+  public boolean isBound() {
+    return false;
+  }
 }

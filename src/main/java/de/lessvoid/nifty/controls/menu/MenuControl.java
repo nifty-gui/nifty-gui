@@ -26,6 +26,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
   private Nifty nifty;
   private Screen screen;
   private Element element;
+  private boolean bound;
 
   // This will keep a map of all items (T) added to this menu with the elementId
   // of the Nifty element as the key. We'll use this map to find the added item
@@ -45,6 +46,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+    bound = true;
   }
 
   @Override
@@ -172,6 +174,15 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
   @Override
   public boolean hasFocus() {
     return false;
+  }
+
+  @Override
+  public void layoutCallback() {
+  }
+
+  @Override
+  public boolean isBound() {
+    return bound;
   }
 
   public String toString() {

@@ -63,11 +63,12 @@ public class SliderControl extends AbstractController implements Slider {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void onStartScreen() {
   }
 
   @Override
-  public void onStartScreen() {
+  public void layoutCallback() {
+    sliderImpl.updateView();
   }
 
   @Override
