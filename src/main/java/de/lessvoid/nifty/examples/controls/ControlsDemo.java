@@ -16,6 +16,8 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.StyleBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
+import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
+import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.examples.controls.chatcontrol.ChatControlDialogDefinition;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 import de.lessvoid.nifty.examples.controls.common.DialogPanelControlDefinition;
@@ -210,6 +212,7 @@ public class ControlsDemo {
   }
 
   private static Screen createDemoScreen(final Nifty nifty) {
+    final CommonBuilders common = new CommonBuilders();
     Screen screen = new ScreenBuilder("demo") {{
       controller(new ControlsDemoScreenController(
           "menuButtonListBox", "dialogListBox",
@@ -240,7 +243,7 @@ public class ControlsDemo {
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonScrollPanel", "ScrollPanel", "ScrollPanel demonstration.\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonChatControl", "ChatControl", "Nifty User ractoc contributed a chat control"));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonChatControl", "ChatControl", "Chat Control\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonDragAndDrop", "Drag and Drop", "Demonstration of the extended Drag and Drop possibilities with Nifty 1.3"));
         }});
@@ -256,6 +259,26 @@ public class ControlsDemo {
           control(new ControlBuilder("dialogScrollPanel", ScrollPanelDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogChatControl", ChatControlDialogDefinition.NAME));
           control(new ControlBuilder("dialogDragAndDrop", DragAndDropDialogDefinition.NAME));
+        }});
+        panel(new PanelBuilder() {{
+          childLayoutCenter();
+          height("50px");
+          width("100%");
+          backgroundColor("#5588");
+          panel(new PanelBuilder() {{
+            paddingLeft("25px");
+            height("50%");
+            alignCenter();
+            valignCenter();
+            childLayoutHorizontal();
+            control(new LabelBuilder() {{
+              label("Screen Resolution: ");
+            }});
+            common.vspacer();
+            control(new DropDownBuilder("resolutions") {{
+              width("200px");
+            }});
+          }});
         }});
       }});
     }}.build(nifty);

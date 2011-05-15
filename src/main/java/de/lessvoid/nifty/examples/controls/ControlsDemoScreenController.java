@@ -1,16 +1,25 @@
 package de.lessvoid.nifty.examples.controls;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.ConsoleCommands.ConsoleCommand;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.effects.Effect;
@@ -94,6 +103,9 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
 
     // enable the nifty command line completion
     consoleCommands.enableCommandCompletion(true);
+
+    // get all resolutions available into the resolutions drop down
+    fillResolutionDropDown(screen);
   }
 
   @Override
@@ -173,6 +185,68 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   @NiftyEventSubscriber(id="console")
   public void onConsoleEvent(final String id, final ConsoleExecuteCommandEvent executeCommandEvent) {
     System.out.println(executeCommandEvent.getCommandLine());
+  }
+
+  @NiftyEventSubscriber(id="resolutions")
+  public void onResolution(final String id, final DropDownSelectionChangedEvent<DisplayMode> event) {
+    DisplayMode displayMode = event.getSelection();
+    try {
+      Display.setDisplayMode(displayMode);
+
+      GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, displayMode.getWidth(), displayMode.getHeight(), 0, -9999, 9999);
+
+      GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+      nifty.resolutionChanged();
+    } catch (LWJGLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Get all LWJGL DisplayModes into the DropDown
+   * @param screen
+   */
+  private void fillResolutionDropDown(final Screen screen) {
+    try {
+      DisplayMode currentMode = Display.getDisplayMode();
+      List <DisplayMode> sorted = new ArrayList<DisplayMode>();
+
+      DisplayMode[] modes = Display.getAvailableDisplayModes();
+      for (int i=0; i<modes.length; i++) {
+        DisplayMode mode = modes[i];
+        if (mode.getBitsPerPixel() == 32 && mode.getFrequency() == currentMode.getFrequency()) {
+          // since Nifty does not yet support automatically rescaling of the GUI and since this
+          // example/demo was designed for 1024x768 pixel we can't allow resolutions below this size.
+          if (mode.getWidth() >= 1024 && mode.getHeight() >= 768) {
+            sorted.add(mode);
+          }
+        }
+      }
+
+      Collections.sort(sorted, new Comparator<DisplayMode>() {
+        @Override
+        public int compare(DisplayMode o1, DisplayMode o2) {
+          int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(Integer.valueOf(o2.getWidth()));
+          if (widthCompare != 0) {
+            return widthCompare;
+          }
+          int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(Integer.valueOf(o2.getHeight()));
+          if (heightCompare != 0) {
+            return heightCompare;
+          }
+          return o1.toString().compareTo(o2.toString());
+        }
+      });
+
+      DropDown dropDown = screen.findNiftyControl("resolutions", DropDown.class);
+      for (DisplayMode mode : sorted) {
+        dropDown.addItem(mode);
+      }
+    } catch (Exception e) {
+    }
   }
 
   private class ShowCommand implements ConsoleCommand {
