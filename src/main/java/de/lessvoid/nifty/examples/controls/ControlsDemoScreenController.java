@@ -14,6 +14,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Console;
@@ -189,20 +190,25 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
 
   @NiftyEventSubscriber(id="resolutions")
   public void onResolution(final String id, final DropDownSelectionChangedEvent<DisplayMode> event) {
-    DisplayMode displayMode = event.getSelection();
-    try {
-      Display.setDisplayMode(displayMode);
+    screen.findElementByName("whiteOverlay").startEffect(EffectEventId.onCustom, new EndNotify() {
+      @Override
+      public void perform() {
+        DisplayMode displayMode = event.getSelection();
+        try {
+          Display.setDisplayMode(displayMode);
 
-      GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, displayMode.getWidth(), displayMode.getHeight(), 0, -9999, 9999);
+          GL11.glMatrixMode(GL11.GL_PROJECTION);
+            GL11.glLoadIdentity();
+            GL11.glOrtho(0, displayMode.getWidth(), displayMode.getHeight(), 0, -9999, 9999);
 
-      GL11.glMatrixMode(GL11.GL_MODELVIEW);
+          GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
-      nifty.resolutionChanged();
-    } catch (LWJGLException e) {
-      e.printStackTrace();
-    }
+          nifty.resolutionChanged();
+        } catch (LWJGLException e) {
+          e.printStackTrace();
+        }
+      }
+    }, "onResolutionStart");
   }
 
   /**

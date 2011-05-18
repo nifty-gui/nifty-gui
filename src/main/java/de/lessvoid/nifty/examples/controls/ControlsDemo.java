@@ -18,6 +18,7 @@ import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
+import de.lessvoid.nifty.effects.impl.Fade;
 import de.lessvoid.nifty.examples.controls.chatcontrol.ChatControlDialogDefinition;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 import de.lessvoid.nifty.examples.controls.common.DialogPanelControlDefinition;
@@ -285,6 +286,13 @@ public class ControlsDemo {
               width("200px");
             }});
           }});
+        }});
+      }});
+      layer(new LayerBuilder("whiteOverlay") {{
+        onCustomEffect(new EffectBuilder("renderQuad") {{
+          customKey("onResolutionStart");
+          length(350);
+          neverStopRendering(false);
         }});
       }});
     }}.build(nifty);
