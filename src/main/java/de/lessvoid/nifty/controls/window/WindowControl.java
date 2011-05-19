@@ -15,6 +15,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class WindowControl extends AbstractController implements Window {
   private DraggableControl draggableControl = new DraggableControl();
   private boolean removeCloseButton;
+  private boolean hideOnClose;
 
   public void bind(
       final Nifty nifty,
@@ -25,6 +26,7 @@ public class WindowControl extends AbstractController implements Window {
     super.bind(element);
     draggableControl.bind(nifty, screen, element, parameter, controlDefinitionAttributes);
     removeCloseButton = !controlDefinitionAttributes.getAsBoolean("closeable", true);
+    hideOnClose = controlDefinitionAttributes.getAsBoolean("hideOnClose", false);
   }
 
   @Override
@@ -85,6 +87,10 @@ public class WindowControl extends AbstractController implements Window {
 
   @Override
   public void closeWindow() {
-    getElement().markForRemoval();
+    if (hideOnClose) {
+      getElement().hide();
+    } else {
+      getElement().markForRemoval();
+    }
   }
 }
