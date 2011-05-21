@@ -121,7 +121,9 @@ public class ConsoleControl extends AbstractController implements Console, Event
     }
   }
 
-  private void out(final String value, final Color color) {
+  private void out(final String param, final Color color) {
+    String value = nifty.specialValuesReplace(param);
+
     String[] lines = value.split("\n");
     List<String> list = new ArrayList<String>(lines.length);
     for (String line : lines) {

@@ -66,7 +66,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
   public void addMenuItem(final String menuText, final T item) {
     final String id = NiftyIdCreator.generate();
     new ControlBuilder(id, "niftyMenuItem") { {
-      set("menuText", menuText);
+      set("menuText", nifty.specialValuesReplace(menuText));
       set("menuOnClick", "activateItem(" + id + ")");
       set("menuIconVisible", "false");
     } } .build(nifty, screen, element);
@@ -76,7 +76,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
   public void addMenuItem(final String menuText, final String menuIcon, final T item) {
     final String id = NiftyIdCreator.generate();
     new ControlBuilder(id, "niftyMenuItem") { {
-      set("menuText", menuText);
+      set("menuText", nifty.specialValuesReplace(menuText));
       set("menuOnClick", "activateItem(" + id + ")");
       if (menuIcon != null) {
         set("menuIcon", menuIcon);

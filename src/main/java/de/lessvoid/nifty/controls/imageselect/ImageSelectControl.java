@@ -277,7 +277,9 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
      * @param property property
      * @return NiftyImage list.
      */
-    private ArrayList<NiftyImage> createImages(final NiftyRenderEngine renderDevice, final String property) {
+    private ArrayList<NiftyImage> createImages(final NiftyRenderEngine renderDevice, final String param) {
+      String property = nifty.specialValuesReplace(param);
+
         ArrayList<NiftyImage> imageList = new ArrayList<NiftyImage>();
         if (property != null && property.length() > 0) {
             String[] imageStrings = property.split(",");

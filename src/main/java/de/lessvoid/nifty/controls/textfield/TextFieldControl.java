@@ -294,7 +294,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
 
   @Override
   public void setText(final String newText) {
-    textField.initWithText(newText);
+    textField.initWithText(nifty.specialValuesReplace(newText));
     updateCursor();
   }
 
