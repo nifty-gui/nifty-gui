@@ -61,6 +61,7 @@ import de.lessvoid.nifty.tools.ObjectPool.Factory;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.xml.tools.SpecialValuesReplace;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
@@ -1391,7 +1392,20 @@ public class Nifty {
     this.debugOptionPanelColors = option;
   }
 
+  /**
+   * Returns true if the debug option to render panel colors in enabled.
+   * @return true if the option is enabled and false if not
+   */
   public boolean isDebugOptionPanelColors() {
     return debugOptionPanelColors;
+  }
+
+  /**
+   * A helper method to call the special values replace method ${} syntax
+   * @param value the value to perform the replace on
+   * @return the value with stuff replaced
+   */
+  public String specialValuesReplace(final String value) {
+    return SpecialValuesReplace.replace(value, getResourceBundles(), currentScreen == null ? null : currentScreen.getScreenController(), globalProperties);
   }
 }

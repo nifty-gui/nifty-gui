@@ -3,6 +3,7 @@ package de.lessvoid.nifty.elements.render;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.elements.tools.TextBreak;
@@ -94,10 +95,13 @@ public class TextRenderer implements ElementRenderer {
    */
   private SizeValue textMinHeight;
 
+  private Nifty nifty;
+
   /**
    * default constructor.
    */
-  public TextRenderer() {
+  public TextRenderer(final Nifty nifty) {
+    this.nifty = nifty;
 	  originalText = "";
   }
 
@@ -106,7 +110,8 @@ public class TextRenderer implements ElementRenderer {
    * @param newFont the font to use
    * @param newText the text to use
    */
-  public TextRenderer(final RenderFont newFont, final String newText) {
+  public TextRenderer(final Nifty nifty, final RenderFont newFont, final String newText) {
+    this.nifty = nifty;
     init(newFont, newText);
   }
 
@@ -134,7 +139,8 @@ public class TextRenderer implements ElementRenderer {
   /**
    * @param newText new text
    */
-  private void initText(final String newText) {
+  private void initText(final String param) {
+    String newText = nifty.specialValuesReplace(param);
     if (lineWrapping && isCalculatedLineWrapping) {
       isCalculatedLineWrapping = false;
     }
@@ -392,14 +398,14 @@ public class TextRenderer implements ElementRenderer {
   }
   
   public String getWrappedText() {
-	  StringBuffer result = new StringBuffer();
-	    if (textLines.length > 0) {
-	        result.append(textLines[0]);
-	        for (int i=1; i<textLines.length; i++) {
-	            result.append('\n'+textLines[i]);
-	        }
-	    }
-	    return result.toString();
+    StringBuffer result = new StringBuffer();
+    if (textLines.length > 0) {
+      result.append(textLines[0]);
+      for (int i = 1; i < textLines.length; i++) {
+        result.append('\n' + textLines[i]);
+      }
+    }
+    return result.toString();
   }
 
   public void setTextLineHeight(final SizeValue textLineHeight) {
@@ -457,13 +463,13 @@ public class TextRenderer implements ElementRenderer {
     }
     this.textLines = wrapText(valueAsInt, renderEngine, originalText.split("\n", -1));
     maxWidth = valueAsInt;
-    if(maxWidth == 0) {
-	    for (String line : textLines) {
-	      int lineWidth = font.getWidth(line);
-	      if (lineWidth > maxWidth) {
-	        maxWidth = lineWidth;
-	      }
-	    }
+    if (maxWidth == 0) {
+      for (String line : textLines) {
+        int lineWidth = font.getWidth(line);
+        if (lineWidth > maxWidth) {
+          maxWidth = lineWidth;
+        }
+      }
     }
     element.setConstraintWidth(new SizeValue(getTextWidth() + "px"));
     element.setConstraintHeight(new SizeValue(getTextHeight() + "px"));

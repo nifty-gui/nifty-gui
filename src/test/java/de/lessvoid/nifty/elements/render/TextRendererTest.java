@@ -22,7 +22,7 @@ public class TextRendererTest extends TestCase {
   }
 
   public void testInit() {
-    TextRenderer render = new TextRenderer(renderFont, "a\nc");
+    TextRenderer render = new TextRenderer(null, renderFont, "a\nc");
     assertEquals( 20, render.getTextHeight());
     assertEquals( 0, render.getTextWidth());
     verify(renderFont);

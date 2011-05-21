@@ -29,7 +29,7 @@ public class TextType extends ElementType {
     setTagName("<text>");
     setElementRendererCreator(new ElementRendererCreator() {
       public ElementRenderer[] createElementRenderer(final Nifty nifty) {
-        TextRenderer textRenderer = new TextRenderer();
+        TextRenderer textRenderer = new TextRenderer(nifty);
         ElementRenderer[] panelRenderer = nifty.getRootLayerFactory().createPanelRenderer();
         ElementRenderer[] renderer = new ElementRenderer[panelRenderer.length + 1];
         for (int i = 0; i < panelRenderer.length; i++) {

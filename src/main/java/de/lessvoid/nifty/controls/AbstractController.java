@@ -85,7 +85,7 @@ public abstract class AbstractController implements Controller, NiftyControl {
 
     @Override
     public void setStyle(final String style) {
-     element.setStyle(style); 
+     element.setStyle(element.getNifty().specialValuesReplace(style));
     }
 
     @Override
