@@ -57,7 +57,7 @@ public class ElementInteractionMoveHandler {
         mouseEvent.getMouseY() != lastMouseY) {
       lastMouseX = mouseEvent.getMouseX();
       lastMouseY = mouseEvent.getMouseY();
-      nifty.publishEvent(element.getId(), new NiftyMouseMovedEvent(mouseEvent));
+      nifty.publishEvent(element.getId(), new NiftyMouseMovedEvent(element, mouseEvent));
       return true;
     }
     return false;
@@ -65,13 +65,13 @@ public class ElementInteractionMoveHandler {
 
   private boolean handleWheelEvent(final NiftyMouseInputEvent mouseEvent) {
     if (mouseEvent.getMouseWheel() != 0) {
-      nifty.publishEvent(element.getId(), new NiftyMouseWheelEvent(mouseEvent));
+      nifty.publishEvent(element.getId(), new NiftyMouseWheelEvent(element, mouseEvent));
       return true;
     }
     return false;
   }
 
   private void handleGeneralEvent(final NiftyMouseInputEvent mouseEvent) {
-    nifty.publishEvent(element.getId(), new NiftyMouseEvent(mouseEvent));
+    nifty.publishEvent(element.getId(), new NiftyMouseEvent(element, mouseEvent));
   }
 }

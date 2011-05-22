@@ -14,25 +14,25 @@ public class SecondaryClickMouseMethods extends MouseClickMethods {
 
   @Override
   public boolean onClick(final Nifty nifty, final String onClickAlternateKey, final NiftyMouseInputEvent inputEvent) {
-    publishEvent(nifty, new NiftyMouseSecondaryClickedEvent(inputEvent));
+    publishEvent(nifty, new NiftyMouseSecondaryClickedEvent(element, inputEvent));
     return super.onClick(nifty, onClickAlternateKey, inputEvent);
   }
 
   @Override
   public boolean onClickMouseMove(final Nifty nifty, final NiftyMouseInputEvent inputEvent) {
-    publishEvent(nifty, new NiftyMouseSecondaryClickedMovedEvent(inputEvent));
+    publishEvent(nifty, new NiftyMouseSecondaryClickedMovedEvent(element, inputEvent));
     return super.onClickMouseMove(nifty, inputEvent);
   }
 
   @Override
   public void onActivate(final Nifty nifty) {
-    publishEvent(nifty, new NiftyMouseSecondaryClickedEvent());
+    publishEvent(nifty, new NiftyMouseSecondaryClickedEvent(element));
     super.onActivate(nifty);
   }
 
   @Override
   public boolean onMouseRelease(final Nifty nifty, final NiftyMouseInputEvent mouseEvent) {
-    publishEvent(nifty, new NiftyMouseSecondaryReleaseEvent(mouseEvent));
+    publishEvent(nifty, new NiftyMouseSecondaryReleaseEvent(element, mouseEvent));
     return super.onMouseRelease(nifty, mouseEvent);
   }
 

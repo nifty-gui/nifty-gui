@@ -14,25 +14,25 @@ public class TertiaryClickMouseMethods extends MouseClickMethods {
 
   @Override
   public boolean onClick(final Nifty nifty, final String onClickAlternateKey, final NiftyMouseInputEvent inputEvent) {
-    publishEvent(nifty, new NiftyMouseTertiaryClickedEvent(inputEvent));
+    publishEvent(nifty, new NiftyMouseTertiaryClickedEvent(element, inputEvent));
     return super.onClick(nifty, onClickAlternateKey, inputEvent);
   }
 
   @Override
   public boolean onClickMouseMove(final Nifty nifty, final NiftyMouseInputEvent inputEvent) {
-    publishEvent(nifty, new NiftyMouseTertiaryClickedMovedEvent(inputEvent));
+    publishEvent(nifty, new NiftyMouseTertiaryClickedMovedEvent(element, inputEvent));
     return super.onClickMouseMove(nifty, inputEvent);
   }
 
   @Override
   public void onActivate(final Nifty nifty) {
-    publishEvent(nifty, new NiftyMouseTertiaryClickedEvent());
+    publishEvent(nifty, new NiftyMouseTertiaryClickedEvent(element));
     super.onActivate(nifty);
   }
 
   @Override
   public boolean onMouseRelease(final Nifty nifty, final NiftyMouseInputEvent mouseEvent) {
-    publishEvent(nifty, new NiftyMouseTertiaryReleaseEvent(mouseEvent));
+    publishEvent(nifty, new NiftyMouseTertiaryReleaseEvent(element, mouseEvent));
     return super.onMouseRelease(nifty, mouseEvent);
   }
 

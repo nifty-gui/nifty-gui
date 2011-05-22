@@ -23,26 +23,26 @@ public class PrimaryClickMouseMethods extends MouseClickMethods {
 
   @Override
   public boolean onClick(final Nifty nifty, final String onClickAlternateKey, final NiftyMouseInputEvent inputEvent) {
-    publishEvent(nifty, new NiftyMousePrimaryClickedEvent(inputEvent));
+    publishEvent(nifty, new NiftyMousePrimaryClickedEvent(element, inputEvent));
     element.startEffect(EffectEventId.onClick);
     return super.onClick(nifty, onClickAlternateKey, inputEvent);
   }
 
   @Override
   public boolean onClickMouseMove(final Nifty nifty, final NiftyMouseInputEvent inputEvent) {
-    publishEvent(nifty, new NiftyMousePrimaryClickedMovedEvent(inputEvent));
+    publishEvent(nifty, new NiftyMousePrimaryClickedMovedEvent(element, inputEvent));
     return super.onClickMouseMove(nifty, inputEvent);
   }
 
   @Override
   public void onActivate(final Nifty nifty) {
-    publishEvent(nifty, new NiftyMousePrimaryClickedEvent());
+    publishEvent(nifty, new NiftyMousePrimaryClickedEvent(element));
     super.onActivate(nifty);
   }
 
   @Override
   public boolean onMouseRelease(final Nifty nifty, final NiftyMouseInputEvent mouseEvent) {
-    publishEvent(nifty, new NiftyMousePrimaryReleaseEvent(mouseEvent));
+    publishEvent(nifty, new NiftyMousePrimaryReleaseEvent(element, mouseEvent));
     boolean result = super.onMouseRelease(nifty, mouseEvent);
     element.stopEffect(EffectEventId.onClick);
     element.getFocusHandler().lostMouseFocus(element);

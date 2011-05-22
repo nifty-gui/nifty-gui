@@ -1,9 +1,11 @@
 package de.lessvoid.nifty.elements.events;
 
 import de.lessvoid.nifty.NiftyEvent;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
 public class NiftyMouseEvent implements NiftyEvent<Void> {
+  private Element element;
   private int mouseX;
   private int mouseY;
   private int mouseWheel;
@@ -17,22 +19,8 @@ public class NiftyMouseEvent implements NiftyEvent<Void> {
   private boolean button1Release;
   private boolean button2Release;
 
-  public NiftyMouseEvent() {
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.mouseWheel = 0;
-    this.button0Down = false;
-    this.button1Down = false;
-    this.button2Down = false;
-    this.button0InitialDown = false;
-    this.button1InitialDown = false;
-    this.button2InitialDown = false;
-    this.button0Release = false;
-    this.button1Release = false;
-    this.button2Release = false;
-  }
-
-  public NiftyMouseEvent(final NiftyMouseInputEvent source) {
+  public NiftyMouseEvent(final Element element, final NiftyMouseInputEvent source) {
+    this.element = element;
     this.mouseX = source.getMouseX();
     this.mouseY = source.getMouseY();
     this.mouseWheel = source.getMouseWheel();
@@ -45,6 +33,10 @@ public class NiftyMouseEvent implements NiftyEvent<Void> {
     this.button0Release = source.isButton0Release();
     this.button1Release = source.isButton1Release();
     this.button2Release = source.isButton2Release();
+  }
+
+  public Element getElement() {
+    return element;
   }
 
   public int getMouseX() {

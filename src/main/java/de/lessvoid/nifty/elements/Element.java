@@ -1197,7 +1197,7 @@ public class Element implements NiftyEvent<Void> {
       element.internalShow();
     }
 
-    nifty.publishEvent(getId(), new ElementShowEvent());
+    nifty.publishEvent(getId(), new ElementShowEvent(this));
   }
 
   public void setVisible(final boolean visibleParam) {
@@ -1259,7 +1259,7 @@ public class Element implements NiftyEvent<Void> {
       element.internalHide();
     }
 
-    nifty.publishEvent(getId(), new ElementHideEvent());
+    nifty.publishEvent(getId(), new ElementHideEvent(this));
   }
 
   /**
