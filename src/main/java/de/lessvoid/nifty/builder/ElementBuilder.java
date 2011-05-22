@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectsAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlInteractAttributes;
@@ -92,6 +93,14 @@ public abstract class ElementBuilder {
 
   public void backgroundColor(final Color backgroundColor) {
     attributes.setBackgroundColor(backgroundColor.getColorString());
+  }
+
+  public void controller(final Controller controller) {
+    attributes.set("controller", controller.getClass().getName());
+  }
+
+  public void controller(final String controllerClass) {
+    attributes.set("controller", controllerClass);
   }
 
   public void color(final String color) {

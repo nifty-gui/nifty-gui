@@ -19,6 +19,10 @@ public class ControlDefinitionBuilder extends ElementBuilder {
     creator.setController(controller.getClass().getName());
   }
 
+  public void controller(final String controllerClass) {
+    creator.setController(controllerClass);
+  }
+
   public String controlParameter(final String parameterName) {
     return "$" + parameterName;
   }
