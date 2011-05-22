@@ -1,11 +1,12 @@
 package de.lessvoid.nifty.elements.render;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.classextension.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.isA;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
+import static org.easymock.classextension.EasyMock.createMock;
 import junit.framework.TestCase;
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.spi.render.RenderFont;
@@ -22,10 +23,16 @@ public class TextRendererTest extends TestCase {
   }
 
   public void testInit() {
-    TextRenderer render = new TextRenderer(null, renderFont, "a\nc");
+    Nifty niftyMock = createMock(Nifty.class);
+    expect(niftyMock.specialValuesReplace("a\nc")).andReturn("a\nc");
+    replay(niftyMock);
+
+    TextRenderer render = new TextRenderer(niftyMock, renderFont, "a\nc");
     assertEquals( 20, render.getTextHeight());
     assertEquals( 0, render.getTextWidth());
+
     verify(renderFont);
+    verify(niftyMock);
   }
 
   public void testGetStartYWithVerticalAlignTop() {
