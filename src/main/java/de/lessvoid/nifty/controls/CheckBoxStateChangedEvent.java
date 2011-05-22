@@ -8,10 +8,16 @@ import de.lessvoid.nifty.NiftyEvent;
  */
 @SuppressWarnings("rawtypes")
 public class CheckBoxStateChangedEvent implements NiftyEvent {
+  private CheckBox checkbox;
   private boolean checked;
 
-  public CheckBoxStateChangedEvent(final boolean checkedState) {
+  public CheckBoxStateChangedEvent(final CheckBox checkbox, final boolean checkedState) {
+    this.checkbox = checkbox;
     this.checked = checkedState;
+  }
+
+  public CheckBox getCheckBox() {
+    return checkbox;
   }
 
   public boolean isChecked() {

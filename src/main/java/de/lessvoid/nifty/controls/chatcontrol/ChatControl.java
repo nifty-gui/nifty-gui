@@ -111,7 +111,7 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     public final void sendText() {
         final String text = textControl.getText();
         LOGGER.log(Level.INFO, "sending text {0}", text);
-        nifty.publishEvent(getId(), new ChatTextSendEvent(text));
+        nifty.publishEvent(getId(), new ChatTextSendEvent(this, text));
         textControl.setText("");
     }
 

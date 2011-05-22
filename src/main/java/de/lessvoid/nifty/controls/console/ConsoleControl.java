@@ -79,7 +79,7 @@ public class ConsoleControl extends AbstractController implements Console, Event
       listBox.showItemByIndex(listBox.itemCount() - 1);
 
       textfield.setText("");
-      nifty.publishEvent(element.getId(), new ConsoleExecuteCommandEvent(text));
+      nifty.publishEvent(element.getId(), new ConsoleExecuteCommandEvent(this, text));
     }
   }
 

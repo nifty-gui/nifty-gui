@@ -195,7 +195,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
     nifty.closePopup(element.getParent().getId(), new EndNotify() {
       @Override
       public void perform() {
-        nifty.publishEvent(element.getId(), new MenuItemActivatedEvent<T>(items.get(menuItemId)));
+        nifty.publishEvent(element.getId(), new MenuItemActivatedEvent<T>(MenuControl.this, items.get(menuItemId)));
       }
     });
     return true;

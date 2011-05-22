@@ -7,10 +7,16 @@ import de.lessvoid.nifty.NiftyEvent;
  * @author void
  */
 public class TextFieldChangedEvent implements NiftyEvent<Void> {
+  private TextField textField;
   private String currentText;
 
-  public TextFieldChangedEvent(final String currentText) {
+  public TextFieldChangedEvent(final TextField textFieldControl, final String currentText) {
+    this.textField = textFieldControl;
     this.currentText = currentText;
+  }
+
+  public TextField getTextFieldControl() {
+    return textField;
   }
 
   public String getText() {

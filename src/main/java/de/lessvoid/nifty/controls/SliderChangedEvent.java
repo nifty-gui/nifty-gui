@@ -7,10 +7,16 @@ import de.lessvoid.nifty.NiftyEvent;
  * @author void
  */
 public class SliderChangedEvent implements NiftyEvent<Void> {
+  private Slider slider;
   private float value;
 
-  public SliderChangedEvent(final float newValue) {
+  public SliderChangedEvent(final Slider slider, final float newValue) {
+    this.slider = slider;
     this.value = newValue;
+  }
+
+  public Slider getSlider() {
+    return slider;
   }
 
   public float getValue() {

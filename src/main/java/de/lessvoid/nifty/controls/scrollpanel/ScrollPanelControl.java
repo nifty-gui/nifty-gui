@@ -33,42 +33,8 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   private float pageSizeX;
   private float pageSizeY;
   private AutoScroll autoScroll = AutoScroll.OFF;
-  private EventTopicSubscriber<ScrollbarChangedEvent> horizontalScrollbarSubscriber = new EventTopicSubscriber<ScrollbarChangedEvent>() {
-    @Override
-    public void onEvent(final String id, final ScrollbarChangedEvent event) {
-      final Element scrollElement = childRootElement.getElements().get(0);
-      if (scrollElement != null) {
-        scrollElement.setConstraintX(new SizeValue(-(int) event.getValue() + "px"));
-        updateWorldH();
-        scrollElement.getParent().layoutElements();
-
-        float yPos = 0.f;
-        Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
-        if (verticalS != null && verticalScrollbar) {
-          yPos = verticalS.getValue();
-        }
-        nifty.publishEvent(getElement().getId(), new ScrollPanelChangedEvent(event.getValue(), yPos));
-      }
-    }
-  };
-  private EventTopicSubscriber<ScrollbarChangedEvent> verticalScrollbarSubscriber = new EventTopicSubscriber<ScrollbarChangedEvent>() {
-    @Override
-    public void onEvent(final String id, final ScrollbarChangedEvent event) {
-      final Element scrollElement = childRootElement.getElements().get(0);
-      if (scrollElement != null) {
-        scrollElement.setConstraintY(new SizeValue(-(int) event.getValue() + "px"));
-        updateWorldV();
-        scrollElement.getParent().layoutElements();
-
-        float xPos = 0.f;
-        Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
-        if (horizontalS != null && horizontalScrollbar) {
-          xPos = horizontalS.getValue();
-        }
-        nifty.publishEvent(getElement().getId(), new ScrollPanelChangedEvent(xPos, event.getValue()));
-      }
-    }
-  };
+  private EventTopicSubscriber<ScrollbarChangedEvent> horizontalScrollbarSubscriber;
+  private EventTopicSubscriber<ScrollbarChangedEvent> verticalScrollbarSubscriber;
 
   public void bind(
       final Nifty niftyParam,
@@ -87,6 +53,8 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
     pageSizeX = new Float(parameter.getProperty("pageSizeX", "1.0"));
     pageSizeY = new Float(parameter.getProperty("pageSizeY", "1.0"));
     autoScroll = AutoScroll.parse(parameter.getProperty("autoScroll", "off"));
+    horizontalScrollbarSubscriber = new HorizontalEventTopicSubscriber(this);
+    verticalScrollbarSubscriber = new VerticalEventTopicSubscriber(this);
   }
 
   @Override
@@ -346,5 +314,55 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
       newPos = 0;
     }
     setVerticalPos(newPos);
+  }
+
+  private class VerticalEventTopicSubscriber implements EventTopicSubscriber<ScrollbarChangedEvent> {
+    private ScrollPanel scrollPanel;
+
+    public VerticalEventTopicSubscriber(final ScrollPanel scrollPanel) {
+      this.scrollPanel = scrollPanel;
+    }
+
+    @Override
+    public void onEvent(final String id, final ScrollbarChangedEvent event) {
+      final Element scrollElement = childRootElement.getElements().get(0);
+      if (scrollElement != null) {
+        scrollElement.setConstraintY(new SizeValue(-(int) event.getValue() + "px"));
+        updateWorldV();
+        scrollElement.getParent().layoutElements();
+
+        float xPos = 0.f;
+        Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
+        if (horizontalS != null && horizontalScrollbar) {
+          xPos = horizontalS.getValue();
+        }
+        nifty.publishEvent(getElement().getId(), new ScrollPanelChangedEvent(scrollPanel, xPos, event.getValue()));
+      }
+    }
+  }
+
+  private class HorizontalEventTopicSubscriber implements EventTopicSubscriber<ScrollbarChangedEvent> {
+    private ScrollPanel scrollPanel;
+
+    public HorizontalEventTopicSubscriber(final ScrollPanel scrollPanel) {
+      this.scrollPanel = scrollPanel;
+    }
+
+    @Override
+    public void onEvent(final String id, final ScrollbarChangedEvent event) {
+      final Element scrollElement = childRootElement.getElements().get(0);
+      if (scrollElement != null) {
+        scrollElement.setConstraintX(new SizeValue(-(int) event.getValue() + "px"));
+        updateWorldH();
+        scrollElement.getParent().layoutElements();
+
+        float yPos = 0.f;
+        Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
+        if (verticalS != null && verticalScrollbar) {
+          yPos = verticalS.getValue();
+        }
+        nifty.publishEvent(getElement().getId(), new ScrollPanelChangedEvent(scrollPanel, event.getValue(), yPos));
+      }
+    }
   }
 }

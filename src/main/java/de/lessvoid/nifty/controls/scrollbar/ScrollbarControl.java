@@ -46,9 +46,9 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     this.nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
 
     if ("verticalScrollbar".equals(parameter.getProperty("name"))) {
-      this.scrollbarView = new ScrollbarViewVertical(elementPosition.getHeight());
+      this.scrollbarView = new ScrollbarViewVertical(this, elementPosition.getHeight());
     } else if ("horizontalScrollbar".equals(parameter.getProperty("name"))) {
-      this.scrollbarView = new ScrollbarViewHorizontal(elementPosition.getWidth());
+      this.scrollbarView = new ScrollbarViewHorizontal(this, elementPosition.getWidth());
     }
 
     worldMax = Float.valueOf(parameter.getProperty("worldMax", "100.0"));
@@ -177,9 +177,11 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   // ScrollbarView implementations
 
   private class ScrollbarViewVertical implements ScrollbarView {
+    private Scrollbar scrollbar;
     private int minHandleSize;
 
-    public ScrollbarViewVertical(final int minHandleSize) {
+    public ScrollbarViewVertical(final Scrollbar scrollbar, final int minHandleSize) {
+      this.scrollbar = scrollbar;
       this.minHandleSize = minHandleSize;
     }
 
@@ -212,7 +214,7 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     @Override
     public void valueChanged(final float value) {
       if (getElement().getId() != null) {
-        nifty.publishEvent(getElement().getId(), new ScrollbarChangedEvent(value));
+        nifty.publishEvent(getElement().getId(), new ScrollbarChangedEvent(scrollbar, value));
       }
     }
 
@@ -223,9 +225,11 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   }
 
   private class ScrollbarViewHorizontal implements ScrollbarView {
+    private Scrollbar scrollbar;
     private int minHandleSize;
 
-    public ScrollbarViewHorizontal(final int minHandleSize) {
+    public ScrollbarViewHorizontal(final Scrollbar scrollbar, final int minHandleSize) {
+      this.scrollbar = scrollbar;
       this.minHandleSize = minHandleSize;
     }
 
@@ -258,7 +262,7 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     @Override
     public void valueChanged(final float value) {
       if (getElement().getId() != null) {
-        nifty.publishEvent(getElement().getId(), new ScrollbarChangedEvent(value));
+        nifty.publishEvent(getElement().getId(), new ScrollbarChangedEvent(scrollbar, value));
       }
     }
 

@@ -5,8 +5,13 @@ import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.shared.EmptyNiftyControlImpl;
 
 public class CheckBoxImpl extends EmptyNiftyControlImpl implements CheckBox {
+  private CheckBox checkbox;
   private boolean checked;
   private CheckBoxView view = new CheckBoxViewNull();
+
+  public CheckBoxImpl(final CheckBox checkbox) {
+    this.checkbox = checkbox;
+  }
 
   public void bindToView(final CheckBoxView checkBoxView) {
     this.view = checkBoxView;
@@ -42,6 +47,6 @@ public class CheckBoxImpl extends EmptyNiftyControlImpl implements CheckBox {
 
   private void updateView() {
     view.update(checked);
-    view.publish(new CheckBoxStateChangedEvent(checked));
+    view.publish(new CheckBoxStateChangedEvent(checkbox, checked));
   }
 }

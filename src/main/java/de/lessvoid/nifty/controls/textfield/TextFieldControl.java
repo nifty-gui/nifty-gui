@@ -312,7 +312,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
 
   @Override
   public void textChangeEvent(final String newText) {
-    nifty.publishEvent(getElement().getId(), new TextFieldChangedEvent(newText));
+    nifty.publishEvent(getElement().getId(), new TextFieldChangedEvent(this, newText));
   }
 
   @Override

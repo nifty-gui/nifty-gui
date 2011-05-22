@@ -8,7 +8,7 @@ import org.junit.Test;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 
 public class ListBoxItemNextPreviousEmptyTest {
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
 
   @Before
   public void before() {

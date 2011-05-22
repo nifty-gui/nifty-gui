@@ -8,12 +8,15 @@ import de.lessvoid.nifty.NiftyEvent;
  */
 @SuppressWarnings("rawtypes")
 public class ConsoleExecuteCommandEvent implements NiftyEvent {
+  private Console console;
   private ConsoleCommandSplitter splitter = new ConsoleCommandSplitter();
   private String commandLine;
   private String command;
   private String[] arguments;
 
-  public ConsoleExecuteCommandEvent(final String commandLine) {
+  public ConsoleExecuteCommandEvent(final Console console, final String commandLine) {
+    this.console = console;
+
     if (commandLine == null || commandLine.length() == 0) {
       this.commandLine = "";
       this.command = "";
@@ -22,6 +25,10 @@ public class ConsoleExecuteCommandEvent implements NiftyEvent {
       this.commandLine = commandLine;
       processCommandLine(commandLine);
     }
+  }
+
+  public Console getConsole() {
+    return console;
   }
 
   private void processCommandLine(final String commandLine) {

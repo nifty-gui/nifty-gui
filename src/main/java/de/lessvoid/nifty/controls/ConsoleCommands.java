@@ -150,7 +150,7 @@ public class ConsoleCommands implements KeyInputHandler {
       // this means we have not found an appropriate command in the registered commands
       // we'll publish this now as the original console would do. this way you can still
       // subscribe for it (if you need to).
-      nifty.publishEvent(console.getId(), new ConsoleExecuteCommandEvent(text));
+      nifty.publishEvent(console.getId(), new ConsoleExecuteCommandEvent(console, text));
       addCommandToHistory(text);
       return true;
     }

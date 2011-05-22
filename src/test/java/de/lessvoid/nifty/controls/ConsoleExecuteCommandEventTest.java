@@ -8,7 +8,7 @@ import org.junit.Test;
 public class ConsoleExecuteCommandEventTest {
   @Test
   public void testCommandLineNull() {
-    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null);
+    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null, null);
     assertEquals("", command.getCommandLine());
     assertEquals("", command.getCommand());
     assertEquals(0, command.getArgumentCount());
@@ -17,7 +17,7 @@ public class ConsoleExecuteCommandEventTest {
 
   @Test
   public void testCommandLineEmpty() {
-    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent("");
+    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null, "");
     assertEquals("", command.getCommandLine());
     assertEquals("", command.getCommand());
     assertEquals(0, command.getArgumentCount());
@@ -26,7 +26,7 @@ public class ConsoleExecuteCommandEventTest {
 
   @Test
   public void testSimpleCommandLine() {
-    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent("exec");
+    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null, "exec");
     assertEquals("exec", command.getCommandLine());
     assertEquals("exec", command.getCommand());
     assertEquals(0, command.getArgumentCount());
@@ -35,7 +35,7 @@ public class ConsoleExecuteCommandEventTest {
 
   @Test
   public void testOneParameterCommandLine() {
-    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent("exec hello");
+    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null, "exec hello");
     assertEquals("exec hello", command.getCommandLine());
     assertEquals("exec", command.getCommand());
     assertEquals(1, command.getArgumentCount());
@@ -45,7 +45,7 @@ public class ConsoleExecuteCommandEventTest {
 
   @Test
   public void testMultipleParameterCommandLine() {
-    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent("exec hello 42 43 tra");
+    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null, "exec hello 42 43 tra");
     assertEquals("exec hello 42 43 tra", command.getCommandLine());
     assertEquals("exec", command.getCommand());
     assertEquals(4, command.getArgumentCount());
@@ -58,7 +58,7 @@ public class ConsoleExecuteCommandEventTest {
 
   @Test
   public void testMultipleStringParameterCommandLine() {
-    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent("exec 'hello escaped whitespace' 42 43 \"hello quoted parameter\"");
+    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null, "exec 'hello escaped whitespace' 42 43 \"hello quoted parameter\"");
     assertEquals("exec 'hello escaped whitespace' 42 43 \"hello quoted parameter\"", command.getCommandLine());
     assertEquals("exec", command.getCommand());
     assertEquals(4, command.getArgumentCount());

@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ListBoxItemSortTest {
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private TestItem a = new TestItem("a");
   private TestItem c = new TestItem("c");
   private TestItem b = new TestItem("b");

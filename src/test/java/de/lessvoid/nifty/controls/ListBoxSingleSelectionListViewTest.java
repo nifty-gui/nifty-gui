@@ -15,7 +15,7 @@ import de.lessvoid.nifty.controls.listbox.ListBoxView;
 import de.lessvoid.nifty.controls.listbox.TestItem;
 
 public class ListBoxSingleSelectionListViewTest {
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private TestItem o3 = new TestItem("o3");

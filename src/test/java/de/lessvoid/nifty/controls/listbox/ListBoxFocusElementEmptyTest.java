@@ -15,7 +15,7 @@ import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 
 public class ListBoxFocusElementEmptyTest {
   private static final int WIDTH_100 = 100;
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private ListBoxView<TestItem> viewMock;

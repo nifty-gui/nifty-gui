@@ -14,7 +14,7 @@ import org.junit.Test;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 
 public class CheckBoxImplTest {
-  private CheckBoxImpl checkBox = new CheckBoxImpl();
+  private CheckBoxImpl checkBox = new CheckBoxImpl(null);
   private CheckBoxView view;
   private Capture<CheckBoxStateChangedEvent> capturedEvent = new Capture<CheckBoxStateChangedEvent>();
 

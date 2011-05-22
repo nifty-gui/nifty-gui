@@ -7,12 +7,18 @@ import de.lessvoid.nifty.NiftyEvent;
  * @author void
  */
 public class ScrollPanelChangedEvent implements NiftyEvent<Void> {
+  private ScrollPanel scrollPanel;
   private float x;
   private float y;
 
-  public ScrollPanelChangedEvent(final float newX, final float newY) {
+  public ScrollPanelChangedEvent(final ScrollPanel scrollPanel, final float newX, final float newY) {
+    this.scrollPanel = scrollPanel;
     this.x = newX;
     this.y = newY;
+  }
+
+  public ScrollPanel getScrollPanel() {
+    return scrollPanel;
   }
 
   public float getX() {

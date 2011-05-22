@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ListBoxShowItemLessThanViewCountTest {
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private ListBoxView<TestItem> viewMock;

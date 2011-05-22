@@ -7,10 +7,16 @@ import de.lessvoid.nifty.NiftyEvent;
  * @author void
  */
 public class ScrollbarChangedEvent implements NiftyEvent<Void> {
+  private Scrollbar scrollbar;
   private float value;
 
-  public ScrollbarChangedEvent(final float newValue) {
+  public ScrollbarChangedEvent(final Scrollbar scrollbar, final float newValue) {
+    this.scrollbar = scrollbar;
     this.value = newValue;
+  }
+
+  public Scrollbar getScrollbar() {
+    return scrollbar;
   }
 
   public float getValue() {

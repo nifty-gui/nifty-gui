@@ -6,12 +6,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.shared.EmptyNiftyControlImpl;
 
 public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
+  private ListBox<T> listBox;
   private List<T> items = new ArrayList<T>();
   private List<ItemWidth> widthList = new ArrayList<ItemWidth>();
   private ListBoxSelectionMode<T> selection = new ListBoxSelectionModeSingle<T>();
@@ -23,6 +25,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
   private List<Integer> selectedItemsForDisplay = new ArrayList<Integer>();
   private ListBoxFocusItem listBoxFocusItem = new ListBoxFocusItem();
   private int lastMaxWidth = 0;
+
+  public ListBoxImpl(final ListBox<T> listBox) {
+    this.listBox = listBox;
+  }
 
   public int bindToView(final ListBoxView<T> newListBoxView, final int viewDisplayItemCount) {
     this.view = newListBoxView;
@@ -419,7 +425,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
   }
 
   private void selectionChangedEvent(final List<T> oldSelection) {
-    view.publish(new ListBoxSelectionChangedEvent<T>(getSelection(), getSelectedIndices()));
+    view.publish(new ListBoxSelectionChangedEvent<T>(listBox, getSelection(), getSelectedIndices()));
   }
 
   private void updateAfterRemove(final List<T> oldSelection, final int oldItemCount) {

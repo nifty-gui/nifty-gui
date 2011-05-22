@@ -33,7 +33,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 @Deprecated
 public class ListBoxControl<T> extends AbstractController implements ListBox<T>, ListBoxView<T> {
   private Logger log = Logger.getLogger(ListBoxControl.class.getName());
-  private ListBoxImpl<T> listBoxImpl = new ListBoxImpl<T>();
+  private ListBoxImpl<T> listBoxImpl = new ListBoxImpl<T>(this);
   private Element[] labelElements;
   private Nifty nifty;
   private Screen screen;

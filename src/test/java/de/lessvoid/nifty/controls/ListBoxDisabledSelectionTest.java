@@ -8,7 +8,7 @@ import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
 import de.lessvoid.nifty.controls.listbox.TestItem;
 
 public class ListBoxDisabledSelectionTest {
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private SelectionCheck selectionCheck = new SelectionCheck(listBox);

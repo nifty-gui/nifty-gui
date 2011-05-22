@@ -22,7 +22,7 @@ import de.lessvoid.nifty.controls.listbox.ListBoxView;
 import de.lessvoid.nifty.controls.listbox.TestItem;
 
 public class ListBoxMultipleSelectionViewTest {
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private ListBoxView<TestItem> viewMock;
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");

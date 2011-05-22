@@ -14,7 +14,7 @@ import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 
 public class ListBoxFocusElementTest {
   private static final int TOO_LARGE_INDEX = 4;
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private TestItem o3 = new TestItem("o3");

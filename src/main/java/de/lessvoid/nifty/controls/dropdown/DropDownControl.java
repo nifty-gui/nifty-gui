@@ -79,11 +79,11 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
           close(new EndNotify() {
             @Override
             public void perform() {
-              nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(selectedItem, selectedItemIndex));
+              nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(DropDownControl.this, selectedItem, selectedItemIndex));
             }
           });
         } else {
-          nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(selectedItem, selectedItemIndex));
+          nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(DropDownControl.this, selectedItem, selectedItemIndex));
         }
       }
 

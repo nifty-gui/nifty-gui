@@ -10,13 +10,13 @@ public class CheckBoxStateChangedEventTest {
 
   @Test
   public void testChecked() {
-    CheckBoxStateChangedEvent event = new CheckBoxStateChangedEvent(true);
+    CheckBoxStateChangedEvent event = new CheckBoxStateChangedEvent(null, true);
     assertTrue(event.isChecked());
   }
 
   @Test
   public void testUnchecked() {
-    CheckBoxStateChangedEvent event = new CheckBoxStateChangedEvent(false);
+    CheckBoxStateChangedEvent event = new CheckBoxStateChangedEvent(null, false);
     assertFalse(event.isChecked());
   }
 }

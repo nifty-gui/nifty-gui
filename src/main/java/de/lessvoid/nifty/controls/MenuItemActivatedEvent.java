@@ -8,10 +8,16 @@ import de.lessvoid.nifty.NiftyEvent;
  * @author void
  */
 public class MenuItemActivatedEvent<T> implements NiftyEvent<T> {
+  private Menu<T> menu;
   private T item;
 
-  public MenuItemActivatedEvent(final T item) {
+  public MenuItemActivatedEvent(final Menu<T> menu, final T item) {
+    this.menu = menu;
     this.item = item;
+  }
+
+  public Menu<T> getMenu() {
+    return menu;
   }
 
   public T getItem() {

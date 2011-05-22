@@ -48,9 +48,9 @@ public class SliderControl extends AbstractController implements Slider {
     nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
 
     if ("verticalSlider".equals(parameter.getProperty("name"))) {
-      sliderView = new SliderViewVertical();
+      sliderView = new SliderViewVertical(this);
     } else if ("horizontalSlider".equals(parameter.getProperty("name"))) {
-      sliderView = new SliderViewHorizontal();
+      sliderView = new SliderViewHorizontal(this);
     }
 
     min = Float.valueOf(parameter.getProperty("min", "0.0"));
@@ -170,6 +170,12 @@ public class SliderControl extends AbstractController implements Slider {
   // SliderView implementation
 
   private class SliderViewVertical implements SliderView {
+    private Slider slider;
+
+    public SliderViewVertical(final Slider slider) {
+      this.slider = slider;
+    }
+
     @Override
     public int getSize() {
       return elementBackground.getHeight() - elementPosition.getHeight();
@@ -189,12 +195,18 @@ public class SliderControl extends AbstractController implements Slider {
     @Override
     public void valueChanged(final float value) {
       if (element.getId() != null) {
-        nifty.publishEvent(element.getId(), new SliderChangedEvent(value));
+        nifty.publishEvent(element.getId(), new SliderChangedEvent(slider, value));
       }
     }
   }
 
   private class SliderViewHorizontal implements SliderView {
+    private Slider slider;
+
+    public SliderViewHorizontal(final Slider slider) {
+      this.slider = slider;
+    }
+
     @Override
     public int getSize() {
       return elementBackground.getWidth() - elementPosition.getWidth();
@@ -214,7 +226,7 @@ public class SliderControl extends AbstractController implements Slider {
     @Override
     public void valueChanged(final float value) {
       if (element.getId() != null) {
-        nifty.publishEvent(element.getId(), new SliderChangedEvent(value));
+        nifty.publishEvent(element.getId(), new SliderChangedEvent(slider, value));
       }
     }
   }

@@ -9,12 +9,18 @@ import de.lessvoid.nifty.NiftyEvent;
  * @author void
  */
 public class ListBoxSelectionChangedEvent<T> implements NiftyEvent<T> {
+  private ListBox<T> listBox;
   private List<T> selection;
   private List<Integer> selectionIndices;
 
-  public ListBoxSelectionChangedEvent(final List<T> selection, final List<Integer> selectionIndices) {
+  public ListBoxSelectionChangedEvent(final ListBox<T> listBox, final List<T> selection, final List<Integer> selectionIndices) {
+    this.listBox = listBox;
     this.selection = selection;
     this.selectionIndices = selectionIndices;
+  }
+
+  public ListBox<T> getListBox() {
+    return listBox;
   }
 
   public List<T> getSelection() {

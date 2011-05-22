@@ -47,7 +47,7 @@ public class ButtonControl extends AbstractController implements Button {
     EventTopicSubscriber<NiftyMousePrimaryClickedEvent> mouseClickedSubscriber = new EventTopicSubscriber<NiftyMousePrimaryClickedEvent>() {
       @Override
       public void onEvent(final String topic, final NiftyMousePrimaryClickedEvent data) {
-        niftyParam.publishEvent(topic, new ButtonClickedEvent());
+        niftyParam.publishEvent(topic, new ButtonClickedEvent(ButtonControl.this));
       }
     };
     niftyParam.subscribe(screen, newElement.getId(), NiftyMousePrimaryClickedEvent.class, mouseClickedSubscriber);

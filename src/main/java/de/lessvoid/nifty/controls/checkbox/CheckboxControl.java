@@ -20,7 +20,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 @Deprecated
 public class CheckboxControl extends AbstractController implements CheckBox, CheckBoxView {
-  private CheckBoxImpl checkBoxImpl = new CheckBoxImpl();
+  private CheckBoxImpl checkBoxImpl = new CheckBoxImpl(this);
   private Nifty nifty;
   private Screen screen;
   private FocusHandler focusHandler;

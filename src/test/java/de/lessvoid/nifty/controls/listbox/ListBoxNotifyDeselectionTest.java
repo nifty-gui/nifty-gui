@@ -14,7 +14,7 @@ import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.SelectionCheck;
 
 public class ListBoxNotifyDeselectionTest {
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>();
+  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private ListBoxView<TestItem> view;
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");

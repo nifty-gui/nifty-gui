@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class ListBoxViewDefaultTest {
   private static final int WIDTH_100 = 100;
-  private ListBoxImpl<String> listBox = new ListBoxImpl<String>();
+  private ListBoxImpl<String> listBox = new ListBoxImpl<String>(null);
   private ListBoxView<String> view;
 
   @SuppressWarnings("unchecked")

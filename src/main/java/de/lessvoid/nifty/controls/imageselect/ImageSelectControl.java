@@ -291,6 +291,6 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
     }
 
     private void imageIndexChanged() {
-      nifty.publishEvent(element.getId(), new ImageSelectSelectionChangedEvent(currentImageIndex));
+      nifty.publishEvent(element.getId(), new ImageSelectSelectionChangedEvent(this, currentImageIndex));
     }
 }
