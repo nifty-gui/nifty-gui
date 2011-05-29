@@ -1148,7 +1148,12 @@ public class Element implements NiftyEvent<Void> {
     }
   }
 
-  void disableFocus() {
+  public void disableFocus() {
+    if (focusHandler.getKeyboardFocusElement() == this) {
+      Element prevElement = focusHandler.getNext(this);
+      prevElement.setFocus();
+    }
+
     focusHandler.lostKeyboardFocus(Element.this);
     focusHandler.lostMouseFocus(Element.this);
   }
