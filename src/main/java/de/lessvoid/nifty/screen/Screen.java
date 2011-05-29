@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyControl;
@@ -28,6 +29,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class Screen {
+  public int layoutLayersCallCount = 0;
   private Logger log = Logger.getLogger(Screen.class.getName());
 
   private String screenId;
@@ -184,6 +186,7 @@ public class Screen {
   }
 
   public void startScreen(final EndNotify startScreenEndNotify) {
+    NiftyStopwatch.start();
     running = false;
 
     focusHandler.resetFocusElements();
@@ -205,6 +208,7 @@ public class Screen {
     // event of the elements. so we have to set the default focus
     // here after the onStartScreen is started.
     setDefaultFocus();
+    NiftyStopwatch.stop("Screen.startScreen(" + layoutLayersCallCount + ")");
   }
 
   public void endScreen(final EndNotify callback) {
@@ -214,10 +218,14 @@ public class Screen {
   }
 
   public void layoutLayers() {
+    NiftyStopwatch.start();
+    layoutLayersCallCount++;
+
     for (int i=0; i<layerElements.size(); i++) {
       Element w = layerElements.get(i);
       w.layoutElements();
     }
+    NiftyStopwatch.stop("Screen.layoutLayers()");
   }
 
   private void resetLayers() {

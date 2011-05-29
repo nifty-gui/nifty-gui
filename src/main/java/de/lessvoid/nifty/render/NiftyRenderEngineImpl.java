@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.elements.render.TextRenderer.RenderFontNull;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
@@ -171,8 +172,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     if (fontCache.containsKey(filename)) {
       return fontCache.get(filename);
     } else {
+      NiftyStopwatch.start();
       RenderFont newFont = renderDevice.createFont(filename);
       fontCache.put(filename, newFont);
+      NiftyStopwatch.stop("RenderDevice.createFont(" + filename + ")");
       return newFont;
     }
   }

@@ -36,6 +36,10 @@ public class ControlAttributes {
     attributes.set(key, value);
   }
 
+  public String get(final String key) {
+    return attributes.get(key);
+  }
+
   public void setId(final String id) {
     isAutoId = false;
     attributes.set("id", id);

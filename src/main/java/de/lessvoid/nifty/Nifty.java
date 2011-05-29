@@ -36,6 +36,7 @@ import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
+import de.lessvoid.nifty.loaderv2.types.LayerType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
@@ -613,6 +614,34 @@ public class Nifty {
       sn.add(screen.getScreenId());
     }
     return sn;
+  }
+
+  public void removeScreen(final String id) {
+    if (!currentScreen.isNull()) {
+      if (currentScreen.getScreenId().equals(id)) {
+        currentScreen.endScreen(
+          new EndNotify() {
+            public void perform() {
+              currentScreen = new NullScreen();
+              removeScreenInternal(id);
+            }
+          });
+        return;
+      }
+      removeScreenInternal(id);
+    }
+  }
+
+  private void removeScreenInternal(final String id) {
+    Screen screen = screens.remove(id);
+    if (screen == null ||
+        screen.getLayerElements() == null ||
+        screen.getLayerElements().size() == 0) {
+      return;
+    }
+    for (int i=0; i<screen.getLayerElements().size(); i++) {
+      removeElement(screen, screen.getLayerElements().get(i));
+    }
   }
 
   /**
@@ -1359,9 +1388,16 @@ public class Nifty {
   }
 
   public Element createElementFromType(final Screen screen, final Element parent, final ElementType type) {
+    if (type instanceof LayerType) {
+      return createElementFromTypeInternal(screen, parent, type, getRootLayerFactory().createRootLayerLayoutPart(this));
+    }
+    return createElementFromTypeInternal(screen, parent, type, new LayoutPart());
+  }
+
+  private Element createElementFromTypeInternal(final Screen screen, final Element parent, final ElementType type, final LayoutPart layoutPart) {
     ElementType elementType = type.copy();
     elementType.prepare(this, screen, screen.getRootElement().getElementType());
-    Element element = elementType.create(parent, this, screen, new LayoutPart());
+    Element element = elementType.create(parent, this, screen, layoutPart);
     if (screen.isBound()) {
       screen.layoutLayers();
       element.bindControls(screen);

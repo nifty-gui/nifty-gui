@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.controls.dynamic.ScreenCreator;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -39,13 +40,16 @@ public class ScreenBuilder {
   }
 
   public Screen build(final Nifty nifty) {
+    NiftyStopwatch.start();
     Screen screen = creator.create(nifty);
 
     Element screenRootElement = screen.getRootElement();
     for (LayerBuilder layerBuilder : layerBuilders) {
-      layerBuilder.build(nifty, screen, screenRootElement);
+      screen.addLayerElement(layerBuilder.build(nifty, screen, screenRootElement));
     }
 
+    screen.processAddAndRemoveLayerElements();
+    NiftyStopwatch.stop("ScreenBuilder.build ()");
     return screen;
   }
 

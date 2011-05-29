@@ -1,9 +1,6 @@
 package de.lessvoid.nifty.builder;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.screen.Screen;
 
 public class ControlBuilder extends ElementBuilder {
   private CustomControlCreator creator;
@@ -20,10 +17,5 @@ public class ControlBuilder extends ElementBuilder {
 
   public void parameter(final String name, final String value) {
     creator.parameter(name, value);
-  }
-
-  @Override
-  protected Element buildInternal(Nifty nifty, Screen screen, Element parent) {
-    return creator.create(nifty, screen, parent);
   }
 }

@@ -3,8 +3,10 @@ package de.lessvoid.nifty.loaderv2.types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
@@ -27,7 +29,7 @@ public class ElementType extends XmlBaseType {
   protected ElementRendererCreator elementRendererCreator;
   protected InteractType interact = new InteractType();
   protected EffectsType effects = new EffectsType();
-  protected Collection < ElementType > elements = new ArrayList < ElementType >();
+  protected List < ElementType > elements = new ArrayList < ElementType >();
   protected LinkedList < Object > controllers = new LinkedList < Object >();
   protected Controller controller;
 
@@ -315,8 +317,8 @@ public class ElementType extends XmlBaseType {
 
   void applyControls(final Nifty nifty) {
     internalApplyControl(nifty);
-    for (ElementType elementType : elements) {
-      elementType.applyControls(nifty);
+    for (int i=0; i<elements.size(); i++) {
+      elements.get(i).applyControls(nifty);
     }
   }
 

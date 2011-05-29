@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.builder;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
@@ -17,20 +16,20 @@ import de.lessvoid.nifty.tools.Color;
 public abstract class ElementBuilder {
   private ControlAttributes attributes;
   private ControlInteractAttributes interactAttributes = new ControlInteractAttributes();
-  private List<ElementBuilder> elementBuilders = new ArrayList<ElementBuilder>();
-  private Collection<EffectBuilder> onStartScreen = new ArrayList<EffectBuilder>();
-  private Collection<EffectBuilder> onEndScreen = new ArrayList<EffectBuilder>();
-  private Collection<HoverEffectBuilder> onHover = new ArrayList<HoverEffectBuilder>();
-  private Collection<HoverEffectBuilder> onStartHover = new ArrayList<HoverEffectBuilder>();
-  private Collection<HoverEffectBuilder> onEndHover = new ArrayList<HoverEffectBuilder>();
-  private Collection<EffectBuilder> onClick = new ArrayList<EffectBuilder>();
-  private Collection<EffectBuilder> onFocus = new ArrayList<EffectBuilder>();
-  private Collection<EffectBuilder> onLostFocus = new ArrayList<EffectBuilder>();
-  private Collection<EffectBuilder> onGetFocus = new ArrayList<EffectBuilder>();
-  private Collection<EffectBuilder> onActive = new ArrayList<EffectBuilder>();
-  private Collection<EffectBuilder> onCustom = new ArrayList<EffectBuilder>();
-  private Collection<EffectBuilder> onShow = new ArrayList<EffectBuilder>();
-  private Collection<EffectBuilder> onHide = new ArrayList<EffectBuilder>();
+  protected List<ElementBuilder> elementBuilders = new ArrayList<ElementBuilder>();
+  private List<EffectBuilder> onStartScreen = new ArrayList<EffectBuilder>();
+  private List<EffectBuilder> onEndScreen = new ArrayList<EffectBuilder>();
+  private List<HoverEffectBuilder> onHover = new ArrayList<HoverEffectBuilder>();
+  private List<HoverEffectBuilder> onStartHover = new ArrayList<HoverEffectBuilder>();
+  private List<HoverEffectBuilder> onEndHover = new ArrayList<HoverEffectBuilder>();
+  private List<EffectBuilder> onClick = new ArrayList<EffectBuilder>();
+  private List<EffectBuilder> onFocus = new ArrayList<EffectBuilder>();
+  private List<EffectBuilder> onLostFocus = new ArrayList<EffectBuilder>();
+  private List<EffectBuilder> onGetFocus = new ArrayList<EffectBuilder>();
+  private List<EffectBuilder> onActive = new ArrayList<EffectBuilder>();
+  private List<EffectBuilder> onCustom = new ArrayList<EffectBuilder>();
+  private List<EffectBuilder> onShow = new ArrayList<EffectBuilder>();
+  private List<EffectBuilder> onHide = new ArrayList<EffectBuilder>();
 
   protected void initialize(final ControlAttributes attributes) {
     this.attributes = attributes;
@@ -303,6 +302,10 @@ public abstract class ElementBuilder {
     attributes.set(key, value);
   }
 
+  public String get(final String key) {
+    return attributes.get(key);
+  }
+
   public void panel(final PanelBuilder panelBuilder) {
     elementBuilders.add(panelBuilder);
   }
@@ -403,15 +406,9 @@ public abstract class ElementBuilder {
     return Integer.toString(px) + "px";
   }
 
-  protected abstract Element buildInternal(Nifty nifty, Screen screen, Element parent);
-
   public Element build(final Nifty nifty, final Screen screen, final Element parent) {
-    connectAttributes();
-    Element element = buildInternal(nifty, screen, parent);
-    for (ElementBuilder elementBuilder : elementBuilders) {
-      elementBuilder.build(nifty, screen, element);
-    }
-    return element;
+    ElementType type = buildElementType();
+    return nifty.createElementFromType(screen, parent, type);
   }
 
   /**
@@ -423,7 +420,7 @@ public abstract class ElementBuilder {
    * 
    * @return the ElementType representation for this ElementBuilder
    */
-  protected ElementType buildElementType() {
+  public ElementType buildElementType() {
     connectAttributes();
     ElementType thisType = attributes.createType();
 
@@ -445,52 +442,53 @@ public abstract class ElementBuilder {
     }
 
     attributes.connect(thisType);
-    for (ElementBuilder elementBuilder : elementBuilders) {
-      thisType.addElementType(elementBuilder.buildElementType());
+    for (int i=0; i<elementBuilders.size(); i++) {
+      thisType.addElementType(elementBuilders.get(i).buildElementType());
     }
+
     return thisType;
   }
 
   private void connectAttributes() {
     attributes.setEffects(createEffects());
-    for (EffectBuilder effectBuild : onStartScreen) {
-      attributes.addEffectsOnStartScreen(effectBuild.getAttributes());
+    for (int i=0; i<onStartScreen.size(); i++) {
+      attributes.addEffectsOnStartScreen(onStartScreen.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onEndScreen) {
-      attributes.addEffectsOnEndScreen(effectBuild.getAttributes());
+    for (int i=0; i<onEndScreen.size(); i++) {
+      attributes.addEffectsOnEndScreen(onEndScreen.get(i).getAttributes());
     }
-    for (HoverEffectBuilder effectBuild : onHover) {
-      attributes.addEffectsOnHover(effectBuild.getAttributes());
+    for (int i=0; i<onHover.size(); i++) {
+      attributes.addEffectsOnHover(onHover.get(i).getAttributes());
     }
-    for (HoverEffectBuilder effectBuild : onStartHover) {
-      attributes.addEffectsOnStartHover(effectBuild.getAttributes());
+    for (int i=0; i<onStartHover.size(); i++) {
+      attributes.addEffectsOnStartHover(onStartHover.get(i).getAttributes());
     }
-    for (HoverEffectBuilder effectBuild : onEndHover) {
-      attributes.addEffectsOnEndHover(effectBuild.getAttributes());
+    for (int i=0; i<onEndHover.size(); i++) {
+      attributes.addEffectsOnEndHover(onEndHover.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onClick) {
-      attributes.addEffectsOnClick(effectBuild.getAttributes());
+    for (int i=0; i<onClick.size(); i++) {
+      attributes.addEffectsOnClick(onClick.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onFocus) {
-      attributes.addEffectsOnFocus(effectBuild.getAttributes());
+    for (int i=0; i<onFocus.size(); i++) {
+      attributes.addEffectsOnFocus(onFocus.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onLostFocus) {
-      attributes.addEffectsOnLostFocus(effectBuild.getAttributes());
+    for (int i=0; i<onLostFocus.size(); i++) {
+      attributes.addEffectsOnLostFocus(onLostFocus.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onGetFocus) {
-      attributes.addEffectsOnGetFocus(effectBuild.getAttributes());
+    for (int i=0; i<onGetFocus.size(); i++) {
+      attributes.addEffectsOnGetFocus(onGetFocus.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onActive) {
-      attributes.addEffectsOnActive(effectBuild.getAttributes());
+    for (int i=0; i<onActive.size(); i++) {
+      attributes.addEffectsOnActive(onActive.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onCustom) {
-      attributes.addEffectsOnCustom(effectBuild.getAttributes());
+    for (int i=0; i<onCustom.size(); i++) {
+      attributes.addEffectsOnCustom(onCustom.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onShow) {
-      attributes.addEffectsOnShow(effectBuild.getAttributes());
+    for (int i=0; i<onShow.size(); i++) {
+      attributes.addEffectsOnShow(onShow.get(i).getAttributes());
     }
-    for (EffectBuilder effectBuild : onHide) {
-      attributes.addEffectsOnHide(effectBuild.getAttributes());
+    for (int i=0; i<onHide.size(); i++) {
+      attributes.addEffectsOnHide(onHide.get(i).getAttributes());
     }
   }
 

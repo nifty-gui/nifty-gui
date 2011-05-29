@@ -26,9 +26,4 @@ public class PopupBuilder extends ElementBuilder {
     PopupType popupType = (PopupType) buildElementType();
     nifty.registerPopup(popupType);
   }
-
-  @Override
-  protected Element buildInternal(final Nifty nifty, final Screen screen, final Element parent) {
-    return null;
-  }
 }

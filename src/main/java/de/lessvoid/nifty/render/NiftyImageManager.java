@@ -6,6 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
@@ -26,12 +27,15 @@ public class NiftyImageManager {
       log.finer(key + " exists [" + imageCache.get(key).references + "]");
       return existingEntry;
     }
+    NiftyStopwatch.start();
+
     RenderImage createImage = renderDevice.createImage(filename, filterLinear);
     ReferencedCountedImage newEntry = new ReferencedCountedImage(key, createImage);
     backReference.put(createImage, newEntry);
-
     imageCache.put(key, newEntry);
     log.finer(key + " create [" + imageCache.get(key).references + "]");
+
+    NiftyStopwatch.stop("imageManager.getImage(" + filename + ")");
     return newEntry.getRenderImage();
   }
 
