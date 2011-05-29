@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.builder;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
@@ -35,7 +36,7 @@ public class ScreenBuilderWithLayerTest {
 
     screen = createMock(Screen.class);
     expect(screen.getRootElement()).andReturn(screenRootElement);
-    replay(screen);
+    screen.addLayerElement(isA(Element.class));
 
     screenCreator = createMock(ScreenCreator.class);
     expect(screenCreator.create(niftyMock)).andReturn(screen);
@@ -53,6 +54,9 @@ public class ScreenBuilderWithLayerTest {
 
   @Test
   public void testWithOneLayer() {
+    screen.processAddAndRemoveLayerElements();
+    replay(screen);
+
     LayerBuilder layerBuilder = createLayerBuilder();
 
     ScreenBuilder screenBuilder = new ScreenBuilderCreatorMock();
@@ -64,6 +68,10 @@ public class ScreenBuilderWithLayerTest {
 
   @Test
   public void testWithTwoLayers() {
+    screen.addLayerElement(isA(Element.class));
+    screen.processAddAndRemoveLayerElements();
+    replay(screen);
+
     LayerBuilder layerBuilder1 = createLayerBuilder();
     LayerBuilder layerBuilder2 = createLayerBuilder();
 
@@ -78,6 +86,9 @@ public class ScreenBuilderWithLayerTest {
 
   @Test
   public void testWithOneLayerParentAlreadySet() {
+    screen.processAddAndRemoveLayerElements();
+    replay(screen);
+
     LayerBuilder layerBuilder = createLayerBuilderWithParent();
 
     ScreenBuilder screenBuilder = new ScreenBuilderCreatorMock();

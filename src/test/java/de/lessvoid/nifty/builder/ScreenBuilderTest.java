@@ -29,6 +29,7 @@ public class ScreenBuilderTest {
 
     screen = createMock(Screen.class);
     expect(screen.getRootElement()).andReturn(screenRootElement);
+    screen.processAddAndRemoveLayerElements();
     replay(screen);
 
     niftyMock = createMock(Nifty.class);
