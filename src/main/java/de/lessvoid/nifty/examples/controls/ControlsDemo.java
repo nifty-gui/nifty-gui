@@ -18,7 +18,6 @@ import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
-import de.lessvoid.nifty.effects.impl.Fade;
 import de.lessvoid.nifty.examples.controls.chatcontrol.ChatControlDialogDefinition;
 import de.lessvoid.nifty.examples.controls.common.CommonBuilders;
 import de.lessvoid.nifty.examples.controls.common.DialogPanelControlDefinition;
@@ -68,9 +67,9 @@ public class ControlsDemo {
     TextFieldDialogControlDefinition.register(nifty);
     SliderAndScrollbarDialogControlDefinition.register(nifty);
     DragAndDropDialogDefinition.register(nifty);
-    
-    nifty.addScreen("start", createIntroScreen(nifty));
-    nifty.addScreen("demo", createDemoScreen(nifty));
+
+    createIntroScreen(nifty);
+    createDemoScreen(nifty);
     nifty.gotoScreen("demo");
 
     // start the render loop
