@@ -35,6 +35,10 @@ public class ScreenBuilder {
     creator.setInputMapping(inputMapping);
   }
 
+  public void inputMappingPre(final String inputMappingPre) {
+    creator.setInputMappingPre(inputMappingPre);
+  }
+
   public void layer(final LayerBuilder layerBuilder) {
     layerBuilders.add(layerBuilder);
   }

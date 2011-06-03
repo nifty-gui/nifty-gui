@@ -17,6 +17,7 @@ public class ScreenCreator {
   private ScreenController screenController;
   private String defaultFocusElement;
   private String inputMapping;
+  private String inputMappingPre;
 
   public ScreenCreator(final String id) {
     this.id = id;
@@ -39,12 +40,17 @@ public class ScreenCreator {
     this.inputMapping = inputMapping;
   }
 
+  public void setInputMappingPre(final String inputMappingPre) {
+    this.inputMappingPre = inputMappingPre;
+  }
+
   public Screen create(final Nifty nifty) {
     Screen screen = createScreen(nifty);
 
     addRootElement(nifty, screen);
     addDefaultFocusElement(screen);
     addInputMapping(screen, inputMapping);
+    addPreInputMapping(screen, inputMappingPre);
 
     nifty.addScreen(id, screen);
     return screen;
@@ -70,6 +76,17 @@ public class ScreenCreator {
         log.info("class [" + screenController + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
       } else {
         screen.addKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
+      }
+    }
+  }
+
+  private void addPreInputMapping(final Screen screen, final String inputMappingClass) {
+    if (inputMappingClass != null) {
+      NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
+      if (!(screenController instanceof KeyInputHandler)) {
+        log.info("class [" + screenController + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
+      } else {
+        screen.addPreKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
       }
     }
   }

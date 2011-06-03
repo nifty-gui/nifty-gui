@@ -54,7 +54,8 @@ public class Screen {
   private FocusHandler focusHandler;
   private MouseOverHandler mouseOverHandler;
   private Nifty nifty;
-  private List < InputHandlerWithMapping > inputHandlers = new ArrayList < InputHandlerWithMapping >();
+  private List < InputHandlerWithMapping > postInputHandlers = new ArrayList < InputHandlerWithMapping >();
+  private List < InputHandlerWithMapping > preInputHandlers = new ArrayList < InputHandlerWithMapping >();
   private Element rootElement;
   private String defaultFocusElementId;
   private boolean running = false;
@@ -403,11 +404,17 @@ public class Screen {
    * @param inputEvent keyboard event
    */
   public boolean keyEvent(final KeyboardInputEvent inputEvent) {
+    for (int i=0; i<preInputHandlers.size(); i++) {
+      InputHandlerWithMapping handler = preInputHandlers.get(i);
+      if (handler.process(inputEvent)) {
+        return true;
+      }
+    }
     if (focusHandler.keyEvent(inputEvent)) {
       return true;
     }
-    for (int i=0; i<inputHandlers.size(); i++) {
-      InputHandlerWithMapping handler = inputHandlers.get(i);
+    for (int i=0; i<postInputHandlers.size(); i++) {
+      InputHandlerWithMapping handler = postInputHandlers.get(i);
       if (handler.process(inputEvent)) {
         return true;
       }
@@ -421,7 +428,34 @@ public class Screen {
    * @param handler new handler to add
    */
   public void addKeyboardInputHandler(final NiftyInputMapping mapping, final KeyInputHandler handler) {
-    inputHandlers.add(new InputHandlerWithMapping(mapping, handler));
+    postInputHandlers.add(new InputHandlerWithMapping(mapping, handler));
+  }
+
+  public void removeKeyboardInputHandler(final KeyInputHandler handler) {
+    for (int i=0; i<postInputHandlers.size(); i++) {
+      if (postInputHandlers.get(i).getKeyInputHandler().equals(handler)) {
+        postInputHandlers.remove(i);
+        return;
+      }
+    }
+  }
+
+  /**
+   * add a keyboard input handler.
+   * @param mapping mapping
+   * @param handler new handler to add
+   */
+  public void addPreKeyboardInputHandler(final NiftyInputMapping mapping, final KeyInputHandler handler) {
+    preInputHandlers.add(new InputHandlerWithMapping(mapping, handler));
+  }
+
+  public void removePreKeyboardInputHandler(final KeyInputHandler handler) {
+    for (int i=0; i<preInputHandlers.size(); i++) {
+      if (preInputHandlers.get(i).getKeyInputHandler().equals(handler)) {
+        preInputHandlers.remove(i);
+        return;
+      }
+    }
   }
 
   public String debugOutput() {
@@ -639,6 +673,10 @@ public class Screen {
         final KeyInputHandler newHandler) {
       mapping = newMapping;
       handler = newHandler;
+    }
+
+    public KeyInputHandler getKeyInputHandler() {
+      return handler;
     }
 
     /**

@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;

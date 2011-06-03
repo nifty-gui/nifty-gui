@@ -347,7 +347,8 @@
     <xs:attribute name="id" type="xs:string"></xs:attribute>
     <xs:attribute name="controller" type="xs:string"></xs:attribute>
     <xs:attribute name="inputMapping" type="xs:string"></xs:attribute>
-    <xs:attribute name="defaultFocusElement" type="xs:string"/>
+    <xs:attribute name="inputMappingPre" type="xs:boolean" use="optional"></xs:attribute>
+    <xs:attribute name="defaultFocusElement" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="niftyType">

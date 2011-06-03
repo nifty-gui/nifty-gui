@@ -54,6 +54,15 @@ public class ScreenType extends XmlBaseType {
         screen.addKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
       }
     }
+    String inputMappingPreClass = getAttributes().get("inputMappingPre");
+    if (inputMappingPreClass != null) {
+      NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingPreClass, NiftyInputMapping.class);
+      if (!(screenController instanceof KeyInputHandler)) {
+        log.info("class [" + controller + "] tries to use inputMapping [" + inputMappingPreClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
+      } else {
+        screen.addPreKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
+      }
+    }
 
     Element rootElement = nifty.getRootLayerFactory().createRootLayer("root", nifty, screen, timeProvider);
     screen.setRootElement(rootElement);
