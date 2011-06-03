@@ -45,10 +45,9 @@ public class ScreenBuilder {
 
     Element screenRootElement = screen.getRootElement();
     for (LayerBuilder layerBuilder : layerBuilders) {
-      screen.addLayerElement(layerBuilder.build(nifty, screen, screenRootElement));
+      layerBuilder.build(nifty, screen, screenRootElement);
     }
 
-    screen.processAddAndRemoveLayerElements();
     NiftyStopwatch.stop("ScreenBuilder.build ()");
     return screen;
   }
