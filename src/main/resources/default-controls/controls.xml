@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+
+  <!-- include the styles we want to use -->
+  <useStyles filename="nifty-default-styles.xml" />
+
+  <!-- include the default controls -->
+  <useControls filename="nifty-default-controls.xml" />
+
+  <!--
+    this control will make our live a little easier. it is just a panel that is shared by all screens so
+    that the panel looks the same on each screen. the only thing we're changing is the content of the
+    #container inside of the control. this way we'll add individual content on each screen.
+   -->
+  <controlDefinition name="demoPanel" childRootId="#container">
+    <panel childLayout="vertical" valign="center" align="center" width="50%" height="50%" style="nifty-panel">
+      <text width="100%" style="base-font" text="$caption" backgroundColor="#8008" height="25px"/>
+      <panel width="100%" height="7px" />
+      <panel id="#container" width="100%" height="*" childLayout="vertical"/>
+      <panel width="100%" height="7px" />
+      <control id="reset" name="button" label="Restart Screen" align="center" />
+    </panel>
+  </controlDefinition>
+
+  <!--
+    button demonstration
+  -->
+  <screen id="screenButton" controller="de.lessvoid.nifty.examples.defaultControls.ScreenButton" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Button Demonstration">
+        <control id="button" name="button" label="Button" align="center" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    chat control demonstration
+  --> 
+  <screen id="screenChatControl" controller="de.lessvoid.nifty.examples.defaultControls.ScreenChatControl" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Chat Control Demonstration">
+        <control id="chat" name="nifty-chat" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    checkbox control demonstration
+  --> 
+  <screen id="screenCheckBox" controller="de.lessvoid.nifty.examples.defaultControls.ScreenCheckBox" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="CheckBox Control Demonstration">
+        <control id="checkbox" name="checkbox" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    console control demonstration
+  --> 
+  <screen id="screenConsole" controller="de.lessvoid.nifty.examples.defaultControls.ScreenConsole" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Console Control Demonstration">
+        <control id="console" name="nifty-console" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    drop down control demonstration
+  --> 
+  <screen id="screenDropDown" controller="de.lessvoid.nifty.examples.defaultControls.ScreenDropDown" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="DropDown Control Demonstration">
+        <control id="dropdown" name="dropDown" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    imageSelect control demonstration
+  --> 
+  <screen id="screenImageSelect" controller="de.lessvoid.nifty.examples.defaultControls.ScreenImageSelect" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="ImageSelect Control Demonstration">
+        <control id="imageSelect" name="imageSelect" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    label control demonstration
+  --> 
+  <screen id="screenLabel" controller="de.lessvoid.nifty.examples.defaultControls.ScreenLabel" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Label Control Demonstration">
+        <control id="label" name="label" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    listbox control demonstration 
+   -->
+  <screen id="screenListBox" controller="de.lessvoid.nifty.examples.defaultControls.ScreenListBox" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="ListBox Control Demonstration">
+        <control id="listbox" name="listBox" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    menu control demonstration 
+   -->
+  <screen id="screenMenu" controller="de.lessvoid.nifty.examples.defaultControls.ScreenMenu" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Menu Control Demonstration">
+        <control id="menu" name="niftyMenu" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    scrollbar control demonstration 
+   -->
+  <screen id="screenScrollbar" controller="de.lessvoid.nifty.examples.defaultControls.ScreenScrollbar" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Scrollbar Control Demonstration">
+        <control id="scrollbarHorizontal" name="horizontalScrollbar" />
+        <control id="scrollbarVertical" name="verticalScrollbar" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    scrollpanel control demonstration 
+   -->
+  <screen id="screenScrollPanel" controller="de.lessvoid.nifty.examples.defaultControls.ScreenScrollPanel" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="ScrollPanel Control Demonstration">
+        <control id="scrollPanel" name="scrollPanel" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    slider control demonstration 
+   -->
+  <screen id="screenSlider" controller="de.lessvoid.nifty.examples.defaultControls.ScreenSlider" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Slider Control Demonstration">
+        <control id="sliderHorizontal" name="horizontalSlider" />
+        <control id="sliderVertical" name="verticalSlider" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    textfield control demonstration 
+   -->
+  <screen id="screenTextfield" controller="de.lessvoid.nifty.examples.defaultControls.ScreenTextfield" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Textfield Control Demonstration">
+        <control id="textfield" name="textfield" />
+      </control>
+    </layer>
+  </screen>
+
+  <!--
+    window control demonstration 
+   -->
+  <screen id="screenWindow" controller="de.lessvoid.nifty.examples.defaultControls.ScreenWindow" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+    <layer childLayout="center">
+      <control name="demoPanel" caption="Window Control Demonstration">
+        <control id="window" name="window" />
+      </control>
+    </layer>
+  </screen>
+
+</nifty>

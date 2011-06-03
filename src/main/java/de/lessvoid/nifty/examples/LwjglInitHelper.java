@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
@@ -29,7 +30,6 @@ public class LwjglInitHelper {
 
   /** logger. */
   private static Logger log = Logger.getLogger(LwjglInitHelper.class.getName());
-
   private static LwjglInputSystem inputSystem;
 
   public static LwjglInputSystem getInputSystem() {
