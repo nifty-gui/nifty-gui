@@ -28,6 +28,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 @Deprecated
 public class ButtonControl extends AbstractController implements Button {
+  private Nifty nifty;
   private Screen screen;
   private FocusHandler focusHandler;
   private Element buttonTextElement;
@@ -40,22 +41,22 @@ public class ButtonControl extends AbstractController implements Button {
       final Properties parameter,
       final Attributes controlDefinitionAttributes) {
     super.bind(newElement);
+    nifty = niftyParam;
     screen = screenParam;
     buttonTextElement = getElement().findElementByName("#text");
     buttonTextRenderer = buttonTextElement.getRenderer(TextRenderer.class);
-
-    EventTopicSubscriber<NiftyMousePrimaryClickedEvent> mouseClickedSubscriber = new EventTopicSubscriber<NiftyMousePrimaryClickedEvent>() {
-      @Override
-      public void onEvent(final String topic, final NiftyMousePrimaryClickedEvent data) {
-        niftyParam.publishEvent(topic, new ButtonClickedEvent(ButtonControl.this));
-      }
-    };
-    niftyParam.subscribe(screen, newElement.getId(), NiftyMousePrimaryClickedEvent.class, mouseClickedSubscriber);
+    focusHandler = screen.getFocusHandler();
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-    focusHandler = screen.getFocusHandler();
+    EventTopicSubscriber<NiftyMousePrimaryClickedEvent> mouseClickedSubscriber = new EventTopicSubscriber<NiftyMousePrimaryClickedEvent>() {
+      @Override
+      public void onEvent(final String topic, final NiftyMousePrimaryClickedEvent data) {
+        nifty.publishEvent(topic, new ButtonClickedEvent(ButtonControl.this));
+      }
+    };
+    nifty.subscribe(screen, getElement().getId(), NiftyMousePrimaryClickedEvent.class, mouseClickedSubscriber);
     super.init(parameter, controlDefinitionAttributes);
   }
 

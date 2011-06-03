@@ -20,7 +20,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
-import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
@@ -49,7 +48,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private int labelTemplateHeight;
   private Properties parameter;
   private int displayItems;
-  private int itemCount;
   private ListBoxViewConverter<T> viewConverter;
   private EventTopicSubscriber<ScrollbarChangedEvent> verticalScrollbarSubscriber = new EventTopicSubscriber<ScrollbarChangedEvent>() {
     @Override
@@ -105,7 +103,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
     initSelectionMode(listBoxImpl, parameter.getProperty("selectionMode", "Single"), parameter.getProperty("forceSelection", "false"));
     connectListBoxAndListBoxPanel();
-    itemCount = listBoxImpl.bindToView(this, displayItems);
+    listBoxImpl.bindToView(this, displayItems);
     lastMaxWidth = childRootElement.getWidth();
     ensureVerticalScrollbar();
     initLabelTemplateData();
@@ -113,16 +111,17 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     initializeScrollPanel(screen);
     setElementHeight();
     initializeScrollElementHeight();
-    subscribeHorizontalScrollbar();
-    subscribeVerticalScrollbar();
     listBoxImpl.updateView(0);
-    nifty.subscribe(screen, getId(), ElementShowEvent.class, listBoxControlShowEventSubscriber);
+    initializeHorizontalScrollbar();
+    initializeVerticalScrollbar(screen, labelTemplateHeight, 0);
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-    initializeHorizontalScrollbar();
-    initializeVerticalScrollbar(screen, labelTemplateHeight, itemCount);
+    subscribeHorizontalScrollbar();
+    subscribeVerticalScrollbar();
+    nifty.subscribe(screen, getId(), ElementShowEvent.class, listBoxControlShowEventSubscriber);
+
     super.init(parameter, controlDefinitionAttributes);
   }
 
@@ -227,7 +226,11 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
         if (vertical == null) {
           ElementType templateType = verticalScrollbarTemplate.getElementType().copy();
           CustomControlCreator create = new CustomControlCreator((ControlType) templateType);
-          create.create(nifty, screen, scrollElement);
+          Element e = create.create(nifty, screen, scrollElement);
+          if (e.getHeight() < 23*2) { // ugly
+            nifty.removeElement(screen, e);
+            return;
+          }
           subscribeVerticalScrollbar();
           ensureWidthConstraints();
 
@@ -301,7 +304,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     applyWidthConstraintsLastWidth = width;
     SizeValue newWidthSizeValue = new SizeValue(width + "px");
     for (Element element : labelElements) {
-      element.setConstraintWidth(newWidthSizeValue);
+      if (element != null) {
+        element.setConstraintWidth(newWidthSizeValue);
+      }
     }
     childRootElement.setConstraintWidth(newWidthSizeValue);
     getElement().layoutElements();
@@ -552,8 +557,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     for (int i = 0; i < displayItems; i++) {
       ElementType templateType = labelTemplateElement.getElementType().copy();
       templateType.getAttributes().set("id", NiftyIdCreator.generate());
-      templateType.prepare(nifty, screen, screen.getRootElement().getElementType());
-      labelElements[i] = templateType.create(childRootElement, nifty, screen, new LayoutPart());
+      labelElements[i] = nifty.createElementFromType(screen, childRootElement, templateType);
 
       // connect it to this listbox
       ListBoxItemController<T> listBoxItemController = labelElements[i].getControl(ListBoxItemController.class);
