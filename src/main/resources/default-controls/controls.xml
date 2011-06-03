@@ -25,7 +25,7 @@
   <!--
     button demonstration
   -->
-  <screen id="screenButton" controller="de.lessvoid.nifty.examples.defaultControls.ScreenButton" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenButton" controller="de.lessvoid.nifty.examples.defaultControls.ScreenButton" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Button Demonstration">
         <control id="button" name="button" label="Button" align="center" />
@@ -36,7 +36,7 @@
   <!--
     chat control demonstration
   --> 
-  <screen id="screenChatControl" controller="de.lessvoid.nifty.examples.defaultControls.ScreenChatControl" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenChatControl" controller="de.lessvoid.nifty.examples.defaultControls.ScreenChatControl" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Chat Control Demonstration">
         <control id="chat" name="nifty-chat" />
@@ -47,7 +47,7 @@
   <!--
     checkbox control demonstration
   --> 
-  <screen id="screenCheckBox" controller="de.lessvoid.nifty.examples.defaultControls.ScreenCheckBox" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenCheckBox" controller="de.lessvoid.nifty.examples.defaultControls.ScreenCheckBox" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="CheckBox Control Demonstration">
         <control id="checkbox" name="checkbox" />
@@ -58,7 +58,7 @@
   <!--
     console control demonstration
   --> 
-  <screen id="screenConsole" controller="de.lessvoid.nifty.examples.defaultControls.ScreenConsole" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenConsole" controller="de.lessvoid.nifty.examples.defaultControls.ScreenConsole" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Console Control Demonstration">
         <control id="console" name="nifty-console" />
@@ -69,7 +69,7 @@
   <!--
     drop down control demonstration
   --> 
-  <screen id="screenDropDown" controller="de.lessvoid.nifty.examples.defaultControls.ScreenDropDown" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenDropDown" controller="de.lessvoid.nifty.examples.defaultControls.ScreenDropDown" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="DropDown Control Demonstration">
         <control id="dropdown" name="dropDown" />
@@ -80,7 +80,7 @@
   <!--
     imageSelect control demonstration
   --> 
-  <screen id="screenImageSelect" controller="de.lessvoid.nifty.examples.defaultControls.ScreenImageSelect" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenImageSelect" controller="de.lessvoid.nifty.examples.defaultControls.ScreenImageSelect" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="ImageSelect Control Demonstration">
         <control id="imageSelect" name="imageSelect" />
@@ -91,7 +91,7 @@
   <!--
     label control demonstration
   --> 
-  <screen id="screenLabel" controller="de.lessvoid.nifty.examples.defaultControls.ScreenLabel" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenLabel" controller="de.lessvoid.nifty.examples.defaultControls.ScreenLabel" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Label Control Demonstration">
         <control id="label" name="label" />
@@ -102,7 +102,7 @@
   <!--
     listbox control demonstration 
    -->
-  <screen id="screenListBox" controller="de.lessvoid.nifty.examples.defaultControls.ScreenListBox" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenListBox" controller="de.lessvoid.nifty.examples.defaultControls.ScreenListBox" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="ListBox Control Demonstration">
         <control id="listbox" name="listBox" />
@@ -113,7 +113,7 @@
   <!--
     menu control demonstration 
    -->
-  <screen id="screenMenu" controller="de.lessvoid.nifty.examples.defaultControls.ScreenMenu" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenMenu" controller="de.lessvoid.nifty.examples.defaultControls.ScreenMenu" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Menu Control Demonstration">
         <control id="menu" name="niftyMenu" />
@@ -124,7 +124,7 @@
   <!--
     scrollbar control demonstration 
    -->
-  <screen id="screenScrollbar" controller="de.lessvoid.nifty.examples.defaultControls.ScreenScrollbar" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenScrollbar" controller="de.lessvoid.nifty.examples.defaultControls.ScreenScrollbar" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Scrollbar Control Demonstration">
         <control id="scrollbarHorizontal" name="horizontalScrollbar" />
@@ -136,7 +136,7 @@
   <!--
     scrollpanel control demonstration 
    -->
-  <screen id="screenScrollPanel" controller="de.lessvoid.nifty.examples.defaultControls.ScreenScrollPanel" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenScrollPanel" controller="de.lessvoid.nifty.examples.defaultControls.ScreenScrollPanel" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="ScrollPanel Control Demonstration">
         <control id="scrollPanel" name="scrollPanel" />
@@ -147,7 +147,7 @@
   <!--
     slider control demonstration 
    -->
-  <screen id="screenSlider" controller="de.lessvoid.nifty.examples.defaultControls.ScreenSlider" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenSlider" controller="de.lessvoid.nifty.examples.defaultControls.ScreenSlider" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Slider Control Demonstration">
         <control id="sliderHorizontal" name="horizontalSlider" />
@@ -159,7 +159,7 @@
   <!--
     textfield control demonstration 
    -->
-  <screen id="screenTextfield" controller="de.lessvoid.nifty.examples.defaultControls.ScreenTextfield" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenTextfield" controller="de.lessvoid.nifty.examples.defaultControls.ScreenTextfield" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Textfield Control Demonstration">
         <control id="textfield" name="textfield" />
@@ -170,10 +170,12 @@
   <!--
     window control demonstration 
    -->
-  <screen id="screenWindow" controller="de.lessvoid.nifty.examples.defaultControls.ScreenWindow" inputMapping="de.lessvoid.nifty.examples.defaultControls.InputMapping">
+  <screen id="screenWindow" controller="de.lessvoid.nifty.examples.defaultControls.ScreenWindow" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Window Control Demonstration">
-        <control id="window" name="window" />
+        <control id="window" name="window">
+          <text width="100%" style="base-font" text="Hello Window" />
+        </control>
       </control>
     </layer>
   </screen>

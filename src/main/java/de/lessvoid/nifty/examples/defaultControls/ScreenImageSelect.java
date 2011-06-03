@@ -28,9 +28,10 @@ public class ScreenImageSelect implements ScreenController, KeyInputHandler {
 
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.MoveCursorRight) {
+      nifty.gotoScreen("screenLabel");
       return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorLeft) {
-      nifty.gotoScreen("screenButton");
+      nifty.gotoScreen("screenDropDown");
     }
     return false;
   }

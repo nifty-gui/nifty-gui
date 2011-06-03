@@ -36,6 +36,7 @@ public class ScreenButton implements ScreenController, KeyInputHandler {
       nifty.gotoScreen("screenChatControl");
       return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorLeft) {
+      nifty.gotoScreen("screenWindow");
     }
     return false;
   }

@@ -24,8 +24,7 @@ public final class DefaultControlsMain {
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new TimeProvider());
-//    nifty.fromXml("default-controls/controls.xml", "screenButton");
-    nifty.fromXml("default-controls/controls.xml", "screenConsole");
+    nifty.fromXml("default-controls/controls.xml", "screenButton");
     return nifty;
   }
 

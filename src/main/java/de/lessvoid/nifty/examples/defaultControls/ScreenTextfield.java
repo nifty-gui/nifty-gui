@@ -3,10 +3,12 @@ package de.lessvoid.nifty.examples.defaultControls;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
+import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class ScreenTextfield implements ScreenController {
+public class ScreenTextfield implements ScreenController, KeyInputHandler {
   private Nifty nifty;
   private Screen screen;
 
@@ -24,5 +26,15 @@ public class ScreenTextfield implements ScreenController {
   @NiftyEventSubscriber(id="reset")
   public void resetButton(final String id, final ButtonClickedEvent event) {
     nifty.gotoScreen("screenListBox");
+  }
+
+  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyInputEvent.MoveCursorRight) {
+      nifty.gotoScreen("screenWindow");
+      return true;
+    } else if (inputEvent == NiftyInputEvent.MoveCursorLeft) {
+      nifty.gotoScreen("screenSlider");
+    }
+    return false;
   }
 }

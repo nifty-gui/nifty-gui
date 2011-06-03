@@ -28,9 +28,10 @@ public class ScreenConsole implements ScreenController, KeyInputHandler {
 
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyInputEvent.MoveCursorRight) {
+      nifty.gotoScreen("screenDropDown");
       return true;
     } else if (inputEvent == NiftyInputEvent.MoveCursorLeft) {
-      nifty.gotoScreen("screenButton");
+      nifty.gotoScreen("screenCheckBox");
     }
     return false;
   }
