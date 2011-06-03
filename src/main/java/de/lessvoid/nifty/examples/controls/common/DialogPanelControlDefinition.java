@@ -29,7 +29,7 @@ public class DialogPanelControlDefinition {
           height("60%");
           padding("14px,20px,26px,19px");
           onShowEffect(builders.createMoveEffect("in", "left", 500));
-          onHideEffect(builders.createMoveEffect("out", "right", 600));
+          onHideEffect(builders.createMoveEffect("out", "right", 500));
           onHideEffect(builders.createFadeEffect());
         }});
       }});

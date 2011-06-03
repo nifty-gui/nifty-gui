@@ -55,14 +55,18 @@ public class ListBoxDialogController implements Controller {
     this.appendButton = screen.findNiftyControl("appendButton", Button.class);
     this.removeSelectionButton = screen.findNiftyControl("removeSelectionButton", Button.class);
     this.selectedIndices = screen.findNiftyControl("selectedIndices", Label.class);
+
+    // just add some items to the listbox
+    listBox.addItem(new JustAnExampleModelClass("You can add more lines to this ListBox."));
+    listBox.addItem(new JustAnExampleModelClass("Use the append button to do this."));
+    multiSelectionCheckBox.uncheck();
+    disableSelectionCheckBox.uncheck();
+    forceSelectionCheckBox.uncheck();
+    addTextField.setText("");
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-    // just add some items to the listbox
-    listBox.addItem(new JustAnExampleModelClass("You can add more lines to this ListBox."));
-    listBox.addItem(new JustAnExampleModelClass("Use the append button to do this."));
-
     updateSelectedIndexLabel(listBox.getSelectedIndices());
     setAppendButtonState();
     setRemoveSelectionButtonState();

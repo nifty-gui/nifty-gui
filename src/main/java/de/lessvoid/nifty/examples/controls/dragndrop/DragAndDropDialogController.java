@@ -41,11 +41,11 @@ public class DragAndDropDialogController implements Controller {
     this.resetButton = screen.findNiftyControl("resetButton", Button.class);
     this.chestOpenElement = screen.findElementByName("chest-open");
     this.dragAndDropDescription = screen.findNiftyControl("dragAndDropDescription", Label.class);
+    resetButton.disable();
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-    resetButton.disable();
   }
 
   @Override

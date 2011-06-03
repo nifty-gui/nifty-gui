@@ -35,12 +35,12 @@ public class ChatControlDialogController implements Controller {
     this.chat = screen.findNiftyControl("chat", Chat.class);
     this.chatIconVoid = nifty.createImage("chatcontrol/chat-icon-ninja.png", false);
     this.chatIconNiftyUser = nifty.createImage("chatcontrol/chat-icon-user.png", false);
+    chat.addPlayer("void", chatIconVoid);
+    chat.addPlayer("nifty-user", chatIconNiftyUser);
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-    chat.addPlayer("void", chatIconVoid);
-    chat.addPlayer("nifty-user", chatIconNiftyUser);
   }
 
   @Override

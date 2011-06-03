@@ -17,12 +17,13 @@ import org.lwjgl.opengl.GL11;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
-import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.ConsoleCommands.ConsoleCommand;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.impl.Move;
@@ -76,6 +77,7 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   public void bind(final Nifty nifty, final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
+
     this.consolePopup = nifty.createPopup("consolePopup");
     this.console = this.consolePopup.findNiftyControl("console", Console.class);
     this.console.output("Humble Nifty Console Demonstration :)\nYou can toggle the console on/off with the F1 key\nEnter 'help' to show all available commands");
@@ -162,6 +164,16 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   @NiftyEventSubscriber(pattern="menuButton.*")
   public void onMenuButtonListBoxClick(final String id, final NiftyMousePrimaryClickedEvent clickedEvent) {
     changeDialogTo(id);
+  }
+
+  @NiftyEventSubscriber(id="resetScreenButton")
+  public void onTestButtonClick(final String id, final ButtonClickedEvent clickedEvent) {
+    screen.findElementByName(buttonToDialogMap.get(currentMenuButtonId)).hide(new EndNotify() {
+      @Override
+      public void perform() {
+        nifty.gotoScreen("demo");
+      }
+    });
   }
 
   private void changeDialogTo(final String id) {

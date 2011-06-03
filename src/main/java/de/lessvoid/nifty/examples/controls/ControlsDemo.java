@@ -15,6 +15,7 @@ import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.StyleBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
@@ -273,16 +274,21 @@ public class ControlsDemo {
           backgroundColor("#5588");
           panel(new PanelBuilder() {{
             paddingLeft("25px");
+            paddingRight("25px");
             height("50%");
+            width("100%");
             alignCenter();
             valignCenter();
             childLayoutHorizontal();
             control(new LabelBuilder() {{
-              label("Screen Resolution: ");
+              label("Screen Resolution:");
             }});
-            common.vspacer();
+            panel(common.hspacer("7px"));
             control(new DropDownBuilder("resolutions") {{
               width("200px");
+            }});
+            panel(common.hspacer("*"));
+            control(new ButtonBuilder("resetScreenButton", "Restart Screen") {{
             }});
           }});
         }});
@@ -292,6 +298,16 @@ public class ControlsDemo {
           customKey("onResolutionStart");
           length(350);
           neverStopRendering(false);
+        }});
+        onStartScreenEffect(new EffectBuilder("renderQuad") {{
+          length(300);
+          effectParameter("startColor", "#ddff");
+          effectParameter("endColor", "#0000");
+        }});
+        onEndScreenEffect(new EffectBuilder("renderQuad") {{
+          length(300);
+          effectParameter("startColor", "#0000");
+          effectParameter("endColor", "#ddff");
         }});
       }});
     }}.build(nifty);
