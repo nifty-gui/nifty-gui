@@ -169,7 +169,7 @@ public class Nifty {
   public void publishEvent(final String id, final NiftyEvent event) {
     // we can't publish events for elements without an id
     if (id != null) {
-      EventServiceLocator.getEventService("NiftyEventBus").publish(id, event);
+      getEventService().publish(id, event);
     }
   }
 
@@ -184,6 +184,8 @@ public class Nifty {
     }
     ClassSaveEventTopicSubscriber theSubscriber = new ClassSaveEventTopicSubscriber(elementId, subscriber, eventClass);
     getEventService().subscribeStrongly(elementId, theSubscriber);
+    NiftyDefaults.eventBusLog.info("-> subscribe [" + elementId + "] screen [" + screen + "] -> [" + theSubscriber + "(" + subscriber + "),(" + eventClass + ")]");
+
     registerSubscriberForScreen(screen, theSubscriber);
   }
 
@@ -207,6 +209,7 @@ public class Nifty {
         return;
       }
       getEventService().unsubscribe(elementId, (EventTopicSubscriber<?>) object);
+      NiftyDefaults.eventBusLog.info("<- unsubscribe [" + elementId + "] -> [" + object + "]");
     }
   }
 
@@ -216,6 +219,7 @@ public class Nifty {
       for (int i=0; i<list.size(); i++) {
         ClassSaveEventTopicSubscriber subscriber = list.get(i);
         getEventService().unsubscribe(subscriber.getElementId(), subscriber);
+        NiftyDefaults.eventBusLog.info("<- unsubscribe all for [" + screen + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
       }
       list.clear();
     }
@@ -1397,6 +1401,7 @@ public class Nifty {
   private Element createElementFromTypeInternal(final Screen screen, final Element parent, final ElementType type, final LayoutPart layoutPart) {
     ElementType elementType = type.copy();
     elementType.prepare(this, screen, screen.getRootElement().getElementType());
+    elementType.connectParentControls(parent);
     Element element = elementType.create(parent, this, screen, layoutPart);
     if (screen.isBound()) {
       screen.layoutLayers();

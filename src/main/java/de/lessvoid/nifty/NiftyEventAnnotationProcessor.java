@@ -76,17 +76,23 @@ public class NiftyEventAnnotationProcessor {
   private static void patternProcess(final Object obj, final Method method, final boolean add, final String topicPattern, final Class<?> eventClass, final EventService eventService) {
     Pattern pattern = Pattern.compile(topicPattern);
     if (add) {
-      eventService.subscribeStrongly(pattern, new Subscriber(obj, method, eventClass));
+      Subscriber subscriber = new Subscriber(obj, method, eventClass);
+      eventService.subscribeStrongly(pattern, subscriber);
+      NiftyDefaults.eventBusLog.info("-> subscribe [" + pattern + "] -> [" + subscriber + "]");
     } else {
       eventService.unsubscribe(pattern, obj);
+      NiftyDefaults.eventBusLog.info("<- unsubscribe [" + pattern + "] -> [" + obj + "]");
     }
   }
 
   private static void idProcess(final Object obj, final Method method, final boolean add, final String id, final Class<?> eventClass, final EventService eventService) {
     if (add) {
-      eventService.subscribeStrongly(id, new Subscriber(obj, method, eventClass));
+      Subscriber subscriber = new Subscriber(obj, method, eventClass);
+      eventService.subscribeStrongly(id, subscriber);
+      NiftyDefaults.eventBusLog.info("-> subscribe [" + id + "] -> [" + subscriber + "]");
     } else {
       eventService.unsubscribe(id, obj);
+      NiftyDefaults.eventBusLog.info("<- unsubscribe [" + id + "] -> [" + obj + "]");
     }
   }
 

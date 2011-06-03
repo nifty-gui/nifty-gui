@@ -1,8 +1,11 @@
 package de.lessvoid.nifty;
 
+import java.util.logging.Logger;
+
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
 
-public final class NiftyDefaults {
+public class NiftyDefaults {
+  public static Logger eventBusLog = Logger.getLogger("NiftyEventBusLog");
 
   private NiftyDefaults() {
   }
