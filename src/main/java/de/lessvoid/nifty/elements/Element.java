@@ -1217,6 +1217,10 @@ public class Element implements NiftyEvent<Void> {
    * hide this element.
    */
   public void hide() {
+    hide(null);
+  }
+
+  public void hide(final EndNotify perform) {
     // don't hide if not visible
     if (!isVisible()) {
       return;
@@ -1237,6 +1241,9 @@ public class Element implements NiftyEvent<Void> {
       public void perform() {
         resetForHide();
         internalHide();
+        if (perform != null) {
+          perform.perform();
+        }
       }
     });
   }
@@ -1703,23 +1710,24 @@ public class Element implements NiftyEvent<Void> {
   }
 
   public void bindControls(final Screen target) {
-    bindToScreen(target);
-
-    if (attachedInputControl != null) {
-      attachedInputControl.bindControl(nifty, target, this, elementType.getAttributes());
+    if (screen == target) {
+      return;
     }
-
+    bindToScreen(target);
     for (Element element : elements) {
       element.bindControls(target);
+    }
+    if (attachedInputControl != null) {
+      attachedInputControl.bindControl(nifty, target, this, elementType.getAttributes());
     }
   }
 
   public void initControls() {
-    if (attachedInputControl != null) {
-      attachedInputControl.initControl(elementType.getAttributes());
-    }
     for (Element element : elements) {
       element.initControls();
+    }
+    if (attachedInputControl != null) {
+      attachedInputControl.initControl(elementType.getAttributes());
     }
   }
 
