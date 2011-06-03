@@ -9,7 +9,7 @@ import de.lessvoid.nifty.Nifty;
 public interface ScreenController {
   /**
    * Bind this ScreenController to a screen. This happens
-   * right before the onStartScreen STARTED.
+   * right before the onStartScreen STARTED and only exactly once for a screen!
    * @param nifty nifty
    * @param screen screen
    */

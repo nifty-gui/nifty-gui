@@ -34,6 +34,7 @@ public class Screen {
 
   private String screenId;
   private ScreenController screenController = new NullScreenController();
+  private boolean screenControllerBound = false;
 
   private ArrayList < Element > layerElements = new ArrayList < Element >();
   private LinkedList < Element > layerElementsToAdd = new LinkedList < Element >();
@@ -195,7 +196,10 @@ public class Screen {
     bindControls();
 
     // bind happens right BEFORE the onStartScreen
-    screenController.bind(nifty, Screen.this);
+    if (!screenControllerBound) {
+      screenController.bind(nifty, Screen.this);
+      screenControllerBound = true;
+    }
 
     // activate the onActive event right now
     activeEffectStart();
