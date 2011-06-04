@@ -47,12 +47,12 @@ public class ConsoleControl extends AbstractController implements Console, Event
     this.element = newElement;
     this.listBox = element.findNiftyControl("#listBox", ListBox.class);
     this.textfield = element.findNiftyControl("#textInput", TextField.class);
+    initialFill();
   }
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     nifty.subscribe(screen, textfield.getId(), NiftyInputEvent.class, this);
-    initialFill();
     super.init(parameter, controlDefinitionAttributes);
   }
 
