@@ -155,6 +155,7 @@ public class Screen {
     // prepare pop up for display
     popup.resetEffects();
     popup.layoutElements();
+    popup.initControls();
     popup.startEffect(EffectEventId.onStartScreen, localEndNotify);
     popup.startEffect(EffectEventId.onActive);
     popup.onStartScreen();
