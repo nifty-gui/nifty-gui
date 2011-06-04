@@ -325,6 +325,12 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
     @Override
     public void onEvent(final String id, final ScrollbarChangedEvent event) {
+      if (childRootElement == null) {
+        return;
+      }
+      if (childRootElement.getElements().isEmpty()) {
+        return;
+      }
       final Element scrollElement = childRootElement.getElements().get(0);
       if (scrollElement != null) {
         scrollElement.setConstraintY(new SizeValue(-(int) event.getValue() + "px"));
@@ -350,6 +356,12 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
     @Override
     public void onEvent(final String id, final ScrollbarChangedEvent event) {
+      if (childRootElement == null) {
+        return;
+      }
+      if (childRootElement.getElements().isEmpty()) {
+        return;
+      }
       final Element scrollElement = childRootElement.getElements().get(0);
       if (scrollElement != null) {
         scrollElement.setConstraintX(new SizeValue(-(int) event.getValue() + "px"));
