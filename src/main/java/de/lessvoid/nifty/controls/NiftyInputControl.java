@@ -75,12 +75,13 @@ public class NiftyInputControl {
   }
 
   public void onStartScreen(final Nifty nifty, final Screen screen) {
-    nifty.processAnnotations(controller);
+    nifty.subscribeAnnotations(controller);
     controller.onStartScreen();
   }
 
   public void onEndScreen(final Nifty nifty, final Screen screen) {
-    nifty.unsubscribe(elementId, controller);
+    nifty.unsubscribeAnnotations(controller);
+    nifty.unsubscribeElement(screen, elementId);
   }
 
   /**

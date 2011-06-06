@@ -103,7 +103,7 @@ public class Nifty {
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
   private NiftyMouseImpl niftyMouse;
   private NiftyInputConsumerImpl niftyInputConsumer = new NiftyInputConsumerImpl();
-  private Map < Screen, List < ClassSaveEventTopicSubscriber >> screenBasedSubscribers = new Hashtable < Screen, List < ClassSaveEventTopicSubscriber >>();
+  private SubscriberRegistry subscriberRegister = new SubscriberRegistry();
   private boolean debugOptionPanelColors;
 
   /**
@@ -173,8 +173,12 @@ public class Nifty {
     }
   }
 
-  public void processAnnotations(final Object object) {
+  public void subscribeAnnotations(final Object object) {
     NiftyEventAnnotationProcessor.process(object);
+  }
+
+  public void unsubscribeAnnotations(final Object object) {
+    NiftyEventAnnotationProcessor.unprocess(object);
   }
 
   public <T, S extends EventTopicSubscriber<? extends T>> void subscribe(final Screen screen, final String elementId, final Class<T> eventClass, final S subscriber) {
@@ -186,22 +190,10 @@ public class Nifty {
     getEventService().subscribeStrongly(elementId, theSubscriber);
     NiftyDefaults.eventBusLog.info("-> subscribe [" + elementId + "] screen [" + screen + "] -> [" + theSubscriber + "(" + subscriber + "),(" + eventClass + ")]");
 
-    registerSubscriberForScreen(screen, theSubscriber);
-  }
-
-  private void registerSubscriberForScreen(final Screen screen, final ClassSaveEventTopicSubscriber theSubscriber) {
-    List < ClassSaveEventTopicSubscriber > list = screenBasedSubscribers.get(screen);
-    if (list == null) {
-      list = new ArrayList < ClassSaveEventTopicSubscriber >();
-      screenBasedSubscribers.put(screen, list);
-    }
-    list.add(theSubscriber);
+    subscriberRegister.register(screen, elementId, theSubscriber);
   }
 
   public void unsubscribe(final String elementId, final Object object) {
-    // This handles annotations
-    NiftyEventAnnotationProcessor.unprocess(object);
-
     // This handles direct subscription
     if (object instanceof EventTopicSubscriber<?>) {
       if (elementId == null) {
@@ -213,16 +205,12 @@ public class Nifty {
     }
   }
 
-  public void unsubscribeAll(final Screen screen) {
-    List < ClassSaveEventTopicSubscriber > list = screenBasedSubscribers.get(screen);
-    if (list != null && !list.isEmpty()) {
-      for (int i=0; i<list.size(); i++) {
-        ClassSaveEventTopicSubscriber subscriber = list.get(i);
-        getEventService().unsubscribe(subscriber.getElementId(), subscriber);
-        NiftyDefaults.eventBusLog.info("<- unsubscribe all for [" + screen + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
-      }
-      list.clear();
-    }
+  public void unsubscribeScreen(final Screen screen) {
+    subscriberRegister.unsubscribeScreen(screen);
+  }
+
+  public void unsubscribeElement(final Screen screen, final String elementId) {
+    subscriberRegister.unsubscribeElement(screen, elementId);
   }
 
   public void setAlternateKeyForNextLoadXml(final String alternateKeyForNextLoadXmlParam) {
@@ -790,7 +778,6 @@ public class Nifty {
     if (screen.isBound()) {
       element.layoutElements();
       element.bindControls(screen);
-      element.initControls();
     }
     return element;
   }
@@ -1448,5 +1435,55 @@ public class Nifty {
    */
   public String specialValuesReplace(final String value) {
     return SpecialValuesReplace.replace(value, getResourceBundles(), currentScreen == null ? null : currentScreen.getScreenController(), globalProperties);
+  }
+
+  private class SubscriberRegistry {
+    private Map < Screen, Map < String, List < ClassSaveEventTopicSubscriber >>> screenBasedSubscribers = new Hashtable < Screen, Map < String, List < ClassSaveEventTopicSubscriber >>>();
+
+    public void register(final Screen screen, final String elementId, final ClassSaveEventTopicSubscriber subscriber) {
+      Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
+      if (elements == null) {
+        elements = new Hashtable < String, List < ClassSaveEventTopicSubscriber >>();
+        screenBasedSubscribers.put(screen, elements);
+      }
+      List < ClassSaveEventTopicSubscriber > list = elements.get(elementId);
+      if (list == null) {
+        list = new ArrayList < ClassSaveEventTopicSubscriber >();
+        elements.put(elementId, list);
+      }
+      list.add(subscriber);
+    }
+
+    public void unsubscribeScreen(final Screen screen) {
+      Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
+      if (elements != null && !elements.isEmpty()) {
+        for (Map.Entry < String, List < ClassSaveEventTopicSubscriber >> entry : elements.entrySet()) {
+          List < ClassSaveEventTopicSubscriber > list = entry.getValue();
+          for (int i=0; i<list.size(); i++) {
+            ClassSaveEventTopicSubscriber subscriber = list.get(i);
+            getEventService().unsubscribe(subscriber.getElementId(), subscriber);
+            NiftyDefaults.eventBusLog.info("<- unsubscribe screen for [" + screen + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
+          }
+          list.clear();
+        }
+        elements.clear();
+      }
+      screenBasedSubscribers.remove(screen);
+    }
+
+    public void unsubscribeElement(final Screen screen, final String elementId) {
+      Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
+      if (elements != null && !elements.isEmpty()) {
+        List < ClassSaveEventTopicSubscriber > list = elements.get(elementId);
+        if (list != null && !list.isEmpty()) {
+          for (int i=0; i<list.size(); i++) {
+            ClassSaveEventTopicSubscriber subscriber = list.get(i);
+            getEventService().unsubscribe(subscriber.getElementId(), subscriber);
+            NiftyDefaults.eventBusLog.info("<- unsubscribe element [" + elementId + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
+          }
+          list.clear();
+        }
+      }
+    }
   }
 }

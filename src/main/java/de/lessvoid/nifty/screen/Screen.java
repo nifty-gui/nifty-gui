@@ -175,6 +175,7 @@ public class Screen {
   }
 
   public void closePopup(final Element popup, final EndNotify closeNotify) {
+    popup.onEndScreen(this);
     resetLayers();
     removeLayerElement(popup);
     schedulePopupElementRemoval(new ElementWithEndNotify(popup, closeNotify));
@@ -699,7 +700,7 @@ public class Screen {
   }
 
   void onStartScreenHasEnded() {
-    nifty.processAnnotations(screenController);
+    nifty.subscribeAnnotations(screenController);
 
     // onStartScreen has ENDED so call the event.
     screenController.onStartScreen();
@@ -710,8 +711,8 @@ public class Screen {
   }
 
   void onEndScreenHasEnded() {
-    nifty.unsubscribe(screenId, screenController);
-    nifty.unsubscribeAll(this);
+    nifty.unsubscribeAnnotations(screenController);
+    nifty.unsubscribeScreen(this);
 
     // onEndScreen has ENDED so call the event.
     screenController.onEndScreen();
