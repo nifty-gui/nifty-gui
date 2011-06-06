@@ -61,7 +61,7 @@
   <screen id="screenConsole" controller="de.lessvoid.nifty.examples.defaultControls.ScreenConsole" inputMappingPre="de.lessvoid.nifty.examples.defaultControls.InputMapping">
     <layer childLayout="center">
       <control name="demoPanel" caption="Console Control Demonstration">
-        <control id="console" name="nifty-console" />
+        <control id="console" name="nifty-console" lines="19" />
       </control>
     </layer>
   </screen>
