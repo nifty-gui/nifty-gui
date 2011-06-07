@@ -17,7 +17,7 @@ public class PanelRenderer implements ElementRenderer {
    */
   private Color backgroundColor;
 
-  private Color debugColor = new Color(java.awt.Color.HSBtoRGB(new Random().nextFloat(), 1.f, 1.f)).setAlpha(.5f);
+  private Color debugColor = new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), .5f);
 
   /**
    * Default constructor.
