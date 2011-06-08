@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles>
   <style id="nifty-window#frame">
+    <attributes childLayout="vertical" valign="top" />
     <effect>
       <onActive name="border" post="true" color="#2226" border="2px" />
     </effect>
