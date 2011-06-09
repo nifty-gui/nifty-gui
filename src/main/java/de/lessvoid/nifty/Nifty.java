@@ -1455,6 +1455,9 @@ public class Nifty {
     }
 
     public void unsubscribeScreen(final Screen screen) {
+      if (screen == null) {
+        return;
+      }
       Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
       if (elements != null && !elements.isEmpty()) {
         for (Map.Entry < String, List < ClassSaveEventTopicSubscriber >> entry : elements.entrySet()) {
@@ -1472,6 +1475,9 @@ public class Nifty {
     }
 
     public void unsubscribeElement(final Screen screen, final String elementId) {
+      if (screen == null || elementId == null) {
+        return;
+      }
       Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
       if (elements != null && !elements.isEmpty()) {
         List < ClassSaveEventTopicSubscriber > list = elements.get(elementId);
