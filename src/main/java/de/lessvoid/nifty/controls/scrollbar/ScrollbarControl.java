@@ -26,7 +26,7 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   private Element elementPosition;
   private NextPrevHelper nextPrevHelper;
   private float worldMax;
-  private float viewMax;
+  private float worldPageSize;
   private float initial;
   private float pageStepSize;
   private float buttonStepSize;
@@ -52,11 +52,11 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     }
 
     worldMax = Float.valueOf(parameter.getProperty("worldMax", "100.0"));
-    viewMax = Float.valueOf(parameter.getProperty("viewMax", "100.0"));
+    worldPageSize = Float.valueOf(parameter.getProperty("worldPageSize", "100.0"));
     initial = Float.valueOf(parameter.getProperty("initial", "0.0"));
     buttonStepSize = Float.valueOf(parameter.getProperty("buttonStepSize", "1.0"));
     pageStepSize = Float.valueOf(parameter.getProperty("pageStepSize", "25.0"));
-    scrollbarImpl.bindToView(scrollbarView, initial, worldMax, viewMax, buttonStepSize, pageStepSize);
+    scrollbarImpl.bindToView(scrollbarView, initial, worldMax, worldPageSize, buttonStepSize, pageStepSize);
   }
 
   @Override
@@ -120,8 +120,8 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   // Scrollbar implementation
 
   @Override
-  public void setup(final float value, final float worldMax, final float viewMax, final float buttonStepSize, final float pageStepSize) {
-    scrollbarImpl.setup(value, worldMax, viewMax, buttonStepSize, pageStepSize);
+  public void setup(final float value, final float worldMax, final float worldPageSize, final float buttonStepSize, final float pageStepSize) {
+    scrollbarImpl.setup(value, worldMax, worldPageSize, buttonStepSize, pageStepSize);
   }
 
   @Override
@@ -145,13 +145,13 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   }
 
   @Override
-  public void setViewMax(final float viewMax) {
-    scrollbarImpl.setViewMax(viewMax);
+  public void setWorldPageSize(final float worldPageSize) {
+    scrollbarImpl.setWorldPageSize(worldPageSize);
   }
 
   @Override
-  public float getViewMax() {
-    return scrollbarImpl.getViewMax();
+  public float getWorldPageSize() {
+    return scrollbarImpl.getWorldPageSize();
   }
 
   @Override

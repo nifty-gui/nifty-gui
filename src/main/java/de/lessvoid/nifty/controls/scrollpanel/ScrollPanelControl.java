@@ -81,14 +81,14 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
         Scrollbar horizontalS = getElement().findNiftyControl("#nifty-internal-horizontal-scrollbar", Scrollbar.class);
         if (horizontalS != null) {
           horizontalS.setWorldMax(scrollElement.getWidth());
-          horizontalS.setViewMax(horizontalS.getWidth());
+          horizontalS.setWorldPageSize(horizontalS.getWidth());
           updateWorldH();
         }
 
         Scrollbar verticalS = getElement().findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
         if (verticalS != null) {
           verticalS.setWorldMax(scrollElement.getHeight());
-          verticalS.setViewMax(verticalS.getHeight());
+          verticalS.setWorldPageSize(verticalS.getHeight());
           updateWorldV();
         }
       }
@@ -254,7 +254,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
         if (horizontalS != null) {
           horizontalS.setWorldMax(scrollElement.getWidth());
           updateWorldH();
-          horizontalS.setViewMax(horizontalS.getWidth());
+          horizontalS.setWorldPageSize(horizontalS.getWidth());
           horizontalS.setValue(0.0f);
           horizontalS.setButtonStepSize(stepSizeX);
           horizontalS.setPageStepSize(pageSizeX);
@@ -264,7 +264,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
         if (verticalS != null) {
           verticalS.setWorldMax(scrollElement.getHeight());
           updateWorldV();
-          verticalS.setViewMax(verticalS.getHeight());
+          verticalS.setWorldPageSize(verticalS.getHeight());
           verticalS.setValue(0.0f);
           verticalS.setButtonStepSize(stepSizeY);
           verticalS.setPageStepSize(pageSizeY);

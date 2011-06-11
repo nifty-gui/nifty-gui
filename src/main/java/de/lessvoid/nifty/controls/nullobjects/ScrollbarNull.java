@@ -65,7 +65,7 @@ public class ScrollbarNull implements Scrollbar {
   }
 
   @Override
-  public void setup(final float value, final float worldMax, final float viewMax, final float buttonStepSize, final float pageStepSize) {
+  public void setup(final float value, final float worldMax, final float worldPageSize, final float buttonStepSize, final float pageStepSize) {
   }
 
   @Override
@@ -87,11 +87,11 @@ public class ScrollbarNull implements Scrollbar {
   }
 
   @Override
-  public void setViewMax(final float viewMax) {
+  public void setWorldPageSize(final float worldPageSize) {
   }
 
   @Override
-  public float getViewMax() {
+  public float getWorldPageSize() {
     return 0;
   }
 

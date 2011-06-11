@@ -37,7 +37,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 0.f, viewSize, 1.f, 4.f);
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     assertEquals(0.f, scrollbar.getValue());
   }
 

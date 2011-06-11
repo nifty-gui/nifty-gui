@@ -31,7 +31,7 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
       Scrollbar verticalScrollbar = targetElement.findNiftyControl("#nifty-internal-vertical-scrollbar", Scrollbar.class);
 
       int minY = (int) verticalScrollbar.getValue();
-      int maxY = (int) verticalScrollbar.getValue() + (int) verticalScrollbar.getViewMax();
+      int maxY = (int) verticalScrollbar.getValue() + (int) verticalScrollbar.getWorldPageSize();
 
       int currentMinY = element.getY() - targetElement.getY() + (int) verticalScrollbar.getValue();
       int currentMaxY = element.getY() - targetElement.getY() + element.getHeight() + (int) verticalScrollbar.getValue();

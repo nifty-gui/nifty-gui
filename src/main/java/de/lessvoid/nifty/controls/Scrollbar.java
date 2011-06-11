@@ -10,11 +10,11 @@ public interface Scrollbar extends NiftyControl {
    * Setup all parameters of this Scrollbar.
    * @param value the initial value
    * @param worldMax the maximum value
-   * @param viewMax the view maximum value
+   * @param worldPageSize the page size
    * @param buttonStepSize the step size for button clicks
    * @param pageStepSize the step size for page up/down or clicks on the scrollbar background
    */
-  void setup(float value, float worldMax, float viewMax, float buttonStepSize, float pageStepSize);
+  void setup(float value, float worldMax, float worldPageSize, float buttonStepSize, float pageStepSize);
 
   /**
    * Change the value of the scrollbar.
@@ -41,16 +41,16 @@ public interface Scrollbar extends NiftyControl {
   float getWorldMax();
 
   /**
-   * Set the new maximum of the scrollbar.
-   * @param viewMax new maximum
+   * Set the new page size
+   * @param worldPageSize new page size
    */
-  void setViewMax(float viewMax);
+  void setWorldPageSize(float worldPageSize);
 
   /**
-   * Get the current view maximum of the scrollbar.
-   * @return current view max
+   * Get the current page size
+   * @return current page size
    */
-  float getViewMax();
+  float getWorldPageSize();
 
   /**
    * Set the button step size to a new value.

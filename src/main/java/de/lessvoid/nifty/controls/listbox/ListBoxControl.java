@@ -535,7 +535,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     Scrollbar horizontalS = getHorizontalScrollbar();
     if (horizontalS != null && horizontalS.isBound()) {
       horizontalS.setWorldMax(lastMaxWidth);
-      horizontalS.setViewMax(listBoxPanelElement.getWidth());
+      horizontalS.setWorldPageSize(listBoxPanelElement.getWidth());
     }
   }
 
@@ -543,7 +543,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     Scrollbar verticalS = getVerticalScrollbar();
     if (verticalS != null && verticalS.isBound()) {
       verticalS.setWorldMax(itemCount * labelTemplateHeight);
-      verticalS.setViewMax(displayItems * labelTemplateHeight);
+      verticalS.setWorldPageSize(displayItems * labelTemplateHeight);
       verticalS.setButtonStepSize(labelTemplateHeight);
     }
   }
