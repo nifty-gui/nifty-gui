@@ -332,7 +332,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     Collections.sort(items, comperator);
   }
 
-  private void updateViewTotalCount() {
+  void updateViewTotalCount() {
     view.updateTotalCount(items.size());
     updateView();
   }
