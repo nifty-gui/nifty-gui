@@ -1560,7 +1560,7 @@ public class Element implements NiftyEvent<Void> {
    */
   public boolean keyEvent(final KeyboardInputEvent inputEvent) {
     if (attachedInputControl != null) {
-      return attachedInputControl.keyEvent(nifty, inputEvent);
+      return attachedInputControl.keyEvent(nifty, inputEvent, id);
     }
     return false;
   }
@@ -1950,7 +1950,7 @@ public class Element implements NiftyEvent<Void> {
     screen.unregisterElementId(id);
 
     if (attachedInputControl != null) {
-      attachedInputControl.onEndScreen(nifty, screen);
+      attachedInputControl.onEndScreen(nifty, screen, id);
     }
     for (Element element : elements) {
       element.onEndScreen(screen);

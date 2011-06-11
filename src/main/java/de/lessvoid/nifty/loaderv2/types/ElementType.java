@@ -208,7 +208,7 @@ public class ElementType extends XmlBaseType {
     }
 
     NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
-    return new NiftyInputControl(elementId, controller, inputMapping);
+    return new NiftyInputControl(controller, inputMapping);
   }
 
   public void applyAttributes(final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {

@@ -17,7 +17,6 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class NiftyInputControl {
-  private String elementId;
   private Controller controller;
   private NiftyInputMapping inputMapper;
 
@@ -25,12 +24,10 @@ public class NiftyInputControl {
   private List < KeyInputHandler > postInputHandler = new ArrayList < KeyInputHandler >();
 
   /**
-   * @param elementId elementId this NiftyInputControl is attached to
    * @param controllerParam controller
    * @param inputMapperParam input mapper
    */
-  public NiftyInputControl(final String elementId, final Controller controllerParam, final NiftyInputMapping inputMapperParam) {
-    this.elementId = elementId;
+  public NiftyInputControl(final Controller controllerParam, final NiftyInputMapping inputMapperParam) {
     this.controller = controllerParam;
     this.inputMapper = inputMapperParam;
   }
@@ -41,7 +38,7 @@ public class NiftyInputControl {
    * @param inputEvent keyboard event
    * @return return true when the input event has been processed and false when it has not been handled
    */
-  public boolean keyEvent(final Nifty nifty, final KeyboardInputEvent inputEvent) {
+  public boolean keyEvent(final Nifty nifty, final KeyboardInputEvent inputEvent, final String elementId) {
     NiftyInputEvent converted = inputMapper.convert(inputEvent);
 
     for (KeyInputHandler handler : preInputHandler) {
@@ -79,7 +76,7 @@ public class NiftyInputControl {
     controller.onStartScreen();
   }
 
-  public void onEndScreen(final Nifty nifty, final Screen screen) {
+  public void onEndScreen(final Nifty nifty, final Screen screen, final String elementId) {
     nifty.unsubscribeAnnotations(controller);
     nifty.unsubscribeElement(screen, elementId);
   }
