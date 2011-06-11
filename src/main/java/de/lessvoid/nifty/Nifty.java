@@ -926,6 +926,7 @@ public class Nifty {
       // without this reset the mouse cursor image might hang when elements are being removed
       // that changed the image.
       element.resetAllEffects();
+      element.onEndScreen(screen);
 
       removeSingleElement(screen, element);
       Element parent = element.getParent();
@@ -941,8 +942,6 @@ public class Nifty {
     }
 
     private void removeSingleElement(final Screen screen, final Element element) {
-      screen.unregisterElementId(element.getId());
-
       Iterator < Element > elementIt = element.getElements().iterator();
       while (elementIt.hasNext()) {
         Element el = elementIt.next();
