@@ -59,7 +59,7 @@ public class SliderAndScrollbarDialogController implements Controller {
     getScrollbar("scrollbarH").setWorldMax(1000.f);
     getTextfield("scrollbarH_WorldMax_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getWorldMax()));
     getTextfield("scrollbarH_CurrentValue_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getValue()));
-    getTextfield("scrollbarH_ViewMax_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getViewMax()));
+    getTextfield("scrollbarH_ViewMax_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getWorldPageSize()));
     getTextfield("scrollbarH_ButtonStepSize_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getButtonStepSize()));
     getTextfield("scrollbarH_PageStepSize_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getPageStepSize()));
   }
@@ -117,7 +117,7 @@ public class SliderAndScrollbarDialogController implements Controller {
     try {
       float f = Float.valueOf(event.getText());
       Scrollbar scrollbar = getScrollbar("scrollbarH");
-      scrollbar.setViewMax(f);
+      scrollbar.setWorldPageSize(f);
     } catch (NumberFormatException e) {
     }
   }

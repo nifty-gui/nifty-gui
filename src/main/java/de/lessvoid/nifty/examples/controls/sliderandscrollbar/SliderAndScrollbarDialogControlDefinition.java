@@ -144,7 +144,7 @@ public class SliderAndScrollbarDialogControlDefinition {
           }});
           panel(builders.hspacer("20px"));
           control(new LabelBuilder() {{
-            text("View Max:");
+            text("Page Size:");
             alignLeft();
             textVAlignCenter();
             textHAlignLeft();
