@@ -4,17 +4,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.bushe.swing.event.EventTopicSubscriber;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -53,7 +50,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
       return;
     }
     popup = nifty.createPopupWithStyle("dropDownBoxSelectPopup", getElement().getElementType().getAttributes().get("style"));
-    popup.getControl(DropDownPopup.class).setDropDownElement(this);
+    popup.getControl(DropDownPopup.class).setDropDownElement(this, popup);
     listBox = popup.findNiftyControl("#listBox", ListBox.class);
   }
 
@@ -64,45 +61,8 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     ListBoxControl listBoxControl = (ListBoxControl) listBox;
     listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), getSelection());
 
-    final String elementId = getElement().getId();
-    nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class, new EventTopicSubscriber<ListBoxSelectionChangedEvent>() {
-      @SuppressWarnings("unchecked")
-      @Override
-      public void onEvent(final String topic, final ListBoxSelectionChangedEvent data) {
-        final Object selectedItem = getSelectedItem(data.getSelection());
-
-        ListBoxControl listBoxControl = (ListBoxControl) listBox;
-        listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), selectedItem);
-
-        final int selectedItemIndex = getSelectedIndex(data);
-        if (screen.isActivePopup(popup)) {
-          close(new EndNotify() {
-            @Override
-            public void perform() {
-              nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(DropDownControl.this, selectedItem, selectedItemIndex));
-            }
-          });
-        } else {
-          nifty.publishEvent(elementId, new DropDownSelectionChangedEvent(DropDownControl.this, selectedItem, selectedItemIndex));
-        }
-      }
-
-      private int getSelectedIndex(final ListBoxSelectionChangedEvent data) {
-        int selectedItemIndex = -1;
-        List<Integer> selectionIndices = data.getSelectionIndices();
-        if (!selectionIndices.isEmpty()) {
-          selectedItemIndex = selectionIndices.get(0);
-        }
-        return selectedItemIndex;
-      }
-
-      private Object getSelectedItem(final List selection) {
-        if (selection.isEmpty()) {
-          return null;
-        }
-        return selection.get(0);
-      }
-    });
+    nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,
+        new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, this, popup));
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
@@ -138,13 +98,29 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   }
 
   public void close() {
-    alreadyOpen = false;
-    nifty.closePopup(popup.getId());
+    closeInternal(null);
   }
 
   public void close(final EndNotify endNotify) {
+    closeInternal(endNotify);
+  }
+
+  private void closeInternal(final EndNotify endNotify) {
     alreadyOpen = false;
-    nifty.closePopup(popup.getId(), endNotify);
+    nifty.closePopup(popup.getId(), new EndNotify() {
+      @Override
+      public void perform() {
+        // this really feels like a hack but I don't have another idea right now:
+        //
+        // when the popup is closed Nifty will automatically remove all subscribers for all controls in the popup.
+        // this is in general the right behaviour, since the controls are gone (the popup is closed). However in this
+        // case here the listbox is still used by the DropDown. So we need to subscribe our listener again.
+        nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class, new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, DropDownControl.this, popup));
+        if (endNotify != null) {
+          endNotify.perform();
+        }
+      }
+    });
   }
 
   public void refresh() {

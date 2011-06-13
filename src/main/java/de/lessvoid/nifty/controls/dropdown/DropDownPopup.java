@@ -3,8 +3,14 @@ package de.lessvoid.nifty.controls.dropdown;
 import java.util.List;
 import java.util.Properties;
 
+import org.bushe.swing.event.EventTopicSubscriber;
+
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
+import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
@@ -17,7 +23,10 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownPopup<T> extends AbstractController {
   private Nifty nifty;
-  @SuppressWarnings("deprecation") private DropDownControl<T> dropDownControl;
+  private Screen screen;
+  @SuppressWarnings("deprecation")
+  private DropDownControl<T> dropDownControl;
+  private Element popupInstance;
 
   public void bind(
       final Nifty niftyParam,
@@ -27,6 +36,7 @@ public class DropDownPopup<T> extends AbstractController {
       final Attributes controlDefinitionAttributes) {
     super.bind(element);
     this.nifty = niftyParam;
+    this.screen = screenParam;
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
@@ -34,15 +44,19 @@ public class DropDownPopup<T> extends AbstractController {
   }
 
   @SuppressWarnings("deprecation")
-  public void onStartScreen() {
+  public void setDropDownElement(final DropDownControl<T> dropDownControl, final Element popupInstance) {
+    this.dropDownControl = dropDownControl;
+    this.popupInstance = popupInstance;
     linkPopupToDropDownPosition(dropDownControl);
-    dropDownControl.refresh();
   }
 
   @SuppressWarnings("deprecation")
-  public void setDropDownElement(final DropDownControl<T> dropDownControl) {
-    this.dropDownControl = dropDownControl;
+  public void onStartScreen() {
+    final ListBox listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
+    nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,
+        new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, dropDownControl, popupInstance));
     linkPopupToDropDownPosition(dropDownControl);
+    dropDownControl.refresh();
   }
 
   @SuppressWarnings({ "deprecation", "rawtypes" })
