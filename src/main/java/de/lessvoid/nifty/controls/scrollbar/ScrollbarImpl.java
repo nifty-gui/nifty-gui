@@ -176,6 +176,11 @@ public class ScrollbarImpl {
 
   private int calcHandleSize(final int viewSize) {
     int minHandleSize = view.getMinHandleSize();
+    if (worldMax == 0) {
+      // special case: empty data and we can't divide by null anyway :)
+      // we return the maximum size because when nothing is there the scrollbar handle should be maximal.
+      return viewSize;
+    }
     int handleSize = (int) Math.floor(worldPageSize * viewSize / worldMax);
     if (handleSize < minHandleSize) {
       return minHandleSize;
