@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="radiobutton" style="nifty-radiobutton-style" controller="de.lessvoid.nifty.controls.radiobutton.RadioButtonControl">
+    <panel style="#panel" focusable="true" visibleToMouse="true">
+      <interact onClick="onClick()" />
+      <image id="#select" style="#select" />
+    </panel>
+  </controlDefinition>
+</nifty-controls>
