@@ -91,7 +91,7 @@ public class Element implements NiftyEvent<Void> {
   /**
    * The ElementRenderer we should use to render this element.
    */
-  private ElementRenderer[] elementRenderer;
+  private ElementRenderer[] elementRenderer = new ElementRenderer[0];
 
   /**
    * the effect manager for this element.
@@ -300,9 +300,6 @@ public class Element implements NiftyEvent<Void> {
     this.visibleToMouseEvents = attributes.getAsBoolean("visibleToMouse", Convert.DEFAULT_VISIBLE_TO_MOUSE);
     this.layoutManager = convert.layoutManager(attributes.get("childLayout"));
     this.focusable = attributes.getAsBoolean("focusable", Convert.DEFAULT_FOCUSABLE);
-    if (elementRenderer == null) {
-      return;
-    }
     for (int i=0; i<elementRenderer.length; i++) {
       ElementRenderer renderer = elementRenderer[i];
       ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
@@ -351,7 +348,11 @@ public class Element implements NiftyEvent<Void> {
     this.elementType = newElementType;
     this.id = newId;
     this.parent = newParent;
-    this.elementRenderer = newElementRenderer;
+    if (newElementRenderer == null) {
+      this.elementRenderer = new ElementRenderer[0];
+    } else {
+      this.elementRenderer = newElementRenderer;
+    }
     this.effectManager = new EffectManager();
     this.effectManager.setAlternateKey(nifty.getAlternateKey());
     this.layoutPart = newLayoutPart;
@@ -580,11 +581,9 @@ public class Element implements NiftyEvent<Void> {
   }
 
   private void renderElement(final NiftyRenderEngine r) {
-    if (elementRenderer != null) {
-      for (int i=0; i<elementRenderer.length; i++) {
-        ElementRenderer renderer = elementRenderer[i];
-        renderer.render(this, r);
-      }
+    for (int i=0; i<elementRenderer.length; i++) {
+      ElementRenderer renderer = elementRenderer[i];
+      renderer.render(this, r);
     }
   }
 

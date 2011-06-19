@@ -64,7 +64,9 @@ public class ControlType extends ElementType {
   }
 
   void makeFlatControlsInternal() {
-    mergeFromElementType(elements.iterator().next());
+    if (!elements.isEmpty()) {
+      mergeFromElementType(elements.iterator().next());
+    }
     resolveIds(this, getAttributes().get("id"));
   }
 
