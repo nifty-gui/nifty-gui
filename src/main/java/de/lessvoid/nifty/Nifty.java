@@ -1349,6 +1349,10 @@ public class Nifty {
       this.eventClass = eventClass;
     }
 
+    public String toString() {
+      return super.toString() + "{" + elementId + "}{" + target + "}{" + eventClass + "}";
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void onEvent(final String topic, final Object data) {
