@@ -136,11 +136,9 @@ public class ScrollbarImpl {
     }
     int newViewPos = viewValue - moveTheHandleStartPosDelta;
     int handleSize = calcHandleSize(viewSize);
-    changeValue(viewToWorld(newViewPos, viewSize - handleSize, worldMax - worldPageSize));
+    float newWorldValue = viewToWorld(newViewPos, viewSize - handleSize, worldMax - worldPageSize);
+    changeValue(newWorldValue);
     updateView();
-
-    int handlePosition = calcHandlePosition(viewSize, handleSize);
-    moveTheHandleStartPosDelta = viewValue - handlePosition;
   }
 
   private boolean hitsHandle(final int handlePosition, final int handleSize, final int viewValueClicked) {
