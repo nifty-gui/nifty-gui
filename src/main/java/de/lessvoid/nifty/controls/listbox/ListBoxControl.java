@@ -476,6 +476,11 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     return displayItems;
   }
 
+  @Override
+  public void refresh() {
+    listBoxImpl.updateView();
+  }
+
   // internals 
 
   private void initSelectionMode(final ListBoxImpl<T> listBoxImpl, final String selectionMode, final String forceSelection) {

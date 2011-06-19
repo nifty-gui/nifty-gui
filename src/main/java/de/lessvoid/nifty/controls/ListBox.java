@@ -191,6 +191,12 @@ public interface ListBox<T> extends NiftyControl {
   void sortAllItems(Comparator<T> comperator);
 
   /**
+   * Refresh the Listbox display. You can use that when you've made changes to the
+   * underlying model classes. This just displays all currently visible elements.
+   */
+  void refresh();
+
+  /**
    * The ListBoxSelectionMode determines how the ListBox handles selections.
    * @author void
    */

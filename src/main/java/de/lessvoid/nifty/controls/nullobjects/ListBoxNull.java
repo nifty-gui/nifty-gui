@@ -208,4 +208,8 @@ public class ListBoxNull implements ListBox {
   public boolean isBound() {
     return false;
   }
+
+  @Override
+  public void refresh() {
+  }
 }
