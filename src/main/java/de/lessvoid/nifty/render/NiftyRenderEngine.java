@@ -209,6 +209,13 @@ public interface NiftyRenderEngine {
   void disposeImage(RenderImage image);
 
   /**
+   * Dispose the given image and reload it.
+   * @param image image
+   * @return the reloaded image
+   */
+  RenderImage reload(RenderImage image);
+
+  /**
    * This is called from Nifty when it receives the resolutionChange notify from application code.
    * The RenderEngine will update the cached values of width/height from the RenderDevice it has
    * stored inside.

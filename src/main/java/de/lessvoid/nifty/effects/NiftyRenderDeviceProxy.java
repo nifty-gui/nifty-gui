@@ -173,4 +173,9 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   public Set < RenderStateType > getStates() {
     return renderStates;
   }
+
+  @Override
+  public RenderImage reload(final RenderImage image) {
+    return image;
+  }
 }

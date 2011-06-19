@@ -49,8 +49,7 @@ public class NiftyImage {
    * @param color color
    * @param scale scale
    */
-  public void render(
-      final int x, final int y, final int width, final int height, final Color color, final float scale) {
+  public void render(final int x, final int y, final int width, final int height, final Color color, final float scale) {
     imageMode.render(niftyRenderEngine.getRenderDevice(), image, x, y, width, height, color, scale);
   }
 
@@ -62,6 +61,17 @@ public class NiftyImage {
     this.imageMode = imageMode;
   }
 
+  /**
+   * Reload the image data.
+   */
+  public void reload() {
+    image = niftyRenderEngine.reload(image);
+
+  }
+
+  /**
+   * Dispose the resources kept by this image.
+   */
   public void dispose() {
     niftyRenderEngine.disposeImage(image);
   }

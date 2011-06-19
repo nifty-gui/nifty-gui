@@ -523,6 +523,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     imageManager.dispose(image);
   }
 
+  public RenderImage reload(final RenderImage image) {
+    return imageManager.reload(image);
+  }
+
   private class SavedRenderState {
     private float x;
     private float y;

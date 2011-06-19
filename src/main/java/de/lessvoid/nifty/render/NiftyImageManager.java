@@ -20,7 +20,7 @@ public class NiftyImageManager {
     this.renderDevice = renderDevice;
   }
 
-  public RenderImage getImage(String filename, boolean filterLinear) {
+  public RenderImage getImage(final String filename, final boolean filterLinear) {
     String key = buildName(filename, filterLinear);
     if (imageCache.containsKey(key)) {
       RenderImage existingEntry = imageCache.get(key).addReference();
@@ -30,13 +30,20 @@ public class NiftyImageManager {
     NiftyStopwatch.start();
 
     RenderImage createImage = renderDevice.createImage(filename, filterLinear);
-    ReferencedCountedImage newEntry = new ReferencedCountedImage(key, createImage);
+    ReferencedCountedImage newEntry = new ReferencedCountedImage(filename, filterLinear, createImage);
     backReference.put(createImage, newEntry);
     imageCache.put(key, newEntry);
     log.finer(key + " create [" + imageCache.get(key).references + "]");
 
     NiftyStopwatch.stop("imageManager.getImage(" + filename + ")");
     return newEntry.getRenderImage();
+  }
+
+  public RenderImage reload(final RenderImage image) {
+    if (backReference.containsKey(image)) {
+      return backReference.get(image).reload();
+    }
+    return image;
   }
 
   public void dispose(final RenderImage image) {
@@ -68,14 +75,24 @@ public class NiftyImageManager {
   }
 
   private class ReferencedCountedImage {
-    private String name;
+    private String filename;
+    private boolean filterLinear;
+    private String key;
     private RenderImage renderImage;
     private int references;
 
-    public ReferencedCountedImage(final String name, final RenderImage renderImage) {
-      this.name = name;
+    public ReferencedCountedImage(final String filename, final boolean filterLinear, final RenderImage renderImage) {
+      this.filename = filename;
+      this.filterLinear = filterLinear;
+      this.key = buildName(filename, filterLinear);
       this.renderImage = renderImage;
       this.references = 1;
+    }
+
+    public RenderImage reload() {
+      renderImage.dispose();
+      renderImage = renderDevice.createImage(filename, filterLinear);
+      return renderImage;
     }
 
     public RenderImage addReference() {
@@ -86,7 +103,7 @@ public class NiftyImageManager {
     public boolean removeReference() {
       references--;
       if (references == 0) {
-        log.finer(name + " DISPOSE");
+        log.finer(key + " DISPOSE");
         renderImage.dispose();
         return true;
       }
@@ -102,7 +119,7 @@ public class NiftyImageManager {
     }
 
     public String getName() {
-      return name;
+      return key;
     }
   }
 }
