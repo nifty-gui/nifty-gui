@@ -21,6 +21,7 @@ public class ImageOverlay implements EffectImpl {
   private SizeValue height;
   private boolean center;
   private boolean hideIfNotEnoughSpace;
+  private boolean activeBeforeStartDelay; // this will render the effect even when using a startDelay value so that it will already render before the startDelay
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
@@ -38,6 +39,7 @@ public class ImageOverlay implements EffectImpl {
     height = new SizeValue(parameter.getProperty("height", element.getHeight() + "px"));
     center = Boolean.valueOf(parameter.getProperty("center", "false"));
     hideIfNotEnoughSpace = Boolean.valueOf(parameter.getProperty("hideIfNotEnoughSpace", "false"));
+    activeBeforeStartDelay = Boolean.valueOf(parameter.getProperty("activeBeforeStartDelay", "false"));
   }
 
   public void execute(
@@ -45,6 +47,9 @@ public class ImageOverlay implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
+    if (!activeBeforeStartDelay && normalizedTime <= 0.0) {
+      return;
+    }
     int insetOffset = inset.getValueAsInt(element.getWidth());
     int imageX = element.getX() + insetOffset;
     int imageY = element.getY() + insetOffset;
