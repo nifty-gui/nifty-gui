@@ -72,7 +72,6 @@ public class NiftyInputControl {
   }
 
   public void onStartScreen(final Nifty nifty, final Screen screen) {
-    nifty.subscribeAnnotations(controller);
     controller.onStartScreen();
   }
 

@@ -19,6 +19,8 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectManager;
 import de.lessvoid.nifty.effects.Falloff;
+import de.lessvoid.nifty.elements.events.ElementDisableEvent;
+import de.lessvoid.nifty.elements.events.ElementEnableEvent;
 import de.lessvoid.nifty.elements.events.ElementHideEvent;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
@@ -1119,6 +1121,7 @@ public class Element implements NiftyEvent<Void> {
   void enableEffect() {
     stopEffectWithoutChildren(EffectEventId.onDisabled);
     startEffectWithoutChildren(EffectEventId.onEnabled);
+    nifty.publishEvent(getId(), new ElementEnableEvent(this));
   }
 
   /**
@@ -1163,6 +1166,7 @@ public class Element implements NiftyEvent<Void> {
     stopEffectWithoutChildren(EffectEventId.onEndHover);
     stopEffectWithoutChildren(EffectEventId.onEnabled);
     startEffectWithoutChildren(EffectEventId.onDisabled);
+    nifty.publishEvent(getId(), new ElementDisableEvent(this));
   }
 
   /**
@@ -1515,15 +1519,28 @@ public class Element implements NiftyEvent<Void> {
    * On start screen event.
    */
   public void onStartScreen() {
+    onStartScreenSubscribeControllerAnnotations();
+    onStartScreenInternal();
+  }
+
+  private void onStartScreenSubscribeControllerAnnotations() {
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
-      e.onStartScreen();
+      e.onStartScreenSubscribeControllerAnnotations();
     }
+    if (attachedInputControl != null) {
+      nifty.subscribeAnnotations(attachedInputControl.getController());
+    }
+  }
 
+  private void onStartScreenInternal() {
+    for (int i=0; i<elements.size(); i++) {
+      Element e = elements.get(i);
+      e.onStartScreenInternal();
+    }
     if (focusable) {
       focusHandler.addElement(this);
     }
-
     if (attachedInputControl != null) {
       attachedInputControl.onStartScreen(nifty, screen);
     }
