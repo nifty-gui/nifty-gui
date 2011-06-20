@@ -57,6 +57,8 @@ public class SliderAndScrollbarDialogController implements Controller {
     getSlider("sliderA").setup(0.f, 255.f, 255.f, 1.f, 10.f);
 
     getScrollbar("scrollbarH").setWorldMax(1000.f);
+    getScrollbar("scrollbarH").setWorldPageSize(10.f);
+
     getTextfield("scrollbarH_WorldMax_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getWorldMax()));
     getTextfield("scrollbarH_CurrentValue_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getValue()));
     getTextfield("scrollbarH_ViewMax_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getWorldPageSize()));
@@ -99,7 +101,7 @@ public class SliderAndScrollbarDialogController implements Controller {
 
   @NiftyEventSubscriber(id="scrollbarH")
   public void onScrollbarHChanged(final String id, final ScrollbarChangedEvent event) {
-    getTextfield("scrollbarH_CurrentValue_Textfield").setText(String.valueOf((int)getScrollbar("scrollbarH").getValue()));
+    getTextfield("scrollbarH_CurrentValue_Textfield").setText(String.valueOf(getScrollbar("scrollbarH").getValue()));
   }
 
   @NiftyEventSubscriber(id="scrollbarH_WorldMax_Textfield")
