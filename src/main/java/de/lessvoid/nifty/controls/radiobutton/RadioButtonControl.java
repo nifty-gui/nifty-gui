@@ -64,7 +64,6 @@ public class RadioButtonControl extends AbstractController implements RadioButto
     return radioGroup;
   }
 
-  @Override
   public void deactivate() {
     if (!active) {
       return;
@@ -75,7 +74,6 @@ public class RadioButtonControl extends AbstractController implements RadioButto
     publishStateChangedEvent();
   }
 
-  @Override
   public void activate() {
     if (active) {
       return;
@@ -89,6 +87,11 @@ public class RadioButtonControl extends AbstractController implements RadioButto
   @Override
   public boolean isActivated() {
     return active;
+  }
+
+  @Override
+  public void select() {
+    onClick();
   }
 
   public void onClick() {

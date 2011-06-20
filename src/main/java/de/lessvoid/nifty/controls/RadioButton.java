@@ -18,15 +18,10 @@ public interface RadioButton extends NiftyControl {
   RadioButtonGroup getGroup();
 
   /**
-   * Activate this RadioButton. This will make all other RadioButtons of the
+   * Select this RadioButton. This will make all other RadioButtons of the
    * same group inactive.
    */
-  void activate();
-
-  /**
-   * Deactivate this RadioButton.
-   */
-  void deactivate();
+  void select();
 
   /**
    * Returns the activated state of this RadioButton.

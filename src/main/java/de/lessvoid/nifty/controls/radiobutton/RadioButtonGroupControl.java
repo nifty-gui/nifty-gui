@@ -8,7 +8,6 @@ import org.bushe.swing.event.EventTopicSubscriber;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.RadioButton;
 import de.lessvoid.nifty.controls.RadioButtonGroup;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.elements.Element;
@@ -26,8 +25,8 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class RadioButtonGroupControl extends AbstractController implements RadioButtonGroup {
   private Nifty nifty;
   private Screen screen;
-  private RadioButton activeButton;
-  private List<RadioButton> registeredRadioButtons = new ArrayList<RadioButton>();
+  private RadioButtonControl activeButton;
+  private List<RadioButtonControl> registeredRadioButtons = new ArrayList<RadioButtonControl>();
   private boolean allowDeselection = false;  // by default we don't allow deselection
 
   @Override
@@ -59,14 +58,14 @@ public class RadioButtonGroupControl extends AbstractController implements Radio
     return false;
   }
 
-  public void registerRadioButton(final RadioButton radioButtonControl) {
+  public void registerRadioButton(final RadioButtonControl radioButtonControl) {
     registeredRadioButtons.add(radioButtonControl);
     if (activeButton == null) {
       onRadioButtonClick(registeredRadioButtons.get(0));
     }
   }
 
-  public void onRadioButtonClick(final RadioButton clickedRadioButton) {
+  public void onRadioButtonClick(final RadioButtonControl clickedRadioButton) {
     if (activeButton == clickedRadioButton) {
       if (!allowDeselection) {
         return;
