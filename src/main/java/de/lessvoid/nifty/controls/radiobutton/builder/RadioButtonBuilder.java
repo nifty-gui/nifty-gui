@@ -10,4 +10,8 @@ public class RadioButtonBuilder extends ControlBuilder {
   public RadioButtonBuilder(final String id) {
     super(id, "radiobutton");
   }
+
+  public void group(final String group) {
+    set("group", group);
+  }
 }

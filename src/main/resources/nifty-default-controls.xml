@@ -15,5 +15,6 @@
   <useControls filename="nifty-controls/nifty-listbox.xml" />
   <useControls filename="nifty-controls/nifty-dragndrop.xml" />
   <useControls filename="nifty-controls/nifty-window.xml" />
+  <useControls filename="nifty-controls/nifty-radiobutton.xml" />
   <useControls filename="nifty-controls/nifty-hint.xml" />
 </nifty-controls>
