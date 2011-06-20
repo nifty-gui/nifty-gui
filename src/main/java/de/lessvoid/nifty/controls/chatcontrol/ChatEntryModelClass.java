@@ -48,6 +48,22 @@ public final class ChatEntryModelClass {
     }
 
     /**
+     * Supply a new icon which replaces the current one.
+     * @param icon  The icon.
+     */
+    public void setIcon(NiftyImage icon) {
+        this.icon = icon;
+    }
+
+    /**
+     * Set a new label to replace the current one.
+     * @param label The new label.
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @Override

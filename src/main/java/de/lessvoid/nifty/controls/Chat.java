@@ -4,7 +4,9 @@
  */
 package de.lessvoid.nifty.controls;
 
+import de.lessvoid.nifty.controls.chatcontrol.ChatEntryModelClass;
 import de.lessvoid.nifty.render.NiftyImage;
+import java.util.List;
 
 /**
  *
@@ -46,5 +48,23 @@ public interface Chat extends NiftyControl {
      *            The player name to remove.
      */
     void removePlayer(String playerName);
+    
+    /**
+     * This method returns the current list of players in the chat.
+     * @return The current list of players.
+     */
+    List<ChatEntryModelClass> getPlayers();
+    
+    /**
+     * This method returns all the chatlines in the chat.
+     * @return The current list of chatlines.
+     */
+    List<ChatEntryModelClass> getLines();
+    
+    /**
+     * Updates the lists to reflecct any changes made to them,
+     * outside of the addPlayer, removePlayer and 
+     */
+    void update();
     
 }

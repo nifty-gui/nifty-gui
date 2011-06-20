@@ -17,6 +17,7 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
+import java.util.List;
 
 /**
  * This is the main controller for the chat control.
@@ -103,6 +104,32 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
         final ChatEntryModelClass item = new ChatEntryModelClass(playerName, null);
         playerList.removeItem(item);
     }
+    
+    /**
+    * {@inheritDoc}
+    */
+    @Override
+    public List<ChatEntryModelClass> getPlayers() {
+        final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
+        return playerList.getItems();
+    }
+    
+    /**
+    * {@inheritDoc}
+    */
+    @Override
+    public List<ChatEntryModelClass> getLines() {
+        final ListBox<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
+        return chatBox.getItems();
+    }
+    
+    /**
+    * {@inheritDoc}
+    */
+    @Override
+    public void update() {
+        getListBox(PLAYER_LIST).refresh();
+    }
 
     /**
      * This method is called when the player either presses the send button or
@@ -120,6 +147,9 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
         return (ListBox<ChatEntryModelClass>) getElement().findNiftyControl(name, ListBox.class);
     }
 
+    /**
+    * {@inheritDoc}
+    */
     @Override
     public boolean keyEvent(final NiftyInputEvent inputEvent) {
         LOGGER.log(Level.INFO, "event received: {0}", inputEvent);
@@ -130,6 +160,9 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
         return false;
     }
 
+    /**
+    * {@inheritDoc}
+    */
     @Override
     public boolean inputEvent(final NiftyInputEvent inputEvent) {
         return keyEvent(inputEvent);
