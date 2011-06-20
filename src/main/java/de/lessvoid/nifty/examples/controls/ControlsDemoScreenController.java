@@ -101,6 +101,9 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
     ConsoleCommand helpCommand = new HelpCommand();
     consoleCommands.registerCommand("help", helpCommand);
 
+    ConsoleCommand clearCommand = new ClearCommand();
+    consoleCommands.registerCommand("clear", clearCommand);
+
     ConsoleCommand exitCommand = new ExitCommand();
     consoleCommands.registerCommand("exit", exitCommand);
 
@@ -331,6 +334,13 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
     public void execute(final String[] args) {
       console.output("good bye");
       nifty.closePopup(consolePopup.getId());
+    }
+  }
+
+  private class ClearCommand implements ConsoleCommand {
+    @Override
+    public void execute(final String[] args) {
+      console.clear();
     }
   }
 
