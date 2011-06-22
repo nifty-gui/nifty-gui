@@ -34,6 +34,7 @@ public class RadioButtonGroupControl extends AbstractController implements Radio
     super.bind(element);
     this.nifty = nifty;
     this.screen = screen;
+    this.allowDeselection = Boolean.valueOf(parameter.getProperty("allowDeselection", "false"));
   }
 
   @Override
