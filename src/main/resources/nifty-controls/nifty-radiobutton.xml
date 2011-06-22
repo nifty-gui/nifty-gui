@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
   <!-- the actual radio button -->
-  <controlDefinition name="radiobutton" style="nifty-radiobutton-style" controller="de.lessvoid.nifty.controls.radiobutton.RadioButtonControl">
+  <controlDefinition name="radioButton" style="nifty-radiobutton-style" controller="de.lessvoid.nifty.controls.radiobutton.RadioButtonControl">
     <panel style="#panel">
       <interact onClick="onClick()" />
       <image id="#select" style="#select">
@@ -11,5 +11,5 @@
   </controlDefinition>
 
   <!-- the radio group helper is used to group radiobuttons in a logical way so that from all radiobuttons only a single one can be active at any given moment -->
-  <controlDefinition name="radiogroup" width="0px" height="0px" visible="false" controller="de.lessvoid.nifty.controls.radiobutton.RadioButtonGroupControl" />
+  <controlDefinition name="radioButtonGroup" width="0px" height="0px" visible="false" controller="de.lessvoid.nifty.controls.radiobutton.RadioButtonGroupControl" />
 </nifty-controls>

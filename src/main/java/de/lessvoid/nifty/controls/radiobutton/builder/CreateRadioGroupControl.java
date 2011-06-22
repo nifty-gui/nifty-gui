@@ -11,7 +11,7 @@ import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 
 public class CreateRadioGroupControl extends ControlAttributes {
-  private static final String NAME = "radiogroup";
+  private static final String NAME = "radioButtonGroup";
 
   public CreateRadioGroupControl() {
     setAutoId(NiftyIdCreator.generate());

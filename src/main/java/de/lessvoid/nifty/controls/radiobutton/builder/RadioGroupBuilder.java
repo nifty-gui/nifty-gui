@@ -4,10 +4,10 @@ import de.lessvoid.nifty.builder.ControlBuilder;
 
 public class RadioGroupBuilder extends ControlBuilder {
   public RadioGroupBuilder() {
-    super("radiogroup");
+    super("radioButtonGroup");
   }
 
   public RadioGroupBuilder(final String id) {
-    super(id, "radiogroup");
+    super(id, "radioButtonGroup");
   }
 }

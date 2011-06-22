@@ -11,7 +11,7 @@ import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 
 public class CreateRadioButtonControl extends ControlAttributes {
-  private static final String NAME = "radiobutton";
+  private static final String NAME = "radioButton";
 
   public CreateRadioButtonControl() {
     setAutoId(NiftyIdCreator.generate());
