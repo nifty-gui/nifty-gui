@@ -95,10 +95,17 @@ public class RadioButtonControl extends AbstractController implements RadioButto
   }
 
   public void onClick() {
+    if (radioGroup == null) {
+      return;
+    }
     radioGroup.onRadioButtonClick(this);
   }
 
   private void linkToRadioGroup(final String groupId) {
+    if (groupId == null) {
+      radioGroup = null;
+      return;
+    }
     radioGroup = screen.findNiftyControl(groupId, RadioButtonGroupControl.class);
     radioGroup.registerRadioButton(this);
   }
