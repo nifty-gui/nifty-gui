@@ -35,7 +35,7 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
     nifty = niftyParam;
     screen = screenParam;
     checkBoxImpl.bindToView(this);
-    checkBoxImpl.setChecked(new Boolean(propertiesParam.getProperty("checked", "true")));
+    checkBoxImpl.setChecked(new Boolean(propertiesParam.getProperty("checked", "false")));
   }
 
   @Override
