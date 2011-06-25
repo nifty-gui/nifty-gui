@@ -459,6 +459,22 @@ public class Nifty {
   }
 
   /**
+   * Load an additional xml file without removing any of the data that might already been loaded.
+   * @param filename the file to load
+   */
+  public void addXml(final String filename) {
+    loadFromFile(filename);
+  }
+
+  /**
+   * Load an additional xml from a stream without removing any of the data that might already been loaded.
+   * @param stream the stream to load
+   */
+  public void addXml(final InputStream stream) {
+    loadFromStream(stream);
+  }
+
+  /**
    * Load and validate the given filename. If the file is valid, nothing happens. If it
    * is invalid you'll get an exception explaining the error.
    * @param filename filename to check
