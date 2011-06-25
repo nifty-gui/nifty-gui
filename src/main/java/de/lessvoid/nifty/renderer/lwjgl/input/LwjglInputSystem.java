@@ -19,13 +19,13 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
 
 public class LwjglInputSystem implements InputSystem {
-  private static final Logger log = Logger.getLogger(LwjglInputSystem.class.getName());
+  private Logger log = Logger.getLogger(LwjglInputSystem.class.getName());
   private LwjglKeyboardInputEventCreator keyboardEventCreator = new LwjglKeyboardInputEventCreator();
   private IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
   private ConcurrentLinkedQueue<MouseInputEvent> mouseEventsOut = new ConcurrentLinkedQueue<MouseInputEvent>();
   private ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEventsOut = new ConcurrentLinkedQueue<KeyboardInputEvent>();
   public boolean niftyHasKeyboardFocus = true;
-  public boolean niftyTakesKeyboardFocusOnClick = true;
+  public boolean niftyTakesKeyboardFocusOnClick = false;
 
   public void startup() throws Exception {
     Mouse.create();
@@ -102,14 +102,20 @@ public class LwjglInputSystem implements InputSystem {
       // now send the event to nifty
       boolean mouseEventProcessedByNifty = inputEventConsumer.processMouseEvent(mouseX, mouseY, mouseWheel, button, buttonDown);
       if (!mouseEventProcessedByNifty) {
+        log.fine("Nifty did not processed this mouse event. You can handle it.");
+
         // nifty did not process this event, it did not hit any element
         mouseEventsOut.offer(new MouseInputEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
         if (niftyTakesKeyboardFocusOnClick) {
+          log.fine("Nifty gave up the keyboard focus");
           niftyHasKeyboardFocus = false; // give up focus if clicked outside nifty
         }
       } else {
+        log.fine("Nifty has processed this mouse event");
+
         // nifty did handle that event. it hit an element and was processed by some GUI element
         if (niftyTakesKeyboardFocusOnClick) { // take focus if nifty element is clicked
+          log.fine("Nifty takes the keyboard focus back");
           niftyHasKeyboardFocus = true;
         }
       }
