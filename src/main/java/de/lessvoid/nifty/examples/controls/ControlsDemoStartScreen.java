@@ -71,6 +71,10 @@ public class ControlsDemoStartScreen implements ScreenController {
       createLabel.create(newNifty, screen, row);
 
       CreateCheckBoxControl createCheckBoxControl = new CreateCheckBoxControl();
+      // this will mess up the tab order to test this =)
+      // I bet someone smart will bitch about the out of order tab order tho.
+      // IT'S NOT A BUG IT'S A FEATURE DEMONSTRATION! HAH! :P
+      createCheckBoxControl.setFocusableInsertBeforeElementId("listBoxStatic");
       createCheckBoxControl.create(nifty, screen, row);
 
     // create 8px height panel
