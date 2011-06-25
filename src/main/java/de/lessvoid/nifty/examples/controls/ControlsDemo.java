@@ -71,7 +71,7 @@ public class ControlsDemo {
 
     createIntroScreen(nifty);
     createDemoScreen(nifty);
-    nifty.gotoScreen("demo");
+    nifty.gotoScreen("start");
 
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);
