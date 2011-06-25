@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+  <!-- note: no useStyles or useControls in here -->
+  <!-- note: you can't use that file on its own -->
+  <!-- note: this file is only demonstrating loading additional screens -->
+  <screen id="next" controller="de.lessvoid.nifty.examples.reload.ReloadScreen">
+    <layer id="layer" backgroundColor="#803f" childLayout="center">
+      <panel id="panel" height="25%" width="35%" align="center" valign="center" backgroundColor="#f60f" childLayout="center" visibleToMouse="true">
+        <!-- we can use a button here but we've not included the controls at all! magic? no :) this whole screen is loaded additionally to other xml data loaded before -->
+        <control id="back" name="button" label="Back" align="center" valign="center" />
+      </panel>
+    </layer>
+  </screen>
+</nifty>
