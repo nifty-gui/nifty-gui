@@ -175,6 +175,16 @@ public class Element implements NiftyEvent<Void> {
   private boolean focusable = false;
 
   /**
+   * This attribute determines the element before (!) the new element will be inserted into the focusHandler.
+   * You can set this to any element id on the screen and this element will be inserted right before the
+   * given element. This is especially useful when you dynamically remove and add elements and you need to
+   * enforce a specific focus order.
+   *
+   * The default value is null which will simply add the elements as they are created.
+   */
+  private String focusableInsertBeforeElementId;
+
+  /**
    * screen we're connected to.
    */
   private Screen screen;
@@ -302,6 +312,7 @@ public class Element implements NiftyEvent<Void> {
     this.visibleToMouseEvents = attributes.getAsBoolean("visibleToMouse", Convert.DEFAULT_VISIBLE_TO_MOUSE);
     this.layoutManager = convert.layoutManager(attributes.get("childLayout"));
     this.focusable = attributes.getAsBoolean("focusable", Convert.DEFAULT_FOCUSABLE);
+    this.focusableInsertBeforeElementId = attributes.get("focusableInsertBeforeElementId");
     for (int i=0; i<elementRenderer.length; i++) {
       ElementRenderer renderer = elementRenderer[i];
       ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
@@ -1515,6 +1526,12 @@ public class Element implements NiftyEvent<Void> {
     screen.registerElementId(id);
   }
 
+  private void bindToFocusHandler() {
+    if (focusable) {
+      focusHandler.addElement(this, screen.findElementByName(focusableInsertBeforeElementId));
+    }
+  }
+
   /**
    * On start screen event.
    */
@@ -1537,9 +1554,6 @@ public class Element implements NiftyEvent<Void> {
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
       e.onStartScreenInternal();
-    }
-    if (focusable) {
-      focusHandler.addElement(this);
     }
     if (attachedInputControl != null) {
       attachedInputControl.onStartScreen(nifty, screen);
@@ -1745,6 +1759,7 @@ public class Element implements NiftyEvent<Void> {
     if (attachedInputControl != null) {
       attachedInputControl.initControl(elementType.getAttributes());
     }
+    bindToFocusHandler();
   }
 
   /**

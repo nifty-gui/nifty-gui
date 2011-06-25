@@ -122,6 +122,10 @@ public class ControlAttributes {
     attributes.set("focusable", focusable);
   }
 
+  public void setFocusableInsertBeforeElementId(final String focusableInsertBeforeElementId) {
+    attributes.set("focusableInsertBeforeElementId", focusableInsertBeforeElementId);
+  }
+
   public void setFont(final String font) {
     attributes.set("font", font);
   }

@@ -216,6 +216,7 @@
     <xs:attribute name="visibleToMouse" type="xs:string" />
     <xs:attribute name="childLayout" type="xs:string" />
     <xs:attribute name="focusable" type="xs:string" />
+    <xs:attribute name="focusableInsertBeforeElementId" type="xs:string" />
     <xs:attribute name="backgroundImage" type="xs:string" />
     <xs:attribute name="backgroundColor" type="xs:string" />
     <xs:attribute name="color" type="xs:string" />

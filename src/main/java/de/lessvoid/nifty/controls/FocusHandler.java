@@ -29,11 +29,30 @@ public class FocusHandler {
   }
 
   /**
-   * add an element to the focus handler.
+   * add the given element to the focushandler (as the last element).
    * @param element element to add
    */
   public void addElement(final Element element) {
-    entries.add(element);
+    addElement(element, null);
+  }
+
+  /**
+   * add an element to the focus handler.
+   * @param element element to add
+   * @param focusableInsertBeforeElement the element before which to add the new element
+   */
+  public void addElement(final Element element, final Element focusableInsertBeforeElement) {
+    if (focusableInsertBeforeElement == null) {
+      entries.add(element);
+    } else {
+      int idx = entries.indexOf(focusableInsertBeforeElement);
+      if (idx == -1) {
+        log.warning("requesting to add focusable element before [" + focusableInsertBeforeElement + "] but I can't find it on the current screen. Adding it to the end of the list (like in the regular case)");
+        entries.add(element);
+      } else {
+        entries.add(idx, focusableInsertBeforeElement);
+      }
+    }
   }
 
   /**

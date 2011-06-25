@@ -194,6 +194,10 @@ public abstract class ElementBuilder {
     attributes.setFocusable(String.valueOf(focusable));
   }
 
+  public void focusableInsertBeforeElementId(final String focusableInsertBeforeElementId) {
+    attributes.setFocusableInsertBeforeElementId(focusableInsertBeforeElementId);
+  }
+
   public void textHAlign(final Align align) {
     attributes.set("textHAlign", align.getLayout());
   }
