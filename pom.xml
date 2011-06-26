@@ -3,12 +3,12 @@
   <groupId>lessvoid</groupId>
   <artifactId>nifty-examples</artifactId>
   <name>nifty-examples</name>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.3</version>
   <url>http://nifty-gui.sourceforge.net/nifty-examples/project-info.html</url>
   <scm>
-    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-examples/trunk</connection>
-    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-examples/trunk</developerConnection>
-    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-examples</url>
+    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-examples/tags/nifty-examples-1.3</connection>
+    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-examples/tags/nifty-examples-1.3</developerConnection>
+    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-examples/tags/nifty-examples-1.3</url>
   </scm>
   <dependencies>
     <dependency>
