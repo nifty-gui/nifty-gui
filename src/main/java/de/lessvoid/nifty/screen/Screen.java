@@ -467,6 +467,7 @@ public class Screen {
   public String debugOutput(final String regexpElement, final String regexpAttribute) {
     StringBuffer result = new StringBuffer();
     debugOutputLayerElements(regexpElement, regexpAttribute, result, layerElements);
+    result.append("\n\n### popupElements: " + popupElements.size());
     debugOutputLayerElements(regexpElement, regexpAttribute, result, popupElements);
     result.append(focusHandler.toString());
     return result.toString();
@@ -474,7 +475,7 @@ public class Screen {
 
   private void debugOutputLayerElements(final String regexpElement, final String regexpAttribute, StringBuffer result, ArrayList<Element> layers) {
     for (int i=0; i<layers.size(); i++) {
-      Element layer = layerElements.get(i);
+      Element layer = layers.get(i);
       String layerType = " +";
       if (!layer.isVisible()) {
         layerType = " -";
