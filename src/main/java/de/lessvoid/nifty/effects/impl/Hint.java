@@ -41,7 +41,7 @@ public class Hint implements EffectImpl {
     this.hintPanelId = hintLayerId + "-hint-panel";
 
     new LayerBuilder(hintLayerId) {{
-      childLayoutAbsolute();
+      childLayoutAbsoluteInside();
       visible(false);
       control(new ControlBuilder(hintPanelId, hintControl) {{
         parameter("hintText", hintText);

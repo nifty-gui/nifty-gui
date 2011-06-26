@@ -162,6 +162,10 @@ public abstract class ElementBuilder {
     childLayout(ChildLayoutType.Absolute);
   }
 
+  public void childLayoutAbsoluteInside() {
+    childLayout(ChildLayoutType.AbsoluteInside);
+  }
+
   public void childLayoutOverlay() {
     childLayout(ChildLayoutType.Overlay);
   }
