@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.0+" codebase="http://nifty-gui.sourceforge.net/webstart/" href="nifty-default-controls-examples-1.0-alpha-2.jnlp">
+<jnlp spec="1.0+" codebase="http://nifty-gui.sourceforge.net/webstart/" href="nifty-default-controls-examples-1.3.jnlp">
   <information>
     <title>nifty-default-controls-examples</title>
     <vendor>void</vendor>
@@ -12,7 +12,7 @@
   </security>
   <resources>
     <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
-    <jar href="nifty-default-controls-examples-1.0-SNAPSHOT-alpha-2-complete-with-dependencies.jar" />
+    <jar href="nifty-default-controls-examples-1.3-complete-with-dependencies.jar" />
   </resources>
   <resources os="Windows">
     <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
