@@ -23,6 +23,7 @@ public class Gradient implements EffectImpl {
   private boolean horizontal = false;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+    entries.clear();
     for (Attributes entry : parameter.getEffectValues().getValues()) {
       SizeValue offset = new SizeValue(entry.get("offset"));
       Color color = entry.getAsColor("color");
