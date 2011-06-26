@@ -3,7 +3,6 @@ package de.lessvoid.nifty.examples.controls;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +41,7 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   private Nifty nifty;
   private Screen screen;
   private Element consolePopup;
+  private Element creditsPopup;
   private Console console;
   private ConsoleCommands consoleCommands;
 
@@ -78,6 +78,7 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
     this.nifty = nifty;
     this.screen = screen;
 
+    this.creditsPopup = nifty.createPopup("creditsPopup");
     this.consolePopup = nifty.createPopup("consolePopup");
     this.console = this.consolePopup.findNiftyControl("console", Console.class);
     this.console.output("Humble Nifty Console Demonstration :)\nYou can toggle the console on/off with the F1 key\nEnter 'help' to show all available commands");
@@ -166,7 +167,20 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
 
   @NiftyEventSubscriber(pattern="menuButton.*")
   public void onMenuButtonListBoxClick(final String id, final NiftyMousePrimaryClickedEvent clickedEvent) {
+    if ("menuButtonCredits".equals(id)) {
+      showCredits();
+      return;
+    }
     changeDialogTo(id);
+  }
+
+  private void showCredits() {
+    nifty.showPopup(screen, creditsPopup.getId(), null);
+  }
+
+  @NiftyEventSubscriber(id="creditsBack")
+  public void onCreditsBackClick(final String id, final ButtonClickedEvent event) {
+    nifty.closePopup(creditsPopup.getId());
   }
 
   @NiftyEventSubscriber(id="resetScreenButton")
@@ -304,13 +318,9 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
       }
       String param = args[1];
       if ("screen".equals(param)) {
-        Date now = new Date();
         String screenDebugOutput = nifty.getCurrentScreen().debugOutput();
-        System.out.println(new Date().getTime() - now.getTime());
-
-        now = new Date();
         console.output(screenDebugOutput);
-        System.out.println(new Date().getTime() - now.getTime());
+        System.out.println(screenDebugOutput);
       } else {
         console.outputError("unknown parameter [" + args[1] + "]");
       }

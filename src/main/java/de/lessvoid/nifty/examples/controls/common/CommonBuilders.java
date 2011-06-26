@@ -40,6 +40,14 @@ public class CommonBuilders {
     }};
   }
 
+  public PanelBuilder vspacer(final String height) {
+    return new PanelBuilder() {{
+      childLayoutHorizontal();
+      height(height);
+      width("100%");
+    }};
+  }
+
   public PanelBuilder hspacer(final String width) {
     return new PanelBuilder() {{
       width(width);

@@ -77,4 +77,12 @@ public class MenuButtonControlDefinition {
       parameter(PARAMETER_HINT, hintText);
     }};
   }
+
+  public static ControlBuilder getControlBuilder(final String id, final String text, final String hintText, final String width) {
+    return new ControlBuilder(id, NAME) {{
+      parameter(PARAMETER_LABEL, text);
+      parameter(PARAMETER_HINT, hintText);
+      width(width);
+    }};
+  }
 }
