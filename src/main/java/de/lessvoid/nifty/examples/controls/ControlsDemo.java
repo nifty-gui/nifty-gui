@@ -72,7 +72,7 @@ public class ControlsDemo {
 
     createIntroScreen(nifty);
     createDemoScreen(nifty);
-    nifty.gotoScreen("demo");
+    nifty.gotoScreen("start");
 
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);
@@ -589,16 +589,16 @@ public class ControlsDemo {
             }});
             text(new TextBuilder() {{
               text(
-                  "The following people helped creating Nifty with valuable feedback,\nfixing bugs or sending patches.\n\n\n" +
+                  "The following people helped creating Nifty with valuable feedback,\nfixing bugs or sending patches.\n(in no particular order)\n\n" +
                   "chaz0x0\n" + 
                   "Tumaini\n" + 
                   "arielsan\n" + 
-                  "\n" + 
-                  "\n" + 
-                  "\n" + 
-                  "\n" + 
-                  "\n" + 
-                  "\n");
+                  "gaba1978\n" + 
+                  "ractoc\n" + 
+                  "bonechilla\n" + 
+                  "mdeletrain\n" + 
+                  "mulov\n" + 
+                  "gouessej\n");
               style("creditsCenter");
             }});
             panel(common.vspacer("75px"));
