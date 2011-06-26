@@ -150,6 +150,11 @@ public class Screen {
       }
     };
 
+    Element mouseFocusElement = focusHandler.getMouseFocusElement();
+    if (mouseFocusElement != null) {
+      mouseFocusElement.stopEffect(EffectEventId.onHover);
+    }
+
     focusHandler.pushState();
 
     // prepare pop up for display

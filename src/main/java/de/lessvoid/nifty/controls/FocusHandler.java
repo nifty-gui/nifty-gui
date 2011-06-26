@@ -300,4 +300,8 @@ public class FocusHandler {
   public Element getKeyboardFocusElement() {
     return keyboardFocusElement;
   }
+  
+  public Element getMouseFocusElement() {
+    return mouseFocusElement;
+  }
 }
