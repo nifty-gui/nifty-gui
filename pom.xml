@@ -133,4 +133,11 @@
       <url>scp://shell.sourceforge.net/home/project-web/nifty-gui/htdocs/projects/${project.version}/nifty-default-controls</url>
     </site>
   </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>nifty-maven-repo.sourceforge.net</id>
+      <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
+    </repository>
+  </repositories>
 </project>
