@@ -74,9 +74,17 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
      */
     @Override
     public final void receivedChatLine(final String text, final NiftyImage icon) {
+        receivedChatLine(text, icon, null);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void receivedChatLine(String text, NiftyImage icon, String style) {
         final ListBox<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
         LOGGER.log(Level.FINE, "adding message {0}", (chatBox.itemCount() + 1));
-        final ChatEntryModelClass item = new ChatEntryModelClass(text, icon);
+        final ChatEntryModelClass item = new ChatEntryModelClass(text, icon, style);
         chatBox.addItem(item);
         chatBox.showItemByIndex(chatBox.itemCount() - 1);
     }
@@ -86,9 +94,17 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
      */
     @Override
     public final void addPlayer(final String playerName, final NiftyImage playerIcon) {
+        addPlayer(playerName, playerIcon, null);
+    }
+    
+    /**
+     * {@inheritDoc 
+     */
+    @Override
+    public void addPlayer(String playerName, NiftyImage playerIcon, String style) {
         final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
         LOGGER.log(Level.FINE, "adding player {0}", (playerList.itemCount() + 1));
-        final ChatEntryModelClass item = new ChatEntryModelClass(playerName, playerIcon);
+        final ChatEntryModelClass item = new ChatEntryModelClass(playerName, playerIcon, style);
         playerList.addItem(item);
         playerList.sortAllItems(playerComparator);
         playerList.showItem(item);
@@ -156,6 +172,7 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
         if (inputEvent == NiftyInputEvent.SubmitText) {
             sendText();
             return true;
+        } else if (inputEvent == NiftyInputEvent.MoveCursorRight) {
         }
         return false;
     }
@@ -167,6 +184,8 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     public boolean inputEvent(final NiftyInputEvent inputEvent) {
         return keyEvent(inputEvent);
     }
+
+
 
     /**
      * Class used to sort the list of players by name.

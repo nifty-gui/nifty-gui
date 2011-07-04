@@ -10,8 +10,8 @@ import de.lessvoid.nifty.render.NiftyImage;
  * @version 0.1
  */
 public final class ChatEntryModelClass {
-    private String label;
-    private NiftyImage icon;
+    
+    private ChatEntry chatEntry;
 
     /**
      * Constructor excepting the line and the icon.
@@ -19,8 +19,11 @@ public final class ChatEntryModelClass {
      * @param iconParam The icon to display in the entry, this one is optional.
      */
     public ChatEntryModelClass(final String labelParam, final NiftyImage iconParam) {
-        this.label = labelParam;
-        this.icon = iconParam;
+        this.chatEntry = new ChatEntry(labelParam, iconParam);
+    }
+    
+    public ChatEntryModelClass(final String labelParam, final NiftyImage iconParam, String style) {
+        this.chatEntry = new ChatEntry(labelParam, iconParam, style);
     }
 
     /**
@@ -28,7 +31,7 @@ public final class ChatEntryModelClass {
      */
     @Override
     public String toString() {
-        return label;
+        return chatEntry.getLabel();
     }
 
     /**
@@ -36,23 +39,7 @@ public final class ChatEntryModelClass {
      * @return The supplied label.
      */
     public String getLabel() {
-        return label;
-    }
-
-    /**
-     * Return the supplied icon.
-     * @return The supplied icon.
-     */
-    public NiftyImage getIcon() {
-        return icon;
-    }
-
-    /**
-     * Supply a new icon which replaces the current one.
-     * @param icon  The icon.
-     */
-    public void setIcon(NiftyImage icon) {
-        this.icon = icon;
+        return chatEntry.getLabel();
     }
 
     /**
@@ -60,7 +47,40 @@ public final class ChatEntryModelClass {
      * @param label The new label.
      */
     public void setLabel(String label) {
-        this.label = label;
+        chatEntry.setLabel(label);
+    }
+
+    /**
+     * Return the supplied icon.
+     * @return The supplied icon.
+     */
+    public NiftyImage getIcon() {
+        return chatEntry.getIcon();
+    }
+
+    /**
+     * Supply a new icon which replaces the current one.
+     * @param icon  The icon.
+     */
+    public void setIcon(NiftyImage icon) {
+        chatEntry.setIcon(icon);
+    }
+    
+    /**
+     * Returns the style of the current entry.
+     * @return The style.
+     */
+    public String getStyle() {
+        return this.chatEntry.getStyle();
+    }
+    
+    /**
+     * Supply a new style which replaces the current one, null reverts to the 
+     * default style from the XML.
+     * @param style The new style.
+     */
+    public void setStyle(String style) {
+        this.chatEntry.setStyle(style);
     }
     
     /**
