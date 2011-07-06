@@ -32,6 +32,9 @@ public class ChatBoxViewConverter implements ListBoxViewConverter<ChatEntryModel
         if (item != null) {
             textRenderer.setText(item.toString());
             iconRenderer.setImage(item.getIcon());
+            if (item.getStyle() != null && !item.getStyle().equals("")) {
+                text.setStyle(item.getStyle());
+            }
         } else {
             textRenderer.setText("");
             iconRenderer.setImage(null);
