@@ -23,4 +23,8 @@
   <style id="nifty-chat-control#chatTextArea">
     <attributes childLayout="horizontal" align="left" width="75%" />
   </style>
+  
+  <style id="current-player">
+    <attributes  backgroundImage="panel/nifty-panel-red-no-shadow.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8"  />
+  </style>
 </nifty-styles>
