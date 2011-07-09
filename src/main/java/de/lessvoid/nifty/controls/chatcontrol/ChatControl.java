@@ -17,6 +17,7 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +35,8 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     private TextField textControl;
     private PlayerComparator playerComparator = new PlayerComparator();
     private Nifty nifty;
+    private List<ChatEntryModelClass> playerBuffer = new ArrayList<ChatEntryModelClass>();
+    private List<ChatEntryModelClass> linesBuffer = new ArrayList<ChatEntryModelClass>();
 
     /**
      * Default constructor.
@@ -46,9 +49,26 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
      */
     @Override
     public final void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement, final Properties properties, final Attributes controlDefinitionAttributes) {
-      super.bind(newElement);
-      LOGGER.fine("binding chat control");
-      nifty = niftyParam;
+        super.bind(newElement);
+        LOGGER.fine("binding chat control");
+        nifty = niftyParam;
+
+        // this buffer is needed because in some cases the entry is added to either list before the emelent is bound.
+        final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
+        while (!playerBuffer.isEmpty()) {
+            ChatEntryModelClass player = playerBuffer.remove(0);
+            LOGGER.log(Level.FINE, "adding player {0}", (playerList.itemCount() + 1));
+            playerList.addItem(player);
+            playerList.sortAllItems(playerComparator);
+            playerList.showItem(player);
+        }
+        final ListBox<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
+        while (!linesBuffer.isEmpty()) {
+            ChatEntryModelClass line = linesBuffer.remove(0);
+            LOGGER.log(Level.FINE, "adding message {0}", (chatBox.itemCount() + 1));
+            chatBox.addItem(line);
+            chatBox.showItemByIndex(chatBox.itemCount() - 1);
+        }
     }
 
     /**
@@ -76,17 +96,25 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     public final void receivedChatLine(final String text, final NiftyImage icon) {
         receivedChatLine(text, icon, null);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void receivedChatLine(String text, NiftyImage icon, String style) {
-        final ListBox<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
-        LOGGER.log(Level.FINE, "adding message {0}", (chatBox.itemCount() + 1));
-        final ChatEntryModelClass item = new ChatEntryModelClass(text, icon, style);
-        chatBox.addItem(item);
-        chatBox.showItemByIndex(chatBox.itemCount() - 1);
+        if (linesBuffer.isEmpty()) {
+            try {
+                final ListBox<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
+                LOGGER.log(Level.FINE, "adding message {0}", (chatBox.itemCount() + 1));
+                final ChatEntryModelClass item = new ChatEntryModelClass(text, icon, style);
+                chatBox.addItem(item);
+                chatBox.showItemByIndex(chatBox.itemCount() - 1);
+            } catch (NullPointerException npe) {
+                linesBuffer.add(new ChatEntryModelClass(text, icon, style));
+            }
+        } else {
+            linesBuffer.add(new ChatEntryModelClass(text, icon, style));
+        }
     }
 
     /**
@@ -96,18 +124,26 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     public final void addPlayer(final String playerName, final NiftyImage playerIcon) {
         addPlayer(playerName, playerIcon, null);
     }
-    
+
     /**
      * {@inheritDoc 
      */
     @Override
     public void addPlayer(String playerName, NiftyImage playerIcon, String style) {
-        final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
-        LOGGER.log(Level.FINE, "adding player {0}", (playerList.itemCount() + 1));
-        final ChatEntryModelClass item = new ChatEntryModelClass(playerName, playerIcon, style);
-        playerList.addItem(item);
-        playerList.sortAllItems(playerComparator);
-        playerList.showItem(item);
+        if (playerBuffer.isEmpty()) {
+            try {
+                final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
+                LOGGER.log(Level.FINE, "adding player {0}", (playerList.itemCount() + 1));
+                final ChatEntryModelClass item = new ChatEntryModelClass(playerName, playerIcon, style);
+                playerList.addItem(item);
+                playerList.sortAllItems(playerComparator);
+                playerList.showItem(item);
+            } catch (NullPointerException npe) {
+                playerBuffer.add(new ChatEntryModelClass(playerName, playerIcon, style));
+            }
+        } else {
+            playerBuffer.add(new ChatEntryModelClass(playerName, playerIcon, style));
+        }
     }
 
     /**
@@ -120,28 +156,28 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
         final ChatEntryModelClass item = new ChatEntryModelClass(playerName, null);
         playerList.removeItem(item);
     }
-    
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public List<ChatEntryModelClass> getPlayers() {
         final ListBox<ChatEntryModelClass> playerList = getListBox(PLAYER_LIST);
         return playerList.getItems();
     }
-    
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public List<ChatEntryModelClass> getLines() {
         final ListBox<ChatEntryModelClass> chatBox = getListBox(CHAT_BOX);
         return chatBox.getItems();
     }
-    
+
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public void update() {
         getListBox(PLAYER_LIST).refresh();
@@ -160,12 +196,13 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
 
     @SuppressWarnings("unchecked")
     private ListBox<ChatEntryModelClass> getListBox(final String name) {
+
         return (ListBox<ChatEntryModelClass>) getElement().findNiftyControl(name, ListBox.class);
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public boolean keyEvent(final NiftyInputEvent inputEvent) {
         LOGGER.log(Level.INFO, "event received: {0}", inputEvent);
@@ -178,14 +215,12 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public boolean inputEvent(final NiftyInputEvent inputEvent) {
         return keyEvent(inputEvent);
     }
-
-
 
     /**
      * Class used to sort the list of players by name.
@@ -209,5 +244,4 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
             return player1.getLabel().compareToIgnoreCase(player2.getLabel());
         }
     }
-
 }
