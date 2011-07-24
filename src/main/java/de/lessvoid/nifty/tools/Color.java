@@ -137,6 +137,10 @@ public class Color {
     return colorString;
   }
 
+  public void setColorString(final String colorString) {
+	    this.colorString = colorString;
+	  }
+
   public String getColorStringWithoutAlpha() {
     return colorString.substring(0, colorString.length() - 1);
   }

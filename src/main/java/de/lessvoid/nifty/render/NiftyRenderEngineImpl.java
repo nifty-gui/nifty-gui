@@ -532,7 +532,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     private float y;
     private boolean statePositionChanged;
 
-    private String color;
+    private float colorR;
+    private float colorG;
+    private float colorB;
     private boolean colorChanged;
     private boolean stateColorChanged;
     
@@ -674,7 +676,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
 
     private void saveColor() {
-      color = NiftyRenderEngineImpl.this.color.getColorStringWithoutAlpha();
+      colorR = NiftyRenderEngineImpl.this.color.getRed();
+      colorG = NiftyRenderEngineImpl.this.color.getGreen();
+      colorB = NiftyRenderEngineImpl.this.color.getBlue();
       colorChanged = NiftyRenderEngineImpl.this.colorChanged;
       stateColorChanged = true;
     }
@@ -711,7 +715,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
 
     private void restoreColor() {
-      NiftyRenderEngineImpl.this.color.fromStringWithoutAlpha(color);
+      NiftyRenderEngineImpl.this.color.setRed(colorR);
+      NiftyRenderEngineImpl.this.color.setGreen(colorG);
+      NiftyRenderEngineImpl.this.color.setBlue(colorB);
       NiftyRenderEngineImpl.this.colorChanged = colorChanged;
     }
 
