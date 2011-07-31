@@ -1,5 +1,14 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.font;
 
+import static org.lwjgl.opengl.ARBBufferObject.*;
+import static org.lwjgl.opengl.ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_VERTEX_ARRAY;
+import static org.lwjgl.opengl.GL11.glColorPointer;
+import static org.lwjgl.opengl.GL11.glEnableClientState;
+import static org.lwjgl.opengl.GL11.glVertexPointer;
+
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -8,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderFont;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
+import de.lessvoid.nifty.renderer.lwjgl.render.VBO;
 import de.lessvoid.nifty.renderer.lwjgl.render.font.ColorValueParser.Result;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.Color;
@@ -19,7 +29,6 @@ import de.lessvoid.nifty.tools.Color;
  */
 public class Font {
   private AngelCodeFont font;
-  private int listId;
   private LwjglRenderImage[] textures;
   private int selectionStart;
   private int selectionEnd;
@@ -34,8 +43,10 @@ public class Font {
   private float selectionB;
   private float selectionA;
 
-  private Map<Character, Integer> displayListMap = new Hashtable<Character, Integer>();
+  private Map<Character, RenderChar> displayListMap = new Hashtable<Character, RenderChar>();
   private ColorValueParser colorValueParser = new ColorValueParser();
+
+  private VBO vertices;
 
   public Font(final RenderDevice device) {
     selectionStart = -1;
@@ -81,49 +92,69 @@ public class Font {
     }
   }
 
+  private static class RenderChar {
+    // vertex, texcoord, vertex, texcoord, vertex, texcoord, vertex, texcoord
+    // interleaved with 2 floats for each value
+    float[] vertices = new float[8*2];
+
+    public static int vertexSize() {
+      return 8*2;
+    }
+    public int addVertices(final float[] v, final int vi, final int x, final int y) {
+      System.arraycopy(vertices, 0, v, vi, vertices.length);
+      v[vi + 0] += x;
+      v[vi + 1] += y;
+
+      v[vi + 4] += x;
+      v[vi + 5] += y;
+
+      v[vi + 8] += x;
+      v[vi + 9] += y;
+
+      v[vi + 12] += x;
+      v[vi + 13] += y;
+      return vi + vertices.length;
+    }
+  }
+
   private void initDisplayList() {
+    vertices = new VBO();
+
     displayListMap.clear();
 
-    // create new list
-    listId = GL11.glGenLists(font.getChars().size());
-    Tools.checkGLError("glGenLists");
-
-    // create the list
-    int i = 0;
     for (Map.Entry<Character, CharacterInfo> entry : font.getChars().entrySet()) {
-      displayListMap.put(entry.getKey(), listId + i);
-      GL11.glNewList(listId + i, GL11.GL_COMPILE);
-      Tools.checkGLError("glNewList");
       CharacterInfo charInfo = entry.getValue();
       if (charInfo != null) {
-        GL11.glBegin(GL11.GL_QUADS);
-        Tools.checkGLError("glBegin");
+        RenderChar rc = new RenderChar();
 
         float u0 = charInfo.getX() / (float) font.getWidth();
         float v0 = charInfo.getY() / (float) font.getHeight();
         float u1 = (charInfo.getX() + charInfo.getWidth()) / (float) font.getWidth();
         float v1 = (charInfo.getY() + charInfo.getHeight()) / (float) font.getHeight();
 
-        GL11.glTexCoord2f(u0, v0);
-        GL11.glVertex2f(charInfo.getXoffset(), charInfo.getYoffset());
+        int vertex = 0;
+        rc.vertices[vertex++] = charInfo.getXoffset();
+        rc.vertices[vertex++] = charInfo.getYoffset();
+        rc.vertices[vertex++] = u0;
+        rc.vertices[vertex++] = v0;
 
-        GL11.glTexCoord2f(u0, v1);
-        GL11.glVertex2f(charInfo.getXoffset(), charInfo.getYoffset() + charInfo.getHeight());
+        rc.vertices[vertex++] = charInfo.getXoffset();
+        rc.vertices[vertex++] = charInfo.getYoffset() + charInfo.getHeight();
+        rc.vertices[vertex++] = u0;
+        rc.vertices[vertex++] = v1;
 
-        GL11.glTexCoord2f(u1, v1);
-        GL11.glVertex2f(charInfo.getXoffset() + charInfo.getWidth(), charInfo.getYoffset() + charInfo.getHeight());
+        rc.vertices[vertex++] = charInfo.getXoffset() + charInfo.getWidth();
+        rc.vertices[vertex++] = charInfo.getYoffset() + charInfo.getHeight();
+        rc.vertices[vertex++] = u1;
+        rc.vertices[vertex++] = v1;
 
-        GL11.glTexCoord2f(u1, v0);
-        GL11.glVertex2f(charInfo.getXoffset() + charInfo.getWidth(), charInfo.getYoffset());
+        rc.vertices[vertex++] = charInfo.getXoffset() + charInfo.getWidth();
+        rc.vertices[vertex++] = charInfo.getYoffset();
+        rc.vertices[vertex++] = u1;
+        rc.vertices[vertex++] = v0;
 
-        GL11.glEnd();
-        Tools.checkGLError("glEnd");
+        displayListMap.put(entry.getKey(), rc);
       }
-
-      // end list
-      GL11.glEndList();
-      Tools.checkGLError("glEndList");
-      i++;
     }
   }
 
@@ -147,15 +178,18 @@ public class Font {
       final float size,
       final boolean useAlphaTexture,
       final float alpha) {
-    GL11.glMatrixMode(GL11.GL_MODELVIEW);
-    GL11.glPushMatrix();
-    GL11.glLoadIdentity();
+//    GL11.glMatrixMode(GL11.GL_MODELVIEW);
+//    GL11.glPushMatrix();
+//    GL11.glLoadIdentity();
 
     int originalWidth = getStringWidthInternal(text, 1.0f);
     int sizedWidth = getStringWidthInternal(text, size);
     int x = xPos - (sizedWidth - originalWidth) / 2;
 
     int activeTextureIdx = -1;
+
+    float[] v = new float[text.length() * RenderChar.vertexSize()];
+    int vi = 0;
 
     for (int i = 0; i < text.length(); i++) {
       Result result = colorValueParser.isColor(text, i);
@@ -187,12 +221,12 @@ public class Font {
         kerning = LwjglRenderFont.getKerning(charInfoC, nextc);
         characterWidth = (float) (charInfoC.getXadvance() * size + kerning);
 
-        GL11.glLoadIdentity();
-        GL11.glTranslatef(x, yPos, 0.0f);
-
-        GL11.glTranslatef(0.0f, getHeight() / 2, 0.0f);
-        GL11.glScalef(size, size, 1.0f);
-        GL11.glTranslatef(0.0f, -getHeight() / 2, 0.0f);
+//        GL11.glLoadIdentity();
+//        GL11.glTranslatef(x, yPos, 0.0f);
+//
+//        GL11.glTranslatef(0.0f, getHeight() / 2, 0.0f);
+//        GL11.glScalef(size, size, 1.0f);
+//        GL11.glTranslatef(0.0f, -getHeight() / 2, 0.0f);
 
         boolean characterDone = false;
         if (isSelection()) {
@@ -205,17 +239,18 @@ public class Font {
             GL11.glColor4f(selectionBackgroundR, selectionBackgroundG, selectionBackgroundB, selectionBackgroundA);
             GL11.glBegin(GL11.GL_QUADS);
 
-            GL11.glVertex2i(0, 0);
+            GL11.glVertex2i(                   0, 0);
             GL11.glVertex2i((int) characterWidth, 0);
-            GL11.glVertex2i((int) characterWidth, 0 + getHeight());
-            GL11.glVertex2i(0, 0 + getHeight());
+            GL11.glVertex2i((int) characterWidth, getHeight());
+            GL11.glVertex2i(                   0, getHeight());
 
             GL11.glEnd();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             enableBlend();
 
             GL11.glColor4f(selectionR, selectionG, selectionB, selectionA);
-            GL11.glCallList(displayListMap.get(currentc));
+            
+//            GL11.glCallList(displayListMap.get(currentc));
             Tools.checkGLError("glCallList");
             GL11.glPopAttrib();
 
@@ -224,13 +259,27 @@ public class Font {
         }
 
         if (!characterDone) {
-          GL11.glCallList(displayListMap.get(currentc));
-          Tools.checkGLError("glCallList");
+          RenderChar rc = displayListMap.get(currentc);
+          if (rc != null) {
+            vi = rc.addVertices(v, vi, x, yPos);
+          }
         }
 
+        
         x += characterWidth;
       }
     }
+
+    vertices.bufferDynamicData(v);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    vertices.bind();
+    glVertexPointer(2, GL_FLOAT, 4*4, 0);
+    glTexCoordPointer(2, GL_FLOAT, 4*4, 2*4);
+
+    glDrawArrays(GL_QUADS, 0, v.length);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     GL11.glPopMatrix();
   }
