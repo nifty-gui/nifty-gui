@@ -27,4 +27,9 @@
   <style id="current-player">
     <attributes  backgroundImage="panel/nifty-panel-red-no-shadow.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8"  />
   </style>
+  
+  <style id="default">
+    <attributes  backgroundImage="panel/nifty-panel-no-shadow.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8"  />
+  </style>
+  
 </nifty-styles>
