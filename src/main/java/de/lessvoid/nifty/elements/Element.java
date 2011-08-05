@@ -1740,6 +1740,9 @@ public class Element implements NiftyEvent<Void> {
   }
 
   public void bindControls(final Screen target) {
+    if (target == null) {
+      throw new IllegalArgumentException();
+    }
     if (screen == target) {
       return;
     }
