@@ -13,11 +13,12 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderFont;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
-import de.lessvoid.nifty.renderer.lwjgl.render.VBO;
+import de.lessvoid.nifty.renderer.lwjgl.render.VBOARB;
 import de.lessvoid.nifty.renderer.lwjgl.render.font.ColorValueParser.Result;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.Color;
@@ -46,7 +47,7 @@ public class Font {
   private Map<Character, RenderChar> displayListMap = new Hashtable<Character, RenderChar>();
   private ColorValueParser colorValueParser = new ColorValueParser();
 
-  private VBO vertices;
+  private VBOARB vertices;
 
   public Font(final RenderDevice device) {
     selectionStart = -1;
@@ -118,7 +119,7 @@ public class Font {
   }
 
   private void initDisplayList() {
-    vertices = new VBO();
+    vertices = new VBOARB();
 
     displayListMap.clear();
 
@@ -178,9 +179,6 @@ public class Font {
       final float size,
       final boolean useAlphaTexture,
       final float alpha) {
-//    GL11.glMatrixMode(GL11.GL_MODELVIEW);
-//    GL11.glPushMatrix();
-//    GL11.glLoadIdentity();
 
     int originalWidth = getStringWidthInternal(text, 1.0f);
     int sizedWidth = getStringWidthInternal(text, size);
@@ -192,6 +190,7 @@ public class Font {
     int vi = 0;
 
     for (int i = 0; i < text.length(); i++) {
+      /*
       Result result = colorValueParser.isColor(text, i);
       while (result.isColor()) {
         Color color = result.getColor();
@@ -202,6 +201,7 @@ public class Font {
         }
         result = colorValueParser.isColor(text, i);
       }
+      */
       if (i >= text.length()) {
         break;
       }
@@ -229,6 +229,7 @@ public class Font {
 //        GL11.glTranslatef(0.0f, -getHeight() / 2, 0.0f);
 
         boolean characterDone = false;
+        /*
         if (isSelection()) {
           if (i >= selectionStart && i < selectionEnd) {
             GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
@@ -257,31 +258,43 @@ public class Font {
             characterDone = true;
           }
         }
-
+*/
         if (!characterDone) {
           RenderChar rc = displayListMap.get(currentc);
           if (rc != null) {
             vi = rc.addVertices(v, vi, x, yPos);
           }
         }
-
         
         x += characterWidth;
       }
     }
 
-    vertices.bufferDynamicData(v);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    vertices.bind();
+    vertices.bufferDynamicData(v);
+//    vertices.bind();
     glVertexPointer(2, GL_FLOAT, 4*4, 0);
     glTexCoordPointer(2, GL_FLOAT, 4*4, 2*4);
 
+    GL11.glColor4f(0.f, 0.f, 0.f, 1.f);
     glDrawArrays(GL_QUADS, 0, v.length);
 
     glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    GL11.glPopMatrix();
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+    checkGLError();
+    
+//    GL11.glPopMatrix();
+  }
+
+  private void checkGLError() {
+    int error= GL11.glGetError();
+    if (error != GL11.GL_NO_ERROR) {
+      String glerrmsg = GLU.gluErrorString(error);
+      System.out.println("OpenGL Error: (" + error + ") " + glerrmsg);
+    }
   }
 
   private void disableBlend() {
