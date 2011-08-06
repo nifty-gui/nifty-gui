@@ -272,7 +272,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
         scrollElement.setConstraintX(new SizeValue("0px"));
         scrollElement.setConstraintY(new SizeValue("0px"));
       }
-      scrollElement.layoutElements();
+      scrollElement.getParent().layoutElements();
     }
   }
 
