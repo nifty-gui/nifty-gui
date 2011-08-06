@@ -31,7 +31,7 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
     for (int i = 0; i < handlers.length; i++) {
       if (handlers[i] instanceof ConsoleHandler) {
         ((ConsoleHandler) handlers[i]).setFormatter(new LoggerShortFormat());
-        ((ConsoleHandler) handlers[i]).setLevel(Level.OFF);
+        ((ConsoleHandler) handlers[i]).setLevel(Level.WARNING);
       }
     }
 
