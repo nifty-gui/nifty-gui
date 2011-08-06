@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples.menu;
 
 import org.bushe.swing.event.EventTopicSubscriber;
 
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.Menu;
@@ -38,7 +39,6 @@ public class MenuStartScreen implements ScreenController {
     this.popup = nifty.createPopup("niftyPopupMenu");
   
     Menu<ThisReallyCouldBeAnyClassYouWant> popupMenu = popup.findNiftyControl("#menu", Menu.class);
-    nifty.subscribe(screen, popupMenu.getId(), MenuItemActivatedEvent.class, new MenuItemActivatedEventSubscriber());
   
     popupMenu.setWidth(new SizeValue("250px"));
     popupMenu.addMenuItem("MenuItem 1", "menu/listen.png", new ThisReallyCouldBeAnyClassYouWant("SomeId1", "You've clicked MenuItem 1"));
@@ -52,20 +52,27 @@ public class MenuStartScreen implements ScreenController {
 
   public void showMenu() {
     nifty.showPopup(screen, popup.getId(), null);
+    nifty.subscribe(screen, popup.findNiftyControl("#menu", Menu.class).getId(), MenuItemActivatedEvent.class, new MenuItemActivatedEventSubscriber());
   }
 
   private class MenuItemActivatedEventSubscriber implements EventTopicSubscriber<MenuItemActivatedEvent> {
     @Override
     public void onEvent(final String id, final MenuItemActivatedEvent event) {
-      ThisReallyCouldBeAnyClassYouWant item = (ThisReallyCouldBeAnyClassYouWant) event.getItem();
+      final ThisReallyCouldBeAnyClassYouWant item = (ThisReallyCouldBeAnyClassYouWant) event.getItem();
 
       Label label = screen.findNiftyControl("textOut", Label.class);
       label.setText(item.text + " [" + item.key + "]");
 
-      if ("exit".equals(item.key)) {
-        nifty.setAlternateKeyForNextLoadXml("fade");
-        nifty.fromXml("all/intro.xml", "menu");
-      }
+      nifty.closePopup(popup.getId(), new EndNotify() {
+        
+        @Override
+        public void perform() {
+          if ("exit".equals(item.key)) {
+            nifty.setAlternateKeyForNextLoadXml("fade");
+            nifty.fromXml("all/intro.xml", "menu");
+          }
+        }
+      });
     }
   };
 
