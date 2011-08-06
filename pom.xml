@@ -3,13 +3,13 @@
   <groupId>lessvoid</groupId>
   <artifactId>nifty-style-black</artifactId>
   <name>Nifty Style Definition (Black)</name>
-  <version>1.3.1-SNAPSHOT</version>
+  <version>1.4-SNAPSHOT</version>
   <url>http://nifty-gui.sourceforge.net/nifty-style-black/project-info.html</url>
 
   <scm>
-    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-style-black/trunk</connection>
-    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-style-black/trunk</developerConnection>
-    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-style-black</url>
+    <connection>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-style-black</connection>
+    <developerConnection>scm:git:ssh://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-style-black</developerConnection>
+    <url>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-style-black</url>
   </scm>
 
   <description />
