@@ -5,9 +5,9 @@
   <version>1.4-SNAPSHOT</version>
 
   <scm>
-    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-lwjgl-renderer/trunk</connection>
-    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-lwjgl-renderer/trunk</developerConnection>
-    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-lwjgl-renderer</url>
+    <connection>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-lwjgl-renderer</connection>
+    <developerConnection>scm:git:ssh://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-lwjgl-renderer</developerConnection>
+    <url>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-lwjgl-renderer</url>
   </scm>
 
   <dependencies>
