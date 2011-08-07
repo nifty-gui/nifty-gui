@@ -48,8 +48,6 @@ public class LwjglRenderDevice implements RenderDevice {
   private int currentClippingX1 = 0;
   private int currentClippingY1 = 0;
 
-  private int quadCounter;
-
   /**
    * The standard constructor. You'll use this in production code. Using this
    * constructor will configure the RenderDevice to not log FPS on System.out.
@@ -116,25 +114,22 @@ public class LwjglRenderDevice implements RenderDevice {
     currentClippingY0 = 0;
     currentClippingX1 = 0;
     currentClippingY1 = 0;
-
-    quadCounter = 0;
   }
 
   public void endFrame() {
     log.fine("endFrame");
-
     frames++;
     long diff = System.currentTimeMillis() - time;
     if (diff >= 1000) {
       time += diff;
       lastFrames = frames;
       if (logFPS) {
-        System.out.println("FPS: " + frames + ", Quads: " + quadCounter);
+        System.out.println("fps: " + frames);
       }
       frames = 0;
     }
     if (displayFPS) {
-      renderFont(fpsFont, "FPS: " + String.valueOf(lastFrames) + ", Quads: " + quadCounter, 10, getHeight() - fpsFont.getHeight() - 10, Color.randomColor(), 1.0f);
+      renderFont(fpsFont, "FPS: " + String.valueOf(lastFrames), 10, getHeight() - fpsFont.getHeight() - 10, Color.WHITE, 1.0f);
     }
   }
 
@@ -173,7 +168,6 @@ public class LwjglRenderDevice implements RenderDevice {
    * @param color color
    */
   public void renderQuad(final int x, final int y, final int width, final int height, final Color color) {
-    /*
     log.fine("renderQuad()");
 
     if (currentTexturing) {
@@ -188,13 +182,9 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glVertex2i(x + width, y + height);
       GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
-
-    quadCounter++;
-    */
   }
 
   public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
-    /*
     log.fine("renderQuad2()");
 
     if (currentTexturing) {
@@ -211,9 +201,6 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glColor4f(bottomLeft.getRed(), bottomLeft.getGreen(), bottomLeft.getBlue(), bottomLeft.getAlpha());
       GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
-
-    quadCounter++;
-    */
   }
 
   /**
@@ -226,7 +213,6 @@ public class LwjglRenderDevice implements RenderDevice {
    * @param scale scale
    */
   public void renderImage(final RenderImage image, final int x, final int y, final int width, final int height, final Color color, final float scale) {
-    /*
     log.fine("renderImage()");
 
     if (width < 0) {
@@ -266,7 +252,6 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glTexCoord2f(0.0f,   v1); GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
     GL11.glPopMatrix();
-    */
   }
 
   /**
@@ -295,7 +280,6 @@ public class LwjglRenderDevice implements RenderDevice {
       final float scale,
       final int centerX,
       final int centerY) {
-    /*
     log.fine("renderImage2()");
 
     if (w < 0) {
@@ -336,7 +320,6 @@ public class LwjglRenderDevice implements RenderDevice {
     GL11.glEnd();
 
     GL11.glPopMatrix();
-    */
   }
 
   /**
@@ -381,6 +364,7 @@ public class LwjglRenderDevice implements RenderDevice {
     currentClippingX1 = x1;
     currentClippingY1 = y1;
     GL11.glScissor(x0, getHeight() - y1, x1 - x0, y1 - y0);
+//    GL11.glScissor(333, 100, 400, 500);
     GL11.glEnable(GL11.GL_SCISSOR_TEST);
   }
 
