@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.builder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
@@ -412,6 +413,10 @@ public abstract class ElementBuilder {
 
   public String pixels(final int px) {
     return Integer.toString(px) + "px";
+  }
+
+  public List<ElementBuilder> getElementBuilders() {
+    return Collections.unmodifiableList(elementBuilders);
   }
 
   public Element build(final Nifty nifty, final Screen screen, final Element parent) {
