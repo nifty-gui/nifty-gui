@@ -81,8 +81,6 @@ public class TextRenderer implements ElementRenderer {
    */
   private boolean lineWrapping = false;
 
-  private boolean isCalculatedLineWrapping = false;
-
   /**
    * If the textLineHeight property is set it will override the font.getHeight() when
    * calculating the height of the text.
@@ -96,6 +94,12 @@ public class TextRenderer implements ElementRenderer {
   private SizeValue textMinHeight;
 
   private Nifty nifty;
+
+  // in case we use word wrapping and are changing the elements width/height constraints we'll
+  // remember the original values in here
+  private boolean isCalculatedLineWrapping = false;
+  private SizeValue originalConstraintWidth;
+  private SizeValue originalConstraintHeight;
 
   /**
    * default constructor.
@@ -455,7 +459,7 @@ public class TextRenderer implements ElementRenderer {
       return;
     }
     int valueAsInt = element.getWidth();
-    if (valueAsInt == 0) {
+    if (valueAsInt == 0 || !isCalculatedLineWrapping) {
       valueAsInt = elementConstraintWidth.getValueAsInt(parentWidth);
     }
     if (valueAsInt <= 0) {
@@ -471,9 +475,17 @@ public class TextRenderer implements ElementRenderer {
         }
       }
     }
+
+    // we'll now modify the element constraints so that the layout mechanism can later take this word wrapping
+    // business correctly into account when the elements will be layouted. to make sure we're able to reset this
+    // effect later, we'll remember that we've artificially calculated those values in here. so that we're able to
+    // actually reset this later.
+    isCalculatedLineWrapping = true;
+    originalConstraintWidth = element.getConstraintWidth();
+    originalConstraintHeight = element.getConstraintHeight();
+
     element.setConstraintWidth(new SizeValue(getTextWidth() + "px"));
     element.setConstraintHeight(new SizeValue(getTextHeight() + "px"));
-    isCalculatedLineWrapping = true;
   }
 
   public void setLineWrapping(final boolean lineWrapping) {
@@ -494,5 +506,14 @@ public class TextRenderer implements ElementRenderer {
 
   public Color getColor() {
     return color;
+  }
+
+  public void resetLayout(final Element element) {
+    if (isCalculatedLineWrapping) {
+      isCalculatedLineWrapping = false;
+
+      element.setConstraintWidth(originalConstraintWidth);
+      element.setConstraintHeight(originalConstraintHeight);
+    }
   }
 }

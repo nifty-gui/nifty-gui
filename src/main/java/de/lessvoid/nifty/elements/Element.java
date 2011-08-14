@@ -629,6 +629,11 @@ public class Element implements NiftyEvent<Void> {
     isCalcWidthConstraint = false;
     isCalcHeightConstraint = false;
 
+    TextRenderer textRenderer = getRenderer(TextRenderer.class);
+    if (textRenderer != null) {
+      textRenderer.resetLayout(this);
+    }
+
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
       e.resetLayout();
