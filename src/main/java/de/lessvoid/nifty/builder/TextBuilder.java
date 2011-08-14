@@ -13,4 +13,8 @@ public class TextBuilder extends ElementBuilder {
     this();
     this.id(id);
   }
+
+  public void wrap(final boolean wrap) {
+    creator.setWrap(wrap);
+  }
 }

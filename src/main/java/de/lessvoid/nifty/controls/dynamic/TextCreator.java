@@ -37,4 +37,8 @@ public class TextCreator extends ControlAttributes {
   public ElementType createType() {
     return new TextType(attributes);
   }
+
+  public void setWrap(final boolean wrap) {
+    attributes.set("wrap", wrap ? "true" : "false");
+  }
 }
