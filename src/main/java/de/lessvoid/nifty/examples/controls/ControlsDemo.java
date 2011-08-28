@@ -46,7 +46,7 @@ public class ControlsDemo {
     }
 
     // create Nifty and load default styles and controls
-    Nifty nifty = new Nifty(new LwjglRenderDevice(), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(), new TimeProvider());
+    Nifty nifty = new Nifty(new LwjglRenderDevice(true), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(), new TimeProvider());
     nifty.loadStyleFile("nifty-default-styles.xml");
     nifty.loadControlFile("nifty-default-controls.xml");
     nifty.registerSound("intro", "sound/19546__tobi123__Gong_mf2.wav");
@@ -72,7 +72,7 @@ public class ControlsDemo {
 
     createIntroScreen(nifty);
     createDemoScreen(nifty);
-    nifty.gotoScreen("start");
+    nifty.gotoScreen("demo");
 
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);

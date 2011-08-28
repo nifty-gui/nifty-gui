@@ -229,7 +229,6 @@ public class LwjglInitHelper {
       final Nifty nifty,
       final RenderLoopCallback callback) {
     boolean done = false;
-    Display.setVSyncEnabled(true);
     while (!Display.isCloseRequested() && !done) {
       if (callback != null) {
         callback.process();
@@ -243,7 +242,7 @@ public class LwjglInitHelper {
         done = true;
       }
 
-      nifty.render(false);
+      nifty.render(true);
 
       // check gl error at least ones per frame
       int error = GL11.glGetError();
