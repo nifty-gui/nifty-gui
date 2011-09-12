@@ -12,7 +12,7 @@
     <module>nifty-core</module>
     <module>nifty-controls</module>
     <module>nifty-controls-style-black</module>
-    <module>nifty-renderer</module>
+    <module>nifty-renderer-lwjgl</module>
   </modules>
   <developers>
     <developer>
