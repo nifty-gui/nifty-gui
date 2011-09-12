@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+
+  <style id="nifty-default-hint" base="nifty-panel-bright">
+    <attributes childLayout="center" />
+    <effect>
+      <onShow name="fade" length="150" start="#0" end="#d" inherit="true" neverStopRendering="true" />
+      <onCustom name="fade" length="150" start="#d" end="#0" inherit="true" neverStopRendering="true" />
+      <onActive name="followMouse" />
+    </effect>
+  </style>
+
+  <style id="nifty-default-hint#hint-text" base="base-font">
+    <attributes align="left" valign="center" textHAlign="left" color="#111f" />
+  </style>
+</nifty-styles>

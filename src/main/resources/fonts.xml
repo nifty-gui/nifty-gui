@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <style id="button-font">
+    <attributes font="aurulent-sans-16.fnt" />
+  </style>
+
+  <style id="base-font">
+    <attributes font="aurulent-sans-16.fnt" />
+  </style>
+</nifty-styles>

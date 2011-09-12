@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <style id="nifty-image-select">
+    <attributes align="center" valign="center" childLayout="horizontal" focusable="true" visibleToMouse="true" />
+    <effect>
+      <onActive name="border" color="#000f" post="true" />
+      <onHover name="border" color="#822f" post="true" />
+    </effect>
+  </style>
+
+  <style id="nifty-image-select#back-button">
+    <attributes backgroundImage="imageselect/background.png" imageMode="resize:2,19,2,2,2,19,2,76,2,19,2,2" width="23px" height="100%" childLayout="center" />
+    <interact onClick="backClick()"/>
+    <effect>
+      <onClick name="focus" targetElement="#parent" />
+      <onFocus name="imageOverlay" filename="imageselect/background-focus.png" imageMode="resize:2,19,2,2,2,19,2,76,2,19,2,2" post="true" />
+    </effect>
+  </style>
+
+  <style id="nifty-image-select#back-button-image">
+    <attributes filename="imageselect/left.png" align="center" valign="center" />
+    <effect>
+      <onCustom name="imageOverlay" filename="imageselect/left-focus.png" post="true" neverStopRendering="true" />
+    </effect>
+  </style>
+
+  <style id="nifty-image-select#image-panel">
+    <attributes childLayout="overlay" backgroundColor="#000f" childClip="true" />
+  </style>
+
+  <style id="nifty-image-select#image">
+    <attributes align="center" valign="center" />
+    <effect>
+      <onCustom customKey="back" name="move" post="false" mode="fromOffset" offsetX="0" length="350" timeType="exp" factor="5" />
+      <onCustom customKey="forward" name="move" post="false" mode="fromOffset" offsetX="0" length="350" timeType="exp" factor="5" />
+    </effect>
+  </style>
+
+  <style id="nifty-image-select#image-2">
+    <attributes align="center" valign="center" />
+    <effect>
+      <onCustom customKey="back" name="move" post="false" mode="toOffset" offsetX="0" length="350" timeType="exp" factor="5" />
+      <onCustom customKey="forward" name="move" post="false" mode="toOffset" offsetX="0" length="350" timeType="exp" factor="5" />
+    </effect>
+  </style>
+
+  <style id="nifty-image-select#forward-button">
+    <attributes backgroundImage="imageselect/background.png" imageMode="resize:2,19,2,2,2,19,2,76,2,19,2,2" width="23px" height="100%" childLayout="center" />
+    <interact onClick="forwardClick()"/>
+    <effect>
+      <onClick name="focus" targetElement="#parent" />
+      <onFocus name="imageOverlay" filename="imageselect/background-focus.png" imageMode="resize:2,19,2,2,2,19,2,76,2,19,2,2" post="true" />
+    </effect>
+  </style>
+
+  <style id="nifty-image-select#forward-button-image">
+    <attributes filename="imageselect/right.png" align="center" valign="center" />
+    <effect>
+      <onCustom name="imageOverlay" filename="imageselect/right-focus.png" post="true" neverStopRendering="true" />
+    </effect>
+  </style>
+</nifty-styles>

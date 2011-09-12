@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <style id="nifty-radiobutton-style#panel">
+    <attributes width="23px" height="23px" childLayout="center" focusable="true" visibleToMouse="true" />
+  </style>
+  
+  <style id="nifty-radiobutton-style#select">
+    <attributes childLayout="overlay" align="center" valign="center" width="23px" height="23px" filename="radiobutton/radiobutton.png" visibleToMouse="true" />
+    <effect overlay="true">
+      <onEnabled name="fade" start="#5" end="#f" post="false" length="150" inherit="true"/>
+      <onDisabled name="fade" start="#f" end="#5" post="false" length="150" inherit="true" neverStopRendering="true" />
+      <onCustom customKey="show" name="imageSize" startSize="2.0" endSize="1.0" length="150" post="true" />
+      <onCustom customKey="show" name="fade" start="#0" end="#f" length="150" post="true" />
+      <onCustom customKey="show" name="imageOverlay" filename="radiobutton/radiobutton-checked.png" width="23px" height="23px" post="true" neverStopRendering="true" />
+      <onCustom customKey="hide" name="fade" start="#f" end="#0" length="350" post="true" />
+      <onCustom customKey="hide" name="imageOverlay" filename="radiobutton/radiobutton-checked.png" width="23px" height="23px" post="true" length="350" />
+    </effect>
+  </style>
+
+  <style id="nifty-radiobutton-style#overlay-select">
+    <attributes align="center" valign="center" width="23px" height="23px" visibleToMouse="true" />
+    <effect overlay="true">
+      <onFocus name="imageOverlay" filename="radiobutton/radiobutton-hover.png" width="23px" height="23px" post="true" />
+      <onHover name="imageOverlay" filename="radiobutton/radiobutton-hover.png" width="23px" height="23px" post="true" />
+    </effect>
+  </style>
+</nifty-styles>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <!-- just some text label default -->
+  <style id="nifty-label" base="base-font">
+    <attributes align="center" textLineHeight="23px" textMinHeight="23px" />  
+    <effect>
+      <onActive name="clip" post="false" />
+    </effect>
+  </style>
+</nifty-styles>

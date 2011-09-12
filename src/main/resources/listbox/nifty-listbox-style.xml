@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <style id="nifty-listbox">
+    <attributes />
+  </style>
+  <style id="nifty-listbox#scrollpanel">
+    <attributes focusable="true" padding="1px"/>
+    <effect overlay="true">
+      <onActive name="colorBar" color="#666f" post="false" neverStopRendering="true" timeType="infinite" />
+      <onActive name="border" border="1px" color="#222f" inset="1px,0px,0px,1px"/>
+      <onFocus name="border" border="1px" color="#f006" />
+      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="false" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="false" length="150" />
+    </effect>
+  </style>
+  <style id="nifty-listbox#bottom-right">
+    <attributes width="23px" height="23px" />
+  </style>
+  <style id="nifty-listbox-item" base="nifty-label">
+    <attributes color="#000f" width="100%" align="left" textVAlign="center" textHAlign="left" />
+    <interact onClick="listBoxItemClicked()" />
+    <effect>
+      <onCustom customKey="focus" name="colorBar" post="false" color="#444f" neverStopRendering="true" timeType="infinite" />
+      <onCustom customKey="select" name="colorBar" post="false" color="#444f" neverStopRendering="true" timeType="infinite" />
+      <onCustom customKey="select" name="textColor" post="false" color="#fc0f" neverStopRendering="true" timeType="infinite" />
+      <onHover name="colorBar" color="#444f" post="false" neverStopRendering="true" timeType="infinite" inset="1px"/>
+      <onClick name="focus" targetElement="#parent#parent"/>
+    </effect>
+  </style>
+</nifty-styles>

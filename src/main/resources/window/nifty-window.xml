@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <style id="nifty-window#frame">
+    <attributes childLayout="vertical" valign="top" />
+    <effect>
+      <onActive name="border" post="true" color="#2226" border="2px" />
+    </effect>
+  </style>
+
+  <style id="nifty-window#bar">
+    <attributes width="100%" height="20px" padding="2px" backgroundColor="#333f" childLayout="horizontal" />
+  </style>
+  
+  <style id="nifty-window#title" base="base-font">
+    <attributes width="*" height="20px" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="false" color="#ffff" />
+  </style>
+
+  <style id="nifty-window#content">
+    <attributes width="100%" height="*" padding="8px" backgroundColor="#9996" childLayout="center" />
+  </style>
+
+  <style id="nifty-window#close-button">
+    <attributes backgroundImage="window/window-close-button.png" width="14px" height="14px"  align="center" valign="center" />
+    <effect>
+      <onHover name="imageOverlayPulsate" filename="window/window-close-button-hover.png"  post="true" />
+    </effect>
+  </style>
+</nifty-styles>
