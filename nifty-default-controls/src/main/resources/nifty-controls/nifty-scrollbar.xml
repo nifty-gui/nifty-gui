@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
+    <panel style="#panel" focusable="true">
+      <interact onMouseWheel="mouseWheel()" />
+      <image style="#up">
+        <interact onPrimaryClickRepeat="upClick()" onRelease="consumeRelease()" />
+      </image>
+      <image id="#background" style="#background">
+        <interact onPrimaryClick="click()"  onRelease="consumeRelease()" />
+        <image id="#position" style="#position">
+          <interact onPrimaryClick="mouseMoveStart()" onPrimaryClickMouseMove="mouseMove()"  onRelease="consumeRelease()" />
+        </image>
+      </image>
+      <image style="#down">
+        <interact onPrimaryClickRepeat="downClick()"  onRelease="consumeRelease()" />
+      </image>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="horizontalScrollbar" style="nifty-horizontal-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
+    <panel style="#panel">
+      <interact onMouseWheel="mouseWheel()" />
+      <image style="#left">
+        <interact onPrimaryClickRepeat="upClick()"  onRelease="consumeRelease()" />
+      </image>
+      <image id="#background" style="#background">
+        <interact onPrimaryClickRepeat="click()"  onRelease="consumeRelease()" />
+        <image id="#position" style="#position">
+          <interact onPrimaryClick="mouseMoveStart()" onPrimaryClickMouseMove="mouseMove()"  onRelease="consumeRelease()" />
+        </image>
+      </image>
+      <image style="#right">
+        <interact onPrimaryClickRepeat="downClick()"  onRelease="consumeRelease()" />
+      </image>
+    </panel>
+  </controlDefinition>
+</nifty-controls>

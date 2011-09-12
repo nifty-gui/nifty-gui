@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="imageSelect" style="nifty-image-select" controller="de.lessvoid.nifty.controls.imageselect.ImageSelectControl" inputMapping="de.lessvoid.nifty.controls.imageselect.ImageSelectInputMapping">
+    <panel imageList="$imageList" height="$imageHeight">
+
+      <!-- back button -->
+      <panel id="#back-button" style="#back-button">
+        <image id="#back" style="#back-button-image" />
+      </panel>
+
+      <!-- the actual image -->
+      <panel style="#image-panel" width="$imageWidth" height="$imageHeight">
+        <image id="#image" style="#image" />
+        <image id="#image-2" style="#image-2" />
+      </panel>
+
+      <!-- forward button -->
+      <panel id="#forward-button" style="#forward-button">
+        <image id="#forward" style="#forward-button-image" />
+      </panel>
+
+    </panel>
+  </controlDefinition>
+</nifty-controls>

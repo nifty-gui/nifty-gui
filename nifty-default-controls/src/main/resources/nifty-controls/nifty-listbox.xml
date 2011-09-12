@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="listBox" style="nifty-listbox" childRootId="#child-root" controller="de.lessvoid.nifty.controls.listbox.ListBoxControl">
+    <panel childLayout="vertical">
+      <panel id="#scrollpanel" childLayout="horizontal">
+        <panel id="#panel" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
+          <panel id="#child-root" width="100%" childLayout="vertical" visibleToMouse="true">
+            <interact onMouseWheel="mouseWheel()" />
+            <!-- this is the template element used for the listbox items --> 
+            <text text="Template" style="nifty-listbox-item" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
+          </panel>
+        </panel>
+        <control id="#vertical-scrollbar" name="verticalScrollbar" style="nifty-vertical-scrollbar"/>
+      </panel>
+      <panel id="#horizontal-scrollbar-parent" childLayout="horizontal">
+        <control id="#horizontal-scrollbar" name="horizontalScrollbar" style="nifty-horizontal-scrollbar"/>
+        <panel id="#bottom-right" style="#bottom-right" />
+      </panel>
+    </panel>
+  </controlDefinition>
+</nifty-controls>

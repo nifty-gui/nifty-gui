@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition style="nifty-label" name="label" controller="de.lessvoid.nifty.controls.label.LabelControl">
+    <text />
+  </controlDefinition>
+</nifty-controls>

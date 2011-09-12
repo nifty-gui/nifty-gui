@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+
+  <!-- the chatbox control consists of a ListBox for the chat, a ListBox for the player, a text input field and a button to send the message -->
+  <controlDefinition name="nifty-chat" style="nifty-chat-control" controller="de.lessvoid.nifty.controls.chatcontrol.ChatControl" lines="10" sendLabel="Send" chatLineIconWidth="25px" chatLineIconHeight="25px" chatLineHeight="25px">
+    <panel style="#mainPanel">
+      <panel style="#chatPanel">
+        <panel style="#chatArea">
+          <control id="#chatBox" name="listBox" vertical="optional" horizontal="optional" selection="Disabled" displayItems="$lines" viewConverterClass="de.lessvoid.nifty.controls.chatcontrol.ChatBoxViewConverter">
+            <control name="nifty-chat-line" chatLineIconWidth="$chatLineIconWidth" chatLineIconHeight="$chatLineIconHeight" chatLineHeight="$chatLineHeight" />
+          </control>
+        </panel>
+        <panel style="#playerArea">
+          <control id="#playerList" name="listBox" vertical="optional" horizontal="off" selection="Disabled" displayItems="$lines" viewConverterClass="de.lessvoid.nifty.controls.chatcontrol.ChatBoxViewConverter">
+            <control name="nifty-chat-line" chatLineIconWidth="$chatLineIconWidth" chatLineIconHeight="$chatLineIconHeight" chatLineHeight="$chatLineHeight" />
+          </control>
+        </panel>
+      </panel>
+      <panel style="#spacer"/>
+      <panel style="#chatTextArea">
+        <control id="#chat-text-input" name="textfield" />
+        <control id="#chat-text-button" name="button" width="" label="$sendLabel">
+          <interact onClick="sendText()" />
+        </control>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- this defines the control for a single line of text in the chat and player window -->
+  <controlDefinition name="nifty-chat-line">
+    <panel childLayout="horizontal" width="100%" align="center">
+      <image id="#chat-line-icon" width="$chatLineIconWidth" height="$chatLineIconHeight" />
+      <control id="#chat-line-text" name="label" align="left" textHAlign="left" height="$chatLineHeight" wrap="true" />
+    </panel>
+  </controlDefinition>
+
+</nifty-controls>

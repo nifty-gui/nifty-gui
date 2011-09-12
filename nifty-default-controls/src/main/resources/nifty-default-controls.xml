@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <useControls filename="nifty-controls/nifty-button.xml" />
+  <useControls filename="nifty-controls/nifty-chat-control.xml" />
+  <useControls filename="nifty-controls/nifty-checkbox.xml" />
+  <useControls filename="nifty-controls/nifty-console.xml" />
+  <useControls filename="nifty-controls/nifty-drop-down.xml" />
+  <useControls filename="nifty-controls/nifty-image-select.xml" />
+  <useControls filename="nifty-controls/nifty-label.xml" />
+  <useControls filename="nifty-controls/nifty-textfield.xml" />
+  <useControls filename="nifty-controls/nifty-menu.xml" />
+  <useControls filename="nifty-controls/nifty-scrollbar.xml" />
+  <useControls filename="nifty-controls/nifty-slider.xml" />
+  <useControls filename="nifty-controls/nifty-scrollpanel.xml" />
+  <useControls filename="nifty-controls/nifty-listbox.xml" />
+  <useControls filename="nifty-controls/nifty-dragndrop.xml" />
+  <useControls filename="nifty-controls/nifty-window.xml" />
+  <useControls filename="nifty-controls/nifty-radiobutton.xml" />
+  <useControls filename="nifty-controls/nifty-hint.xml" />
+</nifty-controls>

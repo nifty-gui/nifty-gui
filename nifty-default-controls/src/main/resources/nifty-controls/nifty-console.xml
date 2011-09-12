@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="nifty-console" controller="de.lessvoid.nifty.controls.console.ConsoleControl">
+    <panel style="nifty-console-panel">
+      <control id="#listBox" name="listBox" style="nifty-console-listbox" displayItems="$lines" selectionMode="Disabled" horizontal="off" vertical="optional">
+        <text text="Template" style="nifty-console-listbox-item" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
+      </control>
+      <control id="#textInput" name="textfield" style="nifty-console-textfield" />
+    </panel>
+  </controlDefinition>
+</nifty-controls>
