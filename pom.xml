@@ -13,6 +13,7 @@
     <module>nifty-controls</module>
     <module>nifty-controls-style-black</module>
     <module>nifty-renderer-lwjgl</module>
+    <module>nifty-soundsystem-openal</module>
   </modules>
   <developers>
     <developer>
