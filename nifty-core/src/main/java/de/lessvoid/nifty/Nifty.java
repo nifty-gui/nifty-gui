@@ -1305,10 +1305,11 @@ public class Nifty {
 
     @Override
     public boolean processMouseEvent(final int mouseX, final int mouseY, final int mouseWheel, final int button, final boolean buttonDown) {
+      boolean processed = processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
       if (log.isLoggable(Level.FINE)) {
-        log.fine("processMouseEvent: " + mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown);
+        log.fine("processMouseEvent: " + mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + " -> " + processed);
       }
-      return processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
+      return processed;
     }
 
     @Override
@@ -1338,7 +1339,7 @@ public class Nifty {
     }
 
     private boolean processEvent(final NiftyMouseInputEvent mouseInputEvent) {
-      boolean handled = true;
+      boolean handled = false;
       if (mouseInputEventProcessor.canProcess(mouseInputEvent)) {
         mouseInputEventProcessor.process(mouseInputEvent);
         handled = forwardMouseEventToScreen(mouseInputEvent);
