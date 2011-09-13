@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nifty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+
+	<screen id="start"
+		controller="de.lessvoid.nifty.java2d.tests.controllers.HelloWorldMainScreenController">
+		<layer id="layer" backgroundColor="#003f" childLayout="absolute">
+			<panel id="panel1" height="50px" width="100px" align="center"
+				valign="center" backgroundColor="#f60f" x="50px" y="50px">
+			</panel>
+
+			<panel id="panel2" height="50px" width="100px" align="center"
+				valign="center" x="200px" y="50px">
+				<effect>
+					<onActive name="gradient" direction="horizontal">
+						<value offset="0%" color="#f00f" />
+						<value offset="20%" color="#0f0f" />
+						<value offset="60%" color="#00ff" />
+						<value offset="70%" color="#ff0f" />
+						<value offset="100%" color="#ffff" />
+					</onActive>
+				</effect>
+			</panel>
+
+			<panel id="panel4" height="50px" width="100px" align="center"
+				valign="center" x="500px" y="50px">
+				<effect>
+					<onActive name="gradient" direction="vertical">
+						<value offset="0%" color="#f00f" />
+						<value offset="20%" color="#0f0f" />
+						<value offset="60%" color="#00ff" />
+						<value offset="70%" color="#ff0f" />
+						<value offset="100%" color="#ffff" />
+					</onActive>
+				</effect>
+			</panel>
+
+			<panel id="panel3" height="50px" width="100px" align="center"
+				valign="center" x="350px" y="50px" backgroundImage="neonbutton_over.png">
+			</panel>
+
+			<panel height="50px" width="300px" align="center" valign="center"
+				childLayout="center" x="200px" y="200px" visibleToMouse="true"
+				backgroundColor="#00ff" childClip="true">
+				<panel height="100px" width="100px" backgroundColor="#f00f"
+					align="center" valign="center" visibleToMouse="true">
+					<effect>
+						<onHover name="move" direction="left" mode="out" length="1000">
+							<hover hoverFalloffType="linear" hoverWidth="100%"
+								hoverHeight="100%" hoverFalloffConstraint="vertical" />
+						</onHover>
+					</effect>
+				</panel>
+			</panel>
+
+			<panel id="panel5" height="50px" width="100px" align="center"
+				valign="center" backgroundColor="#00f5" x="50px" y="150px">
+			</panel>
+			
+			<panel id="panel6" height="50px" width="100px" align="center"
+				valign="center" backgroundColor="#0f05" x="100px" y="175px">
+			</panel>
+						
+		</layer>
+	</screen>
+</nifty>
