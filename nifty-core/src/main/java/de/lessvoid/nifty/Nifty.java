@@ -105,6 +105,7 @@ public class Nifty {
   private NiftyInputConsumerImpl niftyInputConsumer = new NiftyInputConsumerImpl();
   private SubscriberRegistry subscriberRegister = new SubscriberRegistry();
   private boolean debugOptionPanelColors;
+  private Clipboard clipboard = null;
 
   /**
    * Create nifty with optional console parameter.
@@ -119,6 +120,7 @@ public class Nifty {
       final InputSystem newInputSystem,
       final TimeProvider newTimeProvider) {
     initialize(new NiftyRenderEngineImpl(newRenderDevice), new SoundSystem(newSoundDevice), newInputSystem, newTimeProvider);
+    initializeClipboard();
   }
 
   /**
@@ -154,6 +156,16 @@ public class Nifty {
       initalizeEventBus();
     } catch (Exception e) {
       log.warning(e.getMessage());
+    }
+  }
+
+  private void initializeClipboard() {
+    try {
+      Class.forName(java.awt.datatransfer.Clipboard.class.getName());
+      clipboard = new ClipboardAWT();
+    } catch (ClassNotFoundException e) {
+      log.info("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
+      clipboard = new ClipboardNull();
     }
   }
 
@@ -1511,5 +1523,13 @@ public class Nifty {
         }
       }
     }
+  }
+
+  public Clipboard getClipboard() {
+    return clipboard;
+  }
+
+  public void setClipboard(final Clipboard clipboard) {
+    this.clipboard = clipboard;
   }
 }

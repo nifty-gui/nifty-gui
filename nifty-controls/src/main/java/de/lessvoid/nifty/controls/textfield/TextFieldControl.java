@@ -52,7 +52,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
     this.fromClickCursorPos = -1;
     this.toClickCursorPos = -1;
 
-    this.textField = new TextFieldLogic(properties.getProperty("text", ""), new ClipboardAWT(), this);
+    this.textField = new TextFieldLogic(properties.getProperty("text", ""), nifty.getClipboard(), this);
     this.textField.toFirstPosition();
 
     this.textElement = getElement().findElementByName("#text");

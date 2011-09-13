@@ -10,6 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.lessvoid.nifty.Clipboard;
+
 public class TextFieldMaxLenClipboardTest {
 
   private static final int MAX_LEN = 5;

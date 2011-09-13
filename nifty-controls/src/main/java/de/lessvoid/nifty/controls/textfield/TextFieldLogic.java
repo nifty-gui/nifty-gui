@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.controls.textfield;
 
+import de.lessvoid.nifty.Clipboard;
+
 /**
  * TextField logic.
  * @author void

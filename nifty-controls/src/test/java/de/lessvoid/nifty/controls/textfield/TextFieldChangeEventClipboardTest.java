@@ -8,6 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.lessvoid.nifty.Clipboard;
+
 public class TextFieldChangeEventClipboardTest {
   private TextFieldLogic textField;
   private Clipboard clipboard;

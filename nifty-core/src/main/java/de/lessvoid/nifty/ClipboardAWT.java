@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield;
+package de.lessvoid.nifty;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.ClipboardOwner;
