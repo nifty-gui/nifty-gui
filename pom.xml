@@ -14,6 +14,7 @@
     <module>nifty-controls-style-black</module>
     <module>nifty-renderer-lwjgl</module>
     <module>nifty-soundsystem-openal</module>
+    <module>nifty-soundsystem-pauls-sound</module>
   </modules>
   <developers>
     <developer>
