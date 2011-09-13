@@ -92,7 +92,8 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * stack to save data.
    */
   private Stack < SavedRenderState > stack = new Stack < SavedRenderState >();
-
+  private Color whiteColor = new Color("#ffff");
+  
   /**
    * ObjectPool to reuse SavedRenderState instances.
    */
@@ -216,7 +217,8 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     if (color != null) {
       alpha = color.getAlpha();
     }
-    image.render(x + getX(), y + getY(), width, height, new Color(1.0f, 1.0f, 1.0f, alpha), imageScale);
+    whiteColor.setAlpha(alpha);
+    image.render(x + getX(), y + getY(), width, height, whiteColor, imageScale);
   }
 
   /**

@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.effects;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.elements.Element;
@@ -26,6 +26,7 @@ public class EffectManager {
   private RenderPhase renderPhasePre = new RenderPhasePre();
   private RenderPhase renderPhasePost = new RenderPhasePost();
   private RenderPhase renderPhaseOverlay = new RenderPhaseOverlay();
+  private HashSet<RenderStateType> savedRenderStates = new HashSet<RenderStateType>();
 
   /**
    * create a new effectManager with the given listener.
@@ -96,13 +97,14 @@ public class EffectManager {
    * @param renderDevice RenderDevice
    */
   public void begin(final NiftyRenderEngine renderDevice, final Element element) {
-    Set < RenderStateType > renderStates = RenderStateType.allStatesCopy();
+    savedRenderStates.clear();
+    savedRenderStates.addAll(RenderStateType.allStates());
     for (int i=0; i<effectProcessorList.size(); i++) {
       EffectProcessor processor = effectProcessorList.get(i);
       processor.getRenderStatesToSave(renderDeviceProxy);
-      renderStates.removeAll(renderDeviceProxy.getStates());
+      savedRenderStates.removeAll(renderDeviceProxy.getStates());
     }
-    renderDevice.saveState(renderStates);
+    renderDevice.saveState(savedRenderStates);
   }
 
   /**

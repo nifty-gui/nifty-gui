@@ -57,10 +57,6 @@ public enum RenderStateType {
     return allStates;
   }
 
-  public static Set<RenderStateType> allStatesCopy() {
-    return new HashSet<RenderStateType>(allStates());
-  }
-
   private static Set < RenderStateType > allStates = new HashSet < RenderStateType >();
 
   static {

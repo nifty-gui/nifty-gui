@@ -149,7 +149,8 @@ public class EffectProcessor {
     listener = newListener;
 
     // activate effects
-    for (Effect e : allEffects) {
+    for (int i=0; i<allEffects.size(); i++) {
+      Effect e = allEffects.get(i);
       startEffect(e, alternate, customKey);
     }
 
@@ -164,7 +165,10 @@ public class EffectProcessor {
       return "no active effects";
     } else {
       StringBuffer data = new StringBuffer();
-      for (Effect e : activeEffects.getActive()) {
+
+      List<Effect> effects = activeEffects.getActive();
+      for (int i=0; i<effects.size(); i++) {
+        Effect e = effects.get(i);
         if (data.length() != 0) {
           data.append(", ");
         }
@@ -182,7 +186,8 @@ public class EffectProcessor {
   }
 
   public void processHover(final int x, final int y) {
-    for (Effect e : allEffects) {
+    for (int i=0; i<allEffects.size(); i++) {
+      Effect e = allEffects.get(i);
       if (e.isHoverEffect()) {
         if (!e.isActive()) {
           if (e.isInsideFalloff(x, y)) {
@@ -203,7 +208,8 @@ public class EffectProcessor {
   }
 
   public void processStartHover(final int x, final int y) {
-    for (Effect e : allEffects) {
+    for (int i=0; i<allEffects.size(); i++) {
+      Effect e = allEffects.get(i);
       if (e.isHoverEffect()) {
         if (!e.isActive()) {
           if (e.isInsideFalloff(x, y) && !e.getCustomFlag()) {
@@ -224,7 +230,8 @@ public class EffectProcessor {
   }
 
   public void processEndHover(final int x, final int y) {
-    for (Effect e : allEffects) {
+    for (int i=0; i<allEffects.size(); i++) {
+      Effect e = allEffects.get(i);
       if (e.isHoverEffect()) {
         if (!e.isActive()) {
           if (e.isInsideFalloff(x, y)) {
@@ -241,7 +248,8 @@ public class EffectProcessor {
   }
 
   public void processHoverDeactivate(final int x, final int y) {
-    for (Effect e : allEffects) {
+    for (int i=0; i<allEffects.size(); i++) {
+      Effect e = allEffects.get(i);
       if (e.isHoverEffect()) {
         if (e.isActive()) {
           if (!e.isInsideFalloff(x, y)) {
@@ -317,7 +325,9 @@ public class EffectProcessor {
   }
 
   private boolean isNotNeverStopRendering() {
-    for (Effect e : activeEffects.getActive()) {
+    List<Effect> effects = activeEffects.getActive();
+    for (int i=0; i<effects.size(); i++) {
+      Effect e = effects.get(i);
       if (e.isNeverStopRendering()) {
         return false;
       }
