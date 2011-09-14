@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.render;
 
-import java.util.Set;
-
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -189,7 +187,7 @@ public interface NiftyRenderEngine {
    * save given states.
    * @param statesToSave set of renderstates to save
    */
-  void saveState(Set < RenderStateType > statesToSave);
+  void saveState(RenderStates statesToSave);
 
   /**
    * restore states.

@@ -2,7 +2,6 @@ package de.lessvoid.nifty.render;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
 
@@ -104,7 +103,8 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   });
 
-  private Clip clipEnabled = null;
+  private boolean clipEnabled;
+  private Clip clip = new Clip(0, 0, 0, 0);
   private BlendMode blendMode = BlendMode.BLEND;
   private NiftyImageManager imageManager;
 
@@ -356,7 +356,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param colorParam color
    */
   public void setColor(final Color colorParam) {
-    color = new Color(colorParam);
+    color.setRed(colorParam.getRed());
+    color.setGreen(colorParam.getGreen());
+    color.setBlue(colorParam.getBlue());
+    color.setAlpha(colorParam.getAlpha());
     colorChanged = true;
     colorAlphaChanged = true;
   }
@@ -422,25 +425,26 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   public void enableClip(final int x0, final int y0, final int x1, final int y1) {
     // in case there already is a clipping area set we can't override it. not sure if this is correct tho but it
     // fixes issues when some parent element has set a clipping area in which child elements should not be able to override the area.
-    if (clipEnabled != null) {
+    if (clipEnabled) {
       return;
     }
-    updateClip(new Clip(x0 + getX(), y0 + getY(), x1 + getX(), y1 + getY()));
+    updateClip(true, x0 + getX(), y0 + getY(), x1 + getX(), y1 + getY());
   }
 
   /**
    * @see de.lessvoid.nifty.render.NiftyRenderEngine#disableClip()
    */
   public void disableClip() {
-    updateClip(null);
+    updateClip(false, 0, 0, 0, 0);
   }
 
-  void updateClip(final Clip clip) {
-    clipEnabled = clip;
-    if (clipEnabled == null) {
+  void updateClip(final boolean enabled, final int x0, final int y0, final int x1, final int y1) {
+    clipEnabled = enabled;
+    clip.init(x0, y0, x1, y1);
+    if (!clipEnabled) {
       renderDevice.disableClip();
     } else {
-      clipEnabled.apply();
+      clip.apply();
     }
   }
   /**
@@ -500,7 +504,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return !(selectionStart == -1 && selectionEnd == -1);
   }
 
-  public void saveState(final Set < RenderStateType > statesToSave) {
+  public void saveState(final RenderStates statesToSave) {
     SavedRenderState savedRenderState = pool.allocate();
     savedRenderState.save(statesToSave);
     stack.push(savedRenderState);
@@ -552,8 +556,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     
     private float imageScale;
     private boolean stateImageScaleChanged;
-    
-    private Clip clipEnabled;
+
+    private boolean clipEnabled;
+    private Clip clip = new Clip(0, 0, 0, 0);
     private boolean stateClipChanged;
     
     private BlendMode blendMode;
@@ -564,7 +569,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     public SavedRenderState() {
     }
 
-    public void save(final Set<RenderStateType> statesToSave) {
+    public void save(final RenderStates statesToSave) {
       statePositionChanged = false;
       stateColorChanged = false;
       stateAlphaChanged = false;
@@ -587,24 +592,22 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
         restoreAll = true;
         return;
       }
-      for (RenderStateType state : statesToSave) {
-        if (RenderStateType.position.equals(state)) {
-          savePosition();
-        } else if (RenderStateType.color.equals(state)) {
-          saveColor();
-        } else if (RenderStateType.alpha.equals(state)) {
-          saveColorAlpha();
-        } else if (RenderStateType.textSize.equals(state)) {
-          saveTextSize();
-        } else if (RenderStateType.imageScale.equals(state)) {
-          saveImageSize();
-        } else if (RenderStateType.font.equals(state)) {
-          saveFont();
-        } else if (RenderStateType.clip.equals(state)) {
-          saveClipEnabled();
-        } else if (RenderStateType.blendMode.equals(state)) {
-          saveBlendMode();
-        }
+      if (statesToSave.hasPosition()) {
+        savePosition();
+      } else if (statesToSave.hasColor()) {
+        saveColor();
+      } else if (statesToSave.hasAlpha()) {
+        saveColorAlpha();
+      } else if (statesToSave.hasTextSize()) {
+        saveTextSize();
+      } else if (statesToSave.hasImageScale()) {
+        saveImageSize();
+      } else if (statesToSave.hasFont()) {
+        saveFont();
+      } else if (statesToSave.hasClip()) {
+        saveClipEnabled();
+      } else if (statesToSave.hasBlendMode()) {
+        saveBlendMode();
       }
     }
 
@@ -653,6 +656,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
     private void saveClipEnabled() {
       clipEnabled = NiftyRenderEngineImpl.this.clipEnabled;
+      clip.init(NiftyRenderEngineImpl.this.clip.x0, NiftyRenderEngineImpl.this.clip.y0, NiftyRenderEngineImpl.this.clip.x1, NiftyRenderEngineImpl.this.clip.y1);
       stateClipChanged = true;
     }
 
@@ -696,7 +700,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
 
     private void restoreClip() {
-      NiftyRenderEngineImpl.this.updateClip(clipEnabled);
+      NiftyRenderEngineImpl.this.updateClip(clipEnabled, clip.x0, clip.y0, clip.x1, clip.y1);
     }
 
     private void restoreImageScale() {
@@ -736,6 +740,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     private int y1;
 
     public Clip(final int x0, final int y0, final int x1, final int y1) {
+      init(x0, y0, x1, y1);
+    }
+
+    public void init(final int x0, final int y0, final int x1, final int y1) {
       this.x0 = x0;
       this.y0 = y0;
       this.x1 = x1;

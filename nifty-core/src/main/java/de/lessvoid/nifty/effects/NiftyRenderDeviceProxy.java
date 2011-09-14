@@ -1,12 +1,9 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.render.RenderStateType;
+import de.lessvoid.nifty.render.RenderStates;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -17,8 +14,7 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
-
-  private Set < RenderStateType > renderStates = new HashSet < RenderStateType >();
+  private RenderStates renderStates = new RenderStates();
 
   @Override
   public void beginFrame() {
@@ -48,7 +44,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
   @Override
   public void enableClip(final int x0, final int y0, final int x1, final int y1) {
-    renderStates.add(RenderStateType.clip);
+    renderStates.addClip();
   }
 
   @Override
@@ -63,18 +59,18 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
   @Override
   public void setColor(final Color colorParam) {
-    renderStates.add(RenderStateType.color);
-    renderStates.add(RenderStateType.alpha);
+    renderStates.addColor();
+    renderStates.addAlpha();
   }
 
   @Override
   public void setColorAlpha(final float newColorAlpha) {
-    renderStates.add(RenderStateType.alpha);
+    renderStates.addAlpha();
   }
 
   @Override
   public void setColorIgnoreAlpha(final Color color) {
-    renderStates.add(RenderStateType.color);
+    renderStates.addColor();
   }
 
   @Override
@@ -89,7 +85,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
   @Override
   public void moveTo(final float param, final float param2) {
-    renderStates.add(RenderStateType.position);
+    renderStates.addPosition();
   }
 
   @Override
@@ -119,12 +115,12 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void saveState(final Set < RenderStateType > statesToSave) {
+  public void saveState(final RenderStates statesToSave) {
   }
 
   @Override
   public void setFont(final RenderFont font) {
-    renderStates.add(RenderStateType.font);
+    renderStates.addFont();
   }
 
   @Override
@@ -134,22 +130,22 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
   @Override
   public void setGlobalPosition(final float pos, final float pos2) {
-    renderStates.add(RenderStateType.position);
+    renderStates.addPosition();
   }
 
   @Override
   public void setImageScale(final float scale) {
-    renderStates.add(RenderStateType.imageScale);
+    renderStates.addImageScale();
   }
 
   @Override
   public void setRenderTextSize(final float size) {
-    renderStates.add(RenderStateType.textSize);
+    renderStates.addTextSize();
   }
 
   @Override
   public void setBlendMode(final BlendMode blendMode) {
-    renderStates.add(RenderStateType.blendMode);
+    renderStates.addBlendMode();
   }
 
   @Override
@@ -170,7 +166,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
     renderStates.clear();
   }
 
-  public Set < RenderStateType > getStates() {
+  public RenderStates getStates() {
     return renderStates;
   }
 
