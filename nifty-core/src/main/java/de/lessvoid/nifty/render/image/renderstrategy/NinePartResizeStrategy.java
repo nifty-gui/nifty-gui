@@ -15,6 +15,7 @@ public class NinePartResizeStrategy implements RenderStrategy {
 	private NinePartResizeRow m_row0;
 	private NinePartResizeRow m_row1;
 	private NinePartResizeRow m_row2;
+	private Box box = new Box();
 
 	@Override
 	public void setParameters(String parameters) {
@@ -67,9 +68,23 @@ public class NinePartResizeStrategy implements RenderStrategy {
 		final int y1 = y0 + srcH0;
 		final int y2 = y1 + midlH;
 
-		renderRow(device, image, m_row0, new Box(srcX, srcY0, srcW, srcH0), x, y0, width, srcH0, color, scale, cX, cY);
-		renderRow(device, image, m_row1, new Box(srcX, srcY1, srcW, srcH1), x, y1, width, midlH, color, scale, cX, cY);
-		renderRow(device, image, m_row2, new Box(srcX, srcY2, srcW, srcH2), x, y2, width, srcH2, color, scale, cX, cY);
+		box.setX(srcX);
+    box.setY(srcY0);
+    box.setWidth(srcW);
+    box.setHeight(srcH0);
+		renderRow(device, image, m_row0, box, x, y0, width, srcH0, color, scale, cX, cY);
+
+    box.setX(srcX);
+    box.setY(srcY1);
+    box.setWidth(srcW);
+    box.setHeight(srcH1);
+		renderRow(device, image, m_row1, box, x, y1, width, midlH, color, scale, cX, cY);
+
+    box.setX(srcX);
+    box.setY(srcY2);
+    box.setWidth(srcW);
+    box.setHeight(srcH2);
+		renderRow(device, image, m_row2, box, x, y2, width, srcH2, color, scale, cX, cY);
 	}
 
 	private void renderRow(final RenderDevice renderDevice, final RenderImage image, final NinePartResizeRow row,
