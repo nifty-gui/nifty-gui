@@ -262,8 +262,8 @@ public class Font {
       char currentCharacter = text.charAt(i);
       char nextCharacter = FontHelper.getNextCharacter(text, i);
 
-      Integer w = getCharacterWidth(currentCharacter, nextCharacter, size);
-      if (w != null) {
+      int w = getCharacterWidth(currentCharacter, nextCharacter, size);
+      if (w != -1) {
         length += w;
       }
     }
@@ -308,13 +308,12 @@ public class Font {
     return font.getChar(character);
   }
 
-  public Integer getCharacterWidth(final char currentCharacter, final char nextCharacter, final float size) {
+  public int getCharacterWidth(final char currentCharacter, final char nextCharacter, final float size) {
     CharacterInfo currentCharacterInfo = font.getChar(currentCharacter);
     if (currentCharacterInfo == null) {
-      return null;
+      return -1;
     } else {
-      return new Integer((int) (currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo,
-          nextCharacter)));
+      return (int) (currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter));
     }
   }
 

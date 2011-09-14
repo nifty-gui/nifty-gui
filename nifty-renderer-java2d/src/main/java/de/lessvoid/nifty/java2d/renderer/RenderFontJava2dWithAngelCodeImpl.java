@@ -29,7 +29,7 @@ public class RenderFontJava2dWithAngelCodeImpl implements RenderFont {
 	}
 
 	@Override
-	public Integer getCharacterAdvance(char currentCharacter,
+	public int getCharacterAdvance(char currentCharacter,
 			char nextCharacter, float size) {
 		return 0;
 	}

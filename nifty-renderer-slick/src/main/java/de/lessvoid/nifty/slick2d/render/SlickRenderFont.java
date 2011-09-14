@@ -45,7 +45,7 @@ public class SlickRenderFont implements RenderFont {
    * @param size font size
    * @return width of the character or null when no information for the character is available
    */
-  public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
+  public int getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
 //    CharacterInfo currentCharacterInfo = font.getChar(currentCharacter);
 //    if (currentCharacterInfo == null) {
 //      return null;

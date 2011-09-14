@@ -3,6 +3,7 @@ package de.lessvoid.nifty.renderer.lwjgl.render;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
@@ -94,7 +95,9 @@ public class LwjglRenderDevice implements RenderDevice {
     GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
     viewportWidth = viewportBuffer.get(2);
     viewportHeight = viewportBuffer.get(3);
-    log.info("Viewport: " + viewportWidth + ", " + viewportHeight);
+    if (log.isLoggable(Level.INFO)) {
+      log.info("Viewport: " + viewportWidth + ", " + viewportHeight);
+    }
   }
 
   public void beginFrame() {

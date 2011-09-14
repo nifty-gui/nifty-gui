@@ -433,8 +433,8 @@ public class TextRenderer implements ElementRenderer {
     }
     public void render(final String text, final int x, final int y, final Color fontColor, final float size) {
     }
-    public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
-      return null;
+    public int getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
+      return -1;
     }
     public void dispose() {
     }

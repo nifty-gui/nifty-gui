@@ -25,9 +25,9 @@ public interface RenderFont {
    * @param currentCharacter current character
    * @param nextCharacter next character
    * @param size font size
-   * @return width of the character or null when no information for the character is available
+   * @return width of the character or -1 when no information for the character is available
    */
-  Integer getCharacterAdvance(char currentCharacter, char nextCharacter, float size);
+  int getCharacterAdvance(char currentCharacter, char nextCharacter, float size);
 
   /**
    * This RenderFont is not needed anymore. You should dispose

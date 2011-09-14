@@ -18,8 +18,8 @@ public class FontHelper {
       char currentCharacter = text.charAt(i);
       char nextCharacter = getNextCharacter(text, i);
 
-      Integer w = font.getCharacterAdvance(currentCharacter, nextCharacter, size);
-      if (w != null) { 
+      int w = font.getCharacterAdvance(currentCharacter, nextCharacter, size);
+      if (w != -1) { 
         widthRemaining -= w;
         if (widthRemaining < 0) {
           // this character will underflow the width. we return the last save index.
@@ -44,8 +44,8 @@ public class FontHelper {
       char currentCharacter = text.charAt(i);
       char prevCharacter = getPrevCharacter(text, i);
 
-      Integer w = font.getCharacterAdvance(prevCharacter, currentCharacter, size);
-      if (w != null) {
+      int w = font.getCharacterAdvance(prevCharacter, currentCharacter, size);
+      if (w != -1) {
         widthRemaining -= w;
         if (widthRemaining < 0) {
           // this character will underflow the width. we return the last save index.
@@ -74,8 +74,8 @@ public class FontHelper {
       char currentCharacter = text.charAt(i);
       char nextCharacter = getNextCharacter(text, i);
 
-      Integer w = font.getCharacterAdvance(currentCharacter, nextCharacter, size);
-      if (w != null) {
+      int w = font.getCharacterAdvance(currentCharacter, nextCharacter, size);
+      if (w != -1) {
         if ((pixel >= current) && (pixel <= current + w)) {
           return i;
         }
