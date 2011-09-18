@@ -27,7 +27,7 @@ public class HtmlMain {
 
     // create the NiftyHtmlGenerator that needs the parent element (a panel) where the generated nifty elements will be attached as child elements
     NiftyHtmlGenerator generator = new NiftyHtmlGenerator(nifty);
-    generator.generate(readHTMLFile("src/test/resources/html/test-1.html"), screen, screen.findElementByName("parent"));
+    generator.generate(readHTMLFile("src/test/resources/html/test-2.html"), screen, screen.findElementByName("parent"));
 
     // just debug output the nifty screen (in case we want to check some things)
     System.out.println(nifty.getCurrentScreen().debugOutput());
