@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+  <screen id="start">
+    <layer childLayout="center">
+      <effect>
+        <onActive name="gradient" direction="center">
+          <value offset="0%" color="#111f" />
+          <value offset="25%" color="#111f" />
+          <value offset="100%" color="#666f" />
+        </onActive>
+      </effect>
+      <panel id="parent" backgroundColor="#237c" childLayout="vertical" width="70%" height="70%" align="center" valign="center" padding="10px">
+      </panel>
+    </layer>
+  </screen>
+</nifty>
