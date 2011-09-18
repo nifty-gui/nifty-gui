@@ -17,6 +17,7 @@
     <module>nifty-renderer-java2d</module>
     <module>nifty-soundsystem-openal</module>
     <module>nifty-soundsystem-pauls-sound</module>
+    <module>nifty-html</module>
   </modules>
   <developers>
     <developer>
