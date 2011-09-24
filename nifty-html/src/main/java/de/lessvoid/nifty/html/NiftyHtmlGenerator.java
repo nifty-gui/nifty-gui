@@ -31,7 +31,7 @@ public class NiftyHtmlGenerator {
   public void generate(final String html, final Screen screen, final Element parent) throws Exception {
     Parser parser = Parser.createParser(html, "ISO-8859-1");
 
-    NiftyVisitor visitor = new NiftyVisitor(nifty);
+    NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory());
     parser.visitAllNodesWith(visitor);
     visitor.build(nifty, screen, parent);
   }

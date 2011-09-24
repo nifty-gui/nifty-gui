@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.html;
+package example;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;

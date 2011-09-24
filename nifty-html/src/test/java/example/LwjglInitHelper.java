@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.html;
+package example;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;

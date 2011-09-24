@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.html;
+package example;
 
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.html.NiftyHtmlGenerator;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
@@ -27,7 +28,7 @@ public class HtmlMain {
 
     // create the NiftyHtmlGenerator that needs the parent element (a panel) where the generated nifty elements will be attached as child elements
     NiftyHtmlGenerator generator = new NiftyHtmlGenerator(nifty);
-    generator.generate(readHTMLFile("src/test/resources/html/test-2.html"), screen, screen.findElementByName("parent"));
+    generator.generate(readHTMLFile("src/test/resources/html/test-20.html"), screen, screen.findElementByName("parent"));
 
     // just debug output the nifty screen (in case we want to check some things)
     System.out.println(nifty.getCurrentScreen().debugOutput());
