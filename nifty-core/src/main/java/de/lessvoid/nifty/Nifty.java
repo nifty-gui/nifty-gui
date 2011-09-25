@@ -56,6 +56,7 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.tools.ObjectPool;
 import de.lessvoid.nifty.tools.ObjectPool.Factory;
@@ -1531,5 +1532,9 @@ public class Nifty {
 
   public void setClipboard(final Clipboard clipboard) {
     this.clipboard = clipboard;
+  }
+
+  public RenderFont createFont(final String name) {
+    return getRenderEngine().createFont(name);
   }
 }
