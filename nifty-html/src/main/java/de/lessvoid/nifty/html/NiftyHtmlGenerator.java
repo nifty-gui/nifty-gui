@@ -3,6 +3,7 @@ package de.lessvoid.nifty.html;
 import org.htmlparser.Parser;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
@@ -29,10 +30,25 @@ public class NiftyHtmlGenerator {
    * @throws Exception in case of any error an Exception is thrown
    */
   public void generate(final String html, final Screen screen, final Element parent) throws Exception {
+    removeAllChilds(parent);
+
     Parser parser = Parser.createParser(html, "ISO-8859-1");
 
-    NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory());
+    NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory(), "aurulent-sans-16.fnt");
     parser.visitAllNodesWith(visitor);
-    visitor.build(nifty, screen, parent);
+
+    ElementBuilder builder = visitor.builder();
+    builder.build(nifty, screen, parent);
+  }
+
+  /**
+   * Remove all child elements of the given parent element.
+   * @param parent the element we want to remove all childs
+   */
+  private void removeAllChilds(final Element parent) {
+    for (int i=0; i<parent.getElements().size(); i++) {
+      parent.getElements().get(i).markForRemoval();
+    }
+    nifty.executeEndOfFrameElementActions();
   }
 }
