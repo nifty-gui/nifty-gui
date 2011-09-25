@@ -7,6 +7,7 @@ import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import org.htmlparser.Text;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.nodes.TextNode;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ParagraphTag;
@@ -115,5 +116,34 @@ public class NiftyVisitorWithDefaultFontTest {
 
     assertEquals(1, paragraphPanelBuilder.getElementBuilders().size());
     assertEquals(textBuilder, paragraphPanelBuilder.getElementBuilders().get(0));
+  }
+
+  @Test
+  public void simpleBodyWithBR() throws Exception {
+    expect(defaultFont.getHeight()).andReturn(12);
+    replay(defaultFont);
+
+    PanelBuilder bodyPanelBuilder = new PanelBuilder();
+    PanelBuilder panelBuilder = new PanelBuilder();
+
+    expect(builderFactoryMock.createBodyPanelBuilder()).andReturn(bodyPanelBuilder);
+    expect(builderFactoryMock.createBreakPanelBuilder("12")).andReturn(panelBuilder);
+    replay(builderFactoryMock);
+
+    BodyTag bodyTag = new BodyTag();
+    visitor.visitTag(bodyTag);
+
+      // add BR
+      TagNode breakTag = new TagNode();
+      breakTag.setTagName("br");
+      visitor.visitTag(breakTag);
+      visitor.visitEndTag(breakTag);
+
+    // close body
+    visitor.visitEndTag(bodyTag);
+
+    assertEquals(bodyPanelBuilder, visitor.builder());
+    assertEquals(1, bodyPanelBuilder.getElementBuilders().size());
+    assertEquals(panelBuilder, bodyPanelBuilder.getElementBuilders().get(0));
   }
 }

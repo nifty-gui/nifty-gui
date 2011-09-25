@@ -94,8 +94,12 @@ public class NiftyVisitor extends NodeVisitor {
             tag.getAttribute("align"),
             tag.getAttribute("width"),
             tag.getAttribute("height"),
-            tag.getAttribute("bgcolor"));
+            tag.getAttribute("bgcolor"),
+            tag.getAttribute("vspace"));
         bodyPanel.image(image);
+      } else if (isBreak(tag)) {
+        PanelBuilder breakPanelBuilder = niftyBuilderFactory.createBreakPanelBuilder(String.valueOf(defaultFont.getHeight()));
+        bodyPanel.panel(breakPanelBuilder);
         /*
       } else if (isTableTag(tag)) {
         table = niftyBuilderFactory.createPanelBuilder();
@@ -139,6 +143,8 @@ public class NiftyVisitor extends NodeVisitor {
         blockElementStack.pop();
         currentBlockElement = null;
       } else if (isImageTag(tag)) {
+        // nothing to do
+      } else if (isBreak(tag)) {
         // nothing to do
         /*
       } else if (isTableTag(tag)) {
@@ -224,6 +230,10 @@ public class NiftyVisitor extends NodeVisitor {
 
   private boolean isParagraph(final Tag tag) {
     return "P".equals(tag.getTagName());
+  }
+
+  private boolean isBreak(final Tag tag) {
+    return "BR".equals(tag.getTagName());
   }
 
   private boolean isImageTag(final Tag tag) {

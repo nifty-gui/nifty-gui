@@ -53,7 +53,7 @@ public class NiftyVisitorTest {
     ImageBuilder imageBuilder = new ImageBuilder();
 
     expect(builderFactoryMock.createBodyPanelBuilder()).andReturn(bodyPanelBuilder);
-    expect(builderFactoryMock.createImageBuilder("src", null, null, null, null)).andReturn(imageBuilder);
+    expect(builderFactoryMock.createImageBuilder("src", null, null, null, null, null)).andReturn(imageBuilder);
     replay(builderFactoryMock);
 
     BodyTag bodyTag = new BodyTag();

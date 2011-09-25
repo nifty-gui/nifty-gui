@@ -39,7 +39,7 @@ public class NiftyBuilderFactory {
     return textBuilder;
   }
 
-  public ImageBuilder createImageBuilder(final String src, final String align, final String width, final String height, final String bgcolor) {
+  public ImageBuilder createImageBuilder(final String src, final String align, final String width, final String height, final String bgcolor, final String vspace) {
     ImageBuilder imageBuilder = createImageBuilder();
     imageBuilder.filename(src);
     if (align != null) {
@@ -54,7 +54,16 @@ public class NiftyBuilderFactory {
     if (bgcolor != null) {
       imageBuilder.backgroundColor(bgcolor);
     }
+    if (vspace != null) {
+      imageBuilder.padding(vspace);
+    }
     return imageBuilder;
+  }
+
+  public PanelBuilder createBreakPanelBuilder(final String height) {
+    PanelBuilder result = createPanelBuilder();
+    result.height(height);
+    return result;
   }
 
   PanelBuilder createPanelBuilder() {
