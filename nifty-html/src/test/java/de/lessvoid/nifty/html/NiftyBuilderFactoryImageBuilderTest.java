@@ -46,15 +46,11 @@ public class NiftyBuilderFactoryImageBuilderTest {
     imageBuilderMock.filename("src");
     replay(imageBuilderMock);
 
-    assertEquals(imageBuilderMock, builderFactory.createImageBuilder(image, "src", null, null, null, null, null));
+    assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", null, null, null, null, null));
   }
 
   @Test
   public void testCreateImageBuilderComplete() {
-    expect(image.getWidth()).andReturn(100);
-    expect(image.getHeight()).andReturn(100);
-    replay(image);
-
     imageBuilderMock.filename("src");
     imageBuilderMock.width("100");
     imageBuilderMock.height("100");
@@ -62,7 +58,7 @@ public class NiftyBuilderFactoryImageBuilderTest {
     imageBuilderMock.align(Align.Center);
     replay(imageBuilderMock);
 
-    assertEquals(imageBuilderMock, builderFactory.createImageBuilder(image, "src", "center", "100", "100", "bgcolor", null));
+    assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", "center", "100", "100", "bgcolor", null));
   }
 
   @Test
@@ -78,7 +74,7 @@ public class NiftyBuilderFactoryImageBuilderTest {
     imageBuilderMock.align(Align.Center);
     replay(imageBuilderMock);
 
-    assertEquals(imageBuilderMock, builderFactory.createImageBuilder(image, "src", "center", "10%", "50%", "bgcolor", null));
+    assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", "center", "10%", "50%", "bgcolor", null));
   }
 
   @Test
@@ -110,6 +106,6 @@ public class NiftyBuilderFactoryImageBuilderTest {
     imageBuilderMock.padding("12");
     replay(imageBuilderMock);
 
-    assertEquals(imageBuilderMock, builderFactory.createImageBuilder(image, "src", sourceAlign, null, null, "bgcolor", "12"));
+    assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", sourceAlign, null, null, "bgcolor", "12"));
   }
 }

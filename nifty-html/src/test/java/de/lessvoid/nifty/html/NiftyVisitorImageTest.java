@@ -2,7 +2,6 @@ package de.lessvoid.nifty.html;
 
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
@@ -57,7 +56,7 @@ public class NiftyVisitorImageTest {
     ImageBuilder imageBuilder = new ImageBuilder();
 
     expect(builderFactoryMock.createBodyPanelBuilder()).andReturn(bodyPanelBuilder);
-    expect(builderFactoryMock.createImageBuilder(isA(NiftyImage.class), eq("src"), (String)isNull(), (String)isNull(), (String)isNull(), (String)isNull(), (String)isNull())).andReturn(imageBuilder);
+    expect(builderFactoryMock.createImageBuilder(eq("src"), (String)isNull(), (String)isNull(), (String)isNull(), (String)isNull(), (String)isNull())).andReturn(imageBuilder);
     replay(builderFactoryMock);
 
     BodyTag bodyTag = new BodyTag();
