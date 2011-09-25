@@ -6,6 +6,8 @@ import de.lessvoid.nifty.builder.ElementBuilder.Align;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.tools.SizeValue;
 
 public class NiftyBuilderFactory {
   private Logger log = Logger.getLogger(NiftyBuilderFactory.class.getName());
@@ -39,17 +41,19 @@ public class NiftyBuilderFactory {
     return textBuilder;
   }
 
-  public ImageBuilder createImageBuilder(final String src, final String align, final String width, final String height, final String bgcolor, final String vspace) {
+  public ImageBuilder createImageBuilder(final NiftyImage image, final String src, final String align, final String width, final String height, final String bgcolor, final String vspace) {
     ImageBuilder imageBuilder = createImageBuilder();
     imageBuilder.filename(src);
     if (align != null) {
       imageBuilder.align(translateAlign(align));
     }
     if (width != null) {
-      imageBuilder.width(width);
+      SizeValue value = new SizeValue(width);
+      imageBuilder.width(String.valueOf((int)value.getValue((float)image.getWidth())));
     }
     if (height != null) {
-      imageBuilder.height(height);
+      SizeValue value = new SizeValue(height);
+      imageBuilder.height(String.valueOf((int)value.getValue((float)image.getHeight())));
     }
     if (bgcolor != null) {
       imageBuilder.backgroundColor(bgcolor);

@@ -90,6 +90,7 @@ public class NiftyVisitor extends NodeVisitor {
         blockElementStack.push(currentBlockElement);
       } else if (isImageTag(tag)) {
         ImageBuilder image = niftyBuilderFactory.createImageBuilder(
+            nifty.getRenderEngine().createImage(tag.getAttribute("src"), false),
             tag.getAttribute("src"),
             tag.getAttribute("align"),
             tag.getAttribute("width"),
