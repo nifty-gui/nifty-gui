@@ -14,44 +14,26 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.render.NiftyImage;
-import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 public class NiftyVisitorImageTest {
   private NiftyVisitor visitor;
   private NiftyBuilderFactory builderFactoryMock;
-  private NiftyImage image;
-  private NiftyRenderEngine renderEngine;
-  private Nifty nifty;
 
   @Before
   public void before() {
     builderFactoryMock = createMock(NiftyBuilderFactory.class);
-    image = createMock(NiftyImage.class);
-    replay(image);
-    renderEngine = createMock(NiftyRenderEngine.class);
-    nifty = createMock(Nifty.class);
-    expect(nifty.getRenderEngine()).andReturn(renderEngine);
-    replay(nifty);
-    visitor = new NiftyVisitor(nifty, builderFactoryMock, null);
+    visitor = new NiftyVisitor(null, builderFactoryMock, null);
   }
 
   @After
   public void after() {
     verify(builderFactoryMock);
-    verify(image);
-    verify(renderEngine);
-    verify(nifty);
   }
 
   @Test
   public void simpleBodyWithBasicImageSuccess() throws Exception {
-    expect(renderEngine.createImage("src", false)).andReturn(image);
-    replay(renderEngine);
-
     PanelBuilder bodyPanelBuilder = new PanelBuilder();
     ImageBuilder imageBuilder = new ImageBuilder();
 
