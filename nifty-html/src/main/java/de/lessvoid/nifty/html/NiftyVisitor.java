@@ -2,17 +2,18 @@ package de.lessvoid.nifty.html;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.visitors.NodeVisitor;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.spi.render.RenderFont;
 
 /**
  * A NodeVisitor for the HTML Parser project that will visit all HTML tags
@@ -20,24 +21,47 @@ import de.lessvoid.nifty.screen.Screen;
  * @author void
  */
 public class NiftyVisitor extends NodeVisitor {
+  // errors in processing are added to that list
   private List<String> errors = new ArrayList<String>();
+
+  // we keep a Nifty instance around to access some things
   private Nifty nifty;
+
+  // the PanelBuilder for the body tag
   private PanelBuilder bodyPanel;
-  private PanelBuilder paragraph;
+
+  // helper class to create new builders
+  private NiftyBuilderFactory niftyBuilderFactory;
+
+  // to allow nested block level elements later we must stack them
+  private Stack<PanelBuilder> blockElementStack = new Stack<PanelBuilder>();
+
+  // the current block level element
+  private PanelBuilder currentBlockElement;
+
+  // default font we use for generatin text elements
+  private String defaultFontName;
+  private RenderFont defaultFont; 
+
+  // current color
+  private String currentColor;
+/*
   private PanelBuilder table;
   private PanelBuilder tableRow;
   private PanelBuilder tableData;
-  private String currentColor;
-  private NiftyBuilderFactory niftyBuilderFactory;
-
+*/
   /**
    * Create the NiftyVisitor.
    * @param nifty the Nifty instance
    * @param niftyBuilderFactory a helper class to create Nifty Builders
    */
-  public NiftyVisitor(final Nifty nifty, final NiftyBuilderFactory niftyBuilderFactory) {
+  public NiftyVisitor(final Nifty nifty, final NiftyBuilderFactory niftyBuilderFactory, final String defaultFontName) {
     this.nifty = nifty;
     this.niftyBuilderFactory = niftyBuilderFactory;
+    this.defaultFontName = defaultFontName;
+    if (defaultFontName != null) {
+      this.defaultFont = nifty.createFont(defaultFontName);
+    }
   }
 
   /*
@@ -58,22 +82,25 @@ public class NiftyVisitor extends NodeVisitor {
     try {
       if (isBody(tag)) {
         // we'll add a main panel for the body which will be the parent element for everything we generate
-        // this way we can decide the childLayout and other properties of the body in here.
-        bodyPanel = niftyBuilderFactory.createPanelBuilder();
-        bodyPanel.width("100%");
-        bodyPanel.height("100%");
-        bodyPanel.childLayoutVertical();
+        // this way we can decide the childLayout and other properties of the body panel.
+        bodyPanel = niftyBuilderFactory.createBodyPanelBuilder();
       } else if (isParagraph(tag)) {
         assertBodyPanelNotNull();
-        paragraph = niftyBuilderFactory.createPanelBuilder();
-        paragraph.width("100%");
-        paragraph.childLayoutVertical();
-        /*
+        currentBlockElement = niftyBuilderFactory.createParagraphPanelBuilder();
+        blockElementStack.push(currentBlockElement);
       } else if (isImageTag(tag)) {
-        ImageBuilder image = niftyBuilderFactory.createImageBuilder();
-        image.filename(tag.getAttribute("src"));
-        addAttributes(image, tag);
-        mainPanel.image(image);
+        ImageBuilder image = niftyBuilderFactory.createImageBuilder(
+            tag.getAttribute("src"),
+            tag.getAttribute("align"),
+            tag.getAttribute("width"),
+            tag.getAttribute("height"),
+            tag.getAttribute("bgcolor"),
+            tag.getAttribute("vspace"));
+        bodyPanel.image(image);
+      } else if (isBreak(tag)) {
+        PanelBuilder breakPanelBuilder = niftyBuilderFactory.createBreakPanelBuilder(String.valueOf(defaultFont.getHeight()));
+        bodyPanel.panel(breakPanelBuilder);
+        /*
       } else if (isTableTag(tag)) {
         table = niftyBuilderFactory.createPanelBuilder();
         table.childLayoutVertical();
@@ -106,14 +133,19 @@ public class NiftyVisitor extends NodeVisitor {
   public void visitEndTag(final Tag tag) {
     try {
       if (isBody(tag)) {
-        // nothing to do when a body tag ends
+        // currently there is nothing to do when a body tag ends
       } else if (isParagraph(tag)) {
         assertBodyPanelNotNull();
-        if (paragraph.getElementBuilders().isEmpty()) {
-          paragraph.height("5"/*String.valueOf(nifty.getRenderEngine().createFont("aurulent-sans-16.fnt").getHeight())*/);
+        if (currentBlockElement.getElementBuilders().isEmpty()) {
+          currentBlockElement.height(String.valueOf(defaultFont.getHeight()));
         }
-        bodyPanel.panel(paragraph);
-        paragraph = null;
+        bodyPanel.panel(currentBlockElement);
+        blockElementStack.pop();
+        currentBlockElement = null;
+      } else if (isImageTag(tag)) {
+        // nothing to do
+      } else if (isBreak(tag)) {
+        // nothing to do
         /*
       } else if (isTableTag(tag)) {
         assertMainPanelNotNull();
@@ -134,6 +166,36 @@ public class NiftyVisitor extends NodeVisitor {
     }
   }
 
+  /*
+   * (non-Javadoc)
+   * @see org.htmlparser.visitors.NodeVisitor#visitStringNode(org.htmlparser.Text)
+   */
+  @Override
+  public void visitStringNode(final Text textNode) {
+    if (currentBlockElement != null) {
+      addToPanel(currentBlockElement, textNode);
+    }/* else if (tableData != null) {
+      addToPanel(tableData, textNode);
+    } else if (table != null) {
+      addToPanel(table, textNode);
+    } else if (tableRow != null) {
+      addToPanel(tableRow, textNode);
+    }*/
+  }
+
+  public ElementBuilder builder() throws Exception {
+    try {
+      assertBodyPanelNotNull();
+    } catch (Exception e) {
+      addError(e);
+    }
+
+    assertNoErrors();
+    return bodyPanel;
+  }
+
+  // private stuff
+
   private void addError(final Exception e) {
     if (!errors.contains(e.getMessage())) {
       errors.add(e.getMessage());
@@ -146,45 +208,9 @@ public class NiftyVisitor extends NodeVisitor {
     }
   }
 
-  public void visitStringNode(final Text textNode) {
-    if (paragraph != null) {
-      addToPanel(paragraph, textNode);
-    } else if (tableData != null) {
-      addToPanel(tableData, textNode);
-    } else if (table != null) {
-      addToPanel(table, textNode);
-    } else if (tableRow != null) {
-      addToPanel(tableRow, textNode);
-    }
-  }
-
   private void addToPanel(final PanelBuilder panelBuilder, final Text textNode) {
-    TextBuilder text = niftyBuilderFactory.createTextBuilder();
-    text.text(removeNewLine(textNode.getText()));
-    text.wrap(true);
-    text.textHAlignLeft();
-    text.textVAlignTop();
-    text.font("aurulent-sans-16.fnt");
-    text.width("100%");
-    if (currentColor != null) {
-      text.color(currentColor);
-    }
+    TextBuilder text = niftyBuilderFactory.createTextBuilder(textNode.getText(), defaultFontName, currentColor);
     panelBuilder.text(text);
-  }
-
-  private String removeNewLine(final String text) {
-    return text.replaceAll("\n", "");
-  }
-
-  public Element build(final Nifty nifty, final Screen screen, final Element parent) throws Exception {
-    try {
-      assertBodyPanelNotNull();
-    } catch (Exception e) {
-      addError(e);
-    }
-
-    assertNoErrors();
-    return bodyPanel.build(nifty, screen, parent);
   }
 
   private void assertNoErrors() throws Exception {
@@ -204,6 +230,10 @@ public class NiftyVisitor extends NodeVisitor {
 
   private boolean isParagraph(final Tag tag) {
     return "P".equals(tag.getTagName());
+  }
+
+  private boolean isBreak(final Tag tag) {
+    return "BR".equals(tag.getTagName());
   }
 
   private boolean isImageTag(final Tag tag) {
@@ -228,18 +258,6 @@ public class NiftyVisitor extends NodeVisitor {
 
   private boolean isColorTag(final Tag tag) {
     return "COLOR".equals(tag.getTagName());
-  }
-
-  private void addAttributes(final PanelBuilder panelBuilder, final Tag tag) {
-    if (tag.getAttribute("width") != null) {
-      panelBuilder.width(tag.getAttribute("width"));
-    }
-    if (tag.getAttribute("height") != null) {
-      panelBuilder.width(tag.getAttribute("height"));
-    }
-    if (tag.getAttribute("bgcolor") != null) {
-      panelBuilder.backgroundColor(tag.getAttribute("bgcolor"));
-    }
   }
 
   private void addAttributes(final ImageBuilder imageBuilder, final Tag tag) {
