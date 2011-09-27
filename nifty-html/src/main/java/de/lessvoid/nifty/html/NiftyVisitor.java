@@ -136,6 +136,7 @@ public class NiftyVisitor extends NodeVisitor {
         // currently there is nothing to do when a body tag ends
       } else if (isParagraph(tag)) {
         assertBodyPanelNotNull();
+        assertCurrentBlockElementNotNull();
         if (currentBlockElement.getElementBuilders().isEmpty()) {
           currentBlockElement.height(String.valueOf(defaultFont.getHeight()));
         }
@@ -205,6 +206,12 @@ public class NiftyVisitor extends NodeVisitor {
   private void assertBodyPanelNotNull() throws Exception {
     if (bodyPanel == null) {
       throw new Exception("This looks like HTML with a missing <body> tag");
+    }
+  }
+
+  private void assertCurrentBlockElementNotNull() throws Exception {
+    if (currentBlockElement == null) {
+      throw new Exception("This looks like broken HTML. currentBlockElement seems null. Maybe a duplicate close tag?");
     }
   }
 
