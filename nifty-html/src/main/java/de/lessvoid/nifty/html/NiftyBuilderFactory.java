@@ -66,6 +66,24 @@ public class NiftyBuilderFactory {
     return result;
   }
 
+  public PanelBuilder createTableTagPanelBuilder() {
+    PanelBuilder result = createPanelBuilder();
+    result.childLayoutVertical();
+    return result;
+  }
+
+  public PanelBuilder createTableRowPanelBuilder() {
+    PanelBuilder result = createPanelBuilder();
+    result.childLayoutHorizontal();
+    return result;
+  }
+
+  public PanelBuilder createTableDataPanelBuilder() {
+    PanelBuilder result = createPanelBuilder();
+    result.childLayoutVertical();
+    return result;
+  }
+
   PanelBuilder createPanelBuilder() {
     return new PanelBuilder();
   }

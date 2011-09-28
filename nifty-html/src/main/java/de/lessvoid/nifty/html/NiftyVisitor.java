@@ -45,11 +45,16 @@ public class NiftyVisitor extends NodeVisitor {
 
   // current color
   private String currentColor;
-/*
+
+  // table
   private PanelBuilder table;
+
+  // table row
   private PanelBuilder tableRow;
+
+  // table data
   private PanelBuilder tableData;
-*/
+
   /**
    * Create the NiftyVisitor.
    * @param nifty the Nifty instance
@@ -100,19 +105,13 @@ public class NiftyVisitor extends NodeVisitor {
       } else if (isBreak(tag)) {
         PanelBuilder breakPanelBuilder = niftyBuilderFactory.createBreakPanelBuilder(String.valueOf(defaultFont.getHeight()));
         bodyPanel.panel(breakPanelBuilder);
-        /*
       } else if (isTableTag(tag)) {
-        table = niftyBuilderFactory.createPanelBuilder();
-        table.childLayoutVertical();
-        addAttributes(table, tag);
+        table = niftyBuilderFactory.createTableTagPanelBuilder();
       } else if (isTableRowTag(tag)) {
-        tableRow = niftyBuilderFactory.createPanelBuilder();
-        tableRow.childLayoutHorizontal();
-        addAttributes(tableRow, tag);
+        tableRow = niftyBuilderFactory.createTableRowPanelBuilder();
       } else if (isTableDataTag(tag)) {
-        tableData = niftyBuilderFactory.createPanelBuilder();
-        tableData.childLayoutVertical();
-        addAttributes(tableData, tag);
+        tableData = niftyBuilderFactory.createTableDataPanelBuilder();
+        /*
       } else if (isColorTag(tag)) {
         String colorR = toHex(tag.getAttribute("r"));
         String colorG = toHex(tag.getAttribute("g"));
@@ -147,10 +146,9 @@ public class NiftyVisitor extends NodeVisitor {
         // nothing to do
       } else if (isBreak(tag)) {
         // nothing to do
-        /*
       } else if (isTableTag(tag)) {
-        assertMainPanelNotNull();
-        mainPanel.panel(table);
+        assertBodyPanelNotNull();
+        bodyPanel.panel(table);
         table = null;
       } else if (isTableRowTag(tag)) {
         table.panel(tableRow);
@@ -158,6 +156,7 @@ public class NiftyVisitor extends NodeVisitor {
       } else if (isTableDataTag(tag)) {
         tableRow.panel(tableData);
         tableData = null;
+        /*
       } else if (isColorTag(tag)) {
         currentColor = null;
         */
@@ -175,13 +174,9 @@ public class NiftyVisitor extends NodeVisitor {
   public void visitStringNode(final Text textNode) {
     if (currentBlockElement != null) {
       addToPanel(currentBlockElement, textNode);
-    }/* else if (tableData != null) {
+    } else if (tableData != null) {
       addToPanel(tableData, textNode);
-    } else if (table != null) {
-      addToPanel(table, textNode);
-    } else if (tableRow != null) {
-      addToPanel(tableRow, textNode);
-    }*/
+    }
   }
 
   public ElementBuilder builder() throws Exception {
@@ -265,19 +260,6 @@ public class NiftyVisitor extends NodeVisitor {
 
   private boolean isColorTag(final Tag tag) {
     return "COLOR".equals(tag.getTagName());
-  }
-
-  private void addAttributes(final ImageBuilder imageBuilder, final Tag tag) {
-    if (tag.getAttribute("width") != null) {
-      imageBuilder.width(tag.getAttribute("width"));
-    }
-    if (tag.getAttribute("height") != null) {
-      imageBuilder.width(tag.getAttribute("height"));
-    }
-    if (tag.getAttribute("bgcolor") != null) {
-      imageBuilder.backgroundColor(tag.getAttribute("bgcolor"));
-    }
-    imageBuilder.padding("2px");
   }
 
   private String toHex(final String str) {
