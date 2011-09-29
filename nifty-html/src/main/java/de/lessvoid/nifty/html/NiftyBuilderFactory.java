@@ -2,6 +2,7 @@ package de.lessvoid.nifty.html;
 
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.ElementBuilder.Align;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -66,21 +67,24 @@ public class NiftyBuilderFactory {
     return result;
   }
 
-  public PanelBuilder createTableTagPanelBuilder() {
+  public PanelBuilder createTableTagPanelBuilder(final String width, final String bgcolor, final String border, final String bordercolor) {
     PanelBuilder result = createPanelBuilder();
     result.childLayoutVertical();
+    addTableGeneralAttributes(width, bgcolor, border, bordercolor, result);
     return result;
   }
 
-  public PanelBuilder createTableRowPanelBuilder() {
+  public PanelBuilder createTableRowPanelBuilder(final String width, final String bgcolor, final String border, final String bordercolor) {
     PanelBuilder result = createPanelBuilder();
     result.childLayoutHorizontal();
+    addTableGeneralAttributes(width, bgcolor, border, bordercolor, result);
     return result;
   }
 
-  public PanelBuilder createTableDataPanelBuilder() {
+  public PanelBuilder createTableDataPanelBuilder(final String width, final String bgcolor, final String border, final String bordercolor) {
     PanelBuilder result = createPanelBuilder();
     result.childLayoutVertical();
+    addTableGeneralAttributes(width, bgcolor, border, bordercolor, result);
     return result;
   }
 
@@ -114,6 +118,28 @@ public class NiftyBuilderFactory {
       // default to left
       log.warning("Unknown align type [" + align + "] detected. Will default to Align.LEFT");
       return Align.Left;
+    }
+  }
+
+  private void addTableGeneralAttributes(
+      final String width,
+      final String bgcolor,
+      final String border,
+      final String bordercolor,
+      PanelBuilder result) {
+    if (width != null) {
+      result.width(width);
+    }
+    if (bgcolor != null) {
+      result.backgroundColor(bgcolor);
+    }
+    if (border != null) {
+      result.onActiveEffect(new EffectBuilder("border") {{
+        effectParameter("border", border);
+        if (bordercolor != null) {
+          effectParameter("color", bordercolor);
+        }
+      }});
     }
   }
 }

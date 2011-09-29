@@ -106,11 +106,26 @@ public class NiftyVisitor extends NodeVisitor {
         PanelBuilder breakPanelBuilder = niftyBuilderFactory.createBreakPanelBuilder(String.valueOf(defaultFont.getHeight()));
         bodyPanel.panel(breakPanelBuilder);
       } else if (isTableTag(tag)) {
-        table = niftyBuilderFactory.createTableTagPanelBuilder();
+        assertBodyPanelNotNull();
+        table = niftyBuilderFactory.createTableTagPanelBuilder(
+            tag.getAttribute("width"),
+            tag.getAttribute("bgcolor"),
+            tag.getAttribute("border"),
+            tag.getAttribute("bordercolor"));
       } else if (isTableRowTag(tag)) {
-        tableRow = niftyBuilderFactory.createTableRowPanelBuilder();
+        assertTableNotNull();
+        tableRow = niftyBuilderFactory.createTableRowPanelBuilder(
+            tag.getAttribute("width"),
+            tag.getAttribute("bgcolor"),
+            tag.getAttribute("border"),
+            tag.getAttribute("bordercolor"));
       } else if (isTableDataTag(tag)) {
-        tableData = niftyBuilderFactory.createTableDataPanelBuilder();
+        assertTableRowNotNull();
+        tableData = niftyBuilderFactory.createTableDataPanelBuilder(
+            tag.getAttribute("width"),
+            tag.getAttribute("bgcolor"),
+            tag.getAttribute("border"),
+            tag.getAttribute("bordercolor"));
         /*
       } else if (isColorTag(tag)) {
         String colorR = toHex(tag.getAttribute("r"));
@@ -151,9 +166,11 @@ public class NiftyVisitor extends NodeVisitor {
         bodyPanel.panel(table);
         table = null;
       } else if (isTableRowTag(tag)) {
+        assertTableNotNull();
         table.panel(tableRow);
         tableRow = null;
       } else if (isTableDataTag(tag)) {
+        assertTableRowNotNull();
         tableRow.panel(tableData);
         tableData = null;
         /*
@@ -183,7 +200,7 @@ public class NiftyVisitor extends NodeVisitor {
     try {
       assertBodyPanelNotNull();
     } catch (Exception e) {
-      addError(e);
+      addAsFirstError(e);
     }
 
     assertNoErrors();
@@ -198,9 +215,27 @@ public class NiftyVisitor extends NodeVisitor {
     }
   }
 
+  private void addAsFirstError(final Exception e) {
+    if (!errors.contains(e.getMessage())) {
+      errors.add(0, e.getMessage());
+    }
+  }
+
   private void assertBodyPanelNotNull() throws Exception {
     if (bodyPanel == null) {
       throw new Exception("This looks like HTML with a missing <body> tag");
+    }
+  }
+
+  private void assertTableNotNull() throws Exception {
+    if (table == null) {
+      throw new Exception("This looks like a <tr> element with a missing <table> tag");
+    }
+  }
+
+  private void assertTableRowNotNull() throws Exception {
+    if (table == null) {
+      throw new Exception("This looks like a <td> element with a missing <tr> tag");
     }
   }
 

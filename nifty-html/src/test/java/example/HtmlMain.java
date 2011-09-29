@@ -61,6 +61,10 @@ public class HtmlMain implements ScreenController {
     for (int i=1; i<51; i++) {
       items.add("src/test/resources/html/test-" + String.format("%02d", i) + ".html");
     }
+
+    // just add a couple of special tests
+    items.add("src/test/resources/html/test-41b.html");
+
     DropDown<String> htmlSelectDropDown = screen.findNiftyControl("html-select", DropDown.class);
     htmlSelectDropDown.addAllItems(items);
   }
@@ -73,6 +77,7 @@ public class HtmlMain implements ScreenController {
   public void onHtmlSelectChanged(final String id, final DropDownSelectionChangedEvent<String> event) {
     try {
       generator.generate(readHTMLFile(event.getSelection()), screen, screen.findElementByName("parent"));
+      System.out.println(screen.debugOutput());
     } catch (IOException e) {
       e.printStackTrace();
     } catch (Exception e) {
