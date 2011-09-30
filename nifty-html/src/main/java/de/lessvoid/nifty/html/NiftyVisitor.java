@@ -12,7 +12,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.spi.render.RenderFont;
 
 /**
@@ -45,6 +44,9 @@ public class NiftyVisitor extends NodeVisitor {
 
   // current color
   private String currentColor;
+
+  // we collect all text nodes into this string buffer
+  private StringBuffer currentText = new StringBuffer();
 
   // table
   private PanelBuilder table;
@@ -126,13 +128,11 @@ public class NiftyVisitor extends NodeVisitor {
             tag.getAttribute("bgcolor"),
             tag.getAttribute("border"),
             tag.getAttribute("bordercolor"));
-        /*
-      } else if (isColorTag(tag)) {
-        String colorR = toHex(tag.getAttribute("r"));
-        String colorG = toHex(tag.getAttribute("g"));
-        String colorB = toHex(tag.getAttribute("b"));
-        currentColor = "#" + colorR + colorG + colorB + "ff";
-        */
+      } else if (isFontTag(tag)) {
+        String color = tag.getAttribute("color");
+        if (color != null) {
+          currentColor = color;
+        }
       }
     } catch (Exception e) {
       addError(e);
@@ -151,6 +151,13 @@ public class NiftyVisitor extends NodeVisitor {
       } else if (isParagraph(tag)) {
         assertBodyPanelNotNull();
         assertCurrentBlockElementNotNull();
+
+        String textElement = currentText.toString();
+        if (textElement.length() > 0) {
+          addToPanel(currentBlockElement, textElement);
+          currentText.setLength(0);
+        }
+
         if (currentBlockElement.getElementBuilders().isEmpty()) {
           currentBlockElement.height(String.valueOf(defaultFont.getHeight()));
         }
@@ -171,12 +178,14 @@ public class NiftyVisitor extends NodeVisitor {
         tableRow = null;
       } else if (isTableDataTag(tag)) {
         assertTableRowNotNull();
+
+        addToPanel(tableData, currentText.toString());
+        currentText.setLength(0);
+
         tableRow.panel(tableData);
         tableData = null;
-        /*
-      } else if (isColorTag(tag)) {
+      } else if (isFontTag(tag)) {
         currentColor = null;
-        */
       }
     } catch (Exception e) {
       addError(e);
@@ -189,11 +198,21 @@ public class NiftyVisitor extends NodeVisitor {
    */
   @Override
   public void visitStringNode(final Text textNode) {
-    if (currentBlockElement != null) {
-      addToPanel(currentBlockElement, textNode);
-    } else if (tableData != null) {
-      addToPanel(tableData, textNode);
+    System.out.println(textNode);
+    if (tableData != null) {
+      appendText(textNode);
+    } else if (currentBlockElement != null) {
+      appendText(textNode);
     }
+  }
+
+  private void appendText(final Text textNode) {
+    if (currentColor != null) {
+      currentText.append("\\");
+      currentText.append(currentColor);
+      currentText.append("#");
+    }
+    currentText.append(textNode.getText());
   }
 
   public ElementBuilder builder() throws Exception {
@@ -245,9 +264,8 @@ public class NiftyVisitor extends NodeVisitor {
     }
   }
 
-  private void addToPanel(final PanelBuilder panelBuilder, final Text textNode) {
-    TextBuilder text = niftyBuilderFactory.createTextBuilder(textNode.getText(), defaultFontName, currentColor);
-    panelBuilder.text(text);
+  private void addToPanel(final PanelBuilder panelBuilder, final String text) {
+    panelBuilder.text(niftyBuilderFactory.createTextBuilder(text, defaultFontName, currentColor));
   }
 
   private void assertNoErrors() throws Exception {
@@ -293,8 +311,8 @@ public class NiftyVisitor extends NodeVisitor {
     return "TH".equals(tag.getTagName());
   }
 
-  private boolean isColorTag(final Tag tag) {
-    return "COLOR".equals(tag.getTagName());
+  private boolean isFontTag(final Tag tag) {
+    return "FONT".equals(tag.getTagName());
   }
 
   private String toHex(final String str) {

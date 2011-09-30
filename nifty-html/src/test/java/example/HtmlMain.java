@@ -77,7 +77,9 @@ public class HtmlMain implements ScreenController {
   public void onHtmlSelectChanged(final String id, final DropDownSelectionChangedEvent<String> event) {
     try {
       generator.generate(readHTMLFile(event.getSelection()), screen, screen.findElementByName("parent"));
-      System.out.println(screen.debugOutput());
+
+      // for debugging purpose we could output the screen as a text structure
+//      System.out.println(screen.debugOutput());
     } catch (IOException e) {
       e.printStackTrace();
     } catch (Exception e) {

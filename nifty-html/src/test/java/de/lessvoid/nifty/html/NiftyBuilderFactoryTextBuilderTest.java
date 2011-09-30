@@ -36,6 +36,8 @@ public class NiftyBuilderFactoryTextBuilderTest {
   public void testCreateTextBuilderWithoutColor() {
     textBuilderMock.text("huhu");
     textBuilderMock.wrap(true);
+    textBuilderMock.alignLeft();
+    textBuilderMock.valignTop();
     textBuilderMock.textHAlignLeft();
     textBuilderMock.textVAlignTop();
     textBuilderMock.font("fontname");
@@ -47,8 +49,10 @@ public class NiftyBuilderFactoryTextBuilderTest {
 
   @Test
   public void testCreateTextBuilderWithoutColorWithNewLine() {
-    textBuilderMock.text("huhu test");
+    textBuilderMock.text("huhutest");
     textBuilderMock.wrap(true);
+    textBuilderMock.alignLeft();
+    textBuilderMock.valignTop();
     textBuilderMock.textHAlignLeft();
     textBuilderMock.textVAlignTop();
     textBuilderMock.font("fontname");

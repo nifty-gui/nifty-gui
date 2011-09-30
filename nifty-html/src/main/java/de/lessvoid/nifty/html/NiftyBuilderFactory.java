@@ -30,6 +30,8 @@ public class NiftyBuilderFactory {
     TextBuilder textBuilder = createTextBuilder();
     textBuilder.text(removeNewLine(text));
     textBuilder.wrap(true);
+    textBuilder.alignLeft();
+    textBuilder.valignTop();
     textBuilder.textHAlignLeft();
     textBuilder.textVAlignTop();
     textBuilder.font(defaultFontName);
@@ -101,7 +103,7 @@ public class NiftyBuilderFactory {
   }
 
   private String removeNewLine(final String text) {
-    return text.replaceAll("\n", " ");
+    return text.replaceAll("\n", "").replaceAll("\t", "");
   }
 
   private Align translateAlign(final String align) {
@@ -110,9 +112,6 @@ public class NiftyBuilderFactory {
     } else if ("right".equalsIgnoreCase(align)) {
         return Align.Right;
     } else if ("middle".equalsIgnoreCase(align)) {
-      return Align.Center;
-    // TODO: "center" is not really supported in HTML http://de.selfhtml.org/html/referenz/attribute.htm#img
-    } else if ("center".equalsIgnoreCase(align)) {
       return Align.Center;
     } else {
       // default to left

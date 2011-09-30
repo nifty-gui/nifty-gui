@@ -20,6 +20,9 @@ public class NiftyHtmlGenerator {
    */
   public NiftyHtmlGenerator(final Nifty nifty) {
     this.nifty = nifty;
+
+    // we could set this to true for debug purpose
+    this.nifty.setDebugOptionPanelColors(false);
   }
 
   /**
