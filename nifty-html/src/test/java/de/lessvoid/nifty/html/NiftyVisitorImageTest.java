@@ -24,7 +24,7 @@ public class NiftyVisitorImageTest {
   @Before
   public void before() {
     builderFactoryMock = createMock(NiftyBuilderFactory.class);
-    visitor = new NiftyVisitor(null, builderFactoryMock, null);
+    visitor = new NiftyVisitor(null, builderFactoryMock, null, null);
   }
 
   @After

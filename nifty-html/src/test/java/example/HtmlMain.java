@@ -53,6 +53,8 @@ public class HtmlMain implements ScreenController {
     this.screen = screen;
 
     generator = new NiftyHtmlGenerator(nifty);
+    generator.setDefaultFont("aurulent-sans-16.fnt");
+    generator.setDefaultBoldFont("aurulent-sans-16-bold.fnt");
   }
 
   @Override

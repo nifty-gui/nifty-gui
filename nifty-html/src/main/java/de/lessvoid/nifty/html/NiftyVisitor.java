@@ -40,10 +40,14 @@ public class NiftyVisitor extends NodeVisitor {
 
   // default font we use for generatin text elements
   private String defaultFontName;
+  private String defaultFontBoldName;
   private RenderFont defaultFont; 
 
   // current color
   private String currentColor;
+
+  // this will be set to a different font name when a corresponding tag is being processed
+  private String differentFont;
 
   // we collect all text nodes into this string buffer
   private StringBuffer currentText = new StringBuffer();
@@ -62,10 +66,11 @@ public class NiftyVisitor extends NodeVisitor {
    * @param nifty the Nifty instance
    * @param niftyBuilderFactory a helper class to create Nifty Builders
    */
-  public NiftyVisitor(final Nifty nifty, final NiftyBuilderFactory niftyBuilderFactory, final String defaultFontName) {
+  public NiftyVisitor(final Nifty nifty, final NiftyBuilderFactory niftyBuilderFactory, final String defaultFontName, final String defaultFontBoldName) {
     this.nifty = nifty;
     this.niftyBuilderFactory = niftyBuilderFactory;
     this.defaultFontName = defaultFontName;
+    this.defaultFontBoldName = defaultFontBoldName;
     if (defaultFontName != null) {
       this.defaultFont = nifty.createFont(defaultFontName);
     }
@@ -133,6 +138,8 @@ public class NiftyVisitor extends NodeVisitor {
         if (color != null) {
           currentColor = color;
         }
+      } else if (isStrongTag(tag)) {
+        differentFont = defaultFontBoldName;
       }
     } catch (Exception e) {
       addError(e);
@@ -154,7 +161,7 @@ public class NiftyVisitor extends NodeVisitor {
 
         String textElement = currentText.toString();
         if (textElement.length() > 0) {
-          addToPanel(currentBlockElement, textElement);
+          addTextElement(currentBlockElement, textElement);
           currentText.setLength(0);
         }
 
@@ -164,6 +171,7 @@ public class NiftyVisitor extends NodeVisitor {
         bodyPanel.panel(currentBlockElement);
         blockElementStack.pop();
         currentBlockElement = null;
+        differentFont = null;
       } else if (isImageTag(tag)) {
         // nothing to do
       } else if (isBreak(tag)) {
@@ -179,11 +187,12 @@ public class NiftyVisitor extends NodeVisitor {
       } else if (isTableDataTag(tag)) {
         assertTableRowNotNull();
 
-        addToPanel(tableData, currentText.toString());
+        addTextElement(tableData, currentText.toString());
         currentText.setLength(0);
 
         tableRow.panel(tableData);
         tableData = null;
+        differentFont = null;
       } else if (isFontTag(tag)) {
         currentColor = null;
       }
@@ -198,7 +207,6 @@ public class NiftyVisitor extends NodeVisitor {
    */
   @Override
   public void visitStringNode(final Text textNode) {
-    System.out.println(textNode);
     if (tableData != null) {
       appendText(textNode);
     } else if (currentBlockElement != null) {
@@ -264,8 +272,12 @@ public class NiftyVisitor extends NodeVisitor {
     }
   }
 
-  private void addToPanel(final PanelBuilder panelBuilder, final String text) {
-    panelBuilder.text(niftyBuilderFactory.createTextBuilder(text, defaultFontName, currentColor));
+  private void addTextElement(final PanelBuilder panelBuilder, final String text) {
+    String font = defaultFontName;
+    if (differentFont != null) {
+      font = differentFont;
+    }
+    panelBuilder.text(niftyBuilderFactory.createTextBuilder(text, font, currentColor));
   }
 
   private void assertNoErrors() throws Exception {
@@ -307,12 +319,12 @@ public class NiftyVisitor extends NodeVisitor {
     return "TD".equals(tag.getTagName());
   }
 
-  private boolean isTableHeaderTag(final Tag tag) {
-    return "TH".equals(tag.getTagName());
-  }
-
   private boolean isFontTag(final Tag tag) {
     return "FONT".equals(tag.getTagName());
+  }
+
+  private boolean isStrongTag(final Tag tag) {
+    return "STRONG".equals(tag.getTagName());
   }
 
   private String toHex(final String str) {

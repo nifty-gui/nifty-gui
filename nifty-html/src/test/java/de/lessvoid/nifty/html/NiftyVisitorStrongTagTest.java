@@ -21,7 +21,7 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.spi.render.RenderFont;
 
-public class NiftyVisitorWithDefaultFontTest {
+public class NiftyVisitorStrongTagTest {
   private NiftyVisitor visitor;
   private Nifty niftyMock;
   private NiftyBuilderFactory builderFactoryMock;
@@ -47,38 +47,6 @@ public class NiftyVisitorWithDefaultFontTest {
   }
 
   @Test
-  public void emptyParagraphSuccess() throws Exception {
-    expect(defaultFont.getHeight()).andReturn(12);
-    replay(defaultFont);
-
-    PanelBuilder bodyPanelBuilder = new PanelBuilder();
-    PanelBuilder paragraphPanelBuilder = new PanelBuilder();
-
-    expect(builderFactoryMock.createBodyPanelBuilder()).andReturn(bodyPanelBuilder);
-    expect(builderFactoryMock.createParagraphPanelBuilder()).andReturn(paragraphPanelBuilder);
-    replay(builderFactoryMock);
-
-    // create body
-    BodyTag bodyTag = new BodyTag();
-    visitor.visitTag(bodyTag);
-
-      // create paragraph
-      ParagraphTag p = new ParagraphTag();
-      visitor.visitTag(p);
-      visitor.visitEndTag(p);
-
-    visitor.visitEndTag(bodyTag);
-
-    ElementBuilder builder = visitor.builder();
-    assertEquals(bodyPanelBuilder, builder);
-    assertEquals(1, builder.getElementBuilders().size());
-    assertEquals(paragraphPanelBuilder, builder.getElementBuilders().get(0));
-
-    // empty paragraph (one without any child elements) gets a default height
-    assertEquals("12", paragraphPanelBuilder.get("height"));
-  }
-
-  @Test
   public void simpleTextParagraphSuccess() throws Exception {
     replay(defaultFont);
 
@@ -88,7 +56,7 @@ public class NiftyVisitorWithDefaultFontTest {
 
     expect(builderFactoryMock.createBodyPanelBuilder()).andReturn(bodyPanelBuilder);
     expect(builderFactoryMock.createParagraphPanelBuilder()).andReturn(paragraphPanelBuilder);
-    expect(builderFactoryMock.createTextBuilder("text node", "aurulent-sans-16.fnt", null)).andReturn(textBuilder);
+    expect(builderFactoryMock.createTextBuilder("text node", "aurulent-sans-bold-16.fnt", null)).andReturn(textBuilder);
     replay(builderFactoryMock);
 
     // create body
@@ -99,9 +67,16 @@ public class NiftyVisitorWithDefaultFontTest {
       ParagraphTag p = new ParagraphTag();
       visitor.visitTag(p);
 
-        // create text node
-        Text textNode = new TextNode("text node");
-        visitor.visitStringNode(textNode);
+        // create strong node
+        TagNode strongNode = new TagNode();
+        strongNode.setTagName("strong");
+        visitor.visitTag(strongNode);
+        
+          // create text node
+          Text textNode = new TextNode("text node");
+          visitor.visitStringNode(textNode);
+
+        visitor.visitEndTag(strongNode);
 
       // end paragraph
       visitor.visitEndTag(p);
@@ -116,34 +91,5 @@ public class NiftyVisitorWithDefaultFontTest {
 
     assertEquals(1, paragraphPanelBuilder.getElementBuilders().size());
     assertEquals(textBuilder, paragraphPanelBuilder.getElementBuilders().get(0));
-  }
-
-  @Test
-  public void simpleBodyWithBR() throws Exception {
-    expect(defaultFont.getHeight()).andReturn(12);
-    replay(defaultFont);
-
-    PanelBuilder bodyPanelBuilder = new PanelBuilder();
-    PanelBuilder panelBuilder = new PanelBuilder();
-
-    expect(builderFactoryMock.createBodyPanelBuilder()).andReturn(bodyPanelBuilder);
-    expect(builderFactoryMock.createBreakPanelBuilder("12")).andReturn(panelBuilder);
-    replay(builderFactoryMock);
-
-    BodyTag bodyTag = new BodyTag();
-    visitor.visitTag(bodyTag);
-
-      // add BR
-      TagNode breakTag = new TagNode();
-      breakTag.setTagName("br");
-      visitor.visitTag(breakTag);
-      visitor.visitEndTag(breakTag);
-
-    // close body
-    visitor.visitEndTag(bodyTag);
-
-    assertEquals(bodyPanelBuilder, visitor.builder());
-    assertEquals(1, bodyPanelBuilder.getElementBuilders().size());
-    assertEquals(panelBuilder, bodyPanelBuilder.getElementBuilders().get(0));
   }
 }

@@ -13,6 +13,8 @@ import de.lessvoid.nifty.screen.Screen;
  */
 public class NiftyHtmlGenerator {
   private Nifty nifty;
+  private String defaultFontName = "aurulent-sans-16.fnt";
+  private String defaultBoldFontName = "aurulent-sans-16-bold.fnt";
 
   /**
    * Create the NiftyHtmlGenerator.
@@ -23,6 +25,22 @@ public class NiftyHtmlGenerator {
 
     // we could set this to true for debug purpose
     this.nifty.setDebugOptionPanelColors(false);
+  }
+
+  /**
+   * Change the default font to be used.
+   * @param name
+   */
+  public void setDefaultFont(final String name) {
+    this.defaultFontName = name;
+  }
+
+  /**
+   * Change the default bold font to be used.
+   * @param name
+   */
+  public void setDefaultBoldFont(final String name) {
+    this.defaultBoldFontName = name;
   }
 
   /**
@@ -37,7 +55,7 @@ public class NiftyHtmlGenerator {
 
     Parser parser = Parser.createParser(html, "ISO-8859-1");
 
-    NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory(), "aurulent-sans-16.fnt");
+    NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory(), defaultFontName, defaultBoldFontName);
     parser.visitAllNodesWith(visitor);
 
     ElementBuilder builder = visitor.builder();
