@@ -49,7 +49,7 @@ public class NiftyBuilderFactoryTextBuilderTest {
 
   @Test
   public void testCreateTextBuilderWithoutColorWithNewLine() {
-    textBuilderMock.text("huhutest");
+    textBuilderMock.text("huhu\ntest");
     textBuilderMock.wrap(true);
     textBuilderMock.alignLeft();
     textBuilderMock.valignTop();

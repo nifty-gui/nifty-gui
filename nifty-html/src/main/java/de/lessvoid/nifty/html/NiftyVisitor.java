@@ -110,8 +110,12 @@ public class NiftyVisitor extends NodeVisitor {
             tag.getAttribute("vspace"));
         bodyPanel.image(image);
       } else if (isBreak(tag)) {
-        PanelBuilder breakPanelBuilder = niftyBuilderFactory.createBreakPanelBuilder(String.valueOf(defaultFont.getHeight()));
-        bodyPanel.panel(breakPanelBuilder);
+        if (currentBlockElement != null) {
+          currentText.append("\n");
+        } else {
+          PanelBuilder breakPanelBuilder = niftyBuilderFactory.createBreakPanelBuilder(String.valueOf(defaultFont.getHeight()));
+          bodyPanel.panel(breakPanelBuilder);
+        }
       } else if (isTableTag(tag)) {
         assertBodyPanelNotNull();
         table = niftyBuilderFactory.createTableTagPanelBuilder(
@@ -220,7 +224,7 @@ public class NiftyVisitor extends NodeVisitor {
       currentText.append(currentColor);
       currentText.append("#");
     }
-    currentText.append(textNode.getText());
+    currentText.append(removeNewLine(textNode.getText()));
   }
 
   public ElementBuilder builder() throws Exception {
@@ -325,6 +329,10 @@ public class NiftyVisitor extends NodeVisitor {
 
   private boolean isStrongTag(final Tag tag) {
     return "STRONG".equals(tag.getTagName());
+  }
+
+  private String removeNewLine(final String text) {
+    return text.replaceAll("\n", "").replaceAll("\t", "");
   }
 
   private String toHex(final String str) {

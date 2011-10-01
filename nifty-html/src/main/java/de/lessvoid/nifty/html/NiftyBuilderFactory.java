@@ -28,7 +28,7 @@ public class NiftyBuilderFactory {
 
   public TextBuilder createTextBuilder(final String text, final String defaultFontName, final String color) {
     TextBuilder textBuilder = createTextBuilder();
-    textBuilder.text(removeNewLine(text));
+    textBuilder.text(text);
     textBuilder.wrap(true);
     textBuilder.alignLeft();
     textBuilder.valignTop();
@@ -100,10 +100,6 @@ public class NiftyBuilderFactory {
 
   ImageBuilder createImageBuilder() {
     return new ImageBuilder();
-  }
-
-  private String removeNewLine(final String text) {
-    return text.replaceAll("\n", "").replaceAll("\t", "");
   }
 
   private Align translateAlign(final String align) {
