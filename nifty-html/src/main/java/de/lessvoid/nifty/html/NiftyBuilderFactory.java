@@ -2,6 +2,7 @@ package de.lessvoid.nifty.html;
 
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.ElementBuilder.Align;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -27,8 +28,10 @@ public class NiftyBuilderFactory {
 
   public TextBuilder createTextBuilder(final String text, final String defaultFontName, final String color) {
     TextBuilder textBuilder = createTextBuilder();
-    textBuilder.text(removeNewLine(text));
+    textBuilder.text(text);
     textBuilder.wrap(true);
+    textBuilder.alignLeft();
+    textBuilder.valignTop();
     textBuilder.textHAlignLeft();
     textBuilder.textVAlignTop();
     textBuilder.font(defaultFontName);
@@ -66,6 +69,27 @@ public class NiftyBuilderFactory {
     return result;
   }
 
+  public PanelBuilder createTableTagPanelBuilder(final String width, final String bgcolor, final String border, final String bordercolor) {
+    PanelBuilder result = createPanelBuilder();
+    result.childLayoutVertical();
+    addTableGeneralAttributes(width, bgcolor, border, bordercolor, result);
+    return result;
+  }
+
+  public PanelBuilder createTableRowPanelBuilder(final String width, final String bgcolor, final String border, final String bordercolor) {
+    PanelBuilder result = createPanelBuilder();
+    result.childLayoutHorizontal();
+    addTableGeneralAttributes(width, bgcolor, border, bordercolor, result);
+    return result;
+  }
+
+  public PanelBuilder createTableDataPanelBuilder(final String width, final String bgcolor, final String border, final String bordercolor) {
+    PanelBuilder result = createPanelBuilder();
+    result.childLayoutVertical();
+    addTableGeneralAttributes(width, bgcolor, border, bordercolor, result);
+    return result;
+  }
+
   PanelBuilder createPanelBuilder() {
     return new PanelBuilder();
   }
@@ -78,10 +102,6 @@ public class NiftyBuilderFactory {
     return new ImageBuilder();
   }
 
-  private String removeNewLine(final String text) {
-    return text.replaceAll("\n", " ");
-  }
-
   private Align translateAlign(final String align) {
     if ("left".equalsIgnoreCase(align)) {
       return Align.Left;
@@ -89,13 +109,32 @@ public class NiftyBuilderFactory {
         return Align.Right;
     } else if ("middle".equalsIgnoreCase(align)) {
       return Align.Center;
-    // TODO: "center" is not really supported in HTML http://de.selfhtml.org/html/referenz/attribute.htm#img
-    } else if ("center".equalsIgnoreCase(align)) {
-      return Align.Center;
     } else {
       // default to left
       log.warning("Unknown align type [" + align + "] detected. Will default to Align.LEFT");
       return Align.Left;
+    }
+  }
+
+  private void addTableGeneralAttributes(
+      final String width,
+      final String bgcolor,
+      final String border,
+      final String bordercolor,
+      PanelBuilder result) {
+    if (width != null) {
+      result.width(width);
+    }
+    if (bgcolor != null) {
+      result.backgroundColor(bgcolor);
+    }
+    if (border != null) {
+      result.onActiveEffect(new EffectBuilder("border") {{
+        effectParameter("border", border);
+        if (bordercolor != null) {
+          effectParameter("color", bordercolor);
+        }
+      }});
     }
   }
 }

@@ -50,7 +50,7 @@ public class NiftyBuilderFactoryImageBuilderTest {
     imageBuilderMock.align(Align.Center);
     replay(imageBuilderMock);
 
-    assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", "center", "100", "100", "bgcolor", null));
+    assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", "middle", "100", "100", "bgcolor", null));
   }
 
   @Test
@@ -62,7 +62,7 @@ public class NiftyBuilderFactoryImageBuilderTest {
     imageBuilderMock.align(Align.Center);
     replay(imageBuilderMock);
 
-    assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", "center", "100%", "100%", "bgcolor", null));
+    assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", "middle", "100%", "100%", "bgcolor", null));
   }
 
   @Test
@@ -73,11 +73,6 @@ public class NiftyBuilderFactoryImageBuilderTest {
   @Test
   public void testCreateImageBuilderAlignRight() {
     performAlignTest(Align.Right, "right");
-  }
-
-  @Test
-  public void testCreateImageBuilderAlignCenter() {
-    performAlignTest(Align.Center, "center");
   }
 
   @Test

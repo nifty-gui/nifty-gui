@@ -36,7 +36,7 @@ public class NiftyVisitorWithDefaultFontTest {
     expect(niftyMock.createFont("aurulent-sans-16.fnt")).andReturn(defaultFont);
     replay(niftyMock);
 
-    visitor = new NiftyVisitor(niftyMock, builderFactoryMock, "aurulent-sans-16.fnt");
+    visitor = new NiftyVisitor(niftyMock, builderFactoryMock, "aurulent-sans-16.fnt", "aurulent-sans-bold-16.fnt");
   }
 
   @After

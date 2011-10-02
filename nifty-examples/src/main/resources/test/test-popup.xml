@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+  <useStyles filename="grey-style/nifty-grey-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <screen id="start" controller="de.lessvoid.nifty.examples.test.TestScreen">
+    <layer id="stuff" childLayout="horizontal">
+      <panel width="50%" height="50%w" valign="bottom" backgroundColor="#f0ff" visibleToMouse="true">
+        <interact onClick="popup()"/>
+      </panel>
+    </layer>
+  </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- sure to exit popup -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <popup id="popupExit" childLayout="center" backgroundColor="#0001">
+    <panel style="nifty-panel" childLayout="center" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">
+      <panel childLayout="vertical" align="center" valign="center">
+        <panel childLayout="center" height="70%" width="100%">
+          <text text="Really want to Exit?" style="base-font" align="center" valign="center" color="#000f"/>
+        </panel>
+        <panel childLayout="horizontal" align="center" height="30%">
+          <panel childLayout="center" width="50%">
+            <control id="yesButton" name="button" label="Yes" width="100px" align="center">
+              <interact onClick="popupExit(yes)" /> 
+            </control>
+          </panel>
+          <panel childLayout="center" width="50%">
+            <control id="noButton" name="button" label="No" width="100px" align="center">
+              <interact onClick="popupExit(no)" /> 
+            </control>
+          </panel>
+        </panel>
+      </panel>
+    </panel>
+  </popup>
+</nifty>

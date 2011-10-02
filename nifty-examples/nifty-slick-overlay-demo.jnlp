@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://nifty-gui.sourceforge.net/webstart/" href="nifty-slick-overlay-demo.jnlp">
+  <information>
+    <title>nifty-slick-overlay-demo</title>
+    <vendor>void</vendor>
+    <homepage href="http://nifty-gui.sourceforge.net"/>
+    <description>nifty-slick-overlay-demo</description>
+    <description kind="short">nifty-slick-overlay-demo</description>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+  <resources>
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <jar href="slick-webstart-complete-with-dependencies.jar" main="true" />
+  </resources>
+  <resources os="Windows">
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <nativelib href="lib/lwjgl-2.0.1/lwjgl-win32-native.jar" />
+  </resources>
+  <resources os="Linux">
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <nativelib href="lib/lwjgl-2.0.1/lwjgl-linux-native.jar" />
+  </resources>
+  <resources os="Solaris">
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <nativelib href="lib/lwjgl-2.0.1/lwjgl-solaris-native.jar" />
+  </resources>
+  <resources os="Mac OS">
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <nativelib href="lib/lwjgl-2.0.1/lwjgl-macosx-native.jar" />
+  </resources>
+  <application-desc/>
+</jnlp>
