@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+  <style id="base-font-style">
+    <attributes font="menu.fnt" />
+  </style>
+
+  <style id="base-label-style" base="base-font-style">
+    <attributes align="center" valign="center" backgroundColor="#f00f"/>
+  </style>
+
+  <style id="base-label-style-center-with-effect" base="base-label-style">
+    <attributes align="center"/>
+    <effect>
+      <onStartScreen name="move" direction="right" mode="in" length="800" />
+    </effect>
+  </style>
+
+  <screen id="start" controller="de.lessvoid.nifty.examples.style.label.LabelStartScreen">
+    <layer id="layer" backgroundColor="#206f" childLayout="vertical">
+      <text id="label1" style="base-label-style-center-with-effect" text="base-label-style-center-with-effect" />
+      <text id="label2" style="base-label-style" text="base-label-style" />
+      <text id="label3" style="base-label-style" text="base-label-style (custom color and effects)" backgroundColor="#0f0f" >
+        <effect>
+          <onStartScreen name="move" direction="bottom" mode="in" length="800" />
+        </effect>
+      </text>
+      <text id="label4" style="base-label-style-center-with-effect" text="base-label-style-center-with-effect (+ custom effects)" backgroundColor="#0f0f" >
+        <effect>
+          <onStartScreen name="move" direction="bottom" mode="in" length="800" />
+        </effect>
+      </text>
+    </layer>
+  </screen>
+</nifty>

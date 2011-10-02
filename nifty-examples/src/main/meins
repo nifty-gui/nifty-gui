@@ -1,0 +1,30 @@
+#
+#Sun Apr 27 23:00:20 CEST 2008
+effect1.top.red=255
+texture.width=512
+effect0.kernelsize=3.0
+font.size=42
+padding.bottom=2
+font.bold=true
+texture.height=512
+padding.left=0
+padding.advance=2
+font.name=Tahoma
+effect1.top.green=255
+charset.name=void
+effect1.bottom.green=102
+effect0.distance=3.0
+effect0.green=0
+font.italic=true
+effect1.bottom.blue=102
+effects.count=2
+effect0.name=BlurShadowEffect (jos)
+effect1.top.blue=255
+effect0.blue=0
+padding.right=2
+effect0.red=0
+effect0.opacity=0.5
+effect0.passes=1.0
+padding.top=1
+effect1.name=Gradient Effect
+effect1.bottom.red=102
