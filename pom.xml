@@ -18,6 +18,7 @@
     <module>nifty-soundsystem-openal</module>
     <module>nifty-soundsystem-pauls-sound</module>
     <module>nifty-html</module>
+    <module>nifty-examples</module>
   </modules>
   <developers>
     <developer>
