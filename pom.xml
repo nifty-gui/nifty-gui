@@ -5,14 +5,14 @@
   <name>nifty-default-controls-examples</name>
   <version>1.3.1-SNAPSHOT</version>
   <url>http://nifty-gui.sourceforge.net/nifty-default-controls-examples/project-info.html</url>
-  <properties>
-  	<nifty.version>1.3.1-SNAPSHOT</nifty.version>
-  </properties>
   <scm>
-    <connection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-default-controls-examples/trunk</connection>
-    <developerConnection>scm:svn:https://nifty-gui.svn.sourceforge.net/svnroot/nifty-gui/nifty-default-controls-examples/trunk</developerConnection>
-    <url>scm:svn:http://nifty-gui.svn.sourceforge.net/viewvc/nifty-gui/nifty-default-controls-examples</url>
+    <connection>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-default-controls-examples</connection>
+    <developerConnection>scm:git:ssh://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-default-controls-examples</developerConnection>
+    <url>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty-default-controls-examples</url>
   </scm>
+  <properties>
+    <nifty.version>1.3.1-SNAPSHOT</nifty.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>lessvoid</groupId>
@@ -40,7 +40,6 @@
       <version>${nifty.version}</version>
     </dependency>
   </dependencies>
-
   <build>
     <extensions>
       <extension>
@@ -49,7 +48,6 @@
         <version>1.0-beta-7</version>
       </extension>
     </extensions>
-
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -107,14 +105,12 @@
         </configuration>
       </plugin>
     </plugins>
-
     <resources>
       <resource>
         <directory>src/main/resources</directory>
       </resource>
     </resources>
   </build>
-
   <distributionManagement>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
@@ -125,7 +121,6 @@
       <url>sftp://web.sourceforge.net/home/project-web/nifty-gui/htdocs/nifty-default-controls-examples</url>
     </site>
   </distributionManagement>
-
   <repositories>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
