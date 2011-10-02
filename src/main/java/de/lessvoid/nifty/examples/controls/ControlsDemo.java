@@ -28,6 +28,7 @@ import de.lessvoid.nifty.examples.controls.dropdown.DropDownDialogControlDefinit
 import de.lessvoid.nifty.examples.controls.listbox.ListBoxDialogControlDefinition;
 import de.lessvoid.nifty.examples.controls.scrollpanel.ScrollPanelDialogControlDefinition;
 import de.lessvoid.nifty.examples.controls.sliderandscrollbar.SliderAndScrollbarDialogControlDefinition;
+import de.lessvoid.nifty.examples.controls.tabs.TabsControlDialogDefinition;
 import de.lessvoid.nifty.examples.controls.textfield.TextFieldDialogControlDefinition;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.DefaultScreenController;
@@ -66,6 +67,7 @@ public class ControlsDemo {
     DropDownDialogControlDefinition.register(nifty);
     ScrollPanelDialogControlDefinition.register(nifty);
     ChatControlDialogDefinition.register(nifty);
+    TabsControlDialogDefinition.register(nifty);
     TextFieldDialogControlDefinition.register(nifty);
     SliderAndScrollbarDialogControlDefinition.register(nifty);
     DragAndDropDialogDefinition.register(nifty);
@@ -225,6 +227,7 @@ public class ControlsDemo {
           "menuButtonSlider", "dialogSliderAndScrollbar",
           "menuButtonScrollPanel", "dialogScrollPanel",
           "menuButtonChatControl", "dialogChatControl",
+          "menuButtonTabsControl", "dialogTabsControl",
           "menuButtonDragAndDrop", "dialogDragAndDrop"
       ));
       inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping"); // this will enable Keyboard events for the screen controller
@@ -249,6 +252,8 @@ public class ControlsDemo {
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonChatControl", "ChatControl", "Chat Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
           panel(builders.hspacer("10px"));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonTabsControl", "TabsControl", "Tabs Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonDragAndDrop", "Drag and Drop", "Drag and Drop demonstration\n\nDrag and Drop has been extended with Nifty 1.3"));
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonCredits", "?", "Credits\n\nCredits and Thanks!", "25px"));
@@ -264,6 +269,7 @@ public class ControlsDemo {
           control(new ControlBuilder("dialogDropDown", DropDownDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogScrollPanel", ScrollPanelDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogChatControl", ChatControlDialogDefinition.NAME));
+          control(new ControlBuilder("dialogTabsControl", TabsControlDialogDefinition.NAME));
           control(new ControlBuilder("dialogDragAndDrop", DragAndDropDialogDefinition.NAME));
         }});
       }});
