@@ -34,6 +34,11 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
+  public String getFontname(final RenderFont font) {
+    return null;
+  }
+
+  @Override
   public NiftyImage createImage(final String name, final boolean filterLinear) {
     return null;
   }

@@ -181,6 +181,16 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
+  @Override
+  public String getFontname(final RenderFont font) {
+    for (Map.Entry<String, RenderFont> entry : fontCache.entrySet()) {
+      if (entry.getValue().equals(font)) {
+        return entry.getKey();
+      }
+    }
+    return null;
+  }
+
   /**
    * @see de.lessvoid.nifty.render.NiftyRenderEngine#renderQuad(int, int, int, int)
    * @param x x

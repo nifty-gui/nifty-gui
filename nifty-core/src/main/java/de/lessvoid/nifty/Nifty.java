@@ -1542,4 +1542,8 @@ public class Nifty {
   public RenderFont createFont(final String name) {
     return getRenderEngine().createFont(name);
   }
+
+  public String getFontname(final RenderFont font) {
+    return getRenderEngine().getFontname(font);
+  }
 }

@@ -54,6 +54,13 @@ public interface NiftyRenderEngine {
   RenderFont createFont(String name);
 
   /**
+   * Returns the original filename of the given RenderFont.
+   * @param font RenderFont to get the name from
+   * @return the filename of the font
+   */
+  String getFontname(RenderFont font);
+
+  /**
    * render a quad.
    * @param x x
    * @param y y
