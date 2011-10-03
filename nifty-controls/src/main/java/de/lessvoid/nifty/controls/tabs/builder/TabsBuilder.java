@@ -5,8 +5,6 @@
 package de.lessvoid.nifty.controls.tabs.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.elements.Element;
-import java.util.List;
 
 /**
  *

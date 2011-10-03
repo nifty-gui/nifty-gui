@@ -23,7 +23,7 @@ import java.util.Properties;
 public class TabsControl extends AbstractController implements Tabs {
 
     private Nifty nifty;
-    private String activeTab;
+    private static String activeTab;
     private Element elmnt;
 
     @Override
@@ -52,7 +52,9 @@ public class TabsControl extends AbstractController implements Tabs {
 
     private void createTabButton(final String tabId, final String buttonCaption) {
         Element tabButtonPanel = elmnt.findElementByName("#tab-button-panel");
+        System.out.println("looking for button " + tabId + "-button");
         if (tabButtonPanel.findElementByName(tabId + "-button") == null) {
+            System.out.println("adding button " + tabId + "-button");
             new ButtonBuilder(tabId + "-button") {{
                 style("nifty-button");
                 childLayout(ChildLayoutType.Horizontal);
@@ -76,6 +78,7 @@ public class TabsControl extends AbstractController implements Tabs {
     @Override
     public void addTab(Element tab) {
         if (tab.getControl(TabControl.class) != null) {
+            System.out.println("adding tab " + tab.getId());
             elmnt.findElementByName("#tab-content-panel").add(tab);
             setActiveTab(tab.getId());
             createTabButton(tab.getId(), tab.getControl(TabControl.class).getCaption());
@@ -126,7 +129,7 @@ public class TabsControl extends AbstractController implements Tabs {
             //TODO: add these two styles to the grey style.
 //            elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab).setStyle("tab-button");
 //            elmnt.findElementByName("#tab-button-panel").findElementByName(tabId).setStyle("active-tab-button");
-
+System.out.println("setting active tab to " + tabId);
             if (activeTab != null) {
                 elmnt.findElementByName("#tab-content-panel").findElementByName(activeTab).hideWithoutEffect();
             }
