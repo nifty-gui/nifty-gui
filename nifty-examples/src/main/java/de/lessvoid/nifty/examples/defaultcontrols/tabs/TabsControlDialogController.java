@@ -33,21 +33,19 @@ public class TabsControlDialogController implements Controller {
             final Properties parameter,
             final Attributes controlDefinitionAttributes) {
         this.tabs = screen.findNiftyControl("tabs", Tabs.class);
-        Element tab1 = new TabBuilder("tab_1") {{
+        Element tab1 = new TabBuilder("tab_1", "Tab 1") {{
             panel(new PanelBuilder() {{
                 childLayoutHorizontal();
                 control(builders.createLabel("Tab 1")); 
             }});
-        }}.build(nifty, screen, element);
-        tab1.getControl(TabControl.class).setCaption("Tab 1");
+        }}.build(nifty, screen, this.tabs.getElement());
         tabs.addTab(tab1);
-        Element tab2 = new TabBuilder("tab_2") {{
+        Element tab2 = new TabBuilder("tab_2", "Tab 2") {{
             panel(new PanelBuilder() {{
                 childLayoutHorizontal();
                 control(builders.createLabel("Tab 2")); 
             }});
-        }}.build(nifty, screen, element);
-        tab1.getControl(TabControl.class).setCaption("Tab 2");
+        }}.build(nifty, screen, this.tabs.getElement());
         tabs.addTab(tab2);
     }
 
