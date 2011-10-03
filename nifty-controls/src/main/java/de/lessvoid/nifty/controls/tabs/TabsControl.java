@@ -4,23 +4,26 @@
  */
 package de.lessvoid.nifty.controls.tabs;
 
+import java.util.List;
+import java.util.Properties;
+
+import org.bushe.swing.event.EventTopicSubscriber;
+
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ElementBuilder.ChildLayoutType;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Tabs;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-import java.util.List;
-import java.util.Properties;
 
 /**
  *
  * @author ractoc
  */
-public class TabsControl extends AbstractController implements Tabs {
+public class TabsControl extends AbstractController implements Tabs, EventTopicSubscriber<ElementShowEvent> {
 
     private Nifty nifty;
     private static String activeTab;
@@ -31,10 +34,12 @@ public class TabsControl extends AbstractController implements Tabs {
         super.bind(element);
         this.nifty = nifty;
         this.elmnt = element;
+        nifty.subscribe(screen, getId(), ElementShowEvent.class, this);
     }
 
     @Override
     public void init(Properties prprts, Attributes atrbts) {
+      System.out.println("init");
         Element tabContentPanel = elmnt.findElementByName("#tab-content-panel");
         List<Element> elements = tabContentPanel.getElements();
         for (final Element e : elements) {
@@ -129,7 +134,7 @@ public class TabsControl extends AbstractController implements Tabs {
             //TODO: add these two styles to the grey style.
 //            elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab).setStyle("tab-button");
 //            elmnt.findElementByName("#tab-button-panel").findElementByName(tabId).setStyle("active-tab-button");
-System.out.println("setting active tab to " + tabId);
+          System.out.println("setting active tab to " + tabId);
             if (activeTab != null) {
                 elmnt.findElementByName("#tab-content-panel").findElementByName(activeTab).hideWithoutEffect();
             }
@@ -139,5 +144,19 @@ System.out.println("setting active tab to " + tabId);
             elmnt.layoutElements();
         }
 
+    }
+
+    @Override
+    public void onEvent(final String topic, final ElementShowEvent data) {
+      System.out.println("onShow: " + data.getElement());
+
+      // we make sure that only the active tab is visible
+      Element tabContentPanel = elmnt.findElementByName("#tab-content-panel");
+      for (int i=0; i<tabContentPanel.getElements().size(); i++) {
+        tabContentPanel.getElements().get(i).hideWithoutEffect();
+      }
+      if (activeTab != null) {
+        elmnt.findElementByName("#tab-content-panel").findElementByName(activeTab).showWithoutEffects();
+      }
     }
 }
