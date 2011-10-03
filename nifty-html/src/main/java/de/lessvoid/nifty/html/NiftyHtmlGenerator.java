@@ -6,6 +6,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.spi.render.RenderFont;
 
 /**
  * This class will take a HTML String and transforms the HTML into Nifty elements.
@@ -13,8 +14,10 @@ import de.lessvoid.nifty.screen.Screen;
  */
 public class NiftyHtmlGenerator {
   private Nifty nifty;
-  private String defaultFontName = "aurulent-sans-16.fnt";
-  private String defaultBoldFontName = "aurulent-sans-16-bold.fnt";
+  private String defaultFontname = "aurulent-sans-16.fnt";
+  private String defaultBoldFontname = "aurulent-sans-16-bold.fnt";
+  private RenderFont defaultFont;
+  private RenderFont defaultBoldFont;
 
   /**
    * Create the NiftyHtmlGenerator.
@@ -32,7 +35,7 @@ public class NiftyHtmlGenerator {
    * @param name
    */
   public void setDefaultFont(final String name) {
-    this.defaultFontName = name;
+    this.defaultFontname = name;
   }
 
   /**
@@ -40,7 +43,23 @@ public class NiftyHtmlGenerator {
    * @param name
    */
   public void setDefaultBoldFont(final String name) {
-    this.defaultBoldFontName = name;
+    this.defaultBoldFontname = name;
+  }
+
+  /**
+   * Change the default font to be used.
+   * @param defaultFont the RenderFont to use
+   */
+  public void setDefaultFont(final RenderFont defaultFont) {
+    this.defaultFont = defaultFont;
+  }
+
+  /**
+   * Change the default bold font to be used.
+   * @param defaultBoldFont the RenderFont to use for bold output
+   */
+  public void setDefaultBoldFont(final RenderFont defaultBoldFont) {
+    this.defaultBoldFont = defaultBoldFont;
   }
 
   /**
@@ -55,7 +74,7 @@ public class NiftyHtmlGenerator {
 
     Parser parser = Parser.createParser(html, "ISO-8859-1");
 
-    NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory(), defaultFontName, defaultBoldFontName);
+    NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory(), getDefaultFontname(), getDefaultBoldFontname());
     parser.visitAllNodesWith(visitor);
 
     ElementBuilder builder = visitor.builder();
@@ -71,5 +90,19 @@ public class NiftyHtmlGenerator {
       parent.getElements().get(i).markForRemoval();
     }
     nifty.executeEndOfFrameElementActions();
+  }
+
+  private String getDefaultFontname() {
+    if (defaultFont != null) {
+      return nifty.getFontname(defaultFont);
+    }
+    return defaultFontname;
+  }
+
+  private String getDefaultBoldFontname() {
+    if (defaultBoldFont != null) {
+      return nifty.getFontname(defaultBoldFont);
+    }
+    return defaultBoldFontname;
   }
 }

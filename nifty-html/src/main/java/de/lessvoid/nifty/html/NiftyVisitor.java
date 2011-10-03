@@ -23,9 +23,6 @@ public class NiftyVisitor extends NodeVisitor {
   // errors in processing are added to that list
   private List<String> errors = new ArrayList<String>();
 
-  // we keep a Nifty instance around to access some things
-  private Nifty nifty;
-
   // the PanelBuilder for the body tag
   private PanelBuilder bodyPanel;
 
@@ -67,7 +64,6 @@ public class NiftyVisitor extends NodeVisitor {
    * @param niftyBuilderFactory a helper class to create Nifty Builders
    */
   public NiftyVisitor(final Nifty nifty, final NiftyBuilderFactory niftyBuilderFactory, final String defaultFontName, final String defaultFontBoldName) {
-    this.nifty = nifty;
     this.niftyBuilderFactory = niftyBuilderFactory;
     this.defaultFontName = defaultFontName;
     this.defaultFontBoldName = defaultFontBoldName;
@@ -333,14 +329,5 @@ public class NiftyVisitor extends NodeVisitor {
 
   private String removeNewLine(final String text) {
     return text.replaceAll("\n", "").replaceAll("\t", "");
-  }
-
-  private String toHex(final String str) {
-    int value = Integer.parseInt(str);
-    String hex = Integer.toHexString(value);
-    if (value < 16) {
-      return "0" + hex;
-    }
-    return hex;
   }
 }
