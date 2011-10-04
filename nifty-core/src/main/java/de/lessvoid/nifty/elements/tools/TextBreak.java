@@ -33,6 +33,7 @@ public class TextBreak {
     List < String > result = new ArrayList < String > ();
     int i = 0, length;
     String currentWord = "";
+    String lastColorValue = null;
     StringBuffer currentLine = new StringBuffer();
     while (isValidIndex(i)) {
     	//Empty StringBuffer
@@ -40,6 +41,10 @@ public class TextBreak {
       length = 0;
       while (isBelowLimit(length) && isValidIndex(i)) {
         currentWord = getWord(i);
+        String colorValue = extractColorValue(currentWord);
+        if (colorValue != null) {
+          lastColorValue = colorValue;
+        }
         length += font.getWidth(currentWord);
         if (isBelowLimit(length)) {
           currentLine.append(currentWord);
@@ -47,9 +52,8 @@ public class TextBreak {
         }
       }
       if(currentLine.length() > 0) {
-    	  result.add(currentLine.toString());
-      }
-      else { //If we get here the word itself is longer than the wrapping width
+        addResult(result, lastColorValue, currentLine.toString());
+      } else { //If we get here the word itself is longer than the wrapping width
     	  //We break it up
     	  String wordPart = currentWord;
     	  int p;
@@ -60,14 +64,26 @@ public class TextBreak {
 	    		  wordPart = wordPart.substring(0, wordPart.length()-1);
 	    		  p++;
 	    	  }
-	    	  result.add(wordPart);
+	    	  addResult(result, lastColorValue, wordPart);
 	    	  //Set the new word part to the rest of the word
 	    	  wordPart = currentWord.substring(currentWord.length()-p);
+	        String colorValue = extractColorValue(wordPart);
+	        if (colorValue != null) {
+	          lastColorValue = colorValue;
+	        }
     	  } while(p > 0);
     	  i++;
       }
     }
     return result;
+  }
+
+  private void addResult(final List<String> result, final String lastColorValue, final String currentLine) {
+    if (lastColorValue != null) {
+      result.add(lastColorValue + currentLine);
+    } else {
+      result.add(currentLine);
+    }
   }
 
   private boolean isValidIndex(final int i) {
@@ -89,5 +105,19 @@ public class TextBreak {
   private boolean isSingleLine() {
 	//Check if there is only one word and it fits in one line
     return (words.length == 1 && isBelowLimit(font.getWidth(words[0])));
+  }
+
+  String extractColorValue(final String text) {
+    if (text == null) {
+      return null;
+    }
+    int start = text.lastIndexOf("\\#");
+    if (start != -1) {
+      int end = text.indexOf("#", start + 2);
+      if (end != -1) {
+        return text.substring(start, end + 1);
+      }
+    }
+    return null;
   }
 }
