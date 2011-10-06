@@ -131,10 +131,9 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
      */
     public void switchTab(String tabId) {
         if (!tabId.equals(activeTab)) {
-            //TODO: add these two styles to the grey style.
-//            elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab).setStyle("tab-button");
-//            elmnt.findElementByName("#tab-button-panel").findElementByName(tabId).setStyle("active-tab-button");
-          System.out.println("setting active tab to " + tabId);
+            //TODO: add these two styles to the style.
+            elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab+"-button").setStyle("tab-button");
+            elmnt.findElementByName("#tab-button-panel").findElementByName(tabId+"-button").setStyle("active-tab-button");
             if (activeTab != null) {
                 elmnt.findElementByName("#tab-content-panel").findElementByName(activeTab).hideWithoutEffect();
             }
