@@ -22,7 +22,9 @@
         <value offset="50%" color="#55ff" />
         <value offset="100%" color="#fccf" />
       </onActive>
+      <!-- this kinda messes the textcolor 
       <onActive name="pulsate" period="25000" pulsateType="sinRaised" startColor="#0000" endColor="#000f" changeColorOnly="true" startDelay="2000" />
+       -->
       <onActive name="gradient" direction="vertical" startDelay="2000">
         <value offset="0%" color="#001f" />
         <value offset="50%" color="#404f" />
