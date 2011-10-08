@@ -85,8 +85,8 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
         if (tab.getControl(TabControl.class) != null) {
             System.out.println("adding tab " + tab.getId());
             elmnt.findElementByName("#tab-content-panel").add(tab);
-            setActiveTab(tab.getId());
             createTabButton(tab.getId(), tab.getControl(TabControl.class).getCaption());
+            setActiveTab(tab.getId());
             elmnt.layoutElements();
         } else {
             throw new IllegalArgumentException("Expected an Element with a TabControl.");
@@ -132,7 +132,9 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
     public void switchTab(String tabId) {
         if (!tabId.equals(activeTab)) {
             //TODO: add these two styles to the style.
-            elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab+"-button").setStyle("tab-button");
+            if (activeTab != null) {
+                elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab+"-button").setStyle("tab-button");
+            }
             elmnt.findElementByName("#tab-button-panel").findElementByName(tabId+"-button").setStyle("active-tab-button");
             if (activeTab != null) {
                 elmnt.findElementByName("#tab-content-panel").findElementByName(activeTab).hideWithoutEffect();
