@@ -66,6 +66,7 @@
       <element name="panel" type="PanelType" occurs="zeroOrMore" />
       <element name="image" type="ImageType" occurs="zeroOrMore" />
       <element name="text" type="TextType" occurs="zeroOrMore" />
+      <element name="control" type="ControlType" occurs="zeroOrMore" />
     </group>
   </type>
   <type name="NiftyType">
