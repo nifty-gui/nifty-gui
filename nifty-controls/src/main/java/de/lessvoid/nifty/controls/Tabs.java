@@ -25,16 +25,28 @@ public interface Tabs extends NiftyControl {
     public void removeTab(int index);
     
     /**
-     * Sets the active tab to the specified index.
-     * @param index The index of the tab to make the active tab.
+     * Sets the selected tab to the specified index.
+     * @param index The index of the tab to make the selected tab.
      */
-    public void setActiveTab(int index);
+    public void setSelectedTab(int index);
     
     /**
-     * Sets the active tab based on the tabId;
-     * @param tabId The TabId of the tab to make the active tab.
+     * Sets the selected tab based on the tabId;
+     * @param tabId The TabId of the tab to make the selected tab.
      */
-    public void setActiveTab(String tabId);
+    public void setSelectedTab(String tabId);
+    
+    /**
+     * Gets the selected tab to the specified index.
+     * @return The id of the selected tab.
+     */
+    public String getSelectedTab();
+    
+    /**
+     * Gets the selected tab to the specified index.
+     * @return The index of the selected tab.
+     */
+    public int getSelectedTabIndex();
     
     
 }
