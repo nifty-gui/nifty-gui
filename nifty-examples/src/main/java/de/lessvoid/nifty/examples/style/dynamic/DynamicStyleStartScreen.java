@@ -17,7 +17,7 @@ public class DynamicStyleStartScreen implements ScreenController {
   public void onEndScreen() {
   }
 
-  public void setStyle(final String style) {
+  public void setNiftyStyle(final String style) {
     screen.findElementByName("panel").setStyle(style);
   }
 }
