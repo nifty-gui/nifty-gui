@@ -18,4 +18,5 @@
   <useStyles filename="listbox/nifty-listbox-style.xml" />
   <useStyles filename="window/nifty-window.xml" />
   <useStyles filename="hint/nifty-hint.xml" />
+  <useStyles filename="tabs/nifty-tabs.xml" />
 </nifty-styles>
