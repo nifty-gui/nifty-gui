@@ -104,7 +104,11 @@ public class NiftyVisitor extends NodeVisitor {
             tag.getAttribute("height"),
             tag.getAttribute("bgcolor"),
             tag.getAttribute("vspace"));
-        bodyPanel.image(image);
+        if (currentBlockElement != null) {
+          currentBlockElement.image(image);
+        } else {
+          bodyPanel.image(image);
+        }
       } else if (isBreak(tag)) {
         if (currentBlockElement != null) {
           currentText.append("\n");
