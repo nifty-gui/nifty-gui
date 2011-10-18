@@ -163,9 +163,12 @@ public class Nifty {
 
   private void initializeClipboard() {
     try {
-      Class.forName(java.awt.datatransfer.Clipboard.class.getName());
+      Class.forName("java.awt.datatransfer.Clipboard");
       clipboard = new ClipboardAWT();
     } catch (ClassNotFoundException e) {
+      log.info("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
+      clipboard = new ClipboardNull();
+    } catch (Throwable e) {
       log.info("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
       clipboard = new ClipboardNull();
     }
