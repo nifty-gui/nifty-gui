@@ -1361,9 +1361,11 @@ public class Element implements NiftyEvent<Void> {
         mouseOverHandler.addMouseElement(this);
       }
     }
-    for (int i=0; i<elements.size(); i++) {
-      Element w = elements.get(i);
-      w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
+    if (visible) {
+      for (int i=0; i<elements.size(); i++) {
+        Element w = elements.get(i);
+        w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
+      }
     }
   }
 
