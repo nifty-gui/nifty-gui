@@ -25,8 +25,8 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
 
   public void setUp() {
     renderDeviceMock = createMock(RenderDevice.class);
-    expect(renderDeviceMock.getWidth()).andReturn(1024);
-    expect(renderDeviceMock.getHeight()).andReturn(768);
+    expect(renderDeviceMock.getWidth()).andReturn(1024).times(2);
+    expect(renderDeviceMock.getHeight()).andReturn(768).times(2);
 
     font = createStrictMock(RenderFont.class);
   }
