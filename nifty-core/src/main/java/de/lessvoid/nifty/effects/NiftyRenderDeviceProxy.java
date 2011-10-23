@@ -63,6 +63,16 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
+  public int getNativeWidth() {
+    return 0;
+  }
+
+  @Override
+  public int getNativeHeight() {
+    return 0;
+  }
+
+  @Override
   public void setColor(final Color colorParam) {
     renderStates.addColor();
     renderStates.addAlpha();
@@ -178,5 +188,53 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   @Override
   public RenderImage reload(final RenderImage image) {
     return image;
+  }
+
+  @Override
+  public int convertToNativeX(final int x) {
+    return 0;
+  }
+
+  @Override
+  public int convertToNativeY(final int y) {
+    return 0;
+  }
+
+  @Override
+  public int convertToNativeWidth(final int x) {
+    return 0;
+  }
+
+  @Override
+  public int convertToNativeHeight(final int y) {
+    return 0;
+  }
+
+  @Override
+  public int convertFromNativeX(final int x) {
+    return 0;
+  }
+
+  @Override
+  public int convertFromNativeY(final int y) {
+    return 0;
+  }
+
+  @Override
+  public float convertToNativeTextSizeX(final float size) {
+    return 0.f;
+  }
+
+  @Override
+  public float convertToNativeTextSizeY(final float size) {
+    return 0.f;
+  }
+
+  @Override
+  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY) {
+  }
+
+  @Override
+  public void disableAutoScaling() {
   }
 }

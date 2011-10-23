@@ -53,6 +53,8 @@ public class ControlsDemo {
     nifty.registerSound("intro", "defaultcontrols/sound/19546__tobi123__Gong_mf2.wav");
     nifty.registerMusic("credits", "defaultcontrols/sound/Loveshadow_-_Almost_Given_Up.ogg");
     nifty.registerMouseCursor("hand", "defaultcontrols/mouse-cursor-hand.png", 5, 4);
+    nifty.enableAutoScaling(1024, 768);
+
     registerMenuButtonHintStyle(nifty);
     registerStyles(nifty);
     registerConsolePopup(nifty);

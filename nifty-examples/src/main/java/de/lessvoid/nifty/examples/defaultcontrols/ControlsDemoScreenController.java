@@ -253,11 +253,7 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
       for (int i=0; i<modes.length; i++) {
         DisplayMode mode = modes[i];
         if (mode.getBitsPerPixel() == 32 && mode.getFrequency() == currentMode.getFrequency()) {
-          // since Nifty does not yet support automatically rescaling of the GUI and since this
-          // example/demo was designed for 1024x768 pixel we can't allow resolutions below this size.
-          if (mode.getWidth() >= 1024 && mode.getHeight() >= 768) {
-            sorted.add(mode);
-          }
+          sorted.add(mode);
         }
       }
 
@@ -280,6 +276,7 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
       for (DisplayMode mode : sorted) {
         dropDown.addItem(mode);
       }
+      dropDown.selectItem(currentMode);
     } catch (Exception e) {
     }
   }

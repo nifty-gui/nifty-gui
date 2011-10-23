@@ -6,7 +6,6 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.elements.tools.FontHelper;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderFont;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
 import de.lessvoid.nifty.renderer.lwjgl.render.font.ColorValueParser.Result;
 import de.lessvoid.nifty.spi.render.RenderDevice;
@@ -128,32 +127,33 @@ public class Font {
   }
 
   public void drawString(int x, int y, String text) {
-    internalRenderText(x, y, text, 1.0f, false, 1.0f);
+    internalRenderText(x, y, text, 1.0f, 1.0f, false, 1.0f);
   }
 
-  public void drawStringWithSize(int x, int y, String text, float size) {
-    internalRenderText(x, y, text, size, false, 1.0f);
+  public void drawStringWithSize(int x, int y, String text, float sizeX, float sizeY) {
+    internalRenderText(x, y, text, sizeX, sizeY, false, 1.0f);
   }
 
-  public void renderWithSizeAndColor(int x, int y, String text, float size, float r, float g, float b, float a) {
+  public void renderWithSizeAndColor(int x, int y, String text, float sizeX, float sizeY, float r, float g, float b, float a) {
     GL11.glColor4f(r, g, b, a);
-    internalRenderText(x, y, text, size, false, a);
+    internalRenderText(x, y, text, sizeX, sizeY, false, a);
   }
 
   private void internalRenderText(
       final int xPos,
       final int yPos,
       final String text,
-      final float size,
+      final float sizeX,
+      final float sizeY,
       final boolean useAlphaTexture,
       final float alpha) {
     GL11.glMatrixMode(GL11.GL_MODELVIEW);
     GL11.glPushMatrix();
     GL11.glLoadIdentity();
 
-    int originalWidth = getStringWidthInternal(text, 1.0f);
-    int sizedWidth = getStringWidthInternal(text, size);
-    int x = xPos - (sizedWidth - originalWidth) / 2;
+    float normHeightScale = getHeight() * sizeY;
+    int x = xPos;
+    int y = yPos;
 
     int activeTextureIdx = -1;
 
@@ -175,7 +175,7 @@ public class Font {
       char currentc = text.charAt(i);
       char nextc = FontHelper.getNextCharacter(text, i);
       CharacterInfo charInfoC = font.getChar((char) currentc);
-      int kerning = 0;
+
       float characterWidth = 0;
       if (charInfoC != null) {
         int texId = charInfoC.getPage();
@@ -184,15 +184,11 @@ public class Font {
           textures[activeTextureIdx].bind();
         }
 
-        kerning = LwjglRenderFont.getKerning(charInfoC, nextc);
-        characterWidth = (float) (charInfoC.getXadvance() * size + kerning);
+        characterWidth = getCharacterWidth((char) currentc, nextc, sizeX);
 
         GL11.glLoadIdentity();
-        GL11.glTranslatef(x, yPos, 0.0f);
-
-        GL11.glTranslatef(0.0f, getHeight() / 2, 0.0f);
-        GL11.glScalef(size, size, 1.0f);
-        GL11.glTranslatef(0.0f, -getHeight() / 2, 0.0f);
+        GL11.glTranslatef(x, y, 0.0f);
+        GL11.glScalef(sizeX, sizeY, 1.0f);
 
         boolean characterDone = false;
         if (isSelection()) {
@@ -207,8 +203,8 @@ public class Font {
 
             GL11.glVertex2i(0, 0);
             GL11.glVertex2i((int) characterWidth, 0);
-            GL11.glVertex2i((int) characterWidth, 0 + getHeight());
-            GL11.glVertex2i(0, 0 + getHeight());
+            GL11.glVertex2i((int) characterWidth, (int) normHeightScale);
+            GL11.glVertex2i(0, 0 + (int)normHeightScale);
 
             GL11.glEnd();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -313,11 +309,12 @@ public class Font {
     if (currentCharacterInfo == null) {
       return -1;
     } else {
-      return (int) (currentCharacterInfo.getXadvance() * size + getKerning(currentCharacterInfo, nextCharacter));
+      return (int) (
+          (currentCharacterInfo.getXadvance() + getKerning(currentCharacterInfo, nextCharacter)) * size);
     }
   }
 
-  public static int getKerning(final CharacterInfo charInfoC, final char nextc) {
+  private int getKerning(final CharacterInfo charInfoC, final char nextc) {
     Integer kern = charInfoC.getKerning().get(Character.valueOf(nextc));
     if (kern != null) {
       return kern.intValue();

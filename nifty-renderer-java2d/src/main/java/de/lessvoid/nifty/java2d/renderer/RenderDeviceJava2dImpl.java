@@ -249,7 +249,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
 	@Override
 	public void renderFont(RenderFont font, String text, int x, int y,
-			Color fontColor, float size) {
+			Color fontColor, float sizeX, float sizeY) {
 
 		if (font instanceof RenderFontJava2dImpl) {
 			renderFontJava2dImpl(text, x, y, fontColor,
@@ -294,7 +294,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 				renderImage(renderImage, x, y, 200, // 
 						200, charInfo.getX(), charInfo.getY(), // 
 						charInfo.getWidth(), charInfo.getHeight(), //  
-						fontColor, size, 0, 0);
+						fontColor, sizeX, 0, 0);
 			}
 
 		}

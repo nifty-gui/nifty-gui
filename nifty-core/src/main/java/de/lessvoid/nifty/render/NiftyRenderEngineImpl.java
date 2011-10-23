@@ -24,14 +24,21 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   /**
    * RenderDevice.
    */
-  private RenderDevice renderDevice;
+  private ScalingRenderDevice renderDevice;
 
   /**
-   * Display width and height.
+   * Display width and height. This is always the base resolution (when scaling is enabled).
    */
   private int displayWidth;
   private int displayHeight;
 
+  /**
+   * This is always the native display resolution.
+   */
+  private int nativeDisplayWidth;
+  private int nativeDisplayHeight;
+  private boolean autoScaling = false;
+  
   /**
    * global position x.
    */
@@ -113,9 +120,11 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param renderDeviceParam RenderDevice
    */
   public NiftyRenderEngineImpl(final RenderDevice renderDeviceParam) {
-    renderDevice = renderDeviceParam;
+    renderDevice = new ScalingRenderDevice(this, renderDeviceParam);
     displayWidth = renderDevice.getWidth();
     displayHeight = renderDevice.getHeight();
+    nativeDisplayWidth = renderDevice.getWidth();
+    nativeDisplayHeight = renderDevice.getHeight();
     imageManager = new NiftyImageManager(renderDeviceParam);
   }
 
@@ -249,13 +258,13 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       final Color textSelectionColor) {
     if (isSelection(selectionStart, selectionEnd)) {
       renderSelectionText(
-          text, x + getX(), y + getY(), color, textSelectionColor, textScale, selectionStart, selectionEnd);
+          text, x + getX(), y + getY(), color, textSelectionColor, textScale, textScale, selectionStart, selectionEnd);
     } else {
       if (font == null || font instanceof RenderFontNull) {
         log.warning("missing font in renderText! could it be that you're using <text> elements without a font or style attribute? in case you've replaced <label> with <text> you're probably missing style='nifty-label' :)");
         return;
       }
-      renderDevice.renderFont(font, text, x + getX(), y + getY(), color, textScale);
+      renderDevice.renderFont(font, text, x + getX(), y + getY(), color, textScale, textScale);
     }
   }
 
@@ -276,7 +285,8 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       final int y,
       final Color textColor,
       final Color textSelectionColor,
-      final float textSize,
+      final float textSizeX,
+      final float textSizeY,
       final int selectionStartParam,
       final int selectionEndParam) {
     int selectionStart = selectionStartParam;
@@ -289,29 +299,29 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
 
     if (isEverythingSelected(text, selectionStart, selectionEnd)) {
-      renderDevice.renderFont(font, text, x, y, textSelectionColor, textSize);
+      renderDevice.renderFont(font, text, x, y, textSelectionColor, textSizeX, textSizeY);
     } else if (isSelectionAtBeginning(selectionStart)) {
       String selectedString = text.substring(selectionStart, selectionEnd);
       String unselectedString = text.substring(selectionEnd);
 
-      renderDevice.renderFont(font, selectedString, x, y, textSelectionColor, textSize);
-      renderDevice.renderFont(font, unselectedString, x + font.getWidth(selectedString), y, textColor, textSize);
+      renderDevice.renderFont(font, selectedString, x, y, textSelectionColor, textSizeX, textSizeY);
+      renderDevice.renderFont(font, unselectedString, x + font.getWidth(selectedString), y, textColor, textSizeX, textSizeY);
     } else if (isSelectionAtEnd(text, selectionEnd)) {
       String unselectedString = text.substring(0, selectionStart);
       String selectedString = text.substring(selectionStart, selectionEnd);
 
-      renderDevice.renderFont(font, unselectedString, x, y, textColor, textSize);
-      renderDevice.renderFont(font, selectedString, x + font.getWidth(unselectedString), y, textSelectionColor, textSize);
+      renderDevice.renderFont(font, unselectedString, x, y, textColor, textSizeX, textSizeY);
+      renderDevice.renderFont(font, selectedString, x + font.getWidth(unselectedString), y, textSelectionColor, textSizeX, textSizeY);
     } else {
       String unselectedString1 = text.substring(0, selectionStart);
       String selectedString = text.substring(selectionStart, selectionEnd);
       String unselectedString2 = text.substring(selectionEnd, text.length());
 
-      renderDevice.renderFont(font, unselectedString1, x, y, textColor, textSize);
+      renderDevice.renderFont(font, unselectedString1, x, y, textColor, textSizeX, textSizeY);
       int unselectedString1Len = font.getWidth(unselectedString1);
-      renderDevice.renderFont(font, selectedString, x + unselectedString1Len, y, textSelectionColor, textSize);
+      renderDevice.renderFont(font, selectedString, x + unselectedString1Len, y, textSelectionColor, textSizeX, textSizeY);
       int selectedStringLen = font.getWidth(selectedString);
-      renderDevice.renderFont(font, unselectedString2, x + unselectedString1Len + selectedStringLen, y, textColor, textSize);
+      renderDevice.renderFont(font, unselectedString2, x + unselectedString1Len + selectedStringLen, y, textColor, textSizeX, textSizeY);
     }
   }
 
@@ -484,8 +494,12 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
   @Override
   public void displayResolutionChanged() {
-    displayWidth = renderDevice.getWidth();
-    displayHeight = renderDevice.getHeight();
+    if (!autoScaling) {
+      displayWidth = renderDevice.getWidth();
+      displayHeight = renderDevice.getHeight();
+    }
+    nativeDisplayWidth = renderDevice.getWidth();
+    nativeDisplayHeight = renderDevice.getHeight();
   }
 
   /**
@@ -763,5 +777,69 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     public void apply() {
       renderDevice.enableClip(x0, y0, x1, y1);
     }
+  }
+
+  @Override
+  public int getNativeWidth() {
+    return nativeDisplayWidth;
+  }
+
+  @Override
+  public int getNativeHeight() {
+    return nativeDisplayHeight;
+  }
+
+  @Override
+  public int convertToNativeX(final int x) {
+    return (int)Math.floor(x * ((float)getNativeWidth() / getWidth()));
+  }
+
+  @Override
+  public int convertToNativeY(final int y) {
+    return (int)Math.floor(y * ((float)getNativeHeight() / getHeight()));
+  }
+
+  @Override
+  public int convertToNativeWidth(final int x) {
+    return (int)Math.ceil(x * ((float)getNativeWidth() / getWidth()));
+  }
+
+  @Override
+  public int convertToNativeHeight(final int y) {
+    return (int)Math.ceil(y * ((float)getNativeHeight() / getHeight()));
+  }
+
+  @Override
+  public int convertFromNativeX(final int x) {
+    return (int)Math.ceil(x * ((float)getWidth() / getNativeWidth()));
+  }
+
+  @Override
+  public int convertFromNativeY(final int y) {
+    return (int)Math.ceil(y * ((float)getHeight() / getNativeHeight()));
+  }
+
+  @Override
+  public float convertToNativeTextSizeX(final float size) {
+    return (float)( size * (float)getNativeWidth() / getWidth() );
+  }
+
+  @Override
+  public float convertToNativeTextSizeY(final float size) {
+    return (float)( size * (float)getNativeHeight() / getHeight() );
+  }
+
+  @Override
+  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY) {
+    autoScaling = true;
+    displayWidth = baseResolutionX;
+    displayHeight = baseResolutionY;
+  }
+
+  @Override
+  public void disableAutoScaling() {
+    autoScaling = false;
+    displayWidth = nativeDisplayWidth;
+    displayHeight = nativeDisplayHeight;
   }
 }

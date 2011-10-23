@@ -12,16 +12,36 @@ import de.lessvoid.nifty.tools.Color;
 public interface NiftyRenderEngine {
 
   /**
-   * Get Width of Display mode.
+   * Get Width of Display mode. This will always return the base resolution
+   * if auto scaling is enabled.
+   *
    * @return width of display mode
    */
   int getWidth();
 
   /**
-   * Get Height of Display mode.
+   * Get Height of Display mode. This will always return the base resolution
+   * if auto scaling is enabled.
+   *
    * @return height of display mode
    */
   int getHeight();
+
+  /**
+   * This will always return the current native display resolution independent
+   * of the auto scaling mode.
+   *
+   * @return the native display width
+   */
+  int getNativeWidth();
+
+  /**
+   * This will always return the current native display resolution independent
+   * of the auto scaling mode.
+   *
+   * @return the native display height
+   */
+  int getNativeHeight();
 
   /**
    * Called when a frame begins.
@@ -226,4 +246,16 @@ public interface NiftyRenderEngine {
    * stored inside.
    */
   void displayResolutionChanged();
+
+  void enableAutoScaling(int baseResolutionX, int baseResolutionY);
+  void disableAutoScaling();
+
+  int convertToNativeX(int x);
+  int convertToNativeY(int y);
+  int convertToNativeWidth(int x);
+  int convertToNativeHeight(int y);
+  int convertFromNativeX(int x);
+  int convertFromNativeY(int y);
+  float convertToNativeTextSizeX(float size);
+  float convertToNativeTextSizeY(float size);
 }

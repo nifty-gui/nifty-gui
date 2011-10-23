@@ -1355,7 +1355,7 @@ public class Nifty {
       }
 
       NiftyMouseInputEvent result = pool.allocate();
-      result.initialize(mouseX, mouseY, mouseWheel, button0Down, button1Down, button2Down);
+      result.initialize(renderEngine.convertFromNativeX(mouseX), renderEngine.convertFromNativeY(mouseY), mouseWheel, button0Down, button1Down, button2Down);
       return result;
     }
 
@@ -1548,5 +1548,18 @@ public class Nifty {
 
   public String getFontname(final RenderFont font) {
     return getRenderEngine().getFontname(font);
+  }
+
+  /**
+   * Enable automatic scaling of all GUI elements in relation to the given base resolution.
+   * @param baseResultionX width, for instance 1024
+   * @param baseResolutionY height, for instance 768
+   */
+  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY) {
+    renderEngine.enableAutoScaling(baseResolutionX, baseResolutionY);
+  }
+
+  public void disableAutoScaling() {
+    renderEngine.disableAutoScaling();
   }
 }

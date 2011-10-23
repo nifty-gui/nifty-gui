@@ -6,7 +6,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.Tabs;
-import de.lessvoid.nifty.controls.tabs.TabControl;
 import de.lessvoid.nifty.controls.tabs.builder.TabBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;

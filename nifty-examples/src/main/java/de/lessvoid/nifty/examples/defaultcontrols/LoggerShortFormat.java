@@ -31,7 +31,7 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
     for (int i = 0; i < handlers.length; i++) {
       if (handlers[i] instanceof ConsoleHandler) {
         ((ConsoleHandler) handlers[i]).setFormatter(new LoggerShortFormat());
-        ((ConsoleHandler) handlers[i]).setLevel(Level.WARNING);
+        ((ConsoleHandler) handlers[i]).setLevel(Level.OFF);
       }
     }
 
@@ -39,6 +39,7 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
 //    Logger.getLogger("org.bushe.swing.event.EventService").setLevel(Level.ALL);
 //    Logger.getLogger("de.lessvoid.nifty.examples.listbox.NiftyAnnotationProcessor").setLevel(Level.ALL);
     
-//    Logger.getLogger("de.lessvoid.nifty.Nifty").setLevel(Level.FINE);
+    Logger.getLogger("de.lessvoid.nifty.Nifty").setLevel(Level.OFF);
+    Logger.getLogger("de.lessvoid.nifty.screen.Screen").setLevel(Level.OFF);
   }
 }
