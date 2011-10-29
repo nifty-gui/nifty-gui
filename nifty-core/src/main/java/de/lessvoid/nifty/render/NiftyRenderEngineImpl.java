@@ -38,6 +38,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   private int nativeDisplayWidth;
   private int nativeDisplayHeight;
   private boolean autoScaling = false;
+  private Float autoScalingScaleX = null;
+  private Float autoScalingScaleY = null;
+  private float autoScalingOffsetX = 0;
+  private float autoScalingOffsetY = 0;
   
   /**
    * global position x.
@@ -791,42 +795,56 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
   @Override
   public int convertToNativeX(final int x) {
-    return (int)Math.floor(x * ((float)getNativeWidth() / getWidth()));
+    return (int)Math.floor(x * getScaleX() + autoScalingOffsetX);
   }
 
   @Override
   public int convertToNativeY(final int y) {
-    return (int)Math.floor(y * ((float)getNativeHeight() / getHeight()));
+    return (int)Math.floor(y * getScaleY() + autoScalingOffsetY);
   }
 
   @Override
   public int convertToNativeWidth(final int x) {
-    return (int)Math.ceil(x * ((float)getNativeWidth() / getWidth()));
+    return (int)Math.ceil(x * getScaleX());
   }
 
   @Override
   public int convertToNativeHeight(final int y) {
-    return (int)Math.ceil(y * ((float)getNativeHeight() / getHeight()));
+    return (int)Math.ceil(y * getScaleY());
   }
 
   @Override
   public int convertFromNativeX(final int x) {
-    return (int)Math.ceil(x * ((float)getWidth() / getNativeWidth()));
+    return (int)Math.ceil((x - autoScalingOffsetX) * (1.0f / getScaleX()));
   }
 
   @Override
   public int convertFromNativeY(final int y) {
-    return (int)Math.ceil(y * ((float)getHeight() / getNativeHeight()));
+    return (int)Math.ceil((y - autoScalingOffsetY) * (1.0f / getScaleY()));
   }
 
   @Override
   public float convertToNativeTextSizeX(final float size) {
-    return (float)( size * (float)getNativeWidth() / getWidth() );
+    return (float)(size * getScaleX());
   }
 
   @Override
   public float convertToNativeTextSizeY(final float size) {
-    return (float)( size * (float)getNativeHeight() / getHeight() );
+    return (float)(size * getScaleY());
+  }
+
+  private float getScaleX() {
+    if (autoScalingScaleX != null) {
+      return autoScalingScaleX;
+    }
+    return (float)getNativeWidth() / getWidth();
+  }
+
+  private float getScaleY() {
+    if (autoScalingScaleY != null) {
+      return autoScalingScaleY;
+    }
+    return (float)getNativeHeight() / getHeight();
   }
 
   @Override
@@ -834,6 +852,21 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     autoScaling = true;
     displayWidth = baseResolutionX;
     displayHeight = baseResolutionY;
+    autoScalingScaleX = null;
+    autoScalingScaleY = null;
+    autoScalingOffsetX = 0;
+    autoScalingOffsetY = 0;
+  }
+
+  @Override
+  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY, final float scaleX, final float scaleY) {
+    autoScaling = true;
+    displayWidth = baseResolutionX;
+    displayHeight = baseResolutionY;
+    autoScalingScaleX = ((float)getNativeWidth() / getWidth()) * scaleX;
+    autoScalingScaleY = ((float)getNativeHeight() / getHeight()) * scaleY;
+    autoScalingOffsetX = getNativeWidth()/2 - getNativeWidth()/2 * scaleX;
+    autoScalingOffsetY = getNativeHeight()/2 - getNativeHeight()/2 * scaleY;
   }
 
   @Override
@@ -841,5 +874,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     autoScaling = false;
     displayWidth = nativeDisplayWidth;
     displayHeight = nativeDisplayHeight;
+    autoScalingScaleX = null;
+    autoScalingScaleY = null;
+    autoScalingOffsetX = 0;
+    autoScalingOffsetY = 0;
   }
 }

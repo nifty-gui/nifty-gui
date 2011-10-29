@@ -1559,6 +1559,10 @@ public class Nifty {
     renderEngine.enableAutoScaling(baseResolutionX, baseResolutionY);
   }
 
+  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY, final float scaleX, final float scaleY) {
+    renderEngine.enableAutoScaling(baseResolutionX, baseResolutionY, scaleX, scaleY);
+  }
+
   public void disableAutoScaling() {
     renderEngine.disableAutoScaling();
   }

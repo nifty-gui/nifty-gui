@@ -235,6 +235,10 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
+  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY, final float scaleX, final float scaleY) {
+  }
+
+  @Override
   public void disableAutoScaling() {
   }
 }

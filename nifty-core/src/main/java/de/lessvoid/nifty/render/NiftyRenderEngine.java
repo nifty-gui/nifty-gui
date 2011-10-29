@@ -248,6 +248,7 @@ public interface NiftyRenderEngine {
   void displayResolutionChanged();
 
   void enableAutoScaling(int baseResolutionX, int baseResolutionY);
+  void enableAutoScaling(int baseResolutionX, int baseResolutionY, float scaleX, float scaleY);
   void disableAutoScaling();
 
   int convertToNativeX(int x);
@@ -258,4 +259,5 @@ public interface NiftyRenderEngine {
   int convertFromNativeY(int y);
   float convertToNativeTextSizeX(float size);
   float convertToNativeTextSizeY(float size);
+
 }
