@@ -14,7 +14,10 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  */
 public class Nop implements EffectImpl {
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  public void activate(
+      final Nifty nifty,
+      final Element element,
+      final EffectProperties parameter) {
   }
 
   public void execute(
