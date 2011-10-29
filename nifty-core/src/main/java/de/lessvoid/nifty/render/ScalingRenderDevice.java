@@ -105,7 +105,7 @@ public class ScalingRenderDevice implements RenderDevice {
 
   @Override
   public void enableClip(int x0, int y0, int x1, int y1) {
-    internal.enableClip(renderEngine.convertToNativeX(x0), renderEngine.convertToNativeY(y0), renderEngine.convertToNativeWidth(x1), renderEngine.convertToNativeHeight(y1));
+    internal.enableClip(renderEngine.convertToNativeX(x0), renderEngine.convertToNativeY(y0), renderEngine.convertToNativeX(x1), renderEngine.convertToNativeY(y1));
   }
 
   @Override
