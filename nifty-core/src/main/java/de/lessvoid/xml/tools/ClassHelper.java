@@ -51,7 +51,7 @@ public final class ClassHelper {
             "given class [" + className + "] does not implement [" + type.getName() + "]");
       }
     } catch (Exception e) {
-      log.warning("class [" + className + "] could not be instanziated (" + e.toString() + ")");
+      log.warning("class [" + className + "] could not be instantiated (" + e.toString() + ")");
     }
     return null;
   }
@@ -60,7 +60,7 @@ public final class ClassHelper {
     try {
       return clazz.newInstance();
     } catch (Exception e) {
-      log.warning("class [" + clazz.getName() + "] could not be instanziated");
+      log.warning("class [" + clazz.getName() + "] could not be instantiated");
     }
     return null;
   }
