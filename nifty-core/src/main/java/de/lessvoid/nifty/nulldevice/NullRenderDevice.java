@@ -40,7 +40,7 @@ public class NullRenderDevice implements RenderDevice {
     return 0;
   }
   
-  public void renderFont(RenderFont font, String text, int x, int y, Color fontColor, float size) {
+  public void renderFont(RenderFont font, String text, int x, int y, Color fontColor, float sizeX, float sizeY) {
   }
   
   public void renderImage(RenderImage image, int x, int y, int width, int height, Color color, float imageScale) {

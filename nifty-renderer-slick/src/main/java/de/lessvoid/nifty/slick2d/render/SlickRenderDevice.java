@@ -109,7 +109,7 @@ public class SlickRenderDevice implements RenderDevice {
 //    GL11.glPopMatrix();
   }
 
-  public void renderFont(final RenderFont font, final String text, final int x, final int y, final Color color, final float fontSize) {
+  public void renderFont(final RenderFont font, final String text, final int x, final int y, final Color color, final float fontSizeX, final float fontSizeY) {
 //    log.fine("renderFont()");
 //
 //    if (!currentTexturing) {

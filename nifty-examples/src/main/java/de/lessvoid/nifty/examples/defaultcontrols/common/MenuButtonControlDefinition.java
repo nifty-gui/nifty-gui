@@ -18,7 +18,7 @@ public class MenuButtonControlDefinition {
       controller(new MenuButtonController());
       panel(new PanelBuilder() {{
         backgroundColor("#800a");
-        width("123px");
+        width("110px");
         alignCenter();
         valignCenter();
         childLayoutCenter();

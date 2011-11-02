@@ -11,6 +11,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
@@ -132,7 +133,7 @@ public class LwjglRenderDevice implements RenderDevice {
       frames = 0;
     }
     if (displayFPS) {
-      renderFont(fpsFont, "FPS: " + String.valueOf(lastFrames), 10, getHeight() - fpsFont.getHeight() - 10, Color.WHITE, 1.0f);
+      renderFont(fpsFont, "FPS: " + String.valueOf(lastFrames), 10, getHeight() - fpsFont.getHeight() - 10, Color.WHITE, 1.0f, 1.0f);
     }
   }
 
@@ -333,7 +334,7 @@ public class LwjglRenderDevice implements RenderDevice {
    * @param color color
    * @param fontSize size
    */
-  public void renderFont(final RenderFont font, final String text, final int x, final int y, final Color color, final float fontSize) {
+  public void renderFont(final RenderFont font, final String text, final int x, final int y, final Color color, final float fontSizeX, final float fontSizeY) {
     log.fine("renderFont()");
 
     if (!currentTexturing) {
@@ -342,9 +343,22 @@ public class LwjglRenderDevice implements RenderDevice {
     }
     setBlendMode(BlendMode.BLEND);
     if (color == null) {
-      ((LwjglRenderFont)font).getFont().drawStringWithSize(x, y, text, fontSize);
+      ((LwjglRenderFont)font).getFont().drawStringWithSize(x, y, text, fontSizeX, fontSizeY);
     } else {
-      ((LwjglRenderFont)font).getFont().renderWithSizeAndColor(x, y, text, fontSize, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+      ((LwjglRenderFont)font).getFont().renderWithSizeAndColor(x, y, text, fontSizeX, fontSizeY, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    }
+  }
+
+  private void checkGLError() {
+    int error= GL11.glGetError();
+    if (error != GL11.GL_NO_ERROR) {
+      String glerrmsg = GLU.gluErrorString(error);
+      log.warning("Error: (" + error + ") " + glerrmsg);
+      try {
+        throw new Exception();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -366,9 +380,11 @@ public class LwjglRenderDevice implements RenderDevice {
     currentClippingY0 = y0;
     currentClippingX1 = x1;
     currentClippingY1 = y1;
+
     GL11.glScissor(x0, getHeight() - y1, x1 - x0, y1 - y0);
-//    GL11.glScissor(333, 100, 400, 500);
+    checkGLError();
     GL11.glEnable(GL11.GL_SCISSOR_TEST);
+    checkGLError();
   }
 
   /**

@@ -115,7 +115,7 @@ public interface RenderDevice {
    * @param fontColor font color
    * @param size size
    */
-  void renderFont(RenderFont font, String text, int x, int y, Color fontColor, float size);
+  void renderFont(RenderFont font, String text, int x, int y, Color fontColor, float sizeX, float sizeY);
 
   /**
    * Enable clipping to the given region.

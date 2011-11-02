@@ -19,12 +19,12 @@
       <panel width="100%" height="50" childLayout="horizontal">
         <panel with="50%" childLayout="center">
           <control id="setStyleA" name="button" label="Style A" align="center" valign="center">
-            <interact onClick="setStyle(style a)" /> 
+            <interact onClick="setNiftyStyle(style a)" />
           </control>
         </panel>
         <panel id="helper-panel" with="50%" childLayout="center">
           <control id="setStyleB" name="button" label="Style B" align="center" valign="center">
-            <interact onClick="setStyle(style b)" /> 
+            <interact onClick="setNiftyStyle(style b)" /> 
           </control>
         </panel>
       </panel>

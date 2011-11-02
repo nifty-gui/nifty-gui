@@ -243,6 +243,13 @@ public class EffectProcessor {
             e.setCustomFlag(false);
           }
         }
+        if (e.isActive()) {
+          if (e.isInsideFalloff(x, y) && !e.getCustomFlag()) {
+            e.setCustomFlag(true);
+            e.setActive(false);
+            activeEffects.remove(e);
+          }          
+        }
       }
     }
   }

@@ -39,7 +39,7 @@ public class LwjglRenderImage implements RenderImage {
       height = imageLoader.getHeight();
       textureWidth = imageLoader.getTexWidth();
       textureHeight = imageLoader.getTexHeight();
-      createTexture(imageData, textureWidth, textureHeight, 0, imageLoader.getDepth() == 32 ? GL11.GL_RGBA : GL11.GL_RGB);
+      createTexture(imageData, textureWidth, textureHeight, filterParam, imageLoader.getDepth() == 32 ? GL11.GL_RGBA : GL11.GL_RGB);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -66,14 +66,16 @@ public class LwjglRenderImage implements RenderImage {
 //    checkGLError();
   }  
 
-  private void createTexture(final ByteBuffer textureBuffer, final int width, final int height, final int filter, final int srcPixelFormat) throws Exception {
-    textureId = createTextureID(); 
+  private void createTexture(final ByteBuffer textureBuffer, final int width, final int height, final boolean filter, final int srcPixelFormat) throws Exception {
+    textureId = createTextureID();
     int minFilter = GL11.GL_NEAREST;
     int magFilter = GL11.GL_NEAREST;
+    if (filter) {
+      minFilter = GL11.GL_LINEAR_MIPMAP_LINEAR;
+      magFilter = GL11.GL_NEAREST;
+    }
     bind();
 
-    int componentCount = 1;
-     
     IntBuffer temp = BufferUtils.createIntBuffer(16);
     GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE, temp);
     checkGLError();
@@ -95,10 +97,11 @@ public class LwjglRenderImage implements RenderImage {
     GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, magFilter); 
     checkGLError();
 
-    if (minFilter == GL11.GL_LINEAR_MIPMAP_NEAREST) {
+    if (minFilter == GL11.GL_LINEAR_MIPMAP_NEAREST ||
+        minFilter == GL11.GL_LINEAR_MIPMAP_LINEAR) {
       GLU.gluBuild2DMipmaps(
           GL11.GL_TEXTURE_2D,
-          componentCount, 
+          4, 
           width,
           height,
           srcPixelFormat, 
@@ -142,6 +145,11 @@ public class LwjglRenderImage implements RenderImage {
     if (error != GL11.GL_NO_ERROR) {
       String glerrmsg = GLU.gluErrorString(error);
       log.warning("OpenGL Error: (" + error + ") " + glerrmsg);
+      try {
+        throw new Exception();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 }

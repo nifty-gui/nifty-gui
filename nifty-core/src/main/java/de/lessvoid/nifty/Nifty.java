@@ -163,9 +163,12 @@ public class Nifty {
 
   private void initializeClipboard() {
     try {
-      Class.forName(java.awt.datatransfer.Clipboard.class.getName());
+      Class.forName("java.awt.datatransfer.Clipboard");
       clipboard = new ClipboardAWT();
     } catch (ClassNotFoundException e) {
+      log.info("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
+      clipboard = new ClipboardNull();
+    } catch (Throwable e) {
       log.info("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
       clipboard = new ClipboardNull();
     }
@@ -1352,7 +1355,7 @@ public class Nifty {
       }
 
       NiftyMouseInputEvent result = pool.allocate();
-      result.initialize(mouseX, mouseY, mouseWheel, button0Down, button1Down, button2Down);
+      result.initialize(renderEngine.convertFromNativeX(mouseX), renderEngine.convertFromNativeY(mouseY), mouseWheel, button0Down, button1Down, button2Down);
       return result;
     }
 
@@ -1545,5 +1548,22 @@ public class Nifty {
 
   public String getFontname(final RenderFont font) {
     return getRenderEngine().getFontname(font);
+  }
+
+  /**
+   * Enable automatic scaling of all GUI elements in relation to the given base resolution.
+   * @param baseResultionX width, for instance 1024
+   * @param baseResolutionY height, for instance 768
+   */
+  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY) {
+    renderEngine.enableAutoScaling(baseResolutionX, baseResolutionY);
+  }
+
+  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY, final float scaleX, final float scaleY) {
+    renderEngine.enableAutoScaling(baseResolutionX, baseResolutionY, scaleX, scaleY);
+  }
+
+  public void disableAutoScaling() {
+    renderEngine.disableAutoScaling();
   }
 }

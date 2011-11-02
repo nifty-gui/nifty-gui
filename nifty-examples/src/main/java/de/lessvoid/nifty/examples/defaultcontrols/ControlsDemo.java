@@ -19,6 +19,7 @@ import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
+import de.lessvoid.nifty.controls.slider.builder.SliderBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.chatcontrol.ChatControlDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
@@ -54,6 +55,8 @@ public class ControlsDemo {
     nifty.registerSound("intro", "defaultcontrols/sound/19546__tobi123__Gong_mf2.wav");
     nifty.registerMusic("credits", "defaultcontrols/sound/Loveshadow_-_Almost_Given_Up.ogg");
     nifty.registerMouseCursor("hand", "defaultcontrols/mouse-cursor-hand.png", 5, 4);
+    nifty.enableAutoScaling(1024, 768);
+
     registerMenuButtonHintStyle(nifty);
     registerStyles(nifty);
     registerConsolePopup(nifty);
@@ -303,6 +306,19 @@ public class ControlsDemo {
             panel(common.hspacer("7px"));
             control(new DropDownBuilder("resolutions") {{
               width("200px");
+            }});
+            panel(common.hspacer("20px"));
+            control(new LabelBuilder() {{
+              label("Scale Resolution:");
+            }});
+            panel(common.hspacer("7px"));
+            control(new SliderBuilder(false) {{
+              id("scale-resolution");
+              min(0.5f);
+              max(1.5f);
+              initial(1.0f);
+              stepSize(0.01f);
+              buttonStepSize(0.01f);
             }});
             panel(common.hspacer("*"));
             control(new ButtonBuilder("resetScreenButton", "Restart Screen") {{

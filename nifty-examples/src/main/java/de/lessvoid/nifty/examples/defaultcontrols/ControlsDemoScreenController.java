@@ -23,6 +23,7 @@ import de.lessvoid.nifty.controls.ConsoleCommands.ConsoleCommand;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
+import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.impl.Move;
@@ -232,12 +233,18 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
 
           GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
+          nifty.enableAutoScaling(1024, 768);
           nifty.resolutionChanged();
         } catch (LWJGLException e) {
           e.printStackTrace();
         }
       }
     }, "onResolutionStart");
+  }
+
+  @NiftyEventSubscriber(id="scale-resolution")
+  public void onSliderChanged(final String id, final SliderChangedEvent sliderChangedEvent) {
+    nifty.enableAutoScaling(1024, 768, sliderChangedEvent.getValue(), sliderChangedEvent.getValue());
   }
 
   /**
@@ -253,11 +260,7 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
       for (int i=0; i<modes.length; i++) {
         DisplayMode mode = modes[i];
         if (mode.getBitsPerPixel() == 32 && mode.getFrequency() == currentMode.getFrequency()) {
-          // since Nifty does not yet support automatically rescaling of the GUI and since this
-          // example/demo was designed for 1024x768 pixel we can't allow resolutions below this size.
-          if (mode.getWidth() >= 1024 && mode.getHeight() >= 768) {
-            sorted.add(mode);
-          }
+          sorted.add(mode);
         }
       }
 
@@ -280,6 +283,7 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
       for (DisplayMode mode : sorted) {
         dropDown.addItem(mode);
       }
+      dropDown.selectItem(currentMode);
     } catch (Exception e) {
     }
   }
