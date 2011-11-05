@@ -3,6 +3,7 @@
   <useControls filename="nifty-controls/nifty-button.xml" />
   <useControls filename="nifty-controls/nifty-chat-control.xml" />
   <useControls filename="nifty-controls/nifty-tabs.xml" />
+  <useControls filename="nifty-controls/nifty-treebox.xml" />
   <useControls filename="nifty-controls/nifty-checkbox.xml" />
   <useControls filename="nifty-controls/nifty-console.xml" />
   <useControls filename="nifty-controls/nifty-drop-down.xml" />

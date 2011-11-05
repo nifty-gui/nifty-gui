@@ -19,4 +19,22 @@ public class TabSelectedEvent implements NiftyEvent<Void> {
         this.tabsControl = tabsControl;
         this.selectedTabId = selectedTabId;
     }
+
+    public String getSelectedTabId() {
+        return selectedTabId;
+    }
+
+    public void setSelectedTabId(String selectedTabId) {
+        this.selectedTabId = selectedTabId;
+    }
+
+    public TabsControl getTabsControl() {
+        return tabsControl;
+    }
+
+    public void setTabsControl(TabsControl tabsControl) {
+        this.tabsControl = tabsControl;
+    }
+    
+    
 }

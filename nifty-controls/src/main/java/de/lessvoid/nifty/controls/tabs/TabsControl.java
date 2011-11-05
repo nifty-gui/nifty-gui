@@ -40,7 +40,6 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
 
     @Override
     public void init(Properties prprts, Attributes atrbts) {
-        System.out.println("init");
         Element tabContentPanel = elmnt.findElementByName("#tab-content-panel");
         List<Element> elements = tabContentPanel.getElements();
         for (final Element e : elements) {
@@ -58,9 +57,7 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
 
     private void createTabButton(final String tabId, final String buttonCaption) {
         Element tabButtonPanel = elmnt.findElementByName("#tab-button-panel");
-        System.out.println("looking for button " + tabId + "-button");
         if (tabButtonPanel.findElementByName(tabId + "-button") == null) {
-            System.out.println("adding button " + tabId + "-button");
             new ButtonBuilder(tabId + "-button") {
 
                 {
@@ -87,7 +84,6 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
     @Override
     public void addTab(Element tab) {
         if (tab.getControl(TabControl.class) != null) {
-            System.out.println("adding tab " + tab.getId());
             elmnt.findElementByName("#tab-content-panel").add(tab);
             createTabButton(tab.getId(), tab.getControl(TabControl.class).getCaption());
             setSelectedTab(tab.getId());
@@ -148,7 +144,7 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
                 if (e.getId().equals(activeTab)) {
                     break;
                 }
-                tabIndex ++;
+                tabIndex++;
             }
         }
         return tabIndex;
@@ -160,7 +156,6 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
      */
     public void switchTab(String tabId) {
         if (!tabId.equals(activeTab)) {
-            //TODO: add these two styles to the style.
             if (activeTab != null) {
                 elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab + "-button").setStyle("tab-button");
             }
@@ -178,8 +173,6 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
 
     @Override
     public void onEvent(final String topic, final ElementShowEvent data) {
-        System.out.println("onShow: " + data.getElement());
-
         // we make sure that only the active tab is visible
         Element tabContentPanel = elmnt.findElementByName("#tab-content-panel");
         for (int i = 0; i < tabContentPanel.getElements().size(); i++) {
