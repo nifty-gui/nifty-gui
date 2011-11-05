@@ -1,12 +1,14 @@
 package de.lessvoid.nifty.slick2d.render.font;
 
+import de.lessvoid.nifty.slick2d.loaders.SlickLoadException;
+
 /**
  * This exception is expected to be thrown be the constructor of this class
  * in case loading the specified font failed.
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class LoadFontException extends Exception {
+public final class SlickLoadFontException extends SlickLoadException {
     /**
      * The serialization UID.
      */
@@ -15,7 +17,7 @@ public final class LoadFontException extends Exception {
     /**
      * Create the exception without an attached message or parent Throwable.
      */
-    public LoadFontException() {
+    public SlickLoadFontException() {
         super();
     };
 
@@ -23,7 +25,7 @@ public final class LoadFontException extends Exception {
      * Create the exception with an attached message and without parent
      * Throwable.
      */
-    public LoadFontException(final String msg) {
+    public SlickLoadFontException(final String msg) {
         super(msg);
     };
 
@@ -31,14 +33,14 @@ public final class LoadFontException extends Exception {
      * Create the exception without an attached message and with parent
      * Throwable.
      */
-    public LoadFontException(final Throwable e) {
+    public SlickLoadFontException(final Throwable e) {
         super(e);
     };
 
     /**
      * Create the exception with an attached message and parent Throwable.
      */
-    public LoadFontException(final String msg, final Throwable e) {
+    public SlickLoadFontException(final String msg, final Throwable e) {
         super(msg, e);
     };
 }

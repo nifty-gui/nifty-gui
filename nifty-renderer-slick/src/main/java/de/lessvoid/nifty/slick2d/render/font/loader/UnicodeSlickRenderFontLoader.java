@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.HieroSettings;
 
-import de.lessvoid.nifty.slick2d.render.font.LoadFontException;
+import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import de.lessvoid.nifty.slick2d.render.font.UnicodeSlickRenderFont;
 
@@ -24,24 +24,24 @@ public final class UnicodeSlickRenderFontLoader extends
      * ".ttf" to the filename and by replacing the file ending with "ttf".
      */
     @Override
-    public SlickRenderFont loadFont(final String font)
-        throws LoadFontException {
+    public SlickRenderFont loadFont(final String filename)
+        throws SlickLoadFontException {
         try {
-            final HieroSettings hieroSettings = new HieroSettings(font);
-            Font javaFont = loadJavaFont(font + ".ttf");
+            final HieroSettings hieroSettings = new HieroSettings(filename);
+            Font javaFont = loadJavaFont(filename + ".ttf");
             if (javaFont == null) {
                 javaFont =
-                    loadJavaFont(font.substring(0, font.lastIndexOf("."))
+                    loadJavaFont(filename.substring(0, filename.lastIndexOf("."))
                         + "ttf");
 
                 if (javaFont == null) {
-                    throw new LoadFontException("Loading TTF Font failed.");
+                    throw new SlickLoadFontException("Loading TTF Font failed.");
                 }
             }
             return new UnicodeSlickRenderFont(new UnicodeFont(javaFont,
                 hieroSettings), javaFont);
         } catch (final SlickException e) {
-            throw new LoadFontException("Loading the font failed.", e);
+            throw new SlickLoadFontException("Loading the font failed.", e);
         }
     }
 }

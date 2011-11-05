@@ -16,10 +16,10 @@ public final class UnicodeSlickRenderFont extends AbstractJavaSlickRenderFont {
      * 
      * @param ucFont the unicode font that is used to render
      * @param javaFont the java font that is used to render just the same font
-     * @throws LoadFontException in case loading the font fails
+     * @throws SlickLoadFontException in case loading the font fails
      */
     public UnicodeSlickRenderFont(final UnicodeFont ucFont,
-        final Font javaFont) throws LoadFontException {
+        final Font javaFont) throws SlickLoadFontException {
         super(ucFont, javaFont);
     }
 }

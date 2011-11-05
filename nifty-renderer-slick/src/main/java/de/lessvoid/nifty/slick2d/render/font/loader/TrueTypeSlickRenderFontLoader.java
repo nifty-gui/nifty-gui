@@ -4,7 +4,7 @@ import java.awt.Font;
 
 import org.newdawn.slick.TrueTypeFont;
 
-import de.lessvoid.nifty.slick2d.render.font.LoadFontException;
+import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import de.lessvoid.nifty.slick2d.render.font.TrueTypeSlickRenderFont;
 
@@ -19,12 +19,12 @@ public final class TrueTypeSlickRenderFontLoader extends
      * Load the requested font.
      */
     @Override
-    public SlickRenderFont loadFont(final String font)
-        throws LoadFontException {
+    public SlickRenderFont loadFont(final String filename)
+        throws SlickLoadFontException {
 
-        final Font javaFont = loadJavaFont(font);
+        final Font javaFont = loadJavaFont(filename);
         if (javaFont == null) {
-            throw new LoadFontException("Can't load font as true type.");
+            throw new SlickLoadFontException("Can't load font as true type.");
         }
 
         return new TrueTypeSlickRenderFont(new TrueTypeFont(javaFont, true),

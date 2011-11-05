@@ -5,11 +5,11 @@ package de.lessvoid.nifty.slick2d.render;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class Utils {
+public final class SlickRenderUtils {
     /**
      * The private constructor avoids any instances to be created.
      */
-    private Utils() {
+    private SlickRenderUtils() {
         // nothing
     }
 

@@ -28,10 +28,10 @@ public abstract class AbstractJavaSlickRenderFont extends AbstractSlickRenderFon
      * 
      * @param ttFont the true type font that is used to render
      * @param javaFont the java font that is used to render just the same font
-     * @throws LoadFontException in case loading the font fails
+     * @throws SlickLoadFontException in case loading the font fails
      */
     protected AbstractJavaSlickRenderFont(final org.newdawn.slick.Font slickFont,
-        final java.awt.Font javaFont) throws LoadFontException {
+        final java.awt.Font javaFont) throws SlickLoadFontException {
         super(slickFont);
         internalFont = javaFont;
         tempCharArray = new char[2];

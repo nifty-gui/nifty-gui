@@ -3,7 +3,7 @@ package de.lessvoid.nifty.slick2d.render.font.loader;
 import org.newdawn.slick.AngelCodeFont;
 
 import de.lessvoid.nifty.slick2d.render.font.AngelCodeSlickRenderFont;
-import de.lessvoid.nifty.slick2d.render.font.LoadFontException;
+import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 
 /**
@@ -17,17 +17,17 @@ public final class AngelCodeSlickRenderFontLoader implements
      * Load the requested font.
      */
     @Override
-    public SlickRenderFont loadFont(final String font)
-        throws LoadFontException {
-        final String image = font;
+    public SlickRenderFont loadFont(final String filename)
+        throws SlickLoadFontException {
+        final String image = filename;
         final String definition =
-            font.substring(0, font.lastIndexOf('.') + 1) + "fnt";
+            filename.substring(0, filename.lastIndexOf('.') + 1) + "fnt";
 
         try {
             return new AngelCodeSlickRenderFont(new AngelCodeFont(image,
                 definition));
         } catch (final Exception e) {
-            throw new LoadFontException("Loading font failed.", e);
+            throw new SlickLoadFontException("Loading font failed.", e);
         }
     }
 

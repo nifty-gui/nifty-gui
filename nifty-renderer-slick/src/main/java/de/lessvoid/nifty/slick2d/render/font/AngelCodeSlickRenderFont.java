@@ -13,10 +13,10 @@ public final class AngelCodeSlickRenderFont extends AbstractSlickRenderFont {
      * Create the render font using a already loaded angel code font.
      * 
      * @param font the font this render font is supposed to encapsulate
-     * @throws LoadFontException in case loading the font fails
+     * @throws SlickLoadFontException in case loading the font fails
      */
     public AngelCodeSlickRenderFont(final AngelCodeFont font)
-        throws LoadFontException {
+        throws SlickLoadFontException {
         super(font);
     }
 }

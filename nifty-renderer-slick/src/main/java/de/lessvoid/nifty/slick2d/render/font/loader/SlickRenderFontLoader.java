@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.slick2d.render.font.loader;
 
-import de.lessvoid.nifty.slick2d.render.font.LoadFontException;
+import de.lessvoid.nifty.slick2d.loaders.SlickLoader;
+import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 
 /**
@@ -8,13 +9,13 @@ import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public interface SlickRenderFontLoader {
+public interface SlickRenderFontLoader extends SlickLoader {
     /**
      * Load a render font that is identified by a String.
      * 
-     * @param font the font identifier
+     * @param filename the filename to load
      * @return the loaded font
-     * @throws LoadFontException in case loading the font fails
+     * @throws SlickLoadFontException in case loading the font fails
      */
-    SlickRenderFont loadFont(String font) throws LoadFontException;
+    SlickRenderFont loadFont(String filename) throws SlickLoadFontException;
 }

@@ -3,7 +3,7 @@ package de.lessvoid.nifty.slick2d.render.font;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
-import de.lessvoid.nifty.slick2d.render.Utils;
+import de.lessvoid.nifty.slick2d.render.SlickRenderUtils;
 import de.lessvoid.nifty.tools.Color;
 
 /**
@@ -30,9 +30,9 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
      * @param font the font that supplies the render font with informations
      */
     protected AbstractSlickRenderFont(final Font font)
-        throws LoadFontException {
+        throws SlickLoadFontException {
         if (font == null) {
-            throw new LoadFontException();
+            throw new SlickLoadFontException();
         }
         internalFont = font;
         convertColor = new org.newdawn.slick.Color(0.f, 0.f, 0.f, 0.f);
@@ -52,7 +52,7 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
         g.scale(sizeX, sizeY);
 
         if (color != null) {
-            g.setColor(Utils.convertColorNiftySlick(color, convertColor));
+            g.setColor(SlickRenderUtils.convertColorNiftySlick(color, convertColor));
         }
         g.drawString(text, 0, 0);
         g.popTransform();
