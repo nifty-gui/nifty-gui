@@ -8,6 +8,8 @@ import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.slick2d.loaders.SlickRenderFontLoaders;
+import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
@@ -45,7 +47,7 @@ public class SlickRenderDevice implements RenderDevice {
   }
 
   public RenderFont createFont(final String filename) {
-    return new SlickRenderFont(filename, this);
+    return SlickRenderFontLoaders.getInstance().loadFont(filename);
   }
 
   public void renderQuad(final int x, final int y, final int width, final int height, final Color color) {
