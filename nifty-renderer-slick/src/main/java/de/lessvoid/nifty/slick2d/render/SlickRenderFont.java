@@ -34,6 +34,15 @@ public class SlickRenderFont implements RenderFont {
    * @param text text
    * @return width of the given text for the current font
    */
+  public int getWidth(final String text, final float size) {
+    return 0;//font.getStringWidth(text);
+  }
+
+  /**
+   * get font width of the given string.
+   * @param text text
+   * @return width of the given text for the current font
+   */
   public int getWidth(final String text) {
     return 0;//font.getStringWidth(text);
   }

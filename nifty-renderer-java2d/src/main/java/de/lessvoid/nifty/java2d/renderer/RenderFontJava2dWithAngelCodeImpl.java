@@ -39,8 +39,13 @@ public class RenderFontJava2dWithAngelCodeImpl implements RenderFont {
 		return 0;
 	}
 
+  @Override
+  public int getWidth(String text) {
+    return getWidth(text, 1.f);
+  }
+
 	@Override
-	public int getWidth(String text) {
+	public int getWidth(String text, float size) {
 		return 0;
 	}
 

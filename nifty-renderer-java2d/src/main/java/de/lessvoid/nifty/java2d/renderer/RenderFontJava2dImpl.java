@@ -40,8 +40,13 @@ public class RenderFontJava2dImpl implements RenderFont {
 		return (int) height;
 	}
 
+  @Override
+  public int getWidth(String text) {
+    return getWidth(text, 1.f);
+  }
+
 	@Override
-	public int getWidth(String text) {
+	public int getWidth(String text, float size) {
 		Graphics graphics = renderDevice.getGraphics();
 
 		if (graphics == null)
