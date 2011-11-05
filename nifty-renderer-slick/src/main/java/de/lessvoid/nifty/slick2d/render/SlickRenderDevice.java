@@ -4,12 +4,14 @@ import java.io.IOException;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.fills.GradientFill;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.slick2d.loaders.SlickMouseCursorLoaders;
 import de.lessvoid.nifty.slick2d.loaders.SlickRenderFontLoaders;
 import de.lessvoid.nifty.slick2d.loaders.SlickRenderImageLoaders;
+import de.lessvoid.nifty.slick2d.render.cursor.SlickMouseCursor;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import de.lessvoid.nifty.slick2d.render.image.SlickRenderImage;
 import de.lessvoid.nifty.spi.render.MouseCursor;
@@ -79,6 +81,10 @@ public final class SlickRenderDevice implements RenderDevice {
      * Finish rendering a frame.
      */
     public void endFrame() {
+        if (activeMouseCursor != null) {
+            final Input input = gameContainer.getInput();
+            activeMouseCursor.render(gameContainer.getGraphics(), input.getMouseX(), input.getMouseY());
+        }
     }
 
     /**
@@ -208,18 +214,42 @@ public final class SlickRenderDevice implements RenderDevice {
                 break;
         }
     }
+    
+    /**
+     * The mouse cursor that is currently active.
+     */
+    private SlickMouseCursor activeMouseCursor;
 
+    /**
+     * Create a new mouse cursor.
+     */
     @Override
-    public MouseCursor createMouseCursor(String filename, int hotspotX,
-        int hotspotY) throws IOException {
-        return null;
+    public MouseCursor createMouseCursor(final String filename, final int hotspotX,
+        final int hotspotY) throws IOException {
+        return SlickMouseCursorLoaders.getInstance().loadCursor(filename, hotspotX, hotspotY);
     }
 
+    /**
+     * Enable the mouse cursor.
+     */
     @Override
-    public void enableMouseCursor(MouseCursor mouseCursor) {
+    public void enableMouseCursor(final MouseCursor mouseCursor) {
+        if (!(mouseCursor instanceof SlickMouseCursor)) {
+            throw new IllegalArgumentException("Invalid mouse cursor implementation.");
+        }
+        
+        activeMouseCursor = (SlickMouseCursor) mouseCursor;
+        activeMouseCursor.enableCursor();
     }
 
+    /**
+     * Disable the current mouse cursor.
+     */
     @Override
     public void disableMouseCursor() {
+        if (activeMouseCursor != null) {
+            activeMouseCursor.disableCursor();
+            activeMouseCursor = null;
+        }
     }
 }
