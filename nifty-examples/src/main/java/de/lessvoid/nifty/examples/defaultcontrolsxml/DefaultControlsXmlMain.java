@@ -32,6 +32,7 @@ public class DefaultControlsXmlMain {
 //    nifty.fromXml("src/main/resources/defaultcontrolsxml/12-slider.xml", "start");
 //    nifty.fromXml("src/main/resources/defaultcontrolsxml/13-textfield.xml", "start");
 //    nifty.fromXml("src/main/resources/defaultcontrolsxml/14-window.xml", "start");
+  nifty.fromXml("src/main/resources/defaultcontrolsxml/15-tabs.xml", "start");
 
     LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();
