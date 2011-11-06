@@ -18,7 +18,6 @@ import de.lessvoid.nifty.slick2d.input.events.MouseEventMoved;
 import de.lessvoid.nifty.slick2d.input.events.MouseEventPressed;
 import de.lessvoid.nifty.slick2d.input.events.MouseEventReleased;
 import de.lessvoid.nifty.slick2d.input.events.MouseEventWheelMoved;
-import de.lessvoid.nifty.spi.input.InputSystem;
 
 /**
  * This is the abstract Input System implementation to connect the Input of
@@ -27,7 +26,7 @@ import de.lessvoid.nifty.spi.input.InputSystem;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public abstract class AbstractSlickInputSystem extends InputAdapter implements
-    InputSystem {
+    SlickInputSystem {
     /**
      * The list of input events that was registered but yet not processed.
      */
