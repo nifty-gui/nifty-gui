@@ -8,12 +8,14 @@ import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.spi.render.RenderFont;
 
 /**
  *
  * @author ractoc
  */
-public class TreeBoxViewController implements ListBoxViewConverter<TreeEntryModelClass> {
+public class TreeBoxViewConverter implements ListBoxViewConverter<TreeEntryModelClass> {
 
     @Override
     public void display(Element listBoxItem, TreeEntryModelClass item) {
@@ -37,7 +39,17 @@ public class TreeBoxViewController implements ListBoxViewConverter<TreeEntryMode
         final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
         final Element icon = element.findElementByName("#tree-item-icon");
         final ImageRenderer iconRenderer = icon.getRenderer(ImageRenderer.class);
-        return ((textRenderer.getFont() == null) ? 0 : textRenderer.getFont().getWidth(item.getTreeItem().getDisplayCaption())
-                + iconRenderer.getImage().getWidth() + item.getIndent());
+        final RenderFont font = textRenderer.getFont();
+        if (font == null) {
+          return 0;
+        }
+        if (iconRenderer == null ||
+            iconRenderer.getImage() == null ||
+            item == null ||
+            item.getTreeItem() == null) {
+          return 0;
+        }
+        NiftyImage image = iconRenderer.getImage();
+        return font.getWidth(item.getTreeItem().getDisplayCaption()) + image.getWidth() + item.getIndent();
     }
 }
