@@ -7,6 +7,12 @@ import de.lessvoid.nifty.slick2d.render.cursor.SlickMouseCursor;
 import de.lessvoid.nifty.slick2d.render.cursor.loader.LwjglCursorSlickMouseCursorLoader;
 import de.lessvoid.nifty.slick2d.render.cursor.loader.SlickMouseCursorLoader;
 
+/**
+ * This maintains the list of known cursor loaders and queries them one by one in
+ * order to load a cursor.
+ * 
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ */
 public final class SlickMouseCursorLoaders extends
     AbstractSlickLoaders<SlickMouseCursorLoader> {
     /**
@@ -36,7 +42,7 @@ public final class SlickMouseCursorLoaders extends
      * Add the default loaders.
      */
     @Override
-    public void loadDefaultLoaders(SlickAddLoaderLocation order) {
+    public void loadDefaultLoaders(final SlickAddLoaderLocation order) {
         addLoader(new LwjglCursorSlickMouseCursorLoader(), order);
     }
 
