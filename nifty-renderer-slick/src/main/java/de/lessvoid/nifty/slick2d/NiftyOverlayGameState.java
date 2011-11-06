@@ -67,6 +67,7 @@ public abstract class NiftyOverlayGameState implements GameState {
      * Initialize the Nifty GUI for this game.
      * 
      * @param container the container used to display the game
+     * @param game the game this state is part of
      * @param renderDevice the render device that is supposed to be used to
      *            render the GUI
      * @param soundDevice the sound device that is supposed to be used
@@ -75,7 +76,7 @@ public abstract class NiftyOverlayGameState implements GameState {
      * @throws IllegalStateException in case this function was called before
      */
     protected final void initNifty(final GameContainer container,
-        final SlickRenderDevice renderDevice,
+        final StateBasedGame game, final SlickRenderDevice renderDevice,
         final SlickSoundDevice soundDevice,
         final SlickInputSystem inputSystem, final TimeProvider timeProvider) {
         if (niftyGUI != null) {
@@ -88,7 +89,7 @@ public abstract class NiftyOverlayGameState implements GameState {
 
         this.inputSystem = inputSystem;
 
-        prepareNifty(niftyGUI);
+        prepareNifty(niftyGUI, game);
     }
 
     /**
@@ -97,6 +98,7 @@ public abstract class NiftyOverlayGameState implements GameState {
      * NiftyGUI to the input listener this basic game implements.
      * 
      * @param container the container used to display the game
+     * @param game the game this state is part of
      * @param renderDevice the render device that is supposed to be used to
      *            render the GUI
      * @param soundDevice the sound device that is supposed to be used
@@ -104,9 +106,9 @@ public abstract class NiftyOverlayGameState implements GameState {
      * @throws IllegalStateException in case this function was called before
      */
     protected final void initNifty(final GameContainer container,
-        final SlickRenderDevice renderDevice,
+        final StateBasedGame game, final SlickRenderDevice renderDevice,
         final SlickSoundDevice soundDevice, final TimeProvider timeProvider) {
-        initNifty(container, renderDevice, soundDevice,
+        initNifty(container, game, renderDevice, soundDevice,
             new SlickSlickInputSystem(this), timeProvider);
     }
 
@@ -116,8 +118,9 @@ public abstract class NiftyOverlayGameState implements GameState {
      * initialized.
      * 
      * @param nifty the Nifty GUI that got initialized
+     * @param game the game this state is part of
      */
-    protected abstract void prepareNifty(Nifty nifty);
+    protected abstract void prepareNifty(Nifty nifty, StateBasedGame game);
 
     /**
      * Render the game.
@@ -173,7 +176,7 @@ public abstract class NiftyOverlayGameState implements GameState {
         final Input input = container.getInput();
         input.removeListener(inputSystem);
         input.addListener(inputSystem);
-        
+
         enterState(container, game);
     }
 
@@ -206,7 +209,7 @@ public abstract class NiftyOverlayGameState implements GameState {
         final StateBasedGame game) throws SlickException {
         final Input input = container.getInput();
         input.removeListener(inputSystem);
-        
+
         leaveState(container, game);
     }
 }

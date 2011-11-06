@@ -1,8 +1,12 @@
 package de.lessvoid.nifty.slick2d.render.cursor.loader;
 
+import java.io.IOException;
+
 import org.newdawn.slick.opengl.CursorLoader;
 import org.newdawn.slick.opengl.ImageData;
 import org.newdawn.slick.opengl.ImageDataFactory;
+import org.newdawn.slick.opengl.LoadableImageData;
+import org.newdawn.slick.util.ResourceLoader;
 
 import de.lessvoid.nifty.slick2d.render.cursor.LwjglCursorSlickMouseCursor;
 import de.lessvoid.nifty.slick2d.render.cursor.SlickLoadCursorException;
@@ -24,8 +28,12 @@ public final class LwjglCursorSlickMouseCursorLoader implements
     public SlickMouseCursor loadCursor(final String filename, final int hotspotX,
         final int hotspotY) throws SlickLoadCursorException {
         
-        final ImageData data = ImageDataFactory.getImageDataFor(filename);
-        
+        final LoadableImageData data = ImageDataFactory.getImageDataFor(filename);
+        try {
+            data.loadImage(ResourceLoader.getResourceAsStream(filename), true, true, null);
+        } catch (final IOException e) {
+            throw new SlickLoadCursorException("Failed loading cursor.", e);
+        }
         try {
             return new LwjglCursorSlickMouseCursor(CursorLoader.get().getCursor(data, hotspotX, data.getHeight() - hotspotY + 1));
         } catch (final Exception e) {

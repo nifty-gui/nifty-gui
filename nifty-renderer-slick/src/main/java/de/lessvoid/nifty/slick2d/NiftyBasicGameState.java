@@ -10,7 +10,7 @@ import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
-public abstract class NiftyBasicGameState extends NiftyOverlayGameState {
+public abstract class NiftyBasicGameState extends NiftyOverlayBasicGameState {
     /**
      * The screen that is called upon entering the game state.
      */
@@ -49,7 +49,7 @@ public abstract class NiftyBasicGameState extends NiftyOverlayGameState {
      * rendering the screen.
      */
     @Override
-    protected final void renderGame(final GameContainer container,
+    protected void renderGame(final GameContainer container,
         final StateBasedGame game, final Graphics g) throws SlickException {
         g.clear();
     }
@@ -61,7 +61,7 @@ public abstract class NiftyBasicGameState extends NiftyOverlayGameState {
     @Override
     protected final void initGameAndGUI(GameContainer container,
         final StateBasedGame game) throws SlickException {
-        initNifty(container, new SlickRenderDevice(container),
+        initNifty(container, game, new SlickRenderDevice(container),
             new SlickSoundDevice(), new PlainSlickInputSystem(),
             new TimeProvider());
         getNifty().gotoScreen(startScreen);
@@ -70,10 +70,20 @@ public abstract class NiftyBasicGameState extends NiftyOverlayGameState {
     /**
      * Enter this game state.
      */
+    @Override
     public void enterState(final GameContainer container,
         final StateBasedGame game) throws SlickException {
         if (startScreen != null) {
             getNifty().gotoScreen(startScreen);
         }
+    }
+
+    /**
+     * Leave this game state.
+     */
+    @Override
+    public void leaveState(final GameContainer container,
+        final StateBasedGame game) throws SlickException {
+        // nothing
     }
 }

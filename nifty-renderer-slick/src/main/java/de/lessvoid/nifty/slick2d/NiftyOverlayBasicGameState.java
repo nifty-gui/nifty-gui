@@ -67,6 +67,7 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
      * Initialize the Nifty GUI for this game.
      * 
      * @param container the container used to display the game
+     * @param game the state based game this state is part of
      * @param renderDevice the render device that is supposed to be used to
      *            render the GUI
      * @param soundDevice the sound device that is supposed to be used
@@ -74,7 +75,7 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
      * @param timeProvider the time provider that is supposed to be used
      * @throws IllegalStateException in case this function was called before
      */
-    protected final void initNifty(final GameContainer container,
+    protected final void initNifty(final GameContainer container, final StateBasedGame game, 
         final SlickRenderDevice renderDevice,
         final SlickSoundDevice soundDevice, final SlickInputSystem inputSystem, final TimeProvider timeProvider) {
         if (niftyGUI != null) {
@@ -87,7 +88,7 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
         
         this.inputSystem = inputSystem;
 
-        prepareNifty(niftyGUI);
+        prepareNifty(niftyGUI, game);
     }
     
     /**
@@ -96,16 +97,17 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
      * NiftyGUI to the input listener this basic game implements.
      * 
      * @param container the container used to display the game
+     * @param game the state based game this state is part of
      * @param renderDevice the render device that is supposed to be used to
      *            render the GUI
      * @param soundDevice the sound device that is supposed to be used
      * @param timeProvider the time provider that is supposed to be used
      * @throws IllegalStateException in case this function was called before
      */
-    protected final void initNifty(final GameContainer container,
+    protected final void initNifty(final GameContainer container, final StateBasedGame game, 
         final SlickRenderDevice renderDevice,
         final SlickSoundDevice soundDevice, final TimeProvider timeProvider) {
-        initNifty(container, renderDevice, soundDevice, new SlickSlickInputSystem(this), timeProvider);
+        initNifty(container, game, renderDevice, soundDevice, new SlickSlickInputSystem(this), timeProvider);
     }
 
     /**
@@ -114,8 +116,9 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
      * initialized.
      * 
      * @param nifty the Nifty GUI that got initialized
+     * @param game the state based game this state is part of
      */
-    protected abstract void prepareNifty(Nifty nifty);
+    protected abstract void prepareNifty(Nifty nifty, StateBasedGame game);
 
     /**
      * Render the game.
