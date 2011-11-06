@@ -70,7 +70,7 @@ public abstract class NiftyGameState extends NiftyOverlayBasicGameState {
     /**
      * Enter this game state.
      */
-    public void enter(final GameContainer container,
+    public void enterState(final GameContainer container,
         final StateBasedGame game) throws SlickException {
         if (startScreen != null) {
             getNifty().gotoScreen(startScreen);

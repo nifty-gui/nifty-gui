@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.slick2d.input.events;
 
+import de.lessvoid.nifty.slick2d.input.InputState;
+
 /**
  * This is the abstract mouse event that stores only the data all mouse events
  * have in common.
@@ -45,5 +47,23 @@ public abstract class AbstractMouseEvent implements InputEvent {
      */
     protected final int getY() {
         return locY;
+    }
+    
+    /**
+     * {@inheritDoc}
+     * Default implementation allows this event to be executed in any case.
+     */
+    @Override
+    public boolean executeEvent(final InputState state) {
+        return true;
+    }
+    
+    /**
+     * {@inheritDoc}
+     * The default implementation never updates the state.
+     */
+    @Override
+    public void updateState(final InputState state, final boolean handledByGUI) {
+        // nothing to do
     }
 }

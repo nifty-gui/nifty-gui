@@ -36,6 +36,11 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements
      * The input system that feeds this input system with data.
      */
     private Input input;
+    
+    /**
+     * The input state used for the communication between the input events.
+     */
+    private final InputState inputState;
 
     /**
      * The list of buttons that got pressed and are still pressed.
@@ -45,6 +50,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements
     protected AbstractSlickInputSystem() {
         inputEventList = new ArrayList<InputEvent>();
         buttonPressedStack = new LinkedList<Integer>();
+        inputState = new InputState();
     }
 
     @Override
@@ -131,8 +137,14 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements
         InputEvent currentEvent;
         while (!inputEventList.isEmpty()) {
             currentEvent = inputEventList.remove(0);
+            if (!currentEvent.executeEvent(inputState)) {
+                continue;
+            }
             if (!currentEvent.sendToNifty(inputEventConsumer)) {
                 handleInputEvent(currentEvent);
+                currentEvent.updateState(inputState, false);
+            } else {
+                currentEvent.updateState(inputState, true);
             }
         }
     }

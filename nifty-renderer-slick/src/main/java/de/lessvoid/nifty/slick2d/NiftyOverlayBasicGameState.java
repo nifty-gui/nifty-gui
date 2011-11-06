@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.opengl.SlickCallable;
-import org.newdawn.slick.state.GameState;
+import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.Nifty;
@@ -15,11 +15,16 @@ import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
-public abstract class NiftyOverlayBasicGameState implements GameState {
+public abstract class NiftyOverlayBasicGameState extends BasicGameState {
     /**
      * The one and only Nifty GUI.
      */
     private Nifty niftyGUI;
+    
+    /**
+     * The used input system.
+     */
+    private SlickInputSystem inputSystem;
 
     /**
      * Get the instance of the NiftyGUI that is used to render this screen.
@@ -41,6 +46,8 @@ public abstract class NiftyOverlayBasicGameState implements GameState {
         if (niftyGUI == null) {
             throw new IllegalStateException("NiftyGUI was not initialized.");
         }
+        
+        container.getInput().removeListener(game);
     }
 
     /**
@@ -77,12 +84,8 @@ public abstract class NiftyOverlayBasicGameState implements GameState {
 
         niftyGUI =
             new Nifty(renderDevice, soundDevice, inputSystem, timeProvider);
-
-        final Input input = container.getInput();
-        /* Slick automatically adds the game as input listener. Undo this. */
-        input.removeListener(this);
-        input.removeListener(inputSystem);
-        input.addListener(inputSystem);
+        
+        this.inputSystem = inputSystem;
 
         prepareNifty(niftyGUI);
     }
@@ -159,4 +162,49 @@ public abstract class NiftyOverlayBasicGameState implements GameState {
      */
     protected abstract void updateGame(GameContainer container, StateBasedGame game, int delta)
         throws SlickException;
+
+    /**
+     * Enter the game state.
+     */
+    public final void enter(final GameContainer container,
+        final StateBasedGame game) throws SlickException {
+        final Input input = container.getInput();
+        input.removeListener(inputSystem);
+        input.addListener(inputSystem);
+        
+        enterState(container, game);
+    }
+
+    /**
+     * Enter the game state. This function is called during the default
+     * {@link #enter(GameContainer, StateBasedGame)} function call.
+     * 
+     * @param container the container that displays the game
+     * @param game the state based game this state is a part of
+     * @throws SlickException in case entering the state fails
+     */
+    protected abstract void enterState(final GameContainer container,
+        final StateBasedGame game) throws SlickException;
+
+    /**
+     * Leave the game state. This function is called during the default
+     * {@link #leave(GameContainer, StateBasedGame)} function call.
+     * 
+     * @param container the container that displays the game
+     * @param game the state based game this state is a part of
+     * @throws SlickException in case entering the state fails
+     */
+    protected abstract void leaveState(final GameContainer container,
+        final StateBasedGame game) throws SlickException;
+
+    /**
+     * Leave this game state.
+     */
+    public final void leave(final GameContainer container,
+        final StateBasedGame game) throws SlickException {
+        final Input input = container.getInput();
+        input.removeListener(inputSystem);
+        
+        leaveState(container, game);
+    }
 }

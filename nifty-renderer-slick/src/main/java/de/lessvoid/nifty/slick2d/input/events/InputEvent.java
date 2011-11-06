@@ -3,8 +3,26 @@ package de.lessvoid.nifty.slick2d.input.events;
 import org.newdawn.slick.InputListener;
 
 import de.lessvoid.nifty.NiftyInputConsumer;
+import de.lessvoid.nifty.slick2d.input.InputState;
 
 public interface InputEvent {
+    /**
+     * Check if the input event is supposed to be executed.
+     * 
+     * @param state the input event state
+     * @return <code>true</code> in case this event is supposed to be executed
+     */
+    boolean executeEvent(InputState state);
+
+    /**
+     * Update the input event state.
+     * 
+     * @param state the input event state to update
+     * @param handledByGUI <code>true</code> if this event was handled by the
+     *            GUI
+     */
+    void updateState(InputState state, boolean handledByGUI);
+
     /**
      * Send the event to a nifty input consumer.
      * 

@@ -3,6 +3,7 @@ package de.lessvoid.nifty.slick2d.input.events;
 import org.newdawn.slick.InputListener;
 
 import de.lessvoid.nifty.NiftyInputConsumer;
+import de.lessvoid.nifty.slick2d.input.InputState;
 
 /**
  * This mouse event is used to store the event generated in case a mouse button
@@ -46,5 +47,15 @@ public final class MouseEventClicked extends AbstractMouseEventButton {
     public boolean sendToSlick(final InputListener listener) {
         listener.mouseClicked(getButton(), getX(), getY(), count);
         return true;
+    }
+    
+    /**
+     * Reject this event in case the input state says so.
+     */
+    @Override
+    public boolean executeEvent(final InputState state) {
+        boolean result = !state.isConsumeNextClick();
+        state.setConsumeNextClick(false);
+        return result;
     }
 }
