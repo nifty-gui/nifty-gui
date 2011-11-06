@@ -7,6 +7,7 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
 public class TextTyping implements EffectImpl {
@@ -62,6 +63,22 @@ public class TextTyping implements EffectImpl {
       r.saveState(null);
       r.setFont(textRenderer.getFont());
       r.setRenderTextSize(charSize);
+
+      // this part makes sure the text gets correctly centered when the RenderTextSize has been changed
+      TextRenderer textRenderer = element.getRenderer(TextRenderer.class);
+      if (textRenderer != null) {
+        String text = textRenderer.getWrappedText();
+        RenderFont font = textRenderer.getFont();
+
+        float originalWidth = font.getWidth(text, 1.0f);
+        float sizedWidth = font.getWidth(text, charSize);
+
+        float originalHeight = font.getHeight();
+        float sizedHeight = font.getHeight() * charSize;
+
+        r.moveTo(- (sizedWidth - originalWidth) / 2, - (sizedHeight - originalHeight) / 2);
+      }
+
       r.renderText(nextChar, element.getX() + textWidth, element.getY(), -1, -1, Color.WHITE);
       r.restoreState();
     }

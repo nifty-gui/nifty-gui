@@ -18,7 +18,11 @@ public class LwjglRenderFont implements RenderFont {
   }
 
   public int getWidth(final String text) {
-    return font.getStringWidth(text);
+    return font.getStringWidth(text, 1.f);
+  }
+
+  public int getWidth(final String text, final float size) {
+    return font.getStringWidth(text, size);
   }
 
   public static int getKerning(final CharacterInfo charInfoC, final char nextc) {

@@ -431,6 +431,9 @@ public class TextRenderer implements ElementRenderer {
     public int getWidth(final String text) {
       return 0;
     }
+    public int getWidth(final String text, final float scale) {
+      return 0;
+    }
     public void render(final String text, final int x, final int y, final Color fontColor, final float size) {
     }
     public int getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {

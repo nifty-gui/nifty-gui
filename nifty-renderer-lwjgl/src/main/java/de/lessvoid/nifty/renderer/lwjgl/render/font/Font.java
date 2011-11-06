@@ -240,8 +240,8 @@ public class Font {
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   }
 
-  public int getStringWidth(String text) {
-    return getStringWidthInternal(text, 1.0f);
+  public int getStringWidth(final String text, final float size) {
+    return getStringWidthInternal(text, size);
   }
 
   private int getStringWidthInternal(final String text, final float size) {
