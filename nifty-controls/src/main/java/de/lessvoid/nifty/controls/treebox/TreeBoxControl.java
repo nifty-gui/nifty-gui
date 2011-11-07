@@ -13,7 +13,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -77,7 +76,9 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
                 addTreeItem(treeListBox, (TreeItem) childItem, currentIndent + 1);
             }
         }
-        System.out.println("adding tree item " + treeItem.getDisplayCaption());
-        treeListBox.addItem(new TreeEntryModelClass(indentWidth * currentIndent, treeItem));
+        if (currentIndent != 0) {
+            System.out.println("adding tree item " + treeItem.getDisplayCaption() + " with indent " + indentWidth * currentIndent);
+            treeListBox.addItem(new TreeEntryModelClass(indentWidth * currentIndent, treeItem));
+        }
     }
 }
