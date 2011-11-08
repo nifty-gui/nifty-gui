@@ -8,6 +8,7 @@ import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  *
@@ -19,8 +20,8 @@ public class TreeBoxViewConverter implements ListBoxViewConverter<TreeEntryModel
     public void display(Element listBoxItem, TreeEntryModelClass item) {
         System.out.println(item.getTreeItem().getDisplayCaption() + "=" + item.getIndent());
         final Element spacer = listBoxItem.findElementByName("#tree-item-spacer");
-        spacer.setWidth(item.getIndent());
-        spacer.setHeight(item.getTreeItem().getDisplayIconCollapsed().getHeight());
+        spacer.setConstraintWidth(new SizeValue(String.valueOf(item.getIndent())));
+        spacer.setConstraintHeight(new SizeValue(String.valueOf(item.getTreeItem().getDisplayIconCollapsed().getHeight())));
         final Element text = listBoxItem.findElementByName("#tree-item-caption");
         final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
         final Element icon = listBoxItem.findElementByName("#tree-item-icon");
@@ -31,8 +32,8 @@ public class TreeBoxViewConverter implements ListBoxViewConverter<TreeEntryModel
         } else {
             iconRenderer.setImage(item.getTreeItem().getDisplayIconCollapsed());
         }
-        icon.setWidth(item.getTreeItem().getDisplayIconCollapsed().getWidth());
-        icon.setHeight(item.getTreeItem().getDisplayIconCollapsed().getHeight());
+        icon.setConstraintWidth(new SizeValue(String.valueOf(item.getTreeItem().getDisplayIconCollapsed().getWidth())));
+        icon.setConstraintHeight(new SizeValue(String.valueOf(item.getTreeItem().getDisplayIconCollapsed().getHeight())));
     }
 
     @Override
