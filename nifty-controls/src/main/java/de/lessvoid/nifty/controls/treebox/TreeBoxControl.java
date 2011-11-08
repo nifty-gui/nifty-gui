@@ -71,14 +71,14 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
     }
 
     private void addTreeItem(ListBox<TreeEntryModelClass> treeListBox, TreeItem treeItem, int currentIndent) {
+        if (currentIndent != 0) {
+            System.out.println("adding tree item " + treeItem.getDisplayCaption() + " with indent " + indentWidth * currentIndent);
+            treeListBox.addItem(new TreeEntryModelClass(indentWidth * currentIndent, treeItem));
+        }
         if (treeItem.isExpanded()) {
             for (Object childItem : treeItem.getTreeItems()) {
                 addTreeItem(treeListBox, (TreeItem) childItem, currentIndent + 1);
             }
-        }
-        if (currentIndent != 0) {
-            System.out.println("adding tree item " + treeItem.getDisplayCaption() + " with indent " + indentWidth * currentIndent);
-            treeListBox.addItem(new TreeEntryModelClass(indentWidth * currentIndent, treeItem));
         }
     }
 }
