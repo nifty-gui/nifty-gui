@@ -35,7 +35,7 @@ public class TabsControlDialogController implements Controller {
         Element tab1 = new TabBuilder("tab_1", "Tab 1") {{
             panel(new PanelBuilder() {{
                 childLayoutHorizontal();
-                control(builders.createLabel("Tab 1")); 
+                control(builders.createLabel("Tab 1"));
             }});
         }}.build(nifty, screen, this.tabs.getElement());
         tabs.addTab(tab1);

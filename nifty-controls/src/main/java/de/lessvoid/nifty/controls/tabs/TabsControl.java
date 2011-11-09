@@ -18,6 +18,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
@@ -29,12 +30,22 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
     private Nifty nifty;
     private static String activeTab;
     private Element elmnt;
+    private String buttonWidth;
 
     @Override
     public void bind(Nifty nifty, Screen screen, Element element, Properties parameter, Attributes controlDefinitionAttributes) {
         super.bind(element);
         this.nifty = nifty;
         this.elmnt = element;
+        System.out.println("buttonWidth attribute = " + controlDefinitionAttributes.get("buttonWidth"));
+        if (controlDefinitionAttributes.isSet("buttonWidth")) {
+            buttonWidth = controlDefinitionAttributes.get("buttonWidth");
+        } else {
+            throw new NullPointerException("buttonWidth not set with control " + getId());
+        }
+        if (!controlDefinitionAttributes.isSet("buttonHeight")) {
+            throw new NullPointerException("buttonHeight not set with control " + getId());
+        }
         nifty.subscribe(screen, getId(), ElementShowEvent.class, this);
     }
 
@@ -64,7 +75,7 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
                     style("nifty-button");
                     childLayout(ChildLayoutType.Horizontal);
                     interactOnClick("switchTab(" + tabId + ")");
-                    width(percentage(25));
+                    width(buttonWidth);
                     height(percentage(100));
                     label(buttonCaption);
                 }

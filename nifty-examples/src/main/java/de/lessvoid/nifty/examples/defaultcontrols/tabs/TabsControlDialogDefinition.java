@@ -20,6 +20,8 @@ public class TabsControlDialogDefinition {
       controller(new TabsControlDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
         control(new TabsBuilder("tabs") {{
+            buttonWidth("50%");
+            buttonHeight("25px");
         }});
       }});
     }}.registerControlDefintion(nifty);
