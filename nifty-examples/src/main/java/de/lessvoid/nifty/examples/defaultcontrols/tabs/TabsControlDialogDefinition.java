@@ -21,7 +21,7 @@ public class TabsControlDialogDefinition {
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
         control(new TabsBuilder("tabs") {{
             buttonWidth("50%");
-            buttonHeight("25px");
+            buttonHeight("50px");
         }});
       }});
     }}.registerControlDefintion(nifty);

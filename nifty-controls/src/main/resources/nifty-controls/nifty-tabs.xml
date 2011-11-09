@@ -5,7 +5,7 @@
   
     <controlDefinition controller="de.lessvoid.nifty.controls.tabs.TabsControl" name="nifty-tabs" childRootId="#tab-content-panel">
         <panel id="#tabs-panel" childLayout="vertical" style="nifty-panel" align="left" valign="top">
-            <panel id="#tab-button-panel" childLayout="horizontal" align="left" valign="top" height="$buttonHeight">
+            <panel id="#tab-button-panel" childLayout="horizontal" align="left" valign="top">
             </panel>
             <panel id="#tab-content-panel" childLayout="overlay" align="left" valign="top">
             </panel>

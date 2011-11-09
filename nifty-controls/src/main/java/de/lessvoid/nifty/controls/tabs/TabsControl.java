@@ -31,20 +31,19 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
     private static String activeTab;
     private Element elmnt;
     private String buttonWidth;
+    private String buttonHeight;
 
     @Override
     public void bind(Nifty nifty, Screen screen, Element element, Properties parameter, Attributes controlDefinitionAttributes) {
         super.bind(element);
         this.nifty = nifty;
         this.elmnt = element;
-        System.out.println("buttonWidth attribute = " + controlDefinitionAttributes.get("buttonWidth"));
         if (controlDefinitionAttributes.isSet("buttonWidth")) {
             buttonWidth = controlDefinitionAttributes.get("buttonWidth");
-        } else {
-            throw new NullPointerException("buttonWidth not set with control " + getId());
         }
-        if (!controlDefinitionAttributes.isSet("buttonHeight")) {
-            throw new NullPointerException("buttonHeight not set with control " + getId());
+        if (controlDefinitionAttributes.isSet("buttonHeight")) {
+            element.findElementByName("#tab-button-panel").setConstraintHeight(new SizeValue(controlDefinitionAttributes.get("buttonHeight")));
+            buttonHeight = controlDefinitionAttributes.get("buttonHeight");
         }
         nifty.subscribe(screen, getId(), ElementShowEvent.class, this);
     }
@@ -75,8 +74,14 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
                     style("nifty-button");
                     childLayout(ChildLayoutType.Horizontal);
                     interactOnClick("switchTab(" + tabId + ")");
-                    width(buttonWidth);
-                    height(percentage(100));
+                    if (buttonWidth != null) {
+                        width(buttonWidth);
+                    }
+                    if (buttonHeight != null) {
+                        height(percentage(100));
+                    } else {
+                        height("25px");
+                    }
                     label(buttonCaption);
                 }
             }.build(nifty, nifty.getCurrentScreen(), tabButtonPanel);
