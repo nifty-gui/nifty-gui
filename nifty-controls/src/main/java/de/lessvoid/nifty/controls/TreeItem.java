@@ -117,5 +117,9 @@ public class TreeItem<T> {
         }
     }
     
+    public boolean isLeaf() {
+        return treeNodes == null || treeNodes.size() <= 0;
+    }
+    
     
 }

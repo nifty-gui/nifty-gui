@@ -84,6 +84,8 @@ public class ControlsDemo {
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();
+    
+    
   }
 
   private static Screen createIntroScreen(final Nifty nifty) {

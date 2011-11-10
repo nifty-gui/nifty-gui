@@ -5,14 +5,18 @@
 package de.lessvoid.nifty.controls.treebox;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TreeBox;
 import de.lessvoid.nifty.controls.TreeItem;
+import de.lessvoid.nifty.controls.TreeItemSelectedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -23,24 +27,18 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 
     private int indentWidth = 15;
     private TreeItem tree;
+    private Nifty nifty;
+    private boolean processingItemSelected;
 
     @Override
     public void bind(Nifty nifty, Screen screen, Element element, Properties parameter, Attributes controlDefinitionAttributes) {
         super.bind(element);
-        System.out.println("binding the treebox");
+        this.nifty = nifty;
         if (tree != null) {
-            System.out.println("tree items found");
             ListBox<TreeEntryModelClass> treeListBox = getListBox("#listbox");
             addTreeItem(treeListBox, tree, 0);
-        } else {
-            System.out.println("no tree items found");
         }
         ListBox<TreeEntryModelClass> treeListBox = getListBox("#listbox");
-        if (treeListBox != null) {
-            System.out.println("tree listbox found");
-        } else {
-            System.out.println("no tree listbox found");
-        }
     }
 
     @Override
@@ -56,12 +54,49 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
     public void setTree(TreeItem treeRoot) {
         this.tree = treeRoot;
         ListBox<TreeEntryModelClass> treeListBox = getListBox("#listbox");
+        treeListBox.clear();
         if (treeListBox != null) {
-            System.out.println("tree listbox found");
             addTreeItem(treeListBox, tree, 0);
             getElement().layoutElements();
-        } else {
-            System.out.println("no tree listbox found");
+        }
+    }
+
+    /**
+     * When the selection of the ListBox changes this method is called.
+     */
+    @NiftyEventSubscriber(id = "tree-box#listbox")
+    public void onListBoxSelectionChanged(final String id, final ListBoxSelectionChangedEvent<TreeEntryModelClass> event) {
+        System.out.println("item selected");
+        System.out.println("processingItemSelected " + processingItemSelected);
+        if (!processingItemSelected) {
+            processingItemSelected = true;
+            List<TreeEntryModelClass> selection = event.getSelection();
+
+            System.out.println(selection.size() + " items selected");
+//            ListBox<TreeEntryModelClass> treeListBox = getListBox("#listbox");
+//            List<TreeEntryModelClass> selection = treeListBox.getSelection();
+
+            for (TreeEntryModelClass selectedItem : selection) {
+                TreeItem item = selectedItem.getTreeItem();
+                System.out.println("found selected item: " + item.getDisplayCaption());
+                System.out.println("item has " + item.getTreeItems().size() + " nodes");
+                if (!item.isLeaf()) {
+                    System.out.println("setting expanded to " + (!item.isExpanded()));
+                    item.setExpanded(!item.isExpanded());
+                } else {
+                    nifty.publishEvent(getId(), new TreeItemSelectedEvent(this, item));
+                }
+            }
+            System.out.println("setting tree");
+//TODO: somehow this next line is where it goes wrong
+            // the for loop is never executed for some reason.
+            setTree(tree);
+            for (TreeEntryModelClass selectedItem : selection) {
+            System.out.println("setting selected item " + selectedItem.getTreeItem().getDisplayCaption());
+                getListBox("#listBox").selectItem(selectedItem);
+            }
+            System.out.println("setting processingItemSelected to false");
+            processingItemSelected = false;
         }
     }
 
@@ -72,7 +107,6 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 
     private void addTreeItem(ListBox<TreeEntryModelClass> treeListBox, TreeItem treeItem, int currentIndent) {
         if (currentIndent != 0) {
-            System.out.println("adding tree item " + treeItem.getDisplayCaption() + " with indent " + indentWidth * currentIndent);
             treeListBox.addItem(new TreeEntryModelClass(indentWidth * currentIndent, treeItem));
         }
         if (treeItem.isExpanded()) {

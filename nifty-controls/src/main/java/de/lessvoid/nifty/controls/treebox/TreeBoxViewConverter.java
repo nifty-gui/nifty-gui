@@ -5,6 +5,7 @@
 package de.lessvoid.nifty.controls.treebox;
 
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
+import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverterSimple;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -18,7 +19,6 @@ public class TreeBoxViewConverter implements ListBoxViewConverter<TreeEntryModel
 
     @Override
     public void display(Element listBoxItem, TreeEntryModelClass item) {
-        System.out.println(item.getTreeItem().getDisplayCaption() + "=" + item.getIndent());
         final Element spacer = listBoxItem.findElementByName("#tree-item-spacer");
         spacer.setConstraintWidth(new SizeValue(String.valueOf(item.getIndent())));
         spacer.setConstraintHeight(new SizeValue(String.valueOf(item.getTreeItem().getDisplayIconCollapsed().getHeight())));
