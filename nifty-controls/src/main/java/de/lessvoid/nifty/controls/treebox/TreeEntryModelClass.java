@@ -16,6 +16,8 @@ public class TreeEntryModelClass {
     
     private int indent;
     
+    private boolean activeItem;
+    
     public TreeEntryModelClass(int indent, TreeItem treeItem) {
         this.indent = indent;
         this.treeItem = treeItem;
@@ -46,6 +48,14 @@ public class TreeEntryModelClass {
     @Override
     public int hashCode() {
         return this.treeItem.hashCode();
+    }
+
+    public boolean isActiveItem() {
+        return activeItem;
+    }
+
+    public void setActiveItem(boolean activeItem) {
+        this.activeItem = activeItem;
     }
 
     public int getIndent() {

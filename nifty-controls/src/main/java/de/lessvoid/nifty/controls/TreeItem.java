@@ -117,6 +117,22 @@ public class TreeItem<T> {
         }
     }
     
+    public boolean contains(TreeItem<T> child) {
+        if (!isExpanded()) {
+            return false;
+        } else if (treeNodes.contains(child)) {
+            return true;
+        } else {
+            for (TreeItem item : treeNodes) {
+                boolean found = item.contains(item);
+                if (found) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    
     public boolean isLeaf() {
         return treeNodes == null || treeNodes.size() <= 0;
     }
