@@ -35,6 +35,9 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
     @Override
     public void bind(Nifty nifty, Screen screen, Element element, Properties parameter, Attributes controlDefinitionAttributes) {
         super.bind(element);
+        if (controlDefinitionAttributes.getAsInteger("indentWidth") != null) {
+            indentWidth = controlDefinitionAttributes.getAsInteger("indentWidth").intValue();
+        }
         this.nifty = nifty;
         this.element = element;
         setListBox("#listbox");
