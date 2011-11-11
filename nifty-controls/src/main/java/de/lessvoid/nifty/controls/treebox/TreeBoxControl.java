@@ -4,6 +4,9 @@
  */
 package de.lessvoid.nifty.controls.treebox;
 
+import java.util.List;
+import java.util.Properties;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.AbstractController;
@@ -11,13 +14,10 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TreeBox;
 import de.lessvoid.nifty.controls.TreeItem;
-import de.lessvoid.nifty.controls.TreeItemSelectedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-import java.util.List;
-import java.util.Properties;
 
 /**
  *
@@ -84,7 +84,7 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
                     System.out.println("setting expanded to " + (!item.isExpanded()));
                     item.setExpanded(!item.isExpanded());
                 } else {
-                    nifty.publishEvent(getId(), new TreeItemSelectedEvent(this, item));
+// TODO: ractoc! fix this! :)                    nifty.publishEvent(getId(), new TreeItemSelectedEvent(this, item));
                 }
             }
             System.out.println("setting tree");
@@ -93,7 +93,7 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
             setTree(tree);
             for (TreeEntryModelClass selectedItem : selection) {
             System.out.println("setting selected item " + selectedItem.getTreeItem().getDisplayCaption());
-                getListBox("#listBox").selectItem(selectedItem);
+                getListBox("#listbox").selectItem(selectedItem);
             }
             System.out.println("setting processingItemSelected to false");
             processingItemSelected = false;
