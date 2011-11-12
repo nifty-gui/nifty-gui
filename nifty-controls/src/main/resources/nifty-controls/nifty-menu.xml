@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <!-- the menu control -->
+  <controlDefinition name="niftyMenu" controller="de.lessvoid.nifty.controls.menu.MenuControl">
+    <panel style="nifty-panel-bright" width="150px" childLayout="vertical" paddingLeft="0px" paddingRight="0px">
+    </panel>
+  </controlDefinition>
+
+  <!-- the menu item control -->
+  <controlDefinition name="niftyMenuItem" controller="de.lessvoid.nifty.controls.MenuItemControl" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
+    <panel style="niftyMenuItemStyle">
+      <interact onClick="$menuOnClick" onSecondaryRelease="$menuOnClick" onSecondaryClick="$menuOnClick"/>
+      <panel width="10px" height="23px" />
+      <image id="#icon" visible="$menuIconVisible" width="23px" height="23px" filename="$menuIcon" />
+      <panel width="5px" height="23px" />
+      <control id="#text" style="#text" name="label" text="$menuText" />
+    </panel>
+  </controlDefinition>
+
+  <!-- the menu item separator control -->
+  <controlDefinition name="niftyMenuItemSeparator">
+    <panel style="niftyMenuItemSeparatorStyle">
+      <panel style="#line" />
+    </panel>
+  </controlDefinition>
+
+  <!-- and the popup -->
+  <popup id="niftyPopupMenu" childLayout="absolute-inside" controller="de.lessvoid.nifty.controls.menu.PopupMenuControl">
+    <interact onClick="closePopup()" onSecondaryClick="closePopup()" onTertiaryClick="closePopup()"/>
+    <control id="#menu" name="niftyMenu" />
+  </popup>
+</nifty-controls>

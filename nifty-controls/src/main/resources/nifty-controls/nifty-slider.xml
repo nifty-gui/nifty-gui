@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="verticalSlider" style="nifty-vertical-slider" controller="de.lessvoid.nifty.controls.slider.SliderControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
+    <panel style="#panel" focusable="true">
+      <interact onMouseWheel="mouseWheel()" />
+      <image style="#up">
+        <interact onClickRepeat="upClick()" />
+      </image>
+      <image id="#background" style="#background">
+        <interact onClick="mouseClick()" onClickMouseMove="mouseClick()" />
+        <image id="#position" style="#position">
+          <interact onClick="mouseClick()" onClickMouseMove="mouseClick()" />
+        </image>
+      </image>
+      <image style="#down">
+        <interact onClickRepeat="downClick()" />
+      </image>
+    </panel>
+  </controlDefinition>
+
+  <controlDefinition name="horizontalSlider" style="nifty-horizontal-slider" controller="de.lessvoid.nifty.controls.slider.SliderControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
+    <panel style="#panel">
+      <interact onMouseWheel="mouseWheel()" />
+      <image style="#left">
+        <interact onClickRepeat="upClick()" />
+      </image>
+      <image id="#background" style="#background">
+        <interact onClick="mouseClick()" onClickMouseMove="mouseClick()" />
+        <image id="#position" style="#position">
+          <interact onClick="mouseClick()" onClickMouseMove="mouseClick()" />
+        </image>
+      </image>
+      <image style="#right">
+        <interact onClickRepeat="downClick()" />
+      </image>
+    </panel>
+  </controlDefinition>
+</nifty-controls>

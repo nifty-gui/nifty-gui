@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition style="nifty-textfield" name="textfield" controller="de.lessvoid.nifty.controls.textfield.TextFieldControl" inputMapping="de.lessvoid.nifty.controls.textfield.TextFieldInputMapping" passwordChar="$passwordChar" maxLength="$maxLength">
+    <panel style="#panel" focusable="true">
+      <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()" />
+      <panel id="#field" style="#field" visibleToMouse="true">
+        <text id="#text" style="#text" text="$text" />
+      </panel>
+      <panel style="#cursor-panel">
+        <image id="#cursor" style="#cursor"/>
+      </panel>
+    </panel>
+  </controlDefinition>
+</nifty-controls>

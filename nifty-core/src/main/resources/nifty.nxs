@@ -1,0 +1,87 @@
+<nxs package="de.lessvoid.nifty.loaderv2.types" root="nifty" type="NiftyType">
+  <type name="UseStylesType" />
+  <type name="UseControlsType" />
+  <type name="RegisterSoundType" />
+  <type name="RegisterEffectType" />
+  <type name="RegisterMusicType" />
+  <type name="RegisterMouseCursorType" />
+  <type name="ResourceBundleType" />
+  <type name="AttributesType" />
+  <type name="InteractType" />
+  <type name="EffectValueType" />
+  <type name="EffectType">
+    <element name="value" type="EffectValueType" occurs="zeroOrMore" />
+  </type>
+  <type name="HoverType" />
+  <type name="EffectTypeOnHover">
+    <element name="hover" type="HoverType" occurs="optional" />
+  </type>
+  <type name="EffectsType">
+    <group>
+      <element name="onStartScreen" type="EffectType" occurs="zeroOrMore" />
+      <element name="onEndScreen" type="EffectType" occurs="zeroOrMore" />
+      <element name="onHover" type="EffectTypeOnHover" occurs="zeroOrMore" />
+      <element name="onStartHover" type="EffectTypeOnHover" occurs="zeroOrMore" />
+      <element name="onEndHover" type="EffectTypeOnHover" occurs="zeroOrMore" />
+      <element name="onClick" type="EffectType" occurs="zeroOrMore" />
+      <element name="onFocus" type="EffectType" occurs="zeroOrMore" />
+      <element name="onLostFocus" type="EffectType" occurs="zeroOrMore" />
+      <element name="onGetFocus" type="EffectType" occurs="zeroOrMore" />
+      <element name="onActive" type="EffectType" occurs="zeroOrMore" />
+      <element name="onCustom" type="EffectType" occurs="zeroOrMore" />
+      <element name="onShow" type="EffectType" occurs="zeroOrMore" />
+      <element name="onHide" type="EffectType" occurs="zeroOrMore" />
+      <element name="onEnabled" type="EffectType" occurs="zeroOrMore" />
+      <element name="onDisabled" type="EffectType" occurs="zeroOrMore" />
+    </group>
+  </type>
+  <type name="StyleType">
+    <element name="attributes" type="AttributesType" occurs="optional" />
+    <element name="interact" type="InteractType" occurs="optional" />
+    <element name="effect" type="EffectsType" occurs="optional" />
+  </type>
+  <type name="ElementType">
+    <group>
+      <element name="interact" type="InteractType" occurs="optional" />
+      <element name="effect" type="EffectsType" occurs="optional" />
+      <element name="panel" type="PanelType" occurs="zeroOrMore" />
+      <element name="image" type="ImageType" occurs="zeroOrMore" />
+      <element name="text" type="TextType" occurs="zeroOrMore" />
+      <element name="control" type="ControlType" occurs="zeroOrMore" />
+    </group>
+  </type>
+  <type name="PanelType" extends="ElementType" />
+  <type name="ImageType" extends="ElementType" />
+  <type name="TextType" extends="ElementType" />
+  <type name="ControlType" extends="ElementType" />
+  <type name="LayerType" extends="ElementType" />
+  <type name="PopupType" extends="ElementType" />
+  <type name="ScreenType">
+    <element name="layer" type="LayerType" occurs="zeroOrMore" />
+  </type>
+  <type name="ControlDefinitionType">
+    <group>
+      <element name="interact" type="InteractType" occurs="optional" />
+      <element name="effect" type="EffectsType" occurs="optional" />
+      <element name="panel" type="PanelType" occurs="zeroOrMore" />
+      <element name="image" type="ImageType" occurs="zeroOrMore" />
+      <element name="text" type="TextType" occurs="zeroOrMore" />
+      <element name="control" type="ControlType" occurs="zeroOrMore" />
+    </group>
+  </type>
+  <type name="NiftyType">
+    <group>
+      <element name="useStyles" type="UseStylesType" occurs="zeroOrMore" />
+      <element name="useControls" type="UseControlsType" occurs="zeroOrMore" />
+      <element name="registerSound" type="RegisterSoundType" occurs="zeroOrMore" />
+      <element name="registerEffect" type="RegisterEffectType" occurs="zeroOrMore" />
+      <element name="registerMusic" type="RegisterMusicType" occurs="zeroOrMore" />
+      <element name="registerMouseCursor" type="RegisterMouseCursorType" occurs="zeroOrMore" />
+      <element name="resourceBundle" type="ResourceBundleType" occurs="zeroOrMore" />
+      <element name="style" type="StyleType" occurs="zeroOrMore" />
+      <element name="controlDefinition" type="ControlDefinitionType" occurs="zeroOrMore" />
+      <element name="screen" type="ScreenType" occurs="oneOrMore" />
+      <element name="popup" type="PopupType" occurs="zeroOrMore" />
+    </group>
+  </type>
+</nxs>

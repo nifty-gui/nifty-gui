@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+
+  <style id="nifty-panel">
+    <attributes padding="8px,16px,24px,16px" backgroundImage="panel/nifty-panel.png" imageMode="resize:28,184,28,28,28,184,28,154,28,184,28,58" />
+  </style>
+
+  <style id="nifty-panel-red">
+    <attributes padding="8px,16px,24px,16px" backgroundImage="panel/nifty-panel-red.png" imageMode="resize:28,184,28,8,28,184,28,174,28,184,28,58" />
+  </style>
+
+  <style id="nifty-panel-no-shadow">
+    <attributes padding="8px" backgroundImage="panel/nifty-panel-no-shadow.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8" />
+  </style>
+
+  <style id="nifty-panel-red-no-shadow">
+    <attributes padding="8px" backgroundImage="panel/nifty-panel-red-no-shadow.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8" />
+  </style>
+
+  <style id="nifty-panel-simple">
+    <attributes padding="5px" backgroundImage="panel/nifty-panel-simple.png" imageMode="resize:9,2,9,9,9,2,9,2,9,2,9,9" />
+  </style>
+
+  <style id="nifty-panel-bright">
+    <attributes padding="5px" backgroundImage="panel/nifty-panel-hint.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8" />
+  </style>
+</nifty-styles>

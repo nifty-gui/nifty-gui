@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+  <!-- get the standard styles and controls in -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <!-- just a simple screen that opens a popup by secondary click -->
+  <screen id="start" controller="de.lessvoid.nifty.examples.menu.MenuStartScreen">
+    <layer id="layer" backgroundColor="#003f" childLayout="center">
+      <interact onSecondaryClick="showMenu()"/>
+      <panel align="center" valign="center" childLayout="vertical" width="50%">
+        <text style="base-font" align="center" valign="center" text="click anywhere with your right mouse button for a popup menu" />
+        <!-- we'll output menu items as they are being clicked in here -->
+        <control id="textOut" name="label" backgroundColor="#8005" width="100%"/>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

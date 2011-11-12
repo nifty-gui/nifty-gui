@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <controlDefinition name="nifty-default-hint" style="nifty-default-hint">
+    <panel style="#panel">
+      <text id="#hint-text" style="#hint-text" text="$hintText"/>
+    </panel>
+  </controlDefinition>
+</nifty-controls>

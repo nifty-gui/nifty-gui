@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+  <!-- DRAGGABLE CONTROL -->
+  <controlDefinition name="draggable" childRootId="#draggableContent" controller="de.lessvoid.nifty.controls.dragndrop.DraggableControl">
+    <interact onClick="dragStart()" onClickMouseMove="drag()" onRelease="dragStop()" />
+    <panel id="#draggableContent"/>
+  </controlDefinition>
+
+  <!-- DROPPABLE CONTROL -->
+  <controlDefinition name="droppable" childRootId="#droppableContent" controller="de.lessvoid.nifty.controls.dragndrop.DroppableControl">
+    <panel childLayout="absolute">
+      <panel id="#droppableContent" x="0px" y="0px" width="100%" height="100%" childLayout="center"/>
+    </panel>
+  </controlDefinition>
+
+  <!-- DRAGGABLE POPUP -->
+  <popup id="draggablePopup" childLayout="absolute" />
+</nifty-controls>

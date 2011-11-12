@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://nifty-gui.sourceforge.net/webstart/" href="nifty-examples-1.0-applet.jnlp">
+	<information>
+		<title>nifty-examples</title>
+		<vendor>void</vendor>
+		<homepage href="http://nifty-gui.sourceforge.net"/>
+		<description>nifty-examples</description>
+		<description kind="short">nifty-examples</description>
+	</information>
+	<security>
+		<all-permissions/>
+	</security>
+	<resources>
+		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+		<jar href="nifty-examples-1.0-SNAPSHOT-complete-with-dependencies.jar" main="true"/>
+	</resources>
+	<resources os="Windows">
+		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+	    <nativelib href="lib/lwjgl-2.0rc1/lwjgl-win32-native.jar" />
+	</resources>
+	<resources os="Linux">
+		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+		<nativelib href="lib/lwjgl-2.0rc1/lwjgl-linux-native.jar" />
+	</resources>
+	<resources os="Mac OS">
+		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+		<nativelib href="lib/lwjgl-2.0rc1/lwjgl-macosx-native.jar" />
+	</resources>
+        <applet-desc 
+            name="My Applet"
+            main-class="de.lessvoid.nifty.examples.all.AllExamplesMain"
+            width="640"
+            height="480">
+        </applet-desc>
+</jnlp>

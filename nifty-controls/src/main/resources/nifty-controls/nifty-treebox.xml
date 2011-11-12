@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls>
+    <controlDefinition name="nifty-tree-box" controller="de.lessvoid.nifty.controls.treebox.TreeBoxControl">
+        <panel id="#treebox" childLayout="center">
+            <control id="#listbox" name="listBox" style="nifty-listbox" vertical="optional" horizontal="optional" selectionMode="Single" displayItems="15" viewConverterClass="de.lessvoid.nifty.controls.treebox.TreeBoxViewConverter">
+                <panel childLayout="horizontal" width="100%" align="center" style="nifty-listbox-item" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController">
+                    <panel id="#tree-item-spacer" width="0px" height="15px" />
+                    <image id="#tree-item-icon" width="5px" height="15px" />
+                    <control id="#tree-item-caption" name="label" align="left" textHAlign="left" height="15px" wrap="true" />
+                </panel>
+            </control>
+        </panel>
+    </controlDefinition>
+</nifty-controls>

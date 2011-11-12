@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+  
+    <controlDefinition controller="de.lessvoid.nifty.controls.tabs.TabsControl" name="nifty-tabs" childRootId="#tab-content-panel">
+        <panel id="#tabs-panel" childLayout="vertical" style="nifty-panel" align="left" valign="top">
+            <panel id="#tab-button-panel" childLayout="horizontal" align="left" valign="top">
+            </panel>
+            <panel id="#tab-content-panel" childLayout="overlay" align="left" valign="top">
+            </panel>
+        </panel> 
+    </controlDefinition>
+    
+    <controlDefinition controller="de.lessvoid.nifty.controls.tabs.TabControl" name="nifty-tab" childRootId="#content">
+        <panel id="#content" childLayout="horizontal" align="left" valign="top">
+        </panel>     
+    </controlDefinition>
+  
+</nifty-controls>
