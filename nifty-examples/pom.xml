@@ -44,6 +44,12 @@
         <artifactId>maven-nativedependencies-plugin</artifactId>
         <version>0.0.5</version>
         <executions>
+          <!-- 
+            If you use this pom.xml with eclipse m2e plugin you'll need to install the
+            maven natives plugin from http://code.google.com/p/mavennatives/ to make the
+            error message go away. This will allow you to run the examples from within
+            eclipse without any more lwjgl setup.
+           -->
           <execution>
             <id>unpacknatives</id>
             <phase>generate-resources</phase>
