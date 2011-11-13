@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.slick2d.render.image;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -95,6 +96,12 @@ public final class ImageSlickRenderImage implements SlickRenderImage {
 
         g.drawImage(image, x, y, x + w, y + h, srcX, srcY, srcX + srcW, srcY
             + srcH, SlickRenderUtils.convertColorNiftySlick(color, slickColor));
+        
+
+        final int glError = GL11.glGetError();
+        if (glError != GL11.GL_NO_ERROR) {
+            System.err.println("OpenGL Error: " + Integer.toString(glError));
+        }
 
         g.popTransform();
     }

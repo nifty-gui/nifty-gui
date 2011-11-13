@@ -5,7 +5,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.opengl.SlickCallable;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
@@ -82,7 +81,7 @@ public abstract class NiftyOverlayGame implements Game {
 
         final Input input = container.getInput();
         inputSystem.setInput(input);
-        
+
         niftyGUI =
             new Nifty(renderDevice, soundDevice, inputSystem, timeProvider);
 

@@ -2,6 +2,7 @@ package de.lessvoid.nifty.slick2d.render;
 
 import java.io.IOException;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -240,7 +241,7 @@ public final class SlickRenderDevice implements RenderDevice {
         }
         
         activeMouseCursor = (SlickMouseCursor) mouseCursor;
-        activeMouseCursor.enableCursor();
+        activeMouseCursor.enableCursor(gameContainer);
     }
 
     /**
@@ -249,7 +250,7 @@ public final class SlickRenderDevice implements RenderDevice {
     @Override
     public void disableMouseCursor() {
         if (activeMouseCursor != null) {
-            activeMouseCursor.disableCursor();
+            activeMouseCursor.disableCursor(gameContainer);
             activeMouseCursor = null;
         }
     }

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.slick2d.render.cursor;
 
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 import de.lessvoid.nifty.spi.render.MouseCursor;
@@ -14,12 +15,12 @@ public interface SlickMouseCursor extends MouseCursor {
     /**
      * Start showing this mouse cursor.
      */
-    void enableCursor();
+    void enableCursor(GameContainer container);
     
     /**
      * Stop showing this mouse cursor
      */
-    void disableCursor();
+    void disableCursor(GameContainer container);
     
     /**
      * Render the mouse cursor on the screen. This method is called after

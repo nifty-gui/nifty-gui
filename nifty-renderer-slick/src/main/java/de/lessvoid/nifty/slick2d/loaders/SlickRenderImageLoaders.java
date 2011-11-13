@@ -2,6 +2,8 @@ package de.lessvoid.nifty.slick2d.loaders;
 
 import java.util.Iterator;
 
+import org.lwjgl.opengl.GL11;
+
 import de.lessvoid.nifty.slick2d.render.image.SlickLoadImageException;
 import de.lessvoid.nifty.slick2d.render.image.SlickRenderImage;
 import de.lessvoid.nifty.slick2d.render.image.loader.ImageSlickRenderImageLoader;
@@ -62,7 +64,10 @@ public final class SlickRenderImageLoaders extends
 
         while (itr.hasNext()) {
             try {
-                return itr.next().loadImage(filename, filterLinear);
+                final SlickRenderImage resultImage;
+                resultImage = itr.next().loadImage(filename, filterLinear);
+                
+                return resultImage;
             } catch (final SlickLoadImageException e) {
                 // this loader failed... does not matter
             }
