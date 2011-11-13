@@ -33,10 +33,8 @@ public class TreeBoxViewConverter implements ListBoxViewConverter<TreeEntryModel
         }
         // set a different style based on active item or not.
         if (item.isActiveItem()) {
-        	System.out.println("setting style on " + item + "-" + item.getTreeItem().getDisplayCaption() + " to nifty-treebox-item-active");
         	text.setStyle("nifty-treebox-item-active");
         } else {
-        	System.out.println("setting style on " + item + "-" + item.getTreeItem().getDisplayCaption() + " to nifty-listbox-item");
         	text.setStyle("nifty-listbox-item");
         }
         icon.setConstraintWidth(new SizeValue(String.valueOf(item.getTreeItem().getDisplayIconCollapsed().getWidth())));

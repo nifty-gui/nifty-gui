@@ -79,26 +79,15 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 			processingItemSelected = true;
 			TreeEntryModelClass selectedItem = event.getSelection().get(0);
 			Integer selectedIndex = event.getSelectionIndices().get(0);
-			System.out.println("setting item " + selectedItem + "-"
-					+ selectedItem.getTreeItem().getDisplayCaption()
-					+ " to active");
 			selectedItem.setActiveItem(true);
 			TreeItem item = selectedItem.getTreeItem();
 			if (!item.isLeaf()) {
 				item.setExpanded(!item.isExpanded());
 			}
-			nifty.publishEvent(getId(), new TreeItemSelectedEvent(this, item));
-			for (int i = 0; i < treeListBox.getItems().size(); i++) {
-				TreeEntryModelClass treeListEntry = treeListBox.getItems().get(i);
-				if (i == selectedIndex) {
-					treeListEntry.setActiveItem(true);
-				} else {
-					treeListEntry.setActiveItem(false);
-				}
-				treeListBox.removeItemByIndex(i);
-				treeListBox.insertItem(treeListEntry, i);
-			}
 			setTree(tree);
+			treeListBox.getItems().get(selectedIndex).setActiveItem(true);
+			nifty.publishEvent(getId(), new TreeItemSelectedEvent(this, item));
+			treeListBox.refresh();
 			processingItemSelected = false;
 		}
 

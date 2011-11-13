@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+
+  <style id="nifty-treebox-item-active" base="nifty-listbox-item">
+	<attributes backgroundColor="#111A" />
+  </style>
+  
+</nifty-styles>
