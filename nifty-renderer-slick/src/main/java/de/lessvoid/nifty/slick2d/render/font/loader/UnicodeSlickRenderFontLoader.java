@@ -38,6 +38,7 @@ public final class UnicodeSlickRenderFontLoader extends
                     throw new SlickLoadFontException("Loading TTF Font failed.");
                 }
             }
+            
             return new UnicodeSlickRenderFont(new UnicodeFont(javaFont,
                 hieroSettings), javaFont);
         } catch (final SlickException e) {

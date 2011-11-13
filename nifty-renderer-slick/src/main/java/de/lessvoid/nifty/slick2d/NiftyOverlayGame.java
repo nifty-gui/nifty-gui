@@ -79,10 +79,13 @@ public abstract class NiftyOverlayGame implements Game {
             throw new IllegalStateException(
                 "The NiftyGUI was already initialized. Its illegal to do so twice.");
         }
+
+        final Input input = container.getInput();
+        inputSystem.setInput(input);
+        
         niftyGUI =
             new Nifty(renderDevice, soundDevice, inputSystem, timeProvider);
 
-        final Input input = container.getInput();
         input.removeListener(inputSystem);
         input.addListener(inputSystem);
 
@@ -106,9 +109,7 @@ public abstract class NiftyOverlayGame implements Game {
         throws SlickException {
         renderGame(container, g);
         
-        SlickCallable.enterSafeBlock();
         niftyGUI.render(false);
-        SlickCallable.leaveSafeBlock();
     }
 
     /**

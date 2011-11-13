@@ -75,6 +75,7 @@ public final class SlickRenderDevice implements RenderDevice {
      */
     public void beginFrame() {
         disableClip();
+        setBlendMode(BlendMode.BLEND);
     }
 
     /**

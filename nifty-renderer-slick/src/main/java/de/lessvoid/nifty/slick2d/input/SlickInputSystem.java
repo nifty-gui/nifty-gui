@@ -12,5 +12,5 @@ import de.lessvoid.nifty.spi.input.InputSystem;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public interface SlickInputSystem extends InputSystem, InputListener {
-
+    
 }

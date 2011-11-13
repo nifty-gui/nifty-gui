@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.slick2d.render.image.loader;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 import de.lessvoid.nifty.slick2d.render.image.ImageSlickRenderImage;
 import de.lessvoid.nifty.slick2d.render.image.SlickLoadImageException;
@@ -28,8 +27,8 @@ public final class ImageSlickRenderImageLoader implements
                 image = new Image(filename, false, Image.FILTER_NEAREST);
             }
             return new ImageSlickRenderImage(image);
-        } catch (SlickException e) {
-            throw new SlickLoadImageException("Loadint the image \"" + filename
+        } catch (Exception e) {
+            throw new SlickLoadImageException("Loading the image \"" + filename
                 + "\" failed.", e);
         }
     }

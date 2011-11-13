@@ -87,7 +87,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements
     public final void mouseDragged(final int oldx, final int oldy,
         final int newx, final int newy) {
         final int lastButton =
-            buttonPressedStack.get(buttonPressedStack.size()).intValue();
+            buttonPressedStack.get(buttonPressedStack.size() - 1).intValue();
         inputEventList.add(new MouseEventDragged(lastButton, oldx, oldy, newx,
             newy));
     }
