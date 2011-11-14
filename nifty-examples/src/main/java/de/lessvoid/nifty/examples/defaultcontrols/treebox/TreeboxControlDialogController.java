@@ -3,11 +3,14 @@ package de.lessvoid.nifty.examples.defaultcontrols.treebox;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TreeBox;
 import de.lessvoid.nifty.controls.TreeItem;
+import de.lessvoid.nifty.controls.TreeItemSelectedEvent;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
@@ -22,7 +25,6 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class TreeboxControlDialogController implements Controller {
 
     private TreeBox treebox;
-    private static CommonBuilders builders = new CommonBuilders();
     private Nifty nifty;
 
     @Override
@@ -75,5 +77,10 @@ public class TreeboxControlDialogController implements Controller {
         treeRoot.addTreeItem(branch1);
         treeRoot.addTreeItem(branch2);
         return treeRoot;
+    }
+    
+    @NiftyEventSubscriber(id="tree-box")
+    public void treeItemSelected(final String id, final TreeItemSelectedEvent event) {
+    	nifty.getCurrentScreen().findNiftyControl("selectedItemText", TextField.class).setText(event.getTreeItem().getDisplayCaption());
     }
 }

@@ -4,7 +4,6 @@
  */
 package de.lessvoid.nifty.controls.treebox;
 
-import java.util.List;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
@@ -79,11 +78,11 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 			processingItemSelected = true;
 			TreeEntryModelClass selectedItem = event.getSelection().get(0);
 			Integer selectedIndex = event.getSelectionIndices().get(0);
-			selectedItem.setActiveItem(true);
 			TreeItem item = selectedItem.getTreeItem();
-			if (!item.isLeaf()) {
+			if (!item.isLeaf() && selectedItem.isActiveItem()) {
 				item.setExpanded(!item.isExpanded());
 			}
+			selectedItem.setActiveItem(true);
 			setTree(tree);
 			treeListBox.getItems().get(selectedIndex).setActiveItem(true);
 			nifty.publishEvent(getId(), new TreeItemSelectedEvent(this, item));
