@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.slick2d.render.font.loader;
 
 import org.newdawn.slick.AngelCodeFont;
+import org.newdawn.slick.Graphics;
 
 import de.lessvoid.nifty.slick2d.render.font.AngelCodeSlickRenderFont;
 import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
@@ -17,7 +18,7 @@ public final class AngelCodeSlickRenderFontLoader implements
      * Load the requested font.
      */
     @Override
-    public SlickRenderFont loadFont(final String filename)
+    public SlickRenderFont loadFont(final Graphics g, final String filename)
         throws SlickLoadFontException {
         final String image = filename;
         final String definition =

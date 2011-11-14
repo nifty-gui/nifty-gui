@@ -5,6 +5,7 @@ import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.util.ResourceLoader;
 
 /**

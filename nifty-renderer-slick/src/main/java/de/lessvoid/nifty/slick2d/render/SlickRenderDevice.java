@@ -2,7 +2,6 @@ package de.lessvoid.nifty.slick2d.render;
 
 import java.io.IOException;
 
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -106,7 +105,7 @@ public final class SlickRenderDevice implements RenderDevice {
      * Create a new font that can be rendered on the screen.
      */
     public RenderFont createFont(final String filename) {
-        return SlickRenderFontLoaders.getInstance().loadFont(filename);
+        return SlickRenderFontLoaders.getInstance().loadFont(gameContainer.getGraphics(), filename);
     }
 
     /**

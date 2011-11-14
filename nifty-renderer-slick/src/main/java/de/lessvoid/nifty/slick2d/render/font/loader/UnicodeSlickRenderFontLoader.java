@@ -2,6 +2,7 @@ package de.lessvoid.nifty.slick2d.render.font.loader;
 
 import java.awt.Font;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.HieroSettings;
@@ -24,7 +25,7 @@ public final class UnicodeSlickRenderFontLoader extends
      * ".ttf" to the filename and by replacing the file ending with "ttf".
      */
     @Override
-    public SlickRenderFont loadFont(final String filename)
+    public SlickRenderFont loadFont(final Graphics g, final String filename)
         throws SlickLoadFontException {
         try {
             final HieroSettings hieroSettings = new HieroSettings(filename);
@@ -41,7 +42,7 @@ public final class UnicodeSlickRenderFontLoader extends
             
             return new UnicodeSlickRenderFont(new UnicodeFont(javaFont,
                 hieroSettings), javaFont);
-        } catch (final SlickException e) {
+        } catch (final Exception e) {
             throw new SlickLoadFontException("Loading the font failed.", e);
         }
     }

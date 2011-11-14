@@ -2,9 +2,12 @@ package de.lessvoid.nifty.slick2d.loaders;
 
 import java.util.Iterator;
 
+import org.newdawn.slick.Graphics;
+
 import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import de.lessvoid.nifty.slick2d.render.font.loader.AngelCodeSlickRenderFontLoader;
+import de.lessvoid.nifty.slick2d.render.font.loader.DefaultSlickRenderFontLoader;
 import de.lessvoid.nifty.slick2d.render.font.loader.SlickRenderFontLoader;
 import de.lessvoid.nifty.slick2d.render.font.loader.TrueTypeSlickRenderFontLoader;
 import de.lessvoid.nifty.slick2d.render.font.loader.UnicodeSlickRenderFontLoader;
@@ -43,17 +46,18 @@ public final class SlickRenderFontLoaders extends
     /**
      * Load the font with the defined name.
      * 
+     * @param g the graphics instance used for rendering
      * @param filename name of the file that contains the font
      * @return the font loaded
      * @throws IllegalArgumentException in case all loaders fail to load the
      *             font
      */
-    public SlickRenderFont loadFont(final String filename) {
+    public SlickRenderFont loadFont(final Graphics g, final String filename) {
         final Iterator<SlickRenderFontLoader> itr = getLoaderIterator();
 
         while (itr.hasNext()) {
             try {
-                return itr.next().loadFont(filename);
+                return itr.next().loadFont(g, filename);
             } catch (final SlickLoadFontException e) {
                 // this loader failed... does not matter
             }
@@ -75,6 +79,7 @@ public final class SlickRenderFontLoaders extends
     public void loadDefaultLoaders(final SlickAddLoaderLocation order) {
         switch (order) {
             case first:
+                addLoader(new DefaultSlickRenderFontLoader(), order);
                 addLoader(new AngelCodeSlickRenderFontLoader(), order);
                 addLoader(new UnicodeSlickRenderFontLoader(), order);
                 addLoader(new TrueTypeSlickRenderFontLoader(), order);
@@ -84,6 +89,7 @@ public final class SlickRenderFontLoaders extends
                 addLoader(new TrueTypeSlickRenderFontLoader(), order);
                 addLoader(new UnicodeSlickRenderFontLoader(), order);
                 addLoader(new AngelCodeSlickRenderFontLoader(), order);
+                addLoader(new DefaultSlickRenderFontLoader(), order);
                 break;
         }
     }
