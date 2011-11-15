@@ -8,7 +8,7 @@ import org.newdawn.slick.Font;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class DefaultSlickRenderFont extends AbstractSlickRenderFont {
+public class DefaultSlickRenderFont extends AbstractSlickRenderFont {
     /**
      * Create the render font using a already loaded font.
      * 

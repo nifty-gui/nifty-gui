@@ -10,7 +10,7 @@ import org.newdawn.slick.SlickException;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class LwjglCursorSlickMouseCursor extends
+public class LwjglCursorSlickMouseCursor extends
     AbstractNativeSlickMouseCursor {
     /**
      * The cursor that is displayed.

@@ -10,7 +10,7 @@ import de.lessvoid.nifty.sound.SoundSystem;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class SoundSlickSoundHandle implements SlickSoundHandle {
+public class SoundSlickSoundHandle implements SlickSoundHandle {
     /**
      * The sound object that is used for playback.
      */

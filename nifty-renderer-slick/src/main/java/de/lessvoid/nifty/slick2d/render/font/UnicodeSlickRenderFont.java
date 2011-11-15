@@ -2,6 +2,7 @@ package de.lessvoid.nifty.slick2d.render.font;
 
 import java.awt.Font;
 
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 
 /**
@@ -10,7 +11,7 @@ import org.newdawn.slick.UnicodeFont;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class UnicodeSlickRenderFont extends AbstractJavaSlickRenderFont {
+public class UnicodeSlickRenderFont extends AbstractJavaSlickRenderFont {
     /**
      * The constructor to create this unicode font based render font.
      * 
@@ -21,5 +22,10 @@ public final class UnicodeSlickRenderFont extends AbstractJavaSlickRenderFont {
     public UnicodeSlickRenderFont(final UnicodeFont ucFont,
         final Font javaFont) throws SlickLoadFontException {
         super(ucFont, javaFont);
+        try {
+            ucFont.loadGlyphs();
+        } catch (final SlickException e) {
+            throw new SlickLoadFontException("Failed preparing font.", e);
+        }
     }
 }

@@ -10,7 +10,7 @@ import org.newdawn.slick.TrueTypeFont;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class TrueTypeSlickRenderFont extends AbstractJavaSlickRenderFont {
+public class TrueTypeSlickRenderFont extends AbstractJavaSlickRenderFont {
     /**
      * The constructor to create this true type based render font.
      * 

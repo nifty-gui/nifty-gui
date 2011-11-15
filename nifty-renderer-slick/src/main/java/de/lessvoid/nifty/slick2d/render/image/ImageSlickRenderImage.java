@@ -14,7 +14,7 @@ import de.lessvoid.nifty.tools.Color;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class ImageSlickRenderImage implements SlickRenderImage {
+public class ImageSlickRenderImage implements SlickRenderImage {
     /**
      * The image that is used for the rendering operation.
      */
