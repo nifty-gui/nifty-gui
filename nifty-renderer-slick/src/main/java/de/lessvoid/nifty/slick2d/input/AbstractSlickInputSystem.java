@@ -95,6 +95,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements
     @Override
     public final void setInput(final Input input) {
         this.input = input;
+        input.enableKeyRepeat();
     }
 
     @Override
