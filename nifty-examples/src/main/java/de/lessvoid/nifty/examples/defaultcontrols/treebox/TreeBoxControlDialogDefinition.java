@@ -1,9 +1,9 @@
-package de.lessvoid.nifty.examples.defaultcontrols.tabs;
+package de.lessvoid.nifty.examples.defaultcontrols.treebox;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
-import de.lessvoid.nifty.controls.tabs.builder.TabsBuilder;
+import de.lessvoid.nifty.controls.treebox.builder.TreeBoxBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
 
 /**
@@ -12,16 +12,14 @@ import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefin
  * 
  * @author void
  */
-public class TabsControlDialogDefinition {
-  public static String NAME = "tabsControlDialogControl";
+public class TreeBoxControlDialogDefinition {
+  public static String NAME = "treeboxControlDialogControl";
 
   public static void register(final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
-      controller(new TabsControlDialogController());
+      controller(new TreeboxControlDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
-        control(new TabsBuilder("tabs") {{
-            buttonWidth("50%");
-            buttonHeight("50px");
+        control(new TreeBoxBuilder("tree-box") {{
         }});
       }});
     }}.registerControlDefintion(nifty);

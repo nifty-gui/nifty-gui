@@ -18,6 +18,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
@@ -29,18 +30,26 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
     private Nifty nifty;
     private static String activeTab;
     private Element elmnt;
+    private String buttonWidth;
+    private String buttonHeight;
 
     @Override
     public void bind(Nifty nifty, Screen screen, Element element, Properties parameter, Attributes controlDefinitionAttributes) {
         super.bind(element);
         this.nifty = nifty;
         this.elmnt = element;
+        if (controlDefinitionAttributes.isSet("buttonWidth")) {
+            buttonWidth = controlDefinitionAttributes.get("buttonWidth");
+        }
+        if (controlDefinitionAttributes.isSet("buttonHeight")) {
+            element.findElementByName("#tab-button-panel").setConstraintHeight(new SizeValue(controlDefinitionAttributes.get("buttonHeight")));
+            buttonHeight = controlDefinitionAttributes.get("buttonHeight");
+        }
         nifty.subscribe(screen, getId(), ElementShowEvent.class, this);
     }
 
     @Override
     public void init(Properties prprts, Attributes atrbts) {
-        System.out.println("init");
         Element tabContentPanel = elmnt.findElementByName("#tab-content-panel");
         List<Element> elements = tabContentPanel.getElements();
         for (final Element e : elements) {
@@ -58,17 +67,21 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
 
     private void createTabButton(final String tabId, final String buttonCaption) {
         Element tabButtonPanel = elmnt.findElementByName("#tab-button-panel");
-        System.out.println("looking for button " + tabId + "-button");
         if (tabButtonPanel.findElementByName(tabId + "-button") == null) {
-            System.out.println("adding button " + tabId + "-button");
             new ButtonBuilder(tabId + "-button") {
 
                 {
                     style("nifty-button");
                     childLayout(ChildLayoutType.Horizontal);
                     interactOnClick("switchTab(" + tabId + ")");
-                    width(percentage(25));
-                    height(percentage(100));
+                    if (buttonWidth != null) {
+                        width(buttonWidth);
+                    }
+                    if (buttonHeight != null) {
+                        height(percentage(100));
+                    } else {
+                        height("25px");
+                    }
                     label(buttonCaption);
                 }
             }.build(nifty, nifty.getCurrentScreen(), tabButtonPanel);
@@ -87,7 +100,6 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
     @Override
     public void addTab(Element tab) {
         if (tab.getControl(TabControl.class) != null) {
-            System.out.println("adding tab " + tab.getId());
             elmnt.findElementByName("#tab-content-panel").add(tab);
             createTabButton(tab.getId(), tab.getControl(TabControl.class).getCaption());
             setSelectedTab(tab.getId());
@@ -148,7 +160,7 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
                 if (e.getId().equals(activeTab)) {
                     break;
                 }
-                tabIndex ++;
+                tabIndex++;
             }
         }
         return tabIndex;
@@ -160,7 +172,6 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
      */
     public void switchTab(String tabId) {
         if (!tabId.equals(activeTab)) {
-            //TODO: add these two styles to the style.
             if (activeTab != null) {
                 elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab + "-button").setStyle("tab-button");
             }
@@ -178,8 +189,6 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
 
     @Override
     public void onEvent(final String topic, final ElementShowEvent data) {
-        System.out.println("onShow: " + data.getElement());
-
         // we make sure that only the active tab is visible
         Element tabContentPanel = elmnt.findElementByName("#tab-content-panel");
         for (int i = 0; i < tabContentPanel.getElements().size(); i++) {

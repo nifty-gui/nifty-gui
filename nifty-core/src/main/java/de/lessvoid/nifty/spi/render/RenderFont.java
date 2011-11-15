@@ -15,6 +15,14 @@ public interface RenderFont {
   int getWidth(String text);
 
   /**
+   * Get width in pixel of given text.
+   * @param text the text to measure.
+   * @param size size
+   * @return the pixel width of the given text
+   */
+  int getWidth(String text, float size);
+
+  /**
    * The height of the font in pixel.
    * @return font height in pixel.
    */

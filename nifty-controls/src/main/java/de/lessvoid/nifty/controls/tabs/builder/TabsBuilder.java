@@ -19,5 +19,13 @@ public class TabsBuilder extends ControlBuilder {
   public TabsBuilder(final String id) {
     super(id, "nifty-tabs");
   }
+  
+  public void buttonWidth(final String buttonWidth) {
+      set("buttonWidth", buttonWidth);
+  }
+  
+  public void buttonHeight(final String buttonHeight) {
+      set("buttonHeight", buttonHeight);
+  }
     
 }

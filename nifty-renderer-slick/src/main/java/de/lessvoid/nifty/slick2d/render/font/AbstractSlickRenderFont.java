@@ -89,6 +89,14 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
      * {@inheritDoc}
      */
     @Override
+    public final int getWidth(final String text, final float size) {
+        return (int) (internalFont.getWidth(text) * size);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public final int getHeight() {
         return internalFont.getLineHeight();
     }
