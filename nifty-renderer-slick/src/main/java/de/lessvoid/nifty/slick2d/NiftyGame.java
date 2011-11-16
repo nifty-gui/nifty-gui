@@ -4,17 +4,22 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import de.lessvoid.nifty.slick2d.input.PlainSlickInputSystem;
 import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
- * This "game" implements all the features of a Slick BasicGame with the sole
- * purpose of displaying a NiftyGUI on top of it.
+ * This "game" does nothing but showing the Nifty GUI on the screen. For real
+ * games the Nifty Overlay Game should be used.
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
+public abstract class NiftyGame extends NiftyOverlayGame {
+    /**
+     * The title of the game.
+     */
+    private final String title;
 
     /**
      * The screen that is called when preparing the GUI.
@@ -27,7 +32,7 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
      * 
      * @param gameTitle the title of the game
      */
-    public NiftyBasicGame(final String gameTitle) {
+    public NiftyGame(final String gameTitle) {
         this(gameTitle, "start");
     }
 
@@ -39,9 +44,25 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
      * @param niftyStartScreen the name of the screen that should be called
      *            first
      */
-    public NiftyBasicGame(final String gameTitle, final String niftyStartScreen) {
-        super(gameTitle);
+    public NiftyGame(final String gameTitle, final String niftyStartScreen) {
+        title = gameTitle;
         startScreen = niftyStartScreen;
+    }
+
+    /**
+     * Was a close requested?
+     */
+    @Override
+    public boolean closeRequested() {
+        return false;
+    }
+
+    /**
+     * Get the title of the game.
+     */
+    @Override
+    public final String getTitle() {
+        return title;
     }
 
     /**
@@ -49,8 +70,8 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
      * displayed.
      */
     @Override
-    protected void updateGame(final GameContainer container, final int delta)
-        throws SlickException {
+    protected final void updateGame(final GameContainer container,
+        final int delta) throws SlickException {
         // nothing to do
     }
 
@@ -59,8 +80,8 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
      * rendering the screen.
      */
     @Override
-    protected void renderGame(final GameContainer container, final Graphics g)
-        throws SlickException {
+    protected final void renderGame(final GameContainer container,
+        final Graphics g) throws SlickException {
         g.clear();
     }
 
@@ -69,10 +90,14 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
      * display.
      */
     @Override
-    protected void initGameAndGUI(GameContainer container)
+    protected final void initGameAndGUI(GameContainer container)
         throws SlickException {
         initNifty(container, new SlickRenderDevice(container),
-            new SlickSoundDevice(), new TimeProvider());
-        getNifty().gotoScreen(startScreen);
+            new SlickSoundDevice(), new PlainSlickInputSystem(),
+            new TimeProvider());
+
+        if (startScreen != null) {
+            getNifty().gotoScreen(startScreen);
+        }
     }
 }

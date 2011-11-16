@@ -24,7 +24,7 @@ public class SelectionCheck {
     assertEquals(selection.length, listBox.getSelectedIndices().size());
     int i = 0;
     for (int o : selection) {
-      assertEquals(o, listBox.getSelectedIndices().get(i));
+      assertEquals(o, listBox.getSelectedIndices().get(i).intValue());
       i++;
     }
   }
@@ -41,7 +41,7 @@ public class SelectionCheck {
     assertEquals(expected.length, selectionChangedEvent.getSelectionIndices().size());
     int i = 0;
     for (int item : expected) {
-      assertEquals(item, selectionChangedEvent.getSelectionIndices().get(i++));
+      assertEquals(item, selectionChangedEvent.getSelectionIndices().get(i++).intValue());
     }
   }
 
