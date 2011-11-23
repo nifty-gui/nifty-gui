@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.controls.messagebox.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.controls.MessageBox;
 
 public class MessageBoxBuilder extends ControlBuilder {
 
@@ -13,23 +12,23 @@ public class MessageBoxBuilder extends ControlBuilder {
 		super("nifty-messagebox", id);
 	}
 	
-	public void setMessageBoxType(String type) {
+	public void messageBoxType(String type) {
 		set("messageBoxType", type);
 	}
 	
-	public void setMessage(String message) {
+	public void message(String message) {
 		set("message", message);
 	}
 
-	public void setIcon(String icon) {
+	public void icon(String icon) {
 		set("icon", icon);
 	}
 	
-	public void setButtonCaption(String buttonCaption) {
+	public void buttonCaption(String buttonCaption) {
 		set("buttonCaption", buttonCaption);
 	}
 	
-	public void setButtonCaptions(String buttonCaptions) {
+	public void buttonCaptions(String buttonCaptions) {
 		set("buttonCaptions", buttonCaptions);
 	}
 	

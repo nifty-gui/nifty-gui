@@ -27,6 +27,7 @@ import de.lessvoid.nifty.examples.defaultcontrols.common.MenuButtonControlDefini
 import de.lessvoid.nifty.examples.defaultcontrols.dragndrop.DragAndDropDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.dropdown.DropDownDialogControlDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.listbox.ListBoxDialogControlDefinition;
+import de.lessvoid.nifty.examples.defaultcontrols.messagebox.MessageBoxDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.scrollpanel.ScrollPanelDialogControlDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.sliderandscrollbar.SliderAndScrollbarDialogControlDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.tabs.TabsControlDialogDefinition;
@@ -70,6 +71,7 @@ public class ControlsDemo {
     ListBoxDialogControlDefinition.register(nifty);
     DropDownDialogControlDefinition.register(nifty);
     ScrollPanelDialogControlDefinition.register(nifty);
+    MessageBoxDialogDefinition.register(nifty);
     ChatControlDialogDefinition.register(nifty);
     TabsControlDialogDefinition.register(nifty);
     TreeBoxControlDialogDefinition.register(nifty);
@@ -233,6 +235,7 @@ public class ControlsDemo {
           "menuButtonTextField", "dialogTextField",
           "menuButtonSlider", "dialogSliderAndScrollbar",
           "menuButtonScrollPanel", "dialogScrollPanel",
+          "menuButtonMessageBox", "dialogMessageBox",
           "menuButtonChatControl", "dialogChatControl",
           "menuButtonTabsControl", "dialogTabsControl",
           "menuButtonTreeBoxControl", "dialogTreeBoxControl",
@@ -258,6 +261,8 @@ public class ControlsDemo {
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonScrollPanel", "ScrollPanel", "ScrollPanel demonstration\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
           panel(builders.hspacer("10px"));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonMessageBox", "MessageBox", "MessageBox demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonChatControl", "ChatControl", "Chat Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonTabsControl", "TabsControl", "Tabs Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
@@ -279,6 +284,7 @@ public class ControlsDemo {
           control(new ControlBuilder("dialogDropDown", DropDownDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogScrollPanel", ScrollPanelDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogChatControl", ChatControlDialogDefinition.NAME));
+          control(new ControlBuilder("dialogMessageBox", MessageBoxDialogDefinition.NAME));
           control(new ControlBuilder("dialogTabsControl", TabsControlDialogDefinition.NAME));
           control(new ControlBuilder("dialogTreeBoxControl", TreeBoxControlDialogDefinition.NAME));
           control(new ControlBuilder("dialogDragAndDrop", DragAndDropDialogDefinition.NAME));
