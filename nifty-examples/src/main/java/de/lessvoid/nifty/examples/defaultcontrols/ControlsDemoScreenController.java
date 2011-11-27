@@ -279,7 +279,7 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
         }
       });
 
-      DropDown dropDown = screen.findNiftyControl("resolutions", DropDown.class);
+      DropDown<DisplayMode> dropDown = screen.findNiftyControl("resolutions", DropDown.class);
       for (DisplayMode mode : sorted) {
         dropDown.addItem(mode);
       }
