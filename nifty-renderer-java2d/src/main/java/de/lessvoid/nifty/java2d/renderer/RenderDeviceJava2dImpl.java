@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.java2d.renderer.fonts.AngelCodeFont;
 import de.lessvoid.nifty.java2d.renderer.fonts.CharacterInfo;
 import de.lessvoid.nifty.render.BlendMode;
@@ -22,13 +23,13 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class RenderDeviceJava2dImpl implements RenderDevice {
 
-	protected static final Logger logger = Logger
-			.getLogger(RenderDeviceJava2dImpl.class.getName());
+	protected static final Logger logger = Logger.getLogger(RenderDeviceJava2dImpl.class.getName());
 
+	private NiftyResourceLoader resourceLoader;
 	private Graphics2D graphics;
 
 	private Graphics2dHelper graphics2dHelper;
@@ -47,6 +48,11 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 		return new java.awt.Color(color.getRed(), color.getGreen(), color
 				.getBlue(), color.getAlpha());
 	}
+
+  @Override
+  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
+  }
 
 	public RenderDeviceJava2dImpl(GraphicsWrapper graphicsWrapper) {
 		this.graphicsWrapper = graphicsWrapper;
@@ -94,8 +100,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 	@Override
 	public RenderImage createImage(String filename, boolean filterLinear) {
 		try {
-			BufferedImage image = ImageIO.read(ResourceLoader
-					.getResource(filename));
+			BufferedImage image = ImageIO.read(resourceLoader.getResource(filename));
 			// convert the image to ARGB model
 			BufferedImage bufferedImage = new BufferedImage(image
 					.getWidth(null), image.getHeight(null),
@@ -325,5 +330,4 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
     // TODO Auto-generated method stub
     
   }
-
 }

@@ -1,12 +1,19 @@
 package de.lessvoid.nifty.spi.sound;
 
 import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * SoundLoader loads sounds and music.
  * @author void
  */
 public interface SoundDevice {
+
+  /**
+   * Gives this RenderDevice access to the NiftyResourceLoader.
+   * @param niftyResourceLoader NiftyResourceLoader
+   */
+  void setResourceLoader(NiftyResourceLoader niftyResourceLoader);
 
   /**
    * Load the Sound with the given name.

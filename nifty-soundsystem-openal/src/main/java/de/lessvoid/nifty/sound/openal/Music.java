@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.sound.openal.slick.Audio;
 import de.lessvoid.nifty.sound.openal.slick.AudioImpl;
 import de.lessvoid.nifty.sound.openal.slick.SoundStore;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * A piece of music loaded and playable within the game. Only one piece of music can
@@ -71,8 +72,8 @@ public class Music {
 	 * @param ref The location of the music
 	 * @throws SlickException
 	 */
-	public Music(String ref) throws Exception {
-		this(ref, false);
+	public Music(String ref, final NiftyResourceLoader resourceLoader) throws Exception {
+		this(ref, false, resourceLoader);
 	}
 
 	/**
@@ -81,8 +82,8 @@ public class Music {
 	 * @param ref The location of the music
 	 * @throws SlickException
 	 */
-	public Music(URL ref) throws Exception {
-		this(ref, false);
+	public Music(URL ref, final NiftyResourceLoader resourceLoader) throws Exception {
+		this(ref, false, resourceLoader);
 	}
 	
 	/**
@@ -92,14 +93,14 @@ public class Music {
 	 * @param streamingHint A hint to indicate whether streaming should be used if possible
 	 * @throws SlickException
 	 */
-	public Music(URL url, boolean streamingHint) throws Exception {
+	public Music(URL url, boolean streamingHint, final NiftyResourceLoader resourceLoader) throws Exception {
 		SoundStore.get().init();
 		String ref = url.getFile();
 		
 		try {
 			if (ref.toLowerCase().endsWith(".ogg")) {
 				if (streamingHint) {
-					sound = SoundStore.get().getOggStream(url);
+					sound = SoundStore.get().getOggStream(url, resourceLoader);
 				} else {
 					sound = SoundStore.get().getOgg(url.openStream());
 				}
@@ -125,22 +126,22 @@ public class Music {
 	 * @param streamingHint A hint to indicate whether streaming should be used if possible
 	 * @throws SlickException
 	 */
-	public Music(String ref, boolean streamingHint) throws Exception {
+	public Music(String ref, boolean streamingHint, final NiftyResourceLoader resourceLoader) throws Exception {
 		SoundStore.get().init();
 		
 		try {
 			if (ref.toLowerCase().endsWith(".ogg")) {
 				if (streamingHint) {
-					sound = SoundStore.get().getOggStream(ref);
+					sound = SoundStore.get().getOggStream(ref, resourceLoader);
 				} else {
-					sound = SoundStore.get().getOgg(ref);
+					sound = SoundStore.get().getOgg(ref, resourceLoader);
 				}
 			} else if (ref.toLowerCase().endsWith(".wav")) {
-				sound = SoundStore.get().getWAV(ref);
+				sound = SoundStore.get().getWAV(ref, resourceLoader);
 			} else if (ref.toLowerCase().endsWith(".xm") || ref.toLowerCase().endsWith(".mod")) {
-				sound = SoundStore.get().getMOD(ref);
+				sound = SoundStore.get().getMOD(ref, resourceLoader);
 			} else if (ref.toLowerCase().endsWith(".aif") || ref.toLowerCase().endsWith(".aiff")) {
-				sound = SoundStore.get().getAIF(ref);
+				sound = SoundStore.get().getAIF(ref, resourceLoader);
 			} else {
 				throw new Exception("Only .xm, .mod, .ogg, and .aif/f are currently supported.");
 			}

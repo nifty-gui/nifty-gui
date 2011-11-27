@@ -1,12 +1,19 @@
 package de.lessvoid.nifty.spi.input;
 
 import de.lessvoid.nifty.NiftyInputConsumer;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * Interface for Niftys InputSystem.
  * @author void
  */
 public interface InputSystem {
+
+  /**
+   * Gives this RenderDevice access to the NiftyResourceLoader.
+   * @param niftyResourceLoader NiftyResourceLoader
+   */
+  void setResourceLoader(NiftyResourceLoader niftyResourceLoader);
 
   /**
    * This method is called by Nifty when it's ready to process input events. The

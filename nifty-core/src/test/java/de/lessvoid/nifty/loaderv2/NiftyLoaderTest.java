@@ -1,17 +1,15 @@
 package de.lessvoid.nifty.loaderv2;
 
-import static org.easymock.classextension.EasyMock.createNiceMock;
-import static org.easymock.classextension.EasyMock.replay;
-
 import java.io.ByteArrayInputStream;
 
 import junit.framework.TestCase;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.loaderv2.types.NiftyType;
+import de.lessvoid.nifty.nulldevice.NullInputSystem;
+import de.lessvoid.nifty.nulldevice.NullRenderDevice;
+import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 
 public class NiftyLoaderTest extends TestCase {
   private static String testXml =
@@ -63,13 +61,12 @@ public class NiftyLoaderTest extends TestCase {
   }
 
   public void testLoader() throws Exception {
-    NiftyLoader niftyLoader = new NiftyLoader(new TimeProvider());
-    niftyLoader.registerSchema("nifty.nxs", ResourceLoader.getResourceAsStream("nifty.nxs"));
-    niftyLoader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
+    Nifty nifty = new Nifty(new NullRenderDevice(), new NullSoundDevice(), new NullInputSystem(), new TimeProvider());
 
-    Nifty nifty = createNiceMock(Nifty.class);
-    replay(nifty);
+    NiftyLoader niftyLoader = new NiftyLoader(nifty, new TimeProvider());
+    niftyLoader.registerSchema("nifty.nxs", nifty.getResourceAsStream("nifty.nxs"));
+    niftyLoader.registerSchema("nifty-styles.nxs", nifty.getResourceAsStream("nifty-styles.nxs"));
 
-    NiftyType niftyType = niftyLoader.loadNiftyXml("nifty.nxs", new ByteArrayInputStream(testXml.getBytes("ISO-8859-1")), nifty);
+    niftyLoader.loadNiftyXml("nifty.nxs", new ByteArrayInputStream(testXml.getBytes("ISO-8859-1")), nifty);
   }
 }

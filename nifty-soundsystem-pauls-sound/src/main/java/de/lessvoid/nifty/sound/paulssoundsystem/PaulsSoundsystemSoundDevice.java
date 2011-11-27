@@ -7,6 +7,7 @@ import paulscode.sound.codecs.CodecWav;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class PaulsSoundsystemSoundDevice implements SoundDevice {
   private paulscode.sound.SoundSystem soundSystem;
@@ -22,6 +23,10 @@ public class PaulsSoundsystemSoundDevice implements SoundDevice {
 
     addAdditionalCodecs(libraryClass, additionalCodecs);
     soundSystem = new paulscode.sound.SoundSystem();
+  }
+
+  @Override
+  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
   }
 
   private void addAdditionalCodecs(final Class libraryClass, final SupportedCodec... codecs) throws SoundSystemException {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import de.lessvoid.xml.lwxs.elements.Element;
 import de.lessvoid.xml.lwxs.elements.SubstitutionGroup;
 import de.lessvoid.xml.lwxs.elements.Type;
@@ -21,6 +22,11 @@ public class Schema implements XmlProcessor {
   private String packageString;
   private String root;
   private String type;
+  private NiftyResourceLoader resourceLoader;
+
+  public Schema(final NiftyResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
+  }
 
   public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
     packageString = attributes.get("package");
@@ -38,7 +44,7 @@ public class Schema implements XmlProcessor {
     xmlParser.nextTag();
     xmlParser.zeroOrMore(
         new de.lessvoid.xml.xpp3.SubstitutionGroup()
-          .add("include", new IncludeProcessor(types))
+          .add("include", new IncludeProcessor(resourceLoader, types))
           .add("type", new TypeProcessor(this)));
   }
 

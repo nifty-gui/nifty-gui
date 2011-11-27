@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
 		MouseListener, KeyListener {
@@ -17,6 +18,10 @@ public class InputSystemAwtImpl implements InputSystem, MouseMotionListener,
 	private ConcurrentLinkedQueue<MouseEvent> mouseEvents = new ConcurrentLinkedQueue<MouseEvent>();
 
 	private ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEvents = new ConcurrentLinkedQueue<KeyboardInputEvent>();
+
+  @Override
+  public void setResourceLoader(final NiftyResourceLoader nifty) {
+  }
 
 	@Override
 	public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {

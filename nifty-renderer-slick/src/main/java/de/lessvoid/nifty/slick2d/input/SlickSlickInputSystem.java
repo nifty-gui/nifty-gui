@@ -3,6 +3,7 @@ package de.lessvoid.nifty.slick2d.input;
 import org.newdawn.slick.InputListener;
 
 import de.lessvoid.nifty.slick2d.input.events.InputEvent;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * This is the input system that forwards all events to a slick listener. Also
@@ -32,6 +33,10 @@ public final class SlickSlickInputSystem extends AbstractSlickInputSystem {
                 "The target listener must not be NULL.");
         }
         listener = targetListener;
+    }
+
+    @Override
+    public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
     }
 
     /**

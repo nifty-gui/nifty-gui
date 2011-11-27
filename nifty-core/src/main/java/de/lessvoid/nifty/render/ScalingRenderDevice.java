@@ -7,6 +7,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class ScalingRenderDevice implements RenderDevice {
   private NiftyRenderEngine renderEngine;
@@ -15,6 +16,10 @@ public class ScalingRenderDevice implements RenderDevice {
   public ScalingRenderDevice(final NiftyRenderEngine renderEngine, final RenderDevice interal) {
     this.renderEngine = renderEngine;
     this.internal = interal;
+  }
+
+  @Override
+  public void setResourceLoader(NiftyResourceLoader niftyResourceLoader) {
   }
 
   @Override

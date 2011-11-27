@@ -4,12 +4,19 @@ import java.io.IOException;
 
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * Nifty RenderDevice.
  * @author void
  */
 public interface RenderDevice {
+
+  /**
+   * Gives this RenderDevice access to the NiftyResourceLoader.
+   * @param niftyResourceLoader NiftyResourceLoader
+   */
+  void setResourceLoader(NiftyResourceLoader niftyResourceLoader);
 
   /**
    * Create a new RenderImage.
