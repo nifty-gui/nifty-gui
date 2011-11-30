@@ -22,7 +22,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * Lwjgl RenderDevice Implementation.
@@ -31,6 +31,7 @@ import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 public class LwjglRenderDevice implements RenderDevice {
   private static Logger log = Logger.getLogger(LwjglRenderDevice.class.getName());
   private static IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+  private NiftyResourceLoader resourceLoader;
   private int viewportWidth;
   private int viewportHeight;
   private long time;
@@ -69,6 +70,12 @@ public class LwjglRenderDevice implements RenderDevice {
     this();
     this.logFPS = true;
     this.displayFPS = displayFPS;
+  }
+
+  @Override
+  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
+
     if (this.displayFPS) {
       fpsFont = createFont("fps.fnt");
     }
@@ -151,7 +158,7 @@ public class LwjglRenderDevice implements RenderDevice {
    * @return RenderImage
    */
   public RenderImage createImage(final String filename, final boolean filterLinear) {
-    return new LwjglRenderImage(filename, filterLinear);
+    return new LwjglRenderImage(filename, filterLinear, resourceLoader);
   }
 
   /**
@@ -160,7 +167,7 @@ public class LwjglRenderDevice implements RenderDevice {
    * @return RenderFont
    */
   public RenderFont createFont(final String filename) {
-    return new LwjglRenderFont(filename, this);
+    return new LwjglRenderFont(filename, this, resourceLoader);
   }
 
   /**
@@ -444,7 +451,7 @@ public class LwjglRenderDevice implements RenderDevice {
 
   private Cursor loadMouseCursor(final String name, final int hotspotX, final int hotspotY) throws IOException {
     ImageData imageLoader = createImageLoader(name);
-    ByteBuffer imageData = imageLoader.loadMouseCursorImage(ResourceLoader.getResourceAsStream(name));
+    ByteBuffer imageData = imageLoader.loadMouseCursorImage(resourceLoader.getResourceAsStream(name));
     imageData.rewind();
     int width = imageLoader.getWidth();
     int height = imageLoader.getHeight();

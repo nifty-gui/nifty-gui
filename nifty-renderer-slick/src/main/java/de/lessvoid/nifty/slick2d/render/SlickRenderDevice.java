@@ -19,6 +19,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * The render device that takes care for rendering the Nifty GUI inside of
@@ -54,6 +55,10 @@ public final class SlickRenderDevice implements RenderDevice {
     public SlickRenderDevice(final GameContainer gameContainer) {
         this.gameContainer = gameContainer;
         tempSlickColor = new org.newdawn.slick.Color(0.f, 0.f, 0.f, 0.f);
+    }
+
+    @Override
+    public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
     }
 
     /**

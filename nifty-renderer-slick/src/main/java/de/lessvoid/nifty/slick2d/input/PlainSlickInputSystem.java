@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.slick2d.input;
 
 import de.lessvoid.nifty.slick2d.input.events.InputEvent;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * This version of the input system is only usable in case all input is meant
@@ -16,7 +17,11 @@ public final class PlainSlickInputSystem extends AbstractSlickInputSystem {
     public PlainSlickInputSystem() {
         super();
     }
-    
+
+    @Override
+    public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+    }
+
     /**
      * All input events not handled by the Nifty GUI end up here and get
      * discarded.

@@ -4,12 +4,13 @@ import de.lessvoid.nifty.renderer.lwjgl.render.font.CharacterInfo;
 import de.lessvoid.nifty.renderer.lwjgl.render.font.Font;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class LwjglRenderFont implements RenderFont {
   private Font font;
 
-  public LwjglRenderFont(final String name, final RenderDevice device) {
-    font = new Font(device);
+  public LwjglRenderFont(final String name, final RenderDevice device, final NiftyResourceLoader resourceLoader) {
+    font = new Font(device, resourceLoader);
     font.init(name);
   }
 

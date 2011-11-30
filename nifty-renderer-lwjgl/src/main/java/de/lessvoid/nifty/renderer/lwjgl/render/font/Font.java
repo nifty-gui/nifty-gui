@@ -10,6 +10,7 @@ import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
 import de.lessvoid.nifty.renderer.lwjgl.render.font.ColorValueParser.Result;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * OpenGL display list based Font.
@@ -36,7 +37,10 @@ public class Font {
   private Map<Character, Integer> displayListMap = new Hashtable<Character, Integer>();
   private ColorValueParser colorValueParser = new ColorValueParser();
 
-  public Font(final RenderDevice device) {
+  private NiftyResourceLoader resourceLoader;
+
+  public Font(final RenderDevice device, final NiftyResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
     selectionStart = -1;
     selectionEnd = -1;
     selectionR = 1.0f;
@@ -55,7 +59,7 @@ public class Font {
 
   public boolean init(final String filename) {
     // get the angel code font from file
-    font = new AngelCodeFont();
+    font = new AngelCodeFont(resourceLoader);
     if (!font.load(filename)) {
       return false;
     }
@@ -63,7 +67,7 @@ public class Font {
     // load textures of font into array
     textures = new LwjglRenderImage[font.getTextures().length];
     for (int i = 0; i < font.getTextures().length; i++) {
-      textures[i] = new LwjglRenderImage(extractPath(filename) + font.getTextures()[i], true);
+      textures[i] = new LwjglRenderImage(extractPath(filename) + font.getTextures()[i], true, resourceLoader);
     }
 
     // now build open gl display lists for every character in the font

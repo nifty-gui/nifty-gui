@@ -12,7 +12,7 @@ public class SchemaNullTest {
 
   @Before
   public void setUp() {
-    schema = new Schema();
+    schema = new Schema(null);
   }
 
   @Test(expected = Exception.class)

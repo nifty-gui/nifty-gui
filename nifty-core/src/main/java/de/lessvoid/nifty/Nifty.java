@@ -62,7 +62,7 @@ import de.lessvoid.nifty.tools.ObjectPool;
 import de.lessvoid.nifty.tools.ObjectPool.Factory;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import de.lessvoid.xml.tools.SpecialValuesReplace;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -108,6 +108,7 @@ public class Nifty {
   private SubscriberRegistry subscriberRegister = new SubscriberRegistry();
   private boolean debugOptionPanelColors;
   private Clipboard clipboard = null;
+  private NiftyResourceLoader resourceLoader = new NiftyResourceLoader();
 
   /**
    * Create nifty with optional console parameter.
@@ -121,6 +122,9 @@ public class Nifty {
       final SoundDevice newSoundDevice,
       final InputSystem newInputSystem,
       final TimeProvider newTimeProvider) {
+    newRenderDevice.setResourceLoader(resourceLoader);
+    newSoundDevice.setResourceLoader(resourceLoader);
+    newInputSystem.setResourceLoader(resourceLoader);
     initialize(new NiftyRenderEngineImpl(newRenderDevice), new SoundSystem(newSoundDevice), newInputSystem, newTimeProvider);
     initializeClipboard();
   }
@@ -149,10 +153,10 @@ public class Nifty {
     this.niftyMouse = new NiftyMouseImpl(newRenderDevice.getRenderDevice(), inputSystem, timeProvider);
 
     try {
-      loader = new NiftyLoader(timeProvider);
-      loader.registerSchema("nifty.nxs", ResourceLoader.getResourceAsStream("nifty.nxs"));
-      loader.registerSchema("nifty-styles.nxs", ResourceLoader.getResourceAsStream("nifty-styles.nxs"));
-      loader.registerSchema("nifty-controls.nxs", ResourceLoader.getResourceAsStream("nifty-controls.nxs"));
+      loader = new NiftyLoader(this, timeProvider);
+      loader.registerSchema("nifty.nxs", getResourceAsStream("nifty.nxs"));
+      loader.registerSchema("nifty-styles.nxs", getResourceAsStream("nifty-styles.nxs"));
+      loader.registerSchema("nifty-controls.nxs", getResourceAsStream("nifty-controls.nxs"));
       NiftyDefaults.initDefaultEffects(this);
 
       initalizeEventBus();
@@ -498,7 +502,7 @@ public class Nifty {
    * @throws Exception exception describing the error
    */
   public void validateXml(final String filename) throws Exception {
-    loader.validateNiftyXml(ResourceLoader.getResourceAsStream(filename));
+    loader.validateNiftyXml(getResourceAsStream(filename));
   }
 
   /**
@@ -520,7 +524,7 @@ public class Nifty {
 
     try {
       long start = timeProvider.getMsTime();
-      NiftyType niftyType = loader.loadNiftyXml("nifty.nxs", ResourceLoader.getResourceAsStream(filename), this);
+      NiftyType niftyType = loader.loadNiftyXml("nifty.nxs", getResourceAsStream(filename), this);
       niftyType.create(this, timeProvider);
       if (log.isLoggable(Level.INFO)) {
         log.info(niftyType.output());
@@ -1565,5 +1569,23 @@ public class Nifty {
 
   public void disableAutoScaling() {
     renderEngine.disableAutoScaling();
+  }
+
+  /**
+   * Return an InputStream for the given resource name. This is resolved
+   * using the currently registered ResourceLocations.
+   * @param ref the name of the resource to load
+   * @return the InputStream of the resource data
+   */
+  public InputStream getResourceAsStream(final String ref) {
+    return resourceLoader.getResourceAsStream(ref);
+  }
+
+  /**
+   * Return the ResourceLoader of this Nifty instance.
+   * @return the ResourceLoader to load resources
+   */
+  public NiftyResourceLoader getResourceLoader() {
+    return resourceLoader;
   }
 }

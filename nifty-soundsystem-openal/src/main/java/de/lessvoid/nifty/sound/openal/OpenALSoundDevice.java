@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * Slick Implementation of the SoundLoader.
@@ -17,6 +18,13 @@ public class OpenALSoundDevice implements SoundDevice {
    */
   private static Logger log = Logger.getLogger(SoundSystem.class.getName());
 
+  private NiftyResourceLoader resourceLoader;
+
+  @Override
+  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
+  }
+
   /**
    * Load a sound.
    * @param soundSystem soundSystem
@@ -25,7 +33,7 @@ public class OpenALSoundDevice implements SoundDevice {
    */
   public SoundHandle loadSound(final SoundSystem soundSystem, final String filename) {
     try {
-      return new OpenALSoundHandle(soundSystem, new Sound(filename));
+      return new OpenALSoundHandle(soundSystem, new Sound(filename, resourceLoader));
     } catch (Exception e) {
       log.warning("loading of '" + filename + "' failed" + e);
     }
@@ -40,7 +48,7 @@ public class OpenALSoundDevice implements SoundDevice {
    */
   public SoundHandle loadMusic(final SoundSystem soundSystem, final String filename) {
     try {
-      return new OpenALMusicHandle(soundSystem, new Music(filename, true));
+      return new OpenALMusicHandle(soundSystem, new Music(filename, true, resourceLoader));
     } catch (Exception e) {
       log.warning("loading of '" + filename + "' failed" + e);
     }

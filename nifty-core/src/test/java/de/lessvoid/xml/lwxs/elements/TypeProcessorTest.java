@@ -22,7 +22,7 @@ public class TypeProcessorTest {
 
   @Before
   public void setUp() {
-    niftyXmlSchema = new Schema();
+    niftyXmlSchema = new Schema(null);
     typeProcessor = new TypeProcessor(niftyXmlSchema);
     xmlParserMock = createMock(XmlParser.class);
   }

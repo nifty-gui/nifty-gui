@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+
 /**
  * A utility to provide a simple and rational interface to the
  * slick internals
@@ -69,11 +71,11 @@ public class AudioLoader {
 	 * @return An object representing the audio data 
 	 * @throws IOException Indicates a failure to access the audio data
 	 */
-	public static Audio getStreamingAudio(String format, URL url) throws IOException {
+	public static Audio getStreamingAudio(String format, URL url, final NiftyResourceLoader resourceLoader) throws IOException {
 		init();
 		
 		if (format.equals(OGG)) {
-			return SoundStore.get().getOggStream(url);
+			return SoundStore.get().getOggStream(url, resourceLoader);
 		}
 		if (format.equals(MOD)) {
 			return SoundStore.get().getMOD(url.openStream());

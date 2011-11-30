@@ -5,6 +5,7 @@ import de.lessvoid.nifty.slick2d.loaders.SlickSoundLoaders;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * Slick Implementation of the SoundLoader.
@@ -22,6 +23,10 @@ public final class SlickSoundDevice implements SoundDevice {
     public SoundHandle loadSound(final SoundSystem soundSystem,
         final String filename) {
         return SlickSoundLoaders.getInstance().loadSound(soundSystem, filename);
+    }
+
+    @Override
+    public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
     }
 
     /**

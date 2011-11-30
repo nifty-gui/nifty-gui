@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.sound.openal.slick.Audio;
 import de.lessvoid.nifty.sound.openal.slick.SoundStore;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * A single sound effect loaded from either OGG or XM/MOD file. Sounds are allocated to 
@@ -51,18 +52,18 @@ public class Sound {
 	 * @param ref The location of the OGG or MOD/XM to load
 	 * @throws SlickException Indicates a failure to load the sound effect
 	 */
-	public Sound(String ref) throws Exception {
+	public Sound(String ref, final NiftyResourceLoader resourceLoader) throws Exception {
 		SoundStore.get().init();
 		
 		try {
 			if (ref.toLowerCase().endsWith(".ogg")) {
-				sound = SoundStore.get().getOgg(ref);
+				sound = SoundStore.get().getOgg(ref, resourceLoader);
 			} else if (ref.toLowerCase().endsWith(".wav")) {
-				sound = SoundStore.get().getWAV(ref);
+				sound = SoundStore.get().getWAV(ref, resourceLoader);
 			} else if (ref.toLowerCase().endsWith(".aif")) {
-				sound = SoundStore.get().getAIF(ref);
+				sound = SoundStore.get().getAIF(ref, resourceLoader);
 			} else if (ref.toLowerCase().endsWith(".xm") || ref.toLowerCase().endsWith(".mod")) {
-				sound = SoundStore.get().getMOD(ref);
+				sound = SoundStore.get().getMOD(ref, resourceLoader);
 			} else {
 				throw new Exception("Only .xm, .mod, .aif, .wav and .ogg are currently supported.");
 			}

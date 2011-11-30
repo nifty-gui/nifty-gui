@@ -11,7 +11,7 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.OpenALException;
 
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * A generic tool to work on a supplied stream, pulling out PCM data and buffered it to OpenAL
@@ -54,6 +54,7 @@ public class OpenALStreamPlayer {
 	private float pitch;
 	/** Position in seconds of the previously played buffers */
 	private float positionOffset;
+  private NiftyResourceLoader resourceLoader;
 	
 	/**
 	 * Create a new player to work on an audio stream
@@ -61,9 +62,10 @@ public class OpenALStreamPlayer {
 	 * @param source The source on which we'll play the audio
 	 * @param ref A reference to the audio file to stream
 	 */
-	public OpenALStreamPlayer(int source, String ref) {
+	public OpenALStreamPlayer(int source, String ref, NiftyResourceLoader resourceLoader) {
 		this.source = source;
 		this.ref = ref;
+    this.resourceLoader = resourceLoader;
 		
 		bufferNames = BufferUtils.createIntBuffer(BUFFER_COUNT);
 		AL10.alGenBuffers(bufferNames);
@@ -75,9 +77,10 @@ public class OpenALStreamPlayer {
 	 * @param source The source on which we'll play the audio
 	 * @param url A reference to the audio file to stream
 	 */
-	public OpenALStreamPlayer(int source, URL url) {
+	public OpenALStreamPlayer(int source, URL url, NiftyResourceLoader resourceLoader) {
 		this.source = source;
 		this.url = url;
+    this.resourceLoader = resourceLoader;
 
 		bufferNames = BufferUtils.createIntBuffer(BUFFER_COUNT);
 		AL10.alGenBuffers(bufferNames);
@@ -98,7 +101,7 @@ public class OpenALStreamPlayer {
 		if (url != null) {
 			audio = new OggInputStream(url.openStream());
 		} else {
-			audio = new OggInputStream(ResourceLoader.getResourceAsStream(ref));
+			audio = new OggInputStream(resourceLoader.getResourceAsStream(ref));
 		}
 		
 		this.audio = audio;

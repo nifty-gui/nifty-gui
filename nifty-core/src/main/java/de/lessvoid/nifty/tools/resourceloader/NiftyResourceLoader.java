@@ -11,12 +11,13 @@ import java.util.ArrayList;
  * minds how this is meant to work in the future.
  * 
  * @author Kevin Glass
+ * @auther void (made it a none static class)
  */
-public class ResourceLoader {
+public class NiftyResourceLoader {
   /** The list of locations to be searched */
-  private static ArrayList locations = new ArrayList();
+  private ArrayList<ResourceLocation> locations = new ArrayList<ResourceLocation>();
   
-  static {
+  public NiftyResourceLoader() {
     locations.add(new ClasspathLocation());
     locations.add(new FileSystemLocation(new File(".")));
   }
@@ -27,7 +28,7 @@ public class ResourceLoader {
    * @param location
    *          The location that will be searched for resoruces
    */
-  public static void addResourceLocation(ResourceLocation location) {
+  public void addResourceLocation(ResourceLocation location) {
     locations.add(location);
   }
   
@@ -37,7 +38,7 @@ public class ResourceLoader {
    * @param location
    *          The location that will be removed from the search list
    */
-  public static void removeResourceLocation(ResourceLocation location) {
+  public void removeResourceLocation(ResourceLocation location) {
     locations.remove(location);
   }
   
@@ -45,7 +46,7 @@ public class ResourceLoader {
    * Remove all the locations, no resources will be found until new locations
    * have been added
    */
-  public static void removeAllResourceLocations() {
+  public void removeAllResourceLocations() {
     locations.clear();
   }
   
@@ -56,7 +57,7 @@ public class ResourceLoader {
    *          The reference to the resource to retrieve
    * @return A stream from which the resource can be read
    */
-  public static InputStream getResourceAsStream(String ref) {
+  public InputStream getResourceAsStream(String ref) {
     InputStream in = null;
     
     for (int i = 0; i < locations.size(); i++) {
@@ -81,7 +82,7 @@ public class ResourceLoader {
    *          The reference to the resource to retrieve
    * @return A stream from which the resource can be read
    */
-  public static URL getResource(String ref) {
+  public URL getResource(String ref) {
     
     URL url = null;
     

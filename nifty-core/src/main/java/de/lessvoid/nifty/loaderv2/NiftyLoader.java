@@ -21,7 +21,6 @@ import de.lessvoid.nifty.loaderv2.types.NiftyControlsType;
 import de.lessvoid.nifty.loaderv2.types.NiftyStylesType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
 import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
 import de.lessvoid.xml.lwxs.Schema;
 import de.lessvoid.xml.xpp3.XmlParser;
 
@@ -29,8 +28,10 @@ public class NiftyLoader {
   private Logger log = Logger.getLogger(NiftyLoader.class.getName());
   private Map < String, Schema > schemes = new Hashtable < String, Schema >();
   private TimeProvider timeProvider;
+  private Nifty nifty;
 
-  public NiftyLoader(final TimeProvider timeProvider) {
+  public NiftyLoader(final Nifty nifty, final TimeProvider timeProvider) {
+    this.nifty = nifty;
     this.timeProvider = timeProvider;
   }
 
@@ -77,7 +78,7 @@ public class NiftyLoader {
       Document document = parser.parse(inputStreamXml);
 
       SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-      InputStream schemaStream = ResourceLoader.getResourceAsStream("nifty-1.3.xsd");
+      InputStream schemaStream = nifty.getResourceAsStream("nifty-1.3.xsd");
       try {
         Source schemaFile = new StreamSource(schemaStream);
         javax.xml.validation.Schema schema = factory.newSchema(schemaFile);
@@ -99,7 +100,7 @@ public class NiftyLoader {
     log.info("loading new nifty style xml file [" + styleFilename + "] with schemaId [" + schemaId + "]");
 
     XmlParser parser = new XmlParser(new MXParser());
-    InputStream stream = ResourceLoader.getResourceAsStream(styleFilename);
+    InputStream stream = nifty.getResourceAsStream(styleFilename);
     try {
       parser.read(stream);
       NiftyStylesType niftyStylesType = (NiftyStylesType) getSchema(schemaId).loadXml(parser);
@@ -116,7 +117,7 @@ public class NiftyLoader {
     log.info("loading new nifty controls xml file [" + controlFilename + "] with schemaId [" + schemaId + "]");
 
     XmlParser parser = new XmlParser(new MXParser());
-    InputStream stream = ResourceLoader.getResourceAsStream(controlFilename);
+    InputStream stream = nifty.getResourceAsStream(controlFilename);
     try {
       parser.read(stream);
       NiftyControlsType niftyControlsType = (NiftyControlsType) getSchema(schemaId).loadXml(parser);
@@ -128,7 +129,7 @@ public class NiftyLoader {
 
   public void registerSchema(final String schemaId, final InputStream inputStreamSchema) throws Exception {
     try {
-      Schema niftyXmlSchema = new Schema();
+      Schema niftyXmlSchema = new Schema(nifty.getResourceLoader());
       XmlParser parser = new XmlParser(new MXParser());
       parser.read(inputStreamSchema);
       parser.nextTag();

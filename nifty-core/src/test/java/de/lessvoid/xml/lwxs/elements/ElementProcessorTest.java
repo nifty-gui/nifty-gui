@@ -26,7 +26,7 @@ public class ElementProcessorTest {
 
   @Before
   public void setUp() {
-    niftyXmlSchema = new Schema();
+    niftyXmlSchema = new Schema(null);
     parentMock = createMock(Type.class);
     elementProcessor = new TypeProcessorElement(parentMock);
     xmlParserMock = createMock(XmlParser.class);

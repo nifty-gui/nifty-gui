@@ -13,7 +13,7 @@ import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
 import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
 import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
 import de.lessvoid.nifty.spi.render.RenderImage;
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class LwjglRenderImage implements RenderImage {
   private Logger log = Logger.getLogger(LwjglRenderImage.class.getName());
@@ -24,7 +24,7 @@ public class LwjglRenderImage implements RenderImage {
   private int textureHeight;
   private int textureId;
 
-  public LwjglRenderImage(final String name, final boolean filterParam) {
+  public LwjglRenderImage(final String name, final boolean filterParam, final NiftyResourceLoader resourceLoader) {
     try {
       log.fine("loading image: " + name);
       ImageData imageLoader;
@@ -33,7 +33,7 @@ public class LwjglRenderImage implements RenderImage {
       } else {
         imageLoader = new ImageIOImageData();
       }
-      ByteBuffer imageData = imageLoader.loadImage(ResourceLoader.getResourceAsStream(name));
+      ByteBuffer imageData = imageLoader.loadImage(resourceLoader.getResourceAsStream(name));
       imageData.rewind();
       width = imageLoader.getWidth();
       height = imageLoader.getHeight();

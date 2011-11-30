@@ -17,7 +17,7 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.OpenALException;
 
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * Responsible for holding and playing the sounds used in the game.
@@ -549,8 +549,8 @@ public class SoundStore {
 	 * @return The sound for play back 
 	 * @throws IOException Indicates a failure to read the data
 	 */
-	public Audio getMOD(String ref) throws IOException {
-		return getMOD(ref, ResourceLoader.getResourceAsStream(ref));
+	public Audio getMOD(String ref, final NiftyResourceLoader resourceLoader) throws IOException {
+		return getMOD(ref, resourceLoader.getResourceAsStream(ref));
 	}
 
 	/**
@@ -593,8 +593,8 @@ public class SoundStore {
 	 * @return The Sound read from the AIF file
 	 * @throws IOException Indicates a failure to load the AIF
 	 */
-	public Audio getAIF(String ref) throws IOException {
-		return getAIF(ref, ResourceLoader.getResourceAsStream(ref));
+	public Audio getAIF(String ref, final NiftyResourceLoader resourceLoader) throws IOException {
+		return getAIF(ref, resourceLoader.getResourceAsStream(ref));
 	}
 	
 
@@ -669,8 +669,8 @@ public class SoundStore {
 	 * @return The Sound read from the WAV file
 	 * @throws IOException Indicates a failure to load the WAV
 	 */
-	public Audio getWAV(String ref) throws IOException {
-		return getWAV(ref, ResourceLoader.getResourceAsStream(ref));
+	public Audio getWAV(String ref, final NiftyResourceLoader resourceLoader) throws IOException {
+		return getWAV(ref, resourceLoader.getResourceAsStream(ref));
 	}
 	
 	/**
@@ -740,7 +740,7 @@ public class SoundStore {
 	 * @return The Sound read from the OGG file
 	 * @throws IOException Indicates a failure to load the OGG
 	 */
-	public Audio getOggStream(String ref) throws IOException {
+	public Audio getOggStream(String ref, final NiftyResourceLoader resourceLoader) throws IOException {
 		if (!soundWorks) {
 			return new NullAudio();
 		}
@@ -755,7 +755,7 @@ public class SoundStore {
 		getMusicSource();
 		currentMusic = sources.get(0);
 		
-		return new StreamSound(new OpenALStreamPlayer(currentMusic, ref));
+		return new StreamSound(new OpenALStreamPlayer(currentMusic, ref, resourceLoader));
 	}
 
 	/**
@@ -765,7 +765,7 @@ public class SoundStore {
 	 * @return The Sound read from the OGG file
 	 * @throws IOException Indicates a failure to load the OGG
 	 */
-	public Audio getOggStream(URL ref) throws IOException {
+	public Audio getOggStream(URL ref, final NiftyResourceLoader resourceLoader) throws IOException {
 		if (!soundWorks) {
 			return new NullAudio();
 		}
@@ -780,7 +780,7 @@ public class SoundStore {
 		getMusicSource();
 		currentMusic = sources.get(0);
 		
-		return new StreamSound(new OpenALStreamPlayer(currentMusic, ref));
+		return new StreamSound(new OpenALStreamPlayer(currentMusic, ref, resourceLoader));
 	}
 	
 	/**
@@ -790,8 +790,8 @@ public class SoundStore {
 	 * @return The Sound read from the OGG file
 	 * @throws IOException Indicates a failure to load the OGG
 	 */
-	public Audio getOgg(String ref) throws IOException {
-		return getOgg(ref, ResourceLoader.getResourceAsStream(ref));
+	public Audio getOgg(String ref, final NiftyResourceLoader resourceLoader) throws IOException {
+		return getOgg(ref, resourceLoader.getResourceAsStream(ref));
 	}
 	
 	/**

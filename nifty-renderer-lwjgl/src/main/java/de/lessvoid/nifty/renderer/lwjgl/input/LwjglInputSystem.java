@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class LwjglInputSystem implements InputSystem {
   private Logger log = Logger.getLogger(LwjglInputSystem.class.getName());
@@ -26,6 +27,10 @@ public class LwjglInputSystem implements InputSystem {
   private ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEventsOut = new ConcurrentLinkedQueue<KeyboardInputEvent>();
   public boolean niftyHasKeyboardFocus = true;
   public boolean niftyTakesKeyboardFocusOnClick = false;
+
+  @Override
+  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  }
 
   public void startup() throws Exception {
     Mouse.create();

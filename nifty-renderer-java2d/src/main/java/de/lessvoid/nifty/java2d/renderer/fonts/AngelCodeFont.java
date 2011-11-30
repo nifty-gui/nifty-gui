@@ -9,7 +9,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Hashtable;
 
-import de.lessvoid.nifty.tools.resourceloader.ResourceLoader;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * AngelCodeFont loading.
@@ -50,6 +50,12 @@ public class AngelCodeFont {
 	 */
 	private Hashtable<Character, CharacterInfo> chars = new Hashtable<Character, CharacterInfo>();
 
+	private NiftyResourceLoader resourceLoader;
+
+	public AngelCodeFont(final NiftyResourceLoader resourceLoader) {
+	  this.resourceLoader = resourceLoader;
+	}
+
 	/**
 	 * load the font with the given name.
 	 * 
@@ -58,7 +64,7 @@ public class AngelCodeFont {
 	 * @return true on success and false on any error
 	 */
 	public boolean load(final String filename) {
-		InputStream in = ResourceLoader.getResourceAsStream(filename);
+		InputStream in = resourceLoader.getResourceAsStream(filename);
 		if (in == null) 
 			return false;
 		return load(in);
