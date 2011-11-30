@@ -21,7 +21,9 @@ public class MessageBoxBuilder extends ControlBuilder {
 	}
 
 	public void icon(String icon) {
-		set("icon", icon);
+		if (icon != null) {
+			set("icon", icon);
+		}
 	}
 	
 	public void buttonCaption(String buttonCaption) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
 	<controlDefinition name="nifty-messagebox" style="nifty-panel" controller="de.lessvoid.nifty.controls.messagebox.MessageBoxControl">
-		<popup style="panel" childLayout="vertical">
+		<panel style="panel" childLayout="vertical">
 			<panel id="#message" childLayout="horizontal">
 				<image id="#message-icon" filename="$iconImage" />
 				<control id="#message-text" name="label" align="left"
@@ -9,6 +9,10 @@
 			</panel>
 			<panel id="#buttons" align="right" childLayout="horizontal">
 			</panel>
-		</popup>
+		</panel>
 	</controlDefinition>
+	
+	<popup id="niftyPopupMessageBox" childLayout="absolute-inside">
+		<control id="#messagebox" name="nifty-messagebox" />
+	</popup>
 </nifty-controls>
