@@ -28,20 +28,28 @@ public class MessageBox extends AbstractController {
 	private String buttonHeight = "25px";
 
 	private Nifty nifty;
-	private Screen screen;
 	private Element element;
 	
 	private Element messageboxPopup;
 
 	public MessageBox(Nifty nifty, final MessageType messageType, final String message,
-			final String buttonCaption, final String iconParam) {
+			final String buttonCaption, final String icon) {
+		this.nifty = nifty;
 		messageboxPopup = nifty.createPopup("niftyPopupMessageBox");
-		new MessageBoxBuilder("MessageBox_" + messageType.name()) {{
-			icon(iconParam);
-			message(message);
-			messageBoxType(messageType.name());
-			buttonCaption(buttonCaption);
-		}}.build(nifty, nifty.getCurrentScreen(), messageboxPopup);
+
+		setMessageType(messageType);
+		setMessage(message);
+		setButtonCaption(buttonCaption);
+		setIcon(icon);
+		setupMessageBox();
+		
+		
+//		new MessageBoxBuilder("MessageBox_" + messageType.name()) {{
+//			icon(iconParam);
+//			message(message);
+//			messageBoxType(messageType.name());
+//			buttonCaption(buttonCaption);
+//		}}.build(nifty, nifty.getCurrentScreen(), messageboxPopup);
 	}
 
 	public MessageBox(Nifty nifty, MessageType messageType, String message,
@@ -51,23 +59,30 @@ public class MessageBox extends AbstractController {
 
 	public MessageBox(Nifty nifty, final MessageType messageType, final String message,
 			final String[] buttonCaptions, final String icon) {
+		this.nifty = nifty;
 		messageboxPopup = nifty.createPopup("niftyPopupMessageBox");
 		
-		String captionsTemp = "";
-		for (String buttonCaption : buttonCaptions) {
-			if (captionsTemp.length() > 0) {
-				captionsTemp = captionsTemp + ",";
-			}
-			captionsTemp = captionsTemp + buttonCaption;
-		}
-		final String captions = captionsTemp;
+		setMessageType(messageType);
+		setMessage(message);
+		setButtonCaptions(buttonCaptions);
+		setIcon(icon);
+		setupMessageBox();
 		
-		new MessageBoxBuilder("MessageBox_" + messageType.name()) {{
-			icon(icon);
-			message(message);
-			messageBoxType(messageType.name());
-			buttonCaptions(captions);
-		}}.build(nifty, nifty.getCurrentScreen(), messageboxPopup);
+//		String captionsTemp = "";
+//		for (String buttonCaption : buttonCaptions) {
+//			if (captionsTemp.length() > 0) {
+//				captionsTemp = captionsTemp + ",";
+//			}
+//			captionsTemp = captionsTemp + buttonCaption;
+//		}
+//		final String captions = captionsTemp;
+//		
+//		new MessageBoxBuilder("MessageBox_" + messageType.name()) {{
+//			icon(icon);
+//			message(message);
+//			messageBoxType(messageType.name());
+//			buttonCaptions(captions);
+//		}}.build(nifty, nifty.getCurrentScreen(), messageboxPopup);
 	}
 
 	public MessageBox(Nifty nifty, MessageType messageType, String message,
@@ -86,13 +101,10 @@ public class MessageBox extends AbstractController {
 			setButtonCaption(controlDefinitionAttributes.get("buttonCaption"));
 		}
 		
-		this.nifty = nifty;
-		this.screen = screen;
-		this.element = element;
-
 		if (messageType != MessageType.CUSTOM) {
 			setIcon("/messagebox/" + messageType.name() + ".jpg");
 		}
+		setupMessageBox();
 	}
 
 	@Override
@@ -108,8 +120,7 @@ public class MessageBox extends AbstractController {
 	}
 	
 	public void show() {
-		setupMessageBox();
-		nifty.showPopup(screen, messageboxPopup.getId(), null);
+		nifty.showPopup(nifty.getCurrentScreen(), messageboxPopup.getId(), null);
 	}
 	
 	public void hide(String command) {
@@ -149,11 +160,11 @@ public class MessageBox extends AbstractController {
 	}
 
 	private void setupMessageBox() {
-		final Element imgIcon = messageboxPopup.findElementByName("#message-icon");
+		final Element imgIcon = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-icon");
 		final ImageRenderer iconRenderer = imgIcon
 				.getRenderer(ImageRenderer.class);
 		iconRenderer.setImage(icon);
-		final Element text = messageboxPopup.findElementByName("#message-text");
+		final Element text = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-text");
 		final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
 		textRenderer.setText(message);
 		
@@ -163,17 +174,17 @@ public class MessageBox extends AbstractController {
 			createButton(buttonCaption, buttonCaption, "button_" + i);
 		}
 		
-		element.layoutElements();
+		messageboxPopup.findElementByName("#messagebox").layoutElements();
 		
 	}
 	
 	private void closeMessageBox(String command) {
 		clearButtons();
-		element.findElementByName("#buttons");
+		messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
 	}
 	
 	private void createButton(final String buttonCaption, final String command, final String buttonId) {
-        Element buttonPanel = messageboxPopup.findElementByName("#buttons");
+        Element buttonPanel = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
         if (buttonPanel.findElementByName("#" + buttonId) == null) {
             new ButtonBuilder("#" + buttonId) {
 
@@ -196,7 +207,7 @@ public class MessageBox extends AbstractController {
     }
 	
 	private void clearButtons() {
-		List<Element> buttons = messageboxPopup.findElementByName("#buttons").getElements();
+		List<Element> buttons = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons").getElements();
 		for (Element button : buttons) {
 			button.markForRemoval();
 		}
