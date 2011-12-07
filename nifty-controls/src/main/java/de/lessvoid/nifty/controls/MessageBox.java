@@ -84,7 +84,7 @@ public class MessageBox extends AbstractController {
 		}
 		
 		if (messageType != MessageType.CUSTOM) {
-			setIcon("messagebox/" + messageType.name() + ".jpg");
+			setIcon("messagebox/" + messageType.name() + ".png");
 		}
 	}
 
@@ -141,8 +141,7 @@ public class MessageBox extends AbstractController {
 
 	private void setupMessageBox() {
 		final Element imgIcon = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-icon");
-		final ImageRenderer iconRenderer = imgIcon
-				.getRenderer(ImageRenderer.class);
+		final ImageRenderer iconRenderer = imgIcon.getRenderer(ImageRenderer.class);
 		iconRenderer.setImage(icon);
 		final Element text = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-text");
 		final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
