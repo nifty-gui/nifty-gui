@@ -9,6 +9,9 @@ import de.lessvoid.nifty.controls.MessageBox;
  *
  */
 public class MessageBoxControl extends MessageBox {
+	
+	public MessageBoxControl() {
+	}
 
 	public MessageBoxControl(Nifty nifty, MessageType messageType, String message,
 			String buttonCaption, String icon) {

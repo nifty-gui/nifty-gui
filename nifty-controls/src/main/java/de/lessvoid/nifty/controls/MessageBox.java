@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
-import de.lessvoid.nifty.controls.messagebox.builder.MessageBoxBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -28,28 +27,24 @@ public class MessageBox extends AbstractController {
 	private String buttonHeight = "25px";
 
 	private Nifty nifty;
-	private Element element;
 	
 	private Element messageboxPopup;
+	private MessageBox msgBox;
+	
+	public MessageBox() {
+	}
 
 	public MessageBox(Nifty nifty, final MessageType messageType, final String message,
 			final String buttonCaption, final String icon) {
 		this.nifty = nifty;
 		messageboxPopup = nifty.createPopup("niftyPopupMessageBox");
 
-		setMessageType(messageType);
-		setMessage(message);
-		setButtonCaption(buttonCaption);
-		setIcon(icon);
-		setupMessageBox();
-		
-		
-//		new MessageBoxBuilder("MessageBox_" + messageType.name()) {{
-//			icon(iconParam);
-//			message(message);
-//			messageBoxType(messageType.name());
-//			buttonCaption(buttonCaption);
-//		}}.build(nifty, nifty.getCurrentScreen(), messageboxPopup);
+		msgBox = messageboxPopup.findNiftyControl("#messagebox", MessageBox.class);
+		msgBox.setMessageType(messageType);
+		msgBox.setMessage(message);
+		msgBox.setButtonCaption(buttonCaption);
+		msgBox.setIcon(icon);
+		msgBox.setupMessageBox();
 	}
 
 	public MessageBox(Nifty nifty, MessageType messageType, String message,
@@ -62,27 +57,12 @@ public class MessageBox extends AbstractController {
 		this.nifty = nifty;
 		messageboxPopup = nifty.createPopup("niftyPopupMessageBox");
 		
-		setMessageType(messageType);
-		setMessage(message);
-		setButtonCaptions(buttonCaptions);
-		setIcon(icon);
-		setupMessageBox();
-		
-//		String captionsTemp = "";
-//		for (String buttonCaption : buttonCaptions) {
-//			if (captionsTemp.length() > 0) {
-//				captionsTemp = captionsTemp + ",";
-//			}
-//			captionsTemp = captionsTemp + buttonCaption;
-//		}
-//		final String captions = captionsTemp;
-//		
-//		new MessageBoxBuilder("MessageBox_" + messageType.name()) {{
-//			icon(icon);
-//			message(message);
-//			messageBoxType(messageType.name());
-//			buttonCaptions(captions);
-//		}}.build(nifty, nifty.getCurrentScreen(), messageboxPopup);
+		msgBox = messageboxPopup.findNiftyControl("#messagebox", MessageBox.class);
+		msgBox.setMessageType(messageType);
+		msgBox.setMessage(message);
+		msgBox.setButtonCaptions(buttonCaptions);
+		msgBox.setIcon(icon);
+		msgBox.setupMessageBox();
 	}
 
 	public MessageBox(Nifty nifty, MessageType messageType, String message,
@@ -94,6 +74,8 @@ public class MessageBox extends AbstractController {
 	public void bind(Nifty nifty, Screen screen, Element element,
 			Properties parameter, Attributes controlDefinitionAttributes) {
 		System.out.println("binding MessageBox");
+		messageboxPopup = element;
+		this.nifty = nifty;
 		if (controlDefinitionAttributes.isSet("buttonCaptions")) {
 			setButtonCaptions(controlDefinitionAttributes.get("buttonCaptions")
 					.split(","));
@@ -102,9 +84,8 @@ public class MessageBox extends AbstractController {
 		}
 		
 		if (messageType != MessageType.CUSTOM) {
-			setIcon("/messagebox/" + messageType.name() + ".jpg");
+			setIcon("messagebox/" + messageType.name() + ".jpg");
 		}
-		setupMessageBox();
 	}
 
 	@Override
@@ -123,9 +104,9 @@ public class MessageBox extends AbstractController {
 		nifty.showPopup(nifty.getCurrentScreen(), messageboxPopup.getId(), null);
 	}
 	
-	public void hide(String command) {
+	public void close(String command) {
 		closeMessageBox(command);
-		nifty.closePopup(messageboxPopup.getId());
+		nifty.closePopup(messageboxPopup.getParent().getId());
 	}
 
 	public void setIcon(String icon) {
@@ -147,7 +128,6 @@ public class MessageBox extends AbstractController {
 	}
 
 	public void setButtonCaptions(String buttonCaptions) {
-		System.out.println("setting button captions");
 		this.buttonCaptions = buttonCaptions.split(",");
 	}
 
@@ -167,28 +147,25 @@ public class MessageBox extends AbstractController {
 		final Element text = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-text");
 		final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
 		textRenderer.setText(message);
-		
 		int i = 0;
 		for (String buttonCaption : buttonCaptions) {
 			i++;
 			createButton(buttonCaption, buttonCaption, "button_" + i);
 		}
-		
 		messageboxPopup.findElementByName("#messagebox").layoutElements();
-		
+		nifty.getCurrentScreen().layoutLayers();
 	}
 	
 	private void closeMessageBox(String command) {
 		clearButtons();
-		messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
+//		messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
+		nifty.getCurrentScreen().layoutLayers();
 	}
 	
 	private void createButton(final String buttonCaption, final String command, final String buttonId) {
         Element buttonPanel = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
         if (buttonPanel.findElementByName("#" + buttonId) == null) {
-            new ButtonBuilder("#" + buttonId) {
-
-                {
+            new ButtonBuilder("#" + buttonId) {{
                     style("nifty-button");
                     childLayout(ChildLayoutType.Horizontal);
                     interactOnClick("close(" + command + ")");
@@ -196,13 +173,12 @@ public class MessageBox extends AbstractController {
                         width(buttonWidth);
                     }
                     if (buttonHeight != null) {
-                        height(percentage(100));
+                        height(buttonHeight);
                     } else {
                         height("25px");
                     }
                     label(buttonCaption);
-                }
-            }.build(nifty, nifty.getCurrentScreen(), buttonPanel);
+                }}.build(nifty, nifty.getCurrentScreen(), buttonPanel);
         }
     }
 	
