@@ -1,26 +1,199 @@
 package de.lessvoid.nifty.controls;
 
-public interface MessageBox extends NiftyControl {
-	
-	void setIcon(String icon);
-	
-	void setMessage(String message);
+import java.util.List;
+import java.util.Properties;
 
-	void setButtonCaption(String buttonCaption);
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.xml.xpp3.Attributes;
 
-	void setButtonCaptions(String buttonCaptions);
+public class MessageBox extends AbstractController {
+
+	private String[] buttonCaptions;
+
+	private MessageType messageType = MessageType.INFO;
+
+	private NiftyImage icon;
+
+	private String message;
 	
-	void setButtonCaptions(String[] buttonCaptions);
+	private String buttonWidth = "100px";
+	private String buttonHeight = "25px";
+
+	private Nifty nifty;
 	
-	void setMessageType(String messageType);
+	private Element messageboxPopup;
+	private MessageBox msgBox;
 	
-	void setMessageType(MessageType messageType);
-	
-	enum MessageType {
-		CUSTOM,
-		INFO,
-		WARNING,
-		ERROR
+	public MessageBox() {
 	}
 
+	public MessageBox(Nifty nifty, final MessageType messageType, final String message,
+			final String buttonCaption, final String icon) {
+		this.nifty = nifty;
+		messageboxPopup = nifty.createPopup("niftyPopupMessageBox");
+
+		msgBox = messageboxPopup.findNiftyControl("#messagebox", MessageBox.class);
+		msgBox.setMessageType(messageType);
+		msgBox.setMessage(message);
+		msgBox.setButtonCaption(buttonCaption);
+		msgBox.setIcon(icon);
+		msgBox.setupMessageBox();
+	}
+
+	public MessageBox(Nifty nifty, MessageType messageType, String message,
+			String buttonCaption) {
+		this(nifty, messageType, message, buttonCaption, null);
+	}
+
+	public MessageBox(Nifty nifty, final MessageType messageType, final String message,
+			final String[] buttonCaptions, final String icon) {
+		this.nifty = nifty;
+		messageboxPopup = nifty.createPopup("niftyPopupMessageBox");
+		
+		msgBox = messageboxPopup.findNiftyControl("#messagebox", MessageBox.class);
+		msgBox.setMessageType(messageType);
+		msgBox.setMessage(message);
+		msgBox.setButtonCaptions(buttonCaptions);
+		msgBox.setIcon(icon);
+		msgBox.setupMessageBox();
+	}
+
+	public MessageBox(Nifty nifty, MessageType messageType, String message,
+			String[] buttonCaptions) {
+		this(nifty, messageType, message, buttonCaptions, null);
+	}
+
+	@Override
+	public void bind(Nifty nifty, Screen screen, Element element,
+			Properties parameter, Attributes controlDefinitionAttributes) {
+		System.out.println("binding MessageBox");
+		messageboxPopup = element;
+		this.nifty = nifty;
+		if (controlDefinitionAttributes.isSet("buttonCaptions")) {
+			setButtonCaptions(controlDefinitionAttributes.get("buttonCaptions")
+					.split(","));
+		} else if (controlDefinitionAttributes.isSet("buttonCaption")) {
+			setButtonCaption(controlDefinitionAttributes.get("buttonCaption"));
+		}
+		
+		if (messageType != MessageType.CUSTOM) {
+			setIcon("messagebox/" + messageType.name() + ".png");
+		}
+	}
+
+	@Override
+	public void onStartScreen() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean inputEvent(NiftyInputEvent inputEvent) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public void show() {
+		nifty.showPopup(nifty.getCurrentScreen(), messageboxPopup.getId(), null);
+	}
+	
+	public void close(String command) {
+		closeMessageBox(command);
+		nifty.closePopup(messageboxPopup.getParent().getId());
+	}
+
+	public void setIcon(String icon) {
+		if (icon != null) {
+			this.icon = nifty.createImage(icon, false);
+		}
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public void setButtonCaption(String buttonCaption) {
+		this.buttonCaptions = new String[] { buttonCaption };
+	}
+
+	public void setButtonCaptions(String[] buttonCaptions) {
+		this.buttonCaptions = buttonCaptions;
+	}
+
+	public void setButtonCaptions(String buttonCaptions) {
+		this.buttonCaptions = buttonCaptions.split(",");
+	}
+
+	public void setMessageType(String messageType) {
+		this.messageType = MessageType.valueOf(messageType);
+	}
+
+	public void setMessageType(MessageType messageType) {
+		this.messageType = messageType;
+	}
+
+	private void setupMessageBox() {
+		final Element imgIcon = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-icon");
+		final ImageRenderer iconRenderer = imgIcon.getRenderer(ImageRenderer.class);
+		iconRenderer.setImage(icon);
+		final Element text = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-text");
+		final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
+		textRenderer.setText(message);
+		int i = 0;
+		for (String buttonCaption : buttonCaptions) {
+			i++;
+			createButton(buttonCaption, buttonCaption, "button_" + i);
+		}
+		messageboxPopup.findElementByName("#messagebox").layoutElements();
+		nifty.getCurrentScreen().layoutLayers();
+	}
+	
+	private void closeMessageBox(String command) {
+		clearButtons();
+//		messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
+		nifty.getCurrentScreen().layoutLayers();
+	}
+	
+	private void createButton(final String buttonCaption, final String command, final String buttonId) {
+        Element buttonPanel = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
+        if (buttonPanel.findElementByName("#" + buttonId) == null) {
+            new ButtonBuilder("#" + buttonId) {{
+                    style("nifty-button");
+                    childLayout(ChildLayoutType.Horizontal);
+                    interactOnClick("close(" + command + ")");
+                    if (buttonWidth != null) {
+                        width(buttonWidth);
+                    }
+                    if (buttonHeight != null) {
+                        height(buttonHeight);
+                    } else {
+                        height("25px");
+                    }
+                    label(buttonCaption);
+                }}.build(nifty, nifty.getCurrentScreen(), buttonPanel);
+        }
+    }
+	
+	private void clearButtons() {
+		List<Element> buttons = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons").getElements();
+		for (Element button : buttons) {
+			button.markForRemoval();
+		}
+	}
+	
+	protected Element getMessageBoxPopup() {
+		return messageboxPopup;
+	}
+
+	public enum MessageType {
+		CUSTOM, INFO, WARNING, ERROR
+	}
+	
 }

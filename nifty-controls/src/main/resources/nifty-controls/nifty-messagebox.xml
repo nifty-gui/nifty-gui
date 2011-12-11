@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
-	<controlDefinition name="nifty-messagebox" style="nifty-panel" controller="de.lessvoid.nifty.controls.messagebox.MessageBoxControl">
-		<popup style="panel" childLayout="vertical">
-			<panel id="#message" childLayout="horizontal">
-				<image id="#message-icon" filename="$iconImage" />
-				<control id="#message-text" name="label" align="left"
-					textHAlign="left" height="$messageText" wrap="true" />
+	<controlDefinition name="nifty-messagebox" style="nifty-standard-messagebox-style" controller="de.lessvoid.nifty.controls.MessageBox">
+		<panel style="panel" childLayout="vertical" id="#messagebox" width="500px" height="250px">
+			<panel id="#message" childLayout="horizontal" align="left" valign="center" textVAlign="cerent" height="195px">
+				<panel childLayout="center" valign="center">
+					<image id="#message-icon" filename="messagebox/WARNING.png" width="48px" height="48px" />
+				</panel>
+				<panel width="10px" height="100%"></panel>
+				<control id="#message-text" color="#111f" name="label" align="left" textHAlign="left" textVAlign="center" wrap="true" />
 			</panel>
 			<panel id="#buttons" align="right" childLayout="horizontal">
 			</panel>
-		</popup>
+		</panel>
 	</controlDefinition>
+
+	<popup id="niftyPopupMessageBox" style="nifty-standard-messagebox-popup-style">
+		<control id="#messagebox" name="nifty-messagebox" />
+	</popup>
 </nifty-controls>

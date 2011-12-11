@@ -33,6 +33,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
+import de.lessvoid.nifty.layout.manager.CenterLayout;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
@@ -318,6 +319,20 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     }
     this.visibleToMouseEvents = attributes.getAsBoolean("visibleToMouse", Convert.DEFAULT_VISIBLE_TO_MOUSE);
     this.layoutManager = convert.layoutManager(attributes.get("childLayout"));
+
+    // Ok, I might regret that later but when we are a childLayout="center" we should really
+    // default the align and valign values to center. Not sure if this breaks something now
+    // where somebody is using childLayout="center" and relies on the old default values
+    // (align="left" and valign="top")
+    if (hasParentChildLayoutCenter()) {
+      if (attributes.get("align") == null) {
+        layoutPart.getBoxConstraints().setHorizontalAlign(HorizontalAlign.center);
+      }
+      if (attributes.get("valign") == null) {
+        layoutPart.getBoxConstraints().setVerticalAlign(VerticalAlign.center);
+      }
+    }    
+
     this.focusable = attributes.getAsBoolean("focusable", Convert.DEFAULT_FOCUSABLE);
     this.focusableInsertBeforeElementId = attributes.get("focusableInsertBeforeElementId");
     for (int i=0; i<elementRenderer.length; i++) {
@@ -325,6 +340,12 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
       rendererApply.apply(this, attributes, renderEngine);
     }
+  }
+
+  private boolean hasParentChildLayoutCenter() {
+    if (parent == null)
+        return false;
+    return (parent.layoutManager instanceof CenterLayout);
   }
 
   public void initializeFromPostAttributes(final Attributes attributes) {

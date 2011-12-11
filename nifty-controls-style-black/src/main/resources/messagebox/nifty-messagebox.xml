@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+  <style id="nifty-standard-messagebox-popup-style">
+    <attributes childLayout="center" backgroundColor="#0006" />
+  </style>
+
+  <style id="nifty-standard-messagebox-style">
+    <attributes align="center" valign="center" padding="15px" backgroundImage="panel/nifty-panel-hint.png" imageMode="resize:8,210,8,8,8,210,8,209,8,210,8,8" />
+  </style>
+</nifty-styles>
