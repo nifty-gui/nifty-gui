@@ -38,7 +38,7 @@ public class CenterLayoutVerticallPercentWithBorderTest extends TestCase {
     constraint.setVerticalAlign(VerticalAlign.bottom);
     layout.handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
     int height = (480 - 100) / 2;
-    CenterLayoutTest.assertBoxTopHeight(box, 480 - height - 50, height);
+    CenterLayoutTest.assertBoxTopHeight(box, 480 - height - 50 + 50, height);
   }
 
   public void testVerticalAlignCenterPercentWidth() {
