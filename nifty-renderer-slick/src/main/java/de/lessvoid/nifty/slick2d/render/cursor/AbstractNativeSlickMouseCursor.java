@@ -9,14 +9,13 @@ import org.newdawn.slick.Graphics;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public abstract class AbstractNativeSlickMouseCursor implements
-    SlickMouseCursor {
-    /**
-     * Render the cursor.
-     * For the native implementations this function does nothing at all.
-     */
-    @Override
-    public final void render(final Graphics g, final int x, final int y) {
-        // nothing
-    }
+public abstract class AbstractNativeSlickMouseCursor implements SlickMouseCursor {
+  /**
+   * Render the cursor. For the native implementations this function does
+   * nothing at all.
+   */
+  @Override
+  public final void render(final Graphics g, final int x, final int y) {
+    // nothing
+  }
 }

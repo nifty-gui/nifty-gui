@@ -8,67 +8,65 @@ import de.lessvoid.nifty.slick2d.render.cursor.loader.LwjglCursorSlickMouseCurso
 import de.lessvoid.nifty.slick2d.render.cursor.loader.SlickMouseCursorLoader;
 
 /**
- * This maintains the list of known cursor loaders and queries them one by one in
- * order to load a cursor.
+ * This maintains the list of known cursor loaders and queries them one by one
+ * in order to load a cursor.
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class SlickMouseCursorLoaders extends
-    AbstractSlickLoaders<SlickMouseCursorLoader> {
-    /**
-     * The singleton instance of this class.
-     */
-    private static final SlickMouseCursorLoaders INSTANCE =
-        new SlickMouseCursorLoaders();
+public final class SlickMouseCursorLoaders extends AbstractSlickLoaders<SlickMouseCursorLoader> {
+  /**
+   * The singleton instance of this class.
+   */
+  private static final SlickMouseCursorLoaders INSTANCE = new SlickMouseCursorLoaders();
 
-    /**
-     * Private constructor so no instances but the singleton instance are
-     * created.
-     */
-    private SlickMouseCursorLoaders() {
-        super();
+  /**
+   * Get the singleton instance of this class.
+   * 
+   * @return the singleton instance
+   */
+  public static SlickMouseCursorLoaders getInstance() {
+    return INSTANCE;
+  }
+
+  /**
+   * Private constructor so no instances but the singleton instance are created.
+   */
+  private SlickMouseCursorLoaders() {
+    super();
+  }
+
+  /**
+   * Load a mouse cursor.
+   * 
+   * @param filename
+   *          the name of the file that stores the image of this cursor
+   * @param hotspotX
+   *          the x coordinate of the cursor hotspot
+   * @param hotspotY
+   *          the y coordinate of the cursor hotspot
+   * @return the loaded mouse cursor
+   * @throws IllegalArgumentException
+   *           in case all loaders fail to load this cursor
+   */
+  public SlickMouseCursor loadCursor(final String filename, final int hotspotX, final int hotspotY) {
+    final Iterator<SlickMouseCursorLoader> itr = getLoaderIterator();
+
+    while (itr.hasNext()) {
+      try {
+        return itr.next().loadCursor(filename, hotspotX, hotspotY);
+      } catch (final SlickLoadCursorException e) {
+        // this loader failed... does not matter
+      }
     }
 
-    /**
-     * Get the singleton instance of this class.
-     * 
-     * @return the singleton instance
-     */
-    public static SlickMouseCursorLoaders getInstance() {
-        return INSTANCE;
-    }
+    throw new IllegalArgumentException("Failed to load cursor \"" + filename + "\".");
+  }
 
-    /**
-     * Add the default loaders.
-     */
-    @Override
-    public void loadDefaultLoaders(final SlickAddLoaderLocation order) {
-        addLoader(new LwjglCursorSlickMouseCursorLoader(), order);
-    }
-
-    /**
-     * Load a mouse cursor.
-     * 
-     * @param filename the name of the file that stores the image of this cursor
-     * @param hotspotX the x coordinate of the cursor hotspot
-     * @param hotspotY the y coordinate of the cursor hotspot
-     * @return the loaded mouse cursor
-     * @throws IllegalArgumentException in case all loaders fail to load this
-     *             cursor
-     */
-    public SlickMouseCursor loadCursor(final String filename,
-        final int hotspotX, final int hotspotY) {
-        final Iterator<SlickMouseCursorLoader> itr = getLoaderIterator();
-
-        while (itr.hasNext()) {
-            try {
-                return itr.next().loadCursor(filename, hotspotX, hotspotY);
-            } catch (final SlickLoadCursorException e) {
-                // this loader failed... does not matter
-            }
-        }
-
-        throw new IllegalArgumentException("Failed to load cursor \""
-            + filename + "\".");
-    }
+  /**
+   * Add the default loaders.
+   */
+  @Override
+  public void loadDefaultLoaders(final SlickAddLoaderLocation order) {
+    addLoader(new LwjglCursorSlickMouseCursorLoader(), order);
+  }
 }
