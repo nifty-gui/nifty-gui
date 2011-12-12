@@ -3,6 +3,7 @@ package de.lessvoid.nifty.slick2d.render.font.loader;
 import java.awt.Font;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.HieroSettings;
 
@@ -36,7 +37,9 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
       }
 
       return new UnicodeSlickRenderFont(new UnicodeFont(javaFont, hieroSettings), javaFont);
-    } catch (final Exception e) {
+    } catch (final SlickException e) {
+      throw new SlickLoadFontException("Loading the font failed.", e);
+    } catch (final RuntimeException e) {
       throw new SlickLoadFontException("Loading the font failed.", e);
     }
   }

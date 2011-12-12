@@ -46,12 +46,25 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    */
   private final InputState inputState;
 
+  /**
+   * Prepare all required instances to work with this class.
+   */
   protected AbstractSlickInputSystem() {
     inputEventList = new ArrayList<InputEvent>();
     buttonPressedStack = new LinkedList<Integer>();
     inputState = new InputState();
   }
 
+  /**
+   * This is called by Nifty and used to poll the input events. In case the
+   * event is not handled by the NiftyGUI is send to the additional input event
+   * handler that is implemented by the {@link #handleInputEvent(InputEvent)}
+   * function.
+   * 
+   * @param inputEventConsumer
+   *          the input event consumer that is provided by Nifty, it will
+   *          receive all events first
+   */
   @Override
   public final void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
     InputEvent currentEvent;
@@ -78,70 +91,151 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    */
   protected abstract void handleInputEvent(InputEvent event);
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void inputEnded() {
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void inputStarted() {
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final boolean isAcceptingInput() {
     return true;
   }
 
+  /**
+   * Check if the control key is pressed down. This function requires the
+   * {@link org.newdawn.slick.Input} instance that is used by Slick to be sent
+   * in order to work properly. Setting this instance is done by calling
+   * {@link #setInput(Input)}.
+   * 
+   * @return <code>true</code> in case one of the control keys is done and the
+   *         {@link org.newdawn.slick.Input} instance was set properly, else
+   *         <code>false</code>
+   */
   private final boolean isControlDown() {
+    if (input == null) {
+      return false;
+    }
     return input.isKeyDown(Input.KEY_LCONTROL) || input.isKeyDown(Input.KEY_RCONTROL);
   }
 
+  /**
+   * Check if the shift key is pressed down. This function requires the
+   * {@link org.newdawn.slick.Input} instance that is used by Slick to be sent
+   * in order to work properly. Setting this instance is done by calling
+   * {@link #setInput(Input)}.
+   * 
+   * @return <code>true</code> in case one of the shift keys is done and the
+   *         {@link org.newdawn.slick.Input} instance was set properly, else
+   *         <code>false</code>
+   */
   private final boolean isShiftDown() {
+    if (input == null) {
+      return false;
+    }
     return input.isKeyDown(Input.KEY_LSHIFT) || input.isKeyDown(Input.KEY_RSHIFT);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void keyPressed(final int key, final char c) {
     inputEventList.add(new KeyboardEventPressed(key, c, isShiftDown(), isControlDown()));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void keyReleased(final int key, final char c) {
     inputEventList.add(new KeyboardEventReleased(key, c, isShiftDown(), isControlDown()));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void mouseClicked(final int button, final int x, final int y, final int clickCount) {
     inputEventList.add(new MouseEventClicked(x, y, button, clickCount));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void mouseDragged(final int oldx, final int oldy, final int newx, final int newy) {
     final int lastButton = buttonPressedStack.get(buttonPressedStack.size() - 1).intValue();
     inputEventList.add(new MouseEventDragged(lastButton, oldx, oldy, newx, newy));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void mouseMoved(final int oldx, final int oldy, final int newx, final int newy) {
     inputEventList.add(new MouseEventMoved(oldx, oldy, newx, newy));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void mousePressed(final int button, final int x, final int y) {
     inputEventList.add(new MouseEventPressed(x, y, button));
     buttonPressedStack.add(Integer.valueOf(button));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void mouseReleased(final int button, final int x, final int y) {
     inputEventList.add(new MouseEventReleased(x, y, button));
     buttonPressedStack.remove(Integer.valueOf(button));
   }
 
+  /**
+   * {@inheritDoc}. This function requires the {@link org.newdawn.slick.Input}
+   * instance that is used by Slick to be sent in order to work properly.
+   * Setting this instance is done by calling {@link #setInput(Input)}.
+   * 
+   * @throws IllegalStateException
+   *           in case the {@link org.newdawn.slick.Input} was not set
+   */
   @Override
   public final void mouseWheelMoved(final int change) {
+    if (input == null) {
+      throw new IllegalStateException("Can't generate mouse wheel events without a reference to the Input");
+    }
     inputEventList.add(new MouseEventWheelMoved(input.getMouseX(), input.getMouseY(), change / 120));
   }
 
+  /**
+   * Set the {@link org.newdawn.slick.Input} instance that is used by Slick to
+   * handle the user input. Some functions of this class require this instance
+   * to work properly. Calling this function will also make sure that the
+   * {@link org.newdawn.slick.Input} instance is configured properly so the GUI
+   * works as expected.
+   * 
+   * @param input
+   *          the {@link org.newdawn.slick.Input} instance
+   * @see #mouseWheelMoved(int)
+   * @see #isControlDown()
+   * @see #isShiftDown()
+   * 
+   */
   @Override
   public final void setInput(final Input input) {
     this.input = input;
@@ -149,7 +243,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
   }
 
   /**
-   * Set the current location of the mouse to a new spot.
+   * {@inheritDoc}
    */
   @Override
   public final void setMousePosition(final int x, final int y) {

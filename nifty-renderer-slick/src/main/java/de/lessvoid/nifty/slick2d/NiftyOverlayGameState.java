@@ -195,7 +195,9 @@ public abstract class NiftyOverlayGameState implements GameState {
       throws SlickException {
     renderGame(container, game, g);
 
-    niftyGUI.render(false);
+    if (niftyGUI != null) {
+      niftyGUI.render(false);
+    }
   }
 
   /**
@@ -218,7 +220,10 @@ public abstract class NiftyOverlayGameState implements GameState {
   public final void update(final GameContainer container, final StateBasedGame game, final int delta)
       throws SlickException {
     updateGame(container, game, delta);
-    niftyGUI.update();
+
+    if (niftyGUI != null) {
+      niftyGUI.update();
+    }
   }
 
   /**

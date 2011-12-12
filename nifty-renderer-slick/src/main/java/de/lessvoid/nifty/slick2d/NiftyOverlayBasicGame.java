@@ -51,7 +51,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
     initGameAndGUI(container);
 
     if (niftyGUI == null) {
-      throw new IllegalStateException("NiftyGUI was not initialized.");
+      throw new IllegalArgumentException("NiftyGUI is not initializied!");
     }
   }
 
@@ -148,7 +148,9 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
   public final void render(final GameContainer container, final Graphics g) throws SlickException {
     renderGame(container, g);
 
-    niftyGUI.render(false);
+    if (niftyGUI != null) {
+      niftyGUI.render(false);
+    }
   }
 
   /**
@@ -170,7 +172,10 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
   @Override
   public final void update(final GameContainer container, final int delta) throws SlickException {
     updateGame(container, delta);
-    niftyGUI.update();
+
+    if (niftyGUI != null) {
+      niftyGUI.update();
+    }
   }
 
   /**
