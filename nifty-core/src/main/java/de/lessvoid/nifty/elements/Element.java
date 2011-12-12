@@ -18,6 +18,7 @@ import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectManager;
+import de.lessvoid.nifty.effects.ElementEffectStateCache;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.events.ElementDisableEvent;
 import de.lessvoid.nifty.elements.events.ElementEnableEvent;
@@ -32,6 +33,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
+import de.lessvoid.nifty.layout.manager.CenterLayout;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
@@ -53,7 +55,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * The Element.
  * @author void
  */
-public class Element implements NiftyEvent<Void> {
+public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
   /**
    * the logger.
@@ -104,6 +106,12 @@ public class Element implements NiftyEvent<Void> {
    * Element interaction.
    */
   private ElementInteraction interaction;
+
+  /**
+   * Effect state cache (this includes info about the child state) and is only
+   * update when Effect states are changed.
+   */
+  private ElementEffectStateCache effectStateCache = new ElementEffectStateCache();
 
   /**
    * Nifty instance this element is attached to.
@@ -311,6 +319,20 @@ public class Element implements NiftyEvent<Void> {
     }
     this.visibleToMouseEvents = attributes.getAsBoolean("visibleToMouse", Convert.DEFAULT_VISIBLE_TO_MOUSE);
     this.layoutManager = convert.layoutManager(attributes.get("childLayout"));
+
+    // Ok, I might regret that later but when we are a childLayout="center" we should really
+    // default the align and valign values to center. Not sure if this breaks something now
+    // where somebody is using childLayout="center" and relies on the old default values
+    // (align="left" and valign="top")
+    if (hasParentChildLayoutCenter()) {
+      if (attributes.get("align") == null) {
+        layoutPart.getBoxConstraints().setHorizontalAlign(HorizontalAlign.center);
+      }
+      if (attributes.get("valign") == null) {
+        layoutPart.getBoxConstraints().setVerticalAlign(VerticalAlign.center);
+      }
+    }    
+
     this.focusable = attributes.getAsBoolean("focusable", Convert.DEFAULT_FOCUSABLE);
     this.focusableInsertBeforeElementId = attributes.get("focusableInsertBeforeElementId");
     for (int i=0; i<elementRenderer.length; i++) {
@@ -318,6 +340,12 @@ public class Element implements NiftyEvent<Void> {
       ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
       rendererApply.apply(this, attributes, renderEngine);
     }
+  }
+
+  private boolean hasParentChildLayoutCenter() {
+    if (parent == null)
+        return false;
+    return (parent.layoutManager instanceof CenterLayout);
   }
 
   public void initializeFromPostAttributes(final Attributes attributes) {
@@ -366,7 +394,7 @@ public class Element implements NiftyEvent<Void> {
     } else {
       this.elementRenderer = newElementRenderer;
     }
-    this.effectManager = new EffectManager();
+    this.effectManager = new EffectManager(this);
     this.effectManager.setAlternateKey(nifty.getAlternateKey());
     this.layoutPart = newLayoutPart;
     this.enabled = true;
@@ -1100,13 +1128,7 @@ public class Element implements NiftyEvent<Void> {
    * @return true, if the effect has ended and false otherwise
    */
   public boolean isEffectActive(final EffectEventId effectEventId) {
-    for (int i=0; i<elements.size(); i++) {
-      Element w = elements.get(i);
-      if (w.isEffectActive(effectEventId)) {
-        return true;
-      }
-    }
-    return effectManager.isActive(effectEventId);
+    return effectStateCache.get(effectEventId);
   }
 
   /**
@@ -2000,5 +2022,38 @@ public class Element implements NiftyEvent<Void> {
 
   public ElementInteraction getElementInteraction() {
     return interaction;
+  }
+
+  // EffectManager.Notify implementation
+
+  @Override
+  public void effectStateChanged(final EffectEventId eventId, final boolean active) {
+    // Get the oldState first.
+    boolean oldState = effectStateCache.get(eventId);
+
+    // The given EffectEventId changed its state. This means we now must update
+    // the ElementEffectStatetCache for this element. We do this by recalculating
+    // our state taking the state of all child elements into account.
+    boolean newState = isEffectActiveRecalc(eventId);
+
+    // When our state has been changed due to the update we will update the cache
+    // and tell our parent element to update as well.
+    if (newState != oldState) {
+      effectStateCache.set(eventId, newState);
+
+      if (parent != null) {
+        parent.effectStateChanged(eventId, newState);
+      }
+    }
+  }
+
+  private boolean isEffectActiveRecalc(final EffectEventId eventId) {
+    for (int i=0; i<elements.size(); i++) {
+      Element w = elements.get(i);
+      if (w.isEffectActiveRecalc(eventId)) {
+        return true;
+      }
+    }
+    return effectManager.isActive(eventId);
   }
 }

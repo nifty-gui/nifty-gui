@@ -16,6 +16,7 @@ import de.lessvoid.nifty.tools.TimeProvider;
  * @author void
  */
 public class EffectManager {
+  private Notify notify;
   private Map<EffectEventId, EffectProcessor> effectProcessor = new Hashtable<EffectEventId, EffectProcessor>();
   private List<EffectProcessor> effectProcessorList;
   private Falloff hoverFalloff;
@@ -30,24 +31,25 @@ public class EffectManager {
   /**
    * create a new effectManager with the given listener.
    */
-  public EffectManager() {
+  public EffectManager(final Notify notify) {
+    this.notify = notify;
     this.alternateKey = null;
 
-    effectProcessor.put(EffectEventId.onStartScreen, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onEndScreen, new EffectProcessor(true));
-    effectProcessor.put(EffectEventId.onFocus, new EffectProcessor(true));
-    effectProcessor.put(EffectEventId.onGetFocus, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onLostFocus, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onClick, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onHover, new EffectProcessor(true));
-    effectProcessor.put(EffectEventId.onStartHover, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onEndHover, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onActive, new EffectProcessor(true));
-    effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onShow, new EffectProcessor(false));
-    effectProcessor.put(EffectEventId.onHide, new EffectProcessor(true));
-    effectProcessor.put(EffectEventId.onEnabled, new EffectProcessor(true));
-    effectProcessor.put(EffectEventId.onDisabled, new EffectProcessor(true));
+    effectProcessor.put(EffectEventId.onStartScreen, new EffectProcessor(new NotifyAdapter(EffectEventId.onStartScreen, notify), false));
+    effectProcessor.put(EffectEventId.onEndScreen, new EffectProcessor(new NotifyAdapter(EffectEventId.onEndScreen, notify), true));
+    effectProcessor.put(EffectEventId.onFocus, new EffectProcessor(new NotifyAdapter(EffectEventId.onFocus, notify), true));
+    effectProcessor.put(EffectEventId.onGetFocus, new EffectProcessor(new NotifyAdapter(EffectEventId.onGetFocus, notify), false));
+    effectProcessor.put(EffectEventId.onLostFocus, new EffectProcessor(new NotifyAdapter(EffectEventId.onLostFocus, notify), false));
+    effectProcessor.put(EffectEventId.onClick, new EffectProcessor(new NotifyAdapter(EffectEventId.onClick, notify), false));
+    effectProcessor.put(EffectEventId.onHover, new EffectProcessor(new NotifyAdapter(EffectEventId.onHover, notify), true));
+    effectProcessor.put(EffectEventId.onStartHover, new EffectProcessor(new NotifyAdapter(EffectEventId.onStartHover, notify), false));
+    effectProcessor.put(EffectEventId.onEndHover, new EffectProcessor(new NotifyAdapter(EffectEventId.onEndHover, notify), false));
+    effectProcessor.put(EffectEventId.onActive, new EffectProcessor(new NotifyAdapter(EffectEventId.onActive, notify), true));
+    effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(new NotifyAdapter(EffectEventId.onCustom, notify), false));
+    effectProcessor.put(EffectEventId.onShow, new EffectProcessor(new NotifyAdapter(EffectEventId.onShow, notify), false));
+    effectProcessor.put(EffectEventId.onHide, new EffectProcessor(new NotifyAdapter(EffectEventId.onHide, notify), true));
+    effectProcessor.put(EffectEventId.onEnabled, new EffectProcessor(new NotifyAdapter(EffectEventId.onEnabled, notify), true));
+    effectProcessor.put(EffectEventId.onDisabled, new EffectProcessor(new NotifyAdapter(EffectEventId.onDisabled, notify), true));
 
     // we'll need to iterate over all effectProcessors later and so we keep them here in an ArrayList
     effectProcessorList = new ArrayList<EffectProcessor>(effectProcessor.values());
@@ -328,6 +330,25 @@ public class EffectManager {
   private final static class RenderPhaseOverlay implements RenderPhase {
     public void render(final EffectProcessor processor, final NiftyRenderEngine renderEngine) {
       processor.renderOverlay(renderEngine);
+    }
+  }
+
+  public interface Notify {
+    void effectStateChanged(EffectEventId eventId, boolean active);
+  }
+
+  private class NotifyAdapter implements EffectProcessor.Notify {
+    private Notify notify;
+    private EffectEventId eventId;
+
+    public NotifyAdapter(final EffectEventId eventId, final Notify notify) {
+      this.eventId = eventId;
+      this.notify = notify;
+    }
+
+    @Override
+    public void effectProcessorStateChanged(final boolean active) {
+      notify.effectStateChanged(eventId, active);
     }
   }
 }

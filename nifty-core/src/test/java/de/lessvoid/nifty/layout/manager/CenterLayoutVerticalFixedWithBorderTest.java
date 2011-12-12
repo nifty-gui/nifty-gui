@@ -3,7 +3,6 @@ package de.lessvoid.nifty.layout.manager;
 import junit.framework.TestCase;
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
-import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
 
@@ -43,7 +42,7 @@ public class CenterLayoutVerticalFixedWithBorderTest extends TestCase {
   public void testVerticalAlignBottomFixedWidth() {
     constraint.setVerticalAlign(VerticalAlign.bottom);
     layout.handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
-    CenterLayoutTest.assertBoxTopHeight(box, 480 - 100 - 50, 100);
+    CenterLayoutTest.assertBoxTopHeight(box, 480 - 100 - 50 + 50, 100);
   }
 
   public void testVerticalAlignCenterFixedWidth() {

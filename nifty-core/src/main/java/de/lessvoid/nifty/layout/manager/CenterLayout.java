@@ -132,7 +132,7 @@ public class CenterLayout implements LayoutManager {
     if (constraint.getVerticalAlign() == VerticalAlign.top) {
       box.setY(rootBoxY);
     } else if (constraint.getVerticalAlign() == VerticalAlign.bottom) {
-      box.setY(rootBox.getHeight() - rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight()) - boxHeight);
+      box.setY(rootBoxY + rootBox.getHeight() - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight()) - boxHeight);
     } else {
       box.setY(rootBoxY + (rootBoxHeight - boxHeight) / 2);
     }

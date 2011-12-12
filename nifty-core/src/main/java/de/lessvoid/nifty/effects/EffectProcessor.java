@@ -16,6 +16,7 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  */
 public class EffectProcessor {
   private Logger log = Logger.getLogger(EffectProcessor.class.getName());
+  private Notify notify;
   private List<Effect> allEffects = new ArrayList<Effect>();
   private ActiveEffects activeEffects = new ActiveEffects();
   private List<Effect> activeEffectsToRemove = new ArrayList<Effect>();
@@ -28,8 +29,9 @@ public class EffectProcessor {
   private boolean processingEffects;
   private boolean pendingEffectsRemove;
 
-  public EffectProcessor(final boolean neverStopRenderingParam) {
-    neverStopRendering = neverStopRenderingParam;
+  public EffectProcessor(final Notify notify, final boolean neverStopRenderingParam) {
+    this.notify = notify;
+    this.neverStopRendering = neverStopRenderingParam;
   }
 
   public void registerEffect(final Effect e) {
@@ -110,7 +112,7 @@ public class EffectProcessor {
   }
 
   public void reset() {
-    active = false;
+    internalSetActive(false);
     for (int i=0; i<activeEffects.getActive().size(); i++) {
       Effect e = activeEffects.getActive().get(i);
       e.setActive(false);
@@ -155,7 +157,7 @@ public class EffectProcessor {
     }
 
     if (!activeEffects.isEmpty()) {
-      active = true;
+      internalSetActive(true);
       pendingEffectsRemove = false;
     }
   }
@@ -179,7 +181,7 @@ public class EffectProcessor {
   }
 
   public void setActive(final boolean newActive) {
-    active = newActive;
+    internalSetActive(newActive);
     if (!active) {
       reset();
     }
@@ -308,7 +310,7 @@ public class EffectProcessor {
     if (active) {
       if (!activeEffects.containsActiveEffects()) {
         // done!
-        active = false;
+        internalSetActive(false);
 
         if (listener != null) {
           listener.perform();
@@ -348,5 +350,17 @@ public class EffectProcessor {
 
   private boolean isActive(final Effect e) {
     return e.isActive() || e.isNeverStopRendering() || neverStopRendering;
+  }
+
+  private void internalSetActive(final boolean newActive) {
+    boolean oldActive = active;
+    this.active = newActive;
+    if (newActive != oldActive) {
+      notify.effectProcessorStateChanged(newActive);
+    }
+  }
+
+  public interface Notify {
+    void effectProcessorStateChanged(boolean active);
   }
 }

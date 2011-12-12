@@ -11,6 +11,7 @@
   <useControls filename="nifty-controls/nifty-label.xml" />
   <useControls filename="nifty-controls/nifty-textfield.xml" />
   <useControls filename="nifty-controls/nifty-menu.xml" />
+  <useControls filename="nifty-controls/nifty-messagebox.xml" />
   <useControls filename="nifty-controls/nifty-scrollbar.xml" />
   <useControls filename="nifty-controls/nifty-slider.xml" />
   <useControls filename="nifty-controls/nifty-scrollpanel.xml" />
