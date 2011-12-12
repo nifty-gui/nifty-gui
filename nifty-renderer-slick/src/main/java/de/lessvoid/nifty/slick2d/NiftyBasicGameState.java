@@ -32,6 +32,7 @@ public abstract class NiftyBasicGameState extends NiftyOverlayBasicGameState {
    *          state is entered
    */
   protected NiftyBasicGameState(final String niftyStartScreen) {
+    super();
     startScreen = niftyStartScreen;
   }
 

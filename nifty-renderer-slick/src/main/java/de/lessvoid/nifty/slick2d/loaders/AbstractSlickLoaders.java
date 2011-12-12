@@ -44,6 +44,7 @@ public abstract class AbstractSlickLoaders<T extends SlickLoader> {
       break;
     case last:
     case dontCare:
+    default:
       loaders.add(newLoader);
       break;
     }

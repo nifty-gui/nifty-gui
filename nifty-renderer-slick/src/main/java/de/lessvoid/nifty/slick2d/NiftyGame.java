@@ -47,6 +47,7 @@ public abstract class NiftyGame extends NiftyOverlayGame {
    *          the name of the screen that should be called first
    */
   public NiftyGame(final String gameTitle, final String niftyStartScreen) {
+    super();
     title = gameTitle;
     startScreen = niftyStartScreen;
   }

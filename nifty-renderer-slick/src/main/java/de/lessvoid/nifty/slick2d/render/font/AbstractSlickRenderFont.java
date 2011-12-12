@@ -45,6 +45,7 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
    */
   @Override
   public void dispose() {
+    // usually no data needs to be disposed
   }
 
   /**

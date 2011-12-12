@@ -23,6 +23,7 @@ public class LwjglCursorSlickMouseCursor extends AbstractNativeSlickMouseCursor 
    *          the lwjgl cursor
    */
   public LwjglCursorSlickMouseCursor(final Cursor lwjglCursor) {
+    super();
     cursor = lwjglCursor;
   }
 

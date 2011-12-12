@@ -2,7 +2,6 @@ package de.lessvoid.nifty.slick2d.input;
 
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.slick2d.input.events.InputEvent;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * This is the input system that forwards all events to a Nifty input consumer.
@@ -39,9 +38,5 @@ public final class NiftySlickInputSystem extends AbstractSlickInputSystem {
   @Override
   protected void handleInputEvent(final InputEvent event) {
     event.sendToNifty(consumer);
-  }
-
-  @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
   }
 }

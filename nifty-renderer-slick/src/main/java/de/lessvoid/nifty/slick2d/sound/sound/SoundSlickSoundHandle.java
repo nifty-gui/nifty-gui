@@ -39,6 +39,7 @@ public class SoundSlickSoundHandle implements SlickSoundHandle {
    */
   @Override
   public void dispose() {
+    // by default nothing needs to be disposed
   }
 
   /**

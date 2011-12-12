@@ -18,6 +18,7 @@ import de.lessvoid.nifty.slick2d.input.events.MouseEventMoved;
 import de.lessvoid.nifty.slick2d.input.events.MouseEventPressed;
 import de.lessvoid.nifty.slick2d.input.events.MouseEventReleased;
 import de.lessvoid.nifty.slick2d.input.events.MouseEventWheelMoved;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * This is the abstract Input System implementation to connect the Input of
@@ -50,6 +51,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    * Prepare all required instances to work with this class.
    */
   protected AbstractSlickInputSystem() {
+    super();
     inputEventList = new ArrayList<InputEvent>();
     buttonPressedStack = new LinkedList<Integer>();
     inputState = new InputState();
@@ -73,11 +75,12 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
       if (!currentEvent.executeEvent(inputState)) {
         continue;
       }
-      if (!currentEvent.sendToNifty(inputEventConsumer)) {
+      
+      if (currentEvent.sendToNifty(inputEventConsumer)) {
+        currentEvent.updateState(inputState, true);
+      } else {
         handleInputEvent(currentEvent);
         currentEvent.updateState(inputState, false);
-      } else {
-        currentEvent.updateState(inputState, true);
       }
     }
   }
@@ -96,6 +99,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    */
   @Override
   public final void inputEnded() {
+    // nothing to do once all input events were send
   }
 
   /**
@@ -103,6 +107,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    */
   @Override
   public final void inputStarted() {
+    // nothing to do when the input starts
   }
 
   /**
@@ -248,5 +253,13 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
   @Override
   public final void setMousePosition(final int x, final int y) {
     Mouse.setCursorPosition(x, y);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+    // no use for the resource loader
   }
 }

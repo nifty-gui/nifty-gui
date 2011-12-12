@@ -277,17 +277,16 @@ public final class SlickRenderDevice implements RenderDevice {
   @Override
   public void setBlendMode(final BlendMode renderMode) {
     final Graphics g = gameContainer.getGraphics();
-    switch (renderMode) {
-    case BLEND:
+    
+    if (renderMode == BlendMode.BLEND) {
       g.setDrawMode(Graphics.MODE_NORMAL);
-      break;
-    case MULIPLY:
+    } else {
       g.setDrawMode(Graphics.MODE_COLOR_MULTIPLY);
-      break;
     }
   }
 
   @Override
   public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+    // resource loader is not used
   }
 }

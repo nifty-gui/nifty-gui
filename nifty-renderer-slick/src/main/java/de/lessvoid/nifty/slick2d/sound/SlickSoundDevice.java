@@ -43,6 +43,7 @@ public final class SlickSoundDevice implements SoundDevice {
 
   @Override
   public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+    // no need for the resource loader
   }
 
   /**

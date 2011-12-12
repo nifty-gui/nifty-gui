@@ -29,7 +29,7 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
       final HieroSettings hieroSettings = new HieroSettings(filename);
       Font javaFont = loadJavaFont(filename + ".ttf");
       if (javaFont == null) {
-        javaFont = loadJavaFont(filename.substring(0, filename.lastIndexOf(".")) + "ttf");
+        javaFont = loadJavaFont(filename.substring(0, filename.lastIndexOf('.')).concat("ttf"));
 
         if (javaFont == null) {
           throw new SlickLoadFontException("Loading TTF Font failed.");

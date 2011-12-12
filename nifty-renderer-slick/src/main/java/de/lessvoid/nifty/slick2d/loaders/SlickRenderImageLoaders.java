@@ -60,10 +60,7 @@ public final class SlickRenderImageLoaders extends AbstractSlickLoaders<SlickRen
 
     while (itr.hasNext()) {
       try {
-        final SlickRenderImage resultImage;
-        resultImage = itr.next().loadImage(filename, filterLinear);
-
-        return resultImage;
+        return itr.next().loadImage(filename, filterLinear);
       } catch (final SlickLoadImageException e) {
         // this loader failed... does not matter
       }

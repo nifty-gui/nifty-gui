@@ -60,6 +60,7 @@ public final class SlickRenderFontLoaders extends AbstractSlickLoaders<SlickRend
       break;
     case last:
     case dontCare:
+    default:
       addLoader(new UnicodeSlickRenderFontLoader(), order);
       addLoader(new HieroUnicodeSlickRenderFontLoader(), order);
       addLoader(new AngelCodeSlickRenderFontLoader(), order);
