@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.slick2d.render.image;
 
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -42,7 +41,7 @@ public class ImageSlickRenderImage implements SlickRenderImage {
      */
     @Override
     public int getWidth() {
-        return image.getWidth();
+        return getImage().getWidth();
     }
 
     /**
@@ -50,7 +49,7 @@ public class ImageSlickRenderImage implements SlickRenderImage {
      */
     @Override
     public int getHeight() {
-        return image.getHeight();
+        return getImage().getHeight();
     }
 
     /**
@@ -61,10 +60,22 @@ public class ImageSlickRenderImage implements SlickRenderImage {
     @Override
     public void dispose() {
         try {
-            image.destroy();
+            getImage().destroy();
         } catch (final SlickException e) {
             // Destorying failed... does not matter
         }
+    }
+
+    /**
+     * Get the image that is drawn by this render image. When overwriting this
+     * class its possible to alter this function in order to receive the image
+     * in different ways. The default implementation uses the image stored in
+     * this instance.
+     * 
+     * @return the used image
+     */
+    protected Image getImage() {
+        return image;
     }
 
     /**
@@ -94,14 +105,9 @@ public class ImageSlickRenderImage implements SlickRenderImage {
         g.scale(scale, scale);
         g.translate(-centerX, -centerY);
 
-        g.drawImage(image, x, y, x + w, y + h, srcX, srcY, srcX + srcW, srcY
-            + srcH, SlickRenderUtils.convertColorNiftySlick(color, slickColor));
-        
-
-        final int glError = GL11.glGetError();
-        if (glError != GL11.GL_NO_ERROR) {
-            System.err.println("OpenGL Error: " + Integer.toString(glError));
-        }
+        g.drawImage(getImage(), x, y, x + w, y + h, srcX, srcY, srcX + srcW,
+            srcY + srcH,
+            SlickRenderUtils.convertColorNiftySlick(color, slickColor));
 
         g.popTransform();
     }
