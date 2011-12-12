@@ -13,6 +13,8 @@ import de.lessvoid.nifty.slick2d.render.font.TrueTypeSlickRenderFont;
  * This loader is able to load fonts that base on TrueType fonts.
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @deprecated This loader uses the {@link org.newdawn.slick.TrueTypeFont} that
+ *             is marked as deprecated
  */
 @Deprecated
 public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRenderFontLoader {
@@ -21,7 +23,6 @@ public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRender
    */
   @Override
   public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
-
     Font javaFont;
     try {
       javaFont = loadJavaFont(filename);

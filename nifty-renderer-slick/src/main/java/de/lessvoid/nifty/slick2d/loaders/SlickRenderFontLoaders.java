@@ -8,9 +8,9 @@ import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import de.lessvoid.nifty.slick2d.render.font.loader.AngelCodeSlickRenderFontLoader;
 import de.lessvoid.nifty.slick2d.render.font.loader.DefaultSlickRenderFontLoader;
-import de.lessvoid.nifty.slick2d.render.font.loader.SlickRenderFontLoader;
-import de.lessvoid.nifty.slick2d.render.font.loader.TrueTypeSlickRenderFontLoader;
 import de.lessvoid.nifty.slick2d.render.font.loader.HieroUnicodeSlickRenderFontLoader;
+import de.lessvoid.nifty.slick2d.render.font.loader.SlickRenderFontLoader;
+import de.lessvoid.nifty.slick2d.render.font.loader.UnicodeSlickRenderFontLoader;
 
 /**
  * This class is used to trigger the actual font loading. It will query all the
@@ -56,16 +56,31 @@ public final class SlickRenderFontLoaders extends AbstractSlickLoaders<SlickRend
       addLoader(new DefaultSlickRenderFontLoader(), order);
       addLoader(new AngelCodeSlickRenderFontLoader(), order);
       addLoader(new HieroUnicodeSlickRenderFontLoader(), order);
-      addLoader(new TrueTypeSlickRenderFontLoader(), order);
+      addLoader(new UnicodeSlickRenderFontLoader(), order);
       break;
     case last:
     case dontCare:
-      addLoader(new TrueTypeSlickRenderFontLoader(), order);
+      addLoader(new UnicodeSlickRenderFontLoader(), order);
       addLoader(new HieroUnicodeSlickRenderFontLoader(), order);
       addLoader(new AngelCodeSlickRenderFontLoader(), order);
       addLoader(new DefaultSlickRenderFontLoader(), order);
       break;
     }
+  }
+
+  /**
+   * Add the loaders to the loader list that are flagged as deprecated. In
+   * general its a bad idea to do this.
+   * 
+   * @param order
+   *          the place where the deprecated loaders are added to the list
+   * @deprecated loads deprecated font loaders
+   */
+  @Deprecated
+  public void loadDeprecatedLoaders(final SlickAddLoaderLocation order) {
+    addLoader(
+        new de.lessvoid.nifty.slick2d.render.font.loader.TrueTypeSlickRenderFontLoader(), 
+        order);
   }
 
   /**

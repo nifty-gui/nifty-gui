@@ -9,6 +9,8 @@ import org.newdawn.slick.TrueTypeFont;
  * the text.
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @deprecated This font uses the {@link org.newdawn.slick.TrueTypeFont} that is
+ *             marked as deprecated
  */
 @Deprecated
 public class TrueTypeSlickRenderFont extends AbstractJavaSlickRenderFont {
