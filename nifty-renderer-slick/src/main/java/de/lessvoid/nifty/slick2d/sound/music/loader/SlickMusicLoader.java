@@ -11,13 +11,16 @@ import de.lessvoid.nifty.sound.SoundSystem;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public interface SlickMusicLoader extends SlickLoader {
-    /**
-     * Load some music.
-     * 
-     * @param soundSystem the Nifty soundsystem that is going to manage the load music
-     * @param filename the name of the file that stores the music
-     * @return the loaded music
-     * @throws SlickLoadMusicException in case loading the music failed
-     */
-    SlickMusicHandle loadMusic(SoundSystem soundSystem, final String filename) throws SlickLoadMusicException;
+  /**
+   * Load some music.
+   * 
+   * @param soundSystem
+   *          the Nifty soundsystem that is going to manage the load music
+   * @param filename
+   *          the name of the file that stores the music
+   * @return the loaded music
+   * @throws SlickLoadMusicException
+   *           in case loading the music failed
+   */
+  SlickMusicHandle loadMusic(SoundSystem soundSystem, final String filename) throws SlickLoadMusicException;
 }

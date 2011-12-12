@@ -13,38 +13,43 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickSoundDevice implements SoundDevice {
-    /**
-     * Load a sound.
-     * 
-     * @param soundSystem soundSystem
-     * @param filename filename of sound
-     * @return handle to sound
-     */
-    public SoundHandle loadSound(final SoundSystem soundSystem,
-        final String filename) {
-        return SlickSoundLoaders.getInstance().loadSound(soundSystem, filename);
-    }
+  /**
+   * Load a music piece.
+   * 
+   * @param soundSystem
+   *          soundSystem
+   * @param filename
+   *          file to load
+   * @return the music piece
+   */
+  @Override
+  public SoundHandle loadMusic(final SoundSystem soundSystem, final String filename) {
+    return SlickMusicLoaders.getInstance().loadMusic(soundSystem, filename);
+  }
 
-    @Override
-    public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
-    }
+  /**
+   * Load a sound.
+   * 
+   * @param soundSystem
+   *          soundSystem
+   * @param filename
+   *          filename of sound
+   * @return handle to sound
+   */
+  @Override
+  public SoundHandle loadSound(final SoundSystem soundSystem, final String filename) {
+    return SlickSoundLoaders.getInstance().loadSound(soundSystem, filename);
+  }
 
-    /**
-     * Load a music piece.
-     * 
-     * @param soundSystem soundSystem
-     * @param filename file to load
-     * @return the music piece
-     */
-    public SoundHandle loadMusic(final SoundSystem soundSystem,
-        final String filename) {
-        return SlickMusicLoaders.getInstance().loadMusic(soundSystem, filename);
-    }
+  @Override
+  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  }
 
-    /**
-     * Update the sound device.
-     */
-    public void update(final int delta) {
-       // nothing to do
-    }
+  /**
+   * Update the sound device.
+   */
+  @Override
+  public void update(final int delta) {
+    // nothing to do
+  }
 }

@@ -10,47 +10,47 @@ import org.newdawn.slick.SlickException;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public class LwjglCursorSlickMouseCursor extends
-    AbstractNativeSlickMouseCursor {
-    /**
-     * The cursor that is displayed.
-     */
-    private final Cursor cursor;
+public class LwjglCursorSlickMouseCursor extends AbstractNativeSlickMouseCursor {
+  /**
+   * The cursor that is displayed.
+   */
+  private final Cursor cursor;
 
-    /**
-     * Create a new slick mouse cursor that wraps a LWJGL cursor.
-     * 
-     * @param lwjglCursor the lwjgl cursor
-     */
-    public LwjglCursorSlickMouseCursor(final Cursor lwjglCursor) {
-        cursor = lwjglCursor;
-    }
+  /**
+   * Create a new slick mouse cursor that wraps a LWJGL cursor.
+   * 
+   * @param lwjglCursor
+   *          the lwjgl cursor
+   */
+  public LwjglCursorSlickMouseCursor(final Cursor lwjglCursor) {
+    cursor = lwjglCursor;
+  }
 
-    /**
-     * Dispose the cursor.
-     */
-    @Override
-    public void dispose() {
-        cursor.destroy();
-    }
+  /**
+   * Switch back to the native default cursor.
+   */
+  @Override
+  public void disableCursor(final GameContainer container) {
+    container.setDefaultMouseCursor();
+  }
 
-    /**
-     * Start displaying the cursor.
-     */
-    @Override
-    public void enableCursor(final GameContainer container) {
-        try {
-            container.setMouseCursor(cursor, 0, 0);
-        } catch (final SlickException e) {
-            // enabling failed
-        }
-    }
+  /**
+   * Dispose the cursor.
+   */
+  @Override
+  public void dispose() {
+    cursor.destroy();
+  }
 
-    /**
-     * Switch back to the native default cursor.
-     */
-    @Override
-    public void disableCursor(final GameContainer container) {
-        container.setDefaultMouseCursor();
+  /**
+   * Start displaying the cursor.
+   */
+  @Override
+  public void enableCursor(final GameContainer container) {
+    try {
+      container.setMouseCursor(cursor, 0, 0);
+    } catch (final SlickException e) {
+      // enabling failed
     }
+  }
 }

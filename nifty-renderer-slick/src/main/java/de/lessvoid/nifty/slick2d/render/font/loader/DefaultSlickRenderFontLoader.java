@@ -11,20 +11,18 @@ import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class DefaultSlickRenderFontLoader implements
-    SlickRenderFontLoader {
-    /**
-     * Load the requested font.
-     */
-    @Override
-    public SlickRenderFont loadFont(final Graphics g, final String filename)
-        throws SlickLoadFontException {
-        try {
-            g.resetFont();
-            return new DefaultSlickRenderFont(g.getFont());
-        } catch (final Exception e) {
-            throw new SlickLoadFontException("Loading font failed.", e);
-        }
+public final class DefaultSlickRenderFontLoader implements SlickRenderFontLoader {
+  /**
+   * Load the requested font.
+   */
+  @Override
+  public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
+    try {
+      g.resetFont();
+      return new DefaultSlickRenderFont(g.getFont());
+    } catch (final Exception e) {
+      throw new SlickLoadFontException("Loading font failed.", e);
     }
+  }
 
 }
