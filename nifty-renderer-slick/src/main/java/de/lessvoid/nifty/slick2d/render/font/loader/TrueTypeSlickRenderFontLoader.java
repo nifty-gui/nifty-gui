@@ -14,6 +14,7 @@ import de.lessvoid.nifty.slick2d.render.font.TrueTypeSlickRenderFont;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
+@Deprecated
 public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRenderFontLoader {
   /**
    * Load the requested font.

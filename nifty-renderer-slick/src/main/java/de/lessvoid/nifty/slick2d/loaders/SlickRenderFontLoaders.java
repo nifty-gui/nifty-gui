@@ -10,7 +10,7 @@ import de.lessvoid.nifty.slick2d.render.font.loader.AngelCodeSlickRenderFontLoad
 import de.lessvoid.nifty.slick2d.render.font.loader.DefaultSlickRenderFontLoader;
 import de.lessvoid.nifty.slick2d.render.font.loader.SlickRenderFontLoader;
 import de.lessvoid.nifty.slick2d.render.font.loader.TrueTypeSlickRenderFontLoader;
-import de.lessvoid.nifty.slick2d.render.font.loader.UnicodeSlickRenderFontLoader;
+import de.lessvoid.nifty.slick2d.render.font.loader.HieroUnicodeSlickRenderFontLoader;
 
 /**
  * This class is used to trigger the actual font loading. It will query all the
@@ -55,13 +55,13 @@ public final class SlickRenderFontLoaders extends AbstractSlickLoaders<SlickRend
     case first:
       addLoader(new DefaultSlickRenderFontLoader(), order);
       addLoader(new AngelCodeSlickRenderFontLoader(), order);
-      addLoader(new UnicodeSlickRenderFontLoader(), order);
+      addLoader(new HieroUnicodeSlickRenderFontLoader(), order);
       addLoader(new TrueTypeSlickRenderFontLoader(), order);
       break;
     case last:
     case dontCare:
       addLoader(new TrueTypeSlickRenderFontLoader(), order);
-      addLoader(new UnicodeSlickRenderFontLoader(), order);
+      addLoader(new HieroUnicodeSlickRenderFontLoader(), order);
       addLoader(new AngelCodeSlickRenderFontLoader(), order);
       addLoader(new DefaultSlickRenderFontLoader(), order);
       break;

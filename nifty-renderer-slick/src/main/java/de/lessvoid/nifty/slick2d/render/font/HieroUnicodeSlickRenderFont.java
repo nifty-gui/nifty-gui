@@ -11,7 +11,7 @@ import org.newdawn.slick.UnicodeFont;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public class UnicodeSlickRenderFont extends AbstractJavaSlickRenderFont {
+public class HieroUnicodeSlickRenderFont extends AbstractJavaSlickRenderFont {
   /**
    * The constructor to create this unicode font based render font.
    * 
@@ -22,7 +22,7 @@ public class UnicodeSlickRenderFont extends AbstractJavaSlickRenderFont {
    * @throws SlickLoadFontException
    *           in case loading the font fails
    */
-  public UnicodeSlickRenderFont(final UnicodeFont ucFont, final Font javaFont) throws SlickLoadFontException {
+  public HieroUnicodeSlickRenderFont(final UnicodeFont ucFont, final Font javaFont) throws SlickLoadFontException {
     super(ucFont, javaFont);
     try {
       ucFont.loadGlyphs();
