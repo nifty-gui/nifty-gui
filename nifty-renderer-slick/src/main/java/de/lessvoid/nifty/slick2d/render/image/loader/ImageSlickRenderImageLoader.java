@@ -11,25 +11,22 @@ import de.lessvoid.nifty.slick2d.render.image.SlickRenderImage;
  * 
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class ImageSlickRenderImageLoader implements
-    SlickRenderImageLoader {
-    /**
-     * Load the image.
-     */
-    @Override
-    public SlickRenderImage loadImage(final String filename, final boolean filterLinear)
-        throws SlickLoadImageException {
-        try {
-            Image image = null;
-            if (filterLinear) {
-                image = new Image(filename, false, Image.FILTER_LINEAR);
-            } else {
-                image = new Image(filename, false, Image.FILTER_NEAREST);
-            }
-            return new ImageSlickRenderImage(image);
-        } catch (Exception e) {
-            throw new SlickLoadImageException("Loading the image \"" + filename
-                + "\" failed.", e);
-        }
+public final class ImageSlickRenderImageLoader implements SlickRenderImageLoader {
+  /**
+   * Load the image.
+   */
+  @Override
+  public SlickRenderImage loadImage(final String filename, final boolean filterLinear) throws SlickLoadImageException {
+    try {
+      Image image = null;
+      if (filterLinear) {
+        image = new Image(filename, false, Image.FILTER_LINEAR);
+      } else {
+        image = new Image(filename, false, Image.FILTER_NEAREST);
+      }
+      return new ImageSlickRenderImage(image);
+    } catch (final Exception e) {
+      throw new SlickLoadImageException("Loading the image \"" + filename + "\" failed.", e);
     }
+  }
 }

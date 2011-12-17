@@ -15,57 +15,57 @@ import de.lessvoid.nifty.sound.SoundSystem;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickMusicLoaders extends AbstractSlickLoaders<SlickMusicLoader> {
-    /**
-     * The singleton instance of this class.
-     */
-    private static final SlickMusicLoaders INSTANCE =
-        new SlickMusicLoaders();
+  /**
+   * The singleton instance of this class.
+   */
+  private static final SlickMusicLoaders INSTANCE = new SlickMusicLoaders();
 
-    /**
-     * Private constructor so no instances but the singleton instance are
-     * created.
-     */
-    private SlickMusicLoaders() {
-        super();
+  /**
+   * Get the singleton instance of this class.
+   * 
+   * @return the singleton instance
+   */
+  public static SlickMusicLoaders getInstance() {
+    return INSTANCE;
+  }
+
+  /**
+   * Private constructor so no instances but the singleton instance are created.
+   */
+  private SlickMusicLoaders() {
+    super();
+  }
+
+  /**
+   * Load the default loaders.
+   */
+  @Override
+  public void loadDefaultLoaders(final SlickAddLoaderLocation order) {
+    addLoader(new MusicSlickMusicLoader(), order);
+  }
+
+  /**
+   * Load a music using the registered loaders.
+   * 
+   * @param soundSystem
+   *          the sound system that stores the sound data
+   * @param filename
+   *          the name of the file that holds the music
+   * @return the loaded music
+   * @throws IllegalArgumentException
+   *           in case loading the music fails
+   */
+  public SlickMusicHandle loadMusic(final SoundSystem soundSystem, final String filename) {
+    final Iterator<SlickMusicLoader> itr = getLoaderIterator();
+
+    while (itr.hasNext()) {
+      try {
+        return itr.next().loadMusic(soundSystem, filename);
+      } catch (final SlickLoadMusicException e) {
+        // this loader failed... does not matter
+      }
     }
 
-    /**
-     * Get the singleton instance of this class.
-     * 
-     * @return the singleton instance
-     */
-    public static SlickMusicLoaders getInstance() {
-        return INSTANCE;
-    }
-        
-    /**
-     * Load the default loaders.
-     */
-    @Override
-    public void loadDefaultLoaders(final SlickAddLoaderLocation order) {
-        addLoader(new MusicSlickMusicLoader(), order);
-    }
-
-    /**
-     * Load a music using the registered loaders.
-     * 
-     * @param soundSystem the sound system that stores the sound data
-     * @param filename the name of the file that holds the music
-     * @return the loaded music
-     * @throws IllegalArgumentException in case loading the music fails
-     */
-    public SlickMusicHandle loadMusic(final SoundSystem soundSystem, final String filename) {
-        final Iterator<SlickMusicLoader> itr = getLoaderIterator();
-
-        while (itr.hasNext()) {
-            try {
-                return itr.next().loadMusic(soundSystem, filename);
-            } catch (final SlickLoadMusicException e) {
-                // this loader failed... does not matter
-            }
-        }
-
-        throw new IllegalArgumentException("Failed to load music \""
-            + filename + "\".");
-    }
+    throw new IllegalArgumentException("Failed to load music \"" + filename + "\".");
+  }
 }

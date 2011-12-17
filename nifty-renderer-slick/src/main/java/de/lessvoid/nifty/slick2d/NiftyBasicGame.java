@@ -16,63 +16,60 @@ import de.lessvoid.nifty.tools.TimeProvider;
  */
 public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
 
-    /**
-     * The screen that is called when preparing the GUI.
-     */
-    private final String startScreen;
+  /**
+   * The screen that is called when preparing the GUI.
+   */
+  private final String startScreen;
 
-    /**
-     * Create a new game that displays the Nifty GUI and set the title that is
-     * shown.
-     * 
-     * @param gameTitle the title of the game
-     */
-    public NiftyBasicGame(final String gameTitle) {
-        this(gameTitle, "start");
-    }
+  /**
+   * Create a new game that displays the Nifty GUI and set the title that is
+   * shown.
+   * 
+   * @param gameTitle
+   *          the title of the game
+   */
+  public NiftyBasicGame(final String gameTitle) {
+    this(gameTitle, "start");
+  }
 
-    /**
-     * Create a new game that displays the Nifty GUI and set the title and the
-     * start screen for this game.
-     * 
-     * @param gameTitle the title of the game
-     * @param niftyStartScreen the name of the screen that should be called
-     *            first
-     */
-    public NiftyBasicGame(final String gameTitle, final String niftyStartScreen) {
-        super(gameTitle);
-        startScreen = niftyStartScreen;
-    }
+  /**
+   * Create a new game that displays the Nifty GUI and set the title and the
+   * start screen for this game.
+   * 
+   * @param gameTitle
+   *          the title of the game
+   * @param niftyStartScreen
+   *          the name of the screen that should be called first
+   */
+  public NiftyBasicGame(final String gameTitle, final String niftyStartScreen) {
+    super(gameTitle);
+    startScreen = niftyStartScreen;
+  }
 
-    /**
-     * Updating the game is not needed in this implementation as only the GUI is
-     * displayed.
-     */
-    @Override
-    protected void updateGame(final GameContainer container, final int delta)
-        throws SlickException {
-        // nothing to do
-    }
+  /**
+   * When initializing the game its only needed to prepare the GUI for display.
+   */
+  @Override
+  protected void initGameAndGUI(final GameContainer container) throws SlickException {
+    initNifty(container, new SlickRenderDevice(container), new SlickSoundDevice(), new TimeProvider());
+    getNifty().gotoScreen(startScreen);
+  }
 
-    /**
-     * Rendering the GUI only requires that the display is cleared before
-     * rendering the screen.
-     */
-    @Override
-    protected void renderGame(final GameContainer container, final Graphics g)
-        throws SlickException {
-        g.clear();
-    }
+  /**
+   * Rendering the GUI only requires that the display is cleared before
+   * rendering the screen.
+   */
+  @Override
+  protected void renderGame(final GameContainer container, final Graphics g) throws SlickException {
+    g.clear();
+  }
 
-    /**
-     * When initializing the game its only needed to prepare the GUI for
-     * display.
-     */
-    @Override
-    protected void initGameAndGUI(GameContainer container)
-        throws SlickException {
-        initNifty(container, new SlickRenderDevice(container),
-            new SlickSoundDevice(), new TimeProvider());
-        getNifty().gotoScreen(startScreen);
-    }
+  /**
+   * Updating the game is not needed in this implementation as only the GUI is
+   * displayed.
+   */
+  @Override
+  protected void updateGame(final GameContainer container, final int delta) throws SlickException {
+    // nothing to do
+  }
 }

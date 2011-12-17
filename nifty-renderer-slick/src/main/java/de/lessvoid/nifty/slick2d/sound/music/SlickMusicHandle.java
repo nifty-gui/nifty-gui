@@ -8,5 +8,5 @@ import de.lessvoid.nifty.spi.sound.SoundHandle;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public interface SlickMusicHandle extends SoundHandle {
-    // no additional methods needed
+  // no additional methods needed
 }
