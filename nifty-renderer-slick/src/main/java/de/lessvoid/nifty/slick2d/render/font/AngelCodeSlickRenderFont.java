@@ -9,14 +9,15 @@ import org.newdawn.slick.AngelCodeFont;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class AngelCodeSlickRenderFont extends AbstractSlickRenderFont {
-    /**
-     * Create the render font using a already loaded angel code font.
-     * 
-     * @param font the font this render font is supposed to encapsulate
-     * @throws SlickLoadFontException in case loading the font fails
-     */
-    public AngelCodeSlickRenderFont(final AngelCodeFont font)
-        throws SlickLoadFontException {
-        super(font);
-    }
+  /**
+   * Create the render font using a already loaded angel code font.
+   * 
+   * @param font
+   *          the font this render font is supposed to encapsulate
+   * @throws SlickLoadFontException
+   *           in case loading the font fails
+   */
+  public AngelCodeSlickRenderFont(final AngelCodeFont font) throws SlickLoadFontException {
+    super(font);
+  }
 }

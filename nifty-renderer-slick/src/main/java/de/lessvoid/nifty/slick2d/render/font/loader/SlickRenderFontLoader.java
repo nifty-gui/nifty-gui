@@ -12,13 +12,16 @@ import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public interface SlickRenderFontLoader extends SlickLoader {
-    /**
-     * Load a render font that is identified by a String.
-     * 
-     * @param g the graphics instance used for all render operations
-     * @param filename the filename to load
-     * @return the loaded font
-     * @throws SlickLoadFontException in case loading the font fails
-     */
-    SlickRenderFont loadFont(Graphics g, String filename) throws SlickLoadFontException;
+  /**
+   * Load a render font that is identified by a String.
+   * 
+   * @param g
+   *          the graphics instance used for all render operations
+   * @param filename
+   *          the filename to load
+   * @return the loaded font
+   * @throws SlickLoadFontException
+   *           in case loading the font fails
+   */
+  SlickRenderFont loadFont(Graphics g, String filename) throws SlickLoadFontException;
 }
