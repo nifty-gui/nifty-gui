@@ -21,6 +21,7 @@ public class DroppableControl extends AbstractController implements Droppable {
   private Nifty nifty;
   private List<DroppableDropFilter> filters = new CopyOnWriteArrayList<DroppableDropFilter>();
   private Element droppable;
+  private Element droppableContent;
   private DraggableControl draggable;
 
   @Override
@@ -33,6 +34,7 @@ public class DroppableControl extends AbstractController implements Droppable {
     super.bind(element);
     this.nifty = nifty;
     droppable = element;
+    droppableContent = element.getElements().get(0);
   }
 
   @Override
@@ -86,7 +88,7 @@ public class DroppableControl extends AbstractController implements Droppable {
     draggable = droppedDraggable;
     draggable.getElement().setConstraintX(new SizeValue("0px"));
     draggable.getElement().setConstraintY(new SizeValue("0px"));
-    draggable.getElement().markForMove(droppable, endNotify);
+    draggable.getElement().markForMove(droppableContent, endNotify);
 
     DroppableControl source = droppedDraggable.getDroppable();
     droppedDraggable.setDroppable(this);
