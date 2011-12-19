@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.layout.manager;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
@@ -11,16 +10,16 @@ import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
- * CenterLayout centers the very first child only in the
- * given root element. Remember that center probably makes
- * only sense if the centered element has some width and
- * height constraints set.
+ * CenterLayout centers all child elements. If there are
+ * more than one child elements all elements will be
+ * centered (and over layed above each other).
+ * 
+ * Remember that center probably makes only sense if the
+ * centered element has some width and height constraints set.
  *
  * @author void
  */
 public class CenterLayout implements LayoutManager {
-  private Logger log = Logger.getLogger(CenterLayout.class.getName());
-
   /**
    * layoutElements.
    * @param rootElement @see {@link LayoutManager}
@@ -33,16 +32,17 @@ public class CenterLayout implements LayoutManager {
       return;
     }
 
-    if (elements.size() > 1) {
-      log.warning("You're using a centerLayout element but you've added more than one child element to it. centerLayout only supports one element! Odd things will happen when used with more than one element :)");
-    }
-
-    // we only support center of the very first element
     Box rootBox = rootElement.getBox();
     BoxConstraints rootBoxConstraints = rootElement.getBoxConstraints();
 
-    Box box = elements.get(0).getBox();
-    BoxConstraints constraint = elements.get(0).getBoxConstraints();
+    for (int i=0; i<elements.size(); i++) {
+      layoutElement(elements.get(i), rootBox, rootBoxConstraints);
+    }
+  }
+
+  private void layoutElement(final LayoutPart element, Box rootBox, BoxConstraints rootBoxConstraints) {
+    Box box = element.getBox();
+    BoxConstraints constraint = element.getBoxConstraints();
 
     if (constraint.getWidth() != null && constraint.getWidth().hasHeightSuffix()) {
       handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);

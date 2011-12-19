@@ -129,20 +129,27 @@ public class AbsolutePositionLayout implements LayoutManager {
   public static class KeepInsidePostProcess implements PostProcess {
     @Override
     public void process(final int rootBoxX, final int rootBoxY, final int rootBoxWidth, final int rootBoxHeight, final Box box) {
-      int width = rootBoxWidth - box.getWidth();
-      int height = rootBoxHeight - box.getHeight();
+      // first make sure width and height fit into the root box
+      if (box.getWidth() > rootBoxWidth) {
+        box.setWidth(rootBoxWidth);
+      }
+      if (box.getHeight() > rootBoxHeight) {
+        box.setHeight(rootBoxHeight);
+      }
+
+      // and now make sure the box fits the rootbox
       if (box.getX() < rootBoxX) {
         box.setX(rootBoxX);
-      }
-      if (box.getX() > width) {
-        box.setX(width);
       }
       if (box.getY() < rootBoxY) {
         box.setY(rootBoxY);
       }
-      if (box.getY() > height) {
-        box.setY(height);
-      } 
+      if ((box.getX() + box.getWidth()) > (rootBoxX + rootBoxWidth)) {
+        box.setX(rootBoxX + rootBoxWidth - box.getWidth());
+      }
+      if ((box.getY() + box.getHeight()) > (rootBoxY + rootBoxHeight)) {
+        box.setY(rootBoxY + rootBoxHeight - box.getHeight());
+      }
     }
   }
 }
