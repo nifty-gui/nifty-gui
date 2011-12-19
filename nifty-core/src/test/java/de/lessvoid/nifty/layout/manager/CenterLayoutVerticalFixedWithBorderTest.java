@@ -30,7 +30,7 @@ public class CenterLayoutVerticalFixedWithBorderTest extends TestCase {
   public void testVerticalAlignDefaultFixedWidth() {
     // defaults to top right now
     layout.handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
-    CenterLayoutTest.assertBoxTopHeight(box, 50, 100);
+    CenterLayoutTest.assertBoxTopHeight(box, 190, 100);
   }
 
   public void testVerticalAlignTopFixedWidth() {

@@ -32,7 +32,7 @@ public class CenterLayoutWithPaddingTest extends TestCase {
       constraint.setHorizontalAlign(HorizontalAlign.center);
 
       LayoutPart child = prepare(constraint);
-      assertBox(child, 270, 50, 100, 100);
+      assertBox(child, 270, 190, 100, 100);
     }
 
     public void testHorizontalAlignCenterWithBorderNoConstraint() throws Exception {

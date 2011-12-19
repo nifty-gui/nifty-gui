@@ -6,6 +6,11 @@ package de.lessvoid.nifty.layout.align;
  */
 public enum HorizontalAlign {
   /**
+   * default alignment - the real value will be decided by the layout process.
+   */
+  horizontalDefault,
+
+  /**
    * left alignment.
    */
   left,
@@ -18,5 +23,5 @@ public enum HorizontalAlign {
   /**
    * right alignment.
    */
-  right
+  right;
 }

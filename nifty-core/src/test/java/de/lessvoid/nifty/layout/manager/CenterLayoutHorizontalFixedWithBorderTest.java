@@ -30,7 +30,7 @@ public class CenterLayoutHorizontalFixedWithBorderTest extends TestCase {
   public void testHorizontalAlignDefaultFixedWidth() {
     // defauls to left right now
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
-    CenterLayoutTest.assertBoxLeftWidth(box, 50, 100);
+    CenterLayoutTest.assertBoxLeftWidth(box, 270, 100);
   }
 
   public void testHorizontalAlignLeftFixedWidth() {

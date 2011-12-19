@@ -17,8 +17,8 @@ import de.lessvoid.nifty.tools.SizeValue;
 
 public class Convert {
   public static final String DEFAULT_PADDING = "0px";
-  public static final HorizontalAlign DEFAULT_HORIZONTAL_ALIGN = HorizontalAlign.left;
-  public static final VerticalAlign DEFAULT_VERTICAL_ALIGN = VerticalAlign.top;
+  public static final HorizontalAlign DEFAULT_HORIZONTAL_ALIGN = HorizontalAlign.horizontalDefault;
+  public static final VerticalAlign DEFAULT_VERTICAL_ALIGN = VerticalAlign.verticalDefault;
   public static final HorizontalAlign DEFAULT_TEXT_HORIZONTAL_ALIGN = HorizontalAlign.center;
   public static final VerticalAlign DEFAULT_TEXT_VERTICAL_ALIGN = VerticalAlign.center;
   public static final boolean DEFAULT_IMAGE_FILTER = false;

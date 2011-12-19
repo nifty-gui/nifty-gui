@@ -105,6 +105,7 @@ public class VerticalLayout implements LayoutManager {
     } else if (HorizontalAlign.left.equals(constraints.getHorizontalAlign())) {
       return rootBoxX;
     } else {
+      // default = same as left
       return rootBoxX;
     }
   }

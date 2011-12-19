@@ -55,8 +55,8 @@ public class BoxConstraints {
     this.y = null;
     this.width = null;
     this.height = null;
-    this.horizontalAlign = HorizontalAlign.left;
-    this.verticalAlign = VerticalAlign.top;
+    this.horizontalAlign = HorizontalAlign.horizontalDefault;
+    this.verticalAlign = VerticalAlign.verticalDefault;
     paddingLeft = new SizeValue("0px");
     paddingRight = new SizeValue("0px");
     paddingTop = new SizeValue("0px");

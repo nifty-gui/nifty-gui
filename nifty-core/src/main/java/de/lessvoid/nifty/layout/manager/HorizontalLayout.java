@@ -103,6 +103,7 @@ public class HorizontalLayout implements LayoutManager {
     } else if (VerticalAlign.bottom.equals(boxConstraints.getVerticalAlign())) {
       return rootBoxY + (rootBoxHeight - box.getHeight());
     } else {
+      // top is default in here
       return rootBoxY;
     }
   }

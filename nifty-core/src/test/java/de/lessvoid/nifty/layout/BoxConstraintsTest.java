@@ -13,8 +13,8 @@ public class BoxConstraintsTest extends TestCase {
     assertNull(box.getY());
     assertNull(box.getWidth());
     assertNull(box.getHeight());
-    assertEquals(HorizontalAlign.left, box.getHorizontalAlign());
-    assertEquals(VerticalAlign.top, box.getVerticalAlign());
+    assertEquals(HorizontalAlign.horizontalDefault, box.getHorizontalAlign());
+    assertEquals(VerticalAlign.verticalDefault, box.getVerticalAlign());
   }
 
   public void testNormalConstructor() {
@@ -40,8 +40,8 @@ public class BoxConstraintsTest extends TestCase {
     assertNull(copy.getY());
     assertNull(copy.getWidth());
     assertNull(copy.getHeight());
-    assertEquals(HorizontalAlign.left, copy.getHorizontalAlign());
-    assertEquals(VerticalAlign.top, copy.getVerticalAlign());
+    assertEquals(HorizontalAlign.horizontalDefault, copy.getHorizontalAlign());
+    assertEquals(VerticalAlign.verticalDefault, copy.getVerticalAlign());
   }
 
 }

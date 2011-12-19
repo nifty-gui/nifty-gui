@@ -246,6 +246,7 @@ public class TextRenderer implements ElementRenderer {
     } else if (VerticalAlign.bottom == verticalAlign) {
       return elementHeight - textHeight;
     } else {
+      // default is top in here
       return 0;
     }
   }
@@ -268,6 +269,7 @@ public class TextRenderer implements ElementRenderer {
     } else if (HorizontalAlign.right == horizontalAlign) {
       return elementWidth - textWidth;
     } else {
+      // default is 0
       return 0;
     }
   }

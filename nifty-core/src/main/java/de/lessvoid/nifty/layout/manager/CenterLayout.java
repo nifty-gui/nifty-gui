@@ -111,6 +111,7 @@ public class CenterLayout implements LayoutManager {
     } else if (constraint.getHorizontalAlign() == HorizontalAlign.right) {
       box.setX(rootBoxX + rootBox.getWidth() - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()) - boxWidth);
     } else {
+      // default and center is the same in here
       box.setX(rootBoxX + (rootBoxWidth - boxWidth) / 2);
     }
   }
@@ -134,6 +135,7 @@ public class CenterLayout implements LayoutManager {
     } else if (constraint.getVerticalAlign() == VerticalAlign.bottom) {
       box.setY(rootBoxY + rootBox.getHeight() - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight()) - boxHeight);
     } else {
+      // center is default in here
       box.setY(rootBoxY + (rootBoxHeight - boxHeight) / 2);
     }
   }
