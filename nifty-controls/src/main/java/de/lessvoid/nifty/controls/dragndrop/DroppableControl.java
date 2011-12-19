@@ -20,7 +20,6 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class DroppableControl extends AbstractController implements Droppable {
   private Nifty nifty;
   private List<DroppableDropFilter> filters = new CopyOnWriteArrayList<DroppableDropFilter>();
-  private Element droppable;
   private Element droppableContent;
   private DraggableControl draggable;
 
@@ -33,13 +32,12 @@ public class DroppableControl extends AbstractController implements Droppable {
       final Attributes controlDefinitionAttributes) {
     super.bind(element);
     this.nifty = nifty;
-    droppable = element;
-    droppableContent = element.getElements().get(0);
+    droppableContent = element.findElementByName("#droppableContent");
   }
 
   @Override
   public void onStartScreen() {
-    draggable = findDraggableChild(droppable);
+    draggable = findDraggableChild(droppableContent);
     if (draggable != null) {
       drop(draggable, reactivate(draggable.getElement()), false);
     }
