@@ -27,13 +27,10 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
   public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
     try {
       final HieroSettings hieroSettings = new HieroSettings(filename);
-      Font javaFont = loadJavaFont(filename + ".ttf");
-      if (javaFont == null) {
-        javaFont = loadJavaFont(filename.substring(0, filename.lastIndexOf('.')).concat("ttf"));
+      final Font javaFont = loadFont(filename);
 
-        if (javaFont == null) {
-          throw new SlickLoadFontException("Loading TTF Font failed.");
-        }
+      if (javaFont == null) {
+        throw new SlickLoadFontException("Loading TTF Font failed.");
       }
 
       return new UnicodeSlickRenderFont(new UnicodeFont(javaFont, hieroSettings), javaFont);
@@ -42,5 +39,25 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
     } catch (final RuntimeException e) {
       throw new SlickLoadFontException("Loading the font failed.", e);
     }
+  }
+
+  /**
+   * Try to located the font using the filename and common naming conversations.
+   * 
+   * @param filename
+   *          the filename of the font
+   * @return the loaded font or <code>null</code>
+   */
+  private Font loadFont(final String filename) {
+    Font javaFont;
+
+    javaFont = loadJavaFont(filename.concat(".ttf"));
+    if (javaFont != null) {
+      return javaFont;
+    }
+
+    javaFont = loadJavaFont(filename.substring(0, filename.lastIndexOf('.')).concat("ttf"));
+
+    return javaFont;
   }
 }
