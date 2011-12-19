@@ -14,20 +14,18 @@ import de.lessvoid.nifty.sound.SoundSystem;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class MusicSlickMusicLoader implements SlickMusicLoader {
-    /**
-     * Load the music.
-     */
-    @Override
-    public SlickMusicHandle loadMusic(final SoundSystem soundSystem,
-        final String filename) throws SlickLoadMusicException {
+  /**
+   * Load the music.
+   */
+  @Override
+  public SlickMusicHandle loadMusic(final SoundSystem soundSystem, final String filename)
+      throws SlickLoadMusicException {
 
-        try {
-            return new MusicSlickMusicHandle(soundSystem, new Music(filename,
-                true));
-        } catch (SlickException e) {
-            throw new SlickLoadMusicException("Loading the music \""
-                + filename + "\" failed.", e);
-        }
+    try {
+      return new MusicSlickMusicHandle(soundSystem, new Music(filename, true));
+    } catch (final SlickException e) {
+      throw new SlickLoadMusicException("Loading the music \"" + filename + "\" failed.", e);
     }
+  }
 
 }
