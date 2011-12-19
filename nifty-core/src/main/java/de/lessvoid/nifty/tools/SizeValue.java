@@ -14,13 +14,13 @@ public class SizeValue {
    * Add a PIXEL to some size value to indicate a pixel value.
    * Example: "100px" or "640px"
    */
-  private static final String PIXEL = "px";
+  public static final String PIXEL = "px";
 
   /**
    * Add a PERCENT to some size value to indicate a percent value.
    * Example: "100%" or "50%"
    */
-  private static final String PERCENT = "%";
+  public static final String PERCENT = "%";
 
   /**
    * Add a WIDTH_SUFFIX to some size value to indicate that this value
@@ -28,7 +28,7 @@ public class SizeValue {
    * is only appropriate to a height attribute and this class can only
    * detect it's present. Handling must be performed outside of this class.
    */
-  private static final String WIDTH_SUFFIX = "w";
+  public static final String WIDTH_SUFFIX = "w";
 
   /**
    * Add a HEIGHT_SUFFIX to some size value to indicate that this value
@@ -36,18 +36,18 @@ public class SizeValue {
    * is only appropriate to a width attribute and this class can only
    * detect it's present. Handling must be performed outside of this class.
    */
-  private static final String HEIGHT_SUFFIX = "h";
+  public static final String HEIGHT_SUFFIX = "h";
 
   /**
    * The WILDCARD value will not really be handled by the SizeValue class.
    * Its used to use the maximum available space by some layout managers.
    */
-  private static final String WILDCARD = "*";
+  public static final String WILDCARD = "*";
 
   /**
    * Max percent constant.
    */
-  private static final float MAX_PERCENT = 100.0f;
+  public static final float MAX_PERCENT = 100.0f;
 
   /**
    * The current value that has been set.
