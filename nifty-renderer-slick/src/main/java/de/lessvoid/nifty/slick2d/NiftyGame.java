@@ -4,11 +4,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import de.lessvoid.nifty.slick2d.input.PlainSlickInputSystem;
-import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
-import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
-
 /**
  * This "game" does nothing but showing the Nifty GUI on the screen. For real
  * games the Nifty Overlay Game should be used.
@@ -73,8 +68,7 @@ public abstract class NiftyGame extends NiftyOverlayGame {
    */
   @Override
   protected final void initGameAndGUI(final GameContainer container) throws SlickException {
-    initNifty(container, new SlickRenderDevice(container), new SlickSoundDevice(), new PlainSlickInputSystem(),
-        new TimeProvider());
+    initNifty(container);
 
     if (startScreen != null) {
       getNifty().gotoScreen(startScreen);
