@@ -20,7 +20,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loaderv2.types.NiftyControlsType;
 import de.lessvoid.nifty.loaderv2.types.NiftyStylesType;
 import de.lessvoid.nifty.loaderv2.types.NiftyType;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.xml.lwxs.Schema;
 import de.lessvoid.xml.xpp3.XmlParser;
 

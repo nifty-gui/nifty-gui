@@ -10,14 +10,15 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class SnowEffect implements EffectImpl {
   private Snowflake[] snow = new Snowflake[256];
   private int screenWidth;
   private int screenHeight;
   private Random random = new Random();
-  private TimeProvider timeProvider = new TimeProvider();
+  private TimeProvider timeProvider = new AccurateTimeProvider();
   private NiftyImage niftyImage;
   private NiftyImageMode image0 = NiftyImageMode.subImage(0, 0, 1, 1);
   private NiftyImageMode image1 = NiftyImageMode.subImage(2, 0, 3, 3);

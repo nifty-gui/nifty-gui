@@ -7,7 +7,7 @@ import static org.easymock.classextension.EasyMock.verify;
 
 import java.util.Properties;
 
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
 import junit.framework.TestCase;
 

@@ -4,7 +4,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 /**
  * The MultiplayerExampleMain.
@@ -25,7 +25,7 @@ public final class MultiplayerExampleMain {
         new LwjglRenderDevice(),
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
-        new TimeProvider());
+        new AccurateTimeProvider());
     nifty.fromXml("multiplayer/multiplayer.xml", "start");
 
     // render

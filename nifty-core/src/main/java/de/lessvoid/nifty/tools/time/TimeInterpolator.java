@@ -3,7 +3,7 @@ package de.lessvoid.nifty.tools.time;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.time.interpolator.ExpTime;
 import de.lessvoid.nifty.tools.time.interpolator.Interpolator;
 import de.lessvoid.nifty.tools.time.interpolator.LinearTime;

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.slick2d;
 
+import org.lwjgl.util.Timer;
 import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -7,10 +8,12 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.slick2d.input.PlainSlickInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
 import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.slick2d.time.LWJGLTimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 /**
  * This game implementation creates a Slick Game that is able to Overlay the
@@ -97,6 +100,66 @@ public abstract class NiftyOverlayGame implements Game {
   }
 
   /**
+   * Initialize the Nifty GUI for this game. This function will use the default
+   * {@link de.lessvoid.nifty.tools.TimeProvider}.
+   * 
+   * @param container
+   *          the container used to display the game
+   * @param renderDevice
+   *          the render device that is supposed to be used to render the GUI
+   * @param soundDevice
+   *          the sound device that is supposed to be used
+   * @param inputSystem
+   *          the input system that is supposed to be used
+   * @throws IllegalStateException
+   *           in case this function was called before
+   */
+  protected final void initNifty(
+      final GameContainer container,
+      final SlickRenderDevice renderDevice,
+      final SlickSoundDevice soundDevice,
+      final SlickInputSystem inputSystem) {
+    initNifty(container, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
+  }
+
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default
+   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * and sound devices that are provided with this library.
+   * 
+   * @param container
+   *          the container used to display the game
+   * @param inputSystem
+   *          the input system that is supposed to be used
+   * @throws IllegalStateException
+   *           in case this function was called before
+   * @see de.lessvoid.nifty.slick2d.render.SlickRenderDevice
+   * @see de.lessvoid.nifty.slick2d.sound.SlickSoundDevice
+   */
+  protected final void initNifty(final GameContainer container, final SlickInputSystem inputSystem) {
+    initNifty(container, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
+  }
+
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default
+   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * and sound devices that are provided with this library. As for the input
+   * the a system will be implemented that forwards the commands <i>only</i> to
+   * the Nifty-GUI.
+   * 
+   * @param container
+   *          the container used to display the game
+   * @throws IllegalStateException
+   *           in case this function was called before
+   * @see de.lessvoid.nifty.slick2d.render.SlickRenderDevice
+   * @see de.lessvoid.nifty.slick2d.sound.SlickSoundDevice
+   * @see de.lessvoid.nifty.slick2d.input.PlainSlickInputSystem
+   */
+  protected final void initNifty(final GameContainer container) {
+    initNifty(container, new PlainSlickInputSystem());
+  }
+
+  /**
    * This function should be used to prepare the actual GUI and the controllers
    * of the Nifty GUI. It is called right after the Nifty GUI got initialized.
    * 
@@ -135,6 +198,7 @@ public abstract class NiftyOverlayGame implements Game {
    */
   @Override
   public final void update(final GameContainer container, final int delta) throws SlickException {
+    Timer.tick();
     updateGame(container, delta);
 
     if (niftyGUI != null) {

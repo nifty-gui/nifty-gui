@@ -46,9 +46,9 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.MouseOverHandler;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.NullObjectFactory;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**

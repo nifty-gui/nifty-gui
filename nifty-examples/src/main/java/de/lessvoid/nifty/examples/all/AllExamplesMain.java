@@ -4,7 +4,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 /**
  * The Nifty Examples.
@@ -37,7 +37,7 @@ public class AllExamplesMain {
         new LwjglRenderDevice(),
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
-        new TimeProvider());
+        new AccurateTimeProvider());
     if (args.length == 1) {
       nifty.fromXml(ALL_INTRO_XML, args[0]);
     } else {

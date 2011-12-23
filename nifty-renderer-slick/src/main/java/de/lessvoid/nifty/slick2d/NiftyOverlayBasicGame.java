@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.slick2d;
 
+import org.lwjgl.util.Timer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,7 +12,8 @@ import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickSlickInputSystem;
 import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.slick2d.time.LWJGLTimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 /**
  * This class implements a Slick Basic game with a NiftyGUI Overlay.
@@ -109,9 +111,8 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
   }
 
   /**
-   * Initialize the Nifty GUI for this game. This function will create a input
-   * system that forwards all input events that got not handled by the NiftyGUI
-   * to the input listener this basic game implements.
+   * Initialize the Nifty GUI for this game. This function will use the default
+   * {@link de.lessvoid.nifty.tools.TimeProvider}.
    * 
    * @param container
    *          the container used to display the game
@@ -119,8 +120,8 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
    *          the render device that is supposed to be used to render the GUI
    * @param soundDevice
    *          the sound device that is supposed to be used
-   * @param timeProvider
-   *          the time provider that is supposed to be used
+   * @param inputSystem
+   *          the input system that is supposed to be used
    * @throws IllegalStateException
    *           in case this function was called before
    */
@@ -128,8 +129,45 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
       final GameContainer container,
       final SlickRenderDevice renderDevice,
       final SlickSoundDevice soundDevice,
-      final TimeProvider timeProvider) {
-    initNifty(container, renderDevice, soundDevice, new SlickSlickInputSystem(this), timeProvider);
+      final SlickInputSystem inputSystem) {
+    initNifty(container, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
+  }
+
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default
+   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * and sound devices that are provided with this library.
+   * 
+   * @param container
+   *          the container used to display the game
+   * @param inputSystem
+   *          the input system that is supposed to be used
+   * @throws IllegalStateException
+   *           in case this function was called before
+   * @see de.lessvoid.nifty.slick2d.render.SlickRenderDevice
+   * @see de.lessvoid.nifty.slick2d.sound.SlickSoundDevice
+   */
+  protected final void initNifty(final GameContainer container, final SlickInputSystem inputSystem) {
+    initNifty(container, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
+  }
+
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default
+   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * and sound devices that are provided with this library. As for the input it
+   * will forward all input to the Slick {@link org.newdawn.slick.InputListener}
+   * that is implemented in this class.
+   * 
+   * @param container
+   *          the container used to display the game
+   * @throws IllegalStateException
+   *           in case this function was called before
+   * @see de.lessvoid.nifty.slick2d.render.SlickRenderDevice
+   * @see de.lessvoid.nifty.slick2d.sound.SlickSoundDevice
+   * @see de.lessvoid.nifty.slick2d.input.SlickSlickInputSystem
+   */
+  protected final void initNifty(final GameContainer container) {
+    initNifty(container, new SlickSlickInputSystem(this));
   }
 
   /**
@@ -171,6 +209,8 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
    */
   @Override
   public final void update(final GameContainer container, final int delta) throws SlickException {
+    Timer.tick();
+    
     updateGame(container, delta);
 
     if (niftyGUI != null) {

@@ -8,7 +8,6 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 /**
@@ -54,7 +53,7 @@ public class ImageSizePulsate implements EffectImpl {
     if (endSizeString != null) {
       endSize = new SizeValue(endSizeString);
     }
-    pulsator = new Pulsator(parameter, new TimeProvider());
+    pulsator = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
   /**

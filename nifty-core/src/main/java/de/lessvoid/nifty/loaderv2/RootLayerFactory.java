@@ -11,8 +11,8 @@ import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 public class RootLayerFactory {
   public Element createRootLayer(

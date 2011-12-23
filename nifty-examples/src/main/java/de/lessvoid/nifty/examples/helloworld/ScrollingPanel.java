@@ -8,7 +8,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 public class ScrollingPanel implements EffectImpl {
   private TimeProvider timeProvider;
