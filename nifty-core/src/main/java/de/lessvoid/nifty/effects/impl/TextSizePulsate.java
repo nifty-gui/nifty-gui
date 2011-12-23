@@ -10,7 +10,6 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 /**
@@ -50,7 +49,7 @@ public class TextSizePulsate implements EffectImpl {
     if (endSizeString != null) {
       endSize = new SizeValue(endSizeString);
     }
-    pulsator = new Pulsator(parameter, new TimeProvider());
+    pulsator = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
   public void execute(

@@ -1,21 +1,16 @@
 package de.lessvoid.nifty.tools;
 
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+
 /**
  * provides the current time :).
+ * 
  * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @deprecated This implementation only exists for legacy reasons and is likely
+ *             to be dropped in future versions. Better use the implementations
+ *             in the package {@link de.lessvoid.nifty.spi.time.impl}
  */
-public class TimeProvider {
-
-    /**
-     * convert factor for conversion from nano to ms time.
-     */
-    private static final int NANO_TO_MS_CONVERSION = 1000000;
-
-    /**
-     * get current time in ms.
-     * @return current time in ms
-     */
-    public long getMsTime() {
-        return System.nanoTime() / NANO_TO_MS_CONVERSION;
-    }
+@Deprecated
+public class TimeProvider extends AccurateTimeProvider {
 }

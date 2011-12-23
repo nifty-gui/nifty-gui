@@ -37,8 +37,8 @@ import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 public class ControlsDemo {
   private static CommonBuilders builders = new CommonBuilders();
@@ -50,7 +50,7 @@ public class ControlsDemo {
     }
 
     // create Nifty and load default styles and controls
-    Nifty nifty = new Nifty(new LwjglRenderDevice(true), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(), new TimeProvider());
+    Nifty nifty = new Nifty(new LwjglRenderDevice(true), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(), new AccurateTimeProvider());
     nifty.loadStyleFile("nifty-default-styles.xml");
     nifty.loadControlFile("nifty-default-controls.xml");
     nifty.registerSound("intro", "defaultcontrols/sound/19546__tobi123__Gong_mf2.wav");

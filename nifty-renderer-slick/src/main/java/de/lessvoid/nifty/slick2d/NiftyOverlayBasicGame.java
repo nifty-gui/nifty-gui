@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.slick2d;
 
+import org.lwjgl.util.Timer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,7 +12,8 @@ import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickSlickInputSystem;
 import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.slick2d.time.LWJGLTimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 /**
  * This class implements a Slick Basic game with a NiftyGUI Overlay.
@@ -128,7 +130,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
       final SlickRenderDevice renderDevice,
       final SlickSoundDevice soundDevice,
       final SlickInputSystem inputSystem) {
-    initNifty(container, renderDevice, soundDevice, inputSystem, new TimeProvider());
+    initNifty(container, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
   }
 
   /**
@@ -207,6 +209,8 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
    */
   @Override
   public final void update(final GameContainer container, final int delta) throws SlickException {
+    Timer.tick();
+    
     updateGame(container, delta);
 
     if (niftyGUI != null) {

@@ -10,7 +10,6 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.image.ImageModeFactory;
 import de.lessvoid.nifty.render.image.ImageModeHelper;
-import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 /**
@@ -32,7 +31,7 @@ public class ImageOverlayPulsate implements EffectImpl {
 	    		renderStrategyProperty));
     }
 
-    this.pulsater = new Pulsator(parameter, new TimeProvider());
+    this.pulsater = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
   public void execute(

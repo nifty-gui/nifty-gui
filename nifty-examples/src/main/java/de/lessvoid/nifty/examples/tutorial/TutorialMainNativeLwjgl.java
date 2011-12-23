@@ -5,7 +5,7 @@ import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public final class TutorialMainNativeLwjgl {
 
@@ -22,7 +22,7 @@ public final class TutorialMainNativeLwjgl {
         new LwjglRenderDevice(),
         new OpenALSoundDevice(),
         new LwjglInputSystem(),
-        new TimeProvider());
+        new AccurateTimeProvider());
     nifty.fromXml("tutorial/tutorial.xml", "start");
 
     // render

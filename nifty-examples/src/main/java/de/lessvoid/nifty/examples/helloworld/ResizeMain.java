@@ -8,7 +8,7 @@ import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class ResizeMain implements ScreenController {
 
@@ -25,7 +25,7 @@ public class ResizeMain implements ScreenController {
         new LwjglRenderDevice(),
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
-        new TimeProvider());
+        new AccurateTimeProvider());
     nifty.fromXml("src/main/resources/helloworld/resize.xml", "start");
 
     LwjglInitHelper.renderLoop(nifty, null);

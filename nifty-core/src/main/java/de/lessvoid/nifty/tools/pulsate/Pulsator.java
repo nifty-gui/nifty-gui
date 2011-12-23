@@ -3,7 +3,7 @@ package de.lessvoid.nifty.tools.pulsate;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.provider.NullPulsator;
 import de.lessvoid.nifty.tools.pulsate.provider.RectanglePulsator;
 import de.lessvoid.nifty.tools.pulsate.provider.SinusPulsator;

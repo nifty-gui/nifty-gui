@@ -9,7 +9,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 /**
@@ -30,7 +29,7 @@ public class Pulsate implements EffectImpl {
     endColor = new Color(parameter.getProperty("endColor", "#ffffffff"));
     width = new SizeValue(parameter.getProperty("width"));
     changeColorOnly = new Boolean(parameter.getProperty("changeColorOnly", "false"));
-    pulsator = new Pulsator(parameter, new TimeProvider());
+    pulsator = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
   public void execute(

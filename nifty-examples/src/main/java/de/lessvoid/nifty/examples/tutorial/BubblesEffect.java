@@ -10,14 +10,15 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class BubblesEffect implements EffectImpl {
   private Bubble[] bubbles = new Bubble[32];
   private int screenWidth;
   private int screenHeight;
   private Random random = new Random();
-  private TimeProvider timeProvider = new TimeProvider();
+  private TimeProvider timeProvider = new AccurateTimeProvider();
   private NiftyImage niftyImage1;
   private NiftyImage niftyImage2;
 

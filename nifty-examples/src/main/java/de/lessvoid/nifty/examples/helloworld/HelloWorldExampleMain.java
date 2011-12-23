@@ -7,7 +7,7 @@ import de.lessvoid.nifty.NiftyMouse;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 /**
  * The Nifty Hello World.
@@ -35,7 +35,7 @@ public final class HelloWorldExampleMain {
         new LwjglRenderDevice(),
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
-        new TimeProvider());
+        new AccurateTimeProvider());
     nifty.fromXml("src/main/resources/helloworld/helloworld.xml", "start");
 
     // get the NiftyMouse interface that gives us access to all mouse cursor related stuff

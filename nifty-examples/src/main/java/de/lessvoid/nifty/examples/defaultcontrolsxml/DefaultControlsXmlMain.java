@@ -4,7 +4,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class DefaultControlsXmlMain {
   public static void main(final String[] args) {
@@ -17,7 +17,7 @@ public class DefaultControlsXmlMain {
         new LwjglRenderDevice(),
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
-        new TimeProvider());
+        new AccurateTimeProvider());
 //    nifty.fromXml("src/main/resources/defaultcontrolsxml/01-button.xml", "start");
 //    nifty.fromXml("src/main/resources/defaultcontrolsxml/02-chat.xml", "start");
 //    nifty.fromXml("src/main/resources/defaultcontrolsxml/03-checkbox.xml", "start");
