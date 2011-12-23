@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.slick2d;
 
-import org.lwjgl.util.Timer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -264,7 +263,6 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
   @Override
   public final void update(final GameContainer container, final StateBasedGame game, final int delta)
       throws SlickException {
-    Timer.tick();
     updateGame(container, game, delta);
 
     if (niftyGUI != null) {
