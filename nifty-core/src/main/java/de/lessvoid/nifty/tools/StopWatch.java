@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.tools;
 
 public class StopWatch {
-  private TimeProvider timeProvider;
+  private de.lessvoid.nifty.spi.time.TimeProvider timeProvider;
   private long startTime;
 
-  public StopWatch(final TimeProvider timeProviderParam) {
+  public StopWatch(final de.lessvoid.nifty.spi.time.TimeProvider timeProviderParam) {
     timeProvider = timeProviderParam;
   }
 

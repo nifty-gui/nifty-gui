@@ -8,7 +8,7 @@ import static org.easymock.classextension.EasyMock.verify;
 import java.util.Properties;
 
 import junit.framework.TestCase;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
 
 public class LinearTimeTest extends TestCase {

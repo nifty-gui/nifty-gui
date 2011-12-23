@@ -20,7 +20,7 @@ import de.lessvoid.nifty.elements.events.ElementDisableEvent;
 import de.lessvoid.nifty.elements.events.ElementEnableEvent;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 public class ElementEnableDisableTest {
   private Nifty niftyMock;

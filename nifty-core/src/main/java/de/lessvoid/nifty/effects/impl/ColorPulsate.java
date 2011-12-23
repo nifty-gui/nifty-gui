@@ -8,7 +8,6 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 /**
@@ -24,7 +23,7 @@ public class ColorPulsate implements EffectImpl {
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     startColor = new Color(parameter.getProperty("startColor", "#00000000"));
     endColor = new Color(parameter.getProperty("endColor", "#ffffffff"));
-    pulsator = new Pulsator(parameter, new TimeProvider());
+    pulsator = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
   public void execute(

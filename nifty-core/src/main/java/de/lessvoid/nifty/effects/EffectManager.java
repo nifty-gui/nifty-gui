@@ -9,7 +9,7 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStates;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 /**
  * manage all effects of an element.

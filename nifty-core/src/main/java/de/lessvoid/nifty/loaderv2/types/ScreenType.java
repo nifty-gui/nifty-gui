@@ -13,9 +13,9 @@ import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.StopWatch;
 import de.lessvoid.nifty.tools.StringHelper;
-import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.xml.tools.ClassHelper;
 
 public class ScreenType extends XmlBaseType {

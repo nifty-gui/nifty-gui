@@ -20,9 +20,9 @@ import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.NullObjectFactory;
 import de.lessvoid.nifty.tools.StringHelper;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 /**
  * A single screen with elements and input focus.

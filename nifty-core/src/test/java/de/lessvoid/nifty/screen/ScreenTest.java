@@ -13,7 +13,7 @@ import org.junit.Test;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen.StartScreenEndNotify;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 public class ScreenTest {
   private Nifty niftyMock;

@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.StopWatch;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 public class NiftyType extends XmlBaseType {
   private Logger log = Logger.getLogger(NiftyType.class.getName());
