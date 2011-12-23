@@ -15,7 +15,7 @@ import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class HtmlMain implements ScreenController {
   private Nifty nifty;
@@ -28,7 +28,7 @@ public class HtmlMain implements ScreenController {
     }
 
     // create nifty
-    Nifty nifty = new Nifty(new LwjglRenderDevice(), new NullSoundDevice(), LwjglInitHelper.getInputSystem(), new TimeProvider());
+    Nifty nifty = new Nifty(new LwjglRenderDevice(), new NullSoundDevice(), LwjglInitHelper.getInputSystem(), new AccurateTimeProvider());
     nifty.fromXml("src/test/resources/test.xml", "start");
 
     // that's the standard render loop for LWJGL as used in every standard nifty example

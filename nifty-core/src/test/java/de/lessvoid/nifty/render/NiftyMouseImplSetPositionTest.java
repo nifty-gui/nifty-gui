@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.spi.input.InputSystem;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class NiftyMouseImplSetPositionTest {
   private NiftyMouseImpl niftyMouse;
@@ -18,7 +18,7 @@ public class NiftyMouseImplSetPositionTest {
   @Before
   public void before() {
     inputSystemMock = createMock(InputSystem.class);
-    niftyMouse = new NiftyMouseImpl(null, inputSystemMock, new TimeProvider());
+    niftyMouse = new NiftyMouseImpl(null, inputSystemMock, new AccurateTimeProvider());
   }
 
   @After

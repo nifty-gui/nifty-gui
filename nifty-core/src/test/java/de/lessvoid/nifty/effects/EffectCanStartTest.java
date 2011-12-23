@@ -9,7 +9,7 @@ import java.util.Properties;
 import org.junit.Test;
 
 import de.lessvoid.nifty.effects.impl.Nop;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class EffectCanStartTest {
   private static final boolean INHERIT_FALSE = false;
@@ -62,6 +62,6 @@ public class EffectCanStartTest {
 
   private void prepare(final String alternateEnable, final String alternateDisable, final String customKey) {
     effect = new Effect(null, INHERIT_FALSE, POST_FALSE, OVERLAY_TRUE, alternateEnable, alternateDisable, customKey, NEVER_STOP_RENDERING, EffectEventId.onActive);
-    effect.init(null, new Nop(), new EffectProperties(new Properties()), new TimeProvider(), new LinkedList<Object>());
+    effect.init(null, new Nop(), new EffectProperties(new Properties()), new AccurateTimeProvider(), new LinkedList<Object>());
   }
 }

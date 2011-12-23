@@ -7,7 +7,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.Falloff.HoverFalloffConstraint;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
 
 /**

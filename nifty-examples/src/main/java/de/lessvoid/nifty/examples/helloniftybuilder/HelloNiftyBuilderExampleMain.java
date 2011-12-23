@@ -13,7 +13,7 @@ import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 /**
  * The Nifty Hello World. This time using the Nifty Builder classes
@@ -33,7 +33,7 @@ public class HelloNiftyBuilderExampleMain implements ScreenController {
         new LwjglRenderDevice(),
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
-        new TimeProvider());
+        new AccurateTimeProvider());
 
     // create a screen
     Screen screen = new ScreenBuilder("start") {{

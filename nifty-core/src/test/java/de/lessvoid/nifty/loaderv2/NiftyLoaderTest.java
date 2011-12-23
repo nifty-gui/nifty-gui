@@ -9,7 +9,7 @@ import de.lessvoid.nifty.nulldevice.NullRenderDevice;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class NiftyLoaderTest extends TestCase {
   private static String testXml =
@@ -61,9 +61,9 @@ public class NiftyLoaderTest extends TestCase {
   }
 
   public void testLoader() throws Exception {
-    Nifty nifty = new Nifty(new NullRenderDevice(), new NullSoundDevice(), new NullInputSystem(), new TimeProvider());
+    Nifty nifty = new Nifty(new NullRenderDevice(), new NullSoundDevice(), new NullInputSystem(), new AccurateTimeProvider());
 
-    NiftyLoader niftyLoader = new NiftyLoader(nifty, new TimeProvider());
+    NiftyLoader niftyLoader = new NiftyLoader(nifty, new AccurateTimeProvider());
     niftyLoader.registerSchema("nifty.nxs", nifty.getResourceAsStream("nifty.nxs"));
     niftyLoader.registerSchema("nifty-styles.nxs", nifty.getResourceAsStream("nifty-styles.nxs"));
 

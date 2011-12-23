@@ -22,8 +22,8 @@ import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.TimeProvider;
 
 public class TableExampleMain {
 
@@ -81,7 +81,7 @@ public class TableExampleMain {
         new LwjglRenderDevice(),
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
-        new TimeProvider());
+        new AccurateTimeProvider());
 
     nifty.loadControlFile("nifty-default-controls.xml");
     nifty.loadStyleFile("nifty-default-styles.xml");

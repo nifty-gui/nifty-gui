@@ -17,7 +17,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
-import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 public class ElementShowHideTest {
   private Nifty niftyMock;
