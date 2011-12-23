@@ -32,8 +32,11 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
       if (javaFont == null) {
         throw new SlickLoadFontException("Loading TTF Font failed.");
       }
+      
+      final UnicodeFont uniFont = new UnicodeFont(javaFont, hieroSettings);
+      uniFont.addAsciiGlyphs();
 
-      return new UnicodeSlickRenderFont(new UnicodeFont(javaFont, hieroSettings), javaFont);
+      return new UnicodeSlickRenderFont(uniFont, javaFont);
     } catch (final SlickException e) {
       throw new SlickLoadFontException("Loading the font failed.", e);
     } catch (final RuntimeException e) {

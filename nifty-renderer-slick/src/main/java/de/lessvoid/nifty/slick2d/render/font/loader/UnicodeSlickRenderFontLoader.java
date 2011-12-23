@@ -26,10 +26,14 @@ public final class UnicodeSlickRenderFontLoader extends AbstractJavaSlickRenderF
   @SuppressWarnings("unchecked")
   public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
     try {
-      final Font javaFont = loadJavaFont(filename);
+      Font javaFont = loadJavaFont(filename);
 
       if (javaFont == null) {
         throw new SlickLoadFontException("Loading TTF Font failed.");
+      }
+      
+      if (javaFont.getSize() == 1) {
+        javaFont = javaFont.deriveFont(12.f);
       }
 
       final UnicodeFont uniFont = new UnicodeFont(javaFont);
