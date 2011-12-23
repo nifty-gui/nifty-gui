@@ -43,9 +43,18 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
         }
         if (controlDefinitionAttributes.isSet("buttonHeight")) {
             element.findElementByName("#tab-button-panel").setConstraintHeight(new SizeValue(controlDefinitionAttributes.get("buttonHeight")));
+            int pixelHeight = 0;
+            if (controlDefinitionAttributes.get("buttonHeight").endsWith("px")) {
+            	pixelHeight = Integer.parseInt(controlDefinitionAttributes.get("buttonHeight").substring(0, controlDefinitionAttributes.get("buttonHeight").length() - 2));
+            } else if (controlDefinitionAttributes.get("buttonHeight").endsWith("%")) {
+            	int percentageHeight = Integer.parseInt(controlDefinitionAttributes.get("buttonHeight").substring(0, controlDefinitionAttributes.get("buttonHeight").length() - 1));
+            	pixelHeight = element.getParent().getHeight() / 100 * percentageHeight;
+            }
+            element.findElementByName("#tab-button-panel").setHeight(pixelHeight);
             buttonHeight = controlDefinitionAttributes.get("buttonHeight");
         }
         nifty.subscribe(screen, getId(), ElementShowEvent.class, this);
+        element.layoutElements();
     }
 
     @Override
@@ -67,6 +76,9 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
 
     private void createTabButton(final String tabId, final String buttonCaption) {
         Element tabButtonPanel = elmnt.findElementByName("#tab-button-panel");
+        if (tabButtonPanel.getHeight() == 0) {
+        	tabButtonPanel.setConstraintHeight(new SizeValue(buttonHeight));
+        }
         if (tabButtonPanel.findElementByName(tabId + "-button") == null) {
             new ButtonBuilder(tabId + "-button") {
 
