@@ -33,7 +33,6 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
-import de.lessvoid.nifty.layout.manager.CenterLayout;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
@@ -1122,7 +1121,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     enableInternal();
   }
 
-  public void enableInternal() {
+  private void enableInternal() {
     enabledCount++;
     if (enabledCount == 0) {
       enabled = true;
@@ -1284,7 +1283,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     internalHide();
   }
 
-  public void internalHide() {
+  private void internalHide() {
     visible = false;
     disableFocus();
 
