@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.slick2d.time;
+package de.lessvoid.nifty.renderer.lwjgl.time;
 
 import org.lwjgl.Sys;
 

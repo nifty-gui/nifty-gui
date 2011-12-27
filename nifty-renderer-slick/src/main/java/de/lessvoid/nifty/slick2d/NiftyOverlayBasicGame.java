@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.slick2d;
 
-import org.lwjgl.util.Timer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -208,9 +207,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
    * Update the game.
    */
   @Override
-  public final void update(final GameContainer container, final int delta) throws SlickException {
-    Timer.tick();
-    
+  public final void update(final GameContainer container, final int delta) throws SlickException {    
     updateGame(container, delta);
 
     if (niftyGUI != null) {
