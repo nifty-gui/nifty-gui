@@ -12,12 +12,16 @@ public class MenuButtonControlDefinition {
   private static final String NAME = "menuButtonControl";
   private static final String PARAMETER_LABEL = "menuButtonLabel";
   private static final String PARAMETER_HINT = "menuButtonHint";
+  private static final String PARAMETER_COLOR_0 = "menuButtonColor0";
+  private static final String PARAMETER_COLOR_1 = "menuButtonColor1";
+  private static final String PARAMETER_COLOR_2 = "menuButtonColor2";
+  private static final String PARAMETER_COLOR_3 = "menuButtonColor3";
 
   public static void register(final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
       controller(new MenuButtonController());
       panel(new PanelBuilder() {{
-        backgroundColor("#800a");
+        backgroundColor(controlParameter(PARAMETER_COLOR_0));
         width("110px");
         alignCenter();
         valignCenter();
@@ -34,19 +38,19 @@ public class MenuButtonControlDefinition {
           effectParameter("color", "#800f");
         }});
         onHoverEffect(new HoverEffectBuilder("gradient") {{
-          effectValue("offset", "0%", "color", "#222f");
-          effectValue("offset", "100%", "color", "#f77f");
+          effectValue("offset", "0%", "color", controlParameter(PARAMETER_COLOR_1));
+          effectValue("offset", "100%", "color", controlParameter(PARAMETER_COLOR_3));
         }});
         onFocusEffect(new EffectBuilder("gradient") {{
-          effectValue("offset", "0%", "color", "#222f");
-          effectValue("offset", "100%", "color", "#feef");
+          effectValue("offset", "0%", "color", controlParameter(PARAMETER_COLOR_1));
+          effectValue("offset", "100%", "color", controlParameter(PARAMETER_COLOR_2));
         }});
         onCustomEffect(new EffectBuilder("gradient") {{
           effectParameter("customKey", "selected");
           effectParameter("timeType", "infinite");
           effectParameter("neverStopRendering", "true");
-          effectValue("offset", "0%", "color", "#222f");
-          effectValue("offset", "100%", "color", "#feef");
+          effectValue("offset", "0%", "color", controlParameter(PARAMETER_COLOR_1));
+          effectValue("offset", "100%", "color", controlParameter(PARAMETER_COLOR_2));
         }});
         onHoverEffect(new HoverEffectBuilder("hint") {{
           effectParameter("hintText", controlParameter(PARAMETER_HINT));
@@ -75,6 +79,21 @@ public class MenuButtonControlDefinition {
     return new ControlBuilder(id, NAME) {{
       parameter(PARAMETER_LABEL, text);
       parameter(PARAMETER_HINT, hintText);
+      parameter(PARAMETER_COLOR_0, "#800a");
+      parameter(PARAMETER_COLOR_1, "#222f");
+      parameter(PARAMETER_COLOR_2, "#feef");
+      parameter(PARAMETER_COLOR_3, "#f77f");
+    }};
+  }
+
+  public static ControlBuilder getControlBuilderUser(final String id, final String text, final String hintText) {
+    return new ControlBuilder(id, NAME) {{
+      parameter(PARAMETER_LABEL, text);
+      parameter(PARAMETER_HINT, hintText);
+      parameter(PARAMETER_COLOR_0, "#44fa");
+      parameter(PARAMETER_COLOR_1, "#222f");
+      parameter(PARAMETER_COLOR_2, "#eeff");
+      parameter(PARAMETER_COLOR_3, "#eeff");
     }};
   }
 
@@ -82,6 +101,10 @@ public class MenuButtonControlDefinition {
     return new ControlBuilder(id, NAME) {{
       parameter(PARAMETER_LABEL, text);
       parameter(PARAMETER_HINT, hintText);
+      parameter(PARAMETER_COLOR_0, "#800a");
+      parameter(PARAMETER_COLOR_1, "#222f");
+      parameter(PARAMETER_COLOR_2, "#feef");
+      parameter(PARAMETER_COLOR_3, "#f77f");
       width(width);
     }};
   }

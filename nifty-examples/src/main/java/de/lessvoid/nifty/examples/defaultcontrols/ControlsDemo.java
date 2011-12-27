@@ -86,8 +86,6 @@ public class ControlsDemo {
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();
-    
-    
   }
 
   private static Screen createIntroScreen(final Nifty nifty) {
@@ -235,22 +233,25 @@ public class ControlsDemo {
           "menuButtonTextField", "dialogTextField",
           "menuButtonSlider", "dialogSliderAndScrollbar",
           "menuButtonScrollPanel", "dialogScrollPanel",
-          "menuButtonMessageBox", "dialogMessageBox",
+          "menuButtonDragAndDrop", "dialogDragAndDrop",
           "menuButtonChatControl", "dialogChatControl",
+          "menuButtonMessageBox", "dialogMessageBox",
           "menuButtonTabsControl", "dialogTabsControl",
-          "menuButtonTreeBoxControl", "dialogTreeBoxControl",
-          "menuButtonDragAndDrop", "dialogDragAndDrop"
+          "menuButtonTreeBoxControl", "dialogTreeBoxControl"
       ));
       inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping"); // this will enable Keyboard events for the screen controller
       layer(new LayerBuilder("layer") {{
         backgroundImage("defaultcontrols/background-new.png");
         childLayoutVertical();
-        panel(new PanelBuilder("navigation") {{
+        panel(new PanelBuilder("navigation-1") {{
           width("100%");
-          height("63px");
+          height("43px");
           backgroundColor("#5588");
           childLayoutHorizontal();
-          padding("20px");
+          paddingLeft("20px");
+          paddingRight("20px");
+          paddingTop("10px");
+          paddingBottom("10px");
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonListBox", "ListBox", "ListBox demonstration\n\nThis example shows adding and removing items from a ListBox\nas well as the different selection modes that are available."));
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonDropDown", "DropDown", "DropDown and RadioButton demonstration\n\nThis shows how to dynamically add items to the\nDropDown control as well as the change event."));
@@ -261,17 +262,27 @@ public class ControlsDemo {
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonScrollPanel", "ScrollPanel", "ScrollPanel demonstration\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonMessageBox", "MessageBox", "MessageBox demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
-          panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonChatControl", "ChatControl", "Chat Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
-          panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonTabsControl", "TabsControl", "Tabs Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
-          panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonTreeBoxControl", "TreeBoxControl", "TreeBox Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
-          panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonDragAndDrop", "Drag and Drop", "Drag and Drop demonstration\n\nDrag and Drop has been extended with Nifty 1.3"));
           panel(builders.hspacer("10px"));
           control(MenuButtonControlDefinition.getControlBuilder("menuButtonCredits", "?", "Credits\n\nCredits and Thanks!", "25px"));
+        }});
+        panel(new PanelBuilder("navigation-2") {{
+          width("100%");
+          height("33px");
+          backgroundColor("#5588");
+          childLayoutHorizontal();
+          paddingLeft("20px");
+          paddingRight("20px");
+          paddingTop("0px");
+          paddingBottom("10px");
+          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonChatControl", "ChatControl", "Chat Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          panel(builders.hspacer("10px"));
+          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonMessageBox", "MessageBox", "MessageBox demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          panel(builders.hspacer("10px"));
+          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonTabsControl", "TabsControl", "Tabs Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          panel(builders.hspacer("10px"));
+          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonTreeBoxControl", "TreeBoxControl", "TreeBox Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          panel(builders.hspacer("10px"));
         }});
         panel(new PanelBuilder("dialogParent") {{
           childLayoutOverlay();
@@ -279,15 +290,15 @@ public class ControlsDemo {
           alignCenter();
           valignCenter();
           control(new ControlBuilder("dialogListBox", ListBoxDialogControlDefinition.NAME));
+          control(new ControlBuilder("dialogDropDown", DropDownDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogTextField", TextFieldDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogSliderAndScrollbar", SliderAndScrollbarDialogControlDefinition.NAME));
-          control(new ControlBuilder("dialogDropDown", DropDownDialogControlDefinition.NAME));
           control(new ControlBuilder("dialogScrollPanel", ScrollPanelDialogControlDefinition.NAME));
+          control(new ControlBuilder("dialogDragAndDrop", DragAndDropDialogDefinition.NAME));
           control(new ControlBuilder("dialogChatControl", ChatControlDialogDefinition.NAME));
           control(new ControlBuilder("dialogMessageBox", MessageBoxDialogDefinition.NAME));
           control(new ControlBuilder("dialogTabsControl", TabsControlDialogDefinition.NAME));
           control(new ControlBuilder("dialogTreeBoxControl", TreeBoxControlDialogDefinition.NAME));
-          control(new ControlBuilder("dialogDragAndDrop", DragAndDropDialogDefinition.NAME));
         }});
       }});
       layer(new LayerBuilder() {{

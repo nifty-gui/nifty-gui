@@ -23,7 +23,6 @@ public class TreeBoxControlDialogDefinition {
 		new ControlDefinitionBuilder(NAME) {{
 			controller(new TreeboxControlDialogController());
 			control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
-				childLayoutHorizontal();
 				panel(new PanelBuilder() {{
 					childLayoutVertical();
 					control(builders.createLabel("TreeBox:"));
