@@ -35,6 +35,7 @@ import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
+import de.lessvoid.nifty.loaderv2.types.PopupType;
 import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
 import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderer;
 import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererImage;
@@ -1535,10 +1536,33 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     screen.registerElementId(id);
   }
 
-  private void bindToFocusHandler() {
-    if (focusable) {
-      focusHandler.addElement(this, screen.findElementByName(focusableInsertBeforeElementId));
+  private void bindToFocusHandler(final boolean isPopup) {
+    // not focusable means we won't add the element to the focus handler
+    if (!focusable) {
+      return;
     }
+
+    // when this element is part of a popup (and this popup is not currently active) we don't add the element
+    Element popupParent = resolvePopupParentElement();
+    if (popupParent != null) {
+      if (!isPopup) {
+        return;
+      }
+    }
+
+    focusHandler.addElement(this, screen.findElementByName(focusableInsertBeforeElementId));
+  }
+
+  private Element resolvePopupParentElement() {
+    if (elementType instanceof PopupType) {
+      return this;
+    }
+
+    if (parent == null) {
+      return null;
+    }
+
+    return parent.resolvePopupParentElement();
   }
 
   /**
@@ -1764,14 +1788,14 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     }
   }
 
-  public void initControls() {
+  public void initControls(final boolean isPopup) {
     for (Element element : elements) {
-      element.initControls();
+      element.initControls(isPopup);
     }
     if (attachedInputControl != null) {
       attachedInputControl.initControl(elementType.getAttributes());
     }
-    bindToFocusHandler();
+    bindToFocusHandler(isPopup);
   }
 
   /**
@@ -1899,7 +1923,14 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * @return focusable
    */
   public boolean isFocusable() {
-    return focusable && enabled && visible;
+    return focusable && enabled && visible && hasVisibleParent();
+  }
+  
+  private boolean hasVisibleParent() {
+    if (parent != null) {
+      return parent.visible && parent.hasVisibleParent(); 
+    }
+    return true;
   }
 
   /**

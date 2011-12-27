@@ -942,7 +942,7 @@ public class Nifty {
       // on the newControl here manually. It won't be called by the screen anymore.
       if (screen.isBound()) {
         newControl.bindControls(screen);
-        newControl.initControls();
+        newControl.initControls(false);
       }
       if (screen.isRunning()) {
         newControl.startEffect(EffectEventId.onStartScreen);
@@ -1438,7 +1438,7 @@ public class Nifty {
     if (screen.isBound()) {
       screen.layoutLayers();
       element.bindControls(screen);
-      element.initControls();
+      element.initControls(false);
       element.startEffect(EffectEventId.onStartScreen);
       element.startEffect(EffectEventId.onActive);
       element.onStartScreen();

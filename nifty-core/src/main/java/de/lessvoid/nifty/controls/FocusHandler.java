@@ -133,7 +133,12 @@ public class FocusHandler {
     if (entries.isEmpty()) {
       return null;
     }
-    return entries.get(0);
+    for (int i=0; i<entries.size(); i++) {
+      if (entries.get(i).isFocusable()) {
+        return entries.get(i);
+      }
+    }
+    return null;
   }
 
   /**

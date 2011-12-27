@@ -31,7 +31,7 @@ public class LayerCreator extends ControlAttributes {
     // anymore.
     if (screen.isBound()) {
       layerElement.bindControls(screen);
-      layerElement.initControls();
+      layerElement.initControls(false);
     }
     if (screen.isRunning()) {
       layerElement.startEffect(EffectEventId.onStartScreen);

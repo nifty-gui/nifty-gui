@@ -160,7 +160,7 @@ public class Screen {
     // prepare pop up for display
     popup.resetEffects();
     popup.layoutElements();
-    popup.initControls();
+    popup.initControls(true);
     popup.startEffect(EffectEventId.onStartScreen, localEndNotify);
     popup.startEffect(EffectEventId.onActive);
     popup.onStartScreen();
@@ -810,7 +810,7 @@ public class Screen {
       layerElements.get(i).bindControls(this);
     }
     for (int i=0; i<layerElements.size(); i++) {
-      layerElements.get(i).initControls();
+      layerElements.get(i).initControls(false);
     }
   }
 
