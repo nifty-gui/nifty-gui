@@ -20,6 +20,14 @@
     <module>nifty-html</module>
     <module>nifty-examples</module>
   </modules>
+  <url>http://sourceforge.net/projects/nifty-gui/</url>
+  <licenses>
+    <license>
+      <name>The BSD 2-Clause License</name>
+      <url>http://www.opensource.org/licenses/bsd-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <developers>
     <developer>
       <id>void256</id>
