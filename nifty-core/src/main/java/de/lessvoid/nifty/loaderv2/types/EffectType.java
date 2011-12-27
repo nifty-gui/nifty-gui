@@ -29,7 +29,11 @@ public class EffectType extends XmlBaseType {
 
   public EffectType(final EffectType e) {
     super(e);
-    this.effectValues = new ArrayList < EffectValueType > (e.effectValues);
+
+    effectValues = new ArrayList<EffectValueType>();
+    for (EffectValueType effectValue : e.effectValues) {
+      effectValues.add(effectValue.clone());
+    }
   }
 
   public EffectType clone() {
@@ -162,6 +166,10 @@ public class EffectType extends XmlBaseType {
 
   public void resolveParameters(final Attributes src) {
     getAttributes().resolveParameters(src);
+
+    for (EffectValueType e : effectValues) {
+      e.getAttributes().resolveParameters(src);
+    }
   }
 
   public void addValue(final EffectValueType elmentValueType) {
