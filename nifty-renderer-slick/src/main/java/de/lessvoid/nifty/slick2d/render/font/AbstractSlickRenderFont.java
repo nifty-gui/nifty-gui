@@ -1,5 +1,8 @@
 package de.lessvoid.nifty.slick2d.render.font;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
@@ -13,6 +16,12 @@ import de.lessvoid.nifty.tools.Color;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public abstract class AbstractSlickRenderFont implements SlickRenderFont {
+  /**
+   * This pattern contains the regular expression to detect color changes within
+   * the text.
+   */
+  private final Pattern colorChangePattern;
+
   /**
    * This instance of the slick color is used to convert the color of Nifty to
    * slick without creating new objects over and over again.
@@ -36,6 +45,7 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
     }
     internalFont = font;
     convertColor = new org.newdawn.slick.Color(0.f, 0.f, 0.f, 0.f);
+    colorChangePattern = Pattern.compile("\\\\(#\\p{XDigit}{3,8})#");
   }
 
   /**
@@ -77,7 +87,7 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
    */
   @Override
   public final int getWidth(final String text) {
-    return internalFont.getWidth(text);
+    return internalFont.getWidth(getCleanedString(text));
   }
 
   /**
@@ -85,7 +95,7 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
    */
   @Override
   public final int getWidth(final String text, final float size) {
-    return (int) (internalFont.getWidth(text) * size);
+    return (int) (getWidth(text) * size);
   }
 
   /**
@@ -93,6 +103,85 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
    */
   @Override
   public final void renderText(
+      final Graphics g,
+      final String text,
+      final int locX,
+      final int locY,
+      final Color color,
+      final float sizeX,
+      final float sizeY) {
+
+    final Matcher patternMatcher = colorChangePattern.matcher(text);
+
+    if (!patternMatcher.find()) {
+      // The color change thingy was not found. So we can just write the entire
+      // text and be done with it.
+      renderTextImpl(g, text, locX, locY, color, sizeX, sizeY);
+      return;
+    }
+    
+    final int maximumLineHeight = internalFont.getHeight(getCleanedString(text));
+
+    Color currentColor = color;
+    int nextTextIndex = 0;
+    int currentX = locX;
+
+    do {
+      final int lastIndex = patternMatcher.start() - 1;
+      
+      String textPart;
+      if (lastIndex > -1) {
+        textPart = text.substring(nextTextIndex, lastIndex);
+        final int currentY = locY + (maximumLineHeight - internalFont.getHeight(textPart));
+        renderTextImpl(g, textPart, currentX, currentY, currentColor, sizeX, sizeY);
+      } else {
+        textPart = "";
+      }
+
+      nextTextIndex = patternMatcher.end();
+      // get the new color
+      final String colorText = patternMatcher.group(1);
+      if (Color.check(colorText)) {
+        currentColor = new Color(colorText);
+      } else {
+        currentColor = color;
+      }
+      // get the new location
+
+      if (lastIndex > -1) {
+        currentX += getWidth(textPart, sizeX) + getCharacterAdvance(text.charAt(lastIndex), text.charAt(nextTextIndex), sizeX);
+      }
+    } while (patternMatcher.find());
+
+    if (text.length() >= nextTextIndex) {
+      final String textPart = text.substring(nextTextIndex);
+      final int currentY = locY + (maximumLineHeight - internalFont.getHeight(textPart));
+      renderTextImpl(g, textPart, currentX, currentY, currentColor, sizeX, sizeY);
+    }
+  }
+  
+  /**
+   * Clean all color change markers from the text.
+   * 
+   * @param orgString the original text
+   * @return the cleaned text
+   */
+  private String getCleanedString(final String orgString) {
+    return colorChangePattern.matcher(orgString).replaceAll("");
+  }
+
+  /**
+   * This function contains the actual text rendering implementation.
+   * 
+   * @param g the graphics object used to drawn
+   * @param text the text to draw
+   * @param locX the x coordinate of the screen location to drawn on
+   * @param locY the y coordinate of the screen location to drawn on
+   * @param color the color of the text
+   * @param sizeX the scaling factor along the x axis
+   * @param sizeY the scaling factor along the y axis
+   */
+  private void renderTextImpl(
       final Graphics g,
       final String text,
       final int locX,
