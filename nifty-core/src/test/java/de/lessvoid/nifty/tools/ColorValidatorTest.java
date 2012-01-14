@@ -12,11 +12,12 @@ public class ColorValidatorTest {
 
   private String[] shortAlphaColor = new String[] { "#0000", "#ffff", "#FFFF", "#0afb", "#0AFB", "#0aFb", "#0AfB",
       "#aaaa", "#1579" };
-  
-  private String[] longColor = new String[] { "#000000", "#ffffff", "#FFFFFF", "#00aaff", "#00AAFF", "#00aaFF", "#00AAff", "#aaaaaa", "#115577" };
 
-  private String[] longAlphaColor = new String[] { "#00000000", "#ffffffff", "#FFFFFFFF", "#00aaffbb", "#00AAFFBB", "#00aaFFbb", "#00AAffBB",
-      "#aaaaaaaa", "#11557799" };
+  private String[] longColor = new String[] { "#000000", "#ffffff", "#FFFFFF", "#00aaff", "#00AAFF", "#00aaFF",
+      "#00AAff", "#aaaaaa", "#115577" };
+
+  private String[] longAlphaColor = new String[] { "#00000000", "#ffffffff", "#FFFFFFFF", "#00aaffbb", "#00AAFFBB",
+      "#00aaFFbb", "#00AAffBB", "#aaaaaaaa", "#11557799" };
 
   @Test
   public void testInvalid() {
@@ -44,7 +45,7 @@ public class ColorValidatorTest {
     builder.append("\" was detected as valid.");
     return builder.toString();
   }
-  
+
   @Test
   public void testValid() {
     for (final String color : shortColor) {
@@ -72,7 +73,7 @@ public class ColorValidatorTest {
     builder.append("\" was detected as invalid.");
     return builder.toString();
   }
-  
+
   @Test
   public void testShortMode() {
     for (final String color : shortColor) {
@@ -91,7 +92,7 @@ public class ColorValidatorTest {
       assertFalse(generateInvalidColorMsg(color), validator.isShortModeWithoutAlpha(color));
     }
   }
-  
+
   @Test
   public void testShortAlphaMode() {
     for (final String color : shortColor) {
@@ -110,7 +111,7 @@ public class ColorValidatorTest {
       assertFalse(generateInvalidColorMsg(color), validator.isShortMode(color));
     }
   }
-  
+
   @Test
   public void testLongMode() {
     for (final String color : shortColor) {
@@ -129,7 +130,7 @@ public class ColorValidatorTest {
       assertFalse(generateInvalidColorMsg(color), validator.isLongModeWithoutAlpha(color));
     }
   }
-  
+
   @Test
   public void testLongAlphaMode() {
     for (final String color : shortColor) {
@@ -143,7 +144,7 @@ public class ColorValidatorTest {
     for (final String color : longColor) {
       assertFalse(generateInvalidColorMsg(color), validator.isLongMode(color));
     }
-    
+
     for (final String color : longAlphaColor) {
       assertTrue(generateValidColorMsg(color), validator.isLongMode(color));
     }
