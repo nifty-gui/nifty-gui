@@ -26,8 +26,14 @@ public class ColorValidator {
     if (toCheck == null) {
       return false;
     }
-
-    return colorPattern.matcher(toCheck).matches();
+    
+    final int digits = toCheck.length() - 1;
+    
+    if (digits == 3 || digits == 4 || digits == 6 || digits == 8) {
+      return checkSyntax(toCheck);
+    }
+    
+    return false;
   }
 
   /**
@@ -94,6 +100,18 @@ public class ColorValidator {
    *         required length exactly
    */
   private boolean isColor(final String toCheck, final int components) {
-    return (toCheck.length() == (components + 1) && isValid(toCheck));
+    return (toCheck != null && toCheck.length() == (components + 1) && checkSyntax(toCheck));
+  }
+
+  /**
+   * Check if the general syntax of the color string fits. That test does not
+   * validate that the string has the required length.
+   * 
+   * @param toCheck
+   *          the text to check
+   * @return <code>true</code> in case the text matches the required syntax
+   */
+  private boolean checkSyntax(final String toCheck) {
+    return colorPattern.matcher(toCheck).matches();
   }
 }
