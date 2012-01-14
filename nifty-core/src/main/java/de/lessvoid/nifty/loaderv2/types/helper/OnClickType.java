@@ -9,7 +9,7 @@ public class OnClickType {
   /**
    * The pattern used to check
    */
-  private static final Pattern VALID_PATTERN = Pattern.compile("\\w+\\((?|\\w+(?,\\s*\\w+)*)\\)");
+  private static final Pattern VALID_PATTERN = Pattern.compile("\\w+\\((?:|\\w+(?:,\\s*\\w+)*)\\)");
   private String value;
 
   public OnClickType(final String valueParam) {
