@@ -225,7 +225,7 @@ public class DraggableControl extends AbstractController implements Draggable {
       if (droppable != null) {
         return droppable;
       }
-      if (mouseInside && element.isVisibleToMouseEvents()) {
+      if (mouseInside && element.isVisibleToMouseEvents() && element.isVisible()) {
         return originalParent;
       }
     }
