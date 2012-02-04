@@ -15,7 +15,7 @@ public interface SlickMusicLoader extends SlickLoader {
    * Load some music.
    * 
    * @param soundSystem
-   *          the Nifty soundsystem that is going to manage the load music
+   *          the Nifty sound system that is going to manage the load music
    * @param filename
    *          the name of the file that stores the music
    * @return the loaded music

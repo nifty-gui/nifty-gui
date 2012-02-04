@@ -18,11 +18,10 @@ public final class AngelCodeSlickRenderFontLoader implements SlickRenderFontLoad
    */
   @Override
   public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
-    final String image = filename;
     final String definition = filename.substring(0, filename.lastIndexOf('.') + 1) + "fnt";
 
     try {
-      return new AngelCodeSlickRenderFont(new AngelCodeFont(image, definition));
+      return new AngelCodeSlickRenderFont(new AngelCodeFont(filename, definition));
     } catch (final Exception e) {
       throw new SlickLoadFontException("Loading font failed.", e);
     }

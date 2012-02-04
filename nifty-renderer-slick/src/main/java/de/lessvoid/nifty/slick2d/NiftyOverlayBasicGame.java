@@ -52,7 +52,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
     initGameAndGUI(container);
 
     if (niftyGUI == null) {
-      throw new IllegalArgumentException("NiftyGUI is not initializied!");
+      throw new IllegalArgumentException("NiftyGUI is not initialized!");
     }
   }
 
@@ -60,7 +60,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
    * Initialize the game. This function is called during
    * {@link #init(GameContainer)}. During this call its needed to initialize the
    * Nifty GUI with own options by calling
-   * {@link #initNifty(GameContainer, SlickRenderDevice, SlickSoundDevice, TimeProvider)}
+   * {@link #initNifty(GameContainer, SlickRenderDevice, SlickSoundDevice, SlickInputSystem, TimeProvider)}
    * .
    * 
    * @param container
@@ -111,7 +111,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}.
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}.
    * 
    * @param container
    *          the container used to display the game
@@ -134,7 +134,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}. Also it will use the render
    * and sound devices that are provided with this library.
    * 
    * @param container
@@ -152,7 +152,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}. Also it will use the render
    * and sound devices that are provided with this library. As for the input it
    * will forward all input to the Slick {@link org.newdawn.slick.InputListener}
    * that is implemented in this class.

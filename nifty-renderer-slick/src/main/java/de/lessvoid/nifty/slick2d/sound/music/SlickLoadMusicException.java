@@ -19,26 +19,33 @@ public final class SlickLoadMusicException extends SlickLoadException {
    */
   public SlickLoadMusicException() {
     super();
-  };
+  }
 
   /**
    * Create the exception with an attached message and without parent Throwable.
+   *
+   * @param msg The message that is attached to this exception
    */
   public SlickLoadMusicException(final String msg) {
     super(msg);
-  };
+  }
 
   /**
    * Create the exception with an attached message and parent Throwable.
+   *
+   * @param msg The message that is attached to this exception
+   * @param e The throwable that caused this exception
    */
   public SlickLoadMusicException(final String msg, final Throwable e) {
     super(msg, e);
-  };
+  }
 
   /**
    * Create the exception without an attached message and with parent Throwable.
+   *
+   * @param e The throwable that caused this exception
    */
   public SlickLoadMusicException(final Throwable e) {
     super(e);
-  };
+  }
 }

@@ -18,7 +18,7 @@ public final class ImageSlickRenderImageLoader implements SlickRenderImageLoader
   @Override
   public SlickRenderImage loadImage(final String filename, final boolean filterLinear) throws SlickLoadImageException {
     try {
-      Image image = null;
+      Image image;
       if (filterLinear) {
         image = new Image(filename, false, Image.FILTER_LINEAR);
       } else {

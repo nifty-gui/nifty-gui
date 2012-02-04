@@ -23,7 +23,7 @@ public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRender
    */
   @Override
   public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
-    Font javaFont = null;
+    Font javaFont;
     try {
       javaFont = loadJavaFont(filename);
     } catch (final Exception e) {

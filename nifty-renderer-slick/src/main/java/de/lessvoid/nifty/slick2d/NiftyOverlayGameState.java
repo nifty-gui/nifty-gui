@@ -76,13 +76,16 @@ public abstract class NiftyOverlayGameState implements GameState {
 
   /**
    * Initialize the game. This function is called during
-   * {@link #init(GameContainer)}. During this call its needed to initialize the
+   * {@link #init(GameContainer, StateBasedGame)}. During this call its needed to initialize the
    * Nifty GUI with own options by calling
-   * {@link #initNifty(GameContainer, SlickRenderDevice, SlickSoundDevice, TimeProvider)}
+   * {@link #initNifty(GameContainer, StateBasedGame, SlickRenderDevice, SlickSoundDevice, SlickInputSystem,
+   * TimeProvider)}
    * .
    * 
    * @param container
    *          the game container that displays the game
+   * @param game
+   *          the state based game this state is part of
    * @throws SlickException
    *           in case initializing the game goes wrong
    */
@@ -128,7 +131,7 @@ public abstract class NiftyOverlayGameState implements GameState {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}.
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}.
    * 
    * @param container
    *          the container used to display the game
@@ -154,7 +157,7 @@ public abstract class NiftyOverlayGameState implements GameState {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}. Also it will use the render
    * and sound devices that are provided with this library.
    * @see de.lessvoid.nifty.slick2d.render.SlickRenderDevice
    * @see de.lessvoid.nifty.slick2d.sound.SlickSoundDevice
@@ -177,7 +180,7 @@ public abstract class NiftyOverlayGameState implements GameState {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}. Also it will use the render
    * and sound devices that are provided with this library. As for the input it
    * will forward all input to the Slick {@link org.newdawn.slick.InputListener}
    * that is implemented in this class.
@@ -246,10 +249,12 @@ public abstract class NiftyOverlayGameState implements GameState {
 
   /**
    * This function is supposed to be used to render the game. It is called
-   * during the call of the {@link #render(GameContainer, Graphics)} function.
+   * during the call of the {@link #render(GameContainer, StateBasedGame, Graphics)} function.
    * 
    * @param container
    *          the container that displays the game
+   * @param game
+   *          the state based game this state is part of
    * @param g
    *          the graphics instance that is used to draw the game
    * @throws SlickException
@@ -272,10 +277,12 @@ public abstract class NiftyOverlayGameState implements GameState {
 
   /**
    * This function is supposed to be used to update the state of the game. It
-   * called during the call of the {@link #update(GameContainer, int)} function.
+   * called during the call of the {@link #update(GameContainer, StateBasedGame, int)} function.
    * 
    * @param container
    *          the container that displays the game
+   * @param game
+   *          the state based game this state is part of
    * @param delta
    *          the time since the last update
    * @throws SlickException

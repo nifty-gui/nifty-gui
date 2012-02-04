@@ -33,9 +33,7 @@ public interface SlickRenderFont extends RenderFont {
    * @param sizeY
    *          the vertical scaling factor of the text
    * @throws IllegalArgumentException
-   *           in case the parameter g is <code>null</code>
-   * @throws IllegalArgumentException
-   *           in case the parameter text is <code>null</code>
+   *           in case the parameter g is <code>null</code> or in case the parameter text is <code>null</code>
    */
   void renderText(Graphics g, String text, int locX, int locY, Color color, float sizeX, float sizeY);
 }

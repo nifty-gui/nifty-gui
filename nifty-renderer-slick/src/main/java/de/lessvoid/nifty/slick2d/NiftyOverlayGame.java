@@ -100,7 +100,7 @@ public abstract class NiftyOverlayGame implements Game {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}.
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}.
    * 
    * @param container
    *          the container used to display the game
@@ -123,7 +123,7 @@ public abstract class NiftyOverlayGame implements Game {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}. Also it will use the render
    * and sound devices that are provided with this library.
    * 
    * @param container
@@ -141,7 +141,7 @@ public abstract class NiftyOverlayGame implements Game {
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default
-   * {@link de.lessvoid.nifty.tools.TimeProvider}. Also it will use the render
+   * {@link de.lessvoid.nifty.spi.time.TimeProvider}. Also it will use the render
    * and sound devices that are provided with this library. As for the input
    * the a system will be implemented that forwards the commands <i>only</i> to
    * the Nifty-GUI.

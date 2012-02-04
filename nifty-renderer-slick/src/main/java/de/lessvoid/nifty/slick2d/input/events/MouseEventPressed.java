@@ -44,7 +44,7 @@ public final class MouseEventPressed extends AbstractMouseEventButton {
   }
 
   /**
-   * Tell the state to consume the next click event in case the click happend
+   * Tell the state to consume the next click event in case the click happened
    * upon the GUI.
    */
   @Override

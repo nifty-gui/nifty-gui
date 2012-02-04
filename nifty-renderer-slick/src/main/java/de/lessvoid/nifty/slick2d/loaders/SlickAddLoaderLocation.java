@@ -10,7 +10,7 @@ public enum SlickAddLoaderLocation {
   /**
    * Add the loader where ever you like.
    */
-  dontCare,
+  doNotCare,
 
   /**
    * Add the loader to the top of the list, so its queried first.
@@ -20,5 +20,5 @@ public enum SlickAddLoaderLocation {
   /**
    * Add the loader to the bottom of the list, so its queried last.
    */
-  last;
+  last
 }

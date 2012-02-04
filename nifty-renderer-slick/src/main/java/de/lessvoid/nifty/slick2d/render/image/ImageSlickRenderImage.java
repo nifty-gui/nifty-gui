@@ -47,7 +47,7 @@ public class ImageSlickRenderImage implements SlickRenderImage {
     try {
       getImage().destroy();
     } catch (final SlickException e) {
-      // Destorying failed... does not matter
+      // Destroying failed... does not matter
     }
   }
 

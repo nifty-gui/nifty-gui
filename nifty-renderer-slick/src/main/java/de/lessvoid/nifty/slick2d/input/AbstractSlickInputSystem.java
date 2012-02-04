@@ -128,11 +128,8 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    *         {@link org.newdawn.slick.Input} instance was set properly, else
    *         <code>false</code>
    */
-  private final boolean isControlDown() {
-    if (input == null) {
-      return false;
-    }
-    return input.isKeyDown(Input.KEY_LCONTROL) || input.isKeyDown(Input.KEY_RCONTROL);
+  private boolean isControlDown() {
+      return input != null && (input.isKeyDown(Input.KEY_LCONTROL) || input.isKeyDown(Input.KEY_RCONTROL));
   }
 
   /**
@@ -145,11 +142,8 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    *         {@link org.newdawn.slick.Input} instance was set properly, else
    *         <code>false</code>
    */
-  private final boolean isShiftDown() {
-    if (input == null) {
-      return false;
-    }
-    return input.isKeyDown(Input.KEY_LSHIFT) || input.isKeyDown(Input.KEY_RSHIFT);
+  private boolean isShiftDown() {
+      return input != null && (input.isKeyDown(Input.KEY_LSHIFT) || input.isKeyDown(Input.KEY_RSHIFT));
   }
 
   /**
@@ -180,17 +174,17 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    * {@inheritDoc}
    */
   @Override
-  public final void mouseDragged(final int oldx, final int oldy, final int newx, final int newy) {
-    final int lastButton = buttonPressedStack.get(buttonPressedStack.size() - 1).intValue();
-    inputEventList.add(new MouseEventDragged(lastButton, oldx, oldy, newx, newy));
+  public final void mouseDragged(final int oldX, final int oldY, final int newX, final int newY) {
+    final int lastButton = buttonPressedStack.get(buttonPressedStack.size() - 1);
+    inputEventList.add(new MouseEventDragged(lastButton, oldX, oldY, newX, newY));
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public final void mouseMoved(final int oldx, final int oldy, final int newx, final int newy) {
-    inputEventList.add(new MouseEventMoved(oldx, oldy, newx, newy));
+  public final void mouseMoved(final int oldX, final int oldY, final int newX, final int newY) {
+    inputEventList.add(new MouseEventMoved(oldX, oldY, newX, newY));
   }
 
   /**
@@ -199,7 +193,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
   @Override
   public final void mousePressed(final int button, final int x, final int y) {
     inputEventList.add(new MouseEventPressed(x, y, button));
-    buttonPressedStack.add(Integer.valueOf(button));
+    buttonPressedStack.add(button);
   }
 
   /**

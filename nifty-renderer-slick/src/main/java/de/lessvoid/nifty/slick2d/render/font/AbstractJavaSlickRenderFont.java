@@ -26,7 +26,7 @@ public abstract class AbstractJavaSlickRenderFont extends AbstractSlickRenderFon
   /**
    * The constructor to create this java AWT based render font.
    * 
-   * @param ttFont
+   * @param slickFont
    *          the true type font that is used to render
    * @param javaFont
    *          the java font that is used to render just the same font

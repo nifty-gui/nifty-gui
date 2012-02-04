@@ -37,7 +37,8 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
    * Create this render font and define the internal used font.
    * 
    * @param font
-   *          the font that supplies the render font with informations
+   *          the font that supplies the render font with information
+   * @throws SlickLoadFontException in case loading the font fails
    */
   protected AbstractSlickRenderFont(final Font font) throws SlickLoadFontException {
     if (font == null) {

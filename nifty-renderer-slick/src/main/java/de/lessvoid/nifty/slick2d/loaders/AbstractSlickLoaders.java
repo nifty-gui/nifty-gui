@@ -43,7 +43,7 @@ public abstract class AbstractSlickLoaders<T extends SlickLoader> {
       loaders.add(0, newLoader);
       break;
     case last:
-    case dontCare:
+    case doNotCare:
     default:
       loaders.add(newLoader);
       break;
