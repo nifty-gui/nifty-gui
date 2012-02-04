@@ -3,9 +3,8 @@ package de.lessvoid.nifty.slick2d.render.font;
 import de.lessvoid.nifty.slick2d.loaders.SlickLoadException;
 
 /**
- * This exception is expected to be thrown be the constructor of this class in
- * case loading the specified font failed.
- * 
+ * This exception is expected to be thrown be the constructor of this class in case loading the specified font failed.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickLoadFontException extends SlickLoadException {
@@ -18,7 +17,6 @@ public final class SlickLoadFontException extends SlickLoadException {
    * Create the exception without an attached message or parent Throwable.
    */
   public SlickLoadFontException() {
-    super();
   }
 
   /**

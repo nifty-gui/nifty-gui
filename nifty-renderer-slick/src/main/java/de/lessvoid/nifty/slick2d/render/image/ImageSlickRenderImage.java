@@ -1,16 +1,14 @@
 package de.lessvoid.nifty.slick2d.render.image;
 
+import de.lessvoid.nifty.slick2d.render.SlickRenderUtils;
+import de.lessvoid.nifty.tools.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import de.lessvoid.nifty.slick2d.render.SlickRenderUtils;
-import de.lessvoid.nifty.tools.Color;
-
 /**
- * This slick render image implementation uses a Slick image to draw on the
- * screen.
- * 
+ * This slick render image implementation uses a Slick image to draw on the screen.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class ImageSlickRenderImage implements SlickRenderImage {
@@ -20,33 +18,30 @@ public class ImageSlickRenderImage implements SlickRenderImage {
   private final Image image;
 
   /**
-   * This instance of a slick color is used to avoid the need to create a new
-   * color instance every time this image is rendered.
+   * This instance of a slick color is used to avoid the need to create a new color instance every time this image is
+   * rendered.
    */
   private final org.newdawn.slick.Color slickColor;
 
   /**
-   * Create this render image that is supposed to render a specified Slick
-   * image.
-   * 
-   * @param image
-   *          the image to draw
+   * Create this render image that is supposed to render a specified Slick image.
+   *
+   * @param usedImage the image to draw
    */
-  public ImageSlickRenderImage(final Image image) {
-    this.image = image;
-    slickColor = new org.newdawn.slick.Color(0.f, 0.f, 0.f, 0.f);
+  public ImageSlickRenderImage(final Image usedImage) {
+    image = usedImage;
+    slickColor = new org.newdawn.slick.Color(0.0f, 0.0f, 0.0f, 0.0f);
   }
 
   /**
-   * Dispose this image. After calling this method its not possible anymore to
-   * render this image. Also all functions of this image are likely to yield
-   * invalid results.
+   * Dispose this image. After calling this method its not possible anymore to render this image. Also all functions of
+   * this image are likely to yield invalid results.
    */
   @Override
   public void dispose() {
     try {
       getImage().destroy();
-    } catch (final SlickException e) {
+    } catch (final SlickException ignored) {
       // Destroying failed... does not matter
     }
   }
@@ -60,11 +55,10 @@ public class ImageSlickRenderImage implements SlickRenderImage {
   }
 
   /**
-   * Get the image that is drawn by this render image. When overwriting this
-   * class its possible to alter this function in order to receive the image in
-   * different ways. The default implementation uses the image stored in this
+   * Get the image that is drawn by this render image. When overwriting this class its possible to alter this function
+   * in order to receive the image in different ways. The default implementation uses the image stored in this
    * instance.
-   * 
+   *
    * @return the used image
    */
   protected Image getImage() {
@@ -79,9 +73,6 @@ public class ImageSlickRenderImage implements SlickRenderImage {
     return getImage().getWidth();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void renderImage(
       final Graphics g,
@@ -98,9 +89,6 @@ public class ImageSlickRenderImage implements SlickRenderImage {
     renderImage(g, x, y, width, height, 0, 0, getWidth(), getHeight(), color, scale, centerX, centerY);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void renderImage(
       final Graphics g,

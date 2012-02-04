@@ -1,21 +1,18 @@
 package de.lessvoid.nifty.slick2d.render.font.loader;
 
-import java.awt.Font;
-
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.TrueTypeFont;
+import java.awt.*;
 
 import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
-import de.lessvoid.nifty.slick2d.render.font.TrueTypeSlickRenderFont;
+import org.newdawn.slick.Graphics;
 
 /**
  * This loader is able to load fonts that base on TrueType fonts.
- * 
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
- * @deprecated This loader uses the {@link org.newdawn.slick.TrueTypeFont} that
- *             is marked as deprecated
+ * @deprecated This loader uses the {@link org.newdawn.slick.TrueTypeFont} that is marked as deprecated
  */
+@SuppressWarnings("UnnecessaryFullyQualifiedName")
 @Deprecated
 public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRenderFontLoader {
   /**
@@ -23,7 +20,7 @@ public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRender
    */
   @Override
   public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
-    Font javaFont;
+    final Font javaFont;
     try {
       javaFont = loadJavaFont(filename);
     } catch (final Exception e) {
@@ -33,7 +30,8 @@ public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRender
       throw new SlickLoadFontException("Can't load font as true type.");
     }
 
-    return new TrueTypeSlickRenderFont(new TrueTypeFont(javaFont, true), javaFont);
+    return new de.lessvoid.nifty.slick2d.render.font.TrueTypeSlickRenderFont(
+        new org.newdawn.slick.TrueTypeFont(javaFont, true), javaFont);
   }
 
 }

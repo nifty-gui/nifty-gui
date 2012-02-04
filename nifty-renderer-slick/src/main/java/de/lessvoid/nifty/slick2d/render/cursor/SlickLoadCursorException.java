@@ -3,9 +3,9 @@ package de.lessvoid.nifty.slick2d.render.cursor;
 import de.lessvoid.nifty.slick2d.loaders.SlickLoadException;
 
 /**
- * This exception is expected to be thrown be the constructor of this class in
- * case loading the specified mouse cursor failed.
- * 
+ * This exception is expected to be thrown be the constructor of this class in case loading the specified mouse cursor
+ * failed.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickLoadCursorException extends SlickLoadException {
@@ -18,7 +18,6 @@ public final class SlickLoadCursorException extends SlickLoadException {
    * Create the exception without an attached message or parent Throwable.
    */
   public SlickLoadCursorException() {
-    super();
   }
 
   /**
