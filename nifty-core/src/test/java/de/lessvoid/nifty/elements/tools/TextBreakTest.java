@@ -48,15 +48,16 @@ public class TextBreakTest {
   public void testSplit() {
     replay(elementMock);
 
-    expect(renderFontMock.getWidth("abc ")).andReturn(95);
-    expect(renderFontMock.getWidth("def")).andReturn(95).times(2);
+    expect(renderFontMock.getWidth("abc")).andReturn(95);
+    expect(renderFontMock.getWidth("def")).andReturn(95);
+    expect(renderFontMock.getWidth(" def")).andReturn(95);
     replay(renderFontMock);
 
     TextBreak textBreak = new TextBreak("abc def", 100, renderFontMock);
     List < String > lines = textBreak.split();
 
     assertEquals(2, lines.size());
-    assertEquals("abc ", lines.get(0));
+    assertEquals("abc", lines.get(0));
     assertEquals("def", lines.get(1));
   }
 
@@ -64,8 +65,8 @@ public class TextBreakTest {
   public void testNoneSplit() {
     replay(elementMock);
 
-    expect(renderFontMock.getWidth("abc ")).andReturn(40);
-    expect(renderFontMock.getWidth("def")).andReturn(40);
+    expect(renderFontMock.getWidth("abc")).andReturn(40);
+    expect(renderFontMock.getWidth(" def")).andReturn(40);
     replay(renderFontMock);
 
     TextBreak textBreak = new TextBreak("abc def", 100, renderFontMock);
