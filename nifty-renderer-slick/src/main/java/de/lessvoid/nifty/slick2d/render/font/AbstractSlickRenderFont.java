@@ -63,8 +63,7 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
    */
   @Override
   public int getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
-    // this is a ugly implementation, but I failed to come up with anything
-    // better...
+    // this is a ugly implementation, but I failed to come up with anything better...
     final int firstLength = internalFont.getWidth(Character.toString(currentCharacter));
     final int secondLength = internalFont.getWidth(
         Character.toString(currentCharacter) + Character.toString(nextCharacter));
@@ -99,45 +98,45 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
     final Matcher patternMatcher = colorChangePattern.matcher(text);
 
     if (!patternMatcher.find()) {
-      // The color change thingy was not found. So we can just write the entire
-      // text and be done with it.
+      // The color change thingy was not found. So we can just write the entire text and be done with it.
       renderTextImpl(g, text, locX, locY, color, sizeX, sizeY);
       return;
     }
 
-    final int maximumLineHeight = internalFont.getHeight(getCleanedString(text));
+    final int maximumLineHeight = Math.round(internalFont.getHeight(getCleanedString(text)) * sizeY);
 
     Color currentColor = color;
-    int nextTextIndex = 0;
     int currentX = locX;
 
+
+    int lastProcessedChar = -1;
+
     do {
-      final int lastIndex = patternMatcher.start() - 1;
+      final int firstColorIndex = patternMatcher.start();
 
       final String textPart;
-      if (lastIndex > -1) {
-        textPart = text.substring(nextTextIndex, lastIndex);
-        final int currentY = locY + (maximumLineHeight - internalFont.getHeight(textPart));
+      if ((firstColorIndex - lastProcessedChar) > 1) {
+        textPart = text.substring(lastProcessedChar + 1, firstColorIndex);
+        final int currentY = locY + Math.round((maximumLineHeight - internalFont.getHeight(textPart)) * sizeY);
         renderTextImpl(g, textPart, currentX, currentY, currentColor, sizeX, sizeY);
       } else {
         textPart = "";
       }
 
-      nextTextIndex = patternMatcher.end();
+      lastProcessedChar = patternMatcher.end() - 1;
       // get the new color
       final String colorText = patternMatcher.group(1);
       currentColor = Color.check(colorText) ? new Color(colorText) : color;
       // get the new location
 
-      if (lastIndex > -1) {
-        currentX += getWidth(textPart, sizeX) + getCharacterAdvance(text.charAt(lastIndex), text.charAt(nextTextIndex),
-            sizeX);
+      if (!textPart.isEmpty()) {
+        currentX += getWidth(textPart, sizeX);
       }
     } while (patternMatcher.find());
 
-    if (text.length() >= nextTextIndex) {
-      final String textPart = text.substring(nextTextIndex);
-      final int currentY = locY + (maximumLineHeight - internalFont.getHeight(textPart));
+    if (text.length() >= (lastProcessedChar + 2)) {
+      final String textPart = text.substring(lastProcessedChar + 1);
+      final int currentY = locY + Math.round((maximumLineHeight - internalFont.getHeight(textPart)) * sizeY);
       renderTextImpl(g, textPart, currentX, currentY, currentColor, sizeX, sizeY);
     }
   }
