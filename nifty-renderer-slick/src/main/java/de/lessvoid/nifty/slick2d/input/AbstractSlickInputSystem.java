@@ -51,12 +51,18 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
   private final InputState inputState;
 
   /**
+   * The currently active forwarding mode.
+   */
+  private ForwardingMode forwardMode;
+
+  /**
    * Prepare all required instances to work with this class.
    */
   protected AbstractSlickInputSystem() {
     inputEventList = new ArrayList<InputEvent>(INPUT_EVENT_BUFFER_INIT_SIZE);
     buttonPressedStack = new LinkedList<Integer>();
     inputState = new InputState();
+    forwardMode = ForwardingMode.none;
   }
 
   /**
@@ -74,7 +80,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
         continue;
       }
 
-      if (currentEvent.sendToNifty(inputEventConsumer)) {
+      if (!currentEvent.isForwarded(forwardMode) && currentEvent.sendToNifty(inputEventConsumer)) {
         currentEvent.updateState(inputState, true);
       } else {
         handleInputEvent(currentEvent);
@@ -163,6 +169,44 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
     }
     inputEventList.add(new MouseEventWheelMoved(input.getMouseX(), input.getMouseY(),
         change / WHEEL_DELTA_CORRECTION));
+  }
+
+  /**
+   * Enable the forwarding modes. This causes that some event are not send to the Nifty-GUI. Instead they are always
+   * forwarded to the second listener.
+   *
+   * @param mode the forwarding mode to enable
+   */
+  protected final void enableForwardingMode(final ForwardingMode mode) {
+    if ((forwardMode == ForwardingMode.all) || (mode == ForwardingMode.none) || (mode == forwardMode)) {
+      return;
+    }
+    
+    if (mode == ForwardingMode.all) {
+      forwardMode = ForwardingMode.all;
+    }
+
+    forwardMode = (forwardMode == ForwardingMode.none) ? mode : ForwardingMode.all;
+  }
+
+  /**
+   * Disable the forwarding mode. Once called the specified events are not send to the Nifty-GUI anymore.
+   *
+   * @param mode the forwarding mode that is supposed to be disabled
+   */
+  protected final void disableForwardingMode(final ForwardingMode mode) {
+    if ((forwardMode == ForwardingMode.none) || (mode == ForwardingMode.none)) {
+      return;
+    }
+
+    if ((forwardMode == mode) || (mode == ForwardingMode.all)) {
+      forwardMode = ForwardingMode.none;
+      return;
+    }
+
+    if (forwardMode == ForwardingMode.all) {
+      forwardMode = (mode == ForwardingMode.mouse) ? ForwardingMode.keyboard : ForwardingMode.mouse;
+    }
   }
 
   /**

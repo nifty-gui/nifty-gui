@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.slick2d.input.events;
 
+import de.lessvoid.nifty.slick2d.input.ForwardingMode;
 import de.lessvoid.nifty.slick2d.input.InputState;
 
 /**
@@ -53,6 +54,11 @@ public abstract class AbstractMouseEvent implements InputEvent {
    */
   protected final int getY() {
     return locY;
+  }
+
+  @Override
+  public boolean isForwarded(final ForwardingMode mode) {
+    return (mode == ForwardingMode.mouse) || (mode == ForwardingMode.all);
   }
 
   /**

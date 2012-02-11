@@ -9,7 +9,7 @@ import org.newdawn.slick.InputListener;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class SlickSlickInputSystem extends AbstractSlickInputSystem {
+public final class SlickSlickInputSystem extends AbstractSlickInputSystem implements ForwardingInputSystem {
   /**
    * The input listener that will receive any events the NiftyGUI does not use.
    */
@@ -34,5 +34,35 @@ public final class SlickSlickInputSystem extends AbstractSlickInputSystem {
   @Override
   protected void handleInputEvent(final InputEvent event) {
     event.sendToSlick(listener);
+  }
+
+  @Override
+  public void requestExclusiveMouse() {
+    enableForwardingMode(ForwardingMode.mouse);
+  }
+
+  @Override
+  public void requestExclusiveKeyboard() {
+    enableForwardingMode(ForwardingMode.keyboard);
+  }
+
+  @Override
+  public void requestExclusiveInput() {
+    enableForwardingMode(ForwardingMode.all);
+  }
+
+  @Override
+  public void releaseExclusiveMouse() {
+    disableForwardingMode(ForwardingMode.mouse);
+  }
+
+  @Override
+  public void releaseExclusiveKeyboard() {
+    disableForwardingMode(ForwardingMode.keyboard);
+  }
+
+  @Override
+  public void releaseExclusiveInput() {
+    disableForwardingMode(ForwardingMode.all);
   }
 }

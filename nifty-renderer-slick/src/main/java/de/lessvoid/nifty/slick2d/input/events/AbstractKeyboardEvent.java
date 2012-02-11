@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.slick2d.input.events;
 
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.slick2d.input.ForwardingMode;
 import de.lessvoid.nifty.slick2d.input.InputState;
 
 /**
@@ -30,6 +31,11 @@ public abstract class AbstractKeyboardEvent extends KeyboardInputEvent implement
   @Override
   public boolean executeEvent(final InputState state) {
     return true;
+  }
+
+  @Override
+  public boolean isForwarded(final ForwardingMode mode) {
+    return (mode == ForwardingMode.keyboard) || (mode == ForwardingMode.all);
   }
 
   /**

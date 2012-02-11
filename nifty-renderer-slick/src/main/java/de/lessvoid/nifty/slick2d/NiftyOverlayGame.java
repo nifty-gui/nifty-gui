@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.slick2d;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.slick2d.input.ForwardingInputSystem;
 import de.lessvoid.nifty.slick2d.input.PlainSlickInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
 import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
@@ -14,11 +15,16 @@ import org.newdawn.slick.*;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public abstract class NiftyOverlayGame implements Game {
+public abstract class NiftyOverlayGame implements Game, NiftyInputForwarding {
   /**
    * The one and only Nifty GUI.
    */
   private Nifty niftyGUI = null;
+
+  /**
+   * This variable provides the control over the forwarding implementations.
+   */
+  private ForwardingInputSystem inputForwardingControl;
 
   /**
    * Get the instance of the NiftyGUI that is used to render this screen.
@@ -27,6 +33,11 @@ public abstract class NiftyOverlayGame implements Game {
    */
   public final Nifty getNifty() {
     return niftyGUI;
+  }
+
+  @Override
+  public final ForwardingInputSystem getInputForwardingControl() {
+    return inputForwardingControl;
   }
 
   /**
@@ -75,6 +86,10 @@ public abstract class NiftyOverlayGame implements Game {
     inputSystem.setInput(input);
 
     niftyGUI = new Nifty(renderDevice, soundDevice, inputSystem, timeProvider);
+
+    if (inputSystem instanceof ForwardingInputSystem) {
+      inputForwardingControl = (ForwardingInputSystem) inputSystem;
+    }
 
     input.removeListener(inputSystem);
     input.addListener(inputSystem);
@@ -127,6 +142,11 @@ public abstract class NiftyOverlayGame implements Game {
    */
   protected final void initNifty(final GameContainer container) {
     initNifty(container, new PlainSlickInputSystem());
+  }
+
+  @Override
+  public final boolean isInputForwardingSupported() {
+    return inputForwardingControl != null;
   }
 
   /**

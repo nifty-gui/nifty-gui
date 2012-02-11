@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.slick2d;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.slick2d.input.ForwardingInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickSlickInputSystem;
 import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
@@ -11,7 +12,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public abstract class NiftyOverlayBasicGameState extends BasicGameState {
+public abstract class NiftyOverlayBasicGameState extends BasicGameState implements NiftyInputForwarding {
   /**
    * The used input system.
    */
@@ -21,6 +22,11 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
    * The one and only Nifty GUI.
    */
   private Nifty niftyGUI = null;
+
+  /**
+   * This variable provides the control over the forwarding implementations.
+   */
+  private ForwardingInputSystem inputForwardingControl;
 
   /**
    * Enter the game state.
@@ -51,6 +57,11 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
    */
   public final Nifty getNifty() {
     return niftyGUI;
+  }
+
+  @Override
+  public final ForwardingInputSystem getInputForwardingControl() {
+    return inputForwardingControl;
   }
 
   /**
@@ -104,6 +115,10 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
     inputSystem.setInput(container.getInput());
 
     niftyGUI = new Nifty(renderDevice, soundDevice, inputSystem, timeProvider);
+
+    if (inputSystem instanceof ForwardingInputSystem) {
+      inputForwardingControl = (ForwardingInputSystem) inputSystem;
+    }
 
     inSystem = inputSystem;
 
@@ -160,6 +175,11 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState {
    */
   protected final void initNifty(final GameContainer container, final StateBasedGame game) {
     initNifty(container, game, new SlickSlickInputSystem(this));
+  }
+
+  @Override
+  public final boolean isInputForwardingSupported() {
+    return (inputForwardingControl != null);
   }
 
   /**
