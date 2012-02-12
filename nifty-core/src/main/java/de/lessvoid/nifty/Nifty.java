@@ -364,7 +364,7 @@ public class Nifty {
         try {
           controlToAdd.startControl(controlToAdd.createControl());
         } catch (Exception e) {
-          e.printStackTrace();
+          throw new RuntimeException(e);
         }
       }
     }
@@ -381,7 +381,7 @@ public class Nifty {
         try {
           controlToAdd.startControl(controlToAdd.createControl());
         } catch (Exception e) {
-          e.printStackTrace();
+          throw new RuntimeException(e);
         }
       }
       controlsToAdd.clear();
@@ -532,7 +532,7 @@ public class Nifty {
       long end = timeProvider.getMsTime();
       log.info("loadFromFile took [" + (end - start) + "]");
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
   }
 
@@ -553,7 +553,7 @@ public class Nifty {
       long end = timeProvider.getMsTime();
       log.info("loadFromStream took [" + (end - start) + "]");
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
   }
 

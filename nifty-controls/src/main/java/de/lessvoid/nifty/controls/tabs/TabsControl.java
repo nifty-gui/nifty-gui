@@ -28,7 +28,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 public class TabsControl extends AbstractController implements Tabs, EventTopicSubscriber<ElementShowEvent> {
 
     private Nifty nifty;
-    private static String activeTab;
+    private String activeTab;
     private Element elmnt;
     private String buttonWidth;
     private String buttonHeight;
@@ -186,11 +186,10 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
         if (!tabId.equals(activeTab)) {
             if (activeTab != null) {
                 elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab + "-button").setStyle("tab-button");
-            }
-            elmnt.findElementByName("#tab-button-panel").findElementByName(tabId + "-button").setStyle("active-tab-button");
-            if (activeTab != null) {
                 elmnt.findElementByName("#tab-content-panel").findElementByName(activeTab).hideWithoutEffect();
             }
+            elmnt.findElementByName("#tab-button-panel").findElementByName(tabId + "-button").setStyle("active-tab-button");
+            elmnt.findElementByName("#tab-button-panel").findElementByName(tabId + "-button").setFocus();
             elmnt.findElementByName("#tab-content-panel").findElementByName(tabId).showWithoutEffects();
             nifty.publishEvent(getId(), new TabSelectedEvent(this, tabId));
             activeTab = tabId;
@@ -208,6 +207,7 @@ public class TabsControl extends AbstractController implements Tabs, EventTopicS
         }
         if (activeTab != null) {
             elmnt.findElementByName("#tab-content-panel").findElementByName(activeTab).showWithoutEffects();
+            elmnt.findElementByName("#tab-button-panel").findElementByName(activeTab + "-button").setFocus();
         }
     }
 }
