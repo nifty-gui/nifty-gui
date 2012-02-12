@@ -17,10 +17,30 @@ import org.newdawn.slick.font.effects.ColorEffect;
 public final class UnicodeSlickRenderFontLoader extends AbstractJavaSlickRenderFontLoader {
   /**
    * The default size of a font. This value is needed as TrueType fonts in general do not have a default size,
-   * but Nifty
-   * expects a font to be rendered at default size.
+   * but Nifty expects a font to be rendered at default size.
    */
   private static final float DEFAULT_SIZE = 12.0f;
+
+  /**
+   * The font size that will be actually used in case the font does not provide a default size.
+   */
+  private float fontSize;
+
+  /**
+   * Constructor that uses the provided default size of 12pt as font size.
+   */
+  public UnicodeSlickRenderFontLoader() {
+    this(DEFAULT_SIZE);
+  }
+
+  /**
+   * This constructor allows setting the size all fonts are load with.
+   *
+   * @param defaultSize the new size of the font
+   */
+  public UnicodeSlickRenderFontLoader(final float defaultSize) {
+    fontSize = defaultSize;
+  }
 
   /**
    * Load the font. The name of the font will be used as name of the Hiero settings file. The true type font file will
@@ -35,9 +55,7 @@ public final class UnicodeSlickRenderFontLoader extends AbstractJavaSlickRenderF
       throw new SlickLoadFontException("Loading TTF Font failed.");
     }
 
-    if (javaFont.getSize() == 1) {
-      javaFont = javaFont.deriveFont(DEFAULT_SIZE);
-    }
+    javaFont = javaFont.deriveFont(fontSize);
 
     try {
       final UnicodeFont uniFont = new UnicodeFont(javaFont);
