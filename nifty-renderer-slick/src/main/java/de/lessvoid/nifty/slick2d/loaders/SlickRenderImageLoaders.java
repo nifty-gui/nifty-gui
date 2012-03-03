@@ -8,9 +8,9 @@ import de.lessvoid.nifty.slick2d.render.image.loader.ImageSlickRenderImageLoader
 import de.lessvoid.nifty.slick2d.render.image.loader.SlickRenderImageLoader;
 
 /**
- * This class is used to trigger the actual image loading. It will query all
- * known image loaders in order to load the render image.
- * 
+ * This class is used to trigger the actual image loading. It will query all known image loaders in order to load the
+ * render image.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickRenderImageLoaders extends AbstractSlickLoaders<SlickRenderImageLoader> {
@@ -21,7 +21,7 @@ public final class SlickRenderImageLoaders extends AbstractSlickLoaders<SlickRen
 
   /**
    * Get the singleton instance of this class.
-   * 
+   *
    * @return the singleton instance
    */
   public static SlickRenderImageLoaders getInstance() {
@@ -32,7 +32,6 @@ public final class SlickRenderImageLoaders extends AbstractSlickLoaders<SlickRen
    * Private constructor so no instances but the singleton instance are created.
    */
   private SlickRenderImageLoaders() {
-    super();
   }
 
   /**
@@ -45,23 +44,20 @@ public final class SlickRenderImageLoaders extends AbstractSlickLoaders<SlickRen
 
   /**
    * Load the image with the defined name.
-   * 
-   * @param filename
-   *          name of the file that contains the image
-   * @param filterLinear
-   *          <code>true</code> in case a linear filter should be applied when
-   *          resizing this image
+   *
+   * @param filename name of the file that contains the image
+   * @param filterLinear {@code true} in case a linear filter should be applied when resizing this image
    * @return the image loaded
-   * @throws IllegalArgumentException
-   *           in case all loaders fail to load the image
+   * @throws IllegalArgumentException in case all loaders fail to load the image
    */
+  @SuppressWarnings("TypeMayBeWeakened")
   public SlickRenderImage loadImage(final String filename, final boolean filterLinear) {
     final Iterator<SlickRenderImageLoader> itr = getLoaderIterator();
 
     while (itr.hasNext()) {
       try {
         return itr.next().loadImage(filename, filterLinear);
-      } catch (final SlickLoadImageException e) {
+      } catch (final SlickLoadImageException ignored) {
         // this loader failed... does not matter
       }
     }

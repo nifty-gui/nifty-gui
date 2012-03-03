@@ -1,13 +1,13 @@
 package de.lessvoid.nifty.slick2d.render.cursor;
 
 import org.lwjgl.input.Cursor;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 
 /**
- * This implementation of the slick mouse cursor uses the LWJGL cursor
- * implementation to display the mouse cursor.
- * 
+ * This implementation of the slick mouse cursor uses the LWJGL cursor implementation to display the mouse cursor.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class LwjglCursorSlickMouseCursor extends AbstractNativeSlickMouseCursor {
@@ -18,12 +18,10 @@ public class LwjglCursorSlickMouseCursor extends AbstractNativeSlickMouseCursor 
 
   /**
    * Create a new slick mouse cursor that wraps a LWJGL cursor.
-   * 
-   * @param lwjglCursor
-   *          the lwjgl cursor
+   *
+   * @param lwjglCursor the lwjgl cursor
    */
   public LwjglCursorSlickMouseCursor(final Cursor lwjglCursor) {
-    super();
     cursor = lwjglCursor;
   }
 
@@ -50,7 +48,7 @@ public class LwjglCursorSlickMouseCursor extends AbstractNativeSlickMouseCursor 
   public void enableCursor(final GameContainer container) {
     try {
       container.setMouseCursor(cursor, 0, 0);
-    } catch (final SlickException e) {
+    } catch (final SlickException ignored) {
       // enabling failed
     }
   }
