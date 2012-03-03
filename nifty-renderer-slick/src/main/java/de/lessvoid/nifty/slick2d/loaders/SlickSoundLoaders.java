@@ -9,9 +9,8 @@ import de.lessvoid.nifty.slick2d.sound.sound.loader.SoundSlickSoundLoader;
 import de.lessvoid.nifty.sound.SoundSystem;
 
 /**
- * This maintains the list of known sound loaders and queries them one by one in
- * order to load a sound.
- * 
+ * This maintains the list of known sound loaders and queries them one by one in order to load a sound.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickSoundLoaders extends AbstractSlickLoaders<SlickSoundLoader> {
@@ -22,7 +21,7 @@ public final class SlickSoundLoaders extends AbstractSlickLoaders<SlickSoundLoad
 
   /**
    * Get the singleton instance of this class.
-   * 
+   *
    * @return the singleton instance
    */
   public static SlickSoundLoaders getInstance() {
@@ -33,7 +32,6 @@ public final class SlickSoundLoaders extends AbstractSlickLoaders<SlickSoundLoad
    * Private constructor so no instances but the singleton instance are created.
    */
   private SlickSoundLoaders() {
-    super();
   }
 
   /**
@@ -46,22 +44,20 @@ public final class SlickSoundLoaders extends AbstractSlickLoaders<SlickSoundLoad
 
   /**
    * Load a sound using the registered loaders.
-   * 
-   * @param soundSystem
-   *          the sound system that stores the sound data
-   * @param filename
-   *          the name of the file that holds the sound
+   *
+   * @param soundSystem the sound system that stores the sound data
+   * @param filename the name of the file that holds the sound
    * @return the loaded sound
-   * @throws IllegalArgumentException
-   *           in case loading the sound fails
+   * @throws IllegalArgumentException in case loading the sound fails
    */
+  @SuppressWarnings("TypeMayBeWeakened")
   public SlickSoundHandle loadSound(final SoundSystem soundSystem, final String filename) {
     final Iterator<SlickSoundLoader> itr = getLoaderIterator();
 
     while (itr.hasNext()) {
       try {
         return itr.next().loadSound(soundSystem, filename);
-      } catch (final SlickLoadSoundException e) {
+      } catch (final SlickLoadSoundException ignored) {
         // this loader failed... does not matter
       }
     }

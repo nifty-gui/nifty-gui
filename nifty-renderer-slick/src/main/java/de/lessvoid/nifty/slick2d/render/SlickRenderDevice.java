@@ -1,12 +1,5 @@
 package de.lessvoid.nifty.slick2d.render;
 
-import java.io.IOException;
-
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Rectangle;
-
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.slick2d.loaders.SlickMouseCursorLoaders;
 import de.lessvoid.nifty.slick2d.loaders.SlickRenderFontLoaders;
@@ -20,46 +13,46 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Rectangle;
 
 /**
- * The render device that takes care for rendering the Nifty GUI inside of
- * Slick.
- * 
+ * The render device that takes care for rendering the Nifty GUI inside of Slick.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickRenderDevice implements RenderDevice {
   /**
    * The mouse cursor that is currently active.
    */
-  private SlickMouseCursor activeMouseCursor;
+  private SlickMouseCursor activeMouseCursor = null;
 
   /**
-   * The game container that hosts the render area the Nifty GUI is supposed to
-   * be rendered inside
+   * The game container that hosts the render area the Nifty GUI is supposed to be rendered inside
    */
   private final GameContainer gameContainer;
 
   /**
    * The shape filling instance that is used to render the 4 colored rectangles.
    */
-  private SlickQuadFill quadFill;
+  private SlickQuadFill quadFill = null;
 
   /**
-   * This temporary slick color is just used to avoid the need to create Slick
-   * Color instances again and again for a short time while rendering.
+   * This temporary slick color is just used to avoid the need to create Slick Color instances again and again for a
+   * short time while rendering.
    */
   private final org.newdawn.slick.Color tempSlickColor;
 
   /**
-   * Create a new render device and set the game container used to render the
-   * GUI inside.
-   * 
-   * @param gameContainer
-   *          the game container
+   * Create a new render device and set the game container used to render the GUI inside.
+   *
+   * @param container the game container
    */
-  public SlickRenderDevice(final GameContainer gameContainer) {
-    this.gameContainer = gameContainer;
-    tempSlickColor = new org.newdawn.slick.Color(0.f, 0.f, 0.f, 0.f);
+  public SlickRenderDevice(final GameContainer container) {
+    gameContainer = container;
+    tempSlickColor = new org.newdawn.slick.Color(0.0f, 0.0f, 0.0f, 0.0f);
   }
 
   /**
@@ -96,8 +89,7 @@ public final class SlickRenderDevice implements RenderDevice {
    * Create a new mouse cursor.
    */
   @Override
-  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY)
-      throws IOException {
+  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) {
     return SlickMouseCursorLoaders.getInstance().loadCursor(filename, hotspotX, hotspotY);
   }
 
@@ -277,7 +269,7 @@ public final class SlickRenderDevice implements RenderDevice {
   @Override
   public void setBlendMode(final BlendMode renderMode) {
     final Graphics g = gameContainer.getGraphics();
-    
+
     if (renderMode == BlendMode.BLEND) {
       g.setDrawMode(Graphics.MODE_NORMAL);
     } else {

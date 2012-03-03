@@ -6,10 +6,9 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
- * This shape fill implementation is used to render the rectangles of slick that
- * that have a different color on each edge. This implementation is not supposed
- * to be used for any other purpose.
- * 
+ * This shape fill implementation is used to render the rectangles of slick that that have a different color on each
+ * edge. This implementation is not supposed to be used for any other purpose.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 final class SlickQuadFill implements ShapeFill {
@@ -40,18 +39,17 @@ final class SlickQuadFill implements ShapeFill {
 
   /**
    * Create a new rectangle filling instance.
-   * 
-   * @param tlColor
-   *          the color at the top left
-   * @param trColor
-   *          the color at the top right
-   * @param blColor
-   *          the color at the bottom left
-   * @param brColor
-   *          the color at the bottom right
+   *
+   * @param tlColor the color at the top left
+   * @param trColor the color at the top right
+   * @param blColor the color at the bottom left
+   * @param brColor the color at the bottom right
    */
-  public SlickQuadFill(final de.lessvoid.nifty.tools.Color tlColor, final de.lessvoid.nifty.tools.Color trColor,
-      final de.lessvoid.nifty.tools.Color blColor, final de.lessvoid.nifty.tools.Color brColor) {
+  SlickQuadFill(
+      final de.lessvoid.nifty.tools.Color tlColor,
+      final de.lessvoid.nifty.tools.Color trColor,
+      final de.lessvoid.nifty.tools.Color blColor,
+      final de.lessvoid.nifty.tools.Color brColor) {
 
     topLeft = SlickRenderUtils.convertColorNiftySlick(tlColor);
     topRight = SlickRenderUtils.convertColorNiftySlick(trColor);
@@ -61,15 +59,11 @@ final class SlickQuadFill implements ShapeFill {
 
   /**
    * Change all the color values.
-   * 
-   * @param tlColor
-   *          the color at the top left
-   * @param trColor
-   *          the color at the top right
-   * @param blColor
-   *          the color at the bottom left
-   * @param brColor
-   *          the color at the bottom right
+   *
+   * @param tlColor the color at the top left
+   * @param trColor the color at the top right
+   * @param blColor the color at the bottom left
+   * @param brColor the color at the bottom right
    */
   public void changeColors(
       final de.lessvoid.nifty.tools.Color tlColor,
@@ -88,21 +82,14 @@ final class SlickQuadFill implements ShapeFill {
    */
   @Override
   public Color colorAt(final Shape shape, final float x, final float y) {
-    final boolean isMaxX = (Math.abs(x - shape.getMaxX()) < 0.001f);
-    final boolean isMaxY = (Math.abs(y - shape.getMaxY()) < 0.001f);
+    final boolean isMaxX = Math.abs(x - shape.getMaxX()) < 0.0f;
+    final boolean isMaxY = Math.abs(y - shape.getMaxY()) < 0.0f;
 
+    //noinspection IfMayBeConditional
     if (isMaxX) {
-      if (isMaxY) {
-        return topRight;
-      } else {
-        return topLeft;
-      }
+      return isMaxY ? topRight : topLeft;
     } else {
-      if (isMaxY) {
-        return bottomRight;
-      } else {
-        return bottomLeft;
-      }
+      return isMaxY ? bottomRight : bottomLeft;
     }
   }
 

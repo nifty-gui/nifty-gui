@@ -1,13 +1,11 @@
 package de.lessvoid.nifty.slick2d.input.events;
 
+import de.lessvoid.nifty.NiftyInputConsumer;
 import org.newdawn.slick.InputListener;
 
-import de.lessvoid.nifty.NiftyInputConsumer;
-
 /**
- * This mouse event is used to store the event generated in case the mouse
- * cursor is moved with one button pressed.
- * 
+ * This mouse event is used to store the event generated in case the mouse cursor is moved with one button pressed.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class MouseEventDragged extends AbstractMouseEventButton {
@@ -23,17 +21,12 @@ public final class MouseEventDragged extends AbstractMouseEventButton {
 
   /**
    * Create a mouse dragged event.
-   * 
-   * @param mouseButton
-   *          the mouse button that was used
-   * @param startX
-   *          the X coordinate of the location where the movement started
-   * @param startY
-   *          the Y coordinate of the location where the movement started
-   * @param endX
-   *          the X coordinate of the location where the movement stopped
-   * @param endY
-   *          the Y coordinate of the location where the movement stopped
+   *
+   * @param mouseButton the mouse button that was used
+   * @param startX the X coordinate of the location where the movement started
+   * @param startY the Y coordinate of the location where the movement started
+   * @param endX the X coordinate of the location where the movement stopped
+   * @param endY the Y coordinate of the location where the movement stopped
    */
   public MouseEventDragged(final int mouseButton, final int startX, final int startY, final int endX, final int endY) {
     super(startX, startY, mouseButton);
