@@ -15,7 +15,7 @@ import org.newdawn.slick.*;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public abstract class NiftyOverlayGame implements Game, NiftyInputForwarding {
+public abstract class NiftyOverlayGame implements Game, NiftyInputForwarding, NiftyOrderControl {
   /**
    * The one and only Nifty GUI.
    */
@@ -25,6 +25,24 @@ public abstract class NiftyOverlayGame implements Game, NiftyInputForwarding {
    * This variable provides the control over the forwarding implementations.
    */
   private ForwardingInputSystem inputForwardingControl;
+
+  /**
+   * The render order that is used in this game.
+   */
+  private NiftyRenderOrder renderOrder;
+
+  /**
+   * The update order that is used in this game.
+   */
+  private NiftyUpdateOrder updateOrder;
+
+  /**
+   * Default constructor.
+   */
+  protected NiftyOverlayGame() {
+    setRenderOrder(NiftyRenderOrder.NiftyOverlay);
+    setUpdateOrder(NiftyUpdateOrder.NiftyLast);
+  }
 
   /**
    * Get the instance of the NiftyGUI that is used to render this screen.
@@ -162,10 +180,19 @@ public abstract class NiftyOverlayGame implements Game, NiftyInputForwarding {
    */
   @Override
   public final void render(final GameContainer container, final Graphics g) throws SlickException {
-    renderGame(container, g);
-
-    if (niftyGUI != null) {
-      niftyGUI.render(false);
+    if (niftyGUI == null) {
+      renderGame(container, g);
+    } else {
+      switch (renderOrder) {
+        case NiftyOverlay:
+          renderGame(container, g);
+          niftyGUI.render(false);
+          break;
+        case NiftyBackground:
+          niftyGUI.render(true);
+          renderGame(container, g);
+          break;
+      }
     }
   }
 
@@ -184,10 +211,19 @@ public abstract class NiftyOverlayGame implements Game, NiftyInputForwarding {
    */
   @Override
   public final void update(final GameContainer container, final int delta) throws SlickException {
-    updateGame(container, delta);
-
-    if (niftyGUI != null) {
-      niftyGUI.update();
+    if (niftyGUI == null) {
+      updateGame(container, delta);
+    } else {
+      switch (updateOrder) {
+        case NiftyLast:
+          updateGame(container, delta);
+          niftyGUI.update();
+          break;
+        case NiftyFirst:
+          niftyGUI.update();
+          updateGame(container, delta);
+          break;
+      }
     }
   }
 
@@ -200,4 +236,24 @@ public abstract class NiftyOverlayGame implements Game, NiftyInputForwarding {
    * @throws SlickException in case anything goes wrong during the update
    */
   protected abstract void updateGame(GameContainer container, int delta) throws SlickException;
+
+  @Override
+  public final NiftyRenderOrder getRenderOrder() {
+    return renderOrder;
+  }
+
+  @Override
+  public final NiftyUpdateOrder getUpdateOrder() {
+    return updateOrder;
+  }
+
+  @Override
+  public final void setRenderOrder(NiftyRenderOrder order) {
+    renderOrder = order;
+  }
+
+  @Override
+  public final void setUpdateOrder(NiftyUpdateOrder order) {
+    updateOrder = order;
+  }
 }

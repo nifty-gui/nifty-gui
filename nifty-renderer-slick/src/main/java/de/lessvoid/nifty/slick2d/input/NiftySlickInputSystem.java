@@ -8,7 +8,7 @@ import de.lessvoid.nifty.slick2d.input.events.InputEvent;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class NiftySlickInputSystem extends AbstractSlickInputSystem implements ForwardingInputSystem{
+public final class NiftySlickInputSystem extends AbstractSlickInputSystem implements ForwardingInputSystem {
   /**
    * The consumer that is supposed to receive any input events that are not used by the Nifty GUI.
    */

@@ -12,7 +12,8 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public abstract class NiftyOverlayBasicGameState extends BasicGameState implements NiftyInputForwarding {
+public abstract class NiftyOverlayBasicGameState extends BasicGameState implements NiftyInputForwarding,
+    NiftyOrderControl {
   /**
    * The used input system.
    */
@@ -27,6 +28,24 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
    * This variable provides the control over the forwarding implementations.
    */
   private ForwardingInputSystem inputForwardingControl;
+
+  /**
+   * The render order that is used in this game.
+   */
+  private NiftyRenderOrder renderOrder;
+
+  /**
+   * The update order that is used in this game.
+   */
+  private NiftyUpdateOrder updateOrder;
+
+  /**
+   * Default constructor.
+   */
+  protected NiftyOverlayBasicGameState() {
+    setRenderOrder(NiftyRenderOrder.NiftyOverlay);
+    setUpdateOrder(NiftyUpdateOrder.NiftyLast);
+  }
 
   /**
    * Enter the game state.
@@ -179,7 +198,7 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
 
   @Override
   public final boolean isInputForwardingSupported() {
-    return (inputForwardingControl != null);
+    return inputForwardingControl != null;
   }
 
   /**
@@ -218,10 +237,19 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
   @Override
   public final void render(
       final GameContainer container, final StateBasedGame game, final Graphics g) throws SlickException {
-    renderGame(container, game, g);
-
-    if (niftyGUI != null) {
-      niftyGUI.render(false);
+    if (niftyGUI == null) {
+      renderGame(container, game, g);
+    } else {
+      switch (renderOrder) {
+        case NiftyOverlay:
+          renderGame(container, game, g);
+          niftyGUI.render(false);
+          break;
+        case NiftyBackground:
+          niftyGUI.render(true);
+          renderGame(container, game, g);
+          break;
+      }
     }
   }
 
@@ -242,10 +270,19 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
   @Override
   public final void update(
       final GameContainer container, final StateBasedGame game, final int delta) throws SlickException {
-    updateGame(container, game, delta);
-
-    if (niftyGUI != null) {
-      niftyGUI.update();
+    if (niftyGUI == null) {
+      updateGame(container, game, delta);
+    } else {
+      switch (updateOrder) {
+        case NiftyLast:
+          updateGame(container, game, delta);
+          niftyGUI.update();
+          break;
+        case NiftyFirst:
+          niftyGUI.update();
+          updateGame(container, game, delta);
+          break;
+      }
     }
   }
 
@@ -259,4 +296,24 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
    * @throws SlickException in case anything goes wrong during the update
    */
   protected abstract void updateGame(GameContainer container, StateBasedGame game, int delta) throws SlickException;
+
+  @Override
+  public final NiftyRenderOrder getRenderOrder() {
+    return renderOrder;
+  }
+
+  @Override
+  public final NiftyUpdateOrder getUpdateOrder() {
+    return updateOrder;
+  }
+
+  @Override
+  public final void setRenderOrder(NiftyRenderOrder order) {
+    renderOrder = order;
+  }
+
+  @Override
+  public final void setUpdateOrder(NiftyUpdateOrder order) {
+    updateOrder = order;
+  }
 }

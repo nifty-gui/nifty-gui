@@ -10,27 +10,28 @@ public interface ForwardingInputSystem {
   /**
    * Request exclusive mouse access. This causes that mouse events are not send to the Nifty-GUI but to the underlying
    * game directly.
-   * <p />
-   * <b>Important:</b> Be sure to disable this mode again as it renders the Nifty-GUI non-functional. While enabled
-   * its impossible to interact with the GUI elements by mouse.
+   * <p/>
+   * <b>Important:</b> Be sure to disable this mode again as it renders the Nifty-GUI non-functional. While enabled its
+   * impossible to interact with the GUI elements by mouse.
    */
   void requestExclusiveMouse();
 
   /**
    * Request exclusive keyboard access. This causes that keyboard events are not send to the Nifty-GUI but to the
    * underlying game directly.
-   * <p />
-   * <b>Important:</b> Be sure to disable this mode again as it renders the Nifty-GUI non-functional. While enabled
-   * its impossible to interact with the GUI elements by keyboard.
+   * <p/>
+   * <b>Important:</b> Be sure to disable this mode again as it renders the Nifty-GUI non-functional. While enabled its
+   * impossible to interact with the GUI elements by keyboard.
    */
   void requestExclusiveKeyboard();
 
   /**
    * Request exclusive input access. This causes that mouse and keyboard events are not send to the Nifty-GUI but to
-   * the underlying game directly.
-   * <p />
-   * <b>Important:</b> Be sure to disable this mode again as it renders the Nifty-GUI non-functional. While enabled
-   * its impossible to interact with the GUI elements at all.
+   * the
+   * underlying game directly.
+   * <p/>
+   * <b>Important:</b> Be sure to disable this mode again as it renders the Nifty-GUI non-functional. While enabled its
+   * impossible to interact with the GUI elements at all.
    */
   void requestExclusiveInput();
 

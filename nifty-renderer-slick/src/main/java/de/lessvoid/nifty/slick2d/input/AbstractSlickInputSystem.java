@@ -181,7 +181,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
     if ((forwardMode == ForwardingMode.all) || (mode == ForwardingMode.none) || (mode == forwardMode)) {
       return;
     }
-    
+
     if (mode == ForwardingMode.all) {
       forwardMode = ForwardingMode.all;
     }

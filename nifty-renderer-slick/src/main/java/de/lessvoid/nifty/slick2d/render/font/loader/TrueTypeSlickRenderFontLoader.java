@@ -17,7 +17,8 @@ import org.newdawn.slick.Graphics;
 public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRenderFontLoader {
   /**
    * The default size of a font. This value is needed as TrueType fonts in general do not have a default size,
-   * but Nifty expects a font to be rendered at default size.
+   * but Nifty
+   * expects a font to be rendered at default size.
    */
   private static final float DEFAULT_SIZE = 12.0f;
 
@@ -41,6 +42,7 @@ public final class TrueTypeSlickRenderFontLoader extends AbstractJavaSlickRender
   public TrueTypeSlickRenderFontLoader(final float defaultSize) {
     fontSize = defaultSize;
   }
+
   /**
    * Load the requested font.
    */

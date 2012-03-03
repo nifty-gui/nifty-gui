@@ -12,7 +12,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public abstract class NiftyOverlayGameState implements GameState, NiftyInputForwarding {
+public abstract class NiftyOverlayGameState implements GameState, NiftyInputForwarding, NiftyOrderControl {
   /**
    * The input system that is used by this game state.
    */
@@ -27,6 +27,49 @@ public abstract class NiftyOverlayGameState implements GameState, NiftyInputForw
    * This variable provides the control over the forwarding implementations.
    */
   private ForwardingInputSystem inputForwardingControl;
+
+  /**
+   * The render order that is used in this game.
+   */
+  private NiftyRenderOrder renderOrder;
+
+  /**
+   * The update order that is used in this game.
+   */
+  private NiftyUpdateOrder updateOrder;
+
+  /**
+   * Default constructor.
+   */
+  protected NiftyOverlayGameState() {
+    setRenderOrder(NiftyRenderOrder.NiftyOverlay);
+    setUpdateOrder(NiftyUpdateOrder.NiftyLast);
+  }
+
+  @Override
+  public final ForwardingInputSystem getInputForwardingControl() {
+    return inputForwardingControl;
+  }
+
+  @Override
+  public final NiftyRenderOrder getRenderOrder() {
+    return renderOrder;
+  }
+
+  @Override
+  public final void setRenderOrder(NiftyRenderOrder order) {
+    renderOrder = order;
+  }
+
+  @Override
+  public final NiftyUpdateOrder getUpdateOrder() {
+    return updateOrder;
+  }
+
+  @Override
+  public final void setUpdateOrder(NiftyUpdateOrder order) {
+    updateOrder = order;
+  }
 
   /**
    * Enter the game state.
@@ -59,11 +102,6 @@ public abstract class NiftyOverlayGameState implements GameState, NiftyInputForw
     return niftyGUI;
   }
 
-  @Override
-  public final ForwardingInputSystem getInputForwardingControl() {
-    return inputForwardingControl;
-  }
-
   /**
    * Initialize the game and the GUI.
    */
@@ -89,6 +127,58 @@ public abstract class NiftyOverlayGameState implements GameState, NiftyInputForw
    * @throws SlickException in case initializing the game goes wrong
    */
   protected abstract void initGameAndGUI(GameContainer container, StateBasedGame game) throws SlickException;
+
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
+   * the render and sound devices that are provided with this library. As for the input it will forward all input to
+   * the
+   * Slick {@link InputListener} that is implemented in this class.
+   *
+   * @param container the container used to display the game
+   * @param game the game this state is part of
+   * @throws IllegalStateException in case this function was called before
+   * @see SlickRenderDevice
+   * @see SlickSoundDevice
+   * @see SlickSlickInputSystem
+   */
+  protected final void initNifty(final GameContainer container, final StateBasedGame game) {
+    initNifty(container, game, new SlickSlickInputSystem(this));
+  }
+
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
+   * the render and sound devices that are provided with this library.
+   *
+   * @param container the container used to display the game
+   * @param game the game this state is part of
+   * @param inputSystem the input system that is supposed to be used
+   * @throws IllegalStateException in case this function was called before
+   * @see SlickRenderDevice
+   * @see SlickSoundDevice
+   */
+  protected final void initNifty(
+      final GameContainer container, final StateBasedGame game, final SlickInputSystem inputSystem) {
+    initNifty(container, game, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
+  }
+
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}.
+   *
+   * @param container the container used to display the game
+   * @param game the game this state is part of
+   * @param renderDevice the render device that is supposed to be used to render the GUI
+   * @param soundDevice the sound device that is supposed to be used
+   * @param inputSystem the input system that is supposed to be used
+   * @throws IllegalStateException in case this function was called before
+   */
+  protected final void initNifty(
+      final GameContainer container,
+      final StateBasedGame game,
+      final SlickRenderDevice renderDevice,
+      final SlickSoundDevice soundDevice,
+      final SlickInputSystem inputSystem) {
+    initNifty(container, game, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
+  }
 
   /**
    * Initialize the Nifty GUI for this game.
@@ -126,56 +216,13 @@ public abstract class NiftyOverlayGameState implements GameState, NiftyInputForw
   }
 
   /**
-   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}.
+   * This function should be used to prepare the actual GUI and the controllers of the Nifty GUI. It is called right
+   * after the Nifty GUI got initialized.
    *
-   * @param container the container used to display the game
+   * @param nifty the Nifty GUI that got initialized
    * @param game the game this state is part of
-   * @param renderDevice the render device that is supposed to be used to render the GUI
-   * @param soundDevice the sound device that is supposed to be used
-   * @param inputSystem the input system that is supposed to be used
-   * @throws IllegalStateException in case this function was called before
    */
-  protected final void initNifty(
-      final GameContainer container,
-      final StateBasedGame game,
-      final SlickRenderDevice renderDevice,
-      final SlickSoundDevice soundDevice,
-      final SlickInputSystem inputSystem) {
-    initNifty(container, game, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
-  }
-
-  /**
-   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
-   * the render and sound devices that are provided with this library.
-   *
-   * @param container the container used to display the game
-   * @param game the game this state is part of
-   * @param inputSystem the input system that is supposed to be used
-   * @throws IllegalStateException in case this function was called before
-   * @see SlickRenderDevice
-   * @see SlickSoundDevice
-   */
-  protected final void initNifty(
-      final GameContainer container, final StateBasedGame game, final SlickInputSystem inputSystem) {
-    initNifty(container, game, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
-  }
-
-  /**
-   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
-   * the render and sound devices that are provided with this library. As for the input it will forward all input to
-   * the
-   * Slick {@link InputListener} that is implemented in this class.
-   *
-   * @param container the container used to display the game
-   * @param game the game this state is part of
-   * @throws IllegalStateException in case this function was called before
-   * @see SlickRenderDevice
-   * @see SlickSoundDevice
-   * @see SlickSlickInputSystem
-   */
-  protected final void initNifty(final GameContainer container, final StateBasedGame game) {
-    initNifty(container, game, new SlickSlickInputSystem(this));
-  }
+  protected abstract void prepareNifty(Nifty nifty, StateBasedGame game);
 
   @Override
   public final boolean isInputForwardingSupported() {
@@ -204,24 +251,24 @@ public abstract class NiftyOverlayGameState implements GameState, NiftyInputForw
   protected abstract void leaveState(GameContainer container, StateBasedGame game) throws SlickException;
 
   /**
-   * This function should be used to prepare the actual GUI and the controllers of the Nifty GUI. It is called right
-   * after the Nifty GUI got initialized.
-   *
-   * @param nifty the Nifty GUI that got initialized
-   * @param game the game this state is part of
-   */
-  protected abstract void prepareNifty(Nifty nifty, StateBasedGame game);
-
-  /**
    * Render the game.
    */
   @Override
   public final void render(
       final GameContainer container, final StateBasedGame game, final Graphics g) throws SlickException {
-    renderGame(container, game, g);
-
-    if (niftyGUI != null) {
-      niftyGUI.render(false);
+    if (niftyGUI == null) {
+      renderGame(container, game, g);
+    } else {
+      switch (renderOrder) {
+        case NiftyOverlay:
+          renderGame(container, game, g);
+          niftyGUI.render(false);
+          break;
+        case NiftyBackground:
+          niftyGUI.render(true);
+          renderGame(container, game, g);
+          break;
+      }
     }
   }
 
@@ -242,10 +289,19 @@ public abstract class NiftyOverlayGameState implements GameState, NiftyInputForw
   @Override
   public final void update(
       final GameContainer container, final StateBasedGame game, final int delta) throws SlickException {
-    updateGame(container, game, delta);
-
-    if (niftyGUI != null) {
-      niftyGUI.update();
+    if (niftyGUI == null) {
+      updateGame(container, game, delta);
+    } else {
+      switch (updateOrder) {
+        case NiftyLast:
+          updateGame(container, game, delta);
+          niftyGUI.update();
+          break;
+        case NiftyFirst:
+          niftyGUI.update();
+          updateGame(container, game, delta);
+          break;
+      }
     }
   }
 
