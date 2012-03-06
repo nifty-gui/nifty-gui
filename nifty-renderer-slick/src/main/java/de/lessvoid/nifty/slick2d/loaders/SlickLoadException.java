@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.slick2d.loaders;
 
 /**
- * This exception is expected to be thrown be the constructor of this class in
- * case loading the specified resource failed.
- * 
+ * This exception is expected to be thrown be the constructor of this class in case loading the specified resource
+ * failed.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class SlickLoadException extends Exception {
@@ -16,27 +16,33 @@ public class SlickLoadException extends Exception {
    * Create the exception without an attached message or parent Throwable.
    */
   public SlickLoadException() {
-    super();
-  };
+  }
 
   /**
    * Create the exception with an attached message and without parent Throwable.
+   *
+   * @param msg The message that is attached to this exception
    */
   public SlickLoadException(final String msg) {
     super(msg);
-  };
+  }
 
   /**
    * Create the exception with an attached message and parent Throwable.
+   *
+   * @param msg The message that is attached to this exception
+   * @param e The throwable that caused this exception
    */
   public SlickLoadException(final String msg, final Throwable e) {
     super(msg, e);
-  };
+  }
 
   /**
    * Create the exception without an attached message and with parent Throwable.
+   *
+   * @param e The throwable that caused this exception
    */
   public SlickLoadException(final Throwable e) {
     super(e);
-  };
+  }
 }

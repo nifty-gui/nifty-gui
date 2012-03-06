@@ -9,17 +9,15 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * Slick Implementation of the SoundLoader.
- * 
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickSoundDevice implements SoundDevice {
   /**
    * Load a music piece.
-   * 
-   * @param soundSystem
-   *          soundSystem
-   * @param filename
-   *          file to load
+   *
+   * @param soundSystem soundSystem
+   * @param filename file to load
    * @return the music piece
    */
   @Override
@@ -29,11 +27,9 @@ public final class SlickSoundDevice implements SoundDevice {
 
   /**
    * Load a sound.
-   * 
-   * @param soundSystem
-   *          soundSystem
-   * @param filename
-   *          filename of sound
+   *
+   * @param soundSystem soundSystem
+   * @param filename filename of sound
    * @return handle to sound
    */
   @Override
