@@ -1076,6 +1076,12 @@ public class Nifty {
     return null;
   }
 
+  public void unregisterScreenController(final ScreenController ... controllers) {
+    for (ScreenController c : controllers) {
+      registeredScreenControllers.remove(c);
+    }
+  }
+
   public NiftyLoader getLoader() {
     return loader;
   }
