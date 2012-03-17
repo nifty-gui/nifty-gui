@@ -40,7 +40,7 @@ public class TextBreak {
       currentLine.setLength(0);
       length = 0;
       while (isBelowLimit(length) && isValidIndex(i)) {
-        currentWord = getWord(i);
+        currentWord = getWord(i, length == 0);
         String colorValue = extractColorValue(currentWord);
         if (colorValue != null) {
           lastColorValue = colorValue;
@@ -94,10 +94,10 @@ public class TextBreak {
     return currentLineLength < width;
   }
 
-  private String getWord(final int i) {
+  private String getWord(final int i, final boolean newLine) {
     String currentWord = words[i];
-    if (i < words.length-1) {
-      currentWord += " ";
+    if (i > 0 && !newLine) {
+      currentWord = " " + currentWord;
     }
     return currentWord;
   }

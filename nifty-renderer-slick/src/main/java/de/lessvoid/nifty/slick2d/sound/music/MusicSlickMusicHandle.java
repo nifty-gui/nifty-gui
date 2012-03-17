@@ -1,13 +1,11 @@
 package de.lessvoid.nifty.slick2d.sound.music;
 
+import de.lessvoid.nifty.sound.SoundSystem;
 import org.newdawn.slick.Music;
 
-import de.lessvoid.nifty.sound.SoundSystem;
-
 /**
- * This Slick music handle uses the slick music class to implement and playback
- * music.
- * 
+ * This Slick music handle uses the slick music class to implement and playback music.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class MusicSlickMusicHandle implements SlickMusicHandle {
@@ -23,14 +21,12 @@ public class MusicSlickMusicHandle implements SlickMusicHandle {
 
   /**
    * Create a new music handle that wraps a Slick music object.
-   * 
-   * @param soundSystem
-   *          the sound system that manages this music
-   * @param music
-   *          the music object that is used for playback
+   *
+   * @param soundSystem the sound system that manages this music
+   * @param backgroundMusic the music object that is used for playback
    */
-  public MusicSlickMusicHandle(final SoundSystem soundSystem, final Music music) {
-    this.music = music;
+  public MusicSlickMusicHandle(final SoundSystem soundSystem, final Music backgroundMusic) {
+    music = backgroundMusic;
     soundSys = soundSystem;
   }
 
@@ -63,7 +59,7 @@ public class MusicSlickMusicHandle implements SlickMusicHandle {
    */
   @Override
   public void play() {
-    music.play(1.f, soundSys.getMusicVolume());
+    music.play(1.0f, soundSys.getMusicVolume());
   }
 
   /**

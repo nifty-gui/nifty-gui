@@ -407,6 +407,17 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
   public void setParent(final Element element) {
     parent = element;
+
+    // this element has a new parent. check the parentClipArea and update this element accordingly.
+    if (parentHasClipArea()) {
+      setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
+    } else {
+      parentClipArea = false;
+    }
+  }
+
+  private boolean parentHasClipArea() {
+    return parent.parentClipArea;
   }
 
   /**

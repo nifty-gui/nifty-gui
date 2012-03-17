@@ -1,27 +1,24 @@
 package de.lessvoid.nifty.slick2d.render.font.loader;
 
-import java.awt.Font;
+import java.awt.*;
 
+import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
+import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
+import de.lessvoid.nifty.slick2d.render.font.UnicodeSlickRenderFont;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.HieroSettings;
 
-import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
-import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
-import de.lessvoid.nifty.slick2d.render.font.UnicodeSlickRenderFont;
-
 /**
- * Load the font as Unicode font using Hiero settings to specify how the font is
- * supposed to look like.
- * 
+ * Load the font as Unicode font using Hiero settings to specify how the font is supposed to look like.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRenderFontLoader {
   /**
-   * Load the font. The name of the font will be used as name of the Hiero
-   * settings file. The true type font file will be load by trying to add ".ttf"
-   * to the filename and by replacing the file ending with "ttf".
+   * Load the font. The name of the font will be used as name of the Hiero settings file. The true type font file will
+   * be load by trying to add ".ttf" to the filename and by replacing the file ending with "ttf".
    */
   @Override
   public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
@@ -32,7 +29,7 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
       if (javaFont == null) {
         throw new SlickLoadFontException("Loading TTF Font failed.");
       }
-      
+
       final UnicodeFont uniFont = new UnicodeFont(javaFont, hieroSettings);
       uniFont.addAsciiGlyphs();
 
@@ -46,20 +43,16 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
 
   /**
    * Try to located the font using the filename and common naming conversations.
-   * 
-   * @param filename
-   *          the filename of the font
-   * @return the loaded font or <code>null</code>
+   *
+   * @param filename the filename of the font
+   * @return the loaded font or {@code null}
    */
-  private Font loadFont(final String filename) {
-    Font javaFont;
+  private static Font loadFont(final String filename) {
 
-    javaFont = loadJavaFont(filename.concat(".ttf"));
-    if (javaFont != null) {
-      return javaFont;
+    Font javaFont = loadJavaFont(filename + ".ttf");
+    if (javaFont == null) {
+      javaFont = loadJavaFont(filename.substring(0, filename.lastIndexOf('.')) + "ttf");
     }
-
-    javaFont = loadJavaFont(filename.substring(0, filename.lastIndexOf('.')).concat("ttf"));
 
     return javaFont;
   }

@@ -1,25 +1,20 @@
 package de.lessvoid.nifty.slick2d.input.events;
 
+import de.lessvoid.nifty.NiftyInputConsumer;
 import org.newdawn.slick.InputListener;
 
-import de.lessvoid.nifty.NiftyInputConsumer;
-
 /**
- * This mouse event is used to store the event generated in case a mouse button
- * is released.
- * 
+ * This mouse event is used to store the event generated in case a mouse button is released.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class MouseEventReleased extends AbstractMouseEventButton {
   /**
    * Create a new mouse button release event.
-   * 
-   * @param x
-   *          the x coordinate of the event location
-   * @param y
-   *          the y coordinate of the event location
-   * @param mouseButton
-   *          the mouse button that was used
+   *
+   * @param x the x coordinate of the event location
+   * @param y the y coordinate of the event location
+   * @param mouseButton the mouse button that was used
    */
   public MouseEventReleased(final int x, final int y, final int mouseButton) {
     super(x, y, mouseButton);

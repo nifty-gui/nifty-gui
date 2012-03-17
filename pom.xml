@@ -12,6 +12,7 @@
     <module>nifty-renderer-lwjgl</module>
     <module>nifty-renderer-slick</module>
     <module>nifty-renderer-java2d</module>
+    <module>nifty-renderer-jogl2</module>
     <module>nifty-soundsystem-openal</module>
     <module>nifty-soundsystem-pauls-sound</module>
     <module>nifty-html</module>
