@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
 
 public class NiftyDefaults {
-  public static Logger eventBusLog = Logger.getLogger("NiftyEventBusLog");
+  public static Logger eventBusLog = Logger.getLogger(NiftyDefaults.class.getPackage() + ".NiftyEventBusLog");
 
   private NiftyDefaults() {
   }

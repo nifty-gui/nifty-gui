@@ -72,7 +72,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 public class Nifty {
   private Logger log = Logger.getLogger(Nifty.class.getName());
-  private Logger inputEventLog = Logger.getLogger("NiftyInputEventHandlingLog");
+  private Logger inputEventLog = Logger.getLogger(Nifty.class.getPackage() + ".NiftyInputEventHandlingLog");
   private NiftyRenderEngine renderEngine;
   private SoundSystem soundSystem;
   private Map < String, Screen > screens = new Hashtable < String, Screen >();
@@ -1074,6 +1074,12 @@ public class Nifty {
       }
     }
     return null;
+  }
+
+  public void unregisterScreenController(final ScreenController ... controllers) {
+    for (ScreenController c : controllers) {
+      registeredScreenControllers.remove(c);
+    }
   }
 
   public NiftyLoader getLoader() {
