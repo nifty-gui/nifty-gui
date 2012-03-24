@@ -112,7 +112,7 @@ public class JoglRenderDevice implements RenderDevice {
         }
         return viewportHeight;
     }
-
+    
     private void getViewport() {
         final GL gl = GLContext.getCurrentGL();
         gl.glGetIntegerv(GL.GL_VIEWPORT, viewportBuffer);
@@ -120,7 +120,13 @@ public class JoglRenderDevice implements RenderDevice {
         viewportHeight = viewportBuffer.get(3);
         log.info("Viewport: " + viewportWidth + ", " + viewportHeight);
     }
-
+    /**
+     * Clears cached Veiwport dimensions.
+     * Call this method if your window has been resized.
+     */
+    public void invalidateViewport(){
+        viewportHeight = viewportWidth = 0;
+    }
     public void beginFrame() {
         log.fine("beginFrame()");
 
