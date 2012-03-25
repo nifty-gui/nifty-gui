@@ -98,6 +98,7 @@
       <xs:enumeration value="absolute"></xs:enumeration>
       <xs:enumeration value="horizontal"></xs:enumeration>
       <xs:enumeration value="overlay"></xs:enumeration>
+      <xs:enumeration value="absolute-inside"></xs:enumeration>
     </xs:restriction>
   </xs:simpleType>
 
@@ -353,7 +354,7 @@
   </xs:complexType>
 
   <xs:complexType name="niftyType">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
       <xs:element name="useStyles" type="useStylesType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="useControls" type="useControlsType" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="registerSound" type="registerSoundType" maxOccurs="unbounded" minOccurs="0" />
@@ -365,7 +366,6 @@
       <xs:element name="controlDefinition" type="controlDefinition" maxOccurs="unbounded" minOccurs="0" />
       <xs:element name="screen" type="screenType" maxOccurs="unbounded" minOccurs="1" />
       <xs:element name="popup" type="popupType" maxOccurs="unbounded" minOccurs="0" />
-    </xs:sequence>
+    </xs:choice>
   </xs:complexType>
-
 </xs:schema>
