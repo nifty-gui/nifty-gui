@@ -26,13 +26,9 @@ import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class JoglRenderDevice implements RenderDevice {
-    private static Logger log = Logger.getLogger(JoglRenderDevice.class.getName());
+    private static final Logger log = Logger.getLogger(JoglRenderDevice.class.getName());
 
     private static IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4);
-
-    private int viewportWidth;
-
-    private int viewportHeight;
 
     private long time;
 
@@ -94,11 +90,9 @@ public class JoglRenderDevice implements RenderDevice {
      * 
      * @return width of display mode
      */
+    @Override
     public int getWidth() {
-        if (viewportWidth == 0) {
-            getViewport();
-        }
-        return viewportWidth;
+        return getViewport().x;
     }
 
     /**
@@ -106,21 +100,20 @@ public class JoglRenderDevice implements RenderDevice {
      * 
      * @return height of display mode
      */
-    public int getHeight() {
-        if (viewportHeight == 0) {
-            getViewport();
-        }
-        return viewportHeight;
+    @Override
+    public int getHeight() {       
+        return getViewport().y;
     }
 
-    private void getViewport() {
+    private Point getViewport() {
         final GL gl = GLContext.getCurrentGL();
         gl.glGetIntegerv(GL.GL_VIEWPORT, viewportBuffer);
-        viewportWidth = viewportBuffer.get(2);
-        viewportHeight = viewportBuffer.get(3);
-        log.info("Viewport: " + viewportWidth + ", " + viewportHeight);
+        Point dimensions = new Point(viewportBuffer.get(2),viewportBuffer.get(3));
+        log.info("Viewport: " + dimensions.x + ", " + dimensions.y);
+        return dimensions;
     }
 
+    @Override
     public void beginFrame() {
         log.fine("beginFrame()");
 
@@ -141,6 +134,7 @@ public class JoglRenderDevice implements RenderDevice {
         currentClippingY1 = 0;
     }
 
+    @Override
     public void endFrame() {
         log.fine("endFrame");
         frames++;
@@ -159,6 +153,7 @@ public class JoglRenderDevice implements RenderDevice {
         }
     }
 
+    @Override
     public void clear() {
         log.fine("clear()");
         final GL gl = GLContext.getCurrentGL();
@@ -173,6 +168,7 @@ public class JoglRenderDevice implements RenderDevice {
      * @param filterLinear linear filter the image
      * @return RenderImage
      */
+    @Override
     public RenderImage createImage(final String filename, final boolean filterLinear) {
         return new JoglRenderImage(filename, filterLinear, niftyResourceLoader);
     }
@@ -183,6 +179,7 @@ public class JoglRenderDevice implements RenderDevice {
      * @param filename filename
      * @return RenderFont
      */
+    @Override
     public RenderFont createFont(final String filename) {
         return new JoglRenderFont(filename, this, niftyResourceLoader);
     }
@@ -196,6 +193,7 @@ public class JoglRenderDevice implements RenderDevice {
      * @param height height
      * @param color color
      */
+    @Override
     public void renderQuad(final int x, final int y, final int width, final int height,
             final Color color) {
         log.fine("renderQuad()");
@@ -214,6 +212,7 @@ public class JoglRenderDevice implements RenderDevice {
         gl.glEnd();
     }
 
+    @Override
     public void renderQuad(final int x, final int y, final int width, final int height,
             final Color topLeft, final Color topRight, final Color bottomRight,
             final Color bottomLeft) {
@@ -248,6 +247,7 @@ public class JoglRenderDevice implements RenderDevice {
      * @param color color
      * @param scale scale
      */
+    @Override
     public void renderImage(final RenderImage image, final int x, final int y, final int width,
             final int height, final Color color, final float scale) {
         log.fine("renderImage()");
@@ -299,6 +299,7 @@ public class JoglRenderDevice implements RenderDevice {
      * @param srcH h
      * @param color color
      */
+    @Override
     public void renderImage(final RenderImage image, final int x, final int y, final int w,
             final int h, final int srcX, final int srcY, final int srcW, final int srcH,
             final Color color, final float scale, final int centerX, final int centerY) {
@@ -348,6 +349,7 @@ public class JoglRenderDevice implements RenderDevice {
      * @param color color
      * @param fontSize size
      */
+    @Override
     public void renderFont(final RenderFont font, final String text, final int x, final int y, final Color color, final float fontSizeX, final float fontSizeY) {
         log.fine("renderFont()");
         final GL gl = GLContext.getCurrentGL();
@@ -373,6 +375,7 @@ public class JoglRenderDevice implements RenderDevice {
      * @param x1 x1
      * @param y1 y1
      */
+    @Override
     public void enableClip(final int x0, final int y0, final int x1, final int y1) {
         log.fine("enableClip()");
 
@@ -393,6 +396,7 @@ public class JoglRenderDevice implements RenderDevice {
     /**
      * Disable Clip.
      */
+    @Override
     public void disableClip() {
         log.fine("disableClip()");
 
@@ -408,6 +412,7 @@ public class JoglRenderDevice implements RenderDevice {
         currentClippingY1 = 0;
     }
 
+    @Override
     public void setBlendMode(final BlendMode renderMode) {
         log.fine("setBlendMode()");
 
