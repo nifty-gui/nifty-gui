@@ -28,6 +28,7 @@ import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.elements.tools.ElementTreeTraverser;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.layout.LayoutPart;
@@ -50,6 +51,7 @@ import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.NullObjectFactory;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
+import java.util.*;
 
 /**
  * The Element.
@@ -122,7 +124,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * The focus handler this element is attached to.
    */
   private FocusHandler focusHandler;
-  
+
   /**
    * enable element.
    */
@@ -133,7 +135,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * to start the onEnabled/onDisabled effects when the element is already enabled/disabled.
    */
   private int enabledCount;
-  
+
   /**
    * visible element.
    */
@@ -283,7 +285,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   }
 
   /**
-   * This is used when the element is being created from an ElementType in the loading process. 
+   * This is used when the element is being created from an ElementType in the loading process.
    */
   public void initializeFromAttributes(final Attributes attributes, final NiftyRenderEngine renderEngine) {
     layoutPart.getBoxConstraints().setHeight(convert.sizeValue(attributes.get("height")));
@@ -423,7 +425,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   /**
    * get element state as string.
    * @param offset offset string
-   * @param regex 
+   * @param regex
    * @return the element state as string.
    */
   public String getElementStateString(final String offset) {
@@ -502,7 +504,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     if (interactionBlocked) {
       return "interactionBlocked";
     }
-    
+
     if (!enabled) {
       return "disabled";
     }
@@ -553,7 +555,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   public int getWidth() {
     return layoutPart.getBox().getWidth();
   }
-  
+
   /**
    * Sets the height of this element
    * @param height the new height in pixels
@@ -561,7 +563,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   public void setHeight(int height) {
     layoutPart.getBox().setHeight(height);
   }
-  
+
   /**
    * Sets the width of this element
    * @param width the new width in pixels
@@ -578,6 +580,13 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     return elements;
   }
 
+  /**
+   * get all children and all childrens' children.
+   * @return an iterator that will traverse the entire Element tree.
+   */
+  public Iterator<Element> getDescendants(){
+    return new ElementTreeTraverser(this);
+  }
   /**
    * add a child element.
    * @param widget the child to add
@@ -842,7 +851,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       w.resetSingleEffect(effectEventId);
     }
   }
-  
+
   public void resetSingleEffect(final EffectEventId effectEventId, final String customKey) {
     effectManager.resetSingleEffect(effectEventId, customKey);
     for (int i=0; i<elements.size(); i++) {
@@ -901,7 +910,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
   public SizeValue getConstraintY() {
     return layoutPart.getBoxConstraints().getY();
-  } 
+  }
 
   /**
    * get current width constraint.
@@ -1936,10 +1945,10 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   public boolean isFocusable() {
     return focusable && enabled && visible && hasVisibleParent();
   }
-  
+
   private boolean hasVisibleParent() {
     if (parent != null) {
-      return parent.visible && parent.hasVisibleParent(); 
+      return parent.visible && parent.hasVisibleParent();
     }
     return true;
   }
@@ -2018,7 +2027,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       element.reactivate();
     }
   }
-  
+
   private void notifyListeners() {
     nifty.publishEvent(id, this);
   }
