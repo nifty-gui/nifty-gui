@@ -24,6 +24,9 @@ public final class AngelCodeSlickRenderFontLoader implements SlickRenderFontLoad
       return new AngelCodeSlickRenderFont(new AngelCodeFont(definition, filename));
     } catch (final SlickLoadFontException e) {
       throw new SlickLoadFontException("Loading font failed.", e);
+    } catch (final NullPointerException e) {
+      // Seems Slick throws around NullPointerExceptions when something goes wrong. How nasty!
+      throw new SlickLoadFontException("Loading font failed.", e);
     } catch (final SlickException e) {
       throw new SlickLoadFontException("Loading font failed.", e);
     }
