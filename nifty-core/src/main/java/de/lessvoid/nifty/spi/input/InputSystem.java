@@ -10,7 +10,7 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 public interface InputSystem {
 
   /**
-   * Gives this RenderDevice access to the NiftyResourceLoader.
+   * Gives this InputSystem access to the NiftyResourceLoader.
    * @param niftyResourceLoader NiftyResourceLoader
    */
   void setResourceLoader(NiftyResourceLoader niftyResourceLoader);
