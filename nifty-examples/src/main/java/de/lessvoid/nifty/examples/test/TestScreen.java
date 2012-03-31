@@ -2,10 +2,11 @@ package de.lessvoid.nifty.examples.test;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class TestScreen implements ScreenController {
+public class TestScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
 
@@ -32,5 +33,25 @@ public class TestScreen implements ScreenController {
     } else if ("no".equals(exit)) {
       nifty.closePopup(screen.getTopMostPopup().getId(), null);
     }
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "test/test-popup.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty General Test";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
   }
 }

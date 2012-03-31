@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.slick2d.loaders;
 
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.slick2d.sound.sound.SlickLoadSoundException;
 import de.lessvoid.nifty.slick2d.sound.sound.SlickSoundHandle;
@@ -14,6 +15,11 @@ import de.lessvoid.nifty.sound.SoundSystem;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickSoundLoaders extends AbstractSlickLoaders<SlickSoundLoader> {
+  /**
+   * The logger used to print log messages.
+   */
+  private static Logger log = Logger.getLogger(SlickSoundLoaders.class.getName());
+
   /**
    * The singleton instance of this class.
    */
@@ -62,6 +68,7 @@ public final class SlickSoundLoaders extends AbstractSlickLoaders<SlickSoundLoad
       }
     }
 
-    throw new IllegalArgumentException("Failed to load sound \"" + filename + "\".");
+    log.warning("Failed to load sound \"" + filename + "\".");
+    return null;
   }
 }

@@ -7,6 +7,7 @@ import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -17,7 +18,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * ConsoleDemoStartScreen.
  * @author void
  */
-public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputHandler {
+public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputHandler, NiftyExample {
   private Nifty nifty;
   private Screen screen;
   private boolean consoleVisible = false;
@@ -120,5 +121,25 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
 
   private void removeConsoleElementFromFocusHandler() {
     screen.getFocusHandler().remove(consoleElementFocus);
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "console/console-samescreen.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Console Same Screen Demonstation";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
   }
 }

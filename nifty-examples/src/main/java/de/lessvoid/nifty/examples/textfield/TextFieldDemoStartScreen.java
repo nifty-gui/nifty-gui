@@ -8,6 +8,7 @@ import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldCreator;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -15,7 +16,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * TextFieldDemoStartScreen.
  * @author void
  */
-public class TextFieldDemoStartScreen implements ScreenController {
+public class TextFieldDemoStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
 
@@ -65,5 +66,25 @@ public class TextFieldDemoStartScreen implements ScreenController {
   public void back() {
     System.out.println(screen.findElementByName("password").getControl(TextFieldControl.class).getText());
     nifty.fromXml("all/intro.xml", "menu");
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "textfield/textfield.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Textfield Demonstation";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
   }
 }

@@ -1,7 +1,10 @@
 package de.lessvoid.nifty.examples.mouse;
 
+import java.io.IOException;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.NiftyMouse;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.NiftyMouseEvent;
@@ -16,6 +19,7 @@ import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryClickedEvent;
 import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryClickedMovedEvent;
 import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryReleaseEvent;
 import de.lessvoid.nifty.elements.events.NiftyMouseWheelEvent;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -24,7 +28,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * ScreenController for Hello World Example.
  * @author void
  */
-public class MouseStartScreen implements ScreenController {
+public class MouseStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
   private Label mousePrimaryText;
@@ -202,5 +206,39 @@ public class MouseStartScreen implements ScreenController {
         id + " -> " + event.getMouseX() + ", " + event.getMouseY() + ", " + event.getMouseWheel() + "\n" +
         event.isButton0Down() + ", " + event.isButton1Down() + ", " + event.isButton2Down() + "\n" +
         event.isButton0Release() + ", " + event.isButton1Release() + ", " + event.isButton2Release());
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "mouse/mouse.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Mouse Control Example";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // get the NiftyMouse interface that gives us access to all mouse cursor related stuff
+    NiftyMouse niftyMouse = nifty.getNiftyMouse();
+
+    try {
+      // register/load a mouse cursor (this would be done somewhere at the beginning)
+      niftyMouse.registerMouseCursor("mouseId", "nifty-cursor.png", 0, 0);
+      
+      // change the cursor to the one we've loaded before
+      niftyMouse.enableMouseCursor("mouseId");
+    } catch (IOException e) {
+      System.err.println("Failed to load mouse cursor!");
+    }
+
+    // we could set the position like so
+    niftyMouse.setMousePosition(20, 20);
   }
 }
