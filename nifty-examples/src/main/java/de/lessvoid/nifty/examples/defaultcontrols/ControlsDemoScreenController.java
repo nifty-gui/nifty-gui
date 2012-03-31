@@ -1,17 +1,7 @@
 package de.lessvoid.nifty.examples.defaultcontrols;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
-
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
@@ -29,13 +19,14 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.impl.Move;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
+import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 
-public class ControlsDemoScreenController implements ScreenController, KeyInputHandler {
+public class ControlsDemoScreenController<T> implements ScreenController, KeyInputHandler {
   private static Logger logger = Logger.getLogger(ControlsDemoScreenController.class.getName());
   private static final Color HELP_COLOR = new Color("#aaaf");
 
@@ -45,6 +36,8 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   private Element creditsPopup;
   private Console console;
   private ConsoleCommands consoleCommands;
+
+  private final ResolutionControl<T> resControl;
 
   // This simply maps the IDs of the MenuButton elements to the corresponding Dialog elements we'd
   // like to show with the given MenuButton. This map will make our life a little bit easier when
@@ -58,7 +51,8 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   // This keeps the current menu button
   private String currentMenuButtonId;
 
-  public ControlsDemoScreenController(final String ... mapping) {
+  public ControlsDemoScreenController(final ResolutionControl<T> resolutionControl, final String ... mapping) {
+    resControl = resolutionControl;
     if (mapping == null || mapping.length == 0 || mapping.length % 2 != 0) {
       logger.warning("expecting pairs of values that map menuButton IDs to dialog IDs");
     } else {
@@ -219,25 +213,13 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
   }
 
   @NiftyEventSubscriber(id="resolutions")
-  public void onResolution(final String id, final DropDownSelectionChangedEvent<DisplayMode> event) {
+  public void onResolution(final String id, final DropDownSelectionChangedEvent<T> event) {
     screen.findElementByName("whiteOverlay").startEffect(EffectEventId.onCustom, new EndNotify() {
       @Override
       public void perform() {
-        DisplayMode displayMode = event.getSelection();
-        try {
-          Display.setDisplayMode(displayMode);
-
-          GL11.glMatrixMode(GL11.GL_PROJECTION);
-            GL11.glLoadIdentity();
-            GL11.glOrtho(0, displayMode.getWidth(), displayMode.getHeight(), 0, -9999, 9999);
-
-          GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
-          nifty.enableAutoScaling(1024, 768);
-          nifty.resolutionChanged();
-        } catch (LWJGLException e) {
-          e.printStackTrace();
-        }
+        resControl.setResolution(event.getSelection());
+        nifty.enableAutoScaling(1024, 768);
+        nifty.resolutionChanged();
       }
     }, "onResolutionStart");
   }
@@ -252,39 +234,10 @@ public class ControlsDemoScreenController implements ScreenController, KeyInputH
    * @param screen
    */
   private void fillResolutionDropDown(final Screen screen) {
-    try {
-      DisplayMode currentMode = Display.getDisplayMode();
-      List <DisplayMode> sorted = new ArrayList<DisplayMode>();
-
-      DisplayMode[] modes = Display.getAvailableDisplayModes();
-      for (int i=0; i<modes.length; i++) {
-        DisplayMode mode = modes[i];
-        if (mode.getBitsPerPixel() == 32 && mode.getFrequency() == currentMode.getFrequency()) {
-          sorted.add(mode);
-        }
-      }
-
-      Collections.sort(sorted, new Comparator<DisplayMode>() {
-        @Override
-        public int compare(DisplayMode o1, DisplayMode o2) {
-          int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(Integer.valueOf(o2.getWidth()));
-          if (widthCompare != 0) {
-            return widthCompare;
-          }
-          int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(Integer.valueOf(o2.getHeight()));
-          if (heightCompare != 0) {
-            return heightCompare;
-          }
-          return o1.toString().compareTo(o2.toString());
-        }
-      });
-
-      DropDown<DisplayMode> dropDown = screen.findNiftyControl("resolutions", DropDown.class);
-      for (DisplayMode mode : sorted) {
-        dropDown.addItem(mode);
-      }
-      dropDown.selectItem(currentMode);
-    } catch (Exception e) {
+    DropDown<T> dropDown = screen.findNiftyControl("resolutions", DropDown.class);
+    final Collection<T> resolutions = resControl.getResolutions();
+    for (T mode : resolutions) {
+      dropDown.addItem(mode);
     }
   }
 

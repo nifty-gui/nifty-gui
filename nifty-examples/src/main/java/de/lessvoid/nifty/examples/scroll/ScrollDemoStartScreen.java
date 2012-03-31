@@ -5,10 +5,11 @@ import de.lessvoid.nifty.controls.ScrollPanel.AutoScroll;
 import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
 import de.lessvoid.nifty.controls.scrollpanel.ScrollPanelControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class ScrollDemoStartScreen implements ScreenController {
+public class ScrollDemoStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
 
@@ -42,5 +43,25 @@ public class ScrollDemoStartScreen implements ScreenController {
   private void addLabel(final Element myScrollStuff, final String text) {
     CreateLabelControl label = new CreateLabelControl(text);
     label.create(nifty, screen, myScrollStuff);
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "scroll/scroll.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Scrolling Demonstation";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
   }
 }

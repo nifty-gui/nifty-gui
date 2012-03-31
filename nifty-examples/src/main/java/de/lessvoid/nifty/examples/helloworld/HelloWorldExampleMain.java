@@ -36,19 +36,14 @@ public final class HelloWorldExampleMain {
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new AccurateTimeProvider());
+
+    final HelloWorldStartScreen screen = new HelloWorldStartScreen();
+    nifty.registerScreenController(screen);
+
+    screen.prepareStart(nifty);
+
     nifty.fromXml("src/main/resources/helloworld/helloworld.xml", "start");
 
-    // get the NiftyMouse interface that gives us access to all mouse cursor related stuff
-    NiftyMouse niftyMouse = nifty.getNiftyMouse();
-
-    // register/load a mouse cursor (this would be done somewhere at the beginning)
-    niftyMouse.registerMouseCursor("mouseId", "src/main/resources/nifty-cursor.png", 0, 0);
-
-    // change the cursor to the one we've loaded before
-    niftyMouse.enableMouseCursor("mouseId");
-
-    // we could set the position like so
-    niftyMouse.setMousePosition(20, 20);
 
     LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();

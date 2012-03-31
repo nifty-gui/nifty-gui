@@ -9,6 +9,7 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -20,7 +21,7 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
  * to dynamically create Nifty screens WITHOUT the xml.
  * @author void
  */
-public class HelloNiftyBuilderExampleMain implements ScreenController {
+public class HelloNiftyBuilderExampleMain implements ScreenController, NiftyExample {
   private Nifty nifty;
 
   public static void main(final String[] args) {
@@ -35,9 +36,56 @@ public class HelloNiftyBuilderExampleMain implements ScreenController {
         LwjglInitHelper.getInputSystem(),
         new AccurateTimeProvider());
 
+    HelloNiftyBuilderExampleMain screenController = new HelloNiftyBuilderExampleMain();
+    screenController.prepareStart(nifty);
+
+    nifty.gotoScreen("start");
+
+    // render
+    LwjglInitHelper.renderLoop(nifty, null);
+    LwjglInitHelper.destroy();
+  }
+
+  @Override
+  public void bind(final Nifty nifty, final Screen screen) {
+    System.out.println("bind()");
+    this.nifty = nifty;
+  }
+
+  @Override
+  public void onStartScreen() {
+    System.out.println("onStartScreen()");
+  }
+
+  @Override
+  public void onEndScreen() {
+    System.out.println("onEndScreen()");
+  }
+
+  public void quit() {
+    nifty.exit();
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return null;
+  }
+
+  @Override
+  public String getTitle() {
+    return "Hello Nifty Builder World";
+  }
+
+  @Override
+  public void prepareStart(final Nifty nifty) {
     // create a screen
     Screen screen = new ScreenBuilder("start") {{
-      controller(new HelloNiftyBuilderExampleMain());
+      controller(HelloNiftyBuilderExampleMain.this);
 
       layer(new LayerBuilder("layer") {{
         backgroundColor("#003f");
@@ -102,30 +150,5 @@ public class HelloNiftyBuilderExampleMain implements ScreenController {
     }}.build(nifty);
 
     nifty.addScreen("start", screen);
-    nifty.gotoScreen("start");
-
-    // render
-    LwjglInitHelper.renderLoop(nifty, null);
-    LwjglInitHelper.destroy();
-  }
-
-  @Override
-  public void bind(final Nifty nifty, final Screen screen) {
-    System.out.println("bind()");
-    this.nifty = nifty;
-  }
-
-  @Override
-  public void onStartScreen() {
-    System.out.println("onStartScreen()");
-  }
-
-  @Override
-  public void onEndScreen() {
-    System.out.println("onEndScreen()");
-  }
-
-  public void quit() {
-    nifty.exit();
   }
 }

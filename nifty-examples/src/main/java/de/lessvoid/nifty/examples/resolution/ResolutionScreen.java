@@ -1,9 +1,6 @@
 package de.lessvoid.nifty.examples.resolution;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -15,6 +12,7 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -22,11 +20,17 @@ import de.lessvoid.nifty.screen.ScreenController;
  * ScreenController for Hello World Example.
  * @author void
  */
-public class ResolutionScreen implements ScreenController {
+public class ResolutionScreen<T> implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
-  private DropDown<DisplayMode> dropDown;
+  private DropDown<T> dropDown;
   private ListBox<String> listBox;
+  
+  private ResolutionControl<T> resControl;
+
+  public ResolutionScreen(final ResolutionControl<T> newControl) {
+    resControl = newControl;
+  }
 
   @SuppressWarnings("unchecked")
   @Override
@@ -40,7 +44,7 @@ public class ResolutionScreen implements ScreenController {
     fillResolutionDropDown(screen);
 
     // and make sure the current is selected too
-    dropDown.selectItem(Display.getDisplayMode());
+    dropDown.selectItem(resControl.getCurrentResolution());
 
     listBox.addItem("Test");
     listBox.addItem("TestTestTestTestTestTestTestTestTestTestTestTest");
@@ -56,21 +60,9 @@ public class ResolutionScreen implements ScreenController {
   }
 
   @NiftyEventSubscriber(id="resolutions")
-  public void onResolution(final String id, final DropDownSelectionChangedEvent<DisplayMode> event) {
-    DisplayMode displayMode = event.getSelection();
-    try {
-      Display.setDisplayMode(displayMode);
-
-      GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, displayMode.getWidth(), displayMode.getHeight(), 0, -9999, 9999);
-
-      GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
-      nifty.resolutionChanged();
-    } catch (LWJGLException e) {
-      e.printStackTrace();
-    }
+  public void onResolution(final String id, final DropDownSelectionChangedEvent<T> event) {
+    resControl.setResolution(event.getSelection());
+    nifty.resolutionChanged();
   }
 
   /**
@@ -78,37 +70,29 @@ public class ResolutionScreen implements ScreenController {
    * @param screen
    */
   private void fillResolutionDropDown(final Screen screen) {
-    try {
-      DisplayMode currentMode = Display.getDisplayMode();
-      List <DisplayMode> sorted = new ArrayList<DisplayMode>();
-
-      DisplayMode[] modes = Display.getAvailableDisplayModes();
-      for (int i=0; i<modes.length; i++) {
-        DisplayMode mode = modes[i];
-        if (mode.getBitsPerPixel() == 32 && mode.getFrequency() == currentMode.getFrequency()) {
-          sorted.add(mode);
-        }
-      }
-
-      Collections.sort(sorted, new Comparator<DisplayMode>() {
-        @Override
-        public int compare(DisplayMode o1, DisplayMode o2) {
-          int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(Integer.valueOf(o2.getWidth()));
-          if (widthCompare != 0) {
-            return widthCompare;
-          }
-          int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(Integer.valueOf(o2.getHeight()));
-          if (heightCompare != 0) {
-            return heightCompare;
-          }
-          return o1.toString().compareTo(o2.toString());
-        }
-      });
-
-      for (DisplayMode mode : sorted) {
-        dropDown.addItem(mode);
-      }
-    } catch (Exception e) {
+    final Collection<T> resolutions = resControl.getResolutions();
+    for (T mode : resolutions) {
+      dropDown.addItem(mode);
     }
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "resolution/resolution.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Screen Resolution";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    nifty.registerScreenController(this);
   }
 }

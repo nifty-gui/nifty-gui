@@ -4,13 +4,14 @@ import java.io.IOException;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
-public class ResizeMain implements ScreenController {
+public class ResizeMain implements ScreenController, NiftyExample {
 
   public ResizeMain() {
   }
@@ -42,5 +43,25 @@ public class ResizeMain implements ScreenController {
 
   @Override
   public void onEndScreen() {
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "helloworld/resize.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Hello World";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
   }
 }
