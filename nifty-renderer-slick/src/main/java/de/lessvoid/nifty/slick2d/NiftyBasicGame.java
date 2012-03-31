@@ -42,7 +42,7 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
    * When initializing the game its only needed to prepare the GUI for display.
    */
   @Override
-  protected final void initGameAndGUI(final GameContainer container) {
+  protected void initGameAndGUI(final GameContainer container) {
     initNifty(container);
     getNifty().gotoScreen(startScreen);
   }
