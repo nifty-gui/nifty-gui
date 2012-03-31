@@ -5,7 +5,7 @@
   <!-- load default styles and controls -->
   <!-- +++++++++++++++++++++++++++++++++++++++ -->
 <!--   <useStyles filename="nifty-default-styles.xml" />   -->
-  <useStyles filename="grey-style/nifty-grey-styles.xml" />
+  <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
 
   <!-- +++++++++++++++++++++++++++++++++++++++ -->

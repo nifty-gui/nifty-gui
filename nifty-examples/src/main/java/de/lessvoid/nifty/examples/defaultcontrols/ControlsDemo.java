@@ -4,6 +4,8 @@
  */
 package de.lessvoid.nifty.examples.defaultcontrols;
 
+import org.lwjgl.opengl.DisplayMode;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.EffectBuilder;
@@ -20,6 +22,7 @@ import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.slider.builder.SliderBuilder;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.examples.defaultcontrols.chatcontrol.ChatControlDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
@@ -33,6 +36,8 @@ import de.lessvoid.nifty.examples.defaultcontrols.sliderandscrollbar.SliderAndSc
 import de.lessvoid.nifty.examples.defaultcontrols.tabs.TabsControlDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.textfield.TextFieldDialogControlDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.treebox.TreeBoxControlDialogDefinition;
+import de.lessvoid.nifty.examples.resolution.ResolutionControl;
+import de.lessvoid.nifty.examples.resolution.ResolutionControlLWJGL;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
@@ -40,8 +45,14 @@ import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import de.lessvoid.nifty.tools.Color;
 
-public class ControlsDemo {
+public class ControlsDemo<T> implements NiftyExample {
   private static CommonBuilders builders = new CommonBuilders();
+
+  private final ResolutionControl<T> resolutionControl;
+
+  public ControlsDemo(final ResolutionControl<T> resControl) {
+    resolutionControl = resControl;
+  }
 
   public static void main(final String[] args) {
     // init lwjgl
@@ -51,36 +62,9 @@ public class ControlsDemo {
 
     // create Nifty and load default styles and controls
     Nifty nifty = new Nifty(new LwjglRenderDevice(true), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(), new AccurateTimeProvider());
-    nifty.loadStyleFile("nifty-default-styles.xml");
-    nifty.loadControlFile("nifty-default-controls.xml");
-    nifty.registerSound("intro", "defaultcontrols/sound/19546__tobi123__Gong_mf2.wav");
-    nifty.registerMusic("credits", "defaultcontrols/sound/Loveshadow_-_Almost_Given_Up.ogg");
-    nifty.registerMouseCursor("hand", "defaultcontrols/mouse-cursor-hand.png", 5, 4);
-    nifty.enableAutoScaling(1024, 768);
+    ControlsDemo<DisplayMode> demo = new ControlsDemo(new ResolutionControlLWJGL());
+    demo.prepareStart(nifty);
 
-    registerMenuButtonHintStyle(nifty);
-    registerStyles(nifty);
-    registerConsolePopup(nifty);
-    registerCreditsPopup(nifty);
-
-    // register some helper controls
-    MenuButtonControlDefinition.register(nifty);
-    DialogPanelControlDefinition.register(nifty);
-
-    // register the dialog controls
-    ListBoxDialogControlDefinition.register(nifty);
-    DropDownDialogControlDefinition.register(nifty);
-    ScrollPanelDialogControlDefinition.register(nifty);
-    MessageBoxDialogDefinition.register(nifty);
-    ChatControlDialogDefinition.register(nifty);
-    TabsControlDialogDefinition.register(nifty);
-    TreeBoxControlDialogDefinition.register(nifty);
-    TextFieldDialogControlDefinition.register(nifty);
-    SliderAndScrollbarDialogControlDefinition.register(nifty);
-    DragAndDropDialogDefinition.register(nifty);
-
-    createIntroScreen(nifty);
-    createDemoScreen(nifty);
     nifty.gotoScreen("demo");
 
     // start the render loop
@@ -224,10 +208,10 @@ public class ControlsDemo {
     return screen;
   }
 
-  private static Screen createDemoScreen(final Nifty nifty) {
+  private static <T> Screen createDemoScreen(final Nifty nifty, final ResolutionControl<T> resControl) {
     final CommonBuilders common = new CommonBuilders();
     Screen screen = new ScreenBuilder("demo") {{
-      controller(new ControlsDemoScreenController(
+      controller(new ControlsDemoScreenController<T>(resControl,
           "menuButtonListBox", "dialogListBox",
           "menuButtonDropDown", "dialogDropDown",
           "menuButtonTextField", "dialogTextField",
@@ -685,4 +669,52 @@ public class ControlsDemo {
     }}.registerPopup(nifty);
   }
 
+  @Override
+  public String getStartScreen() {
+    return "demo";
+  }
+
+  @Override
+  public String getMainXML() {
+    return null;
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Controls Demonstation";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    nifty.loadStyleFile("nifty-default-styles.xml");
+    nifty.loadControlFile("nifty-default-controls.xml");
+    nifty.registerSound("intro", "defaultcontrols/sound/19546__tobi123__Gong_mf2.wav");
+    nifty.registerMusic("credits", "defaultcontrols/sound/Loveshadow_-_Almost_Given_Up.ogg");
+    nifty.registerMouseCursor("hand", "defaultcontrols/mouse-cursor-hand.png", 5, 4);
+    nifty.enableAutoScaling(1024, 768);
+
+    registerMenuButtonHintStyle(nifty);
+    registerStyles(nifty);
+    registerConsolePopup(nifty);
+    registerCreditsPopup(nifty);
+
+    // register some helper controls
+    MenuButtonControlDefinition.register(nifty);
+    DialogPanelControlDefinition.register(nifty);
+
+    // register the dialog controls
+    ListBoxDialogControlDefinition.register(nifty);
+    DropDownDialogControlDefinition.register(nifty);
+    ScrollPanelDialogControlDefinition.register(nifty);
+    MessageBoxDialogDefinition.register(nifty);
+    ChatControlDialogDefinition.register(nifty);
+    TabsControlDialogDefinition.register(nifty);
+    TreeBoxControlDialogDefinition.register(nifty);
+    TextFieldDialogControlDefinition.register(nifty);
+    SliderAndScrollbarDialogControlDefinition.register(nifty);
+    DragAndDropDialogDefinition.register(nifty);
+
+    createIntroScreen(nifty);
+    createDemoScreen(nifty, resolutionControl);
+  }
 }

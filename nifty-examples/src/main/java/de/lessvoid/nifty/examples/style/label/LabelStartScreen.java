@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.style.label;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -8,7 +9,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * ScreenController for Hello World Example.
  * @author void
  */
-public class LabelStartScreen implements ScreenController {
+public class LabelStartScreen implements ScreenController, NiftyExample {
 
   /** nifty instance. */
   private Nifty nifty;
@@ -41,4 +42,23 @@ public class LabelStartScreen implements ScreenController {
     nifty.fromXml("all/intro.xml", "menu");
   }
 
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "style/label/label.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Style Label Example";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing
+  }
 }

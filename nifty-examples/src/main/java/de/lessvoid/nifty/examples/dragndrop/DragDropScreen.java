@@ -16,10 +16,11 @@ import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.dragndrop.builder.DraggableBuilder;
 import de.lessvoid.nifty.controls.window.builder.CreateWindow;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class DragDropScreen implements ScreenController {
+public class DragDropScreen implements ScreenController, NiftyExample {
 
   private Nifty nifty;
   private Screen screen;
@@ -152,5 +153,25 @@ public class DragDropScreen implements ScreenController {
 
   private Droppable findDroppable(final String id) {
     return screen.findNiftyControl(id, Droppable.class);
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "dragndrop/dragndrop.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Drag'n'Drop Example";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing
   }
 }

@@ -12,10 +12,11 @@ import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.controls.listbox.builder.CreateListBoxControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class ControlsDemoStartScreen implements ScreenController {
+public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
 
@@ -176,5 +177,25 @@ public class ControlsDemoStartScreen implements ScreenController {
 
   private DropDown findDropDownControl(final String id) {
     return screen.findNiftyControl(id, DropDown.class);
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "controls/controls.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Controls Demonstation";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
   }
 }

@@ -1,11 +1,14 @@
 package de.lessvoid.nifty.examples.localize;
 
+import java.util.Properties;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class LocalizeTestScreen implements ScreenController {
+public class LocalizeTestScreen implements ScreenController, NiftyExample {
   private Screen screen;
 
   public void bind(final Nifty newNifty, final Screen newScreen) {
@@ -30,5 +33,27 @@ public class LocalizeTestScreen implements ScreenController {
 
   public String sound() {
     return "outro";
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "localize/localize.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Localize Example";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    final Properties props = new Properties();
+    props.put("void", ":)");
+    nifty.setGlobalProperties(props);
   }
 }
