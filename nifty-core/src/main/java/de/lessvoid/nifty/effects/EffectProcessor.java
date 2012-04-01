@@ -115,7 +115,7 @@ public class EffectProcessor {
     internalSetActive(false);
     for (int i=0; i<activeEffects.getActive().size(); i++) {
       Effect e = activeEffects.getActive().get(i);
-      e.setActive(false);
+      e.deactivate();
     }
     if (!processingEffects) {
       activeEffects.clear();
@@ -129,7 +129,7 @@ public class EffectProcessor {
      for (int i=0; i<activeEffects.getActive().size(); i++) {
        Effect e = activeEffects.getActive().get(i);
        if (e.customKeyMatches(customKey)) {
-         e.setActive(false);
+         e.deactivate();
          activeEffectsToRemove.add(e);
        }
      }
@@ -199,7 +199,7 @@ public class EffectProcessor {
         }
         if (e.isActive()) {
           if (!e.isInsideFalloff(x, y)) {
-            e.setActive(false);
+            e.deactivate();
             activeEffects.remove(e);
           } else {
             e.hoverDistance(x, y);
@@ -223,7 +223,7 @@ public class EffectProcessor {
         if (!e.isInsideFalloff(x, y) && e.getCustomFlag()) {
           e.setCustomFlag(false);
           if (e.isActive()) {
-            e.setActive(false);
+            e.deactivate();
             activeEffects.remove(e);
           }
         }
@@ -248,9 +248,9 @@ public class EffectProcessor {
         if (e.isActive()) {
           if (e.isInsideFalloff(x, y) && !e.getCustomFlag()) {
             e.setCustomFlag(true);
-            e.setActive(false);
+            e.deactivate();
             activeEffects.remove(e);
-          }          
+          }
         }
       }
     }
@@ -262,7 +262,7 @@ public class EffectProcessor {
       if (e.isHoverEffect()) {
         if (e.isActive()) {
           if (!e.isInsideFalloff(x, y)) {
-            e.setActive(false);
+            e.deactivate();
             activeEffects.remove(e);
           }
         }
