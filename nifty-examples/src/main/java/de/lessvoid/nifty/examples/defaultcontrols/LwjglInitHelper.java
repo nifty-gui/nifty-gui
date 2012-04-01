@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.examples.LoggerShortFormat;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
 
 /**
