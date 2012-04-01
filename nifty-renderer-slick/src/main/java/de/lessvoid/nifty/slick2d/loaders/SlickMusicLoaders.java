@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.slick2d.loaders;
 
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.slick2d.sound.music.SlickLoadMusicException;
 import de.lessvoid.nifty.slick2d.sound.music.SlickMusicHandle;
@@ -14,6 +15,11 @@ import de.lessvoid.nifty.sound.SoundSystem;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class SlickMusicLoaders extends AbstractSlickLoaders<SlickMusicLoader> {
+  /**
+   * The logger used to print log messages.
+   */
+  private static Logger log = Logger.getLogger(SlickMusicLoaders.class.getName());
+
   /**
    * The singleton instance of this class.
    */
@@ -62,6 +68,7 @@ public final class SlickMusicLoaders extends AbstractSlickLoaders<SlickMusicLoad
       }
     }
 
-    throw new IllegalArgumentException("Failed to load music \"" + filename + "\".");
+    log.warning("Failed to load music \"" + filename + "\".");
+    return null;
   }
 }

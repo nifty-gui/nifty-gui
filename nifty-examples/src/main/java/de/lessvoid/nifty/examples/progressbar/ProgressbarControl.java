@@ -6,12 +6,13 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class ProgressbarControl implements Controller {
+public class ProgressbarControl implements Controller, NiftyExample {
   private Element progressBarElement;
   private Element progressTextElement;
 
@@ -55,4 +56,23 @@ public class ProgressbarControl implements Controller {
     progressTextElement.getRenderer(TextRenderer.class).setText(progressText);
   }
 
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "progressbar/progressbar.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Progressbar Example";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing
+  }
 }

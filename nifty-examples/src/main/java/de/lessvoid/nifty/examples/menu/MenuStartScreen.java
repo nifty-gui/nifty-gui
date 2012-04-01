@@ -8,6 +8,7 @@ import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.Menu;
 import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -16,7 +17,7 @@ import de.lessvoid.nifty.tools.SizeValue;
  * ScreenController for Hello World Example.
  * @author void
  */
-public class MenuStartScreen implements ScreenController {
+public class MenuStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
   private Element popup;
@@ -53,6 +54,26 @@ public class MenuStartScreen implements ScreenController {
   public void showMenu() {
     nifty.showPopup(screen, popup.getId(), null);
     nifty.subscribe(screen, popup.findNiftyControl("#menu", Menu.class).getId(), MenuItemActivatedEvent.class, new MenuItemActivatedEventSubscriber());
+  }
+
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "menu/menu.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Menu Example";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
   }
 
   private class MenuItemActivatedEventSubscriber implements EventTopicSubscriber<MenuItemActivatedEvent> {

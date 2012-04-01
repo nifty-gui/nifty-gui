@@ -33,8 +33,7 @@ public final class LwjglCursorSlickMouseCursorLoader implements SlickMouseCursor
       throw new SlickLoadCursorException("Failed loading cursor.", e);
     }
     try {
-      return new LwjglCursorSlickMouseCursor(
-          CursorLoader.get().getCursor(data, hotspotX, (data.getHeight() - hotspotY) + 1));
+      return new LwjglCursorSlickMouseCursor(CursorLoader.get().getCursor(data, hotspotX, hotspotY));
     } catch (final LWJGLException e) {
       throw new SlickLoadCursorException("Failed loading cursor.", e);
     } catch (final IOException e) {
