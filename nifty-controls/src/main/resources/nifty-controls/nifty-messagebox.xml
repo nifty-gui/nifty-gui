@@ -2,7 +2,7 @@
 <nifty-controls>
 	<controlDefinition name="nifty-messagebox" style="nifty-standard-messagebox-style" controller="de.lessvoid.nifty.controls.MessageBox">
 		<panel style="panel" childLayout="vertical" id="#messagebox" width="500px" height="250px">
-			<panel id="#message" childLayout="horizontal" align="left" valign="center" textVAlign="cerent" height="195px">
+			<panel id="#message" childLayout="horizontal" align="left" valign="center" textVAlign="center" height="195px">
 				<panel childLayout="center" valign="center">
 					<image id="#message-icon" filename="messagebox/WARNING.png" width="48px" height="48px" />
 				</panel>

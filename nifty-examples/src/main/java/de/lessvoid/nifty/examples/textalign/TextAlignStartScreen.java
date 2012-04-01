@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.textalign;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -8,7 +9,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * ScreenController for Hello World Example.
  * @author void
  */
-public class TextAlignStartScreen implements ScreenController {
+public class TextAlignStartScreen implements ScreenController, NiftyExample {
 
   /** nifty instance. */
   private Nifty nifty;
@@ -42,4 +43,23 @@ public class TextAlignStartScreen implements ScreenController {
     nifty.fromXml("all/intro.xml", "menu");
   }
 
+  @Override
+  public String getStartScreen() {
+    return "start";
+  }
+
+  @Override
+  public String getMainXML() {
+    return "textalign/textalign.xml";
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Textalign Example";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
+  }
 }

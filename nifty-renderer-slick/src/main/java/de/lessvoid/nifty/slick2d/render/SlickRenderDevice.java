@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.slick2d.render;
 
+import org.lwjgl.opengl.GL11;
+
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.slick2d.loaders.SlickMouseCursorLoaders;
 import de.lessvoid.nifty.slick2d.loaders.SlickRenderFontLoaders;
@@ -17,6 +19,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.opengl.renderer.Renderer;
+import org.newdawn.slick.opengl.renderer.SGL;
 
 /**
  * The render device that takes care for rendering the Nifty GUI inside of Slick.
@@ -274,6 +278,7 @@ public final class SlickRenderDevice implements RenderDevice {
       g.setDrawMode(Graphics.MODE_NORMAL);
     } else {
       g.setDrawMode(Graphics.MODE_COLOR_MULTIPLY);
+      Renderer.get().glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ZERO);
     }
   }
 

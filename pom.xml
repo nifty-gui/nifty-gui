@@ -17,6 +17,7 @@
     <module>nifty-soundsystem-pauls-sound</module>
     <module>nifty-html</module>
     <module>nifty-examples</module>
+    <module>nifty-examples-slick2d</module>
   </modules>
   <url>http://sourceforge.net/projects/nifty-gui/</url>
   <licenses>

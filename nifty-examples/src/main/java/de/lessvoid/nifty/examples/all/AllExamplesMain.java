@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples.all;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
+import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
@@ -10,17 +11,22 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
  * The Nifty Examples.
  * @author void
  */
-public class AllExamplesMain {
+public class AllExamplesMain implements NiftyExample {
 
   /**
    * file of the main program.
    */
   private static final String ALL_INTRO_XML = "all/intro.xml";
+  
+  private final String startScreen;
 
-  /**
-   * Prevent instantiation of this class.
-   */
-  private AllExamplesMain() {
+
+  public AllExamplesMain() {
+    this("start");
+  }
+
+  private AllExamplesMain(final String screen) {
+    startScreen = screen;
   }
 
   /**
@@ -51,5 +57,25 @@ public class AllExamplesMain {
     }
 
     LwjglInitHelper.destroy();
+  }
+
+  @Override
+  public String getStartScreen() {
+    return startScreen;
+  }
+
+  @Override
+  public String getMainXML() {
+    return ALL_INTRO_XML;
+  }
+
+  @Override
+  public String getTitle() {
+    return "Nifty Examples";
+  }
+
+  @Override
+  public void prepareStart(Nifty nifty) {
+    // nothing to do
   }
 }

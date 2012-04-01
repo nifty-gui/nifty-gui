@@ -78,10 +78,10 @@ public class NiftyEventAnnotationProcessor {
     if (add) {
       Subscriber subscriber = new Subscriber(obj, method, eventClass);
       eventService.subscribeStrongly(pattern, subscriber);
-      NiftyDefaults.eventBusLog.info("-> subscribe [" + pattern + "] -> [" + subscriber + "]");
+      log.info("-> subscribe [" + pattern + "] -> [" + subscriber + "]");
     } else {
       eventService.unsubscribe(pattern, obj);
-      NiftyDefaults.eventBusLog.info("<- unsubscribe [" + pattern + "] -> [" + obj + "]");
+      log.info("<- unsubscribe [" + pattern + "] -> [" + obj + "]");
     }
   }
 
@@ -89,10 +89,10 @@ public class NiftyEventAnnotationProcessor {
     if (add) {
       Subscriber subscriber = new Subscriber(obj, method, eventClass);
       eventService.subscribeStrongly(id, subscriber);
-      NiftyDefaults.eventBusLog.info("-> subscribe [" + id + "] -> [" + subscriber + "]");
+      log.info("-> subscribe [" + id + "] -> [" + subscriber + "]");
     } else {
       eventService.unsubscribe(id, obj);
-      NiftyDefaults.eventBusLog.info("<- unsubscribe [" + id + "] -> [" + obj + "]");
+      log.info("<- unsubscribe [" + id + "] -> [" + obj + "]");
     }
   }
 

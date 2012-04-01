@@ -62,8 +62,8 @@ public class LwjglRenderImage implements RenderImage {
   }
 
   public void dispose() {
-//    GL11.glDeleteTextures(textureId);
-//    checkGLError();
+    GL11.glDeleteTextures(textureId);
+    checkGLError();
   }  
 
   private void createTexture(final ByteBuffer textureBuffer, final int width, final int height, final boolean filter, final int srcPixelFormat) throws Exception {

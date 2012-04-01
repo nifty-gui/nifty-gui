@@ -18,7 +18,7 @@ import de.lessvoid.nifty.tools.time.TimeInterpolator;
  * @author void
  */
 public class Effect {
-  private static Logger log = Logger.getLogger(Effect.class.getName());
+  private Logger log = Logger.getLogger(Effect.class.getName());
   private EffectEventId effectEventId;
   private boolean active;
   private Element element;
@@ -110,7 +110,7 @@ public class Effect {
   }
 
   public void update() {
-    setActive(timeInterpolator.update());
+    setActiveInternal(timeInterpolator.update(), false); 
   }
 
   public void execute(final NiftyRenderEngine r) {
@@ -125,10 +125,16 @@ public class Effect {
     return active;
   }
 
-  public void setActive(final boolean newActive) {
+  public void deactivate() {
+    setActiveInternal(false, true);
+  }
+
+  private void setActiveInternal(final boolean newActive, final boolean callDeactivate) {
     boolean ended = false;
     if (this.active && !newActive) {
-      effectImpl.deactivate();
+      if (callDeactivate) {
+        effectImpl.deactivate();
+      }
       ended = true;
     }
     this.active = newActive;

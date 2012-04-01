@@ -86,6 +86,7 @@ public class EffectManager {
       final TimeProvider time,
       final EndNotify listener,
       final String customKey) {
+    stopEffect(id);
     effectProcessor.get(id).activate(listener, alternateKey, customKey);
   }
 
