@@ -1,12 +1,15 @@
 package de.lessvoid.nifty.controls.nullobjects;
 
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.textfield.filter.TextFieldInputFilter;
+import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
- * The NullObject in case you're requesting this control and it could not be found. You'll
- * get a warning in the log and an instance of this class back. This reduces NPE.
+ * The NullObject in case you're requesting this control and it could not be found. You'll get a warning in the log and
+ * an instance of this class back. This reduces NPE.
+ *
  * @author void
  */
 public class TextFieldNull implements TextField {
@@ -75,7 +78,17 @@ public class TextFieldNull implements TextField {
   }
 
   @Override
-  public void setText(final String text) {
+  public CharSequence getRealText() {
+    return null;
+  }
+
+  @Override
+  public CharSequence getDisplayedText() {
+    return null;
+  }
+
+  @Override
+  public void setText(final CharSequence text) {
   }
 
   @Override
@@ -84,6 +97,24 @@ public class TextFieldNull implements TextField {
 
   @Override
   public void setCursorPosition(final int position) {
+  }
+
+  @Override
+  public void setFilter(TextFieldInputFilter filter) {
+  }
+
+  @Override
+  public TextFieldInputFilter getFilter() {
+    return null;
+  }
+
+  @Override
+  public void setFormat(TextFieldDisplayFormat format) {
+  }
+
+  @Override
+  public TextFieldDisplayFormat getFormat() {
+    return null;
   }
 
   @Override
