@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.Clipboard;
+import de.lessvoid.nifty.controls.TextField;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.*;
@@ -42,7 +43,7 @@ public class TextFieldMaxLenClipboardTest {
     expect(clipboard.get()).andReturn("abcdef");
     replay(clipboard);
 
-    textField.setMaxLength(-1);
+    textField.setMaxLength(TextField.UNLIMITED_LENGTH);
     textField.put();
     assertEquals("abcdef12345", textField.getRealText().toString());
   }

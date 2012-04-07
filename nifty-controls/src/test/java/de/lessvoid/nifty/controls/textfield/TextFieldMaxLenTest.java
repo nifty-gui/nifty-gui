@@ -19,7 +19,7 @@ public class TextFieldMaxLenTest extends TestCase {
 
   public void testMaxLengthWithDataEntered() {
     textField.setMaxLength(-1);
-    textField.initWithText("abcdef");
+    textField.setTextAndNotify("abcdef");
     assertEquals("abcdef", textField.getRealText().toString());
 
     textField.setMaxLength(1);
@@ -28,7 +28,7 @@ public class TextFieldMaxLenTest extends TestCase {
 
   public void testMaxLengthWithSameLength() {
     textField.setMaxLength(-1);
-    textField.initWithText("abcde");
+    textField.setTextAndNotify("abcde");
     assertEquals("abcde", textField.getRealText().toString());
 
     textField.setMaxLength(MAX_LEN);
@@ -37,13 +37,13 @@ public class TextFieldMaxLenTest extends TestCase {
 
   public void testMaxLengthWithEmptyData() {
     textField.setMaxLength(-1);
-    textField.initWithText("");
+    textField.setTextAndNotify("");
     textField.setMaxLength(1);
     assertEquals("", textField.getRealText().toString());
   }
 
   public void testMakingMaxLengthShorter() {
-    textField.initWithText("123456");
+    textField.setTextAndNotify("123456");
     textField.setMaxLength(2);
     assertEquals("12", textField.getRealText().toString());
   }

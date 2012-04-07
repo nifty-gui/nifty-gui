@@ -16,9 +16,8 @@ import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class TextFieldLogic {
-
   /**
-   * the text.
+   * The text that was typed into the input area by the user.
    */
   private final StringBuilder text;
 
@@ -50,7 +49,7 @@ public class TextFieldLogic {
   /**
    * clipboard.
    */
-  private Clipboard clipboard;
+  private final Clipboard clipboard;
 
   /**
    * The character limit that applies to the text field. {@code -1} means no limit applies.
@@ -60,7 +59,7 @@ public class TextFieldLogic {
   /**
    * The text field view instance that allows to notify the parent component about a update.
    */
-  private TextFieldView view;
+  private final TextFieldView view;
 
   /**
    * The filter that is used on the input text.
@@ -83,8 +82,8 @@ public class TextFieldLogic {
     clipboard = newClipboard;
     maxLength = TextField.UNLIMITED_LENGTH;
 
-    setFilter(null);
-    setFormat(null);
+    filter = new FilterAcceptAll();
+    format = new FormatPlain();
 
     text = new StringBuilder(100);
     setText(newText);
@@ -105,13 +104,14 @@ public class TextFieldLogic {
    * @param newFilter the input filter of the text field
    */
   public void setFilter(final TextFieldInputFilter newFilter) {
-    if (newFilter == null) {
-      filter = new FilterAcceptAll();
-    } else {
-      filter = newFilter;
-    }
+    filter = (newFilter == null) ? new FilterAcceptAll() : newFilter;
   }
 
+  /**
+   * Get the input filter that applied currently to the input of this text field.
+   *
+   * @return the currently active filter
+   */
   public TextFieldInputFilter getFilter() {
     return filter;
   }
@@ -122,13 +122,14 @@ public class TextFieldLogic {
    * @param newFormat the new format that is applied to the text field
    */
   public void setFormat(final TextFieldDisplayFormat newFormat) {
-    if (newFormat == null) {
-      format = new FormatPlain();
-    } else {
-      format = newFormat;
-    }
+    format = (newFormat == null) ? new FormatPlain() : newFormat;
   }
 
+  /**
+   * Get the format that currently applies to the displayed text of this text field.
+   *
+   * @return the format that is applied to the text displayed
+   */
   public TextFieldDisplayFormat getFormat() {
     return format;
   }
@@ -194,21 +195,7 @@ public class TextFieldLogic {
    * @param direction the amount of characters to move the cursor
    */
   private void moveCursor(final int direction) {
-    if ((direction < 0) && (cursorPosition == 0)) {
-      return;
-    }
-    if ((direction > 0) && (cursorPosition == text.length())) {
-      return;
-    }
-
-    cursorPosition += direction;
-    if (cursorPosition < 0) {
-      cursorPosition = 0;
-    } else if (cursorPosition > text.length()) {
-      cursorPosition = text.length();
-    }
-
-    selectionFromCursorPosition();
+    setCursorPosition(cursorPosition + direction);
   }
 
   /**
@@ -230,14 +217,14 @@ public class TextFieldLogic {
    * Delete the character at the cursor position.
    */
   public void delete() {
-    final String old = text.toString();
     if (hasSelection()) {
       deleteSelectedText();
-    } else if (filter.acceptDelete(old, cursorPosition, cursorPosition + 1)) {
+    } else if ((cursorPosition < text.length()) && filter.acceptDelete(text, cursorPosition, cursorPosition + 1)) {
       text.delete(cursorPosition, cursorPosition + 1);
+    } else {
+      return;
     }
-
-    notifyTextChange(old);
+    view.textChangeEvent(text.toString());
   }
 
   /**
@@ -264,14 +251,6 @@ public class TextFieldLogic {
       cursorPosition = selectionStart;
       resetSelection();
     }
-  }
-
-  private void notifyTextChange(final CharSequence old) {
-    final String current = text.toString();
-    if (old.toString().equals(current)) {
-      return;
-    }
-    view.textChangeEvent(current);
   }
 
   /**
@@ -313,7 +292,10 @@ public class TextFieldLogic {
   }
 
   /**
-   * end selecting.
+   * Stop the active selecting operation.
+   * <p/>
+   * After calling this function moving the cursor will not increase or decrease the size of the selection, it rather
+   * will reset the selection.
    */
   public void endSelecting() {
     selecting = false;
@@ -351,6 +333,12 @@ public class TextFieldLogic {
     return null;
   }
 
+  /**
+   * Get the part of the text that is selected. The text returned is the one the user actually typed in. That is not by
+   * all means the same text the user sees.
+   *
+   * @return the selected text as typed in by the user or {@code null} in case nothing is selected
+   */
   public CharSequence getRealSelectedText() {
     if (!hasSelection()) {
       return null;
@@ -359,6 +347,11 @@ public class TextFieldLogic {
     return text.subSequence(selectionStart, selectionEnd);
   }
 
+  /**
+   * Get the amount of characters that are currently selected.
+   *
+   * @return the amount of selected characters
+   */
   public int getSelectionLength() {
     if (hasSelection()) {
       return selectionEnd - selectionStart;
@@ -367,24 +360,15 @@ public class TextFieldLogic {
   }
 
   /**
-   * init instance wit the given text.
+   * Overwrite the text that is stored in this text field entirely and notify the listeners about the changed text.
    *
-   * @param newText new text
+   * @param newText the new text that should be applied
    */
-  public void initWithText(final CharSequence newText) {
-    changeText(newText);
-
-    if ((newText != null) && (newText.length() > 0)) {
-      view.textChangeEvent(newText);
-    }
-  }
-
-  private void changeText(final CharSequence newText) {
-    final int oldCursorPos = cursorPosition;
+  public void setTextAndNotify(final CharSequence newText) {
     setText(newText);
 
-    if (oldCursorPos <= text.length()) {
-      cursorPosition = oldCursorPos;
+    if ((newText != null) && (newText.length() > 0)) {
+      view.textChangeEvent(newText.toString());
     }
   }
 
@@ -418,7 +402,12 @@ public class TextFieldLogic {
     }
 
     if ((maxLength == TextField.UNLIMITED_LENGTH) || (text.length() < maxLength)) {
-      final int insertCnt = Math.min(maxLength - text.length(), chars.length());
+      final int insertCnt;
+      if (maxLength == TextField.UNLIMITED_LENGTH) {
+        insertCnt = text.length();
+      } else {
+        insertCnt = Math.min(maxLength - text.length(), chars.length());
+      }
       final CharSequence insertSequence = chars.subSequence(0, insertCnt);
       if (filter.acceptInput(text, cursorPosition, insertSequence)) {
         text.insert(cursorPosition, chars);
@@ -444,19 +433,17 @@ public class TextFieldLogic {
    * @param c the character to insert
    */
   public void insert(final char c) {
-    final String old = text.toString();
-
     if (hasSelection()) {
       deleteSelectedText();
     }
 
     if (filterAndInsert(c)) {
-      notifyTextChange(old);
+      view.textChangeEvent(text.toString());
     }
   }
 
   /**
-   * Put data from clipboard into textfield.
+   * Put data from clipboard into text field.
    */
   public void put() {
     final String clipboardText = clipboard.get();
@@ -471,32 +458,39 @@ public class TextFieldLogic {
    * @param chars the character sequence to insert
    */
   public void insert(final CharSequence chars) {
-    final String old = text.toString();
-
     if (hasSelection()) {
       deleteSelectedText();
     }
 
     if (filterAndInsert(chars)) {
-      notifyTextChange(old);
+      view.textChangeEvent(text.toString());
     }
   }
 
+  /**
+   * Expand the active selection over the entire text field.
+   */
   public void selectAll() {
     selectionStartIndex = 0;
     selectionStart = 0;
     selectionEnd = text.length();
-    selecting = true;
     cursorPosition = text.length();
   }
 
+  /**
+   * Set the maximal length that is allowed to be used. In case the current text is longer then the applied limit all
+   * characters that exceed the limit will be deleted right away.
+   *
+   * @param maxLen the new maximal length of the text field
+   */
   public void setMaxLength(final int maxLen) {
     maxLength = maxLen;
 
     if (maxLength != TextField.UNLIMITED_LENGTH) {
       if (text.length() > maxLen) {
         text.setLength(maxLen);
-        setCursorPosition(text.length());
+        setCursorPosition(Math.min(cursorPosition, text.length()));
+        view.textChangeEvent(text.toString());
       }
     }
   }
@@ -507,19 +501,17 @@ public class TextFieldLogic {
    * @param newIndex index.
    */
   public void setCursorPosition(final int newIndex) {
-    if (newIndex < 0) {
-      cursorPosition = 0;
-    } else if (newIndex > text.length()) {
-      cursorPosition = text.length();
-    } else {
-      cursorPosition = newIndex;
-    }
+    final int clampedIndex = Math.max(0, Math.min(newIndex, text.length()));
 
-    selectionFromCursorPosition();
+    if (cursorPosition != clampedIndex) {
+      cursorPosition = clampedIndex;
+      selectionFromCursorPosition();
+    }
   }
 
   /**
-   * start selecting.
+   * Start a selecting operation at the current cursor position. Be sure to set the location of the cursor to the proper
+   * stop before calling this function.
    */
   public void startSelecting() {
     selecting = true;
@@ -527,24 +519,16 @@ public class TextFieldLogic {
   }
 
   /**
-   * Position cursor to first character.
+   * Move the location of the cursor to the first position in the text.
    */
   public void toFirstPosition() {
-    if (cursorPosition > 0) {
-      cursorPosition = 0;
-
-      selectionFromCursorPosition();
-    }
+    setCursorPosition(0);
   }
 
   /**
-   * Position cursor to last character.
+   * Move the cursor to the last position in the text field.
    */
   public void toLastPosition() {
-    if (cursorPosition < text.length()) {
-      cursorPosition = text.length();
-
-      selectionFromCursorPosition();
-    }
+    setCursorPosition(Integer.MAX_VALUE);
   }
 }

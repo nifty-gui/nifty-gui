@@ -101,8 +101,8 @@ public class TextFieldControl extends AbstractController implements TextField, T
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     focusHandler = screen.getFocusHandler();
 
-    textField.initWithText(textElement.getRenderer(TextRenderer.class).getOriginalText());
-    fieldWidth = this.fieldElement.getWidth() - this.cursorElement.getWidth();
+    textField.setTextAndNotify(textElement.getRenderer(TextRenderer.class).getOriginalText());
+    fieldWidth = fieldElement.getWidth() - cursorElement.getWidth();
 
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
     firstVisibleCharacterIndex = 0;
@@ -119,7 +119,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
 
   @Override
   public void layoutCallback() {
-    this.fieldWidth = this.fieldElement.getWidth() - this.cursorElement.getWidth();
+    fieldWidth = this.fieldElement.getWidth() - this.cursorElement.getWidth();
   }
 
   private CharSequence getVisibleText() {
@@ -154,7 +154,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
   private int getCursorPosFromMouse(final int mouseX, final CharSequence visibleString) {
     TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
     return FontHelper.getCharacterIndexFromPixelPosition(textRenderer.getFont(), visibleString,
-        (mouseX - fieldElement.getX()), 1.0f);
+        mouseX - fieldElement.getX(), 1.0f);
   }
 
   @Override
@@ -356,8 +356,8 @@ public class TextFieldControl extends AbstractController implements TextField, T
   }
 
   @Override
-  public void textChangeEvent(final CharSequence newText) {
-    nifty.publishEvent(getElement().getId(), new TextFieldChangedEvent(this, newText.toString()));
+  public void textChangeEvent(final String newText) {
+    nifty.publishEvent(getElement().getId(), new TextFieldChangedEvent(this, newText));
   }
 
   @Override
