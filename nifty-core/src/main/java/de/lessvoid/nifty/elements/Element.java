@@ -1340,7 +1340,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * Checks if this element can handle mouse events.
    * @return true can handle mouse events, false can't handle them
    */
-  boolean canHandleMouseEvents() {
+  public boolean canHandleMouseEvents() {
     if (isEffectActive(EffectEventId.onStartScreen)) {
       return false;
     }
