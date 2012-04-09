@@ -9,18 +9,18 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
 
 /**
- * Play a sound.
+ * Play music.
  * @author void
  */
-public class PlaySound implements EffectImpl {
+public class PlayMusic implements EffectImpl {
   private boolean done;
   private boolean repeat;
-  private SoundHandle soundHandle;
+  private SoundHandle musicHandle;
   private Nifty nifty;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     this.nifty = nifty;
-    soundHandle = nifty.getSoundSystem().getSound(parameter.getProperty("sound"));
+    musicHandle = nifty.getSoundSystem().getMusic(parameter.getProperty("music"));
     repeat = Boolean.valueOf(parameter.getProperty("repeat", "false"));
     done = false;
   }
@@ -31,15 +31,15 @@ public class PlaySound implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     if (normalizedTime > 0.0f) {
-      if (soundHandle != null) {
+      if (musicHandle != null) {
         if (!done) {
-          playSound();
+          playMusic();
           done = true;
         } else {
           // in repeat mode, when the sound is not playing anymore we'll simply start it again
           if (repeat) {
-            if (!soundHandle.isPlaying()) {
-              playSound();
+            if (!musicHandle.isPlaying()) {
+              playMusic();
             }
           }
         }
@@ -47,9 +47,9 @@ public class PlaySound implements EffectImpl {
     }
   }
 
-  private void playSound() {
-    soundHandle.setVolume(nifty.getSoundSystem().getSoundVolume());
-    soundHandle.play();
+  private void playMusic() {
+    musicHandle.setVolume(nifty.getSoundSystem().getMusicVolume());
+    musicHandle.play();
   }
 
   public void deactivate() {

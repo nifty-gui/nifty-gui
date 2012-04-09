@@ -1,7 +1,5 @@
 package de.lessvoid.nifty;
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
 
 public class NiftyDefaults {
@@ -34,6 +32,7 @@ public class NiftyDefaults {
     nifty.registerEffect(new RegisterEffectType("move", "de.lessvoid.nifty.effects.impl.Move"));
     nifty.registerEffect(new RegisterEffectType("nop", "de.lessvoid.nifty.effects.impl.Nop"));
     nifty.registerEffect(new RegisterEffectType("particle", "de.lessvoid.nifty.effects.impl.Particle"));
+    nifty.registerEffect(new RegisterEffectType("playMusic", "de.lessvoid.nifty.effects.impl.PlayMusic"));
     nifty.registerEffect(new RegisterEffectType("playSound", "de.lessvoid.nifty.effects.impl.PlaySound"));
     nifty.registerEffect(new RegisterEffectType("pulsate", "de.lessvoid.nifty.effects.impl.Pulsate"));
     nifty.registerEffect(new RegisterEffectType("remote", "de.lessvoid.nifty.effects.impl.Remote"));
