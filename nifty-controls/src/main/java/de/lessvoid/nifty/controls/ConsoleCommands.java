@@ -158,6 +158,25 @@ public class ConsoleCommands implements KeyInputHandler {
     return false;
   }
 
+  /**
+   * Find a ConsoleCommand with the given commandText. This will find commands that
+   * begin with the given commandText as well.
+   *
+   * @param commandText the command to return
+   * @return the ConsoleCommand or null if command does not exist
+   */
+  public ConsoleCommand findCommand(final String commandText) {
+    ConsoleCommand command = commands.get(commandText);
+    if (command != null) {
+      return command;
+    }
+    List<String> commandMatches = findMatches(commandText);
+    if (commandMatches.size() == 1) {
+      return commands.get(commandMatches.get(0));
+    }
+    return null;
+  }
+
   private void changeText(final String newText) {
     textfield.setText(newText);
     textfield.setCursorPosition(textfield.getText().length());
