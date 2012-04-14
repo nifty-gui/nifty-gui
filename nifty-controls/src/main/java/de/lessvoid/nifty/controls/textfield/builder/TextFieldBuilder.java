@@ -21,6 +21,10 @@ public class TextFieldBuilder extends ControlBuilder {
   }
 
   public void maxLength(final int maxLength) {
-    set("maxLength", String.valueOf(maxLength));
+    set("maxLength", Integer.toString(maxLength));
+  }
+
+  public void filter(final CharSequence filter) {
+    set("filter", filter.toString());
   }
 }
