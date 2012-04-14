@@ -8,14 +8,6 @@ package de.lessvoid.nifty.controls.textfield.format;
  */
 public interface TextFieldDisplayFormat {
   /**
-   * Get the version of the text that is supposed to be displayed.
-   *
-   * @param original the original text
-   * @return the transformed display text
-   */
-  CharSequence getDisplaySequence(CharSequence original);
-
-  /**
    * Get a part of the original text converted into the one that is supposed to be displayed.
    *
    * @param original the original text

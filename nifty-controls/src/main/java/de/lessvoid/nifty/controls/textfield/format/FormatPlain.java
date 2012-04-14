@@ -7,11 +7,6 @@ package de.lessvoid.nifty.controls.textfield.format;
  */
 public class FormatPlain implements TextFieldDisplayFormat {
   @Override
-  public CharSequence getDisplaySequence(final CharSequence original) {
-    return original;
-  }
-
-  @Override
   public CharSequence getDisplaySequence(final CharSequence original, final int start, final int end) {
     return original.subSequence(start, end);
   }

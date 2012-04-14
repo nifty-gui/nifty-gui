@@ -1,7 +1,10 @@
 package de.lessvoid.nifty.controls.nullobjects;
 
 import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.textfield.filter.TextFieldInputFilter;
+import de.lessvoid.nifty.controls.textfield.filter.delete.TextFieldDeleteFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharSequenceFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputFilter;
 import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -21,7 +24,7 @@ public class TextFieldNull implements TextField {
 
   @Override
   public String getId() {
-    return "TextFieldNull";
+    return "TextFieldNull"; //NON-NLS
   }
 
   @Override
@@ -78,12 +81,12 @@ public class TextFieldNull implements TextField {
   }
 
   @Override
-  public CharSequence getRealText() {
+  public String getRealText() {
     return null;
   }
 
   @Override
-  public CharSequence getDisplayedText() {
+  public String getDisplayedText() {
     return null;
   }
 
@@ -100,21 +103,31 @@ public class TextFieldNull implements TextField {
   }
 
   @Override
-  public void setFilter(TextFieldInputFilter filter) {
+  public void enableInputFilter(final TextFieldInputFilter filter) {
   }
 
   @Override
-  public TextFieldInputFilter getFilter() {
-    return null;
+  public void enableInputFilter(final TextFieldInputCharFilter filter) {
   }
 
   @Override
-  public void setFormat(TextFieldDisplayFormat format) {
+  public void enableInputFilter(final TextFieldInputCharSequenceFilter filter) {
   }
 
   @Override
-  public TextFieldDisplayFormat getFormat() {
-    return null;
+  public void disableInputFilter() {
+  }
+
+  @Override
+  public void enableDeleteFilter(final TextFieldDeleteFilter filter) {
+  }
+
+  @Override
+  public void disableDeleteFilter() {
+  }
+
+  @Override
+  public void setFormat(final TextFieldDisplayFormat format) {
   }
 
   @Override

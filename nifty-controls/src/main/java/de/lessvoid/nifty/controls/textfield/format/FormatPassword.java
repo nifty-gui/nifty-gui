@@ -39,11 +39,6 @@ public class FormatPassword implements TextFieldDisplayFormat {
   }
 
   @Override
-  public CharSequence getDisplaySequence(final CharSequence original) {
-    return new SingleCharSequence(pwChar, original.length());
-  }
-
-  @Override
   public CharSequence getDisplaySequence(final CharSequence original, final int start, final int end) {
     return new SingleCharSequence(pwChar, end - start);
   }

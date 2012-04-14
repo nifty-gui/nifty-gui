@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.controls.textfield.filter;
+package de.lessvoid.nifty.controls.textfield.filter.input;
 
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -9,7 +9,7 @@ import java.util.Locale;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public class FilterAcceptFloat extends AbstractCharacterFilter {
+public class FilterAcceptFloat implements TextFieldInputCharFilter {
   /**
    * The character that represents the minus in a number.
    */
@@ -30,8 +30,16 @@ public class FilterAcceptFloat extends AbstractCharacterFilter {
   }
 
   @Override
-  protected boolean isAllowedCharacter(final int index, final char character) {
-    return Character.isDigit(
-        character) || ((character == minusChar) && (index == 0)) || (character == decimalSeparator);
+  public boolean acceptInput(final int index, final char newChar) {
+    if (Character.isDigit(newChar)) {
+      return true;
+    }
+
+    if ((newChar == minusChar) && (index == 0)) {
+      return true;
+    }
+
+    return newChar == decimalSeparator;
+
   }
 }

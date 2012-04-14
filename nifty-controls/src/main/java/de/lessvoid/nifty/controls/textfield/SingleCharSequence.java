@@ -92,6 +92,9 @@ public class SingleCharSequence implements CharSequence {
       throw new IndexOutOfBoundsException("Index out of range: " + Integer.toString(end - start));
     }
 
+    if ((start == 0) && (end == length)) {
+      return this;
+    }
     return new SingleCharSequence(singleChar, end - start);
   }
 }

@@ -65,18 +65,24 @@ public class TextFieldInputMapping implements NiftyInputMapping {
         if (inputEvent.isControlDown()) {
           return NiftyInputEvent.Cut;
         }
+        break;
       case KeyboardInputEvent.KEY_C:
         if (inputEvent.isControlDown()) {
           return NiftyInputEvent.Copy;
         }
+        break;
       case KeyboardInputEvent.KEY_V:
         if (inputEvent.isControlDown()) {
           return NiftyInputEvent.Paste;
         }
+        break;
       case KeyboardInputEvent.KEY_A:
         if (inputEvent.isControlDown()) {
           return NiftyInputEvent.SelectAll;
         }
+        break;
+      default:
+        break;
     }
 
     if (!Character.isISOControl(inputEvent.getCharacter())) {

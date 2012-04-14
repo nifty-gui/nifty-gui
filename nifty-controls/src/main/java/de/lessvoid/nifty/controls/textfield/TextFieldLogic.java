@@ -2,8 +2,12 @@ package de.lessvoid.nifty.controls.textfield;
 
 import de.lessvoid.nifty.Clipboard;
 import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.textfield.filter.FilterAcceptAll;
-import de.lessvoid.nifty.controls.textfield.filter.TextFieldInputFilter;
+import de.lessvoid.nifty.controls.textfield.filter.delete.FilterDeleteAll;
+import de.lessvoid.nifty.controls.textfield.filter.delete.TextFieldDeleteFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptAll;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharSequenceFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputFilter;
 import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
 import de.lessvoid.nifty.controls.textfield.format.FormatPlain;
 import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
@@ -19,6 +23,7 @@ public class TextFieldLogic {
   /**
    * The text that was typed into the input area by the user.
    */
+  @SuppressWarnings("StringBufferField")
   private final StringBuilder text;
 
   /**
@@ -62,9 +67,29 @@ public class TextFieldLogic {
   private final TextFieldView view;
 
   /**
-   * The filter that is used on the input text.
+   * The filter that is used on the input of single characters in the text.
    */
-  private TextFieldInputFilter filter;
+  private TextFieldInputCharFilter filterInputSingle;
+
+  /**
+   * The filter that is used on the input of a character sequence in the text.
+   */
+  private TextFieldInputCharSequenceFilter filterInputSequence;
+
+  /**
+   * The filter that is applied on delete operations.
+   */
+  private TextFieldDeleteFilter filterDelete;
+
+  /**
+   * The default input filter.
+   */
+  private static final TextFieldInputFilter DEFAULT_INPUT_FILTER = new FilterAcceptAll();
+
+  /**
+   * The default delete filter.
+   */
+  private static final TextFieldDeleteFilter DEFAULT_DELETE_FILTER = new FilterDeleteAll();
 
   /**
    * The format that is applied to the text.
@@ -82,7 +107,10 @@ public class TextFieldLogic {
     clipboard = newClipboard;
     maxLength = TextField.UNLIMITED_LENGTH;
 
-    filter = new FilterAcceptAll();
+    filterInputSingle = DEFAULT_INPUT_FILTER;
+    filterInputSequence = DEFAULT_INPUT_FILTER;
+    filterDelete = DEFAULT_DELETE_FILTER;
+
     format = new FormatPlain();
 
     text = new StringBuilder(100);
@@ -99,21 +127,30 @@ public class TextFieldLogic {
   }
 
   /**
-   * Set the filter that is meant to be applied to the text that is typed into the text field.
+   * Set the filter that is applied to single character inputs.
    *
-   * @param newFilter the input filter of the text field
+   * @param filter the new filter or {@code null} to reset the filter
    */
-  public void setFilter(final TextFieldInputFilter newFilter) {
-    filter = (newFilter == null) ? new FilterAcceptAll() : newFilter;
+  public void setInputFilterSingle(final TextFieldInputCharFilter filter) {
+    filterInputSingle = (filter == null) ? DEFAULT_INPUT_FILTER : filter;
   }
 
   /**
-   * Get the input filter that applied currently to the input of this text field.
+   * Set the filter that is applied to character sequence inputs.
    *
-   * @return the currently active filter
+   * @param filter the new filter or {@code null} to reset the filter
    */
-  public TextFieldInputFilter getFilter() {
-    return filter;
+  public void setInputFilterSequence(final TextFieldInputCharSequenceFilter filter) {
+    filterInputSequence = (filter == null) ? DEFAULT_INPUT_FILTER : filter;
+  }
+
+  /**
+   * Set the filter that is applied to delete operations.
+   *
+   * @param filter the new filter or {@code null} to reset the filter
+   */
+  public void setDeleteFilter(final TextFieldDeleteFilter filter) {
+    filterDelete = (filter == null) ? DEFAULT_DELETE_FILTER : filter;
   }
 
   /**
@@ -219,7 +256,8 @@ public class TextFieldLogic {
   public void delete() {
     if (hasSelection()) {
       deleteSelectedText();
-    } else if ((cursorPosition < text.length()) && filter.acceptDelete(text, cursorPosition, cursorPosition + 1)) {
+    } else if ((cursorPosition < text.length()) && filterDelete.acceptDelete(text, cursorPosition,
+        cursorPosition + 1)) {
       text.delete(cursorPosition, cursorPosition + 1);
     } else {
       return;
@@ -246,7 +284,7 @@ public class TextFieldLogic {
       throw new IllegalStateException("Can't delete selected text without selection");
     }
 
-    if (filter.acceptDelete(text, selectionStart, selectionEnd)) {
+    if (filterDelete.acceptDelete(text, selectionStart, selectionEnd)) {
       text.delete(selectionStart, selectionEnd);
       cursorPosition = selectionStart;
       resetSelection();
@@ -308,7 +346,7 @@ public class TextFieldLogic {
    * @return the text that is to be displayed to the user
    */
   public CharSequence getDisplayedText() {
-    return format.getDisplaySequence(text);
+    return format.getDisplaySequence(text, 0, text.length());
   }
 
   /**
@@ -380,7 +418,7 @@ public class TextFieldLogic {
    */
   private boolean filterAndInsert(final char c) {
     if ((maxLength == TextField.UNLIMITED_LENGTH) || (text.length() < maxLength)) {
-      if (filter.acceptInput(text, cursorPosition, c)) {
+      if (filterInputSingle.acceptInput(cursorPosition, c)) {
         text.insert(cursorPosition, c);
         cursorPosition++;
         return true;
@@ -409,7 +447,7 @@ public class TextFieldLogic {
         insertCnt = Math.min(maxLength - text.length(), chars.length());
       }
       final CharSequence insertSequence = chars.subSequence(0, insertCnt);
-      if (filter.acceptInput(text, cursorPosition, insertSequence)) {
+      if (filterInputSequence.acceptInput(cursorPosition, insertSequence)) {
         text.insert(cursorPosition, chars);
         cursorPosition += insertCnt;
         return true;
