@@ -1,12 +1,10 @@
 package de.lessvoid.nifty.controls.textfield;
 
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.easymock.classextension.EasyMock.*;
 
 public class TextFieldChangeEventTest {
   private TextFieldLogic textField;
@@ -27,14 +25,14 @@ public class TextFieldChangeEventTest {
   public void testInitWithTextNull() {
     replay(view);
 
-    textField.initWithText(null);
+    textField.setTextAndNotify(null);
   }
 
   @Test
   public void testInitWithTextEmpty() {
     replay(view);
 
-    textField.initWithText("");
+    textField.setTextAndNotify("");
   }
 
   @Test
@@ -42,7 +40,7 @@ public class TextFieldChangeEventTest {
     view.textChangeEvent("new text");
     replay(view);
 
-    textField.initWithText("new text");
+    textField.setTextAndNotify("new text");
   }
 
   @Test

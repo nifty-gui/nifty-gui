@@ -1,14 +1,12 @@
 package de.lessvoid.nifty.controls.textfield;
 
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.Clipboard;
+
+import static org.easymock.classextension.EasyMock.*;
 
 public class TextFieldChangeEventClipboardTest {
   private TextFieldLogic textField;
@@ -33,7 +31,7 @@ public class TextFieldChangeEventClipboardTest {
     replay(clipboard);
     replay(view);
 
-    textField.cut(null);
+    textField.cut();
   }
 
   @Test
@@ -47,6 +45,6 @@ public class TextFieldChangeEventClipboardTest {
     textField.startSelecting();
     textField.setCursorPosition(1);
     textField.endSelecting();
-    textField.cut(null);
+    textField.cut();
   }
 }
