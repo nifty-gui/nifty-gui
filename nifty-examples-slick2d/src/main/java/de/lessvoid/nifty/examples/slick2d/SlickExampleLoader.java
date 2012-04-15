@@ -19,6 +19,11 @@ public class SlickExampleLoader extends NiftyBasicGame {
   private final NiftyExample example;
 
   /**
+   * The active instance of the Nifty-GUI.
+   */
+  private Nifty niftyGui;
+
+  /**
    * This helper method creates the required Slick-instance to display the examples.
    *
    * @param loader the example loader that is supposed to be displayed in the game container
@@ -45,8 +50,10 @@ public class SlickExampleLoader extends NiftyBasicGame {
   @Override
   protected void prepareNifty(final Nifty nifty) {
     example.prepareStart(nifty);
+    nifty.setDebugOptionPanelColors(true);
     if (example.getMainXML() != null) {
       nifty.fromXml(example.getMainXML(), example.getStartScreen());
     }
+    niftyGui = nifty;
   }
 }

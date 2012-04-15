@@ -7,16 +7,7 @@ package de.lessvoid.nifty.examples.defaultcontrols;
 import org.lwjgl.opengl.DisplayMode;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.HoverEffectBuilder;
-import de.lessvoid.nifty.builder.ImageBuilder;
-import de.lessvoid.nifty.builder.LayerBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.PopupBuilder;
-import de.lessvoid.nifty.builder.ScreenBuilder;
-import de.lessvoid.nifty.builder.StyleBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.builder.*;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
@@ -61,7 +52,8 @@ public class ControlsDemo<T> implements NiftyExample {
     }
 
     // create Nifty and load default styles and controls
-    Nifty nifty = new Nifty(new LwjglRenderDevice(true), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(), new AccurateTimeProvider());
+    Nifty nifty = new Nifty(new LwjglRenderDevice(true), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(),
+        new AccurateTimeProvider());
     ControlsDemo<DisplayMode> demo = new ControlsDemo(new ResolutionControlLWJGL());
     demo.prepareStart(nifty);
 
@@ -211,19 +203,16 @@ public class ControlsDemo<T> implements NiftyExample {
   private static <T> Screen createDemoScreen(final Nifty nifty, final ResolutionControl<T> resControl) {
     final CommonBuilders common = new CommonBuilders();
     Screen screen = new ScreenBuilder("demo") {{
-      controller(new ControlsDemoScreenController<T>(resControl,
-          "menuButtonListBox", "dialogListBox",
-          "menuButtonDropDown", "dialogDropDown",
-          "menuButtonTextField", "dialogTextField",
-          "menuButtonSlider", "dialogSliderAndScrollbar",
-          "menuButtonScrollPanel", "dialogScrollPanel",
-          "menuButtonDragAndDrop", "dialogDragAndDrop",
-          "menuButtonChatControl", "dialogChatControl",
-          "menuButtonMessageBox", "dialogMessageBox",
-          "menuButtonTabsControl", "dialogTabsControl",
-          "menuButtonTreeBoxControl", "dialogTreeBoxControl"
-      ));
-      inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping"); // this will enable Keyboard events for the screen controller
+      controller(
+          new ControlsDemoScreenController<T>(resControl, "menuButtonListBox", "dialogListBox", "menuButtonDropDown",
+              "dialogDropDown", "menuButtonTextField", "dialogTextField", "menuButtonSlider",
+              "dialogSliderAndScrollbar", "menuButtonScrollPanel", "dialogScrollPanel", "menuButtonDragAndDrop",
+              "dialogDragAndDrop", "menuButtonChatControl", "dialogChatControl", "menuButtonMessageBox",
+              "dialogMessageBox", "menuButtonTabsControl", "dialogTabsControl", "menuButtonTreeBoxControl",
+              "dialogTreeBoxControl"));
+      inputMapping(
+          "de.lessvoid.nifty.input.mapping.DefaultInputMapping"); // this will enable Keyboard events for the screen
+          // controller
       layer(new LayerBuilder("layer") {{
         backgroundImage("defaultcontrols/background-new.png");
         childLayoutVertical();
@@ -236,19 +225,33 @@ public class ControlsDemo<T> implements NiftyExample {
           paddingRight("20px");
           paddingTop("10px");
           paddingBottom("10px");
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonListBox", "ListBox", "ListBox demonstration\n\nThis example shows adding and removing items from a ListBox\nas well as the different selection modes that are available."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonListBox", "ListBox",
+              "ListBox demonstration\n\nThis example shows adding and removing items from a ListBox\nas well as the " +
+                  "different selection modes that are available."));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonDropDown", "DropDown", "DropDown and RadioButton demonstration\n\nThis shows how to dynamically add items to the\nDropDown control as well as the change event."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonDropDown", "DropDown",
+              "DropDown and RadioButton demonstration\n\nThis shows how to dynamically add items to the\nDropDown " +
+                  "control as well as the change event."));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonTextField", "TextField", "TextField demonstration\n\nThis example demonstrates the Textfield example using the password\nmode and the input length restriction. It also demonstrates\nall of the new events the Textfield publishes on the Eventbus."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonTextField", "TextField",
+              "TextField demonstration\n\nThis example demonstrates the Textfield example using the password\nmode " +
+                  "and the input length restriction. It also demonstrates\nall of the new events the Textfield " +
+                  "publishes on the Eventbus."));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonSlider", "Slider & Scrollbars", "Sliders and Scrollbars demonstration\n\nThis creates sliders to change a RGBA value and it\ndisplays a scrollbar that can be customized."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonSlider", "Slider & Scrollbars",
+              "Sliders and Scrollbars demonstration\n\nThis creates sliders to change a RGBA value and it\ndisplays a" +
+                  " scrollbar that can be customized."));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonScrollPanel", "ScrollPanel", "ScrollPanel demonstration\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonScrollPanel", "ScrollPanel",
+              "ScrollPanel demonstration\n\nThis simply shows an image and uses the ScrollPanel\nto scroll around its" +
+                  " area. You can directly input\nthe x/y position you want the ScrollPanel to scroll to."));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonDragAndDrop", "Drag and Drop", "Drag and Drop demonstration\n\nDrag and Drop has been extended with Nifty 1.3"));
+          control(MenuButtonControlDefinition.getControlBuilder("menuButtonDragAndDrop", "Drag and Drop",
+              "Drag and Drop demonstration\n\nDrag and Drop has been extended with Nifty 1.3"));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilder("menuButtonCredits", "?", "Credits\n\nCredits and Thanks!", "25px"));
+          control(
+              MenuButtonControlDefinition.getControlBuilder("menuButtonCredits", "?", "Credits\n\nCredits and Thanks!",
+                  "25px"));
         }});
         panel(new PanelBuilder("navigation-2") {{
           width("100%");
@@ -259,13 +262,25 @@ public class ControlsDemo<T> implements NiftyExample {
           paddingRight("20px");
           paddingTop("0px");
           paddingBottom("10px");
-          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonChatControl", "ChatControl", "Chat Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonChatControl", "ChatControl",
+              "Chat Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow " +
+                  "you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just " +
+                  "included his work as\nanother standard control to Nifty! :)"));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonMessageBox", "MessageBox", "MessageBox demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonMessageBox", "MessageBox",
+              "MessageBox demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow " +
+                  "you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just " +
+                  "included his work as\nanother standard control to Nifty! :)"));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonTabsControl", "TabsControl", "Tabs Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonTabsControl", "TabGroupControl",
+              "TabGroup Control demonstration\n\nThis control was contributed by Nifty User ractoc. It " +
+                  "demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this " +
+                  "case we've just included his work as\nanother standard control to Nifty! :)"));
           panel(builders.hspacer("10px"));
-          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonTreeBoxControl", "TreeBoxControl", "TreeBox Control demonstration\n\nThis control was contributed by Nifty User ractoc. It demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this case we've just included his work as\nanother standard control to Nifty! :)"));
+          control(MenuButtonControlDefinition.getControlBuilderUser("menuButtonTreeBoxControl", "TreeBoxControl",
+              "TreeBox Control demonstration\n\nThis control was contributed by Nifty User ractoc. It " +
+                  "demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this " +
+                  "case we've just included his work as\nanother standard control to Nifty! :)"));
           panel(builders.hspacer("10px"));
         }});
         panel(new PanelBuilder("dialogParent") {{
@@ -580,7 +595,9 @@ public class ControlsDemo<T> implements NiftyExample {
               style("creditsCaption");
             }});
             text(new TextBuilder() {{
-              text("This demonstration uses creative commons licenced sound samples\nand music from the following sources");
+              text(
+                  "This demonstration uses creative commons licenced sound samples\nand music from the following " +
+                      "sources");
               style("creditsCenter");
             }});
             panel(common.vspacer("30px"));
@@ -620,16 +637,17 @@ public class ControlsDemo<T> implements NiftyExample {
             }});
             text(new TextBuilder() {{
               text(
-                  "The following people helped creating Nifty with valuable feedback,\nfixing bugs or sending patches.\n(in no particular order)\n\n" +
-                  "chaz0x0\n" + 
-                  "Tumaini\n" + 
-                  "arielsan\n" + 
-                  "gaba1978\n" + 
-                  "ractoc\n" + 
-                  "bonechilla\n" + 
-                  "mdeletrain\n" + 
-                  "mulov\n" + 
-                  "gouessej\n");
+                  "The following people helped creating Nifty with valuable feedback," +
+                      "\nfixing bugs or sending patches.\n(in no particular order)\n\n" +
+                      "chaz0x0\n" +
+                      "Tumaini\n" +
+                      "arielsan\n" +
+                      "gaba1978\n" +
+                      "ractoc\n" +
+                      "bonechilla\n" +
+                      "mdeletrain\n" +
+                      "mulov\n" +
+                      "gouessej\n");
               style("creditsCenter");
             }});
             panel(common.vspacer("75px"));
@@ -638,11 +656,11 @@ public class ControlsDemo<T> implements NiftyExample {
               style("creditsCaption");
             }});
             text(new TextBuilder() {{
-              text(
-                  "Ariel Coppes and Ruben Garat of Gemserk\n(http://blog.gemserk.com/)\n\n\n" +
+              text("Ariel Coppes and Ruben Garat of Gemserk\n(http://blog.gemserk.com/)\n\n\n" +
                   "Erlend, Kirill, Normen, Skye and Ruth of jMonkeyEngine\n(http://www.jmonkeyengine.com/home/)\n\n\n" +
                   "Brian Matzon, Elias Naur, Caspian Rychlik-Prince for lwjgl\n(http://www.lwjgl.org/\n\n\n" +
-                  "KappaOne, MatthiasM, aho, Dragonene, darkprophet, appel, woogley, Riven, NoobFukaire\nfor valuable input and discussions at #lwjgl IRC on the freenode network\n\n\n" +
+                  "KappaOne, MatthiasM, aho, Dragonene, darkprophet, appel, woogley, Riven, " +
+                  "NoobFukaire\nfor valuable input and discussions at #lwjgl IRC on the freenode network\n\n\n" +
                   "... and Kevin Glass\n(http://slick.cokeandcode.com/)\n\n\n\n\n\n\n\n" +
                   "As well as everybody that has not yet given up on Nifty =)\n\n" +
                   "And again sorry to all of you that I've forgotten. You rock too!\n\n\n");

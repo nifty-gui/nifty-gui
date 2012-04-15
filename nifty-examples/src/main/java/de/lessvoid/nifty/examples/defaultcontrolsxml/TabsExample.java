@@ -4,7 +4,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.NiftyExample;
 
 /**
- * This class defines the default controls example for the <b>Tabs</b> control.
+ * This class defines the default controls example for the <b>TabGroup</b> control.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
@@ -21,7 +21,7 @@ public class TabsExample implements NiftyExample {
 
   @Override
   public String getTitle() {
-    return "Nifty default controls examples - Tabs Control";
+    return "Nifty default controls examples - TabGroup Control";
   }
 
   @Override
