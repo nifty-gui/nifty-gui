@@ -3,6 +3,7 @@ package de.lessvoid.nifty.controls.listbox;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bushe.swing.event.EventTopicSubscriber;
@@ -191,8 +192,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     try {
       return (ListBoxViewConverter<T>) Class.forName(className).newInstance();
     } catch (Exception e) {
-      log.warning("Unable to instantiate given class [" + className + "] with error: " + e.getMessage());
-      e.printStackTrace();
+      log.log(Level.WARNING, "Unable to instantiate given class [" + className + "] with error: " + e.getMessage(), e);
       return new ListBoxViewConverterSimple();
     }
   }
