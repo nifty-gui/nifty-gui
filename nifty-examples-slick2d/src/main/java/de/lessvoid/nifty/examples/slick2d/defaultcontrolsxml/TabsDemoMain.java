@@ -4,7 +4,7 @@ import de.lessvoid.nifty.examples.defaultcontrolsxml.TabsExample;
 import de.lessvoid.nifty.examples.slick2d.SlickExampleLoader;
 
 /**
- * Demo class to execute the default controls XML &quot;Tabs&quot; demonstration.
+ * Demo class to execute the default controls XML &quot;TabGroup&quot; demonstration.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
