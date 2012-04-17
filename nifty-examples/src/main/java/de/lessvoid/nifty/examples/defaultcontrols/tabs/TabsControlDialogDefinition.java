@@ -3,13 +3,13 @@ package de.lessvoid.nifty.examples.defaultcontrols.tabs;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
-import de.lessvoid.nifty.controls.tabs.builder.TabsBuilder;
+import de.lessvoid.nifty.controls.tabs.builder.TabGroupBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
 
 /**
- * The ChatControlDialogRegister registers a new control (the whole ChatControlDialog) with
- * Nifty. We can later simply generate the whole dialog using a control with the given NAME.
- * 
+ * The ChatControlDialogRegister registers a new control (the whole ChatControlDialog) with Nifty. We can later simply
+ * generate the whole dialog using a control with the given NAME.
+ *
  * @author void
  */
 public class TabsControlDialogDefinition {
@@ -19,9 +19,8 @@ public class TabsControlDialogDefinition {
     new ControlDefinitionBuilder(NAME) {{
       controller(new TabsControlDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
-        control(new TabsBuilder("tabs") {{
-            buttonWidth("50%");
-            buttonHeight("50px");
+        control(new TabGroupBuilder("tabs") {{
+          height("100%");
         }});
       }});
     }}.registerControlDefintion(nifty);

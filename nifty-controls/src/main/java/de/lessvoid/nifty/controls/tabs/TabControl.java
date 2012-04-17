@@ -4,55 +4,104 @@
  */
 package de.lessvoid.nifty.controls.tabs;
 
+import java.util.Properties;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Tab;
+import de.lessvoid.nifty.controls.TabGroup;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-import java.util.Properties;
 
 /**
+ * This is the controller of the tab controls.
  *
  * @author ractoc
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @deprecated This class is not meant for direct usage. For accessing the controls provided for this element access the
+ *             {@link Tab} interface.
  */
-public class TabControl extends AbstractController implements Tab {
+@Deprecated
+public class TabControl extends AbstractController implements Tab, TabGroupMember {
+  /**
+   * The tab group that is the parent of this tab. This might be {@code null} for the time this tab is not a part of tab
+   * group.
+   */
+  private TabGroup parentGroup;
 
-    private String caption;
+  /**
+   * The caption of this tab.
+   */
+  private String tabCaption;
 
-    @Override
-    public void bind(Nifty nifty, Screen screen, Element element, Properties parameter, Attributes controlDefinitionAttributes) {
-        super.bind(element);
-        if (caption == null || caption.length() == 0) {
-            if (controlDefinitionAttributes.get("caption") == null || controlDefinitionAttributes.get("caption").length() == 0) {
-                setCaption(getId());
-            } else {
-                setCaption(controlDefinitionAttributes.get("caption"));
-            }
-        }
+  @Override
+  public void bind(
+      final Nifty nifty,
+      final Screen screen,
+      final Element element,
+      final Properties parameter,
+      final Attributes controlDefinitionAttributes) {
+    bind(element);
 
+    if (controlDefinitionAttributes.isSet("caption")) {
+      setCaption(controlDefinitionAttributes.get("caption"));
+    } else {
+      throw new IllegalStateException("Missing caption tag for the tab.");
     }
+  }
 
-    @Override
-    public void onStartScreen() {
+  @Override
+  public void setCaption(final String caption) {
+    if (caption == null) {
+      throw new IllegalArgumentException("Caption must not be empty or null");
     }
+    if (!caption.equals(tabCaption)) {
+      tabCaption = caption;
+      if (hasParent()) {
+        parentGroup.setTabCaption(this, caption);
+      }
+    }
+  }
 
-    @Override
-    public boolean inputEvent(NiftyInputEvent inputEvent) {
-        return true;
-    }
+  @Override
+  public boolean hasParent() {
+    return parentGroup != null;
+  }
 
-    @Override
-    public void setCaption(String caption) {
-        if (caption == null || caption.length() == 0) {
-            throw new NullPointerException("Missing attribute: caption for tab " + this.getId());
-        }
-        this.caption = caption;
-    }
+  @Override
+  public String getCaption() {
+    return tabCaption;
+  }
 
-    @Override
-    public String getCaption() {
-        return caption;
+  @Override
+  public TabGroup getParentGroup() {
+    return parentGroup;
+  }
+
+  @Override
+  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    return true;
+  }
+
+  @Override
+  public boolean isVisible() {
+    if (hasParent()) {
+      return parentGroup.getSelectedTab().equals(this);
     }
+    return false;
+  }
+
+  @Override
+  public void onStartScreen() {
+  }
+
+  @Override
+  public void setParentTabGroup(final TabGroup tabGroup) {
+    parentGroup = tabGroup;
+    if (parentGroup != null) {
+      parentGroup.setTabCaption(this, tabCaption);
+    }
+  }
 }

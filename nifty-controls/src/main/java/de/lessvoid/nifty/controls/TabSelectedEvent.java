@@ -5,36 +5,35 @@
 package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
-import de.lessvoid.nifty.controls.tabs.TabsControl;
+import de.lessvoid.nifty.controls.tabs.TabGroupControl;
 
 /**
- *
  * @author ractoc
  */
 public class TabSelectedEvent implements NiftyEvent<Void> {
-    private TabsControl tabsControl;
-    private String selectedTabId;
-    
-    public TabSelectedEvent(TabsControl tabsControl, String selectedTabId) {
-        this.tabsControl = tabsControl;
-        this.selectedTabId = selectedTabId;
-    }
+  private TabGroupControl tabsControl;
+  private String selectedTabId;
 
-    public String getSelectedTabId() {
-        return selectedTabId;
-    }
+  public TabSelectedEvent(TabGroupControl tabsControl, String selectedTabId) {
+    this.tabsControl = tabsControl;
+    this.selectedTabId = selectedTabId;
+  }
 
-    public void setSelectedTabId(String selectedTabId) {
-        this.selectedTabId = selectedTabId;
-    }
+  public String getSelectedTabId() {
+    return selectedTabId;
+  }
 
-    public TabsControl getTabsControl() {
-        return tabsControl;
-    }
+  public void setSelectedTabId(String selectedTabId) {
+    this.selectedTabId = selectedTabId;
+  }
 
-    public void setTabsControl(TabsControl tabsControl) {
-        this.tabsControl = tabsControl;
-    }
-    
-    
+  public TabGroupControl getTabsControl() {
+    return tabsControl;
+  }
+
+  public void setTabsControl(TabGroupControl tabsControl) {
+    this.tabsControl = tabsControl;
+  }
+
+
 }
