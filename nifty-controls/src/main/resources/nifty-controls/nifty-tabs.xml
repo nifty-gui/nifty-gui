@@ -4,9 +4,9 @@
                      childRootId="#tab-content-panel" style="nifty-tabs">
     <panel id="#tabs-panel" childLayout="vertical">
       <panel id="#tab-button-panel" childLayout="horizontal">
-        <control id="#button-template" name="button"/>
+        <control id="#button-template" name="button" style="nifty-tab-button-active"/>
       </panel>
-      <panel id="#tab-content-panel" childLayout="center"/>
+      <panel id="#tab-content-panel" style="#panel" childLayout="center"/>
     </panel>
   </controlDefinition>
 

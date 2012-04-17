@@ -255,20 +255,15 @@ public class TabGroupControl extends AbstractController implements TabGroup {
         log.warning("Element without tab control detected. Removing: " + element.getId()); //NON-NLS
         element.markForRemoval();
       } else {
-        addTab(tabControl);
+        initTab(tabControl);
+        selectedIndex = 0;
       }
     }
 
     checkVisibility();
   }
 
-  @Override
-  public void addTab(final Tab tab) {
-    if (!tab.getElement().getParent().equals(contentPanel)) {
-      tab.getElement().markForMove(contentPanel, new TabAddMoveEndNotify(this, tab));
-      return;
-    }
-
+  private void initTab(final Tab tab) {
     final int tabIndex = indexOf(tab);
     Element button = getButton(tabIndex);
     if (button == null) {
@@ -289,13 +284,19 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       btnControl.setText(tab.getCaption());
     }
 
-    if (selectedIndex == -1) {
-      selectedIndex = 0;
-    }
-
     if (tab instanceof TabGroupMember) {
       ((TabGroupMember) tab).setParentTabGroup(this);
     }
+  }
+
+  @Override
+  public void addTab(final Tab tab) {
+    if (!tab.getElement().getParent().equals(contentPanel)) {
+      tab.getElement().markForMove(contentPanel, new TabAddMoveEndNotify(this, tab));
+      return;
+    }
+
+    initTab(tab);
 
     checkVisibility();
   }
@@ -359,12 +360,26 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
     for (int i = 0; i < length; i++) {
       final Element tab = tabList.get(i);
-      if ((i == selectedIndex) && !tab.isVisible()) {
-        tab.show();
-      } else if ((i != selectedIndex) && tab.isVisible()) {
-        tab.hide();
+      final Element button = getButton(i);
+
+      if (i == selectedIndex) {
+        if (!tab.isVisible()) {
+          tab.show();
+        }
+        if (!"nifty-tab-button-active".equals(button.getStyle())) {
+          button.setStyle("nifty-tab-button-active");
+        }
+      } else {
+        if (tab.isVisible()) {
+          tab.hide();
+        }
+        if (!"nifty-tab-button".equals(button.getStyle())) {
+          button.setStyle("nifty-tab-button");
+        }
       }
     }
+
+    getElement().layoutElements();
   }
 
   @Override
