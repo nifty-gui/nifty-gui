@@ -4,8 +4,8 @@
   <useStyles filename="panel/nifty-panel.xml"/>
 
   <!-- This style is applied to the panel that holds the content of each tab. -->
-  <style id="nifty-tabs#panel" base="nifty-panel">
-    <attributes width="100%" padding="3,3,3,3"/>
+  <style id="nifty-tabs#panel">
+    <attributes width="100%" padding="8px,16px,24px,16px" backgroundImage="tabs/tab-content-panel.png" imageMode="resize:6,213,6,2,6,213,6,215,6,213,6,8" />
   </style>
 
   <!-- This style is applied to the panel that holds the button -->
@@ -25,7 +25,7 @@
                 paddingRight="11px" width="100px" height="23px" childLayout="center" visibleToMouse="true"/>
     <effect>
       <onHover name="imageOverlay" filename="tabs/tabs.png"
-               imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
+               imageMode="sprite-resize:31,23,1,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
     </effect>
   </style>
 
@@ -38,11 +38,13 @@
   <!-- The style of a tab button that is the activated one. -->
   <style id="nifty-tab-button-active">
     <attributes backgroundImage="tabs/tabs.png"
-                imageMode="sprite-resize:31,23,1,15,1,15,11,15,1,15,1,15,1,15,11" paddingLeft="11px"
+                imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" paddingLeft="11px"
                 paddingRight="11px" width="100px" height="23px" childLayout="center" visibleToMouse="true"/>
     <effect>
+    <!-- weiss noch net :) 
       <onHover name="imageOverlay" filename="tabs/tabs.png"
                imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
+       -->
     </effect>
   </style>
 

@@ -4,7 +4,7 @@
   <useStyles filename="nifty-default-styles.xml"/>
   <useControls filename="nifty-default-controls.xml"/>
   <screen id="start">
-    <layer id="layer" childLayout="center" backgroundColor="#003f">
+    <layer id="layer" childLayout="center" backgroundColor="#dddf">
       <panel id="tabs" childLayout="vertical" valign="center" align="center" width="50%" height="50%">
         <control id="edit_tabs" name="tabGroup">
           <control id="tab_1" name="tab" caption="Tab #1" childLayout="vertical" height="100%">
