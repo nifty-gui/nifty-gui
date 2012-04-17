@@ -3,9 +3,9 @@ package de.lessvoid.nifty.examples.defaultcontrols.tabs;
 import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.TabGroup;
+import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.tabs.builder.TabBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
@@ -33,16 +33,22 @@ public class TabsControlDialogController implements Controller {
       final Attributes controlDefinitionAttributes) {
     tabs = screen.findNiftyControl("tabs", TabGroup.class);
     tabs.addTab(new TabBuilder("tab_1", "Tab 1") {{
-      panel(new PanelBuilder() {{
-        childLayoutHorizontal();
-        control(builders.createLabel("Tab 1"));
+      childLayoutCenter();
+      control(new LabelBuilder("tab1_label", "Tab 1") {{
+        height("100%");
+        width("100%");
       }});
+      height("100%");
+      width("100%");
     }});
     tabs.addTab(new TabBuilder("tab_2", "Tab 2") {{
-      panel(new PanelBuilder() {{
-        childLayoutHorizontal();
-        control(builders.createLabel("Tab 2"));
+      childLayoutCenter();
+      control(new LabelBuilder("tab2_label", "Tab 2") {{
+        height("100%");
+        width("100%");
       }});
+      height("100%");
+      width("100%");
     }});
   }
 

@@ -10,8 +10,8 @@
     </panel>
   </controlDefinition>
 
-  <controlDefinition controller="de.lessvoid.nifty.controls.tabs.TabControl" name="tab"
-                     childRootId="#content" style="nifty-tab">
+  <controlDefinition controller="de.lessvoid.nifty.controls.tabs.TabControl" name="tab" style="nifty-tab"
+                     childLayout="center" childRootId="#content">
     <panel id="#content"/>
   </controlDefinition>
 </nifty-controls>

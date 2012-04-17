@@ -20,7 +20,7 @@ public class TabsControlDialogDefinition {
       controller(new TabsControlDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
         control(new TabGroupBuilder("tabs") {{
-
+          height("100%");
         }});
       }});
     }}.registerControlDefintion(nifty);
