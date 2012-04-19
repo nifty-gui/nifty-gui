@@ -5,12 +5,14 @@
 
   <!-- This style is applied to the panel that holds the content of each tab. -->
   <style id="nifty-tabs#panel">
-    <attributes width="100%" padding="8px,16px,24px,16px" backgroundImage="tabs/tab-content-panel.png" imageMode="resize:6,213,6,2,6,213,6,215,6,213,6,8" />
+    <attributes width="100%" padding="8px,16px,24px,16px" backgroundImage="tabs/tab-content-panel.png"
+                imageMode="resize:6,213,6,1,6,213,6,215,6,213,6,8"/>
   </style>
 
   <!-- This style is applied to the panel that holds the button -->
   <style id="nifty-tabs#tab-button-panel">
-    <attributes width="100%" padding="3,3,3,3"/>
+    <attributes width="100%" backgroundImage="tabs/tab-background-border.png"
+                imageMode="resize:0,3,0,0,0,3,0,2,0,3,0,1"/>
   </style>
 
   <!-- The style of a single tab element. -->
@@ -41,10 +43,10 @@
                 imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" paddingLeft="11px"
                 paddingRight="11px" width="100px" height="23px" childLayout="center" visibleToMouse="true"/>
     <effect>
-    <!-- weiss noch net :) 
-      <onHover name="imageOverlay" filename="tabs/tabs.png"
-               imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
-       -->
+      <!-- weiss noch net :)
+     <onHover name="imageOverlay" filename="tabs/tabs.png"
+              imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
+      -->
     </effect>
   </style>
 
