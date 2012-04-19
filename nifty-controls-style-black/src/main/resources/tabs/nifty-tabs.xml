@@ -6,7 +6,7 @@
   <!-- This style is applied to the panel that holds the content of each tab. -->
   <style id="nifty-tabs#panel">
     <attributes width="100%" padding="8px,16px,24px,16px" backgroundImage="tabs/tab-content-panel.png"
-                imageMode="resize:6,213,6,1,6,213,6,215,6,213,6,8"/>
+                imageMode="resize:6,1,6,1,6,1,6,215,6,1,6,8"/>
   </style>
 
   <!-- This style is applied to the panel that holds the button -->
