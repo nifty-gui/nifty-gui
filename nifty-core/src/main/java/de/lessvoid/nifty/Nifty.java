@@ -160,7 +160,7 @@ public class Nifty {
 
       initalizeEventBus();
     } catch (Exception e) {
-      log.warning(e.getMessage());
+      log.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
@@ -251,8 +251,10 @@ public class Nifty {
     }
     handleDynamicElements();
     updateSoundSystem();
-    if (log.isLoggable(Level.FINER)) {
-      log.fine(currentScreen.debugOutput());
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest(currentScreen.debugOutput());
+    } else if (log.isLoggable(Level.FINE)) {
+      log.fine(currentScreen.debugOutputFocusElements());
     }
     return exit;
   }
@@ -1001,7 +1003,25 @@ public class Nifty {
       }
       element.setParent(destinationElement);
       destinationElement.add(element);
+
+      // now we'll need to add elements back to the focushandler
+      addToFocusHandler(element);
+
       screen.layoutLayers();
+    }
+
+    private void addToFocusHandler(final Element element) {
+      if (element.isFocusable()) {
+        // currently add the element to the end of the focushandler
+        //
+        // this is not quite right but at the moment I don't have any idea on how
+        // to find the right spot in the focushandler to insert the element into
+        // (it should really be to spot where it has been removed from)
+        element.getFocusHandler().addElement(element);
+      }
+      for (int i=0; i<element.getElements().size(); i++) {
+        addToFocusHandler(element.getElements().get(i));
+      }
     }
   }
 
@@ -1217,7 +1237,7 @@ public class Nifty {
         log.info(niftyType.output());
       }
     } catch (Exception e) {
-      log.warning(e.getMessage());
+      log.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
@@ -1231,7 +1251,7 @@ public class Nifty {
         log.info(niftyType.output());
       }
     } catch (Exception e) {
-      log.warning(e.getMessage());
+      log.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
@@ -1248,7 +1268,7 @@ public class Nifty {
         log.info(niftyType.output());
       }
     } catch (Exception e) {
-      log.warning(e.getMessage());
+      log.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
@@ -1263,7 +1283,7 @@ public class Nifty {
         log.info(niftyType.output());
       }
     } catch (Exception e) {
-      log.warning(e.getMessage());
+      log.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
@@ -1280,7 +1300,7 @@ public class Nifty {
         log.info(niftyType.output());
       }
     } catch (Exception e) {
-      log.warning(e.getMessage());
+      log.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
@@ -1305,7 +1325,7 @@ public class Nifty {
     try {
       getNiftyMouse().registerMouseCursor(id, filename, hotspotX, hotspotY);
     } catch (IOException e) {
-      log.warning(e.getMessage());
+      log.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
@@ -1332,8 +1352,8 @@ public class Nifty {
     @Override
     public boolean processMouseEvent(final int mouseX, final int mouseY, final int mouseWheel, final int button, final boolean buttonDown) {
       boolean processed = processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
-      if (log.isLoggable(Level.INFO)) {
-        log.info("[processMouseEvent] [" +  mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + "] processed [" + processed + "]");
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("[processMouseEvent] [" +  mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + "] processed [" + processed + "]");
       }
       return processed;
     }
@@ -1344,8 +1364,8 @@ public class Nifty {
         return false;
       }
       boolean result = currentScreen.keyEvent(keyEvent);
-      if (log.isLoggable(Level.INFO)) {
-        log.info("[processKeyboardEvent] " + keyEvent + " processed [" + result + "]");
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("[processKeyboardEvent] " + keyEvent + " processed [" + result + "]");
       }
       return result;
     }
