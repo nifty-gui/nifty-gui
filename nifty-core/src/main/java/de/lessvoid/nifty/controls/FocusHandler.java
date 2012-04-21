@@ -56,6 +56,25 @@ public class FocusHandler {
   }
 
   /**
+   * add an element to the focus handler after an existing element already added to it
+   * @param existingElement element that already exists in the focushandler
+   * @param element new element to add
+   */
+  public void addElementAfter(final Element existingElement, final Element element) {
+    int idx = entries.indexOf(existingElement);
+    if (idx == -1) {
+      log.warning("requesting to add focusable element after [" + existingElement + "] but I can't find it on the current screen. Adding it to the end of the list (like in the regular case)");
+      entries.add(element);
+    } else {
+      if (idx == entries.size() - 1) {
+        entries.add(element);
+      } else {
+        entries.add(idx + 1, element);
+      }
+    }
+  }
+
+  /**
    * get next element.
    * @param current current element
    * @return next element
