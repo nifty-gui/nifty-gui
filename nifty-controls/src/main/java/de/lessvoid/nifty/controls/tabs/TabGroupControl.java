@@ -352,6 +352,16 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   }
 
   /**
+   * Get the tab control at a specified index.
+   *
+   * @param index the index of the tab control
+   * @return the tab control
+   */
+  private Tab getTab(final int index) {
+    return contentPanel.getElements().get(index).getNiftyControl(Tab.class);
+  }
+
+  /**
    * Check the visibility settings of all tabs and correct it as needed.
    */
   private void checkVisibility() {
@@ -466,6 +476,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
     selectedIndex = index;
     checkVisibility();
+    niftyGui.publishEvent(getId(), new TabSelectedEvent(this, getTab(index), index));
   }
 
   @Override
