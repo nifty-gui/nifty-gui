@@ -469,6 +469,12 @@ public class Screen {
     return debugOutput(".*", ".*");
   }
 
+  public String debugOutputFocusElements() {
+    StringBuffer result = new StringBuffer();
+    result.append(focusHandler.toString());
+    return result.toString();
+  }
+
   public String debugOutput(final String regexpElement, final String regexpAttribute) {
     StringBuffer result = new StringBuffer();
     debugOutputLayerElements(regexpElement, regexpAttribute, result, layerElements);
