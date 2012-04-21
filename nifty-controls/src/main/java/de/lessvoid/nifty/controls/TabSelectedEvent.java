@@ -5,35 +5,66 @@
 package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
-import de.lessvoid.nifty.controls.tabs.TabGroupControl;
 
 /**
+ * This event is fired once a tab is selected by the user and becomes visible.
+ *
  * @author ractoc
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class TabSelectedEvent implements NiftyEvent<Void> {
-  private TabGroupControl tabsControl;
-  private String selectedTabId;
+  /**
+   * The group that is the parent of the tab that got selected.
+   */
+  private final TabGroup group;
 
-  public TabSelectedEvent(TabGroupControl tabsControl, String selectedTabId) {
-    this.tabsControl = tabsControl;
-    this.selectedTabId = selectedTabId;
+  /**
+   * The tab that was selected.
+   */
+  private final Tab tab;
+
+  /**
+   * The index of the selected tab.
+   */
+  private final int index;
+
+  /**
+   * + Create a instance of this event and set all the values that are transferred in such a event.
+   *
+   * @param tabGroup the tab group control that is the parent of the effected tab
+   * @param tabControl the tab that is now visible
+   * @param tabIndex the index of the tab that is now visible
+   */
+  public TabSelectedEvent(final TabGroup tabGroup, final Tab tabControl, final int tabIndex) {
+    group = tabGroup;
+    tab = tabControl;
+    index = tabIndex;
   }
 
-  public String getSelectedTabId() {
-    return selectedTabId;
+  /**
+   * Get the tab group that is the parent of the tab that became visible.
+   *
+   * @return the tab group
+   */
+  private TabGroup getParentGroup() {
+    return group;
   }
 
-  public void setSelectedTabId(String selectedTabId) {
-    this.selectedTabId = selectedTabId;
+  /**
+   * Get the tab that became visible.
+   *
+   * @return the tab that is now visible
+   */
+  private Tab getTab() {
+    return tab;
   }
 
-  public TabGroupControl getTabsControl() {
-    return tabsControl;
+  /**
+   * Get the index of the tab that was set visible.
+   *
+   * @return the index of the tab that is now visible
+   */
+  private int getIndex() {
+    return index;
   }
-
-  public void setTabsControl(TabGroupControl tabsControl) {
-    this.tabsControl = tabsControl;
-  }
-
-
 }
