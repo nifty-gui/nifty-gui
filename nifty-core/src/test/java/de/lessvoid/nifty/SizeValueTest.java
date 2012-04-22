@@ -57,4 +57,19 @@ public class SizeValueTest extends TestCase {
     assertTrue(value.hasHeightSuffix());
     assertFalse(value.hasWidthSuffix());
   }
+
+  public void testPixelFactoryMethod() {
+    SizeValue value = SizeValue.px(10);
+    assertEquals(10, value.getValueAsInt(100));
+  }
+
+  public void testPercentageFactoryMethod() {
+    SizeValue value = SizeValue.percent(10);
+    assertEquals(10, value.getValueAsInt(100));
+  }
+
+  public void testWildcardFactoryMethod() {
+    SizeValue value = SizeValue.wildcard();
+    assertTrue(value.hasWildcard());
+  }
 }
