@@ -3,9 +3,8 @@
   <!-- the actual radio button -->
   <controlDefinition name="radioButton" style="nifty-radiobutton-style" controller="de.lessvoid.nifty.controls.radiobutton.RadioButtonControl">
     <panel style="#panel">
-      <interact onClick="onClick()" />
       <image id="#select" style="#select">
-        <image id="#overlay-select" style="#overlay-select" />
+        <interact onClick="onClick()" />
       </image>
     </panel>
   </controlDefinition>

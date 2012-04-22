@@ -5,16 +5,18 @@
   <!-- the background of the textfield -->
   <style id="nifty-textfield#panel">
     <attributes childLayout="overlay" height="23px" />
+    <effect>
+      <onHover name="changeMouseCursor" id="textFieldCursor" />
+      <onHover name="border" color="#822f" post="true" />
+    </effect>
   </style>
 
   <!-- the actual input field -->
   <style id="nifty-textfield#field">
-    <attributes childLayout="center" visibleToMouse="true" childClip="true" backgroundColor="#666f" padding="0px,2px"/>
+    <attributes childLayout="center" childClip="true" backgroundColor="#666f" padding="0px,2px"/>
     <effect>
       <onActive name="border" color="#222f" post="true" inset="1px" />
       <onFocus name="colorBar" color="#800f" post="true" inset="1px" />
-      <onHover name="changeMouseCursor" id="textFieldCursor" />
-      <onHover name="border" color="#822f" post="true" />
       <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
       <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
