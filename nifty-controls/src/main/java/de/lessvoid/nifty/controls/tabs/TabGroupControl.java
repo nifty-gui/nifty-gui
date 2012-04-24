@@ -19,6 +19,7 @@ import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
@@ -30,6 +31,8 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 @Deprecated
 public class TabGroupControl extends AbstractController implements TabGroup {
+  private static final int BUTTON_LEFT_MARGIN = -16;
+
   /**
    * This class is used for the event handlers that are needed for the tab group controls. It will force the tab group
    * to update the visibility settings of all tabs in case the element is shown.
@@ -378,6 +381,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
         }
         if (!"nifty-tab-button-active".equals(button.getStyle())) {
           button.setStyle("nifty-tab-button-active");
+          addMargin(i, button);
         }
       } else {
         if (tab.isVisible()) {
@@ -385,11 +389,20 @@ public class TabGroupControl extends AbstractController implements TabGroup {
         }
         if (!"nifty-tab-button".equals(button.getStyle())) {
           button.setStyle("nifty-tab-button");
+          addMargin(i, button);
         }
       }
     }
 
     getElement().layoutElements();
+  }
+
+  private void addMargin(final int i, final Element button) {
+    if (i > 0) {
+      button.setMarginLeft(SizeValue.px(BUTTON_LEFT_MARGIN));
+    } else {
+      button.setMarginLeft(SizeValue.px(0));
+    }
   }
 
   @Override
