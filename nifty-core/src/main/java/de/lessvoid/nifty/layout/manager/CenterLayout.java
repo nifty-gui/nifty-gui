@@ -40,6 +40,22 @@ public class CenterLayout implements LayoutManager {
     }
   }
 
+  private int leftMargin(final BoxConstraints boxConstraints, final int rootBoxWidth) {
+    return boxConstraints.getMarginLeft().getValueAsInt(rootBoxWidth);
+  }
+
+  private int rightMargin(final BoxConstraints boxConstraints, final int rootBoxWidth) {
+    return boxConstraints.getMarginRight().getValueAsInt(rootBoxWidth);
+  }
+
+  private int topMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+    return boxConstraints.getMarginTop().getValueAsInt(rootBoxHeight);
+  }
+
+  private int bottomMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+    return boxConstraints.getMarginBottom().getValueAsInt(rootBoxHeight);
+  }
+
   private void layoutElement(final LayoutPart element, Box rootBox, BoxConstraints rootBoxConstraints) {
     Box box = element.getBox();
     BoxConstraints constraint = element.getBoxConstraints();
@@ -54,6 +70,9 @@ public class CenterLayout implements LayoutManager {
       handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
       handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     }
+
+    box.setX(box.getX() + leftMargin(constraint, rootBox.getWidth()) - rightMargin(constraint, rootBox.getWidth()));
+    box.setY(box.getY() + topMargin(constraint, rootBox.getHeight()) - bottomMargin(constraint, rootBox.getHeight()));
   }
 
   void handleHorizontalAlignment(

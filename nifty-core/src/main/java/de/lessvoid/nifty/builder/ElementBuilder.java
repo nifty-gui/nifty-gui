@@ -307,6 +307,26 @@ public abstract class ElementBuilder {
     attributes.setPaddingBottom(padding);
   }
 
+  public void margin(final String margin) {
+    attributes.setMargin(margin);
+  }
+
+  public void marginLeft(final String margin) {
+    attributes.setMarginLeft(margin);
+  }
+
+  public void marginRight(final String margin) {
+    attributes.setMarginRight(margin);
+  }
+
+  public void marginTop(final String margin) {
+    attributes.setMarginTop(margin);
+  }
+
+  public void marginBottom(final String margin) {
+    attributes.setMarginBottom(margin);
+  }
+
   public void set(final String key, final String value) {
     attributes.set(key, value);
   }

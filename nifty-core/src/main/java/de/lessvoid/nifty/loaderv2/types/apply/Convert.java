@@ -17,6 +17,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 
 public class Convert {
   public static final String DEFAULT_PADDING = "0px";
+  public static final String DEFAULT_MARGIN = "0px";
   public static final HorizontalAlign DEFAULT_HORIZONTAL_ALIGN = HorizontalAlign.horizontalDefault;
   public static final VerticalAlign DEFAULT_VERTICAL_ALIGN = VerticalAlign.verticalDefault;
   public static final HorizontalAlign DEFAULT_TEXT_HORIZONTAL_ALIGN = HorizontalAlign.center;
@@ -41,13 +42,6 @@ public class Convert {
     }
     if (value.length() == 0) {
       return null;
-    }
-    return new SizeValue(value);
-  }
-
-  public SizeValue paddingSizeValue(final String value) {
-    if (value == null) {
-      return new SizeValue(DEFAULT_PADDING);
     }
     return new SizeValue(value);
   }

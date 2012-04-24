@@ -312,6 +312,27 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight"), paddingRight));
     layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop"), paddingTop));
     layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom"), paddingBottom));
+
+    String marginLeft = Convert.DEFAULT_MARGIN;
+    String marginRight = Convert.DEFAULT_MARGIN;
+    String marginTop = Convert.DEFAULT_MARGIN;
+    String marginBottom = Convert.DEFAULT_MARGIN;
+    if (attributes.isSet("margin")) {
+      try {
+        PaddingAttributeParser marginParser = new PaddingAttributeParser(attributes.get("margin"));
+        marginLeft = marginParser.getLeft();
+        marginRight = marginParser.getRight();
+        marginTop = marginParser.getTop();
+        marginBottom = marginParser.getBottom();
+      } catch (Exception e) {
+        log.warning(e.getMessage());
+      }
+    }
+    layoutPart.getBoxConstraints().setMarginLeft(convert.paddingSizeValue(attributes.get("marginLeft"), marginLeft));
+    layoutPart.getBoxConstraints().setMarginRight(convert.paddingSizeValue(attributes.get("marginRight"), marginRight));
+    layoutPart.getBoxConstraints().setMarginTop(convert.paddingSizeValue(attributes.get("marginTop"), marginTop));
+    layoutPart.getBoxConstraints().setMarginBottom(convert.paddingSizeValue(attributes.get("marginBottom"), marginBottom));
+
     this.clipChildren = attributes.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP);
     boolean visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
     if (visible) {
@@ -438,6 +459,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     elementDebugOut.add(" position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]");
     elementDebugOut.add(" constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]");
     elementDebugOut.add(" padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]");
+    elementDebugOut.add(" margin [" + outputSizeValue(layoutPart.getBoxConstraints().getMarginLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginBottom()) + "]");
     StringBuffer state = new StringBuffer();
     if (focusable) {
       state.append(" focusable");
@@ -1985,6 +2007,26 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
   public void setPaddingBottom(final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingBottom(paddingValue);
+    notifyListeners();
+  }
+
+  public void setMarginLeft(final SizeValue value) {
+    layoutPart.getBoxConstraints().setMarginLeft(value);
+    notifyListeners();
+  }
+
+  public void setMarginRight(final SizeValue value) {
+    layoutPart.getBoxConstraints().setMarginRight(value);
+    notifyListeners();
+  }
+
+  public void setMarginTop(final SizeValue value) {
+    layoutPart.getBoxConstraints().setMarginTop(value);
+    notifyListeners();
+  }
+
+  public void setMarginBottom(final SizeValue value) {
+    layoutPart.getBoxConstraints().setMarginBottom(value);
     notifyListeners();
   }
 

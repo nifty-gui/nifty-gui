@@ -54,11 +54,27 @@ public class VerticalLayout implements LayoutManager {
         currentBox.setHeight(elementHeight);
       }
 
-      currentBox.setX(processHorizontalAlignment(rootBoxX, rootBoxWidth, currentBox.getWidth(), currentBoxConstraints));
+      int x = processHorizontalAlignment(rootBoxX, rootBoxWidth, currentBox.getWidth(), currentBoxConstraints);
+      x = x + leftMargin(currentBoxConstraints, rootBoxWidth);
+      currentBox.setX(x);
+
+      y = y + topMargin(currentBoxConstraints, rootBoxHeight);
       currentBox.setY(y);
 
-      y += elementHeight;
+      y += elementHeight + bottomMargin(currentBoxConstraints, rootBoxHeight);
     }
+  }
+
+  private int leftMargin(final BoxConstraints boxConstraints, final int rootBoxWidth) {
+    return boxConstraints.getMarginLeft().getValueAsInt(rootBoxWidth);
+  }
+
+  private int topMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+    return boxConstraints.getMarginTop().getValueAsInt(rootBoxHeight);
+  }
+
+  private int bottomMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+    return boxConstraints.getMarginBottom().getValueAsInt(rootBoxHeight);
   }
 
   public SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
