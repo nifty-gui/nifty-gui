@@ -48,7 +48,7 @@ public class HorizontalLayoutMarginTest {
     layout.layoutElements(root, elements);
 
     assertBox(left, 0, 0, 100, 100);
-    assertBox(right, 50, 0, 100, 100);
+    assertBox(right, 150, 0, 100, 100);
   }
 
   @Test
