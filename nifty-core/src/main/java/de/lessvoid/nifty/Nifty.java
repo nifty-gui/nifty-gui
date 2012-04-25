@@ -1,7 +1,9 @@
 package de.lessvoid.nifty;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -126,6 +128,32 @@ public class Nifty {
     newInputSystem.setResourceLoader(resourceLoader);
     initialize(new NiftyRenderEngineImpl(newRenderDevice), new SoundSystem(newSoundDevice), newInputSystem, newTimeProvider);
     initializeClipboard();
+    System.out.println(getVersion());
+  }
+
+  public String getVersion() {
+    String result = "N/A";
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    InputStream stream = Nifty.class.getClassLoader().getResourceAsStream("version");
+    try {
+      byte[] buffer = new byte[1024];
+      int len = 0;
+      while ((len = stream.read(buffer)) > 0) {
+        out.write(buffer, 0, len);
+      }
+      result = out.toString("ISO-8859-1");
+    } catch (Exception e) {
+      log.log(Level.SEVERE, "unable to read version file from classpath", e);
+    } finally {
+      try {
+        if (stream != null) {
+          stream.close();
+        }
+      } catch (IOException e) {
+        log.log(Level.SEVERE, "unable to close version file from classpath stream. this is a bit odd", e);
+      }
+    }
+    return result;
   }
 
   /**
