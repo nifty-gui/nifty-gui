@@ -93,7 +93,7 @@
             <configuration>
               <tasks>
                 <!-- Safety -->
-                <mkdir dir="${project.build.directory}"/>
+                <mkdir dir="${project.build.outputDirectory}"/>
                 <tstamp>
                   <format property="last.updated" pattern="yyyy-MM-dd HH:mm:ss"/>
                 </tstamp>
