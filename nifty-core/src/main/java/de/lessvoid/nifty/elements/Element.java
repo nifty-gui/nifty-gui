@@ -710,12 +710,34 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
       // if all (!) child elements have a pixel fixed width we can calculate a new width constraint for this element!
       if (elements.size() == layoutPartChild.size()) {
+        // we don't have anything to calculate values from so we quit
+        if (layoutPartChild.size() == 0) {
+          // but before we check if we eventually need to reset the constrain
+          checkAndResetCalculatedWidthConstraint(myWidth);
+          return;
+        }
         SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
         if (newWidth != null) {
-          setConstraintWidth(newWidth);
+          int newWidthPx = newWidth.getValueAsInt(0);
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          setConstraintWidth(SizeValue.px(newWidthPx));
           isCalcWidthConstraint = true;
         }
+      } else {
+        checkAndResetCalculatedWidthConstraint(myWidth);
       }
+    }
+  }
+
+  private void checkAndResetCalculatedWidthConstraint(final SizeValue currentWidthConstraint) {
+    if (!isCalcWidthConstraint) {
+      return;
+    }
+    // this now means we had a calculatedWidthConstrained before but for whatever reason
+    // that is not valid anymore so we need to reset it here.
+    if (currentWidthConstraint != null) {
+      setConstraintWidth(null);
     }
   }
 
@@ -746,12 +768,34 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
       // if all (!) child elements have a px fixed height we can calculate a new height constraint for this element!
       if (elements.size() == layoutPartChild.size()) {
+        // we don't have anything to calculate values from so we quit
+        if (layoutPartChild.size() == 0) {
+          // but before we check if we eventually need to reset the constrain
+          checkAndResetCalculatedHeightConstraint(myHeight);
+          return;
+        }
         SizeValue newHeight = layoutManager.calculateConstraintHeight(this.layoutPart, layoutPartChild);
         if (newHeight != null) {
-          setConstraintHeight(newHeight);
+          int newHeightPx = newHeight.getValueAsInt(0);
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+          setConstraintHeight(SizeValue.px(newHeightPx));
           isCalcHeightConstraint = true;
         }
+      } else {
+        checkAndResetCalculatedHeightConstraint(myHeight);
       }
+    }
+  }
+
+  private void checkAndResetCalculatedHeightConstraint(final SizeValue myHeightConstraint) {
+    if (!isCalcHeightConstraint) {
+      return;
+    }
+    // this now means we had a calculatedWidthConstrained before but for whatever reason
+    // that is not valid anymore so we need to reset it here.
+    if (myHeightConstraint != null) {
+      setConstraintHeight(null);
     }
   }
 

@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.layout.manager;
 
+import static de.lessvoid.nifty.layout.manager.BoxTestHelper.assertBox;
+
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
@@ -8,7 +10,6 @@ import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
-
 public class CenterLayoutWithPaddingTest extends TestCase {
 
     private LayoutPart rootPanel;
@@ -32,14 +33,14 @@ public class CenterLayoutWithPaddingTest extends TestCase {
       constraint.setHorizontalAlign(HorizontalAlign.center);
 
       LayoutPart child = prepare(constraint);
-      assertBox(child, 270, 190, 100, 100);
+      assertBox(child.getBox(), 270, 190, 100, 100);
     }
 
     public void testHorizontalAlignCenterWithBorderNoConstraint() throws Exception {
       constraint.setHorizontalAlign(HorizontalAlign.center);
 
       LayoutPart child = prepare(constraint);
-      assertBox(child, 50, 50, 540, 380);
+      assertBox(child.getBox(), 50, 50, 540, 380);
     }
 
     private LayoutPart prepare(final BoxConstraints constraint) {
@@ -50,12 +51,4 @@ public class CenterLayoutWithPaddingTest extends TestCase {
       layout.layoutElements(rootPanel, elements);
       return child;
     }
-
-    private void assertBox(final LayoutPart child, final int left, final int top, final int width, final int height) {
-      assertEquals(left, child.getBox().getX());
-      assertEquals(top, child.getBox().getY());
-      assertEquals(width, child.getBox().getWidth());
-      assertEquals(height, child.getBox().getHeight());
-    }
-
 }

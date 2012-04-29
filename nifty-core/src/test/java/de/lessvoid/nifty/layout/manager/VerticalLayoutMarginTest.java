@@ -1,18 +1,17 @@
 package de.lessvoid.nifty.layout.manager;
 
+import static de.lessvoid.nifty.layout.manager.BoxTestHelper.assertBox;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.tools.SizeValue;
-
 public class VerticalLayoutMarginTest {
   private VerticalLayout layout= new VerticalLayout();
   private LayoutPart root;
@@ -38,8 +37,8 @@ public class VerticalLayoutMarginTest {
     top.getBoxConstraints().setMarginTop(SizeValue.px(50));
     layout.layoutElements(root, elements);
 
-    assertBox(top, 0, 50, 100, 100);
-    assertBox(bottom, 0, 150, 100, 100);
+    assertBox(top.getBox(), 0, 50, 100, 100);
+    assertBox(bottom.getBox(), 0, 150, 100, 100);
   }
 
   @Test
@@ -47,8 +46,8 @@ public class VerticalLayoutMarginTest {
     top.getBoxConstraints().setMarginBottom(SizeValue.px(50));
     layout.layoutElements(root, elements);
 
-    assertBox(top, 0, 0, 100, 100);
-    assertBox(bottom, 0, 150, 100, 100);
+    assertBox(top.getBox(), 0, 0, 100, 100);
+    assertBox(bottom.getBox(), 0, 150, 100, 100);
   }
 
   @Test
@@ -56,14 +55,7 @@ public class VerticalLayoutMarginTest {
     top.getBoxConstraints().setMarginLeft(SizeValue.px(50));
     layout.layoutElements(root, elements);
 
-    assertBox(top, 50, 0, 100, 100);
-    assertBox(bottom, 0, 100, 100, 100);
-  }
-
-  private void assertBox(final LayoutPart layoutPart, final int x, final int y, final int width, final int height) {
-    assertEquals(x, layoutPart.getBox().getX());
-    assertEquals(y, layoutPart.getBox().getY());
-    assertEquals(width, layoutPart.getBox().getWidth());
-    assertEquals(height, layoutPart.getBox().getHeight());
+    assertBox(top.getBox(), 50, 0, 100, 100);
+    assertBox(bottom.getBox(), 0, 100, 100, 100);
   }
 }

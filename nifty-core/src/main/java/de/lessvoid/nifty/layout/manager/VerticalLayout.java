@@ -78,28 +78,11 @@ public class VerticalLayout implements LayoutManager {
   }
 
   public SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
-    if (children.size() == 0) {
-      return null;
-    }
-    int newWidth = 0;
-    for (LayoutPart e : children) {
-      newWidth += e.getBoxConstraints().getWidth().getValueAsInt(0);
-    }
-    newWidth += root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth());
-    newWidth += root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth());
-
-    return new SizeValue(newWidth + "px");
+    return root.getMaxWidth(children);
   }
 
   public SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
-    int newHeight = 0;
-    for (LayoutPart e : children) {
-      newHeight += e.getBoxConstraints().getHeight().getValueAsInt(0);
-    }
-    newHeight += root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight());
-    newHeight += root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
-
-    return new SizeValue(newHeight + "px");
+    return root.getSumHeight(children);
   }
 
   private int processWidthConstraints(final int rootBoxWidth, final BoxConstraints constraints, final int elementHeight) {

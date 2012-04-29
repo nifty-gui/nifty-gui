@@ -162,7 +162,7 @@ public class HorizontalLayout implements LayoutManager {
    * @return new calculated SizeValue
    */
   public final SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
-    return null;
+    return root.getSumWidth(children);
   }
 
   /**
@@ -170,16 +170,7 @@ public class HorizontalLayout implements LayoutManager {
    * @return new calculated SizeValue
    */
   public final SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
-    int newHeight = 0;
-    for (LayoutPart e : children) {
-      int partHeight = e.getBoxConstraints().getHeight().getValueAsInt(0)
-        - e.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight())
-        - e.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
-      if (partHeight > newHeight) {
-        newHeight = partHeight;
-      }
-    }
-    return new SizeValue(newHeight + "px");
+    return root.getMaxHeight(children);
   }
 
   private boolean isInvalid(final LayoutPart root, final List <LayoutPart> children) {
