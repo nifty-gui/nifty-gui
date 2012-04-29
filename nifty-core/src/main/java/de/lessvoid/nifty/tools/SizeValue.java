@@ -187,6 +187,13 @@ public class SizeValue {
     return "*".equals(value);
   }
 
+  public boolean equals(final Object obj) {
+    if (obj instanceof SizeValue) {
+      return this.value.equals(((SizeValue) obj).value);
+    }
+    return false;
+  }
+
   /**
    * Get the percent value this value represent.
    * @return the actual percent value.
