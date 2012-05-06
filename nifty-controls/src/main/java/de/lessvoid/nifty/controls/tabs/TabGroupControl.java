@@ -383,6 +383,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
           button.setStyle("nifty-tab-button-active");
           addMargin(i, button);
         }
+        button.setRenderOrder(100000);
       } else {
         if (tab.isVisible()) {
           tab.hide();
@@ -391,6 +392,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
           button.setStyle("nifty-tab-button");
           addMargin(i, button);
         }
+        button.setRenderOrder(0);
       }
     }
 
