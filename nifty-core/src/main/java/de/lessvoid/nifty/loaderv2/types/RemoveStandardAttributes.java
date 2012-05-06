@@ -46,6 +46,7 @@ public class RemoveStandardAttributes {
     attributes.remove("color");
     attributes.remove("selectionColor");
     attributes.remove("name");
+    attributes.remove("renderOrder");
     return attributes;
   }
 }

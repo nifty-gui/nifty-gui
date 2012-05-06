@@ -191,6 +191,10 @@ public abstract class ElementBuilder {
     attributes.setChildClip(String.valueOf(childClip));
   }
 
+  public void renderOrder(final int renderOrder) {
+    attributes.setRenderOrder(renderOrder);
+  }
+
   public void visible(final boolean visible) {
     attributes.setVisible(String.valueOf(visible));
   }

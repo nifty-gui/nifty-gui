@@ -28,6 +28,7 @@ public class Convert {
   public static final boolean DEFAULT_VISIBLE = true;
   public static final boolean DEFAULT_CHILD_CLIP = false;
   public static final Color DEFAULT_COLOR = null;
+  public static final int DEFAULT_RENDER_ORDER = 0;
 
   public RenderFont font(final NiftyRenderEngine niftyRenderEngine, final String value) {
     if (value == null) {

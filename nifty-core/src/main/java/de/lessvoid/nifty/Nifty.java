@@ -3,11 +3,9 @@ package de.lessvoid.nifty;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +26,9 @@ import org.bushe.swing.event.annotation.ReferenceStrength;
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.ElementMoveAction;
+import de.lessvoid.nifty.elements.ElementRemoveAction;
+import de.lessvoid.nifty.elements.EndOfFrameElementAction;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventProcessor;
@@ -977,99 +978,6 @@ public class Nifty {
         newControl.startEffect(EffectEventId.onStartScreen);
         newControl.startEffect(EffectEventId.onActive);
         newControl.onStartScreen();
-      }
-    }
-  }
-
-  private interface Action {
-    void perform(Screen screen, Element element);
-  }
-
-  public class ElementRemoveAction implements Action {
-    public void perform(final Screen screen, final Element element) {
-      // we'll now resetAllEffects here when an element is removed. this was especially
-      // introduced to reset all onHover effects that were used for changing the mouse cursor image.
-      // without this reset the mouse cursor image might hang when elements are being removed
-      // that changed the image.
-      element.resetAllEffects();
-      element.onEndScreen(screen);
-
-      removeSingleElement(screen, element);
-      Element parent = element.getParent();
-      if (parent != null) {
-        parent.getElements().remove(element);
-
-        // when the parent is the root element then the element we're removing is a layer element
-        if (parent == screen.getRootElement()) {
-          screen.removeLayerElement(element);
-        }
-      }
-      screen.layoutLayers();
-    }
-
-    private void removeSingleElement(final Screen screen, final Element element) {
-      Iterator < Element > elementIt = element.getElements().iterator();
-      while (elementIt.hasNext()) {
-        Element el = elementIt.next();
-        removeSingleElement(screen, el);
-        elementIt.remove();
-      }
-    }
-  }
-
-  public class ElementMoveAction implements Action {
-    private Element destinationElement;
-
-    public ElementMoveAction(final Element destinationElement) {
-      this.destinationElement = destinationElement;
-    }
-
-    public void perform(final Screen screen, final Element element) {
-      Element parent = element.getParent();
-      if (parent != null) {
-        parent.getElements().remove(element);
-      }
-      element.setParent(destinationElement);
-      destinationElement.add(element);
-
-      // now we'll need to add elements back to the focushandler
-      addToFocusHandler(element);
-
-      screen.layoutLayers();
-    }
-
-    private void addToFocusHandler(final Element element) {
-      if (element.isFocusable()) {
-        // currently add the element to the end of the focushandler
-        //
-        // this is not quite right but at the moment I don't have any idea on how
-        // to find the right spot in the focushandler to insert the element into
-        // (it should really be to spot where it has been removed from)
-        element.getFocusHandler().addElement(element);
-      }
-      for (int i=0; i<element.getElements().size(); i++) {
-        addToFocusHandler(element.getElements().get(i));
-      }
-    }
-  }
-
-  private class EndOfFrameElementAction {
-    private Screen screen;
-    private Element element;
-    private Action action;
-    private EndNotify endNotify;
-
-    public EndOfFrameElementAction(final Screen newScreen, final Element newElement, final Action action, final EndNotify endNotify) {
-      this.screen = newScreen;
-      this.element = newElement;
-      this.action = action;
-      this.endNotify = endNotify;
-    }
-
-    public void perform() {
-      action.perform(screen, element);
-      if (endNotify != null) {
-        endNotify.perform();
       }
     }
   }

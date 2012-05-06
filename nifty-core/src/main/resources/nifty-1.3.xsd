@@ -46,6 +46,7 @@
     <xs:attribute name="backgroundColor" type="colorType" />
     <xs:attribute name="visibleToMouse" type="xs:boolean" />
     <xs:attribute name="style" type="xs:string" />
+    <xs:attribute name="renderOrder" type="xs:int" />
     <xs:anyAttribute processContents="skip" namespace="##any" />
   </xs:complexType>
 
@@ -232,7 +233,8 @@
     <xs:attribute name="font" type="xs:string" />
     <xs:attribute name="filename" type="xs:string" />
     <xs:attribute name="wrap" type="xs:boolean" />
-    <xs:attribute name="imageMode" type="xs:string"></xs:attribute>
+    <xs:attribute name="imageMode" type="xs:string" />
+    <xs:attribute name="renderOrder" type="xs:int" />
   </xs:complexType>
 
   <xs:simpleType name="onClickType">

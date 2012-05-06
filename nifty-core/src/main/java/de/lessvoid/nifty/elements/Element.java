@@ -1,9 +1,14 @@
 package de.lessvoid.nifty.elements;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
@@ -71,6 +76,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * our identification.
    */
   private String id;
+  private int renderOrder;
 
   /**
    * the parent element.
@@ -80,7 +86,47 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   /**
    * the child elements.
    */
-  private ArrayList < Element > elements = new ArrayList < Element >();
+  private List < Element > elements = new ArrayList < Element >();
+  private Set < Element > elementsRenderOrder = new TreeSet < Element >(new Comparator<Element>() {
+
+    /**
+     * This uses the renderOrder attribute of the elements to compare them. If the renderOrder
+     * attribute is not set (is 0) then the index of the element in the elements list is used
+     * as the renderOrder value. This is done to keep the original sort order of the elements for
+     * rendering. The value is not cached and is directly recalculated using the element index in
+     * the list. The child count for an element is usually low (< 10) and the comparator is only
+     * executed when the child elements change. So this lookup shouldn't hurt performance too much.
+     *
+     * If you change the default value of renderOrder then your value is being used. So if you set it
+     * to some high value (> 1000 to be save) this element is rendered after all the other elements.
+     * If you set it to some very low value (< -1000 to be save) then this element is rendered before
+     * all the others.
+     */
+    @Override
+    public int compare(final Element o1, final Element o2) {
+      int o1RenderOrder = getRenderOrder(o1);
+      int o2RenderOrder = getRenderOrder(o2);
+
+      if (o1RenderOrder < o2RenderOrder) {
+        return -1;
+      } else if (o1RenderOrder > o2RenderOrder) {
+        return 1;
+      }
+      // this means the renderOrder values are equal. since this is a set
+      // we can't return 0 because this would mean (for the set) that the
+      // elements are equal and one of the values will be removed. so here
+      // we simply compare the String representation of the elements so that
+      // we keep a fixed sort order.
+      return o1.toString().compareTo(o2.toString());
+    }
+
+    private int getRenderOrder(final Element element) {
+      if (element.renderOrder != 0) {
+        return element.renderOrder;
+      }
+      return elements.indexOf(element);
+    }
+  });
 
   /**
    * The LayoutManager we should use for all child elements.
@@ -334,6 +380,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     layoutPart.getBoxConstraints().setMarginBottom(convert.paddingSizeValue(attributes.get("marginBottom"), marginBottom));
 
     this.clipChildren = attributes.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP);
+    this.renderOrder = attributes.getAsInteger("renderOrder", Convert.DEFAULT_RENDER_ORDER);
     boolean visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
     if (visible) {
       this.visible = true;
@@ -490,10 +537,17 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     }
     elementDebugOut.add(" flags [" + state + "]");
     elementDebugOut.add(" effects [" + effectManager.getStateString(offset) + "]");
+    elementDebugOut.add(" renderOrder [" + renderOrder + "]");
 
     if (parentClipArea) {
       elementDebugOut.add(" parent clip [x=" + parentClipX + ", y=" + parentClipY + ", w=" + parentClipWidth + ", h=" + parentClipHeight + "]");
     }
+    StringBuffer renderOrder = new StringBuffer();
+    renderOrder.append(" render order: ");
+    for (Element e : elementsRenderOrder) {
+      renderOrder.append("[" + e.getId() + " (" + ((e.renderOrder == 0) ? elements.indexOf(e) : e.renderOrder) + ")]");
+    }
+    elementDebugOut.add(renderOrder.toString());
 
     elementDebug.delete(0, elementDebug.length());
     for (int i=0; i<elementDebugOut.size(); i++) {
@@ -597,7 +651,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * @return the list of child elements
    */
   public List < Element > getElements() {
-    return elements;
+    return Collections.unmodifiableList(elements);
   }
 
   /**
@@ -606,6 +660,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    */
   public void add(final Element widget) {
     elements.add(widget);
+    elementsRenderOrder.add(widget);
   }
 
   /**
@@ -653,8 +708,9 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   }
 
   private void renderInternalChildElements(final NiftyRenderEngine r) {
-    for (int i=0; i<elements.size(); i++) {
-      Element p = elements.get(i);
+    Iterator<Element> elementIter = elementsRenderOrder.iterator();
+    while (elementIter.hasNext()) {
+      Element p = elementIter.next();
       p.render(r);
     }
   }
@@ -1721,6 +1777,21 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     return this.clipChildren;
   }
 
+  public void setRenderOrder(final int renderOrder) {
+    this.renderOrder = renderOrder;
+    parent.renderOrderChanged(this);
+    System.out.println(screen.debugOutput());
+  }
+
+  private void renderOrderChanged(final Element element) {
+    elementsRenderOrder.remove(element);
+    elementsRenderOrder.add(element);
+  }
+
+  public int getRenderOrder() {
+    return renderOrder;
+  }
+
   /**
    * Set the focus to this element.
    */
@@ -2163,5 +2234,23 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       }
     }
     return effectManager.isActive(eventId);
+  }
+
+  // package private to prevent public access
+  void internalRemoveElement(final Element element) {
+    elements.remove(element);
+    elementsRenderOrder.remove(element);
+  }
+
+  // package private to prevent public access
+  void internalRemoveElementWithChilds() {
+    Iterator < Element > elementIt = elements.iterator();
+    while (elementIt.hasNext()) {
+      Element el = elementIt.next();
+      el.internalRemoveElementWithChilds();
+    }
+ 
+    elements.clear();
+    elementsRenderOrder.clear();
   }
 }

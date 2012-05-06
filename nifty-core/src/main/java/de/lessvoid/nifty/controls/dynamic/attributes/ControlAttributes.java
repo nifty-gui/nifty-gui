@@ -126,6 +126,10 @@ public class ControlAttributes {
     attributes.set("childClip", childClip);
   }
 
+  public void setRenderOrder(final int renderOrder) {
+    attributes.set("renderOrder", String.valueOf(renderOrder));
+  }
+
   public void setVisible(final String visible) {
     attributes.set("visible", visible);
   }
