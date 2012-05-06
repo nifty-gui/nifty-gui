@@ -34,6 +34,7 @@ public class EffectType extends XmlBaseType {
     for (EffectValueType effectValue : e.effectValues) {
       effectValues.add(effectValue.clone());
     }
+    styleId = e.styleId;
   }
 
   public EffectType clone() {
