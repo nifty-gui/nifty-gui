@@ -1798,7 +1798,6 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   public void setRenderOrder(final int renderOrder) {
     this.renderOrder = renderOrder;
     parent.renderOrderChanged(this);
-    System.out.println(screen.debugOutput());
   }
 
   private void renderOrderChanged(final Element element) {
