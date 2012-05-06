@@ -117,7 +117,25 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       // elements are equal and one of the values will be removed. so here
       // we simply compare the String representation of the elements so that
       // we keep a fixed sort order.
-      return o1.toString().compareTo(o2.toString());
+      String o1Id = o1.id;
+      String o2Id = o2.id;
+      if (o1Id == null && o2Id != null){
+        return -1;
+      } else if (o1Id != null && o2Id == null) {
+        return 1;
+      } else if (o1Id != null && o2Id != null) {
+        int idCompareResult = o1Id.compareTo(o2Id);
+        if (idCompareResult != 0) {
+          return idCompareResult;
+        }
+      }
+
+      // ids equal or both null use super.toString()
+      // hashCode() should return a value thats different for both elements since
+      // adding the same element twice to the same parent element is not supported.
+      String ref1 = Integer.toHexString(o1.hashCode());
+      String ref2 = Integer.toHexString(o2.hashCode());
+      return ref1.compareTo(ref2);
     }
 
     private int getRenderOrder(final Element element) {
