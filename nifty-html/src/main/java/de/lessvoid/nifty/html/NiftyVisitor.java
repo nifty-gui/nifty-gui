@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
+import org.htmlparser.util.Translate;
 import org.htmlparser.visitors.NodeVisitor;
 
 import de.lessvoid.nifty.Nifty;
@@ -224,7 +225,7 @@ public class NiftyVisitor extends NodeVisitor {
       currentText.append(currentColor);
       currentText.append("#");
     }
-    currentText.append(removeNewLine(textNode.getText()));
+    currentText.append(removeNewLineAndTabs(translateHTMLEntities(textNode.getText())));
   }
 
   public ElementBuilder builder() throws Exception {
@@ -331,7 +332,11 @@ public class NiftyVisitor extends NodeVisitor {
     return "STRONG".equals(tag.getTagName());
   }
 
-  private String removeNewLine(final String text) {
+  private String removeNewLineAndTabs(final String text) {
     return text.replaceAll("\n", "").replaceAll("\t", "");
+  }
+
+  private String translateHTMLEntities(final String text) {
+    return Translate.decode(text);
   }
 }
