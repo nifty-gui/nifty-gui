@@ -64,6 +64,7 @@ public class HtmlMain implements ScreenController {
       items.add("src/test/resources/html/test-" + String.format("%02d", i) + ".html");
     }
 
+    @SuppressWarnings ("unchecked")
     DropDown<String> htmlSelectDropDown = screen.findNiftyControl("html-select", DropDown.class);
     htmlSelectDropDown.addAllItems(items);
   }

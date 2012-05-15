@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.loaderv2.types.apply;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Size;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;

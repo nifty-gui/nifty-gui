@@ -12,6 +12,7 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
+@SuppressWarnings ("deprecation")
 public class ChatPanelController implements Controller, KeyInputHandler {
   private Nifty nifty;
   private Screen screen;

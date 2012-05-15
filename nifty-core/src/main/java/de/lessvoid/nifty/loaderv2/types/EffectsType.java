@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.loaderv2.types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -110,10 +111,13 @@ public class EffectsType extends XmlBaseType {
 
   public void translateSpecialValues(final Nifty nifty, final Screen screen) {
     super.translateSpecialValues(nifty, screen);
-    
-    for (Collection<EffectType> col : new Collection[]{
-        onStartScreen, onEndScreen, onHover, onStartHover, onEndHover, onClick, onFocus,
-        onLostFocus, onGetFocus, onActive, onCustom, onShow, onHide, onEnabled, onDisabled}) {
+    @SuppressWarnings ("unchecked")
+    java.util.List <Collection <EffectType>> effectTypes = Arrays.asList (
+        onStartScreen, onEndScreen,
+        onHover, onStartHover, onEndHover, onClick,
+        onFocus, onLostFocus, onGetFocus, onActive, onCustom,
+        onShow, onHide, onEnabled, onDisabled);
+    for (Collection<EffectType> col : effectTypes) {
       for (EffectType e : col) {
         e.translateSpecialValues(nifty, screen);
       }

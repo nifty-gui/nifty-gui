@@ -2,8 +2,6 @@ package de.lessvoid.nifty.controls.listbox;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.*;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -95,6 +93,7 @@ public class ListBoxFocusElementEmptyTest {
     assertEquals(o2, listBox.getFocusItem());
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testGetFocusAfterClear() {
     expect(viewMock.getWidth(o1)).andReturn(WIDTH_100);
@@ -116,6 +115,7 @@ public class ListBoxFocusElementEmptyTest {
     assertNull(listBox.getFocusItem());
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testGetFocusAfterRemoveItem() {
     expect(viewMock.getWidth(o1)).andReturn(WIDTH_100);
@@ -133,6 +133,7 @@ public class ListBoxFocusElementEmptyTest {
     assertNull(listBox.getFocusItem());
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testGetFocusAfterRemoveItemByIndex() {
     expect(viewMock.getWidth(o1)).andReturn(WIDTH_100);

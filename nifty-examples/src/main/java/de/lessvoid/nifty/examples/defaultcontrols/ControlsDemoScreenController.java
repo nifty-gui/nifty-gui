@@ -234,6 +234,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
    * @param screen
    */
   private void fillResolutionDropDown(final Screen screen) {
+    @SuppressWarnings ("unchecked")
     DropDown<T> dropDown = screen.findNiftyControl("resolutions", DropDown.class);
     final Collection<T> resolutions = resControl.getResolutions();
     for (T mode : resolutions) {

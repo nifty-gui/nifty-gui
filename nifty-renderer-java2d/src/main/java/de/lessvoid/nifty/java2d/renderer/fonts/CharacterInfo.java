@@ -3,9 +3,10 @@ package de.lessvoid.nifty.java2d.renderer.fonts;
 import java.util.Hashtable;
 
 /**
- * info of an individual character.
+ * info of an individual character.<br>
+ * it is a copy from the lwjgl renderer, but it has nothing to do with the renderer, so it could be in another project.
+ * 
  * @author void
- * @deprecated it is a copy from the lwjgl renderer, but it has nothing to do with the renderer, so it could be in another project.
  */
 public class CharacterInfo {
   /**

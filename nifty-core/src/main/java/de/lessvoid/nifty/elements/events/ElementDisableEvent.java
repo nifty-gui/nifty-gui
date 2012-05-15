@@ -3,7 +3,7 @@ package de.lessvoid.nifty.elements.events;
 import de.lessvoid.nifty.NiftyEvent;
 import de.lessvoid.nifty.elements.Element;
 
-public class ElementDisableEvent implements NiftyEvent<Void> {
+public class ElementDisableEvent implements NiftyEvent {
   private Element element;
 
   public ElementDisableEvent(final Element element) {

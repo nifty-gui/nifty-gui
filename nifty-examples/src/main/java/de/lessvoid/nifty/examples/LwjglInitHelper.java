@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
@@ -123,14 +122,15 @@ public class LwjglInitHelper {
           }
         });
 
-        for (int i = 0; i < matchingModes.length; i++) {
+        int i = 0;
+        // for (int i = 0; i < matchingModes.length; i++) {
           log.fine("using fallback mode: " + matchingModes[i].getWidth() + ", "
               + matchingModes[i].getHeight() + ", "
               + matchingModes[i].getBitsPerPixel() + ", "
               + matchingModes[i].getFrequency());
           Display.setDisplayMode(matchingModes[i]);
-          break;
-        }
+        //  break;
+        //}
       }
 
       int x = (width - Display.getDisplayMode().getWidth()) / 2;

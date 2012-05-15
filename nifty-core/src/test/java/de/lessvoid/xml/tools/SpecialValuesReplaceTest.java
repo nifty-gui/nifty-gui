@@ -86,6 +86,7 @@ public class SpecialValuesReplaceTest {
   }
 
   private class MyObjectCallback {
+    @SuppressWarnings ("unused")
     public String getValue() {
       return "called";
     }

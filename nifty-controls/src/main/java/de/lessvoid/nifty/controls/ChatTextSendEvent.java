@@ -11,7 +11,7 @@ import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
  *
  * @author ractoc
  */
-public class ChatTextSendEvent implements NiftyEvent<Void> {
+public class ChatTextSendEvent implements NiftyEvent {
     private ChatControl chatControl;
     private String text;
 

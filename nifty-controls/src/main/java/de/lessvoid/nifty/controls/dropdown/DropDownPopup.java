@@ -3,12 +3,8 @@ package de.lessvoid.nifty.controls.dropdown;
 import java.util.List;
 import java.util.Properties;
 
-import org.bushe.swing.event.EventTopicSubscriber;
-
-import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
@@ -52,21 +48,23 @@ public class DropDownPopup<T> extends AbstractController {
 
   @SuppressWarnings("deprecation")
   public void onStartScreen() {
-    final ListBox listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
+    @SuppressWarnings ("unchecked")
+    final ListBox<T> listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
     nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,
-        new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, dropDownControl, popupInstance));
+        new DropDownListBoxSelectionChangedEventSubscriber<T>(nifty, screen, listBox, dropDownControl, popupInstance));
     linkPopupToDropDownPosition(dropDownControl);
     dropDownControl.refresh();
   }
 
-  @SuppressWarnings({ "deprecation", "rawtypes" })
+  @SuppressWarnings("deprecation")
   private void linkPopupToDropDownPosition(final DropDownControl<T> dropDownControl) {
     Element panel = getElement().findElementByName("#panel");
     panel.setConstraintX(new SizeValue(dropDownControl.getElement().getX() + "px"));
     panel.setConstraintWidth(new SizeValue(dropDownControl.getWidth() + "px"));
     getElement().layoutElements();
 
-    ListBoxControl listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
+    @SuppressWarnings ("unchecked")
+    ListBoxControl<T> listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
     listBox.ensureWidthConstraints();
 
     panel.setConstraintHeight(new SizeValue(listBox.getHeight() + "px"));
@@ -81,8 +79,8 @@ public class DropDownPopup<T> extends AbstractController {
     getElement().layoutElements();
   }
 
-  @SuppressWarnings({ "deprecation", "rawtypes" })
-  private void updateMoveEffect(final ListBoxControl listBox, final int direction) {
+  @SuppressWarnings("deprecation")
+  private void updateMoveEffect(final ListBoxControl<T> listBox, final int direction) {
     List<Effect> moveEffects = getElement().findElementByName("#panel").getEffects(EffectEventId.onStartScreen, Move.class);
     if (!moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));

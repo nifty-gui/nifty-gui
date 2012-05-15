@@ -48,7 +48,7 @@ public class Music {
 	/** True if the music is playing */
 	private boolean playing;
 	/** The list of listeners waiting for notification that the music ended */
-	private ArrayList listeners = new ArrayList();
+	private ArrayList<MusicListener> listeners = new ArrayList<MusicListener>();
 	/** The volume of this music */
 	private float volume = 1.0f;
 	/** Start gain for fading in/out */

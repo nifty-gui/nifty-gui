@@ -57,7 +57,7 @@ import java.util.*;
  * The Element.
  * @author void
  */
-public class Element implements NiftyEvent<Void>, EffectManager.Notify {
+public class Element implements NiftyEvent, EffectManager.Notify {
 
   /**
    * the logger.

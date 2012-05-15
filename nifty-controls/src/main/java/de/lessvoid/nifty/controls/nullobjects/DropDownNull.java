@@ -6,7 +6,7 @@ import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
-public class DropDownNull implements DropDown {
+public class DropDownNull<T> implements DropDown<T> {
 
   @Override
   public Element getElement() {
@@ -67,15 +67,15 @@ public class DropDownNull implements DropDown {
   }
 
   @Override
-  public void setViewConverter(final DropDownViewConverter viewConverter) {
+  public void setViewConverter(final DropDownViewConverter<T> viewConverter) {
   }
 
   @Override
-  public void addItem(final Object newItem) {
+  public void addItem(final T newItem) {
   }
 
   @Override
-  public void insertItem(final Object item, final int index) {
+  public void insertItem(final T item, final int index) {
   }
 
   @Override
@@ -92,11 +92,11 @@ public class DropDownNull implements DropDown {
   }
 
   @Override
-  public void selectItem(final Object item) {
+  public void selectItem(final T item) {
   }
 
   @Override
-  public Object getSelection() {
+  public T getSelection() {
     return null;
   }
 
@@ -110,20 +110,20 @@ public class DropDownNull implements DropDown {
   }
 
   @Override
-  public void removeItem(final Object item) {
+  public void removeItem(final T item) {
   }
 
   @Override
-  public List getItems() {
+  public List<T> getItems() {
     return null;
   }
 
   @Override
-  public void addAllItems(final List itemsToAdd) {
+  public void addAllItems(final List<T> itemsToAdd) {
   }
 
   @Override
-  public void removeAllItems(final List itemsToRemove) {
+  public void removeAllItems(final List<T> itemsToRemove) {
   }
 
   @Override

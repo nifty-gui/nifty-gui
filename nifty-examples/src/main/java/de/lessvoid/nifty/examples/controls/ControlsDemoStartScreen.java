@@ -24,7 +24,8 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
     screen = newScreen;
     nifty = newNifty;
 
-    DropDown dropDown1 = findDropDownControl("dropDown1");
+    @SuppressWarnings ("unchecked")
+    DropDown<String> dropDown1 = (DropDown<String>)findDropDownControl("dropDown1");
     if (dropDown1 != null) {
       dropDown1.addItem("Nifty GUI");
       dropDown1.addItem("Slick2d");
@@ -33,7 +34,8 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
       dropDown1.selectItemByIndex(0);
     }
 
-    DropDown dropDown2 = findDropDownControl("dropDown2");
+    @SuppressWarnings ("unchecked")
+    DropDown<String> dropDown2 = (DropDown <String>)findDropDownControl("dropDown2");
     if (dropDown2 != null) {
       dropDown2.addItem("rocks!");
       dropDown2.addItem("rules!");
@@ -44,7 +46,8 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
       dropDown2.selectItem("rocks!");
     }
 
-    ListBox listBoxStatic = screen.findNiftyControl("listBoxStatic", ListBox.class);
+    @SuppressWarnings ("unchecked")
+    ListBox<String> listBoxStatic = (ListBox<String>)screen.findNiftyControl("listBoxStatic", ListBox.class);
     for (int i=0; i<5; i++) {
       listBoxStatic.addItem("Listbox Item: " + i);
     }
@@ -99,7 +102,8 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
 
       // create drop down
       CreateDropDownControl dynamicItem = new CreateDropDownControl("dynamicDropDown");
-      DropDown dropDown3 = dynamicItem.create(nifty, screen, row);
+      @SuppressWarnings ("unchecked")
+      DropDown<String> dropDown3 = dynamicItem.create(nifty, screen, row);
       if (dropDown3 != null) {
         dropDown3.addItem("dynamic drop down");
         dropDown3.addItem("ftw");
@@ -126,7 +130,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
       createLabel.create(newNifty, screen, secondRow);
 
       // create a list box
-      CreateListBoxControl dynamicListboxCreate = new CreateListBoxControl("listBoxDynamic");
+      CreateListBoxControl<String> dynamicListboxCreate = new CreateListBoxControl<String>("listBoxDynamic");
       dynamicListboxCreate.set("horizontal", "false");
       dynamicListboxCreate.setWidth("*");
       dynamicListboxCreate.setHeight("100%");
@@ -134,7 +138,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
       dynamicListboxCreate.set("horizontal", "off");
       dynamicListboxCreate.setChildLayout("vertical");
 
-      ListBox dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
+      ListBox <String> dynamicListbox = dynamicListboxCreate.create(nifty, screen, secondRow);
       for (int i=0; i<10; i++) {
         dynamicListbox.addItem("Listbox Item: " + i);
       }
@@ -159,15 +163,18 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
 
   public void back() {
     // this demonstrates how to access selected items
-    DropDown dropDown1 = findDropDownControl("dropDown1");
+    @SuppressWarnings ("unchecked")
+    DropDown<String> dropDown1 = (DropDown <String>)findDropDownControl("dropDown1");
     System.out.println(dropDown1.getSelection());
 
-    DropDown dropDown2 = findDropDownControl("dropDown2");
+    @SuppressWarnings ("unchecked")
+    DropDown<String> dropDown2 = (DropDown <String>)findDropDownControl("dropDown2");
     System.out.println(dropDown2.getSelection());
 
-    ListBox listBoxStatic = screen.findNiftyControl("listBoxStatic", ListBoxControl.class);
+    @SuppressWarnings ("unchecked")
+    ListBox<String> listBoxStatic = (ListBox<String>)screen.findNiftyControl("listBoxStatic", ListBoxControl.class);
     System.out.println("listBoxStatic selectedItemIndex: " + listBoxStatic.getSelection());
- 
+
     CheckBox checkBoxControl = screen.findNiftyControl("checkbox", CheckBox.class);
     System.out.println("checkbox: " + checkBoxControl.isChecked());
 
@@ -175,7 +182,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
     nifty.fromXml("all/intro.xml", "menu");
   }
 
-  private DropDown findDropDownControl(final String id) {
+  private DropDown <?> findDropDownControl(final String id) {
     return screen.findNiftyControl(id, DropDown.class);
   }
 

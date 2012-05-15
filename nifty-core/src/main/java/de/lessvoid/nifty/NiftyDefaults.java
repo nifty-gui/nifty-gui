@@ -1,7 +1,5 @@
 package de.lessvoid.nifty;
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
 
 public class NiftyDefaults {
