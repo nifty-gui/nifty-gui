@@ -10,15 +10,15 @@ import de.lessvoid.nifty.controls.TreeItem;
  *
  * @author ractoc
  */
-public class TreeEntryModelClass {
+public class TreeEntryModelClass<T> {
    
-    private TreeItem treeItem;
+    private TreeItem<T> treeItem;
     
     private int indent;
     
     private boolean activeItem;
     
-    public TreeEntryModelClass(int indent, TreeItem treeItem) {
+    public TreeEntryModelClass(int indent, TreeItem<T> treeItem) {
         this.indent = indent;
         this.treeItem = treeItem;
     }
@@ -39,7 +39,7 @@ public class TreeEntryModelClass {
         if (obj == null || !(obj instanceof TreeEntryModelClass)) {
             return false;
         }
-        return this.treeItem.equals(((TreeEntryModelClass) obj).getTreeItem());
+        return this.treeItem.equals(((TreeEntryModelClass<?>) obj).getTreeItem());
     }
 
     /**
@@ -66,11 +66,11 @@ public class TreeEntryModelClass {
         this.indent = indent;
     }
 
-    public TreeItem getTreeItem() {
+    public TreeItem<T> getTreeItem() {
         return treeItem;
     }
 
-    public void setTreeItem(TreeItem treeItem) {
+    public void setTreeItem(TreeItem<T> treeItem) {
         this.treeItem = treeItem;
     }
     

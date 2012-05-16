@@ -37,6 +37,7 @@ public class ListBoxItemRemoveTest {
     verify(viewMock);
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testClear() {
     viewMock.updateTotalCount(0);
@@ -49,6 +50,7 @@ public class ListBoxItemRemoveTest {
     assertListBoxCount(0);
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testRemoveItemByIndex() {
     viewMock.updateTotalCount(1);
@@ -77,6 +79,7 @@ public class ListBoxItemRemoveTest {
     assertListBoxCount(2);
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testRemoveAllItemManual() {
     viewMock.updateTotalCount(1);
@@ -93,6 +96,7 @@ public class ListBoxItemRemoveTest {
     assertListBoxCount(0);
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testRemoveAllItems() {
     viewMock.updateTotalCount(0);
@@ -108,6 +112,7 @@ public class ListBoxItemRemoveTest {
     assertListBoxCount(0);
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testRemoveAllItemsAtBackOfList() {
     TestItem o3 = new TestItem("o3");

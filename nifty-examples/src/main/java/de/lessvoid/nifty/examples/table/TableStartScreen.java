@@ -146,6 +146,7 @@ public class TableStartScreen implements ScreenController, NiftyExample {
     }};
     Screen startScreen = builder.build(nifty);
 
+    @SuppressWarnings ("unchecked")
     ListBox<TableRow> listBox = startScreen.findNiftyControl("serverBox", ListBox.class);
     for (int i=0; i<1000; i++) {
       listBox.addItem(new TableRow(i, randomString(), randomString(), randomString(), randomString(), randomString()));

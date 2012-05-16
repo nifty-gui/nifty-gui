@@ -39,6 +39,7 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
   private void createPopup() {
     this.popup = nifty.createPopup("niftyPopupMenu");
   
+    @SuppressWarnings ("unchecked")
     Menu<ThisReallyCouldBeAnyClassYouWant> popupMenu = popup.findNiftyControl("#menu", Menu.class);
   
     popupMenu.setWidth(new SizeValue("250px"));
@@ -76,9 +77,9 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
     // nothing to do
   }
 
-  private class MenuItemActivatedEventSubscriber implements EventTopicSubscriber<MenuItemActivatedEvent> {
+  private class MenuItemActivatedEventSubscriber implements EventTopicSubscriber<MenuItemActivatedEvent<ThisReallyCouldBeAnyClassYouWant>> {
     @Override
-    public void onEvent(final String id, final MenuItemActivatedEvent event) {
+    public void onEvent(final String id, final MenuItemActivatedEvent<ThisReallyCouldBeAnyClassYouWant> event) {
       final ThisReallyCouldBeAnyClassYouWant item = (ThisReallyCouldBeAnyClassYouWant) event.getItem();
 
       Label label = screen.findNiftyControl("textOut", Label.class);

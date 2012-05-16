@@ -54,15 +54,14 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     listBox = popup.findNiftyControl("#listBox", ListBox.class);
   }
 
-  @SuppressWarnings("rawtypes")
   public void onStartScreen() {
     updateEnabled();
 
-    ListBoxControl listBoxControl = (ListBoxControl) listBox;
+    ListBoxControl <T> listBoxControl = (ListBoxControl<T>) listBox;
     listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), getSelection());
 
     nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,
-        new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, this, popup));
+        new DropDownListBoxSelectionChangedEventSubscriber<T>(nifty, screen, listBox, this, popup));
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
@@ -115,7 +114,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
         // when the popup is closed Nifty will automatically remove all subscribers for all controls in the popup.
         // this is in general the right behaviour, since the controls are gone (the popup is closed). However in this
         // case here the listbox is still used by the DropDown. So we need to subscribe our listener again.
-        nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class, new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, DropDownControl.this, popup));
+        nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class, new DropDownListBoxSelectionChangedEventSubscriber<T>(nifty, screen, listBox, DropDownControl.this, popup));
         if (endNotify != null) {
           endNotify.perform();
         }

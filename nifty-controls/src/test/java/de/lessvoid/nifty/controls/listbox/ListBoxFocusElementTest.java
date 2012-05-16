@@ -115,6 +115,7 @@ public class ListBoxFocusElementTest {
     assertEquals(0, listBox.getFocusItemIndex());
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testFocusItemAfterDelete() {
     viewMock.updateTotalCount(3);
@@ -128,6 +129,7 @@ public class ListBoxFocusElementTest {
     assertEquals(o2, listBox.getFocusItem());
   }
 
+  @SuppressWarnings ("unchecked")
   @Test
   public void testRemoveFocusItemBeingTheLastItem() {
     viewMock.scrollTo(2);

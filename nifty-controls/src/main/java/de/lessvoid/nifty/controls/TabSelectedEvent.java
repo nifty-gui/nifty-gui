@@ -11,7 +11,7 @@ import de.lessvoid.nifty.controls.tabs.TabsControl;
  *
  * @author ractoc
  */
-public class TabSelectedEvent implements NiftyEvent<Void> {
+public class TabSelectedEvent implements NiftyEvent {
     private TabsControl tabsControl;
     private String selectedTabId;
     

@@ -14,10 +14,10 @@ import de.lessvoid.nifty.tools.SizeValue;
  *
  * @author ractoc
  */
-public class TreeBoxViewConverter implements ListBoxViewConverter<TreeEntryModelClass> {
+public class TreeBoxViewConverter implements ListBoxViewConverter<TreeEntryModelClass<?>> {
 
     @Override
-    public void display(Element listBoxItem, TreeEntryModelClass item) {
+    public void display(Element listBoxItem, TreeEntryModelClass<?> item) {
         final Element spacer = listBoxItem.findElementByName("#tree-item-spacer");
         spacer.setConstraintWidth(new SizeValue(String.valueOf(item.getIndent())));
         spacer.setConstraintHeight(new SizeValue(String.valueOf(item.getTreeItem().getDisplayIconCollapsed().getHeight())));
@@ -42,7 +42,7 @@ public class TreeBoxViewConverter implements ListBoxViewConverter<TreeEntryModel
     }
 
     @Override
-    public int getWidth(Element element, TreeEntryModelClass item) {
+    public int getWidth(Element element, TreeEntryModelClass<?> item) {
         final Element text = element.findElementByName("#tree-item-caption");
         final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
         return ((textRenderer.getFont() == null) ? 0 : textRenderer.getFont().getWidth(item.getTreeItem().getDisplayCaption())

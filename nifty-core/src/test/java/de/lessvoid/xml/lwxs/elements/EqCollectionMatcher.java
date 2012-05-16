@@ -7,10 +7,10 @@ import org.easymock.IArgumentMatcher;
 import org.easymock.classextension.EasyMock;
 
 public class EqCollectionMatcher implements IArgumentMatcher {
-  private Collection expectedCollection;
+  private Collection<Object> expectedCollection;
   private String errorText;
 
-  public EqCollectionMatcher(final Collection expectedCollectionParam) {
+  public EqCollectionMatcher(final Collection<Object> expectedCollectionParam) {
     expectedCollection = expectedCollectionParam;
   }
 
@@ -19,13 +19,14 @@ public class EqCollectionMatcher implements IArgumentMatcher {
       errorText = "[not an Collection instance";
       return false;
     }
-    Collection actualCollection = ((Collection) actual);
+    @SuppressWarnings ("unchecked")
+    Collection<Object> actualCollection = (Collection<Object>) actual;
     if (expectedCollection.isEmpty()) {
       errorText = "[expected collection is empty, actual is not]";
       return actualCollection.isEmpty();
     }
-    Iterator expectedIt = expectedCollection.iterator();
-    Iterator actualIt = actualCollection.iterator();
+    Iterator<Object> expectedIt = expectedCollection.iterator();
+    Iterator<Object> actualIt = actualCollection.iterator();
     while (expectedIt.hasNext()) {
       Object expectedO = expectedIt.next();
       Object actualO = actualIt.next();
@@ -41,7 +42,7 @@ public class EqCollectionMatcher implements IArgumentMatcher {
     buffer.append("mismatch dude: " + errorText);
   }
 
-  public static Collection eqCollection(final Collection in) {
+  public static Collection <Object> eqCollection(final Collection<Object> in) {
     EasyMock.reportMatcher(new EqCollectionMatcher(in));
     return null;
   }

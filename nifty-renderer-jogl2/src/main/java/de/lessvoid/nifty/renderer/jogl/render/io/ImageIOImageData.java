@@ -125,11 +125,11 @@ public class ImageIOImageData implements ImageData {
       if (useAlpha) {
         depth = 32;
         raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, 4, null);
-        texImage = new BufferedImage(glAlphaColorModel, raster, false, new Hashtable());
+        texImage = new BufferedImage(glAlphaColorModel, raster, false, new Hashtable<String, Object>());
       } else {
         depth = 24;
         raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, 3, null);
-        texImage = new BufferedImage(glColorModel, raster, false, new Hashtable());
+        texImage = new BufferedImage(glColorModel, raster, false, new Hashtable<String, Object>());
       }
       
       // copy the source image into the produced image

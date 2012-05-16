@@ -9,6 +9,7 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+@SuppressWarnings ("deprecation")
 public class ScrollDemoStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;

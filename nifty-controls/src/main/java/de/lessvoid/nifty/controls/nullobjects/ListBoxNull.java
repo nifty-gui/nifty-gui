@@ -8,7 +8,7 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
-public class ListBoxNull implements ListBox {
+public class ListBoxNull<T> implements ListBox<T> {
 
   @Override
   public Element getElement() {
@@ -73,15 +73,15 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public void setListBoxViewConverter(final ListBoxViewConverter viewConverter) {
+  public void setListBoxViewConverter(final ListBoxViewConverter<T> viewConverter) {
   }
 
   @Override
-  public void addItem(final Object newItem) {
+  public void addItem(final T newItem) {
   }
 
   @Override
-  public void insertItem(final Object item, final int index) {
+  public void insertItem(final T item, final int index) {
   }
 
   @Override
@@ -98,7 +98,7 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public void selectItem(final Object item) {
+  public void selectItem(final T item) {
   }
 
   @Override
@@ -114,11 +114,11 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public void deselectItem(final Object item) {
+  public void deselectItem(final T item) {
   }
 
   @Override
-  public List getSelection() {
+  public List<T> getSelection() {
     return null;
   }
 
@@ -127,16 +127,16 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public void removeItem(final Object item) {
+  public void removeItem(final T item) {
   }
 
   @Override
-  public List getItems() {
+  public List<T> getItems() {
     return null;
   }
 
   @Override
-  public void showItem(final Object item) {
+  public void showItem(final T item) {
   }
 
   @Override
@@ -144,7 +144,7 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public void setFocusItem(final Object item) {
+  public void setFocusItem(final T item) {
   }
 
   @Override
@@ -152,7 +152,7 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public Object getFocusItem() {
+  public T getFocusItem() {
     return null;
   }
 
@@ -162,11 +162,11 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public void addAllItems(final List itemsToAdd) {
+  public void addAllItems(final List<T> itemsToAdd) {
   }
 
   @Override
-  public void removeAllItems(final List itemsToRemove) {
+  public void removeAllItems(final List<T> itemsToRemove) {
   }
 
   @Override
@@ -174,7 +174,7 @@ public class ListBoxNull implements ListBox {
   }
 
   @Override
-  public void sortAllItems(final Comparator comperator) {
+  public void sortAllItems(final Comparator<T> comperator) {
   }
 
   @Override

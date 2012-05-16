@@ -11,33 +11,33 @@ import de.lessvoid.nifty.controls.treebox.TreeBoxControl;
  *
  * @author ractoc
  */
-public class TreeItemSelectedEvent implements NiftyEvent<Void> {
+public class TreeItemSelectedEvent<T> implements NiftyEvent {
     
-    private TreeBoxControl treeBoxControl;
-    private TreeItem treeItem;
+    private TreeBoxControl<T> treeBoxControl;
+    private TreeItem<T> treeItem;
 
-    public TreeItemSelectedEvent(TreeBoxControl treeBoxControl, TreeItem treeItem) {
+    public TreeItemSelectedEvent(TreeBoxControl<T> treeBoxControl, TreeItem<T> treeItem) {
         this.treeBoxControl = treeBoxControl;
         this.treeItem = treeItem;
     }
 
-    public TreeItemSelectedEvent(TreeItem treeItem) {
+    public TreeItemSelectedEvent(TreeItem<T> treeItem) {
         this.treeItem = treeItem;
     }
 
-    public TreeBoxControl getTreeBoxControl() {
+    public TreeBoxControl<T> getTreeBoxControl() {
         return treeBoxControl;
     }
 
-    public void setTreeBoxControl(TreeBoxControl treeBoxControl) {
+    public void setTreeBoxControl(TreeBoxControl<T> treeBoxControl) {
         this.treeBoxControl = treeBoxControl;
     }
 
-    public TreeItem getTreeItem() {
+    public TreeItem<T> getTreeItem() {
         return treeItem;
     }
 
-    public void setTreeItem(TreeItem treeItem) {
+    public void setTreeItem(TreeItem<T> treeItem) {
         this.treeItem = treeItem;
     }
     

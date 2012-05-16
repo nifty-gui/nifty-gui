@@ -23,13 +23,13 @@ import de.lessvoid.xml.xpp3.Attributes;
  * 
  * @author ractoc
  */
-public class TreeBoxControl extends AbstractController implements TreeBox {
+public class TreeBoxControl<T> extends AbstractController implements TreeBox<T> {
 
 	private int indentWidth = 15;
-	private TreeItem tree;
+	private TreeItem<T> tree;
 	private Nifty nifty;
 	private Element element;
-	private ListBox<TreeEntryModelClass> treeListBox;
+	private ListBox<TreeEntryModelClass<T>> treeListBox;
 	private boolean processingItemSelected;
 
 	@Override
@@ -58,7 +58,7 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 	}
 
 	@Override
-	public void setTree(TreeItem treeRoot) {
+	public void setTree(TreeItem<T> treeRoot) {
 		this.tree = treeRoot;
 		treeListBox.clear();
 		if (treeListBox != null) {
@@ -73,19 +73,19 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 	 */
 	@NiftyEventSubscriber(id = "tree-box#listbox")
 	public void onListBoxSelectionChanged(final String id,
-			final ListBoxSelectionChangedEvent<TreeEntryModelClass> event) {
+			final ListBoxSelectionChangedEvent<TreeEntryModelClass<T>> event) {
 		if (!processingItemSelected) {
 			processingItemSelected = true;
-			TreeEntryModelClass selectedItem = event.getSelection().get(0);
+			TreeEntryModelClass<T> selectedItem = event.getSelection().get(0);
 			Integer selectedIndex = event.getSelectionIndices().get(0);
-			TreeItem item = selectedItem.getTreeItem();
+			TreeItem<T> item = selectedItem.getTreeItem();
 			if (!item.isLeaf() && selectedItem.isActiveItem()) {
 				item.setExpanded(!item.isExpanded());
 			}
 			selectedItem.setActiveItem(true);
 			setTree(tree);
 			treeListBox.getItems().get(selectedIndex).setActiveItem(true);
-			nifty.publishEvent(getId(), new TreeItemSelectedEvent(this, item));
+			nifty.publishEvent(getId(), new TreeItemSelectedEvent<T>(this, item));
 			treeListBox.refresh();
 			processingItemSelected = false;
 		}
@@ -95,21 +95,21 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 	@SuppressWarnings("unchecked")
 	private void setListBox(final String name) {
 		if (treeListBox == null) {
-			treeListBox = (ListBox<TreeEntryModelClass>) element
+			treeListBox = (ListBox<TreeEntryModelClass<T>>) element
 					.findNiftyControl(name, ListBox.class);
 		}
 	}
 
-	private int addTreeItem(ListBox<TreeEntryModelClass> treeListBox,
-			TreeItem treeItem, int currentIndent, int itemIndex) {
+	private int addTreeItem(ListBox<TreeEntryModelClass<T>> treeListBox,
+			TreeItem<T> treeItem, int currentIndent, int itemIndex) {
 		if (currentIndent != 0) {
-			treeListBox.insertItem(new TreeEntryModelClass(indentWidth
+			treeListBox.insertItem(new TreeEntryModelClass<T>(indentWidth
 					* currentIndent, treeItem), itemIndex);
 			itemIndex++;
 		}
 		if (treeItem.isExpanded()) {
-			for (Object childItem : treeItem.getTreeItems()) {
-				itemIndex = addTreeItem(treeListBox, (TreeItem) childItem,
+			for (TreeItem<T> childItem : treeItem.getTreeItems()) {
+				itemIndex = addTreeItem(treeListBox, childItem,
 						currentIndent + 1, itemIndex);
 			}
 		}
@@ -117,8 +117,8 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 	}
 
 	private void removeAbsoleteTreeItems(
-			ListBox<TreeEntryModelClass> treeListBox, TreeItem tree) {
-		for (TreeEntryModelClass treeListEntry : treeListBox.getItems()) {
+			ListBox<TreeEntryModelClass<T>> treeListBox, TreeItem<T> tree) {
+		for (TreeEntryModelClass<T> treeListEntry : treeListBox.getItems()) {
 			treeListEntry.setActiveItem(false);
 			if (!tree.contains(treeListEntry.getTreeItem())) {
 				treeListBox.removeItem(treeListEntry);

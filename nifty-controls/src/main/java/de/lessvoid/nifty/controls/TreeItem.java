@@ -32,20 +32,20 @@ public class TreeItem<T> {
     }
 
     public TreeItem(TreeItem<T> parentItem, T value, String displayCaption, NiftyImage displayIconCollapsed, NiftyImage displayIconExpanded) {
-        this(parentItem, value, displayCaption, displayIconCollapsed, displayIconExpanded, false);
-    }
+      this(parentItem, value, displayCaption, displayIconCollapsed, displayIconExpanded, false);
+  }
 
     public TreeItem(TreeItem<T> parentItem, T value, String displayCaption, NiftyImage displayIcon, boolean expanded) {
-        this(parentItem, value, displayCaption, displayIcon, null, expanded);
-    }
+      this(parentItem, value, displayCaption, displayIcon, null, expanded);
+  }
 
     public TreeItem(TreeItem<T> parentItem, T value, String displayCaption, NiftyImage displayIcon) {
-        this(parentItem, value, displayCaption, displayIcon, null, false);
-    }
-    
+      this(parentItem, value, displayCaption, displayIcon, null, false);
+  }
+
     public TreeItem() {
-        this(null, null, "Root", null, null, true);
-    }
+      this(null, null, "Root", null, null, true);
+  }
 
     public void addTreeItem(TreeItem<T> item) {
         treeNodes.add(item);
@@ -123,7 +123,7 @@ public class TreeItem<T> {
         } else if (treeNodes.contains(child)) {
             return true;
         } else {
-            for (TreeItem item : treeNodes) {
+            for (TreeItem<T> item : treeNodes) {
                 boolean found = item.contains(child);
                 if (found) {
                     return true;

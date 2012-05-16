@@ -29,11 +29,13 @@ public class PageControl implements Controller {
 
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+    @SuppressWarnings ("unchecked")
     DropDown<String> dropDown = screen.findNiftyControl("dropDownControl", DropDown.class);
     dropDown.addItem("a");
     dropDown.addItem("b");
     dropDown.addItem("c");
 
+    @SuppressWarnings ("unchecked")
     ListBox<String> listBox = screen.findNiftyControl("listBox", ListBox.class);
     listBox.addItem("a");
     listBox.addItem("b");

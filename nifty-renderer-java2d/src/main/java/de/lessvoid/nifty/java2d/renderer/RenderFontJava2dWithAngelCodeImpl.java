@@ -8,7 +8,7 @@ import de.lessvoid.nifty.spi.render.RenderImage;
 
 public class RenderFontJava2dWithAngelCodeImpl implements RenderFont {
 
-	private final RenderDeviceJava2dImpl renderDevice;
+	//private final RenderDeviceJava2dImpl renderDevice;
 
 	private final AngelCodeFont angelCodeFont;
 	
@@ -23,7 +23,7 @@ public class RenderFontJava2dWithAngelCodeImpl implements RenderFont {
 
 	public RenderFontJava2dWithAngelCodeImpl(
 			RenderDeviceJava2dImpl renderDevice, AngelCodeFont angelCodeFont, Map<String, RenderImage> textureImages) {
-		this.renderDevice = renderDevice;
+		//this.renderDevice = renderDevice;
 		this.angelCodeFont = angelCodeFont;
 		this.textureImages = textureImages;
 	}

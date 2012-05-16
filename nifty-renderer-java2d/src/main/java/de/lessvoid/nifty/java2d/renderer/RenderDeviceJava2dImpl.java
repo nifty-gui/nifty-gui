@@ -269,19 +269,24 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 			// reference implementation or
 			// http://slick.javaunlimited.net/viewtopic.php?p=844&sid=9bfbbee23dd97e95b10ead16f9976a81
 
-			char[] charArray = text.toCharArray();
+			// NOTE: The first link is dead. The second link recommends recoloring individual pixels,
+			// which is a horrible idea; reusing the white text as an alpha channel on top of a
+			// uniformly-colored background should give Java2D a chance to hand that work to a
+			// GPU.
+
+			//char[] charArray = text.toCharArray();
 			String[] textures = angelCodeFont.getTextures();
 
 			for (int i = 0; i < text.length(); i++) {
 
 				char c = text.charAt(i);
-				char nextCharacter = i + 1 < text.length() ? text.charAt(i + 1)
-						: 0;
+				//char nextCharacter = i + 1 < text.length() ? text.charAt(i + 1)
+				//		: 0;
 
-				CharacterInfo charInfo = angelCodeFont.getChar(c);
+				de.lessvoid.nifty.java2d.renderer.fonts.CharacterInfo charInfo = angelCodeFont.getChar(c);
 
-				int kerning = 0;
-				float characterWidth = 0;
+				//int kerning = 0;
+				//float characterWidth = 0;
 
 				if (charInfo == null)
 					break;

@@ -12,10 +12,10 @@ import java.util.Hashtable;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
- * AngelCodeFont loading.
+ * AngelCodeFont loading.<br>
+ * it is a copy from the lwjgl renderer, but it has nothing to do with the renderer, so it could be in another project.
  * 
  * @author void
- * @deprecated it is a copy from the lwjgl renderer, but it has nothing to do with the renderer, so it could be in another project.
  */
 public class AngelCodeFont {
 

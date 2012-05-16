@@ -4,7 +4,7 @@ import de.lessvoid.nifty.NiftyEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
-public class NiftyMouseWheelEvent implements NiftyEvent<Void> {
+public class NiftyMouseWheelEvent implements NiftyEvent {
   private Element element;
   private int mouseWheel;
 

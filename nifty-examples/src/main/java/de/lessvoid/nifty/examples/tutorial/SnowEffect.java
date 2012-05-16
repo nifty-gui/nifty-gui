@@ -13,6 +13,7 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
+@Deprecated
 public class SnowEffect implements EffectImpl {
   private Snowflake[] snow = new Snowflake[256];
   private int screenWidth;

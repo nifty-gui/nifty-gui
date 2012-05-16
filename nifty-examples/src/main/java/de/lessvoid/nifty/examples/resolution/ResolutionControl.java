@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.resolution;
 
-import org.lwjgl.LWJGLException;
-
 import java.util.Collection;
 
 /**
