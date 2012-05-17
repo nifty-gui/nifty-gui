@@ -2,7 +2,7 @@ package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
 
-public class ButtonClickedEvent implements NiftyEvent<Void> {
+public class ButtonClickedEvent implements NiftyEvent {
   private Button button;
 
   public ButtonClickedEvent(final Button button) {

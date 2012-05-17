@@ -49,7 +49,7 @@ public class PrimaryClickMouseMethods extends MouseClickMethods {
     return result;
   }
 
-  private void publishEvent(final Nifty nifty, final NiftyEvent<?> event) {
+  private void publishEvent(final Nifty nifty, final NiftyEvent event) {
     nifty.publishEvent(element.getId(), event);
   }
 }
