@@ -40,7 +40,7 @@ public class SoundStore {
 	/** The number of sound sources enabled - default 8 */
 	private int sourceCount;
 	/** The map of references to IDs of previously loaded sounds */
-	private HashMap loaded = new HashMap();
+	private HashMap<String, Integer> loaded = new HashMap<String, Integer>();
 	/** The ID of the buffer containing the music currently being played */
 	private int currentMusic = -1;
 	/** The OpenGL AL sound sources in use */
@@ -291,7 +291,7 @@ public class SoundStore {
 		log.info("Initialising sounds..");
 		inited = true;
 		
-		AccessController.doPrivileged(new PrivilegedAction() {
+		AccessController.doPrivileged(new PrivilegedAction<Object>() {
             public Object run() {
 				try {
 					AL.create();
@@ -633,7 +633,7 @@ public class SoundStore {
 		int buffer = -1;
 		
 		if (loaded.get(ref) != null) {
-			buffer = ((Integer) loaded.get(ref)).intValue();
+			buffer = loaded.get(ref).intValue();
 		} else {
 			try {
 				IntBuffer buf = BufferUtils.createIntBuffer(1);
@@ -706,7 +706,7 @@ public class SoundStore {
 		int buffer = -1;
 		
 		if (loaded.get(ref) != null) {
-			buffer = ((Integer) loaded.get(ref)).intValue();
+			buffer = loaded.get(ref).intValue();
 		} else {
 			try {
 				IntBuffer buf = BufferUtils.createIntBuffer(1);
@@ -827,7 +827,7 @@ public class SoundStore {
 		int buffer = -1;
 		
 		if (loaded.get(ref) != null) {
-			buffer = ((Integer) loaded.get(ref)).intValue();
+			buffer = loaded.get(ref).intValue();
 		} else {
 			try {
 				IntBuffer buf = BufferUtils.createIntBuffer(1);
