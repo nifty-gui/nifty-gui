@@ -3,12 +3,8 @@ package de.lessvoid.nifty.controls.dropdown;
 import java.util.List;
 import java.util.Properties;
 
-import org.bushe.swing.event.EventTopicSubscriber;
-
-import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;

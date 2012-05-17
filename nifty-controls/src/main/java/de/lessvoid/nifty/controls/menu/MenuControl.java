@@ -4,7 +4,6 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 
-import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.builder.ControlBuilder;
