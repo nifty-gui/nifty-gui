@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.java2d.renderer.fonts.AngelCodeFont;
 import de.lessvoid.nifty.java2d.renderer.fonts.CharacterInfo;
 import de.lessvoid.nifty.render.BlendMode;
