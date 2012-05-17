@@ -11,9 +11,8 @@ import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
 
 /**
- * An effect can be active or not and is always attached to one element. It
- * has a TimeInterpolator that manages the life time of the effect. The actual
- * effect implementation is done be EffectImpl implementations.
+ * An effect can be active or not and is always attached to one element. It has a TimeInterpolator that manages the life
+ * time of the effect. The actual effect implementation is done be EffectImpl implementations.
  *
  * @author void
  */
@@ -81,7 +80,7 @@ public class Effect {
       final EffectImpl effectImplParam,
       final EffectProperties parameterParam,
       final TimeProvider timeParam,
-      final LinkedList < Object > controllers) {
+      final LinkedList<Object> controllers) {
     element = elementParam;
     effectImpl = effectImplParam;
     parameter = parameterParam;
@@ -110,7 +109,7 @@ public class Effect {
   }
 
   public void update() {
-    setActiveInternal(timeInterpolator.update(), false); 
+    setActiveInternal(timeInterpolator.update(), !neverStopRendering);
   }
 
   public void execute(final NiftyRenderEngine r) {
@@ -131,13 +130,13 @@ public class Effect {
 
   private void setActiveInternal(final boolean newActive, final boolean callDeactivate) {
     boolean ended = false;
-    if (this.active && !newActive) {
+    if (active && !newActive) {
       if (callDeactivate) {
         effectImpl.deactivate();
       }
       ended = true;
     }
-    this.active = newActive;
+    active = newActive;
 
     if (ended) {
       effectEvents.onEndEffect();
@@ -169,7 +168,7 @@ public class Effect {
     return "(" + effectImpl.getClass().getSimpleName() + "[" + customKey + "]" + ")";
   }
 
-  public <T extends EffectImpl> T getEffectImpl(final Class <T> requestedClass) {
+  public <T extends EffectImpl> T getEffectImpl(final Class<T> requestedClass) {
     if (requestedClass.isInstance(effectImpl)) {
       return requestedClass.cast(effectImpl);
     }
@@ -224,26 +223,34 @@ public class Effect {
 
       // don't start this effect when it has an alternateKey set.
       if (isAlternateEnable()) {
-        log.info("starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] and effect isAlternateEnable()");
+        log.info(
+            "starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] and effect " +
+                "isAlternateEnable()");
         return false;
       }
     } else {
       // we have an alternate key
       if (isAlternateDisable() && alternateDisableMatches(alternate)) {
         // don't start this effect. it has an alternateKey set and should be used for disable matches only
-        log.info("starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] matches alternateDisableMatches()");
+        log.info(
+            "starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] matches " +
+                "alternateDisableMatches()");
         return false;
       }
 
       if (isAlternateEnable() && !alternateEnableMatches(alternate)) {
         // start with alternateEnable but names don't match ... don't start
-        log.info("starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] does not match alternateEnableMatches()");
+        log.info(
+            "starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] does not " +
+                "match alternateEnableMatches()");
         return false;
       }
     }
 
     if (!customKeyMatches(customKey)) {
-      log.info("starting effect [" + getStateString() + "] canceled because customKey [" + customKey + "] does not match key set at the effect");
+      log.info(
+          "starting effect [" + getStateString() + "] canceled because customKey [" + customKey + "] does not match " +
+              "key set at the effect");
       return false;
     }
 
