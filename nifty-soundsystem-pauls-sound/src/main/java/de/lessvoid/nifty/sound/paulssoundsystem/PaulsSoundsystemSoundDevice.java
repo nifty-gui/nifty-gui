@@ -13,7 +13,7 @@ public class PaulsSoundsystemSoundDevice implements SoundDevice {
   private paulscode.sound.SoundSystem soundSystem;
   private int counter = 0;
 
-  public PaulsSoundsystemSoundDevice(final Class libraryClass, final SupportedCodec ... additionalCodecs) throws SoundSystemException {
+  public PaulsSoundsystemSoundDevice(final Class<?> libraryClass, final SupportedCodec ... additionalCodecs) throws SoundSystemException {
     SoundSystemConfig.setSoundFilesPackage("");
     SoundSystemConfig.addLibrary(libraryClass);
 
@@ -21,7 +21,7 @@ public class PaulsSoundsystemSoundDevice implements SoundDevice {
     SoundSystemConfig.setCodec("ogg", CodecJOrbis.class);
     SoundSystemConfig.setCodec("wav", CodecWav.class);
 
-    addAdditionalCodecs(libraryClass, additionalCodecs);
+    addAdditionalCodecs(additionalCodecs);
     soundSystem = new paulscode.sound.SoundSystem();
   }
 
@@ -29,7 +29,7 @@ public class PaulsSoundsystemSoundDevice implements SoundDevice {
   public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
   }
 
-  private void addAdditionalCodecs(final Class libraryClass, final SupportedCodec... codecs) throws SoundSystemException {
+  private void addAdditionalCodecs(final SupportedCodec... codecs) throws SoundSystemException {
     if (codecs != null) {
       for (SupportedCodec codec : codecs) {
         SoundSystemConfig.setCodec(codec.getExtension(), codec.getCodecClass());
