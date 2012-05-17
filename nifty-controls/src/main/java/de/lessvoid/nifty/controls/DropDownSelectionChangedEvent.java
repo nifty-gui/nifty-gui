@@ -6,7 +6,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * Nifty generates this event when the selection of the DropDown changes.
  * @author void
  */
-public class DropDownSelectionChangedEvent<T> implements NiftyEvent<T> {
+public class DropDownSelectionChangedEvent<T> implements NiftyEvent {
   private DropDown<T> dropDown;
   private T selection;
   private int selectionItemIndex;

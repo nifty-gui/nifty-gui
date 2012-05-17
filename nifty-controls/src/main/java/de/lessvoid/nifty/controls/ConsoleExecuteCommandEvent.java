@@ -6,7 +6,6 @@ import de.lessvoid.nifty.NiftyEvent;
  * Executed when a new command is being issued on the console.
  * @author void
  */
-@SuppressWarnings("rawtypes")
 public class ConsoleExecuteCommandEvent implements NiftyEvent {
   private Console console;
   private ConsoleCommandSplitter splitter = new ConsoleCommandSplitter();

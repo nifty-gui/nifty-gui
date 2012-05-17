@@ -6,7 +6,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * Nifty generates this event when a Scrollbar value has been changed.
  * @author void
  */
-public class ScrollbarChangedEvent implements NiftyEvent<Void> {
+public class ScrollbarChangedEvent implements NiftyEvent {
   private Scrollbar scrollbar;
   private float value;
 

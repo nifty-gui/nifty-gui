@@ -214,7 +214,6 @@ public class Nifty {
     return EventServiceLocator.getEventService("NiftyEventBus");
   }
 
-  @SuppressWarnings("rawtypes")
   public void publishEvent(final String id, final NiftyEvent event) {
     // we can't publish events for elements without an id
     if (id != null) {
