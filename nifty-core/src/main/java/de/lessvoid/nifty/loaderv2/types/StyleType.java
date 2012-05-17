@@ -56,6 +56,7 @@ public class StyleType extends XmlBaseType {
   }
 
   void applyToInternal(final ElementType elementType) {
+    elementType.removeWithTag(getStyleId());
     if (attributesType != null) {
       attributesType.apply(elementType.getAttributes(), getStyleId());
     }

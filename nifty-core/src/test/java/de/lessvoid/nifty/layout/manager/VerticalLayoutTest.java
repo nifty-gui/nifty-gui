@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.layout.manager;
 
+import static de.lessvoid.nifty.layout.manager.BoxTestHelper.assertBox;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,12 +129,5 @@ public class VerticalLayoutTest extends TestCase {
 
   private void performLayout() {
     layout.layoutElements(root, elements);
-  }
-
-  private void assertBox(final Box box, final int x, final int y, final int width, final int height) {
-    assertEquals(x, box.getX());
-    assertEquals(y, box.getY());
-    assertEquals(width, box.getWidth());
-    assertEquals(height, box.getHeight());
   }
 }

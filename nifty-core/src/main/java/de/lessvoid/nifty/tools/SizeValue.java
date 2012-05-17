@@ -97,6 +97,32 @@ public class SizeValue {
   }
 
   /**
+   * static helper to create a pixel based SizeValue.
+   * @param pixelValue pixel value
+   * @return SizeValue
+   */
+  public static SizeValue px(final int pixelValue) {
+    return new SizeValue(pixelValue + PIXEL);
+  }
+
+  /**
+   * static helper to create a percentage based SizeValue.
+   * @param percentage percentage value
+   * @return SizeValue
+   */
+  public static SizeValue percent(final int percentage) {
+    return new SizeValue(percentage + PERCENT);
+  }
+
+  /**
+   * static helper to create a wildcard based SizeValue.
+   * @return SizeValue
+   */
+  public static SizeValue wildcard() {
+    return new SizeValue(WILDCARD);
+  }
+
+  /**
    * Checks if the value contains either PERCENT or PIXEL.
    * @return true when either PERCENT or PIXEL is given.
    */
@@ -126,6 +152,46 @@ public class SizeValue {
    */
   public int getValueAsInt(final float range) {
     return (int) getValue(range);
+  }
+
+  /**
+   * Checks if this value describes a pixel value.
+   * @return true if the given string value ends with PIXEL
+   * and false otherwise
+   */
+  public boolean isPixel() {
+    if (value == null) {
+      return false;
+    } else {
+      return !value.equals(WILDCARD) && (value.endsWith(PIXEL) || hasNoSuffix());
+    }
+  }
+
+  /**
+   * toString.
+   * @return value
+   */
+  public String toString() {
+    return value;
+  }
+
+  public boolean hasWidthSuffix() {
+    return hasWidthSuffix;
+  }
+
+  public boolean hasHeightSuffix() {
+    return hasHeightSuffix;
+  }
+
+  public boolean hasWildcard() {
+    return "*".equals(value);
+  }
+
+  public boolean equals(final Object obj) {
+    if (obj instanceof SizeValue) {
+      return this.value.equals(((SizeValue) obj).value);
+    }
+    return false;
   }
 
   /**
@@ -170,19 +236,6 @@ public class SizeValue {
     }
   }
 
-  /**
-   * Checks if this value describes a pixel value.
-   * @return true if the given string value ends with PIXEL
-   * and false otherwise
-   */
-  public boolean isPixel() {
-    if (value == null) {
-      return false;
-    } else {
-      return !value.equals(WILDCARD) && (value.endsWith(PIXEL) || hasNoSuffix());
-    }
-  }
-
   private boolean hasNoSuffix() {
     if (value == null) {
       return false;
@@ -195,25 +248,5 @@ public class SizeValue {
       return false;
     }
     return true;
-  }
-
-  /**
-   * toString.
-   * @return value
-   */
-  public String toString() {
-    return value;
-  }
-
-  public boolean hasWidthSuffix() {
-    return hasWidthSuffix;
-  }
-
-  public boolean hasHeightSuffix() {
-    return hasHeightSuffix;
-  }
-
-  public boolean hasWildcard() {
-    return "*".equals(value);
   }
 }

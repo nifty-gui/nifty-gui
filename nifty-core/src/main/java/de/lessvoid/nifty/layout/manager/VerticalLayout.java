@@ -54,36 +54,35 @@ public class VerticalLayout implements LayoutManager {
         currentBox.setHeight(elementHeight);
       }
 
-      currentBox.setX(processHorizontalAlignment(rootBoxX, rootBoxWidth, currentBox.getWidth(), currentBoxConstraints));
+      int x = processHorizontalAlignment(rootBoxX, rootBoxWidth, currentBox.getWidth(), currentBoxConstraints);
+      x = x + leftMargin(currentBoxConstraints, rootBoxWidth);
+      currentBox.setX(x);
+
+      y = y + topMargin(currentBoxConstraints, rootBoxHeight);
       currentBox.setY(y);
 
-      y += elementHeight;
+      y += elementHeight + bottomMargin(currentBoxConstraints, rootBoxHeight);
     }
+  }
+
+  private int leftMargin(final BoxConstraints boxConstraints, final int rootBoxWidth) {
+    return boxConstraints.getMarginLeft().getValueAsInt(rootBoxWidth);
+  }
+
+  private int topMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+    return boxConstraints.getMarginTop().getValueAsInt(rootBoxHeight);
+  }
+
+  private int bottomMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+    return boxConstraints.getMarginBottom().getValueAsInt(rootBoxHeight);
   }
 
   public SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
-    if (children.size() == 0) {
-      return null;
-    }
-    int newWidth = 0;
-    for (LayoutPart e : children) {
-      newWidth += e.getBoxConstraints().getWidth().getValueAsInt(0);
-    }
-    newWidth += root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth());
-    newWidth += root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth());
-
-    return new SizeValue(newWidth + "px");
+    return root.getMaxWidth(children);
   }
 
   public SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
-    int newHeight = 0;
-    for (LayoutPart e : children) {
-      newHeight += e.getBoxConstraints().getHeight().getValueAsInt(0);
-    }
-    newHeight += root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight());
-    newHeight += root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
-
-    return new SizeValue(newHeight + "px");
+    return root.getSumHeight(children);
   }
 
   private int processWidthConstraints(final int rootBoxWidth, final BoxConstraints constraints, final int elementHeight) {

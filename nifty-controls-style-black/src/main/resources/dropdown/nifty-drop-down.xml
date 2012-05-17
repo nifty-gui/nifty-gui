@@ -8,7 +8,7 @@
   </style>
 
   <style id="nifty-drop-down#panel-text">
-    <attributes childLayout="center" visibleToMouse="true" childClip="true" backgroundColor="#666f" padding="0px,2px" width="*" />
+    <attributes childLayout="center" childClip="true" backgroundColor="#666f" padding="0px,2px" width="*" />
     <effect>
       <onActive name="border" color="#222f" post="true" inset="1px" />
       <onFocus name="colorBar" color="#800f" post="true" inset="1px" />
@@ -29,7 +29,7 @@
   </style>
 
   <style id="nifty-drop-down#icon">
-    <attributes filename="scrollbar/scrollbar.png" width="23px" height="23px" imageMode="sprite:23,23,0" visibleToMouse="true" />
+    <attributes filename="scrollbar/scrollbar.png" width="23px" height="23px" imageMode="sprite:23,23,0" />
     <effect>
       <onClick name="focus" targetElement="#parent" />
       <onClick name="imageOverlay" filename="scrollbar/scrollbar.png" imageMode="sprite:23,23,2" post="true" />

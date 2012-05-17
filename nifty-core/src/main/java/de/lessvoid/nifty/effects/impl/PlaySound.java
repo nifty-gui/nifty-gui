@@ -48,8 +48,8 @@ public class PlaySound implements EffectImpl {
   }
 
   private void playSound() {
+    soundHandle.setVolume(nifty.getSoundSystem().getSoundVolume());
     soundHandle.play();
-    soundHandle.setVolume(nifty.getSoundSystem().getMusicVolume());
   }
 
   public void deactivate() {

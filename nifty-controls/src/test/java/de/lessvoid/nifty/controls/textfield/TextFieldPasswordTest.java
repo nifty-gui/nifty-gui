@@ -1,9 +1,12 @@
 package de.lessvoid.nifty.controls.textfield;
 
+import junit.framework.TestCase;
+
+import de.lessvoid.nifty.Clipboard;
+import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
+
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
-import junit.framework.TestCase;
-import de.lessvoid.nifty.Clipboard;
 
 public class TextFieldPasswordTest extends TestCase {
   private static final int MAX_CURSOR_POSITION = 5;
@@ -21,38 +24,41 @@ public class TextFieldPasswordTest extends TestCase {
 
   public void testCutNormal() {
     expectPut("hello");
-    textField.cut(null);
+    textField.setFormat(null);
+    textField.cut();
   }
 
   public void testCutPassword() {
     expectPut("*****");
-    textField.cut('*');
+    textField.setFormat(new FormatPassword('*'));
+    textField.cut();
   }
 
   public void testCopyNormal() {
     expectPut("hello");
-    textField.copy(null);
+    textField.setFormat(null);
+    textField.copy();
   }
 
   public void testCopyPassword() {
     expectPut("*****");
-    textField.copy('*');
+    textField.setFormat(new FormatPassword('*'));
+    textField.copy();
   }
 
   public void testModifyWithPasswordMethodWithNull() {
-    assertEquals("hello", textField.modifyWithPasswordChar("hello", null));
+    textField.setFormat(null);
+    assertEquals("hello", textField.getDisplayedText().toString());
   }
 
   public void testModifyWithPasswordMethodWithChar() {
-    assertEquals("*****", textField.modifyWithPasswordChar("hello", '*'));
-  }
-
-  public void testModifyWithPasswordMethodWithCharAndNull() {
-    assertNull(textField.modifyWithPasswordChar(null, '*'));
+    textField.setFormat(new FormatPassword('*'));
+    assertEquals("*****", textField.getDisplayedText().toString());
   }
 
   private void expectPut(final String value) {
     clipboard.put(value);
+    textField.setFormat(null);
     replay(clipboard);
   }
 }

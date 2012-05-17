@@ -22,7 +22,7 @@ public final class TestMain {
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new AccurateTimeProvider());
-    nifty.fromXml("test/test-popup.xml", "start");
+    nifty.fromXml("test/test.xml", "start");
 
     // render
     LwjglInitHelper.renderLoop(nifty, null);

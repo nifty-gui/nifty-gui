@@ -1,9 +1,14 @@
 package de.lessvoid.nifty.elements;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
@@ -73,6 +78,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * our identification.
    */
   private String id;
+  private int renderOrder;
 
   /**
    * the parent element.
@@ -82,7 +88,65 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   /**
    * the child elements.
    */
-  private ArrayList < Element > elements = new ArrayList < Element >();
+  private List < Element > elements = new ArrayList < Element >();
+  private Set < Element > elementsRenderOrder = new TreeSet < Element >(new Comparator<Element>() {
+
+    /**
+     * This uses the renderOrder attribute of the elements to compare them. If the renderOrder
+     * attribute is not set (is 0) then the index of the element in the elements list is used
+     * as the renderOrder value. This is done to keep the original sort order of the elements for
+     * rendering. The value is not cached and is directly recalculated using the element index in
+     * the list. The child count for an element is usually low (< 10) and the comparator is only
+     * executed when the child elements change. So this lookup shouldn't hurt performance too much.
+     *
+     * If you change the default value of renderOrder then your value is being used. So if you set it
+     * to some high value (> 1000 to be save) this element is rendered after all the other elements.
+     * If you set it to some very low value (< -1000 to be save) then this element is rendered before
+     * all the others.
+     */
+    @Override
+    public int compare(final Element o1, final Element o2) {
+      int o1RenderOrder = getRenderOrder(o1);
+      int o2RenderOrder = getRenderOrder(o2);
+
+      if (o1RenderOrder < o2RenderOrder) {
+        return -1;
+      } else if (o1RenderOrder > o2RenderOrder) {
+        return 1;
+      }
+      // this means the renderOrder values are equal. since this is a set
+      // we can't return 0 because this would mean (for the set) that the
+      // elements are equal and one of the values will be removed. so here
+      // we simply compare the String representation of the elements so that
+      // we keep a fixed sort order.
+      String o1Id = o1.id;
+      String o2Id = o2.id;
+      if (o1Id == null && o2Id != null){
+        return -1;
+      } else if (o1Id != null && o2Id == null) {
+        return 1;
+      } else if (o1Id != null && o2Id != null) {
+        int idCompareResult = o1Id.compareTo(o2Id);
+        if (idCompareResult != 0) {
+          return idCompareResult;
+        }
+      }
+
+      // ids equal or both null use super.toString()
+      // hashCode() should return a value thats different for both elements since
+      // adding the same element twice to the same parent element is not supported.
+      String ref1 = Integer.toHexString(o1.hashCode());
+      String ref2 = Integer.toHexString(o2.hashCode());
+      return ref1.compareTo(ref2);
+    }
+
+    private int getRenderOrder(final Element element) {
+      if (element.renderOrder != 0) {
+        return element.renderOrder;
+      }
+      return elements.indexOf(element);
+    }
+  });
 
   /**
    * The LayoutManager we should use for all child elements.
@@ -314,7 +378,29 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight"), paddingRight));
     layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop"), paddingTop));
     layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom"), paddingBottom));
+
+    String marginLeft = Convert.DEFAULT_MARGIN;
+    String marginRight = Convert.DEFAULT_MARGIN;
+    String marginTop = Convert.DEFAULT_MARGIN;
+    String marginBottom = Convert.DEFAULT_MARGIN;
+    if (attributes.isSet("margin")) {
+      try {
+        PaddingAttributeParser marginParser = new PaddingAttributeParser(attributes.get("margin"));
+        marginLeft = marginParser.getLeft();
+        marginRight = marginParser.getRight();
+        marginTop = marginParser.getTop();
+        marginBottom = marginParser.getBottom();
+      } catch (Exception e) {
+        log.warning(e.getMessage());
+      }
+    }
+    layoutPart.getBoxConstraints().setMarginLeft(convert.paddingSizeValue(attributes.get("marginLeft"), marginLeft));
+    layoutPart.getBoxConstraints().setMarginRight(convert.paddingSizeValue(attributes.get("marginRight"), marginRight));
+    layoutPart.getBoxConstraints().setMarginTop(convert.paddingSizeValue(attributes.get("marginTop"), marginTop));
+    layoutPart.getBoxConstraints().setMarginBottom(convert.paddingSizeValue(attributes.get("marginBottom"), marginBottom));
+
     this.clipChildren = attributes.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP);
+    this.renderOrder = attributes.getAsInteger("renderOrder", Convert.DEFAULT_RENDER_ORDER);
     boolean visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
     if (visible) {
       this.visible = true;
@@ -440,6 +526,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     elementDebugOut.add(" position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]");
     elementDebugOut.add(" constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]");
     elementDebugOut.add(" padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]");
+    elementDebugOut.add(" margin [" + outputSizeValue(layoutPart.getBoxConstraints().getMarginLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginBottom()) + "]");
     StringBuffer state = new StringBuffer();
     if (focusable) {
       state.append(" focusable");
@@ -470,10 +557,17 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     }
     elementDebugOut.add(" flags [" + state + "]");
     elementDebugOut.add(" effects [" + effectManager.getStateString(offset) + "]");
+    elementDebugOut.add(" renderOrder [" + renderOrder + "]");
 
     if (parentClipArea) {
       elementDebugOut.add(" parent clip [x=" + parentClipX + ", y=" + parentClipY + ", w=" + parentClipWidth + ", h=" + parentClipHeight + "]");
     }
+    StringBuffer renderOrder = new StringBuffer();
+    renderOrder.append(" render order: ");
+    for (Element e : elementsRenderOrder) {
+      renderOrder.append("[" + e.getId() + " (" + ((e.renderOrder == 0) ? elements.indexOf(e) : e.renderOrder) + ")]");
+    }
+    elementDebugOut.add(renderOrder.toString());
 
     elementDebug.delete(0, elementDebug.length());
     for (int i=0; i<elementDebugOut.size(); i++) {
@@ -577,7 +671,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * @return the list of child elements
    */
   public List < Element > getElements() {
-    return elements;
+    return Collections.unmodifiableList(elements);
   }
 
   /**
@@ -593,6 +687,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    */
   public void add(final Element widget) {
     elements.add(widget);
+    elementsRenderOrder.add(widget);
   }
 
   /**
@@ -640,8 +735,9 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   }
 
   private void renderInternalChildElements(final NiftyRenderEngine r) {
-    for (int i=0; i<elements.size(); i++) {
-      Element p = elements.get(i);
+    Iterator<Element> elementIter = elementsRenderOrder.iterator();
+    while (elementIter.hasNext()) {
+      Element p = elementIter.next();
       p.render(r);
     }
   }
@@ -697,12 +793,34 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
       // if all (!) child elements have a pixel fixed width we can calculate a new width constraint for this element!
       if (elements.size() == layoutPartChild.size()) {
+        // we don't have anything to calculate values from so we quit
+        if (layoutPartChild.size() == 0) {
+          // but before we check if we eventually need to reset the constrain
+          checkAndResetCalculatedWidthConstraint(myWidth);
+          return;
+        }
         SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
         if (newWidth != null) {
-          setConstraintWidth(newWidth);
+          int newWidthPx = newWidth.getValueAsInt(0);
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          setConstraintWidth(SizeValue.px(newWidthPx));
           isCalcWidthConstraint = true;
         }
+      } else {
+        checkAndResetCalculatedWidthConstraint(myWidth);
       }
+    }
+  }
+
+  private void checkAndResetCalculatedWidthConstraint(final SizeValue currentWidthConstraint) {
+    if (!isCalcWidthConstraint) {
+      return;
+    }
+    // this now means we had a calculatedWidthConstrained before but for whatever reason
+    // that is not valid anymore so we need to reset it here.
+    if (currentWidthConstraint != null) {
+      setConstraintWidth(null);
     }
   }
 
@@ -733,12 +851,34 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
       // if all (!) child elements have a px fixed height we can calculate a new height constraint for this element!
       if (elements.size() == layoutPartChild.size()) {
+        // we don't have anything to calculate values from so we quit
+        if (layoutPartChild.size() == 0) {
+          // but before we check if we eventually need to reset the constrain
+          checkAndResetCalculatedHeightConstraint(myHeight);
+          return;
+        }
         SizeValue newHeight = layoutManager.calculateConstraintHeight(this.layoutPart, layoutPartChild);
         if (newHeight != null) {
-          setConstraintHeight(newHeight);
+          int newHeightPx = newHeight.getValueAsInt(0);
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+          setConstraintHeight(SizeValue.px(newHeightPx));
           isCalcHeightConstraint = true;
         }
+      } else {
+        checkAndResetCalculatedHeightConstraint(myHeight);
       }
+    }
+  }
+
+  private void checkAndResetCalculatedHeightConstraint(final SizeValue myHeightConstraint) {
+    if (!isCalcHeightConstraint) {
+      return;
+    }
+    // this now means we had a calculatedWidthConstrained before but for whatever reason
+    // that is not valid anymore so we need to reset it here.
+    if (myHeightConstraint != null) {
+      setConstraintHeight(null);
     }
   }
 
@@ -1664,6 +1804,20 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     return this.clipChildren;
   }
 
+  public void setRenderOrder(final int renderOrder) {
+    this.renderOrder = renderOrder;
+    parent.renderOrderChanged(this);
+  }
+
+  private void renderOrderChanged(final Element element) {
+    elementsRenderOrder.remove(element);
+    elementsRenderOrder.add(element);
+  }
+
+  public int getRenderOrder() {
+    return renderOrder;
+  }
+
   /**
    * Set the focus to this element.
    */
@@ -1997,6 +2151,26 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     notifyListeners();
   }
 
+  public void setMarginLeft(final SizeValue value) {
+    layoutPart.getBoxConstraints().setMarginLeft(value);
+    notifyListeners();
+  }
+
+  public void setMarginRight(final SizeValue value) {
+    layoutPart.getBoxConstraints().setMarginRight(value);
+    notifyListeners();
+  }
+
+  public void setMarginTop(final SizeValue value) {
+    layoutPart.getBoxConstraints().setMarginTop(value);
+    notifyListeners();
+  }
+
+  public void setMarginBottom(final SizeValue value) {
+    layoutPart.getBoxConstraints().setMarginBottom(value);
+    notifyListeners();
+  }
+
   public String toString() {
     return id + " (" + super.toString() + ")";
   }
@@ -2086,5 +2260,23 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       }
     }
     return effectManager.isActive(eventId);
+  }
+
+  // package private to prevent public access
+  void internalRemoveElement(final Element element) {
+    elements.remove(element);
+    elementsRenderOrder.remove(element);
+  }
+
+  // package private to prevent public access
+  void internalRemoveElementWithChilds() {
+    Iterator < Element > elementIt = elements.iterator();
+    while (elementIt.hasNext()) {
+      Element el = elementIt.next();
+      el.internalRemoveElementWithChilds();
+    }
+ 
+    elements.clear();
+    elementsRenderOrder.clear();
   }
 }

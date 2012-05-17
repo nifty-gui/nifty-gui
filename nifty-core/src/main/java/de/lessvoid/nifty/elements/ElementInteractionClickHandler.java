@@ -67,18 +67,21 @@ public class ElementInteractionClickHandler {
       if (isButtonDown && isInitialButtonDown) {
         setMouseDown(true, eventTime);
         onInitialClick();
-        processed = onClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey) || processed;
+        onClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey);
+        processed = true;
       }
     } else if (!isButtonDown && isMouseDown) {
       setMouseDown(false, eventTime);
     }
     if (isButtonRelease) {
       if (mouseInside || hasMouseAccess) {
-        processed = onMouseRelease(mouseEvent) || processed;
+        onMouseRelease(mouseEvent);
+        processed = true;
       }
     }
     if (isMouseDown) {
-      processed = onClickMouseMove(mouseEvent) || processed;
+      onClickMouseMove(mouseEvent);
+      processed = true;
     }
     return processed;
   }

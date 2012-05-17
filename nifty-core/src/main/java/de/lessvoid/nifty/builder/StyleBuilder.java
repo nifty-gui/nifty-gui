@@ -177,6 +177,10 @@ public class StyleBuilder {
     attributes.setChildClip(String.valueOf(childClip));
   }
 
+  public void renderOrder(final int renderOrder) {
+    attributes.setRenderOrder(renderOrder);
+  }
+
   public void visible(final boolean visible) {
     attributes.setVisible(String.valueOf(visible));
   }
@@ -287,6 +291,26 @@ public class StyleBuilder {
 
   public void paddingBottom(final String padding) {
     attributes.setPaddingBottom(padding);
+  }
+
+  public void margin(final String margin) {
+    attributes.setMargin(margin);
+  }
+
+  public void marginLeft(final String margin) {
+    attributes.setMarginLeft(margin);
+  }
+
+  public void marginRight(final String margin) {
+    attributes.setMarginRight(margin);
+  }
+
+  public void marginTop(final String margin) {
+    attributes.setMarginTop(margin);
+  }
+
+  public void marginBottom(final String margin) {
+    attributes.setMarginBottom(margin);
   }
 
   public void set(final String key, final String value) {

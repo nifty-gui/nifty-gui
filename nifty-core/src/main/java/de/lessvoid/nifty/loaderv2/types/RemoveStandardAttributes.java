@@ -23,6 +23,11 @@ public class RemoveStandardAttributes {
     attributes.remove("paddingTop");
     attributes.remove("paddingBottom");
     attributes.remove("padding");
+    attributes.remove("marginLeft");
+    attributes.remove("marginRight");
+    attributes.remove("marginTop");
+    attributes.remove("marginBottom");
+    attributes.remove("margin");
     attributes.remove("childClip");
     attributes.remove("visible");
     attributes.remove("visibleToMouse");
@@ -40,6 +45,7 @@ public class RemoveStandardAttributes {
     attributes.remove("color");
     attributes.remove("selectionColor");
     attributes.remove("name");
+    attributes.remove("renderOrder");
     return attributes;
   }
 }

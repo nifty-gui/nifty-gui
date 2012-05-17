@@ -47,6 +47,11 @@ public class BoxConstraints {
   private SizeValue paddingTop;
   private SizeValue paddingBottom;
 
+  private SizeValue marginLeft;
+  private SizeValue marginRight;
+  private SizeValue marginTop;
+  private SizeValue marginBottom;
+
   /**
    * default constructor.
    */
@@ -61,6 +66,10 @@ public class BoxConstraints {
     paddingRight = new SizeValue("0px");
     paddingTop = new SizeValue("0px");
     paddingBottom = new SizeValue("0px");
+    marginLeft = new SizeValue("0px");
+    marginRight = new SizeValue("0px");
+    marginTop = new SizeValue("0px");
+    marginBottom = new SizeValue("0px");
   }
 
   /**
@@ -79,6 +88,7 @@ public class BoxConstraints {
       final SizeValue newHeight,
       final HorizontalAlign newHorizontalAlign,
       final VerticalAlign newVerticalAlign) {
+    this();
     this.x = newX;
     this.y = newY;
     this.width = newWidth;
@@ -104,7 +114,7 @@ public class BoxConstraints {
    * Get the horizontal position constraint of the box.
    * @return the horizontal position of the box
    */
-  public final SizeValue getX() {
+  public SizeValue getX() {
     return x;
   }
 
@@ -112,7 +122,7 @@ public class BoxConstraints {
    * Get the horizontal position constraint of the box.
    * @param newX the horizontal position of the box
    */
-  public final void setX(final SizeValue newX) {
+  public void setX(final SizeValue newX) {
     this.x = newX;
   }
 
@@ -120,7 +130,7 @@ public class BoxConstraints {
    * Get the vertical position constraint of the box.
    * @return the vertical position of the box
    */
-  public final SizeValue getY() {
+  public SizeValue getY() {
     return y;
   }
 
@@ -128,7 +138,7 @@ public class BoxConstraints {
    * Set the vertical position constraint of the box.
    * @param newY the vertical position of the box
    */
-  public final void setY(final SizeValue newY) {
+  public void setY(final SizeValue newY) {
     this.y = newY;
   }
 
@@ -136,7 +146,7 @@ public class BoxConstraints {
    * Get the current height constraint for the box.
    * @return the current height of the box
    */
-  public final SizeValue getHeight() {
+  public SizeValue getHeight() {
     return height;
   }
 
@@ -144,7 +154,7 @@ public class BoxConstraints {
    * Set a new height constraint for the box.
    * @param newHeight the new height for the box.
    */
-  public final void setHeight(final SizeValue newHeight) {
+  public void setHeight(final SizeValue newHeight) {
     this.height = newHeight;
   }
 
@@ -152,7 +162,7 @@ public class BoxConstraints {
    * Get the current width constraint of the box.
    * @return the current width of the box
    */
-  public final SizeValue getWidth() {
+  public SizeValue getWidth() {
     return width;
   }
 
@@ -160,7 +170,7 @@ public class BoxConstraints {
    * Set a new width constraint for the box.
    * @param newWidth the new width
    */
-  public final void setWidth(final SizeValue newWidth) {
+  public void setWidth(final SizeValue newWidth) {
     this.width = newWidth;
   }
 
@@ -168,7 +178,7 @@ public class BoxConstraints {
    * Get the current horizontal align.
    * @return the current horizontal align.
    */
-  public final HorizontalAlign getHorizontalAlign() {
+  public HorizontalAlign getHorizontalAlign() {
     return horizontalAlign;
   }
 
@@ -176,7 +186,7 @@ public class BoxConstraints {
    * Set a new horizontal align.
    * @param newHorizontalAlign the new horizontal align
    */
-  public final void setHorizontalAlign(final HorizontalAlign newHorizontalAlign) {
+  public void setHorizontalAlign(final HorizontalAlign newHorizontalAlign) {
     this.horizontalAlign = newHorizontalAlign;
   }
 
@@ -184,7 +194,7 @@ public class BoxConstraints {
    * Get the current VerticalAlign.
    * @return the current VerticalAlign
    */
-  public final VerticalAlign getVerticalAlign() {
+  public VerticalAlign getVerticalAlign() {
     return verticalAlign;
   }
 
@@ -192,7 +202,7 @@ public class BoxConstraints {
    * Set a new VerticalAlign.
    * @param newVerticalAlign the new vertical align
    */
-  public final void setVerticalAlign(final VerticalAlign newVerticalAlign) {
+  public void setVerticalAlign(final VerticalAlign newVerticalAlign) {
     this.verticalAlign = newVerticalAlign;
   }
 
@@ -258,5 +268,69 @@ public class BoxConstraints {
     paddingRight = padding;
     paddingTop = padding;
     paddingBottom = padding;
+  }
+
+  public SizeValue getMarginLeft() {
+    return marginLeft;
+  }
+
+  public SizeValue getMarginRight() {
+    return marginRight;
+  }
+
+  public SizeValue getMarginTop() {
+    return marginTop;
+  }
+
+  public SizeValue getMarginBottom() {
+    return marginBottom;
+  }
+
+  public void setMarginLeft(final SizeValue marginLeftParam) {
+    marginLeft = marginLeftParam;
+  }
+
+  public void setMarginRight(final SizeValue marginRightParam) {
+    marginRight = marginRightParam;
+  }
+
+  public void setMarginTop(final SizeValue marginTopParam) {
+    marginTop = marginTopParam;
+  }
+
+  public void setMarginBottom(final SizeValue marginBottomParam) {
+    marginBottom = marginBottomParam;
+  }
+
+  public void setMargin(final SizeValue topBottomParam, final SizeValue leftRightParam) {
+    marginLeft = leftRightParam;
+    marginRight = leftRightParam;
+    marginTop = topBottomParam;
+    marginBottom = topBottomParam;
+  }
+
+  public void setMargin(final SizeValue topParam, final SizeValue leftRightParam, final SizeValue bottomParam) {
+    marginLeft = leftRightParam;
+    marginRight = leftRightParam;
+    marginTop = topParam;
+    marginBottom = bottomParam;
+  }
+
+  public void setMargin(
+      final SizeValue topParam,
+      final SizeValue rightParam,
+      final SizeValue bottomParam,
+      final SizeValue leftParam) {
+    marginLeft = leftParam;
+    marginRight = rightParam;
+    marginTop = topParam;
+    marginBottom = bottomParam;
+  }
+
+  public void setMargin(final SizeValue margin) {
+    marginLeft = margin;
+    marginRight = margin;
+    marginTop = margin;
+    marginBottom = margin;
   }
 }

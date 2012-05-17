@@ -10,6 +10,8 @@ import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import static de.lessvoid.nifty.layout.manager.BoxTestHelper.*;
+
 public class HorizontalLayoutTest extends TestCase {
   private HorizontalLayout layout = new HorizontalLayout();
   private LayoutPart rootPanel;
@@ -115,12 +117,5 @@ public class HorizontalLayoutTest extends TestCase {
 
     assertBox(left.getBox(), 10, 10, 310, 460);
     assertBox(right.getBox(), 320, 10, 310, 460);
-  }
-
-  private void assertBox(final Box box, final int x, final int y, final int width, final int height) {
-    assertEquals(x, box.getX());
-    assertEquals(y, box.getY());
-    assertEquals(width, box.getWidth());
-    assertEquals(height, box.getHeight());
   }
 }

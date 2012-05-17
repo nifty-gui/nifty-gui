@@ -386,6 +386,20 @@ public class Screen {
     return element.getControl(requestedControlClass);
   }
 
+  /**
+   * Finds the Nifty Control matching the given id and control class on this screen
+   * and returns it. If no matching control is found then a Null version of the control
+   * will be returned to prevent NullPointerExceptions if you use it directly like:
+   * screen.findNiftyControl(...).doStuff(). There is no need to check the return value
+   * or catch exceptions. While testing your GUI please take a look at the console log
+   * so that you see the error message that is written in case a control can't be found
+   * (see also http://en.wikipedia.org/wiki/Null_Object_pattern for details).
+   *
+   * @param <T> The type of the control class being looked for
+   * @param elementName The id of the control
+   * @param requestedControlClass The class being looked for
+   * @return Either a NiftyControl or a Null version of a NiftyControl for the matching control class.
+   */
   public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
     Element element = findElementByName(elementName);
     if (element == null) {
@@ -467,6 +481,12 @@ public class Screen {
 
   public String debugOutput() {
     return debugOutput(".*", ".*");
+  }
+
+  public String debugOutputFocusElements() {
+    StringBuffer result = new StringBuffer();
+    result.append(focusHandler.toString());
+    return result.toString();
   }
 
   public String debugOutput(final String regexpElement, final String regexpAttribute) {

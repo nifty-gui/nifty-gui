@@ -23,7 +23,7 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-lwjgl-renderer</artifactId>
-      <version>1.3</version>
+      <version>1.3.2-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -37,4 +37,35 @@
     	<version>1.4.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.googlecode.mavennatives</groupId>
+        <artifactId>maven-nativedependencies-plugin</artifactId>
+        <version>0.0.5</version>
+        <executions>
+          <!-- 
+            If you use this pom.xml with eclipse m2e plugin you'll need to install the
+            maven natives eclipse plugin from http://code.google.com/p/mavennatives/
+            to make the error message go away. It's as simple as installing it using
+            the following update site: http://mavennatives.googlecode.com/svn/eclipse-update/.
+
+            This plugin detects if you have the maven plugin configured, and if you do
+            it executes the unpacking of natives, and configures the Native Library Location.
+
+            This will allow you to run the examples from within eclipse without any more
+            setup of LWJGL required! Just execute the individual examples like any other
+            Java application from eclipse. Done! :) 
+           -->
+          <execution>
+            <id>unpacknatives</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

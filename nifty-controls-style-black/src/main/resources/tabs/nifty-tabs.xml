@@ -1,24 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles>
+  <!-- The Tabs require the Nifty-Panel to be displayed properly. -->
+  <useStyles filename="panel/nifty-panel.xml"/>
 
-  <style id="nifty-tabs#tab-button">
-    <attributes backgroundImage="tabs/button.png" imageMode="sprite-resize:100,23,0,2,96,2,2,2,96,2,19,2,96,2,2" paddingLeft="7px" paddingRight="7px" width="100px" height="23px" childLayout="center" visibleToMouse="true" />
+  <!-- This style is applied to the panel that holds the content of each tab. -->
+  <style id="nifty-tabs#panel">
+    <attributes width="100%" padding="8px,16px,24px,16px" backgroundImage="tabs/tab-content-panel.png"
+                imageMode="resize:6,1,6,1,6,1,6,215,6,1,6,8"/>
+  </style>
+
+  <!-- This style is applied to the panel that holds the button -->
+  <style id="nifty-tabs#tab-button-panel">
+    <attributes width="100%" backgroundImage="tabs/tab-background-border.png"
+                imageMode="resize:0,3,0,0,0,3,0,2,0,3,0,1"/>
+  </style>
+
+  <!-- The style of a single tab element. -->
+  <style id="nifty-tab">
+    <attributes width="100%"/>
+  </style>
+
+  <!-- The style of a tab button that is not the activated one. -->
+  <style id="nifty-tab-button">
+    <attributes backgroundImage="tabs/tabs.png"
+                imageMode="sprite-resize:31,23,2,15,1,15,11,15,1,15,1,15,1,15,11" paddingLeft="11px"
+                paddingRight="11px" width="100px" height="23px" childLayout="center" visibleToMouse="true"/>
     <effect>
-      <onHover name="border" color="#822f" post="true" />
-      <onFocus name="imageOverlay" filename="tabs/button.png" imageMode="sprite-resize:100,23,1,2,96,2,2,2,96,2,19,2,96,2,2" post="true" />
-      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
-      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
+      <onHover name="imageOverlay" filename="tabs/tabs.png"
+               imageMode="sprite-resize:31,23,1,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
     </effect>
   </style>
 
-  <style id="nifty-tabs#active-tab-button">
-    <attributes backgroundImage="tabs/button.png" imageMode="sprite-resize:100,23,0,2,96,2,2,2,96,2,19,2,96,2,2" paddingLeft="7px" paddingRight="7px" width="100px" height="23px" childLayout="center" visibleToMouse="true" />
+  <!-- The style of the text on a tab button that is not the activated one. -->
+  <style id="nifty-tab-button#text" base="tab-font">
+    <attributes align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="false"
+                color="#000"/>
+  </style>
+
+  <!-- The style of a tab button that is the activated one. -->
+  <style id="nifty-tab-button-active">
+    <attributes backgroundImage="tabs/tabs.png"
+                imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" paddingLeft="11px"
+                paddingRight="11px" width="100px" height="23px" childLayout="center" visibleToMouse="true"/>
     <effect>
-      <onHover name="border" color="#822f" post="true" />
-      <onFocus name="imageOverlay" filename="tabs/active-button.png" imageMode="sprite-resize:100,23,1,2,96,2,2,2,96,2,19,2,96,2,2" post="true" />
-      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
-      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
+      <!-- weiss noch net :)
+     <onHover name="imageOverlay" filename="tabs/tabs.png"
+              imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
+      -->
     </effect>
   </style>
-  
+
+  <!-- The style of the text on a tab button that is the activated one. -->
+  <style id="nifty-tab-button-active#text" base="nifty-tab-button#text"/>
 </nifty-styles>

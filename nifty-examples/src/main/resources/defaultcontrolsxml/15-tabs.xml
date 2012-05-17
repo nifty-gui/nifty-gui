@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
-  <useStyles filename="nifty-default-styles.xml" />
-  <useControls filename="nifty-default-controls.xml" />
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+  <useStyles filename="nifty-default-styles.xml"/>
+  <useControls filename="nifty-default-controls.xml"/>
   <screen id="start">
-    <layer id="layer" childLayout="center" backgroundColor="#003f">
+    <layer id="layer" childLayout="center" backgroundColor="#dddf">
       <panel id="tabs" childLayout="vertical" valign="center" align="center" width="50%" height="50%">
-        <control id="edit_tabs" name="nifty-tabs">
-          <control id="tab_1" name="nifty-tab" caption="Tab #1">
-            <panel childLayout="vertical" valign="center" align="center" backgroundColor="#f004" width="100%" height="100%">
-              <control align="center" valign="center" name="label" text="Content for Tab #1" width="100%" height="100%" />
-            </panel>
+        <control id="edit_tabs" name="tabGroup">
+          <control id="tab_1" name="tab" caption="Tab #1" childLayout="vertical" height="100%">
+            <control align="center" valign="center" name="label" text="Content for Tab #1" width="100%" height="100%"
+                />
           </control>
-          <control id="tab_2" name="nifty-tab" caption="Tab #2">
-            <panel childLayout="vertical" valign="center" align="center" backgroundColor="#0f04" width="100%" height="100%">
-              <control align="center" valign="center" name="label" text="Content for Tab #2" width="100%" height="100%" />
-            </panel>
+          <control id="tab_2" name="tab" caption="Tab #2" childLayout="vertical" height="100%">
+            <control align="center" valign="center" name="label" text="Content for Tab #2" width="100%" height="100%"/>
           </control>
         </control>
       </panel>

@@ -60,11 +60,27 @@ public class HorizontalLayout implements LayoutManager {
         box.setHeight(elementHeight);
       }
 
-      box.setY(processVerticalAlignment(rootBoxY, rootBoxHeight, box, boxConstraints));
+      int y = processVerticalAlignment(rootBoxY, rootBoxHeight, box, boxConstraints);
+      y = y + topMargin(boxConstraints, rootBoxHeight);
+      box.setY(y);
+
+      x = x + leftMargin(boxConstraints, rootBoxWidth);
       box.setX(x);
 
-      x += elementWidth;
+      x += elementWidth + rightMargin(boxConstraints, rootBoxWidth);
     }
+  }
+
+  private int leftMargin(final BoxConstraints boxConstraints, final int rootBoxWidth) {
+    return boxConstraints.getMarginLeft().getValueAsInt(rootBoxWidth);
+  }
+
+  private int rightMargin(final BoxConstraints boxConstraints, final int rootBoxWidth) {
+    return boxConstraints.getMarginRight().getValueAsInt(rootBoxWidth);
+  }
+
+  private int topMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+    return boxConstraints.getMarginTop().getValueAsInt(rootBoxHeight);
   }
 
   private int processHeightConstraint(final int rootBoxHeight, final Box box, final BoxConstraints constraint, final int elementWidth) {
@@ -146,7 +162,7 @@ public class HorizontalLayout implements LayoutManager {
    * @return new calculated SizeValue
    */
   public final SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
-    return null;
+    return root.getSumWidth(children);
   }
 
   /**
@@ -154,16 +170,7 @@ public class HorizontalLayout implements LayoutManager {
    * @return new calculated SizeValue
    */
   public final SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
-    int newHeight = 0;
-    for (LayoutPart e : children) {
-      int partHeight = e.getBoxConstraints().getHeight().getValueAsInt(0)
-        - e.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight())
-        - e.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
-      if (partHeight > newHeight) {
-        newHeight = partHeight;
-      }
-    }
-    return new SizeValue(newHeight + "px");
+    return root.getMaxHeight(children);
   }
 
   private boolean isInvalid(final LayoutPart root, final List <LayoutPart> children) {

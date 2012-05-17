@@ -1,12 +1,18 @@
 package de.lessvoid.nifty.controls.nullobjects;
 
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.textfield.filter.delete.TextFieldDeleteFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharSequenceFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputFilter;
+import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
- * The NullObject in case you're requesting this control and it could not be found. You'll
- * get a warning in the log and an instance of this class back. This reduces NPE.
+ * The NullObject in case you're requesting this control and it could not be found. You'll get a warning in the log and
+ * an instance of this class back. This reduces NPE.
+ *
  * @author void
  */
 public class TextFieldNull implements TextField {
@@ -18,7 +24,7 @@ public class TextFieldNull implements TextField {
 
   @Override
   public String getId() {
-    return "TextFieldNull";
+    return "TextFieldNull"; //NON-NLS
   }
 
   @Override
@@ -75,7 +81,17 @@ public class TextFieldNull implements TextField {
   }
 
   @Override
-  public void setText(final String text) {
+  public String getRealText() {
+    return null;
+  }
+
+  @Override
+  public String getDisplayedText() {
+    return null;
+  }
+
+  @Override
+  public void setText(final CharSequence text) {
   }
 
   @Override
@@ -84,6 +100,34 @@ public class TextFieldNull implements TextField {
 
   @Override
   public void setCursorPosition(final int position) {
+  }
+
+  @Override
+  public void enableInputFilter(final TextFieldInputFilter filter) {
+  }
+
+  @Override
+  public void enableInputFilter(final TextFieldInputCharFilter filter) {
+  }
+
+  @Override
+  public void enableInputFilter(final TextFieldInputCharSequenceFilter filter) {
+  }
+
+  @Override
+  public void disableInputFilter() {
+  }
+
+  @Override
+  public void enableDeleteFilter(final TextFieldDeleteFilter filter) {
+  }
+
+  @Override
+  public void disableDeleteFilter() {
+  }
+
+  @Override
+  public void setFormat(final TextFieldDisplayFormat format) {
   }
 
   @Override

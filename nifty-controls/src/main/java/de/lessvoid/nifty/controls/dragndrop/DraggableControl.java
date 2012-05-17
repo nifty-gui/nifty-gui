@@ -137,13 +137,14 @@ public class DraggableControl extends AbstractController implements Draggable {
 
   private void moveDraggableToPopup() {
     popup = nifty.createPopup(POPUP);
+    nifty.showPopup(screen, popup.getId(), null);
 
     draggable.markForMove(popup, new EndNotify() {
       @Override
       public void perform() {
         draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
         draggable.setConstraintY(new SizeValue(originalPositionY + "px"));
-        nifty.showPopup(screen, popup.getId(), null);
+        draggable.getParent().layoutElements();
       }
     });
   }
@@ -217,16 +218,17 @@ public class DraggableControl extends AbstractController implements Draggable {
     ListIterator<Element> iter = elements.listIterator(elements.size());
     while (iter.hasPrevious()) {
       Element element = iter.previous();
-      boolean mouseInside = element.isMouseInsideElement(x, y);
-      if (mouseInside && isDroppable(element)) {
+
+      // we can only drop stuff on visible droppables
+      boolean mouseInsideAndVisible = element.isMouseInsideElement(x, y) && element.isVisible();
+      if (mouseInsideAndVisible && isDroppable(element)) {
         return element;
       }
+
+      // nothing found for this element check it's child elements
       Element droppable = findDroppableAtCoordinates(element, x, y);
       if (droppable != null) {
         return droppable;
-      }
-      if (mouseInside && element.isVisibleToMouseEvents() && element.isVisible()) {
-        return originalParent;
       }
     }
     return null;

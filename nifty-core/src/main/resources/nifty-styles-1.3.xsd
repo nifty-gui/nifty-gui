@@ -96,6 +96,11 @@
     <xs:attribute name="paddingTop" type="xs:string" />
     <xs:attribute name="paddingBottom" type="xs:string" />
     <xs:attribute name="padding" type="xs:string" />
+    <xs:attribute name="marginLeft" type="xs:string" />
+    <xs:attribute name="marginRight" type="xs:string" />
+    <xs:attribute name="marginTop" type="xs:string" />
+    <xs:attribute name="marginBottom" type="xs:string" />
+    <xs:attribute name="margin" type="xs:string" />
     <xs:attribute name="childClip" type="xs:string" />
     <xs:attribute name="visible" type="xs:string" />
     <xs:attribute name="visibleToMouse" type="xs:string" />
@@ -110,7 +115,8 @@
     <xs:attribute name="font" type="xs:string" />
     <xs:attribute name="filename" type="xs:string" />
     <xs:attribute name="wrap" type="xs:boolean" />
-    <xs:attribute name="imageMode" type="xs:string"></xs:attribute>
+    <xs:attribute name="imageMode" type="xs:string" />
+    <xs:attribute name="renderOrder" type="xs:int" />
     <xs:anyAttribute namespace="##any" processContents="skip" />
   </xs:complexType>
 

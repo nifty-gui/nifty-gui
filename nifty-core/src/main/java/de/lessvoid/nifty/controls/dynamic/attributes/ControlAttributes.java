@@ -102,8 +102,32 @@ public class ControlAttributes {
     attributes.set("paddingBottom", paddingBottom);
   }
 
+  public void setMargin(final String margin) {
+    attributes.set("margin", margin);
+  }
+
+  public void setMarginLeft(final String marginLeft) {
+    attributes.set("marginLeft", marginLeft);
+  }
+
+  public void setMarginRight(final String marginRight) {
+    attributes.set("marginRight", marginRight);
+  }
+
+  public void setMarginTop(final String marginTop) {
+    attributes.set("marginTop", marginTop);
+  }
+
+  public void setMarginBottom(final String marginBottom) {
+    attributes.set("marginBottom", marginBottom);
+  }
+
   public void setChildClip(final String childClip) {
     attributes.set("childClip", childClip);
+  }
+
+  public void setRenderOrder(final int renderOrder) {
+    attributes.set("renderOrder", String.valueOf(renderOrder));
   }
 
   public void setVisible(final String visible) {
