@@ -16,7 +16,6 @@ import de.lessvoid.xml.lwxs.elements.Type;
 import de.lessvoid.xml.lwxs.processor.TypeProcessorElement;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
-import de.lessvoid.xml.xpp3.XmlProcessor;
 
 public class ElementProcessorTest {
   private TypeProcessorElement elementProcessor;

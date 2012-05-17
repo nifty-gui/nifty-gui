@@ -17,7 +17,6 @@ import de.lessvoid.xml.lwxs.Schema;
 import de.lessvoid.xml.lwxs.elements.Element;
 import de.lessvoid.xml.lwxs.elements.OccursEnum;
 import de.lessvoid.xml.lwxs.elements.Type;
-import de.lessvoid.xml.lwxs.elements.XmlProcessorElement;
 import de.lessvoid.xml.lwxs.elements.XmlProcessorType;
 
 public class ElementTest {
