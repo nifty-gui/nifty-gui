@@ -1,7 +1,6 @@
 package de.lessvoid.xml.lwxs.elements;
 
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
@@ -14,10 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.xml.lwxs.Schema;
-import de.lessvoid.xml.lwxs.elements.Element;
-import de.lessvoid.xml.lwxs.elements.OccursEnum;
-import de.lessvoid.xml.lwxs.elements.Type;
-import de.lessvoid.xml.lwxs.elements.XmlProcessorType;
 
 public class ElementTest {
   private Schema schemaMock;
