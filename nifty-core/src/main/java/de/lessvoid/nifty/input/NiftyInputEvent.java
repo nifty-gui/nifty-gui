@@ -6,7 +6,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * a nifty input event.
  * @author void
  */
-public enum NiftyInputEvent implements NiftyEvent<Void> {
+public enum NiftyInputEvent implements NiftyEvent {
   /**
    * goto next input element.
    */

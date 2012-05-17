@@ -11,7 +11,7 @@ import de.lessvoid.nifty.controls.treebox.TreeBoxControl;
  *
  * @author ractoc
  */
-public class TreeItemSelectedEvent implements NiftyEvent<Void> {
+public class TreeItemSelectedEvent implements NiftyEvent {
     
     private TreeBoxControl treeBoxControl;
     private TreeItem treeItem;

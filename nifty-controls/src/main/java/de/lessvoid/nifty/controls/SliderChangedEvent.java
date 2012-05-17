@@ -6,7 +6,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * Nifty generates this event when a Slider value has been changed.
  * @author void
  */
-public class SliderChangedEvent implements NiftyEvent<Void> {
+public class SliderChangedEvent implements NiftyEvent {
   private Slider slider;
   private float value;
 

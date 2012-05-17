@@ -2,7 +2,6 @@ package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
 
-@SuppressWarnings("rawtypes")
 public class DraggableDragCanceledEvent implements NiftyEvent {
   private Droppable source;
   private Draggable draggable;
