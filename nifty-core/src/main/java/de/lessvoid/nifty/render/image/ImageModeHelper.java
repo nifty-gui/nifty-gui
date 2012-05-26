@@ -32,7 +32,7 @@ public class ImageModeHelper {
 			final String imageModeName = imageMode[0];
 			if (imageModeName.equals("normal") || imageModeName.equals("resize")) {
 				return "fullimage";
-			} else if (imageModeName.equals("subImage") || imageModeName.equals("repeat")) {
+			} else if (imageModeName.equals("subImage") || imageModeName.equals("subImageDirect") || imageModeName.equals("repeat")) {
 				return "subimage:" + getImageModeParameters(imageMode);
 			} else if (imageModeName.equals("sprite")) {
 				return "sprite:" + getImageModeParameters(imageMode);
@@ -69,6 +69,8 @@ public class ImageModeHelper {
 			final String imageModeName = imageMode[0];
 			if (imageModeName.equals("normal") || imageModeName.equals("subImage") || imageModeName.equals("sprite")) {
 				return "resize";
+			} else if (imageModeName.equals("subImageDirect")) {
+	      return "direct";
 			} else if (imageModeName.equals("resize")) {
 				return "nine-part:" + getImageModeParameters(imageMode);
 			} else if (imageModeName.equals("sprite-resize")) {
