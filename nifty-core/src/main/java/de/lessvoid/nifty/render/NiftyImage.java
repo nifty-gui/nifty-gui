@@ -62,6 +62,14 @@ public class NiftyImage {
   }
 
   /**
+   * Get the current ImageMode of this image. This can be used to modify the imageMode parameters dynamically.
+   * @return the current ImageMode of this NiftyImage
+   */
+  public ImageMode getImageMode() {
+    return this.imageMode;
+  }
+
+  /**
    * Reload the image data.
    */
   public void reload() {

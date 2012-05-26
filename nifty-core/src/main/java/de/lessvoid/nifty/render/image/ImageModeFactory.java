@@ -32,9 +32,19 @@ public class ImageModeFactory {
 	}
 
 	public ImageMode createImageMode(String areaProviderDescription, String renderStrategyDescription) {
-		return new CompoundImageMode(new CachedAreaProvider(m_areaProviderFactory.create(areaProviderDescription)),
-				m_renderStrategyFactory.create(renderStrategyDescription));
+		return new CompoundImageMode(
+		    new CachedAreaProvider(
+		        getAreaProvider(areaProviderDescription)),
+		        getRenderStrategy(renderStrategyDescription));
 	}
+
+  AreaProvider getAreaProvider(final String areaProviderDescription) {
+    return m_areaProviderFactory.create(areaProviderDescription);
+  }
+
+  RenderStrategy getRenderStrategy(final String renderStrategyDescription) {
+    return m_renderStrategyFactory.create(renderStrategyDescription);
+  }
 
 	synchronized public static ImageModeFactory getSharedInstance() {
 		if (s_sharedInstance == null) {
