@@ -2,9 +2,11 @@ package de.lessvoid.nifty.controls.window;
 
 import java.util.Properties;
 
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Window;
+import de.lessvoid.nifty.controls.WindowClosedEvent;
 import de.lessvoid.nifty.controls.dragndrop.DraggableControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -14,6 +16,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 public class WindowControl extends AbstractController implements Window {
   private DraggableControl draggableControl = new DraggableControl();
+  private Nifty nifty;
   private boolean removeCloseButton;
   private boolean hideOnClose;
 
@@ -24,6 +27,7 @@ public class WindowControl extends AbstractController implements Window {
       final Properties parameter,
       final Attributes controlDefinitionAttributes) {
     super.bind(element);
+    this.nifty = nifty;
     draggableControl.bind(nifty, screen, element, parameter, controlDefinitionAttributes);
     removeCloseButton = !controlDefinitionAttributes.getAsBoolean("closeable", true);
     hideOnClose = controlDefinitionAttributes.getAsBoolean("hideOnClose", false);
@@ -88,9 +92,24 @@ public class WindowControl extends AbstractController implements Window {
   @Override
   public void closeWindow() {
     if (hideOnClose) {
-      getElement().hide();
+      getElement().hide(new CloseEndNotify(nifty, true));
     } else {
-      getElement().markForRemoval();
+      getElement().markForRemoval(new CloseEndNotify(nifty, false));
+    }
+  }
+
+  private class CloseEndNotify implements EndNotify {
+    private final Nifty nifty;
+    private final boolean hidden;
+
+    public CloseEndNotify(final Nifty nifty, final boolean hidden) {
+      this.nifty = nifty;
+      this.hidden = hidden;
+    }
+
+    @Override
+    public void perform() {
+      nifty.publishEvent(getElement().getId(), new WindowClosedEvent(WindowControl.this, hidden));
     }
   }
 }
