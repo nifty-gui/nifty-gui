@@ -11,6 +11,7 @@ import de.lessvoid.nifty.render.image.areaprovider.SpriteAreaProvider;
 import de.lessvoid.nifty.render.image.areaprovider.SubImageAreaProvider;
 import de.lessvoid.nifty.render.image.renderstrategy.ClampStrategy;
 import de.lessvoid.nifty.render.image.renderstrategy.NinePartResizeStrategy;
+import de.lessvoid.nifty.render.image.renderstrategy.RenderDirectlyStrategy;
 import de.lessvoid.nifty.render.image.renderstrategy.RenderStrategy;
 import de.lessvoid.nifty.render.image.renderstrategy.RepeatStrategy;
 import de.lessvoid.nifty.render.image.renderstrategy.ResizeStrategy;
@@ -31,9 +32,19 @@ public class ImageModeFactory {
 	}
 
 	public ImageMode createImageMode(String areaProviderDescription, String renderStrategyDescription) {
-		return new CompoundImageMode(new CachedAreaProvider(m_areaProviderFactory.create(areaProviderDescription)),
-				m_renderStrategyFactory.create(renderStrategyDescription));
+		return new CompoundImageMode(
+		    new CachedAreaProvider(
+		        getAreaProvider(areaProviderDescription)),
+		        getRenderStrategy(renderStrategyDescription));
 	}
+
+  AreaProvider getAreaProvider(final String areaProviderDescription) {
+    return m_areaProviderFactory.create(areaProviderDescription);
+  }
+
+  RenderStrategy getRenderStrategy(final String renderStrategyDescription) {
+    return m_renderStrategyFactory.create(renderStrategyDescription);
+  }
 
 	synchronized public static ImageModeFactory getSharedInstance() {
 		if (s_sharedInstance == null) {
@@ -47,6 +58,7 @@ public class ImageModeFactory {
 			renderStrategyMapping.put("nine-part", NinePartResizeStrategy.class);
 			renderStrategyMapping.put("repeat", RepeatStrategy.class);
 			renderStrategyMapping.put("resize", ResizeStrategy.class);
+			renderStrategyMapping.put("direct", RenderDirectlyStrategy.class);
 
 			s_sharedInstance = new ImageModeFactory(areaProviderMapping, "fullimage", renderStrategyMapping, "resize");
 		}

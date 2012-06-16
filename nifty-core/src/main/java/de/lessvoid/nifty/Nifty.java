@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -74,15 +74,16 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class Nifty {
-  private Logger log = Logger.getLogger(Nifty.class.getName());
+  private static final Logger log = Logger.getLogger(Nifty.class.getName());
+
   private NiftyRenderEngine renderEngine;
   private SoundSystem soundSystem;
-  private Map < String, Screen > screens = new Hashtable < String, Screen >();
-  private Map < String, PopupType > popupTypes = new Hashtable < String, PopupType >();
-  private Map < String, Element > popups = new Hashtable < String, Element >();
-  private Map < String, StyleType > styles = new Hashtable < String, StyleType >();
-  private Map < String, ControlDefinitionType > controlDefintions = new Hashtable < String, ControlDefinitionType >();
-  private Map < String, RegisterEffectType > registeredEffects = new Hashtable < String, RegisterEffectType >();
+  private Map < String, Screen > screens = new HashMap < String, Screen >();
+  private Map < String, PopupType > popupTypes = new HashMap < String, PopupType >();
+  private Map < String, Element > popups = new HashMap < String, Element >();
+  private Map < String, StyleType > styles = new HashMap < String, StyleType >();
+  private Map < String, ControlDefinitionType > controlDefintions = new HashMap < String, ControlDefinitionType >();
+  private Map < String, RegisterEffectType > registeredEffects = new HashMap < String, RegisterEffectType >();
   private Screen currentScreen = new NullScreen();
   private String currentLoaded;
   private boolean exit;
@@ -93,15 +94,15 @@ public class Nifty {
   private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
   private List < EndOfFrameElementAction > endOfFrameElementActions = new ArrayList < EndOfFrameElementAction >();
   private MouseInputEventProcessor mouseInputEventProcessor;
-  private Collection < ScreenController > registeredScreenControllers = new ArrayList < ScreenController >();
+  private Map < String, ScreenController > registeredScreenControllers = new HashMap < String, ScreenController >();
   private String alternateKeyForNextLoadXml;
   private long lastTime;
   private InputSystem inputSystem;
   private boolean gotoScreenInProgess;
   private String alternateKey;
   private Collection < DelayedMethodInvoke > delayedMethodInvokes = new ArrayList < DelayedMethodInvoke > ();
-  private Map<String, String> resourceBundleSource = new Hashtable<String, String>();
-  private Map<String, ResourceBundle> resourceBundles = new Hashtable<String, ResourceBundle>();
+  private Map<String, String> resourceBundleSource = new HashMap<String, String>();
+  private Map<String, ResourceBundle> resourceBundles = new HashMap<String, ResourceBundle>();
   private Locale locale = Locale.getDefault();
   private Properties globalProperties;
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
@@ -129,7 +130,6 @@ public class Nifty {
     newInputSystem.setResourceLoader(resourceLoader);
     initialize(new NiftyRenderEngineImpl(newRenderDevice), new SoundSystem(newSoundDevice), newInputSystem, newTimeProvider);
     initializeClipboard();
-    System.out.println(getVersion());
   }
 
   public String getVersion() {
@@ -1012,7 +1012,7 @@ public class Nifty {
    */
   public void registerScreenController(final ScreenController ... controllers) {
     for (ScreenController c : controllers) {
-      registeredScreenControllers.add(c);
+      registeredScreenControllers.put(c.getClass().getName(), c);
     }
   }
 
@@ -1022,17 +1022,12 @@ public class Nifty {
    * @return ScreenController instance
    */
   public ScreenController findScreenController(final String controllerClass) {
-    for (ScreenController controller : registeredScreenControllers) {
-      if (controller.getClass().getName().equals(controllerClass)) {
-        return controller;
-      }
-    }
-    return null;
+    return registeredScreenControllers.get(controllerClass);
   }
 
   public void unregisterScreenController(final ScreenController ... controllers) {
     for (ScreenController c : controllers) {
-      registeredScreenControllers.remove(c);
+      registeredScreenControllers.remove(c.getClass().getName());
     }
   }
 
@@ -1443,12 +1438,12 @@ public class Nifty {
   }
 
   private class SubscriberRegistry {
-    private Map < Screen, Map < String, List < ClassSaveEventTopicSubscriber >>> screenBasedSubscribers = new Hashtable < Screen, Map < String, List < ClassSaveEventTopicSubscriber >>>();
+    private Map < Screen, Map < String, List < ClassSaveEventTopicSubscriber >>> screenBasedSubscribers = new HashMap < Screen, Map < String, List < ClassSaveEventTopicSubscriber >>>();
 
     public void register(final Screen screen, final String elementId, final ClassSaveEventTopicSubscriber subscriber) {
       Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
       if (elements == null) {
-        elements = new Hashtable < String, List < ClassSaveEventTopicSubscriber >>();
+        elements = new HashMap < String, List < ClassSaveEventTopicSubscriber >>();
         screenBasedSubscribers.put(screen, elements);
       }
       List < ClassSaveEventTopicSubscriber > list = elements.get(elementId);
