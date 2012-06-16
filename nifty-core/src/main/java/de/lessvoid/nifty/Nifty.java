@@ -130,7 +130,6 @@ public class Nifty {
     newInputSystem.setResourceLoader(resourceLoader);
     initialize(new NiftyRenderEngineImpl(newRenderDevice), new SoundSystem(newSoundDevice), newInputSystem, newTimeProvider);
     initializeClipboard();
-    System.out.println(getVersion());
   }
 
   public String getVersion() {
