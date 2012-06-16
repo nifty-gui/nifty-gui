@@ -2255,8 +2255,18 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
   // package private to prevent public access
   void internalRemoveElement(final Element element) {
-    elements.remove(element);
+    // so now that's odd: we need to remove the element first from the
+    // elementsRenderOrder and THEN from the elements list. this is because
+    // the elementsRenderOrder comparator uses the index of the element in
+    // the elements list >_<
+    //
+    // the main issue here is of course the splitted data structure. something
+    // we need to adress in 1.4 or 2.0.
     elementsRenderOrder.remove(element);
+
+    // now that the element has been removed from the elementsRenderOrder set
+    // we can remove it from the elements list as well.
+    elements.remove(element);
   }
 
   // package private to prevent public access
@@ -2267,7 +2277,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       el.internalRemoveElementWithChilds();
     }
  
-    elements.clear();
     elementsRenderOrder.clear();
+    elements.clear();
   }
 }
