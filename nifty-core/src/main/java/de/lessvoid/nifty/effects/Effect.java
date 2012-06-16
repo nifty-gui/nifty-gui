@@ -88,6 +88,10 @@ public class Effect {
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
     effectEvents.init(nifty, controllers, parameter);
     customFlag = false;
+
+    if (hoverEffect) {
+      element.setVisibleToMouseEvents(true);
+    }
   }
 
   public boolean start(final String alternate, final String customKey) {
