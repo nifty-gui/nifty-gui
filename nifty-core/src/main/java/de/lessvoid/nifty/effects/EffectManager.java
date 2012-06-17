@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.effects;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +16,7 @@ import de.lessvoid.nifty.spi.time.TimeProvider;
  * @author void
  */
 public class EffectManager {
-  private Notify notify;
-  private Map<EffectEventId, EffectProcessor> effectProcessor = new Hashtable<EffectEventId, EffectProcessor>();
+  private Map<EffectEventId, EffectProcessor> effectProcessor = new EnumMap<EffectEventId, EffectProcessor>(EffectEventId.class);
   private List<EffectProcessor> effectProcessorList;
   private Falloff hoverFalloff;
   private NiftyRenderDeviceProxy renderDeviceProxy = new NiftyRenderDeviceProxy();
@@ -32,7 +31,6 @@ public class EffectManager {
    * create a new effectManager with the given listener.
    */
   public EffectManager(final Notify notify) {
-    this.notify = notify;
     this.alternateKey = null;
 
     effectProcessor.put(EffectEventId.onStartScreen, new EffectProcessor(new NotifyAdapter(EffectEventId.onStartScreen, notify), false));
