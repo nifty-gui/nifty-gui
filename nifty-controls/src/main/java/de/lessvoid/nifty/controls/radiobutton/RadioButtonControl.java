@@ -80,6 +80,7 @@ public class RadioButtonControl extends AbstractController implements RadioButto
     }
     getElement().stopEffect(EffectEventId.onCustom);
     getElement().startEffect(EffectEventId.onCustom, null, "show");
+    getElement().setFocus();
     active = true;
     publishStateChangedEvent();
   }
