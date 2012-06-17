@@ -16,6 +16,47 @@ import de.lessvoid.nifty.spi.time.TimeProvider;
  * @author void
  */
 public class EffectManager {
+  // define the order of effects as they are rendered later
+  private static final EffectEventId[] effectsRenderOrder = new EffectEventId[] {
+      EffectEventId.onShow,
+      EffectEventId.onHide,
+      EffectEventId.onStartScreen,
+      EffectEventId.onEndScreen,
+      EffectEventId.onCustom,
+      EffectEventId.onActive,
+      EffectEventId.onHover,
+      EffectEventId.onStartHover,
+      EffectEventId.onEndHover,
+      EffectEventId.onFocus,
+      EffectEventId.onLostFocus,
+      EffectEventId.onGetFocus,
+      EffectEventId.onClick,
+      EffectEventId.onEnabled,
+      EffectEventId.onDisabled
+  };
+
+  // define the order of effects as they are called for hide/show/reset things
+  private static final EffectEventId[] effectsHideShowOrder = new EffectEventId[] {
+    EffectEventId.onStartScreen,
+    EffectEventId.onEndScreen,
+    EffectEventId.onShow,
+    EffectEventId.onHide,
+    EffectEventId.onCustom,
+    EffectEventId.onHover,
+    EffectEventId.onStartHover,
+    EffectEventId.onEndHover,
+    // onActive is currently used by the nifty-panel style. when we reset that effect here
+    // we would not be able to use the nifty-panel in popups. when a popup is being closed
+    // all effects will be reset. which makes sense but probably not for the onActive effect.
+    // we need to check later if this uncommenting has any bad influence on other controls.
+    //
+    //  EffectEventId.onActive
+    EffectEventId.onFocus,
+    EffectEventId.onLostFocus,
+    EffectEventId.onGetFocus,
+    EffectEventId.onClick
+  };
+
   private Map<EffectEventId, EffectProcessor> effectProcessor = new EnumMap<EffectEventId, EffectProcessor>(EffectEventId.class);
   private List<EffectProcessor> effectProcessorList;
   private Falloff hoverFalloff;
@@ -33,21 +74,9 @@ public class EffectManager {
   public EffectManager(final Notify notify) {
     this.alternateKey = null;
 
-    effectProcessor.put(EffectEventId.onStartScreen, new EffectProcessor(new NotifyAdapter(EffectEventId.onStartScreen, notify), false));
-    effectProcessor.put(EffectEventId.onEndScreen, new EffectProcessor(new NotifyAdapter(EffectEventId.onEndScreen, notify), true));
-    effectProcessor.put(EffectEventId.onFocus, new EffectProcessor(new NotifyAdapter(EffectEventId.onFocus, notify), true));
-    effectProcessor.put(EffectEventId.onGetFocus, new EffectProcessor(new NotifyAdapter(EffectEventId.onGetFocus, notify), false));
-    effectProcessor.put(EffectEventId.onLostFocus, new EffectProcessor(new NotifyAdapter(EffectEventId.onLostFocus, notify), false));
-    effectProcessor.put(EffectEventId.onClick, new EffectProcessor(new NotifyAdapter(EffectEventId.onClick, notify), false));
-    effectProcessor.put(EffectEventId.onHover, new EffectProcessor(new NotifyAdapter(EffectEventId.onHover, notify), true));
-    effectProcessor.put(EffectEventId.onStartHover, new EffectProcessor(new NotifyAdapter(EffectEventId.onStartHover, notify), false));
-    effectProcessor.put(EffectEventId.onEndHover, new EffectProcessor(new NotifyAdapter(EffectEventId.onEndHover, notify), false));
-    effectProcessor.put(EffectEventId.onActive, new EffectProcessor(new NotifyAdapter(EffectEventId.onActive, notify), true));
-    effectProcessor.put(EffectEventId.onCustom, new EffectProcessor(new NotifyAdapter(EffectEventId.onCustom, notify), false));
-    effectProcessor.put(EffectEventId.onShow, new EffectProcessor(new NotifyAdapter(EffectEventId.onShow, notify), false));
-    effectProcessor.put(EffectEventId.onHide, new EffectProcessor(new NotifyAdapter(EffectEventId.onHide, notify), true));
-    effectProcessor.put(EffectEventId.onEnabled, new EffectProcessor(new NotifyAdapter(EffectEventId.onEnabled, notify), true));
-    effectProcessor.put(EffectEventId.onDisabled, new EffectProcessor(new NotifyAdapter(EffectEventId.onDisabled, notify), true));
+    for (EffectEventId eventId : EffectEventId.values()) {
+      effectProcessor.put(eventId, eventId.createEffectProcessor(new NotifyAdapter(eventId, notify)));
+    }
 
     // we'll need to iterate over all effectProcessors later and so we keep them here in an ArrayList
     effectProcessorList = new ArrayList<EffectProcessor>(effectProcessor.values());
@@ -115,21 +144,9 @@ public class EffectManager {
   }
 
   private void render(final Element element, final NiftyRenderEngine renderEngine, final RenderPhase phase) {
-    phase.render(effectProcessor.get(EffectEventId.onShow), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onHide), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onStartScreen), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onEndScreen), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onCustom), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onActive), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onHover), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onStartHover), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onEndHover), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onFocus), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onLostFocus), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onGetFocus), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onClick), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onEnabled), renderEngine);
-    phase.render(effectProcessor.get(EffectEventId.onDisabled), renderEngine);
+    for (int i=0; i<effectsRenderOrder.length; i++) {
+      phase.render(effectProcessor.get(effectsRenderOrder[i]), renderEngine);
+    }
   }
 
   public void renderPre(final NiftyRenderEngine renderEngine, final Element element) {
@@ -191,56 +208,21 @@ public class EffectManager {
   }
 
   public void resetAll() {
-      effectProcessor.get(EffectEventId.onStartScreen).reset();
-      effectProcessor.get(EffectEventId.onEndScreen).reset();
-      effectProcessor.get(EffectEventId.onShow).reset();
-      effectProcessor.get(EffectEventId.onHide).reset();
-      effectProcessor.get(EffectEventId.onCustom).reset();
-      effectProcessor.get(EffectEventId.onHover).reset();
-      effectProcessor.get(EffectEventId.onStartHover).reset();
-      effectProcessor.get(EffectEventId.onEndHover).reset();
-// onActive is currently used by the nifty-panel style. when we reset that effect here
-// we would not be able to use the nifty-panel in popups. when a popup is being closed
-// all effects will be reset. which makes sense but probably not for the onActive effect.
-// we need to check later if this uncommenting has any bad influence on other controls.
-//
-//      effectProcessor.get(EffectEventId.onActive).reset();
-      effectProcessor.get(EffectEventId.onFocus).reset();
-      effectProcessor.get(EffectEventId.onLostFocus).reset();
-      effectProcessor.get(EffectEventId.onGetFocus).reset();
-      effectProcessor.get(EffectEventId.onClick).reset();
+    for (int i=0; i<effectsHideShowOrder.length; i++) {
+      effectProcessor.get(effectsHideShowOrder[i]).reset();
     }
+  }
 
   public void resetForHide() {
-    effectProcessor.get(EffectEventId.onStartScreen).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onEndScreen).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onShow).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onHide).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onCustom).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onHover).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onStartHover).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onEndHover).saveActiveNeverStopRenderingEffects();
-// not sure about this one yet :)
-//    effectProcessor.get(EffectEventId.onActive).pushNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onFocus).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onLostFocus).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onGetFocus).saveActiveNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onClick).saveActiveNeverStopRenderingEffects();
+    for (int i=0; i<effectsHideShowOrder.length; i++) {
+      effectProcessor.get(effectsHideShowOrder[i]).saveActiveNeverStopRenderingEffects();
+    }
   }
 
   public void restoreForShow() {
-    effectProcessor.get(EffectEventId.onStartScreen).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onEndScreen).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onShow).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onHide).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onCustom).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onHover).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onStartHover).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onEndHover).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onFocus).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onLostFocus).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onGetFocus).restoreNeverStopRenderingEffects();
-    effectProcessor.get(EffectEventId.onClick).restoreNeverStopRenderingEffects();
+    for (int i=0; i<effectsHideShowOrder.length; i++) {
+      effectProcessor.get(effectsHideShowOrder[i]).restoreNeverStopRenderingEffects();
+    }
   }
 
   public void resetSingleEffect(final EffectEventId effectEventId) {
