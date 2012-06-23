@@ -7,9 +7,9 @@ import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
-import de.lessvoid.nifty.renderer.lwjgl.render.font.ColorValueParser.Result;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.ColorValueParser;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
@@ -162,15 +162,15 @@ public class Font {
     int activeTextureIdx = -1;
 
     for (int i = 0; i < text.length(); i++) {
-      Result result = colorValueParser.isColor(text, i);
-      while (result.isColor()) {
-        Color color = result.getColor();
+      colorValueParser.isColor(text, i);
+      while (colorValueParser.isColor()) {
+        Color color = colorValueParser.getColor();
         GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-        i = result.getNextIndex();
+        i = colorValueParser.getNextIndex();
         if (i >= text.length()) {
           break;
         }
-        result = colorValueParser.isColor(text, i);
+        colorValueParser.isColor(text, i);
       }
       if (i >= text.length()) {
         break;
@@ -252,9 +252,9 @@ public class Font {
     int length = 0;
 
     for (int i = 0; i < text.length(); i++) {
-      Result result = colorValueParser.isColor(text, i);
-      if (result.isColor()) {
-        i = result.getNextIndex();
+      colorValueParser.isColor(text, i);
+      if (colorValueParser.isColor()) {
+        i = colorValueParser.getNextIndex();
         if (i >= text.length()) {
           break;
         }
