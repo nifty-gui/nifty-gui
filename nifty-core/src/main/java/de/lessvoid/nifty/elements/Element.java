@@ -87,7 +87,11 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * the child elements.
    */
   private List < Element > elements = new ArrayList < Element >();
-  private Set < Element > elementsRenderOrder = new TreeSet < Element >(new Comparator<Element>() {
+
+  /**
+   * This set defines the render order of the child elements using a Comparator.
+   */
+  private Set < Element > elementsRenderOrderSet = new TreeSet < Element >(new Comparator<Element>() {
 
     /**
      * This uses the renderOrder attribute of the elements to compare them. If the renderOrder
@@ -145,6 +149,11 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       return elements.indexOf(element);
     }
   });
+
+  /**
+   * We keep a copy of the elementsRenderOrderSet in a simple array for being more GC friendly while rendering.
+   */
+  private Element[] elementsRenderOrder = new Element[0];
 
   /**
    * The LayoutManager we should use for all child elements.
@@ -562,7 +571,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     }
     StringBuffer renderOrder = new StringBuffer();
     renderOrder.append(" render order: ");
-    for (Element e : elementsRenderOrder) {
+    for (Element e : elementsRenderOrderSet) {
       renderOrder.append("[" + e.getId() + " (" + ((e.renderOrder == 0) ? elements.indexOf(e) : e.renderOrder) + ")]");
     }
     elementDebugOut.add(renderOrder.toString());
@@ -678,7 +687,8 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    */
   public void add(final Element widget) {
     elements.add(widget);
-    elementsRenderOrder.add(widget);
+    elementsRenderOrderSet.add(widget);
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
 
   /**
@@ -726,9 +736,8 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   }
 
   private void renderInternalChildElements(final NiftyRenderEngine r) {
-    Iterator<Element> elementIter = elementsRenderOrder.iterator();
-    while (elementIter.hasNext()) {
-      Element p = elementIter.next();
+    for (int i=0; i<elementsRenderOrder.length; i++) {
+      Element p = elementsRenderOrder[i];
       p.render(r);
     }
   }
@@ -1801,8 +1810,9 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   }
 
   private void renderOrderChanged(final Element element) {
-    elementsRenderOrder.remove(element);
-    elementsRenderOrder.add(element);
+    elementsRenderOrderSet.remove(element);
+    elementsRenderOrderSet.add(element);
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
 
   public int getRenderOrder() {
@@ -2262,11 +2272,13 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     //
     // the main issue here is of course the splitted data structure. something
     // we need to adress in 1.4 or 2.0.
-    elementsRenderOrder.remove(element);
+    elementsRenderOrderSet.remove(element);
 
     // now that the element has been removed from the elementsRenderOrder set
     // we can remove it from the elements list as well.
     elements.remove(element);
+
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
 
   // package private to prevent public access
@@ -2277,7 +2289,8 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       el.internalRemoveElementWithChilds();
     }
  
-    elementsRenderOrder.clear();
+    elementsRenderOrderSet.clear();
     elements.clear();
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
 }
