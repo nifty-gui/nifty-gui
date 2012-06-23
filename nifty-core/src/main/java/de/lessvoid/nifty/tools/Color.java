@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.tools;
 
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -120,7 +121,7 @@ public class Color {
   }
 
   private String fromRGBA(float redValue, float greenValue, float blueValue, float alphaValue) {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     result.append('#');
     result.append(toHex(redValue));
     result.append(toHex(greenValue));
@@ -197,9 +198,9 @@ public class Color {
    */
   private float getRFromString(final String color) {
     if (isShortMode(color)) {
-      return (Integer.valueOf(color.substring(1, 2), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
+      return (Integer.parseInt(color.substring(1, 2), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
     } else {
-      return Integer.valueOf(color.substring(1, 3), HEX_BASE) / MAX_INT_VALUE;
+      return Integer.parseInt(color.substring(1, 3), HEX_BASE) / MAX_INT_VALUE;
     }
   }
 
@@ -210,9 +211,9 @@ public class Color {
    */
   private float getGFromString(final String color) {
     if (isShortMode(color)) {
-      return (Integer.valueOf(color.substring(2, 3), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
+      return (Integer.parseInt(color.substring(2, 3), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
     } else {
-      return Integer.valueOf(color.substring(3, 5), HEX_BASE) / MAX_INT_VALUE;
+      return Integer.parseInt(color.substring(3, 5), HEX_BASE) / MAX_INT_VALUE;
     }
   }
 
@@ -223,9 +224,9 @@ public class Color {
    */
   private float getBFromString(final String color) {
     if (isShortMode(color)) {
-      return (Integer.valueOf(color.substring(3, 4), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
+      return (Integer.parseInt(color.substring(3, 4), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
     } else {
-      return Integer.valueOf(color.substring(5, 7), HEX_BASE) / MAX_INT_VALUE;
+      return Integer.parseInt(color.substring(5, 7), HEX_BASE) / MAX_INT_VALUE;
     }
   }
 
@@ -236,9 +237,9 @@ public class Color {
    */
   private float getAFromString(final String color) {
     if (isShortMode(color)) {
-      return (Integer.valueOf(color.substring(4, 5), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
+      return (Integer.parseInt(color.substring(4, 5), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
     } else {
-      return Integer.valueOf(color.substring(7, 9), HEX_BASE) / MAX_INT_VALUE;
+      return Integer.parseInt(color.substring(7, 9), HEX_BASE) / MAX_INT_VALUE;
     }
   }
 
@@ -320,20 +321,26 @@ public class Color {
       green = getGFromString(color);
       blue = getBFromString(color);
       alpha = 1.0f;
-      log.fine("found short mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#f]");
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("found short mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#f]");
+      }
     } else if (colorValidator.isLongModeWithoutAlpha(color)) {
       red = getRFromString(color);
       green = getGFromString(color);
       blue = getBFromString(color);
       alpha = 1.0f;
-      log.fine("found long mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#ff]");
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("found long mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#ff]");
+      }
     } else if (colorValidator.isValid(color)) {
       red = getRFromString(color);
       green = getGFromString(color);
       blue = getBFromString(color);
       alpha = getAFromString(color);
     } else {
-      log.fine("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
+      }
       red = green = blue = alpha = 1.0f;
     }
   }
