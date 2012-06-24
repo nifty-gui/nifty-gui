@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.effects;
 
-import de.lessvoid.nifty.effects.EffectProcessor.Notify;
+import de.lessvoid.nifty.effects.EffectProcessorImpl.Notify;
 
 
 
@@ -32,6 +32,6 @@ public enum EffectEventId {
   }
 
   EffectProcessor createEffectProcessor(final Notify notify) {
-    return new EffectProcessor(notify, neverStopRendering);
+    return new EffectProcessorImpl(notify, neverStopRendering);
   }
 }
