@@ -7,7 +7,16 @@ package de.lessvoid.nifty.examples.defaultcontrols;
 import org.lwjgl.opengl.DisplayMode;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.*;
+import de.lessvoid.nifty.builder.ControlBuilder;
+import de.lessvoid.nifty.builder.EffectBuilder;
+import de.lessvoid.nifty.builder.HoverEffectBuilder;
+import de.lessvoid.nifty.builder.ImageBuilder;
+import de.lessvoid.nifty.builder.LayerBuilder;
+import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.PopupBuilder;
+import de.lessvoid.nifty.builder.ScreenBuilder;
+import de.lessvoid.nifty.builder.StyleBuilder;
+import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
