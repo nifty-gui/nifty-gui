@@ -19,7 +19,7 @@ import de.lessvoid.nifty.tools.ObjectPool.Factory;
  * @author void
  */
 public class NiftyRenderEngineImpl implements NiftyRenderEngine {
-  private Logger log = Logger.getLogger(NiftyRenderEngineImpl.class.getName());
+  private static Logger log = Logger.getLogger(NiftyRenderEngineImpl.class.getName());
 
   /**
    * RenderDevice.

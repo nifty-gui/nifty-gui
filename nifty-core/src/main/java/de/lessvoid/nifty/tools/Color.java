@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  * @author void
  */
 public class Color {
-  private Logger log = Logger.getLogger(Color.class.getName());
+  private static Logger log = Logger.getLogger(Color.class.getName());
 
   /**
    * scale short mode factor (converts 0x5 to 0x55).

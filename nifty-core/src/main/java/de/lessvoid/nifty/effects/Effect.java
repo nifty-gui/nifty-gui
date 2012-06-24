@@ -17,7 +17,7 @@ import de.lessvoid.nifty.tools.time.TimeInterpolator;
  * @author void
  */
 public class Effect {
-  private Logger log = Logger.getLogger(Effect.class.getName());
+  private static Logger log = Logger.getLogger(Effect.class.getName());
   private EffectEventId effectEventId;
   private boolean active;
   private Element element;

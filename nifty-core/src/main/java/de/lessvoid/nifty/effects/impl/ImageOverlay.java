@@ -26,8 +26,8 @@ public class ImageOverlay implements EffectImpl {
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
 
-    String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(parameter);
-    String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(parameter);
+    String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(parameter);
+    String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(parameter);
     if ((areaProviderProperty != null) || (renderStrategyProperty != null)) {
 	    image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
 	    		renderStrategyProperty));

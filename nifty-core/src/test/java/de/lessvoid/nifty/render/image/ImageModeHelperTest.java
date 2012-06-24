@@ -12,8 +12,6 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.render.image.ImageModeHelper;
-
 public class ImageModeHelperTest {
 
 	private Properties m_normalProperties;
@@ -53,7 +51,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetAreaProviderPropertyExtractsNormalImageMode() {
-		String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(m_normalProperties);
+		String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(m_normalProperties);
 		assertEquals(areaProviderProperty, "fullimage");
 
 		verify(m_normalProperties);
@@ -61,7 +59,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetRenderStrategyPropertyExtractsNormalImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(m_normalProperties);
+		String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(m_normalProperties);
 		assertEquals(renderStrategyProperty, "resize");
 
 		verify(m_normalProperties);
@@ -69,7 +67,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetAreaProviderPropertyExtractsResizeImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getAreaProviderProperty(m_resizeProperties);
+		String renderStrategyProperty = ImageModeHelper.getAreaProviderProperty(m_resizeProperties);
 		assertEquals(renderStrategyProperty, "fullimage");
 
 		verify(m_resizeProperties);
@@ -77,7 +75,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetRenderStrategyPropertyExtractsImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(m_resizeProperties);
+		String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(m_resizeProperties);
 		assertEquals(renderStrategyProperty, "nine-part:0,1,2,3,4,5,6,7,8,9,10,11");
 
 		verify(m_resizeProperties);
@@ -85,7 +83,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetAreaProviderPropertyExtractsSubImageImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getAreaProviderProperty(m_subImageProperties);
+		String renderStrategyProperty = ImageModeHelper.getAreaProviderProperty(m_subImageProperties);
 		assertEquals(renderStrategyProperty, "subimage:0,1,2,3");
 
 		verify(m_resizeProperties);
@@ -93,7 +91,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetRenderStrategyPropertyExtractsSubImageImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(m_subImageProperties);
+		String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(m_subImageProperties);
 		assertEquals(renderStrategyProperty, "resize");
 
 		verify(m_subImageProperties);
@@ -101,7 +99,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetAreaProviderPropertyExtractsRepeatImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getAreaProviderProperty(m_repeatProperties);
+		String renderStrategyProperty = ImageModeHelper.getAreaProviderProperty(m_repeatProperties);
 		assertEquals(renderStrategyProperty, "subimage:0,1,2,3");
 
 		verify(m_resizeProperties);
@@ -109,7 +107,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetRenderStrategyPropertyExtractsRepeatImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(m_repeatProperties);
+		String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(m_repeatProperties);
 		assertEquals(renderStrategyProperty, "repeat");
 
 		verify(m_repeatProperties);
@@ -117,7 +115,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetAreaProviderPropertyExtractsSpriteImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getAreaProviderProperty(m_spriteProperties);
+		String renderStrategyProperty = ImageModeHelper.getAreaProviderProperty(m_spriteProperties);
 		assertEquals(renderStrategyProperty, "sprite:0,1,2");
 
 		verify(m_resizeProperties);
@@ -125,7 +123,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetRenderStrategyPropertyExtractsSpriteImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(m_spriteProperties);
+		String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(m_spriteProperties);
 		assertEquals(renderStrategyProperty, "resize");
 
 		verify(m_spriteProperties);
@@ -133,7 +131,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetAreaProviderPropertyExtractsSpriteResizeImageMode() {
-		String renderStrategyProperty = new ImageModeHelper().getAreaProviderProperty(m_spriteResizeProperties);
+		String renderStrategyProperty = ImageModeHelper.getAreaProviderProperty(m_spriteResizeProperties);
 		assertEquals(renderStrategyProperty, "sprite:0,1,2");
 
 		verify(m_resizeProperties);
@@ -141,8 +139,7 @@ public class ImageModeHelperTest {
 
 	@Test
 	public void testGetRenderStrategyPropertyExtractsSpriteResizeImageMode() {
-		String renderStrategyProperty = new ImageModeHelper()
-				.getRenderStrategyProperty(m_spriteResizeProperties);
+		String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(m_spriteResizeProperties);
 		assertEquals(renderStrategyProperty, "nine-part:3,4,5,6,7,8,9,10,11,12,13,14");
 
 		verify(m_spriteResizeProperties);
@@ -155,7 +152,7 @@ public class ImageModeHelperTest {
 		expect(properties.getProperty("imageArea")).andReturn("dummy:foo");
 		replay(properties);
 
-		assertEquals(new ImageModeHelper().getAreaProviderProperty(properties), "dummy:foo");
+		assertEquals(ImageModeHelper.getAreaProviderProperty(properties), "dummy:foo");
 
 		verify(properties);
 	}
@@ -167,7 +164,7 @@ public class ImageModeHelperTest {
 		expect(properties.getProperty("imageArea")).andReturn(null);
 		replay(properties);
 
-		assertNull(new ImageModeHelper().getAreaProviderProperty(properties));
+		assertNull(ImageModeHelper.getAreaProviderProperty(properties));
 
 		verify(properties);
 	}
@@ -179,7 +176,7 @@ public class ImageModeHelperTest {
 		expect(properties.getProperty("imageArea")).andReturn(null);
 		replay(properties);
 
-		assertNull(new ImageModeHelper().getAreaProviderProperty(properties));
+		assertNull(ImageModeHelper.getAreaProviderProperty(properties));
 
 		verify(properties);
 	}
@@ -191,7 +188,7 @@ public class ImageModeHelperTest {
 		expect(properties.getProperty("renderStrategy")).andReturn("dummy:foo");
 		replay(properties);
 
-		assertEquals(new ImageModeHelper().getRenderStrategyProperty(properties), "dummy:foo");
+		assertEquals(ImageModeHelper.getRenderStrategyProperty(properties), "dummy:foo");
 
 		verify(properties);
 	}
@@ -203,7 +200,7 @@ public class ImageModeHelperTest {
 		expect(properties.getProperty("renderStrategy")).andReturn(null);
 		replay(properties);
 
-		assertNull(new ImageModeHelper().getRenderStrategyProperty(properties));
+		assertNull(ImageModeHelper.getRenderStrategyProperty(properties));
 
 		verify(properties);
 	}
@@ -215,7 +212,7 @@ public class ImageModeHelperTest {
 		expect(properties.getProperty("renderStrategy")).andReturn(null);
 		replay(properties);
 
-		assertNull(new ImageModeHelper().getRenderStrategyProperty(properties));
+		assertNull(ImageModeHelper.getRenderStrategyProperty(properties));
 
 		verify(properties);
 	}

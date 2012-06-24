@@ -18,7 +18,7 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class Border implements EffectImpl {
-  private Logger log = Logger.getLogger(Border.class.getName());
+  private static Logger log = Logger.getLogger(Border.class.getName());
   private Color colorLeft = Color.WHITE;
   private Color colorRight = Color.WHITE;
   private Color colorTop = Color.WHITE;

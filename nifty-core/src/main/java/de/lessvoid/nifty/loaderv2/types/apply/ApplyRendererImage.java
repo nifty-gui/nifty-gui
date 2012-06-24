@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.loaderv2.types.apply;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Size;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
@@ -42,8 +40,8 @@ public class ApplyRendererImage implements ApplyRenderer {
       return;
     }
 
-	String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(attributes.getAttributes());
-	String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(attributes.getAttributes());
+	String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(attributes.getAttributes());
+	String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(attributes.getAttributes());
     ImageMode imageMode = convert.imageMode(areaProviderProperty, renderStrategyProperty);
 
     image.setImageMode(imageMode);

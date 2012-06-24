@@ -11,7 +11,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
 public class NiftyImageManager {
-  private Logger log = Logger.getLogger(NiftyImageManager.class.getName());
+  private static Logger log = Logger.getLogger(NiftyImageManager.class.getName());
   private RenderDevice renderDevice;
   private Map <String, ReferencedCountedImage> imageCache = new Hashtable < String, ReferencedCountedImage >();
   private Map <RenderImage, ReferencedCountedImage> backReference = new Hashtable <RenderImage, ReferencedCountedImage>();

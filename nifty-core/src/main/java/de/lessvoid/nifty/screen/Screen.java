@@ -30,7 +30,7 @@ import de.lessvoid.nifty.tools.StringHelper;
  */
 public class Screen {
   public int layoutLayersCallCount = 0;
-  private Logger log = Logger.getLogger(Screen.class.getName());
+  private static Logger log = Logger.getLogger(Screen.class.getName());
 
   private String screenId;
   private ScreenController screenController = new NullScreenController();

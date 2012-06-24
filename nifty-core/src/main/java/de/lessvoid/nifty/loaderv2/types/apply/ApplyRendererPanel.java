@@ -39,8 +39,8 @@ public class ApplyRendererPanel implements ApplyRenderer {
       return;
     }
     
-	String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(attributes.getAttributes());
-	String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(attributes.getAttributes());
+	String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(attributes.getAttributes());
+	String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(attributes.getAttributes());
     ImageMode imageMode = convert.imageMode(areaProviderProperty, renderStrategyProperty);
 
     image.setImageMode(imageMode);
