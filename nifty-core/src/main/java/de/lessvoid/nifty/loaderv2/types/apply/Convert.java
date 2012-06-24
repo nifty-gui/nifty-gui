@@ -29,6 +29,13 @@ public class Convert {
   public static final boolean DEFAULT_CHILD_CLIP = false;
   public static final Color DEFAULT_COLOR = null;
   public static final int DEFAULT_RENDER_ORDER = 0;
+  private static final VerticalLayout verticalLayout = new VerticalLayout();
+  private static final CenterLayout centerLayout = new CenterLayout();
+  private static final HorizontalLayout horizontalLayout = new HorizontalLayout();
+  private static final OverlayLayout overlayLayout = new OverlayLayout();
+  private static final AbsolutePositionLayout absolutePositionLayout = new AbsolutePositionLayout();
+  private static final AbsolutePositionLayout absolutePositionLayoutKeepInside = new AbsolutePositionLayout(
+      new AbsolutePositionLayout.KeepInsidePostProcess());
 
   public RenderFont font(final NiftyRenderEngine niftyRenderEngine, final String value) {
     if (value == null) {
@@ -88,17 +95,17 @@ public class Convert {
     }
     String typeCompare = type.toLowerCase();
     if (typeCompare.equals("vertical")) {
-      return new VerticalLayout();
+      return verticalLayout;
     } else if (typeCompare.equals("center")) {
-      return new CenterLayout();
+      return centerLayout;
     } else if (typeCompare.equals("horizontal")) {
-      return new HorizontalLayout();
+      return horizontalLayout;
     } else if (typeCompare.equals("overlay")) {
-      return new OverlayLayout();
+      return overlayLayout;
     } else if (typeCompare.equals("absolute")) {
-      return new AbsolutePositionLayout();
+      return absolutePositionLayout;
     } else if (typeCompare.equals("absolute-inside")) {
-      return new AbsolutePositionLayout(new AbsolutePositionLayout.KeepInsidePostProcess());
+      return absolutePositionLayoutKeepInside;
     }
     
     return null;

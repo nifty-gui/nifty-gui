@@ -14,10 +14,11 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class AbsolutePositionLayout implements LayoutManager {
+  private static final DefaultPostProcess defaultPostProcess = new DefaultPostProcess();
   private PostProcess post;
 
   public AbsolutePositionLayout() {
-    this.post = new DefaultPostProcess();
+    this.post = defaultPostProcess;
   }
 
   public AbsolutePositionLayout(final PostProcess post) {
