@@ -1,6 +1,7 @@
 package de.lessvoid.xml.xpp3;
 
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -178,11 +179,15 @@ public class XmlParser {
     int eventType = xpp.next();
     while (eventType != XmlPullParser.END_DOCUMENT) {
      if (eventType == XmlPullParser.END_TAG) {
-       indent();
-       log.fine(indent() + "END <" + xpp.getName() + ">");
+       if (log.isLoggable(Level.FINE)) {
+         indent();
+         log.fine(indent() + "END <" + xpp.getName() + ">");
+       }
        return;
      } else if (eventType == XmlPullParser.START_TAG) {
-       log.fine(indent() + "START <" + xpp.getName() + ">");
+       if (log.isLoggable(Level.FINE)) {
+         log.fine(indent() + "START <" + xpp.getName() + ">");
+       }
        return;
      }
      eventType = xpp.next();
@@ -194,7 +199,7 @@ public class XmlParser {
    * @return string of whitespace of xpp depth level length
    */
   private String indent() {
-    StringBuffer b = new StringBuffer();
+    StringBuilder b = new StringBuilder();
      for (int i = 0; i < xpp.getDepth(); i++) {
        b.append(" ");
      }

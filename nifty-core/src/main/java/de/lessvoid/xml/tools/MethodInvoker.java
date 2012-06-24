@@ -1,6 +1,7 @@
 package de.lessvoid.xml.tools;
 
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -102,26 +103,36 @@ public class MethodInvoker {
             // does the method supports the parameters?
             // TODO: not only check for the count but check the type too
             if (getMethodParameterCount(method) == invokeParameters.length) {
-              log.fine("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
+              if (log.isLoggable(Level.FINE)) {
+                log.fine("invoking method '" + methodWithName + "' with (" + debugParaString(invokeParameters) + ")");
+              }
               return callMethod(object, method, invokeParameters);
             } else {
-              log.fine("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
+              if (log.isLoggable(Level.FINE)) {
+                log.fine("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
+              }
               return callMethod(object, method, new Object[0]);
             }
           } else {
             // no invokeParameters encoded. this means we can call the method as is or with the invokeParametersParam
             if (invokeParametersParam.length > 0) {
               if (getMethodParameterCount(method) == invokeParametersParam.length) {
-                log.fine("invoking method '" + methodWithName + "' with the actual parameters ("
+                if (log.isLoggable(Level.FINE)) {
+                  log.fine("invoking method '" + methodWithName + "' with the actual parameters ("
                     + debugParaString(invokeParametersParam) + ")");
+                }
                 return callMethod(object, method, invokeParametersParam);
               } else {
-                log.fine("invoking method '" + methodWithName
+                if (log.isLoggable(Level.FINE)) {
+                  log.fine("invoking method '" + methodWithName
                     + "' without parameters (invokeParametersParam mismatch)");
+                }
                 return callMethod(object, method, null);
               }
             } else {
-              log.fine("invoking method '" + methodWithName + "' without parameters");
+              if (log.isLoggable(Level.FINE)) {
+                log.fine("invoking method '" + methodWithName + "' without parameters");
+              }
               return callMethod(object, method, null);
             }
           }
@@ -141,13 +152,15 @@ public class MethodInvoker {
    */
   private Object callMethod(final Object targetObject, final Method method, final Object[] invokeParameters) {
     try {
-      log.fine("method: " + method + "on targetObject: " + targetObject + ", parameters: " + invokeParameters);
-      if (method != null) {
-        log.fine(method.getName());
-      }
-      if (invokeParameters != null) {
-        for (Object o : invokeParameters) {
-          log.fine("parameter: " + o);
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("method: " + method + "on targetObject: " + targetObject + ", parameters: " + invokeParameters);
+        if (method != null) {
+          log.fine(method.getName());
+        }
+        if (invokeParameters != null) {
+          for (Object o : invokeParameters) {
+            log.fine("parameter: " + o);
+          }
         }
       }
       return method.invoke(targetObject, invokeParameters);
