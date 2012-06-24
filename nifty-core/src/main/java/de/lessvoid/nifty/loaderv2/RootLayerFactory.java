@@ -1,8 +1,5 @@
 package de.lessvoid.nifty.loaderv2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
@@ -34,10 +31,10 @@ public class RootLayerFactory {
   }
 
   public ElementRenderer[] createPanelRenderer() {
-    List < ElementRenderer > renderer = new ArrayList < ElementRenderer >();
-    renderer.add(new ImageRenderer());
-    renderer.add(new PanelRenderer());
-    return renderer.toArray(new ElementRenderer[0]);
+    ElementRenderer[] renderer = new ElementRenderer[2];
+    renderer[0] = new ImageRenderer();
+    renderer[1] = new PanelRenderer();
+    return renderer;
   }
 
   public LayoutPart createRootLayerLayoutPart(final Nifty nifty) {
