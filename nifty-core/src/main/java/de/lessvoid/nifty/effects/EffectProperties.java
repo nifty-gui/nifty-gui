@@ -8,7 +8,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 public class EffectProperties extends Properties {
   private static final long serialVersionUID = 1L;
-  private EffectPropertiesValues effectValues = new EffectPropertiesValues();
+  private EffectPropertiesValues effectValues;
   
   public EffectProperties(final Properties createProperties) {
     super();
@@ -19,23 +19,34 @@ public class EffectProperties extends Properties {
   }
 
   public void addEffectValue(final Attributes effectProperties) {
-    effectValues.add(effectProperties);
+    getEffectPropertiesValueLazy().add(effectProperties);
   }
 
   public EffectPropertiesValues getEffectValues() {
-    return effectValues;
+    return getEffectPropertiesValueLazy();
   }
 
   public boolean isTimeInterpolator() {
-    return effectValues.containsTimeValues();
+    return getEffectPropertiesValueLazy().containsTimeValues();
   }
 
   public LinearInterpolator getInterpolator() {
-    LinearInterpolator interpolator = effectValues.toLinearInterpolator();
+    if (effectValues == null) {
+      return null;
+    }
+    LinearInterpolator interpolator = getEffectPropertiesValueLazy().toLinearInterpolator();
     if (interpolator == null) {
       return null;
     }
     interpolator.prepare();
     return interpolator;
+  }
+
+  private EffectPropertiesValues getEffectPropertiesValueLazy() {
+    if (effectValues != null) {
+      return effectValues;
+    }
+    effectValues = new EffectPropertiesValues();
+    return effectValues;
   }
 }
