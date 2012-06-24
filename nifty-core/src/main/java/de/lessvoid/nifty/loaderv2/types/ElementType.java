@@ -28,7 +28,7 @@ public class ElementType extends XmlBaseType {
   protected ElementRendererCreator elementRendererCreator;
   protected InteractType interact = new InteractType();
   protected EffectsType effects = new EffectsType();
-  protected List < ElementType > elements = new ArrayList < ElementType >();
+  protected List < ElementType > elements = new ArrayList < ElementType >(0);
   protected LinkedList < Object > controllers = new LinkedList < Object >();
   protected Controller controller;
 
