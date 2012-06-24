@@ -22,15 +22,19 @@
         <value offset="50%" color="#55ff" />
         <value offset="100%" color="#fccf" />
       </onActive>
-      <!-- this kinda messes the textcolor 
       <onActive name="pulsate" period="25000" pulsateType="sinRaised" startColor="#0000" endColor="#000f" changeColorOnly="true" startDelay="2000" />
-       -->
       <onActive name="gradient" direction="vertical" startDelay="2000">
         <value offset="0%" color="#001f" />
         <value offset="50%" color="#404f" />
         <value offset="80%" color="#f00f" />
         <value offset="100%" color="#ffaf" />
       </onActive>
+      <!--
+        Since the pulsate effect has changed the current color we'll need to reset it here since it is used as the
+        text color as well. If we omit the changeColor effect we'll get the alpha of the pulsate effect applied to
+        all text as well which would look kinda, erm, odd :)
+       -->
+      <onActive name="changeColor" color="#ffff" />
     </effect>
   </style>
 
