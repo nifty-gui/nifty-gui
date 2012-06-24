@@ -16,11 +16,16 @@ public final class CollectionLogger {
     if (collection.isEmpty()) {
       return StringHelper.whitespace(offset) + "no children " + message;
     }
-    String result = StringHelper.whitespace(offset) + "children " + message + ": " + collection.size();
+    StringBuilder result = new StringBuilder();
+    result.append(StringHelper.whitespace(offset));
+    result.append("children ");
+    result.append(message);
+    result.append(": ");
+    result.append(collection.size());
     for (XmlBaseType type : collection) {
-      result += "\n" + type.output(offset + 1);
+      result.append("\n");
+      result.append(type.output(offset + 1));
     }
-    return result;
+    return result.toString();
   }
-
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 import de.lessvoid.nifty.loaderv2.types.StyleType;
 
 public class StyleResolverDefault implements StyleResolver {
-  private Map < String, StyleType > styles;
+  private final Map < String, StyleType > styles;
 
   public StyleResolverDefault(final Map < String, StyleType > stylesParam) {
     styles = stylesParam;

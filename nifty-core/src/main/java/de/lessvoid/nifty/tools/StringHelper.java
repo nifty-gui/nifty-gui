@@ -10,7 +10,7 @@ public final class StringHelper {
    * @return string with whitespaces length times.
    */
   public static String whitespace(final int length) {
-    StringBuffer b = new StringBuffer();
+    StringBuilder b = new StringBuilder();
     for (int i = 0; i < length; i++) {
       b.append(" ");
     }

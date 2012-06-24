@@ -3,7 +3,7 @@ package de.lessvoid.nifty.elements;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +86,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   /**
    * the child elements.
    */
-  private List < Element > elements = new ArrayList < Element >();
+  private List < Element > elements = new ArrayList < Element >(0);
 
   /**
    * This set defines the render order of the child elements using a Comparator.
@@ -276,7 +276,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   private TimeProvider time;
 
   private List<String> elementDebugOut = new ArrayList<String>();
-  private StringBuffer elementDebug = new StringBuffer();
+  private StringBuilder elementDebug = new StringBuilder();
 
   private boolean parentClipArea = false;
   private int parentClipX;
@@ -285,7 +285,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   private int parentClipHeight;
 
   private static Convert convert = new Convert();
-  private static Map < Class < ? extends ElementRenderer >, ApplyRenderer > rendererApplier = new Hashtable < Class < ? extends ElementRenderer>, ApplyRenderer >();
+  private static Map < Class < ? extends ElementRenderer >, ApplyRenderer > rendererApplier = new HashMap < Class < ? extends ElementRenderer>, ApplyRenderer >();
   {
     rendererApplier.put(TextRenderer.class, new ApplyRenderText(convert));
     rendererApplier.put(ImageRenderer.class, new ApplyRendererImage(convert));

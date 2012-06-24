@@ -8,9 +8,9 @@ import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
 public class Element {
-  private String tagName;
-  private String tagType;
-  private OccursEnum occurs;
+  private final String tagName;
+  private final String tagType;
+  private final OccursEnum occurs;
 
   public Element(
       final String elementNameParam,
@@ -68,8 +68,8 @@ public class Element {
   }
 
   private class Helper implements XmlProcessor {
-    private XmlType xmlTypeParent;
-    private XmlProcessorElement xmlProcessorElement;
+    private final XmlType xmlTypeParent;
+    private final XmlProcessorElement xmlProcessorElement;
 
     public Helper(final XmlType xmlTypeParam, final XmlProcessorElement xmlProcessorElementParam) {
       xmlTypeParent = xmlTypeParam;

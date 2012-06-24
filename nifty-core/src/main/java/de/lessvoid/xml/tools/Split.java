@@ -41,7 +41,7 @@ public class Split {
   }
 
   public static String join(final List<String> parts) {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     for (String part : parts) {
       result.append(part);
     }

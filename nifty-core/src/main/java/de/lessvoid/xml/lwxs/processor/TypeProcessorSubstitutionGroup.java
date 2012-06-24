@@ -7,7 +7,7 @@ import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
 public class TypeProcessorSubstitutionGroup implements XmlProcessor {
-  private Type parent;
+  private final Type parent;
 
   public TypeProcessorSubstitutionGroup(final Type parentParam) {
     parent = parentParam;
