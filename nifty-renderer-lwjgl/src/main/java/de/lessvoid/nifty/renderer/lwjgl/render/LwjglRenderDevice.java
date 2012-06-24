@@ -32,8 +32,8 @@ public class LwjglRenderDevice implements RenderDevice {
   private static Logger log = Logger.getLogger(LwjglRenderDevice.class.getName());
   private static IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
   private NiftyResourceLoader resourceLoader;
-  private int viewportWidth;
-  private int viewportHeight;
+  private int viewportWidth = -1;
+  private int viewportHeight = -1;
   private long time;
   private long frames;
   private long lastFrames;
@@ -86,7 +86,9 @@ public class LwjglRenderDevice implements RenderDevice {
    * @return width of display mode
    */
   public int getWidth() {
-    getViewport();
+    if (viewportWidth == -1) {
+      getViewport();
+    }
     return viewportWidth;
   }
 
@@ -95,7 +97,9 @@ public class LwjglRenderDevice implements RenderDevice {
    * @return height of display mode
    */
   public int getHeight() {
-    getViewport();
+    if (viewportHeight == -1) {
+      getViewport();
+    }
     return viewportHeight;
   }
   
@@ -142,6 +146,14 @@ public class LwjglRenderDevice implements RenderDevice {
     if (displayFPS) {
       renderFont(fpsFont, "FPS: " + String.valueOf(lastFrames), 10, getHeight() - fpsFont.getHeight() - 10, Color.WHITE, 1.0f, 1.0f);
     }
+
+    // currently the RenderDevice interface does not support a way to be notified when the resolution is changed
+    // so we reset the viewportWidth and viewportHeight here so that we only call getViewport() once per frame and
+    // not each time someone calls getWidth() or getHeight().
+    viewportWidth = -1;
+    viewportHeight = -1;
+
+    checkGLError();
   }
 
   public void clear() {
@@ -389,9 +401,7 @@ public class LwjglRenderDevice implements RenderDevice {
     currentClippingY1 = y1;
 
     GL11.glScissor(x0, getHeight() - y1, x1 - x0, y1 - y0);
-    checkGLError();
     GL11.glEnable(GL11.GL_SCISSOR_TEST);
-    checkGLError();
   }
 
   /**
