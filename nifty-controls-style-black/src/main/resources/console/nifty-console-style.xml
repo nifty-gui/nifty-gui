@@ -51,7 +51,7 @@
   <style id="nifty-console-textfield#cursor">
     <attributes filename="console_cursor_empty.png"/>
     <effect>
-      <onActive name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="console_cursor.png" post="true"/>
+      <onCustom name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="console_cursor.png" post="true"/>
     </effect>
   </style>
 
