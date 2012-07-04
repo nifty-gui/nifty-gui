@@ -17,9 +17,6 @@
   </style>
   <style id="nifty-console-listbox#scrollpanel">
     <attributes focusable="true" borderBottom="1px" borderColor="#000f"/>
-    <effect overlay="true">
-      <onActive name="border" border="0px,0px,1px,0px" color="#222f" inset="1px,0px,0px,1px"/>
-    </effect>
   </style>
   <style id="nifty-console-listbox#bottom-right">
     <attributes width="20px" height="20px" />
@@ -35,6 +32,9 @@
 
   <style id="nifty-console-textfield#panel">
     <attributes childLayout="overlay" height="20px" />
+    <effect>
+      <onActive name="border" border="1px,0px,0px,0px" color="#222f" />
+    </effect>
   </style>
   <style id="nifty-console-textfield#field">
     <attributes childLayout="center" visibleToMouse="true" childClip="true" />
