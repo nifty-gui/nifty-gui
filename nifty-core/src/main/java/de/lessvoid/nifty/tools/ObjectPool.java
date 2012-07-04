@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.tools;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -17,7 +17,7 @@ public class ObjectPool<T> {
     this.factory = initialFactory;
     pool = new ArrayList<T>(size);
     free = new ArrayList<Integer>(size);
-    indexLookUp = new Hashtable<T, Integer>(size);
+    indexLookUp = new HashMap<T, Integer>(size);
     for (int i=0; i<size; i++) {
       T item = initialFactory.createNew();
       pool.add(item);

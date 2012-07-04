@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.render;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
@@ -101,7 +103,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   /**
    * stack to save data.
    */
-  private Stack < SavedRenderState > stack = new Stack < SavedRenderState >();
+  private Deque<SavedRenderState> stack = new ArrayDeque<SavedRenderState>(20);
   private Color whiteColor = new Color("#ffff");
   
   /**
