@@ -51,6 +51,10 @@ public class LwjglRenderDevice implements RenderDevice {
   private int currentClippingX1 = 0;
   private int currentClippingY1 = 0;
 
+  private StringBuilder buffer = new StringBuilder();
+  private int primitiveCount;
+  private int glyphCount;
+
   /**
    * The standard constructor. You'll use this in production code. Using this
    * constructor will configure the RenderDevice to not log FPS on System.out.
@@ -102,7 +106,7 @@ public class LwjglRenderDevice implements RenderDevice {
     }
     return viewportHeight;
   }
-  
+
   private void getViewport() {
     GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
     viewportWidth = viewportBuffer.get(2);
@@ -129,6 +133,8 @@ public class LwjglRenderDevice implements RenderDevice {
     currentClippingY0 = 0;
     currentClippingX1 = 0;
     currentClippingY1 = 0;
+    primitiveCount = 0;
+    glyphCount = 0;
   }
 
   public void endFrame() {
@@ -138,13 +144,22 @@ public class LwjglRenderDevice implements RenderDevice {
     if (diff >= 1000) {
       time += diff;
       lastFrames = frames;
+
+      buffer.setLength(0);
+      buffer.append("FPS: ");
+      buffer.append(lastFrames);
+      buffer.append(", Prim: ");
+      buffer.append(primitiveCount);
+      buffer.append(", Glyph: ");
+      buffer.append(glyphCount);
+
       if (logFPS) {
-        System.out.println("fps: " + frames);
+        System.out.println(buffer.toString());
       }
       frames = 0;
     }
     if (displayFPS) {
-      renderFont(fpsFont, "FPS: " + String.valueOf(lastFrames), 10, getHeight() - fpsFont.getHeight() - 10, Color.WHITE, 1.0f, 1.0f);
+      renderFont(fpsFont, buffer.toString(), 10, getHeight() - fpsFont.getHeight() - 10, Color.WHITE, 1.0f, 1.0f);
     }
 
     // currently the RenderDevice interface does not support a way to be notified when the resolution is changed
@@ -205,6 +220,7 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glVertex2i(x + width, y + height);
       GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
+    primitiveCount++;
   }
 
   public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
@@ -224,6 +240,7 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glColor4f(bottomLeft.getRed(), bottomLeft.getGreen(), bottomLeft.getBlue(), bottomLeft.getAlpha());
       GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
+    primitiveCount++;
   }
 
   /**
@@ -275,6 +292,7 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glTexCoord2f(0.0f,   v1); GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
     GL11.glPopMatrix();
+    primitiveCount++;
   }
 
   /**
@@ -343,6 +361,7 @@ public class LwjglRenderDevice implements RenderDevice {
     GL11.glEnd();
 
     GL11.glPopMatrix();
+    primitiveCount++;
   }
 
   /**
@@ -362,9 +381,9 @@ public class LwjglRenderDevice implements RenderDevice {
     }
     setBlendMode(BlendMode.BLEND);
     if (color == null) {
-      ((LwjglRenderFont)font).getFont().drawStringWithSize(x, y, text, fontSizeX, fontSizeY);
+      glyphCount += ((LwjglRenderFont)font).getFont().drawStringWithSize(x, y, text, fontSizeX, fontSizeY);
     } else {
-      ((LwjglRenderFont)font).getFont().renderWithSizeAndColor(x, y, text, fontSizeX, fontSizeY, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+      glyphCount += ((LwjglRenderFont)font).getFont().renderWithSizeAndColor(x, y, text, fontSizeX, fontSizeY, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
   }
 

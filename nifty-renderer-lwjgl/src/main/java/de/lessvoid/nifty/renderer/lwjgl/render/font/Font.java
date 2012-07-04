@@ -130,20 +130,20 @@ public class Font {
     }
   }
 
-  public void drawString(int x, int y, String text) {
-    internalRenderText(x, y, text, 1.0f, 1.0f, false, 1.0f);
+  public int drawString(int x, int y, String text) {
+    return internalRenderText(x, y, text, 1.0f, 1.0f, false, 1.0f);
   }
 
-  public void drawStringWithSize(int x, int y, String text, float sizeX, float sizeY) {
-    internalRenderText(x, y, text, sizeX, sizeY, false, 1.0f);
+  public int drawStringWithSize(int x, int y, String text, float sizeX, float sizeY) {
+    return internalRenderText(x, y, text, sizeX, sizeY, false, 1.0f);
   }
 
-  public void renderWithSizeAndColor(int x, int y, String text, float sizeX, float sizeY, float r, float g, float b, float a) {
+  public int renderWithSizeAndColor(int x, int y, String text, float sizeX, float sizeY, float r, float g, float b, float a) {
     GL11.glColor4f(r, g, b, a);
-    internalRenderText(x, y, text, sizeX, sizeY, false, a);
+    return internalRenderText(x, y, text, sizeX, sizeY, false, a);
   }
 
-  private void internalRenderText(
+  private int internalRenderText(
       final int xPos,
       final int yPos,
       final String text,
@@ -160,6 +160,7 @@ public class Font {
     int y = yPos;
 
     int activeTextureIdx = -1;
+    int counter = 0;
 
     for (int i = 0; i < text.length(); i++) {
       colorValueParser.isColor(text, i);
@@ -220,12 +221,14 @@ public class Font {
             GL11.glPopAttrib();
 
             characterDone = true;
+            counter++;
           }
         }
 
         if (!characterDone) {
           GL11.glCallList(displayListMap.get(currentc));
           Tools.checkGLError("glCallList");
+          counter++;
         }
 
         x += characterWidth;
@@ -233,6 +236,7 @@ public class Font {
     }
 
     GL11.glPopMatrix();
+    return counter;
   }
 
   private void disableBlend() {
