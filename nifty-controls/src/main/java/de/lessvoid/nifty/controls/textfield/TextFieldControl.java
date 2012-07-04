@@ -8,7 +8,16 @@ import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.controls.textfield.filter.delete.TextFieldDeleteFilter;
-import de.lessvoid.nifty.controls.textfield.filter.input.*;
+import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptDigits;
+import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptFloat;
+import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptLetters;
+import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptLowerCase;
+import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptNegativeDigits;
+import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptRegex;
+import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptUpperCase;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharSequenceFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputFilter;
 import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
 import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
 import de.lessvoid.nifty.effects.EffectEventId;
@@ -254,9 +263,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
     tempBuilder.append("px"); //NON-NLS
     cursorElement.setConstraintY(new SizeValue(tempBuilder.toString()));
     cursorElement.startEffect(EffectEventId.onActive, null);
-    if (screen != null) {
-      screen.layoutLayers();
-    }
+    cursorElement.getParent().layoutElements();
   }
 
   private void calcFirstVisibleIndex(final int cursorPos) {
