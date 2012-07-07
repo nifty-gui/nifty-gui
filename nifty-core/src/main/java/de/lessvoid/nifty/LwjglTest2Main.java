@@ -35,10 +35,10 @@ public class LwjglTest2Main {
         "vVertex",
         "vTexCoords",
         "instanceColor",
-        "instanceTransform1",
-        "instanceTransform2",
-        "instanceTransform3",
-        "instanceTransform4");
+        "instanceScale",
+        "instanceAngle",
+        "instancePos",
+        "instanceDim");
     shader.compile("nifty.vs", "nifty.fs");
     shader.activate();
     shader.setUniform("mProjection", MatrixFactory.createProjection(1024, 768));
@@ -57,13 +57,13 @@ public class LwjglTest2Main {
     va.enableVertexAttributef(0, 2, 4, 0);
     va.enableVertexAttributef(1, 2, 4, 2);
 
-    RenderBuffer renderBuffer = new RenderBuffer(2000, 4 + 16);
+    RenderBuffer renderBuffer = new RenderBuffer(2000, 4 + 2 + 2 + 2);
 
-    va.enableVertexAttributeDivisorf(2, 4, 20, 0, 1); // color
-    va.enableVertexAttributeDivisorf(3, 4, 20, 4, 1); // transform
-    va.enableVertexAttributeDivisorf(4, 4, 20, 8, 1);
-    va.enableVertexAttributeDivisorf(5, 4, 20, 12, 1);
-    va.enableVertexAttributeDivisorf(6, 4, 20, 16, 1);
+    va.enableVertexAttributeDivisorf(2, 4, 10, 0, 1); // instanceColor
+    va.enableVertexAttributeDivisorf(3, 1, 10, 4, 1); // instanceScale
+    va.enableVertexAttributeDivisorf(4, 1, 10, 5, 1); // instanceAngle
+    va.enableVertexAttributeDivisorf(5, 2, 10, 6, 1); // instancePos
+    va.enableVertexAttributeDivisorf(6, 2, 10, 8, 1); // instanceDim
 
     Element root = new Element();
     for (int i=0; i<100; i++) {

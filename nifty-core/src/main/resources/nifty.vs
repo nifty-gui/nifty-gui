@@ -7,10 +7,10 @@ uniform mat4 mProjection;
 in vec2 vVertex;
 in vec2 vTexCoords;
 in vec4 instanceColor;
-in vec4 instanceTransform1;
-in vec4 instanceTransform2;
-in vec4 instanceTransform3;
-in vec4 instanceTransform4;
+in float instanceScale;
+in float instanceAngle;
+in vec2 instancePos;
+in vec2 instanceDim;
 
 // output
 out vec2 vVaryingTexCoords;
@@ -54,9 +54,20 @@ mat4 scale(float x, float y, float z) {
 void main() {
   vVaryingTexCoords = vTexCoords;
 
-  mat4 transform = mat4(instanceTransform1, instanceTransform2, instanceTransform3, instanceTransform4);
+  mat4 translate = translate(instancePos.x, instancePos.y, 0.0);
+  mat4 scale = scale(instanceScale * instanceDim.x, instanceScale * instanceDim.y, 1.0);
+  mat4 rotate = rotate(instanceAngle, 0.0, 1.0, 0.0);
+  mat4 translate2 = translate(-0.5, -0.5, 0.0);
+  mat4 transform = translate * scale * rotate * translate2;
  
-  gl_Position = mProjection * transform * vec4(vVertex, 0.0, 1.0);
+//    Matrix4f.mul(local, new Matrix4f().translate(new Vector2f(box.getX(), box.getY())), local);
+//    scale = (float) Math.sin(x) / 4.0f + 1.0f;
+//    Matrix4f.mul(local, new Matrix4f().scale(new Vector3f(box.getWidth() * scale, box.getHeight() * scale, 1.0f)), local);
+//    Matrix4f.mul(local, new Matrix4f().rotate(angle, new Vector3f(0.f, 0.f, 1.f)), local);
+//    Matrix4f.mul(local, new Matrix4f().translate(new Vector2f(-0.5f, -0.5f)), local);
+ 
+ 
+  gl_Position = mProjection * transform * vec4(vVertex, -1.0, 1.0);
 
   color = instanceColor;
 }

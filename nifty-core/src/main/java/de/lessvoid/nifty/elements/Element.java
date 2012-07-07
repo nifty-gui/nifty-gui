@@ -25,6 +25,7 @@ public class Element {
   private final LayoutPart layoutPart = new LayoutPart();
   private final Matrix4f local = new Matrix4f();
   private float angle = 0;
+  private float scale = 0;
   private float angleInc;
   private float x = 0;
   private final Color backgroundColor;
@@ -70,12 +71,12 @@ public class Element {
   public void update() {
     Box box = layoutPart.getBox();
 
-    local.setIdentity();
-    Matrix4f.mul(local, new Matrix4f().translate(new Vector2f(box.getX(), box.getY())), local);
-    float scale = (float) Math.sin(x) + 0.5f;
-    Matrix4f.mul(local, new Matrix4f().scale(new Vector3f(box.getWidth() * scale, box.getHeight() * scale, 1.0f)), local);
-    Matrix4f.mul(local, new Matrix4f().rotate(angle, new Vector3f(0.f, 0.f, 1.f)), local);
-    Matrix4f.mul(local, new Matrix4f().translate(new Vector2f(-0.5f, -0.5f)), local);
+//    local.setIdentity();
+//    Matrix4f.mul(local, new Matrix4f().translate(new Vector2f(box.getX(), box.getY())), local);
+    scale = (float) Math.sin(x) / 4.0f + 1.0f;
+//    Matrix4f.mul(local, new Matrix4f().scale(new Vector3f(box.getWidth() * scale, box.getHeight() * scale, 1.0f)), local);
+//    Matrix4f.mul(local, new Matrix4f().rotate(angle, new Vector3f(0.f, 0.f, 1.f)), local);
+//    Matrix4f.mul(local, new Matrix4f().translate(new Vector2f(-0.5f, -0.5f)), local);
 
     angle += angleInc;
     x += 0.0001;
@@ -85,7 +86,7 @@ public class Element {
   }
 
   public void render(final RenderBuffer renderBuffer) {
-    renderBuffer.append(backgroundColor, local);
+    renderBuffer.append(backgroundColor, scale, angle, layoutPart.getBox());
 
     for (int i=0; i<children.size(); i++) {
       children.get(i).render(renderBuffer);
