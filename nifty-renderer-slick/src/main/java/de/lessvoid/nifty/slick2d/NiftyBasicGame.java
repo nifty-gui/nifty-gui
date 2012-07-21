@@ -5,14 +5,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 /**
- * This "game" implements all the features of a Slick BasicGame with the sole purpose of displaying a NiftyGUI on top
- * of
+ * This "game" implements all the features of a Slick BasicGame with the sole purpose of displaying a NiftyGUI on top of
  * it.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
-
   /**
    * The screen that is called when preparing the GUI.
    */
