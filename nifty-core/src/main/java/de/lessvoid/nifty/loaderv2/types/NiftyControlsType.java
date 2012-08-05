@@ -10,6 +10,7 @@ public class NiftyControlsType extends XmlBaseType {
   private Collection < ControlDefinitionType > controlDefinitions = new ArrayList < ControlDefinitionType >();
   private Collection < UseControlsType > useControls = new ArrayList < UseControlsType >();
   private Collection < PopupType > popups = new ArrayList < PopupType >();
+  private Collection < ResourceBundleType > resourceBundles = new ArrayList < ResourceBundleType >();
 
   public void addControlDefinition(final ControlDefinitionType controlDefinitionType) {
     controlDefinitions.add(controlDefinitionType);
@@ -23,12 +24,19 @@ public class NiftyControlsType extends XmlBaseType {
     popups.add(popupType);
   }
 
+  public void addResourceBundle(final ResourceBundleType resourceBundle) {
+    resourceBundles.add(resourceBundle);
+  }
+
   public void loadControls(final NiftyLoader niftyLoader, final NiftyType niftyType) throws Exception {
     for (UseControlsType useControl : useControls) {
       useControl.loadControl(niftyLoader, niftyType);
     }
     for (ControlDefinitionType controlDefinition : controlDefinitions) {
       niftyType.addControlDefinition(controlDefinition);
+    }
+    for (ResourceBundleType bundle : resourceBundles) {
+      niftyType.addResourceBundle(bundle);
     }
     for (PopupType popup : popups) {
       niftyType.addPopup(popup);
