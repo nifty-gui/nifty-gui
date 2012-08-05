@@ -3,12 +3,8 @@ package de.lessvoid.nifty.controls.dropdown;
 import java.util.List;
 import java.util.Properties;
 
-import org.bushe.swing.event.EventTopicSubscriber;
-
-import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
@@ -59,7 +55,7 @@ public class DropDownPopup<T> extends AbstractController {
     dropDownControl.refresh();
   }
 
-  @SuppressWarnings({ "deprecation", "rawtypes" })
+  @SuppressWarnings({"deprecation", "rawtypes"})
   private void linkPopupToDropDownPosition(final DropDownControl<T> dropDownControl) {
     Element panel = getElement().findElementByName("#panel");
     panel.setConstraintX(new SizeValue(dropDownControl.getElement().getX() + "px"));
@@ -81,15 +77,16 @@ public class DropDownPopup<T> extends AbstractController {
     getElement().layoutElements();
   }
 
-  @SuppressWarnings({ "deprecation", "rawtypes" })
+  @SuppressWarnings({"deprecation", "rawtypes"})
   private void updateMoveEffect(final ListBoxControl listBox, final int direction) {
-    List<Effect> moveEffects = getElement().findElementByName("#panel").getEffects(EffectEventId.onStartScreen, Move.class);
-    if (!moveEffects.isEmpty()) {
+    List<Effect> moveEffects = getElement().findElementByName("#panel").getEffects(EffectEventId.onStartScreen,
+        Move.class);
+    if ((moveEffects != null) && !moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));
       moveEffects.get(0).getParameters().setProperty("mode", "fromOffset");
     }
     moveEffects = getElement().findElementByName("#panel").getEffects(EffectEventId.onEndScreen, Move.class);
-    if (!moveEffects.isEmpty()) {
+    if ((moveEffects != null) && !moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));
       moveEffects.get(0).getParameters().setProperty("mode", "toOffset");
     }

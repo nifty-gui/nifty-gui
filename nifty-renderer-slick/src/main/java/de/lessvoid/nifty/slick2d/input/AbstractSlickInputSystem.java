@@ -66,8 +66,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
   }
 
   /**
-   * This is called by Nifty and used to poll the input events. In case the event is not handled by the NiftyGUI is
-   * send
+   * This is called by Nifty and used to poll the input events. In case the event is not handled by the NiftyGUI is send
    * to the additional input event handler that is implemented by the {@link #handleInputEvent(InputEvent)} function.
    *
    * @param inputEventConsumer the input event consumer that is provided by Nifty, it will receive all events first
@@ -135,6 +134,10 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
 
   @Override
   public final void mouseDragged(final int oldX, final int oldY, final int newX, final int newY) {
+    if (buttonPressedStack.isEmpty()) {
+      // drag started outside of the screen. Can't handle this one.
+      return;
+    }
     final int lastButton = buttonPressedStack.get(buttonPressedStack.size() - 1);
     inputEventList.add(new MouseEventDragged(lastButton, oldX, oldY, newX, newY));
   }
@@ -167,8 +170,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
     if (input == null) {
       throw new IllegalStateException("Can't generate mouse wheel events without a reference to the Input");
     }
-    inputEventList.add(new MouseEventWheelMoved(input.getMouseX(), input.getMouseY(),
-        change / WHEEL_DELTA_CORRECTION));
+    inputEventList.add(new MouseEventWheelMoved(input.getMouseX(), input.getMouseY(), change / WHEEL_DELTA_CORRECTION));
   }
 
   /**
@@ -210,8 +212,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
   }
 
   /**
-   * Set the {@link Input} instance that is used by Slick to handle the user input. Some functions of this class
-   * require
+   * Set the {@link Input} instance that is used by Slick to handle the user input. Some functions of this class require
    * this instance to work properly. Calling this function will also make sure that the {@link Input} instance is
    * configured properly so the GUI works as expected.
    *

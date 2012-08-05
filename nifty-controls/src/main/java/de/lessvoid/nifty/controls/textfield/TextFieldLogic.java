@@ -442,7 +442,7 @@ public class TextFieldLogic {
     if ((maxLength == TextField.UNLIMITED_LENGTH) || (text.length() < maxLength)) {
       final int insertCnt;
       if (maxLength == TextField.UNLIMITED_LENGTH) {
-        insertCnt = text.length();
+        insertCnt = chars.length();
       } else {
         insertCnt = Math.min(maxLength - text.length(), chars.length());
       }
