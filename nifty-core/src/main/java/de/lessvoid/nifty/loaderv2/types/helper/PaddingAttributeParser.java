@@ -8,10 +8,10 @@ package de.lessvoid.nifty.loaderv2.types.helper;
  * @author void
  */
 public class PaddingAttributeParser {
-  private String left;
-  private String right;
-  private String top;
-  private String bottom;
+  private final String left;
+  private final String right;
+  private final String top;
+  private final String bottom;
 
   public PaddingAttributeParser(final String input) throws Exception {
     if (input == null) {

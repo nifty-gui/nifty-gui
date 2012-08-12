@@ -24,7 +24,7 @@ public class PrimaryClickMouseMethods extends MouseClickMethods {
   @Override
   public boolean onClick(final Nifty nifty, final String onClickAlternateKey, final NiftyMouseInputEvent inputEvent) {
     publishEvent(nifty, new NiftyMousePrimaryClickedEvent(element, inputEvent));
-    element.startEffect(EffectEventId.onClick);
+    element.startEffectWithoutChildren(EffectEventId.onClick);
     return super.onClick(nifty, onClickAlternateKey, inputEvent);
   }
 
@@ -44,7 +44,7 @@ public class PrimaryClickMouseMethods extends MouseClickMethods {
   public boolean onMouseRelease(final Nifty nifty, final NiftyMouseInputEvent mouseEvent) {
     publishEvent(nifty, new NiftyMousePrimaryReleaseEvent(element, mouseEvent));
     boolean result = super.onMouseRelease(nifty, mouseEvent);
-    element.stopEffect(EffectEventId.onClick);
+    element.stopEffectWithoutChildren(EffectEventId.onClick);
     element.getFocusHandler().lostMouseFocus(element);
     return result;
   }

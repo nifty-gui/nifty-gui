@@ -20,7 +20,7 @@ import de.lessvoid.nifty.render.image.ImageModeHelper;
  * @author void
  */
 public class ChangeImage implements EffectImpl {
-  private Logger log = Logger.getLogger(ChangeImage.class.getName());
+  private static Logger log = Logger.getLogger(ChangeImage.class.getName());
   private Element element;
   private NiftyImage activeImage;
   private NiftyImage inactiveImage;
@@ -44,8 +44,8 @@ public class ChangeImage implements EffectImpl {
   private NiftyImage loadImage(final String name, final Nifty nifty, final EffectProperties parameter) {
     NiftyImage image = nifty.getRenderEngine().createImage(parameter.getProperty(name), false);
 
-    String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(parameter);
-    String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(parameter);
+    String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(parameter);
+    String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(parameter);
     if ((areaProviderProperty != null) || (renderStrategyProperty != null)) {
     	image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
     			renderStrategyProperty));

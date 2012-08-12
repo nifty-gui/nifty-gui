@@ -3,7 +3,7 @@ package de.lessvoid.nifty.elements;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -87,8 +87,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   /**
    * the child elements.
    */
-  private List < Element > elements = new ArrayList < Element >();
-  private Set < Element > elementsRenderOrder = new TreeSet < Element >(new Comparator<Element>() {
+  private List < Element > elements = new ArrayList < Element >(0);
+
+  /**
+   * This set defines the render order of the child elements using a Comparator.
+   */
+  private Set < Element > elementsRenderOrderSet = new TreeSet < Element >(new Comparator<Element>() {
 
     /**
      * This uses the renderOrder attribute of the elements to compare them. If the renderOrder
@@ -146,6 +150,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       return elements.indexOf(element);
     }
   });
+
+  /**
+   * We keep a copy of the elementsRenderOrderSet in a simple array for being more GC friendly while rendering.
+   */
+  private Element[] elementsRenderOrder = new Element[0];
 
   /**
    * The LayoutManager we should use for all child elements.
@@ -268,7 +277,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private TimeProvider time;
 
   private List<String> elementDebugOut = new ArrayList<String>();
-  private StringBuffer elementDebug = new StringBuffer();
+  private StringBuilder elementDebug = new StringBuilder();
 
   private boolean parentClipArea = false;
   private int parentClipX;
@@ -277,7 +286,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private int parentClipHeight;
 
   private static Convert convert = new Convert();
-  private static Map < Class < ? extends ElementRenderer >, ApplyRenderer > rendererApplier = new Hashtable < Class < ? extends ElementRenderer>, ApplyRenderer >();
+  private static Map < Class < ? extends ElementRenderer >, ApplyRenderer > rendererApplier = new HashMap < Class < ? extends ElementRenderer>, ApplyRenderer >();
   {
     rendererApplier.put(TextRenderer.class, new ApplyRenderText(convert));
     rendererApplier.put(ImageRenderer.class, new ApplyRendererImage(convert));
@@ -563,7 +572,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
     StringBuffer renderOrder = new StringBuffer();
     renderOrder.append(" render order: ");
-    for (Element e : elementsRenderOrder) {
+    for (Element e : elementsRenderOrderSet) {
       renderOrder.append("[" + e.getId() + " (" + ((e.renderOrder == 0) ? elements.indexOf(e) : e.renderOrder) + ")]");
     }
     elementDebugOut.add(renderOrder.toString());
@@ -686,7 +695,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    */
   public void add(final Element widget) {
     elements.add(widget);
-    elementsRenderOrder.add(widget);
+    elementsRenderOrderSet.add(widget);
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
 
   /**
@@ -734,9 +744,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void renderInternalChildElements(final NiftyRenderEngine r) {
-    Iterator<Element> elementIter = elementsRenderOrder.iterator();
-    while (elementIter.hasNext()) {
-      Element p = elementIter.next();
+    for (int i=0; i<elementsRenderOrder.length; i++) {
+      Element p = elementsRenderOrder[i];
       p.render(r);
     }
   }
@@ -1809,8 +1818,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void renderOrderChanged(final Element element) {
-    elementsRenderOrder.remove(element);
-    elementsRenderOrder.add(element);
+    elementsRenderOrderSet.remove(element);
+    elementsRenderOrderSet.add(element);
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
 
   public int getRenderOrder() {
@@ -2263,8 +2273,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
   // package private to prevent public access
   void internalRemoveElement(final Element element) {
+    // so now that's odd: we need to remove the element first from the
+    // elementsRenderOrder and THEN from the elements list. this is because
+    // the elementsRenderOrder comparator uses the index of the element in
+    // the elements list >_<
+    //
+    // the main issue here is of course the splitted data structure. something
+    // we need to adress in 1.4 or 2.0.
+    elementsRenderOrderSet.remove(element);
+
+    // now that the element has been removed from the elementsRenderOrder set
+    // we can remove it from the elements list as well.
     elements.remove(element);
-    elementsRenderOrder.remove(element);
+
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
 
   // package private to prevent public access
@@ -2275,7 +2297,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       el.internalRemoveElementWithChilds();
     }
  
+    elementsRenderOrderSet.clear();
     elements.clear();
-    elementsRenderOrder.clear();
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
 }

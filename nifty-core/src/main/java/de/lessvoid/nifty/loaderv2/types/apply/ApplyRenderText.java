@@ -6,7 +6,7 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ApplyRenderText implements ApplyRenderer {
-  private Convert convert;
+  private final Convert convert;
 
   public ApplyRenderText(final Convert convertParam) {
     convert = convertParam;

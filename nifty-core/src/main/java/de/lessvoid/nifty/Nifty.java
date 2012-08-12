@@ -730,21 +730,24 @@ public class Nifty {
   private void displayResolutionChanged() {
     getRenderEngine().displayResolutionChanged();
 
+    resetMouseInputEvents();
+
     int newWidth = getRenderEngine().getWidth();
     int newHeight = getRenderEngine().getHeight();
-    updateLayoutPart(currentScreen.getRootElement().getLayoutPart(), newWidth, newHeight);
 
-    for (Element e : currentScreen.getLayerElements()) {
-      updateLayoutPart(e.getLayoutPart(), newWidth, newHeight);
+    for (Screen screen : screens.values()) {
+      updateLayoutPart(screen.getRootElement().getLayoutPart(), newWidth, newHeight);
+      for (Element e : screen.getLayerElements()) {
+        updateLayoutPart(e.getLayoutPart(), newWidth, newHeight);
+      }
+      screen.resetLayout();
     }
 
     for (Element e : popups.values()) {
       updateLayoutPart(e.getLayoutPart(), newWidth, newHeight);
     }
 
-    resetMouseInputEvents();
-
-    currentScreen.resetLayout();
+    // we refresh the current screen right here. all other screens will be refreshed when they are activated.
     currentScreen.layoutLayers();
   }
 

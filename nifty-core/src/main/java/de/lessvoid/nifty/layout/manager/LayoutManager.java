@@ -10,6 +10,12 @@ import de.lessvoid.nifty.tools.SizeValue;
  * The Layout interface must be implemented by all Layout Managers.
  * It defines the basic interface to layout components.
  *
+ * Implementation note:
+ *
+ * Most of the standard LayoutManager implementation will only be instantiated once and the same instance will be
+ * shared by multiple Elements. This is done to save runtime and memory costs when using lots of Elements.
+ * That's why it's probably a good idea to not use any instance variables in LayoutManager implementations!
+ *
  * @author void
  */
 public interface LayoutManager {

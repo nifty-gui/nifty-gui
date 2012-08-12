@@ -16,7 +16,7 @@ import de.lessvoid.nifty.tools.TargetElementResolver;
  */
 public class Move implements EffectImpl {
 
-  private Logger log = Logger.getLogger(Move.class.getName());
+  private static Logger log = Logger.getLogger(Move.class.getName());
 
   private static final String LEFT = "left";
   private static final String RIGHT = "right";

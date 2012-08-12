@@ -8,7 +8,7 @@ import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
 public class TypeProcessor implements XmlProcessor {
-  private Schema niftyXmlSchema;
+  private final Schema niftyXmlSchema;
 
   public TypeProcessor(final Schema niftyXmlSchemaParam) {
     niftyXmlSchema = niftyXmlSchemaParam;

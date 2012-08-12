@@ -12,7 +12,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 
 public class NiftyMouseImpl implements NiftyMouse {
-  private Logger log = Logger.getLogger(NiftyMouseImpl.class.getName());
+  private static Logger log = Logger.getLogger(NiftyMouseImpl.class.getName());
   private RenderDevice renderDevice;
   private InputSystem inputSystem;
   private Map < String, MouseCursor > registeredMouseCursors = new Hashtable < String, MouseCursor >();

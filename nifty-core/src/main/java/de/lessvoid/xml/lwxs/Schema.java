@@ -17,7 +17,7 @@ import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
 public class Schema implements XmlProcessor {
-  private Logger log = Logger.getLogger(Schema.class.getName());
+  private static Logger log = Logger.getLogger(Schema.class.getName());
   private Map < String, Type > types = new HashMap < String, Type >();
   private String packageString;
   private String root;

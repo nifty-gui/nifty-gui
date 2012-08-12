@@ -17,7 +17,7 @@ import de.lessvoid.nifty.tools.time.TimeInterpolator;
  * @author void
  */
 public class Effect {
-  private Logger log = Logger.getLogger(Effect.class.getName());
+  private static Logger log = Logger.getLogger(Effect.class.getName());
   private EffectEventId effectEventId;
   private boolean active;
   private Element element;
@@ -88,6 +88,10 @@ public class Effect {
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
     effectEvents.init(nifty, controllers, parameter);
     customFlag = false;
+
+    if (hoverEffect) {
+      element.setVisibleToMouseEvents(true);
+    }
   }
 
   public boolean start(final String alternate, final String customKey) {

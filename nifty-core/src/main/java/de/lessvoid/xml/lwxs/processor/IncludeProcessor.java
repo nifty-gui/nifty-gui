@@ -1,7 +1,6 @@
 package de.lessvoid.xml.lwxs.processor;
 
 import java.io.InputStream;
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.xmlpull.mxp1.MXParser;
@@ -14,8 +13,8 @@ import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
 public class IncludeProcessor implements XmlProcessor {
-  private Map < String, Type > types = new Hashtable < String, Type >();
-  private NiftyResourceLoader resourceLoader;
+  private final Map < String, Type > types;
+  private final NiftyResourceLoader resourceLoader;
 
   public IncludeProcessor(final NiftyResourceLoader resourceLader, final Map < String, Type > typesParam) {
     this.resourceLoader = resourceLader;

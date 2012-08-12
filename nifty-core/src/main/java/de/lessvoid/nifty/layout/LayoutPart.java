@@ -13,12 +13,12 @@ public class LayoutPart {
   /**
    * the box.
    */
-  private Box box;
+  private final Box box;
 
   /**
    * the box constraints.
    */
-  private BoxConstraints boxConstraints;
+  private final BoxConstraints boxConstraints;
 
   /**
    * Create a new instance.
@@ -64,7 +64,7 @@ public class LayoutPart {
   }
 
   public String toString() {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     result.append("box [" + box.getX() + ", " + box.getY() + ", " + box.getWidth() + ", " + box.getHeight() + "] with constraints [" + boxConstraints.getX() + ", " + boxConstraints.getY() + ", " + boxConstraints.getWidth() + ", " + boxConstraints.getHeight() + "]");
     return result.toString();
   }

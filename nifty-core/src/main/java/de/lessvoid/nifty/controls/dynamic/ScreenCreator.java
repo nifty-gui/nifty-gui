@@ -11,7 +11,7 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.xml.tools.ClassHelper;
 
 public class ScreenCreator {
-  private Logger log = Logger.getLogger(ScreenCreator.class.getName());
+  private static Logger log = Logger.getLogger(ScreenCreator.class.getName());
 
   private String id;
   private ScreenController screenController;

@@ -9,7 +9,7 @@ import de.lessvoid.nifty.loaderv2.types.helper.NullElementRendererCreator;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ControlType extends ElementType {
-  private Logger log = Logger.getLogger(ControlType.class.getName());
+  private static Logger log = Logger.getLogger(ControlType.class.getName());
 
   public ControlType() {
     super();

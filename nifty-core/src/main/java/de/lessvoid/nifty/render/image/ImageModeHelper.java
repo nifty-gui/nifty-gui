@@ -11,11 +11,14 @@ import de.lessvoid.nifty.ParameterizedObjectFactory;
 public class ImageModeHelper {
 	private static Logger log = Logger.getLogger(ParameterizedObjectFactory.class.getName());
 
-	public String getAreaProviderProperty(final Properties properties) {
+	private ImageModeHelper() {
+	}
+
+	public static String getAreaProviderProperty(final Properties properties) {
 		return getAreaProviderProperty(new StringPropertyAdapter(properties));
 	}
 
-	public String getAreaProviderProperty(final Map<String, String> properties) {
+	public static String getAreaProviderProperty(final Map<String, String> properties) {
 		final String imageModeProperty = properties.get("imageMode");
 		String property = getAreaProviderProperty(imageModeProperty);
 		if (property != null) {
@@ -26,7 +29,7 @@ public class ImageModeHelper {
 		return properties.get("imageArea");
 	}
 
-	public String getAreaProviderProperty(final String imageModeProperty) {
+	public static String getAreaProviderProperty(final String imageModeProperty) {
 		if (imageModeProperty != null) {
 			final String[] imageMode = imageModeProperty.split(":");
 			final String imageModeName = imageMode[0];
@@ -47,11 +50,11 @@ public class ImageModeHelper {
 		return null;
 	}
 
-	public String getRenderStrategyProperty(final Properties properties) {
+	public static String getRenderStrategyProperty(final Properties properties) {
 		return getRenderStrategyProperty(new StringPropertyAdapter(properties));
 	}
 
-	public String getRenderStrategyProperty(final Map<String, String> properties) {
+	public static String getRenderStrategyProperty(final Map<String, String> properties) {
 		final String imageModeProperty = properties.get("imageMode");
 		String property = getRenderStrategyProperty(imageModeProperty);
 		if (property != null) {
@@ -63,7 +66,7 @@ public class ImageModeHelper {
 		return properties.get("renderStrategy");
 	}
 
-	public String getRenderStrategyProperty(final String imageModeProperty) {
+	public static String getRenderStrategyProperty(final String imageModeProperty) {
 		if (imageModeProperty != null) {
 			final String[] imageMode = imageModeProperty.split(":");
 			final String imageModeName = imageMode[0];
@@ -86,7 +89,7 @@ public class ImageModeHelper {
 		return null;
 	}
 
-	private String getImageModeParameters(final String[] imageMode) {
+	private static String getImageModeParameters(final String[] imageMode) {
 		if (imageMode.length > 1) {
 			return imageMode[1];
 		}
@@ -94,7 +97,7 @@ public class ImageModeHelper {
 		return "";
 	}
 
-	private String getNinePartParameters(final String imageMode) {
+	private static String getNinePartParameters(final String imageMode) {
 		String[] split = imageMode.split("(\\d+,){3}", 2);
 		if (split.length > 1) {
 			return split[1];

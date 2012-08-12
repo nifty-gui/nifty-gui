@@ -19,7 +19,7 @@ import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.tools.ClassHelper;
 
 public class ScreenType extends XmlBaseType {
-  private Logger log = Logger.getLogger(ScreenType.class.getName());
+  private static Logger log = Logger.getLogger(ScreenType.class.getName());
   private Collection < LayerType > layers = new ArrayList < LayerType >();
 
   public void addLayer(final LayerType layer) {

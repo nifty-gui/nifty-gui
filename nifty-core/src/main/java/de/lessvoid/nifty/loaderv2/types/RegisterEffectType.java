@@ -7,7 +7,7 @@ import de.lessvoid.xml.tools.ClassHelper;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class RegisterEffectType extends XmlBaseType {
-  private Logger logger = Logger.getLogger(RegisterEffectType.class.getName());
+  private static Logger logger = Logger.getLogger(RegisterEffectType.class.getName());
 
   public RegisterEffectType() {
   }

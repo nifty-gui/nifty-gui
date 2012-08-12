@@ -12,7 +12,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  * @author void
  */
 public class FocusHandler {
-  private Logger log = Logger.getLogger(FocusHandler.class.getName());
+  private static Logger log = Logger.getLogger(FocusHandler.class.getName());
 
   private ArrayList < Element > entries = new ArrayList < Element >();
   private ArrayList < ArrayList < Element >> elementBuffer = new ArrayList < ArrayList < Element >>();

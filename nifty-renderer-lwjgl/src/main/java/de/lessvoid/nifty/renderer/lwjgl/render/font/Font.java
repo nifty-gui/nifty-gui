@@ -7,9 +7,9 @@ import org.lwjgl.opengl.GL11;
 
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
-import de.lessvoid.nifty.renderer.lwjgl.render.font.ColorValueParser.Result;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.ColorValueParser;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
@@ -130,20 +130,20 @@ public class Font {
     }
   }
 
-  public void drawString(int x, int y, String text) {
-    internalRenderText(x, y, text, 1.0f, 1.0f, false, 1.0f);
+  public int drawString(int x, int y, String text) {
+    return internalRenderText(x, y, text, 1.0f, 1.0f, false, 1.0f);
   }
 
-  public void drawStringWithSize(int x, int y, String text, float sizeX, float sizeY) {
-    internalRenderText(x, y, text, sizeX, sizeY, false, 1.0f);
+  public int drawStringWithSize(int x, int y, String text, float sizeX, float sizeY) {
+    return internalRenderText(x, y, text, sizeX, sizeY, false, 1.0f);
   }
 
-  public void renderWithSizeAndColor(int x, int y, String text, float sizeX, float sizeY, float r, float g, float b, float a) {
+  public int renderWithSizeAndColor(int x, int y, String text, float sizeX, float sizeY, float r, float g, float b, float a) {
     GL11.glColor4f(r, g, b, a);
-    internalRenderText(x, y, text, sizeX, sizeY, false, a);
+    return internalRenderText(x, y, text, sizeX, sizeY, false, a);
   }
 
-  private void internalRenderText(
+  private int internalRenderText(
       final int xPos,
       final int yPos,
       final String text,
@@ -160,17 +160,18 @@ public class Font {
     int y = yPos;
 
     int activeTextureIdx = -1;
+    int counter = 0;
 
     for (int i = 0; i < text.length(); i++) {
-      Result result = colorValueParser.isColor(text, i);
-      while (result.isColor()) {
-        Color color = result.getColor();
+      colorValueParser.isColor(text, i);
+      while (colorValueParser.isColor()) {
+        Color color = colorValueParser.getColor();
         GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-        i = result.getNextIndex();
+        i = colorValueParser.getNextIndex();
         if (i >= text.length()) {
           break;
         }
-        result = colorValueParser.isColor(text, i);
+        colorValueParser.isColor(text, i);
       }
       if (i >= text.length()) {
         break;
@@ -220,12 +221,14 @@ public class Font {
             GL11.glPopAttrib();
 
             characterDone = true;
+            counter++;
           }
         }
 
         if (!characterDone) {
           GL11.glCallList(displayListMap.get(currentc));
           Tools.checkGLError("glCallList");
+          counter++;
         }
 
         x += characterWidth;
@@ -233,6 +236,7 @@ public class Font {
     }
 
     GL11.glPopMatrix();
+    return counter;
   }
 
   private void disableBlend() {
@@ -252,9 +256,9 @@ public class Font {
     int length = 0;
 
     for (int i = 0; i < text.length(); i++) {
-      Result result = colorValueParser.isColor(text, i);
-      if (result.isColor()) {
-        i = result.getNextIndex();
+      colorValueParser.isColor(text, i);
+      if (colorValueParser.isColor()) {
+        i = colorValueParser.getNextIndex();
         if (i >= text.length()) {
           break;
         }

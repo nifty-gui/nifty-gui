@@ -59,8 +59,8 @@ public class NiftyImageMode implements ImageMode {
 	 * @return a RenderImageMode
 	 */
 	public static NiftyImageMode valueOf(final String imageMode) {
-		String areaProviderProperty = new ImageModeHelper().getAreaProviderProperty(imageMode);
-		String renderStrategyProperty = new ImageModeHelper().getRenderStrategyProperty(imageMode);
+		String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(imageMode);
+		String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(imageMode);
 
 		return new NiftyImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
 				renderStrategyProperty));

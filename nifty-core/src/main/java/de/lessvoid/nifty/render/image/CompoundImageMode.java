@@ -11,7 +11,6 @@ import de.lessvoid.nifty.tools.Color;
 public class CompoundImageMode implements ImageMode {
   private AreaProvider m_areaProvider;
   private RenderStrategy m_renderStrategy;
-  private ImageModeHelper imageModeHelper = new ImageModeHelper();
 
   public CompoundImageMode(AreaProvider areaProvider, RenderStrategy renderStrategy) {
     m_areaProvider = areaProvider;
@@ -22,10 +21,10 @@ public class CompoundImageMode implements ImageMode {
   public void setParameters(final String parameters) {
     ImageModeFactory imageModeFactory = ImageModeFactory.getSharedInstance();
 
-    String areaProviderProperty = imageModeHelper.getAreaProviderProperty(parameters);
+    String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(parameters);
     m_areaProvider = imageModeFactory.getAreaProvider(areaProviderProperty);
 
-    String renderStrategyProperty = imageModeHelper.getRenderStrategyProperty(parameters);
+    String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(parameters);
     m_renderStrategy = imageModeFactory.getRenderStrategy(renderStrategyProperty);
   }
 

@@ -17,9 +17,6 @@
   </style>
   <style id="nifty-console-listbox#scrollpanel">
     <attributes focusable="true" borderBottom="1px" borderColor="#000f"/>
-    <effect overlay="true">
-      <onActive name="border" border="0px,0px,1px,0px" color="#222f" inset="1px,0px,0px,1px"/>
-    </effect>
   </style>
   <style id="nifty-console-listbox#bottom-right">
     <attributes width="20px" height="20px" />
@@ -35,12 +32,13 @@
 
   <style id="nifty-console-textfield#panel">
     <attributes childLayout="overlay" height="20px" />
-  </style>
-  <style id="nifty-console-textfield#field">
-    <attributes childLayout="center" visibleToMouse="true" childClip="true" />
     <effect>
       <onHover name="changeMouseCursor" id="textFieldCursor" />
+      <onActive name="border" border="1px,0px,0px,0px" color="#222f" />
     </effect>
+  </style>
+  <style id="nifty-console-textfield#field">
+    <attributes childLayout="center" childClip="true" />
   </style>
   <style id="nifty-console-textfield#text">
     <attributes font="console.fnt" selectionColor="#f00f" visibleToMouse="false" align="left" textHAlign="left" textVAlign="center" valign="center"/>
@@ -51,7 +49,7 @@
   <style id="nifty-console-textfield#cursor">
     <attributes filename="console_cursor_empty.png"/>
     <effect>
-      <onActive name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="console_cursor.png" post="true"/>
+      <onCustom name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="console_cursor.png" post="true"/>
     </effect>
   </style>
 

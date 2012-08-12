@@ -18,7 +18,7 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class ColorBar implements EffectImpl {
-  private Logger log = Logger.getLogger(ColorBar.class.getName());
+  private static Logger log = Logger.getLogger(ColorBar.class.getName());
   private Color color;
   private Color tempColor = new Color("#000f");
   private SizeValue width;

@@ -11,7 +11,7 @@ import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.StopWatch;
 
 public class NiftyType extends XmlBaseType {
-  private Logger log = Logger.getLogger(NiftyType.class.getName());
+  private static Logger log = Logger.getLogger(NiftyType.class.getName());
 
   private Collection < StyleType > styles = new ArrayList < StyleType >();
   private Collection < UseStylesType > useStyles = new ArrayList < UseStylesType >();

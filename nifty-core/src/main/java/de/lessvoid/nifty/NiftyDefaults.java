@@ -11,6 +11,7 @@ public class NiftyDefaults {
     nifty.registerEffect(new RegisterEffectType("autoScroll", "de.lessvoid.nifty.effects.impl.AutoScroll"));
     nifty.registerEffect(new RegisterEffectType("border", "de.lessvoid.nifty.effects.impl.Border"));
     nifty.registerEffect(new RegisterEffectType("blendMode", "de.lessvoid.nifty.effects.impl.BlendMode"));
+    nifty.registerEffect(new RegisterEffectType("changeColor", "de.lessvoid.nifty.effects.impl.ChangeColor"));
     nifty.registerEffect(new RegisterEffectType("changeFont", "de.lessvoid.nifty.effects.impl.ChangeFont"));
     nifty.registerEffect(new RegisterEffectType("changeImage", "de.lessvoid.nifty.effects.impl.ChangeImage"));
     nifty.registerEffect(new RegisterEffectType("changeMouseCursor", "de.lessvoid.nifty.effects.impl.ChangeMouseCursor"));

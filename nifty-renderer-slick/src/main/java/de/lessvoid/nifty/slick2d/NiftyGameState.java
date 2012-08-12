@@ -6,6 +6,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+/**
+ * This is the game state implementation that supports the Nifty-GUI. Its used for game states that display only the
+ * Nifty-GUI and nothing other then that.
+ *
+ * @author Martin Karing &gt;nitram@illarion.org&lt;
+ */
 public abstract class NiftyGameState extends NiftyOverlayGameState {
   /**
    * The screen that is called upon entering the game state.

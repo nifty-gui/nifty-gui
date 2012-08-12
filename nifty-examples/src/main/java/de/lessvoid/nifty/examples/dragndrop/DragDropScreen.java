@@ -13,6 +13,7 @@ import de.lessvoid.nifty.controls.Droppable;
 import de.lessvoid.nifty.controls.DroppableDropFilter;
 import de.lessvoid.nifty.controls.DroppableDroppedEvent;
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.controls.WindowClosedEvent;
 import de.lessvoid.nifty.controls.dragndrop.builder.DraggableBuilder;
 import de.lessvoid.nifty.controls.window.builder.CreateWindow;
 import de.lessvoid.nifty.elements.Element;
@@ -91,7 +92,12 @@ public class DragDropScreen implements ScreenController, NiftyExample {
     windowAttributes.setHeight("240px");
     windowAttributes.create(nifty, screen, windows);
   }
-  
+
+  @NiftyEventSubscriber(pattern="window-.*")
+  public void onAnyWindowClose(final String id, final WindowClosedEvent event) {
+    setStatus("Window [" + id + "] " + (event.isHidden() ? "hidden" : "closed"));
+  }
+
   private String randomColor() {
     return "#" + Integer.toHexString(random.nextInt(200)) + Integer.toHexString(random.nextInt(200)) + Integer.toHexString(random.nextInt(200)) + "ff";
   }

@@ -1,6 +1,6 @@
 package de.lessvoid.xml.xpp3;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,7 +12,7 @@ public class SubstitutionGroup {
   /**
    * tags.
    */
-  private Map < String, XmlProcessor > registeredTags = new Hashtable < String, XmlProcessor >();
+  private Map < String, XmlProcessor > registeredTags = new HashMap < String, XmlProcessor >();
 
   /**
    * Check if the given tag is contained in the list of registered tags.

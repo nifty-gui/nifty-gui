@@ -25,7 +25,7 @@ import de.lessvoid.xml.lwxs.Schema;
 import de.lessvoid.xml.xpp3.XmlParser;
 
 public class NiftyLoader {
-  private Logger log = Logger.getLogger(NiftyLoader.class.getName());
+  private static Logger log = Logger.getLogger(NiftyLoader.class.getName());
   private Map < String, Schema > schemes = new Hashtable < String, Schema >();
   private TimeProvider timeProvider;
   private Nifty nifty;

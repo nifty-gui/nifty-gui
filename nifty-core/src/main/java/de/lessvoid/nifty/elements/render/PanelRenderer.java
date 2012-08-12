@@ -17,7 +17,7 @@ public class PanelRenderer implements ElementRenderer {
    */
   private Color backgroundColor;
 
-  private Color debugColor = new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), .5f);
+  private Color debugColor;
 
   /**
    * Default constructor.
@@ -36,7 +36,7 @@ public class PanelRenderer implements ElementRenderer {
   public void render(final Element element, final NiftyRenderEngine r) {
     if (element.getNifty().isDebugOptionPanelColors()) {
       r.saveState(null);
-      r.setColor(debugColor);
+      r.setColor(getDebugColor());
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
       r.restoreState();
       return;
@@ -54,6 +54,14 @@ public class PanelRenderer implements ElementRenderer {
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
       r.restoreState();
     }
+  }
+
+  private Color getDebugColor() {
+    if (debugColor != null) {
+      return debugColor;
+    }
+    debugColor =  new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), .5f);
+    return debugColor;
   }
 
   /**

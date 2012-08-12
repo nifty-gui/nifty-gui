@@ -16,7 +16,7 @@ import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class LwjglRenderImage implements RenderImage {
-  private Logger log = Logger.getLogger(LwjglRenderImage.class.getName());
+  private static Logger log = Logger.getLogger(LwjglRenderImage.class.getName());
 
   private int width;
   private int height;
