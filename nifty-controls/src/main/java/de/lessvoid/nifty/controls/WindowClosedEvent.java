@@ -2,7 +2,7 @@ package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
 
-public class WindowClosedEvent implements NiftyEvent<Void> {
+public class WindowClosedEvent implements NiftyEvent {
   private final Window window;
   private final boolean hidden;
 
