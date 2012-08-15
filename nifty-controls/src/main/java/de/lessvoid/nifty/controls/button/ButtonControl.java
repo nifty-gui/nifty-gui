@@ -13,6 +13,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.screen.Screen;
@@ -70,20 +71,20 @@ public class ButtonControl extends AbstractController implements Button {
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     Element buttonElement = getElement();
-    if (inputEvent == NiftyInputEvent.NextInputElement) {
+    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
       if (focusHandler != null) {
         focusHandler.getNext(buttonElement).setFocus();
       }
       return true;
-    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
       if (focusHandler != null) {
         focusHandler.getPrev(buttonElement).setFocus();
       }
       return true;
-    } else if (inputEvent == NiftyInputEvent.Activate) {
+    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
       buttonClick();
       return true;
-    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
       if (focusHandler != null) {
         Element nextElement = focusHandler.getNext(buttonElement);
         if (nextElement.getParent().equals(buttonElement.getParent())) {
@@ -91,7 +92,7 @@ public class ButtonControl extends AbstractController implements Button {
           return true;
         }
       }
-    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorUp) {
       if (focusHandler != null) {
         Element prevElement = focusHandler.getPrev(buttonElement);
         if (prevElement.getParent().equals(buttonElement.getParent())) {

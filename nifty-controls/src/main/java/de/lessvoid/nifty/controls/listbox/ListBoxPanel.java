@@ -7,6 +7,7 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -32,19 +33,19 @@ public class ListBoxPanel<T> extends AbstractController {
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyInputEvent.NextInputElement) {
+    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
       if (focusHandler != null) {
         Element nextElement = focusHandler.getNext(element);
         nextElement.setFocus();
         return true;
       }
-    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
       if (focusHandler != null) {
         Element prevElement = focusHandler.getPrev(element);
         prevElement.setFocus();
         return true;
       }
-    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
       if (hasElements()) {
         int focusItemIndex = listBox.getFocusItemIndex();
         if (focusItemIndex < listBox.itemCount() - 1) {
@@ -52,7 +53,7 @@ public class ListBoxPanel<T> extends AbstractController {
           return true;
         }
       }
-    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorUp) {
       if (hasElements()) {
         int focusItemIndex = listBox.getFocusItemIndex();
         if (focusItemIndex > 0) {
@@ -60,7 +61,7 @@ public class ListBoxPanel<T> extends AbstractController {
           return true;
         }
       }
-    } else if (inputEvent == NiftyInputEvent.Activate) {
+    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
       if (hasElements()) {
         int focusItemIndex = listBox.getFocusItemIndex();
         if (focusItemIndex >= 0) {

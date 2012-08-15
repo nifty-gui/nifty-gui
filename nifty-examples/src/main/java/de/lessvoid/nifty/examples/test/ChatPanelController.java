@@ -7,6 +7,7 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
@@ -59,7 +60,7 @@ public class ChatPanelController implements Controller, KeyInputHandler {
   public boolean keyEvent(NiftyInputEvent arg0) {
     System.out.println("keyEvent ChatPanelController");
 
-    if (arg0 == NiftyInputEvent.Activate) {
+    if (arg0 == NiftyStandardInputEvent.Activate) {
       String message = chatsend.getText();
       if (message.length() >= 1000) {
         return false;

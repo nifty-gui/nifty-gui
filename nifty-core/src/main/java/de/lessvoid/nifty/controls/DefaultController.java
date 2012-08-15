@@ -5,6 +5,7 @@ import java.util.Properties;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -34,7 +35,7 @@ public class DefaultController implements Controller {
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (nextPrevHelper.handleNextPrev(inputEvent)) {
       return true;
-    } else if (inputEvent == NiftyInputEvent.Activate) {
+    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
       element.onClick();
       return true;
     }

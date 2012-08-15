@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.controls.textfield;
 
-import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
@@ -12,14 +12,14 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  */
 public class TextFieldInputMapping implements NiftyInputMapping {
   /**
-   * Convert a keyboard input event to a {@link NiftyInputEvent}.
+   * Convert a keyboard input event to a {@link NiftyStandardInputEvent}.
    *
    * @param inputEvent the keyboard input event that needs to be converted
-   * @return the {@link NiftyInputEvent} that is assigned to the keyboard event or {@code null} in case no event is
+   * @return the {@link NiftyStandardInputEvent} that is assigned to the keyboard event or {@code null} in case no event is
    *         assigned
    */
   @Override
-  public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
+  public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       return handleKeyDownEvent(inputEvent);
     } else {
@@ -28,57 +28,57 @@ public class TextFieldInputMapping implements NiftyInputMapping {
   }
 
   /**
-   * Translate a keyboard down event to a {@link NiftyInputEvent} regarding the button that was used at this event.
+   * Translate a keyboard down event to a {@link NiftyStandardInputEvent} regarding the button that was used at this event.
    *
    * @param inputEvent the keyboard input event that needs translation
-   * @return {@link NiftyInputEvent} that is assigned to the keyboard event or {@code null} in case no event is
+   * @return {@link NiftyStandardInputEvent} that is assigned to the keyboard event or {@code null} in case no event is
    *         assigned
    */
-  private static NiftyInputEvent handleKeyDownEvent(final KeyboardInputEvent inputEvent) {
+  private static NiftyStandardInputEvent handleKeyDownEvent(final KeyboardInputEvent inputEvent) {
     switch (inputEvent.getKey()) {
       case KeyboardInputEvent.KEY_UP:
-        return NiftyInputEvent.MoveCursorUp;
+        return NiftyStandardInputEvent.MoveCursorUp;
       case KeyboardInputEvent.KEY_DOWN:
-        return NiftyInputEvent.MoveCursorDown;
+        return NiftyStandardInputEvent.MoveCursorDown;
       case KeyboardInputEvent.KEY_LEFT:
-        return NiftyInputEvent.MoveCursorLeft;
+        return NiftyStandardInputEvent.MoveCursorLeft;
       case KeyboardInputEvent.KEY_RIGHT:
-        return NiftyInputEvent.MoveCursorRight;
+        return NiftyStandardInputEvent.MoveCursorRight;
       case KeyboardInputEvent.KEY_F1:
-        return NiftyInputEvent.ConsoleToggle;
+        return NiftyStandardInputEvent.ConsoleToggle;
       case KeyboardInputEvent.KEY_RETURN:
-        return NiftyInputEvent.SubmitText;
+        return NiftyStandardInputEvent.SubmitText;
       case KeyboardInputEvent.KEY_DELETE:
-        return NiftyInputEvent.Delete;
+        return NiftyStandardInputEvent.Delete;
       case KeyboardInputEvent.KEY_BACK:
-        return NiftyInputEvent.Backspace;
+        return NiftyStandardInputEvent.Backspace;
       case KeyboardInputEvent.KEY_END:
-        return NiftyInputEvent.MoveCursorToLastPosition;
+        return NiftyStandardInputEvent.MoveCursorToLastPosition;
       case KeyboardInputEvent.KEY_HOME:
-        return NiftyInputEvent.MoveCursorToFirstPosition;
+        return NiftyStandardInputEvent.MoveCursorToFirstPosition;
       case KeyboardInputEvent.KEY_LSHIFT:
       case KeyboardInputEvent.KEY_RSHIFT:
-        return NiftyInputEvent.SelectionStart;
+        return NiftyStandardInputEvent.SelectionStart;
       case KeyboardInputEvent.KEY_TAB:
-        return inputEvent.isShiftDown() ? NiftyInputEvent.PrevInputElement : NiftyInputEvent.NextInputElement;
+        return inputEvent.isShiftDown() ? NiftyStandardInputEvent.PrevInputElement : NiftyStandardInputEvent.NextInputElement;
       case KeyboardInputEvent.KEY_X:
         if (inputEvent.isControlDown()) {
-          return NiftyInputEvent.Cut;
+          return NiftyStandardInputEvent.Cut;
         }
         break;
       case KeyboardInputEvent.KEY_C:
         if (inputEvent.isControlDown()) {
-          return NiftyInputEvent.Copy;
+          return NiftyStandardInputEvent.Copy;
         }
         break;
       case KeyboardInputEvent.KEY_V:
         if (inputEvent.isControlDown()) {
-          return NiftyInputEvent.Paste;
+          return NiftyStandardInputEvent.Paste;
         }
         break;
       case KeyboardInputEvent.KEY_A:
         if (inputEvent.isControlDown()) {
-          return NiftyInputEvent.SelectAll;
+          return NiftyStandardInputEvent.SelectAll;
         }
         break;
       default:
@@ -86,7 +86,7 @@ public class TextFieldInputMapping implements NiftyInputMapping {
     }
 
     if (!Character.isISOControl(inputEvent.getCharacter())) {
-      final NiftyInputEvent character = NiftyInputEvent.Character;
+      final NiftyStandardInputEvent character = NiftyStandardInputEvent.Character;
       character.setCharacter(inputEvent.getCharacter());
       return character;
     }
@@ -94,18 +94,18 @@ public class TextFieldInputMapping implements NiftyInputMapping {
   }
 
   /**
-   * Translate a keyboard key released event into the assigned {@link NiftyInputEvent}.
+   * Translate a keyboard key released event into the assigned {@link NiftyStandardInputEvent}.
    *
    * @param inputEvent the keyboard input event that triggered the call of this function
-   * @return the assigned {@link NiftyInputEvent} or {@code null} in case no event is assigned
+   * @return the assigned {@link NiftyStandardInputEvent} or {@code null} in case no event is assigned
    */
-  private static NiftyInputEvent handleKeyUpEvent(final KeyboardInputEvent inputEvent) {
+  private static NiftyStandardInputEvent handleKeyUpEvent(final KeyboardInputEvent inputEvent) {
     switch (inputEvent.getKey()) {
       case KeyboardInputEvent.KEY_LSHIFT:
       case KeyboardInputEvent.KEY_RSHIFT:
-        return NiftyInputEvent.SelectionEnd;
+        return NiftyStandardInputEvent.SelectionEnd;
       case KeyboardInputEvent.KEY_ESCAPE:
-        return NiftyInputEvent.Escape;
+        return NiftyStandardInputEvent.Escape;
       default:
         return null;
     }
