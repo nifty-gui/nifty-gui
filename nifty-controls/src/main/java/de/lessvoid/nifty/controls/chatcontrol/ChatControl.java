@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.controls.chatcontrol;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,12 +15,11 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This is the main controller for the chat control.
@@ -206,10 +207,10 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     @Override
     public boolean keyEvent(final NiftyInputEvent inputEvent) {
         LOGGER.log(Level.INFO, "event received: {0}", inputEvent);
-        if (inputEvent == NiftyInputEvent.SubmitText) {
+        if (inputEvent == NiftyStandardInputEvent.SubmitText) {
             sendText();
             return true;
-        } else if (inputEvent == NiftyInputEvent.MoveCursorRight) {
+        } else if (inputEvent == NiftyStandardInputEvent.MoveCursorRight) {
         }
         return false;
     }

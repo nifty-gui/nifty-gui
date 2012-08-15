@@ -17,6 +17,7 @@ import org.junit.Test;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.loaderv2.RootLayerFactory;
@@ -123,7 +124,7 @@ public class ScreenCreatorTest {
 
   @Test
   public void testInputMappingScreenController() {
-    NiftyInputEvent expectedEvent = NiftyInputEvent.Activate;
+    NiftyStandardInputEvent expectedEvent = NiftyStandardInputEvent.Activate;
     ScreenController screenController = new MyScreenControllerWithInputMapping(expectedEvent);
     ScreenCreator createWithIdAndScreenController = new ScreenCreator("myid", screenController);
     createWithIdAndScreenController.setInputMapping(DefaultInputMapping.class.getName());
@@ -145,10 +146,10 @@ public class ScreenCreatorTest {
   }
 
   private class MyScreenControllerWithInputMapping implements ScreenController, KeyInputHandler {
-    private NiftyInputEvent expectedEvent;
+    private NiftyStandardInputEvent expectedEvent;
     private boolean called;
 
-    public MyScreenControllerWithInputMapping(final NiftyInputEvent expectedEvent) {
+    public MyScreenControllerWithInputMapping(final NiftyStandardInputEvent expectedEvent) {
       this.expectedEvent = expectedEvent;
     }
 

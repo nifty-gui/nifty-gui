@@ -12,6 +12,7 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -102,7 +103,7 @@ public class TextFieldDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="mainTextField")
-  public void onTextChanged(final String id, final NiftyInputEvent event) {
+  public void onTextChanged(final String id, final NiftyStandardInputEvent event) {
     keyEventLabel.setText(event.toString() + " [" + event.getCharacter() + "]");
   }
 

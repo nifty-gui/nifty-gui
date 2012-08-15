@@ -4,15 +4,20 @@
  */
 package de.lessvoid.nifty.controls.tabs;
 
-import org.bushe.swing.event.EventTopicSubscriber;
-
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.bushe.swing.event.EventTopicSubscriber;
+
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.*;
+import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.ButtonClickedEvent;
+import de.lessvoid.nifty.controls.Tab;
+import de.lessvoid.nifty.controls.TabGroup;
+import de.lessvoid.nifty.controls.TabSelectedEvent;
 import de.lessvoid.nifty.controls.tabs.builder.TabBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;

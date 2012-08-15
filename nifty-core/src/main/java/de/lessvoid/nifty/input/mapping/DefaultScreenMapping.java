@@ -1,23 +1,23 @@
 package de.lessvoid.nifty.input.mapping;
 
-import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
 public class DefaultScreenMapping implements NiftyInputMapping {
 
-  public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
+  public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == KeyboardInputEvent.KEY_ESCAPE) {
-        return NiftyInputEvent.Escape;
+        return NiftyStandardInputEvent.Escape;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
-        return NiftyInputEvent.MoveCursorLeft;
+        return NiftyStandardInputEvent.MoveCursorLeft;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RIGHT) {
-        return NiftyInputEvent.MoveCursorRight;
+        return NiftyStandardInputEvent.MoveCursorRight;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
-        return NiftyInputEvent.MoveCursorUp;
+        return NiftyStandardInputEvent.MoveCursorUp;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_DOWN) {
-        return NiftyInputEvent.MoveCursorDown;
+        return NiftyStandardInputEvent.MoveCursorDown;
       }
     }
     return null;

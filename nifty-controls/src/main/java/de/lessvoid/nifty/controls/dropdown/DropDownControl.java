@@ -10,11 +10,12 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -66,19 +67,19 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   }
 
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyInputEvent.NextInputElement) {
+    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
       focusHandler.getNext(getElement()).setFocus();
       return true;
-    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
       focusHandler.getPrev(getElement()).setFocus();
       return true;
-    } else if (inputEvent == NiftyInputEvent.Activate) {
+    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
       dropDownClicked();
       return true;
-    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
+    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorUp) {
       listBox.selectPrevious();
       return true;
-    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
+    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
       listBox.selectNext();
       return true;
     }

@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.controls;
 
-import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 
 public class NextPrevHelper {
   private Element element;
@@ -14,12 +14,12 @@ public class NextPrevHelper {
   }
 
   public boolean handleNextPrev(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyInputEvent.NextInputElement) {
+    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
       if (focusHandler != null) {
         focusHandler.getNext(element).setFocus();
       }
       return true;
-    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
       if (focusHandler != null) {
         focusHandler.getPrev(element).setFocus();
       }

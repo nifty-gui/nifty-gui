@@ -2,7 +2,7 @@ package de.lessvoid.nifty.controls.dropdown;
 
 
 
-import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
@@ -12,21 +12,21 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  */
 public class DropDownControlInputMapping implements NiftyInputMapping {
 
-  public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
+  public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == KeyboardInputEvent.KEY_DOWN) {
-        return NiftyInputEvent.MoveCursorDown;
+        return NiftyStandardInputEvent.MoveCursorDown;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
-        return NiftyInputEvent.MoveCursorUp;
+        return NiftyStandardInputEvent.MoveCursorUp;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RETURN) {
-        return NiftyInputEvent.Activate;
+        return NiftyStandardInputEvent.Activate;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_SPACE) {
-        return NiftyInputEvent.Activate;
+        return NiftyStandardInputEvent.Activate;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_TAB) {
         if (inputEvent.isShiftDown()) {
-          return NiftyInputEvent.PrevInputElement;
+          return NiftyStandardInputEvent.PrevInputElement;
         } else {
-          return NiftyInputEvent.NextInputElement;
+          return NiftyStandardInputEvent.NextInputElement;
         }
       }
     }

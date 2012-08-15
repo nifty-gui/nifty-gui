@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples.all;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -21,7 +22,7 @@ public class SplashController implements ScreenController, KeyInputHandler {
   }
 
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyInputEvent.Escape) {
+    if (inputEvent == NiftyStandardInputEvent.Escape) {
       nifty.setAlternateKey("exit");
       nifty.gotoScreen("menu");
       return true;

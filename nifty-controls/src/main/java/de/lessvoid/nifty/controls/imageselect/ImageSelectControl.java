@@ -15,6 +15,7 @@ import de.lessvoid.nifty.effects.impl.Move;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.Screen;
@@ -96,13 +97,13 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
      * @param inputEvent the NiftyInputEvent to process
      */
     public boolean inputEvent(final NiftyInputEvent inputEvent) {
-      if (NiftyInputEvent.MoveCursorLeft == inputEvent) {
+      if (NiftyStandardInputEvent.MoveCursorLeft == inputEvent) {
         backClick();
-      } else if (NiftyInputEvent.MoveCursorRight == inputEvent) {
+      } else if (NiftyStandardInputEvent.MoveCursorRight == inputEvent) {
         forwardClick();
       } else if (nextPrevHelper.handleNextPrev(inputEvent)) {
         return true;
-      } else if (inputEvent == NiftyInputEvent.Activate) {
+      } else if (inputEvent == NiftyStandardInputEvent.Activate) {
         element.onClick();
         return true;
       }
