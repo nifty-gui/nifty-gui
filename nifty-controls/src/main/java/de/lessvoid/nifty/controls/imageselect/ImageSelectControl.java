@@ -235,6 +235,7 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
         return;
       }
       currentImageIndex = imageIndex;
+      updateVisuals();
       imageIndexChanged();
     }
 
