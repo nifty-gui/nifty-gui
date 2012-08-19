@@ -235,7 +235,26 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
       imageIndexChanged();
     }
 
-    // privat stuff
+    /**
+     * Remove Image.
+     * @param image image
+     */
+    @Override
+    public void removeImage(final NiftyImage image) {
+      images.remove(image);
+      updateVisuals();
+    }
+
+    /**
+     * Number of images
+     * @Return Number of images
+     */
+    @Override
+    public int getImageCount() {
+      return images.size();
+    }
+
+    // private stuff
 
     /**
      * update visuals.
