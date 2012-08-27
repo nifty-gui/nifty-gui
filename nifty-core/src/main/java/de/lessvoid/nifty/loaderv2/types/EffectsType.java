@@ -108,6 +108,7 @@ public class EffectsType extends XmlBaseType {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void translateSpecialValues(final Nifty nifty, final Screen screen) {
     super.translateSpecialValues(nifty, screen);
     
