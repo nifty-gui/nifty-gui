@@ -1562,7 +1562,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     if (interaction.onMouseOver(this, mouseEvent)) {
       eatMouseEvent = true;
     }
-    if (interaction.onMouseWheel(this, mouseEvent)) {
+    if ((mouseEvent.getMouseWheel() != 0) && interaction.onMouseWheel(this, mouseEvent)) {
       eatMouseEvent = true;
     }
     return eatMouseEvent;
