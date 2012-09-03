@@ -22,7 +22,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @deprecated Please use {@link de.lessvoid.nifty.controls.PopupMenu} when accessing NiftyControls.
  */
 @Deprecated
-public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
+public class MenuControl<T> implements Controller, Menu<T> {
   private Nifty nifty;
   private Screen screen;
   private Element element;

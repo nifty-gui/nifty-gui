@@ -7,7 +7,15 @@ public class Split {
   private static final String BEGIN_KEY = "${";
   private static final String END_KEY = "}";
 
+  public static boolean containsKey(final String value) {
+    if (value == null) {
+      return false;
+    }
+    return value.contains(BEGIN_KEY);
+  }
+
   public static List<String> split(final String value) {
+
     List<String> result = new ArrayList<String>();
     if (value == null) {
       return result;

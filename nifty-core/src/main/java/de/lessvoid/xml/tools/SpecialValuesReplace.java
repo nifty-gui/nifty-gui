@@ -57,6 +57,12 @@ public class SpecialValuesReplace {
    * @return the parsed input
    */
   public static String replace(final String input, final Map<String, ResourceBundle> resourceBundles, final Object methodCallTarget, final Properties properties) {
+    if (input == null) {
+      return "";
+    }
+    if (!Split.containsKey(input)) {
+      return input;
+    }
     List<String> parts = Split.split(input);
     for (int idx=0; idx<parts.size(); idx++) {
       String part = parts.get(idx);

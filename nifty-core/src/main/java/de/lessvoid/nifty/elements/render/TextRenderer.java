@@ -101,6 +101,12 @@ public class TextRenderer implements ElementRenderer {
   private SizeValue originalConstraintWidth;
   private SizeValue originalConstraintHeight;
 
+  /*
+   * When the element this TextRenderer belongs to as been layouted at least once we remember the attached element
+   * here so that we can later automatically relayout ourself correctly when someone changed this text.
+   */
+  private Element hasBeenLayoutedElement;
+
   /**
    * default constructor.
    */
@@ -127,7 +133,7 @@ public class TextRenderer implements ElementRenderer {
     if (newText == null) {
       return;
     }
-    initText(newText);
+    initText(newText, true);
   }
 
   /**
@@ -137,13 +143,13 @@ public class TextRenderer implements ElementRenderer {
    */
   private void init(final RenderFont newFont, final String newText) {
     this.font = newFont;
-    initText(newText);
+    initText(newText, false);
   }
 
   /**
    * @param newText new text
    */
-  private void initText(final String param) {
+  private void initText(final String param, final boolean changeExistingText) {
     String newText = nifty.specialValuesReplace(param);
     if (lineWrapping && isCalculatedLineWrapping) {
       isCalculatedLineWrapping = false;
@@ -151,6 +157,9 @@ public class TextRenderer implements ElementRenderer {
 
     this.originalText = newText;
     this.textLines = newText.split("\n", -1);
+    if (changeExistingText && hasBeenLayoutedElement != null) {
+      hasBeenLayoutedElement.getParent().layoutElements();
+    }
 
     maxWidth = 0;
     for (String line : textLines) {
@@ -470,6 +479,10 @@ public class TextRenderer implements ElementRenderer {
     if (valueAsInt <= 0) {
       return;
     }
+
+    // remember some values so that we can correctly do auto word wrapping when someone changes the text
+    this.hasBeenLayoutedElement = element;
+
     this.textLines = wrapText(valueAsInt, renderEngine, originalText.split("\n", -1));
     maxWidth = valueAsInt;
     if (maxWidth == 0) {

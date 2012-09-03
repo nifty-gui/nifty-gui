@@ -123,7 +123,7 @@ public class TreeItem<T> {
         } else if (treeNodes.contains(child)) {
             return true;
         } else {
-            for (TreeItem item : treeNodes) {
+            for (TreeItem<T> item : treeNodes) {
                 boolean found = item.contains(child);
                 if (found) {
                     return true;

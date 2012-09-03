@@ -287,6 +287,10 @@ public class ElementType extends XmlBaseType {
     applyControls(nifty);
     applyStyles(nifty.getDefaultStyleResolver());
     makeFlatControls();
+
+    // in case we have surviving special values (f.i. from applied controlDefinitions) we need to translate them too
+    translateSpecialValues(nifty, screen);
+
     resolveParameters(rootElementType.getAttributes());
     resolveControllers(new LinkedList < Object >());
   }
