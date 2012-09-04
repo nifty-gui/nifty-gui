@@ -20,6 +20,7 @@ public class WindowControl extends AbstractController implements Window {
   private boolean removeCloseButton;
   private boolean hideOnClose;
 
+  @Override
   public void bind(
       final Nifty nifty,
       final Screen screen,

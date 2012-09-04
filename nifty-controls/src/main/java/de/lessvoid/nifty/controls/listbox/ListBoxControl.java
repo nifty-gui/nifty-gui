@@ -74,6 +74,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private int lastMaxWidth;
   private int applyWidthConstraintsLastWidth = -1;
 
+  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -183,6 +184,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     super.onFocus(getFocus);
   }
 
+  @Override
   public void setFocus() {
     childRootElement.setFocus();
   }

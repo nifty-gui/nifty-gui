@@ -32,6 +32,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
   // that we'll need to return when the item with an elementId has been activated.
   private Map<String, T> items = new Hashtable<String, T>();
 
+  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -62,6 +63,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
   public void onFocus(final boolean getFocus) {
   }
 
+  @Override
   public void addMenuItem(final String menuText, final T item) {
     final String id = NiftyIdCreator.generate();
     new ControlBuilder(id, "niftyMenuItem") { {
@@ -72,6 +74,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
     items.put(id, item);
   }
 
+  @Override
   public void addMenuItem(final String menuText, final String menuIcon, final T item) {
     final String id = NiftyIdCreator.generate();
     new ControlBuilder(id, "niftyMenuItem") { {
@@ -87,6 +90,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
     items.put(id, item);
   }
 
+  @Override
   public void addMenuItemSeparator() {
     new ControlBuilder("niftyMenuItemSeparator").build(nifty, screen, element);
   }
@@ -184,6 +188,7 @@ public class MenuControl<T> implements NiftyControl, Controller, Menu<T> {
     return bound;
   }
 
+  @Override
   public String toString() {
     return super.toString() + " {" + (element == null ? "" : element.getId()) + "}";
   }

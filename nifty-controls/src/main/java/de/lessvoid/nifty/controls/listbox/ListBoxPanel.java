@@ -18,6 +18,7 @@ public class ListBoxPanel<T> extends AbstractController {
   private ListBoxImpl<T> listBox;
   private boolean hasFocus = false;
 
+  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -29,9 +30,11 @@ public class ListBoxPanel<T> extends AbstractController {
     focusHandler = screen.getFocusHandler();
   }
 
+  @Override
   public void onStartScreen() {
   }
 
+  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
       if (focusHandler != null) {
@@ -92,6 +95,7 @@ public class ListBoxPanel<T> extends AbstractController {
     this.listBox = listBox;
   }
 
+  @Override
   public boolean hasFocus() {
     return hasFocus;
   }

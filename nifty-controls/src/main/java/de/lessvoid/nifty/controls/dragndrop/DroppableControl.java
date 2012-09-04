@@ -104,14 +104,17 @@ public class DroppableControl extends AbstractController implements Droppable {
     nifty.publishEvent(getElement().getId(), new DroppableDroppedEvent(source, droppedDraggable, this));
   }
 
+  @Override
   public void addFilter(final DroppableDropFilter filter) {
     filters.add(filter);
   }
 
+  @Override
   public void removeFilter(final DroppableDropFilter filter) {
     filters.remove(filter);
   }
 
+  @Override
   public void removeAllFilters() {
     filters.clear();
   }
