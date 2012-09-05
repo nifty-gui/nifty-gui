@@ -17,6 +17,7 @@ public class ListBoxItemController<T> extends AbstractController {
     private Screen screen;
     private Element element;
 
+    @Override
     public void bind(
             final Nifty niftyParam,
             final Screen screenParam,
@@ -28,6 +29,7 @@ public class ListBoxItemController<T> extends AbstractController {
         this.element = newElement;
     }
 
+    @Override
     public void onStartScreen() {
     }
 
@@ -36,6 +38,7 @@ public class ListBoxItemController<T> extends AbstractController {
         super.onFocus(getFocus);
     }
 
+    @Override
     public boolean inputEvent(final NiftyInputEvent inputEvent) {
         return false;
     }

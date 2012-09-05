@@ -13,6 +13,7 @@ public class TextFieldPasswordTest extends TestCase {
   private TextFieldLogic textField;
   private Clipboard clipboard;
 
+  @Override
   public void setUp() {
     clipboard = createMock(Clipboard.class);
 

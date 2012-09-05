@@ -17,7 +17,6 @@ public class ListBoxViewDefaultTest {
   private ListBoxImpl<String> listBox = new ListBoxImpl<String>(null);
   private ListBoxView<String> view;
 
-  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     view = createMock(ListBoxView.class);

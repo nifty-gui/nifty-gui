@@ -34,7 +34,6 @@ public class ConsoleControl extends AbstractController implements Console, Event
   private Color standardColor = null;
   private Color errorColor = new Color("#f00a");
 
-  @SuppressWarnings("unchecked")
   @Override
   public void bind(
       final Nifty niftyParam,

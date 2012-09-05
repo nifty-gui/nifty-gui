@@ -10,6 +10,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  */
 public class ImageSelectInputMapping implements NiftyInputMapping {
 
+  @Override
   public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
