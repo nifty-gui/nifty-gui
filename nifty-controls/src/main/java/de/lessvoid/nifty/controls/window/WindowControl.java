@@ -93,18 +93,16 @@ public class WindowControl extends AbstractController implements Window {
   @Override
   public void closeWindow() {
     if (hideOnClose) {
-      getElement().hide(new CloseEndNotify(nifty, true));
+      getElement().hide(new CloseEndNotify(true));
     } else {
-      getElement().markForRemoval(new CloseEndNotify(nifty, false));
+      getElement().markForRemoval(new CloseEndNotify(false));
     }
   }
 
   private class CloseEndNotify implements EndNotify {
-    private final Nifty nifty;
     private final boolean hidden;
 
-    public CloseEndNotify(final Nifty nifty, final boolean hidden) {
-      this.nifty = nifty;
+    public CloseEndNotify(final boolean hidden) {
       this.hidden = hidden;
     }
 
