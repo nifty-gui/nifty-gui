@@ -10,7 +10,6 @@ import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.Menu;
 import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
-import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
