@@ -26,6 +26,7 @@ public class ConsoleCommandsMatchTest {
       }
     };
     ConsoleControl console = new ConsoleControl() {
+      @Override
       public TextField getTextField() {
         final Element elementMock = createNiceMock(Element.class);
         replay(elementMock);

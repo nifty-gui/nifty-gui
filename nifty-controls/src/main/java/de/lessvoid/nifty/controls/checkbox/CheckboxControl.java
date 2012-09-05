@@ -26,6 +26,7 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
   private Screen screen;
   private FocusHandler focusHandler;
 
+  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -45,6 +46,7 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
     super.init(parameter, controlDefinitionAttributes);
   }
 
+  @Override
   public void onStartScreen() {
   }
 
@@ -53,6 +55,7 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
     super.onFocus(getFocus);
   }
 
+  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
       focusHandler.getNext(getElement()).setFocus();

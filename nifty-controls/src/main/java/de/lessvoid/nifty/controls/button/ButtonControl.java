@@ -35,6 +35,7 @@ public class ButtonControl extends AbstractController implements Button {
   private Element buttonTextElement;
   private TextRenderer buttonTextRenderer;
 
+  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -61,6 +62,7 @@ public class ButtonControl extends AbstractController implements Button {
     super.init(parameter, controlDefinitionAttributes);
   }
 
+  @Override
   public void onStartScreen() {
   }
 
@@ -69,6 +71,7 @@ public class ButtonControl extends AbstractController implements Button {
     super.onFocus(getFocus);
   }
 
+  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     Element buttonElement = getElement();
     if (inputEvent == NiftyStandardInputEvent.NextInputElement) {

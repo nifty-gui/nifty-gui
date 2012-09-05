@@ -15,6 +15,7 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
   private Logger log = Logger.getLogger(UpdateScrollpanelPositionToDisplayElement.class.getName());
   private Element targetElement;
 
+  @Override
   public void activate(final Nifty nifty, final Element elementParameter, final EffectProperties parameter) {
     String target = parameter.getProperty("target");
     if (target != null) {
@@ -22,6 +23,7 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
     }
   }
 
+  @Override
   public void execute(
       final Element element,
       final float normalizedTime,
@@ -51,6 +53,7 @@ public class UpdateScrollpanelPositionToDisplayElement implements EffectImpl {
     }
   }
 
+  @Override
   public void deactivate() {
   }
 }

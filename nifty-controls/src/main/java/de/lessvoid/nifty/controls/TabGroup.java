@@ -5,10 +5,8 @@
 package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.EndNotify;
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.tabs.builder.TabBuilder;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.screen.Screen;
 
 /**
  * A tab group is the parent element to a set of tabs. It allows selecting exactly one of those tabs for displaying.

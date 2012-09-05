@@ -195,10 +195,9 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
         textControl.setText("");
     }
 
-    @SuppressWarnings("unchecked")
     private ListBox<ChatEntryModelClass> getListBox(final String name) {
 
-        return (ListBox<ChatEntryModelClass>) getElement().findNiftyControl(name, ListBox.class);
+        return getElement().findNiftyControl(name, ListBox.class);
     }
 
     /**
