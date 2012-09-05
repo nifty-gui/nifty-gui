@@ -51,6 +51,7 @@ public class DropDownPopup<T> extends AbstractController {
   @Override
   @SuppressWarnings("deprecation")
   public void onStartScreen() {
+    @SuppressWarnings("rawtypes")
     final ListBox listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
     nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,
         new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, dropDownControl, popupInstance));
