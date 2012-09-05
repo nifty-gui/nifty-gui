@@ -34,7 +34,6 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   private ListBox<T> listBox;
 
   @Override
-  @SuppressWarnings("unchecked")
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,

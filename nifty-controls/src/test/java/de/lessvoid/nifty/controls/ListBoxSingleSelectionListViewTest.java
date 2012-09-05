@@ -22,7 +22,6 @@ public class ListBoxSingleSelectionListViewTest {
   private TestItem o4 = new TestItem("o4");
   private ListBoxView<TestItem> viewMock;
 
-  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     listBox.addItem(o1);
@@ -38,7 +37,6 @@ public class ListBoxSingleSelectionListViewTest {
     verify(viewMock);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testSelectFirstItem() {
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
@@ -47,7 +45,6 @@ public class ListBoxSingleSelectionListViewTest {
     listBox.selectItemByIndex(0);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testSelectDoubleItem() {
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
@@ -59,7 +56,6 @@ public class ListBoxSingleSelectionListViewTest {
     listBox.selectItemByIndex(1);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testSelectOutOfDisplayItem() {
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
@@ -68,7 +64,6 @@ public class ListBoxSingleSelectionListViewTest {
     listBox.selectItemByIndex(2);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testClearWithSelection() {
     viewMock.updateTotalWidth(0);
@@ -82,7 +77,6 @@ public class ListBoxSingleSelectionListViewTest {
     listBox.clear();
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testRemoveItemWithSelection() {
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));

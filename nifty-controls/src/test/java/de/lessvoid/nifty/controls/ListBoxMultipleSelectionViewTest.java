@@ -28,7 +28,6 @@ public class ListBoxMultipleSelectionViewTest {
   private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = new Capture<ListBoxSelectionChangedEvent<TestItem>>();
   private SelectionCheck selectionCheck = new SelectionCheck(listBox);
 
-  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     listBox.addItem(o1);

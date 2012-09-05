@@ -92,7 +92,6 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	private void setListBox(final String name) {
 		if (treeListBox == null) {
 			treeListBox = element.findNiftyControl(name, ListBox.class);
