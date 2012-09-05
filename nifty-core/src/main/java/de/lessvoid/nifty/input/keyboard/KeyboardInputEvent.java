@@ -131,6 +131,7 @@ public class KeyboardInputEvent {
    *
    * @deprecated Use KEY_LMETA instead
    */
+  @Deprecated
   public static final int KEY_LWIN            = KEY_LMETA; /* Left Windows key */
   public static final int KEY_RMETA            = 0xDC; /* Right Windows/Option key */
   /**
@@ -138,6 +139,7 @@ public class KeyboardInputEvent {
    *
    * @deprecated Use KEY_RMETA instead
    */
+  @Deprecated
   public static final int KEY_RWIN            = KEY_RMETA; /* Right Windows key */
   public static final int KEY_APPS            = 0xDD; /* AppMenu key */
   public static final int KEY_POWER           = 0xDE;
