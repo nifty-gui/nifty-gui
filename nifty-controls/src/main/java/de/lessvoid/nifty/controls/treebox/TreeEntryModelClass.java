@@ -10,6 +10,7 @@ import de.lessvoid.nifty.controls.TreeItem;
  *
  * @author ractoc
  */
+@SuppressWarnings("rawtypes")
 public class TreeEntryModelClass {
    
     private TreeItem treeItem;

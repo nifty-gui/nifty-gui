@@ -74,6 +74,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private int lastMaxWidth;
   private int applyWidthConstraintsLastWidth = -1;
 
+  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -183,6 +184,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     super.onFocus(getFocus);
   }
 
+  @Override
   public void setFocus() {
     childRootElement.setFocus();
   }
@@ -553,7 +555,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     }
   }
 
-  @SuppressWarnings("unchecked")
   private void createLabels() {
     if (labelTemplateElement == null) {
       return;
@@ -607,7 +608,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     nifty.removeElement(screen, labelTemplateElement);
   }
 
-  @SuppressWarnings("unchecked")
   private void connectListBoxAndListBoxPanel() {
     ListBoxPanel<T> listBoxPanel = listBoxPanelElement.getControl(ListBoxPanel.class);
     listBoxPanel.setListBox(listBoxImpl);
@@ -625,7 +625,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     }
   }
 
-  @SuppressWarnings("unchecked")
   private void handleElementFocus(final int index, final int focusElement) {
     ListBoxPanel<T> listBoxPanel = listBoxPanelElement.getControl(ListBoxPanel.class);
     if (listBoxPanel.hasFocus()) {
@@ -639,7 +638,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     }
   }
 
-  @SuppressWarnings("unchecked")
   private void setListBoxItemIndex(final int itemIndex) {
     ListBoxItemController<T> listBoxItemController = labelElements[itemIndex].getControl(ListBoxItemController.class);
     if (listBoxItemController != null) {

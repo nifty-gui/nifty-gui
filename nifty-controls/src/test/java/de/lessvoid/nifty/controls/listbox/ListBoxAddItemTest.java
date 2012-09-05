@@ -21,10 +21,9 @@ public class ListBoxAddItemTest {
   private TestItem o2 = new TestItem("o2");
   private ListBoxView<TestItem> viewMock;
 
-  @SuppressWarnings("unchecked")
   @Before
   public void before() {
-    viewMock = (ListBoxView<TestItem>) createMock(ListBoxView.class);
+    viewMock = createMock(ListBoxView.class);
     assertEquals(0, listBox.bindToView(viewMock, 2));
   }
 

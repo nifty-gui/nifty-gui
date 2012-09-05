@@ -12,6 +12,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  */
 public class DropDownControlInputMapping implements NiftyInputMapping {
 
+  @Override
   public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == KeyboardInputEvent.KEY_DOWN) {

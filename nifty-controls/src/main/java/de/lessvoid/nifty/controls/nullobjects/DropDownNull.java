@@ -6,6 +6,7 @@ import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
+@SuppressWarnings("rawtypes")
 public class DropDownNull implements DropDown {
 
   @Override
