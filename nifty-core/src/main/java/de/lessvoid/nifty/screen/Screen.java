@@ -181,7 +181,7 @@ public class Screen {
 
   public void closePopup(final Element popup, final EndNotify closeNotify) {
     popup.onEndScreen(this);
-    resetLayers();
+    nifty.resetMouseInputEvents();
     removeLayerElement(popup);
     schedulePopupElementRemoval(new ElementWithEndNotify(popup, closeNotify));
   }
