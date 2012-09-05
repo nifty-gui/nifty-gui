@@ -15,4 +15,4 @@ public enum EffectType {
    * EffectType that is rendered after the effect.
    */
   Post
-};
+}
