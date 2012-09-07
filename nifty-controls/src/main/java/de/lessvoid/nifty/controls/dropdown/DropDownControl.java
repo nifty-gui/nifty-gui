@@ -2,6 +2,7 @@ package de.lessvoid.nifty.controls.dropdown;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
@@ -52,6 +53,24 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     popup = nifty.createPopupWithStyle("dropDownBoxSelectPopup", getElement().getElementType().getAttributes().get("style"));
     popup.getControl(DropDownPopup.class).setDropDownElement(this, popup);
     listBox = popup.findNiftyControl("#listBox", ListBox.class);
+
+    final DropDownViewConverter<T> converter = createViewConverter(properties.getProperty("viewConverterClass"));
+    if (converter != null) {
+      setViewConverter(converter);
+    }
+  }
+
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  private DropDownViewConverter<T> createViewConverter(final String className) {
+    if (className == null) {
+      return null;
+    }
+    try {
+      return (DropDownViewConverter<T>) Class.forName(className).newInstance();
+    } catch (Exception e) {
+      log.log(Level.WARNING, "Unable to instantiate given class [" + className + "] with error: " + e.getMessage(), e);
+      return null;
+    }
   }
 
   @SuppressWarnings("rawtypes")
