@@ -292,7 +292,7 @@ public class Nifty {
     updateSoundSystem();
     if (log.isLoggable(Level.FINEST)) {
       log.finest(currentScreen.debugOutput());
-    } else if (log.isLoggable(Level.FINE)) {
+    } else if (log.isLoggable(Level.FINER)) {
       log.fine(currentScreen.debugOutputFocusElements());
     }
     return exit;
@@ -642,6 +642,23 @@ public class Nifty {
   private void gotoScreenInternal(final String id) {
     log.info("gotoScreenInternal [" + id + "]");
  
+    // When someone calls nifty.closePopup() directly followed by a nifty.gotoScreen() the gotoScreen will now win and
+    // we don't wait for the pending Popups to be closed. We'll simply remove the close Popup events since they would be
+    // gone anyway on the new Screen. This is done because the close popups are handled at the end of frame when we
+    // might already be on the new Screen.
+    //
+    // If the user wants to actually see the popup to be closed (maybe because he has added some effects) then now he'll
+    // use the closePopup() method with the EndNotify and call nifty.gotoScreen() when the EndNotify fires.
+    if (hasClosePopups()) {
+      ArrayList <ClosePopUp> copy = new ArrayList <ClosePopUp>(closePopupList);
+      closePopupList.clear();
+
+      for (int i=0; i<copy.size(); i++) {
+        ClosePopUp closePopup = copy.get(i);
+        closePopup.forcedCloseWithoutEndNotify();
+      }
+    }
+
     currentScreen = screens.get(id);
     if (currentScreen == null) {
       currentScreen = new NullScreen();
@@ -1064,6 +1081,10 @@ public class Nifty {
 
     public void close() {
       currentScreen.closePopup(popups.get(removePopupId), closeNotify);
+    }
+
+    public void forcedCloseWithoutEndNotify() {
+      currentScreen.closePopup(popups.get(removePopupId), null);
     }
   }
 
