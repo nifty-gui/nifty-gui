@@ -113,6 +113,16 @@ public class Nifty {
   private Clipboard clipboard = null;
   private NiftyResourceLoader resourceLoader = new NiftyResourceLoader();
 
+  /*
+   * when set to true Nifty will ignore all mouse events.
+   */
+  private boolean ignoreMouseEvents;
+
+  /*
+   * when set to true Nifty will ignore all keyboard events.
+   */
+  private boolean ignoreKeyboardEvents;
+
   /**
    * Create nifty with optional console parameter.
    * @param newRenderDevice the RenderDevice
@@ -1285,6 +1295,9 @@ public class Nifty {
 
     @Override
     public boolean processMouseEvent(final int mouseX, final int mouseY, final int mouseWheel, final int button, final boolean buttonDown) {
+      if (isIgnoreMouseEvents()) {
+        return false;
+      }
       boolean processed = processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
       if (log.isLoggable(Level.FINE)) {
         log.fine("[processMouseEvent] [" +  mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + "] processed [" + processed + "]");
@@ -1294,6 +1307,9 @@ public class Nifty {
 
     @Override
     public boolean processKeyboardEvent(final KeyboardInputEvent keyEvent) {
+      if (isIgnoreKeyboardEvents()) {
+        return false;
+      }
       if (currentScreen.isNull()) {
         return false;
       }
@@ -1546,5 +1562,21 @@ public class Nifty {
    */
   public NiftyResourceLoader getResourceLoader() {
     return resourceLoader;
+  }
+
+  public void setIgnoreMouseEvents(final boolean newValue) {
+    ignoreMouseEvents = newValue;
+  }
+
+  public boolean isIgnoreMouseEvents() {
+    return ignoreMouseEvents;
+  }
+
+  public void setIgnoreKeyboardEvents(final boolean newValue) {
+    ignoreKeyboardEvents = newValue;
+  }
+
+  public boolean isIgnoreKeyboardEvents() {
+    return ignoreKeyboardEvents;
   }
 }
