@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
@@ -256,6 +257,14 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     initializeVerticalScrollbar(screen, labelTemplateHeight, newCount);
   }
 
+  private void applyIdPrefixToElementType(final String prefix, final ElementType type) {
+    type.getAttributes().set("id", prefix + type.getAttributes().get("id"));
+
+    for (final ElementType child : type.getElements()) {
+      applyIdPrefixToElementType(prefix, child);
+    }
+  }
+
   @Override
   public void updateTotalWidth(final int newWidth) {
     this.lastMaxWidth = newWidth;
@@ -263,7 +272,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
       Element horizontal = getElement().findElementByName("#horizontal-scrollbar-parent");
       if (newWidth > listBoxPanelElement.getWidth()) {
         if (horizontal == null) {
-          nifty.createElementFromType(screen, getElement(), horizontalScrollbarTemplate.getElementType());
+          final ElementType type = horizontalScrollbarTemplate.getElementType().copy();
+          applyIdPrefixToElementType(getElement().getId(), type);
+          nifty.createElementFromType(screen, getElement(), type);
 
           updateBottomRightElement();
           nifty.executeEndOfFrameElementActions();
