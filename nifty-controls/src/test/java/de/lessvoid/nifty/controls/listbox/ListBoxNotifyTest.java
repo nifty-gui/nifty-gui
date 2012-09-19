@@ -39,6 +39,7 @@ public class ListBoxNotifyTest {
   @Test
   public void testSelectByItem() {
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     view.publish(capture(lastEvent));
     replay(view);
 
@@ -50,6 +51,7 @@ public class ListBoxNotifyTest {
 
   @Test
   public void testSelectByItemIndex() {
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     view.publish(capture(lastEvent));
     replay(view);

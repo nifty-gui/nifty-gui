@@ -123,6 +123,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     selection.add(items.get(selectionIndex));
     updateView();
     selectionChangedEvent(oldSelection);
+    setFocusItemByIndex(selectionIndex);
   }
 
   public void selectItem(final T item) {
