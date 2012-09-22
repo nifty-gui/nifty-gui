@@ -112,17 +112,17 @@ public class NiftyMouseInputEvent {
 
   public String toString() {
     return
-      "mouseX = " + mouseX + ", " +
-      "mouseY = " + mouseY + ", " +
-      "mouseWheel = " + mouseWheel + ", " +
-      "button0Down = " + button0Down + ", " +
-      "button1Down = " + button1Down + ", " +
-      "button2Down = " + button2Down + ", " + 
-      "button0InitialDown = " + button0InitialDown + ", " +
-      "button1InitialDown = " + button1InitialDown + ", " +
-      "button2InitialDown = " + button2InitialDown + ", " +
-      "button0Release = " + button0Release + ", " +
-      "button1Release = " + button1Release + ", " +
-      "button2Release = " + button2Release; 
+      "mouseX=" + mouseX + ", " +
+      "mouseY=" + mouseY + ", " +
+      "mouseWheel=" + mouseWheel + ", " +
+      "b0Down=" + button0Down + ", " +
+      "b1Down=" + button1Down + ", " +
+      "b2Down=" + button2Down + ", " + 
+      "b0InitialDown=" + button0InitialDown + ", " +
+      "b1InitialDown=" + button1InitialDown + ", " +
+      "b2InitialDown=" + button2InitialDown + ", " +
+      "b0Release=" + button0Release + ", " +
+      "b1Release=" + button1Release + ", " +
+      "b2Release=" + button2Release; 
   }
 }

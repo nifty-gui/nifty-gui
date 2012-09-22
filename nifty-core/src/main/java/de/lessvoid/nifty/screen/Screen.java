@@ -352,7 +352,7 @@ public class Screen {
       layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
     }
 
-    if (log.isLoggable(Level.FINE)) {
+    if (log.isLoggable(Level.FINER)) {
       log.fine(mouseOverHandler.getInfoString());
     }
 
