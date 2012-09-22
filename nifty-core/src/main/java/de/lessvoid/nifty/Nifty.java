@@ -1360,12 +1360,9 @@ public class Nifty {
     }
 
     private boolean processEvent(final NiftyMouseInputEvent mouseInputEvent) {
-      boolean handled = false;
-      if (mouseInputEventProcessor.canProcess(mouseInputEvent)) {
-        mouseInputEventProcessor.process(mouseInputEvent);
-        handled = forwardMouseEventToScreen(mouseInputEvent);
-        handleDynamicElements();
-      }
+      mouseInputEventProcessor.process(mouseInputEvent);
+      boolean handled = forwardMouseEventToScreen(mouseInputEvent);
+      handleDynamicElements();
       pool.free(mouseInputEvent);
       return handled;
     }

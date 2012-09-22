@@ -312,6 +312,10 @@ public class FocusHandler {
     return keyboardFocusElement != null;
   }
 
+  public boolean hasAnyElementTheMouseFocus() {
+    return mouseFocusElement != null;
+  }
+
   public Element findElement(final String defaultFocusElementId) {
     for (Element element : entries) {
       if (defaultFocusElementId.equals(element.getId())) {

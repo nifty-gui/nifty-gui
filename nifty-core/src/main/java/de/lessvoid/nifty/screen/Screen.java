@@ -347,9 +347,15 @@ public class Screen {
     mouseOverHandler.reset();
 
     long eventTime = timeProvider.getMsTime();
-    for (int i=0; i<layerList.size(); i++) {
-      Element layer = layerList.get(i);
-      layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
+
+    if (focusHandler.hasAnyElementTheMouseFocus()) {
+      Element e = focusHandler.getMouseFocusElement();
+      mouseOverHandler.addMouseOverElement(e);
+    } else {
+      for (int i=0; i<layerList.size(); i++) {
+        Element layer = layerList.get(i);
+        layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
+      }
     }
 
     if (log.isLoggable(Level.FINER)) {
