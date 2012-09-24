@@ -275,7 +275,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     } else if (itemIndex > items.size() - viewDisplayItemCount) {
       viewOffset = items.size() - viewDisplayItemCount;
     }
-    view.scrollTo(viewOffset);
+    updateViewScroll();
     updateView();
   }
 
@@ -291,7 +291,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
 
     if (focusItemIndex >= viewOffset + viewDisplayItemCount) {
       viewOffset = focusItemIndex - viewDisplayItemCount + 1;
-      view.scrollTo(viewOffset);
+      updateViewScroll();
       updateView();
     } else if (focusItemIndex < viewOffset) {
       showItemByIndex(focusItemIndex);
@@ -336,6 +336,10 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
   void updateViewTotalCount() {
     view.updateTotalCount(items.size());
     updateView();
+  }
+
+  void updateViewScroll() {
+    view.scrollTo(viewOffset);
   }
 
   private List<Integer> getSelectionElementsForDisplay() {

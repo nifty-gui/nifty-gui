@@ -121,6 +121,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     listBoxImpl.updateViewTotalCount();
+    listBoxImpl.updateViewScroll();
 
     subscribeHorizontalScrollbar();
     subscribeVerticalScrollbar();
