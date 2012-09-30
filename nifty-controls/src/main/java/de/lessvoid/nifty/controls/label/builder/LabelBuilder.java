@@ -19,4 +19,8 @@ public class LabelBuilder extends ControlBuilder {
   public void label(final String label) {
     text(label);
   }
+
+  public void wrap(final boolean enabled) {
+    set("wrap", Boolean.toString(enabled));
+  }
 }

@@ -25,7 +25,10 @@ public class LabelControl extends AbstractController implements Label {
       final Element element,
       final Properties parameter,
       final Attributes controlDefinitionAttributes) {
-    super.bind(element);
+    bind(element);
+
+    final boolean wrap = controlDefinitionAttributes.getAsBoolean("wrap", false);
+    getTextRenderer().setLineWrapping(wrap);
   }
 
   @Override
