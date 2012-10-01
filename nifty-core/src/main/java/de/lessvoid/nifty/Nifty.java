@@ -108,6 +108,7 @@ public class Nifty {
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
   private NiftyMouseImpl niftyMouse;
   private NiftyInputConsumerImpl niftyInputConsumer = new NiftyInputConsumerImpl();
+  private NiftyInputConsumerNotify niftyInputConsumerNotify = new NiftyInputConsumerNotifyDefault();
   private SubscriberRegistry subscriberRegister = new SubscriberRegistry();
   private boolean debugOptionPanelColors;
   private Clipboard clipboard = null;
@@ -1316,29 +1317,30 @@ public class Nifty {
 
     @Override
     public boolean processMouseEvent(final int mouseX, final int mouseY, final int mouseWheel, final int button, final boolean buttonDown) {
-      if (isIgnoreMouseEvents()) {
-        return false;
+      boolean processed = false;
+      if (!isIgnoreMouseEvents()) {
+        processed = processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
+        if (log.isLoggable(Level.FINE)) {
+          log.fine("[processMouseEvent] [" +  mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + "] processed [" + processed + "]");
+        }
       }
-      boolean processed = processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
-      if (log.isLoggable(Level.FINE)) {
-        log.fine("[processMouseEvent] [" +  mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + "] processed [" + processed + "]");
-      }
+      niftyInputConsumerNotify.processedMouseEvent(mouseX, mouseY, mouseWheel, button, buttonDown, processed);
       return processed;
     }
 
     @Override
     public boolean processKeyboardEvent(final KeyboardInputEvent keyEvent) {
-      if (isIgnoreKeyboardEvents()) {
-        return false;
+      boolean processed = false;
+      if (!isIgnoreKeyboardEvents()) {
+        if (!currentScreen.isNull()) {
+          processed = currentScreen.keyEvent(keyEvent);
+          if (log.isLoggable(Level.FINE)) {
+            log.fine("[processKeyboardEvent] " + keyEvent + " processed [" + processed + "]");
+          }
+        }
       }
-      if (currentScreen.isNull()) {
-        return false;
-      }
-      boolean result = currentScreen.keyEvent(keyEvent);
-      if (log.isLoggable(Level.FINE)) {
-        log.fine("[processKeyboardEvent] " + keyEvent + " processed [" + result + "]");
-      }
-      return result;
+      niftyInputConsumerNotify.processKeyboardEvent(keyEvent, processed);
+      return processed;
     }
 
     void resetMouseDown() {
@@ -1596,5 +1598,33 @@ public class Nifty {
 
   public boolean isIgnoreKeyboardEvents() {
     return ignoreKeyboardEvents;
+  }
+
+  public NiftyInputConsumerNotify getNiftyInputConsumerNotify() {
+    return niftyInputConsumerNotify;
+  }
+
+  public void setNiftyInputConsumerNotify(final NiftyInputConsumerNotify newNotify) {
+    this.niftyInputConsumerNotify = newNotify;
+  }
+
+  /**
+   * Implementation of {@link NiftyInputConsumerNotify} which will just ignore everything.
+   * @author void
+   */
+  private static class NiftyInputConsumerNotifyDefault implements NiftyInputConsumerNotify {
+    @Override
+    public void processedMouseEvent(
+        int mouseX,
+        int mouseY,
+        int mouseWheel,
+        int button,
+        boolean buttonDown,
+        boolean processed) {
+    }
+
+    @Override
+    public void processKeyboardEvent(KeyboardInputEvent keyEvent, boolean processed) {
+    }
   }
 }
