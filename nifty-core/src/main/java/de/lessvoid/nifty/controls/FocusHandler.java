@@ -197,6 +197,7 @@ public class FocusHandler {
   }
 
   public void resetFocusElements() {
+    entries.clear();
     lostKeyboardFocus(keyboardFocusElement);
     lostMouseFocus(mouseFocusElement);
   }
