@@ -246,6 +246,7 @@ public class Screen {
     for (int i=0; i<layerElements.size(); i++) {
       Element w = layerElements.get(i);
       w.resetEffects();
+      w.reactivate();
     }
   }
 
