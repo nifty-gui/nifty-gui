@@ -97,6 +97,17 @@ public class MenuButtonControlDefinition {
     }};
   }
 
+  public static ControlBuilder getControlBuilderSpecial(final String id, final String text, final String hintText) {
+    return new ControlBuilder(id, NAME) {{
+      parameter(PARAMETER_LABEL, text);
+      parameter(PARAMETER_HINT, hintText);
+      parameter(PARAMETER_COLOR_0, "#2c2a");
+      parameter(PARAMETER_COLOR_1, "#222f");
+      parameter(PARAMETER_COLOR_2, "#efef");
+      parameter(PARAMETER_COLOR_3, "#efef");
+    }};
+  }
+
   public static ControlBuilder getControlBuilder(final String id, final String text, final String hintText, final String width) {
     return new ControlBuilder(id, NAME) {{
       parameter(PARAMETER_LABEL, text);

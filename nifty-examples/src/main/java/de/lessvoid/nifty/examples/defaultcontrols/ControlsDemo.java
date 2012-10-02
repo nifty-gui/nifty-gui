@@ -29,6 +29,7 @@ import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefin
 import de.lessvoid.nifty.examples.defaultcontrols.common.MenuButtonControlDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.dragndrop.DragAndDropDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.dropdown.DropDownDialogControlDefinition;
+import de.lessvoid.nifty.examples.defaultcontrols.eventconsume.EventConsumeDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.listbox.ListBoxDialogControlDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.messagebox.MessageBoxDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.scrollpanel.ScrollPanelDialogControlDefinition;
@@ -213,12 +214,19 @@ public class ControlsDemo<T> implements NiftyExample {
     final CommonBuilders common = new CommonBuilders();
     Screen screen = new ScreenBuilder("demo") {{
       controller(
-          new ControlsDemoScreenController<T>(resControl, "menuButtonListBox", "dialogListBox", "menuButtonDropDown",
-              "dialogDropDown", "menuButtonTextField", "dialogTextField", "menuButtonSlider",
-              "dialogSliderAndScrollbar", "menuButtonScrollPanel", "dialogScrollPanel", "menuButtonDragAndDrop",
-              "dialogDragAndDrop", "menuButtonChatControl", "dialogChatControl", "menuButtonMessageBox",
-              "dialogMessageBox", "menuButtonTabsControl", "dialogTabsControl", "menuButtonTreeBoxControl",
-              "dialogTreeBoxControl"));
+          new ControlsDemoScreenController<T>(
+              resControl,
+              "menuButtonListBox", "dialogListBox",
+              "menuButtonDropDown", "dialogDropDown",
+              "menuButtonTextField", "dialogTextField",
+              "menuButtonSlider", "dialogSliderAndScrollbar",
+              "menuButtonScrollPanel", "dialogScrollPanel",
+              "menuButtonDragAndDrop", "dialogDragAndDrop",
+              "menuButtonChatControl", "dialogChatControl",
+              "menuButtonMessageBox", "dialogMessageBox",
+              "menuButtonTabsControl", "dialogTabsControl",
+              "menuButtonTreeBoxControl", "dialogTreeBoxControl",
+              "menuButtonEventConsumeControl", "dialogEventConsumeControl"));
       inputMapping(
           "de.lessvoid.nifty.input.mapping.DefaultInputMapping"); // this will enable Keyboard events for the screen
           // controller
@@ -291,6 +299,9 @@ public class ControlsDemo<T> implements NiftyExample {
                   "demonstrates\nhow you can combine Nifty standard controls to build more\ncomplex stuff. In this " +
                   "case we've just included his work as\nanother standard control to Nifty! :)"));
           panel(builders.hspacer("10px"));
+          control(MenuButtonControlDefinition.getControlBuilderSpecial("menuButtonEventConsumeControl", "Event Consuming",
+              "Nifty Event Consuming demonstration\n\nThis demonstrates how Nifty consumes events and how you can" +
+                  "influence\nthe event processing to block certain elements from\nreceiving events."));
         }});
         panel(new PanelBuilder("dialogParent") {{
           childLayoutOverlay();
@@ -307,6 +318,7 @@ public class ControlsDemo<T> implements NiftyExample {
           control(new ControlBuilder("dialogMessageBox", MessageBoxDialogDefinition.NAME));
           control(new ControlBuilder("dialogTabsControl", TabsControlDialogDefinition.NAME));
           control(new ControlBuilder("dialogTreeBoxControl", TreeBoxControlDialogDefinition.NAME));
+          control(new ControlBuilder("dialogEventConsumeControl", EventConsumeDialogDefinition.NAME));
         }});
       }});
       layer(new LayerBuilder() {{
@@ -740,6 +752,7 @@ public class ControlsDemo<T> implements NiftyExample {
     TextFieldDialogControlDefinition.register(nifty);
     SliderAndScrollbarDialogControlDefinition.register(nifty);
     DragAndDropDialogDefinition.register(nifty);
+    EventConsumeDialogDefinition.register(nifty);
 
     createIntroScreen(nifty);
     createDemoScreen(nifty, resolutionControl);
