@@ -58,9 +58,9 @@ public class CheckBoxImplTest {
 
   @Test
   public void testSetToUnchecked() {
-    expectViewUpdate(false);
+    replay(view);
     checkBox.setChecked(false);
-    assertCheckBoxState(false);
+    assertEquals(false, checkBox.isChecked());
   }
 
   @Test
