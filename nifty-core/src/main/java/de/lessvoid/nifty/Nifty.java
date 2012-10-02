@@ -1018,7 +1018,6 @@ public class Nifty {
   }
 
   public void removeElement(final Screen screen, final Element element, final EndNotify endNotify) {
-    element.removeFromFocusHandler();
     element.startEffect(EffectEventId.onEndScreen, new EndNotify() {
       public void perform() {
         endOfFrameElementActions.add(new EndOfFrameElementAction(screen, element, new ElementRemoveAction(), endNotify));
