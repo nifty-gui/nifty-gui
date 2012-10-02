@@ -284,6 +284,16 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   private int parentClipWidth;
   private int parentClipHeight;
 
+  /*
+   * when set to true this Element will ignore all mouse events.
+   */
+  private boolean ignoreMouseEvents;
+
+  /*
+   * when set to true this Element will ignore all keyboard events.
+   */
+  private boolean ignoreKeyboardEvents;
+
   private static Convert convert = new Convert();
   private static Map < Class < ? extends ElementRenderer >, ApplyRenderer > rendererApplier = new HashMap < Class < ? extends ElementRenderer>, ApplyRenderer >();
   {
@@ -1505,6 +1515,9 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
     if (!enabled) {
       return false;
     }
+    if (isIgnoreMouseEvents()) {
+      return false;
+    }
     return true;
   }
 
@@ -2098,7 +2111,12 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
    * @return focusable
    */
   public boolean isFocusable() {
-    return focusable && enabled && visible && hasVisibleParent();
+    return
+        focusable &&
+        enabled &&
+        visible &&
+        hasVisibleParent() &&
+        !isIgnoreKeyboardEvents();
   }
   
   private boolean hasVisibleParent() {
@@ -2228,6 +2246,28 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
   public ElementInteraction getElementInteraction() {
     return interaction;
+  }
+
+  public void setIgnoreMouseEvents(final boolean newValue) {
+    ignoreMouseEvents = newValue;
+    if (newValue) {
+      focusHandler.lostMouseFocus(this);
+    }
+  }
+
+  public boolean isIgnoreMouseEvents() {
+    return ignoreMouseEvents;
+  }
+
+  public void setIgnoreKeyboardEvents(final boolean newValue) {
+    ignoreKeyboardEvents = newValue;
+    if (newValue) {
+      focusHandler.lostKeyboardFocus(this);
+    }
+  }
+
+  public boolean isIgnoreKeyboardEvents() {
+    return ignoreKeyboardEvents;
   }
 
   // EffectManager.Notify implementation
