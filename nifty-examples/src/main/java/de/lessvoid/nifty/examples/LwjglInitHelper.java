@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
@@ -53,7 +52,12 @@ public class LwjglInitHelper {
    * @return true on success and false otherwise
    */
   public static boolean initSubSystems(final String title) {
-    LoggerShortFormat.intialize();
+    try {
+      LoggerShortFormat.intialize();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
     if (!LwjglInitHelper.initGraphics(title)) {
       return false;
     }
