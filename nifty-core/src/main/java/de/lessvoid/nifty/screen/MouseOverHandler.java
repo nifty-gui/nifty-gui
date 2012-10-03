@@ -22,11 +22,20 @@ public class MouseOverHandler {
   private ArrayList < Element > mouseElements = new ArrayList < Element >();
 
   /**
+   * This is set to true when there is at least a single element that can handle mouse events but is at the moment
+   * temporarily not able to do so due to a onStartScreen/onEndScreen/blockedInteration flag. This is treated
+   * specially because the element cannot really be interacted with but we should still acknowledge this element as
+   * being processed by Nifty.
+   */
+  private boolean interactElementInTransitAvailable = false;
+
+  /**
    * Reset mouse over elements.
    */
   public void reset() {
     mouseOverElements.clear();
     mouseElements.clear();
+    interactElementInTransitAvailable = false;
   }
 
   /**
@@ -35,6 +44,10 @@ public class MouseOverHandler {
    */
   public void addMouseOverElement(final Element element) {
     mouseOverElements.add(element);
+  }
+
+  public void addMouseElement(final Element element) {
+    mouseElements.add(element);
   }
 
   /**
@@ -60,7 +73,6 @@ public class MouseOverHandler {
       }
     }
   }
-
 
   public void processMouseOverEvent(
       final Element rootElement,
@@ -102,13 +114,26 @@ public class MouseOverHandler {
         return;
       }
     }
-}
+  }
 
+  /**
+   * The result of this method will directly be used as the processed flag for a mouse event. So we return true when
+   * there is:
+   * a) at least a single mouse over element available (so in that case we've found an element below the mouse cursor
+   *    we can actually interact with)
+   * b) there was at least a single element that is temporarily disabled because of an onStartScreen/onEndScreen/
+   *    interactionBlocked but would otherwise be able to interact with. 
+   * @return true if there is a single element able to process mouse events or false if nothing is there
+   */
   public boolean hitsElement() {
+    return hasMouseOverElements() || interactElementInTransitAvailable;
+  }
+
+  private boolean hasMouseOverElements() {
     return !mouseOverElements.isEmpty();
   }
 
-  public void addMouseElement(final Element element) {
-    mouseElements.add(element);
+  public void canTheoreticallyHandleMouse(final Element element) {
+    interactElementInTransitAvailable = true;
   }
 }

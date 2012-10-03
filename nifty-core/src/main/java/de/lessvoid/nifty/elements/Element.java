@@ -1522,6 +1522,43 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
   }
 
   /**
+   * This is a special version of canHandleMouseEvents() that will return true if this element is able to process
+   * mouse events in general. This method will return true even when the element is temporarily not able to handle
+   * events because onStartScreen or onEndScreen effects are active.
+   * @return true can handle mouse events, false can't handle them
+   */
+  boolean canTheoreticallyHandleMouseEvents() {
+//    if (isEffectActive(EffectEventId.onStartScreen)) {
+//      return false;
+//    }
+//    if (isEffectActive(EffectEventId.onEndScreen)) {
+//      return false;
+//    }
+    if (!visible) {
+      return false;
+    }
+    if (done) {
+      return false;
+    }
+    if (!visibleToMouseEvents) {
+      return false;
+    }
+    if (!focusHandler.canProcessMouseEvents(this)) {
+      return false;
+    }
+//    if (interactionBlocked) {
+//      return false;
+//    }
+    if (!enabled) {
+      return false;
+    }
+    if (isIgnoreMouseEvents()) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * This should check if the mouse event is inside the current element and if it is
    * forward the event to it's child. The purpose of this is to build a list of all
    * elements from front to back that are available for a certain mouse position.
@@ -1530,11 +1567,16 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
       final NiftyMouseInputEvent mouseEvent,
       final long eventTime,
       final MouseOverHandler mouseOverHandler) {
+    boolean isInside = isInside(mouseEvent);
     if (canHandleMouseEvents()) {
-      if (isInside(mouseEvent)) {
+      if (isInside) {
         mouseOverHandler.addMouseOverElement(this);
       } else {
         mouseOverHandler.addMouseElement(this);
+      }
+    } else if (canTheoreticallyHandleMouseEvents()) {
+      if (isInside) {
+        mouseOverHandler.canTheoreticallyHandleMouse(this);
       }
     }
     if (visible) {
