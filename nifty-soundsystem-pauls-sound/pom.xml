@@ -3,7 +3,7 @@
   <parent>
     <groupId>lessvoid</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.3.2</version>
   </parent>
   <artifactId>nifty-pauls-soundsystem</artifactId>
   <name>Nifty Sound Device for Pauls-Soundsystem</name>
@@ -11,7 +11,7 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>1.3.2-SNAPSHOT</version>
+      <version>1.3.2</version>
     </dependency>
     <dependency>
       <groupId>com.paulscode.soundsystem</groupId>

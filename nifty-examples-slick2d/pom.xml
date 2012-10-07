@@ -3,7 +3,7 @@
   <parent>
     <artifactId>nifty-main</artifactId>
     <groupId>lessvoid</groupId>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.3.2</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>nifty-examples-slick2d</artifactId>
@@ -12,27 +12,27 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>1.3.2-SNAPSHOT</version>
+      <version>1.3.2</version>
     </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-examples</artifactId>
-      <version>1.3.2-SNAPSHOT</version>
+      <version>1.3.2</version>
     </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-style-black</artifactId>
-      <version>1.3.2-SNAPSHOT</version>
+      <version>1.3.2</version>
     </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-default-controls</artifactId>
-      <version>1.3.2-SNAPSHOT</version>
+      <version>1.3.2</version>
     </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-slick-renderer</artifactId>
-      <version>1.3.2-SNAPSHOT</version>
+      <version>1.3.2</version>
     </dependency>
   </dependencies>
   <build>

@@ -3,7 +3,7 @@
   <parent>
     <groupId>lessvoid</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.3.2</version>
   </parent>
   <artifactId>nifty</artifactId>
   <packaging>jar</packaging>
@@ -93,11 +93,11 @@
             <configuration>
               <tasks>
                 <!-- Safety -->
-                <mkdir dir="${project.build.outputDirectory}"/>
+                <mkdir dir="${project.build.outputDirectory}" />
                 <tstamp>
-                  <format property="last.updated" pattern="yyyy-MM-dd HH:mm:ss"/>
+                  <format property="last.updated" pattern="yyyy-MM-dd HH:mm:ss" />
                 </tstamp>
-                <echo file="${project.build.outputDirectory}/version" message="${project.version} (${last.updated})"/>
+                <echo file="${project.build.outputDirectory}/version" message="${project.version} (${last.updated})" />
               </tasks>
             </configuration>
           </execution>
@@ -124,7 +124,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
