@@ -276,7 +276,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     Element button = getButton(tabIndex);
     if (button == null) {
       final ElementType newButtonTemplate = buttonTemplate.copy();
-      newButtonTemplate.getAttributes().set("id", "#tabButton-" + tabIndex); //NON-NLS
+      newButtonTemplate.getAttributes().set("id", buildTabButtonName(tabIndex)); //NON-NLS
       button = niftyGui.createElementFromType(parentScreen, tabButtonPanel, newButtonTemplate);
     }
     niftyGui.subscribe(parentScreen, button.getId(), ButtonClickedEvent.class, buttonClickedSubscriber);
@@ -295,6 +295,10 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     if (tab instanceof TabGroupMember) {
       ((TabGroupMember) tab).setParentTabGroup(this);
     }
+  }
+
+  private String buildTabButtonName(final int index) {
+    return tabButtonPanel.getId() + "#tabButton-" + Integer.toString(index);
   }
 
   @Override

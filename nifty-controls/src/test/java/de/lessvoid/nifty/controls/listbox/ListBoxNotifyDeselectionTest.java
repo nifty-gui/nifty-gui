@@ -23,6 +23,7 @@ public class ListBoxNotifyDeselectionTest {
 
   @Before
   public void before() {
+    listBox.bindToView(new ListBoxViewNull<TestItem>(), 2);
     listBox.addItem(o1);
     listBox.addItem(o2);
     listBox.selectItem(o1);

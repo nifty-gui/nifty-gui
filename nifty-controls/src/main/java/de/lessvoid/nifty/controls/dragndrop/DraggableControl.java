@@ -142,6 +142,7 @@ public class DraggableControl extends AbstractController implements Draggable {
     draggable.markForMove(popup, new EndNotify() {
       @Override
       public void perform() {
+        draggable.getFocusHandler().requestExclusiveMouseFocus(draggable);
         draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
         draggable.setConstraintY(new SizeValue(originalPositionY + "px"));
         draggable.getParent().layoutElements();

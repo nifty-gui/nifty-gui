@@ -181,7 +181,7 @@ public class Screen {
 
   public void closePopup(final Element popup, final EndNotify closeNotify) {
     popup.onEndScreen(this);
-    resetLayers();
+    nifty.resetMouseInputEvents();
     removeLayerElement(popup);
     schedulePopupElementRemoval(new ElementWithEndNotify(popup, closeNotify));
   }
@@ -246,6 +246,7 @@ public class Screen {
     for (int i=0; i<layerElements.size(); i++) {
       Element w = layerElements.get(i);
       w.resetEffects();
+      w.reactivate();
     }
   }
 
@@ -347,12 +348,18 @@ public class Screen {
     mouseOverHandler.reset();
 
     long eventTime = timeProvider.getMsTime();
-    for (int i=0; i<layerList.size(); i++) {
-      Element layer = layerList.get(i);
-      layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
+
+    if (focusHandler.hasAnyElementTheMouseFocus()) {
+      Element e = focusHandler.getMouseFocusElement();
+      mouseOverHandler.addMouseOverElement(e);
+    } else {
+      for (int i=0; i<layerList.size(); i++) {
+        Element layer = layerList.get(i);
+        layer.buildMouseOverElements(inputEvent, eventTime, mouseOverHandler);
+      }
     }
 
-    if (log.isLoggable(Level.FINE)) {
+    if (log.isLoggable(Level.FINER)) {
       log.fine(mouseOverHandler.getInfoString());
     }
 

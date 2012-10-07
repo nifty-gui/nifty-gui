@@ -33,11 +33,9 @@ import de.lessvoid.xml.xpp3.Attributes;
 @Deprecated
 public class ImageSelectControl extends AbstractController implements de.lessvoid.nifty.controls.ImageSelect {
     private Nifty nifty;
-    private Element element;
     private ArrayList<NiftyImage> images;
     private int currentImageIndex;
     private int imageWidth;
-    private int imageHeight;
     private NextPrevHelper nextPrevHelper;
     private Element backButtonElement;
     private Element forwardButtonElement;
@@ -54,19 +52,18 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
         final Element newElement,
         final Properties properties,
         final Attributes controlDefinitionAttributes) {
+        super.bind(newElement);
         nifty = niftyParam;
-        element = newElement;
         images = createImages(nifty.getRenderEngine(), properties.getProperty("imageList"));
         currentImageIndex = 0;
         imageWidth = new SizeValue(properties.getProperty("imageWidth", "0px")).getValueAsInt(1.0f);
-        imageHeight = new SizeValue(properties.getProperty("imageHeight", "0px")).getValueAsInt(1.0f);
-        nextPrevHelper = new NextPrevHelper(element, screenParam.getFocusHandler());
-        backButtonElement = element.findElementByName("#back-button");
-        forwardButtonElement = element.findElementByName("#forward-button");
-        imageElement = element.findElementByName("#image");
-        imageElement2 = element.findElementByName("#image-2");
-        backElement = element.findElementByName("#back");
-        forwardElement = element.findElementByName("#forward");
+        nextPrevHelper = new NextPrevHelper(getElement(), screenParam.getFocusHandler());
+        backButtonElement = getElement().findElementByName("#back-button");
+        forwardButtonElement = getElement().findElementByName("#forward-button");
+        imageElement = getElement().findElementByName("#image");
+        imageElement2 = getElement().findElementByName("#image-2");
+        backElement = getElement().findElementByName("#back");
+        forwardElement = getElement().findElementByName("#forward");
 
         List<Effect> moveEffects = imageElement.getEffects(EffectEventId.onCustom, Move.class);
         for (Effect e : moveEffects) {
@@ -106,7 +103,7 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
       } else if (nextPrevHelper.handleNextPrev(inputEvent)) {
         return true;
       } else if (inputEvent == NiftyStandardInputEvent.Activate) {
-        element.onClick();
+        getElement().onClick();
         return true;
       }
       return false;
@@ -241,7 +238,26 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
       imageIndexChanged();
     }
 
-    // privat stuff
+    /**
+     * Remove Image.
+     * @param image image
+     */
+    @Override
+    public void removeImage(final NiftyImage image) {
+      images.remove(image);
+      updateVisuals();
+    }
+
+    /**
+     * Number of images
+     * @Return Number of images
+     */
+    @Override
+    public int getImageCount() {
+      return images.size();
+    }
+
+    // private stuff
 
     /**
      * update visuals.
@@ -295,6 +311,6 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
     }
 
     private void imageIndexChanged() {
-      nifty.publishEvent(element.getId(), new ImageSelectSelectionChangedEvent(this, currentImageIndex));
+      nifty.publishEvent(getElement().getId(), new ImageSelectSelectionChangedEvent(this, currentImageIndex));
     }
 }

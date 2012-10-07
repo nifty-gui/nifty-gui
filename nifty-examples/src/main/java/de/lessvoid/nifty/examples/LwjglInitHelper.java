@@ -52,7 +52,12 @@ public class LwjglInitHelper {
    * @return true on success and false otherwise
    */
   public static boolean initSubSystems(final String title) {
-    LoggerShortFormat.intialize();
+    try {
+      LoggerShortFormat.intialize();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
     if (!LwjglInitHelper.initGraphics(title)) {
       return false;
     }

@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.logging.Level;
@@ -480,14 +481,20 @@ public class LwjglRenderDevice implements RenderDevice {
 
   private Cursor loadMouseCursor(final String name, final int hotspotX, final int hotspotY) throws IOException {
     ImageData imageLoader = createImageLoader(name);
-    ByteBuffer imageData = imageLoader.loadMouseCursorImage(resourceLoader.getResourceAsStream(name));
-    imageData.rewind();
-    int width = imageLoader.getWidth();
-    int height = imageLoader.getHeight();
+    InputStream source = null;
     try {
+      source = resourceLoader.getResourceAsStream(name);
+      ByteBuffer imageData = imageLoader.loadMouseCursorImage(source);
+      imageData.rewind();
+      int width = imageLoader.getWidth();
+      int height = imageLoader.getHeight();
       return new Cursor(width, height, hotspotX, height - hotspotY - 1, 1, imageData.asIntBuffer(), null);
     } catch (LWJGLException e) {
       throw new IOException(e);
+    } finally {
+      if (source != null) {
+        source.close();
+      }
     }
   }
 

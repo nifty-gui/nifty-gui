@@ -4,6 +4,8 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class ElementRemoveAction implements Action {
   public void perform(final Screen screen, final Element element) {
+    element.removeFromFocusHandler();
+
     // we'll now resetAllEffects here when an element is removed. this was especially
     // introduced to reset all onHover effects that were used for changing the mouse cursor image.
     // without this reset the mouse cursor image might hang when elements are being removed

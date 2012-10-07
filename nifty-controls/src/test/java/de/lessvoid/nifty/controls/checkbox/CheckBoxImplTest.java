@@ -44,9 +44,9 @@ public class CheckBoxImplTest {
 
   @Test
   public void testUncheck() {
-    expectViewUpdate(false);
+    replay(view);
     checkBox.uncheck();
-    assertCheckBoxState(false);
+    assertEquals(false, checkBox.isChecked());
   }
 
   @Test
@@ -58,9 +58,9 @@ public class CheckBoxImplTest {
 
   @Test
   public void testSetToUnchecked() {
-    expectViewUpdate(false);
+    replay(view);
     checkBox.setChecked(false);
-    assertCheckBoxState(false);
+    assertEquals(false, checkBox.isChecked());
   }
 
   @Test
@@ -72,18 +72,13 @@ public class CheckBoxImplTest {
 
   @Test
   public void testToggleToOff() {
-    view.update(false);
-    view.publish(capture(capturedEvent));
     view.update(true);
     view.publish(capture(capturedEvent));
     replay(view);
 
     checkBox.uncheck();
-    assertEquals(false, capturedEvent.getValue().isChecked());
-
     checkBox.toggle();
     assertEquals(true, capturedEvent.getValue().isChecked());
-
     assertEquals(true, checkBox.isChecked());
   }
 

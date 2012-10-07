@@ -19,20 +19,17 @@ public class CheckBoxImpl extends EmptyNiftyControlImpl implements CheckBox {
 
   @Override
   public void check() {
-    checked = true;
-    updateView();
+    internalSetChecked(true);
   }
 
   @Override
   public void uncheck() {
-    checked = false;
-    updateView();
+    internalSetChecked(false);
   }
 
   @Override
   public void setChecked(final boolean state) {
-    checked = state;
-    updateView();
+    internalSetChecked(state);
   }
 
   @Override
@@ -43,6 +40,15 @@ public class CheckBoxImpl extends EmptyNiftyControlImpl implements CheckBox {
   @Override
   public void toggle() {
     setChecked(!isChecked());
+  }
+
+  private void internalSetChecked(final boolean newState) {
+    // when there is no state change then, well, don't change the state :)
+    if (checked == newState) {
+      return;
+    }
+    checked = newState;
+    updateView();
   }
 
   private void updateView() {

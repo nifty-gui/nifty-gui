@@ -91,6 +91,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
     consoleCommands.registerCommand("show ScrollPanel", showCommand);
     consoleCommands.registerCommand("show ChatControl", showCommand);
     consoleCommands.registerCommand("show DragAndDrop", showCommand);
+    consoleCommands.registerCommand("show EventConsume", showCommand);
 
     NiftyCommand niftyCommand = new NiftyCommand();
     consoleCommands.registerCommand("nifty screen", niftyCommand);

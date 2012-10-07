@@ -15,8 +15,8 @@ public class PrimaryClickMouseMethods extends MouseClickMethods {
 
   @Override
   public void onInitialClick() {
+    element.getFocusHandler().requestExclusiveMouseFocus(element);
     if (element.isFocusable()) {
-      element.getFocusHandler().requestExclusiveMouseFocus(element);
       element.getFocusHandler().setKeyFocus(element);
     }
   }

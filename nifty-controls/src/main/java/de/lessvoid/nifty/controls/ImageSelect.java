@@ -37,4 +37,16 @@ public interface ImageSelect extends NiftyControl {
    * @param imageIndex image index
    */
   void setSelectedImageIndex(int imageIndex);
+
+  /**
+   * Remove Image.
+   * @param image image
+   */
+  void removeImage(NiftyImage image);
+
+  /**
+   * Number of images
+   * @Return Number of images
+   */
+  int getImageCount();
 }

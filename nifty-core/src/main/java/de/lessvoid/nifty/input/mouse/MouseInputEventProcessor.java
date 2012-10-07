@@ -26,29 +26,8 @@ public class MouseInputEventProcessor {
     hadAnyEvents = false;
   }
 
-  public boolean canProcess(final NiftyMouseInputEvent mouseEvent) {
-    hadAnyEvents = true;
-
-    int mouseX = mouseEvent.getMouseX();
-    int mouseY = mouseEvent.getMouseY();
-    int mouseWheel = mouseEvent.getMouseWheel();
-    boolean button0Down = mouseEvent.isButton0Down();
-    boolean button1Down = mouseEvent.isButton1Down();
-    boolean button2Down = mouseEvent.isButton2Down();
-
-    if (mouseX != lastMouseX ||
-        mouseY != lastMouseY ||
-        mouseWheel != 0 ||
-        button0Down != lastButtonDown0 ||
-        button1Down != lastButtonDown1 ||
-        button2Down != lastButtonDown2) {
-      return true;
-    }
-
-    return false;
-  }
-
   public void process(final NiftyMouseInputEvent mouse) {
+    hadAnyEvents = true;
     mouse.setButton0InitialDown(!lastButtonDown0 && mouse.isButton0Down());
     mouse.setButton0Release(lastButtonDown0 && !mouse.isButton0Down());
     mouse.setButton1InitialDown(!lastButtonDown1 && mouse.isButton1Down());

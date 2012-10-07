@@ -108,10 +108,21 @@ public class Nifty {
   private RootLayerFactory rootLayerFactory = new RootLayerFactory();
   private NiftyMouseImpl niftyMouse;
   private NiftyInputConsumerImpl niftyInputConsumer = new NiftyInputConsumerImpl();
+  private NiftyInputConsumerNotify niftyInputConsumerNotify = new NiftyInputConsumerNotifyDefault();
   private SubscriberRegistry subscriberRegister = new SubscriberRegistry();
   private boolean debugOptionPanelColors;
   private Clipboard clipboard = null;
   private NiftyResourceLoader resourceLoader = new NiftyResourceLoader();
+
+  /*
+   * when set to true Nifty will ignore all mouse events.
+   */
+  private boolean ignoreMouseEvents;
+
+  /*
+   * when set to true Nifty will ignore all keyboard events.
+   */
+  private boolean ignoreKeyboardEvents;
 
   /**
    * Create nifty with optional console parameter.
@@ -281,7 +292,7 @@ public class Nifty {
     updateSoundSystem();
     if (log.isLoggable(Level.FINEST)) {
       log.finest(currentScreen.debugOutput());
-    } else if (log.isLoggable(Level.FINE)) {
+    } else if (log.isLoggable(Level.FINER)) {
       log.fine(currentScreen.debugOutputFocusElements());
     }
     return exit;
@@ -631,6 +642,23 @@ public class Nifty {
   private void gotoScreenInternal(final String id) {
     log.info("gotoScreenInternal [" + id + "]");
  
+    // When someone calls nifty.closePopup() directly followed by a nifty.gotoScreen() the gotoScreen will now win and
+    // we don't wait for the pending Popups to be closed. We'll simply remove the close Popup events since they would be
+    // gone anyway on the new Screen. This is done because the close popups are handled at the end of frame when we
+    // might already be on the new Screen.
+    //
+    // If the user wants to actually see the popup to be closed (maybe because he has added some effects) then now he'll
+    // use the closePopup() method with the EndNotify and call nifty.gotoScreen() when the EndNotify fires.
+    if (hasClosePopups()) {
+      ArrayList <ClosePopUp> copy = new ArrayList <ClosePopUp>(closePopupList);
+      closePopupList.clear();
+
+      for (int i=0; i<copy.size(); i++) {
+        ClosePopUp closePopup = copy.get(i);
+        closePopup.forcedCloseWithoutEndNotify();
+      }
+    }
+
     currentScreen = screens.get(id);
     if (currentScreen == null) {
       currentScreen = new NullScreen();
@@ -989,7 +1017,6 @@ public class Nifty {
   }
 
   public void removeElement(final Screen screen, final Element element, final EndNotify endNotify) {
-    element.removeFromFocusHandler();
     element.startEffect(EffectEventId.onEndScreen, new EndNotify() {
       public void perform() {
         endOfFrameElementActions.add(new EndOfFrameElementAction(screen, element, new ElementRemoveAction(), endNotify));
@@ -1053,6 +1080,10 @@ public class Nifty {
 
     public void close() {
       currentScreen.closePopup(popups.get(removePopupId), closeNotify);
+    }
+
+    public void forcedCloseWithoutEndNotify() {
+      currentScreen.closePopup(popups.get(removePopupId), null);
     }
   }
 
@@ -1284,23 +1315,30 @@ public class Nifty {
 
     @Override
     public boolean processMouseEvent(final int mouseX, final int mouseY, final int mouseWheel, final int button, final boolean buttonDown) {
-      boolean processed = processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
-      if (log.isLoggable(Level.FINE)) {
-        log.fine("[processMouseEvent] [" +  mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + "] processed [" + processed + "]");
+      boolean processed = false;
+      if (!isIgnoreMouseEvents()) {
+        processed = processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
+        if (log.isLoggable(Level.FINE)) {
+          log.fine("[processMouseEvent] [" +  mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + "] processed [" + processed + "]");
+        }
       }
+      niftyInputConsumerNotify.processedMouseEvent(mouseX, mouseY, mouseWheel, button, buttonDown, processed);
       return processed;
     }
 
     @Override
     public boolean processKeyboardEvent(final KeyboardInputEvent keyEvent) {
-      if (currentScreen.isNull()) {
-        return false;
+      boolean processed = false;
+      if (!isIgnoreKeyboardEvents()) {
+        if (!currentScreen.isNull()) {
+          processed = currentScreen.keyEvent(keyEvent);
+          if (log.isLoggable(Level.FINE)) {
+            log.fine("[processKeyboardEvent] " + keyEvent + " processed [" + processed + "]");
+          }
+        }
       }
-      boolean result = currentScreen.keyEvent(keyEvent);
-      if (log.isLoggable(Level.FINE)) {
-        log.fine("[processKeyboardEvent] " + keyEvent + " processed [" + result + "]");
-      }
-      return result;
+      niftyInputConsumerNotify.processKeyboardEvent(keyEvent, processed);
+      return processed;
     }
 
     void resetMouseDown() {
@@ -1322,12 +1360,9 @@ public class Nifty {
     }
 
     private boolean processEvent(final NiftyMouseInputEvent mouseInputEvent) {
-      boolean handled = false;
-      if (mouseInputEventProcessor.canProcess(mouseInputEvent)) {
-        mouseInputEventProcessor.process(mouseInputEvent);
-        handled = forwardMouseEventToScreen(mouseInputEvent);
-        handleDynamicElements();
-      }
+      mouseInputEventProcessor.process(mouseInputEvent);
+      boolean handled = forwardMouseEventToScreen(mouseInputEvent);
+      handleDynamicElements();
       pool.free(mouseInputEvent);
       return handled;
     }
@@ -1545,5 +1580,49 @@ public class Nifty {
    */
   public NiftyResourceLoader getResourceLoader() {
     return resourceLoader;
+  }
+
+  public void setIgnoreMouseEvents(final boolean newValue) {
+    ignoreMouseEvents = newValue;
+  }
+
+  public boolean isIgnoreMouseEvents() {
+    return ignoreMouseEvents;
+  }
+
+  public void setIgnoreKeyboardEvents(final boolean newValue) {
+    ignoreKeyboardEvents = newValue;
+  }
+
+  public boolean isIgnoreKeyboardEvents() {
+    return ignoreKeyboardEvents;
+  }
+
+  public NiftyInputConsumerNotify getNiftyInputConsumerNotify() {
+    return niftyInputConsumerNotify;
+  }
+
+  public void setNiftyInputConsumerNotify(final NiftyInputConsumerNotify newNotify) {
+    this.niftyInputConsumerNotify = newNotify;
+  }
+
+  /**
+   * Implementation of {@link NiftyInputConsumerNotify} which will just ignore everything.
+   * @author void
+   */
+  private static class NiftyInputConsumerNotifyDefault implements NiftyInputConsumerNotify {
+    @Override
+    public void processedMouseEvent(
+        int mouseX,
+        int mouseY,
+        int mouseWheel,
+        int button,
+        boolean buttonDown,
+        boolean processed) {
+    }
+
+    @Override
+    public void processKeyboardEvent(KeyboardInputEvent keyEvent, boolean processed) {
+    }
   }
 }

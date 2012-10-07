@@ -197,6 +197,7 @@ public class FocusHandler {
   }
 
   public void resetFocusElements() {
+    entries.clear();
     lostKeyboardFocus(keyboardFocusElement);
     lostMouseFocus(mouseFocusElement);
   }
@@ -310,6 +311,10 @@ public class FocusHandler {
 
   public boolean hasAnyElementTheKeyboardFocus() {
     return keyboardFocusElement != null;
+  }
+
+  public boolean hasAnyElementTheMouseFocus() {
+    return mouseFocusElement != null;
   }
 
   public Element findElement(final String defaultFocusElementId) {

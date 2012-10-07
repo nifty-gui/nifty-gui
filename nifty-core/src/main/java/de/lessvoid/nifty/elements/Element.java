@@ -285,6 +285,16 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private int parentClipWidth;
   private int parentClipHeight;
 
+  /*
+   * when set to true this Element will ignore all mouse events.
+   */
+  private boolean ignoreMouseEvents;
+
+  /*
+   * when set to true this Element will ignore all keyboard events.
+   */
+  private boolean ignoreKeyboardEvents;
+
   private static Convert convert = new Convert();
   private static Map < Class < ? extends ElementRenderer >, ApplyRenderer > rendererApplier = new HashMap < Class < ? extends ElementRenderer>, ApplyRenderer >();
   {
@@ -1513,6 +1523,46 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     if (!enabled) {
       return false;
     }
+    if (isIgnoreMouseEvents()) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * This is a special version of canHandleMouseEvents() that will return true if this element is able to process
+   * mouse events in general. This method will return true even when the element is temporarily not able to handle
+   * events because onStartScreen or onEndScreen effects are active.
+   * @return true can handle mouse events, false can't handle them
+   */
+  boolean canTheoreticallyHandleMouseEvents() {
+//    if (isEffectActive(EffectEventId.onStartScreen)) {
+//      return false;
+//    }
+//    if (isEffectActive(EffectEventId.onEndScreen)) {
+//      return false;
+//    }
+    if (!visible) {
+      return false;
+    }
+    if (done) {
+      return false;
+    }
+    if (!visibleToMouseEvents) {
+      return false;
+    }
+    if (!focusHandler.canProcessMouseEvents(this)) {
+      return false;
+    }
+//    if (interactionBlocked) {
+//      return false;
+//    }
+    if (!enabled) {
+      return false;
+    }
+    if (isIgnoreMouseEvents()) {
+      return false;
+    }
     return true;
   }
 
@@ -1525,11 +1575,16 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       final NiftyMouseInputEvent mouseEvent,
       final long eventTime,
       final MouseOverHandler mouseOverHandler) {
+    boolean isInside = isInside(mouseEvent);
     if (canHandleMouseEvents()) {
-      if (isInside(mouseEvent)) {
+      if (isInside) {
         mouseOverHandler.addMouseOverElement(this);
       } else {
         mouseOverHandler.addMouseElement(this);
+      }
+    } else if (canTheoreticallyHandleMouseEvents()) {
+      if (isInside) {
+        mouseOverHandler.canTheoreticallyHandleMouse(this);
       }
     }
     if (visible) {
@@ -1570,7 +1625,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     if (interaction.onMouseOver(this, mouseEvent)) {
       eatMouseEvent = true;
     }
-    if (interaction.onMouseWheel(this, mouseEvent)) {
+    if ((mouseEvent.getMouseWheel() != 0) && interaction.onMouseWheel(this, mouseEvent)) {
       eatMouseEvent = true;
     }
     return eatMouseEvent;
@@ -2106,7 +2161,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @return focusable
    */
   public boolean isFocusable() {
-    return focusable && enabled && visible && hasVisibleParent();
+    return
+        focusable &&
+        enabled &&
+        visible &&
+        hasVisibleParent() &&
+        !isIgnoreKeyboardEvents();
   }
 
   private boolean hasVisibleParent() {
@@ -2236,6 +2296,28 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
   public ElementInteraction getElementInteraction() {
     return interaction;
+  }
+
+  public void setIgnoreMouseEvents(final boolean newValue) {
+    ignoreMouseEvents = newValue;
+    if (newValue) {
+      focusHandler.lostMouseFocus(this);
+    }
+  }
+
+  public boolean isIgnoreMouseEvents() {
+    return ignoreMouseEvents;
+  }
+
+  public void setIgnoreKeyboardEvents(final boolean newValue) {
+    ignoreKeyboardEvents = newValue;
+    if (newValue) {
+      focusHandler.lostKeyboardFocus(this);
+    }
+  }
+
+  public boolean isIgnoreKeyboardEvents() {
+    return ignoreKeyboardEvents;
   }
 
   // EffectManager.Notify implementation

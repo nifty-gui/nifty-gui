@@ -40,6 +40,7 @@ public class ListBoxSingleSelectionListViewTest {
   @Test
   public void testSelectFirstItem() {
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
@@ -48,8 +49,10 @@ public class ListBoxSingleSelectionListViewTest {
   @Test
   public void testSelectDoubleItem() {
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(1));
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 1, ListBoxTestTool.buildValuesSelection(1));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     replay(viewMock);
     listBox.selectItemByIndex(0);
@@ -60,6 +63,8 @@ public class ListBoxSingleSelectionListViewTest {
   public void testSelectOutOfDisplayItem() {
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
+    viewMock.scrollTo(1);
+    viewMock.display(ListBoxTestTool.buildValues(o2, o3), 1, ListBoxTestTool.buildValuesSelection(1));
     replay(viewMock);
     listBox.selectItemByIndex(2);
   }
@@ -67,6 +72,7 @@ public class ListBoxSingleSelectionListViewTest {
   @Test
   public void testClearWithSelection() {
     viewMock.updateTotalWidth(0);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.updateTotalCount(0);
@@ -79,6 +85,7 @@ public class ListBoxSingleSelectionListViewTest {
 
   @Test
   public void testRemoveItemWithSelection() {
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection(0));
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
     viewMock.updateTotalCount(3);

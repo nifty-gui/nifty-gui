@@ -108,7 +108,7 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     return true;
   }
 
-  public void mouseWheel(final Element element, final NiftyMouseInputEvent inputEvent) {
+  public boolean mouseWheel(final Element element, final NiftyMouseInputEvent inputEvent) {
     int mouseWheel = inputEvent.getMouseWheel();
     float currentValue = scrollbarImpl.getValue();
     if (mouseWheel < 0) {
@@ -116,6 +116,7 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     } else if (mouseWheel > 0) {
       scrollbarImpl.setValue(currentValue - scrollbarImpl.getButtonStepSize() * mouseWheel);
     }
+    return true;
   }
 
   // Scrollbar implementation
