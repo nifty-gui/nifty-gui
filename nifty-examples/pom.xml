@@ -3,14 +3,14 @@
   <parent>
     <artifactId>nifty-main</artifactId>
     <groupId>lessvoid</groupId>
-    <version>1.3.2</version>
+    <version>1.3.3-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>nifty-examples</artifactId>
   <name>Nifty Examples</name>
   <description>Lots of Nifty example code! You can find the source for nearly all demos/tutorials in here.</description>
   <properties>
-    <nifty-version>1.3.2</nifty-version>
+    <nifty-version>1.3.3-SNAPSHOT</nifty-version>
   </properties>
   <dependencies>
     <dependency>
