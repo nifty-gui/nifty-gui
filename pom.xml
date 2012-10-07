@@ -91,7 +91,7 @@
   </dependencies>
   <scm>
     <connection>scm:git:git://github.com/void256/nifty-gui.git</connection>
-    <developerConnection>git@github.com:void256/nifty-gui.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:void256/nifty-gui.git</developerConnection>
     <url>scm:git:https://github.com/void256/nifty-gui.git</url>
   </scm>
   <distributionManagement>
