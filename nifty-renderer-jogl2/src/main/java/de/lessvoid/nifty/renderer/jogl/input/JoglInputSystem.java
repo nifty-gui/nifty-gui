@@ -44,19 +44,15 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
         if (mouseEvent.getButton() == MouseEvent.BUTTON1
                 || mouseEvent.getModifiers() == InputEvent.BUTTON1_MASK) {
             mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(), true, 0));
-        }else{
-	    mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(),false, 0));
-	}
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         // at the moment we only care about the BUTTON1
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-            mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(),true, 0));
-        }else{
-	    mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(),false, 0));
-	}
+            mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(), true, 0));
+        }
     }
 
     @Override

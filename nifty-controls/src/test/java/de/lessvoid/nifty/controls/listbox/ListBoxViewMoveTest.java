@@ -15,6 +15,7 @@ public class ListBoxViewMoveTest {
   private TestItem o3 = new TestItem("o3");
   private ListBoxView<TestItem> view;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     view = createMock(ListBoxView.class);

@@ -9,7 +9,6 @@ import java.util.TreeMap;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 
 /**
@@ -89,7 +88,7 @@ public class ConsoleCommands implements KeyInputHandler {
     if (!commandCompletion) {
       return false;
     }
-    if (NiftyStandardInputEvent.NextInputElement.equals(inputEvent)) {
+    if (NiftyInputEvent.NextInputElement.equals(inputEvent)) {
       List<String> matches = findMatches(textfield.getText());
       if (matches.size() == 1) {
         changeText(matches.get(0));
@@ -106,13 +105,13 @@ public class ConsoleCommands implements KeyInputHandler {
         changeText(shortest);
       }
       return true;
-    } else if (NiftyStandardInputEvent.MoveCursorUp.equals(inputEvent)) {
+    } else if (NiftyInputEvent.MoveCursorUp.equals(inputEvent)) {
       if (commandHistoryLastCommand > 0) {
         commandHistoryLastCommand--;
         changeText(commandHistory.get(commandHistoryLastCommand));
       }
       return true;
-    } else if (NiftyStandardInputEvent.MoveCursorDown.equals(inputEvent)) {
+    } else if (NiftyInputEvent.MoveCursorDown.equals(inputEvent)) {
       if (commandHistoryLastCommand < commandHistory.size() - 1) {
         commandHistoryLastCommand++;
         changeText(commandHistory.get(commandHistoryLastCommand));
@@ -121,7 +120,7 @@ public class ConsoleCommands implements KeyInputHandler {
         changeText("");
       }
       return true;
-    } else if (NiftyStandardInputEvent.SubmitText.equals(inputEvent)) {
+    } else if (NiftyInputEvent.SubmitText.equals(inputEvent)) {
       String text = textfield.getText();
       console.output(text);
       textfield.setText("");

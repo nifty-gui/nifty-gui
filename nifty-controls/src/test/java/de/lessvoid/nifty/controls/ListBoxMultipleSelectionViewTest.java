@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ListBoxMultipleSelectionViewTest {
   private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = new Capture<ListBoxSelectionChangedEvent<TestItem>>();
   private SelectionCheck selectionCheck = new SelectionCheck(listBox);
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     listBox.addItem(o1);

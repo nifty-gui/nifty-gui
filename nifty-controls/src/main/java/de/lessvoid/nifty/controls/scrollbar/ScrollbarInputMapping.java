@@ -1,31 +1,30 @@
 package de.lessvoid.nifty.controls.scrollbar;
 
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
 public class ScrollbarInputMapping implements NiftyInputMapping {
 
-  @Override
-  public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
+  public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == KeyboardInputEvent.KEY_DOWN) {
-        return NiftyStandardInputEvent.MoveCursorDown;
+        return NiftyInputEvent.MoveCursorDown;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
-        return NiftyStandardInputEvent.MoveCursorUp;
+        return NiftyInputEvent.MoveCursorUp;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
-        return NiftyStandardInputEvent.MoveCursorPageDown;
+        return NiftyInputEvent.MoveCursorPageDown;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_UP) {
-        return NiftyStandardInputEvent.MoveCursorPageUp;
+        return NiftyInputEvent.MoveCursorPageUp;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
-          return NiftyStandardInputEvent.MoveCursorLeft;
+          return NiftyInputEvent.MoveCursorLeft;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RIGHT) {
-          return NiftyStandardInputEvent.MoveCursorRight;
+          return NiftyInputEvent.MoveCursorRight;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_TAB) {
         if (inputEvent.isShiftDown()) {
-          return NiftyStandardInputEvent.PrevInputElement;
+          return NiftyInputEvent.PrevInputElement;
         } else {
-          return NiftyStandardInputEvent.NextInputElement;
+          return NiftyInputEvent.NextInputElement;
         }
       }
     }

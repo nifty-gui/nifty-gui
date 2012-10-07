@@ -6,7 +6,6 @@ import java.util.Iterator;
 import org.easymock.IArgumentMatcher;
 import org.easymock.classextension.EasyMock;
 
-@SuppressWarnings("rawtypes")
 public class EqCollectionMatcher implements IArgumentMatcher {
   private Collection expectedCollection;
   private String errorText;

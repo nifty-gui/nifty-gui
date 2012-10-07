@@ -7,7 +7,6 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -40,13 +39,13 @@ public class MenuButtonController implements Controller {
 
   @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
       focusHandler.getNext(element).setFocus();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       focusHandler.getPrev(element).setFocus();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
+    } else if (inputEvent == NiftyInputEvent.Activate) {
       element.onClick();
       return true;
     }

@@ -48,7 +48,7 @@ public class Music {
 	/** True if the music is playing */
 	private boolean playing;
 	/** The list of listeners waiting for notification that the music ended */
-	private ArrayList<MusicListener> listeners = new ArrayList<MusicListener>();
+	private ArrayList listeners = new ArrayList();
 	/** The volume of this music */
 	private float volume = 1.0f;
 	/** Start gain for fading in/out */
@@ -175,7 +175,7 @@ public class Music {
 	private void fireMusicEnded() {
 		playing = false;
 		for (int i=0;i<listeners.size();i++) {
-			listeners.get(i).musicEnded(this);
+			((MusicListener) listeners.get(i)).musicEnded(this);
 		}
 	}
 
@@ -187,7 +187,7 @@ public class Music {
 	private void fireMusicSwapped(Music newMusic) {
 		playing = false;
 		for (int i=0;i<listeners.size();i++) {
-			listeners.get(i).musicSwapped(this, newMusic);
+			((MusicListener) listeners.get(i)).musicSwapped(this, newMusic);
 		}
 	}
 	/**

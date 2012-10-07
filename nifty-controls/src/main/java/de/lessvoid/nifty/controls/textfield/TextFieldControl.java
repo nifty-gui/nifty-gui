@@ -25,7 +25,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -175,8 +174,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
       return false;
     }
 
-    NiftyStandardInputEvent standardInputEvent = (NiftyStandardInputEvent) inputEvent;
-    switch (standardInputEvent) {
+    switch (inputEvent) {
       case MoveCursorLeft:
         textField.cursorLeft();
         break;
@@ -214,7 +212,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
         textField.selectAll();
         break;
       case Character:
-        textField.insert(standardInputEvent.getCharacter());
+        textField.insert(inputEvent.getCharacter());
         break;
       case NextInputElement:
         focusHandler.getNext(fieldElement).setFocus();

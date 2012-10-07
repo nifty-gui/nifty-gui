@@ -7,7 +7,6 @@ public class TextFieldMaxLenTest extends TestCase {
   private static final int MAX_LEN = 5;
   private TextFieldLogic textField;
 
-  @Override
   public void setUp() {
     textField = new TextFieldLogic("12345", null, new EmptyTextFieldView());
     textField.setMaxLength(MAX_LEN);

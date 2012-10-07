@@ -1,8 +1,6 @@
 package de.lessvoid.nifty.controls.chatcontrol;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,11 +13,12 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the main controller for the chat control.
@@ -195,9 +194,10 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
         textControl.setText("");
     }
 
+    @SuppressWarnings("unchecked")
     private ListBox<ChatEntryModelClass> getListBox(final String name) {
 
-        return getElement().findNiftyControl(name, ListBox.class);
+        return (ListBox<ChatEntryModelClass>) getElement().findNiftyControl(name, ListBox.class);
     }
 
     /**
@@ -206,10 +206,10 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
     @Override
     public boolean keyEvent(final NiftyInputEvent inputEvent) {
         LOGGER.log(Level.INFO, "event received: {0}", inputEvent);
-        if (inputEvent == NiftyStandardInputEvent.SubmitText) {
+        if (inputEvent == NiftyInputEvent.SubmitText) {
             sendText();
             return true;
-        } else if (inputEvent == NiftyStandardInputEvent.MoveCursorRight) {
+        } else if (inputEvent == NiftyInputEvent.MoveCursorRight) {
         }
         return false;
     }

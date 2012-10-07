@@ -1,8 +1,7 @@
 package de.lessvoid.nifty.controls.listbox;
 
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.*;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +20,7 @@ public class ListBoxFocusElementEmptyTest {
   private TestItem o2 = new TestItem("o2");
   private ListBoxView<TestItem> viewMock;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     viewMock = createMock(ListBoxView.class);

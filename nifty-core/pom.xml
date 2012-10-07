@@ -3,7 +3,7 @@
   <parent>
     <groupId>lessvoid</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.3.2-SNAPSHOT</version>
   </parent>
   <artifactId>nifty</artifactId>
   <packaging>jar</packaging>

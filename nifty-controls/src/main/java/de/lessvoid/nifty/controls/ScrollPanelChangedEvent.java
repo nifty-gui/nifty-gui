@@ -6,7 +6,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * Nifty generates this event when a ScrollPanel position has changed.
  * @author void
  */
-public class ScrollPanelChangedEvent implements NiftyEvent {
+public class ScrollPanelChangedEvent implements NiftyEvent<Void> {
   private ScrollPanel scrollPanel;
   private float x;
   private float y;

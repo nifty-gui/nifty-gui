@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.controls.imageselect;
 
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
@@ -10,22 +10,21 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  */
 public class ImageSelectInputMapping implements NiftyInputMapping {
 
-  @Override
-  public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
+  public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == KeyboardInputEvent.KEY_LEFT) {
-        return NiftyStandardInputEvent.MoveCursorLeft;
+        return NiftyInputEvent.MoveCursorLeft;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RIGHT) {
-        return NiftyStandardInputEvent.MoveCursorRight;
+        return NiftyInputEvent.MoveCursorRight;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RETURN) {
-        return NiftyStandardInputEvent.Activate;
+        return NiftyInputEvent.Activate;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_SPACE) {
-        return NiftyStandardInputEvent.Activate;
+        return NiftyInputEvent.Activate;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_TAB) {
         if (inputEvent.isShiftDown()) {
-          return NiftyStandardInputEvent.PrevInputElement;
+          return NiftyInputEvent.PrevInputElement;
         } else {
-          return NiftyStandardInputEvent.NextInputElement;
+          return NiftyInputEvent.NextInputElement;
         }
       }
     }

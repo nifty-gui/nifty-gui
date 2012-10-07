@@ -2,9 +2,9 @@ package de.lessvoid.nifty.sound.paulssoundsystem;
 
 public class SupportedCodec {
   private String extension;
-  private Class<?> codecClass;
+  private Class codecClass;
 
-  public SupportedCodec(final String extension, final Class<?> codecClass) {
+  public SupportedCodec(final String extension, final Class codecClass) {
     this.extension = extension;
     this.codecClass = codecClass;
   }
@@ -13,7 +13,7 @@ public class SupportedCodec {
     return extension;
   }
 
-  public Class<?> getCodecClass() {
+  public Class getCodecClass() {
     return codecClass;
   }
 }

@@ -14,6 +14,7 @@ public class ListBoxShowItemLessThanViewCountTest {
   private TestItem o2 = new TestItem("o2");
   private ListBoxView<TestItem> viewMock;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     listBox.addItem(o1);

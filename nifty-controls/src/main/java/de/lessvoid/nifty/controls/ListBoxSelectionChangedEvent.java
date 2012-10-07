@@ -8,7 +8,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * Nifty generates this event when the selection of the ListBox changes.
  * @author void
  */
-public class ListBoxSelectionChangedEvent<T> implements NiftyEvent {
+public class ListBoxSelectionChangedEvent<T> implements NiftyEvent<T> {
   private ListBox<T> listBox;
   private List<T> selection;
   private List<Integer> selectionIndices;

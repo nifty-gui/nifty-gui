@@ -21,7 +21,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -124,7 +123,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
 
   @Override
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.ConsoleToggle) {
+    if (inputEvent == NiftyInputEvent.ConsoleToggle) {
       if (screen.isActivePopup(consolePopup)) {
         nifty.closePopup(consolePopup.getId());
       } else {

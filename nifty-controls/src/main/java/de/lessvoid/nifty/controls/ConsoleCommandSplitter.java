@@ -38,7 +38,7 @@ public class ConsoleCommandSplitter {
           default:
         }
       }
-      return parts.toArray(new String[parts.size()]);
+      return (String[]) parts.toArray(new String[parts.size()]);
     } catch (IOException e) {
       log.warning("exception whild parsing '" + commandLine + "'");
       return new String[] { commandLine };

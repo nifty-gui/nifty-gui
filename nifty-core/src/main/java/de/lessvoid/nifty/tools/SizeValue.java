@@ -197,23 +197,18 @@ public class SizeValue {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
+    if (this == obj)
       return true;
-    }
-    if (obj == null) {
+    if (obj == null)
       return false;
-    }
-    if (!(obj instanceof SizeValue)) {
+    if (getClass() != obj.getClass())
       return false;
-    }
     SizeValue other = (SizeValue) obj;
     if (value == null) {
-      if (other.value != null) {
+      if (other.value != null)
         return false;
-      }
-    } else if (!value.equals(other.value)) {
+    } else if (!value.equals(other.value))
       return false;
-    }
     return true;
   }
 

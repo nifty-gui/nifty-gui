@@ -7,7 +7,6 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -18,7 +17,6 @@ public class ListBoxPanel<T> extends AbstractController {
   private ListBoxImpl<T> listBox;
   private boolean hasFocus = false;
 
-  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -30,25 +28,23 @@ public class ListBoxPanel<T> extends AbstractController {
     focusHandler = screen.getFocusHandler();
   }
 
-  @Override
   public void onStartScreen() {
   }
 
-  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
       if (focusHandler != null) {
         Element nextElement = focusHandler.getNext(element);
         nextElement.setFocus();
         return true;
       }
-    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       if (focusHandler != null) {
         Element prevElement = focusHandler.getPrev(element);
         prevElement.setFocus();
         return true;
       }
-    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
       if (hasElements()) {
         int focusItemIndex = listBox.getFocusItemIndex();
         if (focusItemIndex < listBox.itemCount() - 1) {
@@ -56,7 +52,7 @@ public class ListBoxPanel<T> extends AbstractController {
           return true;
         }
       }
-    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorUp) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
       if (hasElements()) {
         int focusItemIndex = listBox.getFocusItemIndex();
         if (focusItemIndex > 0) {
@@ -64,7 +60,7 @@ public class ListBoxPanel<T> extends AbstractController {
           return true;
         }
       }
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
+    } else if (inputEvent == NiftyInputEvent.Activate) {
       if (hasElements()) {
         int focusItemIndex = listBox.getFocusItemIndex();
         if (focusItemIndex >= 0) {
@@ -95,7 +91,6 @@ public class ListBoxPanel<T> extends AbstractController {
     this.listBox = listBox;
   }
 
-  @Override
   public boolean hasFocus() {
     return hasFocus;
   }

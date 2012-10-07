@@ -1,5 +1,6 @@
 package de.lessvoid.xml.lwxs.elements;
 
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
@@ -10,9 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.xml.lwxs.Schema;
+import de.lessvoid.xml.lwxs.elements.Element;
+import de.lessvoid.xml.lwxs.elements.Type;
 import de.lessvoid.xml.lwxs.processor.TypeProcessorElement;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
+import de.lessvoid.xml.xpp3.XmlProcessor;
 
 public class ElementProcessorTest {
   private TypeProcessorElement elementProcessor;

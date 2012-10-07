@@ -14,7 +14,6 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -34,6 +33,7 @@ public class ConsoleControl extends AbstractController implements Console, Event
   private Color standardColor = null;
   private Color errorColor = new Color("#f00a");
 
+  @SuppressWarnings("unchecked")
   @Override
   public void bind(
       final Nifty niftyParam,
@@ -73,7 +73,7 @@ public class ConsoleControl extends AbstractController implements Console, Event
 
   @Override
   public void onEvent(final String topic, final NiftyInputEvent data) {
-    if (data.equals(NiftyStandardInputEvent.SubmitText)) {
+    if (data.equals(NiftyInputEvent.SubmitText)) {
       String text = textfield.getText();
       listBox.addItem(text);
       listBox.showItemByIndex(listBox.itemCount() - 1);

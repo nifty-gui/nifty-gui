@@ -20,6 +20,7 @@ public class CreateImageSelectControl extends ControlAttributes {
     setName("imageSelect");
   }
 
+  @SuppressWarnings("rawtypes")
   public ImageSelect create(
       final Nifty nifty,
       final Screen screen,

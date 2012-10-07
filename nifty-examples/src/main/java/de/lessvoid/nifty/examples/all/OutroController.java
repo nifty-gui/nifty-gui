@@ -5,7 +5,6 @@ import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -81,7 +80,7 @@ public class OutroController implements ScreenController, KeyInputHandler {
   }
 
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.Escape) {
+    if (inputEvent == NiftyInputEvent.Escape) {
       escape = true;
       nifty.setAlternateKey("exit");
       nifty.setAlternateKeyForNextLoadXml("fade");

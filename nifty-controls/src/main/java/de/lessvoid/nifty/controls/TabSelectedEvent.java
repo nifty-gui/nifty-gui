@@ -12,7 +12,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * @author ractoc
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public class TabSelectedEvent implements NiftyEvent {
+public class TabSelectedEvent implements NiftyEvent<Void> {
   /**
    * The group that is the parent of the tab that got selected.
    */

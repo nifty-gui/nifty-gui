@@ -13,7 +13,6 @@ public class PopupMenuControl<T> implements Controller {
   private Nifty nifty;
   private Element element;
 
-  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,

@@ -11,12 +11,11 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -34,7 +33,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   private Element popup;
   private ListBox<T> listBox;
 
-  @Override
+  @SuppressWarnings("unchecked")
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -75,7 +74,6 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     }
   }
 
-  @Override
   @SuppressWarnings("rawtypes")
   public void onStartScreen() {
     updateEnabled();
@@ -87,21 +85,20 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
         new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, this, popup));
   }
 
-  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
       focusHandler.getNext(getElement()).setFocus();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       focusHandler.getPrev(getElement()).setFocus();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
+    } else if (inputEvent == NiftyInputEvent.Activate) {
       dropDownClicked();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorUp) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
       listBox.selectPrevious();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
       listBox.selectNext();
       return true;
     }

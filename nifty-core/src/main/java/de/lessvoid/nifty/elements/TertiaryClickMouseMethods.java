@@ -36,7 +36,7 @@ public class TertiaryClickMouseMethods extends MouseClickMethods {
     return super.onMouseRelease(nifty, mouseEvent);
   }
 
-  private void publishEvent(final Nifty nifty, final NiftyEvent event) {
+  private void publishEvent(final Nifty nifty, final NiftyEvent<?> event) {
     nifty.publishEvent(element.getId(), event);
   }
 }

@@ -10,7 +10,6 @@ import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -77,10 +76,10 @@ public class SliderControl extends AbstractController implements Slider {
     if (nextPrevHelper.handleNextPrev(inputEvent)) {
       return true;
     }
-    if (inputEvent == NiftyStandardInputEvent.MoveCursorUp || inputEvent == NiftyStandardInputEvent.MoveCursorLeft) {
+    if (inputEvent == NiftyInputEvent.MoveCursorUp || inputEvent == NiftyInputEvent.MoveCursorLeft) {
       sliderImpl.stepDown();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown || inputEvent == NiftyStandardInputEvent.MoveCursorRight) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown || inputEvent == NiftyInputEvent.MoveCursorRight) {
       sliderImpl.stepUp();
       return true;
     }

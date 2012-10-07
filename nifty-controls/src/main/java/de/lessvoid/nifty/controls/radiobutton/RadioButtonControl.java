@@ -10,7 +10,6 @@ import de.lessvoid.nifty.controls.RadioButtonStateChangedEvent;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -42,13 +41,13 @@ public class RadioButtonControl extends AbstractController implements RadioButto
 
   @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
       screen.getFocusHandler().getNext(getElement()).setFocus();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       screen.getFocusHandler().getPrev(getElement()).setFocus();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
+    } else if (inputEvent == NiftyInputEvent.Activate) {
       onClick();
       return true;
     }

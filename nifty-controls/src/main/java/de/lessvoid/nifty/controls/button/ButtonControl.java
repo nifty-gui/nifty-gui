@@ -13,7 +13,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.screen.Screen;
@@ -35,7 +34,6 @@ public class ButtonControl extends AbstractController implements Button {
   private Element buttonTextElement;
   private TextRenderer buttonTextRenderer;
 
-  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -62,7 +60,6 @@ public class ButtonControl extends AbstractController implements Button {
     super.init(parameter, controlDefinitionAttributes);
   }
 
-  @Override
   public void onStartScreen() {
   }
 
@@ -71,23 +68,22 @@ public class ButtonControl extends AbstractController implements Button {
     super.onFocus(getFocus);
   }
 
-  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     Element buttonElement = getElement();
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
       if (focusHandler != null) {
         focusHandler.getNext(buttonElement).setFocus();
       }
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       if (focusHandler != null) {
         focusHandler.getPrev(buttonElement).setFocus();
       }
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
+    } else if (inputEvent == NiftyInputEvent.Activate) {
       buttonClick();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorDown) {
       if (focusHandler != null) {
         Element nextElement = focusHandler.getNext(buttonElement);
         if (nextElement.getParent().equals(buttonElement.getParent())) {
@@ -95,7 +91,7 @@ public class ButtonControl extends AbstractController implements Button {
           return true;
         }
       }
-    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorUp) {
+    } else if (inputEvent == NiftyInputEvent.MoveCursorUp) {
       if (focusHandler != null) {
         Element prevElement = focusHandler.getPrev(buttonElement);
         if (prevElement.getParent().equals(buttonElement.getParent())) {

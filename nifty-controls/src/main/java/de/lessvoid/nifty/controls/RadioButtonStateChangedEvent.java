@@ -10,7 +10,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * RadioGroupSelectionChangedEvent. 
  * @author void
  */
-public class RadioButtonStateChangedEvent implements NiftyEvent {
+public class RadioButtonStateChangedEvent implements NiftyEvent<Void> {
   private RadioButton radioButton;
   private boolean selected;
 

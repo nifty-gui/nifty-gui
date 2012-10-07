@@ -7,7 +7,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * collection of individual RadioButtons) has changed.
  * @author void
  */
-public class RadioButtonGroupStateChangedEvent implements NiftyEvent {
+public class RadioButtonGroupStateChangedEvent implements NiftyEvent<Void> {
   private RadioButton selectedRadioButton;
   private RadioButton previousSelectedRadioButton;
 

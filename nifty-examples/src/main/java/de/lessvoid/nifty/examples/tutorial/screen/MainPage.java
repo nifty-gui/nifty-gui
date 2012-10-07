@@ -19,7 +19,6 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
@@ -244,10 +243,10 @@ public class MainPage implements ScreenController, KeyInputHandler {
   }
 
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
-    if (NiftyStandardInputEvent.MoveCursorRight.equals(inputEvent)) {
+    if (NiftyInputEvent.MoveCursorRight.equals(inputEvent)) {
       screen.findElementByName("nextButton").onClick();
       return true;
-    } else if (NiftyStandardInputEvent.MoveCursorLeft.equals(inputEvent)) {
+    } else if (NiftyInputEvent.MoveCursorLeft.equals(inputEvent)) {
       screen.findElementByName("backButton").onClick();
       return true;
     }

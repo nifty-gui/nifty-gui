@@ -14,7 +14,6 @@ import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
-@SuppressWarnings("rawtypes")
 public class DropDownListBoxSelectionChangedEventSubscriber implements EventTopicSubscriber<ListBoxSelectionChangedEvent> {
   private Nifty nifty;
   private Screen screen;

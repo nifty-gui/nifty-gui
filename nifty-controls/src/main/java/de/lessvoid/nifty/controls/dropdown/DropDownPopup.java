@@ -24,7 +24,6 @@ public class DropDownPopup<T> extends AbstractController {
   private DropDownControl<T> dropDownControl;
   private Element popupInstance;
 
-  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -36,7 +35,6 @@ public class DropDownPopup<T> extends AbstractController {
     this.screen = screenParam;
   }
 
-  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
     return false;
   }
@@ -48,10 +46,8 @@ public class DropDownPopup<T> extends AbstractController {
     linkPopupToDropDownPosition(dropDownControl);
   }
 
-  @Override
   @SuppressWarnings("deprecation")
   public void onStartScreen() {
-    @SuppressWarnings("rawtypes")
     final ListBox listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
     nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,
         new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, dropDownControl, popupInstance));

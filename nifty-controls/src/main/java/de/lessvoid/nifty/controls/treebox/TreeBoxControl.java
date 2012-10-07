@@ -23,11 +23,10 @@ import de.lessvoid.xml.xpp3.Attributes;
  * 
  * @author ractoc
  */
-@SuppressWarnings("rawtypes")
 public class TreeBoxControl extends AbstractController implements TreeBox {
 
 	private int indentWidth = 15;
-  private TreeItem tree;
+	private TreeItem tree;
 	private Nifty nifty;
 	private Element element;
 	private ListBox<TreeEntryModelClass> treeListBox;
@@ -93,9 +92,11 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setListBox(final String name) {
 		if (treeListBox == null) {
-			treeListBox = element.findNiftyControl(name, ListBox.class);
+			treeListBox = (ListBox<TreeEntryModelClass>) element
+					.findNiftyControl(name, ListBox.class);
 		}
 	}
 
@@ -115,8 +116,7 @@ public class TreeBoxControl extends AbstractController implements TreeBox {
 		return itemIndex;
 	}
 
-	@SuppressWarnings("unchecked")
-  private void removeAbsoleteTreeItems(
+	private void removeAbsoleteTreeItems(
 			ListBox<TreeEntryModelClass> treeListBox, TreeItem tree) {
 		for (TreeEntryModelClass treeListEntry : treeListBox.getItems()) {
 			treeListEntry.setActiveItem(false);

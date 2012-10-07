@@ -9,6 +9,5 @@ package de.lessvoid.nifty.controls;
  */
 public interface TreeBox extends NiftyControl {
     
-    @SuppressWarnings("rawtypes")
     void setTree(TreeItem treeRoot);
 }

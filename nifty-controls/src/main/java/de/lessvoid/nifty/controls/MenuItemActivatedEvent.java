@@ -7,7 +7,7 @@ import de.lessvoid.nifty.NiftyEvent;
  * that was activated is being transmitted in this event.
  * @author void
  */
-public class MenuItemActivatedEvent<T> implements NiftyEvent {
+public class MenuItemActivatedEvent<T> implements NiftyEvent<T> {
   private Menu<T> menu;
   private T item;
 

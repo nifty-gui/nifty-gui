@@ -197,7 +197,7 @@ public class ScrollbarImpl {
     if (worldMax == 0.f) {
       return 0.f;
     }
-    return Math.round(worldValue / worldMaxValue * viewMaxValue);
+    return (int) Math.round(worldValue / worldMaxValue * viewMaxValue);
   }
 
   private void ensureWorldPageSize() {

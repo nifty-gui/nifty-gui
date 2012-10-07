@@ -2,7 +2,7 @@ package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
 
-public class FocusGainedEvent implements NiftyEvent {
+public class FocusGainedEvent implements NiftyEvent<Void> {
   private Controller controller;
   private NiftyControl niftyControl;
 

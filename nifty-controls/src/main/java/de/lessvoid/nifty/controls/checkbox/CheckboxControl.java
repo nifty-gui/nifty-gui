@@ -10,7 +10,6 @@ import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -26,7 +25,6 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
   private Screen screen;
   private FocusHandler focusHandler;
 
-  @Override
   public void bind(
       final Nifty niftyParam,
       final Screen screenParam,
@@ -46,7 +44,6 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
     super.init(parameter, controlDefinitionAttributes);
   }
 
-  @Override
   public void onStartScreen() {
   }
 
@@ -55,15 +52,14 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
     super.onFocus(getFocus);
   }
 
-  @Override
   public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+    if (inputEvent == NiftyInputEvent.NextInputElement) {
       focusHandler.getNext(getElement()).setFocus();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
+    } else if (inputEvent == NiftyInputEvent.PrevInputElement) {
       focusHandler.getPrev(getElement()).setFocus();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
+    } else if (inputEvent == NiftyInputEvent.Activate) {
       onClick();
       return true;
     }

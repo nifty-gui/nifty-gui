@@ -8,7 +8,6 @@ import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
@@ -44,7 +43,7 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
   }
 
   public boolean keyEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.ConsoleToggle) {
+    if (inputEvent == NiftyInputEvent.ConsoleToggle) {
       toggleConsole();
       return true;
     } else {

@@ -8,7 +8,6 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
-@SuppressWarnings("rawtypes")
 public class ListBoxNull implements ListBox {
 
   @Override

@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.input.mapping;
 
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
+import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
@@ -15,19 +15,19 @@ public class DefaultInputMapping implements NiftyInputMapping {
    * @param inputEvent input event
    * @return NiftInputEvent
    */
-  public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
+  public NiftyInputEvent convert(final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       if (inputEvent.getKey() == KeyboardInputEvent.KEY_F1) {
-        return NiftyStandardInputEvent.ConsoleToggle;
+        return NiftyInputEvent.ConsoleToggle;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_RETURN) {
-        return NiftyStandardInputEvent.Activate;
+        return NiftyInputEvent.Activate;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_SPACE) {
-        return NiftyStandardInputEvent.Activate;
+        return NiftyInputEvent.Activate;
       } else if (inputEvent.getKey() == KeyboardInputEvent.KEY_TAB) {
         if (inputEvent.isShiftDown()) {
-          return NiftyStandardInputEvent.PrevInputElement;
+          return NiftyInputEvent.PrevInputElement;
         } else {
-          return NiftyStandardInputEvent.NextInputElement;
+          return NiftyInputEvent.NextInputElement;
         }
       }
     }

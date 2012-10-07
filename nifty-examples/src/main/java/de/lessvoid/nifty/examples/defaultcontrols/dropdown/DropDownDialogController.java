@@ -19,7 +19,6 @@ import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.examples.defaultcontrols.common.JustAnExampleModelClass;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -77,8 +76,8 @@ public class DropDownDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="addDropDownItemText")
-  public void onAddTextFieldInputEvent(final String id, final NiftyStandardInputEvent event) {
-    if (NiftyStandardInputEvent.SubmitText.equals(event)) {
+  public void onAddTextFieldInputEvent(final String id, final NiftyInputEvent event) {
+    if (NiftyInputEvent.SubmitText.equals(event)) {
       addDropDownItemButton.activate();
     }
   }
