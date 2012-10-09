@@ -66,8 +66,13 @@ public class TextFieldControl extends AbstractController implements TextField, T
     fromClickCursorPos = -1;
     toClickCursorPos = -1;
 
-    textField = new TextFieldLogic(properties.getProperty("text", ""), nifty.getClipboard(), this); //NON-NLS
-    textField.toFirstPosition();
+    final String initText = properties.getProperty("text"); //NON-NLS
+    if ((initText == null) || initText.isEmpty()) {
+      textField = new TextFieldLogic(nifty.getClipboard(), this);
+      textField.toFirstPosition();
+    } else {
+      textField = new TextFieldLogic(initText, nifty.getClipboard(), this);
+    }
 
     textElement = getElement().findElementByName("#text"); //NON-NLS
     fieldElement = getElement().findElementByName("#field"); //NON-NLS
@@ -113,7 +118,6 @@ public class TextFieldControl extends AbstractController implements TextField, T
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     focusHandler = screen.getFocusHandler();
 
-    textField.setTextAndNotify(textElement.getRenderer(TextRenderer.class).getOriginalText());
     fieldWidth = fieldElement.getWidth() - cursorElement.getWidth();
 
     final TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
@@ -175,7 +179,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
       return false;
     }
 
-    NiftyStandardInputEvent standardInputEvent = (NiftyStandardInputEvent) inputEvent;
+    final NiftyStandardInputEvent standardInputEvent = (NiftyStandardInputEvent) inputEvent;
     switch (standardInputEvent) {
       case MoveCursorLeft:
         textField.cursorLeft();
