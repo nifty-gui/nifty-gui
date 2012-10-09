@@ -99,10 +99,10 @@ public class TextFieldLogic {
   /**
    * Create TextField with clipboard support.
    *
-   * @param newText init text
    * @param newClipboard clipboard
+   * @param textFieldView the viewer for the text field
    */
-  public TextFieldLogic(final CharSequence newText, final Clipboard newClipboard, final TextFieldView textFieldView) {
+  public TextFieldLogic(final Clipboard newClipboard, final TextFieldView textFieldView) {
     view = textFieldView;
     clipboard = newClipboard;
     maxLength = TextField.UNLIMITED_LENGTH;
@@ -114,6 +114,17 @@ public class TextFieldLogic {
     format = new FormatPlain();
 
     text = new StringBuilder(100);
+  }
+
+  /**
+   * Create TextField with clipboard support.
+   *
+   * @param newText init text
+   * @param newClipboard clipboard
+   * @param textFieldView the viewer for the text field
+   */
+  public TextFieldLogic(final CharSequence newText, final Clipboard newClipboard, final TextFieldView textFieldView) {
+    this(newClipboard, textFieldView);
     setText(newText);
   }
 
