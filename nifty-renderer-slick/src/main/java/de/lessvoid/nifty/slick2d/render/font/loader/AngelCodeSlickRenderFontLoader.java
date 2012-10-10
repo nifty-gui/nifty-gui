@@ -31,12 +31,16 @@ public final class AngelCodeSlickRenderFontLoader implements SlickRenderFontLoad
       /* Slick is unable to extract the image files from the font definition. */
       BufferedReader in = null;
       try {
+    	String imageFilepath;
         in = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsStream(definition)));
         in.readLine();
         in.readLine();
         image = in.readLine();
         final int indexOfFileEntry = image.indexOf("file=\"") + 6;
         image = image.substring(indexOfFileEntry, image.length() - 1);
+        final int indexOfPathEnd = filename.lastIndexOf("/");
+        imageFilepath = filename.substring(0,indexOfPathEnd + 1);
+        image = imageFilepath + image;
       } catch (IOException e) {
         throw new SlickLoadFontException("Loading font failed.", e);
       } finally {
