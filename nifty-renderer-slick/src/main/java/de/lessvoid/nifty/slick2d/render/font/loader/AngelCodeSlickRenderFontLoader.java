@@ -18,6 +18,8 @@ import org.newdawn.slick.util.ResourceLoader;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class AngelCodeSlickRenderFontLoader implements SlickRenderFontLoader {
+  private static final String SLASH = System.getProperty("file.separator");
+
   /**
    * Load the requested font.
    */
@@ -34,9 +36,7 @@ public final class AngelCodeSlickRenderFontLoader implements SlickRenderFontLoad
         in = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsStream(definition)));
         in.readLine();
         in.readLine();
-        image = in.readLine();
-        final int indexOfFileEntry = image.indexOf("file=\"") + 6;
-        image = image.substring(indexOfFileEntry, image.length() - 1);
+        image = getImageLocation(filename, in.readLine());
       } catch (IOException e) {
         throw new SlickLoadFontException("Loading font failed.", e);
       } finally {
@@ -65,4 +65,16 @@ public final class AngelCodeSlickRenderFontLoader implements SlickRenderFontLoad
     }
   }
 
+  private String getImageLocation(final String fontFilename, final String imageLine) throws IOException {
+    return extracted(fontFilename) + getImagefile(imageLine);
+  }
+
+  private String extracted(final String fontFilename) {
+    return fontFilename.substring(0, fontFilename.lastIndexOf(SLASH) + 1);
+  }
+
+  private String getImagefile(final String imageLine) {
+    final int indexOfFileEntry = imageLine.indexOf("file=\"") + 6;
+    return imageLine.substring(indexOfFileEntry, imageLine.length() - 1);
+  }
 }
