@@ -67,7 +67,7 @@ public class ControlsDemo<T> implements NiftyExample {
     ControlsDemo<DisplayMode> demo = new ControlsDemo<DisplayMode>(new ResolutionControlLWJGL());
     demo.prepareStart(nifty);
 
-    nifty.gotoScreen("demo");
+    nifty.gotoScreen("start");
 
     // start the render loop
     LwjglInitHelper.renderLoop(nifty, null);
