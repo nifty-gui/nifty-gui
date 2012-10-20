@@ -90,9 +90,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty/</connection>
-    <developerConnection>scm:git:ssh://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty/</developerConnection>
-    <url>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty/</url>
+    <connection>scm:git:git://github.com/void256/nifty-gui.git</connection>
+    <developerConnection>scm:git:git@github.com:void256/nifty-gui.git</developerConnection>
+    <url>scm:git:https://github.com/void256/nifty-gui.git</url>
   </scm>
   <distributionManagement>
     <repository>
