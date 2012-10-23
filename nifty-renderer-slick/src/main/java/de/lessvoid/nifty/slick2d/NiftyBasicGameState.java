@@ -76,7 +76,7 @@ public abstract class NiftyBasicGameState extends NiftyOverlayBasicGameState {
    * Updating the game is not needed in this implementation as only the GUI is displayed.
    */
   @Override
-  protected final void updateGame(final GameContainer container, final StateBasedGame game, final int delta) {
+  protected void updateGame(final GameContainer container, final StateBasedGame game, final int delta) {
     // nothing to do
   }
 }

@@ -75,11 +75,12 @@ public class ElementInteraction {
       final boolean mouseInside,
       final boolean canHandleInteraction,
       final boolean hasMouseAccess) {
-    move.process(canHandleInteraction, mouseInside, hasMouseAccess, mouseEvent);
-    return
+    final boolean moveResult = move.process(canHandleInteraction, mouseInside, hasMouseAccess, mouseEvent);
+    final boolean clickResult =
       primary.process(mouseEvent, mouseEvent.isButton0Down(), mouseEvent.isButton0InitialDown(), mouseEvent.isButton0Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey) ||
       secondary.process(mouseEvent, mouseEvent.isButton1Down(), mouseEvent.isButton1InitialDown(), mouseEvent.isButton1Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey) ||
       tertiary.process(mouseEvent, mouseEvent.isButton2Down(), mouseEvent.isButton2InitialDown(), mouseEvent.isButton2Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey);
+    return moveResult || clickResult;
   }
 
   public void activate(final Nifty nifty) {
