@@ -4,11 +4,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TreeBox;
-import de.lessvoid.nifty.controls.TreeItem;
-import de.lessvoid.nifty.controls.TreeItemSelectedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
@@ -81,8 +77,11 @@ public class TreeboxControlDialogController implements Controller {
     }
     
     @NiftyEventSubscriber(id="tree-box")
-    public void treeItemSelected(final String id, final TreeItemSelectedEvent event) {
-    	nifty.getCurrentScreen().findNiftyControl("selectedItemText", TextField.class).setText(event.getTreeItem()
-          .getValue().toString());
+    public void treeItemSelected(final String id, final TreeItemSelectionChangedEvent<String> event) {
+      final TextField text = nifty.getCurrentScreen().findNiftyControl("selectedItemText", TextField.class);
+
+      if (!event.getSelection().isEmpty()) {
+        text.setText(event.getSelection().get(0).getValue());
+      }
     }
 }

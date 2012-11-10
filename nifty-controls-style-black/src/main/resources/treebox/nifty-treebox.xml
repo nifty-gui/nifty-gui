@@ -10,10 +10,10 @@
     <attributes childLayout="horizontal" height="24px" />
   </style>
   <style id="nifty-treebox-item#closed">
-    <attributes filename="treebox/closed.png" height="13px" width="8px" visibleToMouse="true" />
+    <attributes filename="treebox/closed.png" height="13px" width="8px" />
   </style>
   <style id="nifty-treebox-item#opened">
-    <attributes filename="treebox/opened.png" height="8px" width="13px" visibleToMouse="true" />
+    <attributes filename="treebox/opened.png" height="8px" width="13px" />
   </style>
   <style id="nifty-treebox-item#leaf">
     <attributes height="0px" width="0px" visible="false" />

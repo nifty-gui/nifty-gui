@@ -5,6 +5,7 @@
     <panel childLayout="horizontal" width="100%" align="center">
       <panel id="#tree-item-spacer" visibleToMouse="false" />
       <panel id="#tree-item-icon-container" style="#tree-item-icon-container">
+        <interact onClick="expandButtonClicked()" />
         <image id="#tree-item-icon" />
       </panel>
       <panel id="#tree-item-content" style="#content" childLayout="horizontal" width="*" />

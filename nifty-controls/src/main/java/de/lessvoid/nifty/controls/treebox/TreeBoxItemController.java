@@ -12,7 +12,7 @@ import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>> implements EventTopicSubscriber<NiftyMousePrimaryClickedEvent> {
+public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>> {
   @SuppressWarnings("deprecation")
   private TreeBoxControl<T> parentControl;
 
@@ -24,9 +24,6 @@ public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>>
       final Properties properties,
       final Attributes controlDefinitionAttributes) {
     super.bind(niftyParam, screenParam, newElement, properties, controlDefinitionAttributes);
-
-    niftyParam.subscribe(screenParam, newElement.findElementByName("#tree-item-icon").getId(),
-        NiftyMousePrimaryClickedEvent.class, this);
   }
 
   @SuppressWarnings("deprecation")
@@ -34,8 +31,7 @@ public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>>
     parentControl = control;
   }
 
-  @Override
-  public void onEvent(final String topic, final NiftyMousePrimaryClickedEvent data) {
+  public void expandButtonClicked() {
     final TreeItem<T> item = getItem();
     if (item.isLeaf()) {
       return;

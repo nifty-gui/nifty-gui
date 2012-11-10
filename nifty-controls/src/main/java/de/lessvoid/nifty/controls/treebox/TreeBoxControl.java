@@ -8,12 +8,7 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.TreeBox;
-import de.lessvoid.nifty.controls.TreeItem;
-import de.lessvoid.nifty.controls.TreeItemSelectedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.controls.listbox.ListBoxItemController;
 import de.lessvoid.nifty.controls.listbox.ListBoxItemProcessor;
@@ -100,6 +95,13 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
 
     for (final TreeItem<T> item : treeRoot) {
       addListItem(list, item, 0);
+    }
+  }
+
+  @Override
+  public void publish(final ListBoxSelectionChangedEvent<TreeItem<T>> event) {
+    if (getElement().getId() != null) {
+      nifty.publishEvent(getElement().getId(), new TreeItemSelectionChangedEvent<T>(this, event));
     }
   }
 
