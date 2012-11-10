@@ -14,115 +14,102 @@ import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TreeBox;
 import de.lessvoid.nifty.controls.TreeItem;
 import de.lessvoid.nifty.controls.TreeItemSelectedEvent;
+import de.lessvoid.nifty.controls.listbox.ListBoxControl;
+import de.lessvoid.nifty.controls.listbox.ListBoxItemController;
+import de.lessvoid.nifty.controls.listbox.ListBoxItemProcessor;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
- * 
- * @author ractoc
+ * This is the control of the tree box. Its basically a list box that displays a tree.
+ *
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @deprecated Use {@link TreeBox}
  */
-@SuppressWarnings("rawtypes")
-public class TreeBoxControl extends AbstractController implements TreeBox {
+@Deprecated
+public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> implements TreeBox<T> {
+  /**
+   * The default indentation.
+   */
+  private static final int DEFAULT_INDENT = 15;
 
-	private int indentWidth = 15;
-  private TreeItem tree;
+  /**
+   * Indention per level.
+   */
+	private int indentWidth;
+
+  /**
+   * The root node of the tree that is displayed.
+   */
+	private TreeItem<T> treeRoot;
+
+  /**
+   * The used instance of the Nifty-GUI.
+   */
 	private Nifty nifty;
-	private Element element;
-	private ListBox<TreeEntryModelClass> treeListBox;
-	private boolean processingItemSelected;
+
+  public TreeBoxControl() {
+    super();
+
+    getListBox().addItemProcessor(new ListBoxItemProcessor() {
+      @Override
+      public void processElement(final Element element) {
+        final TreeBoxItemController<T> listBoxItemController = element.getControl(TreeBoxItemController.class);
+        if (listBoxItemController != null) {
+          listBoxItemController.setParentControl(TreeBoxControl.this);
+        }
+      }
+    });
+  }
 
 	@Override
-	public void bind(Nifty nifty, Screen screen, Element element,
-			Properties parameter, Attributes controlDefinitionAttributes) {
-		super.bind(element);
-		if (controlDefinitionAttributes.getAsInteger("indentWidth") != null) {
-			indentWidth = controlDefinitionAttributes.getAsInteger(
-					"indentWidth").intValue();
-		}
-		this.nifty = nifty;
-		this.element = element;
-		setListBox("#listbox");
-		if (tree != null) {
-			addTreeItem(treeListBox, tree, 0, 0);
-		}
+	public void bind(final Nifty nifty, final Screen screen, final Element element, final Properties parameter,
+                   final Attributes controlDefinitionAttributes) {
+		super.bind(nifty, screen, element, parameter, controlDefinitionAttributes);
+    this.nifty = nifty;
+
+    indentWidth = controlDefinitionAttributes.getAsInteger("indentWidth", DEFAULT_INDENT);
 	}
 
 	@Override
-	public void onStartScreen() {
-	}
-
-	@Override
-	public boolean inputEvent(NiftyInputEvent inputEvent) {
+	public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    super.inputEvent(inputEvent);
 		return true;
 	}
 
 	@Override
-	public void setTree(TreeItem treeRoot) {
-		this.tree = treeRoot;
-		treeListBox.clear();
-		if (treeListBox != null) {
-			removeAbsoleteTreeItems(treeListBox, tree);
-			addTreeItem(treeListBox, tree, 0, 0);
-			getElement().layoutElements();
-		}
+	public void setTree(final TreeItem<T> treeRoot) {
+		this.treeRoot = treeRoot;
+    updateList();
 	}
 
-	/**
-	 * When the selection of the ListBox changes this method is called.
-	 */
-	@NiftyEventSubscriber(id = "tree-box#listbox")
-	public void onListBoxSelectionChanged(final String id,
-			final ListBoxSelectionChangedEvent<TreeEntryModelClass> event) {
-		if (!processingItemSelected) {
-			processingItemSelected = true;
-			TreeEntryModelClass selectedItem = event.getSelection().get(0);
-			Integer selectedIndex = event.getSelectionIndices().get(0);
-			TreeItem item = selectedItem.getTreeItem();
-			if (!item.isLeaf() && selectedItem.isActiveItem()) {
-				item.setExpanded(!item.isExpanded());
-			}
-			selectedItem.setActiveItem(true);
-			setTree(tree);
-			treeListBox.getItems().get(selectedIndex).setActiveItem(true);
-			nifty.publishEvent(getId(), new TreeItemSelectedEvent(this, item));
-			treeListBox.refresh();
-			processingItemSelected = false;
-		}
+	private ListBox<TreeItem<T>> getListBox() {
+    return this;
+  }
 
-	}
+  public void updateList(final TreeItem<T> selectItem) {
+    updateList();
+    selectItem(selectItem);
+  }
 
-	private void setListBox(final String name) {
-		if (treeListBox == null) {
-			treeListBox = element.findNiftyControl(name, ListBox.class);
-		}
-	}
+  private void updateList() {
+    final ListBox<TreeItem<T>> list = getListBox();
+    list.clear();
 
-	private int addTreeItem(ListBox<TreeEntryModelClass> treeListBox,
-			TreeItem treeItem, int currentIndent, int itemIndex) {
-		if (currentIndent != 0) {
-			treeListBox.insertItem(new TreeEntryModelClass(indentWidth
-					* currentIndent, treeItem), itemIndex);
-			itemIndex++;
-		}
-		if (treeItem.isExpanded()) {
-			for (Object childItem : treeItem.getTreeItems()) {
-				itemIndex = addTreeItem(treeListBox, (TreeItem) childItem,
-						currentIndent + 1, itemIndex);
-			}
-		}
-		return itemIndex;
-	}
+    for (final TreeItem<T> item : treeRoot) {
+      addListItem(list, item, 0);
+    }
+  }
 
-	@SuppressWarnings("unchecked")
-  private void removeAbsoleteTreeItems(
-			ListBox<TreeEntryModelClass> treeListBox, TreeItem tree) {
-		for (TreeEntryModelClass treeListEntry : treeListBox.getItems()) {
-			treeListEntry.setActiveItem(false);
-			if (!tree.contains(treeListEntry.getTreeItem())) {
-				treeListBox.removeItem(treeListEntry);
-			}
-		}
-	}
+  private void addListItem(final ListBox<TreeItem<T>> list, final TreeItem<T> currentItem, final int currentIndent) {
+    list.addItem(currentItem);
+    currentItem.setIndent(currentIndent);
+    if (currentItem.isExpanded()) {
+      for (final TreeItem<T> item : currentItem) {
+        addListItem(list, item, currentIndent + indentWidth);
+      }
+    }
+  }
 }

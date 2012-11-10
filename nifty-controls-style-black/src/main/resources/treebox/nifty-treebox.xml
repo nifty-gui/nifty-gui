@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles>
-
-  <style id="nifty-treebox-item-active" base="nifty-listbox-item">
-	<attributes backgroundColor="#111A" />
+  <style id="nifty-treebox-item" base="nifty-listbox-item">
+    <attributes childLayout="horizontal" height="24px" />
   </style>
-  
+  <style id="nifty-treebox-item#tree-item-icon-container">
+    <attributes childLayout="center" height="24px" width="24px" />
+  </style>
+  <style id="nifty-treebox-item#content">
+    <attributes childLayout="horizontal" height="24px" />
+  </style>
+  <style id="nifty-treebox-item#closed">
+    <attributes filename="treebox/closed.png" height="13px" width="8px" visibleToMouse="true" />
+  </style>
+  <style id="nifty-treebox-item#opened">
+    <attributes filename="treebox/opened.png" height="8px" width="13px" visibleToMouse="true" />
+  </style>
+  <style id="nifty-treebox-item#leaf">
+    <attributes height="0px" width="0px" visible="false" />
+  </style>
 </nifty-styles>

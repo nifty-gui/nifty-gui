@@ -1,9 +1,6 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +41,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private ScrollbarMode horizontalScrollbar;
   private Element horizontalScrollbarTemplate;
   private Element childRootElement;
-  private Element labelTemplateElement;
+  private ElementType labelTemplateElementType;
   private Element listBoxPanelElement;
   private Element bottomRightTemplate;
   private int labelTemplateHeight;
@@ -75,6 +72,20 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private int lastMaxWidth;
   private int applyWidthConstraintsLastWidth = -1;
 
+  private final List<ListBoxItemProcessor> itemProcessors = new ArrayList<ListBoxItemProcessor>();
+
+  public ListBoxControl() {
+    itemProcessors.add(new ListBoxItemProcessor() {
+      @Override
+      public void processElement(final Element element) {
+        final ListBoxItemController<T> listBoxItemController = element.getControl(ListBoxItemController.class);
+        if (listBoxItemController != null) {
+          listBoxItemController.setListBox(listBoxImpl);
+        }
+      }
+    });
+  }
+
   @Override
   public void bind(
       final Nifty niftyParam,
@@ -99,7 +110,11 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
     childRootElement = getElement().findElementByName("#child-root");
     if (!childRootElement.getElements().isEmpty()) {
-      labelTemplateElement = childRootElement.getElements().get(0);
+      final Element templateElement = childRootElement.getElements().get(0);
+      templateElement.getParent().layoutElements();
+      labelTemplateHeight = templateElement.getHeight();
+      labelTemplateElementType = templateElement.getElementType().copy();
+      nifty.removeElement(screen, templateElement);
     }
     labelElements = new Element[displayItems];
     listBoxPanelElement = getElement().findElementByName("#panel");
@@ -109,7 +124,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     listBoxImpl.bindToView(this, displayItems);
     lastMaxWidth = childRootElement.getWidth();
     ensureVerticalScrollbar();
-    initLabelTemplateData();
     createLabels();
     initializeScrollPanel(screen);
     setElementHeight();
@@ -567,23 +581,46 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     }
   }
 
+  @Override
+  public void addItemProcessor(final ListBoxItemProcessor processor) {
+    itemProcessors.add(processor);
+  }
+
   private void createLabels() {
-    if (labelTemplateElement == null) {
+    if (labelTemplateElementType == null) {
       return;
     }
-    for (Element e : childRootElement.getElements()) {
+    for (final Element e : childRootElement.getElements()) {
       nifty.removeElement(screen, e);
     }    
     for (int i = 0; i < displayItems; i++) {
-      ElementType templateType = labelTemplateElement.getElementType().copy();
-      templateType.getAttributes().set("id", NiftyIdCreator.generate());
+      ElementType templateType = labelTemplateElementType.copy();
+
+      String oldId = templateType.getAttributes().get("id");
+      if (oldId == null) {
+        oldId = getElement().findElementByName("#child-root").getId();
+      }
+      final String newId = oldId + "#" + NiftyIdCreator.generate();
+
+      templateType.getAttributes().set("id", newId);
+      replaceAllIds(templateType, oldId, newId);
+
       labelElements[i] = nifty.createElementFromType(screen, childRootElement, templateType);
 
-      // connect it to this listbox
-      ListBoxItemController<T> listBoxItemController = labelElements[i].getControl(ListBoxItemController.class);
-      if (listBoxItemController != null) {
-        listBoxItemController.setListBox(listBoxImpl);
+      for (final ListBoxItemProcessor processor : itemProcessors) {
+        processor.processElement(labelElements[i]);
       }
+    }
+  }
+
+  private void replaceAllIds(final ElementType type, final String oldId, final String newId) {
+    final Collection<ElementType> children = type.getElements();
+    for (final ElementType child : children) {
+      final String id = child.getAttributes().get("id");
+      if (id != null) {
+        child.getAttributes().set("id", id.replace(oldId, newId));
+      }
+      replaceAllIds(child, oldId, newId);
     }
   }
 
@@ -609,15 +646,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
       horizontalScrollbarElementHeight = horizontalScrollbarElement.getHeight();
     }
     return horizontalScrollbarElementHeight;
-  }
-
-  private void initLabelTemplateData() {
-    if (labelTemplateElement == null) {
-      return;
-    }
-    labelTemplateElement.getParent().layoutElements();
-    labelTemplateHeight = labelTemplateElement.getHeight();
-    nifty.removeElement(screen, labelTemplateElement);
   }
 
   private void connectListBoxAndListBoxPanel() {
