@@ -7,7 +7,6 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -19,7 +18,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 public class TreeboxControlDialogController implements Controller {
 
-    private TreeBox treebox;
+    private TreeBox<String> treebox;
     private Nifty nifty;
 
     @Override
@@ -29,7 +28,7 @@ public class TreeboxControlDialogController implements Controller {
             final Element element,
             final Properties parameter,
             final Attributes controlDefinitionAttributes) {
-        this.treebox = screen.findNiftyControl("tree-box", TreeBox.class);
+        treebox = screen.findNiftyControl("tree-box", TreeBox.class);
         this.nifty = nifty;
         
         treebox.setTree(setupTree());
@@ -53,11 +52,6 @@ public class TreeboxControlDialogController implements Controller {
     }
 
     private TreeItem<String> setupTree() {
-        
-        NiftyImage folder = nifty.createImage("defaultcontrols/treebox/folder.png", true);
-        NiftyImage folderOpen = nifty.createImage("defaultcontrols/treebox/folder-open.png", true);
-        NiftyImage item = nifty.createImage("defaultcontrols/treebox/folder.png", true);
-        
         TreeItem<String> treeRoot = new TreeItem<String>();
         TreeItem<String> branch1 = new TreeItem<String>("branch 1");
         branch1.setExpanded(true);

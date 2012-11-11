@@ -4,6 +4,7 @@
  */
 package de.lessvoid.nifty.controls.treebox;
 
+import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TreeItem;
@@ -11,6 +12,7 @@ import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
@@ -41,6 +43,8 @@ public class TreeBoxViewConverter<T> implements ListBox.ListBoxViewConverter<Tre
     if (displayLabel == null) {
       final LabelBuilder builder =  new LabelBuilder("#label");
       builder.text(item.getValue().toString());
+      builder.textHAlign(ElementBuilder.Align.Left);
+      builder.width("*");
 
       builder.build(text.getNifty(), text.getNifty().getCurrentScreen(), text);
     } else {
@@ -59,8 +63,8 @@ public class TreeBoxViewConverter<T> implements ListBox.ListBoxViewConverter<Tre
       final Label displayLabel = text.findNiftyControl("#label", Label.class);
       width += icon.getWidth();
       if (displayLabel != null) {
-        width += displayLabel.getElement().getRenderer(TextRenderer.class).getFont().getWidth(item.getValue()
-            .toString());
+        final RenderFont font = displayLabel.getElement().getRenderer(TextRenderer.class).getFont();
+        width += font.getWidth(item.getValue().toString());
       }
 
       return width;
