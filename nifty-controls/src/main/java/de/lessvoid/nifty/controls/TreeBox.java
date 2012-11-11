@@ -7,8 +7,7 @@ package de.lessvoid.nifty.controls;
 /**
  * @author ractoc
  */
-public interface TreeBox extends NiftyControl {
+public interface TreeBox<T> extends NiftyControl {
     
-    @SuppressWarnings("rawtypes")
-    void setTree(TreeItem treeRoot);
+    void setTree(TreeItem<T> treeRoot);
 }
