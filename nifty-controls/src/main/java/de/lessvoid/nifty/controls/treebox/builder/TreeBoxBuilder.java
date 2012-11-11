@@ -4,20 +4,22 @@
  */
 package de.lessvoid.nifty.controls.treebox.builder;
 
+import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.builder.ControlBuilder;
+import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
 
 /**
  *
  * @author ractoc
  */
-public class TreeBoxBuilder extends ControlBuilder {
+public class TreeBoxBuilder extends ListBoxBuilder {
     
   public TreeBoxBuilder() {
-    super("nifty-tree-box");
+    this(NiftyIdCreator.generate());
   }
 
   public TreeBoxBuilder(final String id) {
-    super(id, "nifty-tree-box");
+    super(id, "treeBox");
   }
     
 }

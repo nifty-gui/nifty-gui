@@ -11,6 +11,10 @@ public class ListBoxBuilder extends ControlBuilder {
     super(id, "listBox");
   }
 
+  protected ListBoxBuilder(final String id, final String name) {
+    super(id, name);
+  }
+
   public void displayItems(final int displayItems) {
     set("displayItems", String.valueOf(displayItems));
   }

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.listbox.ListBoxItemProcessor;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
@@ -212,5 +213,9 @@ public class ListBoxNull implements ListBox {
 
   @Override
   public void refresh() {
+  }
+
+  @Override
+  public void addItemProcessor(final ListBoxItemProcessor processor) {
   }
 }

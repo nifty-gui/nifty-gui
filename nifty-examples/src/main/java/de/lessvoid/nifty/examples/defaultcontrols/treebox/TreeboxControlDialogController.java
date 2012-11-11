@@ -4,14 +4,9 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TreeBox;
-import de.lessvoid.nifty.controls.TreeItem;
-import de.lessvoid.nifty.controls.TreeItemSelectedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
@@ -23,7 +18,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  */
 public class TreeboxControlDialogController implements Controller {
 
-    private TreeBox treebox;
+    private TreeBox<String> treebox;
     private Nifty nifty;
 
     @Override
@@ -33,7 +28,7 @@ public class TreeboxControlDialogController implements Controller {
             final Element element,
             final Properties parameter,
             final Attributes controlDefinitionAttributes) {
-        this.treebox = screen.findNiftyControl("tree-box", TreeBox.class);
+        treebox = screen.findNiftyControl("tree-box", TreeBox.class);
         this.nifty = nifty;
         
         treebox.setTree(setupTree());
@@ -56,30 +51,31 @@ public class TreeboxControlDialogController implements Controller {
         return false;
     }
 
-    private TreeItem setupTree() {
-        
-        NiftyImage folder = nifty.createImage("defaultcontrols/treebox/folder.png", true);
-        NiftyImage folderOpen = nifty.createImage("defaultcontrols/treebox/folder-open.png", true);
-        NiftyImage item = nifty.createImage("defaultcontrols/treebox/folder.png", true);
-        
+    private TreeItem<String> setupTree() {
         TreeItem<String> treeRoot = new TreeItem<String>();
-        TreeItem<String> branch1 = new TreeItem<String>(treeRoot, "branch 1", "branche 1", folder, folderOpen, true);
-        TreeItem<String> branch11 = new TreeItem<String>(treeRoot, "branch 1 1", "branche 1 1", item);
-        TreeItem<String> branch12 = new TreeItem<String>(treeRoot, "branch 1 2", "branche 1 2", item);
+        TreeItem<String> branch1 = new TreeItem<String>("branch 1");
+        branch1.setExpanded(true);
+        TreeItem<String> branch11 = new TreeItem<String>("branch 1 1");
+        TreeItem<String> branch12 = new TreeItem<String>("branch 1 2");
         branch1.addTreeItem(branch11);
         branch1.addTreeItem(branch12);
-        TreeItem<String> branch2 = new TreeItem<String>(treeRoot, "branch 2", "branche 2", folder, folderOpen, true);
-        TreeItem<String> branch21 = new TreeItem<String>(treeRoot, "branch 2 1", "branche 2 1", folder, folderOpen, true);
-        TreeItem<String> branch211 = new TreeItem<String>(treeRoot, "branch 2 1 1", "branche 2 1 1", item);
+        TreeItem<String> branch2 = new TreeItem<String>("branch 2");
+        TreeItem<String> branch21 = new TreeItem<String>("branch 2 1");
+        TreeItem<String> branch211 = new TreeItem<String>("branch 2 1 1");
         branch2.addTreeItem(branch21);
         branch21.addTreeItem(branch211);
         treeRoot.addTreeItem(branch1);
         treeRoot.addTreeItem(branch2);
+
         return treeRoot;
     }
     
     @NiftyEventSubscriber(id="tree-box")
-    public void treeItemSelected(final String id, final TreeItemSelectedEvent event) {
-    	nifty.getCurrentScreen().findNiftyControl("selectedItemText", TextField.class).setText(event.getTreeItem().getDisplayCaption());
+    public void treeItemSelected(final String id, final TreeItemSelectionChangedEvent<String> event) {
+      final TextField text = nifty.getCurrentScreen().findNiftyControl("selectedItemText", TextField.class);
+
+      if (!event.getSelection().isEmpty()) {
+        text.setText(event.getSelection().get(0).getValue());
+      }
     }
 }
