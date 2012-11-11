@@ -83,6 +83,14 @@ public abstract class ElementBuilder {
     attributes.setId(id);
   }
 
+  public String getId() {
+    return attributes.getId();
+  }
+
+  public boolean isAutoId() {
+    return attributes.isAutoId();
+  }
+
   public void name(final String name) {
     attributes.setName(name);
   }
