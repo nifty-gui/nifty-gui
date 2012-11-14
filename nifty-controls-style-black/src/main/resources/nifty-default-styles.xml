@@ -19,5 +19,6 @@
   <useStyles filename="window/nifty-window.xml" />
   <useStyles filename="hint/nifty-hint.xml" />
   <useStyles filename="tabs/nifty-tabs.xml" />
+  <useStyles filename="treebox/nifty-treebox.xml" />
   <useStyles filename="messagebox/nifty-messagebox.xml" />
 </nifty-styles>

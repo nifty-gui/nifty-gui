@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.controls.listbox.ListBoxItemProcessor;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 
@@ -34,7 +35,7 @@ public interface ListBox<T> extends NiftyControl {
    * Add a item to the ListBox.
    * @param newItem the item to add
    */
-  void addItem(final T newItem);
+  void addItem(T newItem);
 
   /**
    * Insert the given item at the given index.
@@ -195,6 +196,8 @@ public interface ListBox<T> extends NiftyControl {
    * underlying model classes. This just displays all currently visible elements.
    */
   void refresh();
+
+  void addItemProcessor(ListBoxItemProcessor processor);
 
   /**
    * The ListBoxSelectionMode determines how the ListBox handles selections.

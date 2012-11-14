@@ -27,6 +27,11 @@ public class TreeBoxControlDialogDefinition {
 					childLayoutVertical();
 					control(builders.createLabel("TreeBox:"));
 					control(new TreeBoxBuilder("tree-box") {{
+            displayItems(4);
+            selectionModeSingle();
+            showVerticalScrollbar();
+            showHorizontalScrollbar();
+            width("*");
 				    }});
 				}});
 				panel(new PanelBuilder() {{

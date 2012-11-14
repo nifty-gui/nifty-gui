@@ -15,7 +15,6 @@ public class ListBoxItemController<T> extends AbstractController {
     private int visualItemIndex;
     private Nifty nifty;
     private Screen screen;
-    private Element element;
 
     @Override
     public void bind(
@@ -24,9 +23,9 @@ public class ListBoxItemController<T> extends AbstractController {
             final Element newElement,
             final Properties properties,
             final Attributes controlDefinitionAttributes) {
+      bind(newElement);
         this.nifty = niftyParam;
         this.screen = screenParam;
-        this.element = newElement;
     }
 
     @Override
@@ -60,13 +59,17 @@ public class ListBoxItemController<T> extends AbstractController {
     }
 
     public void listBoxItemClicked() {
-        T item = listBox.getItemByVisualIndex(visualItemIndex);
+        final T item = getItem();
         listBox.setFocusItem(item);
         if (listBox.getSelection().contains(item)) {
             listBox.deselectItemByVisualIndex(visualItemIndex);
         } else {
             listBox.selectItemByVisualIndex(visualItemIndex);
         }
+    }
+
+    protected T getItem() {
+      return listBox.getItemByVisualIndex(visualItemIndex);
     }
 
     public void setListBox(final ListBoxImpl<T> listBox) {
