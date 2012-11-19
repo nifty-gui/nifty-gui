@@ -79,17 +79,19 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
         continue;
       }
 
-      boolean isForwarded = currentEvent.isForwarded(forwardMode);
+      final boolean isForwarded = currentEvent.isForwarded(forwardMode);
       if (!isForwarded && currentEvent.sendToNifty(inputEventConsumer)) {
         currentEvent.updateState(inputState, true);
       } else {
         handleInputEvent(currentEvent);
 
-        // Forwarding might just have been disabled, if that is the case Nifty needs to know about the event
-        if (!isForwarded && currentEvent.isForwarded(forwardMode)) {
+        // Forwarding might just have been enabled again, if that is the case Nifty needs to know about the event
+        if (isForwarded && !currentEvent.isForwarded(forwardMode)) {
           currentEvent.sendToNifty(inputEventConsumer);
+          currentEvent.updateState(inputState, true);
+        } else {
+          currentEvent.updateState(inputState, false);
         }
-        currentEvent.updateState(inputState, false);
       }
     }
   }
