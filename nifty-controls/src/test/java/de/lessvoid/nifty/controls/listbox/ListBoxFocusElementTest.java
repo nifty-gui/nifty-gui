@@ -135,6 +135,8 @@ public class ListBoxFocusElementTest {
     viewMock.scrollTo(1);
     viewMock.display(ListBoxTestTool.buildValues(o2, o3), 1, ListBoxTestTool.buildValuesSelection());
     viewMock.publish(isA(ListBoxSelectionChangedEvent.class));
+    viewMock.scrollTo(1);
+    viewMock.display(ListBoxTestTool.buildValues(o2, o3), 1, ListBoxTestTool.buildValuesSelection());
     replay(viewMock);
 
     listBox.setFocusItem(o4);

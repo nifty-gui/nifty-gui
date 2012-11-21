@@ -54,8 +54,11 @@ public class ListBoxViewWidthTest {
     view.updateTotalWidth(WIDTH_100);
     view.updateTotalCount(1);
     view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+    view.scrollTo(0);
+
     expect(view.getWidth(o2)).andReturn(WIDTH_100);
     view.updateTotalCount(2);
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(view);
 
@@ -69,11 +72,15 @@ public class ListBoxViewWidthTest {
     view.updateTotalWidth(WIDTH_100);
     view.updateTotalCount(1);
     view.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+    view.scrollTo(0);
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     expect(view.getWidth(o2)).andReturn(WIDTH_100);
     view.updateTotalCount(2);
+    view.scrollTo(0);
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     expect(view.getWidth(o3)).andReturn(WIDTH_100);
     view.updateTotalCount(3);
+    view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     view.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     replay(view);
 

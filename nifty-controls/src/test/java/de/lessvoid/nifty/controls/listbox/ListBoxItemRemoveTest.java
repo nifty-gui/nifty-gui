@@ -116,9 +116,15 @@ public class ListBoxItemRemoveTest {
     viewMock.updateTotalWidth(WIDTH_100);
     viewMock.updateTotalCount(3);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.scrollTo(0);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+
     expect(viewMock.getWidth(o4)).andReturn(WIDTH_100);
     viewMock.updateTotalCount(4);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.scrollTo(0);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
+
     viewMock.scrollTo(2);
     viewMock.display(ListBoxTestTool.buildValues(o3, o4), -1, ListBoxTestTool.buildValuesSelection());
     viewMock.updateTotalCount(2);
