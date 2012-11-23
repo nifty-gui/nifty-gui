@@ -62,7 +62,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     }
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings("unchecked")
   private DropDownViewConverter<T> createViewConverter(final String className) {
     if (className == null) {
       return null;
