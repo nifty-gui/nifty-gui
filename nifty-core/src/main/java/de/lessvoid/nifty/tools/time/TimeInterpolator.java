@@ -24,7 +24,7 @@ public class TimeInterpolator {
   /**
    * the time provider.
    */
-  private TimeProvider timeProvider;
+  private final TimeProvider timeProvider;
 
   /**
    * the InterpolatorProvider we use.
@@ -52,14 +52,29 @@ public class TimeInterpolator {
   private long startDelayParam = 0;
 
   /**
-   * initialize with the given parameters.
+   * Initialize with the given parameters.
+   * <p />
+   * This function automatically calls {@link #initialize(java.util.Properties, boolean)}  so calling this one again
+   * is <b>not</b> needed.
    *
    * @param parameter parameter props
    * @param newTimeProvider TimeProvider to use
-   * @param infinite infinit effects never end
+   * @param infinite infinite effects never end
    */
   public TimeInterpolator(final Properties parameter, final TimeProvider newTimeProvider, final boolean infinite) {
     timeProvider = newTimeProvider;
+    initialize(parameter, infinite);
+  }
+
+  /**
+   * Initialize the time interpolator with the given values.
+   * <p />
+   * This possible to call this method more then once in case the parameters got changed.
+   *
+   * @param parameter the parameters used for the initialization
+   * @param infinite the infinite flag, in case its {@code true} this effect does never end
+   */
+  public void initialize(final Properties parameter, final boolean infinite) {
     startDelayParam = Long.parseLong(parameter.getProperty("startDelay", "0"));
 
     String lengthDefault = null;
@@ -71,7 +86,7 @@ public class TimeInterpolator {
     if ("infinite".equals(parameter.getProperty("length", lengthDefault))) {
       interpolatorProvider = new NullTime();
     } else {
-      this.lengthParam = Long.parseLong(parameter.getProperty("length", "1000"));
+      lengthParam = Long.parseLong(parameter.getProperty("length", "1000"));
       if (Boolean.parseBoolean(parameter.getProperty("oneShot"))) {
         interpolatorProvider = new OneTime();
       }

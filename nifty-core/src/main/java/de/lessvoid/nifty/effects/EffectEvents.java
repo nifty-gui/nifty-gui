@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.effects;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Properties;
 
@@ -10,14 +11,14 @@ public class EffectEvents {
   private NiftyMethodInvoker onStartEffect;
   private NiftyMethodInvoker onEndEffect;
 
-  public void init(final Nifty nifty, final LinkedList < Object > controllers, final Properties parameter) {
+  public void init(final Nifty nifty, final Object[] controllers, final Properties parameter) {
     String onStartEffectString = parameter.getProperty("onStartEffect");
     if (onStartEffectString != null) {
-      onStartEffect = new NiftyMethodInvoker(nifty, onStartEffectString, controllers.toArray());
+      onStartEffect = new NiftyMethodInvoker(nifty, onStartEffectString, controllers);
     }
     String onEndEffectString = parameter.getProperty("onEndEffect");
     if (onEndEffectString != null) {
-      onEndEffect = new NiftyMethodInvoker(nifty, onEndEffectString, controllers.toArray());
+      onEndEffect = new NiftyMethodInvoker(nifty, onEndEffectString, controllers);
     }
   }
 
