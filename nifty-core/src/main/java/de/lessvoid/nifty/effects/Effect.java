@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.effects;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -24,6 +25,7 @@ public class Effect {
   private TimeInterpolator timeInterpolator;
   private EffectImpl effectImpl;
   private EffectProperties parameter;
+  private Object[] controllerArray;
   private boolean post;
   private boolean overlay;
   private String alternateEnable;
@@ -71,8 +73,29 @@ public class Effect {
     falloff = falloffParameter;
   }
 
+  public void disableHover() {
+    hoverEffect = false;
+    falloff = null;
+  }
+
+  public void disableInfinite() {
+    if (infiniteEffect) {
+      infiniteEffect = false;
+
+      if (timeInterpolator != null) {
+        timeInterpolator.initialize(parameter, infiniteEffect);
+      }
+    }
+  }
+
   public void enableInfinite() {
-    infiniteEffect = true;
+    if (!infiniteEffect) {
+      infiniteEffect = true;
+
+      if (timeInterpolator != null) {
+        timeInterpolator.initialize(parameter, infiniteEffect);
+      }
+    }
   }
 
   public void init(
@@ -80,18 +103,24 @@ public class Effect {
       final EffectImpl effectImplParam,
       final EffectProperties parameterParam,
       final TimeProvider timeParam,
-      final LinkedList<Object> controllers) {
+      final Collection<Object> controllers) {
     element = elementParam;
     effectImpl = effectImplParam;
     parameter = parameterParam;
     parameter.put("effectEventId", effectEventId);
     timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
-    effectEvents.init(nifty, controllers, parameter);
+    controllerArray = controllers.toArray();
+    effectEvents.init(nifty, controllerArray, parameter);
     customFlag = false;
 
     if (hoverEffect) {
       element.setVisibleToMouseEvents(true);
     }
+  }
+
+  public void updateParameters() {
+    timeInterpolator.initialize(parameter, infiniteEffect);
+    effectEvents.init(nifty, controllerArray, parameter);
   }
 
   public boolean start(final String alternate, final String customKey) {
@@ -152,20 +181,14 @@ public class Effect {
   }
 
   public boolean isAlternateDisable() {
-    return (alternateDisable != null);
+    return alternateDisable != null;
   }
 
   public boolean customKeyMatches(final String customKeyToCheck) {
     if (customKeyToCheck == null) {
-      if (customKey == null) {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (customKeyToCheck.equals(customKey)) {
-      return true;
+      return customKey == null;
     }
-    return false;
+    return customKeyToCheck.equals(customKey);
   }
 
   public String getStateString() {
@@ -262,15 +285,15 @@ public class Effect {
   }
 
   private boolean isAlternateEnable() {
-    return (alternateEnable != null);
+    return alternateEnable != null;
   }
 
   private boolean alternateEnableMatches(final String alternate) {
-    return alternate != null && alternate.equals(alternateEnable);
+    return (alternate != null) && alternate.equals(alternateEnable);
   }
 
   private boolean alternateDisableMatches(final String alternate) {
-    return alternate != null && alternate.equals(alternateDisable);
+    return (alternate != null) && alternate.equals(alternateDisable);
   }
 
   public boolean getCustomFlag() {
