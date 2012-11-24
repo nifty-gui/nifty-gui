@@ -126,7 +126,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     ensureVerticalScrollbar();
     createLabels();
     initializeScrollPanel(screen);
-    setElementHeight();
     initializeScrollElementHeight();
     listBoxImpl.updateView(0);
     initializeHorizontalScrollbar();
@@ -297,7 +296,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
           nifty.executeEndOfFrameElementActions();
           screen.layoutLayers();
 
-          setElementHeight();
           subscribeHorizontalScrollbar();
         }
       } else if (newWidth <= listBoxPanelElement.getWidth()) {
@@ -305,12 +303,12 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
           unsubscribeHorizontalScrollbar();
           nifty.removeElement(screen, horizontal);
           nifty.executeEndOfFrameElementActions();
-          setElementHeight();
         }
       }
     }    
     initializeHorizontalScrollbar();
     ensureWidthConstraints();
+    getElement().getParent().layoutElements();
   }
 
   public void ensureWidthConstraints() {
@@ -541,7 +539,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
     updateBottomRightElement();
     nifty.executeEndOfFrameElementActions();
-    screen.layoutLayers();
+    getElement().getParent().layoutElements();
   }
 
   private void updateBottomRightElement() {
@@ -632,11 +630,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     if (displayItems == 1) {
       verticalScrollbar = ScrollbarMode.off;
     }
-  }
-
-  private void setElementHeight() {
-    getElement().setConstraintHeight(new SizeValue(displayItems * labelTemplateHeight + findHorizontalScrollbarHeight() + "px"));
-    screen.layoutLayers();
   }
 
   private int findHorizontalScrollbarHeight() {

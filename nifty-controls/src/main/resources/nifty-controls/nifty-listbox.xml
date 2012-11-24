@@ -4,7 +4,7 @@
     <panel childLayout="vertical">
       <panel id="#scrollpanel" childLayout="horizontal">
         <panel id="#panel" childLayout="absolute" childClip="true" style="#scrollpanel" controller="de.lessvoid.nifty.controls.listbox.ListBoxPanel" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
-          <panel id="#child-root" width="100%" childLayout="vertical" visibleToMouse="true">
+          <panel id="#child-root" childLayout="vertical" visibleToMouse="true">
             <interact onMouseWheel="mouseWheel()" />
             <!-- this is the template element used for the listbox items --> 
             <text text="Template" style="nifty-listbox-item" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping"/>
