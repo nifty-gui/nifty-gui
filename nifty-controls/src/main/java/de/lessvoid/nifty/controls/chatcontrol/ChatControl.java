@@ -190,7 +190,6 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
      */
     public final void sendText() {
         final String text = textControl.getText();
-        LOGGER.log(Level.INFO, "sending text {0}", text);
         nifty.publishEvent(getId(), new ChatTextSendEvent(this, text));
         textControl.setText("");
     }
@@ -205,7 +204,6 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
      */
     @Override
     public boolean keyEvent(final NiftyInputEvent inputEvent) {
-        LOGGER.log(Level.INFO, "event received: {0}", inputEvent);
         if (inputEvent == NiftyStandardInputEvent.SubmitText) {
             sendText();
             return true;

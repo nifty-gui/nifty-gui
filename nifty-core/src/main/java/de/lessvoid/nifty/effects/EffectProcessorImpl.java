@@ -322,10 +322,10 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
 
     if (!activeEffects.contains(e)) {
-      log.info("adding effect as active");
+      log.fine("adding effect as active");
       activeEffects.add(e);
     } else {
-      log.info("NOT adding effect as active because it's already registered as active");
+      log.fine("NOT adding effect as active because it's already registered as active");
     }
   }
 

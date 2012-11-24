@@ -22,7 +22,7 @@ public class ImageModeHelper {
 		final String imageModeProperty = properties.get("imageMode");
 		String property = getAreaProviderProperty(imageModeProperty);
 		if (property != null) {
-			log.info("imageMode property converted to imageArea property : " + imageModeProperty + " -> " + property);
+			log.fine("imageMode property converted to imageArea property : " + imageModeProperty + " -> " + property);
 			return property;
 		}
 
@@ -58,7 +58,7 @@ public class ImageModeHelper {
 		final String imageModeProperty = properties.get("imageMode");
 		String property = getRenderStrategyProperty(imageModeProperty);
 		if (property != null) {
-			log.info("imageMode property converted to renderStrategy property : " + imageModeProperty + " -> "
+			log.fine("imageMode property converted to renderStrategy property : " + imageModeProperty + " -> "
 					+ property);
 			return property;
 		}

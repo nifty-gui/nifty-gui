@@ -129,7 +129,7 @@ public class Effect {
       return false;
     }
 
-    log.info("starting effect [" + getStateString() + "] with customKey [" + customKey + "]");
+    log.fine("starting effect [" + getStateString() + "] with customKey [" + customKey + "]");
     internalStart();
     return true;
   }
@@ -250,7 +250,7 @@ public class Effect {
 
       // don't start this effect when it has an alternateKey set.
       if (isAlternateEnable()) {
-        log.info(
+        log.fine(
             "starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] and effect " +
                 "isAlternateEnable()");
         return false;
@@ -259,7 +259,7 @@ public class Effect {
       // we have an alternate key
       if (isAlternateDisable() && alternateDisableMatches(alternate)) {
         // don't start this effect. it has an alternateKey set and should be used for disable matches only
-        log.info(
+        log.fine(
             "starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] matches " +
                 "alternateDisableMatches()");
         return false;
@@ -267,7 +267,7 @@ public class Effect {
 
       if (isAlternateEnable() && !alternateEnableMatches(alternate)) {
         // start with alternateEnable but names don't match ... don't start
-        log.info(
+        log.fine(
             "starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] does not " +
                 "match alternateEnableMatches()");
         return false;
@@ -275,7 +275,7 @@ public class Effect {
     }
 
     if (!customKeyMatches(customKey)) {
-      log.info(
+      log.fine(
           "starting effect [" + getStateString() + "] canceled because customKey [" + customKey + "] does not match " +
               "key set at the effect");
       return false;

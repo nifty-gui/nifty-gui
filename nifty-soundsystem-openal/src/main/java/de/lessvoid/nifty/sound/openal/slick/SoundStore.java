@@ -288,7 +288,7 @@ public class SoundStore {
 		if (inited) {
 			return;
 		}
-		log.info("Initialising sounds..");
+		log.fine("Initialising sounds..");
 		inited = true;
 		
 		AccessController.doPrivileged(new PrivilegedAction<Object>() {
@@ -298,7 +298,7 @@ public class SoundStore {
 					soundWorks = true;
 					sounds = true;
 					music = true;
-					log.info("- Sound works");
+					log.fine("- Sound works");
 				} catch (Exception e) {
 				  log.warning("Sound initialisation failure." + e.getMessage());
 					soundWorks = false;
@@ -330,7 +330,7 @@ public class SoundStore {
 					break;
 				}
 			}
-			log.info("- "+sourceCount+" OpenAL source available");
+			log.fine("- "+sourceCount+" OpenAL source available");
 		
 			if (AL10.alGetError() != AL10.AL_NO_ERROR) {
 				sounds = false;
@@ -351,7 +351,7 @@ public class SoundStore {
 				AL10.alListener(AL10.AL_VELOCITY, listenerVel);
 				AL10.alListener(AL10.AL_ORIENTATION, listenerOri);
    			 
-				log.info("- Sounds source generated");
+				log.fine("- Sounds source generated");
 			}
 		}
 	}
