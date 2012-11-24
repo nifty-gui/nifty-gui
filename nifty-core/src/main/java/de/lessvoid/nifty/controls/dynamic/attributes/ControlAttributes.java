@@ -45,6 +45,10 @@ public class ControlAttributes {
     attributes.set("id", id);
   }
 
+  public String getId() {
+    return attributes.get("id");
+  }
+
   public void setAutoId(final String id) {
     isAutoId = true;
     attributes.set("id", id);

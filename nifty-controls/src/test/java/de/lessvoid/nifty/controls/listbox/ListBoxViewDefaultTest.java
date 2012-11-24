@@ -34,6 +34,8 @@ public class ListBoxViewDefaultTest {
     view.updateTotalWidth(WIDTH_100);
     view.updateTotalCount(1);
     view.display(buildValues("a", null), 0, buildValuesSelection());
+    view.scrollTo(0);
+    view.display(buildValues("a", "b"), 0, buildValuesSelection());
     expect(view.getWidth("b")).andReturn(WIDTH_100);
     view.updateTotalCount(2);
     view.display(buildValues("a", "b"), 0, buildValuesSelection());

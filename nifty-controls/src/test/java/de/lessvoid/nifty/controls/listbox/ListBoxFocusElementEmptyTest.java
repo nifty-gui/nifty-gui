@@ -57,6 +57,8 @@ public class ListBoxFocusElementEmptyTest {
     viewMock.updateTotalWidth(WIDTH_100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.scrollTo(0);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     expect(viewMock.getWidth(o2)).andReturn(WIDTH_100);
     viewMock.updateTotalCount(2);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
@@ -85,6 +87,8 @@ public class ListBoxFocusElementEmptyTest {
     viewMock.updateTotalWidth(WIDTH_100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.scrollTo(0);
+    viewMock.display(ListBoxTestTool.buildValues(o2, o1), 0, ListBoxTestTool.buildValuesSelection());
     expect(viewMock.getWidth(o2)).andReturn(WIDTH_100);
     viewMock.updateTotalCount(2);
     viewMock.display(ListBoxTestTool.buildValues(o2, o1), 0, ListBoxTestTool.buildValuesSelection());
@@ -101,6 +105,8 @@ public class ListBoxFocusElementEmptyTest {
     viewMock.updateTotalWidth(WIDTH_100);
     viewMock.updateTotalCount(1);
     viewMock.display(ListBoxTestTool.buildValues(o1, null), 0, ListBoxTestTool.buildValuesSelection());
+    viewMock.scrollTo(0);
+    viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());
     expect(viewMock.getWidth(o2)).andReturn(WIDTH_100);
     viewMock.updateTotalCount(2);
     viewMock.display(ListBoxTestTool.buildValues(o1, o2), 0, ListBoxTestTool.buildValuesSelection());

@@ -19,6 +19,7 @@ public class TestItem implements Comparable<TestItem> {
     return label;
   }
 
+  @Override
   public String toString() {
     return label;
   }

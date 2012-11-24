@@ -64,6 +64,8 @@ public class ControlsDemo<T> implements NiftyExample {
     // create Nifty and load default styles and controls
     Nifty nifty = new Nifty(new LwjglRenderDevice(true), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(),
         new AccurateTimeProvider());
+    System.out.println(nifty.getVersion());
+
     ControlsDemo<DisplayMode> demo = new ControlsDemo<DisplayMode>(new ResolutionControlLWJGL());
     demo.prepareStart(nifty);
 
