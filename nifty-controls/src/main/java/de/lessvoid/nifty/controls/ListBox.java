@@ -285,7 +285,8 @@ public interface ListBox<T> extends NiftyControl {
             + "ListBoxViewConverter to the ListBox.");
         return 0;
       }
-     return element.getRenderer(TextRenderer.class).getFont().getWidth(item.toString());
+      final String resultText = element.getNifty().specialValuesReplace(item.toString());
+      return element.getRenderer(TextRenderer.class).getFont().getWidth(resultText);
     }
   }
 }
