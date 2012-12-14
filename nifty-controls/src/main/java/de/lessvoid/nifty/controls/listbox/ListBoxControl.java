@@ -538,6 +538,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     childRootElement.setConstraintY(new SizeValue("0px"));
 
     updateBottomRightElement();
+
+    nifty.executeEndOfFrameElementActions();
+    getElement().getParent().layoutElements();
   }
 
   private void updateBottomRightElement() {
