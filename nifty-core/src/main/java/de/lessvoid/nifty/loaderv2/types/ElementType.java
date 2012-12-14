@@ -266,7 +266,8 @@ public class ElementType extends XmlBaseType {
     applyAttributes(element, attrib, nifty.getRenderEngine());
     applyPostAttributes(element, attrib, nifty.getRenderEngine());
     attributes.refreshEffects(effects);
-    screen.layoutLayers();
+
+    element.getParent().layoutElements();
   }
 
   public InteractType getInteract() {

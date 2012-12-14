@@ -20,7 +20,10 @@ public class ElementMoveAction implements Action {
     // now we'll need to add elements back to the focushandler
     addToFocusHandler(element);
 
-    screen.layoutLayers();
+    if (parent != null) {
+      parent.layoutElements();
+    }
+    destinationElement.layoutElements();
   }
 
   private void addToFocusHandler(final Element element) {
