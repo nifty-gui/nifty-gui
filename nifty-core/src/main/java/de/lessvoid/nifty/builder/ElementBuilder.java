@@ -454,7 +454,7 @@ public abstract class ElementBuilder {
   public Element build(final Nifty nifty, final Screen screen, final Element parent) {
     ElementType type = buildElementType();
     Element result = nifty.createElementFromType(screen, parent, type);
-    screen.layoutLayers();
+    parent.layoutElements();
     return result;
   }
 

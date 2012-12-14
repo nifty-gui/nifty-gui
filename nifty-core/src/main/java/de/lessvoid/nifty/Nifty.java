@@ -1429,7 +1429,7 @@ public class Nifty {
     elementType.connectParentControls(parent);
     Element element = elementType.create(parent, this, screen, layoutPart);
     if (screen.isBound()) {
-      screen.layoutLayers();
+      //screen.layoutLayers();
       element.bindControls(screen);
       element.initControls(false);
       element.startEffect(EffectEventId.onStartScreen);
