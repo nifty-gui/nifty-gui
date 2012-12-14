@@ -242,7 +242,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
       }
     }
     nifty.executeEndOfFrameElementActions();
-    screen.layoutLayers();
+    getElement().getParent().layoutElements();
   }
 
   private void initializeScrollbars() {
