@@ -21,9 +21,10 @@ public class ElementRemoveAction implements Action {
       // when the parent is the root element then the element we're removing is a layer element
       if (parent == screen.getRootElement()) {
         screen.removeLayerElement(element);
+      } else {
+        parent.layoutElements();
       }
     }
-    screen.layoutLayers();
   }
 
   private void removeSingleElement(final Screen screen, final Element element) {

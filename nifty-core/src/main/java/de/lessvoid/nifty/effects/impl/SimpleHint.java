@@ -65,7 +65,7 @@ public class SimpleHint implements EffectImpl {
       TextRenderer textRenderer = targetElement.getRenderer(TextRenderer.class);
       textRenderer.setText(hintText);
       targetElement.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-      nifty.getCurrentScreen().layoutLayers();
+      element.getParent().layoutElements();
     }
   }
 

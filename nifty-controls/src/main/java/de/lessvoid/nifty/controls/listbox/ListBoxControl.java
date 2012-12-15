@@ -255,7 +255,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
           updateBottomRightElement();
           nifty.executeEndOfFrameElementActions();
-          screen.layoutLayers();
+          getElement().getParent().layoutElements();
         }
       } else if (newCount <= displayItems) {
         if (vertical != null) {
@@ -266,7 +266,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
           updateBottomRightElement();
           nifty.executeEndOfFrameElementActions();
-          screen.layoutLayers();
+          getElement().getParent().layoutElements();
         }
       }
     }
@@ -294,8 +294,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
           updateBottomRightElement();
           nifty.executeEndOfFrameElementActions();
-          screen.layoutLayers();
-
           subscribeHorizontalScrollbar();
         }
       } else if (newWidth <= listBoxPanelElement.getWidth()) {
@@ -538,6 +536,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     childRootElement.setConstraintY(new SizeValue("0px"));
 
     updateBottomRightElement();
+
     nifty.executeEndOfFrameElementActions();
     getElement().getParent().layoutElements();
   }
