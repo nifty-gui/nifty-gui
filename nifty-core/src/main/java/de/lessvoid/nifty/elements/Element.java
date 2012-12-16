@@ -1378,6 +1378,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * show this element.
    */
   public void show() {
+    show(null);
+  }
+
+  public void show(final EndNotify perform) {
     // don't show if show is still in progress
     if (isEffectActive(EffectEventId.onShow)) {
       return;
@@ -1390,7 +1394,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     // show
     internalShow();
-    startEffect(EffectEventId.onShow);
+    startEffect(EffectEventId.onShow, perform);
   }
 
   private void internalShow() {
