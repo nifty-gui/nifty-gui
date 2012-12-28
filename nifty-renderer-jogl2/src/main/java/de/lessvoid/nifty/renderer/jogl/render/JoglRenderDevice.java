@@ -109,7 +109,7 @@ public class JoglRenderDevice implements RenderDevice {
         final GL gl = GLContext.getCurrentGL();
         gl.glGetIntegerv(GL.GL_VIEWPORT, viewportBuffer);
         Point dimensions = new Point(viewportBuffer.get(2),viewportBuffer.get(3));
-        log.info("Viewport: " + dimensions.x + ", " + dimensions.y);
+        log.fine("Viewport: " + dimensions.x + ", " + dimensions.y);
         return dimensions;
     }
 

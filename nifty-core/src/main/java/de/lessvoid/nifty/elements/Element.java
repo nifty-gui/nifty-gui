@@ -2067,7 +2067,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     elementType.applyEffects(nifty, screen, this);
     elementType.applyInteract(nifty, screen, this);
 
-    log.info("after setStyle [" + newStyle + "]\n" + elementType.output(0));
+    log.fine("after setStyle [" + newStyle + "]\n" + elementType.output(0));
     notifyListeners();
   }
 
@@ -2076,12 +2076,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   void removeStyle(final String style) {
-    log.info("before removeStyle [" + style + "]\n" + elementType.output(0));
+    log.fine("before removeStyle [" + style + "]\n" + elementType.output(0));
 
     elementType.removeWithTag(style);
     effectManager.removeAllEffects();
 
-    log.info("after removeStyle [" + style + "]\n" + elementType.output(0));
+    log.fine("after removeStyle [" + style + "]\n" + elementType.output(0));
     notifyListeners();
   }
 

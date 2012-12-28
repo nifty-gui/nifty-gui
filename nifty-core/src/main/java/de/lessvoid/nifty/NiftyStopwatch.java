@@ -9,7 +9,6 @@ public class NiftyStopwatch {
   private static Stack<Long> stack = new Stack<Long>();
 
   {
-    System.out.println("init: " + log);
   }
 
   public static void start() {
@@ -22,7 +21,7 @@ public class NiftyStopwatch {
     for (int i=0; i<stack.size(); i++) {
       b.append(".");
     }
-    log.info("[" + String.format("%04d", length) + "] " + b + message);
+    log.fine("[" + String.format("%04d", length) + "] " + b + message);
   }
 
   private static long now() {

@@ -72,7 +72,7 @@ public class Screen {
     screenId = newId;
     screenController = newScreenController;
     if (screenController == null) {
-      log.info("Missing ScreenController for screen [" + newId + "] using DefaultScreenController() instead but this might not be what you want.");
+      log.warning("Missing ScreenController for screen [" + newId + "] using DefaultScreenController() instead but this might not be what you want.");
       screenController = new DefaultScreenController();
     }
     timeProvider = newTimeProvider;
@@ -653,7 +653,7 @@ public class Screen {
     }
 
     public void perform() {
-      log.info("onStartScreen has ended");
+      log.fine("onStartScreen has ended");
 
       if (additionalEndNotify != null) {
         additionalEndNotify.perform();
@@ -675,7 +675,6 @@ public class Screen {
     }
 
     public void perform() {
-      Logger.getAnonymousLogger().info("onEndScreen has ended");
       onEndScreenHasEnded();
       if (additionalEndNotify != null) {
         additionalEndNotify.perform();

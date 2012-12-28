@@ -112,8 +112,8 @@ public class LwjglRenderDevice implements RenderDevice {
     GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
     viewportWidth = viewportBuffer.get(2);
     viewportHeight = viewportBuffer.get(3);
-    if (log.isLoggable(Level.INFO)) {
-      log.info("Viewport: " + viewportWidth + ", " + viewportHeight);
+    if (log.isLoggable(Level.FINE)) {
+      log.fine("Viewport: " + viewportWidth + ", " + viewportHeight);
     }
   }
 

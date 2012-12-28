@@ -153,9 +153,9 @@ public class LwjglInputSystem implements InputSystem {
     if ((caps & Cursor.CURSOR_ANIMATION) != 0) {
       add(out, "CURSOR_ANIMATION");
     }
-    log.info("native cursor support (" + caps + ") -> [" + out.toString() + "]");
-    log.info("native cursor min size: " + Cursor.getMinCursorSize());
-    log.info("native cursor max size: " + Cursor.getMaxCursorSize());
+    log.fine("native cursor support (" + caps + ") -> [" + out.toString() + "]");
+    log.fine("native cursor min size: " + Cursor.getMinCursorSize());
+    log.fine("native cursor max size: " + Cursor.getMaxCursorSize());
   }
 
   private static void add(StringBuffer out, String text) {

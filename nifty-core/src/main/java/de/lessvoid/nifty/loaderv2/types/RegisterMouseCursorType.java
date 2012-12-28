@@ -14,7 +14,7 @@ public class RegisterMouseCursorType extends XmlBaseType {
   public void materialize(final Nifty nifty, final Logger log) {
     try {
       nifty.getNiftyMouse().registerMouseCursor(getId(), getFilename(), getHotspotX(), getHotspotY());
-      log.info("Registering mouseCursor with id [" + getId() + "]");
+      log.fine("Registering mouseCursor with id [" + getId() + "]");
     } catch (IOException e) {
       log.warning("Error registering mouse cursor: " + e.getMessage());
     }
