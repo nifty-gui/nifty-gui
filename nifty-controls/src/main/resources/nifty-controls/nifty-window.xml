@@ -2,7 +2,7 @@
 <nifty-controls>
   <!-- WINDOW CONTROL -->
   <controlDefinition name="window" style="nifty-window" childRootId="#window-content" controller="de.lessvoid.nifty.controls.window.WindowControl" revert="false" drop="false" handle="#window-bar">
-    <interact onClick="dragStart()" onClickMouseMove="drag()" onRelease="dragStop()" />
+    <interact onClick="bringToFront()" onClickMouseMove="drag()" onRelease="dragStop()" />
     <panel style="#frame">
       <panel id="#window-bar" style="#bar">
         <text id="#window-title" style="#title" text="$title" />

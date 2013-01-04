@@ -54,8 +54,8 @@ public class WindowControl extends AbstractController implements Window {
     draggableControl.onFocus(getFocus);
   }
 
-  public void dragStart(final int mouseX, final int mouseY) {
-    draggableControl.dragStart(mouseX, mouseY);
+  public void bringToFront(final int mouseX, final int mouseY) {
+    draggableControl.bringToFront(mouseX, mouseY);
   }
 
   public void drag(final int mouseX, final int mouseY) {
