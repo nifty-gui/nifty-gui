@@ -21,4 +21,9 @@ public interface Window extends NiftyControl {
    * Close this Window.
    */
   void closeWindow();
+
+  /**
+   * Move the window control to the front inside its parent element.
+   */
+  void moveToFront();
 }
