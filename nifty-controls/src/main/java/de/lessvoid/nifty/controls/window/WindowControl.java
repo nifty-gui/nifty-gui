@@ -99,6 +99,11 @@ public class WindowControl extends AbstractController implements Window {
     }
   }
 
+  @Override
+  public void moveToFront() {
+    draggableControl.moveToFront();
+  }
+
   private class CloseEndNotify implements EndNotify {
     private final boolean hidden;
 

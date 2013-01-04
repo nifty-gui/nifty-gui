@@ -75,9 +75,8 @@ public class DraggableControl extends AbstractController implements Draggable {
    * @param mouseY mouse y
    */
   public void bringToFront(final int mouseX, final int mouseY) {
-    originalParent = draggable.getParent();
     if (!dragged) {
-      moveDraggableOnTop();
+      moveToFront();
     }
   }
 
@@ -106,7 +105,7 @@ public class DraggableControl extends AbstractController implements Draggable {
       dragged = true;
       notifyObserversDragStarted();
     } else {
-      moveDraggableOnTop();
+      moveToFront();
     }
   }
 
@@ -166,13 +165,15 @@ public class DraggableControl extends AbstractController implements Draggable {
     });
   }
 
-  private void moveDraggableOnTop() {
-    final List<Element> siblings = originalParent.getElements();
+  @Override
+  public void moveToFront() {
+    final Element parent = draggable.getParent();
+    final List<Element> siblings = parent.getElements();
     //noinspection ObjectEquality
     if (siblings.get(siblings.size() - 1) == draggable) {
       return;
     }
-    draggable.markForMove(originalParent, new EndNotify() {
+    draggable.markForMove(parent, new EndNotify() {
       @Override
       public void perform() {
         draggable.reactivate();
