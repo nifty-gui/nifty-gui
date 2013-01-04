@@ -29,7 +29,8 @@ public class DraggableControl extends AbstractController implements Draggable {
   private Element handle;
   private boolean revert;
   private boolean dropEnabled;
-  private boolean dragged = false;  
+  private boolean dragged = false;
+  private boolean triedDragging = false;
   private int originalPositionX;
   private int originalPositionY;
   private SizeValue originalConstraintX;
@@ -73,10 +74,23 @@ public class DraggableControl extends AbstractController implements Draggable {
    * @param mouseX mouse x
    * @param mouseY mouse y
    */
-  public void dragStart(final int mouseX, final int mouseY) {
-    if (dragged) {
+  public void bringToFront(final int mouseX, final int mouseY) {
+    if (!dragged) {
+      moveToFront();
+    }
+  }
+
+  /**
+   * Called by the dragging function to start a dragging operation.
+   * @param mouseX mouse x
+   * @param mouseY mouse y
+   */
+  private void dragStart(final int mouseX, final int mouseY) {
+    if (dragged || triedDragging) {
       return;
     }
+
+    triedDragging = true;
 
     originalParent = draggable.getParent();
     originalPositionX = draggable.getX();
@@ -91,7 +105,7 @@ public class DraggableControl extends AbstractController implements Draggable {
       dragged = true;
       notifyObserversDragStarted();
     } else {
-      moveDraggableOnTop();
+      moveToFront();
     }
   }
 
@@ -102,6 +116,7 @@ public class DraggableControl extends AbstractController implements Draggable {
    */
   public void drag(final int mouseX, final int mouseY) {
     if (!dragged) {
+      dragStart(mouseX, mouseY);
       return;
     }
 
@@ -117,6 +132,7 @@ public class DraggableControl extends AbstractController implements Draggable {
    * Called by <interact onRelease="" />
    */
   public void dragStop() {
+    triedDragging = false;
     if (!dragged) {
       return;
     }
@@ -145,13 +161,19 @@ public class DraggableControl extends AbstractController implements Draggable {
         draggable.getFocusHandler().requestExclusiveMouseFocus(draggable);
         draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
         draggable.setConstraintY(new SizeValue(originalPositionY + "px"));
-        draggable.getParent().layoutElements();
       }
     });
   }
 
-  private void moveDraggableOnTop() {
-    draggable.markForMove(originalParent, new EndNotify() {
+  @Override
+  public void moveToFront() {
+    final Element parent = draggable.getParent();
+    final List<Element> siblings = parent.getElements();
+    //noinspection ObjectEquality
+    if (siblings.get(siblings.size() - 1) == draggable) {
+      return;
+    }
+    draggable.markForMove(parent, new EndNotify() {
       @Override
       public void perform() {
         draggable.reactivate();
