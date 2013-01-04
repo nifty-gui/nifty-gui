@@ -517,6 +517,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     // this element has a new parent. check the parentClipArea and update this element accordingly.
     if (parentHasClipArea()) {
       setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
+      notifyListeners();
     } else {
       parentClipArea = false;
     }
@@ -972,7 +973,6 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       Element w = elements.get(i);
       w.setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
     }
-    notifyListeners();
   }
 
   /**
