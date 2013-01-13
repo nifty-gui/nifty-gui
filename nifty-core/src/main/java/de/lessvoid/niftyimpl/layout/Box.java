@@ -1,10 +1,9 @@
 package de.lessvoid.niftyimpl.layout;
 
 /**
- * The Box class represent a rectangular area on the screen. It has a position
- * (x,y) as well as height and weight attributes. The Box represent an already
- * resolved position in pixel.
- * 
+ * The Box class represent a rectangular area on the screen. It has a position (x,y) as well as height and weight
+ * attributes. The Box represent an already resolved position in pixels.
+ *
  * @author void
  */
 public class Box {
@@ -30,8 +29,7 @@ public class Box {
   private int height;
 
   /**
-   * Create a new Box with some default coordinates (x,y) set to (0,0) and with
-   * width and height set to 0.
+   * Create a new Box with some default coordinates (x,y) set to (0,0) and with width and height set to 0.
    */
   public Box() {
     this.x = 0;
@@ -72,6 +70,93 @@ public class Box {
     this.height = newHeight;
   }
 
+  /**
+   * Copy all the Box data from the given parameter to this without creating a new instance.
+   * @param src the source box to copy data from
+   */
+  public void from(final Box src) {
+    this.x = src.x;
+    this.y = src.y;
+    this.width = src.width;
+    this.height = src.height;
+  }
+
+  /**
+   * Get the current height for the box.
+   * 
+   * @return the current height of the box
+   */
+  public int getHeight() {
+    return height;
+  }
+
+  /**
+   * Get the current width of the box.
+   * 
+   * @return the current width of the box
+   */
+  public int getWidth() {
+    return width;
+  }
+
+  /**
+   * Get the horizontal position of the box.
+   * 
+   * @return the horizontal position of the box
+   */
+  public int getX() {
+    return x;
+  }
+
+  /**
+   * Get the vertical position of the box.
+   * 
+   * @return the vertical position of the box
+   */
+  public int getY() {
+    return y;
+  }
+
+  /**
+   * Set a new height for the box.
+   * 
+   * @param newHeight
+   *          the new height for the box.
+   */
+  public void setHeight(final int newHeight) {
+    this.height = newHeight;
+  }
+
+  /**
+   * Set a new width for the box.
+   * 
+   * @param newWidth
+   *          the new width
+   */
+  public void setWidth(final int newWidth) {
+    this.width = newWidth;
+  }
+
+  /**
+   * Get the horizontal position of the box.
+   * 
+   * @param newX
+   *          the vertical position of the box
+   */
+  public void setX(final int newX) {
+    this.x = newX;
+  }
+
+  /**
+   * Set the vertical position of the box.
+   * 
+   * @param newY
+   *          the vertical position of the box
+   */
+  public void setY(final int newY) {
+    this.y = newY;
+  }
+
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -99,49 +184,6 @@ public class Box {
     return true;
   }
 
-  public void from(final Box box) {
-    this.x = box.x;
-    this.y = box.y;
-    this.width = box.width;
-    this.height = box.height;
-  }
-
-  /**
-   * Get the current height for the box.
-   * 
-   * @return the current height of the box
-   */
-  public final int getHeight() {
-    return height;
-  }
-
-  /**
-   * Get the current width of the box.
-   * 
-   * @return the current width of the box
-   */
-  public final int getWidth() {
-    return width;
-  }
-
-  /**
-   * Get the horizontal position of the box.
-   * 
-   * @return the horizontal position of the box
-   */
-  public final int getX() {
-    return x;
-  }
-
-  /**
-   * Get the vertical position of the box.
-   * 
-   * @return the vertical position of the box
-   */
-  public final int getY() {
-    return y;
-  }
-
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -151,45 +193,5 @@ public class Box {
     result = prime * result + x;
     result = prime * result + y;
     return result;
-  }
-
-  /**
-   * Set a new height for the box.
-   * 
-   * @param newHeight
-   *          the new height for the box.
-   */
-  public final void setHeight(final int newHeight) {
-    this.height = newHeight;
-  }
-
-  /**
-   * Set a new width for the box.
-   * 
-   * @param newWidth
-   *          the new width
-   */
-  public final void setWidth(final int newWidth) {
-    this.width = newWidth;
-  }
-
-  /**
-   * Get the horizontal position of the box.
-   * 
-   * @param newX
-   *          the vertical position of the box
-   */
-  public final void setX(final int newX) {
-    this.x = newX;
-  }
-
-  /**
-   * Set the vertical position of the box.
-   * 
-   * @param newY
-   *          the vertical position of the box
-   */
-  public final void setY(final int newY) {
-    this.y = newY;
   }
 }

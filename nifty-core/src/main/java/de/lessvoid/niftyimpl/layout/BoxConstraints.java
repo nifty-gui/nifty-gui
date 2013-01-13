@@ -5,8 +5,7 @@ import de.lessvoid.nifty.layout.SizeValue;
 import de.lessvoid.nifty.layout.VerticalAlign;
 
 /**
- * The BoxConstraints class represent a rectangular area on the screen.
- * It has a position (x,y) as well as height and width attributes.
+ * The BoxConstraints class represent constraints that will be used when a Layoutable is being layout. 
  *
  * @author void
  */
@@ -42,26 +41,56 @@ public class BoxConstraints {
    */
   private VerticalAlign verticalAlign;
 
+  /**
+   * Left padding.
+   */
   private SizeValue paddingLeft;
+
+  /**
+   * Right padding.
+   */
   private SizeValue paddingRight;
+
+  /**
+   * Top padding.
+   */
   private SizeValue paddingTop;
+
+  /**
+   * Bottom padding.
+   */
   private SizeValue paddingBottom;
 
+  /**
+   * Left margin.
+   */
   private SizeValue marginLeft;
+
+  /**
+   * Right margin.
+   */
   private SizeValue marginRight;
+
+  /**
+   * Top margin.
+   */
   private SizeValue marginTop;
+
+  /**
+   * Bottom margin.
+   */
   private SizeValue marginBottom;
 
   /**
    * default constructor.
    */
   public BoxConstraints() {
-    this.x = null;
-    this.y = null;
-    this.width = null;
-    this.height = null;
-    this.horizontalAlign = HorizontalAlign.horizontalDefault;
-    this.verticalAlign = VerticalAlign.verticalDefault;
+    x = null;
+    y = null;
+    width = null;
+    height = null;
+    horizontalAlign = HorizontalAlign.horizontalDefault;
+    verticalAlign = VerticalAlign.verticalDefault;
     paddingLeft = SizeValue.px(0);
     paddingRight = SizeValue.px(0);
     paddingTop = SizeValue.px(0);
@@ -108,6 +137,14 @@ public class BoxConstraints {
     this.height = src.height;
     this.horizontalAlign = src.horizontalAlign;
     this.verticalAlign = src.verticalAlign;
+    this.paddingLeft = src.paddingLeft;
+    this.paddingRight = src.paddingRight;
+    this.paddingTop = src.paddingTop;
+    this.paddingBottom = src.paddingBottom;
+    this.marginLeft = src.marginLeft;
+    this.marginRight = src.marginRight;
+    this.marginTop = src.marginTop;
+    this.marginBottom = src.marginBottom;
   }
 
   /**
@@ -206,38 +243,76 @@ public class BoxConstraints {
     this.verticalAlign = newVerticalAlign;
   }
 
+  /**
+   * Get Left padding.
+   * @return left padding
+   */
   public SizeValue getPaddingLeft() {
     return paddingLeft;
   }
 
-  public SizeValue getPaddingRight() {
-    return paddingRight;
-  }
-
-  public SizeValue getPaddingTop() {
-    return paddingTop;
-  }
-
-  public SizeValue getPaddingBottom() {
-    return paddingBottom;
-  }
-
+  /**
+   * Set Left padding.
+   * @param paddingLeftParam left padding
+   */
   public void setPaddingLeft(final SizeValue paddingLeftParam) {
     paddingLeft = paddingLeftParam;
   }
 
+  /**
+   * Get Right padding.
+   * @return right padding
+   */
+  public SizeValue getPaddingRight() {
+    return paddingRight;
+  }
+
+  /**
+   * Set right padding.
+   * @param right padding
+   */
   public void setPaddingRight(final SizeValue paddingRightParam) {
     paddingRight = paddingRightParam;
   }
 
+  /**
+   * Get Top padding.
+   * @return top padding
+   */
+  public SizeValue getPaddingTop() {
+    return paddingTop;
+  }
+
+  /**
+   * Set Top padding.
+   * @param top padding
+   */
   public void setPaddingTop(final SizeValue paddingTopParam) {
     paddingTop = paddingTopParam;
   }
 
+  /**
+   * Get Bottom padding.
+   * @return bottom padding
+   */
+  public SizeValue getPaddingBottom() {
+    return paddingBottom;
+  }
+
+  /**
+   * Set Bottom padding.
+   * @param bottom padding.
+   */
   public void setPaddingBottom(final SizeValue paddingBottomParam) {
     paddingBottom = paddingBottomParam;
   }
 
+  /**
+   * Set all padding values from two parameters.
+   *
+   * @param topBottomParam top and bottom padding
+   * @param leftRightParam left and right padding
+   */
   public void setPadding(final SizeValue topBottomParam, final SizeValue leftRightParam) {
     paddingLeft = leftRightParam;
     paddingRight = leftRightParam;
@@ -245,6 +320,13 @@ public class BoxConstraints {
     paddingBottom = topBottomParam;
   }
 
+  /**
+   * Set all padding values from three parameters.
+   *
+   * @param topParam top padding
+   * @param leftRightParam left and right padding
+   * @param bottomParam bottom padding
+   */
   public void setPadding(final SizeValue topParam, final SizeValue leftRightParam, final SizeValue bottomParam) {
     paddingLeft = leftRightParam;
     paddingRight = leftRightParam;
@@ -252,6 +334,14 @@ public class BoxConstraints {
     paddingBottom = bottomParam;
   }
 
+  /**
+   * Set all padding values from four individual parameters.
+   *
+   * @param topParam top padding
+   * @param rightParam right padding
+   * @param bottomParam bottom padding
+   * @param leftParam left padding
+   */
   public void setPadding(
       final SizeValue topParam,
       final SizeValue rightParam,
@@ -263,6 +353,10 @@ public class BoxConstraints {
     paddingBottom = bottomParam;
   }
 
+  /**
+   * Set all padding values to the same value.
+   * @param padding padding value that will be applied to all four paddings (top, right, bottom, left)
+   */
   public void setPadding(final SizeValue padding) {
     paddingLeft = padding;
     paddingRight = padding;
@@ -270,38 +364,76 @@ public class BoxConstraints {
     paddingBottom = padding;
   }
 
+  /**
+   * Get left margin.
+   * @return left margin value
+   */
   public SizeValue getMarginLeft() {
     return marginLeft;
   }
 
-  public SizeValue getMarginRight() {
-    return marginRight;
-  }
-
-  public SizeValue getMarginTop() {
-    return marginTop;
-  }
-
-  public SizeValue getMarginBottom() {
-    return marginBottom;
-  }
-
+  /**
+   * Set left margin.
+   * @param marginLeftParam left margin value
+   */
   public void setMarginLeft(final SizeValue marginLeftParam) {
     marginLeft = marginLeftParam;
   }
 
+  /**
+   * Get right margin.
+   * @return right margin value
+   */
+  public SizeValue getMarginRight() {
+    return marginRight;
+  }
+
+  /**
+   * Set right margin.
+   * @param marginRightParam right margin value
+   */
   public void setMarginRight(final SizeValue marginRightParam) {
     marginRight = marginRightParam;
   }
 
+  /**
+   * Get top margin.
+   * @return top margin value
+   */
+  public SizeValue getMarginTop() {
+    return marginTop;
+  }
+
+  /**
+   * Set top margin value.
+   * @param marginTopParam top margin value
+   */
   public void setMarginTop(final SizeValue marginTopParam) {
     marginTop = marginTopParam;
   }
 
+  /**
+   * Get bottom margin.
+   * @return bottom margin value
+   */
+  public SizeValue getMarginBottom() {
+    return marginBottom;
+  }
+
+  /**
+   * Set bottom margin.
+   * @param marginBottomParam bottom margin value
+   */
   public void setMarginBottom(final SizeValue marginBottomParam) {
     marginBottom = marginBottomParam;
   }
 
+  /**
+   * Set all margin values from two values.
+   *
+   * @param topBottomParam top and bottom margin value
+   * @param leftRightParam left and right margin value
+   */
   public void setMargin(final SizeValue topBottomParam, final SizeValue leftRightParam) {
     marginLeft = leftRightParam;
     marginRight = leftRightParam;
@@ -309,6 +441,13 @@ public class BoxConstraints {
     marginBottom = topBottomParam;
   }
 
+  /**
+   * Set all margin values from three values.
+   *
+   * @param topParam top margin
+   * @param leftRightParam left and right margin
+   * @param bottomParam bottom margin
+   */
   public void setMargin(final SizeValue topParam, final SizeValue leftRightParam, final SizeValue bottomParam) {
     marginLeft = leftRightParam;
     marginRight = leftRightParam;
@@ -316,6 +455,13 @@ public class BoxConstraints {
     marginBottom = bottomParam;
   }
 
+  /**
+   * Set margin values from four individual values.
+   * @param topParam top margin value
+   * @param rightParam right margin value
+   * @param bottomParam bottom margin value
+   * @param leftParam left margin value
+   */
   public void setMargin(
       final SizeValue topParam,
       final SizeValue rightParam,
@@ -327,6 +473,11 @@ public class BoxConstraints {
     marginBottom = bottomParam;
   }
 
+  /**
+   * Set all margin values to the same value.
+   *
+   * @param margin the margin value to set all margin values to.
+   */
   public void setMargin(final SizeValue margin) {
     marginLeft = margin;
     marginRight = margin;

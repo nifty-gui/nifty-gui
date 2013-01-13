@@ -7,9 +7,9 @@ import de.lessvoid.nifty.NiftyElement;
 import de.lessvoid.nifty.layout.SizeValue;
 import de.lessvoid.niftyimpl.layout.Box;
 import de.lessvoid.niftyimpl.layout.BoxConstraints;
-import de.lessvoid.niftyimpl.layout.LayoutPart;
+import de.lessvoid.niftyimpl.layout.Layoutable;
 
-public class NiftyElementImpl implements NiftyElement, LayoutPart {
+public class NiftyElementImpl implements NiftyElement, Layoutable {
 
   /**
    * The id of this element.
@@ -72,7 +72,7 @@ public class NiftyElementImpl implements NiftyElement, LayoutPart {
   public SizeValue getMaxChildWidth() {
     int newWidth = 0;
     for (int i=0; i<children.size(); i++) {
-      LayoutPart e = children.get(i);
+      Layoutable e = children.get(i);
       int partWidth = e.getBoxConstraints().getWidth().getValueAsInt(0);
       partWidth += e.getBoxConstraints().getMarginLeft().getValueAsInt(0);
       partWidth += e.getBoxConstraints().getMarginRight().getValueAsInt(0);
@@ -87,7 +87,7 @@ public class NiftyElementImpl implements NiftyElement, LayoutPart {
   public SizeValue getMaxChildHeight() {
     int newHeight = 0;
     for (int i=0; i<children.size(); i++) {
-      LayoutPart e = children.get(i);
+      Layoutable e = children.get(i);
       int partHeight = e.getBoxConstraints().getHeight().getValueAsInt(0);
       partHeight += e.getBoxConstraints().getMarginTop().getValueAsInt(0);
       partHeight += e.getBoxConstraints().getMarginBottom().getValueAsInt(0);
@@ -102,7 +102,7 @@ public class NiftyElementImpl implements NiftyElement, LayoutPart {
   public SizeValue getTotalChildrenWidth() {
     int newWidth = 0;
     for (int i=0; i<children.size(); i++) {
-      LayoutPart e = children.get(i);
+      Layoutable e = children.get(i);
       newWidth += e.getBoxConstraints().getMarginLeft().getValueAsInt(0);
       newWidth += e.getBoxConstraints().getWidth().getValueAsInt(0);
       newWidth += e.getBoxConstraints().getMarginRight().getValueAsInt(0);
@@ -114,7 +114,7 @@ public class NiftyElementImpl implements NiftyElement, LayoutPart {
   public SizeValue getTotalChildrenHeight() {
     int newHeight = 0;
     for (int i=0; i<children.size(); i++) {
-      LayoutPart e = children.get(i);
+      Layoutable e = children.get(i);
       newHeight += e.getBoxConstraints().getHeight().getValueAsInt(0);
       newHeight += e.getBoxConstraints().getMarginTop().getValueAsInt(0);
       newHeight += e.getBoxConstraints().getMarginBottom().getValueAsInt(0);

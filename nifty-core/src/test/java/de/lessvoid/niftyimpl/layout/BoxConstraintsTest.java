@@ -45,4 +45,19 @@ public class BoxConstraintsTest extends TestCase {
     assertEquals(VerticalAlign.verticalDefault, copy.getVerticalAlign());
   }
 
+  public void testSetter() {
+    BoxConstraints b = new BoxConstraints();
+    b.setX(new SizeValue("100px"));
+    b.setY(new SizeValue("200px"));
+    b.setWidth(new SizeValue("300px"));
+    b.setHeight(new SizeValue("400px"));
+    b.setHorizontalAlign(HorizontalAlign.right);
+    b.setVerticalAlign(VerticalAlign.bottom);
+    assertEquals("100px", b.getX().toString());
+    assertEquals("200px", b.getY().toString());
+    assertEquals("300px", b.getWidth().toString());
+    assertEquals("400px", b.getHeight().toString());
+    assertEquals(HorizontalAlign.right, b.getHorizontalAlign());
+    assertEquals(VerticalAlign.bottom, b.getVerticalAlign());
+  }
 }
