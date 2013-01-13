@@ -2,11 +2,10 @@ package de.lessvoid.niftyimpl.layout.manager;
 
 import java.util.List;
 
-import de.lessvoid.nifty.layout.Box;
-import de.lessvoid.nifty.layout.BoxConstraints;
-import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.layout.align.VerticalAlign;
-import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.nifty.layout.VerticalAlign;
+import de.lessvoid.niftyimpl.layout.Box;
+import de.lessvoid.niftyimpl.layout.BoxConstraints;
+import de.lessvoid.niftyimpl.layout.Layoutable;
 
 /**
  * A HorizontalLayout implementation of the LayoutManager interface.
@@ -36,7 +35,7 @@ public class HorizontalLayout implements LayoutManager {
     int x = rootBoxX;
     for (int i = 0; i < children.size(); i++) {
       Layoutable current = children.get(i);
-      Box box = current.getBox();
+      Box box = current.getLayoutPos();
       BoxConstraints boxConstraints = current.getBoxConstraints();
 
       int elementWidth;
@@ -124,13 +123,6 @@ public class HorizontalLayout implements LayoutManager {
     }
   }
 
-  /**
-   *
-   * @param elements the child elements the max width is going
-   * to be calculated
-   * @param parentWidth the width of the parent element
-   * @return max non fixed width
-   */
   private int getMaxNonFixedWidth(
       final List < Layoutable > elements,
       final int parentWidth
@@ -157,39 +149,33 @@ public class HorizontalLayout implements LayoutManager {
     }
   }
 
-  /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
-  public final SizeValue calculateConstraintWidth(final Layoutable root, final List < Layoutable > children) {
-    return root.getSumWidth(children);
-  }
-
-  /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
-  public final SizeValue calculateConstraintHeight(final Layoutable root, final List < Layoutable > children) {
-    return root.getMaxHeight(children);
-  }
-
   private boolean isInvalid(final Layoutable root, final List <Layoutable> children) {
     return root == null || children == null || children.size() == 0;
   }
 
   private int getRootBoxX(final Layoutable root) {
-    return root.getBox().getX() + root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth());
+    return
+        root.getLayoutPos().getX() +
+        root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getLayoutPos().getWidth());
   }
 
   private int getRootBoxY(final Layoutable root) {
-    return root.getBox().getY() + root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight());
+    return
+        root.getLayoutPos().getY() +
+        root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getLayoutPos().getHeight());
   }
 
   private int getRootBoxWidth(final Layoutable root) {
-    return root.getBox().getWidth() - root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth()) - root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth());
+    return
+        root.getLayoutPos().getWidth() -
+        root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getLayoutPos().getWidth()) -
+        root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getLayoutPos().getWidth());
   }
 
   private int getRootBoxHeight(final Layoutable root) {
-    return root.getBox().getHeight() - root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight()) - root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
+    return
+        root.getLayoutPos().getHeight() -
+        root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getLayoutPos().getHeight()) -
+        root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getLayoutPos().getHeight());
   }
 }

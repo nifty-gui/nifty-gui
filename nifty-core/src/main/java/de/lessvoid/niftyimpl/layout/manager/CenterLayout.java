@@ -2,12 +2,11 @@ package de.lessvoid.niftyimpl.layout.manager;
 
 import java.util.List;
 
-import de.lessvoid.nifty.layout.Box;
-import de.lessvoid.nifty.layout.BoxConstraints;
-import de.lessvoid.nifty.layout.LayoutPart;
-import de.lessvoid.nifty.layout.align.HorizontalAlign;
-import de.lessvoid.nifty.layout.align.VerticalAlign;
-import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.nifty.layout.HorizontalAlign;
+import de.lessvoid.nifty.layout.VerticalAlign;
+import de.lessvoid.niftyimpl.layout.Box;
+import de.lessvoid.niftyimpl.layout.BoxConstraints;
+import de.lessvoid.niftyimpl.layout.Layoutable;
 
 /**
  * CenterLayout centers all child elements. If there are
@@ -25,14 +24,14 @@ public class CenterLayout implements LayoutManager {
    * @param rootElement @see {@link LayoutManager}
    * @param elements @see {@link LayoutManager}
    */
+  @Override
   public void layoutElements(final Layoutable rootElement, final List < Layoutable > elements) {
-
     // check for useful params
     if (rootElement == null || elements == null || elements.size() == 0) {
       return;
     }
 
-    Box rootBox = rootElement.getBox();
+    Box rootBox = rootElement.getLayoutPos();
     BoxConstraints rootBoxConstraints = rootElement.getBoxConstraints();
 
     for (int i=0; i<elements.size(); i++) {
@@ -57,7 +56,7 @@ public class CenterLayout implements LayoutManager {
   }
 
   private void layoutElement(final Layoutable element, Box rootBox, BoxConstraints rootBoxConstraints) {
-    Box box = element.getBox();
+    Box box = element.getLayoutPos();
     BoxConstraints constraint = element.getBoxConstraints();
 
     if (constraint.getWidth() != null && constraint.getWidth().hasHeightSuffix()) {
@@ -157,21 +156,5 @@ public class CenterLayout implements LayoutManager {
       // center is default in here
       box.setY(rootBoxY + (rootBoxHeight - boxHeight) / 2);
     }
-  }
-
-  /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
-  public SizeValue calculateConstraintWidth(final Layoutable root, final List < Layoutable > children) {
-    return root.getMaxWidth(children);
-  }
-
-  /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
-  public SizeValue calculateConstraintHeight(final Layoutable root, final List < Layoutable > children) {
-    return root.getMaxHeight(children);
   }
 }
