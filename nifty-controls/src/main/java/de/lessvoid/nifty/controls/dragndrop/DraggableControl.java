@@ -7,11 +7,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.Draggable;
-import de.lessvoid.nifty.controls.DraggableDragCanceledEvent;
-import de.lessvoid.nifty.controls.DraggableDragStartedEvent;
-import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -37,7 +33,7 @@ public class DraggableControl extends AbstractController implements Draggable {
   private SizeValue originalConstraintY;
   private int dragStartX;
   private int dragStartY;
-  private DroppableControl droppable;
+  private Droppable droppable;
 
   @Override
   public void bind(
@@ -265,11 +261,11 @@ public class DraggableControl extends AbstractController implements Draggable {
     return false;
   }
 
-  public DroppableControl getDroppable() {
+  public Droppable getDroppable() {
     return droppable;
   }
 
-  protected void setDroppable(final DroppableControl droppable) {
+  public void setDroppable(final Droppable droppable) {
     this.droppable = droppable;
   }
 
