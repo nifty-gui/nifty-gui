@@ -51,39 +51,34 @@ public class AbsolutePositionLayout implements LayoutManager {
     for (int i = 0; i < elements.size(); i++) {
       Layoutable p = elements.get(i);
       Box box = p.getLayoutPos();
-      BoxConstraints cons = p.getBoxConstraints();
+      BoxConstraints constraints = p.getBoxConstraints();
 
-      // makes only sense with constraints given
-      if (cons != null) {
-        if (cons.getX() != null) {
-          box.setX(rootBoxX + cons.getX().getValueAsInt(rootBoxWidth));
-        }
-
-        if (cons.getY() != null) {
-          box.setY(rootBoxY + cons.getY().getValueAsInt(rootBoxHeight));
-        }
-
-        if (cons.getWidth() != null && cons.getWidth().hasHeightSuffix()) {
-          if (cons.getHeight() != null) {
-            box.setHeight(cons.getHeight().getValueAsInt(rootBoxHeight));
-          }
-          box.setWidth(cons.getWidth().getValueAsInt(box.getHeight()));
-        } else if (cons.getHeight() != null && cons.getHeight().hasWidthSuffix()) {
-          if (cons.getWidth() != null) {
-            box.setWidth(cons.getWidth().getValueAsInt(rootBoxWidth));
-          }
-          box.setHeight(cons.getHeight().getValueAsInt(box.getWidth()));
-        } else {
-          if (cons.getWidth() != null) {
-            box.setWidth(cons.getWidth().getValueAsInt(rootBoxWidth));
-          }
-          if (cons.getHeight() != null) {
-            box.setHeight(cons.getHeight().getValueAsInt(rootBoxHeight));
-          }
-        }
-
-        post.process(rootBoxX, rootBoxY, rootBoxWidth, rootBoxHeight, box);
+      if (constraints.getX() != null) {
+        box.setX(rootBoxX + constraints.getX().getValueAsInt(rootBoxWidth));
       }
+      if (constraints.getY() != null) {
+        box.setY(rootBoxY + constraints.getY().getValueAsInt(rootBoxHeight));
+      }
+      if (constraints.getWidth() != null && constraints.getWidth().hasHeightSuffix()) {
+        if (constraints.getHeight() != null) {
+          box.setHeight(constraints.getHeight().getValueAsInt(rootBoxHeight));
+        }
+        box.setWidth(constraints.getWidth().getValueAsInt(box.getHeight()));
+      } else if (constraints.getHeight() != null && constraints.getHeight().hasWidthSuffix()) {
+        if (constraints.getWidth() != null) {
+          box.setWidth(constraints.getWidth().getValueAsInt(rootBoxWidth));
+        }
+        box.setHeight(constraints.getHeight().getValueAsInt(box.getWidth()));
+      } else {
+        if (constraints.getWidth() != null) {
+          box.setWidth(constraints.getWidth().getValueAsInt(rootBoxWidth));
+        }
+        if (constraints.getHeight() != null) {
+          box.setHeight(constraints.getHeight().getValueAsInt(rootBoxHeight));
+        }
+      }
+
+      post.process(rootBoxX, rootBoxY, rootBoxWidth, rootBoxHeight, box);
     }
   }
 

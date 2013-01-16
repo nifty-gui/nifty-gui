@@ -19,14 +19,9 @@ import de.lessvoid.niftyimpl.layout.Layoutable;
  * @author void
  */
 public class CenterLayout implements LayoutManager {
-  /**
-   * layoutElements.
-   * @param rootElement @see {@link LayoutManager}
-   * @param elements @see {@link LayoutManager}
-   */
+
   @Override
   public void layoutElements(final Layoutable rootElement, final List < Layoutable > elements) {
-    // check for useful params
     if (rootElement == null || elements == null || elements.size() == 0) {
       return;
     }
@@ -116,7 +111,9 @@ public class CenterLayout implements LayoutManager {
       final Box box,
       final BoxConstraints constraint) {
     int rootBoxX = rootBox.getX() + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth());
-    int rootBoxWidth = rootBox.getWidth() - rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth()) - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth());
+    int rootBoxWidth = rootBox.getWidth() -
+                       rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth()) -
+                       rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth());
 
     int boxWidth = (int) constraint.getWidth().getValue(rootBoxWidth);
     if (constraint.getWidth().hasHeightSuffix()) {
@@ -127,7 +124,9 @@ public class CenterLayout implements LayoutManager {
     if (constraint.getHorizontalAlign() == HorizontalAlign.left) {
       box.setX(rootBoxX);
     } else if (constraint.getHorizontalAlign() == HorizontalAlign.right) {
-      box.setX(rootBoxX + rootBox.getWidth() - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()) - boxWidth);
+      box.setX(rootBoxX +
+               rootBox.getWidth() -
+               rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()) - boxWidth);
     } else {
       // default and center is the same in here
       box.setX(rootBoxX + (rootBoxWidth - boxWidth) / 2);
@@ -140,7 +139,9 @@ public class CenterLayout implements LayoutManager {
       final Box box,
       final BoxConstraints constraint) {
     int rootBoxY = rootBox.getY() + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight());
-    int rootBoxHeight = rootBox.getHeight() - rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight()) - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight());
+    int rootBoxHeight = rootBox.getHeight() -
+                        rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight()) -
+                        rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight());
 
     int boxHeight = (int) constraint.getHeight().getValue(rootBoxHeight);
     if (constraint.getHeight().hasWidthSuffix()) {
@@ -151,7 +152,9 @@ public class CenterLayout implements LayoutManager {
     if (constraint.getVerticalAlign() == VerticalAlign.top) {
       box.setY(rootBoxY);
     } else if (constraint.getVerticalAlign() == VerticalAlign.bottom) {
-      box.setY(rootBoxY + rootBox.getHeight() - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight()) - boxHeight);
+      box.setY(rootBoxY +
+               rootBox.getHeight() -
+               rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight()) - boxHeight);
     } else {
       // center is default in here
       box.setY(rootBoxY + (rootBoxHeight - boxHeight) / 2);

@@ -1,13 +1,17 @@
 package de.lessvoid.niftyimpl.layout;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import org.junit.Test;
+
 import de.lessvoid.nifty.layout.HorizontalAlign;
 import de.lessvoid.nifty.layout.SizeValue;
 import de.lessvoid.nifty.layout.VerticalAlign;
-import de.lessvoid.niftyimpl.layout.BoxConstraints;
 
-public class BoxConstraintsTest extends TestCase {
+public class BoxConstraintsTest {
 
+  @Test
   public void testDefaultConstructor() {
     BoxConstraints box = new BoxConstraints();
     assertNull(box.getX());
@@ -18,6 +22,7 @@ public class BoxConstraintsTest extends TestCase {
     assertEquals(VerticalAlign.verticalDefault, box.getVerticalAlign());
   }
 
+  @Test
   public void testNormalConstructor() {
     BoxConstraints box = new BoxConstraints(
         new SizeValue("100px"),
@@ -34,6 +39,7 @@ public class BoxConstraintsTest extends TestCase {
     assertEquals(VerticalAlign.bottom, box.getVerticalAlign());
   }
 
+  @Test
   public void testCopyConstructor() {
     BoxConstraints box = new BoxConstraints();
     BoxConstraints copy = new BoxConstraints(box);
@@ -45,6 +51,7 @@ public class BoxConstraintsTest extends TestCase {
     assertEquals(VerticalAlign.verticalDefault, copy.getVerticalAlign());
   }
 
+  @Test
   public void testSetter() {
     BoxConstraints b = new BoxConstraints();
     b.setX(new SizeValue("100px"));

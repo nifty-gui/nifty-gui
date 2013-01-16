@@ -100,22 +100,18 @@ public class VerticalLayout implements LayoutManager {
     }
   }
 
-  private int calcElementHeight(final List < Layoutable > children, final int rootBoxHeight, final BoxConstraints boxConstraints, final int boxWidth) {
+  private int calcElementHeight(final List<Layoutable> children, final int rootBoxHeight, final BoxConstraints boxConstraints, final int boxWidth) {
     if (hasHeightConstraint(boxConstraints)) {
-      int h;
       if (boxConstraints.getHeight().hasWidthSuffix()) {
-        h = boxConstraints.getHeight().getValueAsInt(boxWidth);
-      } else {
-        h = boxConstraints.getHeight().getValueAsInt(rootBoxHeight);
-      }
-      if (h != -1) {
-        return h;
+        return boxConstraints.getHeight().getValueAsInt(boxWidth);
+      } else if (!boxConstraints.getHeight().hasWildcard()) {
+        return boxConstraints.getHeight().getValueAsInt(rootBoxHeight);
       }
     }
     return getMaxNonFixedHeight(children, rootBoxHeight);
   }
 
-  private int getMaxNonFixedHeight(final List < Layoutable > elements, final int parentHeight) {
+  private int getMaxNonFixedHeight(final List<Layoutable> elements, final int parentHeight) {
     int maxFixedHeight = 0;
     int fixedCount = 0;
 
@@ -131,19 +127,15 @@ public class VerticalLayout implements LayoutManager {
     }
 
     int notFixedCount = elements.size() - fixedCount;
-    if (notFixedCount > 0) {
-      return (parentHeight - maxFixedHeight) / notFixedCount;
-    } else {
-      return (parentHeight - maxFixedHeight);
-    }
+    return (parentHeight - maxFixedHeight) / notFixedCount;
   }
 
   private boolean hasWidthConstraint(final BoxConstraints constraints) {
-    return constraints != null && constraints.getWidth() != null && !constraints.getWidth().hasWildcard();
+    return constraints.getWidth() != null && !constraints.getWidth().hasWildcard();
   }
 
   private boolean hasHeightConstraint(final BoxConstraints boxConstraints) {
-    return boxConstraints != null && boxConstraints.getHeight() != null;
+    return boxConstraints.getHeight() != null;
   }
 
   private boolean isInvalid(final Layoutable root, final List <Layoutable> children) {
