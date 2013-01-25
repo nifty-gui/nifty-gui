@@ -28,7 +28,7 @@ public class PanelCreator extends ControlAttributes {
       }
     });
     nifty.addControlsWithoutStartScreen();
-    return parent.findElementByName(attributes.get("id"));
+    return parent.findElementById(attributes.get("id"));
   }
 
   @Override
