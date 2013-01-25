@@ -39,7 +39,7 @@ public class Screen {
   private ArrayList < Element > layerElements = new ArrayList < Element >();
   private LinkedList < Element > layerElementsToAdd = new LinkedList < Element >();
   private LinkedList < Element > layerElementsToRemove = new LinkedList < Element >();
-  
+
   /**
    * Popup layers are dynamic layers on top of the normal layers.
    * They are treated as "normal" layers and are added to the layerElements variable. In the
@@ -48,8 +48,8 @@ public class Screen {
    */
   private ArrayList < Element > popupElements = new ArrayList < Element >();
   private LinkedList < Element > popupElementsToAdd = new LinkedList < Element >();
-  private LinkedList<ElementWithEndNotify> popupElementsToRemove = new LinkedList < ElementWithEndNotify >(); 
-  
+  private LinkedList<ElementWithEndNotify> popupElementsToRemove = new LinkedList < ElementWithEndNotify >();
+
   private TimeProvider timeProvider;
   private FocusHandler focusHandler;
   private MouseOverHandler mouseOverHandler;
@@ -377,7 +377,7 @@ public class Screen {
   public Element findElementByName(final String name) {
     for (int i=0; i<layerElements.size(); i++) {
       Element layer = layerElements.get(i);
-      Element found = layer.findElementByName(name);
+      Element found = layer.findElementById(name);
       if (found != null) {
         return found;
       }
@@ -526,7 +526,7 @@ public class Screen {
       Element ww = wwElements.get(i);
       String elementId = getIdText(ww);
       if (elementId.matches(regexpElement)) {
-        result.append("\n" + offset + elementId + " " + ww.getElementType().getClass().getSimpleName() + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]");  
+        result.append("\n" + offset + elementId + " " + ww.getElementType().getClass().getSimpleName() + " childLayout [" + ww.getElementType().getAttributes().get("childLayout") + "]");
         result.append("\n" + StringHelper.whitespace(offset.length()) + ww.getElementStateString(StringHelper.whitespace(offset.length()), regexpAttribute));
         result.append(outputElement(ww, offset + " ", ".*", regexpAttribute));
       } else {
@@ -794,7 +794,7 @@ public class Screen {
 
   /**
    * Checks if the mouse currently hovers any element that is able to handle mouse events.
-   * 
+   *
    * @return true if the mouse hovers an element that is visibleToMouse and
    *         false if the mouse would hit the background and not any element at all
    */
@@ -848,6 +848,6 @@ public class Screen {
     for (Element layer : layerElements) {
       layer.resetMouseDown();
     }
-    
+
   }
 }

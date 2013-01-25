@@ -62,7 +62,7 @@ public class Hint implements EffectImpl {
       if (hintLayer != null && !hintLayer.isVisible()) {
         // decide if we can already show the hint
         if (nifty.getNiftyMouse().getNoMouseMovementTime() > hintDelay) {
-          Element hintPanel = hintLayer.findElementByName(hintPanelId);
+          Element hintPanel = hintLayer.findElementById(hintPanelId);
           if (hintPanel != null) {
             hintPanel.setConstraintX(new SizeValue(getPosX(element, hintPanel, r.getWidth()) + "px"));
             hintPanel.setConstraintY(new SizeValue(getPosY(element, hintPanel, r.getHeight()) + "px"));
