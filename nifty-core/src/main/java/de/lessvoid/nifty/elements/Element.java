@@ -1684,26 +1684,40 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
   /**
    * find an element by name.
+   * this method is deprecated, use findElementById() instead
    *
    * @param name the name of the element (id)
    * @return the element or null
+   *
+   * @see Element#findElementById(java.lang.String) 
    */
-  public Element findElementByName(final String name) {
-    if (name == null) {
+  @Deprecated
+  public Element findElementByName(final String id) {
+      return findElementById(id);
+  }
+
+  /**
+   * find an element by id.
+   *
+   * @param id the name of the element (id)
+   * @return the element or null
+   */
+  public Element findElementById(final String id) {
+    if (id == null) {
       return null;
     }
 
-    if (id != null && id.equals(name)) {
+    if (id != null && id.equals(id)) {
       return this;
     }
 
-    if (childIdMatch(name, id)) {
+    if (childIdMatch(id, id)) {
       return this;
     }
 
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
-      Element found = e.findElementByName(name);
+      Element found = e.findElementById(id);
       if (found != null) {
         return found;
       }
@@ -2112,7 +2126,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
-    Element element = findElementByName(elementName);
+    Element element = findElementById(elementName);
     if (element == null) {
       return null;
     }
@@ -2120,7 +2134,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
-    Element element = findElementByName(elementName);
+    Element element = findElementById(elementName);
     if (element == null) {
       return null;
     }
@@ -2382,7 +2396,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       Element el = elementIt.next();
       el.internalRemoveElementWithChilds();
     }
- 
+
     elementsRenderOrderSet.clear();
     elements.clear();
     elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);

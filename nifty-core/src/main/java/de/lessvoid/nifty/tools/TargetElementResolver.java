@@ -22,7 +22,7 @@ public class TargetElementResolver {
       return resolveParents(id, base.getParent());
     }
     if (id.startsWith("#")) {
-      return base.findElementByName(id);
+      return base.findElementById(id);
     }
     return screen.findElementByName(id);
   }
@@ -31,10 +31,10 @@ public class TargetElementResolver {
     String subParentId = id.replaceFirst(PARENT, "");
     if (!subParentId.startsWith(PARENT)) {
       if (subParentId.startsWith("#")) {
-        return parent.findElementByName(subParentId.replaceFirst("#", ""));
+        return parent.findElementById(subParentId.replaceFirst("#", ""));
       }
       return parent;
     }
     return resolveParents(subParentId, parent.getParent());
-  }  
+  }
 }

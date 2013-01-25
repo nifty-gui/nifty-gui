@@ -52,7 +52,7 @@ public class TargetElementResolverTest {
     replay(expected);
 
     Element parent = createMock(Element.class);
-    expect(parent.findElementByName("id")).andReturn(expected);
+    expect(parent.findElementById("id")).andReturn(expected);
     replay(parent);
 
     baseElement = createMock(Element.class);
@@ -70,7 +70,7 @@ public class TargetElementResolverTest {
   @Test
   public void testResolveParentWithIdNotFound() {
     Element parent = createMock(Element.class);
-    expect(parent.findElementByName("id")).andReturn(null);
+    expect(parent.findElementById("id")).andReturn(null);
     replay(parent);
 
     baseElement = createMock(Element.class);

@@ -38,7 +38,7 @@ public class CustomControlCreator extends ControlAttributes {
       final Element parent) {
     nifty.addControl(screen, parent, getStandardControl());
     nifty.addControls();
-    return parent.findElementByName(attributes.get("id"));
+    return parent.findElementById(attributes.get("id"));
   }
 
   @Override
