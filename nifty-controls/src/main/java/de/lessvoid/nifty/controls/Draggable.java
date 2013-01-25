@@ -8,6 +8,14 @@ package de.lessvoid.nifty.controls;
  */
 public interface Draggable extends NiftyControl {
   /**
+   * This function is used to disable the draggable properly.
+   *
+   * @param cancelCurrentDrag in case this parameter is set {@code true} the current dragging operation will be
+   *                          canceled once this function is called.
+   */
+  void disable(boolean cancelCurrentDrag);
+
+  /**
    * Move the draggable control to the front inside its parent element.
    */
   void moveToFront();

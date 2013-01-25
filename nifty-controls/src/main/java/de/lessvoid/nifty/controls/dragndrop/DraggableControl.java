@@ -35,6 +35,11 @@ public class DraggableControl extends AbstractController implements Draggable {
   private int dragStartY;
   private Droppable droppable;
 
+  /**
+   * This flag stores if the draggable is supposed to be disabled once the dragging operation is done.
+   */
+  private boolean disableAtEndOfDrag;
+
   @Override
   public void bind(
       final Nifty nifty,
@@ -145,6 +150,7 @@ public class DraggableControl extends AbstractController implements Draggable {
       }
     }
     dragged = false;
+    postDragActions();
   }
 
   private void moveDraggableToPopup() {
@@ -177,6 +183,37 @@ public class DraggableControl extends AbstractController implements Draggable {
     });
   }
 
+  /**
+   * Overwritten default disable function to ensure the proper deactivation of a currently dragged draggable.
+   */
+  @SuppressWarnings("RefusedBequest")
+  @Override
+  public void disable() {
+    disable(true);
+  }
+
+  @Override
+  public void disable(final boolean cancelCurrentDrag) {
+    if (dragged) {
+      if (cancelCurrentDrag) {
+        dragCancel();
+        dragged = false;
+        super.disable();
+      } else {
+        disableAtEndOfDrag = true;
+      }
+    } else {
+      super.disable();
+    }
+  }
+
+  private void postDragActions() {
+    if (disableAtEndOfDrag) {
+      disableAtEndOfDrag = false;
+      super.disable();
+    }
+  }
+
   private void dragCancel() {
     if (revert) {
       draggable.setConstraintX(originalConstraintX);
@@ -193,6 +230,9 @@ public class DraggableControl extends AbstractController implements Draggable {
     return new EndNotify() {
       @Override
       public void perform() {
+        if (popup == null) {
+          return;
+        }
         nifty.closePopup(popup.getId(), new EndNotify() {
           @Override
           public void perform() {
