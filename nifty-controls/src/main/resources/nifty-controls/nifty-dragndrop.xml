@@ -2,7 +2,7 @@
 <nifty-controls>
   <!-- DRAGGABLE CONTROL -->
   <controlDefinition name="draggable" childRootId="#draggableContent" controller="de.lessvoid.nifty.controls.dragndrop.DraggableControl">
-    <interact onClick="dragStart()" onClickMouseMove="drag()" onRelease="dragStop()" />
+    <interact onClick="bringToFront()" onClickMouseMove="drag()" onRelease="dragStop()" />
     <panel id="#draggableContent"/>
   </controlDefinition>
 

@@ -432,6 +432,9 @@ public class TextFieldLogic {
       if (filterInputSingle.acceptInput(cursorPosition, c)) {
         text.insert(cursorPosition, c);
         cursorPosition++;
+        if (selecting) {
+          startSelecting();
+        }
         return true;
       }
     }
@@ -461,6 +464,9 @@ public class TextFieldLogic {
       if (filterInputSequence.acceptInput(cursorPosition, insertSequence)) {
         text.insert(cursorPosition, chars);
         cursorPosition += insertCnt;
+        if (selecting) {
+          startSelecting();
+        }
         return true;
       } else {
         final int length = chars.length();

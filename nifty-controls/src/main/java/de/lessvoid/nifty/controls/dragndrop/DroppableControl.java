@@ -1,16 +1,13 @@
 package de.lessvoid.nifty.controls.dragndrop;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.Droppable;
-import de.lessvoid.nifty.controls.DroppableDropFilter;
-import de.lessvoid.nifty.controls.DroppableDroppedEvent;
-import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -19,7 +16,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 
 public class DroppableControl extends AbstractController implements Droppable {
   private Nifty nifty;
-  private List<DroppableDropFilter> filters = new CopyOnWriteArrayList<DroppableDropFilter>();
+  private Collection<DroppableDropFilter> filters = new CopyOnWriteArrayList<DroppableDropFilter>();
   private Element droppableContent;
   private DraggableControl draggable;
 
@@ -48,7 +45,7 @@ public class DroppableControl extends AbstractController implements Droppable {
     return false;
   }
 
-  private EndNotify reactivate(final Element element) {
+  private static EndNotify reactivate(final Element element) {
     return new EndNotify() {
       @Override
       public void perform() {
@@ -57,12 +54,12 @@ public class DroppableControl extends AbstractController implements Droppable {
     };
   }
 
-  private DraggableControl findDraggableChild(final Element element) {
-    for (Element child : element.getElements()) {
+  private static DraggableControl findDraggableChild(final Element element) {
+    for (final Element child : element.getElements()) {
       if (isDraggable(child)) {
         return child.getControl(DraggableControl.class);
       }
-      DraggableControl draggable = findDraggableChild(child);
+      final DraggableControl draggable = findDraggableChild(child);
       if (draggable != null) {
         return draggable;
       }
@@ -70,10 +67,10 @@ public class DroppableControl extends AbstractController implements Droppable {
     return null;
   }
 
-  private boolean isDraggable(final Element element) {
-    NiftyInputControl control = element.getAttachedInputControl();
+  private static boolean isDraggable(final Element element) {
+    final NiftyInputControl control = element.getAttachedInputControl();
     if (control != null) {
-      return control.getController() instanceof DraggableControl;
+      return control.getController() instanceof Draggable;
     }
     return false;
   }
@@ -84,11 +81,11 @@ public class DroppableControl extends AbstractController implements Droppable {
 
   private void drop(final DraggableControl droppedDraggable, final EndNotify endNotify, final boolean notifyObservers) {
     draggable = droppedDraggable;
-    draggable.getElement().setConstraintX(new SizeValue("0px"));
-    draggable.getElement().setConstraintY(new SizeValue("0px"));
+    draggable.getElement().setConstraintX(SizeValue.px(0));
+    draggable.getElement().setConstraintY(SizeValue.px(0));
     draggable.getElement().markForMove(droppableContent, endNotify);
 
-    DroppableControl source = droppedDraggable.getDroppable();
+    final Droppable source = droppedDraggable.getDroppable();
     droppedDraggable.setDroppable(this);
 
     if (notifyObservers) {
@@ -100,7 +97,7 @@ public class DroppableControl extends AbstractController implements Droppable {
     return draggable;
   }
 
-  private void notifyObservers(final DroppableControl source, final DraggableControl droppedDraggable) {
+  private void notifyObservers(final Droppable source, final Draggable droppedDraggable) {
     nifty.publishEvent(getElement().getId(), new DroppableDroppedEvent(source, droppedDraggable, this));
   }
 
@@ -119,8 +116,8 @@ public class DroppableControl extends AbstractController implements Droppable {
     filters.clear();
   }
 
-  protected boolean accept(final DroppableControl source, final DraggableControl draggable) {
-    for (DroppableDropFilter filter : filters) {
+  protected boolean accept(final Droppable source, final Draggable draggable) {
+    for (final DroppableDropFilter filter : filters) {
       if (!filter.accept(source, draggable, this)) {
         return false;
       }

@@ -14,7 +14,7 @@ public class ClasspathLocation implements ResourceLocation {
    */
   public URL getResource(String ref) {
     String cpRef = ref.replace('\\', '/');
-    return ClasspathLocation.class.getClassLoader().getResource(cpRef);
+    return Thread.currentThread().getContextClassLoader().getResource(cpRef);
   }
 
   /**
@@ -22,6 +22,6 @@ public class ClasspathLocation implements ResourceLocation {
    */
   public InputStream getResourceAsStream(String ref) {
     String cpRef = ref.replace('\\', '/');
-    return ClasspathLocation.class.getClassLoader().getResourceAsStream(cpRef);  
+    return Thread.currentThread().getContextClassLoader().getResourceAsStream(cpRef);  
   }
 }

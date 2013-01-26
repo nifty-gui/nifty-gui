@@ -41,7 +41,7 @@ public class TreeBoxViewConverter<T> implements ListBox.ListBoxViewConverter<Tre
     final Element text = element.findElementByName("#tree-item-content");
     final Label displayLabel = text.findNiftyControl("#label", Label.class);
     if (displayLabel == null) {
-      final LabelBuilder builder =  new LabelBuilder("#label");
+      final LabelBuilder builder =  new LabelBuilder(text.getId() + "#label");
       builder.text(item.getValue().toString());
       builder.textHAlign(ElementBuilder.Align.Left);
       builder.width("*");

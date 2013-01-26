@@ -7,11 +7,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.Draggable;
-import de.lessvoid.nifty.controls.DraggableDragCanceledEvent;
-import de.lessvoid.nifty.controls.DraggableDragStartedEvent;
-import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
@@ -29,14 +25,20 @@ public class DraggableControl extends AbstractController implements Draggable {
   private Element handle;
   private boolean revert;
   private boolean dropEnabled;
-  private boolean dragged = false;  
+  private boolean dragged = false;
+  private boolean triedDragging = false;
   private int originalPositionX;
   private int originalPositionY;
   private SizeValue originalConstraintX;
   private SizeValue originalConstraintY;
   private int dragStartX;
   private int dragStartY;
-  private DroppableControl droppable;
+  private Droppable droppable;
+
+  /**
+   * This flag stores if the draggable is supposed to be disabled once the dragging operation is done.
+   */
+  private boolean disableAtEndOfDrag;
 
   @Override
   public void bind(
@@ -73,10 +75,23 @@ public class DraggableControl extends AbstractController implements Draggable {
    * @param mouseX mouse x
    * @param mouseY mouse y
    */
-  public void dragStart(final int mouseX, final int mouseY) {
-    if (dragged) {
+  public void bringToFront(final int mouseX, final int mouseY) {
+    if (!dragged) {
+      moveToFront();
+    }
+  }
+
+  /**
+   * Called by the dragging function to start a dragging operation.
+   * @param mouseX mouse x
+   * @param mouseY mouse y
+   */
+  private void dragStart(final int mouseX, final int mouseY) {
+    if (dragged || triedDragging) {
       return;
     }
+
+    triedDragging = true;
 
     originalParent = draggable.getParent();
     originalPositionX = draggable.getX();
@@ -91,7 +106,7 @@ public class DraggableControl extends AbstractController implements Draggable {
       dragged = true;
       notifyObserversDragStarted();
     } else {
-      moveDraggableOnTop();
+      moveToFront();
     }
   }
 
@@ -102,6 +117,7 @@ public class DraggableControl extends AbstractController implements Draggable {
    */
   public void drag(final int mouseX, final int mouseY) {
     if (!dragged) {
+      dragStart(mouseX, mouseY);
       return;
     }
 
@@ -117,6 +133,7 @@ public class DraggableControl extends AbstractController implements Draggable {
    * Called by <interact onRelease="" />
    */
   public void dragStop() {
+    triedDragging = false;
     if (!dragged) {
       return;
     }
@@ -133,6 +150,7 @@ public class DraggableControl extends AbstractController implements Draggable {
       }
     }
     dragged = false;
+    postDragActions();
   }
 
   private void moveDraggableToPopup() {
@@ -145,18 +163,55 @@ public class DraggableControl extends AbstractController implements Draggable {
         draggable.getFocusHandler().requestExclusiveMouseFocus(draggable);
         draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
         draggable.setConstraintY(new SizeValue(originalPositionY + "px"));
-        draggable.getParent().layoutElements();
       }
     });
   }
 
-  private void moveDraggableOnTop() {
-    draggable.markForMove(originalParent, new EndNotify() {
+  @Override
+  public void moveToFront() {
+    final Element parent = draggable.getParent();
+    final List<Element> siblings = parent.getElements();
+    //noinspection ObjectEquality
+    if (siblings.get(siblings.size() - 1) == draggable) {
+      return;
+    }
+    draggable.markForMove(parent, new EndNotify() {
       @Override
       public void perform() {
         draggable.reactivate();
       }
     });
+  }
+
+  /**
+   * Overwritten default disable function to ensure the proper deactivation of a currently dragged draggable.
+   */
+  @SuppressWarnings("RefusedBequest")
+  @Override
+  public void disable() {
+    disable(true);
+  }
+
+  @Override
+  public void disable(final boolean cancelCurrentDrag) {
+    if (dragged) {
+      if (cancelCurrentDrag) {
+        dragCancel();
+        dragged = false;
+        super.disable();
+      } else {
+        disableAtEndOfDrag = true;
+      }
+    } else {
+      super.disable();
+    }
+  }
+
+  private void postDragActions() {
+    if (disableAtEndOfDrag) {
+      disableAtEndOfDrag = false;
+      super.disable();
+    }
   }
 
   private void dragCancel() {
@@ -175,6 +230,9 @@ public class DraggableControl extends AbstractController implements Draggable {
     return new EndNotify() {
       @Override
       public void perform() {
+        if (popup == null) {
+          return;
+        }
         nifty.closePopup(popup.getId(), new EndNotify() {
           @Override
           public void perform() {
@@ -243,11 +301,11 @@ public class DraggableControl extends AbstractController implements Draggable {
     return false;
   }
 
-  public DroppableControl getDroppable() {
+  public Droppable getDroppable() {
     return droppable;
   }
 
-  protected void setDroppable(final DroppableControl droppable) {
+  public void setDroppable(final Droppable droppable) {
     this.droppable = droppable;
   }
 
