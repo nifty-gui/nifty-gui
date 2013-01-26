@@ -2218,6 +2218,70 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return visibleToMouseEvents;
   }
 
+  /**
+   * get current left padding.
+   * @return current left padding
+   */
+  public SizeValue getPaddingLeft() {
+    return layoutPart.getBoxConstraints().getPaddingLeft();
+  }
+
+  /**
+   * get current right padding.
+   * @return current right padding
+   */
+  public SizeValue getPaddingRight() {
+    return layoutPart.getBoxConstraints().getPaddingRight();
+  }
+
+  /**
+   * get current top padding.
+   * @return current top padding
+   */
+  public SizeValue getPaddingTop() {
+    return layoutPart.getBoxConstraints().getPaddingTop();
+  }
+
+  /**
+   * get current bottom padding.
+   * @return current bottom padding
+   */
+  public SizeValue getPaddingBottom() {
+    return layoutPart.getBoxConstraints().getPaddingBottom();
+  }
+
+  /**
+   * get current left margin.
+   * @return current left margin
+   */
+  public SizeValue getMarginLeft() {
+    return layoutPart.getBoxConstraints().getMarginLeft();
+  }
+
+  /**
+   * get current right margin.
+   * @return current right margin
+   */
+  public SizeValue getMarginRight() {
+    return layoutPart.getBoxConstraints().getMarginRight();
+  }
+
+  /**
+   * get current top margin.
+   * @return current top margin
+   */
+  public SizeValue getMarginTop() {
+    return layoutPart.getBoxConstraints().getMarginTop();
+  }
+
+  /**
+   * get current bottom margin.
+   * @return current bottom margin
+   */
+  public SizeValue getMarginBottom() {
+    return layoutPart.getBoxConstraints().getMarginBottom();
+  }
+
   public void setPaddingLeft(final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingLeft(paddingValue);
     notifyListeners();
