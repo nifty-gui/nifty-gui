@@ -14,16 +14,16 @@ import de.lessvoid.niftyimpl.layout.Layoutable;
 
 public class HorizontalLayoutTest {
   private HorizontalLayout layout = new HorizontalLayout();
-  private LayoutPart rootPanel;
+  private LayoutPartTestHelper rootPanel;
   private List<Layoutable> elements;
-  private LayoutPart left;
-  private LayoutPart right;
+  private LayoutPartTestHelper left;
+  private LayoutPartTestHelper right;
 
   @Before
   public void setUp() throws Exception {
-    rootPanel = new LayoutPart(new Box(0, 0, 640, 480), new BoxConstraints());
-    left = new LayoutPart(new Box(), new BoxConstraints());
-    right = new LayoutPart(new Box(), new BoxConstraints());
+    rootPanel = new LayoutPartTestHelper(new Box(0, 0, 640, 480), new BoxConstraints());
+    left = new LayoutPartTestHelper(new Box(), new BoxConstraints());
+    right = new LayoutPartTestHelper(new Box(), new BoxConstraints());
 
     elements = new ArrayList<Layoutable>();
     elements.add(left);
@@ -38,6 +38,11 @@ public class HorizontalLayoutTest {
   @Test
   public void testUpdateWithNullEntriesMakeNoTrouble() {
     layout.layoutElements(rootPanel, null);
+  }
+
+  @Test
+  public void testUpdateWithEmptyChildren() {
+    layout.layoutElements(rootPanel, new ArrayList<Layoutable>());
   }
 
   @Test
@@ -102,6 +107,15 @@ public class HorizontalLayoutTest {
   }
 
   @Test
+  public void testLayoutFixedHeightBottomAlign() {
+    left.getBoxConstraints().setHeight(new SizeValue("20px"));
+    left.getBoxConstraints().setVerticalAlign(VerticalAlign.bottom);
+    layout.layoutElements(rootPanel, elements);
+
+    Assert.assertBox(left.getLayoutPos(), 0, 460, 320, 20);
+  }
+
+  @Test
   public void testLayoutWithPercentage() throws Exception {
     left.getBoxConstraints().setWidth(new SizeValue("25%"));
     right.getBoxConstraints().setWidth(new SizeValue("75%"));
@@ -130,5 +144,49 @@ public class HorizontalLayoutTest {
 
     Assert.assertBox(left.getLayoutPos(), 10, 10, 310, 460);
     Assert.assertBox(right.getLayoutPos(), 320, 10, 310, 460);
+  }
+
+  @Test
+  public void testLayoutWithWidthSuffixLeft() {
+    left.getBoxConstraints().setWidth(new SizeValue("50%h"));
+    left.getBoxConstraints().setHeight(new SizeValue("200px"));
+
+    layout.layoutElements(rootPanel, elements);
+
+    Assert.assertBox(left.getLayoutPos(),    0, 0, 100, 200);
+    Assert.assertBox(right.getLayoutPos(), 100, 0, 540, 480);
+  }
+
+  @Test
+  public void testLayoutWithWidthSuffixRight() {
+    right.getBoxConstraints().setWidth(new SizeValue("50%h"));
+    right.getBoxConstraints().setHeight(new SizeValue("200px"));
+
+    layout.layoutElements(rootPanel, elements);
+
+    Assert.assertBox(left.getLayoutPos(),    0, 0, 540, 480);
+    Assert.assertBox(right.getLayoutPos(), 540, 0, 100, 200);
+  }
+
+  @Test
+  public void testLayoutWithHeightSuffixLeft() {
+    left.getBoxConstraints().setWidth(new SizeValue("200px"));
+    left.getBoxConstraints().setHeight(new SizeValue("50%w"));
+
+    layout.layoutElements(rootPanel, elements);
+
+    Assert.assertBox(left.getLayoutPos(),    0, 0, 200, 100);
+    Assert.assertBox(right.getLayoutPos(), 200, 0, 440, 480);
+  }
+
+  @Test
+  public void testLayoutWithHeightSuffixRight() {
+    right.getBoxConstraints().setWidth(new SizeValue("200px"));
+    right.getBoxConstraints().setHeight(new SizeValue("50%w"));
+
+    layout.layoutElements(rootPanel, elements);
+
+    Assert.assertBox(left.getLayoutPos(),    0, 0, 440, 480);
+    Assert.assertBox(right.getLayoutPos(), 440, 0, 200, 100);
   }
 }

@@ -13,24 +13,14 @@ import de.lessvoid.niftyimpl.layout.Layoutable;
  */
 public class OverlayLayout implements LayoutManager {
 
-  /**
-   * layoutElements.
-   * @param rootElement @see {@link LayoutManager}
-   * @param elements @see {@link LayoutManager}
-   */
-  public final void layoutElements(final Layoutable rootElement, final List < Layoutable > elements) {
-
-    // make the params any sense?
-    if (rootElement == null || elements == null || elements.size() == 0) {
+  public void layoutElements(final Layoutable root, final List <Layoutable> children) {
+    if (root == null || children == null || children.size() == 0) {
       return;
     }
 
-    // get the root box
-    Box rootBox = rootElement.getLayoutPos();
-
-    // now do the layout
-    for (int i = 0; i < elements.size(); i++) {
-      Layoutable p = elements.get(i);
+    Box rootBox = root.getLayoutPos();
+    for (int i = 0; i < children.size(); i++) {
+      Layoutable p = children.get(i);
       Box box = p.getLayoutPos();
       box.setX(rootBox.getX());
       box.setY(rootBox.getY());

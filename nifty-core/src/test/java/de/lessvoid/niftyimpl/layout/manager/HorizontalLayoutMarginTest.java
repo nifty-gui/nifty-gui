@@ -13,18 +13,18 @@ import de.lessvoid.niftyimpl.layout.Layoutable;
 
 public class HorizontalLayoutMarginTest {
   private HorizontalLayout layout= new HorizontalLayout();
-  private LayoutPart root;
+  private LayoutPartTestHelper root;
   private List<Layoutable> elements;
-  private LayoutPart left;
-  private LayoutPart right;
+  private LayoutPartTestHelper left;
+  private LayoutPartTestHelper right;
 
   @Before
   public void before() throws Exception {
-    root = new LayoutPart(new Box(0, 0, 200, 100), new BoxConstraints());
+    root = new LayoutPartTestHelper(new Box(0, 0, 200, 100), new BoxConstraints());
     elements = new ArrayList<Layoutable>();
-    left = new LayoutPart(new Box(), new BoxConstraints());
+    left = new LayoutPartTestHelper(new Box(), new BoxConstraints());
     elements.add(left);
-    right = new LayoutPart(new Box(), new BoxConstraints());
+    right = new LayoutPartTestHelper(new Box(), new BoxConstraints());
     elements.add(right);
   }
 

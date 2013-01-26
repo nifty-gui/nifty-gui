@@ -15,15 +15,15 @@ import de.lessvoid.niftyimpl.layout.Layoutable;
 public class CenterLayoutTest {
   private ArrayList<Layoutable> elements = new ArrayList<Layoutable>();
   private CenterLayout layout = new CenterLayout();
-  private LayoutPart root;
-  private LayoutPart child;
+  private LayoutPartTestHelper root;
+  private LayoutPartTestHelper child;
 
   @Before
   public void setUp() throws Exception {
     Box box = new Box(0, 0, 640, 480);
     BoxConstraints boxConstraint = new BoxConstraints();
-    root = new LayoutPart(box, boxConstraint);
-    child = new LayoutPart();
+    root = new LayoutPartTestHelper(box, boxConstraint);
+    child = new LayoutPartTestHelper();
     elements.add(child);
   }
 

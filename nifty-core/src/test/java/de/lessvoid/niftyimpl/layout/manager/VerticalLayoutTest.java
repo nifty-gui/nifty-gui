@@ -14,18 +14,18 @@ import de.lessvoid.niftyimpl.layout.Layoutable;
 
 public class VerticalLayoutTest {
   private VerticalLayout layout = new VerticalLayout();
-  private LayoutPart root;
+  private LayoutPartTestHelper root;
   private List<Layoutable> elements;
-  private LayoutPart top;
-  private LayoutPart bottom;
+  private LayoutPartTestHelper top;
+  private LayoutPartTestHelper bottom;
 
   @Before
   public void setUp() throws Exception {
-    root = new LayoutPart(new Box(0, 0, 640, 480), new BoxConstraints());
+    root = new LayoutPartTestHelper(new Box(0, 0, 640, 480), new BoxConstraints());
     elements = new ArrayList<Layoutable>();
-    top = new LayoutPart(new Box(), new BoxConstraints());
+    top = new LayoutPartTestHelper(new Box(), new BoxConstraints());
     elements.add(top);
-    bottom = new LayoutPart(new Box(), new BoxConstraints());
+    bottom = new LayoutPartTestHelper(new Box(), new BoxConstraints());
     elements.add(bottom);
   }
 

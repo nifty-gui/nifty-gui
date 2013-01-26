@@ -17,18 +17,18 @@ import de.lessvoid.niftyimpl.layout.manager.AbsolutePositionLayout.KeepInsidePos
 public class AbsolutePositionLayoutTest {
   private AbsolutePositionLayout layout = new AbsolutePositionLayout();
   private List<Layoutable> elements;
-  private LayoutPart rootPanel;
-  private LayoutPart element;
+  private LayoutPartTestHelper rootPanel;
+  private LayoutPartTestHelper element;
 
   @Before
   public void setUp() throws Exception {
     Box box = new Box(0, 0, 640, 480);
     BoxConstraints boxConstraint = new BoxConstraints();
-    rootPanel = new LayoutPart(box, boxConstraint);
+    rootPanel = new LayoutPartTestHelper(box, boxConstraint);
 
     box = new Box();
     boxConstraint = new BoxConstraints();
-    element = new LayoutPart(box, boxConstraint);
+    element = new LayoutPartTestHelper(box, boxConstraint);
 
     elements = new ArrayList<Layoutable>();
     elements.add(element);
