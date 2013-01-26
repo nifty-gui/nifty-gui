@@ -8,15 +8,15 @@
   <artifactId>nifty-jogl-renderer</artifactId>
   <dependencies>
     <dependency>
-      <groupId>org.jogamp.jogl</groupId>
-      <artifactId>jogl.all</artifactId>
-      <version>2.0-b526-20111018</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jogamp.gluegen</groupId>
-      <artifactId>gluegen-rt</artifactId>
-      <version>2.0-b424-20111018</version>
-    </dependency>
+     <groupId>org.jogamp.gluegen</groupId>
+     <artifactId>gluegen-rt-main</artifactId>
+     <version>2.0-rc11</version>
+   </dependency>
+   <dependency>
+     <groupId>org.jogamp.jogl</groupId>
+     <artifactId>jogl-all-main</artifactId>
+     <version>2.0-rc11</version>
+   </dependency>
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
@@ -48,12 +48,5 @@
       </plugin>
     </plugins>
   </build>
-  <repositories>
-    <repository>
-      <id>maven.iscpif.fr</id>
-      <name>ISCPIF repository</name>
-      <url>http://maven.iscpif.fr/thirdparty/</url>
-    </repository>
-  </repositories>
   <name>Nifty Renderer for JOGL2</name>
 </project>
