@@ -24,7 +24,7 @@ public class TargetElementResolver {
     if (id.startsWith("#")) {
       return base.findElementById(id);
     }
-    return screen.findElementByName(id);
+    return screen.findElementById(id);
   }
 
   private Element resolveParents(final String id, final Element parent) {

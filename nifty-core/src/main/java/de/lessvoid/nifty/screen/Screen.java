@@ -371,13 +371,27 @@ public class Screen {
 
   /**
    * find an element by name.
+   * this method is deprecated, use findElementById() instead
+   *
    * @param name the id to find
    * @return the element or null
+   *
+   * @see Screen#findElementById(java.lang.String)
    */
+  @Deprecated
   public Element findElementByName(final String name) {
+      return findElementById(name);
+  }
+
+  /**
+   * find an element by id.
+   * @param findId the id to find
+   * @return the element or null
+   */
+  public Element findElementById(final String findId) {
     for (int i=0; i<layerElements.size(); i++) {
       Element layer = layerElements.get(i);
-      Element found = layer.findElementById(name);
+      Element found = layer.findElementById(findId);
       if (found != null) {
         return found;
       }
@@ -386,7 +400,7 @@ public class Screen {
   }
 
   public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
-    Element element = findElementByName(elementName);
+    Element element = findElementById(elementName);
     if (element == null) {
       return null;
     }
@@ -408,7 +422,7 @@ public class Screen {
    * @return Either a NiftyControl or a Null version of a NiftyControl for the matching control class.
    */
   public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
-    Element element = findElementByName(elementName);
+    Element element = findElementById(elementName);
     if (element == null) {
       log.warning("missing element/control with id [" + elementName + "] for requested control class [" + requestedControlClass.getName() + "]");
       return NullObjectFactory.createNull(requestedControlClass);

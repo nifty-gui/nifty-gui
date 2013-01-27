@@ -1689,7 +1689,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param name the name of the element (id)
    * @return the element or null
    *
-   * @see Element#findElementById(java.lang.String) 
+   * @see Element#findElementById(java.lang.String)
    */
   @Deprecated
   public Element findElementByName(final String id) {
@@ -1702,22 +1702,22 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param id the name of the element (id)
    * @return the element or null
    */
-  public Element findElementById(final String id) {
-    if (id == null) {
+  public Element findElementById(final String findId) {
+    if (findId == null) {
       return null;
     }
 
-    if (id != null && id.equals(id)) {
+    if (id != null && id.equals(findId)) {
       return this;
     }
 
-    if (childIdMatch(id, id)) {
+    if (childIdMatch(findId, id)) {
       return this;
     }
 
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
-      Element found = e.findElementById(id);
+      Element found = e.findElementById(findId);
       if (found != null) {
         return found;
       }
@@ -1791,7 +1791,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       }
     }
 
-    focusHandler.addElement(this, screen.findElementByName(focusableInsertBeforeElementId));
+    focusHandler.addElement(this, screen.findElementById(focusableInsertBeforeElementId));
   }
 
   private Element resolvePopupParentElement() {
@@ -2216,6 +2216,70 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    */
   public boolean isVisibleToMouseEvents() {
     return visibleToMouseEvents;
+  }
+
+  /**
+   * get current left padding.
+   * @return current left padding
+   */
+  public SizeValue getPaddingLeft() {
+    return layoutPart.getBoxConstraints().getPaddingLeft();
+  }
+
+  /**
+   * get current right padding.
+   * @return current right padding
+   */
+  public SizeValue getPaddingRight() {
+    return layoutPart.getBoxConstraints().getPaddingRight();
+  }
+
+  /**
+   * get current top padding.
+   * @return current top padding
+   */
+  public SizeValue getPaddingTop() {
+    return layoutPart.getBoxConstraints().getPaddingTop();
+  }
+
+  /**
+   * get current bottom padding.
+   * @return current bottom padding
+   */
+  public SizeValue getPaddingBottom() {
+    return layoutPart.getBoxConstraints().getPaddingBottom();
+  }
+
+  /**
+   * get current left margin.
+   * @return current left margin
+   */
+  public SizeValue getMarginLeft() {
+    return layoutPart.getBoxConstraints().getMarginLeft();
+  }
+
+  /**
+   * get current right margin.
+   * @return current right margin
+   */
+  public SizeValue getMarginRight() {
+    return layoutPart.getBoxConstraints().getMarginRight();
+  }
+
+  /**
+   * get current top margin.
+   * @return current top margin
+   */
+  public SizeValue getMarginTop() {
+    return layoutPart.getBoxConstraints().getMarginTop();
+  }
+
+  /**
+   * get current bottom margin.
+   * @return current bottom margin
+   */
+  public SizeValue getMarginBottom() {
+    return layoutPart.getBoxConstraints().getMarginBottom();
   }
 
   public void setPaddingLeft(final SizeValue paddingValue) {
