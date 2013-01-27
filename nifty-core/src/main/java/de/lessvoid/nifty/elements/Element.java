@@ -1689,7 +1689,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param name the name of the element (id)
    * @return the element or null
    *
-   * @see Element#findElementById(java.lang.String) 
+   * @see Element#findElementById(java.lang.String)
    */
   @Deprecated
   public Element findElementByName(final String id) {
@@ -1791,7 +1791,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       }
     }
 
-    focusHandler.addElement(this, screen.findElementByName(focusableInsertBeforeElementId));
+    focusHandler.addElement(this, screen.findElementById(focusableInsertBeforeElementId));
   }
 
   private Element resolvePopupParentElement() {
