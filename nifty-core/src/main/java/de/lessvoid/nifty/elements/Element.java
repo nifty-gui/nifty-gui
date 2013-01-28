@@ -303,6 +303,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     rendererApplier.put(PanelRenderer.class, new ApplyRendererPanel(convert));
   }
 
+  private Map<String, Object> userData = new HashMap<String, Object>();
+
   /**
    * construct new instance of Element.
    * @param newNifty Nifty
@@ -2465,4 +2467,32 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     elements.clear();
     elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
+
+  /**
+   * Assign custom user data to this Element instance.
+   *
+   * @param key the key for the object to set
+   * @param data
+   */
+  public void setUserData(String key, Object data) {
+    userData.put(key, data);
+  }
+
+  /**
+   * Retrive previously assigned user data by key
+   *
+   * @param key the key for the requested user data
+   * @return
+   */
+  public Object getUserData(String key) {
+    return userData.get(key);
+  }
+
+  /**
+   * @return all uesr data keys
+   */
+  public Set<String> getUserDataKeys() {
+    return userData.keySet();
+  }
+
 }
