@@ -303,7 +303,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     rendererApplier.put(PanelRenderer.class, new ApplyRendererPanel(convert));
   }
 
-  private Map<String, Object> userData = new HashMap<String, Object>();
+  private Map<String, Object> userData;
 
   /**
    * construct new instance of Element.
@@ -2475,6 +2475,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param data
    */
   public void setUserData(String key, Object data) {
+    if (userData == null) {
+      userData = new HashMap<String, Object>();
+    }
     userData.put(key, data);
   }
 
@@ -2484,15 +2487,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param key the key for the requested user data
    * @return
    */
-  public Object getUserData(String key) {
-    return userData.get(key);
+  public <T> T getUserData(String key) {
+    if (userData == null) {
+      return null;
+    }
+    return (T) userData.get(key);
   }
 
   /**
-   * @return all uesr data keys
+   * @return all user data keys
    */
   public Set<String> getUserDataKeys() {
-    return userData.keySet();
+    if (userData != null) {
+      return userData.keySet();
+    }
+    return Collections.EMPTY_SET;
   }
 
 }
