@@ -35,6 +35,11 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+    	<groupId>org.jglfont</groupId>
+    	<artifactId>jglfont-core</artifactId>
+    	<version>1.0</version>
+    </dependency>
   </dependencies>
   <build>
     <resources>
