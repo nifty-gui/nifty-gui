@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import org.jglfont.BitmapFontException;
 import org.jglfont.BitmapFontFactory;
 import org.jglfont.spi.BitmapFontRenderer;
-import org.jglfont.spi.ResourceLoader;
 
 import de.lessvoid.nifty.batch.TextureAtlasGenerator.Result;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
@@ -71,7 +70,7 @@ public class BatchRenderDevice implements RenderDevice {
     time = System.currentTimeMillis();
     frames = 0;
     generator = new TextureAtlasGenerator(2048, 2048);
-    factory = new BitmapFontFactory(new FontRenderer(generator));
+    factory = new BitmapFontFactory(new FontRenderer());
     renderBackend.createAtlasTexture(atlasWidth, atlasHeight);
     plainImage = (BatchRenderImage) createImage("de/lessvoid/nifty/batch/nifty.png", true);
   }
@@ -192,7 +191,7 @@ public class BatchRenderDevice implements RenderDevice {
   public RenderFont createFont(final String filename) {
     try {
       // we need to disable blending in here to get the original image into the texture atlas without any blending
-      return new LwjglRenderFont2(filename, factory, resourceLoader);
+      return new BatchRenderFont(filename, factory, resourceLoader);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -272,7 +271,7 @@ public class BatchRenderDevice implements RenderDevice {
   public void renderFont(final RenderFont font, final String text, final int x, final int y, final Color color, final float sizeX, final float sizeY) {
     log.finest("renderFont()");
 
-    LwjglRenderFont2 renderFont = (LwjglRenderFont2) font;
+    BatchRenderFont renderFont = (BatchRenderFont) font;
     renderFont.getBitmapFont().renderText(x, y, text, sizeX, sizeY, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
   }
 
@@ -418,6 +417,10 @@ public class BatchRenderDevice implements RenderDevice {
       final int textureY,
       final int textureWidth,
       final int textureHeight) {
+    if (!activeBatch) {
+      renderBackend.beginBatch(currentBlendMode);
+      activeBatch = true;
+    }
     renderBackend.addQuad(x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth, textureHeight);
   }
 
@@ -456,21 +459,19 @@ public class BatchRenderDevice implements RenderDevice {
   }
 
   private class FontRenderer implements BitmapFontRenderer {
-    private final TextureAtlasGenerator atlas;
     private final Map<String, BitmapInfo> textureInfos = new HashMap<String, BitmapInfo>();
-
-    public FontRenderer(final TextureAtlasGenerator atlas) {
-      this.atlas = atlas;
-    }
 
     @Override
     public void registerBitmap(final String bitmapId, final InputStream data, final String filename) throws IOException {
-      de.lessvoid.simpleimageloader.ImageData imageData = loader.load(filename, data, new SimpleImageLoaderConfig().forceAlpha());
-      Result result = atlas.addImage(createTexture(imageData), filename, 0);
-      if (result == null) {
+      Image image = renderBackend.loadImage(filename);
+      try {
+        Result result = generator.addImage(image.getWidth(), image.getHeight(), filename, 5);
+        renderBackend.addImageToTexture(image, result.getX(), result.getY());
+        textureInfos.put(bitmapId, new BitmapInfo(result));
+      } catch (TextureAtlasGeneratorException e) {
+        log.log(Level.SEVERE, "image didn't fit into the texture atlas", e);
         throw new BitmapFontException("failed to add image to texture atlas: " + filename);
       }
-      textureInfos.put(bitmapId, new BitmapInfo(result));
     }
 
     @Override
@@ -521,7 +522,6 @@ public class BatchRenderDevice implements RenderDevice {
       textColor.setBlue(b);
       textColor.setAlpha(a);
       textureInfos.get(bitmapId).renderCharacter(c, x, y, sx, sy, textColor);
-      glyphCount++;
     }
 
     @Override
