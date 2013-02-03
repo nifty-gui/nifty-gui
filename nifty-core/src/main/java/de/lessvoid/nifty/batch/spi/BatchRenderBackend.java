@@ -21,13 +21,13 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
  * 2) The only actual render data that Nifty will call this BatchRenderBackend with are textured quads with individual
  *    vertex colors. Nifty will provide the texture coordinates which will always be relative to the texture atlas
  *    created before. A BatchRenderBackend implementation should cache or send these quads to the GPU to be later
- *    rendered in a single draw call.
+ *    rendered in a single draw call when Nifty calls the render() method of a BatchRenderBackend implementation.
  *
- * 3) The batch size, e.g. how many quads will fit into a single batch is decided by the BatchRenderBackend. The method
- *    to add a quad to the batch can return false to notify Nifty that a new batch should be created - by calling the
- *    appropriate method on this BatchRenderBackend for this purpose.
+ * 3) The batch size, e.g. how many quads will fit into a single batch is decided by the BatchRenderBackend
+ *    implementation. If a quad does not fit into the current batch the BatchRenderBackend implementation might create
+ *    a new batch automatically.
  *
- * 4) Nifty will only start a new batch when the glBlendMode will change. In this case it will start a new Batch.
+ * 4) Nifty will only start a new batch when the BlendMode changes.
  *
  * @author void
  */
@@ -87,6 +87,8 @@ public interface BatchRenderBackend {
    */
   void disableMouseCursor();
 
+  // batch related new stuff
+
   /**
    * Create a texture that will later be used as the texture atlas of the given size.
    * @param width width of the texture atlas
@@ -95,7 +97,7 @@ public interface BatchRenderBackend {
   void createAtlasTexture(int width, int height);
 
   /**
-   * Load the given image and provide width and height of the image.
+   * Load the given image and provide width and height of the image using the Image interface defined at the bottom.
    * @param filename the filename to load
    * @param ImageDimension instance (could carry additional data like the actual image data if necessary)
    */
@@ -110,18 +112,17 @@ public interface BatchRenderBackend {
   void addImageToTexture(Image image, int x, int y);
 
   /**
-   * Begin a new batch with the given BlendMode.
+   * Begin a new batch with the given BlendMode. Starting a new batch with beginBatch() should store the current batch
+   * for later rendering and should start a new batch.
    *
    * @param blendMode the blendMode this batch should use. This will be BlendMode.BLEND in most cases and very rare will
-   * be MULTIPLY.
+   * it be MULTIPLY.
    */
   void beginBatch(BlendMode blendMode);
 
   /**
-   * Render a quad with the given coordinates to the current batch. There will always be a beginBatch() call before any
-   * addQuad() call. There will be lots of addQuad() calls after a beginBatch() call. However it's possible that there
-   * will be multiple beginBatch() calls - there is no explicit endBatch() call. Starting a new batch with beginBatch()
-   * should end the current one, store it for later rendering and start a new batch.
+   * Add a quad with the given coordinates to the current batch. There will always be a beginBatch() call before any
+   * addQuad() call. There will be lots of addQuad() calls after a beginBatch() call.
    *
    * @param x the x position in screen coordinates where to render this quad (0,0 is the left, upper corner)
    * @param y the y position in screen coordinates where to render this quad (0,0 is the left, upper corner)
