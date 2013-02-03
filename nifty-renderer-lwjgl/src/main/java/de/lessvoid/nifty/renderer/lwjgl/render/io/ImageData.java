@@ -17,4 +17,5 @@ public interface ImageData {
 
   // these methods don't scale to power of 2 stuff and are used for special loading (f.i. for mouse cursors)
   ByteBuffer loadMouseCursorImage(InputStream fis) throws IOException;
+  ByteBuffer loadImageDirect(InputStream fis) throws IOException;
 }

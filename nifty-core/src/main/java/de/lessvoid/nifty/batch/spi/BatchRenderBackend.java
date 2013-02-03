@@ -123,9 +123,6 @@ public interface BatchRenderBackend {
    * will be multiple beginBatch() calls - there is no explicit endBatch() call. Starting a new batch with beginBatch()
    * should end the current one, store it for later rendering and start a new batch.
    *
-   * This method can return false in case the quad does not fit into the current batch which might be for whatever
-   * reason. In that case Nifty will begin a new batch and add the quad to the new one.
-   *
    * @param x the x position in screen coordinates where to render this quad (0,0 is the left, upper corner)
    * @param y the y position in screen coordinates where to render this quad (0,0 is the left, upper corner)
    * @param width the width of the quad to render
@@ -138,9 +135,8 @@ public interface BatchRenderBackend {
    * @param textureY texture coordinate y of the upper line (already normalized in the range 0 to 1)
    * @param textureWidth texture width (already normalized in the range 0 to 1)
    * @param textureHeight texture height (already normalized in the range 0 to 1)
-   * @return true if the quad has been added successfully and false if not
    */
-  boolean addQuad(
+  void addQuad(
       float x,
       float y,
       float width,
@@ -155,9 +151,9 @@ public interface BatchRenderBackend {
       float textureHeight);
 
   /**
-   * Render all batches.
+   * Render all batches and return the number of batches rendered for statistics.
    */
-  void render();
+  int render();
 
   /**
    * Helper interface to allow the provideImageDimensions() method to return the image dimension and if necessary

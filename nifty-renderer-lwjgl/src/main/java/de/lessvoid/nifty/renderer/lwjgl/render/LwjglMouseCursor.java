@@ -15,7 +15,7 @@ public class LwjglMouseCursor implements MouseCursor {
     cursor.destroy();
   }
 
-  Cursor getCursor() {
+  public Cursor getCursor() {
     return cursor;
   }
 }

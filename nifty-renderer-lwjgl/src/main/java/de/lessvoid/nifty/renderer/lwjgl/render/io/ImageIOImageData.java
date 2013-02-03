@@ -96,6 +96,11 @@ public class ImageIOImageData implements ImageData {
     return imageToByteBuffer(bufferedImage, true, true, null, false, true);
   }
 
+  public ByteBuffer loadImageDirect(InputStream fis) throws IOException {
+    BufferedImage bufferedImage = ImageIO.read(fis);
+    return imageToByteBuffer(bufferedImage, false, true, null, false, false);
+  }
+
   public ByteBuffer imageToByteBuffer(BufferedImage image, boolean flipped, boolean forceAlpha, int[] transparent, boolean powerOfTwoSupport, boolean modeARGB) {
     ByteBuffer imageBuffer = null;
     WritableRaster raster;

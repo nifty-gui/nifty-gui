@@ -24,7 +24,9 @@ import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
- * Lwjgl RenderDevice Implementation.
+ * BatchRenderDevice will try to reduce state changes by storing all of the textures into a single texture atlas and
+ * will try to render the whole GUI in very few - at best in a single - draw call.
+ *
  * @author void
  */
 public class BatchRenderDevice implements RenderDevice {
@@ -35,6 +37,8 @@ public class BatchRenderDevice implements RenderDevice {
   private long time;
   private long frames;
   private long lastFrames;
+  private int glyphCount;
+  private int quadCount;
   private boolean displayFPS = false;
   private boolean logFPS = false;
   private RenderFont fpsFont;
@@ -56,7 +60,9 @@ public class BatchRenderDevice implements RenderDevice {
   private TextureAtlasGenerator generator;
   private Color fontColor = new Color("#f00");
   private boolean activeBatch;
-  private final BatchRenderImage plainImage;
+  private BatchRenderImage thePlainImage;
+  private final int atlasWidth;
+  private final int atlasHeight;
 
   /**
    * The standard constructor. You'll use this in production code. Using this
@@ -66,13 +72,18 @@ public class BatchRenderDevice implements RenderDevice {
    */
   public BatchRenderDevice(final BatchRenderBackend renderBackend, final int atlasWidth, final int atlasHeight) {
     this.renderBackend = renderBackend;
+    this.atlasWidth = atlasWidth;
+    this.atlasHeight = atlasHeight;
 
     time = System.currentTimeMillis();
     frames = 0;
-    generator = new TextureAtlasGenerator(2048, 2048);
+    generator = new TextureAtlasGenerator(atlasWidth, atlasHeight);
     factory = new BitmapFontFactory(new FontRenderer());
     renderBackend.createAtlasTexture(atlasWidth, atlasHeight);
-    plainImage = (BatchRenderImage) createImage("de/lessvoid/nifty/batch/nifty.png", true);
+  }
+
+  public void enableLogFPS() {
+    logFPS = true;
   }
 
   @Override
@@ -130,6 +141,8 @@ public class BatchRenderDevice implements RenderDevice {
 
     renderBackend.beginFrame();
     activeBatch = false;
+    quadCount = 0;
+    glyphCount = 0;
   }
 
   @Override
@@ -141,7 +154,7 @@ public class BatchRenderDevice implements RenderDevice {
       renderFont(fpsFont, buffer.toString(), 10, getHeight() - fpsFont.getHeight() - 10, fontColor , 1.0f, 1.0f);
     }
 
-    renderBackend.render();
+    int batches = renderBackend.render();
 
     frames++;
     long diff = System.currentTimeMillis() - time;
@@ -152,6 +165,20 @@ public class BatchRenderDevice implements RenderDevice {
       buffer.setLength(0);
       buffer.append("FPS: ");
       buffer.append(lastFrames);
+      buffer.append(" (");
+      buffer.append(String.format("%f", 1000.f / lastFrames));
+      buffer.append(" ms)");
+      buffer.append(", Total Tri: ");
+      buffer.append(quadCount*2);
+      buffer.append(" (Text: ");
+      buffer.append(glyphCount*2);
+      buffer.append(")");
+      buffer.append(", Total Vert: ");
+      buffer.append(quadCount*4);
+      buffer.append(" (Text: ");
+      buffer.append(glyphCount*4);
+      buffer.append("), Batches: ");
+      buffer.append(batches);
 
       if (logFPS) {
         System.out.println(buffer.toString());
@@ -200,12 +227,14 @@ public class BatchRenderDevice implements RenderDevice {
   @Override
   public void renderQuad(final int x, final int y, final int width, final int height, final Color color) {
     log.finest("renderQuad()");
+    BatchRenderImage plainImage = getPlainImage();
     addQuad(x, y, width, height, color, color, color, color, plainImage.getX(), plainImage.getY(), plainImage.getWidth(), plainImage.getHeight());
   }
 
   @Override
   public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
     log.finest("renderQuad2()");
+    BatchRenderImage plainImage = getPlainImage();
     addQuad(x, y, width, height, topLeft, topRight, bottomLeft, bottomRight, plainImage.getX(), plainImage.getY(), plainImage.getWidth(), plainImage.getHeight());
   }
 
@@ -330,6 +359,15 @@ public class BatchRenderDevice implements RenderDevice {
     renderBackend.disableMouseCursor();
   }
 
+  // Internal implementations
+
+  private BatchRenderImage getPlainImage() {
+    if (thePlainImage == null) {
+      thePlainImage = (BatchRenderImage) createImage("de/lessvoid/nifty/batch/nifty.png", true);
+    }
+    return thePlainImage;
+  }
+
   private void addNewBatch() {
     renderBackend.beginBatch(currentBlendMode);
   }
@@ -421,7 +459,23 @@ public class BatchRenderDevice implements RenderDevice {
       renderBackend.beginBatch(currentBlendMode);
       activeBatch = true;
     }
-    renderBackend.addQuad(x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth, textureHeight);
+    renderBackend.addQuad(
+        x, y,
+        width,
+        height,
+        color1,
+        color2,
+        color3,
+        color4,
+        calcU(textureX, atlasWidth),
+        calcU(textureY, atlasHeight),
+        calcU(textureWidth - 1, atlasWidth),
+        calcU(textureHeight - 1, atlasHeight));
+    quadCount++;
+  }
+
+  private float calcU(final int value, final int max) {
+    return (0.5f / (float) max) + (value / (float) max);
   }
 
   private boolean isOutsideClippingRectangle(final float x, final float y, final float width, final float height) {
@@ -452,10 +506,6 @@ public class BatchRenderDevice implements RenderDevice {
       return true;
     }
     return false;
-  }
-
-  private float calcU(final int value, final int max) {
-    return (0.5f / (float) max) + (value / (float) max);
   }
 
   private class FontRenderer implements BitmapFontRenderer {
@@ -553,6 +603,7 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     public void renderQuad(final int x, final int y, final float sx, final float sy, final Color textColor) {
+      glyphCount++;
       addQuad(
           x + (float) Math.floor(xoff * sx),
           y + (float) Math.floor(yoff * sy),
