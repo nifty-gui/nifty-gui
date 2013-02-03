@@ -7,6 +7,7 @@ package de.lessvoid.nifty.examples.defaultcontrols;
 import org.lwjgl.opengl.DisplayMode;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.HoverEffectBuilder;
@@ -40,6 +41,7 @@ import de.lessvoid.nifty.examples.defaultcontrols.treebox.TreeBoxControlDialogDe
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 import de.lessvoid.nifty.examples.resolution.ResolutionControlLWJGL;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
@@ -48,8 +50,10 @@ import de.lessvoid.nifty.tools.Color;
 
 public class ControlsDemo<T> implements NiftyExample {
   private static CommonBuilders builders = new CommonBuilders();
-
   private final ResolutionControl<T> resolutionControl;
+
+  // this will enable the batched renderer when set to true
+  private final static boolean useBatchedRenderer = true;
 
   public ControlsDemo(final ResolutionControl<T> resControl) {
     resolutionControl = resControl;
@@ -62,8 +66,23 @@ public class ControlsDemo<T> implements NiftyExample {
     }
 
     // create Nifty and load default styles and controls
-    Nifty nifty = new Nifty(new LwjglRenderDevice(true), new OpenALSoundDevice(), LwjglInitHelper.getInputSystem(),
-        new AccurateTimeProvider());
+    Nifty nifty;
+    if (useBatchedRenderer) {
+      BatchRenderDevice renderDevice = new BatchRenderDevice(new LwjglBatchRenderBackend(), 2048, 2048);
+      renderDevice.enableLogFPS();
+
+      nifty = new Nifty(
+          renderDevice,
+          new OpenALSoundDevice(),
+          LwjglInitHelper.getInputSystem(),
+          new AccurateTimeProvider());
+    } else {
+      nifty = new Nifty(
+          new LwjglRenderDevice(true),
+          new OpenALSoundDevice(),
+          LwjglInitHelper.getInputSystem(),
+          new AccurateTimeProvider());
+    }
     ControlsDemo<DisplayMode> demo = new ControlsDemo(new ResolutionControlLWJGL());
     demo.prepareStart(nifty);
 
@@ -227,9 +246,8 @@ public class ControlsDemo<T> implements NiftyExample {
               "menuButtonTabsControl", "dialogTabsControl",
               "menuButtonTreeBoxControl", "dialogTreeBoxControl",
               "menuButtonEventConsumeControl", "dialogEventConsumeControl"));
-      inputMapping(
-          "de.lessvoid.nifty.input.mapping.DefaultInputMapping"); // this will enable Keyboard events for the screen
-          // controller
+      // this will enable Keyboard events for the screen controller
+      inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping"); 
       layer(new LayerBuilder("layer") {{
         backgroundImage("defaultcontrols/background-new.png");
         childLayoutVertical();

@@ -99,6 +99,10 @@ public class TGAImageData implements ImageData {
     return loadImageInternal(fis, true, false, null, false, true);
   }
 
+  public ByteBuffer loadImageDirect(InputStream fis) throws IOException {
+    return loadImageInternal(fis, false, true, null, false, false);
+  }
+
 	private ByteBuffer loadImageInternal(InputStream fis, boolean flipped, boolean forceAlpha, int[] transparent, boolean forceNonePowerOfTwo, boolean modeARGB) throws IOException {
 		if (transparent != null) { 
 			forceAlpha = true;

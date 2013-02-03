@@ -53,7 +53,7 @@ public class LwjglRenderDevice implements RenderDevice {
   private int currentClippingY1 = 0;
 
   private StringBuilder buffer = new StringBuilder();
-  private int primitiveCount;
+  private int quadCount;
   private int glyphCount;
 
   /**
@@ -134,7 +134,7 @@ public class LwjglRenderDevice implements RenderDevice {
     currentClippingY0 = 0;
     currentClippingX1 = 0;
     currentClippingY1 = 0;
-    primitiveCount = 0;
+    quadCount = 0;
     glyphCount = 0;
   }
 
@@ -149,10 +149,19 @@ public class LwjglRenderDevice implements RenderDevice {
       buffer.setLength(0);
       buffer.append("FPS: ");
       buffer.append(lastFrames);
-      buffer.append(", Prim: ");
-      buffer.append(primitiveCount);
-      buffer.append(", Glyph: ");
-      buffer.append(glyphCount);
+      buffer.append(" (");
+      buffer.append(String.format("%f", 1000.f / lastFrames));
+      buffer.append(" ms)");
+      buffer.append(", Total Tri: ");
+      buffer.append(quadCount*2);
+      buffer.append(" (Text: ");
+      buffer.append(glyphCount*2);
+      buffer.append(")");
+      buffer.append(", Total Vert: ");
+      buffer.append(quadCount*4);
+      buffer.append(" (Text: ");
+      buffer.append(glyphCount*4);
+      buffer.append(")");
 
       if (logFPS) {
         System.out.println(buffer.toString());
@@ -221,7 +230,7 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glVertex2i(x + width, y + height);
       GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
-    primitiveCount++;
+    quadCount++;
   }
 
   public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
@@ -241,7 +250,7 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glColor4f(bottomLeft.getRed(), bottomLeft.getGreen(), bottomLeft.getBlue(), bottomLeft.getAlpha());
       GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
-    primitiveCount++;
+    quadCount++;
   }
 
   /**
@@ -293,7 +302,7 @@ public class LwjglRenderDevice implements RenderDevice {
       GL11.glTexCoord2f(0.0f,   v1); GL11.glVertex2i(x,         y + height);
     GL11.glEnd();
     GL11.glPopMatrix();
-    primitiveCount++;
+    quadCount++;
   }
 
   /**
@@ -362,7 +371,7 @@ public class LwjglRenderDevice implements RenderDevice {
     GL11.glEnd();
 
     GL11.glPopMatrix();
-    primitiveCount++;
+    quadCount++;
   }
 
   /**
@@ -381,11 +390,14 @@ public class LwjglRenderDevice implements RenderDevice {
       currentTexturing = true;
     }
     setBlendMode(BlendMode.BLEND);
+    int count = 0;
     if (color == null) {
-      glyphCount += ((LwjglRenderFont)font).getFont().drawStringWithSize(x, y, text, fontSizeX, fontSizeY);
+      count = ((LwjglRenderFont)font).getFont().drawStringWithSize(x, y, text, fontSizeX, fontSizeY);
     } else {
-      glyphCount += ((LwjglRenderFont)font).getFont().renderWithSizeAndColor(x, y, text, fontSizeX, fontSizeY, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+      count = ((LwjglRenderFont)font).getFont().renderWithSizeAndColor(x, y, text, fontSizeX, fontSizeY, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
+    glyphCount += count;
+    quadCount += count;
   }
 
   private void checkGLError() {
