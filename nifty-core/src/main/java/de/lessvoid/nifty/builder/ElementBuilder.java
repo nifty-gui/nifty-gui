@@ -442,14 +442,56 @@ public abstract class ElementBuilder {
   public List<ElementBuilder> getElementBuilders() {
     return Collections.unmodifiableList(elementBuilders);
   }
-
+  /**
+   * Build an elment 
+   * @param nifty
+   * @param screen
+   * @param parent
+   * @param before
+   * @return the Element created
+   */
   public Element build(final Nifty nifty, final Screen screen, final Element parent) {
     ElementType type = buildElementType();
     Element result = nifty.createElementFromType(screen, parent, type);
     screen.layoutLayers();
     return result;
   }
-
+  /**
+   * Build an elment in a specified position in parent element list
+   * @param nifty
+   * @param screen
+   * @param parent
+   * @param before
+   * @return the Element created
+   */
+  public Element build(final Nifty nifty, final Screen screen, final Element parent,int index) {
+	  ElementType type = buildElementType();
+	  Element result = nifty.createElementFromType(screen, parent, type,index);
+	  screen.layoutLayers();
+	 return result; 
+  }
+  /**
+   * Build an elment after a elment in parent children list
+   * @param nifty
+   * @param screen
+   * @param parent
+   * @param before
+   * @return the Element created
+   */
+  public Element build(final Nifty nifty, final Screen screen, final Element parent,Element before) {
+	  int index = parent.getElements().size();
+	  for(int i=0;i<parent.getElements().size();i++){
+		  if(parent.getElements().get(i).equals(before)){
+			  index=i;
+			  break;
+		  }
+	  }
+	  ElementType type = buildElementType();
+	  Element result = nifty.createElementFromType(screen, parent, type,index);
+	  screen.layoutLayers();
+	 return result; 
+  }
+  
   /**
    * This method is called whenever we need the ElementType instead of a real
    * Element instance. This is currently used for ControlDefinition and Popup

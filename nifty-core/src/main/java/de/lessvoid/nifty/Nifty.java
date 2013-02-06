@@ -1416,19 +1416,28 @@ public class Nifty {
       return ReferenceStrength.STRONG;
     }
   }
-
+  /**
+   * Creates an element from a type at index position in Parent child list
+   * 
+   */
+  public Element createElementFromType(final Screen screen, final Element parent, final ElementType type,final int index) {
+	    if (type instanceof LayerType) {
+	      return createElementFromTypeInternal(screen, parent, type, getRootLayerFactory().createRootLayerLayoutPart(this),index);
+	    }
+	    return createElementFromTypeInternal(screen, parent, type, new LayoutPart(),index);
+  }
   public Element createElementFromType(final Screen screen, final Element parent, final ElementType type) {
     if (type instanceof LayerType) {
-      return createElementFromTypeInternal(screen, parent, type, getRootLayerFactory().createRootLayerLayoutPart(this));
+      return createElementFromTypeInternal(screen, parent, type, getRootLayerFactory().createRootLayerLayoutPart(this),parent.getElements().size());
     }
-    return createElementFromTypeInternal(screen, parent, type, new LayoutPart());
+    return createElementFromTypeInternal(screen, parent, type, new LayoutPart(),parent.getElements().size());
   }
 
-  private Element createElementFromTypeInternal(final Screen screen, final Element parent, final ElementType type, final LayoutPart layoutPart) {
+  private Element createElementFromTypeInternal(final Screen screen, final Element parent, final ElementType type, final LayoutPart layoutPart,final int index) {
     ElementType elementType = type.copy();
     elementType.prepare(this, screen, screen.getRootElement().getElementType());
     elementType.connectParentControls(parent);
-    Element element = elementType.create(parent, this, screen, layoutPart);
+    Element element = elementType.create(parent, this, screen, layoutPart,index);
     if (screen.isBound()) {
       screen.layoutLayers();
       element.bindControls(screen);
