@@ -140,17 +140,26 @@ public class ElementType extends XmlBaseType {
       final Nifty nifty,
       final Screen screen,
       final LayoutPart layoutPart) {
-    Element element = internalCreateElement(parent, nifty, screen, layoutPart, getAttributes());
+    Element element = internalCreateElement(parent, nifty, screen, layoutPart, getAttributes(),parent.getElements().size());
     applyStandard(nifty, screen, element);
     return element;
   }
-
+  public Element create(
+	      final Element parent,
+	      final Nifty nifty,
+	      final Screen screen,
+	      final LayoutPart layoutPart,int index) {
+	    Element element = internalCreateElement(parent, nifty, screen, layoutPart, getAttributes(),index);
+	    applyStandard(nifty, screen, element);
+	    return element;
+	  }
   private Element internalCreateElement(
       final Element parent,
       final Nifty nifty,
       final Screen screen,
       final LayoutPart layoutPart,
-      final Attributes attrib) {
+      final Attributes attrib,
+      final int index) {
     Element element = new Element(
         nifty,
         this,
@@ -161,7 +170,7 @@ public class ElementType extends XmlBaseType {
         false,
         nifty.getTimeProvider(),
         elementRendererCreator.createElementRenderer(nifty));
-    parent.add(element);
+    parent.add(element,index);
     return element;
   }
 
