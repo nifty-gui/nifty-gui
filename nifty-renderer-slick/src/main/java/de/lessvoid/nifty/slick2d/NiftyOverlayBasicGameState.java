@@ -52,6 +52,16 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
   private NiftyUpdateOrder updateOrder;
 
   /**
+   * The last reported screen height.
+   */
+  private int lastHeight;
+
+  /**
+   * The last reported screen width.
+   */
+  private int lastWidth;
+
+  /**
    * Default constructor.
    */
   protected NiftyOverlayBasicGameState() {
@@ -207,6 +217,13 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
   public final void update(
       final GameContainer container, final StateBasedGame game, final int delta) throws SlickException {
     if (niftyCarrier.isInitialized()) {
+      final int currentHeight = container.getHeight();
+      final int currentWidth = container.getWidth();
+      if ((currentHeight != lastHeight) || (currentWidth != lastWidth)) {
+        lastHeight = currentHeight;
+        lastWidth = currentWidth;
+        niftyCarrier.getNifty().resolutionChanged();
+      }
       switch (updateOrder) {
         case NiftyLast:
           updateGame(container, game, delta);

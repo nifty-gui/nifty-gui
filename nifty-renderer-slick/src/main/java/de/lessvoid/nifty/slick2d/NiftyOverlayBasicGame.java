@@ -37,6 +37,16 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
   private NiftyUpdateOrder updateOrder;
 
   /**
+   * The last reported screen height.
+   */
+  private int lastHeight;
+
+  /**
+   * The last reported screen width.
+   */
+  private int lastWidth;
+
+  /**
    * Forward constructor to set the title of the game.
    *
    * @param title the title of the game
@@ -48,17 +58,28 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
   }
 
   @Override
+  public final void setRenderOrder(NiftyRenderOrder order) {
+    renderOrder = order;
+  }
+
+  @Override
+  public final void setUpdateOrder(NiftyUpdateOrder order) {
+    updateOrder = order;
+  }
+
+  @Override
   public final ForwardingInputSystem getInputForwardingControl() {
     return inputForwardingControl;
   }
 
-  /**
-   * Get the instance of the NiftyGUI that is used to render this screen.
-   *
-   * @return the instance of the NiftyGUI
-   */
-  public final Nifty getNifty() {
-    return niftyGUI;
+  @Override
+  public final NiftyRenderOrder getRenderOrder() {
+    return renderOrder;
+  }
+
+  @Override
+  public final NiftyUpdateOrder getUpdateOrder() {
+    return updateOrder;
   }
 
   /**
@@ -83,102 +104,10 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
    */
   protected abstract void initGameAndGUI(GameContainer container) throws SlickException;
 
-  /**
-   * Initialize the Nifty GUI for this game.
-   *
-   * @param container the container used to display the game
-   * @param renderDevice the render device that is supposed to be used to render the GUI
-   * @param soundDevice the sound device that is supposed to be used
-   * @param inputSystem the input system that is supposed to be used
-   * @param timeProvider the time provider that is supposed to be used
-   * @throws IllegalStateException in case this function was called before
-   */
-  protected final void initNifty(
-      @SuppressWarnings("TypeMayBeWeakened") final GameContainer container,
-      final SlickRenderDevice renderDevice,
-      final SlickSoundDevice soundDevice,
-      final SlickInputSystem inputSystem,
-      final TimeProvider timeProvider) {
-    if (niftyGUI != null) {
-      throw new IllegalStateException("The NiftyGUI was already initialized. Its illegal to do so twice.");
-    }
-
-    final Input input = container.getInput();
-    inputSystem.setInput(input);
-
-    niftyGUI = new Nifty(renderDevice, soundDevice, inputSystem, timeProvider);
-
-    if (inputSystem instanceof ForwardingInputSystem) {
-      inputForwardingControl = (ForwardingInputSystem) inputSystem;
-    }
-
-    /* Slick automatically adds the game as input listener. Undo this. */
-    input.removeListener(this);
-    input.removeListener(inputSystem);
-    input.addListener(inputSystem);
-
-    prepareNifty(niftyGUI);
-  }
-
-  /**
-   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}.
-   *
-   * @param container the container used to display the game
-   * @param renderDevice the render device that is supposed to be used to render the GUI
-   * @param soundDevice the sound device that is supposed to be used
-   * @param inputSystem the input system that is supposed to be used
-   * @throws IllegalStateException in case this function was called before
-   */
-  protected final void initNifty(
-      final GameContainer container,
-      final SlickRenderDevice renderDevice,
-      final SlickSoundDevice soundDevice,
-      final SlickInputSystem inputSystem) {
-    initNifty(container, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
-  }
-
-  /**
-   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
-   * the render and sound devices that are provided with this library.
-   *
-   * @param container the container used to display the game
-   * @param inputSystem the input system that is supposed to be used
-   * @throws IllegalStateException in case this function was called before
-   * @see SlickRenderDevice
-   * @see SlickSoundDevice
-   */
-  protected final void initNifty(final GameContainer container, final SlickInputSystem inputSystem) {
-    initNifty(container, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
-  }
-
-  /**
-   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
-   * the render and sound devices that are provided with this library. As for the input it will forward all input to
-   * the
-   * Slick {@link InputListener} that is implemented in this class.
-   *
-   * @param container the container used to display the game
-   * @throws IllegalStateException in case this function was called before
-   * @see SlickRenderDevice
-   * @see SlickSoundDevice
-   * @see SlickSlickInputSystem
-   */
-  protected final void initNifty(final GameContainer container) {
-    initNifty(container, new SlickSlickInputSystem(this));
-  }
-
   @Override
   public final boolean isInputForwardingSupported() {
     return inputForwardingControl != null;
   }
-
-  /**
-   * This function should be used to prepare the actual GUI and the controllers of the Nifty GUI. It is called right
-   * after the Nifty GUI got initialized.
-   *
-   * @param nifty the Nifty GUI that got initialized
-   */
-  protected abstract void prepareNifty(Nifty nifty);
 
   /**
    * Render the game.
@@ -219,6 +148,13 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
     if (niftyGUI == null) {
       updateGame(container, delta);
     } else {
+      final int currentHeight = container.getHeight();
+      final int currentWidth = container.getWidth();
+      if ((currentHeight != lastHeight) || (currentWidth != lastWidth)) {
+        lastHeight = currentHeight;
+        lastWidth = currentWidth;
+        niftyGUI.resolutionChanged();
+      }
       switch (updateOrder) {
         case NiftyLast:
           updateGame(container, delta);
@@ -242,23 +178,104 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
    */
   protected abstract void updateGame(GameContainer container, int delta) throws SlickException;
 
-  @Override
-  public final NiftyRenderOrder getRenderOrder() {
-    return renderOrder;
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
+   * the render and sound devices that are provided with this library. As for the input it will forward all input to
+   * the
+   * Slick {@link InputListener} that is implemented in this class.
+   *
+   * @param container the container used to display the game
+   * @throws IllegalStateException in case this function was called before
+   * @see SlickRenderDevice
+   * @see SlickSoundDevice
+   * @see SlickSlickInputSystem
+   */
+  protected final void initNifty(final GameContainer container) {
+    initNifty(container, new SlickSlickInputSystem(this));
   }
 
-  @Override
-  public final NiftyUpdateOrder getUpdateOrder() {
-    return updateOrder;
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
+   * the render and sound devices that are provided with this library.
+   *
+   * @param container the container used to display the game
+   * @param inputSystem the input system that is supposed to be used
+   * @throws IllegalStateException in case this function was called before
+   * @see SlickRenderDevice
+   * @see SlickSoundDevice
+   */
+  protected final void initNifty(final GameContainer container, final SlickInputSystem inputSystem) {
+    initNifty(container, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
   }
 
-  @Override
-  public final void setRenderOrder(NiftyRenderOrder order) {
-    renderOrder = order;
+  /**
+   * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}.
+   *
+   * @param container the container used to display the game
+   * @param renderDevice the render device that is supposed to be used to render the GUI
+   * @param soundDevice the sound device that is supposed to be used
+   * @param inputSystem the input system that is supposed to be used
+   * @throws IllegalStateException in case this function was called before
+   */
+  protected final void initNifty(
+      final GameContainer container,
+      final SlickRenderDevice renderDevice,
+      final SlickSoundDevice soundDevice,
+      final SlickInputSystem inputSystem) {
+    initNifty(container, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
   }
 
-  @Override
-  public final void setUpdateOrder(NiftyUpdateOrder order) {
-    updateOrder = order;
+  /**
+   * Initialize the Nifty GUI for this game.
+   *
+   * @param container the container used to display the game
+   * @param renderDevice the render device that is supposed to be used to render the GUI
+   * @param soundDevice the sound device that is supposed to be used
+   * @param inputSystem the input system that is supposed to be used
+   * @param timeProvider the time provider that is supposed to be used
+   * @throws IllegalStateException in case this function was called before
+   */
+  protected final void initNifty(
+      @SuppressWarnings("TypeMayBeWeakened") final GameContainer container,
+      final SlickRenderDevice renderDevice,
+      final SlickSoundDevice soundDevice,
+      final SlickInputSystem inputSystem,
+      final TimeProvider timeProvider) {
+    if (niftyGUI != null) {
+      throw new IllegalStateException("The NiftyGUI was already initialized. Its illegal to do so twice.");
+    }
+
+    final Input input = container.getInput();
+    inputSystem.setInput(input);
+
+    niftyGUI = new Nifty(renderDevice, soundDevice, inputSystem, timeProvider);
+
+    if (inputSystem instanceof ForwardingInputSystem) {
+      inputForwardingControl = (ForwardingInputSystem) inputSystem;
+    }
+
+    /* Slick automatically adds the game as input listener. Undo this. */
+    input.removeListener(this);
+    input.removeListener(inputSystem);
+    input.addListener(inputSystem);
+
+    prepareNifty(niftyGUI);
+  }
+
+  /**
+   * This function should be used to prepare the actual GUI and the controllers of the Nifty GUI. It is called right
+   * after the Nifty GUI got initialized.
+   *
+   * @param nifty the Nifty GUI that got initialized
+   */
+  protected abstract void prepareNifty(Nifty nifty);
+
+  /**
+   * Get the instance of the NiftyGUI that is used to render this screen.
+   *
+   * @return the instance of the NiftyGUI
+   */
+  public final Nifty getNifty() {
+    return niftyGUI;
   }
 }
