@@ -1702,22 +1702,22 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param id the name of the element (id)
    * @return the element or null
    */
-  public Element findElementById(final String id) {
-    if (id == null) {
+  public Element findElementById(final String idParam) {
+    if (idParam == null) {
       return null;
     }
 
-    if (id != null && id.equals(id)) {
+    if (id != null && id.equals(idParam)) {
       return this;
     }
 
-    if (childIdMatch(id, id)) {
+    if (childIdMatch(idParam, id)) {
       return this;
     }
 
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
-      Element found = e.findElementById(id);
+      Element found = e.findElementById(idParam);
       if (found != null) {
         return found;
       }
