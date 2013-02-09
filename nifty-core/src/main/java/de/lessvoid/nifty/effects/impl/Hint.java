@@ -58,7 +58,7 @@ public class Hint implements EffectImpl {
       final Falloff falloff,
       final NiftyRenderEngine r) {
     if (normalizedTime > 0.0) {
-      final Element hintLayer = nifty.getCurrentScreen().findElementByName(hintLayerId);
+      final Element hintLayer = nifty.getCurrentScreen().findElementById(hintLayerId);
       if (hintLayer != null && !hintLayer.isVisible()) {
         // decide if we can already show the hint
         if (nifty.getNiftyMouse().getNoMouseMovementTime() > hintDelay) {
@@ -76,7 +76,7 @@ public class Hint implements EffectImpl {
   }
 
   public void deactivate() {
-    final Element hintLayer = nifty.getCurrentScreen().findElementByName(hintLayerId);
+    final Element hintLayer = nifty.getCurrentScreen().findElementById(hintLayerId);
     if (hintLayer == null) {
       return;
     }

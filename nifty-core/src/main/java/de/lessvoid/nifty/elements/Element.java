@@ -303,6 +303,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     rendererApplier.put(PanelRenderer.class, new ApplyRendererPanel(convert));
   }
 
+  private Map<String, Object> userData;
+
   /**
    * construct new instance of Element.
    * @param newNifty Nifty
@@ -1689,7 +1691,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param name the name of the element (id)
    * @return the element or null
    *
-   * @see Element#findElementById(java.lang.String) 
+   * @see Element#findElementById(java.lang.String)
    */
   @Deprecated
   public Element findElementByName(final String id) {
@@ -1702,22 +1704,22 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param id the name of the element (id)
    * @return the element or null
    */
-  public Element findElementById(final String idParam) {
-    if (idParam == null) {
+  public Element findElementById(final String findId) {
+    if (findId == null) {
       return null;
     }
 
-    if (id != null && id.equals(idParam)) {
+    if (id != null && id.equals(findId)) {
       return this;
     }
 
-    if (childIdMatch(idParam, id)) {
+    if (childIdMatch(findId, id)) {
       return this;
     }
 
     for (int i=0; i<elements.size(); i++) {
       Element e = elements.get(i);
-      Element found = e.findElementById(idParam);
+      Element found = e.findElementById(findId);
       if (found != null) {
         return found;
       }
@@ -1791,7 +1793,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       }
     }
 
-    focusHandler.addElement(this, screen.findElementByName(focusableInsertBeforeElementId));
+    focusHandler.addElement(this, screen.findElementById(focusableInsertBeforeElementId));
   }
 
   private Element resolvePopupParentElement() {
@@ -2218,6 +2220,70 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return visibleToMouseEvents;
   }
 
+  /**
+   * get current left padding.
+   * @return current left padding
+   */
+  public SizeValue getPaddingLeft() {
+    return layoutPart.getBoxConstraints().getPaddingLeft();
+  }
+
+  /**
+   * get current right padding.
+   * @return current right padding
+   */
+  public SizeValue getPaddingRight() {
+    return layoutPart.getBoxConstraints().getPaddingRight();
+  }
+
+  /**
+   * get current top padding.
+   * @return current top padding
+   */
+  public SizeValue getPaddingTop() {
+    return layoutPart.getBoxConstraints().getPaddingTop();
+  }
+
+  /**
+   * get current bottom padding.
+   * @return current bottom padding
+   */
+  public SizeValue getPaddingBottom() {
+    return layoutPart.getBoxConstraints().getPaddingBottom();
+  }
+
+  /**
+   * get current left margin.
+   * @return current left margin
+   */
+  public SizeValue getMarginLeft() {
+    return layoutPart.getBoxConstraints().getMarginLeft();
+  }
+
+  /**
+   * get current right margin.
+   * @return current right margin
+   */
+  public SizeValue getMarginRight() {
+    return layoutPart.getBoxConstraints().getMarginRight();
+  }
+
+  /**
+   * get current top margin.
+   * @return current top margin
+   */
+  public SizeValue getMarginTop() {
+    return layoutPart.getBoxConstraints().getMarginTop();
+  }
+
+  /**
+   * get current bottom margin.
+   * @return current bottom margin
+   */
+  public SizeValue getMarginBottom() {
+    return layoutPart.getBoxConstraints().getMarginBottom();
+  }
+
   public void setPaddingLeft(final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingLeft(paddingValue);
     notifyListeners();
@@ -2401,4 +2467,41 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     elements.clear();
     elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
   }
+
+  /**
+   * Assign custom user data to this Element instance.
+   *
+   * @param key the key for the object to set
+   * @param data
+   */
+  public void setUserData(String key, Object data) {
+    if (userData == null) {
+      userData = new HashMap<String, Object>();
+    }
+    userData.put(key, data);
+  }
+
+  /**
+   * Retrive previously assigned user data by key
+   *
+   * @param key the key for the requested user data
+   * @return
+   */
+  public <T> T getUserData(String key) {
+    if (userData == null) {
+      return null;
+    }
+    return (T) userData.get(key);
+  }
+
+  /**
+   * @return all user data keys
+   */
+  public Set<String> getUserDataKeys() {
+    if (userData != null) {
+      return userData.keySet();
+    }
+    return Collections.EMPTY_SET;
+  }
+
 }
