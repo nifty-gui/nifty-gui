@@ -450,12 +450,54 @@ public abstract class ElementBuilder {
   public List<ElementBuilder> getElementBuilders() {
     return Collections.unmodifiableList(elementBuilders);
   }
-
+  /**
+   * Build a element
+   * @param nifty
+   * @param screen
+   * @param parent
+   * @return the element created
+   */
   public Element build(final Nifty nifty, final Screen screen, final Element parent) {
     ElementType type = buildElementType();
     Element result = nifty.createElementFromType(screen, parent, type);
     parent.layoutElements();
     return result;
+  }
+  
+  /**
+   * Build an elment in a specified position in parent element list
+   * @param nifty
+   * @param screen
+   * @param parent
+   * @param before
+   * @return the Element created
+   */
+  public Element build(final Nifty nifty, final Screen screen, final Element parent,int index) {
+	  ElementType type = buildElementType();
+	  Element result = nifty.createElementFromType(screen, parent, type,index);
+	  screen.layoutLayers();
+	 return result; 
+  }
+  /**
+   * Build an elment after a elment in parent children list
+   * @param nifty
+   * @param screen
+   * @param parent
+   * @param before
+   * @return the Element created
+   */
+  public Element build(final Nifty nifty, final Screen screen, final Element parent,Element before) {
+	  int index = parent.getElements().size();
+	  for(int i=0;i<parent.getElements().size();i++){
+		  if(parent.getElements().get(i).equals(before)){
+			  index=i;
+			  break;
+		  }
+	  }
+	  ElementType type = buildElementType();
+	  Element result = nifty.createElementFromType(screen, parent, type,index);
+	  screen.layoutLayers();
+	 return result; 
   }
 
   /**
