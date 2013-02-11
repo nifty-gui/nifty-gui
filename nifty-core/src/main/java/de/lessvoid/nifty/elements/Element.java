@@ -707,11 +707,30 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param widget the child to add
    */
   public void add(final Element widget) {
-    elements.add(widget);
-    elementsRenderOrderSet.add(widget);
-    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
-  }
-
+	    add(widget,elements.size());
+	  }
+  /**
+   * insert a child element.
+   * @param widget the child to add
+   * @param index where to add
+   */
+   public void add(final Element widget, final int index) {
+	    elements.add(index, widget);
+	    elementsRenderOrderSet.add(widget);
+	    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
+   }
+   /**
+    * Set the index of this element in the list of its parent
+    * @param index
+    */
+   public void setIndex(final int index){
+	  int curInd = this.parent.elements.indexOf(this);
+	  if(curInd>=0 && index !=curInd){
+		  this.parent.elements.remove(curInd);
+		  this.parent.elements.add(index, this);
+		  this.parent.layoutElements();
+	  }
+   }
   /**
    * render this element.
    * @param r the RenderDevice to use
