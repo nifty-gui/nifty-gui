@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Properties;
 
@@ -11,6 +12,8 @@ import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class EffectTypeWithEffectValueTest {
+  private static final float EPSILON = 0.01f;
+
   private EffectType effectType = new EffectType();
   private EffectProperties effectProperties = new EffectProperties(
       new Properties());
@@ -28,8 +31,8 @@ public class EffectTypeWithEffectValueTest {
     effectType.applyEffectValues(effectProperties);
     assertEquals("100", effectProperties.getProperty("length"));
     LinearInterpolator interpolator = effectProperties.getInterpolator();
-    assertEquals(0.0f, interpolator.getValue(0.0f));
-    assertEquals(1.0f, interpolator.getValue(1.0f));
+    assertEquals(0.0f, interpolator.getValue(0.0f), EPSILON);
+    assertEquals(1.0f, interpolator.getValue(1.0f), EPSILON);
   }
 
   private EffectValueType createEffectValueType(final String time, final String value) {
