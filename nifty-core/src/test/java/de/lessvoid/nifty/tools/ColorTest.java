@@ -7,6 +7,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ColorTest {
+  private static final float EPSILON = 0.01f;
 
   @Test
   public void testMultiply() {
@@ -19,13 +20,13 @@ public class ColorTest {
   @Test
   public void testColorShortModeWithoutAlpha() {
     Color c = new Color("#123");
-    checkColor(c, 0.1f, 0.2f, 0.3f, 1.0f);
+    checkColor(c, 0.066f, 0.133f, 0.2f, 1.0f);
   }
 
   @Test
   public void testColorLongModeWithoutAlpha() {
-    Color c = new Color("#102030");
-    checkColor(c, 0.1f, 0.2f, 0.3f, 1.0f);
+    Color c = new Color("#8000ff");
+    checkColor(c, 0.5f, 0.0f, 1.0f, 1.0f);
   }
 
   @Test
@@ -49,10 +50,10 @@ public class ColorTest {
   @Test
   public void testColorValid() {
     Color c = new Color("#1238");
-    checkColor(c, 0.1f, 0.2f, 0.3f, 0.8f);
+    checkColor(c, 0.066f, 0.133f, 0.2f, 0.533f);
 
     c = new Color("#10203080");
-    checkColor(c, 0.1f, 0.2f, 0.3f, 0.8f);
+    checkColor(c, 0.066f, 0.133f, 0.188f, 0.501f);
   }
 
   @Test
@@ -62,9 +63,9 @@ public class ColorTest {
   }
 
   private void checkColor(Color m, float red, float green, float blue, float alpha) {
-    assertEquals(red, m.getRed());
-    assertEquals(green, m.getGreen());
-    assertEquals(blue, m.getBlue());
-    assertEquals(alpha, m.getAlpha());
+    assertEquals(red, m.getRed(), EPSILON);
+    assertEquals(green, m.getGreen(), EPSILON);
+    assertEquals(blue, m.getBlue(), EPSILON);
+    assertEquals(alpha, m.getAlpha(), EPSILON);
   }
 }
