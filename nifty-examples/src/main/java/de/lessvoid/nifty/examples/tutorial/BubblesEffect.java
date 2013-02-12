@@ -22,8 +22,8 @@ public class BubblesEffect implements EffectImpl {
   private NiftyImage niftyImage2;
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    niftyImage1 = nifty.getRenderEngine().createImage("tutorial/bubble-64x64.png", true);
-    niftyImage2 = nifty.getRenderEngine().createImage("tutorial/bubble-32x32.png", true);
+    niftyImage1 = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), "tutorial/bubble-64x64.png", true);
+    niftyImage2 = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), "tutorial/bubble-32x32.png", true);
     screenWidth = nifty.getCurrentScreen().getRootElement().getWidth();
     screenHeight = nifty.getCurrentScreen().getRootElement().getHeight();
     for (int i=0; i<bubbles.length; i++) {

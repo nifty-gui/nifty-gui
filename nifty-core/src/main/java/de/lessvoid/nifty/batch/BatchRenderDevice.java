@@ -3,12 +3,12 @@ package de.lessvoid.nifty.batch;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.logging.Level;
+import java.util.Set;
 import java.util.logging.Logger;
 
-import org.jglfont.BitmapFontException;
 import org.jglfont.BitmapFontFactory;
 import org.jglfont.spi.BitmapFontRenderer;
 
@@ -63,6 +63,8 @@ public class BatchRenderDevice implements RenderDevice {
   private BatchRenderImage thePlainImage;
   private final int atlasWidth;
   private final int atlasHeight;
+  private final Set<BatchRenderFont> fontCache = new HashSet<BatchRenderFont>();
+  private final FontRenderer fontRenderer;
 
   /**
    * The standard constructor. You'll use this in production code. Using this
@@ -78,7 +80,8 @@ public class BatchRenderDevice implements RenderDevice {
     time = System.currentTimeMillis();
     frames = 0;
     generator = new TextureAtlasGenerator(atlasWidth, atlasHeight);
-    factory = new BitmapFontFactory(new FontRenderer());
+    fontRenderer = new FontRenderer(this);
+    factory = new BitmapFontFactory(fontRenderer);
     renderBackend.createAtlasTexture(atlasWidth, atlasHeight);
   }
 
@@ -203,25 +206,22 @@ public class BatchRenderDevice implements RenderDevice {
   @Override
   public RenderImage createImage(final String filename, final boolean filterLinear) {
     Image image = renderBackend.loadImage(filename);
-    try {
-      Result result = generator.addImage(image.getWidth(), image.getHeight(), filename, 5);
-      renderBackend.addImageToTexture(image, result.getX(), result.getY());
-      return new BatchRenderImage(result.getX(), result.getY(), image.getWidth(), image.getHeight());
-    } catch (TextureAtlasGeneratorException e) {
-      log.log(Level.SEVERE, "image didn't fit into the texture atlas", e);
-      // FIXME
-      return null;
-    }
+    return new BatchRenderImage(image, generator, filename, renderBackend);
   }
 
   @Override
   public RenderFont createFont(final String filename) {
     try {
-      // we need to disable blending in here to get the original image into the texture atlas without any blending
-      return new BatchRenderFont(filename, factory, resourceLoader);
+      BatchRenderFont batchRenderFont = new BatchRenderFont(this, filename, factory, resourceLoader);
+      fontCache.add(batchRenderFont);
+      return batchRenderFont;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public void disposeFont(final BatchRenderFont batchRenderFont) {
+    fontCache.remove(batchRenderFont);
   }
 
   @Override
@@ -252,6 +252,9 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     BatchRenderImage img = (BatchRenderImage) image;
+    if (!img.isUploaded()) {
+      img.upload();
+    }
     float centerX = x + width / 2.f;
     float centerY = y + height / 2.f;
     int ix = Math.round(centerX - (width * scale) / 2.f);
@@ -293,6 +296,9 @@ public class BatchRenderDevice implements RenderDevice {
     int ih = Math.round(h * scale);
 
     BatchRenderImage img = (BatchRenderImage) image;
+    if (!img.isUploaded()) {
+      img.upload();
+    }
     addQuad(ix, iy, iw, ih, c, c, c, c, img.getX() + srcX, img.getY() + srcY, srcW, srcH);
   }
 
@@ -359,11 +365,21 @@ public class BatchRenderDevice implements RenderDevice {
     renderBackend.disableMouseCursor();
   }
 
+  public void resetTextureAtlas() {
+    thePlainImage.unload();
+    generator.reset();
+    renderBackend.clearAtlasTexture(atlasWidth, atlasHeight);
+    fontRenderer.unload();
+  }
+
   // Internal implementations
 
   private BatchRenderImage getPlainImage() {
     if (thePlainImage == null) {
       thePlainImage = (BatchRenderImage) createImage("de/lessvoid/nifty/batch/nifty.png", true);
+    }
+    if (!thePlainImage.isUploaded()) {
+      thePlainImage.upload();
     }
     return thePlainImage;
   }
@@ -510,18 +526,21 @@ public class BatchRenderDevice implements RenderDevice {
 
   private class FontRenderer implements BitmapFontRenderer {
     private final Map<String, BitmapInfo> textureInfos = new HashMap<String, BitmapInfo>();
+    private BatchRenderDevice batchRenderDevice;
+
+    public FontRenderer(final BatchRenderDevice batchRenderDevice) {
+      this.batchRenderDevice = batchRenderDevice;
+    }
+
+    public void unload() {
+      for (BitmapInfo info : textureInfos.values()) {
+        info.unload();
+      }
+    }
 
     @Override
     public void registerBitmap(final String bitmapId, final InputStream data, final String filename) throws IOException {
-      Image image = renderBackend.loadImage(filename);
-      try {
-        Result result = generator.addImage(image.getWidth(), image.getHeight(), filename, 5);
-        renderBackend.addImageToTexture(image, result.getX(), result.getY());
-        textureInfos.put(bitmapId, new BitmapInfo(result));
-      } catch (TextureAtlasGeneratorException e) {
-        log.log(Level.SEVERE, "image didn't fit into the texture atlas", e);
-        throw new BitmapFontException("failed to add image to texture atlas: " + filename);
-      }
+      textureInfos.put(bitmapId, new BitmapInfo((BatchRenderImage) batchRenderDevice.createImage(filename, true)));
     }
 
     @Override
@@ -537,14 +556,7 @@ public class BatchRenderDevice implements RenderDevice {
         final float u1,
         final float v1) {
       BitmapInfo textureInfo = textureInfos.get(bitmapId);
-      int atlasX0 = textureInfo.getX();
-      int atlasY0 = textureInfo.getY();
-      int atlasImageW = textureInfo.getOriginalImageWidth();
-      int atlasImageH = textureInfo.getOriginalImageHeight();
-      int u = (int) (atlasX0 + u0 * atlasImageW);
-      int v = (int) (atlasY0 + v0 * atlasImageH);
-
-      textureInfo.addCharRenderInfo(c, new CharRenderInfo(xoff, yoff, w, h, u, v));
+      textureInfo.addCharRenderInfo(c, new CharRenderInfo(xoff, yoff, w, h, u0, v0));
     }
 
     @Override
@@ -553,6 +565,9 @@ public class BatchRenderDevice implements RenderDevice {
 
     @Override
     public void beforeRender() {
+      for (BitmapInfo info : textureInfos.values()) {
+        info.upload();
+      }
     }
 
     @Override
@@ -584,16 +599,16 @@ public class BatchRenderDevice implements RenderDevice {
     final int yoff;
     final int w;
     final int h;
-    final int u0;
-    final int v0;
+    final float u0;
+    final float v0;
 
     public CharRenderInfo(
         final int xoff,
         final int yoff,
         final int w,
         final int h,
-        final int u0,
-        final int v0) {
+        final float u0,
+        final float v0) {
       this.xoff = xoff;
       this.yoff = yoff;
       this.w = w;
@@ -602,7 +617,16 @@ public class BatchRenderDevice implements RenderDevice {
       this.v0 = v0;
     }
 
-    public void renderQuad(final int x, final int y, final float sx, final float sy, final Color textColor) {
+    public void renderQuad(
+        final int x,
+        final int y,
+        final float sx,
+        final float sy,
+        final Color textColor,
+        final int atlasX0,
+        final int atlasY0,
+        final int atlasImageW,
+        final int atlasImageH) {
       glyphCount++;
       addQuad(
           x + (float) Math.floor(xoff * sx),
@@ -613,39 +637,40 @@ public class BatchRenderDevice implements RenderDevice {
           textColor,
           textColor,
           textColor,
-          u0,
-          v0,
+          (int) (atlasX0 + u0 * atlasImageW),
+          (int) (atlasY0 + v0 * atlasImageH),
           w,
           h);
     }
   }
 
   private static class BitmapInfo {
-    private final Result result;
+    private final BatchRenderImage image;
     private final Map<Character, CharRenderInfo> characterIndices = new Hashtable<Character, CharRenderInfo>();
+    private Result result;
 
-    public BitmapInfo(final Result result) {
-      this.result = result;
+    public BitmapInfo(final BatchRenderImage image) {
+      this.image = image;
+    }
+
+    private void upload() {
+      if (image.isUploaded()) {
+        return;
+      }
+      image.upload();
+      result = new Result(image.getX(), image.getY(), image.getWidth(), image.getHeight());
+    }
+
+    private void unload() {
+      image.markAsUnloaded();
     }
 
     public void renderCharacter(char c, int x, int y, float sx, float sy, Color textColor) {
-      characterIndices.get(c).renderQuad(x, y, sx, sy, textColor);
-    }
-
-    public int getX() {
-      return result.getX();
-    }
-
-    public int getY() {
-      return result.getY();
-    }
-
-    public int getOriginalImageWidth() {
-      return result.getOriginalImageWidth();
-    }
-
-    public int getOriginalImageHeight() {
-      return result.getOriginalImageHeight();
+      int atlasX0 = result.getX();
+      int atlasY0 = result.getY();
+      int atlasImageW = result.getOriginalImageWidth();
+      int atlasImageH = result.getOriginalImageHeight();
+      characterIndices.get(c).renderQuad(x, y, sx, sy, textColor, atlasX0, atlasY0, atlasImageW, atlasImageH);
     }
 
     public void addCharRenderInfo(final Character c, final CharRenderInfo renderInfo) {

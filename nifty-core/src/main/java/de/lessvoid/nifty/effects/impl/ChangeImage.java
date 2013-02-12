@@ -42,7 +42,7 @@ public class ChangeImage implements EffectImpl {
   }
 
   private NiftyImage loadImage(final String name, final Nifty nifty, final EffectProperties parameter) {
-    NiftyImage image = nifty.getRenderEngine().createImage(parameter.getProperty(name), false);
+    NiftyImage image = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), parameter.getProperty(name), false);
 
     String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(parameter);
     String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(parameter);

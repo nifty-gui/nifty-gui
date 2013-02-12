@@ -24,7 +24,7 @@ public class ImageOverlay implements EffectImpl {
   private boolean activeBeforeStartDelay; // this will render the effect even when using a startDelay value so that it will already render before the startDelay
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
+    image = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), parameter.getProperty("filename"), false);
 
     String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(parameter);
     String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(parameter);

@@ -9,13 +9,16 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class BatchRenderFont implements RenderFont {
+  private final BatchRenderDevice batchRenderDevice;
   private final BitmapFont font;
 
   public BatchRenderFont(
+      final BatchRenderDevice batchRenderDevice,
       final String name,
       final BitmapFontFactory factory,
       final NiftyResourceLoader resourceLoader) throws IOException {
-    font = factory.loadFont(resourceLoader.getResourceAsStream(name));
+    this.batchRenderDevice = batchRenderDevice;
+    this.font = factory.loadFont(resourceLoader.getResourceAsStream(name), name);
   }
 
   @Override
@@ -40,6 +43,7 @@ public class BatchRenderFont implements RenderFont {
 
   @Override
   public void dispose() {
+    batchRenderDevice.disposeFont(this);
   }
 
   public BitmapFont getBitmapFont() {

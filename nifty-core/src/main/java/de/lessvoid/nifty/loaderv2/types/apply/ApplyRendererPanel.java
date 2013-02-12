@@ -7,6 +7,7 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.image.ImageMode;
 import de.lessvoid.nifty.render.image.ImageModeHelper;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ApplyRendererPanel implements ApplyRenderer {
@@ -17,6 +18,7 @@ public class ApplyRendererPanel implements ApplyRenderer {
   }
 
   public void apply(
+      final Screen screen,
       final Element element,
       final Attributes attributes,
       final NiftyRenderEngine renderEngine) {
@@ -33,6 +35,7 @@ public class ApplyRendererPanel implements ApplyRenderer {
 
     NiftyImage image =
       renderEngine.createImage(
+          screen,
           attributes.get("backgroundImage"),
           attributes.getAsBoolean("filter", Convert.DEFAULT_IMAGE_FILTER));
     if (image == null) {

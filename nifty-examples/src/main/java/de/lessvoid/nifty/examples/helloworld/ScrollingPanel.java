@@ -24,7 +24,7 @@ public class ScrollingPanel implements EffectImpl {
     start = timeProvider.getMsTime();
     xspeed = Float.valueOf(parameter.getProperty("xspeed", "1000"));
     yspeed = Float.valueOf(parameter.getProperty("yspeed", "1000"));
-    image = nifty.getRenderEngine().createImage(parameter.getProperty("filename"), false);
+    image = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), parameter.getProperty("filename"), false);
     String imageMode = parameter.getProperty("imageMode", null);
     if (imageMode != null) {
       image.setImageMode(NiftyImageMode.valueOf(imageMode));

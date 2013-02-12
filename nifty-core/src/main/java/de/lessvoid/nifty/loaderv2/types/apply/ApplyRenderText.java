@@ -3,6 +3,7 @@ package de.lessvoid.nifty.loaderv2.types.apply;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ApplyRenderText implements ApplyRenderer {
@@ -13,6 +14,7 @@ public class ApplyRenderText implements ApplyRenderer {
   }
 
   public void apply(
+      final Screen screen,
       final Element element,
       final Attributes attributes,
       final NiftyRenderEngine renderEngine) {

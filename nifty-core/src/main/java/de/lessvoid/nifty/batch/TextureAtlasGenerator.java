@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.batch;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,8 +17,12 @@ import java.util.TreeMap;
  * @author void
  */
 public class TextureAtlasGenerator {
+  private final int width;
+  private final int height;
   private Node root;
-  private Map<String, Rectangle> rectangleMap;
+
+  // for easy access we keep each node in a map with the passed name as the key so we can look up a Node directly
+  private Map<String, Node> rectangleMap;
 
   /**
    * You'll get an instance of this class back when you add an image. This class will show you where you'll need to
@@ -60,8 +66,10 @@ public class TextureAtlasGenerator {
    * @param height
    */
   public TextureAtlasGenerator(final int width, final int height) {
+    this.width = width;
+    this.height = height;
     this.root = new Node(0, 0, width, height);
-    this.rectangleMap = new TreeMap<String, Rectangle>();
+    this.rectangleMap = new TreeMap<String, Node>();
   }
 
   /**
@@ -82,8 +90,30 @@ public class TextureAtlasGenerator {
         throw new TextureAtlasGeneratorException(imageWidth, imageHeight, name);
       }
 
-      rectangleMap.put(name, node.rect);
+      rectangleMap.put(name, node);
       return new Result(node.rect.x, node.rect.y, imageWidth, imageHeight);
+  }
+
+  public Result removeImage(final String name) {
+    Node node = rectangleMap.remove(name);
+    if (node == null) {
+      return null;
+    }
+    
+    node.occupied = false;
+    node.child[0] = null;
+    node.child[1] = null;
+    return new Result(node.rect.x, node.rect.y, node.rect.width, node.rect.height);
+  }
+
+  public List<Result> rebuild(final int width, final int height, final int padding) throws TextureAtlasGeneratorException {
+    List<Result> results = new ArrayList<Result>();
+    root = new Node(0, 0, width, height);
+    for (Map.Entry<String, Node> entry : rectangleMap.entrySet()) {
+      Rectangle rect = entry.getValue().rect;
+      results.add(addImage(rect.width, rect.height, entry.getKey(), padding));
+    }
+    return results;
   }
 
   private static class Rectangle {
@@ -100,7 +130,7 @@ public class TextureAtlasGenerator {
     }
   }
 
-  private class Node {
+  private static class Node {
     public Rectangle rect;
     public Node child[];
     public boolean occupied;
@@ -125,34 +155,37 @@ public class TextureAtlasGenerator {
           return newNode;
         }
         return child[1].insert(imageWidth, imageHeight, padding);
-      } else {
-        if (this.occupied) {
-          return null; // occupied
-        }
-
-        if (imageWidth > rect.width || imageHeight > rect.height) {
-          return null; // does not fit
-        }
-
-        if (imageWidth == rect.width && imageHeight == rect.height) {
-          this.occupied = true; // perfect fit
-          return this;
-        }
-
-        int dw = rect.width - imageWidth;
-        int dh = rect.height - imageHeight;
-
-        if (dw > dh) {
-          child[0] = new Node(rect.x, rect.y, imageWidth, rect.height);
-          child[1] = new Node(padding + rect.x + imageWidth, rect.y, rect.width - imageWidth - padding,
-              rect.height);
-        } else {
-          child[0] = new Node(rect.x, rect.y, rect.width, imageHeight);
-          child[1] = new Node(rect.x, padding + rect.y + imageHeight, rect.width, rect.height
-              - imageHeight - padding);
-        }
-        return child[0].insert(imageWidth, imageHeight, padding);
       }
+
+      if (this.occupied) {
+        return null; // occupied
+      }
+      
+      if (imageWidth > rect.width || imageHeight > rect.height) {
+        return null; // does not fit
+      }
+      
+      if (imageWidth == rect.width && imageHeight == rect.height) {
+        this.occupied = true; // perfect fit
+        return this;
+      }
+      
+      int dw = rect.width - imageWidth;
+      int dh = rect.height - imageHeight;
+      
+      if (dw > dh) {
+        child[0] = new Node(rect.x, rect.y, imageWidth, rect.height);
+        child[1] = new Node(padding + rect.x + imageWidth, rect.y, rect.width - imageWidth - padding, rect.height);
+      } else {
+        child[0] = new Node(rect.x, rect.y, rect.width, imageHeight);
+        child[1] = new Node(rect.x, padding + rect.y + imageHeight, rect.width, rect.height - imageHeight - padding);
+      }
+      return child[0].insert(imageWidth, imageHeight, padding);
     }
+  }
+
+  public void reset() {
+    this.root = new Node(0, 0, width, height);
+    this.rectangleMap = new TreeMap<String, Node>();
   }
 }

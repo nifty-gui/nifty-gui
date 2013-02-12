@@ -369,9 +369,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * This is used when the element is being created from an ElementType in the loading process.
+   * This is used when the element is being created from an ElementType in the loading process. 
+   * @param screen2 
    */
-  public void initializeFromAttributes(final Attributes attributes, final NiftyRenderEngine renderEngine) {
+  public void initializeFromAttributes(final Screen targetScreen, final Attributes attributes, final NiftyRenderEngine renderEngine) {
     layoutPart.getBoxConstraints().setHeight(convert.sizeValue(attributes.get("height")));
     layoutPart.getBoxConstraints().setWidth(convert.sizeValue(attributes.get("width")));
     layoutPart.getBoxConstraints().setX(convert.sizeValue(attributes.get("x")));
@@ -433,7 +434,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     for (int i=0; i<elementRenderer.length; i++) {
       ElementRenderer renderer = elementRenderer[i];
       ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
-      rendererApply.apply(this, attributes, renderEngine);
+      rendererApply.apply(targetScreen, this, attributes, renderEngine);
     }
   }
 
@@ -2098,7 +2099,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     elementType.getAttributes().set("style", newStyle);
     elementType.applyStyles(nifty.getDefaultStyleResolver());
-    elementType.applyAttributes(this, elementType.getAttributes(), nifty.getRenderEngine());
+    elementType.applyAttributes(this.screen, this, elementType.getAttributes(), nifty.getRenderEngine());
     elementType.applyEffects(nifty, screen, this);
     elementType.applyInteract(nifty, screen, this);
 

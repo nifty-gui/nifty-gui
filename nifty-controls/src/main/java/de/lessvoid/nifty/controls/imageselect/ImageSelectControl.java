@@ -304,7 +304,7 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
         if (property != null && property.length() > 0) {
             String[] imageStrings = property.split(",");
             for (String imageString : imageStrings) {
-                imageList.add(renderDevice.createImage(imageString, false));
+                imageList.add(renderDevice.createImage(nifty.getCurrentScreen(), imageString, false));
             }
         }
         return imageList;

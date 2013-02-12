@@ -90,11 +90,17 @@ public interface BatchRenderBackend {
   // batch related new stuff
 
   /**
-   * Create a texture that will later be used as the texture atlas of the given size.
+   * Create a texture that will later be used as the texture atlas.
+   * 
    * @param width width of the texture atlas
    * @param height height of the texture atlas
    */
   void createAtlasTexture(int width, int height);
+
+  /**
+   * Clear the atlas texture.
+   */
+  void clearAtlasTexture(int width, int height);
 
   /**
    * Load the given image and provide width and height of the image using the Image interface defined at the bottom.
@@ -155,6 +161,19 @@ public interface BatchRenderBackend {
    * Render all batches and return the number of batches rendered for statistics.
    */
   int render();
+
+  /**
+   * Remove the image from the texture atlas. This really could be an empty implementation because there really is
+   * nothing that this method needs to do. After a call to this method Nifty might reuse the place in the texture
+   * with other calls to addImageToTexture().
+   *
+   * @param image image to remove
+   * @param x x position in texture atlas
+   * @param y y position in texture atlas
+   * @param w width in texture atlas
+   * @param h height in texture atlas
+   */
+  void removeFromTexture(Image image, int x, int y, int w, int h);
 
   /**
    * Helper interface to allow the provideImageDimensions() method to return the image dimension and if necessary

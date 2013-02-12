@@ -1,9 +1,11 @@
 package de.lessvoid.nifty.examples.all;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
@@ -38,12 +40,17 @@ public class AllExamplesMain implements NiftyExample {
       System.exit(0);
     }
 
+    BatchRenderDevice renderDevice = new BatchRenderDevice(new LwjglBatchRenderBackend(), 2048, 2048);
+//    renderDevice.enableLogFPS();
+
     // create nifty
     Nifty nifty = new Nifty(
-        new LwjglRenderDevice(),
+//        new LwjglRenderDevice(),
+        renderDevice,
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new AccurateTimeProvider());
+    nifty.createImage("nifty-logo-150x150.png", true);
     if (args.length == 1) {
       nifty.fromXml(ALL_INTRO_XML, args[0]);
     } else {
