@@ -4,6 +4,7 @@ import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.RenderStates;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -39,7 +40,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public NiftyImage createImage(final String name, final boolean filterLinear) {
+  public NiftyImage createImage(final Screen screen, final String name, final boolean filterLinear) {
     return null;
   }
 
@@ -240,5 +241,13 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
   @Override
   public void disableAutoScaling() {
+  }
+
+  @Override
+  public void screenStarted(Screen screen) {
+  }
+
+  @Override
+  public void screenEnded(final Screen screen) {
   }
 }

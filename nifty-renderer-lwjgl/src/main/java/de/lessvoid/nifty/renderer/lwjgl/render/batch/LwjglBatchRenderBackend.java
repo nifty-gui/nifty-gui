@@ -44,6 +44,9 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   private final ObjectPool<Batch> batchPool;
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
+  private ByteBuffer initialData;
+  private boolean fillRemovedTexture =
+      Boolean.getBoolean(System.getProperty(LwjglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
 
   public LwjglBatchRenderBackend() {
     batchPool = new ObjectPool<Batch>(2, new Factory<Batch>() {
@@ -133,9 +136,33 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   public void createAtlasTexture(final int width, final int height) {
     try {
       createAtlasTexture(width, height, false, GL11.GL_RGBA);
+
+      initialData = BufferUtils.createByteBuffer(width*height*4);
+      for (int i=0; i<width*height; i++) {
+        initialData.put((byte) 0x00);
+        initialData.put((byte) 0x00);
+        initialData.put((byte) 0x00);
+        initialData.put((byte) 0x00);
+      }
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);
     }
+  }
+
+  @Override
+  public void clearAtlasTexture(final int width, final int height) {
+    initialData.rewind();
+    GL11.glTexImage2D(
+          GL11.GL_TEXTURE_2D,
+          0,
+          4,
+          width,
+          height,
+          0,
+          GL11.GL_RGBA,
+          GL11.GL_UNSIGNED_BYTE,
+          initialData);
+    checkGLError();
   }
 
   @Override
@@ -189,7 +216,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       final float textureWidth,
       final float textureHeight) {
     if (!currentBatch.canAddQuad()) {
-      beginBatch(null);
+      beginBatch(currentBatch.getBlendMode());
     }
     currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth, textureHeight);
   }
@@ -215,6 +242,35 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     GL11.glDisable(GL11.GL_TEXTURE_2D);
 
     return batches.size();
+  }
+
+  @Override
+  public void removeFromTexture(final Image image, final int x, final int y, final int w, final int h) {
+    // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
+    // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
+    if (!fillRemovedTexture) {
+      return;
+    }
+    ByteBuffer initialData = BufferUtils.createByteBuffer(image.getWidth()*image.getHeight()*4);
+    for (int i=0; i<image.getWidth()*image.getHeight(); i++) {
+      initialData.put((byte) 0xff);
+      initialData.put((byte) 0x00);
+      initialData.put((byte) 0x00);
+      initialData.put((byte) 0xff);
+    }
+    initialData.rewind();
+
+    GL11.glTexSubImage2D(
+        GL11.GL_TEXTURE_2D,
+        0,
+        x,
+        y,
+        w,
+        h,
+        GL11.GL_RGBA, 
+        GL11.GL_UNSIGNED_BYTE,
+        initialData);
+
   }
 
   private void getViewport() {
@@ -390,6 +446,10 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       this.blendMode = blendMode;
       primitiveCount = 0;
       vertexBuffer.clear();
+    }
+
+    public BlendMode getBlendMode() {
+      return blendMode;
     }
 
     public void render() {

@@ -1447,7 +1447,7 @@ public class Nifty {
    * @return RenderImage instance
    */
   public NiftyImage createImage(final String name, final boolean filterLinear) {
-    return renderEngine.createImage(name, filterLinear);
+    return renderEngine.createImage(getCurrentScreen(), name, filterLinear);
   }
 
   /**

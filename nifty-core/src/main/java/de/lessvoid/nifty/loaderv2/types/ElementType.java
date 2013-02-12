@@ -169,7 +169,7 @@ public class ElementType extends XmlBaseType {
       final Nifty nifty,
       final Screen screen,
       final Element element) {
-    applyAttributes(element, getAttributes(), nifty.getRenderEngine());
+    applyAttributes(screen, element, getAttributes(), nifty.getRenderEngine());
     applyEffects(nifty, screen, element);
     applyInteract(nifty, screen, element);
     applyChildren(element, screen, nifty);
@@ -211,11 +211,11 @@ public class ElementType extends XmlBaseType {
     return new NiftyInputControl(controller, inputMapping);
   }
 
-  public void applyAttributes(final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {
+  public void applyAttributes(final Screen screen, final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {
     if (work == null) {
       return;
     }
-    element.initializeFromAttributes(work, renderEngine);
+    element.initializeFromAttributes(screen, work, renderEngine);
   }
 
   public void applyPostAttributes(final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {
@@ -263,7 +263,7 @@ public class ElementType extends XmlBaseType {
       final ControlAttributes attributes) {
     Attributes attrib = new Attributes(getAttributes());
     attributes.refreshAttributes(attrib);
-    applyAttributes(element, attrib, nifty.getRenderEngine());
+    applyAttributes(screen, element, attrib, nifty.getRenderEngine());
     applyPostAttributes(element, attrib, nifty.getRenderEngine());
     attributes.refreshEffects(effects);
     screen.layoutLayers();

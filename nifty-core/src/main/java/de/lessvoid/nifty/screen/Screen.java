@@ -198,6 +198,8 @@ public class Screen {
     NiftyStopwatch.start();
     running = false;
 
+    nifty.getRenderEngine().screenStarted(this);
+
     focusHandler.resetFocusElements();
     resetLayers();
     layoutLayers();
@@ -753,6 +755,7 @@ public class Screen {
     for (int i=0; i<layerElements.size(); i++) {
       layerElements.get(i).onEndScreen(this);
     }
+    nifty.getRenderEngine().screenEnded(this);
   }
 
   public boolean isEffectActive(final EffectEventId effectEventId) {

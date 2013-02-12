@@ -4,11 +4,11 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Stack;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.elements.render.TextRenderer.RenderFontNull;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -163,17 +163,12 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     renderDevice.clear();
   }
 
-  /**
-   * @see de.lessvoid.nifty.render.NiftyRenderEngine#createImage(java.lang.String, boolean)
-   * @param filename name
-   * @param filterLinear filter
-   * @return NiftyImage
-   */
-  public NiftyImage createImage(final String filename, final boolean filterLinear) {
+  @Override
+  public NiftyImage createImage(final Screen screen, final String filename, final boolean filterLinear) {
     if (filename == null) {
       return null;
     }
-    return new NiftyImage(this, imageManager.getImage(filename, filterLinear));
+    return new NiftyImage(this, imageManager.registerImage(filename, filterLinear, screen));
   }
 
   /**
@@ -556,7 +551,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   }
 
   public void disposeImage(final RenderImage image) {
-    imageManager.dispose(image);
+    imageManager.unregisterImage(image);
   }
 
   public RenderImage reload(final RenderImage image) {
@@ -880,5 +875,15 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     autoScalingScaleY = null;
     autoScalingOffsetX = 0;
     autoScalingOffsetY = 0;
+  }
+
+  @Override
+  public void screenStarted(final Screen screen) {
+    imageManager.uploadScreenImages(screen);
+  }
+
+  @Override
+  public void screenEnded(final Screen screen) {
+    imageManager.unloadScreenImages(screen);
   }
 }

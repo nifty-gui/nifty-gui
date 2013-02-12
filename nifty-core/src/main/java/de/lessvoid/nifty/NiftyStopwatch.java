@@ -25,6 +25,10 @@ public class NiftyStopwatch {
     log.info("[" + String.format("%04d", length) + "] " + b + message);
   }
 
+  public static long stop() {
+    return now() - stack.pop();
+  }
+
   private static long now() {
     return new Date().getTime();
   }

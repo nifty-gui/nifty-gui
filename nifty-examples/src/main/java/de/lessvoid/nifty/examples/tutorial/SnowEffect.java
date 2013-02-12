@@ -27,7 +27,7 @@ public class SnowEffect implements EffectImpl {
   private NiftyImageMode image4 = NiftyImageMode.subImage(5, 5, 5, 5);
 
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    niftyImage = nifty.getRenderEngine().createImage("tutorial/snow.png", true);
+    niftyImage = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), "tutorial/snow.png", true);
     screenWidth = nifty.getCurrentScreen().getRootElement().getWidth();
     screenHeight = nifty.getCurrentScreen().getRootElement().getHeight();
     for (int i=0; i<snow.length; i++) {

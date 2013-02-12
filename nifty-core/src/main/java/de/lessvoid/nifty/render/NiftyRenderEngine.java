@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.render;
 
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -64,7 +65,7 @@ public interface NiftyRenderEngine {
    * @param filterLinear filter
    * @return RenderImage instance
    */
-  NiftyImage createImage(String name, boolean filterLinear);
+  NiftyImage createImage(Screen screen, String name, boolean filterLinear);
 
   /**
    * Create a new RenderFont.
@@ -259,5 +260,17 @@ public interface NiftyRenderEngine {
   int convertFromNativeY(int y);
   float convertToNativeTextSizeX(float size);
   float convertToNativeTextSizeY(float size);
+
+  /**
+   * Called by Nifty when the given screen has started.
+   * @param screen the screen that has just started
+   */
+  void screenStarted(Screen screen);
+
+  /**
+   * Called by Nifty when the given screen has ended.
+   * @param screen the screen that has just ended
+   */
+  void screenEnded(Screen screen);
 
 }
