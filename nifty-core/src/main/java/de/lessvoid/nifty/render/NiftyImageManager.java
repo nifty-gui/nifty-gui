@@ -108,11 +108,9 @@ public class NiftyImageManager {
 
     ((BatchRenderDevice) renderDevice).resetTextureAtlas();
 
-    Set<ReferencedCountedImage> imageList = screenRef.get(screen.getScreenId());
-    if (imageList != null) {
-      for (ReferencedCountedImage image : imageList) {
-        image.markAsUnloaded();
-      }
+    // we need to mark all images as unloaded
+    for (ReferencedCountedImage i : imageCache.values()) {
+      i.markAsUnloaded();
     }
 
     long time = NiftyStopwatch.stop();
