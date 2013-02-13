@@ -23,7 +23,6 @@ public class TextFieldLogic {
   /**
    * The text that was typed into the input area by the user.
    */
-  @SuppressWarnings("StringBufferField")
   private final StringBuilder text;
 
   /**
@@ -503,7 +502,7 @@ public class TextFieldLogic {
   public void put() {
     final String clipboardText = clipboard.get();
     if (clipboardText != null) {
-      insert(clipboardText);
+      insert(filterNewLines(clipboardText));
     }
   }
 
@@ -585,5 +584,9 @@ public class TextFieldLogic {
    */
   public void toLastPosition() {
     setCursorPosition(Integer.MAX_VALUE);
+  }
+
+  private CharSequence filterNewLines(final String input) {
+    return input.replaceAll("\\r\\n|\\r|\\n", "");
   }
 }

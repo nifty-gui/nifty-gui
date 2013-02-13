@@ -47,4 +47,24 @@ public class TextFieldMaxLenClipboardTest {
     textField.put();
     assertEquals("abcdef12345", textField.getRealText().toString());
   }
+
+  @Test
+  public void testInsertWithNormalNewLine() {
+    expect(clipboard.get()).andReturn("abc\ndef");
+    replay(clipboard);
+
+    textField = new TextFieldLogic("", clipboard, new EmptyTextFieldView());
+    textField.put();
+    assertEquals("abcdef", textField.getRealText().toString());
+  }
+
+  @Test
+  public void testInsertWithWindowsStyleNewLine() {
+    expect(clipboard.get()).andReturn("abc\r\ndef");
+    replay(clipboard);
+
+    textField = new TextFieldLogic("", clipboard, new EmptyTextFieldView());
+    textField.put();
+    assertEquals("abcdef", textField.getRealText().toString());
+  }
 }
