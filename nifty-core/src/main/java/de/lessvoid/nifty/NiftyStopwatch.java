@@ -8,9 +8,6 @@ public class NiftyStopwatch {
   private static Logger log = Logger.getLogger(NiftyStopwatch.class.getName());
   private static Stack<Long> stack = new Stack<Long>();
 
-  {
-  }
-
   public static void start() {
     stack.push(now());
   }

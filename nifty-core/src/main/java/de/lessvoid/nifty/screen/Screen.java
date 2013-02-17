@@ -691,7 +691,7 @@ public class Screen {
     }
 
     public void perform() {
-      log.info("onEndScreen has ended - schedule further processing as end of frame action");
+      log.fine("onEndScreen has ended - schedule further processing as end of frame action");
       nifty.scheduleEndOfFrameElementAction(Screen.this, null, new EndOfScreenAction(), additionalEndNotify);
     }
   }
@@ -757,7 +757,7 @@ public class Screen {
   }
 
   void onEndScreenHasEnded() {
-    log.info("onEndScreenHasEnded()");
+    log.fine("onEndScreenHasEnded()");
 
     nifty.unsubscribeAnnotations(screenController);
     nifty.unsubscribeScreen(this);

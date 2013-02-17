@@ -171,7 +171,7 @@ public class LwjglInitHelper {
       if (extensions != null) {
         String[] ext = extensions.split(" ");
         for (int i = 0; i < ext.length; i++) {
-          log.fine("opengl extensions: " + ext[i]);
+          log.finer("opengl extensions: " + ext[i]);
         }
       }
 
