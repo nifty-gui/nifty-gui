@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.render;
 
+import java.util.Collection;
+
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
@@ -273,4 +275,21 @@ public interface NiftyRenderEngine {
    */
   void screenEnded(Screen screen);
 
+  /**
+   * All screens are about to be removed because a new XML is being loaded.
+   * @param screens the collection of Screens that will be removed 
+   */
+  void screensClear(Collection<Screen> screens);
+
+  /**
+   * The given Screen has been added.
+   * @param screen the added Screen
+   */
+  void screenAdded(Screen screen);
+
+  /**
+   * The given Screen has been removed.
+   * @param screen the removed Screen
+   */
+  void screenRemoved(Screen screen);
 }

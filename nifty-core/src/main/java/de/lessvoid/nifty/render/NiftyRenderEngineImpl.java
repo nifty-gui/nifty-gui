@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.render;
 
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.Hashtable;
 import java.util.Map;
@@ -885,5 +886,23 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   @Override
   public void screenEnded(final Screen screen) {
     imageManager.unloadScreenImages(screen);
+  }
+
+  @Override
+  public void screensClear(final Collection<Screen> screens) {
+    for (Screen screen : screens) {
+      imageManager.unloadScreenImages(screen);
+      imageManager.screenRemoved(screen);
+    }
+  }
+
+  @Override
+  public void screenAdded(final Screen screen) {
+    imageManager.screenAdded(screen);
+  }
+
+  @Override
+  public void screenRemoved(final Screen screen) {
+    imageManager.screenRemoved(screen);
   }
 }

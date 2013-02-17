@@ -84,6 +84,7 @@ public class NiftyImageManager {
       return;
     }
 
+    log.fine(">>> uploadScreenImages [" + screen.getScreenId() + "] start");
     NiftyStopwatch.start();
 
     for (ReferencedCountedImage image : imageList) {
@@ -92,10 +93,10 @@ public class NiftyImageManager {
 
     long time = NiftyStopwatch.stop();
     if (log.isLoggable(Level.FINE)) {
-      log.fine("{" + String.format("%d", time) + " ms} uploadScreenImages for [" + screen.getScreenId() + "]");
+      log.fine("{" + String.format("%d", time) + " ms} <<< uploadScreenImages [" + screen.getScreenId() + "]");
     }
     if (log.isLoggable(Level.FINER)) {
-      log.finer("{" + String.format("%d", time) + " ms} uploadScreenImages for [" + screen.getScreenId() + "] " + getInfoString());
+      log.finer("{" + String.format("%d", time) + " ms} <<< uploadScreenImages [" + screen.getScreenId() + "] " + getInfoString());
     }
   }
 
@@ -104,6 +105,7 @@ public class NiftyImageManager {
       return;
     }
 
+    log.fine(">>> unloadScreenImages [" + screen.getScreenId() + "] start");
     NiftyStopwatch.start();
 
     ((BatchRenderDevice) renderDevice).resetTextureAtlas();
@@ -115,13 +117,27 @@ public class NiftyImageManager {
 
     long time = NiftyStopwatch.stop();
     if (log.isLoggable(Level.FINE)) {
-      log.fine("{" + String.format("%d", time) + " ms} unloadScreenImages for [" + screen.getScreenId() + "]");
+      log.fine("{" + String.format("%d", time) + " ms} <<< unloadScreenImages [" + screen.getScreenId() + "]");
     }
     if (log.isLoggable(Level.FINER)) {
-      log.finer("{" + String.format("%d", time) + " ms} unloadScreenImages for [" + screen.getScreenId() + "] " + getInfoString());
+      log.finer("{" + String.format("%d", time) + " ms} <<< unloadScreenImages [" + screen.getScreenId() + "] " + getInfoString());
     }
 
     currentScreen = null;
+  }
+
+  public void screenAdded(final Screen screen) {
+    if (log.isLoggable(Level.FINER)) {
+      log.finer("screenAdded [" + screen.getScreenId() + "] " + getInfoString());
+    }
+  }
+
+  public void screenRemoved(final Screen screen) {
+    screenRef.remove(screen.getScreenId());
+
+    if (log.isLoggable(Level.FINER)) {
+      log.finer("screenRemoved [" + screen.getScreenId() + "] " + getInfoString());
+    }
   }
 
   public RenderImage reload(final RenderImage image) {
@@ -215,25 +231,16 @@ public class NiftyImageManager {
     public void upload() {
       BatchRenderImage batchRenderImage = (BatchRenderImage) renderImage;
       batchRenderImage.upload();
-      if (log.isLoggable(Level.FINER)) {
-        log.finer("[" + screen.getScreenId() + "][" + filename + "] uploaded (texture atlas)");
-      }
     }
 
     public void unload() {
       BatchRenderImage batchRenderImage = (BatchRenderImage) renderImage;
       batchRenderImage.unload();
-      if (log.isLoggable(Level.FINER)) {
-        log.finer("[" + screen.getScreenId() + "][" + filename + "] unloaded (texture atlas)");
-      }
     }
 
     public void markAsUnloaded() {
       BatchRenderImage batchRenderImage = (BatchRenderImage) renderImage;
       batchRenderImage.markAsUnloaded();
-      if (log.isLoggable(Level.FINER)) {
-        log.finer("[" + screen.getScreenId() + "][" + filename + "] marked unloaded (texture atlas)");
-      }
     }
 
     public RenderImage reload() {

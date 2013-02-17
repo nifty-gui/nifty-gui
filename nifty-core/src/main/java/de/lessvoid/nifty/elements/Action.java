@@ -2,6 +2,6 @@ package de.lessvoid.nifty.elements;
 
 import de.lessvoid.nifty.screen.Screen;
 
-interface Action {
+public interface Action {
   void perform(Screen screen, Element element);
 }

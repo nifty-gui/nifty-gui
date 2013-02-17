@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.effects;
 
+import java.util.Collection;
+
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
@@ -249,5 +251,17 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
 
   @Override
   public void screenEnded(final Screen screen) {
+  }
+
+  @Override
+  public void screensClear(final Collection<Screen> screens) {
+  }
+
+  @Override
+  public void screenAdded(final Screen screen) {
+  }
+
+  @Override
+  public void screenRemoved(final Screen screen) {
   }
 }
