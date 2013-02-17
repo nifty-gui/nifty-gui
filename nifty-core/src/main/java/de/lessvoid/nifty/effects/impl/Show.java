@@ -23,7 +23,7 @@ public class Show implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    Logger.getAnonymousLogger().info("show [" + targetElement + "]");
+    Logger.getAnonymousLogger().fine("show [" + targetElement + "]");
     if (targetElement != null) {
       targetElement.show();
     } else {

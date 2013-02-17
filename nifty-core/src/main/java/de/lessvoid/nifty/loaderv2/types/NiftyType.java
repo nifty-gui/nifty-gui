@@ -72,21 +72,21 @@ public class NiftyType extends XmlBaseType {
   public void create(final Nifty nifty, final TimeProvider timeProvider) {
     StopWatch stopWatch = new StopWatch(timeProvider);
     stopWatch.start();
-    log.info("debug out [" + stopWatch.stop() + "]");
+    log.fine("debug out [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (ResourceBundleType resourceBundle : resourceBundles) {
       resourceBundle.translateSpecialValues(nifty, null);
       resourceBundle.materialize(nifty);
     }
-    log.info("resourceBundles [" + stopWatch.stop() + "]");
+    log.fine("resourceBundles [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (StyleType style : styles) {
       style.translateSpecialValues(nifty, null);
       nifty.registerStyle(style);
     }
-    log.info("registerStyle [" + stopWatch.stop() + "]");
+    log.fine("registerStyle [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (ControlDefinitionType controlDefintion : controlDefinitions) {
@@ -94,49 +94,49 @@ public class NiftyType extends XmlBaseType {
       controlDefintion.makeFlat();
       nifty.registerControlDefintion(controlDefintion);
     }
-    log.info("registerControlDefinition [" + stopWatch.stop() + "]");
+    log.fine("registerControlDefinition [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (RegisterEffectType registerEffectType : registeredEffect) {
       registerEffectType.translateSpecialValues(nifty, null);
       nifty.registerEffect(registerEffectType);
     }
-    log.info("registerEffect [" + stopWatch.stop() + "]");
+    log.fine("registerEffect [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (RegisterSoundType registerSoundType : registeredSounds) {
       registerSoundType.translateSpecialValues(nifty, null);
       registerSoundType.materialize(nifty.getSoundSystem());
     }
-    log.info("registerSound [" + stopWatch.stop() + "]");
+    log.fine("registerSound [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (RegisterMusicType registerMusicType : registeredMusic) {
       registerMusicType.translateSpecialValues(nifty, null);
       registerMusicType.materialize(nifty.getSoundSystem());
     }
-    log.info("registerMusic [" + stopWatch.stop() + "]");
+    log.fine("registerMusic [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (RegisterMouseCursorType registerMouseCursorType : registeredMouseCursor) {
       registerMouseCursorType.translateSpecialValues(nifty, null);
       registerMouseCursorType.materialize(nifty, log);
     }
-    log.info("registerMouseCursor [" + stopWatch.stop() + "]");
+    log.fine("registerMouseCursor [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (PopupType popup : popups) {
       popup.translateSpecialValues(nifty, null);
       nifty.registerPopup(popup);
     }
-    log.info("registerPopup [" + stopWatch.stop() + "]");
+    log.fine("registerPopup [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (ScreenType screen : screens) {
       screen.translateSpecialValues(nifty, null);
       screen.create(nifty, this, timeProvider);
     }
-    log.info("create Screens [" + stopWatch.stop() + "]");
+    log.fine("create Screens [" + stopWatch.stop() + "]");
   }
 
   public void loadStyles(final NiftyLoader niftyLoader, final Nifty nifty) throws Exception {

@@ -156,14 +156,14 @@ public class Nifty {
       }
       result = out.toString("ISO-8859-1");
     } catch (Exception e) {
-      log.log(Level.SEVERE, "unable to read version file from classpath", e);
+      log.log(Level.WARNING, "unable to read version file from classpath", e);
     } finally {
       try {
         if (stream != null) {
           stream.close();
         }
       } catch (IOException e) {
-        log.log(Level.SEVERE, "unable to close version file from classpath stream. this is a bit odd", e);
+        log.log(Level.WARNING, "unable to close version file from classpath stream. this is a bit odd", e);
       }
     }
     return result;
@@ -210,10 +210,10 @@ public class Nifty {
       Class.forName("java.awt.datatransfer.Clipboard");
       clipboard = new ClipboardAWT();
     } catch (ClassNotFoundException e) {
-      log.info("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
+      log.warning("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
       clipboard = new ClipboardNull();
     } catch (Throwable e) {
-      log.info("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
+      log.warning("unable to access class 'java.awt.datatransfer.Clipboard'. clipboard will be disabled.");
       clipboard = new ClipboardNull();
     }
   }
@@ -249,7 +249,7 @@ public class Nifty {
     }
     ClassSaveEventTopicSubscriber theSubscriber = new ClassSaveEventTopicSubscriber(elementId, subscriber, eventClass);
     getEventService().subscribeStrongly(elementId, theSubscriber);
-    log.info("-> subscribe [" + elementId + "] screen [" + screen + "] -> [" + theSubscriber + "(" + subscriber + "),(" + eventClass + ")]");
+    log.fine("-> subscribe [" + elementId + "] screen [" + screen + "] -> [" + theSubscriber + "(" + subscriber + "),(" + eventClass + ")]");
 
     subscriberRegister.register(screen, elementId, theSubscriber);
   }
@@ -262,7 +262,7 @@ public class Nifty {
         return;
       }
       getEventService().unsubscribe(elementId, (EventTopicSubscriber<?>) object);
-      log.info("<- unsubscribe [" + elementId + "] -> [" + object + "]");
+      log.fine("<- unsubscribe [" + elementId + "] -> [" + object + "]");
     }
   }
 
@@ -562,17 +562,17 @@ public class Nifty {
    * @param filename filename to load
    */
   void loadFromFile(final String filename) {
-    log.info("loadFromFile [" + filename + "]");
+    log.fine("loadFromFile [" + filename + "]");
 
     try {
       long start = timeProvider.getMsTime();
       NiftyType niftyType = loader.loadNiftyXml("nifty.nxs", getResourceAsStream(filename), this);
       niftyType.create(this, timeProvider);
-      if (log.isLoggable(Level.INFO)) {
-        log.info(niftyType.output());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(niftyType.output());
       }
       long end = timeProvider.getMsTime();
-      log.info("loadFromFile took [" + (end - start) + "]");
+      log.fine("loadFromFile took [" + (end - start) + "]");
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -583,17 +583,17 @@ public class Nifty {
    * @param stream stream to load
    */
   void loadFromStream(final InputStream stream) {
-    log.info("loadFromStream []");
+    log.fine("loadFromStream []");
 
     try {
       long start = timeProvider.getMsTime();
       NiftyType niftyType = loader.loadNiftyXml("nifty.nxs", stream, this);
       niftyType.create(this, timeProvider);
-      if (log.isLoggable(Level.INFO)) {
-        log.info(niftyType.output());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(niftyType.output());
       }
       long end = timeProvider.getMsTime();
-      log.info("loadFromStream took [" + (end - start) + "]");
+      log.fine("loadFromStream took [" + (end - start) + "]");
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -618,11 +618,11 @@ public class Nifty {
    */
   public void gotoScreen(final String id) {
     if (gotoScreenInProgess) {
-      log.info("gotoScreen [" + id + "] aborted because still in gotoScreenInProgress phase");
+      log.fine("gotoScreen [" + id + "] aborted because still in gotoScreenInProgress phase");
       return;
     }
 
-    log.info("gotoScreen [" + id + "]");
+    log.fine("gotoScreen [" + id + "]");
     gotoScreenInProgess = true;
 
     if (currentScreen.isNull()) {
@@ -643,7 +643,7 @@ public class Nifty {
    * @param id the new screen id we should go to.
    */
   private void gotoScreenInternal(final String id) {
-    log.info("gotoScreenInternal [" + id + "]");
+    log.fine("gotoScreenInternal [" + id + "]");
  
     // When someone calls nifty.closePopup() directly followed by a nifty.gotoScreen() the gotoScreen will now win and
     // we don't wait for the pending Popups to be closed. We'll simply remove the close Popup events since they would be
@@ -1205,9 +1205,9 @@ public class Nifty {
       NiftyType niftyType = new NiftyType();
       loader.loadStyleFile("nifty-styles.nxs", styleFile, niftyType, this);
       niftyType.create(this, getTimeProvider());
-      if (log.isLoggable(Level.INFO)) {
-        log.info("loadStyleFile");
-        log.info(niftyType.output());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("loadStyleFile");
+        log.fine(niftyType.output());
       }
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);
@@ -1219,9 +1219,9 @@ public class Nifty {
       NiftyType niftyType = new NiftyType();
       loader.loadControlFile("nifty-controls.nxs", controlFile, niftyType);
       niftyType.create(this, getTimeProvider());
-      if (log.isLoggable(Level.INFO)) {
-        log.info("loadControlFile");
-        log.info(niftyType.output());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("loadControlFile");
+        log.fine(niftyType.output());
       }
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);
@@ -1236,9 +1236,9 @@ public class Nifty {
       resourceBundle.getAttributes().set("filename", filename);
       niftyType.addResourceBundle(resourceBundle);
       niftyType.create(this, getTimeProvider());
-      if (log.isLoggable(Level.INFO)) {
-        log.info("registerResourceBundle");
-        log.info(niftyType.output());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("registerResourceBundle");
+        log.fine(niftyType.output());
       }
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);
@@ -1251,9 +1251,9 @@ public class Nifty {
       RegisterEffectType registerEffect = new RegisterEffectType(name, classParam);
       niftyType.addRegisterEffect(registerEffect);
       niftyType.create(this, getTimeProvider());
-      if (log.isLoggable(Level.INFO)) {
-        log.info("registerEffect");
-        log.info(niftyType.output());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("registerEffect");
+        log.fine(niftyType.output());
       }
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);
@@ -1268,9 +1268,9 @@ public class Nifty {
       registerSound.getAttributes().set("filename", filename);
       niftyType.addRegisterSound(registerSound);
       niftyType.create(this, getTimeProvider());
-      if (log.isLoggable(Level.INFO)) {
-        log.info("registerSound");
-        log.info(niftyType.output());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("registerSound");
+        log.fine(niftyType.output());
       }
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);
@@ -1285,9 +1285,9 @@ public class Nifty {
       registerMusic.getAttributes().set("filename", filename);
       niftyType.addRegisterMusic(registerMusic);
       niftyType.create(this, getTimeProvider());
-      if (log.isLoggable(Level.INFO)) {
-        log.info("registerMusic");
-        log.info(niftyType.output());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("registerMusic");
+        log.fine(niftyType.output());
       }
     } catch (Exception e) {
       log.warning(e.getMessage());
@@ -1512,7 +1512,7 @@ public class Nifty {
           for (int i=0; i<list.size(); i++) {
             ClassSaveEventTopicSubscriber subscriber = list.get(i);
             getEventService().unsubscribe(subscriber.getElementId(), subscriber);
-            log.info("<- unsubscribe screen for [" + screen + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
+            log.fine("<- unsubscribe screen for [" + screen + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
           }
           list.clear();
         }
@@ -1532,7 +1532,7 @@ public class Nifty {
           for (int i=0; i<list.size(); i++) {
             ClassSaveEventTopicSubscriber subscriber = list.get(i);
             getEventService().unsubscribe(subscriber.getElementId(), subscriber);
-            log.info("<- unsubscribe element [" + elementId + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
+            log.fine("<- unsubscribe element [" + elementId + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
           }
           list.clear();
         }

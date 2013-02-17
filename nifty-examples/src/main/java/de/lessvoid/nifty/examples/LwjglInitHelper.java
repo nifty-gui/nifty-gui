@@ -153,7 +153,7 @@ public class LwjglInitHelper {
         System.exit(-1);
       }
 
-      log.info(
+      log.fine(
           "Width: " + Display.getDisplayMode().getWidth()
           + ", Height: " + Display.getDisplayMode().getHeight()
           + ", Bits per pixel: " + Display.getDisplayMode().getBitsPerPixel()
@@ -161,15 +161,15 @@ public class LwjglInitHelper {
           + ", Title: " + Display.getTitle());
 
       // just output some infos about the system we're on
-      log.info("plattform: " + LWJGLUtil.getPlatformName());
-      log.info("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
-      log.info("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
-      log.info("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
+      log.fine("plattform: " + LWJGLUtil.getPlatformName());
+      log.fine("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
+      log.fine("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
+      log.fine("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
       String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
       if (extensions != null) {
         String[] ext = extensions.split(" ");
         for (int i = 0; i < ext.length; i++) {
-          log.fine("opengl extensions: " + ext[i]);
+          log.finer("opengl extensions: " + ext[i]);
         }
       }
 

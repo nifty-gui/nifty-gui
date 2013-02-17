@@ -23,7 +23,7 @@ public class Hide implements EffectImpl {
       final float normalizedTime,
       final Falloff falloff,
       final NiftyRenderEngine r) {
-    Logger.getAnonymousLogger().info("hide [" + targetElement + "]");
+    Logger.getAnonymousLogger().fine("hide [" + targetElement + "]");
     if (targetElement != null) {
       targetElement.hide();
     } else {

@@ -39,9 +39,9 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
       this.target = new Object[targetParam.length];
       System.arraycopy(targetParam, 0, target, 0, targetParam.length);
 
-      log.info("target objects for [" + methodWithName + "]");
+      log.fine("target objects for [" + methodWithName + "]");
       for (Object o : target) {
-        log.info(o.toString());
+        log.fine(o.toString());
       }
     }
   }

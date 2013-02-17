@@ -73,7 +73,7 @@ public class ScreenCreator {
     if (inputMappingClass != null) {
       NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
       if (!(screenController instanceof KeyInputHandler)) {
-        log.info("class [" + screenController + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
+        log.warning("class [" + screenController + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
       } else {
         screen.addKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
       }
@@ -84,7 +84,7 @@ public class ScreenCreator {
     if (inputMappingClass != null) {
       NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
       if (!(screenController instanceof KeyInputHandler)) {
-        log.info("class [" + screenController + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
+        log.warning("class [" + screenController + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
       } else {
         screen.addPreKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
       }

@@ -41,7 +41,7 @@ public class NiftyLoader {
       final Nifty nifty) throws Exception {
     try {
       long start = timeProvider.getMsTime();
-      log.info("loading new nifty xml file with schemaId [" + schemaId + "]");
+      log.fine("loading new nifty xml file with schemaId [" + schemaId + "]");
 
       XmlParser parser = new XmlParser(new MXParser());
       parser.read(inputStreamXml);
@@ -51,7 +51,7 @@ public class NiftyLoader {
       niftyType.loadControls(this);
 
       long end = timeProvider.getMsTime();
-      log.info("loaded nifty xml file with schemaId [" + schemaId + "] took [" + (end - start) + " ms]");
+      log.fine("loaded nifty xml file with schemaId [" + schemaId + "] took [" + (end - start) + " ms]");
 
       return niftyType;
     } finally {
@@ -65,7 +65,7 @@ public class NiftyLoader {
     validate(inputStreamXml);
 
     long end = timeProvider.getMsTime();
-    log.info("validating nifty xml took [" + (end - start) + " ms]");
+    log.fine("validating nifty xml took [" + (end - start) + " ms]");
 
     return true;
   }
@@ -97,7 +97,7 @@ public class NiftyLoader {
       final String styleFilename,
       final NiftyType niftyType,
       final Nifty nifty) throws Exception {
-    log.info("loading new nifty style xml file [" + styleFilename + "] with schemaId [" + schemaId + "]");
+    log.fine("loading new nifty style xml file [" + styleFilename + "] with schemaId [" + schemaId + "]");
 
     XmlParser parser = new XmlParser(new MXParser());
     InputStream stream = nifty.getResourceAsStream(styleFilename);
@@ -114,7 +114,7 @@ public class NiftyLoader {
       final String schemaId,
       final String controlFilename,
       final NiftyType niftyType) throws Exception {
-    log.info("loading new nifty controls xml file [" + controlFilename + "] with schemaId [" + schemaId + "]");
+    log.fine("loading new nifty controls xml file [" + controlFilename + "] with schemaId [" + schemaId + "]");
 
     XmlParser parser = new XmlParser(new MXParser());
     InputStream stream = nifty.getResourceAsStream(controlFilename);

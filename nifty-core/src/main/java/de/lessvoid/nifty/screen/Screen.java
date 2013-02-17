@@ -72,7 +72,7 @@ public class Screen {
     screenId = newId;
     screenController = newScreenController;
     if (screenController == null) {
-      log.info("Missing ScreenController for screen [" + newId + "] using DefaultScreenController() instead but this might not be what you want.");
+      log.warning("Missing ScreenController for screen [" + newId + "] using DefaultScreenController() instead but this might not be what you want.");
       screenController = new DefaultScreenController();
     }
     timeProvider = newTimeProvider;
@@ -655,7 +655,7 @@ public class Screen {
     }
 
     public void perform() {
-      log.info("onStartScreen has ended");
+      log.fine("onStartScreen has ended");
 
       if (additionalEndNotify != null) {
         additionalEndNotify.perform();
@@ -677,7 +677,7 @@ public class Screen {
     }
 
     public void perform() {
-      log.info("onEndScreen has ended - schedule further processing as end of frame action");
+      log.fine("onEndScreen has ended - schedule further processing as end of frame action");
       nifty.scheduleEndOfFrameElementAction(Screen.this, null, new EndOfScreenAction(), additionalEndNotify);
     }
   }
@@ -743,7 +743,7 @@ public class Screen {
   }
 
   void onEndScreenHasEnded() {
-    log.info("onEndScreenHasEnded()");
+    log.fine("onEndScreenHasEnded()");
 
     nifty.unsubscribeAnnotations(screenController);
     nifty.unsubscribeScreen(this);

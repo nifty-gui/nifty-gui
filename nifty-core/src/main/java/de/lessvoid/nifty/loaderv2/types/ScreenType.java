@@ -49,7 +49,7 @@ public class ScreenType extends XmlBaseType {
     if (inputMappingClass != null) {
       NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
       if (!(screenController instanceof KeyInputHandler)) {
-        log.info("class [" + controller + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
+        log.warning("class [" + controller + "] tries to use inputMapping [" + inputMappingClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
       } else {
         screen.addKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
       }
@@ -58,7 +58,7 @@ public class ScreenType extends XmlBaseType {
     if (inputMappingPreClass != null) {
       NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingPreClass, NiftyInputMapping.class);
       if (!(screenController instanceof KeyInputHandler)) {
-        log.info("class [" + controller + "] tries to use inputMapping [" + inputMappingPreClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
+        log.warning("class [" + controller + "] tries to use inputMapping [" + inputMappingPreClass + "] but does not implement [" + KeyInputHandler.class.getName() + "]");
       } else {
         screen.addPreKeyboardInputHandler(inputMapping, KeyInputHandler.class.cast(screenController));
       }
@@ -72,7 +72,7 @@ public class ScreenType extends XmlBaseType {
     for (LayerType layerType : layers) {
       layerType.prepare(nifty, screen, rootElement.getElementType());
     }
-    Logger.getLogger(NiftyLoader.class.getName()).info("internal prepare screen (" + id + ") [" + stopWatch.stop() + "]");
+    Logger.getLogger(NiftyLoader.class.getName()).fine("internal prepare screen (" + id + ") [" + stopWatch.stop() + "]");
 
     stopWatch.start();
     for (LayerType layerType : layers) {
@@ -84,7 +84,7 @@ public class ScreenType extends XmlBaseType {
               screen,
               layerLayout));
     }
-    Logger.getLogger(NiftyLoader.class.getName()).info("internal create screen (" + id + ") [" + stopWatch.stop() + "]");
+    Logger.getLogger(NiftyLoader.class.getName()).fine("internal create screen (" + id + ") [" + stopWatch.stop() + "]");
 
     screen.processAddAndRemoveLayerElements();
     nifty.addScreen(id, screen);

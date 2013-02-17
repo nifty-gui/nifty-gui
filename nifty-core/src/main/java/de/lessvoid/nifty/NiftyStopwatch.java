@@ -8,10 +8,6 @@ public class NiftyStopwatch {
   private static Logger log = Logger.getLogger(NiftyStopwatch.class.getName());
   private static Stack<Long> stack = new Stack<Long>();
 
-  {
-    System.out.println("init: " + log);
-  }
-
   public static void start() {
     stack.push(now());
   }
@@ -22,7 +18,7 @@ public class NiftyStopwatch {
     for (int i=0; i<stack.size(); i++) {
       b.append(".");
     }
-    log.info("[" + String.format("%04d", length) + "] " + b + message);
+    log.fine("[" + String.format("%04d", length) + "] " + b + message);
   }
 
   public static long stop() {
