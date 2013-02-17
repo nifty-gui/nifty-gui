@@ -69,7 +69,7 @@ public class ControlsDemo<T> implements NiftyExample {
     Nifty nifty;
     if (useBatchedRenderer) {
       BatchRenderDevice renderDevice = new BatchRenderDevice(new LwjglBatchRenderBackend(), 2048, 2048);
-      //renderDevice.enableLogFPS();
+      renderDevice.enableLogFPS();
 
       nifty = new Nifty(
           renderDevice,
