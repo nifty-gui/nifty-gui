@@ -140,9 +140,9 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       initialData = BufferUtils.createByteBuffer(width*height*4);
       for (int i=0; i<width*height; i++) {
         initialData.put((byte) 0x00);
+        initialData.put((byte) 0xff);
         initialData.put((byte) 0x00);
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0x00);
+        initialData.put((byte) 0xff);
       }
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);

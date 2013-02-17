@@ -92,4 +92,8 @@ public class BatchRenderImage implements RenderImage {
     uploaded = false;
     log.finer("image [" + filename + "] marked as unloaded (texture atlas)");
   }
+
+  public String toString() {
+    return super.toString() + " {" + filename + "}";
+  }
 }

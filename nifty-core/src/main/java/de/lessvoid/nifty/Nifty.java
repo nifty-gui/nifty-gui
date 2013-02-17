@@ -53,6 +53,7 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyMouseImpl;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.NiftyRenderEngineImpl;
+import de.lessvoid.nifty.screen.EndOfScreenAction;
 import de.lessvoid.nifty.screen.NullScreen;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -603,6 +604,7 @@ public class Nifty {
    * @param xmlId xml id
    */
   void prepareScreens(final String xmlId) {
+    renderEngine.screensClear(screens.values());
     screens.clear();
 
     // this.currentScreen = null;
@@ -721,6 +723,7 @@ public class Nifty {
 
   private void removeScreenInternal(final String id) {
     Screen screen = screens.remove(id);
+    renderEngine.screenRemoved(screen);
     if (screen == null ||
         screen.getLayerElements() == null ||
         screen.getLayerElements().size() == 0) {
@@ -1030,6 +1033,10 @@ public class Nifty {
     endOfFrameElementActions.add(new EndOfFrameElementAction(screen, elementToMove, new ElementMoveAction(destination), endNotify));
   }
 
+  public void scheduleEndOfFrameElementAction(final Screen screen, final Element element, final EndOfScreenAction action, final EndNotify endNotify) {
+    endOfFrameElementActions.add(new EndOfFrameElementAction(screen, element, action, endNotify));
+  }
+
   /**
    * @return the mouseInputEventQueue
    */
@@ -1090,6 +1097,7 @@ public class Nifty {
 
   public void addScreen(final String id, final Screen screen) {
     screens.put(id, screen);
+    renderEngine.screenAdded(screen);
   }
 
   public void registerStyle(final StyleType style) {
