@@ -9,7 +9,7 @@ import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
 /**
- * NiftyRenderEngine interface.
+ * NiftyRenderEngine interface. This is considered a private API. Use methods on the main Nifty instance instead.
  * @author void
  */
 public interface NiftyRenderEngine {
@@ -62,7 +62,10 @@ public interface NiftyRenderEngine {
   void clear();
 
   /**
-   * Create a new Image.
+   * Create a new Image. Attention: use nifty.createImage() instead! This method has changed in Nifty 1.3.3 - sorry :)
+   * You should probably never need to call methods on the NiftyRenderEngine directly though.
+   *
+   * @param screen the Screen this image is connected to
    * @param name file name to use
    * @param filterLinear filter
    * @return RenderImage instance
