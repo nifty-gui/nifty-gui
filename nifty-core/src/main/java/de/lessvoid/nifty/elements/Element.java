@@ -2506,6 +2506,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @param key the key for the requested user data
    * @return
    */
+  @SuppressWarnings("unchecked")
   public <T> T getUserData(String key) {
     if (userData == null) {
       return null;
@@ -2520,7 +2521,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     if (userData != null) {
       return userData.keySet();
     }
-    return Collections.EMPTY_SET;
+    return Collections.emptySet();
   }
 
 }

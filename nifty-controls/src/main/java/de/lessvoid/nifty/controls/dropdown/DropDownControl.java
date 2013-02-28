@@ -34,6 +34,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   private Element popup;
   private ListBox<T> listBox;
 
+  @SuppressWarnings("unchecked")
   @Override
   public void bind(
       final Nifty niftyParam,
@@ -76,11 +77,10 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   }
 
   @Override
-  @SuppressWarnings("rawtypes")
   public void onStartScreen() {
     updateEnabled();
 
-    ListBoxControl listBoxControl = (ListBoxControl) listBox;
+    ListBoxControl<T> listBoxControl = (ListBoxControl<T>) listBox;
     listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), getSelection());
 
     nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,

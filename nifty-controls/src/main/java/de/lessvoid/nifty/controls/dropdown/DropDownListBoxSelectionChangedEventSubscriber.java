@@ -51,7 +51,7 @@ public class DropDownListBoxSelectionChangedEventSubscriber implements EventTopi
     }
   }
 
-  private int getSelectedIndex(final ListBoxSelectionChangedEvent data) {
+  private int getSelectedIndex(final ListBoxSelectionChangedEvent<?> data) {
     int selectedItemIndex = -1;
     List<Integer> selectionIndices = data.getSelectionIndices();
     if (!selectionIndices.isEmpty()) {

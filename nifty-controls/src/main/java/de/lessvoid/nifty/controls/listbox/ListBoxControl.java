@@ -78,6 +78,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     itemProcessors.add(new ListBoxItemProcessor() {
       @Override
       public void processElement(final Element element) {
+        @SuppressWarnings("unchecked")
         final ListBoxItemController<T> listBoxItemController = element.getControl(ListBoxItemController.class);
         if (listBoxItemController != null) {
           listBoxItemController.setListBox(listBoxImpl);
@@ -641,6 +642,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void connectListBoxAndListBoxPanel() {
+    @SuppressWarnings("unchecked")
     ListBoxPanel<T> listBoxPanel = listBoxPanelElement.getControl(ListBoxPanel.class);
     listBoxPanel.setListBox(listBoxImpl);
   }
@@ -658,6 +660,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void handleElementFocus(final int index, final int focusElement) {
+    @SuppressWarnings("unchecked")
     ListBoxPanel<T> listBoxPanel = listBoxPanelElement.getControl(ListBoxPanel.class);
     if (listBoxPanel.hasFocus()) {
       if (focusElement == index) {
@@ -671,6 +674,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void setListBoxItemIndex(final int itemIndex) {
+    @SuppressWarnings("unchecked")
     ListBoxItemController<T> listBoxItemController = labelElements[itemIndex].getControl(ListBoxItemController.class);
     if (listBoxItemController != null) {
       listBoxItemController.setItemIndex(itemIndex);
