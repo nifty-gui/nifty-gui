@@ -49,6 +49,7 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
     getListBox().addItemProcessor(new ListBoxItemProcessor() {
       @Override
       public void processElement(final Element element) {
+        @SuppressWarnings("unchecked")
         final TreeBoxItemController<T> listBoxItemController = element.getControl(TreeBoxItemController.class);
         if (listBoxItemController != null) {
           listBoxItemController.setParentControl(TreeBoxControl.this);
