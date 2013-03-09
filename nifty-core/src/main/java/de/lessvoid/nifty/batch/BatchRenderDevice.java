@@ -21,6 +21,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.ColorValueParser;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
@@ -54,8 +55,6 @@ public class BatchRenderDevice implements RenderDevice {
   private int completeClippedCounter;
 
   private final BitmapFontFactory factory;
-  private final Color textColor = new Color(0.f, 0.f, 0.f, 0.f);
-
   private final BatchRenderBackend renderBackend;
   private TextureAtlasGenerator generator;
   private Color fontColor = new Color("#f00");
@@ -526,7 +525,10 @@ public class BatchRenderDevice implements RenderDevice {
 
   private class FontRenderer implements BitmapFontRenderer {
     private final Map<String, BitmapInfo> textureInfos = new HashMap<String, BitmapInfo>();
+    private final ColorValueParser colorValueParser = new ColorValueParser();
     private BatchRenderDevice batchRenderDevice;
+    private final Color textColor = Color.BLACK;
+    private boolean hasColor;
 
     public FontRenderer(final BatchRenderDevice batchRenderDevice) {
       this.batchRenderDevice = batchRenderDevice;
@@ -571,6 +573,26 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     @Override
+    public int preProcess(final String text, final int offset) {
+      hasColor = false;
+      int index = offset;
+      colorValueParser.isColor(text, index);
+      while (colorValueParser.isColor()) {
+        textColor.setRed(colorValueParser.getColor().getRed());
+        textColor.setGreen(colorValueParser.getColor().getGreen());
+        textColor.setBlue(colorValueParser.getColor().getBlue());
+        textColor.setAlpha(colorValueParser.getColor().getAlpha());
+        hasColor = true;
+        index = colorValueParser.getNextIndex();
+        if (index >= text.length()) {
+          return index;
+        }
+        colorValueParser.isColor(text, index);
+      }
+      return index;
+    }
+
+    @Override
     public void render(
         final String bitmapId,
         final int x,
@@ -582,10 +604,12 @@ public class BatchRenderDevice implements RenderDevice {
         final float g,
         final float b,
         final float a) {
-      textColor.setRed(r);
-      textColor.setGreen(g);
-      textColor.setBlue(b);
-      textColor.setAlpha(a);
+      if (!hasColor) {
+        textColor.setRed(r);
+        textColor.setGreen(g);
+        textColor.setBlue(b);
+        textColor.setAlpha(a);
+      }
       textureInfos.get(bitmapId).renderCharacter(c, x, y, sx, sy, textColor);
     }
 
