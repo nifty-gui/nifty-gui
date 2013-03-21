@@ -1,5 +1,15 @@
 package de.lessvoid.nifty.examples;
 
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glViewport;
+
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,9 +20,11 @@ import java.util.logging.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
+import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 import de.lessvoid.nifty.Nifty;
@@ -52,13 +64,17 @@ public class LwjglInitHelper {
    * @return true on success and false otherwise
    */
   public static boolean initSubSystems(final String title) {
+    return initSubSystems(title, false);
+  }
+
+  public static boolean initSubSystems(final String title, final boolean useCoreProfile) {
     try {
       LoggerShortFormat.intialize();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
 
-    if (!LwjglInitHelper.initGraphics(title)) {
+    if (!LwjglInitHelper.initGraphics(title, useCoreProfile)) {
       return false;
     }
 
@@ -75,7 +91,7 @@ public class LwjglInitHelper {
    * @param title title of window
    * @return true on success and false otherwise
    */
-  private static boolean initGraphics(final String title) {
+  private static boolean initGraphics(final String title, final boolean enableCoreProfile) {
     int width = 1920;
     int height = 1200;
     try {
@@ -144,7 +160,11 @@ public class LwjglInitHelper {
       // Create the actual window
       try {
         Display.setFullscreen(false);
-        Display.create();
+        if (enableCoreProfile) {
+          Display.create(new PixelFormat(), new ContextAttribs(3, 2).withProfileCore(true));
+        } else {
+          Display.create();
+        }
         Display.setVSyncEnabled(false);
         Display.setTitle(title);
       } catch (Exception e) {
@@ -173,20 +193,26 @@ public class LwjglInitHelper {
         }
       }
 
-      IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
-      GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
-      int viewportWidth = viewportBuffer.get(2);
-      int viewportHeight = viewportBuffer.get(3);
+      if (enableCoreProfile) {
+        glViewport(0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
 
-//      GL11.glViewport(0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
-      GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, viewportWidth, viewportHeight, 0, -9999, 9999);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      } else {
+        IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+        GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
+        int viewportWidth = viewportBuffer.get(2);
+        int viewportHeight = viewportBuffer.get(3);
 
-      GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity();
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+          GL11.glLoadIdentity();
+          GL11.glOrtho(0, viewportWidth, viewportHeight, 0, -9999, 9999);
 
-        // Prepare Rendermode
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+          GL11.glLoadIdentity();
+
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
@@ -200,6 +226,7 @@ public class LwjglInitHelper {
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
+      }
 
       return true;
     } catch (LWJGLException e) {
