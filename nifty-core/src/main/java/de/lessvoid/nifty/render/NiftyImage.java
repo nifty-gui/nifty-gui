@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.render;
 
+import de.lessvoid.nifty.batch.BatchRenderImage;
 import de.lessvoid.nifty.render.image.ImageMode;
 import de.lessvoid.nifty.render.image.ImageModeFactory;
 import de.lessvoid.nifty.spi.render.RenderImage;
@@ -75,6 +76,24 @@ public class NiftyImage {
   public void reload() {
     image = niftyRenderEngine.reload(image);
 
+  }
+
+  /**
+   * This is a special method for the batched renderer. If you use the batched renderer and you have changed the
+   * content of the backing texture through some external mechanism (external to Nifty that is, f.i. through jme3)
+   * Nifty does not know about your change. In case of the batched renderer this is unfortunate since your modified
+   * texture will never be uploaded to the texture atlas in this case.
+   *
+   * This method allows you to trigger that upload manual by marking this NiftyImage as unloaded Nifty will
+   * automatically upload it the next time this NiftyImage is accessed. So you would change the backing texture and
+   * then call this method to notify Nifty of your change.
+   */
+  public void markBatchRenderImageAsUnloaded() {
+    if (!(image instanceof BatchRenderImage)) {
+      return;
+    }
+    BatchRenderImage batchRenderImage = (BatchRenderImage) image;
+    batchRenderImage.markAsUnloaded();
   }
 
   /**
