@@ -176,12 +176,17 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       return new ImageImpl(width, height, image);
     } catch (Exception e) {
       log.log(Level.WARNING, "problems loading image [" + filename + "]", e);
-      return null;
+      return new ImageImpl(0, 0, null);
     }
   }
 
   @Override
   public void addImageToTexture(final Image image, final int x, final int y) {
+    ImageImpl imageImpl = (ImageImpl) image;
+    if (imageImpl.getWidth() == 0 ||
+        imageImpl.getHeight() == 0) {
+      return;
+    }
     GL11.glTexSubImage2D(
         GL11.GL_TEXTURE_2D,
         0,
@@ -191,7 +196,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
         image.getHeight(),
         GL11.GL_RGBA, 
         GL11.GL_UNSIGNED_BYTE,
-        ((ImageImpl) image).byteBuffer);
+        imageImpl.byteBuffer);
   }
 
   @Override
@@ -459,7 +464,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
         GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ZERO);
       }
 
-      vertexBuffer.rewind();
+      vertexBuffer.flip();
       vertexBuffer.position(0);
       GL11.glVertexPointer(2, 8*4, vertexBuffer);
 

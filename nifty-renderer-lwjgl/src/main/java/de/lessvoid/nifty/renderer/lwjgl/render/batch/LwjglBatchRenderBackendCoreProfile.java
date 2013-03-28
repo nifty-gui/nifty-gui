@@ -8,7 +8,6 @@ import static org.lwjgl.opengl.GL31.glPrimitiveRestartIndex;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -198,12 +197,17 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       return new ImageImpl(width, height, image);
     } catch (Exception e) {
       log.log(Level.WARNING, "problems loading image [" + filename + "]", e);
-      return null;
+      return new ImageImpl(0, 0, null);
     }
   }
 
   @Override
   public void addImageToTexture(final Image image, final int x, final int y) {
+    ImageImpl imageImpl = (ImageImpl) image;
+    if (imageImpl.getWidth() == 0 ||
+        imageImpl.getHeight() == 0) {
+      return;
+    }
     GL11.glTexSubImage2D(
         GL11.GL_TEXTURE_2D,
         0,
@@ -213,7 +217,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
         image.getHeight(),
         GL11.GL_RGBA, 
         GL11.GL_UNSIGNED_BYTE,
-        ((ImageImpl) image).byteBuffer);
+        imageImpl.byteBuffer);
   }
 
   @Override
@@ -254,6 +258,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       Batch batch = batches.get(i);
       batch.render();
     }
+
     glDisable(GL_PRIMITIVE_RESTART);
 
     return batches.size();
@@ -400,17 +405,15 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     private final CoreVAO vao;
     private final CoreVBO vbo;
     private final CoreElementVBO elementVbo;
-    private FloatBuffer vertexBuffer;
     private int globalIndex;
     private int indexCount;
-    private IntBuffer indexBuffer;
 
     private Batch() {
       vao = new CoreVAO();
       vao.bind();
 
-      elementVbo = CoreElementVBO.createStream(new int[SIZE/4]);
-      indexBuffer = elementVbo.getBuffer();
+      elementVbo = CoreElementVBO.createStream(new int[SIZE]);
+      elementVbo.bind();
 
       vbo = CoreVBO.createStream(new float[SIZE]);
       vbo.bind();
@@ -428,9 +431,9 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     public void begin(final BlendMode blendMode) {
       vao.bind();
       vbo.bind();
-      vbo.getBuffer().rewind();
-      vertexBuffer = vbo.getBuffer();
-      indexBuffer.rewind();
+      vbo.getBuffer().clear();
+      elementVbo.bind();
+      elementVbo.getBuffer().clear();
       primitiveCount = 0;
       globalIndex = 0;
       indexCount = 0;
@@ -449,9 +452,11 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       }
 
       vao.bind();
-      vbo.getBuffer().rewind();
+      vbo.getBuffer().flip();
+      vbo.bind();
       vbo.send();
-      elementVbo.getBuffer().rewind();
+      elementVbo.getBuffer().flip();
+      elementVbo.bind();
       elementVbo.send();
       CoreRender.renderTriangleStripIndexed(indexCount);
     }
@@ -519,8 +524,8 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
       indexCount += 5;
 
-      vertexBuffer.put(primitiveBuffer);
-      indexBuffer.put(elementIndexBuffer);
+      vbo.getBuffer().put(primitiveBuffer);
+      elementVbo.getBuffer().put(elementIndexBuffer);
       primitiveCount++;
     }
   }
