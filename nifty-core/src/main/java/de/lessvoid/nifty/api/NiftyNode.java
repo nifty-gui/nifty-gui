@@ -5,6 +5,7 @@ import de.lessvoid.nifty.internal.InternalLayoutAbsolute;
 import de.lessvoid.nifty.internal.InternalLayoutAbsolute.KeepInsidePostProcess;
 import de.lessvoid.nifty.internal.InternalLayoutCenter;
 import de.lessvoid.nifty.internal.InternalLayoutHorizontal;
+import de.lessvoid.nifty.internal.InternalLayoutNone;
 import de.lessvoid.nifty.internal.InternalLayoutOverlay;
 import de.lessvoid.nifty.internal.InternalLayoutVertical;
 
@@ -88,6 +89,13 @@ public interface NiftyNode {
   void setChildLayout(ChildLayout childLayout);
 
   /**
+   * Change the background color of this node to a new color. The default value is a fully transparent color.
+   *
+   * @param color the new background color
+   */
+  void setBackgroundColor(NiftyColor color);
+
+  /**
    * Create a new NiftyNode and make this node it's parent.
    * 
    * @return a new NiftyNode
@@ -169,7 +177,7 @@ public interface NiftyNode {
    *          the pattern to match the output
    */
   void getStateInfo(final StringBuilder result, final String pattern);
-  
+
   /**
    * The ChildLayout enumeration will define how this NiftyNode will layout its
    * children.
@@ -177,6 +185,11 @@ public interface NiftyNode {
    * @author void
    */
   public enum ChildLayout {
+    /**
+     * A layout that does nothing. This is the default layout for a Node without any parents.
+     */
+    None(new InternalLayoutNone()),
+
     /**
      * Absolute doesn't really layout the child nodes. It just absolute
      * positions them according to their constraints.

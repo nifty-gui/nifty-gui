@@ -89,7 +89,7 @@ public class NiftyColorTest {
 
   @Test
   public void testToString() {
-    assertEquals("(0.0,0.0,1.0,1.0)", NiftyColor.BLUE().toString());
+    assertEquals("#0000ffff {0.0, 0.0, 1.0, 1.0}", NiftyColor.BLUE().toString());
   }
 
   @Test

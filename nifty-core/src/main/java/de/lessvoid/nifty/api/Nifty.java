@@ -90,6 +90,17 @@ public class Nifty {
    *
    * Additionally this method will make the created root node the same size as the current screen.
    * 
+   * @return a new NiftyNode
+   */
+  public NiftyNode createRootNodeFullscreen() {
+    return createRootNode(UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), ChildLayout.None);
+  }
+
+  /**
+   * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
+   *
+   * Additionally this method will make the created root node the same size as the current screen.
+   * 
    * @param childLayout the childLayout for the root node (this determines the way any child nodes will be layed out
    * in the new rootNode)
    * @return a new NiftyNode

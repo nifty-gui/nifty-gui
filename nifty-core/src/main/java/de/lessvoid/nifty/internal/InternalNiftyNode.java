@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import de.lessvoid.nifty.api.HorizontalAlignment;
 import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VerticalAlignment;
@@ -33,7 +34,7 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
   private InternalNiftyNode parentNode;
 
   // The childLayout.
-  private ChildLayout childLayout;
+  private ChildLayout childLayout = ChildLayout.None;
 
   // Does this node needs layout? This will be set to false when this Node has been layed out by its parent.
   private boolean needsLayout = true;
@@ -46,6 +47,9 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
 
   // The pseudo list of children. Only used when we are a root node.
   private final List<InternalLayoutable> rootNodePseudoChildren = new ArrayList<InternalLayoutable>();
+
+  // The backgroundColor of the NiftyNode. 
+  private NiftyColor backgroundColor = NiftyColor.TRANSPARENT();
 
   public static InternalNiftyNode newNode(final Nifty nifty, final String id, final InternalNiftyNode parent) {
     return new InternalNiftyNode(
@@ -79,6 +83,7 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
 
   @Override
   public void setChildLayout(final ChildLayout childLayout) {
+    assertNotNull(childLayout);
     this.childLayout = childLayout;
   }
 
@@ -161,6 +166,11 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
     return layoutPos.getWidth();
   }
 
+  @Override
+  public void setBackgroundColor(final NiftyColor color) {
+    backgroundColor  = color;
+  }
+
   // Layoutable Implementation
 
   @Override
@@ -203,6 +213,9 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
     }
     result.append(offset).append("- ").append("[").append(id).append("]").append(rootNodeString).append("\n");
     result.append(matches(pattern, statePosition(), offset + "  "));
+    result.append(matches(pattern, stateConstraints(), offset + "  "));
+    result.append(matches(pattern, stateBackgroundColor(), offset + "  "));
+    result.append(matches(pattern, stateChildLayout(), offset + "  "));
 
     for (int i=0; i<children.size(); i++) {
       children.get(i).getStateInfo(result, offset + "  ", pattern);
@@ -274,7 +287,35 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
   }
 
   private String statePosition() {
-    return "position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]\n";
+    return "position [x=" + getX() + ", y=" + getY() + ", width=" + getWidth() + ", height=" + getHeight() + "]\n";
+  }
+
+  private String stateConstraints() {
+    return
+        "constraints [" +
+        "x=" + constraints.getX() + ", " +
+        "y=" + constraints.getY() + ", " +
+        "width=" + constraints.getWidth() + ", " +
+        "height=" + constraints.getHeight() + ", " +
+        "horizontalAlign=" + constraints.getHorizontalAlign() + ", " +
+        "verticalAlign=" + constraints.getVerticalAlign() + ", " +
+        "paddingLeft=" + constraints.getPaddingLeft() + ", " +
+        "paddingRight=" + constraints.getPaddingRight() + ", " +
+        "paddingTop=" + constraints.getPaddingTop() + ", " +
+        "paddingBottom=" + constraints.getPaddingBottom() + ", " +
+        "marginLeft=" + constraints.getMarginLeft() + ", " +
+        "marginRight=" + constraints.getMarginRight() + ", " +
+        "marginTop=" + constraints.getMarginTop() + ", " +
+        "marginBottom=" + constraints.getMarginBottom() +
+        "]\n";
+  }
+
+  private String stateBackgroundColor() {
+    return "backgroundColor [" + backgroundColor + "]\n";
+  }
+
+  private String stateChildLayout() {
+    return "childLayout [" + childLayout + "]\n";
   }
 
   private String matches(final Pattern pattern, final String data, final String offset) {
@@ -286,5 +327,11 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
 
   private NiftyNode createChildNodeInternal() {
     return InternalNiftyNode.newNode(nifty, InternalNiftyIdGenerator.generate(), this);
+  }
+
+  private void assertNotNull(final ChildLayout param) {
+    if (param == null) {
+      throw new IllegalArgumentException("ChildLayout must not be null. Use ChildLayout.None instead");
+    }
   }
 }

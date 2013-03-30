@@ -226,13 +226,19 @@ public class NiftyColor {
    */
   public String toString() {
     StringBuilder result = new StringBuilder();
-    result.append("(").append(red).append(",")
-          .append(green).append(",")
-          .append(blue).append(",")
-          .append(alpha).append(")");
+    result.append("#");
+    result.append(zeroPadded(Integer.toHexString((int) red*255)));
+    result.append(zeroPadded(Integer.toHexString((int) green*255)));
+    result.append(zeroPadded(Integer.toHexString((int) blue*255)));
+    result.append(zeroPadded(Integer.toHexString((int) alpha*255)));
+    result.append(" {");
+    result.append(red).append(", ");
+    result.append(green).append(", ");
+    result.append(blue).append(", ");
+    result.append(alpha);
+    result.append("}");
     return result.toString();
   }
-
 
   /**
    * @see Object#hashCode() hashCode
@@ -274,5 +280,12 @@ public class NiftyColor {
     if (Double.doubleToLongBits(red) != Double.doubleToLongBits(other.red))
       return false;
     return true;
+  }
+
+  private String zeroPadded(final String hexString) {
+    if (hexString.length() == 1) {
+      return "0" + hexString;
+    }
+    return hexString;
   }
 }
