@@ -112,15 +112,13 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
   }
 
   @Override
-  public void setHorizontalAlignment(HorizontalAlignment alignment) {
-    // TODO Auto-generated method stub
-    
+  public void setHorizontalAlignment(final HorizontalAlignment alignment) {
+    constraints.setHorizontalAlign(alignment);
   }
 
   @Override
-  public void setVerticalAlignment(VerticalAlignment alignment) {
-    // TODO Auto-generated method stub
-    
+  public void setVerticalAlignment(final VerticalAlignment alignment) {
+    constraints.setVerticalAlign(alignment);
   }
 
   /**
@@ -190,7 +188,7 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
 
   @Override
   public void getStateInfo(final StringBuilder result) {
-    getStateInfo(result, "", Pattern.compile("(?s).*"));
+    getStateInfo(result, "", Pattern.compile(".*"));
   }
 
   @Override
@@ -199,7 +197,11 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
   }
 
   public void getStateInfo(final StringBuilder result, final String offset, final Pattern pattern) {
-    result.append(offset).append("- [").append(id).append("]").append("\n");
+    String rootNodeString = "";
+    if (parentNode == null) {
+      rootNodeString = " {rootNode} ";
+    }
+    result.append(offset).append("- ").append("[").append(id).append("]").append(rootNodeString).append("\n");
     result.append(matches(pattern, statePosition(), offset + "  "));
 
     for (int i=0; i<children.size(); i++) {
@@ -276,7 +278,7 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
   }
 
   private String matches(final Pattern pattern, final String data, final String offset) {
-    if (pattern.matcher(offset + data).matches()) {
+    if (pattern.matcher(offset + data).find()) {
       return offset + data;
     }
     return "";

@@ -114,6 +114,31 @@ public class Nifty {
     return renderDevice.getHeight();
   }
 
+  /**
+   * Output the state of all root nodes (and the whole tree below) to a String. This is meant to aid in debugging.
+   * DON'T RELY ON ANY INFORMATION IN HERE SINCE THIS CAN BE CHANGED IN FUTURE RELEASES!
+   *
+   * @return String that contains the debugging info for all root nodes
+   */
+  public String getSceneInfoLog() {
+    return getSceneInfoLog("(?s).*");
+  }
+
+  /**
+   * Output the state of all root nodes (and the whole tree below) to a String. This is meant to aid in debugging.
+   * DON'T RELY ON ANY INFORMATION IN HERE SINCE THIS CAN BE CHANGED IN FUTURE RELEASES!
+   *
+   * @param filter regexp to filter the output (Example: "position" will only output position info)
+   * @return String that contains the debugging info for all root nodes
+   */
+  public String getSceneInfoLog(final String filter) {
+    StringBuilder result = new StringBuilder("Nifty scene info log\n");
+    for (int i=0; i<rootNodes.size(); i++) {
+      rootNodes.get(i).getStateInfo(result, filter);
+    }
+    return result.toString();
+  }
+
   // Internal methods
 
   private NiftyNode createRootNodeInternal() {
