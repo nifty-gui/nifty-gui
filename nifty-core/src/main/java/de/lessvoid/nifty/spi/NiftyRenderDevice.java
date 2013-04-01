@@ -22,6 +22,18 @@ public interface NiftyRenderDevice {
    */
   int getHeight();
 
+  /**
+   * Create the given number of render targets. Implementations should reserve num textures of the given width x height
+   * that will later be used for rendering.
+   *
+   * @param width the width
+   * @param height the height
+   * @param num the number of render targets to allocate
+   */
+  void createRenderTargets(int width, int height, int num);
+
+  void render();
+
 //  /**
 //   * Gives this RenderDevice access to the NiftyResourceLoader.
 //   * @param niftyResourceLoader NiftyResourceLoader

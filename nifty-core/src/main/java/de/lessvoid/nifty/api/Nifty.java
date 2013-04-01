@@ -6,6 +6,7 @@ import java.util.List;
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.internal.InternalNiftyIdGenerator;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.spi.NiftyCanvas;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -24,12 +25,15 @@ public class Nifty {
   // parent of the root node is always using the exact same size as the screen.
   private ChildLayout rootNodePlacementLayout = ChildLayout.Center;
 
+  private NiftyCanvas testCanvas;
+
   /**
    * Create a new Nifty instance.
    * @param renderDevice the NiftyRenderDevice this instance will be using
    */
   public Nifty(final NiftyRenderDevice renderDevice) {
     this.renderDevice = renderDevice;
+    renderDevice.createRenderTargets(256, 256, renderDevice.getWidth() / 256 * renderDevice.getHeight() / 256);
   }
 
   /**
@@ -42,6 +46,7 @@ public class Nifty {
    * Render.
    */
   public void render() {
+    renderDevice.render();
   }
 
   /**
