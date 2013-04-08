@@ -296,12 +296,18 @@ public class ElementType extends XmlBaseType {
     makeFlat();
     applyControls(nifty);
     applyStyles(nifty.getDefaultStyleResolver());
+
+    // github issue #109: https://github.com/void256/nifty-gui/issues/109
+    // resolveParameters() needs to be called before makeFlatControls() in case someone tries to change the id of
+    // elements with some $parameter. Since makeFlatControls() resolves the ids it's necessary that this parameter
+    // replacement already happend when makeFlatControls() is called.
+    resolveParameters(rootElementType.getAttributes());
+
     makeFlatControls();
 
     // in case we have surviving special values (f.i. from applied controlDefinitions) we need to translate them too
     translateSpecialValues(nifty, screen);
 
-    resolveParameters(rootElementType.getAttributes());
     resolveControllers(new LinkedList < Object >());
   }
 
