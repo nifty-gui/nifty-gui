@@ -6,7 +6,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.Assert;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.internal.InternalBox;
 import de.lessvoid.nifty.internal.InternalBoxConstraints;

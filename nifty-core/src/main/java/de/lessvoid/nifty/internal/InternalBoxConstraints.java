@@ -9,7 +9,7 @@ import de.lessvoid.nifty.api.VerticalAlignment;
  *
  * @author void
  */
-public class InternalBoxConstraints {
+class InternalBoxConstraints {
 
   // Horizontal Position Constraint of the box.
   private UnitValue x;
@@ -56,7 +56,7 @@ public class InternalBoxConstraints {
   /**
    * default constructor.
    */
-  public InternalBoxConstraints() {
+  InternalBoxConstraints() {
     x = null;
     y = null;
     width = null;
@@ -82,7 +82,7 @@ public class InternalBoxConstraints {
    * @param newHorizontalAlign horizontal align
    * @param newVerticalAlign vertical align
    */
-  public InternalBoxConstraints(
+  InternalBoxConstraints(
       final UnitValue newX,
       final UnitValue newY,
       final UnitValue newWidth,
@@ -102,7 +102,7 @@ public class InternalBoxConstraints {
    * copy constructor.
    * @param src source instance to copy from
    */
-  public InternalBoxConstraints(final InternalBoxConstraints src) {
+  InternalBoxConstraints(final InternalBoxConstraints src) {
     this.x = src.x;
     this.y = src.y;
     this.width = src.width;

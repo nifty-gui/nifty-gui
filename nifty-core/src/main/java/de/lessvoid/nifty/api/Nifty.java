@@ -2,11 +2,13 @@ package de.lessvoid.nifty.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
-import de.lessvoid.nifty.internal.InternalNiftyIdGenerator;
+import de.lessvoid.nifty.internal.InternalIdGenerator;
+import de.lessvoid.nifty.internal.NiftyAccessor;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.spi.NiftyCanvas;
+import de.lessvoid.nifty.internal.InternalNiftyRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -14,6 +16,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  * @author void
  */
 public class Nifty {
+  private final Logger log = Logger.getLogger(Nifty.class.getName());
 
   // The NiftyRenderDevice we'll forward all render calls to.
   private final NiftyRenderDevice renderDevice;
@@ -25,28 +28,40 @@ public class Nifty {
   // parent of the root node is always using the exact same size as the screen.
   private ChildLayout rootNodePlacementLayout = ChildLayout.Center;
 
+  // the class performing the conversion from NiftyNode to RenderNode
+  private final InternalNiftyRenderer renderer;
+
   private NiftyCanvas testCanvas;
+  private boolean hack = true;
+  private long now;
 
   /**
    * Create a new Nifty instance.
    * @param renderDevice the NiftyRenderDevice this instance will be using
    */
-  public Nifty(final NiftyRenderDevice renderDevice) {
-    this.renderDevice = renderDevice;
-    renderDevice.createRenderTargets(256, 256, renderDevice.getWidth() / 256 * renderDevice.getHeight() / 256);
+  public Nifty(final NiftyRenderDevice newRenderDevice) {
+    renderDevice = newRenderDevice;
+    renderer = new InternalNiftyRenderer(newRenderDevice);
   }
 
   /**
    * Update.
    */
   public void update() {
+    for (int i=0; i<rootNodes.size(); i++) {
+      rootNodes.get(i).getImpl().updateContent();
+    }
   }
 
   /**
    * Render.
    */
   public void render() {
-    renderDevice.render();
+    if (hack) {
+      renderer.synchronize(rootNodes);
+      hack = false;
+    }
+    renderer.render();
   }
 
   /**
@@ -155,9 +170,20 @@ public class Nifty {
     return result.toString();
   }
 
+  // Friend methods
+
+  NiftyRenderDevice getRenderDevice() {
+    return renderDevice;   
+  }
+
   // Internal methods
 
   private NiftyNode createRootNodeInternal() {
-    return InternalNiftyNode.newRootNode(this, InternalNiftyIdGenerator.generate(), rootNodePlacementLayout);
+    return NiftyNode.newInstance(InternalNiftyNode.newRootNode(this, InternalIdGenerator.generate(), rootNodePlacementLayout));
   }
+
+  static {
+    NiftyAccessor.DEFAULT = new InternalNiftyAccessorImpl();
+  }
+
 }

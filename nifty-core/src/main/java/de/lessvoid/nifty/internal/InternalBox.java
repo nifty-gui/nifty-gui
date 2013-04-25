@@ -6,7 +6,7 @@ package de.lessvoid.nifty.internal;
  *
  * @author void
  */
-public class InternalBox {
+class InternalBox {
 
   // Horizontal Position of the box.
   private int x;
@@ -23,7 +23,7 @@ public class InternalBox {
   /**
    * Create a new Box with some default coordinates (x,y) set to (0,0) and with width and height set to 0.
    */
-  public InternalBox() {
+  InternalBox() {
     this.x = 0;
     this.y = 0;
     this.width = 0;
@@ -36,7 +36,7 @@ public class InternalBox {
    * @param src
    *          src box to copy from
    */
-  public InternalBox(final InternalBox src) {
+  InternalBox(final InternalBox src) {
     this.x = src.x;
     this.y = src.y;
     this.width = src.width;
@@ -55,7 +55,7 @@ public class InternalBox {
    * @param newHeight
    *          the new height of the box
    */
-  public InternalBox(final int newX, final int newY, final int newWidth, final int newHeight) {
+  InternalBox(final int newX, final int newY, final int newWidth, final int newHeight) {
     this.x = newX;
     this.y = newY;
     this.width = newWidth;

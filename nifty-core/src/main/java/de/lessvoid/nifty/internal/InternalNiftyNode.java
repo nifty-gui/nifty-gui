@@ -7,12 +7,17 @@ import java.util.regex.Pattern;
 
 import de.lessvoid.nifty.api.HorizontalAlignment;
 import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyCanvas;
+import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.internal.InternalChildIterate.Function;
+import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
+import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvasPainterStandard;
 
-public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, InternalLayoutable {
+public class InternalNiftyNode implements InternalLayoutable {
   private final StringBuilder builder = new StringBuilder();
 
   // The Nifty instance this NiftyNode belongs to.
@@ -27,7 +32,7 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
   // The box constraints.
   private final InternalBoxConstraints constraints = new InternalBoxConstraints();
 
-  // The child elements of this element.
+  // The child elements of this element and the helper to easily iterator over the list.
   private final List<InternalNiftyNode> children = new CopyOnWriteArrayList<InternalNiftyNode>();
 
   // The parent node.
@@ -51,6 +56,18 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
   // The backgroundColor of the NiftyNode. 
   private NiftyColor backgroundColor = NiftyColor.TRANSPARENT();
 
+  // If you don't set a specific NiftyCanvasPainter we use this one
+  private static InternalNiftyCanvasPainterStandard standardCanvasPainter = new InternalNiftyCanvasPainterStandard();
+
+  // The canvas.
+  private NiftyCanvas canvas;
+
+  private double angleZ;
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Factory methods
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   public static InternalNiftyNode newNode(final Nifty nifty, final String id, final InternalNiftyNode parent) {
     return new InternalNiftyNode(
         nifty,
@@ -69,109 +86,108 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
         new InternalLayoutableScreenSized(nifty.getScreenWidth(), nifty.getScreenHeight()));
   }
 
-  // Nifty API interface implementation
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Nifty API "interface" implementation
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  @Override
   public void setWidthConstraint(final UnitValue unitValue) {
     constraints.setWidth(unitValue);
+    needsLayout = true;
   }
 
-  @Override
   public void setHeightConstraint(final UnitValue unitValue) {
     constraints.setHeight(unitValue);
+    needsLayout = true;
   }
 
-  @Override
   public void setChildLayout(final ChildLayout childLayout) {
     assertNotNull(childLayout);
     this.childLayout = childLayout;
+    needsLayout = true;
   }
 
-  @Override
-  public NiftyNode createChildNode() {
+  public InternalNiftyNode newChildNode() {
     return createChildNodeInternal();
   }
 
-  @Override
-  public NiftyNode createChildNode(final ChildLayout childLayout) {
-    NiftyNode result = createChildNodeInternal();
+  public InternalNiftyNode newChildNode(final ChildLayout childLayout) {
+    InternalNiftyNode result = createChildNodeInternal();
     result.setChildLayout(childLayout);
     return result;
   }
 
-  @Override
-  public NiftyNode createChildNode(final UnitValue width, final UnitValue height) {
-    NiftyNode result = createChildNodeInternal();
+  public InternalNiftyNode newChildNode(final UnitValue width, final UnitValue height) {
+    InternalNiftyNode result = createChildNodeInternal();
     result.setWidthConstraint(width);
     result.setHeightConstraint(height);
     return result;
   }
 
-  @Override
-  public NiftyNode createChildNode(final UnitValue width, final UnitValue height, final ChildLayout childLayout) {
-    NiftyNode result = createChildNodeInternal();
+  public InternalNiftyNode newChildNode(final UnitValue width, final UnitValue height, final ChildLayout childLayout) {
+    InternalNiftyNode result = createChildNodeInternal();
     result.setWidthConstraint(width);
     result.setHeightConstraint(height);
     result.setChildLayout(childLayout);
     return result;
   }
 
-  @Override
   public void setHorizontalAlignment(final HorizontalAlignment alignment) {
     constraints.setHorizontalAlign(alignment);
+    needsLayout = true;
   }
 
-  @Override
   public void setVerticalAlignment(final VerticalAlignment alignment) {
     constraints.setVerticalAlign(alignment);
+    needsLayout = true;
   }
 
-  /**
-   * get x.
-   * @return x position of this element.
-   */
-  @Override
   public int getX() {
     assertLayout();
     return layoutPos.getX();
   }
 
-  /**
-   * get y.
-   * @return the y position of this element.
-   */
-  @Override
   public int getY() {
     assertLayout();
     return layoutPos.getY();
   }
 
-  /**
-   * get height.
-   * @return the height of this element.
-   */
-  @Override
   public int getHeight() {
     assertLayout();
     return layoutPos.getHeight();
   }
 
-  /**
-   * get width.
-   * @return the width of this element.
-   */
-  @Override
   public int getWidth() {
     assertLayout();
     return layoutPos.getWidth();
   }
 
-  @Override
   public void setBackgroundColor(final NiftyColor color) {
     backgroundColor  = color;
   }
 
+  public void setRotation(final double angle) {
+    angleZ = angle;
+  }
+
+  public double getRotationZ() {
+    return angleZ;
+  }
+
+  public void setContent(final NiftyCanvasPainter painter) {
+    
+  }
+
+  public void getStateInfo(final StringBuilder result) {
+    getStateInfo(result, "", Pattern.compile(".*"));
+  }
+
+  public void getStateInfo(final StringBuilder result, final String pattern) {
+    getStateInfo(result, "", Pattern.compile(pattern));
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Layoutable Implementation
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
   public InternalBox getLayoutPos() {
@@ -183,7 +199,9 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
     return constraints;
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Object overrides
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
   public String toString() {
@@ -196,17 +214,36 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
     return builder.toString();
   }
 
-  @Override
-  public void getStateInfo(final StringBuilder result) {
-    getStateInfo(result, "", Pattern.compile(".*"));
+  private boolean needsRedraw = true;
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Private Methods and package private stuff
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public void updateContent() {
+    if (needsRedraw) {
+      InternalNiftyCanvas internalNiftyCanvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
+      internalNiftyCanvas.setSize(getWidth(), getHeight());
+      standardCanvasPainter.paint(this, internalNiftyCanvas);
+      needsRedraw  = false;
+    }
+    InternalChildIterate.iterate(children, childUpdateContent());
   }
 
-  @Override
-  public void getStateInfo(final StringBuilder result, final String pattern) {
-    getStateInfo(result, "", Pattern.compile(pattern));
+  private Function<InternalNiftyNode, Object> childUpdateContent() {
+    return new Function<InternalNiftyNode, Object>() {
+      @Override
+      public void perform(final InternalNiftyNode node, final Object parameter) {
+        node.updateContent();
+      }
+    };
   }
 
-  public void getStateInfo(final StringBuilder result, final String offset, final Pattern pattern) {
+  List<InternalNiftyNode> getChildren() {
+    return children;
+  }
+
+  private void getStateInfo(final StringBuilder result, final String offset, final Pattern pattern) {
     String rootNodeString = "";
     if (parentNode == null) {
       rootNodeString = " {rootNode} ";
@@ -222,8 +259,6 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
     }
   }
 
-  // Private Methods
-
   private InternalNiftyNode(
       final Nifty nifty,
       final String id,
@@ -236,29 +271,33 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
     this.needsLayout = true;
     this.rootNodePseudoParentLayout = rootNodePseudoParentLayout;
     this.rootNodePseudoLayoutable = rootNodePseudoLayoutable;
+    this.canvas = NiftyNodeAccessor.getDefault().createNiftyCanvas(new InternalNiftyCanvas());
 
     if (this.parentNode == null) {
       rootNodePseudoChildren.add(this);
     } else {
-      this.parentNode.children.add(this);
+      parentNode.children.add(this);
     }
   }
 
   private void layoutChildren() {
     assertLayout();
-
     if (children.isEmpty()) {
       return;
     }
-
     assertChildLayout();
     childLayout.getLayout().layoutElements(this, children);
+    InternalChildIterate.iterate(children, childLayout());
+  }
 
-    for (int i=0; i<children.size(); i++) {
-      InternalNiftyNode node = children.get(i);
-      node.needsLayout = false;
-      node.layoutChildren();
-    }
+  private Function<InternalNiftyNode, Object> childLayout() {
+    return new Function<InternalNiftyNode, Object>() {
+      @Override
+      public void perform(final InternalNiftyNode node, final Object parameter) {
+        node.needsLayout = false;
+        node.layoutChildren();
+      }
+    };
   }
 
   private void assertChildLayout() {
@@ -282,7 +321,7 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
     }
   }
 
-  private boolean isRootNode() {
+  boolean isRootNode() {
     return parentNode == null;
   }
 
@@ -325,13 +364,21 @@ public class InternalNiftyNode implements de.lessvoid.nifty.api.NiftyNode, Inter
     return "";
   }
 
-  private NiftyNode createChildNodeInternal() {
-    return InternalNiftyNode.newNode(nifty, InternalNiftyIdGenerator.generate(), this);
+  private InternalNiftyNode createChildNodeInternal() {
+    return InternalNiftyNode.newNode(nifty, InternalIdGenerator.generate(), this);
   }
 
   private void assertNotNull(final ChildLayout param) {
     if (param == null) {
       throw new IllegalArgumentException("ChildLayout must not be null. Use ChildLayout.None instead");
     }
+  }
+
+  public NiftyColor getBackgroundColor() {
+    return backgroundColor;
+  }
+
+  public InternalNiftyCanvas getCanvas() {
+    return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
   }
 }

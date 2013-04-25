@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.api.HorizontalAlignment;
 import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.api.UnitValue;
@@ -12,7 +13,7 @@ import de.lessvoid.nifty.api.UnitValue;
  *
  * @author void
  */
-public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes  {
+public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes implements UseCase {
 
   public UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes(final Nifty nifty) {
     // Change the root node placement child layout from the default Center to Vertical. This will be used to lay out
@@ -24,7 +25,11 @@ public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes  {
     rootNode.setHorizontalAlignment(HorizontalAlignment.right);
 
     // add two child nodes to the root node
-    rootNode.createChildNode();
-    rootNode.createChildNode();
+    rootNode.newChildNode().setBackgroundColor(NiftyColor.BLUE());
+    rootNode.newChildNode().setBackgroundColor(NiftyColor.RED());
+  }
+
+  @Override
+  public void update() {
   }
 }

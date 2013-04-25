@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.spi;
 
+import de.lessvoid.nifty.internal.math.Mat4;
+
 /**
  * NiftyRenderDevice is part of the Nifty SPI to allow pluggable render devices. Everything Nifty expects to render in
  * the end will go through implementations of this interface.
@@ -28,11 +30,15 @@ public interface NiftyRenderDevice {
    *
    * @param width the width
    * @param height the height
-   * @param num the number of render targets to allocate
+   * @param countX the number of x
+   * @param countY the number of y
    */
-  void createRenderTargets(int width, int height, int num);
+  NiftyRenderTarget createRenderTargets(int width, int height, int countX, final int countY);
 
-  void render();
+  void render(NiftyRenderTarget renderTarget, int x, int y, int width, int height, Mat4 mat);
+
+  void begin();
+  void end();
 
 //  /**
 //   * Gives this RenderDevice access to the NiftyResourceLoader.
@@ -66,10 +72,6 @@ public interface NiftyRenderDevice {
 //   */
 //  void endFrame();
 //
-//  /**
-//   * clear screen.
-//   */
-//  void clear();
 //
 //  /**
 //   * Change the RenderMode to the given Mode.

@@ -19,18 +19,19 @@ public class RunUseCaseLwjglMain {
 
     // init LWJGL using some helper class
     CoreLwjglSetup setup = new CoreLwjglSetup();
-    setup.initializeLogging();
+    setup.initializeLogging("/logging.properties");
     setup.initialize("Hello Nifty 2.0", 1024, 768);
 
     // create nifty instance
     final Nifty nifty = createNifty();
 
-    loadUseCase(args[0], nifty);
+    final UseCase useCase = loadUseCase(args[0], nifty);
     logScene(nifty);
 
     setup.renderLoop(new RenderLoopCallback() {
       @Override
       public boolean render(final float deltaTime) {
+        useCase.update();
         nifty.update();
         nifty.render();
         return false;
@@ -38,12 +39,12 @@ public class RunUseCaseLwjglMain {
     });
   }
 
-  private static void loadUseCase(final String clazzName, final Nifty nifty) throws Exception {
+  private static UseCase loadUseCase(final String clazzName, final Nifty nifty) throws Exception {
     Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(
         RunUseCaseLwjglMain.class.getPackage().getName() + "." + clazzName);
     log.info("loaded class [" + clazz + "]");
 
-    clazz.getConstructor(Nifty.class).newInstance(nifty);
+    return (UseCase) clazz.getConstructor(Nifty.class).newInstance(nifty);
   }
 
   private static void logScene(final Nifty nifty) {

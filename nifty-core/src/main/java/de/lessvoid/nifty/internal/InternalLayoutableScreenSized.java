@@ -6,11 +6,11 @@ import de.lessvoid.nifty.api.UnitValue;
  * This is a helper class so that we can use the Layout mechanism even for positioning the root node.
  * @author void
  */
-public class InternalLayoutableScreenSized implements InternalLayoutable {
+class InternalLayoutableScreenSized implements InternalLayoutable {
   private final InternalBox box;
   private final InternalBoxConstraints boxConstraints;
 
-  public InternalLayoutableScreenSized(final int width, final int height) {
+  InternalLayoutableScreenSized(final int width, final int height) {
     box = new InternalBox(0, 0, width, height);
     boxConstraints = new InternalBoxConstraints();
     boxConstraints.setWidth(UnitValue.px(width));

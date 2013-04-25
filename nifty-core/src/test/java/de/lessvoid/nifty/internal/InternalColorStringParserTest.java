@@ -4,10 +4,10 @@ import static de.lessvoid.nifty.AssertColor.assertColor;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.internal.InternalNiftyColorStringParser;
+import de.lessvoid.nifty.internal.InternalColorStringParser;
 
-public class InternalNiftyColorStringParserTest {
-  private InternalNiftyColorStringParser parser = new InternalNiftyColorStringParser();
+public class InternalColorStringParserTest {
+  private InternalColorStringParser parser = new InternalColorStringParser();
 
   @Test
   public void testShortWithoutAlpha() {

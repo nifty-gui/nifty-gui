@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.api;
+package de.lessvoid.nifty.internal;
 
 import static org.junit.Assert.assertEquals;
 import de.lessvoid.nifty.internal.InternalBox;

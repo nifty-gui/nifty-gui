@@ -6,7 +6,7 @@ package de.lessvoid.nifty.internal;
  * InternalLayoutable is the interface used in all layout related processes.
  * @author void
  */
-public interface InternalLayoutable {
+interface InternalLayoutable {
 
   /**
    * Get the box of this LayoutPart.

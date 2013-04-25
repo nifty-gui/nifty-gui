@@ -139,6 +139,19 @@ public class NiftyMutableColor {
   }
 
   /**
+   * Change all components of this to values from the given color.
+   * @param color the source color
+   * @return this
+   */
+  public NiftyMutableColor set(final NiftyColor color) {
+    this.red = color.getRed();
+    this.green = color.getGreen();
+    this.blue = color.getBlue();
+    this.alpha = color.getAlpha();
+    return this;
+  }
+
+  /**
    * Update all of the components of this color with the components of another NiftyColor.
    * @param src the NiftyColor to copy the components from
    * @return this

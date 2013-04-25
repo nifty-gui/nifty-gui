@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * @author void
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public class InternalNiftyColorValidator {
+class InternalColorValidator {
   /**
    * The pattern used to check if the string is valid to be a color definition.
    */

@@ -8,43 +8,69 @@ import de.lessvoid.nifty.internal.InternalLayoutHorizontal;
 import de.lessvoid.nifty.internal.InternalLayoutNone;
 import de.lessvoid.nifty.internal.InternalLayoutOverlay;
 import de.lessvoid.nifty.internal.InternalLayoutVertical;
+import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.internal.NiftyNodeAccessor;
 
 /**
- * The core element of the Nifty scene graph is a NiftyNode. It is created by
- * the main Nifty instance and represents a hierarchical structure of a Nifty
- * GUI.
+ * The core element of the Nifty scene graph is a NiftyNode. It is created by the main Nifty instance and represents the
+ * hierarchical structure of a Nifty GUI.
  * 
  * @author void
  */
-public interface NiftyNode {
+public class NiftyNode {
+  private final InternalNiftyNode impl;
+
+  /**
+   * Please use one of the {@link Nifty#createRootNode()} methods to create a new NiftyNode. You're not supposed to
+   * create an instance of this class directly and you're not supposed to extend from this class.
+   */
+  private NiftyNode(final InternalNiftyNode impl) {
+    this.impl = impl;
+  }
+
+  InternalNiftyNode getImpl() {
+    return impl;
+  }
+
+  static NiftyNode newInstance(final InternalNiftyNode impl) {
+    return new NiftyNode(impl);
+  }
 
   /**
    * Get the x position of this node.
    * 
    * @return x position of this node.
    */
-  int getX();
+  public int getX() {
+    return impl.getX();
+  }
 
   /**
    * Get the y position of this node.
    * 
    * @return y y position of this node.
    */
-  int getY();
+  public int getY() {
+    return impl.getY();
+  }
 
   /**
    * Get the width of this node.
    * 
    * @return width width of this element.
    */
-  int getWidth();
+  public int getWidth() {
+    return impl.getWidth();
+  }
 
   /**
    * Get the height of this node.
    * 
    * @return height height of this node.
    */
-  int getHeight();
+  public int getHeight() {
+    return impl.getHeight();
+  }
 
   /**
    * Set the horizontal alignment.
@@ -52,7 +78,9 @@ public interface NiftyNode {
    * @param alignment
    *          the new horizontal alignment
    */
-  void setHorizontalAlignment(HorizontalAlignment alignment);
+  public void setHorizontalAlignment(final HorizontalAlignment alignment) {
+    impl.setHorizontalAlignment(alignment);
+  }
 
   /**
    * Set the vertical alignment.
@@ -60,7 +88,9 @@ public interface NiftyNode {
    * @param alignment
    *          the new vertical alignment
    */
-  void setVerticalAlignment(VerticalAlignment alignment);
+  public void setVerticalAlignment(final VerticalAlignment alignment) {
+    impl.setVerticalAlignment(alignment);
+  }
 
   /**
    * Change the width constraint of this NiftyNode forcing it to a certain
@@ -69,7 +99,9 @@ public interface NiftyNode {
    * @param value
    *          the UnitValue representing the new width
    */
-  void setWidthConstraint(UnitValue px);
+  public void setWidthConstraint(final UnitValue value) {
+    impl.setWidthConstraint(value);
+  }
 
   /**
    * Change the height constraint of this NiftyNode forcing it to a certain
@@ -78,7 +110,9 @@ public interface NiftyNode {
    * @param value
    *          the UnitValue representing the new height
    */
-  void setHeightConstraint(UnitValue px);
+  public void setHeightConstraint(final UnitValue value) {
+    impl.setHeightConstraint(value);
+  }
 
   /**
    * Set the ChildLayout for this NiftyNode. The ChildLayout defines the way
@@ -86,21 +120,42 @@ public interface NiftyNode {
    * 
    * @param childLayout
    */
-  void setChildLayout(ChildLayout childLayout);
+  public void setChildLayout(final ChildLayout childLayout) {
+    impl.setChildLayout(childLayout);
+  }
 
   /**
    * Change the background color of this node to a new color. The default value is a fully transparent color.
    *
    * @param color the new background color
    */
-  void setBackgroundColor(NiftyColor color);
+  public void setBackgroundColor(final NiftyColor color) {
+    impl.setBackgroundColor(color);
+  }
+
+  public void setRotation(final double angle) {
+    impl.setRotation(angle);
+  }
+
+  /**
+   * Set a NiftyCanvasPainter for the NiftyNode. This means you'd like to provide the content on your own. The
+   * NiftyCanvasPainter is an interface you're supposed to implement. Nifty will call you back when it is time to
+   * provide the content of this Node.
+   *
+   * @param painter the NiftyCanvasPainter instance to use for this Node
+   */
+  public void setContent(final NiftyCanvasPainter painter) {
+    impl.setContent(painter);
+  }
 
   /**
    * Create a new NiftyNode and make this node it's parent.
    * 
    * @return a new NiftyNode
    */
-  NiftyNode createChildNode();
+  public NiftyNode newChildNode() {
+    return new NiftyNode(impl.newChildNode());
+  }
 
   /**
    * Create a new NiftyNode and make this node it's parent. Use the given
@@ -110,7 +165,9 @@ public interface NiftyNode {
    *          the new ChildLayout for the new node
    * @return a new NiftyNode
    */
-  NiftyNode createChildNode(ChildLayout childLayout);
+  public NiftyNode newChildNode(final ChildLayout childLayout) {
+    return new NiftyNode(impl.newChildNode(childLayout));
+  }
 
   /**
    * Create a new NiftyNode and make this node it's parent. The new ChildNode
@@ -124,7 +181,9 @@ public interface NiftyNode {
    *          height of the new NiftyNode
    * @return a new NiftyNode
    */
-  NiftyNode createChildNode(UnitValue width, UnitValue height);
+  public NiftyNode newChildNode(final UnitValue width, final UnitValue height) {
+    return new NiftyNode(impl.newChildNode(width, height));
+  }
 
   /**
    * Create a new NiftyNode and make this node it's parent. The new ChildNode
@@ -140,7 +199,9 @@ public interface NiftyNode {
    *          the new ChildLayout for the new node
    * @return a new NiftyNode
    */
-  NiftyNode createChildNode(UnitValue width, UnitValue height, ChildLayout childLayout);
+  public NiftyNode newChildNode(final UnitValue width, final UnitValue height, final ChildLayout childLayout) {
+    return new NiftyNode(impl.newChildNode(width, height, childLayout));
+  }
 
   /**
    * Collect state information for this node (and all of it's children) into the
@@ -155,7 +216,9 @@ public interface NiftyNode {
    * @param result
    *          the StringBuilder to add the state info to
    */
-  void getStateInfo(final StringBuilder result);
+  public void getStateInfo(final StringBuilder result) {
+    impl.getStateInfo(result);
+  }
 
   /**
    * @see #getStateInfo(StringBuilder)
@@ -176,7 +239,9 @@ public interface NiftyNode {
    * @param pattern
    *          the pattern to match the output
    */
-  void getStateInfo(final StringBuilder result, final String pattern);
+  public void getStateInfo(final StringBuilder result, final String pattern) {
+    impl.getStateInfo(result, pattern);
+  }
 
   /**
    * The ChildLayout enumeration will define how this NiftyNode will layout its
@@ -238,5 +303,9 @@ public interface NiftyNode {
     public InternalLayout getLayout() {
       return layout;
     }
+  }
+
+  static {
+    NiftyNodeAccessor.DEFAULT = new InternalNiftyNodeAccessorImpl();
   }
 }

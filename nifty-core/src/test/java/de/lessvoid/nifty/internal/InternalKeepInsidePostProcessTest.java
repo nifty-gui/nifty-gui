@@ -2,7 +2,6 @@ package de.lessvoid.nifty.internal;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.Assert;
 import de.lessvoid.nifty.internal.InternalBox;
 import de.lessvoid.nifty.internal.InternalLayoutAbsolute.KeepInsidePostProcess;
 
