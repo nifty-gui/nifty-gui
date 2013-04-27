@@ -214,18 +214,18 @@ public class InternalNiftyNode implements InternalLayoutable {
     return builder.toString();
   }
 
-  private boolean needsRedraw = true;
-
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Private Methods and package private stuff
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  private boolean needsRedraw = true;
+
   public void updateContent() {
     if (needsRedraw) {
       InternalNiftyCanvas internalNiftyCanvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
-      internalNiftyCanvas.setSize(getWidth(), getHeight());
+      internalNiftyCanvas.reset();
       standardCanvasPainter.paint(this, internalNiftyCanvas);
-      needsRedraw  = false;
+      needsRedraw = false;
     }
     InternalChildIterate.iterate(children, childUpdateContent());
   }

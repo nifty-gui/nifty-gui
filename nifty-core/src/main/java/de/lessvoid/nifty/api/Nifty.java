@@ -37,7 +37,7 @@ public class Nifty {
 
   /**
    * Create a new Nifty instance.
-   * @param renderDevice the NiftyRenderDevice this instance will be using
+   * @param newRenderDevice the NiftyRenderDevice this instance will be using
    */
   public Nifty(final NiftyRenderDevice newRenderDevice) {
     renderDevice = newRenderDevice;

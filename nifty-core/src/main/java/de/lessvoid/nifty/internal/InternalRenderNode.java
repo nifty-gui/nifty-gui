@@ -1,37 +1,62 @@
 package de.lessvoid.nifty.internal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
+import de.lessvoid.nifty.internal.canvas.Command;
+import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderTarget;
 
 /**
  * Represents a Node that can be rendered. A InternalNiftyNode will be converted into an instance of this class.
  * @author void
  */
 public class InternalRenderNode {
-  // The actual content to render for this node.
-  private final InternalNiftyCanvas canvas;
-
   // The combined model transformation for this node.
   private Mat4 mat = new Mat4();
 
   // The child RenderNodes of this node.
   private final List<InternalRenderNode> children = new ArrayList<InternalRenderNode>();
 
-  public InternalRenderNode(final InternalNiftyCanvas canvas) {
-    this.canvas = canvas;
+  // render target for this node
+  private NiftyRenderTarget renderTarget;
+
+  private final int width;
+  private final int height;
+  private final Context context;
+  private final List<Command> commands;
+
+  public InternalRenderNode(final int width, final int height, final List<Command> commands) {
+    this.width = width;
+    this.height = height;
+    this.context = new Context();
+    this.commands = commands;
   }
 
   public void updateContent(final NiftyRenderDevice renderDevice) {
-    canvas.updateContent(renderDevice);
+    if (renderTarget == null) {
+      renderTarget = renderDevice.createRenderTargets(width, height, 1, 1);
+    }
+
+    if (!commands.isEmpty()) {
+      for (int i=0; i<commands.size(); i++) {
+        Command command = commands.get(i);
+        command.execute(renderTarget, context);
+      }
+      commands.clear();
+    }
+
     InternalChildIterate.iterate(children, childUpdateContent, renderDevice);
   }
 
   public void render(final NiftyRenderDevice renderDevice) {
-    canvas.render(renderDevice, canvas.getWidth(), canvas.getHeight(), mat);
+    if (renderTarget == null) {
+      return;
+    }
+    renderDevice.render(renderTarget, 0, 0, width, height, mat);
     InternalChildIterate.iterate(children, childRender, renderDevice);
   }
 

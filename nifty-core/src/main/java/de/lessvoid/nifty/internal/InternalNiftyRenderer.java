@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 public class InternalNiftyRenderer {
@@ -45,7 +44,7 @@ public class InternalNiftyRenderer {
   }
 
   private InternalRenderNode toRenderNode(final InternalNiftyNode node) {
-    InternalRenderNode renderNode = new InternalRenderNode(node.getCanvas());
+    InternalRenderNode renderNode = new InternalRenderNode(node.getWidth(), node.getHeight(), node.getCanvas().getCommands());
     InternalChildIterate.iterate(node.getChildren(), convertToRenderNode, renderNode);
     return renderNode;
   }
