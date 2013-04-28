@@ -13,9 +13,17 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VerticalAlignment;
-import de.lessvoid.nifty.internal.InternalChildIterate.Function;
+import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvasPainterStandard;
+import de.lessvoid.nifty.internal.common.InternalChildIterate;
+import de.lessvoid.nifty.internal.common.InternalChildIterate.Function;
+import de.lessvoid.nifty.internal.common.InternalIdGenerator;
+import de.lessvoid.nifty.internal.layout.InternalBox;
+import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
+import de.lessvoid.nifty.internal.layout.InternalLayoutable;
+import de.lessvoid.nifty.internal.layout.InternalLayoutableScreenSized;
 
 public class InternalNiftyNode implements InternalLayoutable {
   private final StringBuilder builder = new StringBuilder();
@@ -215,6 +223,14 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Other stuff
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public InternalNiftyNode getParent() {
+    return parentNode;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Private Methods and package private stuff
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -239,7 +255,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     };
   }
 
-  List<InternalNiftyNode> getChildren() {
+  public List<InternalNiftyNode> getChildren() {
     return children;
   }
 
@@ -321,7 +337,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     }
   }
 
-  boolean isRootNode() {
+  private boolean isRootNode() {
     return parentNode == null;
   }
 

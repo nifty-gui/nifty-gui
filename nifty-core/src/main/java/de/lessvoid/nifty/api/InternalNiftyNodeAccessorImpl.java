@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.NiftyNodeAccessor;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 
 final class InternalNiftyNodeAccessorImpl extends NiftyNodeAccessor {

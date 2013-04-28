@@ -87,7 +87,6 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
 
     plainColor.activate();
     plainColor.setUniformf("uColor", (float)color.getRed(), (float)color.getGreen(), (float)color.getBlue(), (float)color.getAlpha());
-
     addQuad(vbo.getBuffer(), (float)x0, (float)y0, (float)x1, (float)y1);
     quadCount++;
     flush();

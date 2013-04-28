@@ -1,15 +1,15 @@
 package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.internal.InternalLayout;
-import de.lessvoid.nifty.internal.InternalLayoutAbsolute;
-import de.lessvoid.nifty.internal.InternalLayoutAbsolute.KeepInsidePostProcess;
-import de.lessvoid.nifty.internal.InternalLayoutCenter;
-import de.lessvoid.nifty.internal.InternalLayoutHorizontal;
-import de.lessvoid.nifty.internal.InternalLayoutNone;
-import de.lessvoid.nifty.internal.InternalLayoutOverlay;
-import de.lessvoid.nifty.internal.InternalLayoutVertical;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
+import de.lessvoid.nifty.internal.layout.InternalLayout;
+import de.lessvoid.nifty.internal.layout.InternalLayoutAbsolute;
+import de.lessvoid.nifty.internal.layout.InternalLayoutCenter;
+import de.lessvoid.nifty.internal.layout.InternalLayoutHorizontal;
+import de.lessvoid.nifty.internal.layout.InternalLayoutNone;
+import de.lessvoid.nifty.internal.layout.InternalLayoutOverlay;
+import de.lessvoid.nifty.internal.layout.InternalLayoutVertical;
+import de.lessvoid.nifty.internal.layout.InternalLayoutAbsolute.KeepInsidePostProcess;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.NiftyNodeAccessor;
 
 /**
  * The core element of the Nifty scene graph is a NiftyNode. It is created by the main Nifty instance and represents the

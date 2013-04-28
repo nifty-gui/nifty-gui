@@ -407,6 +407,16 @@ public class Mat4 implements Serializable {
 		return dest;
 	}
 
+  /**
+   * Multiply the right matrix by the left and return the result in a new matrix.
+   * @param left The left source matrix
+   * @param right The right source matrix
+   * @return the destination matrix
+   */
+	 public static Mat4 mul(final Mat4 left, final Mat4 right) {
+	   return Mat4.mul(left, right, null);
+	 }
+
 	/**
 	 * Multiply the right matrix by the left and place the result in a third matrix.
 	 * @param left The left source matrix

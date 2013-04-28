@@ -21,7 +21,7 @@ public class UseCase_0004_FixedSizedRotatingRootNode implements UseCase {
   }
 
   @Override
-  public void update() {
+  public void update(final Nifty nifty) {
     niftyNode.setRotation(rot);
     rot += 0.01;
   }

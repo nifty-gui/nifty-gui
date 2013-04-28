@@ -25,11 +25,12 @@ public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes implements 
     rootNode.setHorizontalAlignment(HorizontalAlignment.right);
 
     // add two child nodes to the root node
-    rootNode.newChildNode().setBackgroundColor(NiftyColor.BLUE());
-    rootNode.newChildNode().setBackgroundColor(NiftyColor.RED());
+    rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#0ff"));
+    rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff0"));
   }
 
   @Override
-  public void update() {
+  public void update(final Nifty nifty) {
+    //System.out.println(nifty.getStatistics().getAll());
   }
 }

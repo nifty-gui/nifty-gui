@@ -19,6 +19,6 @@ public class UseCase_0003_FixedSizedRootNode implements UseCase {
   }
 
   @Override
-  public void update() {
+  public void update(final Nifty nifty) {
   }
 }

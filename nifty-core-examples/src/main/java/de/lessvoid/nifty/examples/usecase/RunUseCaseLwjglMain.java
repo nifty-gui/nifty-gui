@@ -1,5 +1,8 @@
 package de.lessvoid.nifty.examples.usecase;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import de.lessvoid.coregl.CoreLwjglSetup;
@@ -31,9 +34,22 @@ public class RunUseCaseLwjglMain {
     setup.renderLoop(new RenderLoopCallback() {
       @Override
       public boolean render(final float deltaTime) {
-        useCase.update();
+        useCase.update(nifty);
         nifty.update();
         nifty.render();
+/*
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMinimumFractionDigits(4);
+        format.setMaximumFractionDigits(4);
+        List<Integer> frameTimes = new ArrayList<Integer>();
+        nifty.getStatistics().getUpdateTime(frameTimes);
+        StringBuilder stuff = new StringBuilder();
+        for (Integer i : frameTimes) {
+          stuff.append(format.format(i / 100000.f));
+          stuff.append(", ");
+        }
+        System.out.println(stuff.toString());
+*/
         return false;
       }
     });

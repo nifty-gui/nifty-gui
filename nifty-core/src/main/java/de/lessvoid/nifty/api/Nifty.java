@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
-import de.lessvoid.nifty.internal.InternalIdGenerator;
-import de.lessvoid.nifty.internal.NiftyAccessor;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.InternalNiftyRenderer;
+import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
+import de.lessvoid.nifty.internal.common.InternalIdGenerator;
+import de.lessvoid.nifty.internal.common.InternalNiftyStatistics;
+import de.lessvoid.nifty.internal.render.InternalRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -17,6 +18,9 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  */
 public class Nifty {
   private final Logger log = Logger.getLogger(Nifty.class.getName());
+
+  // The one and only NiftyStatistics instanz.
+  private final NiftyStatistics statistics = new NiftyStatistics(new InternalNiftyStatistics());
 
   // The NiftyRenderDevice we'll forward all render calls to.
   private final NiftyRenderDevice renderDevice;
@@ -29,7 +33,7 @@ public class Nifty {
   private ChildLayout rootNodePlacementLayout = ChildLayout.Center;
 
   // the class performing the conversion from NiftyNode to RenderNode
-  private final InternalNiftyRenderer renderer;
+  private final InternalRenderer renderer;
 
   private NiftyCanvas testCanvas;
   private boolean hack = true;
@@ -41,27 +45,31 @@ public class Nifty {
    */
   public Nifty(final NiftyRenderDevice newRenderDevice) {
     renderDevice = newRenderDevice;
-    renderer = new InternalNiftyRenderer(newRenderDevice);
+    renderer = new InternalRenderer(statistics.getImpl(), newRenderDevice);
   }
 
   /**
    * Update.
    */
   public void update() {
+    long now = System.nanoTime();
     for (int i=0; i<rootNodes.size(); i++) {
       rootNodes.get(i).getImpl().updateContent();
     }
+    statistics.getImpl().addUpdateTime((int) (System.nanoTime() - now));
   }
 
   /**
    * Render.
    */
   public void render() {
+    long now = System.nanoTime();
     if (hack) {
       renderer.synchronize(rootNodes);
       hack = false;
     }
     renderer.render();
+    statistics.getImpl().addRenderTime((int) (System.nanoTime() - now));
   }
 
   /**
@@ -168,6 +176,14 @@ public class Nifty {
       rootNodes.get(i).getStateInfo(result, filter);
     }
     return result.toString();
+  }
+
+  /**
+   * Get the NiftyStatistics instance where you can request a lot of statistics about Nifty.
+   * @return the NiftyStatistics instance
+   */
+  public NiftyStatistics getStatistics() {
+    return statistics;
   }
 
   // Friend methods

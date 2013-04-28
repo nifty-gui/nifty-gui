@@ -2,7 +2,7 @@ package de.lessvoid.nifty.api;
 
 import java.util.Random;
 
-import de.lessvoid.nifty.internal.InternalColorStringParser;
+import de.lessvoid.nifty.internal.common.InternalColorStringParser;
 
 /**
  * Immutable Color representation for Nifty. Nifty uses this class when color information is needed or returned by
