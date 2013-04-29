@@ -18,6 +18,7 @@
     <module>nifty-html</module>
     <module>nifty-examples</module>
     <module>nifty-examples-slick2d</module>
+    <module>nifty-examples-jogl</module>
   </modules>
   <url>http://sourceforge.net/projects/nifty-gui/</url>
   <licenses>
