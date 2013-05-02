@@ -234,12 +234,16 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param height height
    */
   public void renderImage(final NiftyImage image, final int x, final int y, final int width, final int height) {
-    float alpha = 1.0f;
-    if (color != null) {
-      alpha = color.getAlpha();
+    Color c = image.getColor();
+    if (c == null) {
+         float alpha = 1.0f;
+         if (color != null) {
+             alpha = color.getAlpha();
+         }
+         whiteColor.setAlpha(alpha);
+        c = whiteColor;
     }
-    whiteColor.setAlpha(alpha);
-    image.render(x + getX(), y + getY(), width, height, whiteColor, imageScale);
+    image.render(x + getX(), y + getY(), width, height, c, imageScale);
   }
 
   /**
