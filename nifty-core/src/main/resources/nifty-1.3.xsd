@@ -68,6 +68,7 @@
         <xs:attribute type="xs:string" name="filename" use="optional" />
         <xs:attribute name="x" type="xs:string" use="optional"></xs:attribute>
         <xs:attribute name="y" type="xs:string" use="optional"></xs:attribute>
+        <xs:attribute name="color" type="colorType" use="optional" ></xs:attribute>
         <xs:attribute name="filter" type="xs:boolean" use="optional"></xs:attribute>
         <xs:attribute name="imageMode" type="xs:string" use="optional"></xs:attribute>
         <xs:attribute name="subImageSizeMode">
