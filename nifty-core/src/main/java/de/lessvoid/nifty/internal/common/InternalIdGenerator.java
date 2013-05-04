@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InternalIdGenerator {
   private static final AtomicInteger id = new AtomicInteger(1);
 
-  public static String generate() {
-    return String.valueOf(id.incrementAndGet());
+  public static int generate() {
+    return id.incrementAndGet();
   }
 }

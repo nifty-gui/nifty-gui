@@ -17,6 +17,6 @@ public class UseCase_0001_FullScreenColorNode implements UseCase {
   }
 
   @Override
-  public void update(final Nifty nifty) {
+  public void update(final Nifty nifty, final float deltaTime) {
   }
 }

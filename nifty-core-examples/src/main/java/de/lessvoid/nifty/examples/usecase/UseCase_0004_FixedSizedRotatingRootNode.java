@@ -12,17 +12,21 @@ import de.lessvoid.nifty.api.UnitValue;
  */
 public class UseCase_0004_FixedSizedRotatingRootNode implements UseCase {
   private final NiftyNode niftyNode;
+  private final NiftyNode childNode;
   private float rot = 0;
 
   public UseCase_0004_FixedSizedRotatingRootNode(final Nifty nifty) {
-    // Create a new root node that is exactly 100x100px and is centered.
-    niftyNode = nifty.createRootNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.None);
+    niftyNode = nifty.createRootNode(UnitValue.px(300), UnitValue.px(300), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.BLUE());
+
+    childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100));
+    childNode.setBackgroundColor(NiftyColor.RED());
   }
 
   @Override
-  public void update(final Nifty nifty) {
-    niftyNode.setRotation(rot);
-    rot += 0.01;
+  public void update(final Nifty nifty, final float deltaTime) {
+    rot += deltaTime / 50.f;
+    //niftyNode.setRotation(rot/10);
+    childNode.setRotation(-rot*10);
   }
 }

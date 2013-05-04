@@ -1,17 +1,18 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import de.lessvoid.coregl.CoreLwjglSetup;
-import de.lessvoid.coregl.CoreLwjglSetup.RenderLoopCallback;
+import de.lessvoid.coregl.CoreLwjglSetup.RenderLoopCallback2;
 import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
 import de.lessvoid.nifty.renderer.lwjgl.NiftyRenderDeviceLwgl;
 
 public class RunUseCaseLwjglMain {
   private static Logger log = Logger.getLogger(RunUseCaseLwjglMain.class.getName());
+  private static float time;
 
   public static void main(final String[] args) throws Exception {
     if (args.length != 1) {
@@ -31,25 +32,46 @@ public class RunUseCaseLwjglMain {
     final UseCase useCase = loadUseCase(args[0], nifty);
     logScene(nifty);
 
-    setup.renderLoop(new RenderLoopCallback() {
+    setup.renderLoop2(new RenderLoopCallback2() {
       @Override
       public boolean render(final float deltaTime) {
-        useCase.update(nifty);
+        useCase.update(nifty, deltaTime);
         nifty.update();
-        nifty.render();
+        boolean result = nifty.render();
 /*
-        NumberFormat format = NumberFormat.getInstance();
+        time += deltaTime;
+        if (time >= 1000) {
+          time = 0;
+
+          FrameInfo[] frameInfos = nifty.getStatistics().getAllSamples();
+          StringBuilder stuff = new StringBuilder("Nifty Stats\n");
+          for (FrameInfo frameInfo : frameInfos) {
+            stuff.append(frameInfo.getFrame());
+            stuff.append(": ");
+            stuff.append(formatValue(frameInfo.getUpdateTime())).append(", ");
+            stuff.append(formatValue(frameInfo.getRenderTime())).append(", ");
+            stuff.append(formatValue(frameInfo.getSyncTime()));
+            stuff.append("\n");
+          }
+          log.info(stuff.toString());
+        }
+*/
+        return result;
+      }
+
+      private String formatValue(final long value) {
+        if (value == -1) {
+          return "N/A";
+        }
+        NumberFormat format = NumberFormat.getInstance(Locale.US);
+        format.setGroupingUsed(false);
         format.setMinimumFractionDigits(4);
         format.setMaximumFractionDigits(4);
-        List<Integer> frameTimes = new ArrayList<Integer>();
-        nifty.getStatistics().getUpdateTime(frameTimes);
-        StringBuilder stuff = new StringBuilder();
-        for (Integer i : frameTimes) {
-          stuff.append(format.format(i / 100000.f));
-          stuff.append(", ");
-        }
-        System.out.println(stuff.toString());
-*/
+        return format.format(value / 100000.f);
+      }
+
+      @Override
+      public boolean shouldEnd() {
         return false;
       }
     });

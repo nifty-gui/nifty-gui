@@ -695,4 +695,32 @@ public class Mat4 implements Serializable {
   public static Mat4 createIdentity() {
     return new Mat4();
   }
+
+  /**
+   * Compare this Matrix with some other matrix and return true when they are equal.
+   * @param other
+   */
+  public boolean compare(final Mat4 other) {
+    return
+        equals(this.m00, other.m00) &&
+        equals(this.m01, other.m01) &&
+        equals(this.m02, other.m02) &&
+        equals(this.m03, other.m03) &&
+        equals(this.m10, other.m10) &&
+        equals(this.m11, other.m11) &&
+        equals(this.m12, other.m12) &&
+        equals(this.m13, other.m13) &&
+        equals(this.m20, other.m20) &&
+        equals(this.m21, other.m21) &&
+        equals(this.m22, other.m22) &&
+        equals(this.m23, other.m23) &&
+        equals(this.m30, other.m30) &&
+        equals(this.m31, other.m31) &&
+        equals(this.m32, other.m32) &&
+        equals(this.m33, other.m33);
+  }
+
+  private boolean equals(final float a, final float b) {
+    return Math.abs(a - b) < 0.00000001f;
+  }
 }

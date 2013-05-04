@@ -1,55 +1,67 @@
 package de.lessvoid.nifty.internal.common;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
 
 public class InternalNiftyStatistics {
   private static final int TIME_HISTORY = 10;
-  private final AtomicInteger renderTreeSynchronisations = new AtomicInteger();
-  private final Queue<Integer> frameTimeHistory = new LinkedBlockingQueue<Integer>(TIME_HISTORY);
-  private final Queue<Integer> updateTimeHistory = new LinkedBlockingQueue<Integer>(TIME_HISTORY);
 
-  public void renderTreeSynchronisation() {
-    renderTreeSynchronisations.addAndGet(1);
+  private int frameCounter = 0;
+  private final Queue<FrameInfo> frameHistory = new LinkedBlockingQueue<FrameInfo>(TIME_HISTORY);
+  private final long[] times = new long[Type.values().length];
+
+  public enum Type {
+    Synchronize,
+    Update,
+    Render
   }
 
-  public void addRenderTime(final int time) {
-    addTime(frameTimeHistory, time);
+  /**
+   * Should be called when processing for a frame ends. This will put all the data we've recorded into a new
+   * FrameInfo instance and will store it for later retrieval.
+   */
+  public void endFrame() {
+    addSample(new FrameInfo(
+        frameCounter++,
+        times[Type.Render.ordinal()],
+        times[Type.Update.ordinal()],
+        times[Type.Synchronize.ordinal()]));
+    for (Type type : Type.values()) {
+      times[type.ordinal()] = -1;
+    }
   }
 
-  public void addUpdateTime(final int time) {
-    addTime(updateTimeHistory, time);
+  /**
+   * Start a sample time.
+   * @param type the Type that is being recorded
+   */
+  public void start(final Type type) {
+    times[type.ordinal()] = System.nanoTime();
   }
 
-  public int getRenderTreeSynchronisations() {
-    return renderTreeSynchronisations.get();
+  /**
+   * Stop a sample time.
+   * @param type the Type to stop
+   */
+  public void stop(final Type type) {
+    times[type.ordinal()] = System.nanoTime() - times[type.ordinal()];
   }
 
-  public void getFrameTime(final List<Integer> target) {
-    getTime(frameTimeHistory, target);
+  /**
+   * Get all samples collected so far.
+   * @return FrameInfo array
+   */
+  public FrameInfo[] getFrameInfos() {
+    return frameHistory.toArray(new FrameInfo[0]);
   }
 
-  public void getUpdateTime(final List<Integer> target) {
-    getTime(updateTimeHistory, target);
-  }
-
-  private void addTime(final Queue<Integer> queue, final int time) {
-    if (queue.offer(time)) {
+  private void addSample(final FrameInfo frameInfo) {
+    if (frameHistory.offer(frameInfo)) {
       return;
     }
-    queue.poll();
-    addTime(queue, time);
-  }
-
-  private void getTime(final Queue<Integer> queue, final List<Integer> target) {
-    target.clear();
-
-    Iterator<Integer> iter = queue.iterator();
-    while (iter.hasNext()) {
-      target.add(iter.next());
-    }
+    frameHistory.poll();
+    addSample(frameInfo);
   }
 }

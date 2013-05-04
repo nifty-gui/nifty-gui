@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.internal.canvas;
 
+import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 
 

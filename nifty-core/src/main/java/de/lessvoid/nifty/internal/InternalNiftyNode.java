@@ -17,8 +17,6 @@ import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvasPainterStandard;
-import de.lessvoid.nifty.internal.common.InternalChildIterate;
-import de.lessvoid.nifty.internal.common.InternalChildIterate.Function;
 import de.lessvoid.nifty.internal.common.InternalIdGenerator;
 import de.lessvoid.nifty.internal.layout.InternalBox;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
@@ -32,7 +30,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   private final Nifty nifty;
 
   // The id of this element.
-  private final String id;
+  private final int id = InternalIdGenerator.generate();
 
   // The box.
   private final InternalBox layoutPos = new InternalBox();
@@ -76,19 +74,17 @@ public class InternalNiftyNode implements InternalLayoutable {
   // Factory methods
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public static InternalNiftyNode newNode(final Nifty nifty, final String id, final InternalNiftyNode parent) {
+  public static InternalNiftyNode newNode(final Nifty nifty, final InternalNiftyNode parent) {
     return new InternalNiftyNode(
         nifty,
-        id,
         parent,
         null,
         null);
   }
 
-  public static InternalNiftyNode newRootNode(final Nifty nifty, final String id, final ChildLayout ueberLayout) {
+  public static InternalNiftyNode newRootNode(final Nifty nifty, final ChildLayout ueberLayout) {
     return new InternalNiftyNode(
         nifty,
-        id,
         null,
         ueberLayout,
         new InternalLayoutableScreenSized(nifty.getScreenWidth(), nifty.getScreenHeight()));
@@ -226,6 +222,10 @@ public class InternalNiftyNode implements InternalLayoutable {
   // Other stuff
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  public int getId() {
+    return id;
+  }
+
   public InternalNiftyNode getParent() {
     return parentNode;
   }
@@ -243,16 +243,9 @@ public class InternalNiftyNode implements InternalLayoutable {
       standardCanvasPainter.paint(this, internalNiftyCanvas);
       needsRedraw = false;
     }
-    InternalChildIterate.iterate(children, childUpdateContent());
-  }
-
-  private Function<InternalNiftyNode, Object> childUpdateContent() {
-    return new Function<InternalNiftyNode, Object>() {
-      @Override
-      public void perform(final InternalNiftyNode node, final Object parameter) {
-        node.updateContent();
-      }
-    };
+    for (int i=0; i<children.size(); i++) {
+      children.get(i).updateContent();
+    }
   }
 
   public List<InternalNiftyNode> getChildren() {
@@ -277,12 +270,10 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   private InternalNiftyNode(
       final Nifty nifty,
-      final String id,
       final InternalNiftyNode parentNode,
       final ChildLayout rootNodePseudoParentLayout,
       final InternalLayoutable rootNodePseudoLayoutable) {
     this.nifty = nifty;
-    this.id = id;
     this.parentNode = parentNode;
     this.needsLayout = true;
     this.rootNodePseudoParentLayout = rootNodePseudoParentLayout;
@@ -303,17 +294,12 @@ public class InternalNiftyNode implements InternalLayoutable {
     }
     assertChildLayout();
     childLayout.getLayout().layoutElements(this, children);
-    InternalChildIterate.iterate(children, childLayout());
-  }
 
-  private Function<InternalNiftyNode, Object> childLayout() {
-    return new Function<InternalNiftyNode, Object>() {
-      @Override
-      public void perform(final InternalNiftyNode node, final Object parameter) {
-        node.needsLayout = false;
-        node.layoutChildren();
-      }
-    };
+    for (int i=0; i<children.size(); i++) {
+      InternalNiftyNode node = children.get(i);
+      node.needsLayout = false;
+      node.layoutChildren();
+    }
   }
 
   private void assertChildLayout() {
@@ -381,7 +367,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   private InternalNiftyNode createChildNodeInternal() {
-    return InternalNiftyNode.newNode(nifty, InternalIdGenerator.generate(), this);
+    return InternalNiftyNode.newNode(nifty, this);
   }
 
   private void assertNotNull(final ChildLayout param) {

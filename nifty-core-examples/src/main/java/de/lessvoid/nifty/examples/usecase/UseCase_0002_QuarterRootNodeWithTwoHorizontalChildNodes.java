@@ -30,7 +30,7 @@ public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes implements 
   }
 
   @Override
-  public void update(final Nifty nifty) {
+  public void update(final Nifty nifty, final float deltaTime) {
     //System.out.println(nifty.getStatistics().getAll());
   }
 }

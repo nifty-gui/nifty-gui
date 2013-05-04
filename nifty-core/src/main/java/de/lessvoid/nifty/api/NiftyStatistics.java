@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.api;
 
-import java.util.List;
-
 import de.lessvoid.nifty.internal.common.InternalNiftyStatistics;
 
 /**
@@ -9,40 +7,48 @@ import de.lessvoid.nifty.internal.common.InternalNiftyStatistics;
  * @author void
  */
 public class NiftyStatistics {
+  /**
+   * A FrameInfo instance records sample times for a specific frame.
+   * @author void
+   */
+  public static class FrameInfo {
+    private final long frame;
+    private final long renderTime;
+    private final long updateTime;
+    private final long syncTime;
+
+    public FrameInfo(final long frame, final long renderTime, final long updateTime, final long syncTime) {
+      this.frame = frame;
+      this.renderTime = renderTime;
+      this.updateTime = updateTime;
+      this.syncTime = syncTime;
+    }
+
+    public long getFrame() {
+      return frame;
+    }
+
+    public long getRenderTime() {
+      return renderTime;
+    }
+
+    public long getUpdateTime() {
+      return updateTime;
+    }
+
+    public long getSyncTime() {
+      return syncTime;
+    }
+  }
+
   private final InternalNiftyStatistics statistics;
 
   /**
-   * Get the total number of render tree synchronisations.
-   * @return the total number of render tree synchronisations
+   * Get all collected samples so far.
+   * @return array of FrameInfo instances with statistics collected so far
    */
-  public int getRenderTreeSynchronisations() {
-    return statistics.getRenderTreeSynchronisations();
-  }
-
-  /**
-   * Get the collected frame time samples into the target list. The oldest sample is returned first.
-   * @param target the list to collect the samples into
-   */
-  public void getFrameTime(final List<Integer> target) {
-    statistics.getFrameTime(target);
-  }
-
-  /**
-   * Get the collected update time samples into the target list. The oldest sample is returned first.
-   * @param target the list to collect the samples into
-   */
-  public void getUpdateTime(final List<Integer> target) {
-    statistics.getUpdateTime(target);
-  }
-
-  /**
-   * Get all statistics as a String ready for output in a console.
-   * @return a String with all appropriate statistics for loggin
-   */
-  public String getAll() {
-    StringBuilder result = new StringBuilder("Nifty statistics\n");
-    result.append(" renderTreeSynchronisations: ").append(statistics.getRenderTreeSynchronisations()).append("\n");
-    return result.toString();
+  public FrameInfo[] getAllSamples() {
+    return statistics.getFrameInfos();
   }
 
   NiftyStatistics(final InternalNiftyStatistics statistics) {

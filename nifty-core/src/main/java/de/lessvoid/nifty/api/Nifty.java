@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
-import de.lessvoid.nifty.internal.common.InternalIdGenerator;
 import de.lessvoid.nifty.internal.common.InternalNiftyStatistics;
+import de.lessvoid.nifty.internal.common.InternalNiftyStatistics.Type;
 import de.lessvoid.nifty.internal.render.InternalRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
@@ -21,6 +21,7 @@ public class Nifty {
 
   // The one and only NiftyStatistics instanz.
   private final NiftyStatistics statistics = new NiftyStatistics(new InternalNiftyStatistics());
+  private final InternalNiftyStatistics stats = statistics.getImpl();
 
   // The NiftyRenderDevice we'll forward all render calls to.
   private final NiftyRenderDevice renderDevice;
@@ -52,24 +53,22 @@ public class Nifty {
    * Update.
    */
   public void update() {
-    long now = System.nanoTime();
+    stats.start(Type.Update);
     for (int i=0; i<rootNodes.size(); i++) {
       rootNodes.get(i).getImpl().updateContent();
     }
-    statistics.getImpl().addUpdateTime((int) (System.nanoTime() - now));
+    stats.stop(Type.Update);
   }
 
   /**
    * Render.
    */
-  public void render() {
-    long now = System.nanoTime();
-    if (hack) {
-      renderer.synchronize(rootNodes);
-      hack = false;
-    }
-    renderer.render();
-    statistics.getImpl().addRenderTime((int) (System.nanoTime() - now));
+  public boolean render() {
+    stats.start(Type.Render);
+    boolean frameChanged = renderer.render(rootNodes);
+    stats.stop(Type.Render);
+    stats.endFrame();
+    return frameChanged;
   }
 
   /**
@@ -195,7 +194,7 @@ public class Nifty {
   // Internal methods
 
   private NiftyNode createRootNodeInternal() {
-    return NiftyNode.newInstance(InternalNiftyNode.newRootNode(this, InternalIdGenerator.generate(), rootNodePlacementLayout));
+    return NiftyNode.newInstance(InternalNiftyNode.newRootNode(this, rootNodePlacementLayout));
   }
 
   static {
