@@ -16,5 +16,6 @@ public interface ImageData {
   ByteBuffer loadImage(InputStream fis, boolean flipped, int[] transparent) throws IOException;
   ByteBuffer loadImage(InputStream fis, boolean flipped, boolean forceAlpha, int[] transparent) throws IOException;
   
+  ByteBuffer loadImageDirect(InputStream fis) throws IOException;
   BufferedImage loadMouseCursorImage(InputStream fis) throws IOException;
 }

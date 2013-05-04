@@ -309,6 +309,10 @@ public class TGAImageData implements ImageData {
       return ImageIO.read(fis);
     }
     
+    public ByteBuffer loadImageDirect(InputStream fis) throws IOException {
+      return loadImage(fis, false, true, null);
+    }
+
     /**
      * Get the closest greater power of 2 to the fold number
      * 

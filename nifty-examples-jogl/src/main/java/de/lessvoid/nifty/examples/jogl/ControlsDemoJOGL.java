@@ -19,12 +19,15 @@ import org.lwjgl.opengl.GL11;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.LoggerShortFormat;
 import de.lessvoid.nifty.examples.defaultcontrols.ControlsDemo;
 import de.lessvoid.nifty.examples.resolution.ResolutionControlLWJGL;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
 import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
+import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackend;
+import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
 public class ControlsDemoJOGL implements GLEventListener {
@@ -34,9 +37,10 @@ public class ControlsDemoJOGL implements GLEventListener {
   long time = System.currentTimeMillis();
   long frames = 0;
   private static JoglInputSystem inputSystem;
-  private static JoglRenderDevice renderDevice;
+  private static RenderDevice renderDevice;
   private static Nifty nifty;
   private static GLCanvas canvas;
+  private static boolean useBatchedRenderer = false;
 
   private static void intialize() throws Exception {
     InputStream input = null;
@@ -53,6 +57,10 @@ public class ControlsDemoJOGL implements GLEventListener {
   public static void main(String[] args) throws Exception {
     intialize();
 
+    if (args.length == 1) {
+      useBatchedRenderer = "batch".equals(args[0]);
+    }
+
     canvas = new GLCanvas(new GLCapabilities(GLProfile.getDefault()));
     canvas.setAutoSwapBufferMode(true);
     canvas.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -60,7 +68,7 @@ public class ControlsDemoJOGL implements GLEventListener {
 
     final FPSAnimator animator = new FPSAnimator(canvas, FPS, false);
 
-    final Frame frame = new Frame("AWT Window Test - Nifty");
+    final Frame frame = new Frame(getCaption(useBatchedRenderer));
     frame.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     frame.add(canvas);
     frame.setVisible(true);
@@ -75,13 +83,26 @@ public class ControlsDemoJOGL implements GLEventListener {
     animator.start();
   }
 
+  private static String getCaption(final boolean batched) {
+    String add = "";
+    if (batched) {
+      add = " (BATCH RENDERER)";
+    }
+    return "AWT Window Test - Nifty" + add;
+  }
+
   public void display(GLAutoDrawable drawable) {
+    long startTime = System.nanoTime();
     update(drawable);
-    render(drawable);
+    render(drawable, startTime);
   }
 
   public void init(GLAutoDrawable drawable) {
-    renderDevice = new JoglRenderDevice();
+    if (useBatchedRenderer) {
+      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend(), 2048, 2048);
+    } else {
+      renderDevice = new JoglRenderDevice();
+    }
     inputSystem = new JoglInputSystem();
     canvas.addMouseListener(inputSystem);
     canvas.addMouseMotionListener(inputSystem);
@@ -115,13 +136,14 @@ public class ControlsDemoJOGL implements GLEventListener {
     nifty.render(true);
   }
 
-  private void render(GLAutoDrawable drawable) {
+  private void render(GLAutoDrawable drawable, final long startTime) {
+    long frameTime = System.nanoTime() - startTime;
     frames++;
 
     long diff = System.currentTimeMillis() - time;
     if (diff >= 1000) {
       time += diff;
-      System.out.println("fps : " + frames);
+      System.out.println("fps : " + frames + " (" + frameTime / 1000000f + " ms)");
       frames = 0;
     }
   }
