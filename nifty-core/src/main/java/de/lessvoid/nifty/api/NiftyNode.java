@@ -244,6 +244,20 @@ public class NiftyNode {
   }
 
   /**
+   * Enable cache of this Node.
+   */
+  public void enableCache() {
+    impl.setCache(true);
+  }
+
+  /**
+   * Disable cache of this Node.
+   */
+  public void disableCache() {
+    impl.setCache(false);
+  }
+
+  /**
    * The ChildLayout enumeration will define how this NiftyNode will layout its
    * children.
    * 

@@ -50,6 +50,9 @@ public class InternalNiftyNode implements InternalLayoutable {
   // Does this node needs layout? This will be set to false when this Node has been layed out by its parent.
   private boolean needsLayout = true;
 
+  // Does this node needs to be redrawn? This will be set to false once the Node content has been drawn.
+  private boolean needsRedraw = true;
+
   // The pseudo ChildLayout if this node is a root node. This field is only used when this node is a root node.
   private final ChildLayout rootNodePseudoParentLayout;
 
@@ -67,6 +70,9 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   // The canvas.
   private NiftyCanvas canvas;
+
+  // When set to true, Nifty will render all childrens into a texture.
+  private boolean cache;
 
   private double angleZ;
 
@@ -167,6 +173,7 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public void setBackgroundColor(final NiftyColor color) {
     backgroundColor  = color;
+    needsRedraw = true;
   }
 
   public void setRotation(final double angle) {
@@ -187,6 +194,14 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public void getStateInfo(final StringBuilder result, final String pattern) {
     getStateInfo(result, "", Pattern.compile(pattern));
+  }
+
+  public void setCache(final boolean cache) {
+    this.cache = cache;
+  }
+
+  public boolean isCache() {
+    return cache;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,8 +249,6 @@ public class InternalNiftyNode implements InternalLayoutable {
   // Private Methods and package private stuff
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  private boolean needsRedraw = true;
-
   public void updateContent() {
     if (needsRedraw) {
       InternalNiftyCanvas internalNiftyCanvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
@@ -243,6 +256,7 @@ public class InternalNiftyNode implements InternalLayoutable {
       standardCanvasPainter.paint(this, internalNiftyCanvas);
       needsRedraw = false;
     }
+
     for (int i=0; i<children.size(); i++) {
       children.get(i).updateContent();
     }

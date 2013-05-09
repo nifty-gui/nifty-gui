@@ -72,7 +72,7 @@ public class InternalLayoutCenter implements InternalLayout {
       handleWidthConstraint(rootBox, rootBoxConstraints, box, constraint);
     } else {
       box.setX(
-          rootBox.getX()
+          0
           + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth()));
       box.setWidth(
           rootBox.getWidth()
@@ -90,7 +90,7 @@ public class InternalLayoutCenter implements InternalLayout {
       handleHeightConstraint(rootBox, rootBoxConstraints, box, constraint);
     } else {
       box.setY(
-          rootBox.getY()
+          0
           + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight()));
       box.setHeight(
           rootBox.getHeight()
@@ -104,7 +104,7 @@ public class InternalLayoutCenter implements InternalLayout {
       final InternalBoxConstraints rootBoxConstraints,
       final InternalBox box,
       final InternalBoxConstraints constraint) {
-    int rootBoxX = rootBox.getX() + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth());
+    int rootBoxX = 0 + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth());
     int rootBoxWidth = rootBox.getWidth() -
                        rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth()) -
                        rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth());
@@ -132,7 +132,7 @@ public class InternalLayoutCenter implements InternalLayout {
       final InternalBoxConstraints rootBoxConstraints,
       final InternalBox box,
       final InternalBoxConstraints constraint) {
-    int rootBoxY = rootBox.getY() + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight());
+    int rootBoxY = 0 + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight());
     int rootBoxHeight = rootBox.getHeight() -
                         rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight()) -
                         rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight());

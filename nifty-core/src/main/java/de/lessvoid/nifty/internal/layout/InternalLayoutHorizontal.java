@@ -162,13 +162,11 @@ public class InternalLayoutHorizontal implements InternalLayout {
   }
 
   private int getRootBoxX(final InternalLayoutable root) {
-    return root.getLayoutPos().getX()
-        + root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getLayoutPos().getWidth());
+    return 0 + root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getLayoutPos().getWidth());
   }
 
   private int getRootBoxY(final InternalLayoutable root) {
-    return root.getLayoutPos().getY()
-        + root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getLayoutPos().getHeight());
+    return 0 + root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getLayoutPos().getHeight());
   }
 
   private int getRootBoxWidth(final InternalLayoutable root) {

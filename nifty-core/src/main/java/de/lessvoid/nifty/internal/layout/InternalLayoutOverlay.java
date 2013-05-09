@@ -19,8 +19,8 @@ public class InternalLayoutOverlay implements InternalLayout {
     for (int i = 0; i < children.size(); i++) {
       InternalLayoutable p = children.get(i);
       InternalBox box = p.getLayoutPos();
-      box.setX(rootBox.getX());
-      box.setY(rootBox.getY());
+      box.setX(0);
+      box.setY(0);
       box.setWidth(rootBox.getWidth());
       box.setHeight(rootBox.getHeight());
     }

@@ -139,13 +139,13 @@ public class InternalLayoutVertical implements InternalLayout {
 
   private int getRootBoxX(final InternalLayoutable root) {
     return
-        root.getLayoutPos().getX() +
+        0 +
         root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getLayoutPos().getWidth());
   }
 
   private int getRootBoxY(final InternalLayoutable root) {
     return
-        root.getLayoutPos().getY() +
+        0 +
         root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getLayoutPos().getHeight());
   }
 

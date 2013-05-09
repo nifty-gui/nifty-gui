@@ -25,8 +25,8 @@ public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes implements 
     rootNode.setHorizontalAlignment(HorizontalAlignment.right);
 
     // add two child nodes to the root node
-    rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#0ff"));
-    rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff0"));
+    rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#0ff8"));
+    rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff08"));
   }
 
   @Override

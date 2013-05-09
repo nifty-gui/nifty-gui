@@ -10,18 +10,18 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderTarget;
 
 /**
- * Represents a Node that can be rendered. A InternalNiftyNode will be converted into an instance of this class.
+ * 
  * @author void
  */
-public class InternalRendererNode {
+public class RenderNodeFBO implements RenderNode {
   // track back to the original InternalNiftyNode
   private final int originalNodeId;
 
-  // The combined model transformation for this node.
-  private final Mat4 mat;
+  // The local model transformation for this node.
+  private final Mat4 local;
 
   // The child RenderNodes of this node.
-  private final List<InternalRendererNode> children = new ArrayList<InternalRendererNode>();
+  private final List<RenderNodeFBO> children = new ArrayList<RenderNodeFBO>();
 
   // render target for this node
   private NiftyRenderTarget renderTarget;
@@ -31,28 +31,24 @@ public class InternalRendererNode {
   private final Context context;
   private final List<Command> commands;
 
-  private Mat4 move;
-
-  public InternalRendererNode(
+  public RenderNodeFBO(
       final int originalNodeId,
       final int width,
       final int height,
       final List<Command> commands,
-      final Mat4 mat,
-      final Mat4 move,
+      final Mat4 local,
       final NiftyRenderTarget renderTarget) {
     this.originalNodeId = originalNodeId;
     this.width = width;
     this.height = height;
     this.context = new Context();
     this.commands = commands;
-    this.mat = mat;
-    this.move = move;
+    this.local = local;
     this.renderTarget = renderTarget;
   }
 
-  public void updateContent(final NiftyRenderDevice renderDevice) {
-    renderTarget.setMatrix(move);
+  public void updateContent(final NiftyRenderDevice renderDevice, final Mat4 mat) {
+    renderTarget.setMatrix(mat);
     if (!commands.isEmpty()) {
       for (int i=0; i<commands.size(); i++) {
         Command command = commands.get(i);
@@ -62,16 +58,21 @@ public class InternalRendererNode {
     }
 
     for (int i=0; i<children.size(); i++) {
-      children.get(i).updateContent(renderDevice);
+      children.get(i).updateContent(renderDevice, children.get(i).local);
     }
   }
 
+  @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.render(renderTarget, 0, 0, width, height, mat);
-//    InternalChildIterate.iterate(children, childRender, renderDevice);
+    renderDevice.render(renderTarget, 0, 0, width, height, local);
+/*
+    for (int i=0; i<children.size(); i++) {
+      children.get(i).render(renderDevice);
+    }
+*/
   }
 
-  public void addChildNode(final InternalRendererNode childNode) {
+  public void addChildNode(final RenderNodeFBO childNode) {
     children.add(childNode);
   }
 
@@ -79,16 +80,12 @@ public class InternalRendererNode {
     return originalNodeId;
   }
 
-  public Mat4 getTransformation() {
-    return new Mat4(mat);
+  public Mat4 getLocal() {
+    return new Mat4(local);
   }
 
-  public Mat4 getMove() {
-    return new Mat4(move);
-  }
-
-  public void setTransformation(final Mat4 src) {
-    this.mat.load(src);
+  public void setLocal(final Mat4 src) {
+    this.local.load(src);
   }
 
   public NiftyRenderTarget getRendertarget() {
@@ -116,11 +113,7 @@ public class InternalRendererNode {
     this.commands.addAll(commands);
   }
 
-  public List<InternalRendererNode> getChildren() {
+  public List<RenderNodeFBO> getChildren() {
     return children;
-  }
-
-  public void setMove(Mat4 move2) {
-    move = new Mat4(move2);
   }
 }

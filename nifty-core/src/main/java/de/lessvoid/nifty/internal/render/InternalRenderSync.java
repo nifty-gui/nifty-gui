@@ -15,29 +15,29 @@ import de.lessvoid.nifty.spi.NiftyRenderTarget;
  * Synchronize a list of NiftyNodes to a list if InternalRenderNodes.
  * @author void
  */
-public class InternalRendererSync {
+public class InternalRenderSync {
   private final InternalNiftyStatistics statistics;
   private final NiftyNodeAccessor niftyNodeAccessor;
   private final NiftyRenderDevice renderDevice;
 
-  public InternalRendererSync(final InternalNiftyStatistics statistics, final NiftyRenderDevice renderDevice) {
+  public InternalRenderSync(final InternalNiftyStatistics statistics, final NiftyRenderDevice renderDevice) {
     this.statistics = statistics;
     this.niftyNodeAccessor = NiftyNodeAccessor.getDefault();
     this.renderDevice = renderDevice;
   }
 
-  public boolean synchronize(final List<NiftyNode> srcNodes, final List<InternalRendererNode> dstNodes) {
+  public boolean synchronize(final List<NiftyNode> srcNodes, final List<InternalRenderNode> dstNodes) {
     statistics.start(Type.Synchronize);
     boolean changed = false;
 
     for (int i=0; i<srcNodes.size(); i++) {
       InternalNiftyNode src = niftyNodeAccessor.getInternalNiftyNode(srcNodes.get(i));
-      InternalRendererNode dst = findNode(dstNodes, src.getId());
+      InternalRenderNode dst = findNode(dstNodes, src.getId());
       if (dst == null) {
-        dstNodes.add(createRenderNode(src, null, Mat4.createTranslate(src.getX(), src.getY(), 0.f), null));
+        dstNodes.add(createRenderNode(src, null, new Mat4(), null));
         changed = true;
       } else {
-        boolean syncChanged = syncRenderNode(src, Mat4.createTranslate(src.getX(), src.getY(), 0.f), null, dst);
+        boolean syncChanged = syncRenderNode(src, new Mat4(), null, dst);
         changed = changed || syncChanged;
       }
     }
@@ -46,9 +46,9 @@ public class InternalRendererSync {
     return changed;
   }
 
-  private InternalRendererNode findNode(final List<InternalRendererNode> nodes, final int id) {
+  private InternalRenderNode findNode(final List<InternalRenderNode> nodes, final int id) {
     for (int i=0; i<nodes.size(); i++) {
-      InternalRendererNode node = nodes.get(i);
+      InternalRenderNode node = nodes.get(i);
       if (node.getOriginalNodeId() == id) {
         return node;
       }
@@ -56,68 +56,60 @@ public class InternalRendererSync {
     return null;
   }
 
-  private InternalRendererNode createRenderNode(
+  private InternalRenderNode createRenderNode(
       final InternalNiftyNode node,
       final InternalNiftyNode parent,
       final Mat4 parentTransform,
       final NiftyRenderTarget parentRenderTarget) {
-    Mat4 transformation = parentTransform;
-    NiftyRenderTarget rt;
-    Mat4 move;
-    if (parent != null) {
-      move = Mat4.createTranslate(node.getX() - parent.getX(), node.getY() - parent.getY(), 0.f);
-      Mat4.mul(parentTransform, move, transformation);
-      rt = parentRenderTarget;
-    } else {
-      rt = renderDevice.createRenderTargets(node.getWidth(), node.getHeight(), 1, 1);
-      move = new Mat4();
-    }
-    Mat4.mul(transformation, Mat4.createRotate((float) node.getRotationZ(), 0.0f, 0.0f, 1.f), transformation);
-    Mat4.mul(move, Mat4.createRotate((float) node.getRotationZ(), 0.0f, 0.0f, 1.f), move);
-    System.out.println(move);
-    InternalRendererNode renderNode = new InternalRendererNode(
+    InternalRenderNode renderNode = new InternalRenderNode(
         node.getId(),
         node.getWidth(),
         node.getHeight(),
         node.getCanvas().getCommands(),
-        transformation,
-        move,
-        rt);
+        buildLocalTransformation(node),
+        createRenderTarget(node, parent, parentRenderTarget));
 
     for (int i=0; i<node.getChildren().size(); i++) {
       InternalNiftyNode n = node.getChildren().get(i);
-      renderNode.addChildNode(createRenderNode(n, n.getParent(), renderNode.getTransformation(), renderNode.getRendertarget()));
+      renderNode.addChildNode(createRenderNode(n, n.getParent(), renderNode.getLocal(), renderNode.getRendertarget()));
     }
 
     return renderNode;
+  }
+
+  private Mat4 buildLocalTransformation(final InternalNiftyNode node) {
+    return Mat4.mul(
+        Mat4.createTranslate(node.getX(), node.getY(), 0.f),
+        Mat4.createRotate((float) node.getRotationZ(), 0.0f, 0.0f, 1.f));
+  }
+
+  private NiftyRenderTarget createRenderTarget(
+      final InternalNiftyNode node,
+      final InternalNiftyNode parent,
+      final NiftyRenderTarget parentRenderTarget) {
+    if (parent == null || node.isCache()) {
+      return renderDevice.createRenderTargets(node.getWidth(), node.getHeight(), 1, 1);
+    }
+    return parentRenderTarget;
   }
 
   private boolean syncRenderNode(
       final InternalNiftyNode src,
       final Mat4 parentTransform,
       final NiftyRenderTarget parentRenderTarget,
-      final InternalRendererNode dst) {
-    Mat4 transformation = parentTransform;
-    InternalNiftyNode parent = src.getParent();
-    Mat4 move = new Mat4();
-    if (parent != null) {
-      move = Mat4.createTranslate(src.getX() - parent.getX(), src.getY() - parent.getY(), 0.f);
-      Mat4.mul(parentTransform, move, transformation);
-    }
-    Mat4.mul(transformation, Mat4.createRotate((float) src.getRotationZ(), 0.0f, 0.0f, 1.f), transformation);
-    Mat4.mul(move, Mat4.createRotate((float) src.getRotationZ(), 0.0f, 0.0f, 1.f), move);
-
-    boolean thisNodeChanged = (!dst.getTransformation().compare(transformation) ||
-                               !dst.getMove().compare(move) ||
+      final InternalRenderNode dst) {
+    // FIXME only build a new matrix when transformation related properties of the nodes have changed!
+    Mat4 local = buildLocalTransformation(src);
+    boolean thisNodeChanged = (!dst.getLocal().compare(local) ||
                                 dst.getWidth() != src.getWidth() ||
                                 dst.getHeight() != src.getHeight() ||
                                 src.getCanvas().isChanged());
-
-    dst.setTransformation(transformation);
+    dst.setLocal(local);
     dst.setWidth(src.getWidth());
     dst.setHeight(src.getHeight());
-    dst.setCommands(src.getCanvas().getCommands());
-    dst.setMove(move);
+    if (thisNodeChanged) {
+      dst.setCommands(src.getCanvas().getCommands());
+    }
 
     boolean childChanged = false;
     for (int i=0; i<src.getChildren().size(); i++) {
@@ -128,13 +120,13 @@ public class InternalRendererSync {
     return thisNodeChanged || childChanged;
   }
 
-  private boolean sync(final InternalNiftyNode src, final InternalRendererNode dstParent) {
-    InternalRendererNode dst = findNode(dstParent.getChildren(), src.getId());
+  private boolean sync(final InternalNiftyNode src, final InternalRenderNode dstParent) {
+    InternalRenderNode dst = findNode(dstParent.getChildren(), src.getId());
     if (dst == null) {
       dstParent.addChildNode(createRenderNode(src, src.getParent(), Mat4.createTranslate(src.getX(), src.getY(), 0.f), dstParent.getRendertarget()));
       return true;
     } else {
-      return syncRenderNode(src, dstParent.getTransformation(), dstParent.getRendertarget(), dst);
+      return syncRenderNode(src, dstParent.getLocal(), dstParent.getRendertarget(), dst);
     }
   }
 }

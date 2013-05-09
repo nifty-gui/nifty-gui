@@ -1,12 +1,13 @@
 package de.lessvoid.nifty.renderer.lwjgl;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
 
 import de.lessvoid.coregl.CoreFBO;
@@ -49,14 +50,17 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
 
     projection = CoreMatrixFactory.createOrtho(0, texture.getWidth(), 0, texture.getHeight());
 
-    fbo.bindFramebuffer(texture.getWidth(), texture.getHeight());
+    fbo.bindFramebuffer();
     for (int i=0; i<countX*countY; i++) {
       fbo.attachTexture(texture.getTextureId(), 0, i);
+      fbo.attachStencil(texture.getWidth(), texture.getHeight());
       glClearColor(0.25f, 0.5f, 1.0f, 1.f);
-      glClear(GL_COLOR_BUFFER_BIT);
+      glClearStencil(0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     }
-    fbo.disableAndResetViewport();
+    fbo.disable();
+    glViewport(0, 0, Display.getWidth(), Display.getHeight());
 
     vao = new CoreVAO();
     vao.bind();
@@ -82,8 +86,9 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
 
   @Override
   public void filledRect(final double x0, final double y0, final double x1, final double y1, final NiftyColor color) {
-    fbo.bindFramebuffer(texture.getWidth(), texture.getHeight());
+    fbo.bindFramebuffer();
     fbo.attachTexture(texture.getTextureId(), 0, 0);
+    glViewport(0, 0, texture.getWidth(), texture.getHeight());
 
     plainColor.activate();
     plainColor.setUniformf("uColor", (float)color.getRed(), (float)color.getGreen(), (float)color.getBlue(), (float)color.getAlpha());
@@ -91,7 +96,8 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
     quadCount++;
     flush();
 
-    fbo.disableAndResetViewport();
+    fbo.disable();
+    glViewport(0, 0, Display.getWidth(), Display.getHeight());
   }
 
   private void addQuad(final FloatBuffer buffer, final float x0, final float y0, final float x1, final float y1) {
