@@ -6,12 +6,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,6 +92,7 @@ public class Nifty {
   private boolean exit;
   private boolean resolutionChanged;
   private TimeProvider timeProvider;
+  private final Set<String> closedPopups = new HashSet<String>();
   private List < ClosePopUp > closePopupList = new ArrayList < ClosePopUp >();
   private NiftyLoader loader;
   private List < ControlToAdd > controlsToAdd = new ArrayList < ControlToAdd >();
@@ -962,6 +965,13 @@ public class Nifty {
       log.warning("missing popup [" + id + "] o_O");
       return;
     }
+
+    if (closedPopups.contains(id)) {
+      log.warning("popup [" + id + "] already scheduled to be closed. Additional close call ignored.");
+      return;
+    }
+    closedPopups.add(id);
+
     popup.resetAllEffects();
     popup.startEffect(EffectEventId.onEndScreen, new EndNotify() {
       public void perform() {
@@ -1648,5 +1658,9 @@ public class Nifty {
     @Override
     public void processKeyboardEvent(KeyboardInputEvent keyEvent, boolean processed) {
     }
+  }
+
+  public void internalPopupRemoved(final String id) {
+    closedPopups.remove(id);
   }
 }

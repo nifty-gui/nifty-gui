@@ -844,6 +844,7 @@ public class Screen {
       if (closeNotify != null) {
         closeNotify.perform();
       }
+      element.getNifty().internalPopupRemoved(element.getId());
     }
   }
 
