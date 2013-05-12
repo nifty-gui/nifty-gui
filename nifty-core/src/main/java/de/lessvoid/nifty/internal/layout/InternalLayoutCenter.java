@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.lessvoid.nifty.api.HorizontalAlignment;
 import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.internal.common.Box;
 
 /**
  * CenterLayout centers all child elements. If there are more than one child elements all elements will be centered
@@ -20,7 +21,7 @@ public class InternalLayoutCenter implements InternalLayout {
       return;
     }
 
-    InternalBox rootBox = rootElement.getLayoutPos();
+    Box rootBox = rootElement.getLayoutPos();
     InternalBoxConstraints rootBoxConstraints = rootElement.getBoxConstraints();
 
     for (int i=0; i<elements.size(); i++) {
@@ -44,8 +45,8 @@ public class InternalLayoutCenter implements InternalLayout {
     return boxConstraints.getMarginBottom().getValueAsInt(rootBoxHeight);
   }
 
-  private void layoutElement(final InternalLayoutable element, InternalBox rootBox, InternalBoxConstraints rootBoxConstraints) {
-    InternalBox box = element.getLayoutPos();
+  private void layoutElement(final InternalLayoutable element, Box rootBox, InternalBoxConstraints rootBoxConstraints) {
+    Box box = element.getLayoutPos();
     InternalBoxConstraints constraint = element.getBoxConstraints();
 
     if (constraint.getWidth() != null && constraint.getWidth().hasHeightSuffix()) {
@@ -64,9 +65,9 @@ public class InternalLayoutCenter implements InternalLayout {
   }
 
   void handleHorizontalAlignment(
-      final InternalBox rootBox,
+      final Box rootBox,
       final InternalBoxConstraints rootBoxConstraints,
-      final InternalBox box,
+      final Box box,
       final InternalBoxConstraints constraint) {
     if (constraint.getWidth() != null) {
       handleWidthConstraint(rootBox, rootBoxConstraints, box, constraint);
@@ -82,9 +83,9 @@ public class InternalLayoutCenter implements InternalLayout {
   }
 
   void handleVerticalAlignment(
-      final InternalBox rootBox,
+      final Box rootBox,
       final InternalBoxConstraints rootBoxConstraints,
-      final InternalBox box,
+      final Box box,
       final InternalBoxConstraints constraint) {
     if (constraint.getHeight() != null) {
       handleHeightConstraint(rootBox, rootBoxConstraints, box, constraint);
@@ -100,9 +101,9 @@ public class InternalLayoutCenter implements InternalLayout {
   }
 
   private void handleWidthConstraint(
-      final InternalBox rootBox,
+      final Box rootBox,
       final InternalBoxConstraints rootBoxConstraints,
-      final InternalBox box,
+      final Box box,
       final InternalBoxConstraints constraint) {
     int rootBoxX = 0 + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth());
     int rootBoxWidth = rootBox.getWidth() -
@@ -128,9 +129,9 @@ public class InternalLayoutCenter implements InternalLayout {
   }
 
   private void handleHeightConstraint(
-      final InternalBox rootBox,
+      final Box rootBox,
       final InternalBoxConstraints rootBoxConstraints,
-      final InternalBox box,
+      final Box box,
       final InternalBoxConstraints constraint) {
     int rootBoxY = 0 + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight());
     int rootBoxHeight = rootBox.getHeight() -

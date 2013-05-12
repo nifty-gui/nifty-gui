@@ -1,9 +1,14 @@
 package de.lessvoid.nifty.spi;
 
+import java.io.IOException;
+
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.internal.math.Mat4;
 
 public interface NiftyRenderTarget {
+
+  int getWidth();
+  int getHeight();
 
   /**
    * 
@@ -21,4 +26,11 @@ public interface NiftyRenderTarget {
    */
   void filledRect(double x0, double y0, double x1, double y1, NiftyColor randomColor);
 
+  void beginStencil();
+  void markStencil(double x, double y, double width, double height);
+  void endStencil();
+  
+  void saveContent(String filename) throws IOException;
+  void enableStencil();
+  void disableStencil();
 }

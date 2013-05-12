@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VerticalAlignment;
-import de.lessvoid.nifty.internal.layout.InternalBox;
+import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutHorizontal;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
@@ -22,9 +22,9 @@ public class InternalLayoutHorizontalTest {
 
   @Before
   public void setUp() throws Exception {
-    rootPanel = new InternalLayoutableTestImpl(new InternalBox(0, 0, 640, 480), new InternalBoxConstraints());
-    left = new InternalLayoutableTestImpl(new InternalBox(), new InternalBoxConstraints());
-    right = new InternalLayoutableTestImpl(new InternalBox(), new InternalBoxConstraints());
+    rootPanel = new InternalLayoutableTestImpl(new Box(0, 0, 640, 480), new InternalBoxConstraints());
+    left = new InternalLayoutableTestImpl(new Box(), new InternalBoxConstraints());
+    right = new InternalLayoutableTestImpl(new Box(), new InternalBoxConstraints());
 
     elements = new ArrayList<InternalLayoutable>();
     elements.add(left);

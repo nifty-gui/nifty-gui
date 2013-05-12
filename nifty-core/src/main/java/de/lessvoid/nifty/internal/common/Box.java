@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.internal.layout;
+package de.lessvoid.nifty.internal.common;
 
 /**
  * The Box class represent a rectangular area on the screen. It has a position (x,y) as well as height and weight
@@ -6,7 +6,7 @@ package de.lessvoid.nifty.internal.layout;
  *
  * @author void
  */
-public class InternalBox {
+public class Box {
 
   // Horizontal Position of the box.
   private int x;
@@ -23,7 +23,7 @@ public class InternalBox {
   /**
    * Create a new Box with some default coordinates (x,y) set to (0,0) and with width and height set to 0.
    */
-  public InternalBox() {
+  public Box() {
     this.x = 0;
     this.y = 0;
     this.width = 0;
@@ -36,7 +36,7 @@ public class InternalBox {
    * @param src
    *          src box to copy from
    */
-  public InternalBox(final InternalBox src) {
+  public Box(final Box src) {
     this.x = src.x;
     this.y = src.y;
     this.width = src.width;
@@ -55,7 +55,7 @@ public class InternalBox {
    * @param newHeight
    *          the new height of the box
    */
-  public InternalBox(final int newX, final int newY, final int newWidth, final int newHeight) {
+  public Box(final int newX, final int newY, final int newWidth, final int newHeight) {
     this.x = newX;
     this.y = newY;
     this.width = newWidth;
@@ -66,7 +66,7 @@ public class InternalBox {
    * Copy all the Box data from the given parameter to this without creating a new instance.
    * @param src the source box to copy data from
    */
-  public void from(final InternalBox src) {
+  public void from(final Box src) {
     this.x = src.x;
     this.y = src.y;
     this.width = src.width;
@@ -170,7 +170,7 @@ public class InternalBox {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final InternalBox other = (InternalBox) obj;
+    final Box other = (Box) obj;
     if (height != other.height) {
       return false;
     }

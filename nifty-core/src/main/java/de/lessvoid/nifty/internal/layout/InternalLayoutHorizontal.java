@@ -3,6 +3,7 @@ package de.lessvoid.nifty.internal.layout;
 import java.util.List;
 
 import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.internal.common.Box;
 
 /**
  * The children elements are arranged in a horizontal form in relation to the root element.
@@ -32,7 +33,7 @@ public class InternalLayoutHorizontal implements InternalLayout {
     int x = rootBoxX;
     for (int i = 0; i < children.size(); i++) {
       InternalLayoutable current = children.get(i);
-      InternalBox box = current.getLayoutPos();
+      Box box = current.getLayoutPos();
       InternalBoxConstraints boxConstraints = current.getBoxConstraints();
 
       int elementWidth;
@@ -81,7 +82,7 @@ public class InternalLayoutHorizontal implements InternalLayout {
 
   private int processHeightConstraint(
       final int rootBoxHeight,
-      final InternalBox box,
+      final Box box,
       final InternalBoxConstraints constraint,
       final int elementWidth) {
     if (hasHeightConstraint(constraint)) {
@@ -119,7 +120,7 @@ public class InternalLayoutHorizontal implements InternalLayout {
   private int processVerticalAlignment(
       final int rootBoxY,
       final int rootBoxHeight,
-      final InternalBox box,
+      final Box box,
       final InternalBoxConstraints boxConstraints) {
     if (VerticalAlignment.center.equals(boxConstraints.getVerticalAlign())) {
       return rootBoxY + ((rootBoxHeight - box.getHeight()) / 2);

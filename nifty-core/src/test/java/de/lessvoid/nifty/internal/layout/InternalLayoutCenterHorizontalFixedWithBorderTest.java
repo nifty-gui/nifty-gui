@@ -5,14 +5,14 @@ import org.junit.Test;
 
 import de.lessvoid.nifty.api.HorizontalAlignment;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.internal.layout.InternalBox;
+import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutCenter;
 
 public class InternalLayoutCenterHorizontalFixedWithBorderTest {
   private InternalLayoutCenter layout;
-  private InternalBox rootBox;
-  private InternalBox box;
+  private Box rootBox;
+  private Box box;
   private InternalBoxConstraints constraint;
   private InternalBoxConstraints rootBoxConstraints;
 
@@ -20,12 +20,12 @@ public class InternalLayoutCenterHorizontalFixedWithBorderTest {
   public void setUp() throws Exception {
     layout = new InternalLayoutCenter();
 
-    rootBox = new InternalBox(0, 0, 640, 480);
+    rootBox = new Box(0, 0, 640, 480);
 
     rootBoxConstraints = new InternalBoxConstraints();
     rootBoxConstraints.setPadding(new UnitValue("50px"));
 
-    box = new InternalBox();
+    box = new Box();
 
     constraint = new InternalBoxConstraints();
     constraint.setWidth(new UnitValue("100px"));

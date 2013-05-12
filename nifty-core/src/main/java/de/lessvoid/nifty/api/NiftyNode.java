@@ -93,6 +93,22 @@ public class NiftyNode {
   }
 
   /**
+   * Set the x constraint of this NiftyNode. Please remember that not all layouts will respect that value.
+   * @param value the UnitValue representing the new x position
+   */
+  public void setXConstraint(final UnitValue value) {
+    impl.setXConstraint(value);
+  }
+
+  /**
+   * Set the y constraint of this NiftyNode. Please remember that not all layouts will respect that value.
+   * @param value the UnitValue representing the new y position
+   */
+  public void setYConstraint(final UnitValue value) {
+    impl.setYConstraint(value);
+  }
+
+  /**
    * Change the width constraint of this NiftyNode forcing it to a certain
    * UnitValue.
    * 

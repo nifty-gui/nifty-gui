@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.internal.layout.InternalBox;
+import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutAbsolute;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
@@ -23,11 +23,11 @@ public class InternalLayoutAbsolutePositionTest {
 
   @Before
   public void setUp() throws Exception {
-    InternalBox box = new InternalBox(0, 0, 640, 480);
+    Box box = new Box(0, 0, 640, 480);
     InternalBoxConstraints boxConstraint = new InternalBoxConstraints();
     rootPanel = new InternalLayoutableTestImpl(box, boxConstraint);
 
-    box = new InternalBox();
+    box = new Box();
     boxConstraint = new InternalBoxConstraints();
     element = new InternalLayoutableTestImpl(box, boxConstraint);
 

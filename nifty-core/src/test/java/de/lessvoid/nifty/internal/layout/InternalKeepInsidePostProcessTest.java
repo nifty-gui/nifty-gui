@@ -2,7 +2,7 @@ package de.lessvoid.nifty.internal.layout;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.internal.layout.InternalBox;
+import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalLayoutAbsolute.KeepInsidePostProcess;
 
 public class InternalKeepInsidePostProcessTest {
@@ -11,7 +11,7 @@ public class InternalKeepInsidePostProcessTest {
   private int rootBoxY = 100;
   private int rootBoxWidth = 200;
   private int rootBoxHeight = 200;
-  private InternalBox box = new InternalBox();
+  private Box box = new Box();
 
   @Test
   public void testWidth() {

@@ -6,19 +6,18 @@ import java.util.List;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.internal.common.InternalNiftyStatistics;
 import de.lessvoid.nifty.internal.common.InternalNiftyStatistics.Type;
-import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
-public class InternalRender {
-  private final List<InternalRenderNode> rootRenderNodes = new ArrayList<InternalRenderNode>();
+public class Render {
+  private final List<RenderNodeContent> rootRenderNodes = new ArrayList<RenderNodeContent>();
   private final InternalNiftyStatistics statistics;
   private final NiftyRenderDevice renderDevice;
-  private final InternalRenderSync rendererSync;
+  private final RenderSync rendererSync;
 
-  public InternalRender(final InternalNiftyStatistics statistics, final NiftyRenderDevice renderDevice) {
+  public Render(final InternalNiftyStatistics statistics, final NiftyRenderDevice renderDevice) {
     this.statistics = statistics;
     this.renderDevice = renderDevice;
-    this.rendererSync = new InternalRenderSync(statistics, renderDevice);
+    this.rendererSync = new RenderSync(statistics, renderDevice);
   }
 
   public boolean render(final List<NiftyNode> rootNodes) {
@@ -26,16 +25,8 @@ public class InternalRender {
       return false;
     }
 
-    updateContent();
     render();
-
     return true;
-  }
-
-  private void updateContent() {
-    for (int i=0; i<rootRenderNodes.size(); i++) {
-      rootRenderNodes.get(i).updateContent(renderDevice, new Mat4());
-    }
   }
 
   private void render() {

@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.internal.layout.InternalBox;
+import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutHorizontal;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
@@ -21,11 +21,11 @@ public class InternalLayoutHorizontalMarginTest {
 
   @Before
   public void before() throws Exception {
-    root = new InternalLayoutableTestImpl(new InternalBox(0, 0, 200, 100), new InternalBoxConstraints());
+    root = new InternalLayoutableTestImpl(new Box(0, 0, 200, 100), new InternalBoxConstraints());
     elements = new ArrayList<InternalLayoutable>();
-    left = new InternalLayoutableTestImpl(new InternalBox(), new InternalBoxConstraints());
+    left = new InternalLayoutableTestImpl(new Box(), new InternalBoxConstraints());
     elements.add(left);
-    right = new InternalLayoutableTestImpl(new InternalBox(), new InternalBoxConstraints());
+    right = new InternalLayoutableTestImpl(new Box(), new InternalBoxConstraints());
     elements.add(right);
   }
 

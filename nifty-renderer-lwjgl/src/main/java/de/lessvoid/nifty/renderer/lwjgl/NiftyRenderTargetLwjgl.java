@@ -1,15 +1,37 @@
 package de.lessvoid.nifty.renderer.lwjgl;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL31.*;
+import static org.lwjgl.opengl.GL32.*;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL12.*;
+import static org.lwjgl.opengl.GL11.GL_BACK;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_NONE;
+import static org.lwjgl.opengl.GL11.GL_REPLACE;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_TEST;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glClearStencil;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glDrawBuffer;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glStencilFunc;
+import static org.lwjgl.opengl.GL11.glStencilOp;
+import static org.lwjgl.opengl.GL11.glViewport;
 
+import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.util.vector.Matrix4f;
 
+import de.lessvoid.Screenshot;
+import de.lessvoid.coregl.CoreCheckGL;
 import de.lessvoid.coregl.CoreFBO;
 import de.lessvoid.coregl.CoreMatrixFactory;
 import de.lessvoid.coregl.CoreRender;
@@ -36,10 +58,15 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
   private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
   private final Matrix4f model = new Matrix4f();
   private final Matrix4f modelProjection = new Matrix4f();
+  private final int width;
+  private final int height;
+  private final Screenshot screenshot = new Screenshot();
 
   public NiftyRenderTargetLwjgl(final CoreTexture2D texture, final CoreFBO fbo, final int countX, final int countY) {
     this.texture = texture;
     this.fbo = fbo;
+    this.width = texture.getWidth();
+    this.height = texture.getHeight();
 
     plainColor = CoreShader.newShaderWithVertexAttributes("aVertex");
     plainColor.vertexShader("de/lessvoid/nifty/renderer/lwjgl/plain-color.vs");
@@ -54,8 +81,8 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
     for (int i=0; i<countX*countY; i++) {
       fbo.attachTexture(texture.getTextureId(), 0, i);
       fbo.attachStencil(texture.getWidth(), texture.getHeight());
-      glClearColor(0.25f, 0.5f, 1.0f, 1.f);
-      glClearStencil(0);
+      glClearColor(1.0f, 1.0f, 1.0f, 1.f);
+      glClearStencil(0x00);
       glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     }
@@ -100,6 +127,55 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
     glViewport(0, 0, Display.getWidth(), Display.getHeight());
   }
 
+  @Override
+  public void beginStencil() {
+    fbo.bindFramebuffer();
+    glDrawBuffer(GL_NONE);
+    glViewport(0, 0, texture.getWidth(), texture.getHeight());
+    glStencilFunc(GL_ALWAYS, 0x01, 0x01);
+    glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+    glEnable(GL_STENCIL_TEST);
+  }
+
+  @Override
+  public void markStencil(final double x, final double y, final double width, final double height) {
+    plainColor.activate();
+    addQuad(vbo.getBuffer(), (float)x, (float)y, (float)(x + width), (float)(y + height));
+    quadCount++;
+    flush();
+  }
+
+  @Override
+  public void endStencil() {
+    fbo.disable();
+    glViewport(0, 0, Display.getWidth(), Display.getHeight());
+    glDrawBuffer(GL_BACK);
+    glDisable(GL_STENCIL_TEST);
+  }
+
+  @Override
+  public void enableStencil() {
+    glStencilFunc(GL_EQUAL, 0x01, 0x01);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glEnable(GL_STENCIL_TEST);
+  }
+
+  @Override
+  public void disableStencil() {
+    glDisable(GL_STENCIL_TEST);
+  }
+
+  @Override
+  public void saveContent(final String filename) throws IOException {
+    fbo.bindFramebuffer();
+    CoreCheckGL.checkGLError("bindFramebuffer");
+
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    CoreCheckGL.checkGLError("glReadBuffer");
+
+    screenshot.save(filename, texture.getWidth(), texture.getHeight());
+  }
+
   private void addQuad(final FloatBuffer buffer, final float x0, final float y0, final float x1, final float y1) {
     // first
     buffer.put(x0);
@@ -142,5 +218,15 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
     vao.unbind();
     vbo.getBuffer().clear();
     quadCount = 0;
+  }
+
+  @Override
+  public int getWidth() {
+    return width;
+  }
+
+  @Override
+  public int getHeight() {
+    return height;
   }
 }

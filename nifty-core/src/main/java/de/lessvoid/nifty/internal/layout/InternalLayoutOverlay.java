@@ -2,6 +2,8 @@ package de.lessvoid.nifty.internal.layout;
 
 import java.util.List;
 
+import de.lessvoid.nifty.internal.common.Box;
+
 
 /**
  * OverlayLayout doesn't layout things. It just forwards the size of the root box to the children.
@@ -15,10 +17,10 @@ public class InternalLayoutOverlay implements InternalLayout {
       return;
     }
 
-    InternalBox rootBox = root.getLayoutPos();
+    Box rootBox = root.getLayoutPos();
     for (int i = 0; i < children.size(); i++) {
       InternalLayoutable p = children.get(i);
-      InternalBox box = p.getLayoutPos();
+      Box box = p.getLayoutPos();
       box.setX(0);
       box.setY(0);
       box.setWidth(rootBox.getWidth());

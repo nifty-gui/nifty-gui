@@ -17,8 +17,8 @@ import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvasPainterStandard;
+import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.common.InternalIdGenerator;
-import de.lessvoid.nifty.internal.layout.InternalBox;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
 import de.lessvoid.nifty.internal.layout.InternalLayoutableScreenSized;
@@ -33,7 +33,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   private final int id = InternalIdGenerator.generate();
 
   // The box.
-  private final InternalBox layoutPos = new InternalBox();
+  private final Box layoutPos = new Box();
 
   // The box constraints.
   private final InternalBoxConstraints constraints = new InternalBoxConstraints();
@@ -99,6 +99,16 @@ public class InternalNiftyNode implements InternalLayoutable {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Nifty API "interface" implementation
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public void setXConstraint(final UnitValue value) {
+    constraints.setX(value);
+    needsLayout = true;
+  }
+
+  public void setYConstraint(final UnitValue value) {
+    constraints.setY(value);
+    needsLayout = true;
+  }
 
   public void setWidthConstraint(final UnitValue unitValue) {
     constraints.setWidth(unitValue);
@@ -209,7 +219,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
-  public InternalBox getLayoutPos() {
+  public Box getLayoutPos() {
     return layoutPos;
   }
 

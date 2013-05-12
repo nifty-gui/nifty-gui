@@ -35,7 +35,7 @@ public interface NiftyRenderDevice {
    */
   NiftyRenderTarget createRenderTargets(int width, int height, int countX, final int countY);
 
-  void render(NiftyRenderTarget renderTarget, int x, int y, int width, int height, Mat4 mat);
+  void render(NiftyRenderTarget renderTarget, Mat4 mat);
 
   void begin();
   void end();

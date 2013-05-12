@@ -697,6 +697,42 @@ public class Mat4 implements Serializable {
   }
 
   /**
+   * Transform a Vector by a matrix and return the result in a destination
+   * vector.
+   * @param left The left matrix
+   * @param right The right vector
+   * @return the destination vector
+   */
+  public static Vec4 transform(Mat4 left, Vec4 right) {
+    return transform(left, right, null);
+  }
+
+  /**
+   * Transform a Vector by a matrix and return the result in a destination
+   * vector.
+   * @param left The left matrix
+   * @param right The right vector
+   * @param dest The destination vector, or null if a new one is to be created
+   * @return the destination vector
+   */
+  public static Vec4 transform(Mat4 left, Vec4 right, Vec4 dest) {
+    if (dest == null)
+      dest = new Vec4();
+
+    float x = left.m00 * right.x + left.m10 * right.y + left.m20 * right.z + left.m30 * right.w;
+    float y = left.m01 * right.x + left.m11 * right.y + left.m21 * right.z + left.m31 * right.w;
+    float z = left.m02 * right.x + left.m12 * right.y + left.m22 * right.z + left.m32 * right.w;
+    float w = left.m03 * right.x + left.m13 * right.y + left.m23 * right.z + left.m33 * right.w;
+
+    dest.x = x;
+    dest.y = y;
+    dest.z = z;
+    dest.w = w;
+
+    return dest;
+  }
+
+  /**
    * Compare this Matrix with some other matrix and return true when they are equal.
    * @param other
    */

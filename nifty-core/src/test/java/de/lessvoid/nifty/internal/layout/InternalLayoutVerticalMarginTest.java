@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.internal.layout.InternalBox;
+import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutVertical;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
@@ -21,11 +21,11 @@ public class InternalLayoutVerticalMarginTest {
 
   @Before
   public void before() throws Exception {
-    root = new InternalLayoutableTestImpl(new InternalBox(0, 0, 100, 200), new InternalBoxConstraints());
+    root = new InternalLayoutableTestImpl(new Box(0, 0, 100, 200), new InternalBoxConstraints());
     elements = new ArrayList<InternalLayoutable>();
-    top = new InternalLayoutableTestImpl(new InternalBox(), new InternalBoxConstraints());
+    top = new InternalLayoutableTestImpl(new Box(), new InternalBoxConstraints());
     elements.add(top);
-    bottom = new InternalLayoutableTestImpl(new InternalBox(), new InternalBoxConstraints());
+    bottom = new InternalLayoutableTestImpl(new Box(), new InternalBoxConstraints());
     elements.add(bottom);
   }
 

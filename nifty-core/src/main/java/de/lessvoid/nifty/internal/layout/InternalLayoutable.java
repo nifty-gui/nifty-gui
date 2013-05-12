@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.internal.layout;
 
+import de.lessvoid.nifty.internal.common.Box;
+
 
 
 /**
@@ -12,7 +14,7 @@ public interface InternalLayoutable {
    * Get the box of this LayoutPart.
    * @return the box
    */
-  InternalBox getLayoutPos();
+  Box getLayoutPos();
 
   /**
    * Get the box constraints for this LayoutPart.

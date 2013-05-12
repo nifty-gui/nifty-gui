@@ -2,6 +2,8 @@ package de.lessvoid.nifty.internal.layout;
 
 import java.util.List;
 
+import de.lessvoid.nifty.internal.common.Box;
+
 
 /**
  * AbsolutPositionLayout doesn't layout things. It just absolute positions it according to the constraints.
@@ -47,7 +49,7 @@ public class InternalLayoutAbsolute implements InternalLayout {
     // now do the layout
     for (int i = 0; i < elements.size(); i++) {
       InternalLayoutable p = elements.get(i);
-      InternalBox box = p.getLayoutPos();
+      Box box = p.getLayoutPos();
       InternalBoxConstraints constraints = p.getBoxConstraints();
 
       if (constraints.getX() != null) {
@@ -106,7 +108,7 @@ public class InternalLayoutAbsolute implements InternalLayout {
   }
 
   public interface PostProcess {
-    void process(int rootBoxX, int rootBoxY, int rootBoxWidth, int rootBoxHeight, InternalBox box);
+    void process(int rootBoxX, int rootBoxY, int rootBoxWidth, int rootBoxHeight, Box box);
   }
 
   public static class DefaultPostProcess implements PostProcess {
@@ -116,7 +118,7 @@ public class InternalLayoutAbsolute implements InternalLayout {
         final int rootBoxY,
         final int rootBoxWidth,
         
-        int rootBoxHeight, final InternalBox box) {
+        int rootBoxHeight, final Box box) {
     }
   }
 
@@ -127,7 +129,7 @@ public class InternalLayoutAbsolute implements InternalLayout {
         final int rootBoxY,
         final int rootBoxWidth,
         final int rootBoxHeight,
-        final InternalBox box) {
+        final Box box) {
       // first make sure width and height fit into the root box
       if (box.getWidth() > rootBoxWidth) {
         box.setWidth(rootBoxWidth);

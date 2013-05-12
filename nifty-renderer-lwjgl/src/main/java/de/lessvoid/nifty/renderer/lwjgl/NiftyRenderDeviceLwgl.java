@@ -148,11 +148,11 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void render(final NiftyRenderTarget renderTarget, final int x, final int y, final int width, final int height, final Mat4 mat) {
+  public void render(final NiftyRenderTarget renderTarget, final Mat4 mat) {
     Matrix4f m = toLwjglMatrix(mat);
     Matrix4f.mul(mvp, m, this.mat);
 //System.out.println("(" + x + ", " + y + ", " + width + ", " + height + ")\n" + m + "* " + this.mat);
-    addQuad(vbo.getBuffer(), x, y, width, height, 0);
+    addQuad(vbo.getBuffer(), 0, 0, renderTarget.getWidth(), renderTarget.getHeight(), 0);
     quadCount++;
     ((NiftyRenderTargetLwjgl) renderTarget).bind();
 

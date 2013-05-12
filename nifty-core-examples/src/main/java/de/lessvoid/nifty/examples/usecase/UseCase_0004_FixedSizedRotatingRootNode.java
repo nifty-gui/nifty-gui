@@ -13,21 +13,44 @@ import de.lessvoid.nifty.api.UnitValue;
 public class UseCase_0004_FixedSizedRotatingRootNode implements UseCase {
   private final NiftyNode niftyNode;
   private final NiftyNode childNode;
+  private final NiftyNode grandChildNode;
   private float rot = 0;
+  private float totalTime = 0;
 
   public UseCase_0004_FixedSizedRotatingRootNode(final Nifty nifty) {
-    niftyNode = nifty.createRootNode(UnitValue.px(300), UnitValue.px(300), ChildLayout.Center);
-    niftyNode.setBackgroundColor(NiftyColor.BLUE());
+    niftyNode = nifty.createRootNode(UnitValue.px(300), UnitValue.px(300), ChildLayout.Absolute);
+    niftyNode.setBackgroundColor(NiftyColor.GREEN());
 
-    childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100));
-    childNode.setBackgroundColor(NiftyColor.RED());
-  }
+    childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
+    childNode.setBackgroundColor(NiftyColor.BLACK());
+    childNode.setXConstraint(UnitValue.px(10));
+    childNode.setYConstraint(UnitValue.px(20));
+
+    grandChildNode = childNode.newChildNode(UnitValue.px(25), UnitValue.px(25));
+    grandChildNode.setBackgroundColor(NiftyColor.RED());
+}
 
   @Override
   public void update(final Nifty nifty, final float deltaTime) {
+    totalTime += deltaTime;
     rot += deltaTime / 50.f;
     //niftyNode.setRotation(rot/10);
 //    niftyNode.setBackgroundColor(NiftyColor.randomColor());
-    childNode.setRotation(0);
+    if (totalTime > 2000) {
+      childNode.setBackgroundColor(NiftyColor.BLUE());
+      childNode.setXConstraint(UnitValue.px(50));
+      childNode.setYConstraint(UnitValue.px(50));
+      totalTime = 0;
+    }
+    /*
+    grandChildNode.setRotation(rot);
+    if (totalTime > 20) {
+      childNode.setBackgroundColor(NiftyColor.randomColor());
+      childNode.setRotation(Math.random()*360);
+      childNode.setXConstraint(UnitValue.px((int)(Math.random() * 200)));
+      childNode.setYConstraint(UnitValue.px((int)(Math.random() * 200)));
+      totalTime = 0;
+    }
+    */
   }
 }
