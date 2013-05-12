@@ -15,6 +15,8 @@ public class NiftyImage {
   private ImageMode imageMode;
   private NiftyRenderEngine niftyRenderEngine;
 
+  private Color color;
+
   /**
    * create new NiftyImage.
    * @param createImage RenderImage
@@ -68,6 +70,22 @@ public class NiftyImage {
    */
   public ImageMode getImageMode() {
     return this.imageMode;
+  }
+
+  /**
+   * Set color.
+   * @param color color
+   */
+  public void setColor(final Color color) {
+    this.color = color;
+  }
+
+  /**
+   * Get color.
+   * @return color of the image if any
+   */
+  public Color getColor() {
+      return color;
   }
 
   /**

@@ -43,6 +43,8 @@ public class ApplyRendererImage implements ApplyRenderer {
       return;
     }
 
+    image.setColor(convert.color(attributes.get("color")));
+
 	String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(attributes.getAttributes());
 	String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(attributes.getAttributes());
     ImageMode imageMode = convert.imageMode(areaProviderProperty, renderStrategyProperty);
