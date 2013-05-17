@@ -8,12 +8,14 @@
   </parent>
   <artifactId>nifty-slick-renderer</artifactId>
   <name>Nifty Renderer for Slick2D</name>
+  <!-- 
   <repositories>
     <repository>
       <id>slick-maven-repo</id>
       <url>http://slick.cokeandcode.com/mavenrepo</url>
     </repository>
   </repositories>
+   -->
   <build>
     <plugins>
       <plugin>
@@ -40,7 +42,12 @@
     <dependency>
       <groupId>slick</groupId>
       <artifactId>slick</artifactId>
-      <version>274</version>
+      <version>20121001-264</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.lwjgl.lwjgl</groupId>
+    	<artifactId>lwjgl</artifactId>
+    	<version>2.9.0</version>
     </dependency>
   </dependencies>
 </project>
