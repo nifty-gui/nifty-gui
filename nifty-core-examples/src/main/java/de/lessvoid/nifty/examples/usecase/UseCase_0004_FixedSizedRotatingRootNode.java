@@ -33,7 +33,7 @@ public class UseCase_0004_FixedSizedRotatingRootNode implements UseCase {
   @Override
   public void update(final Nifty nifty, final float deltaTime) {
     totalTime += deltaTime;
-    rot += deltaTime / 50.f;
+//    rot += deltaTime / 50.f;
     //niftyNode.setRotation(rot/10);
 //    niftyNode.setBackgroundColor(NiftyColor.randomColor());
     /*
@@ -45,9 +45,12 @@ public class UseCase_0004_FixedSizedRotatingRootNode implements UseCase {
     }
     */
 
-    childNode.setRotation(rot);
-    grandChildNode.setRotation(rot*10);
-
+    if (totalTime > 100) {
+      rot += 1.f;
+      childNode.setRotation(rot);
+      grandChildNode.setRotation(rot*10);
+      totalTime = 0;
+    }
     
     /*
     grandChildNode.setRotation(rot);
