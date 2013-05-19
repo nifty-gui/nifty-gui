@@ -23,8 +23,8 @@ public class UseCase_0004_FixedSizedRotatingRootNode implements UseCase {
 
     childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
     childNode.setBackgroundColor(NiftyColor.BLACK());
-    childNode.setXConstraint(UnitValue.px(10));
-    childNode.setYConstraint(UnitValue.px(20));
+    childNode.setXConstraint(UnitValue.px(50));
+    childNode.setYConstraint(UnitValue.px(50));
 
     grandChildNode = childNode.newChildNode(UnitValue.px(25), UnitValue.px(25));
     grandChildNode.setBackgroundColor(NiftyColor.RED());
@@ -36,12 +36,19 @@ public class UseCase_0004_FixedSizedRotatingRootNode implements UseCase {
     rot += deltaTime / 50.f;
     //niftyNode.setRotation(rot/10);
 //    niftyNode.setBackgroundColor(NiftyColor.randomColor());
+    /*
     if (totalTime > 2000) {
       childNode.setBackgroundColor(NiftyColor.BLUE());
       childNode.setXConstraint(UnitValue.px(50));
       childNode.setYConstraint(UnitValue.px(50));
       totalTime = 0;
     }
+    */
+
+    childNode.setRotation(rot);
+    grandChildNode.setRotation(rot*10);
+
+    
     /*
     grandChildNode.setRotation(rot);
     if (totalTime > 20) {

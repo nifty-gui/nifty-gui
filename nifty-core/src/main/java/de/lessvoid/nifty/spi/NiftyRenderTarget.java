@@ -30,7 +30,8 @@ public interface NiftyRenderTarget {
   void markStencil(double x, double y, double width, double height);
   void endStencil();
   
-  void saveContent(String filename) throws IOException;
   void enableStencil();
   void disableStencil();
+
+  void save(final String filebase);
 }

@@ -29,28 +29,11 @@ public class RenderNodeContentChild {
     this.commands = commands;
     this.width = w;
     this.height = h;
-    updateAABB(currentAABB, local);
-  }
 
-  public void updateContent(final NiftyRenderTarget renderTarget, final Context context, final Mat4 mat) {
-    Mat4 my = Mat4.mul(mat, local);
-
-    if (changed) {
-      oldAABB.from(currentAABB);
-      updateAABB(currentAABB, my);
-
-      renderTarget.setMatrix(my);
-      for (int i=0; i<commands.size(); i++) {
-        Command command = commands.get(i);
-        command.execute(renderTarget, context);
-      }
-
-      changed = false;
-    }
-
-    for (int i=0; i<children.size(); i++) {
-      children.get(i).updateContent(renderTarget, context, my);
-    }
+    currentAABB.setX(0);
+    currentAABB.setY(0);
+    currentAABB.setWidth(width);
+    currentAABB.setHeight(height);
   }
 
   public void prepareRender(final NiftyRenderTarget renderTarget) {
@@ -70,6 +53,26 @@ public class RenderNodeContentChild {
 
     for (int i=0; i<children.size(); i++) {
       children.get(i).prepareRender(renderTarget);
+    }
+  }
+
+  public void updateContent(final NiftyRenderTarget renderTarget, final Context context, final Mat4 mat) {
+    Mat4 my = Mat4.mul(mat, local);
+
+    if (changed) {
+      oldAABB.from(currentAABB);
+      updateAABB(currentAABB, my);
+      changed = false;
+    }
+
+    renderTarget.setMatrix(my);
+    for (int i=0; i<commands.size(); i++) {
+      Command command = commands.get(i);
+      command.execute(renderTarget, context);
+    }
+
+    for (int i=0; i<children.size(); i++) {
+      children.get(i).updateContent(renderTarget, context, my);
     }
   }
 
@@ -142,5 +145,4 @@ public class RenderNodeContentChild {
   public void markChanged() {
     changed = true;
   }
-
 }

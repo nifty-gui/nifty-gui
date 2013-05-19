@@ -34,7 +34,7 @@ public class RenderSync {
       InternalNiftyNode src = niftyNodeAccessor.getInternalNiftyNode(srcNodes.get(i));
       RenderNodeContent dst = findNode(dstNodes, src.getId());
       if (dst == null) {
-        dstNodes.add(createRenderNodeBufferParent(src, null, new Mat4(), null));
+        dstNodes.add(createRenderNodeBufferParent(src, null, null));
         changed = true;
       } else {
         boolean syncChanged = syncRenderNodeBufferChildNodes(src, dst.getChild());
@@ -59,7 +59,6 @@ public class RenderSync {
   private RenderNodeContent createRenderNodeBufferParent(
       final InternalNiftyNode node,
       final InternalNiftyNode parent,
-      final Mat4 parentTransform,
       final NiftyRenderTarget parentRenderTarget) {
     return new RenderNodeContent(
         createRenderNodeBufferChild(node),

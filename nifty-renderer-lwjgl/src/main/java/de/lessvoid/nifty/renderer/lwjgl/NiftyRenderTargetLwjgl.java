@@ -130,9 +130,13 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
   @Override
   public void beginStencil() {
     fbo.bindFramebuffer();
-    glDrawBuffer(GL_NONE);
+    glColorMask(false, false, false, false);
     glViewport(0, 0, texture.getWidth(), texture.getHeight());
-    glStencilFunc(GL_ALWAYS, 0x01, 0x01);
+
+    glClearStencil(0x00);
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    glStencilFunc(GL_ALWAYS, 0xFF, 0xFF);
     glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
     glEnable(GL_STENCIL_TEST);
   }
@@ -140,7 +144,7 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
   @Override
   public void markStencil(final double x, final double y, final double width, final double height) {
     plainColor.activate();
-    addQuad(vbo.getBuffer(), (float)x, (float)y, (float)(x + width), (float)(y + height));
+    addQuad(vbo.getBuffer(), (float)Math.floor(x - 1), (float)Math.floor(y - 1), (float)Math.ceil(x + width + 1), (float)Math.ceil(y + height + 1));
     quadCount++;
     flush();
   }
@@ -149,8 +153,16 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
   public void endStencil() {
     fbo.disable();
     glViewport(0, 0, Display.getWidth(), Display.getHeight());
-    glDrawBuffer(GL_BACK);
+    glColorMask(true, true, true, true);
     glDisable(GL_STENCIL_TEST);
+  }
+
+  @Override
+  public void save(final String filebase) {
+    fbo.bindFramebuffer();
+    Screenshot.saveColor(filebase + "-color.png", texture.getWidth(), texture.getHeight());
+    Screenshot.saveStencil(filebase + "-stencil.png", texture.getWidth(), texture.getHeight());
+    fbo.disable();
   }
 
   @Override
@@ -163,17 +175,6 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
   @Override
   public void disableStencil() {
     glDisable(GL_STENCIL_TEST);
-  }
-
-  @Override
-  public void saveContent(final String filename) throws IOException {
-    fbo.bindFramebuffer();
-    CoreCheckGL.checkGLError("bindFramebuffer");
-
-    glReadBuffer(GL_COLOR_ATTACHMENT0);
-    CoreCheckGL.checkGLError("glReadBuffer");
-
-    screenshot.save(filename, texture.getWidth(), texture.getHeight());
   }
 
   private void addQuad(final FloatBuffer buffer, final float x0, final float y0, final float x1, final float y1) {
