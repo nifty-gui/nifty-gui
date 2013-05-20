@@ -175,18 +175,18 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
 
   @Override
   public void disableStencil() {
-
+/*
     // render stencil to color buffer BEGIN
     fbo.bindFramebuffer();
     glViewport(0, 0, texture.getWidth(), texture.getHeight());
+
     setMatrix(Mat4.createIdentity());
-//    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
     glStencilMask(0x00);
-    glStencilFunc(GL_LEQUAL, 1, 0xFF);
-    glDisable(GL_STENCIL_TEST);
+    glStencilFunc(GL_EQUAL, 0xFF, 0xFF);
 
     plainColor.activate();
-    plainColor.setUniformf("uColor", 1.f, 1.f, 1.f, 0.2f);
+    plainColor.setUniformf("uColor", 1.f, 1.f, 1.f, 0.5f);
     addQuad(vbo.getBuffer(), 0, 0, texture.getWidth(), texture.getHeight());
     quadCount++;
     flush();
@@ -195,7 +195,7 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
     fbo.disable();
     glViewport(0, 0, Display.getWidth(), Display.getHeight());
     // render stencil to color buffer END
-
+*/
     glDisable(GL_STENCIL_TEST);
   }
 

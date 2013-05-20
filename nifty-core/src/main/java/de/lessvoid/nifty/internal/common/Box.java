@@ -212,4 +212,18 @@ public class Box {
     result.append(super.toString());
     return result.toString();
   }
+
+  public StringBuilder toString(final StringBuilder result) {
+    result.append("[x=");
+    result.append(x);
+    result.append(", y=");
+    result.append(y);
+    result.append(", width=");
+    result.append(width);
+    result.append(", height=");
+    result.append(height);
+    result.append("] ");
+    result.append(super.toString());
+    return result;
+  }
 }

@@ -119,6 +119,10 @@ public class RenderSync {
       childChanged = childChanged || currentChildChanged;
     }
 
+    if (thisNodeChanged || childChanged) {
+      dst.markNeedsReRender();
+    }
+
     return thisNodeChanged || childChanged;
   }
 
