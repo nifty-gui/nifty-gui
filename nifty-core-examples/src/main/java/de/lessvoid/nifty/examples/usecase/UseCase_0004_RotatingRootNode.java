@@ -30,7 +30,7 @@ public class UseCase_0004_RotatingRootNode implements UseCase {
   public void update(final Nifty nifty, final float deltaTime) {
     totalTime += deltaTime;
     if (totalTime > 25) {
-      niftyNode.setRotation(angle++);
+      niftyNode.setRotationZ(angle++);
       totalTime = 0;
     }
   }

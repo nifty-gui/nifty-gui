@@ -41,9 +41,13 @@ public class UseCase_0005_RotatingChildNode implements UseCase {
 
     if (totalTime > 25) {
       rot += 1.f;
-      childNode.setRotation(rot);
-      grandChildNode.setRotation(rot/10);
+      childNode.setRotationX(rot);
+      childNode.setRotationY(rot);
+      childNode.setRotationZ(rot);
+      grandChildNode.setRotationZ(rot/10);
       totalTime = 0;
+      niftyNode.setScaleX(Math.sin(rot/100.f)+1.f);
+      niftyNode.setScaleY(Math.sin(rot/100.f)+1.f);
     }
   }
 }

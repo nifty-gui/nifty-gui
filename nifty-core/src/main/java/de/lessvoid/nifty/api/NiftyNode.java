@@ -149,8 +149,52 @@ public class NiftyNode {
     impl.setBackgroundColor(color);
   }
 
-  public void setRotation(final double angle) {
-    impl.setRotation(angle);
+  /**
+   * Set rotation around the x-axis in degrees.
+   * @param angle rotation angle
+   */
+  public void setRotationX(final double angle) {
+    impl.setRotationX(angle);
+  }
+
+  /**
+   * Set rotation around the y-axis in degrees.
+   * @param angle rotation angle
+   */
+  public void setRotationY(final double angle) {
+    impl.setRotationY(angle);
+  }
+
+  /**
+   * Set rotation around the z-axis in degrees.
+   * @param angle rotation angle
+   */
+  public void setRotationZ(final double angle) {
+    impl.setRotationZ(angle);
+  }
+
+  /**
+   * Set scale for x-axis.
+   * @param factor factor
+   */
+  public void setScaleX(final double factor) {
+    impl.setScaleX(factor);
+  }
+
+  /**
+   * Set scale for y-axis.
+   * @param factor factor
+   */
+  public void setScaleY(final double factor) {
+    impl.setScaleY(factor);
+  }
+
+  /**
+   * Set scale for z-axis.
+   * @param factor factor
+   */
+  public void setScaleZ(final double factor) {
+    impl.setScaleZ(factor);
   }
 
   /**

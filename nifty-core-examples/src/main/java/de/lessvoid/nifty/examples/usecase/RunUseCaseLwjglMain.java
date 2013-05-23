@@ -10,6 +10,8 @@ import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
 import de.lessvoid.nifty.renderer.lwjgl.NiftyRenderDeviceLwgl;
 
+import static org.lwjgl.opengl.GL11.*;
+
 public class RunUseCaseLwjglMain {
   private static Logger log = Logger.getLogger(RunUseCaseLwjglMain.class.getName());
   private static float time;
@@ -37,6 +39,10 @@ public class RunUseCaseLwjglMain {
       public boolean render(final float deltaTime) {
         useCase.update(nifty, deltaTime);
         nifty.update();
+
+//        glClearColor((float)Math.random(), (float)Math.random(), (float)Math.random(), 1.f);
+//        glClear(GL_COLOR_BUFFER_BIT);
+
         boolean result = nifty.render();
 /*
         time += deltaTime;
@@ -56,6 +62,7 @@ public class RunUseCaseLwjglMain {
           log.info(stuff.toString());
         }
 */
+
         return result;
       }
 

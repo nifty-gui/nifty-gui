@@ -74,7 +74,13 @@ public class InternalNiftyNode implements InternalLayoutable {
   // When set to true, Nifty will render all childrens into a texture.
   private boolean cache;
 
-  private double angleZ;
+  private boolean transformationChanged = true;
+  private double angleX = 0.0;
+  private double angleY = 0.0;
+  private double angleZ = 0.0;
+  private double scaleX = 1.0;
+  private double scaleY = 1.0;
+  private double scaleZ = 1.0;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
@@ -186,12 +192,58 @@ public class InternalNiftyNode implements InternalLayoutable {
     needsRedraw = true;
   }
 
-  public void setRotation(final double angle) {
-    angleZ = angle;
+  public double getScaleX() {
+    return scaleX;
+  }
+
+  public void setScaleX(final double factor) {
+    updateTransformationChanged(scaleX, factor);
+    scaleX = factor;
+  }
+
+  public double getScaleY() {
+    return scaleY;
+  }
+
+  public void setScaleY(final double factor) {
+    updateTransformationChanged(scaleY, factor);
+    scaleY = factor;
+  }
+
+  public double getScaleZ() {
+    return scaleZ;
+  }
+
+  public void setScaleZ(final double factor) {
+    updateTransformationChanged(scaleZ, factor);
+    scaleZ = factor;
+  }
+
+  public double getRotationX() {
+    return angleX;
+  }
+
+  public void setRotationX(final double angle) {
+    updateTransformationChanged(angleX, angle);
+    angleX = angle;
+  }
+
+  public double getRotationY() {
+    return angleY;
+  }
+
+  public void setRotationY(final double angle) {
+    updateTransformationChanged(angleY, angle);
+    angleY = angle;
   }
 
   public double getRotationZ() {
     return angleZ;
+  }
+
+  public void setRotationZ(final double angle) {
+    updateTransformationChanged(angleZ, angle);
+    angleZ = angle;
   }
 
   public void setContent(final NiftyCanvasPainter painter) {
@@ -406,5 +458,19 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public InternalNiftyCanvas getCanvas() {
     return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
+  }
+
+  public void resetTransformationChanged() {
+    transformationChanged = false;
+  }
+
+  public boolean isTransformationChanged() {
+    return transformationChanged;
+  }
+
+  private void updateTransformationChanged(final double oldValue, final double newValue) {
+    if (newValue != oldValue) {
+      transformationChanged = true;
+    }
   }
 }

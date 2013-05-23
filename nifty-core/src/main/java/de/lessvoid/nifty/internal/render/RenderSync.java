@@ -82,9 +82,12 @@ public class RenderSync {
   }
 
   private Mat4 buildLocalTransformation(final InternalNiftyNode node) {
-    return Mat4.mul(
-        Mat4.createTranslate(node.getX(), node.getY(), 0.f),
-        Mat4.createRotate((float) node.getRotationZ(), 0.0f, 0.0f, 1.f));
+    return Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(
+            Mat4.createTranslate(node.getX(), node.getY(), 0.f),
+            Mat4.createRotate((float) node.getRotationX(), 1.f, 0.f, 0.f)),
+            Mat4.createRotate((float) node.getRotationY(), 0.f, 1.f, 0.f)),
+            Mat4.createRotate((float) node.getRotationZ(), 0.f, 0.f, 1.f)),
+            Mat4.createScale((float) node.getScaleX(), (float) node.getScaleY(), (float) node.getScaleZ()));
   }
 
   private NiftyRenderTarget createRenderTarget(
@@ -98,19 +101,18 @@ public class RenderSync {
   }
 
   private boolean syncRenderNodeBufferChildNodes(final InternalNiftyNode src, final RenderNodeContentChild dst) {
-    Mat4 local = buildLocalTransformation(src);
-    boolean localChanged = !dst.getLocal().compare(local);
     boolean widthChanged = dst.getWidth() != src.getWidth();
     boolean heightChanged = dst.getHeight() != src.getHeight();
     boolean canvasChanged = src.getCanvas().isChanged();
-    boolean thisNodeChanged = (localChanged || widthChanged || heightChanged || canvasChanged);
+    boolean thisNodeChanged = (widthChanged || heightChanged || canvasChanged || src.isTransformationChanged());
 
     if (thisNodeChanged) {
-      dst.setLocal(local);
+      dst.setLocal(buildLocalTransformation(src));
       dst.setWidth(src.getWidth());
       dst.setHeight(src.getHeight());
       dst.setCommands(src.getCanvas().getCommands());
       dst.markChanged();
+      src.resetTransformationChanged();
     }
 
     boolean childChanged = false;
