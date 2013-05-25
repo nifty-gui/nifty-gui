@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.io.InputStream;
 import java.util.logging.LogManager;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
@@ -27,6 +28,7 @@ import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
 import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
 import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackend;
+import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackendCoreProfile;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.TimeProvider;
 
@@ -41,6 +43,7 @@ public class ControlsDemoJOGL implements GLEventListener {
   private static Nifty nifty;
   private static GLCanvas canvas;
   private static boolean useBatchedRenderer = false;
+  private static boolean useBatchedCoreRenderer = false;
 
   private static void intialize() throws Exception {
     InputStream input = null;
@@ -59,16 +62,20 @@ public class ControlsDemoJOGL implements GLEventListener {
 
     if (args.length == 1) {
       useBatchedRenderer = "batch".equals(args[0]);
+      useBatchedCoreRenderer = "core".equals(args[0]);
+      if (useBatchedCoreRenderer) {
+        useBatchedRenderer = true;
+      }
     }
 
-    canvas = new GLCanvas(new GLCapabilities(GLProfile.getDefault()));
+    canvas = new GLCanvas(new GLCapabilities(getProfile(useBatchedCoreRenderer)));
     canvas.setAutoSwapBufferMode(true);
     canvas.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     canvas.addGLEventListener(new ControlsDemoJOGL());
 
     final FPSAnimator animator = new FPSAnimator(canvas, FPS, false);
 
-    final Frame frame = new Frame(getCaption(useBatchedRenderer));
+    final Frame frame = new Frame(getCaption(useBatchedRenderer, useBatchedCoreRenderer));
     frame.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     frame.add(canvas);
     frame.setVisible(true);
@@ -83,10 +90,20 @@ public class ControlsDemoJOGL implements GLEventListener {
     animator.start();
   }
 
-  private static String getCaption(final boolean batched) {
+  private static GLProfile getProfile(final boolean useCore) {
+    if (useCore) {
+      return GLProfile.get(GLProfile.GL3);
+    }
+    return GLProfile.getDefault();
+  }
+
+  private static String getCaption(final boolean batched, final boolean useCore) {
     String add = "";
     if (batched) {
-      add = " (BATCH RENDERER)";
+      add += " (BATCH RENDERER)";
+    }
+    if (useCore) {
+      add += " (CORE PROFILE)";
     }
     return "AWT Window Test - Nifty" + add;
   }
@@ -99,7 +116,11 @@ public class ControlsDemoJOGL implements GLEventListener {
 
   public void init(GLAutoDrawable drawable) {
     if (useBatchedRenderer) {
-      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend(), 2048, 2048);
+      if (useBatchedCoreRenderer) {
+        renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile(), 2048, 2048);
+      } else {
+        renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend(), 2048, 2048);
+      }
     } else {
       renderDevice = new JoglRenderDevice();
     }
@@ -119,16 +140,19 @@ public class ControlsDemoJOGL implements GLEventListener {
   }
 
   public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-    GL2 gl = drawable.getGL().getGL2();
-
+    GL gl = drawable.getGL();
     gl.glViewport(0, 0, width, height);
+    gl.glEnable(GL.GL_BLEND);
 
-    gl.glMatrixMode(GL2.GL_PROJECTION);
-    gl.glLoadIdentity();
-    gl.glOrtho(0, width, height, 0, -9999, 9999);
+    if (gl.isGL2()) {
+      GL2 gl2 = gl.getGL2();
+      gl2.glMatrixMode(GL2.GL_PROJECTION);
+      gl2.glLoadIdentity();
+      gl2.glOrtho(0, width, height, 0, -9999, 9999);
 
-    gl.glMatrixMode(GL11.GL_MODELVIEW);
-    gl.glLoadIdentity();
+      gl2.glMatrixMode(GL11.GL_MODELVIEW);
+      gl2.glLoadIdentity();
+    }
   }
 
   private void update(GLAutoDrawable drawable) {
