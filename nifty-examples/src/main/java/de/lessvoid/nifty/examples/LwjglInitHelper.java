@@ -24,11 +24,13 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreCheckGL;
 
 /**
  * Helper class shared by all the examples to initialize lwjgl and stuff.
@@ -185,15 +187,17 @@ public class LwjglInitHelper {
       log.fine("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
       log.fine("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
       log.fine("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
-      String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
-      if (extensions != null) {
-        String[] ext = extensions.split(" ");
-        for (int i = 0; i < ext.length; i++) {
-          log.finer("opengl extensions: " + ext[i]);
-        }
-      }
 
       if (enableCoreProfile) {
+        String extensions = GL30.glGetStringi(GL11.GL_EXTENSIONS, 0);
+        if (extensions != null) {
+          String[] ext = extensions.split(" ");
+          for (int i = 0; i < ext.length; i++) {
+            log.finer("opengl extensions: " + ext[i]);
+          }
+        }
+        CoreCheckGL.checkGLError("extension check failed");
+
         glViewport(0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -201,6 +205,15 @@ public class LwjglInitHelper {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       } else {
+        String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
+        if (extensions != null) {
+          String[] ext = extensions.split(" ");
+          for (int i = 0; i < ext.length; i++) {
+            log.finer("opengl extensions: " + ext[i]);
+          }
+        }
+        CoreCheckGL.checkGLError("extension check failed");
+
         IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
         int viewportWidth = viewportBuffer.get(2);
