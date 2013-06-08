@@ -22,6 +22,16 @@
   		<groupId>lessvoid</groupId>
   		<artifactId>nifty-examples</artifactId>
   		<version>1.3.3-SNAPSHOT</version>
+  		<exclusions>
+  		  <exclusion>
+  		    <groupId>org.lwjgl.lwjgl</groupId>
+  		    <artifactId>lwjgl</artifactId>
+  		  </exclusion>
+        <exclusion>
+          <groupId>org.lwjgl.lwjgl</groupId>
+          <artifactId>lwjgl_util</artifactId>
+        </exclusion>
+  		</exclusions>
   	</dependency>
   </dependencies>
 </project>

@@ -51,7 +51,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private int viewportHeight = -1;
   private CoreTexture2D texture;
   private final CoreShader niftyShader;
-  private final Mat4 modelViewProjection;
+  private Mat4 modelViewProjection;
   private final ObjectPool<Batch> batchPool;
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
@@ -90,23 +90,23 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
   @Override
   public int getWidth() {
-    if (viewportWidth == -1) {
-      getViewport();
-    }
+    getViewport();
     return viewportWidth;
   }
 
   @Override
   public int getHeight() {
-    if (viewportHeight == -1) {
-      getViewport();
-    }
+    getViewport();
     return viewportHeight;
   }
 
   @Override
   public void beginFrame() {
     log.fine("beginFrame()");
+
+    modelViewProjection = CoreMatrixFactory.createOrtho(0, getWidth(), getHeight(), 0);
+    niftyShader.activate();
+    niftyShader.setUniformMatrix4f("uModelViewProjectionMatrix", modelViewProjection);
 
     for (int i=0; i<batches.size(); i++) {
       batchPool.free(batches.get(i));
@@ -117,9 +117,6 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public void endFrame() {
     log.fine("endFrame");
-
-    viewportWidth = -1;
-    viewportHeight = -1;
     checkGLError();
   }
 

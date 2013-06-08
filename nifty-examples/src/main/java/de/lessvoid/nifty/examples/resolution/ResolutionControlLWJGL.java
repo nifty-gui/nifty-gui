@@ -12,6 +12,12 @@ import java.util.*;
  * | File Templates.
  */
 public class ResolutionControlLWJGL implements ResolutionControl<DisplayMode> {
+  private final boolean coreProfile;
+
+  public ResolutionControlLWJGL(final boolean coreProfile) {
+    this.coreProfile = coreProfile;
+  }
+
   @Override
   public Collection<DisplayMode> getResolutions() {
     try {
@@ -52,11 +58,14 @@ public class ResolutionControlLWJGL implements ResolutionControl<DisplayMode> {
   public void setResolution(DisplayMode newResolution) {
     try {
       Display.setDisplayMode(newResolution);
-      GL11.glMatrixMode(GL11.GL_PROJECTION);
-      GL11.glLoadIdentity();
-      GL11.glOrtho(0, newResolution.getWidth(), newResolution.getHeight(), 0, -9999, 9999);
 
-      GL11.glMatrixMode(GL11.GL_MODELVIEW);
+      if (!coreProfile) {
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, newResolution.getWidth(), newResolution.getHeight(), 0, -9999, 9999);
+
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+      }
     } catch (final LWJGLException e) {
       e.printStackTrace();
     }

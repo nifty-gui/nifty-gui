@@ -131,6 +131,7 @@ public class BatchRenderDevice implements RenderDevice {
   @Override
   public void beginFrame() {
     log.finest("beginFrame()");
+    renderBackend.beginFrame();
 
     currentBlendMode = BlendMode.BLEND;
 
@@ -141,7 +142,6 @@ public class BatchRenderDevice implements RenderDevice {
     currentClippingY1 = getHeight();
     completeClippedCounter = 0;
 
-    renderBackend.beginFrame();
     activeBatch = false;
     quadCount = 0;
     glyphCount = 0;

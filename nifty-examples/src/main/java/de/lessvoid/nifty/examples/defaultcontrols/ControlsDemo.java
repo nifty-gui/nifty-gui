@@ -89,7 +89,7 @@ public class ControlsDemo<T> implements NiftyExample {
           LwjglInitHelper.getInputSystem(),
           new AccurateTimeProvider());
     }
-    ControlsDemo<DisplayMode> demo = new ControlsDemo(new ResolutionControlLWJGL());
+    ControlsDemo<DisplayMode> demo = new ControlsDemo(new ResolutionControlLWJGL(useCoreProfile));
     demo.prepareStart(nifty);
 
     nifty.gotoScreen("start");

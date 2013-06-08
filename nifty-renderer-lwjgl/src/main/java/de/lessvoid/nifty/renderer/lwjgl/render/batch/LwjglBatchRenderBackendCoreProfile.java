@@ -55,7 +55,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private int viewportHeight = -1;
   private CoreTexture2D texture;
   private final CoreShader niftyShader;
-  private final Matrix4f modelViewProjection;
+  private Matrix4f modelViewProjection;
   private final ObjectPool<Batch> batchPool;
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
@@ -70,14 +70,11 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private int[] elementIndexBuffer = new int[5];
 
   public LwjglBatchRenderBackendCoreProfile() {
-    modelViewProjection = CoreMatrixFactory.createOrtho(0, getWidth(), getHeight(), 0);
-
     niftyShader = CoreShader.newShaderWithVertexAttributes("aVertex", "aColor", "aTexture");
     niftyShader.fragmentShader("nifty.fs");
     niftyShader.vertexShader("nifty.vs");
     niftyShader.link();
     niftyShader.activate();
-    niftyShader.setUniformMatrix4f("uModelViewProjectionMatrix", modelViewProjection);
     niftyShader.setUniformi("uTex", 0);
 
     batchPool = new ObjectPool<Batch>(2, new Factory<Batch>() {
@@ -95,23 +92,23 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
   @Override
   public int getWidth() {
-    if (viewportWidth == -1) {
-      getViewport();
-    }
+    getViewport();
     return viewportWidth;
   }
 
   @Override
   public int getHeight() {
-    if (viewportHeight == -1) {
-      getViewport();
-    }
+    getViewport();
     return viewportHeight;
   }
 
   @Override
   public void beginFrame() {
     log.fine("beginFrame()");
+
+    modelViewProjection = CoreMatrixFactory.createOrtho(0, getWidth(), getHeight(), 0);
+    niftyShader.activate();
+    niftyShader.setUniformMatrix4f("uModelViewProjectionMatrix", modelViewProjection);
 
     for (int i=0; i<batches.size(); i++) {
       batchPool.free(batches.get(i));
@@ -122,9 +119,6 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public void endFrame() {
     log.fine("endFrame");
-
-    viewportWidth = -1;
-    viewportHeight = -1;
     checkGLError();
   }
 
@@ -249,7 +243,6 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
   @Override
   public int render() {
-    niftyShader.activate();
     bind();
     glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(PRIMITIVE_RESTART_INDEX);

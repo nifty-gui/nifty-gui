@@ -241,6 +241,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
     for (T mode : resolutions) {
       dropDown.addItem(mode);
     }
+    dropDown.selectItem(resControl.getCurrentResolution());
   }
 
   private class ShowCommand implements ConsoleCommand {

@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.examples.resolution;
 
-import org.lwjgl.opengl.DisplayMode;
-
 import java.io.IOException;
+
+import org.lwjgl.opengl.DisplayMode;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
@@ -27,7 +27,7 @@ public final class ResolutionExampleMain {
         LwjglInitHelper.getInputSystem(),
         new AccurateTimeProvider());
 
-    nifty.registerScreenController(new ResolutionScreen<DisplayMode>(new ResolutionControlLWJGL()));
+    nifty.registerScreenController(new ResolutionScreen<DisplayMode>(new ResolutionControlLWJGL(false)));
     nifty.fromXml("src/main/resources/resolution/resolution.xml", "start");
 
     LwjglInitHelper.renderLoop(nifty, null);
