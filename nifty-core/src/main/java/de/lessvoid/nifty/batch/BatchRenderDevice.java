@@ -567,6 +567,7 @@ public class BatchRenderDevice implements RenderDevice {
 
     @Override
     public void beforeRender() {
+      hasColor = false;
       for (BitmapInfo info : textureInfos.values()) {
         info.upload();
       }
@@ -574,7 +575,6 @@ public class BatchRenderDevice implements RenderDevice {
 
     @Override
     public int preProcess(final String text, final int offset) {
-      hasColor = false;
       int index = offset;
       colorValueParser.isColor(text, index);
       while (colorValueParser.isColor()) {
@@ -608,13 +608,27 @@ public class BatchRenderDevice implements RenderDevice {
         textColor.setRed(r);
         textColor.setGreen(g);
         textColor.setBlue(b);
-        textColor.setAlpha(a);
       }
+      textColor.setAlpha(a);
       textureInfos.get(bitmapId).renderCharacter(c, x, y, sx, sy, textColor);
     }
 
     @Override
     public void afterRender() {
+    }
+
+    @Override
+    public int preProcessForLength(final String text, final int offset) {
+      int index = offset;
+      colorValueParser.isColor(text, index);
+      while (colorValueParser.isColor()) {
+        index = colorValueParser.getNextIndex();
+        if (index >= text.length()) {
+          return index;
+        }
+        colorValueParser.isColor(text, index);
+      }
+      return index;
     }
   }
 
