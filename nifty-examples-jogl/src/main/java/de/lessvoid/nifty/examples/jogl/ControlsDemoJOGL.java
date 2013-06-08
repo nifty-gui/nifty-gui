@@ -1,172 +1,25 @@
 package de.lessvoid.nifty.examples.jogl;
 
 import java.awt.Frame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.InputStream;
-import java.util.logging.LogManager;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 
-import com.jogamp.opengl.util.FPSAnimator;
-
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.batch.BatchRenderDevice;
-import de.lessvoid.nifty.examples.LoggerShortFormat;
 import de.lessvoid.nifty.examples.defaultcontrols.ControlsDemo;
+import de.lessvoid.nifty.examples.jogl.JOGLNiftyRunner.Callback;
 import de.lessvoid.nifty.examples.jogl.ResolutionControlJOGL.Resolution;
-import de.lessvoid.nifty.nulldevice.NullSoundDevice;
-import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
-import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
-import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackend;
-import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackendCoreProfile;
-import de.lessvoid.nifty.spi.render.RenderDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
 
-public class ControlsDemoJOGL implements GLEventListener {
-  private static final int FPS = 60;
-  private static final int CANVAS_WIDTH = 1024;
-  private static final int CANVAS_HEIGHT = 768;
-  long time = System.currentTimeMillis();
-  long frames = 0;
-  private static JoglInputSystem inputSystem;
-  private static RenderDevice renderDevice;
-  private static Nifty nifty;
-  private static GLCanvas canvas;
-  private static Frame frame;
-  private static boolean useBatchedRenderer = false;
-  private static boolean useBatchedCoreRenderer = false;
-
-  private static void intialize() throws Exception {
-    InputStream input = null;
-    try {
-      input = LoggerShortFormat.class.getClassLoader().getResourceAsStream("logging.properties");
-      LogManager.getLogManager().readConfiguration(input);
-    } finally {
-      if (input != null) {
-        input.close();
-      }
-    }
-  }
+public class ControlsDemoJOGL {
 
   public static void main(String[] args) throws Exception {
-    intialize();
+    JOGLNiftyRunner.run(args, new Callback() {
 
-    if (args.length == 1) {
-      useBatchedRenderer = "batch".equals(args[0]);
-      useBatchedCoreRenderer = "core".equals(args[0]);
-      if (useBatchedCoreRenderer) {
-        useBatchedRenderer = true;
-      }
-    }
-
-    canvas = new GLCanvas(new GLCapabilities(getProfile(useBatchedCoreRenderer)));
-    canvas.setAutoSwapBufferMode(true);
-    canvas.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-    canvas.addGLEventListener(new ControlsDemoJOGL());
-
-    final FPSAnimator animator = new FPSAnimator(canvas, FPS, false);
-
-    frame = new Frame(getCaption(useBatchedRenderer, useBatchedCoreRenderer));
-    frame.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-    frame.add(canvas);
-    frame.setVisible(true);
-    frame.addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent e) {
-        animator.stop();
-        frame.remove(canvas);
-        System.exit(0);
+      @Override
+      public void init(final Nifty nifty, final GLCanvas canvas, final Frame frame) {
+        ControlsDemo<Resolution> demo = new ControlsDemo<Resolution>(new ResolutionControlJOGL(canvas, frame));
+        demo.prepareStart(nifty);
+        nifty.gotoScreen("start");
       }
     });
-
-    animator.start();
-  }
-
-  private static GLProfile getProfile(final boolean useCore) {
-    if (useCore) {
-      return GLProfile.get(GLProfile.GL3);
-    }
-    return GLProfile.getDefault();
-  }
-
-  private static String getCaption(final boolean batched, final boolean useCore) {
-    String add = "";
-    if (batched) {
-      add += " (BATCH RENDERER)";
-    }
-    if (useCore) {
-      add += " (CORE PROFILE)";
-    }
-    return "AWT Window Test - Nifty" + add;
-  }
-
-  public void display(GLAutoDrawable drawable) {
-    long startTime = System.nanoTime();
-    update(drawable);
-    render(drawable, startTime);
-  }
-
-  public void init(GLAutoDrawable drawable) {
-    if (useBatchedRenderer) {
-      if (useBatchedCoreRenderer) {
-        renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile(), 2048, 2048);
-      } else {
-        renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend(), 2048, 2048);
-      }
-    } else {
-      renderDevice = new JoglRenderDevice();
-    }
-    inputSystem = new JoglInputSystem();
-    canvas.addMouseListener(inputSystem);
-    canvas.addMouseMotionListener(inputSystem);
-    canvas.addKeyListener(inputSystem);
-
-    nifty = new Nifty(renderDevice, new NullSoundDevice(), inputSystem, new TimeProvider());
-
-    ControlsDemo<Resolution> demo = new ControlsDemo<Resolution>(new ResolutionControlJOGL(canvas, frame));
-    demo.prepareStart(nifty);
-    nifty.gotoScreen("start");
-  }
-
-  public void dispose(GLAutoDrawable drawable) {
-  }
-
-  public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-    GL gl = drawable.getGL();
-    gl.glViewport(0, 0, width, height);
-    gl.glEnable(GL.GL_BLEND);
-
-    if (gl.isGL2()) {
-      GL2 gl2 = gl.getGL2();
-      gl2.glMatrixMode(GL2.GL_PROJECTION);
-      gl2.glLoadIdentity();
-      gl2.glOrtho(0, width, height, 0, -9999, 9999);
-
-      gl2.glMatrixMode(GL2.GL_MODELVIEW);
-      gl2.glLoadIdentity();
-    }
-  }
-
-  private void update(GLAutoDrawable drawable) {
-    boolean di = nifty.update();
-    nifty.render(true);
-  }
-
-  private void render(GLAutoDrawable drawable, final long startTime) {
-    long frameTime = System.nanoTime() - startTime;
-    frames++;
-
-    long diff = System.currentTimeMillis() - time;
-    if (diff >= 1000) {
-      time += diff;
-      System.out.println("fps : " + frames + " (" + frameTime / 1000000f + " ms)");
-      frames = 0;
-    }
   }
 }
