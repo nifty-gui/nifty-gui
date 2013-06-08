@@ -14,16 +14,13 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
-
 import com.jogamp.opengl.util.FPSAnimator;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.LoggerShortFormat;
 import de.lessvoid.nifty.examples.defaultcontrols.ControlsDemo;
-import de.lessvoid.nifty.examples.resolution.ResolutionControlLWJGL;
+import de.lessvoid.nifty.examples.jogl.ResolutionControlJOGL.Resolution;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
 import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
@@ -42,6 +39,7 @@ public class ControlsDemoJOGL implements GLEventListener {
   private static RenderDevice renderDevice;
   private static Nifty nifty;
   private static GLCanvas canvas;
+  private static Frame frame;
   private static boolean useBatchedRenderer = false;
   private static boolean useBatchedCoreRenderer = false;
 
@@ -75,7 +73,7 @@ public class ControlsDemoJOGL implements GLEventListener {
 
     final FPSAnimator animator = new FPSAnimator(canvas, FPS, false);
 
-    final Frame frame = new Frame(getCaption(useBatchedRenderer, useBatchedCoreRenderer));
+    frame = new Frame(getCaption(useBatchedRenderer, useBatchedCoreRenderer));
     frame.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     frame.add(canvas);
     frame.setVisible(true);
@@ -131,7 +129,7 @@ public class ControlsDemoJOGL implements GLEventListener {
 
     nifty = new Nifty(renderDevice, new NullSoundDevice(), inputSystem, new TimeProvider());
 
-    ControlsDemo<DisplayMode> demo = new ControlsDemo(new ResolutionControlLWJGL());
+    ControlsDemo<Resolution> demo = new ControlsDemo<Resolution>(new ResolutionControlJOGL(canvas, frame));
     demo.prepareStart(nifty);
     nifty.gotoScreen("start");
   }
@@ -150,7 +148,7 @@ public class ControlsDemoJOGL implements GLEventListener {
       gl2.glLoadIdentity();
       gl2.glOrtho(0, width, height, 0, -9999, 9999);
 
-      gl2.glMatrixMode(GL11.GL_MODELVIEW);
+      gl2.glMatrixMode(GL2.GL_MODELVIEW);
       gl2.glLoadIdentity();
     }
   }

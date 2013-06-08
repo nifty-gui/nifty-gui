@@ -64,17 +64,13 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
 
   @Override
   public int getWidth() {
-    if (viewportWidth == -1) {
-      getViewport();
-    }
+    getViewport();
     return viewportWidth;
   }
 
   @Override
   public int getHeight() {
-    if (viewportHeight == -1) {
-      getViewport();
-    }
+    getViewport();
     return viewportHeight;
   }
 
@@ -91,9 +87,6 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   @Override
   public void endFrame() {
     log.fine("endFrame");
-
-    viewportWidth = -1;
-    viewportHeight = -1;
     checkGLError();
   }
 
