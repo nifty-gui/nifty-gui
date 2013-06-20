@@ -3,7 +3,7 @@
   <parent>
     <groupId>lessvoid</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.3.3-SNAPSHOT</version>
+    <version>1.3.3</version>
   </parent>
   <artifactId>nifty-slick-renderer</artifactId>
   <name>Nifty Renderer for Slick2D</name>
@@ -36,7 +36,7 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty</artifactId>
-      <version>1.3.3-SNAPSHOT</version>
+      <version>1.3.3</version>
     </dependency>
     <dependency>
       <groupId>slick</groupId>
