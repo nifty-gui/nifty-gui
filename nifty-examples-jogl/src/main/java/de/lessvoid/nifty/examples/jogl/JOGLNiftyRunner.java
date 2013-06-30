@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.jogl;
 
 import java.awt.Frame;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.InputStream;
@@ -68,14 +69,14 @@ public class JOGLNiftyRunner implements GLEventListener {
 
     canvas = new GLCanvas(new GLCapabilities(getProfile(useBatchedCoreRenderer)));
     canvas.setAutoSwapBufferMode(true);
-    canvas.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+    canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
     canvas.addGLEventListener(new JOGLNiftyRunner(callback));
 
     final FPSAnimator animator = new FPSAnimator(canvas, FPS, false);
 
     frame = new Frame(getCaption(useBatchedRenderer, useBatchedCoreRenderer));
-    frame.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     frame.add(canvas);
+    frame.pack();
     frame.setVisible(true);
     frame.addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
