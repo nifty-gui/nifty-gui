@@ -122,6 +122,7 @@ public class JOGLNiftyRunner implements GLEventListener {
   }
 
   public void dispose(GLAutoDrawable drawable) {
+      System.exit(0);
   }
 
   public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
