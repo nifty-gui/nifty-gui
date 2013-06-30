@@ -119,10 +119,10 @@ public class CoreShader {
    */
   public int vertexShader(final InputStream source) {
     final GL gl = GLContext.getCurrentGL();
-    int shaderId = gl.getGL3().glCreateShader(GL3.GL_VERTEX_SHADER);
+    int shaderId = gl.getGL2ES2().glCreateShader(GL3.GL_VERTEX_SHADER);
     checkGLError("glCreateShader(GL_VERTEX_SHADER)");
     prepareShader(source, shaderId);
-    gl.getGL3().glAttachShader(program, shaderId);
+    gl.getGL2ES2().glAttachShader(program, shaderId);
     checkGLError("glAttachShader");
     return shaderId;
   }
@@ -134,10 +134,10 @@ public class CoreShader {
    */
   public int fragmentShader(final InputStream source) {
     final GL gl = GLContext.getCurrentGL();
-    int shaderId = gl.getGL3().glCreateShader(GL3.GL_FRAGMENT_SHADER);
+    int shaderId = gl.getGL2ES2().glCreateShader(GL3.GL_FRAGMENT_SHADER);
     checkGLError("glCreateShader(GL_FRAGMENT_SHADER)");
     prepareShader(source, shaderId);
-    gl.getGL3().glAttachShader(program, shaderId);
+    gl.getGL2ES2().glAttachShader(program, shaderId);
     checkGLError("glAttachShader");
     return shaderId;
   }
@@ -149,10 +149,10 @@ public class CoreShader {
    */
   public int geometryShader(final InputStream source) {
     final GL gl = GLContext.getCurrentGL();
-    int shaderId = gl.getGL3().glCreateShader(GL3.GL_GEOMETRY_SHADER);
+    int shaderId = gl.getGL2ES2().glCreateShader(GL3.GL_GEOMETRY_SHADER);
     checkGLError("glCreateShader(GL_GEOMETRY_SHADER)");
     prepareShader(source, shaderId);
-    gl.getGL3().glAttachShader(program, shaderId);
+    gl.getGL2ES2().glAttachShader(program, shaderId);
     checkGLError("glAttachShader");
     return shaderId;
   }
@@ -244,15 +244,15 @@ public class CoreShader {
   public void link() {
     final GL gl = GLContext.getCurrentGL();
     for (int i=0; i<attributes.length; i++) {
-      gl.getGL3().glBindAttribLocation(program, i, attributes[i]);
+      gl.getGL2ES2().glBindAttribLocation(program, i, attributes[i]);
       checkGLError("glBindAttribLocation (" + attributes[i] + ")");
     }
 
-    gl.getGL3().glLinkProgram(program);
+    gl.getGL2ES2().glLinkProgram(program);
     checkGLError("glLinkProgram");
 /* FIXME JOGL
-    if (gl.getGL3().glGetProgram(program, GL2.GL_LINK_STATUS) != GL.GL_TRUE) {
-      log.warning("link error: " + gl.getGL3().glGetProgramInfoLog(program, 1024));
+    if (gl.getGL2ES2().glGetProgram(program, GL2.GL_LINK_STATUS) != GL.GL_TRUE) {
+      log.warning("link error: " + gl.getGL2ES2().glGetProgramInfoLog(program, 1024));
       checkGLError("glGetProgramInfoLog");
     }
     */
@@ -266,7 +266,7 @@ public class CoreShader {
    */
   public void setUniformf(final String name, final float value) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniform1f(getLocation(name), value);
+    gl.getGL2ES2().glUniform1f(getLocation(name), value);
     checkGLError("glUniform1f");
   }
 
@@ -278,7 +278,7 @@ public class CoreShader {
    */
   public void setUniformf(final String name, final float v1, final float v2) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniform2f(getLocation(name), v1, v2);
+    gl.getGL2ES2().glUniform2f(getLocation(name), v1, v2);
     checkGLError("glUniform2f");
   }
 
@@ -291,7 +291,7 @@ public class CoreShader {
    */
   public void setUniformf(final String name, final float v1, final float v2, final float v3) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniform3f(getLocation(name), v1, v2, v3);
+    gl.getGL2ES2().glUniform3f(getLocation(name), v1, v2, v3);
     checkGLError("glUniform3f");
   }
 
@@ -305,7 +305,7 @@ public class CoreShader {
    */
   public void setUniformf(final String name, final float x, final float y, final float z, final float w) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniform4f(getLocation(name), x, y, z, w);
+    gl.getGL2ES2().glUniform4f(getLocation(name), x, y, z, w);
     checkGLError("glUniform4f");
   }
 
@@ -316,7 +316,7 @@ public class CoreShader {
    */
   public void setUniformi(final String name, final int v1) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniform1i(getLocation(name), v1);
+    gl.getGL2ES2().glUniform1i(getLocation(name), v1);
     checkGLError("glUniform1i");
   }
 
@@ -328,7 +328,7 @@ public class CoreShader {
    */
   public void setUniformi(final String name, final int v1, final int v2) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniform2i(getLocation(name), v1, v2);
+    gl.getGL2ES2().glUniform2i(getLocation(name), v1, v2);
     checkGLError("glUniform2i");
   }
 
@@ -341,7 +341,7 @@ public class CoreShader {
    */
   public void setUniformi(final String name, final int v1, final int v2, final int v3) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniform3i(getLocation(name), v1, v2, v3);
+    gl.getGL2ES2().glUniform3i(getLocation(name), v1, v2, v3);
     checkGLError("glUniform3i");
   }
 
@@ -355,7 +355,7 @@ public class CoreShader {
    */
   public void setUniformi(final String name, final int v1, final int v2, final int v3, final int v4) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniform4i(getLocation(name), v1, v2, v3, v4);
+    gl.getGL2ES2().glUniform4i(getLocation(name), v1, v2, v3, v4);
     checkGLError("glUniform4i");
   }
 
@@ -369,7 +369,7 @@ public class CoreShader {
     matrix.store(matBuffer);
     matBuffer.rewind();
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUniformMatrix4fv(getLocation(name), 1, false, matBuffer);
+    gl.getGL2ES2().glUniformMatrix4fv(getLocation(name), 1, false, matBuffer);
     checkGLError("glUniformMatrix4");
   }
 
@@ -380,7 +380,7 @@ public class CoreShader {
    */
   public int getAttribLocation(final String name) {
     final GL gl = GLContext.getCurrentGL();
-    int result = gl.getGL3().glGetAttribLocation(program, name);
+    int result = gl.getGL2ES2().glGetAttribLocation(program, name);
     checkGLError("glGetAttribLocation");
     return result;
   }
@@ -394,7 +394,7 @@ public class CoreShader {
    */
   public void bindAttribLocation(final String name, final int index) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glBindAttribLocation(program, index, name);
+    gl.getGL2ES2().glBindAttribLocation(program, index, name);
     checkGLError("glBindAttribLocation");
   }
 
@@ -403,14 +403,14 @@ public class CoreShader {
    */
   public void activate() {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glUseProgram(program);
+    gl.getGL2ES2().glUseProgram(program);
     checkGLError("glUseProgram");
   }
 
   private CoreShader(final String ... vertexAttributes) {
     this.attributes = vertexAttributes;
     final GL gl = GLContext.getCurrentGL();
-    this.program = gl.getGL3().glCreateProgram();
+    this.program = gl.getGL2ES2().glCreateProgram();
     checkGLError("glCreateProgram");
   }
 
@@ -436,7 +436,7 @@ public class CoreShader {
       name.put((byte)0x00);
       name.rewind();
       final GL gl = GLContext.getCurrentGL();
-      int result = gl.getGL3().glGetUniformLocation(program, uniformName);
+      int result = gl.getGL2ES2().glGetUniformLocation(program, uniformName);
       checkGLError("glGetUniformLocation for [" + uniformName + "] failed");
       log.info(getLoggingPrefix() + "glUniformLocation for [" + uniformName + "] = [" + result + "]");
       return result;
@@ -451,16 +451,16 @@ public class CoreShader {
     String[] loadShader = loadShader(source);
     int[] stringLength = new int[1];
     stringLength[0] = loadShader[0].length();
-    gl.getGL3().glShaderSource(shaderId, 1, loadShader, Buffers.newDirectIntBuffer(stringLength));
+    gl.getGL2ES2().glShaderSource(shaderId, 1, loadShader, Buffers.newDirectIntBuffer(stringLength));
     checkGLError("glShaderSource");
 
-    gl.getGL3().glCompileShader(shaderId);
+    gl.getGL2ES2().glCompileShader(shaderId);
     checkGLError("glCompileShader");
 
     int[] result = new int[1];
-    gl.getGL3().glGetShaderiv(shaderId, GL3.GL_COMPILE_STATUS, result, 0);
+    gl.getGL2ES2().glGetShaderiv(shaderId, GL3.GL_COMPILE_STATUS, result, 0);
     if (result[0] == GL3.GL_FALSE) {
-      log.warning("compile error: "/* + gl.getGL3().glGetShaderInfoLog(shaderId, 1024)*/);
+      log.warning("compile error: "/* + gl.getGL2ES2().glGetShaderInfoLog(shaderId, 1024)*/);
     }
 
     printLogInfo(shaderId);
@@ -500,7 +500,7 @@ public class CoreShader {
     ByteBuffer infoLog = Buffers.newDirectByteBuffer(2048);
     IntBuffer lengthBuffer = Buffers.newDirectIntBuffer(1);
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glGetShaderInfoLog(obj, 2048, lengthBuffer, infoLog);
+    gl.getGL2ES2().glGetShaderInfoLog(obj, 2048, lengthBuffer, infoLog);
     checkGLError("glGetShaderInfoLog");
 
     byte[] infoBytes = new byte[lengthBuffer.get()];

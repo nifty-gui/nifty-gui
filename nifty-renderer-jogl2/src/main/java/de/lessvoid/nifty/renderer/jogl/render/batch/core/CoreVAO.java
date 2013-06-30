@@ -24,8 +24,10 @@ public class CoreVAO {
    */
   public void bind() {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glBindVertexArray(vao);
-    CoreCheckGL.checkGLError("glBindVertexArray");
+    if (gl.isGL3()) {
+      gl.getGL3().glBindVertexArray(vao);
+      CoreCheckGL.checkGLError("glBindVertexArray");
+    }
   }
 
   /**
@@ -33,8 +35,10 @@ public class CoreVAO {
    */
   public void unbind() {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glBindVertexArray(0);
-    CoreCheckGL.checkGLError("glBindVertexArray(0)");
+    if (gl.isGL3()) {
+      gl.getGL3().glBindVertexArray(0);
+      CoreCheckGL.checkGLError("glBindVertexArray(0)");
+    }
   }
 
   /**
@@ -42,9 +46,11 @@ public class CoreVAO {
    */
   public void delete() {
     final GL gl = GLContext.getCurrentGL();
-    int[] buffer = new int[1];
-    buffer[0] = vao;
-    gl.getGL3().glDeleteVertexArrays(1, buffer, 0);
+    if (gl.isGL3()) {
+      int[] buffer = new int[1];
+      buffer[0] = vao;
+      gl.getGL3().glDeleteVertexArrays(1, buffer, 0);
+    }
   }
 
   /**
@@ -59,16 +65,18 @@ public class CoreVAO {
    */
   public void enableVertexAttributef(final int index, final int size, final int stride, final int offset) {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glVertexAttribPointer(index, size, GL.GL_FLOAT, false, stride * 4, offset * 4);
-    gl.getGL3().glEnableVertexAttribArray(index);
+    gl.getGL2ES2().glVertexAttribPointer(index, size, GL.GL_FLOAT, false, stride * 4, offset * 4);
+    gl.getGL2ES2().glEnableVertexAttribArray(index);
     CoreCheckGL.checkGLError("glVertexAttribPointer (" + index + ")");
   }
 
   private void init() {
     final GL gl = GLContext.getCurrentGL();
-    int[] buffer = new int[1];
-    gl.getGL3().glGenVertexArrays(1, buffer, 0);
-    vao = buffer[0];
-    CoreCheckGL.checkGLError("glGenVertexArrays");
+    if (gl.isGL3()) {
+      int[] buffer = new int[1];
+      gl.getGL3().glGenVertexArrays(1, buffer, 0);
+      vao = buffer[0];
+      CoreCheckGL.checkGLError("glGenVertexArrays");
+    }
   }
 }

@@ -712,7 +712,7 @@ public class CoreTexture2D {
       if (isCreatingMipMaps(level, minFilter)) {
         if (gl.isGL3()) {
           glTexImage2D(target, 0, internalFormat, width, height, border, format, usedType, data);
-          gl.getGL3().glGenerateMipmap(target);
+          gl.getGL2ES2().glGenerateMipmap(target);
           checkGLError("glGenerateMipmap", true);
         } else {
           gluBuild2DMipmaps(target, internalFormat, width, height, format, usedType, data);
