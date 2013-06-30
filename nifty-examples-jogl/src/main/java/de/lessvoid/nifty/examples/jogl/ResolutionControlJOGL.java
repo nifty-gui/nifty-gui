@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.examples.jogl;
 
 import java.awt.Frame;
+import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -55,8 +56,8 @@ public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
     }
 
     public void apply(final Frame frame, final GLCanvas canvas) {
-      frame.setSize(width, height);
-      canvas.setSize(width, height);
+      canvas.setPreferredSize(new Dimension(width, height));
+      frame.pack();
 
       GL gl = canvas.getGL();
       gl.glViewport(0, 0, width, height);
