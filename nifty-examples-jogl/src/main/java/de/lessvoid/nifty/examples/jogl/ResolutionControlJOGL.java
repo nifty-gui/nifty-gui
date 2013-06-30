@@ -1,27 +1,23 @@
 package de.lessvoid.nifty.examples.jogl;
 
-import java.awt.Frame;
-import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.awt.GLCanvas;
 
+import com.jogamp.newt.opengl.GLWindow;
 import de.lessvoid.nifty.examples.jogl.ResolutionControlJOGL.Resolution;
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 
 public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
-  private final GLCanvas canvas;
-  private final Frame frame;
+  private final GLWindow window;
   private final List<Resolution> resolutions;
   private Resolution current;
 
-  public ResolutionControlJOGL(final GLCanvas canvas, final Frame frame) {
-    this.canvas = canvas;
-    this.frame = frame;
+  public ResolutionControlJOGL(final GLWindow window) {
+    this.window = window;
     this.current = new Resolution(1024, 768);
     this.resolutions = Arrays.asList(
         new Resolution(640, 480),
@@ -37,7 +33,7 @@ public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
 
   @Override
   public void setResolution(final Resolution newResolution) {
-    newResolution.apply(frame, canvas);
+    newResolution.apply(window);
     current = newResolution;
   }
 
@@ -55,11 +51,10 @@ public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
       this.height = height;
     }
 
-    public void apply(final Frame frame, final GLCanvas canvas) {
-      canvas.setPreferredSize(new Dimension(width, height));
-      frame.pack();
+    public void apply(final GLWindow window) {
+      window.setSize(width, height);
 
-      GL gl = canvas.getGL();
+      GL gl = window.getGL();
       gl.glViewport(0, 0, width, height);
 
       if (gl.isGL2()) {

@@ -1,9 +1,6 @@
 package de.lessvoid.nifty.examples.jogl;
 
-import java.awt.Frame;
-
-import javax.media.opengl.awt.GLCanvas;
-
+import com.jogamp.newt.opengl.GLWindow;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.jogl.JOGLNiftyRunner.Callback;
 
@@ -13,7 +10,7 @@ public class NiftyTutorialJOGL {
     JOGLNiftyRunner.run(args, new Callback() {
 
       @Override
-      public void init(final Nifty nifty, final GLCanvas canvas, final Frame frame) {
+      public void init(final Nifty nifty, final GLWindow window) {
         nifty.fromXml("tutorial/tutorial.xml", "start");
       }
     });

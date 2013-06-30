@@ -1,9 +1,5 @@
 package de.lessvoid.nifty.examples.jogl;
 
-import java.awt.Frame;
-import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.InputStream;
 import java.util.logging.LogManager;
 
@@ -13,7 +9,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
+import com.jogamp.newt.opengl.GLWindow;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
@@ -38,10 +34,9 @@ public class JOGLNiftyRunner implements GLEventListener {
   private static final int CANVAS_HEIGHT = 768;
   private static long time = System.currentTimeMillis();
   private static long frames = 0;
-  private static GLCanvas canvas;
-  private static Frame frame;
   private static boolean useBatchedRenderer = false;
   private static boolean useBatchedCoreRenderer = false;
+  private static GLWindow window;
 
   private RenderDevice renderDevice;
   private JoglInputSystem inputSystem;
@@ -67,24 +62,15 @@ public class JOGLNiftyRunner implements GLEventListener {
       }
     }
 
-    canvas = new GLCanvas(new GLCapabilities(getProfile(useBatchedCoreRenderer)));
-    canvas.setAutoSwapBufferMode(true);
-    canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
-    canvas.addGLEventListener(new JOGLNiftyRunner(callback));
+    window = GLWindow.create(new GLCapabilities(getProfile(useBatchedCoreRenderer)));
+    window.setAutoSwapBufferMode(true);
+    window.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+    window.addGLEventListener(new JOGLNiftyRunner(callback));
 
-    final FPSAnimator animator = new FPSAnimator(canvas, FPS, false);
+    final FPSAnimator animator = new FPSAnimator(window, FPS, false);
 
-    frame = new Frame(getCaption(useBatchedRenderer, useBatchedCoreRenderer));
-    frame.add(canvas);
-    frame.pack();
-    frame.setVisible(true);
-    frame.addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent e) {
-        animator.stop();
-        frame.remove(canvas);
-        System.exit(0);
-      }
-    });
+    window.setTitle(getCaption(useBatchedRenderer, useBatchedCoreRenderer));
+    window.setVisible(true);
 
     animator.start();
   }
@@ -104,7 +90,7 @@ public class JOGLNiftyRunner implements GLEventListener {
     if (useCore) {
       add += " (CORE PROFILE)";
     }
-    return "AWT Window Test - Nifty" + add;
+    return "NEWT Window Test - Nifty" + add;
   }
 
   public JOGLNiftyRunner(final Callback callback) {
@@ -128,12 +114,11 @@ public class JOGLNiftyRunner implements GLEventListener {
       renderDevice = new JoglRenderDevice();
     }
     inputSystem = new JoglInputSystem();
-    canvas.addMouseListener(inputSystem);
-    canvas.addMouseMotionListener(inputSystem);
-    canvas.addKeyListener(inputSystem);
+    window.addMouseListener(inputSystem);
+    window.addKeyListener(inputSystem);
 
     nifty = new Nifty(renderDevice, new NullSoundDevice(), inputSystem, new TimeProvider());
-    callback.init(nifty, canvas, frame);
+    callback.init(nifty, window);
   }
 
   public void dispose(GLAutoDrawable drawable) {
@@ -173,6 +158,6 @@ public class JOGLNiftyRunner implements GLEventListener {
   }
 
   public interface Callback {
-    void init(Nifty nifty, GLCanvas canvas, Frame frame);    
+    void init(Nifty nifty, GLWindow window);
   }
 }
