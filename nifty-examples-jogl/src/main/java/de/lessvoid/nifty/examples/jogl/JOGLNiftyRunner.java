@@ -9,8 +9,8 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
-import com.jogamp.newt.opengl.GLWindow;
 
+import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import de.lessvoid.nifty.Nifty;
@@ -34,9 +34,8 @@ public class JOGLNiftyRunner implements GLEventListener {
   private static final int CANVAS_HEIGHT = 768;
   private static long time = System.currentTimeMillis();
   private static long frames = 0;
-  private static boolean useBatchedRenderer = false;
-  private static boolean useBatchedCoreRenderer = false;
   private static GLWindow window;
+  private static Mode mode = Mode.Old;
 
   private RenderDevice renderDevice;
   private JoglInputSystem inputSystem;
@@ -55,40 +54,44 @@ public class JOGLNiftyRunner implements GLEventListener {
     }
 
     if (args.length == 1) {
-      useBatchedRenderer = "batch".equals(args[0]);
-      useBatchedCoreRenderer = "core".equals(args[0]);
-      if (useBatchedCoreRenderer) {
-        useBatchedRenderer = true;
-      }
+      mode = Mode.findMode(args[0]);
     }
 
-    window = GLWindow.create(new GLCapabilities(getProfile(useBatchedCoreRenderer)));
+    System.out.println("using mode " + mode.getName());
+
+    window = GLWindow.create(new GLCapabilities(getProfile(mode)));
     window.setAutoSwapBufferMode(true);
     window.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     window.addGLEventListener(new JOGLNiftyRunner(callback));
 
     final FPSAnimator animator = new FPSAnimator(window, FPS, false);
 
-    window.setTitle(getCaption(useBatchedRenderer, useBatchedCoreRenderer));
+    window.setTitle(getCaption(mode));
     window.setVisible(true);
 
     animator.start();
   }
 
-  private static GLProfile getProfile(final boolean useCore) {
-    if (useCore) {
+  private static GLProfile getProfile(final Mode mode) {
+    if (Mode.Core.equals(mode)) {
       return GLProfile.get(GLProfile.GL3);
+    }
+    if (Mode.ES2.equals(mode)) {
+      return GLProfile.get(GLProfile.GL2ES2);
     }
     return GLProfile.getDefault();
   }
 
-  private static String getCaption(final boolean batched, final boolean useCore) {
+  private static String getCaption(final Mode mode) {
     String add = "";
-    if (batched) {
+    if (Mode.Batch.equals(mode)) {
       add += " (BATCH RENDERER)";
     }
-    if (useCore) {
+    if (Mode.Core.equals(mode)) {
       add += " (CORE PROFILE)";
+    }
+    if (Mode.ES2.equals(mode)) {
+      add += " (ES2 PROFILE)";
     }
     return "NEWT Window Test - Nifty" + add;
   }
@@ -104,12 +107,12 @@ public class JOGLNiftyRunner implements GLEventListener {
   }
 
   public void init(GLAutoDrawable drawable) {
-    if (useBatchedRenderer) {
-      if (useBatchedCoreRenderer) {
-        renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile(), 2048, 2048);
-      } else {
-        renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend(), 2048, 2048);
-      }
+    if (Mode.Batch.equals(mode)) {
+      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend(), 2048, 2048);
+    } else if (Mode.Core.equals(mode)) {
+      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile(), 2048, 2048);
+    } else if (Mode.ES2.equals(mode)) {
+      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile(), 2048, 2048);
     } else {
       renderDevice = new JoglRenderDevice();
     }
@@ -160,5 +163,34 @@ public class JOGLNiftyRunner implements GLEventListener {
 
   public interface Callback {
     void init(Nifty nifty, GLWindow window);
+  }
+
+  private static enum Mode {
+    Old("old"),
+    Batch("batch"),
+    Core("core"),
+    ES2("es2");
+
+    private final String name;
+    private Mode(final String name) {
+      this.name = name;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public static Mode findMode(final String arg) {
+      for (Mode mode : Mode.values()) {
+        if (mode.matches(arg)) {
+          return mode;
+        }
+      }
+      return Mode.Old;
+    }
+
+    private boolean matches(final String check) {
+      return name.equals(check);
+    }
   }
 }

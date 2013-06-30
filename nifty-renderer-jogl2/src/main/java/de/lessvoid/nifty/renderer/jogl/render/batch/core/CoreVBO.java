@@ -86,12 +86,12 @@ public class CoreVBO {
 
     final GL gl = GLContext.getCurrentGL();
     int[] buffer = new int[1];
-    gl.getGL3().glGenBuffers(1, buffer, 0);
+    gl.getGL2ES2().glGenBuffers(1, buffer, 0);
     id = buffer[0];
     CoreCheckGL.checkGLError("glGenBuffers");
 
-    gl.getGL3().glBindBuffer(GL.GL_ARRAY_BUFFER, id);
-    gl.getGL3().glBufferData(GL.GL_ARRAY_BUFFER, data.length, vertexBuffer, usage);
+    gl.getGL2ES2().glBindBuffer(GL.GL_ARRAY_BUFFER, id);
+    gl.getGL2ES2().glBufferData(GL.GL_ARRAY_BUFFER, data.length, vertexBuffer, usage);
     CoreCheckGL.checkGLError("glBufferData");
   }
 
@@ -113,7 +113,7 @@ public class CoreVBO {
    */
   public void bind() {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glBindBuffer(GL.GL_ARRAY_BUFFER, id);
+    gl.getGL2ES2().glBindBuffer(GL.GL_ARRAY_BUFFER, id);
     CoreCheckGL.checkGLError("glBindBuffer(GL_ARRAY_BUFFER)");
   }
 
@@ -122,7 +122,7 @@ public class CoreVBO {
    */
   public void send() {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glBufferData(GL.GL_ARRAY_BUFFER, vertexBuffer.limit()*4, vertexBuffer, usage);
+    gl.getGL2ES2().glBufferData(GL.GL_ARRAY_BUFFER, vertexBuffer.limit()*4, vertexBuffer, usage);
     CoreCheckGL.checkGLError("glBufferData(GL_ARRAY_BUFFER)");
   }
 
@@ -133,6 +133,6 @@ public class CoreVBO {
     int[] buffer = new int[1];
     buffer[0] = id;
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL3().glDeleteBuffers(1, buffer, 0);
+    gl.getGL2ES2().glDeleteBuffers(1, buffer, 0);
   }
 }

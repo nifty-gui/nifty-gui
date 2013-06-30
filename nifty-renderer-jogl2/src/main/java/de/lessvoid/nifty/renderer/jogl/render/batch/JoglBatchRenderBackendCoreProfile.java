@@ -68,8 +68,15 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     modelViewProjection = CoreMatrixFactory.createOrtho(0, getWidth(), getHeight(), 0);
 
     niftyShader = CoreShader.newShaderWithVertexAttributes("aVertex", "aColor", "aTexture");
-    niftyShader.fragmentShader("nifty.fs");
-    niftyShader.vertexShader("nifty.vs");
+
+    final GL gl = GLContext.getCurrentGL();
+    if (gl.isGLES2()) {
+      niftyShader.fragmentShader("nifty-es2.fs");
+      niftyShader.vertexShader("nifty-es2.vs");
+    } else {
+      niftyShader.fragmentShader("nifty-gl3.fs");
+      niftyShader.vertexShader("nifty-gl3.vs");
+    }
     niftyShader.link();
     niftyShader.activate();
     niftyShader.setUniformMatrix4f("uModelViewProjectionMatrix", modelViewProjection);
