@@ -1,13 +1,8 @@
 package de.lessvoid.nifty.renderer.jogl.input;
 
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.jogamp.newt.event.*;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
@@ -16,7 +11,7 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 /**
  * Copy of InputSystemAwtImpl
  */
-public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseListener,
+public class JoglInputSystem implements InputSystem, MouseListener,
         KeyListener {
 
     private ConcurrentLinkedQueue<MouseEventData> mouseEvents = new ConcurrentLinkedQueue<MouseEventData>();
@@ -47,6 +42,11 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
         }else{
 	    mouseEvents.add(new MouseEventData(mouseEvent.getX(), mouseEvent.getY(),false, 0));
 	}
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseEvent mouseEvent) {
+
     }
 
     @Override
@@ -96,17 +96,12 @@ public class JoglInputSystem implements InputSystem, MouseMotionListener, MouseL
     }
 
     private void handleKeyEvent(KeyEvent e, boolean isKeyDown) {
-        int newKeyCode = keyCodeConverter.convertToNiftyKeyCode(e.getKeyCode(), e.getKeyLocation());
+        int newKeyCode = keyCodeConverter.convertToNiftyKeyCode(e.getKeyCode(), e.getKeySymbol());
         keyboardEvents.add(new KeyboardInputEvent(newKeyCode, e.getKeyChar(), isKeyDown, e
                 .isShiftDown(), e.isControlDown()));
     }
 
     AwtToNiftyKeyCodeConverter keyCodeConverter = new AwtToNiftyKeyCodeConverter();
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
 
     @Override
     public void setMousePosition(int x, int y) {
