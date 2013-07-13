@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
 
-public class InternalNiftyStatistics {
+public class Statistics {
   private static final int TIME_HISTORY = 10;
 
   private int frameCounter = 0;

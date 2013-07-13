@@ -2,14 +2,14 @@ package de.lessvoid.nifty.internal.common;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.internal.common.InternalColorValidator;
+import de.lessvoid.nifty.internal.common.ColorValidator;
 
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 public class InternalColorValidatorTest {
-  private InternalColorValidator validator = new InternalColorValidator();
+  private ColorValidator validator = new ColorValidator();
 
   private String[] shortColor = new String[] { "#000", "#fff", "#FFF", "#0af", "#0AF", "#0aF", "#0Af", "#aaa", "#157" };
 

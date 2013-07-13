@@ -11,14 +11,14 @@ import de.lessvoid.nifty.spi.NiftyRenderTarget;
  * 
  * @author void
  */
-public class RenderNodeContent {
-  private final Logger log = Logger.getLogger(RenderNodeContent.class.getName());
+public class RenderNode {
+  private final Logger log = Logger.getLogger(RenderNode.class.getName());
   private final RenderNodeContentChild child;
   private final NiftyRenderTarget renderTarget;
   private final Context context;
   private final StringBuilder getStateInfo = new StringBuilder();
 
-  public RenderNodeContent(final RenderNodeContentChild child, final NiftyRenderTarget renderTarget) {
+  public RenderNode(final RenderNodeContentChild child, final NiftyRenderTarget renderTarget) {
     this.child = child;
     this.renderTarget = renderTarget;
     this.context = new Context();

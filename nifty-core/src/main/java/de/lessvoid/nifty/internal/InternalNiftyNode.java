@@ -18,7 +18,7 @@ import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvasPainterStandard;
 import de.lessvoid.nifty.internal.common.Box;
-import de.lessvoid.nifty.internal.common.InternalIdGenerator;
+import de.lessvoid.nifty.internal.common.IdGenerator;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
 import de.lessvoid.nifty.internal.layout.InternalLayoutableScreenSized;
@@ -30,7 +30,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   private final Nifty nifty;
 
   // The id of this element.
-  private final int id = InternalIdGenerator.generate();
+  private final int id = IdGenerator.generate();
 
   // The box.
   private final Box layoutPos = new Box();

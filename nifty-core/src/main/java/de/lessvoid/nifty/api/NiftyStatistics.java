@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.internal.common.InternalNiftyStatistics;
+import de.lessvoid.nifty.internal.common.Statistics;
 
 /**
  * Several different statistical informations about Niftys internal processing.
@@ -41,7 +41,7 @@ public class NiftyStatistics {
     }
   }
 
-  private final InternalNiftyStatistics statistics;
+  private final Statistics statistics;
 
   /**
    * Get all collected samples so far.
@@ -51,11 +51,11 @@ public class NiftyStatistics {
     return statistics.getFrameInfos();
   }
 
-  NiftyStatistics(final InternalNiftyStatistics statistics) {
+  NiftyStatistics(final Statistics statistics) {
     this.statistics = statistics;
   }
 
-  InternalNiftyStatistics getImpl() {
+  Statistics getImpl() {
     return statistics;
   }
 }

@@ -9,13 +9,13 @@ import de.lessvoid.nifty.api.NiftyColor;
  * Helper class to create Color instances from String representation.
  * @author void
  */
-public class InternalColorStringParser {
-  private static Logger log = Logger.getLogger(InternalColorStringParser.class.getName());
+public class ColorStringParser {
+  private static Logger log = Logger.getLogger(ColorStringParser.class.getName());
 
   /**
    * ColorValidator.
    */
-  private static InternalColorValidator colorValidator = new InternalColorValidator();
+  private static ColorValidator colorValidator = new ColorValidator();
 
   /**
    * scale short mode factor (converts 0x5 to 0x55).

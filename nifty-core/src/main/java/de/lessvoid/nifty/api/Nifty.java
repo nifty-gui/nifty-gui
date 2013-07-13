@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
-import de.lessvoid.nifty.internal.common.InternalNiftyStatistics;
-import de.lessvoid.nifty.internal.common.InternalNiftyStatistics.Type;
+import de.lessvoid.nifty.internal.common.Statistics;
+import de.lessvoid.nifty.internal.common.Statistics.Type;
 import de.lessvoid.nifty.internal.render.Render;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
@@ -20,8 +20,8 @@ public class Nifty {
   private final Logger log = Logger.getLogger(Nifty.class.getName());
 
   // The one and only NiftyStatistics instanz.
-  private final NiftyStatistics statistics = new NiftyStatistics(new InternalNiftyStatistics());
-  private final InternalNiftyStatistics stats = statistics.getImpl();
+  private final NiftyStatistics statistics = new NiftyStatistics(new Statistics());
+  private final Statistics stats = statistics.getImpl();
 
   // The NiftyRenderDevice we'll forward all render calls to.
   private final NiftyRenderDevice renderDevice;
