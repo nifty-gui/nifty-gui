@@ -81,6 +81,7 @@
         <xs:attribute name="color" type="colorType" use="optional" ></xs:attribute>
         <xs:attribute name="filter" type="xs:boolean" use="optional"></xs:attribute>
         <xs:attribute name="imageMode" type="xs:string" use="optional"></xs:attribute>
+        <xs:attribute name="renderStrategy" type="xs:string" use="optional"></xs:attribute>
         <xs:attribute name="subImageSizeMode">
           <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -235,8 +236,7 @@
   	<xs:attribute name="visibleToMouse" type="xs:string" />
   	<xs:attribute name="childLayout" type="xs:string" />
   	<xs:attribute name="focusable" type="xs:string" />
-  	<xs:attribute name="focusableInsertBeforeElementId"
-  		type="xs:string" />
+  	<xs:attribute name="focusableInsertBeforeElementId" type="xs:string" />
   	<xs:attribute name="backgroundImage" type="xs:string" />
   	<xs:attribute name="backgroundColor" type="xs:string" />
   	<xs:attribute name="color" type="xs:string" />
@@ -247,6 +247,7 @@
   	<xs:attribute name="filename" type="xs:string" />
   	<xs:attribute name="wrap" type="xs:boolean" />
   	<xs:attribute name="imageMode" type="xs:string" />
+    <xs:attribute name="renderStrategy" type="xs:string"></xs:attribute>
   	<xs:attribute name="renderOrder" type="xs:int" />
   	<xs:anyAttribute namespace="##any" processContents="skip"></xs:anyAttribute>
   </xs:complexType>
