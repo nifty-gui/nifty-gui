@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-controls>
+<nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
   <!-- DRAGGABLE CONTROL -->
   <controlDefinition name="draggable" childRootId="#draggableContent" controller="de.lessvoid.nifty.controls.dragndrop.DraggableControl">
-    <interact onClick="bringToFront()" onClickMouseMove="drag()" onRelease="dragStop()" />
-    <panel id="#draggableContent"/>
+    <panel id="#draggableContent">
+      <interact onClick="bringToFront()" onClickMouseMove="drag()" onRelease="dragStop()" />
+    </panel>
   </controlDefinition>
 
   <!-- DROPPABLE CONTROL -->

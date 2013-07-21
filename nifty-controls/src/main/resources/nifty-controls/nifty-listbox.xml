@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-controls>
+<nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
   <controlDefinition name="listBox" style="nifty-listbox" childRootId="#child-root" controller="de.lessvoid.nifty.controls.listbox.ListBoxControl">
     <panel childLayout="vertical">
       <panel id="#scrollpanel" childLayout="horizontal">

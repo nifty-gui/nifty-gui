@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-controls>
+<nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
   <controlDefinition name="verticalScrollbar" style="nifty-vertical-scrollbar" controller="de.lessvoid.nifty.controls.scrollbar.ScrollbarControl" inputMapping="de.lessvoid.nifty.controls.scrollbar.ScrollbarInputMapping">
     <panel style="#panel" focusable="true">
       <interact onMouseWheel="mouseWheel()" />

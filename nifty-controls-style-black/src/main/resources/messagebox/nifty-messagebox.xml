@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
   <style id="nifty-standard-messagebox-popup-style">
     <attributes childLayout="center" backgroundColor="#0006" />
   </style>

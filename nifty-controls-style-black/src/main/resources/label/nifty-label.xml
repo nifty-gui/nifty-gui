@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
   <!-- just some text label default -->
   <style id="nifty-label" base="base-font">
     <attributes align="center" textLineHeight="23px" textMinHeight="23px" />  

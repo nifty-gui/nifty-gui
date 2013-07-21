@@ -78,7 +78,7 @@ public class NiftyLoader {
       Document document = parser.parse(inputStreamXml);
 
       SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-      InputStream schemaStream = nifty.getResourceAsStream("nifty-1.3.xsd");
+      InputStream schemaStream = nifty.getResourceAsStream("nifty.xsd");
       try {
         Source schemaFile = new StreamSource(schemaStream);
         javax.xml.validation.Schema schema = factory.newSchema(schemaFile);

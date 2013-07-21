@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-controls>
+<nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
 	<controlDefinition name="nifty-messagebox" style="nifty-standard-messagebox-style" controller="de.lessvoid.nifty.controls.MessageBox">
 		<panel style="panel" childLayout="vertical" id="#messagebox" width="500px" height="250px">
 			<panel id="#message" childLayout="horizontal" align="left" valign="center" textVAlign="center" height="195px">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-controls>
+<nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
   <controlDefinition name="treeBox-item" style="nifty-treebox-item"
                      controller="de.lessvoid.nifty.controls.treebox.TreeBoxItemController">
     <panel childLayout="horizontal" width="100%" align="center">

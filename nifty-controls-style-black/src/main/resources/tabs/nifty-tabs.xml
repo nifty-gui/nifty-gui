@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
   <!-- The Tabs require the Nifty-Panel to be displayed properly. -->
   <useStyles filename="panel/nifty-panel.xml"/>
 

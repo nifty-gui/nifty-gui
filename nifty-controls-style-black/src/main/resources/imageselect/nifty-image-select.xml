@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
   <style id="nifty-image-select">
     <attributes align="center" valign="center" childLayout="horizontal" focusable="true" visibleToMouse="true" />
     <effect>

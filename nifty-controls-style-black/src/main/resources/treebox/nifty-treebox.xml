@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
   <style id="nifty-treebox-item" base="nifty-listbox-item">
     <attributes childLayout="horizontal" height="24px" />
   </style>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
   <registerMouseCursor id="textFieldCursor" filename="textfield/mouse-cursor-textfield.png" hotspotX="3" hotspotY="12"/>
 
   <!-- console panel style -->

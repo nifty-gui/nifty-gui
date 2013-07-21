@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
   <style id="nifty-radiobutton-style#panel">
     <attributes width="23px" height="23px" childLayout="center" focusable="true" visibleToMouse="true" />
   </style>

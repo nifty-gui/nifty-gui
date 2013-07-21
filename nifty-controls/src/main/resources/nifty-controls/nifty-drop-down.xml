@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-controls>
+<nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
   <!-- DROP DOWN CONTROL -->
   <controlDefinition
     style="nifty-drop-down"
@@ -7,13 +7,13 @@
     controller="de.lessvoid.nifty.controls.dropdown.DropDownControl"
     inputMapping="de.lessvoid.nifty.controls.dropdown.DropDownControlInputMapping">
     <panel style="#panel">
+      <interact onClick="dropDownClicked()" />
       <panel style="#panel-text">
         <text id="#text" style="#text" text="" />
       </panel>
       <panel style="#panel-icon">
         <image style="#icon" />
       </panel>
-      <interact onClick="dropDownClicked()" />
     </panel>
   </controlDefinition>
 

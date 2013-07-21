@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty-styles>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
 
   <style id="nifty-panel">
     <attributes padding="8px,16px,24px,16px" backgroundImage="panel/nifty-panel.png" imageMode="resize:28,184,28,28,28,184,28,154,28,184,28,58" />
