@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.jogl.input;
 
-import java.awt.event.KeyEvent;
+import com.jogamp.newt.event.KeyEvent;
 
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
@@ -15,27 +15,16 @@ class AwtToNiftyKeyCodeConverter {
 
 	public int convertToNiftyKeyCode(int key_code, int location) {
 		// manually map positioned keys
+	  // Note: currently JOGL does not separate between left and right keys here so we map everything to left for now
 		switch (key_code) {
 		case KeyEvent.VK_ALT: // fall through
-			if (location == KeyEvent.KEY_LOCATION_RIGHT)
-				return KeyboardInputEvent.KEY_RMENU;
-			else
 				return KeyboardInputEvent.KEY_LMENU;
 		case KeyEvent.VK_WINDOWS:
 		case KeyEvent.VK_META:
-			if (location == KeyEvent.KEY_LOCATION_RIGHT)
-				return KeyboardInputEvent.KEY_RMETA;
-			else
 				return KeyboardInputEvent.KEY_LMETA;
 		case KeyEvent.VK_SHIFT:
-			if (location == KeyEvent.KEY_LOCATION_RIGHT)
-				return KeyboardInputEvent.KEY_RSHIFT;
-			else
 				return KeyboardInputEvent.KEY_LSHIFT;
 		case KeyEvent.VK_CONTROL:
-			if (location == KeyEvent.KEY_LOCATION_RIGHT)
-				return KeyboardInputEvent.KEY_RCONTROL;
-			else
 				return KeyboardInputEvent.KEY_LCONTROL;
 		default:
 			return KEY_MAP[key_code];
@@ -102,8 +91,8 @@ class AwtToNiftyKeyCodeConverter {
 		KEY_MAP[KeyEvent.VK_INSERT] = KeyboardInputEvent.KEY_INSERT;
 		KEY_MAP[KeyEvent.VK_J] = KeyboardInputEvent.KEY_J;
 		KEY_MAP[KeyEvent.VK_K] = KeyboardInputEvent.KEY_K;
-		KEY_MAP[KeyEvent.VK_KANA] = KeyboardInputEvent.KEY_KANA;
-		KEY_MAP[KeyEvent.VK_KANJI] = KeyboardInputEvent.KEY_KANJI;
+//		KEY_MAP[KeyEvent.VK_KATAKANA] = KeyboardInputEvent.KEY_KANA;
+//		KEY_MAP[KeyEvent.VK_KANA_LOCK] = KeyboardInputEvent.KEY_KANJI;
 		KEY_MAP[KeyEvent.VK_L] = KeyboardInputEvent.KEY_L;
 		KEY_MAP[KeyEvent.VK_LEFT] = KeyboardInputEvent.KEY_LEFT;
 		KEY_MAP[KeyEvent.VK_M] = KeyboardInputEvent.KEY_M;
