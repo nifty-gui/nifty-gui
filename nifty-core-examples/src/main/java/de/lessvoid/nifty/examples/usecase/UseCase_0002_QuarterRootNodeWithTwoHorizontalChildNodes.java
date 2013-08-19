@@ -13,7 +13,7 @@ import de.lessvoid.nifty.api.UnitValue;
  *
  * @author void
  */
-public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes implements UseCase {
+public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes {
 
   public UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes(final Nifty nifty) {
     // Change the root node placement child layout from the default Center to Vertical. This will be used to lay out
@@ -27,10 +27,5 @@ public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes implements 
     // add two child nodes to the root node
     rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#0ff8"));
     rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff08"));
-  }
-
-  @Override
-  public void update(final Nifty nifty, final float deltaTime) {
-    //System.out.println(nifty.getStatistics().getAll());
   }
 }

@@ -10,7 +10,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * A single root node of a fixed size with a background color that is constantly rotating.
  * @author void
  */
-public class UseCase_0005_RotatingChildNode implements UseCase {
+public class UseCase_0005_RotatingChildNode implements Updateable {
   private final NiftyNode niftyNode;
   private final NiftyNode childNode;
   private final NiftyNode grandChildNode;

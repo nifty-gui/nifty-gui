@@ -27,7 +27,6 @@ public class RenderSync {
   }
 
   public boolean synchronize(final List<NiftyNode> srcNodes, final List<RenderNode> dstNodes) {
-    statistics.start(Type.Synchronize);
     boolean changed = false;
 
     for (int i=0; i<srcNodes.size(); i++) {
@@ -42,7 +41,6 @@ public class RenderSync {
       }
     }
 
-    statistics.stop(Type.Synchronize);
     return changed;
   }
 
