@@ -2278,6 +2278,7 @@ public class Element implements NiftyEvent<Void>, EffectManager.Notify {
 
   public void onEndScreen(final Screen screen) {
     screen.unregisterElementId(id);
+    nifty.unsubscribeElement(screen, id);
 
     if (attachedInputControl != null) {
       attachedInputControl.onEndScreen(nifty, screen, id);
