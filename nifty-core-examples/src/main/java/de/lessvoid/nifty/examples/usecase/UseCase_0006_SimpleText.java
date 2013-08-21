@@ -22,4 +22,8 @@ public class UseCase_0006_SimpleText {
     text.setColor(NiftyColor.RED());
 */
   }
+
+  public static void main(final String[] args) throws Exception {
+    UseCaseRunner.run(UseCase_0006_SimpleText.class, args);
+  }
 }

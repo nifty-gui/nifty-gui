@@ -15,4 +15,8 @@ public class UseCase_0001_FullScreenColorNode {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen();
     niftyNode.setBackgroundColor(NiftyColor.RED());
   }
+
+  public static void main(final String[] args) throws Exception {
+    UseCaseRunner.run(UseCase_0001_FullScreenColorNode.class, args);
+  }
 }

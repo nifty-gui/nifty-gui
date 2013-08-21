@@ -28,4 +28,8 @@ public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes {
     rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#0ff8"));
     rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff08"));
   }
+
+  public static void main(final String[] args) throws Exception {
+    UseCaseRunner.run(UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes.class, args);
+  }
 }

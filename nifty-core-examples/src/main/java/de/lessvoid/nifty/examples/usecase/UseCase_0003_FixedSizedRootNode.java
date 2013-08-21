@@ -17,4 +17,8 @@ public class UseCase_0003_FixedSizedRootNode {
     NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.None);
     niftyNode.setBackgroundColor(NiftyColor.BLUE());
   }
+
+  public static void main(final String[] args) throws Exception {
+    UseCaseRunner.run(UseCase_0003_FixedSizedRootNode.class, args);
+  }
 }

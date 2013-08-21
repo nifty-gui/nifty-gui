@@ -10,26 +10,25 @@ import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
 import de.lessvoid.nifty.renderer.lwjgl.NiftyRenderDeviceLwgl;
 
-public class RunUseCaseLwjglMain {
-  private static Logger log = Logger.getLogger(RunUseCaseLwjglMain.class.getName());
+/**
+ * A helper class that initializes the rendering subsystem and the main Nifty instance. It will then instantiate
+ * the given class using the Nifty instance as it's only parameter.
+ *
+ * @author void
+ */
+public class UseCaseRunner {
+  private static Logger log = Logger.getLogger(UseCaseRunner.class.getName());
   private static float time;
 
-  public static void main(final String[] args) throws Exception {
-    if (args.length != 1) {
-      System.err.println("Expected use case classname (without package name) to run.");
-      System.err.println("Example: " + RunUseCaseLwjglMain.class.getName() + " UseCase_0001_FullScreenColorNode");
-      System.exit(1);
-    }
-
+  static void run(final Class<?> useCaseClass, final String[] args) throws Exception {
     // init LWJGL using some helper class
     CoreLwjglSetup setup = new CoreLwjglSetup();
     setup.initializeLogging("/logging.properties");
-    setup.initialize(caption(args), 1024, 768);
+    setup.initialize(caption(useCaseClass.getSimpleName()), 1024, 768);
 
     // create nifty instance
     final Nifty nifty = createNifty();
-
-    final Object useCase = loadUseCase(args[0], nifty);
+    final Object useCase = useCaseClass.getConstructor(Nifty.class).newInstance(nifty);
     logScene(nifty);
 
     setup.renderLoop2(new RenderLoopCallback2() {
@@ -44,10 +43,10 @@ public class RunUseCaseLwjglMain {
       }
 
       private void updateUseCase(final Nifty nifty, final Object useCase, final float deltaTime) {
-        if (!(useCase instanceof Updateable)) {
+        if (!(useCase instanceof UseCaseUpdateable)) {
           return;
         }
-        ((Updateable) useCase).update(nifty, deltaTime);
+        ((UseCaseUpdateable) useCase).update(nifty, deltaTime);
       }
 
       @Override
@@ -57,16 +56,8 @@ public class RunUseCaseLwjglMain {
     });
   }
 
-  private static String caption(final String[] args) {
-    return "Nifty 2.0 (" + args[0] + ")";
-  }
-
-  private static Object loadUseCase(final String clazzName, final Nifty nifty) throws Exception {
-    Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(
-        RunUseCaseLwjglMain.class.getPackage().getName() + "." + clazzName);
-    log.info("loaded class [" + clazz + "]");
-
-    return clazz.getConstructor(Nifty.class).newInstance(nifty);
+  private static String caption(final String caption) {
+    return "Nifty 2.0 (" + caption + ")";
   }
 
   private static void logScene(final Nifty nifty) {
@@ -106,5 +97,4 @@ public class RunUseCaseLwjglMain {
     format.setMaximumFractionDigits(4);
     return String.format("%10s", format.format(value / 100000.f));
   }
-
 }
