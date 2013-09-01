@@ -192,6 +192,11 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    */
   private int selectedIndex;
 
+  /**
+   * This value is set true once the template is gone.
+   */
+  private boolean templateRemoved;
+
   public TabGroupControl() {
     log = Logger.getLogger(TabGroupControl.class.getName());
     showEventSubscriber = new TabGroupShowEventSubscriber();
@@ -240,7 +245,12 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       throw new IllegalStateException("Required button template missing.");
     }
     buttonTemplate = buttonElement.getElementType().copy();
-    nifty.removeElement(screen, buttonElement);
+    buttonElement.markForRemoval(new EndNotify() {
+      @Override
+      public void perform() {
+        templateRemoved = true;
+      }
+    });
   }
 
   @Override
@@ -353,7 +363,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       return null;
     }
 
-    if (tabButtonPanel.getElements().get(0).getId().endsWith("#button-template")) { //NON-NLS
+    if (!templateRemoved) { //NON-NLS
       realIndex++;
     }
 
@@ -459,7 +469,12 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       triggeredNotification = new CheckVisibilityEndNotify(this, triggeredNotification);
     }
 
-    final Element button = tabButtonPanel.getElements().get(index);
+    final Element button;
+    if (templateRemoved) {
+      button = tabButtonPanel.getElements().get(index);
+    } else {
+      button = tabButtonPanel.getElements().get(index + 1);
+    }
     niftyGui.unsubscribe(button.getId(), buttonClickedSubscriber);
     button.markForRemoval();
     contentPanel.getElements().get(index).markForRemoval(triggeredNotification);
@@ -544,7 +559,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     }
 
     int indexOffset = 0;
-    if (buttons.get(0).getId().endsWith("#button-template")) { //NON-NLS
+    if (!templateRemoved) { //NON-NLS
       indexOffset = -1;
     }
 
