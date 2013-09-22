@@ -141,7 +141,7 @@ public class ControlsDemo<T> implements NiftyExample {
             height("256px");
             childLayoutCenter();
             text(new TextBuilder() {{
-              text("Nifty 1.3 Core");
+              text("Nifty 1.4 Core");
               style("base-font");
               alignCenter();
               valignCenter();
@@ -213,7 +213,7 @@ public class ControlsDemo<T> implements NiftyExample {
             height("256px");
             childLayoutCenter();
             text(new TextBuilder() {{
-              text("Nifty 1.3 Standard Controls");
+              text("Nifty 1.4 Standard Controls");
               style("base-font");
               alignCenter();
               valignCenter();
