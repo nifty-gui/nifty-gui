@@ -2,6 +2,9 @@ package de.lessvoid.nifty.controls.checkbox;
 
 import java.util.Properties;
 
+import org.bushe.swing.event.EventTopicSubscriber;
+
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.CheckBox;
@@ -9,6 +12,7 @@ import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
@@ -19,7 +23,8 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @deprecated Please use {@link de.lessvoid.nifty.controls.CheckBox} when accessing NiftyControls.
  */
 @Deprecated
-public class CheckboxControl extends AbstractController implements CheckBox, CheckBoxView {
+public class CheckboxControl extends AbstractController
+  implements CheckBox, CheckBoxView, EventTopicSubscriber<ElementShowEvent> {
   private CheckBoxImpl checkBoxImpl = new CheckBoxImpl(this);
   private Nifty nifty;
   private Screen screen;
@@ -41,6 +46,7 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
   @Override
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     focusHandler = screen.getFocusHandler();
+    nifty.subscribe(screen, getId(), ElementShowEvent.class, this);
     super.init(parameter, controlDefinitionAttributes);
   }
 
@@ -77,11 +83,18 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
   public void update(final boolean checked) {
     final Element selectImage = getElement().findElementByName("#select");
     if (checked) {
+      selectImage.setVisible(true);
       selectImage.stopEffect(EffectEventId.onCustom);
       selectImage.startEffect(EffectEventId.onCustom, null, "show");
     } else {
+      selectImage.setVisible(true);
       selectImage.stopEffect(EffectEventId.onCustom);
-      selectImage.startEffect(EffectEventId.onCustom, null, "hide");
+      selectImage.startEffect(EffectEventId.onCustom, new EndNotify() {
+        @Override
+        public void perform() {
+          selectImage.setVisible(false);
+        }
+      }, "hide");
     }
   }
 
@@ -90,6 +103,12 @@ public class CheckboxControl extends AbstractController implements CheckBox, Che
     if (getElement().getId() != null) {
       nifty.publishEvent(getElement().getId(), event);
     }
+  }
+
+  @Override
+  public void onEvent(final String topic, final ElementShowEvent data) {
+    final Element selectImage = getElement().findElementByName("#select");
+    selectImage.setVisible(checkBoxImpl.isChecked());
   }
 
   // CheckBox Implementation
