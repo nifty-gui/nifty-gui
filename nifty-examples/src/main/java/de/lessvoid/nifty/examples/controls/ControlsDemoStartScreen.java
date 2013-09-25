@@ -29,6 +29,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
       dropDown1.addItem("Nifty GUI");
       dropDown1.addItem("Slick2d");
       dropDown1.addItem("Lwjgl");
+      dropDown1.addItem("LibGDX");
 
       dropDown1.selectItemByIndex(0);
     }

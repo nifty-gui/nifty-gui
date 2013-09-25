@@ -90,6 +90,11 @@
         <text style="button-font" text="Slick2D&#13;&#10;" align="center" />
         <image filename="all/slick.png" align="center" />
       <panel height="50px" childLayout="vertical" />
+        <text style="button-font" text="LibGDX&#13;&#10;" align="center" />
+        <panel width="313px" height="61px" backgroundColor="#ffff" align="center" childLayout="center">
+          <image filename="all/libgdx.png" align="center"/>
+        </panel>
+      <panel height="50px" childLayout="vertical" />
         <panel childLayout="horizontal" align="center">
           <panel childLayout="vertical">
             <text style="button-font" text="OpenGL&#13;&#10;" align="center" />
