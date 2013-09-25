@@ -93,6 +93,7 @@ public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
       return true;
     }
 
+    @Override
     public String toString() {
       StringBuilder result = new StringBuilder();
       result.append(width);

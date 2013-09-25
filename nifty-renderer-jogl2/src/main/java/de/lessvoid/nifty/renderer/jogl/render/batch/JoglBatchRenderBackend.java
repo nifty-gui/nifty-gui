@@ -49,7 +49,7 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
   private final List<Batch> batches = new ArrayList<Batch>();
   private ByteBuffer initialData;
   private boolean fillRemovedTexture =
-      Boolean.getBoolean(System.getProperty(JoglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
+      Boolean.parseBoolean(System.getProperty(JoglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
   private final GLU glu;
 
   public JoglBatchRenderBackend() {
