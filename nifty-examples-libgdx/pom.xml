@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>lessvoid</groupId>
+    <artifactId>nifty-main</artifactId>
+    <version>1.4.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>nifty-examples-libgdx</artifactId>
+  <packaging>pom</packaging>
+  <name>Nifty Examples for LibGDX - Main Parent</name>
+
+  <properties>
+    <skip.integration.tests>false</skip.integration.tests>
+    <gdx.version>0.9.9-SNAPSHOT</gdx.version>
+    <android.version>4.1.1.4</android.version>
+    <android.maven.version>3.6.0</android.maven.version>
+    <gwt.version>2.5.0</gwt.version>
+    <gwt.maven.version>2.5.0</gwt.maven.version>
+    <niftyGui.version>1.4.0-SNAPSHOT</niftyGui.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>gdx-nightlies</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+  </repositories>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.5.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>desktop</id>
+      <modules>
+        <module>desktop</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>android</id>
+      <modules>
+        <module>android</module>
+      </modules>
+    </profile>
+  </profiles>
+
+  <modules>
+     <!-- Used for rapid debugging of the nifty libgdx renderer only. Enable only if you know what you're doing! -->
+    <!--<module>../nifty-renderer-libgdx</module>-->
+    <module>core</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>lessvoid</groupId>
+        <artifactId>nifty</artifactId>
+        <version>${niftyGui.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>lessvoid</groupId>
+        <artifactId>nifty-examples</artifactId>
+        <version>${niftyGui.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>lessvoid</groupId>
+        <artifactId>nifty-style-black</artifactId>
+        <version>${niftyGui.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>lessvoid</groupId>
+        <artifactId>nifty-default-controls</artifactId>
+        <version>${niftyGui.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>lessvoid</groupId>
+        <artifactId>nifty-libgdx-renderer</artifactId>
+        <version>${niftyGui.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
