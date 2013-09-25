@@ -171,6 +171,9 @@ public class KeyboardInputEvent {
    */
   private boolean controlDown;
 
+  public KeyboardInputEvent() {
+  }
+
   /**
    * create the event.
    * @param newKey key
@@ -180,6 +183,15 @@ public class KeyboardInputEvent {
    * @param newControlDown controlDown
    */
   public KeyboardInputEvent(
+      final int newKey,
+      final char newCharacter,
+      final boolean newKeyDown,
+      final boolean newShiftDown,
+      final boolean newControlDown) {
+    setData(newKey, newCharacter, newKeyDown, newShiftDown, newControlDown);
+  }
+
+  public void setData(
       final int newKey,
       final char newCharacter,
       final boolean newKeyDown,
