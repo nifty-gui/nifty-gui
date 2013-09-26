@@ -105,7 +105,6 @@ public interface BatchRenderBackend {
   /**
    * Load the given image and provide width and height of the image using the Image interface defined at the bottom.
    * @param filename the filename to load
-   * @param ImageDimension instance (could carry additional data like the actual image data if necessary)
    */
   Image loadImage(String filename);
 

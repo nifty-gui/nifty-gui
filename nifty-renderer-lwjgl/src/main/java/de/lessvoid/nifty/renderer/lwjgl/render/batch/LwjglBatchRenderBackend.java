@@ -46,7 +46,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   private final List<Batch> batches = new ArrayList<Batch>();
   private ByteBuffer initialData;
   private boolean fillRemovedTexture =
-      Boolean.getBoolean(System.getProperty(LwjglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
+      Boolean.parseBoolean(System.getProperty(LwjglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
 
   public LwjglBatchRenderBackend() {
     batchPool = new ObjectPool<Batch>(2, new Factory<Batch>() {
@@ -271,6 +271,8 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
 
   }
 
+  // internal implementations
+
   private void getViewport() {
     GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
     viewportWidth = viewportBuffer.get(2);
@@ -279,8 +281,6 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       log.fine("Viewport: " + viewportWidth + ", " + viewportHeight);
     }
   }
-
-  // internal implementations
 
   private void checkGLError() {
     int error= GL11.glGetError();
@@ -451,6 +451,8 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     }
 
     public void render() {
+      if (primitiveCount == 0) return; // Attempting to render with an empty vertex buffer crashes the program.
+
       if (blendMode.equals(BlendMode.BLEND)) {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
       } else if (blendMode.equals(BlendMode.MULIPLY)) {

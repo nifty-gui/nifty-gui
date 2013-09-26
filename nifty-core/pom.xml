@@ -27,6 +27,7 @@
       <groupId>xpp3</groupId>
       <artifactId>xpp3</artifactId>
       <version>1.1.4c</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.bushe</groupId>

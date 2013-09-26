@@ -22,7 +22,7 @@ public interface NiftyInputConsumer {
   /**
    * Process the given keyboard event.
    * @param keyEvent the keyboard event to process
-   * @return true, when the mouse event has been processed and false, if not
+   * @return true, when the keyboard event has been processed and false, if not
    */
   boolean processKeyboardEvent(KeyboardInputEvent keyEvent);
 }

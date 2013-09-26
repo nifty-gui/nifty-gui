@@ -57,7 +57,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private final List<Batch> batches = new ArrayList<Batch>();
   private ByteBuffer initialData;
   private boolean fillRemovedTexture =
-      Boolean.getBoolean(System.getProperty(JoglBatchRenderBackendCoreProfile.class.getName() + ".fillRemovedTexture", "false"));
+      Boolean.parseBoolean(System.getProperty(JoglBatchRenderBackendCoreProfile.class.getName() + ".fillRemovedTexture", "false"));
 
   private static final int PRIMITIVE_SIZE = 4*8; // 4 vertices per quad and 8 vertex attributes per vertex (2xpos, 2xtexture, 4xcolor)
 
