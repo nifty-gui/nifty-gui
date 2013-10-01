@@ -40,7 +40,7 @@
         </panel>    
         <panel id="dynamic-parent" childLayout="vertical">
         </panel>
-        <panel childLayout="horizontal" height="8px" />
+        <panel childLayout="horizontal" height="70px" />
         <panel childLayout="horizontal">
           <text text="Listbox Static: " style="nifty-label" width="120px" align="left" textVAlign="center" textHAlign="left" />
           <control id="listBoxStatic" name="listBox" horizontal="off" width="*" height="100%" displayItems="3" />

@@ -742,7 +742,7 @@ public class ControlsDemo<T> implements NiftyExample {
 
   @Override
   public String getStartScreen() {
-    return "demo";
+    return "start";
   }
 
   @Override
@@ -752,7 +752,7 @@ public class ControlsDemo<T> implements NiftyExample {
 
   @Override
   public String getTitle() {
-    return "Nifty Controls Demonstation";
+    return "Nifty Controls Demonstration";
   }
 
   @Override

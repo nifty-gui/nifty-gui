@@ -61,7 +61,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private final List<Batch> batches = new ArrayList<Batch>();
   private ByteBuffer initialData;
   private boolean fillRemovedTexture =
-      Boolean.getBoolean(System.getProperty(LwjglBatchRenderBackendCoreProfile.class.getName() + ".fillRemovedTexture", "false"));
+      Boolean.parseBoolean(System.getProperty(LwjglBatchRenderBackendCoreProfile.class.getName() + ".fillRemovedTexture", "false"));
 
   private static final int PRIMITIVE_SIZE = 4*8; // 4 vertices per quad and 12 vertex attributes per vertex (2xpos, 2xtexture, 4xcolor, 4xclipping)
   private static final int PRIMITIVE_RESTART_INDEX = 0xFFFF;
