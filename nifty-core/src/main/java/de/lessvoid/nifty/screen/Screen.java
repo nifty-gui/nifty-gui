@@ -753,7 +753,22 @@ public class Screen {
 
     // add dynamic controls
     nifty.addControls();
+
+    // Process a fake mouse event with current coordinates so that Nifty will activate hover effects for any
+    // element currently under the mouse, and will also deactivate any hover effects for any element NOT currently
+    // under the mouse. This prevents the undesirable behavior of having an element under the mouse that should be in a
+    // hovered-effect state, but is not due to the screen change, and of having an element that is NOT under the mouse
+    // that should NOT be in a hovered-effect state, but IS due to the screen change.
+    forceMouseHoverUpdate();
+
     running = true;
+  }
+
+  private void forceMouseHoverUpdate() {
+    NiftyMouseInputEvent event = new NiftyMouseInputEvent();
+    event.initialize(nifty.getRenderEngine().convertFromNativeX(nifty.getNiftyMouse().getX()),
+                     nifty.getRenderEngine().convertFromNativeY(nifty.getNiftyMouse().getY()), 0, false, false, false);
+    mouseEvent(event);
   }
 
   void onEndScreenHasEnded() {
