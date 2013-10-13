@@ -154,7 +154,7 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
       case Input.Keys.BACKSPACE:
         return KeyboardInputEvent.KEY_BACK;
       case Input.Keys.FORWARD_DEL:
-        return KeyboardInputEvent.KEY_NONE;
+        return KeyboardInputEvent.KEY_DELETE;
       case Input.Keys.CENTER:
         return KeyboardInputEvent.KEY_NONE;
       case Input.Keys.DOWN:

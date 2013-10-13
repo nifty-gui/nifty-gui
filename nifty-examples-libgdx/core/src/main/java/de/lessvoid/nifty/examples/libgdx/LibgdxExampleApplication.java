@@ -60,6 +60,7 @@ public class LibgdxExampleApplication implements ApplicationListener {
     keyRepeat.setKeyRepeat(Input.Keys.UP, true);
     keyRepeat.setKeyRepeat(Input.Keys.DOWN, true);
     keyRepeat.setKeyRepeat(Input.Keys.BACKSPACE, true);
+    keyRepeat.setKeyRepeat(Input.Keys.FORWARD_DEL, true);
 
     // Initialize Nifty
     nifty = new Nifty(batchRenderDevice, new GdxSoundDevice(assetManager), gdxInputSystem, new AccurateTimeProvider());
