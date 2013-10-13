@@ -10,6 +10,7 @@ import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VerticalAlignment;
@@ -47,7 +48,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   // The childLayout.
   private ChildLayout childLayout = ChildLayout.None;
 
-  // Does this node needs layout? This will be set to false when this Node has been layed out by its parent.
+  // Does this node needs layout? This will be set to false when this Node has been laid out by its parent.
   private boolean needsLayout = true;
 
   // Does this node needs to be redrawn? This will be set to false once the Node content has been drawn.
@@ -66,13 +67,19 @@ public class InternalNiftyNode implements InternalLayoutable {
   private NiftyColor backgroundColor = NiftyColor.TRANSPARENT();
 
   // If you don't set a specific NiftyCanvasPainter we use this one
-  private static InternalNiftyCanvasPainterStandard standardCanvasPainter = new InternalNiftyCanvasPainterStandard();
+  private static final InternalNiftyCanvasPainterStandard standardPainter = new InternalNiftyCanvasPainterStandard();
 
   // The canvas.
   private NiftyCanvas canvas;
 
+  // The canvas painter.
+  private NiftyCanvasPainter canvasPainter = standardPainter;
+
   // When set to true, Nifty will render all childrens into a texture.
   private boolean cache;
+
+  // The public Node that this node is linked to.
+  private NiftyNode niftyNode;
 
   private boolean transformationChanged = true;
   private double angleX = 0.0;
@@ -247,7 +254,11 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setContent(final NiftyCanvasPainter painter) {
-    
+    this.canvasPainter = painter;
+  }
+
+  public void requestRedraw() {
+    needsRedraw = true;
   }
 
   public void getStateInfo(final StringBuilder result) {
@@ -307,15 +318,20 @@ public class InternalNiftyNode implements InternalLayoutable {
     return parentNode;
   }
 
+  public void setNiftyNode(final NiftyNode niftyNode) {
+    this.niftyNode = niftyNode;
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Private Methods and package private stuff
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   public void updateContent() {
     if (needsRedraw) {
-      InternalNiftyCanvas internalNiftyCanvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
-      internalNiftyCanvas.reset();
-      standardCanvasPainter.paint(this, internalNiftyCanvas);
+      InternalNiftyCanvas internalCanvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
+      internalCanvas.reset();
+
+      canvasPainter.paint(niftyNode, canvas);
       needsRedraw = false;
     }
 

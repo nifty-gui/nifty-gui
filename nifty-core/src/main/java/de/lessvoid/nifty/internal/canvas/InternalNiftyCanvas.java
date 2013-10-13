@@ -22,6 +22,11 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
+  public void setLineWidth(final double lineWidth) {
+    commands.add(new CommandLineWidth(lineWidth));
+    changed = true;
+  }
+
   public void line(final double x0, final double y0, final double x1, final double y1) {
     commands.add(new CommandLine(x0, y0, x1, y1));
     changed = true;

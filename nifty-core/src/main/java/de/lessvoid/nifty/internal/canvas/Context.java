@@ -4,6 +4,7 @@ import de.lessvoid.nifty.api.NiftyColor;
 
 public class Context {
   private NiftyColor fillColor;
+  private float lineWidth;
 
   public Context() {
     reset();
@@ -19,5 +20,13 @@ public class Context {
 
   public NiftyColor getFillColor() {
     return fillColor;
+  }
+
+  public void setLineWidth(final float lineWidth) {
+    this.lineWidth = lineWidth;
+  }
+
+  public float getLineWidth() {
+    return lineWidth;
   }
 }

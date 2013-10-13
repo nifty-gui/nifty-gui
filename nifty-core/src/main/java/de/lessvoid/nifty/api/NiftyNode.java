@@ -26,6 +26,7 @@ public class NiftyNode {
    */
   private NiftyNode(final InternalNiftyNode impl) {
     this.impl = impl;
+    this.impl.setNiftyNode(this);
   }
 
   InternalNiftyNode getImpl() {
@@ -150,6 +151,15 @@ public class NiftyNode {
   }
 
   /**
+   * Get the current background color of this node.
+   *
+   * @return the currently set background color
+   */
+  public NiftyColor getBackgroundColor() {
+    return impl.getBackgroundColor();
+  }
+
+  /**
    * Set rotation around the x-axis in degrees.
    * @param angle rotation angle
    */
@@ -206,6 +216,13 @@ public class NiftyNode {
    */
   public void setContent(final NiftyCanvasPainter painter) {
     impl.setContent(painter);
+  }
+
+  /**
+   * Forces this Node to be redrawn the next time nodes are refreshed.
+   */
+  public void requestRedraw() {
+    impl.requestRedraw();
   }
 
   /**

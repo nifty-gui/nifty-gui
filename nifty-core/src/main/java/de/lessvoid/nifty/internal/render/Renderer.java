@@ -14,16 +14,16 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  * This class internally translates the list of NiftyNodes into a list of RenderNodes.
  * @author void
  */
-public class Render {
-  private final List<RenderNode> rootRenderNodes = new ArrayList<RenderNode>();
+public class Renderer {
+  private final List<RootRenderNode> rootRenderNodes = new ArrayList<RootRenderNode>();
   private final Statistics stats;
   private final NiftyRenderDevice renderDevice;
-  private final RenderSync rendererSync;
+  private final RendererNodeSync rendererSync;
 
-  public Render(final Statistics stats, final NiftyRenderDevice renderDevice) {
+  public Renderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
     this.stats = stats;
     this.renderDevice = renderDevice;
-    this.rendererSync = new RenderSync(stats, renderDevice);
+    this.rendererSync = new RendererNodeSync(renderDevice);
   }
 
   public boolean render(final List<NiftyNode> rootNodes) {

@@ -5,8 +5,6 @@ import java.util.List;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
-import de.lessvoid.nifty.internal.common.Statistics;
-import de.lessvoid.nifty.internal.common.Statistics.Type;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderTarget;
@@ -15,23 +13,21 @@ import de.lessvoid.nifty.spi.NiftyRenderTarget;
  * Synchronize a list of NiftyNodes to a list if InternalRenderNodes.
  * @author void
  */
-public class RenderSync {
-  private final Statistics statistics;
+public class RendererNodeSync {
   private final NiftyNodeAccessor niftyNodeAccessor;
   private final NiftyRenderDevice renderDevice;
 
-  public RenderSync(final Statistics statistics, final NiftyRenderDevice renderDevice) {
-    this.statistics = statistics;
+  public RendererNodeSync(final NiftyRenderDevice renderDevice) {
     this.niftyNodeAccessor = NiftyNodeAccessor.getDefault();
     this.renderDevice = renderDevice;
   }
 
-  public boolean synchronize(final List<NiftyNode> srcNodes, final List<RenderNode> dstNodes) {
+  public boolean synchronize(final List<NiftyNode> srcNodes, final List<RootRenderNode> dstNodes) {
     boolean changed = false;
 
     for (int i=0; i<srcNodes.size(); i++) {
       InternalNiftyNode src = niftyNodeAccessor.getInternalNiftyNode(srcNodes.get(i));
-      RenderNode dst = findNode(dstNodes, src.getId());
+      RootRenderNode dst = findNode(dstNodes, src.getId());
       if (dst == null) {
         dstNodes.add(createRenderNodeBufferParent(src, null, null));
         changed = true;
@@ -44,9 +40,9 @@ public class RenderSync {
     return changed;
   }
 
-  private RenderNode findNode(final List<RenderNode> nodes, final int id) {
+  private RootRenderNode findNode(final List<RootRenderNode> nodes, final int id) {
     for (int i=0; i<nodes.size(); i++) {
-      RenderNode node = nodes.get(i);
+      RootRenderNode node = nodes.get(i);
       if (node.getNodeId() == id) {
         return node;
       }
@@ -54,17 +50,17 @@ public class RenderSync {
     return null;
   }
 
-  private RenderNode createRenderNodeBufferParent(
+  private RootRenderNode createRenderNodeBufferParent(
       final InternalNiftyNode node,
       final InternalNiftyNode parent,
       final NiftyRenderTarget parentRenderTarget) {
-    return new RenderNode(
+    return new RootRenderNode(
         createRenderNodeBufferChild(node),
         createRenderTarget(node, parent, parentRenderTarget));
   }
 
-  private RenderNodeContentChild createRenderNodeBufferChild(final InternalNiftyNode node) {
-    RenderNodeContentChild renderNode = new RenderNodeContentChild(
+  private RenderNode createRenderNodeBufferChild(final InternalNiftyNode node) {
+    RenderNode renderNode = new RenderNode(
         node.getId(),
         buildLocalTransformation(node),
         node.getWidth(),
@@ -98,7 +94,7 @@ public class RenderSync {
     return parentRenderTarget;
   }
 
-  private boolean syncRenderNodeBufferChildNodes(final InternalNiftyNode src, final RenderNodeContentChild dst) {
+  private boolean syncRenderNodeBufferChildNodes(final InternalNiftyNode src, final RenderNode dst) {
     boolean widthChanged = dst.getWidth() != src.getWidth();
     boolean heightChanged = dst.getHeight() != src.getHeight();
     boolean canvasChanged = src.getCanvas().isChanged();
@@ -126,8 +122,8 @@ public class RenderSync {
     return thisNodeChanged || childChanged;
   }
 
-  private boolean syncRenderNodeBufferChild(final InternalNiftyNode src, final RenderNodeContentChild dstParent) {
-    RenderNodeContentChild dst = dstParent.findChildWithId(src.getId());
+  private boolean syncRenderNodeBufferChild(final InternalNiftyNode src, final RenderNode dstParent) {
+    RenderNode dst = dstParent.findChildWithId(src.getId());
     if (dst == null) {
       dstParent.addChildNode(createRenderNodeBufferChild(src));
       return true;

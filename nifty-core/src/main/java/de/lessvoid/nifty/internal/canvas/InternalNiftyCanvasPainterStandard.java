@@ -1,14 +1,16 @@
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.api.NiftyCanvas;
+import de.lessvoid.nifty.api.NiftyCanvasPainter;
+import de.lessvoid.nifty.api.NiftyNode;
 
 
 
-public class InternalNiftyCanvasPainterStandard {
+public class InternalNiftyCanvasPainterStandard implements NiftyCanvasPainter {
 
-  public void paint(final InternalNiftyNode node, final InternalNiftyCanvas canvas) {
-    canvas.setFillColor(node.getBackgroundColor());
-    canvas.filledRect(0, 0, node.getWidth(), node.getHeight());
+  @Override
+  public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+    canvas.setFillStyle(node.getBackgroundColor());
+    canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
   }
 }

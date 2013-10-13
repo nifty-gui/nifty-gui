@@ -14,12 +14,21 @@ public class NiftyCanvas {
     this.impl = impl;
   }
 
-  public void setFillColor(final NiftyColor color) {
+  public void setFillStyle(final NiftyColor color) {
     impl.setFillColor(color);
   }
 
+  public void fillRect(final double x0, final double y0, final double x1, final double y1) {
+    impl.filledRect(x0, y0, x1, y1);
+  }
+
+  /*
   public void setStrokeColor(final NiftyColor color) {
     impl.setStrokeColor(color);
+  }
+
+  public void setLineWidth(final double lineWidth) {
+    impl.setLineWidth(lineWidth);
   }
 
   public void line(final double x0, final double y0, final double x1, final double y1) {
@@ -30,10 +39,7 @@ public class NiftyCanvas {
     impl.rect(x0, y0, x1, y1);
   }
 
-  public void filledRect(final double x0, final double y0, final double x1, final double y1) {
-    impl.filledRect(x0, y0, x1, y1);
-  }
-
+*/
   InternalNiftyCanvas getImpl() {
     return impl;
   }

@@ -22,6 +22,7 @@ import static org.lwjgl.opengl.GL11.glStencilFunc;
 import static org.lwjgl.opengl.GL11.glStencilOp;
 import static org.lwjgl.opengl.GL11.glViewport;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 
@@ -112,14 +113,20 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
   }
 
   @Override
-  public void filledRect(final double x0, final double y0, final double x1, final double y1, final NiftyColor color) {
+  public void filledRect(
+      final double x0, final double y0,
+      final double x1, final double y1,
+      final double x2, final double y2,
+      final double x3, final double y3,
+      final NiftyColor color) {
     fbo.bindFramebuffer();
     fbo.attachTexture(texture.getTextureId(), 0, 0);
     glViewport(0, 0, texture.getWidth(), texture.getHeight());
 
     plainColor.activate();
     plainColor.setUniformf("uColor", (float)color.getRed(), (float)color.getGreen(), (float)color.getBlue(), (float)color.getAlpha());
-    addQuad(vbo.getBuffer(), (float)x0, (float)y0, (float)x1, (float)y1);
+    addTriangle(vbo.getBuffer(), (float)x0, (float)y0, (float)x1, (float)y1, (float)x3, (float)y3);
+    addTriangle(vbo.getBuffer(), (float)x1, (float)y1, (float)x2, (float)y2, (float)x3, (float)y3);
     quadCount++;
     flush();
 
@@ -219,6 +226,21 @@ public class NiftyRenderTargetLwjgl implements NiftyRenderTarget {
 
     buffer.put(x1);
     buffer.put(y1);
+  }
+
+  private void addTriangle(
+      final FloatBuffer buffer,
+      final float x0, final float y0,
+      final float x1, final float y1,
+      final float x2, final float y2) {
+    buffer.put(x0);
+    buffer.put(y0);
+
+    buffer.put(x1);
+    buffer.put(y1);
+
+    buffer.put(x2);
+    buffer.put(y2);
   }
 
   private void flush() {

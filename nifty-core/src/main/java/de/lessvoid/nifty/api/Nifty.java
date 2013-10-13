@@ -9,7 +9,7 @@ import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.Statistics.Type;
-import de.lessvoid.nifty.internal.render.Render;
+import de.lessvoid.nifty.internal.render.Renderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -34,7 +34,7 @@ public class Nifty {
   private ChildLayout rootNodePlacementLayout = ChildLayout.Center;
 
   // the class performing the conversion from NiftyNode to RenderNode
-  private final Render renderer;
+  private final Renderer renderer;
 
   private NiftyCanvas testCanvas;
   private boolean hack = true;
@@ -46,7 +46,7 @@ public class Nifty {
    */
   public Nifty(final NiftyRenderDevice newRenderDevice) {
     renderDevice = newRenderDevice;
-    renderer = new Render(statistics.getImpl(), newRenderDevice);
+    renderer = new Renderer(statistics.getImpl(), newRenderDevice);
   }
 
   /**
