@@ -74,7 +74,7 @@ public class GdxInputSystem implements InputSystem, InputProcessor {
 
   @Override
   public boolean keyTyped(final char character) {
-    eventQueue.offer(GdxKeyboardInputEvent.getInstance(character, character, true, true, isShiftDown(), isControlDown()));
+    eventQueue.offer(GdxKeyboardInputEvent.getInstance(0, character, true, true, isShiftDown(), isControlDown()));
     return true;
   }
 
