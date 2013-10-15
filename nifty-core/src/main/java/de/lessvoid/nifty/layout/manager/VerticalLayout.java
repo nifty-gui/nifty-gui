@@ -133,7 +133,7 @@ public class VerticalLayout implements LayoutManager {
       BoxConstraints original = p.getBoxConstraints();
       if (hasHeightConstraint(original)) {
         if (original.getHeight().isPercentOrPixel()) {
-          maxFixedHeight += original.getHeight().getValue(parentHeight);
+          maxFixedHeight += original.getHeight().getValueAsInt(parentHeight);
           fixedCount++;
         }
       }

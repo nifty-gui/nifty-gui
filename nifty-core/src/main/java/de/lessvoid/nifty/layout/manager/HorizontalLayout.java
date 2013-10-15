@@ -100,9 +100,9 @@ public class HorizontalLayout implements LayoutManager {
 
   private int calcElementWidth(final List < LayoutPart > children, final int rootBoxWidth, final BoxConstraints boxConstraints, final int elementHeight) {
     if (boxConstraints.getWidth() != null) {
-      int h = (int) boxConstraints.getWidth().getValue(rootBoxWidth);
+      int h = boxConstraints.getWidth().getValueAsInt(rootBoxWidth);
       if (boxConstraints.getWidth().hasHeightSuffix()) {
-        h = (int) boxConstraints.getWidth().getValue(elementHeight);
+        h = boxConstraints.getWidth().getValueAsInt(elementHeight);
       }
       if (h != -1) {
         return h;
@@ -143,7 +143,7 @@ public class HorizontalLayout implements LayoutManager {
 
       if (original.getWidth() != null) {
         if (original.getWidth().isPercentOrPixel()) {
-          maxFixedWidth += original.getWidth().getValue(parentWidth);
+          maxFixedWidth += original.getWidth().getValueAsInt(parentWidth);
           fixedCount++;
         }
       }

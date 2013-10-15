@@ -43,7 +43,7 @@ public class RenderQuad implements EffectImpl {
       r.setColor(tempColor);
     }
 
-    int size = (int) width.getValue(element.getParent().getWidth());
+    int size = width.getValueAsInt(element.getParent().getWidth());
     if (size == -1) {
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
     } else {

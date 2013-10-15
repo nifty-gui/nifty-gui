@@ -119,9 +119,9 @@ public class CenterLayout implements LayoutManager {
     int rootBoxX = rootBox.getX() + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth());
     int rootBoxWidth = rootBox.getWidth() - rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth()) - rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth());
 
-    int boxWidth = (int) constraint.getWidth().getValue(rootBoxWidth);
+    int boxWidth = constraint.getWidth().getValueAsInt(rootBoxWidth);
     if (constraint.getWidth().hasHeightSuffix()) {
-      boxWidth = (int) constraint.getWidth().getValue(box.getHeight()); 
+      boxWidth = constraint.getWidth().getValueAsInt(box.getHeight());
     }
     box.setWidth(boxWidth);
 
@@ -143,9 +143,9 @@ public class CenterLayout implements LayoutManager {
     int rootBoxY = rootBox.getY() + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight());
     int rootBoxHeight = rootBox.getHeight() - rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight()) - rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight());
 
-    int boxHeight = (int) constraint.getHeight().getValue(rootBoxHeight);
+    int boxHeight = constraint.getHeight().getValueAsInt(rootBoxHeight);
     if (constraint.getHeight().hasWidthSuffix()) {
-      boxHeight = (int) constraint.getHeight().getValue(box.getWidth());
+      boxHeight = constraint.getHeight().getValueAsInt(box.getWidth());
     }
     box.setHeight(boxHeight);
 

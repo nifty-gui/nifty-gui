@@ -131,9 +131,11 @@ public class SizeValue {
   }
 
   /**
-   * Get the value as float.
+   * Get the value as a float. WARNING: DO NOT CAST THE RETURN VALUE TO AN INTEGER - use {@link #getValueAsInt(float)}
+   * or you will have off-by-one errors!
+   *
    * @param range the size that percent values are calculated from.
-   * @return the result value as float
+   * @return the resulting value as a float.
    */
   public float getValue(final float range) {
     if (isPercent()) {
@@ -148,10 +150,10 @@ public class SizeValue {
   /**
    * Get the value as int.
    * @param range range the size that percent values are calculated from.
-   * @return the result value as int
+   * @return the resulting value rounded to the nearest integer.
    */
   public int getValueAsInt(final float range) {
-    return (int) getValue(range);
+    return Math.round(getValue(range));
   }
 
   /**

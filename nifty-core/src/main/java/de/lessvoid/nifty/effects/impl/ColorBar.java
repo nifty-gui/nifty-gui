@@ -68,7 +68,7 @@ public class ColorBar implements EffectImpl {
     int insetOffsetTop = insetTop.getValueAsInt(element.getHeight());
     int insetOffsetBottom = insetBottom.getValueAsInt(element.getHeight());
 
-    int size = (int) width.getValue(element.getParent().getWidth());
+    int size = width.getValueAsInt(element.getParent().getWidth());
     if (size == -1) {
       r.renderQuad(
           element.getX() + insetOffsetLeft,
