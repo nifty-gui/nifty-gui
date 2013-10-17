@@ -13,6 +13,9 @@ public class Statistics {
   private final long[] times = new long[Type.values().length];
 
   public enum Type {
+    /**
+     * Time spent synchronizing the Nifty scene graph with the render node scene graph.
+     */
     Synchronize,
     Update,
     Render

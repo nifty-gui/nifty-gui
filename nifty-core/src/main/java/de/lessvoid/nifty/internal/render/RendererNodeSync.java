@@ -10,10 +10,12 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderTarget;
 
 /**
- * Synchronize a list of NiftyNodes to a list if InternalRenderNodes.
+ * Synchronize a list of NiftyNodes to a list if RootRenderNode.
+ *
  * @author void
  */
 public class RendererNodeSync {
+  // since we want to access the nodes private API we need a NiftyNodeAccessor
   private final NiftyNodeAccessor niftyNodeAccessor;
   private final NiftyRenderDevice renderDevice;
 
@@ -95,11 +97,7 @@ public class RendererNodeSync {
   }
 
   private boolean syncRenderNodeBufferChildNodes(final InternalNiftyNode src, final RenderNode dst) {
-    boolean widthChanged = dst.getWidth() != src.getWidth();
-    boolean heightChanged = dst.getHeight() != src.getHeight();
-    boolean canvasChanged = src.getCanvas().isChanged();
-    boolean thisNodeChanged = (widthChanged || heightChanged || canvasChanged || src.isTransformationChanged());
-
+    boolean thisNodeChanged = nodeChanged(src, dst);
     if (thisNodeChanged) {
       dst.setLocal(buildLocalTransformation(src));
       dst.setWidth(src.getWidth());
@@ -122,13 +120,19 @@ public class RendererNodeSync {
     return thisNodeChanged || childChanged;
   }
 
+  private boolean nodeChanged(final InternalNiftyNode src, final RenderNode dst) {
+    boolean widthChanged = dst.getWidth() != src.getWidth();
+    boolean heightChanged = dst.getHeight() != src.getHeight();
+    boolean canvasChanged = src.getCanvas().isChanged();
+    return (widthChanged || heightChanged || canvasChanged || src.isTransformationChanged());
+  }
+
   private boolean syncRenderNodeBufferChild(final InternalNiftyNode src, final RenderNode dstParent) {
     RenderNode dst = dstParent.findChildWithId(src.getId());
     if (dst == null) {
       dstParent.addChildNode(createRenderNodeBufferChild(src));
       return true;
-    } else {
-      return syncRenderNodeBufferChildNodes(src, dst);
     }
+    return syncRenderNodeBufferChildNodes(src, dst);
   }
 }

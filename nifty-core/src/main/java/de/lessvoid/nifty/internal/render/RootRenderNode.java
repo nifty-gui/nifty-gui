@@ -51,7 +51,7 @@ public class RootRenderNode {
   public String getStateInfo() {
     getStateInfo.setLength(0);
     getStateInfo.append("# Nfty render tree dump\n");
-    child.getStateInfo(getStateInfo, "");
+    child.outputStateInfo(getStateInfo, "");
     return getStateInfo.toString();
   }
 }
