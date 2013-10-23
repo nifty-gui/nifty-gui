@@ -28,7 +28,6 @@ public class GdxInputSystem implements InputSystem, InputProcessor {
 
   @Override
   public void setResourceLoader(final NiftyResourceLoader niftyResourceLoader) {
-    // nothing to do
   }
 
   @Override

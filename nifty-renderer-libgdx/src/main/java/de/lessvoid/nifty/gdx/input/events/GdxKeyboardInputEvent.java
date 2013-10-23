@@ -14,7 +14,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  */
 public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements GdxInputEvent, Pool.Poolable {
   /**
-   * The internal object pool for this the {@link GdxKeyboardInputEvent} class.
+   * The internal object pool for this {@link GdxKeyboardInputEvent} class.
    */
   private static final Pool<GdxKeyboardInputEvent> POOL = new Pool<GdxKeyboardInputEvent>() {
     @Override
@@ -24,7 +24,7 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
   };
 
   /**
-   * Get a instance of the keyboard input event.
+   * Gets an instance of the keyboard input event.
    *
    * @param key the key that is pressed (has to be in the libGDX key value space)
    * @param character the character of the key that is pressed
@@ -47,7 +47,7 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
   }
 
   /**
-   * This function frees a instanced of the keyboard event again and sends it back into the object pool.
+   * Frees an instance of the keyboard event and sends it back into the object pool.
    *
    * @param event the object to free
    */
@@ -66,11 +66,10 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
   private int gdxKey;
 
   /**
-   * Create a new keyboard input event.
+   * Creates a new keyboard input event.
    */
   private GdxKeyboardInputEvent() {
     super();
-    // nothing to do
   }
 
   /**
@@ -99,6 +98,7 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
    * This function converts a libGDX key code to a Nifty key code.
    *
    * @param gdxKeyCode the libGDX button key code
+   *
    * @return the nifty button key code
    */
   private static int getNiftyKeyCode(final int gdxKeyCode) {
@@ -266,7 +266,7 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
       case Input.Keys.STAR:
         return KeyboardInputEvent.KEY_NONE;
       case Input.Keys.SYM:
-        return KeyboardInputEvent.KEY_SYSRQ;
+        return KeyboardInputEvent.KEY_NONE;
       case Input.Keys.T:
         return KeyboardInputEvent.KEY_T;
       case Input.Keys.TAB:
@@ -411,6 +411,5 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
 
   @Override
   public void reset() {
-    // no action required
   }
 }
