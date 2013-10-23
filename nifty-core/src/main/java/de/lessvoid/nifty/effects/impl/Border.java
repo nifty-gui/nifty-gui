@@ -115,7 +115,7 @@ public class Border implements EffectImpl {
   }
 
   private int getBorder(final Element element, final SizeValue sizeValue) {
-    int left = (int) sizeValue.getValue(element.getParent().getWidth());
+    int left = sizeValue.getValueAsInt(element.getParent().getWidth());
     if (left == -1) {
       left = 0;
     }

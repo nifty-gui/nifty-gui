@@ -374,6 +374,9 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     Gdx.gl10.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     Gdx.gl10.glClear(GL10.GL_COLOR_BUFFER_BIT);
     Gdx.gl10.glEnable(GL10.GL_TEXTURE_2D);
+    // Enable exact pixelization for 2D rendering
+    // See: http://www.opengl.org/archives/resources/faq/technical/transformations.htm#tran0030
+    Gdx.gl10.glTranslatef (0.375f, 0.375f, 0.0f);
   }
 
   private void checkGLError() {

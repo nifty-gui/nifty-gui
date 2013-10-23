@@ -122,4 +122,16 @@ public class SizeValueTest {
     SizeValue b = SizeValue.percent(10);
     assertTrue(a.equals(b));
   }
+
+  @Test
+  public void testOffByOneCastErrorExists() {
+    SizeValue a = SizeValue.percent(100);
+    assertTrue(((int)a.getValue(212)) == 211);
+  }
+
+  @Test
+  public void testOffByOneCastErrorFixedByUsingGetValueAsInt() {
+    SizeValue a = SizeValue.percent(100);
+    assertTrue(a.getValueAsInt(212) == 212);
+  }
 }
