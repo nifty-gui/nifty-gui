@@ -86,8 +86,8 @@ public class NiftyHtmlGenerator {
    * @param parent the element we want to remove all childs
    */
   private void removeAllChilds(final Element parent) {
-    for (int i=0; i<parent.getElements().size(); i++) {
-      parent.getElements().get(i).markForRemoval();
+    for (int i=0; i<parent.getChildren().size(); i++) {
+      parent.getChildren().get(i).markForRemoval();
     }
     nifty.executeEndOfFrameElementActions();
   }

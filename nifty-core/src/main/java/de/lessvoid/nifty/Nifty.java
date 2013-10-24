@@ -894,8 +894,8 @@ public class Nifty {
     if (currentId == null) {
       currentId = parentId;
     }
-    for (int i=0; i<element.getElements().size(); i++) {
-      Element e = element.getElements().get(i);
+    for (int i=0; i<element.getChildren().size(); i++) {
+      Element e = element.getChildren().get(i);
       fixupSubIds(e, currentId);
     }
   }
@@ -1449,9 +1449,9 @@ public class Nifty {
 }
   public Element createElementFromType(final Screen screen, final Element parent, final ElementType type) {
     if (type instanceof LayerType) {
-      return createElementFromTypeInternal(screen, parent, type, getRootLayerFactory().createRootLayerLayoutPart(this),parent.getElements().size());
+      return createElementFromTypeInternal(screen, parent, type, getRootLayerFactory().createRootLayerLayoutPart(this),parent.getChildren().size());
     }
-    return createElementFromTypeInternal(screen, parent, type, new LayoutPart(),parent.getElements().size());
+    return createElementFromTypeInternal(screen, parent, type, new LayoutPart(),parent.getChildren().size());
   }
 
   private Element createElementFromTypeInternal(final Screen screen, final Element parent, 

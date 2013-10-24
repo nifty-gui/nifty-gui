@@ -44,7 +44,7 @@ public class ElementShowHideTest {
             Element.class.getConstructor(
                 Nifty.class, ElementType.class, String.class, Element.class, FocusHandler.class, boolean.class, TimeProvider.class, ElementRenderer[].class),
                 niftyMock, null, "e1", null, focusHandler, false, null, null));
-    e1.add(e2);
+    e1.addChild(e2);
     replay(e1);
     replay(e2);
   }

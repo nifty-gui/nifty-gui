@@ -255,7 +255,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
   @Override
   public Tab getSelectedTab() {
-    return (selectedIndex == -1) ? null : contentPanel.getElements().get(selectedIndex).getNiftyControl(Tab.class);
+    return (selectedIndex == -1) ? null : contentPanel.getChildren().get(selectedIndex).getNiftyControl(Tab.class);
   }
 
   @Override
@@ -267,7 +267,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
     super.init(parameter, controlDefinitionAttributes);
 
-    for (final Element element : contentPanel.getElements()) {
+    for (final Element element : contentPanel.getChildren()) {
       final Tab tabControl = element.getNiftyControl(Tab.class);
       if (tabControl == null) {
         log.warning("Element without tab control detected. Removing: " + element.getId()); //NON-NLS
@@ -330,7 +330,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     }
 
     final int length = getTabCount();
-    final List<Element> elementList = contentPanel.getElements();
+    final List<Element> elementList = contentPanel.getChildren();
     int result = -1;
     for (int i = 0; i < length; i++) {
       if (tab.equals(elementList.get(i).getNiftyControl(Tab.class))) {
@@ -343,7 +343,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
   @Override
   public int getTabCount() {
-    return contentPanel.getElements().size();
+    return contentPanel.getChildren().size();
   }
 
   /**
@@ -358,7 +358,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   private Element getButton(final int index) {
     int realIndex = index;
 
-    final List<Element> buttonList = tabButtonPanel.getElements();
+    final List<Element> buttonList = tabButtonPanel.getChildren();
     if (buttonList.isEmpty()) {
       return null;
     }
@@ -370,7 +370,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     if (realIndex >= buttonList.size()) {
       return null;
     }
-    return tabButtonPanel.getElements().get(realIndex);
+    return tabButtonPanel.getChildren().get(realIndex);
   }
 
   /**
@@ -380,7 +380,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    * @return the tab control
    */
   private Tab getTab(final int index) {
-    return contentPanel.getElements().get(index).getNiftyControl(Tab.class);
+    return contentPanel.getChildren().get(index).getNiftyControl(Tab.class);
   }
 
   /**
@@ -388,7 +388,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    */
   private void checkVisibility() {
     final int length = getTabCount();
-    final List<Element> tabList = contentPanel.getElements();
+    final List<Element> tabList = contentPanel.getChildren();
 
     for (int i = 0; i < length; i++) {
       final Element tab = tabList.get(i);
@@ -471,13 +471,13 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
     final Element button;
     if (templateRemoved) {
-      button = tabButtonPanel.getElements().get(index);
+      button = tabButtonPanel.getChildren().get(index);
     } else {
-      button = tabButtonPanel.getElements().get(index + 1);
+      button = tabButtonPanel.getChildren().get(index + 1);
     }
     niftyGui.unsubscribe(button.getId(), buttonClickedSubscriber);
     button.markForRemoval();
-    contentPanel.getElements().get(index).markForRemoval(triggeredNotification);
+    contentPanel.getChildren().get(index).markForRemoval(triggeredNotification);
   }
 
   @Override
@@ -524,7 +524,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       throw new IndexOutOfBoundsException("Index out of bounds: " + index);
     }
 
-    final Tab tabControl = contentPanel.getElements().get(index).getNiftyControl(Tab.class);
+    final Tab tabControl = contentPanel.getChildren().get(index).getNiftyControl(Tab.class);
     if (tabControl == null) {
       throw new IllegalStateException("Tab control corrupted for index: " + index);
     }
@@ -553,7 +553,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    * @param clickedButton the button that was clicked
    */
   private void processButtonClick(final Element clickedButton) {
-    final List<Element> buttons = tabButtonPanel.getElements();
+    final List<Element> buttons = tabButtonPanel.getChildren();
     if (buttons.isEmpty()) {
       return;
     }

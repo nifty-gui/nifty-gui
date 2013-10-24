@@ -537,7 +537,7 @@ public class Screen {
 
   public String outputElement(final Element w, final String offset, final String regexpElement, final String regexpAttribute) {
     StringBuffer result = new StringBuffer();
-    List<Element> wwElements = w.getElements();
+    List<Element> wwElements = w.getChildren();
     for (int i=0; i<wwElements.size(); i++) {
       Element ww = wwElements.get(i);
       String elementId = getIdText(ww);

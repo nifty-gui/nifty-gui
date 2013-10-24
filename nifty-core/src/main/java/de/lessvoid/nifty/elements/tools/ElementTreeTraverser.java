@@ -17,7 +17,7 @@ public class ElementTreeTraverser implements Iterator<Element>{
     private ArrayList<Iterator<Element>> iterators =  new ArrayList<Iterator<Element>>();
     private Iterator<Element> current;
     public ElementTreeTraverser(Element e){
-        current = e.getElements().listIterator();
+        current = e.getChildren().listIterator();
     }
 
     @Override
@@ -29,8 +29,8 @@ public class ElementTreeTraverser implements Iterator<Element>{
     public Element next() {
         if(current.hasNext()){
             Element e = current.next();
-            if(!e.getElements().isEmpty())
-                iterators.add(e.getElements().listIterator());
+            if(!e.getChildren().isEmpty())
+                iterators.add(e.getChildren().listIterator());
 
             return e;
         }else if(!iterators.isEmpty()){

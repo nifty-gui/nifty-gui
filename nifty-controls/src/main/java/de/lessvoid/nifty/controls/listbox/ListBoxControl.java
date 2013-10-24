@@ -110,8 +110,8 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     applyWidthConstraintsLastWidth = -1;
 
     childRootElement = getElement().findElementByName("#child-root");
-    if (!childRootElement.getElements().isEmpty()) {
-      final Element templateElement = childRootElement.getElements().get(0);
+    if (!childRootElement.getChildren().isEmpty()) {
+      final Element templateElement = childRootElement.getChildren().get(0);
       templateElement.getParent().layoutElements();
       labelTemplateHeight = templateElement.getHeight();
       labelTemplateElementType = templateElement.getElementType().copy();
@@ -588,7 +588,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     if (labelTemplateElementType == null) {
       return;
     }
-    for (final Element e : childRootElement.getElements()) {
+    for (final Element e : childRootElement.getChildren()) {
       nifty.removeElement(screen, e);
     }    
     for (int i = 0; i < displayItems; i++) {
