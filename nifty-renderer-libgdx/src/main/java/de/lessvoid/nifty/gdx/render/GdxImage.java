@@ -1,21 +1,23 @@
-package de.lessvoid.nifty.gdx.render.batch;
+package de.lessvoid.nifty.gdx.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
+
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 
+import java.nio.ByteBuffer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.nio.ByteBuffer;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public class GdxBatchRenderImage extends BatchRenderBackend.ByteBufferedImage implements BatchRenderBackend.Image {
-  @Nullable
+public class GdxImage extends BatchRenderBackend.ByteBufferedImage {
   private Pixmap pixmap;
 
-  public GdxBatchRenderImage(@Nullable final String filename) {
+  public GdxImage(@Nullable final String filename) {
     if (filename == null) {
       return;
     }
@@ -23,7 +25,7 @@ public class GdxBatchRenderImage extends BatchRenderBackend.ByteBufferedImage im
     pixmap = convertPixmapToFormat(pixmap, Pixmap.Format.RGBA8888);
   }
 
-  public GdxBatchRenderImage(final ByteBuffer buffer, final int width, final int height) {
+  public GdxImage(final ByteBuffer buffer, final int width, final int height) {
     super(buffer, width, height);
   }
 
@@ -37,20 +39,20 @@ public class GdxBatchRenderImage extends BatchRenderBackend.ByteBufferedImage im
     return pixmap != null ? pixmap.getHeight() : super.getHeight();
   }
 
-  @Nullable
-  public ByteBuffer asByteBuffer() {
+  @Override
+  public ByteBuffer getBuffer() {
     return pixmap != null ? pixmap.getPixels() : super.getBuffer();
   }
 
+  public boolean hasPixmap() {
+    return pixmap != null;
+  }
+
   @Nullable
-  public Pixmap asPixmap() {
+  public Pixmap getPixmap() {
     return pixmap;
   }
 
-  /**
-   * Disposes of the underlying image data. You can still safely call {@link #getWidth()} & {@link #getHeight()}, but
-   * they will return 0, and {@link #asByteBuffer()} will return null.
-   */
   public void dispose() {
     if (pixmap != null) {
       pixmap.dispose();
@@ -58,7 +60,7 @@ public class GdxBatchRenderImage extends BatchRenderBackend.ByteBufferedImage im
     }
   }
 
-  // internal implementations
+  // Internal implementations
 
   @Nonnull
   private Pixmap convertPixmapToFormat(@Nonnull Pixmap pixmap, Pixmap.Format format) {

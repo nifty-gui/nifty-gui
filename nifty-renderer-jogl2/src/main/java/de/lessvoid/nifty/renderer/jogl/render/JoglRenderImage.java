@@ -1,78 +1,71 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
 import com.jogamp.common.nio.Buffers;
-import de.lessvoid.nifty.renderer.jogl.render.io.ImageData;
-import de.lessvoid.nifty.renderer.jogl.render.io.ImageIOImageData;
-import de.lessvoid.nifty.renderer.jogl.render.io.TGAImageData;
+
+import de.lessvoid.nifty.render.io.ImageLoader;
+import de.lessvoid.nifty.render.io.ImageLoaderFactory;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
-import javax.annotation.Nonnull;
-import javax.media.opengl.GL;
-import javax.media.opengl.GLContext;
-import javax.media.opengl.glu.GLU;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.media.opengl.GL;
+import javax.media.opengl.GLContext;
+import javax.media.opengl.glu.GLU;
 
 /**
  * @author Julien Gouesse
  */
 public class JoglRenderImage implements RenderImage {
-
+  @Nonnull
   private final Logger log = Logger.getLogger(JoglRenderImage.class.getName());
-
+  @Nonnull
+  private final GLU glu;
   private int width;
-
   private int height;
-
   private int textureWidth;
-
   private int textureHeight;
-
   private int textureId;
 
-  private GLU glu;
-
-  public JoglRenderImage(
-      @Nonnull final String name,
-      final boolean filterParam,
-      @Nonnull final NiftyResourceLoader resourceLoader) {
-    InputStream in = null;
+  @Nonnull
+  public JoglRenderImage (
+          @Nonnull String filename,
+          final boolean filterParam,
+          @Nonnull final NiftyResourceLoader resourceLoader) {
+    log.fine("Loading image: " + filename);
+    ImageLoader loader = ImageLoaderFactory.createImageLoader(filename);
+    InputStream imageStream = null;
     try {
-      log.fine("loading image: " + name);
-      glu = new GLU();
-      ImageData imageLoader;
-      if (name.endsWith(".tga")) {
-        imageLoader = new TGAImageData();
-      } else {
-        imageLoader = new ImageIOImageData();
+      imageStream = resourceLoader.getResourceAsStream(filename);
+      if (imageStream != null) {
+        ByteBuffer image = loader.loadImage(imageStream);
+        image.rewind();
+        width = loader.getWidth();
+        height = loader.getHeight();
+        textureWidth = loader.getTexWidth();
+        textureHeight = loader.getTexHeight();
+        createTexture(image, textureWidth, textureHeight, filterParam ? GL.GL_LINEAR : GL.GL_NEAREST,
+                loader.getDepth() == 32 ? GL.GL_RGBA : GL.GL_RGB);
       }
-      in = resourceLoader.getResourceAsStream(name);
-      if (in == null) {
-        return;
-      }
-      ByteBuffer imageData = imageLoader.loadImage(in);
-      imageData.rewind();
-      width = imageLoader.getWidth();
-      height = imageLoader.getHeight();
-      textureWidth = imageLoader.getTexWidth();
-      textureHeight = imageLoader.getTexHeight();
-      createTexture(imageData, textureWidth, textureHeight, filterParam ? GL.GL_LINEAR : GL.GL_NEAREST,
-          imageLoader.getDepth() == 32 ? GL.GL_RGBA : GL.GL_RGB);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.log(Level.WARNING, "Could not load image from file: [" + filename + "]", e);
     } finally {
-      if (in != null) {
+      if (imageStream != null) {
         try {
-          in.close();
-        } catch (IOException ignored) {
+          imageStream.close();
+        } catch (IOException e) {
+          log.log(Level.INFO, "An error occurred while closing the InputStream used to load image: " + "[" + filename +
+                  "].", e);
         }
       }
     }
+    glu = new GLU();
   }
 
   @Override
@@ -95,7 +88,6 @@ public class JoglRenderImage implements RenderImage {
 
   @Override
   public void dispose() {
-    // do nothing
   }
 
   private void createTexture(

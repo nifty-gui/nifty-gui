@@ -3,9 +3,6 @@ package de.lessvoid.nifty.render;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.io.IOException;
 
@@ -13,6 +10,10 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class NiftyMouseImplTest {
   private NiftyMouseImpl niftyMouse;
@@ -125,6 +126,14 @@ public class NiftyMouseImplTest {
   }
 
   public class TestMouseCursor implements MouseCursor {
+    @Override
+    public void enable() {
+    }
+
+    @Override
+    public void disable() {
+    }
+
     @Override
     public void dispose() {
     }

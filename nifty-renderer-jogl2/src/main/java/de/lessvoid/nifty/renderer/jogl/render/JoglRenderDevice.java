@@ -1,10 +1,8 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
 import com.jogamp.common.nio.Buffers;
+
 import de.lessvoid.nifty.render.BlendMode;
-import de.lessvoid.nifty.renderer.jogl.render.io.ImageData;
-import de.lessvoid.nifty.renderer.jogl.render.io.ImageIOImageData;
-import de.lessvoid.nifty.renderer.jogl.render.io.TGAImageData;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
@@ -12,55 +10,42 @@ import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLContext;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.IntBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class JoglRenderDevice implements RenderDevice {
+  @Nonnull
   private static final Logger log = Logger.getLogger(JoglRenderDevice.class.getName());
-
+  @Nonnull
   private static final IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4);
-
-  private long time;
-
-  private long frames;
-
-  private long lastFrames;
-
-  private boolean displayFPS = false;
-
-  private boolean logFPS = false;
-
   @Nullable
   private RenderFont fpsFont;
-
+  @Nullable
+  private BlendMode currentBlendMode = null;
+  @Nullable
+  private MouseCursor mouseCursor;
+  private NiftyResourceLoader resourceLoader;
   // we keep track of which GL states we've already set to make sure we don't set
   // the same state twice.
   private boolean currentTexturing = true;
-
-  @Nullable
-  private BlendMode currentBlendMode = null;
-
+  private long time;
+  private long frames;
+  private long lastFrames;
+  private boolean displayFPS = false;
+  private boolean logFPS = false;
   private boolean currentClipping = false;
-
   private int currentClippingX0 = 0;
-
   private int currentClippingY0 = 0;
-
   private int currentClippingX1 = 0;
-
   private int currentClippingY1 = 0;
-
-  private NiftyResourceLoader niftyResourceLoader;
 
   /**
    * The standard constructor. You'll use this in production code. Using this constructor will
@@ -173,7 +158,7 @@ public class JoglRenderDevice implements RenderDevice {
    */
   @Override
   public RenderImage createImage(@Nonnull final String filename, final boolean filterLinear) {
-    return new JoglRenderImage(filename, filterLinear, niftyResourceLoader);
+    return new JoglRenderImage(filename, filterLinear, resourceLoader);
   }
 
   /**
@@ -184,7 +169,7 @@ public class JoglRenderDevice implements RenderDevice {
    */
   @Override
   public RenderFont createFont(@Nonnull final String filename) {
-    return new JoglRenderFont(filename, this, niftyResourceLoader);
+    return new JoglRenderFont(filename, this, resourceLoader);
   }
 
   /**
@@ -372,7 +357,7 @@ public class JoglRenderDevice implements RenderDevice {
     }
     setBlendMode(BlendMode.BLEND);
     ((JoglRenderFont) font).getFont().renderWithSizeAndColor(x, y, text, fontSizeX, fontSizeY,
-        color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+            color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
   }
 
   /**
@@ -437,52 +422,25 @@ public class JoglRenderDevice implements RenderDevice {
   }
 
   @Override
-  public MouseCursor createMouseCursor(@Nonnull String filename, int hotspotX, int hotspotY)
-      throws IOException {
-    return new JoglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
+  public MouseCursor createMouseCursor(@Nonnull String filename, int hotspotX, int hotspotY) throws IOException {
+    return new JoglMouseCursor(filename, hotspotX, hotspotY, resourceLoader);
   }
 
   @Override
   public void enableMouseCursor(@Nonnull MouseCursor mouseCursor) {
-    // TODO implement this method later
+    this.mouseCursor = mouseCursor;
+    mouseCursor.enable();
   }
 
   @Override
   public void disableMouseCursor() {
-    // TODO implement this method later
-  }
-
-  @Nonnull
-  private Cursor loadMouseCursor(
-      @Nonnull final String name,
-      final int hotspotX,
-      final int hotspotY) throws IOException {
-    ImageData imageLoader = createImageLoader(name);
-    InputStream in = niftyResourceLoader.getResourceAsStream(name);
-    if (in == null) {
-      throw new IOException("Can't find resource to load a cursor.");
+    if (mouseCursor != null) {
+      mouseCursor.disable();
     }
-    try {
-      BufferedImage image = imageLoader.loadMouseCursorImage(in);
-      return Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(hotspotX, hotspotY), name);
-    } finally {
-      try {
-        in.close();
-      } catch (IOException ignored) {
-      }
-    }
-  }
-
-  @Nonnull
-  private ImageData createImageLoader(@Nonnull final String name) {
-    if (name.endsWith(".tga")) {
-      return new TGAImageData();
-    }
-    return new ImageIOImageData();
   }
 
   @Override
   public void setResourceLoader(@Nonnull final NiftyResourceLoader niftyResourceLoader) {
-    this.niftyResourceLoader = niftyResourceLoader;
+    this.resourceLoader = niftyResourceLoader;
   }
 }

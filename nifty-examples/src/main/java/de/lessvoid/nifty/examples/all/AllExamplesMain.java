@@ -41,7 +41,7 @@ public class AllExamplesMain implements NiftyExample {
       System.exit(0);
     }
 
-    BatchRenderDevice renderDevice = new BatchRenderDevice(new LwjglBatchRenderBackend(), 2048, 2048);
+    BatchRenderDevice renderDevice = new BatchRenderDevice(new LwjglBatchRenderBackend());
 //    renderDevice.enableLogFPS();
 
     // create nifty

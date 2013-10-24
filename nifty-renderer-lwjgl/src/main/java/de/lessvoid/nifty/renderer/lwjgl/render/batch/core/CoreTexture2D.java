@@ -221,7 +221,7 @@ public class CoreTexture2D {
   }
 
   /**
-   * This constant can be used as the data type to enable the automated selection of the data type. Also his value is
+   * This constant can be used as the data type to enable the automated selection of the data type. Also this value is
    * used for the texture ID in case the class is supposed to acquire the texture ID automatically.
    */
   private static final int AUTO = -1;
@@ -460,7 +460,7 @@ public class CoreTexture2D {
    */
   public void bind() {
     if (isDisposed) {
-      throw new CoreGLException("This texture was disposed. You can't bind it anymore. Its gone for good.");
+      throw new CoreGLException("This texture was disposed. You can't bind it anymore. It's gone for good.");
     }
     GL11.glBindTexture(textureTarget, textureId);
     checkGLError("glBindTexture", true);

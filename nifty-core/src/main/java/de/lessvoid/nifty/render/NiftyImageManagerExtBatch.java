@@ -75,7 +75,7 @@ public class NiftyImageManagerExtBatch implements NiftyImageManagerExt<Reference
       @Nonnull final Screen screen,
       @Nonnull final RenderDevice renderDevice,
       @Nonnull final Collection<ReferencedCountedImage> imageSet) {
-    ((BatchRenderDevice) renderDevice).resetTextureAtlas();
+    ((BatchRenderDevice) renderDevice).resetTextureAtlases();
 
     // we need to mark all images as unloaded
     for (ReferencedCountedImage i : imageSet) {

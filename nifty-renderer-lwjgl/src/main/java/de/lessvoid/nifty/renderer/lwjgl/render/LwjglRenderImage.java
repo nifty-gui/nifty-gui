@@ -1,51 +1,63 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
+import de.lessvoid.nifty.render.io.ImageLoader;
+import de.lessvoid.nifty.render.io.ImageLoaderFactory;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import javax.annotation.Nonnull;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
-import java.util.logging.Logger;
-
 public class LwjglRenderImage implements RenderImage {
+  @Nonnull
   private static final Logger log = Logger.getLogger(LwjglRenderImage.class.getName());
-
   private int width;
   private int height;
   private int textureWidth;
   private int textureHeight;
   private int textureId;
 
-  public LwjglRenderImage(
-      @Nonnull final String name,
-      final boolean filterParam,
-      @Nonnull final NiftyResourceLoader resourceLoader) {
+  @Nonnull
+  public LwjglRenderImage (
+          @Nonnull String filename,
+          final boolean filterParam,
+          @Nonnull final NiftyResourceLoader resourceLoader) {
+    log.fine("Loading image: " + filename);
+    ImageLoader loader = ImageLoaderFactory.createImageLoader(filename);
+    InputStream imageStream = null;
     try {
-      log.fine("loading image: " + name);
-      ImageData imageLoader;
-      if (name.endsWith(".tga")) {
-        imageLoader = new TGAImageData();
-      } else {
-        imageLoader = new ImageIOImageData();
+      imageStream = resourceLoader.getResourceAsStream(filename);
+      if (imageStream != null) {
+        ByteBuffer image = loader.loadImage(imageStream);
+        image.rewind();
+        width = loader.getWidth();
+        height = loader.getHeight();
+        textureWidth = loader.getTexWidth();
+        textureHeight = loader.getTexHeight();
+        createTexture(image, textureWidth, textureHeight, filterParam, loader.getDepth() == 32 ? GL11.GL_RGBA :
+                GL11.GL_RGB);
       }
-      ByteBuffer imageData = imageLoader.loadImage(resourceLoader.getResourceAsStream(name));
-      imageData.rewind();
-      width = imageLoader.getWidth();
-      height = imageLoader.getHeight();
-      textureWidth = imageLoader.getTexWidth();
-      textureHeight = imageLoader.getTexHeight();
-      createTexture(imageData, textureWidth, textureHeight, filterParam, imageLoader.getDepth() == 32 ? GL11.GL_RGBA
-          : GL11.GL_RGB);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.log(Level.WARNING, "Could not load image from file: [" + filename + "]", e);
+    } finally {
+      if (imageStream != null) {
+        try {
+          imageStream.close();
+        } catch (IOException e) {
+          log.log(Level.INFO, "An error occurred while closing the InputStream used to load image: " + "[" + filename +
+                  "].", e);
+        }
+      }
     }
   }
 

@@ -1,14 +1,14 @@
 package de.lessvoid.nifty.batch;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * This class tries to fit TextureSource data into a single TextureDestination.
+ * This class tries to fit source texture data into a single destination texture.
  * <p/>
  * This work is based on https://github.com/lukaszpaczkowski/texture-atlas-generator by lukaszpaczkowski which is based
  * on the popular packing algorithm http://www.blackpawn.com/texts/lightmaps/ by jimscott@blackpawn.com.
@@ -19,11 +19,14 @@ import java.util.TreeMap;
  * @author void
  */
 public class TextureAtlasGenerator {
-  private final int width;
-  private final int height;
+  private final int atlasWidth;
+  private final int atlasHeight;
+  private final int atlasPadding;
+  private final float atlasTolerance;
+  @Nonnull
   private Node root;
-
   // for easy access we keep each node in a map with the passed name as the key so we can look up a Node directly
+  @Nonnull
   private Map<String, Node> rectangleMap;
 
   /**
@@ -63,48 +66,108 @@ public class TextureAtlasGenerator {
   }
 
   /**
-   * Create a new TextureAtlasGenerator
+   * Creates a new TextureAtlasGenerator.
    *
-   * @param destination
-   * @param width
-   * @param height
+   * @param atlasWidth the width of the atlas, must be > 0
+   * @param atlasHeight the height of the atlas, must be > 0
+   * @param atlasPadding the padding in pixels to apply to images in the atlas (the empty space around the image in the
+   *                     atlas that separates it from the surrounding images in the atlas), must be >= 0,
+   *                     must be < atlasWidth, must be < atlasHeight
+   * @param atlasTolerance the percentage (between 0.0f and 1.0f, inclusive) of atlas area that an image's area (with
+   *                       padding) should be less than in order for the image to even attempt to be added to the atlas
+   *                       when calling {@link #addImage(int, int, String)}. For example, if tolerance is 0.25f, and
+   *                       the width and height of the atlas are 2048, then an image of size 1023 x 1023 with a padding
+   *                       of 1 would NOT be added to the atlas when calling {@link #addImage(int, int, String)}
+   *                       because it would take up 25% (or 0.25f) of total atlas space, assuming there is even room
+   *                       for it in the first place, must be >= 0.0f and <= 1.0f
    */
-  public TextureAtlasGenerator(final int width, final int height) {
-    this.width = width;
-    this.height = height;
-    this.root = new Node(0, 0, width, height);
-    this.rectangleMap = new TreeMap<String, Node>();
+  public TextureAtlasGenerator(final int atlasWidth,
+                               final int atlasHeight,
+                               final int atlasPadding,
+                               final float atlasTolerance) {
+    if (atlasWidth <= 0) {
+      throw new IllegalArgumentException("atlas width must be greater than 0");
+    } else if (atlasHeight <= 0) {
+      throw new IllegalArgumentException("atlas height must be greater than 0");
+    } else if (atlasPadding < 0) {
+      throw new IllegalArgumentException("atlas padding must be non-negative");
+    } else if (atlasPadding >= atlasWidth) {
+      throw new IllegalArgumentException("atlas padding must be less than atlas width");
+    } else if (atlasPadding >= atlasHeight) {
+      throw new IllegalArgumentException("atlas padding must be less than atlas height");
+    } else if (atlasTolerance < 0.0 || atlasTolerance > 1.0) {
+      throw new IllegalArgumentException("tolerance must be >= 0.0f and <= 1.0f");
+    }
+    this.atlasWidth = atlasWidth;
+    this.atlasHeight = atlasHeight;
+    this.atlasPadding = atlasPadding;
+    this.atlasTolerance = atlasTolerance;
+    reset();
   }
 
   /**
-   * Adds an image and calculates the target position of the image in the bigger texture as a Result instance.
-   * Please note that it is up to you to position the image data. This will just give you the coordinates.
+   * Attempts to add an image and if successful, calculates the target position of the image in the bigger texture as a
+   * Result instance. Please note that it is up to you to position the image data. This will just give you the
+   * coordinates.
    *
-   * @param imageWidth  image width to add
-   * @param imageHeight image height to add
-   * @param name        name of the image this is used to track the individual images you can see this as the id of
-   *                    the image
-   * @param padding     padding to apply
-   * @return the position of the image in the bigger texture taking all other previously added images into account
-   * @throws TextureAtlasGeneratorException when the image could not be added
+   * @param imageWidth the width of the image, must be >= 0
+   * @param imageHeight the height of the image, must be >= 0
+   * @param imageName the name of the image (used to track the individual images in the atlas - you can see this as the
+   *                  id of the image)
+   *
+   * @return the position of the image in the bigger texture taking all other previously added images into account,
+   *         or null if the image could not be added to the atlas (either because the atlas was too full, or because
+   *         the image's area with padding exceeded the tolerance specified in
+   *         {@link #TextureAtlasGenerator(int, int, int, float)}).
    */
-  @Nonnull
-  public Result addImage(
-      final int imageWidth,
-      final int imageHeight,
-      @Nonnull final String name,
-      final int padding) throws TextureAtlasGeneratorException {
-    Node node = root.insert(imageWidth, imageHeight, padding);
-    if (node == null) {
-      throw new TextureAtlasGeneratorException(imageWidth, imageHeight, name);
+  @Nullable
+  public Result addImage(final int imageWidth, final int imageHeight, @Nonnull final String imageName) {
+    if (imageWidth < 0) {
+      throw new IllegalArgumentException("image width must be non-negative");
+    } else if (imageHeight < 0) {
+      throw new IllegalArgumentException("image height must be non-negative");
     }
 
-    rectangleMap.put(name, node);
+    if (! shouldAddImage(imageWidth, imageHeight)) {
+      return null;
+    }
+
+    Node node = root.insert(imageWidth, imageHeight, atlasPadding);
+    if (node == null) {
+      return null;
+    }
+
+    rectangleMap.put(imageName, node);
     return new Result(node.rect.x, node.rect.y, imageWidth, imageHeight);
   }
 
+  /**
+   * Determines whether the image (with padding) would take up too much atlas area if it were to be added. If this
+   * method returns false, it guarantees that the image will not be added to the atlas if
+   * {@link #addImage(int, int, String)} is called. If this method return true, however, it DOES NOT GUARANTEE that the
+   * image will fit in the atlas - the atlas could already be so full that even a relatively small image will still not
+   * fit when calling {@link #addImage(int, int, String)}.
+   *
+   * @param imageWidth the width of the image, must be >= 0
+   * @param imageHeight the height of the image, must be >= 0
+   *
+   * @return Whether an image of size (imageWidth + padding) x (imageHeight + padding) would take up too much area for
+   * it to be practical to have it in the atlas (based on the tolerance specified in
+   * {@link #TextureAtlasGenerator(int, int, int, float)}).
+   */
+  public boolean shouldAddImage(final int imageWidth, final int imageHeight) {
+    if (imageWidth < 0) {
+      throw new IllegalArgumentException("image width must be non-negative");
+    } else if (imageHeight < 0) {
+      throw new IllegalArgumentException("image height must be non-negative");
+    }
+    return (imageWidth + atlasPadding) <= atlasWidth &&
+            (imageHeight + atlasPadding) <= atlasHeight &&
+            (imageWidth + atlasPadding) * (imageHeight + atlasPadding) / (float) (atlasWidth * atlasHeight) < atlasTolerance;
+  }
+
   @Nullable
-  public Result removeImage(final String name) {
+  public Result removeImage(@Nonnull final String name) {
     Node node = rectangleMap.remove(name);
     if (node == null) {
       return null;
@@ -116,16 +179,23 @@ public class TextureAtlasGenerator {
     return new Result(node.rect.x, node.rect.y, node.rect.width, node.rect.height);
   }
 
+  public int getAtlasWidth() {
+    return atlasWidth;
+  }
+
+  public int getAtlasHeight() {
+    return atlasHeight;
+  }
+
   @Nonnull
   public List<Result> rebuild(
       final int width,
-      final int height,
-      final int padding) throws TextureAtlasGeneratorException {
+      final int height) {
     List<Result> results = new ArrayList<Result>();
     root = new Node(0, 0, width, height);
     for (Map.Entry<String, Node> entry : rectangleMap.entrySet()) {
       Rectangle rect = entry.getValue().rect;
-      results.add(addImage(rect.width, rect.height, entry.getKey(), padding));
+      results.add(addImage(rect.width, rect.height, entry.getKey()));
     }
     return results;
   }
@@ -174,7 +244,7 @@ public class TextureAtlasGenerator {
         return child[1].insert(imageWidth, imageHeight, padding);
       }
 
-      if (this.occupied) {
+      if (occupied) {
         return null; // occupied
       }
 
@@ -183,7 +253,7 @@ public class TextureAtlasGenerator {
       }
 
       if (imageWidth == rect.width && imageHeight == rect.height) {
-        this.occupied = true; // perfect fit
+        occupied = true; // perfect fit
         return this;
       }
 
@@ -202,7 +272,7 @@ public class TextureAtlasGenerator {
   }
 
   public void reset() {
-    this.root = new Node(0, 0, width, height);
-    this.rectangleMap = new TreeMap<String, Node>();
+    root = new Node(0, 0, atlasWidth, atlasHeight);
+    rectangleMap = new TreeMap<String, Node>();
   }
 }

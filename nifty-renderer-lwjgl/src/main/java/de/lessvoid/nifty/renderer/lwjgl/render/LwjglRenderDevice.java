@@ -1,30 +1,23 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
 import de.lessvoid.nifty.render.BlendMode;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+
 import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Lwjgl RenderDevice Implementation.
@@ -58,6 +51,8 @@ public class LwjglRenderDevice implements RenderDevice {
   private StringBuilder buffer = new StringBuilder();
   private int quadCount;
   private int glyphCount;
+  @Nullable
+  private MouseCursor mouseCursor;
 
   /**
    * The standard constructor. You'll use this in production code. Using this
@@ -523,56 +518,19 @@ public class LwjglRenderDevice implements RenderDevice {
       @Nonnull final String filename,
       final int hotspotX,
       final int hotspotY) throws IOException {
-    return new LwjglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
+    return new LwjglMouseCursor(filename, hotspotX, hotspotY, resourceLoader);
   }
 
   @Override
   public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
-    Cursor nativeCursor = ((LwjglMouseCursor) mouseCursor).getCursor();
-    try {
-      Mouse.setNativeCursor(nativeCursor);
-    } catch (LWJGLException e) {
-      log.warning(e.getMessage());
-    }
+    this.mouseCursor = mouseCursor;
+    mouseCursor.enable();
   }
 
   @Override
   public void disableMouseCursor() {
-    try {
-      Mouse.setNativeCursor(null);
-    } catch (LWJGLException e) {
-      log.warning(e.getMessage());
+    if (mouseCursor != null) {
+      mouseCursor.disable();
     }
-  }
-
-  @Nullable
-  private Cursor loadMouseCursor(
-      @Nonnull final String name,
-      final int hotspotX,
-      final int hotspotY) throws IOException {
-    ImageData imageLoader = createImageLoader(name);
-    InputStream source = null;
-    try {
-      source = resourceLoader.getResourceAsStream(name);
-      ByteBuffer imageData = imageLoader.loadMouseCursorImage(source);
-      imageData.rewind();
-      int width = imageLoader.getWidth();
-      int height = imageLoader.getHeight();
-      return new Cursor(width, height, hotspotX, height - hotspotY - 1, 1, imageData.asIntBuffer(), null);
-    } catch (LWJGLException e) {
-      throw new IOException(e);
-    } finally {
-      if (source != null) {
-        source.close();
-      }
-    }
-  }
-
-  @Nonnull
-  private ImageData createImageLoader(@Nonnull final String name) {
-    if (name.endsWith(".tga")) {
-      return new TGAImageData();
-    }
-    return new ImageIOImageData();
   }
 }
