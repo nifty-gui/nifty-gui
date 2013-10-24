@@ -2,9 +2,10 @@ package de.lessvoid.nifty.screen;
 
 import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -52,7 +53,7 @@ public class ScreenTest {
     replay(screenControllerMock);
 
     timeProviderMock = createMock(TimeProvider.class);
-    expect(timeProviderMock.getMsTime()).andStubReturn((long) 0);
+    expect(timeProviderMock.getMsTime()).andStubReturn(0L);
     replay(timeProviderMock);
 
     screen = new Screen(niftyMock, "id", screenControllerMock, timeProviderMock);
