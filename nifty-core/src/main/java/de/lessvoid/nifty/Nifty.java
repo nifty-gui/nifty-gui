@@ -748,6 +748,9 @@ public class Nifty {
    * exit.
    */
   public void exit() {
+    if (currentScreen.isNull()) {
+      return;
+    }
     currentScreen.endScreen(
         new EndNotify() {
           public final void perform() {
