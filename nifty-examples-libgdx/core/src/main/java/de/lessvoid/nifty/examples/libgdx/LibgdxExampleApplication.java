@@ -14,8 +14,7 @@ import de.lessvoid.nifty.gdx.render.batch.GdxBatchRenderBackend;
 import de.lessvoid.nifty.gdx.sound.GdxSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.LogManager;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
@@ -23,7 +22,6 @@ import java.util.logging.Logger;
  * {@inheritDoc}
  */
 public class LibgdxExampleApplication implements ApplicationListener {
-  private static Logger logger;
   private Nifty nifty;
   private final NiftyExample niftyExample;
   private final int atlasWidth;
@@ -42,8 +40,7 @@ public class LibgdxExampleApplication implements ApplicationListener {
    */
   @Override
   public void create() {
-    logger = Logger.getLogger("de.lessvoid.nifty");
-    logger.setLevel(Level.INFO);
+    configureLogging();
 
     assetManager = new AssetManager();
 
@@ -73,6 +70,14 @@ public class LibgdxExampleApplication implements ApplicationListener {
       nifty.fromXml(niftyExample.getMainXML(), niftyExample.getStartScreen());
     } else {
       nifty.gotoScreen(niftyExample.getStartScreen());
+    }
+  }
+
+  private void configureLogging() {
+    try {
+      LogManager.getLogManager().readConfiguration(ClassLoader.getSystemResourceAsStream("logging.properties"));
+    } catch (Exception e) {
+      Gdx.app.error("LibgdxExampleApplication", "Could not read logging configuration file: assets/logging.properties", e);
     }
   }
 

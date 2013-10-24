@@ -11,7 +11,7 @@
 
   <artifactId>nifty-examples-libgdx-android</artifactId>
   <packaging>apk</packaging>
-  <name>Main Android</name>
+  <name>Nifty Examples for LibGDX - Android</name>
 
   <properties>
     <keystore.path>game.keystore</keystore.path>

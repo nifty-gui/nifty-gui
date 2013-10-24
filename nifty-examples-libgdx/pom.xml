@@ -71,7 +71,7 @@
   </profiles>
 
   <modules>
-     <!-- Used for rapid debugging of the nifty libgdx renderer only. Enable only if you know what you're doing! -->
+    <!-- Used for rapid debugging of the nifty libgdx renderer only. Enable only if you know what you're doing!  -->
     <!--<module>../nifty-renderer-libgdx</module>-->
     <module>core</module>
   </modules>

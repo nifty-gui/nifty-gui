@@ -17,7 +17,6 @@ import org.junit.Test;
  * 
  * @author Marc Pompl
  * @author void (added some stuff)
- * @created 13.06.2010
  */
 public class SpecialValuesReplaceTest {
 
