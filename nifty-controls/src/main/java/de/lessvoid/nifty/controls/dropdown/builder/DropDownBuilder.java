@@ -10,4 +10,8 @@ public class DropDownBuilder extends ControlBuilder {
   public void viewConverterClass(final Class<?> clazz) {
     set("viewConverterClass", clazz.getName());
   }
+
+  public void displayItems(final int displayItems) {
+    set("displayItems", String.valueOf(displayItems));
+  }
 }
