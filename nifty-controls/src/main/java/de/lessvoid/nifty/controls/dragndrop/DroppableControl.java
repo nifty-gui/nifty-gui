@@ -55,7 +55,7 @@ public class DroppableControl extends AbstractController implements Droppable {
   }
 
   private static DraggableControl findDraggableChild(final Element element) {
-    for (final Element child : element.getElements()) {
+    for (final Element child : element.getChildren()) {
       if (isDraggable(child)) {
         return child.getControl(DraggableControl.class);
       }

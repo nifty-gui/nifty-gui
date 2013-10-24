@@ -74,7 +74,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   @Override
   public void layoutCallback() {
     if (childRootElement != null) {
-      List<Element> elements = childRootElement.getElements();
+      List<Element> elements = childRootElement.getChildren();
       if (elements.isEmpty()) {
         return;
       }
@@ -247,7 +247,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   private void initializeScrollbars() {
     if (childRootElement != null) {
-      List<Element> elements = childRootElement.getElements();
+      List<Element> elements = childRootElement.getChildren();
       if (elements.isEmpty()) {
         return;
       }
@@ -331,10 +331,10 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
       if (childRootElement == null) {
         return;
       }
-      if (childRootElement.getElements().isEmpty()) {
+      if (childRootElement.getChildren().isEmpty()) {
         return;
       }
-      final Element scrollElement = childRootElement.getElements().get(0);
+      final Element scrollElement = childRootElement.getChildren().get(0);
       if (scrollElement != null) {
         scrollElement.setConstraintY(new SizeValue(-(int) event.getValue() + "px"));
         updateWorldV();
@@ -362,10 +362,10 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
       if (childRootElement == null) {
         return;
       }
-      if (childRootElement.getElements().isEmpty()) {
+      if (childRootElement.getChildren().isEmpty()) {
         return;
       }
-      final Element scrollElement = childRootElement.getElements().get(0);
+      final Element scrollElement = childRootElement.getChildren().get(0);
       if (scrollElement != null) {
         scrollElement.setConstraintX(new SizeValue(-(int) event.getValue() + "px"));
         updateWorldH();

@@ -487,9 +487,9 @@ public abstract class ElementBuilder {
    * @return the Element created
    */
   public Element build(final Nifty nifty, final Screen screen, final Element parent,Element before) {
-	  int index = parent.getElements().size();
-	  for(int i=0;i<parent.getElements().size();i++){
-		  if(parent.getElements().get(i).equals(before)){
+	  int index = parent.getChildren().size();
+	  for(int i=0;i<parent.getChildren().size();i++){
+		  if(parent.getChildren().get(i).equals(before)){
 			  index=i;
 			  break;
 		  }

@@ -46,7 +46,7 @@ public class ElementEnableDisableEffectsTest {
         Element.class.getDeclaredMethod("enableEffect"),
         Element.class.getDeclaredMethod("disableEffect"),
         Element.class.getDeclaredMethod("disableFocus"));
-    e1.add(e2);
+    e1.addChild(e2);
   }
 
   @After

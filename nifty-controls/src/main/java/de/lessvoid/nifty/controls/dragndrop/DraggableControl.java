@@ -170,7 +170,7 @@ public class DraggableControl extends AbstractController implements Draggable {
   @Override
   public void moveToFront() {
     final Element parent = draggable.getParent();
-    final List<Element> siblings = parent.getElements();
+    final List<Element> siblings = parent.getChildren();
     //noinspection ObjectEquality
     if (siblings.get(siblings.size() - 1) == draggable) {
       return;
@@ -273,7 +273,7 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   private Element findDroppableAtCoordinates(final Element context, final int x, final int y) {
-    List<Element> elements = context.getElements();
+    List<Element> elements = context.getChildren();
     ListIterator<Element> iter = elements.listIterator(elements.size());
     while (iter.hasPrevious()) {
       Element element = iter.previous();

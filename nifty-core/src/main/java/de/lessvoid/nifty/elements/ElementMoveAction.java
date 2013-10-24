@@ -15,7 +15,7 @@ public class ElementMoveAction implements Action {
       parent.internalRemoveElement(element);
     }
     element.setParent(destinationElement);
-    destinationElement.add(element);
+    destinationElement.addChild(element);
 
     // now we'll need to add elements back to the focushandler
     addToFocusHandler(element);
@@ -35,8 +35,8 @@ public class ElementMoveAction implements Action {
       // (it should really be to spot where it has been removed from)
       element.getFocusHandler().addElement(element);
     }
-    for (int i=0; i<element.getElements().size(); i++) {
-      addToFocusHandler(element.getElements().get(i));
+    for (int i=0; i<element.getChildren().size(); i++) {
+      addToFocusHandler(element.getChildren().get(i));
     }
   }
 }

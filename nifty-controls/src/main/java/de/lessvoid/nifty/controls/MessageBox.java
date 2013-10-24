@@ -181,7 +181,7 @@ public class MessageBox extends AbstractController {
     }
 	
 	private void clearButtons() {
-		List<Element> buttons = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons").getElements();
+		List<Element> buttons = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons").getChildren();
 		for (Element button : buttons) {
 			button.markForRemoval();
 		}
