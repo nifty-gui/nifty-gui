@@ -11,7 +11,7 @@
 
   <artifactId>nifty-examples-libgdx-desktop</artifactId>
   <packaging>jar</packaging>
-  <name>Main Desktop</name>
+  <name>Nifty Examples for LibGDX - Desktop</name>
 
   <properties>
     <mainClass>de.lessvoid.nifty.examples.libgdx.all.AllDemoMain</mainClass>

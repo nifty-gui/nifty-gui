@@ -11,7 +11,7 @@
 
   <artifactId>nifty-examples-libgdx-core</artifactId>
   <packaging>jar</packaging>
-  <name>Main Core</name>
+  <name>Nifty Examples for LibGDX - Main Core</name>
 
   <dependencies>
     <dependency>

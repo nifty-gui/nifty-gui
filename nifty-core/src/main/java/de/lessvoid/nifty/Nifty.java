@@ -128,13 +128,6 @@ public class Nifty {
    */
   private boolean ignoreKeyboardEvents;
 
-  /**
-   * Create nifty with optional console parameter.
-   * @param newRenderDevice the RenderDevice
-   * @param newSoundSystem SoundSystem
-   * @param newInputSystem InputSystem
-   * @param newTimeProvider the TimeProvider
-   */
   public Nifty(
       final RenderDevice newRenderDevice,
       final SoundDevice newSoundDevice,

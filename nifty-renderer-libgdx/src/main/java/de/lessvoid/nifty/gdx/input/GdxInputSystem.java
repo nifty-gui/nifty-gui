@@ -21,9 +21,9 @@ public class GdxInputSystem implements InputSystem, InputProcessor {
   private final Queue<GdxInputEvent> eventQueue;
 
   public GdxInputSystem(final Input gdxInput) {
-    this.input = gdxInput;
     eventQueue = new LinkedList<GdxInputEvent>();
-    this.input.setInputProcessor(this);
+    input = gdxInput;
+    input.setInputProcessor(this);
   }
 
   @Override
