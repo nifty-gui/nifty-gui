@@ -6,13 +6,11 @@ import com.badlogic.gdx.graphics.Pixmap;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 
 import java.nio.ByteBuffer;
-import java.util.logging.Logger;
 
 /**
   * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
   */
 public class GdxBatchRenderImage implements BatchRenderBackend.Image {
-  private static Logger log = Logger.getLogger(GdxBatchRenderImage.class.getName());
   private Pixmap pixmap;
 
   public GdxBatchRenderImage(final String filename) {
@@ -25,18 +23,26 @@ public class GdxBatchRenderImage implements BatchRenderBackend.Image {
 
   @Override
   public int getWidth() {
-    return pixmap == null? 0 : pixmap.getWidth();
+    return pixmap != null? pixmap.getWidth() : 0;
   }
 
   @Override
   public int getHeight() {
-    return pixmap == null? 0 : pixmap.getHeight();
+    return pixmap != null? pixmap.getHeight() : 0;
   }
 
-  public ByteBuffer getData() {
-    return pixmap == null? null : pixmap.getPixels();
+  public ByteBuffer asByteBuffer() {
+    return pixmap != null? pixmap.getPixels() : null;
   }
 
+  public Pixmap asPixmap() {
+    return pixmap;
+  }
+
+  /**
+   * Disposes of the underlying image data. You can still safely call {@link #getWidth()} & {@link #getHeight()}, but
+   * they will return 0, and {@link #asByteBuffer()} will return null.
+   */
   public void dispose() {
     if (pixmap != null) {
       pixmap.dispose();
