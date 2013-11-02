@@ -32,9 +32,6 @@ import java.util.logging.Logger;
  *
  * Based on void's {@link de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend} class.
  *
- * The mouse cursor rendering routines are based on Martin Karing's &lt;nitram@illarion.org&gt; original
- * GdxRenderDevice class (no longer included.)
- *
  * The idea of the BatchRenderDevice is to remove as much state changes as possible from rendering a Nifty scene. The
  * way this is done is through these mechanism:
  *
@@ -171,7 +168,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
   public void enableMouseCursor(final MouseCursor mouseCursor) {
     if (mouseCursor instanceof GdxMouseCursor) {
       this.mouseCursor = (GdxMouseCursor) mouseCursor;
-      GdxMouseCursor.hideSystemCursor();
+      this.mouseCursor.enable();
     }
   }
 
@@ -180,8 +177,9 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
    */
   @Override
   public void disableMouseCursor() {
-    GdxMouseCursor.showSystemCursor();
-    mouseCursor = null;
+    if (mouseCursor != null) {
+      mouseCursor.disable();
+    }
   }
 
   /**
@@ -243,7 +241,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
   @Override
   public void addImageToTexture(final Image image, final int x, final int y) {
     GdxBatchRenderImage gdxImage = (GdxBatchRenderImage) image;
-    if (gdxImage == null || gdxImage.getWidth() == 0 || gdxImage.getHeight() == 0 || gdxImage.getData() == null) return;
+    if (gdxImage == null || gdxImage.getWidth() == 0 || gdxImage.getHeight() == 0) return;
     bind(atlasTextureId);
     Gdx.gl10.glTexSubImage2D(
             GL10.GL_TEXTURE_2D,
@@ -254,7 +252,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
             image.getHeight(),
             GL10.GL_RGBA,
             GL10.GL_UNSIGNED_BYTE,
-            gdxImage.getData());
+            gdxImage.asByteBuffer());
     checkGLError();
   }
 
@@ -307,12 +305,6 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     for (int i=0; i<batches.size(); i++) {
       Batch batch = batches.get(i);
       batch.render();
-    }
-
-    if (mouseCursor != null) {
-      mouseCursor.bind();
-      mouseCursor.render();
-      bind(atlasTextureId);
     }
 
     Gdx.gl10.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
