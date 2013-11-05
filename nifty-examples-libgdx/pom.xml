@@ -2,7 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>lessvoid</groupId>
     <artifactId>nifty-main</artifactId>
@@ -15,7 +17,7 @@
 
   <properties>
     <skip.integration.tests>false</skip.integration.tests>
-    <gdx.version>0.9.9-SNAPSHOT</gdx.version>
+    <gdx.version>1.0-SNAPSHOT</gdx.version>
     <android.version>4.1.1.4</android.version>
     <android.maven.version>3.6.0</android.maven.version>
     <gwt.version>2.5.0</gwt.version>
@@ -62,6 +64,7 @@
         <module>desktop</module>
       </modules>
     </profile>
+
     <profile>
       <id>android</id>
       <modules>

@@ -2,7 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>lessvoid</groupId>
     <artifactId>nifty-examples-libgdx</artifactId>
@@ -14,6 +16,7 @@
   <name>Nifty Examples for LibGDX - Desktop</name>
 
   <properties>
+    <!-- Change the mainClass 'AllDemoMain' value if you want to run a different example within de.lessvoid.nifty.examples.libgdx.* -->
     <mainClass>de.lessvoid.nifty.examples.libgdx.all.AllDemoMain</mainClass>
   </properties>
 

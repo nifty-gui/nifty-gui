@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Change package value 'all' if you want to run an example from a different package within de.lessvoid.nifty.examples.libgdx.* -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="de.lessvoid.nifty.examples.libgdx.all"
           android:screenOrientation="landscape"
@@ -6,6 +7,7 @@
           android:versionName="1.0">
   <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
   <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true" android:largeHeap="true">
+    <!-- Change android:name main class value if you want to run a different example from de.lessvoid.nifty.examples.libgdx.* -->
     <activity android:name="AllDemoMain"
               android:label="@string/app_name"
               android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
