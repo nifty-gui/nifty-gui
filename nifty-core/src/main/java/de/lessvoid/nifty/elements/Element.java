@@ -583,6 +583,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     layoutPart.getBox().setWidth(width);
   }
 
+  /**
+   * @deprecated Use {@link #getChildren()}
+   */
+  public List<Element> getElements() {
+    return Collections.unmodifiableList(children);
+  }
+
   public List<Element> getChildren() {
     return Collections.unmodifiableList(children);
   }
