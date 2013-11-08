@@ -26,6 +26,7 @@ import de.lessvoid.nifty.tools.StringHelper;
 
 /**
  * A single screen with elements and input focus.
+ *
  * @author void
  */
 public class Screen {
@@ -140,6 +141,7 @@ public class Screen {
 
     // create the callback
     EndNotify localEndNotify = new EndNotify() {
+      @Override
       public final void perform() {
         for (int i=0; i<layerElements.size(); i++) {
           Element w = layerElements.get(i);
@@ -642,6 +644,7 @@ public class Screen {
       enabled = true;
     }
 
+    @Override
     public void perform() {
       if (enabled) {
         for (int i=0; i<layerElements.size(); i++) {
@@ -668,6 +671,7 @@ public class Screen {
       this.additionalEndNotify = additionalEndNotify;
     }
 
+    @Override
     public void perform() {
       log.fine("onStartScreen has ended");
 
@@ -690,6 +694,7 @@ public class Screen {
       this.additionalEndNotify = additionalEndNotify;
     }
 
+    @Override
     public void perform() {
       log.fine("onEndScreen has ended - schedule further processing as end of frame action");
       nifty.scheduleEndOfFrameElementAction(Screen.this, null, new EndOfScreenAction(), additionalEndNotify);

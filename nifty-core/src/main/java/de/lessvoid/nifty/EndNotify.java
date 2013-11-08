@@ -1,14 +1,13 @@
 package de.lessvoid.nifty;
 
 /**
- * informs about the ending of effect processing.
+ * Informs about the ending of effect processing.
+ *
  * @author void
  */
 public interface EndNotify {
-
   /**
-   * the effect has finished.
+   * The effect has finished.
    */
   void perform();
-
 }
