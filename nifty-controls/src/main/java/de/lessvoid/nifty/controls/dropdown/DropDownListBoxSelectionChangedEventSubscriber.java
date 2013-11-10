@@ -30,7 +30,7 @@ public class DropDownListBoxSelectionChangedEventSubscriber implements EventTopi
     this.popupInstance = popupInstance;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"deprecation", "unchecked"})
   @Override
   public void onEvent(final String topic, final ListBoxSelectionChangedEvent data) {
     final Object selectedItem = getSelectedItem(data.getSelection());

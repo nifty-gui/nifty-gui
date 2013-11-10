@@ -30,24 +30,26 @@ public class ImageModeHelper {
 	}
 
 	public static String getAreaProviderProperty(final String imageModeProperty) {
-		if (imageModeProperty != null) {
-			final String[] imageMode = imageModeProperty.split(":");
-			final String imageModeName = imageMode[0];
-			if (imageModeName.equals("normal") || imageModeName.equals("resize")) {
-				return "fullimage";
-			} else if (imageModeName.equals("subImage") || imageModeName.equals("subImageDirect") || imageModeName.equals("repeat")) {
-				return "subimage:" + getImageModeParameters(imageMode);
-			} else if (imageModeName.equals("sprite")) {
-				return "sprite:" + getImageModeParameters(imageMode);
-			} else if (imageModeName.equals("sprite-resize")) {
-				String imageModeParameters = imageMode[1];
-				return "sprite:" + imageModeParameters.replace("," + getNinePartParameters(imageModeParameters), "");
-			} else {
-				log.warning("imageMode property could not be converted to imageArea property : " + imageModeProperty);
-			}
-		}
+		if (imageModeProperty == null) {
+      return null;
+    }
 
-		return null;
+    final String[] imageMode = imageModeProperty.split(":");
+    final String imageModeName = imageMode[0];
+
+    if (imageModeName.equals("normal") || imageModeName.equals("resize")) {
+      return "fullimage";
+    } else if (imageModeName.equals("subImage") || imageModeName.equals("subImageDirect") || imageModeName.equals("repeat")) {
+      return "subimage:" + getImageModeParameters(imageMode);
+    } else if (imageModeName.equals("sprite")) {
+      return "sprite:" + getImageModeParameters(imageMode);
+    } else if (imageModeName.equals("sprite-resize")) {
+      String imageModeParameters = imageMode[1];
+      return "sprite:" + imageModeParameters.replace("," + getNinePartParameters(imageModeParameters), "");
+    } else {
+      log.warning("imageMode property could not be converted to imageArea property : " + imageModeProperty);
+      return null;
+    }
 	}
 
 	public static String getRenderStrategyProperty(final Properties properties) {
@@ -67,26 +69,28 @@ public class ImageModeHelper {
 	}
 
 	public static String getRenderStrategyProperty(final String imageModeProperty) {
-		if (imageModeProperty != null) {
-			final String[] imageMode = imageModeProperty.split(":");
-			final String imageModeName = imageMode[0];
-			if (imageModeName.equals("normal") || imageModeName.equals("subImage") || imageModeName.equals("sprite")) {
-				return "resize";
-			} else if (imageModeName.equals("subImageDirect")) {
-	      return "direct";
-			} else if (imageModeName.equals("resize")) {
-				return "nine-part:" + getImageModeParameters(imageMode);
-			} else if (imageModeName.equals("sprite-resize")) {
-				return "nine-part:" + getNinePartParameters(getImageModeParameters(imageMode));
-			} else if (imageModeName.equals("repeat")) {
-				return "repeat";
-			} else {
-				log.warning("imageMode property could not be converted to renderStrategy property : "
-						+ imageModeProperty);
-			}
-		}
+		if (imageModeProperty == null) {
+      return null;
+    }
 
-		return null;
+    final String[] imageMode = imageModeProperty.split(":");
+    final String imageModeName = imageMode[0];
+
+    if (imageModeName.equals("normal") || imageModeName.equals("subImage") || imageModeName.equals("sprite")) {
+      return "resize";
+    } else if (imageModeName.equals("subImageDirect")) {
+      return "direct";
+    } else if (imageModeName.equals("resize")) {
+      return "nine-part:" + getImageModeParameters(imageMode);
+    } else if (imageModeName.equals("sprite-resize")) {
+      return "nine-part:" + getNinePartParameters(getImageModeParameters(imageMode));
+    } else if (imageModeName.equals("repeat")) {
+      return "repeat";
+    } else {
+      log.warning("imageMode property could not be converted to renderStrategy property : "
+          + imageModeProperty);
+      return null;
+    }
 	}
 
 	private static String getImageModeParameters(final String[] imageMode) {
