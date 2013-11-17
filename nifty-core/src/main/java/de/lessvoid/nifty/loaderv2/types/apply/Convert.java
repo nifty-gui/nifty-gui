@@ -45,12 +45,6 @@ public class Convert {
   }
 
   public SizeValue sizeValue(final String value) {
-    if (value == null) {
-      return null;
-    }
-    if (value.length() == 0) {
-      return null;
-    }
     return new SizeValue(value);
   }
 

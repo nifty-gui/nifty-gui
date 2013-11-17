@@ -50,15 +50,10 @@ public class Falloff {
       falloffConstraint = HoverFalloffConstraint.valueOf(falloffConstraintString);
     }
 
-    String hoverWidthString = properties.getProperty(Falloff.HOVER_WIDTH);
-    if (hoverWidthString != null) {
-      hoverWidth = new SizeValue(hoverWidthString);
-    }
-
-    String hoverHeightString = properties.getProperty(Falloff.HOVER_HEIGHT);
-    if (hoverHeightString != null) {
-      hoverHeight = new SizeValue(hoverHeightString);
-    }
+    
+    hoverWidth = new SizeValue(properties.getProperty(Falloff.HOVER_WIDTH));
+    hoverHeight = new SizeValue(properties.getProperty(Falloff.HOVER_HEIGHT));
+    
   }
 
   public Falloff() {
@@ -81,19 +76,11 @@ public class Falloff {
   }
 
   private int getVerticalHover(Element element) {
-    if( hoverHeight == null ) {
-      return element.getHeight();
-    } else {
-      return hoverHeight.getValueAsInt(element.getHeight());
-    }
+    return hoverHeight.hasValue() ? hoverHeight.getValueAsInt(element.getHeight()) : element.getHeight();
   }
 
   private int getHorizontalHover(Element element) {
-    if( hoverWidth == null ) {
-      return element.getWidth();
-    } else {
-      return hoverWidth.getValueAsInt(element.getWidth());
-    }
+    return hoverWidth.hasValue() ? hoverWidth.getValueAsInt(element.getWidth()) : element.getWidth();
   }
 
   public void updateFalloffValue(final Element element, final int mouseX, final int mouseY) {

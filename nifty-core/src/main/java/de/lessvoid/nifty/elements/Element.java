@@ -211,16 +211,6 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private NiftyInputControl attachedInputControl = null;
 
   /**
-   * Remember if we've calculated this constraint ourselves.
-   */
-  private boolean isCalcWidthConstraint;
-
-  /**
-   * Remember if we've calculated this constraint ourselves.
-   */
-  private boolean isCalcHeightConstraint;
-
-  /**
    * Whether this element can be focused or not.
    */
   private boolean focusable = false;
@@ -701,8 +691,6 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public void resetLayout() {
-    isCalcWidthConstraint = false;
-    isCalcHeightConstraint = false;
 
     TextRenderer textRenderer = getRenderer(TextRenderer.class);
     if (textRenderer != null) {
@@ -725,53 +713,74 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void preProcessConstraintWidthThisLevel() {
-    // try the original width value first
+    // This is either the original width value, or a value we set here.
     SizeValue myWidth = getConstraintWidth();
+    
+    if (layoutManager != null) {
 
-    // is it empty and we have an layoutManager there's still hope for a width constraint
-    if (layoutManager != null && (myWidth == null || isCalcWidthConstraint)) {
+      // unset width, or width="sum" or width="max"
+      // try to calculate the width constraint using the children
+      // but only if all child elements have a fixed pixel width.
+      
+      // The difference between an unset width and width="sum" is that the latter does not fail if
+      // there are values that are not pixel, it simply considers them to be "0".
+      // width="sum" also simply sums the width values, it does not care about the layout manager.
+      
+      if (myWidth == null || myWidth.hasDefault()) {
+        List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentWidth();
 
-      // collect all child layoutPart that have a fixed pixel size in a list
-      List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
-      for (int i=0; i< children.size(); i++) {
-        Element e = children.get(i);
-        SizeValue childWidth = e.getConstraintWidth();
-        if (childWidth != null && childWidth.isPixel()) {
-          layoutPartChild.add(e.layoutPart);
+        // if all (!) child elements have a pixel fixed width we can calculate a new width constraint for this element!
+        if (!layoutPartChild.isEmpty() && children.size() == layoutPartChild.size()) {
+          
+          SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
+          if (newWidth != null && newWidth.hasValue()) {
+            int newWidthPx = newWidth.getValueAsInt(0);
+            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+            setConstraintWidth(SizeValue.def(newWidthPx));
+          }
+        } else {
+            setConstraintWidth(SizeValue.def());
         }
-      }
-
-      // if all (!) child elements have a pixel fixed width we can calculate a new width constraint for this element!
-      if (children.size() == layoutPartChild.size()) {
-        // we don't have anything to calculate values from so we quit
-        if (layoutPartChild.size() == 0) {
-          // but before we check if we eventually need to reset the constrain
-          checkAndResetCalculatedWidthConstraint(myWidth);
-          return;
-        }
-        SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
-        if (newWidth != null) {
+        
+      } else if (myWidth.hasSum()) {
+        List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentWidth();
+        SizeValue newWidth = layoutPart.getSumWidth(layoutPartChild);
+        if (newWidth != null && newWidth.hasValue()) {
           int newWidthPx = newWidth.getValueAsInt(0);
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
-          setConstraintWidth(SizeValue.px(newWidthPx));
-          isCalcWidthConstraint = true;
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          setConstraintWidth(SizeValue.sum(newWidthPx));
+        } else {
+          setConstraintWidth(SizeValue.sum(0));
         }
-      } else {
-        checkAndResetCalculatedWidthConstraint(myWidth);
+        
+      } else if (myWidth.hasMax()) {
+        List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentWidth();
+        SizeValue newWidth = layoutPart.getMaxWidth(layoutPartChild);
+        if (newWidth != null && newWidth.hasValue()) {
+          int newWidthPx = newWidth.getValueAsInt(0);
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          setConstraintWidth(SizeValue.max(newWidthPx));
+        } else {
+          setConstraintWidth(SizeValue.max(0));
+        }
+        
       }
     }
   }
-
-  private void checkAndResetCalculatedWidthConstraint(final SizeValue currentWidthConstraint) {
-    if (!isCalcWidthConstraint) {
-      return;
+  
+  private List<LayoutPart> getLayoutChildrenWithIndependentWidth() {
+    List < LayoutPart > layoutPartChild = new ArrayList<LayoutPart>(children.size());
+    for (int i=0; i< children.size(); i++) {
+      Element e = children.get(i);
+      SizeValue childWidth = e.getConstraintWidth();
+      if (childWidth.isPixel() && childWidth.isIndependentFromParent()) {
+        layoutPartChild.add(e.layoutPart);
+      }
     }
-    // this now means we had a calculatedWidthConstrained before but for whatever reason
-    // that is not valid anymore so we need to reset it here.
-    if (currentWidthConstraint != null) {
-      setConstraintWidth(null);
-    }
+    return layoutPartChild;
   }
 
   private void preProcessConstraintHeight() {
@@ -784,52 +793,74 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void preProcessConstraintHeightThisLevel() {
-    // try the original height value first
+    // This is either the original height value, or a value we set here.
     SizeValue myHeight = getConstraintHeight();
+    
+    if (layoutManager != null) {
 
-    // is it empty and we have an layoutManager there's still hope for a height constraint
-    if (layoutManager != null && (myHeight == null || isCalcHeightConstraint)) {
-      // collect all child layoutPart that have a fixed px size in a list
-      List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
-      for (int i=0; i< children.size(); i++) {
-        Element e = children.get(i);
-        SizeValue childHeight = e.getConstraintHeight();
-        if (childHeight != null && childHeight.isPixel()) {
-          layoutPartChild.add(e.layoutPart);
-        }
-      }
+      // unset height, or height="sum" or height="max"
+      // try to calculate the height constraint using the children
+      // but only if all child elements have a fixed pixel height.
+      
+      // The difference between an unset height and height="sum" is that the latter does not fail if
+      // there are values that are not pixel, it simply considers them to be "0".
+      // height="sum" also simply sums the height values, it does not care about the layout manager.
+      
+      if (myHeight == null || myHeight.hasDefault()) {
+        List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentHeight();
 
-      // if all (!) child elements have a px fixed height we can calculate a new height constraint for this element!
-      if (children.size() == layoutPartChild.size()) {
-        // we don't have anything to calculate values from so we quit
-        if (layoutPartChild.size() == 0) {
-          // but before we check if we eventually need to reset the constrain
-          checkAndResetCalculatedHeightConstraint(myHeight);
-          return;
+        // if all (!) child elements have a pixel fixed height we can calculate a new height constraint for this element!
+        if (!layoutPartChild.isEmpty() && children.size() == layoutPartChild.size()) {
+          
+          SizeValue newHeight = layoutManager.calculateConstraintHeight(this.layoutPart, layoutPartChild);
+          if (newHeight != null && newHeight.hasValue()) {
+            int newHeightPx = newHeight.getValueAsInt(0);
+            newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+            newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+            setConstraintHeight(SizeValue.def(newHeightPx));
+          }
+        } else {
+            setConstraintHeight(SizeValue.def());
         }
-        SizeValue newHeight = layoutManager.calculateConstraintHeight(this.layoutPart, layoutPartChild);
-        if (newHeight != null) {
+        
+      } else if (myHeight.hasSum()) {
+        List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentHeight();
+        SizeValue newHeight = layoutPart.getSumHeight(layoutPartChild);
+        if (newHeight != null && newHeight.hasValue()) {
           int newHeightPx = newHeight.getValueAsInt(0);
           newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
           newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
-          setConstraintHeight(SizeValue.px(newHeightPx));
-          isCalcHeightConstraint = true;
+          setConstraintHeight(SizeValue.sum(newHeightPx));
+        } else {
+          setConstraintHeight(SizeValue.sum(0));
         }
-      } else {
-        checkAndResetCalculatedHeightConstraint(myHeight);
+        
+      } else if (myHeight.hasMax()) {
+        List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentHeight();
+        SizeValue newHeight = layoutPart.getMaxHeight(layoutPartChild);
+        if (newHeight != null && newHeight.hasValue()) {
+          int newHeightPx = newHeight.getValueAsInt(0);
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+          setConstraintHeight(SizeValue.max(newHeightPx));
+        } else {
+          setConstraintHeight(SizeValue.max(0));
+        }
+        
       }
     }
   }
-
-  private void checkAndResetCalculatedHeightConstraint(final SizeValue myHeightConstraint) {
-    if (!isCalcHeightConstraint) {
-      return;
+  
+  private List<LayoutPart> getLayoutChildrenWithIndependentHeight() {
+    List < LayoutPart > layoutPartChild = new ArrayList<LayoutPart>(children.size());
+    for (int i=0; i< children.size(); i++) {
+      Element e = children.get(i);
+      SizeValue childHeight = e.getConstraintHeight();
+      if (childHeight.isPixel() && childHeight.isIndependentFromParent()) {
+        layoutPartChild.add(e.layoutPart);
+      }
     }
-    // this now means we had a calculatedWidthConstrained before but for whatever reason
-    // that is not valid anymore so we need to reset it here.
-    if (myHeightConstraint != null) {
-      setConstraintHeight(null);
-    }
+    return layoutPartChild;
   }
 
   private void processLayoutInternal() {
@@ -883,7 +914,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   public void layoutElements() {
     prepareLayout();
     processLayout();
-
+    
+    prepareLayout();
+    processLayout();
+    
     prepareLayout();
     processLayout();
   }

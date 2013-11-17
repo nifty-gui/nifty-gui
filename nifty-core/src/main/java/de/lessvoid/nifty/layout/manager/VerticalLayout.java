@@ -132,7 +132,7 @@ public class VerticalLayout implements LayoutManager {
       LayoutPart p = elements.get(i);
       BoxConstraints original = p.getBoxConstraints();
       if (hasHeightConstraint(original)) {
-        if (original.getHeight().isPercentOrPixel()) {
+        if (original.getHeight().hasValue()) {
           maxFixedHeight += original.getHeight().getValueAsInt(parentHeight);
           fixedCount++;
         }
@@ -147,12 +147,12 @@ public class VerticalLayout implements LayoutManager {
     }
   }
 
-  private boolean hasWidthConstraint(final BoxConstraints constraints) {
-    return constraints != null && constraints.getWidth() != null && !constraints.getWidth().hasWildcard();
+  private boolean hasWidthConstraint(final BoxConstraints constraint) {
+    return constraint != null && constraint.getWidth().hasValue();
   }
 
   private boolean hasHeightConstraint(final BoxConstraints boxConstraints) {
-    return boxConstraints != null && boxConstraints.getHeight() != null;
+    return boxConstraints != null && boxConstraints.getHeight().hasValue();
   }
 
   private boolean isInvalid(final LayoutPart root, final List <LayoutPart> children) {

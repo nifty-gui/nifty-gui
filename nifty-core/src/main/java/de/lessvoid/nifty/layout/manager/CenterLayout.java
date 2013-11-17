@@ -60,10 +60,10 @@ public class CenterLayout implements LayoutManager {
     Box box = element.getBox();
     BoxConstraints constraint = element.getBoxConstraints();
 
-    if (constraint.getWidth() != null && constraint.getWidth().hasHeightSuffix()) {
+    if (constraint.getWidth().hasHeightSuffix()) {
       handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
       handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
-    } else if (constraint.getHeight() != null && constraint.getHeight().hasWidthSuffix()) {
+    } else if (constraint.getHeight().hasWidthSuffix()) {
       handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
       handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
     } else {
@@ -80,7 +80,7 @@ public class CenterLayout implements LayoutManager {
       final BoxConstraints rootBoxConstraints,
       final Box box,
       final BoxConstraints constraint) {
-    if (constraint.getWidth() != null) {
+    if (constraint.getWidth().hasValue()) {
       handleWidthConstraint(rootBox, rootBoxConstraints, box, constraint);
     } else {
       box.setX(
@@ -98,7 +98,7 @@ public class CenterLayout implements LayoutManager {
       final BoxConstraints rootBoxConstraints,
       final Box box,
       final BoxConstraints constraint) {
-    if (constraint.getHeight() != null) {
+    if (constraint.getHeight().hasValue()) {
       handleHeightConstraint(rootBox, rootBoxConstraints, box, constraint);
     } else {
       box.setY(

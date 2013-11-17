@@ -115,7 +115,7 @@ public class BoxConstraints {
    * @return the horizontal position of the box
    */
   public SizeValue getX() {
-    return x;
+    return x == null ? SizeValue.def() : x;
   }
 
   /**
@@ -131,7 +131,7 @@ public class BoxConstraints {
    * @return the vertical position of the box
    */
   public SizeValue getY() {
-    return y;
+    return y == null ? SizeValue.def() : y;
   }
 
   /**
@@ -147,7 +147,7 @@ public class BoxConstraints {
    * @return the current height of the box
    */
   public SizeValue getHeight() {
-    return height;
+    return height == null ? SizeValue.def() : height;
   }
 
   /**
@@ -163,7 +163,7 @@ public class BoxConstraints {
    * @return the current width of the box
    */
   public SizeValue getWidth() {
-    return width;
+    return width == null ? SizeValue.def() : width;
   }
 
   /**
@@ -207,19 +207,19 @@ public class BoxConstraints {
   }
 
   public SizeValue getPaddingLeft() {
-    return paddingLeft;
+    return paddingLeft == null ? SizeValue.def() : paddingLeft;
   }
 
   public SizeValue getPaddingRight() {
-    return paddingRight;
+    return paddingRight == null ? SizeValue.def() : paddingRight;
   }
 
   public SizeValue getPaddingTop() {
-    return paddingTop;
+    return paddingTop == null ? SizeValue.def() : paddingTop;
   }
 
   public SizeValue getPaddingBottom() {
-    return paddingBottom;
+    return paddingBottom == null ? SizeValue.def() : paddingBottom;
   }
 
   public void setPaddingLeft(final SizeValue paddingLeftParam) {
@@ -271,19 +271,19 @@ public class BoxConstraints {
   }
 
   public SizeValue getMarginLeft() {
-    return marginLeft;
+    return marginLeft == null ? SizeValue.def() : marginLeft;
   }
 
   public SizeValue getMarginRight() {
-    return marginRight;
+    return marginRight == null ? SizeValue.def() : marginRight;
   }
 
   public SizeValue getMarginTop() {
-    return marginTop;
+    return marginTop == null ? SizeValue.def() : marginTop;
   }
 
   public SizeValue getMarginBottom() {
-    return marginBottom;
+    return marginBottom == null ? SizeValue.def() : marginBottom;
   }
 
   public void setMarginLeft(final SizeValue marginLeftParam) {
