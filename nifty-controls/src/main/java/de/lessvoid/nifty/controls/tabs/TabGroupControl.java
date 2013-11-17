@@ -5,7 +5,6 @@
 package de.lessvoid.nifty.controls.tabs;
 
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.bushe.swing.event.EventTopicSubscriber;
@@ -15,6 +14,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.Tab;
 import de.lessvoid.nifty.controls.TabGroup;
 import de.lessvoid.nifty.controls.TabSelectedEvent;
@@ -25,7 +25,6 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * This is the controller for the tab group.
@@ -230,8 +229,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     bind(element);
 
     niftyGui = nifty;
@@ -264,8 +262,8 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
-    super.init(parameter, controlDefinitionAttributes);
+  public void init(final Parameters parameter) {
+    super.init(parameter);
 
     for (final Element element : contentPanel.getChildren()) {
       final Tab tabControl = element.getNiftyControl(Tab.class);

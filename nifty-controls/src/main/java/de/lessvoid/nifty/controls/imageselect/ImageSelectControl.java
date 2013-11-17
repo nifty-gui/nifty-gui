@@ -2,13 +2,13 @@ package de.lessvoid.nifty.controls.imageselect;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ImageSelectSelectionChangedEvent;
 import de.lessvoid.nifty.controls.NextPrevHelper;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.impl.Move;
@@ -20,7 +20,6 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * ImageSelectControl.
@@ -50,8 +49,7 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
         final Nifty niftyParam,
         final Screen screenParam,
         final Element newElement,
-        final Properties properties,
-        final Attributes controlDefinitionAttributes) {
+        final Parameters properties) {
         super.bind(newElement);
         nifty = niftyParam;
         images = createImages(nifty.getRenderEngine(), properties.getProperty("imageList"));

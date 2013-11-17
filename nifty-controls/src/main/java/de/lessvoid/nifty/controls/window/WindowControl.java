@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.controls.window;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.Window;
 import de.lessvoid.nifty.controls.WindowClosedEvent;
 import de.lessvoid.nifty.controls.dragndrop.DraggableControl;
@@ -12,7 +11,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class WindowControl extends AbstractController implements Window {
   private DraggableControl draggableControl = new DraggableControl();
@@ -25,13 +23,12 @@ public class WindowControl extends AbstractController implements Window {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     super.bind(element);
     this.nifty = nifty;
-    draggableControl.bind(nifty, screen, element, parameter, controlDefinitionAttributes);
-    removeCloseButton = !controlDefinitionAttributes.getAsBoolean("closeable", true);
-    hideOnClose = controlDefinitionAttributes.getAsBoolean("hideOnClose", false);
+    draggableControl.bind(nifty, screen, element, parameter);
+    removeCloseButton = !parameter.getAsBoolean("closeable", true);
+    hideOnClose = parameter.getAsBoolean("hideOnClose", false);
   }
 
   @Override

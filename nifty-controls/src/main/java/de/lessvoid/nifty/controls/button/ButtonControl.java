@@ -1,18 +1,17 @@
 package de.lessvoid.nifty.controls.button;
 
-import java.util.Properties;
-
-import de.lessvoid.nifty.controls.ButtonReleasedEvent;
 import org.bushe.swing.event.EventTopicSubscriber;
 
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryReleaseEvent;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
+import de.lessvoid.nifty.controls.ButtonReleasedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
+import de.lessvoid.nifty.elements.events.NiftyMousePrimaryReleaseEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
@@ -22,7 +21,6 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * Implementation of the TextButton Control.
@@ -42,8 +40,7 @@ public class ButtonControl extends AbstractController implements Button {
       final Nifty niftyParam,
       final Screen screenParam,
       final Element newElement,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     super.bind(newElement);
     nifty = niftyParam;
     screen = screenParam;
@@ -53,7 +50,7 @@ public class ButtonControl extends AbstractController implements Button {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     EventTopicSubscriber<NiftyMousePrimaryClickedEvent> mouseClickedSubscriber = new EventTopicSubscriber<NiftyMousePrimaryClickedEvent>() {
       @Override
       public void onEvent(final String topic, final NiftyMousePrimaryClickedEvent data) {
@@ -70,7 +67,7 @@ public class ButtonControl extends AbstractController implements Button {
     };
     nifty.subscribe(screen, getElement().getId(), NiftyMousePrimaryReleaseEvent.class, mouseReleasedSubscriber);
 
-    super.init(parameter, controlDefinitionAttributes);
+    super.init(parameter);
   }
 
   @Override

@@ -1,9 +1,8 @@
 package de.lessvoid.nifty.controls.radiobutton;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.RadioButton;
 import de.lessvoid.nifty.controls.RadioButtonGroup;
 import de.lessvoid.nifty.controls.RadioButtonStateChangedEvent;
@@ -12,7 +11,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * RadioButtonControl implementation.
@@ -26,7 +24,7 @@ public class RadioButtonControl extends AbstractController implements RadioButto
   private Screen screen;
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen, final Element element, final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void bind(final Nifty nifty, final Screen screen, final Element element, final Parameters parameter) {
     super.bind(element);
     this.nifty = nifty;
     this.screen = screen;

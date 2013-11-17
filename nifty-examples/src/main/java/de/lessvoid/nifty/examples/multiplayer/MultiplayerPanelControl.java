@@ -1,13 +1,11 @@
 package de.lessvoid.nifty.examples.multiplayer;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * MultiplayerPanelControl.
@@ -22,15 +20,14 @@ public class MultiplayerPanelControl implements Controller {
       final Nifty niftyParam,
       final Screen screenParam,
       final Element newElement,
-      final Properties properties,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters properties) {
     nifty = niftyParam;
     screen = screenParam;
     element = newElement;
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
   }
 
   public void onStartScreen() {

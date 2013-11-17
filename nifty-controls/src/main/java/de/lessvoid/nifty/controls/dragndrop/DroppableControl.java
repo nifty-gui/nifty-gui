@@ -1,18 +1,21 @@
 package de.lessvoid.nifty.controls.dragndrop;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.*;
+import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Draggable;
+import de.lessvoid.nifty.controls.Droppable;
+import de.lessvoid.nifty.controls.DroppableDropFilter;
+import de.lessvoid.nifty.controls.DroppableDroppedEvent;
+import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class DroppableControl extends AbstractController implements Droppable {
   private Nifty nifty;
@@ -25,8 +28,7 @@ public class DroppableControl extends AbstractController implements Droppable {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     super.bind(element);
     this.nifty = nifty;
     droppableContent = element.findElementByName("#droppableContent");

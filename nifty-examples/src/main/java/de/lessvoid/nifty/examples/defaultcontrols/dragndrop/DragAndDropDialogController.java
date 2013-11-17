@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.defaultcontrols.dragndrop;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -11,12 +9,12 @@ import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.DroppableDroppedEvent;
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.dragndrop.builder.DraggableBuilder;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The DragAndDropDialogController.
@@ -34,8 +32,7 @@ public class DragAndDropDialogController implements Controller {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     this.nifty = nifty;
     this.screen = screen;
     this.resetButton = screen.findNiftyControl("resetButton", Button.class);
@@ -45,7 +42,7 @@ public class DragAndDropDialogController implements Controller {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
   }
 
   @Override

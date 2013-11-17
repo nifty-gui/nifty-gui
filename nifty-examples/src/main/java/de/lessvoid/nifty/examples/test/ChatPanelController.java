@@ -1,9 +1,8 @@
 package de.lessvoid.nifty.examples.test;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -11,7 +10,6 @@ import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class ChatPanelController implements Controller, KeyInputHandler {
   private Nifty nifty;
@@ -21,8 +19,7 @@ public class ChatPanelController implements Controller, KeyInputHandler {
   public static Element chatField;
 
   public void bind(final Nifty niftyParam, final Screen screenParam,
-      final Element newElement, final Properties properties,
-      final Attributes controlDefinitionAttributes) {
+      final Element newElement, final Parameters properties) {
 
     nifty = niftyParam;
     screen = screenParam;
@@ -33,7 +30,7 @@ public class ChatPanelController implements Controller, KeyInputHandler {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
   }
 
   public void onStartScreen() {

@@ -1,12 +1,12 @@
 package de.lessvoid.nifty.controls.scrollpanel;
 
 import java.util.List;
-import java.util.Properties;
 
 import org.bushe.swing.event.EventTopicSubscriber;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.ScrollPanel;
 import de.lessvoid.nifty.controls.ScrollPanelChangedEvent;
 import de.lessvoid.nifty.controls.Scrollbar;
@@ -16,7 +16,6 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * @deprecated Please use {@link de.lessvoid.nifty.controls.ScrollPanel} when accessing NiftyControls.
@@ -41,14 +40,13 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
       final Nifty niftyParam,
       final Screen screenParam,
       final Element elementParam,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     super.bind(elementParam);
     nifty = niftyParam;
     screen = screenParam;
     verticalScrollbar = new Boolean(parameter.getProperty("vertical", "true"));
     horizontalScrollbar = new Boolean(parameter.getProperty("horizontal", "true"));
-    childRootElement = getElement().findElementByName(controlDefinitionAttributes.get("childRootId"));
+    childRootElement = getElement().findElementById(parameter.getProperty("childRootId"));
     stepSizeX = new Float(parameter.getProperty("stepSizeX", "1.0"));
     stepSizeY = new Float(parameter.getProperty("stepSizeY", "1.0"));
     pageSizeX = new Float(parameter.getProperty("pageSizeX", "1.0"));
@@ -59,12 +57,11 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     initializeScrollPanel();
     initializeScrollbars();
     subscribeHorizontalScrollbar();
     subscribeVerticalScrollbar();
-    super.init(parameter, controlDefinitionAttributes);
   }
 
   @Override

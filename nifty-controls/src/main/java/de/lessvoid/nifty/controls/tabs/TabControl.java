@@ -4,16 +4,14 @@
  */
 package de.lessvoid.nifty.controls.tabs;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.Tab;
 import de.lessvoid.nifty.controls.TabGroup;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * This is the controller of the tab controls.
@@ -41,12 +39,11 @@ public class TabControl extends AbstractController implements Tab, TabGroupMembe
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     bind(element);
 
-    if (controlDefinitionAttributes.isSet("caption")) {
-      setCaption(controlDefinitionAttributes.get("caption"));
+    if (parameter.containsKey("caption")) {
+      setCaption(parameter.getProperty("caption"));
     } else {
       throw new IllegalStateException("Missing caption tag for the tab.");
     }

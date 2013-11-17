@@ -2,12 +2,12 @@ package de.lessvoid.nifty.controls.radiobutton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.bushe.swing.event.EventTopicSubscriber;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.RadioButtonGroup;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.elements.Element;
@@ -15,7 +15,6 @@ import de.lessvoid.nifty.elements.events.ElementDisableEvent;
 import de.lessvoid.nifty.elements.events.ElementEnableEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * RadioButtonGroupControl implementation.
@@ -30,7 +29,7 @@ public class RadioButtonGroupControl extends AbstractController implements Radio
   private boolean allowDeselection = false;  // by default we don't allow deselection
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen, final Element element, final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void bind(final Nifty nifty, final Screen screen, final Element element, final Parameters parameter) {
     super.bind(element);
     this.nifty = nifty;
     this.screen = screen;

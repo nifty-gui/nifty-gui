@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.examples.defaultcontrols.chatcontrol;
 
-import java.util.Properties;
 import java.util.Random;
 
 import de.lessvoid.nifty.Nifty;
@@ -8,11 +7,11 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Chat;
 import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The ChatControlDialogController registers a new control with Nifty
@@ -30,8 +29,7 @@ public class ChatControlDialogController implements Controller {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     this.chat = screen.findNiftyControl("chat", Chat.class);
     this.chatIconVoid = nifty.createImage("defaultcontrols/chatcontrol/chat-icon-ninja.png", false);
     this.chatIconNiftyUser = nifty.createImage("defaultcontrols/chatcontrol/chat-icon-user.png", false);
@@ -40,7 +38,7 @@ public class ChatControlDialogController implements Controller {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
   }
 
   @Override

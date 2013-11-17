@@ -4,18 +4,18 @@
  */
 package de.lessvoid.nifty.controls.treebox;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.*;
+import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.TreeBox;
+import de.lessvoid.nifty.controls.TreeItem;
+import de.lessvoid.nifty.controls.TreeItemSelectionChangedEvent;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
-import de.lessvoid.nifty.controls.listbox.ListBoxItemController;
 import de.lessvoid.nifty.controls.listbox.ListBoxItemProcessor;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * This is the control of the tree box. Its basically a list box that displays a tree.
@@ -59,12 +59,11 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
   }
 
 	@Override
-	public void bind(final Nifty nifty, final Screen screen, final Element element, final Properties parameter,
-                   final Attributes controlDefinitionAttributes) {
-		super.bind(nifty, screen, element, parameter, controlDefinitionAttributes);
+	public void bind(final Nifty nifty, final Screen screen, final Element element, final Parameters parameter) {
+		super.bind(nifty, screen, element, parameter);
     this.nifty = nifty;
 
-    indentWidth = controlDefinitionAttributes.getAsInteger("indentWidth", DEFAULT_INDENT);
+    indentWidth = parameter.getAsInteger("indentWidth", DEFAULT_INDENT);
 	}
 
 	@Override

@@ -1,17 +1,15 @@
 package de.lessvoid.nifty.examples.tutorial.screen;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class PageControl implements Controller {
   private Element element;
@@ -22,14 +20,13 @@ public class PageControl implements Controller {
       final Nifty nifty,
       final Screen screenParam,
       final Element newElement,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     element = newElement;
     screen = screenParam;
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     DropDown<String> dropDown = screen.findNiftyControl("dropDownControl", DropDown.class);
     dropDown.addItem("a");
     dropDown.addItem("b");

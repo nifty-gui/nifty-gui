@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.controls.textfield;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.controls.textfield.filter.delete.TextFieldDeleteFilter;
@@ -28,7 +27,6 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * A TextFieldControl.
@@ -57,8 +55,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
       final Nifty niftyParam,
       final Screen screenParam,
       final Element newElement,
-      final Properties properties,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters properties) {
     bind(newElement);
 
     nifty = niftyParam;
@@ -115,7 +112,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     focusHandler = screen.getFocusHandler();
 
     fieldWidth = fieldElement.getWidth() - cursorElement.getWidth();
@@ -126,7 +123,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
         textField.getDisplayedText(), fieldWidth, 1.0f);
 
     updateCursor();
-    super.init(parameter, controlDefinitionAttributes);
+    super.init(parameter);
   }
 
   @Override

@@ -1,6 +1,10 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,6 +15,7 @@ import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.Scrollbar;
 import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.controls.dynamic.CustomControlCreator;
@@ -23,7 +28,6 @@ import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * @deprecated Please use {@link de.lessvoid.nifty.controls.ListBox} when accessing NiftyControls.
@@ -45,7 +49,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   private Element listBoxPanelElement;
   private Element bottomRightTemplate;
   private int labelTemplateHeight;
-  private Properties parameter;
+  private Parameters parameter;
   private int displayItems;
   private ListBoxViewConverter<T> viewConverter;
   private EventTopicSubscriber<ScrollbarChangedEvent> verticalScrollbarSubscriber = new EventTopicSubscriber<ScrollbarChangedEvent>() {
@@ -92,8 +96,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
       final Nifty niftyParam,
       final Screen screenParam,
       final Element elementParam,
-      final Properties parameterParam,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameterParam) {
     super.bind(elementParam);
 
     nifty = niftyParam;
@@ -134,7 +137,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     listBoxImpl.updateViewTotalCount();
     listBoxImpl.updateViewScroll();
 
@@ -142,7 +145,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     subscribeVerticalScrollbar();
     nifty.subscribe(screen, getId(), ElementShowEvent.class, listBoxControlShowEventSubscriber);
 
-    super.init(parameter, controlDefinitionAttributes);
+    super.init(parameter);
   }
 
   @Override

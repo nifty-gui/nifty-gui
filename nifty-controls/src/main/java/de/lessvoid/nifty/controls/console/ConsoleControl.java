@@ -2,7 +2,6 @@ package de.lessvoid.nifty.controls.console;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.bushe.swing.event.EventTopicSubscriber;
 
@@ -11,13 +10,13 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * A Nifty Control that represents a input console.
@@ -40,8 +39,7 @@ public class ConsoleControl extends AbstractController implements Console, Event
       final Nifty niftyParam,
       final Screen screenParam,
       final Element newElement,
-      final Properties properties,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters properties) {
     super.bind(newElement);
     this.nifty = niftyParam;
     this.screen = screenParam;
@@ -52,9 +50,9 @@ public class ConsoleControl extends AbstractController implements Console, Event
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     nifty.subscribe(screen, textfield.getId(), NiftyInputEvent.class, this);
-    super.init(parameter, controlDefinitionAttributes);
+    super.init(parameter);
   }
 
   @Override

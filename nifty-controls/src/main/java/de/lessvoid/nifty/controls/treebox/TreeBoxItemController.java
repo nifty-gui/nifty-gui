@@ -1,13 +1,11 @@
 package de.lessvoid.nifty.controls.treebox;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.TreeItem;
 import de.lessvoid.nifty.controls.listbox.ListBoxItemController;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * This is the default controller for the items of the {@link de.lessvoid.nifty.controls.TreeBox}. It takes care for
@@ -28,9 +26,8 @@ public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>>
       final Nifty niftyParam,
       final Screen screenParam,
       final Element newElement,
-      final Properties properties,
-      final Attributes controlDefinitionAttributes) {
-    super.bind(niftyParam, screenParam, newElement, properties, controlDefinitionAttributes);
+      final Parameters properties) {
+    super.bind(niftyParam, screenParam, newElement, properties);
   }
 
   @SuppressWarnings("deprecation")

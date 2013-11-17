@@ -1,30 +1,26 @@
 package de.lessvoid.nifty.examples.defaultcontrols.messagebox;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.MessageBox;
 import de.lessvoid.nifty.controls.MessageBox.MessageType;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class MessageBoxDialogController implements Controller {
 	
 	private Nifty nifty;
 	
 	@Override
-	public void bind(Nifty nifty, Screen screen, Element element,
-			Properties parameter, Attributes controlDefinitionAttributes) {
+	public void bind(Nifty nifty, Screen screen, Element element, Parameters parameter) {
 		System.out.println("binding MessageBoxDialogController");
 		this.nifty = nifty;
 	}
 
 	@Override
-	public void init(Properties parameter,
-			Attributes controlDefinitionAttributes) {
+	public void init(Parameters parameter) {
 	}
 
 	@Override
