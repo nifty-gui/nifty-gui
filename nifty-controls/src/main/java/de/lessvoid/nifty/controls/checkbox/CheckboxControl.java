@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.controls.checkbox;
 
-import java.util.Properties;
-
 import org.bushe.swing.event.EventTopicSubscriber;
 
 import de.lessvoid.nifty.EndNotify;
@@ -10,13 +8,13 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * A CheckboxControl.
@@ -36,20 +34,19 @@ public class CheckboxControl extends AbstractController
       final Nifty niftyParam,
       final Screen screenParam,
       final Element elementParam,
-      final Properties propertiesParam,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters propertiesParam) {
     super.bind(elementParam);
     nifty = niftyParam;
     screen = screenParam;
     checkBoxImpl.bindToView(this);
-    checkBoxImpl.setChecked(new Boolean(propertiesParam.getProperty("checked", "false")));
+    checkBoxImpl.setChecked(propertiesParam.getAsBoolean("checked", false));
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     focusHandler = screen.getFocusHandler();
     nifty.subscribe(screen, getId(), ElementShowEvent.class, this);
-    super.init(parameter, controlDefinitionAttributes);
+    super.init(parameter);
   }
 
   @Override

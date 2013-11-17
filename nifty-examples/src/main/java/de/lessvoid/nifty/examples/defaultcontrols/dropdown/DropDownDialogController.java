@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.defaultcontrols.dropdown;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;
@@ -11,6 +9,7 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.RadioButtonGroup;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.RadioButtonStateChangedEvent;
@@ -21,7 +20,6 @@ import de.lessvoid.nifty.examples.defaultcontrols.common.JustAnExampleModelClass
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class DropDownDialogController implements Controller {
   private Screen screen;
@@ -39,8 +37,7 @@ public class DropDownDialogController implements Controller {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     this.screen = screen;
     this.addDropDownItemText = screen.findNiftyControl("addDropDownItemText", TextField.class);
     this.addDropDownItemButton = screen.findNiftyControl("addDropDownItemButton", Button.class);
@@ -52,7 +49,7 @@ public class DropDownDialogController implements Controller {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     setDropDownItemButtonState();
     setRemoveDropDownItemButtonState(null);
     updateSelectedIndexLabel(dropDown.getSelectedIndex());

@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.controls.slider;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.NextPrevHelper;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.Slider;
 import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.elements.Element;
@@ -13,7 +12,6 @@ import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * @deprecated Please use {@link de.lessvoid.nifty.controls.Slider} when accessing NiftyControls.
@@ -38,8 +36,7 @@ public class SliderControl extends AbstractController implements Slider {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     super.bind(element);
 
     this.nifty = nifty;

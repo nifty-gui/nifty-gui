@@ -3,7 +3,6 @@ package de.lessvoid.nifty.controls.chatcontrol;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +11,7 @@ import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Chat;
 import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -19,7 +19,6 @@ import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * This is the main controller for the chat control.
@@ -49,7 +48,7 @@ public class ChatControl extends AbstractController implements Chat, KeyInputHan
      * {@inheritDoc}
      */
     @Override
-    public final void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement, final Properties properties, final Attributes controlDefinitionAttributes) {
+    public final void bind(final Nifty niftyParam, final Screen screenParam, final Element newElement, final Parameters properties) {
         super.bind(newElement);
         LOGGER.fine("binding chat control");
         nifty = niftyParam;

@@ -2,7 +2,6 @@ package de.lessvoid.nifty.controls.menu;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
@@ -10,11 +9,11 @@ import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.Menu;
 import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * @deprecated Please use {@link de.lessvoid.nifty.controls.PopupMenu} when accessing NiftyControls.
@@ -36,15 +35,14 @@ public class MenuControl<T> implements Controller, Menu<T> {
       final Nifty niftyParam,
       final Screen screenParam,
       final Element newElement,
-      final Properties properties,
-      final Attributes controlDefinitionAttributesParam) {
+      final Parameters properties) {
     nifty = niftyParam;
     screen = screenParam;
     element = newElement;
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     bound = true;
   }
 

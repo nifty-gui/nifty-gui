@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.examples.defaultcontrols.scrollpanel;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.ScrollPanel;
 import de.lessvoid.nifty.controls.ScrollPanel.AutoScroll;
 import de.lessvoid.nifty.controls.ScrollPanelChangedEvent;
@@ -13,7 +12,6 @@ import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The ScrollPanelDialogController.
@@ -27,13 +25,12 @@ public class ScrollPanelDialogController implements Controller {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     this.screen = screen;
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     ScrollPanel scrollPanel = getScrollPanel();
     scrollPanel.setUp(10.f, 10.f, 100.f, 100.f, AutoScroll.OFF);
     getScrollPanelXPosTextField().setText(String.valueOf((int)scrollPanel.getHorizontalPos()));

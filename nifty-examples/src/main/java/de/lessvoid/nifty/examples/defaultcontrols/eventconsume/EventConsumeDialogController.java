@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.defaultcontrols.eventconsume;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.NiftyInputConsumerNotify;
@@ -12,12 +10,12 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The Controller for the EventConsumeDialog.
@@ -39,8 +37,7 @@ public class EventConsumeDialogController implements Controller {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     this.screen = screen;
     this.mouseXText = screen.findNiftyControl("mouseXText", Label.class);
     this.mouseYText = screen.findNiftyControl("mouseYText", Label.class);
@@ -85,7 +82,7 @@ public class EventConsumeDialogController implements Controller {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementByName("eventConsumeLeftPanel"), "Green Panel"));
     eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementByName("eventConsumeLeftButton"), "Test Left Button"));
     eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementByName("eventConsumeRightPanel"), "Red Panel"));

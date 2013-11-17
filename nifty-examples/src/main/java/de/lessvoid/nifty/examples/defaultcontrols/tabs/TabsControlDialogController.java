@@ -1,12 +1,11 @@
 package de.lessvoid.nifty.examples.defaultcontrols.tabs;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.TabGroup;
 import de.lessvoid.nifty.controls.checkbox.builder.CheckboxBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
@@ -16,7 +15,6 @@ import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The TabsControlDialogController registers a new control with Nifty that represents the whole Dialog. This gives us
@@ -34,8 +32,7 @@ public class TabsControlDialogController implements Controller {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     this.screen = screen;
     tabs = screen.findNiftyControl("tabs", TabGroup.class);
     tabs.addTab(new TabBuilder("tab_1", "Tab 1") {{
@@ -62,7 +59,7 @@ public class TabsControlDialogController implements Controller {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
   }
 
   @Override

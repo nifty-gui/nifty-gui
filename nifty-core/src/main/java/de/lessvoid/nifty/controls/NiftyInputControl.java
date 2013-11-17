@@ -122,14 +122,13 @@ public class NiftyInputControl {
           nifty,
           screen,
           element,
-          attributes.createProperties(),
-          attributes);
+          new Parameters(attributes.createProperties()));
     }
   }
 
   public void initControl(final Attributes attributes) {
     if (controller != null) {
-      controller.init(attributes.createProperties(), attributes);
+      controller.init(new Parameters(attributes.createProperties()));
     }
   }
 }

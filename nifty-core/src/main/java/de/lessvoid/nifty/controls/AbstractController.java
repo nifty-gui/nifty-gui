@@ -1,10 +1,7 @@
 package de.lessvoid.nifty.controls;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public abstract class AbstractController implements Controller, NiftyControl {
     private Element element;
@@ -15,7 +12,7 @@ public abstract class AbstractController implements Controller, NiftyControl {
     }
 
     @Override
-    public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+    public void init(final Parameters parameter) {
       this.bound = true;
     }
 

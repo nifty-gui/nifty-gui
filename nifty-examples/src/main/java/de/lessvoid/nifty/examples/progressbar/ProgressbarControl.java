@@ -1,16 +1,14 @@
 package de.lessvoid.nifty.examples.progressbar;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class ProgressbarControl implements Controller, NiftyExample {
   private Element progressBarElement;
@@ -20,14 +18,13 @@ public class ProgressbarControl implements Controller, NiftyExample {
       final Nifty nifty,
       final Screen screenParam,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     progressBarElement = element.findElementByName("#progress");
     progressTextElement = element.findElementByName("#progress-text");
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
   }
 
   public void onStartScreen() {

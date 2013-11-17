@@ -1,14 +1,16 @@
 package de.lessvoid.nifty.examples.defaultcontrols.treebox;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.*;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.TreeBox;
+import de.lessvoid.nifty.controls.TreeItem;
+import de.lessvoid.nifty.controls.TreeItemSelectionChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The TreeboxControlDialogController registers a new control with Nifty
@@ -26,8 +28,7 @@ public class TreeboxControlDialogController implements Controller {
             final Nifty nifty,
             final Screen screen,
             final Element element,
-            final Properties parameter,
-            final Attributes controlDefinitionAttributes) {
+            final Parameters parameter) {
         treebox = screen.findNiftyControl("tree-box", TreeBox.class);
         this.nifty = nifty;
         
@@ -35,7 +36,7 @@ public class TreeboxControlDialogController implements Controller {
     }
 
     @Override
-    public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+    public void init(final Parameters parameter) {
     }
 
     @Override

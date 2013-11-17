@@ -1,11 +1,10 @@
 package de.lessvoid.nifty.examples.defaultcontrols.sliderandscrollbar;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.Scrollbar;
 import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.controls.Slider;
@@ -17,7 +16,6 @@ import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The SliderAndScrollbarDialogController to show off the new Slider and Scrollbar Controls and a couple of more new Nifty 1.3 things.
@@ -36,8 +34,7 @@ public class SliderAndScrollbarDialogController implements Controller {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     this.screen = screen;
     this.color = screen.findElementByName("color");
     this.red = 0.f;
@@ -46,7 +43,7 @@ public class SliderAndScrollbarDialogController implements Controller {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
   }
 
   @Override

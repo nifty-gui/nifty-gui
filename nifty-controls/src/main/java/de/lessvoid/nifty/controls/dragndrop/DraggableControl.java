@@ -2,17 +2,21 @@ package de.lessvoid.nifty.controls.dragndrop;
 
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.*;
+import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Draggable;
+import de.lessvoid.nifty.controls.DraggableDragCanceledEvent;
+import de.lessvoid.nifty.controls.DraggableDragStartedEvent;
+import de.lessvoid.nifty.controls.Droppable;
+import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class DraggableControl extends AbstractController implements Draggable {
   private static final String POPUP = "draggablePopup";
@@ -45,20 +49,19 @@ public class DraggableControl extends AbstractController implements Draggable {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     super.bind(element);
     this.nifty = nifty;
     this.screen = screen;
     this.draggable = element;
 
-    String handleId = controlDefinitionAttributes.get("handle");
+    String handleId = parameter.get("handle");
     handle = draggable.findElementByName(handleId);
     if (handle == null) {
       handle = draggable;
     }
-    revert = controlDefinitionAttributes.getAsBoolean("revert", true);
-    dropEnabled = controlDefinitionAttributes.getAsBoolean("drop", true);
+    revert = parameter.getAsBoolean("revert", true);
+    dropEnabled = parameter.getAsBoolean("drop", true);
   }
 
   @Override

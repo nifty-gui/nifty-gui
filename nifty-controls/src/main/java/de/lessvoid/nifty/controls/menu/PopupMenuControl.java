@@ -1,13 +1,11 @@
 package de.lessvoid.nifty.controls.menu;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class PopupMenuControl<T> implements Controller {
   private Nifty nifty;
@@ -18,14 +16,13 @@ public class PopupMenuControl<T> implements Controller {
       final Nifty niftyParam,
       final Screen screenParam,
       final Element newElement,
-      final Properties properties,
-      final Attributes controlDefinitionAttributesParam) {
+      final Parameters properties) {
     nifty = niftyParam;
     element = newElement;
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
   }
 
   @Override

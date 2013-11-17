@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.controls.dropdown;
 
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +12,7 @@ import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -40,8 +40,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
       final Nifty niftyParam,
       final Screen screenParam,
       final Element newElement,
-      final Properties properties,
-      final Attributes controlDefinitionAttributesParam) {
+      final Parameters properties) {
     super.bind(newElement);
     nifty = niftyParam;
     screen = screenParam;

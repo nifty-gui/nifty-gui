@@ -1,13 +1,11 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class ListBoxItemController<T> extends AbstractController {
 
@@ -21,8 +19,7 @@ public class ListBoxItemController<T> extends AbstractController {
             final Nifty niftyParam,
             final Screen screenParam,
             final Element newElement,
-            final Properties properties,
-            final Attributes controlDefinitionAttributes) {
+            final Parameters properties) {
       bind(newElement);
         this.nifty = niftyParam;
         this.screen = screenParam;

@@ -1,13 +1,12 @@
 package de.lessvoid.nifty.examples.defaultcontrols.textfield;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
@@ -15,7 +14,6 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  * The ListBoxDialog to show off the new ListBox and a couple of more new Nifty 1.3 things.
@@ -35,8 +33,7 @@ public class TextFieldDialogController implements Controller {
       final Nifty nifty,
       final Screen screen,
       final Element element,
-      final Properties parameter,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters parameter) {
     this.mainTextField = screen.findNiftyControl("mainTextField", TextField.class);
     this.passwordCharCheckBox = screen.findNiftyControl("passwordCharCheckBox", CheckBox.class);
     this.passwordCharTextField = screen.findNiftyControl("passwordCharTextField", TextField.class);
@@ -47,7 +44,7 @@ public class TextFieldDialogController implements Controller {
   }
 
   @Override
-  public void init(final Properties parameter, final Attributes controlDefinitionAttributes) {
+  public void init(final Parameters parameter) {
     passwordCharTextField.setText("*");
     maxLengthTextField.setText("5");
     textChangedLabel.setText("---");

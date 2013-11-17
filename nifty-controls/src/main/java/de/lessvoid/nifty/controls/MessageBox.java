@@ -71,15 +71,14 @@ public class MessageBox extends AbstractController {
 	}
 
 	@Override
-	public void bind(Nifty nifty, Screen screen, Element element,
-			Properties parameter, Attributes controlDefinitionAttributes) {
+	public void bind(Nifty nifty, Screen screen, Element element, Parameters parameter) {
 		messageboxPopup = element;
 		this.nifty = nifty;
-		if (controlDefinitionAttributes.isSet("buttonCaptions")) {
-			setButtonCaptions(controlDefinitionAttributes.get("buttonCaptions")
+		if (parameter.isSet("buttonCaptions")) {
+			setButtonCaptions(parameter.get("buttonCaptions")
 					.split(","));
-		} else if (controlDefinitionAttributes.isSet("buttonCaption")) {
-			setButtonCaption(controlDefinitionAttributes.get("buttonCaption"));
+		} else if (parameter.isSet("buttonCaption")) {
+			setButtonCaption(parameter.get("buttonCaption"));
 		}
 		
 		if (messageType != MessageType.CUSTOM) {

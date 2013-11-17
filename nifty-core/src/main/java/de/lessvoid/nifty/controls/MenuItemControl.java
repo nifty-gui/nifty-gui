@@ -1,13 +1,10 @@
 package de.lessvoid.nifty.controls;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class MenuItemControl extends AbstractController {
   private Screen screen;
@@ -18,8 +15,7 @@ public class MenuItemControl extends AbstractController {
       final Nifty nifty,
       final Screen screenParam,
       final Element newElement,
-      final Properties properties,
-      final Attributes controlDefinitionAttributes) {
+      final Parameters properties) {
     element = newElement;
     screen = screenParam;
   }
