@@ -2,8 +2,10 @@ package de.lessvoid.nifty.controls.button;
 
 import java.util.Properties;
 
+import de.lessvoid.nifty.controls.ButtonReleasedEvent;
 import org.bushe.swing.event.EventTopicSubscriber;
 
+import de.lessvoid.nifty.elements.events.NiftyMousePrimaryReleaseEvent;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Button;
@@ -59,6 +61,15 @@ public class ButtonControl extends AbstractController implements Button {
       }
     };
     nifty.subscribe(screen, getElement().getId(), NiftyMousePrimaryClickedEvent.class, mouseClickedSubscriber);
+
+    EventTopicSubscriber<NiftyMousePrimaryReleaseEvent> mouseReleasedSubscriber = new EventTopicSubscriber<NiftyMousePrimaryReleaseEvent>() {
+      @Override
+      public void onEvent(final String topic, final NiftyMousePrimaryReleaseEvent data) {
+        nifty.publishEvent(topic, new ButtonReleasedEvent (ButtonControl.this));
+      }
+    };
+    nifty.subscribe(screen, getElement().getId(), NiftyMousePrimaryReleaseEvent.class, mouseReleasedSubscriber);
+
     super.init(parameter, controlDefinitionAttributes);
   }
 

@@ -10,6 +10,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.render.image.ImageMode;
 import de.lessvoid.nifty.render.image.ImageModeFactory;
 import de.lessvoid.nifty.render.image.ImageModeHelper;
 
@@ -25,16 +26,19 @@ public class ChangeImage implements EffectImpl {
   private NiftyImage activeImage;
   private NiftyImage inactiveImage;
 
+  @Override
   public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
     this.element = element;
     this.activeImage = loadImage("active", nifty, parameter);
     this.inactiveImage = loadImage("inactive", nifty, parameter);
   }
 
+  @Override
   public void execute(final Element element, final float normalizedTime, final Falloff falloff, final NiftyRenderEngine r) {
     changeElementImage(activeImage);
   }
 
+  @Override
   public void deactivate() {
     changeElementImage(inactiveImage);
     activeImage.dispose();
@@ -42,16 +46,50 @@ public class ChangeImage implements EffectImpl {
   }
 
   private NiftyImage loadImage(final String name, final Nifty nifty, final EffectProperties parameter) {
-    NiftyImage image = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), parameter.getProperty(name), false);
+    NiftyImage image = createImage(name, nifty, parameter);
+    setImageMode(image, name, parameter);
+    return image;
+  }
 
-    String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(parameter);
-    String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(parameter);
+  private NiftyImage createImage(final String name, final Nifty nifty, final EffectProperties parameter) {
+    return nifty.createImage(parameter.getProperty(name), false);
+  }
+
+  private void setImageMode(final NiftyImage image, final String name, final EffectProperties parameter) {
+    String areaProviderProperty = getAreaProviderProperty(name, parameter);
+    String renderStrategyProperty = getRenderStrategyProperty(name, parameter);
+
     if ((areaProviderProperty != null) || (renderStrategyProperty != null)) {
-    	image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
-    			renderStrategyProperty));
+      image.setImageMode(createImageMode(areaProviderProperty, renderStrategyProperty));
+    }
+  }
+
+  private String getAreaProviderProperty(final String name, final EffectProperties parameter) {
+    return ImageModeHelper.getAreaProviderProperty(getImageModeProperty(name, parameter));
+  }
+
+  private String getRenderStrategyProperty(final String name, final EffectProperties parameter) {
+    return ImageModeHelper.getRenderStrategyProperty(getImageModeProperty(name, parameter));
+  }
+
+  private String getImageModeProperty(final String name, final EffectProperties parameter) {
+    String imageModeProperty = null;
+
+    if ("active".equals(name)) {
+      imageModeProperty = parameter.getProperty("imageModeActive", null);
+    } else if ("inactive".equals(name)) {
+      imageModeProperty = parameter.getProperty("imageModeInactive", null);
     }
 
-    return image;
+    if (imageModeProperty == null) {
+      imageModeProperty = parameter.getProperty("imageMode", null);
+    }
+
+    return imageModeProperty;
+  }
+
+  private ImageMode createImageMode (final String areaProviderProperty, final String renderStrategyProperty) {
+    return ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty, renderStrategyProperty);
   }
 
   private void changeElementImage(final NiftyImage image) {
