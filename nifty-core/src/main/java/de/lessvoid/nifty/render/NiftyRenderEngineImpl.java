@@ -448,10 +448,15 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param x1 x1
    * @param y1 y1
    */
-  public void enableClip(final int x0, final int y0, final int x1, final int y1) {
+  public void enableClip(final int cx0, final int cy0, final int cx1, final int cy1) {
     // Issue #138:
     // In case there already is a clipping area we change it to the intersection of the existing with the requested new
     // one. This way you can further restrict a clipping rectangle but can't override (e.g. make it bigger).
+    int x0 = cx0 + getX();
+    int y0 = cy0 + getY();
+    int x1 = cx1 + getX();
+    int y1 = cy1 + getY();
+
     if (clipEnabled) {
       // if the new clip rectangle is completely outside the current clipping area we don't modify the existing one
       if (isOutsideClippingRectangle(x0, y0, x1, y1)) {
@@ -460,7 +465,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
       // if the new clip rectangle is completely inside the current clipping area we can use it as-is directly
       if (isInsideClippingRectangle(x0, y0, x1, y1)) {
-        updateClip(true, x0 + getX(), y0 + getY(), x1 + getX(), y1 + getY());
+        updateClip(true, x0, y0, x1, y1);
         return;
       }
 
@@ -470,10 +475,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       int newX1 = Math.min(x1, clip.x1);
       int newY1 = Math.min(y1, clip.y1);
 
-      updateClip(true, newX0 + getX(), newY0 + getY(), newX1 + getX(), newY1 + getY());
+      updateClip(true, newX0, newY0, newX1, newY1);
       return;
     }
-    updateClip(true, x0 + getX(), y0 + getY(), x1 + getX(), y1 + getY());
+    updateClip(true, x0, y0, x1, y1);
   }
 
   /**
