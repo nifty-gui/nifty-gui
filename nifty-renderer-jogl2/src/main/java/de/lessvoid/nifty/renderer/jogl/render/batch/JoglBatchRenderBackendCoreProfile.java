@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLContext;
 
 import com.jogamp.common.nio.Buffers;
@@ -239,11 +240,15 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     niftyShader.activate();
     bind();
 
+    final GL gl = GLContext.getCurrentGL();
+    gl.glEnable(GL.GL_BLEND);
+
     for (int i=0; i<batches.size(); i++) {
       Batch batch = batches.get(i);
       batch.render();
     }
 
+    gl.glDisable(GL2.GL_BLEND);
     return batches.size();
   }
 

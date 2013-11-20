@@ -244,6 +244,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public int render() {
     bind();
+    glEnable(GL11.GL_BLEND);
     glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(PRIMITIVE_RESTART_INDEX);
 
@@ -253,6 +254,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     }
 
     glDisable(GL_PRIMITIVE_RESTART);
+    glDisable(GL11.GL_BLEND);
 
     return batches.size();
   }
