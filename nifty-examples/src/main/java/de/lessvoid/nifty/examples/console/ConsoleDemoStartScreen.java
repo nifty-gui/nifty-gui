@@ -64,7 +64,7 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
   }
 
   private void openConsole() {
-    nifty.showPopup(screen, consolePopup.getId(), consolePopup.findElementByName("console#textInput"));
+    nifty.showPopup(screen, consolePopup.getId(), consolePopup.findElementById("console#textInput"));
     screen.processAddAndRemoveLayerElements();
 
     if (firstConsoleShow) {

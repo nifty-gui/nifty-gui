@@ -59,7 +59,7 @@ public class DropDownPopup<T> extends AbstractController {
 
   @SuppressWarnings({"deprecation", "rawtypes"})
   private void linkPopupToDropDownPosition(final DropDownControl<T> dropDownControl) {
-    Element panel = getElement().findElementByName("#panel");
+    Element panel = getElement().findElementById("#panel");
     panel.setConstraintX(new SizeValue(dropDownControl.getElement().getX() + "px"));
     panel.setConstraintWidth(new SizeValue(dropDownControl.getWidth() + "px"));
     getElement().layoutElements();
@@ -81,13 +81,13 @@ public class DropDownPopup<T> extends AbstractController {
 
   @SuppressWarnings({"deprecation", "rawtypes"})
   private void updateMoveEffect(final ListBoxControl listBox, final int direction) {
-    List<Effect> moveEffects = getElement().findElementByName("#panel").getEffects(EffectEventId.onStartScreen,
+    List<Effect> moveEffects = getElement().findElementById("#panel").getEffects(EffectEventId.onStartScreen,
         Move.class);
     if ((moveEffects != null) && !moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));
       moveEffects.get(0).getParameters().setProperty("mode", "fromOffset");
     }
-    moveEffects = getElement().findElementByName("#panel").getEffects(EffectEventId.onEndScreen, Move.class);
+    moveEffects = getElement().findElementById("#panel").getEffects(EffectEventId.onEndScreen, Move.class);
     if ((moveEffects != null) && !moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));
       moveEffects.get(0).getParameters().setProperty("mode", "toOffset");

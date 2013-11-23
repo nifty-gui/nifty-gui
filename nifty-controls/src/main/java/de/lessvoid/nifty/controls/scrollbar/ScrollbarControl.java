@@ -39,8 +39,8 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     super.bind(element);
 
     this.nifty = nifty;
-    this.elementBackground = element.findElementByName("#background");
-    this.elementPosition = element.findElementByName("#position");
+    this.elementBackground = element.findElementById("#background");
+    this.elementPosition = element.findElementById("#position");
     this.nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
 
     if ("verticalScrollbar".equals(parameter.getProperty("name"))) {

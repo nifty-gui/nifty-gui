@@ -35,7 +35,7 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
     screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
 
     consoleElement = screen.findElementByName("console");
-    consoleElementFocus = consoleElement.findElementByName("#textInput");
+    consoleElementFocus = consoleElement.findElementById("#textInput");
     consoleLayer = screen.findElementByName("consoleLayer");
   }
 

@@ -235,10 +235,10 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     niftyGui = nifty;
     parentScreen = screen;
 
-    tabButtonPanel = element.findElementByName("#tab-button-panel"); //NON-NLS
-    contentPanel = element.findElementByName("#tab-content-panel"); //NON-NLS
+    tabButtonPanel = element.findElementById("#tab-button-panel"); //NON-NLS
+    contentPanel = element.findElementById("#tab-content-panel"); //NON-NLS
 
-    final Element buttonElement = tabButtonPanel.findElementByName("#button-template"); //NON-NLS
+    final Element buttonElement = tabButtonPanel.findElementById("#button-template"); //NON-NLS
     if (buttonElement == null) {
       throw new IllegalStateException("Required button template missing.");
     }

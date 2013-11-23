@@ -82,7 +82,7 @@ public class CheckboxControl extends AbstractController
 
   @Override
   public void update(final boolean checked) {
-    final Element selectImage = getElement().findElementByName("#select");
+    final Element selectImage = getElement().findElementById("#select");
     if (checked) {
       selectImage.setVisible(true);
       selectImage.stopEffect(EffectEventId.onCustom);
@@ -108,7 +108,7 @@ public class CheckboxControl extends AbstractController
 
   @Override
   public void onEvent(final String topic, final ElementShowEvent data) {
-    final Element selectImage = getElement().findElementByName("#select");
+    final Element selectImage = getElement().findElementById("#select");
     selectImage.setVisible(checkBoxImpl.isChecked());
   }
 

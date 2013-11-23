@@ -587,7 +587,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @deprecated Use {@link #getChildren()}
    */
   public List<Element> getElements() {
-    return Collections.unmodifiableList(children);
+    return getChildren();
   }
 
   public List<Element> getChildren() {

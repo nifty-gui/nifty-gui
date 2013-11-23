@@ -56,12 +56,12 @@ public class ImageSelectControl extends AbstractController implements de.lessvoi
         currentImageIndex = 0;
         imageWidth = new SizeValue(properties.getProperty("imageWidth", "0px")).getValueAsInt(1.0f);
         nextPrevHelper = new NextPrevHelper(getElement(), screenParam.getFocusHandler());
-        backButtonElement = getElement().findElementByName("#back-button");
-        forwardButtonElement = getElement().findElementByName("#forward-button");
-        imageElement = getElement().findElementByName("#image");
-        imageElement2 = getElement().findElementByName("#image-2");
-        backElement = getElement().findElementByName("#back");
-        forwardElement = getElement().findElementByName("#forward");
+        backButtonElement = getElement().findElementById("#back-button");
+        forwardButtonElement = getElement().findElementById("#forward-button");
+        imageElement = getElement().findElementById("#image");
+        imageElement2 = getElement().findElementById("#image-2");
+        backElement = getElement().findElementById("#back");
+        forwardElement = getElement().findElementById("#forward");
 
         List<Effect> moveEffects = imageElement.getEffects(EffectEventId.onCustom, Move.class);
         for (Effect e : moveEffects) {

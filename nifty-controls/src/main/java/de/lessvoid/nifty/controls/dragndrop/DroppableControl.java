@@ -31,7 +31,7 @@ public class DroppableControl extends AbstractController implements Droppable {
       final Parameters parameter) {
     super.bind(element);
     this.nifty = nifty;
-    droppableContent = element.findElementByName("#droppableContent");
+    droppableContent = element.findElementById("#droppableContent");
   }
 
   @Override

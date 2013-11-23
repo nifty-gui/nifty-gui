@@ -156,7 +156,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
   }
 
   private void modifyMoveEffect(final EffectEventId effectEventId, final Element element, final String direction) {
-    List<Effect> moveEffects = element.findElementByName("#effectPanel").getEffects(effectEventId, Move.class);
+    List<Effect> moveEffects = element.findElementById("#effectPanel").getEffects(effectEventId, Move.class);
     if (!moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().put("direction", direction);
     }

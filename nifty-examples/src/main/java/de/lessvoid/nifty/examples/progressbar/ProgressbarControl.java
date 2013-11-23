@@ -19,8 +19,8 @@ public class ProgressbarControl implements Controller, NiftyExample {
       final Screen screenParam,
       final Element element,
       final Parameters parameter) {
-    progressBarElement = element.findElementByName("#progress");
-    progressTextElement = element.findElementByName("#progress-text");
+    progressBarElement = element.findElementById("#progress");
+    progressTextElement = element.findElementById("#progress-text");
   }
 
   @Override

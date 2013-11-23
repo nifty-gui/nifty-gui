@@ -44,7 +44,7 @@ public class ButtonControl extends AbstractController implements Button {
     super.bind(newElement);
     nifty = niftyParam;
     screen = screenParam;
-    buttonTextElement = getElement().findElementByName("#text");
+    buttonTextElement = getElement().findElementById("#text");
     buttonTextRenderer = buttonTextElement.getRenderer(TextRenderer.class);
     focusHandler = screen.getFocusHandler();
   }

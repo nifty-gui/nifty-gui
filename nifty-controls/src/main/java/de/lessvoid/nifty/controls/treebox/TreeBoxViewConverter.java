@@ -10,7 +10,6 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TreeItem;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -24,12 +23,12 @@ public class TreeBoxViewConverter<T> implements ListBox.ListBoxViewConverter<Tre
 
   @Override
   public void display(final Element element, final TreeItem<T> item) {
-    final Element spacer = element.findElementByName("#tree-item-spacer");
+    final Element spacer = element.findElementById("#tree-item-spacer");
     spacer.setConstraintWidth(SizeValue.px(item.getIndent()));
     spacer.setConstraintHeight(SizeValue.px(1));
     spacer.setVisible(item.getIndent() > 0);
 
-    final Element icon = element.findElementByName("#tree-item-icon");
+    final Element icon = element.findElementById("#tree-item-icon");
     if (item.isLeaf()) {
       icon.setStyle(element.getStyle() + "#leaf");
     } else if (item.isExpanded()) {
@@ -38,7 +37,7 @@ public class TreeBoxViewConverter<T> implements ListBox.ListBoxViewConverter<Tre
       icon.setStyle(element.getStyle() + "#closed");
     }
 
-    final Element text = element.findElementByName("#tree-item-content");
+    final Element text = element.findElementById("#tree-item-content");
     final Label displayLabel = text.findNiftyControl("#label", Label.class);
     if (displayLabel == null) {
       final LabelBuilder builder =  new LabelBuilder(text.getId() + "#label");
@@ -58,8 +57,8 @@ public class TreeBoxViewConverter<T> implements ListBox.ListBoxViewConverter<Tre
     @Override
     public int getWidth(final Element element, final TreeItem<T> item) {
       int width = item.getIndent();
-      final Element icon = element.findElementByName("#tree-item-icon");
-      final Element text = element.findElementByName("#tree-item-content");
+      final Element icon = element.findElementById("#tree-item-icon");
+      final Element text = element.findElementById("#tree-item-content");
       final Label displayLabel = text.findNiftyControl("#label", Label.class);
       width += icon.getWidth();
       if (displayLabel != null) {

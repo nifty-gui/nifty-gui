@@ -114,7 +114,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
     textColorEffect.setAttribute("color", "#a22f");
 
     chapterSelectPopup = nifty.createPopup("chapterSelectPopup");
-    Element chapterSelectElement = chapterSelectPopup.findElementByName("#chapterSelect");
+    Element chapterSelectElement = chapterSelectPopup.findElementById("#chapterSelect");
     int idx = 0;
     for (String label : chapterCaption) {
       CreateLabelControl createLabel = new CreateLabelControl(label);

@@ -71,9 +71,9 @@ public class TextFieldControl extends AbstractController implements TextField, T
       textField = new TextFieldLogic(initText, nifty.getClipboard(), this);
     }
 
-    textElement = getElement().findElementByName("#text"); //NON-NLS
-    fieldElement = getElement().findElementByName("#field"); //NON-NLS
-    cursorElement = getElement().findElementByName("#cursor"); //NON-NLS
+    textElement = getElement().findElementById("#text"); //NON-NLS
+    fieldElement = getElement().findElementById("#field"); //NON-NLS
+    cursorElement = getElement().findElementById("#cursor"); //NON-NLS
 
     if (properties.containsKey("passwordChar")) { //NON-NLS
       textField.setFormat(new FormatPassword(properties.getProperty("passwordChar").charAt(0))); //NON-NLS

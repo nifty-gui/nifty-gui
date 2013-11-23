@@ -104,15 +104,15 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     parameter = parameterParam;
     viewConverter = createViewConverter(parameter.getProperty("viewConverterClass", ListBoxViewConverterSimple.class.getName()));
     verticalScrollbar = getScrollbarMode("vertical");
-    verticalScrollbarTemplate = getElement().findElementByName("#vertical-scrollbar");
+    verticalScrollbarTemplate = getElement().findElementById("#vertical-scrollbar");
     horizontalScrollbar = getScrollbarMode("horizontal");
-    horizontalScrollbarTemplate = getElement().findElementByName("#horizontal-scrollbar-parent");
-    bottomRightTemplate = getElement().findElementByName("#bottom-right");
+    horizontalScrollbarTemplate = getElement().findElementById("#horizontal-scrollbar-parent");
+    bottomRightTemplate = getElement().findElementById("#bottom-right");
     displayItems = new Integer(parameter.getProperty("displayItems", "2"));
-    scrollElement = getElement().findElementByName("#scrollpanel");
+    scrollElement = getElement().findElementById("#scrollpanel");
     applyWidthConstraintsLastWidth = -1;
 
-    childRootElement = getElement().findElementByName("#child-root");
+    childRootElement = getElement().findElementById("#child-root");
     if (!childRootElement.getChildren().isEmpty()) {
       final Element templateElement = childRootElement.getChildren().get(0);
       templateElement.getParent().layoutElements();
@@ -121,7 +121,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
       nifty.removeElement(screen, templateElement);
     }
     labelElements = new Element[displayItems];
-    listBoxPanelElement = getElement().findElementByName("#panel");
+    listBoxPanelElement = getElement().findElementById("#panel");
 
     initSelectionMode(listBoxImpl, parameter.getProperty("selectionMode", "Single"), parameter.getProperty("forceSelection", "false"));
     connectListBoxAndListBoxPanel();
@@ -166,28 +166,28 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void subscribeVerticalScrollbar() {
-    Element scrollbar = getElement().findElementByName("#vertical-scrollbar");
+    Element scrollbar = getElement().findElementById("#vertical-scrollbar");
     if (scrollbar != null) {
       nifty.subscribe(screen, scrollbar.getId(), ScrollbarChangedEvent.class, verticalScrollbarSubscriber);
     }
   }
 
   private void subscribeHorizontalScrollbar() {
-    Element scrollbar = getElement().findElementByName("#horizontal-scrollbar");
+    Element scrollbar = getElement().findElementById("#horizontal-scrollbar");
     if (scrollbar != null) {
       nifty.subscribe(screen, scrollbar.getId(), ScrollbarChangedEvent.class, horizontalScrollbarSubscriber);
     }
   }
 
   private void unsubscribeVerticalScrollbar() {
-    Element scrollbar = getElement().findElementByName("#vertical-scrollbar");
+    Element scrollbar = getElement().findElementById("#vertical-scrollbar");
     if (scrollbar != null) {
       nifty.unsubscribe(scrollbar.getId(), verticalScrollbarSubscriber);
     }
   }
 
   private void unsubscribeHorizontalScrollbar() {
-    Element scrollbar = getElement().findElementByName("#horizontal-scrollbar");
+    Element scrollbar = getElement().findElementById("#horizontal-scrollbar");
     if (scrollbar != null) {
       nifty.unsubscribe(scrollbar.getId(), horizontalScrollbarSubscriber);
     }
@@ -244,7 +244,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   @Override
   public void updateTotalCount(final int newCount) {
     if (verticalScrollbar == ScrollbarMode.optional) {
-      Element vertical = getElement().findElementByName("#vertical-scrollbar");
+      Element vertical = getElement().findElementById("#vertical-scrollbar");
       if (newCount > displayItems) {
         if (vertical == null) {
           ElementType templateType = verticalScrollbarTemplate.getElementType().copy();
@@ -289,7 +289,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   public void updateTotalWidth(final int newWidth) {
     this.lastMaxWidth = newWidth;
     if (horizontalScrollbar == ScrollbarMode.optional) {
-      Element horizontal = getElement().findElementByName("#horizontal-scrollbar-parent");
+      Element horizontal = getElement().findElementById("#horizontal-scrollbar-parent");
       if (newWidth > listBoxPanelElement.getWidth()) {
         if (horizontal == null) {
           final ElementType type = horizontalScrollbarTemplate.getElementType().copy();
@@ -524,13 +524,13 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   private void initializeScrollPanel(final Screen screen) {
     if (horizontalScrollbar == ScrollbarMode.off || horizontalScrollbar == ScrollbarMode.optional) {
-      Element horizontal = getElement().findElementByName("#horizontal-scrollbar-parent");
+      Element horizontal = getElement().findElementById("#horizontal-scrollbar-parent");
       if (horizontal != null) {
         nifty.removeElement(screen, horizontal);
       }
     }
     if (verticalScrollbar == ScrollbarMode.off || verticalScrollbar == ScrollbarMode.optional) {
-      Element vertical = getElement().findElementByName("#vertical-scrollbar");
+      Element vertical = getElement().findElementById("#vertical-scrollbar");
       if (vertical != null) {
         nifty.removeElement(screen, vertical);
       }
@@ -546,9 +546,9 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   private void updateBottomRightElement() {
-    Element horizontal = getElement().findElementByName("#horizontal-scrollbar-parent");
-    Element vertical = getElement().findElementByName("#vertical-scrollbar");
-    Element bottomRight = getElement().findElementByName("#bottom-right");
+    Element horizontal = getElement().findElementById("#horizontal-scrollbar-parent");
+    Element vertical = getElement().findElementById("#vertical-scrollbar");
+    Element bottomRight = getElement().findElementById("#bottom-right");
     if (horizontal != null) {
       if (vertical == null) {
         if (bottomRight != null) {
@@ -599,7 +599,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
       String oldId = templateType.getAttributes().get("id");
       if (oldId == null) {
-        oldId = getElement().findElementByName("#child-root").getId();
+        oldId = getElement().findElementById("#child-root").getId();
       }
       final String newId = oldId + "#" + NiftyIdCreator.generate();
 
@@ -637,7 +637,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
 
   private int findHorizontalScrollbarHeight() {
     int horizontalScrollbarElementHeight = 0;
-    Element horizontalScrollbarElement = getElement().findElementByName("#horizontal-scrollbar");
+    Element horizontalScrollbarElement = getElement().findElementById("#horizontal-scrollbar");
     if (horizontalScrollbarElement != null) {
       horizontalScrollbarElementHeight = horizontalScrollbarElement.getHeight();
     }
