@@ -64,15 +64,15 @@ public class WindowControl extends AbstractController implements Window {
   }
 
   private Element getTitleElement() {
-    return getElement().findElementByName("#window-title");
+    return getElement().findElementById("#window-title");
   }
 
   private Element getCloseButton() {
-    return getElement().findElementByName("#window-close-button");
+    return getElement().findElementById("#window-close-button");
   }
 
   public Element getContent() {
-    return getElement().findElementByName("#window-content");
+    return getElement().findElementById("#window-content");
   }
 
   // Window implementation

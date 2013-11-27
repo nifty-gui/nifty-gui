@@ -212,14 +212,14 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
   }
 
   private void subscribeVerticalScrollbar() {
-    Element scrollbar = getElement().findElementByName("#nifty-internal-vertical-scrollbar");
+    Element scrollbar = getElement().findElementById("#nifty-internal-vertical-scrollbar");
     if (scrollbar != null) {
       nifty.subscribe(screen, scrollbar.getId(), ScrollbarChangedEvent.class, verticalScrollbarSubscriber);
     }
   }
 
   private void subscribeHorizontalScrollbar() {
-    Element scrollbar = getElement().findElementByName("#nifty-internal-horizontal-scrollbar");
+    Element scrollbar = getElement().findElementById("#nifty-internal-horizontal-scrollbar");
     if (scrollbar != null) {
       nifty.subscribe(screen, scrollbar.getId(), ScrollbarChangedEvent.class, horizontalScrollbarSubscriber);
     }
@@ -227,13 +227,13 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
 
   private void initializeScrollPanel() {
     if (!verticalScrollbar) {
-      Element vertical = getElement().findElementByName("#nifty-internal-vertical-scrollbar");
+      Element vertical = getElement().findElementById("#nifty-internal-vertical-scrollbar");
       if (vertical != null) {
         nifty.removeElement(screen, vertical);
       }
     }
     if (!horizontalScrollbar) {
-      Element horizontal = getElement().findElementByName("#nifty-internal-horizonal-panel");
+      Element horizontal = getElement().findElementById("#nifty-internal-horizonal-panel");
       if (horizontal != null) {
         nifty.removeElement(screen, horizontal);
       }

@@ -56,7 +56,7 @@ public class DraggableControl extends AbstractController implements Draggable {
     this.draggable = element;
 
     String handleId = parameter.get("handle");
-    handle = draggable.findElementByName(handleId);
+    handle = draggable.findElementById(handleId);
     if (handle == null) {
       handle = draggable;
     }

@@ -138,10 +138,10 @@ public class MessageBox extends AbstractController {
 	}
 
 	private void setupMessageBox() {
-		final Element imgIcon = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-icon");
+		final Element imgIcon = messageboxPopup.findElementById("#messagebox").findElementById("#message-icon");
 		final ImageRenderer iconRenderer = imgIcon.getRenderer(ImageRenderer.class);
 		iconRenderer.setImage(icon);
-		final Element text = messageboxPopup.findElementByName("#messagebox").findElementByName("#message-text");
+		final Element text = messageboxPopup.findElementById("#messagebox").findElementById("#message-text");
 		final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
 		textRenderer.setText(message);
 		int i = 0;
@@ -149,19 +149,19 @@ public class MessageBox extends AbstractController {
 			i++;
 			createButton(buttonCaption, buttonCaption, "button_" + i);
 		}
-		messageboxPopup.findElementByName("#messagebox").layoutElements();
+		messageboxPopup.findElementById("#messagebox").layoutElements();
 		nifty.getCurrentScreen().layoutLayers();
 	}
 	
 	private void closeMessageBox(String command) {
 		clearButtons();
-//		messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
+//		messageboxPopup.findElementById("#messagebox").findElementById("#buttons");
 		nifty.getCurrentScreen().layoutLayers();
 	}
 	
 	private void createButton(final String buttonCaption, final String command, final String buttonId) {
-        Element buttonPanel = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons");
-        if (buttonPanel.findElementByName("#" + buttonId) == null) {
+        Element buttonPanel = messageboxPopup.findElementById("#messagebox").findElementById("#buttons");
+        if (buttonPanel.findElementById("#" + buttonId) == null) {
             new ButtonBuilder("#" + buttonId) {{
                     style("nifty-button");
                     childLayout(ChildLayoutType.Horizontal);
@@ -180,7 +180,7 @@ public class MessageBox extends AbstractController {
     }
 	
 	private void clearButtons() {
-		List<Element> buttons = messageboxPopup.findElementByName("#messagebox").findElementByName("#buttons").getChildren();
+		List<Element> buttons = messageboxPopup.findElementById("#messagebox").findElementById("#buttons").getChildren();
 		for (Element button : buttons) {
 			button.markForRemoval();
 		}

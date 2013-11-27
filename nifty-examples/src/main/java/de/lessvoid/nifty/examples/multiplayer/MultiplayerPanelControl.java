@@ -46,19 +46,19 @@ public class MultiplayerPanelControl implements Controller {
   }
 
   public void setDifficulty(final String mode) {
-    element.findElementByName("#easy").setStyle("unselected");
-    element.findElementByName("#medium").setStyle("unselected");
-    element.findElementByName("#hard").setStyle("unselected");
-    element.findElementByName("#expert").setStyle("unselected");
+    element.findElementById("#easy").setStyle("unselected");
+    element.findElementById("#medium").setStyle("unselected");
+    element.findElementById("#hard").setStyle("unselected");
+    element.findElementById("#expert").setStyle("unselected");
 
     if ("easy".equals(mode)) {
-      element.findElementByName("#easy").setStyle("selected");
+      element.findElementById("#easy").setStyle("selected");
     } else if ("medium".equals(mode)) {
-      element.findElementByName("#medium").setStyle("selected");
+      element.findElementById("#medium").setStyle("selected");
     } else if ("hard".equals(mode)) {
-      element.findElementByName("#hard").setStyle("selected");
+      element.findElementById("#hard").setStyle("selected");
     } else if ("expert".equals(mode)) {
-      element.findElementByName("#expert").setStyle("selected");
+      element.findElementById("#expert").setStyle("selected");
     }
   }
 }

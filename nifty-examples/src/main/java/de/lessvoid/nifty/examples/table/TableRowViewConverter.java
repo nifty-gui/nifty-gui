@@ -18,7 +18,7 @@ class TableRowViewConverter implements ListBox.ListBoxViewConverter<TableRow> {
         color = new Color("#00f5");
       }
       // get the text element for the row
-      Element textElement = listBoxItem.findElementByName("#col-" + String.valueOf(i));
+      Element textElement = listBoxItem.findElementById("#col-" + String.valueOf(i));
       textElement.getRenderer(TextRenderer.class).setText(item.data[i]);
       listBoxItem.getRenderer(PanelRenderer.class).setBackgroundColor(color);
     }
@@ -28,7 +28,7 @@ class TableRowViewConverter implements ListBox.ListBoxViewConverter<TableRow> {
   public int getWidth(final Element listBoxItem, final TableRow item) {
     int width = 0;
     for (int i=0; i<5; i++) {
-      TextRenderer renderer = listBoxItem.findElementByName("#col-" + String.valueOf(i)).getRenderer(TextRenderer.class);
+      TextRenderer renderer = listBoxItem.findElementById("#col-" + String.valueOf(i)).getRenderer(TextRenderer.class);
       width += renderer.getFont().getWidth(item.data[i]);
     }
     return width;

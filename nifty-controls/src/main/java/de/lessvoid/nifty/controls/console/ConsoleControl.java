@@ -57,7 +57,7 @@ public class ConsoleControl extends AbstractController implements Console, Event
 
   @Override
   public void onStartScreen() {
-    element.findElementByName("#textInput").setFocus();
+    element.findElementById("#textInput").setFocus();
   }
 
   @Override

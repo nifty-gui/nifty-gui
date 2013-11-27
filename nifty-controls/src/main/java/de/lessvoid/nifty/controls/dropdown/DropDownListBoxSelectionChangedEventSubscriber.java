@@ -36,7 +36,7 @@ public class DropDownListBoxSelectionChangedEventSubscriber implements EventTopi
     final Object selectedItem = getSelectedItem(data.getSelection());
 
     ListBoxControl listBoxControl = (ListBoxControl) listBox;
-    listBoxControl.getViewConverter().display(dropDown.getElement().findElementByName("#text"), selectedItem);
+    listBoxControl.getViewConverter().display(dropDown.getElement().findElementById("#text"), selectedItem);
 
     final int selectedItemIndex = getSelectedIndex(data);
     if (screen.isActivePopup(popupInstance)) {

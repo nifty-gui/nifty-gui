@@ -80,7 +80,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
     updateEnabled();
 
     ListBoxControl<T> listBoxControl = (ListBoxControl<T>) listBox;
-    listBoxControl.getViewConverter().display(getElement().findElementByName("#text"), getSelection());
+    listBoxControl.getViewConverter().display(getElement().findElementById("#text"), getSelection());
 
     nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,
         new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, this, popup));

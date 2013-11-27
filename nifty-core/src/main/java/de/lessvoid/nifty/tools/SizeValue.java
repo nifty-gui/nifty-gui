@@ -149,7 +149,7 @@ public class SizeValue {
 
   /**
    * Get the value as int.
-   * @param range range the size that percent values are calculated from.
+   * @param range the size that percent values are calculated from.
    * @return the resulting value rounded to the nearest integer.
    */
   public int getValueAsInt(final float range) {

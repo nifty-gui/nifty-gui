@@ -25,9 +25,9 @@ public class ChatBoxViewConverter implements ListBoxViewConverter<ChatEntryModel
      */
     @Override
     public final void display(final Element listBoxItem, final ChatEntryModelClass item) {
-        final Element text = listBoxItem.findElementByName(CHAT_LINE_TEXT);
+        final Element text = listBoxItem.findElementById(CHAT_LINE_TEXT);
         final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
-        final Element icon = listBoxItem.findElementByName(CHAT_LINE_ICON);
+        final Element icon = listBoxItem.findElementById(CHAT_LINE_ICON);
         final ImageRenderer iconRenderer = icon.getRenderer(ImageRenderer.class);
         if (item != null) {
             textRenderer.setText(item.toString());
@@ -48,7 +48,7 @@ public class ChatBoxViewConverter implements ListBoxViewConverter<ChatEntryModel
      */
     @Override
     public final int getWidth(final Element listBoxItem, final ChatEntryModelClass item) {
-        final Element text = listBoxItem.findElementByName(CHAT_LINE_TEXT);
+        final Element text = listBoxItem.findElementById(CHAT_LINE_TEXT);
         final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
         return ((textRenderer.getFont() == null) ? 0 : textRenderer.getFont().getWidth(item.getLabel()))
                 + ((item.getIcon() == null) ? 0 : item.getIcon().getWidth());
