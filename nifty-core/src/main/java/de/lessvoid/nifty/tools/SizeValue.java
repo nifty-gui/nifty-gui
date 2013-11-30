@@ -10,6 +10,12 @@ package de.lessvoid.nifty.tools;
  */
 public class SizeValue {
 
+  
+  /** The default value. This is used if the attribute is unset or null.
+   * It can also be used to track the pixel value that the default resolves to.
+   */
+  public static final String DEFAULT = "d";
+  
   /**
    * Add a PIXEL to some size value to indicate a pixel value.
    * Example: "100px" or "640px"
@@ -45,6 +51,32 @@ public class SizeValue {
   public static final String WILDCARD = "*";
 
   /**
+   * The SUM_SUFFIX value will not really be handled by the SizeValue class.
+   * When set, this size value will be the sum of the sizes of the content/children 
+   * of the element it is used on.
+   * Only children with absolute size values will be considered, or children
+   * that also have a sum/max size value.
+   * 
+   * Builders or XML should use the value "s" or "sum". A pixel value
+   * can also be given in the form of "100s", but this is for internal use
+   * (it represents the calculated width).
+   */
+  public static final String SUM = "s";
+  
+  /**
+   * The MAX_SUFFIX value will not really be handled by the SizeValue class.
+   * When set, this size value will be the highest of the sizes of the content/children 
+   * of the element it is used on.
+   * Only children with absolute size values will be considered, or children
+   * that also have a sum/max size value.
+   * 
+   * Builders or XML should use the value "m" or "max". A pixel value
+   * can also be given in the form of "100m", but this is for internal use
+   * (it represents the calculated width).
+   */
+  public static final String MAX = "m";
+  
+  /**
    * Max percent constant.
    */
   public static final float MAX_PERCENT = 100.0f;
@@ -52,18 +84,41 @@ public class SizeValue {
   /**
    * The current value that has been set.
    */
-  private String value;
+  private final String value;
 
   /**
    * percent value.
    */
-  private float percentValue;
+  private final float percentValue;
 
   /**
    * pixel value.
    */
-  private float pixelValue;
-
+  private final float pixelValue;
+  
+  private boolean isIndependent;
+  private boolean hasValue;
+  private boolean isPixel;
+  private boolean isPercent;
+  
+  /** Matches DEFAULT.
+   */
+  private boolean hasDefault;
+  
+  /** Matches WILDCARD.
+   */
+  private boolean hasWildcard;
+  
+  /**
+   * value has SUM_SUFFIX attached.
+   */
+  private boolean hasSum;
+  
+  /**
+   * value has MAX_SUFFIX attached.
+   */
+  private boolean hasMax;
+  
   /**
    * value has WIDTH_SUFFIX attached.
    */
@@ -78,24 +133,79 @@ public class SizeValue {
    * Create a new instance using the given value.
    * @param valueParam the String value
    */
-  public SizeValue(final String valueParam) {
-    if (valueParam != null) {
-      if (valueParam.endsWith(PERCENT + WIDTH_SUFFIX)) {
-        hasWidthSuffix = true;
-        this.value = valueParam.substring(0, valueParam.length() - 1);
-      } else if (valueParam.endsWith(PERCENT + HEIGHT_SUFFIX)) {
-        hasHeightSuffix = true;
-        this.value = valueParam.substring(0, valueParam.length() - 1);
-      } else {
-        this.value = valueParam;
-      }
-    } else {
-      this.value = valueParam;
+  public SizeValue(String valueParam) {
+    
+    isIndependent = true;
+    hasValue = false;
+    isPixel = false;
+    isPercent = false;
+    
+    if (valueParam == null || valueParam.length() == 0 || valueParam.equals("default")) { // alias for "d"
+      valueParam = DEFAULT;
+      hasDefault = true;
+      isPixel = true;
+    } else if (valueParam.equals("sum")) { // alias for "s"
+      valueParam = SUM;
+      hasSum = true;
+      isPixel = true;
+    } else if (valueParam.equals("max")) { // alias for "m"
+      valueParam = MAX;
+      hasMax = true;
+      isPixel = true;
+    } else if (valueParam.endsWith(WILDCARD)) {
+      hasWildcard = true;
+      isIndependent = false;
+    } else if (valueParam.endsWith(DEFAULT)) {
+      hasDefault = true;
+      isPixel = true;
+      hasValue = valueParam.length() > DEFAULT.length();
+    } else if (valueParam.endsWith(SUM)) {
+      hasSum = true;
+      isPixel = true;
+      hasValue = valueParam.length() > SUM.length();
+    } else if (valueParam.endsWith(MAX)) {
+      hasMax = true;
+      isPixel = true;
+      hasValue = valueParam.length() > MAX.length();
+    } else if (valueParam.endsWith(PERCENT + WIDTH_SUFFIX)) {
+      hasWidthSuffix = true;
+      isIndependent = false;
+      isPercent = true;
+      hasValue = valueParam.length() > PERCENT.length() + WIDTH_SUFFIX.length();
+    } else if (valueParam.endsWith(PERCENT + HEIGHT_SUFFIX)) {
+      hasHeightSuffix = true;
+      isIndependent = false;
+      isPercent = true;
+      hasValue = valueParam.length() > PERCENT.length() + HEIGHT_SUFFIX.length();
+    } else if (valueParam.endsWith(PERCENT)) {
+      isIndependent = false;
+      isPercent = true;
+      hasValue = valueParam.length() > PERCENT.length();
+    } else if (valueParam.endsWith(PIXEL)) {
+      isPixel = true;
+      hasValue = valueParam.length() > PERCENT.length();
+    } else { // "123"
+      isPixel = true;
+      hasValue = true;
     }
+    
+    this.value = valueParam;
+    
     this.percentValue = getPercentValue();
     this.pixelValue = getPixelValue();
+    
+    
   }
 
+  private static final SizeValue DEF = new SizeValue(null);
+  public static SizeValue def() {
+    return DEF;
+  }
+  
+  public static SizeValue def(int pixelValue) {
+    return new SizeValue(pixelValue + DEFAULT);
+  }
+  
   /**
    * static helper to create a pixel based SizeValue.
    * @param pixelValue pixel value
@@ -121,12 +231,45 @@ public class SizeValue {
   public static SizeValue wildcard() {
     return new SizeValue(WILDCARD);
   }
+  
+  public static SizeValue wildcard(int computedValue) {
+    return new SizeValue(computedValue + WILDCARD);
+  }
+  
+  public static SizeValue sum() {
+    return new SizeValue(SUM);
+  }
+  
+  public static SizeValue sum(int computedValue) {
+    return new SizeValue(computedValue + SUM);
+  }
+  
+  public static SizeValue max() {
+    return new SizeValue(MAX);
+  }
+  
+  public static SizeValue max(int computedValue) {
+    return new SizeValue(computedValue + MAX);
+  }
 
+  /** Do we need to know the size of the parent element to calculate this value?.
+   * @return true if the size of this value can be calculated without knowing about the parent.
+   */
+  public boolean isIndependentFromParent() {
+    return isIndependent;
+  }
+  
+  @Deprecated
+  public boolean isPercentOrPixel()
+  {
+    return hasValue();
+  }
+  
   /**
    * Checks if the value contains either PERCENT or PIXEL.
    * @return true when either PERCENT or PIXEL is given.
    */
-  public boolean isPercentOrPixel() {
+  public boolean hasValue() {
     return isPercent() || isPixel();
   }
 
@@ -162,19 +305,29 @@ public class SizeValue {
    * and false otherwise
    */
   public boolean isPixel() {
-    if (value == null) {
-      return false;
-    } else {
-      return !value.equals(WILDCARD) && (value.endsWith(PIXEL) || hasNoSuffix());
-    }
+    return isPixel && hasValue;
   }
 
+  /**
+   * Checks if this value describes a percent value.
+   * @return true if the given string value ends with PERCENT
+   * and false otherwise.
+   */
+  public boolean isPercent() {
+    return isPercent;
+  }
+  
   /**
    * toString.
    * @return value
    */
+  @Override
   public String toString() {
     return value;
+  }
+  
+  public boolean hasDefault() {
+    return hasDefault;
   }
 
   public boolean hasWidthSuffix() {
@@ -186,7 +339,15 @@ public class SizeValue {
   }
 
   public boolean hasWildcard() {
-    return "*".equals(value);
+    return hasWildcard;
+  }
+  
+  public boolean hasSum() {
+    return hasSum;
+  }
+  
+  public boolean hasMax() {
+    return hasMax;
   }
 
   @Override
@@ -219,14 +380,22 @@ public class SizeValue {
     return true;
   }
 
+  private String getValueWithoutSuffix() {
+    for (int i = value.length()-1; i >= 0; --i) {
+      if (value.charAt(i) >= '0' && value.charAt(i) <= '9') {
+        return value.substring(0, i+1);
+      }
+    }
+    return "0";
+  }
+  
   /**
    * Get the percent value this value represent.
    * @return the actual percent value.
    */
   private float getPercentValue() {
     if (isPercent()) {
-      String percent = value.substring(0, value.length() - PERCENT.length());
-      return Float.valueOf(percent);
+      return Float.valueOf(getValueWithoutSuffix());
     } else {
       return 0;
     }
@@ -238,40 +407,8 @@ public class SizeValue {
    */
   private int getPixelValue() {
     if (isPixel()) {
-      if (hasNoSuffix()) {
-        return Integer.valueOf(value);
-      }
-      String pixel = value.substring(0, value.length() - PIXEL.length());
-      return Integer.valueOf(pixel);
-    } else {
-      return 0;
+      return Integer.valueOf(getValueWithoutSuffix());
     }
-  }
-
-  /**
-   * Checks if this value describes a percent value.
-   * @return true if the given string value ends with PERCENT
-   * and false otherwise.
-   */
-  private boolean isPercent() {
-    if (value == null) {
-      return false;
-    } else {
-      return value.endsWith(PERCENT);
-    }
-  }
-
-  private boolean hasNoSuffix() {
-    if (value == null) {
-      return false;
-    }
-
-    if (value.endsWith(PIXEL) ||
-        value.endsWith(PERCENT) ||
-        value.endsWith(WIDTH_SUFFIX) ||
-        value.endsWith(HEIGHT_SUFFIX)) {
-      return false;
-    }
-    return true;
+    return 0;
   }
 }

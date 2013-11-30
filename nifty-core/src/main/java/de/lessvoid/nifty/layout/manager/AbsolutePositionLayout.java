@@ -53,29 +53,29 @@ public class AbsolutePositionLayout implements LayoutManager {
 
       // makes only sense with constraints given
       if (cons != null) {
-        if (cons.getX() != null) {
+        if (cons.getX().hasValue()) {
           box.setX(rootBoxX + cons.getX().getValueAsInt(rootBoxWidth));
         }
 
-        if (cons.getY() != null) {
+        if (cons.getY().hasValue()) {
           box.setY(rootBoxY + cons.getY().getValueAsInt(rootBoxHeight));
         }
 
-        if (cons.getWidth() != null && cons.getWidth().hasHeightSuffix()) {
-          if (cons.getHeight() != null) {
+        if (cons.getWidth().hasHeightSuffix()) {
+          if (cons.getHeight().hasValue()) {
             box.setHeight(cons.getHeight().getValueAsInt(rootBoxHeight));
           }
           box.setWidth(cons.getWidth().getValueAsInt(box.getHeight()));
-        } else if (cons.getHeight() != null && cons.getHeight().hasWidthSuffix()) {
-          if (cons.getWidth() != null) {
+        } else if (cons.getHeight().hasWidthSuffix()) {
+          if (cons.getWidth().hasValue()) {
             box.setWidth(cons.getWidth().getValueAsInt(rootBoxWidth));
           }
           box.setHeight(cons.getHeight().getValueAsInt(box.getWidth()));
         } else {
-          if (cons.getWidth() != null) {
+          if (cons.getWidth().hasValue()) {
             box.setWidth(cons.getWidth().getValueAsInt(rootBoxWidth));
           }
-          if (cons.getHeight() != null) {
+          if (cons.getHeight().hasValue()) {
             box.setHeight(cons.getHeight().getValueAsInt(rootBoxHeight));
           }
         }

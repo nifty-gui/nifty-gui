@@ -9,10 +9,10 @@ public class BoxConstraintsTest extends TestCase {
 
   public void testDefaultConstructor() {
     BoxConstraints box = new BoxConstraints();
-    assertNull(box.getX());
-    assertNull(box.getY());
-    assertNull(box.getWidth());
-    assertNull(box.getHeight());
+    assertTrue(box.getX().hasDefault());
+    assertTrue(box.getY().hasDefault());
+    assertTrue(box.getWidth().hasDefault());
+    assertTrue(box.getHeight().hasDefault());
     assertEquals(HorizontalAlign.horizontalDefault, box.getHorizontalAlign());
     assertEquals(VerticalAlign.verticalDefault, box.getVerticalAlign());
   }
@@ -36,10 +36,10 @@ public class BoxConstraintsTest extends TestCase {
   public void testCopyConstructor() {
     BoxConstraints box = new BoxConstraints();
     BoxConstraints copy = new BoxConstraints(box);
-    assertNull(copy.getX());
-    assertNull(copy.getY());
-    assertNull(copy.getWidth());
-    assertNull(copy.getHeight());
+    assertTrue(box.getX().hasDefault());
+    assertTrue(box.getY().hasDefault());
+    assertTrue(box.getWidth().hasDefault());
+    assertTrue(box.getHeight().hasDefault());
     assertEquals(HorizontalAlign.horizontalDefault, copy.getHorizontalAlign());
     assertEquals(VerticalAlign.verticalDefault, copy.getVerticalAlign());
   }

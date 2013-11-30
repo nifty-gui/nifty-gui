@@ -4,6 +4,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 public class ApplyRenderText implements ApplyRenderer {
@@ -34,11 +35,11 @@ public class ApplyRenderText implements ApplyRenderer {
     textRenderer.setLineWrapping(wrap);
 
     if (!wrap) {
-      if (element.getConstraintWidth() == null) {
-        element.setConstraintWidth(convert.sizeValue(textRenderer.getTextWidth() + "px"));
+      if (element.getConstraintWidth().hasDefault()) {
+        element.setConstraintWidth(SizeValue.def(textRenderer.getTextWidth()));
       }
-      if (element.getConstraintHeight() == null) {
-        element.setConstraintHeight(convert.sizeValue(textRenderer.getTextHeight() + "px"));
+      if (element.getConstraintHeight().hasDefault()) {
+        element.setConstraintHeight(SizeValue.def(textRenderer.getTextHeight()));
       }
     }
   }

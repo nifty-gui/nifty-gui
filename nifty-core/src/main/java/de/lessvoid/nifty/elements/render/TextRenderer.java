@@ -85,13 +85,13 @@ public class TextRenderer implements ElementRenderer {
    * If the textLineHeight property is set it will override the font.getHeight() when
    * calculating the height of the text.
    */
-  private SizeValue textLineHeight;
+  private SizeValue textLineHeight = SizeValue.def();
 
   /**
    * If the textMinLineHeight property is set the text will always be at least textMinLineHeight
    * pixel height.
    */
-  private SizeValue textMinHeight;
+  private SizeValue textMinHeight = SizeValue.def();
 
   private Nifty nifty;
 
@@ -184,7 +184,7 @@ public class TextRenderer implements ElementRenderer {
 
   private void renderLines(final Element w, final NiftyRenderEngine r, String[] lines) {
     RenderFont font = ensureFont(r);
-
+    
     boolean stateSaved = prepareRenderEngine(r, font);
 
     int y = getStartYWithVerticalAlign(lines.length * font.getHeight(), w.getHeight(), textVAlign);
@@ -322,14 +322,16 @@ public class TextRenderer implements ElementRenderer {
    */
   public int getTextHeight() {
     int calculatedHeight = font.getHeight() * textLines.length;
-    if (textLineHeight != null) {
+    if (textLineHeight.hasValue()) {
       calculatedHeight = textLineHeight.getValueAsInt(1.0f) * textLines.length;
     }
-    if (textMinHeight != null) {
+    
+    if (textMinHeight.hasValue()) {
       if (calculatedHeight < textMinHeight.getValueAsInt(1.0f)) {
         return textMinHeight.getValueAsInt(1.0f);
       }
     }
+    
     return calculatedHeight;
   }
 
@@ -424,11 +426,11 @@ public class TextRenderer implements ElementRenderer {
   }
 
   public void setTextLineHeight(final SizeValue textLineHeight) {
-    this.textLineHeight = textLineHeight;
+    this.textLineHeight = textLineHeight == null ? SizeValue.def() : textLineHeight;
   }
 
   public void setTextMinHeight(final SizeValue textMinHeight) {
-    this.textMinHeight = textMinHeight;
+    this.textMinHeight = textMinHeight == null ? SizeValue.def() : textMinHeight;
   }
 
   /**
@@ -469,21 +471,24 @@ public class TextRenderer implements ElementRenderer {
   }
 
   public void setWidthConstraint(final Element element, final SizeValue elementConstraintWidth, final int parentWidth, final NiftyRenderEngine renderEngine) {
+    
     if (elementConstraintWidth == null || parentWidth == 0 || !lineWrapping || isCalculatedLineWrapping) {
       return;
     }
+    
     int valueAsInt = element.getWidth();
-    if (valueAsInt == 0 || !isCalculatedLineWrapping) {
+    if (!elementConstraintWidth.hasWildcard() && (valueAsInt == 0 || !isCalculatedLineWrapping)) {
       valueAsInt = elementConstraintWidth.getValueAsInt(parentWidth);
     }
     if (valueAsInt <= 0) {
       return;
     }
-
+    
     // remember some values so that we can correctly do auto word wrapping when someone changes the text
     this.hasBeenLayoutedElement = element;
 
     this.textLines = wrapText(valueAsInt, renderEngine, originalText.split("\n", -1));
+    
     maxWidth = valueAsInt;
     if (maxWidth == 0) {
       for (String line : textLines) {
@@ -501,9 +506,9 @@ public class TextRenderer implements ElementRenderer {
     isCalculatedLineWrapping = true;
     originalConstraintWidth = element.getConstraintWidth();
     originalConstraintHeight = element.getConstraintHeight();
-
-    element.setConstraintWidth(new SizeValue(getTextWidth() + "px"));
-    element.setConstraintHeight(new SizeValue(getTextHeight() + "px"));
+    
+    element.setConstraintWidth(elementConstraintWidth.hasWildcard() ? SizeValue.wildcard(getTextWidth()) : SizeValue.px(getTextWidth()));
+    element.setConstraintHeight(SizeValue.px(getTextHeight()));
   }
 
   public void setLineWrapping(final boolean lineWrapping) {

@@ -40,7 +40,7 @@ public class HorizontalLayout implements LayoutManager {
       BoxConstraints boxConstraints = current.getBoxConstraints();
 
       int elementWidth;
-      if (boxConstraints.getWidth() != null && boxConstraints.getWidth().hasHeightSuffix()) {
+      if (boxConstraints.getWidth().hasHeightSuffix()) {
         int elementHeight = processHeightConstraint(rootBoxHeight, box, boxConstraints, 0);
         box.setHeight(elementHeight);
 
@@ -95,11 +95,11 @@ public class HorizontalLayout implements LayoutManager {
   }
 
   private boolean hasHeightConstraint(final BoxConstraints constraint) {
-    return constraint != null && constraint.getHeight() != null && !constraint.getHeight().hasWildcard();
+    return constraint != null && constraint.getHeight().hasValue();
   }
 
   private int calcElementWidth(final List < LayoutPart > children, final int rootBoxWidth, final BoxConstraints boxConstraints, final int elementHeight) {
-    if (boxConstraints.getWidth() != null) {
+    if (boxConstraints.getWidth().hasValue()) {
       int h = boxConstraints.getWidth().getValueAsInt(rootBoxWidth);
       if (boxConstraints.getWidth().hasHeightSuffix()) {
         h = boxConstraints.getWidth().getValueAsInt(elementHeight);
@@ -140,13 +140,12 @@ public class HorizontalLayout implements LayoutManager {
     for (int i = 0; i < elements.size(); i++) {
       LayoutPart p = elements.get(i);
       BoxConstraints original = p.getBoxConstraints();
-
-      if (original.getWidth() != null) {
-        if (original.getWidth().isPercentOrPixel()) {
-          maxFixedWidth += original.getWidth().getValueAsInt(parentWidth);
-          fixedCount++;
-        }
+      
+      if (original.getWidth().hasValue()) {
+        maxFixedWidth += original.getWidth().getValueAsInt(parentWidth);
+        fixedCount++;
       }
+
     }
 
     int notFixedCount = elements.size() - fixedCount;
