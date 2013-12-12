@@ -62,6 +62,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
     initializeScrollbars();
     subscribeHorizontalScrollbar();
     subscribeVerticalScrollbar();
+    super.init(parameter);
   }
 
   @Override
