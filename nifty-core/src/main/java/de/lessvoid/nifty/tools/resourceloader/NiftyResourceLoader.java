@@ -1,23 +1,27 @@
 package de.lessvoid.nifty.tools.resourceloader;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple wrapper around resource loading should anyone decide to change their
  * minds how this is meant to work in the future.
  * 
  * @author Kevin Glass
- * @auther void (made it a none static class)
+ * @author void (made it a none static class)
  */
 public class NiftyResourceLoader {
   /** The list of locations to be searched */
-  private ArrayList<ResourceLocation> locations = new ArrayList<ResourceLocation>();
+  @Nonnull
+  private List<ResourceLocation> locations;
   
   public NiftyResourceLoader() {
+    locations = new ArrayList<ResourceLocation>();
     locations.add(new ClasspathLocation());
     locations.add(new FileSystemLocation(new File(".")));
   }
@@ -26,9 +30,9 @@ public class NiftyResourceLoader {
    * Add a location that will be searched for resources
    * 
    * @param location
-   *          The location that will be searched for resoruces
+   *          The location that will be searched for resources
    */
-  public void addResourceLocation(ResourceLocation location) {
+  public void addResourceLocation(@Nonnull final ResourceLocation location) {
     locations.add(location);
   }
   
@@ -38,7 +42,7 @@ public class NiftyResourceLoader {
    * @param location
    *          The location that will be removed from the search list
    */
-  public void removeResourceLocation(ResourceLocation location) {
+  public void removeResourceLocation(@Nonnull final ResourceLocation location) {
     locations.remove(location);
   }
   
@@ -56,12 +60,14 @@ public class NiftyResourceLoader {
    * @param ref
    *          The reference to the resource to retrieve
    * @return A stream from which the resource can be read
+   * @throws ResourceNotFoundException in case locating the resource fails
    */
+  @Nonnull
   public InputStream getResourceAsStream(String ref) {
     InputStream in = null;
     
     for (int i = 0; i < locations.size(); i++) {
-      ResourceLocation location = (ResourceLocation) locations.get(i);
+      ResourceLocation location = locations.get(i);
       in = location.getResourceAsStream(ref);
       if (in != null) {
         break;
@@ -69,7 +75,7 @@ public class NiftyResourceLoader {
     }
     
     if (in == null) {
-      throw new RuntimeException("Resource not found: " + ref);
+      throw new ResourceNotFoundException(ref);
     }
     
     return new BufferedInputStream(in);
@@ -81,13 +87,15 @@ public class NiftyResourceLoader {
    * @param ref
    *          The reference to the resource to retrieve
    * @return A stream from which the resource can be read
+   * @throws ResourceNotFoundException in case locating the resource fails
    */
+  @Nonnull
   public URL getResource(String ref) {
     
     URL url = null;
     
     for (int i = 0; i < locations.size(); i++) {
-      ResourceLocation location = (ResourceLocation) locations.get(i);
+      ResourceLocation location = locations.get(i);
       url = location.getResource(ref);
       if (url != null) {
         break;
@@ -95,7 +103,7 @@ public class NiftyResourceLoader {
     }
     
     if (url == null) {
-      throw new RuntimeException("Resource not found: " + ref);
+      throw new ResourceNotFoundException(ref);
     }
     
     return url;

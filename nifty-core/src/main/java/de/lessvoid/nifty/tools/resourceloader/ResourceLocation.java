@@ -1,5 +1,8 @@
 package de.lessvoid.nifty.tools.resourceloader;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.WillNotClose;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -9,7 +12,6 @@ import java.net.URL;
  * @author kevin
  */
 public interface ResourceLocation {
-
   /**
    * Get a resource as an input stream
    * 
@@ -17,7 +19,9 @@ public interface ResourceLocation {
    * @return A stream from which the resource can be read or
    * null if the resource can't be found in this location
    */
-  public InputStream getResourceAsStream(String ref);
+  @Nullable
+  @WillNotClose
+  public InputStream getResourceAsStream(@Nonnull String ref);
 
   /**
    * Get a resource as a URL
@@ -25,5 +29,6 @@ public interface ResourceLocation {
    * @param ref The reference to the resource to retrieve
    * @return A stream from which the resource can be read
    */
-  public URL getResource(String ref);
+  @Nullable
+  public URL getResource(@Nonnull String ref);
 }
