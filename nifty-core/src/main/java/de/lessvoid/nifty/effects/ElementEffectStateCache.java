@@ -1,34 +1,27 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.Hashtable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.EnumMap;
 import java.util.Map;
 
-public class ElementEffectStateCache {
-  private Map<EffectEventId, Boolean> states = new Hashtable<EffectEventId, Boolean>();
+class ElementEffectStateCache {
+  @Nonnull
+  private Map<EffectEventId, Boolean> states;
 
   public ElementEffectStateCache() {
-    states.put(EffectEventId.onStartScreen, false);
-    states.put(EffectEventId.onEndScreen, false);
-    states.put(EffectEventId.onFocus, false);
-    states.put(EffectEventId.onGetFocus, false);
-    states.put(EffectEventId.onLostFocus, false);
-    states.put(EffectEventId.onClick, false);
-    states.put(EffectEventId.onHover, false);
-    states.put(EffectEventId.onStartHover, false);
-    states.put(EffectEventId.onEndHover, false);
-    states.put(EffectEventId.onActive, false);
-    states.put(EffectEventId.onCustom, false);
-    states.put(EffectEventId.onShow, false);
-    states.put(EffectEventId.onHide, false);
-    states.put(EffectEventId.onEnabled, false);
-    states.put(EffectEventId.onDisabled, false);
+    states = new EnumMap<EffectEventId, Boolean>(EffectEventId.class);
   }
 
-  public boolean get(final EffectEventId effectEventId) {
-    return states.get(effectEventId);
+  public boolean get(@Nonnull final EffectEventId effectEventId) {
+    @Nullable Boolean value = states.get(effectEventId);
+    if (value == null) {
+      return false;
+    }
+    return value;
   }
 
-  public void set(final EffectEventId eventId, final boolean effectActive) {
+  public void set(@Nonnull final EffectEventId eventId, final boolean effectActive) {
     states.put(eventId, effectActive);
   }
 }
