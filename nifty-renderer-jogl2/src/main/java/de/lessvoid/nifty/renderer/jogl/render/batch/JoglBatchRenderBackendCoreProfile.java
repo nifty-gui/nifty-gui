@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nullable;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLContext;
@@ -83,7 +84,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     niftyShader.setUniformMatrix4f("uModelViewProjectionMatrix", modelViewProjection);
     niftyShader.setUniformi("uTex", 0);
 
-    batchPool = new ObjectPool<Batch>(2, new Factory<Batch>() {
+    batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
       @Override
       public Batch createNew() {
         return new Batch();
@@ -173,6 +174,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     texture.updateTextureData(initialData);
   }
 
+  @Nullable
   @Override
   public Image loadImage(final String filename) {
     ImageData loader = createImageLoader(filename);

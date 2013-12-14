@@ -43,6 +43,9 @@ import de.lessvoid.nifty.tools.ObjectPool;
 import de.lessvoid.nifty.tools.ObjectPool.Factory;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * BatchRenderBackend Implementation for OpenGL Core Profile.
  * @author void
@@ -54,8 +57,10 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private int viewportWidth = -1;
   private int viewportHeight = -1;
   private CoreTexture2D texture;
+  @Nonnull
   private final CoreShader niftyShader;
   private Matrix4f modelViewProjection;
+  @Nonnull
   private final ObjectPool<Batch> batchPool;
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
@@ -66,7 +71,9 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private static final int PRIMITIVE_SIZE = 4*8; // 4 vertices per quad and 12 vertex attributes per vertex (2xpos, 2xtexture, 4xcolor, 4xclipping)
   private static final int PRIMITIVE_RESTART_INDEX = 0xFFFF;
 
+  @Nonnull
   private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
+  @Nonnull
   private int[] elementIndexBuffer = new int[5];
 
   public LwjglBatchRenderBackendCoreProfile() {
@@ -77,7 +84,8 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     niftyShader.activate();
     niftyShader.setUniformi("uTex", 0);
 
-    batchPool = new ObjectPool<Batch>(2, new Factory<Batch>() {
+    batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
+      @Nonnull
       @Override
       public Batch createNew() {
         return new Batch();
@@ -130,13 +138,14 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
   }
 
+  @Nonnull
   @Override
-  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) throws IOException {
+  public MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY) throws IOException {
     return new LwjglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
   }
 
   @Override
-  public void enableMouseCursor(final MouseCursor mouseCursor) {
+  public void enableMouseCursor(@Nullable final MouseCursor mouseCursor) {
     Cursor nativeCursor = null;
     if (mouseCursor != null) {
       nativeCursor = ((LwjglMouseCursor) mouseCursor).getCursor(); 
@@ -180,8 +189,9 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     texture.updateTextureData(initialData);
   }
 
+  @Nullable
   @Override
-  public Image loadImage(final String filename) {
+  public Image loadImage(@Nonnull final String filename) {
     ImageData loader = createImageLoader(filename);
     try {
       ByteBuffer image = loader.loadImageDirect(resourceLoader.getResourceAsStream(filename));
@@ -196,7 +206,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   }
 
   @Override
-  public void addImageToTexture(final Image image, final int x, final int y) {
+  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
     ImageImpl imageImpl = (ImageImpl) image;
     if (imageImpl.getWidth() == 0 ||
         imageImpl.getHeight() == 0) {
@@ -227,10 +237,10 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       final float y,
       final float width,
       final float height,
-      final Color color1,
-      final Color color2,
-      final Color color3,
-      final Color color4,
+      @Nonnull final Color color1,
+      @Nonnull final Color color2,
+      @Nonnull final Color color3,
+      @Nonnull final Color color4,
       final float textureX,
       final float textureY,
       final float textureWidth,
@@ -260,7 +270,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   }
 
   @Override
-  public void removeFromTexture(final Image image, final int x, final int y, final int w, final int h) {
+  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
     // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
     // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
     if (!fillRemovedTexture) {
@@ -312,7 +322,8 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     }
   }
 
-  private Cursor loadMouseCursor(final String name, final int hotspotX, final int hotspotY) throws IOException {
+  @Nullable
+  private Cursor loadMouseCursor(@Nonnull final String name, final int hotspotX, final int hotspotY) throws IOException {
     ImageData imageLoader = createImageLoader(name);
     InputStream source = null;
     try {
@@ -331,7 +342,8 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     }
   }
 
-  private ImageData createImageLoader(final String name) {
+  @Nonnull
+  private ImageData createImageLoader(@Nonnull final String name) {
     if (name.endsWith(".tga")) {
       return new TGAImageData();
     }
@@ -394,11 +406,15 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     private final static int PRIMITIVE_SIZE = 4*8;
     private final int SIZE = 64*1024; // 64k
 
+    @Nonnull
     private BlendMode blendMode = BlendMode.BLEND;
 
     private int primitiveCount;
+    @Nonnull
     private final CoreVAO vao;
+    @Nonnull
     private final CoreVBO vbo;
+    @Nonnull
     private final CoreElementVBO elementVbo;
     private int globalIndex;
     private int indexCount;
@@ -435,6 +451,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       vao.unbind();
     }
 
+    @Nonnull
     public BlendMode getBlendMode() {
       return blendMode;
     }
@@ -465,10 +482,10 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
         final float y,
         final float width,
         final float height,
-        final Color color1,
-        final Color color2,
-        final Color color3,
-        final Color color4,
+        @Nonnull final Color color1,
+        @Nonnull final Color color2,
+        @Nonnull final Color color3,
+        @Nonnull final Color color4,
         final float textureX,
         final float textureY,
         final float textureWidth,

@@ -30,6 +30,9 @@ import de.lessvoid.nifty.tools.ObjectPool;
 import de.lessvoid.nifty.tools.ObjectPool.Factory;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Lwjgl RenderDevice Implementation.
  * @author void
@@ -41,6 +44,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   private int viewportWidth = -1;
   private int viewportHeight = -1;
   private int textureId;
+  @Nonnull
   private final ObjectPool<Batch> batchPool;
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
@@ -49,7 +53,8 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       Boolean.parseBoolean(System.getProperty(LwjglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
 
   public LwjglBatchRenderBackend() {
-    batchPool = new ObjectPool<Batch>(2, new Factory<Batch>() {
+    batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
+      @Nonnull
       @Override
       public Batch createNew() {
         return new Batch();
@@ -98,13 +103,14 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
   }
 
+  @Nonnull
   @Override
-  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) throws IOException {
+  public MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY) throws IOException {
     return new LwjglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
   }
 
   @Override
-  public void enableMouseCursor(final MouseCursor mouseCursor) {
+  public void enableMouseCursor(@Nullable final MouseCursor mouseCursor) {
     Cursor nativeCursor = null;
     if (mouseCursor != null) {
       nativeCursor = ((LwjglMouseCursor) mouseCursor).getCursor(); 
@@ -158,8 +164,9 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     checkGLError();
   }
 
+  @Nullable
   @Override
-  public Image loadImage(final String filename) {
+  public Image loadImage(@Nonnull final String filename) {
     ImageData loader = createImageLoader(filename);
     try {
       ByteBuffer image = loader.loadImageDirect(resourceLoader.getResourceAsStream(filename));
@@ -174,7 +181,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   }
 
   @Override
-  public void addImageToTexture(final Image image, final int x, final int y) {
+  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
     ImageImpl imageImpl = (ImageImpl) image;
     if (imageImpl.getWidth() == 0 ||
         imageImpl.getHeight() == 0) {
@@ -205,10 +212,10 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       final float y,
       final float width,
       final float height,
-      final Color color1,
-      final Color color2,
-      final Color color3,
-      final Color color4,
+      @Nonnull final Color color1,
+      @Nonnull final Color color2,
+      @Nonnull final Color color3,
+      @Nonnull final Color color4,
       final float textureX,
       final float textureY,
       final float textureWidth,
@@ -243,7 +250,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   }
 
   @Override
-  public void removeFromTexture(final Image image, final int x, final int y, final int w, final int h) {
+  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
     // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
     // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
     if (!fillRemovedTexture) {
@@ -295,7 +302,8 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
-  private Cursor loadMouseCursor(final String name, final int hotspotX, final int hotspotY) throws IOException {
+  @Nullable
+  private Cursor loadMouseCursor(@Nonnull final String name, final int hotspotX, final int hotspotY) throws IOException {
     ImageData imageLoader = createImageLoader(name);
     InputStream source = null;
     try {
@@ -314,7 +322,8 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
-  private ImageData createImageLoader(final String name) {
+  @Nonnull
+  private ImageData createImageLoader(@Nonnull final String name) {
     if (name.endsWith(".tga")) {
       return new TGAImageData();
     }
@@ -382,6 +391,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     return tmp.get(0);
  }
 
+  @Nonnull
   private IntBuffer createIntBuffer(final int size) {
     ByteBuffer temp = ByteBuffer.allocateDirect(4 * size);
     temp.order(ByteOrder.nativeOrder());
@@ -433,6 +443,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     private final FloatBuffer vertexBuffer;
 
     private int primitiveCount;
+    @Nonnull
     private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
     private BlendMode blendMode = BlendMode.BLEND;
 
@@ -481,10 +492,10 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
         final float y,
         final float width,
         final float height,
-        final Color color1,
-        final Color color2,
-        final Color color3,
-        final Color color4,
+        @Nonnull final Color color1,
+        @Nonnull final Color color2,
+        @Nonnull final Color color3,
+        @Nonnull final Color color4,
         final float textureX,
         final float textureY,
         final float textureWidth,

@@ -14,6 +14,8 @@ import de.lessvoid.nifty.tools.ObjectPool;
 import de.lessvoid.nifty.tools.ObjectPool.Factory;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -67,6 +69,7 @@ import java.util.logging.Logger;
 public class GdxBatchRenderBackend implements BatchRenderBackend {
   private static Logger log = Logger.getLogger(GdxBatchRenderBackend.class.getName());
   private int atlasTextureId;
+  @Nonnull
   private final ObjectPool<Batch> batchPool;
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
@@ -78,7 +81,8 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
 
   public GdxBatchRenderBackend() {
     mouseCursors = new ArrayMap<String, GdxMouseCursor>();
-    batchPool = new ObjectPool<Batch>(2, new Factory<Batch>() {
+    batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
+      @Nonnull
       @Override
       public Batch createNew() {
         return new Batch();
@@ -145,6 +149,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
   /**
    * {@inheritDoc}
    */
+  @Nullable
   @Override
   public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) throws IOException {
     // Prevent many creations of the same mouse cursor. TODO Nifty should be doing this automatically.
@@ -225,6 +230,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
   /**
    * {@inheritDoc}
    */
+  @Nullable
   @Override
   public Image loadImage(final String filename) {
     try {
@@ -239,7 +245,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
    * {@inheritDoc}
    */
   @Override
-  public void addImageToTexture(final Image image, final int x, final int y) {
+  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
     GdxBatchRenderImage gdxImage = (GdxBatchRenderImage) image;
     if (gdxImage == null || gdxImage.getWidth() == 0 || gdxImage.getHeight() == 0) return;
     bind(atlasTextureId);
@@ -275,10 +281,10 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
       final float y,
       final float width,
       final float height,
-      final Color color1,
-      final Color color2,
-      final Color color3,
-      final Color color4,
+      @Nonnull final Color color1,
+      @Nonnull final Color color2,
+      @Nonnull final Color color3,
+      @Nonnull final Color color4,
       final float textureX,
       final float textureY,
       final float textureWidth,
@@ -320,7 +326,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
    * {@inheritDoc}
    */
   @Override
-  public void removeFromTexture(final Image image, final int x, final int y, final int w, final int h) {
+  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
     // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
     // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
     if (!fillRemovedTexture) {
@@ -487,6 +493,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     private final int SIZE = 64*1024; // 64k
     private final FloatBuffer vertexBuffer;
     private int primitiveCount;
+    @Nonnull
     private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
     private BlendMode blendMode = BlendMode.BLEND;
 
@@ -536,10 +543,10 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
         final float y,
         final float width,
         final float height,
-        final Color color1,
-        final Color color2,
-        final Color color3,
-        final Color color4,
+        @Nonnull final Color color1,
+        @Nonnull final Color color2,
+        @Nonnull final Color color3,
+        @Nonnull final Color color4,
         final float textureX,
         final float textureY,
         final float textureWidth,
