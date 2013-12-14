@@ -4,6 +4,8 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.tools.pulsate.PulsatorProvider;
 
+import javax.annotation.Nonnull;
+
 /**
  * The NullPulsator does not really pulsate =).
  * @author void
@@ -14,7 +16,8 @@ public class NullPulsator implements PulsatorProvider {
    * Actually does nothing.
    * @param parameter the parameters
    */
-  public void initialize(final Properties parameter) {
+  @Override
+  public void initialize(@Nonnull final Properties parameter) {
   }
 
   /**
@@ -22,6 +25,7 @@ public class NullPulsator implements PulsatorProvider {
    * @param msTime the time
    * @return always returns 0
    */
+  @Override
   public float getValue(final long msTime) {
     return 0;
   }
@@ -30,6 +34,7 @@ public class NullPulsator implements PulsatorProvider {
    * Reset.
    * @param msTime the time
    */
+  @Override
   public void reset(final long msTime) {
   }
 }

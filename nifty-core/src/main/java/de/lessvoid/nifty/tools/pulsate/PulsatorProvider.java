@@ -1,19 +1,18 @@
 package de.lessvoid.nifty.tools.pulsate;
 
+import javax.annotation.Nonnull;
 import java.util.Properties;
 
 /**
  * The actual Pulsator.
  * @author void
- *
  */
 public interface PulsatorProvider {
-
   /**
    * Initialize the parameter.
    * @param parameter properties
    */
-  void initialize(Properties parameter);
+  void initialize(@Nonnull Properties parameter);
 
   /**
    * Get the value.

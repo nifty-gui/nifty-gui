@@ -9,25 +9,29 @@ import de.lessvoid.nifty.tools.pulsate.provider.RectanglePulsator;
 import de.lessvoid.nifty.tools.pulsate.provider.SinusPulsator;
 import de.lessvoid.nifty.tools.pulsate.provider.SinusRaisedPulsator;
 
+import javax.annotation.Nonnull;
+
 /**
  * Pulsator class.
  * @author void
  */
 public class Pulsator {
-
   /**
    * the logger.
    */
-  private static Logger log = Logger.getLogger(Pulsator.class.getName());
+  @Nonnull
+  private static final Logger log = Logger.getLogger(Pulsator.class.getName());
 
   /**
    * the time provider.
    */
+  @Nonnull
   private TimeProvider timeProvider;
 
   /**
    * the PulsateProvider we use.
    */
+  @Nonnull
   private PulsatorProvider pulsateProvider;
 
   /**
@@ -36,19 +40,19 @@ public class Pulsator {
    * @param parameter parameter props
    * @param newTimeProvider TimeProvider to use
    */
-  public Pulsator(final Properties parameter, final TimeProvider newTimeProvider) {
+  public Pulsator(@Nonnull final Properties parameter, @Nonnull final TimeProvider newTimeProvider) {
     this.timeProvider = newTimeProvider;
 
     // check for the given pulsateType to create the appropriate PulsateProvider
     String pulsateType = parameter.getProperty("pulsateType", "sin");
-    if (pulsateType.equals("sin")) {
+    if ("sin".equals(pulsateType)) {
       pulsateProvider = new SinusPulsator();
-    } else if (pulsateType.equals("sinRaised")) {
+    } else if ("sinRaised".equals(pulsateType)) {
       pulsateProvider = new SinusRaisedPulsator();
-    } else if (pulsateType.equals("rectangle")) {
+    } else if ("rectangle".equals(pulsateType)) {
       pulsateProvider = new RectanglePulsator();
     } else {
-      log.warning(pulsateType + " is not supported, using NullPulsater for fallback. probably not what you want...");
+      log.warning(pulsateType + " is not supported, using NullPulsator for fallback. probably not what you want...");
       pulsateProvider = new NullPulsator();
     }
 
@@ -58,7 +62,7 @@ public class Pulsator {
   }
 
   /**
-   * Reset the pulsater.
+   * Reset the pulsator.
    */
   public void reset() {
     pulsateProvider.reset(timeProvider.getMsTime());
