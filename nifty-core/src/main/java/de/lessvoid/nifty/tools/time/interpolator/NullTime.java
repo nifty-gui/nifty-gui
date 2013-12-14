@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.tools.time.interpolator;
 
+import javax.annotation.Nonnull;
 import java.util.Properties;
 
 /**
@@ -8,22 +9,15 @@ import java.util.Properties;
  */
 public class NullTime implements Interpolator {
 
-  /**
-   * initialize.
-   * @param parameter Properties used to parameterize this class
-   */
-  public void initialize(final Properties parameter) {
+  @Override
+  public void initialize(@Nonnull final Properties parameter) {
   }
 
+  @Override
   public void start() {
   }
 
-  /**
-   * get a new value.
-   * @param lengthParameter max length of effect in ms
-   * @param timePassed time already passed in ms
-   * @return the value
-   */
+  @Override
   public float getValue(final long lengthParameter, final long timePassed) {
     return 1.0f;
   }

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.tools.time.interpolator;
 
+import javax.annotation.Nonnull;
 import java.util.Properties;
 
 /**
@@ -8,22 +9,15 @@ import java.util.Properties;
  */
 public class LinearTime implements Interpolator {
 
-  /**
-   * initialize.
-   * @param parameter Properties
-   */
-  public void initialize(final Properties parameter) {
+  @Override
+  public void initialize(@Nonnull final Properties parameter) {
   }
 
+  @Override
   public void start() {
   }
 
-  /**
-   * get value.
-   * @param lengthParam max length in ms
-   * @param timePassed time already passed in ms
-   * @return calculated value
-   */
+  @Override
   public final float getValue(final long lengthParam, final long timePassed) {
     return 1.0f - ((lengthParam - timePassed) / (float) lengthParam);
   }

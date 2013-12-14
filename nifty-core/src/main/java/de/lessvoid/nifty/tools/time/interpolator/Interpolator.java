@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.tools.time.interpolator;
 
+import javax.annotation.Nonnull;
 import java.util.Properties;
 
 /**
@@ -7,12 +8,11 @@ import java.util.Properties;
  * @author void
  */
 public interface Interpolator {
-
   /**
    * initialize.
-   * @param parameter Properties used to parameterize this class
+   * @param parameter Properties used to parametrize this class
    */
-  void initialize(Properties parameter);
+  void initialize(@Nonnull Properties parameter);
 
   /**
    * In case the Interpolator wants to set some value when started.

@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.tools.time;
 
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.spi.time.TimeProvider;
@@ -10,25 +11,30 @@ import de.lessvoid.nifty.tools.time.interpolator.LinearTime;
 import de.lessvoid.nifty.tools.time.interpolator.NullTime;
 import de.lessvoid.nifty.tools.time.interpolator.OneTime;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * TimeProvider class.
  * @author void
  */
 public class TimeInterpolator {
-
   /**
    * the logger.
    */
-  private static Logger log = Logger.getLogger(TimeInterpolator.class.getName());
+  @Nonnull
+  private static final Logger log = Logger.getLogger(TimeInterpolator.class.getName());
 
   /**
    * the time provider.
    */
+  @Nonnull
   private final TimeProvider timeProvider;
 
   /**
    * the InterpolatorProvider we use.
    */
+  @Nonnull
   private Interpolator interpolatorProvider;
 
   /**
@@ -61,7 +67,10 @@ public class TimeInterpolator {
    * @param newTimeProvider TimeProvider to use
    * @param infinite infinite effects never end
    */
-  public TimeInterpolator(final Properties parameter, final TimeProvider newTimeProvider, final boolean infinite) {
+  public TimeInterpolator(
+      @Nonnull final Properties parameter,
+      @Nonnull final TimeProvider newTimeProvider,
+      final boolean infinite) {
     timeProvider = newTimeProvider;
     initialize(parameter, infinite);
   }
@@ -74,19 +83,21 @@ public class TimeInterpolator {
    * @param parameter the parameters used for the initialization
    * @param infinite the infinite flag, in case its {@code true} this effect does never end
    */
-  public void initialize(final Properties parameter, final boolean infinite) {
-    startDelayParam = Long.parseLong(parameter.getProperty("startDelay", "0"));
+  public void initialize(@Nonnull final Properties parameter, final boolean infinite) {
+    startDelayParam = parseLongParameter(parameter, "startDelay", 0);
 
-    String lengthDefault = null;
+    final String lengthDefault;
     if (infinite) {
       lengthDefault = "infinite";
+    } else {
+      lengthDefault = null;
     }
 
-    interpolatorProvider = null;
+    Interpolator interpolatorProvider = null;
     if ("infinite".equals(parameter.getProperty("length", lengthDefault))) {
       interpolatorProvider = new NullTime();
     } else {
-      lengthParam = Long.parseLong(parameter.getProperty("length", "1000"));
+      lengthParam = parseLongParameter(parameter, "length", 1000);
       if (Boolean.parseBoolean(parameter.getProperty("oneShot"))) {
         interpolatorProvider = new OneTime();
       }
@@ -95,20 +106,21 @@ public class TimeInterpolator {
     // check for the given timeType to create the appropriate interpolator
     if (interpolatorProvider == null) {
       String timeType = parameter.getProperty("timeType", "linear");
-      if (timeType.equals("infinite")) {
+      if ("infinite".equals(timeType)) {
         interpolatorProvider = new NullTime();
-      } else if (timeType.equals("linear")) {
+      } else if ("linear".equals(timeType)) {
         interpolatorProvider = new LinearTime();
-      } else if (timeType.equals("exp")) {
+      } else if ("exp".equals(timeType)) {
         interpolatorProvider = new ExpTime();
       } else {
         log.warning(timeType + " is not supported, using NullTime for fallback. probably not what you want...");
         interpolatorProvider = new NullTime();
       }
     }
-
     // initialize the provider
     interpolatorProvider.initialize(parameter);
+
+    this.interpolatorProvider = interpolatorProvider;
   }
 
   /**
@@ -148,5 +160,30 @@ public class TimeInterpolator {
    */
   public final float getValue() {
     return value;
+  }
+
+  /**
+   * This function fetches a string parameter and parses it to a long value if possible. In case the parameter is not
+   * set or parsing the parameter fails, the default value is returned.
+   *
+   * @param parameter the storage of all parameter
+   * @param key the key of the requested parameter
+   * @param defaultValue the default value
+   * @return the parsed value or the default value
+   */
+  private static long parseLongParameter(
+      @Nonnull final Properties parameter,
+      @Nonnull final String key,
+      final long defaultValue) {
+    @Nullable final String property = parameter.getProperty(key);
+    if (property == null) {
+      return defaultValue;
+    }
+    try {
+      return Long.parseLong(property);
+    } catch (final NumberFormatException e) {
+      log.log(Level.SEVERE, "Error parsing the \"" + key + "\" properly.", e);
+      return defaultValue;
+    }
   }
 }
