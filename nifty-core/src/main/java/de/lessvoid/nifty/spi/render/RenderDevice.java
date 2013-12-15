@@ -6,41 +6,54 @@ import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Nifty RenderDevice.
+ *
  * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public interface RenderDevice {
-
   /**
    * Gives this RenderDevice access to the NiftyResourceLoader.
+   *
    * @param niftyResourceLoader NiftyResourceLoader
    */
-  void setResourceLoader(NiftyResourceLoader niftyResourceLoader);
+  void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader);
 
   /**
-   * Create a new RenderImage.
-   * @param filename filename
-   * @param filterLinear filter
-   * @return RenderImage
+   * Create a new image for the renderer. This method is only called if the image is not already cached. The
+   * implementation calling this method will take care for caching already loaded images as needed.
+   *
+   * @param filename the filename of the image that needs to be load
+   * @param filterLinear {@code true} in case a linear (and slower) rescaling filter is supposed to be applied
+   * @return the created render image or {@code null} in case the image assigned to the filename is not found
    */
-  RenderImage createImage(String filename, boolean filterLinear);
+  @Nullable
+  RenderImage createImage(@Nonnull String filename, boolean filterLinear);
 
   /**
-   * Create a new RenderFont.
-   * @param filename filename
-   * @return RenderFont
+   * Create a new font for the renderer. This method is only called if the font was not load before. Created fonts
+   * will be cached by the implementation calling this method.
+   *
+   * @param filename the filename assigned to the font that needs to be load
+   * @return the created render font or {@code null} in case no font was found using this name
    */
-  RenderFont createFont(String filename);
+  @Nullable
+  RenderFont createFont(@Nonnull String filename);
 
   /**
    * Get Width.
+   *
    * @return width of display mode
    */
   int getWidth();
 
   /**
    * Get Height.
+   *
    * @return height of display mode
    */
   int getHeight();
@@ -62,74 +75,73 @@ public interface RenderDevice {
 
   /**
    * Change the RenderMode to the given Mode.
+   *
    * @param renderMode RenderMode
    */
-  void setBlendMode(BlendMode renderMode);
+  void setBlendMode(@Nonnull BlendMode renderMode);
 
   /**
    * Render a quad.
-   * @param x x
-   * @param y y
-   * @param width width
-   * @param height height
-   * @param color color
    */
-  void renderQuad(int x, int y, int width, int height, Color color);
+  void renderQuad(int x, int y, int width, int height, @Nonnull Color color);
 
   /**
    * Render a quad with different colors at the vertices.
-   * @param x
-   * @param y
-   * @param width
-   * @param height
-   * @param topLeft
-   * @param topRight
-   * @param bottomRight
-   * @param bottomLeft
    */
-  void renderQuad(int x, int y, int width, int height, Color topLeft, Color topRight, Color bottomRight, Color bottomLeft);
+  void renderQuad(
+      int x,
+      int y,
+      int width,
+      int height,
+      @Nonnull Color topLeft,
+      @Nonnull Color topRight,
+      @Nonnull Color bottomRight,
+      @Nonnull Color bottomLeft);
 
   /**
    * Render the image.
-   * @param x x
-   * @param y y
-   * @param width w
-   * @param height h
-   * @param color color
-   * @param imageScale image scale
    */
-  void renderImage(RenderImage image, int x, int y, int width, int height, Color color, float imageScale);
+  void renderImage(
+      @Nonnull RenderImage image,
+      int x,
+      int y,
+      int width,
+      int height,
+      @Nonnull Color color,
+      float imageScale);
 
   /**
    * Render a sub image of this image.
-   * @param x x
-   * @param y y
-   * @param w w
-   * @param h h
-   * @param srcX source x
-   * @param srcY source y
-   * @param srcW source width
-   * @param srcH source height
-   * @param color color
    */
-  void renderImage(RenderImage image, int x, int y, int w, int h, int srcX, int srcY, int srcW, int srcH, Color color, float scale, int centerX, int centerY);
+  void renderImage(
+      @Nonnull RenderImage image,
+      int x,
+      int y,
+      int w,
+      int h,
+      int srcX,
+      int srcY,
+      int srcW,
+      int srcH,
+      @Nonnull Color color,
+      float scale,
+      int centerX,
+      int centerY);
 
   /**
    * Render the given text at the given position.
-   * @param text text to render
-   * @param x x position
-   * @param y y position
-   * @param fontColor font color
-   * @param size size
    */
-  void renderFont(RenderFont font, String text, int x, int y, Color fontColor, float sizeX, float sizeY);
+  void renderFont(
+      @Nonnull RenderFont font,
+      @Nonnull String text,
+      int x,
+      int y,
+      @Nonnull Color fontColor,
+      float sizeX,
+      float sizeY);
 
   /**
    * Enable clipping to the given region.
-   * @param x0 x0
-   * @param y0 y0
-   * @param x1 x1
-   * @param y1 y1
    */
   void enableClip(int x0, int y0, int x1, int y1);
 
@@ -139,19 +151,23 @@ public interface RenderDevice {
   void disableClip();
 
   /**
-   * Create a new mouse cursor.
-   * @param filename image file for the cursor
+   * Create a new mouse cursor. This method is called by a implementation that takes care for caching the result of
+   * this call.
+   *
+   * @param filename the filename assigned to the mouse cursor that needs to be load
    * @param hotspotX hotspot x with 0 being left of the screen
    * @param hotspotY hotspot y with 0 being top of the screen 
-   * @return the loaded mouse cursor resource ready to be applied
+   * @return the newly created mouse cursor or {@code null} in case there is no matching cursor for this file name
    */
-  MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY) throws IOException;
+  @Nullable
+  MouseCursor createMouseCursor(@Nonnull String filename, int hotspotX, int hotspotY) throws IOException;
 
   /**
    * Enable the given mouse cursor.
+   *
    * @param mouseCursor the mouse cursor to enable
    */
-  void enableMouseCursor(MouseCursor mouseCursor);
+  void enableMouseCursor(@Nonnull MouseCursor mouseCursor);
 
   /**
    * Disable the current mouse cursor.
