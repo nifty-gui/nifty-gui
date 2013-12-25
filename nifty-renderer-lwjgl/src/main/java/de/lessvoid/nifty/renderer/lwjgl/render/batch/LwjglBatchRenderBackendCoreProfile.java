@@ -451,6 +451,8 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     }
 
     public void render() {
+      if (primitiveCount == 0) return; // Attempting to render with an empty vertex buffer crashes the program.
+
       if (blendMode.equals(BlendMode.BLEND)) {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
       } else if (blendMode.equals(BlendMode.MULIPLY)) {

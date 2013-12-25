@@ -454,6 +454,8 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     }
 
     public void render() {
+      if (primitiveCount == 0) return; // Attempting to render with an empty vertex buffer crashes the program.
+
       final GL gl = GLContext.getCurrentGL();
       if (blendMode.equals(BlendMode.BLEND)) {
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
