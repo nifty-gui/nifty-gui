@@ -180,7 +180,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   /**
    * The screen this element is part of.
    */
-  @Nonnull
+  @Nullable
   private Screen screen;
 
   @Nonnull
@@ -1692,8 +1692,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private boolean canHandleInteraction() {
-    return enabled && !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId
-        .onEndScreen);
+    if (screen == null || !enabled) {
+      return false;
+    }
+    return !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId.onEndScreen);
   }
 
   /**
@@ -1788,7 +1790,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       return;
     }
 
-    focusHandler.addElement(this, screen.findElementById(focusableInsertBeforeElementId));
+    if (screen == null) {
+      log.severe("Trying to bind element [" + String.valueOf(getId()) + "] to focus handler while screen is not " +
+          "bound.");
+    } else {
+      focusHandler.addElement(this, screen.findElementById(focusableInsertBeforeElementId));
+    }
   }
 
   private boolean hasAncestorPopup() {
@@ -1834,8 +1841,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         e.onStartScreenInternal();
       }
     }
-    if (attachedInputControl != null) {
-      attachedInputControl.onStartScreen(nifty, screen);
+    if (screen == null) {
+      log.severe("Internal start of screen called, but no screen is bound to the element [" + String.valueOf(getId())
+          + "]");
+    } else {
+      if (attachedInputControl != null) {
+        attachedInputControl.onStartScreen(nifty, screen);
+      }
     }
   }
 
@@ -2065,9 +2077,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     elementType.getAttributes().set("style", newStyle);
     elementType.applyStyles(nifty.getDefaultStyleResolver());
-    elementType.applyAttributes(this.screen, this, elementType.getAttributes(), nifty.getRenderEngine());
-    elementType.applyEffects(nifty, screen, this);
-    elementType.applyInteract(nifty, screen, this);
+    if (screen == null) {
+      log.warning("Can't properly apply style as long as the element is not bound to a screen.");
+    } else {
+      elementType.applyAttributes(screen, this, elementType.getAttributes(), nifty.getRenderEngine());
+      elementType.applyEffects(nifty, screen, this);
+      elementType.applyInteract(nifty, screen, this);
+    }
 
     log.fine("after setStyle [" + newStyle + "]\n" + elementType.output(0));
     notifyListeners();
@@ -2309,7 +2325,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public void markForRemoval(@Nullable final EndNotify endNotify) {
-    nifty.removeElement(screen, this, endNotify);
+    if (screen == null) {
+      log.warning("Marking the element [" + String.valueOf(getId()) + "] for removal is not possible when there is " +
+          "not screen bound.");
+    } else {
+      nifty.removeElement(screen, this, endNotify);
+    }
   }
 
   public void markForMove(@Nonnull final Element destination) {
@@ -2317,7 +2338,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public void markForMove(@Nonnull final Element destination, @Nullable final EndNotify endNotify) {
-    nifty.moveElement(screen, this, destination, endNotify);
+    if (screen == null) {
+      log.warning("Marking the element [" + String.valueOf(getId()) + "] for moving is not possible when there is not" +
+          " screen bound.");
+    } else {
+      nifty.moveElement(screen, this, destination, endNotify);
+    }
   }
 
   public void reactivate() {
