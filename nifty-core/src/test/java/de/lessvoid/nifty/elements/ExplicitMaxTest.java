@@ -92,7 +92,8 @@ public class ExplicitMaxTest {
     for (LayoutManager layout : layouts) {
       root.setLayoutManager(layout);
       root.layoutElements();
-      assertEquals(75, root.getConstraintHeight().getValueAsInt(0));
+      assertEquals("LayoutManager: " + layout.getClass().getSimpleName(), 75,
+          root.getConstraintHeight().getValueAsInt(0));
     }
   }
 }

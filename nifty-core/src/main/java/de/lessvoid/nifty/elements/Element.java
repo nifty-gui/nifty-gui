@@ -20,6 +20,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.elements.tools.ElementTreeTraverser;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
@@ -280,12 +281,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       @Nonnull final Screen targetScreen,
       @Nonnull final Attributes attributes,
       @Nonnull final NiftyRenderEngine renderEngine) {
-    layoutPart.getBoxConstraints().setHeight(convert.sizeValue(attributes.get("height")));
-    layoutPart.getBoxConstraints().setWidth(convert.sizeValue(attributes.get("width")));
-    layoutPart.getBoxConstraints().setX(convert.sizeValue(attributes.get("x")));
-    layoutPart.getBoxConstraints().setY(convert.sizeValue(attributes.get("y")));
-    layoutPart.getBoxConstraints().setHorizontalAlign(convert.horizontalAlign(attributes.get("align")));
-    layoutPart.getBoxConstraints().setVerticalAlign(convert.verticalAlign(attributes.get("valign")));
+    BoxConstraints boxConstraints = layoutPart.getBoxConstraints();
+    boxConstraints.setHeight(convert.sizeValue(attributes.get("height")));
+    boxConstraints.setWidth(convert.sizeValue(attributes.get("width")));
+    boxConstraints.setX(convert.sizeValue(attributes.get("x")));
+    boxConstraints.setY(convert.sizeValue(attributes.get("y")));
+    boxConstraints.setHorizontalAlign(convert.horizontalAlign(attributes.get("align")));
+    boxConstraints.setVerticalAlign(convert.verticalAlign(attributes.get("valign")));
 
     String paddingLeft = Convert.DEFAULT_PADDING;
     String paddingRight = Convert.DEFAULT_PADDING;
@@ -293,7 +295,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     String paddingBottom = Convert.DEFAULT_PADDING;
     if (attributes.isSet("padding")) {
       try {
-        PaddingAttributeParser paddingParser = new PaddingAttributeParser(attributes.get("padding"));
+        String padding = attributes.get("padding");
+        assert padding != null; // checked by isSet
+        PaddingAttributeParser paddingParser = new PaddingAttributeParser(padding);
         paddingLeft = paddingParser.getLeft();
         paddingRight = paddingParser.getRight();
         paddingTop = paddingParser.getTop();
@@ -302,12 +306,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         log.warning(e.getMessage());
       }
     }
-    layoutPart.getBoxConstraints().setPaddingLeft(convert.paddingSizeValue(attributes.get("paddingLeft"), paddingLeft));
-    layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight"),
-        paddingRight));
-    layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop"), paddingTop));
-    layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom"),
-        paddingBottom));
+    boxConstraints.setPaddingLeft(convert.paddingSizeValue(attributes.get("paddingLeft"), paddingLeft));
+    boxConstraints.setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight"), paddingRight));
+    boxConstraints.setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop"), paddingTop));
+    boxConstraints.setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom"), paddingBottom));
 
     String marginLeft = Convert.DEFAULT_MARGIN;
     String marginRight = Convert.DEFAULT_MARGIN;
@@ -315,7 +317,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     String marginBottom = Convert.DEFAULT_MARGIN;
     if (attributes.isSet("margin")) {
       try {
-        PaddingAttributeParser marginParser = new PaddingAttributeParser(attributes.get("margin"));
+        String margin = attributes.get("margin");
+        assert margin != null; // checked by isSet
+        PaddingAttributeParser marginParser = new PaddingAttributeParser(margin);
         marginLeft = marginParser.getLeft();
         marginRight = marginParser.getRight();
         marginTop = marginParser.getTop();
@@ -324,11 +328,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         log.warning(e.getMessage());
       }
     }
-    layoutPart.getBoxConstraints().setMarginLeft(convert.paddingSizeValue(attributes.get("marginLeft"), marginLeft));
-    layoutPart.getBoxConstraints().setMarginRight(convert.paddingSizeValue(attributes.get("marginRight"), marginRight));
-    layoutPart.getBoxConstraints().setMarginTop(convert.paddingSizeValue(attributes.get("marginTop"), marginTop));
-    layoutPart.getBoxConstraints().setMarginBottom(convert.paddingSizeValue(attributes.get("marginBottom"),
-        marginBottom));
+    boxConstraints.setMarginLeft(convert.paddingSizeValue(attributes.get("marginLeft"), marginLeft));
+    boxConstraints.setMarginRight(convert.paddingSizeValue(attributes.get("marginRight"), marginRight));
+    boxConstraints.setMarginTop(convert.paddingSizeValue(attributes.get("marginTop"), marginTop));
+    boxConstraints.setMarginBottom(convert.paddingSizeValue(attributes.get("marginBottom"), marginBottom));
 
     this.clipChildren = attributes.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP);
     this.renderOrder = attributes.getAsInteger("renderOrder", Convert.DEFAULT_RENDER_ORDER);
