@@ -1,34 +1,38 @@
 package de.lessvoid.nifty.renderer.jogl.input;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Logger;
-
-import com.jogamp.newt.event.InputEvent;
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.event.MouseEvent;
-import com.jogamp.newt.event.MouseListener;
-
+import com.jogamp.newt.event.*;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import javax.annotation.Nonnull;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Logger;
+
 /**
  * This is a direct port of the LwjglInputSystem to JOGL and the old existing InputSystem for JOGL.
+ *
  * @author void
  */
 public class JoglInputSystem implements InputSystem, MouseListener, KeyListener {
-  private Logger log = Logger.getLogger(JoglInputSystem.class.getName());
-  private AwtToNiftyKeyCodeConverter converter = new AwtToNiftyKeyCodeConverter();
+  private final Logger log = Logger.getLogger(JoglInputSystem.class.getName());
+  @Nonnull
+  private final AwtToNiftyKeyCodeConverter converter = new AwtToNiftyKeyCodeConverter();
 
   // queues to store events received from JOGL in
-  private ConcurrentLinkedQueue<MouseInputEvent> mouseEvents = new ConcurrentLinkedQueue<MouseInputEvent>();
-  private ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEvents = new ConcurrentLinkedQueue<KeyboardInputEvent>();
+  @Nonnull
+  private final ConcurrentLinkedQueue<MouseInputEvent> mouseEvents = new ConcurrentLinkedQueue<MouseInputEvent>();
+  @Nonnull
+  private final ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEvents = new
+      ConcurrentLinkedQueue<KeyboardInputEvent>();
 
   // queues to store events not processed by Nifty in
-  private ConcurrentLinkedQueue<MouseInputEvent> mouseEventsOut = new ConcurrentLinkedQueue<MouseInputEvent>();
-  private ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEventsOut = new ConcurrentLinkedQueue<KeyboardInputEvent>();
+  @Nonnull
+  private final ConcurrentLinkedQueue<MouseInputEvent> mouseEventsOut = new ConcurrentLinkedQueue<MouseInputEvent>();
+  @Nonnull
+  private final ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEventsOut = new
+      ConcurrentLinkedQueue<KeyboardInputEvent>();
 
   // some booleans to remember if nifty currently has the focus
   private boolean niftyHasKeyboardFocus = true;
@@ -45,13 +49,13 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   // InputSystem Implementation
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     // We currently don't need any resources so we don't have any use for this
     // method
   }
 
   @Override
-  public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
+  public void forwardEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     mouseEventsOut.clear();
     keyboardEventsOut.clear();
 
@@ -67,7 +71,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   // MouseMotionListener Implementation
 
   @Override
-  public void mouseDragged(final MouseEvent mouseEvent) {
+  public void mouseDragged(@Nonnull final MouseEvent mouseEvent) {
     if (mouseEvent.getButton() == MouseEvent.BUTTON1 || mouseEvent.getModifiers() == InputEvent.BUTTON1_MASK) {
       mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), 0, 0, true));
     }
@@ -80,7 +84,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   }
 
   @Override
-  public void mouseMoved(final MouseEvent mouseEvent) {
+  public void mouseMoved(@Nonnull final MouseEvent mouseEvent) {
     mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), 0, -1, false));
   }
 
@@ -99,7 +103,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   }
 
   @Override
-  public void mousePressed(final MouseEvent mouseEvent) {
+  public void mousePressed(@Nonnull final MouseEvent mouseEvent) {
     if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
       mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), 0, 0, true));
     }
@@ -112,7 +116,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   }
 
   @Override
-  public void mouseReleased(final MouseEvent mouseEvent) {
+  public void mouseReleased(@Nonnull final MouseEvent mouseEvent) {
     if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
       mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), 0, 0, false));
     }
@@ -125,20 +129,21 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   }
 
   @Override
-  public void mouseWheelMoved(final MouseEvent mouseEvent) {
+  public void mouseWheelMoved(@Nonnull final MouseEvent mouseEvent) {
     // void: I have no idea if this would be the correct way to translate mouse wheel events
-    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), (int) mouseEvent.getWheelRotation(), -1, false));
+    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), (int) mouseEvent.getRotation()[0], -1,
+        false));
   }
 
   // KeyListener implementation
 
   @Override
-  public void keyPressed(final KeyEvent e) {
+  public void keyPressed(@Nonnull final KeyEvent e) {
     handleKeyEvent(e, true);
   }
 
   @Override
-  public void keyReleased(final KeyEvent e) {
+  public void keyReleased(@Nonnull final KeyEvent e) {
     handleKeyEvent(e, false);
   }
 
@@ -148,7 +153,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   /**
    * This can be called the check if any mouse events have not been handled by
    * Nifty.
-   * 
+   *
    * @return true when mouse events are available and false if not
    */
   public boolean hasNextMouseEvent() {
@@ -157,7 +162,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
 
   /**
    * Retrieve a unhandled mouse event from the internal queue.
-   * 
+   *
    * @return MouseInputEvent of the mouse event that was not handled by Nifty
    */
   public MouseInputEvent nextMouseEvent() {
@@ -167,7 +172,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   /**
    * This can be called the check if any keyboard events have not been handled
    * by Nifty.
-   * 
+   *
    * @return true when keyboard events are available and false if not
    */
   public boolean hasNextKeyboardEvent() {
@@ -176,7 +181,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
 
   /**
    * Retrieve a unhandled keyboard event from the internal queue.
-   * 
+   *
    * @return KeyboardInputEvent of the event that was not handled by Nifty
    */
   public KeyboardInputEvent nextKeyboardEvent() {
@@ -185,7 +190,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
 
   // Internals
 
-  private void processMouseEvents(final NiftyInputConsumer inputEventConsumer) {
+  private void processMouseEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     MouseInputEvent mouseEvent = mouseEvents.poll();
     while (mouseEvent != null) {
       // now send the event to nifty
@@ -215,7 +220,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
     }
   }
 
-  private void processKeyboardEvents(final NiftyInputConsumer inputEventConsumer) {
+  private void processKeyboardEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     KeyboardInputEvent keyEvent = keyboardEvents.poll();
     while (keyEvent != null) {
       // due to or short-circuiting on true, the event will get forward to
@@ -229,15 +234,16 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
     }
   }
 
-  private void handleKeyEvent(final KeyEvent e, final boolean isKeyDown) {
+  private void handleKeyEvent(@Nonnull final KeyEvent e, final boolean isKeyDown) {
     keyboardEvents.add(convert(e, isKeyDown, converter.convertToNiftyKeyCode(e.getKeyCode(), e.getKeySymbol())));
   }
 
-  private KeyboardInputEvent convert(final KeyEvent e, final boolean isKeyDown, final int keyCode) {
+  @Nonnull
+  private KeyboardInputEvent convert(@Nonnull final KeyEvent e, final boolean isKeyDown, final int keyCode) {
     return new KeyboardInputEvent(keyCode, e.getKeyChar(), isKeyDown, e.isShiftDown(), e.isControlDown());
   }
 
-  public class MouseInputEvent {
+  public static class MouseInputEvent {
     private final int mouseX;
     private final int mouseY;
     // the button that has been pressed with -1 = no button, 0 = first button, 1
@@ -255,7 +261,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
       this.buttonDown = buttonDown;
     }
 
-    MouseInputEvent(final MouseInputEvent mouseEvent) {
+    MouseInputEvent(@Nonnull final MouseInputEvent mouseEvent) {
       this.mouseX = mouseEvent.mouseX;
       this.mouseY = mouseEvent.mouseY;
       this.button = mouseEvent.button;
@@ -263,7 +269,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
       this.buttonDown = mouseEvent.buttonDown;
     }
 
-    boolean sendToNifty(final NiftyInputConsumer inputEventConsumer) {
+    boolean sendToNifty(@Nonnull final NiftyInputConsumer inputEventConsumer) {
       return inputEventConsumer.processMouseEvent(
           mouseX,
           mouseY,
@@ -292,8 +298,11 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
       return buttonDown;
     }
 
+    @Override
+    @Nonnull
     public String toString() {
-      return this.button + "=" + this.buttonDown + " at " + this.mouseX + "," + this.mouseY + " scroll:" + this.mouseWheel;
+      return this.button + "=" + this.buttonDown + " at " + this.mouseX + "," + this.mouseY + " scroll:" + this
+          .mouseWheel;
     }
   }
 }

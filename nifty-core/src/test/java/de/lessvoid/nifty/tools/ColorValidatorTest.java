@@ -2,12 +2,10 @@ package de.lessvoid.nifty.tools;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ColorValidatorTest {
-  private ColorValidator validator = new ColorValidator();
-
   private String[] shortColor = new String[] { "#000", "#fff", "#FFF", "#0af", "#0AF", "#0aF", "#0Af", "#aaa", "#157" };
 
   private String[] shortAlphaColor = new String[] { "#0000", "#ffff", "#FFFF", "#0afb", "#0AFB", "#0aFb", "#0AfB",
@@ -35,15 +33,11 @@ public class ColorValidatorTest {
   }
 
   private void testInvalid(final String text) {
-    assertFalse(generateInvalidColorMsg(text), validator.isValid(text));
+    assertFalse(generateInvalidColorMsg(text), ColorValidator.isValid(text));
   }
 
   private String generateInvalidColorMsg(final String color) {
-    final StringBuilder builder = new StringBuilder();
-    builder.append("Invalid color \"");
-    builder.append(String.valueOf(color));
-    builder.append("\" was detected as valid.");
-    return builder.toString();
+    return "Invalid color \"" + String.valueOf(color) + "\" was detected as valid.";
   }
 
   @Test
@@ -63,90 +57,86 @@ public class ColorValidatorTest {
   }
 
   private void testValid(final String text) {
-    assertTrue(generateValidColorMsg(text), validator.isValid(text));
+    assertTrue(generateValidColorMsg(text), ColorValidator.isValid(text));
   }
 
   private String generateValidColorMsg(final String color) {
-    final StringBuilder builder = new StringBuilder();
-    builder.append("Valid color \"");
-    builder.append(String.valueOf(color));
-    builder.append("\" was detected as invalid.");
-    return builder.toString();
+    return "Valid color \"" + String.valueOf(color) + "\" was detected as invalid.";
   }
 
   @Test
   public void testShortMode() {
     for (final String color : shortColor) {
-      assertTrue(generateValidColorMsg(color), validator.isShortModeWithoutAlpha(color));
+      assertTrue(generateValidColorMsg(color), ColorValidator.isShortModeWithoutAlpha(color));
     }
 
     for (final String color : shortAlphaColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isShortModeWithoutAlpha(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isShortModeWithoutAlpha(color));
     }
 
     for (final String color : longColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isShortModeWithoutAlpha(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isShortModeWithoutAlpha(color));
     }
 
     for (final String color : longAlphaColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isShortModeWithoutAlpha(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isShortModeWithoutAlpha(color));
     }
   }
 
   @Test
   public void testShortAlphaMode() {
     for (final String color : shortColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isShortMode(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isShortMode(color));
     }
 
     for (final String color : shortAlphaColor) {
-      assertTrue(generateValidColorMsg(color), validator.isShortMode(color));
+      assertTrue(generateValidColorMsg(color), ColorValidator.isShortMode(color));
     }
 
     for (final String color : longColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isShortMode(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isShortMode(color));
     }
 
     for (final String color : longAlphaColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isShortMode(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isShortMode(color));
     }
   }
 
   @Test
   public void testLongMode() {
     for (final String color : shortColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isLongModeWithoutAlpha(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isLongModeWithoutAlpha(color));
     }
 
     for (final String color : shortAlphaColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isLongModeWithoutAlpha(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isLongModeWithoutAlpha(color));
     }
 
     for (final String color : longColor) {
-      assertTrue(generateValidColorMsg(color), validator.isLongModeWithoutAlpha(color));
+      assertTrue(generateValidColorMsg(color), ColorValidator.isLongModeWithoutAlpha(color));
     }
 
     for (final String color : longAlphaColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isLongModeWithoutAlpha(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isLongModeWithoutAlpha(color));
     }
   }
 
   @Test
   public void testLongAlphaMode() {
     for (final String color : shortColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isLongMode(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isLongMode(color));
     }
 
     for (final String color : shortAlphaColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isLongMode(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isLongMode(color));
     }
 
     for (final String color : longColor) {
-      assertFalse(generateInvalidColorMsg(color), validator.isLongMode(color));
+      assertFalse(generateInvalidColorMsg(color), ColorValidator.isLongMode(color));
     }
 
     for (final String color : longAlphaColor) {
-      assertTrue(generateValidColorMsg(color), validator.isLongMode(color));
+      assertTrue(generateValidColorMsg(color), ColorValidator.isLongMode(color));
     }
   }
 }

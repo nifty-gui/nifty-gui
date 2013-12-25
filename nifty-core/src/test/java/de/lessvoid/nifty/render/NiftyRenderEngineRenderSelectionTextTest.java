@@ -1,14 +1,11 @@
 package de.lessvoid.nifty.render;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.createStrictMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import junit.framework.TestCase;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
+import junit.framework.TestCase;
+
+import static org.easymock.EasyMock.*;
 
 public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
 
@@ -23,6 +20,7 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
   private RenderDevice renderDeviceMock;
   private RenderFont font;
 
+  @Override
   public void setUp() {
     renderDeviceMock = createMock(RenderDevice.class);
     expect(renderDeviceMock.getWidth()).andReturn(1024).times(2);
@@ -79,7 +77,8 @@ public class NiftyRenderEngineRenderSelectionTextTest extends TestCase {
 
     engine = new NiftyRenderEngineImpl(renderDeviceMock);
     engine.setFont(font);
-    engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, TEXT_SIZE, TEXT.length() - 1, TEXT.length());
+    engine.renderSelectionText(TEXT, X, Y, TEXT_COLOR, TEXT_SELECTION_COLOR, TEXT_SIZE, TEXT_SIZE, TEXT.length() - 1,
+        TEXT.length());
     verify(font);
   }
 

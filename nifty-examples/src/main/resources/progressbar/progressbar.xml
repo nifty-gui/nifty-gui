@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
 
-  <!-- this is our nifty little progressbar control -->
-  <controlDefinition name="progressbar" controller="de.lessvoid.nifty.examples.progressbar.ProgressbarControl">
-    <image filename="progressbar/progressbar-outer.png" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15" childLayout="absolute">
-      <image id="#progress" x="0" y="0" filename="progressbar/progressbar-inner.png" width="32px" height="100%" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15" />
-      <text id="#progress-text" font="verdana-small-regular.fnt" text="" textHAlign="center" textVAlign="center" width="100%" height="100%" x="0" y="0" color="#f00f" />
-    </image>
-  </controlDefinition>
+    <!-- this is our nifty little progressbar control -->
+    <controlDefinition name="progressbar" controller="de.lessvoid.nifty.examples.progressbar.ProgressbarControl">
+        <image filename="progressbar/progressbar-outer.png" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"
+               childLayout="absolute">
+            <image id="#progress" x="0" y="0" filename="progressbar/progressbar-inner.png" width="32px" height="100%"
+                   imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"/>
+            <text id="#progress-text" font="verdana-small-regular.fnt" text="" textHAlign="center" textVAlign="center"
+                  width="100%" height="100%" x="0" y="0" color="#f00f"/>
+        </image>
+    </controlDefinition>
 
-  <!-- a simple screen -->
-  <screen id="start">
-    <layer id="layer" childLayout="center">
-      <control id="my-progress" name="progressbar" align="center" valign="center" width="400px" height="32px" />
-    </layer>
-  </screen>
+    <!-- a simple screen -->
+    <screen id="start">
+        <layer id="layer" childLayout="center">
+            <control id="my-progress" name="progressbar" align="center" valign="center" width="400px" height="32px"/>
+        </layer>
+    </screen>
 </nifty>

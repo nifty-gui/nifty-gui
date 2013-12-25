@@ -2,38 +2,42 @@ package de.lessvoid.nifty.examples.defaultcontrols.textfield;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.CheckBox;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * The ListBoxDialog to show off the new ListBox and a couple of more new Nifty 1.3 things.
  * @author void
  */
 public class TextFieldDialogController implements Controller {
+  @Nullable
   private TextField mainTextField;
+  @Nullable
   private CheckBox passwordCharCheckBox;
+  @Nullable
   private TextField passwordCharTextField;
+  @Nullable
   private CheckBox maxLengthEnableCheckBox;
+  @Nullable
   private TextField maxLengthTextField;
+  @Nullable
   private Label textChangedLabel;
+  @Nullable
   private Label keyEventLabel;
   
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     this.mainTextField = screen.findNiftyControl("mainTextField", TextField.class);
     this.passwordCharCheckBox = screen.findNiftyControl("passwordCharCheckBox", CheckBox.class);
     this.passwordCharTextField = screen.findNiftyControl("passwordCharTextField", TextField.class);
@@ -44,7 +48,7 @@ public class TextFieldDialogController implements Controller {
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
     passwordCharTextField.setText("*");
     maxLengthTextField.setText("5");
     textChangedLabel.setText("---");
@@ -63,7 +67,7 @@ public class TextFieldDialogController implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
@@ -83,12 +87,12 @@ public class TextFieldDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="mainTextField")
-  public void onTextChanged(final String id, final TextFieldChangedEvent event) {
+  public void onTextChanged(final String id, @Nonnull final TextFieldChangedEvent event) {
     textChangedLabel.setText(event.getText());
   }
 
   @NiftyEventSubscriber(id="maxLengthTextField")
-  public void onMaxLengthTextChanged(final String id, final TextFieldChangedEvent event) {
+  public void onMaxLengthTextChanged(final String id, @Nonnull final TextFieldChangedEvent event) {
     setMaxLength(event.getText());
   }
 
@@ -100,7 +104,7 @@ public class TextFieldDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="mainTextField")
-  public void onTextChanged(final String id, final NiftyStandardInputEvent event) {
+  public void onTextChanged(final String id, @Nonnull final NiftyStandardInputEvent event) {
     keyEventLabel.setText(event.toString() + " [" + event.getCharacter() + "]");
   }
 

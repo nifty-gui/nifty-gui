@@ -2,6 +2,8 @@ package de.lessvoid.nifty.controls.listbox;
 
 import de.lessvoid.nifty.elements.Element;
 
+import javax.annotation.Nonnull;
+
 /**
  * This interfaces defines a class that has to process a list box label item once its created.
  *
@@ -13,5 +15,5 @@ public interface ListBoxItemProcessor {
    *
    * @param element the element to process
    */
-  void processElement(Element element);
+  void processElement(@Nonnull Element element);
 }

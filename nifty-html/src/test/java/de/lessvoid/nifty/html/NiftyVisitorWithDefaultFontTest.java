@@ -1,11 +1,10 @@
 package de.lessvoid.nifty.html;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ElementBuilder;
+import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import org.htmlparser.Text;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.nodes.TextNode;
@@ -15,11 +14,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ElementBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.spi.render.RenderFont;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class NiftyVisitorWithDefaultFontTest {
   private NiftyVisitor visitor;
@@ -31,6 +28,8 @@ public class NiftyVisitorWithDefaultFontTest {
   public void before() {
     builderFactoryMock = createMock(NiftyBuilderFactory.class);
     defaultFont = createMock(RenderFont.class);
+    expect(defaultFont.getHeight()).andReturn(12);
+    replay(defaultFont);
 
     niftyMock = createMock(Nifty.class);
     expect(niftyMock.createFont("aurulent-sans-16.fnt")).andReturn(defaultFont);
@@ -48,8 +47,6 @@ public class NiftyVisitorWithDefaultFontTest {
 
   @Test
   public void emptyParagraphSuccess() throws Exception {
-    expect(defaultFont.getHeight()).andReturn(12);
-    replay(defaultFont);
 
     PanelBuilder bodyPanelBuilder = new PanelBuilder();
     PanelBuilder paragraphPanelBuilder = new PanelBuilder();
@@ -80,8 +77,6 @@ public class NiftyVisitorWithDefaultFontTest {
 
   @Test
   public void simpleTextParagraphSuccess() throws Exception {
-    replay(defaultFont);
-
     PanelBuilder bodyPanelBuilder = new PanelBuilder();
     PanelBuilder paragraphPanelBuilder = new PanelBuilder();
     TextBuilder textBuilder = new TextBuilder();
@@ -120,9 +115,6 @@ public class NiftyVisitorWithDefaultFontTest {
 
   @Test
   public void simpleBodyWithBR() throws Exception {
-    expect(defaultFont.getHeight()).andReturn(12);
-    replay(defaultFont);
-
     PanelBuilder bodyPanelBuilder = new PanelBuilder();
     PanelBuilder panelBuilder = new PanelBuilder();
 

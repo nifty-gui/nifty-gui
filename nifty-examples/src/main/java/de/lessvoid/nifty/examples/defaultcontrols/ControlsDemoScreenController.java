@@ -1,19 +1,10 @@
 package de.lessvoid.nifty.examples.defaultcontrols;
 
-import java.util.*;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.Console;
-import de.lessvoid.nifty.controls.ConsoleCommands;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.ConsoleCommands.ConsoleCommand;
-import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
-import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
-import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.impl.Move;
@@ -27,15 +18,24 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.logging.Logger;
+
 public class ControlsDemoScreenController<T> implements ScreenController, KeyInputHandler {
-  private static Logger logger = Logger.getLogger(ControlsDemoScreenController.class.getName());
+  private static final Logger logger = Logger.getLogger(ControlsDemoScreenController.class.getName());
   private static final Color HELP_COLOR = new Color("#aaaf");
 
   private Nifty nifty;
   private Screen screen;
+  @Nullable
   private Element consolePopup;
+  @Nullable
   private Element creditsPopup;
+  @Nullable
   private Console console;
+  @Nullable
   private ConsoleCommands consoleCommands;
 
   private final ResolutionControl<T> resControl;
@@ -43,16 +43,19 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
   // This simply maps the IDs of the MenuButton elements to the corresponding Dialog elements we'd
   // like to show with the given MenuButton. This map will make our life a little bit easier when
   // switching between the menus.
-  private Map<String, String> buttonToDialogMap = new Hashtable<String, String>();
+  @Nonnull
+  private final Map<String, String> buttonToDialogMap = new HashMap<String, String>();
 
   // We keep all the button IDs in this list so that we can later decide if an index is before or
   // after the current button.
-  private List<String> buttonIdList = new ArrayList<String>();
+  @Nonnull
+  private final List<String> buttonIdList = new ArrayList<String>();
 
   // This keeps the current menu button
+  @Nullable
   private String currentMenuButtonId;
 
-  public ControlsDemoScreenController(final ResolutionControl<T> resolutionControl, final String ... mapping) {
+  public ControlsDemoScreenController(final ResolutionControl<T> resolutionControl, @Nullable final String ... mapping) {
     resControl = resolutionControl;
     if (mapping == null || mapping.length == 0 || mapping.length % 2 != 0) {
       logger.warning("expecting pairs of values that map menuButton IDs to dialog IDs");
@@ -70,7 +73,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
   }
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
 
@@ -114,8 +117,8 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
 
   @Override
   public void onStartScreen() {
-    screen.findElementByName(buttonToDialogMap.get(currentMenuButtonId)).show();
-    screen.findElementByName(currentMenuButtonId).startEffect(EffectEventId.onCustom, null, "selected");
+    screen.findElementById(buttonToDialogMap.get(currentMenuButtonId)).show();
+    screen.findElementById(currentMenuButtonId).startEffect(EffectEventId.onCustom, null, "selected");
   }
 
   @Override
@@ -123,7 +126,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
   }
 
   @Override
-  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+  public boolean keyEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.ConsoleToggle) {
       if (screen.isActivePopup(consolePopup)) {
         nifty.closePopup(consolePopup.getId());
@@ -135,7 +138,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
     return false;
   }
 
-  public void openLink(final String url) {
+  public void openLink(@Nonnull final String url) {
     if (!java.awt.Desktop.isDesktopSupported()) {
       System.err.println("Desktop is not supported (Can't open link)");
       return;
@@ -155,7 +158,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
     }
   }
 
-  private void modifyMoveEffect(final EffectEventId effectEventId, final Element element, final String direction) {
+  private void modifyMoveEffect(@Nonnull final EffectEventId effectEventId, @Nonnull final Element element, final String direction) {
     List<Effect> moveEffects = element.findElementById("#effectPanel").getEffects(effectEventId, Move.class);
     if (!moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().put("direction", direction);
@@ -163,7 +166,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
   }
 
   @NiftyEventSubscriber(pattern="menuButton.*")
-  public void onMenuButtonListBoxClick(final String id, final NiftyMousePrimaryClickedEvent clickedEvent) {
+  public void onMenuButtonListBoxClick(@Nonnull final String id, final NiftyMousePrimaryClickedEvent clickedEvent) {
     if ("menuButtonCredits".equals(id)) {
       showCredits();
       return;
@@ -182,7 +185,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
 
   @NiftyEventSubscriber(id="resetScreenButton")
   public void onTestButtonClick(final String id, final ButtonClickedEvent clickedEvent) {
-    screen.findElementByName(buttonToDialogMap.get(currentMenuButtonId)).hide(new EndNotify() {
+    screen.findElementById(buttonToDialogMap.get(currentMenuButtonId)).hide(new EndNotify() {
       @Override
       public void perform() {
         nifty.gotoScreen("demo");
@@ -190,33 +193,33 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
     });
   }
 
-  private void changeDialogTo(final String id) {
+  private void changeDialogTo(@Nonnull final String id) {
     if (!id.equals(currentMenuButtonId)) {
       int currentIndex = buttonIdList.indexOf(currentMenuButtonId);
       int nextIndex = buttonIdList.indexOf(id);
 
-      Element nextElement = screen.findElementByName(buttonToDialogMap.get(id));
+      Element nextElement = screen.findElementById(buttonToDialogMap.get(id));
       modifyMoveEffect(EffectEventId.onShow, nextElement, currentIndex < nextIndex ? "right" : "left");
       nextElement.show();
 
-      Element currentElement = screen.findElementByName(buttonToDialogMap.get(currentMenuButtonId));
+      Element currentElement = screen.findElementById(buttonToDialogMap.get(currentMenuButtonId));
       modifyMoveEffect(EffectEventId.onHide, currentElement, currentIndex < nextIndex ? "left" : "right");
       currentElement.hide();
 
-      screen.findElementByName(currentMenuButtonId).stopEffect(EffectEventId.onCustom);
-      screen.findElementByName(id).startEffect(EffectEventId.onCustom, null, "selected");
+      screen.findElementById(currentMenuButtonId).stopEffect(EffectEventId.onCustom);
+      screen.findElementById(id).startEffect(EffectEventId.onCustom, null, "selected");
       currentMenuButtonId = id;
     }
   }
 
   @NiftyEventSubscriber(id="console")
-  public void onConsoleEvent(final String id, final ConsoleExecuteCommandEvent executeCommandEvent) {
+  public void onConsoleEvent(final String id, @Nonnull final ConsoleExecuteCommandEvent executeCommandEvent) {
     System.out.println(executeCommandEvent.getCommandLine());
   }
 
   @NiftyEventSubscriber(id="resolutions")
-  public void onResolution(final String id, final DropDownSelectionChangedEvent<T> event) {
-    screen.findElementByName("whiteOverlay").startEffect(EffectEventId.onCustom, new EndNotify() {
+  public void onResolution(final String id, @Nonnull final DropDownSelectionChangedEvent<T> event) {
+    screen.findElementById("whiteOverlay").startEffect(EffectEventId.onCustom, new EndNotify() {
       @Override
       public void perform() {
         resControl.setResolution(event.getSelection());
@@ -227,7 +230,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
   }
 
   @NiftyEventSubscriber(id="scale-resolution")
-  public void onSliderChanged(final String id, final SliderChangedEvent sliderChangedEvent) {
+  public void onSliderChanged(final String id, @Nonnull final SliderChangedEvent sliderChangedEvent) {
     nifty.enableAutoScaling(1024, 768, sliderChangedEvent.getValue(), sliderChangedEvent.getValue());
   }
 
@@ -235,7 +238,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
    * Get all LWJGL DisplayModes into the DropDown
    * @param screen
    */
-  private void fillResolutionDropDown(final Screen screen) {
+  private void fillResolutionDropDown(@Nonnull final Screen screen) {
     DropDown<T> dropDown = screen.findNiftyControl("resolutions", DropDown.class);
     final Collection<T> resolutions = resControl.getResolutions();
     for (T mode : resolutions) {
@@ -246,7 +249,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
 
   private class ShowCommand implements ConsoleCommand {
     @Override
-    public void execute(final String[] args) {
+    public void execute(@Nonnull final String[] args) {
       if (args.length != 2) {
         console.outputError("command argument error");
         return;
@@ -271,7 +274,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
 
   private class NiftyCommand implements ConsoleCommand {
     @Override
-    public void execute(final String[] args) {
+    public void execute(@Nonnull final String[] args) {
       if (args.length != 2) {
         console.outputError("command argument error");
         return;
@@ -289,7 +292,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
 
   private class HelpCommand implements ConsoleCommand {
     @Override
-    public void execute(final String[] args) {
+    public void execute(@Nonnull final String[] args) {
       console.output("---------------------------", HELP_COLOR);
       console.output("Supported commands", HELP_COLOR);
       console.output("---------------------------", HELP_COLOR);
@@ -301,7 +304,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
 
   private class ExitCommand implements ConsoleCommand {
     @Override
-    public void execute(final String[] args) {
+    public void execute(@Nonnull final String[] args) {
       console.output("good bye");
       nifty.closePopup(consolePopup.getId());
     }
@@ -309,7 +312,7 @@ public class ControlsDemoScreenController<T> implements ScreenController, KeyInp
 
   private class ClearCommand implements ConsoleCommand {
     @Override
-    public void execute(final String[] args) {
+    public void execute(@Nonnull final String[] args) {
       console.clear();
     }
   }

@@ -5,20 +5,27 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 /**
  * ScreenController for Hello World Example.
+ *
  * @author void
  */
 public class TextAlignStartScreen implements ScreenController, NiftyExample {
 
-  /** nifty instance. */
+  /**
+   * nifty instance.
+   */
   private Nifty nifty;
 
   /**
    * Bind this ScreenController to a screen.
-   * @param newNifty nifty
+   *
+   * @param newNifty  nifty
    * @param newScreen screen
    */
+  @Override
   public final void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
   }
@@ -26,12 +33,14 @@ public class TextAlignStartScreen implements ScreenController, NiftyExample {
   /**
    * on start screen interactive.
    */
+  @Override
   public final void onStartScreen() {
   }
 
   /**
    * on end screen.
    */
+  @Override
   public final void onEndScreen() {
   }
 
@@ -43,16 +52,19 @@ public class TextAlignStartScreen implements ScreenController, NiftyExample {
     nifty.fromXml("all/intro.xml", "menu");
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "textalign/textalign.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Textalign Example";

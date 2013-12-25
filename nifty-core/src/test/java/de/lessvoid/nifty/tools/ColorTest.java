@@ -2,9 +2,7 @@ package de.lessvoid.nifty.tools;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ColorTest {
   private static final float EPSILON = 0.01f;
@@ -13,7 +11,7 @@ public class ColorTest {
   public void testMultiply() {
     Color c = new Color(1.0f, 0.5f, 0.6f, 0.8f);
     Color m = new Color("#000f");
-    m.mutiply(c, 0.5f);
+    m.multiply(c, 0.5f);
     checkColor(m, 0.5f, 0.25f, 0.3f, 0.4f);
   }
 

@@ -1,9 +1,10 @@
 package de.lessvoid.nifty.slick2d.render.font;
 
-import java.awt.font.GlyphVector;
-
 import org.newdawn.slick.Font;
 import org.newdawn.slick.font.GlyphPage;
+
+import javax.annotation.Nonnull;
+import java.awt.font.GlyphVector;
 
 /**
  * This class extends the usual abstract slick render font to support fonts that base on Java AWT fonts.
@@ -19,17 +20,18 @@ public abstract class AbstractJavaSlickRenderFont extends AbstractSlickRenderFon
   /**
    * This temporary array is needed to calculate the advancing values in a fast and easy way.
    */
+  @Nonnull
   private final char[] tempCharArray;
 
   /**
    * The constructor to create this java AWT based render font.
    *
    * @param slickFont the true type font that is used to render
-   * @param javaFont the java font that is used to render just the same font
+   * @param javaFont  the java font that is used to render just the same font
    * @throws SlickLoadFontException in case loading the font fails
    */
   protected AbstractJavaSlickRenderFont(
-      final Font slickFont, final java.awt.Font javaFont) throws SlickLoadFontException {
+      @Nonnull final Font slickFont, final java.awt.Font javaFont) throws SlickLoadFontException {
     super(slickFont);
     internalFont = javaFont;
     tempCharArray = new char[2];

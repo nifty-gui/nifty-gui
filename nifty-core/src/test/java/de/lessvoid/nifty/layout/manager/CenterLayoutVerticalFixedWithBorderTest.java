@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.layout.manager;
 
-import junit.framework.TestCase;
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
+import junit.framework.TestCase;
 
 public class CenterLayoutVerticalFixedWithBorderTest extends TestCase {
   private CenterLayout layout;
@@ -13,6 +13,7 @@ public class CenterLayoutVerticalFixedWithBorderTest extends TestCase {
   private BoxConstraints constraint;
   private BoxConstraints rootBoxConstraints;
 
+  @Override
   public void setUp() throws Exception {
     layout = new CenterLayout();
 

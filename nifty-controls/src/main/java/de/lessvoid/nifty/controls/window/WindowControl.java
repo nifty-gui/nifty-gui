@@ -12,36 +12,65 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
+@Deprecated
 public class WindowControl extends AbstractController implements Window {
-  private DraggableControl draggableControl = new DraggableControl();
+  @Nonnull
+  private static final Logger log = Logger.getLogger(WindowControl.class.getName());
+  @Nonnull
+  private final DraggableControl draggableControl;
+  @Nullable
   private Nifty nifty;
   private boolean removeCloseButton;
   private boolean hideOnClose;
 
+  public WindowControl() {
+    draggableControl = new DraggableControl();
+  }
+
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     super.bind(element);
     this.nifty = nifty;
     draggableControl.bind(nifty, screen, element, parameter);
     removeCloseButton = !parameter.getAsBoolean("closeable", true);
     hideOnClose = parameter.getAsBoolean("hideOnClose", false);
+
+    // testing children
+    Element content = getContent();
+    if (content == null) {
+      log.severe("Content element of window not found. Window will not display properly.");
+    }
+    Element title = getTitleElement();
+    if (title == null) {
+      log.severe("Title element of window not found. Window will not display its head properly.");
+    }
+    Element closeButton = getCloseButton();
+    if (closeButton == null) {
+      log.severe("Close button of window not found. Window will not offer a control to close the window.");
+    }
   }
 
   @Override
   public void onStartScreen() {
     draggableControl.onStartScreen();
     if (removeCloseButton) {
-      getCloseButton().markForRemoval();
-      removeCloseButton = false;
+      Element closeButton = getCloseButton();
+      if (closeButton != null) {
+        closeButton.markForRemoval();
+      }
     }
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return draggableControl.inputEvent(inputEvent);
   }
 
@@ -51,8 +80,8 @@ public class WindowControl extends AbstractController implements Window {
     draggableControl.onFocus(getFocus);
   }
 
-  public void bringToFront(final int mouseX, final int mouseY) {
-    draggableControl.bringToFront(mouseX, mouseY);
+  public void bringToFront() {
+    draggableControl.bringToFront();
   }
 
   public void drag(final int mouseX, final int mouseY) {
@@ -63,36 +92,73 @@ public class WindowControl extends AbstractController implements Window {
     draggableControl.dragStop();
   }
 
+  @Nullable
   private Element getTitleElement() {
-    return getElement().findElementById("#window-title");
+    Element element = getElement();
+    if (element == null) {
+      return null;
+    }
+    return element.findElementById("#window-title");
   }
 
+  @Nullable
   private Element getCloseButton() {
-    return getElement().findElementById("#window-close-button");
+    Element element = getElement();
+    if (element == null) {
+      return null;
+    }
+    return element.findElementById("#window-close-button");
   }
 
+  @Nullable
   public Element getContent() {
-    return getElement().findElementById("#window-content");
+    Element element = getElement();
+    if (element == null) {
+      return null;
+    }
+    return element.findElementById("#window-content");
   }
 
   // Window implementation
 
+  @Nullable
   @Override
   public String getTitle() {
-    return getTitleElement().getRenderer(TextRenderer.class).getOriginalText();
+    Element title = getTitleElement();
+    if (title == null) {
+      return null;
+    }
+    TextRenderer renderer = title.getRenderer(TextRenderer.class);
+    if (renderer == null) {
+      return null;
+    }
+    return renderer.getOriginalText();
   }
 
   @Override
-  public void setTitle(final String title) {
-    getTitleElement().getRenderer(TextRenderer.class).setText(title);
+  public void setTitle(@Nonnull final String title) {
+    Element titleElement = getTitleElement();
+    if (titleElement == null) {
+      return;
+    }
+    TextRenderer renderer = titleElement.getRenderer(TextRenderer.class);
+    if (renderer == null) {
+      return;
+    }
+    renderer.setText(title);
   }
 
   @Override
   public void closeWindow() {
-    if (hideOnClose) {
-      getElement().hide(new CloseEndNotify(true));
-    } else {
-      getElement().markForRemoval(new CloseEndNotify(false));
+    if (nifty != null) {
+      Element element = getElement();
+      if (element != null) {
+        if (hideOnClose) {
+          element.hide(new CloseEndNotify(nifty, this, element, true));
+        } else {
+          element.markForRemoval(new CloseEndNotify(nifty, this, element, false));
+        }
+      }
     }
   }
 
@@ -101,16 +167,32 @@ public class WindowControl extends AbstractController implements Window {
     draggableControl.moveToFront();
   }
 
-  private class CloseEndNotify implements EndNotify {
+  private static class CloseEndNotify implements EndNotify {
+    @Nonnull
+    private final Nifty nifty;
+    @Nonnull
+    private final Window window;
+    @Nonnull
+    private final Element element;
     private final boolean hidden;
 
-    public CloseEndNotify(final boolean hidden) {
+    public CloseEndNotify(
+        @Nonnull Nifty nifty,
+        @Nonnull Window window,
+        @Nonnull Element element,
+        final boolean hidden) {
+      this.nifty = nifty;
+      this.window = window;
+      this.element = element;
       this.hidden = hidden;
     }
 
     @Override
     public void perform() {
-      nifty.publishEvent(getElement().getId(), new WindowClosedEvent(WindowControl.this, hidden));
+      String id = element.getId();
+      if (id != null) {
+        nifty.publishEvent(element.getId(), new WindowClosedEvent(window, hidden));
+      }
     }
   }
 }

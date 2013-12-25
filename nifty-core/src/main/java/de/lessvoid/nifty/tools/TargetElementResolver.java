@@ -3,18 +3,25 @@ package de.lessvoid.nifty.tools;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class TargetElementResolver {
+  @Nonnull
   private final static String PARENT = "#parent";
 
-  private Screen screen;
-  private Element base;
+  @Nonnull
+  private final Screen screen;
+  @Nonnull
+  private final Element base;
 
-  public TargetElementResolver(final Screen screen, final Element baseElement) {
+  public TargetElementResolver(@Nonnull final Screen screen, @Nonnull final Element baseElement) {
     this.screen = screen;
     this.base = baseElement;
   }
 
-  public Element resolve(final String id) {
+  @Nullable
+  public Element resolve(@Nullable final String id) {
     if (id == null) {
       return null;
     }
@@ -27,7 +34,8 @@ public class TargetElementResolver {
     return screen.findElementById(id);
   }
 
-  private Element resolveParents(final String id, final Element parent) {
+  @Nullable
+  private Element resolveParents(@Nonnull final String id, @Nonnull final Element parent) {
     String subParentId = id.replaceFirst(PARENT, "");
     if (!subParentId.startsWith(PARENT)) {
       if (subParentId.startsWith("#")) {

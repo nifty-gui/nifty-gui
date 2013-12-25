@@ -9,7 +9,7 @@ public interface TextFieldInputCharFilter {
   /**
    * Check if the input of a new character is acceptable.
    *
-   * @param index the position within the text where the character is added
+   * @param index   the position within the text where the character is added
    * @param newChar the character that is now about to be added to the text
    * @return {@code true} in case adding the character is allowed
    */

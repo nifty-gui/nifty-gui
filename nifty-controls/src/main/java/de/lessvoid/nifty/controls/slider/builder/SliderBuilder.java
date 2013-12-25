@@ -2,12 +2,14 @@ package de.lessvoid.nifty.controls.slider.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 
+import javax.annotation.Nonnull;
+
 public class SliderBuilder extends ControlBuilder {
   public SliderBuilder(final boolean vertical) {
     super(getName(vertical));
   }
 
-  public SliderBuilder(final String id, final boolean vertical) {
+  public SliderBuilder(@Nonnull final String id, final boolean vertical) {
     super(id, getName(vertical));
   }
 
@@ -31,6 +33,7 @@ public class SliderBuilder extends ControlBuilder {
     set("buttonStepSize", String.valueOf(buttonStepSize));
   }
 
+  @Nonnull
   private static String getName(final boolean vertical) {
     if (vertical) {
       return "verticalSlider";

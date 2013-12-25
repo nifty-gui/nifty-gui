@@ -1,25 +1,29 @@
 package de.lessvoid.nifty.loaderv2.types.helper;
 
+import javax.annotation.Nonnull;
+
 /**
  * one value:    [applied to all]
  * two values:   [top and bottom], [left and right]
  * three values: [top], [left and right], [bottom]
  * four values:  [top], [right], [bottom], [left]
+ *
  * @author void
  */
 public class PaddingAttributeParser {
+  @Nonnull
   private final String left;
+  @Nonnull
   private final String right;
+  @Nonnull
   private final String top;
+  @Nonnull
   private final String bottom;
 
-  public PaddingAttributeParser(final String input) throws Exception {
-    if (input == null) {
-      throw new Exception("parsing error, paddingString is null");
-    }
+  public PaddingAttributeParser(@Nonnull final String input) throws Exception {
 
     String[] values = input.split(",");
-    if (values == null || values.length == 0) {
+    if (values.length == 0) {
       throw new Exception("parsing error, paddingString is empty");
     }
 
@@ -52,18 +56,22 @@ public class PaddingAttributeParser {
     }
   }
 
+  @Nonnull
   public String getLeft() {
     return left;
   }
 
+  @Nonnull
   public String getTop() {
     return top;
   }
 
+  @Nonnull
   public String getRight() {
     return right;
   }
 
+  @Nonnull
   public String getBottom() {
     return bottom;
   }

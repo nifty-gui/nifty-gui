@@ -1,17 +1,19 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListBoxFocusItem {
-  private List<Integer> indizesToRemove = new ArrayList<Integer>();
+class ListBoxFocusItem {
+  @Nonnull
+  private final List<Integer> indicesToRemove = new ArrayList<Integer>();
 
   public void prepare() {
-    indizesToRemove.clear();
+    indicesToRemove.clear();
   }
 
   public void registerIndex(final int value) {
-    indizesToRemove.add(value);
+    indicesToRemove.add(value);
   }
 
   public int resolve(final int focusIndex, final int itemCount) {
@@ -21,31 +23,31 @@ public class ListBoxFocusItem {
     if (itemCount == 0) {
       return -1;
     }
-    if (indizesToRemove.isEmpty()) {
+    if (indicesToRemove.isEmpty()) {
       return focusIndex;
     }
-    int newFocusIndex = calcNewFocusIndex(focusIndex, indizesToRemove);
-    if (newFocusIndex >= itemCount - indizesToRemove.size()) {
-      newFocusIndex = itemCount - indizesToRemove.size() - 1;
+    int newFocusIndex = calcNewFocusIndex(focusIndex, indicesToRemove);
+    if (newFocusIndex >= itemCount - indicesToRemove.size()) {
+      newFocusIndex = itemCount - indicesToRemove.size() - 1;
     }
     return newFocusIndex;
   }
 
-  private int calcNewFocusIndex(final int focusIndex, final List<Integer> indizesToRemove) {
+  private int calcNewFocusIndex(final int focusIndex, @Nonnull final List<Integer> indicesToRemove) {
     int newFocusIndex = focusIndex;
-    for (int i=0; i<indizesToRemove.size(); i++) {
-      int removeIdx = indizesToRemove.get(i);
+    for (int i = 0; i < indicesToRemove.size(); i++) {
+      int removeIdx = indicesToRemove.get(i);
       if (removeIdx < newFocusIndex) {
         newFocusIndex--;
-        decrementListEntries(indizesToRemove, i);
+        decrementListEntries(indicesToRemove, i);
       }
     }
     return newFocusIndex;
   }
 
-  private void decrementListEntries(final List<Integer> indizesToRemove, final int startIdx) {
-    for (int i=startIdx; i<indizesToRemove.size(); i++) {
-      indizesToRemove.set(i, indizesToRemove.get(i) - 1);
+  private void decrementListEntries(@Nonnull final List<Integer> indicesToRemove, final int startIdx) {
+    for (int i = startIdx; i < indicesToRemove.size(); i++) {
+      indicesToRemove.set(i, indicesToRemove.get(i) - 1);
     }
   }
 }

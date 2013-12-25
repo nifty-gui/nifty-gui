@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
-  <!-- WINDOW CONTROL -->
-  <controlDefinition name="window" style="nifty-window" childRootId="#window-content" controller="de.lessvoid.nifty.controls.window.WindowControl" revert="false" drop="false" handle="#window-bar">
-    <panel style="#frame">
-      <interact onClick="bringToFront()" onClickMouseMove="drag()" onRelease="dragStop()" />
-      <panel id="#window-bar" style="#bar">
-        <text id="#window-title" style="#title" text="$title" />
-        <panel id="#window-close-button" style="#close-button">
-          <interact onClick="closeWindow()" />
+    <!-- WINDOW CONTROL -->
+    <controlDefinition name="window" style="nifty-window" childRootId="#window-content"
+                       controller="de.lessvoid.nifty.controls.window.WindowControl" revert="false" drop="false"
+                       handle="#window-bar">
+        <panel style="#frame">
+            <interact onClick="bringToFront()" onClickMouseMove="drag()" onRelease="dragStop()"/>
+            <panel id="#window-bar" style="#bar">
+                <text id="#window-title" style="#title" text="$title"/>
+                <panel id="#window-close-button" style="#close-button">
+                    <interact onClick="closeWindow()"/>
+                </panel>
+            </panel>
+            <panel id="#window-content" style="#content"/>
         </panel>
-      </panel>
-      <panel id="#window-content" style="#content" />
-    </panel>
-  </controlDefinition>
+    </controlDefinition>
 </nifty-controls>

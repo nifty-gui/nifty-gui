@@ -1,28 +1,19 @@
 package de.lessvoid.nifty.examples.mouse;
 
-import java.io.IOException;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.NiftyMouse;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.events.NiftyMouseEvent;
-import de.lessvoid.nifty.elements.events.NiftyMouseMovedEvent;
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedMovedEvent;
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryReleaseEvent;
-import de.lessvoid.nifty.elements.events.NiftyMouseSecondaryClickedEvent;
-import de.lessvoid.nifty.elements.events.NiftyMouseSecondaryClickedMovedEvent;
-import de.lessvoid.nifty.elements.events.NiftyMouseSecondaryReleaseEvent;
-import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryClickedEvent;
-import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryClickedMovedEvent;
-import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryReleaseEvent;
-import de.lessvoid.nifty.elements.events.NiftyMouseWheelEvent;
+import de.lessvoid.nifty.elements.events.*;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 /**
  * ScreenController for Hello World Example.
@@ -31,19 +22,31 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class MouseStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
+  @Nullable
   private Label mousePrimaryText;
+  @Nullable
   private Label mouseSecondaryText;
+  @Nullable
   private Label mouseTertiaryText;
+  @Nullable
   private Label mouseMoveText;
+  @Nullable
   private Label mouseWheelText;
 
+  @Nullable
   private Label mouseEventsPrimaryText;
+  @Nullable
   private Label mouseEventsSecondaryText;
+  @Nullable
   private Label mouseEventsTertiaryText;
+  @Nullable
   private Label mouseEventsMoveText;
+  @Nullable
   private Label mouseEventsWheelText;
+  @Nullable
   private Label mouseEventsText;
 
+  @Override
   public void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
@@ -61,6 +64,7 @@ public class MouseStartScreen implements ScreenController, NiftyExample {
     this.mouseEventsText = screen.findNiftyControl("mouseEventsText", Label.class);
   }
 
+  @Override
   public void onStartScreen() {
     System.out.println(screen.debugOutput());
   }
@@ -120,13 +124,13 @@ public class MouseStartScreen implements ScreenController, NiftyExample {
 
   // mouse over
 
-  public void mouseOver(final Element element, final NiftyMouseInputEvent event) {
+  public void mouseOver(final Element element, @Nonnull final NiftyMouseInputEvent event) {
     mouseMoveText.setText(event.getMouseX() + ", " + event.getMouseY());
   }
 
   // mouse wheel
 
-  public void mouseWheel(final Element element, final NiftyMouseInputEvent event) {
+  public void mouseWheel(final Element element, @Nonnull final NiftyMouseInputEvent event) {
     mouseWheelText.setText(String.valueOf(event.getMouseWheel()));
   }
 
@@ -187,44 +191,47 @@ public class MouseStartScreen implements ScreenController, NiftyExample {
   // mouse move
 
   @NiftyEventSubscriber(id="mouseEvents")
-  public void onElementMouseMove(final String id, final NiftyMouseMovedEvent event) {
+  public void onElementMouseMove(final String id, @Nonnull final NiftyMouseMovedEvent event) {
     mouseEventsMoveText.setText(event.getMouseX() + ", " + event.getMouseY());
   }
 
   // mouse wheel
 
   @NiftyEventSubscriber(id="mouseEvents")
-  public void onElementMouseWheel(final String id, final NiftyMouseWheelEvent event) {
+  public void onElementMouseWheel(final String id, @Nonnull final NiftyMouseWheelEvent event) {
     mouseEventsWheelText.setText(String.valueOf(event.getMouseWheel()));
   }
 
   // general
 
   @NiftyEventSubscriber(id="mouseEvents")
-  public void onElementMouse(final String id, final NiftyMouseEvent event) {
+  public void onElementMouse(final String id, @Nonnull final NiftyMouseEvent event) {
     mouseEventsText.setText(
         id + " -> " + event.getMouseX() + ", " + event.getMouseY() + ", " + event.getMouseWheel() + "\n" +
         event.isButton0Down() + ", " + event.isButton1Down() + ", " + event.isButton2Down() + "\n" +
         event.isButton0Release() + ", " + event.isButton1Release() + ", " + event.isButton2Release());
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "mouse/mouse.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Mouse Control Example";
   }
 
   @Override
-  public void prepareStart(Nifty nifty) {
+  public void prepareStart(@Nonnull Nifty nifty) {
     // get the NiftyMouse interface that gives us access to all mouse cursor related stuff
     NiftyMouse niftyMouse = nifty.getNiftyMouse();
 

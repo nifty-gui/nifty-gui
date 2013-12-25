@@ -1,10 +1,31 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
+import com.jogamp.common.nio.Buffers;
+import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.renderer.jogl.math.Mat4;
+import de.lessvoid.nifty.renderer.jogl.render.JoglMouseCursor;
+import de.lessvoid.nifty.renderer.jogl.render.batch.core.*;
+import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreTexture2D.ColorFormat;
+import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreTexture2D.ResizeFilter;
+import de.lessvoid.nifty.renderer.jogl.render.io.ImageData;
+import de.lessvoid.nifty.renderer.jogl.render.io.ImageIOImageData;
+import de.lessvoid.nifty.renderer.jogl.render.io.TGAImageData;
+import de.lessvoid.nifty.spi.render.MouseCursor;
+import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.Factory;
+import de.lessvoid.nifty.tools.ObjectPool;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLContext;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -12,59 +33,38 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nullable;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
-
-import com.jogamp.common.nio.Buffers;
-
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
-import de.lessvoid.nifty.render.BlendMode;
-import de.lessvoid.nifty.renderer.jogl.math.Mat4;
-import de.lessvoid.nifty.renderer.jogl.render.JoglMouseCursor;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreElementVBO;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreMatrixFactory;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreRender;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreShader;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreTexture2D;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreTexture2D.ColorFormat;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreTexture2D.ResizeFilter;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreVAO;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreVBO;
-import de.lessvoid.nifty.renderer.jogl.render.io.ImageData;
-import de.lessvoid.nifty.renderer.jogl.render.io.ImageIOImageData;
-import de.lessvoid.nifty.renderer.jogl.render.io.TGAImageData;
-import de.lessvoid.nifty.spi.render.MouseCursor;
-import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.ObjectPool;
-import de.lessvoid.nifty.tools.ObjectPool.Factory;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-
 /**
  * BatchRenderBackend Implementation for OpenGL Core Profile.
+ *
  * @author void
  */
 public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
-  private static Logger log = Logger.getLogger(JoglBatchRenderBackendCoreProfile.class.getName());
-  private static IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4*4);
+  private static final Logger log = Logger.getLogger(JoglBatchRenderBackendCoreProfile.class.getName());
+  private static final IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4 * 4);
   private NiftyResourceLoader resourceLoader;
   private int viewportWidth = -1;
   private int viewportHeight = -1;
   private CoreTexture2D texture;
+  @Nonnull
   private final CoreShader niftyShader;
   private Mat4 modelViewProjection;
+  @Nonnull
   private final ObjectPool<Batch> batchPool;
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
   private ByteBuffer initialData;
-  private boolean fillRemovedTexture =
-      Boolean.parseBoolean(System.getProperty(JoglBatchRenderBackendCoreProfile.class.getName() + ".fillRemovedTexture", "false"));
+  private final boolean fillRemovedTexture =
+      Boolean.parseBoolean(System.getProperty(JoglBatchRenderBackendCoreProfile.class.getName() + "" +
+          ".fillRemovedTexture", "false"));
 
-  private static final int PRIMITIVE_SIZE = 4*8; // 4 vertices per quad and 8 vertex attributes per vertex (2xpos, 2xtexture, 4xcolor)
+  private static final int PRIMITIVE_SIZE = 4 * 8; // 4 vertices per quad and 8 vertex attributes per vertex (2xpos,
+  // 2xtexture, 4xcolor)
 
-  private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
-  private int[] elementIndexBuffer = new int[6];
+
+  @Nonnull
+  private final float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
+  @Nonnull
+  private final int[] elementIndexBuffer = new int[6];
 
   public JoglBatchRenderBackendCoreProfile() {
     modelViewProjection = CoreMatrixFactory.createOrtho(0, getWidth(), getHeight(), 0);
@@ -85,6 +85,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     niftyShader.setUniformi("uTex", 0);
 
     batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
+      @Nonnull
       @Override
       public Batch createNew() {
         return new Batch();
@@ -93,7 +94,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     this.resourceLoader = resourceLoader;
   }
 
@@ -117,7 +118,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     niftyShader.activate();
     niftyShader.setUniformMatrix4f("uModelViewProjectionMatrix", modelViewProjection);
 
-    for (int i=0; i<batches.size(); i++) {
+    for (int i = 0; i < batches.size(); i++) {
       batchPool.free(batches.get(i));
     }
     batches.clear();
@@ -139,12 +140,15 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   }
 
   @Override
-  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) throws IOException {
+  public MouseCursor createMouseCursor(
+      @Nonnull final String filename,
+      final int hotspotX,
+      final int hotspotY) throws IOException {
     return new JoglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
   }
 
   @Override
-  public void enableMouseCursor(final MouseCursor mouseCursor) {
+  public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
   }
 
   @Override
@@ -154,10 +158,15 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public void createAtlasTexture(final int width, final int height) {
     try {
-      createAtlasTexture(width, height, GL.GL_RGBA);
+      ByteBuffer initTextureData = Buffers.newDirectByteBuffer(width * height * 4);
+      for (int i = 0; i < width * height * 4; i++) {
+        initTextureData.put((byte) 0x80);
+      }
+      initTextureData.rewind();
+      texture = new CoreTexture2D(ColorFormat.RGBA, width, height, initTextureData, ResizeFilter.Nearest);
 
-      initialData = Buffers.newDirectByteBuffer(width*height*4);
-      for (int i=0; i<width*height; i++) {
+      initialData = Buffers.newDirectByteBuffer(width * height * 4);
+      for (int i = 0; i < width * height; i++) {
         initialData.put((byte) 0x00);
         initialData.put((byte) 0xff);
         initialData.put((byte) 0x00);
@@ -176,22 +185,30 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
   @Nullable
   @Override
-  public Image loadImage(final String filename) {
+  public Image loadImage(@Nonnull final String filename) {
     ImageData loader = createImageLoader(filename);
-    try {
-      ByteBuffer image = loader.loadImageDirect(resourceLoader.getResourceAsStream(filename));
-      image.rewind();
-      int width = loader.getWidth();
-      int height = loader.getHeight();
-      return new ImageImpl(width, height, image);
-    } catch (Exception e) {
-      log.log(Level.WARNING, "problems loading image [" + filename + "]", e);
-      return new ImageImpl(0, 0, null);
+    InputStream in = resourceLoader.getResourceAsStream(filename);
+    if (in != null) {
+      try {
+        ByteBuffer image = loader.loadImageDirect(in);
+        image.rewind();
+        int width = loader.getWidth();
+        int height = loader.getHeight();
+        return new ImageImpl(width, height, image);
+      } catch (Exception e) {
+        log.log(Level.WARNING, "problems loading image [" + filename + "]", e);
+      } finally {
+        try {
+          in.close();
+        } catch (IOException ignored) {
+        }
+      }
     }
+    return null;
   }
 
   @Override
-  public void addImageToTexture(final Image image, final int x, final int y) {
+  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
     ImageImpl imageImpl = (ImageImpl) image;
     if (imageImpl.getWidth() == 0 ||
         imageImpl.getHeight() == 0) {
@@ -205,13 +222,13 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
         y,
         image.getWidth(),
         image.getHeight(),
-        GL.GL_RGBA, 
+        GL.GL_RGBA,
         GL.GL_UNSIGNED_BYTE,
         imageImpl.byteBuffer);
   }
 
   @Override
-  public void beginBatch(final BlendMode blendMode) {
+  public void beginBatch(@Nonnull final BlendMode blendMode) {
     batches.add(batchPool.allocate());
     currentBatch = batches.get(batches.size() - 1);
     currentBatch.begin(blendMode);
@@ -223,10 +240,10 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       final float y,
       final float width,
       final float height,
-      final Color color1,
-      final Color color2,
-      final Color color3,
-      final Color color4,
+      @Nonnull final Color color1,
+      @Nonnull final Color color2,
+      @Nonnull final Color color3,
+      @Nonnull final Color color4,
       final float textureX,
       final float textureY,
       final float textureWidth,
@@ -234,7 +251,8 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     if (!currentBatch.canAddQuad()) {
       beginBatch(currentBatch.getBlendMode());
     }
-    currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth, textureHeight);
+    currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY,
+        textureWidth, textureHeight);
   }
 
   @Override
@@ -245,7 +263,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     final GL gl = GLContext.getCurrentGL();
     gl.glEnable(GL.GL_BLEND);
 
-    for (int i=0; i<batches.size(); i++) {
+    for (int i = 0; i < batches.size(); i++) {
       Batch batch = batches.get(i);
       batch.render();
     }
@@ -255,14 +273,14 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   }
 
   @Override
-  public void removeFromTexture(final Image image, final int x, final int y, final int w, final int h) {
+  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
     // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
     // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
     if (!fillRemovedTexture) {
       return;
     }
-    ByteBuffer initialData = Buffers.newDirectByteBuffer(image.getWidth()*image.getHeight()*4);
-    for (int i=0; i<image.getWidth()*image.getHeight(); i++) {
+    ByteBuffer initialData = Buffers.newDirectByteBuffer(image.getWidth() * image.getHeight() * 4);
+    for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
       initialData.put((byte) 0xff);
       initialData.put((byte) 0x00);
       initialData.put((byte) 0x00);
@@ -278,7 +296,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
         y,
         w,
         h,
-        GL.GL_RGBA, 
+        GL.GL_RGBA,
         GL.GL_UNSIGNED_BYTE,
         initialData);
 
@@ -298,7 +316,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
   private void checkGLError() {
     final GL gl = GLContext.getCurrentGL();
-    int error= gl.glGetError();
+    int error = gl.glGetError();
     if (error != GL.GL_NO_ERROR) {
       log.warning("Error: (" + error + ") ");
       try {
@@ -309,26 +327,33 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     }
   }
 
-  private Cursor loadMouseCursor(final String name, final int hotspotX, final int hotspotY) throws IOException {
+  @Nonnull
+  private Cursor loadMouseCursor(
+      @Nonnull final String name,
+      final int hotspotX,
+      final int hotspotY) throws IOException {
     ImageData imageLoader = createImageLoader(name);
-    BufferedImage image = imageLoader.loadMouseCursorImage(resourceLoader.getResourceAsStream(name));       
-    return Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(hotspotX,hotspotY), name);
+    InputStream in = resourceLoader.getResourceAsStream(name);
+    if (in == null) {
+      throw new IOException("Can't find resource to load a cursor.");
+    }
+    try {
+      BufferedImage image = imageLoader.loadMouseCursorImage(in);
+      return Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(hotspotX, hotspotY), name);
+    } finally {
+      try {
+        in.close();
+      } catch (IOException ignored) {
+      }
+    }
   }
 
-  private ImageData createImageLoader(final String name) {
+  @Nonnull
+  private ImageData createImageLoader(@Nonnull final String name) {
     if (name.endsWith(".tga")) {
       return new TGAImageData();
     }
     return new ImageIOImageData();
-  }
-
-  private void createAtlasTexture(final int width, final int height, final int srcPixelFormat) throws Exception {
-    ByteBuffer initialData = Buffers.newDirectByteBuffer(width*height*4);
-    for (int i=0; i<width*height*4; i++) {
-      initialData.put((byte) 0x80);
-    }
-    initialData.rewind();
-    texture = new CoreTexture2D(ColorFormat.RGBA, width, height, initialData, ResizeFilter.Nearest);
   }
 
   private void bind() {
@@ -375,14 +400,18 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     // - 2 x pos
     // - 2 x texture
     // - 4 x color
-    private final static int PRIMITIVE_SIZE = 4*8;
-    private final int SIZE = 64*1024; // 64k
+    private final static int PRIMITIVE_SIZE = 4 * 8;
+    private final static int SIZE = 64 * 1024; // 64k
 
-    private BlendMode blendMode = BlendMode.BLEND;
+    @Nonnull
+    private final BlendMode blendMode = BlendMode.BLEND;
 
     private int primitiveCount;
+    @Nonnull
     private final CoreVAO vao;
+    @Nonnull
     private final CoreVBO vbo;
+    @Nonnull
     private final CoreElementVBO elementVbo;
     private int globalIndex;
     private int triangleVertexCount;
@@ -419,6 +448,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       vao.unbind();
     }
 
+    @Nonnull
     public BlendMode getBlendMode() {
       return blendMode;
     }
@@ -450,10 +480,10 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
         final float y,
         final float width,
         final float height,
-        final Color color1,
-        final Color color2,
-        final Color color3,
-        final Color color4,
+        @Nonnull final Color color1,
+        @Nonnull final Color color2,
+        @Nonnull final Color color3,
+        @Nonnull final Color color4,
         final float textureX,
         final float textureY,
         final float textureWidth,
@@ -493,16 +523,16 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       primitiveBuffer[bufferIndex++] = color3.getBlue();
       primitiveBuffer[bufferIndex++] = color3.getAlpha();
       primitiveBuffer[bufferIndex++] = textureX;
-      primitiveBuffer[bufferIndex++] = textureY + textureHeight;
+      primitiveBuffer[bufferIndex] = textureY + textureHeight;
 
       int elementIndexBufferIndex = 0;
-      elementIndexBuffer[elementIndexBufferIndex++] = globalIndex + 0;
+      elementIndexBuffer[elementIndexBufferIndex++] = globalIndex;
       elementIndexBuffer[elementIndexBufferIndex++] = globalIndex + 1;
       elementIndexBuffer[elementIndexBufferIndex++] = globalIndex + 2;
-      
+
       elementIndexBuffer[elementIndexBufferIndex++] = globalIndex + 2;
       elementIndexBuffer[elementIndexBufferIndex++] = globalIndex + 3;
-      elementIndexBuffer[elementIndexBufferIndex++] = globalIndex + 0;
+      elementIndexBuffer[elementIndexBufferIndex] = globalIndex;
 
       triangleVertexCount += 6;
       globalIndex += 4;

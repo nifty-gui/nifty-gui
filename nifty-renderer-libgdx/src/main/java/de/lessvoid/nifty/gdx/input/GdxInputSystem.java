@@ -2,10 +2,6 @@ package de.lessvoid.nifty.gdx.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-
-import java.util.LinkedList;
-import java.util.Queue;
-
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.gdx.input.events.GdxInputEvent;
 import de.lessvoid.nifty.gdx.input.events.GdxKeyboardInputEvent;
@@ -13,11 +9,16 @@ import de.lessvoid.nifty.gdx.input.events.GdxMouseInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import javax.annotation.Nonnull;
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class GdxInputSystem implements InputSystem, InputProcessor {
   private final Input input;
+  @Nonnull
   private final Queue<GdxInputEvent> eventQueue;
 
   public GdxInputSystem(final Input gdxInput) {
@@ -27,11 +28,11 @@ public class GdxInputSystem implements InputSystem, InputProcessor {
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader niftyResourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader niftyResourceLoader) {
   }
 
   @Override
-  public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
+  public void forwardEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     while (true) {
       final GdxInputEvent event = eventQueue.poll();
       if (event == null) {
@@ -67,7 +68,8 @@ public class GdxInputSystem implements InputSystem, InputProcessor {
 
   @Override
   public boolean keyUp(final int keyCode) {
-    eventQueue.offer(GdxKeyboardInputEvent.getInstance(keyCode, (char) 0, false, false, isShiftDown(), isControlDown()));
+    eventQueue.offer(GdxKeyboardInputEvent.getInstance(keyCode, (char) 0, false, false, isShiftDown(),
+        isControlDown()));
     return true;
   }
 
@@ -95,7 +97,8 @@ public class GdxInputSystem implements InputSystem, InputProcessor {
       eventQueue.offer(GdxMouseInputEvent.getMouseEvent(screenX, screenY, 0, pointer, Input.Buttons.LEFT, true, true));
     }
     if (input.isButtonPressed(Input.Buttons.MIDDLE)) {
-      eventQueue.offer(GdxMouseInputEvent.getMouseEvent(screenX, screenY, 0, pointer, Input.Buttons.MIDDLE, true, true));
+      eventQueue.offer(GdxMouseInputEvent.getMouseEvent(screenX, screenY, 0, pointer, Input.Buttons.MIDDLE, true,
+          true));
     }
     if (input.isButtonPressed(Input.Buttons.RIGHT)) {
       eventQueue.offer(GdxMouseInputEvent.getMouseEvent(screenX, screenY, 0, pointer, Input.Buttons.RIGHT, true, true));
@@ -105,13 +108,15 @@ public class GdxInputSystem implements InputSystem, InputProcessor {
 
   @Override
   public boolean mouseMoved(final int screenX, final int screenY) {
-    eventQueue.offer(GdxMouseInputEvent.getMouseEvent(screenX, screenY, 0, 0, GdxMouseInputEvent.NO_BUTTON, false, false));
+    eventQueue.offer(GdxMouseInputEvent.getMouseEvent(screenX, screenY, 0, 0, GdxMouseInputEvent.NO_BUTTON, false,
+        false));
     return true;
   }
 
   @Override
   public boolean scrolled(final int amount) {
-    eventQueue.offer(GdxMouseInputEvent.getMouseEvent(input.getX(), input.getY(), amount, 0, GdxMouseInputEvent.NO_BUTTON, false, false));
+    eventQueue.offer(GdxMouseInputEvent.getMouseEvent(input.getX(), input.getY(), amount, 0,
+        GdxMouseInputEvent.NO_BUTTON, false, false));
     return true;
   }
 }

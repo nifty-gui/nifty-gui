@@ -1,22 +1,26 @@
 package de.lessvoid.nifty.elements.render;
 
-import java.util.Random;
-
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Random;
+
 /**
  * The ElementRenderer for a Panel.
+ *
  * @author void
  */
 public class PanelRenderer implements ElementRenderer {
-
   /**
    * the background color when used otherwise null.
    */
+  @Nullable
   private Color backgroundColor;
 
+  @Nullable
   private Color debugColor;
 
   /**
@@ -28,12 +32,11 @@ public class PanelRenderer implements ElementRenderer {
   /**
    * render it.
    *
-   * @param element
-   *            the widget we're connected to
-   * @param r
-   *            the renderDevice we should use
+   * @param element the widget we're connected to
+   * @param r       the renderDevice we should use
    */
-  public void render(final Element element, final NiftyRenderEngine r) {
+  @Override
+  public void render(@Nonnull final Element element, @Nonnull final NiftyRenderEngine r) {
     if (element.getNifty().isDebugOptionPanelColors()) {
       r.saveState(null);
       r.setColor(getDebugColor());
@@ -56,19 +59,22 @@ public class PanelRenderer implements ElementRenderer {
     }
   }
 
+  @Nonnull
   private Color getDebugColor() {
     if (debugColor != null) {
       return debugColor;
     }
-    debugColor =  new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), .5f);
+    final Random rnd = new Random();
+    debugColor = new Color(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), .5f);
     return debugColor;
   }
 
   /**
    * set a background color.
+   *
    * @param newBackgroundColor background color
    */
-  public void setBackgroundColor(final Color newBackgroundColor) {
+  public void setBackgroundColor(@Nullable final Color newBackgroundColor) {
     this.backgroundColor = newBackgroundColor;
   }
 }

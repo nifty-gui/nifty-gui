@@ -2,6 +2,8 @@ package de.lessvoid.nifty.controls.textfield.format;
 
 import de.lessvoid.nifty.controls.textfield.SingleCharSequence;
 
+import javax.annotation.Nonnull;
+
 /**
  * This format is used to generate a password field. It will overlay every character with a default character.
  *
@@ -38,8 +40,9 @@ public class FormatPassword implements TextFieldDisplayFormat {
     pwChar = passwordChar;
   }
 
+  @Nonnull
   @Override
-  public CharSequence getDisplaySequence(final CharSequence original, final int start, final int end) {
+  public CharSequence getDisplaySequence(@Nonnull final CharSequence original, final int start, final int end) {
     return new SingleCharSequence(pwChar, end - start);
   }
 }

@@ -1,11 +1,12 @@
 package de.lessvoid.nifty.batch;
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.batch.TextureAtlasGenerator.Result;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend.Image;
 import de.lessvoid.nifty.spi.render.RenderImage;
+
+import javax.annotation.Nonnull;
+import java.util.logging.Logger;
 
 /**
  * This only really carries the x and y position of the image in the texture atlas as well as the width and height of
@@ -13,21 +14,27 @@ import de.lessvoid.nifty.spi.render.RenderImage;
  * @author void
  */
 public class BatchRenderImage implements RenderImage {
+  @Nonnull
   private static final Logger log = Logger.getLogger(BatchRenderImage.class.getName());
 
+  @Nonnull
   private final TextureAtlasGenerator generator;
+  @Nonnull
   private final String filename;
+  @Nonnull
   private final BatchRenderBackend renderBackend;
+  @Nonnull
   private final Image image;
+
   private int x;
   private int y;
   private boolean uploaded;
 
   public BatchRenderImage(
-      final Image image,
-      final TextureAtlasGenerator generator,
-      final String filename,
-      final BatchRenderBackend renderBackend) {
+      @Nonnull final Image image,
+      @Nonnull final TextureAtlasGenerator generator,
+      @Nonnull final String filename,
+      @Nonnull final BatchRenderBackend renderBackend) {
     this.image = image;
     this.generator = generator;
     this.filename = filename;
@@ -39,14 +46,17 @@ public class BatchRenderImage implements RenderImage {
     this.uploaded = false;
   }
 
+  @Override
   public int getWidth() {
     return image.getWidth();
   }
 
+  @Override
   public int getHeight() {
     return image.getHeight();
   }
 
+  @Override
   public void dispose() {
   }  
 
@@ -79,6 +89,10 @@ public class BatchRenderImage implements RenderImage {
       return;
     }
     Result result = generator.removeImage(filename);
+    if (result == null) {
+      log.severe("For some reason the image, while its uploaded, is not part of the texture generator.");
+      return;
+    }
     renderBackend.removeFromTexture(image, result.getX(), result.getY(), result.getOriginalImageWidth(), result.getOriginalImageHeight());
     uploaded = false;
     log.finer("image [" + filename + "] unloaded (texture atlas)");
@@ -93,6 +107,8 @@ public class BatchRenderImage implements RenderImage {
     log.finer("image [" + filename + "] marked as unloaded (texture atlas)");
   }
 
+  @Override
+  @Nonnull
   public String toString() {
     return super.toString() + " {" + filename + "}";
   }

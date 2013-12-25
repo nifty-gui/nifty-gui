@@ -9,6 +9,10 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 /**
  * This Nifty Effect will change the position of the element the effect is attached to to
  * the current mouse pointer position. Make sure that the element you apply this effect to
@@ -17,28 +21,40 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class FollowMouse implements EffectImpl {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(FollowMouse.class.getName());
+  @Nullable
   private Nifty nifty;
   private int offsetX;
   private int offsetY;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     this.nifty = nifty;
     this.offsetX = Integer.valueOf(parameter.getProperty("offsetX", "20"));
     this.offsetY = Integer.valueOf(parameter.getProperty("offsetY", "20"));
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nullable final Falloff falloff,
+      @Nonnull final NiftyRenderEngine r) {
+    if (nifty == null) {
+      log.warning("FadeMusic effect is executed before it was activated.");
+      return;
+    }
     NiftyMouse niftyMouse = nifty.getNiftyMouse();
 
     int newPosX = borderCheck(niftyMouse.getX() + offsetX, element.getWidth(), r.getWidth());
-    element.setConstraintX(new SizeValue(newPosX + "px"));
+    element.setConstraintX(SizeValue.px(newPosX));
 
     int newPosY = borderCheck(niftyMouse.getY() + offsetY, element.getHeight(), r.getHeight());
-    element.setConstraintY(new SizeValue(newPosY + "px"));
+    element.setConstraintY(SizeValue.px(newPosY));
 
     element.getParent().layoutElements();
   }
@@ -50,6 +66,7 @@ public class FollowMouse implements EffectImpl {
     return pos;
   }
 
+  @Override
   public void deactivate() {
   }
 }

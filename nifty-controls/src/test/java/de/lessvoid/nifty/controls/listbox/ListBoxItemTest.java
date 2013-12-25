@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ListBoxItemTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);

@@ -1,29 +1,31 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import de.lessvoid.nifty.controls.ListBox;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+
 public class ListBoxAddItemTest {
   private static final int WIDTH_101 = 101;
   private static final int WIDTH_100 = 100;
-  private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
+  private ListBoxImpl<TestItem> listBox;
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
   private ListBoxView<TestItem> viewMock;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void before() {
     viewMock = createMock(ListBoxView.class);
+    ListBox<TestItem> listMock = createMock(ListBox.class);
+    listBox = new ListBoxImpl<TestItem>(listMock);
     assertEquals(0, listBox.bindToView(viewMock, 2));
   }
 
@@ -92,7 +94,7 @@ public class ListBoxAddItemTest {
     assertListBoxContent(o1, o2);
   }
 
-  private void assertListBoxContent(final TestItem ... expected) {
+  private void assertListBoxContent(final TestItem... expected) {
     assertEquals(expected.length, listBox.getItems().size());
     int i = 0;
     for (TestItem e : expected) {

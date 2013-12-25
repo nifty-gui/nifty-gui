@@ -1,32 +1,31 @@
 package de.lessvoid.nifty.examples.tutorial.screen;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+
+import javax.annotation.Nonnull;
 
 public class PageControl implements Controller {
   private Element element;
   private FocusHandler focusHandler;
   private Screen screen;
 
+  @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screenParam,
-      final Element newElement,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screenParam,
+      @Nonnull final Element newElement,
+      @Nonnull final Parameters parameter) {
     element = newElement;
     screen = screenParam;
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
     DropDown<String> dropDown = screen.findNiftyControl("dropDownControl", DropDown.class);
     dropDown.addItem("a");
     dropDown.addItem("b");
@@ -41,14 +40,17 @@ public class PageControl implements Controller {
     listBox.addItem("f");
   }
 
+  @Override
   public void onStartScreen() {
     focusHandler = screen.getFocusHandler();
   }
 
+  @Override
   public void onFocus(final boolean getFocus) {
   }
 
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
       focusHandler.getNext(element).setFocus();
       return true;

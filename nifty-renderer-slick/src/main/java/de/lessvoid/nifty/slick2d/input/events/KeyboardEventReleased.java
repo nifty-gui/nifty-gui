@@ -3,6 +3,8 @@ package de.lessvoid.nifty.slick2d.input.events;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import org.newdawn.slick.InputListener;
 
+import javax.annotation.Nonnull;
+
 /**
  * This class stores the data generated when releasing a key.
  *
@@ -12,9 +14,9 @@ public final class KeyboardEventReleased extends AbstractKeyboardEvent {
   /**
    * Create this new event key released event.
    *
-   * @param keyId the ID of the key that was used
-   * @param keyChar the character assigned to the used key
-   * @param shiftDown {@code true} in case shift is pressed down at the same time
+   * @param keyId       the ID of the key that was used
+   * @param keyChar     the character assigned to the used key
+   * @param shiftDown   {@code true} in case shift is pressed down at the same time
    * @param controlDown {@code true} in case control is pressed down at the same time
    */
   public KeyboardEventReleased(
@@ -26,7 +28,7 @@ public final class KeyboardEventReleased extends AbstractKeyboardEvent {
    * Send the event to a Nifty input consumer.
    */
   @Override
-  public boolean sendToNifty(final NiftyInputConsumer consumer) {
+  public boolean sendToNifty(@Nonnull final NiftyInputConsumer consumer) {
     return consumer.processKeyboardEvent(this);
   }
 
@@ -34,7 +36,7 @@ public final class KeyboardEventReleased extends AbstractKeyboardEvent {
    * Send the event to a Slick input listener.
    */
   @Override
-  public boolean sendToSlick(final InputListener listener) {
+  public boolean sendToSlick(@Nonnull final InputListener listener) {
     listener.keyReleased(getKey(), getCharacter());
     return true;
   }

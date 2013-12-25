@@ -27,6 +27,7 @@ public class MenuController implements ScreenController {
    * @param niftyParam niftyParam
    * @param screenParam screenParam
    */
+  @Override
   public void bind(final Nifty niftyParam, final Screen screenParam) {
     this.nifty = niftyParam;
     this.screen = screenParam;
@@ -46,7 +47,7 @@ public class MenuController implements ScreenController {
   }
 
   private void hideIfThere(final String elementName) {
-    Element element = screen.findElementByName(elementName);
+    Element element = screen.findElementById(elementName);
     if (element != null) {
       element.hide();
     }
@@ -55,9 +56,11 @@ public class MenuController implements ScreenController {
   /**
    * just goto the next screen.
    */
+  @Override
   public final void onStartScreen() {
   }
 
+  @Override
   public final void onEndScreen() {
   }
 
@@ -120,6 +123,7 @@ public class MenuController implements ScreenController {
    */
   public void popupExit(final String exit) {
     nifty.closePopup("popupExit", new EndNotify() {
+      @Override
       public void perform() {
         if ("yes".equals(exit)) {
           nifty.setAlternateKey("fade");

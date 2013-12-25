@@ -1,19 +1,21 @@
 package de.lessvoid.nifty;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
-
 import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceLocator;
 import org.bushe.swing.event.EventTopicSubscriber;
 import org.bushe.swing.event.ProxySubscriber;
 import org.bushe.swing.event.annotation.ReferenceStrength;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
 public class NiftyEventAnnotationProcessor {
-  private static Logger log = Logger.getLogger(NiftyEventAnnotationProcessor.class.getName());
+  private static final Logger log = Logger.getLogger(NiftyEventAnnotationProcessor.class.getName());
 
   public static void process(final Object obj) {
     processOrUnprocess(obj, true);
@@ -23,7 +25,7 @@ public class NiftyEventAnnotationProcessor {
     processOrUnprocess(obj, false);
   }
 
-  private static void processOrUnprocess(final Object obj, final boolean add) {
+  private static void processOrUnprocess(@Nullable final Object obj, final boolean add) {
     if (obj == null) {
       return;
     }
@@ -43,7 +45,7 @@ public class NiftyEventAnnotationProcessor {
     }
   }
 
-  private static void process(final NiftyEventSubscriber annotation, final Object obj, final Method method, final boolean add) {
+  private static void process(@Nonnull final NiftyEventSubscriber annotation, final Object obj, @Nonnull final Method method, final boolean add) {
     String id = annotation.id();
     String pattern = annotation.pattern();
     ensureNotNull(id, pattern);
@@ -57,7 +59,7 @@ public class NiftyEventAnnotationProcessor {
     }
   }
 
-  private static boolean isSet(final String value) {
+  private static boolean isSet(@Nullable final String value) {
     return value != null && value.length() > 0;
   }
 
@@ -67,13 +69,13 @@ public class NiftyEventAnnotationProcessor {
     }
   }
 
-  private static void ensureMethodParamCount(final Class<?>[] params) {
+  private static void ensureMethodParamCount(@Nullable final Class<?>[] params) {
     if (params == null || params.length != 2 || !String.class.equals(params[0]) || params[1].isPrimitive()) {
        throw new IllegalArgumentException("The subscriptionMethod must have the two parameters, the first one must be a String and the second a non-primitive (Object or derivative).");
     }
   }
 
-  private static void patternProcess(final Object obj, final Method method, final boolean add, final String topicPattern, final Class<?> eventClass, final EventService eventService) {
+  private static void patternProcess(final Object obj, final Method method, final boolean add, @Nonnull final String topicPattern, final Class<?> eventClass, @Nonnull final EventService eventService) {
     Pattern pattern = Pattern.compile(topicPattern);
     if (add) {
       Subscriber subscriber = new Subscriber(obj, method, eventClass);
@@ -85,7 +87,7 @@ public class NiftyEventAnnotationProcessor {
     }
   }
 
-  private static void idProcess(final Object obj, final Method method, final boolean add, final String id, final Class<?> eventClass, final EventService eventService) {
+  private static void idProcess(final Object obj, final Method method, final boolean add, final String id, final Class<?> eventClass, @Nonnull final EventService eventService) {
     if (add) {
       Subscriber subscriber = new Subscriber(obj, method, eventClass);
       eventService.subscribeStrongly(id, subscriber);
@@ -131,6 +133,7 @@ public class NiftyEventAnnotationProcessor {
     public void proxyUnsubscribed() {
     }
 
+    @Nonnull
     @Override
     public ReferenceStrength getReferenceStrength() {
       return ReferenceStrength.STRONG;

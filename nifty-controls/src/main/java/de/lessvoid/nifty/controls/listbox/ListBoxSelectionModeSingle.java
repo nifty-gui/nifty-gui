@@ -1,49 +1,54 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import java.util.ArrayList;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * A single selection mode for a Nifty ListBox. You can only select a single item.
  * Selecting a new one will remove any previous selected items.
- * @author void
+ *
  * @param <T>
+ * @author void
  */
-public class ListBoxSelectionModeSingle<T> implements ListBoxSelectionMode<T> {
-  private List<T> selection = new ArrayList<T>();
+class ListBoxSelectionModeSingle<T> implements ListBoxSelectionMode<T> {
+  @Nullable
+  private T selection;
   private boolean requiresSelection = false;
 
   @Override
   public void clear() {
-    selection.clear();
+    selection = null;
   }
 
+  @Nonnull
   @Override
   public List<T> getSelection() {
-    return new ArrayList<T>(selection);
+    if (selection == null) {
+      return Collections.emptyList();
+    }
+    return Collections.singletonList(selection);
   }
 
   @Override
-  public void remove(final T item) {
+  public void remove(@Nonnull final T item) {
     if (requiresSelection) {
       return;
     }
-    if (isPartOfSelection(item)) {
-      removeFromSelection(item);
+    removeForced(item);
+  }
+
+  @Override
+  public void removeForced(@Nonnull final T item) {
+    if (item.equals(selection)) {
+      selection = null;
     }
   }
 
   @Override
-  public void removeForced(final T item) {
-    if (isPartOfSelection(item)) {
-      removeFromSelection(item);
-    }
-  }
-
-  @Override
-  public void add(final T item) {
-    selection.clear();
-    selection.add(item);
+  public void add(@Nonnull final T item) {
+    selection = item;
   }
 
   @Override
@@ -53,14 +58,6 @@ public class ListBoxSelectionModeSingle<T> implements ListBoxSelectionMode<T> {
 
   @Override
   public boolean requiresAutoSelection() {
-    return requiresSelection && selection.isEmpty();
-  }
-
-  private boolean isPartOfSelection(final T item) {
-    return selection.contains(item);
-  }
-
-  private void removeFromSelection(final T item) {
-    selection.remove(item);
+    return requiresSelection && selection == null;
   }
 }

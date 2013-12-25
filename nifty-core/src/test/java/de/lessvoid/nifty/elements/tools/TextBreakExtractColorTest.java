@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.elements.tools;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-
-import org.junit.Test;
 
 public class TextBreakExtractColorTest {
   private TextBreak textBreak = new TextBreak("line", 20, null);

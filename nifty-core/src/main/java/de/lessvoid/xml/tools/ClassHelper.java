@@ -1,5 +1,7 @@
 package de.lessvoid.xml.tools;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.logging.Logger;
 
 /**
@@ -11,7 +13,7 @@ public final class ClassHelper {
   /**
    * logger.
    */
-  private static Logger log = Logger.getLogger(ClassHelper.class.getName());
+  private static final Logger log = Logger.getLogger(ClassHelper.class.getName());
 
   /**
    * You can't initialize this class.
@@ -24,10 +26,10 @@ public final class ClassHelper {
    * @param className name of class to load
    * @return Class object or null
    */
-  public static Class < ? > loadClass(final String className) {
+  @Nullable
+  public static Class<?> loadClass(@Nonnull final String className) {
     try {
-      Class < ? > cls = ClassHelper.class.getClassLoader().loadClass(className);
-      return cls;
+      return Class.forName(className);
     } catch (Exception e) {
       log.warning("class [" + className + "] could not be found (" + e.getMessage() + ")");
     }
@@ -41,14 +43,14 @@ public final class ClassHelper {
    * @param <T> class
    * @return new ScreenController instance or null
    */
-  public static < T > T getInstance(final String className, final Class < T > type) {
+  @Nullable
+  public static <T> T getInstance(@Nonnull final String className, @Nonnull final Class<T> type) {
     try {
-      Class < ? > cls = ClassHelper.class.getClassLoader().loadClass(className);
+      Class<?> cls = Class.forName(className);
       if (type.isAssignableFrom(cls)) {
         return type.cast(cls.newInstance());
       } else {
-        log.warning(
-            "given class [" + className + "] does not implement [" + type.getName() + "]");
+        log.warning("given class [" + className + "] does not implement [" + type.getName() + "]");
       }
     } catch (Exception e) {
       log.warning("class [" + className + "] could not be instantiated (" + e.toString() + ")");
@@ -56,7 +58,8 @@ public final class ClassHelper {
     return null;
   }
 
-  public static < T > T getInstance(final Class < T > clazz) {
+  @Nullable
+  public static <T> T getInstance(@Nonnull final Class<T> clazz) {
     try {
       return clazz.newInstance();
     } catch (Exception e) {

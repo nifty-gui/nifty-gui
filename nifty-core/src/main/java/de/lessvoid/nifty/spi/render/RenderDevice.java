@@ -1,13 +1,12 @@
 package de.lessvoid.nifty.spi.render;
 
-import java.io.IOException;
-
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
 
 /**
  * Nifty RenderDevice.
@@ -27,7 +26,7 @@ public interface RenderDevice {
    * Create a new image for the renderer. This method is only called if the image is not already cached. The
    * implementation calling this method will take care for caching already loaded images as needed.
    *
-   * @param filename the filename of the image that needs to be load
+   * @param filename     the filename of the image that needs to be load
    * @param filterLinear {@code true} in case a linear (and slower) rescaling filter is supposed to be applied
    * @return the created render image or {@code null} in case the image assigned to the filename is not found
    */
@@ -156,7 +155,7 @@ public interface RenderDevice {
    *
    * @param filename the filename assigned to the mouse cursor that needs to be load
    * @param hotspotX hotspot x with 0 being left of the screen
-   * @param hotspotY hotspot y with 0 being top of the screen 
+   * @param hotspotY hotspot y with 0 being top of the screen
    * @return the newly created mouse cursor or {@code null} in case there is no matching cursor for this file name
    */
   @Nullable

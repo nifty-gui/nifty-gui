@@ -6,6 +6,8 @@ package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
 
+import javax.annotation.Nonnull;
+
 /**
  * This event is fired once a tab is selected by the user and becomes visible.
  *
@@ -16,11 +18,13 @@ public class TabSelectedEvent implements NiftyEvent {
   /**
    * The group that is the parent of the tab that got selected.
    */
+  @Nonnull
   private final TabGroup group;
 
   /**
    * The tab that was selected.
    */
+  @Nonnull
   private final Tab tab;
 
   /**
@@ -31,11 +35,11 @@ public class TabSelectedEvent implements NiftyEvent {
   /**
    * + Create a instance of this event and set all the values that are transferred in such a event.
    *
-   * @param tabGroup the tab group control that is the parent of the effected tab
+   * @param tabGroup   the tab group control that is the parent of the effected tab
    * @param tabControl the tab that is now visible
-   * @param tabIndex the index of the tab that is now visible
+   * @param tabIndex   the index of the tab that is now visible
    */
-  public TabSelectedEvent(final TabGroup tabGroup, final Tab tabControl, final int tabIndex) {
+  public TabSelectedEvent(@Nonnull final TabGroup tabGroup, @Nonnull final Tab tabControl, final int tabIndex) {
     group = tabGroup;
     tab = tabControl;
     index = tabIndex;
@@ -46,6 +50,7 @@ public class TabSelectedEvent implements NiftyEvent {
    *
    * @return the tab group
    */
+  @Nonnull
   private TabGroup getParentGroup() {
     return group;
   }
@@ -53,8 +58,9 @@ public class TabSelectedEvent implements NiftyEvent {
   /**
    * Get the tab that became visible.
    *
-   * @return the tab that is now visible
+   * @return the tab that is now visible or {@code null} in case no tab is visible
    */
+  @Nonnull
   private Tab getTab() {
     return tab;
   }

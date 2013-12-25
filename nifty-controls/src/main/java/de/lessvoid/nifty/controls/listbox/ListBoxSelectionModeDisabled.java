@@ -1,35 +1,36 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import java.util.ArrayList;
+import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * A disabled selection mode for a Nifty ListBox. You can't select anything.
- * @author void
+ *
  * @param <T>
+ * @author void
  */
-public class ListBoxSelectionModeDisabled<T> implements ListBoxSelectionMode<T> {
-  private List<T> emptySelection = new ArrayList<T>();
-
+class ListBoxSelectionModeDisabled<T> implements ListBoxSelectionMode<T> {
   @Override
   public void clear() {
   }
 
+  @Nonnull
   @Override
   public List<T> getSelection() {
-    return emptySelection;
+    return Collections.emptyList();
   }
 
   @Override
-  public void remove(final T item) {
+  public void remove(@Nonnull final T item) {
   }
 
   @Override
-  public void removeForced(final T item) {
+  public void removeForced(@Nonnull final T item) {
   }
 
   @Override
-  public void add(final T item) {
+  public void add(@Nonnull final T item) {
   }
 
   @Override

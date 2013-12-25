@@ -1,23 +1,23 @@
 package de.lessvoid.xml.lwxs.elements;
 
+import de.lessvoid.xml.lwxs.Schema;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.lessvoid.xml.lwxs.Schema;
-
 public class Type {
-  private ArrayList < SubstitutionGroup > substitutionGroups = new ArrayList < SubstitutionGroup >();
-  private ArrayList < Element > elements = new ArrayList < Element >();
-  private String className;
-  private String extendsName;
+  @Nonnull
+  private final ArrayList < SubstitutionGroup > substitutionGroups = new ArrayList < SubstitutionGroup >();
+  @Nonnull
+  private final ArrayList < Element > elements = new ArrayList < Element >();
+  @Nonnull
+  private final String className;
+  @Nullable
+  private final String extendsName;
 
-  public Type() {
-  }
-
-  public Type(final String classNameParam, final String extendsNameParam) throws Exception {
-    if (classNameParam == null) {
-      throw new Exception("className must not be null");
-    }
+  public Type(@Nonnull final String classNameParam, @Nullable final String extendsNameParam) {
     className = classNameParam;
     extendsName = extendsNameParam;
   }
@@ -30,7 +30,8 @@ public class Type {
     substitutionGroups.add(substitutionGroup);
   }
 
-  public XmlProcessorType createXmlProcessor(final Schema schema) throws Exception {
+  @Nonnull
+  public XmlProcessorType createXmlProcessor(@Nonnull final Schema schema) throws Exception {
     ArrayList < SubstitutionGroup > substitutionGroups = new ArrayList < SubstitutionGroup >();
     ArrayList < Element > elements = new ArrayList < Element >();
 
@@ -46,19 +47,26 @@ public class Type {
     return schema.getInstance(className, elements, substitutionGroups);
   }
 
+  @Nonnull
   private Collection < ? extends Element > getElements() {
     return elements;
   }
 
+  @Nonnull
   private Collection < ? extends SubstitutionGroup > getSubstituitionGroup() {
     return substitutionGroups;
   }
 
-  public XmlProcessorType createXmlProcessorFromType(final Schema schema, final Type typeParent) throws Exception {
+  @Nonnull
+  public XmlProcessorType createXmlProcessorFromType(@Nonnull final Schema schema, @Nonnull final Type typeParent) throws Exception {
     return schema.getInstance(typeParent.className, elements, substitutionGroups);
   }
 
-  public Type getTypeParent(final Schema schema) throws Exception {
+  @Nullable
+  public Type getTypeParent(@Nonnull final Schema schema) throws Exception {
+    if (extendsName == null) {
+      return null;
+    }
     if (schema.isTypeAvailable(extendsName)) {
       return schema.getType(extendsName);
     } else {
@@ -67,28 +75,27 @@ public class Type {
   }
 
   public void addChildren(
-      final Schema schema,
-      final XmlProcessorType processor,
-      final String tagName,
+      @Nonnull final Schema schema,
+      @Nonnull final XmlProcessorType processor,
+      @Nonnull final String tagName,
       final String tagType,
-      final OccursEnum occurs) throws Exception {
-    childElement(schema, processor, tagName, tagType, occurs);
+      @Nonnull final OccursEnum occurs) throws Exception {
+    childElement(schema, processor, tagName, occurs);
   }
 
   private void childElement(
-      final Schema schema,
-      final XmlProcessorType processor,
-      final String tagName,
-      final String tagType,
-      final OccursEnum occurs) throws Exception {
+      @Nonnull final Schema schema,
+      @Nonnull final XmlProcessorType processor,
+      @Nonnull final String tagName,
+      @Nonnull final OccursEnum occurs) throws Exception {
     XmlProcessorElement child = new XmlProcessorElement(
         createXmlProcessor(schema),
         tagName,
-        tagType,
         occurs);
     processor.addElementProcessor(child);
   }
 
+  @Nonnull
   public String getClassName() {
     return className;
   }

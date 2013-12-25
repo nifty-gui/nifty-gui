@@ -10,43 +10,67 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.image.ImageModeFactory;
 import de.lessvoid.nifty.render.image.ImageModeHelper;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * ImagePulsate - image color pulsate.
+ *
  * @author void
  */
 public class ImageOverlayPulsate implements EffectImpl {
-
+  @Nullable
   private NiftyImage image;
+  @Nullable
   private Pulsator pulsater;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    image = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), parameter.getProperty("filename"), true);
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
+    Screen screen = nifty.getCurrentScreen();
+    if (screen == null) {
+      return;
+    }
+    image = nifty.getRenderEngine().createImage(screen, parameter.getProperty("filename"), true);
+    if (image == null) {
+      return;
+    }
 
     String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(parameter);
     String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(parameter);
     if ((areaProviderProperty != null) || (renderStrategyProperty != null)) {
-	    image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
-	    		renderStrategyProperty));
+      image.setImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
+          renderStrategyProperty));
     }
 
     this.pulsater = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
-    r.saveState(null);
-    float value = pulsater.update();
-    r.setColorAlpha(value);
-    r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
-    r.restoreState();
+      @Nonnull final NiftyRenderEngine r) {
+    if (image != null) {
+      r.saveState(null);
+      if (pulsater != null) {
+        r.setColorAlpha(pulsater.update());
+      }
+      r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
+      r.restoreState();
+    }
   }
 
+  @Override
   public void deactivate() {
-    image.dispose();
+    if (image != null) {
+      image.dispose();
+    }
   }
 }

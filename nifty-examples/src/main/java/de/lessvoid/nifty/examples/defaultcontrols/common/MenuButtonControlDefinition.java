@@ -1,12 +1,10 @@
 package de.lessvoid.nifty.examples.defaultcontrols.common;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
-import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.HoverEffectBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.*;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
+
+import javax.annotation.Nonnull;
 
 public class MenuButtonControlDefinition {
   private static final String NAME = "menuButtonControl";
@@ -17,7 +15,7 @@ public class MenuButtonControlDefinition {
   private static final String PARAMETER_COLOR_2 = "menuButtonColor2";
   private static final String PARAMETER_COLOR_3 = "menuButtonColor3";
 
-  public static void register(final Nifty nifty) {
+  public static void register(@Nonnull final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
       controller(new MenuButtonController());
       panel(new PanelBuilder() {{
@@ -75,7 +73,8 @@ public class MenuButtonControlDefinition {
     }}.registerControlDefintion(nifty);
   }
 
-  public static ControlBuilder getControlBuilder(final String id, final String text, final String hintText) {
+  @Nonnull
+  public static ControlBuilder getControlBuilder(@Nonnull final String id, @Nonnull final String text, @Nonnull final String hintText) {
     return new ControlBuilder(id, NAME) {{
       parameter(PARAMETER_LABEL, text);
       parameter(PARAMETER_HINT, hintText);
@@ -86,7 +85,8 @@ public class MenuButtonControlDefinition {
     }};
   }
 
-  public static ControlBuilder getControlBuilderUser(final String id, final String text, final String hintText) {
+  @Nonnull
+  public static ControlBuilder getControlBuilderUser(@Nonnull final String id, @Nonnull final String text, @Nonnull final String hintText) {
     return new ControlBuilder(id, NAME) {{
       parameter(PARAMETER_LABEL, text);
       parameter(PARAMETER_HINT, hintText);
@@ -97,7 +97,8 @@ public class MenuButtonControlDefinition {
     }};
   }
 
-  public static ControlBuilder getControlBuilderSpecial(final String id, final String text, final String hintText) {
+  @Nonnull
+  public static ControlBuilder getControlBuilderSpecial(@Nonnull final String id, @Nonnull final String text, @Nonnull final String hintText) {
     return new ControlBuilder(id, NAME) {{
       parameter(PARAMETER_LABEL, text);
       parameter(PARAMETER_HINT, hintText);
@@ -108,7 +109,8 @@ public class MenuButtonControlDefinition {
     }};
   }
 
-  public static ControlBuilder getControlBuilder(final String id, final String text, final String hintText, final String width) {
+  @Nonnull
+  public static ControlBuilder getControlBuilder(@Nonnull final String id, @Nonnull final String text, @Nonnull final String hintText, @Nonnull final String width) {
     return new ControlBuilder(id, NAME) {{
       parameter(PARAMETER_LABEL, text);
       parameter(PARAMETER_HINT, hintText);

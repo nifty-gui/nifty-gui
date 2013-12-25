@@ -1,139 +1,160 @@
 package de.lessvoid.nifty.render;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.batch.BatchRenderImage;
 import de.lessvoid.nifty.render.NiftyImageManager.ReferencedCountedImage;
-import de.lessvoid.nifty.render.NiftyImageManagerExtBatch.ReferencedCountedImageBatch;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
-public class NiftyImageManagerExtBatch<T extends ReferencedCountedImageBatch> implements NiftyImageManagerExt<T> {
-  private static Logger log = Logger.getLogger(NiftyImageManagerExtBatch.class.getName());
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-  private Map<String, Set<T>> screenRef = new HashMap<String, Set<T>>();
+public class NiftyImageManagerExtBatch implements NiftyImageManagerExt<ReferencedCountedImage> {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(NiftyImageManagerExtBatch.class.getName());
+
+  @Nonnull
+  private final Map<String, Set<ReferencedCountedImageBatch>> screenRef = new HashMap<String,
+      Set<ReferencedCountedImageBatch>>();
+  @Nullable
   private Screen currentScreen;
 
   @Override
-  public void registerImage(final Screen screen, final T image) {
-    if (screen != null) {
-      Set<T> screenList = screenRef.get(screen.getScreenId());
-      if (screenList == null) {
-        screenList = new HashSet<T>();
-        screenRef.put(screen.getScreenId(), screenList);
+  public void registerImage(@Nonnull final Screen screen, @Nonnull final ReferencedCountedImage image) {
+    Set<ReferencedCountedImageBatch> screenList = screenRef.get(screen.getScreenId());
+    if (screenList == null) {
+      screenList = new HashSet<ReferencedCountedImageBatch>();
+      screenRef.put(screen.getScreenId(), screenList);
+    }
+    final ReferencedCountedImageBatch batchImage = cast(image);
+    if (screenList.add(batchImage)) {
+      if (log.isLoggable(Level.FINER)) {
+        log.finer("[" + screen.getScreenId() + "] now with [" + screenList.size() + "] entries (" + image.getName() +
+            ")");
       }
-      if (screenList.add(image)) {
-        if (log.isLoggable(Level.FINER)) {
-          log.finer("[" + screen.getScreenId() + "] now with [" + screenList.size() + "] entries (" + image.getName() + ")");
-        }
-      }
-      if (currentScreen != null && currentScreen.getScreenId().equals(screen.getScreenId())) {
-        if (!image.isUploaded()) {
-          image.upload();
-        }
+    }
+    if (currentScreen != null && currentScreen.getScreenId().equals(screen.getScreenId())) {
+      if (!batchImage.isUploaded()) {
+        batchImage.upload();
       }
     }
   }
 
   @Override
-  public void unregisterImage(final T reference) {
-    reference.unload();
+  public void unregisterImage(@Nonnull final ReferencedCountedImage reference) {
+    final ReferencedCountedImageBatch image = cast(reference);
+    image.unload();
 
-    Set<T> screenList = screenRef.get(reference.getScreen().getScreenId());
+    Set<ReferencedCountedImageBatch> screenList = screenRef.get(reference.getScreen().getScreenId());
     if (screenList != null) {
-      screenList.remove(reference);
+      screenList.remove(image);
     }
   }
 
   @Override
-  public void uploadScreenImages(final Screen screen) {
+  public void uploadScreenImages(@Nonnull final Screen screen) {
     currentScreen = screen;
 
     // find all ReferencedCountedImage and upload them into the texture atlas (for this screen).
-    Set<T> imageList = screenRef.get(screen.getScreenId());
+    Set<ReferencedCountedImageBatch> imageList = screenRef.get(screen.getScreenId());
     if (imageList == null) {
       return;
     }
 
-    for (T image : imageList) {
+    for (ReferencedCountedImageBatch image : imageList) {
       image.upload();
     }
   }
 
   @Override
-  public void unloadScreenImages(final Screen screen, final RenderDevice renderDevice, final Collection<T> imageSet) {
+  public void unloadScreenImages(
+      @Nonnull final Screen screen,
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final Collection<ReferencedCountedImage> imageSet) {
     ((BatchRenderDevice) renderDevice).resetTextureAtlas();
 
     // we need to mark all images as unloaded
-    for (T i : imageSet) {
-      i.markAsUnloaded();
+    for (ReferencedCountedImage i : imageSet) {
+      cast(i).markAsUnloaded();
     }
 
     currentScreen = null;
   }
 
-  @Override
-  public void screenAdded(final Screen screen) {
+  @Nonnull
+  private static ReferencedCountedImageBatch cast(@Nonnull final ReferencedCountedImage image) {
+    if (image instanceof ReferencedCountedImageBatch) {
+      return (ReferencedCountedImageBatch) image;
+    }
+    throw new IllegalArgumentException("Illegal image type supplied: " + image.getClass().getName() + "expected " +
+        ReferencedCountedImageBatch.class.getName());
   }
 
   @Override
-  public void screenRemoved(final Screen screen) {
+  public void screenAdded(@Nonnull final Screen screen) {
+  }
+
+  @Override
+  public void screenRemoved(@Nonnull final Screen screen) {
     screenRef.remove(screen.getScreenId());
   }
 
   @Override
-  public void addScreenInfo(final StringBuffer result) {
+  public void addScreenInfo(@Nonnull final StringBuffer result) {
     if (screenRef.entrySet().isEmpty()) {
       return;
     }
     result.append("\n");
-    for (Map.Entry<String, Set<T>> entry : screenRef.entrySet()) {
-      result.append("\n[" + entry.getKey() + "]\n");
-      for (T image : entry.getValue()) {
+    for (Map.Entry<String, Set<ReferencedCountedImageBatch>> entry : screenRef.entrySet()) {
+      result.append("\n[").append(entry.getKey()).append("]\n");
+      for (ReferencedCountedImageBatch image : entry.getValue()) {
         result.append(image.toString());
       }
     }
   }
 
+  @Nonnull
   @Override
-  public T createReferencedCountedImage(
-      final RenderDevice renderDevice,
-      final Screen screen,
-      final String filename,
+  public ReferencedCountedImageBatch createReferencedCountedImage(
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final Screen screen,
+      @Nonnull final String filename,
       final boolean filterLinear,
-      final RenderImage renderImage,
-      final String key) {
-    return (T) new ReferencedCountedImageBatch(renderDevice, screen, filename, filterLinear, renderImage, key);
+      @Nonnull final RenderImage renderImage,
+      @Nonnull final String key) {
+    return new ReferencedCountedImageBatch(renderDevice, screen, filename, filterLinear, renderImage, key);
   }
 
   /**
    * A standard implementation of a ReferencedCountedImage without Batch support.
+   *
    * @author void
    */
   public static class ReferencedCountedImageBatch implements ReferencedCountedImage {
+    @Nonnull
     private final RenderDevice renderDevice;
+    @Nonnull
     private final Screen screen;
+    @Nonnull
     private final String filename;
     private final boolean filterLinear;
+    @Nonnull
     private final String key;
+    @Nonnull
     private RenderImage renderImage;
     private int references;
 
     public ReferencedCountedImageBatch(
-        final RenderDevice renderDevice,
-        final Screen screen,
-        final String filename,
+        @Nonnull final RenderDevice renderDevice,
+        @Nonnull final Screen screen,
+        @Nonnull final String filename,
         final boolean filterLinear,
-        final RenderImage renderImage,
-        final String key) {
+        @Nonnull final RenderImage renderImage,
+        @Nonnull final String key) {
       this.renderDevice = renderDevice;
       this.screen = screen;
       this.filename = filename;
@@ -158,13 +179,20 @@ public class NiftyImageManagerExtBatch<T extends ReferencedCountedImageBatch> im
       batchRenderImage.markAsUnloaded();
     }
 
+    @Nonnull
     @Override
     public RenderImage reload() {
-      renderImage.dispose();
-      renderImage = renderDevice.createImage(filename, filterLinear);
+      final RenderImage newImage = renderDevice.createImage(filename, filterLinear);
+      if (newImage == null) {
+        log.severe("Failed to reload image, reloading canceled.");
+      } else {
+        renderImage.dispose();
+        renderImage = newImage;
+      }
       return renderImage;
     }
 
+    @Nonnull
     @Override
     public RenderImage addReference() {
       references++;
@@ -186,16 +214,19 @@ public class NiftyImageManagerExtBatch<T extends ReferencedCountedImageBatch> im
       return references;
     }
 
+    @Nonnull
     @Override
     public RenderImage getRenderImage() {
       return renderImage;
     }
 
+    @Nonnull
     @Override
     public String getName() {
       return key;
     }
 
+    @Nonnull
     @Override
     public Screen getScreen() {
       return screen;
@@ -208,6 +239,7 @@ public class NiftyImageManagerExtBatch<T extends ReferencedCountedImageBatch> im
       return false;
     }
 
+    @Nonnull
     @Override
     public String toString() {
       return " - [" + getName() + "] reference count [" + getReferences() + "] uploaded [" + isUploaded() + "]\n";

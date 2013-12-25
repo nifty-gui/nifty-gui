@@ -1,11 +1,11 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.Test;
 
 import java.util.List;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 
 public class ListBoxSelectionModeSingleTest {
@@ -56,11 +56,11 @@ public class ListBoxSelectionModeSingleTest {
     assertSelection();
   }
 
-  private void assertSelection(final Object ... expected) {
+  private void assertSelection(final Object... expected) {
     List<Object> selection = selectionMode.getSelection();
     assertEquals(selection.size(), expected.length);
 
-    int i=0;
+    int i = 0;
     for (Object o : selection) {
       assertEquals(o, expected[i++]);
     }

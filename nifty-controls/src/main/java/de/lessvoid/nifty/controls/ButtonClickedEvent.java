@@ -2,13 +2,17 @@ package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
 
-public class ButtonClickedEvent implements NiftyEvent {
-  private Button button;
+import javax.annotation.Nonnull;
 
-  public ButtonClickedEvent(final Button button) {
+public class ButtonClickedEvent implements NiftyEvent {
+  @Nonnull
+  private final Button button;
+
+  public ButtonClickedEvent(@Nonnull final Button button) {
     this.button = button;
   }
 
+  @Nonnull
   public Button getButton() {
     return button;
   }

@@ -1,12 +1,12 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Comparator;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class ListBoxItemSortTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);

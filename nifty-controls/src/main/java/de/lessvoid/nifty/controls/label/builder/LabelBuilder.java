@@ -2,21 +2,23 @@ package de.lessvoid.nifty.controls.label.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 
+import javax.annotation.Nonnull;
+
 public class LabelBuilder extends ControlBuilder {
   public LabelBuilder() {
     super("label");
   }
 
-  public LabelBuilder(final String id) {
+  public LabelBuilder(@Nonnull final String id) {
     super(id, "label");
   }
 
-  public LabelBuilder(final String id, final String text) {
+  public LabelBuilder(@Nonnull final String id, @Nonnull final String text) {
     super(id, "label");
     text(text);
   }
 
-  public void label(final String label) {
+  public void label(@Nonnull final String label) {
     text(label);
   }
 

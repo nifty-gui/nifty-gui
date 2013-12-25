@@ -1,12 +1,13 @@
 package de.lessvoid.nifty.layout;
 
-import junit.framework.TestCase;
 import de.lessvoid.nifty.tools.SizeValue;
+import junit.framework.TestCase;
 
 public class BoxConstraintWithPaddingTest extends TestCase {
 
   private BoxConstraints boxConstraints;
 
+  @Override
   public void setUp() {
     boxConstraints = new BoxConstraints();
   }

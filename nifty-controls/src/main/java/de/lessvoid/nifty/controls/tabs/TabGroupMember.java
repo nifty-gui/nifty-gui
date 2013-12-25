@@ -2,6 +2,8 @@ package de.lessvoid.nifty.controls.tabs;
 
 import de.lessvoid.nifty.controls.TabGroup;
 
+import javax.annotation.Nullable;
+
 /**
  * This interface can be implemented in tab controls in case those controls need to be informed once they are added to a
  * tab group. This interface is not meant to be used in a final application. Its only used to nifty-control
@@ -15,5 +17,5 @@ public interface TabGroupMember {
    *
    * @param tabGroup the parent tab group
    */
-  void setParentTabGroup(TabGroup tabGroup);
+  void setParentTabGroup(@Nullable TabGroup tabGroup);
 }

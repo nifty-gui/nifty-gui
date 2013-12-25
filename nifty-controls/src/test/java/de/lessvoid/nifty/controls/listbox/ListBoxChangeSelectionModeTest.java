@@ -1,13 +1,10 @@
-package de.lessvoid.nifty.controls;
+package de.lessvoid.nifty.controls.listbox;
 
-import static org.junit.Assert.assertEquals;
-
+import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.ListBox.SelectionMode;
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.TestItem;
+import static org.junit.Assert.assertEquals;
 
 public class ListBoxChangeSelectionModeTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
@@ -57,7 +54,7 @@ public class ListBoxChangeSelectionModeTest {
     assertSelection(o1);
   }
 
-  private void assertSelection(final Object ... selection) {
+  private void assertSelection(final Object... selection) {
     assertEquals(selection.length, listBox.getSelection().size());
     int i = 0;
     for (Object o : selection) {

@@ -1,13 +1,7 @@
 package de.lessvoid.nifty.examples.helloniftybuilder;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.HoverEffectBuilder;
-import de.lessvoid.nifty.builder.ImageBuilder;
-import de.lessvoid.nifty.builder.LayerBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.ScreenBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.builder.*;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
@@ -16,9 +10,13 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * The Nifty Hello World. This time using the Nifty Builder classes
  * to dynamically create Nifty screens WITHOUT the xml.
+ *
  * @author void
  */
 public class HelloNiftyBuilderExampleMain implements ScreenController, NiftyExample {
@@ -66,23 +64,26 @@ public class HelloNiftyBuilderExampleMain implements ScreenController, NiftyExam
     nifty.exit();
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nullable
   @Override
   public String getMainXML() {
     return null;
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Hello Nifty Builder World";
   }
 
   @Override
-  public void prepareStart(final Nifty nifty) {
+  public void prepareStart(@Nonnull final Nifty nifty) {
     // create a screen
     Screen screen = new ScreenBuilder("start") {{
       controller(HelloNiftyBuilderExampleMain.this);

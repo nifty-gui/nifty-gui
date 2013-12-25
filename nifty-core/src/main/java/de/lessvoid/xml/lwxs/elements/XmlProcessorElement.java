@@ -4,33 +4,28 @@ import de.lessvoid.xml.lwxs.XmlType;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
 
+import javax.annotation.Nonnull;
+
 public class XmlProcessorElement {
+  @Nonnull
   private XmlProcessorType elementProcessor;
+  @Nonnull
   private String elementName;
+  @Nonnull
   private OccursEnum elementOccurs;
 
   public XmlProcessorElement(
-      final XmlProcessorType elementProcessorParam,
-      final String elementNameParam,
-      final String elementTypeParam,
-      final OccursEnum elementOccursParam) throws Exception {
-    if (elementProcessorParam == null) {
-      throw new Exception("elementProcessorParam must not be null");
-    }
-    if (elementNameParam == null) {
-      throw new Exception("elementNameParam must not be null");
-    }
-    if (elementOccursParam == null) {
-      throw new Exception("elementOccursParam must not be null");
-    }
+      @Nonnull final XmlProcessorType elementProcessorParam,
+      @Nonnull final String elementNameParam,
+      @Nonnull final OccursEnum elementOccursParam) {
     elementProcessor = elementProcessorParam;
     elementName = elementNameParam;
     elementOccurs = elementOccursParam;
   }
 
   public void process(
-      final XmlParser xmlParser,
-      final XmlType xmlTypeParent) throws Exception {
+      @Nonnull final XmlParser xmlParser,
+      @Nonnull final XmlType xmlTypeParent) throws Exception {
     if (elementOccurs.equals(OccursEnum.required)) {
       elementProcessor.parentLinkSet(xmlTypeParent, elementName);
       xmlParser.required(elementName, elementProcessor);
@@ -47,9 +42,9 @@ public class XmlProcessorElement {
   }
 
   public void processSubstGroup(
-      final XmlParser xmlParser,
-      final XmlType xmlTypeParent,
-      final Attributes attributes) throws Exception {
+      @Nonnull final XmlParser xmlParser,
+      @Nonnull final XmlType xmlTypeParent,
+      @Nonnull final Attributes attributes) throws Exception {
     if (elementOccurs.equals(OccursEnum.required)) {
       elementProcessor.parentLinkSet(xmlTypeParent, elementName);
       elementProcessor.process(xmlParser, attributes);

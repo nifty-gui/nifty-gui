@@ -1,9 +1,10 @@
 package de.lessvoid.nifty.loaderv2.types.helper;
 
-import java.util.regex.Pattern;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
+
+import javax.annotation.Nonnull;
+import java.util.regex.Pattern;
 
 public class OnClickType {
   /**
@@ -24,7 +25,8 @@ public class OnClickType {
     return VALID_PATTERN.matcher(value).matches();
   }
 
-  public NiftyMethodInvoker getMethod(final Nifty nifty, final Object ... controlController) {
+  @Nonnull
+  public NiftyMethodInvoker getMethod(final Nifty nifty, final Object... controlController) {
     return new NiftyMethodInvoker(nifty, value, controlController);
   }
 }

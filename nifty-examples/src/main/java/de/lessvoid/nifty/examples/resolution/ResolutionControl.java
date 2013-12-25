@@ -1,11 +1,12 @@
 package de.lessvoid.nifty.examples.resolution;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
  * The resolution change example needs a control to actually read and alter the used resolutions. This interface needs
  * to be implemented by the implementing renderers to provide the access to the different functions.
- * 
+ *
  * @param <T></T> the type of the objects that are used to identify the different resolution values
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
@@ -15,6 +16,7 @@ public interface ResolutionControl<T> {
    *
    * @return the list of valid resolutions
    */
+  @Nonnull
   Collection<T> getResolutions();
 
   /**

@@ -10,17 +10,21 @@ import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
 
+import javax.annotation.Nonnull;
+
 /**
  * The ListBoxDialogControlDefinition registers a new control with Nifty
  * that represents the whole Dialog. This gives us later an appropriate
  * ControlBuilder to actual construct the Dialog (as a control).
+ *
  * @author void
  */
 public class ListBoxDialogControlDefinition {
   public static final String NAME = "listBoxDialogControl";
-  private static CommonBuilders builders = new CommonBuilders();
+  @Nonnull
+  private static final CommonBuilders builders = new CommonBuilders();
 
-  public static void register(final Nifty nifty) {
+  public static void register(@Nonnull final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
       controller(new ListBoxDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{

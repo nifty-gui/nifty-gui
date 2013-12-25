@@ -1,12 +1,14 @@
 package de.lessvoid.nifty.renderer.lwjgl.input;
 
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import org.lwjgl.input.Keyboard;
 
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import javax.annotation.Nonnull;
 
 
 /**
  * KeyboardInputEventCreator.
+ *
  * @author void
  */
 public class LwjglKeyboardInputEventCreator {
@@ -23,11 +25,13 @@ public class LwjglKeyboardInputEventCreator {
 
   /**
    * create KeyboardInputEvent.
-   * @param key key
+   *
+   * @param key       key
    * @param character character
-   * @param keyDown keyDown
+   * @param keyDown   keyDown
    * @return event
    */
+  @Nonnull
   public KeyboardInputEvent createEvent(final int key, final char character, final boolean keyDown) {
     if (isShiftDown(key, keyDown)) {
       shiftDown = true;
@@ -45,6 +49,7 @@ public class LwjglKeyboardInputEventCreator {
 
   /**
    * checks if the shift key is given.
+   *
    * @param key key
    * @return true when shift has been pressed and false otherwise
    */
@@ -54,7 +59,8 @@ public class LwjglKeyboardInputEventCreator {
 
   /**
    * check if shift is down.
-   * @param key key to check
+   *
+   * @param key     key to check
    * @param keyDown keyDown
    * @return true when left or right shift has been pressed
    */
@@ -64,7 +70,8 @@ public class LwjglKeyboardInputEventCreator {
 
   /**
    * check if shift is up.
-   * @param key key
+   *
+   * @param key     key
    * @param keyDown keyDown
    * @return true when left or right shift has been released
    */
@@ -74,16 +81,19 @@ public class LwjglKeyboardInputEventCreator {
 
   /**
    * check if the given key is the controlKey.
+   *
    * @param key key
    * @return true left or right control key pressed and false otherwise
    */
   private boolean isControlKey(final int key) {
-    return key == Keyboard.KEY_RCONTROL || key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_LMETA || key == Keyboard.KEY_RMETA;
+    return key == Keyboard.KEY_RCONTROL || key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_LMETA || key ==
+        Keyboard.KEY_RMETA;
   }
 
   /**
    * check if control key is down.
-   * @param key key
+   *
+   * @param key     key
    * @param keyDown keyDown
    * @return controlDown
    */
@@ -93,7 +103,8 @@ public class LwjglKeyboardInputEventCreator {
 
   /**
    * check if control key is up.
-   * @param key key
+   *
+   * @param key     key
    * @param keyDown keyDown
    * @return controlDown
    */

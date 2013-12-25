@@ -1,22 +1,22 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
-import java.util.logging.Logger;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-
 import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
 import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
 import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+
+import javax.annotation.Nonnull;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+import java.util.logging.Logger;
 
 public class LwjglRenderImage implements RenderImage {
-  private static Logger log = Logger.getLogger(LwjglRenderImage.class.getName());
+  private static final Logger log = Logger.getLogger(LwjglRenderImage.class.getName());
 
   private int width;
   private int height;
@@ -24,7 +24,10 @@ public class LwjglRenderImage implements RenderImage {
   private int textureHeight;
   private int textureId;
 
-  public LwjglRenderImage(final String name, final boolean filterParam, final NiftyResourceLoader resourceLoader) {
+  public LwjglRenderImage(
+      @Nonnull final String name,
+      final boolean filterParam,
+      @Nonnull final NiftyResourceLoader resourceLoader) {
     try {
       log.fine("loading image: " + name);
       ImageData imageLoader;
@@ -39,16 +42,19 @@ public class LwjglRenderImage implements RenderImage {
       height = imageLoader.getHeight();
       textureWidth = imageLoader.getTexWidth();
       textureHeight = imageLoader.getTexHeight();
-      createTexture(imageData, textureWidth, textureHeight, filterParam, imageLoader.getDepth() == 32 ? GL11.GL_RGBA : GL11.GL_RGB);
+      createTexture(imageData, textureWidth, textureHeight, filterParam, imageLoader.getDepth() == 32 ? GL11.GL_RGBA
+          : GL11.GL_RGB);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
+  @Override
   public int getWidth() {
     return width;
   }
 
+  @Override
   public int getHeight() {
     return height;
   }
@@ -61,12 +67,18 @@ public class LwjglRenderImage implements RenderImage {
     return textureHeight;
   }
 
+  @Override
   public void dispose() {
     GL11.glDeleteTextures(textureId);
     checkGLError();
-  }  
+  }
 
-  private void createTexture(final ByteBuffer textureBuffer, final int width, final int height, final boolean filter, final int srcPixelFormat) throws Exception {
+  private void createTexture(
+      final ByteBuffer textureBuffer,
+      final int width,
+      final int height,
+      final boolean filter,
+      final int srcPixelFormat) throws Exception {
     textureId = createTextureID();
     int minFilter = GL11.GL_NEAREST;
     int magFilter = GL11.GL_NEAREST;
@@ -93,47 +105,47 @@ public class LwjglRenderImage implements RenderImage {
       return;
     }
 
-    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, minFilter); 
-    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, magFilter); 
+    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, minFilter);
+    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, magFilter);
     checkGLError();
 
-    if (minFilter == GL11.GL_LINEAR_MIPMAP_NEAREST ||
-        minFilter == GL11.GL_LINEAR_MIPMAP_LINEAR) {
+    if (minFilter == GL11.GL_LINEAR_MIPMAP_LINEAR) {
       GLU.gluBuild2DMipmaps(
           GL11.GL_TEXTURE_2D,
-          4, 
+          4,
           width,
           height,
-          srcPixelFormat, 
+          srcPixelFormat,
           GL11.GL_UNSIGNED_BYTE,
           textureBuffer);
     } else {
       GL11.glTexImage2D(
-          GL11.GL_TEXTURE_2D, 
+          GL11.GL_TEXTURE_2D,
           0,
-          4, 
-          width, 
-          height, 
-          0, 
-          srcPixelFormat, 
-          GL11.GL_UNSIGNED_BYTE, 
+          4,
+          width,
+          height,
+          0,
+          srcPixelFormat,
+          GL11.GL_UNSIGNED_BYTE,
           textureBuffer);
     }
     checkGLError();
   }
-  
-  private int createTextureID() { 
-     IntBuffer tmp = createIntBuffer(1); 
-     GL11.glGenTextures(tmp);
-     checkGLError();
-     return tmp.get(0);
+
+  private int createTextureID() {
+    IntBuffer tmp = createIntBuffer(1);
+    GL11.glGenTextures(tmp);
+    checkGLError();
+    return tmp.get(0);
   }
 
+  @Nonnull
   private IntBuffer createIntBuffer(final int size) {
     ByteBuffer temp = ByteBuffer.allocateDirect(4 * size);
     temp.order(ByteOrder.nativeOrder());
     return temp.asIntBuffer();
-  }    
+  }
 
   public void bind() {
     GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
@@ -141,7 +153,7 @@ public class LwjglRenderImage implements RenderImage {
   }
 
   private void checkGLError() {
-    int error= GL11.glGetError();
+    int error = GL11.glGetError();
     if (error != GL11.GL_NO_ERROR) {
       String glerrmsg = GLU.gluErrorString(error);
       log.warning("OpenGL Error: (" + error + ") " + glerrmsg);

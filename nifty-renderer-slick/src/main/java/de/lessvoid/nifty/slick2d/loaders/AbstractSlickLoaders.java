@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.slick2d.loaders;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ public abstract class AbstractSlickLoaders<T extends SlickLoader> implements Sli
   /**
    * The list of font loaders that are expected to be queried.
    */
+  @Nonnull
   private final List<T> loaders;
 
   /**
@@ -27,10 +29,10 @@ public abstract class AbstractSlickLoaders<T extends SlickLoader> implements Sli
    * Add a loader to the list of loaders that get queried when loading a new resource.
    *
    * @param newLoader the new font loader
-   * @param order the loader where the place the new loader on the list
+   * @param order     the loader where the place the new loader on the list
    */
   @Override
-  public final void addLoader(final T newLoader, final SlickAddLoaderLocation order) {
+  public final void addLoader(@Nonnull final T newLoader, @Nonnull final SlickAddLoaderLocation order) {
     if (checkAlreadyLoaded(newLoader)) {
       return;
     }
@@ -53,7 +55,7 @@ public abstract class AbstractSlickLoaders<T extends SlickLoader> implements Sli
    * @param newLoader the loader that is to be added
    * @return {@code true} in case the loader is already added to the loaders list
    */
-  private boolean checkAlreadyLoaded(final T newLoader) {
+  private boolean checkAlreadyLoaded(@Nonnull final T newLoader) {
     final Class<?> newLoaderClass = newLoader.getClass();
     for (final T currentLoader : loaders) {
       final Class<?> currentLoaderClass = currentLoader.getClass();
@@ -69,6 +71,7 @@ public abstract class AbstractSlickLoaders<T extends SlickLoader> implements Sli
    *
    * @return the loader iterator
    */
+  @Nonnull
   protected final Iterator<T> getLoaderIterator() {
     if (loaders.isEmpty()) {
       loadDefaultLoaders(SlickAddLoaderLocation.first);

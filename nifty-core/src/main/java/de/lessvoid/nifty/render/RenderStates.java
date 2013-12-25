@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.render;
 
+import javax.annotation.Nonnull;
+
 public class RenderStates {
   private boolean position;
   private boolean color;
@@ -13,51 +15,67 @@ public class RenderStates {
   public void addClip() {
     clip = true;
   }
+
   public void addColor() {
     color = true;
   }
+
   public void addAlpha() {
     alpha = true;
   }
+
   public void addPosition() {
     position = true;
   }
+
   public void addFont() {
     font = true;
   }
+
   public void addImageScale() {
     imageScale = true;
   }
+
   public void addTextSize() {
     textSize = true;
   }
+
   public void addBlendMode() {
     blendMode = true;
   }
+
   public boolean hasPosition() {
     return position;
   }
+
   public boolean hasColor() {
     return color;
   }
+
   public boolean hasAlpha() {
     return alpha;
   }
+
   public boolean hasTextSize() {
     return textSize;
   }
+
   public boolean hasImageScale() {
     return imageScale;
   }
+
   public boolean hasFont() {
     return font;
   }
+
   public boolean hasClip() {
     return clip;
   }
+
   public boolean hasBlendMode() {
     return blendMode;
   }
+
   public void clear() {
     position = false;
     color = false;
@@ -68,6 +86,7 @@ public class RenderStates {
     clip = false;
     blendMode = false;
   }
+
   public void addAll() {
     position = true;
     color = true;
@@ -78,7 +97,8 @@ public class RenderStates {
     clip = true;
     blendMode = true;
   }
-  public void removeAll(final RenderStates states) {
+
+  public void removeAll(@Nonnull final RenderStates states) {
     if (states.position) {
       position = false;
     } else if (states.color) {

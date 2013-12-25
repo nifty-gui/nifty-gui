@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.controls.dropdown;
 
-import java.util.List;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.ListBox;
@@ -16,8 +14,17 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.logging.Logger;
+
 public class DropDownPopup<T> extends AbstractController {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(DropDownPopup.class.getName());
+  @Nullable
   private Nifty nifty;
+  @Nullable
   private Screen screen;
   @SuppressWarnings("deprecation")
   private DropDownControl<T> dropDownControl;
@@ -25,22 +32,27 @@ public class DropDownPopup<T> extends AbstractController {
 
   @Override
   public void bind(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     super.bind(element);
-    this.nifty = niftyParam;
-    this.screen = screenParam;
+    this.nifty = nifty;
+    this.screen = screen;
+
+    ListBox listBox = element.findNiftyControl("#listBox", ListBox.class);
+    if (listBox == null) {
+      log.severe("Drop down popup is corrupted. No reference to list box found. Looked for: #listBox");
+    }
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
   @SuppressWarnings("deprecation")
-  public void setDropDownElement(final DropDownControl<T> dropDownControl, final Element popupInstance) {
+  public void setDropDownElement(@Nonnull final DropDownControl<T> dropDownControl, final Element popupInstance) {
     this.dropDownControl = dropDownControl;
     this.popupInstance = popupInstance;
     linkPopupToDropDownPosition(dropDownControl);
@@ -49,52 +61,84 @@ public class DropDownPopup<T> extends AbstractController {
   @Override
   @SuppressWarnings("deprecation")
   public void onStartScreen() {
-    @SuppressWarnings("rawtypes")
-    final ListBox listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
-    nifty.subscribe(screen, listBox.getId(), ListBoxSelectionChangedEvent.class,
-        new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, dropDownControl, popupInstance));
+    if (nifty == null || screen == null) {
+      log.severe("Control is not bound yet. Can't start the screen for this element.");
+    }
+    Element element = getElement();
+    if (element != null) {
+      ListBox listBox = element.findNiftyControl("#listBox", ListBox.class);
+      if (listBox != null) {
+        String listBoxId = listBox.getId();
+        if (listBoxId == null) {
+          log.warning("List box has no ID, can't subscribe to events, functionality limited.");
+        } else {
+          nifty.subscribe(screen, listBoxId, ListBoxSelectionChangedEvent.class,
+              new DropDownListBoxSelectionChangedEventSubscriber(nifty, screen, listBox, dropDownControl,
+                  popupInstance));
+        }
+      }
+    }
     linkPopupToDropDownPosition(dropDownControl);
     dropDownControl.refresh();
   }
 
-  @SuppressWarnings({"deprecation", "rawtypes"})
-  private void linkPopupToDropDownPosition(final DropDownControl<T> dropDownControl) {
-    Element panel = getElement().findElementById("#panel");
-    panel.setConstraintX(new SizeValue(dropDownControl.getElement().getX() + "px"));
-    panel.setConstraintWidth(new SizeValue(dropDownControl.getWidth() + "px"));
-    getElement().layoutElements();
-
-    ListBoxControl listBox = getElement().findNiftyControl("#listBox", ListBoxControl.class);
-    listBox.ensureWidthConstraints();
-
-    panel.setConstraintHeight(new SizeValue(listBox.getHeight() + "px"));
-
-    if ((dropDownControl.getElement().getY() + listBox.getHeight()) > nifty.getRenderEngine().getHeight()) {
-      panel.setConstraintY(new SizeValue(dropDownControl.getElement().getY() - listBox.getHeight() + "px"));
-      updateMoveEffect(listBox, 1);
-    } else {
-      panel.setConstraintY(new SizeValue(dropDownControl.getElement().getY() + dropDownControl.getHeight() + "px"));
-      updateMoveEffect(listBox, -1);
+  @SuppressWarnings("deprecation")
+  private void linkPopupToDropDownPosition(@Nonnull final DropDownControl<T> dropDownControl) {
+    if (nifty == null) {
+      log.severe("Control is not bound yet. Can't start the screen for this element.");
     }
-    getElement().layoutElements();
+    Element element = getElement();
+    if (element == null) {
+      return;
+    }
+    Element panel = element.findElementById("#panel");
+    if (panel == null) {
+      log.severe("Can't find panel of drop down element, linking the popup location is not possible.");
+      return;
+    }
+    Element dropDownElement = dropDownControl.getElement();
+    if (dropDownElement == null) {
+      return;
+    }
+    panel.setConstraintX(SizeValue.px(dropDownControl.getElement().getX()));
+    panel.setConstraintWidth(SizeValue.px(dropDownControl.getWidth()));
+    element.layoutElements();
+
+    ListBoxControl listBox = element.findNiftyControl("#listBox", ListBoxControl.class);
+    if (listBox != null) {
+      listBox.ensureWidthConstraints();
+      int listHeight = listBox.getHeight();
+
+      panel.setConstraintHeight(SizeValue.px(listHeight));
+
+      if ((dropDownControl.getElement().getY() + listHeight) > nifty.getRenderEngine().getHeight()) {
+        panel.setConstraintY(SizeValue.px(dropDownControl.getElement().getY() - listHeight));
+        updateMoveEffect(panel, listBox, 1);
+      } else {
+        panel.setConstraintY(SizeValue.px(dropDownControl.getElement().getY() + dropDownControl.getHeight()));
+        updateMoveEffect(panel, listBox, -1);
+      }
+      getElement().layoutElements();
+    }
   }
 
-  @SuppressWarnings({"deprecation", "rawtypes"})
-  private void updateMoveEffect(final ListBoxControl listBox, final int direction) {
-    List<Effect> moveEffects = getElement().findElementById("#panel").getEffects(EffectEventId.onStartScreen,
-        Move.class);
-    if ((moveEffects != null) && !moveEffects.isEmpty()) {
+  @SuppressWarnings("deprecation")
+  private void updateMoveEffect(
+      @Nonnull final Element panel,
+      @Nonnull final ListBoxControl listBox,
+      final int direction) {
+    List<Effect> moveEffects = panel.getEffects(EffectEventId.onStartScreen, Move.class);
+    if (!moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));
       moveEffects.get(0).getParameters().setProperty("mode", "fromOffset");
     }
-    moveEffects = getElement().findElementById("#panel").getEffects(EffectEventId.onEndScreen, Move.class);
-    if ((moveEffects != null) && !moveEffects.isEmpty()) {
+    moveEffects = panel.getEffects(EffectEventId.onEndScreen, Move.class);
+    if (!moveEffects.isEmpty()) {
       moveEffects.get(0).getParameters().setProperty("offsetY", String.valueOf(direction * listBox.getHeight()));
       moveEffects.get(0).getParameters().setProperty("mode", "toOffset");
     }
   }
 
-  @SuppressWarnings("deprecation")
   public void close() {
     dropDownControl.close();
   }

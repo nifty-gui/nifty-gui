@@ -1,8 +1,8 @@
-package de.lessvoid.nifty.controls;
+package de.lessvoid.nifty.controls.listbox;
+
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 
 import static org.junit.Assert.assertEquals;
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.TestItem;
 
 public class SelectionCheck {
   private final ListBoxImpl<TestItem> listBox;
@@ -11,7 +11,7 @@ public class SelectionCheck {
     this.listBox = listBox;
   }
 
-  public void assertSelection(final Object ... selection) {
+  public void assertSelection(final Object... selection) {
     assertEquals(selection.length, listBox.getSelection().size());
     int i = 0;
     for (Object o : selection) {
@@ -20,7 +20,7 @@ public class SelectionCheck {
     }
   }
 
-  public void assertSelectionIndices(final int ... selection) {
+  public void assertSelectionIndices(final int... selection) {
     assertEquals(selection.length, listBox.getSelectedIndices().size());
     int i = 0;
     for (int o : selection) {
@@ -29,7 +29,9 @@ public class SelectionCheck {
     }
   }
 
-  public void assertChangedEventSelection(final ListBoxSelectionChangedEvent<TestItem> selectionChangedEvent, final TestItem ... expected) {
+  public void assertChangedEventSelection(
+      final ListBoxSelectionChangedEvent<TestItem> selectionChangedEvent,
+      final TestItem... expected) {
     assertEquals(expected.length, selectionChangedEvent.getSelection().size());
     int i = 0;
     for (TestItem item : expected) {
@@ -37,7 +39,9 @@ public class SelectionCheck {
     }
   }
 
-  public void assertChangedEventSelectionIndices(final ListBoxSelectionChangedEvent<TestItem> selectionChangedEvent, final int ... expected) {
+  public void assertChangedEventSelectionIndices(
+      final ListBoxSelectionChangedEvent<TestItem> selectionChangedEvent,
+      final int... expected) {
     assertEquals(expected.length, selectionChangedEvent.getSelectionIndices().size());
     int i = 0;
     for (int item : expected) {

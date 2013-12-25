@@ -8,25 +8,31 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
+import javax.annotation.Nonnull;
+
 /**
  * Nop effect - does nothing.
+ *
  * @author void
  */
 public class Nop implements EffectImpl {
 
+  @Override
   public void activate(
-      final Nifty nifty,
-      final Element element,
-      final EffectProperties parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
   }
 
+  @Override
   public void deactivate() {
   }
 }

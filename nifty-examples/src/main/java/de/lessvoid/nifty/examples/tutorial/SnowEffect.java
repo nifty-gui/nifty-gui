@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.tutorial;
 
-import java.util.Random;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
@@ -13,20 +11,34 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Random;
+
 public class SnowEffect implements EffectImpl {
-  private Snowflake[] snow = new Snowflake[256];
+  @Nonnull
+  private final Snowflake[] snow = new Snowflake[256];
   private int screenWidth;
   private int screenHeight;
-  private Random random = new Random();
-  private TimeProvider timeProvider = new AccurateTimeProvider();
+  @Nonnull
+  private final Random random = new Random();
+  @Nonnull
+  private final TimeProvider timeProvider = new AccurateTimeProvider();
+  @Nullable
   private NiftyImage niftyImage;
-  private NiftyImageMode image0 = NiftyImageMode.subImage(0, 0, 1, 1);
-  private NiftyImageMode image1 = NiftyImageMode.subImage(2, 0, 3, 3);
-  private NiftyImageMode image2 = NiftyImageMode.subImage(6, 0, 4, 4);
-  private NiftyImageMode image3 = NiftyImageMode.subImage(0, 4, 4, 4);
-  private NiftyImageMode image4 = NiftyImageMode.subImage(5, 5, 5, 5);
+  @Nonnull
+  private final NiftyImageMode image0 = NiftyImageMode.subImage(0, 0, 1, 1);
+  @Nonnull
+  private final NiftyImageMode image1 = NiftyImageMode.subImage(2, 0, 3, 3);
+  @Nonnull
+  private final NiftyImageMode image2 = NiftyImageMode.subImage(6, 0, 4, 4);
+  @Nonnull
+  private final NiftyImageMode image3 = NiftyImageMode.subImage(0, 4, 4, 4);
+  @Nonnull
+  private final NiftyImageMode image4 = NiftyImageMode.subImage(5, 5, 5, 5);
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(@Nonnull final Nifty nifty, @Nonnull final Element element, @Nonnull final EffectProperties parameter) {
     niftyImage = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), "tutorial/snow.png", true);
     screenWidth = nifty.getCurrentScreen().getRootElement().getWidth();
     screenHeight = nifty.getCurrentScreen().getRootElement().getHeight();
@@ -35,11 +47,13 @@ public class SnowEffect implements EffectImpl {
     }
   }
 
+  @Override
   public void deactivate() {
     niftyImage.dispose();
   }
 
-  public void execute(final Element element, final float effectTime, final Falloff falloff, final NiftyRenderEngine r) {
+  @Override
+  public void execute(@Nonnull final Element element, final float effectTime, final Falloff falloff, @Nonnull final NiftyRenderEngine r) {
     for (Snowflake snowflake : snow) {
       snowflake.update(timeProvider.getMsTime());
       snowflake.render(r);
@@ -123,13 +137,13 @@ public class SnowEffect implements EffectImpl {
       }
     }
 
-    public void render(final NiftyRenderEngine r) {
+    public void render(@Nonnull final NiftyRenderEngine r) {
       if (enabled) {
         niftyImage.setImageMode(imageMode);
         if (y < 100) {
           return;
         } else if (y < 140) {
-          r.setColorAlpha(1.0f - (float)(140f - y) / 40f);
+          r.setColorAlpha(1.0f - (140f - y) / 40f);
         } else if (y > (768 - 140) && y < (768 - 100)) {
           float max = 768 - 140;
           r.setColorAlpha(1.0f - (y - max) / 40f);

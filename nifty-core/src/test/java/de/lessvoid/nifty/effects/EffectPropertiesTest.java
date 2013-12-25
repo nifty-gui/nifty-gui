@@ -1,16 +1,12 @@
 package de.lessvoid.nifty.effects;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Properties;
-
+import de.lessvoid.xml.xpp3.Attributes;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.xml.xpp3.Attributes;
+import java.util.Properties;
+
+import static org.junit.Assert.*;
 
 
 public class EffectPropertiesTest {

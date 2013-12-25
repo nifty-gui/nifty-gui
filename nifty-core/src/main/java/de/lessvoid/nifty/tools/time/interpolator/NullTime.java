@@ -5,6 +5,7 @@ import java.util.Properties;
 
 /**
  * Interpolator that always return 1.0f.
+ *
  * @author void
  */
 public class NullTime implements Interpolator {

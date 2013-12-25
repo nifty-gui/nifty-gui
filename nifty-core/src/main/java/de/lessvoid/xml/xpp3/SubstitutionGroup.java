@@ -1,5 +1,7 @@
 package de.lessvoid.xml.xpp3;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,14 +14,16 @@ public class SubstitutionGroup {
   /**
    * tags.
    */
-  private Map < String, XmlProcessor > registeredTags = new HashMap < String, XmlProcessor >();
+  @Nonnull
+  private final Map < String, XmlProcessor > registeredTags = new HashMap < String, XmlProcessor >();
 
   /**
    * Check if the given tag is contained in the list of registered tags.
    * @param tag tag to check
    * @return registered XmlElementProcessor or null
    */
-  public XmlProcessor matches(final String tag) {
+  @Nullable
+  public XmlProcessor matches(@Nullable final String tag) {
     if (tag == null) {
       return null;
     }
@@ -33,6 +37,7 @@ public class SubstitutionGroup {
    * @param xmlElement the xmlElement processor
    * @return this
    */
+  @Nonnull
   public SubstitutionGroup add(final String tag, final XmlProcessor xmlElement) {
     registeredTags.put(tag, xmlElement);
     return this;

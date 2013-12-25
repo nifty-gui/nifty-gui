@@ -4,6 +4,8 @@ import de.lessvoid.nifty.slick2d.loaders.SlickLoader;
 import de.lessvoid.nifty.slick2d.render.cursor.SlickLoadCursorException;
 import de.lessvoid.nifty.slick2d.render.cursor.SlickMouseCursor;
 
+import javax.annotation.Nonnull;
+
 /**
  * This interface defines the loader of a mouse cursor.
  *
@@ -19,5 +21,6 @@ public interface SlickMouseCursorLoader extends SlickLoader {
    * @return the loaded mouse cursor
    * @throws SlickLoadCursorException in case loading the cursor fails
    */
+  @Nonnull
   SlickMouseCursor loadCursor(String filename, int hotspotX, int hotspotY) throws SlickLoadCursorException;
 }

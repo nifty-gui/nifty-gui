@@ -11,7 +11,7 @@ public interface SlickLoaders<T extends SlickLoader> {
    * Add a loader to the list of loaders that get queried when loading a new resource.
    *
    * @param newLoader the new font loader
-   * @param order the loader where the place the new loader on the list
+   * @param order     the loader where the place the new loader on the list
    */
   void addLoader(T newLoader, SlickAddLoaderLocation order);
 

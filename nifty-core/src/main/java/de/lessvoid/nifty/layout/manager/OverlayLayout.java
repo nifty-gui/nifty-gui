@@ -1,10 +1,12 @@
 package de.lessvoid.nifty.layout.manager;
 
-import java.util.List;
-
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.tools.SizeValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * OverlayLayout doesn't layout things. It just forwards the size of the
@@ -16,12 +18,14 @@ public class OverlayLayout implements LayoutManager {
 
   /**
    * layoutElements.
+   *
    * @param rootElement @see {@link LayoutManager}
-   * @param elements @see {@link LayoutManager}
+   * @param elements    @see {@link LayoutManager}
    */
+  @Override
   public final void layoutElements(
-      final LayoutPart rootElement,
-      final List < LayoutPart > elements) {
+      @Nullable final LayoutPart rootElement,
+      @Nullable final List<LayoutPart> elements) {
 
     // make the params any sense?
     if (rootElement == null || elements == null || elements.size() == 0) {
@@ -46,15 +50,23 @@ public class OverlayLayout implements LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public final SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
-    return null;
+  @Nonnull
+  @Override
+  public final SizeValue calculateConstraintWidth(
+      @Nonnull final LayoutPart root,
+      @Nonnull final List<LayoutPart> children) {
+    return SizeValue.def();
   }
 
   /**
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  public final SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
-    return null;
+  @Nonnull
+  @Override
+  public final SizeValue calculateConstraintHeight(
+      @Nonnull final LayoutPart root,
+      @Nonnull final List<LayoutPart> children) {
+    return SizeValue.def();
   }
 }

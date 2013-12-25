@@ -1,15 +1,16 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.Falloff.HoverFalloffConstraint;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.time.TimeInterpolator;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.logging.Logger;
 
 /**
  * An effect can be active or not and is always attached to one element. It has a TimeInterpolator that manages the life
@@ -18,54 +19,86 @@ import de.lessvoid.nifty.tools.time.TimeInterpolator;
  * @author void
  */
 public class Effect {
-  private static Logger log = Logger.getLogger(Effect.class.getName());
-  private EffectEventId effectEventId;
+  @Nonnull
+  private static final Logger log = Logger.getLogger(Effect.class.getName());
+  @Nonnull
+  private final EffectEventId effectEventId;
   private boolean active;
-  private Element element;
-  private TimeInterpolator timeInterpolator;
-  private EffectImpl effectImpl;
-  private EffectProperties parameter;
-  private Object[] controllerArray;
-  private boolean post;
-  private boolean overlay;
-  private String alternateEnable;
-  private String alternateDisable;
+  @Nonnull
+  private final Element element;
+  @Nonnull
+  private final TimeInterpolator timeInterpolator;
+  @Nonnull
+  private final EffectImpl effectImpl;
+  @Nonnull
+  private final EffectProperties parameter;
+  @Nonnull
+  private final Object[] controllerArray;
+  private final boolean post;
+  private final boolean overlay;
+  @Nullable
+  private final String alternateEnable;
+  @Nullable
+  private final String alternateDisable;
+  @Nullable
   private String alternate;
-  private String customKey;
-  private boolean inherit;
-  private Nifty nifty;
+  @Nullable
+  private final String customKey;
+  private final boolean inherit;
+  @Nonnull
+  private final Nifty nifty;
   private boolean hoverEffect;
   private boolean infiniteEffect;
+  @Nullable
   private Falloff falloff;
-  private EffectEvents effectEvents;
-  private boolean neverStopRendering;
+  @Nonnull
+  private final EffectEvents effectEvents;
+  private final boolean neverStopRendering;
   private boolean customFlag;
 
   public Effect(
-      final Nifty niftyParam,
-      final boolean inheritParam,
-      final boolean postParam,
-      final boolean overlayParam,
-      final String alternateEnableParam,
-      final String alternateDisableParam,
-      final String customKeyParam,
-      final boolean neverStopRenderingParam,
-      final EffectEventId effectEventIdParam) {
-    nifty = niftyParam;
-    inherit = inheritParam;
-    post = postParam;
-    overlay = overlayParam;
+      @Nonnull final Nifty nifty,
+      final boolean inherit,
+      final boolean post,
+      final boolean overlay,
+      @Nullable final String alternateEnable,
+      @Nullable final String alternateDisable,
+      @Nullable final String customKey,
+      final boolean neverStopRendering,
+      @Nonnull final EffectEventId effectEventId,
+      @Nonnull final Element element,
+      @Nonnull final EffectImpl effectImpl,
+      @Nonnull final EffectProperties parameter,
+      @Nonnull final TimeProvider timeProvider,
+      @Nonnull final Collection<Object> controllers) {
+    this.nifty = nifty;
+    this.inherit = inherit;
+    this.post = post;
+    this.overlay = overlay;
     active = false;
-    alternateEnable = alternateEnableParam;
-    alternateDisable = alternateDisableParam;
+    this.alternateEnable = alternateEnable;
+    this.alternateDisable = alternateDisable;
     alternate = null;
-    customKey = customKeyParam;
-    effectEventId = effectEventIdParam;
+    this.customKey = customKey;
+    this.effectEventId = effectEventId;
     hoverEffect = false;
     infiniteEffect = false;
-    neverStopRendering = neverStopRenderingParam;
+    this.neverStopRendering = neverStopRendering;
     effectEvents = new EffectEvents();
     customFlag = false;
+
+    this.element = element;
+    this.effectImpl = effectImpl;
+    this.parameter = parameter;
+    parameter.put("effectEventId", effectEventId);
+    timeInterpolator = new TimeInterpolator(parameter, timeProvider, infiniteEffect);
+    controllerArray = controllers.toArray();
+    effectEvents.init(nifty, controllerArray, parameter);
+    customFlag = false;
+
+    if (hoverEffect) {
+      element.setVisibleToMouseEvents(true);
+    }
   }
 
   public void enableHover(final Falloff falloffParameter) {
@@ -79,42 +112,17 @@ public class Effect {
   }
 
   public void disableInfinite() {
-    if (infiniteEffect) {
-      infiniteEffect = false;
-
-      if (timeInterpolator != null) {
-        timeInterpolator.initialize(parameter, infiniteEffect);
-      }
-    }
+    setInfiniteEffect(false);
   }
 
   public void enableInfinite() {
-    if (!infiniteEffect) {
-      infiniteEffect = true;
-
-      if (timeInterpolator != null) {
-        timeInterpolator.initialize(parameter, infiniteEffect);
-      }
-    }
+    setInfiniteEffect(true);
   }
 
-  public void init(
-      final Element elementParam,
-      final EffectImpl effectImplParam,
-      final EffectProperties parameterParam,
-      final TimeProvider timeParam,
-      final Collection<Object> controllers) {
-    element = elementParam;
-    effectImpl = effectImplParam;
-    parameter = parameterParam;
-    parameter.put("effectEventId", effectEventId);
-    timeInterpolator = new TimeInterpolator(parameter, timeParam, infiniteEffect);
-    controllerArray = controllers.toArray();
-    effectEvents.init(nifty, controllerArray, parameter);
-    customFlag = false;
-
-    if (hoverEffect) {
-      element.setVisibleToMouseEvents(true);
+  public void setInfiniteEffect(final boolean infinite) {
+    if (infinite != infiniteEffect) {
+      infiniteEffect = infinite;
+      timeInterpolator.initialize(parameter, infinite);
     }
   }
 
@@ -123,7 +131,7 @@ public class Effect {
     effectEvents.init(nifty, controllerArray, parameter);
   }
 
-  public boolean start(final String alternate, final String customKey) {
+  public boolean start(@Nullable final String alternate, @Nullable final String customKey) {
     this.alternate = alternate;
     if (!canStartEffect(alternate, customKey)) {
       return false;
@@ -145,7 +153,7 @@ public class Effect {
     setActiveInternal(timeInterpolator.update(), !neverStopRendering);
   }
 
-  public void execute(final NiftyRenderEngine r) {
+  public void execute(@Nonnull final NiftyRenderEngine r) {
     if (isHoverEffect()) {
       effectImpl.execute(element, timeInterpolator.getValue(), falloff, r);
     } else {
@@ -184,18 +192,20 @@ public class Effect {
     return alternateDisable != null;
   }
 
-  public boolean customKeyMatches(final String customKeyToCheck) {
+  public boolean customKeyMatches(@Nullable final String customKeyToCheck) {
     if (customKeyToCheck == null) {
       return customKey == null;
     }
     return customKeyToCheck.equals(customKey);
   }
 
+  @Nonnull
   public String getStateString() {
     return "(" + effectImpl.getClass().getSimpleName() + "[" + customKey + "]" + ")";
   }
 
-  public <T extends EffectImpl> T getEffectImpl(final Class<T> requestedClass) {
+  @Nullable
+  public <T extends EffectImpl> T getEffectImpl(@Nonnull final Class<T> requestedClass) {
     if (requestedClass.isInstance(effectImpl)) {
       return requestedClass.cast(effectImpl);
     }
@@ -232,26 +242,29 @@ public class Effect {
     return neverStopRendering;
   }
 
+  @Nonnull
   public EffectProperties getParameters() {
     return parameter;
   }
 
+  @Nullable
   public String getAlternate() {
     return alternate;
   }
 
+  @Nullable
   public String getCustomKey() {
     return customKey;
   }
 
-  private boolean canStartEffect(final String alternate, final String customKey) {
+  private boolean canStartEffect(@Nullable final String alternate, @Nullable final String customKey) {
     if (alternate == null) {
       // no alternate key given
 
       // don't start this effect when it has an alternateKey set.
       if (isAlternateEnable()) {
         log.fine(
-            "starting effect [" + getStateString() + "] canceled because alternateKey [" + alternate + "] and effect " +
+            "starting effect [" + getStateString() + "] canceled because alternateKey [NULL] and effect " +
                 "isAlternateEnable()");
         return false;
       }
@@ -288,11 +301,11 @@ public class Effect {
     return alternateEnable != null;
   }
 
-  private boolean alternateEnableMatches(final String alternate) {
+  private boolean alternateEnableMatches(@Nullable final String alternate) {
     return (alternate != null) && alternate.equals(alternateEnable);
   }
 
-  private boolean alternateDisableMatches(final String alternate) {
+  private boolean alternateDisableMatches(@Nullable final String alternate) {
     return (alternate != null) && alternate.equals(alternateDisable);
   }
 
@@ -302,5 +315,10 @@ public class Effect {
 
   public void setCustomFlag(final boolean customFlag) {
     this.customFlag = customFlag;
+  }
+
+  @Nonnull
+  public EffectEventId getEffectEventId() {
+    return effectEventId;
   }
 }

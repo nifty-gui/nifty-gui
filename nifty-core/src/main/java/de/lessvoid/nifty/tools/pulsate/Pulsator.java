@@ -1,8 +1,5 @@
 package de.lessvoid.nifty.tools.pulsate;
 
-import java.util.Properties;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.pulsate.provider.NullPulsator;
 import de.lessvoid.nifty.tools.pulsate.provider.RectanglePulsator;
@@ -10,9 +7,12 @@ import de.lessvoid.nifty.tools.pulsate.provider.SinusPulsator;
 import de.lessvoid.nifty.tools.pulsate.provider.SinusRaisedPulsator;
 
 import javax.annotation.Nonnull;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Pulsator class.
+ *
  * @author void
  */
 public class Pulsator {
@@ -26,18 +26,18 @@ public class Pulsator {
    * the time provider.
    */
   @Nonnull
-  private TimeProvider timeProvider;
+  private final TimeProvider timeProvider;
 
   /**
    * the PulsateProvider we use.
    */
   @Nonnull
-  private PulsatorProvider pulsateProvider;
+  private final PulsatorProvider pulsateProvider;
 
   /**
    * initialize with the given parameters.
    *
-   * @param parameter parameter props
+   * @param parameter       parameter props
    * @param newTimeProvider TimeProvider to use
    */
   public Pulsator(@Nonnull final Properties parameter, @Nonnull final TimeProvider newTimeProvider) {
@@ -70,6 +70,7 @@ public class Pulsator {
 
   /**
    * update the value.
+   *
    * @return true when still active and false when done
    */
   public float update() {

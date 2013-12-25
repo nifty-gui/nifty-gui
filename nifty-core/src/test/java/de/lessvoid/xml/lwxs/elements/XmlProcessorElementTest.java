@@ -1,18 +1,12 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
+import de.lessvoid.xml.lwxs.XmlType;
+import de.lessvoid.xml.xpp3.XmlParser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.xml.lwxs.XmlType;
-import de.lessvoid.xml.lwxs.elements.OccursEnum;
-import de.lessvoid.xml.lwxs.elements.XmlProcessorElement;
-import de.lessvoid.xml.lwxs.elements.XmlProcessorType;
-import de.lessvoid.xml.xpp3.XmlParser;
+import static org.easymock.classextension.EasyMock.*;
 
 public class XmlProcessorElementTest {
   private XmlParser xmlParserMock;
@@ -30,34 +24,6 @@ public class XmlProcessorElementTest {
     verify(xmlElementProcessorMock);
   }
 
-  @Test(expected = Exception.class)
-  public void testElementProcessorNull() throws Exception {
-    replay(xmlElementProcessorMock);
-    replay(xmlParserMock);
-    new XmlProcessorElement(null, null, null, null);
-  }
-
-  @Test(expected = Exception.class)
-  public void testElementNameNull() throws Exception {
-    replay(xmlElementProcessorMock);
-    replay(xmlParserMock);
-    new XmlProcessorElement(xmlElementProcessorMock, null, null, null);
-  }
-
-  @Test(expected = Exception.class)
-  public void testTypeNull() throws Exception {
-    replay(xmlElementProcessorMock);
-    replay(xmlParserMock);
-    new XmlProcessorElement(xmlElementProcessorMock, "name", null, null);
-  }
-
-  @Test(expected = Exception.class)
-  public void testOccuresNull() throws Exception {
-    replay(xmlElementProcessorMock);
-    replay(xmlParserMock);
-    new XmlProcessorElement(xmlElementProcessorMock, "name", "type", null);
-  }
-
   @Test
   public void testOccuresRequired() throws Exception {
     xmlParserMock.required("name", xmlElementProcessorMock);
@@ -69,7 +35,7 @@ public class XmlProcessorElementTest {
     xmlElementProcessorMock.parentLinkSet(parent, "name");
     replay(xmlElementProcessorMock);
 
-    XmlProcessorElement child = new XmlProcessorElement(xmlElementProcessorMock, "name", "type", OccursEnum.required);
+    XmlProcessorElement child = new XmlProcessorElement(xmlElementProcessorMock, "name", OccursEnum.required);
     child.process(xmlParserMock, parent);
 
     verify(parent);
@@ -86,7 +52,7 @@ public class XmlProcessorElementTest {
     xmlElementProcessorMock.parentLinkAdd(parent, "name");
     replay(xmlElementProcessorMock);
 
-    XmlProcessorElement child = new XmlProcessorElement(xmlElementProcessorMock, "name", "type", OccursEnum.oneOrMore);
+    XmlProcessorElement child = new XmlProcessorElement(xmlElementProcessorMock, "name", OccursEnum.oneOrMore);
     child.process(xmlParserMock, parent);
 
     verify(parent);
@@ -103,7 +69,7 @@ public class XmlProcessorElementTest {
     xmlElementProcessorMock.parentLinkSet(parent, "name");
     replay(xmlElementProcessorMock);
 
-    XmlProcessorElement child = new XmlProcessorElement(xmlElementProcessorMock, "name", "type", OccursEnum.optional);
+    XmlProcessorElement child = new XmlProcessorElement(xmlElementProcessorMock, "name", OccursEnum.optional);
     child.process(xmlParserMock, parent);
 
     verify(parent);
@@ -120,7 +86,7 @@ public class XmlProcessorElementTest {
     xmlElementProcessorMock.parentLinkAdd(parent, "name");
     replay(xmlElementProcessorMock);
 
-    XmlProcessorElement child = new XmlProcessorElement(xmlElementProcessorMock, "name", "type", OccursEnum.zeroOrMore);
+    XmlProcessorElement child = new XmlProcessorElement(xmlElementProcessorMock, "name", OccursEnum.zeroOrMore);
     child.process(xmlParserMock, parent);
 
     verify(parent);

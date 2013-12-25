@@ -2,14 +2,23 @@ package de.lessvoid.nifty.builder;
 
 import de.lessvoid.nifty.controls.dynamic.TextCreator;
 
-public class TextBuilder extends ElementBuilder {
-  private TextCreator creator = new TextCreator("");
+import javax.annotation.Nonnull;
 
-  public TextBuilder() {
-    initialize(creator);
+public class TextBuilder extends ElementBuilder {
+  @Nonnull
+  private final TextCreator creator;
+
+  private TextBuilder(@Nonnull final TextCreator creator) {
+    super(creator);
+    this.creator = creator;
   }
 
-  public TextBuilder(final String id) {
+
+  public TextBuilder() {
+    this(new TextCreator(""));
+  }
+
+  public TextBuilder(@Nonnull final String id) {
     this();
     this.id(id);
   }

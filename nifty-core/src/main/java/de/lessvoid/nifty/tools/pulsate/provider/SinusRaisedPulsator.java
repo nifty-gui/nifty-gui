@@ -1,15 +1,15 @@
 package de.lessvoid.nifty.tools.pulsate.provider;
 
+import de.lessvoid.nifty.tools.pulsate.PulsatorProvider;
+
+import javax.annotation.Nonnull;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.lessvoid.nifty.tools.pulsate.PulsatorProvider;
-
-import javax.annotation.Nonnull;
-
 /**
  * SinusPulsator.
+ *
  * @author void
  */
 public class SinusRaisedPulsator implements PulsatorProvider {
@@ -41,6 +41,7 @@ public class SinusRaisedPulsator implements PulsatorProvider {
 
   /**
    * Initialize the Pulsator.
+   *
    * @param parameter the parameters
    */
   @Override
@@ -56,6 +57,7 @@ public class SinusRaisedPulsator implements PulsatorProvider {
 
   /**
    * Get current value for the given time.
+   *
    * @param msTime current time
    * @return the pulsate value in [0,1] interval
    */
@@ -75,6 +77,7 @@ public class SinusRaisedPulsator implements PulsatorProvider {
 
   /**
    * get scaled sinus.
+   *
    * @param x input
    * @return sinus
    */
@@ -84,6 +87,7 @@ public class SinusRaisedPulsator implements PulsatorProvider {
 
   /**
    * Reset.
+   *
    * @param msTime current time
    */
   @Override

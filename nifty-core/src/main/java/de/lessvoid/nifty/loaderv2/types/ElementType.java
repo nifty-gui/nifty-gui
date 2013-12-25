@@ -1,15 +1,11 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.layout.LayoutPart;
@@ -23,20 +19,31 @@ import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.tools.ClassHelper;
 import de.lessvoid.xml.xpp3.Attributes;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
 public class ElementType extends XmlBaseType {
+  @Nullable
   protected String tagName;
+  @Nullable
   protected ElementRendererCreator elementRendererCreator;
+  @Nonnull
   protected InteractType interact = new InteractType();
+  @Nonnull
   protected EffectsType effects = new EffectsType();
-  protected List < ElementType > elements = new ArrayList < ElementType >(0);
-  protected LinkedList < Object > controllers = new LinkedList < Object >();
+  @Nonnull
+  protected final List<ElementType> elements = new ArrayList<ElementType>(0);
+  @Nonnull
+  protected Deque<Object> controllers = new LinkedList<Object>();
+  @Nullable
   protected Controller controller;
 
   public ElementType() {
     super();
   }
 
-  public ElementType(final ElementType src) {
+  public ElementType(@Nonnull final ElementType src) {
     super(src);
     tagName = src.tagName;
     elementRendererCreator = src.elementRendererCreator;
@@ -45,11 +52,11 @@ public class ElementType extends XmlBaseType {
     copyElements(src);
   }
 
-  public ElementType(final Attributes attributes) {
+  public ElementType(@Nonnull final Attributes attributes) {
     super(attributes);
   }
 
-  void mergeFromElementType(final ElementType src) {
+  void mergeFromElementType(@Nonnull final ElementType src) {
     tagName = src.tagName;
     elementRendererCreator = src.elementRendererCreator;
     mergeFromAttributes(src.getAttributes());
@@ -58,22 +65,23 @@ public class ElementType extends XmlBaseType {
     copyElements(src);
   }
 
-  void copyElements(final ElementType src) {
+  void copyElements(@Nonnull final ElementType src) {
     elements.clear();
     for (ElementType element : src.elements) {
       elements.add(element.copy());
     }
   }
 
+  @Nonnull
   public ElementType copy() {
     return new ElementType(this);
   }
 
-  void setElementRendererCreator(final ElementRendererCreator elementRendererCreatorParam) {
+  void setElementRendererCreator(@Nullable final ElementRendererCreator elementRendererCreatorParam) {
     elementRendererCreator = elementRendererCreatorParam;
   }
 
-  void setTagName(final String tagNameParam) {
+  void setTagName(@Nullable final String tagNameParam) {
     tagName = tagNameParam;
   }
 
@@ -91,75 +99,84 @@ public class ElementType extends XmlBaseType {
     return elements.iterator().next();
   }
 
-  public void addElementType(final ElementType type) {
+  public void addElementType(@Nonnull final ElementType type) {
     elements.add(type);
   }
 
-  public void addPanel(final ElementType panel) {
+  public void addPanel(@Nonnull final ElementType panel) {
     elements.add(panel);
   }
 
-  public void addImage(final ElementType image) {
+  public void addImage(@Nonnull final ElementType image) {
     elements.add(image);
   }
 
-  public void addLabel(final ElementType label) {
+  public void addLabel(@Nonnull final ElementType label) {
     elements.add(label);
   }
 
-  public void addText(final ElementType text) {
+  public void addText(@Nonnull final ElementType text) {
     elements.add(text);
   }
 
-  public void addControl(final ElementType text) {
+  public void addControl(@Nonnull final ElementType text) {
     elements.add(text);
   }
 
-  public void setInteract(final InteractType interactParam) {
+  public void setInteract(@Nonnull final InteractType interactParam) {
     interact = interactParam;
   }
 
-  public void setEffect(final EffectsType effectsParam) {
+  public void setEffect(@Nonnull final EffectsType effectsParam) {
     effects = effectsParam;
   }
 
+  @Override
+  @Nonnull
   public String output(final int offset) {
     String result = StringHelper.whitespace(offset) + tagName + " [element] " + super.output(offset);
-    if (interact != null) {
-      result += "\n" + interact.output(offset + 1);
-    }
-    if (effects != null) {
-      result += "\n" + effects.output(offset + 1);
-    }
+    result += "\n" + interact.output(offset + 1);
+    result += "\n" + effects.output(offset + 1);
     result += "\n" + CollectionLogger.out(offset + 1, elements, "elements");
     return result;
   }
 
+  @Nonnull
   public Element create(
-      final Element parent,
-      final Nifty nifty,
-      final Screen screen,
-      final LayoutPart layoutPart) {
-    Element element = internalCreateElement(parent, nifty, screen, layoutPart, getAttributes(),parent.getChildren().size());
+      @Nonnull final Element parent,
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final LayoutPart layoutPart) {
+    return create(parent, nifty, screen, layoutPart, parent.getChildrenCount());
+  }
+
+  @Nonnull
+  public Element create(
+      @Nonnull final Element parent,
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final LayoutPart layoutPart,
+      final int index) {
+    Element element = internalCreateElement(parent, nifty, screen, layoutPart, getAttributes(), index);
     applyStandard(nifty, screen, element);
     return element;
   }
-  public Element create(
-	      final Element parent,
-	      final Nifty nifty,
-	      final Screen screen,
-	      final LayoutPart layoutPart,int index) {
-	    Element element = internalCreateElement(parent, nifty, screen, layoutPart, getAttributes(),index);
-	    applyStandard(nifty, screen, element);
-	    return element;
- }
+
+  @Nonnull
   private Element internalCreateElement(
-      final Element parent,
-      final Nifty nifty,
-      final Screen screen,
-      final LayoutPart layoutPart,
-      final Attributes attrib,
+      @Nonnull final Element parent,
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final LayoutPart layoutPart,
+      @Nonnull final Attributes attrib,
       final int index) {
+    ElementRenderer[] renderer = null;
+    if (elementRendererCreator != null) {
+      renderer = elementRendererCreator.createElementRenderer(nifty);
+    }
+    if (renderer == null) {
+      renderer = new ElementRenderer[0];
+    }
     Element element = new Element(
         nifty,
         this,
@@ -169,15 +186,15 @@ public class ElementType extends XmlBaseType {
         screen.getFocusHandler(),
         false,
         nifty.getTimeProvider(),
-        elementRendererCreator.createElementRenderer(nifty));
+        renderer);
     parent.insertChild(element, index);
     return element;
   }
 
   private void applyStandard(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element) {
     applyAttributes(screen, element, getAttributes(), nifty.getRenderEngine());
     applyEffects(nifty, screen, element);
     applyInteract(nifty, screen, element);
@@ -186,48 +203,64 @@ public class ElementType extends XmlBaseType {
     applyPostAttributes(element, getAttributes(), nifty.getRenderEngine());
 
     if (controller != null) {
-      NiftyInputControl niftyInputControl = createNiftyInputControl(element.getId(), getAttributes(), controller);
+      NiftyInputControl niftyInputControl = createNiftyInputControl(getAttributes(), controller);
       element.attachInputControl(niftyInputControl);
     }
   }
 
-  private void enforceChildLayout(final Attributes attributes, final int childCount) {
+  private void enforceChildLayout(@Nonnull final Attributes attributes, final int childCount) {
     if (!attributes.isSet("childLayout") && childCount > 0) {
-      throw new RuntimeException("missing childLayout attribute for an element with [" + childCount + "] child elements. Attributes of error element [" + attributes.toString() + "]");
+      throw new RuntimeException("missing childLayout attribute for an element with [" + childCount + "] child " +
+          "elements. Attributes of error element [" + attributes.toString() + "]");
     }
   }
 
-  LinkedList < Object > getControllersWithScreenController(final Screen screen) {
-    LinkedList < Object > withScreenController = new LinkedList < Object > (controllers);
-    withScreenController.addLast(screen.getScreenController());
+  @Nonnull
+  List<Object> getControllersWithScreenController(@Nonnull final Screen screen) {
+    List<Object> withScreenController = new LinkedList<Object>(controllers);
+    withScreenController.add(screen.getScreenController());
     return withScreenController;
   }
 
-  private Controller createLocalController(final String controllerClassParam) {
+  @Nullable
+  private Controller createLocalController(@Nullable final String controllerClassParam) {
     if (controllerClassParam == null) {
       return null;
     }
     return ClassHelper.getInstance(controllerClassParam, Controller.class);
   }
 
-  private NiftyInputControl createNiftyInputControl(final String elementId, final Attributes controlDefinitionAttributes, final Controller controller) {
+  @Nullable
+  private NiftyInputControl createNiftyInputControl(
+      @Nonnull final Attributes controlDefinitionAttributes,
+      final Controller controller) {
     String inputMappingClass = controlDefinitionAttributes.get("inputMapping");
-    if (inputMappingClass == null) {
-      inputMappingClass = DefaultInputMapping.class.getName();
+    NiftyInputMapping inputMapping = null;
+    if (inputMappingClass != null) {
+      inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
+    }
+    if (inputMapping == null) {
+      inputMapping = new DefaultInputMapping();
     }
 
-    NiftyInputMapping inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
     return new NiftyInputControl(controller, inputMapping);
   }
 
-  public void applyAttributes(final Screen screen, final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {
+  public void applyAttributes(
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nullable final Attributes work,
+      @Nonnull final NiftyRenderEngine renderEngine) {
     if (work == null) {
       return;
     }
     element.initializeFromAttributes(screen, work, renderEngine);
   }
 
-  public void applyPostAttributes(final Element element, final Attributes work, final NiftyRenderEngine renderEngine) {
+  public void applyPostAttributes(
+      @Nonnull final Element element,
+      @Nullable final Attributes work,
+      final NiftyRenderEngine renderEngine) {
     if (work == null) {
       return;
     }
@@ -235,27 +268,23 @@ public class ElementType extends XmlBaseType {
   }
 
   public void applyEffects(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element) {
-    if (effects != null) {
-      effects.materialize(nifty, element, screen, getControllersWithScreenController(screen));
-    }
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element) {
+    effects.materialize(nifty, element, screen, getControllersWithScreenController(screen));
   }
 
   public void applyInteract(
       final Nifty nifty,
-      final Screen screen,
-      final Element element) {
-    if (interact != null) {
-      interact.materialize(nifty, element, getControllersWithScreenController(screen).toArray());
-    }
+      @Nonnull final Screen screen,
+      @Nonnull final Element element) {
+    interact.materialize(nifty, element, getControllersWithScreenController(screen).toArray());
   }
 
   protected void applyChildren(
-      final Element parent,
-      final Screen screen,
-      final Nifty nifty) {
+      @Nonnull final Element parent,
+      @Nonnull final Screen screen,
+      @Nonnull final Nifty nifty) {
     for (ElementType elementType : elements) {
       elementType.create(
           parent,
@@ -266,10 +295,10 @@ public class ElementType extends XmlBaseType {
   }
 
   public void refreshAttributes(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final ControlAttributes attributes) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final ControlAttributes attributes) {
     Attributes attrib = new Attributes(getAttributes());
     attributes.refreshAttributes(attrib);
     applyAttributes(screen, element, attrib, nifty.getRenderEngine());
@@ -279,19 +308,22 @@ public class ElementType extends XmlBaseType {
     element.getParent().layoutElements();
   }
 
+  @Nonnull
   public InteractType getInteract() {
     return interact;
   }
 
+  @Nonnull
   public EffectsType getEffects() {
     return effects;
   }
 
-  public Collection < ElementType > getElements() {
+  @Nonnull
+  public Collection<ElementType> getElements() {
     return elements;
   }
 
-  public void prepare(final Nifty nifty, final Screen screen, final ElementType rootElementType) {
+  public void prepare(@Nonnull final Nifty nifty, final Screen screen, @Nonnull final ElementType rootElementType) {
     translateSpecialValues(nifty, screen);
     makeFlat();
     applyControls(nifty);
@@ -308,10 +340,11 @@ public class ElementType extends XmlBaseType {
     // in case we have surviving special values (f.i. from applied controlDefinitions) we need to translate them too
     translateSpecialValues(nifty, screen);
 
-    resolveControllers(new LinkedList < Object >());
+    resolveControllers(new LinkedList<Object>());
   }
 
-  public void translateSpecialValues(final Nifty nifty, final Screen screen) {
+  @Override
+  public void translateSpecialValues(@Nonnull final Nifty nifty, final Screen screen) {
     super.translateSpecialValues(nifty, screen);
     interact.translateSpecialValues(nifty, screen);
     effects.translateSpecialValues(nifty, screen);
@@ -320,7 +353,7 @@ public class ElementType extends XmlBaseType {
     }
   }
 
-  void resolveParameters(final Attributes parentAttributes) {
+  void resolveParameters(@Nonnull final Attributes parentAttributes) {
     getAttributes().resolveParameters(parentAttributes);
 
     Attributes newParent = new Attributes(parentAttributes);
@@ -336,7 +369,7 @@ public class ElementType extends XmlBaseType {
 
   void applyControls(final Nifty nifty) {
     internalApplyControl(nifty);
-    for (int i=0; i<elements.size(); i++) {
+    for (int i = 0; i < elements.size(); i++) {
       elements.get(i).applyControls(nifty);
     }
   }
@@ -354,14 +387,15 @@ public class ElementType extends XmlBaseType {
   void makeFlatControlsInternal() {
   }
 
-  public void applyStyles(final StyleResolver styleResolver) {
+  public void applyStyles(@Nonnull final StyleResolver styleResolver) {
     StyleResolver childStyleResolver = applyStyleInternal(styleResolver);
     for (ElementType elementType : elements) {
       elementType.applyStyles(childStyleResolver);
     }
   }
 
-  StyleResolver applyStyleInternal(final StyleResolver styleResolver) {
+  @Nonnull
+  StyleResolver applyStyleInternal(@Nonnull final StyleResolver styleResolver) {
     String style = getAttributes().get("style");
     if (style != null) {
       StyleType styleType = styleResolver.resolve(style);
@@ -375,8 +409,8 @@ public class ElementType extends XmlBaseType {
     return styleResolver;
   }
 
-  void resolveControllers(final LinkedList < Object > controllerParam) {
-    controllers = new LinkedList < Object > (controllerParam);
+  void resolveControllers(@Nonnull final Collection<Object> controllerParam) {
+    controllers = new LinkedList<Object>(controllerParam);
     controller = createLocalController(getAttributes().get("controller"));
     if (controller != null) {
       controllers.addFirst(controller);
@@ -386,7 +420,7 @@ public class ElementType extends XmlBaseType {
     }
   }
 
-  public void removeWithTag(final String styleId) {
+  public void removeWithTag(@Nonnull final String styleId) {
     getAttributes().removeWithTag(styleId);
     effects.removeWithTag(styleId);
     interact.getAttributes().removeWithTag(styleId);
@@ -397,25 +431,22 @@ public class ElementType extends XmlBaseType {
    * is being transformed into the runtime element tree. during this process each interact
    * method is being resolved, tracing all controllers from top to bottom leading a list
    * of controller instances for each method.
-   * 
+   * <p/>
    * when we're creating elements dynamically then every element below in the hierachry is
    * resolved the same way but everything above us (the parent and parent.parent and so on)
    * is not being linked, which leads to controllers missing.
-   * 
+   * <p/>
    * this call will now travel up the hierachry and collect all controllers and add them
    * to the element we're currently processing.
    */
-  public void connectParentControls(final Element parent) {
-    if (parent == null) {
-      return;
-    }
+  public void connectParentControls(@Nonnull final Element parent) {
     NiftyInputControl control = parent.getAttachedInputControl();
     if (control != null) {
       Controller controller = control.getController();
-      if (controller != null) {
-        controllers.addLast(controller);
-      }
+      controllers.addLast(controller);
     }
-    connectParentControls(parent.getParent());
+    if (parent.hasParent()) {
+      connectParentControls(parent.getParent());
+    }
   }
 }

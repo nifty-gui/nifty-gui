@@ -1,26 +1,26 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.font;
 
-import java.util.Hashtable;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderImage;
-import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.ColorValueParser;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * OpenGL display list based Font.
- * 
+ *
  * @author void
  */
 public class Font {
-  private AngelCodeFont font;
-  private int listId;
-  private LwjglRenderImage[] textures;
+  @Nonnull
+  private final AngelCodeFont font;
+  @Nonnull
+  private final LwjglRenderImage[] textures;
   private int selectionStart;
   private int selectionEnd;
 
@@ -34,13 +34,12 @@ public class Font {
   private float selectionB;
   private float selectionA;
 
-  private Map<Character, Integer> displayListMap = new Hashtable<Character, Integer>();
-  private ColorValueParser colorValueParser = new ColorValueParser();
+  @Nonnull
+  private final Map<Character, Integer> displayListMap = new HashMap<Character, Integer>();
+  @Nonnull
+  private final ColorValueParser colorValueParser = new ColorValueParser();
 
-  private NiftyResourceLoader resourceLoader;
-
-  public Font(final RenderDevice device, final NiftyResourceLoader resourceLoader) {
-    this.resourceLoader = resourceLoader;
+  public Font(@Nonnull final String filename, @Nonnull final NiftyResourceLoader resourceLoader) {
     selectionStart = -1;
     selectionEnd = -1;
     selectionR = 1.0f;
@@ -51,17 +50,12 @@ public class Font {
     selectionBackgroundG = 1.0f;
     selectionBackgroundB = 0.0f;
     selectionBackgroundA = 1.0f;
-  }
 
-  private boolean isSelection() {
-    return !(selectionStart == -1 && selectionEnd == -1);
-  }
-
-  public boolean init(final String filename) {
     // get the angel code font from file
     font = new AngelCodeFont(resourceLoader);
     if (!font.load(filename)) {
-      return false;
+      textures = new LwjglRenderImage[0];
+      return;
     }
 
     // load textures of font into array
@@ -72,10 +66,14 @@ public class Font {
 
     // now build open gl display lists for every character in the font
     initDisplayList();
-    return true;
   }
 
-  private String extractPath(final String filename) {
+  private boolean isSelection() {
+    return !(selectionStart == -1 && selectionEnd == -1);
+  }
+
+  @Nonnull
+  private String extractPath(@Nonnull final String filename) {
     int idx = filename.lastIndexOf("/");
     if (idx == -1) {
       return "";
@@ -88,7 +86,7 @@ public class Font {
     displayListMap.clear();
 
     // create new list
-    listId = GL11.glGenLists(font.getChars().size());
+    int listId = GL11.glGenLists(font.getChars().size());
     Tools.checkGLError("glGenLists");
 
     // create the list
@@ -130,15 +128,24 @@ public class Font {
     }
   }
 
-  public int drawString(int x, int y, String text) {
+  public int drawString(int x, int y, @Nonnull String text) {
     return internalRenderText(x, y, text, 1.0f, 1.0f, false, 1.0f);
   }
 
-  public int drawStringWithSize(int x, int y, String text, float sizeX, float sizeY) {
+  public int drawStringWithSize(int x, int y, @Nonnull String text, float sizeX, float sizeY) {
     return internalRenderText(x, y, text, sizeX, sizeY, false, 1.0f);
   }
 
-  public int renderWithSizeAndColor(int x, int y, String text, float sizeX, float sizeY, float r, float g, float b, float a) {
+  public int renderWithSizeAndColor(
+      int x,
+      int y,
+      @Nonnull String text,
+      float sizeX,
+      float sizeY,
+      float r,
+      float g,
+      float b,
+      float a) {
     GL11.glColor4f(r, g, b, a);
     return internalRenderText(x, y, text, sizeX, sizeY, false, a);
   }
@@ -146,7 +153,7 @@ public class Font {
   private int internalRenderText(
       final int xPos,
       final int yPos,
-      final String text,
+      @Nonnull final String text,
       final float sizeX,
       final float sizeY,
       final boolean useAlphaTexture,
@@ -157,7 +164,6 @@ public class Font {
 
     float normHeightScale = getHeight() * sizeY;
     int x = xPos;
-    int y = yPos;
 
     int activeTextureIdx = -1;
     int counter = 0;
@@ -166,6 +172,7 @@ public class Font {
       colorValueParser.isColor(text, i);
       while (colorValueParser.isColor()) {
         Color color = colorValueParser.getColor();
+        assert color != null;
         GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
         i = colorValueParser.getNextIndex();
         if (i >= text.length()) {
@@ -179,9 +186,9 @@ public class Font {
 
       char currentc = text.charAt(i);
       char nextc = FontHelper.getNextCharacter(text, i);
-      CharacterInfo charInfoC = font.getChar((char) currentc);
+      CharacterInfo charInfoC = font.getChar(currentc);
 
-      float characterWidth = 0;
+      float characterWidth;
       if (charInfoC != null) {
         int texId = charInfoC.getPage();
         if (activeTextureIdx != texId) {
@@ -189,10 +196,10 @@ public class Font {
           textures[activeTextureIdx].bind();
         }
 
-        characterWidth = getCharacterWidth((char) currentc, nextc, sizeX);
+        characterWidth = getCharacterWidth(currentc, nextc, sizeX);
 
         GL11.glLoadIdentity();
-        GL11.glTranslatef(x, y, 0.0f);
+        GL11.glTranslatef(x, yPos, 0.0f);
         GL11.glScalef(sizeX, sizeY, 1.0f);
 
         boolean characterDone = false;
@@ -209,7 +216,7 @@ public class Font {
             GL11.glVertex2i(0, 0);
             GL11.glVertex2i((int) characterWidth, 0);
             GL11.glVertex2i((int) characterWidth, (int) normHeightScale);
-            GL11.glVertex2i(0, 0 + (int)normHeightScale);
+            GL11.glVertex2i(0, (int) normHeightScale);
 
             GL11.glEnd();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -248,11 +255,11 @@ public class Font {
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   }
 
-  public int getStringWidth(final String text, final float size) {
+  public int getStringWidth(@Nonnull final String text, final float size) {
     return getStringWidthInternal(text, size);
   }
 
-  private int getStringWidthInternal(final String text, final float size) {
+  private int getStringWidthInternal(@Nonnull final String text, final float size) {
     int length = 0;
 
     for (int i = 0; i < text.length(); i++) {
@@ -322,10 +329,10 @@ public class Font {
     }
   }
 
-  private int getKerning(final CharacterInfo charInfoC, final char nextc) {
+  private int getKerning(@Nonnull final CharacterInfo charInfoC, final char nextc) {
     Integer kern = charInfoC.getKerning().get(Character.valueOf(nextc));
     if (kern != null) {
-      return kern.intValue();
+      return kern;
     }
     return 0;
   }

@@ -1,11 +1,10 @@
 package de.lessvoid.nifty.html;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ElementBuilder;
+import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import org.htmlparser.Text;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.nodes.TextNode;
@@ -15,11 +14,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ElementBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.spi.render.RenderFont;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class NiftyVisitorStrongTagTest {
   private NiftyVisitor visitor;
@@ -31,6 +27,8 @@ public class NiftyVisitorStrongTagTest {
   public void before() {
     builderFactoryMock = createMock(NiftyBuilderFactory.class);
     defaultFont = createMock(RenderFont.class);
+    expect(defaultFont.getHeight()).andReturn(10).anyTimes();
+    replay(defaultFont);
 
     niftyMock = createMock(Nifty.class);
     expect(niftyMock.createFont("aurulent-sans-16.fnt")).andReturn(defaultFont);
@@ -48,8 +46,6 @@ public class NiftyVisitorStrongTagTest {
 
   @Test
   public void simpleTextParagraphSuccess() throws Exception {
-    replay(defaultFont);
-
     PanelBuilder bodyPanelBuilder = new PanelBuilder();
     PanelBuilder paragraphPanelBuilder = new PanelBuilder();
     TextBuilder textBuilder = new TextBuilder();

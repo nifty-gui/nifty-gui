@@ -1,11 +1,19 @@
 package de.lessvoid.nifty.screen;
 
 import de.lessvoid.nifty.elements.Action;
-import de.lessvoid.nifty.elements.Element;
+
+import javax.annotation.Nonnull;
 
 public class EndOfScreenAction implements Action {
+  @Nonnull
+  private final Screen screen;
 
-  public void perform(final Screen screen, final Element element) {
+  public EndOfScreenAction(@Nonnull final Screen screen) {
+    this.screen = screen;
+  }
+
+  @Override
+  public void perform() {
     screen.onEndScreenHasEnded();
   }
 }

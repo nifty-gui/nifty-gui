@@ -1,7 +1,8 @@
 package de.lessvoid.nifty.layout.manager;
 
 import de.lessvoid.nifty.layout.Box;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class BoxTestHelper {
   public static void initBox(final Box box, final int x, final int y, final int width, final int height) {

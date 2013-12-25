@@ -1,11 +1,8 @@
-package de.lessvoid.nifty.controls;
-
-import org.junit.Before;
-import org.junit.Test;
+package de.lessvoid.nifty.controls.listbox;
 
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.TestItem;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ListBoxMultipleSelectionTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);

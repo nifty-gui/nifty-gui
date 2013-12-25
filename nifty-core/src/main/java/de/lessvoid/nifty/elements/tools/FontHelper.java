@@ -2,18 +2,23 @@ package de.lessvoid.nifty.elements.tools;
 
 import de.lessvoid.nifty.spi.render.RenderFont;
 
+import javax.annotation.Nonnull;
+
 public class FontHelper {
 
   /**
    * Get character index into the given text that is no more pixel as the given width.
    *
-   * @param font font
-   * @param text the string to check
+   * @param font  font
+   * @param text  the string to check
    * @param width the minimum width
    * @return the character index into the string.
    */
   public static int getVisibleCharactersFromStart(
-      final RenderFont font, final CharSequence text, final int width, final float size) {
+      @Nonnull final RenderFont font,
+      @Nonnull final CharSequence text,
+      final int width,
+      final float size) {
     int widthRemaining = width;
 
     for (int i = 0; i < text.length(); i++) {
@@ -35,13 +40,16 @@ public class FontHelper {
   /**
    * Get character index into the given text that is no more pixel as the given width.
    *
-   * @param font font
-   * @param text the string to check
+   * @param font  font
+   * @param text  the string to check
    * @param width the minimum width
    * @return the character index into the string.
    */
   public static int getVisibleCharactersFromEnd(
-      final RenderFont font, final CharSequence text, final int width, final float size) {
+      @Nonnull final RenderFont font,
+      @Nonnull final CharSequence text,
+      final int width,
+      final float size) {
     int widthRemaining = width;
 
     for (int i = text.length() - 1; i >= 0; i--) {
@@ -63,14 +71,14 @@ public class FontHelper {
   /**
    * get index into text from a given pixel position.
    *
-   * @param font font
-   * @param text text string
+   * @param font  font
+   * @param text  text string
    * @param pixel pixel index
-   * @param size font size
+   * @param size  font size
    * @return index into text string
    */
   public static int getCharacterIndexFromPixelPosition(
-      final RenderFont font, final CharSequence text, final int pixel, final float size) {
+      @Nonnull final RenderFont font, @Nonnull final CharSequence text, final int pixel, final float size) {
     if (pixel < 0) {
       return -1;
     }
@@ -97,7 +105,7 @@ public class FontHelper {
    * @param i
    * @return
    */
-  public static char getNextCharacter(final CharSequence text, int i) {
+  public static char getNextCharacter(@Nonnull final CharSequence text, int i) {
     char nextc = 0;
     if (i < text.length() - 1) {
       nextc = text.charAt(i + 1);
@@ -110,7 +118,7 @@ public class FontHelper {
    * @param i
    * @return
    */
-  public static char getPrevCharacter(final CharSequence text, int i) {
+  public static char getPrevCharacter(@Nonnull final CharSequence text, int i) {
     char prevc = 0;
     if (i > 0) {
       prevc = text.charAt(i - 1);

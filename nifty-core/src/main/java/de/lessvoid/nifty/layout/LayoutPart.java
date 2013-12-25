@@ -1,23 +1,26 @@
 package de.lessvoid.nifty.layout;
 
-import java.util.List;
-
 import de.lessvoid.nifty.tools.SizeValue;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * LayoutPart is a composition of Box and BoxConstraints.
+ *
  * @author void
  */
 public class LayoutPart {
-
   /**
    * the box.
    */
+  @Nonnull
   private final Box box;
 
   /**
    * the box constraints.
    */
+  @Nonnull
   private final BoxConstraints boxConstraints;
 
   /**
@@ -30,53 +33,63 @@ public class LayoutPart {
 
   /**
    * Create a new LayoutPart instance.
-   * @param newBox the new box
+   *
+   * @param newBox            the new box
    * @param newBoxConstraints the new box constraints
    */
-  public LayoutPart(final Box newBox, final BoxConstraints newBoxConstraints) {
+  public LayoutPart(@Nonnull final Box newBox, @Nonnull final BoxConstraints newBoxConstraints) {
     this.box = newBox;
     this.boxConstraints = newBoxConstraints;
   }
 
   /**
    * copy constructor.
+   *
    * @param src source
    */
-  public LayoutPart(final LayoutPart src) {
+  public LayoutPart(@Nonnull final LayoutPart src) {
     this.box = new Box(src.getBox());
     this.boxConstraints = new BoxConstraints(src.getBoxConstraints());
   }
 
   /**
    * Get the box of this LayoutPart.
+   *
    * @return the box
    */
+  @Nonnull
   public final Box getBox() {
     return box;
   }
 
   /**
    * Get the box constraints for this LayoutPart.
+   *
    * @return the box Constraints
    */
+  @Nonnull
   public final BoxConstraints getBoxConstraints() {
     return boxConstraints;
   }
 
+  @Override
+  @Nonnull
   public String toString() {
-    StringBuilder result = new StringBuilder();
-    result.append("box [" + box.getX() + ", " + box.getY() + ", " + box.getWidth() + ", " + box.getHeight() + "] with constraints [" + boxConstraints.getX() + ", " + boxConstraints.getY() + ", " + boxConstraints.getWidth() + ", " + boxConstraints.getHeight() + "]");
-    return result.toString();
+    return "box [" + box.getX() + ", " + box.getY() + ", " +
+        "" + box.getWidth() + ", " + box.getHeight() + "] with constraints [" + boxConstraints.getX() + ", " +
+        "" + boxConstraints.getY() + ", " +
+        "" + boxConstraints.getWidth() + ", " + boxConstraints.getHeight() + "]";
   }
 
   /**
    * Calculates the maximum width of the given child elements. This takes padding of this LayoutPart
    * as well as the margin values of the child elements into account.
-   * 
+   *
    * @param children List<LayoutPart> to calculate max width
    * @return max width
    */
-  public SizeValue getMaxWidth(final List<LayoutPart> children) {
+  @Nonnull
+  public SizeValue getMaxWidth(@Nonnull final List<LayoutPart> children) {
     int newWidth = 0;
     for (LayoutPart e : children) {
       int partWidth = e.getBoxConstraints().getWidth().getValueAsInt(0);
@@ -92,11 +105,12 @@ public class LayoutPart {
   /**
    * Calculates the maximum height of the given child elements. This takes padding of this LayoutPart
    * as well as the margin values of the child elements into account.
-   * 
+   *
    * @param children List<LayoutPart> to calculate max height
    * @return max height
    */
-  public SizeValue getMaxHeight(final List<LayoutPart> children) {
+  @Nonnull
+  public SizeValue getMaxHeight(@Nonnull final List<LayoutPart> children) {
     int newHeight = 0;
     for (LayoutPart e : children) {
       int partHeight = e.getBoxConstraints().getHeight().getValueAsInt(0);
@@ -116,7 +130,8 @@ public class LayoutPart {
    * @param children List<LayoutPart> to calculate width sum
    * @return width sum
    */
-  public SizeValue getSumWidth(final List<LayoutPart> children) {
+  @Nonnull
+  public SizeValue getSumWidth(@Nonnull final List<LayoutPart> children) {
     int newWidth = 0;
     for (LayoutPart e : children) {
       newWidth += e.getBoxConstraints().getMarginLeft().getValueAsInt(0);
@@ -133,7 +148,8 @@ public class LayoutPart {
    * @param children List<LayoutPart> to calculate height sum
    * @return width sum
    */
-  public SizeValue getSumHeight(final List<LayoutPart> children) {
+  @Nonnull
+  public SizeValue getSumHeight(@Nonnull final List<LayoutPart> children) {
     int newHeight = 0;
     for (LayoutPart e : children) {
       newHeight += e.getBoxConstraints().getHeight().getValueAsInt(0);

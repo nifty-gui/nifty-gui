@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.batch;
 
-import static org.junit.Assert.assertEquals;
-
+import de.lessvoid.nifty.batch.TextureAtlasGenerator.Result;
 import org.junit.Test;
 
-import de.lessvoid.nifty.batch.TextureAtlasGenerator.Result;
+import static org.junit.Assert.assertEquals;
 
 public class TextureAtlasGeneratorTest {
   private TextureAtlasGenerator generator = new TextureAtlasGenerator(100, 100);

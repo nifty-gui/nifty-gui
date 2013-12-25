@@ -1,34 +1,44 @@
 package de.lessvoid.nifty.controls.radiobutton;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.RadioButton;
-import de.lessvoid.nifty.controls.RadioButtonGroup;
-import de.lessvoid.nifty.controls.RadioButtonStateChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 /**
  * RadioButtonControl implementation.
+ *
  * @deprecated Please use {@link de.lessvoid.nifty.controls.RadioButton} when accessing NiftyControls.
  */
 @Deprecated
 public class RadioButtonControl extends AbstractController implements RadioButton {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(RadioButtonControl.class.getName());
   private boolean active;
+  @Nullable
   private RadioButtonGroupControl radioGroup;
+  @Nullable
   private Nifty nifty;
+  @Nullable
   private Screen screen;
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen, final Element element, final Parameters parameter) {
-    super.bind(element);
+  public void bind(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
+    bind(element);
     this.nifty = nifty;
     this.screen = screen;
-    linkToRadioGroup(parameter.getProperty("group"));
+    linkToRadioGroup(parameter.get("group"));
   }
 
   @Override
@@ -39,25 +49,35 @@ public class RadioButtonControl extends AbstractController implements RadioButto
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
-      screen.getFocusHandler().getNext(getElement()).setFocus();
-      return true;
-    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
-      screen.getFocusHandler().getPrev(getElement()).setFocus();
-      return true;
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyStandardInputEvent.Activate) {
       onClick();
       return true;
+    }
+
+    if (screen == null) {
+      return false;
+    }
+    Element element = getElement();
+    if (element != null) {
+      if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+        screen.getFocusHandler().getNext(element).setFocus();
+        return true;
+      }
+      if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
+        screen.getFocusHandler().getPrev(element).setFocus();
+        return true;
+      }
     }
     return false;
   }
 
   @Override
-  public void setGroup(final String groupId) {
+  public void setGroup(@Nullable final String groupId) {
     linkToRadioGroup(groupId);
   }
 
+  @Nullable
   @Override
   public RadioButtonGroup getGroup() {
     return radioGroup;
@@ -67,8 +87,11 @@ public class RadioButtonControl extends AbstractController implements RadioButto
     if (!active) {
       return;
     }
-    getElement().stopEffect(EffectEventId.onCustom);
-    getElement().startEffect(EffectEventId.onCustom, null, "hide");
+    Element element = getElement();
+    if (element != null) {
+      element.stopEffect(EffectEventId.onCustom);
+      element.startEffect(EffectEventId.onCustom, null, "hide");
+    }
     active = false;
     publishStateChangedEvent();
   }
@@ -77,9 +100,12 @@ public class RadioButtonControl extends AbstractController implements RadioButto
     if (active) {
       return;
     }
-    getElement().stopEffect(EffectEventId.onCustom);
-    getElement().startEffect(EffectEventId.onCustom, null, "show");
-    getElement().setFocus();
+    Element element = getElement();
+    if (element != null) {
+      element.stopEffect(EffectEventId.onCustom);
+      element.startEffect(EffectEventId.onCustom, null, "show");
+      element.setFocus();
+    }
     active = true;
     publishStateChangedEvent();
   }
@@ -101,16 +127,28 @@ public class RadioButtonControl extends AbstractController implements RadioButto
     radioGroup.onRadioButtonClick(this);
   }
 
-  private void linkToRadioGroup(final String groupId) {
+  private void linkToRadioGroup(@Nullable final String groupId) {
+    if (screen == null) {
+      log.warning("Linking to radio group failed. Is the binding not done yet?");
+    }
     if (groupId == null) {
       radioGroup = null;
       return;
     }
     radioGroup = screen.findNiftyControl(groupId, RadioButtonGroupControl.class);
-    radioGroup.registerRadioButton(this);
+    if (radioGroup == null) {
+      log.warning("No radio group with the id [" + groupId + "] found.");
+    } else {
+      radioGroup.registerRadioButton(this);
+    }
   }
 
   private void publishStateChangedEvent() {
-    nifty.publishEvent(getElement().getId(), new RadioButtonStateChangedEvent(this, active));
+    if (nifty != null) {
+      String id = getId();
+      if (id != null) {
+        nifty.publishEvent(id, new RadioButtonStateChangedEvent(this, active));
+      }
+    }
   }
 }

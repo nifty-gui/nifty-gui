@@ -2,9 +2,11 @@ package de.lessvoid.nifty.loaderv2.types.resolver.style;
 
 import de.lessvoid.nifty.loaderv2.types.StyleType;
 
+import javax.annotation.Nullable;
+
 public class StyleResolverControlDefinintion implements StyleResolver {
-  private StyleResolver baseStyleResolver;
-  private String baseStyleId;
+  private final StyleResolver baseStyleResolver;
+  private final String baseStyleId;
 
   public StyleResolverControlDefinintion(
       final StyleResolver baseStyleResolverParam,
@@ -13,7 +15,9 @@ public class StyleResolverControlDefinintion implements StyleResolver {
     baseStyleId = baseStyleIdParam;
   }
 
-  public StyleType resolve(final String styleId) {
+  @Override
+  @Nullable
+  public StyleType resolve(@Nullable final String styleId) {
     if (styleId == null) {
       return null;
     }

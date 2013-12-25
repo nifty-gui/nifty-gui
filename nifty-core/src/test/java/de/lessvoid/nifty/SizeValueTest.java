@@ -1,15 +1,13 @@
 package de.lessvoid.nifty;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import de.lessvoid.nifty.tools.SizeValue;
 import org.junit.Test;
 
-import de.lessvoid.nifty.tools.SizeValue;
+import static org.junit.Assert.*;
 
 /**
  * Testcases for SizeValue class.
+ *
  * @author void
  */
 public class SizeValueTest {
@@ -34,7 +32,7 @@ public class SizeValueTest {
     assertFalse(value.hasValue());
     assertTrue(value.isIndependentFromParent());
   }
-  
+
   @Test
   public void testDefaultGeneratedValue() {
     SizeValue value = new SizeValue("5d");
@@ -76,7 +74,7 @@ public class SizeValueTest {
     assertTrue(value.isIndependentFromParent());
     assertTrue(value.hasSum());
   }
-  
+
   @Test
   public void testSumGeneratedValue() {
     SizeValue value = new SizeValue("500s");
@@ -87,7 +85,7 @@ public class SizeValueTest {
     assertTrue(value.isIndependentFromParent());
     assertTrue(value.hasSum());
   }
-  
+
   @Test
   public void testMax() {
     SizeValue value = new SizeValue("max");
@@ -98,7 +96,7 @@ public class SizeValueTest {
     assertTrue(value.isIndependentFromParent());
     assertTrue(value.hasMax());
   }
-  
+
   @Test
   public void testMaxGeneratedValue() {
     SizeValue value = new SizeValue("500m");
@@ -109,7 +107,7 @@ public class SizeValueTest {
     assertTrue(value.isIndependentFromParent());
     assertTrue(value.hasMax());
   }
-  
+
   @Test
   public void testWildcard() {
     SizeValue value = new SizeValue("*");
@@ -194,7 +192,7 @@ public class SizeValueTest {
   @Test
   public void testOffByOneCastErrorExists() {
     SizeValue a = SizeValue.percent(100);
-    assertTrue(((int)a.getValue(212)) == 211);
+    assertTrue(((int) a.getValue(212)) == 211);
   }
 
   @Test

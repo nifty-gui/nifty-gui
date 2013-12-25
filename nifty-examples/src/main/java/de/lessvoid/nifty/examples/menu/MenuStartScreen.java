@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.menu;
 
-import org.bushe.swing.event.EventTopicSubscriber;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Label;
@@ -12,6 +10,10 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
+import org.bushe.swing.event.EventTopicSubscriber;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * ScreenController for Hello World Example.
@@ -20,8 +22,10 @@ import de.lessvoid.nifty.tools.SizeValue;
 public class MenuStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
+  @Nullable
   private Element popup;
 
+  @Override
   public void bind(final Nifty nifty, final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
@@ -56,16 +60,19 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
     nifty.subscribe(screen, popup.findNiftyControl("#menu", Menu.class).getId(), MenuItemActivatedEvent.class, new MenuItemActivatedEventSubscriber());
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "menu/menu.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Menu Example";
@@ -78,7 +85,7 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
 
   private class MenuItemActivatedEventSubscriber implements EventTopicSubscriber<MenuItemActivatedEvent> {
     @Override
-    public void onEvent(final String id, final MenuItemActivatedEvent event) {
+    public void onEvent(final String id, @Nonnull final MenuItemActivatedEvent event) {
       final ThisReallyCouldBeAnyClassYouWant item = (ThisReallyCouldBeAnyClassYouWant) event.getItem();
 
       Label label = screen.findNiftyControl("textOut", Label.class);
@@ -95,14 +102,16 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
         }
       });
     }
-  };
+  }
 
   // This is just an example and not an example of great class naming :)
-  private class ThisReallyCouldBeAnyClassYouWant {
+  private static class ThisReallyCouldBeAnyClassYouWant {
+    @Nonnull
     public String key;
+    @Nonnull
     public String text;
 
-    public ThisReallyCouldBeAnyClassYouWant(final String key, final String text) {
+    public ThisReallyCouldBeAnyClassYouWant(@Nonnull final String key, @Nonnull final String text) {
       this.key = key;
       this.text = text;
     }

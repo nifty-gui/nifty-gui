@@ -12,8 +12,11 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
+import javax.annotation.Nonnull;
+
 /**
  * text size pulsate.
+ *
  * @author void
  */
 public class TextSizePulsate implements EffectImpl {
@@ -21,11 +24,13 @@ public class TextSizePulsate implements EffectImpl {
   /**
    * start size.
    */
+  @Nonnull
   private SizeValue startSize = new SizeValue("0%");
 
   /**
    * end size.
    */
+  @Nonnull
   private SizeValue endSize = new SizeValue("100%");
 
   /**
@@ -39,7 +44,11 @@ public class TextSizePulsate implements EffectImpl {
    */
   private boolean activated = false;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     String startSizeString = parameter.getProperty("startSize");
     if (startSizeString != null) {
       startSize = new SizeValue(startSizeString);
@@ -52,11 +61,12 @@ public class TextSizePulsate implements EffectImpl {
     pulsator = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (!activated && normalizedTime > 0.0f) {
       activated = true;
       pulsator.reset();
@@ -70,20 +80,23 @@ public class TextSizePulsate implements EffectImpl {
       if (textRenderer != null) {
         String text = textRenderer.getWrappedText();
         RenderFont font = textRenderer.getFont();
-  
-        float originalWidth = font.getWidth(text, 1.0f);
-        float sizedWidth = font.getWidth(text, size);
-  
-        float originalHeight = font.getHeight();
-        float sizedHeight = font.getHeight() * size;
-  
-        r.moveTo(- (sizedWidth - originalWidth) / 2, - (sizedHeight - originalHeight) / 2);
+
+        if (font != null) {
+          float originalWidth = font.getWidth(text, 1.0f);
+          float sizedWidth = font.getWidth(text, size);
+
+          float originalHeight = font.getHeight();
+          float sizedHeight = font.getHeight() * size;
+
+          r.moveTo(-(sizedWidth - originalWidth) / 2, -(sizedHeight - originalHeight) / 2);
+        }
       }
 
       r.setRenderTextSize(size);
     }
   }
 
+  @Override
   public void deactivate() {
     activated = true;
   }

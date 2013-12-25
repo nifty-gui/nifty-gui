@@ -5,9 +5,9 @@ import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Map;
 
-class ElementEffectStateCache {
+public class ElementEffectStateCache {
   @Nonnull
-  private Map<EffectEventId, Boolean> states;
+  private final Map<EffectEventId, Boolean> states;
 
   public ElementEffectStateCache() {
     states = new EnumMap<EffectEventId, Boolean>(EffectEventId.class);

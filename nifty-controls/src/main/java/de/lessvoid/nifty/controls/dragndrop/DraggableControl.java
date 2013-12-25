@@ -1,31 +1,40 @@
 package de.lessvoid.nifty.controls.dragndrop;
 
-import java.util.List;
-import java.util.ListIterator;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.Draggable;
-import de.lessvoid.nifty.controls.DraggableDragCanceledEvent;
-import de.lessvoid.nifty.controls.DraggableDragStartedEvent;
-import de.lessvoid.nifty.controls.Droppable;
-import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.logging.Logger;
+
+/**
+ * The controller class for a draggable element.
+ *
+ * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @deprecated Internal control class. Use {@link de.lessvoid.nifty.controls.Draggable}
+ */
+@Deprecated
 public class DraggableControl extends AbstractController implements Draggable {
+  @Nonnull
   private static final String POPUP = "draggablePopup";
-  private static Logger logger = Logger.getLogger(DraggableControl.class.getName());
+  @Nonnull
+  private static final Logger log = Logger.getLogger(DraggableControl.class.getName());
+  @Nullable
   private Nifty nifty;
+  @Nullable
   private Screen screen;
-  private Element draggable;
+  @Nullable
   private Element originalParent;
+  @Nullable
   private Element popup;
+  @Nullable
   private Element handle;
   private boolean revert;
   private boolean dropEnabled;
@@ -33,10 +42,13 @@ public class DraggableControl extends AbstractController implements Draggable {
   private boolean triedDragging = false;
   private int originalPositionX;
   private int originalPositionY;
+  @Nonnull
   private SizeValue originalConstraintX;
+  @Nonnull
   private SizeValue originalConstraintY;
   private int dragStartX;
   private int dragStartY;
+  @Nullable
   private Droppable droppable;
 
   /**
@@ -46,19 +58,18 @@ public class DraggableControl extends AbstractController implements Draggable {
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     super.bind(element);
     this.nifty = nifty;
     this.screen = screen;
-    this.draggable = element;
 
     String handleId = parameter.get("handle");
-    handle = draggable.findElementById(handleId);
+    handle = element.findElementById(handleId);
     if (handle == null) {
-      handle = draggable;
+      handle = element;
     }
     revert = parameter.getAsBoolean("revert", true);
     dropEnabled = parameter.getAsBoolean("drop", true);
@@ -69,16 +80,14 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
   /**
    * Called by <interact onClick="" />
-   * @param mouseX mouse x
-   * @param mouseY mouse y
    */
-  public void bringToFront(final int mouseX, final int mouseY) {
+  public void bringToFront() {
     if (!dragged) {
       moveToFront();
     }
@@ -86,6 +95,7 @@ public class DraggableControl extends AbstractController implements Draggable {
 
   /**
    * Called by the dragging function to start a dragging operation.
+   *
    * @param mouseX mouse x
    * @param mouseY mouse y
    */
@@ -96,6 +106,11 @@ public class DraggableControl extends AbstractController implements Draggable {
 
     triedDragging = true;
 
+    Element draggable = getElement();
+    if (draggable == null) {
+      return;
+    }
+
     originalParent = draggable.getParent();
     originalPositionX = draggable.getX();
     originalPositionY = draggable.getY();
@@ -104,7 +119,7 @@ public class DraggableControl extends AbstractController implements Draggable {
     dragStartX = mouseX;
     dragStartY = mouseY;
 
-    if (handle.isMouseInsideElement(mouseX, mouseY)) {
+    if (handle != null && handle.isMouseInsideElement(mouseX, mouseY)) {
       moveDraggableToPopup();
       dragged = true;
       notifyObserversDragStarted();
@@ -115,6 +130,7 @@ public class DraggableControl extends AbstractController implements Draggable {
 
   /**
    * Called by <interact onMouseMove="" /
+   *
    * @param mouseX mouse x
    * @param mouseY mouse y
    */
@@ -124,12 +140,19 @@ public class DraggableControl extends AbstractController implements Draggable {
       return;
     }
 
+    Element draggable = getElement();
+    if (draggable == null) {
+      return;
+    }
+
     int newPositionX = originalPositionX + mouseX - dragStartX;
     int newPositionY = originalPositionY + mouseY - dragStartY;
-    draggable.setConstraintX(new SizeValue(newPositionX + "px"));
-    draggable.setConstraintY(new SizeValue(newPositionY + "px"));
+    draggable.setConstraintX(SizeValue.px(newPositionX));
+    draggable.setConstraintY(SizeValue.px(newPositionY));
 
-    popup.layoutElements();
+    if (popup != null) {
+      popup.layoutElements();
+    }
   }
 
   /**
@@ -138,15 +161,18 @@ public class DraggableControl extends AbstractController implements Draggable {
   public void dragStop() {
     triedDragging = false;
     if (!dragged) {
+      moveToFront();
       return;
     }
-    logger.fine("dragStop()");
     Element newDroppable = findDroppableAtCurrentCoordinates();
-    if (newDroppable == originalParent) {
+    if (newDroppable == null || newDroppable == originalParent) {
       dragCancel();
     } else {
       DroppableControl droppableControl = newDroppable.getControl(DroppableControl.class);
-      if (droppableControl.accept(droppable, this)) {
+      if (droppableControl == null) {
+        log.warning("Droppable has no droppable control. Corrupted controls! Canceling drag.");
+        dragCancel();
+      } else if (droppable != null && droppableControl.accept(droppable, this)) {
         droppableControl.drop(this, closePopup());
       } else {
         dragCancel();
@@ -157,21 +183,37 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   private void moveDraggableToPopup() {
-    popup = nifty.createPopup(POPUP);
-    nifty.showPopup(screen, popup.getId(), null);
+    if (nifty == null || screen == null) {
+      return;
+    }
+    final Element draggable = getElement();
+    if (draggable == null) {
+      return;
+    }
+    popup = nifty.createPopup(screen, POPUP);
+    String popupId = popup.getId();
+    if (popupId == null) {
+      log.severe("Newly created popup did not get a ID. Critical internal error. Popup creation failed.");
+      return;
+    }
+    nifty.showPopup(screen, popupId, null);
 
     draggable.markForMove(popup, new EndNotify() {
       @Override
       public void perform() {
         draggable.getFocusHandler().requestExclusiveMouseFocus(draggable);
-        draggable.setConstraintX(new SizeValue(originalPositionX + "px"));
-        draggable.setConstraintY(new SizeValue(originalPositionY + "px"));
+        draggable.setConstraintX(SizeValue.px(originalPositionX));
+        draggable.setConstraintY(SizeValue.px(originalPositionY));
       }
     });
   }
 
   @Override
   public void moveToFront() {
+    final Element draggable = getElement();
+    if (draggable == null) {
+      return;
+    }
     final Element parent = draggable.getParent();
     final List<Element> siblings = parent.getChildren();
     //noinspection ObjectEquality
@@ -218,25 +260,38 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   private void dragCancel() {
+    final Element draggable = getElement();
+    if (draggable == null) {
+      return;
+    }
     if (revert) {
       draggable.setConstraintX(originalConstraintX);
       draggable.setConstraintY(originalConstraintY);
     } else {
-      draggable.setConstraintX(new SizeValue(draggable.getX() + "px"));
-      draggable.setConstraintY(new SizeValue(draggable.getY() + "px"));
+      draggable.setConstraintX(SizeValue.px(draggable.getX()));
+      draggable.setConstraintY(SizeValue.px(draggable.getY()));
     }
     moveDraggableBackToOriginalParent();
     notifyObserversDragCanceled();
   }
 
+  @Nullable
   private EndNotify closePopup() {
     return new EndNotify() {
       @Override
       public void perform() {
-        if (popup == null) {
+        if (popup == null || nifty == null) {
           return;
         }
-        nifty.closePopup(popup.getId(), new EndNotify() {
+        final Element draggable = getElement();
+        if (draggable == null) {
+          return;
+        }
+        String popupId = popup.getId();
+        if (popupId == null) {
+          return;
+        }
+        nifty.closePopup(popupId, new EndNotify() {
           @Override
           public void perform() {
             draggable.reactivate();
@@ -253,17 +308,32 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   private void moveDraggableBackToOriginalParent() {
+    if (originalParent == null) {
+      return;
+    }
+    final Element draggable = getElement();
+    if (draggable == null) {
+      return;
+    }
     draggable.markForMove(originalParent, closePopup());
   }
 
+  @Nullable
   private Element findDroppableAtCurrentCoordinates() {
+    if (screen == null) {
+      return null;
+    }
     if (dropEnabled) {
+      final Element draggable = getElement();
+      if (draggable == null) {
+        return null;
+      }
       int dragAnkerX = draggable.getX() + draggable.getWidth() / 2;
       int dragAnkerY = draggable.getY() + draggable.getHeight() / 2;
       List<Element> layers = screen.getLayerElements();
-      ListIterator<Element> iter = layers.listIterator(layers.size());
-      while (iter.hasPrevious()) {
-        Element layer = iter.previous();
+      final int layerCount = layers.size();
+      for (int i = layerCount - 1; i >= 0; i--) {
+        Element layer = layers.get(i);
         if (popup != null && layer != popup) {
           Element droppable = findDroppableAtCoordinates(layer, dragAnkerX, dragAnkerY);
           if (droppable != null) {
@@ -275,11 +345,12 @@ public class DraggableControl extends AbstractController implements Draggable {
     return originalParent;
   }
 
-  private Element findDroppableAtCoordinates(final Element context, final int x, final int y) {
+  @Nullable
+  private Element findDroppableAtCoordinates(@Nonnull final Element context, final int x, final int y) {
     List<Element> elements = context.getChildren();
-    ListIterator<Element> iter = elements.listIterator(elements.size());
-    while (iter.hasPrevious()) {
-      Element element = iter.previous();
+    final int childCount = elements.size();
+    for (int i = childCount - 1; i >= 0; i--) {
+      Element element = elements.get(i);
 
       // we can only drop stuff on visible droppables
       boolean mouseInsideAndVisible = element.isMouseInsideElement(x, y) && element.isVisible();
@@ -296,7 +367,7 @@ public class DraggableControl extends AbstractController implements Draggable {
     return null;
   }
 
-  private boolean isDroppable(final Element element) {
+  private boolean isDroppable(@Nonnull final Element element) {
     NiftyInputControl control = element.getAttachedInputControl();
     if (control != null) {
       return control.getController() instanceof DroppableControl;
@@ -304,19 +375,33 @@ public class DraggableControl extends AbstractController implements Draggable {
     return false;
   }
 
+  @Nullable
   public Droppable getDroppable() {
     return droppable;
   }
 
-  public void setDroppable(final Droppable droppable) {
+  @Override
+  public void setDroppable(@Nullable final Droppable droppable) {
     this.droppable = droppable;
   }
 
   private void notifyObserversDragStarted() {
-    nifty.publishEvent(getElement().getId(), new DraggableDragStartedEvent(droppable, this));
+    if (nifty == null || droppable == null) {
+      return;
+    }
+    String id = getId();
+    if (id != null) {
+      nifty.publishEvent(id, new DraggableDragStartedEvent(droppable, this));
+    }
   }
 
   private void notifyObserversDragCanceled() {
-    nifty.publishEvent(getElement().getId(), new DraggableDragCanceledEvent(droppable, this));
+    if (nifty == null || droppable == null) {
+      return;
+    }
+    String id = getId();
+    if (id != null) {
+      nifty.publishEvent(id, new DraggableDragCanceledEvent(droppable, this));
+    }
   }
 }

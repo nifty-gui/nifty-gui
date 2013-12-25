@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.defaultcontrols.chatcontrol;
 
-import java.util.Random;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Chat;
@@ -13,6 +11,10 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Random;
+
 /**
  * The ChatControlDialogController registers a new control with Nifty
  * that represents the whole Dialog. This gives us later an appropriate
@@ -20,25 +22,30 @@ import de.lessvoid.nifty.screen.Screen;
  * @author void
  */
 public class ChatControlDialogController implements Controller {
+  @Nullable
   private Chat chat;
+  @Nullable
   private NiftyImage chatIconNiftyUser;
+  @Nullable
   private NiftyImage chatIconVoid;
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     this.chat = screen.findNiftyControl("chat", Chat.class);
     this.chatIconVoid = nifty.createImage("defaultcontrols/chatcontrol/chat-icon-ninja.png", false);
     this.chatIconNiftyUser = nifty.createImage("defaultcontrols/chatcontrol/chat-icon-user.png", false);
-    chat.addPlayer("void", chatIconVoid);
-    chat.addPlayer("nifty-user", chatIconNiftyUser);
+    if (chat != null) {
+      chat.addPlayer("void", chatIconVoid);
+      chat.addPlayer("nifty-user", chatIconNiftyUser);
+    }
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
   }
 
   @Override
@@ -50,19 +57,22 @@ public class ChatControlDialogController implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
   @NiftyEventSubscriber(id="chat")
-  public void onChatTextSendEvent(final String id, final ChatTextSendEvent event) {
+  public void onChatTextSendEvent(final String id, @Nonnull final ChatTextSendEvent event) {
     // You should post that text to the server ... 
 
-    // here we simply post it to the chat window
-    chat.receivedChatLine(event.getText(), chatIconNiftyUser);
 
-    // and we generate a random reaction from the void player =)
-    chat.receivedChatLine(getRandomResponse(), chatIconVoid);
+    if (chat != null) {
+      // here we simply post it to the chat window
+      chat.receivedChatLine(event.getText(), chatIconNiftyUser);
+
+      // and we generate a random reaction from the void player =)
+      chat.receivedChatLine(getRandomResponse(), chatIconVoid);
+    }
   }
 
   private String getRandomResponse() {

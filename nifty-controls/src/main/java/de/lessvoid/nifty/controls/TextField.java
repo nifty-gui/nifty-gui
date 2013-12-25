@@ -7,6 +7,9 @@ import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputFilter;
 import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
 import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public interface TextField extends NiftyControl {
   /**
    * This is the constant the maximal length needs to be set to in order to set it to a unlimited.
@@ -17,7 +20,7 @@ public interface TextField extends NiftyControl {
    * Disable the display of a password character and display the text as it was typed in.
    *
    * @deprecated Use {@link #setFormat(TextFieldDisplayFormat)} with the argument {@code null} to reset the display
-   *             format
+   * format
    */
   @Deprecated
   void disablePasswordChar();
@@ -27,7 +30,7 @@ public interface TextField extends NiftyControl {
    *
    * @param passwordChar the character all characters of the real text are replaced with
    * @deprecated Rather then using this function apply a new text format using {@link #setFormat
-   *             (TextFieldDisplayFormat)} with the {@link FormatPassword}.
+   * (TextFieldDisplayFormat)} with the {@link FormatPassword}.
    */
   @Deprecated
   void enablePasswordChar(char passwordChar);
@@ -38,6 +41,7 @@ public interface TextField extends NiftyControl {
    *
    * @return the text visible to the user
    */
+  @Nonnull
   String getDisplayedText();
 
   /**
@@ -47,6 +51,7 @@ public interface TextField extends NiftyControl {
    *
    * @return the text that was typed in by the user into the text field
    */
+  @Nonnull
   String getRealText();
 
   /**
@@ -56,6 +61,7 @@ public interface TextField extends NiftyControl {
    * @return the text that was typed into the text field
    * @deprecated Better use {@link #getRealText()}
    */
+  @Nonnull
   @Deprecated
   String getText();
 
@@ -84,7 +90,7 @@ public interface TextField extends NiftyControl {
    *
    * @param filter the new filter or {@code null} to reset to the default filter that allows all input
    */
-  void enableInputFilter(TextFieldInputFilter filter);
+  void enableInputFilter(@Nullable TextFieldInputFilter filter);
 
   /**
    * Apply a filter to the input to this text field. Once set only characters that are allowed by the filter are
@@ -95,7 +101,7 @@ public interface TextField extends NiftyControl {
    *
    * @param filter the new filter or {@code null} to reset to the default filter that allows all input
    */
-  void enableInputFilter(TextFieldInputCharFilter filter);
+  void enableInputFilter(@Nullable TextFieldInputCharFilter filter);
 
   /**
    * Apply a filter to the input to this text field. Once set only characters that are allowed by the filter are
@@ -106,7 +112,7 @@ public interface TextField extends NiftyControl {
    *
    * @param filter the new filter or {@code null} to reset to the default filter that allows all input
    */
-  void enableInputFilter(TextFieldInputCharSequenceFilter filter);
+  void enableInputFilter(@Nullable TextFieldInputCharSequenceFilter filter);
 
   /**
    * Disable any active input filter and start using the default input filter again.
@@ -119,7 +125,7 @@ public interface TextField extends NiftyControl {
    *
    * @param filter the new filter or {@code null} to reset to the default filter that allows all delete operations
    */
-  void enableDeleteFilter(TextFieldDeleteFilter filter);
+  void enableDeleteFilter(@Nullable TextFieldDeleteFilter filter);
 
   /**
    * Reset the delete filter to the default one that simply allows all input.
@@ -131,16 +137,16 @@ public interface TextField extends NiftyControl {
    * the text that was typed in.
    *
    * @param format the new format or {@code null} to reset to the default format that simply displays the text that was
-   * typed in
+   *               typed in
    */
-  void setFormat(TextFieldDisplayFormat format);
+  void setFormat(@Nullable TextFieldDisplayFormat format);
 
   /**
    * Set the maximal length in characters that applies for this text field. Once set it will be impossible for the user
    * to type in more characters then set here.
    *
    * @param maxLength the maximal amount of characters allowed in this text field or {@link #UNLIMITED_LENGTH} in case
-   * no limit is supposed to be set
+   *                  no limit is supposed to be set
    */
   void setMaxLength(int maxLength);
 
@@ -149,5 +155,5 @@ public interface TextField extends NiftyControl {
    *
    * @param text the text that is supposed to be displayed
    */
-  void setText(CharSequence text);
+  void setText(@Nonnull CharSequence text);
 }

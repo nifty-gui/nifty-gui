@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.helloworld;
 
-import java.io.IOException;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
@@ -24,7 +22,7 @@ public final class HelloWorldExampleMain {
    * Main method.
    * @param args arguments
    */
-  public static void main(final String[] args) throws IOException {
+  public static void main(final String[] args) {
     if (!LwjglInitHelper.initSubSystems("Nifty Hello World")) {
       System.exit(0);
     }

@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.slick2d.render.font.loader;
 
-import java.awt.*;
-
 import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import de.lessvoid.nifty.slick2d.render.font.UnicodeSlickRenderFont;
@@ -9,6 +7,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.HieroSettings;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * Load the font as Unicode font using Hiero settings to specify how the font is supposed to look like.
@@ -20,8 +22,9 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
    * Load the font. The name of the font will be used as name of the Hiero settings file. The true type font file will
    * be load by trying to add ".ttf" to the filename and by replacing the file ending with "ttf".
    */
+  @Nonnull
   @Override
-  public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
+  public SlickRenderFont loadFont(final Graphics g, @Nonnull final String filename) throws SlickLoadFontException {
     try {
       final HieroSettings hieroSettings = new HieroSettings(filename);
       final Font javaFont = loadFont(filename);
@@ -34,9 +37,9 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
       uniFont.addAsciiGlyphs();
 
       return new UnicodeSlickRenderFont(uniFont, javaFont);
-    } catch (final SlickException e) {
+    } catch (@Nonnull final SlickException e) {
       throw new SlickLoadFontException("Loading the font failed.", e);
-    } catch (final RuntimeException e) {
+    } catch (@Nonnull final RuntimeException e) {
       throw new SlickLoadFontException("Loading the font failed.", e);
     }
   }
@@ -47,7 +50,8 @@ public final class HieroUnicodeSlickRenderFontLoader extends AbstractJavaSlickRe
    * @param filename the filename of the font
    * @return the loaded font or {@code null}
    */
-  private static Font loadFont(final String filename) {
+  @Nullable
+  private static Font loadFont(@Nonnull final String filename) {
 
     Font javaFont = loadJavaFont(filename + ".ttf");
     if (javaFont == null) {

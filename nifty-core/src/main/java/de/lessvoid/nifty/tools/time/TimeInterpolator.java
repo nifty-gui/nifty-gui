@@ -1,21 +1,17 @@
 package de.lessvoid.nifty.tools.time;
 
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.tools.time.interpolator.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.lessvoid.nifty.spi.time.TimeProvider;
-import de.lessvoid.nifty.tools.time.interpolator.ExpTime;
-import de.lessvoid.nifty.tools.time.interpolator.Interpolator;
-import de.lessvoid.nifty.tools.time.interpolator.LinearTime;
-import de.lessvoid.nifty.tools.time.interpolator.NullTime;
-import de.lessvoid.nifty.tools.time.interpolator.OneTime;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * TimeProvider class.
+ *
  * @author void
  */
 public class TimeInterpolator {
@@ -59,13 +55,13 @@ public class TimeInterpolator {
 
   /**
    * Initialize with the given parameters.
-   * <p />
+   * <p/>
    * This function automatically calls {@link #initialize(java.util.Properties, boolean)}  so calling this one again
    * is <b>not</b> needed.
    *
-   * @param parameter parameter props
+   * @param parameter       parameter props
    * @param newTimeProvider TimeProvider to use
-   * @param infinite infinite effects never end
+   * @param infinite        infinite effects never end
    */
   public TimeInterpolator(
       @Nonnull final Properties parameter,
@@ -77,11 +73,11 @@ public class TimeInterpolator {
 
   /**
    * Initialize the time interpolator with the given values.
-   * <p />
+   * <p/>
    * This possible to call this method more then once in case the parameters got changed.
    *
    * @param parameter the parameters used for the initialization
-   * @param infinite the infinite flag, in case its {@code true} this effect does never end
+   * @param infinite  the infinite flag, in case its {@code true} this effect does never end
    */
   public void initialize(@Nonnull final Properties parameter, final boolean infinite) {
     startDelayParam = parseLongParameter(parameter, "startDelay", 0);
@@ -134,6 +130,7 @@ public class TimeInterpolator {
 
   /**
    * update the value.
+   *
    * @return true when still active and false when done
    */
   public final boolean update() {
@@ -156,6 +153,7 @@ public class TimeInterpolator {
 
   /**
    * get the current value [0.0, 1.0].
+   *
    * @return the current value
    */
   public final float getValue() {
@@ -166,8 +164,8 @@ public class TimeInterpolator {
    * This function fetches a string parameter and parses it to a long value if possible. In case the parameter is not
    * set or parsing the parameter fails, the default value is returned.
    *
-   * @param parameter the storage of all parameter
-   * @param key the key of the requested parameter
+   * @param parameter    the storage of all parameter
+   * @param key          the key of the requested parameter
    * @param defaultValue the default value
    * @return the parsed value or the default value
    */
@@ -181,7 +179,7 @@ public class TimeInterpolator {
     }
     try {
       return Long.parseLong(property);
-    } catch (final NumberFormatException e) {
+    } catch (@Nonnull final NumberFormatException e) {
       log.log(Level.SEVERE, "Error parsing the \"" + key + "\" properly.", e);
       return defaultValue;
     }

@@ -1,11 +1,7 @@
 package de.lessvoid.nifty.controls.scrollbar;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.NextPrevHelper;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.Scrollbar;
-import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
@@ -13,48 +9,70 @@ import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 /**
+ * This is the controller that takes care for the functionality of a scroll bar. It supports both horizontal and
+ * vertical scroll bars.
+ *
+ * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
  * @deprecated Please use {@link de.lessvoid.nifty.controls.Scrollbar} when accessing NiftyControls.
  */
 @Deprecated
 public class ScrollbarControl extends AbstractController implements Scrollbar {
-  private ScrollbarImpl scrollbarImpl = new ScrollbarImpl();
+  @Nonnull
+  private static final Logger log = Logger.getLogger(ScrollbarControl.class.getName());
+  @Nonnull
+  private final ScrollbarImpl scrollbarImpl;
+  @Nullable
   private ScrollbarView scrollbarView;
-  private Nifty nifty;
-  private Element elementBackground;
-  private Element elementPosition;
+  @Nullable
   private NextPrevHelper nextPrevHelper;
-  private float worldMax;
-  private float worldPageSize;
-  private float initial;
-  private float pageStepSize;
-  private float buttonStepSize;
+
+  public ScrollbarControl() {
+    scrollbarImpl = new ScrollbarImpl();
+  }
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
-    super.bind(element);
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
+    bind(element);
 
-    this.nifty = nifty;
-    this.elementBackground = element.findElementById("#background");
-    this.elementPosition = element.findElementById("#position");
-    this.nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
+    Element elementBackground = element.findElementById("#background");
+    Element elementPosition = element.findElementById("#position");
+    nextPrevHelper = new NextPrevHelper(element, screen.getFocusHandler());
 
-    if ("verticalScrollbar".equals(parameter.getProperty("name"))) {
-      this.scrollbarView = new ScrollbarViewVertical(this, elementPosition.getHeight());
-    } else if ("horizontalScrollbar".equals(parameter.getProperty("name"))) {
-      this.scrollbarView = new ScrollbarViewHorizontal(this, elementPosition.getWidth());
+    if (elementBackground == null) {
+      log.severe("Background of scrollbar control not located. Scrollbar will not work properly. Looked for: " +
+          "#background");
+    }
+    if (elementPosition == null) {
+      log.severe("Position element of scrollbar control not located. Scrollbar will not work properly. Looked for: " +
+          "#position");
+    } else if (elementBackground != null) {
+      if ("verticalScrollbar".equals(parameter.get("name"))) {
+        scrollbarView = new ScrollbarViewVertical(nifty, this, elementBackground, elementPosition,
+            elementPosition.getHeight());
+      } else {
+        scrollbarView = new ScrollbarViewHorizontal(nifty, this, elementBackground, elementPosition,
+            elementPosition.getWidth());
+      }
     }
 
-    worldMax = Float.valueOf(parameter.getProperty("worldMax", "100.0"));
-    worldPageSize = Float.valueOf(parameter.getProperty("worldPageSize", "100.0"));
-    initial = Float.valueOf(parameter.getProperty("initial", "0.0"));
-    buttonStepSize = Float.valueOf(parameter.getProperty("buttonStepSize", "1.0"));
-    pageStepSize = Float.valueOf(parameter.getProperty("pageStepSize", "25.0"));
-    scrollbarImpl.bindToView(scrollbarView, initial, worldMax, worldPageSize, buttonStepSize, pageStepSize);
+    if (scrollbarView != null) {
+      float worldMax = parameter.getAsFloat("worldMax", 100.f);
+      float worldPageSize = parameter.getAsFloat("worldPageSize", 100.f);
+      float initial = parameter.getAsFloat("initial", 0.f);
+      float buttonStepSize = parameter.getAsFloat("buttonStepSize", 1.f);
+      float pageStepSize = parameter.getAsFloat("pageStepSize", 25.f);
+      scrollbarImpl.bindToView(scrollbarView, initial, worldMax, worldPageSize, buttonStepSize, pageStepSize);
+    }
   }
 
   @Override
@@ -67,14 +85,15 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (nextPrevHelper.handleNextPrev(inputEvent)) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
+    if (nextPrevHelper != null && nextPrevHelper.handleNextPrev(inputEvent)) {
       return true;
     }
     if (inputEvent == NiftyStandardInputEvent.MoveCursorUp || inputEvent == NiftyStandardInputEvent.MoveCursorLeft) {
       scrollbarImpl.stepDown();
       return true;
-    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown || inputEvent == NiftyStandardInputEvent.MoveCursorRight) {
+    } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown || inputEvent == NiftyStandardInputEvent
+        .MoveCursorRight) {
       scrollbarImpl.stepUp();
       return true;
     }
@@ -90,22 +109,28 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   }
 
   public void click(final int mouseX, final int mouseY) {
-    scrollbarImpl.interactionClick(scrollbarView.filter(mouseX, mouseY));
+    if (scrollbarView != null) {
+      scrollbarImpl.interactionClick(scrollbarView.filter(mouseX, mouseY));
+    }
   }
 
   public void mouseMoveStart(final int mouseX, final int mouseY) {
-    scrollbarImpl.interactionClick(scrollbarView.filter(mouseX, mouseY));
+    if (scrollbarView != null) {
+      scrollbarImpl.interactionClick(scrollbarView.filter(mouseX, mouseY));
+    }
   }
 
   public void mouseMove(final int mouseX, final int mouseY) {
-    scrollbarImpl.interactionMove(scrollbarView.filter(mouseX, mouseY));
+    if (scrollbarView != null) {
+      scrollbarImpl.interactionMove(scrollbarView.filter(mouseX, mouseY));
+    }
   }
 
   public boolean consumeRelease() {
     return true;
   }
 
-  public boolean mouseWheel(final Element element, final NiftyMouseInputEvent inputEvent) {
+  public boolean mouseWheel(@Nonnull final Element element, @Nonnull final NiftyMouseInputEvent inputEvent) {
     int mouseWheel = inputEvent.getMouseWheel();
     float currentValue = scrollbarImpl.getValue();
     if (mouseWheel < 0) {
@@ -119,7 +144,12 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
   // Scrollbar implementation
 
   @Override
-  public void setup(final float value, final float worldMax, final float worldPageSize, final float buttonStepSize, final float pageStepSize) {
+  public void setup(
+      final float value,
+      final float worldMax,
+      final float worldPageSize,
+      final float buttonStepSize,
+      final float pageStepSize) {
     scrollbarImpl.setup(value, worldMax, worldPageSize, buttonStepSize, pageStepSize);
   }
 
@@ -175,12 +205,27 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
 
   // ScrollbarView implementations
 
-  private class ScrollbarViewVertical implements ScrollbarView {
-    private Scrollbar scrollbar;
+  private static class ScrollbarViewVertical implements ScrollbarView {
+    @Nonnull
+    private final Nifty nifty;
+    @Nonnull
+    private final ScrollbarControl scrollbar;
+    @Nonnull
+    private final Element elementBackground;
+    @Nonnull
+    private final Element elementPosition;
     private int minHandleSize;
 
-    public ScrollbarViewVertical(final Scrollbar scrollbar, final int minHandleSize) {
+    public ScrollbarViewVertical(
+        @Nonnull final Nifty nifty,
+        @Nonnull final ScrollbarControl scrollbar,
+        @Nonnull final Element elementBackground,
+        @Nonnull final Element elementPosition,
+        final int minHandleSize) {
+      this.nifty = nifty;
       this.scrollbar = scrollbar;
+      this.elementBackground = elementBackground;
+      this.elementPosition = elementPosition;
       this.minHandleSize = minHandleSize;
     }
 
@@ -196,24 +241,30 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
 
     @Override
     public void setHandle(final int pos, final int size) {
-      if (elementBackground.getHeight() < minHandleSize) {
-        if (getElement().isVisible()) {
+      Element scrollbarElement = scrollbar.getElement();
+      if (scrollbarElement == null) {
+        return;
+      }
+
+      if (getAreaSize() < minHandleSize) {
+        if (scrollbarElement.isVisible()) {
           elementPosition.hide();
         }
       } else {
-        if (getElement().isVisible()) {
+        if (!scrollbarElement.isVisible()) {
           elementPosition.show();
         }
-        elementPosition.setConstraintY(new SizeValue(pos + "px"));
-        elementPosition.setConstraintHeight(new SizeValue(size + "px"));
+        elementPosition.setConstraintY(SizeValue.px(pos));
+        elementPosition.setConstraintHeight(SizeValue.px(size));
         elementBackground.layoutElements();
       }
     }
 
     @Override
     public void valueChanged(final float value) {
-      if (getElement().getId() != null) {
-        nifty.publishEvent(getElement().getId(), new ScrollbarChangedEvent(scrollbar, value));
+      String id = scrollbar.getId();
+      if (id != null) {
+        nifty.publishEvent(id, new ScrollbarChangedEvent(scrollbar, value));
       }
     }
 
@@ -223,12 +274,27 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     }
   }
 
-  private class ScrollbarViewHorizontal implements ScrollbarView {
-    private Scrollbar scrollbar;
+  private static class ScrollbarViewHorizontal implements ScrollbarView {
+    @Nonnull
+    private final Nifty nifty;
+    @Nonnull
+    private final ScrollbarControl scrollbar;
+    @Nonnull
+    private final Element elementBackground;
+    @Nonnull
+    private final Element elementPosition;
     private int minHandleSize;
 
-    public ScrollbarViewHorizontal(final Scrollbar scrollbar, final int minHandleSize) {
+    public ScrollbarViewHorizontal(
+        @Nonnull final Nifty nifty,
+        @Nonnull final ScrollbarControl scrollbar,
+        @Nonnull final Element elementBackground,
+        @Nonnull final Element elementPosition,
+        final int minHandleSize) {
+      this.nifty = nifty;
       this.scrollbar = scrollbar;
+      this.elementBackground = elementBackground;
+      this.elementPosition = elementPosition;
       this.minHandleSize = minHandleSize;
     }
 
@@ -244,24 +310,30 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
 
     @Override
     public void setHandle(final int pos, final int size) {
+      Element scrollbarElement = scrollbar.getElement();
+      if (scrollbarElement == null) {
+        return;
+      }
+
       if (elementBackground.getWidth() < minHandleSize) {
-        if (getElement().isVisible()) {
+        if (scrollbarElement.isVisible()) {
           elementPosition.hide();
         }
       } else {
-        if (getElement().isVisible()) {
+        if (scrollbarElement.isVisible()) {
           elementPosition.show();
         }
-        elementPosition.setConstraintX(new SizeValue(pos + "px"));
-        elementPosition.setConstraintWidth(new SizeValue(size + "px"));
+        elementPosition.setConstraintX(SizeValue.px(pos));
+        elementPosition.setConstraintWidth(SizeValue.px(size));
         elementBackground.layoutElements();
       }
     }
 
     @Override
     public void valueChanged(final float value) {
-      if (getElement().getId() != null) {
-        nifty.publishEvent(getElement().getId(), new ScrollbarChangedEvent(scrollbar, value));
+      String id = scrollbar.getId();
+      if (id != null) {
+        nifty.publishEvent(id, new ScrollbarChangedEvent(scrollbar, value));
       }
     }
 

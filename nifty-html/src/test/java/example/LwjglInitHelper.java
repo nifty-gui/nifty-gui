@@ -1,12 +1,7 @@
 package example;
 
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.logging.Logger;
-
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
@@ -15,8 +10,12 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Helper class shared by all the examples to initialize lwjgl and stuff.

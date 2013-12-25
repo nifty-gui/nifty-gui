@@ -1,34 +1,31 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.tools.ClassHelper;
-import de.lessvoid.xml.xpp3.Attributes;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
 
 public class RegisterEffectType extends XmlBaseType {
-  private static Logger logger = Logger.getLogger(RegisterEffectType.class.getName());
+  private static final Logger logger = Logger.getLogger(RegisterEffectType.class.getName());
 
   public RegisterEffectType() {
   }
 
-  public RegisterEffectType(final String nameParam, final String classParam) {
-    Attributes attributes = new Attributes();
-    attributes.set("name", nameParam);
-    attributes.set("class", classParam);
-    try {
-      initFromAttributes(attributes);
-    } catch (Exception e) {
-      logger.warning(
-          "unable to register effect [" + nameParam + "] for class [" + classParam + "] (" + e.getMessage() + "]");
-    }
+  public RegisterEffectType(@Nonnull final String nameParam, @Nonnull final String classParam) {
+    getAttributes().set("name", nameParam);
+    getAttributes().set("class", classParam);
   }
 
+  @Override
+  @Nonnull
   public String output(final int offset) {
     return StringHelper.whitespace(offset) + "<registerEffect> " + super.output(offset);
   }
 
-  public Class < ? > getEffectClass() {
+  @Nullable
+  public Class<?> getEffectClass() {
     String className = getClassName();
     if (className == null) {
       return null;
@@ -36,10 +33,12 @@ public class RegisterEffectType extends XmlBaseType {
     return ClassHelper.loadClass(className);
   }
 
+  @Nullable
   public String getName() {
     return getAttributes().get("name");
   }
 
+  @Nullable
   private String getClassName() {
     return getAttributes().get("class");
   }

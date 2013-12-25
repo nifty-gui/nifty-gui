@@ -14,6 +14,9 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * ConsoleDemoStartScreen.
  * @author void
@@ -21,11 +24,13 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler, NiftyExample {
   private Nifty nifty;
   private Screen screen;
+  @Nullable
   private Element consolePopup;
   private boolean consoleVisible = false;
   private boolean allowConsoleToggle = true;
   private boolean firstConsoleShow = true;
 
+  @Override
   public void bind(final Nifty newNifty, final Screen newScreen) {
     nifty = newNifty;
     screen = newScreen;
@@ -33,9 +38,11 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
     consolePopup = nifty.createPopup("consolePopup");
   }
 
+  @Override
   public void onStartScreen() {
   }
 
+  @Override
   public void onEndScreen() {
   }
 
@@ -43,7 +50,8 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
     nifty.fromXml("all/intro.xml", "menu");
   }
 
-  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean keyEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.ConsoleToggle) {
       toggleConsole();
       return true;
@@ -64,13 +72,19 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
   }
 
   private void openConsole() {
-    nifty.showPopup(screen, consolePopup.getId(), consolePopup.findElementById("console#textInput"));
+    String id = consolePopup != null ? consolePopup.getId() : null;
+    if (id == null) {
+      return;
+    }
+    nifty.showPopup(screen, id, consolePopup.findElementById("console#textInput"));
     screen.processAddAndRemoveLayerElements();
 
     if (firstConsoleShow) {
       firstConsoleShow = false;
       Console console = screen.findNiftyControl("console", Console.class);
-      console.output("Nifty Console Demo\nVersion: 2.0");
+      if (console != null) {
+        console.output("Nifty Console Demo\nVersion: 2.0");
+      }
     }
 
     consoleVisible = true;
@@ -78,7 +92,11 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
   }
 
   private void closeConsole() {
-    nifty.closePopup(consolePopup.getId(), new EndNotify() {
+    String id = consolePopup != null ? consolePopup.getId() : null;
+    if (id == null) {
+      return;
+    }
+    nifty.closePopup(id, new EndNotify() {
       @Override
       public void perform() {
         consoleVisible = false;
@@ -88,24 +106,29 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
   }
 
   @NiftyEventSubscriber(id="console")
-  public void onConsoleCommand(final String id, final ConsoleExecuteCommandEvent command) {
+  public void onConsoleCommand(final String id, @Nonnull final ConsoleExecuteCommandEvent command) {
     Console console = screen.findNiftyControl("console", Console.class);
-    console.output("your input was: " + command.getCommandLine() + " [" + command.getArgumentCount() + " parameter(s)]");
+    if (console != null) {
+      console.output("your input was: " + command.getCommandLine() + " [" + command.getArgumentCount() + " parameter(s)]");
+    }
     if ("exit".equals(command.getCommand())) {
       back();
     }
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "console/console.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Console Demonstation";

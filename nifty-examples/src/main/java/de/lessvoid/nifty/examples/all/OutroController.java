@@ -10,6 +10,8 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 /**
  * Outro implementation for the nifty demo Outro screen.
  * @author void
@@ -19,33 +21,35 @@ public class OutroController implements ScreenController, KeyInputHandler {
   private Screen screen;
   private boolean escape;
 
+  @Override
   public void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
 
-    screen.findElementByName("1").hideWithoutEffect();
-    screen.findElementByName("2").hideWithoutEffect();
-    screen.findElementByName("3").hideWithoutEffect();
-    screen.findElementByName("4").hideWithoutEffect();
-    screen.findElementByName("5").hideWithoutEffect();
-    screen.findElementByName("6").hideWithoutEffect();
-    screen.findElementByName("7").hideWithoutEffect();
-    screen.findElementByName("8").hideWithoutEffect();
+    screen.findElementById("1").hideWithoutEffect();
+    screen.findElementById("2").hideWithoutEffect();
+    screen.findElementById("3").hideWithoutEffect();
+    screen.findElementById("4").hideWithoutEffect();
+    screen.findElementById("5").hideWithoutEffect();
+    screen.findElementById("6").hideWithoutEffect();
+    screen.findElementById("7").hideWithoutEffect();
+    screen.findElementById("8").hideWithoutEffect();
   }
 
+  @Override
   public final void onStartScreen() {
-    Element theEndLabel = screen.findElementByName("theEndLabel");
+    Element theEndLabel = screen.findElementById("theEndLabel");
     if (theEndLabel != null) {
       theEndLabel.startEffect(EffectEventId.onCustom);
       theEndLabel.show();
     }
 
-    Element myScrollStuff = screen.findElementByName("myScrollStuff");
+    Element myScrollStuff = screen.findElementById("myScrollStuff");
     if (myScrollStuff != null) {
       CustomControlCreator endScroller = new CustomControlCreator("endscroller-page-1");
       endScroller.create(nifty, screen, myScrollStuff);
       myScrollStuff.startEffect(EffectEventId.onCustom);
-      screen.findElementByName("1").show();
+      screen.findElementById("1").show();
     }
   }
 
@@ -53,34 +57,36 @@ public class OutroController implements ScreenController, KeyInputHandler {
     if (escape) {
       return;
     }
-    Element theEndLabel = screen.findElementByName("theEndLabel");
+    Element theEndLabel = screen.findElementById("theEndLabel");
     if (theEndLabel != null) {
       theEndLabel.stopEffect(EffectEventId.onCustom);
     }
 
-    Element myScrollStuff = screen.findElementByName("myScrollStuff");
+    Element myScrollStuff = screen.findElementById("myScrollStuff");
     if (myScrollStuff != null) {
       nifty.setAlternateKeyForNextLoadXml("fade");
       nifty.gotoScreen("menu");
     }
   }
 
+  @Override
   public void onEndScreen() {
   }
 
   public void shizzleHide(final String id) {
     if (escape) return;
-    screen.findElementByName(id).hide();
+    screen.findElementById(id).hide();
   }
 
-  public void shizzleShow(final String id) {
+  public void shizzleShow(@Nonnull final String id) {
     if (escape) return;
     if (!id.equals("end")) {
-      screen.findElementByName(id).show();
+      screen.findElementById(id).show();
     }
   }
 
-  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean keyEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.Escape) {
       escape = true;
       nifty.setAlternateKey("exit");

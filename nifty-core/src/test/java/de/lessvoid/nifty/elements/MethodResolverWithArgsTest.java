@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.elements;
 
-import junit.framework.TestCase;
 import de.lessvoid.xml.tools.MethodResolver;
+import junit.framework.TestCase;
 
 public class MethodResolverWithArgsTest extends TestCase {
 
@@ -18,11 +18,13 @@ public class MethodResolverWithArgsTest extends TestCase {
   }
 
   public void testMethodDoesExistSingleParameter() {
-    assertNotNull(MethodResolver.findMethodWithArgs(MethodResolverWithArgsTest.class, "methodWithSingleParameter()", Object.class));
+    assertNotNull(MethodResolver.findMethodWithArgs(MethodResolverWithArgsTest.class, "methodWithSingleParameter()",
+        Object.class));
   }
 
   public void testMethodDoesExistTwoParameters() {
-    assertNotNull(MethodResolver.findMethodWithArgs(MethodResolverWithArgsTest.class, "methodWithTwoParameters()", Object.class, String.class));
+    assertNotNull(MethodResolver.findMethodWithArgs(MethodResolverWithArgsTest.class, "methodWithTwoParameters()",
+        Object.class, String.class));
   }
 
   public void methodWithoutParameters() {

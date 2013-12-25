@@ -1,22 +1,24 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch.core;
 
 
-import java.nio.IntBuffer;
+import com.jogamp.common.nio.Buffers;
 
+import javax.annotation.Nonnull;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLContext;
-
-import com.jogamp.common.nio.Buffers;
+import java.nio.IntBuffer;
 
 /**
  * The CoreElementVBO class represents a VBO bound to GL_ELEMENT_BUFFER.
+ *
  * @author void
  */
 public class CoreElementVBO {
-  private int[] id = new int[1];
-  private int usage;
-  private IntBuffer indexBuffer;
+  @Nonnull
+  private final int[] id = new int[1];
+  private final int usage;
+  private final IntBuffer indexBuffer;
 
   /**
    * This works exactly as createStaticVBO() but will use GL_STREAM_DRAW instead.
@@ -24,7 +26,8 @@ public class CoreElementVBO {
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreElementVBO createStream(final int[] data) {
+  @Nonnull
+  public static CoreElementVBO createStream(@Nonnull final int[] data) {
     return new CoreElementVBO(GL3.GL_STREAM_DRAW, data);
   }
 
@@ -61,7 +64,7 @@ public class CoreElementVBO {
    */
   public void send() {
     final GL gl = GLContext.getCurrentGL();
-    gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexBuffer.limit()*4, indexBuffer, usage);
+    gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexBuffer.limit() * 4, indexBuffer, usage);
     CoreCheckGL.checkGLError("glBufferData(GL_ELEMENT_ARRAY_BUFFER)");
   }
 
@@ -73,7 +76,7 @@ public class CoreElementVBO {
     gl.glDeleteBuffers(1, id, 0);
   }
 
-  private CoreElementVBO(final int usageType, final int[] data) {
+  private CoreElementVBO(final int usageType, @Nonnull final int[] data) {
     final GL gl = GLContext.getCurrentGL();
     usage = usageType;
 

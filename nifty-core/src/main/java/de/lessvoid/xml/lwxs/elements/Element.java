@@ -7,34 +7,27 @@ import de.lessvoid.xml.xpp3.SubstitutionGroup;
 import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
+import javax.annotation.Nonnull;
+
 public class Element {
+  @Nonnull
   private final String tagName;
+  @Nonnull
   private final String tagType;
+  @Nonnull
   private final OccursEnum occurs;
 
   public Element(
-      final String elementNameParam,
-      final String elementTypeParam,
-      final OccursEnum elementOccursParam) throws Exception {
-    if (elementNameParam == null) {
-      throw new Exception("elementName can't be null");
-    }
-    if (elementTypeParam == null) {
-      throw new Exception("elementType can't be null");
-    }
-    if (elementOccursParam == null) {
-      throw new Exception("elementOccursParam can't be null");
-    }
+      @Nonnull final String elementNameParam,
+      @Nonnull final String elementTypeParam,
+      @Nonnull final OccursEnum elementOccursParam) throws Exception {
     tagName = elementNameParam;
     tagType = elementTypeParam;
     occurs = elementOccursParam;
   }
 
-  public void addToProcessor(final Schema schema, final XmlProcessorType processor) throws Exception {
+  public void addToProcessor(@Nonnull final Schema schema, @Nonnull final XmlProcessorType processor) throws Exception {
     Type type = schema.getType(tagType);
-    if (type == null) {
-      throw new Exception("type [" + tagType + "] not found");
-    }
     type.addChildren(schema, processor, tagName, tagType, occurs);
 
     Type typeParent = type.getTypeParent(schema);
@@ -44,30 +37,28 @@ public class Element {
   }
 
   public void addToSubstGroup(
-      final Schema schema,
-      final SubstitutionGroup substitutionGroup,
-      final XmlType xmlType) throws Exception {
+      @Nonnull final Schema schema,
+      @Nonnull final SubstitutionGroup substitutionGroup,
+      @Nonnull final XmlType xmlType) throws Exception {
     Type type = schema.getType(tagType);
-    if (type == null) {
-      throw new Exception("type [" + tagType + "] not found");
-    }
     Type typeParent = type.getTypeParent(schema);
     if (typeParent != null) {
       XmlProcessorElement xmlProcessorElement = new XmlProcessorElement(
-          typeParent.createXmlProcessorFromType(schema, type), tagName, tagType, occurs);
+          typeParent.createXmlProcessorFromType(schema, type), tagName, occurs);
       substitutionGroup.add(getTagName(), new Helper(xmlType, xmlProcessorElement));
     } else {
       XmlProcessorElement xmlProcessorElement = new XmlProcessorElement(
-          type.createXmlProcessor(schema), tagName, tagType, occurs);
+          type.createXmlProcessor(schema), tagName, occurs);
       substitutionGroup.add(getTagName(), new Helper(xmlType, xmlProcessorElement));
     }
   }
 
+  @Nonnull
   public String getTagName() {
     return tagName;
   }
 
-  private class Helper implements XmlProcessor {
+  private static class Helper implements XmlProcessor {
     private final XmlType xmlTypeParent;
     private final XmlProcessorElement xmlProcessorElement;
 
@@ -76,7 +67,8 @@ public class Element {
       xmlProcessorElement = xmlProcessorElementParam;
     }
 
-    public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
+    @Override
+    public void process(@Nonnull final XmlParser xmlParser, @Nonnull final Attributes attributes) throws Exception {
       xmlProcessorElement.processSubstGroup(xmlParser, xmlTypeParent, attributes);
     }
   }

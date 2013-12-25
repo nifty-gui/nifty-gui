@@ -1,20 +1,13 @@
 package de.lessvoid.nifty.examples.tutorial.screen;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Draggable;
-import de.lessvoid.nifty.controls.DraggableDragCanceledEvent;
-import de.lessvoid.nifty.controls.DraggableDragStartedEvent;
-import de.lessvoid.nifty.controls.Droppable;
-import de.lessvoid.nifty.controls.DroppableDroppedEvent;
+import de.lessvoid.nifty.builder.ElementBuilder;
+import de.lessvoid.nifty.builder.HoverEffectBuilder;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
-import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
-import de.lessvoid.nifty.controls.label.builder.CreateLabelControl;
+import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -25,20 +18,30 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainPage implements ScreenController, KeyInputHandler {
   private Nifty nifty;
   private Screen screen;
   private boolean mute = false;
 
-  private ArrayList <String> pages = new ArrayList <String> ();
-  private ArrayList <String> chapterCaption = new ArrayList <String> ();
-  private Map <String, Integer> chapterPageMap = new Hashtable <String, Integer> ();
+  @Nonnull
+  private final ArrayList <String> pages = new ArrayList <String> ();
+  @Nonnull
+  private final ArrayList <String> chapterCaption = new ArrayList <String> ();
+  @Nonnull
+  private final Map <String, Integer> chapterPageMap = new HashMap <String, Integer> ();
   private int pageIndex = 0;
   private int lastPageIndex = 0;
   private boolean lastPageWasActive = false;
   private Element chapterSelectPopup;
   
-  public void bind(final Nifty nifty, final Screen screen) {
+  @Override
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
 
@@ -109,24 +112,26 @@ public class MainPage implements ScreenController, KeyInputHandler {
     addChapter("The End", "pageTheEndTeaser");
     addChapter("Credits", "pageCredits");
 
-    ControlEffectOnHoverAttributes textColorEffect = new ControlEffectOnHoverAttributes();
-    textColorEffect.setName("textColor");
-    textColorEffect.setAttribute("color", "#a22f");
+    HoverEffectBuilder hoverEffect = new HoverEffectBuilder("textColor");
+    hoverEffect.effectValue("color", "#a22f");
 
-    chapterSelectPopup = nifty.createPopup("chapterSelectPopup");
+    chapterSelectPopup = nifty.createPopup(screen, "chapterSelectPopup");
     Element chapterSelectElement = chapterSelectPopup.findElementById("#chapterSelect");
+    if (chapterSelectElement == null) {
+      throw new IllegalStateException("Binding of page failed! Popup not properly created.");
+    }
     int idx = 0;
     for (String label : chapterCaption) {
-      CreateLabelControl createLabel = new CreateLabelControl(label);
-      createLabel.setAlign("left");
-      createLabel.setTextVAlign("center");
-      createLabel.setTextHAlign("left");
-      createLabel.setColor("#ccce");
-      createLabel.setStyle("menuFont");
-      createLabel.setVisibleToMouse("true");
-      createLabel.addEffectsOnHover(textColorEffect);
-      createLabel.setInteractOnClick("chapterSelect(" + idx + ")");
-      createLabel.create(nifty, screen, chapterSelectElement);
+      LabelBuilder createLabel = new LabelBuilder(label);
+      createLabel.align(ElementBuilder.Align.Left);
+      createLabel.textVAlign(ElementBuilder.VAlign.Center);
+      createLabel.textHAlign(ElementBuilder.Align.Left);
+      createLabel.color("#ccce");
+      createLabel.style("menuFont");
+      createLabel.visibleToMouse(true);
+      createLabel.onHoverEffect(hoverEffect);
+      createLabel.interactOnClick("chapterSelect(" + idx + ")");
+      createLabel.build(nifty, screen, chapterSelectElement);
       idx++;
     }
 
@@ -134,7 +139,6 @@ public class MainPage implements ScreenController, KeyInputHandler {
     lastPageIndex = -1;
     updatePage();
     updateBackButtonVisibility();
-    nifty.addControls();
   }
 
   private void addChapter(final String chapter, final String page) {
@@ -142,9 +146,11 @@ public class MainPage implements ScreenController, KeyInputHandler {
     chapterPageMap.put(String.valueOf(chapterCaption.size() - 1), pages.indexOf(page));
   }
   
+  @Override
   public void onStartScreen() {
   }
   
+  @Override
   public void onEndScreen() {
   }
 
@@ -176,7 +182,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
   }
 
   private void updateBackButtonVisibility() {
-    Element backButtonElement = screen.findElementByName("backButton");
+    Element backButtonElement = screen.findElementById("backButton");
     if (pageIndex == 0) {
       if (!lastPageWasActive) {
         backButtonElement.setVisible(false);
@@ -185,13 +191,13 @@ public class MainPage implements ScreenController, KeyInputHandler {
       showBackButton();
     }
 
-    Element currentPageElement = screen.findElementByName("curPage");
+    Element currentPageElement = screen.findElementById("curPage");
     currentPageElement.startEffect(EffectEventId.onCustom);
     currentPageElement.getRenderer(TextRenderer.class).setText(String.valueOf(pageIndex + 1) + " / " + pages.size());
   }
 
   private void showBackButton() {
-    Element backButtonElement = screen.findElementByName("backButton");
+    Element backButtonElement = screen.findElementById("backButton");
     if (!backButtonElement.isVisible()) {
       backButtonElement.setVisible(true);
     }
@@ -201,22 +207,23 @@ public class MainPage implements ScreenController, KeyInputHandler {
     System.out.println("toggleMute");
     mute = !mute;
     if (mute) {
-      screen.findElementByName("muteButton").setStyle("muteButtonSoundOff");
-      screen.findElementByName("muteButton").startEffect(EffectEventId.onCustom);
+      screen.findElementById("muteButton").setStyle("muteButtonSoundOff");
+      screen.findElementById("muteButton").startEffect(EffectEventId.onCustom);
     } else {
-      screen.findElementByName("muteButton").setStyle("muteButtonSoundOn");
-      screen.findElementByName("muteButton").startEffect(EffectEventId.onCustom);
+      screen.findElementById("muteButton").setStyle("muteButtonSoundOn");
+      screen.findElementById("muteButton").startEffect(EffectEventId.onCustom);
     }
   }
 
   private void updatePage() {
     String pageName = pages.get(pageIndex);
     CreatePageControl createControl = new CreatePageControl(pageName, "page_" + pageIndex);
-    createControl.create(nifty, screen, screen.findElementByName("pp"));
+    createControl.create(nifty, screen, screen.findElementById("pp"));
 
-    Element element = screen.findElementByName("page_" + lastPageIndex);
+    Element element = screen.findElementById("page_" + lastPageIndex);
     if (element != null) {
       nifty.removeElement(screen, element, new EndNotify() {
+        @Override
         public void perform() {
         }
       });
@@ -225,30 +232,32 @@ public class MainPage implements ScreenController, KeyInputHandler {
   }
 
   public class CreatePageControl extends ControlAttributes {
-    public CreatePageControl(final String name, final String id) {
-      setAutoId(id);
+    public CreatePageControl(@Nonnull final String name, @Nonnull final String id) {
+      setId(id);
       setName(name);
     }
 
     public void create(
-        final Nifty nifty,
-        final Screen screen,
-        final Element parent) {
+        @Nonnull final Nifty nifty,
+        @Nonnull final Screen screen,
+        @Nonnull final Element parent) {
       nifty.addControl(screen, parent, getStandardControl());
     }
 
+    @Nullable
     @Override
     public ElementType createType() {
       return null;
     }
   }
 
-  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean keyEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (NiftyStandardInputEvent.MoveCursorRight.equals(inputEvent)) {
-      screen.findElementByName("nextButton").onClick();
+      screen.findElementById("nextButton").onClick();
       return true;
     } else if (NiftyStandardInputEvent.MoveCursorLeft.equals(inputEvent)) {
-      screen.findElementByName("backButton").onClick();
+      screen.findElementById("backButton").onClick();
       return true;
     }
     return false;
@@ -266,7 +275,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
     });
   }
 
-  public void openLink(final String url) {
+  public void openLink(@Nonnull final String url) {
     if (!java.awt.Desktop.isDesktopSupported()) {
       System.err.println("Desktop is not supported (Can't open link)");
       return;
@@ -287,21 +296,22 @@ public class MainPage implements ScreenController, KeyInputHandler {
   }
 
   @NiftyEventSubscriber(id="draggable")
-  public void onDragStart(final String id, final DraggableDragStartedEvent event) {
+  public void onDragStart(final String id, @Nonnull final DraggableDragStartedEvent event) {
     changeInfoText("dragStart() for source: " + getDroppableId(event.getSource()) + " with draggable: " + getDraggableId(event.getDraggable()));
   }
 
   @NiftyEventSubscriber(id="draggable")
-  public void onDragCancel(final String id, final DraggableDragCanceledEvent event) {
+  public void onDragCancel(final String id, @Nonnull final DraggableDragCanceledEvent event) {
     changeInfoText("dragCancel() for source: " + getDroppableId(event.getSource()) + " with draggable: " + getDraggableId(event.getDraggable()));
   }
 
   @NiftyEventSubscriber(pattern="droppable.") // this is a regexp matching both droppable1 and droppable2
-  public void onDropped(final String id, final DroppableDroppedEvent event) {
+  public void onDropped(final String id, @Nonnull final DroppableDroppedEvent event) {
     changeInfoText("drop() for source: " + getDroppableId(event.getSource()) + " with draggable: " + getDraggableId(event.getDraggable()) + " on target: " + getDroppableId(event.getTarget()));
   }
 
-  private String getDroppableId(final Droppable source) {
+  @Nullable
+  private String getDroppableId(@Nullable final Droppable source) {
     if (source == null) {
       return "null";
     }
@@ -311,7 +321,8 @@ public class MainPage implements ScreenController, KeyInputHandler {
     return source.getElement().getId();
   }
 
-  private String getDraggableId(final Draggable draggable) {
+  @Nullable
+  private String getDraggableId(@Nullable final Draggable draggable) {
     if (draggable == null) {
       return "null";
     }
@@ -322,7 +333,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
   }
 
   private void changeInfoText(final String text) {
-    Element infoText = screen.findElementByName("DragAndDropInfoText");
+    Element infoText = screen.findElementById("DragAndDropInfoText");
     if (infoText != null) {
       infoText.getRenderer(TextRenderer.class).setText(text);
     }

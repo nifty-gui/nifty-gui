@@ -1,19 +1,13 @@
 package de.lessvoid.xml.xpp3;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Set;
-
-import org.xmlpull.v1.XmlPullParser;
-
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.xml.tools.SpecialValuesReplace;
+import org.xmlpull.v1.XmlPullParser;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * XPP Attributes in a nicer form.
@@ -22,15 +16,20 @@ import de.lessvoid.xml.tools.SpecialValuesReplace;
 // TODO: This class should be modified to implement the Map<String, String> interface (renaming all concerned method),
 // and should not expose its attributes member anymore.
 public class Attributes {
-  private Map < String, String > attributes = new HashMap < String, String >();
-  private Map < String, Set < String >> taggedAttributes = new HashMap < String, Set < String >>();
+  @Nonnull
+  private final Map<String, String> attributes;
+  @Nonnull
+  private final Map<String, Set<String>> taggedAttributes;
 
   public Attributes() {
+    attributes = new HashMap<String, String>();
+    taggedAttributes = new HashMap<String, Set<String>>();
   }
 
-  public Attributes(final String ... values) {
-    for (int i=0; i<values.length/2; i++) {
-      set(values[i*2+0], values[i*2+1]);
+  public Attributes(@Nonnull final String ... values) {
+    this();
+    for (int i = 0; i < values.length / 2; i++) {
+      attributes.put(values[i * 2], values[i * 2 + 1]);
     }
   }
 
@@ -38,48 +37,59 @@ public class Attributes {
    * Get Attributes from XmlParser.
    * @param xpp xpp
    */
-  public Attributes(final XmlPullParser xpp) {
-    initAttributes(xppToMap(xpp));
+  public Attributes(@Nonnull final XmlPullParser xpp) {
+    this();
+    final int count = xpp.getAttributeCount();
+    for (int i = 0; i < count; i++) {
+      String key = xpp.getAttributeName(i);
+      String value = xpp.getAttributeValue(i);
+      attributes.put(key, value);
+    }
   }
 
   /**
    * copy constructor.
    * @param source source
    */
-  public Attributes(final Attributes source) {
-    attributes = new HashMap < String, String >();
+  public Attributes(@Nonnull final Attributes source) {
+    this();
     attributes.putAll(source.attributes);
-
-    taggedAttributes = new HashMap < String, Set < String >>();
     taggedAttributes.putAll(source.taggedAttributes);
   }
 
-  public void translateSpecialValues(final Map<String, ResourceBundle> resourceBundle, final ScreenController screenController, final Properties globalProperties) {
+  public void translateSpecialValues(
+      @Nonnull final Map<String, ResourceBundle> resourceBundle,
+      @Nullable final ScreenController screenController,
+      @Nullable final Properties globalProperties) {
     for (Map.Entry<String, String> value : attributes.entrySet()) {
-      attributes.put(value.getKey(), SpecialValuesReplace.replace(value.getValue(), resourceBundle, screenController, globalProperties));
+      attributes.put(value.getKey(),
+          SpecialValuesReplace.replace(value.getValue(), resourceBundle, screenController, globalProperties));
     }
   }
 
   /**
-   * Is the given attribute available.
-   * @param name name
-   * @return true if available false otherwise
+   * Check if a specific attribute is set.
+   *
+   * @param name the name of the attribute
+   * @return {@code true} in case a attribute with the supplied name exists
    */
-  public boolean isSet(final String name) {
-    return attributes.get(name) != null;
+  public boolean isSet(@Nonnull final String name) {
+    return get(name) != null;
   }
 
   /**
    * Return the attribute with the given name.
-   * @param name name of attibute
+   * @param name name of attribute
    * @return value
    */
-  public String get(final String name) {
+  @Nullable
+  public String get(@Nonnull final String name) {
     return attributes.get(name);
   }
 
-  public String getWithDefault(final String name, final String defaultValue) {
-    String value = attributes.get(name);
+  @Nonnull
+  public String getWithDefault(@Nonnull final String name, @Nonnull final String defaultValue) {
+    String value = get(name);
     if (value == null) {
       value = defaultValue;
     }
@@ -88,8 +98,10 @@ public class Attributes {
 
   /**
    * Create Properties instance from attributes.
+   *
    * @return a filled Properties instance
    */
+  @Nonnull
   public Properties createProperties() {
     Properties props = new Properties();
     props.putAll(attributes);
@@ -97,12 +109,14 @@ public class Attributes {
   }
 
   /**
-   * Get as Boolean helper.
+   * Fetch a value of the attributes and convert it to a boolean value. This method will return the default value in
+   * case its not absolutely clear what boolean value is stored with the supplied attribute name.
+   *
    * @param name name of attribute
    * @param defaultValue default value
-   * @return boolen value
+   * @return the boolean value stored or the default value
    */
-  public boolean getAsBoolean(final String name, final boolean defaultValue) {
+  public boolean getAsBoolean(@Nonnull final String name, final boolean defaultValue) {
     String value = get(name);
     if (value == null) {
       return defaultValue;
@@ -115,31 +129,80 @@ public class Attributes {
     return defaultValue;
   }
 
-  public Integer getAsInteger(final String name) {
+  /**
+   * Fetch a value from the attributes and convert it to a integer.
+   *
+   * @param name the name of the attribute
+   * @return the number stored with the supplied name
+   * @throws IllegalArgumentException in case the name argument can't be resolved to a value
+   * @throws NumberFormatException in case the value of the requested attribute does not contain a integer number
+   */
+  public int getAsInteger(@Nonnull final String name) {
     String value = get(name);
     if (value == null) {
-      return null;
+      throw new IllegalArgumentException("Requested attribute \"" + name + "\" does not match a value.");
     }
-    return Integer.valueOf(value);
+    return Integer.parseInt(value);
   }
 
-  public Integer getAsInteger(final String name, final int defaultValue) {
+  /**
+   * Fetch a value from the attributes and convert it to a integer. The default value is returned in case the
+   * attribute name can't be mapped to a value or the value can't be converted to a integer.
+   *
+   * @param name the attribute name
+   * @param defaultValue the value returned in case the attribute can't be converted to a integer value
+   * @return the integer representation of the attribute value or the default value
+   */
+  public int getAsInteger(@Nonnull final String name, final int defaultValue) {
     String value = get(name);
     if (value == null) {
       return defaultValue;
     }
-    return Integer.valueOf(value);
+    try {
+      return Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+      return defaultValue;
+    }
   }
 
-  public Float getAsFloat(final String name) {
+  /**
+   * Fetch a value from the attributes and convert it to a float.
+   *
+   * @param name the name of the attribute
+   * @return the number stored with the supplied name
+   * @throws IllegalArgumentException in case the name argument can't be resolved to a value
+   * @throws NumberFormatException in case the value of the requested attribute does not contain a floating point value
+   */
+  public float getAsFloat(@Nonnull final String name) {
     String value = get(name);
     if (value == null) {
-      return null;
+      throw new IllegalArgumentException("Requested attribute \"" + name + "\" does not match a value.");
     }
-    return Float.valueOf(value);
+    return Float.parseFloat(value);
   }
 
-  public Color getAsColor(final String name) {
+  /**
+   * Fetch a value from the attributes and convert it to a float. The default value is returned in case the
+   * attribute name can't be mapped to a value or the value can't be converted to a float.
+   *
+   * @param name the attribute name
+   * @param defaultValue the value returned in case the attribute can't be converted to a float value
+   * @return the float representation of the attribute value or the default value
+   */
+  public float getAsFloat(@Nonnull final String name, final float defaultValue) {
+    String value = get(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    try {
+      return Float.parseFloat(value);
+    } catch (NumberFormatException e) {
+      return defaultValue;
+    }
+  }
+
+  @Nullable
+  public Color getAsColor(@Nonnull final String name) {
     String value = get(name);
     if (value == null) {
       return null;
@@ -149,26 +212,34 @@ public class Attributes {
 
   /**
    * Set an attribute.
+   *
    * @param name name of the attribute to set
    * @param value value to set attribute to
    */
-  public void set(final String name, final String value) {
+  public void set(@Nonnull final String name, @Nonnull final String value) {
     setAttribute(name, value);
   }
 
-  public void merge(final Attributes src) {
-    Map < String, String > srcAttributes = src.attributes;
+  public void overwrite(@Nonnull final Attributes src) {
+    attributes.clear();
+    taggedAttributes.clear();
+    attributes.putAll(src.attributes);
+    taggedAttributes.putAll(src.taggedAttributes);
+  }
 
-    Set < String > srcKeys = srcAttributes.keySet();
-    for (String srcKey : srcKeys) {
+  public void merge(@Nonnull final Attributes src) {
+    Map<String, String> srcAttributes = src.attributes;
+
+    for (Map.Entry<String, String> srcAttribute : srcAttributes.entrySet()) {
+      String srcKey = srcAttribute.getKey();
       if (!attributes.containsKey(srcKey)) {
-        attributes.put(srcKey, srcAttributes.get(srcKey));
+        attributes.put(srcKey, srcAttribute.getValue());
 
-        for (Map.Entry < String, Set < String >> tag : src.taggedAttributes.entrySet()) {
+        for (Map.Entry<String, Set<String>> tag : src.taggedAttributes.entrySet()) {
           if (tag.getValue().contains(srcKey)) {
-            Set < String > attribForTag = taggedAttributes.get(tag.getKey());
+            Set<String> attribForTag = taggedAttributes.get(tag.getKey());
             if (attribForTag == null) {
-              attribForTag = new HashSet < String >();
+              attribForTag = new HashSet<String>();
               taggedAttributes.put(tag.getKey(), attribForTag);
             }
             attribForTag.add(srcKey);
@@ -178,36 +249,32 @@ public class Attributes {
     }
   }
 
-  public void mergeAndTag(final Attributes src, final String tag) {
-    Map < String, String > srcAttributes = src.attributes;
-
-    Set < String > srcKeys = srcAttributes.keySet();
-    for (String srcKey : srcKeys) {
-      String value = srcAttributes.get(srcKey);
+  public void mergeAndTag(@Nonnull final Attributes src, @Nonnull final String tag) {
+    for (Map.Entry<String, String> entry : src.attributes.entrySet()) {
+      String srcKey = entry.getKey();
 
       // you can only overwrite keys when they don't exist yet
       if (!attributes.containsKey(srcKey)) {
-        setAttribute(srcKey, value);
+        setAttribute(srcKey, entry.getValue());
         tagAttribute(srcKey, tag);
       }
     }
   }
 
-  private void tagAttribute(final String srcKey, final String tag) {
-    Set < String > attribForTag = taggedAttributes.get(tag);
+  private void tagAttribute(@Nonnull final String srcKey, @Nonnull final String tag) {
+    Set<String> attribForTag = taggedAttributes.get(tag);
     if (attribForTag == null) {
-      attribForTag = new HashSet < String >();
+      attribForTag = new HashSet<String>();
       taggedAttributes.put(tag, attribForTag);
     }
     attribForTag.add(srcKey);
   }
 
-  public void refreshFromAttributes(final Attributes src) {
-    Map < String, String > srcAttributes = src.attributes;
-
-    Set < String > srcKeys = srcAttributes.keySet();
-    for (String srcKey : srcKeys) {
-      String srcValue = srcAttributes.get(srcKey);
+  public void refreshFromAttributes(@Nonnull final Attributes src) {
+    Map<String, String> srcAttributes = src.attributes;
+    for (Map.Entry<String, String> srcAttribute : srcAttributes.entrySet()) {
+      String srcKey = srcAttribute.getKey();
+      String srcValue = srcAttribute.getValue();
       if (srcValue.equals("")) {
         // this key should be replaced
         attributes.remove(srcKey);
@@ -217,51 +284,33 @@ public class Attributes {
     }
   }
 
-  private Map < String, String > xppToMap(final XmlPullParser xpp) {
-    Map < String, String > result = new HashMap < String, String >();
-    for (int i = 0; i < xpp.getAttributeCount(); i++) {
-      String key = xpp.getAttributeName(i);
-      String value = xpp.getAttributeValue(i);
-      result.put(key, value);
-    }
-    return result;
-  }
-
-  private void initAttributes(final Map < String, String > source) {
-    attributes = new HashMap < String, String >();
-
-    Set < Map.Entry < String, String >> entries = source.entrySet();
-    for (Map.Entry < String, String > entry : entries) {
-      String key = entry.getKey();
-      String value = entry.getValue();
-      setAttribute(key, value);
-    }
-  }
-
   private void setAttribute(final String key, final String value) {
     attributes.put(key, value);
   }
 
+  @Override
+  @Nonnull
   public String toString() {
-    String result = "";
+    StringBuilder result = new StringBuilder();
     boolean first = true;
     for (String key : attributes.keySet()) {
       if (!first) {
-        result += ", ";
+        result.append(", ");
       }
       if (first) {
         first = false;
       }
-      result += key + " => " + attributes.get(key);
+      result.append(key).append(" => ").append(attributes.get(key));
 
       String tag = resolveTag(key);
       if (tag != null) {
-        result += " {" + tag + "}";
+        result.append(" {").append(tag).append("}");
       }
     }
-    return result;
+    return result.toString();
   }
 
+  @Nullable
   private String resolveTag(final String key) {
     for (Map.Entry < String, Set < String >> tag : taggedAttributes.entrySet()) {
       if (tag.getValue().contains(key)) {
@@ -271,9 +320,9 @@ public class Attributes {
     return null;
   }
 
-  public class Entry {
-    private String key;
-    private String value;
+  public static class Entry {
+    private final String key;
+    private final String value;
 
     private Entry(final String key, final String value) {
       this.key = key;
@@ -289,6 +338,7 @@ public class Attributes {
     }
   }
 
+  @Nonnull
   public List<Entry> extractParameters() {
     List<Entry> parameters = new ArrayList<Entry>();
 
@@ -303,10 +353,11 @@ public class Attributes {
     return parameters;
   }
 
-  private boolean isParameterDefinition(final String value) {
+  private boolean isParameterDefinition(@Nonnull final String value) {
     return !value.startsWith("${") && (value.startsWith("$"));
   }
 
+  @Nonnull
   public Map < String, String > getAttributes() {
     return attributes;
   }
@@ -315,6 +366,7 @@ public class Attributes {
     attributes.remove(key);
   }
 
+  @Nullable
   public String getWithTag(final String name, final String tag) {
     Set < String > attributesWithTag = taggedAttributes.get(tag);
     if (attributesWithTag == null) {
@@ -326,7 +378,8 @@ public class Attributes {
     return attributes.get(name);
   }
 
-  public void resolveParameters(final Attributes attributes) {
+  @SuppressWarnings("ConstantConditions")
+  public void resolveParameters(@Nonnull final Attributes attributes) {
     List<Entry> entrySet = getParameterSet();
     for (Entry entry : entrySet) {
       String key = entry.getKey();
@@ -343,6 +396,7 @@ public class Attributes {
     }
   }
 
+  @Nonnull
   List<Entry> getParameterSet() {
     return extractParameters();
   }

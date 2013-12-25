@@ -1,5 +1,8 @@
 package de.lessvoid.nifty.layout;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * The Box class represent a rectangular area on the screen.
  * It has a position (x,y) as well as height and weight attributes.
@@ -58,7 +61,7 @@ public class Box {
 	 * copy constructor.
 	 * @param src src box to copy from
 	 */
-	public Box(final Box src) {
+	public Box(@Nonnull final Box src) {
 		this.x = src.x;
 		this.y = src.y;
 		this.width = src.width;
@@ -141,7 +144,7 @@ public class Box {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

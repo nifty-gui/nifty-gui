@@ -1,44 +1,47 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch.core;
 
 
-import java.nio.FloatBuffer;
+import com.jogamp.common.nio.Buffers;
 
+import javax.annotation.Nonnull;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLContext;
-
-import com.jogamp.common.nio.Buffers;
+import java.nio.FloatBuffer;
 
 /**
  * The CoreArrayVBO class represents a VBO bound to GL_ARRAY_BUFFER.
+ *
  * @author void
  */
 public class CoreVBO {
   private final int id;
   private final int usage;
-  private FloatBuffer vertexBuffer;
+  private final FloatBuffer vertexBuffer;
 
   /**
    * Create a new VBO with static vertex data (GL_STATIC_DRAW). This will
    * create the buffer object but does not bind or sends the data to the GPU.
    * You'll need to call bind() to bind this VBO and you'll need to call sendData()
    * to transmit the buffer data to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createStatic(final float[] data) {
+  @Nonnull
+  public static CoreVBO createStatic(@Nonnull final float[] data) {
     return new CoreVBO(GL.GL_STATIC_DRAW, data);
   }
 
   /**
    * This provides the same functionality as createStaticVBO() but automatically
    * sends the data given to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createStaticAndSend(final float[] data) {
+  @Nonnull
+  public static CoreVBO createStaticAndSend(@Nonnull final float[] data) {
     CoreVBO result = new CoreVBO(GL.GL_STATIC_DRAW, data);
     result.send();
     return result;
@@ -47,11 +50,12 @@ public class CoreVBO {
   /**
    * This provides the same functionality as createStatic() but automatically
    * sends the data given to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createStaticAndSend(final FloatBuffer data) {
+  @Nonnull
+  public static CoreVBO createStaticAndSend(@Nonnull final FloatBuffer data) {
     CoreVBO result = new CoreVBO(GL.GL_STATIC_DRAW, data.array());
     result.send();
     return result;
@@ -63,7 +67,8 @@ public class CoreVBO {
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createDynamic(final float[] data) {
+  @Nonnull
+  public static CoreVBO createDynamic(@Nonnull final float[] data) {
     return new CoreVBO(GL.GL_DYNAMIC_DRAW, data);
   }
 
@@ -73,11 +78,12 @@ public class CoreVBO {
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createStream(final float[] data) {
+  @Nonnull
+  public static CoreVBO createStream(@Nonnull final float[] data) {
     return new CoreVBO(GL3.GL_STREAM_DRAW, data);
   }
 
-  private CoreVBO(final int usageType, final float[] data) {
+  private CoreVBO(final int usageType, @Nonnull final float[] data) {
     usage = usageType;
 
     vertexBuffer = Buffers.newDirectFloatBuffer(data.length);
@@ -122,7 +128,7 @@ public class CoreVBO {
    */
   public void send() {
     final GL gl = GLContext.getCurrentGL();
-    gl.getGL2ES2().glBufferData(GL.GL_ARRAY_BUFFER, vertexBuffer.limit()*4, vertexBuffer, usage);
+    gl.getGL2ES2().glBufferData(GL.GL_ARRAY_BUFFER, vertexBuffer.limit() * 4, vertexBuffer, usage);
     CoreCheckGL.checkGLError("glBufferData(GL_ARRAY_BUFFER)");
   }
 

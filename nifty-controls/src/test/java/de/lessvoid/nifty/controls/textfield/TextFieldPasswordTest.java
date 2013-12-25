@@ -1,9 +1,8 @@
 package de.lessvoid.nifty.controls.textfield;
 
-import junit.framework.TestCase;
-
 import de.lessvoid.nifty.Clipboard;
 import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
+import junit.framework.TestCase;
 
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;

@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.sound.paulssoundsystem;
 
 public class SupportedCodec {
-  private String extension;
-  private Class<?> codecClass;
+  private final String extension;
+  private final Class<?> codecClass;
 
   public SupportedCodec(final String extension, final Class<?> codecClass) {
     this.extension = extension;

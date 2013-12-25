@@ -2,10 +2,11 @@ package de.lessvoid.nifty.effects;
 
 import de.lessvoid.nifty.effects.EffectProcessorImpl.Notify;
 
-
+import javax.annotation.Nonnull;
 
 /**
- * possible effect event id's that you can attach effects too.
+ * This enum contains all the ID's of effect events known.
+ *
  * @author void
  */
 public enum EffectEventId {
@@ -31,6 +32,7 @@ public enum EffectEventId {
     this.neverStopRendering = neverStopRendering;
   }
 
+  @Nonnull
   EffectProcessor createEffectProcessor(final Notify notify) {
     return new EffectProcessorImpl(notify, neverStopRendering);
   }

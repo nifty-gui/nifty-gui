@@ -1,10 +1,10 @@
 package de.lessvoid.xml.xpp3;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class AttributesMergeAndTagTest {
   private static final String EXISTING_KEY = "testKey";

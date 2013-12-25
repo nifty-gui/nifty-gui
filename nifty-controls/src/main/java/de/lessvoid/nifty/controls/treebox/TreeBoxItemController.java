@@ -1,11 +1,11 @@
 package de.lessvoid.nifty.controls.treebox;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.TreeItem;
 import de.lessvoid.nifty.controls.listbox.ListBoxItemController;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.screen.Screen;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
 
 /**
  * This is the default controller for the items of the {@link de.lessvoid.nifty.controls.TreeBox}. It takes care for
@@ -15,23 +15,17 @@ import de.lessvoid.nifty.screen.Screen;
  * @param <T> the type of the object displayed in the tree
  */
 public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>> {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(TreeBoxItemController.class.getName());
   /**
    * The control that is parent to this tree item.
    */
   @SuppressWarnings("deprecation")
+  @Nullable
   private TreeBoxControl<T> parentControl;
 
-  @Override
-  public void bind(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element newElement,
-      final Parameters properties) {
-    super.bind(niftyParam, screenParam, newElement, properties);
-  }
-
-  @SuppressWarnings("deprecation")
-  void setParentControl(final TreeBoxControl<T> control) {
+  @SuppressWarnings({ "deprecation", "NullableProblems" })
+  void setParentControl(@Nonnull final TreeBoxControl<T> control) {
     parentControl = control;
   }
 
@@ -40,8 +34,12 @@ public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>>
    * to the parent control in order to update the tree.
    */
   public void expandButtonClicked() {
+    if (parentControl != null) {
+      log.warning("Can't handle click to expend button as long as the parent control is not applied.");
+      return;
+    }
     final TreeItem<T> item = getItem();
-    if (item.isLeaf()) {
+    if (item == null || item.isLeaf()) {
       return;
     }
     item.setExpanded(!item.isExpanded());

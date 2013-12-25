@@ -6,8 +6,11 @@ import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
-public interface AreaProvider extends Parameterizable {
-	Box getSourceArea(RenderImage renderImage);
+import javax.annotation.Nullable;
 
-	Size getNativeSize(NiftyImage image);
+public interface AreaProvider extends Parameterizable {
+  @Nullable
+  Box getSourceArea(RenderImage renderImage);
+
+  Size getNativeSize(NiftyImage image);
 }

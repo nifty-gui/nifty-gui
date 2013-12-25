@@ -1,17 +1,13 @@
-package de.lessvoid.nifty.controls;
+package de.lessvoid.nifty.controls.listbox;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
+import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.ListBox.SelectionMode;
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxTestTool;
-import de.lessvoid.nifty.controls.listbox.TestItem;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ListBoxSingleSelectionRequiresSelectionListViewTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
@@ -87,11 +83,11 @@ public class ListBoxSingleSelectionRequiresSelectionListViewTest {
     assertSelection(o2);
   }
 
-  private void assertSelection(final TestItem ... expected) {
+  private void assertSelection(final TestItem... expected) {
     List<TestItem> selection = listBox.getSelection();
     assertEquals(selection.size(), expected.length);
 
-    int i=0;
+    int i = 0;
     for (TestItem o : selection) {
       assertEquals(o, expected[i++]);
     }

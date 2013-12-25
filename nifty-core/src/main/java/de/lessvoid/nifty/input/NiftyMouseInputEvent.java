@@ -1,12 +1,14 @@
 package de.lessvoid.nifty.input;
 
 
+import javax.annotation.Nonnull;
+
 /**
  * NiftyMouseInputEvent.
- *
+ * <p/>
  * Please Note: This object is pool managed which means it requires a default constructor and an initialize method
  * that resets all (!) member variables. Not doing this will lead to bad things happening while instances are reused!
- * 
+ *
  * @author void
  */
 public class NiftyMouseInputEvent {
@@ -23,7 +25,13 @@ public class NiftyMouseInputEvent {
   private boolean button2InitialDown;
   private boolean button2Release;
 
-  public void initialize(final int mouseX, final int mouseY, final int mouseWheel, final boolean button0Down, final boolean button1Down, final boolean button2Down) {
+  public void initialize(
+      final int mouseX,
+      final int mouseY,
+      final int mouseWheel,
+      final boolean button0Down,
+      final boolean button1Down,
+      final boolean button2Down) {
     this.mouseX = mouseX;
     this.mouseY = mouseY;
     this.mouseWheel = mouseWheel;
@@ -110,19 +118,21 @@ public class NiftyMouseInputEvent {
     this.button2Release = button2Release;
   }
 
+  @Override
+  @Nonnull
   public String toString() {
     return
-      "mouseX=" + mouseX + ", " +
-      "mouseY=" + mouseY + ", " +
-      "mouseWheel=" + mouseWheel + ", " +
-      "b0Down=" + button0Down + ", " +
-      "b1Down=" + button1Down + ", " +
-      "b2Down=" + button2Down + ", " + 
-      "b0InitialDown=" + button0InitialDown + ", " +
-      "b1InitialDown=" + button1InitialDown + ", " +
-      "b2InitialDown=" + button2InitialDown + ", " +
-      "b0Release=" + button0Release + ", " +
-      "b1Release=" + button1Release + ", " +
-      "b2Release=" + button2Release; 
+        "mouseX=" + mouseX + ", " +
+            "mouseY=" + mouseY + ", " +
+            "mouseWheel=" + mouseWheel + ", " +
+            "b0Down=" + button0Down + ", " +
+            "b1Down=" + button1Down + ", " +
+            "b2Down=" + button2Down + ", " +
+            "b0InitialDown=" + button0InitialDown + ", " +
+            "b1InitialDown=" + button1InitialDown + ", " +
+            "b2InitialDown=" + button2InitialDown + ", " +
+            "b0Release=" + button0Release + ", " +
+            "b1Release=" + button1Release + ", " +
+            "b2Release=" + button2Release;
   }
 }

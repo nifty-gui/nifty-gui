@@ -1,19 +1,5 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
 import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
@@ -24,20 +10,35 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Lwjgl RenderDevice Implementation.
+ *
  * @author void
  */
 public class LwjglRenderDevice implements RenderDevice {
-  private static Logger log = Logger.getLogger(LwjglRenderDevice.class.getName());
-  private static IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+  private static final Logger log = Logger.getLogger(LwjglRenderDevice.class.getName());
+  private static final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
   private NiftyResourceLoader resourceLoader;
   private int viewportWidth = -1;
   private int viewportHeight = -1;
   private long time;
   private long frames;
-  private long lastFrames;
   private boolean displayFPS = false;
   private boolean logFPS = false;
   private RenderFont fpsFont;
@@ -45,6 +46,7 @@ public class LwjglRenderDevice implements RenderDevice {
   // we keep track of which GL states we've already set to make sure we don't set
   // the same state twice.
   private boolean currentTexturing = true;
+  @Nullable
   private BlendMode currentBlendMode = null;
   private boolean currentClipping = false;
   private int currentClippingX0 = 0;
@@ -52,6 +54,7 @@ public class LwjglRenderDevice implements RenderDevice {
   private int currentClippingX1 = 0;
   private int currentClippingY1 = 0;
 
+  @Nonnull
   private StringBuilder buffer = new StringBuilder();
   private int quadCount;
   private int glyphCount;
@@ -69,7 +72,6 @@ public class LwjglRenderDevice implements RenderDevice {
    * The development mode constructor allows to display the FPS on screen when
    * the given flag is set to true. Note that setting displayFPS to false will
    * still log the FPS on System.out every couple of frames.
-   * @param displayFPS
    */
   public LwjglRenderDevice(final boolean displayFPS) {
     this();
@@ -78,7 +80,7 @@ public class LwjglRenderDevice implements RenderDevice {
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     this.resourceLoader = resourceLoader;
 
     if (this.displayFPS) {
@@ -88,8 +90,10 @@ public class LwjglRenderDevice implements RenderDevice {
 
   /**
    * Get Width.
+   *
    * @return width of display mode
    */
+  @Override
   public int getWidth() {
     if (viewportWidth == -1) {
       getViewport();
@@ -99,8 +103,10 @@ public class LwjglRenderDevice implements RenderDevice {
 
   /**
    * Get Height.
+   *
    * @return height of display mode
    */
+  @Override
   public int getHeight() {
     if (viewportHeight == -1) {
       getViewport();
@@ -117,6 +123,7 @@ public class LwjglRenderDevice implements RenderDevice {
     }
   }
 
+  @Override
   public void beginFrame() {
     log.fine("beginFrame()");
 
@@ -138,13 +145,14 @@ public class LwjglRenderDevice implements RenderDevice {
     glyphCount = 0;
   }
 
+  @Override
   public void endFrame() {
     log.fine("endFrame");
     frames++;
     long diff = System.currentTimeMillis() - time;
     if (diff >= 1000) {
       time += diff;
-      lastFrames = frames;
+      long lastFrames = frames;
 
       buffer.setLength(0);
       buffer.append("FPS: ");
@@ -153,14 +161,14 @@ public class LwjglRenderDevice implements RenderDevice {
       buffer.append(String.format("%f", 1000.f / lastFrames));
       buffer.append(" ms)");
       buffer.append(", Total Tri: ");
-      buffer.append(quadCount*2);
+      buffer.append(quadCount * 2);
       buffer.append(" (Text: ");
-      buffer.append(glyphCount*2);
+      buffer.append(glyphCount * 2);
       buffer.append(")");
       buffer.append(", Total Vert: ");
-      buffer.append(quadCount*4);
+      buffer.append(quadCount * 4);
       buffer.append(" (Text: ");
-      buffer.append(glyphCount*4);
+      buffer.append(glyphCount * 4);
       buffer.append(")");
 
       if (logFPS) {
@@ -181,6 +189,7 @@ public class LwjglRenderDevice implements RenderDevice {
     checkGLError();
   }
 
+  @Override
   public void clear() {
     log.fine("clear()");
 
@@ -190,32 +199,40 @@ public class LwjglRenderDevice implements RenderDevice {
 
   /**
    * Create a new RenderImage.
-   * @param filename filename
+   *
+   * @param filename     filename
    * @param filterLinear linear filter the image
    * @return RenderImage
    */
-  public RenderImage createImage(final String filename, final boolean filterLinear) {
+  @Override
+  @Nonnull
+  public RenderImage createImage(@Nonnull final String filename, final boolean filterLinear) {
     return new LwjglRenderImage(filename, filterLinear, resourceLoader);
   }
 
   /**
    * Create a new RenderFont.
+   *
    * @param filename filename
    * @return RenderFont
    */
-  public RenderFont createFont(final String filename) {
-    return new LwjglRenderFont(filename, this, resourceLoader);
+  @Override
+  @Nonnull
+  public RenderFont createFont(@Nonnull final String filename) {
+    return new LwjglRenderFont(filename, resourceLoader);
   }
 
   /**
    * Render a quad.
-   * @param x x
-   * @param y y
-   * @param width width
+   *
+   * @param x      x
+   * @param y      y
+   * @param width  width
    * @param height height
-   * @param color color
+   * @param color  color
    */
-  public void renderQuad(final int x, final int y, final int width, final int height, final Color color) {
+  @Override
+  public void renderQuad(final int x, final int y, final int width, final int height, @Nonnull final Color color) {
     log.fine("renderQuad()");
 
     if (currentTexturing) {
@@ -225,15 +242,24 @@ public class LwjglRenderDevice implements RenderDevice {
 
     GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     GL11.glBegin(GL11.GL_QUADS);
-      GL11.glVertex2i(x,         y);
-      GL11.glVertex2i(x + width, y);
-      GL11.glVertex2i(x + width, y + height);
-      GL11.glVertex2i(x,         y + height);
+    GL11.glVertex2i(x, y);
+    GL11.glVertex2i(x + width, y);
+    GL11.glVertex2i(x + width, y + height);
+    GL11.glVertex2i(x, y + height);
     GL11.glEnd();
     quadCount++;
   }
 
-  public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
+  @Override
+  public void renderQuad(
+      final int x,
+      final int y,
+      final int width,
+      final int height,
+      @Nonnull final Color topLeft,
+      @Nonnull final Color topRight,
+      @Nonnull final Color bottomRight,
+      @Nonnull final Color bottomLeft) {
     log.fine("renderQuad2()");
 
     if (currentTexturing) {
@@ -241,28 +267,37 @@ public class LwjglRenderDevice implements RenderDevice {
       currentTexturing = false;
     }
     GL11.glBegin(GL11.GL_QUADS);
-      GL11.glColor4f(topLeft.getRed(), topLeft.getGreen(), topLeft.getBlue(), topLeft.getAlpha());
-      GL11.glVertex2i(x,         y);
-      GL11.glColor4f(topRight.getRed(), topRight.getGreen(), topRight.getBlue(), topRight.getAlpha());
-      GL11.glVertex2i(x + width, y);
-      GL11.glColor4f(bottomRight.getRed(), bottomRight.getGreen(), bottomRight.getBlue(), bottomRight.getAlpha());
-      GL11.glVertex2i(x + width, y + height);
-      GL11.glColor4f(bottomLeft.getRed(), bottomLeft.getGreen(), bottomLeft.getBlue(), bottomLeft.getAlpha());
-      GL11.glVertex2i(x,         y + height);
+    GL11.glColor4f(topLeft.getRed(), topLeft.getGreen(), topLeft.getBlue(), topLeft.getAlpha());
+    GL11.glVertex2i(x, y);
+    GL11.glColor4f(topRight.getRed(), topRight.getGreen(), topRight.getBlue(), topRight.getAlpha());
+    GL11.glVertex2i(x + width, y);
+    GL11.glColor4f(bottomRight.getRed(), bottomRight.getGreen(), bottomRight.getBlue(), bottomRight.getAlpha());
+    GL11.glVertex2i(x + width, y + height);
+    GL11.glColor4f(bottomLeft.getRed(), bottomLeft.getGreen(), bottomLeft.getBlue(), bottomLeft.getAlpha());
+    GL11.glVertex2i(x, y + height);
     GL11.glEnd();
     quadCount++;
   }
 
   /**
    * Render the image using the given Box to specify the render attributes.
-   * @param x x
-   * @param y y
-   * @param width width
+   *
+   * @param x      x
+   * @param y      y
+   * @param width  width
    * @param height height
-   * @param color color
-   * @param scale scale
+   * @param color  color
+   * @param scale  scale
    */
-  public void renderImage(final RenderImage image, final int x, final int y, final int width, final int height, final Color color, final float scale) {
+  @Override
+  public void renderImage(
+      @Nonnull final RenderImage image,
+      final int x,
+      final int y,
+      final int width,
+      final int height,
+      @Nonnull final Color color,
+      final float scale) {
     log.fine("renderImage()");
 
     if (width < 0) {
@@ -286,20 +321,24 @@ public class LwjglRenderDevice implements RenderDevice {
     LwjglRenderImage internalImage = (LwjglRenderImage) image;
     internalImage.bind();
 
-    float textureWidth = (float)internalImage.getTextureWidth();
-    float textureHeight = (float)internalImage.getTextureHeight();
-    float imageWidth = (float)internalImage.getWidth();
-    float imageHeight = (float)internalImage.getHeight();
+    float textureWidth = (float) internalImage.getTextureWidth();
+    float textureHeight = (float) internalImage.getTextureHeight();
+    float imageWidth = (float) internalImage.getWidth();
+    float imageHeight = (float) internalImage.getHeight();
 
     float u1 = imageWidth / textureWidth;
     float v1 = imageHeight / textureHeight;
 
     GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     GL11.glBegin(GL11.GL_QUADS);
-      GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex2i(x,         y);
-      GL11.glTexCoord2f(  u1, 0.0f); GL11.glVertex2i(x + width, y);
-      GL11.glTexCoord2f(  u1,   v1); GL11.glVertex2i(x + width, y + height);
-      GL11.glTexCoord2f(0.0f,   v1); GL11.glVertex2i(x,         y + height);
+    GL11.glTexCoord2f(0.0f, 0.0f);
+    GL11.glVertex2i(x, y);
+    GL11.glTexCoord2f(u1, 0.0f);
+    GL11.glVertex2i(x + width, y);
+    GL11.glTexCoord2f(u1, v1);
+    GL11.glVertex2i(x + width, y + height);
+    GL11.glTexCoord2f(0.0f, v1);
+    GL11.glVertex2i(x, y + height);
     GL11.glEnd();
     GL11.glPopMatrix();
     quadCount++;
@@ -307,18 +346,20 @@ public class LwjglRenderDevice implements RenderDevice {
 
   /**
    * Render sub image.
-   * @param x x
-   * @param y y
-   * @param w w
-   * @param h h
-   * @param srcX x
-   * @param srcY y
-   * @param srcW w
-   * @param srcH h
+   *
+   * @param x     x
+   * @param y     y
+   * @param w     w
+   * @param h     h
+   * @param srcX  x
+   * @param srcY  y
+   * @param srcW  w
+   * @param srcH  h
    * @param color color
    */
+  @Override
   public void renderImage(
-      final RenderImage image,
+      @Nonnull final RenderImage image,
       final int x,
       final int y,
       final int w,
@@ -327,7 +368,7 @@ public class LwjglRenderDevice implements RenderDevice {
       final int srcY,
       final int srcW,
       final int srcH,
-      final Color color,
+      @Nonnull final Color color,
       final float scale,
       final int centerX,
       final int centerY) {
@@ -354,8 +395,8 @@ public class LwjglRenderDevice implements RenderDevice {
     LwjglRenderImage internalImage = (LwjglRenderImage) image;
     internalImage.bind();
 
-    float textureWidth = (float)internalImage.getTextureWidth();
-    float textureHeight = (float)internalImage.getTextureHeight();
+    float textureWidth = (float) internalImage.getTextureWidth();
+    float textureHeight = (float) internalImage.getTextureHeight();
 
     float u0 = srcX / textureWidth;
     float v0 = srcY / textureHeight;
@@ -364,10 +405,14 @@ public class LwjglRenderDevice implements RenderDevice {
 
     GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     GL11.glBegin(GL11.GL_QUADS);
-      GL11.glTexCoord2f(u0, v0); GL11.glVertex2i(x,     y);
-      GL11.glTexCoord2f(u1, v0); GL11.glVertex2i(x + w, y);
-      GL11.glTexCoord2f(u1, v1); GL11.glVertex2i(x + w, y + h);
-      GL11.glTexCoord2f(u0, v1); GL11.glVertex2i(x,     y + h);
+    GL11.glTexCoord2f(u0, v0);
+    GL11.glVertex2i(x, y);
+    GL11.glTexCoord2f(u1, v0);
+    GL11.glVertex2i(x + w, y);
+    GL11.glTexCoord2f(u1, v1);
+    GL11.glVertex2i(x + w, y + h);
+    GL11.glTexCoord2f(u0, v1);
+    GL11.glVertex2i(x, y + h);
     GL11.glEnd();
 
     GL11.glPopMatrix();
@@ -376,13 +421,16 @@ public class LwjglRenderDevice implements RenderDevice {
 
   /**
    * render the text.
-   * @param text text
-   * @param x x
-   * @param y y
-   * @param color color
-   * @param fontSize size
    */
-  public void renderFont(final RenderFont font, final String text, final int x, final int y, final Color color, final float fontSizeX, final float fontSizeY) {
+  @Override
+  public void renderFont(
+      @Nonnull final RenderFont font,
+      @Nonnull final String text,
+      final int x,
+      final int y,
+      @Nonnull final Color color,
+      final float fontSizeX,
+      final float fontSizeY) {
     log.fine("renderFont()");
 
     if (!currentTexturing) {
@@ -390,18 +438,15 @@ public class LwjglRenderDevice implements RenderDevice {
       currentTexturing = true;
     }
     setBlendMode(BlendMode.BLEND);
-    int count = 0;
-    if (color == null) {
-      count = ((LwjglRenderFont)font).getFont().drawStringWithSize(x, y, text, fontSizeX, fontSizeY);
-    } else {
-      count = ((LwjglRenderFont)font).getFont().renderWithSizeAndColor(x, y, text, fontSizeX, fontSizeY, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-    }
+    int count = ((LwjglRenderFont) font).getFont().renderWithSizeAndColor(x, y, text, fontSizeX, fontSizeY,
+        color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+
     glyphCount += count;
     quadCount += count;
   }
 
   private void checkGLError() {
-    int error= GL11.glGetError();
+    int error = GL11.glGetError();
     if (error != GL11.GL_NO_ERROR) {
       String glerrmsg = GLU.gluErrorString(error);
       log.warning("Error: (" + error + ") " + glerrmsg);
@@ -415,15 +460,18 @@ public class LwjglRenderDevice implements RenderDevice {
 
   /**
    * Enable clipping to the given region.
+   *
    * @param x0 x0
    * @param y0 y0
    * @param x1 x1
    * @param y1 y1
    */
+  @Override
   public void enableClip(final int x0, final int y0, final int x1, final int y1) {
     log.fine("enableClip()");
 
-    if (currentClipping && currentClippingX0 == x0 && currentClippingY0 == y0 && currentClippingX1 == x1 && currentClippingY1 == y1) {
+    if (currentClipping && currentClippingX0 == x0 && currentClippingY0 == y0 && currentClippingX1 == x1 &&
+        currentClippingY1 == y1) {
       return;
     }
     currentClipping = true;
@@ -439,6 +487,7 @@ public class LwjglRenderDevice implements RenderDevice {
   /**
    * Disable Clip.
    */
+  @Override
   public void disableClip() {
     log.fine("disableClip()");
 
@@ -453,7 +502,8 @@ public class LwjglRenderDevice implements RenderDevice {
     currentClippingY1 = 0;
   }
 
-  public void setBlendMode(final BlendMode renderMode) {
+  @Override
+  public void setBlendMode(@Nonnull final BlendMode renderMode) {
     log.fine("setBlendMode()");
 
     if (renderMode.equals(currentBlendMode)) {
@@ -467,15 +517,18 @@ public class LwjglRenderDevice implements RenderDevice {
     }
   }
 
-  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) throws IOException {
+  @Override
+  @Nonnull
+  public MouseCursor createMouseCursor(
+      @Nonnull final String filename,
+      final int hotspotX,
+      final int hotspotY) throws IOException {
     return new LwjglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
   }
 
-  public void enableMouseCursor(final MouseCursor mouseCursor) {
-    Cursor nativeCursor = null;
-    if (mouseCursor != null) {
-      nativeCursor = ((LwjglMouseCursor) mouseCursor).getCursor(); 
-    }
+  @Override
+  public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
+    Cursor nativeCursor = ((LwjglMouseCursor) mouseCursor).getCursor();
     try {
       Mouse.setNativeCursor(nativeCursor);
     } catch (LWJGLException e) {
@@ -483,6 +536,7 @@ public class LwjglRenderDevice implements RenderDevice {
     }
   }
 
+  @Override
   public void disableMouseCursor() {
     try {
       Mouse.setNativeCursor(null);
@@ -491,7 +545,11 @@ public class LwjglRenderDevice implements RenderDevice {
     }
   }
 
-  private Cursor loadMouseCursor(final String name, final int hotspotX, final int hotspotY) throws IOException {
+  @Nullable
+  private Cursor loadMouseCursor(
+      @Nonnull final String name,
+      final int hotspotX,
+      final int hotspotY) throws IOException {
     ImageData imageLoader = createImageLoader(name);
     InputStream source = null;
     try {
@@ -510,7 +568,8 @@ public class LwjglRenderDevice implements RenderDevice {
     }
   }
 
-  private ImageData createImageLoader(final String name) {
+  @Nonnull
+  private ImageData createImageLoader(@Nonnull final String name) {
     if (name.endsWith(".tga")) {
       return new TGAImageData();
     }

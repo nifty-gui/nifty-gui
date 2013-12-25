@@ -2,11 +2,13 @@ package de.lessvoid.nifty;
 
 import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
 
+import javax.annotation.Nonnull;
+
 public class NiftyDefaults {
   private NiftyDefaults() {
   }
 
-  public static void initDefaultEffects(final Nifty nifty) {
+  public static void initDefaultEffects(@Nonnull final Nifty nifty) {
     nifty.registerEffect(new RegisterEffectType("alphaHide", "de.lessvoid.nifty.effects.impl.AlphaHide"));
     nifty.registerEffect(new RegisterEffectType("autoScroll", "de.lessvoid.nifty.effects.impl.AutoScroll"));
     nifty.registerEffect(new RegisterEffectType("border", "de.lessvoid.nifty.effects.impl.Border"));

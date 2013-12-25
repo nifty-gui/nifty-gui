@@ -7,6 +7,8 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+
 /**
  * MultiplayerPanelControl.
  * @author void
@@ -16,28 +18,32 @@ public class MultiplayerPanelControl implements Controller {
   private Screen screen;
   private Element element;
 
+  @Override
   public void bind(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element newElement,
-      final Parameters properties) {
+      @Nonnull final Nifty niftyParam,
+      @Nonnull final Screen screenParam,
+      @Nonnull final Element newElement,
+      @Nonnull final Parameters properties) {
     nifty = niftyParam;
     screen = screenParam;
     element = newElement;
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
   }
 
+  @Override
   public void onStartScreen() {
     setDifficulty("easy");
   }
 
+  @Override
   public void onFocus(final boolean getFocus) {
   }
 
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 

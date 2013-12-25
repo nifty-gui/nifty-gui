@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.Collection;
-
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
@@ -12,12 +10,18 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+
 /**
  * RenderDeviceProxy.
+ *
  * @author void
  */
 public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
-  private RenderStates renderStates = new RenderStates();
+  @Nonnull
+  private final RenderStates renderStates = new RenderStates();
 
   @Override
   public void beginFrame() {
@@ -31,18 +35,21 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   public void clear() {
   }
 
+  @Nullable
   @Override
-  public RenderFont createFont(final String name) {
+  public RenderFont createFont(@Nonnull final String name) {
     return null;
   }
 
+  @Nonnull
   @Override
-  public String getFontname(final RenderFont font) {
-    return null;
+  public String getFontname(@Nonnull final RenderFont font) {
+    throw new UnsupportedOperationException();
   }
 
+  @Nullable
   @Override
-  public NiftyImage createImage(final Screen screen, final String name, final boolean filterLinear) {
+  public NiftyImage createImage(@Nonnull final Screen screen, @Nonnull final String name, final boolean filterLinear) {
     return null;
   }
 
@@ -76,7 +83,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void setColor(final Color colorParam) {
+  public void setColor(@Nonnull final Color colorParam) {
     renderStates.addColor();
     renderStates.addAlpha();
   }
@@ -107,7 +114,12 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void renderImage(final NiftyImage image, final int x, final int y, final int width, final int height) {
+  public void renderImage(
+      @Nonnull final NiftyImage image,
+      final int x,
+      final int y,
+      final int width,
+      final int height) {
   }
 
   @Override
@@ -115,17 +127,25 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void renderQuad(final int x, final int y, final int width, final int height, final Color topLeft, final Color topRight, final Color bottomRight, final Color bottomLeft) {
+  public void renderQuad(
+      final int x,
+      final int y,
+      final int width,
+      final int height,
+      @Nonnull final Color topLeft,
+      @Nonnull final Color topRight,
+      @Nonnull final Color bottomRight,
+      @Nonnull final Color bottomLeft) {
   }
 
   @Override
   public void renderText(
-      final String text,
+      @Nonnull final String text,
       final int x,
       final int y,
       final int selectionStart,
       final int selectionEnd,
-      final Color c) {
+      @Nonnull final Color c) {
   }
 
   @Override
@@ -141,6 +161,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
     renderStates.addFont();
   }
 
+  @Nullable
   @Override
   public RenderFont getFont() {
     return null;
@@ -162,34 +183,37 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void setBlendMode(final BlendMode blendMode) {
+  public void setBlendMode(@Nonnull final BlendMode blendMode) {
     renderStates.addBlendMode();
   }
 
+  @Nonnull
   @Override
   public RenderDevice getRenderDevice() {
-    return null;
+    throw new UnsupportedOperationException();
   }
 
   @Override
-  public void disposeImage(final RenderImage image) {
+  public void disposeImage(@Nonnull final RenderImage image) {
   }
 
   @Override
   public void displayResolutionChanged() {
   }
 
-  
+
   public void reset() {
     renderStates.clear();
   }
 
+  @Nonnull
   public RenderStates getStates() {
     return renderStates;
   }
 
+  @Nonnull
   @Override
-  public RenderImage reload(final RenderImage image) {
+  public RenderImage reload(@Nonnull final RenderImage image) {
     return image;
   }
 
@@ -238,7 +262,11 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY, final float scaleX, final float scaleY) {
+  public void enableAutoScaling(
+      final int baseResolutionX,
+      final int baseResolutionY,
+      final float scaleX,
+      final float scaleY) {
   }
 
   @Override
@@ -246,22 +274,22 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void screenStarted(Screen screen) {
+  public void screenStarted(@Nonnull Screen screen) {
   }
 
   @Override
-  public void screenEnded(final Screen screen) {
+  public void screenEnded(@Nonnull final Screen screen) {
   }
 
   @Override
-  public void screensClear(final Collection<Screen> screens) {
+  public void screensClear(@Nonnull final Collection<Screen> screens) {
   }
 
   @Override
-  public void screenAdded(final Screen screen) {
+  public void screenAdded(@Nonnull final Screen screen) {
   }
 
   @Override
-  public void screenRemoved(final Screen screen) {
+  public void screenRemoved(@Nonnull final Screen screen) {
   }
 }

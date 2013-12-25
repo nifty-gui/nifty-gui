@@ -5,6 +5,7 @@ import java.util.Properties;
 
 /**
  * Interpolates a value linear from 0.0 to 1.0 with the given time parameters.
+ *
  * @author void
  */
 public class LinearTime implements Interpolator {

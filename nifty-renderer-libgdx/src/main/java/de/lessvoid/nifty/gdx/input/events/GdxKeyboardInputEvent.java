@@ -3,9 +3,10 @@ package de.lessvoid.nifty.gdx.input.events;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Pool;
-
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+
+import javax.annotation.Nonnull;
 
 /**
  * This is the keyboard input event that is buffered from the libGDX data before its send to the Nifty-GUI.
@@ -17,6 +18,7 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
    * The internal object pool for this {@link GdxKeyboardInputEvent} class.
    */
   private static final Pool<GdxKeyboardInputEvent> POOL = new Pool<GdxKeyboardInputEvent>() {
+    @Nonnull
     @Override
     protected GdxKeyboardInputEvent newObject() {
       return new GdxKeyboardInputEvent();
@@ -26,11 +28,11 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
   /**
    * Gets an instance of the keyboard input event.
    *
-   * @param key the key that is pressed (has to be in the libGDX key value space)
-   * @param character the character of the key that is pressed
-   * @param keyDown {@code true} in case the key was pressed
-   * @param keyTyped {@code true} in case the key was typed
-   * @param shiftDown {@code true} in case shift is down right now
+   * @param key         the key that is pressed (has to be in the libGDX key value space)
+   * @param character   the character of the key that is pressed
+   * @param keyDown     {@code true} in case the key was pressed
+   * @param keyTyped    {@code true} in case the key was typed
+   * @param shiftDown   {@code true} in case shift is down right now
    * @param controlDown {@code true} in case control is down right now
    * @return the new event instance
    */
@@ -75,11 +77,11 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
   /**
    * Set the data of this input event.
    *
-   * @param key the key that was pressed
-   * @param character the character of the key
-   * @param keyDown {@code true} in case the key was pressed down
-   * @param keyTyped {@code true} in case the key was typed
-   * @param shiftDown {@code true} in case the shift key is down
+   * @param key         the key that was pressed
+   * @param character   the character of the key
+   * @param keyDown     {@code true} in case the key was pressed down
+   * @param keyTyped    {@code true} in case the key was typed
+   * @param shiftDown   {@code true} in case the shift key is down
    * @param controlDown {@code true} in case the control key is down
    */
   private void setData(
@@ -89,7 +91,7 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
       final boolean keyTyped,
       final boolean shiftDown,
       final boolean controlDown) {
-      super.setData(getNiftyKeyCode(key), character, keyDown, shiftDown, controlDown);
+    super.setData(getNiftyKeyCode(key), character, keyDown, shiftDown, controlDown);
     typed = keyTyped;
     gdxKey = key;
   }
@@ -98,7 +100,6 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
    * This function converts a libGDX key code to a Nifty key code.
    *
    * @param gdxKeyCode the libGDX button key code
-   *
    * @return the nifty button key code
    */
   private static int getNiftyKeyCode(final int gdxKeyCode) {
@@ -389,12 +390,12 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
   }
 
   @Override
-  public boolean sendToNifty(final NiftyInputConsumer consumer) {
+  public boolean sendToNifty(@Nonnull final NiftyInputConsumer consumer) {
     return consumer.processKeyboardEvent(this);
   }
 
   @Override
-  public void sendToGdx(final InputProcessor processor) {
+  public void sendToGdx(@Nonnull final InputProcessor processor) {
     if (typed) {
       processor.keyTyped(getCharacter());
     } else if (isKeyDown()) {

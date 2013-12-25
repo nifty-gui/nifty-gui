@@ -1,12 +1,12 @@
 package de.lessvoid.nifty.batch;
 
-import java.io.IOException;
-
+import de.lessvoid.nifty.spi.render.RenderFont;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import org.jglfont.BitmapFont;
 import org.jglfont.BitmapFontFactory;
 
-import de.lessvoid.nifty.spi.render.RenderFont;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import javax.annotation.Nonnull;
+import java.io.IOException;
 
 public class BatchRenderFont implements RenderFont {
   private final BatchRenderDevice batchRenderDevice;
@@ -14,9 +14,9 @@ public class BatchRenderFont implements RenderFont {
 
   public BatchRenderFont(
       final BatchRenderDevice batchRenderDevice,
-      final String name,
-      final BitmapFontFactory factory,
-      final NiftyResourceLoader resourceLoader) throws IOException {
+      @Nonnull final String name,
+      @Nonnull final BitmapFontFactory factory,
+      @Nonnull final NiftyResourceLoader resourceLoader) throws IOException {
     this.batchRenderDevice = batchRenderDevice;
     this.font = factory.loadFont(resourceLoader.getResourceAsStream(name), name);
   }
@@ -27,12 +27,12 @@ public class BatchRenderFont implements RenderFont {
   }
 
   @Override
-  public int getWidth(final String text) {
+  public int getWidth(@Nonnull final String text) {
     return font.getStringWidth(text);
   }
 
   @Override
-  public int getWidth(final String text, final float size) {
+  public int getWidth(@Nonnull final String text, final float size) {
     return font.getStringWidth(text, size);
   }
 

@@ -1,11 +1,10 @@
 package de.lessvoid.nifty.effects;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import de.lessvoid.nifty.effects.Falloff.HoverFalloffConstraint;
 import de.lessvoid.nifty.effects.Falloff.HoverFalloffType;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class FalloffTest {

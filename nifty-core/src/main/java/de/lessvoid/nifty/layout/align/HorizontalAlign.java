@@ -2,6 +2,7 @@ package de.lessvoid.nifty.layout.align;
 
 /**
  * HorizontalAlign enumeration.
+ *
  * @author void
  */
 public enum HorizontalAlign {
@@ -23,5 +24,5 @@ public enum HorizontalAlign {
   /**
    * right alignment.
    */
-  right;
+  right
 }

@@ -3,112 +3,114 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>lessvoid</groupId>
-    <artifactId>nifty-examples-libgdx</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>lessvoid</groupId>
+        <artifactId>nifty-examples-libgdx</artifactId>
+        <version>1.4.0-SNAPSHOT</version>
+    </parent>
 
-  <artifactId>nifty-examples-libgdx-desktop</artifactId>
-  <packaging>jar</packaging>
-  <name>Nifty Examples for LibGDX - Desktop</name>
+    <artifactId>nifty-examples-libgdx-desktop</artifactId>
+    <packaging>jar</packaging>
+    <name>Nifty Examples for LibGDX - Desktop</name>
 
-  <properties>
-    <!-- Change the mainClass 'AllDemoMain' value if you want to run a different example within de.lessvoid.nifty.examples.libgdx.* -->
-    <mainClass>de.lessvoid.nifty.examples.libgdx.all.AllDemoMain</mainClass>
-  </properties>
+    <properties>
+        <!-- Change the mainClass 'AllDemoMain' value if you want to run a different example within de.lessvoid.nifty.examples.libgdx.* -->
+        <mainClass>de.lessvoid.nifty.examples.libgdx.all.AllDemoMain</mainClass>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>lessvoid</groupId>
-      <artifactId>nifty-examples-libgdx-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.badlogicgames.gdx</groupId>
-      <artifactId>gdx</artifactId>
-      <version>${gdx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.badlogicgames.gdx</groupId>
-      <artifactId>gdx-backend-lwjgl</artifactId>
-      <version>${gdx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.badlogicgames.gdx</groupId>
-      <artifactId>gdx-platform</artifactId>
-      <version>${gdx.version}</version>
-      <classifier>natives-desktop</classifier>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>lessvoid</groupId>
+            <artifactId>nifty-examples-libgdx-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-backend-lwjgl</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-platform</artifactId>
+            <version>${gdx.version}</version>
+            <classifier>natives-desktop</classifier>
+        </dependency>
+    </dependencies>
 
-  <build>
-    <resources>
-      <resource>
-        <directory>../assets</directory>
-      </resource>
-    </resources>
+    <build>
+        <resources>
+            <resource>
+                <directory>../assets</directory>
+            </resource>
+        </resources>
 
-    <plugins>
-      <!-- this run the game when you invoke: mvn integration-test -Pdesktop -->
-      <plugin>
-        <groupId>com.googlecode.mavennatives</groupId>
-        <artifactId>maven-nativedependencies-plugin</artifactId>
-        <version>0.0.6</version>
-        <executions>
-          <execution>
-            <id>unpacknatives</id>
-            <phase>pre-integration-test</phase>
-            <goals><goal>copy</goal></goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.6</version>
-        <executions>
-          <execution>
-            <phase>integration-test</phase>
-            <configuration>
-              <target>
-                <java fork="true" classname="${mainClass}" classpathref="maven.test.classpath">
-                  <sysproperty key="java.library.path" value="target/natives"/>
-                </java>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+        <plugins>
+            <!-- this run the game when you invoke: mvn integration-test -Pdesktop -->
+            <plugin>
+                <groupId>com.googlecode.mavennatives</groupId>
+                <artifactId>maven-nativedependencies-plugin</artifactId>
+                <version>0.0.6</version>
+                <executions>
+                    <execution>
+                        <id>unpacknatives</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <target>
+                                <java fork="true" classname="${mainClass}" classpathref="maven.test.classpath">
+                                    <sysproperty key="java.library.path" value="target/natives"/>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-      <!-- this builds a totally standalone jar file when you invoke: mvn package -Pdesktop -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.4</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>${mainClass}</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+            <!-- this builds a totally standalone jar file when you invoke: mvn package -Pdesktop -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

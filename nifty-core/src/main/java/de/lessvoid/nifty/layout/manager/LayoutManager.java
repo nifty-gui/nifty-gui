@@ -1,17 +1,18 @@
 package de.lessvoid.nifty.layout.manager;
 
-import java.util.List;
-
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.tools.SizeValue;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 
 /**
  * The Layout interface must be implemented by all Layout Managers.
  * It defines the basic interface to layout components.
- *
+ * <p/>
  * Implementation note:
- *
+ * <p/>
  * Most of the standard LayoutManager implementation will only be instantiated once and the same instance will be
  * shared by multiple Elements. This is done to save runtime and memory costs when using lots of Elements.
  * That's why it's probably a good idea to not use any instance variables in LayoutManager implementations!
@@ -25,10 +26,10 @@ public interface LayoutManager {
    * parent element. The actual layout algorithm is performed by
    * the Layout implementations.
    *
-   * @param root root element all children belong to
+   * @param root     root element all children belong to
    * @param children children elements of the root element
    */
-  void layoutElements(LayoutPart root, List < LayoutPart > children);
+  void layoutElements(@Nonnull LayoutPart root, @Nonnull List<LayoutPart> children);
 
   /**
    * Calculates a new Width constraint. Note that it is the callers
@@ -39,7 +40,8 @@ public interface LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  SizeValue calculateConstraintWidth(LayoutPart root, List < LayoutPart > children);
+  @Nonnull
+  SizeValue calculateConstraintWidth(@Nonnull LayoutPart root, @Nonnull List<LayoutPart> children);
 
   /**
    * Calculates a new Height constraint. Note that it is the callers
@@ -50,5 +52,6 @@ public interface LayoutManager {
    * @param children children elements of the root element
    * @return new calculated SizeValue
    */
-  SizeValue calculateConstraintHeight(LayoutPart root, List < LayoutPart > children);
+  @Nonnull
+  SizeValue calculateConstraintHeight(@Nonnull LayoutPart root, @Nonnull List<LayoutPart> children);
 }

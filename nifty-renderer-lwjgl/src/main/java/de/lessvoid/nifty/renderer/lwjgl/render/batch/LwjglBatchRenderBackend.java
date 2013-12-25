@@ -1,5 +1,25 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch;
 
+import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglMouseCursor;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
+import de.lessvoid.nifty.spi.render.MouseCursor;
+import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.Factory;
+import de.lessvoid.nifty.tools.ObjectPool;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -11,35 +31,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
-import de.lessvoid.nifty.render.BlendMode;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglMouseCursor;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
-import de.lessvoid.nifty.spi.render.MouseCursor;
-import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.ObjectPool;
-import de.lessvoid.nifty.tools.ObjectPool.Factory;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * Lwjgl RenderDevice Implementation.
+ *
  * @author void
  */
 public class LwjglBatchRenderBackend implements BatchRenderBackend {
-  private static Logger log = Logger.getLogger(LwjglBatchRenderBackend.class.getName());
-  private static IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+  private static final Logger log = Logger.getLogger(LwjglBatchRenderBackend.class.getName());
+  private static final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
   private NiftyResourceLoader resourceLoader;
   private int viewportWidth = -1;
   private int viewportHeight = -1;
@@ -49,8 +48,9 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
   private ByteBuffer initialData;
-  private boolean fillRemovedTexture =
-      Boolean.parseBoolean(System.getProperty(LwjglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
+  private final boolean fillRemovedTexture =
+      Boolean.parseBoolean(System.getProperty(LwjglBatchRenderBackend.class.getName() + ".fillRemovedTexture",
+          "false"));
 
   public LwjglBatchRenderBackend() {
     batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
@@ -63,7 +63,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     this.resourceLoader = resourceLoader;
   }
 
@@ -83,7 +83,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   public void beginFrame() {
     log.fine("beginFrame()");
 
-    for (int i=0; i<batches.size(); i++) {
+    for (int i = 0; i < batches.size(); i++) {
       batchPool.free(batches.get(i));
     }
     batches.clear();
@@ -105,16 +105,16 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
 
   @Nonnull
   @Override
-  public MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY) throws IOException {
+  public MouseCursor createMouseCursor(
+      @Nonnull final String filename,
+      final int hotspotX,
+      final int hotspotY) throws IOException {
     return new LwjglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
   }
 
   @Override
-  public void enableMouseCursor(@Nullable final MouseCursor mouseCursor) {
-    Cursor nativeCursor = null;
-    if (mouseCursor != null) {
-      nativeCursor = ((LwjglMouseCursor) mouseCursor).getCursor(); 
-    }
+  public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
+    Cursor nativeCursor = ((LwjglMouseCursor) mouseCursor).getCursor();
     try {
       Mouse.setNativeCursor(nativeCursor);
     } catch (LWJGLException e) {
@@ -136,8 +136,8 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     try {
       createAtlasTexture(width, height, false, GL11.GL_RGBA);
 
-      initialData = BufferUtils.createByteBuffer(width*height*4);
-      for (int i=0; i<width*height; i++) {
+      initialData = BufferUtils.createByteBuffer(width * height * 4);
+      for (int i = 0; i < width * height; i++) {
         initialData.put((byte) 0x00);
         initialData.put((byte) 0xff);
         initialData.put((byte) 0x00);
@@ -152,15 +152,15 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   public void clearAtlasTexture(final int width, final int height) {
     initialData.rewind();
     GL11.glTexImage2D(
-          GL11.GL_TEXTURE_2D,
-          0,
-          4,
-          width,
-          height,
-          0,
-          GL11.GL_RGBA,
-          GL11.GL_UNSIGNED_BYTE,
-          initialData);
+        GL11.GL_TEXTURE_2D,
+        0,
+        4,
+        width,
+        height,
+        0,
+        GL11.GL_RGBA,
+        GL11.GL_UNSIGNED_BYTE,
+        initialData);
     checkGLError();
   }
 
@@ -194,13 +194,13 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
         y,
         image.getWidth(),
         image.getHeight(),
-        GL11.GL_RGBA, 
+        GL11.GL_RGBA,
         GL11.GL_UNSIGNED_BYTE,
         imageImpl.byteBuffer);
   }
 
   @Override
-  public void beginBatch(final BlendMode blendMode) {
+  public void beginBatch(@Nonnull final BlendMode blendMode) {
     batches.add(batchPool.allocate());
     currentBatch = batches.get(batches.size() - 1);
     currentBatch.begin(blendMode);
@@ -223,7 +223,8 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     if (!currentBatch.canAddQuad()) {
       beginBatch(currentBatch.getBlendMode());
     }
-    currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth, textureHeight);
+    currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY,
+        textureWidth, textureHeight);
   }
 
   @Override
@@ -235,7 +236,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
     GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
-    for (int i=0; i<batches.size(); i++) {
+    for (int i = 0; i < batches.size(); i++) {
       Batch batch = batches.get(i);
       batch.render();
     }
@@ -256,8 +257,8 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     if (!fillRemovedTexture) {
       return;
     }
-    ByteBuffer initialData = BufferUtils.createByteBuffer(image.getWidth()*image.getHeight()*4);
-    for (int i=0; i<image.getWidth()*image.getHeight(); i++) {
+    ByteBuffer initialData = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
+    for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
       initialData.put((byte) 0xff);
       initialData.put((byte) 0x00);
       initialData.put((byte) 0x00);
@@ -272,7 +273,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
         y,
         w,
         h,
-        GL11.GL_RGBA, 
+        GL11.GL_RGBA,
         GL11.GL_UNSIGNED_BYTE,
         initialData);
 
@@ -290,7 +291,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   }
 
   private void checkGLError() {
-    int error= GL11.glGetError();
+    int error = GL11.glGetError();
     if (error != GL11.GL_NO_ERROR) {
       String glerrmsg = GLU.gluErrorString(error);
       log.warning("Error: (" + error + ") " + glerrmsg);
@@ -303,7 +304,10 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
   }
 
   @Nullable
-  private Cursor loadMouseCursor(@Nonnull final String name, final int hotspotX, final int hotspotY) throws IOException {
+  private Cursor loadMouseCursor(
+      @Nonnull final String name,
+      final int hotspotX,
+      final int hotspotY) throws IOException {
     ImageData imageLoader = createImageLoader(name);
     InputStream source = null;
     try {
@@ -330,7 +334,11 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     return new ImageIOImageData();
   }
 
-  private void createAtlasTexture(final int width, final int height, final boolean filter, final int srcPixelFormat) throws Exception {
+  private void createAtlasTexture(
+      final int width,
+      final int height,
+      final boolean filter,
+      final int srcPixelFormat) throws Exception {
     textureId = createTextureId();
     int minFilter = GL11.GL_NEAREST;
     int magFilter = GL11.GL_NEAREST;
@@ -357,25 +365,25 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       return;
     }
 
-    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, minFilter); 
-    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, magFilter); 
+    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, minFilter);
+    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, magFilter);
     checkGLError();
 
-    ByteBuffer initialData = BufferUtils.createByteBuffer(width*height*4);
-    for (int i=0; i<width*height*4; i++) {
+    ByteBuffer initialData = BufferUtils.createByteBuffer(width * height * 4);
+    for (int i = 0; i < width * height * 4; i++) {
       initialData.put((byte) 0x80);
     }
     initialData.rewind();
     GL11.glTexImage2D(
-          GL11.GL_TEXTURE_2D, 
-          0,
-          4, 
-          width, 
-          height, 
-          0, 
-          srcPixelFormat, 
-          GL11.GL_UNSIGNED_BYTE, 
-          initialData);
+        GL11.GL_TEXTURE_2D,
+        0,
+        4,
+        width,
+        height,
+        0,
+        srcPixelFormat,
+        GL11.GL_UNSIGNED_BYTE,
+        initialData);
     checkGLError();
   }
 
@@ -384,12 +392,12 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     checkGLError();
   }
 
-  private int createTextureId() { 
-    IntBuffer tmp = createIntBuffer(1); 
+  private int createTextureId() {
+    IntBuffer tmp = createIntBuffer(1);
     GL11.glGenTextures(tmp);
     checkGLError();
     return tmp.get(0);
- }
+  }
 
   @Nonnull
   private IntBuffer createIntBuffer(final int size) {
@@ -433,18 +441,18 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
    *
    * @author void
    */
-  private class Batch {
+  private static class Batch {
     // 4 vertices per quad and 8 vertex attributes per vertex:
     // - 2 x pos
     // - 2 x texture
     // - 4 x color
-    private final static int PRIMITIVE_SIZE = 4*8;
-    private final int SIZE = 64*1024; // 64k
+    private final static int PRIMITIVE_SIZE = 4 * 8;
+    private static final int SIZE = 64 * 1024; // 64k
     private final FloatBuffer vertexBuffer;
 
     private int primitiveCount;
     @Nonnull
-    private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
+    private final float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
     private BlendMode blendMode = BlendMode.BLEND;
 
     private Batch() {
@@ -462,7 +470,9 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
     }
 
     public void render() {
-      if (primitiveCount == 0) return; // Attempting to render with an empty vertex buffer crashes the program.
+      if (primitiveCount == 0) {
+        return; // Attempting to render with an empty vertex buffer crashes the program.
+      }
 
       if (blendMode.equals(BlendMode.BLEND)) {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -472,13 +482,13 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
 
       vertexBuffer.flip();
       vertexBuffer.position(0);
-      GL11.glVertexPointer(2, 8*4, vertexBuffer);
+      GL11.glVertexPointer(2, 8 * 4, vertexBuffer);
 
       vertexBuffer.position(2);
-      GL11.glColorPointer(4, 8*4, vertexBuffer);
+      GL11.glColorPointer(4, 8 * 4, vertexBuffer);
 
       vertexBuffer.position(6);
-      GL11.glTexCoordPointer(2, 8*4, vertexBuffer);
+      GL11.glTexCoordPointer(2, 8 * 4, vertexBuffer);
 
       GL11.glDrawArrays(GL11.GL_QUADS, 0, primitiveCount * 4);
     }
@@ -536,7 +546,7 @@ public class LwjglBatchRenderBackend implements BatchRenderBackend {
       primitiveBuffer[bufferIndex++] = color3.getBlue();
       primitiveBuffer[bufferIndex++] = color3.getAlpha();
       primitiveBuffer[bufferIndex++] = textureX;
-      primitiveBuffer[bufferIndex++] = textureY + textureHeight;
+      primitiveBuffer[bufferIndex] = textureY + textureHeight;
 
       vertexBuffer.put(primitiveBuffer);
       primitiveCount++;

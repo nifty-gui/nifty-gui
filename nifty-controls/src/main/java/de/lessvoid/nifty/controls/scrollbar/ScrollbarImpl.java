@@ -1,11 +1,20 @@
 package de.lessvoid.nifty.controls.scrollbar;
 
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+/**
+ * This is the implementation of a scrollbar. The actual logic of the scroll bars is contained here.
+ *
+ * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ */
 public class ScrollbarImpl {
+  @Nullable
   private ScrollbarView view;
   private float value;
   private float oldValue;
-  private float min = 0.f;
   private float worldMax;
   private float worldPageSize;
   private float buttonStepSize;
@@ -13,21 +22,25 @@ public class ScrollbarImpl {
   private boolean moveTheHandle;
   private int moveTheHandleStartPosDelta;
 
-  public void bindToView(final ScrollbarView view, final float value, final float worldMax, final float worldPageSize, final float buttonStepSize, final float pageStepSize) {
+  public void bindToView(
+      @Nonnull final ScrollbarView view,
+      final float value,
+      final float worldMax,
+      final float worldPageSize,
+      final float buttonStepSize,
+      final float pageStepSize) {
     this.view = view;
-    this.value = value;
     this.oldValue = -1;
-    this.worldMax = worldMax;
-    this.worldPageSize = worldPageSize;
-    this.buttonStepSize = buttonStepSize;
-    this.pageStepSize = pageStepSize;
     this.moveTheHandle = false;
-    ensureWorldPageSize();
-    updateView();
-    changeValue(this.value);
+    setup(value, worldMax, worldPageSize, buttonStepSize, pageStepSize);
   }
 
-  public void setup(final float value, final float worldMax, final float worldPageSize, final float buttonStepSize, final float pageStepSize) {
+  public void setup(
+      final float value,
+      final float worldMax,
+      final float worldPageSize,
+      final float buttonStepSize,
+      final float pageStepSize) {
     this.value = value;
     this.worldMax = worldMax;
     this.worldPageSize = worldPageSize;
@@ -110,6 +123,9 @@ public class ScrollbarImpl {
   }
 
   public void interactionClick(final int viewValueClicked) {
+    if (view == null) {
+      return;
+    }
     int viewSize = view.getAreaSize();
     int handleSize = calcHandleSize(viewSize);
     int handlePosition = calcHandlePosition(viewSize, handleSize);
@@ -127,7 +143,7 @@ public class ScrollbarImpl {
   }
 
   public void interactionMove(final int viewValue) {
-    if (!moveTheHandle) {
+    if (!moveTheHandle || view == null) {
       return;
     }
     int viewSize = view.getAreaSize();
@@ -147,6 +163,7 @@ public class ScrollbarImpl {
 
   private void changeValue(final float newValue) {
     value = newValue;
+    float min = 0.f;
     if (value > (worldMax - worldPageSize)) {
       value = worldMax - worldPageSize;
     } else if (newValue < min) {
@@ -154,11 +171,16 @@ public class ScrollbarImpl {
     }
     if (value != oldValue) {
       oldValue = value;
-      view.valueChanged(value);
+      if (view != null) {
+        view.valueChanged(value);
+      }
     }
   }
 
   public void updateView() {
+    if (view == null) {
+      return;
+    }
     int viewSize = view.getAreaSize();
     int handleSize = calcHandleSize(viewSize);
     view.setHandle(calcHandlePosition(viewSize, handleSize), handleSize);
@@ -173,6 +195,9 @@ public class ScrollbarImpl {
   }
 
   private int calcHandleSize(final int viewSize) {
+    if (view == null) {
+      return viewSize;
+    }
     int minHandleSize = view.getMinHandleSize();
     if (worldMax == 0) {
       // special case: empty data and we can't divide by null anyway :)

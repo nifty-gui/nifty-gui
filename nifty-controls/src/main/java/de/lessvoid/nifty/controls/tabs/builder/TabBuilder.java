@@ -6,6 +6,8 @@ package de.lessvoid.nifty.controls.tabs.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is the builder used to create the tabs that can be displayed inside a tab group.
  *
@@ -18,7 +20,7 @@ public class TabBuilder extends ControlBuilder {
    *
    * @param caption the caption that is displayed for this tab
    */
-  public TabBuilder(final String caption) {
+  public TabBuilder(@Nonnull final String caption) {
     super("tab"); //NON-NLS
     caption(caption);
   }
@@ -26,10 +28,10 @@ public class TabBuilder extends ControlBuilder {
   /**
    * Create a tab with a specified title and the specified element id.
    *
-   * @param id the element id of the new tab
+   * @param id      the element id of the new tab
    * @param caption the caption of the new tab
    */
-  public TabBuilder(final String id, final String caption) {
+  public TabBuilder(@Nonnull final String id, @Nonnull final String caption) {
     super(id, "tab");
     caption(caption);
   }
@@ -37,11 +39,11 @@ public class TabBuilder extends ControlBuilder {
   /**
    * The protected constructor for overwriting.
    *
-   * @param id the element Id of the new tab
+   * @param id       the element Id of the new tab
    * @param typeName the control type name that is supposed to be used when creating the tab
-   * @param caption the caption that is supposed to be displayed for this tab
+   * @param caption  the caption that is supposed to be displayed for this tab
    */
-  protected TabBuilder(final String id, final String typeName, final String caption) {
+  protected TabBuilder(@Nonnull final String id, @Nonnull final String typeName, @Nonnull final String caption) {
     super(id, typeName);
     caption(caption);
   }
@@ -51,7 +53,7 @@ public class TabBuilder extends ControlBuilder {
    *
    * @param caption the caption on the button that will be assigned to this tab
    */
-  public void caption(final String caption) {
+  public void caption(@Nonnull final String caption) {
     set("caption", caption);
   }
 }

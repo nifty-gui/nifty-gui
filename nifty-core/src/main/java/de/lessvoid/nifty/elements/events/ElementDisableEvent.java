@@ -4,7 +4,7 @@ import de.lessvoid.nifty.NiftyEvent;
 import de.lessvoid.nifty.elements.Element;
 
 public class ElementDisableEvent implements NiftyEvent {
-  private Element element;
+  private final Element element;
 
   public ElementDisableEvent(final Element element) {
     this.element = element;

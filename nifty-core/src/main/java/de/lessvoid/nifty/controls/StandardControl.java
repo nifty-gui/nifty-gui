@@ -4,6 +4,9 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+
 public interface StandardControl {
-  Element createControl(Nifty nifty, Screen screen, Element parent) throws Exception;
+  @Nonnull
+  Element createControl(Nifty nifty, Screen screen, Element parent);
 }

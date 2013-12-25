@@ -1,10 +1,13 @@
 package de.lessvoid.nifty.render;
 
+import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * states to save.
+ *
  * @author void
  */
 public enum RenderStateType {
@@ -51,17 +54,18 @@ public enum RenderStateType {
 
   /**
    * Helper to get all available RenderStates as a set.
+   *
    * @return the set of all available render states.
    */
-  public static Set < RenderStateType > allStates() {
+  @Nonnull
+  public static Set<RenderStateType> allStates() {
     return allStates;
   }
 
-  private static Set < RenderStateType > allStates = new HashSet < RenderStateType >();
+  @Nonnull
+  private static final Set<RenderStateType> allStates = new HashSet<RenderStateType>();
 
   static {
-    for (RenderStateType state : RenderStateType.values()) {
-      allStates.add(state);
-    }
+    Collections.addAll(allStates, RenderStateType.values());
   }
 }

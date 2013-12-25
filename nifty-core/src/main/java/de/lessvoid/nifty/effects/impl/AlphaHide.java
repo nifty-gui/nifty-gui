@@ -9,16 +9,23 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+
 public class AlphaHide implements EffectImpl {
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (normalizedTime >= 1.0f) {
       r.setColorAlpha(Color.WHITE.getAlpha());
     } else {
@@ -26,6 +33,7 @@ public class AlphaHide implements EffectImpl {
     }
   }
 
+  @Override
   public void deactivate() {
   }
 }

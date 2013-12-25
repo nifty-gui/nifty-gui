@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
 
-  <style id="button-font">
-    <attributes font="aurulent-sans-16.fnt"/>
-  </style>
+    <style id="button-font">
+        <attributes font="aurulent-sans-16.fnt"/>
+    </style>
 
-  <style id="tab-font">
-    <attributes font="aurulent-sans-16.fnt"/>
-  </style>
+    <style id="tab-font">
+        <attributes font="aurulent-sans-16.fnt"/>
+    </style>
 
-  <style id="base-font">
-    <attributes font="aurulent-sans-16.fnt"/>
-  </style>
+    <style id="base-font">
+        <attributes font="aurulent-sans-16.fnt"/>
+    </style>
 </nifty-styles>

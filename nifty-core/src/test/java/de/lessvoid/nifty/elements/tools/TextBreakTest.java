@@ -1,19 +1,16 @@
 package de.lessvoid.nifty.elements.tools;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.spi.render.RenderFont;
+import java.util.List;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class TextBreakTest {
   private Element elementMock;
@@ -38,7 +35,7 @@ public class TextBreakTest {
     replay(renderFontMock);
 
     TextBreak textBreak = new TextBreak("abcdef", 100, renderFontMock);
-    List < String > lines = textBreak.split();
+    List<String> lines = textBreak.split();
 
     assertEquals(1, lines.size());
     assertEquals("abcdef", lines.get(0));
@@ -54,7 +51,7 @@ public class TextBreakTest {
     replay(renderFontMock);
 
     TextBreak textBreak = new TextBreak("abc def", 100, renderFontMock);
-    List < String > lines = textBreak.split();
+    List<String> lines = textBreak.split();
 
     assertEquals(2, lines.size());
     assertEquals("abc", lines.get(0));
@@ -70,7 +67,7 @@ public class TextBreakTest {
     replay(renderFontMock);
 
     TextBreak textBreak = new TextBreak("abc def", 100, renderFontMock);
-    List < String > lines = textBreak.split();
+    List<String> lines = textBreak.split();
 
     assertEquals(1, lines.size());
     assertEquals("abc def", lines.get(0));

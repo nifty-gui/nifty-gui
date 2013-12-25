@@ -1,16 +1,14 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
 
 public class ListBoxViewDefaultTest {
   private static final int WIDTH_100 = 100;
@@ -33,33 +31,17 @@ public class ListBoxViewDefaultTest {
     expect(view.getWidth("a")).andReturn(WIDTH_100);
     view.updateTotalWidth(WIDTH_100);
     view.updateTotalCount(1);
-    view.display(buildValues("a", null), 0, buildValuesSelection());
+    view.display(Arrays.asList("a"), 0, Collections.<Integer>emptyList());
     view.scrollTo(0);
-    view.display(buildValues("a", "b"), 0, buildValuesSelection());
+    view.display(Arrays.asList("a", "b"), 0, Collections.<Integer>emptyList());
     expect(view.getWidth("b")).andReturn(WIDTH_100);
     view.updateTotalCount(2);
-    view.display(buildValues("a", "b"), 0, buildValuesSelection());
-    view.display(buildValues("a", "b"), 0, buildValuesSelection());
+    view.display(Arrays.asList("a", "b"), 0, Collections.<Integer>emptyList());
+    view.display(Arrays.asList("a", "b"), 0, Collections.<Integer>emptyList());
     replay(view);
 
     listBox.addItem("a");
     listBox.addItem("b");
     listBox.updateView(0);
-  }
-
-  private List<String> buildValues(final String ... values) {
-    List<String> result = new ArrayList<String>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
-  }
-
-  private List<Integer> buildValuesSelection(final Integer ... values) {
-    List<Integer> result = new ArrayList<Integer>();
-    for (int i=0; i<values.length; i++) {
-      result.add(values[i]);
-    }
-    return result;
   }
 }

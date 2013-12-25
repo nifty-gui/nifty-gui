@@ -1,8 +1,7 @@
 package de.lessvoid.nifty.slick2d.time;
 
-import org.lwjgl.Sys;
-
 import de.lessvoid.nifty.spi.time.TimeProvider;
+import org.lwjgl.Sys;
 
 /**
  * This time provider uses the timer that is provided by LWJGL.

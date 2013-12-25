@@ -1,36 +1,50 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ListIterator;
-
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.shared.EmptyNiftyControlImpl;
 
-public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
-  private ListBox<T> listBox;
-  private List<T> items = new ArrayList<T>();
-  private List<ItemWidth> widthList = new ArrayList<ItemWidth>();
-  private ListBoxSelectionMode<T> selection = new ListBoxSelectionModeSingle<T>();
-  private ListBoxView<T> view = new ListBoxViewNull<T>();
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.logging.Logger;
+
+class ListBoxImpl<T> {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(ListBoxImpl.class.getName());
+  @Nonnull
+  private final ListBox<T> listBox;
+  @Nonnull
+  private final List<T> items;
+  @Nonnull
+  private final List<ItemWidth<T>> widthList;
+  @Nonnull
+  private ListBoxSelectionMode<T> selection;
+  @Nullable
+  private ListBoxView<T> view;
   private int viewOffset = 0;
   private int viewDisplayItemCount = 0;
   private int focusItemIndex = -1;
-  private List<T> visibleItemsForDisplay = new ArrayList<T>();
-  private List<Integer> selectedItemsForDisplay = new ArrayList<Integer>();
-  private ListBoxFocusItem listBoxFocusItem = new ListBoxFocusItem();
+  @Nonnull
+  private final List<T> visibleItemsForDisplay;
+  @Nonnull
+  private final List<Integer> selectedItemsForDisplay;
+  @Nonnull
+  private final ListBoxFocusItem listBoxFocusItem;
   private int lastMaxWidth = 0;
 
-  public ListBoxImpl(final ListBox<T> listBox) {
+  public ListBoxImpl(@Nonnull final ListBox<T> listBox) {
     this.listBox = listBox;
+    items = new ArrayList<T>();
+    widthList = new ArrayList<ItemWidth<T>>();
+    selection = new ListBoxSelectionModeSingle<T>();
+    visibleItemsForDisplay = new ArrayList<T>();
+    selectedItemsForDisplay = new ArrayList<Integer>();
+    listBoxFocusItem = new ListBoxFocusItem();
   }
 
-  public int bindToView(final ListBoxView<T> newListBoxView, final int viewDisplayItemCount) {
+  public int bindToView(@Nonnull final ListBoxView<T> newListBoxView, final int viewDisplayItemCount) {
     this.view = newListBoxView;
     this.viewDisplayItemCount = viewDisplayItemCount;
     return items.size();
@@ -45,7 +59,11 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
   }
 
   public void updateView() {
-    view.display(updateCaptions(), getFocusItemForDisplay(), getSelectionElementsForDisplay());
+    if (view != null) {
+      view.display(updateCaptions(), getFocusItemForDisplay(), getSelectionElementsForDisplay());
+    } else {
+      log.warning("Updating the view is not possible as long as the view is not bound to this implementation.");
+    }
   }
 
   public void selectItemByVisualIndex(final int selectionIndex) {
@@ -62,6 +80,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     deselectItemByIndex(viewOffset + selectionIndex);
   }
 
+  @Nullable
   public T getItemByVisualIndex(final int selectionIndex) {
     if (invalidVisualIndex(selectionIndex)) {
       return null;
@@ -72,7 +91,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     return items.get(viewOffset + selectionIndex);
   }
 
-  public void changeSelectionMode(final SelectionMode listBoxSelectionMode, final boolean forceSelection) {
+  public void changeSelectionMode(@Nonnull final SelectionMode listBoxSelectionMode, final boolean forceSelection) {
     List<T> oldSelection = getSelection();
 
     selection = createSelectionMode(listBoxSelectionMode);
@@ -88,19 +107,21 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     }
 
     updateView();
-    selectionChangedEvent(oldSelection);
+    selectionChangedEvent();
   }
 
-  public void addItem(final T newItem) {
+  public void addItem(@Nonnull final T newItem) {
     T visibleItem = getVisibleItem();
 
-    widthList.add(new ItemWidth(newItem));
+    widthList.add(new ItemWidth<T>(newItem, view == null ? 0 : view.getWidth(newItem)));
     items.add(newItem);
     widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
 
-    restoreVisibleItem(visibleItem);
+    if (visibleItem != null) {
+      restoreVisibleItem(visibleItem);
+    }
     ensureAutoSelection(newItem);
   }
 
@@ -109,31 +130,31 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
   }
 
   public void clear() {
-    List<T> oldSelection = getSelection();
     items.clear();
     selection.clear();
 
     widthList.clear();
     lastMaxWidth = 0;
-    view.updateTotalWidth(lastMaxWidth);
+    if (view != null) {
+      view.updateTotalWidth(lastMaxWidth);
+    }
 
     focusItemIndexUpdate();
     updateViewTotalCount();
-    selectionChangedEvent(oldSelection);
+    selectionChangedEvent();
   }
 
   public void selectItemByIndex(final int selectionIndex) {
     if (invalidIndex(selectionIndex)) {
       return;
     }
-    List<T> oldSelection = getSelection();
     selection.add(items.get(selectionIndex));
     updateView();
-    selectionChangedEvent(oldSelection);
+    selectionChangedEvent();
     setFocusItemByIndex(selectionIndex);
   }
 
-  public void selectItem(final T item) {
+  public void selectItem(@Nonnull final T item) {
     selectItemByIndex(items.indexOf(item));
   }
 
@@ -179,10 +200,11 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     return Collections.unmodifiableList(selection.getSelection());
   }
 
+  @Nonnull
   public List<Integer> getSelectedIndices() {
     List<T> sel = selection.getSelection();
     if (sel.isEmpty()) {
-      return new ArrayList<Integer>();
+      return Collections.emptyList();
     }
 
     List<Integer> result = new ArrayList<Integer>();
@@ -196,7 +218,6 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     if (invalidIndex(itemIndex)) {
       return;
     }
-    List<T> oldSelection = getSelection();
     int oldCount = itemCount();
     T visibleItem = getVisibleItem();
 
@@ -209,16 +230,17 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     listBoxFocusItem.prepare();
     listBoxFocusItem.registerIndex(itemIndex);
 
-    updateAfterRemove(oldSelection, oldCount);
-    restoreVisibleItem(visibleItem);
+    updateAfterRemove(oldCount);
+    if (visibleItem != null) {
+      restoreVisibleItem(visibleItem);
+    }
   }
 
   public void removeItem(final T item) {
     removeItemByIndex(items.indexOf(item));
   }
 
-  public void removeAllItems(final List<T> itemsToRemove) {
-    List<T> oldSelection = getSelection();
+  public void removeAllItems(@Nonnull final List<T> itemsToRemove) {
     int oldCount = itemCount();
     T visibleItem = getVisibleItem();
 
@@ -238,43 +260,47 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
       selection.removeForced(item);
     }
 
-    updateAfterRemove(oldSelection, oldCount);
-    restoreVisibleItem(visibleItem);
+    updateAfterRemove(oldCount);
+    if (visibleItem != null) {
+      restoreVisibleItem(visibleItem);
+    }
   }
 
   public void deselectItemByIndex(final int itemIndex) {
     if (invalidIndex(itemIndex)) {
       return;
     }
-    List<T> oldSelection = getSelection();
     selection.remove(items.get(itemIndex));
     updateView();
-    selectionChangedEvent(oldSelection);
+    selectionChangedEvent();
   }
 
-  public void deselectItem(final T item) {
+  public void deselectItem(@Nonnull final T item) {
     deselectItemByIndex(items.indexOf(item));
   }
 
+  @Nonnull
   public List<T> getItems() {
     return Collections.unmodifiableList(items);
   }
 
-  public void insertItem(final T item, final int index) {
+  public void insertItem(@Nonnull final T item, final int index) {
     if (invalidIndexForInsert(index)) {
       return;
     }
     T visibleItem = getVisibleItem();
-    widthList.add(new ItemWidth(item));
+    widthList.add(new ItemWidth<T>(item, view == null ? 0 : view.getWidth(item)));
     items.add(index, item);
     widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
-    restoreVisibleItem(visibleItem);
+    if (visibleItem != null) {
+      restoreVisibleItem(visibleItem);
+    }
     ensureAutoSelection(item);
   }
 
-  public void showItem(final T item) {
+  public void showItem(@Nonnull final T item) {
     showItemByIndex(items.indexOf(item));
   }
 
@@ -292,12 +318,16 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     updateView();
   }
 
-  public void setFocusItem(final T item) {
-    setFocusItemByIndex(items.indexOf(item));
+  public void setFocusItem(@Nullable final T item) {
+    if (item == null) {
+      setFocusItemByIndex(-1);
+    } else {
+      setFocusItemByIndex(items.indexOf(item));
+    }
   }
 
   public void setFocusItemByIndex(final int itemIndex) {
-    if (invalidIndex(itemIndex)) {
+    if (invalidIndex(itemIndex) || itemIndex == -1) {
       return;
     }
     focusItemIndex = itemIndex;
@@ -313,6 +343,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     }
   }
 
+  @Nullable
   public T getFocusItem() {
     if (focusItemIndex == -1) {
       return null;
@@ -328,35 +359,46 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     // handled in ListBoxControl directly
   }
 
-  public void addAllItems(final List<T> itemsToAdd) {
+  public void addAllItems(@Nonnull final List<T> itemsToAdd) {
     if (itemsToAdd.isEmpty()) {
       return;
     }
     for (T item : itemsToAdd) {
-      widthList.add(new ItemWidth(item));
+      widthList.add(new ItemWidth<T>(item, view == null ? 0 : view.getWidth(item)));
     }
     T visibleItem = getVisibleItem();
     items.addAll(itemsToAdd);
     widthUpdate();
     focusItemIndexUpdate();
     updateViewTotalCount();
-    restoreVisibleItem(visibleItem);
+    if (visibleItem != null) {
+      restoreVisibleItem(visibleItem);
+    }
     ensureAutoSelection(itemsToAdd.get(0));
   }
 
-  public void sortItems(final Comparator<T> comperator) {
-    Collections.sort(items, comperator);
+  public void sortItems(@Nullable final Comparator<T> comparator) {
+    Collections.sort(items, comparator);
   }
 
   void updateViewTotalCount() {
-    view.updateTotalCount(items.size());
-    updateView();
+    if (view == null) {
+      log.warning("Can't update total count of view while there is not view bound to the list box implementation.");
+    } else {
+      view.updateTotalCount(items.size());
+      updateView();
+    }
   }
 
   void updateViewScroll() {
-    view.scrollTo(viewOffset);
+    if (view == null) {
+      log.warning("Can't perform view scrolling as long there is no view bound to the list box implementation.");
+    } else {
+      view.scrollTo(viewOffset);
+    }
   }
 
+  @Nonnull
   private List<Integer> getSelectionElementsForDisplay() {
     selectedItemsForDisplay.clear();
     List<T> selectionList = selection.getSelection();
@@ -364,7 +406,7 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
       return selectedItemsForDisplay;
     }
     for (T selectedItem : selectionList) {
-      for (int i=0; i<viewDisplayItemCount; i++) {
+      for (int i = 0; i < viewDisplayItemCount; i++) {
         int selectedItemIndex = items.indexOf(selectedItem);
         if (selectedItemIndex == viewOffset + i) {
           selectedItemsForDisplay.add(i);
@@ -374,20 +416,22 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     return selectedItemsForDisplay;
   }
 
+  @Nonnull
   private List<T> updateCaptions() {
     visibleItemsForDisplay.clear();
-    for (int i=0; i<viewDisplayItemCount; i++) {
-      T item = null;
+    for (int i = 0; i < viewDisplayItemCount; i++) {
       if (viewOffset + i < items.size()) {
-        item = items.get(viewOffset + i);
+        T item = items.get(viewOffset + i);
+        visibleItemsForDisplay.add(item);
+      } else {
+        break;
       }
-      visibleItemsForDisplay.add(item);
     }
     return visibleItemsForDisplay;
   }
 
   private int getFocusItemForDisplay() {
-    for (int i=0; i<viewDisplayItemCount; i++) {
+    for (int i = 0; i < viewDisplayItemCount; i++) {
       if (viewOffset + i < items.size()) {
         if (focusItemIndex == viewOffset + i) {
           return i;
@@ -444,11 +488,13 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     }
   }
 
-  private void selectionChangedEvent(final List<T> oldSelection) {
-    view.publish(new ListBoxSelectionChangedEvent<T>(listBox, getSelection(), getSelectedIndices()));
+  private void selectionChangedEvent() {
+    if (view != null) {
+      view.publish(new ListBoxSelectionChangedEvent<T>(listBox, getSelection(), getSelectedIndices()));
+    }
   }
 
-  private void updateAfterRemove(final List<T> oldSelection, final int oldItemCount) {
+  private void updateAfterRemove(final int oldItemCount) {
     focusItemIndex = listBoxFocusItem.resolve(focusItemIndex, oldItemCount);
     focusItemIndexUpdate();
 
@@ -456,25 +502,29 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
       selection.add(items.get(focusItemIndex));
     }
 
-    view.updateTotalCount(items.size());
+    if (view != null) {
+      view.updateTotalCount(items.size());
+    }
 
     if (viewOffset + viewDisplayItemCount > itemCount()) {
       if (itemCount() > 0) {
         showItemByIndex(itemCount() - 1);
-        selectionChangedEvent(oldSelection);
+        selectionChangedEvent();
         return;
       }
     }
 
     updateView();
-    selectionChangedEvent(oldSelection);
+    selectionChangedEvent();
   }
 
   private void widthUpdate() {
     if (widthList.isEmpty()) {
       if (lastMaxWidth != 0) {
         lastMaxWidth = 0;
-        view.updateTotalWidth(0);
+        if (view != null) {
+          view.updateTotalWidth(0);
+        }
       }
       return;
     }
@@ -482,12 +532,14 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
 
     if (widthList.get(widthList.size() - 1).getWidth() != lastMaxWidth) {
       lastMaxWidth = widthList.get(widthList.size() - 1).getWidth();
-      view.updateTotalWidth(lastMaxWidth);
+      if (view != null) {
+        view.updateTotalWidth(lastMaxWidth);
+      }
     }
   }
 
   private int findItemIndexInWidthList(final T item) {
-    for (int i=0; i<widthList.size(); i++) {
+    for (int i = 0; i < widthList.size(); i++) {
       ItemWidth itemWidth = widthList.get(i);
       if (itemWidth.getItem().equals(item)) {
         return i;
@@ -496,13 +548,14 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     return -1;
   }
 
-  private void ensureAutoSelection(final T newItem) {
+  private void ensureAutoSelection(@Nonnull final T newItem) {
     if (selection.requiresAutoSelection()) {
       selectItem(newItem);
     }
   }
 
-  private ListBoxSelectionMode<T> createSelectionMode(final SelectionMode selectionMode) {
+  @Nonnull
+  private ListBoxSelectionMode<T> createSelectionMode(@Nonnull final SelectionMode selectionMode) {
     switch (selectionMode) {
       case Single:
         return new ListBoxSelectionModeSingle<T>();
@@ -518,38 +571,31 @@ public class ListBoxImpl<T> extends EmptyNiftyControlImpl {
     }
   }
 
+  @Nullable
   private T getVisibleItem() {
     return getItemByVisualIndex(0);
   }
 
-  private void restoreVisibleItem(final T visibleItem) {
+  private void restoreVisibleItem(@Nonnull final T visibleItem) {
     showItem(visibleItem);
   }
 
-  public class ItemWidth implements Comparable<ItemWidth> {
-    private T item;
-    private int width;
+  private static class ItemWidth<T> implements Comparable<ItemWidth<T>> {
+    @Nonnull
+    private final T item;
+    private final int width;
 
-    public ItemWidth(final T item) {
+    public ItemWidth(@Nonnull final T item, final int width) {
       this.item = item;
-      this.width = view.getWidth(item);
+      this.width = width;
     }
 
     @Override
-    public int compareTo(final ItemWidth a) {
+    public int compareTo(@Nonnull final ItemWidth a) {
       return Integer.valueOf(width).compareTo(a.width);
     }
 
-    @Override
-    public boolean equals(final Object obj) {
-      return item.equals(obj);
-    }
-
-    @Override
-    public int hashCode() {
-      return item.hashCode();
-    }
-
+    @Nonnull
     public T getItem() {
       return item;
     }

@@ -1,11 +1,9 @@
 package de.lessvoid.xml.tools;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
-import java.util.List;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +17,7 @@ public class SpecialValuesReplace {
   private static final String KEY_ENV = "ENV.";
   private static final String KEY_CALL = "CALL.";
 
-  private static Logger log = Logger.getLogger(SpecialValuesReplace.class.getName());
+  private static final Logger log = Logger.getLogger(SpecialValuesReplace.class.getName());
 
   /**
    * Tries to replace values surrounded by "${...}". All pieces of the input that are not
@@ -29,34 +27,36 @@ public class SpecialValuesReplace {
    * <br>
    * <b>Example inputs:</b>
    * <ul>
-   * <li><code>${ENV.myEnv}</code> checks and returns if <code>myEnv</code> exists in
+   * <li>{@code ${ENV.myEnv}} checks and returns if {@code myEnv} exists in
    * {@link System.getEnv()}.</li>
    *
-   * <li><code>${PROP.myProp}</code> checks and returns if </ode>myProp</code> exists in
-   * the given properties. If properties is <code>null</code>, {@link System.getProperties()}
+   * <li>{@code ${PROP.myProp}} checks and returns if </ode>myProp</code> exists in
+   * the given properties. If properties is {@code null}, {@link System.getProperties()}
    * is checked instead.</li
    * 
-   * <li><code>${CALL.myMethod()}</code> calls the method <code>myMethod()</code> on the
-   * given <code>object</code> if it's not <code>null</code></li>
+   * <li>{@code ${CALL.myMethod()}} calls the method {@code myMethod()} on the
+   * given {@code object} if it's not {@code null}</li>
    * </ul>
    *
-   * <li><code>${resourceBundleId.key}</code> tries to find the ResourceBundle with the
-   * given <code>id</code> on the given list of ResourceBundles. And then calls 
-   * <code>resourceBundle.get(key)</code> to translate the value.</li>
+   * <li>{@code ${resourceBundleId.key}} tries to find the ResourceBundle with the
+   * given {@code id} on the given list of ResourceBundles. And then calls
+   * {@code resourceBundle.get(key)} to translate the value.</li>
    * </ul>
    * 
-   * @param input
-   *          (may be <code>null</code>)
-   * @param resourceBundles
-   *          Map of pre loaded ResourceBundles with a String id
-   * @param methodCallTarget
-   *          if the input contains ${CALL...} the target object to call the method with
-   * @param properties
-   *          if the input contains ${PROP...} the properties to use (may be <code>null</code> in this case System.getProperties() are used)
+   * @param input (may be {@code null})
+   * @param resourceBundles Map of pre loaded ResourceBundles with a String id
+   * @param methodCallTarget if the input contains ${CALL...} the target object to call the method with
+   * @param properties if the input contains ${PROP...} the properties to use (may be {@code null} in this case
+   *                   System.getProperties() are used)
    * 
    * @return the parsed input
    */
-  public static String replace(final String input, final Map<String, ResourceBundle> resourceBundles, final Object methodCallTarget, final Properties properties) {
+  @Nonnull
+  public static String replace(
+      @Nullable final String input,
+      @Nonnull final Map<String, ResourceBundle> resourceBundles,
+      @Nullable final Object methodCallTarget,
+      @Nullable final Properties properties) {
     if (input == null) {
       return "";
     }
@@ -80,6 +80,7 @@ public class SpecialValuesReplace {
         }
       } else {
         if (endsWithQuote(prev)) {
+          assert prev != null; // endsWithQuote does not allow null values
           parts.set(idx-1, prev.substring(0, prev.length()-1));
         }
       }
@@ -91,22 +92,24 @@ public class SpecialValuesReplace {
     return result;
   }
 
-  private static boolean endsWithQuote(String prev) {
+  private static boolean endsWithQuote(@Nullable String prev) {
     return prev != null && prev.endsWith("\\");
   }
 
-  private static String getPrev(final List<String> parts, final int idx) {
+  @Nullable
+  private static String getPrev(@Nonnull final List<String> parts, final int idx) {
     if (idx == 0) {
       return null;
     }
     return parts.get(idx - 1);
   }
 
-  private static String removeQuotes(final String input) {
+  @Nonnull
+  private static String removeQuotes(@Nonnull final String input) {
     return input.substring(2, input.length()-1);
   }
 
-  private static boolean isSpecialTag(final String input, final String prev) {
+  private static boolean isSpecialTag(@Nullable final String input, @Nullable final String prev) {
     boolean isSpecialTag = input != null && input.startsWith("${") && input.endsWith("}");
     if (!isSpecialTag) {
       return false;
@@ -118,7 +121,7 @@ public class SpecialValuesReplace {
   }
   
 
-  private static String handleENV(final String value) {
+  private static String handleENV(@Nonnull final String value) {
     String name = removeQuotes(value).substring(KEY_ENV.length());
     if (System.getenv().containsKey(name)) {
       String env = System.getenv().get(name);
@@ -129,7 +132,8 @@ public class SpecialValuesReplace {
     return value;
   }
 
-  private static String handleProperties(final String input, final Properties properties) {
+  @Nullable
+  private static String handleProperties(@Nonnull final String input, final Properties properties) {
     String name = removeQuotes(input).substring(KEY_PROP.length());
     String value = readFromProperties(name, properties);
     if (value == null) {
@@ -141,7 +145,8 @@ public class SpecialValuesReplace {
     return input;
   }
 
-  private static String readFromProperties(final String name, final Properties properties) {
+  @Nullable
+  private static String readFromProperties(final String name, @Nullable final Properties properties) {
     if (properties != null) {
       if (properties.containsKey(name)) {
         String value = properties.getProperty(name);
@@ -153,7 +158,7 @@ public class SpecialValuesReplace {
     return null;
   }
 
-  private static String handleCall(final String value, final Object object) {
+  private static String handleCall(@Nonnull final String value, @Nullable final Object object) {
     if (object != null) {
       String methodName = removeQuotes(value).substring(KEY_CALL.length());
       MethodInvoker methodInvoker = new MethodInvoker(methodName, object);
@@ -165,8 +170,8 @@ public class SpecialValuesReplace {
     return value;
   }
 
-  private static String handleLocalize(final String value, final Map<String, ResourceBundle> resourceBundles) {
-    if (value.indexOf(".") != -1) {
+  private static String handleLocalize(@Nonnull final String value, @Nonnull final Map<String, ResourceBundle> resourceBundles) {
+    if (value.contains(".")) {
       String removedQuotes = removeQuotes(value);
       String resourceSelector = removedQuotes.substring(0, removedQuotes.indexOf("."));
       String resourceKey = removedQuotes.substring(removedQuotes.indexOf(".") + 1);

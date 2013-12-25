@@ -7,17 +7,22 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 /**
  * ScreenController for Hello World Example.
+ *
  * @author void
  */
 public class ReloadScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
 
+  @Override
   public void bind(final Nifty newNifty, final Screen newScreen) {
     this.nifty = newNifty;
   }
 
+  @Override
   public void onStartScreen() {
   }
 
@@ -39,23 +44,26 @@ public class ReloadScreen implements ScreenController, NiftyExample {
   /**
    * This is called from the "next.xml" and the id="next" screen
    */
-  @NiftyEventSubscriber(id="back")
+  @NiftyEventSubscriber(id = "back")
   public void back(final String id, final ButtonClickedEvent event) {
     // this will go back to the initially loaded screen with the id "start"
     // note that this screen is still there although we've loaded an additional xml file
     nifty.gotoScreen("start");
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "reload/start.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Reload Example";

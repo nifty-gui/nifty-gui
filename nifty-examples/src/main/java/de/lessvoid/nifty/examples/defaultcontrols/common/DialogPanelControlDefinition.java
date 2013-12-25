@@ -4,17 +4,22 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 
+import javax.annotation.Nonnull;
+
 /**
  * This registers a special Panel control with Nifty we later use as the parent control/panel
  * for Dialogs. With it we can change the look and feel as well as the attached effect in
  * one place.
+ *
  * @author void
  */
 public class DialogPanelControlDefinition {
-  public static String NAME = "dialogPanel";
-  private static CommonBuilders builders = new CommonBuilders();
+  @Nonnull
+  public static final String NAME = "dialogPanel";
+  @Nonnull
+  private static final CommonBuilders builders = new CommonBuilders();
 
-  public static void register(final Nifty nifty) {
+  public static void register(@Nonnull final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
       set("childRootId", "#effectPanel");
       panel(new PanelBuilder() {{

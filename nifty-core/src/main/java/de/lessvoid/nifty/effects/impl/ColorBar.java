@@ -1,8 +1,6 @@
 package de.lessvoid.nifty.effects.impl;
 
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
@@ -13,21 +11,38 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 /**
  * Color - color overlay.
+ *
  * @author void
  */
 public class ColorBar implements EffectImpl {
-  private static Logger log = Logger.getLogger(ColorBar.class.getName());
+  @Nonnull
+  private static final Logger log = Logger.getLogger(ColorBar.class.getName());
+  @Nullable
   private Color color;
-  private Color tempColor = new Color("#000f");
-  private SizeValue width;
-  private SizeValue insetLeft = new SizeValue("0px");
-  private SizeValue insetRight = new SizeValue("0px");
-  private SizeValue insetTop = new SizeValue("0px");
-  private SizeValue insetBottom = new SizeValue("0px");
+  @Nonnull
+  private final Color tempColor = new Color("#000f");
+  @Nonnull
+  private SizeValue width = SizeValue.def();
+  @Nonnull
+  private SizeValue insetLeft = SizeValue.px(0);
+  @Nonnull
+  private SizeValue insetRight = SizeValue.px(0);
+  @Nonnull
+  private SizeValue insetTop = SizeValue.px(0);
+  @Nonnull
+  private SizeValue insetBottom = SizeValue.px(0);
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     color = new Color(parameter.getProperty("color", "#ffffffff"));
     width = new SizeValue(parameter.getProperty("width"));
     try {
@@ -41,25 +56,28 @@ public class ColorBar implements EffectImpl {
     }
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nullable final Falloff falloff,
+      @Nonnull final NiftyRenderEngine r) {
     r.saveState(null);
-    if (r.isColorAlphaChanged()) {
-      if (falloff == null) {
-        r.setColorIgnoreAlpha(color);
+    if (color != null) {
+      if (r.isColorAlphaChanged()) {
+        if (falloff == null) {
+          r.setColorIgnoreAlpha(color);
+        } else {
+          tempColor.multiply(color, falloff.getFalloffValue());
+          r.setColorIgnoreAlpha(tempColor);
+        }
       } else {
-        tempColor.mutiply(color, falloff.getFalloffValue());
-        r.setColorIgnoreAlpha(tempColor);
-      }
-    } else {
-      if (falloff == null) {
-        r.setColor(color);
-      } else {
-        tempColor.mutiply(color, falloff.getFalloffValue());
-        r.setColor(tempColor);
+        if (falloff == null) {
+          r.setColor(color);
+        } else {
+          tempColor.multiply(color, falloff.getFalloffValue());
+          r.setColor(tempColor);
+        }
       }
     }
 
@@ -68,7 +86,12 @@ public class ColorBar implements EffectImpl {
     int insetOffsetTop = insetTop.getValueAsInt(element.getHeight());
     int insetOffsetBottom = insetBottom.getValueAsInt(element.getHeight());
 
-    int size = width.getValueAsInt(element.getParent().getWidth());
+    final int size;
+    if (!element.hasParent()) {
+      size = -1;
+    } else {
+      size = width.getValueAsInt(element.getParent().getWidth());
+    }
     if (size == -1) {
       r.renderQuad(
           element.getX() + insetOffsetLeft,
@@ -85,6 +108,7 @@ public class ColorBar implements EffectImpl {
     r.restoreState();
   }
 
+  @Override
   public void deactivate() {
   }
 }

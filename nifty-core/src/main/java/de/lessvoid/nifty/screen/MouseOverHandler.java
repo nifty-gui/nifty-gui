@@ -1,12 +1,14 @@
 package de.lessvoid.nifty.screen;
 
-import java.util.ArrayList;
-
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+
 /**
  * The MouseOverHandler manages mouse over elements.
+ *
  * @author void
  */
 public class MouseOverHandler {
@@ -14,12 +16,14 @@ public class MouseOverHandler {
   /**
    * Elements with mouse over.
    */
-  private ArrayList < Element > mouseOverElements = new ArrayList < Element >();
+  @Nonnull
+  private final ArrayList<Element> mouseOverElements = new ArrayList<Element>();
 
   /**
    * Elements that can handle mouse events but have no mouse over.
    */
-  private ArrayList < Element > mouseElements = new ArrayList < Element >();
+  @Nonnull
+  private final ArrayList<Element> mouseElements = new ArrayList<Element>();
 
   /**
    * This is set to true when there is at least a single element that can handle mouse events but is at the moment
@@ -40,6 +44,7 @@ public class MouseOverHandler {
 
   /**
    * Add Element.
+   *
    * @param element Element
    */
   public void addMouseOverElement(final Element element) {
@@ -52,8 +57,10 @@ public class MouseOverHandler {
 
   /**
    * Get current state as a String supposed for debug output.
+   *
    * @return info
    */
+  @Nonnull
   public String getInfoString() {
     StringBuffer result = new StringBuffer();
     result.append("mouse over elements: ");
@@ -63,20 +70,20 @@ public class MouseOverHandler {
     return result.toString();
   }
 
-  private void outputElements(final StringBuffer result, final ArrayList<Element> elements) {
+  private void outputElements(@Nonnull final StringBuffer result, @Nonnull final ArrayList<Element> elements) {
     if (elements.isEmpty()) {
       result.append("---");
     } else {
       for (int i = elements.size() - 1; i >= 0; i--) {
         Element element = elements.get(i);
-        result.append("[" + element.getId() + "]");
+        result.append("[").append(element.getId()).append("]");
       }
     }
   }
 
   public void processMouseOverEvent(
       final Element rootElement,
-      final NiftyMouseInputEvent mouseEvent,
+      @Nonnull final NiftyMouseInputEvent mouseEvent,
       final long eventTime) {
     for (int i = mouseOverElements.size() - 1; i >= 0; i--) {
       Element element = mouseOverElements.get(i);
@@ -86,7 +93,7 @@ public class MouseOverHandler {
     }
   }
 
-  public void processMouseEvent(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
+  public void processMouseEvent(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     // first step is to preprocess hover effects for all elements
     // this will deactivate all hover effects that are not active anymore
     // Note: This will make sure that all hover effects will be deactivated before a new
@@ -120,9 +127,10 @@ public class MouseOverHandler {
    * The result of this method will directly be used as the processed flag for a mouse event. So we return true when
    * there is:
    * a) at least a single mouse over element available (so in that case we've found an element below the mouse cursor
-   *    we can actually interact with)
+   * we can actually interact with)
    * b) there was at least a single element that is temporarily disabled because of an onStartScreen/onEndScreen/
-   *    interactionBlocked but would otherwise be able to interact with. 
+   * interactionBlocked but would otherwise be able to interact with.
+   *
    * @return true if there is a single element able to process mouse events or false if nothing is there
    */
   public boolean hitsElement() {

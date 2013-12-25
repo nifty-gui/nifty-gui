@@ -3,6 +3,7 @@ package de.lessvoid.nifty.input;
 
 /**
  * a nifty input event.
+ *
  * @author void
  */
 public enum NiftyStandardInputEvent implements NiftyInputEvent {
@@ -128,6 +129,7 @@ public enum NiftyStandardInputEvent implements NiftyInputEvent {
 
   /**
    * set additional character data.
+   *
    * @param characterParam character param
    */
   public void setCharacter(final char characterParam) {
@@ -136,6 +138,7 @@ public enum NiftyStandardInputEvent implements NiftyInputEvent {
 
   /**
    * get character.
+   *
    * @return character
    */
   public char getCharacter() {

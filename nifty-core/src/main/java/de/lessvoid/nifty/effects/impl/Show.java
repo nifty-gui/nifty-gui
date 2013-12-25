@@ -6,21 +6,35 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TargetElementResolver;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class Show implements EffectImpl {
+  @Nullable
   private Element targetElement;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
+    Screen screen = nifty.getCurrentScreen();
+    if (screen == null) {
+      return;
+    }
+    TargetElementResolver resolver = new TargetElementResolver(screen, element);
     targetElement = resolver.resolve(parameter.getProperty("targetElement"));
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (targetElement != null) {
       targetElement.show();
     } else {
@@ -28,6 +42,7 @@ public class Show implements EffectImpl {
     }
   }
 
+  @Override
   public void deactivate() {
   }
 }

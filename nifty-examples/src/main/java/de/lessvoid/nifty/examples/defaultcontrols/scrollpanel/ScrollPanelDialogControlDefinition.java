@@ -10,6 +10,8 @@ import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
 
+import javax.annotation.Nonnull;
+
 /**
  * The ScrollPanelDialogControlDefinition registers a new control with Nifty
  * that represents the whole Dialog. This gives us later an appropriate
@@ -18,9 +20,10 @@ import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefin
  */
 public class ScrollPanelDialogControlDefinition {
   public static final String NAME = "dialogScrollPanel";
-  private static CommonBuilders builders = new CommonBuilders();
+  @Nonnull
+  private static final CommonBuilders builders = new CommonBuilders();
 
-  public static void register(final Nifty nifty) {
+  public static void register(@Nonnull final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
       controller(new ScrollPanelDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{

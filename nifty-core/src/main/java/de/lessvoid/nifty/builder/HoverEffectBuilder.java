@@ -1,108 +1,125 @@
 package de.lessvoid.nifty.builder;
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectOnHoverAttributes;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlHoverAttributes;
 import de.lessvoid.nifty.effects.Falloff;
-import de.lessvoid.nifty.loaderv2.types.EffectValueType;
 
-public class HoverEffectBuilder {
-  private static Logger logger = Logger.getLogger(HoverEffectBuilder.class.getName());
-  private ControlEffectOnHoverAttributes attributes = new ControlEffectOnHoverAttributes();
-  private ControlHoverAttributes hoverAttributes = new ControlHoverAttributes();
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-  public HoverEffectBuilder(final String effectName) {
-    attributes.setName(effectName);
-    attributes.setControlHoverAttributes(hoverAttributes);
+public class HoverEffectBuilder extends EffectBuilder {
+  @Nonnull
+  private final ControlHoverAttributes hoverAttributes = new ControlHoverAttributes();
+
+  public HoverEffectBuilder(@Nonnull final String effectName) {
+    super(new ControlEffectOnHoverAttributes(), effectName);
+    getAttributes().setControlHoverAttributes(hoverAttributes);
   }
 
+  @Override
+  @Nonnull
   public HoverEffectBuilder inherit(final boolean inherit) {
-    attributes.setInherit(String.valueOf(inherit));
+    super.inherit(inherit);
     return this;
   }
 
+  @Override
+  @Nonnull
   public HoverEffectBuilder inherit() {
-    attributes.setInherit("true");
+    super.inherit();
     return this;
   }
 
+  @Override
+  @Nonnull
   public HoverEffectBuilder post(final boolean post) {
-    attributes.setPost(String.valueOf(post));
+    super.post(post);
     return this;
   }
 
+  @Override
+  @Nonnull
   public HoverEffectBuilder overlay(final boolean overlay) {
-    attributes.setOverlay(String.valueOf(overlay));
+    super.overlay(overlay);
     return this;
   }
 
-  public HoverEffectBuilder alternateEnable(final String alternateEnable) {
-    attributes.setAlternateEnable(alternateEnable);
+  @Override
+  @Nonnull
+  public HoverEffectBuilder alternateEnable(@Nonnull final String alternateEnable) {
+    super.alternateEnable(alternateEnable);
     return this;
   }
 
-  public HoverEffectBuilder alternateDisable(final String alternateDisable) {
-    attributes.setAlternateDisable(alternateDisable);
+  @Override
+  @Nonnull
+  public HoverEffectBuilder alternateDisable(@Nonnull final String alternateDisable) {
+    super.alternateDisable(alternateDisable);
     return this;
   }
 
-  public HoverEffectBuilder customKey(final String customKey) {
-    attributes.setCustomKey(customKey);
+  @Override
+  @Nonnull
+  public HoverEffectBuilder customKey(@Nonnull final String customKey) {
+    super.customKey(customKey);
     return this;
   }
 
+  @Override
+  @Nonnull
   public HoverEffectBuilder neverStopRendering(final boolean neverStopRendering) {
-    attributes.setNeverStopRendering(String.valueOf(neverStopRendering));
+    super.neverStopRendering(neverStopRendering);
     return this;
   }
 
-  public HoverEffectBuilder effectParameter(final String key, final String value) {
-    attributes.setAttribute(key, value);
+  @Override
+  @Nonnull
+  public HoverEffectBuilder effectParameter(@Nonnull final String key, @Nonnull final String value) {
+    super.effectParameter(key, value);
     return this;
   }
 
-  public HoverEffectBuilder hoverParameter(final String key, final String value) {
+  @Nonnull
+  public HoverEffectBuilder hoverParameter(@Nonnull final String key, @Nonnull final String value) {
     hoverAttributes.set(key, value);
     return this;
   }
 
-  public HoverEffectBuilder hoverFalloffType(final Falloff.HoverFalloffType hoverFalloffType) {
+  @Nonnull
+  public HoverEffectBuilder hoverFalloffType(@Nonnull final Falloff.HoverFalloffType hoverFalloffType) {
     hoverAttributes.set("hoverFalloffType", hoverFalloffType.toString());
     return this;
   }
-  
-  public HoverEffectBuilder hoverFalloffConstraint(final Falloff.HoverFalloffConstraint hoverFalloffConstraint) {
+
+  @Nonnull
+  public HoverEffectBuilder hoverFalloffConstraint(@Nonnull final Falloff.HoverFalloffConstraint
+      hoverFalloffConstraint) {
     hoverAttributes.set("hoverFalloffConstraint", hoverFalloffConstraint.toString());
     return this;
   }
-  
-  public HoverEffectBuilder hoverWidth(final String hoverWidth) {
+
+  @Nonnull
+  public HoverEffectBuilder hoverWidth(@Nonnull final String hoverWidth) {
     hoverAttributes.set("hoverWidth", hoverWidth);
     return this;
   }
-  
-  public HoverEffectBuilder hoverHeight(final String hoverHeight) {
+
+  @Nonnull
+  public HoverEffectBuilder hoverHeight(@Nonnull final String hoverHeight) {
     hoverAttributes.set("hoverHeight", hoverHeight);
     return this;
   }
 
+  @Override
+  @Nonnull
   public ControlEffectOnHoverAttributes getAttributes() {
-    return attributes;
+    return (ControlEffectOnHoverAttributes) attributes;
   }
 
-  public HoverEffectBuilder effectValue(final String ... values) {
-    if (values == null || values.length % 2 != 0) {
-      logger.warning("effect values must be given in pairs, example: effectValue(\"color\", \"#f00f\")");
-      return this;
-    }
-    EffectValueType effectValue = new EffectValueType();
-    for (int i=0; i<values.length/2; i++) {
-      String key = values[i*2+0];
-      String value = values[i*2+1];
-      effectValue.getAttributes().set(key, value);
-    }
-    attributes.addEffectValues(effectValue);
+  @Override
+  @Nonnull
+  public HoverEffectBuilder effectValue(@Nullable final String... values) {
+    super.effectValue(values);
     return this;
   }
 }

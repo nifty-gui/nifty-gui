@@ -8,7 +8,7 @@ import java.net.URL;
 
 /**
  * A resource location that searches the classpath
- * 
+ *
  * @author kevin
  */
 public class ClasspathLocation implements ResourceLocation {
@@ -24,6 +24,6 @@ public class ClasspathLocation implements ResourceLocation {
   @WillNotClose
   public InputStream getResourceAsStream(@Nonnull final String ref) {
     String cpRef = ref.replace('\\', '/');
-    return Thread.currentThread().getContextClassLoader().getResourceAsStream(cpRef);  
+    return Thread.currentThread().getContextClassLoader().getResourceAsStream(cpRef);
   }
 }

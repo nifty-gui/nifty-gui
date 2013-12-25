@@ -1,11 +1,12 @@
 package de.lessvoid.nifty.slick2d.loaders;
 
-import java.util.Iterator;
-
 import de.lessvoid.nifty.slick2d.render.cursor.SlickLoadCursorException;
 import de.lessvoid.nifty.slick2d.render.cursor.SlickMouseCursor;
 import de.lessvoid.nifty.slick2d.render.cursor.loader.LwjglCursorSlickMouseCursorLoader;
 import de.lessvoid.nifty.slick2d.render.cursor.loader.SlickMouseCursorLoader;
+
+import javax.annotation.Nonnull;
+import java.util.Iterator;
 
 /**
  * This maintains the list of known cursor loaders and queries them one by one in order to load a cursor.
@@ -23,6 +24,7 @@ public final class SlickMouseCursorLoaders extends AbstractSlickLoaders<SlickMou
    *
    * @return the singleton instance
    */
+  @Nonnull
   public static SlickMouseCursorLoaders getInstance() {
     return INSTANCE;
   }
@@ -42,6 +44,7 @@ public final class SlickMouseCursorLoaders extends AbstractSlickLoaders<SlickMou
    * @return the loaded mouse cursor
    * @throws IllegalArgumentException in case all loaders fail to load this cursor
    */
+  @Nonnull
   @SuppressWarnings("TypeMayBeWeakened")
   public SlickMouseCursor loadCursor(final String filename, final int hotspotX, final int hotspotY) {
     final Iterator<SlickMouseCursorLoader> itr = getLoaderIterator();
@@ -49,7 +52,7 @@ public final class SlickMouseCursorLoaders extends AbstractSlickLoaders<SlickMou
     while (itr.hasNext()) {
       try {
         return itr.next().loadCursor(filename, hotspotX, hotspotY);
-      } catch (final SlickLoadCursorException ignored) {
+      } catch (@Nonnull final SlickLoadCursorException ignored) {
         // this loader failed... does not matter
       }
     }
@@ -61,7 +64,7 @@ public final class SlickMouseCursorLoaders extends AbstractSlickLoaders<SlickMou
    * Add the default loaders.
    */
   @Override
-  public void loadDefaultLoaders(final SlickAddLoaderLocation order) {
+  public void loadDefaultLoaders(@Nonnull final SlickAddLoaderLocation order) {
     addLoader(new LwjglCursorSlickMouseCursorLoader(), order);
   }
 }

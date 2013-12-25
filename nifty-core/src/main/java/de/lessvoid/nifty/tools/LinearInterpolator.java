@@ -1,16 +1,18 @@
 package de.lessvoid.nifty.tools;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
  * A value computed based on linear interpolation between a set of points.
- * 
+ *
  * @author void
  */
 public class LinearInterpolator {
-  private ArrayList<Point> curve = new ArrayList<Point>();
+  @Nonnull
+  private final ArrayList<Point> curve = new ArrayList<Point>();
   private float maxX = 0;
-  
+
   public void addPoint(final float x, final float y) {
     curve.add(new Point(x, y));
   }
@@ -24,7 +26,7 @@ public class LinearInterpolator {
 
   public float getMaxX() {
     return maxX;
-  } 
+  }
 
   public float getValue(final float x) {
     Point p0 = curve.get(0);
@@ -44,16 +46,16 @@ public class LinearInterpolator {
     }
   }
 
-  private boolean isInInterval(final float x, final Point p0, final Point p1) {
+  private boolean isInInterval(final float x, @Nonnull final Point p0, @Nonnull final Point p1) {
     return x >= p0.x && x <= p1.x;
   }
 
-  private float calcValue(final float x, final Point p0, final Point p1) {
+  private float calcValue(final float x, @Nonnull final Point p0, @Nonnull final Point p1) {
     float st = (x - p0.x) / (p1.x - p0.x);
     return p0.y + st * (p1.y - p0.y);
   }
 
-  private float calcMaxX(final ArrayList<Point> curve) {
+  private float calcMaxX(@Nonnull final ArrayList<Point> curve) {
     float maxX = -1.0f;
     for (Point p : curve) {
       if (p.x > maxX) {
@@ -63,10 +65,10 @@ public class LinearInterpolator {
     return maxX;
   }
 
-  public class Point {
+  public static class Point {
     public float x;
-    public float y;
-    
+    public final float y;
+
     public Point(final float x, final float y) {
       this.x = x;
       this.y = y;

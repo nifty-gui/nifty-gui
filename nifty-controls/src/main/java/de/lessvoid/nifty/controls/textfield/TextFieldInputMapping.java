@@ -1,8 +1,11 @@
 package de.lessvoid.nifty.controls.textfield;
 
-import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The input mapping for the {@link de.lessvoid.nifty.controls.TextField}.
@@ -15,11 +18,13 @@ public class TextFieldInputMapping implements NiftyInputMapping {
    * Convert a keyboard input event to a {@link NiftyStandardInputEvent}.
    *
    * @param inputEvent the keyboard input event that needs to be converted
-   * @return the {@link NiftyStandardInputEvent} that is assigned to the keyboard event or {@code null} in case no event is
-   *         assigned
+   * @return the {@link NiftyStandardInputEvent} that is assigned to the keyboard event or {@code null} in case no
+   * event is
+   * assigned
    */
+  @Nullable
   @Override
-  public NiftyStandardInputEvent convert(final KeyboardInputEvent inputEvent) {
+  public NiftyStandardInputEvent convert(@Nonnull final KeyboardInputEvent inputEvent) {
     if (inputEvent.isKeyDown()) {
       return handleKeyDownEvent(inputEvent);
     } else {
@@ -28,13 +33,15 @@ public class TextFieldInputMapping implements NiftyInputMapping {
   }
 
   /**
-   * Translate a keyboard down event to a {@link NiftyStandardInputEvent} regarding the button that was used at this event.
+   * Translate a keyboard down event to a {@link NiftyStandardInputEvent} regarding the button that was used at this
+   * event.
    *
    * @param inputEvent the keyboard input event that needs translation
    * @return {@link NiftyStandardInputEvent} that is assigned to the keyboard event or {@code null} in case no event is
-   *         assigned
+   * assigned
    */
-  private static NiftyStandardInputEvent handleKeyDownEvent(final KeyboardInputEvent inputEvent) {
+  @Nullable
+  private static NiftyStandardInputEvent handleKeyDownEvent(@Nonnull final KeyboardInputEvent inputEvent) {
     switch (inputEvent.getKey()) {
       case KeyboardInputEvent.KEY_UP:
         return NiftyStandardInputEvent.MoveCursorUp;
@@ -60,7 +67,8 @@ public class TextFieldInputMapping implements NiftyInputMapping {
       case KeyboardInputEvent.KEY_RSHIFT:
         return NiftyStandardInputEvent.SelectionStart;
       case KeyboardInputEvent.KEY_TAB:
-        return inputEvent.isShiftDown() ? NiftyStandardInputEvent.PrevInputElement : NiftyStandardInputEvent.NextInputElement;
+        return inputEvent.isShiftDown() ? NiftyStandardInputEvent.PrevInputElement : NiftyStandardInputEvent
+            .NextInputElement;
       case KeyboardInputEvent.KEY_X:
         if (inputEvent.isControlDown()) {
           return NiftyStandardInputEvent.Cut;
@@ -99,7 +107,8 @@ public class TextFieldInputMapping implements NiftyInputMapping {
    * @param inputEvent the keyboard input event that triggered the call of this function
    * @return the assigned {@link NiftyStandardInputEvent} or {@code null} in case no event is assigned
    */
-  private static NiftyStandardInputEvent handleKeyUpEvent(final KeyboardInputEvent inputEvent) {
+  @Nullable
+  private static NiftyStandardInputEvent handleKeyUpEvent(@Nonnull final KeyboardInputEvent inputEvent) {
     switch (inputEvent.getKey()) {
       case KeyboardInputEvent.KEY_LSHIFT:
       case KeyboardInputEvent.KEY_RSHIFT:

@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.NiftyExample;
@@ -18,8 +17,8 @@ import java.util.logging.LogManager;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
- *
- * {@inheritDoc}
+ *         <p/>
+ *         {@inheritDoc}
  */
 public class LibgdxExampleApplication implements ApplicationListener {
   private Nifty nifty;
@@ -77,17 +76,18 @@ public class LibgdxExampleApplication implements ApplicationListener {
     try {
       LogManager.getLogManager().readConfiguration(ClassLoader.getSystemResourceAsStream("logging.properties"));
     } catch (Exception e) {
-      Gdx.app.error("LibgdxExampleApplication", "Could not read logging configuration file: assets/logging.properties", e);
+      Gdx.app.error("LibgdxExampleApplication", "Could not read logging configuration file: assets/logging" +
+          ".properties", e);
     }
   }
 
   /**
    * Called when the {@link com.badlogic.gdx.Application} is resized. This can happen at any point during a non-paused
    * state but will never happen before a call to {@link #create()}.
-   *
+   * <p/>
    * Note: This will be called once automatically during initialization, directly after create().
    *
-   * @param width the new width in pixels
+   * @param width  the new width in pixels
    * @param height the new height in pixels
    */
   @Override

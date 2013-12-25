@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.menu;
 
-import java.io.IOException;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
@@ -16,7 +14,7 @@ public final class MenuExampleMain {
   private MenuExampleMain() {
   }
 
-  public static void main(final String[] args) throws IOException {
+  public static void main(final String[] args) {
     if (!LwjglInitHelper.initSubSystems("Nifty Menu")) {
       System.exit(0);
     }

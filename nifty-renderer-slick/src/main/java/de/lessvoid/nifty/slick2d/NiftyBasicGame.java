@@ -1,8 +1,12 @@
 package de.lessvoid.nifty.slick2d;
 
+import de.lessvoid.nifty.Nifty;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This "game" implements all the features of a Slick BasicGame with the sole purpose of displaying a NiftyGUI on top of
@@ -14,6 +18,7 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
   /**
    * The screen that is called when preparing the GUI.
    */
+  @Nullable
   private final String startScreen;
 
   /**
@@ -21,17 +26,17 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
    *
    * @param gameTitle the title of the game
    */
-  protected NiftyBasicGame(final String gameTitle) {
+  protected NiftyBasicGame(@Nonnull final String gameTitle) {
     this(gameTitle, "start");
   }
 
   /**
    * Create a new game that displays the Nifty GUI and set the title and the start screen for this game.
    *
-   * @param gameTitle the title of the game
+   * @param gameTitle        the title of the game
    * @param niftyStartScreen the name of the screen that should be called first
    */
-  protected NiftyBasicGame(final String gameTitle, final String niftyStartScreen) {
+  protected NiftyBasicGame(@Nonnull final String gameTitle, @Nullable final String niftyStartScreen) {
     super(gameTitle);
     startScreen = niftyStartScreen;
   }
@@ -40,16 +45,22 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
    * When initializing the game its only needed to prepare the GUI for display.
    */
   @Override
-  protected void initGameAndGUI(final GameContainer container) {
+  protected void initGameAndGUI(@Nonnull final GameContainer container) {
     initNifty(container);
-    getNifty().gotoScreen(startScreen);
+    if (startScreen != null) {
+      Nifty nifty = getNifty();
+      if (nifty == null) {
+        throw new IllegalStateException("Nifty is not initialized, but it should be.");
+      }
+      nifty.gotoScreen(startScreen);
+    }
   }
 
   /**
    * Rendering the GUI only requires that the display is cleared before rendering the screen.
    */
   @Override
-  protected void renderGame(final GameContainer container, final Graphics g) throws SlickException {
+  protected void renderGame(@Nonnull final GameContainer container, @Nonnull final Graphics g) {
     g.clear();
   }
 
@@ -57,7 +68,7 @@ public abstract class NiftyBasicGame extends NiftyOverlayBasicGame {
    * Updating the game is not needed in this implementation as only the GUI is displayed.
    */
   @Override
-  protected void updateGame(final GameContainer container, final int delta) throws SlickException {
+  protected void updateGame(@Nonnull final GameContainer container, final int delta) throws SlickException {
     // nothing to do
   }
 }

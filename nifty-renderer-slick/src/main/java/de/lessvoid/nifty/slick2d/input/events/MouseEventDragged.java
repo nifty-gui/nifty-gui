@@ -3,6 +3,8 @@ package de.lessvoid.nifty.slick2d.input.events;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import org.newdawn.slick.InputListener;
 
+import javax.annotation.Nonnull;
+
 /**
  * This mouse event is used to store the event generated in case the mouse cursor is moved with one button pressed.
  *
@@ -23,10 +25,10 @@ public final class MouseEventDragged extends AbstractMouseEventButton {
    * Create a mouse dragged event.
    *
    * @param mouseButton the mouse button that was used
-   * @param startX the X coordinate of the location where the movement started
-   * @param startY the Y coordinate of the location where the movement started
-   * @param endX the X coordinate of the location where the movement stopped
-   * @param endY the Y coordinate of the location where the movement stopped
+   * @param startX      the X coordinate of the location where the movement started
+   * @param startY      the Y coordinate of the location where the movement started
+   * @param endX        the X coordinate of the location where the movement stopped
+   * @param endY        the Y coordinate of the location where the movement stopped
    */
   public MouseEventDragged(final int mouseButton, final int startX, final int startY, final int endX, final int endY) {
     super(startX, startY, mouseButton);
@@ -38,7 +40,7 @@ public final class MouseEventDragged extends AbstractMouseEventButton {
    * Send the event to the Nifty input consumer.
    */
   @Override
-  public boolean sendToNifty(final NiftyInputConsumer consumer) {
+  public boolean sendToNifty(@Nonnull final NiftyInputConsumer consumer) {
     return consumer.processMouseEvent(targetX, targetY, 0, getButton(), true);
   }
 
@@ -46,7 +48,7 @@ public final class MouseEventDragged extends AbstractMouseEventButton {
    * Send the event to the Slick input listener.
    */
   @Override
-  public boolean sendToSlick(final InputListener listener) {
+  public boolean sendToSlick(@Nonnull final InputListener listener) {
     listener.mouseDragged(getX(), getY(), targetX, targetY);
     return true;
   }

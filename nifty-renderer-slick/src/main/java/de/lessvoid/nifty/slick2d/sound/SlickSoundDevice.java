@@ -7,6 +7,8 @@ import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import javax.annotation.Nonnull;
+
 /**
  * Slick Implementation of the SoundLoader.
  *
@@ -17,11 +19,11 @@ public final class SlickSoundDevice implements SoundDevice {
    * Load a music piece.
    *
    * @param soundSystem soundSystem
-   * @param filename file to load
+   * @param filename    file to load
    * @return the music piece
    */
   @Override
-  public SoundHandle loadMusic(final SoundSystem soundSystem, final String filename) {
+  public SoundHandle loadMusic(@Nonnull final SoundSystem soundSystem, @Nonnull final String filename) {
     return SlickMusicLoaders.getInstance().loadMusic(soundSystem, filename);
   }
 
@@ -29,16 +31,16 @@ public final class SlickSoundDevice implements SoundDevice {
    * Load a sound.
    *
    * @param soundSystem soundSystem
-   * @param filename filename of sound
+   * @param filename    filename of sound
    * @return handle to sound
    */
   @Override
-  public SoundHandle loadSound(final SoundSystem soundSystem, final String filename) {
+  public SoundHandle loadSound(@Nonnull final SoundSystem soundSystem, @Nonnull final String filename) {
     return SlickSoundLoaders.getInstance().loadSound(soundSystem, filename);
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     // no need for the resource loader
   }
 

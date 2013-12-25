@@ -1,17 +1,21 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.logging.Logger;
+
 public class NiftyStylesType extends XmlBaseType {
-  private Collection < RegisterMouseCursorType > registeredMouseCursor = new ArrayList < RegisterMouseCursorType >();
-  private Collection < StyleType > styles = new ArrayList < StyleType >();
-  private Collection < UseStylesType > useStyles = new ArrayList < UseStylesType >();
+  @Nonnull
+  private final Collection<RegisterMouseCursorType> registeredMouseCursor = new ArrayList<RegisterMouseCursorType>();
+  @Nonnull
+  private final Collection<StyleType> styles = new ArrayList<StyleType>();
+  @Nonnull
+  private final Collection<UseStylesType> useStyles = new ArrayList<UseStylesType>();
 
   public void addRegisterMouseCursor(final RegisterMouseCursorType registerMouseCursor) {
     registeredMouseCursor.add(registerMouseCursor);
@@ -25,7 +29,11 @@ public class NiftyStylesType extends XmlBaseType {
     useStyles.add(newStyle);
   }
 
-  public void loadStyles(final NiftyLoader niftyLoader, final NiftyType niftyType, final Nifty nifty, final Logger log) throws Exception {
+  public void loadStyles(
+      @Nonnull final NiftyLoader niftyLoader,
+      @Nonnull final NiftyType niftyType,
+      @Nonnull final Nifty nifty,
+      @Nonnull final Logger log) throws Exception {
     for (RegisterMouseCursorType registerMouseCursorType : registeredMouseCursor) {
       registerMouseCursorType.translateSpecialValues(nifty, null);
       registerMouseCursorType.materialize(nifty, log);
@@ -38,10 +46,11 @@ public class NiftyStylesType extends XmlBaseType {
     }
   }
 
+  @Nonnull
   public String output() {
     int offset = 1;
     return
-      "\nNifty Data:\n" + CollectionLogger.out(offset, styles, "styles")
-      + "\n" + CollectionLogger.out(offset, useStyles, "useStyles");
+        "\nNifty Data:\n" + CollectionLogger.out(offset, styles, "styles")
+            + "\n" + CollectionLogger.out(offset, useStyles, "useStyles");
   }
 }

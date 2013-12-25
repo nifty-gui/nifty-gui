@@ -1,13 +1,16 @@
 package de.lessvoid.nifty.controls.textfield.format;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is the implicit default format. It will display the text in exactly the way it was typed in.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class FormatPlain implements TextFieldDisplayFormat {
+  @Nonnull
   @Override
-  public CharSequence getDisplaySequence(final CharSequence original, final int start, final int end) {
+  public CharSequence getDisplaySequence(@Nonnull final CharSequence original, final int start, final int end) {
     return original.subSequence(start, end);
   }
 }

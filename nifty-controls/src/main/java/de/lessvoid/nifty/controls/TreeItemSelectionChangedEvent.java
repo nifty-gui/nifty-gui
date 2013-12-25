@@ -4,25 +4,25 @@
  */
 package de.lessvoid.nifty.controls;
 
-import de.lessvoid.nifty.NiftyEvent;
-import de.lessvoid.nifty.controls.treebox.TreeBoxControl;
+import javax.annotation.Nonnull;
 
 /**
- *
  * @author Martin Karing
  */
 @SuppressWarnings("rawtypes")
 public class TreeItemSelectionChangedEvent<T> extends ListBoxSelectionChangedEvent<TreeItem<T>> {
-    
-    private TreeBox treeBoxControl;
+  @Nonnull
+  private final TreeBox treeBoxControl;
 
-    public TreeItemSelectionChangedEvent(final TreeBoxControl<T> treeBoxControl,
-                                 final ListBoxSelectionChangedEvent<TreeItem<T>> org) {
-      super(treeBoxControl, org.getSelection(), org.getSelectionIndices());
-      this.treeBoxControl = treeBoxControl;
-    }
+  public TreeItemSelectionChangedEvent(
+      @Nonnull final TreeBox<T> treeBoxControl,
+      @Nonnull final ListBoxSelectionChangedEvent<TreeItem<T>> org) {
+    super(treeBoxControl, org.getSelection(), org.getSelectionIndices());
+    this.treeBoxControl = treeBoxControl;
+  }
 
-    public TreeBox<T> getTreeBoxControl() {
-        return treeBoxControl;
-    }
+  @Nonnull
+  public TreeBox getTreeBoxControl() {
+    return treeBoxControl;
+  }
 }

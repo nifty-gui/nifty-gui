@@ -5,6 +5,8 @@ import de.lessvoid.nifty.slick2d.sound.sound.SlickLoadSoundException;
 import de.lessvoid.nifty.slick2d.sound.sound.SlickSoundHandle;
 import de.lessvoid.nifty.sound.SoundSystem;
 
+import javax.annotation.Nonnull;
+
 /**
  * The interface for all loaders that take care for loading sounds.
  *
@@ -15,9 +17,10 @@ public interface SlickSoundLoader extends SlickLoader {
    * Load a new sound.
    *
    * @param soundSystem the sound system that manages the sound
-   * @param filename the name of the file storing the sound data
+   * @param filename    the name of the file storing the sound data
    * @return the loaded sound
    * @throws SlickLoadSoundException in case loading the sound fails
    */
+  @Nonnull
   SlickSoundHandle loadSound(SoundSystem soundSystem, String filename) throws SlickLoadSoundException;
 }

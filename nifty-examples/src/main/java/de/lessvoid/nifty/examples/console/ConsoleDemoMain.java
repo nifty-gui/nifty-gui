@@ -24,6 +24,7 @@ public final class ConsoleDemoMain {
 
   /**
    * Main method.
+   *
    * @param args arguments
    */
   public static void main(final String[] args) {
@@ -41,6 +42,7 @@ public final class ConsoleDemoMain {
 
     // render
     LwjglInitHelper.renderLoop(nifty, new RenderLoopCallback() {
+      @Override
       public void process() {
       }
     });

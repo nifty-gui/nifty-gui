@@ -10,32 +10,42 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
+import javax.annotation.Nonnull;
+
 /**
  * ColorPulsate.
+ *
  * @author void
  */
 public class ColorPulsate implements EffectImpl {
   private Color startColor;
   private Color endColor;
   private Pulsator pulsator;
-  private Color currentColor = new Color("#000f");
+  @Nonnull
+  private final Color currentColor = new Color("#000f");
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     startColor = new Color(parameter.getProperty("startColor", "#00000000"));
     endColor = new Color(parameter.getProperty("endColor", "#ffffffff"));
     pulsator = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     float value = pulsator.update();
     currentColor.linear(startColor, endColor, value);
     r.setColor(currentColor);
   }
 
+  @Override
   public void deactivate() {
   }
 }

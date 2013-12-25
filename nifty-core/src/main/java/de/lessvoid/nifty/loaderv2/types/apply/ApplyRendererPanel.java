@@ -10,18 +10,24 @@ import de.lessvoid.nifty.render.image.ImageModeHelper;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class ApplyRendererPanel implements ApplyRenderer {
-  private Convert convert;
+import javax.annotation.Nonnull;
+import java.util.logging.Logger;
 
-  public ApplyRendererPanel(final Convert convertParam) {
+public class ApplyRendererPanel implements ApplyRenderer {
+  private static final Logger log = Logger.getLogger(ApplyRendererPanel.class.getName());
+  @Nonnull
+  private final Convert convert;
+
+  public ApplyRendererPanel(@Nonnull final Convert convertParam) {
     convert = convertParam;
   }
 
+  @Override
   public void apply(
-      final Screen screen,
-      final Element element,
-      final Attributes attributes,
-      final NiftyRenderEngine renderEngine) {
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Attributes attributes,
+      @Nonnull final NiftyRenderEngine renderEngine) {
     PanelRenderer panelRenderer = element.getRenderer(PanelRenderer.class);
     if (panelRenderer == null) {
       return;
@@ -33,17 +39,22 @@ public class ApplyRendererPanel implements ApplyRenderer {
       return;
     }
 
+    String backgroundImage = attributes.get("backgroundImage");
+    if (backgroundImage == null) {
+      return;
+    }
+
     NiftyImage image =
-      renderEngine.createImage(
-          screen,
-          attributes.get("backgroundImage"),
-          attributes.getAsBoolean("filter", Convert.DEFAULT_IMAGE_FILTER));
+        renderEngine.createImage(
+            screen,
+            backgroundImage,
+            attributes.getAsBoolean("filter", Convert.DEFAULT_IMAGE_FILTER));
     if (image == null) {
       return;
     }
-    
-	String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(attributes.getAttributes());
-	String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(attributes.getAttributes());
+
+    String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(attributes.getAttributes());
+    String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(attributes.getAttributes());
     ImageMode imageMode = convert.imageMode(areaProviderProperty, renderStrategyProperty);
 
     image.setImageMode(imageMode);

@@ -4,21 +4,10 @@
  */
 package de.lessvoid.nifty.examples.defaultcontrols;
 
-import org.lwjgl.opengl.DisplayMode;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
-import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.HoverEffectBuilder;
-import de.lessvoid.nifty.builder.ImageBuilder;
-import de.lessvoid.nifty.builder.LayerBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.PopupBuilder;
-import de.lessvoid.nifty.builder.ScreenBuilder;
-import de.lessvoid.nifty.builder.StyleBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.builder.*;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
@@ -50,9 +39,14 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import de.lessvoid.nifty.tools.Color;
+import org.lwjgl.opengl.DisplayMode;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ControlsDemo<T> implements NiftyExample {
-  private static CommonBuilders builders = new CommonBuilders();
+  @Nonnull
+  private static final CommonBuilders builders = new CommonBuilders();
   private final ResolutionControl<T> resolutionControl;
 
   // this will enable the batched renderer when set to true
@@ -99,6 +93,7 @@ public class ControlsDemo<T> implements NiftyExample {
     LwjglInitHelper.destroy();
   }
 
+  @Nonnull
   private static BatchRenderBackend createBatchRenderBackend(final boolean useCoreProfile) {
     if (useCoreProfile) {
       return new LwjglBatchRenderBackendCoreProfile();
@@ -107,8 +102,9 @@ public class ControlsDemo<T> implements NiftyExample {
     }
   }
 
-  private static Screen createIntroScreen(final Nifty nifty) {
-    Screen screen = new ScreenBuilder("start") {{
+  @Nonnull
+  private static Screen createIntroScreen(@Nonnull final Nifty nifty) {
+    return new ScreenBuilder("start") {{
       controller(new DefaultScreenController() {
         @Override
         public void onStartScreen() {
@@ -240,12 +236,12 @@ public class ControlsDemo<T> implements NiftyExample {
         }});
       }});
     }}.build(nifty);
-    return screen;
   }
 
-  private static <T> Screen createDemoScreen(final Nifty nifty, final ResolutionControl<T> resControl) {
+  @Nonnull
+  private static <T> Screen createDemoScreen(@Nonnull final Nifty nifty, final ResolutionControl<T> resControl) {
     final CommonBuilders common = new CommonBuilders();
-    Screen screen = new ScreenBuilder("demo") {{
+    return new ScreenBuilder("demo") {{
       controller(
           new ControlsDemoScreenController<T>(
               resControl,
@@ -261,7 +257,7 @@ public class ControlsDemo<T> implements NiftyExample {
               "menuButtonTreeBoxControl", "dialogTreeBoxControl",
               "menuButtonEventConsumeControl", "dialogEventConsumeControl"));
       // this will enable Keyboard events for the screen controller
-      inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping"); 
+      inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping");
       layer(new LayerBuilder("layer") {{
         backgroundImage("defaultcontrols/background-new.png");
         childLayoutVertical();
@@ -415,10 +411,9 @@ public class ControlsDemo<T> implements NiftyExample {
         }});
       }});
     }}.build(nifty);
-    return screen;
   }
 
-  private static void registerMenuButtonHintStyle(final Nifty nifty) {
+  private static void registerMenuButtonHintStyle(@Nonnull final Nifty nifty) {
     new StyleBuilder() {{
       id("special-hint");
       base("nifty-panel-bright");
@@ -463,7 +458,7 @@ public class ControlsDemo<T> implements NiftyExample {
     }}.build(nifty);
   }
 
-  private static void registerStyles(final Nifty nifty) {
+  private static void registerStyles(@Nonnull final Nifty nifty) {
     new StyleBuilder() {{
       id("base-font-link");
       base("base-font");
@@ -494,7 +489,7 @@ public class ControlsDemo<T> implements NiftyExample {
     }}.build(nifty);
   }
 
-  private static void registerConsolePopup(Nifty nifty) {
+  private static void registerConsolePopup(@Nonnull Nifty nifty) {
     new PopupBuilder("consolePopup") {{
       childLayoutAbsolute();
       panel(new PanelBuilder() {{
@@ -527,7 +522,7 @@ public class ControlsDemo<T> implements NiftyExample {
     }}.registerPopup(nifty);
   }
 
-  private static void registerCreditsPopup(final Nifty nifty) {
+  private static void registerCreditsPopup(@Nonnull final Nifty nifty) {
     final CommonBuilders common = new CommonBuilders();
     new PopupBuilder("creditsPopup") {{
       childLayoutCenter();
@@ -740,23 +735,26 @@ public class ControlsDemo<T> implements NiftyExample {
     }}.registerPopup(nifty);
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nullable
   @Override
   public String getMainXML() {
     return null;
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Controls Demonstration";
   }
 
   @Override
-  public void prepareStart(Nifty nifty) {
+  public void prepareStart(@Nonnull Nifty nifty) {
     nifty.loadStyleFile("nifty-default-styles.xml");
     nifty.loadControlFile("nifty-default-controls.xml");
     nifty.registerSound("intro", "defaultcontrols/sound/19546__tobi123__Gong_mf2.wav");

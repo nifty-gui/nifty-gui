@@ -8,28 +8,39 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Play a sound.
+ *
  * @author void
  */
 public class PlaySound implements EffectImpl {
   private boolean done;
   private boolean repeat;
+  @Nullable
   private SoundHandle soundHandle;
+  @Nullable
   private Nifty nifty;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     this.nifty = nifty;
     soundHandle = nifty.getSoundSystem().getSound(parameter.getProperty("sound"));
     repeat = Boolean.valueOf(parameter.getProperty("repeat", "false"));
     done = false;
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (normalizedTime > 0.0f) {
       if (soundHandle != null) {
         if (!done) {
@@ -48,10 +59,13 @@ public class PlaySound implements EffectImpl {
   }
 
   private void playSound() {
-    soundHandle.setVolume(nifty.getSoundSystem().getSoundVolume());
-    soundHandle.play();
+    if (soundHandle != null && nifty != null) {
+      soundHandle.setVolume(nifty.getSoundSystem().getSoundVolume());
+      soundHandle.play();
+    }
   }
 
+  @Override
   public void deactivate() {
   }
 }

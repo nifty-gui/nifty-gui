@@ -1,19 +1,20 @@
 package de.lessvoid.nifty.tools.pulsate.provider;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.tools.pulsate.PulsatorProvider;
 
 import javax.annotation.Nonnull;
+import java.util.Properties;
 
 /**
  * The NullPulsator does not really pulsate =).
+ *
  * @author void
  */
 public class NullPulsator implements PulsatorProvider {
 
   /**
    * Actually does nothing.
+   *
    * @param parameter the parameters
    */
   @Override
@@ -22,6 +23,7 @@ public class NullPulsator implements PulsatorProvider {
 
   /**
    * Always returns 0.
+   *
    * @param msTime the time
    * @return always returns 0
    */
@@ -32,6 +34,7 @@ public class NullPulsator implements PulsatorProvider {
 
   /**
    * Reset.
+   *
    * @param msTime the time
    */
   @Override

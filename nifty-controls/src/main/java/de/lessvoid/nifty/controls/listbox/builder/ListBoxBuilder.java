@@ -2,16 +2,18 @@ package de.lessvoid.nifty.controls.listbox.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 
+import javax.annotation.Nonnull;
+
 public class ListBoxBuilder extends ControlBuilder {
   public ListBoxBuilder() {
     super("listBox");
   }
 
-  public ListBoxBuilder(final String id) {
+  public ListBoxBuilder(@Nonnull final String id) {
     super(id, "listBox");
   }
 
-  protected ListBoxBuilder(final String id, final String name) {
+  protected ListBoxBuilder(@Nonnull final String id, @Nonnull final String name) {
     super(id, name);
   }
 
@@ -55,7 +57,7 @@ public class ListBoxBuilder extends ControlBuilder {
     set("horizontal", "optional");
   }
 
-  public void viewConverterClass(final Class<?> clazz) {
+  public void viewConverterClass(@Nonnull final Class<?> clazz) {
     set("viewConverterClass", clazz.getName());
   }
 }

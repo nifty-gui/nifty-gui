@@ -1,8 +1,5 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import de.lessvoid.xml.lwxs.XmlType;
 import de.lessvoid.xml.tools.ClassHelper;
 import de.lessvoid.xml.tools.MethodInvoker;
@@ -10,62 +7,83 @@ import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class XmlProcessorType implements XmlProcessor {
-  private String fullClassName;
-  private Collection < XmlProcessorElement > elements = new ArrayList < XmlProcessorElement >();
-  private Collection < XmlProcessorSubstituitionGroup > substGroups = new ArrayList < XmlProcessorSubstituitionGroup >();
+  @Nonnull
+  private static final Logger log = Logger.getLogger(XmlProcessorType.class.getName());
+  @Nonnull
+  private final String fullClassName;
+  @Nonnull
+  private final Collection < XmlProcessorElement > elements = new ArrayList < XmlProcessorElement >();
+  @Nonnull
+  private final Collection < XmlProcessorSubstituitionGroup > substGroups = new ArrayList < XmlProcessorSubstituitionGroup >();
+  @Nullable
   private XmlType xmlTypeParentSingle;
+  @Nullable
   private XmlType xmlTypeParentMultiple;
+  @Nullable
   private String xmlTypeParentName;
+  @Nullable
   private XmlType xmlType;
 
-  public XmlProcessorType(final String fullClassNameParam) {
+  public XmlProcessorType(@Nonnull final String fullClassNameParam) {
     fullClassName = fullClassNameParam;
   }
 
-  public void addElementProcessor(final XmlProcessorElement element) {
+  public void addElementProcessor(@Nonnull final XmlProcessorElement element) {
     elements.add(element);
   }
 
-  public void addSubstituitionGroup(final XmlProcessorSubstituitionGroup element) {
+  public void addSubstituitionGroup(@Nonnull final XmlProcessorSubstituitionGroup element) {
     substGroups.add(element);
   }
 
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
+  @Override
+  public void process(@Nonnull final XmlParser xmlParser, @Nonnull final Attributes attributes) throws Exception {
     xmlType = ClassHelper.getInstance(fullClassName, XmlType.class);
-    xmlType.initFromAttributes(attributes);
+    if (xmlType == null) {
+      log.log(Level.SEVERE, "Failed to process XML. Requested class " + fullClassName + " failed to locate.");
+    } else {
+      xmlType.applyAttributes(attributes);
+      if (xmlTypeParentSingle != null) {
+        invoke(xmlType, xmlTypeParentSingle, "set");
+      } else if (xmlTypeParentMultiple != null) {
+        invoke(xmlType, xmlTypeParentMultiple, "add");
+      }
 
-    if (xmlTypeParentSingle != null) {
-      invoke(xmlType, xmlTypeParentSingle, "set");
-    } else if (xmlTypeParentMultiple != null) {
-      invoke(xmlType, xmlTypeParentMultiple, "add");
-    }
-
-    xmlParser.nextTag();
-    for (XmlProcessorElement child : elements) {
-      child.process(xmlParser, xmlType);
-    }
-    for (XmlProcessorSubstituitionGroup subst : substGroups) {
-      xmlParser.zeroOrMore(subst.getSubstGroup(xmlType));
+      xmlParser.nextTag();
+      for (XmlProcessorElement child : elements) {
+        child.process(xmlParser, xmlType);
+      }
+      for (XmlProcessorSubstituitionGroup subst : substGroups) {
+        xmlParser.zeroOrMore(subst.getSubstGroup(xmlType));
+      }
     }
   }
 
+  @Nullable
   public XmlType getXmlType() {
     return xmlType;
   }
 
-  private void invoke(final XmlType child, final XmlType parent, final String qualifier) {
+  private void invoke(@Nonnull final XmlType child, @Nonnull final XmlType parent, @Nonnull final String qualifier) {
     MethodInvoker methodInvoker = new MethodInvoker(qualifier + xmlTypeParentName + "()", parent);
     methodInvoker.invoke(child);
   }
 
-  public void parentLinkSet(final XmlType xmlTypeParent, final String elementName) {
+  public void parentLinkSet(@Nonnull final XmlType xmlTypeParent, @Nonnull final String elementName) {
     xmlTypeParentSingle = xmlTypeParent;
     xmlTypeParentMultiple = null;
     xmlTypeParentName = elementName;
   }
 
-  public void parentLinkAdd(final XmlType xmlTypeParent, final String elementName) {
+  public void parentLinkAdd(@Nonnull final XmlType xmlTypeParent, @Nonnull final String elementName) {
     xmlTypeParentSingle = null;
     xmlTypeParentMultiple = xmlTypeParent;
     xmlTypeParentName = elementName;

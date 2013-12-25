@@ -1,18 +1,12 @@
-package de.lessvoid.nifty.controls;
+package de.lessvoid.nifty.controls.listbox;
 
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxImpl;
-import de.lessvoid.nifty.controls.listbox.ListBoxTestTool;
-import de.lessvoid.nifty.controls.listbox.ListBoxView;
-import de.lessvoid.nifty.controls.listbox.TestItem;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.classextension.EasyMock.*;
 
 public class ListBoxSingleSelectionListViewTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);

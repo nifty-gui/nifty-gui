@@ -4,6 +4,8 @@ import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.slick2d.input.InputState;
 import org.newdawn.slick.InputListener;
 
+import javax.annotation.Nonnull;
+
 /**
  * This mouse event is used to store the event generated in case a mouse button is pressed down.
  *
@@ -13,8 +15,8 @@ public final class MouseEventPressed extends AbstractMouseEventButton {
   /**
    * Create a new mouse button pressed event.
    *
-   * @param x the x coordinate of the event location
-   * @param y the y coordinate of the event location
+   * @param x           the x coordinate of the event location
+   * @param y           the y coordinate of the event location
    * @param mouseButton the mouse button that was used
    */
   public MouseEventPressed(final int x, final int y, final int mouseButton) {
@@ -25,7 +27,7 @@ public final class MouseEventPressed extends AbstractMouseEventButton {
    * Send the event to a Nifty input event consumer.
    */
   @Override
-  public boolean sendToNifty(final NiftyInputConsumer consumer) {
+  public boolean sendToNifty(@Nonnull final NiftyInputConsumer consumer) {
     return consumer.processMouseEvent(getX(), getY(), 0, getButton(), true);
   }
 
@@ -33,7 +35,7 @@ public final class MouseEventPressed extends AbstractMouseEventButton {
    * Send the event to a slick input event consumer.
    */
   @Override
-  public boolean sendToSlick(final InputListener listener) {
+  public boolean sendToSlick(@Nonnull final InputListener listener) {
     listener.mousePressed(getButton(), getX(), getY());
     return true;
   }
@@ -42,7 +44,7 @@ public final class MouseEventPressed extends AbstractMouseEventButton {
    * Tell the state to consume the next click event in case the click happened upon the GUI.
    */
   @Override
-  public void updateState(final InputState state, final boolean handledByGUI) {
+  public void updateState(@Nonnull final InputState state, final boolean handledByGUI) {
     state.setConsumeNextClick(handledByGUI);
   }
 }

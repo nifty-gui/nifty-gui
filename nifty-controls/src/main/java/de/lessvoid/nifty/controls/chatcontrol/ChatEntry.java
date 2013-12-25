@@ -2,49 +2,56 @@ package de.lessvoid.nifty.controls.chatcontrol;
 
 import de.lessvoid.nifty.render.NiftyImage;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
- *
  * @author ractoc
  */
 final class ChatEntry {
-    
-    private String label;
-    private NiftyImage icon;
-    private String style;
-    
-    public ChatEntry(String label, NiftyImage icon) {
-        setLabel(label);
-        setIcon(icon);
-    }
+  @Nonnull
+  private String label;
+  @Nullable
+  private NiftyImage icon;
+  @Nullable
+  private String style;
 
-    public ChatEntry(String label, NiftyImage icon, String style) {
-        setLabel(label);
-        setIcon(icon);
-        setStyle(style);
-    }
+  public ChatEntry(@Nonnull String label, @Nullable NiftyImage icon) {
+    setLabel(label);
+    setIcon(icon);
+  }
 
-    public NiftyImage getIcon() {
-        return icon;
-    }
+  public ChatEntry(@Nonnull String label, @Nullable NiftyImage icon, @Nullable String style) {
+    setLabel(label);
+    setIcon(icon);
+    setStyle(style);
+  }
 
-    public void setIcon(NiftyImage icon) {
-        this.icon = icon;
-    }
+  @Nullable
+  public NiftyImage getIcon() {
+    return icon;
+  }
 
-    public String getLabel() {
-        return label;
-    }
+  public void setIcon(@Nullable NiftyImage icon) {
+    this.icon = icon;
+  }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+  @Nonnull
+  public String getLabel() {
+    return label;
+  }
 
-    public String getStyle() {
-        return style;
-    }
+  public void setLabel(@Nonnull String label) {
+    this.label = label;
+  }
 
-    public void setStyle(String style) {
-        this.style = style;
-    }
-    
+  @Nullable
+  public String getStyle() {
+    return style;
+  }
+
+  public void setStyle(@Nullable String style) {
+    this.style = style;
+  }
+
 }

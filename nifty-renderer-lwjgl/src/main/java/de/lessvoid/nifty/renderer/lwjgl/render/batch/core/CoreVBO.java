@@ -1,32 +1,25 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
 
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.GL_STREAM_DRAW;
-import static org.lwjgl.opengl.GL15.GL_WRITE_ONLY;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glDeleteBuffers;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL15.*;
+import org.lwjgl.BufferUtils;
 
+import javax.annotation.Nonnull;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import org.lwjgl.BufferUtils;
+import static org.lwjgl.opengl.GL15.*;
 
 /**
  * The CoreArrayVBO class represents a VBO bound to GL_ARRAY_BUFFER.
+ *
  * @author void
  */
 public class CoreVBO {
   private final int id;
   private final int usage;
   private final long byteLength;
-  private FloatBuffer vertexBuffer;
+  private final FloatBuffer vertexBuffer;
   private ByteBuffer mappedBufferCache;
 
   /**
@@ -34,22 +27,24 @@ public class CoreVBO {
    * create the buffer object but does not bind or sends the data to the GPU.
    * You'll need to call bind() to bind this VBO and you'll need to call sendData()
    * to transmit the buffer data to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createStatic(final float[] data) {
+  @Nonnull
+  public static CoreVBO createStatic(@Nonnull final float[] data) {
     return new CoreVBO(GL_STATIC_DRAW, data);
   }
 
   /**
    * This provides the same functionality as createStaticVBO() but automatically
    * sends the data given to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createStaticAndSend(final float[] data) {
+  @Nonnull
+  public static CoreVBO createStaticAndSend(@Nonnull final float[] data) {
     CoreVBO result = new CoreVBO(GL_STATIC_DRAW, data);
     result.send();
     return result;
@@ -58,11 +53,12 @@ public class CoreVBO {
   /**
    * This provides the same functionality as createStatic() but automatically
    * sends the data given to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createStaticAndSend(final FloatBuffer data) {
+  @Nonnull
+  public static CoreVBO createStaticAndSend(@Nonnull final FloatBuffer data) {
     CoreVBO result = new CoreVBO(GL_STATIC_DRAW, data.array());
     result.send();
     return result;
@@ -74,7 +70,8 @@ public class CoreVBO {
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createDynamic(final float[] data) {
+  @Nonnull
+  public static CoreVBO createDynamic(@Nonnull final float[] data) {
     return new CoreVBO(GL_DYNAMIC_DRAW, data);
   }
 
@@ -84,11 +81,12 @@ public class CoreVBO {
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreVBO createStream(final float[] data) {
+  @Nonnull
+  public static CoreVBO createStream(@Nonnull final float[] data) {
     return new CoreVBO(GL_STREAM_DRAW, data);
   }
 
-  private CoreVBO(final int usageType, final float[] data) {
+  private CoreVBO(final int usageType, @Nonnull final float[] data) {
     usage = usageType;
     byteLength = data.length << 2;
 
@@ -119,8 +117,10 @@ public class CoreVBO {
 
   /**
    * Maps the buffer object that this represents into client space and returns the buffer as a FloatBuffer
+   *
    * @return the FloatBuffer to directly write data into (mapped into client space but is actual memory on the GPU)
    */
+  @Nonnull
   public FloatBuffer getMappedBuffer() {
     ByteBuffer dataBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY, byteLength, mappedBufferCache);
     CoreCheckGL.checkGLError("getMappedBuffer(GL_ARRAY_BUFFER)");

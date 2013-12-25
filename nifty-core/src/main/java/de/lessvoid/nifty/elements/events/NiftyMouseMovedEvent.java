@@ -4,12 +4,14 @@ import de.lessvoid.nifty.NiftyEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
-public class NiftyMouseMovedEvent implements NiftyEvent {
-  private Element element;
-  private int mouseX;
-  private int mouseY;
+import javax.annotation.Nonnull;
 
-  public NiftyMouseMovedEvent(final Element element, final NiftyMouseInputEvent source) {
+public class NiftyMouseMovedEvent implements NiftyEvent {
+  private final Element element;
+  private final int mouseX;
+  private final int mouseY;
+
+  public NiftyMouseMovedEvent(final Element element, @Nonnull final NiftyMouseInputEvent source) {
     this.element = element;
     this.mouseX = source.getMouseX();
     this.mouseY = source.getMouseY();

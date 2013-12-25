@@ -10,8 +10,11 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
+import javax.annotation.Nonnull;
+
 /**
  * ImageSizePulsate.
+ *
  * @author void
  */
 public class ImageSizePulsate implements EffectImpl {
@@ -19,11 +22,13 @@ public class ImageSizePulsate implements EffectImpl {
   /**
    * start size of image.
    */
+  @Nonnull
   private SizeValue startSize = new SizeValue("0%");
 
   /**
    * end size of image.
    */
+  @Nonnull
   private SizeValue endSize = new SizeValue("100%");
 
   /**
@@ -39,11 +44,16 @@ public class ImageSizePulsate implements EffectImpl {
 
   /**
    * initialize.
-   * @param nifty Nifty
-   * @param element Element
+   *
+   * @param nifty     Nifty
+   * @param element   Element
    * @param parameter Parameter
    */
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     String startSizeString = parameter.getProperty("startSize");
     if (startSizeString != null) {
       startSize = new SizeValue(startSizeString);
@@ -58,16 +68,18 @@ public class ImageSizePulsate implements EffectImpl {
 
   /**
    * execute the effect.
-   * @param element the Element
-   * @param normalizedTime TimeInterpolator to use
+   *
+   * @param element           the Element
+   * @param normalizedTime    TimeInterpolator to use
    * @param normalizedFalloff falloff value
-   * @param r RenderDevice to use
+   * @param r                 RenderDevice to use
    */
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (!activated && normalizedTime > 0.0f) {
       activated = true;
       pulsator.reset();
@@ -83,6 +95,7 @@ public class ImageSizePulsate implements EffectImpl {
   /**
    * deactivate the effect.
    */
+  @Override
   public void deactivate() {
     activated = true;
   }

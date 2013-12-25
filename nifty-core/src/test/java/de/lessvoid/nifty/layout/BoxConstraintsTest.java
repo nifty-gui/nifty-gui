@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.layout;
 
-import junit.framework.TestCase;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
+import junit.framework.TestCase;
 
 public class BoxConstraintsTest extends TestCase {
 

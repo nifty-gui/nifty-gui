@@ -14,10 +14,10 @@ public abstract class AbstractKeyboardEvent extends KeyboardInputEvent implement
   /**
    * Create the keyboard event and store the ID of the key and the character.
    *
-   * @param keyId the ID of the key that was used
-   * @param keyChar the character assigned to the used key
-   * @param keyDown {@code true} in case the key is pressed down
-   * @param shiftDown {@code true} in case shift is pressed down at the same time
+   * @param keyId       the ID of the key that was used
+   * @param keyChar     the character assigned to the used key
+   * @param keyDown     {@code true} in case the key is pressed down
+   * @param shiftDown   {@code true} in case shift is pressed down at the same time
    * @param controlDown {@code true} in case control is pressed down at the same time
    */
   protected AbstractKeyboardEvent(

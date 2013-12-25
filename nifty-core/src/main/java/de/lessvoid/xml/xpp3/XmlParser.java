@@ -1,52 +1,59 @@
 package de.lessvoid.xml.xpp3;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.WillNotClose;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 /**
  * XmlParser is a helper/wrapper around XPP3.
+ *
  * @author void
  */
 public class XmlParser {
-
   /**
    * logger.
    */
-  private static Logger log = Logger.getLogger(XmlParser.class.getName());
+  @Nonnull
+  private static final Logger log = Logger.getLogger(XmlParser.class.getName());
 
   /**
    * the parser we should use.
    */
-  private XmlPullParser xpp;
+  @Nonnull
+  private final XmlPullParser xpp;
 
   /**
    * Create a new XmlParser using the given XmlPullParser.
+   *
    * @param xppParam the XmlPullParser to use
    */
-  public XmlParser(final XmlPullParser xppParam) {
+  public XmlParser(@Nonnull final XmlPullParser xppParam) {
     this.xpp = xppParam;
   }
 
   /**
    * Load xml.
+   *
    * @param inputStream InputStream to read from
    * @throws Exception exception
    */
-  public void read(final InputStream inputStream) throws Exception {
+  public void read(@Nonnull @WillNotClose final InputStream inputStream) throws Exception {
     xpp.setInput(inputStream, null);
   }
 
   /**
    * Required element.
-   * @param tag required tag
+   *
+   * @param tag        required tag
    * @param xmlElement handler
    * @throws Exception exception
    */
-  public void required(final String tag, final XmlProcessor xmlElement) throws Exception {
+  public void required(@Nonnull final String tag, @Nonnull final XmlProcessor xmlElement) throws Exception {
     if (isEndTag()) {
       throw new Exception("found end tag but required tag [" + tag + "]");
     }
@@ -59,11 +66,12 @@ public class XmlParser {
 
   /**
    * Optional element.
-   * @param tag required tag
+   *
+   * @param tag        required tag
    * @param xmlElement handler
    * @throws Exception exception
    */
-  public void optional(final String tag, final XmlProcessor xmlElement) throws Exception {
+  public void optional(@Nonnull final String tag, @Nonnull final XmlProcessor xmlElement) throws Exception {
     if (isEndTag()) {
       return;
     }
@@ -76,11 +84,12 @@ public class XmlParser {
 
   /**
    * Zero or more element.
-   * @param tag element tag
+   *
+   * @param tag        element tag
    * @param xmlElement handler
    * @throws Exception exception
    */
-  public void zeroOrMore(final String tag, final XmlProcessor xmlElement) throws Exception {
+  public void zeroOrMore(@Nonnull final String tag, @Nonnull final XmlProcessor xmlElement) throws Exception {
     if (isEndTag()) {
       return;
     }
@@ -95,6 +104,7 @@ public class XmlParser {
 
   /**
    * check if the current tag is an end tag.
+   *
    * @return true on end tag reached and false otherwise
    * @throws Exception exception
    */
@@ -104,10 +114,11 @@ public class XmlParser {
 
   /**
    * SubstitionGroup Support.
+   *
    * @param substGroup SubstitutionGroup
    * @throws Exception exception
    */
-  public void zeroOrMore(final SubstitutionGroup substGroup) throws Exception {
+  public void zeroOrMore(@Nonnull final SubstitutionGroup substGroup) throws Exception {
     if (isEndTag()) {
       return;
     }
@@ -123,11 +134,12 @@ public class XmlParser {
 
   /**
    * One or more element.
-   * @param tag element tag
+   *
+   * @param tag        element tag
    * @param xmlElement handler
    * @throws Exception exception
    */
-  public void oneOrMore(final String tag, final XmlProcessor xmlElement) throws Exception {
+  public void oneOrMore(@Nonnull final String tag, @Nonnull final XmlProcessor xmlElement) throws Exception {
     if (isEndTag()) {
       throw new Exception("End tag reached but was expecting [" + tag + "]");
     }
@@ -142,16 +154,17 @@ public class XmlParser {
 
   /**
    * Process the element.
+   *
    * @param xmlElement xmlElement
    * @throws Exception exception
    */
-  private void processElement(final XmlProcessor xmlElement) throws Exception {
+  private void processElement(@Nonnull final XmlProcessor xmlElement) throws Exception {
     log.fine("process element: " + xmlElement.getClass().getName());
     try {
-     xmlElement.process(this, new Attributes(xpp));
+      xmlElement.process(this, new Attributes(xpp));
     } catch (Exception ex) {
       if (!(ex instanceof XmlPullParserException)) {
-          throw new XmlPullParserException("Error parsing document.", xpp, ex);
+        throw new XmlPullParserException("Error parsing document.", xpp, ex);
       } else {
         throw ex;
       }
@@ -160,15 +173,17 @@ public class XmlParser {
 
   /**
    * Does the current tag matches the given one?
+   *
    * @param tag tag to check
    * @return true if tags match and false otherwise
    */
-  private boolean matchesTag(final String tag) {
+  private boolean matchesTag(@Nonnull final String tag) {
     return tag.equals(xpp.getName());
   }
 
   /**
    * next start or end tag.
+   *
    * @throws Exception exception
    */
   public void nextTag() throws Exception {
@@ -178,31 +193,33 @@ public class XmlParser {
 
     int eventType = xpp.next();
     while (eventType != XmlPullParser.END_DOCUMENT) {
-     if (eventType == XmlPullParser.END_TAG) {
-       if (log.isLoggable(Level.FINE)) {
-         indent();
-         log.fine(indent() + "END <" + xpp.getName() + ">");
-       }
-       return;
-     } else if (eventType == XmlPullParser.START_TAG) {
-       if (log.isLoggable(Level.FINE)) {
-         log.fine(indent() + "START <" + xpp.getName() + ">");
-       }
-       return;
-     }
-     eventType = xpp.next();
+      if (eventType == XmlPullParser.END_TAG) {
+        if (log.isLoggable(Level.FINE)) {
+          indent();
+          log.fine(indent() + "END <" + xpp.getName() + ">");
+        }
+        return;
+      } else if (eventType == XmlPullParser.START_TAG) {
+        if (log.isLoggable(Level.FINE)) {
+          log.fine(indent() + "START <" + xpp.getName() + ">");
+        }
+        return;
+      }
+      eventType = xpp.next();
     }
   }
 
   /**
    * indent current xpp depth level.
+   *
    * @return string of whitespace of xpp depth level length
    */
+  @Nonnull
   private String indent() {
     StringBuilder b = new StringBuilder();
-     for (int i = 0; i < xpp.getDepth(); i++) {
-       b.append(" ");
-     }
+    for (int i = 0; i < xpp.getDepth(); i++) {
+      b.append(' ');
+    }
     return b.toString();
   }
 }

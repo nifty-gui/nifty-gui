@@ -1,11 +1,12 @@
 package de.lessvoid.nifty.slick2d.loaders;
 
-import java.util.Iterator;
-
 import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import de.lessvoid.nifty.slick2d.render.font.loader.*;
 import org.newdawn.slick.Graphics;
+
+import javax.annotation.Nonnull;
+import java.util.Iterator;
 
 /**
  * This class is used to trigger the actual font loading. It will query all the font loaders and try to load a font
@@ -25,6 +26,7 @@ public final class SlickRenderFontLoaders extends AbstractSlickLoaders<SlickRend
    *
    * @return the singleton instance
    */
+  @Nonnull
   public static SlickRenderFontLoaders getInstance() {
     return INSTANCE;
   }
@@ -43,7 +45,7 @@ public final class SlickRenderFontLoaders extends AbstractSlickLoaders<SlickRend
    * @param order the place where the default loaders are added to the list
    */
   @Override
-  public void loadDefaultLoaders(final SlickAddLoaderLocation order) {
+  public void loadDefaultLoaders(@Nonnull final SlickAddLoaderLocation order) {
     switch (order) {
       case first:
         addLoader(new DefaultSlickRenderFontLoader(), order);
@@ -68,18 +70,19 @@ public final class SlickRenderFontLoaders extends AbstractSlickLoaders<SlickRend
    * @deprecated loads deprecated font loaders
    */
   @Deprecated
-  public void loadDeprecatedLoaders(final SlickAddLoaderLocation order) {
+  public void loadDeprecatedLoaders(@Nonnull final SlickAddLoaderLocation order) {
     addLoader(new TrueTypeSlickRenderFontLoader(), order);
   }
 
   /**
    * Load the font with the defined name.
    *
-   * @param g the graphics instance used for rendering
+   * @param g        the graphics instance used for rendering
    * @param filename name of the file that contains the font
    * @return the font loaded
    * @throws IllegalArgumentException in case all loaders fail to load the font
    */
+  @Nonnull
   @SuppressWarnings("TypeMayBeWeakened")
   public SlickRenderFont loadFont(final Graphics g, final String filename) {
     final Iterator<SlickRenderFontLoader> itr = getLoaderIterator();
@@ -87,7 +90,7 @@ public final class SlickRenderFontLoaders extends AbstractSlickLoaders<SlickRend
     while (itr.hasNext()) {
       try {
         return itr.next().loadFont(g, filename);
-      } catch (final SlickLoadFontException ignored) {
+      } catch (@Nonnull final SlickLoadFontException ignored) {
         // this loader failed... does not matter
       }
     }

@@ -3,6 +3,8 @@ package de.lessvoid.nifty.slick2d.input.events;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import org.newdawn.slick.InputListener;
 
+import javax.annotation.Nonnull;
+
 /**
  * This mouse event is used to store the event generated in case the mouse wheel got moved.
  *
@@ -17,8 +19,8 @@ public final class MouseEventWheelMoved extends AbstractMouseEvent {
   /**
    * Create a new mouse wheel event and store the delta value.
    *
-   * @param x the x coordinate
-   * @param y the y coordinate
+   * @param x     the x coordinate
+   * @param y     the y coordinate
    * @param delta the delta of the mouse wheel movement
    */
   public MouseEventWheelMoved(final int x, final int y, final int delta) {
@@ -30,7 +32,7 @@ public final class MouseEventWheelMoved extends AbstractMouseEvent {
    * Send the event to a Nifty input consumer.
    */
   @Override
-  public boolean sendToNifty(final NiftyInputConsumer consumer) {
+  public boolean sendToNifty(@Nonnull final NiftyInputConsumer consumer) {
     return consumer.processMouseEvent(getX(), getY(), wheelDelta, -1, false);
   }
 
@@ -38,7 +40,7 @@ public final class MouseEventWheelMoved extends AbstractMouseEvent {
    * Send the event to a Slick input listener.
    */
   @Override
-  public boolean sendToSlick(final InputListener listener) {
+  public boolean sendToSlick(@Nonnull final InputListener listener) {
     listener.mouseWheelMoved(wheelDelta);
     return true;
   }

@@ -7,14 +7,17 @@ import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
+import javax.annotation.Nonnull;
+
 public class TypeProcessorElement implements XmlProcessor {
-  private Type parent;
+  private final Type parent;
 
   public TypeProcessorElement(final Type parentParam) {
     parent = parentParam;
   }
 
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
+  @Override
+  public void process(@Nonnull final XmlParser xmlParser, @Nonnull final Attributes attributes) throws Exception {
     String name = attributes.get("name");
     if (name == null) {
       throw new Exception("[name] attribute is a required attribute");

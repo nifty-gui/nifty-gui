@@ -2,14 +2,15 @@ package de.lessvoid.nifty.builder;
 
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 
+import javax.annotation.Nonnull;
+
 public class PanelBuilder extends ElementBuilder {
-  private PanelCreator creator = new PanelCreator();
 
   public PanelBuilder() {
-    initialize(creator);
+    super(new PanelCreator());
   }
 
-  public PanelBuilder(final String id) {
+  public PanelBuilder(@Nonnull final String id) {
     this();
     this.id(id);
   }

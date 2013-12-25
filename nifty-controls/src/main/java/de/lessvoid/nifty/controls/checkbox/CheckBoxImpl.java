@@ -2,42 +2,43 @@ package de.lessvoid.nifty.controls.checkbox;
 
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
-import de.lessvoid.nifty.controls.shared.EmptyNiftyControlImpl;
 
-public class CheckBoxImpl extends EmptyNiftyControlImpl implements CheckBox {
-  private CheckBox checkbox;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
+class CheckBoxImpl {
+  private static final Logger log = Logger.getLogger(CheckBoxImpl.class.getName());
+  @Nonnull
+  private final CheckBox checkbox;
   private boolean checked;
-  private CheckBoxView view = new CheckBoxViewNull();
+  @Nullable
+  private CheckBoxView view;
 
-  public CheckBoxImpl(final CheckBox checkbox) {
+  public CheckBoxImpl(@Nonnull final CheckBox checkbox) {
     this.checkbox = checkbox;
   }
 
-  public void bindToView(final CheckBoxView checkBoxView) {
+  public void bindToView(@Nonnull final CheckBoxView checkBoxView) {
     this.view = checkBoxView;
   }
 
-  @Override
   public void check() {
     internalSetChecked(true);
   }
 
-  @Override
   public void uncheck() {
     internalSetChecked(false);
   }
 
-  @Override
   public void setChecked(final boolean state) {
     internalSetChecked(state);
   }
 
-  @Override
   public boolean isChecked() {
     return checked;
   }
 
-  @Override
   public void toggle() {
     setChecked(!isChecked());
   }
@@ -52,7 +53,11 @@ public class CheckBoxImpl extends EmptyNiftyControlImpl implements CheckBox {
   }
 
   private void updateView() {
-    view.update(checked);
-    view.publish(new CheckBoxStateChangedEvent(checkbox, checked));
+    if (view == null) {
+      log.warning("Updating view is not possible before the view is bound. The bind call is likely missing.");
+    } else {
+      view.update(checked);
+      view.publish(new CheckBoxStateChangedEvent(checkbox, checked));
+    }
   }
 }

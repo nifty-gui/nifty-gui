@@ -1,28 +1,36 @@
 package de.lessvoid.nifty.render;
 
-import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.NiftyMouse;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
+
 public class NiftyMouseImpl implements NiftyMouse {
-  private static Logger log = Logger.getLogger(NiftyMouseImpl.class.getName());
-  private RenderDevice renderDevice;
-  private InputSystem inputSystem;
-  private Map < String, MouseCursor > registeredMouseCursors = new Hashtable < String, MouseCursor >();
+  private static final Logger log = Logger.getLogger(NiftyMouseImpl.class.getName());
+  private final RenderDevice renderDevice;
+  private final InputSystem inputSystem;
+  @Nonnull
+  private final Map<String, MouseCursor> registeredMouseCursors = new HashMap<String, MouseCursor>();
+  @Nullable
   private String currentId;
   private int mouseX;
   private int mouseY;
-  private TimeProvider timeProvider;
+  @Nonnull
+  private final TimeProvider timeProvider;
   private long lastMouseMoveEventTime;
 
-  public NiftyMouseImpl(final RenderDevice renderDevice, final InputSystem inputSystem, final TimeProvider timeProvider) {
+  public NiftyMouseImpl(
+      final RenderDevice renderDevice,
+      final InputSystem inputSystem,
+      @Nonnull final TimeProvider timeProvider) {
     this.renderDevice = renderDevice;
     this.inputSystem = inputSystem;
     this.timeProvider = timeProvider;
@@ -30,7 +38,11 @@ public class NiftyMouseImpl implements NiftyMouse {
   }
 
   @Override
-  public void registerMouseCursor(final String id, final String filename, final int hotspotX, final int hotspotY) throws IOException {
+  public void registerMouseCursor(
+      final String id,
+      @Nonnull final String filename,
+      final int hotspotX,
+      final int hotspotY) throws IOException {
     MouseCursor mouseCursor = renderDevice.createMouseCursor(filename, hotspotX, hotspotY);
     if (mouseCursor == null) {
       log.warning("Your RenderDevice does not support the createMouseCursor() method. Mouse cursors can't be changed.");
@@ -39,6 +51,7 @@ public class NiftyMouseImpl implements NiftyMouse {
     registeredMouseCursors.put(id, mouseCursor);
   }
 
+  @Nullable
   @Override
   public String getCurrentId() {
     return currentId;
@@ -59,7 +72,7 @@ public class NiftyMouseImpl implements NiftyMouse {
   }
 
   @Override
-  public void enableMouseCursor(final String id) {
+  public void enableMouseCursor(@Nullable final String id) {
     if (id == null) {
       resetMouseCursor();
       return;

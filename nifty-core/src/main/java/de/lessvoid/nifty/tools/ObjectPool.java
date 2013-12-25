@@ -4,15 +4,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * This is a object pooling utility class. Its used to improve the object handling performance for large object.
- * <p />
+ * <p/>
  * Using this class to pool very small objects, <b>will</b> decrease the performance. How ever in case the objects
  * are large and contain for example large buffers, this class can improve the performance.
- * <p />
+ * <p/>
  * The pool uses a volatile storage system for the unused instances. It will keep objects as long as Java has a
  * sufficient amount of memory at hand. How ever it will remove instances if the memory is running low.
  *
@@ -67,17 +67,4 @@ public class ObjectPool<T> {
     pool.addFirst(new SoftReference<T>(item));
   }
 
-  /**
-   * The factory of a object pool. This is used to create new instances of the pooled objects.
-   *
-   * @param <T>
-   */
-  public interface Factory<T> {
-    /**
-     * Create a new instance of the pooled objects.
-     *
-     * @return the new object instance
-     */
-    @Nonnull T createNew();
-  }
 }

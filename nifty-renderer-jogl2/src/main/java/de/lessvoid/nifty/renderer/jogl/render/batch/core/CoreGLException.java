@@ -29,13 +29,13 @@ public class CoreGLException extends RuntimeException {
 
   /**
    * Constructs a new CoreGL exception with the specified detail message and cause.
-   * <p />
+   * <p/>
    * Note that the detail message associated with {@code cause} is <i>not</i> automatically incorporated in this CoreGL
    * exception's detail message.
    *
    * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method).
-   * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <tt>null</tt>
-   *              value is permitted, and indicates that the cause is nonexistent or unknown.)
+   * @param cause   the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <tt>null</tt>
+   *                value is permitted, and indicates that the cause is nonexistent or unknown.)
    */
   public CoreGLException(String message, Throwable cause) {
     super(message, cause);
@@ -47,8 +47,8 @@ public class CoreGLException extends RuntimeException {
    * <tt>cause</tt>). This constructor is useful for CoreGL exceptions that are little more than wrappers for other
    * throwables.
    *
-   * @param  cause the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <tt>null</tt>
-   *               value is permitted, and indicates that the cause is nonexistent or unknown.)
+   * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <tt>null</tt>
+   *              value is permitted, and indicates that the cause is nonexistent or unknown.)
    */
   public CoreGLException(Throwable cause) {
     super(cause);

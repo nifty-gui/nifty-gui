@@ -1,18 +1,22 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
+
+import javax.annotation.Nonnull;
+import java.util.Properties;
 
 /**
  * @author void
  */
 public class Falloff {
-
+  @Nonnull
   public static final String HOVER_FALLOFF_TYPE = "hoverFalloffType";
+  @Nonnull
   public static final String HOVER_FALLOFF_CONSTRAINT = "hoverFalloffConstraint";
+  @Nonnull
   public static final String HOVER_WIDTH = "hoverWidth";
+  @Nonnull
   public static final String HOVER_HEIGHT = "hoverHeight";
 
   /**
@@ -20,7 +24,7 @@ public class Falloff {
    */
   public enum HoverFalloffType {
     none, // default
-    linear;
+    linear
   }
 
   /**
@@ -30,39 +34,42 @@ public class Falloff {
     none, // default
     vertical,
     horizontal,
-    both;
+    both
   }
 
-  private HoverFalloffType falloffType = HoverFalloffType.none;
-  private HoverFalloffConstraint falloffConstraint = HoverFalloffConstraint.none;
-  private SizeValue hoverWidth;
-  private SizeValue hoverHeight;
+  @Nonnull
+  private final HoverFalloffConstraint falloffConstraint;
+  @Nonnull
+  private final HoverFalloffType falloffType;
+  @Nonnull
+  private final SizeValue hoverWidth;
+  @Nonnull
+  private final SizeValue hoverHeight;
   private float falloffValue;
 
-  public Falloff(final Properties properties) {
+  public Falloff(@Nonnull final Properties properties) {
     String falloffTypeString = properties.getProperty(Falloff.HOVER_FALLOFF_TYPE);
     if (falloffTypeString != null) {
       falloffType = HoverFalloffType.valueOf(falloffTypeString);
+    } else {
+      falloffType = HoverFalloffType.none;
     }
 
     String falloffConstraintString = properties.getProperty(Falloff.HOVER_FALLOFF_CONSTRAINT);
     if (falloffConstraintString != null) {
       falloffConstraint = HoverFalloffConstraint.valueOf(falloffConstraintString);
+    } else {
+      falloffConstraint = HoverFalloffConstraint.none;
     }
 
-    
     hoverWidth = new SizeValue(properties.getProperty(Falloff.HOVER_WIDTH));
     hoverHeight = new SizeValue(properties.getProperty(Falloff.HOVER_HEIGHT));
-    
-  }
-
-  public Falloff() {
   }
 
   public void applyProperties(final Properties properties) {
   }
 
-  public final boolean isInside(final Element element, final int x, final int y) {
+  public final boolean isInside(@Nonnull final Element element, final int x, final int y) {
     int centerX = element.getX() + element.getWidth() / 2;
     int centerY = element.getY() + element.getHeight() / 2;
 
@@ -70,21 +77,21 @@ public class Falloff {
     int verticalHover = getVerticalHover(element);
 
     return x > (centerX - horizontalHover / 2) &&
-           x <= (centerX + horizontalHover / 2) &&
-           y > (centerY - verticalHover / 2) &&
-           y <= (centerY + verticalHover / 2);
+        x <= (centerX + horizontalHover / 2) &&
+        y > (centerY - verticalHover / 2) &&
+        y <= (centerY + verticalHover / 2);
   }
 
-  private int getVerticalHover(Element element) {
+  private int getVerticalHover(@Nonnull Element element) {
     return hoverHeight.hasValue() ? hoverHeight.getValueAsInt(element.getHeight()) : element.getHeight();
   }
 
-  private int getHorizontalHover(Element element) {
+  private int getHorizontalHover(@Nonnull Element element) {
     return hoverWidth.hasValue() ? hoverWidth.getValueAsInt(element.getWidth()) : element.getWidth();
   }
 
-  public void updateFalloffValue(final Element element, final int mouseX, final int mouseY) {
-    if (falloffConstraint == HoverFalloffConstraint.none) {
+  public void updateFalloffValue(@Nonnull final Element element, final int mouseX, final int mouseY) {
+    if (falloffConstraint == HoverFalloffConstraint.none || falloffType == HoverFalloffType.none) {
       falloffValue = 1.0f;
       return;
     }
@@ -109,7 +116,7 @@ public class Falloff {
       /* determine the angle from center of element to current mouse position.
          NOTE: if dy and dy are zero it is not possible to determine the angle.
          Assume an angle of zero degrees if dy AND dx are 0 */
-      double dA = 0.0;
+      double dA;
       if (dy == 0.0 && dx == 0.0) {
         dA = 0.0;
       } else {
@@ -118,7 +125,7 @@ public class Falloff {
       // determine the angle from the center of the object to one of its corners to find the flip / cutoff angle
       float elA = (float) (getHorizontalHover(element) / 2);
       float elB = (float) (getVerticalHover(element) / 2);
-      double dB = 0.0;
+      double dB;
       dB = Math.abs(Math.atan((elB / elA)));
       if ((Math.abs(Math.toDegrees(dA)) >= 0.0) && (Math.abs(Math.toDegrees(dA)) <= Math.abs(Math.toDegrees(dB)))) {
         //use cos(dA) = adj / hyp: so hyp = adj / cos(dA)
@@ -142,6 +149,7 @@ public class Falloff {
     return falloffValue;
   }
 
+  @Nonnull
   public HoverFalloffConstraint getFalloffConstraint() {
     return falloffConstraint;
   }

@@ -1,16 +1,5 @@
 package de.lessvoid.nifty.elements;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEvent;
@@ -19,12 +8,7 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.effects.Effect;
-import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.effects.EffectImpl;
-import de.lessvoid.nifty.effects.EffectManager;
-import de.lessvoid.nifty.effects.ElementEffectStateCache;
-import de.lessvoid.nifty.effects.Falloff;
+import de.lessvoid.nifty.effects.*;
 import de.lessvoid.nifty.elements.events.ElementDisableEvent;
 import de.lessvoid.nifty.elements.events.ElementEnableEvent;
 import de.lessvoid.nifty.elements.events.ElementHideEvent;
@@ -42,132 +26,97 @@ import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderer;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererImage;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererPanel;
-import de.lessvoid.nifty.loaderv2.types.apply.Convert;
+import de.lessvoid.nifty.loaderv2.types.apply.*;
 import de.lessvoid.nifty.loaderv2.types.helper.PaddingAttributeParser;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.MouseOverHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.time.TimeProvider;
-import de.lessvoid.nifty.tools.NullObjectFactory;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author void
  */
 public class Element implements NiftyEvent, EffectManager.Notify {
-  private static Logger log = Logger.getLogger(Element.class.getName());
-  private ElementType elementType;
+  @Nonnull
+  private static final Logger log = Logger.getLogger(Element.class.getName());
+  @Nonnull
+  private final ElementType elementType;
+  @Nullable
   private String id;
   private int renderOrder;
+  @Nullable
   private Element parent;
-  private List<Element> children = new ArrayList<Element>(0);
+  @Nullable
+  private List<Element> children;
 
   /**
    * This set defines the render order of the child elements using a Comparator.
    */
-  private Set<Element> elementsRenderOrderSet = new TreeSet<Element>(new Comparator<Element>() {
+  @Nullable
+  private Set<Element> elementsRenderOrderSet;
 
-    /**
-     * This uses the renderOrder attribute of the elements to compare them. If the renderOrder
-     * attribute is not set (is 0) then the index of the element in the elements list is used
-     * as the renderOrder value. This is done to keep the original sort order of the elements for
-     * rendering. The value is not cached and is directly recalculated using the element index in
-     * the list. The child count for an element is usually low (< 10) and the comparator is only
-     * executed when the child elements change. So this lookup shouldn't hurt performance too much.
-     *
-     * If you change the default value of renderOrder then your value is being used. So if you set it
-     * to some high value (> 1000 to be save) this element is rendered after all the other elements.
-     * If you set it to some very low value (< -1000 to be save) then this element is rendered before
-     * all the others.
-     */
-    @Override
-    public int compare(final Element o1, final Element o2) {
-      int o1RenderOrder = getRenderOrder(o1);
-      int o2RenderOrder = getRenderOrder(o2);
-
-      if (o1RenderOrder < o2RenderOrder) {
-        return -1;
-      } else if (o1RenderOrder > o2RenderOrder) {
-        return 1;
-      }
-      // this means the renderOrder values are equal. since this is a set
-      // we can't return 0 because this would mean (for the set) that the
-      // elements are equal and one of the values will be removed. so here
-      // we simply compare the String representation of the elements so that
-      // we keep a fixed sort order.
-      String o1Id = o1.id;
-      String o2Id = o2.id;
-      if (o1Id == null && o2Id != null){
-        return -1;
-      } else if (o1Id != null && o2Id == null) {
-        return 1;
-      } else if (o1Id != null && o2Id != null) {
-        int idCompareResult = o1Id.compareTo(o2Id);
-        if (idCompareResult != 0) {
-          return idCompareResult;
-        }
-      }
-
-      // ids equal or both null use super.toString()
-      // hashCode() should return a value thats different for both elements since
-      // adding the same element twice to the same parent element is not supported.
-      String ref1 = Integer.toHexString(o1.hashCode());
-      String ref2 = Integer.toHexString(o2.hashCode());
-      return ref1.compareTo(ref2);
-    }
-
-    private int getRenderOrder(final Element element) {
-      if (element.renderOrder != 0) {
-        return element.renderOrder;
-      }
-      return children.indexOf(element);
-    }
-  });
+  /**
+   * This is the shared instance of the comparator used to get the rendering oder for the child elements of another
+   * element.
+   */
+  @Nonnull
+  private static final Comparator<Element> RENDER_ORDER_COMPARATOR = new RenderOrderComparator();
 
   /**
    * We keep a copy of the elementsRenderOrderSet in a simple array for being more GC friendly while rendering.
    */
-  private Element[] elementsRenderOrder = new Element[0];
+  @Nullable
+  private Element[] elementsRenderOrder;
 
   /**
    * The LayoutManager we should use for all child elements.
    */
+  @Nullable
   private LayoutManager layoutManager;
 
   /**
    * The LayoutPart for laying out this element.
    */
-  private LayoutPart layoutPart;
+  @Nonnull
+  private final LayoutPart layoutPart;
 
   /**
    * The ElementRenderer we should use to render this element.
    */
-  private ElementRenderer[] elementRenderer = new ElementRenderer[0];
+  @Nonnull
+  private final ElementRenderer[] elementRenderer;
 
+  @Nonnull
   private EffectManager effectManager;
+  @Nonnull
   private ElementInteraction interaction;
 
   /**
    * Effect state cache (this includes info about the child state) and is only
    * update when Effect states are changed.
    */
-  private ElementEffectStateCache effectStateCache = new ElementEffectStateCache();
+  @Nonnull
+  private final ElementEffectStateCache effectStateCache = new ElementEffectStateCache();
 
   /**
    * Nifty instance this element is attached to.
    */
-  private Nifty nifty;
+  @Nonnull
+  private final Nifty nifty;
 
   /**
    * The focus handler this element is attached to.
    */
-  private FocusHandler focusHandler;
+  @Nonnull
+  private final FocusHandler focusHandler;
 
   /**
    * Whether the element is enabled or not.
@@ -208,6 +157,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   /**
    * The attached control when this element is a control.
    */
+  @Nullable
   private NiftyInputControl attachedInputControl = null;
 
   /**
@@ -220,19 +170,24 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * You can set this to any element id on the screen and this element will be inserted right before the
    * given element. This is especially useful when you dynamically remove and add elements and you need to
    * enforce a specific focus order.
-   *
+   * <p/>
    * The default value is null which will simply add the elements as they are created.
    */
+  @Nullable
   private String focusableInsertBeforeElementId;
 
   /**
    * The screen this element is part of.
    */
+  @Nonnull
   private Screen screen;
 
+  @Nonnull
   private TimeProvider time;
-  private List<String> elementDebugOut = new ArrayList<String>();
-  private StringBuilder elementDebug = new StringBuilder();
+  @Nonnull
+  private final List<String> elementDebugOut = new ArrayList<String>();
+  @Nonnull
+  private final StringBuilder elementDebug = new StringBuilder();
   private boolean parentClipArea = false;
   private int parentClipX;
   private int parentClipY;
@@ -249,63 +204,82 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    */
   private boolean ignoreKeyboardEvents;
 
-  private static Convert convert = new Convert();
-  private static Map < Class < ? extends ElementRenderer >, ApplyRenderer > rendererApplier = new HashMap < Class < ? extends ElementRenderer>, ApplyRenderer >();
-  {
+  @Nonnull
+  private static final Convert convert;
+  @Nonnull
+  private static final Map<Class<? extends ElementRenderer>, ApplyRenderer> rendererApplier;
+
+  static {
+    convert = new Convert();
+    rendererApplier = new HashMap<Class<? extends ElementRenderer>, ApplyRenderer>();
     rendererApplier.put(TextRenderer.class, new ApplyRenderText(convert));
     rendererApplier.put(ImageRenderer.class, new ApplyRendererImage(convert));
     rendererApplier.put(PanelRenderer.class, new ApplyRendererPanel(convert));
   }
 
+  @Nullable
   private Map<String, Object> userData;
 
   public Element(
-      final Nifty newNifty,
-      final ElementType newElementType,
-      final String newId,
-      final Element newParent,
-      final FocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents,
-      final TimeProvider newTimeProvider,
-      final ElementRenderer ... newElementRenderer) {
-    initialize(
-        newNifty,
-        newElementType,
-        newId,
-        newParent,
-        newElementRenderer,
+      @Nonnull final Nifty nifty,
+      @Nonnull final ElementType elementType,
+      @Nullable final String id,
+      @Nullable final Element parent,
+      @Nonnull final FocusHandler focusHandler,
+      final boolean visibleToMouseEvents,
+      @Nonnull final TimeProvider timeProvider,
+      @Nonnull final ElementRenderer... elementRenderer) {
+    this(
+        nifty,
+        elementType,
+        id,
+        parent,
         new LayoutPart(),
-        newFocusHandler,
-        newVisibleToMouseEvents, newTimeProvider);
+        focusHandler,
+        visibleToMouseEvents,
+        timeProvider,
+        elementRenderer);
   }
 
   /**
    * Use this constructor to specify a LayoutPart
    */
   public Element(
-      final Nifty newNifty,
-      final ElementType newElementType,
-      final String newId,
-      final Element newParent,
-      final LayoutPart newLayoutPart,
-      final FocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents,
-      final TimeProvider newTimeProvider, final ElementRenderer ... newElementRenderer) {
-    initialize(
-        newNifty,
-        newElementType,
-        newId,
-        newParent,
-        newElementRenderer,
-        newLayoutPart,
-        newFocusHandler,
-        newVisibleToMouseEvents, newTimeProvider);
+      @Nonnull final Nifty nifty,
+      @Nonnull final ElementType elementType,
+      @Nullable final String id,
+      @Nullable final Element parent,
+      @Nonnull final LayoutPart layoutPart,
+      @Nonnull final FocusHandler focusHandler,
+      final boolean visibleToMouseEvents,
+      @Nonnull final TimeProvider timeProvider,
+      @Nonnull final ElementRenderer... elementRenderer) {
+    this.nifty = nifty;
+    this.elementType = elementType;
+    this.id = id;
+    this.parent = parent;
+    this.elementRenderer = elementRenderer;
+    this.effectManager = new EffectManager(this);
+    this.effectManager.setAlternateKey(this.nifty.getAlternateKey());
+    this.layoutPart = layoutPart;
+    this.enabled = true;
+    this.enabledCount = 0;
+    this.visible = true;
+    this.done = false;
+    this.interactionBlocked = false;
+    this.focusHandler = focusHandler;
+    this.visibleToMouseEvents = visibleToMouseEvents;
+    this.time = timeProvider;
+    this.interaction = new ElementInteraction(this.nifty, this);
   }
 
   /**
-   * This is used when the element is being created from an ElementType in the loading process. 
+   * This is used when the element is being created from an ElementType in the loading process.
    */
-  public void initializeFromAttributes(final Screen targetScreen, final Attributes attributes, final NiftyRenderEngine renderEngine) {
+  public void initializeFromAttributes(
+      @Nonnull final Screen targetScreen,
+      @Nonnull final Attributes attributes,
+      @Nonnull final NiftyRenderEngine renderEngine) {
     layoutPart.getBoxConstraints().setHeight(convert.sizeValue(attributes.get("height")));
     layoutPart.getBoxConstraints().setWidth(convert.sizeValue(attributes.get("width")));
     layoutPart.getBoxConstraints().setX(convert.sizeValue(attributes.get("x")));
@@ -329,9 +303,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       }
     }
     layoutPart.getBoxConstraints().setPaddingLeft(convert.paddingSizeValue(attributes.get("paddingLeft"), paddingLeft));
-    layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight"), paddingRight));
+    layoutPart.getBoxConstraints().setPaddingRight(convert.paddingSizeValue(attributes.get("paddingRight"),
+        paddingRight));
     layoutPart.getBoxConstraints().setPaddingTop(convert.paddingSizeValue(attributes.get("paddingTop"), paddingTop));
-    layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom"), paddingBottom));
+    layoutPart.getBoxConstraints().setPaddingBottom(convert.paddingSizeValue(attributes.get("paddingBottom"),
+        paddingBottom));
 
     String marginLeft = Convert.DEFAULT_MARGIN;
     String marginRight = Convert.DEFAULT_MARGIN;
@@ -351,7 +327,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     layoutPart.getBoxConstraints().setMarginLeft(convert.paddingSizeValue(attributes.get("marginLeft"), marginLeft));
     layoutPart.getBoxConstraints().setMarginRight(convert.paddingSizeValue(attributes.get("marginRight"), marginRight));
     layoutPart.getBoxConstraints().setMarginTop(convert.paddingSizeValue(attributes.get("marginTop"), marginTop));
-    layoutPart.getBoxConstraints().setMarginBottom(convert.paddingSizeValue(attributes.get("marginBottom"), marginBottom));
+    layoutPart.getBoxConstraints().setMarginBottom(convert.paddingSizeValue(attributes.get("marginBottom"),
+        marginBottom));
 
     this.clipChildren = attributes.getAsBoolean("childClip", Convert.DEFAULT_CHILD_CLIP);
     this.renderOrder = attributes.getAsInteger("renderOrder", Convert.DEFAULT_RENDER_ORDER);
@@ -364,14 +341,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     this.focusable = attributes.getAsBoolean("focusable", Convert.DEFAULT_FOCUSABLE);
     this.focusableInsertBeforeElementId = attributes.get("focusableInsertBeforeElementId");
-    for (int i=0; i<elementRenderer.length; i++) {
+    for (int i = 0; i < elementRenderer.length; i++) {
       ElementRenderer renderer = elementRenderer[i];
       ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
       rendererApply.apply(targetScreen, this, attributes, renderEngine);
     }
   }
 
-  public void initializeFromPostAttributes(final Attributes attributes) {
+  public void initializeFromPostAttributes(@Nonnull final Attributes attributes) {
     boolean visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
     if (!visible) {
       hideWithChildren();
@@ -380,54 +357,39 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
   private void hideWithChildren() {
     visible = false;
-    for (int i=0; i< children.size(); i++) {
-      Element element = children.get(i);
-      element.hideWithChildren();
+    if (children != null) {
+      for (int i = 0; i < children.size(); i++) {
+        Element element = children.get(i);
+        element.hideWithChildren();
+      }
     }
   }
 
-  private void initialize(
-      final Nifty newNifty,
-      final ElementType newElementType,
-      final String newId,
-      final Element newParent,
-      final ElementRenderer[] newElementRenderer,
-      final LayoutPart newLayoutPart,
-      final FocusHandler newFocusHandler,
-      final boolean newVisibleToMouseEvents,
-      final TimeProvider timeProvider) {
-    this.nifty = newNifty;
-    this.elementType = newElementType;
-    this.id = newId;
-    this.parent = newParent;
-    if (newElementRenderer == null) {
-      this.elementRenderer = new ElementRenderer[0];
-    } else {
-      this.elementRenderer = newElementRenderer;
-    }
-    this.effectManager = new EffectManager(this);
-    this.effectManager.setAlternateKey(nifty.getAlternateKey());
-    this.layoutPart = newLayoutPart;
-    this.enabled = true;
-    this.enabledCount = 0;
-    this.visible = true;
-    this.done = false;
-    this.interactionBlocked = false;
-    this.focusHandler = newFocusHandler;
-    this.visibleToMouseEvents = newVisibleToMouseEvents;
-    this.time = timeProvider;
-    this.interaction = new ElementInteraction(nifty, this);
-  }
-
+  @Nullable
   public String getId() {
     return id;
   }
 
+  /**
+   * Get the parent of this element.
+   *
+   * @return either the parent of the element or {@code this} in case the element is the root element
+   */
+  @Nonnull
   public Element getParent() {
-    return parent;
+    return parent == null ? this : parent;
   }
 
-  public void setParent(final Element element) {
+  /**
+   * Check if this element has a parent. If this is not the case the element is a root element.
+   *
+   * @return {@code true} in case the element has a parent
+   */
+  public boolean hasParent() {
+    return parent != null;
+  }
+
+  public void setParent(@Nullable final Element element) {
     parent = element;
 
     // This element has a new parent. Check the parent's clip area and update this element accordingly.
@@ -440,23 +402,36 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private boolean parentHasClipArea() {
+    if (parent == null) {
+      return false;
+    }
     return parent.parentClipArea;
   }
 
-  public String getElementStateString(final String offset) {
+  @Nonnull
+  public String getElementStateString(@Nonnull final String offset) {
     return getElementStateString(offset, ".*");
   }
 
-  public String getElementStateString(final String offset, final String regex) {
+  @Nonnull
+  public String getElementStateString(@Nonnull final String offset, @Nonnull final String regex) {
     elementDebugOut.clear();
     elementDebugOut.add(" type: [" + elementType.output(offset.length()) + "]");
     elementDebugOut.add(" style [" + getElementType().getAttributes().get("style") + "]");
     elementDebugOut.add(" state [" + getState() + "]");
     elementDebugOut.add(" position [x=" + getX() + ", y=" + getY() + ", w=" + getWidth() + ", h=" + getHeight() + "]");
-    elementDebugOut.add(" constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]");
-    elementDebugOut.add(" padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]");
-    elementDebugOut.add(" margin [" + outputSizeValue(layoutPart.getBoxConstraints().getMarginLeft()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginRight()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginTop()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getMarginBottom()) + "]");
-    StringBuffer state = new StringBuffer();
+    elementDebugOut.add(" constraint [" + outputSizeValue(layoutPart.getBoxConstraints().getX()) + ", " +
+        "" + outputSizeValue(layoutPart.getBoxConstraints().getY()) + ", " + outputSizeValue(layoutPart
+        .getBoxConstraints().getWidth()) + ", " + outputSizeValue(layoutPart.getBoxConstraints().getHeight()) + "]");
+    elementDebugOut.add(" padding [" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingLeft()) + ", " +
+        "" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingRight()) + ", " +
+        "" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingTop()) + ", " +
+        "" + outputSizeValue(layoutPart.getBoxConstraints().getPaddingBottom()) + "]");
+    elementDebugOut.add(" margin [" + outputSizeValue(layoutPart.getBoxConstraints().getMarginLeft()) + ", " +
+        "" + outputSizeValue(layoutPart.getBoxConstraints().getMarginRight()) + ", " +
+        "" + outputSizeValue(layoutPart.getBoxConstraints().getMarginTop()) + ", " +
+        "" + outputSizeValue(layoutPart.getBoxConstraints().getMarginBottom()) + "]");
+    StringBuilder state = new StringBuilder();
     if (focusable) {
       state.append(" focusable");
     }
@@ -464,7 +439,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       if (state.length() > 0) {
         state.append(",");
       }
-      state.append(" enabled(" + enabledCount + ")");
+      state.append(" enabled(").append(enabledCount).append(")");
     }
     if (visible) {
       if (state.length() > 0) {
@@ -489,21 +464,25 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     elementDebugOut.add(" renderOrder [" + renderOrder + "]");
 
     if (parentClipArea) {
-      elementDebugOut.add(" parent clip [x=" + parentClipX + ", y=" + parentClipY + ", w=" + parentClipWidth + ", h=" + parentClipHeight + "]");
+      elementDebugOut.add(" parent clip [x=" + parentClipX + ", y=" + parentClipY + ", w=" + parentClipWidth + ", " +
+          "h=" + parentClipHeight + "]");
     }
-    StringBuffer renderOrder = new StringBuffer();
+    StringBuilder renderOrder = new StringBuilder();
     renderOrder.append(" render order: ");
-    for (Element e : elementsRenderOrderSet) {
-      renderOrder.append("[" + e.getId() + " (" + ((e.renderOrder == 0) ? children.indexOf(e) : e.renderOrder) + ")]");
+    if (children != null && elementsRenderOrderSet != null) {
+      for (Element e : elementsRenderOrderSet) {
+        renderOrder.append("[").append(e.id).append(" (")
+            .append((e.renderOrder == 0) ? children.indexOf(e) : e.renderOrder).append(")]");
+      }
     }
     elementDebugOut.add(renderOrder.toString());
 
     elementDebug.delete(0, elementDebug.length());
-    for (int i=0; i<elementDebugOut.size(); i++) {
+    for (int i = 0; i < elementDebugOut.size(); i++) {
       String line = elementDebugOut.get(i);
       if (line.matches(regex)) {
         if (elementDebug.length() > 0) {
-          elementDebug.append("\n" + offset);
+          elementDebug.append("\n").append(offset);
         }
         elementDebug.append(line);
       }
@@ -511,6 +490,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return elementDebug.toString();
   }
 
+  @Nonnull
   private String getState() {
     if (isEffectActive(EffectEventId.onStartScreen)) {
       return "starting";
@@ -535,7 +515,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return "normal";
   }
 
-  private String outputSizeValue(final SizeValue value) {
+  @Nullable
+  private String outputSizeValue(@Nullable final SizeValue value) {
     if (value == null) {
       return "null";
     } else {
@@ -576,12 +557,27 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   /**
    * @deprecated Use {@link #getChildren()}
    */
+  @Nonnull
+  @Deprecated
   public List<Element> getElements() {
     return getChildren();
   }
 
+  @Nonnull
   public List<Element> getChildren() {
+    if (children == null) {
+      return Collections.emptyList();
+    }
     return Collections.unmodifiableList(children);
+  }
+
+  /**
+   * Get the amount of children assigned to this element.
+   *
+   * @return the amaount of children
+   */
+  public int getChildrenCount() {
+    return elementsRenderOrder != null ? elementsRenderOrder.length : 0;
   }
 
   /**
@@ -589,57 +585,78 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    *
    * @return an iterator that will traverse the element's entire tree downward.
    */
+  @Nonnull
   public Iterator<Element> getDescendants() {
+    if (children == null) {
+      return Collections.emptyIterator();
+    }
     return new ElementTreeTraverser(this);
   }
 
   /**
    * @deprecated Use {@link #addChild(Element)} instead.
-   *
+   * <p/>
    * Adds a child element to the end of the list of this element's children.
    */
-  public void add(final Element child) {
+  @Deprecated
+  public void add(@Nonnull final Element child) {
     addChild(child);
   }
 
   /**
    * @deprecated Use {@link #insertChild(Element, int)} instead.
-   *
+   * <p/>
    * Inserts a child element at the specified index in this element's list of children.
    */
-  public void add(final Element child, final int index) {
+  @Deprecated
+  public void add(@Nonnull final Element child, final int index) {
     insertChild(child, index);
   }
 
   /**
    * Adds a child element to the end of the list of this element's children.
    */
-  public void addChild(final Element child) {
-    insertChild(child, children.size());
-	}
+  public void addChild(@Nonnull final Element child) {
+    insertChild(child, children != null ? children.size() : 0);
+  }
 
   /**
    * Inserts a child element at the specified index in this element's list of children.
    */
-   public void insertChild(final Element child, final int index) {
-	    children.add (index, child);
-	    elementsRenderOrderSet.add(child);
-	    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
-   }
+  public void insertChild(@Nonnull final Element child, final int index) {
+    if (children == null) {
+      children = new ArrayList<Element>();
+    }
+    children.add(index, child);
 
-   /**
-    * Set the index of this element in it's parent's list of children.
-    */
-   public void setIndex(final int index) {
-	  int curInd = this.parent.children.indexOf(this);
-	  if(curInd>=0 && index !=curInd){
-		  this.parent.children.remove(curInd);
-		  this.parent.children.add (index, this);
-		  this.parent.layoutElements();
-	  }
-   }
+    if (elementsRenderOrderSet == null) {
+      elementsRenderOrderSet = new TreeSet<Element>(RENDER_ORDER_COMPARATOR);
+    }
+    elementsRenderOrderSet.add(child);
+    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[elementsRenderOrderSet.size()]);
+  }
 
-  public void render(final NiftyRenderEngine r) {
+  /**
+   * Set the index of this element in it's parent's list of children.
+   */
+  public void setIndex(final int index) {
+    if (parent == null) {
+      return;
+    }
+    List<Element> parentChildren = parent.children;
+    if (parentChildren == null) {
+      log.severe("Element tree corrupted. Parent element has not children.");
+    } else {
+      final int curInd = parentChildren.indexOf(this);
+      if (curInd >= 0 && index != curInd) {
+        parentChildren.remove(curInd);
+        parentChildren.add(index, this);
+        parent.layoutElements();
+      }
+    }
+  }
+
+  public void render(@Nonnull final NiftyRenderEngine r) {
     if (visible) {
       if (effectManager.isEmpty()) {
         r.saveState(null);
@@ -662,14 +679,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
-  private void renderElement(final NiftyRenderEngine r) {
-    for (int i=0; i<elementRenderer.length; i++) {
+  private void renderElement(@Nonnull final NiftyRenderEngine r) {
+    for (int i = 0; i < elementRenderer.length; i++) {
       ElementRenderer renderer = elementRenderer[i];
       renderer.render(this, r);
     }
   }
 
-  private void renderChildren(final NiftyRenderEngine r) {
+  private void renderChildren(@Nonnull final NiftyRenderEngine r) {
     if (clipChildren) {
       r.enableClip(getX(), getY(), getX() + getWidth(), getY() + getHeight());
       renderInternalChildElements(r);
@@ -679,14 +696,16 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
-  private void renderInternalChildElements(final NiftyRenderEngine r) {
-    for (int i=0; i<elementsRenderOrder.length; i++) {
-      Element p = elementsRenderOrder[i];
-      p.render(r);
+  private void renderInternalChildElements(@Nonnull final NiftyRenderEngine r) {
+    if (elementsRenderOrder != null) {
+      for (int i = 0; i < elementsRenderOrder.length; i++) {
+        Element p = elementsRenderOrder[i];
+        p.render(r);
+      }
     }
   }
 
-  public void setLayoutManager(final LayoutManager newLayout) {
+  public void setLayoutManager(@Nullable final LayoutManager newLayout) {
     this.layoutManager = newLayout;
   }
 
@@ -697,16 +716,22 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       textRenderer.resetLayout(this);
     }
 
-    for (int i=0; i< children.size(); i++) {
-      Element e = children.get(i);
-      e.resetLayout();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element e = children.get(i);
+        e.resetLayout();
+      }
     }
   }
 
   private void preProcessConstraintWidth() {
-    for (int i=0; i< children.size(); i++) {
-      Element e = children.get(i);
-      e.preProcessConstraintWidth();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element e = children.get(i);
+        e.preProcessConstraintWidth();
+      }
     }
 
     preProcessConstraintWidthThisLevel();
@@ -715,65 +740,76 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private void preProcessConstraintWidthThisLevel() {
     // This is either the original width value, or a value we set here.
     SizeValue myWidth = getConstraintWidth();
-    
+
     if (layoutManager != null) {
 
       // unset width, or width="sum" or width="max"
       // try to calculate the width constraint using the children
       // but only if all child elements have a fixed pixel width.
-      
+
       // The difference between an unset width and width="sum" is that the latter does not fail if
       // there are values that are not pixel, it simply considers them to be "0".
       // width="sum" also simply sums the width values, it does not care about the layout manager.
-      
-      if (myWidth == null || myWidth.hasDefault()) {
+
+      if (myWidth.hasDefault()) {
         List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentWidth();
 
         // if all (!) child elements have a pixel fixed width we can calculate a new width constraint for this element!
-        if (!layoutPartChild.isEmpty() && children.size() == layoutPartChild.size()) {
-          
+        if (!layoutPartChild.isEmpty() && getChildrenCount() == layoutPartChild.size()) {
+
           SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
-          if (newWidth != null && newWidth.hasValue()) {
+          if (newWidth.hasValue()) {
             int newWidthPx = newWidth.getValueAsInt(0);
-            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
-            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+                (newWidthPx));
+            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+                (newWidthPx));
             setConstraintWidth(SizeValue.def(newWidthPx));
           }
         } else {
-            setConstraintWidth(SizeValue.def());
+          setConstraintWidth(SizeValue.def());
         }
-        
+
       } else if (myWidth.hasSum()) {
         List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentWidth();
         SizeValue newWidth = layoutPart.getSumWidth(layoutPartChild);
-        if (newWidth != null && newWidth.hasValue()) {
+        if (newWidth.hasValue()) {
           int newWidthPx = newWidth.getValueAsInt(0);
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+              (newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+              (newWidthPx));
           setConstraintWidth(SizeValue.sum(newWidthPx));
         } else {
           setConstraintWidth(SizeValue.sum(0));
         }
-        
+
       } else if (myWidth.hasMax()) {
         List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentWidth();
         SizeValue newWidth = layoutPart.getMaxWidth(layoutPartChild);
-        if (newWidth != null && newWidth.hasValue()) {
+        if (newWidth.hasValue()) {
           int newWidthPx = newWidth.getValueAsInt(0);
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt(newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+              (newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+              (newWidthPx));
           setConstraintWidth(SizeValue.max(newWidthPx));
         } else {
           setConstraintWidth(SizeValue.max(0));
         }
-        
+
       }
     }
   }
-  
+
+  @Nonnull
   private List<LayoutPart> getLayoutChildrenWithIndependentWidth() {
-    List < LayoutPart > layoutPartChild = new ArrayList<LayoutPart>(children.size());
-    for (int i=0; i< children.size(); i++) {
+    if (children == null) {
+      return Collections.emptyList();
+    }
+    final int childrenCount = children.size();
+    List<LayoutPart> layoutPartChild = new ArrayList<LayoutPart>(childrenCount);
+    for (int i = 0; i < childrenCount; i++) {
       Element e = children.get(i);
       SizeValue childWidth = e.getConstraintWidth();
       if (childWidth.isPixel() && childWidth.isIndependentFromParent()) {
@@ -784,9 +820,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void preProcessConstraintHeight() {
-    for (int i=0; i< children.size(); i++) {
-      Element e = children.get(i);
-      e.preProcessConstraintHeight();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element e = children.get(i);
+        e.preProcessConstraintHeight();
+      }
     }
 
     preProcessConstraintHeightThisLevel();
@@ -795,65 +834,77 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private void preProcessConstraintHeightThisLevel() {
     // This is either the original height value, or a value we set here.
     SizeValue myHeight = getConstraintHeight();
-    
+
     if (layoutManager != null) {
 
       // unset height, or height="sum" or height="max"
       // try to calculate the height constraint using the children
       // but only if all child elements have a fixed pixel height.
-      
+
       // The difference between an unset height and height="sum" is that the latter does not fail if
       // there are values that are not pixel, it simply considers them to be "0".
       // height="sum" also simply sums the height values, it does not care about the layout manager.
-      
-      if (myHeight == null || myHeight.hasDefault()) {
+
+      if (myHeight.hasDefault()) {
         List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentHeight();
 
-        // if all (!) child elements have a pixel fixed height we can calculate a new height constraint for this element!
-        if (!layoutPartChild.isEmpty() && children.size() == layoutPartChild.size()) {
-          
+        // if all (!) child elements have a pixel fixed height we can calculate a new height constraint for this
+        // element!
+        if (!layoutPartChild.isEmpty() && getChildrenCount() == layoutPartChild.size()) {
+
           SizeValue newHeight = layoutManager.calculateConstraintHeight(this.layoutPart, layoutPartChild);
-          if (newHeight != null && newHeight.hasValue()) {
+          if (newHeight.hasValue()) {
             int newHeightPx = newHeight.getValueAsInt(0);
-            newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
-            newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+            newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt
+                (newHeightPx));
+            newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight
+                .getValueAsInt(newHeightPx));
             setConstraintHeight(SizeValue.def(newHeightPx));
           }
         } else {
-            setConstraintHeight(SizeValue.def());
+          setConstraintHeight(SizeValue.def());
         }
-        
+
       } else if (myHeight.hasSum()) {
         List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentHeight();
         SizeValue newHeight = layoutPart.getSumHeight(layoutPartChild);
-        if (newHeight != null && newHeight.hasValue()) {
+        if (newHeight.hasValue()) {
           int newHeightPx = newHeight.getValueAsInt(0);
-          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
-          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt
+              (newHeightPx));
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt
+              (newHeightPx));
           setConstraintHeight(SizeValue.sum(newHeightPx));
         } else {
           setConstraintHeight(SizeValue.sum(0));
         }
-        
+
       } else if (myHeight.hasMax()) {
         List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentHeight();
         SizeValue newHeight = layoutPart.getMaxHeight(layoutPartChild);
-        if (newHeight != null && newHeight.hasValue()) {
+        if (newHeight.hasValue()) {
           int newHeightPx = newHeight.getValueAsInt(0);
-          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
-          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt(newHeightPx));
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt
+              (newHeightPx));
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt
+              (newHeightPx));
           setConstraintHeight(SizeValue.max(newHeightPx));
         } else {
           setConstraintHeight(SizeValue.max(0));
         }
-        
+
       }
     }
   }
-  
+
+  @Nonnull
   private List<LayoutPart> getLayoutChildrenWithIndependentHeight() {
-    List < LayoutPart > layoutPartChild = new ArrayList<LayoutPart>(children.size());
-    for (int i=0; i< children.size(); i++) {
+    if (children == null) {
+      return Collections.emptyList();
+    }
+    final int childrenCount = children.size();
+    List<LayoutPart> layoutPartChild = new ArrayList<LayoutPart>(childrenCount);
+    for (int i = 0; i < childrenCount; i++) {
       Element e = children.get(i);
       SizeValue childHeight = e.getConstraintHeight();
       if (childHeight.isPixel() && childHeight.isIndependentFromParent()) {
@@ -864,11 +915,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void processLayoutInternal() {
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      TextRenderer textRenderer = w.getRenderer(TextRenderer.class);
-      if (textRenderer != null) {
-        textRenderer.setWidthConstraint(w, w.getConstraintWidth(), getWidth(), nifty.getRenderEngine());
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        TextRenderer textRenderer = w.getRenderer(TextRenderer.class);
+        if (textRenderer != null) {
+          textRenderer.setWidthConstraint(w, w.getConstraintWidth(), getWidth(), nifty.getRenderEngine());
+        }
       }
     }
   }
@@ -877,15 +931,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     processLayoutInternal();
 
     if (layoutManager != null) {
-      // we need a list of LayoutPart and not of Element, so we'll build one on the fly here
-      List < LayoutPart > layoutPartChild = new ArrayList < LayoutPart >();
-      for (int i=0; i< children.size(); i++) {
-        Element w = children.get(i);
-        layoutPartChild.add(w.layoutPart);
-      }
+      if (children != null) {
+        final int childrenCount = children.size();
+        // we need a list of LayoutPart and not of Element, so we'll build one on the fly here
+        List<LayoutPart> layoutPartChild = new ArrayList<LayoutPart>(childrenCount);
+        for (int i = 0; i < childrenCount; i++) {
+          Element w = children.get(i);
+          layoutPartChild.add(w.layoutPart);
+        }
 
-      // use out layoutManager to layout our children
-      layoutManager.layoutElements(layoutPart, layoutPartChild);
+        // use out layoutManager to layout our children
+        layoutManager.layoutElements(layoutPart, layoutPartChild);
+      }
 
       if (attachedInputControl != null) {
         NiftyControl niftyControl = attachedInputControl.getNiftyControl(NiftyControl.class);
@@ -896,15 +953,19 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         }
       }
 
-      // repeat this step for all child elements
-      for (int i=0; i< children.size(); i++) {
-        Element w = children.get(i);
-        w.processLayout();
+      if (children != null) {
+        // repeat this step for all child elements
+        final int childrenCount = children.size();
+        for (int i = 0; i < childrenCount; i++) {
+          Element w = children.get(i);
+          w.processLayout();
+        }
       }
     }
 
-    if (clipChildren) {
-      for (int i=0; i< children.size(); i++) {
+    if (clipChildren && children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
         Element w = children.get(i);
         w.setParentClipArea(getX(), getY(), getWidth(), getHeight());
       }
@@ -914,10 +975,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   public void layoutElements() {
     prepareLayout();
     processLayout();
-    
+
     prepareLayout();
     processLayout();
-    
+
     prepareLayout();
     processLayout();
   }
@@ -934,144 +995,183 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     parentClipWidth = width;
     parentClipHeight = height;
 
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      w.setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
+      }
     }
   }
 
   public void resetEffects() {
     effectManager.reset();
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      w.resetEffects();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.resetEffects();
+      }
     }
   }
 
   public void resetAllEffects() {
     effectManager.resetAll();
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      w.resetAllEffects();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.resetAllEffects();
+      }
     }
   }
 
   public void resetForHide() {
     effectManager.resetForHide();
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      w.resetForHide();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.resetForHide();
+      }
     }
   }
 
-  public void resetSingleEffect(final EffectEventId effectEventId) {
+  public void resetSingleEffect(@Nonnull final EffectEventId effectEventId) {
     effectManager.resetSingleEffect(effectEventId);
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      w.resetSingleEffect(effectEventId);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.resetSingleEffect(effectEventId);
+      }
     }
   }
 
-  public void resetSingleEffect(final EffectEventId effectEventId, final String customKey) {
+  public void resetSingleEffect(@Nonnull final EffectEventId effectEventId, @Nonnull final String customKey) {
     effectManager.resetSingleEffect(effectEventId, customKey);
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      w.resetSingleEffect(effectEventId, customKey);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.resetSingleEffect(effectEventId, customKey);
+      }
     }
   }
 
   public void resetMouseDown() {
     interaction.resetMouseDown();
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      w.resetMouseDown();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.resetMouseDown();
+      }
     }
   }
 
-  public void setConstraintX(final SizeValue newX) {
+  public void setConstraintX(@Nonnull final SizeValue newX) {
     layoutPart.getBoxConstraints().setX(newX);
     notifyListeners();
   }
 
-  public void setConstraintY(final SizeValue newY) {
+  public void setConstraintY(@Nonnull final SizeValue newY) {
     layoutPart.getBoxConstraints().setY(newY);
     notifyListeners();
   }
 
-  public void setConstraintWidth(final SizeValue newWidth) {
+  public void setConstraintWidth(@Nonnull final SizeValue newWidth) {
     layoutPart.getBoxConstraints().setWidth(newWidth);
     notifyListeners();
   }
 
-  public void setConstraintHeight(final SizeValue newHeight) {
+  public void setConstraintHeight(@Nonnull final SizeValue newHeight) {
     layoutPart.getBoxConstraints().setHeight(newHeight);
     notifyListeners();
   }
 
+  @Nonnull
   public SizeValue getConstraintX() {
     return layoutPart.getBoxConstraints().getX();
   }
 
+  @Nonnull
   public SizeValue getConstraintY() {
     return layoutPart.getBoxConstraints().getY();
   }
 
+  @Nonnull
   public SizeValue getConstraintWidth() {
     return layoutPart.getBoxConstraints().getWidth();
   }
 
+  @Nonnull
   public SizeValue getConstraintHeight() {
     return layoutPart.getBoxConstraints().getHeight();
   }
 
-  public void setConstraintHorizontalAlign(final HorizontalAlign newHorizontalAlign) {
+  public void setConstraintHorizontalAlign(@Nonnull final HorizontalAlign newHorizontalAlign) {
     layoutPart.getBoxConstraints().setHorizontalAlign(newHorizontalAlign);
   }
 
-  public void setConstraintVerticalAlign(final VerticalAlign newVerticalAlign) {
+  public void setConstraintVerticalAlign(@Nonnull final VerticalAlign newVerticalAlign) {
     layoutPart.getBoxConstraints().setVerticalAlign(newVerticalAlign);
   }
 
+  @Nonnull
   public HorizontalAlign getConstraintHorizontalAlign() {
     return layoutPart.getBoxConstraints().getHorizontalAlign();
   }
 
+  @Nonnull
   public VerticalAlign getConstraintVerticalAlign() {
     return layoutPart.getBoxConstraints().getVerticalAlign();
   }
 
   public void registerEffect(
-      final EffectEventId theId,
-      final Effect e) {
-    log.fine("[" + this.getId() + "] register: " + theId.toString() + "(" + e.getStateString() + ")");
+      @Nonnull final EffectEventId theId,
+      @Nonnull final Effect e) {
+    log.fine("[" + id + "] register: " + theId.toString() + "(" + e.getStateString() + ")");
     effectManager.registerEffect(theId, e);
   }
 
-  public void startEffect(final EffectEventId effectEventId) {
+  public void startEffect(@Nonnull final EffectEventId effectEventId) {
     startEffect(effectEventId, null);
   }
 
-  public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
-    startEffect(effectEventId, effectEndNotiy, null);
+  public void startEffect(@Nonnull final EffectEventId effectEventId, @Nullable final EndNotify effectEndNotify) {
+    startEffect(effectEventId, effectEndNotify, null);
   }
 
-  public void startEffect(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
-    startEffectDoIt(effectEventId, effectEndNotiy, customKey, true);
+  public void startEffect(
+      @Nonnull final EffectEventId effectEventId,
+      @Nullable final EndNotify effectEndNotify,
+      @Nullable final String customKey) {
+    startEffectDoIt(effectEventId, effectEndNotify, customKey, true);
   }
 
-  public void startEffectWithoutChildren(final EffectEventId effectEventId) {
+  public void startEffectWithoutChildren(@Nonnull final EffectEventId effectEventId) {
     startEffectWithoutChildren(effectEventId, null);
   }
 
-  public void startEffectWithoutChildren(final EffectEventId effectEventId, final EndNotify effectEndNotiy) {
-    startEffectWithoutChildren(effectEventId, effectEndNotiy, null);
+  public void startEffectWithoutChildren(
+      @Nonnull final EffectEventId effectEventId,
+      @Nullable final EndNotify effectEndNotify) {
+    startEffectWithoutChildren(effectEventId, effectEndNotify, null);
   }
 
-  public void startEffectWithoutChildren(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
-    startEffectDoIt(effectEventId, effectEndNotiy, customKey, false);
+  public void startEffectWithoutChildren(
+      @Nonnull final EffectEventId effectEventId,
+      @Nullable final EndNotify effectEndNotify,
+      @Nullable final String customKey) {
+    startEffectDoIt(effectEventId, effectEndNotify, customKey, false);
   }
 
-  private void startEffectDoIt(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey, final boolean withChildren) {
+  private void startEffectDoIt(
+      @Nonnull final EffectEventId effectEventId,
+      @Nullable final EndNotify effectEndNotify,
+      @Nullable final String customKey,
+      final boolean withChildren) {
     if (effectEventId == EffectEventId.onStartScreen) {
       if (!visible) {
         return;
@@ -1080,10 +1180,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       interactionBlocked = true;
     }
     if (effectEventId == EffectEventId.onEndScreen) {
-      if (!visible) {
+      if (!visible && (effectEndNotify != null)) {
         // it doesn't make sense to start the onEndScreen effect when the element is hidden
         // just call the effectEndNotify directly and quit
-        effectEndNotiy.perform();
+        effectEndNotify.perform();
         return;
       }
       done = true;
@@ -1097,14 +1197,15 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     // before forwarding this to the real event handler.
     //
     // little bit tricky though :/
-    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotiy);
+    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotify);
 
-    // start the effect for ourself
+    // start the effect for our self
     effectManager.startEffect(effectEventId, this, time, forwardToSelf, customKey);
 
     // notify all child elements of the start effect
-    if (withChildren) {
-      for (int i=0; i< children.size(); i++) {
+    if (withChildren && children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
         Element w = children.get(i);
         w.startEffectInternal(effectEventId, forwardToSelf, customKey);
       }
@@ -1120,7 +1221,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     forwardToSelf.perform();
   }
 
-  private void startEffectInternal(final EffectEventId effectEventId, final EndNotify effectEndNotiy, final String customKey) {
+  private void startEffectInternal(
+      @Nonnull final EffectEventId effectEventId,
+      @Nullable final EndNotify effectEndNotify,
+      @Nullable final String customKey) {
     if (effectEventId == EffectEventId.onStartScreen) {
       if (!visible) {
         return;
@@ -1143,15 +1247,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     // before forwarding this to the real event handler.
     //
     // little bit tricky though :/
-    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotiy);
+    LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotify);
 
-    // start the effect for ourself
+    // start the effect for our self
     effectManager.startEffect(effectEventId, this, time, forwardToSelf, customKey);
 
     // notify all child elements of the start effect
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      w.startEffectInternal(effectEventId, forwardToSelf, customKey);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.startEffectInternal(effectEventId, forwardToSelf, customKey);
+      }
     }
 
     if (effectEventId == EffectEventId.onFocus) {
@@ -1161,15 +1268,15 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
-  public void stopEffect(final EffectEventId effectEventId) {
+  public void stopEffect(@Nonnull final EffectEventId effectEventId) {
     stopEffectInternal(effectEventId, true);
   }
 
-  public void stopEffectWithoutChildren(final EffectEventId effectEventId) {
+  public void stopEffectWithoutChildren(@Nonnull final EffectEventId effectEventId) {
     stopEffectInternal(effectEventId, false);
   }
 
-  private void stopEffectInternal(final EffectEventId effectEventId, final boolean withChildren) {
+  private void stopEffectInternal(@Nonnull final EffectEventId effectEventId, final boolean withChildren) {
     if (EffectEventId.onStartScreen == effectEventId ||
         EffectEventId.onEndScreen == effectEventId) {
       interactionBlocked = false;
@@ -1180,8 +1287,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     effectManager.stopEffect(effectEventId);
 
     // notify all child elements of the start effect
-    if (withChildren) {
-      for (int i=0; i< children.size(); i++) {
+    if (withChildren && children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
         Element w = children.get(i);
         w.stopEffect(effectEventId);
       }
@@ -1199,7 +1307,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    *
    * @return true if the effect has ended and false otherwise
    */
-  public boolean isEffectActive(final EffectEventId effectEventId) {
+  public boolean isEffectActive(@Nonnull final EffectEventId effectEventId) {
     return effectStateCache.get(effectEventId);
   }
 
@@ -1215,12 +1323,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     if (enabledCount == 0) {
       enabled = true;
       enableEffect();
-      for (int i=0; i< children.size(); i++) {
-        children.get(i).enableInternal();
+      if (children != null) {
+        final int childrenCount = children.size();
+        for (int i = 0; i < childrenCount; i++) {
+          children.get(i).enableInternal();
+        }
       }
     } else {
-      for (int i=0; i< children.size(); i++) {
-        children.get(i).enableInternal();
+      if (children != null) {
+        final int childrenCount = children.size();
+        for (int i = 0; i < childrenCount; i++) {
+          children.get(i).enableInternal();
+        }
       }
     }
   }
@@ -1228,7 +1342,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   void enableEffect() {
     stopEffectWithoutChildren(EffectEventId.onDisabled);
     startEffectWithoutChildren(EffectEventId.onEnabled);
-    nifty.publishEvent(getId(), new ElementEnableEvent(this));
+    if (id != null) {
+      nifty.publishEvent(id, new ElementEnableEvent(this));
+    }
   }
 
   public void disable() {
@@ -1244,12 +1360,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       enabled = false;
       disableFocus();
       disableEffect();
-      for (int i=0; i< children.size(); i++) {
-        children.get(i).disableInternal();
+      if (children != null) {
+        final int childrenCount = children.size();
+        for (int i = 0; i < childrenCount; i++) {
+          children.get(i).disableInternal();
+        }
       }
     } else {
-      for (int i=0; i< children.size(); i++) {
-        children.get(i).disableInternal();
+      if (children != null) {
+        final int childrenCount = children.size();
+        for (int i = 0; i < childrenCount; i++) {
+          children.get(i).disableInternal();
+        }
       }
     }
   }
@@ -1260,8 +1382,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       prevElement.setFocus();
     }
 
-    focusHandler.lostKeyboardFocus(Element.this);
-    focusHandler.lostMouseFocus(Element.this);
+    focusHandler.lostKeyboardFocus(this);
+    focusHandler.lostMouseFocus(this);
   }
 
   void disableEffect() {
@@ -1270,7 +1392,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     stopEffectWithoutChildren(EffectEventId.onEndHover);
     stopEffectWithoutChildren(EffectEventId.onEnabled);
     startEffectWithoutChildren(EffectEventId.onDisabled);
-    nifty.publishEvent(getId(), new ElementDisableEvent(this));
+
+    if (id != null) {
+      nifty.publishEvent(id, new ElementDisableEvent(this));
+    }
   }
 
   public boolean isEnabled() {
@@ -1281,7 +1406,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     show(null);
   }
 
-  public void show(final EndNotify perform) {
+  public void show(@Nullable final EndNotify perform) {
     // don't show if show is still in progress
     if (isEffectActive(EffectEventId.onShow)) {
       return;
@@ -1301,12 +1426,17 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     visible = true;
     effectManager.restoreForShow();
 
-    for (int i=0; i< children.size(); i++) {
-      Element element = children.get(i);
-      element.internalShow();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element element = children.get(i);
+        element.internalShow();
+      }
     }
 
-    nifty.publishEvent(getId(), new ElementShowEvent(this));
+    if (id != null) {
+      nifty.publishEvent(id, new ElementShowEvent(this));
+    }
   }
 
   public void setVisible(final boolean visibleParam) {
@@ -1321,7 +1451,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     hide(null);
   }
 
-  public void hide(final EndNotify perform) {
+  public void hide(@Nullable final EndNotify perform) {
     // don't hide if not visible
     if (!isVisible()) {
       return;
@@ -1368,22 +1498,28 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     visible = false;
     disableFocus();
 
-    for (int i=0; i< children.size(); i++) {
-      Element element = children.get(i);
-      element.internalHide();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element element = children.get(i);
+        element.internalHide();
+      }
     }
 
-    nifty.publishEvent(getId(), new ElementHideEvent(this));
+    if (id != null) {
+      nifty.publishEvent(id, new ElementHideEvent(this));
+    }
   }
 
   public boolean isVisible() {
     return visible;
   }
 
-  public void setHotSpotFalloff(final Falloff newFalloff) {
+  public void setHotSpotFalloff(@Nullable final Falloff newFalloff) {
     effectManager.setFalloff(newFalloff);
   }
 
+  @Nullable
   public Falloff getFalloff() {
     return effectManager.getFalloff();
   }
@@ -1423,6 +1559,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * This is a special version of canHandleMouseEvents() that will return true if this element is able to process
    * mouse events in general. This method will return true even when the element is temporarily not able to handle
    * events because onStartScreen or onEndScreen effects are active.
+   *
    * @return true can handle mouse events, false can't handle them
    */
   boolean canTheoreticallyHandleMouseEvents() {
@@ -1453,9 +1590,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * elements from front to back that are available for a certain mouse position.
    */
   public void buildMouseOverElements(
-      final NiftyMouseInputEvent mouseEvent,
+      @Nonnull final NiftyMouseInputEvent mouseEvent,
       final long eventTime,
-      final MouseOverHandler mouseOverHandler) {
+      @Nonnull final MouseOverHandler mouseOverHandler) {
     boolean isInside = isInside(mouseEvent);
     if (canHandleMouseEvents()) {
       if (isInside) {
@@ -1469,23 +1606,27 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       }
     }
     if (visible) {
-      for (int i=0; i< children.size(); i++) {
-        Element w = children.get(i);
-        w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
+      if (children != null) {
+        final int childrenCount = children.size();
+        for (int i = 0; i < childrenCount; i++) {
+          Element w = children.get(i);
+          w.buildMouseOverElements(mouseEvent, eventTime, mouseOverHandler);
+        }
       }
     }
   }
 
-  public void mouseEventHoverPreprocess(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
+  public void mouseEventHoverPreprocess(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     effectManager.handleHoverDeactivate(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
   }
 
-  public boolean mouseEvent(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
+  public boolean mouseEvent(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     mouseEventHover(mouseEvent);
-    return interaction.process(mouseEvent, eventTime, isInside(mouseEvent), canHandleInteraction(), focusHandler.hasExclusiveMouseFocus(this));
+    return interaction.process(mouseEvent, eventTime, isInside(mouseEvent), canHandleInteraction(),
+        focusHandler.hasExclusiveMouseFocus(this));
   }
 
-  private void mouseEventHover(final NiftyMouseInputEvent mouseEvent) {
+  private void mouseEventHover(@Nonnull final NiftyMouseInputEvent mouseEvent) {
     effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
     effectManager.handleHoverStartAndEnd(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
   }
@@ -1495,7 +1636,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    *
    * @return true the mouse event has been consumed and false when the mouse event can be processed further down
    */
-  public boolean mouseOverEvent(final NiftyMouseInputEvent mouseEvent, final long eventTime) {
+  public boolean mouseOverEvent(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     boolean isMouseEventConsumed = false;
     if (interaction.onMouseOver(this, mouseEvent)) {
       isMouseEventConsumed = true;
@@ -1509,7 +1650,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   /**
    * Checks to see if the given mouse position is inside of this element.
    */
-  private boolean isInside(final NiftyMouseInputEvent inputEvent) {
+  private boolean isInside(@Nonnull final NiftyMouseInputEvent inputEvent) {
     return isMouseInsideElement(inputEvent.getMouseX(), inputEvent.getMouseY());
   }
 
@@ -1517,20 +1658,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     if (parentClipArea) {
       // must be inside the parent to continue
       if (isInsideParentClipArea(mouseX, mouseY)) {
-          return
+        return
             mouseX >= getX() &&
-            mouseX <= (getX() + getWidth()) &&
-            mouseY > (getY()) &&
-            mouseY < (getY() + getHeight());
-        } else {
-          return false;
-        }
+                mouseX <= (getX() + getWidth()) &&
+                mouseY > (getY()) &&
+                mouseY < (getY() + getHeight());
+      } else {
+        return false;
+      }
     } else {
       return
-        mouseX >= getX() &&
-        mouseX <= (getX() + getWidth()) &&
-        mouseY > (getY()) &&
-        mouseY < (getY() + getHeight());
+          mouseX >= getX() &&
+              mouseX <= (getX() + getWidth()) &&
+              mouseY > (getY()) &&
+              mouseY < (getY() + getHeight());
     }
   }
 
@@ -1548,24 +1689,26 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private boolean canHandleInteraction() {
-    return enabled && !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId.onEndScreen);
+    return enabled && !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId
+        .onEndScreen);
   }
 
   /**
-   * @deprecated Please use {@link #findElementById(String)}.
-   *
    * @param name the name (id) of the element
    * @return the element or null if an element with the specified name cannot be found
+   * @deprecated Please use {@link #findElementById(String)}.
    */
+  @Nullable
   @Deprecated
   public Element findElementByName(final String name) {
-      return findElementById(name);
+    return findElementById(name);
   }
 
   /**
    * @return the element or null if an element with the specified id cannot be found
    */
-  public Element findElementById(final String findId) {
+  @Nullable
+  public Element findElementById(@Nullable final String findId) {
     if (findId == null) {
       return null;
     }
@@ -1578,18 +1721,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       return this;
     }
 
-    for (int i=0; i< children.size(); i++) {
-      Element e = children.get(i);
-      Element found = e.findElementById(findId);
-      if (found != null) {
-        return found;
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element e = children.get(i);
+        Element found = e.findElementById(findId);
+        if (found != null) {
+          return found;
+        }
       }
     }
 
     return null;
   }
 
-  private boolean childIdMatch(final String name, final String id) {
+  private boolean childIdMatch(@Nonnull final String name, @Nullable final String id) {
     if (name.startsWith("#")) {
       if (id != null && id.endsWith(name)) {
         return true;
@@ -1602,26 +1748,32 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     interaction.setAlternateKey(newAlternateKey);
   }
 
-  public void setAlternateKey(final String alternateKey) {
+  public void setAlternateKey(@Nullable final String alternateKey) {
     effectManager.setAlternateKey(alternateKey);
 
-    for (int i=0; i< children.size(); i++) {
-      Element e = children.get(i);
-      e.setAlternateKey(alternateKey);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element e = children.get(i);
+        e.setAlternateKey(alternateKey);
+      }
     }
   }
 
+  @Nonnull
   public EffectManager getEffectManager() {
     return effectManager;
   }
 
-  public void setEffectManager(final EffectManager effectManagerParam) {
+  public void setEffectManager(@Nonnull final EffectManager effectManagerParam) {
     effectManager = effectManagerParam;
   }
 
-  private void bindToScreen(final Screen newScreen) {
+  private void bindToScreen(@Nonnull final Screen newScreen) {
     screen = newScreen;
-    screen.registerElementId(id);
+    if (id != null) {
+      screen.registerElementId(id);
+    }
   }
 
   private void bindToFocusHandler(final boolean isPopup) {
@@ -1629,8 +1781,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       return;
     }
 
-    if (hasAncestorPopup() && !isPopup)
-    {
+    if (hasAncestorPopup() && !isPopup) {
       return;
     }
 
@@ -1641,6 +1792,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return findAncestorPopupElement() != null;
   }
 
+  @Nullable
   private Element findAncestorPopupElement() {
     if (elementType instanceof PopupType) {
       return this;
@@ -1659,9 +1811,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void onStartScreenSubscribeControllerAnnotations() {
-    for (int i=0; i< children.size(); i++) {
-      Element e = children.get(i);
-      e.onStartScreenSubscribeControllerAnnotations();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element e = children.get(i);
+        e.onStartScreenSubscribeControllerAnnotations();
+      }
     }
     if (attachedInputControl != null) {
       nifty.subscribeAnnotations(attachedInputControl.getController());
@@ -1669,9 +1824,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void onStartScreenInternal() {
-    for (int i=0; i< children.size(); i++) {
-      Element e = children.get(i);
-      e.onStartScreenInternal();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element e = children.get(i);
+        e.onStartScreenInternal();
+      }
     }
     if (attachedInputControl != null) {
       attachedInputControl.onStartScreen(nifty, screen);
@@ -1681,13 +1839,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   /**
    * Gets this element's renderer matching the specified class.
    *
-   * @param <T> the {@link de.lessvoid.nifty.elements.render.ElementRenderer} type to check for
+   * @param <T>                    the {@link de.lessvoid.nifty.elements.render.ElementRenderer} type to check for
    * @param requestedRendererClass the {@link de.lessvoid.nifty.elements.render.ElementRenderer} class to check for
    * @return the {@link de.lessvoid.nifty.elements.render.ElementRenderer} that matches the specified class, or null if
    * there is no matching renderer
    */
-  public <T extends ElementRenderer> T getRenderer(final Class <T> requestedRendererClass) {
-    for (int i=0; i<elementRenderer.length; i++) {
+  @Nullable
+  public <T extends ElementRenderer> T getRenderer(@Nonnull final Class<T> requestedRendererClass) {
+    for (int i = 0; i < elementRenderer.length; i++) {
       ElementRenderer renderer = elementRenderer[i];
       if (requestedRendererClass.isInstance(renderer)) {
         return requestedRendererClass.cast(renderer);
@@ -1700,8 +1859,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     this.visibleToMouseEvents = newVisibleToMouseEvents;
   }
 
-  public boolean keyEvent(final KeyboardInputEvent inputEvent) {
-    if (attachedInputControl != null) {
+  public boolean keyEvent(@Nonnull final KeyboardInputEvent inputEvent) {
+    if (attachedInputControl != null && id != null) {
       return attachedInputControl.keyEvent(nifty, inputEvent, id);
     }
     return false;
@@ -1717,13 +1876,24 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
   public void setRenderOrder(final int renderOrder) {
     this.renderOrder = renderOrder;
-    parent.renderOrderChanged(this);
+    if (parent != null) {
+      parent.renderOrderChanged(this);
+    }
   }
 
-  private void renderOrderChanged(final Element element) {
-    elementsRenderOrderSet.remove(element);
-    elementsRenderOrderSet.add(element);
-    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
+  private void renderOrderChanged(@Nonnull final Element element) {
+    if (elementsRenderOrderSet != null) {
+      elementsRenderOrderSet.remove(element);
+      elementsRenderOrderSet.add(element);
+
+      final Element[] usedArray;
+      if (elementsRenderOrder == null || elementsRenderOrder.length != elementsRenderOrderSet.size()) {
+        usedArray = new Element[elementsRenderOrderSet.size()];
+      } else {
+        usedArray = elementsRenderOrder;
+      }
+      elementsRenderOrderSet.toArray(usedArray);
+    }
   }
 
   public int getRenderOrder() {
@@ -1734,7 +1904,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * Attempts to set the focus to this element.
    */
   public void setFocus() {
-    if (nifty != null && nifty.getCurrentScreen() != null) {
+    if (nifty.getCurrentScreen() != null) {
       if (isFocusable()) {
         focusHandler.setKeyFocus(this);
       }
@@ -1748,17 +1918,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private boolean hasParentActiveOnStartOrOnEndScreenEffect() {
     if (parent != null) {
       return
-        parent.effectManager.isActive(EffectEventId.onStartScreen) ||
-        parent.effectManager.isActive(EffectEventId.onEndScreen) ||
-        parent.hasParentActiveOnStartOrOnEndScreenEffect();
+          parent.effectManager.isActive(EffectEventId.onStartScreen) ||
+              parent.effectManager.isActive(EffectEventId.onEndScreen) ||
+              parent.hasParentActiveOnStartOrOnEndScreenEffect();
     }
     return false;
   }
 
   private void resetInteractionBlocked() {
     interactionBlocked = false;
-    for (Element e : children) {
-      e.resetInteractionBlocked();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        child.resetInteractionBlocked();
+      }
     }
   }
 
@@ -1766,12 +1940,16 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * @author void
    */
   public class LocalEndNotify implements EndNotify {
-    private EffectEventId effectEventId;
-    private EndNotify effectEndNotiy;
+    @Nonnull
+    private final EffectEventId effectEventId;
+    @Nullable
+    private final EndNotify effectEndNotify;
 
-    public LocalEndNotify(final EffectEventId effectEventIdParam, final EndNotify effectEndNotiyParam) {
+    public LocalEndNotify(
+        @Nonnull final EffectEventId effectEventIdParam,
+        @Nullable final EndNotify effectEndNotifyParam) {
       effectEventId = effectEventIdParam;
-      effectEndNotiy = effectEndNotiyParam;
+      effectEndNotify = effectEndNotifyParam;
     }
 
     @Override
@@ -1785,51 +1963,58 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       }
 
       // notify parent if:
-      // a) the effect is done for ourself
+      // a) the effect is done for our self
       // b) the effect is done for all of our children
       if (!isEffectActive(effectEventId)) {
-
         // all fine. we can notify the actual event handler
-        if (effectEndNotiy != null) {
-          effectEndNotiy.perform();
+        if (effectEndNotify != null) {
+          effectEndNotify.perform();
         }
       }
     }
   }
 
-  public void setId(final String newId) {
-    this.id = newId;
+  public void setId(@Nullable final String id) {
+    this.id = id;
   }
 
+  @Nonnull
   public ElementType getElementType() {
     return elementType;
   }
 
+  @Nonnull
   public ElementRenderer[] getElementRenderer() {
     return elementRenderer;
   }
 
   public void setFocusable(final boolean isFocusable) {
     this.focusable = isFocusable;
-    for (Element e : children) {
-      e.setFocusable(isFocusable);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        child.setFocusable(isFocusable);
+      }
     }
   }
 
+  @Nullable
   public NiftyInputControl getAttachedInputControl() {
     return attachedInputControl;
   }
 
-  public void bindControls(final Screen target) {
-    if (target == null) {
-      throw new IllegalArgumentException();
-    }
+  public void bindControls(@Nonnull final Screen target) {
     if (screen == target) {
       return;
     }
     bindToScreen(target);
-    for (Element element : children) {
-      element.bindControls(target);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        child.bindControls(target);
+      }
     }
     if (attachedInputControl != null) {
       attachedInputControl.bindControl(nifty, target, this, elementType.getAttributes());
@@ -1837,8 +2022,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public void initControls(final boolean isPopup) {
-    for (Element element : children) {
-      element.initControls(isPopup);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        child.initControls(isPopup);
+      }
     }
     if (attachedInputControl != null) {
       attachedInputControl.initControl(elementType.getAttributes());
@@ -1851,17 +2040,25 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    */
   public void removeFromFocusHandler() {
     focusHandler.remove(this);
-    for (Element element : children) {
-      element.removeFromFocusHandler();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        child.removeFromFocusHandler();
+      }
     }
   }
 
+  @Nonnull
   public FocusHandler getFocusHandler() {
     return focusHandler;
   }
 
-  public void setStyle(final String newStyle) {
-    removeStyle(elementType.getAttributes().get("style"));
+  public void setStyle(@Nonnull final String newStyle) {
+    final String oldStyle = getStyle();
+    if (oldStyle != null) {
+      removeStyle(oldStyle);
+    }
 
     elementType.getAttributes().set("style", newStyle);
     elementType.applyStyles(nifty.getDefaultStyleResolver());
@@ -1873,11 +2070,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     notifyListeners();
   }
 
+  @Nullable
   public String getStyle() {
     return elementType.getAttributes().get("style");
   }
 
-  void removeStyle(final String style) {
+  void removeStyle(@Nonnull final String style) {
     log.fine("before removeStyle [" + style + "]\n" + elementType.output(0));
 
     elementType.removeWithTag(style);
@@ -1896,8 +2094,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     if (attachedInputControl != null) {
       attachedInputControl.addInputHandler(handler);
     }
-    for (Element element : children) {
-      element.addInputHandler(handler);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        child.addInputHandler(handler);
+      }
     }
   }
 
@@ -1910,12 +2112,19 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     if (attachedInputControl != null) {
       attachedInputControl.addPreInputHandler(handler);
     }
-    for (Element element : children) {
-      element.addPreInputHandler(handler);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        child.addPreInputHandler(handler);
+      }
     }
   }
 
-  public < T extends Controller > T findControl(final String elementName, final Class < T > requestedControlClass) {
+  @Nullable
+  public <T extends Controller> T findControl(
+      @Nonnull final String elementName,
+      @Nonnull final Class<T> requestedControlClass) {
     Element element = findElementById(elementName);
     if (element == null) {
       return null;
@@ -1923,7 +2132,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return element.getControl(requestedControlClass);
   }
 
-  public < T extends NiftyControl > T findNiftyControl(final String elementName, final Class < T > requestedControlClass) {
+  @Nullable
+  public <T extends NiftyControl> T findNiftyControl(
+      @Nonnull final String elementName,
+      @Nonnull final Class<T> requestedControlClass) {
     Element element = findElementById(elementName);
     if (element == null) {
       return null;
@@ -1931,45 +2143,52 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return element.getNiftyControl(requestedControlClass);
   }
 
-  public < T extends Controller > T getControl(final Class < T > requestedControlClass) {
+  @Nullable
+  public <T extends Controller> T getControl(@Nonnull final Class<T> requestedControlClass) {
     if (attachedInputControl != null) {
       T t = attachedInputControl.getControl(requestedControlClass);
       if (t != null) {
         return t;
       }
     }
-    for (Element element : children) {
-      T t = element.getControl(requestedControlClass);
-      if (t != null) {
-        return t;
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        T t = child.getControl(requestedControlClass);
+        if (t != null) {
+          return t;
+        }
       }
     }
     return null;
   }
 
-  public < T extends NiftyControl > T getNiftyControl(final Class < T > requestedControlClass) {
+  @Nullable
+  public <T extends NiftyControl> T getNiftyControl(@Nonnull final Class<T> requestedControlClass) {
     if (attachedInputControl != null) {
       T t = attachedInputControl.getNiftyControl(requestedControlClass);
       if (t != null) {
         return t;
       }
     }
-    for (Element element : children) {
-      T t = element.getNiftyControl(requestedControlClass);
-      if (t != null) {
-        return t;
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element child = children.get(i);
+        T t = child.getNiftyControl(requestedControlClass);
+        if (t != null) {
+          return t;
+        }
       }
     }
-    log.warning("missing element/control with id [" + getId() + "] for requested control class [" + requestedControlClass.getName() + "]");
-    return NullObjectFactory.createNull(requestedControlClass);
+    log.warning("missing element/control with id [" + id + "] for requested control class [" +
+        requestedControlClass.getName() + "]");
+    return null;
   }
 
   public boolean isFocusable() {
-    return focusable &&
-           enabled &&
-           visible &&
-           hasVisibleParent() &&
-           !isIgnoreKeyboardEvents();
+    return focusable && enabled && visible && hasVisibleParent() && !isIgnoreKeyboardEvents();
   }
 
   private boolean hasVisibleParent() {
@@ -1979,10 +2198,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return true;
   }
 
-  public void setOnMouseOverMethod(final NiftyMethodInvoker onMouseOverMethod) {
-    this.interaction.setOnMouseOver(onMouseOverMethod);
+  public void setOnMouseOverMethod(@Nullable final NiftyMethodInvoker onMouseOverMethod) {
+    interaction.setOnMouseOver(onMouseOverMethod);
   }
 
+  @Nonnull
   public LayoutPart getLayoutPart() {
     return layoutPart;
   }
@@ -1991,78 +2211,88 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return visibleToMouseEvents;
   }
 
+  @Nonnull
   public SizeValue getPaddingLeft() {
     return layoutPart.getBoxConstraints().getPaddingLeft();
   }
 
+  @Nonnull
   public SizeValue getPaddingRight() {
     return layoutPart.getBoxConstraints().getPaddingRight();
   }
 
+  @Nonnull
   public SizeValue getPaddingTop() {
     return layoutPart.getBoxConstraints().getPaddingTop();
   }
 
+  @Nonnull
   public SizeValue getPaddingBottom() {
     return layoutPart.getBoxConstraints().getPaddingBottom();
   }
 
+  @Nonnull
   public SizeValue getMarginLeft() {
     return layoutPart.getBoxConstraints().getMarginLeft();
   }
 
+  @Nonnull
   public SizeValue getMarginRight() {
     return layoutPart.getBoxConstraints().getMarginRight();
   }
 
+  @Nonnull
   public SizeValue getMarginTop() {
     return layoutPart.getBoxConstraints().getMarginTop();
   }
 
+  @Nonnull
   public SizeValue getMarginBottom() {
     return layoutPart.getBoxConstraints().getMarginBottom();
   }
 
-  public void setPaddingLeft(final SizeValue paddingValue) {
+  public void setPaddingLeft(@Nonnull final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingLeft(paddingValue);
     notifyListeners();
   }
 
-  public void setPaddingRight(final SizeValue paddingValue) {
+  public void setPaddingRight(@Nonnull final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingRight(paddingValue);
     notifyListeners();
   }
 
-  public void setPaddingTop(final SizeValue paddingValue) {
+  public void setPaddingTop(@Nonnull final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingTop(paddingValue);
     notifyListeners();
   }
 
-  public void setPaddingBottom(final SizeValue paddingValue) {
+  public void setPaddingBottom(@Nonnull final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingBottom(paddingValue);
     notifyListeners();
   }
 
-  public void setMarginLeft(final SizeValue value) {
+  public void setMarginLeft(@Nonnull final SizeValue value) {
     layoutPart.getBoxConstraints().setMarginLeft(value);
     notifyListeners();
   }
 
-  public void setMarginRight(final SizeValue value) {
+  public void setMarginRight(@Nonnull final SizeValue value) {
     layoutPart.getBoxConstraints().setMarginRight(value);
     notifyListeners();
   }
 
-  public void setMarginTop(final SizeValue value) {
+  public void setMarginTop(@Nonnull final SizeValue value) {
     layoutPart.getBoxConstraints().setMarginTop(value);
     notifyListeners();
   }
 
-  public void setMarginBottom(final SizeValue value) {
+  public void setMarginBottom(@Nonnull final SizeValue value) {
     layoutPart.getBoxConstraints().setMarginBottom(value);
     notifyListeners();
   }
 
+  @Override
+  @Nonnull
   public String toString() {
     return id + " (" + super.toString() + ")";
   }
@@ -2075,49 +2305,64 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     markForRemoval(null);
   }
 
-  public void markForRemoval(final EndNotify endNotify) {
+  public void markForRemoval(@Nullable final EndNotify endNotify) {
     nifty.removeElement(screen, this, endNotify);
   }
 
-  public void markForMove(final Element destination) {
+  public void markForMove(@Nonnull final Element destination) {
     markForMove(destination, null);
   }
 
-  public void markForMove(final Element destination, final EndNotify endNotify) {
+  public void markForMove(@Nonnull final Element destination, @Nullable final EndNotify endNotify) {
     nifty.moveElement(screen, this, destination, endNotify);
   }
 
   public void reactivate() {
     done = false;
-    for (Element element : children) {
-      element.reactivate();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        children.get(i).reactivate();
+      }
     }
   }
 
   private void notifyListeners() {
-    nifty.publishEvent(id, this);
+    if (id != null) {
+      nifty.publishEvent(id, this);
+    }
   }
 
+  @Nonnull
   public Nifty getNifty() {
     return nifty;
   }
 
-  public <T extends EffectImpl> List<Effect> getEffects(final EffectEventId effectEventId, final Class<T> requestedClass) {
+  @Nonnull
+  public <T extends EffectImpl> List<Effect> getEffects(
+      @Nonnull final EffectEventId effectEventId,
+      @Nonnull final Class<T> requestedClass) {
     return effectManager.getEffects(effectEventId, requestedClass);
   }
 
-  public void onEndScreen(final Screen screen) {
-    screen.unregisterElementId(id);
-    nifty.unsubscribeElement(screen, id);
+  public void onEndScreen(@Nonnull final Screen screen) {
+    if (id != null) {
+      screen.unregisterElementId(id);
+      nifty.unsubscribeElement(screen, id);
+    }
 
     if (attachedInputControl != null) {
       attachedInputControl.onEndScreen(nifty, screen, id);
     }
-    for (Element element : children) {
-      element.onEndScreen(screen);
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        children.get(i).onEndScreen(screen);
+      }
     }
   }
 
+  @Nonnull
   public ElementInteraction getElementInteraction() {
     return interaction;
   }
@@ -2145,12 +2390,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   @Override
-  public void effectStateChanged(final EffectEventId eventId, final boolean active) {
+  public void effectStateChanged(@Nonnull final EffectEventId eventId, final boolean active) {
     // Get the oldState first.
     boolean oldState = effectStateCache.get(eventId);
 
     // The given EffectEventId changed its state. This means we now must update
-    // the ElementEffectStatetCache for this element. We do this by recalculating
+    // the ElementEffectStartedCache for this element. We do this by recalculating
     // our state taking the state of all child elements into account.
     boolean newState = isEffectActiveRecalc(eventId);
 
@@ -2165,45 +2410,60 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
-  private boolean isEffectActiveRecalc(final EffectEventId eventId) {
-    for (int i=0; i< children.size(); i++) {
-      Element w = children.get(i);
-      if (w.isEffectActiveRecalc(eventId)) {
-        return true;
+  private boolean isEffectActiveRecalc(@Nonnull final EffectEventId eventId) {
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        if (w.isEffectActiveRecalc(eventId)) {
+          return true;
+        }
       }
     }
     return effectManager.isActive(eventId);
   }
 
   // package private to prevent public access
-  void internalRemoveElement(final Element element) {
-    // so now that's odd: we need to remove the element first from the
-    // elementsRenderOrder and THEN from the elements list. this is because
-    // the elementsRenderOrder comparator uses the index of the element in
-    // the elements list >_<
-    //
-    // the main issue here is of course the splitted data structure. something
-    // we need to adress in 1.4 or 2.0.
-    elementsRenderOrderSet.remove(element);
+  void internalRemoveElement(@Nonnull final Element element) {
+    if (elementsRenderOrderSet != null && children != null) {
+      // so now that's odd: we need to remove the element first from the
+      // elementsRenderOrder and THEN from the elements list. this is because
+      // the elementsRenderOrder comparator uses the index of the element in
+      // the elements list >_<
+      //
+      // the main issue here is of course the splitted data structure. something
+      // we need to address in 1.4 or 2.0.
+      elementsRenderOrderSet.remove(element);
 
-    // now that the element has been removed from the elementsRenderOrder set
-    // we can remove it from the elements list as well.
-    children.remove (element);
+      // now that the element has been removed from the elementsRenderOrder set
+      // we can remove it from the elements list as well.
+      children.remove(element);
 
-    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
+      if (children.isEmpty()) {
+        elementsRenderOrderSet = null;
+        children = null;
+      }
+    }
+
+    if (elementsRenderOrderSet != null) {
+      elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[elementsRenderOrderSet.size()]);
+    } else {
+      elementsRenderOrder = null;
+    }
   }
 
   // package private to prevent public access
-  void internalRemoveElementWithChilds() {
-    Iterator < Element > elementIt = children.iterator();
-    while (elementIt.hasNext()) {
-      Element el = elementIt.next();
-      el.internalRemoveElementWithChilds();
+  void internalRemoveElementWithChildren() {
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        children.get(i).internalRemoveElementWithChildren();
+      }
     }
 
-    elementsRenderOrderSet.clear();
-    children.clear();
-    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[0]);
+    elementsRenderOrderSet = null;
+    children = null;
+    elementsRenderOrder = null;
   }
 
   /**
@@ -2211,18 +2471,28 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    *
    * @param key the key for the object to set
    */
-  public void setUserData(String key, Object data) {
-    if (userData == null) {
-      userData = new HashMap<String, Object>();
+  public void setUserData(@Nonnull final String key, @Nullable final Object data) {
+    if (data == null) {
+      if (userData != null) {
+        userData.remove(key);
+        if (userData.isEmpty()) {
+          userData = null;
+        }
+      }
+    } else {
+      if (userData == null) {
+        userData = new HashMap<String, Object>();
+      }
+      userData.put(key, data);
     }
-    userData.put(key, data);
   }
 
   /**
    * Gets custom user data set with {@link #setUserData(String, Object)} by key
    */
+  @Nullable
   @SuppressWarnings("unchecked")
-  public <T> T getUserData(String key) {
+  public <T> T getUserData(@Nonnull final String key) {
     if (userData == null) {
       return null;
     }
@@ -2232,6 +2502,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   /**
    * Gets all custom user data keys set with {@link #setUserData(String, Object)}
    */
+  @Nonnull
   public Set<String> getUserDataKeys() {
     if (userData != null) {
       return userData.keySet();
@@ -2239,4 +2510,61 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return Collections.emptySet();
   }
 
+  /**
+   * This uses the renderOrder attribute of the elements to compare them. If the renderOrder
+   * attribute is not set (is 0) then the index of the element in the elements list is used
+   * as the renderOrder value. This is done to keep the original sort order of the elements for
+   * rendering. The value is not cached and is directly recalculated using the element index in
+   * the list. The child count for an element is usually low (< 10) and the comparator is only
+   * executed when the child elements change. So this lookup shouldn't hurt performance too much.
+   * <p/>
+   * If you change the default value of renderOrder then your value is being used. So if you set it
+   * to some high value (> 1000 to be save) this element is rendered after all the other elements.
+   * If you set it to some very low value (< -1000 to be save) then this element is rendered before
+   * all the others.
+   */
+  private static final class RenderOrderComparator implements Comparator<Element> {
+    @Override
+    public int compare(@Nonnull final Element o1, @Nonnull final Element o2) {
+      int o1RenderOrder = getRenderOrder(o1);
+      int o2RenderOrder = getRenderOrder(o2);
+
+      if (o1RenderOrder < o2RenderOrder) {
+        return -1;
+      } else if (o1RenderOrder > o2RenderOrder) {
+        return 1;
+      }
+      // this means the renderOrder values are equal. since this is a set
+      // we can't return 0 because this would mean (for the set) that the
+      // elements are equal and one of the values will be removed. so here
+      // we simply compare the String representation of the elements so that
+      // we keep a fixed sort order.
+      String o1Id = o1.id;
+      String o2Id = o2.id;
+      if (o1Id == null && o2Id != null) {
+        return -1;
+      } else if (o1Id != null && o2Id == null) {
+        return 1;
+      } else if (o1Id != null) {
+        int idCompareResult = o1Id.compareTo(o2Id);
+        if (idCompareResult != 0) {
+          return idCompareResult;
+        }
+      }
+
+      // ids equal or both null use super.toString()
+      // hashCode() should return a value thats different for both elements since
+      // adding the same element twice to the same parent element is not supported.
+      String ref1 = Integer.toHexString(o1.hashCode());
+      String ref2 = Integer.toHexString(o2.hashCode());
+      return ref1.compareTo(ref2);
+    }
+
+    private int getRenderOrder(@Nonnull final Element element) {
+      if (element.renderOrder != 0) {
+        return element.renderOrder;
+      }
+      return element.getChildren().indexOf(element);
+    }
+  }
 }

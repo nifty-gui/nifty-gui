@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
-  <controlDefinition style="nifty-button" name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
-    <panel style="#panel" focusable="true">
-      <text id="#text" style="#text" text="$label"/>
-    </panel>
-  </controlDefinition>
+    <controlDefinition style="nifty-button" name="button" controller="de.lessvoid.nifty.controls.button.ButtonControl"
+                       inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
+        <panel style="#panel" focusable="true">
+            <interact onClick="onClick()" onRelease="onRelease()"/>
+            <text id="#text" style="#text" text="$label"/>
+        </panel>
+    </controlDefinition>
 </nifty-controls>

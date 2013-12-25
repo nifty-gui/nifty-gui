@@ -2,7 +2,6 @@ package de.lessvoid.nifty.examples.libgdx.all;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
 import de.lessvoid.nifty.examples.all.AllExamplesMain;
 import de.lessvoid.nifty.examples.libgdx.LibgdxExampleApplication;
 

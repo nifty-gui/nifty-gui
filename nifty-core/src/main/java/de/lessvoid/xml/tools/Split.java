@@ -1,5 +1,7 @@
 package de.lessvoid.xml.tools;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,14 +9,15 @@ public class Split {
   private static final String BEGIN_KEY = "${";
   private static final String END_KEY = "}";
 
-  public static boolean containsKey(final String value) {
+  public static boolean containsKey(@Nullable final String value) {
     if (value == null) {
       return false;
     }
     return value.contains(BEGIN_KEY);
   }
 
-  public static List<String> split(final String value) {
+  @Nonnull
+  public static List<String> split(@Nullable final String value) {
 
     List<String> result = new ArrayList<String>();
     if (value == null) {
@@ -48,7 +51,8 @@ public class Split {
     return result;
   }
 
-  public static String join(final List<String> parts) {
+  @Nonnull
+  public static String join(@Nonnull final List<String> parts) {
     StringBuilder result = new StringBuilder();
     for (String part : parts) {
       result.append(part);
@@ -56,7 +60,7 @@ public class Split {
     return result.toString();
   }
 
-  private static int findEndIdx(final String remaining, final boolean parsingKey) {
+  private static int findEndIdx(@Nonnull final String remaining, final boolean parsingKey) {
     if (parsingKey) {
       return remaining.indexOf(END_KEY);
     } else {

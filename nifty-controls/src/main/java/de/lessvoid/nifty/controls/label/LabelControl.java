@@ -10,6 +10,9 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * @deprecated Please directly use {@link de.lessvoid.nifty.controls.Label} when accessing NiftyControls.
  */
@@ -18,14 +21,17 @@ public class LabelControl extends AbstractController implements Label {
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     bind(element);
 
     final boolean wrap = parameter.getAsBoolean("wrap", false);
-    getTextRenderer().setLineWrapping(wrap);
+    TextRenderer textRenderer = getTextRenderer();
+    if (textRenderer != null) {
+      textRenderer.setLineWrapping(wrap);
+    }
   }
 
   @Override
@@ -33,31 +39,52 @@ public class LabelControl extends AbstractController implements Label {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
   @Override
-  public void setText(final String text) {
-    getTextRenderer().setText(text);
+  public void setText(@Nullable final String text) {
+    TextRenderer textRenderer = getTextRenderer();
+    if (textRenderer != null) {
+      textRenderer.setText(text);
+    }
   }
 
+  @Nullable
   @Override
   public String getText() {
-    return getTextRenderer().getOriginalText();
+    TextRenderer textRenderer = getTextRenderer();
+    if (textRenderer == null) {
+      return null;
+    }
+    return textRenderer.getOriginalText();
   }
 
   @Override
-  public void setColor(final Color color) {
-    getTextRenderer().setColor(color);
+  public void setColor(@Nonnull final Color color) {
+    TextRenderer textRenderer = getTextRenderer();
+    if (textRenderer != null) {
+      textRenderer.setColor(color);
+    }
   }
 
+  @Nullable
   @Override
   public Color getColor() {
-    return getTextRenderer().getColor();
+    TextRenderer textRenderer = getTextRenderer();
+    if (textRenderer == null) {
+      return null;
+    }
+    return textRenderer.getColor();
   }
 
+  @Nullable
   private TextRenderer getTextRenderer() {
-    return getElement().getRenderer(TextRenderer.class);
+    Element element = getElement();
+    if (element == null) {
+      return null;
+    }
+    return element.getRenderer(TextRenderer.class);
   }
 }

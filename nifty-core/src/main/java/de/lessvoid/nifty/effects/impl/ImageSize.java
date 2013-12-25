@@ -10,18 +10,28 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * ImageSize effect.
+ *
  * @author void
  */
 public class ImageSize implements EffectImpl {
 
   private float startSize;
   private float endSize;
+  @Nonnull
   private SizeValue imageSize = new SizeValue("100%");
+  @Nullable
   private LinearInterpolator interpolator;
 
-  public final void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public final void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     // for normal mode
     startSize = Float.parseFloat(parameter.getProperty("startSize", "1.0"));
     endSize = Float.parseFloat(parameter.getProperty("endSize", "2.0"));
@@ -34,18 +44,18 @@ public class ImageSize implements EffectImpl {
     interpolator = parameter.getInterpolator();
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
-      final NiftyRenderEngine r) {
-    float scale = 1.0f;
+      @Nullable final Falloff falloff,
+      @Nonnull final NiftyRenderEngine r) {
+    float scale;
     if (falloff == null) {
-      float t = normalizedTime;
       if (interpolator != null) {
-    	  scale = interpolator.getValue(t);
+        scale = interpolator.getValue(normalizedTime);
       } else {
-        scale = startSize + t * (endSize - startSize);
+        scale = startSize + normalizedTime * (endSize - startSize);
       }
     } else {
       scale = 1.0f + falloff.getFalloffValue() * imageSize.getValue(1.0f);
@@ -53,6 +63,7 @@ public class ImageSize implements EffectImpl {
     r.setImageScale(scale);
   }
 
+  @Override
   public void deactivate() {
   }
 }

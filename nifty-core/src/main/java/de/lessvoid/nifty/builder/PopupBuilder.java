@@ -6,24 +6,30 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+
 public class PopupBuilder extends ElementBuilder {
-  private PopupCreator creator = new PopupCreator();
-  
+
   public PopupBuilder() {
-    initialize(creator);
+    super(new PopupCreator());
   }
-  
-  public PopupBuilder(final String id) {
+
+  public PopupBuilder(@Nonnull final String id) {
     this();
     this.id(id);
   }
 
-  public Element build(final Nifty nifty, final Screen screen, final Element parent) {
-    throw new RuntimeException("you can't build popups using the PopupBuilder. Please call register() instead to dynamically register popups with Nifty.");
+  @Override
+  @Nonnull
+  public Element build(@Nonnull final Nifty nifty, @Nonnull final Screen screen, @Nonnull final Element parent) {
+    throw new RuntimeException("you can't build popups using the PopupBuilder. Please call register() instead to " +
+        "dynamically register popups with Nifty.");
   }
 
-  public void registerPopup(final Nifty nifty) {
+  public void registerPopup(@Nonnull final Nifty nifty) {
     PopupType popupType = (PopupType) buildElementType();
-    nifty.registerPopup(popupType);
+    if (popupType != null) {
+      nifty.registerPopup(popupType);
+    }
   }
 }

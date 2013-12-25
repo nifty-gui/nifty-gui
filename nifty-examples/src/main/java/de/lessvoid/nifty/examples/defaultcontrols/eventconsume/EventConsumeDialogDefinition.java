@@ -11,16 +11,20 @@ import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
 
+import javax.annotation.Nonnull;
+
 /**
  * The EventConsumeDialogDefinition registers a new control (the whole ChatControlDialog) with Nifty.
  *
  * @author void
  */
 public class EventConsumeDialogDefinition {
-  public static String NAME = "eventConsumeDialogControl";
-  private static CommonBuilders builders = new CommonBuilders();
+  @Nonnull
+  public static final String NAME = "eventConsumeDialogControl";
+  @Nonnull
+  private static final CommonBuilders builders = new CommonBuilders();
 
-  public static void register(final Nifty nifty) {
+  public static void register(@Nonnull final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
       controller(new EventConsumeDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
