@@ -180,10 +180,11 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
       log.severe("Failed to locate list box panel element. List box will not work properly. Looked for: #panel");
     }
 
+    listBoxImpl.bindToView(this, displayItems);
+
     initSelectionMode(listBoxImpl, parameter.getWithDefault("selectionMode", "Single"),
         parameter.getWithDefault("forceSelection", "false"));
     connectListBoxAndListBoxPanel();
-    listBoxImpl.bindToView(this, displayItems);
     lastMaxWidth = childRootElement.getWidth();
     ensureVerticalScrollbar();
     createLabels();
