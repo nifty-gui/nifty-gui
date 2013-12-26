@@ -3,6 +3,8 @@ package de.lessvoid.nifty.slick2d.input.events;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import org.newdawn.slick.InputListener;
 
+import javax.annotation.Nonnull;
+
 /**
  * This mouse event is used to store the event generated in case the mouse cursor is moved.
  *
@@ -24,8 +26,8 @@ public final class MouseEventMoved extends AbstractMouseEvent {
    *
    * @param startX the X coordinate of the location where the movement started
    * @param startY the Y coordinate of the location where the movement started
-   * @param endX the X coordinate of the location where the movement stopped
-   * @param endY the Y coordinate of the location where the movement stopped
+   * @param endX   the X coordinate of the location where the movement stopped
+   * @param endY   the Y coordinate of the location where the movement stopped
    */
   public MouseEventMoved(final int startX, final int startY, final int endX, final int endY) {
     super(startX, startY);
@@ -37,7 +39,7 @@ public final class MouseEventMoved extends AbstractMouseEvent {
    * Send the event to the Nifty input consumer.
    */
   @Override
-  public boolean sendToNifty(final NiftyInputConsumer consumer) {
+  public boolean sendToNifty(@Nonnull final NiftyInputConsumer consumer) {
     return consumer.processMouseEvent(targetX, targetY, 0, -1, false);
   }
 
@@ -45,7 +47,7 @@ public final class MouseEventMoved extends AbstractMouseEvent {
    * Send the event to the Slick input listener.
    */
   @Override
-  public boolean sendToSlick(final InputListener listener) {
+  public boolean sendToSlick(@Nonnull final InputListener listener) {
     listener.mouseMoved(getX(), getY(), targetX, targetY);
     return false;
   }

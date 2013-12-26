@@ -11,17 +11,26 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * TextSize effect.
+ *
  * @author void
  */
 public class TextSize implements EffectImpl {
 
   private float startSize;
   private float endSize;
-  private SizeValue textSize = new SizeValue("100%");
+  @Nonnull
+  private SizeValue textSize = SizeValue.percent(100);
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     startSize = Float.parseFloat(parameter.getProperty("startSize", "1.0"));
     endSize = Float.parseFloat(parameter.getProperty("endSize", "2.0"));
 
@@ -32,15 +41,15 @@ public class TextSize implements EffectImpl {
     }
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nullable final Falloff falloff,
+      @Nonnull final NiftyRenderEngine r) {
     float scale;
     if (falloff == null) {
-      float t = normalizedTime;
-      scale = startSize + t * (endSize - startSize);
+      scale = startSize + normalizedTime * (endSize - startSize);
     } else {
       scale = 1.0f + falloff.getFalloffValue() * textSize.getValue(1.0f);
     }
@@ -48,19 +57,22 @@ public class TextSize implements EffectImpl {
 
     TextRenderer textRenderer = element.getRenderer(TextRenderer.class);
     if (textRenderer != null) {
-      String text = textRenderer.getWrappedText();
       RenderFont font = textRenderer.getFont();
 
-      float originalWidth = font.getWidth(text, 1.0f);
-      float sizedWidth = font.getWidth(text, scale);
+      if (font != null) {
+        String text = textRenderer.getWrappedText();
+        float originalWidth = font.getWidth(text, 1.0f);
+        float sizedWidth = font.getWidth(text, scale);
 
-      float originalHeight = font.getHeight();
-      float sizedHeight = font.getHeight() * scale;
+        float originalHeight = font.getHeight();
+        float sizedHeight = font.getHeight() * scale;
 
-      r.moveTo(- (sizedWidth - originalWidth) / 2, - (sizedHeight - originalHeight) / 2);
+        r.moveTo(-(sizedWidth - originalWidth) / 2, -(sizedHeight - originalHeight) / 2);
+      }
     }
   }
 
+  @Override
   public void deactivate() {
   }
 }

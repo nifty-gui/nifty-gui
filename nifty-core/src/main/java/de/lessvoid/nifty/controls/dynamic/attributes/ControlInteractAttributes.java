@@ -3,7 +3,10 @@ package de.lessvoid.nifty.controls.dynamic.attributes;
 import de.lessvoid.nifty.loaderv2.types.InteractType;
 import de.lessvoid.xml.xpp3.Attributes;
 
+import javax.annotation.Nonnull;
+
 public class ControlInteractAttributes {
+  @Nonnull
   protected Attributes attributes = new Attributes();
 
   public ControlInteractAttributes() {
@@ -11,43 +14,43 @@ public class ControlInteractAttributes {
 
   /**
    * Support for CustomControlCreator
+   *
    * @param interact
    */
-  public ControlInteractAttributes(final InteractType interact) {
+  public ControlInteractAttributes(@Nonnull final InteractType interact) {
     this.attributes = new Attributes(interact.getAttributes());
   }
 
-  public void setAttribute(final String name, final String value) {
+  public void setAttribute(@Nonnull final String name, @Nonnull final String value) {
     attributes.set(name, value);
   }
 
-  public void setOnClick(final String onClick) {
-    attributes.set("onClick", onClick);
+  public void setOnClick(@Nonnull final String onClick) {
+    setAttribute("onClick", onClick);
   }
 
-  public void setOnRelease(final String onRelease) {
-    attributes.set("onRelease", onRelease);
+  public void setOnRelease(@Nonnull final String onRelease) {
+    setAttribute("onRelease", onRelease);
   }
 
-  public void setOnMouseOver(final String onMouseOver) {
-    attributes.set("onMouseOver", onMouseOver);
+  public void setOnMouseOver(@Nonnull final String onMouseOver) {
+    setAttribute("onMouseOver", onMouseOver);
   }
 
-  public void setOnClickRepeat(final String onClickRepeat) {
-    attributes.set("onClickRepeat", onClickRepeat);
+  public void setOnClickRepeat(@Nonnull final String onClickRepeat) {
+    setAttribute("onClickRepeat", onClickRepeat);
   }
 
-  public void setOnClickMouseMove(final String onClickMouseMove) {
-    attributes.set("onClickMouseMove", onClickMouseMove);
+  public void setOnClickMouseMove(@Nonnull final String onClickMouseMove) {
+    setAttribute("onClickMouseMove", onClickMouseMove);
   }
 
-  public void setOnClickAlternateKey(final String onClickAlternateKey) {
-    attributes.set("onClickAlternateKey", onClickAlternateKey);
+  public void setOnClickAlternateKey(@Nonnull final String onClickAlternateKey) {
+    setAttribute("onClickAlternateKey", onClickAlternateKey);
   }
 
+  @Nonnull
   public InteractType create() {
-    InteractType interact = new InteractType();
-    interact.initFromAttributes(attributes);
-    return interact;
+    return new InteractType(attributes);
   }
 }

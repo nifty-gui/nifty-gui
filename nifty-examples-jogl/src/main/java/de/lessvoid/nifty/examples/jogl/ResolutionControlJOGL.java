@@ -1,18 +1,20 @@
 package de.lessvoid.nifty.examples.jogl;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-
 import com.jogamp.newt.opengl.GLWindow;
 import de.lessvoid.nifty.examples.jogl.ResolutionControlJOGL.Resolution;
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
   private final GLWindow window;
+  @Nonnull
   private final List<Resolution> resolutions;
   private Resolution current;
 
@@ -26,13 +28,14 @@ public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
         new Resolution(1280, 1024));
   }
 
+  @Nonnull
   @Override
   public Collection<Resolution> getResolutions() {
     return resolutions;
   }
 
   @Override
-  public void setResolution(final Resolution newResolution) {
+  public void setResolution(@Nonnull final Resolution newResolution) {
     newResolution.apply(window);
     current = newResolution;
   }
@@ -51,7 +54,7 @@ public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
       this.height = height;
     }
 
-    public void apply(final GLWindow window) {
+    public void apply(@Nonnull final GLWindow window) {
       window.setSize(width, height);
 
       GL gl = window.getGL();
@@ -78,7 +81,7 @@ public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
       if (this == obj)
         return true;
       if (obj == null)
@@ -93,13 +96,10 @@ public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
       return true;
     }
 
+    @Nonnull
     @Override
     public String toString() {
-      StringBuilder result = new StringBuilder();
-      result.append(width);
-      result.append(" x ");
-      result.append(height);
-      return result.toString();
+      return String.valueOf(width) + " x " + height;
     }
   }
 }

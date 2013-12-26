@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
-  <controlDefinition style="nifty-label" name="label" controller="de.lessvoid.nifty.controls.label.LabelControl">
-    <text />
-  </controlDefinition>
+    <controlDefinition style="nifty-label" name="label" controller="de.lessvoid.nifty.controls.label.LabelControl">
+        <text/>
+    </controlDefinition>
 </nifty-controls>

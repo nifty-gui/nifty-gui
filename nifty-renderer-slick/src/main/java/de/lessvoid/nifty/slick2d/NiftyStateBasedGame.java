@@ -3,6 +3,8 @@ package de.lessvoid.nifty.slick2d;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is a implementation of Slicks {@link StateBasedGame} that is able to handle the Nifty game state implementations
  * in a better way.
@@ -42,10 +44,11 @@ public abstract class NiftyStateBasedGame extends StateBasedGame {
    * In matters of performance and memory usage, its highly recommend to use a single Nifty-GUI instance. How ever in
    * this case you have to ensure that the GUI of all game states use unique screen names.
    *
-   * @param name The name of the game
+   * @param name                   The name of the game
    * @param singleNiftyGuiInstance This flag will, in case its set to {@code true}, apply the same instance of the
-   * Nifty-GUI to all game states added to this state based game. In case its set to {@code false} every game state will
-   * handle its own Nifty-GUI instance.
+   *                               Nifty-GUI to all game states added to this state based game. In case its set to
+   *                               {@code false} every game state will
+   *                               handle its own Nifty-GUI instance.
    */
   protected NiftyStateBasedGame(final String name, final boolean singleNiftyGuiInstance) {
     super(name);
@@ -79,7 +82,7 @@ public abstract class NiftyStateBasedGame extends StateBasedGame {
    *
    * @param gameState the game state that is supposed to be added
    */
-  public void addState(final NiftyOverlayBasicGameState gameState) {
+  public void addState(@Nonnull final NiftyOverlayBasicGameState gameState) {
     setCarrier(gameState);
     super.addState(gameState);
   }
@@ -90,7 +93,7 @@ public abstract class NiftyStateBasedGame extends StateBasedGame {
    *
    * @param gameState the game state that is supposed to be added
    */
-  public void addState(final NiftyOverlayGameState gameState) {
+  public void addState(@Nonnull final NiftyOverlayGameState gameState) {
     setCarrier(gameState);
     super.addState(gameState);
   }
@@ -100,7 +103,7 @@ public abstract class NiftyStateBasedGame extends StateBasedGame {
    *
    * @param carrierUser the instance that requires a carrier
    */
-  private void setCarrier(final NiftyCarrierUser carrierUser) {
+  private void setCarrier(@Nonnull final NiftyCarrierUser carrierUser) {
     if (singleNiftyInstance) {
       if (globalCarrier == null) {
         globalCarrier = new NiftyCarrier(true);

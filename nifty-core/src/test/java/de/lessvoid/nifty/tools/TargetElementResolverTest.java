@@ -1,12 +1,12 @@
 package de.lessvoid.nifty.tools;
 
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
+import org.junit.Test;
+
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class TargetElementResolverTest {
 

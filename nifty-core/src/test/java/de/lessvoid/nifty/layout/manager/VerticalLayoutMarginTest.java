@@ -1,19 +1,19 @@
 package de.lessvoid.nifty.layout.manager;
 
-import static de.lessvoid.nifty.layout.manager.BoxTestHelper.assertBox;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.tools.SizeValue;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static de.lessvoid.nifty.layout.manager.BoxTestHelper.assertBox;
+
 public class VerticalLayoutMarginTest {
-  private VerticalLayout layout= new VerticalLayout();
+  private VerticalLayout layout = new VerticalLayout();
   private LayoutPart root;
   private List<LayoutPart> elements;
   private LayoutPart top;

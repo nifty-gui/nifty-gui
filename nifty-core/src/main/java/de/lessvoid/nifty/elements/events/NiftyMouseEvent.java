@@ -4,22 +4,24 @@ import de.lessvoid.nifty.NiftyEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
-public class NiftyMouseEvent implements NiftyEvent {
-  private Element element;
-  private int mouseX;
-  private int mouseY;
-  private int mouseWheel;
-  private boolean button0Down;
-  private boolean button1Down;
-  private boolean button2Down;
-  private boolean button0InitialDown;
-  private boolean button1InitialDown;
-  private boolean button2InitialDown;
-  private boolean button0Release;
-  private boolean button1Release;
-  private boolean button2Release;
+import javax.annotation.Nonnull;
 
-  public NiftyMouseEvent(final Element element, final NiftyMouseInputEvent source) {
+public class NiftyMouseEvent implements NiftyEvent {
+  private final Element element;
+  private final int mouseX;
+  private final int mouseY;
+  private final int mouseWheel;
+  private final boolean button0Down;
+  private final boolean button1Down;
+  private final boolean button2Down;
+  private final boolean button0InitialDown;
+  private final boolean button1InitialDown;
+  private final boolean button2InitialDown;
+  private final boolean button0Release;
+  private final boolean button1Release;
+  private final boolean button2Release;
+
+  public NiftyMouseEvent(final Element element, @Nonnull final NiftyMouseInputEvent source) {
     this.element = element;
     this.mouseX = source.getMouseX();
     this.mouseY = source.getMouseY();
@@ -91,18 +93,20 @@ public class NiftyMouseEvent implements NiftyEvent {
     return button2Release;
   }
 
+  @Override
+  @Nonnull
   public String toString() {
     return
-      "mouseX = " + mouseX + ", " +
-      "mouseY = " + mouseY + ", " +
-      "button0Down = " + button0Down + ", " +
-      "button1Down = " + button1Down + ", " +
-      "button2Down = " + button2Down + ", " +
-      "button0InitialDown = " + button0InitialDown + ", " +
-      "button1InitialDown = " + button1InitialDown + ", " +
-      "button2InitialDown = " + button2InitialDown + ", " +
-      "button0Release = " + button0Release + ", " +
-      "button1Release = " + button1Release + ", " +
-      "button2Release = " + button2Release;
+        "mouseX = " + mouseX + ", " +
+            "mouseY = " + mouseY + ", " +
+            "button0Down = " + button0Down + ", " +
+            "button1Down = " + button1Down + ", " +
+            "button2Down = " + button2Down + ", " +
+            "button0InitialDown = " + button0InitialDown + ", " +
+            "button1InitialDown = " + button1InitialDown + ", " +
+            "button2InitialDown = " + button2InitialDown + ", " +
+            "button0Release = " + button0Release + ", " +
+            "button1Release = " + button1Release + ", " +
+            "button2Release = " + button2Release;
   }
 }

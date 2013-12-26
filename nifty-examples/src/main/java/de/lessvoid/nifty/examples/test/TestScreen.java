@@ -6,18 +6,23 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 public class TestScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
   private Screen screen;
 
-  public void bind(final Nifty nifty, final Screen screen) {
+  @Override
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
   }
 
+  @Override
   public void onStartScreen() {
   }
 
+  @Override
   public void onEndScreen() {
   }
 
@@ -35,16 +40,19 @@ public class TestScreen implements ScreenController, NiftyExample {
     }
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "test/test-popup.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty General Test";

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.textfield;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 /**
@@ -22,7 +23,7 @@ public class SingleCharSequence implements CharSequence {
   /**
    * Create a new password character sequence.
    *
-   * @param pwChar the password character
+   * @param pwChar   the password character
    * @param pwLength the length of the sequence
    */
   public SingleCharSequence(final char pwChar, final int pwLength) {
@@ -57,6 +58,7 @@ public class SingleCharSequence implements CharSequence {
     length = newLength;
   }
 
+  @Nonnull
   @Override
   public String toString() {
     final char[] tempArray = new char[length];
@@ -80,6 +82,7 @@ public class SingleCharSequence implements CharSequence {
     return length;
   }
 
+  @Nonnull
   @Override
   public CharSequence subSequence(final int start, final int end) {
     if (start < 0) {

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,11 +13,11 @@ public @interface NiftyEventSubscriber {
    * The Nifty Id we want to subscribe too.
    * @return
    */
-  String id() default "";
+  @Nonnull String id() default "";
 
   /**
    * The Pattern for the id we want to subscribe too.
    * @return
    */
-  String pattern() default "";
+  @Nonnull String pattern() default "";
 }

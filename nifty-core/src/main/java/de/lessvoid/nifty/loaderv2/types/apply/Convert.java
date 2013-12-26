@@ -2,12 +2,7 @@ package de.lessvoid.nifty.loaderv2.types.apply;
 
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
-import de.lessvoid.nifty.layout.manager.AbsolutePositionLayout;
-import de.lessvoid.nifty.layout.manager.CenterLayout;
-import de.lessvoid.nifty.layout.manager.HorizontalLayout;
-import de.lessvoid.nifty.layout.manager.LayoutManager;
-import de.lessvoid.nifty.layout.manager.OverlayLayout;
-import de.lessvoid.nifty.layout.manager.VerticalLayout;
+import de.lessvoid.nifty.layout.manager.*;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.render.image.ImageMode;
 import de.lessvoid.nifty.render.image.ImageModeFactory;
@@ -15,7 +10,12 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 public class Convert {
+  private static final Logger log = Logger.getLogger(Convert.class.getName());
   public static final String DEFAULT_PADDING = "0px";
   public static final String DEFAULT_MARGIN = "0px";
   public static final HorizontalAlign DEFAULT_HORIZONTAL_ALIGN = HorizontalAlign.horizontalDefault;
@@ -27,7 +27,6 @@ public class Convert {
   public static final boolean DEFAULT_VISIBLE_TO_MOUSE = false;
   public static final boolean DEFAULT_VISIBLE = true;
   public static final boolean DEFAULT_CHILD_CLIP = false;
-  public static final Color DEFAULT_COLOR = null;
   public static final int DEFAULT_RENDER_ORDER = 0;
   private static final VerticalLayout verticalLayout = new VerticalLayout();
   private static final CenterLayout centerLayout = new CenterLayout();
@@ -37,53 +36,81 @@ public class Convert {
   private static final AbsolutePositionLayout absolutePositionLayoutKeepInside = new AbsolutePositionLayout(
       new AbsolutePositionLayout.KeepInsidePostProcess());
 
-  public RenderFont font(final NiftyRenderEngine niftyRenderEngine, final String value) {
+  @Nullable
+  public RenderFont font(@Nonnull final NiftyRenderEngine niftyRenderEngine, @Nullable final String value) {
     if (value == null) {
       return null;
     }
     return niftyRenderEngine.createFont(value);
   }
 
-  public SizeValue sizeValue(final String value) {
+  @Nonnull
+  public SizeValue sizeValue(@Nullable final String value) {
     return new SizeValue(value);
   }
 
-  public SizeValue paddingSizeValue(final String value, final String defaultValue) {
+  @Nonnull
+  public SizeValue paddingSizeValue(@Nullable final String value, @Nonnull final String defaultValue) {
     if (value == null) {
       return new SizeValue(defaultValue);
     }
     return new SizeValue(value);
   }
 
-  public HorizontalAlign horizontalAlign(final String value) {
+  @Nonnull
+  public HorizontalAlign horizontalAlign(@Nullable final String value) {
     if (value == null) {
       return DEFAULT_HORIZONTAL_ALIGN;
     }
-    return HorizontalAlign.valueOf(value);
+    try {
+      return HorizontalAlign.valueOf(value);
+    } catch (IllegalArgumentException e) {
+      log.warning("Illegal value for horizontal align: \"" + value + "\"");
+      return DEFAULT_TEXT_HORIZONTAL_ALIGN;
+    }
   }
 
-  public HorizontalAlign textHorizontalAlign(final String value) {
+  @Nonnull
+  public HorizontalAlign textHorizontalAlign(@Nullable final String value) {
     if (value == null) {
       return DEFAULT_TEXT_HORIZONTAL_ALIGN;
     }
-    return HorizontalAlign.valueOf(value);
+    try {
+      return HorizontalAlign.valueOf(value);
+    } catch (IllegalArgumentException e) {
+      log.warning("Illegal value for horizontal text align: \"" + value + "\"");
+      return DEFAULT_TEXT_HORIZONTAL_ALIGN;
+    }
   }
 
-  public VerticalAlign verticalAlign(final String value) {
+  @Nonnull
+  public VerticalAlign verticalAlign(@Nullable final String value) {
     if (value == null) {
       return DEFAULT_VERTICAL_ALIGN;
     }
-    return VerticalAlign.valueOf(value);
+    try {
+      return VerticalAlign.valueOf(value);
+    } catch (IllegalArgumentException e) {
+      log.warning("Illegal value for vertical align: \"" + value + "\"");
+      return DEFAULT_VERTICAL_ALIGN;
+    }
   }
 
-  public VerticalAlign textVerticalAlign(final String value) {
+  @Nonnull
+  public VerticalAlign textVerticalAlign(@Nullable final String value) {
     if (value == null) {
       return DEFAULT_TEXT_VERTICAL_ALIGN;
     }
-    return VerticalAlign.valueOf(value);
+    try {
+      return VerticalAlign.valueOf(value);
+    } catch (IllegalArgumentException e) {
+      log.warning("Illegal value for vertical text align: \"" + value + "\"");
+      return DEFAULT_TEXT_VERTICAL_ALIGN;
+    }
   }
 
-  public LayoutManager layoutManager(final String type) {
+  @Nullable
+  public LayoutManager layoutManager(@Nullable final String type) {
     if (type == null) {
       return null;
     }
@@ -101,22 +128,34 @@ public class Convert {
     } else if (typeCompare.equals("absolute-inside")) {
       return absolutePositionLayoutKeepInside;
     }
-    
+
     return null;
   }
 
-  public Color color(final String value) {
+  @Nullable
+  public Color color(@Nullable final String value) {
     if (value == null) {
-      return DEFAULT_COLOR;
+      return null;
     }
     return new Color(value);
   }
 
-  public ImageMode imageMode(final String areaProviderProperty, final String renderStrategyProperty) {
-	return ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty, renderStrategyProperty);
+  @Nonnull
+  public Color color(@Nullable final String value, @Nonnull final Color defaultColor) {
+    if (value == null) {
+      return defaultColor;
+    }
+    return new Color(value);
   }
 
-  public int insetSizeValue(final String value, final int imageHeight) {
+  @Nonnull
+  public ImageMode imageMode(
+      @Nullable final String areaProviderProperty,
+      @Nullable final String renderStrategyProperty) {
+    return ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty, renderStrategyProperty);
+  }
+
+  public int insetSizeValue(@Nullable final String value, final int imageHeight) {
     if (value == null) {
       return 0;
     }

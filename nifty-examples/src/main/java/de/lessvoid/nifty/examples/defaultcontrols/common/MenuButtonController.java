@@ -9,16 +9,18 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+
 public class MenuButtonController implements Controller {
   private Element element;
   private FocusHandler focusHandler;
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     this.element = element;
     this.focusHandler = screen.getFocusHandler();
   }
@@ -28,7 +30,7 @@ public class MenuButtonController implements Controller {
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
   }
 
   @Override
@@ -36,7 +38,7 @@ public class MenuButtonController implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
       focusHandler.getNext(element).setFocus();
       return true;

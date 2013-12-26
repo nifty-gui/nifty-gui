@@ -5,17 +5,16 @@
 package de.lessvoid.nifty.controls.treebox;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.TreeBox;
-import de.lessvoid.nifty.controls.TreeItem;
-import de.lessvoid.nifty.controls.TreeItemSelectionChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.controls.listbox.ListBoxItemProcessor;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
 
 /**
  * This is the control of the tree box. Its basically a list box that displays a tree.
@@ -25,6 +24,8 @@ import de.lessvoid.nifty.screen.Screen;
  */
 @Deprecated
 public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> implements TreeBox<T> {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(TreeBoxControl.class.getName());
   /**
    * The default indentation.
    */
@@ -33,22 +34,24 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
   /**
    * Indention per level.
    */
-	private int indentWidth;
+  private int indentWidth;
 
   /**
    * The root node of the tree that is displayed.
    */
-	private TreeItem<T> treeRoot;
+  @Nullable
+  private TreeItem<T> treeRoot;
 
   /**
    * The used instance of the Nifty-GUI.
    */
-	private Nifty nifty;
+  @Nullable
+  private Nifty nifty;
 
   public TreeBoxControl() {
     getListBox().addItemProcessor(new ListBoxItemProcessor() {
       @Override
-      public void processElement(final Element element) {
+      public void processElement(@Nonnull final Element element) {
         @SuppressWarnings("unchecked")
         final TreeBoxItemController<T> listBoxItemController = element.getControl(TreeBoxItemController.class);
         if (listBoxItemController != null) {
@@ -58,32 +61,37 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
     });
   }
 
-	@Override
-	public void bind(final Nifty nifty, final Screen screen, final Element element, final Parameters parameter) {
-		super.bind(nifty, screen, element, parameter);
+  @Override
+  public void bind(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
+    super.bind(nifty, screen, element, parameter);
     this.nifty = nifty;
 
     indentWidth = parameter.getAsInteger("indentWidth", DEFAULT_INDENT);
-	}
+  }
 
-	@Override
-	public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     super.inputEvent(inputEvent);
-		return true;
-	}
+    return true;
+  }
 
-	@Override
-	public void setTree(final TreeItem<T> treeRoot) {
-		this.treeRoot = treeRoot;
+  @Override
+  public void setTree(@Nonnull final TreeItem<T> treeRoot) {
+    this.treeRoot = treeRoot;
     updateList();
-	}
+  }
 
   /**
    * Get the {@link ListBox} that is used to display the entries.
    *
    * @return the {@link ListBox}
    */
-	private ListBox<TreeItem<T>> getListBox() {
+  @Nonnull
+  private ListBox<TreeItem<T>> getListBox() {
     return this;
   }
 
@@ -93,7 +101,7 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
    *
    * @param selectItem the item that is supposed to be selected after the tree is updated
    */
-  public void updateList(final TreeItem<T> selectItem) {
+  public void updateList(@Nonnull final TreeItem<T> selectItem) {
     updateList();
     selectItem(selectItem);
   }
@@ -102,6 +110,10 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
    * Clear and build the tree again into the {@link ListBox}.
    */
   private void updateList() {
+    if (treeRoot == null) {
+      log.warning("Update of list triggered while root not is not set.");
+      return;
+    }
     final ListBox<TreeItem<T>> list = getListBox();
     list.clear();
 
@@ -112,9 +124,12 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
 
   @Override
   @SuppressWarnings("RefusedBequest")
-  public void publish(final ListBoxSelectionChangedEvent<TreeItem<T>> event) {
-    if (getElement().getId() != null) {
-      nifty.publishEvent(getElement().getId(), new TreeItemSelectionChangedEvent<T>(this, event));
+  public void publish(@Nonnull final ListBoxSelectionChangedEvent<TreeItem<T>> event) {
+    if (nifty != null) {
+      String id = getId();
+      if (id != null) {
+        nifty.publishEvent(id, new TreeItemSelectionChangedEvent<T>(this, event));
+      }
     }
   }
 
@@ -122,11 +137,14 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
    * Add a tree item to the list box and also insert all its children. This function is made for recursive calls in
    * order to update the current indent value.
    *
-   * @param list the {@link ListBox} that is filled with entries
-   * @param currentItem the current item that is supposed to be added to the list
+   * @param list          the {@link ListBox} that is filled with entries
+   * @param currentItem   the current item that is supposed to be added to the list
    * @param currentIndent the indent of the current item
    */
-  private void addListItem(final ListBox<TreeItem<T>> list, final TreeItem<T> currentItem, final int currentIndent) {
+  private void addListItem(
+      @Nonnull final ListBox<TreeItem<T>> list,
+      @Nonnull final TreeItem<T> currentItem,
+      final int currentIndent) {
     list.addItem(currentItem);
     currentItem.setIndent(currentIndent);
     if (currentItem.isExpanded()) {

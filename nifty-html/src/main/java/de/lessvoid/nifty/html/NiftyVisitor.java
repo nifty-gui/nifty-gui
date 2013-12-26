@@ -1,19 +1,20 @@
 package de.lessvoid.nifty.html;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-
-import org.htmlparser.Tag;
-import org.htmlparser.Text;
-import org.htmlparser.util.Translate;
-import org.htmlparser.visitors.NodeVisitor;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.spi.render.RenderFont;
+import org.htmlparser.Tag;
+import org.htmlparser.Text;
+import org.htmlparser.util.Translate;
+import org.htmlparser.visitors.NodeVisitor;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * A NodeVisitor for the HTML Parser project that will visit all HTML tags
@@ -22,54 +23,70 @@ import de.lessvoid.nifty.spi.render.RenderFont;
  */
 public class NiftyVisitor extends NodeVisitor {
   // errors in processing are added to that list
-  private List<String> errors = new ArrayList<String>();
+  @Nonnull
+  private final List<String> errors = new ArrayList<String>();
 
   // the PanelBuilder for the body tag
   private PanelBuilder bodyPanel;
 
   // helper class to create new builders
-  private NiftyBuilderFactory niftyBuilderFactory;
+  private final NiftyBuilderFactory niftyBuilderFactory;
 
   // to allow nested block level elements later we must stack them
-  private Stack<PanelBuilder> blockElementStack = new Stack<PanelBuilder>();
+  @Nonnull
+  private final Stack<PanelBuilder> blockElementStack = new Stack<PanelBuilder>();
 
   // the current block level element
+  @Nullable
   private PanelBuilder currentBlockElement;
 
-  // default font we use for generatin text elements
-  private String defaultFontName;
-  private String defaultFontBoldName;
-  private RenderFont defaultFont; 
+  // default font we use for generating text elements
+  @Nullable
+  private final String defaultFontName;
+  private final String defaultFontBoldName;
 
   // current color
+  @Nullable
   private String currentColor;
 
   // this will be set to a different font name when a corresponding tag is being processed
+  @Nullable
   private String differentFont;
 
   // we collect all text nodes into this string buffer
-  private StringBuffer currentText = new StringBuffer();
+  @Nonnull
+  private final StringBuffer currentText = new StringBuffer();
 
   // table
+  @Nullable
   private PanelBuilder table;
 
   // table row
+  @Nullable
   private PanelBuilder tableRow;
 
   // table data
+  @Nullable
   private PanelBuilder tableData;
+
+  @Nonnull
+  private String fontHeight;
 
   /**
    * Create the NiftyVisitor.
    * @param nifty the Nifty instance
    * @param niftyBuilderFactory a helper class to create Nifty Builders
    */
-  public NiftyVisitor(final Nifty nifty, final NiftyBuilderFactory niftyBuilderFactory, final String defaultFontName, final String defaultFontBoldName) {
+  public NiftyVisitor(@Nonnull final Nifty nifty, final NiftyBuilderFactory niftyBuilderFactory, @Nullable final String defaultFontName, final String defaultFontBoldName) {
     this.niftyBuilderFactory = niftyBuilderFactory;
     this.defaultFontName = defaultFontName;
     this.defaultFontBoldName = defaultFontBoldName;
+    fontHeight = "0";
     if (defaultFontName != null) {
-      this.defaultFont = nifty.createFont(defaultFontName);
+      RenderFont defaultFont = nifty.createFont(defaultFontName);
+      if (defaultFont != null) {
+        fontHeight = Integer.toString(defaultFont.getHeight());
+      }
     }
   }
 
@@ -87,7 +104,7 @@ public class NiftyVisitor extends NodeVisitor {
    * @see org.htmlparser.visitors.NodeVisitor#visitTag(org.htmlparser.Tag)
    */
   @Override
-  public void visitTag(final Tag tag) {
+  public void visitTag(@Nonnull final Tag tag) {
     try {
       if (isBody(tag)) {
         // we'll add a main panel for the body which will be the parent element for everything we generate
@@ -114,7 +131,7 @@ public class NiftyVisitor extends NodeVisitor {
         if (currentBlockElement != null) {
           currentText.append("\n");
         } else {
-          PanelBuilder breakPanelBuilder = niftyBuilderFactory.createBreakPanelBuilder(String.valueOf(defaultFont.getHeight()));
+          PanelBuilder breakPanelBuilder = niftyBuilderFactory.createBreakPanelBuilder(fontHeight);
           bodyPanel.panel(breakPanelBuilder);
         }
       } else if (isTableTag(tag)) {
@@ -155,14 +172,19 @@ public class NiftyVisitor extends NodeVisitor {
    * (non-Javadoc)
    * @see org.htmlparser.visitors.NodeVisitor#visitEndTag(org.htmlparser.Tag)
    */
+  @SuppressWarnings("StatementWithEmptyBody")
   @Override
-  public void visitEndTag(final Tag tag) {
+  public void visitEndTag(@Nonnull final Tag tag) {
     try {
       if (isBody(tag)) {
         // currently there is nothing to do when a body tag ends
       } else if (isParagraph(tag)) {
-        assertBodyPanelNotNull();
-        assertCurrentBlockElementNotNull();
+        if (bodyPanel == null) {
+          throw new Exception("This looks like HTML with a missing <body> tag");
+        }
+        if (currentBlockElement == null) {
+          throw new Exception("This looks like broken HTML. currentBlockElement seems null. Maybe a duplicate close tag?");
+        }
 
         String textElement = currentText.toString();
         if (textElement.length() > 0) {
@@ -171,26 +193,34 @@ public class NiftyVisitor extends NodeVisitor {
         }
 
         if (currentBlockElement.getElementBuilders().isEmpty()) {
-          currentBlockElement.height(String.valueOf(defaultFont.getHeight()));
+          currentBlockElement.height(fontHeight);
         }
         bodyPanel.panel(currentBlockElement);
-        blockElementStack.pop();
-        currentBlockElement = null;
+        currentBlockElement = blockElementStack.pop();
         differentFont = null;
       } else if (isImageTag(tag)) {
         // nothing to do
       } else if (isBreak(tag)) {
         // nothing to do
       } else if (isTableTag(tag)) {
-        assertBodyPanelNotNull();
+        if (bodyPanel == null || table == null) {
+          throw new Exception("This looks like HTML with a missing <body> tag");
+        }
         bodyPanel.panel(table);
         table = null;
       } else if (isTableRowTag(tag)) {
-        assertTableNotNull();
+        if (table == null || tableRow == null) {
+          throw new Exception("This looks like a <tr> element with a missing <table> tag");
+        }
         table.panel(tableRow);
         tableRow = null;
       } else if (isTableDataTag(tag)) {
-        assertTableRowNotNull();
+        if (tableRow == null) {
+          throw new Exception("This looks like a <td> element with a missing <tr> tag");
+        }
+        if (tableData == null) {
+          throw new Exception("This looks like a <td> element with a missing <tr> tag");
+        }
 
         addTextElement(tableData, currentText.toString());
         currentText.setLength(0);
@@ -211,7 +241,7 @@ public class NiftyVisitor extends NodeVisitor {
    * @see org.htmlparser.visitors.NodeVisitor#visitStringNode(org.htmlparser.Text)
    */
   @Override
-  public void visitStringNode(final Text textNode) {
+  public void visitStringNode(@Nonnull final Text textNode) {
     if (tableData != null) {
       appendText(textNode);
     } else if (currentBlockElement != null) {
@@ -219,7 +249,7 @@ public class NiftyVisitor extends NodeVisitor {
     }
   }
 
-  private void appendText(final Text textNode) {
+  private void appendText(@Nonnull final Text textNode) {
     if (currentColor != null) {
       currentText.append("\\");
       currentText.append(currentColor);
@@ -241,13 +271,13 @@ public class NiftyVisitor extends NodeVisitor {
 
   // private stuff
 
-  private void addError(final Exception e) {
+  private void addError(@Nonnull final Exception e) {
     if (!errors.contains(e.getMessage())) {
       errors.add(e.getMessage());
     }
   }
 
-  private void addAsFirstError(final Exception e) {
+  private void addAsFirstError(@Nonnull final Exception e) {
     if (!errors.contains(e.getMessage())) {
       errors.add(0, e.getMessage());
     }
@@ -266,28 +296,25 @@ public class NiftyVisitor extends NodeVisitor {
   }
 
   private void assertTableRowNotNull() throws Exception {
-    if (table == null) {
+    if (tableRow == null) {
       throw new Exception("This looks like a <td> element with a missing <tr> tag");
     }
   }
 
-  private void assertCurrentBlockElementNotNull() throws Exception {
-    if (currentBlockElement == null) {
-      throw new Exception("This looks like broken HTML. currentBlockElement seems null. Maybe a duplicate close tag?");
-    }
-  }
-
-  private void addTextElement(final PanelBuilder panelBuilder, final String text) {
+  private void addTextElement(@Nonnull final PanelBuilder panelBuilder, @Nonnull final String text) {
     String font = defaultFontName;
     if (differentFont != null) {
       font = differentFont;
     }
+   if (font == null) {
+     return;
+   }
     panelBuilder.text(niftyBuilderFactory.createTextBuilder(text, font, currentColor));
   }
 
   private void assertNoErrors() throws Exception {
     if (!errors.isEmpty()) {
-      StringBuffer message = new StringBuffer();
+      StringBuilder message = new StringBuilder();
       for (int i=0; i<errors.size(); i++) {
         message.append(errors.get(i));
         message.append("\n");
@@ -296,43 +323,43 @@ public class NiftyVisitor extends NodeVisitor {
     }
   }
 
-  private boolean isBody(final Tag tag) {
+  private boolean isBody(@Nonnull final Tag tag) {
     return "BODY".equals(tag.getTagName());
   }
 
-  private boolean isParagraph(final Tag tag) {
+  private boolean isParagraph(@Nonnull final Tag tag) {
     return "P".equals(tag.getTagName());
   }
 
-  private boolean isBreak(final Tag tag) {
+  private boolean isBreak(@Nonnull final Tag tag) {
     return "BR".equals(tag.getTagName());
   }
 
-  private boolean isImageTag(final Tag tag) {
+  private boolean isImageTag(@Nonnull final Tag tag) {
     return "IMG".equals(tag.getTagName());
   }
 
-  private boolean isTableTag(final Tag tag) {
+  private boolean isTableTag(@Nonnull final Tag tag) {
     return "TABLE".equals(tag.getTagName());
   }
 
-  private boolean isTableRowTag(final Tag tag) {
+  private boolean isTableRowTag(@Nonnull final Tag tag) {
     return "TR".equals(tag.getTagName());
   }
 
-  private boolean isTableDataTag(final Tag tag) {
+  private boolean isTableDataTag(@Nonnull final Tag tag) {
     return "TD".equals(tag.getTagName());
   }
 
-  private boolean isFontTag(final Tag tag) {
+  private boolean isFontTag(@Nonnull final Tag tag) {
     return "FONT".equals(tag.getTagName());
   }
 
-  private boolean isStrongTag(final Tag tag) {
+  private boolean isStrongTag(@Nonnull final Tag tag) {
     return "STRONG".equals(tag.getTagName());
   }
 
-  private String removeNewLineAndTabs(final String text) {
+  private String removeNewLineAndTabs(@Nonnull final String text) {
     return text.replaceAll("\n", "").replaceAll("\t", "");
   }
 

@@ -2,8 +2,9 @@ package de.lessvoid.nifty.gdx.input.events;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Pool;
-
 import de.lessvoid.nifty.NiftyInputConsumer;
+
+import javax.annotation.Nonnull;
 
 /**
  * This mouse input event is used to buffer the events send by libGDX before they are send to the Nifty-GUI.
@@ -23,6 +24,7 @@ public final class GdxMouseInputEvent implements GdxInputEvent, Pool.Poolable {
    * The internal object pool for this the {@link GdxMouseInputEvent} class.
    */
   private static final Pool<GdxMouseInputEvent> POOL = new Pool<GdxMouseInputEvent>() {
+    @Nonnull
     @Override
     protected GdxMouseInputEvent newObject() {
       return new GdxMouseInputEvent();
@@ -55,12 +57,12 @@ public final class GdxMouseInputEvent implements GdxInputEvent, Pool.Poolable {
   public static final int NO_BUTTON = -1;
 
   @Override
-  public boolean sendToNifty(final NiftyInputConsumer consumer) {
+  public boolean sendToNifty(@Nonnull final NiftyInputConsumer consumer) {
     return consumer.processMouseEvent(mouseX, mouseY, -wheelDelta, button, buttonDown);
   }
 
   @Override
-  public void sendToGdx(final InputProcessor processor) {
+  public void sendToGdx(@Nonnull final InputProcessor processor) {
     if (dragging) {
       processor.touchDragged(mouseX, mouseY, pointer);
     } else if (buttonDown) {

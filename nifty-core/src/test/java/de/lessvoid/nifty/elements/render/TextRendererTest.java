@@ -1,21 +1,21 @@
 package de.lessvoid.nifty.elements.render;
 
-import static org.easymock.classextension.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.easymock.classextension.EasyMock.createMock;
-import junit.framework.TestCase;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.render.RenderFont;
+import junit.framework.TestCase;
+
+import static org.easymock.classextension.EasyMock.*;
 
 public class TextRendererTest extends TestCase {
 
   private RenderFont renderFont;
 
-  public void setUp() {
+  @Override
+  public void setUp() throws Exception {
+    super.setUp();
     renderFont = createMock(RenderFont.class);
     expect(renderFont.getHeight()).andReturn(10).anyTimes();
     expect(renderFont.getWidth(isA(String.class))).andReturn(0).anyTimes();
@@ -24,14 +24,21 @@ public class TextRendererTest extends TestCase {
 
   public void testInit() {
     Nifty niftyMock = createMock(Nifty.class);
+    NiftyRenderEngine niftyRenderEngineMock = createMock(NiftyRenderEngine.class);
+
+    expect(niftyMock.getRenderEngine()).andReturn(niftyRenderEngineMock);
     expect(niftyMock.specialValuesReplace("a\nc")).andReturn("a\nc");
     replay(niftyMock);
 
+    expect(niftyRenderEngineMock.getFont()).andReturn(renderFont).anyTimes();
+    replay(niftyRenderEngineMock);
+
     TextRenderer render = new TextRenderer(niftyMock, renderFont, "a\nc");
-    assertEquals( 20, render.getTextHeight());
-    assertEquals( 0, render.getTextWidth());
+    assertEquals(20, render.getTextHeight());
+    assertEquals(0, render.getTextWidth());
 
     verify(renderFont);
+    verify(niftyRenderEngineMock);
     verify(niftyMock);
   }
 

@@ -1,6 +1,9 @@
 package de.lessvoid.xml.tools;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,10 +13,12 @@ import java.util.logging.Logger;
  * @author void
  */
 public class MethodInvoker {
-  private static Logger log = Logger.getLogger(MethodInvoker.class.getName());
+  private static final Logger log = Logger.getLogger(MethodInvoker.class.getName());
 
+  @Nullable
   private Object[] target;
-  private String methodWithName;
+  @Nullable
+  private final String methodWithName;
 
   /**
    * create null MethodInvoker.
@@ -28,9 +33,9 @@ public class MethodInvoker {
    * @param methodParam method
    * @param targetParam target
    */
-  public MethodInvoker(final String methodParam, final Object ... targetParam) {
+  public MethodInvoker(@Nullable final String methodParam, @Nonnull final Object ... targetParam) {
     this.methodWithName = methodParam;
-    if (targetParam == null || targetParam.length == 0) {
+    if (targetParam.length == 0) {
       this.target = null;
     } else {
       this.target = new Object[targetParam.length];
@@ -46,7 +51,7 @@ public class MethodInvoker {
    * Set first.
    * @param object object
    */
-  public void setFirst(final Object object) {
+  public void setFirst(@Nonnull final Object object) {
     if (methodWithName == null) {
       return;
     }
@@ -75,7 +80,8 @@ public class MethodInvoker {
    * @param invokeParametersParam parameter array for call
    * @return result of call
    */
-  public Object invoke(final Object ... invokeParametersParam) {
+  @Nullable
+  public Object invoke(@Nonnull final Object ... invokeParametersParam) {
     // nothing to do?
     if (target == null || target.length == 0 || methodWithName == null) {
       return null;
@@ -107,7 +113,7 @@ public class MethodInvoker {
               if (log.isLoggable(Level.FINE)) {
                 log.fine("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
               }
-              return callMethod(object, method, new Object[0]);
+              return callMethod(object, method);
             }
           } else {
             // no invokeParameters encoded. this means we can call the method as is or with the invokeParametersParam
@@ -123,13 +129,13 @@ public class MethodInvoker {
                   log.fine("invoking method '" + methodWithName
                     + "' without parameters (invokeParametersParam mismatch)");
                 }
-                return callMethod(object, method, null);
+                return callMethod(object, method);
               }
             } else {
               if (log.isLoggable(Level.FINE)) {
                 log.fine("invoking method '" + methodWithName + "' without parameters");
               }
-              return callMethod(object, method, null);
+              return callMethod(object, method);
             }
           }
         }
@@ -146,17 +152,18 @@ public class MethodInvoker {
    * @param invokeParameters parameters to use
    * @return result
    */
-  private Object callMethod(final Object targetObject, final Method method, final Object[] invokeParameters) {
+  @Nullable
+  private Object callMethod(
+      @Nonnull final Object targetObject,
+      @Nonnull final Method method,
+      @Nonnull final Object... invokeParameters) {
     try {
       if (log.isLoggable(Level.FINE)) {
-        log.fine("method: " + method + "on targetObject: " + targetObject + ", parameters: " + invokeParameters);
-        if (method != null) {
-          log.fine(method.getName());
-        }
-        if (invokeParameters != null) {
-          for (Object o : invokeParameters) {
-            log.fine("parameter: " + o);
-          }
+        log.fine("method: " + method + "on targetObject: " + targetObject + ", " +
+            "parameters: " + Arrays.toString(invokeParameters));
+        log.fine(method.getName());
+        for (Object o : invokeParameters) {
+          log.fine("parameter: " + o);
         }
       }
       return method.invoke(targetObject, invokeParameters);
@@ -183,7 +190,7 @@ public class MethodInvoker {
    * @param method method
    * @return count of parameters the method needs
    */
-  private int getMethodParameterCount(final Method method) {
+  private int getMethodParameterCount(@Nonnull final Method method) {
     Class < ? > [] parameterTypes = method.getParameterTypes();
     return parameterTypes.length;
   }
@@ -193,8 +200,9 @@ public class MethodInvoker {
    * @param invokeParameters parameter array
    * @return string of parameter array in debug output friendly way
    */
-  private String debugParaString(final Object[] invokeParameters) {
-    StringBuffer paraStringBuffer = new StringBuffer();
+  @Nonnull
+  private String debugParaString(@Nonnull final Object... invokeParameters) {
+    StringBuilder paraStringBuffer = new StringBuilder();
     paraStringBuffer.append(invokeParameters[0].toString());
     for (int i = 1; i < invokeParameters.length; i++) {
       paraStringBuffer.append(", ");

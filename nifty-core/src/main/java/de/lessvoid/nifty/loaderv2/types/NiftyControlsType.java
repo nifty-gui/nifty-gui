@@ -1,16 +1,21 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class NiftyControlsType extends XmlBaseType {
-  private Collection < ControlDefinitionType > controlDefinitions = new ArrayList < ControlDefinitionType >();
-  private Collection < UseControlsType > useControls = new ArrayList < UseControlsType >();
-  private Collection < PopupType > popups = new ArrayList < PopupType >();
-  private Collection < ResourceBundleType > resourceBundles = new ArrayList < ResourceBundleType >();
+  @Nonnull
+  private final Collection<ControlDefinitionType> controlDefinitions = new ArrayList<ControlDefinitionType>();
+  @Nonnull
+  private final Collection<UseControlsType> useControls = new ArrayList<UseControlsType>();
+  @Nonnull
+  private final Collection<PopupType> popups = new ArrayList<PopupType>();
+  @Nonnull
+  private final Collection<ResourceBundleType> resourceBundles = new ArrayList<ResourceBundleType>();
 
   public void addControlDefinition(final ControlDefinitionType controlDefinitionType) {
     controlDefinitions.add(controlDefinitionType);
@@ -28,7 +33,9 @@ public class NiftyControlsType extends XmlBaseType {
     resourceBundles.add(resourceBundle);
   }
 
-  public void loadControls(final NiftyLoader niftyLoader, final NiftyType niftyType) throws Exception {
+  public void loadControls(
+      @Nonnull final NiftyLoader niftyLoader,
+      @Nonnull final NiftyType niftyType) throws Exception {
     for (UseControlsType useControl : useControls) {
       useControl.loadControl(niftyLoader, niftyType);
     }
@@ -43,10 +50,11 @@ public class NiftyControlsType extends XmlBaseType {
     }
   }
 
+  @Nonnull
   public String output() {
     int offset = 1;
     return
-      "\nNifty Data:\n" + CollectionLogger.out(offset, controlDefinitions, "controlDefinitions")
-      + "\n" + CollectionLogger.out(offset, useControls, "useControls");
+        "\nNifty Data:\n" + CollectionLogger.out(offset, controlDefinitions, "controlDefinitions")
+            + "\n" + CollectionLogger.out(offset, useControls, "useControls");
   }
 }

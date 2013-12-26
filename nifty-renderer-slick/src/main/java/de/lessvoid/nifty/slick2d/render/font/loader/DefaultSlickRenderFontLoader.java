@@ -5,6 +5,8 @@ import de.lessvoid.nifty.slick2d.render.font.SlickLoadFontException;
 import de.lessvoid.nifty.slick2d.render.font.SlickRenderFont;
 import org.newdawn.slick.Graphics;
 
+import javax.annotation.Nonnull;
+
 /**
  * The loader is able to load the default render font
  *
@@ -14,12 +16,13 @@ public final class DefaultSlickRenderFontLoader implements SlickRenderFontLoader
   /**
    * Load the requested font.
    */
+  @Nonnull
   @Override
-  public SlickRenderFont loadFont(final Graphics g, final String filename) throws SlickLoadFontException {
+  public SlickRenderFont loadFont(@Nonnull final Graphics g, final String filename) throws SlickLoadFontException {
     try {
       g.resetFont();
       return new DefaultSlickRenderFont(g.getFont());
-    } catch (final SlickLoadFontException e) {
+    } catch (@Nonnull final SlickLoadFontException e) {
       throw new SlickLoadFontException("Loading font failed.", e);
     }
   }

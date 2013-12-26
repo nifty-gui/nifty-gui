@@ -1,20 +1,22 @@
 package de.lessvoid.nifty.tools;
 
-import de.lessvoid.nifty.tools.Color;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Checks a String if it contains a Nifty inline color. This class is used while
  * parsing text strings for colors.
- * 
+ * <p/>
  * This has now been changed to not return an Result instance anymore but simply
  * remembers the last result in instance variables. This makes the class not
  * thread-safe but it was not shared between threads anyway.
- * 
+ *
  * @author void
  */
 public class ColorValueParser {
   private boolean isColor;
   private int nextIndex;
+  @Nullable
   private Color color;
 
   public ColorValueParser() {
@@ -29,11 +31,12 @@ public class ColorValueParser {
     return nextIndex;
   }
 
+  @Nullable
   public Color getColor() {
     return color;
   }
 
-  public boolean isColor(final String text, final int startIdx) {
+  public boolean isColor(@Nonnull final String text, final int startIdx) {
     if (text.startsWith("\\#", startIdx)) {
       int endIdx = text.indexOf('#', startIdx + 2);
       if (endIdx != -1) {
@@ -51,7 +54,7 @@ public class ColorValueParser {
     isColor = false;
   }
 
-  private void setResult(final String value, final int endIdx) {
+  private void setResult(@Nonnull final String value, final int endIdx) {
     nextIndex = -1;
     color = null;
     isColor = Color.check(value);

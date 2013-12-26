@@ -1,8 +1,6 @@
 package de.lessvoid.nifty.effects.impl;
 
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
@@ -13,26 +11,46 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import java.util.logging.Logger;
+
 /**
  * Border - border overlay.
+ *
  * @author void
  */
 public class Border implements EffectImpl {
-  private static Logger log = Logger.getLogger(Border.class.getName());
+  private static final Logger log = Logger.getLogger(Border.class.getName());
+  @Nonnull
   private Color colorLeft = Color.WHITE;
+  @Nonnull
   private Color colorRight = Color.WHITE;
+  @Nonnull
   private Color colorTop = Color.WHITE;
+  @Nonnull
   private Color colorBottom = Color.WHITE;
-  private SizeValue borderLeft = new SizeValue("1px");
-  private SizeValue borderRight = new SizeValue("1px");
-  private SizeValue borderTop = new SizeValue("1px");
-  private SizeValue borderBottom = new SizeValue("1px");
-  private SizeValue insetLeft = new SizeValue("0px");
-  private SizeValue insetRight = new SizeValue("0px");
-  private SizeValue insetTop = new SizeValue("0px");
-  private SizeValue insetBottom = new SizeValue("0px");
+  @Nonnull
+  private SizeValue borderLeft = SizeValue.px(1);
+  @Nonnull
+  private SizeValue borderRight = SizeValue.px(1);
+  @Nonnull
+  private SizeValue borderTop = SizeValue.px(1);
+  @Nonnull
+  private SizeValue borderBottom = SizeValue.px(1);
+  @Nonnull
+  private SizeValue insetLeft = SizeValue.px(0);
+  @Nonnull
+  private SizeValue insetRight = SizeValue.px(0);
+  @Nonnull
+  private SizeValue insetTop = SizeValue.px(0);
+  @Nonnull
+  private SizeValue insetBottom = SizeValue.px(0);
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     try {
       PaddingAttributeParser parser = new PaddingAttributeParser(parameter.getProperty("border", "1px"));
       borderLeft = new SizeValue(parser.getLeft());
@@ -56,11 +74,12 @@ public class Border implements EffectImpl {
     }
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     r.saveState(null);
     int left = getBorder(element, borderLeft);
     int right = getBorder(element, borderRight);
@@ -106,7 +125,7 @@ public class Border implements EffectImpl {
     r.restoreState();
   }
 
-  private void setAlphaSaveColor(final NiftyRenderEngine r, final Color color) {
+  private void setAlphaSaveColor(@Nonnull final NiftyRenderEngine r, @Nonnull final Color color) {
     if (r.isColorAlphaChanged()) {
       r.setColorIgnoreAlpha(color);
     } else {
@@ -114,14 +133,19 @@ public class Border implements EffectImpl {
     }
   }
 
-  private int getBorder(final Element element, final SizeValue sizeValue) {
-    int left = sizeValue.getValueAsInt(element.getParent().getWidth());
-    if (left == -1) {
-      left = 0;
+  private int getBorder(@Nonnull final Element element, @Nonnull final SizeValue sizeValue) {
+    if (!element.hasParent()) {
+      return 0;
+    } else {
+      final int parentWidth = sizeValue.getValueAsInt(element.getParent().getWidth());
+      if (parentWidth < 0) {
+        return 0;
+      }
+      return parentWidth;
     }
-    return left;
   }
 
+  @Override
   public void deactivate() {
   }
 }

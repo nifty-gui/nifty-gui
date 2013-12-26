@@ -1,27 +1,18 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-import java.util.logging.Logger;
-
-import org.lwjgl.opengl.EXTFramebufferObject;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GLContext;
-import org.lwjgl.opengl.SGISGenerateMipmap;
+import org.lwjgl.opengl.*;
 import org.lwjgl.util.glu.GLU;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.nio.*;
+import java.util.logging.Logger;
 
 /**
  * The CoreTexture2D represents a 2D texture in OpenGL space.
- * <p />
+ * <p/>
  * This class takes care for loading the texture to OpenGL and for generating mipmaps as needed.
- * <p />
+ * <p/>
  * This class does <b>not</b> handle proxy textures.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
@@ -71,12 +62,12 @@ public class CoreTexture2D {
     /**
      * The value of the minimizing filter.
      */
-    private int minFilterValue;
+    private final int minFilterValue;
 
     /**
      * The value of the magnifying filter.
      */
-    private int magFilterValue;
+    private final int magFilterValue;
 
     /**
      * Default constructor.
@@ -176,23 +167,23 @@ public class CoreTexture2D {
     /**
      * The pixel data format.
      */
-    private int format;
+    private final int format;
 
     /**
      * The texture format.
      */
-    private int internalFormat;
+    private final int internalFormat;
 
     /**
      * The compressed kind of the texture format.
      */
-    private int compressedInternalFormat;
+    private final int compressedInternalFormat;
 
     /**
      * Default constructor.
      *
-     * @param newFormat the pixel data format
-     * @param newInternalFormat the internal format
+     * @param newFormat                   the pixel data format
+     * @param newInternalFormat           the internal format
      * @param newCompressedInternalFormat the compressed internal format
      */
     ColorFormat(final int newFormat, final int newInternalFormat, final int newCompressedInternalFormat) {
@@ -278,7 +269,7 @@ public class CoreTexture2D {
   private final int height;
 
   /**
-   * We remember the parameters used for the glTexture2D call so we can easily update the texture if we need later. 
+   * We remember the parameters used for the glTexture2D call so we can easily update the texture if we need later.
    */
   private boolean textureCanBeUpdated;
   private int texImageTarget;
@@ -295,14 +286,15 @@ public class CoreTexture2D {
    * settings that should fit the need on most cases.
    *
    * @param format the texture format
-   * @param width the width of the texture
+   * @param width  the width of the texture
    * @param height the height of the texture
-   * @param data the pixel data
+   * @param data   the pixel data
    * @param filter the used filter
    * @throws CoreGLException in case the creation of the texture fails for any reason
    */
-  public CoreTexture2D(final ColorFormat format, final int width, final int height, final Buffer data,
-                       final ResizeFilter filter) {
+  public CoreTexture2D(
+      @Nonnull final ColorFormat format, final int width, final int height, final Buffer data,
+      @Nonnull final ResizeFilter filter) {
     this(format, false, width, height, data, filter);
   }
 
@@ -310,15 +302,16 @@ public class CoreTexture2D {
    * This is the constructor is a slightly reduced version that defines some common options automatically.
    *
    * @param internalFormat the internal format of the texture
-   * @param width the width of the texture in pixels
-   * @param height the height of the texture in pixels
-   * @param format the format of the pixel data
-   * @param data the pixel data
-   * @param filter the used filter
+   * @param width          the width of the texture in pixels
+   * @param height         the height of the texture in pixels
+   * @param format         the format of the pixel data
+   * @param data           the pixel data
+   * @param filter         the used filter
    * @throws CoreGLException in case the creation of the texture fails for any reason
    */
-  public CoreTexture2D(final int internalFormat, final int width, final int height, final int format,
-                       final Buffer data, final ResizeFilter filter) {
+  public CoreTexture2D(
+      final int internalFormat, final int width, final int height, final int format,
+      final Buffer data, @Nonnull final ResizeFilter filter) {
     this(GL11.GL_TEXTURE_2D, internalFormat, width, height, format, data, filter.getMagFilter(), filter.getMinFilter());
   }
 
@@ -326,16 +319,17 @@ public class CoreTexture2D {
    * This is one of the simple constructors that only allow very limited possibilities for settings. How ever they use
    * settings that should fit the need on most cases.
    *
-   * @param format the texture format
+   * @param format     the texture format
    * @param compressed {@code true} in case the internal texture data is supposed to be compressed if possible
-   * @param width the width of the texture
-   * @param height the height of the texture
-   * @param data the pixel data
-   * @param filter the used filter
+   * @param width      the width of the texture
+   * @param height     the height of the texture
+   * @param data       the pixel data
+   * @param filter     the used filter
    * @throws CoreGLException in case the creation of the texture fails for any reason
    */
-  public CoreTexture2D(final ColorFormat format, final boolean compressed, final int width, final int height,
-                       final Buffer data, final ResizeFilter filter) {
+  public CoreTexture2D(
+      @Nonnull final ColorFormat format, final boolean compressed, final int width, final int height,
+      final Buffer data, @Nonnull final ResizeFilter filter) {
     this(format.getInternalFormat(), width, height,
         (compressed ? format.getCompressedInternalFormat() : format.getFormat()), data, filter);
   }
@@ -344,34 +338,36 @@ public class CoreTexture2D {
    * This is the constructor is a slightly reduced version that defines some common options automatically.
    *
    * @param internalFormat the internal format of the texture
-   * @param width the width of the texture in pixels
-   * @param height the height of the texture in pixels
-   * @param format the format of the pixel data
-   * @param data the pixel data
-   * @param magFilter the magnifying filter
-   * @param minFilter the minimizing filter
+   * @param width          the width of the texture in pixels
+   * @param height         the height of the texture in pixels
+   * @param format         the format of the pixel data
+   * @param data           the pixel data
+   * @param magFilter      the magnifying filter
+   * @param minFilter      the minimizing filter
    * @throws CoreGLException in case the creation of the texture fails for any reason
    */
-  public CoreTexture2D(final int internalFormat, final int width, final int height, final int format,
-                           final Buffer data, final int magFilter, final int minFilter) {
+  public CoreTexture2D(
+      final int internalFormat, final int width, final int height, final int format,
+      final Buffer data, final int magFilter, final int minFilter) {
     this(GL11.GL_TEXTURE_2D, internalFormat, width, height, format, data, magFilter, minFilter);
   }
 
   /**
    * This is the constructor is a slightly reduced version that defines some common options automatically.
    *
-   * @param target the target type of the texture operations, has to be a valid 2D texture target
+   * @param target         the target type of the texture operations, has to be a valid 2D texture target
    * @param internalFormat the internal format of the texture
-   * @param width the width of the texture in pixels
-   * @param height the height of the texture in pixels
-   * @param format the format of the pixel data
-   * @param data the pixel data
-   * @param magFilter the magnifying filter
-   * @param minFilter the minimizing filter
+   * @param width          the width of the texture in pixels
+   * @param height         the height of the texture in pixels
+   * @param format         the format of the pixel data
+   * @param data           the pixel data
+   * @param magFilter      the magnifying filter
+   * @param minFilter      the minimizing filter
    * @throws CoreGLException in case the creation of the texture fails for any reason
    */
-  public CoreTexture2D(final int target, final int internalFormat, final int width, final int height, final int format,
-                       final Buffer data, final int magFilter, final int minFilter) {
+  public CoreTexture2D(
+      final int target, final int internalFormat, final int width, final int height, final int format,
+      final Buffer data, final int magFilter, final int minFilter) {
     this(AUTO, target, 0, internalFormat, width, height, 0, format, AUTO, data, magFilter, minFilter);
   }
 
@@ -379,25 +375,27 @@ public class CoreTexture2D {
    * This is the constructor that allows to define all the settings required to create a texture. Using this causes the
    * class to disable all assumptions and do exactly what you want.
    *
-   * @param textureId the ID that is supposed to be used with the texture, it has to be a valid texture ID for the
-   *                  selected target. Use {@link #AUTO} to tell the class to fetch a texture ID in its own.
-   * @param target the target type of the texture operations, has to be a valid 2D texture target
-   * @param level the mipmap level of the texture, in case you want the automated mipmap generation to kick in leave
-   *              this value on {@code 0} and selected a fitting minimizing filter
+   * @param textureId      the ID that is supposed to be used with the texture, it has to be a valid texture ID for the
+   *                       selected target. Use {@link #AUTO} to tell the class to fetch a texture ID in its own.
+   * @param target         the target type of the texture operations, has to be a valid 2D texture target
+   * @param level          the mipmap level of the texture, in case you want the automated mipmap generation to kick
+   *                       in leave
+   *                       this value on {@code 0} and selected a fitting minimizing filter
    * @param internalFormat the internal format of the texture
-   * @param width the width of the texture in pixels
-   * @param height the height of the texture in pixels
-   * @param border the width of the border of the texture
-   * @param format the format of the pixel data
-   * @param type the data type of the pixel data
-   * @param data the pixel data
-   * @param magFilter the magnifying filter
-   * @param minFilter the minimizing filter
+   * @param width          the width of the texture in pixels
+   * @param height         the height of the texture in pixels
+   * @param border         the width of the border of the texture
+   * @param format         the format of the pixel data
+   * @param type           the data type of the pixel data
+   * @param data           the pixel data
+   * @param magFilter      the magnifying filter
+   * @param minFilter      the minimizing filter
    * @throws CoreGLException in case the creation of the texture fails for any reason
    */
-  public CoreTexture2D(final int textureId, final int target, final int level, final int internalFormat,final int width,
-                           final int height, final int border, final int format, final int type, final Buffer data,
-                           final int magFilter, final int minFilter) {
+  public CoreTexture2D(
+      final int textureId, final int target, final int level, final int internalFormat, final int width,
+      final int height, final int border, final int format, final int type, final Buffer data,
+      final int magFilter, final int minFilter) {
     this.textureId = createTexture(textureId, target, level, internalFormat, width, height, border, format, type, data,
         magFilter, minFilter);
     textureTarget = target;
@@ -497,14 +495,10 @@ public class CoreTexture2D {
     return width;
   }
 
+  @Nonnull
   @Override
   public String toString() {
-    final StringBuilder builder = new StringBuilder();
-    builder.append(CoreTexture2D.class.getName()).append('(');
-    builder.append("id:").append(textureId).append(", ");
-    builder.append("w:").append(width).append(", ");
-    builder.append("h:").append(height).append(')');
-    return builder.toString();
+    return CoreTexture2D.class.getName() + '(' + "id:" + textureId + ", " + "w:" + width + ", " + "h:" + height + ')';
   }
 
   @Override
@@ -519,7 +513,7 @@ public class CoreTexture2D {
   /**
    * Apply the filter values for the texture scaling.
    *
-   * @param target the texture target
+   * @param target    the texture target
    * @param minFilter the minimize filter
    * @param magFilter the maximize filter
    * @throws CoreGLException in case setting the filter parameter fails
@@ -534,7 +528,7 @@ public class CoreTexture2D {
   /**
    * Generate and bind a texture ID.
    *
-   * @param target the target type of the texture
+   * @param target    the target type of the texture
    * @param textureId the ID of the texture, in case this is {@code -1} a new texture ID will be generated.
    * @return the texture ID that was actually bound
    * @throws CoreGLException in case creating or binding the texture fails
@@ -568,10 +562,10 @@ public class CoreTexture2D {
    * Check the format, the size and the data type value.
    *
    * @param format the selected format
-   * @param type the selected data type
+   * @param type   the selected data type
    * @throws CoreGLException in case the parameters don't work together
    */
-  private static void checkFormatSizeData(final int format, final int type, final Buffer data) {
+  private static void checkFormatSizeData(final int format, final int type, @Nullable final Buffer data) {
     if (data == null) {
       throw new CoreGLException("Pixeldata must not be NULL");
     }
@@ -629,7 +623,7 @@ public class CoreTexture2D {
   /**
    * This functions causes the OpenGL errors to be checked in case error checking is enabled.
    *
-   * @param message the message in case a error is detected
+   * @param message        the message in case a error is detected
    * @param throwException {@code true} in case an exception is supposed to be thrown in case a error is detected
    */
   private static void checkGLError(final String message, final boolean throwException) {
@@ -641,7 +635,7 @@ public class CoreTexture2D {
   /**
    * This function is used to check if the size value fit the capabilities of OpenGL.
    *
-   * @param width the width of the new texture
+   * @param width  the width of the new texture
    * @param height the height of the new texture
    * @throws CoreGLException in case the texture dimensions are too large or negative
    */
@@ -693,25 +687,28 @@ public class CoreTexture2D {
   /**
    * Create a new texture and transfer the data into the OpenGL space. Also generate mipmaps as needed.
    *
-   * @param textureId the ID of the texture to use, in case this is {@code -1} a new texture ID is generated
-   * @param target the target of the create operation, has to be a valid 2D texture target
-   * @param level the mipmap level, automatic mipmap generation is disabled in case this valid is not equal to 0
+   * @param textureId      the ID of the texture to use, in case this is {@code -1} a new texture ID is generated
+   * @param target         the target of the create operation, has to be a valid 2D texture target
+   * @param level          the mipmap level, automatic mipmap generation is disabled in case this valid is not equal
+   *                       to 0
    * @param internalFormat the internal texture format
-   * @param width the width of the texture
-   * @param height the height of the texture
-   * @param border the border width of the texture
-   * @param format the format of the pixel data
-   * @param type the data type of the pixel data
-   * @param data the pixel data
-   * @param magFilter the magnifying filter
-   * @param minFilter the minimizing filter, in case a filter that uses mipmaps is selected, those mipmaps are generated
-   *                  automatically
+   * @param width          the width of the texture
+   * @param height         the height of the texture
+   * @param border         the border width of the texture
+   * @param format         the format of the pixel data
+   * @param type           the data type of the pixel data
+   * @param data           the pixel data
+   * @param magFilter      the magnifying filter
+   * @param minFilter      the minimizing filter, in case a filter that uses mipmaps is selected,
+   *                       those mipmaps are generated
+   *                       automatically
    * @return the texture ID of the newly created texture
    * @throws CoreGLException in case anything goes wrong
    */
-  private int createTexture(final int textureId, final int target, final int level, final int internalFormat,
-                                      final int width, final int height, final int border, final int format,
-                                      final int type, final Buffer data, final int magFilter, final int minFilter) {
+  private int createTexture(
+      final int textureId, final int target, final int level, final int internalFormat,
+      final int width, final int height, final int border, final int format,
+      final int type, final Buffer data, final int magFilter, final int minFilter) {
     final int usedType = getType(type, data);
 
     if (errorChecks) {
@@ -745,7 +742,7 @@ public class CoreTexture2D {
       } else {
         glTexImage2D(target, level, internalFormat, width, height, border, format, usedType, data);
       }
-    } catch (final CoreGLException ex) {
+    } catch (@Nonnull final CoreGLException ex) {
       if (textureId == -1) {
         GL11.glDeleteTextures(usedTextureId);
         checkGLError("glDeleteTextures", false);
@@ -801,15 +798,15 @@ public class CoreTexture2D {
    * This is a wrapper function for the actual call to {@code glTexImage2D}. It uses the generic {@link Buffer} and
    * internally casts it as needed to fit the different implementations of the {@code glTexImage2D} function.
    *
-   * @param target the target of the texture creation operation
-   * @param level the level of this texture
+   * @param target         the target of the texture creation operation
+   * @param level          the level of this texture
    * @param internalformat the internal format
-   * @param width the width of the texture
-   * @param height the height of the texture
-   * @param border the border width of the texture
-   * @param format the format of the pixel data
-   * @param type the data type of the pixel data
-   * @param pixels the pixel data
+   * @param width          the width of the texture
+   * @param height         the height of the texture
+   * @param border         the border width of the texture
+   * @param format         the format of the pixel data
+   * @param type           the data type of the pixel data
+   * @param pixels         the pixel data
    * @throws CoreGLException in case OpenGL reports a error or in case the type of the buffer is unknown
    */
   private void glTexImage2D(
@@ -841,15 +838,20 @@ public class CoreTexture2D {
     }
 
     if (pixels instanceof ByteBuffer) {
-      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight, texBorder, texFormat, texType, (ByteBuffer) pixels);
+      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight,
+          texBorder, texFormat, texType, (ByteBuffer) pixels);
     } else if (pixels instanceof ShortBuffer) {
-      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight, texBorder, texFormat, texType, (ShortBuffer) pixels);
+      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight,
+          texBorder, texFormat, texType, (ShortBuffer) pixels);
     } else if (pixels instanceof IntBuffer) {
-      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight, texBorder, texFormat, texType, (IntBuffer) pixels);
+      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight,
+          texBorder, texFormat, texType, (IntBuffer) pixels);
     } else if (pixels instanceof FloatBuffer) {
-      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight, texBorder, texFormat, texType, (FloatBuffer) pixels);
+      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight,
+          texBorder, texFormat, texType, (FloatBuffer) pixels);
     } else if (pixels instanceof DoubleBuffer) {
-      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight, texBorder, texFormat, texType, (DoubleBuffer) pixels);
+      GL11.glTexImage2D(texImageTarget, texImageLevel, texImageInternalFormat, texImageWidth, texImageHeight,
+          texBorder, texFormat, texType, (DoubleBuffer) pixels);
     } else {
       throw new CoreGLException("Unknown buffer type; " + pixels.getClass().toString());
     }
@@ -860,17 +862,18 @@ public class CoreTexture2D {
    * This functions wraps the last resort function for the mipmap generation. This function only works in base
    * {@code data} is a {@link ByteBuffer}. It will create textures and its mipmaps.
    *
-   * @param target the target of the texture creation operation
+   * @param target     the target of the texture creation operation
    * @param components the internal texture format
-   * @param width the width of the texture
-   * @param height the height of the texture
-   * @param format the format of the pixel data
-   * @param type the type of the pixel data
-   * @param data the pixel data
+   * @param width      the width of the texture
+   * @param height     the height of the texture
+   * @param format     the format of the pixel data
+   * @param type       the type of the pixel data
+   * @param data       the pixel data
    * @throws CoreGLException in case the creation of the mipmap fails
    */
-  private static void gluBuild2DMipmaps(final int target, final int components, final int width, final int height,
-                                 final int format, final int type, final Buffer data) {
+  private static void gluBuild2DMipmaps(
+      final int target, final int components, final int width, final int height,
+      final int format, final int type, final Buffer data) {
     if (data instanceof ByteBuffer) {
       GLU.gluBuild2DMipmaps(target, components, width, height, format, type, (ByteBuffer) data);
       checkGLError("gluBuild2DMipmaps", true);
@@ -882,7 +885,7 @@ public class CoreTexture2D {
   /**
    * Check if mipmaps are supposed to be generated.
    *
-   * @param level the level settings
+   * @param level     the level settings
    * @param minFilter the minimizing filter
    * @return {@code true} in case mipmaps are supposed to be generated
    */
@@ -905,6 +908,7 @@ public class CoreTexture2D {
 
   /**
    * Check if a value is power of two.
+   *
    * @param n the value to check
    * @return {@code true} in case the value is power of two
    */

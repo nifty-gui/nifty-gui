@@ -1,42 +1,48 @@
 package de.lessvoid.nifty.elements.tools;
 
+import de.lessvoid.nifty.spi.render.RenderFont;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lessvoid.nifty.spi.render.RenderFont;
-
 public class TextBreak {
-  private String[] words;
-  private int width;
-  private RenderFont font;
+  @Nonnull
+  private final String[] words;
+  private final int width;
+  private final RenderFont font;
 
-  public TextBreak(final String line, final int width, final RenderFont font) {
+  public TextBreak(@Nonnull final String line, final int width, final RenderFont font) {
     this.words = line.split(" ", -1);
     this.width = width;
     this.font = font;
   }
 
-  public List < String > split() {
+  @Nonnull
+  public List<String> split() {
     if (isSingleLine()) {
       return singleResult();
     }
     return processWords();
   }
 
-  private List < String > singleResult() {
-    List < String > result = new ArrayList < String > ();
+  @Nonnull
+  private List<String> singleResult() {
+    List<String> result = new ArrayList<String>();
     result.add(words[0]);
     return result;
   }
 
-  private List < String > processWords() {
-    List < String > result = new ArrayList < String > ();
+  @Nonnull
+  private List<String> processWords() {
+    List<String> result = new ArrayList<String>();
     int i = 0, length;
     String currentWord = "";
     String lastColorValue = null;
-    StringBuffer currentLine = new StringBuffer();
+    StringBuilder currentLine = new StringBuilder();
     while (isValidIndex(i)) {
-    	//Empty StringBuffer
+      //Empty StringBuffer
       currentLine.setLength(0);
       length = 0;
       while (isBelowLimit(length) && isValidIndex(i)) {
@@ -51,34 +57,37 @@ public class TextBreak {
           i++;
         }
       }
-      if(currentLine.length() > 0) {
+      if (currentLine.length() > 0) {
         addResult(result, lastColorValue, currentLine.toString());
       } else { //If we get here the word itself is longer than the wrapping width
-    	  //We break it up
-    	  String wordPart = currentWord;
-    	  int p;
-    	  do {
-    		  p = 0;
-	    	  while(!isBelowLimit(font.getWidth(wordPart)) && wordPart.length() > 0) {
-	    		  //Remove one character from the end and see if the new word fits
-	    		  wordPart = wordPart.substring(0, wordPart.length()-1);
-	    		  p++;
-	    	  }
-	    	  addResult(result, lastColorValue, wordPart);
-	    	  //Set the new word part to the rest of the word
-	    	  wordPart = currentWord.substring(currentWord.length()-p);
-	        String colorValue = extractColorValue(wordPart);
-	        if (colorValue != null) {
-	          lastColorValue = colorValue;
-	        }
-    	  } while(p > 0);
-    	  i++;
+        //We break it up
+        String wordPart = currentWord;
+        int p;
+        do {
+          p = 0;
+          while (!isBelowLimit(font.getWidth(wordPart)) && wordPart.length() > 0) {
+            //Remove one character from the end and see if the new word fits
+            wordPart = wordPart.substring(0, wordPart.length() - 1);
+            p++;
+          }
+          addResult(result, lastColorValue, wordPart);
+          //Set the new word part to the rest of the word
+          wordPart = currentWord.substring(currentWord.length() - p);
+          String colorValue = extractColorValue(wordPart);
+          if (colorValue != null) {
+            lastColorValue = colorValue;
+          }
+        } while (p > 0);
+        i++;
       }
     }
     return result;
   }
 
-  private void addResult(final List<String> result, final String lastColorValue, final String currentLine) {
+  private void addResult(
+      @Nonnull final List<String> result,
+      @Nullable final String lastColorValue,
+      final String currentLine) {
     if (lastColorValue != null) {
       result.add(lastColorValue + currentLine);
     } else {
@@ -103,11 +112,12 @@ public class TextBreak {
   }
 
   private boolean isSingleLine() {
-	//Check if there is only one word and it fits in one line
+    //Check if there is only one word and it fits in one line
     return (words.length == 1 && isBelowLimit(font.getWidth(words[0])));
   }
 
-  String extractColorValue(final String text) {
+  @Nullable
+  String extractColorValue(@Nullable final String text) {
     if (text == null) {
       return null;
     }

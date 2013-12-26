@@ -1,24 +1,25 @@
 package de.lessvoid.nifty.layout.manager;
 
-import static de.lessvoid.nifty.layout.manager.BoxTestHelper.assertBox;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import junit.framework.TestCase;
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
+import junit.framework.TestCase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static de.lessvoid.nifty.layout.manager.BoxTestHelper.assertBox;
 
 public class VerticalLayoutTest extends TestCase {
-  private VerticalLayout layout= new VerticalLayout();
+  private VerticalLayout layout = new VerticalLayout();
   private LayoutPart root;
   private List<LayoutPart> elements;
   private LayoutPart top;
   private LayoutPart bottom;
-  
+
+  @Override
   protected void setUp() throws Exception {
     root = new LayoutPart(new Box(0, 0, 640, 480), new BoxConstraints());
 

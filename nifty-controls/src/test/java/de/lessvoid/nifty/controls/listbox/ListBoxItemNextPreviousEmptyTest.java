@@ -1,11 +1,10 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.junit.Assert.assertTrue;
-
+import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.ListBox.SelectionMode;
+import static org.junit.Assert.assertTrue;
 
 public class ListBoxItemNextPreviousEmptyTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);

@@ -1,17 +1,19 @@
 package de.lessvoid.nifty.loaderv2.types.helper;
 
-import java.util.Collection;
-
 import de.lessvoid.nifty.loaderv2.types.XmlBaseType;
 import de.lessvoid.nifty.tools.StringHelper;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
 
 public final class CollectionLogger {
   private CollectionLogger() {
   }
 
+  @Nonnull
   public static String out(
       final int offset,
-      final Collection < ? extends XmlBaseType > collection,
+      @Nonnull final Collection<? extends XmlBaseType> collection,
       final String message) {
     if (collection.isEmpty()) {
       return StringHelper.whitespace(offset) + "no children " + message;

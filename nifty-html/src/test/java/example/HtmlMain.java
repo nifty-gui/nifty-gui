@@ -1,21 +1,23 @@
 package example;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.html.NiftyHtmlGenerator;
-import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import org.easymock.EasyMock;
+
+import javax.annotation.Nonnull;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HtmlMain implements ScreenController {
   private Nifty nifty;
@@ -28,7 +30,9 @@ public class HtmlMain implements ScreenController {
     }
 
     // create nifty
-    Nifty nifty = new Nifty(new LwjglRenderDevice(), new NullSoundDevice(), LwjglInitHelper.getInputSystem(), new AccurateTimeProvider());
+    SoundDevice soundDeviceMock = EasyMock.createNiceMock(SoundDevice.class);
+    Nifty nifty = new Nifty(new LwjglRenderDevice(), soundDeviceMock, LwjglInitHelper.getInputSystem(),
+        new AccurateTimeProvider());
     nifty.fromXml("src/test/resources/test.xml", "start");
 
     // that's the standard render loop for LWJGL as used in every standard nifty example
@@ -48,7 +52,7 @@ public class HtmlMain implements ScreenController {
   }
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
 
@@ -60,7 +64,7 @@ public class HtmlMain implements ScreenController {
   @Override
   public void onStartScreen() {
     List<String> items = new ArrayList<String>();
-    for (int i=1; i<51; i++) {
+    for (int i = 1; i < 51; i++) {
       items.add("src/test/resources/html/test-" + String.format("%02d", i) + ".html");
     }
 
@@ -72,13 +76,13 @@ public class HtmlMain implements ScreenController {
   public void onEndScreen() {
   }
 
-  @NiftyEventSubscriber(id="html-select")
+  @NiftyEventSubscriber(id = "html-select")
   public void onHtmlSelectChanged(final String id, final DropDownSelectionChangedEvent<String> event) {
     try {
-      generator.generate(readHTMLFile(event.getSelection()), screen, screen.findElementByName("parent"));
+      generator.generate(readHTMLFile(event.getSelection()), screen, screen.findElementById("parent"));
 
       // for debugging purpose we could output the screen as a text structure
-//      System.out.println(screen.debugOutput());
+      //      System.out.println(screen.debugOutput());
     } catch (IOException e) {
       e.printStackTrace();
     } catch (Exception e) {

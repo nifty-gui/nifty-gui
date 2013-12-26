@@ -9,25 +9,36 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.render.RenderFont;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * ChangeFont.
+ *
  * @author void
  */
 public class ChangeFont implements EffectImpl {
+  @Nullable
   private RenderFont font;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     font = nifty.getRenderEngine().createFont(parameter.getProperty("font"));
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     r.setFont(font);
   }
 
+  @Override
   public void deactivate() {
   }
 }

@@ -9,26 +9,33 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Fade a sound out.
+ *
  * @author void
  */
 public class FadeSound implements EffectImpl {
+  @Nullable
   private SoundHandle soundHandle;
-  private Nifty nifty;
-  private String soundId;
 
-  public void activate(final Nifty niftyParam, final Element element, final EffectProperties parameter) {
-    nifty = niftyParam;
-    soundId = parameter.getProperty("sound");
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
+    String soundId = parameter.getProperty("sound");
     soundHandle = nifty.getSoundSystem().getSound(soundId);
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (soundHandle == null) {
       return;
     }
@@ -38,6 +45,7 @@ public class FadeSound implements EffectImpl {
     }
   }
 
+  @Override
   public void deactivate() {
   }
 }

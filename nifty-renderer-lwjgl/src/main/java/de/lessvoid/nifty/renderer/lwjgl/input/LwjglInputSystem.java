@@ -4,32 +4,36 @@ package de.lessvoid.nifty.renderer.lwjgl.input;
  *
  * @author Joseph
  */
-import java.nio.IntBuffer;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Logger;
 
+import de.lessvoid.nifty.NiftyInputConsumer;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.spi.input.InputSystem;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import de.lessvoid.nifty.NiftyInputConsumer;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.spi.input.InputSystem;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import javax.annotation.Nonnull;
+import java.nio.IntBuffer;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Logger;
 
 public class LwjglInputSystem implements InputSystem {
-  private Logger log = Logger.getLogger(LwjglInputSystem.class.getName());
-  private LwjglKeyboardInputEventCreator keyboardEventCreator = new LwjglKeyboardInputEventCreator();
-  private IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
-  private ConcurrentLinkedQueue<MouseInputEvent> mouseEventsOut = new ConcurrentLinkedQueue<MouseInputEvent>();
-  private ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEventsOut = new ConcurrentLinkedQueue<KeyboardInputEvent>();
+  private final Logger log = Logger.getLogger(LwjglInputSystem.class.getName());
+  @Nonnull
+  private final LwjglKeyboardInputEventCreator keyboardEventCreator = new LwjglKeyboardInputEventCreator();
+  private final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+  @Nonnull
+  private final ConcurrentLinkedQueue<MouseInputEvent> mouseEventsOut = new ConcurrentLinkedQueue<MouseInputEvent>();
+  private final ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEventsOut = new
+      ConcurrentLinkedQueue<KeyboardInputEvent>();
   public boolean niftyHasKeyboardFocus = true;
   public boolean niftyTakesKeyboardFocusOnClick = false;
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
   }
 
   public void startup() throws Exception {
@@ -46,7 +50,8 @@ public class LwjglInputSystem implements InputSystem {
 
   // InputSystem Implementation
 
-  public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
+  @Override
+  public void forwardEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     mouseEventsOut.clear();
     keyboardEventsOut.clear();
 
@@ -54,6 +59,7 @@ public class LwjglInputSystem implements InputSystem {
     processKeyboardEvents(inputEventConsumer);
   }
 
+  @Override
   public void setMousePosition(final int x, final int y) {
     int viewportHeight = getViewportHeight();
     Mouse.setCursorPosition(x, viewportHeight - y);
@@ -63,6 +69,7 @@ public class LwjglInputSystem implements InputSystem {
 
   /**
    * This can be called the check if any mouse events have not been handled by Nifty.
+   *
    * @return true when mouse events are available and false if not
    */
   public boolean hasNextMouseEvent() {
@@ -71,6 +78,7 @@ public class LwjglInputSystem implements InputSystem {
 
   /**
    * Retrieve a unhandled mouse event from the internal queue.
+   *
    * @return MouseInputEvent of the mouse event that was not handled by Nifty
    */
   public MouseInputEvent nextMouseEvent() {
@@ -79,6 +87,7 @@ public class LwjglInputSystem implements InputSystem {
 
   /**
    * This can be called the check if any keyboard events have not been handled by Nifty.
+   *
    * @return true when keyboard events are available and false if not
    */
   public boolean hasNextKeyboardEvent() {
@@ -87,6 +96,7 @@ public class LwjglInputSystem implements InputSystem {
 
   /**
    * Retrieve a unhandled keyboard event from the internal queue.
+   *
    * @return KeyboardInputEvent of the event that was not handled by Nifty
    */
   public KeyboardInputEvent nextKeyboardEvent() {
@@ -95,17 +105,19 @@ public class LwjglInputSystem implements InputSystem {
 
   // Internals
 
-  private void processMouseEvents(final NiftyInputConsumer inputEventConsumer) {
+  private void processMouseEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     int viewportHeight = getViewportHeight();
     while (Mouse.next()) {
       int mouseX = Mouse.getEventX();
       int mouseY = viewportHeight - Mouse.getEventY();
-      int mouseWheel = Mouse.getEventDWheel() / 120; // not sure about that 120 here. works on my system and makes this return 1 if the wheel is moved the minimal amount.
+      int mouseWheel = Mouse.getEventDWheel() / 120; // not sure about that 120 here. works on my system and makes
+      // this return 1 if the wheel is moved the minimal amount.
       int button = Mouse.getEventButton();
       boolean buttonDown = Mouse.getEventButtonState();
 
       // now send the event to nifty
-      boolean mouseEventProcessedByNifty = inputEventConsumer.processMouseEvent(mouseX, mouseY, mouseWheel, button, buttonDown);
+      boolean mouseEventProcessedByNifty = inputEventConsumer.processMouseEvent(mouseX, mouseY, mouseWheel, button,
+          buttonDown);
       if (!mouseEventProcessedByNifty) {
         log.fine("Nifty did not processed this mouse event. You can handle it.");
 
@@ -127,12 +139,14 @@ public class LwjglInputSystem implements InputSystem {
     }
   }
 
-  private void processKeyboardEvents(final NiftyInputConsumer inputEventConsumer) {
+  private void processKeyboardEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     while (Keyboard.next()) {
-      KeyboardInputEvent event = keyboardEventCreator.createEvent(Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
+      KeyboardInputEvent event = keyboardEventCreator.createEvent(Keyboard.getEventKey(),
+          Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
       // due to or short-circuiting on true, the event will get forward to keyboardEventsOut if keyboardEventsOut=true
-      if (!niftyHasKeyboardFocus || !inputEventConsumer.processKeyboardEvent(event))
+      if (!niftyHasKeyboardFocus || !inputEventConsumer.processKeyboardEvent(event)) {
         keyboardEventsOut.offer(event);
+      }
     }
   }
 
@@ -158,14 +172,14 @@ public class LwjglInputSystem implements InputSystem {
     log.fine("native cursor max size: " + Cursor.getMaxCursorSize());
   }
 
-  private static void add(StringBuffer out, String text) {
+  private static void add(@Nonnull StringBuffer out, String text) {
     if (out.length() > 0) {
       out.append(", ");
     }
     out.append(text);
   }
 
-  public class MouseInputEvent {
+  public static class MouseInputEvent {
     public float mouseX;
     public float mouseY;
     public float pmouseX;
@@ -182,6 +196,8 @@ public class LwjglInputSystem implements InputSystem {
       this.buttonDown = buttonDown;
     }
 
+    @Nonnull
+    @Override
     public String toString() {
       return this.button + "=" + this.buttonDown + " at " + this.mouseX + "," + this.mouseY + " scroll:" + this.scroll;
     }

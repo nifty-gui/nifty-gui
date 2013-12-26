@@ -2,15 +2,12 @@ package de.lessvoid.nifty.examples.defaultcontrols.treebox;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TreeBox;
-import de.lessvoid.nifty.controls.TreeItem;
-import de.lessvoid.nifty.controls.TreeItemSelectionChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+
+import javax.annotation.Nonnull;
 
 /**
  * The TreeboxControlDialogController registers a new control with Nifty
@@ -20,23 +17,22 @@ import de.lessvoid.nifty.screen.Screen;
  */
 public class TreeboxControlDialogController implements Controller {
 
-    private TreeBox<String> treebox;
-    private Nifty nifty;
+  private Nifty nifty;
 
     @Override
     public void bind(
-            final Nifty nifty,
-            final Screen screen,
-            final Element element,
-            final Parameters parameter) {
-        treebox = screen.findNiftyControl("tree-box", TreeBox.class);
+            @Nonnull final Nifty nifty,
+            @Nonnull final Screen screen,
+            @Nonnull final Element element,
+            @Nonnull final Parameters parameter) {
+      TreeBox<String> treebox = screen.findNiftyControl("tree-box", TreeBox.class);
         this.nifty = nifty;
         
         treebox.setTree(setupTree());
     }
 
     @Override
-    public void init(final Parameters parameter) {
+    public void init(@Nonnull final Parameters parameter) {
     }
 
     @Override
@@ -48,10 +44,11 @@ public class TreeboxControlDialogController implements Controller {
     }
 
     @Override
-    public boolean inputEvent(final NiftyInputEvent inputEvent) {
+    public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
         return false;
     }
 
+    @Nonnull
     private TreeItem<String> setupTree() {
         TreeItem<String> treeRoot = new TreeItem<String>();
         TreeItem<String> branch1 = new TreeItem<String>("branch 1");
@@ -72,7 +69,7 @@ public class TreeboxControlDialogController implements Controller {
     }
     
     @NiftyEventSubscriber(id="tree-box")
-    public void treeItemSelected(final String id, final TreeItemSelectionChangedEvent<String> event) {
+    public void treeItemSelected(final String id, @Nonnull final TreeItemSelectionChangedEvent<String> event) {
       final TextField text = nifty.getCurrentScreen().findNiftyControl("selectedItemText", TextField.class);
 
       if (!event.getSelection().isEmpty()) {

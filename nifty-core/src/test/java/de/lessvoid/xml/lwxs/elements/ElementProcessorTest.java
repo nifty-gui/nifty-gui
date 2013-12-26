@@ -1,28 +1,25 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.lessvoid.xml.lwxs.Schema;
 import de.lessvoid.xml.lwxs.processor.TypeProcessorElement;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import static org.easymock.EasyMock.isA;
+import static org.easymock.classextension.EasyMock.*;
 
 public class ElementProcessorTest {
   private TypeProcessorElement elementProcessor;
-  private Schema niftyXmlSchema;
   private XmlParser xmlParserMock;
   private Type parentMock;
 
   @Before
-  public void setUp() {
-    niftyXmlSchema = new Schema(null);
+  public void setUp() throws Exception {
+    Schema niftyXmlSchema = new Schema(XmlPullParserFactory.newInstance(), null);
     parentMock = createMock(Type.class);
     elementProcessor = new TypeProcessorElement(parentMock);
     xmlParserMock = createMock(XmlParser.class);

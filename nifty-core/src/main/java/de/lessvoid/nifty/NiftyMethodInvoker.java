@@ -1,20 +1,25 @@
 package de.lessvoid.nifty;
 
-import java.lang.reflect.Method;
-import java.util.logging.Logger;
-
 import de.lessvoid.xml.tools.MethodResolver;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * A object and a method for the object.
  * @author void
  */
 public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
-  private static Logger log = Logger.getLogger(NiftyMethodInvoker.class.getName());
+  private static final Logger log = Logger.getLogger(NiftyMethodInvoker.class.getName());
 
-  private Object[] target;
-  private String methodWithName;
-  private Nifty nifty;
+  @Nullable
+  private final Object[] target;
+  @Nullable
+  private final String methodWithName;
+  private final Nifty nifty;
 
   /**
    * create null MethodInvoker.
@@ -30,10 +35,10 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
    * @param methodParam method
    * @param targetParam target
    */
-  public NiftyMethodInvoker(final Nifty nifty, final String methodParam, final Object ... targetParam) {
+  public NiftyMethodInvoker(final Nifty nifty, @Nullable final String methodParam, @Nonnull final Object ... targetParam) {
     this.nifty = nifty;
     this.methodWithName = methodParam;
-    if (targetParam == null || targetParam.length == 0) {
+    if (targetParam.length == 0) {
       this.target = null;
     } else {
       this.target = new Object[targetParam.length];
@@ -65,7 +70,11 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
     return true;
   }
 
-  public void performInvoke(final Object ... invokeParametersParam) {
+  @Override
+  public void performInvoke(@Nonnull final Object ... invokeParametersParam) {
+    if (target == null || methodWithName == null) {
+      return;
+    }
     // process all methods (first one wins)
     for (Object object : target) {
       if (object != null) {
@@ -81,7 +90,7 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
           //    2a) invokeParametersParam are given, in this case we'll try to forward them to the method
           //        if this is not possible we fall back to 2b)
           //    2b) just call the method without any parameters
-          Object methodResult = null;
+          Object methodResult;
           Object[] invokeParameters = MethodResolver.extractParameters(methodWithName);
           if (invokeParameters.length > 0) {
             // does the method supports the parameters?
@@ -91,7 +100,7 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
               methodResult = callMethod(object, method, invokeParameters);
             } else {
               log.fine("invoking method '" + methodWithName + "' (note: given invokeParameters have been ignored)");
-              methodResult = callMethod(object, method, new Object[0]);
+              methodResult = callMethod(object, method);
             }
           } else {
             // no invokeParameters encoded. this means we can call the method as is or with the invokeParametersParam
@@ -101,11 +110,11 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
                 methodResult = callMethod(object, method, invokeParametersParam);
               } else {
                 log.fine("invoking method '" + methodWithName + "' without parameters (invokeParametersParam mismatch)");
-                methodResult = callMethod(object, method, null);
+                methodResult = callMethod(object, method);
               }
             } else {
               log.fine("invoking method '" + methodWithName + "' without parameters");
-              methodResult = callMethod(object, method, null);
+              methodResult = callMethod(object, method);
             }
           }
           if (methodResult != null && (methodResult.getClass().equals(Boolean.class))) {
@@ -131,16 +140,17 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
    * @param invokeParameters parameters to use
    * @return result
    */
-  private Object callMethod(final Object targetObject, final Method method, final Object[] invokeParameters) {
+  @Nullable
+  private Object callMethod(
+      @Nonnull final Object targetObject,
+      @Nonnull final Method method,
+      @Nonnull final Object... invokeParameters) {
     try {
-      log.fine("method: " + method + "on targetObject: " + targetObject + ", parameters: " + invokeParameters);
-      if (method != null) {
-        log.fine(method.getName());
-      }
-      if (invokeParameters != null) {
-        for (Object o : invokeParameters) {
-          log.fine("parameter: " + o);
-        }
+      log.fine("method: " + method + "on targetObject: " + targetObject + ", parameters: " + Arrays.toString
+          (invokeParameters));
+      log.fine(method.getName());
+      for (Object o : invokeParameters) {
+        log.fine("parameter: " + o);
       }
       return method.invoke(targetObject, invokeParameters);
     } catch (RuntimeException e) {
@@ -154,7 +164,7 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
     }
   }
 
-  private void logException(final Throwable e) {
+  private void logException(@Nonnull final Throwable e) {
     StackTraceElement[] elements = e.getStackTrace();
     if (elements == null) {
       log.warning("stacktrace is null");
@@ -174,7 +184,7 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
    * @param method method
    * @return count of parameters the method needs
    */
-  private int getMethodParameterCount(final Method method) {
+  private int getMethodParameterCount(@Nonnull final Method method) {
     Class < ? > [] parameterTypes = method.getParameterTypes();
     return parameterTypes.length;
   }
@@ -184,8 +194,9 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
    * @param invokeParameters parameter array
    * @return string of parameter array in debug output friendly way
    */
-  private String debugParaString(final Object[] invokeParameters) {
-    StringBuffer paraStringBuffer = new StringBuffer();
+  @Nonnull
+  private String debugParaString(@Nonnull final Object... invokeParameters) {
+    StringBuilder paraStringBuffer = new StringBuilder();
     paraStringBuffer.append(invokeParameters[0]);
     for (int i = 1; i < invokeParameters.length; i++) {
       paraStringBuffer.append(", ");

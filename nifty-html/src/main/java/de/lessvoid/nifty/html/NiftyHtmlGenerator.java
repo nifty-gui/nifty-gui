@@ -1,19 +1,20 @@
 package de.lessvoid.nifty.html;
 
-import org.htmlparser.Parser;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderFont;
+import org.htmlparser.Parser;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class will take a HTML String and transforms the HTML into Nifty elements.
  * @author void
  */
 public class NiftyHtmlGenerator {
-  private Nifty nifty;
+  private final Nifty nifty;
   private String defaultFontname = "aurulent-sans-16.fnt";
   private String defaultBoldFontname = "aurulent-sans-16-bold.fnt";
   private RenderFont defaultFont;
@@ -69,7 +70,7 @@ public class NiftyHtmlGenerator {
    * @param parent parent element that all new Nifty elements will be added as child elements
    * @throws Exception in case of any error an Exception is thrown
    */
-  public void generate(final String html, final Screen screen, final Element parent) throws Exception {
+  public void generate(final String html, @Nonnull final Screen screen, @Nonnull final Element parent) throws Exception {
     removeAllChilds(parent);
 
     Parser parser = Parser.createParser(html, "ISO-8859-1");
@@ -85,7 +86,7 @@ public class NiftyHtmlGenerator {
    * Remove all child elements of the given parent element.
    * @param parent the element we want to remove all childs
    */
-  private void removeAllChilds(final Element parent) {
+  private void removeAllChilds(@Nonnull final Element parent) {
     for (int i=0; i<parent.getChildren().size(); i++) {
       parent.getChildren().get(i).markForRemoval();
     }

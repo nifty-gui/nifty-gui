@@ -2,6 +2,8 @@ package de.lessvoid.nifty.screen;
 
 import de.lessvoid.nifty.Nifty;
 
+import javax.annotation.Nonnull;
+
 /**
  * The DefaultScreenController is attached to a screen when no ScreenController was specified.
  * It does nothing at the moment.
@@ -9,17 +11,20 @@ import de.lessvoid.nifty.Nifty;
 public class DefaultScreenController implements ScreenController {
   Nifty nifty;
 
-  public void bind(final Nifty nifty, final Screen screen) {
+  @Override
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
   }
 
+  @Override
   public void onStartScreen() {
   }
 
+  @Override
   public void onEndScreen() {
   }
 
-  public void gotoScreen(final String screenId) {
+  public void gotoScreen(@Nonnull final String screenId) {
     nifty.gotoScreen(screenId);
   }
 }

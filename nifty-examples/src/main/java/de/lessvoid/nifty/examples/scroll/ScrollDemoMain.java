@@ -10,6 +10,8 @@ import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
+import javax.annotation.Nonnull;
+
 public final class ScrollDemoMain {
 
   private ScrollDemoMain() {
@@ -26,6 +28,7 @@ public final class ScrollDemoMain {
     }
   }
 
+  @Nonnull
   private static Nifty createNifty() {
     Nifty nifty = new Nifty(
         new LwjglRenderDevice(),
@@ -36,7 +39,7 @@ public final class ScrollDemoMain {
     return nifty;
   }
 
-  private static void render(final Nifty nifty) {
+  private static void render(@Nonnull final Nifty nifty) {
     LwjglInitHelper.renderLoop(nifty, null);
     LwjglInitHelper.destroy();
   }

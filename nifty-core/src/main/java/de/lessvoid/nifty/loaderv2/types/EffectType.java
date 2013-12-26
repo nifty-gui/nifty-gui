@@ -1,9 +1,5 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
 import de.lessvoid.nifty.effects.Effect;
@@ -14,76 +10,106 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class EffectType extends XmlBaseType {
-  private static Logger logger = Logger.getLogger(EffectType.class.getName());
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Logger;
+
+public class EffectType extends XmlBaseType implements Cloneable {
+  private static final Logger logger = Logger.getLogger(EffectType.class.getName());
 
   private static final boolean DEFAULT_INHERIT = false;
   private static final boolean DEFAULT_POST = false;
   private static final boolean DEFAULT_OVERLAY = false;
 
-  protected ArrayList < EffectValueType > effectValues = new ArrayList < EffectValueType > ();
+  @Nonnull
+  protected List<EffectValueType> effectValues;
+  @Nullable
   private String styleId;
 
   public EffectType() {
-  }
-
-  public EffectType(final EffectType e) {
-    super(e);
-
     effectValues = new ArrayList<EffectValueType>();
-    for (EffectValueType effectValue : e.effectValues) {
-      effectValues.add(effectValue.clone());
-    }
-    styleId = e.styleId;
   }
 
-  public EffectType clone() {
-    return new EffectType(this);
+  public EffectType(@Nonnull final Attributes attributes) {
+    super(attributes);
+    effectValues = new ArrayList<EffectValueType>();
+  }
+
+  @Nonnull
+  @Override
+  public EffectType clone() throws CloneNotSupportedException {
+    try {
+      final EffectType newObject = (EffectType) super.clone();
+
+      newObject.effectValues = new ArrayList<EffectValueType>(effectValues.size());
+      for (EffectValueType effectValue : effectValues) {
+        newObject.effectValues.add(effectValue.clone());
+      }
+
+      return newObject;
+    } catch (ClassCastException e) {
+      throw new CloneNotSupportedException("Cloning failed because the clone method created the wrong object.");
+    }
   }
 
   /**
    * This supports creating CustomControlCreator.
-   * @return
    */
+  @Nonnull
   public ControlEffectAttributes convert() {
     return new ControlEffectAttributes(getAttributes(), effectValues);
   }
 
   public void materialize(
-      final Nifty nifty,
-      final Element element,
-      final EffectEventId effectEventId,
-      final Attributes effectsTypeAttibutes,
-      final LinkedList < Object > controllers) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectEventId effectEventId,
+      @Nonnull final Attributes effectsTypeAttributes,
+      @Nonnull final List<Object> controllers) {
     Attributes effectAttributes = new Attributes(getAttributes());
-    effectAttributes.merge(effectsTypeAttibutes);
+    effectAttributes.merge(effectsTypeAttributes);
 
-    Attributes attributes = effectAttributes;
-
-    RegisterEffectType registerEffectType = getRegisteredEffectType(nifty, attributes);
+    RegisterEffectType registerEffectType = getRegisteredEffectType(nifty, effectAttributes);
     if (registerEffectType == null) {
       return;
     }
 
-    Class < ? > effectClass = registerEffectType.getEffectClass();
+    Class<?> effectClass = registerEffectType.getEffectClass();
     if (effectClass == null) {
       return;
     }
 
-    EffectProperties effectProperties = new EffectProperties(attributes.createProperties());
+    EffectProperties effectProperties = new EffectProperties(effectAttributes.createProperties());
     applyEffectValues(effectProperties);
 
-    Effect effect = createEffect(nifty, effectEventId, attributes);
-    effect.init(
-        element,
-        createEffectImpl(effectClass),
-        effectProperties,
-        nifty.getTimeProvider(),
-        controllers);
-    element.registerEffect(effectEventId, effect);
+    EffectImpl effectImpl = createEffectImpl(effectClass);
+    if (effectImpl != null) {
+      Effect effect = new Effect(
+          nifty,
+          getInherit(effectAttributes),
+          getPost(effectAttributes),
+          getOverlay(effectAttributes),
+          getAlternateEnable(effectAttributes),
+          getAlternateDisable(effectAttributes),
+          getCustomKey(effectAttributes),
+          getNeverStopRendering(effectAttributes),
+          effectEventId,
+          element,
+          effectImpl,
+          effectProperties,
+          nifty.getTimeProvider(),
+          controllers);
+      initializeEffect(effect, effectEventId);
+
+      element.registerEffect(effectEventId, effect);
+    }
   }
 
-  private RegisterEffectType getRegisteredEffectType(final Nifty nifty, final Attributes attributes) {
+  @Nullable
+  private RegisterEffectType getRegisteredEffectType(@Nonnull final Nifty nifty, @Nonnull final Attributes attributes) {
     String name = getEffectName(attributes);
     RegisterEffectType registerEffectType = nifty.resolveRegisteredEffect(name);
     if (registerEffectType == null) {
@@ -93,50 +119,38 @@ public class EffectType extends XmlBaseType {
     return registerEffectType;
   }
 
-  private Effect createEffect(final Nifty nifty, final EffectEventId effectEventId, final Attributes attributes) {
-    Effect effect = new Effect(
-        nifty,
-        getInherit(attributes),
-        getPost(attributes),
-        getOverlay(attributes),
-        getAlternateEnable(attributes),
-        getAlternateDisable(attributes),
-        getCustomKey(attributes),
-        getNeverStopRendering(attributes),
-        effectEventId);
-    initializeEffect(effect, effectEventId);
-    return effect;
-  }
-
-  private boolean getInherit(final Attributes attributes) {
+  private boolean getInherit(@Nonnull final Attributes attributes) {
     return attributes.getAsBoolean("inherit", DEFAULT_INHERIT);
   }
 
-  private boolean getPost(final Attributes attributes) {
+  private boolean getPost(@Nonnull final Attributes attributes) {
     return attributes.getAsBoolean("post", DEFAULT_POST);
   }
 
-  private boolean getOverlay(final Attributes attributes) {
+  private boolean getOverlay(@Nonnull final Attributes attributes) {
     return attributes.getAsBoolean("overlay", DEFAULT_OVERLAY);
   }
 
-  private String getAlternateEnable(final Attributes attributes) {
+  @Nullable
+  private String getAlternateEnable(@Nonnull final Attributes attributes) {
     return attributes.get("alternateEnable");
   }
 
-  private String getAlternateDisable(final Attributes attributes) {
+  @Nullable
+  private String getAlternateDisable(@Nonnull final Attributes attributes) {
     return attributes.get("alternateDisable");
   }
 
-  private String getCustomKey(final Attributes attributes) {
+  @Nullable
+  private String getCustomKey(@Nonnull final Attributes attributes) {
     return attributes.get("customKey");
   }
 
-  private boolean getNeverStopRendering(final Attributes attributes) {
+  private boolean getNeverStopRendering(@Nonnull final Attributes attributes) {
     return attributes.getAsBoolean("neverStopRendering", false);
   }
 
-  protected void initializeEffect(final Effect effect, final EffectEventId effectEventId) {
+  protected void initializeEffect(@Nonnull final Effect effect, final EffectEventId effectEventId) {
     if (EffectEventId.onFocus.equals(effectEventId) ||
         EffectEventId.onActive.equals(effectEventId) ||
         EffectEventId.onEnabled.equals(effectEventId) ||
@@ -145,7 +159,8 @@ public class EffectType extends XmlBaseType {
     }
   }
 
-  private EffectImpl createEffectImpl(final Class < ? > effectClass) {
+  @Nullable
+  private EffectImpl createEffectImpl(@Nonnull final Class<?> effectClass) {
     try {
       if (EffectImpl.class.isAssignableFrom(effectClass)) {
         return (EffectImpl) effectClass.newInstance();
@@ -161,11 +176,12 @@ public class EffectType extends XmlBaseType {
     return null;
   }
 
-  private String getEffectName(final Attributes attributes) {
+  @Nullable
+  private String getEffectName(@Nonnull final Attributes attributes) {
     return attributes.get("name");
   }
 
-  public void resolveParameters(final Attributes src) {
+  public void resolveParameters(@Nonnull final Attributes src) {
     getAttributes().resolveParameters(src);
 
     for (EffectValueType e : effectValues) {
@@ -173,26 +189,33 @@ public class EffectType extends XmlBaseType {
     }
   }
 
-  public void addValue(final EffectValueType elmentValueType) {
-	  effectValues.add(elmentValueType);
+  public void addValue(@Nonnull final EffectValueType elementValueType) {
+    effectValues.add(elementValueType);
   }
 
-  void applyEffectValues(final EffectProperties effectProperties) {
+  public void addValues(@Nonnull final Collection<EffectValueType> effectValueTypes) {
+    effectValues.addAll(effectValueTypes);
+  }
+
+  void applyEffectValues(@Nonnull final EffectProperties effectProperties) {
     if (!effectValues.isEmpty()) {
       for (EffectValueType effectValueType : effectValues) {
         effectProperties.addEffectValue(effectValueType.getAttributes());
       }
       if (effectProperties.isTimeInterpolator()) {
         LinearInterpolator interpolator = effectProperties.getInterpolator();
-        effectProperties.setProperty("length", String.valueOf((long)interpolator.getMaxX()));
+        if (interpolator != null) {
+          effectProperties.setProperty("length", String.valueOf((long) interpolator.getMaxX()));
+        }
       }
     }
   }
 
-  public void setStyleId(final String styleId) {
+  public void setStyleId(@Nullable final String styleId) {
     this.styleId = styleId;
   }
 
+  @Nullable
   public String getStyleId() {
     return styleId;
   }

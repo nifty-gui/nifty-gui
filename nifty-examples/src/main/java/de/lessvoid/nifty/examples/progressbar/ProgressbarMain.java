@@ -1,13 +1,13 @@
 package de.lessvoid.nifty.examples.progressbar;
 
-import java.util.Date;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.examples.LwjglInitHelper.RenderLoopCallback;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+
+import java.util.Date;
 
 public class ProgressbarMain {
 

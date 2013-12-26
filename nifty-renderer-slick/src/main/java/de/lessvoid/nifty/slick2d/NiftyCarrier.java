@@ -8,6 +8,9 @@ import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * As the name suggest, this class carries the instance of the Nifty-GUI that is used around.
  *
@@ -17,11 +20,13 @@ public final class NiftyCarrier {
   /**
    * The instance of the Nifty-GUI that is carried by this carrier.
    */
+  @Nullable
   private Nifty nifty;
 
   /**
    * The relay input system that is used in case the target input system is switched.
    */
+  @Nullable
   private final RelaySlickInputSystem relayInputSystem;
 
   /**
@@ -52,6 +57,7 @@ public final class NiftyCarrier {
    *
    * @return the instance of the Nifty-GUI
    */
+  @Nullable
   public Nifty getNifty() {
     return nifty;
   }
@@ -69,16 +75,16 @@ public final class NiftyCarrier {
    * Initialize the Nifty-GUI.
    *
    * @param renderDevice the render device to use for the GUI
-   * @param soundDevice the sound device to use for the GUI
-   * @param inputSystem the input system to use for the GUI
+   * @param soundDevice  the sound device to use for the GUI
+   * @param inputSystem  the input system to use for the GUI
    * @param timeProvider the time provider to use for the GUI
    * @throws IllegalStateException in case this function was already called
    */
   public void initNifty(
-      final SlickRenderDevice renderDevice,
-      final SlickSoundDevice soundDevice,
+      @Nonnull final SlickRenderDevice renderDevice,
+      @Nonnull final SlickSoundDevice soundDevice,
       final SlickInputSystem inputSystem,
-      final TimeProvider timeProvider) {
+      @Nonnull final TimeProvider timeProvider) {
     if (isInitialized()) {
       throw new IllegalStateException("The Nifty-GUI was already initialized. Its illegal to do so twice.");
     }

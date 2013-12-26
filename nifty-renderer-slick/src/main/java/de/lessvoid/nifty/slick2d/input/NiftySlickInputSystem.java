@@ -3,6 +3,9 @@ package de.lessvoid.nifty.slick2d.input;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.slick2d.input.events.InputEvent;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * This is the input system that forwards all events to a Nifty input consumer.
  *
@@ -12,6 +15,7 @@ public final class NiftySlickInputSystem extends AbstractSlickInputSystem implem
   /**
    * The consumer that is supposed to receive any input events that are not used by the Nifty GUI.
    */
+  @Nullable
   private final NiftyInputConsumer consumer;
 
   /**
@@ -20,7 +24,7 @@ public final class NiftySlickInputSystem extends AbstractSlickInputSystem implem
    * @param targetConsumer the consumer that is supposed to receive any unused input events
    * @throws IllegalArgumentException in case the targetConsumer parameter is {@code null}
    */
-  public NiftySlickInputSystem(final NiftyInputConsumer targetConsumer) {
+  public NiftySlickInputSystem(@Nullable final NiftyInputConsumer targetConsumer) {
     if (targetConsumer == null) {
       throw new IllegalArgumentException("The target consumer must not be NULL.");
     }
@@ -31,7 +35,7 @@ public final class NiftySlickInputSystem extends AbstractSlickInputSystem implem
    * Send the event to the defined consumer.
    */
   @Override
-  protected void handleInputEvent(final InputEvent event) {
+  protected void handleInputEvent(@Nonnull final InputEvent event) {
     event.sendToNifty(consumer);
   }
 

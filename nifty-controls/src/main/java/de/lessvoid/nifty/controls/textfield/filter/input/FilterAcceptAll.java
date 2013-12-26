@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.controls.textfield.filter.input;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is the implicit default input filter that simply allows all input operations.
  *
@@ -12,7 +14,7 @@ public class FilterAcceptAll implements TextFieldInputFilter {
   }
 
   @Override
-  public boolean acceptInput(final int index, final CharSequence newChars) {
+  public boolean acceptInput(final int index, @Nonnull final CharSequence newChars) {
     return true;
   }
 }

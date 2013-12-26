@@ -10,6 +10,9 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class TextTyping implements EffectImpl {
   // length of the effect in ms
   private int effectLength;
@@ -24,27 +27,33 @@ public class TextTyping implements EffectImpl {
   private float stepTime;
 
   // the original text
-  private String originalText;
+  @Nonnull
+  private String originalText = "";
 
   // the text renderer (for easy access)
+  @Nullable
   private TextRenderer textRenderer;
 
   @Override
-  public void activate(Nifty nifty, Element element, EffectProperties parameter) {
+  public void activate(@Nonnull Nifty nifty, @Nonnull Element element, @Nonnull EffectProperties parameter) {
     textRenderer = element.getRenderer(TextRenderer.class);
-    originalText = textRenderer.getOriginalText();
+    if (textRenderer == null) {
+      originalText = "";
+    } else {
+      originalText = textRenderer.getOriginalText();
+    }
 
     effectLength = Integer.valueOf(parameter.getProperty("length", "1000"));
     startSize = Float.valueOf(parameter.getProperty("startSize", "5.0"));
     endSize = Float.valueOf(parameter.getProperty("endSize", "1.0"));
     stepTime = effectLength / originalText.length();
 
-    updateText("");
+    updateText(null);
   }
 
   @Override
-  public void execute(Element element, float effectTime, Falloff falloff, NiftyRenderEngine r) {
-    int currentIndex = (int)(originalText.length() * effectTime);
+  public void execute(@Nonnull Element element, float effectTime, Falloff falloff, @Nonnull NiftyRenderEngine r) {
+    int currentIndex = (int) (originalText.length() * effectTime);
     String currentText = originalText.substring(0, currentIndex);
 
     if (currentIndex < originalText.length()) {
@@ -76,7 +85,7 @@ public class TextTyping implements EffectImpl {
         float originalHeight = font.getHeight();
         float sizedHeight = font.getHeight() * charSize;
 
-        r.moveTo(- (sizedWidth - originalWidth) / 2, - (sizedHeight - originalHeight) / 2);
+        r.moveTo(-(sizedWidth - originalWidth) / 2, -(sizedHeight - originalHeight) / 2);
       }
 
       r.renderText(nextChar, element.getX() + textWidth, element.getY(), -1, -1, Color.WHITE);
@@ -90,7 +99,9 @@ public class TextTyping implements EffectImpl {
   public void deactivate() {
   }
 
-  private void updateText(final String currentText) {
-    textRenderer.setText(currentText);
+  private void updateText(@Nullable final String currentText) {
+    if (textRenderer != null) {
+      textRenderer.setText(currentText);
+    }
   }
 }

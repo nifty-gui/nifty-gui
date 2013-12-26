@@ -1,22 +1,27 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.xml.xpp3.Attributes;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
 public class EffectPropertiesValues {
-  private List < Attributes > values = new ArrayList < Attributes > ();
+  @Nonnull
+  private final List<Attributes> values = new ArrayList<Attributes>();
 
   public void add(final Attributes p) {
     values.add(p);
   }
 
-  public List < Attributes > getValues() {
+  @Nonnull
+  public List<Attributes> getValues() {
     return values;
   }
 
+  @Nullable
   public LinearInterpolator toLinearInterpolator() {
     if (values.isEmpty()) {
       return null;
@@ -26,8 +31,8 @@ public class EffectPropertiesValues {
     }
     LinearInterpolator interpolator = new LinearInterpolator();
     for (Attributes p : values) {
-        interpolator.addPoint(p.getAsFloat("time"), p.getAsFloat("value"));
-      }
+      interpolator.addPoint(p.getAsFloat("time"), p.getAsFloat("value"));
+    }
     return interpolator;
   }
 
@@ -41,5 +46,5 @@ public class EffectPropertiesValues {
       }
     }
     return false;
-  }      
+  }
 }

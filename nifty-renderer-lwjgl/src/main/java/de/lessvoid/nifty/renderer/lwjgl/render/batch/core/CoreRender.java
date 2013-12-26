@@ -1,13 +1,11 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
-import static org.lwjgl.opengl.GL11.GL_POINTS;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLE_STRIP;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 
 /**
  * Simple helper methods to render vertex arrays.
+ *
  * @author void
  */
 public class CoreRender {
@@ -37,7 +35,7 @@ public class CoreRender {
    * Render the currently active VAO using triangle strips with the given
    * number of vertices AND do that primCount times.
    *
-   * @param count number of vertices to render as triangle strips per primitve
+   * @param count     number of vertices to render as triangle strips per primitve
    * @param primCount number of primitives to render
    */
   public static void renderTriangleStripInstances(final int count, int primCount) {
@@ -102,7 +100,7 @@ public class CoreRender {
    * Render the currently active VAO using points with the given
    * number of vertices AND do that primCount times.
    *
-   * @param count number of vertices to render as points per primitive
+   * @param count     number of vertices to render as points per primitive
    * @param primCount number of primitives to render
    */
   public static void renderPointsInstances(final int count, int primCount) {

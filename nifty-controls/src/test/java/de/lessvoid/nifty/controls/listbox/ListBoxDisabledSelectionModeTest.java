@@ -1,11 +1,8 @@
-package de.lessvoid.nifty.controls;
-
-import static org.junit.Assert.assertTrue;
+package de.lessvoid.nifty.controls.listbox;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.listbox.ListBoxSelectionModeDisabled;
-import de.lessvoid.nifty.controls.listbox.TestItem;
+import static org.junit.Assert.assertTrue;
 
 
 public class ListBoxDisabledSelectionModeTest {

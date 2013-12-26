@@ -4,13 +4,15 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
+import javax.annotation.Nonnull;
+
 public class ElementInteractionClickHandler {
   private static final long REPEATED_CLICK_START_TIME = 100;
   private static final long REPEATED_CLICK_TIME = 100;
 
-  private Nifty nifty;
-  private Element element;
-  private MouseClickMethods mouseMethods;
+  private final Nifty nifty;
+  private final Element element;
+  private final MouseClickMethods mouseMethods;
   private boolean isMouseDown;
   private boolean onClickRepeatEnabled;
   private long mouseDownTime;
@@ -18,7 +20,10 @@ public class ElementInteractionClickHandler {
   private int lastMouseX;
   private int lastMouseY;
 
-  public ElementInteractionClickHandler(final Nifty nifty, final Element element, final MouseClickMethods mouseMethods) {
+  public ElementInteractionClickHandler(
+      final Nifty nifty,
+      final Element element,
+      final MouseClickMethods mouseMethods) {
     this.nifty = nifty;
     this.element = element;
     this.mouseMethods = mouseMethods;
@@ -38,7 +43,7 @@ public class ElementInteractionClickHandler {
   }
 
   public boolean process(
-      final NiftyMouseInputEvent mouseEvent,
+      @Nonnull final NiftyMouseInputEvent mouseEvent,
       final boolean isButtonDown,
       final boolean isInitialButtonDown,
       final boolean isButtonRelease,
@@ -100,7 +105,11 @@ public class ElementInteractionClickHandler {
     mouseMethods.onInitialClick();
   }
 
-  private boolean onClickMouse(final String elementId, final NiftyMouseInputEvent inputEvent, final boolean canHandleInteraction, final String onClickAlternateKey) {
+  private boolean onClickMouse(
+      final String elementId,
+      @Nonnull final NiftyMouseInputEvent inputEvent,
+      final boolean canHandleInteraction,
+      final String onClickAlternateKey) {
     if (canHandleInteraction) {
       lastMouseX = inputEvent.getMouseX();
       lastMouseY = inputEvent.getMouseY();
@@ -110,7 +119,7 @@ public class ElementInteractionClickHandler {
     return false;
   }
 
-  private boolean onClickMouseMove(final NiftyMouseInputEvent inputEvent) {
+  private boolean onClickMouseMove(@Nonnull final NiftyMouseInputEvent inputEvent) {
     if (lastMouseX == inputEvent.getMouseX() &&
         lastMouseY == inputEvent.getMouseY()) {
       return false;
@@ -122,11 +131,11 @@ public class ElementInteractionClickHandler {
     return mouseMethods.onClickMouseMove(nifty, inputEvent);
   }
 
-  private boolean onMouseRelease(final NiftyMouseInputEvent mouseEvent) {
+  private boolean onMouseRelease(@Nonnull final NiftyMouseInputEvent mouseEvent) {
     return mouseMethods.onMouseRelease(nifty, mouseEvent);
   }
 
-  public void activate(final Nifty nifty) {
+  public void activate(@Nonnull final Nifty nifty) {
     mouseMethods.onActivate(nifty);
   }
 

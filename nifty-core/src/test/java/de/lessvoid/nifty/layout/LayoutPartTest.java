@@ -25,12 +25,12 @@ public class LayoutPartTest extends TestCase {
   public void testCopy() {
     Box box = new Box(100, 200, 300, 400);
     BoxConstraints constraints = new BoxConstraints(
-      new SizeValue("100px"),
-      new SizeValue("200px"),
-      new SizeValue("300px"),
-      new SizeValue("400px"),
-      HorizontalAlign.right,
-      VerticalAlign.bottom);
+        new SizeValue("100px"),
+        new SizeValue("200px"),
+        new SizeValue("300px"),
+        new SizeValue("400px"),
+        HorizontalAlign.right,
+        VerticalAlign.bottom);
 
     LayoutPart part = new LayoutPart(box, constraints);
     LayoutPart copy = new LayoutPart(part);

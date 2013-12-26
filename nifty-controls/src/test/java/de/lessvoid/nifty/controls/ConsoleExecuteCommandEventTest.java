@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.controls;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class ConsoleExecuteCommandEventTest {
@@ -58,7 +58,8 @@ public class ConsoleExecuteCommandEventTest {
 
   @Test
   public void testMultipleStringParameterCommandLine() {
-    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null, "exec 'hello escaped whitespace' 42 43 \"hello quoted parameter\"");
+    ConsoleExecuteCommandEvent command = new ConsoleExecuteCommandEvent(null, "exec 'hello escaped whitespace' 42 43 " +
+        "\"hello quoted parameter\"");
     assertEquals("exec 'hello escaped whitespace' 42 43 \"hello quoted parameter\"", command.getCommandLine());
     assertEquals("exec", command.getCommand());
     assertEquals(4, command.getArgumentCount());

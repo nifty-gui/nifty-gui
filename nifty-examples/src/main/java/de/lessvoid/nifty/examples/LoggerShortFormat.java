@@ -1,11 +1,14 @@
 package de.lessvoid.nifty.examples;
 
+import javax.annotation.Nonnull;
 import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 
 public class LoggerShortFormat extends java.util.logging.Formatter {
-  public String format(final LogRecord record) {
+  @Override
+  @Nonnull
+  public String format(@Nonnull final LogRecord record) {
     return record.getMillis() + " " +
         record.getLevel() + " [" +
         record.getSourceClassName() + "] " +

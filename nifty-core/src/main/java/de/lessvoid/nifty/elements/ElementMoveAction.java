@@ -1,42 +1,50 @@
 package de.lessvoid.nifty.elements;
 
-import de.lessvoid.nifty.screen.Screen;
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public class ElementMoveAction implements Action {
-  private Element destinationElement;
+  @Nonnull
+  private final Element movedElement;
+  @Nonnull
+  private final Element destinationElement;
 
-  public ElementMoveAction(final Element destinationElement) {
+  public ElementMoveAction(
+      @Nonnull final Element movedElement,
+      @Nonnull final Element destinationElement) {
+    this.movedElement = movedElement;
     this.destinationElement = destinationElement;
   }
 
-  public void perform(final Screen screen, final Element element) {
-    Element parent = element.getParent();
-    if (parent != null) {
-      parent.internalRemoveElement(element);
+  @Override
+  public void perform() {
+    if (movedElement.hasParent()) {
+      movedElement.getParent().internalRemoveElement(movedElement);
     }
-    element.setParent(destinationElement);
-    destinationElement.addChild(element);
+    movedElement.setParent(destinationElement);
+    destinationElement.addChild(movedElement);
 
-    // now we'll need to add elements back to the focushandler
-    addToFocusHandler(element);
+    // now we'll need to add elements back to the focus handler
+    addToFocusHandler(movedElement);
 
-    if (parent != null) {
-      parent.layoutElements();
-    }
+    movedElement.getParent().layoutElements();
     destinationElement.layoutElements();
   }
 
-  private void addToFocusHandler(final Element element) {
+  private void addToFocusHandler(@Nonnull final Element element) {
     if (element.isFocusable()) {
-      // currently add the element to the end of the focushandler
+      // currently add the element to the end of the focus handler
       //
       // this is not quite right but at the moment I don't have any idea on how
-      // to find the right spot in the focushandler to insert the element into
+      // to find the right spot in the focus handler to insert the element into
       // (it should really be to spot where it has been removed from)
       element.getFocusHandler().addElement(element);
     }
-    for (int i=0; i<element.getChildren().size(); i++) {
-      addToFocusHandler(element.getChildren().get(i));
+
+    final List<Element> children = element.getChildren();
+    final int size = children.size();
+    for (int i = 0; i < size; i++) {
+      addToFocusHandler(children.get(i));
     }
   }
 }

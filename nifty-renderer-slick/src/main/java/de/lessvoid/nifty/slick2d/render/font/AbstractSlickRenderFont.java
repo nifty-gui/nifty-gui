@@ -1,12 +1,14 @@
 package de.lessvoid.nifty.slick2d.render.font;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import de.lessvoid.nifty.slick2d.render.SlickRenderUtils;
 import de.lessvoid.nifty.tools.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This abstract slick render font implements the functions all the other font implementations will share.
@@ -23,11 +25,13 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
    * This instance of the slick color is used to convert the color of Nifty to slick without creating new objects over
    * and over again.
    */
+  @Nonnull
   private final org.newdawn.slick.Color convertColor;
 
   /**
    * The font that is used.
    */
+  @Nonnull
   private final Font internalFont;
 
   /**
@@ -36,10 +40,7 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
    * @param font the font that supplies the render font with information
    * @throws SlickLoadFontException in case loading the font fails
    */
-  protected AbstractSlickRenderFont(final Font font) throws SlickLoadFontException {
-    if (font == null) {
-      throw new SlickLoadFontException("Font to load was NULL.");
-    }
+  protected AbstractSlickRenderFont(@Nonnull final Font font) throws SlickLoadFontException {
     internalFont = font;
     convertColor = new org.newdawn.slick.Color(0.0f, 0.0f, 0.0f, 0.0f);
     colorChangePattern = Pattern.compile("\\\\(#\\p{XDigit}{3,8})#"); //NON-NLS
@@ -76,19 +77,19 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
   }
 
   @Override
-  public final int getWidth(final String text) {
+  public final int getWidth(@Nonnull final String text) {
     return internalFont.getWidth(getCleanedString(text));
   }
 
   @Override
-  public final int getWidth(final String text, final float size) {
+  public final int getWidth(@Nonnull final String text, final float size) {
     return Math.round(getWidth(text) * size);
   }
 
   @Override
   public final void renderText(
-      final Graphics g,
-      final String text,
+      @Nonnull final Graphics g,
+      @Nonnull final String text,
       final int locX,
       final int locY,
       final Color color,
@@ -107,7 +108,6 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
 
     Color currentColor = color;
     int currentX = locX;
-
 
     int lastProcessedChar = -1;
 
@@ -154,20 +154,20 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
   /**
    * This function contains the actual text rendering implementation.
    *
-   * @param g the graphics object used to drawn
-   * @param text the text to draw
-   * @param locX the x coordinate of the screen location to drawn on
-   * @param locY the y coordinate of the screen location to drawn on
+   * @param g     the graphics object used to drawn
+   * @param text  the text to draw
+   * @param locX  the x coordinate of the screen location to drawn on
+   * @param locY  the y coordinate of the screen location to drawn on
    * @param color the color of the text
    * @param sizeX the scaling factor along the x axis
    * @param sizeY the scaling factor along the y axis
    */
   private void renderTextImpl(
-      final Graphics g,
+      @Nonnull final Graphics g,
       final String text,
       final int locX,
       final int locY,
-      final Color color,
+      @Nullable final Color color,
       final float sizeX,
       final float sizeY) {
 

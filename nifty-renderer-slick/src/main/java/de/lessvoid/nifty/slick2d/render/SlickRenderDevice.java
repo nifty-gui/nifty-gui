@@ -1,12 +1,5 @@
 package de.lessvoid.nifty.slick2d.render;
 
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.opengl.renderer.Renderer;
-
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.slick2d.loaders.SlickMouseCursorLoaders;
 import de.lessvoid.nifty.slick2d.loaders.SlickRenderFontLoaders;
@@ -20,6 +13,15 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.opengl.renderer.Renderer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The render device that takes care for rendering the Nifty GUI inside of Slick.
@@ -30,6 +32,7 @@ public final class SlickRenderDevice implements RenderDevice {
   /**
    * The mouse cursor that is currently active.
    */
+  @Nullable
   private SlickMouseCursor activeMouseCursor = null;
 
   /**
@@ -40,12 +43,14 @@ public final class SlickRenderDevice implements RenderDevice {
   /**
    * The shape filling instance that is used to render the 4 colored rectangles.
    */
+  @Nullable
   private SlickQuadFill quadFill = null;
 
   /**
    * This temporary slick color is just used to avoid the need to create Slick Color instances again and again for a
    * short time while rendering.
    */
+  @Nonnull
   private final org.newdawn.slick.Color tempSlickColor;
 
   /**
@@ -79,12 +84,12 @@ public final class SlickRenderDevice implements RenderDevice {
    * Create a new font that can be rendered on the screen.
    */
   @Override
-  public RenderFont createFont(final String filename) {
+  public RenderFont createFont(@Nonnull final String filename) {
     return SlickRenderFontLoaders.getInstance().loadFont(gameContainer.getGraphics(), filename);
   }
 
   @Override
-  public RenderImage createImage(final String filename, final boolean filterLinear) {
+  public RenderImage createImage(@Nonnull final String filename, final boolean filterLinear) {
     return SlickRenderImageLoaders.getInstance().loadImage(filename, filterLinear);
   }
 
@@ -92,7 +97,7 @@ public final class SlickRenderDevice implements RenderDevice {
    * Create a new mouse cursor.
    */
   @Override
-  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) {
+  public MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY) {
     return SlickMouseCursorLoaders.getInstance().loadCursor(filename, hotspotX, hotspotY);
   }
 
@@ -127,7 +132,7 @@ public final class SlickRenderDevice implements RenderDevice {
    * Enable the mouse cursor.
    */
   @Override
-  public void enableMouseCursor(final MouseCursor mouseCursor) {
+  public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
     if (!(mouseCursor instanceof SlickMouseCursor)) {
       throw new IllegalArgumentException("Invalid mouse cursor implementation.");
     }
@@ -168,11 +173,11 @@ public final class SlickRenderDevice implements RenderDevice {
    */
   @Override
   public void renderFont(
-      final RenderFont font,
-      final String text,
+      @Nonnull final RenderFont font,
+      @Nonnull final String text,
       final int x,
       final int y,
-      final Color color,
+      @Nonnull final Color color,
       final float fontSizeX,
       final float fontSizeY) {
 
@@ -189,12 +194,12 @@ public final class SlickRenderDevice implements RenderDevice {
    */
   @Override
   public void renderImage(
-      final RenderImage image,
+      @Nonnull final RenderImage image,
       final int x,
       final int y,
       final int width,
       final int height,
-      final Color color,
+      @Nonnull final Color color,
       final float scale) {
 
     if (!(image instanceof SlickRenderImage)) {
@@ -210,7 +215,7 @@ public final class SlickRenderDevice implements RenderDevice {
    */
   @Override
   public void renderImage(
-      final RenderImage image,
+      @Nonnull final RenderImage image,
       final int x,
       final int y,
       final int w,
@@ -219,7 +224,7 @@ public final class SlickRenderDevice implements RenderDevice {
       final int srcY,
       final int srcW,
       final int srcH,
-      final Color color,
+      @Nonnull final Color color,
       final float scale,
       final int centerX,
       final int centerY) {
@@ -237,7 +242,7 @@ public final class SlickRenderDevice implements RenderDevice {
    * Render a rectangle with a single color.
    */
   @Override
-  public void renderQuad(final int x, final int y, final int width, final int height, final Color color) {
+  public void renderQuad(final int x, final int y, final int width, final int height, @Nonnull final Color color) {
     gameContainer.getGraphics().setColor(SlickRenderUtils.convertColorNiftySlick(color, tempSlickColor));
     gameContainer.getGraphics().fillRect(x, y, width, height);
   }
@@ -251,10 +256,10 @@ public final class SlickRenderDevice implements RenderDevice {
       final int y,
       final int width,
       final int height,
-      final Color topLeft,
-      final Color topRight,
-      final Color bottomRight,
-      final Color bottomLeft) {
+      @Nonnull final Color topLeft,
+      @Nonnull final Color topRight,
+      @Nonnull final Color bottomRight,
+      @Nonnull final Color bottomLeft) {
 
     if (quadFill == null) {
       quadFill = new SlickQuadFill(topLeft, topRight, bottomLeft, bottomRight);
@@ -270,7 +275,7 @@ public final class SlickRenderDevice implements RenderDevice {
    * Set the blending mode that is used when rendering on the screen.
    */
   @Override
-  public void setBlendMode(final BlendMode renderMode) {
+  public void setBlendMode(@Nonnull final BlendMode renderMode) {
     final Graphics g = gameContainer.getGraphics();
 
     if (renderMode == BlendMode.BLEND) {
@@ -282,7 +287,7 @@ public final class SlickRenderDevice implements RenderDevice {
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     // resource loader is not used
   }
 }

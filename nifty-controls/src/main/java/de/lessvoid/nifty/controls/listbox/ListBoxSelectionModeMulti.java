@@ -1,16 +1,19 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A multiple selection mode for a Nifty ListBox. You can select multiple items.
  * Selecting a new one will add to any previous selected items.
- * @author void
+ *
  * @param <T>
+ * @author void
  */
-public class ListBoxSelectionModeMulti<T> implements ListBoxSelectionMode<T> {
-  private List<T> selection = new ArrayList<T>();
+class ListBoxSelectionModeMulti<T> implements ListBoxSelectionMode<T> {
+  @Nonnull
+  private final List<T> selection = new ArrayList<T>();
   private boolean requiresSelection = false;
 
   @Override
@@ -18,13 +21,14 @@ public class ListBoxSelectionModeMulti<T> implements ListBoxSelectionMode<T> {
     selection.clear();
   }
 
+  @Nonnull
   @Override
   public List<T> getSelection() {
     return new ArrayList<T>(selection);
   }
 
   @Override
-  public void remove(final T item) {
+  public void remove(@Nonnull final T item) {
     if (requiresSelection && selection.size() < 2) {
       return;
     }
@@ -34,14 +38,14 @@ public class ListBoxSelectionModeMulti<T> implements ListBoxSelectionMode<T> {
   }
 
   @Override
-  public void removeForced(final T item) {
+  public void removeForced(@Nonnull final T item) {
     if (isPartOfSelection(item)) {
       removeFromSelection(item);
     }
   }
 
   @Override
-  public void add(final T item) {
+  public void add(@Nonnull final T item) {
     selection.add(item);
   }
 

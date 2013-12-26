@@ -1,13 +1,13 @@
 package de.lessvoid.nifty.examples.slick2d.resolution;
 
+import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-
-import java.util.*;
-
-import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * This is the resolution controller that is used for the Slick2D demo. For the lack of the required functions in
@@ -27,6 +27,7 @@ public class ResolutionControlSlick implements ResolutionControl<DisplayMode> {
     return Display.getDisplayMode();
   }
 
+  @Nonnull
   @Override
   public Collection<DisplayMode> getResolutions() {
     try {
@@ -36,7 +37,7 @@ public class ResolutionControlSlick implements ResolutionControl<DisplayMode> {
       DisplayMode[] modes = Display.getAvailableDisplayModes();
       for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
-        if ((mode.getBitsPerPixel() == 32) && ((currentMode.getFrequency() == 0) || (mode.getFrequency() == 
+        if ((mode.getBitsPerPixel() == 32) && ((currentMode.getFrequency() == 0) || (mode.getFrequency() ==
             currentMode.getFrequency()))) {
           sorted.add(mode);
         }
@@ -44,12 +45,12 @@ public class ResolutionControlSlick implements ResolutionControl<DisplayMode> {
 
       Collections.sort(sorted, new Comparator<DisplayMode>() {
         @Override
-        public int compare(DisplayMode o1, DisplayMode o2) {
-          int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(Integer.valueOf(o2.getWidth()));
+        public int compare(@Nonnull DisplayMode o1, @Nonnull DisplayMode o2) {
+          int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(o2.getWidth());
           if (widthCompare != 0) {
             return widthCompare;
           }
-          int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(Integer.valueOf(o2.getHeight()));
+          int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(o2.getHeight());
           if (heightCompare != 0) {
             return heightCompare;
           }
@@ -74,7 +75,7 @@ public class ResolutionControlSlick implements ResolutionControl<DisplayMode> {
   }
 
   @Override
-  public void setResolution(DisplayMode newResolution) {
+  public void setResolution(@Nonnull DisplayMode newResolution) {
     try {
       slickGameContainer.setDisplayMode(newResolution.getWidth(), newResolution.getHeight(), false);
     } catch (SlickException e) {

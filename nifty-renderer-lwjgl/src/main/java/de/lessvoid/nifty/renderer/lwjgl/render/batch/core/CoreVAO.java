@@ -5,12 +5,11 @@ import static org.lwjgl.opengl.ARBInstancedArrays.glVertexAttribDivisorARB;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
  * A Vertex Array Object (VAO).
+ *
  * @author void
  */
 public class CoreVAO {
@@ -50,9 +49,9 @@ public class CoreVAO {
    * Configure the vertex attribute with the given data. The type of the data will be
    * GL_FLOAT.
    *
-   * @param index the index of the vertex attribute to modify
-   * @param size the size of the data for this vertex attribute
-   *        (the number of GL_FLOAT to use)
+   * @param index  the index of the vertex attribute to modify
+   * @param size   the size of the data for this vertex attribute
+   *               (the number of GL_FLOAT to use)
    * @param stride the stride between the data
    * @param offset the offset of the data
    */
@@ -67,15 +66,20 @@ public class CoreVAO {
    * GL_FLOAT. This will additionally call glVertexAttribDivisorARB to change the
    * frequency this data will be sent.
    *
-   * @param index the index of the vertex attribute to modify
-   * @param size the size of the data for this vertex attribute
-   *        (the number of GL_FLOAT to use)
-   * @param stride the stride between the data
-   * @param offset the offset of the data
+   * @param index   the index of the vertex attribute to modify
+   * @param size    the size of the data for this vertex attribute
+   *                (the number of GL_FLOAT to use)
+   * @param stride  the stride between the data
+   * @param offset  the offset of the data
    * @param divisor Specify the number of instances that will pass between updates of the generic attribute at slot
-   *        index.
+   *                index.
    */
-  public void enableVertexAttributeDivisorf(final int index, final int size, final int stride, final int offset, final int divisor) {
+  public void enableVertexAttributeDivisorf(
+      final int index,
+      final int size,
+      final int stride,
+      final int offset,
+      final int divisor) {
     glVertexAttribPointer(index, size, GL_FLOAT, false, stride * 4, offset * 4);
     glVertexAttribDivisorARB(index, divisor);
     glEnableVertexAttribArray(index);

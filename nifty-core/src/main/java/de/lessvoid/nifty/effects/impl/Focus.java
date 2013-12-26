@@ -7,18 +7,29 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TargetElementResolver;
+
+import javax.annotation.Nonnull;
 
 /**
  * focus on hover.
+ *
  * @author void
  */
 public class Focus implements EffectImpl {
-  private Element targetElement;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
+    Screen screen = nifty.getCurrentScreen();
+    if (screen == null) {
+      return;
+    }
     TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
-    targetElement = resolver.resolve(parameter.getProperty("targetElement"));
+    Element targetElement = resolver.resolve(parameter.getProperty("targetElement"));
 
     if (targetElement != null) {
       targetElement.setFocus();
@@ -27,13 +38,15 @@ public class Focus implements EffectImpl {
     }
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
   }
 
+  @Override
   public void deactivate() {
   }
 }

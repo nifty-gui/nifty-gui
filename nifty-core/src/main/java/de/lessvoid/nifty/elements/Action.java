@@ -1,7 +1,11 @@
 package de.lessvoid.nifty.elements;
 
-import de.lessvoid.nifty.screen.Screen;
-
+/**
+ * This is the interface to a action performed during a specific event.
+ *
+ * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ */
 public interface Action {
-  void perform(Screen screen, Element element);
+  void perform();
 }

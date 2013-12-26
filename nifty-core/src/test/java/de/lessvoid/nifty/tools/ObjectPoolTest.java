@@ -1,31 +1,81 @@
 package de.lessvoid.nifty.tools;
 
-import java.util.Date;
-
 import org.junit.Test;
 
-import de.lessvoid.nifty.tools.ObjectPool.Factory;
+import javax.annotation.Nonnull;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.util.Date;
 
 
 public class ObjectPoolTest {
-  private ObjectPool<Object> pool = new ObjectPool<Object>(200, new Factory<Object>() {
+  private static class HelperObject {
+    private final Buffer buffer = ByteBuffer.allocate(64 * 1024);
+  }
 
+  private ObjectPool<Object> pool = new ObjectPool<Object>(new Factory<Object>() {
+    @Nonnull
     @Override
     public Object createNew() {
       return new Object();
     }
   });
+  private ObjectPool<Object> pool2 = new ObjectPool<Object>(new Factory<Object>() {
+
+    @Nonnull
+    @Override
+    public Object createNew() {
+      return new HelperObject();
+    }
+  });
 
   @Test
-  public void test() {
+  public void testPool() {
     long start = new Date().getTime();
-    for (int i=0; i<100000; i++) {
-      for (int j=0; j<200; j++) {
+    for (int i = 0; i < 100000; i++) {
+      for (int j = 0; j < 200; j++) {
         Object o1 = pool.allocate();
         pool.free(o1);
       }
     }
     long end = new Date().getTime();
-    System.out.println(end - start);
-  } 
+    System.out.println("testPool " + Long.toString(end - start) + "ms");
+  }
+
+  @Test
+  public void testNoPool() {
+    long start = new Date().getTime();
+    for (int i = 0; i < 100000; i++) {
+      for (int j = 0; j < 200; j++) {
+        new Object();
+      }
+    }
+    long end = new Date().getTime();
+    System.out.println("testNoPool " + Long.toString(end - start) + "ms");
+  }
+
+  @Test
+  public void test2Pool() {
+    long start = new Date().getTime();
+    for (int i = 0; i < 1000; i++) {
+      for (int j = 0; j < 200; j++) {
+        Object o1 = pool2.allocate();
+        pool2.free(o1);
+      }
+    }
+    long end = new Date().getTime();
+    System.out.println("test2Pool " + Long.toString(end - start) + "ms");
+  }
+
+  @Test
+  public void test2NoPool() {
+    long start = new Date().getTime();
+    for (int i = 0; i < 1000; i++) {
+      for (int j = 0; j < 200; j++) {
+        new HelperObject();
+      }
+    }
+    long end = new Date().getTime();
+    System.out.println("test2NoPool " + Long.toString(end - start) + "ms");
+  }
 }

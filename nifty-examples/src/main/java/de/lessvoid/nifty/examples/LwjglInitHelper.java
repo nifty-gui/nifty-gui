@@ -1,15 +1,16 @@
 package de.lessvoid.nifty.examples;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glViewport;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreCheckGL;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
+import org.lwjgl.opengl.*;
+import org.lwjgl.util.glu.GLU;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,23 +18,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.LWJGLUtil;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.PixelFormat;
-import org.lwjgl.util.glu.GLU;
-
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreCheckGL;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Helper class shared by all the examples to initialize lwjgl and stuff.
+ *
  * @author void
  */
 public class LwjglInitHelper {
@@ -41,8 +30,10 @@ public class LwjglInitHelper {
   private static final int WIDTH = 1024;
   private static final int HEIGHT = 768;
 
-  /** logger. */
-  private static Logger log = Logger.getLogger(LwjglInitHelper.class.getName());
+  /**
+   * logger.
+   */
+  private static final Logger log = Logger.getLogger(LwjglInitHelper.class.getName());
   private static LwjglInputSystem inputSystem;
 
   public static LwjglInputSystem getInputSystem() {
@@ -51,6 +42,7 @@ public class LwjglInitHelper {
 
   /**
    * RenderLoopCallback.
+   *
    * @author void
    */
   public interface RenderLoopCallback {
@@ -62,6 +54,7 @@ public class LwjglInitHelper {
 
   /**
    * Init SubSystems.
+   *
    * @param title title pf window
    * @return true on success and false otherwise
    */
@@ -90,15 +83,17 @@ public class LwjglInitHelper {
 
   /**
    * Init lwjgl graphics.
+   *
    * @param title title of window
    * @return true on success and false otherwise
    */
   private static boolean initGraphics(final String title, final boolean enableCoreProfile) {
-    int width = 1920;
-    int height = 1200;
+    int width;
+    int height;
     try {
       DisplayMode currentMode = Display.getDisplayMode();
-      log.fine("currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", " + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
+      log.fine("currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", " +
+          "" + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
 
       width = currentMode.getWidth();
       height = currentMode.getHeight();
@@ -107,16 +102,17 @@ public class LwjglInitHelper {
       DisplayMode[] modes = Display.getAvailableDisplayModes();
       log.fine("Found " + modes.length + " display modes");
 
-      List < DisplayMode > matching = new ArrayList < DisplayMode >();
+      List<DisplayMode> matching = new ArrayList<DisplayMode>();
       for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
-        if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT && mode.getBitsPerPixel() == 32 ) {
-          log.fine(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
+        if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT && mode.getBitsPerPixel() == 32) {
+          log.fine(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " +
+              "" + mode.getFrequency());
           matching.add(mode);
         }
       }
 
-      DisplayMode[] matchingModes = matching.toArray(new DisplayMode[0]);
+      DisplayMode[] matchingModes = matching.toArray(new DisplayMode[matching.size()]);
 
       // find mode with matching freq
       boolean found = false;
@@ -133,8 +129,9 @@ public class LwjglInitHelper {
       }
 
       if (!found) {
-        Arrays.sort(matchingModes, new Comparator < DisplayMode >() {
-          public int compare(final DisplayMode o1, final DisplayMode o2) {
+        Arrays.sort(matchingModes, new Comparator<DisplayMode>() {
+          @Override
+          public int compare(@Nonnull final DisplayMode o1, @Nonnull final DisplayMode o2) {
             if (o1.getFrequency() > o2.getFrequency()) {
               return 1;
             } else if (o1.getFrequency() < o2.getFrequency()) {
@@ -146,12 +143,15 @@ public class LwjglInitHelper {
         });
 
         for (int i = 0; i < matchingModes.length; i++) {
-          log.fine("using fallback mode: " + matchingModes[i].getWidth() + ", "
-              + matchingModes[i].getHeight() + ", "
-              + matchingModes[i].getBitsPerPixel() + ", "
-              + matchingModes[i].getFrequency());
-          Display.setDisplayMode(matchingModes[i]);
-          break;
+          try {
+            log.fine("using fallback mode: " + matchingModes[i].getWidth() + ", "
+                + matchingModes[i].getHeight() + ", "
+                + matchingModes[i].getBitsPerPixel() + ", "
+                + matchingModes[i].getFrequency());
+            Display.setDisplayMode(matchingModes[i]);
+            break;
+          } catch (LWJGLException ignored) {
+          }
         }
       }
 
@@ -177,10 +177,10 @@ public class LwjglInitHelper {
 
       log.fine(
           "Width: " + Display.getDisplayMode().getWidth()
-          + ", Height: " + Display.getDisplayMode().getHeight()
-          + ", Bits per pixel: " + Display.getDisplayMode().getBitsPerPixel()
-          + ", Frequency: " + Display.getDisplayMode().getFrequency()
-          + ", Title: " + Display.getTitle());
+              + ", Height: " + Display.getDisplayMode().getHeight()
+              + ", Bits per pixel: " + Display.getDisplayMode().getBitsPerPixel()
+              + ", Frequency: " + Display.getDisplayMode().getFrequency()
+              + ", Title: " + Display.getTitle());
 
       // just output some infos about the system we're on
       log.fine("plattform: " + LWJGLUtil.getPlatformName());
@@ -220,11 +220,11 @@ public class LwjglInitHelper {
         int viewportHeight = viewportBuffer.get(3);
 
         GL11.glMatrixMode(GL11.GL_PROJECTION);
-          GL11.glLoadIdentity();
-          GL11.glOrtho(0, viewportWidth, viewportHeight, 0, -9999, 9999);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, viewportWidth, viewportHeight, 0, -9999, 9999);
 
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
-          GL11.glLoadIdentity();
+        GL11.glLoadIdentity();
 
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
@@ -250,6 +250,7 @@ public class LwjglInitHelper {
 
   /**
    * Init input system.
+   *
    * @return true on success and false otherwise
    */
   private static boolean initInput() {
@@ -265,13 +266,12 @@ public class LwjglInitHelper {
   }
 
   /**
-   * @param nifty nifty instance
-   * @param editor 
+   * @param nifty    nifty instance
    * @param callback callback
    */
   public static void renderLoop(
-      final Nifty nifty,
-      final RenderLoopCallback callback) {
+      @Nonnull final Nifty nifty,
+      @Nullable final RenderLoopCallback callback) {
     boolean done = false;
     while (!Display.isCloseRequested() && !done) {
       if (callback != null) {

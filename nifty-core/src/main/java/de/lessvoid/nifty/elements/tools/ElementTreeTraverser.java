@@ -5,6 +5,8 @@
 package de.lessvoid.nifty.elements.tools;
 
 import de.lessvoid.nifty.elements.Element;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -14,9 +16,10 @@ import java.util.NoSuchElementException;
  * @author telamon
  */
 public class ElementTreeTraverser implements Iterator<Element>{
-    private ArrayList<Iterator<Element>> iterators =  new ArrayList<Iterator<Element>>();
+    @Nonnull
+    private final ArrayList<Iterator<Element>> iterators =  new ArrayList<Iterator<Element>>();
     private Iterator<Element> current;
-    public ElementTreeTraverser(Element e){
+    public ElementTreeTraverser(@Nonnull Element e){
         current = e.getChildren().listIterator();
     }
 

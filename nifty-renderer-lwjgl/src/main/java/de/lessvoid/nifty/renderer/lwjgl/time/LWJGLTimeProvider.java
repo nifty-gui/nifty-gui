@@ -1,12 +1,11 @@
 package de.lessvoid.nifty.renderer.lwjgl.time;
 
-import org.lwjgl.Sys;
-
 import de.lessvoid.nifty.spi.time.TimeProvider;
+import org.lwjgl.Sys;
 
 /**
  * This time provider uses the timer that is provided by LWJGL.
- * 
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class LWJGLTimeProvider implements TimeProvider {
@@ -15,10 +14,7 @@ public class LWJGLTimeProvider implements TimeProvider {
    * time expected by Nifty.
    */
   private static final long CONVERSATION_FACTOR = 1000;
-  
-  /**
-   * {@inheritDoc}
-   */
+
   @Override
   public long getMsTime() {
     return (Sys.getTime() * CONVERSATION_FACTOR) / Sys.getTimerResolution();

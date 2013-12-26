@@ -1,27 +1,36 @@
 package de.lessvoid.nifty.controls;
 
-import java.util.ArrayList;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.logging.Logger;
+
 /**
  * FocusHandler.
+ *
  * @author void
  */
 public class FocusHandler {
-  private static Logger log = Logger.getLogger(FocusHandler.class.getName());
+  private static final Logger log = Logger.getLogger(FocusHandler.class.getName());
 
-  private ArrayList < Element > entries = new ArrayList < Element >();
-  private ArrayList < ArrayList < Element >> elementBuffer = new ArrayList < ArrayList < Element >>();
+  @Nonnull
+  private final ArrayList<Element> entries = new ArrayList<Element>();
+  @Nonnull
+  private final ArrayList<ArrayList<Element>> elementBuffer = new ArrayList<ArrayList<Element>>();
 
+  @Nullable
   private Element mouseFocusElement;
-  private ArrayList < Element > mouseFocusElementBuffer = new ArrayList < Element >();
+  @Nonnull
+  private final ArrayList<Element> mouseFocusElementBuffer = new ArrayList<Element>();
 
+  @Nullable
   private Element keyboardFocusElement;
-  private ArrayList < Element > keyboardFocusElementBuffer = new ArrayList < Element >();
+  @Nonnull
+  private final ArrayList<Element> keyboardFocusElementBuffer = new ArrayList<Element>();
 
   public FocusHandler() {
     mouseFocusElement = null;
@@ -30,6 +39,7 @@ public class FocusHandler {
 
   /**
    * add the given element to the focushandler (as the last element).
+   *
    * @param element element to add
    */
   public void addElement(final Element element) {
@@ -38,16 +48,18 @@ public class FocusHandler {
 
   /**
    * add an element to the focus handler.
-   * @param element element to add
+   *
+   * @param element                      element to add
    * @param focusableInsertBeforeElement the element before which to add the new element
    */
-  public void addElement(final Element element, final Element focusableInsertBeforeElement) {
+  public void addElement(final Element element, @Nullable final Element focusableInsertBeforeElement) {
     if (focusableInsertBeforeElement == null) {
       entries.add(element);
     } else {
       int idx = entries.indexOf(focusableInsertBeforeElement);
       if (idx == -1) {
-        log.warning("requesting to add focusable element before [" + focusableInsertBeforeElement + "] but I can't find it on the current screen. Adding it to the end of the list (like in the regular case)");
+        log.warning("requesting to add focusable element before [" + focusableInsertBeforeElement + "] but I can't " +
+            "find it on the current screen. Adding it to the end of the list (like in the regular case)");
         entries.add(element);
       } else {
         entries.add(idx, focusableInsertBeforeElement);
@@ -57,13 +69,15 @@ public class FocusHandler {
 
   /**
    * add an element to the focus handler after an existing element already added to it
+   *
    * @param existingElement element that already exists in the focushandler
-   * @param element new element to add
+   * @param element         new element to add
    */
   public void addElementAfter(final Element existingElement, final Element element) {
     int idx = entries.indexOf(existingElement);
     if (idx == -1) {
-      log.warning("requesting to add focusable element after [" + existingElement + "] but I can't find it on the current screen. Adding it to the end of the list (like in the regular case)");
+      log.warning("requesting to add focusable element after [" + existingElement + "] but I can't find it on the " +
+          "current screen. Adding it to the end of the list (like in the regular case)");
       entries.add(element);
     } else {
       if (idx == entries.size() - 1) {
@@ -76,10 +90,12 @@ public class FocusHandler {
 
   /**
    * get next element.
+   *
    * @param current current element
    * @return next element
    */
-  public Element getNext(final Element current) {
+  @Nonnull
+  public Element getNext(@Nonnull final Element current) {
     if (entries.isEmpty()) {
       return current;
     }
@@ -106,6 +122,7 @@ public class FocusHandler {
 
   /**
    * get prev element.
+   *
    * @param current current element
    * @return prev element
    */
@@ -136,6 +153,7 @@ public class FocusHandler {
 
   /**
    * remove this element.
+   *
    * @param element element
    */
   public void remove(final Element element) {
@@ -146,13 +164,15 @@ public class FocusHandler {
 
   /**
    * get first entry.
+   *
    * @return first
    */
+  @Nullable
   public Element getFirstFocusElement() {
     if (entries.isEmpty()) {
       return null;
     }
-    for (int i=0; i<entries.size(); i++) {
+    for (int i = 0; i < entries.size(); i++) {
       if (entries.get(i).isFocusable()) {
         return entries.get(i);
       }
@@ -164,7 +184,7 @@ public class FocusHandler {
    * save all states.
    */
   public void pushState() {
-    ArrayList < Element > copy = new ArrayList < Element >();
+    ArrayList<Element> copy = new ArrayList<Element>();
     copy.addAll(entries);
     elementBuffer.add(copy);
 
@@ -204,6 +224,7 @@ public class FocusHandler {
 
   /**
    * set the focus to the given element.
+   *
    * @param newFocusElement new focus element
    */
   public void setKeyFocus(final Element newFocusElement) {
@@ -222,7 +243,8 @@ public class FocusHandler {
     }
 
     keyboardFocusElement = newFocusElement;
-    log.fine("keyboard focus element now changed to [" + (keyboardFocusElement == null ? "" : keyboardFocusElement.toString()) + "]");
+    log.fine("keyboard focus element now changed to [" + (keyboardFocusElement == null ? "" : keyboardFocusElement
+        .toString()) + "]");
 
     if (keyboardFocusElement != null) {
       keyboardFocusElement.startEffect(EffectEventId.onFocus);
@@ -232,7 +254,7 @@ public class FocusHandler {
     }
   }
 
-  public void lostKeyboardFocus(final Element elementThatLostFocus) {
+  public void lostKeyboardFocus(@Nullable final Element elementThatLostFocus) {
     if (elementThatLostFocus != null) {
       log.fine("lostKeyboardFocus for [" + elementThatLostFocus.toString() + "]");
       if (keyboardFocusElement == elementThatLostFocus) {
@@ -243,7 +265,7 @@ public class FocusHandler {
     }
   }
 
-  public boolean keyEvent(final KeyboardInputEvent inputEvent) {
+  public boolean keyEvent(@Nonnull final KeyboardInputEvent inputEvent) {
     if (keyboardFocusElement != null) {
       return keyboardFocusElement.keyEvent(inputEvent);
     }
@@ -258,11 +280,11 @@ public class FocusHandler {
     log.fine("requestExclusiveMouseFocus for [" + mouseFocusElement.toString() + "]");
   }
 
-  public boolean hasExclusiveMouseFocus(final Element element) {
+  public boolean hasExclusiveMouseFocus(@Nonnull final Element element) {
     return element.equals(mouseFocusElement);
   }
 
-  public boolean canProcessMouseEvents(final Element element) {
+  public boolean canProcessMouseEvents(@Nonnull final Element element) {
     if (mouseFocusElement == null) {
       return true;
     }
@@ -270,11 +292,11 @@ public class FocusHandler {
     boolean canProcess = mouseFocusElement == element;
     log.fine(
         "canProcessMouseEvents for [" + element.toString() + "] ==> "
-        + canProcess + " (" + mouseFocusElement.toString() + ")");
+            + canProcess + " (" + mouseFocusElement.toString() + ")");
     return canProcess;
   }
 
-  public void lostMouseFocus(final Element elementThatLostFocus) {
+  public void lostMouseFocus(@Nullable final Element elementThatLostFocus) {
     if (elementThatLostFocus != null) {
       log.fine("lostMouseFocus for [" + elementThatLostFocus.toString() + "]");
       if (mouseFocusElement == elementThatLostFocus) {
@@ -283,6 +305,8 @@ public class FocusHandler {
     }
   }
 
+  @Override
+  @Nonnull
   public String toString() {
     String mouseFocusString = "---";
     if (mouseFocusElement != null) {
@@ -294,19 +318,19 @@ public class FocusHandler {
       keyboardFocusString = keyboardFocusElement.toString();
     }
 
-    StringBuffer focusElements = new StringBuffer();
-    for (int i=0; i<entries.size(); i++) {
+    StringBuilder focusElements = new StringBuilder();
+    for (int i = 0; i < entries.size(); i++) {
       Element e = entries.get(i);
       if (i > 0) {
         focusElements.append(", ");
       }
-      focusElements.append(e.getId() + (!e.isFocusable() ? "*" : ""));
+      focusElements.append(e.getId()).append(!e.isFocusable() ? "*" : "");
     }
     return
-      "\n"
-       + "focus element (mouse):    " + mouseFocusString + "\n"
-       + "focus element (keyboard): " + keyboardFocusString + "\n"
-       + "focus element size: " + entries.size() + " [" + focusElements.toString() + "]";
+        "\n"
+            + "focus element (mouse):    " + mouseFocusString + "\n"
+            + "focus element (keyboard): " + keyboardFocusString + "\n"
+            + "focus element size: " + entries.size() + " [" + focusElements.toString() + "]";
   }
 
   public boolean hasAnyElementTheKeyboardFocus() {
@@ -317,7 +341,8 @@ public class FocusHandler {
     return mouseFocusElement != null;
   }
 
-  public Element findElement(final String defaultFocusElementId) {
+  @Nullable
+  public Element findElement(@Nonnull final String defaultFocusElementId) {
     for (Element element : entries) {
       if (defaultFocusElementId.equals(element.getId())) {
         return element;
@@ -326,10 +351,12 @@ public class FocusHandler {
     return null;
   }
 
+  @Nullable
   public Element getKeyboardFocusElement() {
     return keyboardFocusElement;
   }
-  
+
+  @Nullable
   public Element getMouseFocusElement() {
     return mouseFocusElement;
   }

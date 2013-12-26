@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.gdx.input.events;
 
 import com.badlogic.gdx.InputProcessor;
-
 import de.lessvoid.nifty.NiftyInputConsumer;
 
 /**

@@ -10,30 +10,39 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class ProgressbarControl implements Controller, NiftyExample {
+  @Nullable
   private Element progressBarElement;
+  @Nullable
   private Element progressTextElement;
 
+  @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screenParam,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screenParam,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     progressBarElement = element.findElementById("#progress");
     progressTextElement = element.findElementById("#progress-text");
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
   }
 
+  @Override
   public void onStartScreen() {
   }
 
+  @Override
   public void onFocus(final boolean getFocus) {
   }
 
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
@@ -44,8 +53,8 @@ public class ProgressbarControl implements Controller, NiftyExample {
     } else if (progress > 1.0f) {
       progress = 1.0f;
     }
-    final int MIN_WIDTH = 32; 
-    int pixelWidth = (int)(MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
+    final int MIN_WIDTH = 32;
+    int pixelWidth = (int) (MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
     progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
     progressBarElement.getParent().layoutElements();
 
@@ -53,16 +62,19 @@ public class ProgressbarControl implements Controller, NiftyExample {
     progressTextElement.getRenderer(TextRenderer.class).setText(progressText);
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "progressbar/progressbar.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Progressbar Example";

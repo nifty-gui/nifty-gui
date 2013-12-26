@@ -1,10 +1,14 @@
 package de.lessvoid.nifty.controls.slider;
 
+import javax.annotation.Nullable;
+
 /**
  * A simple Slider mechanism which is used as the base for the Scrollbar.
+ *
  * @author void
  */
 public class SliderImpl {
+  @Nullable
   private SliderView view;
   private float value;
   private float oldValue;
@@ -13,7 +17,12 @@ public class SliderImpl {
   private float stepSize;
   private float buttonStepSize;
 
-  public void bindToView(final SliderView view, final float min, final float max, final float stepSize, final float buttonStepSize) {
+  public void bindToView(
+      @Nullable final SliderView view,
+      final float min,
+      final float max,
+      final float stepSize,
+      final float buttonStepSize) {
     this.view = view;
     this.min = min;
     this.max = max;
@@ -44,7 +53,9 @@ public class SliderImpl {
   }
 
   public void setValueFromPosition(final int pixelX, final int pixelY) {
-    setValue(ensureStepSize(viewToWorld(view.filter(pixelX, pixelY))));
+    if (view != null) {
+      setValue(ensureStepSize(viewToWorld(view.filter(pixelX, pixelY))));
+    }
   }
 
   public float getMin() {
@@ -87,7 +98,12 @@ public class SliderImpl {
     updateView();
   }
 
-  public void setup(final float min, final float max, final float current, final float stepSize, final float buttonStepSize) {
+  public void setup(
+      final float min,
+      final float max,
+      final float current,
+      final float stepSize,
+      final float buttonStepSize) {
     this.min = min;
     this.max = max;
     this.value = current;
@@ -98,7 +114,7 @@ public class SliderImpl {
   }
 
   private void changeValue(final float newValue) {
-    value = newValue;    
+    value = newValue;
     if (value > max) {
       value = max;
     } else if (newValue < min) {
@@ -107,12 +123,16 @@ public class SliderImpl {
     value = ensureStepSize(value);
     if (value != oldValue) {
       oldValue = value;
-      view.valueChanged(value);
+      if (view != null) {
+        view.valueChanged(value);
+      }
     }
   }
 
   public void updateView() {
-    view.update((int) worldToView(value));
+    if (view != null) {
+      view.update((int) worldToView(value));
+    }
   }
 
   private float ensureStepSize(final float value) {
@@ -120,10 +140,16 @@ public class SliderImpl {
   }
 
   private float viewToWorld(final float viewValue) {
-    return (viewValue / view.getSize() * (max - min)) + min;
+    if (view != null) {
+      return (viewValue / view.getSize() * (max - min)) + min;
+    }
+    return 0.f;
   }
 
   private float worldToView(final float worldValue) {
-    return (worldValue - min) / (max - min) * view.getSize();
+    if (view != null) {
+      return (worldValue - min) / (max - min) * view.getSize();
+    }
+    return 0.f;
   }
 }

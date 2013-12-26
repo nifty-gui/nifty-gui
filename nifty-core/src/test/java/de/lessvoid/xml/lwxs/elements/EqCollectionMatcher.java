@@ -1,10 +1,10 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.easymock.IArgumentMatcher;
 import org.easymock.classextension.EasyMock;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 @SuppressWarnings("rawtypes")
 public class EqCollectionMatcher implements IArgumentMatcher {
@@ -15,6 +15,7 @@ public class EqCollectionMatcher implements IArgumentMatcher {
     expectedCollection = expectedCollectionParam;
   }
 
+  @Override
   public boolean matches(final Object actual) {
     if (!(actual instanceof Collection)) {
       errorText = "[not an Collection instance";
@@ -38,8 +39,9 @@ public class EqCollectionMatcher implements IArgumentMatcher {
     return true;
   }
 
+  @Override
   public void appendTo(final StringBuffer buffer) {
-    buffer.append("mismatch dude: " + errorText);
+    buffer.append("mismatch dude: ").append(errorText);
   }
 
   public static Collection eqCollection(final Collection in) {

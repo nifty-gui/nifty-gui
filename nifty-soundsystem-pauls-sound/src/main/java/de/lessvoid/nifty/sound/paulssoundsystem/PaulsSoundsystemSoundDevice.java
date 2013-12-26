@@ -1,19 +1,24 @@
 package de.lessvoid.nifty.sound.paulssoundsystem;
 
-import paulscode.sound.SoundSystemConfig;
-import paulscode.sound.SoundSystemException;
-import paulscode.sound.codecs.CodecJOrbis;
-import paulscode.sound.codecs.CodecWav;
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import paulscode.sound.SoundSystemConfig;
+import paulscode.sound.SoundSystemException;
+import paulscode.sound.codecs.CodecJOrbis;
+import paulscode.sound.codecs.CodecWav;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PaulsSoundsystemSoundDevice implements SoundDevice {
   private paulscode.sound.SoundSystem soundSystem;
   private int counter = 0;
 
-  public PaulsSoundsystemSoundDevice(final Class<?> libraryClass, final SupportedCodec ... additionalCodecs) throws SoundSystemException {
+  public PaulsSoundsystemSoundDevice(
+      final Class<?> libraryClass,
+      final SupportedCodec... additionalCodecs) throws SoundSystemException {
     SoundSystemConfig.setSoundFilesPackage("");
     SoundSystemConfig.addLibrary(libraryClass);
 
@@ -26,10 +31,10 @@ public class PaulsSoundsystemSoundDevice implements SoundDevice {
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
   }
 
-  private void addAdditionalCodecs(final SupportedCodec... codecs) throws SoundSystemException {
+  private void addAdditionalCodecs(@Nullable final SupportedCodec... codecs) throws SoundSystemException {
     if (codecs != null) {
       for (SupportedCodec codec : codecs) {
         SoundSystemConfig.setCodec(codec.getExtension(), codec.getCodecClass());
@@ -37,17 +42,21 @@ public class PaulsSoundsystemSoundDevice implements SoundDevice {
     }
   }
 
-  public SoundHandle loadSound(final SoundSystem soundSystem, final String filename) {
+  @Override
+  public SoundHandle loadSound(@Nonnull final SoundSystem soundSystem, @Nonnull final String filename) {
     return new PaulsSoundHandle(this.soundSystem, filename);
   }
 
-  public SoundHandle loadMusic(final SoundSystem soundSystem, final String filename) {
+  @Override
+  public SoundHandle loadMusic(@Nonnull final SoundSystem soundSystem, @Nonnull final String filename) {
     return new PaulsMusicHandle(this.soundSystem, generateId(), filename);
   }
 
+  @Override
   public void update(final int delta) {
   }
 
+  @Nonnull
   private String generateId() {
     return String.valueOf(counter++);
   }

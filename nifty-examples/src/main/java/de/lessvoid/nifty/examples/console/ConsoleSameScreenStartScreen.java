@@ -15,42 +15,58 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * ConsoleDemoStartScreen.
+ *
  * @author void
  */
 public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputHandler, NiftyExample {
+  @Nullable
   private Nifty nifty;
+  @Nullable
   private Screen screen;
   private boolean consoleVisible = false;
   private boolean allowConsoleToggle = true;
+  @Nullable
   private Element oldFocusElement;
-  private Element consoleElement;
+  @Nullable
   private Element consoleElementFocus;
+  @Nullable
   private Element consoleLayer;
 
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  @Override
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     nifty = newNifty;
     screen = newScreen;
     screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
 
-    consoleElement = screen.findElementByName("console");
-    consoleElementFocus = consoleElement.findElementById("#textInput");
-    consoleLayer = screen.findElementByName("consoleLayer");
+    Element consoleElement = screen.findElementById("console");
+    if (consoleElement != null) {
+      consoleElementFocus = consoleElement.findElementById("#textInput");
+    }
+    consoleLayer = screen.findElementById("consoleLayer");
   }
 
+  @Override
   public void onStartScreen() {
     removeConsoleElementFromFocusHandler();
   }
 
+  @Override
   public void onEndScreen() {
   }
 
   public void back() {
-    nifty.fromXml("all/intro.xml", "menu");
+    if (nifty != null) {
+      nifty.fromXml("all/intro.xml", "menu");
+    }
   }
 
-  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean keyEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.ConsoleToggle) {
       toggleConsole();
       return true;
@@ -59,10 +75,16 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
     }
   }
 
-  @NiftyEventSubscriber(id="console")
-  public void onConsoleCommand(final String id, final ConsoleExecuteCommandEvent command) {
+  @NiftyEventSubscriber(id = "console")
+  public void onConsoleCommand(final String id, @Nonnull final ConsoleExecuteCommandEvent command) {
+    if (screen == null) {
+      return;
+    }
     Console console = screen.findNiftyControl("console", Console.class);
-    console.output("your input was: " + command.getCommandLine() + " [" + command.getArgumentCount() + " parameter(s)]");
+    if (console != null) {
+      console.output("your input was: " + command.getCommandLine() + " [" + command.getArgumentCount() + " parameter" +
+          "(s)]");
+    }
     if ("exit".equals(command.getCommand())) {
       back();
     }
@@ -80,60 +102,73 @@ public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputH
   }
 
   private void openConsole() {
-    consoleLayer.showWithoutEffects();
-    consoleLayer.startEffect(EffectEventId.onStartScreen, new EndNotify() {
-      @Override
-      public void perform() {
-        oldFocusElement = screen.getFocusHandler().getKeyboardFocusElement();
+    if (consoleLayer != null && screen != null && consoleElementFocus != null) {
+      consoleLayer.showWithoutEffects();
+      consoleLayer.startEffect(EffectEventId.onStartScreen, new EndNotify() {
+        @Override
+        public void perform() {
+          oldFocusElement = screen.getFocusHandler().getKeyboardFocusElement();
 
-        // add the consoleElement to the focushandler, when it's not yet added already
-        addConsoleElementToFocusHandler();
-        consoleElementFocus.setFocus();
+          // add the consoleElement to the focushandler, when it's not yet added already
+          addConsoleElementToFocusHandler();
+          consoleElementFocus.setFocus();
 
-        consoleVisible = true;
-        allowConsoleToggle = true;
-      }
-    });
+          consoleVisible = true;
+          allowConsoleToggle = true;
+        }
+      });
+    }
   }
 
   private void closeConsole() {
-    consoleLayer.startEffect(EffectEventId.onEndScreen, new EndNotify() {
-      @Override
-      public void perform() {
-        consoleLayer.hideWithoutEffect();
+    if (consoleLayer != null) {
+      consoleLayer.startEffect(EffectEventId.onEndScreen, new EndNotify() {
+        @Override
+        public void perform() {
+          consoleLayer.hideWithoutEffect();
 
-        consoleVisible = false;
-        allowConsoleToggle = true;
+          consoleVisible = false;
+          allowConsoleToggle = true;
 
-        if (oldFocusElement != null) {
-          oldFocusElement.setFocus();
+          if (oldFocusElement != null) {
+            oldFocusElement.setFocus();
+          }
+
+          removeConsoleElementFromFocusHandler();
         }
-
-        removeConsoleElementFromFocusHandler();
-      }
-    });
+      });
+    }
   }
 
   private void addConsoleElementToFocusHandler() {
-    if (screen.getFocusHandler().findElement(consoleElementFocus.getId()) == null) {
+    String id = consoleElementFocus == null ? null : consoleElementFocus.getId();
+    if (id == null) {
+      return;
+    }
+    if (screen != null && screen.getFocusHandler().findElement(id) == null) {
       screen.getFocusHandler().addElement(consoleElementFocus);
     }
   }
 
   private void removeConsoleElementFromFocusHandler() {
-    screen.getFocusHandler().remove(consoleElementFocus);
+    if (screen != null) {
+      screen.getFocusHandler().remove(consoleElementFocus);
+    }
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "console/console-samescreen.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Console Same Screen Demonstation";

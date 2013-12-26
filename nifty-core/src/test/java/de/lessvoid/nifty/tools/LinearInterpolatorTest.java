@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.tools;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class LinearInterpolatorTest {
   private static final float EPSILON = 0.01f;
@@ -19,7 +19,7 @@ public class LinearInterpolatorTest {
     assertEquals(1.0f, interpolator.getValue(1.0f), EPSILON);
     assertEquals(1.0f, interpolator.getValue(2.0f), EPSILON);
   }
-  
+
   @Test
   public void testWithThreePoints() {
     LinearInterpolator interpolator = new LinearInterpolator();

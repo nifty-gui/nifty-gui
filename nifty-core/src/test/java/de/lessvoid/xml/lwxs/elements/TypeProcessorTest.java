@@ -1,19 +1,17 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.lessvoid.xml.lwxs.Schema;
 import de.lessvoid.xml.lwxs.processor.TypeProcessor;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import static org.easymock.EasyMock.isA;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertNotNull;
 
 public class TypeProcessorTest {
   private TypeProcessor typeProcessor;
@@ -21,8 +19,8 @@ public class TypeProcessorTest {
   private XmlParser xmlParserMock;
 
   @Before
-  public void setUp() {
-    niftyXmlSchema = new Schema(null);
+  public void setUp() throws Exception {
+    niftyXmlSchema = new Schema(XmlPullParserFactory.newInstance(), null);
     typeProcessor = new TypeProcessor(niftyXmlSchema);
     xmlParserMock = createMock(XmlParser.class);
   }
@@ -45,13 +43,5 @@ public class TypeProcessorTest {
 
     Type type = niftyXmlSchema.getType("testType");
     assertNotNull(type);
-  }
-
-  @Test(expected = Exception.class)
-  public void testNameMissing() throws Exception {
-    replay(xmlParserMock);
-
-    Attributes attributes = new Attributes();
-    typeProcessor.process(null, attributes);
   }
 }

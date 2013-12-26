@@ -1,18 +1,15 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ListBoxFocusElementEmptyTest {
   private static final int WIDTH_100 = 100;

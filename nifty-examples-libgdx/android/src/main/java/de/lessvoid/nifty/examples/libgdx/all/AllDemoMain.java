@@ -1,10 +1,8 @@
 package de.lessvoid.nifty.examples.libgdx.all;
 
 import android.os.Bundle;
-
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-
 import de.lessvoid.nifty.examples.all.AllExamplesMain;
 import de.lessvoid.nifty.examples.libgdx.LibgdxExampleApplication;
 

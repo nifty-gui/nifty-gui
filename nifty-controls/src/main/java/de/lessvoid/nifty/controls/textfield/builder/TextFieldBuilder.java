@@ -2,16 +2,18 @@ package de.lessvoid.nifty.controls.textfield.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 
+import javax.annotation.Nonnull;
+
 public class TextFieldBuilder extends ControlBuilder {
   public TextFieldBuilder() {
     super("textfield");
   }
 
-  public TextFieldBuilder(final String id) {
+  public TextFieldBuilder(@Nonnull final String id) {
     super(id, "textfield");
   }
 
-  public TextFieldBuilder(final String id, final String initialText) {
+  public TextFieldBuilder(@Nonnull final String id, @Nonnull final String initialText) {
     super(id, "textfield");
     text(initialText);
   }
@@ -24,7 +26,7 @@ public class TextFieldBuilder extends ControlBuilder {
     set("maxLength", Integer.toString(maxLength));
   }
 
-  public void filter(final CharSequence filter) {
+  public void filter(@Nonnull final CharSequence filter) {
     set("filter", filter.toString());
   }
 }

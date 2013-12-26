@@ -2,42 +2,40 @@ package de.lessvoid.nifty.examples.defaultcontrols.dropdown;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
-import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.RadioButtonGroup;
-import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
-import de.lessvoid.nifty.controls.RadioButtonStateChangedEvent;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.examples.defaultcontrols.common.JustAnExampleModelClass;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class DropDownDialogController implements Controller {
   private Screen screen;
+  @Nullable
   private TextField addDropDownItemText;
+  @Nullable
   private Button addDropDownItemButton;
+  @Nullable
   private DropDown<JustAnExampleModelClass> dropDown;
+  @Nullable
   private Label selectedItem;
+  @Nullable
   private Button removeDropDownItemButton;
+  @Nullable
   private Label selectedIndices;
+  @Nullable
   private RadioButtonGroup radioButtonGroup1;
 
   @SuppressWarnings("unchecked")
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     this.screen = screen;
     this.addDropDownItemText = screen.findNiftyControl("addDropDownItemText", TextField.class);
     this.addDropDownItemButton = screen.findNiftyControl("addDropDownItemButton", Button.class);
@@ -49,7 +47,7 @@ public class DropDownDialogController implements Controller {
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
     setDropDownItemButtonState();
     setRemoveDropDownItemButtonState(null);
     updateSelectedIndexLabel(dropDown.getSelectedIndex());
@@ -64,7 +62,7 @@ public class DropDownDialogController implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
@@ -93,7 +91,7 @@ public class DropDownDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="dropDown")
-  public void onDropDownSelectionChanged(final String id, final DropDownSelectionChangedEvent<JustAnExampleModelClass> event) {
+  public void onDropDownSelectionChanged(final String id, @Nonnull final DropDownSelectionChangedEvent<JustAnExampleModelClass> event) {
     if (event.getSelection() == null) {
       selectedItem.setText("");
     } else {
@@ -109,37 +107,37 @@ public class DropDownDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="option-1")
-  public void onOption1Changed(final String id, final RadioButtonStateChangedEvent event) {
+  public void onOption1Changed(final String id, @Nonnull final RadioButtonStateChangedEvent event) {
     screen.findNiftyControl("option-1-changed", Label.class).setText(String.valueOf(event.isSelected()));
   }
 
   @NiftyEventSubscriber(id="option-2")
-  public void onOption2Changed(final String id, final RadioButtonStateChangedEvent event) {
+  public void onOption2Changed(final String id, @Nonnull final RadioButtonStateChangedEvent event) {
     screen.findNiftyControl("option-2-changed", Label.class).setText(String.valueOf(event.isSelected()));
   }
 
   @NiftyEventSubscriber(id="option-3")
-  public void onOption3Changed(final String id, final RadioButtonStateChangedEvent event) {
+  public void onOption3Changed(final String id, @Nonnull final RadioButtonStateChangedEvent event) {
     screen.findNiftyControl("option-3-changed", Label.class).setText(String.valueOf(event.isSelected()));
   }
 
   @NiftyEventSubscriber(id="option-4")
-  public void onOption4Changed(final String id, final RadioButtonStateChangedEvent event) {
+  public void onOption4Changed(final String id, @Nonnull final RadioButtonStateChangedEvent event) {
     screen.findNiftyControl("option-4-changed", Label.class).setText(String.valueOf(event.isSelected()));
   }
 
   @NiftyEventSubscriber(id="radioGroupAllowDeselection")
-  public void onRadioGroupAllowDeselectionChanged(final String id, final CheckBoxStateChangedEvent event) {
+  public void onRadioGroupAllowDeselectionChanged(final String id, @Nonnull final CheckBoxStateChangedEvent event) {
     radioButtonGroup1.allowDeselection(event.isChecked());
   }
 
   @NiftyEventSubscriber(id="RadioGroup-1")
-  public void onRadioGroup1Changed(final String id, final RadioButtonGroupStateChangedEvent event) {
+  public void onRadioGroup1Changed(final String id, @Nonnull final RadioButtonGroupStateChangedEvent event) {
     screen.findNiftyControl("RadioGroup-1-changed", Label.class).setText(event.getSelectedId() + " (" + event.getPreviousSelectedId() + ")");
   }
 
   @NiftyEventSubscriber(id="radioGroupDisable")
-  public void onRadioGroupDisableCheckBox(final String id, final CheckBoxStateChangedEvent event) {
+  public void onRadioGroupDisableCheckBox(final String id, @Nonnull final CheckBoxStateChangedEvent event) {
     radioButtonGroup1.setEnabled(!event.isChecked());
   }
 
@@ -151,7 +149,7 @@ public class DropDownDialogController implements Controller {
     }
   }
 
-  private void setRemoveDropDownItemButtonState(final JustAnExampleModelClass item) {
+  private void setRemoveDropDownItemButtonState(@Nullable final JustAnExampleModelClass item) {
     if (item == null) {
       removeDropDownItemButton.disable();
     } else {

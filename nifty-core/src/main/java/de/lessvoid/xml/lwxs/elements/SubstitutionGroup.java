@@ -1,14 +1,16 @@
 package de.lessvoid.xml.lwxs.elements;
 
+import de.lessvoid.xml.lwxs.Schema;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.lessvoid.xml.lwxs.Schema;
-
 public class SubstitutionGroup {
-  private Collection < Element > elements = new ArrayList < Element >();
+  @Nonnull
+  private final Collection<Element> elements = new ArrayList<Element>();
 
-  public void addToProcessor(final Schema schema, final XmlProcessorType processor) throws Exception {
+  public void addToProcessor(final Schema schema, @Nonnull final XmlProcessorType processor) throws Exception {
     XmlProcessorSubstituitionGroup subst = new XmlProcessorSubstituitionGroup(schema);
     for (Element e : elements) {
       subst.addElement(e);
@@ -16,12 +18,13 @@ public class SubstitutionGroup {
     processor.addSubstituitionGroup(subst);
   }
 
+  @Nonnull
   public Type getHelperType() {
-    Type type = new Type() {
+    return new Type("none", null) {
+      @Override
       public void addElement(final Element element) {
         elements.add(element);
       }
     };
-    return type;
   }
 }

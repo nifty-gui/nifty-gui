@@ -1,12 +1,12 @@
 package de.lessvoid.nifty.layout.manager;
 
+import de.lessvoid.nifty.layout.Box;
+import de.lessvoid.nifty.layout.manager.AbsolutePositionLayout.KeepInsidePostProcess;
+import org.junit.Test;
+
 import static de.lessvoid.nifty.layout.manager.BoxTestHelper.assertBox;
 import static de.lessvoid.nifty.layout.manager.BoxTestHelper.initBox;
 
-import org.junit.Test;
-
-import de.lessvoid.nifty.layout.Box;
-import de.lessvoid.nifty.layout.manager.AbsolutePositionLayout.KeepInsidePostProcess;
 public class KeepInsidePostProcessTest {
   private KeepInsidePostProcess keepInside = new KeepInsidePostProcess();
   private int rootBoxX = 100;

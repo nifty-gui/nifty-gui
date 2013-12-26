@@ -4,7 +4,8 @@
  */
 package de.lessvoid.nifty.controls;
 
-import de.lessvoid.nifty.render.NiftyImage;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -19,11 +20,13 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
   /**
    * The children of this tree item.
    */
+  @Nonnull
   private final List<TreeItem<T>> children;
 
   /**
    * The parent of this item.
    */
+  @Nullable
   private TreeItem<T> parentItem;
 
   /**
@@ -34,6 +37,7 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
   /**
    * The actual value inside this tree node.
    */
+  @Nullable
   private T value;
 
   /**
@@ -51,7 +55,7 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
   /**
    * Default item for a constructor.
    */
-  public TreeItem(final T itemValue) {
+  public TreeItem(@Nullable final T itemValue) {
     this();
     value = itemValue;
   }
@@ -60,7 +64,7 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
     children.add(item);
   }
 
-  public void addTreeItems(final Collection<TreeItem<T>> items) {
+  public void addTreeItems(@Nonnull final Collection<TreeItem<T>> items) {
     children.addAll(items);
   }
 
@@ -69,24 +73,27 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
    *
    * @return an Iterator.
    */
+  @Nonnull
   @Override
   public Iterator<TreeItem<T>> iterator() {
     return children.iterator();
   }
 
+  @Nullable
   public T getValue() {
     return value;
   }
 
-  public void setValue(final T value) {
+  public void setValue(@Nullable final T value) {
     this.value = value;
   }
 
+  @Nullable
   public TreeItem<T> getParentItem() {
     return parentItem;
   }
 
-  public void setParentItem(final TreeItem<T> parentItem) {
+  public void setParentItem(@Nullable final TreeItem<T> parentItem) {
     this.parentItem = parentItem;
   }
 

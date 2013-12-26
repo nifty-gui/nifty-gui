@@ -2,9 +2,12 @@ package de.lessvoid.nifty.input.mouse;
 
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * The MouseInputEventProcessor keeps track of mouse event state.
+ *
  * @author void
  */
 public class MouseInputEventProcessor {
@@ -26,7 +29,7 @@ public class MouseInputEventProcessor {
     hadAnyEvents = false;
   }
 
-  public void process(final NiftyMouseInputEvent mouse) {
+  public void process(@Nonnull final NiftyMouseInputEvent mouse) {
     hadAnyEvents = true;
     mouse.setButton0InitialDown(!lastButtonDown0 && mouse.isButton0Down());
     mouse.setButton0Release(lastButtonDown0 && !mouse.isButton0Down());
@@ -46,6 +49,7 @@ public class MouseInputEventProcessor {
     return !hadAnyEvents && (lastButtonDown0 || lastButtonDown1 || lastButtonDown2);
   }
 
+  @Nonnull
   public NiftyMouseInputEvent getLastMouseDownEvent() {
     NiftyMouseInputEvent result = new NiftyMouseInputEvent();
     result.initialize(lastMouseX, lastMouseY, lastMouseWheel, lastButtonDown0, lastButtonDown1, lastButtonDown2);

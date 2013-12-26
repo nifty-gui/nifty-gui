@@ -1,17 +1,16 @@
 package de.lessvoid.nifty.controls.scrollbar;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+
 /**
  * Test the ScrollbarImpl.
+ *
  * @author void
  */
 public class ScrollbarImplTest {
@@ -47,7 +46,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f); 
+    scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
   }
 
   @Test
@@ -56,7 +55,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 8.f, viewSize, 1.f, 4.f); 
+    scrollbar.bindToView(view, 0.f, 8.f, viewSize, 1.f, 4.f);
   }
 
   @Test
@@ -65,7 +64,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 0.f, 16.f, viewSize, 1.f, 4.f); 
+    scrollbar.bindToView(view, 0.f, 16.f, viewSize, 1.f, 4.f);
   }
 
   @Test
@@ -74,7 +73,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 1.f, 4.f, viewSize, 1.f, 4.f); 
+    scrollbar.bindToView(view, 1.f, 4.f, viewSize, 1.f, 4.f);
   }
 
   @Test
@@ -83,7 +82,7 @@ public class ScrollbarImplTest {
     view.valueChanged(0.f);
     replay(view);
 
-    scrollbar.bindToView(view, 4.f, 4.f, viewSize, 1.f, 4.f); 
+    scrollbar.bindToView(view, 4.f, 4.f, viewSize, 1.f, 4.f);
   }
 
   @Test
@@ -92,7 +91,7 @@ public class ScrollbarImplTest {
     view.valueChanged(8.f);
     replay(view);
 
-    scrollbar.bindToView(view, 8.f, 16.f, viewSize, 1.f, 4.f); 
+    scrollbar.bindToView(view, 8.f, 16.f, viewSize, 1.f, 4.f);
   }
 
   @Test

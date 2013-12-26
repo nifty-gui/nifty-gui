@@ -1,15 +1,17 @@
 package de.lessvoid.nifty.effects;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.effects.impl.Nop;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import org.easymock.EasyMock;
+import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.Properties;
 
-import org.junit.Test;
-
-import de.lessvoid.nifty.effects.impl.Nop;
-import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class EffectCanStartTest {
   private static final boolean INHERIT_FALSE = false;
@@ -61,7 +63,21 @@ public class EffectCanStartTest {
   }
 
   private void prepare(final String alternateEnable, final String alternateDisable, final String customKey) {
-    effect = new Effect(null, INHERIT_FALSE, POST_FALSE, OVERLAY_TRUE, alternateEnable, alternateDisable, customKey, NEVER_STOP_RENDERING, EffectEventId.onActive);
-    effect.init(null, new Nop(), new EffectProperties(new Properties()), new AccurateTimeProvider(), new LinkedList<Object>());
+    Nifty nifty = EasyMock.createMock(Nifty.class);
+    Element element = EasyMock.createMock(Element.class);
+    effect = new Effect(
+        nifty,
+        INHERIT_FALSE,
+        POST_FALSE,
+        OVERLAY_TRUE,
+        alternateEnable,
+        alternateDisable,
+        customKey,
+        NEVER_STOP_RENDERING,
+        EffectEventId.onActive,
+        element,
+        new Nop(),
+        new EffectProperties(new Properties()), new AccurateTimeProvider(),
+        new LinkedList<Object>());
   }
 }

@@ -1,22 +1,25 @@
 package de.lessvoid.nifty.effects.impl;
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TargetElementResolver;
+
+import javax.annotation.Nonnull;
+import java.util.logging.Logger;
 
 /**
  * Move - move stuff around.
+ *
  * @author void
  */
 public class Move implements EffectImpl {
 
-  private static Logger log = Logger.getLogger(Move.class.getName());
+  private static final Logger log = Logger.getLogger(Move.class.getName());
 
   private static final String LEFT = "left";
   private static final String RIGHT = "right";
@@ -35,7 +38,11 @@ public class Move implements EffectImpl {
   private boolean fromOffset = false;
   private boolean toOffset = false;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     String mode = parameter.getProperty("mode");
     direction = parameter.getProperty("direction");
     if (LEFT.equals(direction)) {
@@ -69,7 +76,7 @@ public class Move implements EffectImpl {
       offsetX = startOffsetX * -1;
       offsetY = startOffsetY * -1;
     } else if ("toOffset".equals(mode)) {
-      toOffset  = true;
+      toOffset = true;
       startOffsetX = 0;
       startOffsetY = 0;
       offsetX = Integer.valueOf(parameter.getProperty("offsetX", "0"));
@@ -77,11 +84,13 @@ public class Move implements EffectImpl {
     }
 
     String target = parameter.getProperty("targetElement");
-    if (target != null) {
-      TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
+    Screen screen = nifty.getCurrentScreen();
+    if (target != null && screen != null) {
+      TargetElementResolver resolver = new TargetElementResolver(screen, element);
       Element targetElement = resolver.resolve(target);
       if (targetElement == null) {
-        log.warning("move effect for element [" + element.getId() + "] was unable to find target element [" + target + "] at screen [" + nifty.getCurrentScreen().getScreenId() + "]");
+        log.warning("move effect for element [" + element.getId() + "] was unable to find target element [" + target
+            + "] at screen [" + screen.getScreenId() + "]");
         return;
       }
 
@@ -99,11 +108,12 @@ public class Move implements EffectImpl {
     }
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (fromOffset || toOffset) {
       float moveToX = startOffsetX + normalizedTime * offsetX;
       float moveToY = startOffsetY + normalizedTime * offsetY;
@@ -125,6 +135,7 @@ public class Move implements EffectImpl {
     }
   }
 
+  @Override
   public void deactivate() {
   }
 }

@@ -3,124 +3,165 @@ package de.lessvoid.nifty.controls;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 public abstract class AbstractController implements Controller, NiftyControl {
-    private Element element;
-    private boolean bound = false;
+  private static final Logger log = Logger.getLogger(AbstractController.class.getName());
+  @Nullable
+  private Element element;
+  private boolean bound = false;
 
-    protected void bind(final Element element) {
-      this.element = element;
+  protected void bind(@Nonnull final Element element) {
+    this.element = element;
+  }
+
+  @Override
+  public void init(@Nonnull final Parameters parameter) {
+    this.bound = true;
+  }
+
+  @Nullable
+  @Override
+  public Element getElement() {
+    if (element == null) {
+      log.warning("Requested element from controller before binding was performed.");
     }
+    return element;
+  }
 
-    @Override
-    public void init(final Parameters parameter) {
-      this.bound = true;
-    }
+  @Override
+  public void enable() {
+    setEnabled(true);
+  }
 
-    @Override
-    public Element getElement() {
-      return element;
-    }
+  @Override
+  public void disable() {
+    setEnabled(false);
+  }
 
-    @Override
-    public void enable() {
-      element.enable();
-    }
-
-    @Override
-    public void disable() {
-      element.disable();
-    }
-
-    @Override
-    public void setEnabled(final boolean enabled) {
+  @Override
+  public void setEnabled(final boolean enabled) {
+    final Element element = getElement();
+    if (element != null) {
       if (enabled) {
         element.enable();
       } else {
         element.disable();
       }
     }
+  }
 
-    @Override
-    public boolean isEnabled() {
-      return element.isEnabled();
-    }
+  @Override
+  public boolean isEnabled() {
+    final Element element = getElement();
+    return element != null && element.isEnabled();
+  }
 
-    @Override
-    public String getId() {
-      return element.getId();
-    }
+  @Nullable
+  @Override
+  public String getId() {
+    final Element element = getElement();
+    return element != null ? element.getId() : null;
+  }
 
-    @Override
-    public void setId(final String id) {
+  @Override
+  public void setId(@Nullable final String id) {
+    final Element element = getElement();
+    if (element != null) {
       element.setId(id);
     }
+  }
 
-    @Override
-    public int getWidth() {
-      return element.getWidth();
-    }
+  @Override
+  public int getWidth() {
+    final Element element = getElement();
+    return element != null ? element.getWidth() : 0;
+  }
 
-    @Override
-    public void setWidth(final SizeValue width) {
+  @Override
+  public void setWidth(@Nonnull final SizeValue width) {
+    final Element element = getElement();
+    if (element != null) {
       element.setConstraintWidth(width);
     }
+  }
 
-    @Override
-    public int getHeight() {
-      return element.getHeight();
-    }
+  @Override
+  public int getHeight() {
+    final Element element = getElement();
+    return element != null ? element.getHeight() : 0;
+  }
 
-    @Override
-    public void setHeight(final SizeValue height) {
+  @Override
+  public void setHeight(@Nonnull final SizeValue height) {
+    final Element element = getElement();
+    if (element != null) {
       element.setConstraintHeight(height);
     }
+  }
 
-    @Override
-    public String getStyle() {
-      return element.getStyle();
+  @Override
+  public String getStyle() {
+    final Element element = getElement();
+    return element != null ? element.getStyle() : null;
+  }
+
+  @Override
+  public void setStyle(@Nonnull final String style) {
+    final Element element = getElement();
+    if (element != null) {
+      element.setStyle(element.getNifty().specialValuesReplace(style));
     }
+  }
 
-    @Override
-    public void setStyle(final String style) {
-     element.setStyle(element.getNifty().specialValuesReplace(style));
-    }
-
-    @Override
-    public void setFocus() {
+  @Override
+  public void setFocus() {
+    final Element element = getElement();
+    if (element != null) {
       element.setFocus();
     }
+  }
 
-    @Override
-    public void setFocusable(final boolean focusable) {
+  @Override
+  public void setFocusable(final boolean focusable) {
+    final Element element = getElement();
+    if (element != null) {
       element.setFocusable(focusable);
     }
+  }
 
-    @Override
-    public void onFocus(final boolean getFocus) {
-      if (element == null) {
-        return;
+  @Override
+  public void onFocus(final boolean getFocus) {
+    final Element element = getElement();
+    if (element != null) {
+      String id = element.getId();
+      if (id != null) {
+        if (getFocus) {
+          element.getNifty().publishEvent(id, new FocusGainedEvent(this, this));
+        } else {
+          element.getNifty().publishEvent(id, new FocusLostEvent(this, this));
+        }
       }
-      if (getFocus) {
-        element.getNifty().publishEvent(element.getId(), new FocusGainedEvent(this, this));
-      } else {
-        element.getNifty().publishEvent(element.getId(), new FocusLostEvent(this, this));
-      }
     }
+  }
 
-    @Override
-    public boolean hasFocus() {
-      if (getElement() == null) {
-        return false;
-      }
-      return getElement() == getElement().getFocusHandler().getKeyboardFocusElement();
+  @Override
+  public boolean hasFocus() {
+    final Element element = getElement();
+    if (element == null) {
+      return false;
     }
+    return element == element.getFocusHandler().getKeyboardFocusElement();
+  }
 
-    @Override
-    public void layoutCallback() {
-    }
+  @Override
+  public void layoutCallback() {
+  }
 
-    @Override
-    public boolean isBound() {
-      return bound;
-    }
+  @Override
+  public boolean isBound() {
+    return bound;
+  }
 }

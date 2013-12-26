@@ -2,6 +2,8 @@ package de.lessvoid.nifty.slick2d.render.font;
 
 import org.newdawn.slick.Font;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is the render font implementation that uses an unknown font implementation.
  *
@@ -14,7 +16,7 @@ public class DefaultSlickRenderFont extends AbstractSlickRenderFont {
    * @param font the font this render font is supposed to encapsulate
    * @throws SlickLoadFontException in case loading the font fails
    */
-  public DefaultSlickRenderFont(final Font font) throws SlickLoadFontException {
+  public DefaultSlickRenderFont(@Nonnull final Font font) throws SlickLoadFontException {
     super(font);
   }
 }

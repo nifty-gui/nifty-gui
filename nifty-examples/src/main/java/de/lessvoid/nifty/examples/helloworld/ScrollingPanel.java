@@ -10,16 +10,21 @@ import de.lessvoid.nifty.render.NiftyImageMode;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class ScrollingPanel implements EffectImpl {
   private TimeProvider timeProvider;
   private long start;
   private float xspeed;
   private float yspeed;
+  @Nullable
   private NiftyImage image;
   private float xoff;
   private float yoff;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(@Nonnull final Nifty nifty, @Nonnull final Element element, @Nonnull final EffectProperties parameter) {
     timeProvider = nifty.getTimeProvider();
     start = timeProvider.getMsTime();
     xspeed = Float.valueOf(parameter.getProperty("xspeed", "1000"));
@@ -33,7 +38,8 @@ public class ScrollingPanel implements EffectImpl {
     yoff = 0;
   }
 
-  public void execute(final Element element, final float normalizedTime, final Falloff falloff, final NiftyRenderEngine r) {
+  @Override
+  public void execute(@Nonnull final Element element, final float normalizedTime, final Falloff falloff, @Nonnull final NiftyRenderEngine r) {
     long now = timeProvider.getMsTime();
     r.saveState(null);
     xoff = ((now - start) % xspeed / xspeed * image.getWidth()) % image.getWidth();
@@ -48,6 +54,7 @@ public class ScrollingPanel implements EffectImpl {
     r.restoreState();
   }
 
+  @Override
   public void deactivate() {
     image.dispose();
   }

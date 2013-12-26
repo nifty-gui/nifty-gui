@@ -1,28 +1,50 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.List;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+
 public interface EffectProcessor {
-  void registerEffect(final Effect e);
-  void getRenderStatesToSave(final NiftyRenderDeviceProxy renderDeviceProxy);
-  void renderPre(final NiftyRenderEngine renderDevice);
-  void renderPost(final NiftyRenderEngine renderDevice);
-  void renderOverlay(final NiftyRenderEngine renderDevice);
+  void registerEffect(@Nonnull Effect e);
+
+  void getRenderStatesToSave(@Nonnull NiftyRenderDeviceProxy renderDeviceProxy);
+
+  void renderPre(@Nonnull NiftyRenderEngine renderDevice);
+
+  void renderPost(@Nonnull NiftyRenderEngine renderDevice);
+
+  void renderOverlay(@Nonnull NiftyRenderEngine renderDevice);
+
   boolean isActive();
+
   void saveActiveNeverStopRenderingEffects();
+
   void restoreNeverStopRenderingEffects();
+
   void reset();
-  void reset(final String customKey);
-  void activate(final EndNotify newListener, final String alternate, final String customKey);
+
+  void reset(@Nonnull String customKey);
+
+  void activate(@Nullable EndNotify newListener, @Nullable String alternate, @Nullable String customKey);
+
+  @Nullable
   String getStateString();
-  void setActive(final boolean newActive);
-  void processHover(final int x, final int y);
-  void processStartHover(final int x, final int y);
-  void processEndHover(final int x, final int y);
-  void processHoverDeactivate(final int x, final int y);
+
+  void setActive(boolean newActive);
+
+  void processHover(int x, int y);
+
+  void processStartHover(int x, int y);
+
+  void processEndHover(int x, int y);
+
+  void processHoverDeactivate(int x, int y);
+
   void removeAllEffects();
-  <T extends EffectImpl> List<Effect> getEffects(final Class<T> requestedClass);
+
+  @Nonnull
+  <T extends EffectImpl> List<Effect> getEffects(@Nonnull Class<T> requestedClass);
 }

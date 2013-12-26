@@ -4,6 +4,8 @@ import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import org.newdawn.slick.Input;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is a input system that is <b>not</b> supposed to be used in any application directly. This input system allows
  * the on-the-fly replacement of the used input system.
@@ -87,7 +89,7 @@ public final class RelaySlickInputSystem implements SlickInputSystem {
   }
 
   @Override
-  public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
+  public void forwardEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     if (targetInputSystem != null) {
       targetInputSystem.forwardEvents(inputEventConsumer);
     }
@@ -186,7 +188,7 @@ public final class RelaySlickInputSystem implements SlickInputSystem {
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader niftyResourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader niftyResourceLoader) {
     if (targetInputSystem != null) {
       targetInputSystem.setResourceLoader(niftyResourceLoader);
     }

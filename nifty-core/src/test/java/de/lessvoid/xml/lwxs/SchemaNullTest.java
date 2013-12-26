@@ -1,18 +1,17 @@
 package de.lessvoid.xml.lwxs;
 
+import de.lessvoid.xml.xpp3.Attributes;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.lessvoid.xml.lwxs.Schema;
-import de.lessvoid.xml.xpp3.Attributes;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 
 public class SchemaNullTest {
   private Schema schema;
 
   @Before
-  public void setUp() {
-    schema = new Schema(null);
+  public void setUp() throws Exception {
+    schema = new Schema(XmlPullParserFactory.newInstance(), null);
   }
 
   @Test(expected = Exception.class)

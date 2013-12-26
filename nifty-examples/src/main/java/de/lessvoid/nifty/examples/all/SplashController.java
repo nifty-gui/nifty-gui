@@ -7,21 +7,27 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 public class SplashController implements ScreenController, KeyInputHandler {
   private Nifty nifty;
 
-  public void bind(final Nifty newNifty, final Screen screen) {
+  @Override
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screen) {
     this.nifty = newNifty;
   }
 
+  @Override
   public void onStartScreen() {
     nifty.gotoScreen("start2");
   }
 
+  @Override
   public void onEndScreen() {
   }
 
-  public boolean keyEvent(final NiftyInputEvent inputEvent) {
+  @Override
+  public boolean keyEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (inputEvent == NiftyStandardInputEvent.Escape) {
       nifty.setAlternateKey("exit");
       nifty.gotoScreen("menu");

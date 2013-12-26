@@ -2,9 +2,10 @@ package de.lessvoid.nifty.gdx.sound;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
+
+import javax.annotation.Nonnull;
 
 /**
  * This is the sound handle used for background music.
@@ -20,6 +21,7 @@ public class GdxMusicHandle implements SoundHandle {
   /**
    * The asset manager used to load the music.
    */
+  @Nonnull
   private final AssetManager assetManager;
 
   /**
@@ -31,10 +33,13 @@ public class GdxMusicHandle implements SoundHandle {
    * Create a new sound handle for background music.
    *
    * @param assetManager the asset manager used to load the music
-   * @param soundSystem the sound system of the nifty gui
-   * @param fileName the file name that is the load to fetch the new music
+   * @param soundSystem  the sound system of the nifty gui
+   * @param fileName     the file name that is the load to fetch the new music
    */
-  public GdxMusicHandle(final AssetManager assetManager, final SoundSystem soundSystem, final String fileName) {
+  public GdxMusicHandle(
+      @Nonnull final AssetManager assetManager,
+      @Nonnull final SoundSystem soundSystem,
+      final String fileName) {
     this.assetManager = assetManager;
 
     if (!assetManager.isLoaded(fileName, Music.class)) {

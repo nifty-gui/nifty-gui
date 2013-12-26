@@ -12,6 +12,9 @@ import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
 import de.lessvoid.nifty.controls.textfield.format.FormatPlain;
 import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * This class contains the control logic of a text field. Things like selection, the cursor position and operations like
  * copy and paste are handled here.
@@ -23,6 +26,7 @@ public class TextFieldLogic {
   /**
    * The text that was typed into the input area by the user.
    */
+  @Nonnull
   private final StringBuilder text;
 
   /**
@@ -53,6 +57,7 @@ public class TextFieldLogic {
   /**
    * clipboard.
    */
+  @Nonnull
   private final Clipboard clipboard;
 
   /**
@@ -63,45 +68,58 @@ public class TextFieldLogic {
   /**
    * The text field view instance that allows to notify the parent component about a update.
    */
+  @Nonnull
   private final TextFieldView view;
 
   /**
    * The filter that is used on the input of single characters in the text.
    */
+  @Nonnull
   private TextFieldInputCharFilter filterInputSingle;
 
   /**
    * The filter that is used on the input of a character sequence in the text.
    */
+  @Nonnull
   private TextFieldInputCharSequenceFilter filterInputSequence;
 
   /**
    * The filter that is applied on delete operations.
    */
+  @Nonnull
   private TextFieldDeleteFilter filterDelete;
 
   /**
    * The default input filter.
    */
+  @Nonnull
   private static final TextFieldInputFilter DEFAULT_INPUT_FILTER = new FilterAcceptAll();
 
   /**
    * The default delete filter.
    */
+  @Nonnull
   private static final TextFieldDeleteFilter DEFAULT_DELETE_FILTER = new FilterDeleteAll();
+
+  /**
+   * The default text filter format.
+   */
+  @Nonnull
+  private static final TextFieldDisplayFormat DEFAULT_FORMAT = new FormatPlain();
 
   /**
    * The format that is applied to the text.
    */
+  @Nonnull
   private TextFieldDisplayFormat format;
 
   /**
    * Create TextField with clipboard support.
    *
-   * @param newClipboard clipboard
+   * @param newClipboard  clipboard
    * @param textFieldView the viewer for the text field
    */
-  public TextFieldLogic(final Clipboard newClipboard, final TextFieldView textFieldView) {
+  public TextFieldLogic(@Nonnull final Clipboard newClipboard, @Nonnull final TextFieldView textFieldView) {
     view = textFieldView;
     clipboard = newClipboard;
     maxLength = TextField.UNLIMITED_LENGTH;
@@ -110,7 +128,7 @@ public class TextFieldLogic {
     filterInputSequence = DEFAULT_INPUT_FILTER;
     filterDelete = DEFAULT_DELETE_FILTER;
 
-    format = new FormatPlain();
+    format = DEFAULT_FORMAT;
 
     text = new StringBuilder(100);
   }
@@ -118,16 +136,19 @@ public class TextFieldLogic {
   /**
    * Create TextField with clipboard support.
    *
-   * @param newText init text
-   * @param newClipboard clipboard
+   * @param newText       init text
+   * @param newClipboard  clipboard
    * @param textFieldView the viewer for the text field
    */
-  public TextFieldLogic(final CharSequence newText, final Clipboard newClipboard, final TextFieldView textFieldView) {
+  public TextFieldLogic(
+      @Nullable final CharSequence newText,
+      @Nonnull final Clipboard newClipboard,
+      @Nonnull final TextFieldView textFieldView) {
     this(newClipboard, textFieldView);
     setText(newText);
   }
 
-  public void setText(final CharSequence newText) {
+  public void setText(@Nullable final CharSequence newText) {
     text.setLength(0);
     if (newText != null) {
       text.append(newText);
@@ -141,7 +162,7 @@ public class TextFieldLogic {
    *
    * @param filter the new filter or {@code null} to reset the filter
    */
-  public void setInputFilterSingle(final TextFieldInputCharFilter filter) {
+  public void setInputFilterSingle(@Nullable final TextFieldInputCharFilter filter) {
     filterInputSingle = (filter == null) ? DEFAULT_INPUT_FILTER : filter;
   }
 
@@ -150,7 +171,7 @@ public class TextFieldLogic {
    *
    * @param filter the new filter or {@code null} to reset the filter
    */
-  public void setInputFilterSequence(final TextFieldInputCharSequenceFilter filter) {
+  public void setInputFilterSequence(@Nullable final TextFieldInputCharSequenceFilter filter) {
     filterInputSequence = (filter == null) ? DEFAULT_INPUT_FILTER : filter;
   }
 
@@ -159,7 +180,7 @@ public class TextFieldLogic {
    *
    * @param filter the new filter or {@code null} to reset the filter
    */
-  public void setDeleteFilter(final TextFieldDeleteFilter filter) {
+  public void setDeleteFilter(@Nullable final TextFieldDeleteFilter filter) {
     filterDelete = (filter == null) ? DEFAULT_DELETE_FILTER : filter;
   }
 
@@ -168,8 +189,8 @@ public class TextFieldLogic {
    *
    * @param newFormat the new format that is applied to the text field
    */
-  public void setFormat(final TextFieldDisplayFormat newFormat) {
-    format = (newFormat == null) ? new FormatPlain() : newFormat;
+  public void setFormat(@Nullable final TextFieldDisplayFormat newFormat) {
+    format = (newFormat == null) ? DEFAULT_FORMAT : newFormat;
   }
 
   /**
@@ -177,6 +198,7 @@ public class TextFieldLogic {
    *
    * @return the format that is applied to the text displayed
    */
+  @Nonnull
   public TextFieldDisplayFormat getFormat() {
     return format;
   }
@@ -331,6 +353,7 @@ public class TextFieldLogic {
     delete();
   }
 
+  @Nullable
   public CharSequence getDisplayedSelectedText() {
     if (!hasSelection()) {
       return null;
@@ -355,6 +378,7 @@ public class TextFieldLogic {
    *
    * @return the text that is to be displayed to the user
    */
+  @Nonnull
   public CharSequence getDisplayedText() {
     return format.getDisplaySequence(text, 0, text.length());
   }
@@ -364,6 +388,7 @@ public class TextFieldLogic {
    *
    * @return the real text that was written into this text field
    */
+  @Nonnull
   public CharSequence getRealText() {
     return text;
   }
@@ -372,8 +397,9 @@ public class TextFieldLogic {
    * Get the character that is used to mask the password.
    *
    * @return the character masking the password or {@code null} in case no character is used and the normal text is
-   *         displayed
+   * displayed
    */
+  @Nullable
   public Character getPasswordChar() {
     if (format instanceof FormatPassword) {
       return ((FormatPassword) format).getPasswordChar();
@@ -387,6 +413,7 @@ public class TextFieldLogic {
    *
    * @return the selected text as typed in by the user or {@code null} in case nothing is selected
    */
+  @Nullable
   public CharSequence getRealSelectedText() {
     if (!hasSelection()) {
       return null;
@@ -412,7 +439,7 @@ public class TextFieldLogic {
    *
    * @param newText the new text that should be applied
    */
-  public void setTextAndNotify(final CharSequence newText) {
+  public void setTextAndNotify(@Nullable final CharSequence newText) {
     setText(newText);
 
     if ((newText != null) && (newText.length() > 0)) {
@@ -447,7 +474,7 @@ public class TextFieldLogic {
    * @param chars the character sequence to add
    * @return {@code true} in case the text was changed
    */
-  private boolean filterAndInsert(final CharSequence chars) {
+  private boolean filterAndInsert(@Nonnull final CharSequence chars) {
     if (chars.length() == 0) {
       return false;
     }
@@ -511,7 +538,7 @@ public class TextFieldLogic {
    *
    * @param chars the character sequence to insert
    */
-  public void insert(final CharSequence chars) {
+  public void insert(@Nonnull final CharSequence chars) {
     if (hasSelection()) {
       deleteSelectedText();
     }
@@ -586,7 +613,7 @@ public class TextFieldLogic {
     setCursorPosition(Integer.MAX_VALUE);
   }
 
-  private CharSequence filterNewLines(final String input) {
+  private CharSequence filterNewLines(@Nonnull final String input) {
     return input.replaceAll("\\r\\n|\\r|\\n", "");
   }
 }

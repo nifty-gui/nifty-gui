@@ -1,19 +1,5 @@
 package de.lessvoid.nifty.controls.dynamic;
 
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -26,6 +12,19 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.annotation.Nonnull;
+
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.*;
 
 public class ScreenCreatorTest {
   private Nifty niftyMock;
@@ -44,7 +43,8 @@ public class ScreenCreatorTest {
     niftyMock.addScreen(eq("myid"), isA(Screen.class));
     replay(niftyMock);
 
-    expect(rootLayerFactoryMock.createRootLayer(eq("root"), eq(niftyMock), isA(Screen.class), eq(timeProvider))).andReturn(rootElement);
+    expect(rootLayerFactoryMock.createRootLayer(eq("root"), eq(niftyMock), isA(Screen.class),
+        eq(timeProvider))).andReturn(rootElement);
     replay(rootLayerFactoryMock);
 
     replay(rootElement);
@@ -136,13 +136,21 @@ public class ScreenCreatorTest {
     // be called. It's a bit cumbersome to test it this way but there is no other way possible right now.
 
     screen.keyEvent(new KeyboardInputEvent(KeyboardInputEvent.KEY_SPACE, ' ', true, false, false));
-    ((MyScreenControllerWithInputMapping)screenController).assertCalled();
+    ((MyScreenControllerWithInputMapping) screenController).assertCalled();
   }
 
   private class MyScreenController implements ScreenController {
-    public void bind(Nifty nifty, Screen screen) {    }
-    public void onStartScreen() {    }
-    public void onEndScreen() {    }
+    @Override
+    public void bind(@Nonnull Nifty nifty, @Nonnull Screen screen) {
+    }
+
+    @Override
+    public void onStartScreen() {
+    }
+
+    @Override
+    public void onEndScreen() {
+    }
   }
 
   private class MyScreenControllerWithInputMapping implements ScreenController, KeyInputHandler {
@@ -153,11 +161,20 @@ public class ScreenCreatorTest {
       this.expectedEvent = expectedEvent;
     }
 
-    public void bind(Nifty nifty, Screen screen) {    }
-    public void onStartScreen() {    }
-    public void onEndScreen() {    }
+    @Override
+    public void bind(@Nonnull Nifty nifty, @Nonnull Screen screen) {
+    }
 
-    public boolean keyEvent(final NiftyInputEvent inputEvent) {
+    @Override
+    public void onStartScreen() {
+    }
+
+    @Override
+    public void onEndScreen() {
+    }
+
+    @Override
+    public boolean keyEvent(@Nonnull final NiftyInputEvent inputEvent) {
       assertEquals(expectedEvent, inputEvent);
       called = true;
       return true;

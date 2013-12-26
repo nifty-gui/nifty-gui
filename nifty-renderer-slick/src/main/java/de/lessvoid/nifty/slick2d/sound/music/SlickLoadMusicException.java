@@ -32,7 +32,7 @@ public final class SlickLoadMusicException extends SlickLoadException {
    * Create the exception with an attached message and parent Throwable.
    *
    * @param msg The message that is attached to this exception
-   * @param e The throwable that caused this exception
+   * @param e   The throwable that caused this exception
    */
   public SlickLoadMusicException(final String msg, final Throwable e) {
     super(msg, e);

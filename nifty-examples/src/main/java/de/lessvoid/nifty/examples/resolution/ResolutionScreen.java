@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.resolution;
 
-import java.util.Collection;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.DropDown;
@@ -11,16 +9,20 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+
 /**
  * ScreenController for Hello World Example.
+ *
  * @author void
  */
 public class ResolutionScreen<T> implements ScreenController, NiftyExample {
   private Nifty nifty;
-  private Screen screen;
+  @Nullable
   private DropDown<T> dropDown;
-  private ListBox<String> listBox;
-  
+
   private ResolutionControl<T> resControl;
 
   public ResolutionScreen(final ResolutionControl<T> newControl) {
@@ -29,11 +31,10 @@ public class ResolutionScreen<T> implements ScreenController, NiftyExample {
 
   @SuppressWarnings("unchecked")
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screen) {
     this.nifty = newNifty;
-    this.screen = newScreen;
     this.dropDown = screen.findNiftyControl("resolutions", DropDown.class);
-    this.listBox = screen.findNiftyControl("listBox", ListBox.class);
+    ListBox<String> listBox = screen.findNiftyControl("listBox", ListBox.class);
 
     // get all DisplayModes from LWJGL and add their descriptions to the DropDown
     fillResolutionDropDown(screen);
@@ -54,14 +55,15 @@ public class ResolutionScreen<T> implements ScreenController, NiftyExample {
   public void onEndScreen() {
   }
 
-  @NiftyEventSubscriber(id="resolutions")
-  public void onResolution(final String id, final DropDownSelectionChangedEvent<T> event) {
+  @NiftyEventSubscriber(id = "resolutions")
+  public void onResolution(final String id, @Nonnull final DropDownSelectionChangedEvent<T> event) {
     resControl.setResolution(event.getSelection());
     nifty.resolutionChanged();
   }
 
   /**
    * Get all LWJGL DisplayModes into the DropDown
+   *
    * @param screen
    */
   private void fillResolutionDropDown(final Screen screen) {
@@ -71,23 +73,26 @@ public class ResolutionScreen<T> implements ScreenController, NiftyExample {
     }
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "resolution/resolution.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Screen Resolution";
   }
 
   @Override
-  public void prepareStart(Nifty nifty) {
+  public void prepareStart(@Nonnull Nifty nifty) {
     nifty.registerScreenController(this);
   }
 }

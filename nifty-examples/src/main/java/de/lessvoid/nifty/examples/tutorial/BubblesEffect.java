@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.tutorial;
 
-import java.util.Random;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.effects.EffectImpl;
 import de.lessvoid.nifty.effects.EffectProperties;
@@ -9,37 +7,73 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.time.TimeProvider;
-import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Random;
+import java.util.logging.Logger;
 
 public class BubblesEffect implements EffectImpl {
-  private Bubble[] bubbles = new Bubble[32];
+  private static final Logger log = Logger.getLogger(BubblesEffect.class.getName());
+  @Nonnull
+  private final Bubble[] bubbles = new Bubble[32];
   private int screenWidth;
   private int screenHeight;
-  private Random random = new Random();
-  private TimeProvider timeProvider = new AccurateTimeProvider();
+  @Nonnull
+  private final Random random = new Random();
+  @Nullable
+  private TimeProvider timeProvider;
+  @Nullable
   private NiftyImage niftyImage1;
+  @Nullable
   private NiftyImage niftyImage2;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
-    niftyImage1 = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), "tutorial/bubble-64x64.png", true);
-    niftyImage2 = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), "tutorial/bubble-32x32.png", true);
-    screenWidth = nifty.getCurrentScreen().getRootElement().getWidth();
-    screenHeight = nifty.getCurrentScreen().getRootElement().getHeight();
-    for (int i=0; i<bubbles.length; i++) {
-      bubbles[i] = new Bubble(timeProvider.getMsTime());
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
+    final Screen currentScreen = nifty.getCurrentScreen();
+    if (currentScreen == null) {
+      log.severe("Can't active BubblesEffect without current screen!");
+    } else {
+      timeProvider = nifty.getTimeProvider();
+      niftyImage1 = nifty.getRenderEngine().createImage(currentScreen, "tutorial/bubble-64x64.png", true);
+      niftyImage2 = nifty.getRenderEngine().createImage(currentScreen, "tutorial/bubble-32x32.png", true);
+      screenWidth = currentScreen.getRootElement().getWidth();
+      screenHeight = currentScreen.getRootElement().getHeight();
+      for (int i = 0; i < bubbles.length; i++) {
+        bubbles[i] = new Bubble(timeProvider.getMsTime());
+      }
+    }
+
+  }
+
+  @Override
+  public void deactivate() {
+    if (niftyImage1 != null) {
+      niftyImage1.dispose();
+    }
+    if (niftyImage2 != null) {
+      niftyImage2.dispose();
     }
   }
 
-  public void deactivate() {
-    niftyImage1.dispose();
-    niftyImage2.dispose();
-  }
-
-  public void execute(final Element element, final float effectTime, final Falloff falloff, final NiftyRenderEngine r) {
-    for (Bubble bubble : bubbles) {
-      bubble.update(timeProvider.getMsTime());
-      bubble.render(r);
+  @Override
+  public void execute(
+      @Nonnull final Element element,
+      final float effectTime,
+      final Falloff falloff,
+      @Nonnull final NiftyRenderEngine r) {
+    if (timeProvider != null) {
+      for (@Nullable Bubble bubble : bubbles) {
+        if (bubble != null) {
+          bubble.update(timeProvider.getMsTime());
+          bubble.render(r);
+        }
+      }
     }
   }
 
@@ -65,7 +99,7 @@ public class BubblesEffect implements EffectImpl {
       initPosition(startTime);
       y = screenHeight;
       speed = getNewSpeed();
-      this.startTime = startTime + random.nextInt((int)speed);
+      this.startTime = startTime + random.nextInt((int) speed);
     }
 
     private int getNewSpeed() {
@@ -97,22 +131,22 @@ public class BubblesEffect implements EffectImpl {
     public void update(final long currentTime) {
       long time = currentTime - startTime;
       float t = getSinusValue(currentTime);
-      x = (int)(t * speedX * dir + initialX);
+      x = (int) (t * speedX * dir + initialX);
 
-      float value = (float)((speed - time) / (float)speed);
-      y = (int)(screenHeight * value);
+      float value = (speed - time) / (float) speed;
+      y = (int) (screenHeight * value);
       if (y < Y_MIN_1) {
         initPosition(currentTime);
         enabled = true;
       }
     }
 
-    public void render(final NiftyRenderEngine r) {
+    public void render(@Nonnull final NiftyRenderEngine r) {
       if (enabled) {
         if (y < Y_MIN_1) {
           return;
         } else if (y < Y_MIN_2) {
-          r.setColorAlpha(1.0f - (float)(140f - y) / 40f);
+          r.setColorAlpha(1.0f - (140f - y) / 40f);
         } else if (y > Y_MAX_1 && y < Y_MAX_2) {
           float max = Y_MAX_1;
           r.setColorAlpha(1.0f - (y - max) / 40f);
@@ -122,11 +156,15 @@ public class BubblesEffect implements EffectImpl {
           r.setColorAlpha(1.0f);
         }
         if (image == 0) {
-          r.renderImage(niftyImage1, x, y, sizeX, sizeY);
+          if (niftyImage1 != null) {
+            r.renderImage(niftyImage1, x, y, sizeX, sizeY);
+          }
         } else {
-          r.renderImage(niftyImage2, x, y, sizeX, sizeY);
+          if (niftyImage2 != null) {
+            r.renderImage(niftyImage2, x, y, sizeX, sizeY);
+          }
         }
-        
+
       }
     }
 

@@ -1,28 +1,27 @@
 package de.lessvoid.nifty.controls.menu;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
-public class PopupMenuControl<T> implements Controller {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public class PopupMenuControl extends AbstractController {
+  @Nullable
   private Nifty nifty;
-  private Element element;
 
   @Override
   public void bind(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element newElement,
-      final Parameters properties) {
-    nifty = niftyParam;
-    element = newElement;
-  }
-
-  @Override
-  public void init(final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters properties) {
+    bind(element);
+    this.nifty = nifty;
   }
 
   @Override
@@ -30,15 +29,16 @@ public class PopupMenuControl<T> implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
-  @Override
-  public void onFocus(final boolean getFocus) {
-  }
-
   public void closePopup() {
-    nifty.closePopup(element.getId());
+    if (nifty != null) {
+      String id = getId();
+      if (id != null) {
+        nifty.closePopup(id);
+      }
+    }
   }
 }

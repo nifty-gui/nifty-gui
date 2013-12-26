@@ -4,16 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.BufferUtils;
-
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.gdx.render.GdxMouseCursor;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.Factory;
 import de.lessvoid.nifty.tools.ObjectPool;
-import de.lessvoid.nifty.tools.ObjectPool.Factory;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -25,60 +26,75 @@ import java.util.logging.Logger;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
- *
- * LibGDX & OpenGL ES Implementation of the {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} Interface. This
- * implementation will be the most backwards-compatible because it doesn't use any functions beyond OpenGL ES 1.0.
- * It is suitable for both desktop and mobile devices.
- *
- * Based on void's {@link de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend} class.
- *
- * The idea of the BatchRenderDevice is to remove as much state changes as possible from rendering a Nifty scene. The
- * way this is done is through these mechanism:
- *
- * 1) A texture atlas is used to store all textures in a single large texture. The actual texture size is provided
- *    by the user but will usually be around 2048x2048 pixel. A BatchRenderBackend has to provide mechanism to create
- *    that texture and a way to load an image and put it at a given position into that big texture.
- *
- * 2) The only actual render data that Nifty will call this BatchRenderBackend with are textured quads with individual
- *    vertex colors. Nifty will provide the texture coordinates which will always be relative to the texture atlas
- *    created before. A BatchRenderBackend implementation should cache or send these quads to the GPU to be later
- *    rendered in a single draw call when Nifty calls the render() method of a BatchRenderBackend implementation.
- *
- * 3) The batch size, e.g. how many quads will fit into a single batch is decided by the BatchRenderBackend
- *    implementation. If a quad does not fit into the current batch the BatchRenderBackend implementation might create
- *    a new batch automatically.
- *
- * 4) Nifty will only start a new batch when the BlendMode changes.
- *
- * 5) Since OpenGL ES doesn't support the idea of GL_QUADS, we have to tessellate the quads into two connected
- *    triangles by duplicating the two shared vertices, so that we can use GL_TRIANGLES instead. So we have a total of
- *    6 vertices per quad (2 connected triangles forming a quad), but the performance hit is more than offset by the
- *    ability of the GPU to handle triangles much more efficiently than quads. GL_TRIANGLES submits the triangles'
- *    vertices in batches to the GPU via a vertex buffer in what is called a triangle list; that is, the triangles are
- *    treated as separate entities by the GPU, so it doesn't automatically try and join all of them together, as it
- *    would with GL_TRIANGLE_STRIP or GL_TRIANGLE_FAN. This is of great benefit for rendering quads, since we want each
- *    quad to be distinct. We then manually tell the GPU to connect every two consecutive triangles together by
- *    specifying two duplicate or shared vertices per quad. This way, two consecutive triangles are pieced together
- *    seamlessly, to create the illusion of a quad, while the next triangle will be seen as a separate entity,
- *    effectively creating a separate quad every other triangle. There are more advanced methods for rendering quads in
- *    OpenGL ES, however, this implementation seeks to be as backwards-compatible as possible, since it only uses
- *    OpenGL ES 1.0.
+ *         <p/>
+ *         LibGDX & OpenGL ES Implementation of the {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} Interface.
+ *         This
+ *         implementation will be the most backwards-compatible because it doesn't use any functions beyond OpenGL ES
+ *         1.0.
+ *         It is suitable for both desktop and mobile devices.
+ *         <p/>
+ *         Based on void's LwjglBatchRenderBackend class.
+ *         <p/>
+ *         The idea of the BatchRenderDevice is to remove as much state changes as possible from rendering a Nifty
+ *         scene. The
+ *         way this is done is through these mechanism:
+ *         <p/>
+ *         1) A texture atlas is used to store all textures in a single large texture. The actual texture size is
+ *         provided
+ *         by the user but will usually be around 2048x2048 pixel. A BatchRenderBackend has to provide mechanism to
+ *         create
+ *         that texture and a way to load an image and put it at a given position into that big texture.
+ *         <p/>
+ *         2) The only actual render data that Nifty will call this BatchRenderBackend with are textured quads with
+ *         individual
+ *         vertex colors. Nifty will provide the texture coordinates which will always be relative to the texture atlas
+ *         created before. A BatchRenderBackend implementation should cache or send these quads to the GPU to be later
+ *         rendered in a single draw call when Nifty calls the render() method of a BatchRenderBackend implementation.
+ *         <p/>
+ *         3) The batch size, e.g. how many quads will fit into a single batch is decided by the BatchRenderBackend
+ *         implementation. If a quad does not fit into the current batch the BatchRenderBackend implementation might
+ *         create
+ *         a new batch automatically.
+ *         <p/>
+ *         4) Nifty will only start a new batch when the BlendMode changes.
+ *         <p/>
+ *         5) Since OpenGL ES doesn't support the idea of GL_QUADS, we have to tessellate the quads into two connected
+ *         triangles by duplicating the two shared vertices, so that we can use GL_TRIANGLES instead. So we have a
+ *         total of
+ *         6 vertices per quad (2 connected triangles forming a quad), but the performance hit is more than offset by
+ *         the
+ *         ability of the GPU to handle triangles much more efficiently than quads. GL_TRIANGLES submits the triangles'
+ *         vertices in batches to the GPU via a vertex buffer in what is called a triangle list; that is,
+ *         the triangles are
+ *         treated as separate entities by the GPU, so it doesn't automatically try and join all of them together, as it
+ *         would with GL_TRIANGLE_STRIP or GL_TRIANGLE_FAN. This is of great benefit for rendering quads,
+ *         since we want each
+ *         quad to be distinct. We then manually tell the GPU to connect every two consecutive triangles together by
+ *         specifying two duplicate or shared vertices per quad. This way, two consecutive triangles are pieced together
+ *         seamlessly, to create the illusion of a quad, while the next triangle will be seen as a separate entity,
+ *         effectively creating a separate quad every other triangle. There are more advanced methods for rendering
+ *         quads in
+ *         OpenGL ES, however, this implementation seeks to be as backwards-compatible as possible, since it only uses
+ *         OpenGL ES 1.0.
  */
 public class GdxBatchRenderBackend implements BatchRenderBackend {
-  private static Logger log = Logger.getLogger(GdxBatchRenderBackend.class.getName());
+  private static final Logger log = Logger.getLogger(GdxBatchRenderBackend.class.getName());
   private int atlasTextureId;
+  @Nonnull
   private final ObjectPool<Batch> batchPool;
   private Batch currentBatch;
   private final List<Batch> batches = new ArrayList<Batch>();
   private ByteBuffer initialData;
-  private boolean fillRemovedTexture =
+  private final boolean fillRemovedTexture =
       Boolean.parseBoolean(System.getProperty(GdxBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
   private GdxMouseCursor mouseCursor;
-  private ArrayMap<String, GdxMouseCursor> mouseCursors;
+  @Nonnull
+  private final ArrayMap<String, GdxMouseCursor> mouseCursors;
 
   public GdxBatchRenderBackend() {
     mouseCursors = new ArrayMap<String, GdxMouseCursor>();
-    batchPool = new ObjectPool<Batch>(2, new Factory<Batch>() {
+    batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
+      @Nonnull
       @Override
       public Batch createNew() {
         return new Batch();
@@ -87,54 +103,36 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     initializeOpenGL();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     // nothing to do
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int getWidth() {
     return Gdx.graphics.getWidth();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int getHeight() {
     return Gdx.graphics.getHeight();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void beginFrame() {
     log.fine("beginFrame()");
-    for (int i=0; i<batches.size(); i++) {
+    for (int i = 0; i < batches.size(); i++) {
       batchPool.free(batches.get(i));
     }
     batches.clear();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void endFrame() {
     log.fine("endFrame");
     checkGLError();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void clear() {
     log.fine("clear()");
@@ -142,11 +140,12 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     Gdx.gl10.glClear(GL10.GL_COLOR_BUFFER_BIT);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Nullable
   @Override
-  public MouseCursor createMouseCursor(final String filename, final int hotspotX, final int hotspotY) throws IOException {
+  public MouseCursor createMouseCursor(
+      @Nonnull final String filename,
+      final int hotspotX,
+      final int hotspotY) throws IOException {
     // Prevent many creations of the same mouse cursor. TODO Nifty should be doing this automatically.
     if (mouseCursors.containsKey(filename)) {
       return mouseCursors.get(filename);
@@ -161,20 +160,14 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  public void enableMouseCursor(final MouseCursor mouseCursor) {
+  public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
     if (mouseCursor instanceof GdxMouseCursor) {
       this.mouseCursor = (GdxMouseCursor) mouseCursor;
       this.mouseCursor.enable();
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void disableMouseCursor() {
     if (mouseCursor != null) {
@@ -182,16 +175,13 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void createAtlasTexture(final int width, final int height) {
     try {
       createAtlasTexture(width, height, false);
 
       initialData = BufferUtils.newByteBuffer(width * height * 4);
-      for (int i=0; i<width*height; i++) {
+      for (int i = 0; i < width * height; i++) {
         initialData.put((byte) 0x00);
         initialData.put((byte) 0xff);
         initialData.put((byte) 0x00);
@@ -202,31 +192,26 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void clearAtlasTexture(final int width, final int height) {
     initialData.rewind();
     bind(atlasTextureId);
     Gdx.gl10.glTexImage2D(
-            GL10.GL_TEXTURE_2D,
-            0,
-            GL10.GL_RGBA,
-            width,
-            height,
-            0,
-            GL10.GL_RGBA,
-            GL10.GL_UNSIGNED_BYTE,
-            initialData);
+        GL10.GL_TEXTURE_2D,
+        0,
+        GL10.GL_RGBA,
+        width,
+        height,
+        0,
+        GL10.GL_RGBA,
+        GL10.GL_UNSIGNED_BYTE,
+        initialData);
     checkGLError();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Nullable
   @Override
-  public Image loadImage(final String filename) {
+  public Image loadImage(@Nonnull final String filename) {
     try {
       return new GdxBatchRenderImage(filename);
     } catch (Exception e) {
@@ -235,50 +220,43 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  public void addImageToTexture(final Image image, final int x, final int y) {
+  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
     GdxBatchRenderImage gdxImage = (GdxBatchRenderImage) image;
-    if (gdxImage == null || gdxImage.getWidth() == 0 || gdxImage.getHeight() == 0) return;
+    if (gdxImage.getWidth() == 0 || gdxImage.getHeight() == 0) {
+      return;
+    }
     bind(atlasTextureId);
     Gdx.gl10.glTexSubImage2D(
-            GL10.GL_TEXTURE_2D,
-            0,
-            x,
-            y,
-            image.getWidth(),
-            image.getHeight(),
-            GL10.GL_RGBA,
-            GL10.GL_UNSIGNED_BYTE,
-            gdxImage.asByteBuffer());
+        GL10.GL_TEXTURE_2D,
+        0,
+        x,
+        y,
+        image.getWidth(),
+        image.getHeight(),
+        GL10.GL_RGBA,
+        GL10.GL_UNSIGNED_BYTE,
+        gdxImage.asByteBuffer());
     checkGLError();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  public void beginBatch(final BlendMode blendMode) {
+  public void beginBatch(@Nonnull final BlendMode blendMode) {
     batches.add(batchPool.allocate());
     currentBatch = batches.get(batches.size() - 1);
     currentBatch.begin(blendMode);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void addQuad(
       final float x,
       final float y,
       final float width,
       final float height,
-      final Color color1,
-      final Color color2,
-      final Color color3,
-      final Color color4,
+      @Nonnull final Color color1,
+      @Nonnull final Color color2,
+      @Nonnull final Color color3,
+      @Nonnull final Color color4,
       final float textureX,
       final float textureY,
       final float textureWidth,
@@ -286,12 +264,10 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     if (!currentBatch.canAddQuad()) {
       beginBatch(currentBatch.getBlendMode());
     }
-    currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth, textureHeight);
+    currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY,
+        textureWidth, textureHeight);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int render() {
     bind(atlasTextureId);
@@ -302,7 +278,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     Gdx.gl10.glEnableClientState(GL10.GL_COLOR_ARRAY);
     Gdx.gl10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
-    for (int i=0; i<batches.size(); i++) {
+    for (int i = 0; i < batches.size(); i++) {
       Batch batch = batches.get(i);
       batch.render();
     }
@@ -316,18 +292,15 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     return batches.size();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  public void removeFromTexture(final Image image, final int x, final int y, final int w, final int h) {
+  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
     // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
     // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
     if (!fillRemovedTexture) {
       return;
     }
-    ByteBuffer initialData = BufferUtils.newByteBuffer(image.getWidth()*image.getHeight()*4);
-    for (int i=0; i<image.getWidth()*image.getHeight(); i++) {
+    ByteBuffer initialData = BufferUtils.newByteBuffer(image.getWidth() * image.getHeight() * 4);
+    for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
       initialData.put((byte) 0xff);
       initialData.put((byte) 0x00);
       initialData.put((byte) 0x00);
@@ -336,15 +309,15 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     initialData.rewind();
     bind(atlasTextureId);
     Gdx.gl10.glTexSubImage2D(
-            GL10.GL_TEXTURE_2D,
-            0,
-            x,
-            y,
-            w,
-            h,
-            GL10.GL_RGBA,
-            GL10.GL_UNSIGNED_BYTE,
-            initialData);
+        GL10.GL_TEXTURE_2D,
+        0,
+        x,
+        y,
+        w,
+        h,
+        GL10.GL_RGBA,
+        GL10.GL_UNSIGNED_BYTE,
+        initialData);
   }
 
   // internal implementations
@@ -368,11 +341,11 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     Gdx.gl10.glEnable(GL10.GL_TEXTURE_2D);
     // Enable exact pixelization for 2D rendering
     // See: http://www.opengl.org/archives/resources/faq/technical/transformations.htm#tran0030
-    Gdx.gl10.glTranslatef (0.375f, 0.375f, 0.0f);
+    Gdx.gl10.glTranslatef(0.375f, 0.375f, 0.0f);
   }
 
   private void checkGLError() {
-    int error= Gdx.gl10.glGetError();
+    int error = Gdx.gl10.glGetError();
     if (error != GL10.GL_NO_ERROR) {
       String glerrmsg;
       switch (error) {
@@ -440,20 +413,20 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     checkGLError();
 
     ByteBuffer initialData = BufferUtils.newByteBuffer(width * height * 4);
-    for (int i=0; i<width*height*4; i++) {
+    for (int i = 0; i < width * height * 4; i++) {
       initialData.put((byte) 0x80);
     }
     initialData.rewind();
     Gdx.gl10.glTexImage2D(
-          GL10.GL_TEXTURE_2D,
-          0,
-          GL10.GL_RGBA,
-          width,
-          height,
-          0,
-          GL10.GL_RGBA,
-          GL10.GL_UNSIGNED_BYTE,
-          initialData);
+        GL10.GL_TEXTURE_2D,
+        0,
+        GL10.GL_RGBA,
+        width,
+        height,
+        0,
+        GL10.GL_RGBA,
+        GL10.GL_UNSIGNED_BYTE,
+        initialData);
     checkGLError();
   }
 
@@ -467,27 +440,30 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     Gdx.gl10.glGenTextures(1, tmp);
     checkGLError();
     return tmp.get(0);
- }
+  }
 
   /**
    * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
-   *
-   * Based on void's {@link de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend.Batch} class.
-   *
-   * This class helps us to manage the batch data. We'll keep a bunch of instances of this class around that will be
-   * reused when needed. Each Batch instance provides room for a certain amount of vertices and we'll use a new Batch
-   * when we exceed this amount of data.
+   *         <p/>
+   *         Based on void's LwjglBatchRenderBackend.Batch class.
+   *         <p/>
+   *         This class helps us to manage the batch data. We'll keep a bunch of instances of this class around that
+   *         will be
+   *         reused when needed. Each Batch instance provides room for a certain amount of vertices and we'll use a
+   *         new Batch
+   *         when we exceed this amount of data.
    */
-  private class Batch {
+  private static class Batch {
     private final static int VERTICES_PER_QUAD = 6;
     private final static int ATTRIBUTES_PER_VERTEX = 8;
     private final static int BYTES_PER_ATTRIBUTE = 4;
     private final static int PRIMITIVE_SIZE = VERTICES_PER_QUAD * ATTRIBUTES_PER_VERTEX;
     private final static int STRIDE = ATTRIBUTES_PER_VERTEX * BYTES_PER_ATTRIBUTE;
-    private final int SIZE = 64*1024; // 64k
+    private static final int SIZE = 64 * 1024; // 64k
     private final FloatBuffer vertexBuffer;
     private int primitiveCount;
-    private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
+    @Nonnull
+    private final float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
     private BlendMode blendMode = BlendMode.BLEND;
 
     private Batch() {
@@ -505,7 +481,9 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     }
 
     public void render() {
-      if (primitiveCount == 0) return; // Attempting to render with an empty vertex buffer crashes the program.
+      if (primitiveCount == 0) {
+        return; // Attempting to render with an empty vertex buffer crashes the program.
+      }
 
       if (blendMode.equals(BlendMode.BLEND)) {
         Gdx.gl10.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -536,10 +514,10 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
         final float y,
         final float width,
         final float height,
-        final Color color1,
-        final Color color2,
-        final Color color3,
-        final Color color4,
+        @Nonnull final Color color1,
+        @Nonnull final Color color2,
+        @Nonnull final Color color3,
+        @Nonnull final Color color4,
         final float textureX,
         final float textureY,
         final float textureWidth,
@@ -615,7 +593,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
       primitiveBuffer[bufferIndex++] = color3.getBlue();
       primitiveBuffer[bufferIndex++] = color3.getAlpha();
       primitiveBuffer[bufferIndex++] = textureX;
-      primitiveBuffer[bufferIndex++] = textureY + textureHeight;
+      primitiveBuffer[bufferIndex] = textureY + textureHeight;
 
       vertexBuffer.put(primitiveBuffer);
       primitiveCount++;

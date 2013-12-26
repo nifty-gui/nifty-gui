@@ -5,13 +5,17 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 public class HintScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
 
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  @Override
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
   }
 
+  @Override
   public void onStartScreen() {
   }
 
@@ -24,16 +28,19 @@ public class HintScreen implements ScreenController, NiftyExample {
     nifty.fromXml("all/intro.xml", "menu");
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "hint/hint.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Hint Example";

@@ -4,13 +4,16 @@ import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is a helper class of reused builders so that we don't repeat ourself too much.
  * @author void
  */
 public class CommonBuilders {
 
-  public EffectBuilder createMoveEffect(final String mode, final String direction, final int length) {
+  @Nonnull
+  public EffectBuilder createMoveEffect(@Nonnull final String mode, @Nonnull final String direction, final int length) {
     return new EffectBuilder("move") {{
       effectParameter("mode", mode);
       effectParameter("direction", direction);
@@ -22,6 +25,7 @@ public class CommonBuilders {
     }};
   }
 
+  @Nonnull
   public EffectBuilder createFadeEffect() {
     return new EffectBuilder("fade") {{
       effectParameter("start", "#f");
@@ -32,6 +36,7 @@ public class CommonBuilders {
     }};
   }
 
+  @Nonnull
   public PanelBuilder vspacer() {
     return new PanelBuilder() {{
       childLayoutHorizontal();
@@ -40,7 +45,8 @@ public class CommonBuilders {
     }};
   }
 
-  public PanelBuilder vspacer(final String height) {
+  @Nonnull
+  public PanelBuilder vspacer(@Nonnull final String height) {
     return new PanelBuilder() {{
       childLayoutHorizontal();
       height(height);
@@ -48,18 +54,21 @@ public class CommonBuilders {
     }};
   }
 
-  public PanelBuilder hspacer(final String width) {
+  @Nonnull
+  public PanelBuilder hspacer(@Nonnull final String width) {
     return new PanelBuilder() {{
       width(width);
       height("0px");
     }};
   }
 
-  public LabelBuilder createLabel(final String text) {
+  @Nonnull
+  public LabelBuilder createLabel(@Nonnull final String text) {
     return createLabel(text, "100px");
   }
 
-  public LabelBuilder createLabel(final String text, final String width) {
+  @Nonnull
+  public LabelBuilder createLabel(@Nonnull final String text, @Nonnull final String width) {
     return new LabelBuilder() {{
       text(text);
       width(width);
@@ -69,7 +78,8 @@ public class CommonBuilders {
     }};
   }
 
-  public LabelBuilder createLabel(final String id, final String text, final String width) {
+  @Nonnull
+  public LabelBuilder createLabel(@Nonnull final String id, @Nonnull final String text, @Nonnull final String width) {
     return new LabelBuilder(id, text) {{
       width(width);
       alignLeft();
@@ -78,13 +88,15 @@ public class CommonBuilders {
     }};
   }
 
-  public LabelBuilder createShortLabel(final String name, final String width) {
+  @Nonnull
+  public LabelBuilder createShortLabel(@Nonnull final String name, @Nonnull final String width) {
     LabelBuilder result = createShortLabel(name);
     result.width(width);
     return result;
   }
 
-  public LabelBuilder createShortLabel(final String name) {
+  @Nonnull
+  public LabelBuilder createShortLabel(@Nonnull final String name) {
     return new LabelBuilder() {{
       text(name);
       alignLeft();

@@ -27,7 +27,7 @@ public interface InputEvent {
    *
    * @param consumer the consumer the event needs to be send to
    * @return {@code true} in case the event was handled by the consumer and must not be forwarded to any other event
-   *         handlers
+   * handlers
    */
   boolean sendToNifty(NiftyInputConsumer consumer);
 
@@ -36,14 +36,14 @@ public interface InputEvent {
    *
    * @param listener the input listener to receive this event
    * @return {@code true} in case the event was handled by the consumer and must not be forwarded to any other event
-   *         handlers
+   * handlers
    */
   boolean sendToSlick(InputListener listener);
 
   /**
    * Update the input event state.
    *
-   * @param state the input event state to update
+   * @param state        the input event state to update
    * @param handledByGUI {@code true} if this event was handled by the GUI
    */
   void updateState(InputState state, boolean handledByGUI);

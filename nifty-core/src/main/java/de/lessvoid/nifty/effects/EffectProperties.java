@@ -1,16 +1,18 @@
 package de.lessvoid.nifty.effects;
 
-import java.util.Map;
-import java.util.Properties;
-
 import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.xml.xpp3.Attributes;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Properties;
 
 public class EffectProperties extends Properties {
   private static final long serialVersionUID = 1L;
   private EffectPropertiesValues effectValues;
-  
-  public EffectProperties(final Properties createProperties) {
+
+  public EffectProperties(@Nonnull final Properties createProperties) {
     super();
 
     for (Map.Entry<Object, Object> entry : createProperties.entrySet()) {
@@ -30,6 +32,7 @@ public class EffectProperties extends Properties {
     return getEffectPropertiesValueLazy().containsTimeValues();
   }
 
+  @Nullable
   public LinearInterpolator getInterpolator() {
     if (effectValues == null) {
       return null;

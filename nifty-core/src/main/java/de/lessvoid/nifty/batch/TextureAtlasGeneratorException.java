@@ -2,6 +2,7 @@ package de.lessvoid.nifty.batch;
 
 /**
  * You'll get this Exception when the current image does not fit into the texture anymore.
+ *
  * @author void
  */
 public class TextureAtlasGeneratorException extends Exception {
@@ -27,5 +28,5 @@ public class TextureAtlasGeneratorException extends Exception {
 
   public int getHeight() {
     return height;
-  }  
+  }
 }

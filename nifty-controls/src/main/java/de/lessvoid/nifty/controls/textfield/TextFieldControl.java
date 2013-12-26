@@ -1,22 +1,9 @@
 package de.lessvoid.nifty.controls.textfield;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.textfield.filter.delete.TextFieldDeleteFilter;
-import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptDigits;
-import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptFloat;
-import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptLetters;
-import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptLowerCase;
-import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptNegativeDigits;
-import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptRegex;
-import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptUpperCase;
-import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharFilter;
-import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputCharSequenceFilter;
-import de.lessvoid.nifty.controls.textfield.filter.input.TextFieldInputFilter;
+import de.lessvoid.nifty.controls.textfield.filter.input.*;
 import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
 import de.lessvoid.nifty.controls.textfield.format.TextFieldDisplayFormat;
 import de.lessvoid.nifty.effects.EffectEventId;
@@ -26,7 +13,12 @@ import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.SizeValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
 
 /**
  * A TextFieldControl.
@@ -37,25 +29,34 @@ import de.lessvoid.nifty.tools.SizeValue;
  */
 @Deprecated
 public class TextFieldControl extends AbstractController implements TextField, TextFieldView {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(TextFieldControl.class.getName());
+  @Nullable
   private Nifty nifty;
+  @Nullable
   private Screen screen;
+  @Nullable
   private Element textElement;
+  @Nullable
   private Element fieldElement;
+  @Nullable
   private Element cursorElement;
+  @Nullable
   private TextFieldLogic textField;
   private int firstVisibleCharacterIndex;
   private int lastVisibleCharacterIndex;
   private int fieldWidth;
   private int fromClickCursorPos;
   private int toClickCursorPos;
+  @Nullable
   private FocusHandler focusHandler;
 
   @Override
   public void bind(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element newElement,
-      final Parameters properties) {
+      @Nonnull final Nifty niftyParam,
+      @Nonnull final Screen screenParam,
+      @Nonnull final Element newElement,
+      @Nonnull final Parameters properties) {
     bind(newElement);
 
     nifty = niftyParam;
@@ -63,7 +64,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
     fromClickCursorPos = -1;
     toClickCursorPos = -1;
 
-    final String initText = properties.getProperty("text"); //NON-NLS
+    final String initText = properties.get("text"); //NON-NLS
     if ((initText == null) || initText.isEmpty()) {
       textField = new TextFieldLogic(nifty.getClipboard(), this);
       textField.toFirstPosition();
@@ -71,19 +72,26 @@ public class TextFieldControl extends AbstractController implements TextField, T
       textField = new TextFieldLogic(initText, nifty.getClipboard(), this);
     }
 
-    textElement = getElement().findElementById("#text"); //NON-NLS
-    fieldElement = getElement().findElementById("#field"); //NON-NLS
-    cursorElement = getElement().findElementById("#cursor"); //NON-NLS
+    textElement = newElement.findElementById("#text"); //NON-NLS
+    fieldElement = newElement.findElementById("#field"); //NON-NLS
+    cursorElement = newElement.findElementById("#cursor"); //NON-NLS
 
-    if (properties.containsKey("passwordChar")) { //NON-NLS
-      textField.setFormat(new FormatPassword(properties.getProperty("passwordChar").charAt(0))); //NON-NLS
+    if (textElement == null) {
+      log.warning("Locating the text element of the text field failed. Looked for: #text");
     }
-    if (properties.containsKey("maxLength")) { //NON-NLS
-      setMaxLength(Integer.parseInt(properties.getProperty("maxLength"))); //NON-NLS
+    if (fieldElement == null) {
+      log.warning("Locating the field element of the text field failed. Looked for: #field");
     }
-    if (properties.containsKey("filter")) { //NON-NLS
-      activateFilter(properties.getProperty("filter")); //NON-NLS
+    if (cursorElement == null) {
+      log.warning("Locating the cursor element of the text field failed. Looked for: #cursor");
     }
+
+    if (properties.isSet("passwordChar")) { //NON-NLS
+      //noinspection ConstantConditions
+      textField.setFormat(new FormatPassword(properties.get("passwordChar").charAt(0))); //NON-NLS
+    }
+    setMaxLength(properties.getAsInteger("maxLength", UNLIMITED_LENGTH));
+    activateFilter(properties.getWithDefault("filter", "all"));
   }
 
   /**
@@ -91,7 +99,7 @@ public class TextFieldControl extends AbstractController implements TextField, T
    *
    * @param filter the value of the filter property
    */
-  private void activateFilter(final String filter) {
+  private void activateFilter(@Nonnull final String filter) {
     if ("all".equals(filter)) { //NON-NLS
       disableInputFilter();
     } else if ("digits".equals(filter)) { //NON-NLS
@@ -112,18 +120,39 @@ public class TextFieldControl extends AbstractController implements TextField, T
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
+    super.init(parameter);
+    if (screen == null) {
+      log.severe("Screen instance not set. Binding failed or did not run yet.");
+      return;
+    }
     focusHandler = screen.getFocusHandler();
 
-    fieldWidth = fieldElement.getWidth() - cursorElement.getWidth();
+    if (textField == null) {
+      log.severe("Field logic not available. Binding failed or did not run yet.");
+      return;
+    }
 
-    final TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
+    layoutCallback();
+
+    CharSequence displayedText = textField.getDisplayedText();
     firstVisibleCharacterIndex = 0;
-    lastVisibleCharacterIndex = FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(),
-        textField.getDisplayedText(), fieldWidth, 1.0f);
+    lastVisibleCharacterIndex = displayedText.length();
+    if (textElement != null) {
+      final TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
+      if (textRenderer == null) {
+        log.warning("Text element does not contain a text renderer");
+      } else {
+        RenderFont font = textRenderer.getFont();
+        if (font == null) {
+          log.warning("No font applied to text element.");
+        } else {
+          lastVisibleCharacterIndex = FontHelper.getVisibleCharactersFromStart(font, displayedText, fieldWidth, 1.0f);
+        }
+      }
+    }
 
     updateCursor();
-    super.init(parameter);
   }
 
   @Override
@@ -132,10 +161,22 @@ public class TextFieldControl extends AbstractController implements TextField, T
 
   @Override
   public void layoutCallback() {
-    fieldWidth = fieldElement.getWidth() - cursorElement.getWidth();
+    if (fieldElement != null && cursorElement != null) {
+      fieldWidth = fieldElement.getWidth() - cursorElement.getWidth();
+    } else {
+      fieldWidth = 0;
+    }
   }
 
+  @Nonnull
   private CharSequence getVisibleText() {
+    if (textField == null) {
+      return "";
+    }
+    if (lastVisibleCharacterIndex == UNLIMITED_LENGTH) {
+      final CharSequence text = textField.getDisplayedText();
+      return text.subSequence(firstVisibleCharacterIndex, text.length());
+    }
     return textField.getDisplayedText().subSequence(firstVisibleCharacterIndex, lastVisibleCharacterIndex);
   }
 
@@ -145,8 +186,10 @@ public class TextFieldControl extends AbstractController implements TextField, T
     if (indexFromPixel != -1) {
       fromClickCursorPos = firstVisibleCharacterIndex + indexFromPixel;
     }
-    textField.resetSelection();
-    textField.setCursorPosition(fromClickCursorPos);
+    if (textField != null) {
+      textField.resetSelection();
+      textField.setCursorPosition(fromClickCursorPos);
+    }
     updateCursor();
   }
 
@@ -157,75 +200,87 @@ public class TextFieldControl extends AbstractController implements TextField, T
       toClickCursorPos = firstVisibleCharacterIndex + indexFromPixel;
     }
 
-    textField.setCursorPosition(fromClickCursorPos);
-    textField.startSelecting();
-    textField.setCursorPosition(toClickCursorPos);
-    textField.endSelecting();
+    if (textField != null) {
+      textField.setCursorPosition(fromClickCursorPos);
+      textField.startSelecting();
+      textField.setCursorPosition(toClickCursorPos);
+      textField.endSelecting();
+    }
     updateCursor();
   }
 
-  private int getCursorPosFromMouse(final int mouseX, final CharSequence visibleString) {
+  private int getCursorPosFromMouse(final int mouseX, @Nonnull final CharSequence visibleString) {
+    if (textElement == null || fieldElement == null) {
+      return 0;
+    }
     final TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
-    return FontHelper.getCharacterIndexFromPixelPosition(textRenderer.getFont(), visibleString,
-        mouseX - fieldElement.getX(), 1.0f);
+    if (textRenderer == null) {
+      return 0;
+    }
+    final RenderFont font = textRenderer.getFont();
+    if (font == null) {
+      return 0;
+    }
+    return FontHelper.getCharacterIndexFromPixelPosition(font, visibleString, mouseX - fieldElement.getX(), 1.0f);
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == null) {
-      return false;
-    }
-
-    final NiftyStandardInputEvent standardInputEvent = (NiftyStandardInputEvent) inputEvent;
-    switch (standardInputEvent) {
-      case MoveCursorLeft:
-        textField.cursorLeft();
-        break;
-      case MoveCursorRight:
-        textField.cursorRight();
-        break;
-      case Delete:
-        textField.delete();
-        break;
-      case Backspace:
-        textField.backspace();
-        break;
-      case MoveCursorToLastPosition:
-        textField.toLastPosition();
-        break;
-      case MoveCursorToFirstPosition:
-        textField.toFirstPosition();
-        break;
-      case SelectionStart:
-        textField.startSelecting();
-        break;
-      case SelectionEnd:
-        textField.endSelecting();
-        break;
-      case Cut:
-        textField.cut();
-        break;
-      case Copy:
-        textField.copy();
-        break;
-      case Paste:
-        textField.put();
-        break;
-      case SelectAll:
-        textField.selectAll();
-        break;
-      case Character:
-        textField.insert(standardInputEvent.getCharacter());
-        break;
-      case NextInputElement:
-        focusHandler.getNext(fieldElement).setFocus();
-        break;
-      case PrevInputElement:
-        focusHandler.getPrev(fieldElement).setFocus();
-        break;
-      default:
-        updateCursor();
-        return false;
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
+    if (inputEvent instanceof NiftyStandardInputEvent) {
+      final NiftyStandardInputEvent standardInputEvent = (NiftyStandardInputEvent) inputEvent;
+      if (textField != null) {
+        switch (standardInputEvent) {
+          case MoveCursorLeft:
+            textField.cursorLeft();
+            break;
+          case MoveCursorRight:
+            textField.cursorRight();
+            break;
+          case Delete:
+            textField.delete();
+            break;
+          case Backspace:
+            textField.backspace();
+            break;
+          case MoveCursorToLastPosition:
+            textField.toLastPosition();
+            break;
+          case MoveCursorToFirstPosition:
+            textField.toFirstPosition();
+            break;
+          case SelectionStart:
+            textField.startSelecting();
+            break;
+          case SelectionEnd:
+            textField.endSelecting();
+            break;
+          case Cut:
+            textField.cut();
+            break;
+          case Copy:
+            textField.copy();
+            break;
+          case Paste:
+            textField.put();
+            break;
+          case SelectAll:
+            textField.selectAll();
+            break;
+          case Character:
+            textField.insert(standardInputEvent.getCharacter());
+            break;
+        }
+      }
+      if (fieldElement != null && focusHandler != null) {
+        switch (standardInputEvent) {
+          case NextInputElement:
+            focusHandler.getNext(fieldElement).setFocus();
+            break;
+          case PrevInputElement:
+            focusHandler.getPrev(fieldElement).setFocus();
+            break;
+        }
+      }
     }
 
     updateCursor();
@@ -233,7 +288,15 @@ public class TextFieldControl extends AbstractController implements TextField, T
   }
 
   private void updateCursor() {
+    if (cursorElement == null || textElement == null || textField == null) {
+      return;
+    }
     final TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
+
+    if (textRenderer == null) {
+      return;
+    }
+
     final String text = textField.getDisplayedText().toString();
     checkBounds(text, textRenderer);
     calcLastVisibleIndex(textRenderer);
@@ -248,25 +311,28 @@ public class TextFieldControl extends AbstractController implements TextField, T
     calcFirstVisibleIndex(cursorPos);
     calcLastVisibleIndex(textRenderer);
 
-    final String substring2 = text.substring(0, firstVisibleCharacterIndex);
-    final int d = textRenderer.getFont().getWidth(substring2);
-    textRenderer.setXoffsetHack(-d);
+    RenderFont font = textRenderer.getFont();
+    final int d;
+    if (font != null) {
+      final String substring2 = text.substring(0, firstVisibleCharacterIndex);
+      d = font.getWidth(substring2);
+    } else {
+      d = 0;
+    }
+    textRenderer.setxOffsetHack(-d);
 
     final String substring = text.substring(0, cursorPos);
     final int textWidth = textRenderer.getFont().getWidth(substring);
     final int cursorPixelPos = textWidth - d;
-
-    final StringBuilder tempBuilder = new StringBuilder(5);
-    tempBuilder.append(cursorPixelPos);
-    tempBuilder.append("px"); //NON-NLS
-    cursorElement.setConstraintX(new SizeValue(tempBuilder.toString()));
-
-    tempBuilder.setLength(0);
-    tempBuilder.append((getElement().getHeight() - cursorElement.getHeight()) / 2);
-    tempBuilder.append("px"); //NON-NLS
-    cursorElement.setConstraintY(new SizeValue(tempBuilder.toString()));
+    final Element element = getElement();
+    if (element == null) {
+      return;
+    }
+    cursorElement.setConstraintX(SizeValue.px(cursorPixelPos));
+    cursorElement.setConstraintY(SizeValue.px((getElement().getHeight() - cursorElement.getHeight()) / 2));
     cursorElement.startEffect(EffectEventId.onActive, null);
-    cursorElement.getParent().layoutElements();
+
+    element.getParent().layoutElements();
   }
 
   private void calcFirstVisibleIndex(final int cursorPos) {
@@ -279,25 +345,38 @@ public class TextFieldControl extends AbstractController implements TextField, T
     }
   }
 
-  private void checkBounds(final CharSequence text, final TextRenderer textRenderer) {
+  private void checkBounds(@Nonnull final CharSequence text, @Nonnull final TextRenderer textRenderer) {
     final int textLen = text.length();
     if (firstVisibleCharacterIndex > textLen) {
       // re position so that we show at much possible text
       lastVisibleCharacterIndex = textLen;
-      firstVisibleCharacterIndex = FontHelper.getVisibleCharactersFromEnd(textRenderer.getFont(), text, fieldWidth,
-          1.0f);
+
+      RenderFont font = textRenderer.getFont();
+      if (font == null) {
+        firstVisibleCharacterIndex = 0;
+      } else {
+        firstVisibleCharacterIndex = FontHelper.getVisibleCharactersFromEnd(font, text, fieldWidth, 1.0f);
+      }
     }
   }
 
-  private void calcLastVisibleIndex(final TextRenderer textRenderer) {
+  private void calcLastVisibleIndex(@Nonnull final TextRenderer textRenderer) {
+    if (textField == null) {
+      return;
+    }
     final CharSequence currentText = textField.getDisplayedText();
-    if (firstVisibleCharacterIndex < currentText.length()) {
-      final CharSequence textToCheck = currentText.subSequence(firstVisibleCharacterIndex, currentText.length());
-      final int lengthFitting = FontHelper.getVisibleCharactersFromStart(textRenderer.getFont(), textToCheck,
-          fieldWidth, 1.0f);
-      lastVisibleCharacterIndex = lengthFitting + firstVisibleCharacterIndex;
+    final RenderFont font = textRenderer.getFont();
+    final int textLength = currentText.length();
+    if (font == null) {
+      lastVisibleCharacterIndex = textLength;
     } else {
-      lastVisibleCharacterIndex = firstVisibleCharacterIndex;
+      if (firstVisibleCharacterIndex < textLength) {
+        final CharSequence textToCheck = currentText.subSequence(firstVisibleCharacterIndex, textLength);
+        final int lengthFitting = FontHelper.getVisibleCharactersFromStart(font, textToCheck, fieldWidth, 1.0f);
+        lastVisibleCharacterIndex = lengthFitting + firstVisibleCharacterIndex;
+      } else {
+        lastVisibleCharacterIndex = firstVisibleCharacterIndex;
+      }
     }
   }
 
@@ -314,81 +393,132 @@ public class TextFieldControl extends AbstractController implements TextField, T
     }
   }
 
+  @Nonnull
   @Override
   public String getText() {
     return getRealText();
   }
 
+  @Nonnull
   @Override
   public String getRealText() {
-    return textField.getRealText().toString();
+    if (textField == null) {
+      return "";
+    } else {
+      return textField.getRealText().toString();
+    }
   }
 
+  @Nonnull
   @Override
   public String getDisplayedText() {
-    return textField.getDisplayedText().toString();
+    if (textField == null) {
+      return "";
+    } else {
+      return textField.getDisplayedText().toString();
+    }
   }
 
   @Override
-  public void setText(final CharSequence text) {
-    textField.setText(nifty.specialValuesReplace(text.toString()));
+  public void setText(@Nonnull final CharSequence text) {
+    final CharSequence realText;
+    if (nifty == null) {
+      log.warning("Nifty instance is not set, binding did not run yet. Special value replacing skipped.");
+      realText = text;
+    } else {
+      realText = nifty.specialValuesReplace(text.toString());
+    }
+    if (textField != null) {
+      textField.setText(realText);
+    }
     updateCursor();
   }
 
   @Override
   public void setMaxLength(final int maxLength) {
-    textField.setMaxLength(maxLength);
+    if (textField != null) {
+      textField.setMaxLength(maxLength);
+    }
     updateCursor();
   }
 
   @Override
   public void setCursorPosition(final int position) {
-    textField.setCursorPosition(position);
+    if (textField != null) {
+      textField.setCursorPosition(position);
+    }
     updateCursor();
   }
 
   @Override
-  public void enableInputFilter(final TextFieldInputFilter filter) {
-    textField.setInputFilterSingle(filter);
-    textField.setInputFilterSequence(filter);
+  public void enableInputFilter(@Nullable final TextFieldInputFilter filter) {
+    if (textField != null) {
+      textField.setInputFilterSingle(filter);
+      textField.setInputFilterSequence(filter);
+    }
   }
 
   @Override
-  public void enableInputFilter(final TextFieldInputCharFilter filter) {
-    textField.setInputFilterSingle(filter);
-    textField.setInputFilterSequence(new InputCharFilterWrapper(filter));
+  public void enableInputFilter(@Nullable final TextFieldInputCharFilter filter) {
+    if (filter == null) {
+      enableInputFilter(null);
+    } else {
+      if (textField != null) {
+        textField.setInputFilterSingle(filter);
+        textField.setInputFilterSequence(new InputCharFilterWrapper(filter));
+      }
+    }
   }
 
   @Override
-  public void enableInputFilter(final TextFieldInputCharSequenceFilter filter) {
-    textField.setInputFilterSingle(new InputCharSequenceFilterWrapper(filter));
-    textField.setInputFilterSequence(filter);
+  public void enableInputFilter(@Nullable final TextFieldInputCharSequenceFilter filter) {
+    if (filter == null) {
+      enableInputFilter(null);
+    } else {
+      if (textField != null) {
+        textField.setInputFilterSingle(new InputCharSequenceFilterWrapper(filter));
+        textField.setInputFilterSequence(filter);
+      }
+    }
   }
 
   @Override
   public void disableInputFilter() {
-    textField.setInputFilterSingle(null);
-    textField.setInputFilterSequence(null);
+    enableInputFilter(null);
   }
 
   @Override
-  public void enableDeleteFilter(final TextFieldDeleteFilter filter) {
-    textField.setDeleteFilter(filter);
+  public void enableDeleteFilter(@Nullable final TextFieldDeleteFilter filter) {
+    if (textField != null) {
+      textField.setDeleteFilter(filter);
+    }
   }
 
   @Override
   public void disableDeleteFilter() {
-    textField.setDeleteFilter(null);
+    enableDeleteFilter(null);
   }
 
   @Override
-  public void setFormat(final TextFieldDisplayFormat format) {
-    textField.setFormat(format);
+  public void setFormat(@Nullable final TextFieldDisplayFormat format) {
+    if (textField != null) {
+      textField.setFormat(format);
+    }
   }
 
   @Override
-  public void textChangeEvent(final String newText) {
-    nifty.publishEvent(getElement().getId(), new TextFieldChangedEvent(this, newText));
+  public void textChangeEvent(@Nonnull final String newText) {
+    if (nifty == null) {
+      log.warning("Binding not done yet. Can't publish events without reference to Nifty.");
+    } else {
+      final Element element = getElement();
+      if (element != null) {
+        String id = getElement().getId();
+        if (id != null) {
+          nifty.publishEvent(id, new TextFieldChangedEvent(this, newText));
+        }
+      }
+    }
   }
 
   @Override
@@ -405,6 +535,6 @@ public class TextFieldControl extends AbstractController implements TextField, T
 
   @Override
   public boolean isPasswordCharEnabled() {
-    return textField.getFormat() instanceof FormatPassword;
+    return (textField != null ? textField.getFormat() : null) instanceof FormatPassword;
   }
 }

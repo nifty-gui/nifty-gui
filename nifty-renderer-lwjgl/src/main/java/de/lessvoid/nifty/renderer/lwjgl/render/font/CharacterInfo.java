@@ -1,9 +1,12 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.font;
 
-import java.util.Hashtable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * info of an individual character.
+ *
  * @author void
  */
 public class CharacterInfo {
@@ -55,10 +58,11 @@ public class CharacterInfo {
   /**
    * kerning information.
    */
-  private Hashtable < Character, Integer > kerning = new Hashtable < Character, Integer > ();
+  private Map<Character, Integer> kerning = new HashMap<Character, Integer>();
 
   /**
    * set id.
+   *
    * @param newId the id
    */
   public final void setId(final int newId) {
@@ -67,6 +71,7 @@ public class CharacterInfo {
 
   /**
    * get id.
+   *
    * @return the id
    */
   public final int getId() {
@@ -75,6 +80,7 @@ public class CharacterInfo {
 
   /**
    * set x.
+   *
    * @param newX new x to set
    */
   public final void setX(final int newX) {
@@ -83,6 +89,7 @@ public class CharacterInfo {
 
   /**
    * get x.
+   *
    * @return the x
    */
   public final int getX() {
@@ -91,6 +98,7 @@ public class CharacterInfo {
 
   /**
    * set y.
+   *
    * @param newY new y
    */
   public final void setY(final int newY) {
@@ -99,6 +107,7 @@ public class CharacterInfo {
 
   /**
    * get y.
+   *
    * @return get y
    */
   public final int getY() {
@@ -107,6 +116,7 @@ public class CharacterInfo {
 
   /**
    * set width.
+   *
    * @param newWidth new width
    */
   public final void setWidth(final int newWidth) {
@@ -115,6 +125,7 @@ public class CharacterInfo {
 
   /**
    * get width.
+   *
    * @return the width.
    */
   public final int getWidth() {
@@ -123,6 +134,7 @@ public class CharacterInfo {
 
   /**
    * set height.
+   *
    * @param newHeight new height
    */
   public final void setHeight(final int newHeight) {
@@ -131,6 +143,7 @@ public class CharacterInfo {
 
   /**
    * get height.
+   *
    * @return height
    */
   public final int getHeight() {
@@ -139,6 +152,7 @@ public class CharacterInfo {
 
   /**
    * set xoffset.
+   *
    * @param newxoffset the new xoffset
    */
   public final void setXoffset(final int newxoffset) {
@@ -147,6 +161,7 @@ public class CharacterInfo {
 
   /**
    * get xoffset.
+   *
    * @return xoffset
    */
   public final int getXoffset() {
@@ -155,6 +170,7 @@ public class CharacterInfo {
 
   /**
    * set yoffset.
+   *
    * @param newyoffset new yoffset
    */
   public final void setYoffset(final int newyoffset) {
@@ -163,6 +179,7 @@ public class CharacterInfo {
 
   /**
    * get yoffset.
+   *
    * @return yoffset
    */
   public final int getYoffset() {
@@ -171,6 +188,7 @@ public class CharacterInfo {
 
   /**
    * set xadvance.
+   *
    * @param newXadvance
    */
   public final void setXadvance(final int newXadvance) {
@@ -179,6 +197,7 @@ public class CharacterInfo {
 
   /**
    * get xadvance.
+   *
    * @return xadvance
    */
   public final int getXadvance() {
@@ -187,6 +206,7 @@ public class CharacterInfo {
 
   /**
    * set page.
+   *
    * @param newPage the new page
    */
   public final void setPage(final int newPage) {
@@ -195,6 +215,7 @@ public class CharacterInfo {
 
   /**
    * get page.
+   *
    * @return the page
    */
   public final int getPage() {
@@ -203,17 +224,20 @@ public class CharacterInfo {
 
   /**
    * set kerning.
+   *
    * @param newKerning the kerning to set
    */
-  public final void setKerning(final Hashtable < Character, Integer > newKerning) {
-    this.kerning = newKerning;
+  public final void setKerning(final Map<Character, Integer> newKerning) {
+    kerning.clear();
+    kerning.putAll(newKerning);
   }
 
   /**
    * get kerning.
+   *
    * @return the kerning
    */
-  public final Hashtable < Character, Integer > getKerning() {
-    return kerning;
+  public final Map<Character, Integer> getKerning() {
+    return Collections.unmodifiableMap(kerning);
   }
 }

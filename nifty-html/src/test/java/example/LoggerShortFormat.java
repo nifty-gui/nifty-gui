@@ -1,10 +1,6 @@
 package example;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class LoggerShortFormat extends java.util.logging.Formatter {
   // inefficient implementation

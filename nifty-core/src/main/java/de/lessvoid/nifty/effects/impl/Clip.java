@@ -8,19 +8,23 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
+import javax.annotation.Nonnull;
+
 public class Clip implements EffectImpl {
 
+  @Override
   public void activate(
-      final Nifty nifty,
-      final Element element,
-      final EffectProperties parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     r.enableClip(
         element.getX(),
         element.getY(),
@@ -28,6 +32,7 @@ public class Clip implements EffectImpl {
         element.getY() + element.getHeight());
   }
 
+  @Override
   public void deactivate() {
   }
 }

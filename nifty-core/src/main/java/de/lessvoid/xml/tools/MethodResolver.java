@@ -1,5 +1,7 @@
 package de.lessvoid.xml.tools;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -9,7 +11,7 @@ import java.util.logging.Logger;
  * @author void
  */
 public class MethodResolver {
-  private static Logger log = Logger.getLogger(MethodResolver.class.getName());
+  private static final Logger log = Logger.getLogger(MethodResolver.class.getName());
 
   /**
    * you can't instantiate this class it's a helper class.
@@ -23,7 +25,8 @@ public class MethodResolver {
    * @param methodName the methodName
    * @return the Method instance
    */
-  public static Method findMethod(final Class < ? > c, final String methodName) {
+  @Nullable
+  public static Method findMethod(@Nullable final Class < ? > c, @Nonnull final String methodName) {
     if (c == null) {
       return null;
     }
@@ -41,7 +44,8 @@ public class MethodResolver {
     return findMethod(c.getSuperclass(), methodName);
   }
 
-  public static Method findMethodWithArgs(final Class<?> c, final String methodName, final Class<?> ... parameters) {
+  @Nullable
+  public static Method findMethodWithArgs(@Nullable final Class<?> c, @Nonnull final String methodName, final Class<?> ... parameters) {
     if (c == null) {
       return null;
     }
@@ -66,9 +70,10 @@ public class MethodResolver {
    * @param methodName method
    * @return array of strings with actual parameters or empty array
    */
-  public static String[] extractParameters(final String methodName) {
+  @Nonnull
+  public static String[] extractParameters(@Nonnull final String methodName) {
     String parameterString = extractArgs(methodName);
-    if (parameterString == null || parameterString.length() == 0) {
+    if (parameterString.length() == 0) {
       return new String[0];
     }
 
@@ -84,7 +89,8 @@ public class MethodResolver {
    * @param methodName complete methodname with argument list in ()
    * @return the part within ()
    */
-  public static String extractArgs(final String methodName) {
+  @Nonnull
+  public static String extractArgs(@Nonnull final String methodName) {
     int startIdx = methodName.indexOf("(");
     int endIdx = methodName.lastIndexOf(")");
     if (startIdx == -1 || endIdx == -1) {
@@ -93,7 +99,8 @@ public class MethodResolver {
     return methodName.substring(startIdx + 1, endIdx);
   }
 
-  private static String extractMethodName(final String methodName) {
+  @Nullable
+  private static String extractMethodName(@Nonnull final String methodName) {
     if (!methodName.contains("(")) {
       return null;
     }

@@ -7,39 +7,48 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.TargetElementResolver;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Hint - show hint.
+ *
  * @author void
  */
 public class SimpleHint implements EffectImpl {
 
   /**
-   * nifty.
-   */
-  private Nifty nifty;
-
-  /**
    * target element.
    */
+  @Nullable
   private Element targetElement;
 
   /**
    * hint text.
    */
+  @Nullable
   private String hintText;
 
   /**
    * initialize.
-   * @param niftyParam Nifty
-   * @param element Element
+   *
+   * @param nifty     Nifty
+   * @param element   Element
    * @param parameter Parameter
    */
-  public void activate(final Nifty niftyParam, final Element element, final EffectProperties parameter) {
-    this.nifty = niftyParam;
-
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
+    Screen screen = nifty.getCurrentScreen();
+    if (screen == null) {
+      return;
+    }
     TargetElementResolver resolver = new TargetElementResolver(nifty.getCurrentScreen(), element);
     targetElement = resolver.resolve(parameter.getProperty("targetElement"));
 
@@ -51,27 +60,32 @@ public class SimpleHint implements EffectImpl {
 
   /**
    * execute the effect.
-   * @param element the Element
+   *
+   * @param element        the Element
    * @param normalizedTime TimeInterpolator to use
-   * @param normalizedFalloff falloff value
-   * @param r RenderDevice to use
+   * @param falloff        falloff value
+   * @param r              RenderDevice to use
    */
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (targetElement != null) {
       TextRenderer textRenderer = targetElement.getRenderer(TextRenderer.class);
-      textRenderer.setText(hintText);
-      targetElement.setConstraintWidth(new SizeValue(textRenderer.getTextWidth() + "px"));
-      element.getParent().layoutElements();
+      if (textRenderer != null) {
+        textRenderer.setText(hintText == null ? "Missing Hint Text!" : hintText);
+        targetElement.setConstraintWidth(SizeValue.px(textRenderer.getTextWidth()));
+        element.getParent().layoutElements();
+      }
     }
   }
 
   /**
    * deactivate the effect.
    */
+  @Override
   public void deactivate() {
   }
 }

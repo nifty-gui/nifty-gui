@@ -1,11 +1,10 @@
 package de.lessvoid.xml.xpp3;
 
-import java.util.Random;
-
+import de.lessvoid.nifty.NiftyStopwatch;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.NiftyStopwatch;
+import java.util.Random;
 
 //@Ignore
 public class AttributesMergeAndTagPerformanceTest {
@@ -20,7 +19,7 @@ public class AttributesMergeAndTagPerformanceTest {
 
   @Before
   public void setUp() {
-    for (int i=0; i<10000; i++) {
+    for (int i = 0; i < 10000; i++) {
       attributes.set(String.valueOf(r.nextInt()), String.valueOf(r.nextInt()));
     }
   }
@@ -28,7 +27,7 @@ public class AttributesMergeAndTagPerformanceTest {
   @Test
   public void testPerformance() {
     Attributes src = new Attributes();
-    for (int i=0; i<10000; i++) {
+    for (int i = 0; i < 10000; i++) {
       src.set(String.valueOf(r.nextInt()), String.valueOf(r.nextInt()));
     }
 

@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.controls;
 
+import javax.annotation.Nullable;
+
 /**
  * The Draggable Control interface.
  *
@@ -26,5 +28,5 @@ public interface Draggable extends NiftyControl {
    *
    * @param droppable the new parent droppable
    */
-  void setDroppable(Droppable droppable);
+  void setDroppable(@Nullable Droppable droppable);
 }

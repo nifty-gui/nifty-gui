@@ -15,8 +15,8 @@ public abstract class AbstractMouseEventButton extends AbstractMouseEvent {
   /**
    * Create the mouse event that involves a mouse button.
    *
-   * @param x the x coordinate of the event location
-   * @param y the y coordinate of the event location
+   * @param x           the x coordinate of the event location
+   * @param y           the y coordinate of the event location
    * @param mouseButton the mouse button that was used
    */
   protected AbstractMouseEventButton(final int x, final int y, final int mouseButton) {

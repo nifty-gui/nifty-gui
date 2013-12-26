@@ -3,41 +3,46 @@ package de.lessvoid.nifty.examples.defaultcontrols.eventconsume;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.NiftyInputConsumerNotify;
-import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.CheckBox;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
-import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * The Controller for the EventConsumeDialog.
  */
 public class EventConsumeDialogController implements Controller {
   private Screen screen;
+  @Nullable
   private Label mouseXText;
+  @Nullable
   private Label mouseYText;
+  @Nullable
   private Label mouseWheelText;
+  @Nullable
   private Label mouseButtonText;
+  @Nullable
   private Label mouseDownText;
+  @Nullable
   private Label mouseProcessedText;
+  @Nullable
   private DropDown<ElementInfo> eventConsumeElementDropDown;
+  @Nullable
   private CheckBox eventConsumeIgnoreMouseEventsCheckBox;
+  @Nullable
   private CheckBox eventConsumeIgnoreKeyboardEventsCheckBox;
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     this.screen = screen;
     this.mouseXText = screen.findNiftyControl("mouseXText", Label.class);
     this.mouseYText = screen.findNiftyControl("mouseYText", Label.class);
@@ -82,11 +87,11 @@ public class EventConsumeDialogController implements Controller {
   }
 
   @Override
-  public void init(final Parameters parameter) {
-    eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementByName("eventConsumeLeftPanel"), "Green Panel"));
-    eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementByName("eventConsumeLeftButton"), "Test Left Button"));
-    eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementByName("eventConsumeRightPanel"), "Red Panel"));
-    eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementByName("eventConsumeRightButton"), "Test Right Button"));
+  public void init(@Nonnull final Parameters parameter) {
+    eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementById("eventConsumeLeftPanel"), "Green Panel"));
+    eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementById("eventConsumeLeftButton"), "Test Left Button"));
+    eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementById("eventConsumeRightPanel"), "Red Panel"));
+    eventConsumeElementDropDown.addItem(new ElementInfo(screen.findElementById("eventConsumeRightButton"), "Test Right Button"));
   }
 
   @Override
@@ -98,34 +103,34 @@ public class EventConsumeDialogController implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
   @NiftyEventSubscriber(id="eventConsumeElementDropDown")
-  public void eventConsumeElementDropDownChanged(final String id, final DropDownSelectionChangedEvent<ElementInfo> e) {
+  public void eventConsumeElementDropDownChanged(final String id, @Nonnull final DropDownSelectionChangedEvent<ElementInfo> e) {
     eventConsumeIgnoreMouseEventsCheckBox.setChecked(e.getSelection().getElement().isIgnoreMouseEvents());
     eventConsumeIgnoreKeyboardEventsCheckBox.setChecked(e.getSelection().getElement().isIgnoreKeyboardEvents());
   }
 
   @NiftyEventSubscriber(id="eventConsumeIgnoreMouseEventsCheckBox")
-  public void eventConsumeIgnoreMouseEventsCheckBoxToggle(final String id, final CheckBoxStateChangedEvent e) {
+  public void eventConsumeIgnoreMouseEventsCheckBoxToggle(final String id, @Nonnull final CheckBoxStateChangedEvent e) {
     eventConsumeElementDropDown.getSelection().getElement().setIgnoreMouseEvents(e.isChecked());
   }
 
   @NiftyEventSubscriber(id="eventConsumeIgnoreKeyboardEventsCheckBox")
-  public void eventConsumeIgnoreKeyboardEventsCheckBoxToggle(final String id, final CheckBoxStateChangedEvent e) {
+  public void eventConsumeIgnoreKeyboardEventsCheckBoxToggle(final String id, @Nonnull final CheckBoxStateChangedEvent e) {
     eventConsumeElementDropDown.getSelection().getElement().setIgnoreKeyboardEvents(e.isChecked());
   }
 
   @NiftyEventSubscriber(pattern="eventConsume.*Button")
-  public void onButtonClick(final String id, final ButtonClickedEvent e) {
+  public void onButtonClick(final String id, @Nonnull final ButtonClickedEvent e) {
     screen.findNiftyControl("eventConsumeButtonOut", Label.class).setText(e.getButton().getText() + " pressed");
   }
 
   private static class ElementInfo {
-    private Element element;
-    private String caption;
+    private final Element element;
+    private final String caption;
 
     public ElementInfo(final Element element, final String caption) {
       this.element = element;
@@ -136,6 +141,7 @@ public class EventConsumeDialogController implements Controller {
       return element;
     }
 
+    @Override
     public String toString() {
       return caption;
     }

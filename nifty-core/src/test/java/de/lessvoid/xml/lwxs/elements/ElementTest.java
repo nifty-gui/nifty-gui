@@ -1,23 +1,20 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
+import de.lessvoid.xml.lwxs.Schema;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.xml.lwxs.Schema;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
 
 public class ElementTest {
   private Schema schemaMock;
   private XmlProcessorType schemaXmlElementProcessorMock;
-  private Collection < Element > collection = new ArrayList < Element >();
+  private Collection<Element> collection = new ArrayList<Element>();
 
   @Before
   public void prepare() {

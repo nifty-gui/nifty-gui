@@ -2,13 +2,16 @@ package de.lessvoid.nifty.loaderv2.types;
 
 import de.lessvoid.xml.xpp3.Attributes;
 
+import javax.annotation.Nonnull;
+
 public class RemoveStandardAttributes {
-  private Attributes controlAttributes;
+  private final Attributes controlAttributes;
 
   public RemoveStandardAttributes(final Attributes controlAttributesParam) {
     controlAttributes = controlAttributesParam;
   }
 
+  @Nonnull
   public Attributes removeStandard() {
     Attributes attributes = new Attributes(controlAttributes);
     attributes.remove("id");

@@ -8,11 +8,15 @@ import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
 
-public class MessageBoxDialogDefinition {
-	public static String NAME = "messageBoxDialogControl";
-	private static CommonBuilders builders = new CommonBuilders();
+import javax.annotation.Nonnull;
 
-	public static void register(final Nifty nifty) {
+public class MessageBoxDialogDefinition {
+	@Nonnull
+  public static final String NAME = "messageBoxDialogControl";
+	@Nonnull
+  private static final CommonBuilders builders = new CommonBuilders();
+
+	public static void register(@Nonnull final Nifty nifty) {
 		new ControlDefinitionBuilder(NAME) {{
 			controller(new MessageBoxDialogController());
 			control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{

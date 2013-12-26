@@ -1,411 +1,411 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://nifty-gui.lessvoid.com/nifty-gui"
-  targetNamespace="http://nifty-gui.lessvoid.com/nifty-gui"
-  attributeFormDefault="unqualified"
-  elementFormDefault="qualified">
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns="http://nifty-gui.lessvoid.com/nifty-gui"
+        targetNamespace="http://nifty-gui.lessvoid.com/nifty-gui"
+        attributeFormDefault="unqualified"
+        elementFormDefault="qualified">
 
-  <!-- root elements -->
-  <xs:element name="nifty" type="niftyType"></xs:element>
-  <xs:element name="nifty-styles" type="niftyStylesType"></xs:element>
-  <xs:element name="nifty-controls" type="niftyControlsType"></xs:element>
+    <!-- root elements -->
+    <xs:element name="nifty" type="niftyType"/>
+    <xs:element name="nifty-styles" type="niftyStylesType"/>
+    <xs:element name="nifty-controls" type="niftyControlsType"/>
 
-  <!-- elements that need to be top level so that the substitutionGroup works -->
-  <xs:element name="element" type="elementType"></xs:element>
-  <xs:element name="layer" type="layerType" substitutionGroup="element"></xs:element>
-  <xs:element name="panel" type="panelType" substitutionGroup="element"></xs:element>
-  <xs:element name="image" type="imageType" substitutionGroup="element"></xs:element>
-  <xs:element name="control" type="controlType" substitutionGroup="element"></xs:element>
-  <xs:element name="text" type="textType" substitutionGroup="element"></xs:element>
-  <xs:element name="popup" type="popupType" substitutionGroup="element"></xs:element>
+    <!-- elements that need to be top level so that the substitutionGroup works -->
+    <xs:element name="element" type="elementType"/>
+    <xs:element name="layer" type="layerType" substitutionGroup="element"/>
+    <xs:element name="panel" type="panelType" substitutionGroup="element"/>
+    <xs:element name="image" type="imageType" substitutionGroup="element"/>
+    <xs:element name="control" type="controlType" substitutionGroup="element"/>
+    <xs:element name="text" type="textType" substitutionGroup="element"/>
+    <xs:element name="popup" type="popupType" substitutionGroup="element"/>
 
-  <!-- elements that need to be top level so that the substitutionGroup works -->
-  <xs:element name="effect" type="effectsType"></xs:element>
-  <xs:element name="singleEffectbase" type="singleEffectTypeBase"></xs:element>
-  <xs:element name="onStartScreen" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onEndScreen" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onHover" type="singleEffectTypeOnHover" substitutionGroup="singleEffectbase" />
-  <xs:element name="onStartHover" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onEndHover" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onClick" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onFocus" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onLostFocus" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onGetFocus" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onActive" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onCustom" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onShow" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onHide" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onEnabled" type="singleEffectType" substitutionGroup="singleEffectbase" />
-  <xs:element name="onDisabled" type="singleEffectType" substitutionGroup="singleEffectbase" />
+    <!-- elements that need to be top level so that the substitutionGroup works -->
+    <xs:element name="effect" type="effectsType"/>
+    <xs:element name="singleEffectbase" type="singleEffectTypeBase"/>
+    <xs:element name="onStartScreen" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onEndScreen" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onHover" type="singleEffectTypeOnHover" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onStartHover" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onEndHover" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onClick" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onFocus" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onLostFocus" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onGetFocus" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onActive" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onCustom" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onShow" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onHide" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onEnabled" type="singleEffectType" substitutionGroup="singleEffectbase"/>
+    <xs:element name="onDisabled" type="singleEffectType" substitutionGroup="singleEffectbase"/>
 
-  <xs:complexType name="elementType">
-    <xs:sequence>
-      <xs:element name="interact" type="interactType" maxOccurs="1" minOccurs="0" />
-      <xs:element name="effect" type="effectsType" maxOccurs="1" minOccurs="0" />
-      <xs:element ref="element" minOccurs="0" maxOccurs="unbounded" />
-    </xs:sequence>
-    <xs:attribute name="id" type="xs:string" />
-    <xs:attribute name="width" type="widthType" />
-    <xs:attribute name="height" type="heightType" />
-    <xs:attribute name="align" type="alignType" />
-    <xs:attribute name="valign" type="valignType" />
-    <xs:attribute name="childLayout" type="layoutType" />
-    <xs:attribute name="childClip" type="xs:boolean" />
-    <xs:attribute name="backgroundImage" type="xs:string" />
-    <xs:attribute name="backgroundColor" type="colorType" />
-    <xs:attribute name="visibleToMouse" type="xs:boolean" />
-    <xs:attribute name="style" type="xs:string" />
-    <xs:attribute name="renderOrder" type="xs:int" />
-    <xs:anyAttribute processContents="skip" namespace="##any" />
-  </xs:complexType>
-
-  <xs:complexType name="layerType">
-    <xs:complexContent>
-      <xs:extension base="panelType" />
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:complexType name="panelType">
-    <xs:complexContent>
-      <xs:extension base="elementType" />
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:complexType name="imageType">
-    <xs:complexContent>
-      <xs:extension base="elementType">
-        <xs:attribute type="xs:string" name="filename" use="optional" />
-        <xs:attribute name="x" type="xs:string" use="optional"></xs:attribute>
-        <xs:attribute name="y" type="xs:string" use="optional"></xs:attribute>
-        <xs:attribute name="color" type="colorType" use="optional" ></xs:attribute>
-        <xs:attribute name="filter" type="xs:boolean" use="optional"></xs:attribute>
-        <xs:attribute name="imageMode" type="xs:string" use="optional"></xs:attribute>
-        <xs:attribute name="renderStrategy" type="xs:string" use="optional"></xs:attribute>
-        <xs:attribute name="subImageSizeMode">
-          <xs:simpleType>
-            <xs:restriction base="xs:string">
-              <xs:enumeration value="scale"></xs:enumeration>
-              <xs:enumeration value="resizeHint"></xs:enumeration>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:attribute>
-        <xs:attribute name="resizeHint" type="xs:string"></xs:attribute>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:simpleType name="colorType">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="#[a-z,0-9]{8,8}"></xs:pattern>
-      <xs:pattern value="#[a-z,0-9]{4,4}"></xs:pattern>
-      <xs:minLength value="5"></xs:minLength>
-      <xs:maxLength value="9"></xs:maxLength>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="layoutType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="vertical"></xs:enumeration>
-      <xs:enumeration value="center"></xs:enumeration>
-      <xs:enumeration value="absolute"></xs:enumeration>
-      <xs:enumeration value="horizontal"></xs:enumeration>
-      <xs:enumeration value="overlay"></xs:enumeration>
-      <xs:enumeration value="absolute-inside"></xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="directionType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="top"></xs:enumeration>
-      <xs:enumeration value="bottom"></xs:enumeration>
-      <xs:enumeration value="left"></xs:enumeration>
-      <xs:enumeration value="right"></xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:complexType name="textType">
-    <xs:complexContent>
-      <xs:extension base="elementType">
-        <xs:attribute name="text" type="xs:string" use="optional"></xs:attribute>
-        <xs:attribute name="layout" type="layoutType" use="optional"></xs:attribute>
-        <xs:attribute name="font" type="xs:string"></xs:attribute>
-        <xs:attribute name="color" type="colorType"></xs:attribute>
-        <xs:attribute name="textLineHeight" type="xs:string" use="optional"></xs:attribute>
-        <xs:attribute name="textMinHeight" type="xs:string" use="optional"></xs:attribute>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:simpleType name="alignType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="left"></xs:enumeration>
-      <xs:enumeration value="center"></xs:enumeration>
-      <xs:enumeration value="right"></xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="widthType">
-    <xs:restriction base="xs:string"></xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="heightType">
-    <xs:restriction base="xs:string"></xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="valignType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="top"></xs:enumeration>
-      <xs:enumeration value="center"></xs:enumeration>
-      <xs:enumeration value="bottom"></xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:complexType name="controlDefinition">
-  	<xs:sequence>
-  		<xs:element ref="element" minOccurs="0" maxOccurs="unbounded" />
-  	</xs:sequence>
-  	<xs:attribute name="name" type="xs:string"></xs:attribute>
-  	<xs:attribute name="controller" type="xs:string"></xs:attribute>
-  	<xs:anyAttribute processContents="skip" namespace="##any"></xs:anyAttribute>
-  </xs:complexType>
-
-  <xs:complexType name="controlType">
-    <xs:complexContent>
-      <xs:extension base="elementType">
-        <xs:attribute name="name" type="xs:string"></xs:attribute>
-        <xs:anyAttribute processContents="skip" namespace="##any" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:complexType name="useStylesType">
-    <xs:attribute name="filename" type="xs:string" use="required" />
-  </xs:complexType>
-
-  <xs:complexType name="useControlsType">
-    <xs:attribute name="filename" type="xs:string" use="required" />
-  </xs:complexType>
-
-  <xs:complexType name="registerSoundType">
-    <xs:attribute name="id" type="xs:string" use="required" />
-    <xs:attribute name="filename" type="xs:string" use="required" />
-  </xs:complexType>
-
-  <xs:complexType name="registerEffectType">
-    <xs:attribute name="name" type="xs:string" use="required" />
-    <xs:attribute name="class" type="xs:string" use="required" />
-  </xs:complexType>
-
-  <xs:complexType name="registerMusicType">
-    <xs:attribute name="id" type="xs:string" use="required" />
-    <xs:attribute name="filename" type="xs:string" use="required" />
-  </xs:complexType>
-
-  <xs:complexType name="registerMouseCursorType">
-    <xs:attribute name="id" type="xs:string" use="required" />
-    <xs:attribute name="filename" type="xs:string" use="required" />
-    <xs:attribute name="hotspotX" type="xs:string" use="optional" />
-    <xs:attribute name="hotspotY" type="xs:string" use="optional" />
-  </xs:complexType>
-
-  <xs:complexType name="resourceBundleType">
-    <xs:attribute name="id" type="xs:string" use="required" />
-    <xs:attribute name="filename" type="xs:string" use="required" />
-  </xs:complexType>
-
-  <xs:complexType name="attributesType">
-  	<xs:attribute name="height" type="xs:string" />
-  	<xs:attribute name="width" type="xs:string" />
-  	<xs:attribute name="x" type="xs:string" />
-  	<xs:attribute name="y" type="xs:string" />
-  	<xs:attribute name="align" type="xs:string" />
-  	<xs:attribute name="valign" type="xs:string" />
-  	<xs:attribute name="paddingLeft" type="xs:string" />
-  	<xs:attribute name="paddingRight" type="xs:string" />
-  	<xs:attribute name="paddingTop" type="xs:string" />
-  	<xs:attribute name="paddingBottom" type="xs:string" />
-  	<xs:attribute name="padding" type="xs:string" />
-  	<xs:attribute name="marginLeft" type="xs:string" />
-  	<xs:attribute name="marginRight" type="xs:string" />
-  	<xs:attribute name="marginTop" type="xs:string" />
-  	<xs:attribute name="marginBottom" type="xs:string" />
-  	<xs:attribute name="margin" type="xs:string" />
-  	<xs:attribute name="childClip" type="xs:string" />
-  	<xs:attribute name="visible" type="xs:string" />
-  	<xs:attribute name="visibleToMouse" type="xs:string" />
-  	<xs:attribute name="childLayout" type="xs:string" />
-  	<xs:attribute name="focusable" type="xs:string" />
-  	<xs:attribute name="focusableInsertBeforeElementId" type="xs:string" />
-  	<xs:attribute name="backgroundImage" type="xs:string" />
-  	<xs:attribute name="backgroundColor" type="xs:string" />
-  	<xs:attribute name="color" type="xs:string" />
-  	<xs:attribute name="controller" type="xs:string" />
-  	<xs:attribute name="inputMapping" type="xs:string" />
-  	<xs:attribute name="textHAlign" type="xs:string" />
-  	<xs:attribute name="font" type="xs:string" />
-  	<xs:attribute name="filename" type="xs:string" />
-  	<xs:attribute name="wrap" type="xs:boolean" />
-  	<xs:attribute name="imageMode" type="xs:string" />
-    <xs:attribute name="renderStrategy" type="xs:string"></xs:attribute>
-  	<xs:attribute name="renderOrder" type="xs:int" />
-  	<xs:anyAttribute namespace="##any" processContents="skip"></xs:anyAttribute>
-  </xs:complexType>
-
-  <xs:simpleType name="onClickType">
-    <xs:restriction base="xs:string" />
-  </xs:simpleType>
-
-  <xs:complexType name="interactType">
-    <!-- these are mapped to the primary button -->
-	<xs:attribute name="onClick" type="onClickType" />
-    <xs:attribute name="onClickRepeat" type="onClickType" />
-    <xs:attribute name="onClickMouseMove" type="onClickType" />
-    <xs:attribute name="onRelease" type="onClickType" />
-
-    <!-- called for primary button only (usually the left mouse button) -->
-    <xs:attribute name="onPrimaryClick" type="onClickType" />
-    <xs:attribute name="onPrimaryClickRepeat" type="onClickType" />
-    <xs:attribute name="onPrimaryClickMouseMove" type="onClickType" />
-    <xs:attribute name="onPrimaryRelease" type="onClickType" />
-
-    <!-- called for secondary button only (usually the right mouse button) -->
-    <xs:attribute name="onSecondaryClick" type="onClickType" />
-    <xs:attribute name="onSecondaryClickRepeat" type="onClickType" />
-    <xs:attribute name="onSecondaryClickMouseMove" type="onClickType" />
-    <xs:attribute name="onSecondaryRelease" type="onClickType" />
-
-    <!-- called for tertiary button only (usually the middle mouse button) -->
-    <xs:attribute name="onTertiaryClick" type="onClickType" />
-    <xs:attribute name="onTertiaryClickRepeat" type="onClickType" />
-    <xs:attribute name="onTertiaryClickMouseMove" type="onClickType" />
-    <xs:attribute name="onTertiaryRelease" type="onClickType" />
-
-    <!-- methods called independent from the mouse buttons -->
-    <xs:attribute name="onMouseOver" type="onClickType" />
-    <xs:attribute name="onMouseWheel" type="onClickType" />
-    <xs:attribute name="onClickAlternateKey" type="xs:string" />
-  </xs:complexType>
-
-  <xs:complexType name="effectValueType">
-    <xs:attribute name="time" type="xs:string"/>
-    <xs:attribute name="value" type="xs:string"/>
-    <xs:attribute name="offset" type="xs:string"/>
-    <xs:attribute name="color" type="colorType"/>
-  </xs:complexType>
-
-  <xs:complexType name="singleEffectTypeBase">
-    <xs:sequence>
-      <xs:element name="value" type="effectValueType" minOccurs="0" maxOccurs="unbounded" />
-    </xs:sequence>
-    <xs:attribute name="name" type="xs:string" />
-    <xs:attribute name="startDelay" type="xs:string" />
-    <xs:attribute name="length" type="xs:string" />
-    <xs:attribute name="oneShot" type="xs:boolean" />
-    <xs:attribute name="timeType" type="xs:string" />
-    <xs:attribute name="factor" type="xs:string" />
-    <xs:attribute name="inherit" type="xs:boolean" />
-    <xs:attribute name="post" type="xs:boolean" />
-    <xs:attribute name="alternateEnable" type="xs:string" />
-    <xs:attribute name="alternateDisable" type="xs:string" />
-    <xs:attribute name="onStartEffect" type="onClickType" />
-    <xs:attribute name="onEndEffect" type="onClickType" />
-    <xs:anyAttribute namespace="##any" processContents="skip" />
-  </xs:complexType>
-
-  <xs:complexType name="singleEffectType">
-    <xs:complexContent>
-      <xs:extension base="singleEffectTypeBase"></xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:complexType name="singleEffectTypeOnHover">
-    <xs:complexContent>
-      <xs:extension base="singleEffectType">
+    <xs:complexType name="elementType">
         <xs:sequence>
-          <xs:element name="hover" type="onHoverType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="interact" type="interactType" maxOccurs="1" minOccurs="0"/>
+            <xs:element name="effect" type="effectsType" maxOccurs="1" minOccurs="0"/>
+            <xs:element ref="element" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="width" type="widthType"/>
+        <xs:attribute name="height" type="heightType"/>
+        <xs:attribute name="align" type="alignType"/>
+        <xs:attribute name="valign" type="valignType"/>
+        <xs:attribute name="childLayout" type="layoutType"/>
+        <xs:attribute name="childClip" type="xs:boolean"/>
+        <xs:attribute name="backgroundImage" type="xs:string"/>
+        <xs:attribute name="backgroundColor" type="colorType"/>
+        <xs:attribute name="visibleToMouse" type="xs:boolean"/>
+        <xs:attribute name="style" type="xs:string"/>
+        <xs:attribute name="renderOrder" type="xs:int"/>
+        <xs:anyAttribute processContents="skip" namespace="##any"/>
+    </xs:complexType>
 
-  <xs:complexType name="onHoverType">
-    <xs:attribute name="hoverFalloffType" type="xs:string" />
-    <xs:attribute name="hoverFalloffConstraint" type="xs:string" />
-    <xs:attribute name="hoverWidth" type="xs:string" />
-    <xs:attribute name="hoverHeight" type="xs:string" />
-  </xs:complexType>
+    <xs:complexType name="layerType">
+        <xs:complexContent>
+            <xs:extension base="panelType"/>
+        </xs:complexContent>
+    </xs:complexType>
 
-  <xs:complexType name="singleEffectTypeHover">
-    <xs:attribute name="width" type="widthType" />
-    <xs:attribute name="height" type="heightType" />
-  </xs:complexType>
+    <xs:complexType name="panelType">
+        <xs:complexContent>
+            <xs:extension base="elementType"/>
+        </xs:complexContent>
+    </xs:complexType>
 
-  <xs:complexType name="effectsType">
-    <xs:sequence>
-      <xs:element ref="singleEffectbase" minOccurs="0" maxOccurs="unbounded" />
-	  </xs:sequence>
-    <xs:attribute name="overlay" type="xs:boolean" />
-  </xs:complexType>
+    <xs:complexType name="imageType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:attribute type="xs:string" name="filename" use="optional"/>
+                <xs:attribute name="x" type="xs:string" use="optional"/>
+                <xs:attribute name="y" type="xs:string" use="optional"/>
+                <xs:attribute name="color" type="colorType" use="optional"/>
+                <xs:attribute name="filter" type="xs:boolean" use="optional"/>
+                <xs:attribute name="imageMode" type="xs:string" use="optional"/>
+                <xs:attribute name="renderStrategy" type="xs:string" use="optional"/>
+                <xs:attribute name="subImageSizeMode">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="scale"/>
+                            <xs:enumeration value="resizeHint"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="resizeHint" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
-  <xs:complexType name="styleType">
-    <xs:sequence>
-      <xs:element name="attributes" type="attributesType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="interact" type="interactType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="effect" type="effectsType" maxOccurs="unbounded" minOccurs="0" />
-    </xs:sequence>
-    <xs:attribute name="id" type="xs:string" />
-    <xs:attribute name="base" type="xs:string" />
-  </xs:complexType>
-  
-  <xs:complexType name="popupType">
-    <xs:complexContent>
-      <xs:extension base="elementType" />
-    </xs:complexContent>
-  </xs:complexType>
+    <xs:simpleType name="colorType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="#[a-z,0-9]{8,8}"/>
+            <xs:pattern value="#[a-z,0-9]{4,4}"/>
+            <xs:minLength value="5"/>
+            <xs:maxLength value="9"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-  <xs:complexType name="screenType">
-    <xs:sequence>
-      <xs:element name="layer" type="layerType" maxOccurs="unbounded" minOccurs="1" />
-    </xs:sequence>
-    <xs:attribute name="id" type="xs:string"></xs:attribute>
-    <xs:attribute name="controller" type="xs:string"></xs:attribute>
-    <xs:attribute name="inputMapping" type="xs:string"></xs:attribute>
-    <xs:attribute name="inputMappingPre" type="xs:boolean" use="optional"></xs:attribute>
-    <xs:attribute name="defaultFocusElement" type="xs:string" />
-  </xs:complexType>
+    <xs:simpleType name="layoutType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="vertical"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="absolute"/>
+            <xs:enumeration value="horizontal"/>
+            <xs:enumeration value="overlay"/>
+            <xs:enumeration value="absolute-inside"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-  <xs:complexType name="niftyType">
-    <xs:choice maxOccurs="unbounded" minOccurs="0">
-      <xs:element name="useStyles" type="useStylesType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="useControls" type="useControlsType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="registerSound" type="registerSoundType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="registerEffect" type="registerEffectType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="registerMusic" type="registerMusicType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="registerMouseCursor" type="registerMouseCursorType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="resourceBundle" type="resourceBundleType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="style" type="styleType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="controlDefinition" type="controlDefinition" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="screen" type="screenType" maxOccurs="unbounded" minOccurs="1" />
-      <xs:element name="popup" type="popupType" maxOccurs="unbounded" minOccurs="0" />
-    </xs:choice>
-  </xs:complexType>
+    <xs:simpleType name="directionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="top"/>
+            <xs:enumeration value="bottom"/>
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="right"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-  <xs:complexType name="niftyStylesType">
-    <xs:sequence>
-      <xs:element name="registerMouseCursor" type="registerMouseCursorType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="useStyles" type="useStylesType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="style" type="styleType" maxOccurs="unbounded" minOccurs="0" />
-    </xs:sequence>
-  </xs:complexType>
+    <xs:complexType name="textType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:attribute name="text" type="xs:string" use="optional"/>
+                <xs:attribute name="layout" type="layoutType" use="optional"/>
+                <xs:attribute name="font" type="xs:string"/>
+                <xs:attribute name="color" type="colorType"/>
+                <xs:attribute name="textLineHeight" type="xs:string" use="optional"/>
+                <xs:attribute name="textMinHeight" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
-  <xs:complexType name="niftyControlsType">
-    <xs:sequence>
-      <xs:element name="useStyles" type="useStylesType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="useControls" type="useControlsType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="resourceBundle" type="resourceBundleType" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="controlDefinition" type="controlDefinition" maxOccurs="unbounded" minOccurs="0" />
-      <xs:element name="popup" type="popupType" maxOccurs="unbounded" minOccurs="0" />
-    </xs:sequence>
-  </xs:complexType>
+    <xs:simpleType name="alignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="widthType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="heightType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="valignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="top"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="bottom"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="controlDefinition">
+        <xs:sequence>
+            <xs:element ref="element" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="controller" type="xs:string"/>
+        <xs:anyAttribute processContents="skip" namespace="##any"/>
+    </xs:complexType>
+
+    <xs:complexType name="controlType">
+        <xs:complexContent>
+            <xs:extension base="elementType">
+                <xs:attribute name="name" type="xs:string"/>
+                <xs:anyAttribute processContents="skip" namespace="##any"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="useStylesType">
+        <xs:attribute name="filename" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="useControlsType">
+        <xs:attribute name="filename" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="registerSoundType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="filename" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="registerEffectType">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="class" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="registerMusicType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="filename" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="registerMouseCursorType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="filename" type="xs:string" use="required"/>
+        <xs:attribute name="hotspotX" type="xs:string" use="optional"/>
+        <xs:attribute name="hotspotY" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="resourceBundleType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="filename" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="attributesType">
+        <xs:attribute name="height" type="xs:string"/>
+        <xs:attribute name="width" type="xs:string"/>
+        <xs:attribute name="x" type="xs:string"/>
+        <xs:attribute name="y" type="xs:string"/>
+        <xs:attribute name="align" type="xs:string"/>
+        <xs:attribute name="valign" type="xs:string"/>
+        <xs:attribute name="paddingLeft" type="xs:string"/>
+        <xs:attribute name="paddingRight" type="xs:string"/>
+        <xs:attribute name="paddingTop" type="xs:string"/>
+        <xs:attribute name="paddingBottom" type="xs:string"/>
+        <xs:attribute name="padding" type="xs:string"/>
+        <xs:attribute name="marginLeft" type="xs:string"/>
+        <xs:attribute name="marginRight" type="xs:string"/>
+        <xs:attribute name="marginTop" type="xs:string"/>
+        <xs:attribute name="marginBottom" type="xs:string"/>
+        <xs:attribute name="margin" type="xs:string"/>
+        <xs:attribute name="childClip" type="xs:string"/>
+        <xs:attribute name="visible" type="xs:string"/>
+        <xs:attribute name="visibleToMouse" type="xs:string"/>
+        <xs:attribute name="childLayout" type="xs:string"/>
+        <xs:attribute name="focusable" type="xs:string"/>
+        <xs:attribute name="focusableInsertBeforeElementId" type="xs:string"/>
+        <xs:attribute name="backgroundImage" type="xs:string"/>
+        <xs:attribute name="backgroundColor" type="xs:string"/>
+        <xs:attribute name="color" type="xs:string"/>
+        <xs:attribute name="controller" type="xs:string"/>
+        <xs:attribute name="inputMapping" type="xs:string"/>
+        <xs:attribute name="textHAlign" type="xs:string"/>
+        <xs:attribute name="font" type="xs:string"/>
+        <xs:attribute name="filename" type="xs:string"/>
+        <xs:attribute name="wrap" type="xs:boolean"/>
+        <xs:attribute name="imageMode" type="xs:string"/>
+        <xs:attribute name="renderStrategy" type="xs:string"/>
+        <xs:attribute name="renderOrder" type="xs:int"/>
+        <xs:anyAttribute namespace="##any" processContents="skip"/>
+    </xs:complexType>
+
+    <xs:simpleType name="onClickType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:complexType name="interactType">
+        <!-- these are mapped to the primary button -->
+        <xs:attribute name="onClick" type="onClickType"/>
+        <xs:attribute name="onClickRepeat" type="onClickType"/>
+        <xs:attribute name="onClickMouseMove" type="onClickType"/>
+        <xs:attribute name="onRelease" type="onClickType"/>
+
+        <!-- called for primary button only (usually the left mouse button) -->
+        <xs:attribute name="onPrimaryClick" type="onClickType"/>
+        <xs:attribute name="onPrimaryClickRepeat" type="onClickType"/>
+        <xs:attribute name="onPrimaryClickMouseMove" type="onClickType"/>
+        <xs:attribute name="onPrimaryRelease" type="onClickType"/>
+
+        <!-- called for secondary button only (usually the right mouse button) -->
+        <xs:attribute name="onSecondaryClick" type="onClickType"/>
+        <xs:attribute name="onSecondaryClickRepeat" type="onClickType"/>
+        <xs:attribute name="onSecondaryClickMouseMove" type="onClickType"/>
+        <xs:attribute name="onSecondaryRelease" type="onClickType"/>
+
+        <!-- called for tertiary button only (usually the middle mouse button) -->
+        <xs:attribute name="onTertiaryClick" type="onClickType"/>
+        <xs:attribute name="onTertiaryClickRepeat" type="onClickType"/>
+        <xs:attribute name="onTertiaryClickMouseMove" type="onClickType"/>
+        <xs:attribute name="onTertiaryRelease" type="onClickType"/>
+
+        <!-- methods called independent from the mouse buttons -->
+        <xs:attribute name="onMouseOver" type="onClickType"/>
+        <xs:attribute name="onMouseWheel" type="onClickType"/>
+        <xs:attribute name="onClickAlternateKey" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="effectValueType">
+        <xs:attribute name="time" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+        <xs:attribute name="offset" type="xs:string"/>
+        <xs:attribute name="color" type="colorType"/>
+    </xs:complexType>
+
+    <xs:complexType name="singleEffectTypeBase">
+        <xs:sequence>
+            <xs:element name="value" type="effectValueType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="startDelay" type="xs:string"/>
+        <xs:attribute name="length" type="xs:string"/>
+        <xs:attribute name="oneShot" type="xs:boolean"/>
+        <xs:attribute name="timeType" type="xs:string"/>
+        <xs:attribute name="factor" type="xs:string"/>
+        <xs:attribute name="inherit" type="xs:boolean"/>
+        <xs:attribute name="post" type="xs:boolean"/>
+        <xs:attribute name="alternateEnable" type="xs:string"/>
+        <xs:attribute name="alternateDisable" type="xs:string"/>
+        <xs:attribute name="onStartEffect" type="onClickType"/>
+        <xs:attribute name="onEndEffect" type="onClickType"/>
+        <xs:anyAttribute namespace="##any" processContents="skip"/>
+    </xs:complexType>
+
+    <xs:complexType name="singleEffectType">
+        <xs:complexContent>
+            <xs:extension base="singleEffectTypeBase"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="singleEffectTypeOnHover">
+        <xs:complexContent>
+            <xs:extension base="singleEffectType">
+                <xs:sequence>
+                    <xs:element name="hover" type="onHoverType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="onHoverType">
+        <xs:attribute name="hoverFalloffType" type="xs:string"/>
+        <xs:attribute name="hoverFalloffConstraint" type="xs:string"/>
+        <xs:attribute name="hoverWidth" type="xs:string"/>
+        <xs:attribute name="hoverHeight" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="singleEffectTypeHover">
+        <xs:attribute name="width" type="widthType"/>
+        <xs:attribute name="height" type="heightType"/>
+    </xs:complexType>
+
+    <xs:complexType name="effectsType">
+        <xs:sequence>
+            <xs:element ref="singleEffectbase" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="overlay" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="styleType">
+        <xs:sequence>
+            <xs:element name="attributes" type="attributesType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="interact" type="interactType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="effect" type="effectsType" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="base" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="popupType">
+        <xs:complexContent>
+            <xs:extension base="elementType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="screenType">
+        <xs:sequence>
+            <xs:element name="layer" type="layerType" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="controller" type="xs:string"/>
+        <xs:attribute name="inputMapping" type="xs:string"/>
+        <xs:attribute name="inputMappingPre" type="xs:boolean" use="optional"/>
+        <xs:attribute name="defaultFocusElement" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="niftyType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element name="useStyles" type="useStylesType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="useControls" type="useControlsType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="registerSound" type="registerSoundType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="registerEffect" type="registerEffectType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="registerMusic" type="registerMusicType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="registerMouseCursor" type="registerMouseCursorType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="resourceBundle" type="resourceBundleType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="style" type="styleType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="controlDefinition" type="controlDefinition" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="screen" type="screenType" maxOccurs="unbounded" minOccurs="1"/>
+            <xs:element name="popup" type="popupType" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="niftyStylesType">
+        <xs:sequence>
+            <xs:element name="registerMouseCursor" type="registerMouseCursorType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="useStyles" type="useStylesType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="style" type="styleType" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="niftyControlsType">
+        <xs:sequence>
+            <xs:element name="useStyles" type="useStylesType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="useControls" type="useControlsType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="resourceBundle" type="resourceBundleType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="controlDefinition" type="controlDefinition" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="popup" type="popupType" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
 </xs:schema>

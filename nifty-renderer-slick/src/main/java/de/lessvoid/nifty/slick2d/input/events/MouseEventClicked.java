@@ -4,6 +4,8 @@ import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.slick2d.input.InputState;
 import org.newdawn.slick.InputListener;
 
+import javax.annotation.Nonnull;
+
 /**
  * This mouse event is used to store the event generated in case a mouse button is clicked.
  *
@@ -18,10 +20,10 @@ public final class MouseEventClicked extends AbstractMouseEventButton {
   /**
    * Create a new mouse button clicked event.
    *
-   * @param x the x coordinate of the event location
-   * @param y the y coordinate of the event location
+   * @param x           the x coordinate of the event location
+   * @param y           the y coordinate of the event location
    * @param mouseButton the mouse button that was used
-   * @param clickCount the count of times how often the button got clicked
+   * @param clickCount  the count of times how often the button got clicked
    */
   public MouseEventClicked(final int x, final int y, final int mouseButton, final int clickCount) {
     super(x, y, mouseButton);
@@ -32,7 +34,7 @@ public final class MouseEventClicked extends AbstractMouseEventButton {
    * Reject this event in case the input state says so.
    */
   @Override
-  public boolean executeEvent(final InputState state) {
+  public boolean executeEvent(@Nonnull final InputState state) {
     final boolean result = !state.isConsumeNextClick();
     state.setConsumeNextClick(false);
     return result;
@@ -51,7 +53,7 @@ public final class MouseEventClicked extends AbstractMouseEventButton {
    * Send the event to a slick listener.
    */
   @Override
-  public boolean sendToSlick(final InputListener listener) {
+  public boolean sendToSlick(@Nonnull final InputListener listener) {
     listener.mouseClicked(getButton(), getX(), getY(), count);
     return true;
   }

@@ -2,6 +2,9 @@ package de.lessvoid.nifty.examples;
 
 import de.lessvoid.nifty.Nifty;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * This class defines a example for Nifty. If defines how the example is supposed to be load in a unified way.
  *
@@ -20,6 +23,7 @@ public interface NiftyExample {
    *
    * @return the resource path to the main XML or {@code null} in case no XML file is supposed to be load
    */
+  @Nullable
   String getMainXML();
 
   /**
@@ -27,6 +31,7 @@ public interface NiftyExample {
    *
    * @return the title of this example
    */
+  @Nonnull
   String getTitle();
 
   /**

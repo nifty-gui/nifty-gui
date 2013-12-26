@@ -1,24 +1,23 @@
 package de.lessvoid.nifty.effects.shared;
 
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.tools.time.TimeInterpolator;
+import junit.framework.TestCase;
 
 import java.util.Properties;
 
-import junit.framework.TestCase;
-import de.lessvoid.nifty.spi.time.TimeProvider;
-import de.lessvoid.nifty.tools.time.TimeInterpolator;
+import static org.easymock.classextension.EasyMock.*;
 
 public class LinearTimeTest extends TestCase {
 
   private TimeProvider timeProvider;
 
+  @Override
   public void setUp() {
     timeProvider = createMock(TimeProvider.class);
   }
 
+  @Override
   public void tearDown() {
     verify(timeProvider);
   }
@@ -74,6 +73,6 @@ public class LinearTimeTest extends TestCase {
     assertEquals(1.0f, linearTime.getValue());
 
     linearTime.update();
-    assertEquals( 1.0f, linearTime.getValue());
+    assertEquals(1.0f, linearTime.getValue());
   }
 }

@@ -1,46 +1,42 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch.core;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import com.jogamp.common.nio.Buffers;
+import de.lessvoid.nifty.renderer.jogl.math.Mat4;
+
+import javax.annotation.Nonnull;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL3;
+import javax.media.opengl.GLContext;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.Charset;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.GL3;
-import javax.media.opengl.GLContext;
-
-import com.jogamp.common.nio.Buffers;
-
-import de.lessvoid.nifty.renderer.jogl.math.Mat4;
 
 /**
  * Helper class that represents a shader (actually as the combination of a vertex
  * and a fragment shader - what GL actually calls program).
+ *
  * @author void
  */
 public class CoreShader {
   private static final Logger log = Logger.getLogger(CoreShader.class.getName());
-  private int program;
-  private Hashtable<String, Integer> parameter = new Hashtable<String, Integer>();
-  private FloatBuffer matBuffer = Buffers.newDirectFloatBuffer(16);
+  private final int program;
+  @Nonnull
+  private final HashMap<String, Integer> parameter = new HashMap<String, Integer>();
+  private final FloatBuffer matBuffer = Buffers.newDirectFloatBuffer(16);
   private final String[] attributes;
 
   /**
    * Create a new Shader.
+   *
    * @return the new CoreShader instance
    */
+  @Nonnull
   public static CoreShader newShader() {
     return new CoreShader();
   }
@@ -51,16 +47,18 @@ public class CoreShader {
    * on your own.
    *
    * @param vertexAttributes the name of the vertex attribute. The first String gets generic attribute index 0. the
-   *        second String gets generic attribute index 1 and so on.
+   *                         second String gets generic attribute index 1 and so on.
    * @return the CoreShader instance
    */
-  public static CoreShader newShaderWithVertexAttributes(final String ... vertexAttributes) {
+  @Nonnull
+  public static CoreShader newShaderWithVertexAttributes(final String... vertexAttributes) {
     return new CoreShader(vertexAttributes);
   }
 
   /**
    * Attach the given vertex shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the filename of the shader
    */
   public int vertexShader(final String filename) {
@@ -70,6 +68,7 @@ public class CoreShader {
   /**
    * Attach the given fragment shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the filename of the shader
    */
   public int fragmentShader(final String filename) {
@@ -79,6 +78,7 @@ public class CoreShader {
   /**
    * Attach the given geometry shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the filename of the shader
    */
   public int geometryShader(final String filename) {
@@ -88,6 +88,7 @@ public class CoreShader {
   /**
    * Attach the given vertex shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
   public int vertexShader(final File file) throws FileNotFoundException {
@@ -97,6 +98,7 @@ public class CoreShader {
   /**
    * Attach the given fragment shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
   public int fragmentShader(final File file) throws FileNotFoundException {
@@ -106,6 +108,7 @@ public class CoreShader {
   /**
    * Attach the given geometry shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
   public int geometryShader(final File file) throws FileNotFoundException {
@@ -115,9 +118,10 @@ public class CoreShader {
   /**
    * Attach the given vertex shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
-  public int vertexShader(final InputStream source) {
+  public int vertexShader(@Nonnull final InputStream source) {
     final GL gl = GLContext.getCurrentGL();
     int shaderId = gl.getGL2ES2().glCreateShader(GL3.GL_VERTEX_SHADER);
     checkGLError("glCreateShader(GL_VERTEX_SHADER)");
@@ -130,9 +134,10 @@ public class CoreShader {
   /**
    * Attach the given fragment shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
-  public int fragmentShader(final InputStream source) {
+  public int fragmentShader(@Nonnull final InputStream source) {
     final GL gl = GLContext.getCurrentGL();
     int shaderId = gl.getGL2ES2().glCreateShader(GL3.GL_FRAGMENT_SHADER);
     checkGLError("glCreateShader(GL_FRAGMENT_SHADER)");
@@ -145,9 +150,10 @@ public class CoreShader {
   /**
    * Attach the given geometry shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
-  public int geometryShader(final InputStream source) {
+  public int geometryShader(@Nonnull final InputStream source) {
     final GL gl = GLContext.getCurrentGL();
     int shaderId = gl.getGL2ES2().glCreateShader(GL3.GL_GEOMETRY_SHADER);
     checkGLError("glCreateShader(GL_GEOMETRY_SHADER)");
@@ -160,6 +166,7 @@ public class CoreShader {
   /**
    * Attach the given vertex shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the filename of the shader
    */
   public void vertexShader(final int shaderId, final String filename) {
@@ -169,6 +176,7 @@ public class CoreShader {
   /**
    * Attach the given fragment shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the filename of the shader
    */
   public void fragmentShader(final int shaderId, final String filename) {
@@ -178,6 +186,7 @@ public class CoreShader {
   /**
    * Attach the given geometry shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the filename of the shader
    */
   public void geometryShader(final int shaderId, final String filename) {
@@ -187,6 +196,7 @@ public class CoreShader {
   /**
    * Attach the given vertex shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
   public void vertexShader(final int shaderId, final File file) throws FileNotFoundException {
@@ -196,6 +206,7 @@ public class CoreShader {
   /**
    * Attach the given fragment shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
   public void fragmentShader(final int shaderId, final File file) throws FileNotFoundException {
@@ -205,6 +216,7 @@ public class CoreShader {
   /**
    * Attach the given geometry shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
   public void geometryShader(final int shaderId, final File file) throws FileNotFoundException {
@@ -214,27 +226,30 @@ public class CoreShader {
   /**
    * Attach the given vertex shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
-  public void vertexShader(final int shaderId, final InputStream source) {
+  public void vertexShader(final int shaderId, @Nonnull final InputStream source) {
     prepareShader(source, shaderId);
   }
 
   /**
    * Attach the given fragment shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
-  public void fragmentShader(final int shaderId, final InputStream source) {
+  public void fragmentShader(final int shaderId, @Nonnull final InputStream source) {
     prepareShader(source, shaderId);
   }
 
   /**
    * Attach the given geometry shader file to this CoreShader. This will call glCreateShader(), loads and compiles
    * the shader source and finally attaches the shader.
+   *
    * @param filename the file of the shader
    */
-  public void geometryShader(final int shaderId, InputStream source) {
+  public void geometryShader(final int shaderId, @Nonnull InputStream source) {
     prepareShader(source, shaderId);
   }
 
@@ -243,7 +258,7 @@ public class CoreShader {
    */
   public void link() {
     final GL gl = GLContext.getCurrentGL();
-    for (int i=0; i<attributes.length; i++) {
+    for (int i = 0; i < attributes.length; i++) {
       gl.getGL2ES2().glBindAttribLocation(program, i, attributes[i]);
       checkGLError("glBindAttribLocation (" + attributes[i] + ")");
     }
@@ -261,10 +276,11 @@ public class CoreShader {
 
   /**
    * Set the uniform with the given name to the given float value.
-   * @param name name of the uniform to set
+   *
+   * @param name  name of the uniform to set
    * @param value the new float value
    */
-  public void setUniformf(final String name, final float value) {
+  public void setUniformf(@Nonnull final String name, final float value) {
     final GL gl = GLContext.getCurrentGL();
     gl.getGL2ES2().glUniform1f(getLocation(name), value);
     checkGLError("glUniform1f");
@@ -272,11 +288,12 @@ public class CoreShader {
 
   /**
    * Set the uniform with the given name to the given value (two floats = vec2).
+   *
    * @param name name of the uniform to set
-   * @param v1 first component of the vec2
-   * @param v2 second component of the vec2
+   * @param v1   first component of the vec2
+   * @param v2   second component of the vec2
    */
-  public void setUniformf(final String name, final float v1, final float v2) {
+  public void setUniformf(@Nonnull final String name, final float v1, final float v2) {
     final GL gl = GLContext.getCurrentGL();
     gl.getGL2ES2().glUniform2f(getLocation(name), v1, v2);
     checkGLError("glUniform2f");
@@ -284,12 +301,13 @@ public class CoreShader {
 
   /**
    * Set the uniform with the given name to the given value (three floats = vec3).
+   *
    * @param name name of the uniform to set
-   * @param v1 first component of the vec3
-   * @param v2 second component of the vec3
-   * @param v3 third component of the vec3
+   * @param v1   first component of the vec3
+   * @param v2   second component of the vec3
+   * @param v3   third component of the vec3
    */
-  public void setUniformf(final String name, final float v1, final float v2, final float v3) {
+  public void setUniformf(@Nonnull final String name, final float v1, final float v2, final float v3) {
     final GL gl = GLContext.getCurrentGL();
     gl.getGL2ES2().glUniform3f(getLocation(name), v1, v2, v3);
     checkGLError("glUniform3f");
@@ -297,13 +315,14 @@ public class CoreShader {
 
   /**
    * Set the uniform with the given name to the given value (four floats = vec4).
+   *
    * @param name name of the uniform to set
-   * @param v1 first component of the vec4
-   * @param v2 second component of the vec4
-   * @param v3 third component of the vec4
-   * @param v4 fourth component of the vec4
+   * @param v1   first component of the vec4
+   * @param v2   second component of the vec4
+   * @param v3   third component of the vec4
+   * @param v4   fourth component of the vec4
    */
-  public void setUniformf(final String name, final float x, final float y, final float z, final float w) {
+  public void setUniformf(@Nonnull final String name, final float x, final float y, final float z, final float w) {
     final GL gl = GLContext.getCurrentGL();
     gl.getGL2ES2().glUniform4f(getLocation(name), x, y, z, w);
     checkGLError("glUniform4f");
@@ -311,10 +330,11 @@ public class CoreShader {
 
   /**
    * Set the uniform with the given name to the given int value.
-   * @param name name of the uniform to set
+   *
+   * @param name  name of the uniform to set
    * @param value the new int value
    */
-  public void setUniformi(final String name, final int v1) {
+  public void setUniformi(@Nonnull final String name, final int v1) {
     final GL gl = GLContext.getCurrentGL();
     gl.getGL2ES2().glUniform1i(getLocation(name), v1);
     checkGLError("glUniform1i");
@@ -322,11 +342,12 @@ public class CoreShader {
 
   /**
    * Set the uniform with the given name to the given int values (two values = ivec2).
+   *
    * @param name name of the uniform to set
-   * @param v1 the first int value of the ivec2
-   * @param v2 the second int value of the ivec2
+   * @param v1   the first int value of the ivec2
+   * @param v2   the second int value of the ivec2
    */
-  public void setUniformi(final String name, final int v1, final int v2) {
+  public void setUniformi(@Nonnull final String name, final int v1, final int v2) {
     final GL gl = GLContext.getCurrentGL();
     gl.getGL2ES2().glUniform2i(getLocation(name), v1, v2);
     checkGLError("glUniform2i");
@@ -334,12 +355,13 @@ public class CoreShader {
 
   /**
    * Set the uniform with the given name to the given int values (three values = ivec3).
+   *
    * @param name name of the uniform to set
-   * @param v1 the first int value of the ivec3
-   * @param v2 the second int value of the ivec3
-   * @param v3 the third int value of the ivec3
+   * @param v1   the first int value of the ivec3
+   * @param v2   the second int value of the ivec3
+   * @param v3   the third int value of the ivec3
    */
-  public void setUniformi(final String name, final int v1, final int v2, final int v3) {
+  public void setUniformi(@Nonnull final String name, final int v1, final int v2, final int v3) {
     final GL gl = GLContext.getCurrentGL();
     gl.getGL2ES2().glUniform3i(getLocation(name), v1, v2, v3);
     checkGLError("glUniform3i");
@@ -347,13 +369,14 @@ public class CoreShader {
 
   /**
    * Set the uniform with the given name to the given int values (four values = ivec4).
+   *
    * @param name name of the uniform to set
-   * @param v1 the first int value of the ivec4
-   * @param v2 the second int value of the ivec4
-   * @param v3 the third int value of the ivec4
-   * @param v3 the fourth int value of the ivec4
+   * @param v1   the first int value of the ivec4
+   * @param v2   the second int value of the ivec4
+   * @param v3   the third int value of the ivec4
+   * @param v3   the fourth int value of the ivec4
    */
-  public void setUniformi(final String name, final int v1, final int v2, final int v3, final int v4) {
+  public void setUniformi(@Nonnull final String name, final int v1, final int v2, final int v3, final int v4) {
     final GL gl = GLContext.getCurrentGL();
     gl.getGL2ES2().glUniform4i(getLocation(name), v1, v2, v3, v4);
     checkGLError("glUniform4i");
@@ -361,10 +384,11 @@ public class CoreShader {
 
   /**
    * Set the uniform mat4 with the given name to the given matrix (Matrix4f).
-   * @param name the name of the uniform
+   *
+   * @param name   the name of the uniform
    * @param matrix the Matrix4f to set
    */
-  public void setUniformMatrix4f(final String name, final Mat4 matrix) {
+  public void setUniformMatrix4f(@Nonnull final String name, @Nonnull final Mat4 matrix) {
     matBuffer.clear();
     matrix.store(matBuffer);
     matBuffer.rewind();
@@ -375,6 +399,7 @@ public class CoreShader {
 
   /**
    * Get the vertex attribute location of the vertex attribute with the given name.
+   *
    * @param name the name of the vertex attribute
    * @return the generic vertex attribute index value
    */
@@ -388,8 +413,8 @@ public class CoreShader {
   /**
    * You can manually bind the vertex attribute with the given name to the given specific index value. You'll need to
    * call this method before calling the link() method!
-   * 
-   * @param name the name of the vertex attribute
+   *
+   * @param name  the name of the vertex attribute
    * @param index the new index you want to give that vertex attribute
    */
   public void bindAttribLocation(final String name, final int index) {
@@ -407,20 +432,20 @@ public class CoreShader {
     checkGLError("glUseProgram");
   }
 
-  private CoreShader(final String ... vertexAttributes) {
+  private CoreShader(final String... vertexAttributes) {
     this.attributes = vertexAttributes;
     final GL gl = GLContext.getCurrentGL();
     this.program = gl.getGL2ES2().glCreateProgram();
     checkGLError("glCreateProgram");
   }
 
-  private int registerParameter(final String name) {
+  private int registerParameter(@Nonnull final String name) {
     int location = getUniform(name);
     parameter.put(name, location);
     return location;
   }
 
-  private int getLocation(final String name) {
+  private int getLocation(@Nonnull final String name) {
     Integer value = parameter.get(name);
     if (value == null) {
       return registerParameter(name);
@@ -428,12 +453,12 @@ public class CoreShader {
     return value;
   }
 
-  private int getUniform(final String uniformName) {
+  private int getUniform(@Nonnull final String uniformName) {
     try {
       byte[] bytes = uniformName.getBytes("ISO-8859-1");
       ByteBuffer name = Buffers.newDirectByteBuffer(bytes.length + 1);
       name.put(bytes);
-      name.put((byte)0x00);
+      name.put((byte) 0x00);
       name.rewind();
       final GL gl = GLContext.getCurrentGL();
       int result = gl.getGL2ES2().glGetUniformLocation(program, uniformName);
@@ -446,7 +471,7 @@ public class CoreShader {
     }
   }
 
-  private void prepareShader(final InputStream source, final int shaderId) {
+  private void prepareShader(@Nonnull final InputStream source, final int shaderId) {
     final GL gl = GLContext.getCurrentGL();
     String[] loadShader = loadShader(source);
     int[] stringLength = new int[1];
@@ -467,18 +492,19 @@ public class CoreShader {
     checkGLError(String.valueOf(shaderId));
   }
 
-  private String[] loadShader(final InputStream source) {
+  @Nonnull
+  private String[] loadShader(@Nonnull final InputStream source) {
     byte[] data = read(source);
     String[] result = new String[1];
     result[0] = new String(data, Charset.forName("ISO-8859-1"));
     return result;
   }
 
-  private byte[] read(final InputStream dataStream) {
+  private byte[] read(@Nonnull final InputStream dataStream) {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     byte[] readBuffer = new byte[1024];
-    int bytesRead = -1;
+    int bytesRead;
     try {
       while ((bytesRead = dataStream.read(readBuffer)) > 0) {
         out.write(readBuffer, 0, bytesRead);
@@ -488,8 +514,7 @@ public class CoreShader {
     } finally {
       try {
         dataStream.close();
-      } catch (IOException e) {
-        throw new RuntimeException(e);
+      } catch (IOException ignored) {
       }
     }
 
@@ -520,10 +545,12 @@ public class CoreShader {
     CoreCheckGL.checkGLError(getLoggingPrefix() + message);
   }
 
+  @Nonnull
   private String getLoggingPrefix() {
     return "[" + program + "] ";
   }
 
+  @Nonnull
   private InputStream getStream(final File file) throws FileNotFoundException {
     log.fine("loading shader file [" + file + "]");
     return new ByteArrayInputStream(read(new FileInputStream(file)));

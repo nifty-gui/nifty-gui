@@ -1,17 +1,8 @@
 package de.lessvoid.nifty.controls.button;
 
-import org.bushe.swing.event.EventTopicSubscriber;
-
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.ButtonReleasedEvent;
-import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryReleaseEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
@@ -22,52 +13,55 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 /**
  * Implementation of the TextButton Control.
+ *
  * @author void
  * @deprecated Please use {@link de.lessvoid.nifty.controls.Button} when accessing NiftyControls.
  */
 @Deprecated
 public class ButtonControl extends AbstractController implements Button {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(ButtonControl.class.getName());
+  @Nullable
   private Nifty nifty;
-  private Screen screen;
+  @Nullable
   private FocusHandler focusHandler;
+  @Nullable
   private Element buttonTextElement;
+  @Nullable
   private TextRenderer buttonTextRenderer;
 
   @Override
   public void bind(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element newElement,
-      final Parameters parameter) {
+      @Nonnull final Nifty niftyParam,
+      @Nonnull final Screen screenParam,
+      @Nonnull final Element newElement,
+      @Nonnull final Parameters parameter) {
     super.bind(newElement);
     nifty = niftyParam;
-    screen = screenParam;
-    buttonTextElement = getElement().findElementById("#text");
-    buttonTextRenderer = buttonTextElement.getRenderer(TextRenderer.class);
-    focusHandler = screen.getFocusHandler();
-  }
 
-  @Override
-  public void init(final Parameters parameter) {
-    EventTopicSubscriber<NiftyMousePrimaryClickedEvent> mouseClickedSubscriber = new EventTopicSubscriber<NiftyMousePrimaryClickedEvent>() {
-      @Override
-      public void onEvent(final String topic, final NiftyMousePrimaryClickedEvent data) {
-        nifty.publishEvent(topic, new ButtonClickedEvent(ButtonControl.this));
-      }
-    };
-    nifty.subscribe(screen, getElement().getId(), NiftyMousePrimaryClickedEvent.class, mouseClickedSubscriber);
+    final Element text = newElement.findElementById("#text");
+    if (text == null) {
+      log.severe("Button element misses the text content element.");
+      return;
+    }
+    buttonTextElement = text;
 
-    EventTopicSubscriber<NiftyMousePrimaryReleaseEvent> mouseReleasedSubscriber = new EventTopicSubscriber<NiftyMousePrimaryReleaseEvent>() {
-      @Override
-      public void onEvent(final String topic, final NiftyMousePrimaryReleaseEvent data) {
-        nifty.publishEvent(topic, new ButtonReleasedEvent (ButtonControl.this));
-      }
-    };
-    nifty.subscribe(screen, getElement().getId(), NiftyMousePrimaryReleaseEvent.class, mouseReleasedSubscriber);
+    if (newElement.getId() == null) {
+      log.warning("Button element has no ID and can't publish any events properly.");
+    }
 
-    super.init(parameter);
+    final TextRenderer renderer = buttonTextElement.getRenderer(TextRenderer.class);
+    if (renderer == null) {
+      throw new RuntimeException("ButtonControl is corrupted, #text element found, but missing TextRenderer");
+    }
+    buttonTextRenderer = renderer;
+    focusHandler = screenParam.getFocusHandler();
   }
 
   @Override
@@ -79,44 +73,64 @@ public class ButtonControl extends AbstractController implements Button {
     super.onFocus(getFocus);
   }
 
-  @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    Element buttonElement = getElement();
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
-      if (focusHandler != null) {
-        focusHandler.getNext(buttonElement).setFocus();
+  public boolean onClick() {
+    if (nifty != null) {
+      String id = getId();
+      if (id != null) {
+        nifty.publishEvent(id, new ButtonClickedEvent(this));
       }
+    }
+    return true;
+  }
+
+  public boolean onRelease() {
+    if (nifty != null) {
+      String id = getId();
+      if (id != null) {
+        nifty.publishEvent(id, new ButtonReleasedEvent(this));
+      }
+    }
+    return true;
+  }
+
+  @Override
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyStandardInputEvent.Activate) {
+      activate();
+      return true;
+    }
+
+    Element buttonElement = getElement();
+    if (buttonElement == null || focusHandler == null) {
+      return false;
+    }
+    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+      focusHandler.getNext(buttonElement).setFocus();
       return true;
     } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
-      if (focusHandler != null) {
-        focusHandler.getPrev(buttonElement).setFocus();
-      }
-      return true;
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
-      buttonClick();
+      focusHandler.getPrev(buttonElement).setFocus();
       return true;
     } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
-      if (focusHandler != null) {
-        Element nextElement = focusHandler.getNext(buttonElement);
-        if (nextElement.getParent().equals(buttonElement.getParent())) {
-          nextElement.setFocus();
-          return true;
-        }
+      Element nextElement = focusHandler.getNext(buttonElement);
+      if (nextElement.getParent().equals(buttonElement.getParent())) {
+        nextElement.setFocus();
+        return true;
       }
     } else if (inputEvent == NiftyStandardInputEvent.MoveCursorUp) {
-      if (focusHandler != null) {
-        Element prevElement = focusHandler.getPrev(buttonElement);
-        if (prevElement.getParent().equals(buttonElement.getParent())) {
-          prevElement.setFocus();
-          return true;
-        }
+      Element prevElement = focusHandler.getPrev(buttonElement);
+      if (prevElement.getParent().equals(buttonElement.getParent())) {
+        prevElement.setFocus();
+        return true;
       }
     }
     return false;
   }
 
   private void buttonClick() {
-    getElement().onClick();
+    Element element = getElement();
+    if (element != null) {
+      getElement().onClick();
+    }
   }
 
   // Button Implementation
@@ -126,66 +140,102 @@ public class ButtonControl extends AbstractController implements Button {
     buttonClick();
   }
 
+  @Nonnull
   @Override
   public String getText() {
-    return buttonTextRenderer.getOriginalText();
+    if (buttonTextRenderer == null) {
+      return "";
+    } else {
+      return buttonTextRenderer.getOriginalText();
+    }
   }
 
   @Override
-  public void setText(final String text) {
-    buttonTextRenderer.setText(text);
-    if (!buttonTextRenderer.isLineWrapping()) {
-      buttonTextElement.setConstraintWidth(new SizeValue(buttonTextRenderer.getTextWidth() + "px"));
+  public void setText(@Nonnull final String text) {
+    if (buttonTextRenderer != null && buttonTextElement != null) {
+      buttonTextRenderer.setText(text);
+      if (!buttonTextRenderer.isLineWrapping()) {
+        buttonTextElement.setConstraintWidth(SizeValue.px(getTextWidth()));
+      }
+    } else {
+      if (!isBound()) {
+        throw new IllegalStateException("Setting the text is not possible before the binding is done.");
+      }
+      log.warning("Failed to apply the text because the required references are not set. Maybe the element is not " +
+          "bound yet?");
     }
   }
 
   @Override
   public int getTextWidth() {
-    return buttonTextRenderer.getTextWidth();
+    return buttonTextRenderer != null ? buttonTextRenderer.getTextWidth() : 0;
   }
 
   @Override
   public int getTextHeight() {
-    return buttonTextRenderer.getTextHeight();
+    return buttonTextRenderer != null ? buttonTextRenderer.getTextHeight() : 0;
   }
 
+  @Nullable
   @Override
   public RenderFont getFont() {
-    return buttonTextRenderer.getFont();
+    return buttonTextRenderer != null ? buttonTextRenderer.getFont() : null;
   }
 
   @Override
-  public void setFont(final RenderFont fontParam) {
-    buttonTextRenderer.setFont(fontParam);
+  public void setFont(@Nullable final RenderFont fontParam) {
+    if (buttonTextRenderer != null) {
+      buttonTextRenderer.setFont(fontParam);
+    } else {
+      if (!isBound()) {
+        throw new IllegalStateException("Setting the font is not possible before the binding is done.");
+      }
+      log.warning("Failed to set the font of the renderer. Maybe the element is not bound yet?");
+    }
   }
 
+  @Nonnull
   @Override
   public VerticalAlign getTextVAlign() {
-    return buttonTextRenderer.getTextVAlign();
+    return buttonTextRenderer != null ? buttonTextRenderer.getTextVAlign() : VerticalAlign.center;
   }
 
   @Override
-  public void setTextVAlign(final VerticalAlign newTextVAlign) {
-    buttonTextRenderer.setTextVAlign(newTextVAlign);
+  public void setTextVAlign(@Nonnull final VerticalAlign newTextVAlign) {
+    if (buttonTextRenderer != null) {
+      buttonTextRenderer.setTextVAlign(newTextVAlign);
+    } else {
+      log.warning("Failed to set the vertical text align. Maybe the element is not bound yet?");
+    }
   }
 
+  @Nonnull
   @Override
   public HorizontalAlign getTextHAlign() {
-    return buttonTextRenderer.getTextHAlign();
+    return buttonTextRenderer != null ? buttonTextRenderer.getTextHAlign() : HorizontalAlign.center;
   }
 
   @Override
-  public void setTextHAlign(final HorizontalAlign newTextHAlign) {
-    buttonTextRenderer.setTextHAlign(newTextHAlign);
+  public void setTextHAlign(@Nonnull final HorizontalAlign newTextHAlign) {
+    if (buttonTextRenderer != null) {
+      buttonTextRenderer.setTextHAlign(newTextHAlign);
+    } else {
+      log.warning("Failed to set the horizontal text align. Maybe the element is not bound yet?");
+    }
   }
 
+  @Nonnull
   @Override
   public Color getTextColor() {
-    return buttonTextRenderer.getColor();
+    return buttonTextRenderer != null ? buttonTextRenderer.getColor() : TextRenderer.DEFAULT_COLOR;
   }
 
   @Override
-  public void setTextColor(final Color newColor) {
-    buttonTextRenderer.setColor(newColor);
+  public void setTextColor(@Nonnull final Color newColor) {
+    if (buttonTextRenderer != null) {
+      buttonTextRenderer.setColor(newColor);
+    } else {
+      log.warning("Failed to set the text color. Maybe the element is not bound yet?");
+    }
   }
 }

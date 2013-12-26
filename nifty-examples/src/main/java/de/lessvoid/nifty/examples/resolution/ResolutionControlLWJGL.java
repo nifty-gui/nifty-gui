@@ -5,6 +5,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -18,6 +19,7 @@ public class ResolutionControlLWJGL implements ResolutionControl<DisplayMode> {
     this.coreProfile = coreProfile;
   }
 
+  @Nonnull
   @Override
   public Collection<DisplayMode> getResolutions() {
     try {
@@ -25,7 +27,7 @@ public class ResolutionControlLWJGL implements ResolutionControl<DisplayMode> {
       List<DisplayMode> sorted = new ArrayList<DisplayMode>();
 
       DisplayMode[] modes = Display.getAvailableDisplayModes();
-      for (int i=0; i<modes.length; i++) {
+      for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
         if (mode.getBitsPerPixel() == 32 && mode.getFrequency() == currentMode.getFrequency()) {
           sorted.add(mode);
@@ -34,12 +36,12 @@ public class ResolutionControlLWJGL implements ResolutionControl<DisplayMode> {
 
       Collections.sort(sorted, new Comparator<DisplayMode>() {
         @Override
-        public int compare(DisplayMode o1, DisplayMode o2) {
-          int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(Integer.valueOf(o2.getWidth()));
+        public int compare(@Nonnull DisplayMode o1, @Nonnull DisplayMode o2) {
+          int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(o2.getWidth());
           if (widthCompare != 0) {
             return widthCompare;
           }
-          int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(Integer.valueOf(o2.getHeight()));
+          int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(o2.getHeight());
           if (heightCompare != 0) {
             return heightCompare;
           }
@@ -55,7 +57,7 @@ public class ResolutionControlLWJGL implements ResolutionControl<DisplayMode> {
   }
 
   @Override
-  public void setResolution(DisplayMode newResolution) {
+  public void setResolution(@Nonnull DisplayMode newResolution) {
     try {
       Display.setDisplayMode(newResolution);
 
@@ -66,7 +68,7 @@ public class ResolutionControlLWJGL implements ResolutionControl<DisplayMode> {
 
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
       }
-    } catch (final LWJGLException e) {
+    } catch (@Nonnull final LWJGLException e) {
       e.printStackTrace();
     }
   }

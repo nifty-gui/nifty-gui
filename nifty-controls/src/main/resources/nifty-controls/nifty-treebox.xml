@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
-  <controlDefinition name="treeBox-item" style="nifty-treebox-item"
-                     controller="de.lessvoid.nifty.controls.treebox.TreeBoxItemController">
-    <panel childLayout="horizontal" width="100%" align="center">
-      <panel id="#tree-item-spacer" visibleToMouse="false" />
-      <panel id="#tree-item-icon-container" style="#tree-item-icon-container">
-        <interact onClick="expandButtonClicked()" />
-        <image id="#tree-item-icon" />
-      </panel>
-      <panel id="#tree-item-content" style="#content" childLayout="horizontal" width="*" />
-    </panel>
-  </controlDefinition>
+    <controlDefinition name="treeBox-item" style="nifty-treebox-item"
+                       controller="de.lessvoid.nifty.controls.treebox.TreeBoxItemController">
+        <panel childLayout="horizontal" width="100%" align="center">
+            <panel id="#tree-item-spacer" visibleToMouse="false"/>
+            <panel id="#tree-item-icon-container" style="#tree-item-icon-container">
+                <interact onClick="expandButtonClicked()"/>
+                <image id="#tree-item-icon"/>
+            </panel>
+            <panel id="#tree-item-content" style="#content" childLayout="horizontal" width="*"/>
+        </panel>
+    </controlDefinition>
 
-  <controlDefinition name="treeBox" controller="de.lessvoid.nifty.controls.treebox.TreeBoxControl"
-                     childRootId="#listbox" style="nifty-listbox">
-    <control id="#listbox" name="listBox" vertical="vertical" horizontal="horizontal"
-             selectionMode="$selectionMode" displayItems="$displayItems"
-             viewConverterClass="de.lessvoid.nifty.controls.treebox.TreeBoxViewConverter">
-      <control name="treeBox-item" id="#treeBox-item" />
-    </control>
-  </controlDefinition>
+    <controlDefinition name="treeBox" controller="de.lessvoid.nifty.controls.treebox.TreeBoxControl"
+                       childRootId="#listbox" style="nifty-listbox">
+        <control id="#listbox" name="listBox" vertical="vertical" horizontal="horizontal"
+                 selectionMode="$selectionMode" displayItems="$displayItems"
+                 viewConverterClass="de.lessvoid.nifty.controls.treebox.TreeBoxViewConverter">
+            <control name="treeBox-item" id="#treeBox-item"/>
+        </control>
+    </controlDefinition>
 </nifty-controls>

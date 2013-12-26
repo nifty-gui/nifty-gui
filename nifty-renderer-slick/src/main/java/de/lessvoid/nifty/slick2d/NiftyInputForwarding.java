@@ -14,6 +14,7 @@ public interface NiftyInputForwarding {
    * @return the forwarding control instance
    */
   ForwardingInputSystem getInputForwardingControl();
+
   /**
    * Check if input forwarding is supported.
    *

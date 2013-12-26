@@ -1,5 +1,7 @@
 package de.lessvoid.nifty;
 
+import javax.annotation.Nullable;
+
 public class Size {
 	private final int m_width;
 	private final int m_height;
@@ -31,7 +33,7 @@ public class Size {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

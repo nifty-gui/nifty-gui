@@ -1,8 +1,6 @@
 package de.lessvoid.nifty.controls;
 
-import static java.io.StreamTokenizer.TT_EOF;
-import static java.io.StreamTokenizer.TT_WORD;
-
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
@@ -10,10 +8,14 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public class ConsoleCommandSplitter {
-  private static Logger log = Logger.getLogger(ConsoleCommandSplitter.class.getName());
+import static java.io.StreamTokenizer.TT_EOF;
+import static java.io.StreamTokenizer.TT_WORD;
 
-  public String[] split(final String commandLine) {
+public class ConsoleCommandSplitter {
+  private static final Logger log = Logger.getLogger(ConsoleCommandSplitter.class.getName());
+
+  @Nonnull
+  public String[] split(@Nonnull final String commandLine) {
     ArrayList<String> parts = new ArrayList<String>();
 
     Reader r = new StringReader(commandLine);
@@ -24,7 +26,7 @@ public class ConsoleCommandSplitter {
     st.quoteChar('"');
     st.quoteChar('\'');
 
-    int token = TT_EOF;
+    int token;
     try {
       while ((token = st.nextToken()) != TT_EOF) {
         switch (token) {

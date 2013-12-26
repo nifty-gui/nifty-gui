@@ -1,31 +1,30 @@
 package de.lessvoid.nifty.examples.jogl;
 
-import java.io.InputStream;
-import java.util.logging.LogManager;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
-
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.FPSAnimator;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.LoggerShortFormat;
-import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
 import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
 import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackend;
 import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackendCoreProfile;
+import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
+import de.lessvoid.nifty.spi.sound.SoundHandle;
 import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.media.opengl.*;
+import java.io.InputStream;
+import java.util.logging.LogManager;
 
 /**
  * Takes care of JOGL initialization.
+ *
  * @author void
  */
 public class JOGLNiftyRunner implements GLEventListener {
@@ -35,14 +34,14 @@ public class JOGLNiftyRunner implements GLEventListener {
   private static long time = System.currentTimeMillis();
   private static long frames = 0;
   private static GLWindow window;
+  @Nonnull
   private static Mode mode = Mode.Old;
 
-  private RenderDevice renderDevice;
-  private JoglInputSystem inputSystem;
+  @Nullable
   private Nifty nifty;
   private Callback callback;
 
-  public static void run(final String[] args, final Callback callback) throws Exception {
+  public static void run(@Nonnull final String[] args, final Callback callback) throws Exception {
     InputStream input = null;
     try {
       input = LoggerShortFormat.class.getClassLoader().getResourceAsStream("logging.properties");
@@ -82,6 +81,7 @@ public class JOGLNiftyRunner implements GLEventListener {
     return GLProfile.getDefault();
   }
 
+  @Nonnull
   private static String getCaption(final Mode mode) {
     String add = "";
     if (Mode.Batch.equals(mode)) {
@@ -100,13 +100,16 @@ public class JOGLNiftyRunner implements GLEventListener {
     this.callback = callback;
   }
 
+  @Override
   public void display(GLAutoDrawable drawable) {
     long startTime = System.nanoTime();
     update(drawable);
     render(drawable, startTime);
   }
 
+  @Override
   public void init(GLAutoDrawable drawable) {
+    RenderDevice renderDevice;
     if (Mode.Batch.equals(mode)) {
       renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend(), 2048, 2048);
     } else if (Mode.Core.equals(mode)) {
@@ -116,19 +119,45 @@ public class JOGLNiftyRunner implements GLEventListener {
     } else {
       renderDevice = new JoglRenderDevice();
     }
-    inputSystem = new JoglInputSystem();
+    JoglInputSystem inputSystem = new JoglInputSystem();
     window.addMouseListener(inputSystem);
     window.addKeyListener(inputSystem);
 
-    nifty = new Nifty(renderDevice, new NullSoundDevice(), inputSystem, new TimeProvider());
+    SoundDevice device = new SoundDevice() {
+      @Override
+      public void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader) {
+      }
+
+      @Nullable
+      @Override
+      public SoundHandle loadSound(
+          @Nonnull SoundSystem soundSystem, @Nonnull String filename) {
+        return null;
+      }
+
+      @Nullable
+      @Override
+      public SoundHandle loadMusic(
+          @Nonnull SoundSystem soundSystem, @Nonnull String filename) {
+        return null;
+      }
+
+      @Override
+      public void update(int delta) {
+
+      }
+    };
+    nifty = new Nifty(renderDevice, device, inputSystem, new TimeProvider());
     callback.init(nifty, window);
   }
 
+  @Override
   public void dispose(GLAutoDrawable drawable) {
-      System.exit(0);
+    System.exit(0);
   }
 
-  public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+  @Override
+  public void reshape(@Nonnull GLAutoDrawable drawable, int x, int y, int width, int height) {
     GL gl = drawable.getGL();
     gl.glViewport(0, 0, width, height);
     gl.glEnable(GL.GL_BLEND);
@@ -172,6 +201,7 @@ public class JOGLNiftyRunner implements GLEventListener {
     ES2("es2");
 
     private final String name;
+
     private Mode(final String name) {
       this.name = name;
     }
@@ -180,6 +210,7 @@ public class JOGLNiftyRunner implements GLEventListener {
       return name;
     }
 
+    @Nonnull
     public static Mode findMode(final String arg) {
       for (Mode mode : Mode.values()) {
         if (mode.matches(arg)) {

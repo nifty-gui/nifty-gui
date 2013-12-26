@@ -1,8 +1,5 @@
 package de.lessvoid.nifty.controls;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -12,34 +9,53 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * NiftyInputControl.
+ *
  * @author void
  */
 public class NiftyInputControl {
-  private Controller controller;
-  private NiftyInputMapping inputMapper;
+  @Nonnull
+  private final Controller controller;
+  @Nonnull
+  private final NiftyInputMapping inputMapper;
 
-  private List < KeyInputHandler > preInputHandler = new ArrayList < KeyInputHandler >();
-  private List < KeyInputHandler > postInputHandler = new ArrayList < KeyInputHandler >();
+  @Nonnull
+  private final List<KeyInputHandler> preInputHandler = new ArrayList<KeyInputHandler>();
+  @Nonnull
+  private final List<KeyInputHandler> postInputHandler = new ArrayList<KeyInputHandler>();
 
   /**
-   * @param controllerParam controller
+   * @param controllerParam  controller
    * @param inputMapperParam input mapper
    */
-  public NiftyInputControl(final Controller controllerParam, final NiftyInputMapping inputMapperParam) {
+  public NiftyInputControl(
+      @Nonnull final Controller controllerParam,
+      @Nonnull final NiftyInputMapping inputMapperParam) {
     this.controller = controllerParam;
     this.inputMapper = inputMapperParam;
   }
 
   /**
    * keyboard event.
-   * @param nifty nifty
+   *
+   * @param nifty      nifty
    * @param inputEvent keyboard event
    * @return return true when the input event has been processed and false when it has not been handled
    */
-  public boolean keyEvent(final Nifty nifty, final KeyboardInputEvent inputEvent, final String elementId) {
+  public boolean keyEvent(
+      @Nonnull final Nifty nifty,
+      @Nonnull final KeyboardInputEvent inputEvent,
+      @Nonnull final String elementId) {
     NiftyInputEvent converted = inputMapper.convert(inputEvent);
+    if (converted == null) {
+      return false;
+    }
 
     for (KeyInputHandler handler : preInputHandler) {
       if (handler.keyEvent(converted)) {
@@ -47,9 +63,7 @@ public class NiftyInputControl {
       }
     }
 
-    if (converted != null) {
-        nifty.publishEvent(elementId, converted);
-    }
+    nifty.publishEvent(elementId, converted);
 
     if (controller.inputEvent(converted)) {
       return true;
@@ -63,25 +77,28 @@ public class NiftyInputControl {
     return false;
   }
 
-  public void addInputHandler(final KeyInputHandler handler) {
+  public void addInputHandler(@Nonnull final KeyInputHandler handler) {
     postInputHandler.add(handler);
   }
 
-  public void addPreInputHandler(final KeyInputHandler handler) {
+  public void addPreInputHandler(@Nonnull final KeyInputHandler handler) {
     preInputHandler.add(handler);
   }
 
-  public void onStartScreen(final Nifty nifty, final Screen screen) {
+  public void onStartScreen(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     controller.onStartScreen();
   }
 
-  public void onEndScreen(final Nifty nifty, final Screen screen, final String elementId) {
+  public void onEndScreen(@Nonnull final Nifty nifty, @Nonnull final Screen screen, @Nullable final String elementId) {
     nifty.unsubscribeAnnotations(controller);
-    nifty.unsubscribeElement(screen, elementId);
+    if (elementId != null) {
+      nifty.unsubscribeElement(screen, elementId);
+    }
   }
 
   /**
    * forward the onForward method to the controller.
+   *
    * @param getFocus get focus
    */
   public void onFocus(final boolean getFocus) {
@@ -90,45 +107,50 @@ public class NiftyInputControl {
 
   /**
    * get controller.
+   *
    * @return controller
    */
+  @Nonnull
   public Controller getController() {
     return controller;
   }
 
   /**
    * Get control when it matches the given class.
-   * @param <T> type of class
+   *
+   * @param <T>                   type of class
    * @param requestedControlClass class that is requested
    * @return the instance or null
    */
-  public < T extends Controller > T getControl(final Class < T > requestedControlClass) {
+  @Nullable
+  public <T extends Controller> T getControl(@Nonnull final Class<T> requestedControlClass) {
     if (requestedControlClass.isInstance(controller)) {
       return requestedControlClass.cast(controller);
     }
     return null;
   }
 
-  public < T extends NiftyControl > T getNiftyControl(final Class < T > requestedControlClass) {
+  @Nullable
+  public <T extends NiftyControl> T getNiftyControl(@Nonnull final Class<T> requestedControlClass) {
     if (requestedControlClass.isInstance(controller)) {
       return requestedControlClass.cast(controller);
     }
     return null;
   }
 
-  public void bindControl(final Nifty nifty, final Screen screen, final Element element, final Attributes attributes) {
-    if (controller != null) {
-      controller.bind(
-          nifty,
-          screen,
-          element,
-          new Parameters(attributes.createProperties()));
-    }
+  public void bindControl(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Attributes attributes) {
+    controller.bind(
+        nifty,
+        screen,
+        element,
+        new Parameters(attributes.createProperties()));
   }
 
-  public void initControl(final Attributes attributes) {
-    if (controller != null) {
-      controller.init(new Parameters(attributes.createProperties()));
-    }
+  public void initControl(@Nonnull final Attributes attributes) {
+    controller.init(new Parameters(attributes.createProperties()));
   }
 }

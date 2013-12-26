@@ -7,6 +7,8 @@ import de.lessvoid.nifty.sound.SoundSystem;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 
+import javax.annotation.Nonnull;
+
 /**
  * The Slick music loader that uses Slick music objects for playing the music.
  *
@@ -16,13 +18,14 @@ public final class MusicSlickMusicLoader implements SlickMusicLoader {
   /**
    * Load the music.
    */
+  @Nonnull
   @Override
   public SlickMusicHandle loadMusic(
       final SoundSystem soundSystem, final String filename) throws SlickLoadMusicException {
 
     try {
       return new MusicSlickMusicHandle(soundSystem, new Music(filename, true));
-    } catch (final SlickException e) {
+    } catch (@Nonnull final SlickException e) {
       throw new SlickLoadMusicException("Loading the music \"" + filename + "\" failed.", e);
     }
   }

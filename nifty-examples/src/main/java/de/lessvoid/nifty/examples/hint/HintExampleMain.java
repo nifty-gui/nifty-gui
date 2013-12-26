@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.hint;
 
-import java.io.IOException;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
@@ -13,7 +11,7 @@ public class HintExampleMain {
   private HintExampleMain() {
   }
 
-  public static void main(final String[] args) throws IOException {
+  public static void main(final String[] args) {
     if (!LwjglInitHelper.initSubSystems("Nifty Hint")) {
       System.exit(0);
     }

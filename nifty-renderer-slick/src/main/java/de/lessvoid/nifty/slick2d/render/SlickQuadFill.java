@@ -5,6 +5,8 @@ import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
+import javax.annotation.Nonnull;
+
 /**
  * This shape fill implementation is used to render the rectangles of slick that that have a different color on each
  * edge. This implementation is not supposed to be used for any other purpose.
@@ -20,21 +22,25 @@ final class SlickQuadFill implements ShapeFill {
   /**
    * The color on the bottom left corner of the shape.
    */
+  @Nonnull
   private final Color bottomLeft;
 
   /**
    * The color on the bottom right corner of the shape.
    */
+  @Nonnull
   private final Color bottomRight;
 
   /**
    * The color on the top left corner of the shape.
    */
+  @Nonnull
   private final Color topLeft;
 
   /**
    * The color on the top right corner of the shape.
    */
+  @Nonnull
   private final Color topRight;
 
   /**
@@ -46,10 +52,10 @@ final class SlickQuadFill implements ShapeFill {
    * @param brColor the color at the bottom right
    */
   SlickQuadFill(
-      final de.lessvoid.nifty.tools.Color tlColor,
-      final de.lessvoid.nifty.tools.Color trColor,
-      final de.lessvoid.nifty.tools.Color blColor,
-      final de.lessvoid.nifty.tools.Color brColor) {
+      @Nonnull final de.lessvoid.nifty.tools.Color tlColor,
+      @Nonnull final de.lessvoid.nifty.tools.Color trColor,
+      @Nonnull final de.lessvoid.nifty.tools.Color blColor,
+      @Nonnull final de.lessvoid.nifty.tools.Color brColor) {
 
     topLeft = SlickRenderUtils.convertColorNiftySlick(tlColor);
     topRight = SlickRenderUtils.convertColorNiftySlick(trColor);
@@ -66,10 +72,10 @@ final class SlickQuadFill implements ShapeFill {
    * @param brColor the color at the bottom right
    */
   public void changeColors(
-      final de.lessvoid.nifty.tools.Color tlColor,
-      final de.lessvoid.nifty.tools.Color trColor,
-      final de.lessvoid.nifty.tools.Color blColor,
-      final de.lessvoid.nifty.tools.Color brColor) {
+      @Nonnull final de.lessvoid.nifty.tools.Color tlColor,
+      @Nonnull final de.lessvoid.nifty.tools.Color trColor,
+      @Nonnull final de.lessvoid.nifty.tools.Color blColor,
+      @Nonnull final de.lessvoid.nifty.tools.Color brColor) {
 
     SlickRenderUtils.convertColorNiftySlick(tlColor, topLeft);
     SlickRenderUtils.convertColorNiftySlick(trColor, topRight);
@@ -80,12 +86,12 @@ final class SlickQuadFill implements ShapeFill {
   /**
    * Get the color at one point on the shape.
    */
+  @Nonnull
   @Override
-  public Color colorAt(final Shape shape, final float x, final float y) {
+  public Color colorAt(@Nonnull final Shape shape, final float x, final float y) {
     final boolean isMaxX = Math.abs(x - shape.getMaxX()) < 0.0f;
     final boolean isMaxY = Math.abs(y - shape.getMaxY()) < 0.0f;
 
-    //noinspection IfMayBeConditional
     if (isMaxX) {
       return isMaxY ? topRight : topLeft;
     } else {
@@ -96,6 +102,7 @@ final class SlickQuadFill implements ShapeFill {
   /**
    * Get the offset at a location.
    */
+  @Nonnull
   @Override
   public Vector2f getOffsetAt(final Shape shape, final float x, final float y) {
     return NULL_VECTOR;

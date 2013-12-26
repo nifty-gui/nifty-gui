@@ -2,12 +2,14 @@ package de.lessvoid.nifty.controls.console.builder;
 
 import de.lessvoid.nifty.builder.ControlBuilder;
 
+import javax.annotation.Nonnull;
+
 public class ConsoleBuilder extends ControlBuilder {
-  public ConsoleBuilder(final String id) {
+  public ConsoleBuilder(@Nonnull final String id) {
     super(id, "nifty-console");
   }
 
-  public ConsoleBuilder(final String id, final int lines) {
+  public ConsoleBuilder(@Nonnull final String id, final int lines) {
     super(id, "nifty-console");
     setLines(lines);
   }

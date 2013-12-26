@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.controls.textfield.filter.delete;
 
+import javax.annotation.Nonnull;
+
 /**
  * This interface can be used to block delete operations from a text field.
  *
@@ -11,8 +13,8 @@ public interface TextFieldDeleteFilter {
    *
    * @param oldSequence the character sequence before the delete is issued
    * @param deleteStart the index of the first character that is deleted
-   * @param deleteEnd the index of the first character after the deletion range
+   * @param deleteEnd   the index of the first character after the deletion range
    * @return {@code true} in case its okay to delete the character
    */
-  boolean acceptDelete(CharSequence oldSequence, int deleteStart, int deleteEnd);
+  boolean acceptDelete(@Nonnull CharSequence oldSequence, int deleteStart, int deleteEnd);
 }

@@ -41,6 +41,7 @@ public final class ConsoleSameScreenMain {
 
     // render
     LwjglInitHelper.renderLoop(nifty, new RenderLoopCallback() {
+      @Override
       public void process() {
       }
     });

@@ -7,27 +7,36 @@ import de.lessvoid.nifty.loaderv2.types.helper.OnClickType;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.xpp3.Attributes;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class InteractType extends XmlBaseType {
   public InteractType() {
     super();
   }
 
-  public InteractType(final InteractType src) {
+  public InteractType(@Nonnull final InteractType src) {
     super(src);
   }
 
-  public void mergeFromInteractType(final InteractType interact) {
+  public InteractType(@Nonnull final Attributes attributes) {
+    super(attributes);
+  }
+
+  public void mergeFromInteractType(@Nonnull final InteractType interact) {
     mergeFromAttributes(interact.getAttributes());
   }
 
+  @Override
+  @Nonnull
   public String output(final int offset) {
     return StringHelper.whitespace(offset) + "<interact> " + super.output(offset);
   }
 
   public void materialize(
       final Nifty nifty,
-      final Element element,
-      final Object ... controller) {
+      @Nonnull final Element element,
+      final Object... controller) {
     materializeMethods(nifty, element, element.getElementInteraction().getPrimary(),
         "onClick", "onClickRepeat", "onRelease", "onClickMouseMove", controller);
     materializeMethods(nifty, element, element.getElementInteraction().getPrimary(),
@@ -55,12 +64,12 @@ public class InteractType extends XmlBaseType {
 
   private void materializeMethods(
       final Nifty nifty,
-      final Element element,
-      final ElementInteractionClickHandler handler,
-      final String onClickName,
-      final String onClickRepeatName,
-      final String onReleaseName,
-      final String onClickMouseMoveName,
+      @Nonnull final Element element,
+      @Nonnull final ElementInteractionClickHandler handler,
+      @Nonnull final String onClickName,
+      @Nonnull final String onClickRepeatName,
+      @Nonnull final String onReleaseName,
+      @Nonnull final String onClickMouseMoveName,
       final Object... controller) {
     OnClickType onClick = getOnClickType(onClickName);
     if (onClick != null) {
@@ -86,7 +95,8 @@ public class InteractType extends XmlBaseType {
     }
   }
 
-  private OnClickType getOnClickType(final String key) {
+  @Nullable
+  private OnClickType getOnClickType(@Nonnull final String key) {
     String onClick = getAttributes().get(key);
     if (onClick == null) {
       return null;
@@ -94,11 +104,11 @@ public class InteractType extends XmlBaseType {
     return new OnClickType(onClick);
   }
 
-  public void apply(final InteractType interact, final String styleId) {
+  public void apply(@Nonnull final InteractType interact, @Nonnull final String styleId) {
     interact.getAttributes().mergeAndTag(getAttributes(), styleId);
   }
 
-  public void resolveParameters(final Attributes src) {
+  public void resolveParameters(@Nonnull final Attributes src) {
     getAttributes().resolveParameters(src);
   }
 }

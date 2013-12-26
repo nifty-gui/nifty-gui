@@ -1,11 +1,12 @@
 package de.lessvoid.nifty.gdx.sound;
 
 import com.badlogic.gdx.assets.AssetManager;
-
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+
+import javax.annotation.Nonnull;
 
 /**
  * This is the sound device that uses libGDX to play the sounds.
@@ -28,17 +29,18 @@ public class GdxSoundDevice implements SoundDevice {
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader niftyResourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader niftyResourceLoader) {
     // nothing to do
   }
 
+  @Nonnull
   @Override
-  public SoundHandle loadSound(final SoundSystem soundSystem, final String filename) {
+  public SoundHandle loadSound(@Nonnull final SoundSystem soundSystem, @Nonnull final String filename) {
     return new GdxSoundHandle(assetManager, soundSystem, filename);
   }
 
   @Override
-  public SoundHandle loadMusic(final SoundSystem soundSystem, final String filename) {
+  public SoundHandle loadMusic(@Nonnull final SoundSystem soundSystem, @Nonnull final String filename) {
     return new GdxMusicHandle(assetManager, soundSystem, filename);
   }
 

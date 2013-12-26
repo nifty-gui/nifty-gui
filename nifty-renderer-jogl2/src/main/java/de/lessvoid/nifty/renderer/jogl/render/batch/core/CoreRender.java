@@ -5,6 +5,7 @@ import javax.media.opengl.GLContext;
 
 /**
  * Simple helper methods to render vertex arrays.
+ *
  * @author void
  */
 public class CoreRender {

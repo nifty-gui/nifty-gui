@@ -1,53 +1,50 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
 
+import org.lwjgl.BufferUtils;
+
+import javax.annotation.Nonnull;
+import java.nio.IntBuffer;
+
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.GL_STREAM_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glDeleteBuffers;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL31.GL_PRIMITIVE_RESTART;
 import static org.lwjgl.opengl.GL31.glPrimitiveRestartIndex;
 
-import java.nio.IntBuffer;
-
-import org.lwjgl.BufferUtils;
-
 /**
  * The CoreElementVBO class represents a VBO bound to GL_ELEMENT_BUFFER.
+ *
  * @author void
  */
 public class CoreElementVBO {
-  private int id;
-  private int usage;
-  private IntBuffer indexBuffer;
+  private final int id;
+  private final int usage;
+  private final IntBuffer indexBuffer;
 
   /**
    * Create a new VBO with static vertex data (GL_STATIC_DRAW). This will
    * create the buffer object but does not bind or sends the data to the GPU.
    * You'll need to call bind() to bind this VBO and you'll need to call sendData()
    * to transmit the buffer data to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreElementVBO createStatic(final int[] data) {
+  @Nonnull
+  public static CoreElementVBO createStatic(@Nonnull final int[] data) {
     return new CoreElementVBO(GL_STATIC_DRAW, data);
   }
 
   /**
    * This provides the same functionality as createStaticVBO() but automatically
    * sends the data given to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreElementVBO createStaticAndSend(final int[] data) {
+  @Nonnull
+  public static CoreElementVBO createStaticAndSend(@Nonnull final int[] data) {
     CoreElementVBO result = new CoreElementVBO(GL_STATIC_DRAW, data);
     result.send();
     return result;
@@ -56,11 +53,12 @@ public class CoreElementVBO {
   /**
    * This provides the same functionality as createStatic() but automatically
    * sends the data given to the GPU.
-   * 
+   *
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreElementVBO createStaticAndSend(final IntBuffer data) {
+  @Nonnull
+  public static CoreElementVBO createStaticAndSend(@Nonnull final IntBuffer data) {
     CoreElementVBO result = new CoreElementVBO(GL_STATIC_DRAW, data.array());
     result.send();
     return result;
@@ -72,7 +70,8 @@ public class CoreElementVBO {
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreElementVBO createDynamic(final int[] data) {
+  @Nonnull
+  public static CoreElementVBO createDynamic(@Nonnull final int[] data) {
     return new CoreElementVBO(GL_DYNAMIC_DRAW, data);
   }
 
@@ -82,7 +81,8 @@ public class CoreElementVBO {
    * @param data float array of buffer data
    * @return the CoreVBO instance created
    */
-  public static CoreElementVBO createStream(final int[] data) {
+  @Nonnull
+  public static CoreElementVBO createStream(@Nonnull final int[] data) {
     return new CoreElementVBO(GL_STREAM_DRAW, data);
   }
 
@@ -129,6 +129,7 @@ public class CoreElementVBO {
 
   /**
    * Enable primitive restart using the given value.
+   *
    * @param value the value to use as primitive restart
    */
   public void enablePrimitiveRestart(final int value) {
@@ -143,7 +144,7 @@ public class CoreElementVBO {
     glDisable(GL_PRIMITIVE_RESTART);
   }
 
-  private CoreElementVBO(final int usageType, final int[] data) {
+  private CoreElementVBO(final int usageType, @Nonnull final int[] data) {
     usage = usageType;
 
     indexBuffer = BufferUtils.createIntBuffer(data.length);

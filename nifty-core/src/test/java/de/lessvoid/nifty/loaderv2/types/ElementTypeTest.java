@@ -1,41 +1,38 @@
 package de.lessvoid.nifty.loaderv2.types;
 
+import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
+import de.lessvoid.xml.xpp3.Attributes;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
-import de.lessvoid.xml.xpp3.Attributes;
-import static org.junit.Assert.*;
 import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class ElementTypeTest {
-  private ElementType elementType = new PanelType();
-  private ElementType elementTypeChild = new PanelType();
+  private ElementType elementType;
   private StyleResolver styleResolver;
 
   @Before
   public void setUp() {
     Attributes attr = new Attributes();
     attr.set("name", "value");
-    elementType.initFromAttributes(attr);
+    elementType = new PanelType(attr);
 
-    InteractType interact = new InteractType();
     attr = new Attributes();
     attr.set("onClick", "onClickMethod()");
-    interact.initFromAttributes(attr);
-    elementType.setInteract(interact);
+    elementType.setInteract(new InteractType(attr));
 
     EffectsType effects = new EffectsType();
-    EffectType effect = new EffectType();
     attr = new Attributes();
     attr.set("name", "move");
-    effect.initFromAttributes(attr);
+    EffectType effect = new EffectType(attr);
     effects.addOnStartScreen(effect);
     elementType.setEffect(effects);
 
     attr = new Attributes();
     attr.set("name2", "value2");
-    elementTypeChild.initFromAttributes(attr);
+    ElementType elementTypeChild = new PanelType(attr);
     elementType.elements.add(elementTypeChild);
   }
 
@@ -51,9 +48,9 @@ public class ElementTypeTest {
     assertEquals("onClickMethod()", interact.getAttributes().get("onClick"));
 
     EffectsType effects = elementType.getEffects();
-    assertEquals(1, effects.onStartScreen.size());
+    assertEquals(1, effects.getEventEffectTypes(EffectEventId.onStartScreen).size());
 
-    EffectType effect = effects.onStartScreen.iterator().next();
+    EffectType effect = effects.getEventEffectTypes(EffectEventId.onStartScreen).iterator().next();
     assertEquals("move", effect.getAttributes().get("name"));
 
     assertEquals(1, elementType.elements.size());

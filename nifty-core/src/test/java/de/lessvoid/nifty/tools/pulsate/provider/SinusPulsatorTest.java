@@ -1,11 +1,11 @@
 package de.lessvoid.nifty.tools.pulsate.provider;
 
+import junit.framework.TestCase;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.Properties;
-
-import junit.framework.TestCase;
 
 public class SinusPulsatorTest extends TestCase {
 
@@ -49,7 +49,7 @@ public class SinusPulsatorTest extends TestCase {
     pulsator.reset(0);
     return pulsator;
   }
-  
+
   private String format(final float f) {
     DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(Locale.US));
     return df.format(f);

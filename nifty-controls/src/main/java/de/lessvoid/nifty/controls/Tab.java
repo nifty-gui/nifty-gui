@@ -4,6 +4,9 @@
  */
 package de.lessvoid.nifty.controls;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * This interface allows to take control over a single tab. This tab is supposed to be the part of a {@link TabGroup}.
  * For the most aspects it behaves like a simple panel.
@@ -17,6 +20,7 @@ public interface Tab extends NiftyControl {
    *
    * @return the current caption of this tab
    */
+  @Nonnull
   String getCaption();
 
   /**
@@ -24,6 +28,7 @@ public interface Tab extends NiftyControl {
    *
    * @return the tab group this tab belongs to or {@code null} in case this tab is not yet assigned to a tab group
    */
+  @Nullable
   TabGroup getParentGroup();
 
   /**
@@ -45,5 +50,5 @@ public interface Tab extends NiftyControl {
    *
    * @param caption the text to display
    */
-  void setCaption(String caption);
+  void setCaption(@Nonnull String caption);
 }

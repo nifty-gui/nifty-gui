@@ -1,10 +1,13 @@
 package de.lessvoid.nifty.slick2d;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.slick2d.input.PlainSlickInputSystem;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This is the basic game state implementation that supports the Nifty-GUI. Its used for game states that display only
@@ -16,6 +19,7 @@ public abstract class NiftyBasicGameState extends NiftyOverlayBasicGameState {
   /**
    * The screen that is called upon entering the game state.
    */
+  @Nullable
   private final String startScreen;
 
   /**
@@ -30,18 +34,21 @@ public abstract class NiftyBasicGameState extends NiftyOverlayBasicGameState {
    *
    * @param niftyStartScreen the name of the screen Nifty is supposed to goto once the game state is entered
    */
-  protected NiftyBasicGameState(final String niftyStartScreen) {
+  protected NiftyBasicGameState(@Nullable final String niftyStartScreen) {
     startScreen = niftyStartScreen;
   }
 
   /**
    * Enter this game state.
    */
-  @SuppressWarnings("PublicMethodNotExposedInInterface")
   @Override
-  public void enterState(final GameContainer container, final StateBasedGame game) throws SlickException {
+  public void enterState(@Nonnull final GameContainer container, @Nonnull final StateBasedGame game) {
     if (startScreen != null) {
-      getNifty().gotoScreen(startScreen);
+      Nifty nifty = getNifty();
+      if (nifty == null) {
+        throw new IllegalStateException("Nifty is not initialized, but it should be.");
+      }
+      nifty.gotoScreen(startScreen);
     }
   }
 
@@ -49,17 +56,22 @@ public abstract class NiftyBasicGameState extends NiftyOverlayBasicGameState {
    * When initializing the game its only needed to prepare the GUI for display.
    */
   @Override
-  protected final void initGameAndGUI(final GameContainer container, final StateBasedGame game) {
+  protected final void initGameAndGUI(@Nonnull final GameContainer container, @Nonnull final StateBasedGame game) {
     initNifty(container, game, new PlainSlickInputSystem());
-    getNifty().gotoScreen(startScreen);
+    if (startScreen != null) {
+      Nifty nifty = getNifty();
+      if (nifty == null) {
+        throw new IllegalStateException("Nifty is not initialized, but it should be.");
+      }
+      nifty.gotoScreen(startScreen);
+    }
   }
 
   /**
    * Leave this game state.
    */
-  @SuppressWarnings("PublicMethodNotExposedInInterface")
   @Override
-  public void leaveState(final GameContainer container, final StateBasedGame game) throws SlickException {
+  public void leaveState(@Nonnull final GameContainer container, @Nonnull final StateBasedGame game) {
     // nothing
   }
 
@@ -68,7 +80,7 @@ public abstract class NiftyBasicGameState extends NiftyOverlayBasicGameState {
    */
   @Override
   protected void renderGame(
-      final GameContainer container, final StateBasedGame game, final Graphics g) throws SlickException {
+      @Nonnull final GameContainer container, @Nonnull final StateBasedGame game, @Nonnull final Graphics g) {
     g.clear();
   }
 
@@ -76,7 +88,10 @@ public abstract class NiftyBasicGameState extends NiftyOverlayBasicGameState {
    * Updating the game is not needed in this implementation as only the GUI is displayed.
    */
   @Override
-  protected void updateGame(final GameContainer container, final StateBasedGame game, final int delta) {
+  protected void updateGame(
+      @Nonnull final GameContainer container,
+      @Nonnull final StateBasedGame game,
+      final int delta) {
     // nothing to do
   }
 }

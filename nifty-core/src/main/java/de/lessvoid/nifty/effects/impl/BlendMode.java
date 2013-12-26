@@ -8,11 +8,19 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 public class BlendMode implements EffectImpl {
+  @Nullable
   de.lessvoid.nifty.render.BlendMode blendMode = null;
 
-  public void activate(final Nifty nifty, final Element element, final EffectProperties parameter) {
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     String blendMode = parameter.getProperty("blendMode");
     if (blendMode != null) {
       if (blendMode.toLowerCase().equals("blend")) {
@@ -23,16 +31,18 @@ public class BlendMode implements EffectImpl {
     }
   }
 
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
       final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nonnull final NiftyRenderEngine r) {
     if (blendMode != null) {
       r.setBlendMode(blendMode);
     }
   }
 
+  @Override
   public void deactivate() {
   }
 }

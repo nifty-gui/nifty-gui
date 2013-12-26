@@ -6,6 +6,8 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 /**
  * The screen controller for the message box example.
  *
@@ -14,33 +16,39 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class MessageBoxStartScreen implements ScreenController, NiftyExample {
   private Screen screen;
 
-  public void bind(final Nifty newNifty, final Screen screenParam) {
+  @Override
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screenParam) {
     screen = screenParam;
   }
 
+  @Override
   public void onStartScreen() {
   }
 
+  @Override
   public void onEndScreen() {
   }
 
   public void changeMessageBoxType(final String newType) {
     final MessageBox msgBox = screen.findNiftyControl("messagebox", MessageBox.class);
     msgBox.setMessageType(newType);
-    
+
     msgBox.getElement().getParent().layoutElements();
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "messagebox/messagebox.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty MessageBox Example";

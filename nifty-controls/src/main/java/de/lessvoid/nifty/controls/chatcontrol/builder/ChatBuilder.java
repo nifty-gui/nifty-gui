@@ -3,8 +3,9 @@ package de.lessvoid.nifty.controls.chatcontrol.builder;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+
 /**
- *
  * @author ractoc
  */
 public class ChatBuilder extends ControlBuilder {
@@ -13,7 +14,7 @@ public class ChatBuilder extends ControlBuilder {
     lines(lines);
   }
 
-  public ChatBuilder(final String id, final int lines) {
+  public ChatBuilder(@Nonnull final String id, final int lines) {
     super(id, "nifty-chat");
     lines(lines);
   }
@@ -22,19 +23,19 @@ public class ChatBuilder extends ControlBuilder {
     set("lines", String.valueOf(lines));
   }
 
-  public void sendLabel(final String sendLabel) {
+  public void sendLabel(@Nonnull final String sendLabel) {
     set("sendLabel", sendLabel);
   }
 
-  public void chatLineIconWidth(final SizeValue value) {
+  public void chatLineIconWidth(@Nonnull final SizeValue value) {
     set("chatLineIconWidth", value.toString());
   }
 
-  public void chatLineIconHeight(final SizeValue value) {
+  public void chatLineIconHeight(@Nonnull final SizeValue value) {
     set("chatLineIconHeight", value.toString());
   }
 
-  public void chatLineHeight(final SizeValue value) {
+  public void chatLineHeight(@Nonnull final SizeValue value) {
     set("chatLineHeight", value.toString());
   }
 }

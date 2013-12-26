@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.controls;
 
 
+import javax.annotation.Nonnull;
+
 public interface DroppableDropFilter {
-  boolean accept(Droppable source, Draggable draggable, Droppable target);
+  boolean accept(@Nonnull Droppable source, @Nonnull Draggable draggable, @Nonnull Droppable target);
 }

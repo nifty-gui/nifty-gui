@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.controls.textfield;
 
+import de.lessvoid.nifty.Clipboard;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.lessvoid.nifty.Clipboard;
 
 import static org.easymock.classextension.EasyMock.*;
 

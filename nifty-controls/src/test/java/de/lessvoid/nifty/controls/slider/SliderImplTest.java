@@ -1,17 +1,12 @@
 package de.lessvoid.nifty.controls.slider;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.slider.SliderImpl;
-import de.lessvoid.nifty.controls.slider.SliderView;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class SliderImplTest {
   private SliderImpl slider = new SliderImpl();

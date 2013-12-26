@@ -1,19 +1,16 @@
 package de.lessvoid.nifty.controls;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import de.lessvoid.nifty.controls.ConsoleCommands.ConsoleCommand;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.KeyInputHandler;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ConsoleCommandsTest {
   private ConsoleCommands consoleCommands;

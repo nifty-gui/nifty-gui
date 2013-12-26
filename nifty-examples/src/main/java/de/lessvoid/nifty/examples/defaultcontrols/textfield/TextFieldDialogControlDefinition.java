@@ -9,22 +9,27 @@ import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
 
+import javax.annotation.Nonnull;
+
 /**
  * The TextFieldDialogControlDefinition registers a new control with Nifty
  * that represents the whole Dialog. This gives us later an appropriate
  * ControlBuilder to actual construct the Dialog (as a control).
+ *
  * @author void
  */
 public class TextFieldDialogControlDefinition {
   public static final String NAME = "textFieldDialogControl";
-  private static CommonBuilders builders = new CommonBuilders();
+  @Nonnull
+  private static final CommonBuilders builders = new CommonBuilders();
 
   /**
    * This registers the dialog as a new ControlDefintion with Nifty so that we can
    * later create the dialog dynamically.
+   *
    * @param nifty
    */
-  public static void register(final Nifty nifty) {
+  public static void register(@Nonnull final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
       controller(new TextFieldDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{

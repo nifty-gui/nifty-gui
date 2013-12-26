@@ -2,18 +2,20 @@ package de.lessvoid.nifty.gdx.render.batch;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
-
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.nio.ByteBuffer;
 
 /**
-  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
-  */
+ * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
+ */
 public class GdxBatchRenderImage implements BatchRenderBackend.Image {
+  @Nullable
   private Pixmap pixmap;
 
-  public GdxBatchRenderImage(final String filename) {
+  public GdxBatchRenderImage(@Nullable final String filename) {
     if (filename == null) {
       return;
     }
@@ -23,18 +25,20 @@ public class GdxBatchRenderImage implements BatchRenderBackend.Image {
 
   @Override
   public int getWidth() {
-    return pixmap != null? pixmap.getWidth() : 0;
+    return pixmap != null ? pixmap.getWidth() : 0;
   }
 
   @Override
   public int getHeight() {
-    return pixmap != null? pixmap.getHeight() : 0;
+    return pixmap != null ? pixmap.getHeight() : 0;
   }
 
+  @Nullable
   public ByteBuffer asByteBuffer() {
-    return pixmap != null? pixmap.getPixels() : null;
+    return pixmap != null ? pixmap.getPixels() : null;
   }
 
+  @Nullable
   public Pixmap asPixmap() {
     return pixmap;
   }
@@ -52,11 +56,12 @@ public class GdxBatchRenderImage implements BatchRenderBackend.Image {
 
   // internal implementations
 
-  private Pixmap convertPixmapToFormat(Pixmap pixmap, Pixmap.Format format) {
-    if(pixmap.getFormat() == format) {
+  @Nonnull
+  private Pixmap convertPixmapToFormat(@Nonnull Pixmap pixmap, Pixmap.Format format) {
+    if (pixmap.getFormat() == format) {
       return pixmap;
     }
-    Pixmap temp = new Pixmap (pixmap.getWidth(), pixmap.getHeight(), format);
+    Pixmap temp = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), format);
     temp.drawPixmap(pixmap, 0, 0);
     pixmap.dispose();
     return temp;

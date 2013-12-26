@@ -1,73 +1,86 @@
 package de.lessvoid.nifty.render;
 
-import java.util.Collection;
-
 import de.lessvoid.nifty.render.NiftyImageManager.ReferencedCountedImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
-public class NiftyImageManagerExtStandard<T extends ReferencedCountedImage> implements NiftyImageManagerExt<T> {
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.logging.Logger;
+
+public class NiftyImageManagerExtStandard implements NiftyImageManagerExt<ReferencedCountedImage> {
 
   @Override
-  public void registerImage(final Screen screen, final T image) {
+  public void registerImage(@Nonnull final Screen screen, @Nonnull final ReferencedCountedImage image) {
   }
 
   @Override
-  public void unregisterImage(final T reference) {
+  public void unregisterImage(@Nonnull final ReferencedCountedImage reference) {
   }
 
   @Override
-  public void uploadScreenImages(final Screen screen) {
+  public void uploadScreenImages(@Nonnull final Screen screen) {
   }
 
   @Override
-  public void unloadScreenImages(final Screen screen, final RenderDevice renderDevice, final Collection<T> imageSet) {
+  public void unloadScreenImages(
+      @Nonnull final Screen screen,
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final Collection<ReferencedCountedImage> imageSet) {
   }
 
   @Override
-  public void screenAdded(final Screen screen) {
+  public void screenAdded(@Nonnull final Screen screen) {
   }
 
   @Override
-  public void screenRemoved(final Screen screen) {
+  public void screenRemoved(@Nonnull final Screen screen) {
   }
 
   @Override
-  public void addScreenInfo(final StringBuffer result) {
+  public void addScreenInfo(@Nonnull final StringBuffer result) {
   }
 
+  @Nonnull
   @Override
-  public T createReferencedCountedImage(
-      final RenderDevice renderDevice,
-      final Screen screen,
-      final String filename,
+  public ReferencedCountedImage createReferencedCountedImage(
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final Screen screen,
+      @Nonnull final String filename,
       final boolean filterLinear,
-      final RenderImage renderImage,
-      final String key) {
-    return (T) new ReferencedCountedImageStandard(renderDevice, screen, filename, filterLinear, renderImage, key);
+      @Nonnull final RenderImage renderImage,
+      @Nonnull final String key) {
+    return new ReferencedCountedImageStandard(renderDevice, screen, filename, filterLinear, renderImage, key);
   }
 
   /**
    * A standard implementation of a ReferencedCountedImage without Batch support.
+   *
    * @author void
    */
   public static class ReferencedCountedImageStandard implements ReferencedCountedImage {
+    private static final Logger log = Logger.getLogger(ReferencedCountedImageStandard.class.getName());
+    @Nonnull
     private final RenderDevice renderDevice;
+    @Nonnull
     private final Screen screen;
+    @Nonnull
     private final String filename;
     private final boolean filterLinear;
+    @Nonnull
     private final String key;
+    @Nonnull
     private RenderImage renderImage;
     private int references;
 
     public ReferencedCountedImageStandard(
-        final RenderDevice renderDevice,
-        final Screen screen,
-        final String filename,
+        @Nonnull final RenderDevice renderDevice,
+        @Nonnull final Screen screen,
+        @Nonnull final String filename,
         final boolean filterLinear,
-        final RenderImage renderImage,
-        final String key) {
+        @Nonnull final RenderImage renderImage,
+        @Nonnull final String key) {
       this.renderDevice = renderDevice;
       this.screen = screen;
       this.filename = filename;
@@ -77,13 +90,20 @@ public class NiftyImageManagerExtStandard<T extends ReferencedCountedImage> impl
       this.references = 1;
     }
 
+    @Nonnull
     @Override
     public RenderImage reload() {
-      renderImage.dispose();
-      renderImage = renderDevice.createImage(filename, filterLinear);
+      RenderImage newImage = renderDevice.createImage(filename, filterLinear);
+      if (newImage == null) {
+        log.warning("Reloading of image failed! Keeping the old image alive.");
+      } else {
+        renderImage.dispose();
+        renderImage = newImage;
+      }
       return renderImage;
     }
 
+    @Nonnull
     @Override
     public RenderImage addReference() {
       references++;
@@ -105,21 +125,25 @@ public class NiftyImageManagerExtStandard<T extends ReferencedCountedImage> impl
       return references;
     }
 
+    @Nonnull
     @Override
     public RenderImage getRenderImage() {
       return renderImage;
     }
 
+    @Nonnull
     @Override
     public String getName() {
       return key;
     }
 
+    @Nonnull
     @Override
     public Screen getScreen() {
       return screen;
     }
 
+    @Nonnull
     @Override
     public String toString() {
       return " - [" + getName() + "] reference count [" + getReferences() + "]\n";

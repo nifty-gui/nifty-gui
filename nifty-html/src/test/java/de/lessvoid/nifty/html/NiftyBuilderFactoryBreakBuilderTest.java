@@ -1,15 +1,12 @@
 package de.lessvoid.nifty.html;
 
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-
+import de.lessvoid.nifty.builder.PanelBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.builder.PanelBuilder;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class NiftyBuilderFactoryBreakBuilderTest {
   private PanelBuilder panelBuilderMock;

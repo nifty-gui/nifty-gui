@@ -4,6 +4,7 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.builder.ControlBuilder;
+import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.EffectImpl;
@@ -11,22 +12,55 @@ import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Hint - show a hint, a nifty hint!
+ * <p/>
+ * This is the new, even more nifty version of the hint. It maintains only a single layer and does not delete this
+ * layer once its created. All hints are stored on this single layer. Thanks to the render order system of Nifty the
+ * hints are still always shown at the very top of the layer stack.
+ *
  * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class Hint implements EffectImpl {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(Hint.class.getName());
+  @Nonnull
+  private static final String HINT_LAYER_ID = "niftyHintLayer";
+  @Nullable
   private Nifty nifty;
-  private String hintLayerId;
-  private String hintPanelId;
+  @Nullable
+  private Screen screen;
+  @Nullable
+  private Element hintLayer;
+  @Nullable
+  private Element hintPanel;
   private int hintDelay;
+  @Nullable
   private String offsetX;
+  @Nullable
   private String offsetY;
 
-  public void activate(final Nifty niftyParam, final Element element, final EffectProperties parameter) {
-    this.nifty = niftyParam;
+  @Override
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
+    this.nifty = nifty;
+    screen = nifty.getCurrentScreen();
+
+    if (screen == null) {
+      log.severe("Can't activate hint effect without a screen that is currently active.");
+      return;
+    }
 
     final String hintControl = parameter.getProperty("hintControl", "nifty-default-hint");
     final String hintStyle = parameter.getProperty("hintStyle", null);
@@ -35,65 +69,98 @@ public class Hint implements EffectImpl {
     offsetX = parameter.getProperty("offsetX", "0");
     offsetY = parameter.getProperty("offsetY", "0");
 
-    // we'll create a new layer on the fly for the hint and because we could really
-    // have lots of hints we'll generate a unique id for this new layer
-    this.hintLayerId = NiftyIdCreator.generate();
-    this.hintPanelId = hintLayerId + "-hint-panel";
+    Element hintLayer = getHintLayer();
 
-    new LayerBuilder(hintLayerId) {{
-      childLayoutAbsoluteInside();
-      visible(false);
-      control(new ControlBuilder(hintPanelId, hintControl) {{
-        parameter("hintText", hintText);
-        if (hintStyle != null) {
-          style(hintStyle);
-        }
-      }});
-    }}.build(niftyParam, niftyParam.getCurrentScreen(), niftyParam.getCurrentScreen().getRootElement());
+    ControlBuilder builder = new ControlBuilder(NiftyIdCreator.generate(), hintControl);
+    builder.parameter("hintText", hintText);
+    if (hintStyle != null) {
+      builder.style(hintStyle);
+    }
+    builder.visible(false);
+    hintPanel = builder.build(nifty, screen, hintLayer);
   }
 
+  @Nonnull
+  private Element getHintLayer() {
+    if (hintLayer != null) {
+      return hintLayer;
+    }
+    if (screen == null || nifty == null) {
+      throw new IllegalStateException("Can't create or retrieve hint layer while there is no active screen.");
+    }
+    hintLayer = screen.findElementById(HINT_LAYER_ID);
+    if (hintLayer != null) {
+      return hintLayer;
+    }
+    LayerBuilder builder = new LayerBuilder(HINT_LAYER_ID);
+    builder.childLayout(ElementBuilder.ChildLayoutType.Absolute);
+    builder.visible(false);
+    hintLayer = builder.build(nifty, screen, screen.getRootElement());
+    hintLayer.setRenderOrder(Integer.MAX_VALUE);
+    return hintLayer;
+  }
+
+  @Override
   public void execute(
-      final Element element,
+      @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
-      final NiftyRenderEngine r) {
+      @Nullable final Falloff falloff,
+      @Nonnull final NiftyRenderEngine r) {
+    if (nifty == null || screen == null || hintLayer == null || hintPanel == null) {
+      log.severe("Can't execute effect. Activation not done or failed.");
+      return;
+    }
     if (normalizedTime > 0.0) {
-      final Element hintLayer = nifty.getCurrentScreen().findElementById(hintLayerId);
-      if (hintLayer != null && !hintLayer.isVisible()) {
+      if (!hintPanel.isVisible()) {
         // decide if we can already show the hint
         if (nifty.getNiftyMouse().getNoMouseMovementTime() > hintDelay) {
-          Element hintPanel = hintLayer.findElementById(hintPanelId);
-          if (hintPanel != null) {
-            hintPanel.setConstraintX(new SizeValue(getPosX(element, hintPanel, r.getWidth()) + "px"));
-            hintPanel.setConstraintY(new SizeValue(getPosY(element, hintPanel, r.getHeight()) + "px"));
+          hintPanel.setConstraintX(SizeValue.px(getPosX(element, hintPanel, r.getWidth())));
+          hintPanel.setConstraintY(SizeValue.px(getPosY(element, hintPanel, r.getHeight())));
 
-            hintLayer.layoutElements();
-            hintLayer.show();
+          // hard remove all old hints, else they only mess with the new ones
+          List<Element> hints = hintLayer.getChildren();
+          for (int i = 0; i < hints.size() - 1; i++) {
+            nifty.removeElement(screen, hints.get(i));
           }
+
+          hintLayer.layoutElements();
+          hintLayer.show();
         }
       }
     }
   }
 
+  @Override
   public void deactivate() {
-    final Element hintLayer = nifty.getCurrentScreen().findElementById(hintLayerId);
-    if (hintLayer == null) {
-      return;
-    }
-    if (hintLayer.isVisible()) {
-      hintLayer.startEffect(EffectEventId.onCustom, new EndNotify() {
-        @Override
-        public void perform() {
-          hintLayer.markForRemoval();
-        }
-      });
-    } else {
-      hintLayer.markForRemoval();
+    if (hintPanel != null) {
+      if (hintPanel.isVisible()) {
+        hintPanel.startEffect(EffectEventId.onCustom, new EndNotify() {
+          @Override
+          public void perform() {
+            removePanel();
+          }
+        });
+      } else {
+        removePanel();
+      }
     }
   }
 
-  private int getPosX(final Element element, final Element hintPanel, final int screenWidth) {
-    int pos = 0;
+  private void removePanel() {
+    if (hintPanel != null && hintLayer != null) {
+      hintPanel.markForRemoval(new EndNotify() {
+        @Override
+        public void perform() {
+          if (hintLayer.getChildrenCount() == 1) {
+            hintLayer.hide();
+          }
+        }
+      });
+    }
+  }
+
+  private int getPosX(@Nonnull final Element element, @Nonnull final Element hintPanel, final int screenWidth) {
+    int pos;
     if ("center".equals(offsetX)) {
       pos = element.getX() + element.getWidth() / 2 - hintPanel.getWidth() / 2;
     } else if ("left".equals(offsetX)) {
@@ -112,8 +179,8 @@ public class Hint implements EffectImpl {
     return pos;
   }
 
-  private int getPosY(final Element element, final Element hintPanel, final int screenHeight) {
-    int pos = 0;
+  private int getPosY(@Nonnull final Element element, @Nonnull final Element hintPanel, final int screenHeight) {
+    int pos;
     if ("center".equals(offsetY)) {
       pos = element.getY() + element.getHeight() / 2 - hintPanel.getHeight() / 2;
     } else if ("top".equals(offsetY)) {

@@ -6,8 +6,12 @@ import de.lessvoid.nifty.elements.events.NiftyMouseMovedEvent;
 import de.lessvoid.nifty.elements.events.NiftyMouseWheelEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
+import javax.annotation.Nonnull;
+
 public class ElementInteractionMoveHandler {
+  @Nonnull
   private final Nifty nifty;
+  @Nonnull
   private final Element element;
   private int lastMouseX;
   private int lastMouseY;
@@ -15,7 +19,7 @@ public class ElementInteractionMoveHandler {
   private boolean lastButton1Down;
   private boolean lastButton2Down;
 
-  public ElementInteractionMoveHandler(final Nifty nifty, final Element element) {
+  public ElementInteractionMoveHandler(@Nonnull final Nifty nifty, @Nonnull final Element element) {
     this.nifty = nifty;
     this.element = element;
     this.lastMouseX = 0;
@@ -25,8 +29,9 @@ public class ElementInteractionMoveHandler {
     this.lastButton2Down = false;
   }
 
-  public boolean process(final boolean canHandleInteraction, final boolean mouseInside, final boolean hasMouseAccess,
-                         final NiftyMouseInputEvent mouseEvent) {
+  public boolean process(
+      final boolean canHandleInteraction, final boolean mouseInside, final boolean hasMouseAccess,
+      @Nonnull final NiftyMouseInputEvent mouseEvent) {
     if (canHandleInteraction && mouseInside) {
       final boolean moved = handleMoveEvent(mouseEvent);
       final boolean wheel = handleWheelEvent(mouseEvent);
@@ -57,25 +62,30 @@ public class ElementInteractionMoveHandler {
     return false;
   }
 
-  private boolean handleMoveEvent(final NiftyMouseInputEvent mouseEvent) {
-    if ((mouseEvent.getMouseX() != lastMouseX) || (mouseEvent.getMouseY() != lastMouseY)) {
+  private boolean handleMoveEvent(@Nonnull final NiftyMouseInputEvent mouseEvent) {
+    String id = element.getId();
+    if (id != null && ((mouseEvent.getMouseX() != lastMouseX) || (mouseEvent.getMouseY() != lastMouseY))) {
       lastMouseX = mouseEvent.getMouseX();
       lastMouseY = mouseEvent.getMouseY();
-      nifty.publishEvent(element.getId(), new NiftyMouseMovedEvent(element, mouseEvent));
+      nifty.publishEvent(id, new NiftyMouseMovedEvent(element, mouseEvent));
       return true;
     }
     return false;
   }
 
-  private boolean handleWheelEvent(final NiftyMouseInputEvent mouseEvent) {
-    if (mouseEvent.getMouseWheel() != 0) {
-      nifty.publishEvent(element.getId(), new NiftyMouseWheelEvent(element, mouseEvent));
+  private boolean handleWheelEvent(@Nonnull final NiftyMouseInputEvent mouseEvent) {
+    String id = element.getId();
+    if (id != null && mouseEvent.getMouseWheel() != 0) {
+      nifty.publishEvent(id, new NiftyMouseWheelEvent(element, mouseEvent));
       return true;
     }
     return false;
   }
 
-  private void handleGeneralEvent(final NiftyMouseInputEvent mouseEvent) {
-    nifty.publishEvent(element.getId(), new NiftyMouseEvent(element, mouseEvent));
+  private void handleGeneralEvent(@Nonnull final NiftyMouseInputEvent mouseEvent) {
+    String id = element.getId();
+    if (id != null) {
+      nifty.publishEvent(id, new NiftyMouseEvent(element, mouseEvent));
+    }
   }
 }

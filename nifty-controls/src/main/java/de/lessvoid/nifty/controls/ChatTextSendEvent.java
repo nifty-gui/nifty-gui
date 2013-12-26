@@ -5,27 +5,31 @@
 package de.lessvoid.nifty.controls;
 
 import de.lessvoid.nifty.NiftyEvent;
-import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
+
+import javax.annotation.Nonnull;
 
 /**
- *
  * @author ractoc
  */
 public class ChatTextSendEvent implements NiftyEvent {
-    private ChatControl chatControl;
-    private String text;
+  @Nonnull
+  private final Chat chatControl;
+  @Nonnull
+  private final String text;
 
-    public ChatTextSendEvent(final ChatControl chatControl, final String textParam) {
-      this.chatControl = chatControl;
-      this.text = textParam;
-    }
+  public ChatTextSendEvent(@Nonnull final Chat chatControl, @Nonnull final String textParam) {
+    this.chatControl = chatControl;
+    this.text = textParam;
+  }
 
-    public ChatControl getChatControl() {
-      return chatControl;
-    }
+  @Nonnull
+  public Chat getChatControl() {
+    return chatControl;
+  }
 
-    public String getText() {
-        return text;
-    }
-    
+  @Nonnull
+  public String getText() {
+    return text;
+  }
+
 }

@@ -1,40 +1,52 @@
 package de.lessvoid.nifty.controls.checkbox;
 
-import org.bushe.swing.event.EventTopicSubscriber;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.CheckBox;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
-import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+import org.bushe.swing.event.EventTopicSubscriber;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
 
 /**
- * A CheckboxControl.
+ * The controller for the checkbox element.
+ *
  * @author void
- * @deprecated Please use {@link de.lessvoid.nifty.controls.CheckBox} when accessing NiftyControls.
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @deprecated Not really deprecated, but to report any uses its flagged as such. Please use
+ * {@link de.lessvoid.nifty.controls.CheckBox} when accessing NiftyControls.
  */
 @Deprecated
 public class CheckboxControl extends AbstractController
-  implements CheckBox, CheckBoxView, EventTopicSubscriber<ElementShowEvent> {
-  private CheckBoxImpl checkBoxImpl = new CheckBoxImpl(this);
+    implements CheckBox, CheckBoxView, EventTopicSubscriber<ElementShowEvent> {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(CheckboxControl.class.getName());
+  @Nonnull
+  private final CheckBoxImpl checkBoxImpl;
+  @Nullable
   private Nifty nifty;
+  @Nullable
   private Screen screen;
+  @Nullable
   private FocusHandler focusHandler;
+
+  public CheckboxControl() {
+    checkBoxImpl = new CheckBoxImpl(this);
+  }
 
   @Override
   public void bind(
-      final Nifty niftyParam,
-      final Screen screenParam,
-      final Element elementParam,
-      final Parameters propertiesParam) {
+      @Nonnull final Nifty niftyParam,
+      @Nonnull final Screen screenParam,
+      @Nonnull final Element elementParam,
+      @Nonnull final Parameters propertiesParam) {
     super.bind(elementParam);
     nifty = niftyParam;
     screen = screenParam;
@@ -43,10 +55,19 @@ public class CheckboxControl extends AbstractController
   }
 
   @Override
-  public void init(final Parameters parameter) {
-    focusHandler = screen.getFocusHandler();
-    nifty.subscribe(screen, getId(), ElementShowEvent.class, this);
+  public void init(@Nonnull final Parameters parameter) {
     super.init(parameter);
+    if (screen == null || nifty == null) {
+      log.severe("Required instances not found, binding did not run or failed.");
+    }
+    String id = getId();
+    if (id == null) {
+      log.warning("Checkbox has not ID, can't register a event subscriber to monitor update events. Checkbox " +
+          "functionality will be limited.");
+    } else {
+      focusHandler = screen.getFocusHandler();
+      nifty.subscribe(screen, id, ElementShowEvent.class, this);
+    }
   }
 
   @Override
@@ -54,20 +75,25 @@ public class CheckboxControl extends AbstractController
   }
 
   @Override
-  public void onFocus(final boolean getFocus) {
-    super.onFocus(getFocus);
-  }
-
-  @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
-    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
-      focusHandler.getNext(getElement()).setFocus();
-      return true;
-    } else if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
-      focusHandler.getPrev(getElement()).setFocus();
-      return true;
-    } else if (inputEvent == NiftyStandardInputEvent.Activate) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
+    if (inputEvent == NiftyStandardInputEvent.Activate) {
       onClick();
+      return true;
+    }
+    if (focusHandler == null) {
+      return false;
+    }
+
+    Element element = getElement();
+    if (element == null) {
+      return false;
+    }
+    if (inputEvent == NiftyStandardInputEvent.NextInputElement) {
+      focusHandler.getNext(element).setFocus();
+      return true;
+    }
+    if (inputEvent == NiftyStandardInputEvent.PrevInputElement) {
+      focusHandler.getPrev(element).setFocus();
       return true;
     }
     return false;
@@ -82,7 +108,15 @@ public class CheckboxControl extends AbstractController
 
   @Override
   public void update(final boolean checked) {
+    final Element element = getElement();
+    if (element == null) {
+      return;
+    }
     final Element selectImage = getElement().findElementById("#select");
+    if (selectImage == null) {
+      log.warning("Failed to find select image of checkbox. Can't display select state.");
+      return;
+    }
     if (checked) {
       selectImage.setVisible(true);
       selectImage.stopEffect(EffectEventId.onCustom);
@@ -100,16 +134,25 @@ public class CheckboxControl extends AbstractController
   }
 
   @Override
-  public void publish(final CheckBoxStateChangedEvent event) {
-    if (getElement().getId() != null) {
-      nifty.publishEvent(getElement().getId(), event);
+  public void publish(@Nonnull final CheckBoxStateChangedEvent event) {
+    if (nifty != null) {
+      String id = getId();
+      if (id != null) {
+        nifty.publishEvent(id, event);
+      }
     }
   }
 
   @Override
   public void onEvent(final String topic, final ElementShowEvent data) {
-    final Element selectImage = getElement().findElementById("#select");
-    selectImage.setVisible(checkBoxImpl.isChecked());
+    Element element = getElement();
+    if (element != null) {
+      // restore visiblity state
+      final Element selectImage = element.findElementById("#select");
+      if (selectImage != null) {
+        selectImage.setVisible(checkBoxImpl.isChecked());
+      }
+    }
   }
 
   // CheckBox Implementation

@@ -1,20 +1,19 @@
 package de.lessvoid.nifty.builder;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.ScreenCreator;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.annotation.Nonnull;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class ScreenBuilderTest {
   private Nifty niftyMock;
@@ -106,14 +105,23 @@ public class ScreenBuilderTest {
       super("myid", screenController);
     }
 
+    @Override
     ScreenCreator createScreenCreator(final String id) {
       return screenCreator;
     }
   }
 
   private class MyScreenController implements ScreenController {
-    public void bind(Nifty nifty, Screen screen) {    }
-    public void onStartScreen() {    }
-    public void onEndScreen() {    }
+    @Override
+    public void bind(@Nonnull Nifty nifty, @Nonnull Screen screen) {
+    }
+
+    @Override
+    public void onStartScreen() {
+    }
+
+    @Override
+    public void onEndScreen() {
+    }
   }
 }

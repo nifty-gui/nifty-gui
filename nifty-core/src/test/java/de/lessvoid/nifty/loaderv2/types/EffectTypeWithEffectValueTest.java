@@ -1,15 +1,14 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.util.Properties;
-
-import org.junit.Test;
-
 import de.lessvoid.nifty.effects.EffectProperties;
 import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.xml.xpp3.Attributes;
+import org.junit.Test;
+
+import java.util.Properties;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class EffectTypeWithEffectValueTest {
   private static final float EPSILON = 0.01f;
@@ -17,7 +16,7 @@ public class EffectTypeWithEffectValueTest {
   private EffectType effectType = new EffectType();
   private EffectProperties effectProperties = new EffectProperties(
       new Properties());
-  
+
   @Test
   public void testNoEffectValues() {
     effectType.applyEffectValues(effectProperties);
@@ -36,11 +35,9 @@ public class EffectTypeWithEffectValueTest {
   }
 
   private EffectValueType createEffectValueType(final String time, final String value) {
-    EffectValueType effectValueType = new EffectValueType();
     Attributes attributes = new Attributes();
     attributes.set("time", time);
     attributes.set("value", value);
-    effectValueType.initFromAttributes(attributes);
-    return effectValueType;
+    return new EffectValueType(attributes);
   }
 }

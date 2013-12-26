@@ -1,12 +1,14 @@
 package de.lessvoid.nifty.layout.manager;
 
-import java.util.List;
-
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.tools.SizeValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * A VerticalLayout implementation of the LayoutManager interface.
@@ -17,7 +19,8 @@ import de.lessvoid.nifty.tools.SizeValue;
  */
 public class VerticalLayout implements LayoutManager {
 
-  public void layoutElements(final LayoutPart root, final List < LayoutPart > children) {
+  @Override
+  public void layoutElements(@Nonnull final LayoutPart root, @Nonnull final List<LayoutPart> children) {
     if (isInvalid(root, children)) {
       return;
     }
@@ -65,27 +68,34 @@ public class VerticalLayout implements LayoutManager {
     }
   }
 
-  private int leftMargin(final BoxConstraints boxConstraints, final int rootBoxWidth) {
+  private int leftMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxWidth) {
     return boxConstraints.getMarginLeft().getValueAsInt(rootBoxWidth);
   }
 
-  private int topMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+  private int topMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxHeight) {
     return boxConstraints.getMarginTop().getValueAsInt(rootBoxHeight);
   }
 
-  private int bottomMargin(final BoxConstraints boxConstraints, final int rootBoxHeight) {
+  private int bottomMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxHeight) {
     return boxConstraints.getMarginBottom().getValueAsInt(rootBoxHeight);
   }
 
-  public SizeValue calculateConstraintWidth(final LayoutPart root, final List < LayoutPart > children) {
+  @Nonnull
+  @Override
+  public SizeValue calculateConstraintWidth(@Nonnull final LayoutPart root, @Nonnull final List<LayoutPart> children) {
     return root.getMaxWidth(children);
   }
 
-  public SizeValue calculateConstraintHeight(final LayoutPart root, final List < LayoutPart > children) {
+  @Nonnull
+  @Override
+  public SizeValue calculateConstraintHeight(@Nonnull final LayoutPart root, @Nonnull final List<LayoutPart> children) {
     return root.getSumHeight(children);
   }
 
-  private int processWidthConstraints(final int rootBoxWidth, final BoxConstraints constraints, final int elementHeight) {
+  private int processWidthConstraints(
+      final int rootBoxWidth,
+      @Nonnull final BoxConstraints constraints,
+      final int elementHeight) {
     if (hasWidthConstraint(constraints)) {
       if (constraints.getWidth().hasHeightSuffix()) {
         return constraints.getWidth().getValueAsInt(elementHeight);
@@ -96,7 +106,11 @@ public class VerticalLayout implements LayoutManager {
     }
   }
 
-  private int processHorizontalAlignment(final int rootBoxX, final int rootBoxWidth, final int currentBoxWidth, final BoxConstraints constraints) {
+  private int processHorizontalAlignment(
+      final int rootBoxX,
+      final int rootBoxWidth,
+      final int currentBoxWidth,
+      @Nonnull final BoxConstraints constraints) {
     if (HorizontalAlign.center.equals(constraints.getHorizontalAlign())) {
       return rootBoxX + ((rootBoxWidth - currentBoxWidth) / 2);
     } else if (HorizontalAlign.right.equals(constraints.getHorizontalAlign())) {
@@ -109,7 +123,11 @@ public class VerticalLayout implements LayoutManager {
     }
   }
 
-  private int calcElementHeight(final List < LayoutPart > children, final int rootBoxHeight, final BoxConstraints boxConstraints, final int boxWidth) {
+  private int calcElementHeight(
+      @Nonnull final List<LayoutPart> children,
+      final int rootBoxHeight,
+      @Nonnull final BoxConstraints boxConstraints,
+      final int boxWidth) {
     if (hasHeightConstraint(boxConstraints)) {
       int h;
       if (boxConstraints.getHeight().hasWidthSuffix()) {
@@ -124,7 +142,7 @@ public class VerticalLayout implements LayoutManager {
     return getMaxNonFixedHeight(children, rootBoxHeight);
   }
 
-  private int getMaxNonFixedHeight(final List < LayoutPart > elements, final int parentHeight) {
+  private int getMaxNonFixedHeight(@Nonnull final List<LayoutPart> elements, final int parentHeight) {
     int maxFixedHeight = 0;
     int fixedCount = 0;
 
@@ -147,31 +165,33 @@ public class VerticalLayout implements LayoutManager {
     }
   }
 
-  private boolean hasWidthConstraint(final BoxConstraints constraint) {
+  private boolean hasWidthConstraint(@Nullable final BoxConstraints constraint) {
     return constraint != null && constraint.getWidth().hasValue();
   }
 
-  private boolean hasHeightConstraint(final BoxConstraints boxConstraints) {
+  private boolean hasHeightConstraint(@Nullable final BoxConstraints boxConstraints) {
     return boxConstraints != null && boxConstraints.getHeight().hasValue();
   }
 
-  private boolean isInvalid(final LayoutPart root, final List <LayoutPart> children) {
+  private boolean isInvalid(@Nullable final LayoutPart root, @Nullable final List<LayoutPart> children) {
     return root == null || children == null || children.size() == 0;
   }
 
-  private int getRootBoxX(final LayoutPart root) {
+  private int getRootBoxX(@Nonnull final LayoutPart root) {
     return root.getBox().getX() + root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth());
   }
 
-  private int getRootBoxY(final LayoutPart root) {
+  private int getRootBoxY(@Nonnull final LayoutPart root) {
     return root.getBox().getY() + root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight());
   }
 
-  private int getRootBoxWidth(final LayoutPart root) {
-    return root.getBox().getWidth() - root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth()) - root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth());
+  private int getRootBoxWidth(@Nonnull final LayoutPart root) {
+    return root.getBox().getWidth() - root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth
+        ()) - root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth());
   }
 
-  private int getRootBoxHeight(final LayoutPart root) {
-    return root.getBox().getHeight() - root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight()) - root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
+  private int getRootBoxHeight(@Nonnull final LayoutPart root) {
+    return root.getBox().getHeight() - root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight
+        ()) - root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
   }
 }

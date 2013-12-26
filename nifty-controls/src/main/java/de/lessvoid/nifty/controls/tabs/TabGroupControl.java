@@ -4,20 +4,9 @@
  */
 package de.lessvoid.nifty.controls.tabs;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import org.bushe.swing.event.EventTopicSubscriber;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.Tab;
-import de.lessvoid.nifty.controls.TabGroup;
-import de.lessvoid.nifty.controls.TabSelectedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.tabs.builder.TabBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
@@ -25,6 +14,12 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
+import org.bushe.swing.event.EventTopicSubscriber;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * This is the controller for the tab group.
@@ -43,7 +38,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    */
   private static final class TabGroupShowEventSubscriber implements EventTopicSubscriber<ElementShowEvent> {
     @Override
-    public void onEvent(final String topic, final ElementShowEvent data) {
+    public void onEvent(@Nonnull final String topic, @Nonnull final ElementShowEvent data) {
       final TabGroupControl control = data.getElement().getControl(TabGroupControl.class);
       if (control != null) {
         control.checkVisibility();
@@ -72,8 +67,11 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     }
 
     @Override
-    public void onEvent(final String topic, final ButtonClickedEvent data) {
-      parentControl.processButtonClick(data.getButton().getElement());
+    public void onEvent(final String topic, @Nonnull final ButtonClickedEvent data) {
+      Element element = data.getButton().getElement();
+      if (element != null) {
+        parentControl.processButtonClick(element);
+      }
     }
   }
 
@@ -85,20 +83,22 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     /**
      * The tab group control that is the target for the visibility check.
      */
+    @Nonnull
     private final TabGroupControl parentControl;
 
     /**
      * The next notification that is supposed to be called in chain.
      */
+    @Nullable
     private final EndNotify next;
 
     /**
      * Constructor for the check visibility end notification.
      *
-     * @param control the tab group control that is the target
+     * @param control    the tab group control that is the target
      * @param nextNotify the next notification to call or {@code null} in case there is none
      */
-    private CheckVisibilityEndNotify(final TabGroupControl control, final EndNotify nextNotify) {
+    private CheckVisibilityEndNotify(@Nonnull final TabGroupControl control, @Nullable final EndNotify nextNotify) {
       parentControl = control;
       next = nextNotify;
     }
@@ -121,20 +121,22 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     /**
      * The tab group control where the tab is supposed to be added to.
      */
+    @Nonnull
     private final TabGroupControl parentControl;
 
     /**
      * The tab that is supposed to be added.
      */
+    @Nonnull
     private final Tab tabToAdd;
 
     /**
      * Create a instance of this notification handler.
      *
      * @param control the tab group control where the tab is added to
-     * @param tab the tab that is added
+     * @param tab     the tab that is added
      */
-    private TabAddMoveEndNotify(final TabGroupControl control, final Tab tab) {
+    private TabAddMoveEndNotify(@Nonnull final TabGroupControl control, @Nonnull final Tab tab) {
       parentControl = control;
       tabToAdd = tab;
     }
@@ -148,42 +150,49 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   /**
    * The logger that takes care for the output of log messages in this class.
    */
-  private final Logger log;
+  private static final Logger log = Logger.getLogger(TabGroupControl.class.getName());
 
   /**
    * The subscriber of the show events for this control. This is required to fix the visibility values one the tab
    * control is displayed.
    */
-  private final EventTopicSubscriber<ElementShowEvent> showEventSubscriber;
+  @Nonnull
+  private static final EventTopicSubscriber<ElementShowEvent> showEventSubscriber = new TabGroupShowEventSubscriber();
 
   /**
    * This subscriber is used to monitor the click events on the buttons.
    */
+  @Nonnull
   private final EventTopicSubscriber<ButtonClickedEvent> buttonClickedSubscriber;
 
   /**
    * This is the panel that is supposed to hold the buttons used to change the currently visible tab.
    */
+  @Nullable
   private Element tabButtonPanel;
 
   /**
    * This is the content panel that stores all tabs.
    */
+  @Nullable
   private Element contentPanel;
 
   /**
    * The instance of the Nifty-GUI that is parent to this tab group control.
    */
-  private Nifty niftyGui;
+  @Nullable
+  private Nifty nifty;
 
   /**
    * The screen that is parent to the element this control is assigned to.
    */
-  private Screen parentScreen;
+  @Nullable
+  private Screen screen;
 
   /**
    * The template of the button that is supposed to be used for each new tab.
    */
+  @Nullable
   private ElementType buttonTemplate;
 
   /**
@@ -197,16 +206,13 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   private boolean templateRemoved;
 
   public TabGroupControl() {
-    log = Logger.getLogger(TabGroupControl.class.getName());
-    showEventSubscriber = new TabGroupShowEventSubscriber();
-
     //noinspection ThisEscapedInObjectConstruction
     buttonClickedSubscriber = new ButtonClickEventSubscriber(this);
     selectedIndex = -1;
   }
 
   @Override
-  public void addTab(final Element tab) {
+  public void addTab(@Nonnull final Element tab) {
     final Tab tabControl = tab.getNiftyControl(Tab.class);
     if (tabControl == null) {
       throw new IllegalArgumentException("Element to add is not a tab.");
@@ -215,8 +221,11 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   }
 
   @Override
-  public void addTab(final TabBuilder tabBuilder) {
-    final Element tab = tabBuilder.build(niftyGui, parentScreen, contentPanel);
+  public void addTab(@Nonnull final TabBuilder tabBuilder) {
+    if (nifty == null || screen == null || contentPanel == null) {
+      throw new IllegalStateException("Element is not bound yet. Can't add tabs.");
+    }
+    final Element tab = tabBuilder.build(nifty, screen, contentPanel);
     final Tab tabControl = tab.getNiftyControl(Tab.class);
     if (tabControl == null) {
       throw new IllegalStateException("Tab builder did not create a tab... WTF?!");
@@ -226,34 +235,48 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     bind(element);
 
-    niftyGui = nifty;
-    parentScreen = screen;
+    this.nifty = nifty;
+    this.screen = screen;
 
-    tabButtonPanel = element.findElementById("#tab-button-panel"); //NON-NLS
-    contentPanel = element.findElementById("#tab-content-panel"); //NON-NLS
+    tabButtonPanel = element.findElementById("#tab-button-panel");
+    contentPanel = element.findElementById("#tab-content-panel");
 
-    final Element buttonElement = tabButtonPanel.findElementById("#button-template"); //NON-NLS
-    if (buttonElement == null) {
-      throw new IllegalStateException("Required button template missing.");
-    }
-    buttonTemplate = buttonElement.getElementType().copy();
-    buttonElement.markForRemoval(new EndNotify() {
-      @Override
-      public void perform() {
-        templateRemoved = true;
+    if (tabButtonPanel == null) {
+      log.severe("Panel for the tabs not found. Tab group will not work properly. Looked for: #tab-button-panel");
+    } else {
+      final Element buttonElement = tabButtonPanel.findElementById("#button-template");
+      if (buttonElement == null) {
+        log.severe("No template for tab button found. Tab group will be unable to display tabs. Looked for: " +
+            "#button-template");
+      } else {
+        buttonTemplate = buttonElement.getElementType().copy();
+        buttonElement.markForRemoval(new EndNotify() {
+          @Override
+          public void perform() {
+            templateRemoved = true;
+          }
+        });
       }
-    });
+    }
+    if (contentPanel == null) {
+      log.severe("Content panel not found. Tab group will be unable to display tab content. Looked for: " +
+          "#tab-content-pane");
+    }
   }
 
+  @Nullable
   @Override
   public Tab getSelectedTab() {
-    return (selectedIndex == -1) ? null : contentPanel.getChildren().get(selectedIndex).getNiftyControl(Tab.class);
+    if (selectedIndex == -1 || contentPanel == null) {
+      return null;
+    }
+    return contentPanel.getChildren().get(selectedIndex).getNiftyControl(Tab.class);
   }
 
   @Override
@@ -262,32 +285,41 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
     super.init(parameter);
 
-    for (final Element element : contentPanel.getChildren()) {
-      final Tab tabControl = element.getNiftyControl(Tab.class);
-      if (tabControl == null) {
-        log.warning("Element without tab control detected. Removing: " + element.getId()); //NON-NLS
-        element.markForRemoval();
-      } else {
-        initTab(tabControl);
-        selectedIndex = 0;
+    if (contentPanel != null) {
+      for (final Element element : contentPanel.getChildren()) {
+        final Tab tabControl = element.getNiftyControl(Tab.class);
+        if (tabControl == null) {
+          log.warning("Element without tab control detected. Removing: " + element.getId());
+          element.markForRemoval();
+        } else {
+          initTab(tabControl);
+          selectedIndex = 0;
+        }
       }
     }
 
     checkVisibility();
   }
 
-  private void initTab(final Tab tab) {
+  private void initTab(@Nonnull final Tab tab) {
     final int tabIndex = indexOf(tab);
     Element button = getButton(tabIndex);
     if (button == null) {
+      if (buttonTemplate == null || nifty == null || screen == null || tabButtonPanel == null) {
+        log.severe("Tab can't be initialized. Binding not done yet or binding failed.");
+        return;
+      }
       final ElementType newButtonTemplate = buttonTemplate.copy();
-      newButtonTemplate.getAttributes().set("id", buildTabButtonName(tabIndex)); //NON-NLS
-      button = niftyGui.createElementFromType(parentScreen, tabButtonPanel, newButtonTemplate);
+      newButtonTemplate.getAttributes().set("id", buildTabButtonName(tabIndex));
+      button = nifty.createElementFromType(screen, tabButtonPanel, newButtonTemplate);
     }
-    niftyGui.subscribe(parentScreen, button.getId(), ButtonClickedEvent.class, buttonClickedSubscriber);
+    String buttonId = button.getId();
+    if (buttonId != null) {
+      nifty.subscribe(screen, buttonId, ButtonClickedEvent.class, buttonClickedSubscriber);
+    }
 
     if (!button.isVisible()) {
       button.show();
@@ -295,7 +327,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
     final Button btnControl = button.getNiftyControl(Button.class);
     if (btnControl == null) {
-      log.warning("Can't set label of tab selection element that is not a button."); //NON-NLS
+      log.warning("Can't set label of tab selection element that is not a button.");
     } else {
       btnControl.setText(tab.getCaption());
     }
@@ -305,28 +337,35 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     }
   }
 
+  @Nonnull
   private String buildTabButtonName(final int index) {
-    return tabButtonPanel.getId() + "#tabButton-" + Integer.toString(index);
+    String tabButtonId = "#tabButton-" + index;
+    if (tabButtonPanel != null) {
+      tabButtonId = tabButtonPanel.getId() + tabButtonId;
+    }
+    return tabButtonId;
   }
 
   @Override
-  public void addTab(final Tab tab) {
-    if (!tab.getElement().getParent().equals(contentPanel)) {
-      tab.getElement().markForMove(contentPanel, new TabAddMoveEndNotify(this, tab));
-      return;
+  public void addTab(@Nonnull final Tab tab) {
+    Element tabElement = tab.getElement();
+    if (tabElement != null) {
+      Element tabParentElement = tabElement.getParent();
+      if (contentPanel != null && tabParentElement.equals(contentPanel)) {
+        tabElement.markForMove(contentPanel, new TabAddMoveEndNotify(this, tab));
+        return;
+      }
     }
 
     initTab(tab);
-
     checkVisibility();
   }
 
   @Override
-  public int indexOf(final Tab tab) {
-    if (tab == null) {
-      throw new NullPointerException("The tab can't be null");
+  public int indexOf(@Nonnull final Tab tab) {
+    if (contentPanel == null) {
+      return -1;
     }
-
     final int length = getTabCount();
     final List<Element> elementList = contentPanel.getChildren();
     int result = -1;
@@ -341,7 +380,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
   @Override
   public int getTabCount() {
-    return contentPanel.getChildren().size();
+    return contentPanel != null ? contentPanel.getChildren().size() : 0;
   }
 
   /**
@@ -353,7 +392,11 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    * @param index the index of the button
    * @return the element of the button or {@code null} in case there is no button assigned to this index
    */
+  @Nullable
   private Element getButton(final int index) {
+    if (tabButtonPanel == null) {
+      return null;
+    }
     int realIndex = index;
 
     final List<Element> buttonList = tabButtonPanel.getChildren();
@@ -361,7 +404,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       return null;
     }
 
-    if (!templateRemoved) { //NON-NLS
+    if (!templateRemoved) {
       realIndex++;
     }
 
@@ -377,7 +420,11 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    * @param index the index of the tab control
    * @return the tab control
    */
+  @Nullable
   private Tab getTab(final int index) {
+    if (contentPanel == null) {
+      return null;
+    }
     return contentPanel.getChildren().get(index).getNiftyControl(Tab.class);
   }
 
@@ -385,12 +432,20 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    * Check the visibility settings of all tabs and correct it as needed.
    */
   private void checkVisibility() {
+    if (contentPanel == null) {
+      return;
+    }
     final int length = getTabCount();
     final List<Element> tabList = contentPanel.getChildren();
 
     for (int i = 0; i < length; i++) {
       final Element tab = tabList.get(i);
       final Element button = getButton(i);
+
+      if (button == null) {
+        log.warning("Something is wrong with the tabs. Tab button not there anymore.");
+        continue;
+      }
 
       if (i == selectedIndex) {
         if (!tab.isVisible()) {
@@ -413,10 +468,13 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       }
     }
 
-    getElement().layoutElements();
+    Element element = getElement();
+    if (element != null) {
+      element.layoutElements();
+    }
   }
 
-  private void addMargin(final int i, final Element button) {
+  private void addMargin(final int i, @Nonnull final Element button) {
     if (i > 0) {
       button.setMarginLeft(SizeValue.px(BUTTON_LEFT_MARGIN));
     } else {
@@ -425,19 +483,24 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return true;
   }
 
   @Override
-  public boolean isTabInGroup(final Tab tab) {
+  public boolean isTabInGroup(@Nonnull final Tab tab) {
     return indexOf(tab) > -1;
   }
 
   @Override
   public void onStartScreen() {
-    //niftyGui.unsubscribe(getId(), showEventSubscriber);
-    niftyGui.subscribe(parentScreen, getId(), ElementShowEvent.class, showEventSubscriber);
+    if (nifty == null || screen == null) {
+      log.severe("Starting screen failed. Seems the binding is not done yet.");
+    }
+    String id = getId();
+    if (id != null) {
+      nifty.subscribe(screen, id, ElementShowEvent.class, showEventSubscriber);
+    }
   }
 
   @Override
@@ -446,17 +509,20 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   }
 
   @Override
-  public void removeTab(final Tab tab) {
+  public void removeTab(@Nonnull final Tab tab) {
     removeTab(tab, null);
   }
 
   @Override
-  public void removeTab(final Element tab) {
+  public void removeTab(@Nonnull final Element tab) {
     removeTab(tab, null);
   }
 
   @Override
-  public void removeTab(final int index, final EndNotify notify) {
+  public void removeTab(final int index, @Nullable final EndNotify notify) {
+    if (nifty == null) {
+      throw new IllegalStateException("Can't remove tab as long as binding is not done.");
+    }
     if ((index < 0) || (index >= getTabCount())) {
       throw new IndexOutOfBoundsException("Index out of bounds: " + index);
     }
@@ -467,19 +533,23 @@ public class TabGroupControl extends AbstractController implements TabGroup {
       triggeredNotification = new CheckVisibilityEndNotify(this, triggeredNotification);
     }
 
-    final Element button;
-    if (templateRemoved) {
-      button = tabButtonPanel.getChildren().get(index);
-    } else {
-      button = tabButtonPanel.getChildren().get(index + 1);
+    if (tabButtonPanel != null) {
+      final Element button;
+      if (templateRemoved) {
+        button = tabButtonPanel.getChildren().get(index);
+      } else {
+        button = tabButtonPanel.getChildren().get(index + 1);
+      }
+      nifty.unsubscribe(button.getId(), buttonClickedSubscriber);
+      button.markForRemoval();
     }
-    niftyGui.unsubscribe(button.getId(), buttonClickedSubscriber);
-    button.markForRemoval();
-    contentPanel.getChildren().get(index).markForRemoval(triggeredNotification);
+    if (contentPanel != null) {
+      contentPanel.getChildren().get(index).markForRemoval(triggeredNotification);
+    }
   }
 
   @Override
-  public void removeTab(final Tab tab, final EndNotify notify) {
+  public void removeTab(@Nonnull final Tab tab, @Nullable final EndNotify notify) {
     final int index = indexOf(tab);
     if (index == -1) {
       throw new IllegalArgumentException("The tab to remove is not part of this tab group.");
@@ -488,7 +558,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   }
 
   @Override
-  public void removeTab(final Element tab, final EndNotify notify) {
+  public void removeTab(@Nonnull final Element tab, @Nullable final EndNotify notify) {
     final Tab tabControl = tab.getNiftyControl(Tab.class);
     if (tabControl == null) {
       throw new IllegalArgumentException("Element to add is not a tab.");
@@ -497,7 +567,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
   }
 
   @Override
-  public void setSelectedTab(final Tab tab) {
+  public void setSelectedTab(@Nonnull final Tab tab) {
     final int index = indexOf(tab);
     if (index == -1) {
       throw new IllegalArgumentException("The tab to remove is not part of this tab group.");
@@ -513,31 +583,49 @@ public class TabGroupControl extends AbstractController implements TabGroup {
 
     selectedIndex = index;
     checkVisibility();
-    niftyGui.publishEvent(getId(), new TabSelectedEvent(this, getTab(index), index));
+    if (nifty != null) {
+      String id = getId();
+      if (id != null) {
+        Tab tab = getTab(index);
+        if (tab == null) {
+          log.severe("Tab with valid index returned null. This looks like a internal error.");
+        } else {
+          nifty.publishEvent(id, new TabSelectedEvent(this, tab, index));
+        }
+      }
+    }
   }
 
   @Override
-  public void setTabCaption(final int index, final String caption) {
+  public void setTabCaption(final int index, @Nonnull final String caption) {
     if ((index < 0) || (index >= getTabCount())) {
       throw new IndexOutOfBoundsException("Index out of bounds: " + index);
     }
 
-    final Tab tabControl = contentPanel.getChildren().get(index).getNiftyControl(Tab.class);
-    if (tabControl == null) {
-      throw new IllegalStateException("Tab control corrupted for index: " + index);
+    if (contentPanel != null) {
+      final Tab tabControl = contentPanel.getChildren().get(index).getNiftyControl(Tab.class);
+      if (tabControl == null) {
+        log.severe("Tab control seems to be corrupted. Expected tab control not located.");
+      } else {
+        tabControl.setCaption(caption);
+      }
     }
-    tabControl.setCaption(caption);
 
-    final Button button = getButton(index).getNiftyControl(Button.class);
-    if (button == null) {
-      log.warning("Can't change caption in case template is not a button."); //NON-NLS
+    Element buttonElement = getButton(index);
+    if (buttonElement == null) {
+      log.severe("Tab control seems corrupted. Expected button element not located.");
     } else {
-      button.setText(caption);
+      final Button button = buttonElement.getNiftyControl(Button.class);
+      if (button == null) {
+        log.severe("Tab button does not seem to contain a button control.");
+      } else {
+        button.setText(caption);
+      }
     }
   }
 
   @Override
-  public void setTabCaption(final Tab tab, final String caption) {
+  public void setTabCaption(@Nonnull final Tab tab, @Nonnull final String caption) {
     final int index = indexOf(tab);
     if (index == -1) {
       throw new IllegalArgumentException("The tab to remove is not part of this tab group.");
@@ -550,14 +638,17 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    *
    * @param clickedButton the button that was clicked
    */
-  private void processButtonClick(final Element clickedButton) {
+  private void processButtonClick(@Nonnull final Element clickedButton) {
+    if (tabButtonPanel == null) {
+      return;
+    }
     final List<Element> buttons = tabButtonPanel.getChildren();
     if (buttons.isEmpty()) {
       return;
     }
 
     int indexOffset = 0;
-    if (!templateRemoved) { //NON-NLS
+    if (!templateRemoved) {
       indexOffset = -1;
     }
 

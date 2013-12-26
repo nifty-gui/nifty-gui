@@ -12,18 +12,24 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
-public class ApplyRendererImage implements ApplyRenderer {
-  private Convert convert;
+import javax.annotation.Nonnull;
+import java.util.logging.Logger;
 
-  public ApplyRendererImage(final Convert convertParam) {
+public class ApplyRendererImage implements ApplyRenderer {
+  private static final Logger log = Logger.getLogger(ApplyRendererImage.class.getName());
+  @Nonnull
+  private final Convert convert;
+
+  public ApplyRendererImage(@Nonnull final Convert convertParam) {
     convert = convertParam;
   }
 
+  @Override
   public void apply(
-      final Screen screen,
-      final Element element,
-      final Attributes attributes,
-      final NiftyRenderEngine renderEngine) {
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Attributes attributes,
+      @Nonnull final NiftyRenderEngine renderEngine) {
     PanelRenderer panelRenderer = element.getRenderer(PanelRenderer.class);
     if (panelRenderer != null) {
       // panel renderer set means this is a panel and therefore the
@@ -35,28 +41,33 @@ public class ApplyRendererImage implements ApplyRenderer {
       return;
     }
 
-    NiftyImage image =
-      renderEngine.createImage(
-          screen,
-          attributes.get("filename"),
-          attributes.getAsBoolean("filter", Convert.DEFAULT_IMAGE_FILTER));
+    String filename = attributes.get("filename");
+    if (filename == null) {
+      log.severe("Filename missing for image.");
+      return;
+    }
+
+    NiftyImage image = renderEngine.createImage(
+        screen,
+        filename,
+        attributes.getAsBoolean("filter", Convert.DEFAULT_IMAGE_FILTER));
     if (image == null) {
       return;
     }
 
     image.setColor(convert.color(attributes.get("color")));
 
-	String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(attributes.getAttributes());
-	String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(attributes.getAttributes());
+    String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(attributes.getAttributes());
+    String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(attributes.getAttributes());
     ImageMode imageMode = convert.imageMode(areaProviderProperty, renderStrategyProperty);
 
     image.setImageMode(imageMode);
     imageRenderer.setImage(image);
-    
+
     imageRenderer.setInset(convert.insetSizeValue(attributes.get("inset"), image.getHeight()));
 
     Size imageDimension = imageMode.getImageNativeSize(image);
-    
+
     if (element.getConstraintWidth().hasDefault()) {
       element.setConstraintWidth(SizeValue.def(imageDimension.getWidth()));
     }

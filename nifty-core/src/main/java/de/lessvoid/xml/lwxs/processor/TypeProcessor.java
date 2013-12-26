@@ -7,14 +7,19 @@ import de.lessvoid.xml.xpp3.SubstitutionGroup;
 import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class TypeProcessor implements XmlProcessor {
+  @Nonnull
   private final Schema niftyXmlSchema;
 
-  public TypeProcessor(final Schema niftyXmlSchemaParam) {
+  public TypeProcessor(@Nonnull final Schema niftyXmlSchemaParam) {
     niftyXmlSchema = niftyXmlSchemaParam;
   }
 
-  public void process(final XmlParser xmlParser, final Attributes attributes) throws Exception {
+  @Override
+  public void process(@Nonnull final XmlParser xmlParser, @Nonnull final Attributes attributes) throws Exception {
     String name = getNameAttribute(attributes);
 
     Type type = new Type(name, getExtendsAttribute(attributes));
@@ -28,7 +33,8 @@ public class TypeProcessor implements XmlProcessor {
     xmlParser.zeroOrMore(substGroup);
   }
 
-  private String getNameAttribute(final Attributes attributes) throws Exception {
+  @Nonnull
+  private String getNameAttribute(@Nonnull final Attributes attributes) throws Exception {
     String name = attributes.get("name");
     if (name == null) {
       throw new Exception("[name] attribute is a required attribute");
@@ -36,7 +42,8 @@ public class TypeProcessor implements XmlProcessor {
     return name;
   }
 
-  private String getExtendsAttribute(final Attributes attributes) throws Exception {
+  @Nullable
+  private String getExtendsAttribute(@Nonnull final Attributes attributes) {
     return attributes.get("extends");
   }
 }

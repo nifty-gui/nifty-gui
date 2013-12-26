@@ -5,33 +5,41 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 public class DynamicStyleStartScreen implements ScreenController, NiftyExample {
   private Screen screen;
 
-  public void bind(final Nifty newNifty, final Screen screenParam) {
+  @Override
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screenParam) {
     screen = screenParam;
   }
 
+  @Override
   public void onStartScreen() {
   }
 
+  @Override
   public void onEndScreen() {
   }
 
-  public void setNiftyStyle(final String style) {
-    screen.findElementByName("panel").setStyle(style);
+  public void setNiftyStyle(@Nonnull final String style) {
+    screen.findElementById("panel").setStyle(style);
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "style/dynamic/dynamic.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Style Dynamic Example";

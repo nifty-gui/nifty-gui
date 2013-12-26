@@ -1,26 +1,18 @@
 package de.lessvoid.nifty.examples.defaultcontrols.listbox;
 
-import java.util.List;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.CheckBox;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.examples.defaultcontrols.common.JustAnExampleModelClass;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * The ListBoxDialog to show off the new ListBox and a couple of more new Nifty 1.3 things.
@@ -28,22 +20,31 @@ import de.lessvoid.nifty.screen.Screen;
  */
 public class ListBoxDialogController implements Controller {
   private Screen screen;
+  @Nullable
   private ListBox<JustAnExampleModelClass> listBox;
+  @Nullable
   private ListBox<JustAnExampleModelClass> selectionListBox;
+  @Nullable
   private CheckBox multiSelectionCheckBox;
+  @Nullable
   private CheckBox disableSelectionCheckBox;
+  @Nullable
   private CheckBox forceSelectionCheckBox;
+  @Nullable
   private Button appendButton;
+  @Nullable
   private Button removeSelectionButton;
+  @Nullable
   private TextField addTextField;
+  @Nullable
   private Label selectedIndices;
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     this.screen = screen;
     this.listBox = getListBox("listBox");
     this.selectionListBox = getListBox("selectionListBox");
@@ -65,7 +66,7 @@ public class ListBoxDialogController implements Controller {
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
     updateSelectedIndexLabel(listBox.getSelectedIndices());
     setAppendButtonState();
     setRemoveSelectionButtonState();
@@ -80,7 +81,7 @@ public class ListBoxDialogController implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
@@ -102,7 +103,7 @@ public class ListBoxDialogController implements Controller {
    * (the one with the Nifty id "listBox").
    */
   @NiftyEventSubscriber(id="listBox")
-  public void onListBoxSelectionChanged(final String id, final ListBoxSelectionChangedEvent<JustAnExampleModelClass> changed) {
+  public void onListBoxSelectionChanged(final String id, @Nonnull final ListBoxSelectionChangedEvent<JustAnExampleModelClass> changed) {
     // Now take the new selection of the listBox and apply it to the selectionListBox to show the current selection
     selectionListBox.clear();
     selectionListBox.addAllItems(changed.getSelection());
@@ -141,6 +142,7 @@ public class ListBoxDialogController implements Controller {
     }
   }
 
+  @Nonnull
   private SelectionMode getSelectionMode() {
     if (disableSelectionCheckBox.isChecked()) {
       return SelectionMode.Disabled;
@@ -167,12 +169,12 @@ public class ListBoxDialogController implements Controller {
     }
   }
 
-  private void updateSelectedIndexLabel(final List<Integer> selectionIndices) {
+  private void updateSelectedIndexLabel(@Nullable final List<Integer> selectionIndices) {
     if (selectionIndices == null || selectionIndices.isEmpty()) {
       selectedIndices.setText("N/A");
       return;
     }
-    StringBuffer text = new StringBuffer();
+    StringBuilder text = new StringBuilder();
     boolean first = true;
     for (Integer i : selectionIndices) {
       if (first) {
@@ -186,6 +188,7 @@ public class ListBoxDialogController implements Controller {
     selectedIndices.setText(text.toString());
   }
 
+  @Nullable
   @SuppressWarnings("unchecked")
   private ListBox<JustAnExampleModelClass> getListBox(final String name) {
     return (ListBox<JustAnExampleModelClass>) screen.findNiftyControl(name, ListBox.class);

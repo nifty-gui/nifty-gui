@@ -1,8 +1,5 @@
 package de.lessvoid.nifty.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.controls.dynamic.ScreenCreator;
@@ -10,9 +7,14 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ScreenBuilder {
-  private ScreenCreator creator;
-  private List<LayerBuilder> layerBuilders = new ArrayList<LayerBuilder>();
+  private final ScreenCreator creator;
+  @Nonnull
+  private final List<LayerBuilder> layerBuilders = new ArrayList<LayerBuilder>();
 
   public ScreenBuilder(final String id) {
     creator = createScreenCreator(id);
@@ -43,7 +45,8 @@ public class ScreenBuilder {
     layerBuilders.add(layerBuilder);
   }
 
-  public Screen build(final Nifty nifty) {
+  @Nonnull
+  public Screen build(@Nonnull final Nifty nifty) {
     NiftyStopwatch.start();
     Screen screen = creator.create(nifty);
 

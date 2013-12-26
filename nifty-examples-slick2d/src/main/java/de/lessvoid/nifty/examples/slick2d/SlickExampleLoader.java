@@ -6,6 +6,8 @@ import de.lessvoid.nifty.slick2d.NiftyBasicGame;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is the general example loader implementation that is able to load the different examples in a unified way. This
  * class will be used for the common examples.
@@ -16,6 +18,7 @@ public class SlickExampleLoader extends NiftyBasicGame {
   /**
    * The nifty example that is executed by this class.
    */
+  @Nonnull
   private final NiftyExample example;
 
   /**
@@ -37,13 +40,13 @@ public class SlickExampleLoader extends NiftyBasicGame {
    *
    * @param niftyExample the example to execute
    */
-  public SlickExampleLoader(final NiftyExample niftyExample) {
+  public SlickExampleLoader(@Nonnull final NiftyExample niftyExample) {
     super(niftyExample.getTitle(), niftyExample.getStartScreen());
     example = niftyExample;
   }
 
   @Override
-  protected void prepareNifty(final Nifty nifty) {
+  protected void prepareNifty(@Nonnull final Nifty nifty) {
     example.prepareStart(nifty);
     if (example.getMainXML() != null) {
       nifty.fromXml(example.getMainXML(), example.getStartScreen());

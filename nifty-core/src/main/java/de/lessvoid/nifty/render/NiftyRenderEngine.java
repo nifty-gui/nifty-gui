@@ -1,46 +1,45 @@
 package de.lessvoid.nifty.render;
 
-import java.util.Collection;
-
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+
 /**
  * NiftyRenderEngine interface. This is considered a private API. Use methods on the main Nifty instance instead.
+ *
  * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public interface NiftyRenderEngine {
-
   /**
-   * Get Width of Display mode. This will always return the base resolution
-   * if auto scaling is enabled.
+   * Get Width of Display mode. This will always return the base resolution if auto scaling is enabled.
    *
    * @return width of display mode
    */
   int getWidth();
 
   /**
-   * Get Height of Display mode. This will always return the base resolution
-   * if auto scaling is enabled.
+   * Get Height of Display mode. This will always return the base resolution if auto scaling is enabled.
    *
    * @return height of display mode
    */
   int getHeight();
 
   /**
-   * This will always return the current native display resolution independent
-   * of the auto scaling mode.
+   * This will always return the current native display resolution independent of the auto scaling mode.
    *
    * @return the native display width
    */
   int getNativeWidth();
 
   /**
-   * This will always return the current native display resolution independent
-   * of the auto scaling mode.
+   * This will always return the current native display resolution independent of the auto scaling mode.
    *
    * @return the native display height
    */
@@ -65,130 +64,148 @@ public interface NiftyRenderEngine {
    * Create a new Image. Attention: use nifty.createImage() instead! This method has changed in Nifty 1.3.3 - sorry :)
    * You should probably never need to call methods on the NiftyRenderEngine directly though.
    *
-   * @param screen the Screen this image is connected to
-   * @param name file name to use
+   * @param screen       the Screen this image is connected to
+   * @param name         file name to use
    * @param filterLinear filter
-   * @return RenderImage instance
+   * @return the created nifty image or {@code null} if loading a image with a assigned name failed
    */
-  NiftyImage createImage(Screen screen, String name, boolean filterLinear);
+  @Nullable
+  NiftyImage createImage(@Nonnull Screen screen, @Nonnull String name, boolean filterLinear);
 
   /**
    * Create a new RenderFont.
+   *
    * @param name name of the font
    * @return RenderFont instance
    */
-  RenderFont createFont(String name);
+  @Nullable
+  RenderFont createFont(@Nonnull String name);
 
   /**
    * Returns the original filename of the given RenderFont.
+   *
    * @param font RenderFont to get the name from
    * @return the filename of the font
+   * @throws IllegalArgumentException in case the render font was not load by the engine and can't be matched to a
+   *                                  file name
    */
-  String getFontname(RenderFont font);
+  @Nonnull
+  String getFontname(@Nonnull RenderFont font);
 
   /**
-   * render a quad.
-   * @param x x
-   * @param y y
-   * @param width width
-   * @param height height
+   * Render a quad.
    */
   void renderQuad(int x, int y, int width, int height);
 
   /**
    * Renders a quad with different colors at the quad vertices.
-   * @param x
-   * @param y
-   * @param width
-   * @param height
-   * @param topLeft
-   * @param topRight
-   * @param bottomRight
-   * @param bottomLeft
    */
-  void renderQuad(int x, int y, int width, int height, Color topLeft, Color topRight, Color bottomRight, Color bottomLeft);
+  void renderQuad(
+      int x,
+      int y,
+      int width,
+      int height,
+      @Nonnull Color topLeft,
+      @Nonnull Color topRight,
+      @Nonnull Color bottomRight,
+      @Nonnull Color bottomLeft);
 
   /**
    * Render Image.
-   * @param image the image to render
-   * @param x the x position on the screen
-   * @param y the y position on the screen
-   * @param width the width
+   *
+   * @param image  the image to render
+   * @param x      the x position on the screen
+   * @param y      the y position on the screen
+   * @param width  the width
    * @param height the height
    */
-  void renderImage(NiftyImage image, int x, int y, int width, int height);
+  void renderImage(@Nonnull NiftyImage image, int x, int y, int width, int height);
 
   /**
    * renderText.
-   * @param text text
-   * @param x x
-   * @param y y
-   * @param selectionStart selection start
-   * @param selectionEnd selection end
+   *
+   * @param text               text
+   * @param x                  x
+   * @param y                  y
+   * @param selectionStart     selection start
+   * @param selectionEnd       selection end
    * @param textSelectionColor color for text selections
    */
-  void renderText(String text, int x, int y, int selectionStart, int selectionEnd, Color textSelectionColor);
+  void renderText(
+      @Nonnull String text,
+      int x,
+      int y,
+      int selectionStart,
+      int selectionEnd,
+      @Nonnull Color textSelectionColor);
 
   /**
-   * set font.
-   * @param font font
+   * Set the font that is supposed to be used to render a text.
+   * <p/>
+   * In case the font is never set or unloaded by setting it to {@code null} any attempt to render a text will fail.
+   *
+   * @param font the font to use or {@code null} to unload the font
    */
-  void setFont(RenderFont font);
+  void setFont(@Nullable RenderFont font);
 
   /**
-   * get font.
-   * @return font
+   * Get the font that is currently applied to the engine and used for all text rendering operations. This may be
+   * {@code null} in case no font is set.
+   *
+   * @return font the font to use
    */
+  @Nullable
   RenderFont getFont();
 
   /**
-   * Set a new color.
-   * @param colorParam new current color to set
+   * Set the color used for the next rendering operations. In case the rendering functions have own color arguments,
+   * this color value is not used.
+   *
+   * @param colorParam new color value to use, this instance is not stored in the engine,
+   *                   rather its values are copied to a internal storage
    */
-  void setColor(Color colorParam);
+  void setColor(@Nonnull Color colorParam);
 
   /**
-   * set only the color alpha.
+   * Set only the alpha value of the current color to a new value.
+   *
    * @param newColorAlpha new alpha value
    */
   void setColorAlpha(float newColorAlpha);
 
   /**
-   * Set only the color component of the given color. This assumes that alpha has already been changed.
-   * @param color color
+   * Set only the color component of the given color. This will not apply the alpha value.
+   *
+   * @param color color the new color value
    */
   void setColorIgnoreAlpha(Color color);
 
   /**
-   * return true when color has been changed.
-   * @return color changed
+   * Check if the color got changed since the last start of a frame.
+   *
+   * @return {@code true} if the color got changed since starting the frame
    */
   boolean isColorChanged();
 
   /**
-   * return true when color alpha has been changed.
-   * @return color changed
+   * Check if the alpha component of the color got changed since the start of the current frame.
+   *
+   * @return {@code true} in case the alpha component got changed
    */
   boolean isColorAlphaChanged();
 
   /**
    * Set BlendMode.
    */
-  void setBlendMode(BlendMode blendMode);
+  void setBlendMode(@Nonnull BlendMode blendMode);
 
   /**
    * Move to the given x/y position.
-   * @param xParam x
-   * @param yParam y
    */
   void moveTo(float xParam, float yParam);
 
   /**
    * Enable clipping to the given region.
-   * @param x0 x0
-   * @param y0 y0
-   * @param x1 x1
-   * @param y1 y1
    */
   void enableClip(int x0, int y0, int x1, int y1);
 
@@ -199,52 +216,66 @@ public interface NiftyRenderEngine {
 
   /**
    * Set RenderTextSize.
+   *
    * @param size size
    */
   void setRenderTextSize(float size);
 
   /**
    * set image size.
+   *
    * @param scale new image size
    */
   void setImageScale(float scale);
 
   /**
    * set global position.
-   * @param xPos x
-   * @param yPos y
    */
   void setGlobalPosition(float xPos, float yPos);
 
   /**
-   * save given states.
-   * @param statesToSave set of renderstates to save
+   * Save all or some of the internal values of the render engine.
+   * <p/>
+   * The saved state is then stored inside a stack. Calling the {@link #restoreState()} function retrieves the last
+   * stored value from the stack and restores it.
+   * <p/>
+   * The stack has to be cleared out until the {@link #beginFrame()} function is called next,
+   * else the states will be wiped and a severe warning is raised.
+   *
+   * @param statesToSave the render states used to store or {@code null} in case all values are supposed to be stored
    */
-  void saveState(RenderStates statesToSave);
+  void saveState(@Nullable RenderStates statesToSave);
 
   /**
-   * restore states.
+   * Restore the last saved state.
+   *
+   * @throws IllegalStateException in case the stack of stored states is empty
    */
   void restoreState();
 
   /**
-   * Get RenderDevice.
-   * @return
+   * Get the render device used by the engine.
+   *
+   * @return the render device
    */
+  @Nonnull
   RenderDevice getRenderDevice();
 
   /**
    * Dispose image.
+   *
    * @param image image to dispose
    */
-  void disposeImage(RenderImage image);
+  void disposeImage(@Nonnull RenderImage image);
 
   /**
    * Dispose the given image and reload it.
+   *
    * @param image image
    * @return the reloaded image
    */
-  RenderImage reload(RenderImage image);
+  @Nonnull
+  RenderImage reload(@Nonnull RenderImage image);
 
   /**
    * This is called from Nifty when it receives the resolutionChange notify from application code.
@@ -254,45 +285,59 @@ public interface NiftyRenderEngine {
   void displayResolutionChanged();
 
   void enableAutoScaling(int baseResolutionX, int baseResolutionY);
+
   void enableAutoScaling(int baseResolutionX, int baseResolutionY, float scaleX, float scaleY);
+
   void disableAutoScaling();
 
   int convertToNativeX(int x);
+
   int convertToNativeY(int y);
+
   int convertToNativeWidth(int x);
+
   int convertToNativeHeight(int y);
+
   int convertFromNativeX(int x);
+
   int convertFromNativeY(int y);
+
   float convertToNativeTextSizeX(float size);
+
   float convertToNativeTextSizeY(float size);
 
   /**
    * Called by Nifty when the given screen has started.
+   *
    * @param screen the screen that has just started
    */
-  void screenStarted(Screen screen);
+  void screenStarted(@Nonnull Screen screen);
 
   /**
    * Called by Nifty when the given screen has ended.
+   *
    * @param screen the screen that has just ended
    */
-  void screenEnded(Screen screen);
+  void screenEnded(@Nonnull Screen screen);
 
   /**
    * All screens are about to be removed because a new XML is being loaded.
-   * @param screens the collection of Screens that will be removed 
+   *
+   * @param screens the collection of Screens that will be removed
    */
-  void screensClear(Collection<Screen> screens);
+  void screensClear(@Nonnull Collection<Screen> screens);
 
   /**
    * The given Screen has been added.
+   *
    * @param screen the added Screen
    */
-  void screenAdded(Screen screen);
+  void screenAdded(@Nonnull Screen screen);
 
   /**
    * The given Screen has been removed.
+   *
    * @param screen the removed Screen
    */
-  void screenRemoved(Screen screen);
+  void screenRemoved(@Nonnull Screen screen);
 }

@@ -1,21 +1,28 @@
 package de.lessvoid.nifty;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class ParameterizedObjectFactory<T extends Parameterizable> {
-	private static Logger log = Logger.getLogger(ParameterizedObjectFactory.class.getName());
+  @Nonnull
+	private static final Logger log = Logger.getLogger(ParameterizedObjectFactory.class.getName());
 
+  @Nonnull
 	private final Map<String, Class<? extends T>> m_objectNameToClassMapping;
+  @Nonnull
 	private final String m_fallbackObjectName;
 
-	public ParameterizedObjectFactory(Map<String, Class<? extends T>> objectNameToClassMapping,
-			String fallbackObjectName) {
+	public ParameterizedObjectFactory(
+      @Nonnull final Map<String, Class<? extends T>> objectNameToClassMapping,
+			@Nonnull final String fallbackObjectName) {
 		m_objectNameToClassMapping = objectNameToClassMapping;
 		m_fallbackObjectName = fallbackObjectName;
 	}
 
-	public T create(String objectDescription) {
+  @Nonnull
+	public T create(@Nullable String objectDescription) {
 		T object;
 		try {
 			object = createInternal(objectDescription);
@@ -27,14 +34,16 @@ public class ParameterizedObjectFactory<T extends Parameterizable> {
 		return object;
 	}
 
-	private T createInternal(String objectDescription) {
+  @Nonnull
+	private T createInternal(@Nullable String objectDescription) {
 		T object = instanciateObject(objectDescription);
 		initializeObject(object, objectDescription);
 
 		return object;
 	}
 
-	private T instanciateObject(String objectDescription) {
+  @Nonnull
+	private T instanciateObject(@Nullable String objectDescription) {
 		String objectName = m_fallbackObjectName;
 		if (objectDescription != null) {
 			objectName = objectDescription.split(":")[0];
@@ -52,7 +61,7 @@ public class ParameterizedObjectFactory<T extends Parameterizable> {
 		}
 	}
 
-	private void initializeObject(T object, String objectDescription) {
+	private void initializeObject(@Nonnull T object, @Nullable String objectDescription) {
 		String objectParameters = null;
 		if (objectDescription != null) {
 			String[] tokens = objectDescription.split(":");

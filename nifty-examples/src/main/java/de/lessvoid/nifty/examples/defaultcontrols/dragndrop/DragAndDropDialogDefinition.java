@@ -1,18 +1,15 @@
 package de.lessvoid.nifty.examples.defaultcontrols.dragndrop;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
-import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.ImageBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.builder.*;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.dragndrop.builder.DraggableBuilder;
 import de.lessvoid.nifty.controls.dragndrop.builder.DroppableBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
 import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefinition;
+
+import javax.annotation.Nonnull;
 
 /**
  * The DragAndDropDialogRegister registers a new control (the whole DragAndDropDialog) with
@@ -21,10 +18,12 @@ import de.lessvoid.nifty.examples.defaultcontrols.common.DialogPanelControlDefin
  * @author void
  */
 public class DragAndDropDialogDefinition {
-  public static String NAME = "dragAndDropDialog";
-  private static CommonBuilders builders = new CommonBuilders();
+  @Nonnull
+  public static final String NAME = "dragAndDropDialog";
+  @Nonnull
+  private static final CommonBuilders builders = new CommonBuilders();
 
-  public static void register(final Nifty nifty) {
+  public static void register(@Nonnull final Nifty nifty) {
     new ControlDefinitionBuilder(NAME) {{
       controller(new DragAndDropDialogController());
       control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{

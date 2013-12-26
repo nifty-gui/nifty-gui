@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class ListBoxFocusItemTest {
@@ -86,7 +86,7 @@ public class ListBoxFocusItemTest {
     assertEquals(0, focusItem.resolve(3, 4));
   }
 
-  private void createList(final Integer ... indizes) {
+  private void createList(final Integer... indizes) {
     focusItem.prepare();
     for (Integer idx : indizes) {
       focusItem.registerIndex(idx);

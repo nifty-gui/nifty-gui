@@ -2,6 +2,8 @@ package de.lessvoid.nifty.slick2d.render.font;
 
 import org.newdawn.slick.AngelCodeFont;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is the render font implementation that uses an angel code font to render the text.
  *
@@ -15,7 +17,7 @@ public class AngelCodeSlickRenderFont extends AbstractSlickRenderFont {
    * @throws SlickLoadFontException in case loading the font fails
    */
   @SuppressWarnings("TypeMayBeWeakened")
-  public AngelCodeSlickRenderFont(final AngelCodeFont font) throws SlickLoadFontException {
+  public AngelCodeSlickRenderFont(@Nonnull final AngelCodeFont font) throws SlickLoadFontException {
     super(font);
   }
 }

@@ -1,16 +1,17 @@
 package de.lessvoid.nifty.slick2d.input;
 
-import org.lwjgl.input.Mouse;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.slick2d.input.events.*;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.util.InputAdapter;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This is the abstract Input System implementation to connect the Input of Slick and Nifty.
@@ -33,21 +34,25 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
   /**
    * The list of buttons that got pressed and are still pressed.
    */
+  @Nonnull
   private final List<Integer> buttonPressedStack;
 
   /**
    * The input system that feeds this input system with data.
    */
+  @Nullable
   private Input input = null;
 
   /**
    * The list of input events that was registered but yet not processed.
    */
+  @Nonnull
   private final List<InputEvent> inputEventList;
 
   /**
    * The input state used for the communication between the input events.
    */
+  @Nonnull
   private final InputState inputState;
 
   /**
@@ -72,7 +77,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    * @param inputEventConsumer the input event consumer that is provided by Nifty, it will receive all events first
    */
   @Override
-  public final void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
+  public final void forwardEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     while (!inputEventList.isEmpty()) {
       final InputEvent currentEvent = inputEventList.remove(0);
       if (!currentEvent.executeEvent(inputState)) {
@@ -108,7 +113,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    * to be sent in order to work properly. Setting this instance is done by calling {@link #setInput(Input)}.
    *
    * @return {@code true} in case one of the control keys is done and the {@link Input} instance was set properly, else
-   *         {@code false}
+   * {@code false}
    */
   private boolean isControlDown() {
     return (input != null) && (input.isKeyDown(Input.KEY_LCONTROL) || input.isKeyDown(Input.KEY_RCONTROL));
@@ -119,7 +124,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    * be sent in order to work properly. Setting this instance is done by calling {@link #setInput(Input)}.
    *
    * @return {@code true} in case one of the shift keys is done and the {@link Input} instance was set properly, else
-   *         {@code false}
+   * {@code false}
    */
   private boolean isShiftDown() {
     return (input != null) && (input.isKeyDown(Input.KEY_LSHIFT) || input.isKeyDown(Input.KEY_RSHIFT));
@@ -230,9 +235,11 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
    * @see #isShiftDown()
    */
   @Override
-  public final void setInput(final Input newInput) {
+  public final void setInput(@Nullable final Input newInput) {
     input = newInput;
-    input.enableKeyRepeat();
+    if (input != null) {
+      input.enableKeyRepeat();
+    }
   }
 
   @Override
@@ -241,7 +248,7 @@ public abstract class AbstractSlickInputSystem extends InputAdapter implements S
   }
 
   @Override
-  public void setResourceLoader(final NiftyResourceLoader resourceLoader) {
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     // no use for the resource loader
   }
 }

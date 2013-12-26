@@ -8,8 +8,11 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 /**
  * StartScreenController for Multiplayer.
+ *
  * @author void
  */
 public class StartScreenController implements ScreenController, NiftyExample {
@@ -17,15 +20,18 @@ public class StartScreenController implements ScreenController, NiftyExample {
   private Screen screen;
   private int id = 10000;
 
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  @Override
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
     addPanel();
   }
 
+  @Override
   public void onStartScreen() {
   }
 
+  @Override
   public void onEndScreen() {
   }
 
@@ -35,24 +41,27 @@ public class StartScreenController implements ScreenController, NiftyExample {
 
   public void addPanel() {
     CustomControlCreator createMultiplayerPanel = new CustomControlCreator(String.valueOf(id++), "multiplayerPanel");
-    createMultiplayerPanel.create(nifty, screen, screen.findElementByName("box-parent"));
+    createMultiplayerPanel.create(nifty, screen, screen.findElementById("box-parent"));
   }
 
-  @NiftyEventSubscriber(pattern=".*#imageSelect")
-  public void onImageSelectSelectionChanged(final String id, final ImageSelectSelectionChangedEvent event) {
+  @NiftyEventSubscriber(pattern = ".*#imageSelect")
+  public void onImageSelectSelectionChanged(final String id, @Nonnull final ImageSelectSelectionChangedEvent event) {
     System.out.println("ImageSelect [" + id + "] changed selection to [" + event.getSelectedIndex() + "]");
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nonnull
   @Override
   public String getMainXML() {
     return "multiplayer/multiplayer.xml";
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Multiplayer Example";

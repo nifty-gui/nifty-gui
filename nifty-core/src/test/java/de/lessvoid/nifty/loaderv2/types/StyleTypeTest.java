@@ -1,13 +1,13 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import static org.junit.Assert.assertEquals;
-
+import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
+import de.lessvoid.xml.xpp3.Attributes;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
-import de.lessvoid.xml.xpp3.Attributes;
-import static org.easymock.classextension.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createNiceMock;
+import static org.junit.Assert.assertEquals;
 
 public class StyleTypeTest {
   private StyleType styleType = new StyleType();
@@ -16,24 +16,21 @@ public class StyleTypeTest {
   public void setUp() {
     styleType.getAttributes().set("id", "my-style");
 
-    AttributesType attributesType = new AttributesType();
     Attributes attributes = new Attributes();
     attributes.set("height", "10%");
-    attributesType.initFromAttributes(attributes);
+    AttributesType attributesType = new AttributesType(attributes);
     styleType.setAttributes(attributesType);
 
     EffectsType effectType = new EffectsType();
-    EffectType effect = new EffectType();
     attributes = new Attributes();
     attributes.set("name", "move");
-    effect.initFromAttributes(attributes);
+    EffectType effect = new EffectType(attributes);
     effectType.addOnStartScreen(effect);
     styleType.setEffect(effectType);
 
-    InteractType interactType = new InteractType();
     attributes = new Attributes();
     attributes.set("onClick", "onClickMethod()");
-    interactType.initFromAttributes(attributes);
+    InteractType interactType = new InteractType(attributes);
     styleType.setInteract(interactType);
   }
 
@@ -46,8 +43,9 @@ public class StyleTypeTest {
 
     assertEquals("10%", elementType.getAttributes().get("height"));
 
-    assertEquals(1, elementType.getEffects().onStartScreen.size());
-    assertEquals("move", elementType.getEffects().onStartScreen.iterator().next().getAttributes().get("name"));
+    assertEquals(1, elementType.getEffects().getEventEffectTypes(EffectEventId.onStartScreen).size());
+    assertEquals("move", elementType.getEffects().getEventEffectTypes(EffectEventId.onStartScreen).iterator().next()
+        .getAttributes().get("name"));
 
     assertEquals("onClickMethod()", elementType.interact.getAttributes().get("onClick"));
   }

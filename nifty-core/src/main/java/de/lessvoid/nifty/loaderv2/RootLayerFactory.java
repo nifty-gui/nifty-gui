@@ -11,13 +11,16 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.SizeValue;
 
+import javax.annotation.Nonnull;
+
 public class RootLayerFactory {
+  @Nonnull
   public Element createRootLayer(
-      final String id,
-      final Nifty nifty,
-      final Screen screen,
-      final TimeProvider time) {
-    Element layer = new Element(
+      @Nonnull final String id,
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final TimeProvider time) {
+    return new Element(
         nifty,
         new ElementType(),
         id,
@@ -27,9 +30,9 @@ public class RootLayerFactory {
         false,
         time,
         createPanelRenderer());
-    return layer;
   }
 
+  @Nonnull
   public ElementRenderer[] createPanelRenderer() {
     ElementRenderer[] renderer = new ElementRenderer[2];
     renderer[0] = new ImageRenderer();
@@ -37,16 +40,17 @@ public class RootLayerFactory {
     return renderer;
   }
 
-  public LayoutPart createRootLayerLayoutPart(final Nifty nifty) {
+  @Nonnull
+  public LayoutPart createRootLayerLayoutPart(@Nonnull final Nifty nifty) {
     LayoutPart layerLayout = new LayoutPart();
     layerLayout.getBox().setX(0);
     layerLayout.getBox().setY(0);
     layerLayout.getBox().setWidth(nifty.getRenderEngine().getWidth());
     layerLayout.getBox().setHeight(nifty.getRenderEngine().getHeight());
-    layerLayout.getBoxConstraints().setX(new SizeValue("0px"));
-    layerLayout.getBoxConstraints().setY(new SizeValue("0px"));
-    layerLayout.getBoxConstraints().setWidth(new SizeValue(nifty.getRenderEngine().getWidth() + "px"));
-    layerLayout.getBoxConstraints().setHeight(new SizeValue(nifty.getRenderEngine().getHeight() + "px"));
+    layerLayout.getBoxConstraints().setX(SizeValue.px(0));
+    layerLayout.getBoxConstraints().setY(SizeValue.px(0));
+    layerLayout.getBoxConstraints().setWidth(SizeValue.px(nifty.getRenderEngine().getWidth()));
+    layerLayout.getBoxConstraints().setHeight(SizeValue.px(nifty.getRenderEngine().getHeight()));
     return layerLayout;
   }
 }

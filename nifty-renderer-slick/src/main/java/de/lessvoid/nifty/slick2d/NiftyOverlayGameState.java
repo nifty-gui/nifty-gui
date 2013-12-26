@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.slick2d;
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.slick2d.input.ForwardingInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
@@ -14,6 +12,10 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 public abstract class NiftyOverlayGameState implements GameState,
     NiftyCarrierUser,
     NiftyInputForwarding,
@@ -21,15 +23,18 @@ public abstract class NiftyOverlayGameState implements GameState,
   /**
    * The logger for this class.
    */
+  @Nonnull
   private static final Logger LOGGER = Logger.getLogger(NiftyOverlayGameState.class.getName());
   /**
    * The input system that is used by this game state.
    */
+  @Nullable
   private SlickInputSystem inSystem = null;
 
   /**
    * The carrier of the Nifty-GUI.
    */
+  @Nullable
   private NiftyCarrier niftyCarrier;
 
   /**
@@ -40,16 +45,19 @@ public abstract class NiftyOverlayGameState implements GameState,
   /**
    * This variable provides the control over the forwarding implementations.
    */
+  @Nullable
   private ForwardingInputSystem inputForwardingControl;
 
   /**
    * The render order that is used in this game.
    */
+  @Nonnull
   private NiftyRenderOrder renderOrder;
 
   /**
    * The update order that is used in this game.
    */
+  @Nonnull
   private NiftyUpdateOrder updateOrder;
 
   /**
@@ -71,12 +79,12 @@ public abstract class NiftyOverlayGameState implements GameState,
   }
 
   @Override
-  public final void setRenderOrder(final NiftyRenderOrder order) {
+  public final void setRenderOrder(@Nonnull final NiftyRenderOrder order) {
     renderOrder = order;
   }
 
   @Override
-  public final void setUpdateOrder(final NiftyUpdateOrder order) {
+  public final void setUpdateOrder(@Nonnull final NiftyUpdateOrder order) {
     updateOrder = order;
   }
 
@@ -84,12 +92,12 @@ public abstract class NiftyOverlayGameState implements GameState,
    * Enter the game state.
    */
   @Override
-  public final void enter(final GameContainer container, final StateBasedGame game) throws SlickException {
+  public final void enter(@Nonnull final GameContainer container, final StateBasedGame game) throws SlickException {
     final Input input = container.getInput();
     input.removeListener(inSystem);
     input.addListener(inSystem);
 
-    if (niftyCarrier.isUsingRelayInputSystem()) {
+    if (niftyCarrier != null && niftyCarrier.isUsingRelayInputSystem()) {
       niftyCarrier.setInputSystem(inSystem);
     }
 
@@ -101,21 +109,23 @@ public abstract class NiftyOverlayGameState implements GameState,
    * function call.
    *
    * @param container the container that displays the game
-   * @param game the state based game this state is a part of
-   * @throws SlickException in case entering the state fails
+   * @param game      the state based game this state is a part of
    */
-  protected abstract void enterState(GameContainer container, StateBasedGame game) throws SlickException;
+  protected abstract void enterState(GameContainer container, StateBasedGame game);
 
+  @Nullable
   @Override
   public final ForwardingInputSystem getInputForwardingControl() {
     return inputForwardingControl;
   }
 
+  @Nonnull
   @Override
   public final NiftyRenderOrder getRenderOrder() {
     return renderOrder;
   }
 
+  @Nonnull
   @Override
   public final NiftyUpdateOrder getUpdateOrder() {
     return updateOrder;
@@ -125,7 +135,8 @@ public abstract class NiftyOverlayGameState implements GameState,
    * Initialize the game and the GUI.
    */
   @Override
-  public final void init(final GameContainer container, final StateBasedGame game) throws SlickException {
+  public final void init(@Nonnull final GameContainer container, @Nonnull final StateBasedGame game)
+      throws SlickException {
     if (niftyCarrier == null) {
       //noinspection HardCodedStringLiteral
       LOGGER.warning("Better use the Nifty-GameState implementations with the NiftyStateBasedGame.");
@@ -147,10 +158,9 @@ public abstract class NiftyOverlayGameState implements GameState,
    * SlickRenderDevice, SlickSoundDevice, SlickInputSystem, TimeProvider)} .
    *
    * @param container the game container that displays the game
-   * @param game the state based game this state is part of
-   * @throws SlickException in case initializing the game goes wrong
+   * @param game      the state based game this state is part of
    */
-  protected abstract void initGameAndGUI(GameContainer container, StateBasedGame game) throws SlickException;
+  protected abstract void initGameAndGUI(@Nonnull GameContainer container, @Nonnull StateBasedGame game);
 
   @Override
   public final boolean isInputForwardingSupported() {
@@ -161,7 +171,8 @@ public abstract class NiftyOverlayGameState implements GameState,
    * Leave this game state.
    */
   @Override
-  public final void leave(final GameContainer container, final StateBasedGame game) throws SlickException {
+  public final void leave(@Nonnull final GameContainer container, @Nonnull final StateBasedGame game)
+      throws SlickException {
     final Input input = container.getInput();
     input.removeListener(inSystem);
 
@@ -173,25 +184,28 @@ public abstract class NiftyOverlayGameState implements GameState,
    * function call.
    *
    * @param container the container that displays the game
-   * @param game the state based game this state is a part of
-   * @throws SlickException in case entering the state fails
+   * @param game      the state based game this state is a part of
    */
-  protected abstract void leaveState(GameContainer container, StateBasedGame game) throws SlickException;
+  protected abstract void leaveState(@Nonnull GameContainer container, @Nonnull StateBasedGame game);
 
   /**
    * Render the game.
    */
   @Override
   public final void render(
-      final GameContainer container, final StateBasedGame game, final Graphics g) throws SlickException {
-    if (niftyCarrier.isInitialized()) {
+      @Nonnull final GameContainer container,
+      @Nonnull final StateBasedGame game,
+      @Nonnull final Graphics g) throws SlickException {
+    if (niftyCarrier != null && niftyCarrier.isInitialized()) {
+      Nifty nifty = niftyCarrier.getNifty();
+      assert nifty != null; // checked by isInitialized
       switch (renderOrder) {
         case NiftyOverlay:
           renderGame(container, game, g);
-          niftyCarrier.getNifty().render(false);
+          nifty.render(false);
           break;
         case NiftyBackground:
-          niftyCarrier.getNifty().render(true);
+          nifty.render(true);
           renderGame(container, game, g);
           break;
       }
@@ -205,33 +219,39 @@ public abstract class NiftyOverlayGameState implements GameState,
    * #render(GameContainer, StateBasedGame, Graphics)} function.
    *
    * @param container the container that displays the game
-   * @param game the state based game this state is part of
-   * @param g the graphics instance that is used to draw the game
-   * @throws SlickException in case anything goes wrong during the rendering
+   * @param game      the state based game this state is part of
+   * @param g         the graphics instance that is used to draw the game
    */
-  protected abstract void renderGame(GameContainer container, StateBasedGame game, Graphics g) throws SlickException;
+  protected abstract void renderGame(
+      @Nonnull GameContainer container,
+      @Nonnull StateBasedGame game,
+      @Nonnull Graphics g);
 
   /**
    * Update the game.
    */
   @Override
   public final void update(
-      final GameContainer container, final StateBasedGame game, final int delta) throws SlickException {
-    if (niftyCarrier.isInitialized()) {
+      @Nonnull final GameContainer container,
+      @Nonnull final StateBasedGame game,
+      final int delta) throws SlickException {
+    if (niftyCarrier != null && niftyCarrier.isInitialized()) {
+      Nifty nifty = niftyCarrier.getNifty();
+      assert nifty != null; // checked by isInitialized()
       final int currentHeight = container.getHeight();
       final int currentWidth = container.getWidth();
       if ((currentHeight != lastHeight) || (currentWidth != lastWidth)) {
         lastHeight = currentHeight;
         lastWidth = currentWidth;
-        niftyCarrier.getNifty().resolutionChanged();
+        nifty.resolutionChanged();
       }
       switch (updateOrder) {
         case NiftyLast:
           updateGame(container, game, delta);
-          niftyCarrier.getNifty().update();
+          nifty.update();
           break;
         case NiftyFirst:
-          niftyCarrier.getNifty().update();
+          nifty.update();
           updateGame(container, game, delta);
           break;
       }
@@ -245,14 +265,13 @@ public abstract class NiftyOverlayGameState implements GameState,
    * #update(GameContainer, StateBasedGame, int)} function.
    *
    * @param container the container that displays the game
-   * @param game the state based game this state is part of
-   * @param delta the time since the last update
-   * @throws SlickException in case anything goes wrong during the update
+   * @param game      the state based game this state is part of
+   * @param delta     the time since the last update
    */
-  protected abstract void updateGame(GameContainer container, StateBasedGame game, int delta) throws SlickException;
+  protected abstract void updateGame(@Nonnull GameContainer container, @Nonnull StateBasedGame game, int delta);
 
   @Override
-  public void setCarrier(final NiftyCarrier carrier) {
+  public void setCarrier(@Nonnull final NiftyCarrier carrier) {
     niftyCarrier = carrier;
   }
 
@@ -262,13 +281,13 @@ public abstract class NiftyOverlayGameState implements GameState,
    * Slick {@link InputListener} that is implemented in this class.
    *
    * @param container the container used to display the game
-   * @param game the game this state is part of
+   * @param game      the game this state is part of
    * @throws IllegalStateException in case this function was called before
    * @see SlickRenderDevice
    * @see SlickSoundDevice
    * @see SlickSlickInputSystem
    */
-  protected final void initNifty(final GameContainer container, final StateBasedGame game) {
+  protected final void initNifty(@Nonnull final GameContainer container, @Nonnull final StateBasedGame game) {
     initNifty(container, game, new SlickSlickInputSystem(this));
   }
 
@@ -276,55 +295,57 @@ public abstract class NiftyOverlayGameState implements GameState,
    * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}. Also it will use
    * the render and sound devices that are provided with this library.
    *
-   * @param container the container used to display the game
-   * @param game the game this state is part of
+   * @param container   the container used to display the game
+   * @param game        the game this state is part of
    * @param inputSystem the input system that is supposed to be used
    * @throws IllegalStateException in case this function was called before
    * @see SlickRenderDevice
    * @see SlickSoundDevice
    */
   protected final void initNifty(
-      final GameContainer container, final StateBasedGame game, final SlickInputSystem inputSystem) {
+      @Nonnull final GameContainer container,
+      @Nonnull final StateBasedGame game,
+      @Nonnull final SlickInputSystem inputSystem) {
     initNifty(container, game, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
   }
 
   /**
    * Initialize the Nifty GUI for this game. This function will use the default {@link TimeProvider}.
    *
-   * @param container the container used to display the game
-   * @param game the game this state is part of
+   * @param container    the container used to display the game
+   * @param game         the game this state is part of
    * @param renderDevice the render device that is supposed to be used to render the GUI
-   * @param soundDevice the sound device that is supposed to be used
-   * @param inputSystem the input system that is supposed to be used
+   * @param soundDevice  the sound device that is supposed to be used
+   * @param inputSystem  the input system that is supposed to be used
    * @throws IllegalStateException in case this function was called before
    */
   protected final void initNifty(
-      final GameContainer container,
-      final StateBasedGame game,
-      final SlickRenderDevice renderDevice,
-      final SlickSoundDevice soundDevice,
-      final SlickInputSystem inputSystem) {
+      @Nonnull final GameContainer container,
+      @Nonnull final StateBasedGame game,
+      @Nonnull final SlickRenderDevice renderDevice,
+      @Nonnull final SlickSoundDevice soundDevice,
+      @Nonnull final SlickInputSystem inputSystem) {
     initNifty(container, game, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
   }
 
   /**
    * Initialize the Nifty GUI for this game.
    *
-   * @param container the container used to display the game
-   * @param game the game this state is part of
+   * @param container    the container used to display the game
+   * @param game         the game this state is part of
    * @param renderDevice the render device that is supposed to be used to render the GUI
-   * @param soundDevice the sound device that is supposed to be used
-   * @param inputSystem the input system that is supposed to be used
+   * @param soundDevice  the sound device that is supposed to be used
+   * @param inputSystem  the input system that is supposed to be used
    * @param timeProvider the time provider that is supposed to be used
    * @throws IllegalStateException in case this function was called before
    */
   protected final void initNifty(
-      @SuppressWarnings("TypeMayBeWeakened") final GameContainer container,
-      final StateBasedGame game,
-      final SlickRenderDevice renderDevice,
-      final SlickSoundDevice soundDevice,
-      final SlickInputSystem inputSystem,
-      final TimeProvider timeProvider) {
+      @Nonnull @SuppressWarnings("TypeMayBeWeakened") final GameContainer container,
+      @Nonnull final StateBasedGame game,
+      @Nonnull final SlickRenderDevice renderDevice,
+      @Nonnull final SlickSoundDevice soundDevice,
+      @Nonnull final SlickInputSystem inputSystem,
+      @Nonnull final TimeProvider timeProvider) {
     if (guiPrepared) {
       throw new IllegalStateException("The NiftyGUI was already initialized. Its illegal to do so twice.");
     }
@@ -332,12 +353,16 @@ public abstract class NiftyOverlayGameState implements GameState,
 
     inputSystem.setInput(container.getInput());
 
-    if (niftyCarrier.isInitialized()) {
-      if (!niftyCarrier.isUsingRelayInputSystem()) {
-        throw new IllegalStateException("Detected carrier that was already initialized without relay.");
+    if (niftyCarrier != null) {
+      if (niftyCarrier.isInitialized()) {
+        if (!niftyCarrier.isUsingRelayInputSystem()) {
+          throw new IllegalStateException("Detected carrier that was already initialized without relay.");
+        }
+      } else {
+        niftyCarrier.initNifty(renderDevice, soundDevice, inputSystem, timeProvider);
       }
     } else {
-      niftyCarrier.initNifty(renderDevice, soundDevice, inputSystem, timeProvider);
+      throw new IllegalStateException("Carrier for Nifty is not set yet.");
     }
 
     if (inputSystem instanceof ForwardingInputSystem) {
@@ -346,7 +371,11 @@ public abstract class NiftyOverlayGameState implements GameState,
 
     inSystem = inputSystem;
 
-    prepareNifty(niftyCarrier.getNifty(), game);
+    Nifty nifty = niftyCarrier.getNifty();
+    if (nifty == null) {
+      throw new IllegalStateException("Nifty is not properly initialized.");
+    }
+    prepareNifty(nifty, game);
   }
 
   /**
@@ -354,16 +383,20 @@ public abstract class NiftyOverlayGameState implements GameState,
    * after the Nifty GUI got initialized.
    *
    * @param nifty the Nifty GUI that got initialized
-   * @param game the game this state is part of
+   * @param game  the game this state is part of
    */
-  protected abstract void prepareNifty(Nifty nifty, StateBasedGame game);
+  protected abstract void prepareNifty(@Nonnull Nifty nifty, @Nonnull StateBasedGame game);
 
   /**
    * Get the instance of the NiftyGUI that is used to render this screen.
    *
    * @return the instance of the NiftyGUI
    */
+  @Nullable
   public final Nifty getNifty() {
+    if (niftyCarrier == null) {
+      return null;
+    }
     return niftyCarrier.getNifty();
   }
 }

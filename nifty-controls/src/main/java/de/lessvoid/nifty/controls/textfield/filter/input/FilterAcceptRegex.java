@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.controls.textfield.filter.input;
 
+import javax.annotation.Nonnull;
 import java.util.regex.Pattern;
 
 /**
@@ -12,6 +13,7 @@ public class FilterAcceptRegex implements TextFieldInputCharSequenceFilter {
   /**
    * The regular expression pattern all inputs are compared against.
    */
+  @Nonnull
   private final Pattern pattern;
 
   /**
@@ -19,7 +21,7 @@ public class FilterAcceptRegex implements TextFieldInputCharSequenceFilter {
    *
    * @param expression the used pattern
    */
-  public FilterAcceptRegex(final Pattern expression) {
+  public FilterAcceptRegex(@Nonnull final Pattern expression) {
     pattern = expression;
   }
 
@@ -29,7 +31,7 @@ public class FilterAcceptRegex implements TextFieldInputCharSequenceFilter {
    *
    * @param expression the regular expression
    */
-  public FilterAcceptRegex(final String expression) {
+  public FilterAcceptRegex(@Nonnull final String expression) {
     this(expression, 0);
   }
 
@@ -37,17 +39,18 @@ public class FilterAcceptRegex implements TextFieldInputCharSequenceFilter {
    * Create a new instance and set the regular expression that needs to be checked.
    *
    * @param expression the regular expression
-   * @param flags Match flags, a bit mask that may include {@link Pattern#CASE_INSENSITIVE}, {@link Pattern#MULTILINE},
-   * {@link Pattern#DOTALL}, {@link Pattern#UNICODE_CASE}, {@link Pattern#CANON_EQ}, {@link Pattern#UNIX_LINES}, {@link
-   * Pattern#LITERAL} and {@link Pattern#COMMENTS}
+   * @param flags      Match flags, a bit mask that may include {@link Pattern#CASE_INSENSITIVE},
+   *                   {@link Pattern#MULTILINE},
+   *                   {@link Pattern#DOTALL}, {@link Pattern#UNICODE_CASE}, {@link Pattern#CANON_EQ},
+   *                   {@link Pattern#UNIX_LINES}, {@link
+   *                   Pattern#LITERAL} and {@link Pattern#COMMENTS}
    */
-  @SuppressWarnings("MagicConstant")
-  public FilterAcceptRegex(final String expression, final int flags) {
+  public FilterAcceptRegex(@Nonnull final String expression, final int flags) {
     this(Pattern.compile(expression, flags));
   }
 
   @Override
-  public boolean acceptInput(final int index, final CharSequence newChars) {
+  public boolean acceptInput(final int index, @Nonnull final CharSequence newChars) {
     return pattern.matcher(newChars).matches();
   }
 }

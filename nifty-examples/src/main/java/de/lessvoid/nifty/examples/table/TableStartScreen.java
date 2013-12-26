@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.examples.table;
 
-import java.util.Random;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.*;
 import de.lessvoid.nifty.controls.ListBox;
@@ -10,17 +8,22 @@ import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Random;
+
 /**
  * ScreenController for TableStartScreen.
+ *
  * @author void
  */
 public class TableStartScreen implements ScreenController, NiftyExample {
-  private Nifty nifty;
 
-  public void bind(final Nifty newNifty, final Screen newScreen) {
-    this.nifty = newNifty;
+  @Override
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
   }
 
+  @Override
   public void onStartScreen() {
   }
 
@@ -28,16 +31,19 @@ public class TableStartScreen implements ScreenController, NiftyExample {
   public void onEndScreen() {
   }
 
+  @Nonnull
   @Override
   public String getStartScreen() {
     return "start";
   }
 
+  @Nullable
   @Override
   public String getMainXML() {
     return null;
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return "Nifty Table Example";
@@ -45,7 +51,7 @@ public class TableStartScreen implements ScreenController, NiftyExample {
 
 
   @Override
-  public void prepareStart(Nifty nifty) {
+  public void prepareStart(@Nonnull Nifty nifty) {
     nifty.loadControlFile("nifty-default-controls.xml");
     nifty.loadStyleFile("nifty-default-styles.xml");
 
@@ -146,18 +152,24 @@ public class TableStartScreen implements ScreenController, NiftyExample {
     }};
     Screen startScreen = builder.build(nifty);
 
+    //noinspection unchecked
     ListBox<TableRow> listBox = startScreen.findNiftyControl("serverBox", ListBox.class);
-    for (int i=0; i<1000; i++) {
-      listBox.addItem(new TableRow(i, randomString(), randomString(), randomString(), randomString(), randomString()));
+    if (listBox != null) {
+      for (int i = 0; i < 1000; i++) {
+        listBox.addItem(new TableRow(i, randomString(), randomString(), randomString(), randomString(),
+            randomString()));
+      }
     }
   }
 
   static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  @Nonnull
   static Random rnd = new Random();
 
+  @Nonnull
   private static String randomString() {
     StringBuilder sb = new StringBuilder(5);
-    for(int i=0; i<5; i++) {
+    for (int i = 0; i < 5; i++) {
       sb.append(AB.charAt(rnd.nextInt(AB.length())));
     }
     return sb.toString();

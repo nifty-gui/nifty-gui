@@ -4,17 +4,15 @@ import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.builder.ImageBuilder;
-import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.DroppableDroppedEvent;
-import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.dragndrop.builder.DraggableBuilder;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The DragAndDropDialogController.
@@ -23,26 +21,29 @@ import de.lessvoid.nifty.screen.Screen;
 public class DragAndDropDialogController implements Controller {
   private Nifty nifty;
   private Screen screen;
+  @Nullable
   private Button resetButton;
+  @Nullable
   private Element chestOpenElement;
+  @Nullable
   private Label dragAndDropDescription;
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     this.nifty = nifty;
     this.screen = screen;
     this.resetButton = screen.findNiftyControl("resetButton", Button.class);
-    this.chestOpenElement = screen.findElementByName("chest-open");
+    this.chestOpenElement = screen.findElementById("chest-open");
     this.dragAndDropDescription = screen.findNiftyControl("dragAndDropDescription", Label.class);
     resetButton.disable();
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
   }
 
   @Override
@@ -54,12 +55,12 @@ public class DragAndDropDialogController implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
   @NiftyEventSubscriber(id="chest")
-  public void onDrop(final String id, final DroppableDroppedEvent event) {
+  public void onDrop(final String id, @Nonnull final DroppableDroppedEvent event) {
     if ("key".equals(event.getDraggable().getId())) {
       event.getDraggable().getElement().markForRemoval();
       chestOpenElement.startEffect(EffectEventId.onCustom, new EndNotify() {
@@ -85,6 +86,6 @@ public class DragAndDropDialogController implements Controller {
       image(new ImageBuilder() {{
         filename("defaultcontrols/dragndrop/Key.png");
       }});
-    }}.build(nifty, screen, screen.findElementByName("key-initial#droppableContent"));
+    }}.build(nifty, screen, screen.findElementById("key-initial#droppableContent"));
   }
 }

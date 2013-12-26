@@ -6,6 +6,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import javax.annotation.Nonnull;
+
 /**
  * This slick render image implementation uses a Slick image to draw on the screen.
  *
@@ -21,6 +23,7 @@ public class ImageSlickRenderImage implements SlickRenderImage {
    * This instance of a slick color is used to avoid the need to create a new color instance every time this image is
    * rendered.
    */
+  @Nonnull
   private final org.newdawn.slick.Color slickColor;
 
   /**
@@ -41,7 +44,7 @@ public class ImageSlickRenderImage implements SlickRenderImage {
   public void dispose() {
     try {
       getImage().destroy();
-    } catch (final SlickException ignored) {
+    } catch (@Nonnull final SlickException ignored) {
       // Destroying failed... does not matter
     }
   }
@@ -75,12 +78,12 @@ public class ImageSlickRenderImage implements SlickRenderImage {
 
   @Override
   public void renderImage(
-      final Graphics g,
+      @Nonnull final Graphics g,
       final int x,
       final int y,
       final int width,
       final int height,
-      final Color color,
+      @Nonnull final Color color,
       final float scale) {
 
     final int centerX = x + (width >> 1);
@@ -91,7 +94,7 @@ public class ImageSlickRenderImage implements SlickRenderImage {
 
   @Override
   public void renderImage(
-      final Graphics g,
+      @Nonnull final Graphics g,
       final int x,
       final int y,
       final int w,
@@ -100,7 +103,7 @@ public class ImageSlickRenderImage implements SlickRenderImage {
       final int srcY,
       final int srcW,
       final int srcH,
-      final Color color,
+      @Nonnull final Color color,
       final float scale,
       final int centerX,
       final int centerY) {

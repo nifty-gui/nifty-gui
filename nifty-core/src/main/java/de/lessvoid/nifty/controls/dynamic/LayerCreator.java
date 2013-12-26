@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.controls.dynamic;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyIdCreator;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
@@ -9,19 +8,22 @@ import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.LayerType;
 import de.lessvoid.nifty.screen.Screen;
 
+import javax.annotation.Nonnull;
+
 public class LayerCreator extends ControlAttributes {
   public LayerCreator() {
-    setAutoId(NiftyIdCreator.generate());
+    setAutoId();
   }
 
-  public LayerCreator(final String id) {
+  public LayerCreator(@Nonnull final String id) {
     setId(id);
   }
 
+  @Nonnull
   public Element create(
-      final Nifty nifty,
-      final Screen screen,
-      final Element parent) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element parent) {
     Element layerElement = createLayer(nifty, screen, parent);
     screen.addLayerElement(layerElement);
     screen.processAddAndRemoveLayerElements();
@@ -41,8 +43,9 @@ public class LayerCreator extends ControlAttributes {
     return layerElement;
   }
 
+  @Nonnull
   @Override
   public ElementType createType() {
-    return new LayerType(attributes);
+    return new LayerType(getAttributes());
   }
 }

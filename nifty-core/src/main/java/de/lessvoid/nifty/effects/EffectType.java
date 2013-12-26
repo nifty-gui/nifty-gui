@@ -2,6 +2,7 @@ package de.lessvoid.nifty.effects;
 
 /**
  * EffectType: pre or post effect.
+ *
  * @author void
  */
 public enum EffectType {

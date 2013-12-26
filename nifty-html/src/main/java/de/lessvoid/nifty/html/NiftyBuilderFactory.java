@@ -1,15 +1,17 @@
 package de.lessvoid.nifty.html;
 
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.ElementBuilder.Align;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.logging.Logger;
+
 public class NiftyBuilderFactory {
-  private Logger log = Logger.getLogger(NiftyBuilderFactory.class.getName());
+  private final Logger log = Logger.getLogger(NiftyBuilderFactory.class.getName());
 
   public PanelBuilder createBodyPanelBuilder() {
     PanelBuilder builder = createPanelBuilder();
@@ -26,7 +28,7 @@ public class NiftyBuilderFactory {
     return builder;
   }
 
-  public TextBuilder createTextBuilder(final String text, final String defaultFontName, final String color) {
+  public TextBuilder createTextBuilder(@Nonnull final String text, @Nonnull final String defaultFontName, @Nullable final String color) {
     TextBuilder textBuilder = createTextBuilder();
     textBuilder.text(text);
     textBuilder.wrap(true);
@@ -42,7 +44,7 @@ public class NiftyBuilderFactory {
     return textBuilder;
   }
 
-  public ImageBuilder createImageBuilder(final String src, final String align, final String width, final String height, final String bgcolor, final String vspace) {
+  public ImageBuilder createImageBuilder(@Nonnull final String src, @Nullable final String align, @Nullable final String width, @Nullable final String height, @Nullable final String bgcolor, @Nullable final String vspace) {
     ImageBuilder imageBuilder = createImageBuilder();
     imageBuilder.filename(src);
     if (align != null) {
@@ -63,7 +65,7 @@ public class NiftyBuilderFactory {
     return imageBuilder;
   }
 
-  public PanelBuilder createBreakPanelBuilder(final String height) {
+  public PanelBuilder createBreakPanelBuilder(@Nonnull final String height) {
     PanelBuilder result = createPanelBuilder();
     result.height(height);
     return result;
@@ -102,6 +104,7 @@ public class NiftyBuilderFactory {
     return new ImageBuilder();
   }
 
+  @Nonnull
   private Align translateAlign(final String align) {
     if ("left".equalsIgnoreCase(align)) {
       return Align.Left;
@@ -117,11 +120,11 @@ public class NiftyBuilderFactory {
   }
 
   private void addTableGeneralAttributes(
-      final String width,
-      final String bgcolor,
-      final String border,
-      final String bordercolor,
-      PanelBuilder result) {
+      @Nullable final String width,
+      @Nullable final String bgcolor,
+      @Nullable final String border,
+      @Nullable final String bordercolor,
+      @Nonnull PanelBuilder result) {
     if (width != null) {
       result.width(width);
     }

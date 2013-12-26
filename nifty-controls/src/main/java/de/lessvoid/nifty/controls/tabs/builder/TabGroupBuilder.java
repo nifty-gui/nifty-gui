@@ -9,6 +9,8 @@ import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 
+import javax.annotation.Nonnull;
+
 /**
  * This builder is used to create a tab group that is the parent to multiple tabs.
  *
@@ -28,7 +30,7 @@ public class TabGroupBuilder extends ControlBuilder {
    *
    * @param id the element id of this tab group
    */
-  public TabGroupBuilder(final String id) {
+  public TabGroupBuilder(@Nonnull final String id) {
     super(id, "tabGroup"); //NON-NLS
   }
 
@@ -36,10 +38,10 @@ public class TabGroupBuilder extends ControlBuilder {
    * The protected constructor that allows setting the element id and the control type name of the created control. This
    * constructor should be used in case this control is extended by a new one.
    *
-   * @param id the id of the element to be created
+   * @param id       the id of the element to be created
    * @param typeName the name of the control type
    */
-  protected TabGroupBuilder(final String id, final String typeName) {
+  protected TabGroupBuilder(@Nonnull final String id, @Nonnull final String typeName) {
     super(id, typeName);
   }
 
@@ -47,7 +49,7 @@ public class TabGroupBuilder extends ControlBuilder {
    * @throws UnsupportedOperationException in case the control is no {@link TabBuilder}
    */
   @Override
-  public void control(final ControlBuilder controlBuilder) {
+  public void control(@Nonnull final ControlBuilder controlBuilder) {
     if (controlBuilder instanceof TabBuilder) {
       super.control(controlBuilder);
     } else {
@@ -60,7 +62,7 @@ public class TabGroupBuilder extends ControlBuilder {
    */
   @Override
   @SuppressWarnings("RefusedBequest")
-  public void image(final ImageBuilder imageBuilder) {
+  public void image(@Nonnull final ImageBuilder imageBuilder) {
     throw new UnsupportedOperationException("Tab groups do not accept any elements other then tabs as children");
   }
 
@@ -69,7 +71,7 @@ public class TabGroupBuilder extends ControlBuilder {
    */
   @Override
   @SuppressWarnings("RefusedBequest")
-  public void panel(final PanelBuilder panelBuilder) {
+  public void panel(@Nonnull final PanelBuilder panelBuilder) {
     throw new UnsupportedOperationException("Tab groups do not accept any elements other then tabs as children");
   }
 
@@ -78,7 +80,7 @@ public class TabGroupBuilder extends ControlBuilder {
    *
    * @param tabBuilder the builder of the new tab
    */
-  public void tab(final TabBuilder tabBuilder) {
+  public void tab(@Nonnull final TabBuilder tabBuilder) {
     super.control(tabBuilder);
   }
 
@@ -87,7 +89,7 @@ public class TabGroupBuilder extends ControlBuilder {
    */
   @Override
   @SuppressWarnings("RefusedBequest")
-  public void text(final TextBuilder textBuilder) {
+  public void text(@Nonnull final TextBuilder textBuilder) {
     throw new UnsupportedOperationException("Tab groups do not accept any elements other then tabs as children");
   }
 }

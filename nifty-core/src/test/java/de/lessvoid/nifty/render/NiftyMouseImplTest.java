@@ -1,21 +1,18 @@
 package de.lessvoid.nifty.render;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.io.IOException;
-
+import de.lessvoid.nifty.spi.render.MouseCursor;
+import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.spi.render.MouseCursor;
-import de.lessvoid.nifty.spi.render.RenderDevice;
-import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import java.io.IOException;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class NiftyMouseImplTest {
   private NiftyMouseImpl niftyMouse;

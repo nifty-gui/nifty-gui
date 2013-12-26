@@ -5,6 +5,8 @@ import de.lessvoid.nifty.examples.slick2d.SlickExampleLoader;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 
+import javax.annotation.Nonnull;
+
 /**
  * Demo class to execute the progressbar demonstration.
  *
@@ -27,7 +29,7 @@ public class ProgressbarDemoMain {
        * Overwritten update game implementation in order to update the progressbar.
        */
       @Override
-      public void updateGame(final GameContainer container, final int delta) throws SlickException {
+      public void updateGame(@Nonnull final GameContainer container, final int delta) throws SlickException {
         super.updateGame(container, delta);
         if (delta == 0) {
           return;

@@ -3,6 +3,9 @@ package de.lessvoid.nifty.slick2d.input;
 import de.lessvoid.nifty.slick2d.input.events.InputEvent;
 import org.newdawn.slick.InputListener;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * This is the input system that forwards all events to a slick listener. Also this input system is so slick, writing
  * slick once is not even enough.
@@ -13,6 +16,7 @@ public final class SlickSlickInputSystem extends AbstractSlickInputSystem implem
   /**
    * The input listener that will receive any events the NiftyGUI does not use.
    */
+  @Nullable
   private final InputListener listener;
 
   /**
@@ -21,7 +25,7 @@ public final class SlickSlickInputSystem extends AbstractSlickInputSystem implem
    * @param targetListener the listener
    * @throws IllegalArgumentException in case the targetListener parameter is {@code null}
    */
-  public SlickSlickInputSystem(final InputListener targetListener) {
+  public SlickSlickInputSystem(@Nullable final InputListener targetListener) {
     if (targetListener == null) {
       throw new IllegalArgumentException("The target listener must not be NULL.");
     }
@@ -32,7 +36,7 @@ public final class SlickSlickInputSystem extends AbstractSlickInputSystem implem
    * Forward the input event to the slick listener.
    */
   @Override
-  protected void handleInputEvent(final InputEvent event) {
+  protected void handleInputEvent(@Nonnull final InputEvent event) {
     event.sendToSlick(listener);
   }
 

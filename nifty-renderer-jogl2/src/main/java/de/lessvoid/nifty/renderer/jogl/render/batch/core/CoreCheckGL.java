@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch.core;
 
 
-import java.util.logging.Logger;
-
 import javax.media.opengl.GL;
 import javax.media.opengl.GLContext;
+import java.util.logging.Logger;
 
 /**
  * Helper method to check for GL errors. This will call glGetError() and as long as the call returns not GL_NO_ERROR it
@@ -17,7 +16,7 @@ public class CoreCheckGL {
   /**
    * The logger of this class.
    */
-  private static Logger log = Logger.getLogger(CoreCheckGL.class.getName());
+  private static final Logger log = Logger.getLogger(CoreCheckGL.class.getName());
 
   /**
    * Check for GL error and log any errors found. You should probably call this once a frame.
@@ -30,7 +29,7 @@ public class CoreCheckGL {
    * Check for GL error and log any errors found. You should probably call this once a frame.
    *
    * @param message a message to log
-   *        (can be used to log additional information for instance what call was executed before)
+   *                (can be used to log additional information for instance what call was executed before)
    */
   public static void checkGLError(final String message) {
     checkGLError(message, false);
@@ -39,8 +38,8 @@ public class CoreCheckGL {
   /**
    * Check for GL error and log any errors found. You should probably call this once a frame.
    *
-   * @param message a message to log
-   *        (can be used to log additional information for instance what call was executed before)
+   * @param message        a message to log
+   *                       (can be used to log additional information for instance what call was executed before)
    * @param throwException in case this value is set {@code true} and OpenGL reports a error a exception will be thrown
    * @throws CoreGLException in case the {@code throwException} is set {@code true} and OpenGL reports an error
    */

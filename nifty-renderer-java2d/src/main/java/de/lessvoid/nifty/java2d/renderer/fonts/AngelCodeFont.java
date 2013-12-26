@@ -1,371 +1,374 @@
 package de.lessvoid.nifty.java2d.renderer.fonts;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Hashtable;
-
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+
+import javax.annotation.Nonnull;
+import java.io.*;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * AngelCodeFont loading.
- * 
+ *
  * @author void
- * @deprecated it is a copy from the lwjgl renderer, but it has nothing to do with the renderer, so it could be in another project.
+ * @deprecated it is a copy from the lwjgl renderer, but it has nothing to do with the renderer,
+ * so it could be in another project.
  */
+@Deprecated
 public class AngelCodeFont {
 
-	/**
-	 * name of font.
-	 */
-	private String name;
+  /**
+   * name of font.
+   */
+  private String name;
 
-	/**
-	 * Texture HashMap for the font. Key = page index Value = filename of
-	 * texture
-	 */
-	private HashMap<Integer, String> textures = new HashMap<Integer, String>();
+  /**
+   * Texture HashMap for the font. Key = page index Value = filename of
+   * texture
+   */
+  @Nonnull
+  private HashMap<Integer, String> textures = new HashMap<Integer, String>();
 
-	/**
-	 * width of single font texture page.
-	 */
-	private int width;
+  /**
+   * width of single font texture page.
+   */
+  private int width;
 
-	/**
-	 * height of single font texture page.
-	 */
-	private int height;
+  /**
+   * height of single font texture page.
+   */
+  private int height;
 
-	/**
-	 * height of single line.
-	 */
-	private int lineHeight;
+  /**
+   * height of single line.
+   */
+  private int lineHeight;
 
-	/**
-	 * CharacterInfo for all characters in the font file.
-	 */
-	private Hashtable<Character, CharacterInfo> chars = new Hashtable<Character, CharacterInfo>();
+  /**
+   * CharacterInfo for all characters in the font file.
+   */
+  @Nonnull
+  private HashMap<Character, CharacterInfo> chars = new HashMap<Character, CharacterInfo>();
 
-	private NiftyResourceLoader resourceLoader;
+  private NiftyResourceLoader resourceLoader;
 
-	public AngelCodeFont(final NiftyResourceLoader resourceLoader) {
-	  this.resourceLoader = resourceLoader;
-	}
+  public AngelCodeFont(final NiftyResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
+  }
 
-	/**
-	 * load the font with the given name.
-	 * 
-	 * @param filename
-	 *            file to load
-	 * @return true on success and false on any error
-	 */
-	public boolean load(final String filename) {
-		InputStream in = resourceLoader.getResourceAsStream(filename);
-		if (in == null) 
-			return false;
-		return load(in);
-	}
+  /**
+   * load the font with the given name.
+   *
+   * @param filename file to load
+   * @return true on success and false on any error
+   */
+  public boolean load(@Nonnull final String filename) {
+    InputStream in = resourceLoader.getResourceAsStream(filename);
+    if (in == null) {
+      return false;
+    }
+    return load(in);
+  }
 
-	public boolean load(InputStream in) {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		try {
-			while (true) {
-				String line = reader.readLine();
-				if (line == null) {
-					break;
-				}
+  public boolean load(@Nonnull InputStream in) {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+    try {
+      while (true) {
+        String line = reader.readLine();
+        if (line == null) {
+          break;
+        }
 
-				if (line.startsWith("info")) {
-					HashMap<String, String> values = getInfoLine(line);
-					parseInfo(values);
-				} else if (line.startsWith("common")) {
-					HashMap<String, Integer> values = splitToInteger(line);
-					parseCommon(values);
-				} else if (line.startsWith("page")) {
-					HashMap<String, String> values = getPageLine(line);
-					parsePage(values);
-				} else if (line.startsWith("chars")) {
-					HashMap<String, Integer> values = splitToInteger(line);
-					parseChars(values);
-				} else if (line.startsWith("char")) {
-					HashMap<String, Integer> values = splitToInteger(line);
-					parseChar(values);
-				} else if (line.startsWith("kernings")) {
-					HashMap<String, Integer> values = splitToInteger(line);
-					parseKernings(values);
-				} else if (line.startsWith("kerning")) {
-					HashMap<String, Integer> values = splitToInteger(line);
-					parseKerning(values);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-		  try {
-	      in.close();
-		  } catch (IOException e) {
-		  }
-		}
+        if (line.startsWith("info")) {
+          HashMap<String, String> values = getInfoLine(line);
+          parseInfo(values);
+        } else if (line.startsWith("common")) {
+          HashMap<String, Integer> values = splitToInteger(line);
+          parseCommon(values);
+        } else if (line.startsWith("page")) {
+          HashMap<String, String> values = getPageLine(line);
+          parsePage(values);
+        } else if (line.startsWith("chars")) {
+          HashMap<String, Integer> values = splitToInteger(line);
+          parseChars(values);
+        } else if (line.startsWith("char")) {
+          HashMap<String, Integer> values = splitToInteger(line);
+          parseChar(values);
+        } else if (line.startsWith("kernings")) {
+          HashMap<String, Integer> values = splitToInteger(line);
+          parseKernings(values);
+        } else if (line.startsWith("kerning")) {
+          HashMap<String, Integer> values = splitToInteger(line);
+          parseKerning(values);
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    } finally {
+      try {
+        in.close();
+      } catch (IOException ignored) {
+      }
+    }
 
-		return true;
-	}
+    return true;
+  }
 
-	/**
-	 * parse info.
-	 * 
-	 * @param line
-	 *            line with info
-	 */
-	private void parseInfo(final HashMap<String, String> line) {
-		name = line.get("face");
-	}
+  /**
+   * parse info.
+   *
+   * @param line line with info
+   */
+  private void parseInfo(@Nonnull final HashMap<String, String> line) {
+    name = line.get("face");
+  }
 
-	private void parseCommon(HashMap<String, Integer> line) {
-		width = line.get("scaleW");
-		height = line.get("scaleH");
-	}
+  private void parseCommon(@Nonnull HashMap<String, Integer> line) {
+    width = line.get("scaleW");
+    height = line.get("scaleH");
+  }
 
-	private void parsePage(HashMap<String, String> line) {
-		Integer id = Integer.parseInt(line.get("id"));
-		textures.put(id, line.get("file"));
-	}
+  private void parsePage(@Nonnull HashMap<String, String> line) {
+    Integer id = Integer.parseInt(line.get("id"));
+    textures.put(id, line.get("file"));
+  }
 
-	private void parseChars(HashMap<String, Integer> line) {
-	}
+  private void parseChars(HashMap<String, Integer> line) {
+  }
 
-	private void parseChar(HashMap<String, Integer> line) {
-		CharacterInfo c = new CharacterInfo();
-		c.setId(line.get("id"));
-		c.setX(line.get("x"));
-		c.setY(line.get("y"));
-		c.setWidth(line.get("width"));
-		c.setHeight(line.get("height"));
-		c.setXoffset(line.get("xoffset"));
-		c.setYoffset(line.get("yoffset"));
-		c.setXadvance(line.get("xadvance"));
-		c.setPage(line.get("page"));
-		chars.put(Character.valueOf((char) c.getId()), c);
-		lineHeight = Math.max(c.getHeight() + c.getYoffset(), lineHeight);
-	}
+  private void parseChar(@Nonnull HashMap<String, Integer> line) {
+    CharacterInfo c = new CharacterInfo();
+    c.setId(line.get("id"));
+    c.setX(line.get("x"));
+    c.setY(line.get("y"));
+    c.setWidth(line.get("width"));
+    c.setHeight(line.get("height"));
+    c.setXoffset(line.get("xoffset"));
+    c.setYoffset(line.get("yoffset"));
+    c.setXadvance(line.get("xadvance"));
+    c.setPage(line.get("page"));
+    chars.put((char) c.getId(), c);
+    lineHeight = Math.max(c.getHeight() + c.getYoffset(), lineHeight);
+  }
 
-	private void parseKernings(HashMap<String, Integer> line) {
-	}
+  private void parseKernings(HashMap<String, Integer> line) {
+  }
 
-	private void parseKerning(HashMap<String, Integer> line) {
-		int first = line.get("first");
-		int second = line.get("second");
-		int amount = line.get("amount");
-		CharacterInfo info = chars.get(Character.valueOf((char) first));
-		info.getKerning().put(Character.valueOf((char) second), amount);
-	}
+  private void parseKerning(@Nonnull HashMap<String, Integer> line) {
+    int first = line.get("first");
+    int second = line.get("second");
+    int amount = line.get("amount");
+    CharacterInfo info = chars.get(Character.valueOf((char) first));
+    info.getKerning().put((char) second, amount);
+  }
 
-	private HashMap<String, Integer> splitToInteger(String line) {
-		HashMap<String, Integer> table = new HashMap<String, Integer>();
+  @Nonnull
+  private HashMap<String, Integer> splitToInteger(@Nonnull String line) {
+    HashMap<String, Integer> table = new HashMap<String, Integer>();
 
-		String[] values = line.split(" ");
-		for (int i = 0; i < values.length; i++) {
-			String[] current = values[i].split("=");
-			if (current.length > 1) {
-				table.put(current[0], Integer.valueOf(current[1]));
-			} else {
-				table.put(current[0], null);
-			}
-		}
+    String[] values = line.split(" ");
+    for (int i = 0; i < values.length; i++) {
+      String[] current = values[i].split("=");
+      if (current.length > 1) {
+        table.put(current[0], Integer.valueOf(current[1]));
+      } else {
+        table.put(current[0], null);
+      }
+    }
 
-		return table;
-	}
+    return table;
+  }
 
-	/**
-	 * 
-	 * @param line
-	 * @return
-	 */
-	private HashMap<String, String> getInfoLine(String line) {
-		HashMap<String, String> table = new HashMap<String, String>();
+  /**
+   * @param line
+   * @return
+   */
+  @Nonnull
+  private HashMap<String, String> getInfoLine(@Nonnull String line) {
+    HashMap<String, String> table = new HashMap<String, String>();
 
-		try {
-			StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(
-					line));
-			tokenizer.whitespaceChars(' ', ' ');
-			tokenizer.parseNumbers();
-			tokenizer.quoteChar('"');
+    try {
+      StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(
+          line));
+      tokenizer.whitespaceChars(' ', ' ');
+      tokenizer.parseNumbers();
+      tokenizer.quoteChar('"');
 
-			// info face="Times New Roman" size=24 bold=0 italic=0 charset=""
-			// unicode=1 stretchH=100 smooth=1 aa=4 padding=1,1,1,1 spacing=1,1
+      // info face="Times New Roman" size=24 bold=0 italic=0 charset=""
+      // unicode=1 stretchH=100 smooth=1 aa=4 padding=1,1,1,1 spacing=1,1
 
-			// info
-			tokenizer.nextToken();
+      // info
+      tokenizer.nextToken();
 
-			// face
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("face", tokenizer.sval);
+      // face
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("face", tokenizer.sval);
 
-			// size
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("size", Integer.toString((int) tokenizer.nval));
+      // size
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("size", Integer.toString((int) tokenizer.nval));
 
-			// bold
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("bold", Integer.toString((int) tokenizer.nval));
+      // bold
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("bold", Integer.toString((int) tokenizer.nval));
 
-			// italic
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("italic", Integer.toString((int) tokenizer.nval));
+      // italic
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("italic", Integer.toString((int) tokenizer.nval));
 
-			// charset
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("charset", tokenizer.sval);
+      // charset
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("charset", tokenizer.sval);
 
-			// unicode
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("unicode", Integer.toString((int) tokenizer.nval));
+      // unicode
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("unicode", Integer.toString((int) tokenizer.nval));
 
-			// stretchH
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("stretchH", Integer.toString((int) tokenizer.nval));
+      // stretchH
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("stretchH", Integer.toString((int) tokenizer.nval));
 
-			// smooth
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("smooth", Integer.toString((int) tokenizer.nval));
+      // smooth
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("smooth", Integer.toString((int) tokenizer.nval));
 
-			// aa
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("aa", Integer.toString((int) tokenizer.nval));
+      // aa
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("aa", Integer.toString((int) tokenizer.nval));
 
-			// padding
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			String padding = Integer.toString((int) tokenizer.nval);
-			tokenizer.nextToken();
-			padding = padding + "," + Integer.toString((int) tokenizer.nval);
-			tokenizer.nextToken();
-			padding = padding + "," + Integer.toString((int) tokenizer.nval);
-			tokenizer.nextToken();
-			padding = padding + "," + Integer.toString((int) tokenizer.nval);
-			table.put("padding", padding);
+      // padding
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      String padding = Integer.toString((int) tokenizer.nval);
+      tokenizer.nextToken();
+      padding = padding + "," + Integer.toString((int) tokenizer.nval);
+      tokenizer.nextToken();
+      padding = padding + "," + Integer.toString((int) tokenizer.nval);
+      tokenizer.nextToken();
+      padding = padding + "," + Integer.toString((int) tokenizer.nval);
+      table.put("padding", padding);
 
-			// spacing
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			String spacing = Integer.toString((int) tokenizer.nval);
-			tokenizer.nextToken();
-			spacing = spacing + "," + Integer.toString((int) tokenizer.nval);
-			table.put("spacing", spacing);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+      // spacing
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      String spacing = Integer.toString((int) tokenizer.nval);
+      tokenizer.nextToken();
+      spacing = spacing + "," + Integer.toString((int) tokenizer.nval);
+      table.put("spacing", spacing);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-		return table;
-	}
+    return table;
+  }
 
-	private HashMap<String, String> getPageLine(String line) {
-		HashMap<String, String> table = new HashMap<String, String>();
+  @Nonnull
+  private HashMap<String, String> getPageLine(@Nonnull String line) {
+    HashMap<String, String> table = new HashMap<String, String>();
 
-		try {
-			StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(
-					line));
-			tokenizer.whitespaceChars(' ', ' ');
-			tokenizer.parseNumbers();
-			tokenizer.quoteChar('"');
+    try {
+      StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(
+          line));
+      tokenizer.whitespaceChars(' ', ' ');
+      tokenizer.parseNumbers();
+      tokenizer.quoteChar('"');
 
-			// page id=0 file="Times New Roman--24_00.tga"
+      // page id=0 file="Times New Roman--24_00.tga"
 
-			// page
-			tokenizer.nextToken();
+      // page
+      tokenizer.nextToken();
 
-			// id
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("id", Integer.toString((int) tokenizer.nval));
+      // id
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("id", Integer.toString((int) tokenizer.nval));
 
-			// file
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			tokenizer.nextToken();
-			table.put("file", tokenizer.sval);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+      // file
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      tokenizer.nextToken();
+      table.put("file", tokenizer.sval);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-		return table;
-	}
+    return table;
+  }
 
-	/**
-	 * get the font name
-	 * 
-	 * @return
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * get the font name
+   *
+   * @return
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * get the font texture
-	 * 
-	 * @return
-	 */
-	public String[] getTextures() {
-		return textures.values().toArray(new String[0]);
-	}
+  /**
+   * get the font texture
+   *
+   * @return
+   */
+  @Nonnull
+  public String[] getTextures() {
+    Collection<String> var = textures.values();
+    return var.toArray(new String[var.size()]);
+  }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public int getNumChars() {
-		return chars.size();
-	}
+  /**
+   * @return
+   */
+  public int getNumChars() {
+    return chars.size();
+  }
 
-	/**
-	 * get character info for the given char
-	 * 
-	 * @param c
-	 * @return
-	 */
-	public CharacterInfo getChar(char c) {
-		return chars.get(Character.valueOf(c));
-	}
+  /**
+   * get character info for the given char
+   *
+   * @param c
+   * @return
+   */
+  public CharacterInfo getChar(char c) {
+    return chars.get(Character.valueOf(c));
+  }
 
-	public Hashtable<Character, CharacterInfo> getChars() {
-		return chars;
-	}
+  @Nonnull
+  public HashMap<Character, CharacterInfo> getChars() {
+    return chars;
+  }
 
-	public int getHeight() {
-		return height;
-	}
+  public int getHeight() {
+    return height;
+  }
 
-	public int getWidth() {
-		return width;
-	}
+  public int getWidth() {
+    return width;
+  }
 
-	public int getLineHeight() {
-		return lineHeight;
-	}
+  public int getLineHeight() {
+    return lineHeight;
+  }
 
 }

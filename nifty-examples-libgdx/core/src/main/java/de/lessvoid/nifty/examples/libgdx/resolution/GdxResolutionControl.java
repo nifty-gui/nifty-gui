@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.Array;
 import de.lessvoid.nifty.examples.libgdx.resolution.GdxResolutionControl.Resolution;
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -20,13 +22,13 @@ import java.util.Comparator;
 public class GdxResolutionControl implements ResolutionControl<Resolution> {
   private Array<Resolution> resolutions;
   private Resolution current;
-  private Resolution temp;
   private boolean initialized;
 
   public GdxResolutionControl() {
     initialized = false;
   }
 
+  @Nonnull
   @Override
   public Collection<Resolution> getResolutions() {
     // Use lazy initialization, since LibGDX is not yet initialized during the construction of this class
@@ -37,7 +39,7 @@ public class GdxResolutionControl implements ResolutionControl<Resolution> {
   }
 
   @Override
-  public void setResolution(final Resolution newResolution) {
+  public void setResolution(@Nonnull final Resolution newResolution) {
     // Use lazy initialization, since LibGDX is not yet initialized during the construction of this class
     if (! initialized) {
       initialize();
@@ -65,7 +67,7 @@ public class GdxResolutionControl implements ResolutionControl<Resolution> {
     current = new Resolution(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     resolutions.add(current);
     for (DisplayMode displayMode : Gdx.graphics.getDisplayModes()) {
-      temp = new Resolution(displayMode.width, displayMode.height);
+      Resolution temp = new Resolution(displayMode.width, displayMode.height);
       if (! resolutions.contains(temp, false)) resolutions.add(temp);
     }
   }
@@ -73,12 +75,12 @@ public class GdxResolutionControl implements ResolutionControl<Resolution> {
   private void sortResolutions() {
     resolutions.sort(new Comparator<Resolution>() {
       @Override
-      public int compare(Resolution o1, Resolution o2) {
-        int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(Integer.valueOf(o2.getWidth()));
+      public int compare(@Nonnull Resolution o1, @Nonnull Resolution o2) {
+        int widthCompare = Integer.valueOf(o1.getWidth()).compareTo(o2.getWidth());
         if (widthCompare != 0) {
           return widthCompare;
         }
-        int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(Integer.valueOf(o2.getHeight()));
+        int heightCompare = Integer.valueOf(o1.getHeight()).compareTo(o2.getHeight());
         if (heightCompare != 0) {
           return heightCompare;
         }
@@ -128,7 +130,7 @@ public class GdxResolutionControl implements ResolutionControl<Resolution> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
       if (this == obj)
         return true;
       if (obj == null)
@@ -143,13 +145,10 @@ public class GdxResolutionControl implements ResolutionControl<Resolution> {
       return true;
     }
 
+    @Nonnull
     @Override
     public String toString() {
-      StringBuilder result = new StringBuilder();
-      result.append(width);
-      result.append(" x ");
-      result.append(height);
-      return result.toString();
+      return String.valueOf(width) + " x " + height;
     }
   }
 }

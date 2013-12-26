@@ -1,20 +1,15 @@
 package de.lessvoid.xml.tools;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Vector;
-
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the class {@link SpecialValuesReplace}.
- * 
+ *
  * @author Marc Pompl
  * @author void (added some stuff)
  */
@@ -35,7 +30,8 @@ public class SpecialValuesReplaceTest {
     Properties myProperties = new Properties();
     myProperties.setProperty("nifty.test", "existsInMyProperties");
     Assert.assertEquals("existsInSystem", SpecialValuesReplace.replace("${PROP.nifty.test}", null, null, null));
-    Assert.assertEquals("existsInMyProperties", SpecialValuesReplace.replace("${PROP.nifty.test}", null, null, myProperties));
+    Assert.assertEquals("existsInMyProperties", SpecialValuesReplace.replace("${PROP.nifty.test}", null, null,
+        myProperties));
   }
 
   @Test
@@ -51,18 +47,21 @@ public class SpecialValuesReplaceTest {
   @Test
   public void testParseObjectInput() {
     Assert.assertEquals("${CALL.getValue()}", SpecialValuesReplace.replace("${CALL.getValue()}", null, null, null));
-    Assert.assertEquals("called", SpecialValuesReplace.replace("${CALL.getValue()}", null, new MyObjectCallback(), null));
-    Assert.assertEquals("${CALL.getNonExisting()}", SpecialValuesReplace.replace("${CALL.getNonExisting()}", null, null, null));
+    Assert.assertEquals("called", SpecialValuesReplace.replace("${CALL.getValue()}", null, new MyObjectCallback(),
+        null));
+    Assert.assertEquals("${CALL.getNonExisting()}", SpecialValuesReplace.replace("${CALL.getNonExisting()}", null,
+        null, null));
   }
 
   @Test
   public void testQuoting() {
-    Assert.assertEquals("${CALL.getValue()}", SpecialValuesReplace.replace("\\${CALL.getValue()}", null, new MyObjectCallback(), null));
+    Assert.assertEquals("${CALL.getValue()}", SpecialValuesReplace.replace("\\${CALL.getValue()}", null,
+        new MyObjectCallback(), null));
   }
 
   @Test
   public void testLocalize() {
-    Map<String, ResourceBundle> resources = new Hashtable<String, ResourceBundle>();
+    Map<String, ResourceBundle> resources = new HashMap<String, ResourceBundle>();
     resources.put("id", new ResourceBundleMock());
     assertEquals("${notfound}", SpecialValuesReplace.replace("${notfound}", resources, null, null));
     assertEquals("${unknown.notfound}", SpecialValuesReplace.replace("${unknown.notfound}", resources, null, null));
@@ -71,13 +70,16 @@ public class SpecialValuesReplaceTest {
 
   private class ResourceBundleMock extends ResourceBundle {
     private Vector<String> data = new Vector<String>();
+
     public ResourceBundleMock() {
       data.add("value");
     }
+
     @Override
     public Enumeration<String> getKeys() {
       return data.elements();
     }
+
     @Override
     protected Object handleGetObject(String key) {
       return data.get(0);

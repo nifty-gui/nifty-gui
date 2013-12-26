@@ -1,21 +1,18 @@
 package de.lessvoid.nifty.examples.resolution;
 
-import java.io.IOException;
-
-import org.lwjgl.opengl.DisplayMode;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import org.lwjgl.opengl.DisplayMode;
 
 public final class ResolutionExampleMain {
 
   private ResolutionExampleMain() {
   }
 
-  public static void main(final String[] args) throws IOException {
+  public static void main(final String[] args) {
     if (!LwjglInitHelper.initSubSystems("Nifty Screen Resolution")) {
       System.exit(0);
     }

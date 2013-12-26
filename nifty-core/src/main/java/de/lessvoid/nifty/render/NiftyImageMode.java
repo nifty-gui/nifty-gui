@@ -8,9 +8,11 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+
 /**
  * RenderImageMode supports the following modes.
- *
+ * <p/>
  * - "normal" (render the given image to the given image size)
  * - "subImage:" (render the given subImage of the image to the given size)
  * - "resize:" (special mode that allows scaling of bitmaps with a predefined schema)
@@ -22,67 +24,76 @@ import de.lessvoid.nifty.tools.Color;
 @Deprecated
 public class NiftyImageMode implements ImageMode {
 
-	private ImageMode m_imageMode;
+  private final ImageMode m_imageMode;
 
-	private NiftyImageMode(ImageMode imageMode) {
-		m_imageMode = imageMode;
-	}
+  private NiftyImageMode(ImageMode imageMode) {
+    m_imageMode = imageMode;
+  }
 
-	/**
-	 * Render image.
-	 * @param renderImage RenderImage
-	 * @param x x
-	 * @param y y
-	 * @param width width
-	 * @param height height
-	 * @param color color
-	 * @param scale scale
-	 */
-	public void render(final RenderDevice renderDevice, final RenderImage renderImage, final int x, final int y,
-			final int width, final int height, final Color color, final float scale) {
-		m_imageMode.render(renderDevice, renderImage, x, y, width, height, color, scale);
-	}
+  /**
+   * Render image.
+   *
+   * @param renderImage RenderImage
+   * @param x           x
+   * @param y           y
+   * @param width       width
+   * @param height      height
+   * @param color       color
+   * @param scale       scale
+   */
+  @Override
+  public void render(
+      final RenderDevice renderDevice, final RenderImage renderImage, final int x, final int y,
+      final int width, final int height, final Color color, final float scale) {
+    m_imageMode.render(renderDevice, renderImage, x, y, width, height, color, scale);
+  }
 
-	@Override
-	public void setParameters(String parameters) {
-		m_imageMode.setParameters(parameters);
-	}
+  @Override
+  public void setParameters(String parameters) {
+    m_imageMode.setParameters(parameters);
+  }
 
-	@Override
-	public Size getImageNativeSize(NiftyImage image) {
-		return m_imageMode.getImageNativeSize(image);
-	}
+  @Override
+  public Size getImageNativeSize(NiftyImage image) {
+    return m_imageMode.getImageNativeSize(image);
+  }
 
-	/**
-	 * create a RenderImageMode from the given String.
-	 * @param imageMode imageMode String
-	 * @return a RenderImageMode
-	 */
-	public static NiftyImageMode valueOf(final String imageMode) {
-		String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(imageMode);
-		String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(imageMode);
+  /**
+   * create a RenderImageMode from the given String.
+   *
+   * @param imageMode imageMode String
+   * @return a RenderImageMode
+   */
+  @Nonnull
+  public static NiftyImageMode valueOf(final String imageMode) {
+    String areaProviderProperty = ImageModeHelper.getAreaProviderProperty(imageMode);
+    String renderStrategyProperty = ImageModeHelper.getRenderStrategyProperty(imageMode);
 
-		return new NiftyImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
-				renderStrategyProperty));
-	}
+    return new NiftyImageMode(ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty,
+        renderStrategyProperty));
+  }
 
-	/**
-	 * normal rendering.
-	 * @return RenderImageMode for NORMAL mode
-	 */
-	public static NiftyImageMode normal() {
-		return new NiftyImageMode(valueOf("normal"));
-	}
+  /**
+   * normal rendering.
+   *
+   * @return RenderImageMode for NORMAL mode
+   */
+  @Nonnull
+  public static NiftyImageMode normal() {
+    return new NiftyImageMode(valueOf("normal"));
+  }
 
-	/**
-	 * scale a sub image.
-	 * @param x x
-	 * @param y y
-	 * @param w w
-	 * @param h h
-	 * @return RenderImageMode for SUBIMAGE mode
-	 */
-	public static NiftyImageMode subImage(final int x, final int y, final int w, final int h) {
-		return new NiftyImageMode(valueOf("subImage:" + x + "px," + y + "px," + w + "px," + h + "px"));
-	}
+  /**
+   * scale a sub image.
+   *
+   * @param x x
+   * @param y y
+   * @param w w
+   * @param h h
+   * @return RenderImageMode for SUBIMAGE mode
+   */
+  @Nonnull
+  public static NiftyImageMode subImage(final int x, final int y, final int w, final int h) {
+    return new NiftyImageMode(valueOf("subImage:" + x + "px," + y + "px," + w + "px," + h + "px"));
+  }
 }

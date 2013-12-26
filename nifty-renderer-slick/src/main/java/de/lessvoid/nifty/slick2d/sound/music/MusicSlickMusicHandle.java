@@ -22,7 +22,7 @@ public class MusicSlickMusicHandle implements SlickMusicHandle {
   /**
    * Create a new music handle that wraps a Slick music object.
    *
-   * @param soundSystem the sound system that manages this music
+   * @param soundSystem     the sound system that manages this music
    * @param backgroundMusic the music object that is used for playback
    */
   public MusicSlickMusicHandle(final SoundSystem soundSystem, final Music backgroundMusic) {

@@ -1,21 +1,15 @@
 package de.lessvoid.nifty;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
 
 public class NiftyTest {
   private Nifty nifty;

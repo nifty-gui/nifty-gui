@@ -2,20 +2,15 @@ package de.lessvoid.nifty.examples.defaultcontrols.sliderandscrollbar;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.Scrollbar;
-import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
-import de.lessvoid.nifty.controls.Slider;
-import de.lessvoid.nifty.controls.SliderChangedEvent;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The SliderAndScrollbarDialogController to show off the new Slider and Scrollbar Controls and a couple of more new Nifty 1.3 things.
@@ -23,6 +18,7 @@ import de.lessvoid.nifty.tools.Color;
  */
 public class SliderAndScrollbarDialogController implements Controller {
   private Screen screen;
+  @Nullable
   private Element color;
   private float red;
   private float green;
@@ -31,19 +27,19 @@ public class SliderAndScrollbarDialogController implements Controller {
 
   @Override
   public void bind(
-      final Nifty nifty,
-      final Screen screen,
-      final Element element,
-      final Parameters parameter) {
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element element,
+      @Nonnull final Parameters parameter) {
     this.screen = screen;
-    this.color = screen.findElementByName("color");
+    this.color = screen.findElementById("color");
     this.red = 0.f;
     this.green = 0.f;
     this.blue = 0.f;
   }
 
   @Override
-  public void init(final Parameters parameter) {
+  public void init(@Nonnull final Parameters parameter) {
   }
 
   @Override
@@ -68,30 +64,30 @@ public class SliderAndScrollbarDialogController implements Controller {
   }
 
   @Override
-  public boolean inputEvent(final NiftyInputEvent inputEvent) {
+  public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     return false;
   }
 
   @NiftyEventSubscriber(id="sliderR")
-  public void onRedSliderChange(final String id, final SliderChangedEvent event) {
+  public void onRedSliderChange(final String id, @Nonnull final SliderChangedEvent event) {
     red = event.getValue();
     changeColor();
   }
 
   @NiftyEventSubscriber(id="sliderG")
-  public void onGreenSliderChange(final String id, final SliderChangedEvent event) {
+  public void onGreenSliderChange(final String id, @Nonnull final SliderChangedEvent event) {
     green = event.getValue();
     changeColor();
   }
 
   @NiftyEventSubscriber(id="sliderB")
-  public void onBlueSliderChange(final String id, final SliderChangedEvent event) {
+  public void onBlueSliderChange(final String id, @Nonnull final SliderChangedEvent event) {
     blue = event.getValue();
     changeColor();
   }
 
   @NiftyEventSubscriber(id="sliderA")
-  public void onAlphaSliderChange(final String id, final SliderChangedEvent event) {
+  public void onAlphaSliderChange(final String id, @Nonnull final SliderChangedEvent event) {
     alpha = event.getValue();
     changeColor();
   }
@@ -102,7 +98,7 @@ public class SliderAndScrollbarDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="scrollbarH_WorldMax_Textfield")
-  public void onMaxValueChanged(final String id, final TextFieldChangedEvent event) {
+  public void onMaxValueChanged(final String id, @Nonnull final TextFieldChangedEvent event) {
     try {
       float f = Float.valueOf(event.getText());
       Scrollbar scrollbar = getScrollbar("scrollbarH");
@@ -112,7 +108,7 @@ public class SliderAndScrollbarDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="scrollbarH_ViewMax_Textfield")
-  public void onViewMaxValueChanged(final String id, final TextFieldChangedEvent event) {
+  public void onViewMaxValueChanged(final String id, @Nonnull final TextFieldChangedEvent event) {
     try {
       float f = Float.valueOf(event.getText());
       Scrollbar scrollbar = getScrollbar("scrollbarH");
@@ -122,7 +118,7 @@ public class SliderAndScrollbarDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="scrollbarH_CurrentValue_Textfield")
-  public void onCurrentValueChanged(final String id, final TextFieldChangedEvent event) {
+  public void onCurrentValueChanged(final String id, @Nonnull final TextFieldChangedEvent event) {
     try {
       float f = Float.valueOf(event.getText());
       Scrollbar scrollbar = getScrollbar("scrollbarH");
@@ -132,7 +128,7 @@ public class SliderAndScrollbarDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="scrollbarH_ButtonStepSize_Textfield")
-  public void onButtonStepSizeChanged(final String id, final TextFieldChangedEvent event) {
+  public void onButtonStepSizeChanged(final String id, @Nonnull final TextFieldChangedEvent event) {
     try {
       float f = Float.valueOf(event.getText());
       Scrollbar scrollbar = getScrollbar("scrollbarH");
@@ -142,7 +138,7 @@ public class SliderAndScrollbarDialogController implements Controller {
   }
 
   @NiftyEventSubscriber(id="scrollbarH_PageStepSize_Textfield")
-  public void onPageStepSizeChanged(final String id, final TextFieldChangedEvent event) {
+  public void onPageStepSizeChanged(final String id, @Nonnull final TextFieldChangedEvent event) {
     try {
       float f = Float.valueOf(event.getText());
       Scrollbar scrollbar = getScrollbar("scrollbarH");
@@ -159,19 +155,23 @@ public class SliderAndScrollbarDialogController implements Controller {
     getLabel("alphaLabel").setText(String.valueOf((int)alpha));
   }
 
+  @Nullable
   private Slider getSlider(final String id) {
-    return (Slider) screen.findNiftyControl(id, Slider.class);
+    return screen.findNiftyControl(id, Slider.class);
   }
 
+  @Nullable
   private Scrollbar getScrollbar(final String id) {
-    return (Scrollbar) screen.findNiftyControl(id, Scrollbar.class);
+    return screen.findNiftyControl(id, Scrollbar.class);
   }
 
+  @Nullable
   private TextField getTextfield(final String id) {
-    return (TextField) screen.findNiftyControl(id, TextField.class);
+    return screen.findNiftyControl(id, TextField.class);
   }
 
+  @Nullable
   private Label getLabel(final String id) {
-    return (Label) screen.findNiftyControl(id, Label.class);
+    return screen.findNiftyControl(id, Label.class);
   }
 }

@@ -11,14 +11,14 @@ public interface ImageMode extends Parameterizable {
 
   /**
    * Render image.
-   * 
+   *
    * @param renderImage RenderImage
-   * @param x x
-   * @param y y
-   * @param width width
-   * @param height height
-   * @param color color
-   * @param scale scale
+   * @param x           x
+   * @param y           y
+   * @param width       width
+   * @param height      height
+   * @param color       color
+   * @param scale       scale
    */
   void render(
       final RenderDevice renderDevice,

@@ -4,21 +4,30 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * All ElementInteraction is handled in here.
+ *
  * @author void
  */
 public class ElementInteraction {
   private String onClickAlternateKey;
+  @Nullable
   private NiftyMethodInvoker onMouseOverMethod;
   private NiftyMethodInvoker onMouseWheelMethod;
 
-  private ElementInteractionClickHandler primary;
-  private ElementInteractionClickHandler secondary;
-  private ElementInteractionClickHandler tertiary;
-  private ElementInteractionMoveHandler move;
+  @Nonnull
+  private final ElementInteractionClickHandler primary;
+  @Nonnull
+  private final ElementInteractionClickHandler secondary;
+  @Nonnull
+  private final ElementInteractionClickHandler tertiary;
+  @Nonnull
+  private final ElementInteractionMoveHandler move;
 
-  public ElementInteraction(final Nifty niftyParam, final Element element) {
+  public ElementInteraction(@Nonnull final Nifty niftyParam, @Nonnull final Element element) {
     primary = new ElementInteractionClickHandler(niftyParam, element, new PrimaryClickMouseMethods(element));
     secondary = new ElementInteractionClickHandler(niftyParam, element, new SecondaryClickMouseMethods(element));
     tertiary = new ElementInteractionClickHandler(niftyParam, element, new TertiaryClickMouseMethods(element));
@@ -31,19 +40,22 @@ public class ElementInteraction {
     tertiary.resetMouseDown();
   }
 
+  @Nonnull
   public ElementInteractionClickHandler getPrimary() {
     return primary;
   }
 
+  @Nonnull
   public ElementInteractionClickHandler getSecondary() {
     return secondary;
   }
 
+  @Nonnull
   public ElementInteractionClickHandler getTertiary() {
     return tertiary;
   }
 
-  public void setOnMouseOver(final NiftyMethodInvoker method) {
+  public void setOnMouseOver(@Nullable final NiftyMethodInvoker method) {
     onMouseOverMethod = method;
   }
 
@@ -70,16 +82,22 @@ public class ElementInteraction {
   }
 
   public boolean process(
-      final NiftyMouseInputEvent mouseEvent,
+      @Nonnull final NiftyMouseInputEvent mouseEvent,
       final long eventTime,
       final boolean mouseInside,
       final boolean canHandleInteraction,
       final boolean hasMouseAccess) {
     final boolean moveResult = move.process(canHandleInteraction, mouseInside, hasMouseAccess, mouseEvent);
     final boolean clickResult =
-      primary.process(mouseEvent, mouseEvent.isButton0Down(), mouseEvent.isButton0InitialDown(), mouseEvent.isButton0Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey) ||
-      secondary.process(mouseEvent, mouseEvent.isButton1Down(), mouseEvent.isButton1InitialDown(), mouseEvent.isButton1Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey) ||
-      tertiary.process(mouseEvent, mouseEvent.isButton2Down(), mouseEvent.isButton2InitialDown(), mouseEvent.isButton2Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess, onClickAlternateKey);
+        primary.process(mouseEvent, mouseEvent.isButton0Down(), mouseEvent.isButton0InitialDown(),
+            mouseEvent.isButton0Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess,
+            onClickAlternateKey) ||
+            secondary.process(mouseEvent, mouseEvent.isButton1Down(), mouseEvent.isButton1InitialDown(),
+                mouseEvent.isButton1Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess,
+                onClickAlternateKey) ||
+            tertiary.process(mouseEvent, mouseEvent.isButton2Down(), mouseEvent.isButton2InitialDown(),
+                mouseEvent.isButton2Release(), eventTime, mouseInside, canHandleInteraction, hasMouseAccess,
+                onClickAlternateKey);
     return moveResult || clickResult;
   }
 
