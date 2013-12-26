@@ -58,10 +58,10 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
     } else if (elementBackground != null) {
       if ("verticalScrollbar".equals(parameter.get("name"))) {
         scrollbarView = new ScrollbarViewVertical(nifty, this, elementBackground, elementPosition,
-            elementPosition.getHeight());
+            elementPosition.getConstraintHeight().getValueAsInt(1.f));
       } else {
         scrollbarView = new ScrollbarViewHorizontal(nifty, this, elementBackground, elementPosition,
-            elementPosition.getWidth());
+            elementPosition.getConstraintHeight().getValueAsInt(1.f));
       }
     }
 
