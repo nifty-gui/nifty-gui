@@ -70,21 +70,13 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.6</version>
-                <executions>
-                    <execution>
-                        <phase>integration-test</phase>
-                        <configuration>
-                            <target>
-                                <java fork="true" classname="${mainClass}" classpathref="maven.test.classpath">
-                                    <sysproperty key="java.library.path" value="target/natives"/>
-                                </java>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <configuration>
+                    <target>
+                        <java fork="true" classname="${mainClass}" classpathref="maven.test.classpath">
+                            <sysproperty key="java.library.path" value="target/natives"/>
+                        </java>
+                    </target>
+                </configuration>
             </plugin>
 
             <!-- this builds a totally standalone jar file when you invoke: mvn package -Pdesktop -->
