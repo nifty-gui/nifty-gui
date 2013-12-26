@@ -11,13 +11,14 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import junit.framework.TestCase;
 import org.easymock.EasyMock;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 
 public class NiftyLoaderTest extends TestCase {
 
   public class DummyScreenController implements ScreenController {
     @Override
-    public void bind(final Nifty nifty, final Screen screen) {
+    public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     }
 
     @Override

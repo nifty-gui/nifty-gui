@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 
 /**
  * ConsoleDemoStartScreen.
+ *
  * @author void
  */
 public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler, NiftyExample {
@@ -31,7 +32,7 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
   private boolean firstConsoleShow = true;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     nifty = newNifty;
     screen = newScreen;
     screen.addKeyboardInputHandler(new DefaultInputMapping(), this);
@@ -105,11 +106,12 @@ public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler
     });
   }
 
-  @NiftyEventSubscriber(id="console")
+  @NiftyEventSubscriber(id = "console")
   public void onConsoleCommand(final String id, @Nonnull final ConsoleExecuteCommandEvent command) {
     Console console = screen.findNiftyControl("console", Console.class);
     if (console != null) {
-      console.output("your input was: " + command.getCommandLine() + " [" + command.getArgumentCount() + " parameter(s)]");
+      console.output("your input was: " + command.getCommandLine() + " [" + command.getArgumentCount() + " parameter" +
+          "(s)]");
     }
     if ("exit".equals(command.getCommand())) {
       back();

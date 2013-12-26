@@ -2,6 +2,8 @@ package de.lessvoid.nifty.screen;
 
 import de.lessvoid.nifty.Nifty;
 
+import javax.annotation.Nonnull;
+
 /**
  * ScreenController Interface all screen controllers should support.
  *
@@ -15,7 +17,7 @@ public interface ScreenController {
    * @param nifty  nifty
    * @param screen screen
    */
-  void bind(Nifty nifty, Screen screen);
+  void bind(@Nonnull Nifty nifty, @Nonnull Screen screen);
 
   /**
    * called right after the onStartScreen event ENDED.

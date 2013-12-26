@@ -22,26 +22,29 @@ public class DragDropScreen implements ScreenController, NiftyExample {
   private Screen screen;
   @Nonnull
   private final Random random = new Random();
-  
+
   @Nullable
   private Droppable trash;
   @Nullable
   private Droppable evilStuff;
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
 
     trash = findDroppable("Trash");
     Droppable goodStuff = findDroppable("GoodStuff");
     evilStuff = findDroppable("EvilStuff");
-    
+
     // this filter demonstrates a drop filter. in this case you can't drag something from the "EvilStuff"
     // dropable to the "GoodStuff" dropable
     goodStuff.addFilter(new DroppableDropFilter() {
       @Override
-      public boolean accept(@Nonnull final Droppable source, @Nonnull final Draggable draggable, @Nonnull final Droppable target) {
+      public boolean accept(
+          @Nonnull final Droppable source,
+          @Nonnull final Draggable draggable,
+          @Nonnull final Droppable target) {
         return source != evilStuff;
       }
     });
@@ -81,7 +84,7 @@ public class DragDropScreen implements ScreenController, NiftyExample {
       builder.build(nifty, screen, draggables);
     }
   }
-  
+
   public void spawnWindow() {
     Element windows = screen.findElementById("windows");
     if (windows == null) {
@@ -95,54 +98,59 @@ public class DragDropScreen implements ScreenController, NiftyExample {
     windowBuilder.build(nifty, screen, windows);
   }
 
-  @NiftyEventSubscriber(pattern="window-.*")
+  @NiftyEventSubscriber(pattern = "window-.*")
   public void onAnyWindowClose(final String id, @Nonnull final WindowClosedEvent event) {
     setStatus("Window [" + id + "] " + (event.isHidden() ? "hidden" : "closed"));
   }
 
   @Nonnull
   private String randomColor() {
-    return "#" + Integer.toHexString(random.nextInt(200)) + Integer.toHexString(random.nextInt(200)) + Integer.toHexString(random.nextInt(200)) + "ff";
+    return "#" + Integer.toHexString(random.nextInt(200)) + Integer.toHexString(random.nextInt(200)) + Integer
+        .toHexString(random.nextInt(200)) + "ff";
   }
-  
+
   /**
    * Called for all Draggables when the Drag operation starts.
+   *
    * @param event the DraggableDragStartedEvent
    */
-  @NiftyEventSubscriber(pattern=".*")
+  @NiftyEventSubscriber(pattern = ".*")
   public void showDragStartStatus(final String id, @Nonnull final DraggableDragStartedEvent event) {
-    setStatus("Dragging [" + getId(event.getDraggable()) + "] from ["  + getId(event.getSource()) + "].");
+    setStatus("Dragging [" + getId(event.getDraggable()) + "] from [" + getId(event.getSource()) + "].");
   }
 
   /**
    * Called for all Draggables when the Drag operation stops.
+   *
    * @param event the DraggableDragCanceledEvent
    */
-  @NiftyEventSubscriber(pattern=".*")
+  @NiftyEventSubscriber(pattern = ".*")
   public void showDragCancelStatus(final String id, @Nonnull final DraggableDragCanceledEvent event) {
-    setStatus("Canceled [" + getId(event.getDraggable()) + "] reverting back to ["  + getId(event.getSource()) + "].");
+    setStatus("Canceled [" + getId(event.getDraggable()) + "] reverting back to [" + getId(event.getSource()) + "].");
   }
 
   /**
    * Called for all Dropables when something is dropped on them.
+   *
    * @param event the DropableDroppedEvent
    */
-  @NiftyEventSubscriber(pattern=".*")
+  @NiftyEventSubscriber(pattern = ".*")
   public void showDropStatus(final String id, @Nonnull final DroppableDroppedEvent event) {
     if ((event.getTarget() == trash) && (event.getSource() == evilStuff)) {
       setStatus("Evil [" + getId(event.getDraggable()) + "] has been eliminated.");
     } else if (event.getTarget() == evilStuff) {
       setStatus("[" + getId(event.getDraggable()) + "] has become evil");
     } else {
-      setStatus("Dropped [" + getId(event.getDraggable()) + "] on ["  + getId(event.getTarget()) + "].");
+      setStatus("Dropped [" + getId(event.getDraggable()) + "] on [" + getId(event.getTarget()) + "].");
     }
   }
 
   /**
    * Called when something is dropped on the Trash.
+   *
    * @param event the DropableDroppedEvent
    */
-  @NiftyEventSubscriber(id="Trash")
+  @NiftyEventSubscriber(id = "Trash")
   public void onTrashDrop(final String id, @Nonnull final DroppableDroppedEvent event) {
     event.getDraggable().getElement().markForRemoval();
   }

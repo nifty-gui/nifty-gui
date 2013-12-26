@@ -12,7 +12,7 @@ public class DefaultScreenController implements ScreenController {
   Nifty nifty;
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
   }
 

@@ -13,7 +13,7 @@ public class SplashController implements ScreenController, KeyInputHandler {
   private Nifty nifty;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screen) {
     this.nifty = newNifty;
   }
 

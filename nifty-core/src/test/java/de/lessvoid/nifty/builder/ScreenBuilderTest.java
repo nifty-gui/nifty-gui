@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
+
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.assertEquals;
@@ -111,7 +113,7 @@ public class ScreenBuilderTest {
 
   private class MyScreenController implements ScreenController {
     @Override
-    public void bind(Nifty nifty, Screen screen) {
+    public void bind(@Nonnull Nifty nifty, @Nonnull Screen screen) {
     }
 
     @Override

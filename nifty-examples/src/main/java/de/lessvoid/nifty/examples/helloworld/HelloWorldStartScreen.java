@@ -11,13 +11,14 @@ import java.io.IOException;
 
 /**
  * ScreenController for Hello World Example.
+ *
  * @author void
  */
 public class HelloWorldStartScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
   }
 
@@ -58,11 +59,11 @@ public class HelloWorldStartScreen implements ScreenController, NiftyExample {
     NiftyMouse niftyMouse = nifty.getNiftyMouse();
 
     try {
-    // register/load a mouse cursor (this would be done somewhere at the beginning)
-    niftyMouse.registerMouseCursor("mouseId", "nifty-cursor.png", 0, 0);
+      // register/load a mouse cursor (this would be done somewhere at the beginning)
+      niftyMouse.registerMouseCursor("mouseId", "nifty-cursor.png", 0, 0);
 
-    // change the cursor to the one we've loaded before
-    niftyMouse.enableMouseCursor("mouseId");
+      // change the cursor to the one we've loaded before
+      niftyMouse.enableMouseCursor("mouseId");
     } catch (IOException e) {
       System.err.println("Loading the mouse cursor failed.");
     }

@@ -26,7 +26,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
   private Screen screen;
 
   @Override
-  public void bind(@Nonnull final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     screen = newScreen;
     nifty = newNifty;
 
@@ -52,7 +52,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
     }
 
     ListBox listBoxStatic = screen.findNiftyControl("listBoxStatic", ListBox.class);
-    for (int i=0; i<5; i++) {
+    for (int i = 0; i < 5; i++) {
       listBoxStatic.addItem("Listbox Item: " + i);
     }
 
@@ -125,7 +125,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
     createPanel.setChildLayout("horizontal");
     Element secondRow = createPanel.create(newNifty, screen, dynamicParent);
 
-      // create label
+    // create label
     labelBuilder.text("Listbox Dyn.:");
     labelBuilder.build(newNifty, screen, secondRow);
 
@@ -138,7 +138,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
     final Element dynamicListBoxElement = listBoxBuilder.build(nifty, screen, secondRow);
     ListBox dynamicListBox = dynamicListBoxElement.getNiftyControl(ListBox.class);
     if (dynamicListBox != null) {
-      for (int i=0; i<10; i++) {
+      for (int i = 0; i < 10; i++) {
         dynamicListBox.addItem("Listbox Item: " + i);
       }
       dynamicListBox.selectItemByIndex(0);
@@ -177,7 +177,7 @@ public class ControlsDemoStartScreen implements ScreenController, NiftyExample {
 
     ListBox listBoxStatic = screen.findNiftyControl("listBoxStatic", ListBoxControl.class);
     System.out.println("listBoxStatic selectedItemIndex: " + listBoxStatic.getSelection());
- 
+
     CheckBox checkBoxControl = screen.findNiftyControl("checkbox", CheckBox.class);
     System.out.println("checkbox: " + checkBoxControl.isChecked());
 

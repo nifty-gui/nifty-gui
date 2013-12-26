@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 public class AllControlsDemoStartScreen implements ScreenController, NiftyExample {
   @Override
-  public void bind(final Nifty newNifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screen) {
     // FIXME
     //    DropDownControl dropDownControl = screen.findControl("dropDown", DropDownControl.class);
     //    dropDownControl.addItem("Item 1");

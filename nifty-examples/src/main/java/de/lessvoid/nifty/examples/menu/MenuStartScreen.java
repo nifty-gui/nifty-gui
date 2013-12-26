@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 
 /**
  * ScreenController for Hello World Example.
+ *
  * @author void
  */
 public class MenuStartScreen implements ScreenController, NiftyExample {
@@ -26,7 +27,7 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
   private Element popup;
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
     createPopup();
@@ -42,14 +43,17 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
 
   private void createPopup() {
     this.popup = nifty.createPopup("niftyPopupMenu");
-  
+
     Menu<ThisReallyCouldBeAnyClassYouWant> popupMenu = popup.findNiftyControl("#menu", Menu.class);
-  
+
     popupMenu.setWidth(new SizeValue("250px"));
-    popupMenu.addMenuItem("MenuItem 1", "menu/listen.png", new ThisReallyCouldBeAnyClassYouWant("SomeId1", "You've clicked MenuItem 1"));
-    popupMenu.addMenuItem("MenuItem 4000000000000000000", "menu/stop.png", new ThisReallyCouldBeAnyClassYouWant("SomeId2", "You've clicked a very odd MenuItem"));
+    popupMenu.addMenuItem("MenuItem 1", "menu/listen.png", new ThisReallyCouldBeAnyClassYouWant("SomeId1",
+        "You've clicked MenuItem 1"));
+    popupMenu.addMenuItem("MenuItem 4000000000000000000", "menu/stop.png", new ThisReallyCouldBeAnyClassYouWant
+        ("SomeId2", "You've clicked a very odd MenuItem"));
     popupMenu.addMenuItemSeparator();
-    popupMenu.addMenuItem("MenuItem 5", new ThisReallyCouldBeAnyClassYouWant("SomeId5", "You've clicked MenuItem 5 (Where is 3?)"));
+    popupMenu.addMenuItem("MenuItem 5", new ThisReallyCouldBeAnyClassYouWant("SomeId5",
+        "You've clicked MenuItem 5 (Where is 3?)"));
     popupMenu.addMenuItem("MenuItem 6", new ThisReallyCouldBeAnyClassYouWant("SomeId6", "You've clicked MenuItem 6"));
     popupMenu.addMenuItemSeparator();
     popupMenu.addMenuItem("Exit", new ThisReallyCouldBeAnyClassYouWant("exit", "Good Bye! :)"));
@@ -57,7 +61,8 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
 
   public void showMenu() {
     nifty.showPopup(screen, popup.getId(), null);
-    nifty.subscribe(screen, popup.findNiftyControl("#menu", Menu.class).getId(), MenuItemActivatedEvent.class, new MenuItemActivatedEventSubscriber());
+    nifty.subscribe(screen, popup.findNiftyControl("#menu", Menu.class).getId(), MenuItemActivatedEvent.class,
+        new MenuItemActivatedEventSubscriber());
   }
 
   @Nonnull
@@ -92,7 +97,7 @@ public class MenuStartScreen implements ScreenController, NiftyExample {
       label.setText(item.text + " [" + item.key + "]");
 
       nifty.closePopup(popup.getId(), new EndNotify() {
-        
+
         @Override
         public void perform() {
           if ("exit".equals(item.key)) {

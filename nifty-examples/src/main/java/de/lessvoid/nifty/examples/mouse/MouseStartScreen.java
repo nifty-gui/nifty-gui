@@ -17,6 +17,7 @@ import java.io.IOException;
 
 /**
  * ScreenController for Hello World Example.
+ *
  * @author void
  */
 public class MouseStartScreen implements ScreenController, NiftyExample {
@@ -47,7 +48,7 @@ public class MouseStartScreen implements ScreenController, NiftyExample {
   private Label mouseEventsText;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
     this.mousePrimaryText = screen.findNiftyControl("mousePrimaryText", Label.class);
@@ -139,77 +140,77 @@ public class MouseStartScreen implements ScreenController, NiftyExample {
 
   // primary
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementPrimaryClick(final String id, final NiftyMousePrimaryClickedEvent event) {
     mouseEventsPrimaryText.setText("clicked");
   }
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementPrimaryClickMove(final String id, final NiftyMousePrimaryClickedMovedEvent event) {
     mouseEventsPrimaryText.setText("clicked mouse move");
   }
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementPrimaryRelease(final String id, final NiftyMousePrimaryReleaseEvent event) {
     mouseEventsPrimaryText.setText("");
   }
 
   // secondary
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementSecondaryClick(final String id, final NiftyMouseSecondaryClickedEvent event) {
     mouseEventsSecondaryText.setText("clicked");
   }
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementSecondaryClickMove(final String id, final NiftyMouseSecondaryClickedMovedEvent event) {
     mouseEventsSecondaryText.setText("clicked mouse moved");
   }
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementSecondaryRelease(final String id, final NiftyMouseSecondaryReleaseEvent event) {
     mouseEventsSecondaryText.setText("");
   }
 
   // Tertiary
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementTertiaryClick(final String id, final NiftyMouseTertiaryClickedEvent event) {
     mouseEventsTertiaryText.setText("clicked");
   }
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementTertiaryClickMove(final String id, final NiftyMouseTertiaryClickedMovedEvent event) {
     mouseEventsTertiaryText.setText("clicked mouse moved");
   }
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementTertiaryRelease(final String id, final NiftyMouseTertiaryReleaseEvent event) {
     mouseEventsTertiaryText.setText("");
   }
 
   // mouse move
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementMouseMove(final String id, @Nonnull final NiftyMouseMovedEvent event) {
     mouseEventsMoveText.setText(event.getMouseX() + ", " + event.getMouseY());
   }
 
   // mouse wheel
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementMouseWheel(final String id, @Nonnull final NiftyMouseWheelEvent event) {
     mouseEventsWheelText.setText(String.valueOf(event.getMouseWheel()));
   }
 
   // general
 
-  @NiftyEventSubscriber(id="mouseEvents")
+  @NiftyEventSubscriber(id = "mouseEvents")
   public void onElementMouse(final String id, @Nonnull final NiftyMouseEvent event) {
     mouseEventsText.setText(
         id + " -> " + event.getMouseX() + ", " + event.getMouseY() + ", " + event.getMouseWheel() + "\n" +
-        event.isButton0Down() + ", " + event.isButton1Down() + ", " + event.isButton2Down() + "\n" +
-        event.isButton0Release() + ", " + event.isButton1Release() + ", " + event.isButton2Release());
+            event.isButton0Down() + ", " + event.isButton1Down() + ", " + event.isButton2Down() + "\n" +
+            event.isButton0Release() + ", " + event.isButton1Release() + ", " + event.isButton2Release());
   }
 
   @Nonnull
@@ -238,7 +239,7 @@ public class MouseStartScreen implements ScreenController, NiftyExample {
     try {
       // register/load a mouse cursor (this would be done somewhere at the beginning)
       niftyMouse.registerMouseCursor("mouseId", "nifty-cursor.png", 0, 0);
-      
+
       // change the cursor to the one we've loaded before
       niftyMouse.enableMouseCursor("mouseId");
     } catch (IOException e) {

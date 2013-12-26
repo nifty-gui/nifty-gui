@@ -21,7 +21,7 @@ public class StartScreenController implements ScreenController, NiftyExample {
   private int id = 10000;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
     addPanel();

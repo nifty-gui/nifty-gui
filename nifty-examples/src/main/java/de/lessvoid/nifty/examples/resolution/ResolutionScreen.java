@@ -31,7 +31,7 @@ public class ResolutionScreen<T> implements ScreenController, NiftyExample {
 
   @SuppressWarnings("unchecked")
   @Override
-  public void bind(final Nifty newNifty, @Nonnull final Screen screen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screen) {
     this.nifty = newNifty;
     this.dropDown = screen.findNiftyControl("resolutions", DropDown.class);
     ListBox<String> listBox = screen.findNiftyControl("listBox", ListBox.class);

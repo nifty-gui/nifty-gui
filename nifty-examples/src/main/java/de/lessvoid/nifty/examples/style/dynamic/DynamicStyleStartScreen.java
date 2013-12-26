@@ -11,7 +11,7 @@ public class DynamicStyleStartScreen implements ScreenController, NiftyExample {
   private Screen screen;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen screenParam) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screenParam) {
     screen = screenParam;
   }
 

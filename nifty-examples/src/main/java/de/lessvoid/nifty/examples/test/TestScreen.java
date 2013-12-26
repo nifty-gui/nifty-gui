@@ -13,7 +13,7 @@ public class TestScreen implements ScreenController, NiftyExample {
   private Screen screen;
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
   }

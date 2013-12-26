@@ -34,7 +34,7 @@ public class ResizeMain implements ScreenController, NiftyExample {
   }
 
   @Override
-  public void bind(Nifty nifty, Screen screen) {
+  public void bind(@Nonnull Nifty nifty, @Nonnull Screen screen) {
   }
 
   @Override

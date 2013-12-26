@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 
 /**
  * TextFieldDemoStartScreen.
+ *
  * @author void
  */
 public class TextFieldDemoStartScreen implements ScreenController, NiftyExample {
@@ -24,7 +25,7 @@ public class TextFieldDemoStartScreen implements ScreenController, NiftyExample 
   private Screen screen;
 
   @Override
-  public void bind(@Nonnull final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     screen = newScreen;
     nifty = newNifty;
 

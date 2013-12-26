@@ -18,7 +18,7 @@ public class ReloadScreen implements ScreenController, NiftyExample {
   private Nifty nifty;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
   }
 

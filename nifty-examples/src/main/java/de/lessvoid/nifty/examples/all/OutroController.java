@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Outro implementation for the nifty demo Outro screen.
+ *
  * @author void
  */
 public class OutroController implements ScreenController, KeyInputHandler {
@@ -22,7 +23,7 @@ public class OutroController implements ScreenController, KeyInputHandler {
   private boolean escape;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
     this.screen = newScreen;
 
@@ -74,12 +75,16 @@ public class OutroController implements ScreenController, KeyInputHandler {
   }
 
   public void shizzleHide(final String id) {
-    if (escape) return;
+    if (escape) {
+      return;
+    }
     screen.findElementById(id).hide();
   }
 
   public void shizzleShow(@Nonnull final String id) {
-    if (escape) return;
+    if (escape) {
+      return;
+    }
     if (!id.equals("end")) {
       screen.findElementById(id).show();
     }

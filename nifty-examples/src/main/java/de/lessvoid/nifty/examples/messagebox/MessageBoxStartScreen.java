@@ -17,7 +17,7 @@ public class MessageBoxStartScreen implements ScreenController, NiftyExample {
   private Screen screen;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen screenParam) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen screenParam) {
     screen = screenParam;
   }
 
@@ -32,7 +32,7 @@ public class MessageBoxStartScreen implements ScreenController, NiftyExample {
   public void changeMessageBoxType(final String newType) {
     final MessageBox msgBox = screen.findNiftyControl("messagebox", MessageBox.class);
     msgBox.setMessageType(newType);
-    
+
     msgBox.getElement().getParent().layoutElements();
   }
 

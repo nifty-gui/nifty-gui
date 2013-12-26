@@ -17,13 +17,13 @@ public class ScrollDemoStartScreen implements ScreenController, NiftyExample {
   private Screen screen;
 
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     screen = newScreen;
     nifty = newNifty;
 
     Element myScrollStuff = screen.findElementById("myScrollStuff");
     if (myScrollStuff != null) {
-      for (int i=0; i<100; i++) {
+      for (int i = 0; i < 100; i++) {
         addLabel(myScrollStuff, "hello " + i);
       }
       screen.layoutLayers();

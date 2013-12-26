@@ -14,12 +14,13 @@ import java.util.Random;
 
 /**
  * ScreenController for TableStartScreen.
+ *
  * @author void
  */
 public class TableStartScreen implements ScreenController, NiftyExample {
 
   @Override
-  public void bind(final Nifty newNifty, final Screen newScreen) {
+  public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
   }
 
   @Override
@@ -154,8 +155,9 @@ public class TableStartScreen implements ScreenController, NiftyExample {
     //noinspection unchecked
     ListBox<TableRow> listBox = startScreen.findNiftyControl("serverBox", ListBox.class);
     if (listBox != null) {
-      for (int i=0; i<1000; i++) {
-        listBox.addItem(new TableRow(i, randomString(), randomString(), randomString(), randomString(), randomString()));
+      for (int i = 0; i < 1000; i++) {
+        listBox.addItem(new TableRow(i, randomString(), randomString(), randomString(), randomString(),
+            randomString()));
       }
     }
   }
@@ -167,7 +169,7 @@ public class TableStartScreen implements ScreenController, NiftyExample {
   @Nonnull
   private static String randomString() {
     StringBuilder sb = new StringBuilder(5);
-    for(int i=0; i<5; i++) {
+    for (int i = 0; i < 5; i++) {
       sb.append(AB.charAt(rnd.nextInt(AB.length())));
     }
     return sb.toString();

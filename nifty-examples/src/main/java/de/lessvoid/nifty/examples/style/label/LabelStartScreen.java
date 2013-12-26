@@ -26,7 +26,7 @@ public class LabelStartScreen implements ScreenController, NiftyExample {
    * @param newScreen screen
    */
   @Override
-  public final void bind(final Nifty newNifty, final Screen newScreen) {
+  public final void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
   }
 

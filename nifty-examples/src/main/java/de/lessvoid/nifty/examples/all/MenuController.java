@@ -6,8 +6,11 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import javax.annotation.Nonnull;
+
 /**
  * Menu.
+ *
  * @author void
  */
 public class MenuController implements ScreenController {
@@ -24,11 +27,12 @@ public class MenuController implements ScreenController {
 
   /**
    * bind.
-   * @param niftyParam niftyParam
+   *
+   * @param niftyParam  niftyParam
    * @param screenParam screenParam
    */
   @Override
-  public void bind(final Nifty niftyParam, final Screen screenParam) {
+  public void bind(@Nonnull final Nifty niftyParam, @Nonnull final Screen screenParam) {
     this.nifty = niftyParam;
     this.screen = screenParam;
     hideIfThere("thumbHelloWorld");
@@ -119,6 +123,7 @@ public class MenuController implements ScreenController {
 
   /**
    * popupExit.
+   *
    * @param exit exit string
    */
   public void popupExit(final String exit) {

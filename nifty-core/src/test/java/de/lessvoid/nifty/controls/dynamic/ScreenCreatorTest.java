@@ -141,7 +141,7 @@ public class ScreenCreatorTest {
 
   private class MyScreenController implements ScreenController {
     @Override
-    public void bind(Nifty nifty, Screen screen) {
+    public void bind(@Nonnull Nifty nifty, @Nonnull Screen screen) {
     }
 
     @Override
@@ -162,7 +162,7 @@ public class ScreenCreatorTest {
     }
 
     @Override
-    public void bind(Nifty nifty, Screen screen) {
+    public void bind(@Nonnull Nifty nifty, @Nonnull Screen screen) {
     }
 
     @Override

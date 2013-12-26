@@ -12,6 +12,7 @@ import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import org.easymock.EasyMock;
 
+import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,7 +52,7 @@ public class HtmlMain implements ScreenController {
   }
 
   @Override
-  public void bind(final Nifty nifty, final Screen screen) {
+  public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     this.nifty = nifty;
     this.screen = screen;
 
