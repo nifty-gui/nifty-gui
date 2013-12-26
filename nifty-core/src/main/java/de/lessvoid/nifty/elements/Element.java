@@ -1,5 +1,20 @@
 package de.lessvoid.nifty.elements;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEvent;
@@ -8,7 +23,12 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.effects.*;
+import de.lessvoid.nifty.effects.Effect;
+import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectManager;
+import de.lessvoid.nifty.effects.ElementEffectStateCache;
+import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.events.ElementDisableEvent;
 import de.lessvoid.nifty.elements.events.ElementEnableEvent;
 import de.lessvoid.nifty.elements.events.ElementHideEvent;
@@ -27,7 +47,11 @@ import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
-import de.lessvoid.nifty.loaderv2.types.apply.*;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderer;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererImage;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererPanel;
+import de.lessvoid.nifty.loaderv2.types.apply.Convert;
 import de.lessvoid.nifty.loaderv2.types.helper.PaddingAttributeParser;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -36,11 +60,6 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * @author void
@@ -591,7 +610,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   @Nonnull
   public Iterator<Element> getDescendants() {
     if (children == null) {
-      return Collections.emptyIterator();
+      // We don't want to give up Java 1.6 compatibility right now. Since Collections.emptyIterator() is Java 1.7 API
+      // for now we've made our own replacement (see end of class). If we finally switch over to 1.7 we can use the
+      // original method.
+      //
+      // return Collections.emptyIterator();
+      return emptyIterator();
     }
     return new ElementTreeTraverser(this);
   }
@@ -2595,5 +2619,17 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       }
       return element.getChildren().indexOf(element);
     }
+  }
+
+  // We don't want to give up Java 1.6 compatibility right now.
+  private static <T> Iterator<T> emptyIterator() {
+    return (Iterator<T>) EmptyIterator.EMPTY_ITERATOR;
+}
+
+  private static class EmptyIterator<E> implements Iterator<E> {
+    static final EmptyIterator<Object> EMPTY_ITERATOR = new EmptyIterator<Object>();
+    public boolean hasNext() { return false; }
+    public E next() { throw new NoSuchElementException(); }
+    public void remove() { throw new IllegalStateException(); }
   }
 }
