@@ -31,6 +31,10 @@
                     <groupId>lessvoid</groupId>
                     <artifactId>nifty-lwjgl-renderer</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>lessvoid</groupId>
+                    <artifactId>nifty-openal-soundsystem</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>

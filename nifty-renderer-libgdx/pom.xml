@@ -16,13 +16,13 @@
 
     <repositories>
         <repository>
-            <id>gdx-nightlies</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <id>gdx-releases</id>
+            <url>http://oss.sonatype.org/content/repositories/releases/</url>
         </repository>
     </repositories>
 
     <properties>
-        <gdx.version>1.0-SNAPSHOT</gdx.version>
+        <gdx.version>0.9.9</gdx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

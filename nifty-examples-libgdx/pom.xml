@@ -17,7 +17,7 @@
 
     <properties>
         <skip.integration.tests>false</skip.integration.tests>
-        <gdx.version>1.0-SNAPSHOT</gdx.version>
+        <gdx.version>0.9.9</gdx.version>
         <android.version>4.1.1.4</android.version>
         <android.maven.version>3.6.0</android.maven.version>
         <gwt.version>2.5.0</gwt.version>
@@ -28,8 +28,8 @@
 
     <repositories>
         <repository>
-            <id>gdx-nightlies</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <id>gdx-releases</id>
+            <url>http://oss.sonatype.org/content/repositories/releases/</url>
         </repository>
     </repositories>
 
