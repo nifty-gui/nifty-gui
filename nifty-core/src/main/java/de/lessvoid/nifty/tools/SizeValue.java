@@ -14,276 +14,349 @@ import javax.annotation.concurrent.Immutable;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 @Immutable
-public class SizeValue {
-  /**
-   * The default value. This is used if the attribute is unset or null. It can also be used to track the pixel value
-   * that the default resolves to.
-   */
-  @Nonnull
-  public static final String DEFAULT = "d";
-
-  /**
-   * Add a PIXEL to some size value to indicate a pixel value.
-   * <p/>
-   * Example: "100px" or "640px"
-   */
-  @Nonnull
-  public static final String PIXEL = "px";
-
-  /**
-   * Add a PERCENT to some size value to indicate a percent value.
-   * <p/>
-   * Example: "100%" or "50%"
-   */
-  @Nonnull
-  public static final String PERCENT = "%";
-
-  /**
-   * Add a WIDTH_SUFFIX to some size value to indicate that this value will be calculated in respect to the Width of
-   * an element. This is only appropriate to a height attribute and this class can only detect it's present. Handling
-   * must be performed outside of this class.
-   */
-  @Nonnull
-  public static final String WIDTH_SUFFIX = "w";
-
-  /**
-   * Add a HEIGHT_SUFFIX to some size value to indicate that this value will be calculated in respect to the Height
-   * of an element. This is only appropriate to a width attribute and this class can only detect it's present.
-   * Handling must be performed outside of this class.
-   */
-  @Nonnull
-  public static final String HEIGHT_SUFFIX = "h";
-
-  /**
-   * The WILDCARD value will not really be handled by the SizeValue class. Its used to use the maximum available
-   * space by some layout managers.
-   */
-  @Nonnull
-  public static final String WILDCARD = "*";
-
-  /**
-   * The SUM_SUFFIX value will not really be handled by the SizeValue class.
-   * <p/>
-   * When set, this size value will be the sum of the sizes of the content/children  of the element it is used on.
-   * Only children with absolute size values will be considered, or children that also have a sum/max size value.
-   * <p/>
-   * Builders or XML should use the value "s" or "sum". A pixel value can also be given in the form of "100s",
-   * but this is for internal use (it represents the calculated width).
-   */
-  @Nonnull
-  public static final String SUM = "s";
-
-  /**
-   * The MAX_SUFFIX value will not really be handled by the SizeValue class.
-   * <p/>
-   * When set, this size value will be the highest of the sizes of the content/children  of the element it is used on.
-   * Only children with absolute size values will be considered, or children that also have a sum/max size value.
-   * <p/>
-   * Builders or XML should use the value "m" or "max". A pixel value can also be given in the form of "100m",
-   * but this is for internal use (it represents the calculated width).
-   */
-  @Nonnull
-  public static final String MAX = "m";
-
+public final class SizeValue {
   /**
    * Max percent constant.
    */
   public static final float MAX_PERCENT = 100.0f;
 
   /**
-   * The current value that has been set.
+   * The shared instance of the default size value.
    */
   @Nonnull
-  private final String value;
+  private static final SizeValue DEF = new SizeValue(SizeValueType.Default);
 
   /**
-   * percent value.
+   * The shared instance of a maximum size value.
    */
-  private final float percentValue;
+  @Nonnull
+  private static final SizeValue MAX = new SizeValue(SizeValueType.Maximum);
 
   /**
-   * pixel value.
+   * The shared instance of the 0px size value. This is used to extremely often that it comes in handy to share the
+   * instance for some minor optimization.
    */
-  private final float pixelValue;
-
-  private boolean isIndependent;
-  private boolean hasValue;
-  private boolean isPixel;
-  private boolean isPercent;
+  @Nonnull
+  private static final SizeValue NULL_PX = new SizeValue(0, SizeValueType.Pixel);
 
   /**
-   * Matches DEFAULT.
+   * The shared instance of a sum size value.
    */
-  private boolean hasDefault;
+  @Nonnull
+  private static final SizeValue SUM = new SizeValue(SizeValueType.Sum);
 
   /**
-   * Matches WILDCARD.
+   * The shared instance of a wildcard size value.
    */
-  private boolean hasWildcard;
+  @Nonnull
+  private static final SizeValue WILDCARD = new SizeValue(SizeValueType.Wildcard);
 
   /**
-   * value has SUM_SUFFIX attached.
+   * The type of this size value.
    */
-  private boolean hasSum;
+  @Nonnull
+  private final SizeValueType type;
 
   /**
-   * value has MAX_SUFFIX attached.
+   * The value stored in this size value, check {@link #hasCalculatedValue} and {@link #hasValue} to ensure that this
+   * value is valid.
    */
-  private boolean hasMax;
+  private final int value;
 
   /**
-   * value has WIDTH_SUFFIX attached.
+   * This is set {@code true} in case the {@link #value} is set as calculated value.
    */
-  private boolean hasWidthSuffix;
+  private final boolean hasCalculatedValue;
 
   /**
-   * value has HEIGHT_SUFFIX attached.
+   * This is set {@code true} in case the {@link #value} is set as normal value.
    */
-  private boolean hasHeightSuffix;
+  private final boolean hasValue;
 
   /**
-   * Create a new instance using the given value.
+   * Create a new instance of the size value that only contains a type. This only works for types that allow to be
+   * used without value.
    *
-   * @param valueParam the String value
+   * @param type the type
+   * @throws java.lang.IllegalArgumentException in case the type requires a value
+   * @see SizeValueType#getValueRequirement()
    */
-  public SizeValue(@Nullable String valueParam) {
-    isIndependent = true;
-    hasValue = false;
-    isPixel = false;
-    isPercent = false;
-
-    if (valueParam == null || valueParam.length() == 0 || valueParam.equals("default")) { // alias for "d"
-      valueParam = DEFAULT;
-      hasDefault = true;
-      isPixel = true;
-    } else if (valueParam.equals("sum")) { // alias for "s"
-      valueParam = SUM;
-      hasSum = true;
-      isPixel = true;
-    } else if (valueParam.equals("max")) { // alias for "m"
-      valueParam = MAX;
-      hasMax = true;
-      isPixel = true;
-    } else if (valueParam.endsWith(WILDCARD)) {
-      hasWildcard = true;
-      isIndependent = false;
-    } else if (valueParam.endsWith(DEFAULT)) {
-      hasDefault = true;
-      isPixel = true;
-      hasValue = valueParam.length() > DEFAULT.length();
-    } else if (valueParam.endsWith(SUM)) {
-      hasSum = true;
-      isPixel = true;
-      hasValue = valueParam.length() > SUM.length();
-    } else if (valueParam.endsWith(MAX)) {
-      hasMax = true;
-      isPixel = true;
-      hasValue = valueParam.length() > MAX.length();
-    } else if (valueParam.endsWith(PERCENT + WIDTH_SUFFIX)) {
-      hasWidthSuffix = true;
-      isIndependent = false;
-      isPercent = true;
-      hasValue = valueParam.length() > PERCENT.length() + WIDTH_SUFFIX.length();
-    } else if (valueParam.endsWith(PERCENT + HEIGHT_SUFFIX)) {
-      hasHeightSuffix = true;
-      isIndependent = false;
-      isPercent = true;
-      hasValue = valueParam.length() > PERCENT.length() + HEIGHT_SUFFIX.length();
-    } else if (valueParam.endsWith(PERCENT)) {
-      isIndependent = false;
-      isPercent = true;
-      hasValue = valueParam.length() > PERCENT.length();
-    } else if (valueParam.endsWith(PIXEL)) {
-      isPixel = true;
-      hasValue = valueParam.length() > PERCENT.length();
-    } else { // "123"
-      isPixel = true;
-      hasValue = true;
+  public SizeValue(@Nonnull final SizeValueType type) {
+    if (type.getValueRequirement() == SizeValueType.ValueRequirement.Required) {
+      throw new IllegalArgumentException("Size value type " + type.name() + " requires a value!");
     }
-
-    this.value = valueParam;
-
-    this.percentValue = getPercentValue();
-    this.pixelValue = getPixelValue();
-
-
+    this.type = type;
+    value = 0;
+    hasValue = false;
+    hasCalculatedValue = false;
   }
 
-  @Nonnull
-  private static final SizeValue DEF = new SizeValue(null);
+  /**
+   * Create a new instance of the size value that contains a value and a type. This only works for types that allow a
+   * fixed set value.
+   *
+   * @param value the value
+   * @param type  the type
+   * @throws java.lang.IllegalArgumentException in case the type forbids the usage of a value or only accepts a
+   *                                            calculated value
+   * @see SizeValueType#getValueRequirement()
+   */
+  public SizeValue(final int value, @Nonnull final SizeValueType type) {
+    switch (type.getValueRequirement()) {
+      case Forbidden:
+        throw new IllegalArgumentException("Size value type " + type.name() + " does not allow a value.");
+      case CalculatedOnly:
+        throw new IllegalArgumentException("Size value type " + type.name() + " does only allow calculated values");
+    }
+    this.type = type;
+    this.value = value;
+    hasValue = true;
+    hasCalculatedValue = false;
+  }
 
+  /**
+   * Create a new instance of a size value that contains a computed value and a type. This only works for values that
+   * do not require a fixed value and allow a computed value.
+   *
+   * @param type            the type
+   * @param calculatedValue the computed value
+   * @throws java.lang.IllegalArgumentException in case the type forbids the usage of values or requires a fixed set
+   *                                            value    *
+   * @see SizeValueType#getValueRequirement()
+   */
+  public SizeValue(@Nonnull final SizeValueType type, final int calculatedValue) {
+    switch (type.getValueRequirement()) {
+      case Forbidden:
+        throw new IllegalArgumentException("Size value type " + type.name() + " does not allow a value.");
+      case Required:
+        throw new IllegalArgumentException("Size value type " + type.name() + " requires a value!");
+    }
+    this.type = type;
+    this.value = calculatedValue;
+    hasValue = false;
+    hasCalculatedValue = true;
+  }
+
+  /**
+   * This constructor is used to parse a size value from a string.
+   * <p />
+   * This is the most expensive way to create a size value. Only use this if you really need to parse a string to get
+   * the size value. This method does <b>not</b> allow to set computed values as those are only set by the layout
+   * process that does not use this method to create its instances.
+   *
+   * @param valueParam the size value as string
+   * @throws java.lang.IllegalArgumentException in case its not possible to parse the value
+   */
+  public SizeValue(@Nullable final String valueParam) {
+    hasCalculatedValue = false;
+    if (valueParam == null || valueParam.isEmpty() || valueParam.equals("default")) { // alias for "d"
+      type = SizeValueType.Default;
+      value = 0;
+      hasValue = false;
+      return;
+    } else if (valueParam.equals("sum")) { // alias for "s"
+      type = SizeValueType.Sum;
+      value = 0;
+      hasValue = false;
+      return;
+    } else if (valueParam.equals("max")) { // alias for "m"
+      type = SizeValueType.Maximum;
+      value = 0;
+      hasValue = false;
+      return;
+    }
+
+    SizeValueType selectedType = null;
+    for (@Nonnull final SizeValueType currentType : SizeValueType.values()) {
+      if (valueParam.endsWith(currentType.getExtension())) {
+        selectedType = currentType;
+        break;
+      }
+    }
+
+    if (selectedType == null) {
+      // no suffix -> falling back to px
+      type = SizeValueType.Pixel;
+      try {
+        value = Integer.valueOf(valueParam);
+        hasValue = true;
+      } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("String value [" + valueParam + "] does not fit the required format.", e);
+      }
+    } else {
+      type = selectedType;
+
+      final int paramLength = valueParam.length();
+      final int extensionLength = type.getExtension().length();
+
+      if (paramLength > extensionLength) {
+        // seems like we got a value
+        switch (type.getValueRequirement()) {
+          case CalculatedOnly:
+            throw new IllegalArgumentException("Setting the value by string is not allowed for types that only allow " +
+                "a calculated value.");
+          case Forbidden:
+            throw new IllegalArgumentException("The size type " + type.name() + " does not allow any values.");
+        }
+        try {
+          value = Integer.valueOf(valueParam.substring(0, paramLength - extensionLength));
+          hasValue = true;
+        } catch (NumberFormatException e) {
+          throw new IllegalArgumentException("String value [" + valueParam + "] does not fit the required format.", e);
+        }
+      } else {
+        if (type.getValueRequirement() == SizeValueType.ValueRequirement.Required) {
+          throw new IllegalArgumentException("Size value type " + type.name() + " requires a value!");
+        }
+        value = 0;
+        hasValue = false;
+      }
+    }
+  }
+
+  /**
+   * Get the default size value.
+   *
+   * @return a instance of the default size value
+   * @see de.lessvoid.nifty.tools.SizeValueType#Default
+   */
   @Nonnull
   public static SizeValue def() {
     return DEF;
   }
 
+  /**
+   * Get a instance of the default size value with a attached calculated size value.
+   *
+   * @param pixelValue the calculated pixel size
+   * @return the default size value instance with the attached calculated size
+   * @see de.lessvoid.nifty.tools.SizeValueType#Default
+   */
   @Nonnull
-  public static SizeValue def(int pixelValue) {
-    return new SizeValue(pixelValue + DEFAULT);
+  public static SizeValue def(final int pixelValue) {
+    return new SizeValue(SizeValueType.Default, pixelValue);
   }
 
-  private static final SizeValue NULL_PX = new SizeValue("0" + PIXEL);
-
   /**
-   * static helper to create a pixel based SizeValue.
+   * Create a pixel based size value.
    *
    * @param pixelValue pixel value
-   * @return SizeValue
+   * @return the size value instance representing the pixel value
+   * @see de.lessvoid.nifty.tools.SizeValueType#Pixel
    */
   @Nonnull
   public static SizeValue px(final int pixelValue) {
     if (pixelValue == 0) {
       return NULL_PX;
     }
-    return new SizeValue(pixelValue + PIXEL);
+    return new SizeValue(pixelValue, SizeValueType.Pixel);
   }
 
   /**
-   * static helper to create a percentage based SizeValue.
+   * Create a percentage based size value.
    *
    * @param percentage percentage value
-   * @return SizeValue
+   * @return the size value instance representing the percentage value
+   * @see de.lessvoid.nifty.tools.SizeValueType#Percent
    */
   @Nonnull
   public static SizeValue percent(final int percentage) {
-    return new SizeValue(percentage + PERCENT);
+    return new SizeValue(percentage, SizeValueType.Percent);
   }
 
-  private static final SizeValue WC = new SizeValue(WILDCARD);
+  /**
+   * Create a percentage based size value. This percentage will use the height of the parent element as reference.
+   * This value is only allowed to be used as width value.
+   *
+   * @param percentage percentage value
+   * @return the size value instance representing the percentage value
+   * @see de.lessvoid.nifty.tools.SizeValueType#PercentHeight
+   */
+  @Nonnull
+  public static SizeValue percentHeight(final int percentage) {
+    return new SizeValue(percentage, SizeValueType.PercentHeight);
+  }
 
   /**
-   * static helper to create a wildcard based SizeValue.
+   * Create a percentage based size value. This percentage will use the width of the parent element as reference.
+   * This value is only allowed to be used as height value.
    *
-   * @return SizeValue
+   * @param percentage percentage value
+   * @return the size value instance representing the percentage value
+   * @see de.lessvoid.nifty.tools.SizeValueType#PercentWidth
+   */
+  @Nonnull
+  public static SizeValue percentWidth(final int percentage) {
+    return new SizeValue(percentage, SizeValueType.PercentWidth);
+  }
+
+  /**
+   * Get a wildcard size value.
+   *
+   * @return the size value instance representing the wildcard value
+   * @see de.lessvoid.nifty.tools.SizeValueType#Wildcard
    */
   @Nonnull
   public static SizeValue wildcard() {
-    return WC;
+    return WILDCARD;
   }
 
+  /**
+   * Create a wildcard size value that stores a computed value.
+   *
+   * @param computedValue the computed size
+   * @return the size value instance representing the wildcard with computed size
+   * @see de.lessvoid.nifty.tools.SizeValueType#Wildcard
+   */
   @Nonnull
-  public static SizeValue wildcard(int computedValue) {
-    return new SizeValue(computedValue + WILDCARD);
+  public static SizeValue wildcard(final int computedValue) {
+    return new SizeValue(SizeValueType.Wildcard, computedValue);
   }
 
+  /**
+   * Get a sum size value.
+   *
+   * @return the size value instance representing the sum value
+   * @see de.lessvoid.nifty.tools.SizeValueType#Sum
+   */
   @Nonnull
   public static SizeValue sum() {
-    return new SizeValue(SUM);
+    return SUM;
   }
 
+  /**
+   * Create a sum size value that stores a computed value.
+   *
+   * @param computedValue the computed size
+   * @return the size value instance representing the sum with computed size
+   * @see de.lessvoid.nifty.tools.SizeValueType#Sum
+   */
   @Nonnull
-  public static SizeValue sum(int computedValue) {
-    return new SizeValue(computedValue + SUM);
+  public static SizeValue sum(final int computedValue) {
+    return new SizeValue(SizeValueType.Sum, computedValue);
   }
 
+  /**
+   * Get a maximum size value.
+   *
+   * @return the size value instance representing the maximum value
+   * @see de.lessvoid.nifty.tools.SizeValueType#Maximum
+   */
   @Nonnull
   public static SizeValue max() {
-    return new SizeValue(MAX);
+    return MAX;
   }
 
+  /**
+   * Create a maximum size value that stores a computed value.
+   *
+   * @param computedValue the computed size
+   * @return the size value instance representing the maximum with computed size
+   * @see de.lessvoid.nifty.tools.SizeValueType#Maximum
+   */
   @Nonnull
-  public static SizeValue max(int computedValue) {
-    return new SizeValue(computedValue + MAX);
+  public static SizeValue max(final int computedValue) {
+    return new SizeValue(SizeValueType.Maximum, computedValue);
   }
 
   /**
@@ -292,7 +365,7 @@ public class SizeValue {
    * @return {@code true} if the size of this value can be calculated without knowing about the parent.
    */
   public boolean isIndependentFromParent() {
-    return isIndependent;
+    return type.isIndependent();
   }
 
   /**
@@ -312,7 +385,7 @@ public class SizeValue {
    * @return true when either PERCENT or PIXEL is given.
    */
   public boolean hasValue() {
-    return isPercent() || isPixel();
+    return hasValue || hasCalculatedValue;
   }
 
   /**
@@ -324,9 +397,9 @@ public class SizeValue {
    */
   public float getValue(final float range) {
     if (isPercent()) {
-      return (range / MAX_PERCENT) * percentValue;
+      return (range / MAX_PERCENT) * value;
     } else if (isPixel()) {
-      return pixelValue;
+      return value;
     } else {
       return -1;
     }
@@ -339,7 +412,13 @@ public class SizeValue {
    * @return the resulting value rounded to the nearest integer.
    */
   public int getValueAsInt(final float range) {
-    return Math.round(getValue(range));
+    if (isPercent()) {
+      return Math.round((range / MAX_PERCENT) * value);
+    } else if (isPixel()) {
+      return value;
+    } else {
+      return -1;
+    }
   }
 
   /**
@@ -349,7 +428,7 @@ public class SizeValue {
    * and false otherwise
    */
   public boolean isPixel() {
-    return isPixel && hasValue;
+    return hasValue() && !isPercent();
   }
 
   /**
@@ -359,51 +438,77 @@ public class SizeValue {
    * and false otherwise.
    */
   public boolean isPercent() {
-    return isPercent;
+    if (!hasValue()) {
+      return false;
+    }
+    switch (type) {
+      case Percent:
+      case PercentWidth:
+      case PercentHeight:
+        return true;
+      default:
+        return false;
+    }
   }
 
   /**
-   * toString.
+   * Get the string representation of this size value.
+   * <p />
+   * The output of this function is most likely <b>not</b> valid to be parsed by the {@link #SizeValue(String)}
+   * constructor as it contains the current calculated value and this constructor does not support this kind of value.
    *
-   * @return value
+   * @return the string representation of this instance
    */
   @Nonnull
   @Override
   public String toString() {
-    return value;
+    StringBuilder builder = new StringBuilder();
+    if (hasValue) {
+      builder.append(value);
+    }
+    builder.append(type.getExtension());
+    if (hasCalculatedValue) {
+      builder.append('[').append(value).append("px]");
+    }
+    return builder.toString();
   }
 
   public boolean hasDefault() {
-    return hasDefault;
+    return type == SizeValueType.Default;
   }
 
   public boolean hasWidthSuffix() {
-    return hasWidthSuffix;
+    return type == SizeValueType.PercentWidth;
   }
 
   public boolean hasHeightSuffix() {
-    return hasHeightSuffix;
+    return type == SizeValueType.PercentHeight;
   }
 
   public boolean hasWildcard() {
-    return hasWildcard;
+    return type == SizeValueType.Wildcard;
   }
 
   public boolean hasSum() {
-    return hasSum;
+    return type == SizeValueType.Sum;
   }
 
   public boolean hasMax() {
-    return hasMax;
+    return type == SizeValueType.Maximum;
   }
 
   @Override
   public int hashCode() {
-    return value.hashCode();
+    int hash = 1;
+    hash = hash * 13 + (hasValue ? 1 : 0);
+    hash = hash * 19 + (hasCalculatedValue ? 1 : 0);
+    hash = hash * 29 + type.hashCode();
+    hash = hash * 37 + value;
+    return hash;
   }
 
   @Override
-  public boolean equals(@Nullable Object obj) {
+  public boolean equals(@Nullable final Object obj) {
     if (super.equals(obj)) {
       return true;
     }
@@ -413,42 +518,13 @@ public class SizeValue {
     if (!(obj instanceof SizeValue)) {
       return false;
     }
-    SizeValue other = (SizeValue) obj;
-    return value.equals(other.value);
-  }
-
-  @Nonnull
-  private String getValueWithoutSuffix() {
-    for (int i = value.length() - 1; i >= 0; --i) {
-      if (value.charAt(i) >= '0' && value.charAt(i) <= '9') {
-        return value.substring(0, i + 1);
-      }
+    final SizeValue other = (SizeValue) obj;
+    if (type != other.type) {
+      return false;
     }
-    return "0";
-  }
-
-  /**
-   * Get the percent value this value represent.
-   *
-   * @return the actual percent value.
-   */
-  private float getPercentValue() {
-    if (isPercent()) {
-      return Float.valueOf(getValueWithoutSuffix());
-    } else {
-      return 0;
+    if (value != other.value) {
+      return false;
     }
-  }
-
-  /**
-   * Get the pixel value this value represent.
-   *
-   * @return the actual pixel value.
-   */
-  private int getPixelValue() {
-    if (isPixel()) {
-      return Integer.valueOf(getValueWithoutSuffix());
-    }
-    return 0;
+    return !(hasValue != other.hasValue || hasCalculatedValue != other.hasCalculatedValue);
   }
 }
