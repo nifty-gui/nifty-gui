@@ -21,7 +21,6 @@ public class ObjectPoolTest {
     }
   });
   private ObjectPool<Object> pool2 = new ObjectPool<Object>(new Factory<Object>() {
-
     @Nonnull
     @Override
     public Object createNew() {
@@ -31,11 +30,21 @@ public class ObjectPoolTest {
 
   @Test
   public void testPool() {
+    Object[] storage = new Object[200];
+    ObjectPool<Object> pool = this.pool;
     long start = new Date().getTime();
     for (int i = 0; i < 100000; i++) {
+      for (int j = 0; j < 100; j++) {
+        storage[j] = pool.allocate();
+      }
+      for (int j = 50; j < 100; j++) {
+        pool.free(storage[j]);
+      }
+      for (int j = 50; j < 200; j++) {
+        storage[j] = pool.allocate();
+      }
       for (int j = 0; j < 200; j++) {
-        Object o1 = pool.allocate();
-        pool.free(o1);
+        pool.free(storage[j]);
       }
     }
     long end = new Date().getTime();
@@ -49,6 +58,9 @@ public class ObjectPoolTest {
       for (int j = 0; j < 200; j++) {
         new Object();
       }
+      for (int j = 50; j < 200; j++) {
+        new Object();
+      }
     }
     long end = new Date().getTime();
     System.out.println("testNoPool " + Long.toString(end - start) + "ms");
@@ -56,11 +68,21 @@ public class ObjectPoolTest {
 
   @Test
   public void test2Pool() {
+    Object[] storage = new Object[200];
+    ObjectPool<Object> pool = this.pool2;
     long start = new Date().getTime();
     for (int i = 0; i < 1000; i++) {
+      for (int j = 0; j < 100; j++) {
+        storage[j] = pool.allocate();
+      }
+      for (int j = 50; j < 100; j++) {
+        pool.free(storage[j]);
+      }
+      for (int j = 50; j < 200; j++) {
+        storage[j] = pool.allocate();
+      }
       for (int j = 0; j < 200; j++) {
-        Object o1 = pool2.allocate();
-        pool2.free(o1);
+        pool.free(storage[j]);
       }
     }
     long end = new Date().getTime();
@@ -72,6 +94,9 @@ public class ObjectPoolTest {
     long start = new Date().getTime();
     for (int i = 0; i < 1000; i++) {
       for (int j = 0; j < 200; j++) {
+        new HelperObject();
+      }
+      for (int j = 50; j < 200; j++) {
         new HelperObject();
       }
     }
