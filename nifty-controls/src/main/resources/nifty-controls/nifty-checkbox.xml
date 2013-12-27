@@ -4,7 +4,7 @@
                        controller="de.lessvoid.nifty.controls.checkbox.CheckboxControl">
         <panel style="#panel" focusable="true" visibleToMouse="true">
             <interact onClick="onClick()"/>
-            <image id="#select" style="#select"/>
+            <panel id="#select" style="#select"/>
         </panel>
     </controlDefinition>
 </nifty-controls>
