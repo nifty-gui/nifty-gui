@@ -381,7 +381,7 @@ public class Nifty {
       invokeMethods();
       closePopUps();
       removeLayerElements();
-      executeEndOfFrameElementActions();
+      executeEndOfFrameElementActionsInternal();
     }
   }
 
@@ -422,17 +422,29 @@ public class Nifty {
     }
   }
 
-  public void executeEndOfFrameElementActions() {
+  private void executeEndOfFrameElementActionsInternal() {
     if (hasEndOfFrameElementActions()) {
       endOfFrameElementActions.flip();
       final List<EndOfFrameElementAction> workingCopy = endOfFrameElementActions.getSecond();
 
       final int size = workingCopy.size();
-      for (int i=0; i<size; i++) {
+      for (int i = 0; i < size; i++) {
         workingCopy.get(i).perform();
       }
       workingCopy.clear();
     }
+  }
+
+  /**
+   * @deprecated Calling this function from anywhere outside Nifty is a bad idea in all cases. Nothing good comes
+   * from it.
+   */
+  @Deprecated
+  public void executeEndOfFrameElementActions() {
+    log.warning("executeEndOfFrameElementActions() is a method that is basically the root of all evil. If you need " +
+        "to use it, your application most likely has a real bad design flaw. The trouble you can cause using this " +
+        "function is... big.");
+    executeEndOfFrameElementActionsInternal();
   }
 
   private boolean hasEndOfFrameElementActions() {
@@ -1073,11 +1085,11 @@ public class Nifty {
    * @param id id of popup to close
    * @param closeNotify EndNotify callback
    */
-  public void closePopup(@Nonnull final String id, final EndNotify closeNotify) {
+  public void closePopup(@Nonnull final String id, @Nullable final EndNotify closeNotify) {
     closePopupInternal(id, closeNotify);
   }
 
-  private void closePopupInternal(@Nonnull final String id, final EndNotify closeNotify) {
+  private void closePopupInternal(@Nonnull final String id, @Nullable final EndNotify closeNotify) {
     Element popup = popups.get(id);
     if (popup == null) {
       log.warning("missing popup [" + id + "] o_O");
