@@ -172,7 +172,7 @@ public class DraggableControl extends AbstractController implements Draggable {
       if (droppableControl == null) {
         log.warning("Droppable has no droppable control. Corrupted controls! Canceling drag.");
         dragCancel();
-      } else if (droppable != null && droppableControl.accept(droppable, this)) {
+      } else if (droppableControl.accept(droppable, this)) {
         droppableControl.drop(this, closePopup());
       } else {
         dragCancel();
