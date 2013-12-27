@@ -285,7 +285,7 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
       }
     }
     if (!horizontalScrollbar) {
-      Element horizontal = getChildById("#nifty-internal-horizonal-panel");
+      Element horizontal = getChildById("#nifty-internal-horizontal-panel");
       if (horizontal != null) {
         nifty.removeElement(screen, horizontal);
       }
