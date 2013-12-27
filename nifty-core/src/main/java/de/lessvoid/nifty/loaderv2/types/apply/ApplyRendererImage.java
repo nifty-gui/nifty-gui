@@ -43,7 +43,6 @@ public class ApplyRendererImage implements ApplyRenderer {
 
     String filename = attributes.get("filename");
     if (filename == null) {
-      log.severe("Filename missing for image.");
       return;
     }
 
@@ -52,6 +51,7 @@ public class ApplyRendererImage implements ApplyRenderer {
         filename,
         attributes.getAsBoolean("filter", Convert.DEFAULT_IMAGE_FILTER));
     if (image == null) {
+      log.severe("Image for the filename \"" + filename + "\" couldn't be load.");
       return;
     }
 

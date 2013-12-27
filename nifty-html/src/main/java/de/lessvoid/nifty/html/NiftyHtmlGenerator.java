@@ -2,6 +2,7 @@ package de.lessvoid.nifty.html;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ElementBuilder;
+import de.lessvoid.nifty.elements.Action;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderFont;
@@ -71,26 +72,31 @@ public class NiftyHtmlGenerator {
    * @throws Exception in case of any error an Exception is thrown
    */
   public void generate(final String html, @Nonnull final Screen screen, @Nonnull final Element parent) throws Exception {
-    removeAllChilds(parent);
+    removeAllChildren(parent);
 
     Parser parser = Parser.createParser(html, "ISO-8859-1");
 
-    NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory(), getDefaultFontname(), getDefaultBoldFontname());
+    final NiftyVisitor visitor = new NiftyVisitor(nifty, new NiftyBuilderFactory(), getDefaultFontname(),
+        getDefaultBoldFontname());
     parser.visitAllNodesWith(visitor);
 
-    ElementBuilder builder = visitor.builder();
-    builder.build(nifty, screen, parent);
+    final ElementBuilder builder = visitor.builder();
+    nifty.scheduleEndOfFrameElementAction(new Action() {
+      @Override
+      public void perform() {
+        builder.build(nifty, screen, parent);
+      }
+    }, null);
   }
 
   /**
    * Remove all child elements of the given parent element.
-   * @param parent the element we want to remove all childs
+   * @param parent the element we want to remove all children
    */
-  private void removeAllChilds(@Nonnull final Element parent) {
+  private void removeAllChildren(@Nonnull final Element parent) {
     for (int i=0; i<parent.getChildren().size(); i++) {
       parent.getChildren().get(i).markForRemoval();
     }
-    nifty.executeEndOfFrameElementActions();
   }
 
   private String getDefaultFontname() {

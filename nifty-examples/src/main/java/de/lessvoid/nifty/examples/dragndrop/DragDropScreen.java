@@ -42,7 +42,7 @@ public class DragDropScreen implements ScreenController, NiftyExample {
     goodStuff.addFilter(new DroppableDropFilter() {
       @Override
       public boolean accept(
-          @Nonnull final Droppable source,
+          @Nullable final Droppable source,
           @Nonnull final Draggable draggable,
           @Nonnull final Droppable target) {
         return source != evilStuff;

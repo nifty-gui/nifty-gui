@@ -169,7 +169,7 @@ public class DroppableControl extends AbstractController implements Droppable {
     filters = null;
   }
 
-  protected boolean accept(@Nonnull final Droppable source, @Nonnull final Draggable draggable) {
+  protected boolean accept(@Nullable final Droppable source, @Nonnull final Draggable draggable) {
     if (filters == null) {
       return true;
     }

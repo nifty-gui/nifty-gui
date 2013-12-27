@@ -9,8 +9,8 @@
                 </panel>
                 <control id="#nifty-internal-vertical-scrollbar" name="verticalScrollbar"/>
             </panel>
-            <panel id="#nifty-internal-horizonal-panel" childLayout="horizontal">
-                <control id="#nifty-internal-horizontal-scrollbar" name="horizontalScrollbar"/>
+            <panel id="#nifty-internal-horizontal-panel" childLayout="horizontal">
+            <control id="#nifty-internal-horizontal-scrollbar" name="horizontalScrollbar"/>
                 <panel align="right" style="#bottom-right"/>
             </panel>
         </panel>
