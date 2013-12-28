@@ -632,16 +632,46 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * Inserts a child element at the specified index in this element's list of children.
    */
   public void insertChild(@Nonnull final Element child, final int index) {
+    final int lastValidIndex = getChildrenCount();
+    int usedIndex = index;
+    if (index < 0 || index > lastValidIndex) {
+      log.severe("Index is out of range. Index: " + index + " Last valid: " + lastValidIndex);
+      usedIndex = Math.min(lastValidIndex, Math.max(0, index));
+    }
     if (children == null) {
       children = new ArrayList<Element>();
     }
-    children.add(index, child);
+
+    children.add(usedIndex, child);
 
     if (elementsRenderOrderSet == null) {
       elementsRenderOrderSet = new TreeSet<Element>(RENDER_ORDER_COMPARATOR);
     }
-    elementsRenderOrderSet.add(child);
-    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[elementsRenderOrderSet.size()]);
+    if (!elementsRenderOrderSet.add(child)) {
+      log.severe("Adding the element failed as it seems this element is already part of the children list. This is " +
+          "bad. Rebuilding the children list is required now.");
+      final int childCount = children.size();
+      boolean foundProblem = false;
+      for (int i = 0; i < childCount; i++) {
+        if (i == usedIndex) {
+          continue;
+        }
+        Element testChild = children.get(i);
+        if (testChild.equals(child)) {
+          foundProblem = true;
+          children.remove(i);
+          break;
+        }
+      }
+      if (!foundProblem) {
+        /* Can't locate the issue, recovery failed -> undoing insert and throwing exception */
+        children.remove(usedIndex);
+        throw new IllegalStateException("Insert item failed, render list refused the item, " +
+            "but duplicate couldn't be located in the children list. Element is corrupted.");
+      }
+    } else {
+      elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[elementsRenderOrderSet.size()]);
+    }
   }
 
   /**
@@ -657,9 +687,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     } else {
       final int curInd = parentChildren.indexOf(this);
       if (curInd >= 0 && index != curInd) {
-        parentChildren.remove(curInd);
-        parentChildren.add(index, this);
-        parent.layoutElements();
+        Element shouldBeThis = parentChildren.remove(curInd);
+        if (shouldBeThis.equals(this)) {
+          parentChildren.add(index, this);
+        } else {
+          log.severe("Setting index failed, detected index did not return correct element. Undoing operation");
+          parentChildren.add(curInd, shouldBeThis);
+        }
       }
     }
   }
@@ -2476,6 +2510,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       if (children.isEmpty()) {
         elementsRenderOrderSet = null;
         children = null;
+      } else if (children.size() != elementsRenderOrderSet.size()) {
+        log.severe("Problem at removing a element. RenderOrderSet and children list don't have the same size " +
+            "anymore. Rebuilding the render order set.");
+        elementsRenderOrderSet.clear();
+        elementsRenderOrderSet.addAll(children);
       }
     }
 
