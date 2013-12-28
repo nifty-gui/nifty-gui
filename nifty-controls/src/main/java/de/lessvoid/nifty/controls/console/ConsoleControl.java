@@ -75,6 +75,11 @@ public class ConsoleControl extends AbstractController implements Console, Event
       } else {
         nifty.subscribe(screen, id, NiftyInputEvent.class, this);
       }
+
+      Element element = getElement();
+      if (element != null) {
+        element.getParent().layoutElements();
+      }
     }
   }
 

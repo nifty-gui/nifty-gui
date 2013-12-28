@@ -247,11 +247,11 @@ public class ScrollbarControl extends AbstractController implements Scrollbar {
       }
 
       if (getAreaSize() < minHandleSize) {
-        if (scrollbarElement.isVisible()) {
+        if (elementPosition.isVisible()) {
           elementPosition.hide();
         }
       } else {
-        if (!scrollbarElement.isVisible()) {
+        if (!elementPosition.isVisible()) {
           elementPosition.show();
         }
         elementPosition.setConstraintY(SizeValue.px(pos));
