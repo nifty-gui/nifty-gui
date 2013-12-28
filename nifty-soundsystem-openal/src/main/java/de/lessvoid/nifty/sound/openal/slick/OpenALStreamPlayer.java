@@ -138,16 +138,9 @@ public class OpenALStreamPlayer {
       in = resourceLoader.getResourceAsStream(ref);
     }
     if (in != null) {
-      try {
-        audio = new OggInputStream(in);
-        this.audio = audio;
-        positionOffset = 0;
-      } finally {
-        try {
-          in.close();
-        } catch (IOException ignored) {
-        }
-      }
+      audio = new OggInputStream(in);
+      this.audio = audio;
+      positionOffset = 0;
     } else {
       throw new IOException("Input not found.");
     }
