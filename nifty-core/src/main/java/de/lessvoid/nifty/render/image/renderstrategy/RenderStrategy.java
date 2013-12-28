@@ -6,8 +6,17 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+
 public interface RenderStrategy extends Parameterizable {
   void render(
-      final RenderDevice renderDevice, final RenderImage image, Box sourceArea, final int x,
-      final int y, final int width, final int height, final Color color, final float scale);
+      @Nonnull RenderDevice renderDevice,
+      @Nonnull RenderImage image,
+      @Nonnull Box sourceArea,
+      int x,
+      int y,
+      int width,
+      int height,
+      @Nonnull Color color,
+      float scale);
 }

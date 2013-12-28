@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public class XmlProcessorSubstituitionGroup {
   @Nonnull
-  private final Collection < Element > elements = new ArrayList < Element >();
+  private final Collection<Element> elements = new ArrayList<Element>();
   @Nonnull
   private final SubstitutionGroup substitutionGroup = new SubstitutionGroup();
   private final Schema schema;
@@ -24,7 +24,7 @@ public class XmlProcessorSubstituitionGroup {
   }
 
   @Nonnull
-  public SubstitutionGroup getSubstGroup(final XmlType xmlType) throws Exception {
+  public SubstitutionGroup getSubstGroup(@Nonnull final XmlType xmlType) throws Exception {
     for (Element e : elements) {
       e.addToSubstGroup(schema, substitutionGroup, xmlType);
     }

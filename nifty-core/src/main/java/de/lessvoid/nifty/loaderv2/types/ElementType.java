@@ -233,7 +233,7 @@ public class ElementType extends XmlBaseType {
   @Nullable
   private NiftyInputControl createNiftyInputControl(
       @Nonnull final Attributes controlDefinitionAttributes,
-      final Controller controller) {
+      @Nonnull final Controller controller) {
     String inputMappingClass = controlDefinitionAttributes.get("inputMapping");
     NiftyInputMapping inputMapping = null;
     if (inputMappingClass != null) {
@@ -260,7 +260,7 @@ public class ElementType extends XmlBaseType {
   public void applyPostAttributes(
       @Nonnull final Element element,
       @Nullable final Attributes work,
-      final NiftyRenderEngine renderEngine) {
+      @Nonnull final NiftyRenderEngine renderEngine) {
     if (work == null) {
       return;
     }
@@ -323,7 +323,10 @@ public class ElementType extends XmlBaseType {
     return elements;
   }
 
-  public void prepare(@Nonnull final Nifty nifty, final Screen screen, @Nonnull final ElementType rootElementType) {
+  public void prepare(
+      @Nonnull final Nifty nifty,
+      @Nullable final Screen screen,
+      @Nonnull final ElementType rootElementType) {
     translateSpecialValues(nifty, screen);
     makeFlat();
     applyControls(nifty);
@@ -344,7 +347,7 @@ public class ElementType extends XmlBaseType {
   }
 
   @Override
-  public void translateSpecialValues(@Nonnull final Nifty nifty, final Screen screen) {
+  public void translateSpecialValues(@Nonnull final Nifty nifty, @Nullable final Screen screen) {
     super.translateSpecialValues(nifty, screen);
     interact.translateSpecialValues(nifty, screen);
     effects.translateSpecialValues(nifty, screen);
@@ -367,14 +370,14 @@ public class ElementType extends XmlBaseType {
     }
   }
 
-  void applyControls(final Nifty nifty) {
+  void applyControls(@Nonnull final Nifty nifty) {
     internalApplyControl(nifty);
     for (int i = 0; i < elements.size(); i++) {
       elements.get(i).applyControls(nifty);
     }
   }
 
-  void internalApplyControl(final Nifty nifty) {
+  void internalApplyControl(@Nonnull final Nifty nifty) {
   }
 
   void makeFlatControls() {

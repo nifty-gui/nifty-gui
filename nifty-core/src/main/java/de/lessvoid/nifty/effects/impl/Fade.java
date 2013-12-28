@@ -53,7 +53,7 @@ public class Fade implements EffectImpl {
   public void execute(
       @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
+      @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
     if (interpolator != null) {
       r.setColorAlpha(interpolator.getValue(normalizedTime));

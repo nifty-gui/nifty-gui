@@ -11,7 +11,7 @@ public class LwjglRenderFont implements RenderFont {
   @Nonnull
   private final Font font;
 
-  public LwjglRenderFont(@Nonnull final String name, final NiftyResourceLoader resourceLoader) {
+  public LwjglRenderFont(@Nonnull final String name, @Nonnull final NiftyResourceLoader resourceLoader) {
     font = new Font(name, resourceLoader);
   }
 

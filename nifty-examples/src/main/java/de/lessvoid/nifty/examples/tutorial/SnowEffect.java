@@ -38,11 +38,14 @@ public class SnowEffect implements EffectImpl {
   private final NiftyImageMode image4 = NiftyImageMode.subImage(5, 5, 5, 5);
 
   @Override
-  public void activate(@Nonnull final Nifty nifty, @Nonnull final Element element, @Nonnull final EffectProperties parameter) {
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     niftyImage = nifty.getRenderEngine().createImage(nifty.getCurrentScreen(), "tutorial/snow.png", true);
     screenWidth = nifty.getCurrentScreen().getRootElement().getWidth();
     screenHeight = nifty.getCurrentScreen().getRootElement().getHeight();
-    for (int i=0; i<snow.length; i++) {
+    for (int i = 0; i < snow.length; i++) {
       snow[i] = new Snowflake(timeProvider.getMsTime());
     }
   }
@@ -53,7 +56,11 @@ public class SnowEffect implements EffectImpl {
   }
 
   @Override
-  public void execute(@Nonnull final Element element, final float effectTime, final Falloff falloff, @Nonnull final NiftyRenderEngine r) {
+  public void execute(
+      @Nonnull final Element element,
+      final float effectTime,
+      @Nullable final Falloff falloff,
+      @Nonnull final NiftyRenderEngine r) {
     for (Snowflake snowflake : snow) {
       snowflake.update(timeProvider.getMsTime());
       snowflake.render(r);
@@ -78,7 +85,7 @@ public class SnowEffect implements EffectImpl {
       initPosition(startTime);
       y = random.nextInt(screenHeight);
       speed = getNewSpeed();
-      this.startTime = startTime + random.nextInt((int)speed);
+      this.startTime = startTime + random.nextInt((int) speed);
     }
 
     private int getNewSpeed() {
@@ -87,7 +94,7 @@ public class SnowEffect implements EffectImpl {
 
     private void initPosition(final long currentTime) {
       initialX = x = random.nextInt(screenWidth);
-      switch(random.nextInt(5)) {
+      switch (random.nextInt(5)) {
         case 0:
           imageMode = image0;
           sizeX = 1;
@@ -128,9 +135,9 @@ public class SnowEffect implements EffectImpl {
     public void update(final long currentTime) {
       long time = currentTime - startTime;
       float t = getSinusValue(currentTime);
-      x = (int)(t * speedX * dir + initialX);
-      float value = (float)(1.0 - (speed - time) / (float)speed);
-      y = (int)(screenHeight * value);
+      x = (int) (t * speedX * dir + initialX);
+      float value = (float) (1.0 - (speed - time) / (float) speed);
+      y = (int) (screenHeight * value);
       if (y > screenHeight) {
         initPosition(currentTime);
         enabled = true;

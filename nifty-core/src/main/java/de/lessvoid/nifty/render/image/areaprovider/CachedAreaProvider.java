@@ -5,6 +5,7 @@ import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CachedAreaProvider implements AreaProvider {
@@ -27,7 +28,7 @@ public class CachedAreaProvider implements AreaProvider {
 
   @Nullable
   @Override
-  public Box getSourceArea(RenderImage renderImage) {
+  public Box getSourceArea(@Nonnull RenderImage renderImage) {
     if (renderImage != m_lastProcessedImage) {
       m_lastProcessedImage = renderImage;
       m_cachedArea = m_cachedProvider.getSourceArea(renderImage);

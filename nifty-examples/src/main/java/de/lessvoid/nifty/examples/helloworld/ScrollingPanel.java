@@ -24,7 +24,10 @@ public class ScrollingPanel implements EffectImpl {
   private float yoff;
 
   @Override
-  public void activate(@Nonnull final Nifty nifty, @Nonnull final Element element, @Nonnull final EffectProperties parameter) {
+  public void activate(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Element element,
+      @Nonnull final EffectProperties parameter) {
     timeProvider = nifty.getTimeProvider();
     start = timeProvider.getMsTime();
     xspeed = Float.valueOf(parameter.getProperty("xspeed", "1000"));
@@ -39,18 +42,23 @@ public class ScrollingPanel implements EffectImpl {
   }
 
   @Override
-  public void execute(@Nonnull final Element element, final float normalizedTime, final Falloff falloff, @Nonnull final NiftyRenderEngine r) {
+  public void execute(
+      @Nonnull final Element element,
+      final float normalizedTime,
+      @Nullable final Falloff falloff,
+      @Nonnull final NiftyRenderEngine r) {
     long now = timeProvider.getMsTime();
     r.saveState(null);
     xoff = ((now - start) % xspeed / xspeed * image.getWidth()) % image.getWidth();
     yoff = ((now - start) % yspeed / yspeed * image.getHeight()) % image.getHeight();
-    r.enableClip(element.getX(), element.getY(), element.getX() + element.getWidth(), element.getY() + element.getHeight());
+    r.enableClip(element.getX(), element.getY(), element.getX() + element.getWidth(),
+        element.getY() + element.getHeight());
     r.renderImage(
         image,
-        element.getX() + (int)xoff - image.getWidth(),
-        element.getY() + (int)yoff - image.getHeight(),
-        element.getWidth() - (int)xoff + image.getWidth(),
-        element.getHeight() - (int)yoff + image.getHeight());
+        element.getX() + (int) xoff - image.getWidth(),
+        element.getY() + (int) yoff - image.getHeight(),
+        element.getWidth() - (int) xoff + image.getWidth(),
+        element.getHeight() - (int) yoff + image.getHeight());
     r.restoreState();
   }
 

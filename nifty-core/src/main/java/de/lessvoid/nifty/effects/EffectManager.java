@@ -149,12 +149,13 @@ public class EffectManager {
    * @param renderDevice RenderDevice
    */
   public void begin(@Nonnull final NiftyRenderEngine renderDevice, @Nonnull final Element element) {
-    savedRenderStates.addAll();
+    /*savedRenderStates.addAll();
     for (int i = 0; i < effectProcessorList.size(); i++) {
       effectProcessorList.get(i).getRenderStatesToSave(renderDeviceProxy);
       savedRenderStates.removeAll(renderDeviceProxy.getStates());
     }
-    renderDevice.saveState(savedRenderStates);
+    renderDevice.saveState(savedRenderStates);  */
+    //renderDevice.saveState(null);
   }
 
   /**
@@ -163,7 +164,7 @@ public class EffectManager {
    * @param renderDevice RenderDevice
    */
   public void end(@Nonnull final NiftyRenderEngine renderDevice) {
-    renderDevice.restoreState();
+    //renderDevice.restoreState();
   }
 
   public void renderPre(@Nonnull final NiftyRenderEngine renderEngine, final Element element) {

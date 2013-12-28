@@ -70,6 +70,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   /**
    * font.
    */
+  @Nullable
   private RenderFont font;
 
   /**
@@ -384,7 +385,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param newFont font
    */
   @Override
-  public void setFont(final RenderFont newFont) {
+  public void setFont(@Nullable final RenderFont newFont) {
     this.font = newFont;
   }
 
@@ -614,6 +615,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     private boolean colorAlphaChanged;
     private boolean stateAlphaChanged;
 
+    @Nullable
     private RenderFont font;
     private boolean stateFontChanged;
 

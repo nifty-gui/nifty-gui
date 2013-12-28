@@ -101,7 +101,7 @@ public class ElementInteraction {
     return moveResult || clickResult;
   }
 
-  public void activate(final Nifty nifty) {
+  public void activate(@Nonnull final Nifty nifty) {
     primary.activate(nifty);
   }
 }

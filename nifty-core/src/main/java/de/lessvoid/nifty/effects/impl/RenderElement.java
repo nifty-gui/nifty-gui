@@ -11,6 +11,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * RenderElement.
@@ -33,7 +34,7 @@ public class RenderElement implements EffectImpl {
   public void execute(
       @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
+      @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
     ElementRenderer[] elementRenderer = element.getElementRenderer();
     for (ElementRenderer renderer : elementRenderer) {

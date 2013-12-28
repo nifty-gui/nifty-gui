@@ -54,14 +54,14 @@ public interface ScrollPanel extends NiftyControl {
    * @param pageSizeY page size y
    * @param auto      auto
    */
-  void setUp(float stepSizeX, float stepSizeY, float pageSizeX, float pageSizeY, AutoScroll auto);
+  void setUp(float stepSizeX, float stepSizeY, float pageSizeX, float pageSizeY, @Nonnull AutoScroll auto);
 
   /**
    * Set auto scroll mode.
    *
    * @param auto auto scroll mode
    */
-  void setAutoScroll(AutoScroll auto);
+  void setAutoScroll(@Nonnull AutoScroll auto);
 
   /**
    * Get auto scroll mode.

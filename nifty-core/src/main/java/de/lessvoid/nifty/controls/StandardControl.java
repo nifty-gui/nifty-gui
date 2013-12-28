@@ -8,5 +8,5 @@ import javax.annotation.Nonnull;
 
 public interface StandardControl {
   @Nonnull
-  Element createControl(Nifty nifty, Screen screen, Element parent);
+  Element createControl(@Nonnull Nifty nifty, @Nonnull Screen screen, @Nonnull Element parent);
 }

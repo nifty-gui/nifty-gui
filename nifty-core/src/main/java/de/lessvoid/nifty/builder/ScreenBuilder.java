@@ -16,7 +16,7 @@ public class ScreenBuilder {
   @Nonnull
   private final List<LayerBuilder> layerBuilders = new ArrayList<LayerBuilder>();
 
-  public ScreenBuilder(final String id) {
+  public ScreenBuilder(@Nonnull final String id) {
     creator = createScreenCreator(id);
   }
 
@@ -59,7 +59,7 @@ public class ScreenBuilder {
     return screen;
   }
 
-  ScreenCreator createScreenCreator(final String id) {
+  ScreenCreator createScreenCreator(@Nonnull final String id) {
     return new ScreenCreator(id);
   }
 }

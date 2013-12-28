@@ -9,6 +9,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Nop effect - does nothing.
@@ -28,7 +29,7 @@ public class Nop implements EffectImpl {
   public void execute(
       @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
+      @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
   }
 

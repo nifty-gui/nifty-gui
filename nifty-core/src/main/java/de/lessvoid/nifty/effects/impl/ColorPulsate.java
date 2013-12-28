@@ -11,6 +11,7 @@ import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.pulsate.Pulsator;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * ColorPulsate.
@@ -38,7 +39,7 @@ public class ColorPulsate implements EffectImpl {
   public void execute(
       @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
+      @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
     float value = pulsator.update();
     currentColor.linear(startColor, endColor, value);

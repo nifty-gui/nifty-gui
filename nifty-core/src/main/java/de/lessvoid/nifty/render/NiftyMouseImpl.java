@@ -39,7 +39,7 @@ public class NiftyMouseImpl implements NiftyMouse {
 
   @Override
   public void registerMouseCursor(
-      final String id,
+      @Nonnull final String id,
       @Nonnull final String filename,
       final int hotspotX,
       final int hotspotY) throws IOException {

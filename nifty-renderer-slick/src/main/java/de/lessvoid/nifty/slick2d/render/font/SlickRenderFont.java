@@ -4,6 +4,9 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import org.newdawn.slick.Graphics;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * This interface extends the normal Nifty {@link RenderFont} to make it usable with the render device of this Slick
  * renderer.
@@ -24,5 +27,12 @@ public interface SlickRenderFont extends RenderFont {
    * @throws IllegalArgumentException in case the parameter g is {@code null} or in case the parameter text is {@code
    *                                  null}
    */
-  void renderText(Graphics g, String text, int locX, int locY, Color color, float sizeX, float sizeY);
+  void renderText(
+      @Nonnull Graphics g,
+      @Nonnull String text,
+      int locX,
+      int locY,
+      @Nullable Color color,
+      float sizeX,
+      float sizeY);
 }

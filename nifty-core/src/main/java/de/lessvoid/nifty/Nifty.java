@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 
 /**
  * The main Nifty class.
+ *
  * @author void
  */
 public class Nifty {
@@ -105,7 +106,7 @@ public class Nifty {
   private boolean resolutionChanged;
   private final Set<String> closedPopups = new HashSet<String>();
   @Nonnull
-  private final List < ClosePopUp > closePopupList = new ArrayList < ClosePopUp >();
+  private final List<ClosePopUp> closePopupList = new ArrayList<ClosePopUp>();
   @Nullable
   private String alternateKeyForNextLoadXml;
   private long lastTime;
@@ -272,7 +273,8 @@ public class Nifty {
       @Nonnull final S subscriber) {
     ClassSaveEventTopicSubscriber theSubscriber = new ClassSaveEventTopicSubscriber(elementId, subscriber, eventClass);
     getEventService().subscribeStrongly(elementId, theSubscriber);
-    log.fine("-> subscribe [" + elementId + "] screen [" + screen + "] -> [" + theSubscriber + "(" + subscriber + "),(" + eventClass + ")]");
+    log.fine("-> subscribe [" + elementId + "] screen [" + screen + "] -> [" + theSubscriber + "(" + subscriber + ")," +
+        "(" + eventClass + ")]");
 
     subscriberRegister.register(screen, elementId, theSubscriber);
   }
@@ -281,7 +283,8 @@ public class Nifty {
     // This handles direct subscription
     if (object instanceof EventTopicSubscriber<?>) {
       if (elementId == null) {
-        log.warning("trying to unsubscribe events for an element with elementId = null. this won't work. offending object \"" + object + "\". try to find the offending element and give it an id!");
+        log.warning("trying to unsubscribe events for an element with elementId = null. this won't work. offending " +
+            "object \"" + object + "\". try to find the offending element and give it an id!");
         return;
       }
       getEventService().unsubscribe(elementId, (EventTopicSubscriber<?>) object);
@@ -303,6 +306,7 @@ public class Nifty {
 
   /**
    * Update Nifty.
+   *
    * @return true when nifty has finished processing the screen and false when rendering should continue.
    */
   public boolean update() {
@@ -337,6 +341,7 @@ public class Nifty {
 
   /**
    * Render Nifty.
+   *
    * @param clearScreen true if nifty should clean the screen and false when you've done that already.
    */
   public void render(final boolean clearScreen) {
@@ -412,10 +417,10 @@ public class Nifty {
         closePopupList.clear();
         return;
       }
-      ArrayList <ClosePopUp> copy = new ArrayList <ClosePopUp>(closePopupList);
+      ArrayList<ClosePopUp> copy = new ArrayList<ClosePopUp>(closePopupList);
       closePopupList.clear();
 
-      for (int i=0; i<copy.size(); i++) {
+      for (int i = 0; i < copy.size(); i++) {
         ClosePopUp closePopup = copy.get(i);
         closePopup.close();
       }
@@ -453,7 +458,8 @@ public class Nifty {
 
   /**
    * Initialize this Nifty instance from the given xml file.
-   * @param filename filename to nifty xml
+   *
+   * @param filename    filename to nifty xml
    * @param startScreen screen to start exec
    */
   public void fromXml(@Nonnull final String filename, @Nonnull final String startScreen) {
@@ -464,6 +470,7 @@ public class Nifty {
 
   /**
    * Initialize this Nifty instance from the given xml file.
+   *
    * @param filename filename to nifty xml
    */
   public void fromXmlWithoutStartScreen(@Nonnull final String filename) {
@@ -473,14 +480,15 @@ public class Nifty {
 
   /**
    * Initialize this Nifty instance from the given xml file.
-   * @param filename filename to nifty xml
+   *
+   * @param filename    filename to nifty xml
    * @param startScreen screen to start exec
    * @param controllers controllers to use
    */
   public void fromXml(
       @Nonnull final String filename,
       @Nonnull final String startScreen,
-      final ScreenController ... controllers) {
+      final ScreenController... controllers) {
     registerScreenController(controllers);
     prepareScreens(filename);
     loadFromFile(filename);
@@ -489,8 +497,9 @@ public class Nifty {
 
   /**
    * fromXml.
-   * @param fileId fileId
-   * @param input inputStream
+   *
+   * @param fileId      fileId
+   * @param input       inputStream
    * @param startScreen screen to start
    */
   public void fromXml(
@@ -504,8 +513,9 @@ public class Nifty {
 
   /**
    * fromXmlWithoutStartScreen.
+   *
    * @param fileId fileId
-   * @param input inputStream
+   * @param input  inputStream
    */
   public void fromXmlWithoutStartScreen(@Nonnull final String fileId, @Nonnull final InputStream input) {
     prepareScreens(fileId);
@@ -514,8 +524,9 @@ public class Nifty {
 
   /**
    * fromXml with ScreenControllers.
-   * @param fileId fileId
-   * @param input inputStream
+   *
+   * @param fileId      fileId
+   * @param input       inputStream
    * @param startScreen screen to start
    * @param controllers controllers to use
    */
@@ -523,7 +534,7 @@ public class Nifty {
       @Nonnull final String fileId,
       @Nonnull final InputStream input,
       @Nonnull final String startScreen,
-      @Nonnull final ScreenController ... controllers) {
+      @Nonnull final ScreenController... controllers) {
     registerScreenController(controllers);
     prepareScreens(fileId);
     loadFromStream(input);
@@ -532,6 +543,7 @@ public class Nifty {
 
   /**
    * Load an additional xml file without removing any of the data that might already been loaded.
+   *
    * @param filename the file to load
    */
   public void addXml(@Nonnull final String filename) {
@@ -540,6 +552,7 @@ public class Nifty {
 
   /**
    * Load an additional xml from a stream without removing any of the data that might already been loaded.
+   *
    * @param stream the stream to load
    */
   public void addXml(@Nonnull @WillClose final InputStream stream) {
@@ -549,6 +562,7 @@ public class Nifty {
   /**
    * Load and validate the given filename. If the file is valid, nothing happens. If it
    * is invalid you'll get an exception explaining the error.
+   *
    * @param filename filename to check
    * @throws Exception exception describing the error
    */
@@ -563,6 +577,7 @@ public class Nifty {
   /**
    * Load and validate the given stream. If the stream is valid, nothing happens. If it
    * is invalid you'll get an exception explaining the error.
+   *
    * @param stream the stream of the XML to check
    * @throws Exception exception describing the error
    */
@@ -572,6 +587,7 @@ public class Nifty {
 
   /**
    * load from the given file.
+   *
    * @param filename filename to load
    */
   void loadFromFile(@Nonnull final String filename) {
@@ -597,6 +613,7 @@ public class Nifty {
 
   /**
    * load from the given file.
+   *
    * @param stream stream to load
    */
   void loadFromStream(@Nonnull @WillClose final InputStream stream) {
@@ -618,6 +635,7 @@ public class Nifty {
 
   /**
    * prepare/reset screens.
+   *
    * @param xmlId xml id
    */
   void prepareScreens(@Nonnull final String xmlId) {
@@ -631,6 +649,7 @@ public class Nifty {
 
   /**
    * goto screen command. this will send first an endScreen event to the current screen.
+   *
    * @param id the new screen id we should go to.
    */
   public void gotoScreen(@Nonnull final String id) {
@@ -647,21 +666,22 @@ public class Nifty {
     } else {
       // end current screen
       currentScreen.endScreen(new EndNotify() {
-            @Override
-            public void perform() {
-              gotoScreenInternal(id);
-            }
+        @Override
+        public void perform() {
+          gotoScreenInternal(id);
+        }
       });
     }
   }
 
   /**
    * goto new screen.
+   *
    * @param id the new screen id we should go to.
    */
   private void gotoScreenInternal(@Nonnull final String id) {
     log.fine("gotoScreenInternal [" + id + "]");
- 
+
     // When someone calls nifty.closePopup() directly followed by a nifty.gotoScreen() the gotoScreen will now win and
     // we don't wait for the pending Popups to be closed. We'll simply remove the close Popup events since they would be
     // gone anyway on the new Screen. This is done because the close popups are handled at the end of frame when we
@@ -670,10 +690,10 @@ public class Nifty {
     // If the user wants to actually see the popup to be closed (maybe because he has added some effects) then now he'll
     // use the closePopup() method with the EndNotify and call nifty.gotoScreen() when the EndNotify fires.
     if (hasClosePopups()) {
-      ArrayList <ClosePopUp> copy = new ArrayList <ClosePopUp>(closePopupList);
+      ArrayList<ClosePopUp> copy = new ArrayList<ClosePopUp>(closePopupList);
       closePopupList.clear();
 
-      for (int i=0; i<copy.size(); i++) {
+      for (int i = 0; i < copy.size(); i++) {
         ClosePopUp closePopup = copy.get(i);
         closePopup.forcedCloseWithoutEndNotify();
       }
@@ -701,6 +721,7 @@ public class Nifty {
 
   /**
    * Set alternate key for all screen. This could be used to change behavior on all screens.
+   *
    * @param alternateKey the new alternate key to use
    */
   public void setAlternateKey(@Nullable final String alternateKey) {
@@ -712,11 +733,12 @@ public class Nifty {
 
   /**
    * Returns a collection of the name of all screens
+   *
    * @return sn The collection containing the name of all screens
    */
   @Nonnull
-  public Collection < String > getAllScreensName() {
-    Collection < String > sn = new LinkedList < String >();
+  public Collection<String> getAllScreensName() {
+    Collection<String> sn = new LinkedList<String>();
     for (Screen screen : screens.values()) {
       sn.add(screen.getScreenId());
     }
@@ -727,11 +749,11 @@ public class Nifty {
     if (currentScreen != null) {
       if (currentScreen.getScreenId().equals(id)) {
         currentScreen.endScreen(new EndNotify() {
-            @Override
-            public void perform() {
-              currentScreen = null;
-              removeScreenInternal(id);
-            }
+          @Override
+          public void perform() {
+            currentScreen = null;
+            removeScreenInternal(id);
+          }
         });
         return;
       }
@@ -748,7 +770,7 @@ public class Nifty {
       if (screen.getLayerElements().size() == 0) {
         return;
       }
-      for (int i=0; i<screen.getLayerElements().size(); i++) {
+      for (int i = 0; i < screen.getLayerElements().size(); i++) {
         removeElement(screen, screen.getLayerElements().get(i));
       }
     }
@@ -756,10 +778,11 @@ public class Nifty {
 
   /**
    * This returns all the style names currently registered with nifty.
+   *
    * @return Collection of all style names
    */
   @Nonnull
-  public Collection < String > getAllStylesName() {
+  public Collection<String> getAllStylesName() {
     return styles.keySet();
   }
 
@@ -820,6 +843,7 @@ public class Nifty {
 
   /**
    * get a specific screen.
+   *
    * @param id the id of the screen to retrieve.
    * @return the screen
    */
@@ -836,6 +860,7 @@ public class Nifty {
 
   /**
    * Get the SoundSystem.
+   *
    * @return SoundSystem
    */
   @Nonnull
@@ -845,6 +870,7 @@ public class Nifty {
 
   /**
    * Return the RenderDevice.
+   *
    * @return RenderDevice
    */
   @Nonnull
@@ -854,6 +880,7 @@ public class Nifty {
 
   /**
    * Get current screen.
+   *
    * @return current screen
    */
   @Nullable
@@ -863,6 +890,7 @@ public class Nifty {
 
   /**
    * Check if nifty displays the file with the given filename and is at a screen with the given screenId.
+   *
    * @param filename filename
    * @param screenId screenId
    * @return true if the given screen is active and false when not
@@ -878,6 +906,7 @@ public class Nifty {
 
   /**
    * popup.
+   *
    * @param popup popup
    */
   public void registerPopup(@Nonnull final PopupType popup) {
@@ -886,8 +915,9 @@ public class Nifty {
 
   /**
    * show popup in the given screen.
+   *
    * @param screen screen
-   * @param id id
+   * @param id     id
    */
   public void showPopup(
       @Nonnull final Screen screen,
@@ -904,11 +934,11 @@ public class Nifty {
   /**
    * Create a popup from its type parameters.
    *
-   * @param screen the screen the popup is supposed to be shown on
+   * @param screen         the screen the popup is supposed to be shown on
    * @param popupTypeParam the type parameters
-   * @param id the id of the popup
+   * @param id             the id of the popup
    * @return the newly created popup or {@code null} in case there is currently no active screen that could receive
-   *         the popup
+   * the popup
    */
   @Nonnull
   private Element createPopupFromType(
@@ -938,7 +968,7 @@ public class Nifty {
     if (currentId == null) {
       currentId = parentId;
     }
-    for (int i=0; i<element.getChildren().size(); i++) {
+    for (int i = 0; i < element.getChildren().size(); i++) {
       Element e = element.getChildren().get(i);
       fixupSubIds(e, currentId);
     }
@@ -1074,6 +1104,7 @@ public class Nifty {
 
   /**
    * Close the Popup with the given id.
+   *
    * @param id id of popup to close
    */
   public void closePopup(@Nonnull final String id) {
@@ -1082,7 +1113,8 @@ public class Nifty {
 
   /**
    * Close the Popup with the given id. This calls the given EndNotify when the onEndScreen of the popup ends.
-   * @param id id of popup to close
+   *
+   * @param id          id of popup to close
    * @param closeNotify EndNotify callback
    */
   public void closePopup(@Nonnull final String id, @Nullable final EndNotify closeNotify) {
@@ -1114,8 +1146,8 @@ public class Nifty {
   /**
    * Add a new control.
    *
-   * @param screen the screen the control is connected to
-   * @param parent the parent element of the control
+   * @param screen          the screen the control is connected to
+   * @param parent          the parent element of the control
    * @param standardControl the standard control that acts as template
    * @return the newly created element
    */
@@ -1196,9 +1228,10 @@ public class Nifty {
 
   /**
    * Register ScreenController instances.
+   *
    * @param controllers ScreenController
    */
-  public void registerScreenController(@Nonnull final ScreenController ... controllers) {
+  public void registerScreenController(@Nonnull final ScreenController... controllers) {
     final int size = controllers.length;
     for (int i = 0; i < size; i++) {
       @Nonnull final ScreenController c = controllers[i];
@@ -1208,6 +1241,7 @@ public class Nifty {
 
   /**
    * find a ScreenController instance that matches the given controllerClass name.
+   *
    * @param controllerClass controller class name
    * @return ScreenController instance
    */
@@ -1221,7 +1255,7 @@ public class Nifty {
    *
    * @param controllers the instances to remove
    */
-  public void unregisterScreenController(@Nonnull final ScreenController ... controllers) {
+  public void unregisterScreenController(@Nonnull final ScreenController... controllers) {
     final int size = controllers.length;
     for (int i = 0; i < size; i++) {
       @Nonnull final ScreenController c = controllers[i];
@@ -1476,7 +1510,11 @@ public class Nifty {
     }
   }
 
-  public void registerMouseCursor(final String id, final String filename, final int hotspotX, final int hotspotY) {
+  public void registerMouseCursor(
+      @Nonnull final String id,
+      @Nonnull final String filename,
+      final int hotspotX,
+      final int hotspotY) {
     try {
       getNiftyMouse().registerMouseCursor(id, filename, hotspotX, hotspotY);
     } catch (IOException e) {
@@ -1492,6 +1530,7 @@ public class Nifty {
   /**
    * This is now an inner class to make sure no one calls it from the outside directly.
    * All InputSystem processing should go through the InputSystem.
+   *
    * @author void
    */
   private class NiftyInputConsumerImpl implements NiftyInputConsumer {
@@ -1510,7 +1549,8 @@ public class Nifty {
       if (!isIgnoreMouseEvents()) {
         processed = processEvent(createEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
         if (log.isLoggable(Level.FINE)) {
-          log.fine("[processMouseEvent] [" +  mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " + buttonDown + "] processed [" + processed + "]");
+          log.fine("[processMouseEvent] [" + mouseX + ", " + mouseY + ", " + mouseWheel + ", " + button + ", " +
+              "" + buttonDown + "] processed [" + processed + "]");
         }
       }
       niftyInputConsumerNotify.processedMouseEvent(mouseX, mouseY, mouseWheel, button, buttonDown, processed);
@@ -1546,9 +1586,15 @@ public class Nifty {
         final int button,
         final boolean buttonDown) {
       switch (button) {
-        case 0: button0Down = buttonDown; break;
-        case 1: button1Down = buttonDown; break;
-        case 2: button2Down = buttonDown; break;
+        case 0:
+          button0Down = buttonDown;
+          break;
+        case 1:
+          button1Down = buttonDown;
+          break;
+        case 2:
+          button2Down = buttonDown;
+          break;
       }
 
       NiftyMouseInputEvent result = new NiftyMouseInputEvent();
@@ -1571,6 +1617,7 @@ public class Nifty {
 
   /**
    * Helper class to connect better to the eventbus.
+   *
    * @author void
    */
   @SuppressWarnings("rawtypes")
@@ -1627,8 +1674,10 @@ public class Nifty {
       return ReferenceStrength.STRONG;
     }
   }
+
   /**
    * Creates an element from its type in a specific index in the list of parent
+   *
    * @return the Element created
    */
   @Nonnull
@@ -1637,29 +1686,35 @@ public class Nifty {
       @Nonnull final Element parent,
       final ElementType type,
       final int index) {
-	    if (type instanceof LayerType) {
-	      return createElementFromTypeInternal(screen, parent, type,
-            getRootLayerFactory().createRootLayerLayoutPart(this), index);
-	    }
-	    return createElementFromTypeInternal(screen, parent, type, new LayoutPart(),index);
-}
-  @Nonnull
-  public Element createElementFromType(@Nonnull final Screen screen, @Nonnull final Element parent, final ElementType type) {
     if (type instanceof LayerType) {
-      return createElementFromTypeInternal(screen, parent, type, getRootLayerFactory().createRootLayerLayoutPart(this),parent.getChildren().size());
+      return createElementFromTypeInternal(screen, parent, type,
+          getRootLayerFactory().createRootLayerLayoutPart(this), index);
     }
-    return createElementFromTypeInternal(screen, parent, type, new LayoutPart(),parent.getChildren().size());
+    return createElementFromTypeInternal(screen, parent, type, new LayoutPart(), index);
   }
 
   @Nonnull
-  private Element createElementFromTypeInternal(@Nonnull final Screen screen, @Nonnull final Element parent,
-		  @Nonnull final ElementType type,
-		  @Nonnull final LayoutPart layoutPart,
-		  final int index) {
+  public Element createElementFromType(
+      @Nonnull final Screen screen,
+      @Nonnull final Element parent,
+      final ElementType type) {
+    if (type instanceof LayerType) {
+      return createElementFromTypeInternal(screen, parent, type, getRootLayerFactory().createRootLayerLayoutPart
+          (this), parent.getChildren().size());
+    }
+    return createElementFromTypeInternal(screen, parent, type, new LayoutPart(), parent.getChildren().size());
+  }
+
+  @Nonnull
+  private Element createElementFromTypeInternal(
+      @Nonnull final Screen screen, @Nonnull final Element parent,
+      @Nonnull final ElementType type,
+      @Nonnull final LayoutPart layoutPart,
+      final int index) {
     ElementType elementType = type.copy();
     elementType.prepare(this, screen, screen.getRootElement().getElementType());
     elementType.connectParentControls(parent);
-    Element element = elementType.create(parent, this, screen, layoutPart,index);
+    Element element = elementType.create(parent, this, screen, layoutPart, index);
     if (screen.isBound()) {
       //screen.layoutLayers();
       element.bindControls(screen);
@@ -1673,7 +1728,8 @@ public class Nifty {
 
   /**
    * Create a new Image. This is a helper method so that you don't need to get the RenderEngine.
-   * @param name file name to use
+   *
+   * @param name         file name to use
    * @param filterLinear filter
    * @return RenderImage instance
    */
@@ -1689,8 +1745,9 @@ public class Nifty {
 
   /**
    * Create a new Image. This is a helper method so that you don't need to get the RenderEngine.
-   * @param screen the screen that is used to create the image
-   * @param name file name to use
+   *
+   * @param screen       the screen that is used to create the image
+   * @param name         file name to use
    * @param filterLinear filter
    * @return RenderImage instance
    */
@@ -1702,6 +1759,7 @@ public class Nifty {
   /**
    * You can set this option to true to let Nifty automatically render all panels in random
    * background colors for debugging purposes.
+   *
    * @param option enable (true) or disable (false) this feature
    */
   public void setDebugOptionPanelColors(final boolean option) {
@@ -1710,6 +1768,7 @@ public class Nifty {
 
   /**
    * Returns true if the debug option to render panel colors in enabled.
+   *
    * @return true if the option is enabled and false if not
    */
   public boolean isDebugOptionPanelColors() {
@@ -1718,6 +1777,7 @@ public class Nifty {
 
   /**
    * A helper method to call the special values replace method ${} syntax
+   *
    * @param value the value to perform the replace on
    * @return the value with stuff replaced
    */
@@ -1732,31 +1792,33 @@ public class Nifty {
 
   private class SubscriberRegistry {
     @Nonnull
-    private final Map < Screen, Map < String, List < ClassSaveEventTopicSubscriber >>> screenBasedSubscribers = new HashMap < Screen, Map < String, List < ClassSaveEventTopicSubscriber >>>();
+    private final Map<Screen, Map<String, List<ClassSaveEventTopicSubscriber>>> screenBasedSubscribers = new
+        HashMap<Screen, Map<String, List<ClassSaveEventTopicSubscriber>>>();
 
     public void register(final Screen screen, final String elementId, final ClassSaveEventTopicSubscriber subscriber) {
-      Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
+      Map<String, List<ClassSaveEventTopicSubscriber>> elements = screenBasedSubscribers.get(screen);
       if (elements == null) {
-        elements = new HashMap < String, List < ClassSaveEventTopicSubscriber >>();
+        elements = new HashMap<String, List<ClassSaveEventTopicSubscriber>>();
         screenBasedSubscribers.put(screen, elements);
       }
-      List < ClassSaveEventTopicSubscriber > list = elements.get(elementId);
+      List<ClassSaveEventTopicSubscriber> list = elements.get(elementId);
       if (list == null) {
-        list = new ArrayList < ClassSaveEventTopicSubscriber >();
+        list = new ArrayList<ClassSaveEventTopicSubscriber>();
         elements.put(elementId, list);
       }
       list.add(subscriber);
     }
 
     public void unsubscribeScreen(@Nonnull final Screen screen) {
-      Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
+      Map<String, List<ClassSaveEventTopicSubscriber>> elements = screenBasedSubscribers.get(screen);
       if (elements != null && !elements.isEmpty()) {
-        for (Map.Entry < String, List < ClassSaveEventTopicSubscriber >> entry : elements.entrySet()) {
-          List < ClassSaveEventTopicSubscriber > list = entry.getValue();
-          for (int i=0; i<list.size(); i++) {
+        for (Map.Entry<String, List<ClassSaveEventTopicSubscriber>> entry : elements.entrySet()) {
+          List<ClassSaveEventTopicSubscriber> list = entry.getValue();
+          for (int i = 0; i < list.size(); i++) {
             ClassSaveEventTopicSubscriber subscriber = list.get(i);
             getEventService().unsubscribe(subscriber.getElementId(), subscriber);
-            log.fine("<- unsubscribe screen for [" + screen + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
+            log.fine("<- unsubscribe screen for [" + screen + "] [" + subscriber.getElementId() + "] -> [" +
+                subscriber + "]");
           }
           list.clear();
         }
@@ -1766,14 +1828,15 @@ public class Nifty {
     }
 
     public void unsubscribeElement(@Nonnull final Screen screen, @Nonnull final String elementId) {
-      Map < String, List < ClassSaveEventTopicSubscriber >> elements = screenBasedSubscribers.get(screen);
+      Map<String, List<ClassSaveEventTopicSubscriber>> elements = screenBasedSubscribers.get(screen);
       if (elements != null && !elements.isEmpty()) {
-        List < ClassSaveEventTopicSubscriber > list = elements.get(elementId);
+        List<ClassSaveEventTopicSubscriber> list = elements.get(elementId);
         if (list != null && !list.isEmpty()) {
-          for (int i=0; i<list.size(); i++) {
+          for (int i = 0; i < list.size(); i++) {
             ClassSaveEventTopicSubscriber subscriber = list.get(i);
             getEventService().unsubscribe(subscriber.getElementId(), subscriber);
-            log.fine("<- unsubscribe element [" + elementId + "] [" + subscriber.getElementId() + "] -> [" + subscriber + "]");
+            log.fine("<- unsubscribe element [" + elementId + "] [" + subscriber.getElementId() + "] -> [" +
+                subscriber + "]");
           }
           list.clear();
         }
@@ -1802,6 +1865,7 @@ public class Nifty {
 
   /**
    * Enable automatic scaling of all GUI elements in relation to the given base resolution.
+   *
    * @param baseResolutionX width, for instance 1024
    * @param baseResolutionY height, for instance 768
    */
@@ -1809,7 +1873,11 @@ public class Nifty {
     renderEngine.enableAutoScaling(baseResolutionX, baseResolutionY);
   }
 
-  public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY, final float scaleX, final float scaleY) {
+  public void enableAutoScaling(
+      final int baseResolutionX,
+      final int baseResolutionY,
+      final float scaleX,
+      final float scaleY) {
     renderEngine.enableAutoScaling(baseResolutionX, baseResolutionY, scaleX, scaleY);
   }
 
@@ -1820,6 +1888,7 @@ public class Nifty {
   /**
    * Return an InputStream for the given resource name. This is resolved
    * using the currently registered ResourceLocations.
+   *
    * @param ref the name of the resource to load
    * @return the InputStream of the resource data
    */
@@ -1830,6 +1899,7 @@ public class Nifty {
 
   /**
    * Return the ResourceLoader of this Nifty instance.
+   *
    * @return the ResourceLoader to load resources
    */
   @Nonnull
@@ -1863,6 +1933,7 @@ public class Nifty {
 
   /**
    * Implementation of {@link NiftyInputConsumerNotify} which will just ignore everything.
+   *
    * @author void
    */
   private static class NiftyInputConsumerNotifyDefault implements NiftyInputConsumerNotify {

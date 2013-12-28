@@ -193,7 +193,9 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
    */
   @Override
   public final void render(
-      final GameContainer container, final StateBasedGame game, final Graphics g) throws SlickException {
+      @Nonnull final GameContainer container,
+      @Nonnull final StateBasedGame game,
+      @Nonnull final Graphics g) throws SlickException {
     if (niftyCarrier != null && niftyCarrier.isInitialized()) {
       Nifty nifty = niftyCarrier.getNifty();
       assert nifty != null; // checked by isInitialized

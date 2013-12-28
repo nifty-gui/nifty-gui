@@ -191,7 +191,7 @@ public class JOGLNiftyRunner implements GLEventListener {
   }
 
   public interface Callback {
-    void init(Nifty nifty, GLWindow window);
+    void init(@Nonnull Nifty nifty, @Nonnull GLWindow window);
   }
 
   private static enum Mode {

@@ -52,7 +52,11 @@ public class TextTyping implements EffectImpl {
   }
 
   @Override
-  public void execute(@Nonnull Element element, float effectTime, Falloff falloff, @Nonnull NiftyRenderEngine r) {
+  public void execute(
+      @Nonnull Element element,
+      float effectTime,
+      @Nullable Falloff falloff,
+      @Nonnull NiftyRenderEngine r) {
     int currentIndex = (int) (originalText.length() * effectTime);
     String currentText = originalText.substring(0, currentIndex);
 

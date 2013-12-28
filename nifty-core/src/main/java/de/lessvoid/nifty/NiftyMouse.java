@@ -1,5 +1,6 @@
 package de.lessvoid.nifty;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -18,9 +19,12 @@ public interface NiftyMouse {
    * @param filename the image to load.
    * @param hotspotX the hotspot x coordinate of the cursor image with 0 being left
    * @param hotspotY the hotspot y coordinate of the cursor image with 0 being top
-   * @return the MouseCursor handle
    */
-  void registerMouseCursor(String id, String filename, int hotspotX, int hotspotY) throws IOException;
+  void registerMouseCursor(
+      @Nonnull String id,
+      @Nonnull String filename,
+      int hotspotX,
+      int hotspotY) throws IOException;
 
   /**
    * Get the current mouse cursor id or null if no mouse cursor is set.
@@ -46,14 +50,14 @@ public interface NiftyMouse {
    *
    * @param id the cursor id to enable
    */
-  void enableMouseCursor(String id);
+  void enableMouseCursor(@Nullable String id);
 
   /**
    * Set the mouse position to the given x, y coordinate with (0,0) being the upper
    * left corner of the screen.
    *
    * @param x x coordinate
-   * @param y y coordinage
+   * @param y y coordinate
    */
   void setMousePosition(int x, int y);
 

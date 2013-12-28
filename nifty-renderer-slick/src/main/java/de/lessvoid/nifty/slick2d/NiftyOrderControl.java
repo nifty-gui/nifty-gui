@@ -1,5 +1,7 @@
 package de.lessvoid.nifty.slick2d;
 
+import javax.annotation.Nonnull;
+
 /**
  * This interface defined the functions to control the order of rendering and updating the Nifty-GUI and the game.
  *
@@ -11,6 +13,7 @@ public interface NiftyOrderControl {
    *
    * @return the current render order
    */
+  @Nonnull
   NiftyRenderOrder getRenderOrder();
 
   /**
@@ -18,6 +21,7 @@ public interface NiftyOrderControl {
    *
    * @return the current update order
    */
+  @Nonnull
   NiftyUpdateOrder getUpdateOrder();
 
   /**
@@ -25,12 +29,12 @@ public interface NiftyOrderControl {
    *
    * @param order the render order
    */
-  void setRenderOrder(NiftyRenderOrder order);
+  void setRenderOrder(@Nonnull NiftyRenderOrder order);
 
   /**
    * Set the updating order that is supposed to be used.
    *
    * @param order the update order
    */
-  void setUpdateOrder(NiftyUpdateOrder order);
+  void setUpdateOrder(@Nonnull NiftyUpdateOrder order);
 }

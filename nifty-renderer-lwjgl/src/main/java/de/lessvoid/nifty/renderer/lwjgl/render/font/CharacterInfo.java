@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.font;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class CharacterInfo {
   /**
    * kerning information.
    */
+  @Nonnull
   private Map<Character, Integer> kerning = new HashMap<Character, Integer>();
 
   /**

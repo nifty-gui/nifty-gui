@@ -760,7 +760,7 @@ public class SoundStore {
    * @throws IOException Indicates a failure to load the WAV
    */
   @Nonnull
-  public Audio getWAV(String ref, InputStream in) throws IOException {
+  public Audio getWAV(String ref, @Nonnull InputStream in) throws IOException {
     if (!soundWorks) {
       return new NullAudio();
     }

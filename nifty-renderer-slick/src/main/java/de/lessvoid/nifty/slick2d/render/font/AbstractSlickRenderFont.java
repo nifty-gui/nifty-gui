@@ -92,7 +92,7 @@ public abstract class AbstractSlickRenderFont implements SlickRenderFont {
       @Nonnull final String text,
       final int locX,
       final int locY,
-      final Color color,
+      @Nullable final Color color,
       final float sizeX,
       final float sizeY) {
 
