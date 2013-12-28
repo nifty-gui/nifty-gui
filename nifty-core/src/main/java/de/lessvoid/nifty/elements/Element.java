@@ -2668,7 +2668,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       // ids equal or both null use super.toString()
       // hashCode() should return a value thats different for both elements since
       // adding the same element twice to the same parent element is not supported.
-      return Integer.compare(o1.hashCode(), o2.hashCode());
+      return Integer.valueOf(o1.hashCode()).compareTo(Integer.valueOf(o2.hashCode()));
     }
 
     private int getRenderOrder(@Nonnull final Element element) {
