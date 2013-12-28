@@ -787,7 +787,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
           "mode.");
     }
 
-    listBoxImpl.changeSelectionMode(listBoxSelectionMode, "true".equalsIgnoreCase(forceSelection));
+    listBoxImpl.changeSelectionMode(listBoxSelectionMode, "true".equalsIgnoreCase(forceSelection), false);
   }
 
   private void initializeScrollPanel() {
