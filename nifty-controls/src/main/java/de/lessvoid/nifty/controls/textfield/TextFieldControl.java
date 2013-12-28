@@ -269,16 +269,19 @@ public class TextFieldControl extends AbstractController implements TextField, T
           case Character:
             textField.insert(standardInputEvent.getCharacter());
             break;
-        }
-      }
-      if (fieldElement != null && focusHandler != null) {
-        switch (standardInputEvent) {
           case NextInputElement:
-            focusHandler.getNext(fieldElement).setFocus();
+            if (focusHandler != null && fieldElement != null) {
+              focusHandler.getNext(fieldElement).setFocus();
+            }
             break;
           case PrevInputElement:
-            focusHandler.getPrev(fieldElement).setFocus();
+            if (focusHandler != null && fieldElement != null) {
+              focusHandler.getPrev(fieldElement).setFocus();
+            }
             break;
+          default:
+            updateCursor();
+            return false;
         }
       }
     }
