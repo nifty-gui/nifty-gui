@@ -351,7 +351,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     Element tabElement = tab.getElement();
     if (tabElement != null) {
       Element tabParentElement = tabElement.getParent();
-      if (contentPanel != null && tabParentElement.equals(contentPanel)) {
+      if (contentPanel != null && !tabParentElement.equals(contentPanel)) {
         tabElement.markForMove(contentPanel, new TabAddMoveEndNotify(this, tab));
         return;
       }
