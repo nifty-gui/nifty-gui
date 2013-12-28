@@ -51,7 +51,6 @@ public class AllExamplesMain implements NiftyExample {
         new OpenALSoundDevice(),
         LwjglInitHelper.getInputSystem(),
         new AccurateTimeProvider());
-    nifty.createImage("nifty-logo-150x150.png", true);
     if (args.length == 1) {
       nifty.fromXml(ALL_INTRO_XML, args[0]);
     } else {
