@@ -91,7 +91,16 @@ class ListBoxImpl<T> {
     return items.get(viewOffset + selectionIndex);
   }
 
-  public void changeSelectionMode(@Nonnull final SelectionMode listBoxSelectionMode, final boolean forceSelection) {
+  public void changeSelectionMode(
+      @Nonnull final SelectionMode listBoxSelectionMode,
+      final boolean forceSelection) {
+    changeSelectionMode(listBoxSelectionMode, forceSelection, true);
+  }
+
+  void changeSelectionMode(
+      @Nonnull final SelectionMode listBoxSelectionMode,
+      final boolean forceSelection,
+      final boolean raiseEvent) {
     List<T> oldSelection = getSelection();
 
     selection = createSelectionMode(listBoxSelectionMode);
@@ -107,7 +116,9 @@ class ListBoxImpl<T> {
     }
 
     updateView();
-    selectionChangedEvent();
+    if (raiseEvent) {
+      selectionChangedEvent();
+    }
   }
 
   public void addItem(@Nonnull final T newItem) {

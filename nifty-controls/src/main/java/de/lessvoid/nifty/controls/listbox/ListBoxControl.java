@@ -787,7 +787,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
           "mode.");
     }
 
-    listBoxImpl.changeSelectionMode(listBoxSelectionMode, "true".equalsIgnoreCase(forceSelection));
+    listBoxImpl.changeSelectionMode(listBoxSelectionMode, "true".equalsIgnoreCase(forceSelection), false);
   }
 
   private void initializeScrollPanel() {
@@ -820,6 +820,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     if (childRootElement != null) {
       childRootElement.setConstraintX(SizeValue.px(0));
       childRootElement.setConstraintY(SizeValue.px(0));
+      childRootElement.getParent().layoutElements();
     }
   }
 
@@ -924,6 +925,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
         processor.processElement(labelElements[i]);
       }
     }
+    childRootElement.layoutElements();
   }
 
   private void replaceAllIds(

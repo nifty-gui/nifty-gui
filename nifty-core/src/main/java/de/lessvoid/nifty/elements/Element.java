@@ -1936,14 +1936,28 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void renderOrderChanged(@Nonnull final Element element) {
-    if (elementsRenderOrderSet != null) {
-      elementsRenderOrderSet.remove(element);
+    if (elementsRenderOrderSet == null) {
+      log.warning("Can't report a changed order, parent doesn't seem to have children?! O.o");
+      return;
+    }
+    Iterator<Element> childItr = elementsRenderOrderSet.iterator();
+    boolean foundOldEntry = false;
+    while (childItr.hasNext()) {
+      Element checkElement = childItr.next();
+      if (checkElement.equals(element)) {
+        childItr.remove();
+        foundOldEntry = true;
+        break;
+      }
+    }
+    if (foundOldEntry) {
       elementsRenderOrderSet.add(element);
-
       if (elementsRenderOrder == null || elementsRenderOrder.length != elementsRenderOrderSet.size()) {
         elementsRenderOrder = new Element[elementsRenderOrderSet.size()];
       }
-      elementsRenderOrderSet.toArray(elementsRenderOrder);
+      elementsRenderOrder = elementsRenderOrderSet.toArray(elementsRenderOrder);
+    } else {
+      log.warning("Failed to locate the element with changed id in the render set.");
     }
   }
 
@@ -2043,33 +2057,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       So the ID changed and we got a parent. This means the render order set is likely to be corrupted now. We need
       to update it to ensure that everything is still working properly.
      */
-    parent.reportChangedId(this);
-  }
-
-  private void reportChangedId(@Nonnull final Element changedElement) {
-    if (elementsRenderOrderSet == null) {
-      log.warning("Can't report a changed Id, parent doesn't seem to have children?! O.o");
-      return;
-    }
-    Iterator<Element> childItr = elementsRenderOrderSet.iterator();
-    boolean foundOldEntry = false;
-    while (childItr.hasNext()) {
-      Element checkElement = childItr.next();
-      if (checkElement.equals(changedElement)) {
-        childItr.remove();
-        foundOldEntry = true;
-        break;
-      }
-    }
-    if (foundOldEntry) {
-      elementsRenderOrderSet.add(changedElement);
-      if (elementsRenderOrder == null || elementsRenderOrder.length != elementsRenderOrderSet.size()) {
-        elementsRenderOrder = new Element[elementsRenderOrderSet.size()];
-      }
-      elementsRenderOrder = elementsRenderOrderSet.toArray(elementsRenderOrder);
-    } else {
-      log.warning("Failed to locate the element with changed id in the render set.");
-    }
+    parent.renderOrderChanged(this);
   }
 
   @Nonnull
