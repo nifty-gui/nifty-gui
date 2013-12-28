@@ -396,7 +396,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     } else {
       subscribeVerticalScrollbar(scrollbarElement);
     }
-    horizontalScrollbarState = true;
+    verticalScrollbarState = true;
     ensureWidthConstraints();
     updateBottomRightElement();
   }
