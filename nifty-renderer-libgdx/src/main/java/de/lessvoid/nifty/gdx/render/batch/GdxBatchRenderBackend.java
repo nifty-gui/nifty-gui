@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.gdx.render.GdxMouseCursor;
 import de.lessvoid.nifty.render.BlendMode;
@@ -162,9 +163,13 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
 
   @Override
   public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
-    if (mouseCursor instanceof GdxMouseCursor) {
-      this.mouseCursor = (GdxMouseCursor) mouseCursor;
-      this.mouseCursor.enable();
+    try {
+      if (mouseCursor instanceof GdxMouseCursor) {
+        this.mouseCursor = (GdxMouseCursor) mouseCursor;
+        this.mouseCursor.enable();
+      }
+    } catch (GdxRuntimeException e) {
+      log.log(Level.SEVERE, "Applying the cursor failed!", e);
     }
   }
 
