@@ -625,7 +625,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * Adds a child element to the end of the list of this element's children.
    */
   public void addChild(@Nonnull final Element child) {
-    insertChild(child, children != null ? children.size() : 0);
+    insertChild(child, getChildrenCount());
   }
 
   /**
@@ -1940,13 +1940,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       elementsRenderOrderSet.remove(element);
       elementsRenderOrderSet.add(element);
 
-      final Element[] usedArray;
       if (elementsRenderOrder == null || elementsRenderOrder.length != elementsRenderOrderSet.size()) {
-        usedArray = new Element[elementsRenderOrderSet.size()];
-      } else {
-        usedArray = elementsRenderOrder;
+        elementsRenderOrder = new Element[elementsRenderOrderSet.size()];
       }
-      elementsRenderOrderSet.toArray(usedArray);
+      elementsRenderOrderSet.toArray(elementsRenderOrder);
     }
   }
 
@@ -2029,7 +2026,50 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public void setId(@Nullable final String id) {
+    @Nullable String oldId = this.id;
     this.id = id;
+
+    if (parent == null) {
+      return;
+    }
+
+    if (oldId == null && id == null) {
+      return;
+    }
+    if ((oldId != null && oldId.equals(id)) || (id != null && id.equals(oldId))) {
+      return;
+    }
+    /*
+      So the ID changed and we got a parent. This means the render order set is likely to be corrupted now. We need
+      to update it to ensure that everything is still working properly.
+     */
+    parent.reportChangedId(this);
+  }
+
+  private void reportChangedId(@Nonnull final Element changedElement) {
+    if (elementsRenderOrderSet == null) {
+      log.warning("Can't report a changed Id, parent doesn't seem to have children?! O.o");
+      return;
+    }
+    Iterator<Element> childItr = elementsRenderOrderSet.iterator();
+    boolean foundOldEntry = false;
+    while (childItr.hasNext()) {
+      Element checkElement = childItr.next();
+      if (checkElement.equals(changedElement)) {
+        childItr.remove();
+        foundOldEntry = true;
+        break;
+      }
+    }
+    if (foundOldEntry) {
+      elementsRenderOrderSet.add(changedElement);
+      if (elementsRenderOrder == null || elementsRenderOrder.length != elementsRenderOrderSet.size()) {
+        elementsRenderOrder = new Element[elementsRenderOrderSet.size()];
+      }
+      elementsRenderOrder = elementsRenderOrderSet.toArray(elementsRenderOrder);
+    } else {
+      log.warning("Failed to locate the element with changed id in the render set.");
+    }
   }
 
   @Nonnull
@@ -2628,9 +2668,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       // ids equal or both null use super.toString()
       // hashCode() should return a value thats different for both elements since
       // adding the same element twice to the same parent element is not supported.
-      String ref1 = Integer.toHexString(o1.hashCode());
-      String ref2 = Integer.toHexString(o2.hashCode());
-      return ref1.compareTo(ref2);
+      return Integer.compare(o1.hashCode(), o2.hashCode());
     }
 
     private int getRenderOrder(@Nonnull final Element element) {
