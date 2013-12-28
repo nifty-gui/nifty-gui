@@ -48,7 +48,7 @@ public class MessageBox extends AbstractController {
   }
 
   public MessageBox(
-      @Nonnull Nifty nifty, final MessageType messageType, final String message,
+      @Nonnull Nifty nifty, @Nonnull final MessageType messageType, @Nonnull final String message,
       final String buttonCaption, final String icon) {
     this.nifty = nifty;
     messageboxPopup = nifty.createPopup("niftyPopupMessageBox");
@@ -68,13 +68,13 @@ public class MessageBox extends AbstractController {
   }
 
   public MessageBox(
-      @Nonnull Nifty nifty, MessageType messageType, String message,
+      @Nonnull Nifty nifty, @Nonnull MessageType messageType, @Nonnull String message,
       String buttonCaption) {
     this(nifty, messageType, message, buttonCaption, null);
   }
 
   public MessageBox(
-      @Nonnull Nifty nifty, final MessageType messageType, final String message,
+      @Nonnull Nifty nifty, @Nonnull final MessageType messageType, @Nonnull final String message,
       final String[] buttonCaptions, final String icon) {
     this.nifty = nifty;
     messageboxPopup = nifty.createPopup("niftyPopupMessageBox");
@@ -93,7 +93,7 @@ public class MessageBox extends AbstractController {
   }
 
   public MessageBox(
-      @Nonnull Nifty nifty, MessageType messageType, String message,
+      @Nonnull Nifty nifty, @Nonnull MessageType messageType, @Nonnull String message,
       String... buttonCaptions) {
     this(nifty, messageType, message, buttonCaptions, null);
   }
@@ -164,7 +164,7 @@ public class MessageBox extends AbstractController {
     this.messageType = MessageType.valueOf(messageType);
   }
 
-  public void setMessageType(MessageType messageType) {
+  public void setMessageType(@Nonnull MessageType messageType) {
     this.messageType = messageType;
   }
 

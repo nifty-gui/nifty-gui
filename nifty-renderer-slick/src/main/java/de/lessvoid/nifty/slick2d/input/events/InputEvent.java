@@ -5,6 +5,8 @@ import de.lessvoid.nifty.slick2d.input.ForwardingMode;
 import de.lessvoid.nifty.slick2d.input.InputState;
 import org.newdawn.slick.InputListener;
 
+import javax.annotation.Nonnull;
+
 public interface InputEvent {
   /**
    * Check if the input event is supposed to be executed.
@@ -12,7 +14,7 @@ public interface InputEvent {
    * @param state the input event state
    * @return {@code true} in case this event is supposed to be executed
    */
-  boolean executeEvent(InputState state);
+  boolean executeEvent(@Nonnull InputState state);
 
   /**
    * Check if this input event is forwarded.
@@ -20,7 +22,7 @@ public interface InputEvent {
    * @param mode the current forwarding mode
    * @return {@code true} in case the event should be forwarded
    */
-  boolean isForwarded(ForwardingMode mode);
+  boolean isForwarded(@Nonnull ForwardingMode mode);
 
   /**
    * Send the event to a nifty input consumer.
@@ -29,7 +31,7 @@ public interface InputEvent {
    * @return {@code true} in case the event was handled by the consumer and must not be forwarded to any other event
    * handlers
    */
-  boolean sendToNifty(NiftyInputConsumer consumer);
+  boolean sendToNifty(@Nonnull NiftyInputConsumer consumer);
 
   /**
    * Send the event to a slick input consumer.
@@ -38,7 +40,7 @@ public interface InputEvent {
    * @return {@code true} in case the event was handled by the consumer and must not be forwarded to any other event
    * handlers
    */
-  boolean sendToSlick(InputListener listener);
+  boolean sendToSlick(@Nonnull InputListener listener);
 
   /**
    * Update the input event state.
@@ -46,5 +48,5 @@ public interface InputEvent {
    * @param state        the input event state to update
    * @param handledByGUI {@code true} if this event was handled by the GUI
    */
-  void updateState(InputState state, boolean handledByGUI);
+  void updateState(@Nonnull InputState state, boolean handledByGUI);
 }

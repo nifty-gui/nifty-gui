@@ -70,6 +70,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   /**
    * font.
    */
+  @Nullable
   private RenderFont font;
 
   /**
@@ -313,6 +314,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     if (selectionEnd < 0) {
       selectionEnd = 0;
     }
+    if (font == null) {
+      return;
+    }
 
     if (isEverythingSelected(text, selectionStart, selectionEnd)) {
       renderDevice.renderFont(font, text, x, y, textSelectionColor, textSizeX, textSizeY);
@@ -384,7 +388,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * @param newFont font
    */
   @Override
-  public void setFont(final RenderFont newFont) {
+  public void setFont(@Nullable final RenderFont newFont) {
     this.font = newFont;
   }
 
@@ -393,6 +397,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    *
    * @return font
    */
+  @Nullable
   @Override
   public RenderFont getFont() {
     return this.font;
@@ -614,6 +619,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     private boolean colorAlphaChanged;
     private boolean stateAlphaChanged;
 
+    @Nullable
     private RenderFont font;
     private boolean stateFontChanged;
 

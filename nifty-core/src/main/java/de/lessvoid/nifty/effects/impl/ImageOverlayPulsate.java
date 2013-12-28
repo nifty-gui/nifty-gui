@@ -55,7 +55,7 @@ public class ImageOverlayPulsate implements EffectImpl {
   public void execute(
       @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
+      @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
     if (image != null) {
       r.saveState(null);

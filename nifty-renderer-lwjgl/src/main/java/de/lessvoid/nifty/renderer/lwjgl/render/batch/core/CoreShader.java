@@ -405,7 +405,7 @@ public class CoreShader {
    * @param name   the name of the uniform
    * @param values the new float array to set
    */
-  public void setUniformfArray(@Nonnull final String name, final float... values) {
+  public void setUniformfArray(@Nonnull final String name, @Nonnull final float... values) {
     FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
     buffer.put(values);
     buffer.rewind();

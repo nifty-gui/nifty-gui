@@ -178,7 +178,7 @@ public interface NiftyRenderEngine {
    *
    * @param color color the new color value
    */
-  void setColorIgnoreAlpha(Color color);
+  void setColorIgnoreAlpha(@Nonnull Color color);
 
   /**
    * Check if the color got changed since the last start of a frame.

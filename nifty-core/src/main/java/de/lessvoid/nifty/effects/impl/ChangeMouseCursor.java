@@ -12,9 +12,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ChangeMouseCursor implements EffectImpl {
+  @Nullable
   private NiftyMouse niftyMouse;
   @Nullable
   private String oldMouseId;
+  @Nullable
   private String newMouseId;
 
   @Override
@@ -31,13 +33,17 @@ public class ChangeMouseCursor implements EffectImpl {
   public void execute(
       @Nonnull final Element element,
       final float effectTime,
-      final Falloff falloff,
+      @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
-    niftyMouse.enableMouseCursor(newMouseId);
+    if (niftyMouse != null) {
+      niftyMouse.enableMouseCursor(newMouseId);
+    }
   }
 
   @Override
   public void deactivate() {
-    niftyMouse.enableMouseCursor(oldMouseId);
+    if (niftyMouse != null) {
+      niftyMouse.enableMouseCursor(oldMouseId);
+    }
   }
 }

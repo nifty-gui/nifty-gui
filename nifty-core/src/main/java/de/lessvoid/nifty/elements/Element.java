@@ -1,20 +1,5 @@
 package de.lessvoid.nifty.elements;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.logging.Logger;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEvent;
@@ -23,12 +8,7 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.effects.Effect;
-import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.effects.EffectImpl;
-import de.lessvoid.nifty.effects.EffectManager;
-import de.lessvoid.nifty.effects.ElementEffectStateCache;
-import de.lessvoid.nifty.effects.Falloff;
+import de.lessvoid.nifty.effects.*;
 import de.lessvoid.nifty.elements.events.ElementDisableEvent;
 import de.lessvoid.nifty.elements.events.ElementEnableEvent;
 import de.lessvoid.nifty.elements.events.ElementHideEvent;
@@ -47,11 +27,7 @@ import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderer;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererImage;
-import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererPanel;
-import de.lessvoid.nifty.loaderv2.types.apply.Convert;
+import de.lessvoid.nifty.loaderv2.types.apply.*;
 import de.lessvoid.nifty.loaderv2.types.helper.PaddingAttributeParser;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -60,6 +36,11 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author void
@@ -644,23 +625,53 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * Adds a child element to the end of the list of this element's children.
    */
   public void addChild(@Nonnull final Element child) {
-    insertChild(child, children != null ? children.size() : 0);
+    insertChild(child, getChildrenCount());
   }
 
   /**
    * Inserts a child element at the specified index in this element's list of children.
    */
   public void insertChild(@Nonnull final Element child, final int index) {
+    final int lastValidIndex = getChildrenCount();
+    int usedIndex = index;
+    if (index < 0 || index > lastValidIndex) {
+      log.severe("Index is out of range. Index: " + index + " Last valid: " + lastValidIndex);
+      usedIndex = Math.min(lastValidIndex, Math.max(0, index));
+    }
     if (children == null) {
       children = new ArrayList<Element>();
     }
-    children.add(index, child);
+
+    children.add(usedIndex, child);
 
     if (elementsRenderOrderSet == null) {
       elementsRenderOrderSet = new TreeSet<Element>(RENDER_ORDER_COMPARATOR);
     }
-    elementsRenderOrderSet.add(child);
-    elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[elementsRenderOrderSet.size()]);
+    if (!elementsRenderOrderSet.add(child)) {
+      log.severe("Adding the element failed as it seems this element is already part of the children list. This is " +
+          "bad. Rebuilding the children list is required now.");
+      final int childCount = children.size();
+      boolean foundProblem = false;
+      for (int i = 0; i < childCount; i++) {
+        if (i == usedIndex) {
+          continue;
+        }
+        Element testChild = children.get(i);
+        if (testChild.equals(child)) {
+          foundProblem = true;
+          children.remove(i);
+          break;
+        }
+      }
+      if (!foundProblem) {
+        /* Can't locate the issue, recovery failed -> undoing insert and throwing exception */
+        children.remove(usedIndex);
+        throw new IllegalStateException("Insert item failed, render list refused the item, " +
+            "but duplicate couldn't be located in the children list. Element is corrupted.");
+      }
+    } else {
+      elementsRenderOrder = elementsRenderOrderSet.toArray(new Element[elementsRenderOrderSet.size()]);
+    }
   }
 
   /**
@@ -676,9 +687,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     } else {
       final int curInd = parentChildren.indexOf(this);
       if (curInd >= 0 && index != curInd) {
-        parentChildren.remove(curInd);
-        parentChildren.add(index, this);
-        parent.layoutElements();
+        Element shouldBeThis = parentChildren.remove(curInd);
+        if (shouldBeThis.equals(this)) {
+          parentChildren.add(index, this);
+        } else {
+          log.severe("Setting index failed, detected index did not return correct element. Undoing operation");
+          parentChildren.add(curInd, shouldBeThis);
+        }
       }
     }
   }
@@ -696,8 +711,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         effectManager.renderPre(r, this);
         renderElement(r);
         effectManager.renderPost(r, this);
-        effectManager.end(r);
         renderChildren(r);
+        effectManager.end(r);
         r.restoreState();
         r.saveState(null);
         effectManager.renderOverlay(r, this);
@@ -1925,13 +1940,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       elementsRenderOrderSet.remove(element);
       elementsRenderOrderSet.add(element);
 
-      final Element[] usedArray;
       if (elementsRenderOrder == null || elementsRenderOrder.length != elementsRenderOrderSet.size()) {
-        usedArray = new Element[elementsRenderOrderSet.size()];
-      } else {
-        usedArray = elementsRenderOrder;
+        elementsRenderOrder = new Element[elementsRenderOrderSet.size()];
       }
-      elementsRenderOrderSet.toArray(usedArray);
+      elementsRenderOrderSet.toArray(elementsRenderOrder);
     }
   }
 
@@ -2014,7 +2026,50 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public void setId(@Nullable final String id) {
+    @Nullable String oldId = this.id;
     this.id = id;
+
+    if (parent == null) {
+      return;
+    }
+
+    if (oldId == null && id == null) {
+      return;
+    }
+    if ((oldId != null && oldId.equals(id)) || (id != null && id.equals(oldId))) {
+      return;
+    }
+    /*
+      So the ID changed and we got a parent. This means the render order set is likely to be corrupted now. We need
+      to update it to ensure that everything is still working properly.
+     */
+    parent.reportChangedId(this);
+  }
+
+  private void reportChangedId(@Nonnull final Element changedElement) {
+    if (elementsRenderOrderSet == null) {
+      log.warning("Can't report a changed Id, parent doesn't seem to have children?! O.o");
+      return;
+    }
+    Iterator<Element> childItr = elementsRenderOrderSet.iterator();
+    boolean foundOldEntry = false;
+    while (childItr.hasNext()) {
+      Element checkElement = childItr.next();
+      if (checkElement.equals(changedElement)) {
+        childItr.remove();
+        foundOldEntry = true;
+        break;
+      }
+    }
+    if (foundOldEntry) {
+      elementsRenderOrderSet.add(changedElement);
+      if (elementsRenderOrder == null || elementsRenderOrder.length != elementsRenderOrderSet.size()) {
+        elementsRenderOrder = new Element[elementsRenderOrderSet.size()];
+      }
+      elementsRenderOrder = elementsRenderOrderSet.toArray(elementsRenderOrder);
+    } else {
+      log.warning("Failed to locate the element with changed id in the render set.");
+    }
   }
 
   @Nonnull
@@ -2133,7 +2188,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    *
    * @param handler additional handler
    */
-  public void addInputHandler(final KeyInputHandler handler) {
+  public void addInputHandler(@Nonnull final KeyInputHandler handler) {
     if (attachedInputControl != null) {
       attachedInputControl.addInputHandler(handler);
     }
@@ -2151,7 +2206,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    *
    * @param handler additional handler
    */
-  public void addPreInputHandler(final KeyInputHandler handler) {
+  public void addPreInputHandler(@Nonnull final KeyInputHandler handler) {
     if (attachedInputControl != null) {
       attachedInputControl.addPreInputHandler(handler);
     }
@@ -2495,6 +2550,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       if (children.isEmpty()) {
         elementsRenderOrderSet = null;
         children = null;
+      } else if (children.size() != elementsRenderOrderSet.size()) {
+        log.severe("Problem at removing a element. RenderOrderSet and children list don't have the same size " +
+            "anymore. Rebuilding the render order set.");
+        elementsRenderOrderSet.clear();
+        elementsRenderOrderSet.addAll(children);
       }
     }
 
@@ -2608,9 +2668,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       // ids equal or both null use super.toString()
       // hashCode() should return a value thats different for both elements since
       // adding the same element twice to the same parent element is not supported.
-      String ref1 = Integer.toHexString(o1.hashCode());
-      String ref2 = Integer.toHexString(o2.hashCode());
-      return ref1.compareTo(ref2);
+      return Integer.compare(o1.hashCode(), o2.hashCode());
     }
 
     private int getRenderOrder(@Nonnull final Element element) {
@@ -2622,14 +2680,29 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   // We don't want to give up Java 1.6 compatibility right now.
+  @SuppressWarnings("unchecked")
+  @Nonnull
   private static <T> Iterator<T> emptyIterator() {
     return (Iterator<T>) EmptyIterator.EMPTY_ITERATOR;
-}
+  }
 
   private static class EmptyIterator<E> implements Iterator<E> {
     static final EmptyIterator<Object> EMPTY_ITERATOR = new EmptyIterator<Object>();
-    public boolean hasNext() { return false; }
-    public E next() { throw new NoSuchElementException(); }
-    public void remove() { throw new IllegalStateException(); }
+
+    @Override
+    public boolean hasNext() {
+      return false;
+    }
+
+    @Override
+    @Nonnull
+    public E next() {
+      throw new NoSuchElementException();
+    }
+
+    @Override
+    public void remove() {
+      throw new IllegalStateException();
+    }
   }
 }

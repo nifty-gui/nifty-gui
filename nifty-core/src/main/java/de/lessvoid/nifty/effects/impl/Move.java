@@ -10,6 +10,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TargetElementResolver;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.logging.Logger;
 
 /**
@@ -112,7 +113,7 @@ public class Move implements EffectImpl {
   public void execute(
       @Nonnull final Element element,
       final float normalizedTime,
-      final Falloff falloff,
+      @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
     if (fromOffset || toOffset) {
       float moveToX = startOffsetX + normalizedTime * offsetX;

@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.java2d.renderer.fonts;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -230,7 +231,7 @@ public class CharacterInfo {
    *
    * @param newKerning the kerning to set
    */
-  public final void setKerning(final Map<Character, Integer> newKerning) {
+  public final void setKerning(@Nonnull final Map<Character, Integer> newKerning) {
     kerning.clear();
     kerning.putAll(newKerning);
   }

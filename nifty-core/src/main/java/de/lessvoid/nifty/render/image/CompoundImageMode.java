@@ -8,6 +8,8 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
+import javax.annotation.Nonnull;
+
 public class CompoundImageMode implements ImageMode {
   private AreaProvider m_areaProvider;
   private RenderStrategy m_renderStrategy;
@@ -30,7 +32,7 @@ public class CompoundImageMode implements ImageMode {
 
   @Override
   public void render(
-      RenderDevice renderDevice,
+      @Nonnull RenderDevice renderDevice,
       RenderImage renderImage,
       int x,
       int y,

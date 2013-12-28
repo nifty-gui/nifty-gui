@@ -3,6 +3,8 @@ package de.lessvoid.nifty.slick2d.input.events;
 import de.lessvoid.nifty.slick2d.input.ForwardingMode;
 import de.lessvoid.nifty.slick2d.input.InputState;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is the abstract mouse event that stores only the data all mouse events have in common.
  *
@@ -34,7 +36,7 @@ public abstract class AbstractMouseEvent implements InputEvent {
    * {@inheritDoc} Default implementation allows this event to be executed in any case.
    */
   @Override
-  public boolean executeEvent(final InputState state) {
+  public boolean executeEvent(@Nonnull final InputState state) {
     return true;
   }
 
@@ -57,7 +59,7 @@ public abstract class AbstractMouseEvent implements InputEvent {
   }
 
   @Override
-  public boolean isForwarded(final ForwardingMode mode) {
+  public boolean isForwarded(@Nonnull final ForwardingMode mode) {
     return (mode == ForwardingMode.mouse) || (mode == ForwardingMode.all);
   }
 
@@ -65,7 +67,7 @@ public abstract class AbstractMouseEvent implements InputEvent {
    * {@inheritDoc} The default implementation never updates the state.
    */
   @Override
-  public void updateState(final InputState state, final boolean handledByGUI) {
+  public void updateState(@Nonnull final InputState state, final boolean handledByGUI) {
     // nothing to do
   }
 }

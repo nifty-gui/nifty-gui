@@ -33,7 +33,7 @@ public enum EffectEventId {
   }
 
   @Nonnull
-  EffectProcessor createEffectProcessor(final Notify notify) {
+  EffectProcessor createEffectProcessor(@Nonnull final Notify notify) {
     return new EffectProcessorImpl(notify, neverStopRendering);
   }
 }

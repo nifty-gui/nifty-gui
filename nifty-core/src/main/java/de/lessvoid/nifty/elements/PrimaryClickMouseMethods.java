@@ -8,6 +8,7 @@ import de.lessvoid.nifty.elements.events.NiftyMousePrimaryReleaseEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PrimaryClickMouseMethods extends MouseClickMethods {
   public PrimaryClickMouseMethods(@Nonnull final Element element) {
@@ -25,7 +26,7 @@ public class PrimaryClickMouseMethods extends MouseClickMethods {
   @Override
   public boolean onClick(
       @Nonnull final Nifty nifty,
-      final String onClickAlternateKey,
+      @Nullable final String onClickAlternateKey,
       @Nonnull final NiftyMouseInputEvent inputEvent) {
     String id = element.getId();
     if (id != null) {

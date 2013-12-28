@@ -132,7 +132,7 @@ public class AbsolutePositionLayout implements LayoutManager {
   }
 
   public interface PostProcess {
-    void process(int rootBoxX, int rootBoxY, int rootBoxWidth, int rootBoxHeight, Box box);
+    void process(int rootBoxX, int rootBoxY, int rootBoxWidth, int rootBoxHeight, @Nonnull Box box);
   }
 
   public static class DefaultPostProcess implements PostProcess {
@@ -142,7 +142,7 @@ public class AbsolutePositionLayout implements LayoutManager {
         final int rootBoxY,
         final int rootBoxWidth,
         final int rootBoxHeight,
-        final Box box) {
+        @Nonnull final Box box) {
     }
   }
 

@@ -94,7 +94,7 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void setColorIgnoreAlpha(final Color color) {
+  public void setColorIgnoreAlpha(@Nonnull final Color color) {
     renderStates.addColor();
   }
 
@@ -153,11 +153,11 @@ public class NiftyRenderDeviceProxy implements NiftyRenderEngine {
   }
 
   @Override
-  public void saveState(final RenderStates statesToSave) {
+  public void saveState(@Nullable final RenderStates statesToSave) {
   }
 
   @Override
-  public void setFont(final RenderFont font) {
+  public void setFont(@Nullable final RenderFont font) {
     renderStates.addFont();
   }
 

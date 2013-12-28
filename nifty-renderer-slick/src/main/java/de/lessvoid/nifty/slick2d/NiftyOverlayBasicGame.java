@@ -58,10 +58,10 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
    *
    * @param title the title of the game
    */
-  protected NiftyOverlayBasicGame(final String title) {
+  protected NiftyOverlayBasicGame(@Nonnull final String title) {
     super(title);
-    setRenderOrder(NiftyRenderOrder.NiftyOverlay);
-    setUpdateOrder(NiftyUpdateOrder.NiftyLast);
+    renderOrder = NiftyRenderOrder.NiftyOverlay;
+    updateOrder = NiftyUpdateOrder.NiftyLast;
   }
 
   @Override

@@ -65,7 +65,7 @@ public class BubblesEffect implements EffectImpl {
   public void execute(
       @Nonnull final Element element,
       final float effectTime,
-      final Falloff falloff,
+      @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
     if (timeProvider != null) {
       for (@Nullable Bubble bubble : bubbles) {

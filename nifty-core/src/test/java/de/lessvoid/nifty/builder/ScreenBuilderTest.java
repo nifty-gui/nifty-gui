@@ -106,7 +106,7 @@ public class ScreenBuilderTest {
     }
 
     @Override
-    ScreenCreator createScreenCreator(final String id) {
+    ScreenCreator createScreenCreator(@Nonnull final String id) {
       return screenCreator;
     }
   }

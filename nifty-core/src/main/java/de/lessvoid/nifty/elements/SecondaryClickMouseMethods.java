@@ -7,6 +7,7 @@ import de.lessvoid.nifty.elements.events.NiftyMouseSecondaryReleaseEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class SecondaryClickMouseMethods extends MouseClickMethods {
   public SecondaryClickMouseMethods(@Nonnull final Element element) {
@@ -16,7 +17,7 @@ public class SecondaryClickMouseMethods extends MouseClickMethods {
   @Override
   public boolean onClick(
       @Nonnull final Nifty nifty,
-      final String onClickAlternateKey,
+      @Nullable final String onClickAlternateKey,
       @Nonnull final NiftyMouseInputEvent inputEvent) {
     String id = element.getId();
     if (id != null) {

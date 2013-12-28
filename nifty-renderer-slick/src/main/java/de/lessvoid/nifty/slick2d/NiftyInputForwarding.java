@@ -2,6 +2,8 @@ package de.lessvoid.nifty.slick2d;
 
 import de.lessvoid.nifty.slick2d.input.ForwardingInputSystem;
 
+import javax.annotation.Nullable;
+
 /**
  * This interface defines the methods available in the game implementations to control how input events are send to the
  * Nifty-GUI or to the underlying game.
@@ -13,6 +15,7 @@ public interface NiftyInputForwarding {
    *
    * @return the forwarding control instance
    */
+  @Nullable
   ForwardingInputSystem getInputForwardingControl();
 
   /**

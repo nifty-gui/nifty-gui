@@ -11,6 +11,7 @@ import de.lessvoid.nifty.tools.Color;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,12 +46,13 @@ public class ImageModeFactoryTest {
     }
 
     @Override
-    public Box getSourceArea(RenderImage renderImage) {
+    public Box getSourceArea(@Nonnull RenderImage renderImage) {
       return null;
     }
 
+    @Nonnull
     @Override
-    public Size getNativeSize(NiftyImage image) {
+    public Size getNativeSize(@Nonnull NiftyImage image) {
       return null;
     }
   }
@@ -63,8 +65,15 @@ public class ImageModeFactoryTest {
 
     @Override
     public void render(
-        RenderDevice renderDevice, RenderImage renderImage, Box sourceArea, int x, int y, int width,
-        int height, Color color, float scale) {
+        @Nonnull RenderDevice renderDevice,
+        @Nonnull RenderImage renderImage,
+        @Nonnull Box sourceArea,
+        int x,
+        int y,
+        int width,
+        int height,
+        @Nonnull Color color,
+        float scale) {
     }
   }
 }

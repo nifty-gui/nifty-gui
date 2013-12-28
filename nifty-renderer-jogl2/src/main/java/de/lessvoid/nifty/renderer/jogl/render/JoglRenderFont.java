@@ -15,7 +15,7 @@ public class JoglRenderFont implements RenderFont {
   public JoglRenderFont(
       @Nonnull final String name,
       final RenderDevice device,
-      final NiftyResourceLoader resourceLoader) {
+      @Nonnull final NiftyResourceLoader resourceLoader) {
     font = new Font(name, resourceLoader);
   }
 

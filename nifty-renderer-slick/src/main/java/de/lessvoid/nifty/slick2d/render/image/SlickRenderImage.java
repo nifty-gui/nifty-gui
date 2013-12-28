@@ -4,6 +4,8 @@ import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 import org.newdawn.slick.Graphics;
 
+import javax.annotation.Nonnull;
+
 /**
  * This slick render image extends the normal render image in order to allow the render device to draw this images
  * easily.
@@ -22,7 +24,7 @@ public interface SlickRenderImage extends RenderImage {
    * @param color  the color that is applied to the image
    * @param scale  scaling factor that is applied to the image, the image is scaled around the center of the image
    */
-  void renderImage(Graphics g, int x, int y, int width, int height, Color color, float scale);
+  void renderImage(@Nonnull Graphics g, int x, int y, int width, int height, @Nonnull Color color, float scale);
 
   /**
    * Draw a part of a image on the screen.
@@ -42,7 +44,7 @@ public interface SlickRenderImage extends RenderImage {
    * @param centerY the y coordinate on the screen the image is scaled around
    */
   void renderImage(
-      Graphics g,
+      @Nonnull Graphics g,
       int x,
       int y,
       int w,
@@ -51,7 +53,7 @@ public interface SlickRenderImage extends RenderImage {
       int srcY,
       int srcW,
       int srcH,
-      Color color,
+      @Nonnull Color color,
       float scale,
       int centerX,
       int centerY);
