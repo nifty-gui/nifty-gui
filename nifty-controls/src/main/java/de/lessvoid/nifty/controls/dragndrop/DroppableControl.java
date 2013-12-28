@@ -126,7 +126,7 @@ public class DroppableControl extends AbstractController implements Droppable {
     final Droppable source = droppedDraggable.getDroppable();
     droppedDraggable.setDroppable(this);
 
-    if (notifyObservers && source != null) {
+    if (notifyObservers) {
       notifyObservers(source, droppedDraggable);
     }
   }
@@ -136,7 +136,7 @@ public class DroppableControl extends AbstractController implements Droppable {
     return draggable;
   }
 
-  private void notifyObservers(@Nonnull final Droppable source, @Nonnull final Draggable droppedDraggable) {
+  private void notifyObservers(@Nullable final Droppable source, @Nonnull final Draggable droppedDraggable) {
     if (nifty == null) {
       return;
     }
