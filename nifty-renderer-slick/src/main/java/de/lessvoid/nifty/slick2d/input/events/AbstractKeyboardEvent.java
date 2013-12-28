@@ -4,6 +4,8 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.slick2d.input.ForwardingMode;
 import de.lessvoid.nifty.slick2d.input.InputState;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is the abstract keyboard event that stores the data all keyboard events got in common.
  *
@@ -29,12 +31,12 @@ public abstract class AbstractKeyboardEvent extends KeyboardInputEvent implement
    * {@inheritDoc} Default implementation allows this event to be executed in any case.
    */
   @Override
-  public boolean executeEvent(final InputState state) {
+  public boolean executeEvent(@Nonnull final InputState state) {
     return true;
   }
 
   @Override
-  public boolean isForwarded(final ForwardingMode mode) {
+  public boolean isForwarded(@Nonnull final ForwardingMode mode) {
     return (mode == ForwardingMode.keyboard) || (mode == ForwardingMode.all);
   }
 
@@ -42,7 +44,7 @@ public abstract class AbstractKeyboardEvent extends KeyboardInputEvent implement
    * {@inheritDoc} The default implementation never updates the state.
    */
   @Override
-  public void updateState(final InputState state, final boolean handledByGUI) {
+  public void updateState(@Nonnull final InputState state, final boolean handledByGUI) {
     // nothing to do
   }
 }

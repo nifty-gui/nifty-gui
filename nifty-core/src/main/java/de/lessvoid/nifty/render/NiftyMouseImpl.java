@@ -14,11 +14,14 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class NiftyMouseImpl implements NiftyMouse {
+  @Nonnull
   private static final Logger log = Logger.getLogger(NiftyMouseImpl.class.getName());
+  @Nonnull
   private final RenderDevice renderDevice;
+  @Nonnull
   private final InputSystem inputSystem;
   @Nonnull
-  private final Map<String, MouseCursor> registeredMouseCursors = new HashMap<String, MouseCursor>();
+  private final Map<String, MouseCursor> registeredMouseCursors;
   @Nullable
   private String currentId;
   private int mouseX;
@@ -28,13 +31,14 @@ public class NiftyMouseImpl implements NiftyMouse {
   private long lastMouseMoveEventTime;
 
   public NiftyMouseImpl(
-      final RenderDevice renderDevice,
-      final InputSystem inputSystem,
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final InputSystem inputSystem,
       @Nonnull final TimeProvider timeProvider) {
     this.renderDevice = renderDevice;
     this.inputSystem = inputSystem;
     this.timeProvider = timeProvider;
     lastMouseMoveEventTime = timeProvider.getMsTime();
+    registeredMouseCursors = new HashMap<String, MouseCursor>();
   }
 
   @Override

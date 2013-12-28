@@ -314,6 +314,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     if (selectionEnd < 0) {
       selectionEnd = 0;
     }
+    if (font == null) {
+      return;
+    }
 
     if (isEverythingSelected(text, selectionStart, selectionEnd)) {
       renderDevice.renderFont(font, text, x, y, textSelectionColor, textSizeX, textSizeY);
@@ -394,6 +397,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    *
    * @return font
    */
+  @Nullable
   @Override
   public RenderFont getFont() {
     return this.font;

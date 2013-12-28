@@ -45,7 +45,7 @@ public final class MouseEventClicked extends AbstractMouseEventButton {
    * Nifty.
    */
   @Override
-  public boolean sendToNifty(final NiftyInputConsumer consumer) {
+  public boolean sendToNifty(@Nonnull final NiftyInputConsumer consumer) {
     return false;
   }
 

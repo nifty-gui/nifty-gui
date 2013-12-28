@@ -16,7 +16,7 @@ public class TypeProcessorSubstitutionGroup implements XmlProcessor {
   }
 
   @Override
-  public void process(@Nonnull final XmlParser xmlParser, final Attributes attributes) throws Exception {
+  public void process(@Nonnull final XmlParser xmlParser, @Nonnull final Attributes attributes) throws Exception {
     SubstitutionGroup substitutionGroup = new SubstitutionGroup();
     parent.addSubstitutionGroup(substitutionGroup);
 

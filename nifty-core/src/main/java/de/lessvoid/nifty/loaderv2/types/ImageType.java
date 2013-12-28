@@ -35,7 +35,7 @@ public class ImageType extends ElementType {
     setElementRendererCreator(new ElementRendererCreator() {
       @Override
       @Nonnull
-      public ElementRenderer[] createElementRenderer(final Nifty nifty) {
+      public ElementRenderer[] createElementRenderer(@Nonnull final Nifty nifty) {
         ElementRenderer[] renderer = new ElementRenderer[1];
         //NiftyImage niftyImage = null;
         //        String filename = getFilename();

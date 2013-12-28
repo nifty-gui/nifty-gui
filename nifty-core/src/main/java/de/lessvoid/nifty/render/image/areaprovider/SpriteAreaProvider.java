@@ -65,7 +65,7 @@ public class SpriteAreaProvider implements AreaProvider {
 
   @Nonnull
   @Override
-  public Size getNativeSize(NiftyImage image) {
+  public Size getNativeSize(@Nonnull NiftyImage image) {
     return new Size(m_width, m_height);
   }
 }

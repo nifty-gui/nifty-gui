@@ -2603,6 +2603,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   // We don't want to give up Java 1.6 compatibility right now.
+  @SuppressWarnings("unchecked")
   @Nonnull
   private static <T> Iterator<T> emptyIterator() {
     return (Iterator<T>) EmptyIterator.EMPTY_ITERATOR;
@@ -2611,15 +2612,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private static class EmptyIterator<E> implements Iterator<E> {
     static final EmptyIterator<Object> EMPTY_ITERATOR = new EmptyIterator<Object>();
 
+    @Override
     public boolean hasNext() {
       return false;
     }
 
+    @Override
     @Nonnull
     public E next() {
       throw new NoSuchElementException();
     }
 
+    @Override
     public void remove() {
       throw new IllegalStateException();
     }

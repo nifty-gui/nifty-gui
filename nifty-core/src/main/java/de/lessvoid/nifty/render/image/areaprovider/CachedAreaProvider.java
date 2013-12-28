@@ -37,8 +37,9 @@ public class CachedAreaProvider implements AreaProvider {
     return m_cachedArea;
   }
 
+  @Nonnull
   @Override
-  public Size getNativeSize(NiftyImage image) {
+  public Size getNativeSize(@Nonnull NiftyImage image) {
     return m_cachedProvider.getNativeSize(image);
   }
 }
