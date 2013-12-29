@@ -34,7 +34,7 @@ public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>>
    * to the parent control in order to update the tree.
    */
   public void expandButtonClicked() {
-    if (parentControl != null) {
+    if (parentControl == null) {
       log.warning("Can't handle click to expend button as long as the parent control is not applied.");
       return;
     }

@@ -299,6 +299,11 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
     } else {
       nifty.subscribe(screen, getId(), ElementShowEvent.class, listBoxControlShowEventSubscriber);
     }
+
+    Element element = getElement();
+    if (element != null) {
+      element.getParent().layoutElements();
+    }
   }
 
   @Override
@@ -925,7 +930,6 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
         processor.processElement(labelElements[i]);
       }
     }
-    childRootElement.layoutElements();
   }
 
   private void replaceAllIds(
