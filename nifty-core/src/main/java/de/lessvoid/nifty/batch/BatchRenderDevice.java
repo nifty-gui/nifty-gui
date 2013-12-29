@@ -11,13 +11,15 @@ import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.ColorValueParser;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-import org.jglfont.BitmapFontFactory;
-import org.jglfont.spi.BitmapFontRenderer;
+import org.jglfont.JGLFontFactory;
+import org.jglfont.spi.JGLFontRenderer;
+import org.jglfont.spi.ResourceLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -57,7 +59,7 @@ public class BatchRenderDevice implements RenderDevice {
   private int completeClippedCounter;
 
   @Nonnull
-  private final BitmapFontFactory factory;
+  private final JGLFontFactory factory;
   @Nonnull
   private final BatchRenderBackend renderBackend;
   @Nonnull
@@ -88,7 +90,15 @@ public class BatchRenderDevice implements RenderDevice {
     frames = 0;
     generator = new TextureAtlasGenerator(atlasWidth, atlasHeight);
     fontRenderer = new FontRenderer(this);
-    factory = new BitmapFontFactory(fontRenderer);
+    factory = new JGLFontFactory(fontRenderer, new ResourceLoader() {
+      @Override
+      public InputStream load(String path) {
+        if (resourceLoader == null) {
+          return null;
+        }
+        return resourceLoader.getResourceAsStream(path);
+      }
+    });
     renderBackend.createAtlasTexture(atlasWidth, atlasHeight);
   }
 
@@ -584,7 +594,7 @@ public class BatchRenderDevice implements RenderDevice {
     return false;
   }
 
-  private class FontRenderer implements BitmapFontRenderer {
+  private class FontRenderer implements JGLFontRenderer {
     private final Map<String, BitmapInfo> textureInfos = new HashMap<String, BitmapInfo>();
     private final ColorValueParser colorValueParser = new ColorValueParser();
     private final BatchRenderDevice batchRenderDevice;
@@ -610,9 +620,25 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     @Override
+    public void registerBitmap(
+            @Nonnull final String bitmapId,
+            @Nonnull final ByteBuffer data,
+            final int width,
+            final int height,
+            @Nonnull final String filename
+    ) throws IOException {
+      BatchRenderImage batchRenderImage = null;
+      Image image = renderBackend.loadImage(data, width, height);
+      if (image != null) {
+        batchRenderImage = new BatchRenderImage(image, generator, filename, renderBackend);
+      }
+      textureInfos.put(bitmapId, new BitmapInfo(batchRenderImage));
+    }
+
+    @Override
     public void registerGlyph(
         final String bitmapId,
-        final char c,
+        final int c,
         final int xoff,
         final int yoff,
         final int w,
@@ -663,7 +689,7 @@ public class BatchRenderDevice implements RenderDevice {
         final String bitmapId,
         final int x,
         final int y,
-        final char c,
+        final int c,
         final float sx,
         final float sy,
         final float r,
@@ -750,7 +776,7 @@ public class BatchRenderDevice implements RenderDevice {
 
   private static class BitmapInfo {
     private final BatchRenderImage image;
-    private final Map<Character, CharRenderInfo> characterIndices = new HashMap<Character, CharRenderInfo>();
+    private final Map<Integer, CharRenderInfo> characterIndices = new HashMap<Integer, CharRenderInfo>();
     private Result result;
 
     public BitmapInfo(final BatchRenderImage image) {
@@ -769,7 +795,7 @@ public class BatchRenderDevice implements RenderDevice {
       image.markAsUnloaded();
     }
 
-    public void renderCharacter(char c, int x, int y, float sx, float sy, @Nonnull Color textColor) {
+    public void renderCharacter(int c, int x, int y, float sx, float sy, @Nonnull Color textColor) {
       int atlasX0 = result.getX();
       int atlasY0 = result.getY();
       int atlasImageW = result.getOriginalImageWidth();
@@ -777,7 +803,7 @@ public class BatchRenderDevice implements RenderDevice {
       characterIndices.get(c).renderQuad(x, y, sx, sy, textColor, atlasX0, atlasY0, atlasImageW, atlasImageH);
     }
 
-    public void addCharRenderInfo(final Character c, final CharRenderInfo renderInfo) {
+    public void addCharRenderInfo(final Integer c, final CharRenderInfo renderInfo) {
       this.characterIndices.put(c, renderInfo);
     }
   }

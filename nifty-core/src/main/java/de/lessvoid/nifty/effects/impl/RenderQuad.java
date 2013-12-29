@@ -44,7 +44,7 @@ public class RenderQuad implements EffectImpl {
       final float normalizedTime,
       @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
-    r.saveState(null);
+    r.saveStates();
 
     currentColor.linear(startColor, endColor, normalizedTime);
     if (falloff == null) {
@@ -61,7 +61,7 @@ public class RenderQuad implements EffectImpl {
       r.renderQuad((element.getX() + element.getWidth() / 2) - size / 2, element.getY(), size, element.getHeight());
     }
 
-    r.restoreState();
+    r.restoreStates();
   }
 
   @Override

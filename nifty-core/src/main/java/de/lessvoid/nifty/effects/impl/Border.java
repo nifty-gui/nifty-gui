@@ -81,7 +81,7 @@ public class Border implements EffectImpl {
       final float normalizedTime,
       @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
-    r.saveState(null);
+    r.saveStates();
     int left = getBorder(element, borderLeft);
     int right = getBorder(element, borderRight);
     int top = getBorder(element, borderTop);
@@ -123,7 +123,7 @@ public class Border implements EffectImpl {
           element.getWidth() + left + right - insetOffsetLeft - insetOffsetRight,
           bottom);
     }
-    r.restoreState();
+    r.restoreStates();
   }
 
   private void setAlphaSaveColor(@Nonnull final NiftyRenderEngine r, @Nonnull final Color color) {

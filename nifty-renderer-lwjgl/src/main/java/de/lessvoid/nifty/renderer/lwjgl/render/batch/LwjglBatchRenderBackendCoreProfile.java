@@ -197,11 +197,17 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       image.rewind();
       int width = loader.getWidth();
       int height = loader.getHeight();
-      return new ImageImpl(width, height, image);
+      return new ImageImpl(image, width, height);
     } catch (Exception e) {
       log.log(Level.WARNING, "problems loading image [" + filename + "]", e);
-      return new ImageImpl(0, 0, null);
+      return new ImageImpl(null, 0, 0);
     }
+  }
+
+  @Nullable
+  @Override
+  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
+    return new ImageImpl(data, w, h);
   }
 
   @Override
@@ -220,7 +226,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
         image.getHeight(),
         GL11.GL_RGBA,
         GL11.GL_UNSIGNED_BYTE,
-        imageImpl.byteBuffer);
+        imageImpl.getBuffer());
   }
 
   @Override
@@ -363,25 +369,9 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
    *
    * @author void
    */
-  private static class ImageImpl implements BatchRenderBackend.Image {
-    private final int width;
-    private final int height;
-    private final ByteBuffer byteBuffer;
-
-    public ImageImpl(final int width, final int height, final ByteBuffer byteBuffer) {
-      this.width = width;
-      this.height = height;
-      this.byteBuffer = byteBuffer;
-    }
-
-    @Override
-    public int getWidth() {
-      return width;
-    }
-
-    @Override
-    public int getHeight() {
-      return height;
+  private static class ImageImpl extends ByteBufferedImage implements BatchRenderBackend.Image {
+    private ImageImpl(ByteBuffer buffer, int width, int height) {
+      super(buffer, width, height);
     }
   }
 
