@@ -177,7 +177,7 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
         image.rewind();
         int width = loader.getWidth();
         int height = loader.getHeight();
-        return new ImageImpl(width, height, image);
+        return new ImageImpl(image, width, height);
       }
     } catch (Exception e) {
       log.log(Level.WARNING, "problems loading image [" + filename + "]", e);
@@ -190,6 +190,12 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
       }
     }
     return null;
+  }
+
+  @Nullable
+  @Override
+  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
+    return new ImageImpl(data, w, h);
   }
 
   @Override
@@ -209,7 +215,7 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
         image.getHeight(),
         GL.GL_RGBA,
         GL.GL_UNSIGNED_BYTE,
-        imageImpl.byteBuffer);
+        imageImpl.getBuffer());
   }
 
   @Override
@@ -430,25 +436,9 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
    *
    * @author void
    */
-  private static class ImageImpl implements BatchRenderBackend.Image {
-    private final int width;
-    private final int height;
-    private final ByteBuffer byteBuffer;
-
-    public ImageImpl(final int width, final int height, final ByteBuffer byteBuffer) {
-      this.width = width;
-      this.height = height;
-      this.byteBuffer = byteBuffer;
-    }
-
-    @Override
-    public int getWidth() {
-      return width;
-    }
-
-    @Override
-    public int getHeight() {
-      return height;
+  private static class ImageImpl extends ByteBufferedImage implements BatchRenderBackend.Image {
+    private ImageImpl(ByteBuffer buffer, int width, int height) {
+      super(buffer, width, height);
     }
   }
 

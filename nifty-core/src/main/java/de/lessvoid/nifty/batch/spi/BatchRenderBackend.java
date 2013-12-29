@@ -8,6 +8,7 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * Nifty BatchRenderBackend used to interface any graphics backend to the new BatchRenderDevice. This looks like the
@@ -119,6 +120,17 @@ public interface BatchRenderBackend {
   Image loadImage(@Nonnull String filename);
 
   /**
+   * Wraps given buffer into Image interface
+   *
+   * @param data image data
+   * @param w width of the image
+   * @param h height of the image
+   * @return wrapped image
+   */
+  @Nullable
+  Image loadImage(@Nonnull ByteBuffer data, int w, int h);
+
+  /**
    * Adds the given image to the main texture atlas at the given position.
    *
    * @param image the Image data loaded by loadImage()
@@ -195,5 +207,39 @@ public interface BatchRenderBackend {
     int getWidth();
 
     int getHeight();
+  }
+
+  /**
+   * Generic implementation of Image interface backed up with byte buffer as main or optional storage.
+   * @author iamtakingiteasy
+   */
+  public static class ByteBufferedImage implements Image {
+    protected final ByteBuffer buffer;
+    protected final int width;
+    protected final int height;
+
+    public ByteBufferedImage() {
+      this(null, 0, 0);
+    }
+
+    public ByteBufferedImage(ByteBuffer buffer, int width, int height) {
+      this.buffer = buffer;
+      this.width = width;
+      this.height = height;
+    }
+
+    @Override
+    public int getWidth() {
+      return width;
+    }
+
+    @Override
+    public int getHeight() {
+      return height;
+    }
+
+    public ByteBuffer getBuffer() {
+      return buffer;
+    }
   }
 }

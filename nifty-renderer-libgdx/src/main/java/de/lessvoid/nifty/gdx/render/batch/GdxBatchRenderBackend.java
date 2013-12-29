@@ -225,6 +225,12 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
+  @Nullable
+  @Override
+  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
+    return new GdxBatchRenderImage(data, w, h);
+  }
+
   @Override
   public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
     GdxBatchRenderImage gdxImage = (GdxBatchRenderImage) image;
