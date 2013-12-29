@@ -2,20 +2,20 @@ package de.lessvoid.nifty.batch;
 
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-import org.jglfont.BitmapFont;
-import org.jglfont.BitmapFontFactory;
+import org.jglfont.JGLFont;
+import org.jglfont.JGLFontFactory;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class BatchRenderFont implements RenderFont {
   private final BatchRenderDevice batchRenderDevice;
-  private final BitmapFont font;
+  private final JGLFont font;
 
   public BatchRenderFont(
       final BatchRenderDevice batchRenderDevice,
       @Nonnull final String name,
-      @Nonnull final BitmapFontFactory factory,
+      @Nonnull final JGLFontFactory factory,
       @Nonnull final NiftyResourceLoader resourceLoader) throws IOException {
     this.batchRenderDevice = batchRenderDevice;
     this.font = factory.loadFont(resourceLoader.getResourceAsStream(name), name);
@@ -46,7 +46,7 @@ public class BatchRenderFont implements RenderFont {
     batchRenderDevice.disposeFont(this);
   }
 
-  public BitmapFont getBitmapFont() {
+  public JGLFont getBitmapFont() {
     return font;
   }
 }

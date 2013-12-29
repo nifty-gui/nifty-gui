@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public class GdxBatchRenderImage implements BatchRenderBackend.Image {
+public class GdxBatchRenderImage extends BatchRenderBackend.ByteBufferedImage implements BatchRenderBackend.Image {
   @Nullable
   private Pixmap pixmap;
 
@@ -23,19 +23,23 @@ public class GdxBatchRenderImage implements BatchRenderBackend.Image {
     pixmap = convertPixmapToFormat(pixmap, Pixmap.Format.RGBA8888);
   }
 
+  public GdxBatchRenderImage(final ByteBuffer buffer, final int width, final int height) {
+    super(buffer, width, height);
+  }
+
   @Override
   public int getWidth() {
-    return pixmap != null ? pixmap.getWidth() : 0;
+    return pixmap != null ? pixmap.getWidth() : super.getWidth();
   }
 
   @Override
   public int getHeight() {
-    return pixmap != null ? pixmap.getHeight() : 0;
+    return pixmap != null ? pixmap.getHeight() : super.getHeight();
   }
 
   @Nullable
   public ByteBuffer asByteBuffer() {
-    return pixmap != null ? pixmap.getPixels() : null;
+    return pixmap != null ? pixmap.getPixels() : super.getBuffer();
   }
 
   @Nullable
