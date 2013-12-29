@@ -14,7 +14,7 @@
 
     <controlDefinition name="treeBox" controller="de.lessvoid.nifty.controls.treebox.TreeBoxControl"
                        childRootId="#listbox" style="nifty-listbox">
-        <control id="#listbox" name="listBox" vertical="vertical" horizontal="horizontal"
+        <control id="#listbox" name="listBox"
                  selectionMode="$selectionMode" displayItems="$displayItems"
                  viewConverterClass="de.lessvoid.nifty.controls.treebox.TreeBoxViewConverter">
             <control name="treeBox-item" id="#treeBox-item"/>
