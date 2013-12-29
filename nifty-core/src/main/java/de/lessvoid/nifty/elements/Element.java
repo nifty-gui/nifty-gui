@@ -802,9 +802,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
           SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
           if (newWidth.hasValue()) {
             int newWidthPx = newWidth.getValueAsInt(0);
-            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt
                 (newWidthPx));
-            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt
                 (newWidthPx));
             setConstraintWidth(SizeValue.def(newWidthPx));
           }
@@ -817,9 +817,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         SizeValue newWidth = layoutPart.getSumWidth(layoutPartChild);
         if (newWidth.hasValue()) {
           int newWidthPx = newWidth.getValueAsInt(0);
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt
               (newWidthPx));
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt
               (newWidthPx));
           setConstraintWidth(SizeValue.sum(newWidthPx));
         } else {
@@ -831,9 +831,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         SizeValue newWidth = layoutPart.getMaxWidth(layoutPartChild);
         if (newWidth.hasValue()) {
           int newWidthPx = newWidth.getValueAsInt(0);
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt
               (newWidthPx));
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt
               (newWidthPx));
           setConstraintWidth(SizeValue.max(newWidthPx));
         } else {
