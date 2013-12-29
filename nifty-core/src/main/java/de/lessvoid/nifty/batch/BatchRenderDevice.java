@@ -13,6 +13,7 @@ import de.lessvoid.nifty.tools.ColorValueParser;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import org.jglfont.JGLFontFactory;
 import org.jglfont.spi.JGLFontRenderer;
+import org.jglfont.spi.ResourceLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -89,7 +90,15 @@ public class BatchRenderDevice implements RenderDevice {
     frames = 0;
     generator = new TextureAtlasGenerator(atlasWidth, atlasHeight);
     fontRenderer = new FontRenderer(this);
-    factory = new JGLFontFactory(fontRenderer);
+    factory = new JGLFontFactory(fontRenderer, new ResourceLoader() {
+      @Override
+      public InputStream load(String path) {
+        if (resourceLoader == null) {
+          return null;
+        }
+        return resourceLoader.getResourceAsStream(path);
+      }
+    });
     renderBackend.createAtlasTexture(atlasWidth, atlasHeight);
   }
 
