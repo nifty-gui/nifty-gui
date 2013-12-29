@@ -62,7 +62,7 @@ public class ColorBar implements EffectImpl {
       final float normalizedTime,
       @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
-    r.saveState(null);
+    r.saveStates();
     if (color != null) {
       if (r.isColorAlphaChanged()) {
         if (falloff == null) {
@@ -105,7 +105,7 @@ public class ColorBar implements EffectImpl {
           size - insetOffsetLeft - insetOffsetRight,
           element.getHeight() - insetOffsetTop - insetOffsetBottom);
     }
-    r.restoreState();
+    r.restoreStates();
   }
 
   @Override

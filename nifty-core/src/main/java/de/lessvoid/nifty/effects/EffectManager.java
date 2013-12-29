@@ -1,14 +1,18 @@
 package de.lessvoid.nifty.effects;
 
-import de.lessvoid.nifty.EndNotify;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.render.NiftyRenderEngine;
-import de.lessvoid.nifty.render.RenderStates;
-import de.lessvoid.nifty.spi.time.TimeProvider;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+
+import de.lessvoid.nifty.EndNotify;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
+import de.lessvoid.nifty.spi.time.TimeProvider;
 
 /**
  * manage all effects of an element.
@@ -72,15 +76,11 @@ public class EffectManager {
 
   // we're not multi-threaded so we can use static in here to save memory allocation when creating lots of elements
   @Nonnull
-  private static final NiftyRenderDeviceProxy renderDeviceProxy = new NiftyRenderDeviceProxy();
-  @Nonnull
   private static final RenderPhase renderPhasePre = new RenderPhasePre();
   @Nonnull
   private static final RenderPhase renderPhasePost = new RenderPhasePost();
   @Nonnull
   private static final RenderPhase renderPhaseOverlay = new RenderPhaseOverlay();
-  @Nonnull
-  private static final RenderStates savedRenderStates = new RenderStates();
 
   /**
    * create a new effectManager with the given listener.
@@ -141,30 +141,6 @@ public class EffectManager {
     if (processor != null) {
       processor.setActive(false);
     }
-  }
-
-  /**
-   * prepare rendering.
-   *
-   * @param renderDevice RenderDevice
-   */
-  public void begin(@Nonnull final NiftyRenderEngine renderDevice, @Nonnull final Element element) {
-    /*savedRenderStates.addAll();
-    for (int i = 0; i < effectProcessorList.size(); i++) {
-      effectProcessorList.get(i).getRenderStatesToSave(renderDeviceProxy);
-      savedRenderStates.removeAll(renderDeviceProxy.getStates());
-    }
-    renderDevice.saveState(savedRenderStates);  */
-    //renderDevice.saveState(null);
-  }
-
-  /**
-   * finish rendering.
-   *
-   * @param renderDevice RenderDevice
-   */
-  public void end(@Nonnull final NiftyRenderEngine renderDevice) {
-    //renderDevice.restoreState();
   }
 
   public void renderPre(@Nonnull final NiftyRenderEngine renderEngine, final Element element) {

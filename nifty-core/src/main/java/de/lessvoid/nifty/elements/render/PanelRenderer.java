@@ -38,15 +38,15 @@ public class PanelRenderer implements ElementRenderer {
   @Override
   public void render(@Nonnull final Element element, @Nonnull final NiftyRenderEngine r) {
     if (element.getNifty().isDebugOptionPanelColors()) {
-      r.saveState(null);
+      r.saveStates();
       r.setColor(getDebugColor());
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
-      r.restoreState();
+      r.restoreStates();
       return;
     }
 
     if (backgroundColor != null) {
-      r.saveState(null);
+      r.saveStates();
       if (!r.isColorChanged()) {
         if (r.isColorAlphaChanged()) {
           r.setColorIgnoreAlpha(backgroundColor);
@@ -55,7 +55,7 @@ public class PanelRenderer implements ElementRenderer {
         }
       }
       r.renderQuad(element.getX(), element.getY(), element.getWidth(), element.getHeight());
-      r.restoreState();
+      r.restoreStates();
     }
   }
 

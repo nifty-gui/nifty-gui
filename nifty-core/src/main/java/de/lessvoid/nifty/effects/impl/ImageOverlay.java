@@ -90,7 +90,7 @@ public class ImageOverlay implements EffectImpl {
         return;
       }
     }
-    r.saveState(null);
+    r.saveStates();
     if (falloff != null) {
       r.setColorAlpha(alpha.multiply(falloff.getFalloffValue()).getAlpha());
     } else {
@@ -104,7 +104,7 @@ public class ImageOverlay implements EffectImpl {
     } else {
       r.renderImage(image, imageX, imageY, imageWidth, imageHeight);
     }
-    r.restoreState();
+    r.restoreStates();
   }
 
   @Override

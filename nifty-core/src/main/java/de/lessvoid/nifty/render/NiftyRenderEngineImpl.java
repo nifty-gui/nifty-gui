@@ -569,14 +569,14 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   }
 
   @Override
-  public void saveState(@Nullable final RenderStates statesToSave) {
+  public void saveStates() {
     SavedRenderState savedRenderState = new SavedRenderState();
-    savedRenderState.save(statesToSave);
+    savedRenderState.save();
     stack.push(savedRenderState);
   }
 
   @Override
-  public void restoreState() {
+  public void restoreStates() {
     SavedRenderState restored = stack.pop();
     restored.restore();
   }
@@ -607,152 +607,78 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   private class SavedRenderState {
     private float x;
     private float y;
-    private boolean statePositionChanged;
 
     private float colorR;
     private float colorG;
     private float colorB;
     private boolean colorChanged;
-    private boolean stateColorChanged;
 
     private float colorAlpha;
     private boolean colorAlphaChanged;
-    private boolean stateAlphaChanged;
 
     @Nullable
     private RenderFont font;
-    private boolean stateFontChanged;
 
     private float textSize;
-    private boolean stateTextSizeChanged;
 
     private float imageScale;
-    private boolean stateImageScaleChanged;
 
     private boolean clipEnabled;
     @Nonnull
     private final Clip clip = new Clip(0, 0, 0, 0);
-    private boolean stateClipChanged;
 
     private BlendMode blendMode;
-    private boolean stateBlendModeChanged;
-
-    private boolean restoreAll = false;
 
     public SavedRenderState() {
     }
 
-    public void save(@Nullable final RenderStates statesToSave) {
-      statePositionChanged = false;
-      stateColorChanged = false;
-      stateAlphaChanged = false;
-      stateFontChanged = false;
-      stateTextSizeChanged = false;
-      stateImageScaleChanged = false;
-      stateClipChanged = false;
-      stateBlendModeChanged = false;
-      restoreAll = false;
-
-      if (statesToSave == null) {
-        savePosition();
-        saveColor();
-        saveColorAlpha();
-        saveTextSize();
-        saveImageSize();
-        saveFont();
-        saveClipEnabled();
-        saveBlendMode();
-        restoreAll = true;
-        return;
-      }
-      if (statesToSave.hasPosition()) {
-        savePosition();
-      } else if (statesToSave.hasColor()) {
-        saveColor();
-      } else if (statesToSave.hasAlpha()) {
-        saveColorAlpha();
-      } else if (statesToSave.hasTextSize()) {
-        saveTextSize();
-      } else if (statesToSave.hasImageScale()) {
-        saveImageSize();
-      } else if (statesToSave.hasFont()) {
-        saveFont();
-      } else if (statesToSave.hasClip()) {
-        saveClipEnabled();
-      } else if (statesToSave.hasBlendMode()) {
-        saveBlendMode();
-      }
+    public void save() {
+      savePosition();
+      saveColor();
+      saveColorAlpha();
+      saveTextSize();
+      saveImageSize();
+      saveFont();
+      saveClipEnabled();
+      saveBlendMode();
     }
 
     public void restore() {
-      if (restoreAll) {
-        restorePosition();
-        restoreColor();
-        restoreAlpha();
-        restoreFont();
-        restoreTextSize();
-        restoreImageScale();
-        restoreClip();
-        restoreBlend();
-        return;
-      }
-      if (statePositionChanged) {
-        restorePosition();
-      }
-      if (stateColorChanged) {
-        restoreColor();
-      }
-      if (stateAlphaChanged) {
-        restoreAlpha();
-      }
-      if (stateFontChanged) {
-        restoreFont();
-      }
-      if (stateTextSizeChanged) {
-        restoreTextSize();
-      }
-      if (stateImageScaleChanged) {
-        restoreImageScale();
-      }
-      if (stateClipChanged) {
-        restoreClip();
-      }
-      if (stateBlendModeChanged) {
-        restoreBlend();
-      }
+      restorePosition();
+      restoreColor();
+      restoreAlpha();
+      restoreFont();
+      restoreTextSize();
+      restoreImageScale();
+      restoreClip();
+      restoreBlend();
     }
 
     private void saveBlendMode() {
       blendMode = NiftyRenderEngineImpl.this.blendMode;
-      stateBlendModeChanged = true;
     }
 
     private void saveClipEnabled() {
       clipEnabled = NiftyRenderEngineImpl.this.clipEnabled;
       clip.init(NiftyRenderEngineImpl.this.clip.x0, NiftyRenderEngineImpl.this.clip.y0,
           NiftyRenderEngineImpl.this.clip.x1, NiftyRenderEngineImpl.this.clip.y1);
-      stateClipChanged = true;
     }
 
     private void saveFont() {
       font = NiftyRenderEngineImpl.this.font;
-      stateFontChanged = true;
     }
 
     private void saveImageSize() {
       imageScale = NiftyRenderEngineImpl.this.imageScale;
-      stateImageScaleChanged = true;
     }
 
     private void saveTextSize() {
       textSize = NiftyRenderEngineImpl.this.textScale;
-      stateTextSizeChanged = true;
     }
 
     private void saveColorAlpha() {
       colorAlpha = NiftyRenderEngineImpl.this.color.getAlpha();
       colorAlphaChanged = NiftyRenderEngineImpl.this.colorAlphaChanged;
-      stateAlphaChanged = true;
     }
 
     private void saveColor() {
@@ -760,13 +686,11 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       colorG = NiftyRenderEngineImpl.this.color.getGreen();
       colorB = NiftyRenderEngineImpl.this.color.getBlue();
       colorChanged = NiftyRenderEngineImpl.this.colorChanged;
-      stateColorChanged = true;
     }
 
     private void savePosition() {
       x = NiftyRenderEngineImpl.this.currentX;
       y = NiftyRenderEngineImpl.this.currentY;
-      statePositionChanged = true;
     }
 
     private void restoreBlend() {

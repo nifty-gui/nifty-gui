@@ -234,24 +234,22 @@ public interface NiftyRenderEngine {
   void setGlobalPosition(float xPos, float yPos);
 
   /**
-   * Save all or some of the internal values of the render engine.
+   * Save all internal state values of the render engine.
    * <p/>
-   * The saved state is then stored inside a stack. Calling the {@link #restoreState()} function retrieves the last
+   * The saved state is stored inside a stack. Calling the {@link #restoreStates()} function retrieves the last
    * stored value from the stack and restores it.
    * <p/>
    * The stack has to be cleared out until the {@link #beginFrame()} function is called next,
    * else the states will be wiped and a severe warning is raised.
-   *
-   * @param statesToSave the render states used to store or {@code null} in case all values are supposed to be stored
    */
-  void saveState(@Nullable RenderStates statesToSave);
+  void saveStates();
 
   /**
    * Restore the last saved state.
    *
    * @throws IllegalStateException in case the stack of stored states is empty
    */
-  void restoreState();
+  void restoreStates();
 
   /**
    * Get the render device used by the engine.

@@ -31,7 +31,7 @@ public class RestoreState implements EffectImpl {
       final float normalizedTime,
       @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
-    r.restoreState();
+    r.restoreStates();
   }
 
   @Override
