@@ -2644,6 +2644,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private static final class RenderOrderComparator implements Comparator<Element> {
     @Override
     public int compare(@Nonnull final Element o1, @Nonnull final Element o2) {
+      if (o1 == o2) {
+        return 0;
+      }
       int o1RenderOrder = getRenderOrder(o1);
       int o2RenderOrder = getRenderOrder(o2);
 
@@ -2680,7 +2683,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       if (element.renderOrder != 0) {
         return element.renderOrder;
       }
-      return element.getChildren().indexOf(element);
+      return element.getParent().getChildren().indexOf(element);
     }
   }
 
