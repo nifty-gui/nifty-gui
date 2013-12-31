@@ -169,6 +169,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public void clearAtlasTexture(final int width, final int height) {
     initialData.rewind();
+    bind();
     texture.updateTextureData(initialData);
   }
 
@@ -195,6 +196,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       return;
     }
     final GL gl = GLContext.getCurrentGL();
+    bind();
     gl.glTexSubImage2D(
         GL.GL_TEXTURE_2D,
         0,
@@ -264,6 +266,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     initialData.rewind();
 
     final GL gl = GLContext.getCurrentGL();
+    bind();
     gl.glTexSubImage2D(
         GL.GL_TEXTURE_2D,
         0,

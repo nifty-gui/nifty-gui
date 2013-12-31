@@ -177,6 +177,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public void clearAtlasTexture(final int width, final int height) {
     initialData.rewind();
+    bind();
     texture.updateTextureData(initialData);
   }
 
@@ -202,6 +203,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
         imageImpl.getHeight() == 0) {
       return;
     }
+    bind();
     GL11.glTexSubImage2D(
         GL11.GL_TEXTURE_2D,
         0,
@@ -273,6 +275,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     }
     initialData.rewind();
 
+    bind();
     GL11.glTexSubImage2D(
         GL11.GL_TEXTURE_2D,
         0,
