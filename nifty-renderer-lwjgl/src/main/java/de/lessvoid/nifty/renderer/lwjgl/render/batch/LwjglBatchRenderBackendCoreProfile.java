@@ -1,29 +1,12 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch;
 
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
-import de.lessvoid.nifty.render.BlendMode;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglMouseCursor;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.*;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreTexture2D.ColorFormat;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreTexture2D.ResizeFilter;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
-import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
-import de.lessvoid.nifty.spi.render.MouseCursor;
-import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.Factory;
-import de.lessvoid.nifty.tools.ObjectPool;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.vector.Matrix4f;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL31.GL_PRIMITIVE_RESTART;
+import static org.lwjgl.opengl.GL31.glPrimitiveRestartIndex;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -33,10 +16,37 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL31.GL_PRIMITIVE_RESTART;
-import static org.lwjgl.opengl.GL31.glPrimitiveRestartIndex;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.vector.Matrix4f;
+
+import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglMouseCursor;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreElementVBO;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreMatrixFactory;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreRender;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreShader;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreTexture2D;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreTexture2D.ColorFormat;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreTexture2D.ResizeFilter;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreVAO;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreVBO;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageData;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.ImageIOImageData;
+import de.lessvoid.nifty.renderer.lwjgl.render.io.TGAImageData;
+import de.lessvoid.nifty.spi.render.MouseCursor;
+import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.Factory;
+import de.lessvoid.nifty.tools.ObjectPool;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * BatchRenderBackend Implementation for OpenGL Core Profile.
@@ -69,6 +79,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
   @Nonnull
   private int[] elementIndexBuffer = new int[5];
+  private final CoreProfileSaveGLState saveGLState = new CoreProfileSaveGLState();
 
   public LwjglBatchRenderBackendCoreProfile() {
     niftyShader = CoreShader.newShaderWithVertexAttributes("aVertex", "aColor", "aTexture");
@@ -107,6 +118,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public void beginFrame() {
     log.fine("beginFrame()");
+    saveGLState.saveCore();
 
     Matrix4f modelViewProjection = CoreMatrixFactory.createOrtho(0, getWidth(), getHeight(), 0);
     niftyShader.activate();
@@ -121,6 +133,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public void endFrame() {
     log.fine("endFrame");
+    saveGLState.restoreCore();
     checkGLError();
   }
 
@@ -261,6 +274,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
   @Override
   public int render() {
+    glActiveTexture(GL_TEXTURE0);
     bind();
     glEnable(GL11.GL_BLEND);
     glEnable(GL_PRIMITIVE_RESTART);
