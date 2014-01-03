@@ -1,31 +1,31 @@
-/* 
+/*
  * Copyright (c) 2002-2008 LWJGL Project
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are 
+ * modification, are permitted provided that the following conditions are
  * met:
- * 
- * * Redistributions of source code must retain the above copyright 
+ *
+ * * Redistributions of source code must retain the above copyright
  *   notice, this list of conditions and the following disclaimer.
  *
  * * Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * * Neither the name of 'LWJGL' nor the names of 
- *   its contributors may be used to endorse or promote products derived 
+ * * Neither the name of 'LWJGL' nor the names of
+ *   its contributors may be used to endorse or promote products derived
  *   from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
  * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
@@ -36,39 +36,40 @@ import java.nio.FloatBuffer;
 
 /**
  *
- * Holds a 2-tuple vector.
- * 
+ * Holds a 3-tuple vector.
+ *
  * @author cix_foo <cix_foo@users.sourceforge.net>
  * @author void256 - removed the interfaces this class implements and remove the base class to make that a simple
  *                   and plain self-contained class
+ * @version $Revision$
+ * $Id$
  */
 
-public class Vec2 implements Serializable {
+public class Vec3 implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public float x, y;
+	public float x, y, z;
 
 	/**
-	 * Constructor for Vec2.
+	 * Constructor for Vector3f.
 	 */
-	public Vec2() {
-		x = 0.f;
-		y = 0.f;
+	public Vec3() {
+		super();
 	}
 
 	/**
 	 * Constructor
 	 */
-	public Vec2(Vec2 src) {
+	public Vec3(Vec3 src) {
 		set(src);
 	}
 
 	/**
 	 * Constructor
 	 */
-	public Vec2(float x, float y) {
-		set(x, y);
+	public Vec3(float x, float y, float z) {
+		set(x, y, z);
 	}
 
 	/* (non-Javadoc)
@@ -79,14 +80,24 @@ public class Vec2 implements Serializable {
 		this.y = y;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lwjgl.util.vector.WritableVector3f#set(float, float, float)
+	 */
+	public void set(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+
 	/**
-	 * Load from another Vector4f
+	 * Load from another Vector3f
 	 * @param src The source vector
 	 * @return this
 	 */
-	public Vec2 set(Vec2 src) {
+	public Vec3 set(Vec3 src) {
 		x = src.getX();
 		y = src.getY();
+		z = src.getZ();
 		return this;
 	}
 
@@ -94,7 +105,7 @@ public class Vec2 implements Serializable {
 	 * @return the length squared of the vector
 	 */
 	public float lengthSquared() {
-		return x * x + y * y;
+		return x * x + y * y + z * z;
 	}
 
 	public float length() {
@@ -107,9 +118,10 @@ public class Vec2 implements Serializable {
 	 * @param y the translation in y
 	 * @return this
 	 */
-	public Vec2 translate(float x, float y) {
+	public Vec3 translate(float x, float y, float z) {
 		this.x += x;
 		this.y += y;
+		this.z += z;
 		return this;
 	}
 
@@ -121,11 +133,11 @@ public class Vec2 implements Serializable {
 	 * @param dest The destination vector, or null if a new vector is to be created
 	 * @return the sum of left and right in dest
 	 */
-	public static Vec2 add(Vec2 left, Vec2 right, Vec2 dest) {
+	public static Vec3 add(Vec3 left, Vec3 right, Vec3 dest) {
 		if (dest == null)
-			return new Vec2(left.x + right.x, left.y + right.y);
+			return new Vec3(left.x + right.x, left.y + right.y, left.z + right.z);
 		else {
-			dest.set(left.x + right.x, left.y + right.y);
+			dest.set(left.x + right.x, left.y + right.y, left.z + right.z);
 			return dest;
 		}
 	}
@@ -138,51 +150,94 @@ public class Vec2 implements Serializable {
 	 * @param dest The destination vector, or null if a new vector is to be created
 	 * @return left minus right in dest
 	 */
-	public static Vec2 sub(Vec2 left, Vec2 right, Vec2 dest) {
+	public static Vec3 sub(Vec3 left, Vec3 right, Vec3 dest) {
 		if (dest == null)
-			return new Vec2(left.x - right.x, left.y - right.y);
+			return new Vec3(left.x - right.x, left.y - right.y, left.z - right.z);
 		else {
-			dest.set(left.x - right.x, left.y - right.y);
+			dest.set(left.x - right.x, left.y - right.y, left.z - right.z);
 			return dest;
 		}
 	}
+
+	/**
+	 * The cross product of two vectors.
+	 *
+	 * @param left The LHS vector
+	 * @param right The RHS vector
+	 * @param dest The destination result, or null if a new vector is to be created
+	 * @return left cross right
+	 */
+	public static Vec3 cross(
+			Vec3 left,
+			Vec3 right,
+			Vec3 dest)
+	{
+
+		if (dest == null)
+			dest = new Vec3();
+
+		dest.set(
+				left.y * right.z - left.z * right.y,
+				right.x * left.z - right.z * left.x,
+				left.x * right.y - left.y * right.x
+				);
+
+		return dest;
+	}
+
 
 
 	/**
 	 * Negate a vector
 	 * @return this
 	 */
-	public Vec2 negate() {
+	public Vec3 negate() {
 		x = -x;
 		y = -y;
+		z = -z;
 		return this;
 	}
+
+	/**
+	 * Negate a vector and place the result in a destination vector.
+	 * @param dest The destination vector or null if a new vector is to be created
+	 * @return the negated vector
+	 */
+	public Vec3 negate(Vec3 dest) {
+		if (dest == null)
+			dest = new Vec3();
+		dest.x = -x;
+		dest.y = -y;
+		dest.z = -z;
+		return dest;
+	}
+
 
 	/**
 	 * Normalise this vector and place the result in another vector.
 	 * @param dest The destination vector, or null if a new vector is to be created
 	 * @return the normalised vector
 	 */
-	public Vec2 normalise(Vec2 dest) {
+	public Vec3 normalise(Vec3 dest) {
 		float l = length();
 
 		if (dest == null)
-			dest = new Vec2(x / l, y / l);
+			dest = new Vec3(x / l, y / l, z / l);
 		else
-			dest.set(x / l, y / l);
+			dest.set(x / l, y / l, z / l);
 
 		return dest;
 	}
 
 	/**
 	 * The dot product of two vectors is calculated as
-	 * v1.x * v2.x + v1.y * v2.y
+	 * v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
 	 * @param left The LHS vector
 	 * @param right The RHS vector
 	 * @return left dot right
 	 */
-	public static float dot(Vec2 left, Vec2 right) {
-		return left.x * right.x + left.y * right.y;
+	public static float dot(Vec3 left, Vec3 right) {
+		return left.x * right.x + left.y * right.y + left.z * right.z;
 	}
 
 	/**
@@ -191,7 +246,7 @@ public class Vec2 implements Serializable {
 	 * @param b The other vector
 	 * @return the angle between the two vectors, in radians
 	 */
-	public static float angle(Vec2 a, Vec2 b) {
+	public static float angle(Vec3 a, Vec3 b) {
 		float dls = dot(a, b) / (a.length() * b.length());
 		if (dls < -1f)
 			dls = -1f;
@@ -203,32 +258,52 @@ public class Vec2 implements Serializable {
 	/* (non-Javadoc)
 	 * @see org.lwjgl.vector.Vector#load(FloatBuffer)
 	 */
-	public Vec2 load(FloatBuffer buf) {
+	public Vec3 load(FloatBuffer buf) {
 		x = buf.get();
 		y = buf.get();
+		z = buf.get();
 		return this;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.lwjgl.vector.Vector#scale(float)
 	 */
-	public Vec2 scale(float scale) {
+	public Vec3 scale(float scale) {
+
 		x *= scale;
 		y *= scale;
+		z *= scale;
+
 		return this;
+
 	}
 
 	/* (non-Javadoc)
 	 * @see org.lwjgl.vector.Vector#store(FloatBuffer)
 	 */
-	public Vec2 store(FloatBuffer buf) {
+	public Vec3 store(FloatBuffer buf) {
+
 		buf.put(x);
 		buf.put(y);
+		buf.put(z);
+
 		return this;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
-		return "Vec2: " + x + " " + y;
+		StringBuilder sb = new StringBuilder(64);
+
+		sb.append("Vector3f[");
+		sb.append(x);
+		sb.append(", ");
+		sb.append(y);
+		sb.append(", ");
+		sb.append(z);
+		sb.append(']');
+		return sb.toString();
 	}
 
 	/**
@@ -261,4 +336,18 @@ public class Vec2 implements Serializable {
 		this.y = y;
 	}
 
+	/**
+	 * Set Z
+	 * @param z
+	 */
+	public void setZ(float z) {
+		this.z = z;
+	}
+
+	/* (Overrides)
+	 * @see org.lwjgl.vector.ReadableVector3f#getZ()
+	 */
+	public float getZ() {
+		return z;
+	}
 }

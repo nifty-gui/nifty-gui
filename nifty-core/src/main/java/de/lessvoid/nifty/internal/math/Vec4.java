@@ -123,9 +123,9 @@ public class Vec4 implements Serializable {
 		return x * x + y * y + z * z + w * w;
 	}
 
-	 public final float length() {
-	    return (float) Math.sqrt(lengthSquared());
-	  }
+	public float length() {
+	  return (float) Math.sqrt(lengthSquared());
+	}
 
 	/**
 	 * Translate a vector

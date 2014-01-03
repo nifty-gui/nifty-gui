@@ -1,12 +1,21 @@
 package de.lessvoid.nifty.api;
 
+import java.lang.management.ManagementFactory;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
 import de.lessvoid.nifty.internal.common.Statistics;
 
 /**
  * Several different statistical informations about Niftys internal processing.
  * @author void
  */
-public class NiftyStatistics {
+public class NiftyStatistics implements NiftyStatisticsMXBean {
   /**
    * A FrameInfo instance records sample times for a specific frame.
    * @author void
@@ -53,9 +62,46 @@ public class NiftyStatistics {
 
   NiftyStatistics(final Statistics statistics) {
     this.statistics = statistics;
+
+    try {
+      MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); 
+      ObjectName name = new ObjectName("de.lessvoid.nifty:type=NiftyStatistics"); 
+      mbs.registerMBean(this, name);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   Statistics getImpl() {
     return statistics;
+  }
+
+  @Override
+  public List<String> getStatistics() {
+    List<String> stuff = new ArrayList<String>();
+    FrameInfo[] frameInfos = getAllSamples();
+    stuff.add("     frame    update     render      synch\n");
+    StringBuilder line = new StringBuilder();
+    for (FrameInfo frameInfo : frameInfos) {
+      line.setLength(0);
+      line.append(String.format("%10s", frameInfo.getFrame()));
+      line.append(formatValue(frameInfo.getUpdateTime()));
+      line.append(formatValue(frameInfo.getRenderTime()));
+      line.append(formatValue(frameInfo.getSyncTime()));
+      line.append("\n");
+      stuff.add(line.toString());
+    }
+    return stuff;
+  }
+
+  private String formatValue(final long value) {
+    if (value == -1) {
+      return "N/A";
+    }
+    NumberFormat format = NumberFormat.getInstance(Locale.US);
+    format.setGroupingUsed(false);
+    format.setMinimumFractionDigits(4);
+    format.setMaximumFractionDigits(4);
+    return String.format("%10s", format.format(value / 100000.f));
   }
 }

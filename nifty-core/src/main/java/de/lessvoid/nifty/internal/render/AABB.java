@@ -3,7 +3,7 @@ package de.lessvoid.nifty.internal.render;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 /**
  * This helper class keeps track of two AABB representing the old and the current position of a RenderNode.
@@ -31,9 +31,9 @@ class AABB {
     updateAABB(current, my, width, height);
   }
 
-  void markStencil(final NiftyRenderTarget renderTarget) {
-    renderTarget.markStencil(old.getX(), old.getY(), old.getWidth(), old.getHeight());
-    renderTarget.markStencil(current.getX(), current.getY(), current.getWidth(), current.getHeight());
+  void markStencil(final NiftyTexture renderTarget) {
+//    renderTarget.markStencil(old.getX(), old.getY(), old.getWidth(), old.getHeight());
+//    renderTarget.markStencil(current.getX(), current.getY(), current.getWidth(), current.getHeight());
   }
 
   void output(final StringBuilder result, final String offset) {

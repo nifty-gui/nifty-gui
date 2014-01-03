@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.internal.canvas;
 
 
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 public interface Command {
 
-  void execute(NiftyRenderTarget renderTarget, Context context);
+  void execute(NiftyTexture renderTarget, Context context);
 
 }

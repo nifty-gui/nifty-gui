@@ -1,13 +1,12 @@
 package de.lessvoid.nifty.examples.usecase;
 
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.logging.Logger;
 
-import de.lessvoid.coregl.CoreLwjglSetup;
-import de.lessvoid.coregl.CoreLwjglSetup.RenderLoopCallback2;
+import de.lessvoid.coregl.CoreFactory;
+import de.lessvoid.coregl.CoreSetup;
+import de.lessvoid.coregl.CoreSetup.RenderLoopCallback2;
+import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
 import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
 import de.lessvoid.nifty.renderer.lwjgl.NiftyRenderDeviceLwgl;
 
 /**
@@ -21,8 +20,9 @@ public class UseCaseRunner {
   private static float time;
 
   static void run(final Class<?> useCaseClass, final String[] args) throws Exception {
-    // init LWJGL using some helper class
-    CoreLwjglSetup setup = new CoreLwjglSetup();
+    CoreFactory factory = new CoreFactoryLwjgl();
+
+    CoreSetup setup = factory.createSetup();
     setup.initializeLogging("/logging.properties");
     setup.initialize(caption(useCaseClass.getSimpleName()), 1024, 768);
 
@@ -36,10 +36,12 @@ public class UseCaseRunner {
       public boolean render(final float deltaTime) {
         updateUseCase(nifty, useCase, deltaTime);
         nifty.update();
+        return nifty.render();
+      }
 
-        boolean frameChanged = nifty.render();
-        outputStatistics(nifty, deltaTime);
-        return frameChanged;
+      @Override
+      public boolean shouldEnd() {
+        return false;
       }
 
       private void updateUseCase(final Nifty nifty, final Object useCase, final float deltaTime) {
@@ -47,11 +49,6 @@ public class UseCaseRunner {
           return;
         }
         ((UseCaseUpdateable) useCase).update(nifty, deltaTime);
-      }
-
-      @Override
-      public boolean shouldEnd() {
-        return false;
       }
     });
   }
@@ -66,35 +63,5 @@ public class UseCaseRunner {
 
   private static Nifty createNifty() {
     return new Nifty(new NiftyRenderDeviceLwgl());
-  }
-
-  private static void outputStatistics(final Nifty nifty, final float deltaTime) {
-    time += deltaTime;
-    if (time >= 1000) {
-      time = 0;
-
-      FrameInfo[] frameInfos = nifty.getStatistics().getAllSamples();
-      StringBuilder stuff = new StringBuilder("Nifty Stats\n");
-      stuff.append("     frame    update     render      synch\n");
-      for (FrameInfo frameInfo : frameInfos) {
-        stuff.append(String.format("%10s", frameInfo.getFrame()));
-        stuff.append(formatValue(frameInfo.getUpdateTime())).append(" ");
-        stuff.append(formatValue(frameInfo.getRenderTime())).append(" ");
-        stuff.append(formatValue(frameInfo.getSyncTime()));
-        stuff.append("\n");
-      }
-      log.info(stuff.toString());
-    }
-  }
-
-  private static String formatValue(final long value) {
-    if (value == -1) {
-      return "N/A";
-    }
-    NumberFormat format = NumberFormat.getInstance(Locale.US);
-    format.setGroupingUsed(false);
-    format.setMinimumFractionDigits(4);
-    format.setMaximumFractionDigits(4);
-    return String.format("%10s", format.format(value / 100000.f));
   }
 }

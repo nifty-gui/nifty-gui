@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class CommandFilledRect implements Command {
   private final double x0;
@@ -16,8 +16,8 @@ public class CommandFilledRect implements Command {
   }
 
   @Override
-  public void execute(final NiftyRenderTarget renderTarget, final Context context) {
-    renderTarget.filledRect(x0, y0, x1, y0, x1, y1, x0, y1, context.getFillColor());
+  public void execute(final NiftyTexture renderTarget, final Context context) {
+//    renderTarget.filledRect(x0, y0, x1, y0, x1, y1, x0, y1, context.getFillColor());
   }
 
 }

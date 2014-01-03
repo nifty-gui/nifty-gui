@@ -8,26 +8,25 @@ import java.nio.FloatBuffer;
 import java.util.logging.Logger;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 
-import de.lessvoid.coregl.CoreCheckGL;
 import de.lessvoid.coregl.CoreFBO;
-import de.lessvoid.coregl.CoreMatrixFactory;
+import de.lessvoid.coregl.CoreFactory;
 import de.lessvoid.coregl.CoreRender;
 import de.lessvoid.coregl.CoreShader;
 import de.lessvoid.coregl.CoreTexture2D;
-import de.lessvoid.coregl.CoreLwjglSetup.RenderLoopCallback;
 import de.lessvoid.coregl.CoreTexture2D.ColorFormat;
 import de.lessvoid.coregl.CoreTexture2D.ResizeFilter;
+import de.lessvoid.coregl.CoreTexture2D.Type;
 import de.lessvoid.coregl.CoreVAO;
 import de.lessvoid.coregl.CoreVBO;
-import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
+import de.lessvoid.math.Mat3;
 import de.lessvoid.nifty.internal.math.Mat4;
+import de.lessvoid.nifty.internal.math.MatrixFactory;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   private static final int VERTEX_SIZE = 5*6;
@@ -36,33 +35,37 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
   private final Logger log = Logger.getLogger(NiftyRenderDeviceLwgl.class.getName());
 
+  private final CoreFactory coreFactory;
+  private final ShaderFactory shaderFactory;
   private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
   private final CoreShader shader;
   private CoreVAO vao;
   private CoreVBO vbo;
   private final CoreFBO fbo;
-  private final Matrix4f mvp;
-  private Matrix4f mat = new Matrix4f();
+  private final Mat4 mvp;
+  private Mat4 mat = new Mat4();
   private int quadCount;
 
   public NiftyRenderDeviceLwgl() {
-    mvp = CoreMatrixFactory.createOrtho(0, getWidth(), getHeight(), 0);
+    coreFactory = new CoreFactoryLwjgl();
+    shaderFactory = new ShaderFactory(coreFactory);
+    mvp = MatrixFactory.createOrtho(0, getDisplayWidth(), getDisplayHeight(), 0);
 
-    shader = CoreShader.newShaderWithVertexAttributes("aVertex", "aUVL");
+    shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aUVL");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/texture.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/texture.fs");
     shader.link();
     shader.activate();
     shader.setUniformi("uTexture", 0);
 
-    fbo = new CoreFBO();
+    fbo = coreFactory.createCoreFBO();
     fbo.bindFramebuffer();
     fbo.disable();
 
-    vao = new CoreVAO();
+    vao = coreFactory.createVAO();
     vao.bind();
 
-    vbo = CoreVBO.createStream(new float[VBO_SIZE]);
+    vbo = coreFactory.createStream(new float[VBO_SIZE]);
     vbo.bind();
 
     vao.enableVertexAttributef(0, 2, 5, 0);
@@ -112,49 +115,27 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public int getWidth() {
+  public int getDisplayWidth() {
    return 1024;
   }
 
   @Override
-  public int getHeight() {
+  public int getDisplayHeight() {
     return 768;
   }
 
   @Override
-  public NiftyRenderTarget createRenderTargets(final int width, final int height, final int countX, final int countY) {
-    CoreTexture2D textureArray = CoreTexture2D.createEmptyTextureArray(ColorFormat.RGBA, GL11.GL_UNSIGNED_BYTE, width, height, countX*countY, ResizeFilter.Linear);
-    return new NiftyRenderTargetLwjgl(textureArray, fbo, countX, countY);
-  }
-
-  private Matrix4f toLwjglMatrix(final Mat4 internal) {
-    matrixBuffer.clear();
-    internal.store(matrixBuffer);
-    matrixBuffer.flip();
-
-    Matrix4f matrix = new Matrix4f();
-    matrix.load(matrixBuffer);
-    return matrix;
-  }
-
-  private Mat4 toInternalMatrix(final Matrix4f matrix) {
-    matrixBuffer.clear();
-    matrix.store(matrixBuffer);
-    matrixBuffer.flip();
-
-    Mat4 internal = new Mat4();
-    internal.load(matrixBuffer);
-    return internal;
+  public NiftyTexture createTexture(final int width, final int height) {
+    return new NiftyTextureLwjgl(coreFactory, width, height);
   }
 
   @Override
-  public void render(final NiftyRenderTarget renderTarget, final Mat4 mat) {
-    Matrix4f m = toLwjglMatrix(mat);
-    Matrix4f.mul(mvp, m, this.mat);
-//System.out.println("(" + x + ", " + y + ", " + width + ", " + height + ")\n" + m + "* " + this.mat);
+  public void render(final NiftyTexture renderTarget, final Mat4 mat) {
+    Mat4 m = mat;
+    Mat4.mul(mvp, m, this.mat);
     addQuad(vbo.getBuffer(), 0, 0, renderTarget.getWidth(), renderTarget.getHeight(), 0);
     quadCount++;
-    ((NiftyRenderTargetLwjgl) renderTarget).bind();
+    ((NiftyTextureLwjgl) renderTarget).bind();
 
     flush();
   }
@@ -164,7 +145,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
       return;
     }
     shader.activate();
-    shader.setUniformMatrix4f("uMvp", mat);
+    shader.setUniformMatrix4f("uMvp", mat.toBuffer());
     shader.setUniformf("uOffset", 0, 0, 0.f);
 
     vao.bind();
@@ -173,7 +154,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vbo.getBuffer().flip();
     vbo.send();
 
-    CoreRender.renderTriangles(6*quadCount);
+    coreFactory.getCoreRender().renderTriangles(6*quadCount);
     vao.unbind();
     vbo.getBuffer().clear();
     quadCount = 0;
@@ -192,5 +173,21 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   @Override
   public void end() {
     flush();
+  }
+
+  @Override
+  public void beginStencil() {
+  }
+
+  @Override
+  public void endStencil() {
+  }
+
+  @Override
+  public void enableStencil() {
+  }
+
+  @Override
+  public void disableStencil() {
   }
 }

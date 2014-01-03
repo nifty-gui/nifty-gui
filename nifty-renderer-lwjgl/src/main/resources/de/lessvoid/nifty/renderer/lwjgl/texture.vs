@@ -1,14 +1,16 @@
 #version 150 core
 
-in vec2 aVertex;
-in vec3 aUVL;
-
-out vec3 vUVL;
-
+// model view projection matrix
 uniform mat4 uMvp;
-uniform vec3 uOffset;
+
+// input attributes
+in vec4 aVertex;
+in vec2 aUV;
+
+// output attributes
+out vec2 vUV;
 
 void main() {
-  gl_Position = uMvp * vec4(aVertex.x + uOffset.x, aVertex.y + uOffset.y, uOffset.z, 1.0);
-  vUVL = aUVL;
+  gl_Position = uMvp * vec4(aVertex.x, aVertex.y, 0.0, 1.0);
+  vUV = aUV;
 }

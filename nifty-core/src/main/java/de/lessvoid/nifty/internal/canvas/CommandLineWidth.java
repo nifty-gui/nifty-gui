@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class CommandLineWidth implements Command {
   private double lineWidth;
@@ -10,7 +10,7 @@ public class CommandLineWidth implements Command {
   }
 
   @Override
-  public void execute(final NiftyRenderTarget renderTarget, final Context context) {
+  public void execute(final NiftyTexture renderTarget, final Context context) {
     context.setLineWidth((float) lineWidth);
   }
 }

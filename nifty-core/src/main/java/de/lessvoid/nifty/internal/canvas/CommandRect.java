@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class CommandRect implements Command {
   private final double x0;
@@ -17,7 +17,7 @@ public class CommandRect implements Command {
   }
 
   @Override
-  public void execute(final NiftyRenderTarget renderTarget, final Context context) {
+  public void execute(final NiftyTexture renderTarget, final Context context) {
   }
 
 }

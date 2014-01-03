@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.internal.math.Vec2;
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class CommandLine implements Command {
   private final double x0;
@@ -17,7 +17,7 @@ public class CommandLine implements Command {
   }
 
   @Override
-  public void execute(final NiftyRenderTarget renderTarget, final Context context) {
+  public void execute(final NiftyTexture renderTarget, final Context context) {
     Vec2 start = new Vec2((float)x0, (float)y0);
     Vec2 end = new Vec2((float)x1, (float)y1);
 
@@ -30,6 +30,6 @@ public class CommandLine implements Command {
     Vec2 p2 = Vec2.add(end, flipNeg, null);
     Vec2 p3 = Vec2.add(start, flipNeg, null);
     
-    renderTarget.filledRect(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, context.getFillColor());
+//    renderTarget.filledRect(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, context.getFillColor());
   }
 }

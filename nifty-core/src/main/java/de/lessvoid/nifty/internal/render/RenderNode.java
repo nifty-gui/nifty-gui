@@ -6,7 +6,8 @@ import java.util.List;
 import de.lessvoid.nifty.internal.canvas.Command;
 import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.math.Mat4;
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class RenderNode {
   private final int nodeId;
@@ -18,19 +19,21 @@ public class RenderNode {
   private int height;
   private boolean changed = true;
   private boolean rerender = true;
+  private final NiftyTexture renderTarget;
 
-  public RenderNode(final int nodeId, final Mat4 local, final int w, final int h, final List<Command> commands) {
+  public RenderNode(final int nodeId, final Mat4 local, final int w, final int h, final List<Command> commands, final NiftyTexture renderTarget) {
     this.nodeId = nodeId;
     this.local = new Mat4(local);
     this.commands = commands;
     this.width = w;
     this.height = h;
     this.aabb = new AABB(width, height);
+    this.renderTarget = renderTarget;
   }
 
-  public void prepareRender(final NiftyRenderTarget renderTarget) {
+  public void prepareRender(final NiftyTexture renderTarget) {
     if (changed) {
-      renderTarget.setMatrix(new Mat4());
+//      renderTarget.setMatrix(new Mat4());
       aabb.markStencil(renderTarget);
     }
 
@@ -39,15 +42,16 @@ public class RenderNode {
     }
   }
 
-  public void updateContent(final NiftyRenderTarget renderTarget, final Context context, final Mat4 mat, final boolean forceRender) {
+  public void updateContent(final NiftyRenderDevice renderDevice, final NiftyTexture target, final Context context, final Mat4 mat, final boolean forceRender) {
     Mat4 my = Mat4.mul(mat, local);
 
     if (rerender || forceRender) {
-      renderTarget.setMatrix(my);
+//      renderTarget.setMatrix(new Mat4());
       for (int i=0; i<commands.size(); i++) {
         Command command = commands.get(i);
         command.execute(renderTarget, context);
       }
+//      target.renderTexture(renderTarget, 0, 0);
     }
 
     if (changed) {
@@ -56,7 +60,7 @@ public class RenderNode {
     }
 
     for (int i=0; i<children.size(); i++) {
-      children.get(i).updateContent(renderTarget, context, my, rerender);
+      children.get(i).updateContent(renderDevice, target, context, my, rerender);
     }
     rerender = false;
   }

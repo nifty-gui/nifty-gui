@@ -2,14 +2,13 @@ package de.lessvoid.nifty.api;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.Statistics.Type;
-import de.lessvoid.nifty.internal.render.Renderer;
+import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -17,9 +16,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  * @author void
  */
 public class Nifty {
-  private final Logger log = Logger.getLogger(Nifty.class.getName());
-
-  // The one and only NiftyStatistics instanz.
+  // The one and only NiftyStatistics instance.
   private final NiftyStatistics statistics = new NiftyStatistics(new Statistics());
   private final Statistics stats = statistics.getImpl();
 
@@ -34,11 +31,7 @@ public class Nifty {
   private ChildLayout rootNodePlacementLayout = ChildLayout.Center;
 
   // the class performing the conversion from NiftyNode to RenderNode
-  private final Renderer renderer;
-
-  private NiftyCanvas testCanvas;
-  private boolean hack = true;
-  private long now;
+  private final NiftyRenderer renderer;
 
   /**
    * Create a new Nifty instance.
@@ -46,7 +39,7 @@ public class Nifty {
    */
   public Nifty(final NiftyRenderDevice newRenderDevice) {
     renderDevice = newRenderDevice;
-    renderer = new Renderer(statistics.getImpl(), newRenderDevice);
+    renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
   }
 
   /**
@@ -141,7 +134,7 @@ public class Nifty {
    * @return width of the current screen
    */
   public int getScreenWidth() {
-    return renderDevice.getWidth();
+    return renderDevice.getDisplayWidth();
   }
 
   /**
@@ -149,7 +142,7 @@ public class Nifty {
    * @return height of the current screen
    */
   public int getScreenHeight() {
-    return renderDevice.getHeight();
+    return renderDevice.getDisplayHeight();
   }
 
   /**

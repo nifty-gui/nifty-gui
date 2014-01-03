@@ -5,20 +5,16 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
-/**
- * 
- * @author void
- */
 public class RootRenderNode {
   private final Logger log = Logger.getLogger(RootRenderNode.class.getName());
   private final RenderNode child;
-  private final NiftyRenderTarget renderTarget;
+  private final NiftyTexture renderTarget;
   private final Context context;
   private final StringBuilder getStateInfo = new StringBuilder();
 
-  public RootRenderNode(final RenderNode child, final NiftyRenderTarget renderTarget) {
+  public RootRenderNode(final RenderNode child, final NiftyTexture renderTarget) {
     this.child = child;
     this.renderTarget = renderTarget;
     this.context = new Context();
@@ -28,14 +24,13 @@ public class RootRenderNode {
     if (log.isLoggable(Level.FINE)) {
       log.fine(getStateInfo());
     }
-
-    renderTarget.beginStencil();
+    renderDevice.beginStencil();
     child.prepareRender(renderTarget);
-    renderTarget.endStencil();
+    renderDevice.endStencil();
 
-    renderTarget.enableStencil();
-    child.updateContent(renderTarget, context, child.getLocal().invert(), false);
-    renderTarget.disableStencil();
+    renderDevice.enableStencil();
+    child.updateContent(renderDevice, renderTarget, context, child.getLocal().invert(), false);
+    renderDevice.disableStencil();
 
     renderDevice.render(renderTarget, child.getLocal());
   }
@@ -50,7 +45,7 @@ public class RootRenderNode {
 
   public String getStateInfo() {
     getStateInfo.setLength(0);
-    getStateInfo.append("# Nfty render tree dump\n");
+    getStateInfo.append("# Nifty render tree dump\n");
     child.outputStateInfo(getStateInfo, "");
     return getStateInfo.toString();
   }

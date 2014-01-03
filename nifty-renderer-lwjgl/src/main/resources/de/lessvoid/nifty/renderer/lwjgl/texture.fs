@@ -1,10 +1,14 @@
 #version 150 core
 
-uniform sampler2DArray uTexture;
+// texture sampler
+uniform sampler2D uTexture;
 
-in vec3 vUVL; // uv and texture layer to use
+// input attributes
+in vec2 vUV;
+
+// output attributes
 out vec4 color;
 
 void main() {
-  color = texture(uTexture, vUVL);
+  color = texture(uTexture, vUV);
 }

@@ -32,6 +32,8 @@
 package de.lessvoid.nifty.internal.math;
 
 import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
@@ -43,6 +45,7 @@ import java.nio.FloatBuffer;
  */
 public class Mat4 implements Serializable {
 	private static final long serialVersionUID = 1L;
+  private final FloatBuffer matrixBuffer = ByteBuffer.allocateDirect(64).order(ByteOrder.nativeOrder()).asFloatBuffer();
 
 	public float m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;
 
@@ -68,6 +71,18 @@ public class Mat4 implements Serializable {
 		buf.append(m03).append(' ').append(m13).append(' ').append(m23).append(' ').append(m33).append('\n');
 		return buf.toString();
 	}
+
+	 /**
+   * Store this Matrix to an internal FloatBuffer and return that buffer. Please note that the same internal buffer
+   * will be used for each call.
+   * @return FloatBuffer with the Matrix data
+   */
+  public FloatBuffer toBuffer() {
+    matrixBuffer.clear();
+    store(matrixBuffer);
+    matrixBuffer.rewind();
+    return matrixBuffer;
+  }
 
 	/**
 	 * Set this matrix to be the identity matrix.

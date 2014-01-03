@@ -1,7 +1,11 @@
 package de.lessvoid.nifty.internal.render;
 
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.internal.common.Statistics;
@@ -21,7 +25,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  *
  * @author void
  */
-public class Renderer {
+public class NiftyRenderer implements NiftyRendererMXBean {
   // the reference to the Statistics instance we'll update
   private final Statistics stats;
 
@@ -40,10 +44,18 @@ public class Renderer {
    * @param stats the Statistics instance to gather stats about rendering
    * @param renderDevice the NiftyRenderDevice used for rendering
    */
-  public Renderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
+  public NiftyRenderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
     this.stats = stats;
     this.renderDevice = renderDevice;
     this.rendererSync = new RendererNodeSync(renderDevice);
+
+    try {
+      MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); 
+      ObjectName name = new ObjectName("de.lessvoid.nifty:type=NiftyRenderer"); 
+      mbs.registerMBean(this, name);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -76,5 +88,16 @@ public class Renderer {
       rootRenderNodes.get(i).render(renderDevice);
     }
     renderDevice.end();
+  }
+
+  // MBean
+
+  @Override
+  public List<String> getRenderTree() {
+    List<String> result = new ArrayList<String>();
+    for (int i=0; i<rootRenderNodes.size(); i++) {
+      result.add(rootRenderNodes.get(i).getStateInfo());
+    }
+    return result;
   }
 }

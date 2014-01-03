@@ -7,23 +7,35 @@ import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderTarget;
+import de.lessvoid.nifty.spi.NiftyTexture;
 
 /**
- * Synchronize a list of NiftyNodes to a list if RootRenderNode.
+ * Synchronize a list of NiftyNodes to a list of RootRenderNode.
  *
  * @author void
  */
 public class RendererNodeSync {
   // since we want to access the nodes private API we need a NiftyNodeAccessor
   private final NiftyNodeAccessor niftyNodeAccessor;
+
+  // and since we need to create render resources like textures we'll keep an NiftyRenderDevice around as well
   private final NiftyRenderDevice renderDevice;
 
+  /**
+   * Create the RendererNodeSync using the NiftyRenderDevice given.
+   * @param renderDevice the NiftyRenderDevice
+   */
   public RendererNodeSync(final NiftyRenderDevice renderDevice) {
     this.niftyNodeAccessor = NiftyNodeAccessor.getDefault();
     this.renderDevice = renderDevice;
   }
 
+  /**
+   * Synchronize the list of given NiftyNode srcNodes into the list of RootRenderNode in dstNodes.
+   * @param srcNodes the source nodes
+   * @param dstNodes the destination nodes
+   * @return true if anything changed and false if it is exactly the same as in the last frame
+   */
   public boolean synchronize(final List<NiftyNode> srcNodes, final List<RootRenderNode> dstNodes) {
     boolean changed = false;
 
@@ -31,12 +43,12 @@ public class RendererNodeSync {
       InternalNiftyNode src = niftyNodeAccessor.getInternalNiftyNode(srcNodes.get(i));
       RootRenderNode dst = findNode(dstNodes, src.getId());
       if (dst == null) {
-        dstNodes.add(createRenderNodeBufferParent(src, null, null));
+        dstNodes.add(createRootRenderNode(src));
         changed = true;
-      } else {
-        boolean syncChanged = syncRenderNodeBufferChildNodes(src, dst.getChild());
-        changed = changed || syncChanged;
+        continue;
       }
+      boolean syncChanged = syncRenderNodeBufferChildNodes(src, dst.getChild());
+      changed = changed || syncChanged;
     }
 
     return changed;
@@ -52,26 +64,21 @@ public class RendererNodeSync {
     return null;
   }
 
-  private RootRenderNode createRenderNodeBufferParent(
-      final InternalNiftyNode node,
-      final InternalNiftyNode parent,
-      final NiftyRenderTarget parentRenderTarget) {
-    return new RootRenderNode(
-        createRenderNodeBufferChild(node),
-        createRenderTarget(node, parent, parentRenderTarget));
+  private RootRenderNode createRootRenderNode(final InternalNiftyNode node) {
+    return new RootRenderNode(createRenderNode(node), createRootRenderTarget(node));
   }
 
-  private RenderNode createRenderNodeBufferChild(final InternalNiftyNode node) {
+  private RenderNode createRenderNode(final InternalNiftyNode node) {
     RenderNode renderNode = new RenderNode(
         node.getId(),
         buildLocalTransformation(node),
         node.getWidth(),
         node.getHeight(),
-        node.getCanvas().getCommands());
+        node.getCanvas().getCommands(),
+        renderDevice.createTexture(node.getWidth(), node.getHeight()));
 
     for (int i=0; i<node.getChildren().size(); i++) {
-      InternalNiftyNode n = node.getChildren().get(i);
-      renderNode.addChildNode(createRenderNodeBufferChild(n));
+      renderNode.addChildNode(createRenderNode(node.getChildren().get(i)));
     }
 
     return renderNode;
@@ -86,14 +93,8 @@ public class RendererNodeSync {
             Mat4.createScale((float) node.getScaleX(), (float) node.getScaleY(), (float) node.getScaleZ()));
   }
 
-  private NiftyRenderTarget createRenderTarget(
-      final InternalNiftyNode node,
-      final InternalNiftyNode parent,
-      final NiftyRenderTarget parentRenderTarget) {
-    if (parent == null || node.isCache()) {
-      return renderDevice.createRenderTargets(node.getWidth(), node.getHeight(), 1, 1);
-    }
-    return parentRenderTarget;
+  private NiftyTexture createRootRenderTarget(final InternalNiftyNode node) {
+    return renderDevice.createTexture(node.getWidth(), node.getHeight());
   }
 
   private boolean syncRenderNodeBufferChildNodes(final InternalNiftyNode src, final RenderNode dst) {
@@ -130,7 +131,7 @@ public class RendererNodeSync {
   private boolean syncRenderNodeBufferChild(final InternalNiftyNode src, final RenderNode dstParent) {
     RenderNode dst = dstParent.findChildWithId(src.getId());
     if (dst == null) {
-      dstParent.addChildNode(createRenderNodeBufferChild(src));
+      dstParent.addChildNode(createRenderNode(src));
       return true;
     }
     return syncRenderNodeBufferChildNodes(src, dst);

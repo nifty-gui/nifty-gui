@@ -3,42 +3,46 @@ package de.lessvoid.nifty.spi;
 import de.lessvoid.nifty.internal.math.Mat4;
 
 /**
- * NiftyRenderDevice is part of the Nifty SPI to allow pluggable render devices. Everything Nifty expects to render in
- * the end will go through implementations of this interface.
+ * NiftyRenderDevice is part of the SPI that allows Nifty to use different graphics backends. Everything that can
+ * be rendered will go through implementations of this interface.
  *
  * @author void
  */
 public interface NiftyRenderDevice {
 
   /**
-   * Get Width.
-   *
+   * Get the width of the display.
    * @return width of display mode
    */
-  int getWidth();
+  int getDisplayWidth();
 
   /**
-   * Get Height.
-   *
+   * Get the height of the display.
    * @return height of display mode
    */
-  int getHeight();
+  int getDisplayHeight();
 
   /**
-   * Create the given number of render targets. Implementations should reserve num textures of the given width x height
-   * that will later be used for rendering.
+   * Create a texture of the given width and height.
    *
-   * @param width the width
-   * @param height the height
-   * @param countX the number of x
-   * @param countY the number of y
+   * @param width the width of the texture
+   * @param height the height of the texture
    */
-  NiftyRenderTarget createRenderTargets(int width, int height, int countX, final int countY);
+  NiftyTexture createTexture(int width, int height);
 
-  void render(NiftyRenderTarget renderTarget, Mat4 mat);
+  
+  void render(NiftyTexture renderTarget, Mat4 mat);
 
   void begin();
   void end();
+
+  void beginStencil();
+
+  void endStencil();
+
+  void enableStencil();
+
+  void disableStencil();
 
 //  /**
 //   * Gives this RenderDevice access to the NiftyResourceLoader.
