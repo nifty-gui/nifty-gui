@@ -186,6 +186,7 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     int batches = renderBackend.render();
+    renderBackend.endFrame();
 
     frames++;
     long diff = System.currentTimeMillis() - time;
