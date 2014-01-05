@@ -18,36 +18,35 @@ public class UseCase_0005_RotatingChildNode implements UseCaseUpdateable {
   private float totalTime = 0;
 
   public UseCase_0005_RotatingChildNode(final Nifty nifty) {
-    niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Absolute);
+    niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.GREEN());
-
-    NiftyNode fixedNode = niftyNode.newChildNode(UnitValue.px(99), UnitValue.px(99), ChildLayout.Center);
-    fixedNode.setBackgroundColor(NiftyColor.RED());
-    fixedNode.setXConstraint(UnitValue.px(250));
-    fixedNode.setYConstraint(UnitValue.px(250));
+    niftyNode.setPivot(0.5, 0.5);
 
     childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
     childNode.setBackgroundColor(NiftyColor.BLACK());
-    childNode.setXConstraint(UnitValue.px(50));
-    childNode.setYConstraint(UnitValue.px(50));
+    childNode.setPivot(0.5, 0.5);
 
     grandChildNode = childNode.newChildNode(UnitValue.px(25), UnitValue.px(25));
     grandChildNode.setBackgroundColor(NiftyColor.RED());
-}
+    grandChildNode.setPivot(0.5, 0.5);
+  }
 
   @Override
   public void update(final Nifty nifty, final float deltaTime) {
     totalTime += deltaTime;
 
     if (totalTime > 25) {
+      totalTime = 0;
       rot += 1.f;
+
       childNode.setRotationX(rot);
       childNode.setRotationY(rot);
       childNode.setRotationZ(rot);
-      grandChildNode.setRotationZ(rot/10);
-      totalTime = 0;
-      niftyNode.setScaleX(Math.sin(rot/100.f)+1.f);
-      niftyNode.setScaleY(Math.sin(rot/100.f)+1.f);
+
+      grandChildNode.setRotationZ(rot*10);
+
+      niftyNode.setScaleX((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
+      niftyNode.setScaleY((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
     }
   }
 

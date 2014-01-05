@@ -82,6 +82,8 @@ public class InternalNiftyNode implements InternalLayoutable {
   private NiftyNode niftyNode;
 
   private boolean transformationChanged = true;
+  private double pivotX = 0.0;
+  private double pivotY = 0.0;
   private double angleX = 0.0;
   private double angleY = 0.0;
   private double angleZ = 0.0;
@@ -224,6 +226,21 @@ public class InternalNiftyNode implements InternalLayoutable {
   public void setScaleZ(final double factor) {
     updateTransformationChanged(scaleZ, factor);
     scaleZ = factor;
+  }
+
+  public void setPivot(final double x, final double y) {
+    updateTransformationChanged(pivotX, x);
+    updateTransformationChanged(pivotY, y);
+    pivotX = x;
+    pivotY = y;
+  }
+
+  public double getPivotX() {
+    return pivotX;
+  }
+
+  public double getPivotY() {
+    return pivotY;
   }
 
   public double getRotationX() {

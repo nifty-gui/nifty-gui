@@ -29,14 +29,6 @@ public class NiftyNode {
     this.impl.setNiftyNode(this);
   }
 
-  InternalNiftyNode getImpl() {
-    return impl;
-  }
-
-  static NiftyNode newInstance(final InternalNiftyNode impl) {
-    return new NiftyNode(impl);
-  }
-
   /**
    * Get the x position of this node.
    * 
@@ -157,6 +149,17 @@ public class NiftyNode {
    */
   public NiftyColor getBackgroundColor() {
     return impl.getBackgroundColor();
+  }
+
+  /**
+   * Set the pivot point that will form the base of all calculation. You can think of this as the center. This is in
+   * the interval [0.0, 1.0].
+   *
+   * @param x x
+   * @param y y
+   */
+  public void setPivot(final double x, final double y) {
+    impl.setPivot(x, y);
   }
 
   /**
@@ -396,7 +399,17 @@ public class NiftyNode {
     }
   }
 
+  // package private accessor stuff
+
+  InternalNiftyNode getImpl() {
+    return impl;
+  }
+
   static {
     NiftyNodeAccessor.DEFAULT = new InternalNiftyNodeAccessorImpl();
+  }
+
+  static NiftyNode newInstance(final InternalNiftyNode impl) {
+    return new NiftyNode(impl);
   }
 }

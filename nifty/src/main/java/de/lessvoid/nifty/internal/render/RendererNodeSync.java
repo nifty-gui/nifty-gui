@@ -81,12 +81,16 @@ public class RendererNodeSync {
   }
 
   private Mat4 buildLocalTransformation(final InternalNiftyNode node) {
-    return Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(
-            Mat4.createTranslate(node.getX(), node.getY(), 0.f),
-            Mat4.createRotate((float) node.getRotationX(), 1.f, 0.f, 0.f)),
-            Mat4.createRotate((float) node.getRotationY(), 0.f, 1.f, 0.f)),
-            Mat4.createRotate((float) node.getRotationZ(), 0.f, 0.f, 1.f)),
-            Mat4.createScale((float) node.getScaleX(), (float) node.getScaleY(), (float) node.getScaleZ()));
+    float pivotX = (float) node.getPivotX() * node.getWidth();
+    float pivotY = (float) node.getPivotY() * node.getHeight();
+    return Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(
+        Mat4.createTranslate(node.getX(), node.getY(), 0.f),
+        Mat4.createTranslate(pivotX, pivotY, 0.0f)),
+        Mat4.createRotate((float) node.getRotationX(), 1.f, 0.f, 0.f)),
+        Mat4.createRotate((float) node.getRotationY(), 0.f, 1.f, 0.f)),
+        Mat4.createRotate((float) node.getRotationZ(), 0.f, 0.f, 1.f)),
+        Mat4.createScale((float) node.getScaleX(), (float) node.getScaleY(), (float) node.getScaleZ())),
+        Mat4.createTranslate(-pivotX, -pivotY, 0.0f));
   }
 
   private boolean syncRenderNodeBufferChildNodes(final InternalNiftyNode src, final RenderNode dst) {
