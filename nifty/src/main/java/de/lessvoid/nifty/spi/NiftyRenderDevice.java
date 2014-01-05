@@ -1,0 +1,51 @@
+package de.lessvoid.nifty.spi;
+
+import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.internal.math.Mat4;
+
+/**
+ * NiftyRenderDevice is part of the SPI that allows Nifty to use different graphics backends. Everything that can
+ * be rendered will go through implementations of this interface.
+ *
+ * @author void
+ */
+public interface NiftyRenderDevice {
+
+  /**
+   * Get the width of the display.
+   * @return width of display mode
+   */
+  int getDisplayWidth();
+
+  /**
+   * Get the height of the display.
+   * @return height of display mode
+   */
+  int getDisplayHeight();
+
+  /**
+   * Enable clearing the screen when rendering.
+   */
+  void clearScreenOnRender(boolean clearScreenOnRender);
+
+  /**
+   * Create a texture of the given width and height.
+   *
+   * @param width the width of the texture
+   * @param height the height of the texture
+   */
+  NiftyTexture createTexture(int width, int height);
+
+  
+  void render(NiftyTexture renderTarget, Mat4 mat);
+
+  void begin();
+  void end();
+
+  void beginRenderToTexture(NiftyTexture texture);
+
+  void endRenderToTexture(NiftyTexture texture);
+
+  void filledRect(double x0, double y0, double x1, double y1, NiftyColor fillColor);
+
+}
