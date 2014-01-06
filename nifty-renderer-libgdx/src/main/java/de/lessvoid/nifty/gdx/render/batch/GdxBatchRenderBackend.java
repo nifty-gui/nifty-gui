@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import de.lessvoid.nifty.batch.TextureAtlasGenerator;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.batch.spi.BatchRendererTexture;
 import de.lessvoid.nifty.gdx.render.GdxMouseCursor;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
@@ -21,7 +23,9 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,12 +84,12 @@ import java.util.logging.Logger;
  */
 public class GdxBatchRenderBackend implements BatchRenderBackend {
   private static final Logger log = Logger.getLogger(GdxBatchRenderBackend.class.getName());
-  private int atlasTextureId;
   @Nonnull
   private final ObjectPool<Batch> batchPool;
-  private Batch currentBatch;
-  private final List<Batch> batches = new ArrayList<Batch>();
-  private ByteBuffer initialData;
+  private final Map<BatchRendererTexture, List<Batch>> batches = new HashMap<BatchRendererTexture, List<Batch>>();
+  private final Map<BatchRendererTexture, Batch> currentBatches = new HashMap<BatchRendererTexture, Batch>();
+  private BatchRendererTexture atlasTexture;
+  private final List<Batch> atlasBatches = new ArrayList<Batch>();
   private final boolean fillRemovedTexture =
       Boolean.parseBoolean(System.getProperty(GdxBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
   private GdxMouseCursor mouseCursor;
@@ -122,10 +126,19 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
   @Override
   public void beginFrame() {
     log.fine("beginFrame()");
-    for (int i = 0; i < batches.size(); i++) {
-      batchPool.free(batches.get(i));
+    for (List<Batch> batchList : batches.values()) {
+      for (Batch batch : batchList) {
+        batchPool.free(batch);
+      }
     }
+
+    for (Batch batch : atlasBatches) {
+      batchPool.free(batch);
+    }
+
     batches.clear();
+    atlasBatches.clear();
+    currentBatches.clear();
   }
 
   @Override
@@ -180,43 +193,141 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
-  @Override
-  public void createAtlasTexture(final int width, final int height) {
-    try {
-      createAtlasTexture(width, height, false);
 
-      initialData = BufferUtils.newByteBuffer(width * height * 4);
-      for (int i = 0; i < width * height; i++) {
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0xff);
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0xff);
-      }
-    } catch (Exception e) {
-      log.log(Level.WARNING, e.getMessage(), e);
+  @Override
+  public BatchRendererTexture createAtlasTexture(int width, int height) {
+    ByteBuffer initialData = ByteBuffer.allocateDirect(width * height * 4);
+    for (int i = 0; i < width * height * 4; i++) {
+      initialData.put((byte) 0x80);
     }
+    return createTexture(initialData, width, height, true);
   }
 
   @Override
-  public void clearAtlasTexture(final int width, final int height) {
-    initialData.rewind();
-    bind(atlasTextureId);
-    Gdx.gl10.glTexImage2D(
-        GL10.GL_TEXTURE_2D,
-        0,
-        GL10.GL_RGBA,
-        width,
-        height,
-        0,
-        GL10.GL_RGBA,
-        GL10.GL_UNSIGNED_BYTE,
-        initialData);
-    checkGLError();
+  public BatchRendererTexture createFontTexture(@Nonnull final ByteBuffer data, int width, int height) {
+    return createTexture(data, width, height, false);
+  }
+
+  private BatchRendererTexture createTexture(@Nonnull final ByteBuffer data, final int width, final int height, boolean atlas) {
+    final int atlasTextureId;
+
+    if (data.capacity() < width * height * 4) {
+      log.severe("Atlas texture' buffer capacity is less than requested WIDTH x HEIGHT");
+      return null;
+    }
+
+    try {
+      data.rewind();
+      atlasTextureId = createAtlasTexture(data, width, height, false);
+    } catch (Exception e) {
+      log.log(Level.WARNING, e.getMessage(), e);
+      return null;
+    }
+
+    BatchRendererTexture texture = new BatchRendererTexture() {
+      private final TextureAtlasGenerator textureAtlasGenerator = new TextureAtlasGenerator(width, height);
+
+      @Override
+      public int getWidth() {
+        return width;
+      }
+
+      @Override
+      public int getHeight() {
+        return height;
+      }
+
+      @Override
+      public void bind() {
+        Gdx.gl10.glBindTexture(GL10.GL_TEXTURE_2D, atlasTextureId);
+      }
+
+      @Override
+      public TextureAtlasGenerator getGenerator() {
+        return textureAtlasGenerator;
+      }
+
+      @Override
+      public void dispose() {
+        Gdx.gl10.glDeleteTextures(1, new int[] { atlasTextureId }, 0);
+      }
+
+      @Override
+      public void clear() {
+        data.rewind();
+        bind();
+        Gdx.gl10.glTexImage2D(
+                GL10.GL_TEXTURE_2D,
+                0,
+                GL10.GL_RGBA,
+                width,
+                height,
+                0,
+                GL10.GL_RGBA,
+                GL10.GL_UNSIGNED_BYTE,
+                data);
+        checkGLError();
+      }
+
+      @Override
+      public void addImageToTexture(@Nonnull Image image, int x, int y) {
+        GdxBatchRenderImage gdxImage = (GdxBatchRenderImage) image;
+        if (gdxImage.getWidth() == 0 || gdxImage.getHeight() == 0) {
+          return;
+        }
+        bind();
+        Gdx.gl10.glTexSubImage2D(
+                GL10.GL_TEXTURE_2D,
+                0,
+                x,
+                y,
+                image.getWidth(),
+                image.getHeight(),
+                GL10.GL_RGBA,
+                GL10.GL_UNSIGNED_BYTE,
+                gdxImage.asByteBuffer());
+        checkGLError();
+      }
+
+      @Override
+      public void removeFromTexture(@Nonnull Image image, int x, int y, int w, int h) {
+        // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
+        // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
+        if (!fillRemovedTexture) {
+          return;
+        }
+        ByteBuffer initialData = BufferUtils.newByteBuffer(image.getWidth() * image.getHeight() * 4);
+        for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
+          initialData.put((byte) 0xff);
+          initialData.put((byte) 0x00);
+          initialData.put((byte) 0x00);
+          initialData.put((byte) 0xff);
+        }
+        initialData.rewind();
+        bind();
+        Gdx.gl10.glTexSubImage2D(
+                GL10.GL_TEXTURE_2D,
+                0,
+                x,
+                y,
+                w,
+                h,
+                GL10.GL_RGBA,
+                GL10.GL_UNSIGNED_BYTE,
+                initialData);
+      }
+    };
+
+    if (atlas) {
+      atlasTexture = texture;
+    }
+
+    return texture;
   }
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final String filename) {
+  public BatchRendererTexture.Image loadImage(@Nonnull final String filename) {
     try {
       return new GdxBatchRenderImage(filename);
     } catch (Exception e) {
@@ -227,39 +338,34 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
+  public BatchRendererTexture.Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
     return new GdxBatchRenderImage(data, w, h);
   }
 
   @Override
-  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
-    GdxBatchRenderImage gdxImage = (GdxBatchRenderImage) image;
-    if (gdxImage.getWidth() == 0 || gdxImage.getHeight() == 0) {
-      return;
-    }
-    bind(atlasTextureId);
-    Gdx.gl10.glTexSubImage2D(
-        GL10.GL_TEXTURE_2D,
-        0,
-        x,
-        y,
-        image.getWidth(),
-        image.getHeight(),
-        GL10.GL_RGBA,
-        GL10.GL_UNSIGNED_BYTE,
-        gdxImage.asByteBuffer());
-    checkGLError();
-  }
+  public void beginBatch(@Nonnull final BatchRendererTexture texture, @Nonnull final BlendMode blendMode) {
+    List<Batch> batchList;
 
-  @Override
-  public void beginBatch(@Nonnull final BlendMode blendMode) {
-    batches.add(batchPool.allocate());
-    currentBatch = batches.get(batches.size() - 1);
-    currentBatch.begin(blendMode);
+    if (texture == atlasTexture) {
+      batchList = atlasBatches;
+    } else {
+      batchList = batches.get(texture);
+      if (batchList == null) {
+        batchList = new ArrayList<Batch>();
+        batches.put(texture, batchList);
+      }
+    }
+
+    Batch batch = batchPool.allocate();
+    batchList.add(batch);
+    batch.begin(blendMode);
+
+    currentBatches.put(texture, batch);
   }
 
   @Override
   public void addQuad(
+      @Nonnull final BatchRendererTexture texture,
       final float x,
       final float y,
       final float width,
@@ -272,8 +378,10 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
       final float textureY,
       final float textureWidth,
       final float textureHeight) {
+    Batch currentBatch = currentBatches.get(texture);
+
     if (!currentBatch.canAddQuad()) {
-      beginBatch(currentBatch.getBlendMode());
+      beginBatch(texture, currentBatch.getBlendMode());
     }
     currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY,
         textureWidth, textureHeight);
@@ -281,17 +389,26 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
 
   @Override
   public int render() {
-    bind(atlasTextureId);
-
     Gdx.gl10.glEnable(GL10.GL_TEXTURE_2D);
     Gdx.gl10.glEnable(GL10.GL_BLEND);
     Gdx.gl10.glEnableClientState(GL10.GL_VERTEX_ARRAY);
     Gdx.gl10.glEnableClientState(GL10.GL_COLOR_ARRAY);
     Gdx.gl10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
-    for (int i = 0; i < batches.size(); i++) {
-      Batch batch = batches.get(i);
+    int batchesCount = 0;
+
+    atlasTexture.bind();
+    for (Batch batch : atlasBatches) {
       batch.render();
+      batchesCount++;
+    }
+
+    for (Map.Entry<BatchRendererTexture, List<Batch>> entry: batches.entrySet()) {
+      entry.getKey().bind();
+      for (Batch batch : entry.getValue()) {
+        batch.render();
+        batchesCount++;
+      }
     }
 
     Gdx.gl10.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
@@ -300,35 +417,7 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     Gdx.gl10.glDisable(GL10.GL_BLEND);
     Gdx.gl10.glDisable(GL10.GL_TEXTURE_2D);
 
-    return batches.size();
-  }
-
-  @Override
-  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
-    // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
-    // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
-    if (!fillRemovedTexture) {
-      return;
-    }
-    ByteBuffer initialData = BufferUtils.newByteBuffer(image.getWidth() * image.getHeight() * 4);
-    for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
-      initialData.put((byte) 0xff);
-      initialData.put((byte) 0x00);
-      initialData.put((byte) 0x00);
-      initialData.put((byte) 0xff);
-    }
-    initialData.rewind();
-    bind(atlasTextureId);
-    Gdx.gl10.glTexSubImage2D(
-        GL10.GL_TEXTURE_2D,
-        0,
-        x,
-        y,
-        w,
-        h,
-        GL10.GL_RGBA,
-        GL10.GL_UNSIGNED_BYTE,
-        initialData);
+    return batchesCount;
   }
 
   // internal implementations
@@ -391,8 +480,8 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
     }
   }
 
-  private void createAtlasTexture(final int width, final int height, final boolean filter) throws Exception {
-    atlasTextureId = createTextureId();
+  private int createAtlasTexture(@Nonnull final ByteBuffer data, final int width, final int height, final boolean filter) throws Exception {
+    int atlasTextureId = createTextureId();
     int minFilter = GL10.GL_NEAREST;
     int magFilter = GL10.GL_NEAREST;
     if (filter) {
@@ -410,12 +499,10 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
       throw new Exception("Attempt to allocate a texture to big for the current hardware");
     }
     if (width < 0) {
-      log.warning("Attempt to allocate a texture with negative width");
-      return;
+      throw new Exception("Attempt to allocate a texture with negative width");
     }
     if (height < 0) {
-      log.warning("Attempt to allocate a texture with negative height");
-      return;
+      throw new Exception("Attempt to allocate a texture with negative height");
     }
 
     Gdx.gl10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, minFilter);
@@ -423,10 +510,8 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
 
     checkGLError();
 
-    ByteBuffer initialData = BufferUtils.newByteBuffer(width * height * 4);
-    for (int i = 0; i < width * height * 4; i++) {
-      initialData.put((byte) 0x80);
-    }
+    ByteBuffer initialData = data;
+
     initialData.rewind();
     Gdx.gl10.glTexImage2D(
         GL10.GL_TEXTURE_2D,
@@ -439,6 +524,8 @@ public class GdxBatchRenderBackend implements BatchRenderBackend {
         GL10.GL_UNSIGNED_BYTE,
         initialData);
     checkGLError();
+
+    return atlasTextureId;
   }
 
   private void bind(int textureId) {

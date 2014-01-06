@@ -1,5 +1,10 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch.core;
 
+import com.jogamp.common.nio.Buffers;
+import de.lessvoid.nifty.batch.TextureAtlasGenerator;
+import de.lessvoid.nifty.batch.spi.BatchRendererTexture;
+import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackendCoreProfile;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.media.opengl.GL;
@@ -18,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public class CoreTexture2D {
+public class CoreTexture2D implements BatchRendererTexture {
   /**
    * Image resizing mode. This enumerator is used in simple and defines the used filter for the magnifying and
    * minimizing automatically.
@@ -263,6 +268,13 @@ public class CoreTexture2D {
   private int texFormat;
   private int texType;
 
+  private final TextureAtlasGenerator textureAtlasGenerator;
+  private final ByteBuffer initialData;
+
+  private final boolean fillRemovedTexture =
+      Boolean.parseBoolean(System.getProperty(JoglBatchRenderBackendCoreProfile.class.getName() + "" +
+          ".fillRemovedTexture", "false"));
+
   /**
    * This is one of the simple constructors that only allow very limited possibilities for settings. How ever they use
    * settings that should fit the need on most cases.
@@ -275,7 +287,7 @@ public class CoreTexture2D {
    * @throws CoreGLException in case the creation of the texture fails for any reason
    */
   public CoreTexture2D(
-      @Nonnull final ColorFormat format, final int width, final int height, final Buffer data,
+      @Nonnull final ColorFormat format, final int width, final int height, final ByteBuffer data,
       @Nonnull final ResizeFilter filter) {
     this(format, false, width, height, data, filter);
   }
@@ -293,7 +305,7 @@ public class CoreTexture2D {
    */
   public CoreTexture2D(
       final int internalFormat, final int width, final int height, final int format,
-      final Buffer data, @Nonnull final ResizeFilter filter) {
+      final ByteBuffer data, @Nonnull final ResizeFilter filter) {
     this(GL.GL_TEXTURE_2D, internalFormat, width, height, format, data, filter.getMagFilter(), filter.getMinFilter());
   }
 
@@ -311,7 +323,7 @@ public class CoreTexture2D {
    */
   public CoreTexture2D(
       @Nonnull final ColorFormat format, final boolean compressed, final int width, final int height,
-      final Buffer data, @Nonnull final ResizeFilter filter) {
+      final ByteBuffer data, @Nonnull final ResizeFilter filter) {
     this(format.getInternalFormat(), width, height,
         (compressed ? format.getCompressedInternalFormat() : format.getFormat()), data, filter);
   }
@@ -330,7 +342,7 @@ public class CoreTexture2D {
    */
   public CoreTexture2D(
       final int internalFormat, final int width, final int height, final int format,
-      final Buffer data, final int magFilter, final int minFilter) {
+      final ByteBuffer data, final int magFilter, final int minFilter) {
     this(GL.GL_TEXTURE_2D, internalFormat, width, height, format, data, magFilter, minFilter);
   }
 
@@ -349,7 +361,7 @@ public class CoreTexture2D {
    */
   public CoreTexture2D(
       final int target, final int internalFormat, final int width, final int height, final int format,
-      final Buffer data, final int magFilter, final int minFilter) {
+      final ByteBuffer data, final int magFilter, final int minFilter) {
     this(AUTO, target, 0, internalFormat, width, height, 0, format, AUTO, data, magFilter, minFilter);
   }
 
@@ -376,13 +388,15 @@ public class CoreTexture2D {
    */
   public CoreTexture2D(
       final int textureId, final int target, final int level, final int internalFormat, final int width,
-      final int height, final int border, final int format, final int type, final Buffer data,
+      final int height, final int border, final int format, final int type, final ByteBuffer data,
       final int magFilter, final int minFilter) {
     this.textureId = createTexture(textureId, target, level, internalFormat, width, height, border, format, type, data,
         magFilter, minFilter);
     textureTarget = target;
     this.width = width;
     this.height = height;
+    this.textureAtlasGenerator = new TextureAtlasGenerator(width, height);
+    this.initialData = data;
   }
 
   /**
@@ -468,6 +482,63 @@ public class CoreTexture2D {
     isDisposed = true;
   }
 
+  @Override
+  public void clear() {
+    initialData.rewind();
+    updateTextureData(initialData);
+  }
+
+  @Override
+  public void addImageToTexture(@Nonnull Image image, int x, int y) {
+    JoglBatchRenderBackendCoreProfile.ImageImpl imageImpl = (JoglBatchRenderBackendCoreProfile.ImageImpl) image;
+    if (imageImpl.getWidth() == 0 ||
+        imageImpl.getHeight() == 0) {
+      return;
+    }
+    final GL gl = GLContext.getCurrentGL();
+    bind();
+    gl.glTexSubImage2D(
+        GL.GL_TEXTURE_2D,
+        0,
+        x,
+        y,
+        image.getWidth(),
+        image.getHeight(),
+        GL.GL_RGBA,
+        GL.GL_UNSIGNED_BYTE,
+        imageImpl.getData());
+  }
+
+  @Override
+  public void removeFromTexture(@Nonnull Image image, int x, int y, int w, int h) {
+    // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
+    // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
+    if (!fillRemovedTexture) {
+      return;
+    }
+    ByteBuffer initialData = Buffers.newDirectByteBuffer(image.getWidth() * image.getHeight() * 4);
+    for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
+      initialData.put((byte) 0xff);
+      initialData.put((byte) 0x00);
+      initialData.put((byte) 0x00);
+      initialData.put((byte) 0xff);
+    }
+    initialData.rewind();
+
+    final GL gl = GLContext.getCurrentGL();
+    bind();
+    gl.glTexSubImage2D(
+        GL.GL_TEXTURE_2D,
+        0,
+        x,
+        y,
+        w,
+        h,
+        GL.GL_RGBA,
+        GL.GL_UNSIGNED_BYTE,
+        initialData);
+  }
+
   /**
    * Get the height of this texture.
    *
@@ -475,6 +546,11 @@ public class CoreTexture2D {
    */
   public int getHeight() {
     return height;
+  }
+
+  @Override
+  public TextureAtlasGenerator getGenerator() {
+    return textureAtlasGenerator;
   }
 
   /**
