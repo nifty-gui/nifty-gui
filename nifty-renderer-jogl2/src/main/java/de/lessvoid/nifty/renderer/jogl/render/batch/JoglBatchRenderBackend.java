@@ -1,7 +1,9 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
 import com.jogamp.common.nio.Buffers;
+import de.lessvoid.nifty.batch.TextureAtlasGenerator;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.batch.spi.BatchRendererTexture;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.renderer.jogl.render.JoglMouseCursor;
 import de.lessvoid.nifty.renderer.jogl.render.io.ImageData;
@@ -28,7 +30,9 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,12 +47,12 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
   private NiftyResourceLoader resourceLoader;
   private int viewportWidth = -1;
   private int viewportHeight = -1;
-  private int textureId;
   @Nonnull
   private final ObjectPool<Batch> batchPool;
-  private Batch currentBatch;
-  private final List<Batch> batches = new ArrayList<Batch>();
-  private ByteBuffer initialData;
+  private BatchRendererTexture atlasTexture;
+  private final List<Batch> atlasBatches = new ArrayList<Batch>();
+  private final Map<BatchRendererTexture, List<Batch>> batches = new HashMap<BatchRendererTexture, List<Batch>>();
+  private final Map<BatchRendererTexture, Batch> currentBatches = new HashMap<BatchRendererTexture, Batch>();
   private final boolean fillRemovedTexture =
       Boolean.parseBoolean(System.getProperty(JoglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
   private final GLU glu;
@@ -89,10 +93,19 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
   public void beginFrame() {
     log.fine("beginFrame()");
 
-    for (int i = 0; i < batches.size(); i++) {
-      batchPool.free(batches.get(i));
+    for (List<Batch> batchList : batches.values()) {
+      for (Batch batch : batchList) {
+        batchPool.free(batch);
+      }
     }
+
+    for (Batch batch : atlasBatches) {
+      batchPool.free(batch);
+    }
+
     batches.clear();
+    atlasBatches.clear();
+    currentBatches.clear();
   }
 
   @Override
@@ -131,43 +144,148 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
     // TODO implement this method later
   }
 
-  @Override
-  public void createAtlasTexture(final int width, final int height) {
-    try {
-      createAtlasTexture(width, height, false, GL.GL_RGBA);
 
-      initialData = Buffers.newDirectByteBuffer(width * height * 4);
-      for (int i = 0; i < width * height; i++) {
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0xff);
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0xff);
-      }
-    } catch (Exception e) {
-      log.log(Level.WARNING, e.getMessage(), e);
+  @Override
+  public BatchRendererTexture createAtlasTexture(int width, int height) {
+    ByteBuffer initialData = ByteBuffer.allocateDirect(width * height * 4);
+    for (int i = 0; i < width * height * 4; i++) {
+      initialData.put((byte) 0x80);
     }
+    return createTexture(initialData, width, height, true);
   }
 
   @Override
-  public void clearAtlasTexture(final int width, final int height) {
-    initialData.rewind();
-    final GL gl = GLContext.getCurrentGL();
-    gl.glTexImage2D(
-        GL.GL_TEXTURE_2D,
-        0,
-        4,
-        width,
-        height,
-        0,
-        GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE,
-        initialData);
-    checkGLError();
+  public BatchRendererTexture createFontTexture(@Nonnull final ByteBuffer data, int width, int height) {
+    return createTexture(data, width, height, false);
+  }
+
+
+  private BatchRendererTexture createTexture(@Nonnull final ByteBuffer data, final int width, final int height, boolean atlas) {
+    final int atlasTextureId;
+
+    if (data.capacity() < width * height * 4) {
+      log.severe("Atlas texture' buffer capacity is less than requested WIDTH x HEIGHT");
+      return null;
+    }
+
+    try {
+      data.rewind();
+      atlasTextureId = createAtlasTexture(data, width, height, false, GL.GL_RGBA);
+    } catch (Exception e) {
+      log.log(Level.WARNING, e.getMessage(), e);
+      return null;
+    }
+
+    BatchRendererTexture texture = new BatchRendererTexture() {
+      private final TextureAtlasGenerator textureAtlasGenerator = new TextureAtlasGenerator(width, height);
+
+      @Override
+      public int getWidth() {
+        return width;
+      }
+
+      @Override
+      public int getHeight() {
+        return height;
+      }
+
+      @Override
+      public void bind() {
+        final GL2 gl = GLContext.getCurrentGL().getGL2();
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, atlasTextureId);
+        checkGLError();
+      }
+
+      @Override
+      public TextureAtlasGenerator getGenerator() {
+        return textureAtlasGenerator;
+      }
+
+      @Override
+      public void dispose() {
+        final GL2 gl = GLContext.getCurrentGL().getGL2();
+        gl.glDeleteTextures(1, new int[] { atlasTextureId }, 0);
+      }
+
+      @Override
+      public void clear() {
+        data.rewind();
+        final GL gl = GLContext.getCurrentGL();
+        gl.glTexImage2D(
+            GL.GL_TEXTURE_2D,
+            0,
+            4,
+            width,
+            height,
+            0,
+            GL.GL_RGBA,
+            GL.GL_UNSIGNED_BYTE,
+            data);
+        checkGLError();
+      }
+
+      @Override
+      public void addImageToTexture(@Nonnull Image image, int x, int y) {
+        ImageImpl imageImpl = (ImageImpl) image;
+        if (imageImpl.getWidth() == 0 ||
+            imageImpl.getHeight() == 0) {
+          return;
+        }
+        final GL gl = GLContext.getCurrentGL();
+        bind();
+        gl.glTexSubImage2D(
+            GL.GL_TEXTURE_2D,
+            0,
+            x,
+            y,
+            image.getWidth(),
+            image.getHeight(),
+            GL.GL_RGBA,
+            GL.GL_UNSIGNED_BYTE,
+            imageImpl.getData());
+      }
+
+      @Override
+      public void removeFromTexture(@Nonnull Image image, int x, int y, int w, int h) {
+        // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
+        // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
+        if (!fillRemovedTexture) {
+          return;
+        }
+        ByteBuffer initialData = Buffers.newDirectByteBuffer(image.getWidth() * image.getHeight() * 4);
+        for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
+          initialData.put((byte) 0xff);
+          initialData.put((byte) 0x00);
+          initialData.put((byte) 0x00);
+          initialData.put((byte) 0xff);
+        }
+        initialData.rewind();
+
+        final GL2 gl = GLContext.getCurrentGL().getGL2();
+        bind();
+        gl.glTexSubImage2D(
+            GL2.GL_TEXTURE_2D,
+            0,
+            x,
+            y,
+            w,
+            h,
+            GL2.GL_RGBA,
+            GL2.GL_UNSIGNED_BYTE,
+            initialData);
+      }
+    };
+
+    if (atlas) {
+      atlasTexture = texture;
+    }
+
+    return texture;
   }
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final String filename) {
+  public BatchRendererTexture.Image loadImage(@Nonnull final String filename) {
     ImageData loader = createImageLoader(filename);
     InputStream imageStream = null;
     try {
@@ -194,39 +312,34 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
+  public BatchRendererTexture.Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
     return new ImageImpl(data, w, h);
   }
 
   @Override
-  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
-    ImageImpl imageImpl = (ImageImpl) image;
-    if (imageImpl.getWidth() == 0 ||
-        imageImpl.getHeight() == 0) {
-      return;
-    }
-    final GL gl = GLContext.getCurrentGL();
-    gl.glTexSubImage2D(
-        GL.GL_TEXTURE_2D,
-        0,
-        x,
-        y,
-        image.getWidth(),
-        image.getHeight(),
-        GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE,
-        imageImpl.getBuffer());
-  }
+  public void beginBatch(@Nonnull final BatchRendererTexture texture, @Nonnull final BlendMode blendMode) {
+    List<Batch> batchList;
 
-  @Override
-  public void beginBatch(@Nonnull final BlendMode blendMode) {
-    batches.add(batchPool.allocate());
-    currentBatch = batches.get(batches.size() - 1);
-    currentBatch.begin(blendMode);
+    if (texture == atlasTexture) {
+      batchList = atlasBatches;
+    } else {
+      batchList = batches.get(texture);
+      if (batchList == null) {
+        batchList = new ArrayList<Batch>();
+        batches.put(texture, batchList);
+      }
+    }
+
+    Batch batch = batchPool.allocate();
+    batchList.add(batch);
+    batch.begin(blendMode);
+
+    currentBatches.put(texture, batch);
   }
 
   @Override
   public void addQuad(
+      @Nonnull final BatchRendererTexture texture,
       final float x,
       final float y,
       final float width,
@@ -239,8 +352,10 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
       final float textureY,
       final float textureWidth,
       final float textureHeight) {
+    Batch currentBatch = currentBatches.get(texture);
+
     if (!currentBatch.canAddQuad()) {
-      beginBatch(currentBatch.getBlendMode());
+      beginBatch(texture, currentBatch.getBlendMode());
     }
     currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY,
         textureWidth, textureHeight);
@@ -248,7 +363,6 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
 
   @Override
   public int render() {
-    bind();
     final GL2 gl = GLContext.getCurrentGL().getGL2();
     gl.glEnable(GL.GL_TEXTURE_2D);
     gl.glEnable(GL.GL_BLEND);
@@ -256,9 +370,11 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
     gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
     gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 
-    for (int i = 0; i < batches.size(); i++) {
-      Batch batch = batches.get(i);
-      batch.render();
+    for (Map.Entry<BatchRendererTexture, List<Batch>> entry: batches.entrySet()) {
+      entry.getKey().bind();
+      for (Batch batch : entry.getValue()) {
+        batch.render();
+      }
     }
 
     gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
@@ -268,36 +384,6 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
     gl.glDisable(GL2.GL_TEXTURE_2D);
 
     return batches.size();
-  }
-
-  @Override
-  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
-    // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
-    // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
-    if (!fillRemovedTexture) {
-      return;
-    }
-    ByteBuffer initialData = Buffers.newDirectByteBuffer(image.getWidth() * image.getHeight() * 4);
-    for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
-      initialData.put((byte) 0xff);
-      initialData.put((byte) 0x00);
-      initialData.put((byte) 0x00);
-      initialData.put((byte) 0xff);
-    }
-    initialData.rewind();
-
-    final GL2 gl = GLContext.getCurrentGL().getGL2();
-    gl.glTexSubImage2D(
-        GL2.GL_TEXTURE_2D,
-        0,
-        x,
-        y,
-        w,
-        h,
-        GL2.GL_RGBA,
-        GL2.GL_UNSIGNED_BYTE,
-        initialData);
-
   }
 
   private void getViewport() {
@@ -355,20 +441,21 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
     return new ImageIOImageData();
   }
 
-  private void createAtlasTexture(
+  private int createAtlasTexture(
+      @Nonnull final ByteBuffer data,
       final int width,
       final int height,
       final boolean filter,
       final int srcPixelFormat) throws Exception {
     final GL2 gl = GLContext.getCurrentGL().getGL2();
-    textureId = createTextureId();
+    int textureId = createTextureId();
     int minFilter = GL.GL_NEAREST;
     int magFilter = GL.GL_NEAREST;
     if (filter) {
       minFilter = GL2.GL_LINEAR_MIPMAP_LINEAR;
       magFilter = GL2.GL_NEAREST;
     }
-    bind();
+    bind(textureId);
 
     IntBuffer temp = Buffers.newDirectIntBuffer(16);
     gl.glGetIntegerv(GL2.GL_MAX_TEXTURE_SIZE, temp);
@@ -379,23 +466,17 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
       throw new Exception("Attempt to allocate a texture to big for the current hardware");
     }
     if (width < 0) {
-      log.warning("Attempt to allocate a texture with negative width");
-      return;
+      throw new Exception("Attempt to allocate a texture with negative width");
     }
     if (height < 0) {
-      log.warning("Attempt to allocate a texture with negative height");
-      return;
+      throw new Exception("Attempt to allocate a texture with negative height");
     }
 
     gl.glTexParameteri(GL.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, minFilter);
     gl.glTexParameteri(GL.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, magFilter);
     checkGLError();
 
-    ByteBuffer initialData = Buffers.newDirectByteBuffer(width * height * 4);
-    for (int i = 0; i < width * height * 4; i++) {
-      initialData.put((byte) 0x80);
-    }
-    initialData.rewind();
+    data.rewind();
     gl.glTexImage2D(
         GL2.GL_TEXTURE_2D,
         0,
@@ -405,11 +486,13 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
         0,
         srcPixelFormat,
         GL2.GL_UNSIGNED_BYTE,
-        initialData);
+        data);
     checkGLError();
+
+    return textureId;
   }
 
-  private void bind() {
+  private void bind(int textureId) {
     final GL2 gl = GLContext.getCurrentGL().getGL2();
     gl.glBindTexture(GL2.GL_TEXTURE_2D, textureId);
     checkGLError();
@@ -436,9 +519,30 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
    *
    * @author void
    */
-  private static class ImageImpl extends ByteBufferedImage implements BatchRenderBackend.Image {
-    private ImageImpl(ByteBuffer buffer, int width, int height) {
-      super(buffer, width, height);
+  private static class ImageImpl implements BatchRendererTexture.Image {
+    private final ByteBuffer buffer;
+    private final int width;
+    private final int height;
+
+    private ImageImpl(final ByteBuffer buffer, final int width, final int height) {
+      this.buffer = buffer;
+      this.width = width;
+      this.height = height;
+    }
+
+    @Override
+    public int getWidth() {
+      return width;
+    }
+
+    @Override
+    public int getHeight() {
+      return height;
+    }
+
+    @Override
+    public ByteBuffer getData() {
+      return buffer;
     }
   }
 

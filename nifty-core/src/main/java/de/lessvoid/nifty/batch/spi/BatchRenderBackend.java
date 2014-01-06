@@ -104,12 +104,15 @@ public interface BatchRenderBackend {
    * @param width  width of the texture atlas
    * @param height height of the texture atlas
    */
-  void createAtlasTexture(int width, int height);
+  BatchRendererTexture createAtlasTexture(int width, int height);
 
   /**
-   * Clear the atlas texture.
+   * Create a texture that will later be used as the font texture atlas.
+   *
+   * @param width width of the texture atlas
+   * @param height height of the texture atlas
    */
-  void clearAtlasTexture(int width, int height);
+  BatchRendererTexture createFontTexture(@Nonnull ByteBuffer data, int width, int height);
 
   /**
    * Load the given image and provide width and height of the image using the Image interface defined at the bottom.
@@ -117,7 +120,7 @@ public interface BatchRenderBackend {
    * @param filename the filename to load
    */
   @Nullable
-  Image loadImage(@Nonnull String filename);
+  BatchRendererTexture.Image loadImage(@Nonnull String filename);
 
   /**
    * Wraps given buffer into Image interface
@@ -128,16 +131,7 @@ public interface BatchRenderBackend {
    * @return wrapped image
    */
   @Nullable
-  Image loadImage(@Nonnull ByteBuffer data, int w, int h);
-
-  /**
-   * Adds the given image to the main texture atlas at the given position.
-   *
-   * @param image the Image data loaded by loadImage()
-   * @param x     the x position where to put the image
-   * @param y     the y position where to put the image
-   */
-  void addImageToTexture(@Nonnull Image image, int x, int y);
+  BatchRendererTexture.Image loadImage(@Nonnull ByteBuffer data, int w, int h);
 
   /**
    * Begin a new batch with the given BlendMode. Starting a new batch with beginBatch() should store the current batch
@@ -146,7 +140,7 @@ public interface BatchRenderBackend {
    * @param blendMode the blendMode this batch should use. This will be BlendMode.BLEND in most cases and very rare will
    *                  it be MULTIPLY.
    */
-  void beginBatch(@Nonnull BlendMode blendMode);
+  void beginBatch(@Nonnull BatchRendererTexture texture, @Nonnull BlendMode blendMode);
 
   /**
    * Add a quad with the given coordinates to the current batch. There will always be a beginBatch() call before any
@@ -166,6 +160,7 @@ public interface BatchRenderBackend {
    * @param textureHeight texture height (already normalized in the range 0 to 1)
    */
   void addQuad(
+      @Nonnull BatchRendererTexture batchRendererTexture,
       float x,
       float y,
       float width,
@@ -183,63 +178,4 @@ public interface BatchRenderBackend {
    * Render all batches and return the number of batches rendered for statistics.
    */
   int render();
-
-  /**
-   * Remove the image from the texture atlas. This really could be an empty implementation because there really is
-   * nothing that this method needs to do. After a call to this method Nifty might reuse the place in the texture
-   * with other calls to addImageToTexture().
-   *
-   * @param image image to remove
-   * @param x     x position in texture atlas
-   * @param y     y position in texture atlas
-   * @param w     width in texture atlas
-   * @param h     height in texture atlas
-   */
-  void removeFromTexture(@Nonnull Image image, int x, int y, int w, int h);
-
-  /**
-   * Helper interface to allow the provideImageDimensions() method to return the image dimension and if necessary
-   * additional data not visible to Nifty.
-   *
-   * @author void
-   */
-  public interface Image {
-    int getWidth();
-
-    int getHeight();
-  }
-
-  /**
-   * Generic implementation of Image interface backed up with byte buffer as main or optional storage.
-   * @author iamtakingiteasy
-   */
-  public static class ByteBufferedImage implements Image {
-    protected final ByteBuffer buffer;
-    protected final int width;
-    protected final int height;
-
-    public ByteBufferedImage() {
-      this(null, 0, 0);
-    }
-
-    public ByteBufferedImage(ByteBuffer buffer, int width, int height) {
-      this.buffer = buffer;
-      this.width = width;
-      this.height = height;
-    }
-
-    @Override
-    public int getWidth() {
-      return width;
-    }
-
-    @Override
-    public int getHeight() {
-      return height;
-    }
-
-    public ByteBuffer getBuffer() {
-      return buffer;
-    }
-  }
 }

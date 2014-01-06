@@ -3,6 +3,7 @@ package de.lessvoid.nifty.gdx.render.batch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.batch.spi.BatchRendererTexture;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -11,11 +12,18 @@ import java.nio.ByteBuffer;
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public class GdxBatchRenderImage extends BatchRenderBackend.ByteBufferedImage implements BatchRenderBackend.Image {
+public class GdxBatchRenderImage implements BatchRendererTexture.Image {
   @Nullable
   private Pixmap pixmap;
+  private final ByteBuffer buffer;
+  private final int width;
+  private final int height;
 
   public GdxBatchRenderImage(@Nullable final String filename) {
+    this.buffer = null;
+    this.width = 0;
+    this.height = 0;
+
     if (filename == null) {
       return;
     }
@@ -24,22 +32,29 @@ public class GdxBatchRenderImage extends BatchRenderBackend.ByteBufferedImage im
   }
 
   public GdxBatchRenderImage(final ByteBuffer buffer, final int width, final int height) {
-    super(buffer, width, height);
+    this.buffer = buffer;
+    this.width = width;
+    this.height = height;
   }
 
   @Override
   public int getWidth() {
-    return pixmap != null ? pixmap.getWidth() : super.getWidth();
+    return pixmap != null ? pixmap.getWidth() : width;
   }
 
   @Override
   public int getHeight() {
-    return pixmap != null ? pixmap.getHeight() : super.getHeight();
+    return pixmap != null ? pixmap.getHeight() : height;
+  }
+
+  @Override
+  public ByteBuffer getData() {
+    return buffer;
   }
 
   @Nullable
   public ByteBuffer asByteBuffer() {
-    return pixmap != null ? pixmap.getPixels() : super.getBuffer();
+    return pixmap != null ? pixmap.getPixels() : buffer;
   }
 
   @Nullable

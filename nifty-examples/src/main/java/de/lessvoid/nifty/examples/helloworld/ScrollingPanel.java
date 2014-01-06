@@ -48,7 +48,7 @@ public class ScrollingPanel implements EffectImpl {
       @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
     long now = timeProvider.getMsTime();
-    r.saveState(null);
+    r.saveStates();
     xoff = ((now - start) % xspeed / xspeed * image.getWidth()) % image.getWidth();
     yoff = ((now - start) % yspeed / yspeed * image.getHeight()) % image.getHeight();
     r.enableClip(element.getX(), element.getY(), element.getX() + element.getWidth(),
@@ -59,7 +59,7 @@ public class ScrollingPanel implements EffectImpl {
         element.getY() + (int) yoff - image.getHeight(),
         element.getWidth() - (int) xoff + image.getWidth(),
         element.getHeight() - (int) yoff + image.getHeight());
-    r.restoreState();
+    r.restoreStates();
   }
 
   @Override

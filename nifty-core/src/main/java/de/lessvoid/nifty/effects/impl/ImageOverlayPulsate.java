@@ -58,12 +58,12 @@ public class ImageOverlayPulsate implements EffectImpl {
       @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
     if (image != null) {
-      r.saveState(null);
+      r.saveStates();
       if (pulsater != null) {
         r.setColorAlpha(pulsater.update());
       }
       r.renderImage(image, element.getX(), element.getY(), element.getWidth(), element.getHeight());
-      r.restoreState();
+      r.restoreStates();
     }
   }
 

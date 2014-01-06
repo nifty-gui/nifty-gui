@@ -1,5 +1,20 @@
 package de.lessvoid.nifty.elements;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEvent;
@@ -8,7 +23,12 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.controls.NiftyInputControl;
-import de.lessvoid.nifty.effects.*;
+import de.lessvoid.nifty.effects.Effect;
+import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.effects.EffectImpl;
+import de.lessvoid.nifty.effects.EffectManager;
+import de.lessvoid.nifty.effects.ElementEffectStateCache;
+import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.events.ElementDisableEvent;
 import de.lessvoid.nifty.elements.events.ElementEnableEvent;
 import de.lessvoid.nifty.elements.events.ElementHideEvent;
@@ -27,7 +47,11 @@ import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.layout.manager.LayoutManager;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.PopupType;
-import de.lessvoid.nifty.loaderv2.types.apply.*;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderer;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererImage;
+import de.lessvoid.nifty.loaderv2.types.apply.ApplyRendererPanel;
+import de.lessvoid.nifty.loaderv2.types.apply.Convert;
 import de.lessvoid.nifty.loaderv2.types.helper.PaddingAttributeParser;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -36,11 +60,6 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * @author void
@@ -701,22 +720,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   public void render(@Nonnull final NiftyRenderEngine r) {
     if (visible) {
       if (effectManager.isEmpty()) {
-        r.saveState(null);
+        r.saveStates();
         renderElement(r);
         renderChildren(r);
-        r.restoreState();
+        r.restoreStates();
       } else {
-        r.saveState(null);
-        effectManager.begin(r, this);
+        r.saveStates();
         effectManager.renderPre(r, this);
         renderElement(r);
         effectManager.renderPost(r, this);
         renderChildren(r);
-        effectManager.end(r);
-        r.restoreState();
-        r.saveState(null);
+        r.restoreStates();
+        r.saveStates();
         effectManager.renderOverlay(r, this);
-        r.restoreState();
+        r.restoreStates();
       }
     }
   }
@@ -802,9 +819,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
           SizeValue newWidth = layoutManager.calculateConstraintWidth(this.layoutPart, layoutPartChild);
           if (newWidth.hasValue()) {
             int newWidthPx = newWidth.getValueAsInt(0);
-            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt
                 (newWidthPx));
-            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+            newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt
                 (newWidthPx));
             setConstraintWidth(SizeValue.def(newWidthPx));
           }
@@ -817,9 +834,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         SizeValue newWidth = layoutPart.getSumWidth(layoutPartChild);
         if (newWidth.hasValue()) {
           int newWidthPx = newWidth.getValueAsInt(0);
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt
               (newWidthPx));
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt
               (newWidthPx));
           setConstraintWidth(SizeValue.sum(newWidthPx));
         } else {
@@ -831,9 +848,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         SizeValue newWidth = layoutPart.getMaxWidth(layoutPartChild);
         if (newWidth.hasValue()) {
           int newWidthPx = newWidth.getValueAsInt(0);
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newWidth.getValueAsInt
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt
               (newWidthPx));
-          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newWidth.getValueAsInt
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt
               (newWidthPx));
           setConstraintWidth(SizeValue.max(newWidthPx));
         } else {
@@ -2627,6 +2644,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private static final class RenderOrderComparator implements Comparator<Element> {
     @Override
     public int compare(@Nonnull final Element o1, @Nonnull final Element o2) {
+      if (o1 == o2) {
+        return 0;
+      }
       int o1RenderOrder = getRenderOrder(o1);
       int o2RenderOrder = getRenderOrder(o2);
 
@@ -2663,7 +2683,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       if (element.renderOrder != 0) {
         return element.renderOrder;
       }
-      return element.getChildren().indexOf(element);
+      return element.getParent().getChildren().indexOf(element);
     }
   }
 

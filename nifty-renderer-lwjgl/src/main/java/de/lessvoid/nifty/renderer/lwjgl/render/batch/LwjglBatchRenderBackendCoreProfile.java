@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch;
 
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.batch.spi.BatchRendererTexture;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglMouseCursor;
 import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.*;
@@ -29,14 +30,19 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL31.GL_PRIMITIVE_RESTART;
 import static org.lwjgl.opengl.GL31.glPrimitiveRestartIndex;
+
 
 /**
  * BatchRenderBackend Implementation for OpenGL Core Profile.
@@ -49,17 +55,14 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private NiftyResourceLoader resourceLoader;
   private int viewportWidth = -1;
   private int viewportHeight = -1;
-  private CoreTexture2D texture;
   @Nonnull
   private final CoreShader niftyShader;
   @Nonnull
   private final ObjectPool<Batch> batchPool;
-  private Batch currentBatch;
-  private final List<Batch> batches = new ArrayList<Batch>();
-  private ByteBuffer initialData;
-  private boolean fillRemovedTexture =
-      Boolean.parseBoolean(System.getProperty(LwjglBatchRenderBackendCoreProfile.class.getName() + "" +
-          ".fillRemovedTexture", "false"));
+  private BatchRendererTexture atlasTexture;
+  private final List<Batch> atlasBatches = new ArrayList<Batch>();
+  private final Map<BatchRendererTexture, List<Batch>> batches = new HashMap<BatchRendererTexture, List<Batch>>();
+  private final Map<BatchRendererTexture, Batch> currentBatches = new HashMap<BatchRendererTexture, Batch>();
 
   private static final int PRIMITIVE_SIZE = 4 * 8; // 4 vertices per quad and 12 vertex attributes per vertex (2xpos,
   // 2xtexture, 4xcolor, 4xclipping)
@@ -69,6 +72,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
   @Nonnull
   private int[] elementIndexBuffer = new int[5];
+  private final CoreProfileSaveGLState saveGLState = new CoreProfileSaveGLState();
 
   public LwjglBatchRenderBackendCoreProfile() {
     niftyShader = CoreShader.newShaderWithVertexAttributes("aVertex", "aColor", "aTexture");
@@ -107,20 +111,31 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Override
   public void beginFrame() {
     log.fine("beginFrame()");
+    saveGLState.saveCore();
 
     Matrix4f modelViewProjection = CoreMatrixFactory.createOrtho(0, getWidth(), getHeight(), 0);
     niftyShader.activate();
     niftyShader.setUniformMatrix4f("uModelViewProjectionMatrix", modelViewProjection);
 
-    for (int i = 0; i < batches.size(); i++) {
-      batchPool.free(batches.get(i));
+    for (List<Batch> batchList : batches.values()) {
+      for (Batch batch : batchList) {
+        batchPool.free(batch);
+      }
     }
+
+    for (Batch batch : atlasBatches) {
+      batchPool.free(batch);
+    }
+
     batches.clear();
+    atlasBatches.clear();
+    currentBatches.clear();
   }
 
   @Override
   public void endFrame() {
     log.fine("endFrame");
+    saveGLState.restoreCore();
     checkGLError();
   }
 
@@ -161,36 +176,43 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   }
 
   @Override
-  public void createAtlasTexture(final int width, final int height) {
-    try {
-      ByteBuffer initTextureData = BufferUtils.createByteBuffer(width * height * 4);
-      for (int i = 0; i < width * height * 4; i++) {
-        initTextureData.put((byte) 0x80);
-      }
-      initTextureData.rewind();
-      texture = new CoreTexture2D(ColorFormat.RGBA, width, height, initTextureData, ResizeFilter.Nearest);
-
-      initialData = BufferUtils.createByteBuffer(width * height * 4);
-      for (int i = 0; i < width * height; i++) {
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0xff);
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0xff);
-      }
-    } catch (Exception e) {
-      log.log(Level.WARNING, e.getMessage(), e);
+  public BatchRendererTexture createAtlasTexture(int width, int height) {
+    ByteBuffer initialData = ByteBuffer.allocateDirect(width * height * 4);
+    for (int i = 0; i < width * height * 4; i++) {
+      initialData.put((byte) 0x80);
     }
+    return createTexture(initialData, width, height, true);
   }
 
   @Override
-  public void clearAtlasTexture(final int width, final int height) {
-    initialData.rewind();
-    texture.updateTextureData(initialData);
+  public BatchRendererTexture createFontTexture(@Nonnull final ByteBuffer data, int width, int height) {
+    return createTexture(data, width, height, false);
+  }
+
+
+  private BatchRendererTexture createTexture(@Nonnull final ByteBuffer data, final int width, final int height, boolean atlas) {
+    if (data.capacity() < width * height * 4) {
+      log.severe("Atlas texture' buffer capacity is less than requested WIDTH x HEIGHT");
+      return null;
+    }
+
+    try {
+      data.rewind();
+      BatchRendererTexture texture = new CoreTexture2D(ColorFormat.RGBA, width, height, data, ResizeFilter.Nearest);
+
+      if (atlas) {
+        atlasTexture = texture;
+      }
+      return texture;
+    } catch (Exception e) {
+      log.log(Level.WARNING, e.getMessage(), e);
+    }
+    return null;
   }
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final String filename) {
+  public BatchRendererTexture.Image loadImage(@Nonnull final String filename) {
     ImageData loader = createImageLoader(filename);
     try {
       ByteBuffer image = loader.loadImageDirect(resourceLoader.getResourceAsStream(filename));
@@ -206,38 +228,34 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
+  public BatchRendererTexture.Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
     return new ImageImpl(data, w, h);
   }
 
   @Override
-  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
-    ImageImpl imageImpl = (ImageImpl) image;
-    if (imageImpl.getWidth() == 0 ||
-        imageImpl.getHeight() == 0) {
-      return;
-    }
-    GL11.glTexSubImage2D(
-        GL11.GL_TEXTURE_2D,
-        0,
-        x,
-        y,
-        image.getWidth(),
-        image.getHeight(),
-        GL11.GL_RGBA,
-        GL11.GL_UNSIGNED_BYTE,
-        imageImpl.getBuffer());
-  }
+  public void beginBatch(@Nonnull final BatchRendererTexture texture, @Nonnull final BlendMode blendMode) {
+    List<Batch> batchList;
 
-  @Override
-  public void beginBatch(@Nonnull final BlendMode blendMode) {
-    batches.add(batchPool.allocate());
-    currentBatch = batches.get(batches.size() - 1);
-    currentBatch.begin(blendMode);
+    if (texture == atlasTexture) {
+      batchList = atlasBatches;
+    } else {
+      batchList = batches.get(texture);
+      if (batchList == null) {
+        batchList = new ArrayList<Batch>();
+        batches.put(texture, batchList);
+      }
+    }
+
+    Batch batch = batchPool.allocate();
+    batchList.add(batch);
+    batch.begin(blendMode);
+
+    currentBatches.put(texture, batch);
   }
 
   @Override
   public void addQuad(
+      @Nonnull final BatchRendererTexture texture,
       final float x,
       final float y,
       final float width,
@@ -250,8 +268,10 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
       final float textureY,
       final float textureWidth,
       final float textureHeight) {
+    Batch currentBatch = currentBatches.get(texture);
+
     if (!currentBatch.canAddQuad()) {
-      beginBatch(currentBatch.getBlendMode());
+      beginBatch(texture, currentBatch.getBlendMode());
     }
     currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY,
         textureWidth, textureHeight);
@@ -259,49 +279,31 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
 
   @Override
   public int render() {
-    bind();
+    glActiveTexture(GL_TEXTURE0);
     glEnable(GL11.GL_BLEND);
     glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(PRIMITIVE_RESTART_INDEX);
 
-    for (int i = 0; i < batches.size(); i++) {
-      Batch batch = batches.get(i);
+    int batchesCount = 0;
+
+    atlasTexture.bind();
+    for (Batch batch : atlasBatches) {
       batch.render();
+      batchesCount++;
+    }
+
+    for (Map.Entry<BatchRendererTexture, List<Batch>> entry: batches.entrySet()) {
+      entry.getKey().bind();
+      for (Batch batch : entry.getValue()) {
+        batch.render();
+        batchesCount++;
+      }
     }
 
     glDisable(GL_PRIMITIVE_RESTART);
     glDisable(GL11.GL_BLEND);
 
-    return batches.size();
-  }
-
-  @Override
-  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
-    // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
-    // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
-    if (!fillRemovedTexture) {
-      return;
-    }
-    ByteBuffer initialData = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
-    for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
-      initialData.put((byte) 0xff);
-      initialData.put((byte) 0x00);
-      initialData.put((byte) 0x00);
-      initialData.put((byte) 0xff);
-    }
-    initialData.rewind();
-
-    GL11.glTexSubImage2D(
-        GL11.GL_TEXTURE_2D,
-        0,
-        x,
-        y,
-        w,
-        h,
-        GL11.GL_RGBA,
-        GL11.GL_UNSIGNED_BYTE,
-        initialData);
-
+    return batchesCount;
   }
 
   private void getViewport() {
@@ -359,19 +361,36 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
     return new ImageIOImageData();
   }
 
-  private void bind() {
-    texture.bind();
-  }
-
   /**
    * Simple BatchRenderBackend.Image implementation that will transport the dimensions of an image as well as the
    * actual bytes from the loadImage() to the addImageToTexture() method.
    *
    * @author void
    */
-  private static class ImageImpl extends ByteBufferedImage implements BatchRenderBackend.Image {
+  public static class ImageImpl implements BatchRendererTexture.Image {
+    private final ByteBuffer buffer;
+    private final int width;
+    private final int height;
+
     private ImageImpl(ByteBuffer buffer, int width, int height) {
-      super(buffer, width, height);
+      this.buffer = buffer;
+      this.width = width;
+      this.height = height;
+    }
+
+    @Override
+    public int getWidth() {
+      return width;
+    }
+
+    @Override
+    public int getHeight() {
+      return height;
+    }
+
+    @Override
+    public ByteBuffer getData() {
+      return buffer;
     }
   }
 

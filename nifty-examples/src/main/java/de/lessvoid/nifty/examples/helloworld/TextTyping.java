@@ -73,7 +73,7 @@ public class TextTyping implements EffectImpl {
       // use normalizedStepTime to calculate the character size for the text size effect 
       float charSize = startSize + normalizedStepTime * (endSize - startSize);
 
-      r.saveState(null);
+      r.saveStates();
       r.setFont(textRenderer.getFont());
       r.setRenderTextSize(charSize);
 
@@ -93,7 +93,7 @@ public class TextTyping implements EffectImpl {
       }
 
       r.renderText(nextChar, element.getX() + textWidth, element.getY(), -1, -1, Color.WHITE);
-      r.restoreState();
+      r.restoreStates();
     }
 
     updateText(currentText);

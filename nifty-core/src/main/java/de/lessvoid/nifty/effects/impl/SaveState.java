@@ -31,7 +31,7 @@ public class SaveState implements EffectImpl {
       final float normalizedTime,
       @Nullable final Falloff falloff,
       @Nonnull final NiftyRenderEngine r) {
-    r.saveState(null);
+    r.saveStates();
   }
 
   @Override

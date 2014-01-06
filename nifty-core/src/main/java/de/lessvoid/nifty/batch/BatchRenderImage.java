@@ -1,8 +1,7 @@
 package de.lessvoid.nifty.batch;
 
 import de.lessvoid.nifty.batch.TextureAtlasGenerator.Result;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend.Image;
+import de.lessvoid.nifty.batch.spi.BatchRendererTexture;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
 import javax.annotation.Nonnull;
@@ -18,27 +17,24 @@ public class BatchRenderImage implements RenderImage {
   private static final Logger log = Logger.getLogger(BatchRenderImage.class.getName());
 
   @Nonnull
-  private final TextureAtlasGenerator generator;
+  private final BatchRendererTexture texture;
+
   @Nonnull
   private final String filename;
   @Nonnull
-  private final BatchRenderBackend renderBackend;
-  @Nonnull
-  private final Image image;
+  private final BatchRendererTexture.Image image;
 
   private int x;
   private int y;
   private boolean uploaded;
 
   public BatchRenderImage(
-      @Nonnull final Image image,
-      @Nonnull final TextureAtlasGenerator generator,
+      @Nonnull final BatchRendererTexture.Image image,
       @Nonnull final String filename,
-      @Nonnull final BatchRenderBackend renderBackend) {
+      @Nonnull final BatchRendererTexture texture) {
     this.image = image;
-    this.generator = generator;
     this.filename = filename;
-    this.renderBackend = renderBackend;
+    this.texture = texture;
 
     // the real x and y will be calculated in the upload() method
     this.x = 0;
@@ -68,32 +64,36 @@ public class BatchRenderImage implements RenderImage {
     return y;
   }
 
-  public void upload() {
+  public void tryUpload() throws TextureAtlasGeneratorException {
     if (uploaded) {
       return;
     }
+    Result result = texture.getGenerator().addImage(image.getWidth(), image.getHeight(), filename, 5);
+    texture.addImageToTexture(image, result.getX(), result.getY());
+    x = result.getX();
+    y = result.getY();
+    uploaded = true;
+    log.finer("image [" + filename + "] uploaded (texture atlas)");
+  }
+
+  public void upload() {
     try {
-      Result result = generator.addImage(image.getWidth(), image.getHeight(), filename, 5);
-      renderBackend.addImageToTexture(image, result.getX(), result.getY());
-      x = result.getX();
-      y = result.getY();
-      uploaded = true;
-      log.finer("image [" + filename + "] uploaded (texture atlas)");
+      tryUpload();
     } catch (TextureAtlasGeneratorException e) {
       log.severe("Image [" + filename + "] did not fit into the texture atlas and will be missing in your screen");
-   }
+    }
   }
 
   public void unload() {
     if (!uploaded) {
       return;
     }
-    Result result = generator.removeImage(filename);
+    Result result = texture.getGenerator().removeImage(filename);
     if (result == null) {
       log.severe("For some reason the image, while its uploaded, is not part of the texture generator.");
       return;
     }
-    renderBackend.removeFromTexture(image, result.getX(), result.getY(), result.getOriginalImageWidth(), result.getOriginalImageHeight());
+    texture.removeFromTexture(image, result.getX(), result.getY(), result.getOriginalImageWidth(), result.getOriginalImageHeight());
     uploaded = false;
     log.finer("image [" + filename + "] unloaded (texture atlas)");
   }

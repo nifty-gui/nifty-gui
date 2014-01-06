@@ -246,7 +246,7 @@ public class TextRenderer implements ElementRenderer {
     }
     boolean stateSaved = false;
     if (r.getFont() == null) {
-      r.saveState(null);
+      r.saveStates();
       r.setFont(font);
       stateSaved = true;
     }
@@ -255,7 +255,7 @@ public class TextRenderer implements ElementRenderer {
 
   private void restoreRenderEngine(@Nonnull final NiftyRenderEngine r, final boolean stateSaved) {
     if (stateSaved) {
-      r.restoreState();
+      r.restoreStates();
     }
   }
 

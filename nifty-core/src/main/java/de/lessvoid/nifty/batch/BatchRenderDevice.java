@@ -2,7 +2,7 @@ package de.lessvoid.nifty.batch;
 
 import de.lessvoid.nifty.batch.TextureAtlasGenerator.Result;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend.Image;
+import de.lessvoid.nifty.batch.spi.BatchRendererTexture;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
@@ -74,6 +74,8 @@ public class BatchRenderDevice implements RenderDevice {
   @Nonnull
   private final FontRenderer fontRenderer;
 
+  private final BatchRendererTexture atlasTexture;
+
   /**
    * The standard constructor. You'll use this in production code. Using this
    * constructor will configure the RenderDevice to not log FPS on System.out.
@@ -89,7 +91,7 @@ public class BatchRenderDevice implements RenderDevice {
     time = System.currentTimeMillis();
     frames = 0;
     generator = new TextureAtlasGenerator(atlasWidth, atlasHeight);
-    fontRenderer = new FontRenderer(this);
+    fontRenderer = new FontRenderer();
     factory = new JGLFontFactory(fontRenderer, new ResourceLoader() {
       @Override
       public InputStream load(String path) {
@@ -99,7 +101,8 @@ public class BatchRenderDevice implements RenderDevice {
         return resourceLoader.getResourceAsStream(path);
       }
     });
-    renderBackend.createAtlasTexture(atlasWidth, atlasHeight);
+
+    atlasTexture =renderBackend.createAtlasTexture(atlasWidth, atlasHeight);
   }
 
   public void enableLogFPS() {
@@ -118,12 +121,10 @@ public class BatchRenderDevice implements RenderDevice {
   @Override
   public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     this.resourceLoader = resourceLoader;
-
+    renderBackend.setResourceLoader(resourceLoader);
     if (this.displayFPS) {
       fpsFont = createFont("fps.fnt");
     }
-
-    renderBackend.setResourceLoader(resourceLoader);
   }
 
   /**
@@ -162,6 +163,8 @@ public class BatchRenderDevice implements RenderDevice {
     log.finest("beginFrame()");
     renderBackend.beginFrame();
 
+    fontRenderer.deactivateBatches();
+
     currentBlendMode = BlendMode.BLEND;
 
     currentClipping = false;
@@ -186,6 +189,7 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     int batches = renderBackend.render();
+    renderBackend.endFrame();
 
     frames++;
     long diff = System.currentTimeMillis() - time;
@@ -234,11 +238,11 @@ public class BatchRenderDevice implements RenderDevice {
   @Nullable
   @Override
   public RenderImage createImage(@Nonnull final String filename, final boolean filterLinear) {
-    Image image = renderBackend.loadImage(filename);
+    BatchRendererTexture.Image image = renderBackend.loadImage(filename);
     if (image == null) {
       return null;
     }
-    return new BatchRenderImage(image, generator, filename, renderBackend);
+    return new BatchRenderImage(image, filename, atlasTexture);
   }
 
   @Nonnull
@@ -261,8 +265,8 @@ public class BatchRenderDevice implements RenderDevice {
   public void renderQuad(final int x, final int y, final int width, final int height, @Nonnull final Color color) {
     log.finest("renderQuad()");
     BatchRenderImage plainImage = getPlainImage();
-    addQuad(x, y, width, height, color, color, color, color, plainImage.getX(), plainImage.getY(),
-        plainImage.getWidth(), plainImage.getHeight());
+    addQuad(atlasTexture, x, y, width, height, color, color, color, color, plainImage.getX(), plainImage.getY(),
+        plainImage.getWidth(), plainImage.getHeight(), atlasWidth, atlasHeight);
   }
 
   @Override
@@ -277,8 +281,8 @@ public class BatchRenderDevice implements RenderDevice {
       @Nonnull final Color bottomLeft) {
     log.finest("renderQuad2()");
     BatchRenderImage plainImage = getPlainImage();
-    addQuad(x, y, width, height, topLeft, topRight, bottomLeft, bottomRight, plainImage.getX(), plainImage.getY(),
-        plainImage.getWidth(), plainImage.getHeight());
+    addQuad(atlasTexture, x, y, width, height, topLeft, topRight, bottomLeft, bottomRight, plainImage.getX(), plainImage.getY(),
+        plainImage.getWidth(), plainImage.getHeight(), atlasWidth, atlasHeight);
   }
 
   @Override
@@ -311,7 +315,7 @@ public class BatchRenderDevice implements RenderDevice {
     int iy = Math.round(centerY - (height * scale) / 2.f);
     int iw = Math.round(width * scale);
     int ih = Math.round(height * scale);
-    addQuad(ix, iy, iw, ih, c, c, c, c, img.getX(), img.getY(), img.getWidth(), img.getHeight());
+    addQuad(atlasTexture, ix, iy, iw, ih, c, c, c, c, img.getX(), img.getY(), img.getWidth(), img.getHeight(), atlasWidth, atlasHeight);
   }
 
   @Override
@@ -349,7 +353,7 @@ public class BatchRenderDevice implements RenderDevice {
     if (!img.isUploaded()) {
       img.upload();
     }
-    addQuad(ix, iy, iw, ih, c, c, c, c, img.getX() + srcX, img.getY() + srcY, srcW, srcH);
+    addQuad(atlasTexture, ix, iy, iw, ih, c, c, c, c, img.getX() + srcX, img.getY() + srcY, srcW, srcH, atlasWidth, atlasHeight);
   }
 
   @Override
@@ -432,7 +436,7 @@ public class BatchRenderDevice implements RenderDevice {
       thePlainImage.unload();
     }
     generator.reset();
-    renderBackend.clearAtlasTexture(atlasWidth, atlasHeight);
+    atlasTexture.clear();
     fontRenderer.unload();
   }
 
@@ -453,10 +457,11 @@ public class BatchRenderDevice implements RenderDevice {
   }
 
   private void addNewBatch() {
-    renderBackend.beginBatch(currentBlendMode);
+    renderBackend.beginBatch(atlasTexture, currentBlendMode);
   }
 
   private void addQuad(
+      @Nonnull final BatchRendererTexture texture,
       final float x,
       final float y,
       final float width,
@@ -468,7 +473,9 @@ public class BatchRenderDevice implements RenderDevice {
       final int textureX,
       final int textureY,
       final int textureWidth,
-      final int textureHeight) {
+      final int textureHeight,
+      final int atlasImageW,
+      final int atlasImageH) {
     // if this quad is completely outside the clipping area we don't need to render it at all
     if (isOutsideClippingRectangle(x, y, width, height)) {
       completeClippedCounter++;
@@ -477,8 +484,8 @@ public class BatchRenderDevice implements RenderDevice {
 
     // if this quad is completely inside the clipping area we can simply render the quad
     if (isInsideClippingRectangle(x, y, width, height)) {
-      addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth,
-          textureHeight);
+      addQuadInternal(texture, x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth,
+          textureHeight, atlasImageW, atlasImageH);
       return;
     }
 
@@ -524,11 +531,12 @@ public class BatchRenderDevice implements RenderDevice {
       newTextureHeight = (int) (newHeight / height * textureHeight);
     }
 
-    addQuadInternal(newX, newY, newWidth, newHeight, color1, color2, color3, color4, newTextureX, newTextureY,
-        newTextureWidth, newTextureHeight);
+    addQuadInternal(texture, newX, newY, newWidth, newHeight, color1, color2, color3, color4, newTextureX, newTextureY,
+        newTextureWidth, newTextureHeight, atlasImageW, atlasImageH);
   }
 
   private void addQuadInternal(
+      BatchRendererTexture texture,
       final float x,
       final float y,
       final float width,
@@ -540,12 +548,15 @@ public class BatchRenderDevice implements RenderDevice {
       final int textureX,
       final int textureY,
       final int textureWidth,
-      final int textureHeight) {
+      final int textureHeight,
+      final int textureAtlasWidth,
+      final int textureAtlasHeight) {
     if (!activeBatch) {
-      renderBackend.beginBatch(currentBlendMode);
+      renderBackend.beginBatch(atlasTexture, currentBlendMode);
       activeBatch = true;
     }
     renderBackend.addQuad(
+        texture,
         x, y,
         width,
         height,
@@ -553,10 +564,10 @@ public class BatchRenderDevice implements RenderDevice {
         color2,
         color3,
         color4,
-        calcU(textureX, atlasWidth),
-        calcU(textureY, atlasHeight),
-        calcU(textureWidth - 1, atlasWidth),
-        calcU(textureHeight - 1, atlasHeight));
+        calcU(textureX, textureAtlasWidth),
+        calcU(textureY, textureAtlasHeight),
+        calcU(textureWidth - 1, textureAtlasWidth),
+        calcU(textureHeight - 1, textureAtlasHeight));
     quadCount++;
   }
 
@@ -594,49 +605,185 @@ public class BatchRenderDevice implements RenderDevice {
     return false;
   }
 
+  private class BitmapResizableTexture {
+    private BatchRendererTexture texture;
+    private boolean batchActive = false;
+    private int textureWidth;
+    private int textureHeight;
+    private ByteBuffer textureBufer;
+    private Map<String, BitmapInfo> bitmapInfos = new HashMap<String, BitmapInfo>();
+
+    private BitmapResizableTexture(BatchRendererTexture.Image image, String filename) {
+      int dim = 2;
+      while (dim < image.getWidth() || dim < image.getHeight()) {
+        dim <<= 1;
+      }
+      textureWidth = dim;
+      textureHeight = dim;
+      this.textureBufer = ByteBuffer.allocateDirect(textureWidth * textureHeight * 4);
+
+      image.getData().rewind();
+      byte[] exchange = new byte[image.getWidth() * 4];
+      for (int i = 0; i < image.getHeight(); i++) {
+        image.getData().get(exchange);
+        textureBufer.position(i * textureWidth * 4);
+        textureBufer.put(exchange);
+      }
+
+      blitRefit(image, filename);
+    }
+
+    public BitmapInfo getBitmapInfo(String filename) {
+      return bitmapInfos.get(filename);
+    }
+
+    public void blit(BatchRendererTexture.Image image, String filename) {
+      try {
+        Result result = texture.getGenerator().addImage(image.getWidth(), image.getHeight(), filename, 5);
+        image.getData().rewind();
+        textureBufer.rewind();
+        byte[] exchange = new byte[image.getWidth() * 4];
+        for (int i = 0; i < image.getHeight(); i++) {
+          image.getData().get(exchange);
+          textureBufer.position(((result.getY() + i) * textureWidth * 4) + (result.getX() * 4));
+          textureBufer.put(exchange);
+        }
+        image.getData().rewind();
+        texture.addImageToTexture(image, result.getX(), result.getY());
+        bitmapInfos.put(filename, new BitmapInfo(this, result.getX(), result.getY()));
+      } catch (TextureAtlasGeneratorException e) {
+        blitRefit(image, filename);
+      }
+    }
+
+    private void blitRefit(BatchRendererTexture.Image image, String filename) {
+      int newWidth  = textureWidth;
+      int newHeight = textureHeight;
+      ByteBuffer newBuffer = textureBufer;
+      if (texture != null) {
+        texture.dispose();
+        newWidth  <<= 1;
+        newHeight <<= 1;
+
+        newBuffer = ByteBuffer.allocateDirect(newWidth * newHeight * 4);
+        textureBufer.rewind();
+        byte[] exchange = new byte[textureWidth*4];
+        for (int i = 0; i < textureHeight; i++) {
+          textureBufer.get(exchange);
+          newBuffer.position(i * newWidth * 4);
+          newBuffer.put(exchange);
+        }
+      }
+
+      newBuffer.rewind();
+      texture = renderBackend.createFontTexture(newBuffer, newWidth, newHeight);
+
+      try {
+        texture.getGenerator().addImage(textureWidth, textureHeight, filename, 5);
+      } catch (TextureAtlasGeneratorException e1) {
+        texture.dispose();
+        bitmapInfos.clear();
+        log.severe("Could not resize atlas texture!");
+        return;
+      }
+
+      textureWidth = newWidth;
+      textureHeight = newHeight;
+      textureBufer = newBuffer;
+
+      blit(image, filename);
+    }
+
+    public int getTextureWidth() {
+      return textureWidth;
+    }
+
+    public int getTextureHeight() {
+      return textureHeight;
+    }
+
+    public BatchRendererTexture getTexture() {
+      return texture;
+    }
+
+    public void setTexture(BatchRendererTexture texture) {
+      this.texture = texture;
+    }
+
+    public boolean isBatchActive() {
+      return batchActive;
+    }
+
+    public void setBatchActive(boolean batchActive) {
+      this.batchActive = batchActive;
+    }
+  }
+
   private class FontRenderer implements JGLFontRenderer {
-    private final Map<String, BitmapInfo> textureInfos = new HashMap<String, BitmapInfo>();
     private final ColorValueParser colorValueParser = new ColorValueParser();
-    private final BatchRenderDevice batchRenderDevice;
     private final Color textColor = Color.BLACK;
     private boolean hasColor;
+    private final Map<String, BitmapResizableTexture> textures = new HashMap<String, BitmapResizableTexture>();
 
-    public FontRenderer(final BatchRenderDevice batchRenderDevice) {
-      this.batchRenderDevice = batchRenderDevice;
+
+    public FontRenderer() {
+    }
+
+    public void tryActivateBatch(String fontName) {
+      BitmapResizableTexture info = textures.get(fontName);
+      if (info != null) {
+        if (!info.isBatchActive()) {
+          renderBackend.beginBatch(info.getTexture(), currentBlendMode);
+          info.setBatchActive(true);
+        }
+      }
     }
 
     public void unload() {
-      for (BitmapInfo info : textureInfos.values()) {
-        info.unload();
+      for (BitmapResizableTexture info : textures.values()) {
+        info.getTexture().dispose();
       }
     }
 
     @Override
     public void registerBitmap(
+        @Nonnull final String fontName,
         @Nonnull final String bitmapId,
         final InputStream data,
         @Nonnull final String filename) throws IOException {
-      textureInfos.put(bitmapId, new BitmapInfo((BatchRenderImage) batchRenderDevice.createImage(filename, true)));
+      BatchRendererTexture.Image image = renderBackend.loadImage(filename);
+      if (image != null) {
+        BitmapResizableTexture info = textures.get(fontName);
+        if (info == null) {
+          textures.put(fontName, new BitmapResizableTexture(image, bitmapId));
+        } else {
+          info.blit(image, bitmapId);
+        }
+      }
     }
 
     @Override
     public void registerBitmap(
-            @Nonnull final String bitmapId,
-            @Nonnull final ByteBuffer data,
-            final int width,
-            final int height,
-            @Nonnull final String filename
-    ) throws IOException {
-      BatchRenderImage batchRenderImage = null;
-      Image image = renderBackend.loadImage(data, width, height);
+        @Nonnull final String fontName,
+        @Nonnull final String bitmapId,
+        @Nonnull final ByteBuffer data,
+        final int width,
+        final int height,
+        @Nonnull final String filename) throws IOException {
+      BatchRendererTexture.Image image = renderBackend.loadImage(data, width, height);
       if (image != null) {
-        batchRenderImage = new BatchRenderImage(image, generator, filename, renderBackend);
+        BitmapResizableTexture info = textures.get(fontName);
+        if (info == null) {
+          textures.put(fontName, new BitmapResizableTexture(image, bitmapId));
+        } else {
+          info.blit(image, bitmapId);
+        }
       }
-      textureInfos.put(bitmapId, new BitmapInfo(batchRenderImage));
     }
 
     @Override
     public void registerGlyph(
+        final String fontName,
         final String bitmapId,
         final int c,
         final int xoff,
@@ -647,8 +794,13 @@ public class BatchRenderDevice implements RenderDevice {
         final float v0,
         final float u1,
         final float v1) {
-      BitmapInfo textureInfo = textureInfos.get(bitmapId);
-      textureInfo.addCharRenderInfo(c, new CharRenderInfo(xoff, yoff, w, h, u0, v0));
+      BitmapResizableTexture fontTexture = textures.get(fontName);
+      if (fontTexture != null) {
+        BitmapInfo textureInfo = fontTexture.getBitmapInfo(bitmapId);
+        if (textureInfo != null) {
+          textureInfo.addCharRenderInfo(c, new CharRenderInfo(xoff, yoff, w, h, u0, v0));
+        }
+      }
     }
 
     @Override
@@ -656,11 +808,9 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     @Override
-    public void beforeRender() {
+    public void beforeRender(String fontName) {
       hasColor = false;
-      for (BitmapInfo info : textureInfos.values()) {
-        info.upload();
-      }
+      tryActivateBatch(fontName);
     }
 
     @Override
@@ -686,6 +836,7 @@ public class BatchRenderDevice implements RenderDevice {
 
     @Override
     public void render(
+        final String fontName,
         final String bitmapId,
         final int x,
         final int y,
@@ -702,11 +853,15 @@ public class BatchRenderDevice implements RenderDevice {
         textColor.setBlue(b);
       }
       textColor.setAlpha(a);
-      textureInfos.get(bitmapId).renderCharacter(c, x, y, sx, sy, textColor);
+      BitmapResizableTexture info = textures.get(fontName);
+      if (info != null) {
+        info.getBitmapInfo(bitmapId).renderCharacter(info.getTexture(), c, x, y, sx, sy, textColor);
+      }
     }
 
     @Override
-    public void afterRender() {
+    public void afterRender(String fontName) {
+
     }
 
     @Override
@@ -721,6 +876,12 @@ public class BatchRenderDevice implements RenderDevice {
         colorValueParser.isColor(text, index);
       }
       return index;
+    }
+
+    public void deactivateBatches() {
+      for (BitmapResizableTexture info : textures.values()) {
+        info.setBatchActive(false);
+      }
     }
   }
 
@@ -748,6 +909,7 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     public void renderQuad(
+        @Nonnull final BatchRendererTexture texture,
         final int x,
         final int y,
         final float sx,
@@ -759,6 +921,7 @@ public class BatchRenderDevice implements RenderDevice {
         final int atlasImageH) {
       glyphCount++;
       addQuad(
+          texture,
           x + (float) Math.floor(xoff * sx),
           y + (float) Math.floor(yoff * sy),
           (w * sx),
@@ -770,37 +933,28 @@ public class BatchRenderDevice implements RenderDevice {
           (int) (atlasX0 + u0 * atlasImageW),
           (int) (atlasY0 + v0 * atlasImageH),
           w,
-          h);
+          h,
+          atlasImageW,
+          atlasImageH);
     }
   }
 
   private static class BitmapInfo {
-    private final BatchRenderImage image;
     private final Map<Integer, CharRenderInfo> characterIndices = new HashMap<Integer, CharRenderInfo>();
-    private Result result;
+    private final BitmapResizableTexture resizableTexture;
+    private final int posX;
+    private final int posY;
 
-    public BitmapInfo(final BatchRenderImage image) {
-      this.image = image;
+    public BitmapInfo(BitmapResizableTexture texture, int x, int y) {
+      this.resizableTexture = texture;
+      this.posX = x;
+      this.posY = y;
     }
 
-    private void upload() {
-      if (image.isUploaded()) {
-        return;
-      }
-      image.upload();
-      result = new Result(image.getX(), image.getY(), image.getWidth(), image.getHeight());
-    }
-
-    private void unload() {
-      image.markAsUnloaded();
-    }
-
-    public void renderCharacter(int c, int x, int y, float sx, float sy, @Nonnull Color textColor) {
-      int atlasX0 = result.getX();
-      int atlasY0 = result.getY();
-      int atlasImageW = result.getOriginalImageWidth();
-      int atlasImageH = result.getOriginalImageHeight();
-      characterIndices.get(c).renderQuad(x, y, sx, sy, textColor, atlasX0, atlasY0, atlasImageW, atlasImageH);
+    public void renderCharacter(@Nonnull final BatchRendererTexture texture, int c, int x, int y, float sx, float sy, @Nonnull Color textColor) {
+      int atlasImageW = resizableTexture.getTextureWidth();
+      int atlasImageH = resizableTexture.getTextureHeight();
+      characterIndices.get(c).renderQuad(texture, x, y, sx, sy, textColor, posX, posY, atlasImageW, atlasImageH);
     }
 
     public void addCharRenderInfo(final Integer c, final CharRenderInfo renderInfo) {

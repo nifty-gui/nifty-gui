@@ -10,8 +10,6 @@ import java.util.List;
 public interface EffectProcessor {
   void registerEffect(@Nonnull Effect e);
 
-  void getRenderStatesToSave(@Nonnull NiftyRenderDeviceProxy renderDeviceProxy);
-
   void renderPre(@Nonnull NiftyRenderEngine renderDevice);
 
   void renderPost(@Nonnull NiftyRenderEngine renderDevice);

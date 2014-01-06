@@ -1,13 +1,14 @@
 package de.lessvoid.nifty.effects;
 
-import de.lessvoid.nifty.EndNotify;
-import de.lessvoid.nifty.render.NiftyRenderEngine;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import de.lessvoid.nifty.EndNotify;
+import de.lessvoid.nifty.render.NiftyRenderEngine;
 
 /**
  * An EffectProcessorImpl handles a single effect type. You can have multiple
@@ -46,24 +47,6 @@ public class EffectProcessorImpl implements EffectProcessor {
   @Override
   public void registerEffect(@Nonnull final Effect e) {
     allEffects.add(e);
-  }
-
-  @Override
-  public void getRenderStatesToSave(@Nonnull final NiftyRenderDeviceProxy renderDeviceProxy) {
-    if (isInactive()) {
-      return;
-    }
-
-    renderDeviceProxy.reset();
-
-    processingEffects = true;
-    for (int i = 0; i < activeEffects.getActive().size(); i++) {
-      Effect e = activeEffects.getActive().get(i);
-      if (e.isInherit() && (isActive(e))) {
-        e.execute(renderDeviceProxy);
-      }
-    }
-    checkPendingEffectsRemove();
   }
 
   @Override
