@@ -630,7 +630,7 @@ public class BatchRenderDevice implements RenderDevice {
         textureBufer.put(exchange);
       }
 
-      blitRefit(image, filename);
+      blitRefit(image, filename, true);
     }
 
     public BitmapInfo getBitmapInfo(String filename) {
@@ -640,23 +640,27 @@ public class BatchRenderDevice implements RenderDevice {
     public void blit(BatchRendererTexture.Image image, String filename) {
       try {
         Result result = texture.getGenerator().addImage(image.getWidth(), image.getHeight(), filename, 5);
-        image.getData().rewind();
-        textureBufer.rewind();
-        byte[] exchange = new byte[image.getWidth() * 4];
-        for (int i = 0; i < image.getHeight(); i++) {
-          image.getData().get(exchange);
-          textureBufer.position(((result.getY() + i) * textureWidth * 4) + (result.getX() * 4));
-          textureBufer.put(exchange);
-        }
-        image.getData().rewind();
-        texture.addImageToTexture(image, result.getX(), result.getY());
-        bitmapInfos.put(filename, new BitmapInfo(this, result.getX(), result.getY()));
+        blit(image, filename, result);
       } catch (TextureAtlasGeneratorException e) {
-        blitRefit(image, filename);
+        blitRefit(image, filename, false);
       }
     }
 
-    private void blitRefit(BatchRendererTexture.Image image, String filename) {
+    private void blit(BatchRendererTexture.Image image, String filename, Result result) {
+      image.getData().rewind();
+      textureBufer.rewind();
+      byte[] exchange = new byte[image.getWidth() * 4];
+      for (int i = 0; i < image.getHeight(); i++) {
+        image.getData().get(exchange);
+        textureBufer.position(((result.getY() + i) * textureWidth * 4) + (result.getX() * 4));
+        textureBufer.put(exchange);
+      }
+      image.getData().rewind();
+      texture.addImageToTexture(image, result.getX(), result.getY());
+      bitmapInfos.put(filename, new BitmapInfo(this, result.getX(), result.getY()));
+    }
+
+    private void blitRefit(BatchRendererTexture.Image image, String filename, boolean firstPlace) {
       int newWidth  = textureWidth;
       int newHeight = textureHeight;
       ByteBuffer newBuffer = textureBufer;
@@ -679,19 +683,21 @@ public class BatchRenderDevice implements RenderDevice {
       texture = renderBackend.createFontTexture(newBuffer, newWidth, newHeight);
 
       try {
-        texture.getGenerator().addImage(textureWidth, textureHeight, filename, 5);
+        Result result = texture.getGenerator().addImage(textureWidth, textureHeight, "texture-" + textureWidth + "-" + textureHeight, 5);
+        if (!firstPlace) {
+          result = texture.getGenerator().addImage(image.getWidth(), image.getHeight(), filename, 5);
+        }
+        textureWidth = newWidth;
+        textureHeight = newHeight;
+        textureBufer = newBuffer;
+
+        blit(image, filename, result);
       } catch (TextureAtlasGeneratorException e1) {
         texture.dispose();
         bitmapInfos.clear();
         log.severe("Could not resize atlas texture!");
         return;
       }
-
-      textureWidth = newWidth;
-      textureHeight = newHeight;
-      textureBufer = newBuffer;
-
-      blit(image, filename);
     }
 
     public int getTextureWidth() {
