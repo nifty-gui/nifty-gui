@@ -58,7 +58,17 @@ public class ScrollPanelControl extends AbstractController implements ScrollPane
     stepSizeY = parameter.getAsFloat("stepSizeY", 1.f);
     pageSizeX = parameter.getAsFloat("pageSizeX", 1.f);
     pageSizeY = parameter.getAsFloat("pageSizeY", 1.f);
-    autoScroll = parameter.getAsEnum("autoScroll", AutoScroll.class, AutoScroll.OFF);
+
+    autoScroll = AutoScroll.OFF;
+    String autoScrollParam = parameter.get("autoScroll");
+    if (autoScrollParam != null) {
+      for (AutoScroll value : AutoScroll.values()) {
+        if (autoScrollParam.equals(value.getParam())) {
+          autoScroll = value;
+          break;
+        }
+      }
+    }
   }
 
   @Override
