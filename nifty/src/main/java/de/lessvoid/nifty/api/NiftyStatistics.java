@@ -25,12 +25,19 @@ public class NiftyStatistics implements NiftyStatisticsMXBean {
     private final long renderTime;
     private final long updateTime;
     private final long syncTime;
+    private final long renderBatchCount;
 
-    public FrameInfo(final long frame, final long renderTime, final long updateTime, final long syncTime) {
+    public FrameInfo(
+        final long frame,
+        final long renderTime,
+        final long updateTime,
+        final long syncTime,
+        final long renderBatchCount) {
       this.frame = frame;
       this.renderTime = renderTime;
       this.updateTime = updateTime;
       this.syncTime = syncTime;
+      this.renderBatchCount = renderBatchCount;
     }
 
     public long getFrame() {
@@ -47,6 +54,10 @@ public class NiftyStatistics implements NiftyStatisticsMXBean {
 
     public long getSyncTime() {
       return syncTime;
+    }
+
+    public long getRenderBatchCount() {
+      return renderBatchCount;
     }
   }
 
@@ -80,7 +91,7 @@ public class NiftyStatistics implements NiftyStatisticsMXBean {
   public List<String> getStatistics() {
     List<String> stuff = new ArrayList<String>();
     FrameInfo[] frameInfos = getAllSamples();
-    stuff.add("     frame    update     render      synch\n");
+    stuff.add("     frame    update     render      synch   batchc.\n");
     StringBuilder line = new StringBuilder();
     for (FrameInfo frameInfo : frameInfos) {
       line.setLength(0);
@@ -88,7 +99,9 @@ public class NiftyStatistics implements NiftyStatisticsMXBean {
       line.append(formatValue(frameInfo.getUpdateTime()));
       line.append(formatValue(frameInfo.getRenderTime()));
       line.append(formatValue(frameInfo.getSyncTime()));
+      line.append(formatDirect(frameInfo.getRenderBatchCount()));
       line.append("\n");
+      System.out.println(line);
       stuff.add(line.toString());
     }
     return stuff;
@@ -103,5 +116,12 @@ public class NiftyStatistics implements NiftyStatisticsMXBean {
     format.setMinimumFractionDigits(4);
     format.setMaximumFractionDigits(4);
     return String.format("%10s", format.format(value / 100000.f));
+  }
+
+  private String formatDirect(final long value) {
+    if (value == -1) {
+      return "N/A";
+    }
+    return String.format("%10s", value);
   }
 }

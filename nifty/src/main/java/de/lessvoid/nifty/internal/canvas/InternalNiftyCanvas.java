@@ -47,9 +47,8 @@ public class InternalNiftyCanvas {
   }
 
   public List<Command> getCommands() {
-    ArrayList<Command> result = new ArrayList<Command>(commands);
     changed = false;
-    return result;
+    return new ArrayList<Command>(commands);
   }
 
   public void reset() {

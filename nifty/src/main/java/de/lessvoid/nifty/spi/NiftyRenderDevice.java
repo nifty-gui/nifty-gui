@@ -26,7 +26,7 @@ public interface NiftyRenderDevice {
   /**
    * Enable clearing the screen when rendering.
    */
-  void clearScreenOnRender(boolean clearScreenOnRender);
+  void clearScreenBeforeRender(boolean clearScreenBeforeRender);
 
   /**
    * Create a texture of the given width and height.
@@ -39,7 +39,7 @@ public interface NiftyRenderDevice {
   
   void render(NiftyTexture renderTarget, Mat4 mat);
 
-  void begin();
+  void begin(NiftyRenderStatistics stats);
   void end();
 
   void beginRenderToTexture(NiftyTexture texture);

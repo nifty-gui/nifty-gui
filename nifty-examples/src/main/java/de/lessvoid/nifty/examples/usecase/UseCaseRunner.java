@@ -36,7 +36,6 @@ public class UseCaseRunner {
       @Override
       public boolean render(final float deltaTime) {
         updateUseCase(nifty, useCase, deltaTime);
-        nifty.update();
         return nifty.render();
       }
 

@@ -42,20 +42,16 @@ public class Nifty {
   }
 
   /**
-   * Update.
+   * Render.
    */
-  public void update() {
+  public boolean render() {
+    stats.startFrame();
     stats.startUpdate();
     for (int i=0; i<rootNodes.size(); i++) {
       rootNodes.get(i).getImpl().updateContent();
     }
     stats.stopUpdate();
-  }
 
-  /**
-   * Render.
-   */
-  public boolean render() {
     stats.startRender();
     boolean frameChanged = renderer.render(rootNodes);
     stats.stopRender();
@@ -181,8 +177,8 @@ public class Nifty {
    * Call this to let Nifty clear the screen when it renders the GUI. This might be useful when the only thing you're
    * currently rendering is the GUI. If you render the GUI as an overlay you better not enable that :)
    */
-  public void clearScreenOnRender() {
-    renderDevice.clearScreenOnRender(true);
+  public void clearScreenBeforeRender() {
+    renderDevice.clearScreenBeforeRender(true);
   }
 
   // Friend methods

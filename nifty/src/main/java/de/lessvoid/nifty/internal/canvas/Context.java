@@ -23,7 +23,7 @@ public class Context {
   }
 
   public void setFillColor(final NiftyColor color) {
-    fillColor = color;
+    fillColor = new NiftyColor(color);
   }
 
   public NiftyColor getFillColor() {

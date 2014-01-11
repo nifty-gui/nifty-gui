@@ -211,6 +211,54 @@ public class NiftyNode {
   }
 
   /**
+   * Get rotation around the x-axis in degrees.
+   * @return angle rotation angle
+   */
+  public double getRotationX() {
+    return impl.getRotationX();
+  }
+
+  /**
+   * Set rotation around the y-axis in degrees.
+   * @return angle rotation angle
+   */
+  public double getRotationY() {
+    return impl.getRotationY();
+  }
+
+  /**
+   * Get rotation around the z-axis in degrees.
+   * @return angle rotation angle
+   */
+  public double getRotationZ() {
+    return impl.getRotationZ();
+  }
+
+  /**
+   * Get scale for x-axis.
+   * @return x scale
+   */
+  public double getScaleX() {
+    return impl.getScaleX();
+  }
+
+  /**
+   * Get scale for y-axis.
+   * @return y scale
+   */
+  public double getScaleY() {
+    return impl.getScaleY();
+  }
+
+  /**
+   * Get scale for z-axis.
+   * @return z scale
+   */
+  public double getScaleZ() {
+    return impl.getScaleZ();
+  }
+
+  /**
    * Set a NiftyCanvasPainter for the NiftyNode. This means you'd like to provide the content on your own. The
    * NiftyCanvasPainter is an interface you're supposed to implement. Nifty will call you back when it is time to
    * provide the content of this Node.

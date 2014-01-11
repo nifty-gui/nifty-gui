@@ -73,6 +73,10 @@ public class NiftyRenderer implements NiftyRendererMXBean {
       return false;
     }
 
+//    for (String s : getRenderTree()) {
+//      System.out.println(s);
+//    }
+
     render();
     return true;
   }
@@ -85,7 +89,7 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   }
 
   private void render() {
-    renderDevice.begin();
+    renderDevice.begin(stats);
     for (int i=0; i<renderNodes.size(); i++) {
       renderNodes.get(i).render(renderDevice, new Mat4());
     }

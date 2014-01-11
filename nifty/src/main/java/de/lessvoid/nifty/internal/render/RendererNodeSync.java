@@ -46,7 +46,7 @@ public class RendererNodeSync {
         changed = true;
         continue;
       }
-      boolean syncChanged = syncRenderNodeBufferChildNodes(src, dst);
+      boolean syncChanged = syncRenderNodeBufferChildNodes(src, dst) != 0;
       changed = changed || syncChanged;
     }
 
@@ -93,42 +93,66 @@ public class RendererNodeSync {
         Mat4.createTranslate(-pivotX, -pivotY, 0.0f));
   }
 
-  private boolean syncRenderNodeBufferChildNodes(final InternalNiftyNode src, final RenderNode dst) {
-    boolean thisNodeChanged = nodeChanged(src, dst);
-    if (thisNodeChanged) {
+  private final int NEEDS_RENDER = 0x01;
+  private final int NEEDS_CONTENT = 0x02;
+
+  private int syncRenderNodeBufferChildNodes(final InternalNiftyNode src, final RenderNode dst) {
+    boolean canvasChanged = canvasChanged(src, dst);
+    boolean needsRender = needsRender(src, dst);
+
+    boolean childCanvasChanged = false;
+    boolean childNeedsRender = false;
+    for (int i=0; i<src.getChildren().size(); i++) {
+      int currentChildChanged = syncRenderNodeBufferChild(src.getChildren().get(i), dst);
+      childCanvasChanged = childCanvasChanged || ((currentChildChanged & NEEDS_CONTENT) != 0);
+      childNeedsRender = childNeedsRender || ((currentChildChanged & NEEDS_RENDER) != 0);
+    }
+
+    int result = 0;
+    if (canvasChanged || childCanvasChanged) {
+      dst.needsContentUpdate(src.getCanvas().getCommands());
+      result |= NEEDS_CONTENT;
+    }
+
+    if (needsRender || childNeedsRender) {
       dst.setLocal(buildLocalTransformation(src));
       dst.setWidth(src.getWidth());
       dst.setHeight(src.getHeight());
-      dst.setCommands(src.getCanvas().getCommands());
-      dst.nodeChanged();
+      dst.needsRender();
       src.resetTransformationChanged();
+      result |= NEEDS_RENDER;
     }
 
-    boolean childChanged = false;
-    for (int i=0; i<src.getChildren().size(); i++) {
-      boolean currentChildChanged = syncRenderNodeBufferChild(src.getChildren().get(i), dst);
-      childChanged = childChanged || currentChildChanged;
-    }
-
-    if (thisNodeChanged || childChanged) {
-      dst.contentChanged();
-    }
-
-    return thisNodeChanged || childChanged;
+    return result;
   }
 
-  private boolean nodeChanged(final InternalNiftyNode src, final RenderNode dst) {
+  private boolean canvasChanged(final InternalNiftyNode src, final RenderNode dst) {
+    if (src.getCanvas().isChanged()) {
+      return true;
+    }
+
     boolean widthChanged = dst.getWidth() != src.getWidth();
     boolean heightChanged = dst.getHeight() != src.getHeight();
-    boolean canvasChanged = src.getCanvas().isChanged();
-    return (widthChanged || heightChanged || canvasChanged || src.isTransformationChanged());
+    if (widthChanged || heightChanged) {
+//      if (RedrawOnSizeChange) {
+//        return true;
+//      }
+    }
+    return false;
   }
 
-  private boolean syncRenderNodeBufferChild(final InternalNiftyNode src, final RenderNode dstParent) {
+  private boolean needsRender(final InternalNiftyNode src, final RenderNode dst) {
+    boolean widthChanged = dst.getWidth() != src.getWidth();
+    boolean heightChanged = dst.getHeight() != src.getHeight();
+    boolean transformationChanged = src.isTransformationChanged();
+    return (widthChanged || heightChanged || transformationChanged);
+  }
+
+  private int syncRenderNodeBufferChild(final InternalNiftyNode src, final RenderNode dstParent) {
     RenderNode dst = dstParent.findChildWithId(src.getId());
     if (dst == null) {
       dstParent.addChildNode(createRenderNode(src));
-      return true;
+      return NEEDS_RENDER | NEEDS_CONTENT;
     }
     return syncRenderNodeBufferChildNodes(src, dst);
   }

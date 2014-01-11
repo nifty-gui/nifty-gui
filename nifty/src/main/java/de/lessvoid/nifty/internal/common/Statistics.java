@@ -4,8 +4,9 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
+import de.lessvoid.nifty.spi.NiftyRenderStatistics;
 
-public class Statistics {
+public class Statistics implements NiftyRenderStatistics {
   private static final int TIME_HISTORY = 10;
 
   private int frameCounter = 0;
@@ -18,7 +19,15 @@ public class Statistics {
      */
     Synchronize,
     Update,
-    Render
+    Render,
+    RenderBatchCount
+  }
+
+  public void startFrame() {
+    for (Type type : Type.values()) {
+      times[type.ordinal()] = -1;
+    }
+    times[Type.RenderBatchCount.ordinal()] = 0;
   }
 
   /**
@@ -30,10 +39,8 @@ public class Statistics {
         frameCounter++,
         times[Type.Render.ordinal()],
         times[Type.Update.ordinal()],
-        times[Type.Synchronize.ordinal()]));
-    for (Type type : Type.values()) {
-      times[type.ordinal()] = -1;
-    }
+        times[Type.Synchronize.ordinal()],
+        times[Type.RenderBatchCount.ordinal()]));
   }
 
   /**
@@ -76,11 +83,20 @@ public class Statistics {
     stop(Type.Synchronize);
   }
 
+  @Override
+  public void incRenderBatchCount() {
+    inc(Type.RenderBatchCount);
+  }
+
   private void start(final Type type) {
     times[type.ordinal()] = System.nanoTime();
   }
 
   private void stop(final Type type) {
     times[type.ordinal()] = System.nanoTime() - times[type.ordinal()];
+  }
+
+  private void inc(final Type type) {
+    times[type.ordinal()]++;
   }
 }

@@ -3,11 +3,9 @@ package de.lessvoid.nifty.renderer.lwjgl;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glViewport;
 
 import java.nio.FloatBuffer;
-import java.util.logging.Logger;
-
-import org.lwjgl.BufferUtils;
 
 import de.lessvoid.coregl.CoreFBO;
 import de.lessvoid.coregl.CoreFactory;
@@ -15,12 +13,16 @@ import de.lessvoid.coregl.CoreShader;
 import de.lessvoid.coregl.CoreShaderManager;
 import de.lessvoid.coregl.CoreVAO;
 import de.lessvoid.coregl.CoreVAO.FloatType;
+import de.lessvoid.coregl.CoreVBO.DataType;
+import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
+import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderStatistics;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
@@ -32,14 +34,17 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   private final CoreShaderManager shaderManager = new CoreShaderManager();
 
   private CoreVAO vao;
-  private CoreVBO vbo;
+  private CoreVBO<FloatBuffer> vbo;
   private final CoreFBO fbo;
-  private final Mat4 mvp;
-  private Mat4 mat = new Mat4();
+  private Mat4 mvp;
+  private Vec4 vsrc = new Vec4();
+  private Vec4 vdst = new Vec4();
 
   private int textureQuadCount;
   private int colorQuadCount;
   private boolean clearScreenOnRender = false;
+  private NiftyRenderStatistics renderStatistics;
+  private NiftyTextureLwjgl lastTexture;
 
   private static final String TEXTURE_SHADER = "texture";
   private static final String PLAIN_COLOR_SHADER = "plain";
@@ -62,7 +67,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao = coreFactory.createVAO();
     vao.bind();
 
-    vbo = coreFactory.createVBOStream(new float[VBO_SIZE]);
+    vbo = coreFactory.createVBO(DataType.FLOAT, UsageType.STREAM_DRAW, VBO_SIZE);
     vbo.bind();
 
     vao.unbind();
@@ -79,21 +84,24 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void clearScreenOnRender(final boolean clearScreenOnRenderParam) {
+  public void clearScreenBeforeRender(final boolean clearScreenOnRenderParam) {
     clearScreenOnRender = clearScreenOnRenderParam;
   }
 
   @Override
-  public void begin() {
+  public void begin(final NiftyRenderStatistics renderStatisticsParam) {
+    renderStatistics = renderStatisticsParam;
+
     if (clearScreenOnRender) {
       glClearColor((float)Math.random(), (float)Math.random(), (float)Math.random(), 1.f);
       // glClearColor(0.f, 0.f, 0.f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    vbo.getFloatBuffer().clear();
+    vbo.getBuffer().clear();
     textureQuadCount = 0;
     colorQuadCount = 0;
+    lastTexture = null;
   }
 
   @Override
@@ -108,21 +116,28 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void render(final NiftyTexture renderTarget, final de.lessvoid.nifty.internal.math.Mat4 mat) {
-    Mat4 m = mat;
-    Mat4.mul(mvp, m, this.mat);
-    addTextureQuad(0, 0, renderTarget.getWidth(), renderTarget.getHeight(), 0);
+  public void render(final NiftyTexture renderTarget, final Mat4 mat) {
+    addTextureQuad(0, 0, renderTarget.getWidth(), renderTarget.getHeight(), 0, internal(renderTarget), mat);
   }
 
   @Override
   public void beginRenderToTexture(final NiftyTexture texture) {
+    flushTextureQuads();
+    flushColorQuads();
+
     fbo.bindFramebuffer();
     fbo.attachTexture(getTextureId(texture), 0);
+    glViewport(0, 0, texture.getWidth(), texture.getHeight());
+    mvp = MatrixFactory.createOrtho(0, texture.getWidth(), texture.getHeight(), 0);
   }
 
   @Override
   public void endRenderToTexture(final NiftyTexture texture) {
-    fbo.disable();
+    flushTextureQuads();
+    flushColorQuads();
+
+    fbo.disableAndResetViewport();
+    mvp = MatrixFactory.createOrtho(0, getDisplayWidth(), getDisplayHeight(), 0);
   }
 
   @Override
@@ -131,26 +146,65 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   private void addTextureQuad(
-      final float x,
-      final float y,
-      final float width,
-      final float height,
-      final int texIdx) {
+      final float xs,
+      final float ys,
+      final float ws,
+      final float hs,
+      final int texIdx,
+      final NiftyTextureLwjgl texture,
+      final Mat4 matrix) {
     if (colorQuadCount > 0) {
       flushColorQuads();
     }
 
-    FloatBuffer b = vbo.getFloatBuffer();
+    if (lastTexture == null) {
+      lastTexture = texture;
+    }
+
+    if (texture != lastTexture) {
+      flushTextureQuads();
+      lastTexture = texture;
+    }
+
+    FloatBuffer b = vbo.getBuffer();
+
+    vsrc.x = xs;
+    vsrc.y = ys;
+    vsrc.z = 0.0f;
+    Mat4.transform(matrix, vsrc, vdst);
+    float ax = vdst.x;
+    float ay = vdst.y;
+
+    vsrc.x = xs + ws;
+    vsrc.y = ys;
+    vsrc.z = 0.0f;
+    Mat4.transform(matrix, vsrc, vdst);
+    float bx = vdst.x;
+    float by = vdst.y;
+
+    vsrc.x = xs;
+    vsrc.y = ys + hs;
+    vsrc.z = 0.0f;
+    Mat4.transform(matrix, vsrc, vdst);
+    float cx = vdst.x;
+    float cy = vdst.y;
+
+    vsrc.x = xs + ws;
+    vsrc.y = ys + hs;
+    vsrc.z = 0.0f;
+    Mat4.transform(matrix, vsrc, vdst);
+    float dx = vdst.x;
+    float dy = vdst.y;
 
     // first
-    b.put(x);         b.put(y);          b.put(0.0f);    b.put(0.0f);    b.put(texIdx);
-    b.put(x);         b.put(y + height); b.put(0.0f);    b.put(1.0f);    b.put(texIdx);
-    b.put(x + width); b.put(y);          b.put(1.0f);    b.put(0.0f);    b.put(texIdx);
+    b.put(ax); b.put(ay); b.put(0.0f); b.put(0.0f);
+    b.put(cx); b.put(cy); b.put(0.0f); b.put(1.0f);
+    b.put(bx); b.put(by); b.put(1.0f); b.put(0.0f);
 
     // second
-    b.put(x);         b.put(y + height); b.put(0.0f);    b.put(1.0f);    b.put(texIdx);
-    b.put(x + width); b.put(y);          b.put(1.0f);    b.put(0.0f);    b.put(texIdx);
-    b.put(x + width); b.put(y + height); b.put(1.0f);    b.put(1.0f);    b.put(texIdx);
+    b.put(cx); b.put(cy); b.put(0.0f); b.put(1.0f);
+    b.put(bx); b.put(by); b.put(1.0f); b.put(0.0f);
+    b.put(dx); b.put(dy); b.put(1.0f); b.put(1.0f);
 
     textureQuadCount++;
   }
@@ -168,7 +222,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
       flushTextureQuads();
     }
 
-    FloatBuffer b = vbo.getFloatBuffer();
+    FloatBuffer b = vbo.getBuffer();
 
     // first
     b.put(x0); b.put(y0); b.put((float) c1.getRed()); b.put((float) c1.getGreen()); b.put((float) c1.getBlue()); b.put((float) c1.getAlpha());
@@ -189,23 +243,25 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     }
 
     CoreShader shader = shaderManager.activate(TEXTURE_SHADER);
-    shader.setUniformMatrix4f("uMvp", mat.toBuffer());
-    shader.setUniformf("uOffset", 0, 0, 0.f);
+    shader.setUniformMatrix4f("uMvp", mvp.toBuffer());
 
     vao.bind();
     vbo.bind();
-    vbo.getFloatBuffer().flip();
+    vbo.getBuffer().rewind();
     vbo.send();
 
     vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 5, 0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 4, 0);
     vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 3, FloatType.FLOAT, 5, 2);
+    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
 
+    lastTexture.bind();
     coreFactory.getCoreRender().renderTriangles(6*textureQuadCount);
     vao.unbind();
-    vbo.getFloatBuffer().clear();
+    vbo.getBuffer().clear();
     textureQuadCount = 0;
+
+    renderStatistics.incRenderBatchCount();
   }
 
   private void flushColorQuads() {
@@ -214,23 +270,24 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     }
 
     CoreShader shader = shaderManager.activate(PLAIN_COLOR_SHADER);
-    shader.setUniformMatrix4f("uMvp", mat.toBuffer());
-    shader.setUniformf("uOffset", 0, 0, 0.f);
+    shader.setUniformMatrix4f("uMvp", mvp.toBuffer());
 
     vao.bind();
     vbo.bind();
-    vbo.getFloatBuffer().flip();
+    vbo.getBuffer().rewind();
     vbo.send();
 
     vao.enableVertexAttribute(0);
     vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 6, 0);
     vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 3, FloatType.FLOAT, 6, 2);
+    vao.vertexAttribPointer(1, 4, FloatType.FLOAT, 6, 2);
 
     coreFactory.getCoreRender().renderTriangles(6*colorQuadCount);
     vao.unbind();
-    vbo.getFloatBuffer().clear();
+    vbo.getBuffer().clear();
     colorQuadCount = 0;
+
+    renderStatistics.incRenderBatchCount();
   }
 
   private int getTextureId(final NiftyTexture texture) {

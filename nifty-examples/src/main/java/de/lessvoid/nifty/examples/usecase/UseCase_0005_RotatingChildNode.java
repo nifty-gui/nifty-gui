@@ -18,6 +18,8 @@ public class UseCase_0005_RotatingChildNode implements UseCaseUpdateable {
   private float totalTime = 0;
 
   public UseCase_0005_RotatingChildNode(final Nifty nifty) {
+    nifty.clearScreenBeforeRender();
+
     niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.GREEN());
     niftyNode.setPivot(0.5, 0.5);

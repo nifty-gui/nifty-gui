@@ -15,14 +15,14 @@ class RenderNodeStateLogger {
       final RenderNode renderNode,
       final AABB aabb,
       final List<Command> commands,
-      final boolean changed,
-      final boolean rerender,
+      final boolean needsContentChange,
+      final boolean needsRender,
       final StringBuilder result,
       final String offset) {
     result.append(offset).append("- ").append("[").append(renderNode.getNodeId()).append("]\n");
     outputDimension(renderNode.getWidth(), renderNode.getHeight(), attributesOffset(result, offset));
-    outputChanged(changed, result);
-    outputRender(rerender, result);
+    outputChanged(needsContentChange, result);
+    outputRender(needsRender, result);
     result.append("\n");
     outputLocal(renderNode.getLocal(), result, offset);
     aabb.output(result, offset);
@@ -53,10 +53,10 @@ class RenderNodeStateLogger {
   }
 
   private static void outputChanged(final boolean changed, final StringBuilder result) {
-    result.append(" changed [").append(changed).append("]");
+    result.append(" content [").append(changed).append("]");
   }
 
   private static void outputRender(final boolean rerender, final StringBuilder result) {
-    result.append(" rerender [").append(rerender).append("]");
+    result.append(" render [").append(rerender).append("]");
   }
 }

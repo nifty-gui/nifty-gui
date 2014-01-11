@@ -52,7 +52,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   private boolean needsLayout = true;
 
   // Does this node needs to be redrawn? This will be set to false once the Node content has been drawn.
-  private boolean needsRedraw = true;
+  private boolean requestRedraw = true;
 
   // The pseudo ChildLayout if this node is a root node. This field is only used when this node is a root node.
   private final ChildLayout rootNodePseudoParentLayout;
@@ -82,8 +82,8 @@ public class InternalNiftyNode implements InternalLayoutable {
   private NiftyNode niftyNode;
 
   private boolean transformationChanged = true;
-  private double pivotX = 0.0;
-  private double pivotY = 0.0;
+  private double pivotX = 0.5;
+  private double pivotY = 0.5;
   private double angleX = 0.0;
   private double angleY = 0.0;
   private double angleZ = 0.0;
@@ -198,7 +198,7 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public void setBackgroundColor(final NiftyColor color) {
     backgroundColor  = color;
-    needsRedraw = true;
+    requestRedraw = true;
   }
 
   public double getScaleX() {
@@ -275,7 +275,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void requestRedraw() {
-    needsRedraw = true;
+    requestRedraw = true;
   }
 
   public void getStateInfo(final StringBuilder result) {
@@ -344,12 +344,12 @@ public class InternalNiftyNode implements InternalLayoutable {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   public void updateContent() {
-    if (needsRedraw) {
+    if (requestRedraw) {
       InternalNiftyCanvas internalCanvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
       internalCanvas.reset();
 
       canvasPainter.paint(niftyNode, canvas);
-      needsRedraw = false;
+      requestRedraw = false;
     }
 
     for (int i=0; i<children.size(); i++) {

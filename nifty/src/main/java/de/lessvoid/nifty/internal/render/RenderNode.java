@@ -16,8 +16,8 @@ public class RenderNode {
   private final Mat4 local;
   private int width;
   private int height;
-  private boolean nodeChanged = true;
-  private boolean contentChanged = true;
+  private boolean needsRender = true;
+  private boolean needsContentUpdate = true;
   private final Context context;
 
   public RenderNode(
@@ -37,22 +37,23 @@ public class RenderNode {
   }
 
   public void render(final NiftyRenderDevice renderDevice, final Mat4 parent) {
-    if (contentChanged) {
+    if (needsContentUpdate) {
       context.prepare(renderDevice);
       for (int i=0; i<commands.size(); i++) {
         Command command = commands.get(i);
         command.execute(renderDevice, context);
       }
       context.flush(renderDevice);
-      contentChanged = false;
+      needsContentUpdate = false;
     }
+
     Mat4 current = Mat4.mul(parent, local);
     renderDevice.render(context.getNiftyTexture(), current);
 
     for (int i=0; i<children.size(); i++) {
       children.get(i).render(renderDevice, current);
     }
-    nodeChanged = false;
+    needsRender = false;
   }
 
   public void addChildNode(final RenderNode childNode) {
@@ -87,11 +88,6 @@ public class RenderNode {
     this.height = height;
   }
 
-  public void setCommands(final List<Command> commands) {
-    this.commands.clear();
-    this.commands.addAll(commands);
-  }
-
   public RenderNode findChildWithId(final int id) {
     for (int i=0; i<children.size(); i++) {
       RenderNode node = children.get(i);
@@ -102,16 +98,20 @@ public class RenderNode {
     return null;
   }
 
-  public void nodeChanged() {
-    nodeChanged = true;
+  public void needsRender() {
+    needsRender = true;
   }
 
-  public void contentChanged() {
-    contentChanged = true;
+  public void needsContentUpdate(final List<Command> list) {
+    commands.clear();
+    commands.addAll(list);
+
+    needsContentUpdate = true;
+    needsRender = true;
   }
 
   public void outputStateInfo(final StringBuilder result, final String offset) {
-    RenderNodeStateLogger.stateInfo(this, new AABB(width, height), commands, nodeChanged, contentChanged, result, offset);
+    RenderNodeStateLogger.stateInfo(this, new AABB(width, height), commands, needsContentUpdate, needsRender, result, offset);
     for (int i=0; i<children.size(); i++) {
       children.get(i).outputStateInfo(result, offset + "  ");
     }
