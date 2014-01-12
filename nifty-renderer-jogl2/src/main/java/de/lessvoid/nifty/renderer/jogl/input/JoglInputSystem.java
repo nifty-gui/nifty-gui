@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.renderer.jogl.input;
 
 import com.jogamp.newt.event.*;
+import com.jogamp.newt.Window;
 
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
@@ -9,7 +10,6 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 import javax.annotation.Nonnull;
 
-import java.awt.Window;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
