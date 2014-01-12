@@ -1,12 +1,15 @@
 package de.lessvoid.nifty.renderer.jogl.input;
 
 import com.jogamp.newt.event.*;
+
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 import javax.annotation.Nonnull;
+
+import java.awt.Window;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
@@ -16,13 +19,16 @@ import java.util.logging.Logger;
  * @author void
  */
 public class JoglInputSystem implements InputSystem, MouseListener, KeyListener {
+	
   private final Logger log = Logger.getLogger(JoglInputSystem.class.getName());
+  
   @Nonnull
   private final AwtToNiftyKeyCodeConverter converter = new AwtToNiftyKeyCodeConverter();
 
   // queues to store events received from JOGL in
   @Nonnull
   private final ConcurrentLinkedQueue<MouseInputEvent> mouseEvents = new ConcurrentLinkedQueue<MouseInputEvent>();
+  
   @Nonnull
   private final ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEvents = new
       ConcurrentLinkedQueue<KeyboardInputEvent>();
@@ -30,9 +36,16 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
   // queues to store events not processed by Nifty in
   @Nonnull
   private final ConcurrentLinkedQueue<MouseInputEvent> mouseEventsOut = new ConcurrentLinkedQueue<MouseInputEvent>();
+  
   @Nonnull
   private final ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEventsOut = new
       ConcurrentLinkedQueue<KeyboardInputEvent>();
+      
+  public JoglInputSystem(@Nonnull final Window newtWindow) {
+	  this.niftyNewtWindow = newtWindow;
+  }
+  
+  private Window niftyNewtWindow;
 
   // some booleans to remember if nifty currently has the focus
   private boolean niftyHasKeyboardFocus = true;
@@ -65,7 +78,8 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
 
   @Override
   public void setMousePosition(final int x, final int y) {
-    // TODO implement this method later
+    int windowX = niftyNewtWindow.getX(), windowY = niftyNewtWindow.getY();
+    niftyNewtWindow.warpPointer(x - windowX, y - windowY);
   }
 
   // MouseMotionListener Implementation
