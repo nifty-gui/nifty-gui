@@ -119,7 +119,7 @@ public class JOGLNiftyRunner implements GLEventListener {
     } else {
       renderDevice = new JoglRenderDevice();
     }
-    JoglInputSystem inputSystem = new JoglInputSystem();
+    JoglInputSystem inputSystem = new JoglInputSystem(window);
     window.addMouseListener(inputSystem);
     window.addKeyListener(inputSystem);
 
