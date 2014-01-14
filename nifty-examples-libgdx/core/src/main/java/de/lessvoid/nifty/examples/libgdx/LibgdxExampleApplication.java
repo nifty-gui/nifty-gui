@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.NiftyExample;
@@ -16,9 +17,9 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import java.util.logging.LogManager;
 
 /**
+ * {@inheritDoc}
+ * <p/>
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
- *         <p/>
- *         {@inheritDoc}
  */
 public class LibgdxExampleApplication implements ApplicationListener {
   private Nifty nifty;

@@ -29,6 +29,11 @@
             <artifactId>codecwav</artifactId>
             <version>0.0.1</version>
         </dependency>
+        <dependency>
+          <groupId>com.paulscode.soundsystem</groupId>
+          <artifactId>libraryjavasound</artifactId>
+          <version>0.0.1</version>
+        </dependency>
     </dependencies>
     <reporting>
         <plugins>

@@ -53,7 +53,7 @@ public class ControlsDemo<T> implements NiftyExample {
   private final static boolean useBatchedRenderer = true;
 
   // this will enable the CoreProfile renderer (please note that currently this required useBatchedRenderer set to true) 
-  private final static boolean useCoreProfile = true;
+  private final static boolean useCoreProfile = false;
 
   public ControlsDemo(final ResolutionControl<T> resControl) {
     resolutionControl = resControl;
