@@ -2,25 +2,28 @@ package de.lessvoid.nifty.examples.jogl;
 
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.FPSAnimator;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.LoggerShortFormat;
+import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
 import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
 import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackend;
 import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackendCoreProfile;
-import de.lessvoid.nifty.sound.SoundSystem;
+import de.lessvoid.nifty.sound.paulssoundsystem.PaulsSoundsystemSoundDevice;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
-import de.lessvoid.nifty.spi.sound.SoundHandle;
 import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import paulscode.sound.SoundSystemException;
+import paulscode.sound.libraries.LibraryJavaSound;
+
+import java.io.InputStream;
+import java.util.logging.LogManager;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.media.opengl.*;
-import java.io.InputStream;
-import java.util.logging.LogManager;
 
 /**
  * Takes care of JOGL initialization.
@@ -35,7 +38,7 @@ public class JOGLNiftyRunner implements GLEventListener {
   private static long frames = 0;
   private static GLWindow window;
   @Nonnull
-  private static Mode mode = Mode.Old;
+  private static Mode mode = Mode.Batch;
 
   @Nullable
   private Nifty nifty;
@@ -123,31 +126,14 @@ public class JOGLNiftyRunner implements GLEventListener {
     window.addMouseListener(inputSystem);
     window.addKeyListener(inputSystem);
 
-    SoundDevice device = new SoundDevice() {
-      @Override
-      public void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader) {
-      }
+    SoundDevice soundDevice;
+    try {
+      soundDevice = new PaulsSoundsystemSoundDevice(LibraryJavaSound.class);
+    } catch (SoundSystemException e) {
+      soundDevice = new NullSoundDevice();
+    }
 
-      @Nullable
-      @Override
-      public SoundHandle loadSound(
-          @Nonnull SoundSystem soundSystem, @Nonnull String filename) {
-        return null;
-      }
-
-      @Nullable
-      @Override
-      public SoundHandle loadMusic(
-          @Nonnull SoundSystem soundSystem, @Nonnull String filename) {
-        return null;
-      }
-
-      @Override
-      public void update(int delta) {
-
-      }
-    };
-    nifty = new Nifty(renderDevice, device, inputSystem, new TimeProvider());
+    nifty = new Nifty(renderDevice, soundDevice, inputSystem, new TimeProvider());
     callback.init(nifty, window);
   }
 

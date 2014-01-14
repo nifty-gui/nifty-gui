@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.examples.libgdx.tutorial;
+package de.lessvoid.nifty.examples.tutorial;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.NiftyExample;
@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public class TutorialExample implements NiftyExample {
+public class TutorialExampleMain implements NiftyExample {
   @Nonnull
   @Override
   public String getStartScreen() {

@@ -144,8 +144,7 @@ public class JoglInputSystem implements InputSystem, MouseListener, KeyListener 
 
   @Override
   public void mouseWheelMoved(@Nonnull final MouseEvent mouseEvent) {
-    // void: I have no idea if this would be the correct way to translate mouse wheel events
-    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), (int) mouseEvent.getRotation()[0], -1,
+    mouseEvents.add(new MouseInputEvent(mouseEvent.getX(), mouseEvent.getY(), (int) mouseEvent.getRotation()[1], -1,
         false));
   }
 

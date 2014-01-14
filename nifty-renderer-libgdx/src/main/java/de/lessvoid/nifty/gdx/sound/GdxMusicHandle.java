@@ -2,6 +2,7 @@ package de.lessvoid.nifty.gdx.sound;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+
 import de.lessvoid.nifty.sound.SoundSystem;
 import de.lessvoid.nifty.spi.sound.SoundHandle;
 

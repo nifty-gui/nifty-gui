@@ -4,20 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.utils.Array;
+
 import de.lessvoid.nifty.examples.libgdx.resolution.GdxResolutionControl.Resolution;
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  *
- * Based on {@link de.lessvoid.nifty.examples.jogl.ResolutionControlJOGL} and
- * {@link de.lessvoid.nifty.examples.slick2d.resolution.ResolutionControlSlick}
+ * Based on ResolutionControlJOGL & ResolutionControlSlick
  */
 public class GdxResolutionControl implements ResolutionControl<Resolution> {
   private Array<Resolution> resolutions;
