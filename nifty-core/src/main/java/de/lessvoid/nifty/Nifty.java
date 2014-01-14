@@ -1129,7 +1129,7 @@ public class Nifty {
     }
 
     if (closedPopups.contains(id)) {
-      log.warning("popup [" + id + "] already scheduled to be closed. Additional close call ignored.");
+      log.fine("popup [" + id + "] already scheduled to be closed. Additional close call ignored.");
       return;
     }
     closedPopups.add(id);
