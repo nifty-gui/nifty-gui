@@ -29,7 +29,7 @@ public abstract class AbstractMouseEventButton extends AbstractMouseEvent {
    *
    * @return the button ID
    */
-  protected final int getButton() {
+  public final int getButton() {
     return button;
   }
 }

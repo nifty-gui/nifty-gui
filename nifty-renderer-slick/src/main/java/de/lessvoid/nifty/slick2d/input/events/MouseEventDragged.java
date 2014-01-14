@@ -53,4 +53,22 @@ public final class MouseEventDragged extends AbstractMouseEventButton {
     return true;
   }
 
+  /**
+   * Get the X coordinate where the movement stopped.
+   *
+   * @return the final mouse X coordinate
+   */
+  public final int getTargetX() {
+    return targetX;
+  }
+
+  /**
+   * Get the Y coordinate where the movement stopped.
+   *
+   * @return the final mouse Y coordinate
+   */
+  public final int getTargetY() {
+    return targetY;
+  }
+
 }

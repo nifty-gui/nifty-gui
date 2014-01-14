@@ -45,7 +45,7 @@ public abstract class AbstractMouseEvent implements InputEvent {
    *
    * @return the x coordinate of the event location
    */
-  protected final int getX() {
+  public final int getX() {
     return locX;
   }
 
@@ -54,7 +54,7 @@ public abstract class AbstractMouseEvent implements InputEvent {
    *
    * @return the y coordinate of the event location
    */
-  protected final int getY() {
+  public final int getY() {
     return locY;
   }
 
