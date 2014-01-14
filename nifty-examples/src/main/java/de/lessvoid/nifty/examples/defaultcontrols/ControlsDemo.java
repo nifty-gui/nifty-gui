@@ -68,7 +68,7 @@ public class ControlsDemo<T> implements NiftyExample {
     // create Nifty and load default styles and controls
     Nifty nifty;
     if (useBatchedRenderer) {
-      BatchRenderDevice renderDevice = new BatchRenderDevice(createBatchRenderBackend(useCoreProfile), 2048, 2048);
+      BatchRenderDevice renderDevice = new BatchRenderDevice(createBatchRenderBackend(useCoreProfile));
       renderDevice.enableLogFPS();
 
       nifty = new Nifty(

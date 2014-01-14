@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.batch.BatchRenderConfiguration;
 import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.gdx.input.GdxInputSystem;
@@ -24,10 +25,10 @@ import java.util.logging.LogManager;
 public class LibgdxExampleApplication implements ApplicationListener {
   private Nifty nifty;
   private final NiftyExample niftyExample;
-  private final int atlasWidth;
-  private final int atlasHeight;
   private AssetManager assetManager;
   private GdxKeyRepeatSystem keyRepeat;
+  private final int atlasWidth;
+  private final int atlasHeight;
 
   public LibgdxExampleApplication(final NiftyExample niftyExample, final int atlasWidth, final int atlasHeight) {
     this.niftyExample = niftyExample;
@@ -44,7 +45,14 @@ public class LibgdxExampleApplication implements ApplicationListener {
 
     assetManager = new AssetManager();
 
-    BatchRenderDevice batchRenderDevice = new BatchRenderDevice(new GdxBatchRenderBackend(), atlasWidth, atlasHeight);
+    BatchRenderConfiguration config = new BatchRenderConfiguration();
+    config.disposeImagesBetweenScreens = false;
+    config.useHighQualityTextures = false;
+    config.fillRemovedImagesInAtlas = true;
+    config.atlasWidth = atlasWidth;
+    config.atlasHeight = atlasHeight;
+
+    BatchRenderDevice batchRenderDevice = new BatchRenderDevice(new GdxBatchRenderBackend(), config);
     batchRenderDevice.enableLogFPS();
 
     GdxInputSystem gdxInputSystem = new GdxInputSystem(Gdx.input);

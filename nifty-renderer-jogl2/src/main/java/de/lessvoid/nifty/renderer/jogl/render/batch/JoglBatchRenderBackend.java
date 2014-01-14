@@ -1,565 +1,318 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
 import com.jogamp.common.nio.Buffers;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
-import de.lessvoid.nifty.render.BlendMode;
-import de.lessvoid.nifty.renderer.jogl.render.JoglMouseCursor;
-import de.lessvoid.nifty.renderer.jogl.render.io.ImageData;
-import de.lessvoid.nifty.renderer.jogl.render.io.ImageIOImageData;
-import de.lessvoid.nifty.renderer.jogl.render.io.TGAImageData;
-import de.lessvoid.nifty.spi.render.MouseCursor;
-import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.Factory;
-import de.lessvoid.nifty.tools.ObjectPool;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
+import de.lessvoid.nifty.batch.OpenGLBatchRenderBackend;
+import de.lessvoid.nifty.renderer.jogl.render.JoglImage;
+import de.lessvoid.nifty.renderer.jogl.render.JoglMouseCursor;
+import de.lessvoid.nifty.spi.render.MouseCursor;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLContext;
-import javax.media.opengl.glu.GLU;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * Jogl BatchRenderBackend Implementation.
+ * This {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementation includes full support for multiple
+ * texture atlases and non-atlas textures.
  *
+ * Jogl implementation of the {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} interface. This implementation
+ * will be the most backwards-compatible because it doesn't use any functions beyond OpenGL 1.1. It is suitable for
+ * desktop devices.
+ *
+ * {@inheritDoc}
+ *
+ * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  * @author void
  */
-public class JoglBatchRenderBackend implements BatchRenderBackend {
-  private static final Logger log = Logger.getLogger(JoglBatchRenderBackend.class.getName());
-  private static final IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4 * 4);
-  private NiftyResourceLoader resourceLoader;
-  private int viewportWidth = -1;
-  private int viewportHeight = -1;
-  private int textureId;
+public class JoglBatchRenderBackend extends OpenGLBatchRenderBackend<JoglBatch> {
   @Nonnull
-  private final ObjectPool<Batch> batchPool;
-  private Batch currentBatch;
-  private final List<Batch> batches = new ArrayList<Batch>();
-  private ByteBuffer initialData;
-  private final boolean fillRemovedTexture =
-      Boolean.parseBoolean(System.getProperty(JoglBatchRenderBackend.class.getName() + ".fillRemovedTexture", "false"));
-  private final GLU glu;
+  private static final Logger log = Logger.getLogger(JoglBatchRenderBackend.class.getName());
+  @Nonnull
+  private final GL2 gl;
 
   public JoglBatchRenderBackend() {
-    glu = GLU.createGLU();
-    batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
-      @Nonnull
-      @Override
-      public Batch createNew() {
-        return new Batch();
-      }
-    });
+    gl = GLContext.getCurrentGL().getGL2();
   }
 
+  @Nonnull
   @Override
-  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
-    this.resourceLoader = resourceLoader;
-  }
-
-  @Override
-  public int getWidth() {
-    if (viewportWidth == -1) {
-      getViewport();
-    }
-    return viewportWidth;
-  }
-
-  @Override
-  public int getHeight() {
-    if (viewportHeight == -1) {
-      getViewport();
-    }
-    return viewportHeight;
-  }
-
-  @Override
-  public void beginFrame() {
-    log.fine("beginFrame()");
-
-    for (int i = 0; i < batches.size(); i++) {
-      batchPool.free(batches.get(i));
-    }
-    batches.clear();
-  }
-
-  @Override
-  public void endFrame() {
-    log.fine("endFrame");
-
-    viewportWidth = -1;
-    viewportHeight = -1;
-    checkGLError();
-  }
-
-  @Override
-  public void clear() {
-    log.fine("clear()");
-
-    final GL gl = GLContext.getCurrentGL();
-    gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-  }
-
-  @Override
-  public MouseCursor createMouseCursor(
-      @Nonnull final String filename,
-      final int hotspotX,
-      final int hotspotY) throws IOException {
-    return new JoglMouseCursor(loadMouseCursor(filename, hotspotX, hotspotY));
-  }
-
-  @Override
-  public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
-    // TODO implement this method later
-  }
-
-  @Override
-  public void disableMouseCursor() {
-    // TODO implement this method later
-  }
-
-  @Override
-  public void createAtlasTexture(final int width, final int height) {
-    try {
-      createAtlasTexture(width, height, false, GL.GL_RGBA);
-
-      initialData = Buffers.newDirectByteBuffer(width * height * 4);
-      for (int i = 0; i < width * height; i++) {
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0xff);
-        initialData.put((byte) 0x00);
-        initialData.put((byte) 0xff);
-      }
-    } catch (Exception e) {
-      log.log(Level.WARNING, e.getMessage(), e);
-    }
-  }
-
-  @Override
-  public void clearAtlasTexture(final int width, final int height) {
-    initialData.rewind();
-    final GL gl = GLContext.getCurrentGL();
-    bind();
-    gl.glTexImage2D(
-        GL.GL_TEXTURE_2D,
-        0,
-        4,
-        width,
-        height,
-        0,
-        GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE,
-        initialData);
-    checkGLError();
+  protected Image createImageFromBuffer(@Nullable ByteBuffer buffer, int imageWidth, int imageHeight) {
+    return new JoglImage(buffer, imageWidth, imageHeight);
   }
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final String filename) {
-    ImageData loader = createImageLoader(filename);
-    InputStream imageStream = null;
-    try {
-      imageStream = resourceLoader.getResourceAsStream(filename);
-      if (imageStream != null) {
-        ByteBuffer image = loader.loadImageDirect(imageStream);
-        image.rewind();
-        int width = loader.getWidth();
-        int height = loader.getHeight();
-        return new ImageImpl(image, width, height);
-      }
-    } catch (Exception e) {
-      log.log(Level.WARNING, "problems loading image [" + filename + "]", e);
-    } finally {
-      if (imageStream != null) {
-        try {
-          imageStream.close();
-        } catch (IOException ignored) {
-        }
-      }
-    }
-    return null;
+  protected ByteBuffer getImageAsBuffer(Image image) {
+    return image instanceof JoglImage ? ((JoglImage)image).getBuffer() : null;
+  }
+
+  @Nonnull
+  @Override
+  protected ByteBuffer createNativeOrderedByteBuffer(int numBytes) {
+    return Buffers.newDirectByteBuffer(numBytes);
+  }
+
+  @Nonnull
+  @Override
+  protected IntBuffer createNativeOrderedIntBuffer(int numInts) {
+    return Buffers.newDirectIntBuffer(numInts);
   }
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
-    return new ImageImpl(data, w, h);
-  }
-
-  @Override
-  public void addImageToTexture(@Nonnull final Image image, final int x, final int y) {
-    ImageImpl imageImpl = (ImageImpl) image;
-    if (imageImpl.getWidth() == 0 ||
-        imageImpl.getHeight() == 0) {
-      return;
-    }
-    final GL gl = GLContext.getCurrentGL();
-    bind();
-    gl.glTexSubImage2D(
-        GL.GL_TEXTURE_2D,
-        0,
-        x,
-        y,
-        image.getWidth(),
-        image.getHeight(),
-        GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE,
-        imageImpl.getBuffer());
-  }
-
-  @Override
-  public void beginBatch(@Nonnull final BlendMode blendMode) {
-    batches.add(batchPool.allocate());
-    currentBatch = batches.get(batches.size() - 1);
-    currentBatch.begin(blendMode);
-  }
-
-  @Override
-  public void addQuad(
-      final float x,
-      final float y,
-      final float width,
-      final float height,
-      @Nonnull final Color color1,
-      @Nonnull final Color color2,
-      @Nonnull final Color color3,
-      @Nonnull final Color color4,
-      final float textureX,
-      final float textureY,
-      final float textureWidth,
-      final float textureHeight) {
-    if (!currentBatch.canAddQuad()) {
-      beginBatch(currentBatch.getBlendMode());
-    }
-    currentBatch.addQuadInternal(x, y, width, height, color1, color2, color3, color4, textureX, textureY,
-        textureWidth, textureHeight);
-  }
-
-  @Override
-  public int render() {
-    bind();
-    final GL2 gl = GLContext.getCurrentGL().getGL2();
-    gl.glEnable(GL.GL_TEXTURE_2D);
-    gl.glEnable(GL.GL_BLEND);
-    gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-    gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
-    gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
-
-    for (int i = 0; i < batches.size(); i++) {
-      Batch batch = batches.get(i);
-      batch.render();
-    }
-
-    gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
-    gl.glDisableClientState(GL2.GL_COLOR_ARRAY);
-    gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
-    gl.glDisable(GL2.GL_BLEND);
-    gl.glDisable(GL2.GL_TEXTURE_2D);
-
-    return batches.size();
-  }
-
-  @Override
-  public void removeFromTexture(@Nonnull final Image image, final int x, final int y, final int w, final int h) {
-    // Since we clear the whole texture when we switch screens it's not really necessary to remove data from the
-    // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
-    if (!fillRemovedTexture) {
-      return;
-    }
-    ByteBuffer initialData = Buffers.newDirectByteBuffer(image.getWidth() * image.getHeight() * 4);
-    for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
-      initialData.put((byte) 0xff);
-      initialData.put((byte) 0x00);
-      initialData.put((byte) 0x00);
-      initialData.put((byte) 0xff);
-    }
-    initialData.rewind();
-
-    final GL2 gl = GLContext.getCurrentGL().getGL2();
-    bind();
-    gl.glTexSubImage2D(
-        GL2.GL_TEXTURE_2D,
-        0,
-        x,
-        y,
-        w,
-        h,
-        GL2.GL_RGBA,
-        GL2.GL_UNSIGNED_BYTE,
-        initialData);
-
-  }
-
-  private void getViewport() {
-    final GL gl = GLContext.getCurrentGL();
-    gl.glGetIntegerv(GL2.GL_VIEWPORT, viewportBuffer);
-    viewportWidth = viewportBuffer.get(2);
-    viewportHeight = viewportBuffer.get(3);
-    if (log.isLoggable(Level.FINE)) {
-      log.fine("Viewport: " + viewportWidth + ", " + viewportHeight);
-    }
-  }
-
-  // internal implementations
-
-  private void checkGLError() {
-    final GL2 gl = GLContext.getCurrentGL().getGL2();
-    int error = gl.glGetError();
-    if (error != GL.GL_NO_ERROR) {
-      String glerrmsg = glu.gluErrorString(error);
-      log.warning("Error: (" + error + ") " + glerrmsg);
-      try {
-        throw new Exception();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
+  public MouseCursor createMouseCursor(@Nonnull String filename, int hotspotX, int hotspotY) throws IOException {
+    return new JoglMouseCursor(filename, hotspotX, hotspotY, getResourceLoader());
   }
 
   @Nonnull
-  private Cursor loadMouseCursor(
-      @Nonnull final String name,
-      final int hotspotX,
-      final int hotspotY) throws IOException {
-    ImageData imageLoader = createImageLoader(name);
-    InputStream in = resourceLoader.getResourceAsStream(name);
-    if (in == null) {
-      throw new IOException("Can't find resource to load a cursor.");
-    }
-    try {
-      BufferedImage image = imageLoader.loadMouseCursorImage(in);
-      return Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(hotspotX, hotspotY), name);
-    } finally {
-      try {
-        in.close();
-      } catch (IOException ignored) {
-      }
-    }
+  @Override
+  public JoglBatch createBatch() {
+    return new JoglBatch();
   }
 
-  @Nonnull
-  private ImageData createImageLoader(@Nonnull final String name) {
-    if (name.endsWith(".tga")) {
-      return new TGAImageData();
-    }
-    return new ImageIOImageData();
+  @Override
+  protected int GL_ALPHA_TEST() {
+    return GL2.GL_ALPHA_TEST;
   }
 
-  private void createAtlasTexture(
-      final int width,
-      final int height,
-      final boolean filter,
-      final int srcPixelFormat) throws Exception {
-    final GL2 gl = GLContext.getCurrentGL().getGL2();
-    textureId = createTextureId();
-    int minFilter = GL.GL_NEAREST;
-    int magFilter = GL.GL_NEAREST;
-    if (filter) {
-      minFilter = GL2.GL_LINEAR_MIPMAP_LINEAR;
-      magFilter = GL2.GL_NEAREST;
-    }
-    bind();
-
-    IntBuffer temp = Buffers.newDirectIntBuffer(16);
-    gl.glGetIntegerv(GL2.GL_MAX_TEXTURE_SIZE, temp);
-    checkGLError();
-
-    int max = temp.get(0);
-    if ((width > max) || (height > max)) {
-      throw new Exception("Attempt to allocate a texture to big for the current hardware");
-    }
-    if (width < 0) {
-      log.warning("Attempt to allocate a texture with negative width");
-      return;
-    }
-    if (height < 0) {
-      log.warning("Attempt to allocate a texture with negative height");
-      return;
-    }
-
-    gl.glTexParameteri(GL.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, minFilter);
-    gl.glTexParameteri(GL.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, magFilter);
-    checkGLError();
-
-    ByteBuffer initialData = Buffers.newDirectByteBuffer(width * height * 4);
-    for (int i = 0; i < width * height * 4; i++) {
-      initialData.put((byte) 0x80);
-    }
-    initialData.rewind();
-    gl.glTexImage2D(
-        GL2.GL_TEXTURE_2D,
-        0,
-        4,
-        width,
-        height,
-        0,
-        srcPixelFormat,
-        GL2.GL_UNSIGNED_BYTE,
-        initialData);
-    checkGLError();
+  @Override
+  protected int GL_BLEND() {
+    return GL.GL_BLEND;
   }
 
-  private void bind() {
-    final GL2 gl = GLContext.getCurrentGL().getGL2();
-    gl.glBindTexture(GL2.GL_TEXTURE_2D, textureId);
-    checkGLError();
+  @Override
+  protected int GL_COLOR_ARRAY() {
+    return GL2.GL_COLOR_ARRAY;
   }
 
-  private int createTextureId() {
-    final GL2 gl = GLContext.getCurrentGL().getGL2();
-    IntBuffer tmp = createIntBuffer(1);
-    gl.glGenTextures(1, tmp);
-    checkGLError();
-    return tmp.get(0);
+  @Override
+  protected int GL_COLOR_BUFFER_BIT() {
+    return GL.GL_COLOR_BUFFER_BIT;
   }
 
-  @Nonnull
-  private IntBuffer createIntBuffer(final int size) {
-    ByteBuffer temp = ByteBuffer.allocateDirect(4 * size);
-    temp.order(ByteOrder.nativeOrder());
-    return temp.asIntBuffer();
+  @Override
+  protected int GL_CULL_FACE() {
+    return GL.GL_CULL_FACE;
   }
 
-  /**
-   * Simple BatchRenderBackend.Image implementation that will transport the dimensions of an image as well as the
-   * actual bytes from the loadImage() to the addImageToTexture() method.
-   *
-   * @author void
-   */
-  private static class ImageImpl extends ByteBufferedImage implements BatchRenderBackend.Image {
-    private ImageImpl(ByteBuffer buffer, int width, int height) {
-      super(buffer, width, height);
-    }
+  @Override
+  protected int GL_DEPTH_TEST() {
+    return GL.GL_DEPTH_TEST;
   }
 
-  /**
-   * This class helps us to manage the batch data. We'll keep a bunch of instances of this class around that will be
-   * reused when needed. Each Batch instance provides room for a certain amount of vertices and we'll use a new Batch
-   * when we exceed this amount of data.
-   *
-   * @author void
-   */
-  private static class Batch {
-    // 4 vertices per quad and 8 vertex attributes per vertex:
-    // - 2 x pos
-    // - 2 x texture
-    // - 4 x color
-    private final static int PRIMITIVE_SIZE = 4 * 8;
-    private final static int SIZE = 64 * 1024; // 64k
-    private final FloatBuffer vertexBuffer;
+  @Override
+  protected int GL_INVALID_ENUM() {
+    return GL.GL_INVALID_ENUM;
+  }
 
-    private int primitiveCount;
-    @Nonnull
-    private final float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
-    private BlendMode blendMode = BlendMode.BLEND;
+  @Override
+  protected int GL_INVALID_OPERATION() {
+    return GL.GL_INVALID_OPERATION;
+  }
 
-    private Batch() {
-      vertexBuffer = Buffers.newDirectFloatBuffer(SIZE);
-    }
+  @Override
+  protected int GL_INVALID_VALUE() {
+    return GL.GL_INVALID_VALUE;
+  }
 
-    public void begin(final BlendMode blendMode) {
-      this.blendMode = blendMode;
-      primitiveCount = 0;
-      vertexBuffer.clear();
-    }
+  @Override
+  protected int GL_LIGHTING() {
+    return GL2.GL_LIGHTING;
+  }
 
-    public BlendMode getBlendMode() {
-      return blendMode;
-    }
+  @Override
+  protected int GL_LINEAR() {
+    return GL.GL_LINEAR;
+  }
 
-    public void render() {
-      if (primitiveCount == 0) return; // Attempting to render with an empty vertex buffer crashes the program.
+  @Override
+  protected int GL_MAX_TEXTURE_SIZE() {
+    return GL.GL_MAX_TEXTURE_SIZE;
+  }
 
-      final GL2 gl = GLContext.getCurrentGL().getGL2();
-      if (blendMode.equals(BlendMode.BLEND)) {
-        gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-      } else if (blendMode.equals(BlendMode.MULIPLY)) {
-        gl.glBlendFunc(GL2.GL_DST_COLOR, GL2.GL_ZERO);
-      }
+  @Override
+  protected int GL_MODELVIEW() {
+    return GL2.GL_MODELVIEW;
+  }
 
-      vertexBuffer.flip();
-      vertexBuffer.position(0);
-      gl.glVertexPointer(2, GL.GL_FLOAT, 8 * 4, vertexBuffer);
+  @Override
+  protected int GL_NEAREST() {
+    return GL.GL_NEAREST;
+  }
 
-      vertexBuffer.position(2);
-      gl.glColorPointer(4, GL.GL_FLOAT, 8 * 4, vertexBuffer);
+  @Override
+  protected int GL_NO_ERROR() {
+    return GL.GL_NO_ERROR;
+  }
 
-      vertexBuffer.position(6);
-      gl.glTexCoordPointer(2, GL.GL_FLOAT, 8 * 4, vertexBuffer);
+  @Override
+  protected int GL_NOTEQUAL() {
+    return GL.GL_NOTEQUAL;
+  }
 
-      gl.glDrawArrays(GL2.GL_QUADS, 0, primitiveCount * 4);
-    }
+  @Override
+  protected int GL_OUT_OF_MEMORY() {
+    return GL.GL_OUT_OF_MEMORY;
+  }
 
-    public boolean canAddQuad() {
-      return ((primitiveCount + 1) * PRIMITIVE_SIZE) < SIZE;
-    }
+  @Override
+  protected int GL_PROJECTION() {
+    return GL2.GL_PROJECTION;
+  }
 
-    private void addQuadInternal(
-        final float x,
-        final float y,
-        final float width,
-        final float height,
-        @Nonnull final Color color1,
-        @Nonnull final Color color2,
-        @Nonnull final Color color3,
-        @Nonnull final Color color4,
-        final float textureX,
-        final float textureY,
-        final float textureWidth,
-        final float textureHeight) {
-      int bufferIndex = 0;
+  @Override
+  protected int GL_RGBA() {
+    return GL.GL_RGBA;
+  }
 
-      primitiveBuffer[bufferIndex++] = x;
-      primitiveBuffer[bufferIndex++] = y;
-      primitiveBuffer[bufferIndex++] = color1.getRed();
-      primitiveBuffer[bufferIndex++] = color1.getGreen();
-      primitiveBuffer[bufferIndex++] = color1.getBlue();
-      primitiveBuffer[bufferIndex++] = color1.getAlpha();
-      primitiveBuffer[bufferIndex++] = textureX;
-      primitiveBuffer[bufferIndex++] = textureY;
+  @Override
+  protected int GL_STACK_OVERFLOW() {
+    return GL2.GL_STACK_OVERFLOW;
+  }
 
-      primitiveBuffer[bufferIndex++] = x + width;
-      primitiveBuffer[bufferIndex++] = y;
-      primitiveBuffer[bufferIndex++] = color2.getRed();
-      primitiveBuffer[bufferIndex++] = color2.getGreen();
-      primitiveBuffer[bufferIndex++] = color2.getBlue();
-      primitiveBuffer[bufferIndex++] = color2.getAlpha();
-      primitiveBuffer[bufferIndex++] = textureX + textureWidth;
-      primitiveBuffer[bufferIndex++] = textureY;
+  @Override
+  protected int GL_STACK_UNDERFLOW() {
+    return GL2.GL_STACK_UNDERFLOW;
+  }
 
-      primitiveBuffer[bufferIndex++] = x + width;
-      primitiveBuffer[bufferIndex++] = y + height;
-      primitiveBuffer[bufferIndex++] = color4.getRed();
-      primitiveBuffer[bufferIndex++] = color4.getGreen();
-      primitiveBuffer[bufferIndex++] = color4.getBlue();
-      primitiveBuffer[bufferIndex++] = color4.getAlpha();
-      primitiveBuffer[bufferIndex++] = textureX + textureWidth;
-      primitiveBuffer[bufferIndex++] = textureY + textureHeight;
+  @Override
+  protected int GL_TEXTURE_2D() {
+    return GL.GL_TEXTURE_2D;
+  }
 
-      primitiveBuffer[bufferIndex++] = x;
-      primitiveBuffer[bufferIndex++] = y + height;
-      primitiveBuffer[bufferIndex++] = color3.getRed();
-      primitiveBuffer[bufferIndex++] = color3.getGreen();
-      primitiveBuffer[bufferIndex++] = color3.getBlue();
-      primitiveBuffer[bufferIndex++] = color3.getAlpha();
-      primitiveBuffer[bufferIndex++] = textureX;
-      primitiveBuffer[bufferIndex] = textureY + textureHeight;
+  @Override
+  protected int GL_TEXTURE_COORD_ARRAY() {
+    return GL2.GL_TEXTURE_COORD_ARRAY;
+  }
 
-      vertexBuffer.put(primitiveBuffer);
-      primitiveCount++;
-    }
+  @Override
+  protected int GL_TEXTURE_MAG_FILTER() {
+    return GL.GL_TEXTURE_MAG_FILTER;
+  }
+
+  @Override
+  protected int GL_TEXTURE_MIN_FILTER() {
+    return GL.GL_TEXTURE_MIN_FILTER;
+  }
+
+  @Override
+  protected int GL_UNSIGNED_BYTE() {
+    return GL.GL_UNSIGNED_BYTE;
+  }
+
+  @Override
+  protected int GL_VERTEX_ARRAY() {
+    return GL2.GL_VERTEX_ARRAY;
+  }
+
+  @Override
+  protected int GL_VIEWPORT() {
+    return GL.GL_VIEWPORT;
+  }
+
+  @Override
+  protected void glAlphaFunc(int func, float ref) {
+    gl.glAlphaFunc(func, ref);
+  }
+
+  @Override
+  protected void glBindTexture(int target, int texture) {
+    gl.glBindTexture(target, texture);
+  }
+
+  @Override
+  protected void glClear(int mask) {
+    gl.glClear(mask);
+  }
+
+  @Override
+  protected void glClearColor(float red, float green, float blue, float alpha) {
+    gl.glClearColor(red, green, blue, alpha);
+  }
+
+  @Override
+  protected void glDeleteTextures(int n, IntBuffer textures) {
+    gl.glDeleteTextures(n, textures);
+  }
+
+  @Override
+  protected void glDisable(int cap) {
+    gl.glDisable(cap);
+  }
+
+  @Override
+  protected void glDisableClientState(int array) {
+    gl.glDisableClientState(array);
+  }
+
+  @Override
+  protected void glEnable(int cap) {
+    gl.glEnable(cap);
+  }
+
+  @Override
+  protected void glEnableClientState(int array) {
+    gl.glEnableClientState(array);
+  }
+
+  @Override
+  protected void glGenTextures(int n, IntBuffer textures) {
+    gl.glGenTextures(n, textures);
+  }
+
+  @Override
+  protected int glGetError() {
+    return gl.glGetError();
+  }
+
+  @Override
+  protected void glGetIntegerv(int pname, IntBuffer params) {
+    gl.glGetIntegerv(pname, params);
+  }
+
+  @Override
+  protected void glLoadIdentity() {
+    gl.glLoadIdentity();
+  }
+
+  @Override
+  protected void glMatrixMode(int mode) {
+    gl.glMatrixMode(mode);
+  }
+
+  @Override
+  protected void glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) {
+    gl.glOrthof(left, right, bottom, top, zNear, zFar);
+  }
+
+  @Override
+  protected void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, ByteBuffer pixels) {
+    gl.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+  }
+
+  @Override
+  protected void glTexParameterf(int target, int pname, float param) {
+    gl.glTexParameterf(target, pname, param);
+  }
+
+  @Override
+  protected void glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, ByteBuffer pixels) {
+    gl.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+  }
+
+  @Override
+  protected void glTranslatef(float x, float y, float z) {
+    gl.glTranslatef(x, y, z);
+  }
+
+  @Override
+  protected void glViewport(int x, int y, int width, int height) {
+    gl.glViewport(x, y, width, height);
   }
 }

@@ -19,7 +19,7 @@ public final class TutorialMainNativeLwjgl {
     }
 
     // create nifty
-    BatchRenderDevice renderDevice = new BatchRenderDevice(new LwjglBatchRenderBackendCoreProfile(), 2048, 2048);
+    BatchRenderDevice renderDevice = new BatchRenderDevice(new LwjglBatchRenderBackendCoreProfile());
     renderDevice.enableLogFPS();
     Nifty nifty = new Nifty(
         renderDevice,

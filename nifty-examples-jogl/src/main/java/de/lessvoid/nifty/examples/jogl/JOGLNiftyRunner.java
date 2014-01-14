@@ -114,11 +114,11 @@ public class JOGLNiftyRunner implements GLEventListener {
   public void init(GLAutoDrawable drawable) {
     RenderDevice renderDevice;
     if (Mode.Batch.equals(mode)) {
-      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend(), 2048, 2048);
+      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackend());
     } else if (Mode.Core.equals(mode)) {
-      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile(), 2048, 2048);
+      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile());
     } else if (Mode.ES2.equals(mode)) {
-      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile(), 2048, 2048);
+      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile());
     } else {
       renderDevice = new JoglRenderDevice();
     }
