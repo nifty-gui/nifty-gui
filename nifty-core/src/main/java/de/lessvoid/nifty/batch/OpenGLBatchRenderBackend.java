@@ -167,10 +167,10 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
     try {
       imageStream = getResourceLoader().getResourceAsStream(filename);
       if (imageStream != null) {
-        ByteBuffer image = loader.loadImageDirect(imageStream);
+        ByteBuffer image = loader.loadAsByteBufferRGBA(imageStream);
         image.rewind();
-        int width = loader.getWidth();
-        int height = loader.getHeight();
+        int width = loader.getImageWidth();
+        int height = loader.getImageHeight();
         return createImageFromBuffer(image, width, height);
       }
     } catch (Exception e) {

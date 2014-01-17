@@ -33,10 +33,10 @@ public class LwjglMouseCursor implements MouseCursor {
       throw new IOException("Cannot find / load mouse cursor image file: [" + cursorImageFilename + "].");
     }
     try {
-      ByteBuffer imageData = imageLoader.loadMouseCursorImageAsByteBuffer(imageStream);
+      ByteBuffer imageData = imageLoader.loadAsByteBufferARGB(imageStream, true);
       imageData.rewind();
-      int width = imageLoader.getWidth();
-      int height = imageLoader.getHeight();
+      int width = imageLoader.getImageWidth();
+      int height = imageLoader.getImageHeight();
       cursor = new Cursor(width, height, hotspotX, height - hotspotY - 1, 1, imageData.asIntBuffer(), null);
     } catch (LWJGLException e) {
       throw new IOException(e);

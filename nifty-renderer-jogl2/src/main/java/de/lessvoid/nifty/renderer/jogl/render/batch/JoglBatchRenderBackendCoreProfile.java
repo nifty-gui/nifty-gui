@@ -190,10 +190,10 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend <Jo
     try {
       imageStream = resourceLoader.getResourceAsStream(filename);
       if (imageStream != null) {
-        ByteBuffer image = loader.loadImageDirect(imageStream);
+        ByteBuffer image = loader.loadAsByteBufferRGBA(imageStream);
         image.rewind();
-        int width = loader.getWidth();
-        int height = loader.getHeight();
+        int width = loader.getImageWidth();
+        int height = loader.getImageHeight();
         return new JoglImage(image, width, height);
       }
     } catch (Exception e) {
