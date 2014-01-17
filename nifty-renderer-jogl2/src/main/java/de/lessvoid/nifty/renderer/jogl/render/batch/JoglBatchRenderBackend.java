@@ -10,7 +10,6 @@ import de.lessvoid.nifty.spi.render.MouseCursor;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.media.opengl.GL;
@@ -32,13 +31,7 @@ import javax.media.opengl.GLContext;
  */
 public class JoglBatchRenderBackend extends OpenGLBatchRenderBackend<JoglBatch> {
   @Nonnull
-  private static final Logger log = Logger.getLogger(JoglBatchRenderBackend.class.getName());
-  @Nonnull
-  private final GL2 gl;
-
-  public JoglBatchRenderBackend() {
-    gl = GLContext.getCurrentGL().getGL2();
-  }
+  private static final GL2 gl = GLContext.getCurrentGL().getGL2();
 
   @Nonnull
   @Override
