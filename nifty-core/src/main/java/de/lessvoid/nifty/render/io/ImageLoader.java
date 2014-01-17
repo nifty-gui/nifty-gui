@@ -8,38 +8,20 @@ import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
 
 public interface ImageLoader {
-  public int getDepth();
-  public int getHeight();
-  public int getTexHeight();
-  public int getTexWidth();
-  public int getWidth();
-  @Nonnull
-  public ByteBuffer getImageBufferData();
+  public int getImageBitDepth();
+  public int getImageHeight();
+  public int getImageWidth();
+  public int getTextureHeight();
+  public int getTextureWidth();
 
   @Nonnull
-  public ByteBuffer loadImage(@Nonnull @WillNotClose InputStream fis) throws IOException;
-
-  @SuppressWarnings("MethodCanBeVariableArityMethod")
-  @Nonnull
-  public ByteBuffer loadImage(
-          @Nonnull @WillNotClose InputStream fis,
-          boolean flipped,
-          int[] transparent) throws IOException;
-
-  @SuppressWarnings("MethodCanBeVariableArityMethod")
-  @Nonnull
-  public ByteBuffer loadImage(
-      @Nonnull @WillNotClose InputStream fis,
-      boolean flipped,
-      boolean forceAlpha,
-      int[] transparent) throws IOException;
+  public ByteBuffer loadAsByteBufferRGBA(@Nonnull @WillNotClose final InputStream imageStream) throws IOException;
 
   @Nonnull
-  public ByteBuffer loadImageDirect(@Nonnull @WillNotClose InputStream fis) throws IOException;
+  public ByteBuffer loadAsByteBufferARGB(
+          @Nonnull @WillNotClose final InputStream imageStream,
+          final boolean shouldFlipVertically) throws IOException;
 
   @Nonnull
-  public ByteBuffer loadMouseCursorImageAsByteBuffer(@Nonnull @WillNotClose InputStream fis) throws IOException;
-
-  @Nonnull
-  public BufferedImage loadMouseCursorImageAsBufferedImage(@Nonnull @WillNotClose InputStream fis) throws IOException;
+  public BufferedImage loadAsBufferedImage(@Nonnull @WillNotClose final InputStream imageStream) throws IOException;
 }
