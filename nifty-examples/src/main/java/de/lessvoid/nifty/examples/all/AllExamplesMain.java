@@ -5,6 +5,7 @@ import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackendFactory;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
@@ -41,7 +42,7 @@ public class AllExamplesMain implements NiftyExample {
       System.exit(0);
     }
 
-    BatchRenderDevice renderDevice = new BatchRenderDevice(new LwjglBatchRenderBackend());
+    BatchRenderDevice renderDevice = new BatchRenderDevice(LwjglBatchRenderBackendFactory.create());
 //    renderDevice.enableLogFPS();
 
     // create nifty

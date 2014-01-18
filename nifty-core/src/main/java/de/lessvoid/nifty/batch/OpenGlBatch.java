@@ -1,13 +1,17 @@
 package de.lessvoid.nifty.batch;
 
+import de.lessvoid.nifty.batch.spi.Batch;
+import de.lessvoid.nifty.batch.spi.BufferFactory;
+import de.lessvoid.nifty.batch.spi.GL;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 
 import java.nio.FloatBuffer;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 /**
- * Abstract base class for OpenGL batch management that gives OpenGL (& OpenGL ES) - based
+ * Class for OpenGL batch management that gives OpenGL (& OpenGL ES) - based
  * {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementations some default functionality to avoid having to
  * reinvent the wheel and to prevent unnecessary code duplication. Fully OpenGL ES compatible - this class doesn't
  * require the implementation of any OpenGL methods that are not available in OpenGL ES.
@@ -16,7 +20,9 @@ import javax.annotation.Nonnull;
  *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public abstract class OpenGlBatch implements Batch {
+public class OpenGLBatch implements Batch {
+  @Nonnull
+  private static final Logger log = Logger.getLogger(OpenGLBatch.class.getName());
   private final static int VERTICES_PER_QUAD = 6;
   private final static int POSITION_ATTRIBUTES_PER_VERTEX = 2;
   private final static int COLOR_ATTRIBUTES_PER_VERTEX = 4;
@@ -26,39 +32,21 @@ public abstract class OpenGlBatch implements Batch {
   private final static int PRIMITIVE_SIZE = VERTICES_PER_QUAD * ATTRIBUTES_PER_VERTEX;
   private final static int STRIDE = ATTRIBUTES_PER_VERTEX * BYTES_PER_ATTRIBUTE;
   private final static int SIZE = 64 * 1024; // 64k
+  @Nonnull
+  private final GL gl;
+  @Nonnull
   private final FloatBuffer vertexBuffer;
-  private int primitiveCount;
   @Nonnull
   private final float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
+  @Nonnull
   private BlendMode blendMode = BlendMode.BLEND;
+  private int primitiveCount;
   private int textureId;
 
-  public OpenGlBatch() {
-    vertexBuffer = createFloatBuffer(SIZE);
+  public OpenGLBatch(@Nonnull final GL gl, @Nonnull final BufferFactory bufferFactory) {
+    this.gl = gl;
+    vertexBuffer = bufferFactory.createNativeOrderedFloatBuffer(SIZE);
   }
-
-  /**
-   * {@link java.nio.FloatBuffer} factory method.
-   */
-  @Nonnull
-  protected abstract FloatBuffer createFloatBuffer(final int numFloats);
-
-  // OpenGL constants
-  protected abstract int GL_DST_COLOR();
-  protected abstract int GL_FLOAT();
-  protected abstract int GL_ONE_MINUS_SRC_ALPHA();
-  protected abstract int GL_SRC_ALPHA();
-  protected abstract int GL_TEXTURE_2D();
-  protected abstract int GL_TRIANGLES();
-  protected abstract int GL_ZERO();
-
-  // OpenGL methods
-  protected abstract void glBindTexture (int target, int texture);
-  protected abstract void glBlendFunc (int sfactor, int dfactor);
-  protected abstract void glColorPointer (int size, int type, int stride, FloatBuffer pointer);
-  protected abstract void glDrawArrays (int mode, int first, int count);
-  protected abstract void glTexCoordPointer (int size, int type, int stride, FloatBuffer pointer);
-  protected abstract void glVertexPointer (int size, int type, int stride, FloatBuffer pointer);
 
   @Override
   public void begin(@Nonnull final BlendMode blendMode, final int textureId) {
@@ -86,28 +74,28 @@ public abstract class OpenGlBatch implements Batch {
     // manipulating openGL textures outside of our knowledge. It is SIGNIFICANTLY more efficient to bind every batch
     // than it is to use glGet* calls to find out if our texture is already bound (glGet* commands are extremely
     // slow, and should not be used in production code).
-    glBindTexture(GL_TEXTURE_2D(), textureId);
+    gl.glBindTexture(gl.GL_TEXTURE_2D(), textureId);
 
     if (blendMode.equals(BlendMode.BLEND)) {
-      glBlendFunc(GL_SRC_ALPHA(), GL_ONE_MINUS_SRC_ALPHA());
+      gl.glBlendFunc(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
     } else if (blendMode.equals(BlendMode.MULIPLY)) {
-      glBlendFunc(GL_DST_COLOR(), GL_ZERO());
+      gl.glBlendFunc(gl.GL_DST_COLOR(), gl.GL_ZERO());
     }
 
     vertexBuffer.flip();
     vertexBuffer.position(0);
-    glVertexPointer(POSITION_ATTRIBUTES_PER_VERTEX, GL_FLOAT(), STRIDE, vertexBuffer);
+    gl.glVertexPointer(POSITION_ATTRIBUTES_PER_VERTEX, gl.GL_FLOAT(), STRIDE, vertexBuffer);
 
     vertexBuffer.position(2);
-    glColorPointer(COLOR_ATTRIBUTES_PER_VERTEX, GL_FLOAT(), STRIDE, vertexBuffer);
+    gl.glColorPointer(COLOR_ATTRIBUTES_PER_VERTEX, gl.GL_FLOAT(), STRIDE, vertexBuffer);
 
     vertexBuffer.position(6);
-    glTexCoordPointer(TEXTURE_ATTRIBUTES_PER_VERTEX, GL_FLOAT(), STRIDE, vertexBuffer);
+    gl.glTexCoordPointer(TEXTURE_ATTRIBUTES_PER_VERTEX, gl.GL_FLOAT(), STRIDE, vertexBuffer);
 
-    // Could use GL_QUADS instead, requiring a different setup, but GL_TRIANGLES is very efficient and more compatible
-    // with different implementations (For example, both OpenGL (desktop platforms) & OpenGL ES (mobile platforms) can
-    // use this rendering method as-is.
-    glDrawArrays(GL_TRIANGLES(), 0, primitiveCount * VERTICES_PER_QUAD);
+    // While we could use GL_QUADS here instead, requiring a different setup, but GL_TRIANGLES is very efficient and
+    // more compatible with different implementations (For example, both OpenGL (desktop platforms) & OpenGL ES
+    // (mobile platforms) can use this render() method as-is.
+    gl.glDrawArrays(gl.GL_TRIANGLES(), 0, primitiveCount * VERTICES_PER_QUAD);
   }
 
   @Override

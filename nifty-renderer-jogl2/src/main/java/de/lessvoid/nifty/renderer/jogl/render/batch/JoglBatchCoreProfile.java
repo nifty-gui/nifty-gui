@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
-import de.lessvoid.nifty.batch.Batch;
+import de.lessvoid.nifty.batch.spi.Batch;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreElementVBO;
 import de.lessvoid.nifty.renderer.jogl.render.batch.core.CoreRender;

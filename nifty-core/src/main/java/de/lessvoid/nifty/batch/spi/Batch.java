@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.batch;
+package de.lessvoid.nifty.batch.spi;
 
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;

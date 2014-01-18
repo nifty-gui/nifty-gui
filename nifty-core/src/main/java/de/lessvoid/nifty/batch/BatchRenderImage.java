@@ -203,7 +203,7 @@ public class BatchRenderImage implements RenderImage {
   }
 
   private static void registerTextureSize(final int textureId, final int textureWidth, final int textureHeight) {
-    BatchRenderImage.textureSizes.put(textureId, new TextureSize(textureWidth, textureHeight));
+    textureSizes.put(textureId, new TextureSize(textureWidth, textureHeight));
   }
 
   private boolean imageExceedsAtlasTolerance() {
@@ -275,7 +275,7 @@ public class BatchRenderImage implements RenderImage {
   }
 
   private static void deregisterTextureSize(final int textureId) {
-    BatchRenderImage.textureSizes.remove(textureId);
+    textureSizes.remove(textureId);
   }
 
   private boolean existsAsNonAtlasImage() {

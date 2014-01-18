@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 /**
- * {@inheritDoc}
- *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public final class GdxMouseCursor implements MouseCursor {

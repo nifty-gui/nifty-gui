@@ -34,6 +34,7 @@ import de.lessvoid.nifty.examples.resolution.ResolutionControlLWJGL;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend;
 import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackendCoreProfile;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackendFactory;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
@@ -98,7 +99,7 @@ public class ControlsDemo<T> implements NiftyExample {
     if (useCoreProfile) {
       return new LwjglBatchRenderBackendCoreProfile();
     } else {
-      return new LwjglBatchRenderBackend();
+      return LwjglBatchRenderBackendFactory.create();
     }
   }
 

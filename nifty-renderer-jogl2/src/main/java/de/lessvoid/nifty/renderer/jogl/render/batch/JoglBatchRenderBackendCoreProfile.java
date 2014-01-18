@@ -2,7 +2,7 @@ package de.lessvoid.nifty.renderer.jogl.render.batch;
 
 import com.jogamp.common.nio.Buffers;
 
-import de.lessvoid.nifty.batch.Batch;
+import de.lessvoid.nifty.batch.spi.Batch;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.render.io.ImageLoader;
 import de.lessvoid.nifty.render.BlendMode;
@@ -40,7 +40,7 @@ import javax.media.opengl.GLContext;
  *
  * @author void
  */
-public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend <JoglBatchCoreProfile> {
+public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Nonnull
   private static final Logger log = Logger.getLogger(JoglBatchRenderBackendCoreProfile.class.getName());
   @Nonnull
@@ -85,7 +85,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend <Jo
       @Nonnull
       @Override
       public JoglBatchCoreProfile createNew() {
-        return createBatch();
+        return new JoglBatchCoreProfile(niftyShader);
       }
     });
   }
@@ -182,7 +182,7 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend <Jo
     texture.updateTextureData(initialData);
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public Image loadImage(@Nonnull final String filename) {
     ImageLoader loader = ImageLoaderFactory.createImageLoader(filename);
@@ -213,8 +213,8 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend <Jo
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
-    return new ByteBufferedImage(data, w, h);
+  public Image loadImage(@Nonnull final ByteBuffer imageData, final int imageWidth, final int imageHeight) {
+    return new ByteBufferedImage(imageData, imageWidth, imageHeight);
   }
 
   @Override
@@ -282,12 +282,6 @@ public class JoglBatchRenderBackendCoreProfile implements BatchRenderBackend <Jo
     }
     currentBatch.addQuad(x, y, width, height, color1, color2, color3, color4, textureX, textureY, textureWidth,
             textureHeight);
-  }
-
-  @Nonnull
-  @Override
-  public JoglBatchCoreProfile createBatch() {
-    return new JoglBatchCoreProfile(niftyShader);
   }
 
   @Override

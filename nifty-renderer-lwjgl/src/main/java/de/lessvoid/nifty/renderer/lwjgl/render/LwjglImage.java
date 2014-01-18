@@ -5,8 +5,6 @@ import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 import java.nio.ByteBuffer;
 
 /**
- * {@inheritDoc}
- *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class LwjglImage extends BatchRenderBackend.ByteBufferedImage {
