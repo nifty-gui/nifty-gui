@@ -47,7 +47,7 @@ import org.lwjgl.util.vector.Matrix4f;
  *
  * @author void
  */
-public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend <LwjglBatchCoreProfile> {
+public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   private static final Logger log = Logger.getLogger(LwjglBatchRenderBackendCoreProfile.class.getName());
   private static final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
   private static final int PRIMITIVE_RESTART_INDEX = 0xFFFF;
@@ -76,7 +76,6 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend <L
     niftyShader.link();
     niftyShader.activate();
     niftyShader.setUniformi("uTex", 0);
-
     batchPool = new ObjectPool<LwjglBatchCoreProfile>(new Factory<LwjglBatchCoreProfile>() {
       @Nonnull
       @Override
@@ -210,8 +209,8 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend <L
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final ByteBuffer data, final int w, final int h) {
-    return new LwjglImage(data, w, h);
+  public Image loadImage(@Nonnull final ByteBuffer imageData, final int imageWidth, final int imageHeight) {
+    return new LwjglImage(imageData, imageWidth, imageHeight);
   }
 
   @Override
@@ -281,12 +280,6 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend <L
             textureY,
             textureWidth,
             textureHeight);
-  }
-
-  @Nonnull
-  @Override
-  public LwjglBatchCoreProfile createBatch() {
-    return new LwjglBatchCoreProfile(niftyShader, PRIMITIVE_RESTART_INDEX);
   }
 
   @Override

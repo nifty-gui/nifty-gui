@@ -1,97 +1,70 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
-import com.jogamp.common.nio.Buffers;
+import de.lessvoid.nifty.batch.spi.Batch;
+import de.lessvoid.nifty.batch.OpenGLBatch;
+import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.tools.Color;
 
-import de.lessvoid.nifty.batch.OpenGlBatch;
-
-import java.nio.FloatBuffer;
 import javax.annotation.Nonnull;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
 
 /**
- * Concrete JOGL-specific implementation of {@link de.lessvoid.nifty.batch.Batch} interface.
- *
- * {@inheritDoc}
- *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public class JoglBatch extends OpenGlBatch {
-  private final GL2 gl;
+public class JoglBatch implements Batch {
+  @Nonnull
+  private final OpenGLBatch internalBatch;
 
-  public JoglBatch() {
-    gl = GLContext.getCurrentGL().getGL2();
+  public JoglBatch(@Nonnull final OpenGLBatch internalBatch) {
+    this.internalBatch = internalBatch;
+  }
+
+  @Override
+  public void begin(@Nonnull BlendMode blendMode, int textureId) {
+    internalBatch.begin(blendMode, textureId);
   }
 
   @Nonnull
   @Override
-  protected FloatBuffer createFloatBuffer(int numFloats) {
-    return Buffers.newDirectFloatBuffer(numFloats);
+  public BlendMode getBlendMode() {
+    return internalBatch.getBlendMode();
   }
 
   @Override
-  protected int GL_DST_COLOR() {
-    return GL.GL_DST_COLOR;
+  public void render() {
+    internalBatch.render();
   }
 
   @Override
-  protected int GL_FLOAT() {
-    return GL.GL_FLOAT;
+  public boolean canAddQuad() {
+    return internalBatch.canAddQuad();
   }
 
   @Override
-  protected int GL_ONE_MINUS_SRC_ALPHA() {
-    return GL.GL_ONE_MINUS_SRC_ALPHA;
-  }
-
-  @Override
-  protected int GL_SRC_ALPHA() {
-    return GL.GL_SRC_ALPHA;
-  }
-
-  @Override
-  protected int GL_TEXTURE_2D() {
-    return GL.GL_TEXTURE_2D;
-  }
-
-  @Override
-  protected int GL_TRIANGLES() {
-    return GL.GL_TRIANGLES;
-  }
-
-  @Override
-  protected int GL_ZERO() {
-    return GL.GL_ZERO;
-  }
-
-  @Override
-  protected void glBindTexture(int target, int texture) {
-    gl.glBindTexture(target, texture);
-  }
-
-  @Override
-  protected void glBlendFunc(int sfactor, int dfactor) {
-    gl.glBlendFunc(sfactor, dfactor);
-  }
-
-  @Override
-  protected void glColorPointer(int size, int type, int stride, FloatBuffer pointer) {
-    gl.glColorPointer(size, type, stride, pointer);
-  }
-
-  @Override
-  protected void glDrawArrays(int mode, int first, int count) {
-    gl.glDrawArrays(mode, first, count);
-  }
-
-  @Override
-  protected void glTexCoordPointer(int size, int type, int stride, FloatBuffer pointer) {
-    gl.glTexCoordPointer(size, type, stride, pointer);
-  }
-
-  @Override
-  protected void glVertexPointer(int size, int type, int stride, FloatBuffer pointer) {
-    gl.glVertexPointer(size, type, stride, pointer);
+  public void addQuad(
+          float x,
+          float y,
+          float width,
+          float height,
+          @Nonnull Color color1,
+          @Nonnull Color color2,
+          @Nonnull Color color3,
+          @Nonnull Color color4,
+          float textureX,
+          float textureY,
+          float textureWidth,
+          float textureHeight) {
+    internalBatch.addQuad(
+            x,
+            y,
+            width,
+            height,
+            color1,
+            color2,
+            color3,
+            color4,
+            textureX,
+            textureY,
+            textureWidth,
+            textureHeight);
   }
 }

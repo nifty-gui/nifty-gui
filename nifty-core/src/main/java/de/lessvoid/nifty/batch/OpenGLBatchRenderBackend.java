@@ -1,6 +1,12 @@
 package de.lessvoid.nifty.batch;
 
+import de.lessvoid.nifty.batch.spi.Batch;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.batch.spi.BufferFactory;
+import de.lessvoid.nifty.batch.spi.ImageFactory;
+import de.lessvoid.nifty.batch.spi.MouseCursorFactory;
+import de.lessvoid.nifty.batch.spi.GL;
+import de.lessvoid.nifty.batch.spi.OpenGLBatchFactory;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.render.io.ImageLoader;
 import de.lessvoid.nifty.render.io.ImageLoaderFactory;
@@ -24,177 +30,84 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Abstract base class for OpenGL batch rendering that gives OpenGL (& OpenGL ES) - based
- * {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementations some default functionality to avoid having to
- * reinvent the wheel and to prevent unnecessary code duplication. Fully OpenGL ES compatible - this class doesn't
- * require the implementation of any OpenGL methods that are not available in OpenGL ES.
+ * Internal {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementation for OpenGL batch rendering that
+ * provides OpenGL (& OpenGL ES) - based {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementations some
+ * default functionality to avoid having to reinvent the wheel and to prevent unnecessary code duplication. Fully
+ * OpenGL ES compatible - this class doesn't require the implementation of any OpenGL methods that are not available in
+ * OpenGL ES.
  *
  * {@inheritDoc}
  *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implements BatchRenderBackend <T> {
+public class OpenGLBatchRenderBackend implements BatchRenderBackend {
   @Nonnull
   private static final Logger log = Logger.getLogger(OpenGLBatchRenderBackend.class.getName());
   private static final int INVALID_TEXTURE_ID = -1;
   @Nonnull
-  private final IntBuffer viewportBuffer = createNativeOrderedIntBuffer(16);
+  private final GL gl;
   @Nonnull
-  private final IntBuffer textureSizeBuffer = createNativeOrderedIntBuffer(16);
+  private BufferFactory bufferFactory;
   @Nonnull
-  private final IntBuffer singleTextureIdBuffer = createNativeOrderedIntBuffer(1);
-  private int viewportWidth;
-  private int viewportHeight;
+  private ImageFactory imageFactory;
   @Nonnull
-  private ObjectPool<T> batchPool;
-  private T currentBatch;
+  private MouseCursorFactory mouseCursorFactory;
   @Nonnull
-  private final List<T> batches = new ArrayList<T>();
+  private final IntBuffer viewportBuffer;
   @Nonnull
-  private ArrayList<Integer> nonAtlasTextureIds = new ArrayList<Integer>();
+  private final IntBuffer textureSizeBuffer;
   @Nonnull
-  private Map<Integer, Integer> atlasWidths = new HashMap<Integer, Integer>();
+  private final IntBuffer singleTextureIdBuffer;
   @Nonnull
-  private Map<Integer, Integer> atlasHeights = new HashMap<Integer, Integer>();
-  private boolean shouldUseHighQualityTextures = false;
-  private boolean shouldFillRemovedImagesInAtlas = false;
-  private NiftyResourceLoader resourceLoader;
+  private final ObjectPool<Batch> batchPool;
+  @Nonnull
+  private final List<Batch> batches = new ArrayList<Batch>();
+  @Nonnull
+  private final ArrayList<Integer> nonAtlasTextureIds = new ArrayList<Integer>();
+  @Nonnull
+  private final Map<Integer, Integer> atlasWidths = new HashMap<Integer, Integer>();
+  @Nonnull
+  private final Map<Integer, Integer> atlasHeights = new HashMap<Integer, Integer>();
+  @Nonnull
+  private final Map<String, MouseCursor> cursorCache = new HashMap<String, MouseCursor>();
   @Nullable
   private MouseCursor mouseCursor;
-
-  public OpenGLBatchRenderBackend() {
-    initializeBatchPool();
-    initializeOpenGL();
-  }
-
-  /**
-   * You must return a non-null instance of your {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend.Image}
-   * implementation, even if buffer is null.
-   */
-  @Nonnull
-  protected abstract Image createImageFromBuffer(@Nullable final ByteBuffer buffer, final int imageWidth, final int imageHeight);
-
-  /**
-   * OpenGL requires images to be in the format of a {@link java.nio.ByteBuffer}.
-   */
   @Nullable
-  protected abstract ByteBuffer getImageAsBuffer(final Image image);
+  private NiftyResourceLoader resourceLoader;
+  @Nullable
+  private Batch currentBatch;
+  private int viewportWidth;
+  private int viewportHeight;
+  private boolean shouldUseHighQualityTextures = false;
+  private boolean shouldFillRemovedImagesInAtlas = false;
 
-  /**
-   * {@link java.nio.ByteBuffer} factory method.
-   */
-  @Nonnull
-  protected abstract ByteBuffer createNativeOrderedByteBuffer(final int numBytes);
-
-  /**
-   * {@link java.nio.IntBuffer} factory method.
-   */
-  @Nonnull
-  protected abstract IntBuffer createNativeOrderedIntBuffer(final int numInts);
-
-  // OpenGL constants
-  protected abstract int GL_ALPHA_TEST();
-  protected abstract int GL_BLEND();
-  protected abstract int GL_COLOR_ARRAY();
-  protected abstract int GL_COLOR_BUFFER_BIT();
-  protected abstract int GL_CULL_FACE();
-  protected abstract int GL_DEPTH_TEST();
-  protected abstract int GL_INVALID_ENUM();
-  protected abstract int GL_INVALID_OPERATION();
-  protected abstract int GL_INVALID_VALUE();
-  protected abstract int GL_LIGHTING();
-  protected abstract int GL_LINEAR();
-  protected abstract int GL_MAX_TEXTURE_SIZE();
-  protected abstract int GL_MODELVIEW();
-  protected abstract int GL_NEAREST();
-  protected abstract int GL_NO_ERROR();
-  protected abstract int GL_NOTEQUAL();
-  protected abstract int GL_OUT_OF_MEMORY();
-  protected abstract int GL_PROJECTION();
-  protected abstract int GL_RGBA();
-  protected abstract int GL_STACK_OVERFLOW();
-  protected abstract int GL_STACK_UNDERFLOW();
-  protected abstract int GL_TEXTURE_2D();
-  protected abstract int GL_TEXTURE_COORD_ARRAY();
-  protected abstract int GL_TEXTURE_MAG_FILTER();
-  protected abstract int GL_TEXTURE_MIN_FILTER();
-  protected abstract int GL_UNSIGNED_BYTE();
-  protected abstract int GL_VERTEX_ARRAY();
-  protected abstract int GL_VIEWPORT();
-
-  // OpenGL methods
-  protected abstract void glAlphaFunc (int func, float ref);
-  protected abstract void glBindTexture (int target, int texture);
-  protected abstract void glClear (int mask);
-  protected abstract void glClearColor (float red, float green, float blue, float alpha);
-  protected abstract void glDeleteTextures (int n, IntBuffer textures);
-  protected abstract void glDisable (int cap);
-  protected abstract void glDisableClientState (int array);
-  protected abstract void glEnable (int cap);
-  protected abstract void glEnableClientState (int array);
-  protected abstract void glGenTextures (int n, IntBuffer textures);
-  protected abstract int glGetError();
-  protected abstract void glGetIntegerv (int pname, IntBuffer params);
-  protected abstract void glLoadIdentity();
-  protected abstract void glMatrixMode (int mode);
-  protected abstract void glOrthof (float left, float right, float bottom, float top, float zNear, float zFar);
-  protected abstract void glTexImage2D (int target, int level, int internalformat, int width, int height, int border, int format, int type, ByteBuffer pixels);
-  protected abstract void glTexParameterf (int target, int pname, float param);
-  protected abstract void glTexSubImage2D (int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, ByteBuffer pixels);
-  protected abstract void glTranslatef (float x, float y, float z);
-  protected abstract void glViewport (int x, int y, int width, int height);
-
-  @Override
-  public void enableMouseCursor(@Nonnull MouseCursor mouseCursor) {
-    this.mouseCursor = mouseCursor;
-    mouseCursor.enable();
-  }
-
-  @Override
-  public void disableMouseCursor() {
-    if (mouseCursor != null) {
-      mouseCursor.disable();
-    }
-  }
-
-  @Nonnull
-  protected Image createImageFromFile(@Nullable String filename) {
-    if (filename == null) {
-      return createImageFromBuffer(null, 0, 0);
-    }
-    ImageLoader loader = ImageLoaderFactory.createImageLoader(filename);
-    InputStream imageStream = null;
-    try {
-      imageStream = getResourceLoader().getResourceAsStream(filename);
-      if (imageStream != null) {
-        ByteBuffer image = loader.loadImageDirect(imageStream);
-        image.rewind();
-        int width = loader.getWidth();
-        int height = loader.getHeight();
-        return createImageFromBuffer(image, width, height);
+  public OpenGLBatchRenderBackend(
+          @Nonnull final GL gl,
+          @Nonnull final OpenGLBatchFactory openGLBatchFactory,
+          @Nonnull final BufferFactory bufferFactory,
+          @Nonnull final ImageFactory imageFactory,
+          @Nonnull final MouseCursorFactory mouseCursorFactory) {
+    this.gl = gl;
+    this.bufferFactory = bufferFactory;
+    this.imageFactory = imageFactory;
+    this.mouseCursorFactory = mouseCursorFactory;
+    viewportBuffer = this.bufferFactory.createNativeOrderedIntBuffer(16);
+    textureSizeBuffer = this.bufferFactory.createNativeOrderedIntBuffer(16);
+    singleTextureIdBuffer = this.bufferFactory.createNativeOrderedIntBuffer(1);
+    batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
+      @Nonnull
+      @Override
+      public Batch createNew() {
+        return openGLBatchFactory.create(gl, bufferFactory);
       }
-    } catch (Exception e) {
-      log.log(Level.WARNING, "Could not load image from file: [" + filename + "]", e);
-    } finally {
-      if (imageStream != null) {
-        try {
-          imageStream.close();
-        } catch (IOException ignored) {
-        }
-      }
-    }
-    return createImageFromBuffer(null, 0, 0);
+    });
+    initializeOpenGL();
   }
 
   @Override
   public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     log.fine("setResourceLoader()");
     this.resourceLoader = resourceLoader;
-  }
-
-  @Nonnull
-  protected NiftyResourceLoader getResourceLoader() {
-    return resourceLoader;
   }
 
   @Override
@@ -229,6 +142,26 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
     clearGlColorBufferWithBlack();
   }
 
+  @Nullable
+  @Override
+  public MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY)
+          throws IOException {
+    return existsCursor(filename) ? getCursor(filename) : createCursor(filename, hotspotX, hotspotY);
+  }
+
+  @Override
+  public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
+    this.mouseCursor = mouseCursor;
+    mouseCursor.enable();
+  }
+
+  @Override
+  public void disableMouseCursor() {
+    if (mouseCursor != null) {
+      mouseCursor.disable();
+    }
+  }
+
   @Override
   public int createTextureAtlas(final int atlasWidth, final int atlasHeight) {
     log.fine("createTextureAtlas()");
@@ -244,7 +177,10 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
   public void clearTextureAtlas(final int atlasTextureId) {
     log.fine("clearTextureAtlas()");
     bindGlTexture(atlasTextureId);
-    updateCurrentlyBoundGlTexture(createBlankImageDataForAtlas(atlasTextureId), getAtlasWidth(atlasTextureId), getAtlasHeight(atlasTextureId));
+    updateCurrentlyBoundGlTexture(
+            createBlankImageDataForAtlas(atlasTextureId),
+            getAtlasWidth(atlasTextureId),
+            getAtlasHeight(atlasTextureId));
   }
 
   @Nonnull
@@ -256,9 +192,9 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
 
   @Nullable
   @Override
-  public Image loadImage(@Nonnull final ByteBuffer data, final int width, final int height) {
+  public Image loadImage(@Nonnull final ByteBuffer imageData, final int imageWidth, final int imageHeight) {
     log.fine("loadImage2()");
-    return createImageFromBuffer(data, width, height);
+    return imageFactory.create(imageData, imageWidth, imageHeight);
   }
 
   @Override
@@ -269,7 +205,12 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
           final int atlasTextureId) {
     log.fine("addImageToAtlas()");
     bindGlTexture(atlasTextureId);
-    updateCurrentlyBoundGlTexture(getImageAsBuffer(image), atlasX, atlasY, image.getWidth(), image.getHeight());
+    updateCurrentlyBoundGlTexture(
+            imageFactory.asByteBuffer(image),
+            atlasX,
+            atlasY,
+            image.getWidth(),
+            image.getHeight());
   }
 
   @Override
@@ -279,7 +220,7 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
       return INVALID_TEXTURE_ID;
     }
     try {
-      return createNonAtlasTextureInternal(getImageAsBuffer(image), image.getWidth(), image.getHeight());
+      return createNonAtlasTextureInternal(imageFactory.asByteBuffer(image), image.getWidth(), image.getHeight());
     } catch (Exception e) {
       textureCreationFailed(getImageWidth(image), getImageHeight(image), e);
       return INVALID_TEXTURE_ID;
@@ -337,7 +278,7 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
   @Override
   public void beginBatch(@Nonnull final BlendMode blendMode, final int textureId) {
     log.fine("beginBatch()");
-    currentBatch = getNewBatch();
+    currentBatch = createNewBatch();
     addBatch(currentBatch);
     currentBatch.begin(blendMode, textureId);
   }
@@ -364,7 +305,12 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
     // texture atlas when individual textures are removed. If necessary this can be enabled with a system property.
     if (shouldFillRemovedImagesInAtlas) {
       bindGlTexture(atlasTextureId);
-      updateCurrentlyBoundGlTexture(createBlankImageData(imageWidth, imageHeight), atlasX, atlasY, imageWidth, imageHeight);
+      updateCurrentlyBoundGlTexture(
+              createBlankImageData(imageWidth, imageHeight),
+              atlasX,
+              atlasY,
+              imageWidth,
+              imageHeight);
     }
   }
 
@@ -382,49 +328,41 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
 
   // Internal implementations
 
-  private void initializeBatchPool() {
-    batchPool = new ObjectPool<T>(new Factory<T>() {
-      @Nonnull
-      @Override
-      public T createNew() {
-        return createBatch();
-      }
-    });
-  }
-
   private void initializeOpenGL() {
-    glViewport(0, 0, getWidth(), getHeight());
-    glMatrixMode(GL_PROJECTION());
-    glLoadIdentity();
-    glOrthof(0.0f, (float) getWidth(), (float) getHeight(), 0.0f, -9999.0f, 9999.0f);
-    glMatrixMode(GL_MODELVIEW());
-    glLoadIdentity();
-    glDisable(GL_DEPTH_TEST());
-    glDisable(GL_CULL_FACE());
-    glDisable(GL_LIGHTING());
-    glEnable(GL_ALPHA_TEST());
-    glEnable(GL_BLEND());
-    glEnable(GL_TEXTURE_2D());
-    glAlphaFunc(GL_NOTEQUAL(), 0);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT());
+    gl.glViewport(0, 0, getWidth(), getHeight());
+    gl.glMatrixMode(gl.GL_PROJECTION());
+    gl.glLoadIdentity();
+    gl.glOrthof(0.0f, (float) getWidth(), (float) getHeight(), 0.0f, -9999.0f, 9999.0f);
+    gl.glMatrixMode(gl.GL_MODELVIEW());
+    gl.glLoadIdentity();
+    gl.glDisable(gl.GL_DEPTH_TEST());
+    gl.glDisable(gl.GL_CULL_FACE());
+    gl.glDisable(gl.GL_LIGHTING());
+    gl.glEnable(gl.GL_ALPHA_TEST());
+    gl.glEnable(gl.GL_BLEND());
+    gl.glEnable(gl.GL_TEXTURE_2D());
+    gl.glAlphaFunc(gl.GL_NOTEQUAL(), 0);
+    gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    gl.glClear(gl.GL_COLOR_BUFFER_BIT());
     // Enable exact pixelization for 2D rendering
     // See: http://www.opengl.org/archives/resources/faq/technical/transformations.htm#tran0030
-    glTranslatef(0.375f, 0.375f, 0.0f);
+    gl.glTranslatef(0.375f, 0.375f, 0.0f);
   }
 
   private void updateViewport() {
     viewportBuffer.clear();
-    glGetIntegerv(GL_VIEWPORT(), viewportBuffer);
+    gl.glGetIntegerv(gl.GL_VIEWPORT(), viewportBuffer);
     viewportWidth = viewportBuffer.get(2);
     viewportHeight = viewportBuffer.get(3);
     log.fine("Updated viewport: width: " + viewportWidth + ", height: " + viewportHeight);
   }
 
+  @Nonnull
   private ByteBuffer createBlankImageData(final int textureWidth, final int textureHeight) {
-    return createNativeOrderedByteBuffer(textureWidth * textureHeight * 4);
+    return this.bufferFactory.createNativeOrderedByteBuffer(textureWidth * textureHeight * 4);
   }
 
+  @Nonnull
   private ByteBuffer createBlankImageDataForAtlas(final int atlasTextureId) {
     return createBlankImageData(getAtlasWidth(atlasTextureId), getAtlasHeight(atlasTextureId));
   }
@@ -438,15 +376,15 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
   }
 
   private void deleteBatches() {
-    for (T batch : batches) {
+    for (Batch batch : batches) {
       batchPool.free(batch);
     }
     batches.clear();
   }
 
   private void clearGlColorBufferWithBlack() {
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT());
+    gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    gl.glClear(gl.GL_COLOR_BUFFER_BIT());
   }
 
   private int createAtlasTextureInternal(final int width, final int height)
@@ -459,20 +397,23 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
   private void textureCreationFailed(
           final int textureWidth,
           final int textureHeight,
-          final Exception exception) {
+          @Nonnull final Exception exception) {
     log.log(Level.WARNING, "Failed to create texture of width: " + textureWidth + " & height: " + textureHeight +
             ".", exception);
   }
 
-  private int getImageWidth(final Image image) {
+  private int getImageWidth(@Nullable final Image image) {
     return image != null ? image.getWidth() : 0;
   }
 
-  private int getImageHeight(final Image image) {
+  private int getImageHeight(@Nullable final Image image) {
     return image != null ? image.getHeight() : 0;
   }
 
-  private int createGlTexture(final ByteBuffer imageData, final int textureWidth, final int textureHeight) throws Exception {
+  private int createGlTexture(
+          @Nullable final ByteBuffer imageData,
+          final int textureWidth,
+          final int textureHeight) throws Exception {
     checkGlTextureSize(textureWidth, textureHeight);
     int glTextureId = createTextureId();
     bindGlTexture(glTextureId);
@@ -482,49 +423,57 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
   }
 
   private void bindGlTexture(final int textureId) {
-    glBindTexture(GL_TEXTURE_2D(), textureId);
+    gl.glBindTexture(gl.GL_TEXTURE_2D(), textureId);
   }
 
-  private void updateCurrentlyBoundGlTexture(final ByteBuffer imageData, final int width, final int height) {
-    glTexImage2D(
-            GL_TEXTURE_2D(),
+  private void updateCurrentlyBoundGlTexture(@Nullable final ByteBuffer imageData, final int width, final int height) {
+    if (imageData == null) {
+      log.warning("Attempted to update currently bound OpenGL texture with null image data!");
+      return;
+    }
+    gl.glTexImage2D(
+            gl.GL_TEXTURE_2D(),
             0,
-            GL_RGBA(),
+            gl.GL_RGBA(),
             width,
             height,
             0,
-            GL_RGBA(),
-            GL_UNSIGNED_BYTE(),
+            gl.GL_RGBA(),
+            gl.GL_UNSIGNED_BYTE(),
             imageData);
     checkGLError();
   }
 
   private void updateCurrentlyBoundGlTexture(
-          final ByteBuffer imageData,
+          @Nullable final ByteBuffer imageData,
           final int subTextureX,
           final int subTextureY,
           final int subTextureWidth,
           final int subTextureHeight) {
-    glTexSubImage2D(
-            GL_TEXTURE_2D(),
+    if (imageData == null) {
+      log.warning("Attempted to update sub-texture of currently bound OpenGL texture with null image data!");
+      return;
+    }
+    gl.glTexSubImage2D(
+            gl.GL_TEXTURE_2D(),
             0,
             subTextureX,
             subTextureY,
             subTextureWidth,
             subTextureHeight,
-            GL_RGBA(),
-            GL_UNSIGNED_BYTE(),
+            gl.GL_RGBA(),
+            gl.GL_UNSIGNED_BYTE(),
             imageData);
     checkGLError();
   }
 
   private void setCurrentlyBoundGlTextureFilteringQuality(final boolean isHighQuality) {
     if (isHighQuality) {
-      glTexParameterf(GL_TEXTURE_2D(), GL_TEXTURE_MIN_FILTER(), GL_LINEAR());
-      glTexParameterf(GL_TEXTURE_2D(), GL_TEXTURE_MAG_FILTER(), GL_LINEAR());
+      gl.glTexParameterf(gl.GL_TEXTURE_2D(), gl.GL_TEXTURE_MIN_FILTER(), gl.GL_LINEAR());
+      gl.glTexParameterf(gl.GL_TEXTURE_2D(), gl.GL_TEXTURE_MAG_FILTER(), gl.GL_LINEAR());
     } else {
-      glTexParameterf(GL_TEXTURE_2D(), GL_TEXTURE_MIN_FILTER(), GL_NEAREST());
-      glTexParameterf(GL_TEXTURE_2D(), GL_TEXTURE_MAG_FILTER(), GL_NEAREST());
+      gl.glTexParameterf(gl.GL_TEXTURE_2D(), gl.GL_TEXTURE_MIN_FILTER(), gl.GL_NEAREST());
+      gl.glTexParameterf(gl.GL_TEXTURE_2D(), gl.GL_TEXTURE_MAG_FILTER(), gl.GL_NEAREST());
     }
     checkGLError();
   }
@@ -536,22 +485,18 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
 
   private int createTextureId() {
     singleTextureIdBuffer.clear();
-    glGenTextures(1, singleTextureIdBuffer);
+    gl.glGenTextures(1, singleTextureIdBuffer);
     checkGLError();
     return singleTextureIdBuffer.get(0);
   }
 
   private void checkGLError() {
-    int error = glGetError();
-
-    if (error == GL_NO_ERROR()) {
+    int error = gl.glGetError();
+    if (error == gl.GL_NO_ERROR()) {
       return;
     }
-
     String errorMessage = getGlErrorMessage(error);
-
     log.warning("Error: (" + error + ") " + errorMessage);
-
     try {
       throw new Exception();
     } catch (Exception e) {
@@ -559,18 +504,19 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
     }
   }
 
+  @Nonnull
   private String getGlErrorMessage(final int error) {
-    if (error == GL_INVALID_ENUM()) {
+    if (error == gl.GL_INVALID_ENUM()) {
       return "Invalid enum";
-    } else if (error == GL_INVALID_VALUE()) {
+    } else if (error == gl.GL_INVALID_VALUE()) {
       return "Invalid value";
-    } else if (error == GL_INVALID_OPERATION()) {
+    } else if (error == gl.GL_INVALID_OPERATION()) {
       return "Invalid operation";
-    } else if (error == GL_STACK_OVERFLOW()) {
+    } else if (error == gl.GL_STACK_OVERFLOW()) {
       return "Stack overflow";
-    } else if (error == GL_STACK_UNDERFLOW()) {
+    } else if (error == gl.GL_STACK_UNDERFLOW()) {
       return "Stack underflow";
-    } else if (error == GL_OUT_OF_MEMORY()) {
+    } else if (error == gl.GL_OUT_OF_MEMORY()) {
       return "Out of memory";
     } else {
       return "";
@@ -594,12 +540,13 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
 
   private int getMaxGlTextureSize() {
     textureSizeBuffer.clear();
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE(), textureSizeBuffer);
+    gl.glGetIntegerv(gl.GL_MAX_TEXTURE_SIZE(), textureSizeBuffer);
     checkGLError();
     return textureSizeBuffer.get(0);
   }
 
-  private int createNonAtlasTextureInternal(final ByteBuffer image, final int width, final int height) throws Exception {
+  private int createNonAtlasTextureInternal(@Nullable final ByteBuffer image, final int width, final int height)
+          throws Exception {
     int textureId = createGlTexture(image, width, height);
     nonAtlasTextureIds.add(textureId);
     return textureId;
@@ -608,7 +555,7 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
   private void deleteNonAtlasTextureInternal(final int textureId) {
     singleTextureIdBuffer.clear();
     singleTextureIdBuffer.put(0, textureId);
-    glDeleteTextures(1, singleTextureIdBuffer);
+    gl.glDeleteTextures(1, singleTextureIdBuffer);
     checkGLError();
     nonAtlasTextureIds.remove(textureId);
   }
@@ -622,14 +569,15 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
           final float y,
           final float width,
           final float height,
-          final Color color1,
-          final Color color2,
-          final Color color3,
-          final Color color4,
+          @Nonnull final Color color1,
+          @Nonnull final Color color2,
+          @Nonnull final Color color3,
+          @Nonnull final Color color4,
           final float textureX,
           final float textureY,
           final float textureWidth,
           final float textureHeight) {
+    assert currentBatch != null;
     currentBatch.addQuad(
             x,
             y,
@@ -651,45 +599,98 @@ public abstract class OpenGLBatchRenderBackend <T extends OpenGlBatch> implement
     }
   }
 
+  @Nonnull
   private BlendMode getCurrentBlendMode() {
+    assert currentBatch != null;
     return currentBatch.getBlendMode();
   }
 
   private boolean shouldBeginBatch() {
+    assert currentBatch != null;
     return !currentBatch.canAddQuad();
   }
 
-  private T getNewBatch() {
+  @Nonnull
+  private Batch createNewBatch() {
     return batchPool.allocate();
   }
 
-  private void addBatch (final T batch) {
+  private void addBatch (@Nonnull final Batch batch) {
     batches.add(batch);
   }
 
   private void renderBatches() {
-    for (T batch : batches) {
+    for (Batch batch : batches) {
       batch.render();
     }
   }
 
   private void beginRendering() {
-    glEnable(GL_TEXTURE_2D());
-    glEnable(GL_BLEND());
-    glEnableClientState(GL_VERTEX_ARRAY());
-    glEnableClientState(GL_COLOR_ARRAY());
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY());
+    gl.glEnable(gl.GL_TEXTURE_2D());
+    gl.glEnable(gl.GL_BLEND());
+    gl.glEnableClientState(gl.GL_VERTEX_ARRAY());
+    gl.glEnableClientState(gl.GL_COLOR_ARRAY());
+    gl.glEnableClientState(gl.GL_TEXTURE_COORD_ARRAY());
   }
 
   private void endRendering() {
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY());
-    glDisableClientState(GL_COLOR_ARRAY());
-    glDisableClientState(GL_VERTEX_ARRAY());
-    glDisable(GL_BLEND());
-    glDisable(GL_TEXTURE_2D());
+    gl.glDisableClientState(gl.GL_TEXTURE_COORD_ARRAY());
+    gl.glDisableClientState(gl.GL_COLOR_ARRAY());
+    gl.glDisableClientState(gl.GL_VERTEX_ARRAY());
+    gl.glDisable(gl.GL_BLEND());
+    gl.glDisable(gl.GL_TEXTURE_2D());
   }
 
   private int getTotalBatchesRendered() {
     return batches.size();
+  }
+
+  private boolean existsCursor(@Nonnull final String filename) {
+    return cursorCache.containsKey(filename);
+  }
+
+  @Nonnull
+  private MouseCursor getCursor(@Nonnull final String filename) {
+    assert cursorCache.containsKey(filename);
+    return cursorCache.get(filename);
+  }
+
+  @Nullable
+  private MouseCursor createCursor (final String filename, final int hotspotX, final int hotspotY) {
+    try {
+      assert resourceLoader != null;
+      cursorCache.put(filename, mouseCursorFactory.create(filename, hotspotX, hotspotY, resourceLoader));
+      return cursorCache.get(filename);
+    } catch (Exception e) {
+      log.log(Level.WARNING, "Could not create mouse cursor [" + filename + "]", e);
+      return null;
+    }
+  }
+
+  @Nonnull
+  private Image createImageFromFile(@Nonnull final String filename) {
+    ImageLoader loader = ImageLoaderFactory.createImageLoader(filename);
+    InputStream imageStream = null;
+    try {
+      assert resourceLoader != null;
+      imageStream = resourceLoader.getResourceAsStream(filename);
+      if (imageStream != null) {
+        ByteBuffer image = loader.loadImageDirect(imageStream);
+        image.rewind();
+        int width = loader.getWidth();
+        int height = loader.getHeight();
+        return imageFactory.create(image, width, height);
+      }
+    } catch (Exception e) {
+      log.log(Level.WARNING, "Could not load image from file: [" + filename + "]", e);
+    } finally {
+      if (imageStream != null) {
+        try {
+          imageStream.close();
+        } catch (IOException ignored) {
+        }
+      }
+    }
+    return imageFactory.create(null, 0, 0);
   }
 }

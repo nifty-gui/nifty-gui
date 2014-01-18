@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.batch.spi;
 
-import de.lessvoid.nifty.batch.Batch;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.tools.Color;
@@ -43,8 +42,7 @@ import javax.annotation.Nullable;
  * @author void
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public interface BatchRenderBackend <T extends Batch> {
-
+public interface BatchRenderBackend {
   /**
    * Gives this RenderDevice access to the NiftyResourceLoader so that the same paths can be used for resolving
    * resources as Nifty would do.
@@ -133,15 +131,10 @@ public interface BatchRenderBackend <T extends Batch> {
   Image loadImage(@Nonnull String filename);
 
   /**
-   * Wraps given buffer into Image interface
-   *
-   * @param data image data
-   * @param w width of the image
-   * @param h height of the image
-   * @return wrapped image
+   * Wraps the given buffer into an Image interface;
    */
   @Nullable
-  Image loadImage(@Nonnull ByteBuffer data, int w, int h);
+  Image loadImage(@Nonnull ByteBuffer imageData, int imageWidth, int imageHeight);
 
   /**
    * Adds the given image to the specified texture atlas at the given position.
@@ -222,15 +215,6 @@ public interface BatchRenderBackend <T extends Batch> {
       float textureWidth,
       float textureHeight,
       int textureId);
-
-  /**
-   * Factory method for creating the type of {@link de.lessvoid.nifty.batch.Batch} that your
-   * {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementation is going to use.
-   *
-   * @return The newly created {@link de.lessvoid.nifty.batch.Batch} instance.
-   */
-  @Nonnull
-  T createBatch();
 
   /**
    * Begins a new batch with the given BlendMode. Starting a new batch with beginBatch() should store the current batch

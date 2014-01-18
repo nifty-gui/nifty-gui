@@ -11,15 +11,13 @@ import de.lessvoid.nifty.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.gdx.input.GdxInputSystem;
 import de.lessvoid.nifty.gdx.input.GdxKeyRepeatSystem;
-import de.lessvoid.nifty.gdx.render.batch.GdxBatchRenderBackend;
+import de.lessvoid.nifty.gdx.render.batch.GdxBatchRenderBackendFactory;
 import de.lessvoid.nifty.gdx.sound.GdxSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 import java.util.logging.LogManager;
 
 /**
- * {@inheritDoc}
- * <p/>
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class LibgdxExampleApplication implements ApplicationListener {
@@ -52,7 +50,7 @@ public class LibgdxExampleApplication implements ApplicationListener {
     config.atlasWidth = atlasWidth;
     config.atlasHeight = atlasHeight;
 
-    BatchRenderDevice batchRenderDevice = new BatchRenderDevice(new GdxBatchRenderBackend(), config);
+    BatchRenderDevice batchRenderDevice = new BatchRenderDevice(GdxBatchRenderBackendFactory.create(), config);
     batchRenderDevice.enableLogFPS();
 
     GdxInputSystem gdxInputSystem = new GdxInputSystem(Gdx.input);

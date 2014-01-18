@@ -1,318 +1,184 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
-import com.jogamp.common.nio.Buffers;
-
 import de.lessvoid.nifty.batch.OpenGLBatchRenderBackend;
-import de.lessvoid.nifty.renderer.jogl.render.JoglImage;
-import de.lessvoid.nifty.renderer.jogl.render.JoglMouseCursor;
+import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
+import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
 
 /**
  * This {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementation includes full support for multiple
  * texture atlases and non-atlas textures.
  *
- * Jogl implementation of the {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} interface. This implementation
- * will be the most backwards-compatible because it doesn't use any functions beyond OpenGL 1.1. It is suitable for
- * desktop devices.
+ * Jogl-specific implementation of the {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} interface. This
+ * implementation will be the most backwards-compatible because it doesn't use any functions beyond OpenGL 1.1. It is
+ * suitable for desktop devices.
  *
  * {@inheritDoc}
  *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
- * @author void
  */
-public class JoglBatchRenderBackend extends OpenGLBatchRenderBackend<JoglBatch> {
+public class JoglBatchRenderBackend implements BatchRenderBackend {
   @Nonnull
-  private static final Logger log = Logger.getLogger(JoglBatchRenderBackend.class.getName());
-  @Nonnull
-  private final GL2 gl;
+  private final BatchRenderBackend internalBackend;
 
-  public JoglBatchRenderBackend() {
-    gl = GLContext.getCurrentGL().getGL2();
+  JoglBatchRenderBackend(@Nonnull final OpenGLBatchRenderBackend internalBackend) {
+    this.internalBackend = internalBackend;
   }
 
-  @Nonnull
   @Override
-  protected Image createImageFromBuffer(@Nullable ByteBuffer buffer, int imageWidth, int imageHeight) {
-    return new JoglImage(buffer, imageWidth, imageHeight);
+  public void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader) {
+    internalBackend.setResourceLoader(niftyResourceLoader);
   }
 
-  @Nullable
   @Override
-  protected ByteBuffer getImageAsBuffer(Image image) {
-    return image instanceof JoglImage ? ((JoglImage)image).getBuffer() : null;
+  public int getWidth() {
+    return internalBackend.getWidth();
   }
 
-  @Nonnull
   @Override
-  protected ByteBuffer createNativeOrderedByteBuffer(int numBytes) {
-    return Buffers.newDirectByteBuffer(numBytes);
+  public int getHeight() {
+    return internalBackend.getHeight();
   }
 
-  @Nonnull
   @Override
-  protected IntBuffer createNativeOrderedIntBuffer(int numInts) {
-    return Buffers.newDirectIntBuffer(numInts);
+  public void beginFrame() {
+    internalBackend.beginFrame();
+  }
+
+  @Override
+  public void endFrame() {
+    internalBackend.endFrame();
+  }
+
+  @Override
+  public void clear() {
+    internalBackend.clear();
   }
 
   @Nullable
   @Override
   public MouseCursor createMouseCursor(@Nonnull String filename, int hotspotX, int hotspotY) throws IOException {
-    return new JoglMouseCursor(filename, hotspotX, hotspotY, getResourceLoader());
+    return internalBackend.createMouseCursor(filename, hotspotX, hotspotY);
+  }
+
+  @Override
+  public void enableMouseCursor(@Nonnull MouseCursor mouseCursor) {
+    internalBackend.enableMouseCursor(mouseCursor);
+  }
+
+  @Override
+  public void disableMouseCursor() {
+    internalBackend.disableMouseCursor();
+  }
+
+  @Override
+  public int createTextureAtlas(int atlasWidth, int atlasHeight) {
+    return internalBackend.createTextureAtlas(atlasWidth, atlasHeight);
+  }
+
+  @Override
+  public void clearTextureAtlas(int atlasTextureId) {
+    internalBackend.clearTextureAtlas(atlasTextureId);
   }
 
   @Nonnull
   @Override
-  public JoglBatch createBatch() {
-    return new JoglBatch();
+  public Image loadImage(@Nonnull String filename) {
+    return internalBackend.loadImage(filename);
+  }
+
+  @Nullable
+  @Override
+  public Image loadImage(@Nonnull ByteBuffer imageData, int imageWidth, int imageHeight) {
+    return internalBackend.loadImage(imageData, imageWidth, imageHeight);
   }
 
   @Override
-  protected int GL_ALPHA_TEST() {
-    return GL2.GL_ALPHA_TEST;
+  public void addImageToAtlas(Image image, int atlasX, int atlasY, int atlasTextureId) {
+    internalBackend.addImageToAtlas(image, atlasX, atlasY, atlasTextureId);
   }
 
   @Override
-  protected int GL_BLEND() {
-    return GL.GL_BLEND;
+  public int createNonAtlasTexture(@Nonnull Image image) {
+    return internalBackend.createNonAtlasTexture(image);
   }
 
   @Override
-  protected int GL_COLOR_ARRAY() {
-    return GL2.GL_COLOR_ARRAY;
+  public void deleteNonAtlasTexture(int textureId) {
+    internalBackend.deleteNonAtlasTexture(textureId);
   }
 
   @Override
-  protected int GL_COLOR_BUFFER_BIT() {
-    return GL.GL_COLOR_BUFFER_BIT;
+  public boolean existsNonAtlasTexture(int textureId) {
+    return internalBackend.existsNonAtlasTexture(textureId);
   }
 
   @Override
-  protected int GL_CULL_FACE() {
-    return GL.GL_CULL_FACE;
+  public void addQuad(
+          float x,
+          float y,
+          float width,
+          float height,
+          @Nonnull Color color1,
+          @Nonnull Color color2,
+          @Nonnull Color color3,
+          @Nonnull Color color4,
+          float textureX,
+          float textureY,
+          float textureWidth,
+          float textureHeight,
+          int textureId) {
+    internalBackend.addQuad(
+            x,
+            y,
+            width,
+            height,
+            color1,
+            color2,
+            color3,
+            color4,
+            textureX,
+            textureY,
+            textureWidth,
+            textureHeight,
+            textureId);
   }
 
   @Override
-  protected int GL_DEPTH_TEST() {
-    return GL.GL_DEPTH_TEST;
+  public void beginBatch(@Nonnull BlendMode blendMode, int textureId) {
+    internalBackend.beginBatch(blendMode, textureId);
   }
 
   @Override
-  protected int GL_INVALID_ENUM() {
-    return GL.GL_INVALID_ENUM;
+  public int render() {
+    return internalBackend.render();
   }
 
   @Override
-  protected int GL_INVALID_OPERATION() {
-    return GL.GL_INVALID_OPERATION;
+  public void removeImageFromAtlas(
+          @Nonnull Image image,
+          int atlasX,
+          int atlasY,
+          int imageWidth,
+          int imageHeight,
+          int atlasTextureId) {
+    internalBackend.removeImageFromAtlas(image, atlasX, atlasY, imageWidth, imageHeight, atlasTextureId);
   }
 
   @Override
-  protected int GL_INVALID_VALUE() {
-    return GL.GL_INVALID_VALUE;
+  public void useHighQualityTextures(boolean shouldUseHighQualityTextures) {
+    internalBackend.useHighQualityTextures(shouldUseHighQualityTextures);
   }
 
   @Override
-  protected int GL_LIGHTING() {
-    return GL2.GL_LIGHTING;
-  }
-
-  @Override
-  protected int GL_LINEAR() {
-    return GL.GL_LINEAR;
-  }
-
-  @Override
-  protected int GL_MAX_TEXTURE_SIZE() {
-    return GL.GL_MAX_TEXTURE_SIZE;
-  }
-
-  @Override
-  protected int GL_MODELVIEW() {
-    return GL2.GL_MODELVIEW;
-  }
-
-  @Override
-  protected int GL_NEAREST() {
-    return GL.GL_NEAREST;
-  }
-
-  @Override
-  protected int GL_NO_ERROR() {
-    return GL.GL_NO_ERROR;
-  }
-
-  @Override
-  protected int GL_NOTEQUAL() {
-    return GL.GL_NOTEQUAL;
-  }
-
-  @Override
-  protected int GL_OUT_OF_MEMORY() {
-    return GL.GL_OUT_OF_MEMORY;
-  }
-
-  @Override
-  protected int GL_PROJECTION() {
-    return GL2.GL_PROJECTION;
-  }
-
-  @Override
-  protected int GL_RGBA() {
-    return GL.GL_RGBA;
-  }
-
-  @Override
-  protected int GL_STACK_OVERFLOW() {
-    return GL2.GL_STACK_OVERFLOW;
-  }
-
-  @Override
-  protected int GL_STACK_UNDERFLOW() {
-    return GL2.GL_STACK_UNDERFLOW;
-  }
-
-  @Override
-  protected int GL_TEXTURE_2D() {
-    return GL.GL_TEXTURE_2D;
-  }
-
-  @Override
-  protected int GL_TEXTURE_COORD_ARRAY() {
-    return GL2.GL_TEXTURE_COORD_ARRAY;
-  }
-
-  @Override
-  protected int GL_TEXTURE_MAG_FILTER() {
-    return GL.GL_TEXTURE_MAG_FILTER;
-  }
-
-  @Override
-  protected int GL_TEXTURE_MIN_FILTER() {
-    return GL.GL_TEXTURE_MIN_FILTER;
-  }
-
-  @Override
-  protected int GL_UNSIGNED_BYTE() {
-    return GL.GL_UNSIGNED_BYTE;
-  }
-
-  @Override
-  protected int GL_VERTEX_ARRAY() {
-    return GL2.GL_VERTEX_ARRAY;
-  }
-
-  @Override
-  protected int GL_VIEWPORT() {
-    return GL.GL_VIEWPORT;
-  }
-
-  @Override
-  protected void glAlphaFunc(int func, float ref) {
-    gl.glAlphaFunc(func, ref);
-  }
-
-  @Override
-  protected void glBindTexture(int target, int texture) {
-    gl.glBindTexture(target, texture);
-  }
-
-  @Override
-  protected void glClear(int mask) {
-    gl.glClear(mask);
-  }
-
-  @Override
-  protected void glClearColor(float red, float green, float blue, float alpha) {
-    gl.glClearColor(red, green, blue, alpha);
-  }
-
-  @Override
-  protected void glDeleteTextures(int n, IntBuffer textures) {
-    gl.glDeleteTextures(n, textures);
-  }
-
-  @Override
-  protected void glDisable(int cap) {
-    gl.glDisable(cap);
-  }
-
-  @Override
-  protected void glDisableClientState(int array) {
-    gl.glDisableClientState(array);
-  }
-
-  @Override
-  protected void glEnable(int cap) {
-    gl.glEnable(cap);
-  }
-
-  @Override
-  protected void glEnableClientState(int array) {
-    gl.glEnableClientState(array);
-  }
-
-  @Override
-  protected void glGenTextures(int n, IntBuffer textures) {
-    gl.glGenTextures(n, textures);
-  }
-
-  @Override
-  protected int glGetError() {
-    return gl.glGetError();
-  }
-
-  @Override
-  protected void glGetIntegerv(int pname, IntBuffer params) {
-    gl.glGetIntegerv(pname, params);
-  }
-
-  @Override
-  protected void glLoadIdentity() {
-    gl.glLoadIdentity();
-  }
-
-  @Override
-  protected void glMatrixMode(int mode) {
-    gl.glMatrixMode(mode);
-  }
-
-  @Override
-  protected void glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) {
-    gl.glOrthof(left, right, bottom, top, zNear, zFar);
-  }
-
-  @Override
-  protected void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, ByteBuffer pixels) {
-    gl.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
-  }
-
-  @Override
-  protected void glTexParameterf(int target, int pname, float param) {
-    gl.glTexParameterf(target, pname, param);
-  }
-
-  @Override
-  protected void glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, ByteBuffer pixels) {
-    gl.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
-  }
-
-  @Override
-  protected void glTranslatef(float x, float y, float z) {
-    gl.glTranslatef(x, y, z);
-  }
-
-  @Override
-  protected void glViewport(int x, int y, int width, int height) {
-    gl.glViewport(x, y, width, height);
+  public void fillRemovedImagesInAtlas(boolean shouldFill) {
+    internalBackend.fillRemovedImagesInAtlas(shouldFill);
   }
 }

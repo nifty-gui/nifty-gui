@@ -1,90 +1,70 @@
 package de.lessvoid.nifty.gdx.render.batch;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.utils.BufferUtils;
+import de.lessvoid.nifty.batch.spi.Batch;
+import de.lessvoid.nifty.batch.OpenGLBatch;
+import de.lessvoid.nifty.render.BlendMode;
+import de.lessvoid.nifty.tools.Color;
 
-import de.lessvoid.nifty.batch.OpenGlBatch;
-
-import java.nio.FloatBuffer;
 import javax.annotation.Nonnull;
 
 /**
- * Concrete LibGDX-specific implementation of {@link de.lessvoid.nifty.batch.Batch} interface.
- *
- * {@inheritDoc}
- *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public class GdxBatch extends OpenGlBatch {
+public class GdxBatch implements Batch {
+  @Nonnull
+  private final OpenGLBatch internalBatch;
+
+  public GdxBatch(@Nonnull final OpenGLBatch internalBatch) {
+    this.internalBatch = internalBatch;
+  }
+
+  @Override
+  public void begin(@Nonnull BlendMode blendMode, int textureId) {
+    internalBatch.begin(blendMode, textureId);
+  }
+
   @Nonnull
   @Override
-  protected FloatBuffer createFloatBuffer(int numFloats) {
-    return BufferUtils.newFloatBuffer(numFloats);
+  public BlendMode getBlendMode() {
+    return internalBatch.getBlendMode();
   }
 
   @Override
-  protected int GL_DST_COLOR() {
-    return GL10.GL_DST_COLOR;
+  public void render() {
+    internalBatch.render();
   }
 
   @Override
-  protected int GL_FLOAT() {
-    return GL10.GL_FLOAT;
+  public boolean canAddQuad() {
+    return internalBatch.canAddQuad();
   }
 
   @Override
-  protected int GL_ONE_MINUS_SRC_ALPHA() {
-    return GL10.GL_ONE_MINUS_SRC_ALPHA;
-  }
-
-  @Override
-  protected int GL_SRC_ALPHA() {
-    return GL10.GL_SRC_ALPHA;
-  }
-
-  @Override
-  protected int GL_TEXTURE_2D() {
-    return GL10.GL_TEXTURE_2D;
-  }
-
-  @Override
-  protected int GL_TRIANGLES() {
-    return GL10.GL_TRIANGLES;
-  }
-
-  @Override
-  protected int GL_ZERO() {
-    return GL10.GL_ZERO;
-  }
-
-  @Override
-  protected void glBindTexture(int target, int texture) {
-    Gdx.gl10.glBindTexture(target, texture);
-  }
-
-  @Override
-  protected void glBlendFunc(int sfactor, int dfactor) {
-    Gdx.gl10.glBlendFunc(sfactor, dfactor);
-  }
-
-  @Override
-  protected void glColorPointer(int size, int type, int stride, FloatBuffer pointer) {
-    Gdx.gl10.glColorPointer(size, type, stride, pointer);
-  }
-
-  @Override
-  protected void glDrawArrays(int mode, int first, int count) {
-    Gdx.gl10.glDrawArrays(mode, first, count);
-  }
-
-  @Override
-  protected void glTexCoordPointer(int size, int type, int stride, FloatBuffer pointer) {
-    Gdx.gl10.glTexCoordPointer(size, type, stride, pointer);
-  }
-
-  @Override
-  protected void glVertexPointer(int size, int type, int stride, FloatBuffer pointer) {
-    Gdx.gl10.glVertexPointer(size, type, stride, pointer);
+  public void addQuad(
+          float x,
+          float y,
+          float width,
+          float height,
+          @Nonnull Color color1,
+          @Nonnull Color color2,
+          @Nonnull Color color3,
+          @Nonnull Color color4,
+          float textureX,
+          float textureY,
+          float textureWidth,
+          float textureHeight) {
+    internalBatch.addQuad(
+            x,
+            y,
+            width,
+            height,
+            color1,
+            color2,
+            color3,
+            color4,
+            textureX,
+            textureY,
+            textureWidth,
+            textureHeight);
   }
 }
