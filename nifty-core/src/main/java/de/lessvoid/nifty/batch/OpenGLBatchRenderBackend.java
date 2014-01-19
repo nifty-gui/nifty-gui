@@ -675,10 +675,10 @@ public class OpenGLBatchRenderBackend implements BatchRenderBackend {
       assert resourceLoader != null;
       imageStream = resourceLoader.getResourceAsStream(filename);
       if (imageStream != null) {
-        ByteBuffer image = loader.loadImageDirect(imageStream);
+        ByteBuffer image = loader.loadAsByteBufferRGBA(imageStream);
         image.rewind();
-        int width = loader.getWidth();
-        int height = loader.getHeight();
+        int width = loader.getImageWidth();
+        int height = loader.getImageHeight();
         return imageFactory.create(image, width, height);
       }
     } catch (Exception e) {

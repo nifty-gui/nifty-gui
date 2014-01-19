@@ -38,13 +38,13 @@ public class LwjglRenderImage implements RenderImage {
     try {
       imageStream = resourceLoader.getResourceAsStream(filename);
       if (imageStream != null) {
-        ByteBuffer image = loader.loadImage(imageStream);
+        ByteBuffer image = loader.loadAsByteBufferRGBA(imageStream);
         image.rewind();
-        width = loader.getWidth();
-        height = loader.getHeight();
-        textureWidth = loader.getTexWidth();
-        textureHeight = loader.getTexHeight();
-        createTexture(image, textureWidth, textureHeight, filterParam, loader.getDepth() == 32 ? GL11.GL_RGBA :
+        width = loader.getImageWidth();
+        height = loader.getImageHeight();
+        textureWidth = loader.getTextureWidth();
+        textureHeight = loader.getTextureHeight();
+        createTexture(image, textureWidth, textureHeight, filterParam, loader.getImageBitDepth() == 32 ? GL11.GL_RGBA :
                 GL11.GL_RGB);
       }
     } catch (Exception e) {

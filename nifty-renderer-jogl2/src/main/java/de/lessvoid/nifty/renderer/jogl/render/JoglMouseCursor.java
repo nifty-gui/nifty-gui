@@ -30,7 +30,7 @@ public class JoglMouseCursor implements MouseCursor {
       throw new IOException("Cannot find / load mouse cursor image file: [" + filename + "].");
     }
     try {
-      BufferedImage image = imageLoader.loadMouseCursorImageAsBufferedImage(imageStream);
+      BufferedImage image = imageLoader.loadAsBufferedImage(imageStream);
       cursor = Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(hotspotX, hotspotY), filename);
     } catch (Exception e) {
       throw new IOException(e);

@@ -44,14 +44,14 @@ public class JoglRenderImage implements RenderImage {
     try {
       imageStream = resourceLoader.getResourceAsStream(filename);
       if (imageStream != null) {
-        ByteBuffer image = loader.loadImage(imageStream);
+        ByteBuffer image = loader.loadAsByteBufferRGBA(imageStream);
         image.rewind();
-        width = loader.getWidth();
-        height = loader.getHeight();
-        textureWidth = loader.getTexWidth();
-        textureHeight = loader.getTexHeight();
+        width = loader.getImageWidth();
+        height = loader.getImageHeight();
+        textureWidth = loader.getTextureWidth();
+        textureHeight = loader.getTextureHeight();
         createTexture(image, textureWidth, textureHeight, filterParam ? GL.GL_LINEAR : GL.GL_NEAREST,
-                loader.getDepth() == 32 ? GL.GL_RGBA : GL.GL_RGB);
+                loader.getImageBitDepth() == 32 ? GL.GL_RGBA : GL.GL_RGB);
       }
     } catch (Exception e) {
       log.log(Level.WARNING, "Could not load image from file: [" + filename + "]", e);
