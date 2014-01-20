@@ -32,9 +32,8 @@ import de.lessvoid.nifty.examples.defaultcontrols.treebox.TreeBoxControlDialogDe
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 import de.lessvoid.nifty.examples.resolution.ResolutionControlLWJGL;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackendCoreProfile;
 import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackendFactory;
+import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.LwjglBatchRenderBackendCoreProfileFactory;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
@@ -97,7 +96,7 @@ public class ControlsDemo<T> implements NiftyExample {
   @Nonnull
   private static BatchRenderBackend createBatchRenderBackend(final boolean useCoreProfile) {
     if (useCoreProfile) {
-      return new LwjglBatchRenderBackendCoreProfile();
+      return LwjglBatchRenderBackendCoreProfileFactory.create();
     } else {
       return LwjglBatchRenderBackendFactory.create();
     }

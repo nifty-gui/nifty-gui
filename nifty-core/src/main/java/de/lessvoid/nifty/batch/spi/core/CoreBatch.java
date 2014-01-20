@@ -1,5 +1,6 @@
-package de.lessvoid.nifty.batch.spi;
+package de.lessvoid.nifty.batch.spi.core;
 
+import de.lessvoid.nifty.batch.core.CoreTexture2D;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 
@@ -10,24 +11,25 @@ import javax.annotation.Nonnull;
  * {@link #addQuad(float, float, float, float, de.lessvoid.nifty.tools.Color, de.lessvoid.nifty.tools.Color, de.lessvoid.nifty.tools.Color, de.lessvoid.nifty.tools.Color, float, float, float, float)}
  * method. A batch can only hold so many quads; the {@link #canAddQuad()} method should tell you when the batch is
  * full. The amount of vertex data that a batch can hold is implementation-specific. Place initialization routines in
- * {@link #begin(de.lessvoid.nifty.render.BlendMode, int)}. When starting a new batch, you should call
- * {@link #begin(de.lessvoid.nifty.render.BlendMode, int)} to initialize the batch before calling {@link #render()}.
+ * {@link #begin(de.lessvoid.nifty.render.BlendMode, de.lessvoid.nifty.batch.core.CoreTexture2D)}. When starting a new
+ * batch, you should call {@link #begin(de.lessvoid.nifty.render.BlendMode, de.lessvoid.nifty.batch.core.CoreTexture2D)}
+ * to initialize the batch before calling {@link #render()}.
  *
  * @author void
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public interface Batch {
+public interface CoreBatch {
   /**
-   * Initializes the batch by specifying the blend mode and texture id before a call to {@link #render()}.
+   * Initializes the batch by specifying the blend mode and texture before a call to {@link #render()}.
    *
    * @param blendMode The {@link de.lessvoid.nifty.render.BlendMode} to render the batch with.
-   * @param textureId The id of the texture that this batch's vertex data belongs to.
+   * @param texture The texture that this batch's vertex data belongs to.
    */
-  public void begin(@Nonnull final BlendMode blendMode, final int textureId);
+  public void begin(@Nonnull BlendMode blendMode, final CoreTexture2D texture);
 
   /**
    * Gets the {@link de.lessvoid.nifty.render.BlendMode} that will be used to render this batch, that was specified in
-   * {@link #begin(de.lessvoid.nifty.render.BlendMode, int)}.
+   * {@link #begin(de.lessvoid.nifty.render.BlendMode, de.lessvoid.nifty.batch.core.CoreTexture2D)}.
    */
   @Nonnull
   public BlendMode getBlendMode();
@@ -35,7 +37,8 @@ public interface Batch {
   /**
    * Renders the batch's vertex data that was added with
    * {@link #addQuad(float, float, float, float, de.lessvoid.nifty.tools.Color, de.lessvoid.nifty.tools.Color, de.lessvoid.nifty.tools.Color, de.lessvoid.nifty.tools.Color, float, float, float, float)},
-   * using the blend mode and texture id specified in {@link #begin(de.lessvoid.nifty.render.BlendMode, int)}.
+   * using the blend mode and texture id specified in
+   * {@link #begin(de.lessvoid.nifty.render.BlendMode, de.lessvoid.nifty.batch.core.CoreTexture2D)}.
    */
   public void render();
 

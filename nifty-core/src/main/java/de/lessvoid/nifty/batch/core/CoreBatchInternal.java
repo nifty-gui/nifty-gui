@@ -1,25 +1,34 @@
-package de.lessvoid.nifty.renderer.lwjgl.render.batch;
+package de.lessvoid.nifty.batch.core;
 
-import de.lessvoid.nifty.batch.spi.Batch;
+import de.lessvoid.nifty.batch.spi.BufferFactory;
+import de.lessvoid.nifty.batch.spi.core.CoreBatch;
+import de.lessvoid.nifty.batch.spi.core.CoreGL;
 import de.lessvoid.nifty.render.BlendMode;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreElementVBO;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreRender;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreShader;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreVAO;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreVBO;
 import de.lessvoid.nifty.tools.Color;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 
-public class LwjglBatchCoreProfile implements Batch {
+/**
+ * Internal implementation for OpenGL Core Profile batch management that gives OpenGL-based
+ * {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementations some default functionality to avoid having to
+ * reinvent the wheel and to prevent unnecessary code duplication. Suitable for desktop devices.
+ *
+ * Note: Requires OpenGL 3.2 or higher. Mobiles devices & OpenGL ES are not officially supported yet with this class.
+ *
+ * {@inheritDoc}
+ *
+ * @author void256
+ * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
+ */
+public class CoreBatchInternal implements CoreBatch {
   // 4 vertices per quad and 8 vertex attributes per vertex:
   // - 2 x pos
   // - 2 x texture
   // - 4 x color
-  private final static int PRIMITIVE_SIZE = 4 * 8;
+  private static final int PRIMITIVE_SIZE = 4 * 8;
   private static final int SIZE = 64 * 1024; // 64k
-  private final int primitiveRestartIndex;
+  @Nonnull
+  private final CoreGL gl;
   @Nonnull
   private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
   @Nonnull
@@ -32,19 +41,26 @@ public class LwjglBatchCoreProfile implements Batch {
   private final CoreVBO vbo;
   @Nonnull
   private final CoreElementVBO elementVbo;
+  private final int primitiveRestartIndex;
+  private CoreTexture2D texture;
   private int primitiveCount;
   private int indexCount;
   private int globalIndex;
 
-  public LwjglBatchCoreProfile(@Nonnull final CoreShader shader, final int primitiveRestartIndex) {
+  public CoreBatchInternal(
+          @Nonnull final CoreGL gl,
+          @Nonnull final CoreShader shader,
+          @Nonnull final BufferFactory bufferFactory,
+          final int primitiveRestartIndex) {
+    this.gl = gl;
     this.primitiveRestartIndex = primitiveRestartIndex;
-    vao = new CoreVAO();
+    vao = new CoreVAO(gl, bufferFactory);
     vao.bind();
 
-    elementVbo = CoreElementVBO.createStream(new int[SIZE]);
+    elementVbo = CoreElementVBO.createStreamVBO(gl, bufferFactory, new int[SIZE]);
     elementVbo.bind();
 
-    vbo = CoreVBO.createStream(new float[SIZE]);
+    vbo = CoreVBO.createStreamVBO(gl, bufferFactory, new float[SIZE]);
     vbo.bind();
 
     vao.enableVertexAttributef(shader.getAttribLocation("aVertex"), 2, 8, 0);
@@ -58,7 +74,8 @@ public class LwjglBatchCoreProfile implements Batch {
   }
 
   @Override
-  public void begin(@Nonnull BlendMode blendMode, int textureId) {
+  public void begin(@Nonnull BlendMode blendMode, CoreTexture2D texture) {
+    this.texture = texture;
     vao.bind();
     vbo.bind();
     vbo.getBuffer().clear();
@@ -82,10 +99,12 @@ public class LwjglBatchCoreProfile implements Batch {
       return; // Attempting to render with an empty vertex buffer crashes the program.
     }
 
+    texture.bind();
+
     if (blendMode.equals(BlendMode.BLEND)) {
-      GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+      gl.glBlendFunc(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
     } else if (blendMode.equals(BlendMode.MULIPLY)) {
-      GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ZERO);
+      gl.glBlendFunc(gl.GL_DST_COLOR(), gl.GL_ZERO());
     }
 
     vao.bind();
@@ -95,7 +114,7 @@ public class LwjglBatchCoreProfile implements Batch {
     elementVbo.getBuffer().flip();
     elementVbo.bind();
     elementVbo.send();
-    CoreRender.renderTriangleStripIndexed(indexCount);
+    CoreRender.renderTriangleStripIndexed(gl, indexCount);
   }
 
   @Override
@@ -105,18 +124,18 @@ public class LwjglBatchCoreProfile implements Batch {
 
   @Override
   public void addQuad(
-          float x,
-          float y,
-          float width,
-          float height,
-          @Nonnull Color color1,
-          @Nonnull Color color2,
-          @Nonnull Color color3,
-          @Nonnull Color color4,
-          float textureX,
-          float textureY,
-          float textureWidth,
-          float textureHeight) {
+          final float x,
+          final float y,
+          final float width,
+          final float height,
+          final @Nonnull Color color1,
+          final @Nonnull Color color2,
+          final @Nonnull Color color3,
+          final @Nonnull Color color4,
+          final float textureX,
+          final float textureY,
+          final float textureWidth,
+          final float textureHeight) {
     int bufferIndex = 0;
     int elementIndexBufferIndex = 0;
 

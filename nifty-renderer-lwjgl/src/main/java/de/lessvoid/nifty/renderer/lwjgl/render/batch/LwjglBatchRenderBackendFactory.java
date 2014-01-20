@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch;
 
-import de.lessvoid.nifty.batch.OpenGLBatchRenderBackend;
+import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBufferFactory;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglImageFactory;
@@ -15,7 +15,7 @@ public class LwjglBatchRenderBackendFactory {
   @Nonnull
   public static LwjglBatchRenderBackend create() {
     return new LwjglBatchRenderBackend(
-            new OpenGLBatchRenderBackend(
+            new BatchRenderBackendInternal(
                     new LwjglGL(),
                     new LwjglBatchFactory(),
                     new LwjglBufferFactory(),

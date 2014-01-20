@@ -1,24 +1,31 @@
 package de.lessvoid.nifty.examples;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.batch.CheckGL;
+import de.lessvoid.nifty.batch.spi.GL;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.CoreCheckGL;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.LWJGLUtil;
-import org.lwjgl.opengl.*;
-import org.lwjgl.util.glu.GLU;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import static org.lwjgl.opengl.GL11.*;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
+import org.lwjgl.opengl.*;
+import org.lwjgl.util.glu.GLU;
+
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glViewport;
 
 /**
  * Helper class shared by all the examples to initialize lwjgl and stuff.
@@ -188,6 +195,8 @@ public class LwjglInitHelper {
       log.fine("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
       log.fine("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
 
+      GL gl = new LwjglGL();
+
       if (enableCoreProfile) {
         String extensions = GL30.glGetStringi(GL11.GL_EXTENSIONS, 0);
         if (extensions != null) {
@@ -196,14 +205,13 @@ public class LwjglInitHelper {
             log.finer("opengl extensions: " + ext[i]);
           }
         }
-        CoreCheckGL.checkGLError("extension check failed");
+        CheckGL.checkGLError(gl, "extension check failed");
 
         glViewport(0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
-
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glClear(GL11.GL_COLOR_BUFFER_BIT);
+        glEnable(GL11.GL_BLEND);
+        glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
       } else {
         String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
         if (extensions != null) {
@@ -212,7 +220,7 @@ public class LwjglInitHelper {
             log.finer("opengl extensions: " + ext[i]);
           }
         }
-        CoreCheckGL.checkGLError("extension check failed");
+        CheckGL.checkGLError(gl, "extension check failed");
 
         IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
@@ -227,18 +235,18 @@ public class LwjglInitHelper {
         GL11.glLoadIdentity();
 
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
+        glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
 
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        glEnable(GL11.GL_ALPHA_TEST);
         GL11.glAlphaFunc(GL11.GL_NOTEQUAL, 0);
 
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL11.GL_COLOR_BUFFER_BIT);
+        glEnable(GL11.GL_TEXTURE_2D);
       }
 
       return true;

@@ -9,8 +9,9 @@ import de.lessvoid.nifty.examples.LoggerShortFormat;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
 import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
-import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackendCoreProfile;
+import de.lessvoid.nifty.renderer.jogl.render.batch.core.JoglBatchRenderBackendCoreProfile;
 import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackendFactory;
+import de.lessvoid.nifty.renderer.jogl.render.batch.core.JoglBatchRenderBackendCoreProfileFactory;
 import de.lessvoid.nifty.sound.paulssoundsystem.PaulsSoundsystemSoundDevice;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
@@ -116,9 +117,9 @@ public class JOGLNiftyRunner implements GLEventListener {
     if (Mode.Batch.equals(mode)) {
       renderDevice = new BatchRenderDevice(JoglBatchRenderBackendFactory.create());
     } else if (Mode.Core.equals(mode)) {
-      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile());
+      renderDevice = new BatchRenderDevice(JoglBatchRenderBackendCoreProfileFactory.create());
     } else if (Mode.ES2.equals(mode)) {
-      renderDevice = new BatchRenderDevice(new JoglBatchRenderBackendCoreProfile());
+      renderDevice = new BatchRenderDevice(JoglBatchRenderBackendCoreProfileFactory.create());
     } else {
       renderDevice = new JoglRenderDevice();
     }

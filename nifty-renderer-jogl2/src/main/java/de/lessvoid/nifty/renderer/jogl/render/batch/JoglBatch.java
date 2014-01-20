@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
+import de.lessvoid.nifty.batch.BatchInternal;
 import de.lessvoid.nifty.batch.spi.Batch;
-import de.lessvoid.nifty.batch.OpenGLBatch;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 
@@ -12,9 +12,9 @@ import javax.annotation.Nonnull;
  */
 public class JoglBatch implements Batch {
   @Nonnull
-  private final OpenGLBatch internalBatch;
+  private final BatchInternal internalBatch;
 
-  public JoglBatch(@Nonnull final OpenGLBatch internalBatch) {
+  public JoglBatch(@Nonnull final BatchInternal internalBatch) {
     this.internalBatch = internalBatch;
   }
 

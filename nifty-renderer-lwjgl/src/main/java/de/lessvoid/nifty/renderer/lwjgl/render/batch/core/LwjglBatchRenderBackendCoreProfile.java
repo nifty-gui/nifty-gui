@@ -1,34 +1,35 @@
-package de.lessvoid.nifty.renderer.lwjgl.render.batch;
+package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
-import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
+import de.lessvoid.nifty.batch.core.BatchRenderBackendCoreProfileInternal;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * This {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementation includes full support for multiple
  * texture atlases and non-atlas textures.
  *
  * Lwjgl-specific implementation of the {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} interface. This
- * implementation will be the most backwards-compatible because it doesn't use any functions beyond OpenGL 1.1. It is
- * suitable for desktop devices.
+ * implementation use OpenGL Core Profile. It is suitable for desktop devices.
+ *
+ * Note: Requires OpenGL 3.2 or higher. Mobiles devices & OpenGL ES are not officially supported yet with this class.
  *
  * {@inheritDoc}
  *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public class LwjglBatchRenderBackend implements BatchRenderBackend {
+public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   @Nonnull
   private final BatchRenderBackend internalBackend;
 
-  LwjglBatchRenderBackend(@Nonnull final BatchRenderBackendInternal internalBackend) {
+  LwjglBatchRenderBackendCoreProfile(@Nonnull final BatchRenderBackendCoreProfileInternal internalBackend) {
     this.internalBackend = internalBackend;
   }
 

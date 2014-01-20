@@ -2,7 +2,7 @@ package de.lessvoid.nifty.gdx.render.batch;
 
 import com.badlogic.gdx.Gdx;
 
-import de.lessvoid.nifty.batch.OpenGLBatchRenderBackend;
+import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.gdx.render.GdxImage;
 import de.lessvoid.nifty.render.BlendMode;
@@ -30,17 +30,17 @@ import javax.annotation.Nullable;
  */
 public class GdxBatchRenderBackend implements BatchRenderBackend {
   @Nonnull
-  private static final Logger log = Logger.getLogger(OpenGLBatchRenderBackend.class.getName());
+  private static final Logger log = Logger.getLogger(BatchRenderBackendInternal.class.getName());
   @Nonnull
   private final BatchRenderBackend internalBackend;
 
-  GdxBatchRenderBackend(@Nonnull final OpenGLBatchRenderBackend internalBackend) {
+  GdxBatchRenderBackend(@Nonnull final BatchRenderBackendInternal internalBackend) {
     this.internalBackend = internalBackend;
   }
 
   @Override
-  public void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader) {
-    internalBackend.setResourceLoader(niftyResourceLoader);
+  public void setResourceLoader(@Nonnull NiftyResourceLoader resourceLoader) {
+    internalBackend.setResourceLoader(resourceLoader);
   }
 
   @Override

@@ -47,9 +47,9 @@ public interface BatchRenderBackend {
    * Gives this RenderDevice access to the NiftyResourceLoader so that the same paths can be used for resolving
    * resources as Nifty would do.
    *
-   * @param niftyResourceLoader NiftyResourceLoader
+   * @param resourceLoader NiftyResourceLoader
    */
-  void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader);
+  void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader);
 
   /**
    * Gets width of the display mode.
@@ -90,14 +90,15 @@ public interface BatchRenderBackend {
    * @return the loaded mouse cursor resource ready to be applied
    */
   @Nullable
-  MouseCursor createMouseCursor(@Nonnull String filename, int hotspotX, int hotspotY) throws IOException;
+  MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY)
+          throws IOException;
 
   /**
    * Enables the given mouse cursor.
    *
    * @param mouseCursor the mouse cursor to enable
    */
-  void enableMouseCursor(@Nonnull MouseCursor mouseCursor);
+  void enableMouseCursor(@Nonnull final MouseCursor mouseCursor);
 
   /**
    * Disables the current mouse cursor.
@@ -112,14 +113,14 @@ public interface BatchRenderBackend {
    *
    * @return the texture id of the new atlas texture
    */
-  int createTextureAtlas(int atlasWidth, int atlasHeight);
+  int createTextureAtlas(final int atlasWidth, final int atlasHeight);
 
   /**
    * Clears an entire texture atlas.
    *
    * @param atlasTextureId the texture id of the atlas texture to clear
    */
-  void clearTextureAtlas(int atlasTextureId);
+  void clearTextureAtlas(final int atlasTextureId);
 
   /**
    * Loads the given image (provide the size of the image using the {@link BatchRenderBackend.Image} interface.
@@ -128,13 +129,13 @@ public interface BatchRenderBackend {
    * @param filename the filename to load
    */
   @Nonnull
-  Image loadImage(@Nonnull String filename);
+  Image loadImage(@Nonnull final String filename);
 
   /**
    * Wraps the given buffer into an Image interface;
    */
   @Nullable
-  Image loadImage(@Nonnull ByteBuffer imageData, int imageWidth, int imageHeight);
+  Image loadImage(@Nonnull final ByteBuffer imageData, final int imageWidth, final int imageHeight);
 
   /**
    * Adds the given image to the specified texture atlas at the given position.
@@ -144,7 +145,7 @@ public interface BatchRenderBackend {
    * @param atlasY the y position in the atlas to insert the image at
    * @param atlasTextureId the texture id of the atlas texture to add the image to
    */
-  void addImageToAtlas(Image image, int atlasX, int atlasY, int atlasTextureId);
+  void addImageToAtlas(@Nonnull final Image image, final int atlasX, final int atlasY, final int atlasTextureId);
 
   /**
    * Creates the given image as a separate, non-atlas texture. This will be called when the texture is not within atlas
@@ -155,7 +156,7 @@ public interface BatchRenderBackend {
    *
    * @return the texture id of the non-atlas texture
    */
-  int createNonAtlasTexture(@Nonnull Image image);
+  int createNonAtlasTexture(@Nonnull final Image image);
 
   /**
    * Deletes the separate, non-atlas texture from memory. This will be called when a texture that was created
@@ -163,7 +164,7 @@ public interface BatchRenderBackend {
    *
    * @param textureId the texture id of the non-atlas texture
    */
-  void deleteNonAtlasTexture(int textureId);
+  void deleteNonAtlasTexture(final int textureId);
 
   /**
    * Checks whether the non-atlas texture with a texture id specified by textureId exists, i.e. it was created
@@ -173,7 +174,7 @@ public interface BatchRenderBackend {
    *
    * @return true if the texture exists, false otherwise
    */
-  boolean existsNonAtlasTexture(int textureId);
+  boolean existsNonAtlasTexture(final int textureId);
 
   /**
    * Adds a quad textured with a sub-texture from a texture atlas, or for non-atlas quads, adds a quad textured with
@@ -202,19 +203,19 @@ public interface BatchRenderBackend {
    * @param textureId the id of the texture
    */
   void addQuad(
-      float x,
-      float y,
-      float width,
-      float height,
-      @Nonnull Color color1,
-      @Nonnull Color color2,
-      @Nonnull Color color3,
-      @Nonnull Color color4,
-      float textureX,
-      float textureY,
-      float textureWidth,
-      float textureHeight,
-      int textureId);
+      final float x,
+      final float y,
+      final float width,
+      final float height,
+      @Nonnull final Color color1,
+      @Nonnull final Color color2,
+      @Nonnull final Color color3,
+      @Nonnull final Color color4,
+      final float textureX,
+      final float textureY,
+      final float textureWidth,
+      final float textureHeight,
+      final int textureId);
 
   /**
    * Begins a new batch with the given BlendMode. Starting a new batch with beginBatch() should store the current batch
@@ -226,7 +227,7 @@ public interface BatchRenderBackend {
    *                  of a texture atlas, but in the case of non-atlas textures, we need a separate batch for each
    *                  one, so textureId will be the id of that single, non-atlas texture
    */
-  void beginBatch(@Nonnull BlendMode blendMode, int textureId);
+  void beginBatch(@Nonnull final BlendMode blendMode, final int textureId);
 
   /**
    * Renders all batches.
@@ -249,7 +250,13 @@ public interface BatchRenderBackend {
    * @param atlasTextureId the texture id of the atlas texture to remove the image from
    *
    */
-  void removeImageFromAtlas(@Nonnull Image image, int atlasX, int atlasY, int imageWidth, int imageHeight, int atlasTextureId);
+  void removeImageFromAtlas(
+          @Nonnull final Image image,
+          final int atlasX,
+          final int atlasY,
+          final int imageWidth,
+          final int imageHeight,
+          final int atlasTextureId);
 
   /**
    * Whether or not to render textures with high quality settings. Usually, setting to true will result in slower
@@ -289,7 +296,7 @@ public interface BatchRenderBackend {
       this(null, 0, 0);
     }
 
-    public ByteBufferedImage(ByteBuffer buffer, int width, int height) {
+    public ByteBufferedImage(final ByteBuffer buffer, final int width, final int height) {
       this.buffer = buffer;
       this.width = width;
       this.height = height;
