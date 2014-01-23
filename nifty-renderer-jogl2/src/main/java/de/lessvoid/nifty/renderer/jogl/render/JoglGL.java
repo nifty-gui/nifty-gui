@@ -3,8 +3,10 @@ package de.lessvoid.nifty.renderer.jogl.render;
 import de.lessvoid.nifty.batch.spi.GL;
 
 import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 import javax.annotation.Nonnull;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLContext;
@@ -17,6 +19,11 @@ public class JoglGL implements GL {
   private static final GL2 gl2 = GLContext.getCurrentGL().getGL2();
 
   @Override
+  public int GL_ALPHA() {
+    return GL2.GL_ALPHA;
+  }
+
+  @Override
   public int GL_ALPHA_TEST() {
     return GL2.GL_ALPHA_TEST;
   }
@@ -24,6 +31,21 @@ public class JoglGL implements GL {
   @Override
   public int GL_BLEND() {
     return GL2.GL_BLEND;
+  }
+
+  @Override
+  public int GL_BLEND_DST() {
+    return GL2.GL_BLEND_DST;
+  }
+
+  @Override
+  public int GL_BLEND_SRC() {
+    return GL2.GL_BLEND_SRC;
+  }
+
+  @Override
+  public int GL_BYTE() {
+    return GL2.GL_BYTE;
   }
 
   @Override
@@ -49,6 +71,11 @@ public class JoglGL implements GL {
   @Override
   public int GL_DST_COLOR() {
     return GL2.GL_DST_COLOR;
+  }
+
+  @Override
+  public int GL_FALSE() {
+    return GL2.GL_FALSE;
   }
 
   @Override
@@ -82,6 +109,26 @@ public class JoglGL implements GL {
   }
 
   @Override
+  public int GL_LINEAR_MIPMAP_LINEAR() {
+    return GL2.GL_LINEAR_MIPMAP_LINEAR;
+  }
+
+  @Override
+  public int GL_LINEAR_MIPMAP_NEAREST() {
+    return GL2.GL_LINEAR_MIPMAP_NEAREST;
+  }
+
+  @Override
+  public int GL_LUMINANCE() {
+    return GL2.GL_LUMINANCE;
+  }
+
+  @Override
+  public int GL_LUMINANCE_ALPHA() {
+    return GL2.GL_LUMINANCE_ALPHA;
+  }
+
+  @Override
   public int GL_MAX_TEXTURE_SIZE() {
     return GL2.GL_MAX_TEXTURE_SIZE;
   }
@@ -94,6 +141,16 @@ public class JoglGL implements GL {
   @Override
   public int GL_NEAREST() {
     return GL2.GL_NEAREST;
+  }
+
+  @Override
+  public int GL_NEAREST_MIPMAP_LINEAR() {
+    return GL2.GL_NEAREST_MIPMAP_LINEAR;
+  }
+
+  @Override
+  public int GL_NEAREST_MIPMAP_NEAREST() {
+    return GL2.GL_NEAREST_MIPMAP_NEAREST;
   }
 
   @Override
@@ -117,13 +174,28 @@ public class JoglGL implements GL {
   }
 
   @Override
+  public int GL_POINTS() {
+    return GL2.GL_POINTS;
+  }
+
+  @Override
   public int GL_PROJECTION() {
     return GL2.GL_PROJECTION;
   }
 
   @Override
+  public int GL_RGB() {
+    return GL2.GL_RGB;
+  }
+
+  @Override
   public int GL_RGBA() {
     return GL2.GL_RGBA;
+  }
+
+  @Override
+  public int GL_SHORT() {
+    return GL2.GL_SHORT;
   }
 
   @Override
@@ -147,6 +219,11 @@ public class JoglGL implements GL {
   }
 
   @Override
+  public int GL_TEXTURE_BINDING_2D() {
+    return GL2.GL_TEXTURE_BINDING_2D;
+  }
+
+  @Override
   public int GL_TEXTURE_COORD_ARRAY() {
     return GL2.GL_TEXTURE_COORD_ARRAY;
   }
@@ -167,8 +244,43 @@ public class JoglGL implements GL {
   }
 
   @Override
+  public int GL_TRIANGLE_STRIP() {
+    return GL2.GL_TRIANGLE_STRIP;
+  }
+
+  @Override
+  public int GL_TRIANGLE_FAN() {
+    return GL2.GL_TRIANGLE_FAN;
+  }
+
+  @Override
+  public int GL_TRUE() {
+    return GL2.GL_TRUE;
+  }
+
+  @Override
   public int GL_UNSIGNED_BYTE() {
     return GL2.GL_UNSIGNED_BYTE;
+  }
+
+  @Override
+  public int GL_UNSIGNED_SHORT() {
+    return GL2.GL_UNSIGNED_SHORT;
+  }
+
+  @Override
+  public int GL_UNSIGNED_SHORT_4_4_4_4() {
+    return GL2.GL_UNSIGNED_SHORT_4_4_4_4;
+  }
+
+  @Override
+  public int GL_UNSIGNED_SHORT_5_5_5_1() {
+    return GL2.GL_UNSIGNED_SHORT_5_5_5_1;
+  }
+
+  @Override
+  public int GL_UNSIGNED_SHORT_5_6_5() {
+    return GL2.GL_UNSIGNED_SHORT_5_6_5;
   }
 
   @Override
@@ -237,6 +349,11 @@ public class JoglGL implements GL {
   }
 
   @Override
+  public void glDrawElements(int mode, int count, int type, int indices) {
+    gl2.glDrawElements(mode, count, type, indices);
+  }
+
+  @Override
   public void glEnable(int cap) {
     gl2.glEnable(cap);
   }
@@ -257,8 +374,18 @@ public class JoglGL implements GL {
   }
 
   @Override
+  public void glGetIntegerv(int pname, int[] params, int offset) {
+    gl2.glGetIntegerv(pname, params, offset);
+  }
+
+  @Override
   public void glGetIntegerv(int pname, IntBuffer params) {
     gl2.glGetIntegerv(pname, params);
+  }
+
+  @Override
+  public boolean glIsEnabled(int cap) {
+    return gl2.glIsEnabled(cap);
   }
 
   @Override
@@ -287,8 +414,33 @@ public class JoglGL implements GL {
   }
 
   @Override
+  public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, DoubleBuffer pixels) {
+    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+  }
+
+  @Override
+  public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, FloatBuffer pixels) {
+    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+  }
+
+  @Override
+  public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, IntBuffer pixels) {
+    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+  }
+
+  @Override
+  public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, ShortBuffer pixels) {
+    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+  }
+
+  @Override
   public void glTexParameterf(int target, int pname, float param) {
     gl2.glTexParameterf(target, pname, param);
+  }
+
+  @Override
+  public void glTexParameteri(int target, int pname, int param) {
+    gl2.glTexParameteri(target, pname, param);
   }
 
   @Override

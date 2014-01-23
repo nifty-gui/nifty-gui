@@ -11,18 +11,21 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 /**
- * Class for OpenGL batch management that gives OpenGL (& OpenGL ES) - based
+ * Internal implementation for OpenGL batch management that gives OpenGL (& OpenGL ES) - based
  * {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementations some default functionality to avoid having to
  * reinvent the wheel and to prevent unnecessary code duplication. Fully OpenGL ES compatible - this class doesn't
- * require the implementation of any OpenGL methods that are not available in OpenGL ES.
+ * require the implementation of any OpenGL methods that are not available in OpenGL ES. This implementation will be
+ * the most backwards-compatible because it doesn't use any functions beyond OpenGL 1.1. It is suitable for both mobile
+ * & desktop devices.
  *
  * {@inheritDoc}
  *
+ * @author void256
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public class OpenGLBatch implements Batch {
+public class BatchInternal implements Batch {
   @Nonnull
-  private static final Logger log = Logger.getLogger(OpenGLBatch.class.getName());
+  private static final Logger log = Logger.getLogger(BatchInternal.class.getName());
   private final static int VERTICES_PER_QUAD = 6;
   private final static int POSITION_ATTRIBUTES_PER_VERTEX = 2;
   private final static int COLOR_ATTRIBUTES_PER_VERTEX = 4;
@@ -43,7 +46,7 @@ public class OpenGLBatch implements Batch {
   private int primitiveCount;
   private int textureId;
 
-  public OpenGLBatch(@Nonnull final GL gl, @Nonnull final BufferFactory bufferFactory) {
+  public BatchInternal(@Nonnull final GL gl, @Nonnull final BufferFactory bufferFactory) {
     this.gl = gl;
     vertexBuffer = bufferFactory.createNativeOrderedFloatBuffer(SIZE);
   }

@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.gdx.render.batch;
 
+import de.lessvoid.nifty.batch.BatchInternal;
 import de.lessvoid.nifty.batch.spi.Batch;
-import de.lessvoid.nifty.batch.OpenGLBatch;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 
@@ -12,9 +12,9 @@ import javax.annotation.Nonnull;
  */
 public class GdxBatch implements Batch {
   @Nonnull
-  private final OpenGLBatch internalBatch;
+  private final BatchInternal internalBatch;
 
-  public GdxBatch(@Nonnull final OpenGLBatch internalBatch) {
+  public GdxBatch(@Nonnull final BatchInternal internalBatch) {
     this.internalBatch = internalBatch;
   }
 

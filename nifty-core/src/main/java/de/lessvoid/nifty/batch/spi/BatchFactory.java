@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
-public interface OpenGLBatchFactory {
+public interface BatchFactory {
   @Nonnull
   public Batch create(@Nonnull final GL gl, @Nonnull final BufferFactory bufferFactory);
 }

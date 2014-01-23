@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
-import de.lessvoid.nifty.batch.OpenGLBatchRenderBackend;
+import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
@@ -28,13 +28,13 @@ public class JoglBatchRenderBackend implements BatchRenderBackend {
   @Nonnull
   private final BatchRenderBackend internalBackend;
 
-  JoglBatchRenderBackend(@Nonnull final OpenGLBatchRenderBackend internalBackend) {
+  JoglBatchRenderBackend(@Nonnull final BatchRenderBackendInternal internalBackend) {
     this.internalBackend = internalBackend;
   }
 
   @Override
-  public void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader) {
-    internalBackend.setResourceLoader(niftyResourceLoader);
+  public void setResourceLoader(@Nonnull NiftyResourceLoader resourceLoader) {
+    internalBackend.setResourceLoader(resourceLoader);
   }
 
   @Override
