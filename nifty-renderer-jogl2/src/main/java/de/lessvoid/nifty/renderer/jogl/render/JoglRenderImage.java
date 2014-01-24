@@ -18,6 +18,7 @@ import javax.annotation.Nonnull;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLContext;
 import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.gl2.GLUgl2;
 
 /**
  * @author Julien Gouesse
@@ -65,7 +66,7 @@ public class JoglRenderImage implements RenderImage {
         }
       }
     }
-    glu = new GLU();
+    glu = new GLUgl2();//FIXME rather call GLU.createGLU(GLContext.getCurrentGL()); but ensure there is a current OpenGL context on this thread
   }
 
   @Override

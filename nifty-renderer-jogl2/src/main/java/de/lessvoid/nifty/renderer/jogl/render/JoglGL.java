@@ -7,16 +7,16 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import javax.annotation.Nonnull;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLContext;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
+ *         N.B: Please never store a GL instance as it might 
+ *         become invalidated at runtime and it would allow to 
+ *         call OpenGL when there is no current context on this thread
  */
 public class JoglGL implements GL {
-  @Nonnull
-  private static final GL2 gl2 = GLContext.getCurrentGL().getGL2();
 
   @Override
   public int GL_ALPHA() {
@@ -300,166 +300,166 @@ public class JoglGL implements GL {
 
   @Override
   public void glAlphaFunc(int func, float ref) {
-    gl2.glAlphaFunc(func, ref);
+    GLContext.getCurrentGL().getGL2().glAlphaFunc(func, ref);
   }
 
   @Override
   public void glBindTexture(int target, int texture) {
-    gl2.glBindTexture(target, texture);
+    GLContext.getCurrentGL().getGL2().glBindTexture(target, texture);
   }
 
   @Override
   public void glBlendFunc(int sfactor, int dfactor) {
-    gl2.glBlendFunc(sfactor, dfactor);
+    GLContext.getCurrentGL().getGL2().glBlendFunc(sfactor, dfactor);
   }
 
   @Override
   public void glClear(int mask) {
-    gl2.glClear(mask);
+    GLContext.getCurrentGL().getGL2().glClear(mask);
   }
 
   @Override
   public void glClearColor(float red, float green, float blue, float alpha) {
-    gl2.glClearColor(red, green, blue, alpha);
+    GLContext.getCurrentGL().getGL2().glClearColor(red, green, blue, alpha);
   }
 
   @Override
   public void glColorPointer(int size, int type, int stride, FloatBuffer pointer) {
-    gl2.glColorPointer(size, type, stride, pointer);
+    GLContext.getCurrentGL().getGL2().glColorPointer(size, type, stride, pointer);
   }
 
   @Override
   public void glDeleteTextures(int n, IntBuffer textures) {
-    gl2.glDeleteTextures(n, textures);
+    GLContext.getCurrentGL().getGL2().glDeleteTextures(n, textures);
   }
 
   @Override
   public void glDisable(int cap) {
-    gl2.glDisable(cap);
+    GLContext.getCurrentGL().getGL2().glDisable(cap);
   }
 
   @Override
   public void glDisableClientState(int array) {
-    gl2.glDisableClientState(array);
+    GLContext.getCurrentGL().getGL2().glDisableClientState(array);
   }
 
   @Override
   public void glDrawArrays(int mode, int first, int count) {
-    gl2.glDrawArrays(mode, first, count);
+    GLContext.getCurrentGL().getGL2().glDrawArrays(mode, first, count);
   }
 
   @Override
   public void glDrawElements(int mode, int count, int type, int indices) {
-    gl2.glDrawElements(mode, count, type, indices);
+    GLContext.getCurrentGL().getGL2().glDrawElements(mode, count, type, indices);
   }
 
   @Override
   public void glEnable(int cap) {
-    gl2.glEnable(cap);
+    GLContext.getCurrentGL().getGL2().glEnable(cap);
   }
 
   @Override
   public void glEnableClientState(int array) {
-    gl2.glEnableClientState(array);
+    GLContext.getCurrentGL().getGL2().glEnableClientState(array);
   }
 
   @Override
   public void glGenTextures(int n, IntBuffer textures) {
-    gl2.glGenTextures(n, textures);
+    GLContext.getCurrentGL().getGL2().glGenTextures(n, textures);
   }
 
   @Override
   public int glGetError() {
-    return gl2.glGetError();
+    return GLContext.getCurrentGL().getGL2().glGetError();
   }
 
   @Override
   public void glGetIntegerv(int pname, int[] params, int offset) {
-    gl2.glGetIntegerv(pname, params, offset);
+    GLContext.getCurrentGL().getGL2().glGetIntegerv(pname, params, offset);
   }
 
   @Override
   public void glGetIntegerv(int pname, IntBuffer params) {
-    gl2.glGetIntegerv(pname, params);
+    GLContext.getCurrentGL().getGL2().glGetIntegerv(pname, params);
   }
 
   @Override
   public boolean glIsEnabled(int cap) {
-    return gl2.glIsEnabled(cap);
+    return GLContext.getCurrentGL().getGL2().glIsEnabled(cap);
   }
 
   @Override
   public void glLoadIdentity() {
-    gl2.glLoadIdentity();
+    GLContext.getCurrentGL().getGL2().glLoadIdentity();
   }
 
   @Override
   public void glMatrixMode(int mode) {
-    gl2.glMatrixMode(mode);
+    GLContext.getCurrentGL().getGL2().glMatrixMode(mode);
   }
 
   @Override
   public void glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) {
-    gl2.glOrthof(left, right, bottom, top, zNear, zFar);
+    GLContext.getCurrentGL().getGL2().glOrthof(left, right, bottom, top, zNear, zFar);
   }
 
   @Override
   public void glTexCoordPointer(int size, int type, int stride, FloatBuffer pointer) {
-    gl2.glTexCoordPointer(size, type, stride, pointer);
+    GLContext.getCurrentGL().getGL2().glTexCoordPointer(size, type, stride, pointer);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, ByteBuffer pixels) {
-    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, DoubleBuffer pixels) {
-    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, FloatBuffer pixels) {
-    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, IntBuffer pixels) {
-    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, ShortBuffer pixels) {
-    gl2.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexParameterf(int target, int pname, float param) {
-    gl2.glTexParameterf(target, pname, param);
+    GLContext.getCurrentGL().getGL2().glTexParameterf(target, pname, param);
   }
 
   @Override
   public void glTexParameteri(int target, int pname, int param) {
-    gl2.glTexParameteri(target, pname, param);
+    GLContext.getCurrentGL().getGL2().glTexParameteri(target, pname, param);
   }
 
   @Override
   public void glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, ByteBuffer pixels) {
-    gl2.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+    GLContext.getCurrentGL().getGL2().glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
   }
 
   @Override
   public void glTranslatef(float x, float y, float z) {
-    gl2.glTranslatef(x, y, z);
+    GLContext.getCurrentGL().getGL2().glTranslatef(x, y, z);
   }
 
   @Override
   public void glVertexPointer(int size, int type, int stride, FloatBuffer pointer) {
-    gl2.glVertexPointer(size, type, stride, pointer);
+    GLContext.getCurrentGL().getGL2().glVertexPointer(size, type, stride, pointer);
   }
 
   @Override
   public void glViewport(int x, int y, int width, int height) {
-    gl2.glViewport(x, y, width, height);
+    GLContext.getCurrentGL().getGL2().glViewport(x, y, width, height);
   }
 }
