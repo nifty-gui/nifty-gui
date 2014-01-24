@@ -215,6 +215,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
           final int atlasY,
           final int atlasTextureId) {
     log.fine("addImageToAtlas()");
+    log.warning("addImageToAtlas with atlas texture id: " + atlasTextureId); // TODO Remove this debugging statement.
     updateAtlasTextureSection(
             atlasTextureId,
             imageFactory.asByteBuffer(image),
@@ -384,6 +385,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
 
   private int createAtlasTextureInternal(final int width, final int height) throws Exception {
     CoreTexture2D atlasTexture = createTexture(createBlankImageData(width, height), width, height);
+    log.warning("createAtlasTextureInternal with atlas texture id: " + atlasTexture.getId()); // TODO Remove this debugging statement.
     atlasTextures.put(atlasTexture.getId(), atlasTexture);
     return atlasTexture.getId();
   }
@@ -432,6 +434,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
       log.warning("Attempted to update section of atlas texture (id: " + atlasTextureId + ") with null image data!");
       return;
     }
+    log.warning("updateAtlasTextureSection with atlas texture id: " + atlasTextureId); // TODO Remove this debugging statement.
     bindAtlasTexture(atlasTextureId);
     // TODO Add updateTextureData method to CoreTexture2D that updates a texture section by calling glTexSubImage2D
     gl.glTexSubImage2D(
@@ -448,6 +451,12 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
   }
 
   private void bindAtlasTexture(final int atlasTextureId) {
+    log.warning("bindAtlasTexture with atlas texture id: " + atlasTextureId); // TODO Remove this debugging statement.
+    log.warning("bindAtlasTexture: available atlas texture ids:"); // TODO Remove this debugging statement.
+    // TODO Remove this debugging block.
+    for (int textureId : atlasTextures.keySet()) {
+      log.warning("bindAtlasTexture: available atlas texture id: " + textureId); // TODO Remove this debugging statement.
+    }
     getAtlasTexture(atlasTextureId).bind();
   }
 
