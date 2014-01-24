@@ -341,7 +341,7 @@ public class JoglCoreGL extends JoglGL implements CoreGL {
   @Override
   public String glGetProgramInfoLog(int program) {
     int[] logLength = new int[1];
-    gl31.glGetProgramiv(program, GL2.GL_INFO_LOG_LENGTH, logLength, 0);
+    GLContext.getCurrentGL().getGL3().glGetProgramiv(program, GL2.GL_INFO_LOG_LENGTH, logLength, 0);
     byte[] log = new byte[logLength[0]];
     GLContext.getCurrentGL().getGL3().glGetProgramInfoLog(program, logLength[0], null, 0, log, 0);
     return new String(log);
