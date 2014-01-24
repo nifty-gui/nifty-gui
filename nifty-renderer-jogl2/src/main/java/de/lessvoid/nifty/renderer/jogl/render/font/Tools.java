@@ -30,7 +30,7 @@ public class Tools {
     int error = gl.glGetError();
     if (error != GL.GL_NO_ERROR) {
       if (glu == null) {
-        glu = new GLU();
+        glu = GLU.createGLU(gl);
       }
       String glerrmsg = glu.gluErrorString(error);
       log.warning("OpenGL Error: (" + error + ") " + glerrmsg + ", " + fkt);
