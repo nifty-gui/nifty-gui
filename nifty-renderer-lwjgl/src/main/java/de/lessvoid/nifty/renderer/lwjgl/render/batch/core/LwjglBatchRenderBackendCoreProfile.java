@@ -102,7 +102,7 @@ public class LwjglBatchRenderBackendCoreProfile implements BatchRenderBackend {
   }
 
   @Override
-  public void addImageToAtlas(Image image, int atlasX, int atlasY, int atlasTextureId) {
+  public void addImageToAtlas(@Nonnull Image image, int atlasX, int atlasY, int atlasTextureId) {
     internalBackend.addImageToAtlas(image, atlasX, atlasY, atlasTextureId);
   }
 

@@ -460,8 +460,8 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
     getAtlasTexture(atlasTextureId).bind();
   }
 
-  private CoreTexture2D getAtlasTexture(final int textureId) {
-    return atlasTextures.get(textureId);
+  private CoreTexture2D getAtlasTexture(final int atlasTextureId) {
+    return atlasTextures.get(atlasTextureId);
   }
 
   private int createNonAtlasTextureInternal(@Nonnull final ByteBuffer imageData, final int width, final int height)
