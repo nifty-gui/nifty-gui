@@ -637,12 +637,12 @@ public class CoreTexture2D {
    * @throws GLException In case the {@code target} parameter contains a illegal value.
    */
   private void checkTarget(final int target) {
-    if (target != gl.GL_TEXTURE_2D() ||
-            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_X() ||
-            target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_X() ||
-            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_Y() ||
-            target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y() ||
-            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_Z() ||
+    if (target != gl.GL_TEXTURE_2D() &&
+            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_X() &&
+            target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_X() &&
+            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_Y() &&
+            target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y() &&
+            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_Z() &&
             target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z()) {
         throw new GLException("Illegal target ID: 0x" + Integer.toHexString(target));
     }
