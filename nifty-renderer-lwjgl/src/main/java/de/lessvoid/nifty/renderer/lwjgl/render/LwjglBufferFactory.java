@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
-import de.lessvoid.nifty.batch.spi.BufferFactory;
+import de.lessvoid.nifty.render.batch.spi.BufferFactory;
 
 import org.lwjgl.BufferUtils;
 

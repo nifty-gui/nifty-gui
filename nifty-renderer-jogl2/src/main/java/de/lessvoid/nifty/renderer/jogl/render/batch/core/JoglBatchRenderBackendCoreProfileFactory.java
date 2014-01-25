@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch.core;
 
-import de.lessvoid.nifty.batch.core.BatchRenderBackendCoreProfileInternal;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.batch.core.BatchRenderBackendCoreProfileInternal;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.renderer.jogl.render.JoglBufferFactory;
 import de.lessvoid.nifty.renderer.jogl.render.JoglImageFactory;
 import de.lessvoid.nifty.renderer.jogl.render.JoglMouseCursorFactory;

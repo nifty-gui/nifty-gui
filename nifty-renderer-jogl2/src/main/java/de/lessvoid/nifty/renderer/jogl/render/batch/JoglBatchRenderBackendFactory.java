@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.renderer.jogl.render.batch;
 
-import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.batch.BatchRenderBackendInternal;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.renderer.jogl.render.JoglBufferFactory;
 import de.lessvoid.nifty.renderer.jogl.render.JoglGL;
 import de.lessvoid.nifty.renderer.jogl.render.JoglImageFactory;

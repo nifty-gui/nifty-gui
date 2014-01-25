@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch;
 
-import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
+import de.lessvoid.nifty.render.batch.BatchRenderBackendInternal;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBufferFactory;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglImageFactory;

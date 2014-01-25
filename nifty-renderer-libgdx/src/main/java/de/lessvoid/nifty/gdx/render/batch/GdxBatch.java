@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.gdx.render.batch;
 
-import de.lessvoid.nifty.batch.BatchInternal;
-import de.lessvoid.nifty.batch.spi.Batch;
+import de.lessvoid.nifty.render.batch.BatchInternal;
+import de.lessvoid.nifty.render.batch.spi.Batch;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 

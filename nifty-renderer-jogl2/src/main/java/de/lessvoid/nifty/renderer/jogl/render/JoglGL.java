@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
-import de.lessvoid.nifty.batch.spi.GL;
+import de.lessvoid.nifty.render.batch.spi.GL;
 
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;

@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.render;
 
-import de.lessvoid.nifty.batch.BatchRenderImage;
+import de.lessvoid.nifty.render.batch.BatchRenderImage;
 import de.lessvoid.nifty.render.image.ImageMode;
 import de.lessvoid.nifty.render.image.ImageModeFactory;
 import de.lessvoid.nifty.spi.render.RenderImage;

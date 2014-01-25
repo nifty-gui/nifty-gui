@@ -4,12 +4,11 @@ import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.batch.BatchRenderDevice;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.LoggerShortFormat;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
 import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
-import de.lessvoid.nifty.renderer.jogl.render.batch.core.JoglBatchRenderBackendCoreProfile;
 import de.lessvoid.nifty.renderer.jogl.render.batch.JoglBatchRenderBackendFactory;
 import de.lessvoid.nifty.renderer.jogl.render.batch.core.JoglBatchRenderBackendCoreProfileFactory;
 import de.lessvoid.nifty.sound.paulssoundsystem.PaulsSoundsystemSoundDevice;

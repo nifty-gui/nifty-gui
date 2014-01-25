@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
-import de.lessvoid.nifty.batch.spi.core.CoreGL;
+import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
 
 import java.nio.ByteBuffer;

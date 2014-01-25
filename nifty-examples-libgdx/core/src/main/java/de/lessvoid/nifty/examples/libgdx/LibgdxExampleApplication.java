@@ -6,8 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.batch.BatchRenderConfiguration;
-import de.lessvoid.nifty.batch.BatchRenderDevice;
+import de.lessvoid.nifty.render.batch.BatchRenderConfiguration;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.gdx.input.GdxInputSystem;
 import de.lessvoid.nifty.gdx.input.GdxKeyRepeatSystem;

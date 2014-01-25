@@ -1,10 +1,9 @@
 package de.lessvoid.nifty.examples.all;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.batch.BatchRenderDevice;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.examples.NiftyExample;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackend;
 import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackendFactory;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;

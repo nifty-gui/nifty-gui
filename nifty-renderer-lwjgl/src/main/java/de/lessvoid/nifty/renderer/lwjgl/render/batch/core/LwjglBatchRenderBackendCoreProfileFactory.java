@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
-import de.lessvoid.nifty.batch.core.BatchRenderBackendCoreProfileInternal;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.batch.core.BatchRenderBackendCoreProfileInternal;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBufferFactory;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglImageFactory;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglMouseCursorFactory;

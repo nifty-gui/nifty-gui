@@ -2,8 +2,8 @@ package de.lessvoid.nifty.gdx.render.batch;
 
 import com.badlogic.gdx.Gdx;
 
-import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.batch.BatchRenderBackendInternal;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.gdx.render.GdxImage;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
@@ -17,10 +17,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * This {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementation includes full support for multiple
+ * This {@link de.lessvoid.nifty.render.batch.spi.BatchRenderBackend} implementation includes full support for multiple
  * texture atlases and non-atlas textures.
  *
- * LibGDX-specific implementation of the {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} interface. This
+ * LibGDX-specific implementation of the {@link de.lessvoid.nifty.render.batch.spi.BatchRenderBackend} interface. This
  * implementation will be the most backwards-compatible because it doesn't use any functions beyond
  * OpenGL / OpenGL ES 1.1. It is suitable for both mobile & desktop devices.
  *

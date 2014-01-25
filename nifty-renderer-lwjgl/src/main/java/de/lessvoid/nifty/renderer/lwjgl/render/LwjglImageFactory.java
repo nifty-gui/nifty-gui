@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend.Image;
-import de.lessvoid.nifty.batch.spi.ImageFactory;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend.Image;
+import de.lessvoid.nifty.render.batch.spi.ImageFactory;
 
 import java.nio.ByteBuffer;
 import javax.annotation.Nonnull;
