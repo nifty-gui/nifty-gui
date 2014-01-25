@@ -57,8 +57,6 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
   @Nonnull
   private final IntBuffer viewportBuffer;
   @Nonnull
-  private final IntBuffer textureSizeBuffer;
-  @Nonnull
   private final IntBuffer singleTextureIdBuffer;
   @Nonnull
   private final ObjectPool<Batch> batchPool;
@@ -93,9 +91,8 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     this.bufferFactory = bufferFactory;
     this.imageFactory = imageFactory;
     this.mouseCursorFactory = mouseCursorFactory;
-    viewportBuffer = this.bufferFactory.createNativeOrderedIntBuffer(16);
-    textureSizeBuffer = this.bufferFactory.createNativeOrderedIntBuffer(16);
-    singleTextureIdBuffer = this.bufferFactory.createNativeOrderedIntBuffer(1);
+    viewportBuffer = bufferFactory.createNativeOrderedIntBuffer(16);
+    singleTextureIdBuffer = bufferFactory.createNativeOrderedIntBuffer(1);
     batchPool = new ObjectPool<Batch>(new Factory<Batch>() {
       @Nonnull
       @Override
@@ -135,7 +132,7 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
   @Override
   public void endFrame() {
     log.fine("endFrame()");
-    checkGLError();
+    CheckGL.checkGLError(gl);
   }
 
   @Override
@@ -411,7 +408,7 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
           @Nullable final ByteBuffer imageData,
           final int textureWidth,
           final int textureHeight) throws Exception {
-    checkGlTextureSize(textureWidth, textureHeight);
+    CheckGL.checkGLTextureSize(gl, textureWidth, textureHeight);
     int glTextureId = createTextureId();
     bindGlTexture(glTextureId);
     updateCurrentlyBoundGlTexture(imageData, textureWidth, textureHeight);
@@ -438,7 +435,7 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
             gl.GL_RGBA(),
             gl.GL_UNSIGNED_BYTE(),
             imageData);
-    checkGLError();
+    CheckGL.checkGLError(gl);
   }
 
   private void updateCurrentlyBoundGlTexture(
@@ -461,7 +458,7 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
             gl.GL_RGBA(),
             gl.GL_UNSIGNED_BYTE(),
             imageData);
-    checkGLError();
+    CheckGL.checkGLError(gl);
   }
 
   private void setCurrentlyBoundGlTextureFilteringQuality(final boolean isHighQuality) {
@@ -472,7 +469,7 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
       gl.glTexParameterf(gl.GL_TEXTURE_2D(), gl.GL_TEXTURE_MIN_FILTER(), gl.GL_NEAREST());
       gl.glTexParameterf(gl.GL_TEXTURE_2D(), gl.GL_TEXTURE_MAG_FILTER(), gl.GL_NEAREST());
     }
-    checkGLError();
+    CheckGL.checkGLError(gl);
   }
 
   private void saveAtlasSize(final int atlasTextureId, final int atlasWidth, final int atlasHeight) {
@@ -483,63 +480,8 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
   private int createTextureId() {
     singleTextureIdBuffer.clear();
     gl.glGenTextures(1, singleTextureIdBuffer);
-    checkGLError();
+    CheckGL.checkGLError(gl);
     return singleTextureIdBuffer.get(0);
-  }
-
-  private void checkGLError() {
-    int error = gl.glGetError();
-    if (error == gl.GL_NO_ERROR()) {
-      return;
-    }
-    String errorMessage = getGlErrorMessage(error);
-    log.warning("Error: (" + error + ") " + errorMessage);
-    try {
-      throw new Exception();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Nonnull
-  private String getGlErrorMessage(final int error) {
-    if (error == gl.GL_INVALID_ENUM()) {
-      return "Invalid enum";
-    } else if (error == gl.GL_INVALID_VALUE()) {
-      return "Invalid value";
-    } else if (error == gl.GL_INVALID_OPERATION()) {
-      return "Invalid operation";
-    } else if (error == gl.GL_STACK_OVERFLOW()) {
-      return "Stack overflow";
-    } else if (error == gl.GL_STACK_UNDERFLOW()) {
-      return "Stack underflow";
-    } else if (error == gl.GL_OUT_OF_MEMORY()) {
-      return "Out of memory";
-    } else {
-      return "";
-    }
-  }
-
-  private void checkGlTextureSize(final int textureWidth, final int textureHeight) throws Exception {
-    int maxSize = getMaxGlTextureSize();
-    if (textureWidth > maxSize || textureHeight > maxSize) {
-      throw new Exception("Attempted to create a texture size beyond the capability of your GPU.\nAttempted " +
-              "size: " + textureWidth + " x " + textureHeight + ".\nMaximum size: " + maxSize + " x " + maxSize +
-              ".");
-    }
-    if (textureWidth < 0) {
-      throw new Exception("Attempted to create a texture with negative width of: " + textureWidth + ".");
-    }
-    if (textureHeight < 0) {
-      throw new Exception("Attempted to create a texture with negative height of: " + textureHeight + ".");
-    }
-  }
-
-  private int getMaxGlTextureSize() {
-    textureSizeBuffer.clear();
-    gl.glGetIntegerv(gl.GL_MAX_TEXTURE_SIZE(), textureSizeBuffer);
-    checkGLError();
-    return textureSizeBuffer.get(0);
   }
 
   private int createNonAtlasTextureInternal(@Nullable final ByteBuffer imageData, final int width, final int height)
@@ -553,7 +495,7 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     singleTextureIdBuffer.clear();
     singleTextureIdBuffer.put(0, nonAtlasTextureId);
     gl.glDeleteTextures(1, singleTextureIdBuffer);
-    checkGLError();
+    CheckGL.checkGLError(gl);
     nonAtlasTextureIds.remove(nonAtlasTextureId);
   }
 

@@ -1,9 +1,12 @@
 package de.lessvoid.nifty.examples;
 
-import javax.annotation.Nonnull;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
+import javax.annotation.Nonnull;
 
 public class LoggerShortFormat extends java.util.logging.Formatter {
   @Override
@@ -12,7 +15,8 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
     return record.getMillis() + " " +
         record.getLevel() + " [" +
         record.getSourceClassName() + "] " +
-        record.getMessage() + "\n";
+        record.getMessage() +
+        (record.getThrown() != null ? " Stack trace:\n" + getStackTrace(record.getThrown()) : "") + "\n";
   }
 
   public static void intialize() throws Exception {
@@ -25,5 +29,14 @@ public class LoggerShortFormat extends java.util.logging.Formatter {
         input.close();
       }
     }
+  }
+
+  // Internal implementations
+
+  private String getStackTrace(@Nonnull final Throwable throwable) {
+    Writer stringWriter = new StringWriter();
+    PrintWriter printWriter = new PrintWriter(stringWriter);
+    throwable.printStackTrace(printWriter);
+    return stringWriter.toString();
   }
 }

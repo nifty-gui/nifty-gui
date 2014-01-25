@@ -6,14 +6,14 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 /**
- * Helper method to check for GL errors. This will call glGetError() and as long as the call returns not GL_NO_ERROR it
- * will log the error and the stack trace of the caller using jdk14 logging.
+ * Helper class to check for OpenGL errors.
  *
  * @author void
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class CheckGL {
+  @Nonnull
   private static final Logger log = Logger.getLogger(CheckGL.class.getName());
 
   /**
@@ -61,6 +61,35 @@ public class CheckGL {
     if (hasError && throwException) {
       throw new GLException("OpenGL Error occurred:" + message);
     }
+  }
+
+  /**
+   * Checks if the texture size is within the capabilities of OpenGL.
+   *
+   * @throws GLException In case the texture dimensions are too large or negative.
+   */
+  public static void checkGLTextureSize(@Nonnull final GL gl, final int textureWidth, final int textureHeight) {
+    final int maxSize = getMaxTextureSize(gl);
+
+    if ((textureWidth > maxSize) || (textureHeight > maxSize)) {
+      throw new GLException("Attempt to allocate a texture to big for the current hardware");
+    }
+    if (textureWidth < 0) {
+      throw new GLException("Attempt to allocate a texture with a width value below 0.");
+    }
+    if (textureHeight < 0) {
+      throw new GLException("Attempt to allocate a texture with a height value below 0.");
+    }
+  }
+
+  // Internal implementations
+
+  private static int getMaxTextureSize(@Nonnull final GL gl) {
+    int[] params = new int[1];
+    gl.glGetIntegerv(gl.GL_MAX_TEXTURE_SIZE(), params, 0);
+    int maxTextureSize = params[0];
+    checkGLError(gl,"glGetInteger", true);
+    return maxTextureSize;
   }
 
   @Nonnull
