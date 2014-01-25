@@ -385,6 +385,7 @@ public class CoreTexture2D {
           @Nonnull final Buffer data,
           final int magFilter,
           final int minFilter) {
+    this.gl = gl;
     this.textureId = createTexture(
             textureId,
             target,
@@ -398,7 +399,6 @@ public class CoreTexture2D {
             data,
             magFilter,
             minFilter);
-    this.gl = gl;
     textureIdBuffer = bufferFactory.createNativeOrderedIntBuffer(1);
     textureTarget = target;
     this.width = width;
