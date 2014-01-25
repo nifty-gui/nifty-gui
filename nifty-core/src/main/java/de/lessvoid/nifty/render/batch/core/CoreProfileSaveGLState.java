@@ -29,7 +29,7 @@ public class CoreProfileSaveGLState {
 
   public CoreProfileSaveGLState(@Nonnull final CoreGL gl, @Nonnull final BufferFactory bufferFactory) {
     this.gl = gl;
-    params = bufferFactory.createNativeOrderedIntBuffer(1);
+    params = bufferFactory.createNativeOrderedIntBuffer(16);
   }
 
   public void saveCore() {
