@@ -59,13 +59,25 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
     this();
     value = itemValue;
   }
-
+  
   public void addTreeItem(final TreeItem<T> item) {
-    children.add(item);
+      children.add(item);
+      item.setParentItem(this);
   }
 
   public void addTreeItems(@Nonnull final Collection<TreeItem<T>> items) {
-    children.addAll(items);
+      for (TreeItem<T> t : items)
+          addTreeItem(t);
+  }
+
+  public void removeTreeItem(final TreeItem<T> item) {
+      children.remove(item);
+      item.setParentItem(null);
+  }
+
+  public void removeTreeItems(@Nonnull final Collection<TreeItem<T>> items) {
+      for (TreeItem<T> t : items)
+          removeTreeItem(t);
   }
 
   /**
