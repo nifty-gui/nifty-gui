@@ -2,15 +2,15 @@ package de.lessvoid.nifty.renderer.lwjgl.render;
 
 import de.lessvoid.nifty.batch.spi.GL;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class LwjglGL implements GL {
   @Override

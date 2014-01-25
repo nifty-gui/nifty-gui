@@ -5,6 +5,7 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

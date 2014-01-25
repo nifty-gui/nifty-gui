@@ -229,6 +229,39 @@ public class CoreTexture2D {
   }
 
   /**
+   * This is one of the simple constructors that only allow very limited possibilities for settings. However, they use
+   * settings that should cover most use cases.
+   *
+   * @param format     The texture format.
+   * @param compressed {@code true} In case the internal texture data is supposed to be compressed if possible.
+   * @param width      The width of the texture.
+   * @param height     The height of the texture.
+   * @param data       The pixel data.
+   * @param filter     The used filter.
+   *
+   * @throws de.lessvoid.nifty.batch.GLException In case the creation of the texture fails for any reason.
+   */
+  public CoreTexture2D(
+          @Nonnull final CoreGL gl,
+          @Nonnull final BufferFactory bufferFactory,
+          @Nonnull final ColorFormat format,
+          final boolean compressed,
+          final int width,
+          final int height,
+          @Nonnull final Buffer data,
+          @Nonnull final ResizeFilter filter) {
+    this(
+            gl,
+            bufferFactory,
+            getInternalFormat(gl, format),
+            width,
+            height,
+            compressed ? getCompressedInternalFormat(gl, format) : getFormat(gl, format),
+            data,
+            filter);
+  }
+
+  /**
    * This constructor is a slightly reduced version that defines some common options automatically.
    *
    * @param internalFormat The internal format of the texture.
@@ -260,39 +293,6 @@ public class CoreTexture2D {
             data,
             getMagFilter(gl, filter),
             getMinFilter(gl, filter));
-  }
-
-  /**
-   * This is one of the simple constructors that only allow very limited possibilities for settings. However, they use
-   * settings that should cover most use cases.
-   *
-   * @param format     The texture format.
-   * @param compressed {@code true} In case the internal texture data is supposed to be compressed if possible.
-   * @param width      The width of the texture.
-   * @param height     The height of the texture.
-   * @param data       The pixel data.
-   * @param filter     The used filter.
-   *
-   * @throws de.lessvoid.nifty.batch.GLException In case the creation of the texture fails for any reason.
-   */
-  public CoreTexture2D(
-          @Nonnull final CoreGL gl,
-          @Nonnull final BufferFactory bufferFactory,
-          @Nonnull final ColorFormat format,
-          final boolean compressed,
-          final int width,
-          final int height,
-          @Nonnull final Buffer data,
-          @Nonnull final ResizeFilter filter) {
-    this(
-            gl,
-            bufferFactory,
-            getInternalFormat(gl, format),
-            width,
-            height,
-            compressed ? getCompressedInternalFormat(gl, format) : getFormat(gl, format),
-            data,
-            filter);
   }
 
   /**
@@ -388,7 +388,8 @@ public class CoreTexture2D {
     this.textureId = createTexture(
             textureId,
             target,
-            level, internalFormat,
+            level,
+            internalFormat,
             width,
             height,
             border,
@@ -630,37 +631,18 @@ public class CoreTexture2D {
   }
 
   /**
-   * Checks if the texture size is within the capabilities of OpenGL.
-   *
-   * @throws GLException In case the texture dimensions are too large or negative.
-   */
-  private void checkSize(final int textureWidth, final int textureHeight) {
-    final int maxSize = getMaxTextureSize(gl);
-
-    if ((textureWidth > maxSize) || (textureHeight > maxSize)) {
-      throw new GLException("Attempt to allocate a texture to big for the current hardware");
-    }
-    if (textureWidth < 0) {
-      throw new GLException("Attempt to allocate a texture with a width value below 0.");
-    }
-    if (textureHeight < 0) {
-      throw new GLException("Attempt to allocate a texture with a height value below 0.");
-    }
-  }
-
-  /**
    * Checks if the target ID is valid to be used with this class.
    *
    * @param target The target ID.
    * @throws GLException In case the {@code target} parameter contains a illegal value.
    */
   private void checkTarget(final int target) {
-    if (target != gl.GL_TEXTURE_2D() &&
-            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_X() &&
-            target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_X() &&
-            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_Y() &&
-            target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y() &&
-            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_Z() &&
+    if (target != gl.GL_TEXTURE_2D() ||
+            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_X() ||
+            target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_X() ||
+            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_Y() ||
+            target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y() ||
+            target != gl.GL_TEXTURE_CUBE_MAP_POSITIVE_Z() ||
             target != gl.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z()) {
         throw new GLException("Illegal target ID: 0x" + Integer.toHexString(target));
     }
@@ -706,7 +688,7 @@ public class CoreTexture2D {
     if (errorChecks) {
       checkTarget(target);
       checkBorder(border);
-      checkSize(width - 2 * border, height - 2 * border);
+      CheckGL.checkGLTextureSize(gl, width - 2 * border, height - 2 * border);
       checkFormatSizeData(format, usedType, data);
     }
 
@@ -813,7 +795,7 @@ public class CoreTexture2D {
       final Buffer pixels) {
     this.texImageTarget = target;
     this.texImageLevel = level;
-    this.texImageInternalFormat = format;
+    this.texImageInternalFormat = internalformat;
     this.texImageWidth = width;
     this.texImageHeight = height;
     this.texBorder = border;
@@ -904,17 +886,6 @@ public class CoreTexture2D {
              minFilter == gl.GL_NEAREST_MIPMAP_LINEAR() ||
              minFilter == gl.GL_LINEAR_MIPMAP_LINEAR());
 
-  }
-
-  /**
-   * Checks if a value is a power of two.
-   *
-   * @param n The value to check.
-   *
-   * @return {@code true} In case the value is power of two.
-   */
-  private boolean isPowerOfTwo(final int n) {
-    return ((n != 0) && (n & (n - 1)) == 0);
   }
 
   /**
