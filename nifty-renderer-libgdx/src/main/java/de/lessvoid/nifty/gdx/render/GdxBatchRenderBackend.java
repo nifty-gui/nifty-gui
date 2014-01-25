@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.gdx.render.batch;
+package de.lessvoid.nifty.gdx.render;
 
 import com.badlogic.gdx.Gdx;
 

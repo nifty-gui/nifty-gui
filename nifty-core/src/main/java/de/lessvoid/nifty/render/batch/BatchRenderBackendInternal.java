@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.render.batch;
 
 import de.lessvoid.nifty.render.batch.spi.Batch;
-import de.lessvoid.nifty.render.batch.spi.BatchFactory;
 import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.render.batch.spi.BufferFactory;
 import de.lessvoid.nifty.render.batch.spi.ImageFactory;
@@ -83,7 +82,6 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
 
   public BatchRenderBackendInternal(
           @Nonnull final GL gl,
-          @Nonnull final BatchFactory batchFactory,
           @Nonnull final BufferFactory bufferFactory,
           @Nonnull final ImageFactory imageFactory,
           @Nonnull final MouseCursorFactory mouseCursorFactory) {
@@ -97,7 +95,7 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
       @Nonnull
       @Override
       public Batch createNew() {
-        return batchFactory.create(gl, bufferFactory);
+        return new BatchInternal(gl, bufferFactory);
       }
     });
     initializeOpenGL();

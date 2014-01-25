@@ -23,7 +23,11 @@ import javax.annotation.Nullable;
  * Lwjgl RenderDevice Implementation.
  *
  * @author void
+ *
+ * @deprecated Use {@link de.lessvoid.nifty.render.batch.BatchRenderDevice} with either
+ * {@link LwjglBatchRenderBackendFactory#create()} or {@link LwjglBatchRenderBackendCoreProfileFactory#create()}.
  */
+@Deprecated
 public class LwjglRenderDevice implements RenderDevice {
   private static final Logger log = Logger.getLogger(LwjglRenderDevice.class.getName());
   private static final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);

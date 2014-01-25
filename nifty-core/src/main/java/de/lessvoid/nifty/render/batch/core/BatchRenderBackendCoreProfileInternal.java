@@ -88,7 +88,6 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
 
   public BatchRenderBackendCoreProfileInternal(
           @Nonnull final CoreGL gl,
-          @Nonnull final CoreBatchFactory batchFactory,
           @Nonnull final BufferFactory bufferFactory,
           @Nonnull final ImageFactory imageFactory,
           @Nonnull final MouseCursorFactory mouseCursorFactory) {
@@ -108,7 +107,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
       @Nonnull
       @Override
       public CoreBatch createNew() {
-        return batchFactory.create(gl, shader, bufferFactory, PRIMITIVE_RESTART_INDEX);
+        return new CoreBatchInternal(gl, shader, bufferFactory, PRIMITIVE_RESTART_INDEX);
       }
     });
   }

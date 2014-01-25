@@ -21,6 +21,11 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * @deprecated Use {@link de.lessvoid.nifty.render.batch.BatchRenderDevice} with either
+ * {@link JoglBatchRenderBackendFactory#create()} or {@link JoglBatchRenderBackendCoreProfileFactory#create()}.
+ */
+@Deprecated
 public class JoglRenderDevice implements RenderDevice {
   @Nonnull
   private static final Logger log = Logger.getLogger(JoglRenderDevice.class.getName());

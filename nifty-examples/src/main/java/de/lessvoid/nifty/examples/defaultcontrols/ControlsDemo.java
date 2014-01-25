@@ -32,8 +32,8 @@ import de.lessvoid.nifty.examples.defaultcontrols.treebox.TreeBoxControlDialogDe
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 import de.lessvoid.nifty.examples.resolution.ResolutionControlLWJGL;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.LwjglBatchRenderBackendFactory;
-import de.lessvoid.nifty.renderer.lwjgl.render.batch.core.LwjglBatchRenderBackendCoreProfileFactory;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendCoreProfileFactory;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;

@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.renderer.jogl.render.batch;
+package de.lessvoid.nifty.renderer.jogl.render;
 
 import de.lessvoid.nifty.render.batch.BatchRenderBackendInternal;
 import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
@@ -15,12 +15,10 @@ import javax.annotation.Nonnull;
 public class JoglBatchRenderBackendFactory {
   @Nonnull
   public static BatchRenderBackend create() {
-    return new JoglBatchRenderBackend(
-            new BatchRenderBackendInternal(
-                    new JoglGL(),
-                    new JoglBatchFactory(),
-                    new JoglBufferFactory(),
-                    new JoglImageFactory(),
-                    new JoglMouseCursorFactory()));
+    return  new BatchRenderBackendInternal(
+            new JoglGL(),
+            new JoglBufferFactory(),
+            new JoglImageFactory(),
+            new JoglMouseCursorFactory());
   }
 }
