@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.render;
 
 import de.lessvoid.nifty.NiftyStopwatch;
-import de.lessvoid.nifty.batch.BatchRenderDevice;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;

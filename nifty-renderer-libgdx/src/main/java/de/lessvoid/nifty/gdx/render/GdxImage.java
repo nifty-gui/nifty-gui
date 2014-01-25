@@ -3,7 +3,7 @@ package de.lessvoid.nifty.gdx.render;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 
 import java.nio.ByteBuffer;
 import javax.annotation.Nonnull;

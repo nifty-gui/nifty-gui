@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.gdx.render.batch;
 
-import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
+import de.lessvoid.nifty.render.batch.BatchRenderBackendInternal;
 import de.lessvoid.nifty.gdx.render.GdxBufferFactory;
 import de.lessvoid.nifty.gdx.render.GdxGL;
 import de.lessvoid.nifty.gdx.render.GdxImageFactory;

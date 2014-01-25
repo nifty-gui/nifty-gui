@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
-import de.lessvoid.nifty.batch.core.CoreBatchInternal;
-import de.lessvoid.nifty.batch.core.CoreTexture2D;
-import de.lessvoid.nifty.batch.spi.core.CoreBatch;
+import de.lessvoid.nifty.render.batch.core.CoreBatchInternal;
+import de.lessvoid.nifty.render.batch.core.CoreTexture2D;
+import de.lessvoid.nifty.render.batch.spi.core.CoreBatch;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.tools.Color;
 

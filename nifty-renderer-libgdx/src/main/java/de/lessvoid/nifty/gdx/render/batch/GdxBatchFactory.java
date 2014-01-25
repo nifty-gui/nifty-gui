@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.gdx.render.batch;
 
-import de.lessvoid.nifty.batch.BatchInternal;
-import de.lessvoid.nifty.batch.spi.Batch;
-import de.lessvoid.nifty.batch.spi.BatchFactory;
-import de.lessvoid.nifty.batch.spi.BufferFactory;
-import de.lessvoid.nifty.batch.spi.GL;
+import de.lessvoid.nifty.render.batch.BatchInternal;
+import de.lessvoid.nifty.render.batch.spi.Batch;
+import de.lessvoid.nifty.render.batch.spi.BatchFactory;
+import de.lessvoid.nifty.render.batch.spi.BufferFactory;
+import de.lessvoid.nifty.render.batch.spi.GL;
 
 import javax.annotation.Nonnull;
 

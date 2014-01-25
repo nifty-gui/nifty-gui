@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.examples;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.batch.CheckGL;
-import de.lessvoid.nifty.batch.spi.GL;
+import de.lessvoid.nifty.render.batch.CheckGL;
+import de.lessvoid.nifty.render.batch.spi.GL;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
 

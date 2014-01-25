@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
-import de.lessvoid.nifty.batch.spi.MouseCursorFactory;
+import de.lessvoid.nifty.render.batch.spi.MouseCursorFactory;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 

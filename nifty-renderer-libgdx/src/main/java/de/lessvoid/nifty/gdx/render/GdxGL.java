@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL11;
 
-import de.lessvoid.nifty.batch.spi.GL;
+import de.lessvoid.nifty.render.batch.spi.GL;
 
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;

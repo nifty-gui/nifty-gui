@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.renderer.lwjgl.render.batch.core;
 
-import de.lessvoid.nifty.batch.core.BatchRenderBackendCoreProfileInternal;
-import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.render.batch.core.BatchRenderBackendCoreProfileInternal;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.tools.Color;
@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * This {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} implementation includes full support for multiple
+ * This {@link de.lessvoid.nifty.render.batch.spi.BatchRenderBackend} implementation includes full support for multiple
  * texture atlases and non-atlas textures.
  *
- * Lwjgl-specific implementation of the {@link de.lessvoid.nifty.batch.spi.BatchRenderBackend} interface. This
+ * Lwjgl-specific implementation of the {@link de.lessvoid.nifty.render.batch.spi.BatchRenderBackend} interface. This
  * implementation use OpenGL Core Profile. It is suitable for desktop devices.
  *
  * Note: Requires OpenGL 3.2 or higher. Mobiles devices & OpenGL ES are not officially supported yet with this class.

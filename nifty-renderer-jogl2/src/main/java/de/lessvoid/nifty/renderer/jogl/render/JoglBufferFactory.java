@@ -2,7 +2,7 @@ package de.lessvoid.nifty.renderer.jogl.render;
 
 import com.jogamp.common.nio.Buffers;
 
-import de.lessvoid.nifty.batch.spi.BufferFactory;
+import de.lessvoid.nifty.render.batch.spi.BufferFactory;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
