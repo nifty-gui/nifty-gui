@@ -4,6 +4,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.batch.CheckGL;
 import de.lessvoid.nifty.batch.spi.GL;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;

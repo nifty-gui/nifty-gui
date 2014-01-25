@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.batch.core;
 
 import de.lessvoid.nifty.batch.BatchRenderBackendInternal;
+import de.lessvoid.nifty.batch.CheckGL;
 import de.lessvoid.nifty.batch.core.CoreTexture2D.ColorFormat;
 import de.lessvoid.nifty.batch.core.CoreTexture2D.ResizeFilter;
 import de.lessvoid.nifty.batch.spi.BatchRenderBackend;
@@ -145,7 +146,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
   public void endFrame() {
     log.fine("endFrame()");
     saveGLState.restoreCore();
-    checkGLError();
+    CheckGL.checkGLError(gl);
   }
 
   @Override
@@ -230,7 +231,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
     log.fine("createNonAtlasTexture()");
     try {
       if (imageFactory.asByteBuffer(image) == null) {
-        log.warning("Attempted to create a non atlas texture with null image data!");
+        log.severe("Attempted to create a non atlas texture with null image data!");
         return INVALID_TEXTURE_ID;
       }
       return createNonAtlasTextureInternal(imageFactory.asByteBuffer(image), image.getWidth(), image.getHeight());
@@ -394,7 +395,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
           final int textureWidth,
           final int textureHeight,
           @Nonnull final Exception exception) {
-    log.log(Level.WARNING, "Failed to create texture of width: " + textureWidth + " & height: " + textureHeight +
+    log.log(Level.SEVERE, "Failed to create texture of width: " + textureWidth + " & height: " + textureHeight +
             ".", exception);
   }
 
@@ -431,12 +432,12 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
           final int atlasSectionWidth,
           final int atlasSectionHeight) {
     if (imageData == null) {
-      log.warning("Attempted to update section of atlas texture (id: " + atlasTextureId + ") with null image data!");
+      log.severe("Attempted to update section of atlas texture (id: " + atlasTextureId + ") with null image data!");
       return;
     }
     log.warning("updateAtlasTextureSection with atlas texture id: " + atlasTextureId); // TODO Remove this debugging statement.
     bindAtlasTexture(atlasTextureId);
-    // TODO Add updateTextureData method to CoreTexture2D that updates a texture section by calling glTexSubImage2D
+    // TODO Move this OpenGL call and error check to CoreTexture2D!
     gl.glTexSubImage2D(
             gl.GL_TEXTURE_2D(),
             0,
@@ -447,7 +448,8 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
             gl.GL_RGBA(),
             gl.GL_UNSIGNED_BYTE(),
             imageData);
-    checkGLError();
+    CheckGL.checkGLError(gl, "Failed to update section [x, y, w, h]: [" + atlasSectionX + ", " + atlasSectionY + ", " +
+            atlasSectionWidth + ", " + atlasSectionHeight + "] of atlas texture with id: " + atlasTextureId + ".");
   }
 
   private void bindAtlasTexture(final int atlasTextureId) {
@@ -569,39 +571,6 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
 
   private int getTotalBatchesRendered() {
     return batches.size();
-  }
-
-  private void checkGLError() {
-    int error = gl.glGetError();
-    if (error == gl.GL_NO_ERROR()) {
-      return;
-    }
-    String errorMessage = getGlErrorMessage(error);
-    log.warning("Error: (" + error + ") " + errorMessage);
-    try {
-      throw new Exception();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Nonnull
-  private String getGlErrorMessage(final int error) {
-    if (error == gl.GL_INVALID_ENUM()) {
-      return "Invalid enum";
-    } else if (error == gl.GL_INVALID_VALUE()) {
-      return "Invalid value";
-    } else if (error == gl.GL_INVALID_OPERATION()) {
-      return "Invalid operation";
-    } else if (error == gl.GL_STACK_OVERFLOW()) {
-      return "Stack overflow";
-    } else if (error == gl.GL_STACK_UNDERFLOW()) {
-      return "Stack underflow";
-    } else if (error == gl.GL_OUT_OF_MEMORY()) {
-      return "Out of memory";
-    } else {
-      return "";
-    }
   }
 
   private boolean existsCursor(@Nonnull final String filename) {
