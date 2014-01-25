@@ -4,9 +4,8 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
-import de.lessvoid.nifty.spi.NiftyRenderStatistics;
 
-public class Statistics implements NiftyRenderStatistics {
+public class Statistics {
   private static final int TIME_HISTORY = 10;
 
   private int frameCounter = 0;
@@ -83,20 +82,11 @@ public class Statistics implements NiftyRenderStatistics {
     stop(Type.Synchronize);
   }
 
-  @Override
-  public void incRenderBatchCount() {
-    inc(Type.RenderBatchCount);
-  }
-
   private void start(final Type type) {
     times[type.ordinal()] = System.nanoTime();
   }
 
   private void stop(final Type type) {
     times[type.ordinal()] = System.nanoTime() - times[type.ordinal()];
-  }
-
-  private void inc(final Type type) {
-    times[type.ordinal()]++;
   }
 }

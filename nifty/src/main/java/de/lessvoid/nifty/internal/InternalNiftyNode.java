@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
+import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.HorizontalAlignment;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VerticalAlignment;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;

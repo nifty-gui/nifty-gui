@@ -3,7 +3,6 @@ package de.lessvoid.nifty.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lessvoid.nifty.api.NiftyNode.ChildLayout;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;

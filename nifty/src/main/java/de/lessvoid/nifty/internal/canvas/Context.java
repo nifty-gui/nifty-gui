@@ -14,7 +14,7 @@ public class Context {
   }
 
   public void prepare(final NiftyRenderDevice renderDevice) {
-    fillColor = NiftyColor.WHITE();
+    fillColor = NiftyColor.BLACK();
     renderDevice.beginRenderToTexture(texture);
   }
 

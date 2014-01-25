@@ -1,13 +1,9 @@
 package de.lessvoid.nifty.api;
 
-import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
 
 import de.lessvoid.nifty.internal.common.Statistics;
 
@@ -15,7 +11,7 @@ import de.lessvoid.nifty.internal.common.Statistics;
  * Several different statistical informations about Niftys internal processing.
  * @author void
  */
-public class NiftyStatistics implements NiftyStatisticsMXBean {
+public class NiftyStatistics {
   /**
    * A FrameInfo instance records sample times for a specific frame.
    * @author void
@@ -73,21 +69,12 @@ public class NiftyStatistics implements NiftyStatisticsMXBean {
 
   NiftyStatistics(final Statistics statistics) {
     this.statistics = statistics;
-
-    try {
-      MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); 
-      ObjectName name = new ObjectName("de.lessvoid.nifty:type=NiftyStatistics"); 
-      mbs.registerMBean(this, name);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   Statistics getImpl() {
     return statistics;
   }
 
-  @Override
   public List<String> getStatistics() {
     List<String> stuff = new ArrayList<String>();
     FrameInfo[] frameInfos = getAllSamples();

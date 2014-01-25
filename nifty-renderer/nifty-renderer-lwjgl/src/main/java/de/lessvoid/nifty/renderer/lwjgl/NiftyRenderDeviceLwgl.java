@@ -13,16 +13,15 @@ import de.lessvoid.coregl.CoreShader;
 import de.lessvoid.coregl.CoreShaderManager;
 import de.lessvoid.coregl.CoreVAO;
 import de.lessvoid.coregl.CoreVAO.FloatType;
+import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.CoreVBO.DataType;
 import de.lessvoid.coregl.CoreVBO.UsageType;
-import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderStatistics;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
@@ -43,7 +42,6 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   private int textureQuadCount;
   private int colorQuadCount;
   private boolean clearScreenOnRender = false;
-  private NiftyRenderStatistics renderStatistics;
   private NiftyTextureLwjgl lastTexture;
 
   private static final String TEXTURE_SHADER = "texture";
@@ -89,9 +87,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void begin(final NiftyRenderStatistics renderStatisticsParam) {
-    renderStatistics = renderStatisticsParam;
-
+  public void begin() {
     if (clearScreenOnRender) {
       glClearColor((float)Math.random(), (float)Math.random(), (float)Math.random(), 1.f);
       // glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -243,7 +239,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     }
 
     CoreShader shader = shaderManager.activate(TEXTURE_SHADER);
-    shader.setUniformMatrix4f("uMvp", mvp.toBuffer());
+    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
 
     vao.bind();
     vbo.bind();
@@ -260,8 +256,6 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.unbind();
     vbo.getBuffer().clear();
     textureQuadCount = 0;
-
-    renderStatistics.incRenderBatchCount();
   }
 
   private void flushColorQuads() {
@@ -270,7 +264,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     }
 
     CoreShader shader = shaderManager.activate(PLAIN_COLOR_SHADER);
-    shader.setUniformMatrix4f("uMvp", mvp.toBuffer());
+    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
 
     vao.bind();
     vbo.bind();
@@ -286,8 +280,6 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.unbind();
     vbo.getBuffer().clear();
     colorQuadCount = 0;
-
-    renderStatistics.incRenderBatchCount();
   }
 
   private int getTextureId(final NiftyTexture texture) {

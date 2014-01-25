@@ -39,7 +39,7 @@ public interface NiftyRenderDevice {
   
   void render(NiftyTexture renderTarget, Mat4 mat);
 
-  void begin(NiftyRenderStatistics stats);
+  void begin();
   void end();
 
   void beginRenderToTexture(NiftyTexture texture);

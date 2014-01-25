@@ -89,7 +89,7 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   }
 
   private void render() {
-    renderDevice.begin(stats);
+    renderDevice.begin();
     for (int i=0; i<renderNodes.size(); i++) {
       renderNodes.get(i).render(renderDevice, new Mat4());
     }

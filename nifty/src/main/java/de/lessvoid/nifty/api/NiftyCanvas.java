@@ -4,7 +4,7 @@ import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 
 /**
- * You can draw stuff and text and so on onto this using the methods given.
+ * This can be used to draw. The actual content a NiftyNode displays is a NiftyCanvas.
  * @author void
  */
 public class NiftyCanvas {
@@ -16,6 +16,9 @@ public class NiftyCanvas {
 
   public void setFillStyle(final NiftyColor color) {
     impl.setFillColor(color);
+  }
+
+  public void setFillStyle(final NiftyLinearGradient gradient) {
   }
 
   public void fillRect(final double x0, final double y0, final double x1, final double y1) {
