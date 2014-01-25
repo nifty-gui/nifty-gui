@@ -1,10 +1,6 @@
-package de.lessvoid.nifty.gdx.render.batch;
+package de.lessvoid.nifty.gdx.render;
 
 import de.lessvoid.nifty.render.batch.BatchRenderBackendInternal;
-import de.lessvoid.nifty.gdx.render.GdxBufferFactory;
-import de.lessvoid.nifty.gdx.render.GdxGL;
-import de.lessvoid.nifty.gdx.render.GdxImageFactory;
-import de.lessvoid.nifty.gdx.render.GdxMouseCursorFactory;
 
 import javax.annotation.Nonnull;
 
@@ -17,7 +13,6 @@ public class GdxBatchRenderBackendFactory {
     return new GdxBatchRenderBackend(
             new BatchRenderBackendInternal(
                     new GdxGL(),
-                    new GdxBatchFactory(),
                     new GdxBufferFactory(),
                     new GdxImageFactory(),
                     new GdxMouseCursorFactory()));

@@ -11,7 +11,7 @@ import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.gdx.input.GdxInputSystem;
 import de.lessvoid.nifty.gdx.input.GdxKeyRepeatSystem;
-import de.lessvoid.nifty.gdx.render.batch.GdxBatchRenderBackendFactory;
+import de.lessvoid.nifty.gdx.render.GdxBatchRenderBackendFactory;
 import de.lessvoid.nifty.gdx.sound.GdxSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
