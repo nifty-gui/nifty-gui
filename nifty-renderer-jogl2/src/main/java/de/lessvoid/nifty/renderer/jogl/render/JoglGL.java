@@ -1,14 +1,16 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
-import de.lessvoid.nifty.render.batch.spi.GL;
-
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2ES2;
 import javax.media.opengl.GLContext;
+
+import de.lessvoid.nifty.render.batch.spi.GL;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
@@ -205,12 +207,12 @@ public class JoglGL implements GL {
 
   @Override
   public int GL_STACK_OVERFLOW() {
-    return GL2.GL_STACK_OVERFLOW;
+    return GL2ES2.GL_STACK_OVERFLOW;
   }
 
   @Override
   public int GL_STACK_UNDERFLOW() {
-    return GL2.GL_STACK_UNDERFLOW;
+    return GL2ES2.GL_STACK_UNDERFLOW;
   }
 
   @Override
