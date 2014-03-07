@@ -82,9 +82,14 @@ public class AbsolutePositionLayout implements LayoutManager {
       } else {
         if (cons.getWidth().hasValue()) {
           box.setWidth(cons.getWidth().getValueAsInt(rootBoxWidth));
+        }else{
+      	  box.setWidth(0);
         }
+      	  
         if (cons.getHeight().hasValue()) {
           box.setHeight(cons.getHeight().getValueAsInt(rootBoxHeight));
+        }else{
+      	 box.setHeight(0);
         }
       }
 
