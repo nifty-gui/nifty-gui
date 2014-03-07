@@ -60,10 +60,13 @@ public class AbsolutePositionLayout implements LayoutManager {
       // makes only sense with constraints given
       if (cons.getX().hasValue()) {
         box.setX(rootBoxX + cons.getX().getValueAsInt(rootBoxWidth));
+      }else{
+      	box.setX(0);//to handle when a previous setY was done and you want to set back to default
       }
-
       if (cons.getY().hasValue()) {
         box.setY(rootBoxY + cons.getY().getValueAsInt(rootBoxHeight));
+      }else{
+      	box.setY(0); //to handle when a previous setY was done and you want to set back to default
       }
 
       if (cons.getWidth().hasHeightSuffix()) {
