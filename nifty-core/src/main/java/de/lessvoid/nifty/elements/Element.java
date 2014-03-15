@@ -214,6 +214,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private int parentClipWidth;
   private int parentClipHeight;
 
+  // this will be set to true when constraints, padding, margin and so on have been changed and this change should
+  // publish an event on the event bus later
+  private boolean constraintsChanged;
+
   /*
    * Whether or not this element should ignore all mouse events.
    */
@@ -417,7 +421,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     // This element has a new parent. Check the parent's clip area and update this element accordingly.
     if (parentHasClipArea()) {
       setParentClipArea(parentClipX, parentClipY, parentClipWidth, parentClipHeight);
-      notifyListeners();
+      publishEvent();
     } else {
       parentClipArea = false;
     }
@@ -1040,6 +1044,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     prepareLayout();
     processLayout();
+
+    publishConstraintsChangedEvent();
+  }
+
+  private void publishConstraintsChangedEvent() {
+    if (constraintsChanged) {
+      publishEvent();
+      constraintsChanged = false;
+    }
+    if (children != null) {
+      for (int i = 0; i < children.size(); i++) {
+        children.get(i).publishConstraintsChangedEvent();
+      }
+    }
   }
 
   private void prepareLayout() {
@@ -2170,7 +2188,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
 
     log.fine("after setStyle [" + newStyle + "]\n" + elementType.output(0));
-    notifyListeners();
+    publishEvent();
   }
 
   @Nullable
@@ -2185,7 +2203,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     effectManager.removeAllEffects();
 
     log.fine("after removeStyle [" + style + "]\n" + elementType.output(0));
-    notifyListeners();
+    publishEvent();
   }
 
   /**
@@ -2441,6 +2459,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   private void notifyListeners() {
+    constraintsChanged = true;
+  }
+
+  private void publishEvent() {
     if (id != null) {
       nifty.publishEvent(id, this);
     }
