@@ -1696,7 +1696,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   public void mouseEventHoverPreprocess(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     effectManager.handleHoverDeactivate(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
   }
-
+  /**
+   * Process mouse event for this element
+   * @param mouseEvent
+   * @param eventTime is the current time in milliseconds
+   * @return True if the event has been processed 
+   */
   public boolean mouseEvent(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     mouseEventHover(mouseEvent);
     return interaction.process(mouseEvent, eventTime, isInside(mouseEvent), canHandleInteraction(),

@@ -51,7 +51,7 @@ public class TabSelectedEvent implements NiftyEvent {
    * @return the tab group
    */
   @Nonnull
-  private TabGroup getParentGroup() {
+  public TabGroup getParentGroup() {
     return group;
   }
 
@@ -61,7 +61,7 @@ public class TabSelectedEvent implements NiftyEvent {
    * @return the tab that is now visible or {@code null} in case no tab is visible
    */
   @Nonnull
-  private Tab getTab() {
+  public Tab getTab() {
     return tab;
   }
 
@@ -70,7 +70,7 @@ public class TabSelectedEvent implements NiftyEvent {
    *
    * @return the index of the tab that is now visible
    */
-  private int getIndex() {
+  public int getIndex() {
     return index;
   }
 }
