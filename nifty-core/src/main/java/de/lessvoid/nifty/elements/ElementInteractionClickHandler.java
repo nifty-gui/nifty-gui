@@ -3,12 +3,14 @@ package de.lessvoid.nifty.elements;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
+import java.util.Properties;
 
 import javax.annotation.Nonnull;
 
 public class ElementInteractionClickHandler {
   private static final long REPEATED_CLICK_START_TIME = 100;
   private static final long REPEATED_CLICK_TIME = 100;
+  private static final int CLICK_COUNT_RECORD_TIME = 500;
 
   private final Nifty nifty;
   private final Element element;
@@ -19,6 +21,9 @@ public class ElementInteractionClickHandler {
   private long lastRepeatStartTime;
   private int lastMouseX;
   private int lastMouseY;
+  private int deltaTime;
+  private long lastClickTime;
+  private int clickCounter;
 
   public ElementInteractionClickHandler(
       final Nifty nifty,
@@ -27,6 +32,7 @@ public class ElementInteractionClickHandler {
     this.nifty = nifty;
     this.element = element;
     this.mouseMethods = mouseMethods;
+    this.clickCounter = 1;
     setMouseDown(false, 0);
   }
 
@@ -69,12 +75,21 @@ public class ElementInteractionClickHandler {
     }
     boolean processed = false;
     if (mouseInside && !isMouseDown) {
-      if (isButtonDown && isInitialButtonDown) {
-        setMouseDown(true, eventTime);
-        onInitialClick();
-        onClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey);
-        processed = true;
-      }
+        if (isButtonDown && isInitialButtonDown) {
+            this.deltaTime += eventTime - this.lastClickTime;
+            setMouseDown(true, eventTime);
+            if ( this.deltaTime > this.calculateThreshold()) {
+                this.lastClickTime = eventTime;
+                this.deltaTime = 0;
+                this.clickCounter = 1;
+                onInitialClick();
+                onClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey);
+            } else {
+                this.clickCounter++;
+                onMultiClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey);
+            }
+            processed = true;
+        }
     } else if (!isButtonDown && isMouseDown) {
       setMouseDown(false, eventTime);
     }
@@ -130,7 +145,17 @@ public class ElementInteractionClickHandler {
 
     return mouseMethods.onClickMouseMove(nifty, inputEvent);
   }
+  
+   private boolean onMultiClickMouse(String id, NiftyMouseInputEvent inputEvent, boolean canHandleInteraction, String onClickAlternateKey) {
+       if (canHandleInteraction) {
+      lastMouseX = inputEvent.getMouseX();
+      lastMouseY = inputEvent.getMouseY();
 
+      return mouseMethods.onMultiClick(nifty, onClickAlternateKey, inputEvent, clickCounter);
+    }
+    return false;
+   }
+   
   private boolean onMouseRelease(@Nonnull final NiftyMouseInputEvent mouseEvent) {
     return mouseMethods.onMouseRelease(nifty, mouseEvent);
   }
@@ -142,6 +167,10 @@ public class ElementInteractionClickHandler {
   public void setOnClickMethod(final NiftyMethodInvoker onClickMethod) {
     mouseMethods.setOnClickMethod(onClickMethod);
   }
+  
+   public void setOnMultiClickMethod(final NiftyMethodInvoker onMultiClickMethod) {
+    mouseMethods.setMultiClickMethod(onMultiClickMethod);
+   }
 
   public void setOnClickMouseMoveMethod(final NiftyMethodInvoker onClickMouseMoveMethod) {
     mouseMethods.setOnClickMouseMoveMethod(onClickMouseMoveMethod);
@@ -150,4 +179,22 @@ public class ElementInteractionClickHandler {
   public void setOnReleaseMethod(final NiftyMethodInvoker onReleaseMethod) {
     mouseMethods.setOnReleaseMethod(onReleaseMethod);
   }
+  /**
+   * Take the threshold for multiclick calculation . This is useful if user
+   * change the value runtime.
+   * @return amount of milliseconds if MULTI_CLICK_TIME is set.
+   */
+  private int calculateThreshold(){
+      int result = ElementInteractionClickHandler.CLICK_COUNT_RECORD_TIME;
+      Properties globalProperties = this.nifty.getGlobalProperties();
+      if (globalProperties != null) {
+          String threshold = globalProperties.getProperty("MULTI_CLICK_TIME");
+          try {
+              result = Integer.parseInt(threshold);
+          } catch (NumberFormatException e) {
+          }
+      }
+      return result;
+  }
+
 }

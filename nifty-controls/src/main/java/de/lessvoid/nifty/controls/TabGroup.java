@@ -174,4 +174,13 @@ public interface TabGroup extends NiftyControl {
    * @throws IllegalArgumentException in case the tab that is supposed to be removed is not a part of this tab group
    */
   void setTabCaption(@Nonnull Tab tab, @Nonnull String caption);
+  
+    /**
+   * Get the tab control at a specified index.
+   *
+   * @param index the index of the tab control
+   * @return the tab control
+   */
+  @Nullable
+  Tab getTabAtIndex(final int index);
 }

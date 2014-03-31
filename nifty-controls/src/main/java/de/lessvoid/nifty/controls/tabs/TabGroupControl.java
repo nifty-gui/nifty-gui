@@ -421,7 +421,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
    * @return the tab control
    */
   @Nullable
-  private Tab getTab(final int index) {
+  public Tab getTabAtIndex(final int index) {
     if (contentPanel == null) {
       return null;
     }
@@ -586,7 +586,7 @@ public class TabGroupControl extends AbstractController implements TabGroup {
     if (nifty != null) {
       String id = getId();
       if (id != null) {
-        Tab tab = getTab(index);
+        Tab tab = getTabAtIndex(index);
         if (tab == null) {
           log.severe("Tab with valid index returned null. This looks like a internal error.");
         } else {
