@@ -38,13 +38,13 @@ public class InteractType extends XmlBaseType {
       @Nonnull final Element element,
       final Object... controller) {
     materializeMethods(nifty, element, element.getElementInteraction().getPrimary(),
-        "onClick", "onClickRepeat", "onRelease", "onClickMouseMove", controller);
+        "onClick", "onClickRepeat", "onRelease", "onClickMouseMove","onMultiClick", controller);
     materializeMethods(nifty, element, element.getElementInteraction().getPrimary(),
-        "onPrimaryClick", "onPrimaryClickRepeat", "onPrimaryRelease", "onPrimaryClickMouseMove", controller);
+        "onPrimaryClick", "onPrimaryClickRepeat", "onPrimaryRelease", "onPrimaryClickMouseMove","onMultiClick", controller);
     materializeMethods(nifty, element, element.getElementInteraction().getSecondary(),
-        "onSecondaryClick", "onSecondaryClickRepeat", "onSecondaryRelease", "onSecondaryClickMouseMove", controller);
+        "onSecondaryClick", "onSecondaryClickRepeat", "onSecondaryRelease", "onSecondaryClickMouseMove","", controller);
     materializeMethods(nifty, element, element.getElementInteraction().getTertiary(),
-        "onTertiaryClick", "onTertiaryClickRepeat", "onTertiaryRelease", "onTertiaryClickMouseMove", controller);
+        "onTertiaryClick", "onTertiaryClickRepeat", "onTertiaryRelease", "onTertiaryClickMouseMove","", controller);
 
     OnClickType onMouseOver = getOnClickType("onMouseOver");
     if (onMouseOver != null) {
@@ -70,10 +70,17 @@ public class InteractType extends XmlBaseType {
       @Nonnull final String onClickRepeatName,
       @Nonnull final String onReleaseName,
       @Nonnull final String onClickMouseMoveName,
+      @Nonnull final String onMultiClickName,
       final Object... controller) {
     OnClickType onClick = getOnClickType(onClickName);
     if (onClick != null) {
       handler.setOnClickMethod(onClick.getMethod(nifty, controller));
+      handler.setOnClickRepeatEnabled(false);
+      element.setVisibleToMouseEvents(true);
+    }
+    OnClickType onMultiClick = getOnClickType(onMultiClickName);
+    if(onMultiClick != null){
+      handler.setOnMultiClickMethod(onMultiClick.getMethod(nifty, controller));
       handler.setOnClickRepeatEnabled(false);
       element.setVisibleToMouseEvents(true);
     }
