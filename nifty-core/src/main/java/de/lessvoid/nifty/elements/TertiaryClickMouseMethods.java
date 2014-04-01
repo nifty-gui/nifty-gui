@@ -1,8 +1,10 @@
 package de.lessvoid.nifty.elements;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryClickedEvent;
 import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryClickedMovedEvent;
+import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryMultiClickedEvent;
 import de.lessvoid.nifty.elements.events.NiftyMouseTertiaryReleaseEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
@@ -51,5 +53,19 @@ public class TertiaryClickMouseMethods extends MouseClickMethods {
       nifty.publishEvent(id, new NiftyMouseTertiaryReleaseEvent(element, mouseEvent));
     }
     return super.onMouseRelease(nifty, mouseEvent);
+  }
+  
+   @Override
+  public boolean onMultiClick(
+      @Nonnull final Nifty nifty,
+      @Nullable final String onClickAlternateKey,
+      @Nonnull final NiftyMouseInputEvent inputEvent,
+      int clickCount) {
+    String id = element.getId();
+    if (id != null) {
+      nifty.publishEvent(id, new NiftyMouseTertiaryMultiClickedEvent(element, inputEvent,clickCount));
+    }
+    element.startEffectWithoutChildren(EffectEventId.onClick);
+    return super.onMultiClick(nifty, onClickAlternateKey, inputEvent,clickCount);
   }
 }

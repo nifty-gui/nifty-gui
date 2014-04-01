@@ -40,11 +40,11 @@ public class InteractType extends XmlBaseType {
     materializeMethods(nifty, element, element.getElementInteraction().getPrimary(),
         "onClick", "onClickRepeat", "onRelease", "onClickMouseMove","onMultiClick", controller);
     materializeMethods(nifty, element, element.getElementInteraction().getPrimary(),
-        "onPrimaryClick", "onPrimaryClickRepeat", "onPrimaryRelease", "onPrimaryClickMouseMove","onMultiClick", controller);
+        "onPrimaryClick", "onPrimaryClickRepeat", "onPrimaryRelease", "onPrimaryClickMouseMove","onPrimaryMultiClick", controller);
     materializeMethods(nifty, element, element.getElementInteraction().getSecondary(),
-        "onSecondaryClick", "onSecondaryClickRepeat", "onSecondaryRelease", "onSecondaryClickMouseMove","", controller);
+        "onSecondaryClick", "onSecondaryClickRepeat", "onSecondaryRelease", "onSecondaryClickMouseMove","onSecondaryMultiClick", controller);
     materializeMethods(nifty, element, element.getElementInteraction().getTertiary(),
-        "onTertiaryClick", "onTertiaryClickRepeat", "onTertiaryRelease", "onTertiaryClickMouseMove","", controller);
+        "onTertiaryClick", "onTertiaryClickRepeat", "onTertiaryRelease", "onTertiaryClickMouseMove","onTertiaryMultiClick", controller);
 
     OnClickType onMouseOver = getOnClickType("onMouseOver");
     if (onMouseOver != null) {
