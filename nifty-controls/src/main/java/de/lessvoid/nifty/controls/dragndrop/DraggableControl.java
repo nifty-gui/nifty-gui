@@ -353,7 +353,7 @@ public class DraggableControl extends AbstractController implements Draggable {
       Element element = elements.get(i);
 
       // we can only drop stuff on visible droppables
-      boolean mouseInsideAndVisible = element.isMouseInsideElement(x, y) && element.isVisible();
+      boolean mouseInsideAndVisible = element.isMouseInsideElement(x, y) && element.isVisibleWithParent();
       if (mouseInsideAndVisible && isDroppable(element)) {
         return element;
       }

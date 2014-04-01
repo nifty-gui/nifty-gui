@@ -150,6 +150,7 @@ public class ElementEnableDisableTest {
     replay(niftyMock);
     setupMocks();
 
+    e1.disableFocus();
     e2.disableFocus();
     replay(e1);
     replay(e2);
@@ -167,6 +168,7 @@ public class ElementEnableDisableTest {
     replay(niftyMock);
     setupMocks();
 
+    e1.disableFocus();
     e2.disableFocus();
     replay(e1);
     replay(e2);
@@ -187,6 +189,7 @@ public class ElementEnableDisableTest {
     replay(niftyMock);
     setupMocks();
 
+    e1.disableFocus();
     e2.disableFocus();
     replay(e1);
     replay(e2);

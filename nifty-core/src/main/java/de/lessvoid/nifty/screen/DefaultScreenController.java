@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
  * It does nothing at the moment.
  */
 public class DefaultScreenController implements ScreenController {
-  Nifty nifty;
+  protected Nifty nifty;
 
   @Override
   public void bind(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {

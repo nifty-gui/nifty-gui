@@ -55,6 +55,12 @@ public class ElementShowHideTest {
   }
 
   @Test
+  public void testDefaults() {
+    assertTrue(e1.isVisible());
+    assertTrue(e2.isVisible());
+  }
+
+  @Test
   public void testSimpleShow() {
     e2.show();
 
@@ -97,7 +103,7 @@ public class ElementShowHideTest {
     e1.hide();
 
     assertFalse(e1.isVisible());
-    assertFalse(e2.isVisible());
+    assertTrue(e2.isVisible());
   }
 
   @Test
@@ -110,7 +116,7 @@ public class ElementShowHideTest {
 
     e1.show();
     assertTrue(e1.isVisible());
-    assertTrue(e2.isVisible()); // visible will currently override all child elements!
+    assertFalse(e2.isVisible());
 
     e2.show();
     assertTrue(e2.isVisible());
@@ -122,7 +128,6 @@ public class ElementShowHideTest {
     e1.show();
 
     assertTrue(e1.isVisible());
-    assertTrue(e2.isVisible()); // visible will currently override all child elements!
+    assertFalse(e2.isVisible());
   }
-
 }

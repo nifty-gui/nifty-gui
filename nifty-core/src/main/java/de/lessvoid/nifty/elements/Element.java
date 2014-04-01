@@ -375,20 +375,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   public void initializeFromPostAttributes(@Nonnull final Attributes attributes) {
-    boolean visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
-    if (!visible) {
-      hideWithChildren();
-    }
-  }
-
-  private void hideWithChildren() {
-    visible = false;
-    if (children != null) {
-      for (int i = 0; i < children.size(); i++) {
-        Element element = children.get(i);
-        element.hideWithChildren();
-      }
-    }
+    visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
   }
 
   @Nullable
@@ -1461,6 +1448,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     focusHandler.lostKeyboardFocus(this);
     focusHandler.lostMouseFocus(this);
+
+    // make sure we don't have child elements that still have the focus
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        children.get(i).disableFocus();
+      }
+    }
   }
 
   void disableEffect() {
@@ -1502,14 +1497,6 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   private void internalShow() {
     visible = true;
     effectManager.restoreForShow();
-
-    if (children != null) {
-      final int childrenCount = children.size();
-      for (int i = 0; i < childrenCount; i++) {
-        Element element = children.get(i);
-        element.internalShow();
-      }
-    }
 
     if (id != null) {
       nifty.publishEvent(id, new ElementShowEvent(this));
@@ -1575,21 +1562,31 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     visible = false;
     disableFocus();
 
-    if (children != null) {
-      final int childrenCount = children.size();
-      for (int i = 0; i < childrenCount; i++) {
-        Element element = children.get(i);
-        element.internalHide();
-      }
-    }
-
     if (id != null) {
       nifty.publishEvent(id, new ElementHideEvent(this));
     }
   }
 
+  /**
+   * Returns true if this element is visible. Please note that this is with regards to that element only. It's possible
+   * that this element is invisible (because of any of its parent elements is invisible) and still this method will
+   * return true;
+   *
+   * @return if this element is visible returns true. when the element is invisible returns false.
+   */
   public boolean isVisible() {
     return visible;
+  }
+
+  /**
+   * Returns true if this element is visible and all of its parent hierarchy is visible too.
+   * @return if this element is really visible and false if it is invisible.
+   */
+  public boolean isVisibleWithParent() {
+    if (parent == null) {
+        return visible;
+      }
+    return visible && parent.isVisibleWithParent();
   }
 
   public void setHotSpotFalloff(@Nullable final Falloff newFalloff) {
