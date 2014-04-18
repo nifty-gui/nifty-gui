@@ -116,6 +116,7 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   private boolean clipEnabled;
   @Nonnull
   private final Clip clip = new Clip(0, 0, 0, 0);
+  private final Clip absoluteClip = new Clip(0, 0, 0, 0);
   @Nonnull
   private BlendMode blendMode = BlendMode.BLEND;
   @Nonnull
@@ -133,6 +134,10 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     nativeDisplayWidth = renderDevice.getWidth();
     nativeDisplayHeight = renderDevice.getHeight();
     imageManager = new NiftyImageManager(renderDeviceParam);
+    absoluteClip.x0 = 0;
+    absoluteClip.y0 = 0;
+    absoluteClip.x1 = displayWidth;
+    absoluteClip.y1 = displayHeight;
   }
 
   @Override
@@ -462,7 +467,19 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     this.currentX = xParam;
     this.currentY = yParam;
   }
+  
+  @Override 
+  public void setAbsoluteClip(int x0, int y0, int x1, int y1) {
+      this.absoluteClip.x0 = x0;
+      this.absoluteClip.y0 = y0;
+      this.absoluteClip.x1 = x1;
+      this.absoluteClip.y1 = y1;
+  }
 
+  public void applyAbsoluteClip() {
+      this.updateClip(true, absoluteClip.x0, absoluteClip.y0, absoluteClip.x1, absoluteClip.y1);
+  }
+  
   @Override
   public void enableClip(final int cx0, final int cy0, final int cx1, final int cy1) {
     // Issue #138:

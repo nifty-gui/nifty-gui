@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nifty>
+    <screen id="GScreen0" controller="de.lessvoid.nifty.examples.absoluteClipping.Clipping">
+        <layer id="GLayer0" backgroundColor="#0000ffff" childLayout="center">
+            <panel id="GPanel0" height="248px" style="nifty-panel" width="319px" childLayout="horizontal">
+                <control name="button" id="decrease" height="38px" width="140px" label="-" childLayout="center" valign="center"/>
+                <control name="button" id="increase" height="39px" width="149px" label="+" childLayout="center" valign="center"/>
+            </panel>
+        </layer>
+    </screen>
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+</nifty>

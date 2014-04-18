@@ -349,7 +349,7 @@ public class Nifty {
     if (clearScreen) {
       renderEngine.clear();
     }
-
+    renderEngine.applyAbsoluteClip();
     if (currentScreen != null) {
       currentScreen.renderLayers(renderEngine);
     }
@@ -1929,6 +1929,28 @@ public class Nifty {
 
   public void setNiftyInputConsumerNotify(final NiftyInputConsumerNotify newNotify) {
     this.niftyInputConsumerNotify = newNotify;
+  }
+  /**
+   * This method clip a rectangle area. This is meant to be used outside {@code nifty.render(true) } call, it 
+   * will clip an area like a camera . <b>Note:</b> Some elements with childClip=true could modify this clip within {@code nifty.render(true) } loop. 
+   * Tested on Java2d renderer.
+   * @param x0 X coordinates of left-upper corner
+   * @param y0 Y coordinates of left-upper corner
+   * @param x1 X coordinates of right-bottom corner
+   * @param y1 Y coordinates of right-bottom corner
+   */
+  public void setAbsoluteClip(int x0,int y0,int x1,int y1){
+      this.renderEngine.setAbsoluteClip(x0, y0, x1, y1);
+  }
+  /**
+   * {@link #setAbsoluteClip(int, int, int, int) setAbsoluteClip} but this use position and size of a rectangle
+   * @param x
+   * @param y
+   * @param width 
+   * @param height 
+   */
+  public void setAbsoluteClipRect(int x,int y,int width,int height){
+      this.setAbsoluteClip(x, y, x+width, y+height);
   }
 
   /**

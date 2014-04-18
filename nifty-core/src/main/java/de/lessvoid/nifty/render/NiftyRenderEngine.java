@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.render;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
@@ -208,7 +209,17 @@ public interface NiftyRenderEngine {
    * Enable clipping to the given region.
    */
   void enableClip(int x0, int y0, int x1, int y1);
-
+  /**
+   * Clip an absolute region
+   * @see Nifty#setAbsoluteClip(int, int, int, int) 
+   * @param x0 X coordinates of left-upper corner
+   * @param y0 Y coordinates of left-upper corner
+   * @param x1 X coordinates of right-bottom corner
+   * @param y1 Y coordinates of right-bottom corner
+   */
+  void setAbsoluteClip(int x0,int y0,int x1,int y1);
+  
+  void applyAbsoluteClip();
   /**
    * Disable the clipping.
    */
