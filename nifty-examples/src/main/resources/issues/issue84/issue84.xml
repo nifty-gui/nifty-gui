@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <controlDefinition name="myLabel">
+    <!--
+      this demonstrates old style parameters: $color
+      as well as new style parameters: $(myText)
+    -->
+    <text font="aurulent-sans-16.fnt" color="$color" text="Hello $(myText)" align="center" valign="center" />
+  </controlDefinition>
+
+  <screen id="start">
+    <layer id="layer" backgroundColor="#003f" childLayout="center">
+      <panel id="panel" height="25%" width="35%" align="center" valign="center" backgroundColor="#f60f" childLayout="center" visibleToMouse="true">
+        <control name="myLabel" myText="World" color="#ffff"/>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

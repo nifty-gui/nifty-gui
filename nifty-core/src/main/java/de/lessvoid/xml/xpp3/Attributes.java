@@ -1,13 +1,22 @@
 package de.lessvoid.xml.xpp3;
 
-import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.xml.tools.SpecialValuesReplace;
-import org.xmlpull.v1.XmlPullParser;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.xml.tools.SpecialValuesReplace;
 
 /**
  * XPP Attributes in a nicer form.
@@ -16,6 +25,7 @@ import java.util.*;
 // TODO: This class should be modified to implement the Map<String, String> interface (renaming all concerned method),
 // and should not expose its attributes member anymore.
 public class Attributes {
+  private final static ControlParameter controlParameter = new ControlParameter();
   @Nonnull
   private final Map<String, String> attributes;
   @Nonnull
@@ -320,13 +330,19 @@ public class Attributes {
     return null;
   }
 
-  public static class Entry {
+  public static class Parameter {
+    private final String originalValue;
     private final String key;
     private final String value;
 
-    private Entry(final String key, final String value) {
+    private Parameter(final String originalValue, final String key, final String value) {
+      this.originalValue = originalValue;
       this.key = key;
       this.value = value;
+    }
+
+    public String getOriginalValue() {
+      return originalValue;
     }
 
     public String getKey() {
@@ -339,14 +355,14 @@ public class Attributes {
   }
 
   @Nonnull
-  public List<Entry> extractParameters() {
-    List<Entry> parameters = new ArrayList<Entry>();
+  public List<Parameter> extractParameters() {
+    List<Parameter> parameters = new ArrayList<Parameter>();
 
     for (Map.Entry < String, String > entry : attributes.entrySet()) {
       String key = entry.getKey(); // like key="$value"
       String value = entry.getValue();
       if (isParameterDefinition(value)) {
-        parameters.add(new Entry(value.replaceFirst("\\$", ""), key));
+        parameters.add(new Parameter(value, controlParameter.extractParameter(value), key));
       }
     }
 
@@ -354,7 +370,7 @@ public class Attributes {
   }
 
   private boolean isParameterDefinition(@Nonnull final String value) {
-    return !value.startsWith("${") && (value.startsWith("$"));
+    return controlParameter.isParameter(value);
   }
 
   @Nonnull
@@ -380,14 +396,14 @@ public class Attributes {
 
   @SuppressWarnings("ConstantConditions")
   public void resolveParameters(@Nonnull final Attributes attributes) {
-    List<Entry> entrySet = getParameterSet();
-    for (Entry entry : entrySet) {
+    List<Parameter> entrySet = getParameterSet();
+    for (Parameter entry : entrySet) {
       String key = entry.getKey();
       String value = entry.getValue();
 
       // first check the given attributes and then check our own
       if (attributes.isSet(key)) {
-        set(value, attributes.get(key));
+        set(value, controlParameter.applyParameter(entry.getOriginalValue(), entry.getKey(), attributes.get(key)));
       } else if (isSet(key) && !isParameterDefinition(get(key))) {
         set(value, get(key));
       } else {
@@ -397,7 +413,7 @@ public class Attributes {
   }
 
   @Nonnull
-  List<Entry> getParameterSet() {
+  List<Parameter> getParameterSet() {
     return extractParameters();
   }
 
