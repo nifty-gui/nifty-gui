@@ -67,7 +67,7 @@ public class TextSize implements EffectImpl {
         float originalHeight = font.getHeight();
         float sizedHeight = font.getHeight() * scale;
 
-        r.moveTo(-(sizedWidth - originalWidth) / 2, -(sizedHeight - originalHeight) / 2);
+        r.moveToRelative(-(sizedWidth - originalWidth) / 2, -(sizedHeight - originalHeight) / 2);
       }
     }
   }

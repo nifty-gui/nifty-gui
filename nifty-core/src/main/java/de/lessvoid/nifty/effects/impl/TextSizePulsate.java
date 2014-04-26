@@ -89,7 +89,7 @@ public class TextSizePulsate implements EffectImpl {
           float originalHeight = font.getHeight();
           float sizedHeight = font.getHeight() * size;
 
-          r.moveTo(-(sizedWidth - originalWidth) / 2, -(sizedHeight - originalHeight) / 2);
+          r.moveToRelative(-(sizedWidth - originalWidth) / 2, -(sizedHeight - originalHeight) / 2);
         }
       }
 

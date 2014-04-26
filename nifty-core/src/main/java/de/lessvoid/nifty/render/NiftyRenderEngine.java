@@ -206,6 +206,14 @@ public interface NiftyRenderEngine {
   void moveTo(float xParam, float yParam);
 
   /**
+   * Move to the given x/y position but respect any previously set position using moveTo.
+   *
+   * @param xParam x
+   * @param yParam y
+   */
+  void moveToRelative(float xParam, float yParam);
+
+  /**
    * Enable clipping to the given region.
    */
   void enableClip(int x0, int y0, int x1, int y1);

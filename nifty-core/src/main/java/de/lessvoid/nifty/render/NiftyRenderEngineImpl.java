@@ -1,16 +1,21 @@
 package de.lessvoid.nifty.render;
 
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.lessvoid.nifty.NiftyStopwatch;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * This is the default implementation of the render engine.
@@ -467,7 +472,13 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     this.currentX = xParam;
     this.currentY = yParam;
   }
-  
+
+  @Override
+  public void moveToRelative(final float xParam, final float yParam) {
+    currentX = currentX + xParam;
+    currentY = currentY + yParam;
+  }
+
   @Override 
   public void setAbsoluteClip(int x0, int y0, int x1, int y1) {
       this.absoluteClip.x0 = x0;
