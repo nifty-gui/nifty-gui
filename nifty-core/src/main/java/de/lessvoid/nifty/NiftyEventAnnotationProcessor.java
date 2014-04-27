@@ -1,18 +1,17 @@
 package de.lessvoid.nifty;
 
-import org.bushe.swing.event.EventService;
-import org.bushe.swing.event.EventServiceLocator;
-import org.bushe.swing.event.EventTopicSubscriber;
-import org.bushe.swing.event.ProxySubscriber;
-import org.bushe.swing.event.annotation.ReferenceStrength;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bushe.swing.event.EventService;
+import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.EventTopicSubscriber;
 
 public class NiftyEventAnnotationProcessor {
   private static final Logger log = Logger.getLogger(NiftyEventAnnotationProcessor.class.getName());
@@ -102,7 +101,7 @@ public class NiftyEventAnnotationProcessor {
     return EventServiceLocator.getEventService("NiftyEventBus");
   }
 
-  private static class Subscriber implements EventTopicSubscriber<Object>, ProxySubscriber {
+  private static class Subscriber implements EventTopicSubscriber<Object> {
     private final Object obj;
     private final Method method;
     private final Class<?> eventClass;
@@ -125,18 +124,40 @@ public class NiftyEventAnnotationProcessor {
     }
 
     @Override
-    public Object getProxiedSubscriber() {
-      return obj;
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((eventClass == null) ? 0 : eventClass.hashCode());
+      result = prime * result + ((method == null) ? 0 : method.hashCode());
+      result = prime * result + ((obj == null) ? 0 : obj.hashCode());
+      return result;
     }
 
     @Override
-    public void proxyUnsubscribed() {
-    }
-
-    @Nonnull
-    @Override
-    public ReferenceStrength getReferenceStrength() {
-      return ReferenceStrength.STRONG;
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      Subscriber other = (Subscriber) obj;
+      if (eventClass == null) {
+        if (other.eventClass != null)
+          return false;
+      } else if (!eventClass.equals(other.eventClass))
+        return false;
+      if (method == null) {
+        if (other.method != null)
+          return false;
+      } else if (!method.equals(other.method))
+        return false;
+      if (this.obj == null) {
+        if (other.obj != null)
+          return false;
+      } else if (!this.obj.equals(other.obj))
+        return false;
+      return true;
     }
   }
 }
