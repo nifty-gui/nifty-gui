@@ -1,14 +1,20 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.logging.Logger;
 
 class ListBoxImpl<T> {
   @Nonnull
@@ -251,7 +257,7 @@ class ListBoxImpl<T> {
     removeItemByIndex(items.indexOf(item));
   }
 
-  public void removeAllItems(@Nonnull final List<T> itemsToRemove) {
+  public void removeAllItems(@Nonnull final Collection<T> itemsToRemove) {
     int oldCount = itemCount();
     T visibleItem = getVisibleItem();
 
@@ -370,7 +376,7 @@ class ListBoxImpl<T> {
     // handled in ListBoxControl directly
   }
 
-  public void addAllItems(@Nonnull final List<T> itemsToAdd) {
+  public void addAllItems(@Nonnull final Collection<T> itemsToAdd) {
     if (itemsToAdd.isEmpty()) {
       return;
     }
@@ -385,7 +391,9 @@ class ListBoxImpl<T> {
     if (visibleItem != null) {
       restoreVisibleItem(visibleItem);
     }
-    ensureAutoSelection(itemsToAdd.get(0));
+    if (!itemsToAdd.isEmpty()) {
+      ensureAutoSelection(itemsToAdd.iterator().next());
+    }
   }
 
   public void sortItems(@Nullable final Comparator<T> comparator) {

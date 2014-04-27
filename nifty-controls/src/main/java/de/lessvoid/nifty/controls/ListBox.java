@@ -1,15 +1,17 @@
 package de.lessvoid.nifty.controls;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.lessvoid.nifty.controls.listbox.ListBoxItemProcessor;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.spi.render.RenderFont;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Comparator;
-import java.util.List;
-import java.util.logging.Logger;
 
 
 /**
@@ -194,14 +196,14 @@ public interface ListBox<T> extends NiftyControl {
    *
    * @param itemsToAdd all items to add
    */
-  void addAllItems(@Nonnull List<T> itemsToAdd);
+  void addAllItems(@Nonnull Collection<T> itemsToAdd);
 
   /**
    * Remove all items given in the List from this ListBox.
    *
    * @param itemsToRemove list of items to remove
    */
-  void removeAllItems(@Nonnull List<T> itemsToRemove);
+  void removeAllItems(@Nonnull Collection<T> itemsToRemove);
 
   /**
    * Sort all items using natural ordering.

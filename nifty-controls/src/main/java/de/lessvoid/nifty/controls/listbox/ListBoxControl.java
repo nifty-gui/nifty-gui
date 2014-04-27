@@ -1,9 +1,26 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bushe.swing.event.EventTopicSubscriber;
+
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
-import de.lessvoid.nifty.controls.*;
+import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.Parameters;
+import de.lessvoid.nifty.controls.Scrollbar;
+import de.lessvoid.nifty.controls.ScrollbarChangedEvent;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
@@ -12,16 +29,6 @@ import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-import org.bushe.swing.event.EventTopicSubscriber;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @deprecated Please use {@link de.lessvoid.nifty.controls.ListBox} when accessing NiftyControls.
@@ -749,12 +756,12 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   @Override
-  public void addAllItems(@Nonnull final List<T> itemsToAdd) {
+  public void addAllItems(@Nonnull final Collection<T> itemsToAdd) {
     listBoxImpl.addAllItems(itemsToAdd);
   }
 
   @Override
-  public void removeAllItems(@Nonnull final List<T> itemsToRemove) {
+  public void removeAllItems(@Nonnull final Collection<T> itemsToRemove) {
     listBoxImpl.removeAllItems(itemsToRemove);
   }
 
