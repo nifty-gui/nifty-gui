@@ -38,6 +38,16 @@ public class TextFieldMaxLenClipboardTest {
   }
 
   @Test
+  public void testInsertWithPutViolatesMaxLength() {
+    expect(clipboard.get()).andReturn("1234567890");
+    replay(clipboard);
+
+    textField.setText("");
+    textField.put();
+    assertEquals("12345", textField.getRealText().toString());
+  }
+
+  @Test
   public void testMaxLengthCopyWithoutMaxLen() {
     expect(clipboard.get()).andReturn("abcdef");
     replay(clipboard);

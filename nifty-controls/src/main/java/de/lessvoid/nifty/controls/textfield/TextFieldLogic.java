@@ -488,7 +488,7 @@ public class TextFieldLogic {
       }
       final CharSequence insertSequence = chars.subSequence(0, insertCnt);
       if (filterInputSequence.acceptInput(cursorPosition, insertSequence)) {
-        text.insert(cursorPosition, chars);
+        text.insert(cursorPosition, insertSequence);
         cursorPosition += insertCnt;
         if (selecting) {
           startSelecting();
