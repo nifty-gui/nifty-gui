@@ -1,19 +1,18 @@
 package de.lessvoid.nifty;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceLocator;
 import org.bushe.swing.event.EventTopicSubscriber;
 import org.bushe.swing.event.ProxySubscriber;
 import org.bushe.swing.event.annotation.ReferenceStrength;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class NiftyEventAnnotationProcessor {
   private static final Logger log = Logger.getLogger(NiftyEventAnnotationProcessor.class.getName());
@@ -137,7 +136,7 @@ public class NiftyEventAnnotationProcessor {
     @Nonnull
     @Override
     public ReferenceStrength getReferenceStrength() {
-      return ReferenceStrength.WEAK;
+      return ReferenceStrength.STRONG;
     }
   }
 }
