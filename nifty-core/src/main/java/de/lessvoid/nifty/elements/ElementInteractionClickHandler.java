@@ -1,13 +1,18 @@
 package de.lessvoid.nifty.elements;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyMethodInvoker;
-import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyMethodInvoker;
+import de.lessvoid.nifty.input.NiftyMouseInputEvent;
+
 public class ElementInteractionClickHandler {
+  private static final Logger logger = Logger.getLogger(ElementInteractionClickHandler.class.getName());
+
   private static final long REPEATED_CLICK_START_TIME = 100;
   private static final long REPEATED_CLICK_TIME = 100;
   private static final int CLICK_COUNT_RECORD_TIME = 500;
@@ -21,7 +26,7 @@ public class ElementInteractionClickHandler {
   private long lastRepeatStartTime;
   private int lastMouseX;
   private int lastMouseY;
-  private int deltaTime;
+  private long deltaTime;
   private long lastClickTime;
   private int clickCounter;
 
@@ -76,16 +81,26 @@ public class ElementInteractionClickHandler {
     boolean processed = false;
     if (mouseInside && !isMouseDown) {
         if (isButtonDown && isInitialButtonDown) {
-            this.deltaTime += eventTime - this.lastClickTime;
+            deltaTime += eventTime - lastClickTime;
             setMouseDown(true, eventTime);
-            if ( this.deltaTime > this.calculateThreshold()) {
-                this.lastClickTime = eventTime;
-                this.deltaTime = 0;
-                this.clickCounter = 1;
+            if ( deltaTime > calculateThreshold()) {
+                if (logger.isLoggable(Level.FINE)) {
+                  logger.fine("eventTime: " + eventTime + ", "
+                            + "lastClickTime: " + lastClickTime + ", "
+                            + "deltaTime: " + deltaTime + " => INITIAL CLICK");
+                }
+                lastClickTime = eventTime;
+                deltaTime = 0;
+                clickCounter = 1;
                 onInitialClick();
                 onClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey);
             } else {
-                this.clickCounter++;
+                clickCounter++;
+                if (logger.isLoggable(Level.FINE)) {
+                  logger.fine("eventTime: " + eventTime + ", "
+                            + "lastClickTime: " + lastClickTime + ", "
+                            + "deltaTime: " + deltaTime + " => MULTI CLICK: " + clickCounter);
+                }
                 onMultiClickMouse(element.getId(), mouseEvent, canHandleInteraction, onClickAlternateKey);
             }
             processed = true;
