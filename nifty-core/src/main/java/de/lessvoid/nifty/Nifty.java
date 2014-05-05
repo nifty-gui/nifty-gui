@@ -1954,6 +1954,13 @@ public class Nifty {
   }
 
   /**
+   * Disable absolute clipping.
+   */
+  public void disableAbsoluteClip() {
+    renderEngine.disableAbsoluteClip();
+  }
+
+  /**
    * Implementation of {@link NiftyInputConsumerNotify} which will just ignore everything.
    *
    * @author void

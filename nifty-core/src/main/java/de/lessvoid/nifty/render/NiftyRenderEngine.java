@@ -217,6 +217,7 @@ public interface NiftyRenderEngine {
    * Enable clipping to the given region.
    */
   void enableClip(int x0, int y0, int x1, int y1);
+
   /**
    * Clip an absolute region
    * @see Nifty#setAbsoluteClip(int, int, int, int) 
@@ -228,6 +229,12 @@ public interface NiftyRenderEngine {
   void setAbsoluteClip(int x0,int y0,int x1,int y1);
   
   void applyAbsoluteClip();
+
+  /**
+   * Disable absolute clipping.
+   */
+  void disableAbsoluteClip();
+
   /**
    * Disable the clipping.
    */

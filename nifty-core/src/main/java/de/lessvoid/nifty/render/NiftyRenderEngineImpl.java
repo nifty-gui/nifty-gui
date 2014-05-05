@@ -127,6 +127,8 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
   @Nonnull
   private final NiftyImageManager imageManager;
 
+  private boolean absoluteClipEnabled;
+
   /**
    * create the device.
    *
@@ -481,16 +483,25 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
 
   @Override 
   public void setAbsoluteClip(int x0, int y0, int x1, int y1) {
-      this.absoluteClip.x0 = x0;
-      this.absoluteClip.y0 = y0;
-      this.absoluteClip.x1 = x1;
-      this.absoluteClip.y1 = y1;
+    absoluteClipEnabled = true;
+    absoluteClip.x0 = x0;
+    absoluteClip.y0 = y0;
+    absoluteClip.x1 = x1;
+    absoluteClip.y1 = y1;
   }
 
+  @Override
   public void applyAbsoluteClip() {
-      this.updateClip(true, absoluteClip.x0, absoluteClip.y0, absoluteClip.x1, absoluteClip.y1);
+    if (absoluteClipEnabled) {
+      updateClip(true, absoluteClip.x0, absoluteClip.y0, absoluteClip.x1, absoluteClip.y1);
+    }
   }
-  
+
+  @Override
+  public void disableAbsoluteClip() {
+    absoluteClipEnabled = false;
+  }
+
   @Override
   public void enableClip(final int cx0, final int cy0, final int cx1, final int cy1) {
     // Issue #138:
