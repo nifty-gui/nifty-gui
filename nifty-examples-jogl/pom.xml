@@ -6,6 +6,9 @@
     <version>1.4.0-SNAPSHOT</version>
   </parent>
   <artifactId>nifty-examples-jogl</artifactId>
+  <properties>
+    <jogamp.version>2.1.4</jogamp.version>
+  </properties>
   <name>Nifty Examples for JOGL</name>
   <dependencies>
   	<dependency>
@@ -37,6 +40,21 @@
       <groupId>lessvoid</groupId>
       <artifactId>nifty-pauls-soundsystem</artifactId>
       <version>1.4.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jogamp.jogl</groupId>
+      <artifactId>jogl-all-main</artifactId>
+      <version>${jogamp.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jogamp.gluegen</groupId>
+      <artifactId>gluegen-rt-main</artifactId>
+      <version>${jogamp.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jogamp.joal</groupId>
+      <artifactId>joal-main</artifactId>
+      <version>${jogamp.version}</version>
     </dependency>
   </dependencies>
 </project>
