@@ -6,6 +6,8 @@ import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.ColorValueParser;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
@@ -21,6 +23,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 
@@ -63,6 +66,8 @@ public class BatchRenderDevice implements RenderDevice {
   private static Logger log = Logger.getLogger(BatchRenderDevice.class.getName());
   @Nonnull
   private final BatchRenderBackend renderBackend;
+  @Nonnull
+  private final TimeProvider timeProvider = new AccurateTimeProvider();
   private int viewportWidth = -1;
   private int viewportHeight = -1;
   private long time;
@@ -132,7 +137,7 @@ public class BatchRenderDevice implements RenderDevice {
     renderBackend.useHighQualityTextures(renderConfig.useHighQualityTextures);
     renderBackend.fillRemovedImagesInAtlas(renderConfig.fillRemovedImagesInAtlas);
     this.renderConfig = renderConfig;
-    time = System.currentTimeMillis();
+    time = timeProvider.getMsTime();
     fontRenderer = new FontRenderer(this);
     factory = new JGLFontFactory(fontRenderer, new ResourceLoader() {
       @Override
@@ -228,7 +233,7 @@ public class BatchRenderDevice implements RenderDevice {
     renderBackend.endFrame();
 
     frames++;
-    long diff = System.currentTimeMillis() - time;
+    long diff = timeProvider.getMsTime() - time;
     if (diff >= 1000) {
       time += diff;
       long lastFrames = frames;

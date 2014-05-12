@@ -1,6 +1,10 @@
 package de.lessvoid.nifty;
 
 import javax.annotation.Nonnull;
+
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -31,6 +35,9 @@ public class NiftyStopwatch {
    */
   @Nonnull
   private static final Queue<Long> stack = Collections.asLifoQueue(new LinkedList<Long>());
+
+  @Nonnull
+  private static TimeProvider timeProvider = new AccurateTimeProvider();
 
   /**
    * Private constructor
@@ -78,6 +85,6 @@ public class NiftyStopwatch {
    * @return the current timestamp
    */
   private static long now() {
-    return System.currentTimeMillis();
+    return timeProvider.getMsTime();
   }
 }

@@ -5,6 +5,8 @@ import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,6 +34,7 @@ import javax.annotation.Nullable;
 public class LwjglRenderDevice implements RenderDevice {
   private static final Logger log = Logger.getLogger(LwjglRenderDevice.class.getName());
   private static final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+  private final TimeProvider timeProvider = new AccurateTimeProvider();
   private NiftyResourceLoader resourceLoader;
   private int viewportWidth = -1;
   private int viewportHeight = -1;
@@ -63,7 +67,7 @@ public class LwjglRenderDevice implements RenderDevice {
    * constructor will configure the RenderDevice to not log FPS on System.out.
    */
   public LwjglRenderDevice() {
-    time = System.currentTimeMillis();
+    time = timeProvider.getMsTime();
     frames = 0;
   }
 
@@ -148,7 +152,7 @@ public class LwjglRenderDevice implements RenderDevice {
   public void endFrame() {
     log.fine("endFrame");
     frames++;
-    long diff = System.currentTimeMillis() - time;
+    long diff = timeProvider.getMsTime() - time;
     if (diff >= 1000) {
       time += diff;
       long lastFrames = frames;

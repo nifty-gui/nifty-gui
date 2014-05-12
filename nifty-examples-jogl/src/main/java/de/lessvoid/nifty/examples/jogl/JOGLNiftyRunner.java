@@ -1,29 +1,36 @@
 package de.lessvoid.nifty.examples.jogl;
 
-import com.jogamp.newt.opengl.GLWindow;
-import com.jogamp.opengl.util.FPSAnimator;
+import java.io.InputStream;
+import java.util.logging.LogManager;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.render.batch.BatchRenderDevice;
-import de.lessvoid.nifty.examples.LoggerShortFormat;
-import de.lessvoid.nifty.nulldevice.NullSoundDevice;
-import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
-import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
-import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendFactory;
-import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendCoreProfileFactory;
-import de.lessvoid.nifty.sound.paulssoundsystem.PaulsSoundsystemSoundDevice;
-import de.lessvoid.nifty.spi.render.RenderDevice;
-import de.lessvoid.nifty.spi.sound.SoundDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
 
 import paulscode.sound.SoundSystemException;
 import paulscode.sound.libraries.LibraryJavaSound;
 
-import java.io.InputStream;
-import java.util.logging.LogManager;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.media.opengl.*;
+import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.util.FPSAnimator;
+
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.examples.LoggerShortFormat;
+import de.lessvoid.nifty.nulldevice.NullSoundDevice;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
+import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
+import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendCoreProfileFactory;
+import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendFactory;
+import de.lessvoid.nifty.renderer.jogl.render.JoglRenderDevice;
+import de.lessvoid.nifty.sound.paulssoundsystem.PaulsSoundsystemSoundDevice;
+import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 /**
  * Takes care of JOGL initialization.
@@ -34,7 +41,8 @@ public class JOGLNiftyRunner implements GLEventListener {
   private static final int FPS = 60;
   private static final int CANVAS_WIDTH = 1024;
   private static final int CANVAS_HEIGHT = 768;
-  private static long time = System.currentTimeMillis();
+  private static TimeProvider timeProvider = new AccurateTimeProvider();
+  private static long time = timeProvider.getMsTime();
   private static long frames = 0;
   private static GLWindow window;
   @Nonnull
@@ -133,7 +141,7 @@ public class JOGLNiftyRunner implements GLEventListener {
       soundDevice = new NullSoundDevice();
     }
 
-    nifty = new Nifty(renderDevice, soundDevice, inputSystem, new TimeProvider());
+    nifty = new Nifty(renderDevice, soundDevice, inputSystem, timeProvider);
     callback.init(nifty, window);
   }
 
@@ -165,13 +173,13 @@ public class JOGLNiftyRunner implements GLEventListener {
   }
 
   private void render(GLAutoDrawable drawable, final long startTime) {
-    long frameTime = System.nanoTime() - startTime;
+    long frameTime = timeProvider.getMsTime() - startTime;
     frames++;
 
-    long diff = System.currentTimeMillis() - time;
+    long diff = timeProvider.getMsTime() - time;
     if (diff >= 1000) {
       time += diff;
-      System.out.println("fps : " + frames + " (" + frameTime / 1000000f + " ms)");
+      System.out.println("fps : " + frames + " (" + frameTime + " ms)");
       frames = 0;
     }
   }

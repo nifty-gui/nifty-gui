@@ -41,13 +41,11 @@ public final class TutorialMainJava2d {
     nifty.fromXml("tutorial/tutorial.xml", "start");
 
     boolean done = false;
-    long time = System.currentTimeMillis();
     long frames = 0;
     while (!done) {
       done = nifty.render(false);
       frames++;
 
-      long diff = System.currentTimeMillis() - time;
       if (diff >= 1000) {
         time += diff;
         System.out.println("fps: " + frames);

@@ -1,5 +1,17 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
+import java.awt.Point;
+import java.io.IOException;
+import java.nio.IntBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLContext;
+
 import com.jogamp.common.nio.Buffers;
 
 import de.lessvoid.nifty.render.BlendMode;
@@ -7,19 +19,10 @@ import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.spi.render.RenderImage;
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
-import java.awt.*;
-import java.io.IOException;
-import java.nio.IntBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * @deprecated Use {@link de.lessvoid.nifty.render.batch.BatchRenderDevice} with either
@@ -31,6 +34,8 @@ public class JoglRenderDevice implements RenderDevice {
   private static final Logger log = Logger.getLogger(JoglRenderDevice.class.getName());
   @Nonnull
   private static final IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4);
+  @Nonnull
+  private final TimeProvider timeProvider = new AccurateTimeProvider();
   @Nullable
   private RenderFont fpsFont;
   @Nullable
@@ -57,7 +62,7 @@ public class JoglRenderDevice implements RenderDevice {
    * configure the RenderDevice to not log FPS on System.out.
    */
   public JoglRenderDevice() {
-    time = System.currentTimeMillis();
+    time = timeProvider.getMsTime();
     frames = 0;
   }
 
@@ -131,7 +136,7 @@ public class JoglRenderDevice implements RenderDevice {
   public void endFrame() {
     log.fine("endFrame");
     frames++;
-    long diff = System.currentTimeMillis() - time;
+    long diff = timeProvider.getMsTime() - time;
     if (diff >= 1000) {
       time += diff;
       lastFrames = frames;
