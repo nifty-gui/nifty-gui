@@ -160,7 +160,8 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
     transform.concatenate(inverseTranslateTransform);
     transform.concatenate(scaleTransform);
     transform.concatenate(translateTransform);
-
+    
+    Composite comp = graphics.getComposite();
     graphics2dHelper.pushTransform();
     {
       graphics.transform(transform);
@@ -169,6 +170,7 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
       graphics.drawImage(renderImage.image, 0, 0, null);
     }
     graphics2dHelper.popTransform();
+    graphics.setComposite(comp);
   }
 
   static class Graphics2dHelper {
@@ -203,12 +205,13 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
     }
 
     RenderImageJava2dImpl renderImage = (RenderImageJava2dImpl) image;
+    Composite comp = graphics.getComposite();
     graphics.setClip(clipRectangle);
     graphics.setComposite(AlphaComposite.getInstance(
         AlphaComposite.SRC_OVER, color.getAlpha()));
     graphics.drawImage(renderImage.image, x, y, x + w, y + h, srcX, srcY,
         srcX + srcW, srcY + srcH, null);
-
+    graphics.setComposite(comp);
   }
 
   @Override
