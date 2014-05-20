@@ -89,11 +89,12 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   }
 
   private void render() {
-    renderDevice.begin();
+    BatchManager batchManager = new BatchManager();
+    batchManager.begin();
     for (int i=0; i<renderNodes.size(); i++) {
-      renderNodes.get(i).render(renderDevice, new Mat4());
+      renderNodes.get(i).render(batchManager, renderDevice, new Mat4());
     }
-    renderDevice.end();
+    batchManager.end();
   }
 
   // MBean

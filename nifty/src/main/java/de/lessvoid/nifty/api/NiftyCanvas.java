@@ -19,6 +19,7 @@ public class NiftyCanvas {
   }
 
   public void setFillStyle(final NiftyLinearGradient gradient) {
+    impl.setFillLinearGradient(gradient);
   }
 
   public void fillRect(final double x0, final double y0, final double x1, final double y1) {

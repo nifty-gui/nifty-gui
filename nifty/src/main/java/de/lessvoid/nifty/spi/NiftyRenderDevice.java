@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.spi;
 
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 
 /**
@@ -47,5 +48,6 @@ public interface NiftyRenderDevice {
   void endRenderToTexture(NiftyTexture texture);
 
   void filledRect(double x0, double y0, double x1, double y1, NiftyColor fillColor);
+  void filledRect(double x0, double y0, double x1, double y1, NiftyLinearGradient gradient);
 
 }

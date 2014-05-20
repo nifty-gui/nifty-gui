@@ -25,4 +25,29 @@ public class NiftyTextureLwjgl implements NiftyTexture {
   public int getHeight() {
     return texture.getHeight();
   }
+
+  @Override
+  public int getAtlasId() {
+    return 0;
+  }
+
+  @Override
+  public double getU0() {
+    return 0;
+  }
+
+  @Override
+  public double getV0() {
+    return 0;
+  }
+
+  @Override
+  public double getV1() {
+    return 0;
+  }
+
+  @Override
+  public double getU1() {
+    return 0;
+  }
 }

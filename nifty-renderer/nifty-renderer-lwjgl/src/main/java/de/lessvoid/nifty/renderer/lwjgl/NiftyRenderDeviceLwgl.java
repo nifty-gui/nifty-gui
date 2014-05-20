@@ -18,6 +18,7 @@ import de.lessvoid.coregl.CoreVBO.DataType;
 import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
 import de.lessvoid.nifty.internal.math.Vec4;
@@ -305,4 +306,11 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     shader.link();
     return shader;
   }
+
+  @Override
+  public void filledRect(double x0, double y0, double x1, double y1, NiftyLinearGradient gradient) {
+    // TODO Auto-generated method stub
+    
+  }
 }
+  

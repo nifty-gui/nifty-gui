@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
@@ -8,6 +9,7 @@ public class Context {
   private final NiftyTexture texture;
   private NiftyColor fillColor;
   private float lineWidth;
+  private NiftyLinearGradient linearGradient;
 
   public Context(final NiftyTexture textureParam) {
     texture = textureParam;
@@ -30,6 +32,10 @@ public class Context {
     return fillColor;
   }
 
+  public void setFillLinearGradient(final NiftyLinearGradient gradient) {
+    linearGradient = gradient;
+  }
+
   public void setLineWidth(final float lineWidth) {
     this.lineWidth = lineWidth;
   }
@@ -40,5 +46,9 @@ public class Context {
 
   public NiftyTexture getNiftyTexture() {
     return texture;
+  }
+
+  public NiftyLinearGradient getFillLinearGradient() {
+    return linearGradient;
   }
 }

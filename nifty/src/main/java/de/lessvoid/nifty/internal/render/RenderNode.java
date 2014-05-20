@@ -36,7 +36,7 @@ public class RenderNode {
     this.context = new Context(content);
   }
 
-  public void render(final NiftyRenderDevice renderDevice, final Mat4 parent) {
+  public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
     if (needsContentUpdate) {
       context.prepare(renderDevice);
       for (int i=0; i<commands.size(); i++) {
@@ -48,10 +48,10 @@ public class RenderNode {
     }
 
     Mat4 current = Mat4.mul(parent, local);
-    renderDevice.render(context.getNiftyTexture(), current);
+    batchManager.add(context.getNiftyTexture(), current);
 
     for (int i=0; i<children.size(); i++) {
-      children.get(i).render(renderDevice, current);
+      children.get(i).render(batchManager, renderDevice, current);
     }
     needsRender = false;
   }

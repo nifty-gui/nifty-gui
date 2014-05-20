@@ -17,7 +17,10 @@ public class CommandFilledRect implements Command {
 
   @Override
   public void execute(final NiftyRenderDevice renderDevice, final Context context) {
-    renderDevice.filledRect(x0, y0, x1, y1, context.getFillColor());
+    if (context.getFillLinearGradient() != null) {
+      renderDevice.filledRect(x0, y0, x1, y1, context.getFillLinearGradient());
+    } else {
+      renderDevice.filledRect(x0, y0, x1, y1, context.getFillColor());
+    }
   }
-
 }
