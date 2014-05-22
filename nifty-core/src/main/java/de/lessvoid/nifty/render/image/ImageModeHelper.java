@@ -52,6 +52,8 @@ public class ImageModeHelper {
     } else if (imageModeName.equals("sprite-resize")) {
       String imageModeParameters = imageMode[1];
       return "sprite:" + imageModeParameters.replace("," + getNinePartParameters(imageModeParameters), "");
+    }else if (imageModeName.equals("subImage-resize")) {
+      return "subimage:" + getImageModeParameters(imageMode).replaceFirst("(,+\\d*){12}$", "");
     } else {
       log.warning("imageMode property could not be converted to imageArea property : " + imageModeProperty);
       return null;
@@ -93,6 +95,8 @@ public class ImageModeHelper {
       return "nine-part:" + getImageModeParameters(imageMode);
     } else if (imageModeName.equals("sprite-resize")) {
       return "nine-part:" + getNinePartParameters(getImageModeParameters(imageMode));
+    }else if (imageModeName.equals("subImage-resize")) {
+      return "nine-part:" + getSubNinePartParameters(getImageModeParameters(imageMode));
     } else if (imageModeName.equals("repeat")) {
       return "repeat";
     } else {
@@ -112,6 +116,19 @@ public class ImageModeHelper {
 
   private static String getNinePartParameters(@Nonnull final String imageMode) {
     String[] split = imageMode.split("(\\d+,){3}", 2);
+    if (split.length > 1) {
+      return split[1];
+    }
+
+    return "";
+  }
+  /**
+   * Get parameters from subImagemode
+   * @param imageMode
+   * @return 
+   */
+  private static String getSubNinePartParameters(@Nonnull final String imageMode) {
+    String[] split = imageMode.split("(\\d+,){4}", 2);
     if (split.length > 1) {
       return split[1];
     }

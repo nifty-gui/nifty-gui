@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nifty>
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+    <screen id="GScreen0">
+        <layer id="GLayer0" childLayout="absolute">
+            <image id="GImage0" height="36%" width="37%" filename="issues/issue225/images.png" imageMode="subImage-resize:0,0,20,20,9,2,9,9,9,2,9,2,9,2,9,9" y="130" x="49"/>
+            <image id="GImage1" height="36%" width="37%" filename="issues/issue225/images.png" imageMode="subImage-resize:20,0,226,226,8,210,8,8,8,210,8,209,8,210,8,8" y="129" x="433"/>
+            <control name="label" id="GLabel0" wrap="true" text="This is an example about a new subImage-resize ImageMode. The two images use the same source but with different imageModes. " height="55px" font="aurulent-sans-16.fnt" width="265px" y="24" x="248"/>
+             <control name="label" id="GLabel0" wrap="true" text="This is the original image" height="55px" font="aurulent-sans-16.fnt" width="265px" y="420" x="248"/>
+            <image id="GImage1" height="36%" width="37%" filename="issues/issue225/images.png" y="450" x="260"/>
+        </layer>
+    </screen>
+</nifty>
