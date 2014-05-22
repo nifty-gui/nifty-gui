@@ -240,6 +240,6 @@ public class CharacterInfo {
    * @return the kerning
    */
   public final Map<Character, Integer> getKerning() {
-    return Collections.unmodifiableMap(kerning);
+    return kerning;
   }
 }
