@@ -16,7 +16,11 @@ public class NiftyStylesType extends XmlBaseType {
   private final Collection<StyleType> styles = new ArrayList<StyleType>();
   @Nonnull
   private final Collection<UseStylesType> useStyles = new ArrayList<UseStylesType>();
-
+  @Nonnull
+  private final Collection<RegisterSoundType> registeredSounds = new ArrayList<RegisterSoundType>();
+  @Nonnull
+  private final Collection<RegisterEffectType> registeredEffect = new ArrayList<RegisterEffectType>();
+  
   public void addRegisterMouseCursor(final RegisterMouseCursorType registerMouseCursor) {
     registeredMouseCursor.add(registerMouseCursor);
   }
@@ -28,7 +32,14 @@ public class NiftyStylesType extends XmlBaseType {
   public void addUseStyles(final UseStylesType newStyle) {
     useStyles.add(newStyle);
   }
-
+  
+  public void addregisterSound(RegisterSoundType newSound){
+      registeredSounds.add(newSound);
+  }
+  public void addregisterEffect(RegisterEffectType newEffect){
+      registeredEffect.add(newEffect);
+  }
+  
   public void loadStyles(
       @Nonnull final NiftyLoader niftyLoader,
       @Nonnull final NiftyType niftyType,
@@ -43,6 +54,12 @@ public class NiftyStylesType extends XmlBaseType {
     }
     for (StyleType style : styles) {
       niftyType.addStyle(style);
+    }
+    for(RegisterSoundType sound : registeredSounds){
+        niftyType.addRegisterSound(sound);
+    }
+    for(RegisterEffectType effect : registeredEffect){
+        niftyType.addRegisterEffect(effect);
     }
   }
 
