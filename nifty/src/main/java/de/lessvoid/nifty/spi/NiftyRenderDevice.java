@@ -1,8 +1,9 @@
 package de.lessvoid.nifty.spi;
 
+import java.nio.FloatBuffer;
+
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
-import de.lessvoid.nifty.internal.math.Mat4;
 
 /**
  * NiftyRenderDevice is part of the SPI that allows Nifty to use different graphics backends. Everything that can
@@ -37,8 +38,7 @@ public interface NiftyRenderDevice {
    */
   NiftyTexture createTexture(int width, int height);
 
-  
-  void render(NiftyTexture renderTarget, Mat4 mat);
+  void render(NiftyTexture renderTarget, FloatBuffer vertices);
 
   void begin();
   void end();

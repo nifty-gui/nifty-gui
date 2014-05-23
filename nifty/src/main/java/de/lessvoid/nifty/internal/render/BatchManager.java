@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.internal.math.Mat4;
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class BatchManager {
@@ -19,10 +20,13 @@ public class BatchManager {
 
   public void begin() {
     activeBatches.clear();
+    if (currentBatch != null) {
+      currentBatch.reset();
+    }
   }
 
   public void add(final NiftyTexture niftyTexture, final Mat4 mat) {
-    currentBatch = ensureBatch(niftyTexture.getAtlasId());
+    currentBatch = ensureBatch(niftyTexture);
     if (currentBatch.add(
         0.0, 0.0,
         niftyTexture.getWidth(), niftyTexture.getHeight(),
@@ -31,7 +35,7 @@ public class BatchManager {
         mat)) {
       return;
     }
-    currentBatch = addNewBatch(niftyTexture.getAtlasId());
+    currentBatch = addNewBatch(niftyTexture);
     if (currentBatch.add(
         0.0, 0.0,
         niftyTexture.getWidth(), niftyTexture.getHeight(),
@@ -44,23 +48,28 @@ public class BatchManager {
     throw new RuntimeException("Created new batch but couldn't add any data to it. This should never happen!");
   }
 
-  public void end() {
+  public void end(final NiftyRenderDevice renderDevice) {
+    renderDevice.begin();
+    for (int i=0; i<activeBatches.size(); i++) {
+      activeBatches.get(i).render(renderDevice);
+    }
+    renderDevice.end();
   }
 
-  private Batch ensureBatch(final int atlasId) {
+  private Batch ensureBatch(final NiftyTexture niftyTexture) {
     if (currentBatch == null) {
-      return addNewBatch(atlasId);
+      return addNewBatch(niftyTexture);
     }
-    if (currentBatch.needsNewBatch(atlasId)) {
-      return addNewBatch(atlasId);
+    if (currentBatch.needsNewBatch(niftyTexture)) {
+      return addNewBatch(niftyTexture);
     }
     return currentBatch;
   }
 
-  private Batch addNewBatch(final int atlasId) {
-    Batch batch = new Batch(atlasId);
+  private Batch addNewBatch(final NiftyTexture niftyTexture) {
+    Batch batch = new Batch(niftyTexture);
     activeBatches.add(batch);
-    log.info("new batch added. total count now: " + activeBatches.size());
+    log.fine("new batch added. total count now: " + activeBatches.size());
     return batch;
   }
 }

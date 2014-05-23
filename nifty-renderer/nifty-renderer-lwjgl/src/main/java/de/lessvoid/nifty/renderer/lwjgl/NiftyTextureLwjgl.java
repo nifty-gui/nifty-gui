@@ -28,7 +28,8 @@ public class NiftyTextureLwjgl implements NiftyTexture {
 
   @Override
   public int getAtlasId() {
-    return 0;
+    // FIXME add texture atlas support
+    return texture.getTextureId();
   }
 
   @Override

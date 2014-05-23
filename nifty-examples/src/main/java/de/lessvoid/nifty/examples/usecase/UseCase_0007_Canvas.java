@@ -22,15 +22,14 @@ public class UseCase_0007_Canvas implements UseCaseUpdateable {
     niftyNode.setBackgroundColor(NiftyColor.TRANSPARENT());
 
     child = niftyNode.newChildNode(UnitValue.percent(100), UnitValue.percent(100));
-    child.setBackgroundColor(NiftyColor.RED());
     child.setContent(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.WHITE());
-        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
-
         canvas.setFillStyle(NiftyColor.randomColor());
-        canvas.fillRect(50, 50, 400, 150);
+        canvas.fillRect(0, 0, 200, 100);
+
+//        canvas.setFillStyle(NiftyColor.randomColor());
+//        canvas.fillRect(0, 0, node.getWidth() / 2, node.getHeight() / 2);
       }
     });
   }

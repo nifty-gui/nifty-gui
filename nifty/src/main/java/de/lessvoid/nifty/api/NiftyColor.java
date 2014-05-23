@@ -227,10 +227,10 @@ public class NiftyColor {
   public String toString() {
     StringBuilder result = new StringBuilder();
     result.append("#");
-    result.append(zeroPadded(Integer.toHexString((int) red*255)));
-    result.append(zeroPadded(Integer.toHexString((int) green*255)));
-    result.append(zeroPadded(Integer.toHexString((int) blue*255)));
-    result.append(zeroPadded(Integer.toHexString((int) alpha*255)));
+    result.append(zeroPadded(Integer.toHexString((int) (red*255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (green*255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (blue*255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (alpha*255.))));
     result.append(" {");
     result.append(red).append(", ");
     result.append(green).append(", ");

@@ -18,7 +18,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  * This class internally translates the list of NiftyNodes into a list of RenderNodes. This means there exists
  * a duplicate of the original scene graph as a list of render nodes.
  *
- * There main reason for this extra amount of work is to prepare for better multithreading support later. We'd like to
+ * The main reason for this extra amount of work is to prepare for better multithreading support later. We'd like to
  * let the source NiftyNodes be able to be modified freely and only at the synchronizing step we need to freeze the
  * source tree while it is being translated into the render tree.
  *
@@ -94,7 +94,7 @@ public class NiftyRenderer implements NiftyRendererMXBean {
     for (int i=0; i<renderNodes.size(); i++) {
       renderNodes.get(i).render(batchManager, renderDevice, new Mat4());
     }
-    batchManager.end();
+    batchManager.end(renderDevice);
   }
 
   // MBean

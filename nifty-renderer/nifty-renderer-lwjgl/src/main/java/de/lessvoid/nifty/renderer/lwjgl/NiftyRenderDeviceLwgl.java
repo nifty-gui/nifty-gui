@@ -21,7 +21,6 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
-import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
@@ -37,13 +36,9 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   private CoreVBO<FloatBuffer> vbo;
   private final CoreFBO fbo;
   private Mat4 mvp;
-  private Vec4 vsrc = new Vec4();
-  private Vec4 vdst = new Vec4();
 
-  private int textureQuadCount;
   private int colorQuadCount;
   private boolean clearScreenOnRender = false;
-  private NiftyTextureLwjgl lastTexture;
 
   private static final String TEXTURE_SHADER = "texture";
   private static final String PLAIN_COLOR_SHADER = "plain";
@@ -96,14 +91,11 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     }
 
     vbo.getBuffer().clear();
-    textureQuadCount = 0;
     colorQuadCount = 0;
-    lastTexture = null;
   }
 
   @Override
   public void end() {
-    flushTextureQuads();
     flushColorQuads();
   }
 
@@ -113,13 +105,21 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void render(final NiftyTexture renderTarget, final Mat4 mat) {
-    addTextureQuad(0, 0, renderTarget.getWidth(), renderTarget.getHeight(), 0, internal(renderTarget), mat);
+  public void render(final NiftyTexture renderTarget, final FloatBuffer vertices) {
+    if (colorQuadCount > 0) {
+      flushColorQuads();
+    }
+
+    vbo.getBuffer().clear();
+    FloatBuffer b = vbo.getBuffer();
+    vertices.flip();
+    b.put(vertices);
+
+    renderTexturedQuads(internal(renderTarget), vertices.position());
   }
 
   @Override
   public void beginRenderToTexture(final NiftyTexture texture) {
-    flushTextureQuads();
     flushColorQuads();
 
     fbo.bindFramebuffer();
@@ -130,7 +130,6 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
   @Override
   public void endRenderToTexture(final NiftyTexture texture) {
-    flushTextureQuads();
     flushColorQuads();
 
     fbo.disableAndResetViewport();
@@ -142,70 +141,6 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     addColorQuad((float) x0, (float) y0, (float)  (x1 - x0), (float) (y1 - y0), color, color, color, color);
   }
 
-  private void addTextureQuad(
-      final float xs,
-      final float ys,
-      final float ws,
-      final float hs,
-      final int texIdx,
-      final NiftyTextureLwjgl texture,
-      final Mat4 matrix) {
-    if (colorQuadCount > 0) {
-      flushColorQuads();
-    }
-
-    if (lastTexture == null) {
-      lastTexture = texture;
-    }
-
-    if (texture != lastTexture) {
-      flushTextureQuads();
-      lastTexture = texture;
-    }
-
-    FloatBuffer b = vbo.getBuffer();
-
-    vsrc.x = xs;
-    vsrc.y = ys;
-    vsrc.z = 0.0f;
-    Mat4.transform(matrix, vsrc, vdst);
-    float ax = vdst.x;
-    float ay = vdst.y;
-
-    vsrc.x = xs + ws;
-    vsrc.y = ys;
-    vsrc.z = 0.0f;
-    Mat4.transform(matrix, vsrc, vdst);
-    float bx = vdst.x;
-    float by = vdst.y;
-
-    vsrc.x = xs;
-    vsrc.y = ys + hs;
-    vsrc.z = 0.0f;
-    Mat4.transform(matrix, vsrc, vdst);
-    float cx = vdst.x;
-    float cy = vdst.y;
-
-    vsrc.x = xs + ws;
-    vsrc.y = ys + hs;
-    vsrc.z = 0.0f;
-    Mat4.transform(matrix, vsrc, vdst);
-    float dx = vdst.x;
-    float dy = vdst.y;
-
-    // first
-    b.put(ax); b.put(ay); b.put(0.0f); b.put(0.0f);
-    b.put(cx); b.put(cy); b.put(0.0f); b.put(1.0f);
-    b.put(bx); b.put(by); b.put(1.0f); b.put(0.0f);
-
-    // second
-    b.put(cx); b.put(cy); b.put(0.0f); b.put(1.0f);
-    b.put(bx); b.put(by); b.put(1.0f); b.put(0.0f);
-    b.put(dx); b.put(dy); b.put(1.0f); b.put(1.0f);
-
-    textureQuadCount++;
-  }
-
   private void addColorQuad(
       final float x0,
       final float y0,
@@ -215,10 +150,6 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
       final NiftyColor c2,
       final NiftyColor c3,
       final NiftyColor c4) {
-    if (textureQuadCount > 0) {
-      flushTextureQuads();
-    }
-
     FloatBuffer b = vbo.getBuffer();
 
     // first
@@ -228,23 +159,19 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
     // second
     b.put(x0); b.put(y1); b.put((float) c3.getRed()); b.put((float) c3.getGreen()); b.put((float) c3.getBlue()); b.put((float) c3.getAlpha());
-    b.put(x1); b.put(y0); b.put((float) c2.getRed()); b.put((float) c2.getGreen()); b.put((float) c2.getBlue()); b.put((float) c2.getAlpha());
     b.put(x1); b.put(y1); b.put((float) c4.getRed()); b.put((float) c4.getGreen()); b.put((float) c4.getBlue()); b.put((float) c4.getAlpha());
+    b.put(x1); b.put(y0); b.put((float) c2.getRed()); b.put((float) c2.getGreen()); b.put((float) c2.getBlue()); b.put((float) c2.getAlpha());
 
     colorQuadCount++;
   }
 
-  private void flushTextureQuads() {
-    if (textureQuadCount == 0) {
-      return;
-    }
-
+  private void renderTexturedQuads(final NiftyTextureLwjgl texture, final int size) {
     CoreShader shader = shaderManager.activate(TEXTURE_SHADER);
     shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().rewind();
+    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -252,11 +179,10 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.enableVertexAttribute(1);
     vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
 
-    lastTexture.bind();
-    coreFactory.getCoreRender().renderTriangles(6*textureQuadCount);
+    texture.bind();
+    coreFactory.getCoreRender().renderTriangles(size);
     vao.unbind();
     vbo.getBuffer().clear();
-    textureQuadCount = 0;
   }
 
   private void flushColorQuads() {
@@ -269,7 +195,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().rewind();
+    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
