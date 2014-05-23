@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nifty>
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+    <useStyles filename="issues/issue228/sound-styles.xml"/>
+    <screen id="GScreen0">
+        <layer id="GLayer0" childLayout="center">
+            <panel id="GPanel0" height="30%" style="make-some-noise" backgroundColor="#0033ffff" width="50%" childLayout="absolute"/>
+            <control name="label" id="GLabel0" text="Click on the panel to hear sound, go on it with mouse to see the style custom effect" wrap="true" height="79px" font="aurulent-sans-16.fnt" width="305px" align="center" valign="top"/>
+        </layer>
+    </screen>
+</nifty>

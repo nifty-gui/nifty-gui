@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles>
+ <registerSound id="select" filename="sound/744__elmomo__MutantJewsArp.ogg"/>
+ <registerEffect name="dummy" class="de.lessvoid.nifty.issues.issue228.DummyEffect" />
+ <style id="make-some-noise">
+    <attributes visibleToMouse="true" />
+    <effect>
+       <onClick name="playSound" sound="select" length="10" />
+       <onHover name="dummy" />
+    </effect>
+</style>
+
+
+</nifty-styles>

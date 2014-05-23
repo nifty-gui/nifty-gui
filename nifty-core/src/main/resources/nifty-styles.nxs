@@ -1,6 +1,8 @@
 <nxs package="de.lessvoid.nifty.loaderv2.types" root="nifty-styles" type="NiftyStylesType">
   <include filename="nifty.nxs" />
   <type name="NiftyStylesType">
+    <element name="registerSound" type="RegisterSoundType" occurs="zeroOrMore" />
+    <element name="registerEffect" type="RegisterEffectType" occurs="zeroOrMore" />
     <element name="registerMouseCursor" type="RegisterMouseCursorType" occurs="zeroOrMore" />
     <element name="useStyles" type="UseStylesType" occurs="zeroOrMore" />
     <element name="style" type="StyleType" occurs="zeroOrMore" />
