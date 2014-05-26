@@ -14,7 +14,7 @@ import de.lessvoid.nifty.spi.NiftyTexture;
  */
 public class Batch {
   private final static int NUM_PRIMITIVES = 100;
-  private final static int PRIMITIVE_SIZE = 4 * 6;
+  public final static int PRIMITIVE_SIZE = 4 * 6;
 
   private final FloatBuffer vertices;
   private final NiftyTexture texture;

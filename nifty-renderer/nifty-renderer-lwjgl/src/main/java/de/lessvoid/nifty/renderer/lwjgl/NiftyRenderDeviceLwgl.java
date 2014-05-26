@@ -21,6 +21,7 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
+import de.lessvoid.nifty.internal.render.Batch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
@@ -115,17 +116,20 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vertices.flip();
     b.put(vertices);
 
-    renderTexturedQuads(internal(renderTarget), vertices.position());
+    renderTexturedQuads(internal(renderTarget), vertices.position() / Batch.PRIMITIVE_SIZE);
   }
 
   @Override
   public void beginRenderToTexture(final NiftyTexture texture) {
     flushColorQuads();
 
+    vbo.getBuffer().clear();
+    colorQuadCount = 0;
+
     fbo.bindFramebuffer();
     fbo.attachTexture(getTextureId(texture), 0);
     glViewport(0, 0, texture.getWidth(), texture.getHeight());
-    mvp = MatrixFactory.createOrtho(0, texture.getWidth(), texture.getHeight(), 0);
+    mvp = MatrixFactory.createOrtho(0, texture.getWidth(), 0, texture.getHeight());
   }
 
   @Override
@@ -138,7 +142,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
   @Override
   public void filledRect(final double x0, final double y0, final double x1, final double y1, final NiftyColor color) {
-    addColorQuad((float) x0, (float) y0, (float)  (x1 - x0), (float) (y1 - y0), color, color, color, color);
+    addColorQuad((float) x0, (float) y0, (float)  (x1), (float) (y1), color, color, color, color);
   }
 
   private void addColorQuad(
@@ -165,13 +169,13 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     colorQuadCount++;
   }
 
-  private void renderTexturedQuads(final NiftyTextureLwjgl texture, final int size) {
+  private void renderTexturedQuads(final NiftyTextureLwjgl texture, final int numQuads) {
     CoreShader shader = shaderManager.activate(TEXTURE_SHADER);
     shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().flip();
+    vbo.getBuffer().rewind();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -180,7 +184,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
 
     texture.bind();
-    coreFactory.getCoreRender().renderTriangles(size);
+    coreFactory.getCoreRender().renderTriangles(numQuads * 6);
     vao.unbind();
     vbo.getBuffer().clear();
   }
@@ -195,7 +199,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().flip();
+    vbo.getBuffer().rewind();
     vbo.send();
 
     vao.enableVertexAttribute(0);

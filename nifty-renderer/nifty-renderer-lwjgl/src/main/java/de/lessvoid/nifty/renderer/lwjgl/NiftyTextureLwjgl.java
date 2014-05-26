@@ -44,11 +44,11 @@ public class NiftyTextureLwjgl implements NiftyTexture {
 
   @Override
   public double getV1() {
-    return 0;
+    return 1.0;
   }
 
   @Override
   public double getU1() {
-    return 0;
+    return 1.0;
   }
 }
