@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nifty>
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+    <resourceBundle id="example"filename="issues/issue100/example" />
+    <screen id="GScreen0" controller="de.lessvoid.nifty.issues.issue100.Issue100Main">
+        <layer id="GLayer0" childLayout="center">
+            <panel id="GPanel1" height="172px" style="nifty-panel" width="369px" childLayout="center" y="152" x="198">
+                <control name="label" id="GLabel0" wrap="true" text="${example.life}" height="65px" font="aurulent-sans-16.fnt" width="158px" align="center" valign="top"/>
+                <control name="dropDown" id="GDropDown0" height="26px" width="265px"/>
+                <control name="label" id="GLabel2" text="Select a lenguage " height="37px" font="aurulent-sans-16.fnt" width="149px" valign="bottom"/>
+            </panel>
+        </layer>
+    </screen>
+</nifty>
