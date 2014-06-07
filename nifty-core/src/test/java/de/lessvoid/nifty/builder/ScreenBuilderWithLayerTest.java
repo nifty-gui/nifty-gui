@@ -11,7 +11,7 @@ import org.junit.Test;
 import javax.annotation.Nonnull;
 
 import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScreenBuilderWithLayerTest {

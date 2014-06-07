@@ -1,7 +1,21 @@
 package de.lessvoid.nifty.layout.manager;
 
 
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertEquals;
+
+import javax.annotation.Nonnull;
+
+import org.bushe.swing.event.EventService;
+import org.junit.Before;
+import org.junit.Test;
+
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyLocaleChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.loaderv2.types.apply.ApplyRenderText;
@@ -10,13 +24,6 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.annotation.Nonnull;
-
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
 
 public class HorizontalLayoutWildcardTextTest {
   private Element root;
@@ -55,14 +62,20 @@ public class HorizontalLayoutWildcardTextTest {
       public void dispose() {
       }
     };
+
     NiftyRenderEngine renderMock = createNiceMock(NiftyRenderEngine.class);
     expect(renderMock.getFont()).andReturn(font).anyTimes();
     replay(renderMock);
+
+    EventService eventServiceMock = createNiceMock(EventService.class);
+    expect(eventServiceMock.subscribe(eq(NiftyLocaleChangedEvent.class), isA(TextRenderer.class))).andReturn(true).anyTimes();
+    replay(eventServiceMock);
 
     String text = line1 + "\n" + line2 + "\n" + line3;
     expect(niftyMock.specialValuesReplace(text)).andReturn(text).anyTimes();
     expect(niftyMock.specialValuesReplace(null)).andReturn(text).anyTimes();
     expect(niftyMock.getRenderEngine()).andReturn(renderMock).anyTimes();
+    expect(niftyMock.getEventService()).andReturn(eventServiceMock).anyTimes();
     replay(niftyMock);
 
     root = new Element(niftyMock, null, null, null, null, false, null);

@@ -1,17 +1,20 @@
 package de.lessvoid.nifty.elements;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
+import org.easymock.ConstructorArgs;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.FocusHandler;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.spi.time.TimeProvider;
-import org.easymock.classextension.ConstructorArgs;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
 
 public class ElementEnableDisableEffectsTest {
   private Nifty niftyMock;

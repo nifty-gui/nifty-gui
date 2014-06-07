@@ -1,11 +1,13 @@
 package de.lessvoid.nifty.controls.scrollbar;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
 
 /**
  * Test the ScrollbarImpl.

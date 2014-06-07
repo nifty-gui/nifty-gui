@@ -1,11 +1,10 @@
 package de.lessvoid.nifty.controls.textfield;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import junit.framework.TestCase;
 import de.lessvoid.nifty.Clipboard;
 import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
-import junit.framework.TestCase;
-
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
 
 public class TextFieldPasswordTest extends TestCase {
   private static final int MAX_CURSOR_POSITION = 5;

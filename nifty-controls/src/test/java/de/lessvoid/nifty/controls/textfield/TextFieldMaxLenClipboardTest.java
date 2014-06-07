@@ -1,14 +1,17 @@
 package de.lessvoid.nifty.controls.textfield;
 
-import de.lessvoid.nifty.Clipboard;
-import de.lessvoid.nifty.controls.TextField;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.Clipboard;
+import de.lessvoid.nifty.controls.TextField;
 
 public class TextFieldMaxLenClipboardTest {
 

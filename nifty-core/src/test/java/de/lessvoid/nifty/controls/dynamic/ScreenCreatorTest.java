@@ -1,5 +1,21 @@
 package de.lessvoid.nifty.controls.dynamic;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import javax.annotation.Nonnull;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -12,19 +28,6 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.annotation.Nonnull;
-
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.*;
 
 public class ScreenCreatorTest {
   private Nifty niftyMock;

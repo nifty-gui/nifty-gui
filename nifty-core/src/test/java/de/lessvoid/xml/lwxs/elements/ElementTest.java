@@ -1,15 +1,18 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import de.lessvoid.xml.lwxs.Schema;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import de.lessvoid.xml.lwxs.Schema;
 
 public class ElementTest {
   private Schema schemaMock;

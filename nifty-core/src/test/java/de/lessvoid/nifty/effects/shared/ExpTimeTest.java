@@ -1,13 +1,15 @@
 package de.lessvoid.nifty.effects.shared;
 
-import de.lessvoid.nifty.spi.time.TimeProvider;
-import de.lessvoid.nifty.tools.time.TimeInterpolator;
-import junit.framework.TestCase;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 
 import java.util.Properties;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
+import junit.framework.TestCase;
+import de.lessvoid.nifty.spi.time.TimeProvider;
+import de.lessvoid.nifty.tools.time.TimeInterpolator;
 
 public class ExpTimeTest extends TestCase {
   private TimeProvider timeProvider;

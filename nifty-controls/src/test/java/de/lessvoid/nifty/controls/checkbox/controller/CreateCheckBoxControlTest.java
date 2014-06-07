@@ -1,5 +1,15 @@
 package de.lessvoid.nifty.controls.checkbox.controller;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.checkbox.CheckboxControl;
@@ -8,13 +18,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.loaderv2.types.ControlType;
 import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.screen.Screen;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.assertEquals;
 
 public class CreateCheckBoxControlTest {
   private Nifty niftyMock;

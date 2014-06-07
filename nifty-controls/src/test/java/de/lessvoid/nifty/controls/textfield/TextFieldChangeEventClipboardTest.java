@@ -1,11 +1,14 @@
 package de.lessvoid.nifty.controls.textfield;
 
-import de.lessvoid.nifty.Clipboard;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.classextension.EasyMock.*;
+import de.lessvoid.nifty.Clipboard;
 
 public class TextFieldChangeEventClipboardTest {
   private TextFieldLogic textField;

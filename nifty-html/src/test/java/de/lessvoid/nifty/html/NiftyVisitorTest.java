@@ -1,16 +1,19 @@
 package de.lessvoid.nifty.html;
 
-import de.lessvoid.nifty.builder.PanelBuilder;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ParagraphTag;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import de.lessvoid.nifty.builder.PanelBuilder;
 
 public class NiftyVisitorTest {
   private NiftyVisitor visitor;

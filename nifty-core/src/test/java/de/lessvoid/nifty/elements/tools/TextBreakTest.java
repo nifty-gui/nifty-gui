@@ -1,16 +1,19 @@
 package de.lessvoid.nifty.elements.tools;
 
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.spi.render.RenderFont;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.spi.render.RenderFont;
 
 public class TextBreakTest {
   private Element elementMock;

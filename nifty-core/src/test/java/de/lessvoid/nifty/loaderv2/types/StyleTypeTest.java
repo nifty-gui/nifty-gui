@@ -1,13 +1,14 @@
 package de.lessvoid.nifty.loaderv2.types;
 
-import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
-import de.lessvoid.xml.xpp3.Attributes;
+import static org.easymock.EasyMock.createNiceMock;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.classextension.EasyMock.createNiceMock;
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
+import de.lessvoid.xml.xpp3.Attributes;
 
 public class StyleTypeTest {
   private StyleType styleType = new StyleType();

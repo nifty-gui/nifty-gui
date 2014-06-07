@@ -1,13 +1,21 @@
 package de.lessvoid.nifty.elements.render;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import junit.framework.TestCase;
+
+import org.bushe.swing.event.EventService;
+
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyLocaleChangedEvent;
 import de.lessvoid.nifty.layout.align.HorizontalAlign;
 import de.lessvoid.nifty.layout.align.VerticalAlign;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.render.RenderFont;
-import junit.framework.TestCase;
-
-import static org.easymock.classextension.EasyMock.*;
 
 public class TextRendererTest extends TestCase {
 
@@ -23,23 +31,30 @@ public class TextRendererTest extends TestCase {
   }
 
   public void testInit() {
+    EventService eventServiceMock = createMock(EventService.class);
     Nifty niftyMock = createMock(Nifty.class);
     NiftyRenderEngine niftyRenderEngineMock = createMock(NiftyRenderEngine.class);
 
     expect(niftyMock.getRenderEngine()).andReturn(niftyRenderEngineMock);
     expect(niftyMock.specialValuesReplace("a\nc")).andReturn("a\nc");
+    expect(niftyMock.getEventService()).andReturn(eventServiceMock);
     replay(niftyMock);
 
     expect(niftyRenderEngineMock.getFont()).andReturn(renderFont).anyTimes();
     replay(niftyRenderEngineMock);
 
+    expect(eventServiceMock.subscribe(eq(NiftyLocaleChangedEvent.class), isA(TextRenderer.class))).andReturn(true);
+    replay(eventServiceMock);
+
     TextRenderer render = new TextRenderer(niftyMock, renderFont, "a\nc");
+
     assertEquals(20, render.getTextHeight());
     assertEquals(0, render.getTextWidth());
 
     verify(renderFont);
     verify(niftyRenderEngineMock);
     verify(niftyMock);
+    verify(eventServiceMock);
   }
 
   public void testGetStartYWithVerticalAlignTop() {

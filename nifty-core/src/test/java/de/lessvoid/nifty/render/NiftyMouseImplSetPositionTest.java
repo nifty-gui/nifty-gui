@@ -1,12 +1,15 @@
 package de.lessvoid.nifty.render;
 
-import de.lessvoid.nifty.spi.input.InputSystem;
-import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.classextension.EasyMock.*;
+import de.lessvoid.nifty.spi.input.InputSystem;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class NiftyMouseImplSetPositionTest {
   private NiftyMouseImpl niftyMouse;

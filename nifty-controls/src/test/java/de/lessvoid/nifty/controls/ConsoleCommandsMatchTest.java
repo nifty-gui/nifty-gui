@@ -1,19 +1,21 @@
 package de.lessvoid.nifty.controls;
 
-import de.lessvoid.nifty.controls.console.ConsoleControl;
-import de.lessvoid.nifty.elements.Element;
-import org.junit.Before;
-import org.junit.Test;
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createNiceMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import javax.annotation.Nonnull;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import de.lessvoid.nifty.controls.console.ConsoleControl;
+import de.lessvoid.nifty.elements.Element;
 
 public class ConsoleCommandsMatchTest {
   private ConsoleCommands consoleCommands;

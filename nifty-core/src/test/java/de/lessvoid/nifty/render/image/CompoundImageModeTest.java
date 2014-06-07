@@ -1,5 +1,13 @@
 package de.lessvoid.nifty.render.image;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
 import de.lessvoid.nifty.Size;
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.render.NiftyImage;
@@ -8,10 +16,6 @@ import de.lessvoid.nifty.render.image.renderstrategy.RenderStrategy;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
-import org.junit.Test;
-
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.assertEquals;
 
 public class CompoundImageModeTest {
 

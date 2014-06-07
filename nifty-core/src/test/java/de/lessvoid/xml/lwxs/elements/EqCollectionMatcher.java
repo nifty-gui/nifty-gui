@@ -1,10 +1,10 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import org.easymock.IArgumentMatcher;
-import org.easymock.classextension.EasyMock;
-
 import java.util.Collection;
 import java.util.Iterator;
+
+import org.easymock.EasyMock;
+import org.easymock.IArgumentMatcher;
 
 @SuppressWarnings("rawtypes")
 public class EqCollectionMatcher implements IArgumentMatcher {

@@ -1,19 +1,22 @@
 package de.lessvoid.nifty.builder;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
+import javax.annotation.Nonnull;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.ScreenCreator;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.annotation.Nonnull;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.assertEquals;
 
 public class ScreenBuilderTest {
   private Nifty niftyMock;

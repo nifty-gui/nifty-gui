@@ -1,10 +1,11 @@
 package de.lessvoid.nifty.html;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ElementBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.spi.render.RenderFont;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
 import org.htmlparser.Text;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.nodes.TextNode;
@@ -14,9 +15,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ElementBuilder;
+import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.spi.render.RenderFont;
 
 public class NiftyVisitorWithDefaultFontTest {
   private NiftyVisitor visitor;

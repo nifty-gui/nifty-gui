@@ -1,16 +1,19 @@
 package de.lessvoid.xml.lwxs.elements;
 
-import de.lessvoid.xml.lwxs.Schema;
-import de.lessvoid.xml.lwxs.processor.TypeProcessorElement;
-import de.lessvoid.xml.xpp3.Attributes;
-import de.lessvoid.xml.xpp3.XmlParser;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.*;
+import de.lessvoid.xml.lwxs.Schema;
+import de.lessvoid.xml.lwxs.processor.TypeProcessorElement;
+import de.lessvoid.xml.xpp3.Attributes;
+import de.lessvoid.xml.xpp3.XmlParser;
 
 public class ElementProcessorTest {
   private TypeProcessorElement elementProcessor;

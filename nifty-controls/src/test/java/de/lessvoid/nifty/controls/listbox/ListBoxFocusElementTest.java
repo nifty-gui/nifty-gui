@@ -1,13 +1,16 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.EasyMock.isA;
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 
 public class ListBoxFocusElementTest {
   private static final int TOO_LARGE_INDEX = 4;
