@@ -1,6 +1,15 @@
 package de.lessvoid.nifty.elements.render;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bushe.swing.event.EventSubscriber;
+
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyLocaleChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.elements.tools.TextBreak;
@@ -11,17 +20,12 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * The TextRenderer implementation.
  *
  * @author void
  */
-public class TextRenderer implements ElementRenderer {
+public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocaleChangedEvent> {
   /**
    * The default color used by the renderer.
    */
@@ -128,11 +132,14 @@ public class TextRenderer implements ElementRenderer {
   @Nullable
   private Element hasBeenLayoutedElement;
 
+  private String originalTextBeforeSpecialValues;
+
   /**
    * default constructor.
    */
   public TextRenderer(@Nonnull final Nifty nifty) {
     this.nifty = nifty;
+    this.nifty.getEventService().subscribe(NiftyLocaleChangedEvent.class, this);
     originalText = "";
   }
 
@@ -144,6 +151,7 @@ public class TextRenderer implements ElementRenderer {
    */
   public TextRenderer(@Nonnull final Nifty nifty, @Nonnull final RenderFont newFont, @Nullable final String newText) {
     this.nifty = nifty;
+    this.nifty.getEventService().subscribe(NiftyLocaleChangedEvent.class, this);
     init(newFont, newText);
   }
 
@@ -171,6 +179,8 @@ public class TextRenderer implements ElementRenderer {
    * @param text the text that is supposed to be used
    */
   private void initText(@Nullable final String text, final boolean changeExistingText) {
+    this.originalTextBeforeSpecialValues = text;
+
     String newText = nifty.specialValuesReplace(text);
     if (lineWrapping && isCalculatedLineWrapping) {
       isCalculatedLineWrapping = false;
@@ -564,5 +574,10 @@ public class TextRenderer implements ElementRenderer {
   @Nonnull
   public Color getTextSelectionColor() {
     return textSelectionColor;
+  }
+
+  @Override
+  public void onEvent(final NiftyLocaleChangedEvent event) {
+    setText(originalTextBeforeSpecialValues);
   }
 }

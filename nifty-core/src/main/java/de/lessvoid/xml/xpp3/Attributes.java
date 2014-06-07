@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -25,6 +25,8 @@ import de.lessvoid.xml.tools.SpecialValuesReplace;
 // TODO: This class should be modified to implement the Map<String, String> interface (renaming all concerned method),
 // and should not expose its attributes member anymore.
 public class Attributes {
+  private static final String ORIGINAL_VALUE_MARKER = "$$$originalValue->";
+
   private final static ControlParameter controlParameter = new ControlParameter();
   @Nonnull
   private final Map<String, String> attributes;
@@ -68,13 +70,28 @@ public class Attributes {
   }
 
   public void translateSpecialValues(
-      @Nonnull final Map<String, ResourceBundle> resourceBundle,
+      @Nonnull final Map<String, String> resourceBundle,
       @Nullable final ScreenController screenController,
-      @Nullable final Properties globalProperties) {
-    for (Map.Entry<String, String> value : attributes.entrySet()) {
-      attributes.put(value.getKey(),
-          SpecialValuesReplace.replace(value.getValue(), resourceBundle, screenController, globalProperties));
+      @Nullable final Properties globalProperties,
+      @Nullable final Locale loc) {
+    Map<String, String> replacedAttributes = new HashMap<String, String>();
+
+    for (Map.Entry<String, String> entry : attributes.entrySet()) {
+      String key = entry.getKey();
+      String value = entry.getValue();
+
+      // skip original values - they don't need to be translated or added again
+      if (key.startsWith(ORIGINAL_VALUE_MARKER)) {
+        replacedAttributes.put(key, value);
+        continue;
+      }
+
+      String replaced = SpecialValuesReplace.replace(value, resourceBundle, screenController, globalProperties, loc);
+      replacedAttributes.put(key, replaced);
+      replacedAttributes.put(ORIGINAL_VALUE_MARKER + key, value);
     }
+
+    attributes.putAll(replacedAttributes);
   }
 
   /**
@@ -424,5 +441,18 @@ public class Attributes {
         remove(key);
       }
     }
+  }
+
+  /**
+   * Get the original value (if possible) or the regular value if the original value does not exist.
+   * @param key the key to return
+   * @return the value of the key
+   */
+  public String getOriginalValue(final String key) {
+    String value = get(Attributes.ORIGINAL_VALUE_MARKER + key);
+    if (value != null) {
+      return value;
+    }
+    return get(key);
   }
 }

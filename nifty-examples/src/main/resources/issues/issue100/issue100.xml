@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+  <resourceBundle id="issue100" filename="issues/issue100/issue100" />
+
+  <screen id="start" controller="de.lessvoid.nifty.issues.issue100.Issue100Main$StartScreen">
+    <layer id="layer" backgroundColor="#003f" childLayout="center">
+      <panel childLayout="vertical" height="50%" align="center" valign="center">
+        <panel id="panel" height="25%" width="35%" align="center" valign="center" backgroundColor="#f60f" childLayout="vertical" visibleToMouse="true" padding="25px">
+          <text id="text" font="aurulent-sans-16.fnt" align="center" valign="center" color="#000f" text="${issue100.hello}"/>
+          <panel width="100%" height="10px" />
+          <control name="dropDown" id="LocaleDropDown" />
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

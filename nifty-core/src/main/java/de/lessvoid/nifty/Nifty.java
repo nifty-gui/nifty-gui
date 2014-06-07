@@ -114,7 +114,7 @@ public class Nifty {
   @Nullable
   private String alternateKey;
   @Nonnull
-  private final Map<String, ResourceBundle> resourceBundles = new HashMap<String, ResourceBundle>();
+  private final Map<String, String> resourceBundles = new HashMap<String, String>();
   @Nullable
   private Properties globalProperties;
   @Nonnull
@@ -1388,18 +1388,24 @@ public class Nifty {
 
   public void setLocale(@Nonnull final Locale locale) {
     this.locale = locale;
+    getEventService().publish(new NiftyLocaleChangedEvent(locale));
+
     if (resourceBundles.size() > 0) {
-      log.log(Level.WARNING, "Changing the locale will not effect already load resource bundles.");
+      log.log(Level.WARNING, "Changing the locale will not effect ALL loaded resource bundles. TextRenderer should work now tho :)");
     }
   }
 
+  public Locale getLocale() {
+    return locale;
+  }
+
   @Nonnull
-  public Map<String, ResourceBundle> getResourceBundles() {
+  public Map<String, String> getResourceBundles() {
     return resourceBundles;
   }
 
   public void addResourceBundle(@Nonnull final String id, @Nonnull final String filename) {
-    resourceBundles.put(id, ResourceBundle.getBundle(filename, locale));
+    resourceBundles.put(id, filename);
   }
 
   @Nullable
@@ -1787,7 +1793,8 @@ public class Nifty {
         value,
         getResourceBundles(),
         currentScreen == null ? null : currentScreen.getScreenController(),
-        globalProperties);
+        globalProperties,
+        locale);
   }
 
   private class SubscriberRegistry {

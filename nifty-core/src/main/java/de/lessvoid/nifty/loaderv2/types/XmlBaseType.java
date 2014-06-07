@@ -40,7 +40,8 @@ public class XmlBaseType implements Cloneable, XmlType {
     attributes.translateSpecialValues(
         nifty.getResourceBundles(),
         screen == null ? null : screen.getScreenController(),
-        nifty.getGlobalProperties());
+        nifty.getGlobalProperties(),
+        nifty.getLocale());
   }
 
   @Nonnull

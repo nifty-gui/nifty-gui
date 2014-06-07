@@ -2,6 +2,7 @@ package de.lessvoid.xml.tools;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
@@ -48,15 +49,17 @@ public class SpecialValuesReplace {
    * @param methodCallTarget if the input contains ${CALL...} the target object to call the method with
    * @param properties if the input contains ${PROP...} the properties to use (may be {@code null} in this case
    *                   System.getProperties() are used)
+   * @param locale 
    * 
    * @return the parsed input
    */
   @Nonnull
   public static String replace(
       @Nullable final String input,
-      @Nonnull final Map<String, ResourceBundle> resourceBundles,
+      @Nonnull final Map<String, String> resourceBundles,
       @Nullable final Object methodCallTarget,
-      @Nullable final Properties properties) {
+      @Nullable final Properties properties,
+      @Nonnull final Locale locale) {
     if (input == null) {
       return "";
     }
@@ -76,7 +79,7 @@ public class SpecialValuesReplace {
         } else if (value.startsWith(KEY_CALL)) {
           parts.set(idx, handleCall(part, methodCallTarget));
         } else {
-          parts.set(idx, handleLocalize(part, resourceBundles));
+          parts.set(idx, handleLocalize(part, resourceBundles, locale));
         }
       } else {
         if (endsWithQuote(prev)) {
@@ -170,21 +173,35 @@ public class SpecialValuesReplace {
     return value;
   }
 
-  private static String handleLocalize(@Nonnull final String value, @Nonnull final Map<String, ResourceBundle> resourceBundles) {
+  private static String handleLocalize(
+      @Nonnull final String value,
+      @Nonnull final Map<String, String> resourceBundles,
+      @Nonnull final Locale locale) {
     if (value.contains(".")) {
       String removedQuotes = removeQuotes(value);
       String resourceSelector = removedQuotes.substring(0, removedQuotes.indexOf("."));
       String resourceKey = removedQuotes.substring(removedQuotes.indexOf(".") + 1);
-      ResourceBundle res = resourceBundles.get(resourceSelector);
-      if (res != null) {
-          try {
-              return res.getString(resourceKey);
-          } catch(MissingResourceException e) {
-              if (log.isLoggable(Level.WARNING)) {
-                  log.warning("Missing resource: " + resourceSelector + "." + resourceKey);
-                }
-              return "<" + resourceKey + ">";
-          }
+      String baseName = resourceBundles.get(resourceSelector);
+      if (baseName == null) {
+        if (log.isLoggable(Level.WARNING)) {
+          log.warning("no resource bundle defined for: " + resourceSelector);
+        }
+        return value;
+      }
+
+      try {
+        ResourceBundle res;
+        if (locale == null) {
+          res = ResourceBundle.getBundle(baseName);
+        } else {
+          res = ResourceBundle.getBundle(baseName, locale);
+        }
+        return res.getString(resourceKey);
+      } catch(MissingResourceException e) {
+        if (log.isLoggable(Level.WARNING)) {
+          log.warning("Missing resource: " + resourceSelector + "." + resourceKey);
+        }
+        return "<" + resourceKey + ">";
       }
     }
     return value;
