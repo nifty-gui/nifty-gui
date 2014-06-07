@@ -138,6 +138,9 @@ public class Nifty {
    */
   private boolean ignoreKeyboardEvents;
 
+  // set to true when NiftyMethodInvoker should throw exceptions (true) instead of only logging them (false)
+  private boolean niftyMethodInvokerDebugEnabled;
+
   public Nifty(
       @Nonnull final RenderDevice newRenderDevice,
       @Nonnull final SoundDevice newSoundDevice,
@@ -1990,5 +1993,21 @@ public class Nifty {
 
   public void internalPopupRemoved(final String id) {
     closedPopups.remove(id);
+  }
+
+  /**
+   * Set this to true to let the NiftyMethodInvoker not catch RuntimeException/Exception when calling any interact
+   * on click method. This way when your on click handler crashes with an Exception it will crash the whole application.
+   * This might be helpful when you develop your application. The default value is false which will not crash the
+   * application but instead will only log the exception.
+   *
+   * @param debugEnabled set to true to not catch exceptions (default value is false)
+   */
+  public void setNiftyMethodInvokerDebugEnabled(final boolean debugEnabled) {
+    this.niftyMethodInvokerDebugEnabled = debugEnabled;
+  }
+
+  public boolean isNiftyMethodInvokerDebugEnabled() {
+    return niftyMethodInvokerDebugEnabled;
   }
 }

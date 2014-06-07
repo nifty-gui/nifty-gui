@@ -4,8 +4,10 @@ import de.lessvoid.xml.tools.MethodResolver;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -154,28 +156,17 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
       }
       return method.invoke(targetObject, invokeParameters);
     } catch (RuntimeException e) {
-      log.warning("RuntimeException: " + e.toString());
-      logException(e);
+      if (nifty.isNiftyMethodInvokerDebugEnabled()) {
+        throw e;
+      }
+      log.log(Level.WARNING, "RuntimeException in callMethod(" + method + ") for [" + targetObject + "]", e);
       return null;
     } catch (Exception e) {
-      log.warning("Exception: " + e.toString());
-      logException(e);
-      return null;
-    }
-  }
-
-  private void logException(@Nonnull final Throwable e) {
-    StackTraceElement[] elements = e.getStackTrace();
-    if (elements == null) {
-      log.warning("stacktrace is null");
-    } else {
-      for (StackTraceElement ee : elements) {
-        log.warning(ee.getClassName() + " " + ee.getMethodName() + " (" + ee.getFileName() + ":" + ee.getLineNumber() + ")");
+      if (nifty.isNiftyMethodInvokerDebugEnabled()) {
+        throw new RuntimeException(e);
       }
-    }
-    if (e.getCause() != null) {
-      log.warning("Root Cause: " + e.getCause().toString());
-      logException(e.getCause());
+      log.log(Level.WARNING, "Exception in callMethod(" + method + ") for [" + targetObject + "]", e);
+      return null;
     }
   }
 
