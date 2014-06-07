@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandStrokeColor implements Command {
   private final NiftyColor color;
@@ -11,7 +11,7 @@ public class CommandStrokeColor implements Command {
   }
 
   @Override
-  public void execute(final NiftyRenderDevice renderDevice, final Context context) {
+  public void execute(final BatchManager batchManager, final Context context) {
   }
 
 }

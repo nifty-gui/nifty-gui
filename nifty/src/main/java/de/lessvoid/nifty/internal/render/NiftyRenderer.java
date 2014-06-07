@@ -10,6 +10,7 @@ import javax.management.ObjectName;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.math.Mat4;
+import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**

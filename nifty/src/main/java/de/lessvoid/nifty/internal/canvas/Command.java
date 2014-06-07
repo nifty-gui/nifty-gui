@@ -1,11 +1,11 @@
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 
 
 public interface Command {
 
-  void execute(NiftyRenderDevice renderDevice, Context context);
+  void execute(BatchManager contentBatchManager, Context context);
 
 }

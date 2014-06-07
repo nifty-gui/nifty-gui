@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.internal.render;
+package de.lessvoid.nifty.internal.render.batch;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -10,9 +10,9 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 /**
- * A Batch stores pre-transformed vertices with texture coordinates rendering from the same NiftyTexture.
+ *
  */
-public class Batch {
+public class TextureBatch implements Batch {
   private final static int NUM_PRIMITIVES = 100;
   public final static int PRIMITIVE_SIZE = 4 * 6;
 
@@ -24,7 +24,7 @@ public class Batch {
   private final Vec4 vsrc = new Vec4();
   private final Vec4 vdst = new Vec4();
 
-  public Batch(final NiftyTexture texture) {
+  public TextureBatch(final NiftyTexture texture) {
     this.atlasId = texture.getAtlasId();
     this.texture = texture;
     this.vertices = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
@@ -61,6 +61,11 @@ public class Batch {
     return true;
   }
 
+  @Override
+  public void render(final NiftyRenderDevice renderDevice) {
+    renderDevice.render(texture, vertices);
+  }
+
   private void addTransformed(final double x, final double y, final Mat4 mat) {
     vsrc.x = (float) x;
     vsrc.y = (float) y;
@@ -68,10 +73,6 @@ public class Batch {
     Mat4.transform(mat, vsrc, vdst);
     vertices.put(vdst.x);
     vertices.put(vdst.y);
-  }
-
-  public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.render(texture, vertices);
   }
 
   private FloatBuffer createBuffer(final int size) {

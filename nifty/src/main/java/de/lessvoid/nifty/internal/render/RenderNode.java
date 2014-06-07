@@ -6,6 +6,7 @@ import java.util.List;
 import de.lessvoid.nifty.internal.canvas.Command;
 import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.math.Mat4;
+import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
@@ -38,17 +39,20 @@ public class RenderNode {
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
     if (needsContentUpdate) {
+      BatchManager contentBatchManager = new BatchManager();
+      contentBatchManager.begin();
       context.prepare(renderDevice);
       for (int i=0; i<commands.size(); i++) {
         Command command = commands.get(i);
-        command.execute(renderDevice, context);
+        command.execute(contentBatchManager, context);
       }
+      contentBatchManager.end(renderDevice);
       context.flush(renderDevice);
       needsContentUpdate = false;
     }
 
     Mat4 current = Mat4.mul(parent, local);
-    batchManager.add(context.getNiftyTexture(), current);
+    batchManager.addTextureQuad(context.getNiftyTexture(), current);
 
     for (int i=0; i<children.size(); i++) {
       children.get(i).render(batchManager, renderDevice, current);

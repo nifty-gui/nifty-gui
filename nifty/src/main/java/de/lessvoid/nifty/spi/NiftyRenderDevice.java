@@ -39,15 +39,11 @@ public interface NiftyRenderDevice {
   NiftyTexture createTexture(int width, int height);
 
   void render(NiftyTexture renderTarget, FloatBuffer vertices);
+  void renderColorQuads(FloatBuffer vertices);
 
   void begin();
   void end();
 
   void beginRenderToTexture(NiftyTexture texture);
-
   void endRenderToTexture(NiftyTexture texture);
-
-  void filledRect(double x0, double y0, double x1, double y1, NiftyColor fillColor);
-  void filledRect(double x0, double y0, double x1, double y1, NiftyLinearGradient gradient);
-
 }

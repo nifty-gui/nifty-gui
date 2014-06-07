@@ -1,8 +1,7 @@
 package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.internal.math.Vec2;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyTexture;
+import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandLine implements Command {
   private final double x0;
@@ -18,7 +17,7 @@ public class CommandLine implements Command {
   }
 
   @Override
-  public void execute(final NiftyRenderDevice renderDevice, final Context context) {
+  public void execute(final BatchManager batchManager, final Context context) {
     Vec2 start = new Vec2((float)x0, (float)y0);
     Vec2 end = new Vec2((float)x1, (float)y1);
 
