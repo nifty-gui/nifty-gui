@@ -34,6 +34,22 @@ public class NiftyLinearGradient {
   }
 
   /**
+   * Copy constructor.
+   * @param src the source
+   */
+  public NiftyLinearGradient(final NiftyLinearGradient src) {
+    this.x0 = src.x0;
+    this.y0 = src.y0;
+    this.x1 = src.x1;
+    this.y1 = src.y1;
+    this.colorStops.addAll(src.colorStops);
+  }
+
+  public void addColorSteps(final List<NiftyColorStop> newColorSteps) {
+    this.colorStops.addAll(newColorSteps);
+  }
+
+  /**
    * Add a color stop to the gradient at position stop (value between 0.0 and 1.0) with the given color.
    *
    * @param stop a value between 0.0 and 1.0 that represents the position between start and end in a
@@ -90,6 +106,48 @@ public class NiftyLinearGradient {
    */
   public List<NiftyColorStop> getColorStops() {
     return Collections.unmodifiableList(new ArrayList<NiftyColorStop>(colorStops));
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((colorStops == null) ? 0 : colorStops.hashCode());
+    long temp;
+    temp = Double.doubleToLongBits(x0);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(x1);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(y0);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(y1);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    NiftyLinearGradient other = (NiftyLinearGradient) obj;
+    if (colorStops == null) {
+      if (other.colorStops != null)
+        return false;
+    } else if (!colorStops.equals(other.colorStops))
+      return false;
+    if (Double.doubleToLongBits(x0) != Double.doubleToLongBits(other.x0))
+      return false;
+    if (Double.doubleToLongBits(x1) != Double.doubleToLongBits(other.x1))
+      return false;
+    if (Double.doubleToLongBits(y0) != Double.doubleToLongBits(other.y0))
+      return false;
+    if (Double.doubleToLongBits(y1) != Double.doubleToLongBits(other.y1))
+      return false;
+    return true;
   }
 
   private void assertValidStop(final double stop) {

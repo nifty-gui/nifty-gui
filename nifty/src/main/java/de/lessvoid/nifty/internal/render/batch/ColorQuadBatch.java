@@ -12,7 +12,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  */
 public class ColorQuadBatch implements Batch {
   private final static int NUM_PRIMITIVES = 100;
-  public final static int PRIMITIVE_SIZE = 4 * 6;
+  public final static int PRIMITIVE_SIZE = 6 * 6;
 
   private final FloatBuffer b;
 

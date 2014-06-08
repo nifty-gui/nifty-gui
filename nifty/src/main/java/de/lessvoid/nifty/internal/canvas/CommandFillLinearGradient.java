@@ -7,7 +7,7 @@ public class CommandFillLinearGradient implements Command {
   private final NiftyLinearGradient gradient;
 
   public CommandFillLinearGradient(final NiftyLinearGradient gradient) {
-    this.gradient = gradient;
+    this.gradient = new NiftyLinearGradient(gradient);
   }
 
   @Override

@@ -2,7 +2,6 @@ package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
-import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
@@ -18,6 +17,7 @@ public class Context {
 
   public void prepare(final NiftyRenderDevice renderDevice) {
     fillColor = NiftyColor.BLACK();
+    linearGradient = null;
     renderDevice.beginRenderToTexture(texture);
   }
 
@@ -27,6 +27,7 @@ public class Context {
 
   public void setFillColor(final NiftyColor color) {
     fillColor = new NiftyColor(color);
+    linearGradient = null;
   }
 
   public NiftyColor getFillColor() {
@@ -34,7 +35,8 @@ public class Context {
   }
 
   public void setFillLinearGradient(final NiftyLinearGradient gradient) {
-    linearGradient = gradient;
+    fillColor = null;
+    linearGradient = new NiftyLinearGradient(gradient);
   }
 
   public void setLineWidth(final float lineWidth) {

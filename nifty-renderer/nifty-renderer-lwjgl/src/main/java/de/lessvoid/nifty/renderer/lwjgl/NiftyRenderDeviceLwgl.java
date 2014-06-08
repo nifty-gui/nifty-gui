@@ -17,9 +17,12 @@ import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.CoreVBO.DataType;
 import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
+import de.lessvoid.nifty.api.NiftyColorStop;
+import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
 import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
+import de.lessvoid.nifty.internal.render.batch.LinearGradientQuadBatch;
 import de.lessvoid.nifty.internal.render.batch.TextureBatch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
@@ -41,6 +44,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
   private static final String TEXTURE_SHADER = "texture";
   private static final String PLAIN_COLOR_SHADER = "plain";
+  private static final String LINEAR_GRADIENT_SHADER = "linearGradient";
 
   public NiftyRenderDeviceLwgl() {
     coreFactory = CoreFactoryLwjgl.create();
@@ -48,6 +52,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
     shaderManager.register(PLAIN_COLOR_SHADER, loadPlainShader());
     shaderManager.register(TEXTURE_SHADER, loadTextureShader());
+    shaderManager.register(LINEAR_GRADIENT_SHADER, loadLinearGradientShader());
 
     CoreShader shader = shaderManager.get(TEXTURE_SHADER);
     shader.activate();
@@ -153,6 +158,50 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
+  public void renderLinearGradientQuads(final NiftyLinearGradient params, final FloatBuffer vertices) {
+    vbo.getBuffer().clear();
+    FloatBuffer b = vbo.getBuffer();
+    vertices.flip();
+    b.put(vertices);
+
+    CoreShader shader = shaderManager.activate(LINEAR_GRADIENT_SHADER);
+    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
+
+    float[] gradientStop = new float[params.getColorStops().size()];
+    float[] gradientColor = new float[params.getColorStops().size() * 4];
+    int i = 0;
+    for (NiftyColorStop stop : params.getColorStops()) {
+      gradientColor[i * 4 + 0] = (float) stop.getColor().getRed();
+      gradientColor[i * 4 + 1] = (float) stop.getColor().getGreen();
+      gradientColor[i * 4 + 2] = (float) stop.getColor().getBlue();
+      gradientColor[i * 4 + 3] = (float) stop.getColor().getAlpha();
+      gradientStop[i] = (float) stop.getStop();
+      i++;
+    }
+
+    shader.setUniformfv("gradientStop", 1, gradientStop);
+    shader.setUniformfv("gradientColor", 4, gradientColor);
+    shader.setUniformi("numStops", params.getColorStops().size());
+    shader.setUniformf(
+        "gradient",
+        (float)params.getX0(), (float)params.getY0(),
+        (float)params.getX1(), (float)params.getY1());
+
+    vao.bind();
+    vbo.bind();
+    vbo.getBuffer().rewind();
+    vbo.send();
+
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+    vao.disableVertexAttribute(1);
+
+    coreFactory.getCoreRender().renderTriangles(vertices.position() / LinearGradientQuadBatch.PRIMITIVE_SIZE * 6);
+    vao.unbind();
+    vbo.getBuffer().clear();
+  }
+
+  @Override
   public void beginRenderToTexture(final NiftyTexture texture) {
     fbo.bindFramebuffer();
     fbo.attachTexture(getTextureId(texture), 0);
@@ -186,6 +235,14 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aColor");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/plain-color.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/plain-color.fs");
+    shader.link();
+    return shader;
+  }
+
+  private CoreShader loadLinearGradientShader() {
+    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex");
+    shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/linear-gradient.vs");
+    shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/linear-gradient.fs");
     shader.link();
     return shader;
   }

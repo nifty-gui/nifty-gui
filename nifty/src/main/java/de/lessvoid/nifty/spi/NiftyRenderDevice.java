@@ -2,7 +2,6 @@ package de.lessvoid.nifty.spi;
 
 import java.nio.FloatBuffer;
 
-import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 
 /**
@@ -40,6 +39,7 @@ public interface NiftyRenderDevice {
 
   void render(NiftyTexture renderTarget, FloatBuffer vertices);
   void renderColorQuads(FloatBuffer vertices);
+  void renderLinearGradientQuads(NiftyLinearGradient gradientParams, FloatBuffer vertices);
 
   void begin();
   void end();

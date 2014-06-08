@@ -16,7 +16,6 @@ import de.lessvoid.nifty.api.UnitValue;
 public class UseCase_0008_CanvasLinearGradient implements UseCaseUpdateable {
   private final NiftyNode niftyNode;
   private final NiftyNode child;
-  private float totalTime;
 
   public UseCase_0008_CanvasLinearGradient(final Nifty nifty) {
     niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
@@ -30,23 +29,23 @@ public class UseCase_0008_CanvasLinearGradient implements UseCaseUpdateable {
         canvas.setFillStyle(NiftyColor.BLUE());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        NiftyLinearGradient gradient = new NiftyLinearGradient(50, 50, 400, 150);
+        NiftyLinearGradient gradient = new NiftyLinearGradient(0.0, 0.0, 1.0, 0.0);
         gradient.addColorStop(0.0, NiftyColor.RED());
+        gradient.addColorStop(1.0, NiftyColor.WHITE());
+        canvas.setFillStyle(gradient);
+        canvas.fillRect(50, 50, 350, 150);
+
+        gradient = new NiftyLinearGradient(0.0, 0.0, 0.0, 1.0);
+        gradient.addColorStop(0.0, NiftyColor.GREEN());
         gradient.addColorStop(1.0, NiftyColor.BLACK());
         canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 50, 400, 150);
+        canvas.fillRect(50, 200, 350, 300);
       }
     });
   }
 
   @Override
   public void update(final Nifty nifty, final float deltaTime) {
-    totalTime += deltaTime;
-
-    if (totalTime > 5) {
-      child.requestRedraw();
-      totalTime = 0;
-    }
   }
 
   public static void main(final String[] args) throws Exception {

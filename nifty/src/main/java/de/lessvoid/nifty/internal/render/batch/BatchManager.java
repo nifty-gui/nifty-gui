@@ -39,10 +39,24 @@ public class BatchManager {
       return;
     }
     // WTF?
-    throw new RuntimeException("Created new batch but couldn't add any data to it. This should never happen!");
+    throw new RuntimeException("Created new texture batch but couldn't add any data to it. This should never happen!");
   }
 
   public void addLinearGradientQuad(final double x0, final double y0, final double x1, final double y1, final NiftyLinearGradient fillLinearGradient) {
+    NiftyLinearGradient gradient = new NiftyLinearGradient(x0, y0, x1, y1);
+    gradient.addColorSteps(fillLinearGradient.getColorStops());
+
+    LinearGradientQuadBatch batch = linearGradientQuadBatch(gradient);
+    if (batch.add(x0, y0, x1, y1)) {
+      return;
+    }
+    batch = newLinearGradientQuadBatch(gradient);
+    if (batch.add(x0, y0, x1, y1)) {
+      return;
+    }
+
+    // WTF?
+    throw new RuntimeException("Created new linear gradient batch but couldn't add any data to it. This should never happen!");
   }
 
   public void addColorQuad(final double x0, final double y0, final double x1, final double y1, final NiftyColor c) {
@@ -55,7 +69,7 @@ public class BatchManager {
       return;
     }
     // WTF?
-    throw new RuntimeException("Created new batch but couldn't add any data to it. This should never happen!");
+    throw new RuntimeException("Created new color batch but couldn't add any data to it. This should never happen!");
   }
 
   public void end(final NiftyRenderDevice renderDevice) {
@@ -103,6 +117,28 @@ public class BatchManager {
     ColorQuadBatch batch = new ColorQuadBatch();
     activeBatches.add(batch);
     log.fine("new color quad batch added. total batch count now: " + activeBatches.size());
+    return batch;
+  }
+
+  private LinearGradientQuadBatch linearGradientQuadBatch(final NiftyLinearGradient params) {
+    if (activeBatches.isEmpty()) {
+      return newLinearGradientQuadBatch(params);
+    }
+    Batch lastBatch = activeBatches.get(activeBatches.size() - 1);
+    if (!(lastBatch instanceof LinearGradientQuadBatch)) {
+      return newLinearGradientQuadBatch(params);
+    }
+    LinearGradientQuadBatch batch = (LinearGradientQuadBatch) lastBatch;
+    if (!batch.requiresNewBatch(params)) {
+      return batch;
+    }
+    return newLinearGradientQuadBatch(params);
+  }
+
+  private LinearGradientQuadBatch newLinearGradientQuadBatch(final NiftyLinearGradient params) {
+    LinearGradientQuadBatch batch = new LinearGradientQuadBatch(params);
+    activeBatches.add(batch);
+    log.fine("new linear gradient quad batch added. total batch count now: " + activeBatches.size());
     return batch;
   }
 }
