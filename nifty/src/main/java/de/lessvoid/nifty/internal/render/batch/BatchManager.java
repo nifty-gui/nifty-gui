@@ -43,7 +43,13 @@ public class BatchManager {
   }
 
   public void addLinearGradientQuad(final double x0, final double y0, final double x1, final double y1, final NiftyLinearGradient fillLinearGradient) {
-    NiftyLinearGradient gradient = new NiftyLinearGradient(x0, y0, x1, y1);
+    float dx = (float) x1 - (float) x0;
+    float dy = (float) y1 - (float) y0;
+    NiftyLinearGradient gradient = new NiftyLinearGradient(
+        x0 + fillLinearGradient.getX0() * dx,
+        y0 + fillLinearGradient.getY0() * dy,
+        x0 + fillLinearGradient.getX1() * dx,
+        y0 + fillLinearGradient.getY1() * dy);
     gradient.addColorSteps(fillLinearGradient.getColorStops());
 
     LinearGradientQuadBatch batch = linearGradientQuadBatch(gradient);

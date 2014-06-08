@@ -33,13 +33,19 @@ public class UseCase_0008_CanvasLinearGradient implements UseCaseUpdateable {
         gradient.addColorStop(0.0, NiftyColor.RED());
         gradient.addColorStop(1.0, NiftyColor.WHITE());
         canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 50, 350, 150);
+        canvas.fillRect(50, 50, 350, 100);
 
         gradient = new NiftyLinearGradient(0.0, 0.0, 0.0, 1.0);
         gradient.addColorStop(0.0, NiftyColor.GREEN());
         gradient.addColorStop(1.0, NiftyColor.BLACK());
         canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 200, 350, 300);
+        canvas.fillRect(50, 150, 350, 200);
+
+        gradient = new NiftyLinearGradient(0.0, 0.0, 0.5, 1.0);
+        gradient.addColorStop(0.0, NiftyColor.WHITE());
+        gradient.addColorStop(1.0, NiftyColor.BLACK());
+        canvas.setFillStyle(gradient);
+        canvas.fillRect(50, 250, 350, 350);
       }
     });
   }
