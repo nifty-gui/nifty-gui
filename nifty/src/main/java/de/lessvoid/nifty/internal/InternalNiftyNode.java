@@ -75,9 +75,6 @@ public class InternalNiftyNode implements InternalLayoutable {
   // The canvas painter.
   private NiftyCanvasPainter canvasPainter = standardPainter;
 
-  // When set to true, Nifty will render all childrens into a texture.
-  private boolean cache;
-
   // The public Node that this node is linked to.
   private NiftyNode niftyNode;
 
@@ -284,14 +281,6 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public void getStateInfo(final StringBuilder result, final String pattern) {
     getStateInfo(result, "", Pattern.compile(pattern));
-  }
-
-  public void setCache(final boolean cache) {
-    this.cache = cache;
-  }
-
-  public boolean isCache() {
-    return cache;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

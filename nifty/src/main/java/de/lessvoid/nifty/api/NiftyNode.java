@@ -1,15 +1,7 @@
 package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
-import de.lessvoid.nifty.internal.layout.InternalLayout;
-import de.lessvoid.nifty.internal.layout.InternalLayoutAbsolute;
-import de.lessvoid.nifty.internal.layout.InternalLayoutCenter;
-import de.lessvoid.nifty.internal.layout.InternalLayoutHorizontal;
-import de.lessvoid.nifty.internal.layout.InternalLayoutNone;
-import de.lessvoid.nifty.internal.layout.InternalLayoutOverlay;
-import de.lessvoid.nifty.internal.layout.InternalLayoutVertical;
-import de.lessvoid.nifty.internal.layout.InternalLayoutAbsolute.KeepInsidePostProcess;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 
 /**
  * The core element of the Nifty scene graph is a NiftyNode. It is created by the main Nifty instance and represents the
@@ -369,20 +361,6 @@ public class NiftyNode {
    */
   public void getStateInfo(final StringBuilder result, final String pattern) {
     impl.getStateInfo(result, pattern);
-  }
-
-  /**
-   * Enable cache of this Node.
-   */
-  public void enableCache() {
-    impl.setCache(true);
-  }
-
-  /**
-   * Disable cache of this Node.
-   */
-  public void disableCache() {
-    impl.setCache(false);
   }
 
   // package private accessor stuff
