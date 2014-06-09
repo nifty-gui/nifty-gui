@@ -10,14 +10,14 @@ import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 
 /**
- * Test a custom canvas painter.
+ * custom canvas painter rendering gradients.
  * @author void
  */
-public class UseCase_0008_CanvasLinearGradient implements UseCaseUpdateable {
+public class UseCase_b02_CanvasLinearGradient {
   private final NiftyNode niftyNode;
   private final NiftyNode child;
 
-  public UseCase_0008_CanvasLinearGradient(final Nifty nifty) {
+  public UseCase_b02_CanvasLinearGradient(final Nifty nifty) {
     niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.TRANSPARENT());
 
@@ -50,11 +50,7 @@ public class UseCase_0008_CanvasLinearGradient implements UseCaseUpdateable {
     });
   }
 
-  @Override
-  public void update(final Nifty nifty, final float deltaTime) {
-  }
-
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_0008_CanvasLinearGradient.class, args);
+    UseCaseRunner.run(UseCase_b02_CanvasLinearGradient.class, args);
   }
 }

@@ -5,25 +5,24 @@ import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
+import de.lessvoid.nifty.api.controls.Label;
 
 /**
  * Display a simple text.
  * @author void
  */
-public class UseCase_0006_SimpleText {
+public class UseCase_c01_LabelControl {
   private final NiftyNode niftyNode;
 
-  public UseCase_0006_SimpleText(final Nifty nifty) {
+  public UseCase_c01_LabelControl(final Nifty nifty) {
     niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.GREEN());
-/*
-    Text text = niftyNode.newControl(Text.class);
-    text.setText("Hello Nifty Text");
-    text.setColor(NiftyColor.RED());
-*/
+
+    Label label = niftyNode.newControl(Label.class);
+    label.setText("Hello Nifty 2.0");
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_0006_SimpleText.class, args);
+    UseCaseRunner.run(UseCase_c01_LabelControl.class, args);
   }
 }

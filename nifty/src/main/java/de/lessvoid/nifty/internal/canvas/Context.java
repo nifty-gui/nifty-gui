@@ -10,6 +10,7 @@ public class Context {
   private NiftyColor fillColor;
   private float lineWidth;
   private NiftyLinearGradient linearGradient;
+  private NiftyColor strokeStyle;
 
   public Context(final NiftyTexture textureParam) {
     texture = textureParam;
@@ -53,5 +54,13 @@ public class Context {
 
   public NiftyLinearGradient getFillLinearGradient() {
     return linearGradient;
+  }
+
+  public void setStrokeStyle(final NiftyColor color) {
+    this.strokeStyle = color;
+  }
+
+  public NiftyColor getStrokeStyle() {
+    return strokeStyle;
   }
 }

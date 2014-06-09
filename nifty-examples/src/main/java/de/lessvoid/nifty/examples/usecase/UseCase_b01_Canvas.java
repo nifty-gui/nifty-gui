@@ -9,15 +9,15 @@ import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 
 /**
- * Test a custom canvas painter.
+ * custom canvas painter.
  * @author void
  */
-public class UseCase_0007_Canvas implements UseCaseUpdateable {
+public class UseCase_b01_Canvas implements UseCaseUpdateable {
   private final NiftyNode niftyNode;
   private final NiftyNode child;
   private float totalTime;
 
-  public UseCase_0007_Canvas(final Nifty nifty) {
+  public UseCase_b01_Canvas(final Nifty nifty) {
     niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.GREEN());
 
@@ -52,6 +52,6 @@ public class UseCase_0007_Canvas implements UseCaseUpdateable {
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_0007_Canvas.class, args);
+    UseCaseRunner.run(UseCase_b01_Canvas.class, args);
   }
 }

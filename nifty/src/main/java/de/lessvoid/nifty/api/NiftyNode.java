@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.api;
 
+import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 
@@ -321,6 +322,15 @@ public class NiftyNode {
    */
   public NiftyNode newChildNode(final UnitValue width, final UnitValue height, final ChildLayout childLayout) {
     return new NiftyNode(impl.newChildNode(width, height, childLayout));
+  }
+
+  /**
+   * Create a new NiftyControl and make this node it's parent.
+   * 
+   * @return a new NiftyControl
+   */
+  public <T extends NiftyControl> T newControl(final Class<T> controlClass) {
+    return impl.newControl(controlClass, new NiftyNode(impl.newChildNode()));
   }
 
   /**

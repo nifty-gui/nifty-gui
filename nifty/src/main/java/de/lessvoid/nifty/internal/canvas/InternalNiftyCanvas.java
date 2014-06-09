@@ -23,8 +23,8 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void setStrokeColor(final NiftyColor color) {
-    commands.add(new CommandStrokeColor(color));
+  public void setStrokeStyle(final NiftyColor color) {
+    commands.add(new CommandStrokeStyle(color));
     changed = true;
   }
 
@@ -45,6 +45,11 @@ public class InternalNiftyCanvas {
 
   public void filledRect(final double x0, final double y0, final double x1, final double y1) {
     commands.add(new CommandFilledRect(x0, y0, x1, y1));
+    changed = true;
+  }
+
+  public void text(final int x, final int y, final String text) {
+    commands.add(new CommandText(x, y, text));
     changed = true;
   }
 

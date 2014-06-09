@@ -26,10 +26,15 @@ public class NiftyCanvas {
     impl.filledRect(x0, y0, x1, y1);
   }
 
-  /*
-  public void setStrokeColor(final NiftyColor color) {
-    impl.setStrokeColor(color);
+  public void setStrokeStyle(final NiftyColor color) {
+    impl.setStrokeStyle(color);
   }
+
+  public void text(final int x, final int y, final String text) {
+    impl.text(x, y, text);
+  }
+
+  /*
 
   public void setLineWidth(final double lineWidth) {
     impl.setLineWidth(lineWidth);

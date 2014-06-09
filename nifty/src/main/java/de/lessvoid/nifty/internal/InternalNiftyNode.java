@@ -14,6 +14,7 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
@@ -161,6 +162,16 @@ public class InternalNiftyNode implements InternalLayoutable {
     result.setHeightConstraint(height);
     result.setChildLayout(childLayout);
     return result;
+  }
+
+  public <T extends NiftyControl> T newControl(final Class<T> controlClass, final NiftyNode childNode) {
+    try {
+      T result = controlClass.newInstance();
+      result.init(childNode);
+      return result;
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public void setHorizontalAlignment(final HorizontalAlignment alignment) {

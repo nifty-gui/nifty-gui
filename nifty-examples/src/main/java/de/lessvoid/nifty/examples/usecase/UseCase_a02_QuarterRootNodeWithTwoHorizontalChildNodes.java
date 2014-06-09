@@ -13,10 +13,10 @@ import de.lessvoid.nifty.api.UnitValue;
  *
  * @author void
  */
-public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes implements UseCaseUpdateable {
+public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes implements UseCaseUpdateable {
   NiftyNode rootNode;
 
-  public UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes(final Nifty nifty) {
+  public UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes(final Nifty nifty) {
     // Change the root node placement child layout from the default Center to Vertical. This will be used to lay out
     // the root node on the screen in the upper half of the screen. We'll make the root node 50% of the screen.
     nifty.setRootNodePlacementLayout(ChildLayout.Vertical);
@@ -36,6 +36,6 @@ public class UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes implements 
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_0002_QuarterRootNodeWithTwoHorizontalChildNodes.class, args);
+    UseCaseRunner.run(UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes.class, args);
   }
 }
