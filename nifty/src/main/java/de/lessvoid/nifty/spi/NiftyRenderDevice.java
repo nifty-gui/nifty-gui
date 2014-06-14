@@ -1,8 +1,12 @@
 package de.lessvoid.nifty.spi;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
+import javax.annotation.Nonnull;
+
 import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
 
 /**
  * NiftyRenderDevice is part of the SPI that allows Nifty to use different graphics backends. Everything that can
@@ -11,6 +15,13 @@ import de.lessvoid.nifty.api.NiftyLinearGradient;
  * @author void
  */
 public interface NiftyRenderDevice {
+
+  /**
+   * Gives this RenderDevice access to the NiftyResourceLoader.
+   *
+   * @param niftyResourceLoader NiftyResourceLoader
+   */
+  void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader);
 
   /**
    * Get the width of the display.
@@ -34,8 +45,27 @@ public interface NiftyRenderDevice {
    *
    * @param width the width of the texture
    * @param height the height of the texture
+   * @return NiftyTexture
    */
   NiftyTexture createTexture(int width, int height);
+
+  /**
+   * Create a texture of the given width and height and initialize it with the given pixel data.
+   *
+   * @param width the width of the texture
+   * @param height the height of the texture
+   * @param data the pixel data of the texture
+   * @return NiftyTexture
+   */
+  NiftyTexture createTexture(int width, int height, ByteBuffer data);
+
+  /**
+   * Load an image and return a NiftyTexture from the image.
+   *
+   * @param filename the image filename to load
+   * @return NiftyTexture
+   */
+  NiftyTexture loadTexture(String filename);
 
   void render(NiftyTexture renderTarget, FloatBuffer vertices);
   void renderColorQuads(FloatBuffer vertices);
@@ -46,4 +76,6 @@ public interface NiftyRenderDevice {
 
   void beginRenderToTexture(NiftyTexture texture);
   void endRenderToTexture(NiftyTexture texture);
+
+
 }

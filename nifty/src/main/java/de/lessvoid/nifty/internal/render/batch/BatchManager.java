@@ -42,6 +42,29 @@ public class BatchManager {
     throw new RuntimeException("Created new texture batch but couldn't add any data to it. This should never happen!");
   }
 
+  public void addTextureQuad(
+      final NiftyTexture niftyTexture,
+      final Mat4 mat,
+      final double x,
+      final double y,
+      final int width,
+      final int height,
+      final double u0,
+      final double v0,
+      final double u1,
+      final double v1) {
+    TextureBatch batch = textureBatch(niftyTexture);
+    if (batch.add(x, y, width, height, u0, v0, u1, v1, mat)) {
+      return;
+    }
+    batch = newTextureBatch(niftyTexture);
+    if (batch.add(x, y, width, height, u0, v0, u1, v1, mat)) {
+      return;
+    }
+    // WTF?
+    throw new RuntimeException("Created new texture batch but couldn't add any data to it. This should never happen!");
+  }
+
   public void addLinearGradientQuad(final double x0, final double y0, final double x1, final double y1, final NiftyLinearGradient fillLinearGradient) {
     float dx = (float) x1 - (float) x0;
     float dy = (float) y1 - (float) y0;

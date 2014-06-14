@@ -1,17 +1,51 @@
 package de.lessvoid.nifty.renderer.lwjgl;
 
+import java.nio.ByteBuffer;
+
 import de.lessvoid.coregl.CoreFactory;
 import de.lessvoid.coregl.CoreTexture2D;
 import de.lessvoid.coregl.CoreTexture2D.ColorFormat;
 import de.lessvoid.coregl.CoreTexture2D.ResizeFilter;
 import de.lessvoid.coregl.CoreTexture2D.Type;
+import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
+import de.lessvoid.nifty.internal.render.io.ImageLoader;
+import de.lessvoid.nifty.internal.render.io.ImageLoaderFactory;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class NiftyTextureLwjgl implements NiftyTexture {
   final CoreTexture2D texture;
 
-  public NiftyTextureLwjgl(final CoreFactory coreFactory, final int width, final int height) {
+  public NiftyTextureLwjgl(
+      final CoreFactory coreFactory,
+      final int width,
+      final int height) {
     texture = coreFactory.createEmptyTexture(ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, ResizeFilter.Linear);
+  }
+
+  public NiftyTextureLwjgl(
+      final CoreFactory coreFactory,
+      final int width,
+      final int height,
+      final ByteBuffer data) {
+    texture = coreFactory.createTexture(ColorFormat.RGBA, width, height, data, ResizeFilter.Linear);
+  }
+
+  public NiftyTextureLwjgl(
+      final CoreFactory coreFactory,
+      final NiftyResourceLoader resourceLoader,
+      final String filename) {
+    try {
+      ImageLoader imageLoader = ImageLoaderFactory.createImageLoader(filename);
+      ByteBuffer data = imageLoader.loadAsByteBufferRGBA(resourceLoader.getResourceAsStream(filename));
+      texture = coreFactory.createTexture(
+          ColorFormat.RGBA,
+          imageLoader.getImageWidth(),
+          imageLoader.getImageHeight(),
+          data,
+          ResizeFilter.Linear);
+    } catch (Exception e) {
+      throw new RuntimeException("Could not load image from file: [" + filename + "]", e);
+    }
   }
 
   public void bind() {

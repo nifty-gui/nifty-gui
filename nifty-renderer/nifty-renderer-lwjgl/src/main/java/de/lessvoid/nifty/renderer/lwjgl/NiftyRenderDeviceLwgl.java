@@ -5,7 +5,10 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glViewport;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+
+import javax.annotation.Nonnull;
 
 import de.lessvoid.coregl.CoreFBO;
 import de.lessvoid.coregl.CoreFactory;
@@ -19,6 +22,7 @@ import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
 import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
 import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
@@ -41,6 +45,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   private Mat4 mvp;
 
   private boolean clearScreenOnRender = false;
+  private NiftyResourceLoader resourceLoader;
 
   private static final String TEXTURE_SHADER = "texture";
   private static final String PLAIN_COLOR_SHADER = "plain";
@@ -69,6 +74,11 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vbo.bind();
 
     vao.unbind();
+  }
+
+  @Override
+  public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
   }
 
   @Override
@@ -104,6 +114,16 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   @Override
   public NiftyTexture createTexture(final int width, final int height) {
     return new NiftyTextureLwjgl(coreFactory, width, height);
+  }
+
+  @Override
+  public NiftyTexture createTexture(final int width, final int height, final ByteBuffer data) {
+    return new NiftyTextureLwjgl(coreFactory, width, height, data);
+  }
+
+  @Override
+  public NiftyTexture loadTexture(final String filename) {
+    return new NiftyTextureLwjgl(coreFactory, resourceLoader, filename);
   }
 
   @Override
