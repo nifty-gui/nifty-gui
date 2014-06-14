@@ -127,7 +127,7 @@ public class ImageLoaderImageIO implements ImageLoader {
   private void blankImageForMacOsXCompatibility(
           @Nonnull final Graphics2D imageGraphics,
           @Nonnull final ImageProperties imageProperties) {
-    imageGraphics.setColor(new Color(0.f, 0f, 0f, 1.f));
+    imageGraphics.setColor(new Color(0f, 0f, 0f, 0f));
     imageGraphics.fillRect(0, 0, imageProperties.getWidth(), imageProperties.getHeight());
   }
 

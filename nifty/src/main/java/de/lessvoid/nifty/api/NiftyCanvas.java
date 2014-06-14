@@ -34,6 +34,10 @@ public class NiftyCanvas {
     impl.text(x, y, text);
   }
 
+  public void image(final NiftyImage image, final int x, final int y) {
+    impl.image(x, y, image);
+  }
+
   /*
 
   public void setLineWidth(final double lineWidth) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyImage;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 
 public class InternalNiftyCanvas {
@@ -50,6 +51,11 @@ public class InternalNiftyCanvas {
 
   public void text(final int x, final int y, final String text) {
     commands.add(new CommandText(x, y, text));
+    changed = true;
+  }
+
+  public void image(final int x, final int y, final NiftyImage image) {
+    commands.add(new CommandImage(x, y, image));
     changed = true;
   }
 

@@ -3,9 +3,11 @@ package de.lessvoid.nifty.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
+import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
@@ -14,6 +16,9 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  * @author void
  */
 public class Nifty {
+  // The resource loader.
+  private final NiftyResourceLoader resourceLoader = new NiftyResourceLoader();
+
   // The one and only NiftyStatistics instance.
   private final NiftyStatistics statistics = new NiftyStatistics(new Statistics());
   private final Statistics stats = statistics.getImpl();
@@ -37,6 +42,7 @@ public class Nifty {
    */
   public Nifty(final NiftyRenderDevice newRenderDevice) {
     renderDevice = newRenderDevice;
+    renderDevice.setResourceLoader(resourceLoader);
     renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
   }
 
@@ -121,6 +127,16 @@ public class Nifty {
    */
   public NiftyNode createRootNodeFullscreen(final ChildLayout childLayout) {
     return createRootNode(UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), childLayout);
+  }
+
+  /**
+   * Create a new NiftyImage.
+   * @param filename the filename to load
+   *
+   * @return a new NiftyImage
+   */
+  public NiftyImage createNiftyImage(final String filename) {
+    return NiftyImage.newInstance(InternalNiftyImage.newImage(renderDevice.loadTexture(filename)));
   }
 
   /**
