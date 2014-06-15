@@ -142,12 +142,17 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vbo.send();
 
     vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 4, 0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 8, 0);
     vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
+    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 8, 2);
+    vao.enableVertexAttribute(2);
+    vao.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
 
     internal(renderTarget).bind();
     coreFactory.getCoreRender().renderTriangles(vertices.position() / TextureBatch.PRIMITIVE_SIZE * 6);
+
+    vao.disableVertexAttribute(2);
+
     vao.unbind();
     vbo.getBuffer().clear();
   }
@@ -244,7 +249,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   private CoreShader loadTextureShader() {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aUVL");
+    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aUV", "aColor");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/texture.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/texture.fs");
     shader.link();

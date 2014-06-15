@@ -3,6 +3,7 @@ package de.lessvoid.nifty.internal.render;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.internal.canvas.Command;
 import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.math.Mat4;
@@ -52,7 +53,7 @@ public class RenderNode {
     }
 
     Mat4 current = Mat4.mul(parent, local);
-    batchManager.addTextureQuad(context.getNiftyTexture(), current);
+    batchManager.addTextureQuad(context.getNiftyTexture(), current, NiftyColor.WHITE());
 
     for (int i=0; i<children.size(); i++) {
       children.get(i).render(batchManager, renderDevice, current);

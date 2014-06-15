@@ -10,7 +10,9 @@ public class Context {
   private NiftyColor fillColor;
   private float lineWidth;
   private NiftyLinearGradient linearGradient;
-  private NiftyColor strokeStyle;
+  private NiftyColor strokeStyle = NiftyColor.WHITE();
+  private NiftyColor textColor = NiftyColor.WHITE();
+  private float textSize = 1.f;
 
   public Context(final NiftyTexture textureParam) {
     texture = textureParam;
@@ -62,5 +64,21 @@ public class Context {
 
   public NiftyColor getStrokeStyle() {
     return strokeStyle;
+  }
+
+  public void setTextSize(final float textSize) {
+    this.textSize = textSize;
+  }
+
+  public float getTextSize() {
+    return textSize;
+  }
+
+  public void setTextColor(final NiftyColor textColor) {
+    this.textColor = textColor;
+  }
+
+  public NiftyColor getTextColor() {
+    return textColor;
   }
 }

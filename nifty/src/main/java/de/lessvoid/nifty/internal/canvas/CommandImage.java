@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.internal.canvas;
 
+import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.accessor.NiftyImageAccessor;
@@ -20,6 +21,6 @@ public class CommandImage implements Command {
   @Override
   public void execute(final BatchManager batchManager, final Context context) {
     InternalNiftyImage internalImage = NiftyImageAccessor.getDefault().getInternalNiftyImage(image);
-    batchManager.addTextureQuad(internalImage.getTexture(), Mat4.createTranslate(x, y, 0.0f));
+    batchManager.addTextureQuad(internalImage.getTexture(), Mat4.createTranslate(x, y, 0.0f), NiftyColor.WHITE());
   }
 }

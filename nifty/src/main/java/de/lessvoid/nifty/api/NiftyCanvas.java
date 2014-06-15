@@ -30,8 +30,16 @@ public class NiftyCanvas {
     impl.setStrokeStyle(color);
   }
 
-  public void text(final int x, final int y, final String text) {
-    impl.text(x, y, text);
+  public void setTextColor(final NiftyColor textColor) {
+    impl.setTextColor(textColor);
+  }
+
+  public void setTextSize(final float textSize) {
+    impl.setTextSize(textSize);
+  }
+
+  public void text(final NiftyFont niftyFont, final int x, final int y, final String text) {
+    impl.text(niftyFont, x, y, text);
   }
 
   public void image(final NiftyImage image, final int x, final int y) {

@@ -1,14 +1,18 @@
 package de.lessvoid.nifty.api;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.internal.InternalNiftyImage;
+import org.jglfont.JGLFontFactory;
+
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
+import de.lessvoid.nifty.internal.render.font.FontRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -36,6 +40,9 @@ public class Nifty {
   // the class performing the conversion from NiftyNode to RenderNode and takes care of all rendering.
   private final NiftyRenderer renderer;
 
+  // the FontFactory
+  private final JGLFontFactory fontFactory;
+
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
@@ -44,6 +51,7 @@ public class Nifty {
     renderDevice = newRenderDevice;
     renderDevice.setResourceLoader(resourceLoader);
     renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
+    fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
   }
 
   /**
@@ -194,6 +202,17 @@ public class Nifty {
    */
   public void clearScreenBeforeRender() {
     renderDevice.clearScreenBeforeRender(true);
+  }
+
+  /**
+   * Load a NiftyFont with the given name.
+   *
+   * @param name the name of the NiftyFont
+   * @return NiftyFont
+   * @throws IOException
+   */
+  public NiftyFont createFont(final String name) throws IOException {
+    return new NiftyFont(fontFactory.loadFont(resourceLoader.getResourceAsStream(name), name, 12));
   }
 
   // Friend methods

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyImage;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 
@@ -29,6 +30,16 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
+  public void setTextColor(final NiftyColor color) {
+    commands.add(new CommandTextColor(color));
+    changed = true;
+  }
+
+  public void setTextSize(final float textSize) {
+    commands.add(new CommandTextSize(textSize));
+    changed = true;
+  }
+
   public void setLineWidth(final double lineWidth) {
     commands.add(new CommandLineWidth(lineWidth));
     changed = true;
@@ -49,8 +60,8 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void text(final int x, final int y, final String text) {
-    commands.add(new CommandText(x, y, text));
+  public void text(final NiftyFont niftyFont, final int x, final int y, final String text) {
+    commands.add(new CommandText(niftyFont, x, y, text));
     changed = true;
   }
 

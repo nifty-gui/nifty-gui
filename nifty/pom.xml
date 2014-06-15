@@ -12,13 +12,11 @@
     <proguard.java.runtime.jar>${java.home}/lib/rt.jar</proguard.java.runtime.jar>
   </properties>
   <dependencies>
-    <!-- 
     <dependency>
       <groupId>org.jglfont</groupId>
       <artifactId>jglfont-core</artifactId>
       <version>1.4-SNAPSHOT</version>
     </dependency>
-    -->
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>

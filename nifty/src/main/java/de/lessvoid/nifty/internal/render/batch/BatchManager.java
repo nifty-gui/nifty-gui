@@ -19,14 +19,15 @@ public class BatchManager {
     activeBatches.clear();
   }
 
-  public void addTextureQuad(final NiftyTexture niftyTexture, final Mat4 mat) {
+  public void addTextureQuad(final NiftyTexture niftyTexture, final Mat4 mat, final NiftyColor color) {
     TextureBatch batch = textureBatch(niftyTexture);
     if (batch.add(
         0.0, 0.0,
         niftyTexture.getWidth(), niftyTexture.getHeight(),
         niftyTexture.getU0(), niftyTexture.getV0(),
         niftyTexture.getU1(), niftyTexture.getV1(),
-        mat)) {
+        mat,
+        color)) {
       return;
     }
     batch = newTextureBatch(niftyTexture);
@@ -35,7 +36,8 @@ public class BatchManager {
         niftyTexture.getWidth(), niftyTexture.getHeight(),
         niftyTexture.getU0(), niftyTexture.getV0(),
         niftyTexture.getU1(), niftyTexture.getV1(),
-        mat)) {
+        mat,
+        color)) {
       return;
     }
     // WTF?
@@ -52,13 +54,14 @@ public class BatchManager {
       final double u0,
       final double v0,
       final double u1,
-      final double v1) {
+      final double v1,
+      final NiftyColor color) {
     TextureBatch batch = textureBatch(niftyTexture);
-    if (batch.add(x, y, width, height, u0, v0, u1, v1, mat)) {
+    if (batch.add(x, y, width, height, u0, v0, u1, v1, mat, color)) {
       return;
     }
     batch = newTextureBatch(niftyTexture);
-    if (batch.add(x, y, width, height, u0, v0, u1, v1, mat)) {
+    if (batch.add(x, y, width, height, u0, v0, u1, v1, mat, color)) {
       return;
     }
     // WTF?
