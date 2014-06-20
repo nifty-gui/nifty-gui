@@ -198,7 +198,7 @@ public class Parameters {
     if (value == null) {
       return null;
     }
-    if (Color.check(name)) {
+    if (Color.check(value)) {
       return new Color(value);
     }
     return null;
