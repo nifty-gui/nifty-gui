@@ -1002,7 +1002,7 @@ public class BatchRenderDevice implements RenderDevice {
     }
 
     @Override
-    public void beforeRender() {
+    public void beforeRender (final Object customRenderState) {
       hasColor = false;
       for (BitmapInfo info : textureInfos.values()) {
         info.upload();
