@@ -69,7 +69,8 @@ public class JOGLNiftyRunner implements GLEventListener {
 
     System.out.println("using mode " + mode.getName());
 
-    window = GLWindow.create(new GLCapabilities(getProfile(mode)));
+    GLCapabilities glCapabilities = new GLCapabilities(getProfile(mode));
+    window = GLWindow.create(glCapabilities);
     window.setAutoSwapBufferMode(true);
     window.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     window.addGLEventListener(new JOGLNiftyRunner(callback));

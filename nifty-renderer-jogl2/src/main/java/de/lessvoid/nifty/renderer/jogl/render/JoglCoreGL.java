@@ -357,7 +357,9 @@ public class JoglCoreGL extends JoglGL implements CoreGL {
     int[] logLength = new int[1];
     GLContext.getCurrentGL().getGL3().glGetShaderiv(shader, GL2.GL_INFO_LOG_LENGTH, logLength, 0);
     byte[] log = new byte[logLength[0]];
-    GLContext.getCurrentGL().getGL3().glGetShaderInfoLog(shader, logLength[0], null, 0, log, 0);
+    if (log.length > 0) {
+      GLContext.getCurrentGL().getGL3().glGetShaderInfoLog(shader, logLength[0], null, 0, log, 0);
+    }
     return new String(log);
   }
 
@@ -435,7 +437,7 @@ public class JoglCoreGL extends JoglGL implements CoreGL {
 
   @Override
   public void glUniformMatrix4(int location, boolean transpose, FloatBuffer matrices) {
-    GLContext.getCurrentGL().getGL3().glUniformMatrix4fv(location, matrices.remaining(), transpose, matrices);
+    GLContext.getCurrentGL().getGL3().glUniformMatrix4fv(location, 1, transpose, matrices);
   }
 
   @Override

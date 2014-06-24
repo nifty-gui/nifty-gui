@@ -307,22 +307,22 @@ public class JoglGL implements GL {
 
   @Override
   public void glBindTexture(int target, int texture) {
-    GLContext.getCurrentGL().getGL2().glBindTexture(target, texture);
+    GLContext.getCurrentGL().glBindTexture(target, texture);
   }
 
   @Override
   public void glBlendFunc(int sfactor, int dfactor) {
-    GLContext.getCurrentGL().getGL2().glBlendFunc(sfactor, dfactor);
+    GLContext.getCurrentGL().glBlendFunc(sfactor, dfactor);
   }
 
   @Override
   public void glClear(int mask) {
-    GLContext.getCurrentGL().getGL2().glClear(mask);
+    GLContext.getCurrentGL().glClear(mask);
   }
 
   @Override
   public void glClearColor(float red, float green, float blue, float alpha) {
-    GLContext.getCurrentGL().getGL2().glClearColor(red, green, blue, alpha);
+    GLContext.getCurrentGL().glClearColor(red, green, blue, alpha);
   }
 
   @Override
@@ -332,12 +332,12 @@ public class JoglGL implements GL {
 
   @Override
   public void glDeleteTextures(int n, IntBuffer textures) {
-    GLContext.getCurrentGL().getGL2().glDeleteTextures(n, textures);
+    GLContext.getCurrentGL().glDeleteTextures(n, textures);
   }
 
   @Override
   public void glDisable(int cap) {
-    GLContext.getCurrentGL().getGL2().glDisable(cap);
+    GLContext.getCurrentGL().glDisable(cap);
   }
 
   @Override
@@ -347,17 +347,17 @@ public class JoglGL implements GL {
 
   @Override
   public void glDrawArrays(int mode, int first, int count) {
-    GLContext.getCurrentGL().getGL2().glDrawArrays(mode, first, count);
+    GLContext.getCurrentGL().glDrawArrays(mode, first, count);
   }
 
   @Override
   public void glDrawElements(int mode, int count, int type, int indices) {
-    GLContext.getCurrentGL().getGL2().glDrawElements(mode, count, type, indices);
+    GLContext.getCurrentGL().glDrawElements(mode, count, type, indices);
   }
 
   @Override
   public void glEnable(int cap) {
-    GLContext.getCurrentGL().getGL2().glEnable(cap);
+    GLContext.getCurrentGL().glEnable(cap);
   }
 
   @Override
@@ -367,27 +367,27 @@ public class JoglGL implements GL {
 
   @Override
   public void glGenTextures(int n, IntBuffer textures) {
-    GLContext.getCurrentGL().getGL2().glGenTextures(n, textures);
+    GLContext.getCurrentGL().glGenTextures(n, textures);
   }
 
   @Override
   public int glGetError() {
-    return GLContext.getCurrentGL().getGL2().glGetError();
+    return GLContext.getCurrentGL().glGetError();
   }
 
   @Override
   public void glGetIntegerv(int pname, int[] params, int offset) {
-    GLContext.getCurrentGL().getGL2().glGetIntegerv(pname, params, offset);
+    GLContext.getCurrentGL().glGetIntegerv(pname, params, offset);
   }
 
   @Override
   public void glGetIntegerv(int pname, IntBuffer params) {
-    GLContext.getCurrentGL().getGL2().glGetIntegerv(pname, params);
+    GLContext.getCurrentGL().glGetIntegerv(pname, params);
   }
 
   @Override
   public boolean glIsEnabled(int cap) {
-    return GLContext.getCurrentGL().getGL2().glIsEnabled(cap);
+    return GLContext.getCurrentGL().glIsEnabled(cap);
   }
 
   @Override
@@ -412,42 +412,42 @@ public class JoglGL implements GL {
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, ByteBuffer pixels) {
-    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, DoubleBuffer pixels) {
-    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, FloatBuffer pixels) {
-    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, IntBuffer pixels) {
-    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, ShortBuffer pixels) {
-    GLContext.getCurrentGL().getGL2().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    GLContext.getCurrentGL().glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
   }
 
   @Override
   public void glTexParameterf(int target, int pname, float param) {
-    GLContext.getCurrentGL().getGL2().glTexParameterf(target, pname, param);
+    GLContext.getCurrentGL().glTexParameterf(target, pname, param);
   }
 
   @Override
   public void glTexParameteri(int target, int pname, int param) {
-    GLContext.getCurrentGL().getGL2().glTexParameteri(target, pname, param);
+    GLContext.getCurrentGL().glTexParameteri(target, pname, param);
   }
 
   @Override
   public void glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, ByteBuffer pixels) {
-    GLContext.getCurrentGL().getGL2().glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+    GLContext.getCurrentGL().glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
   }
 
   @Override
@@ -462,6 +462,6 @@ public class JoglGL implements GL {
 
   @Override
   public void glViewport(int x, int y, int width, int height) {
-    GLContext.getCurrentGL().getGL2().glViewport(x, y, width, height);
+    GLContext.getCurrentGL().glViewport(x, y, width, height);
   }
 }
