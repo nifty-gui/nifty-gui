@@ -8,7 +8,7 @@
     </parent>
     <artifactId>nifty-jogl-renderer</artifactId>
     <properties>
-        <jogamp.version>2.1.4</jogamp.version>
+        <jogamp.version>2.1.5-01</jogamp.version>
     </properties>
     <dependencies>
         <dependency>
