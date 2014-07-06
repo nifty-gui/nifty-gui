@@ -56,19 +56,6 @@
         <version>1.0-beta-7</version>
       </extension>
     </extensions>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.2.2</version>
-          <configuration>
-            <!-- required by gpg-plugin see here: https://docs.sonatype.org/display/Repository/How+To+Generate+PGP+Signatures+With+Maven -->
-            <mavenExecutorId>forked-path</mavenExecutorId>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
   <dependencies>
     <dependency>
@@ -111,7 +98,7 @@
   </repositories>
   <profiles>
     <!-- profile for release signing all artifacts -->
-    <!-- remember to call with: mvn release:perform -Darguments=-Dgpg.passphrase=PASSPHRASE -->
+    <!-- remember to call with: mvn release:perform -Darguments="-Dpgp.secretkey=keyfile:nifty-gui-private.asc -Dpgp.passphrase=literal:PASSWORD" -->
     <profile>
       <id>release-sign-artifacts</id>
       <activation>
@@ -123,13 +110,11 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>pgp-maven-plugin</artifactId>
             <version>1.1</version>
             <executions>
               <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
                 <goals>
                   <goal>sign</goal>
                 </goals>
