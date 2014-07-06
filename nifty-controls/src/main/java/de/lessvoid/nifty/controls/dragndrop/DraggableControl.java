@@ -1,5 +1,10 @@
 package de.lessvoid.nifty.controls.dragndrop;
 
+import java.util.List;
+import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.*;
@@ -7,11 +12,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * The controller class for a draggable element.
@@ -170,7 +170,7 @@ public class DraggableControl extends AbstractController implements Draggable {
     } else {
       DroppableControl droppableControl = newDroppable.getControl(DroppableControl.class);
       if (droppableControl == null) {
-        log.warning("Droppable has no droppable control. Corrupted controls! Canceling drag.");
+        log.warning("Droppable has no Droppable control. Corrupted controls! Canceling drag.");
         dragCancel();
       } else if (droppableControl.accept(droppable, this)) {
         droppableControl.drop(this, closePopup());
@@ -334,10 +334,15 @@ public class DraggableControl extends AbstractController implements Draggable {
       final int layerCount = layers.size();
       for (int i = layerCount - 1; i >= 0; i--) {
         Element layer = layers.get(i);
-        if (popup != null && layer != popup) {
-          Element droppable = findDroppableAtCoordinates(layer, dragAnkerX, dragAnkerY);
-          if (droppable != null) {
-            return droppable;
+        if ((popup != null) && (layer != popup)) {
+          DroppableSearchResult droppableSearchResult = findDroppableAtCoordinates(layer, dragAnkerX, dragAnkerY);
+          if (droppableSearchResult != null) {
+            if (droppableSearchResult.getFoundDroppable() != null) {
+              // found a droppable!
+              return droppableSearchResult.getFoundDroppable();
+            }
+            // found no droppable, but the mouse was blocked.
+            break;
           }
         }
       }
@@ -345,25 +350,41 @@ public class DraggableControl extends AbstractController implements Draggable {
     return originalParent;
   }
 
+  /**
+   * This function looks for a valid foundDroppable target on a specified screen position.
+   *
+   * @param context the element that is the root element to the search
+   * @param x the x component of the screen coordinate
+   * @param y the y component of the screen coordinate
+   * @return {@code null} in case nothing was found and the search should continue with the next element if any or a
+   * search result, in that case the search is supposed to be stopped.
+   */
   @Nullable
-  private Element findDroppableAtCoordinates(@Nonnull final Element context, final int x, final int y) {
+  private DroppableSearchResult findDroppableAtCoordinates(@Nonnull final Element context, final int x, final int y) {
     List<Element> elements = context.getChildren();
     final int childCount = elements.size();
     for (int i = childCount - 1; i >= 0; i--) {
       Element element = elements.get(i);
 
-      // we can only drop stuff on visible droppables
-      boolean mouseInsideAndVisible = element.isMouseInsideElement(x, y) && element.isVisibleWithParent();
+      // Check if the element we are testing is visible and in covers the tested location
+      boolean mouseInsideAndVisible = element.isVisibleWithParent() && element.isMouseInsideElement(x, y);
       if (mouseInsideAndVisible && isDroppable(element)) {
-        return element;
+        // its also a droppable. Our search is over.
+        return new DroppableSearchResult(element);
       }
 
       // nothing found for this element check it's child elements
-      Element droppable = findDroppableAtCoordinates(element, x, y);
-      if (droppable != null) {
-        return droppable;
+      DroppableSearchResult searchResult = findDroppableAtCoordinates(element, x, y);
+      if (searchResult != null) {
+        // search at the child returned a result. We are done.
+        return searchResult;
+      }
+      if (mouseInsideAndVisible && element.isVisibleToMouseEvents()) {
+        // we did not find a result, how ever we found a element that blocks the mouse. Stop the search without result.
+        return new DroppableSearchResult();
       }
     }
+    // No results at all. Continue the search with the other elements/layers.
     return null;
   }
 
@@ -402,6 +423,24 @@ public class DraggableControl extends AbstractController implements Draggable {
     String id = getId();
     if (id != null) {
       nifty.publishEvent(id, new DraggableDragCanceledEvent(droppable, this));
+    }
+  }
+
+  private class DroppableSearchResult {
+    @Nullable
+    private final Element foundDroppable;
+
+    DroppableSearchResult() {
+      this(null);
+    }
+
+    DroppableSearchResult(@Nullable Element foundDroppable) {
+      this.foundDroppable = foundDroppable;
+    }
+
+    @Nullable
+    public Element getFoundDroppable() {
+      return foundDroppable;
     }
   }
 }
