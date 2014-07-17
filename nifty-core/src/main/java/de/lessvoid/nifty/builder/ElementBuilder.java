@@ -456,7 +456,10 @@ public abstract class ElementBuilder {
   public void interactOnClick(@Nonnull String method) {
     interactAttributes.setOnClick(method);
   }
-
+  
+  public void interactOnMultiClick(@Nonnull String method){
+    interactAttributes.setOnMultiClick(method);
+  }
   public void interactOnRelease(@Nonnull final String onRelease) {
     interactAttributes.setOnRelease(onRelease);
   }

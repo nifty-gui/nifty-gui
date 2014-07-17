@@ -256,7 +256,9 @@ public class ControlAttributes {
   public void setInteractOnClick(@Nonnull final String onClick) {
     getInteract().setOnClick(onClick);
   }
-
+  public void setIneractOnMultiClick(@Nonnull final String onClick){
+    getInteract().setOnMultiClick(onClick);
+  }
   public void setInteractOnRelease(@Nonnull final String onRelease) {
     getInteract().setOnRelease(onRelease);
   }

@@ -389,7 +389,9 @@ public class StyleBuilder {
   public void interactOnClick(@Nonnull String method) {
     attributes.setInteractOnClick(method);
   }
-
+  public void interactOnMultiClick(@Nonnull String method){
+    attributes.setIneractOnMultiClick(method);
+  }
   public void interactOnRelease(@Nonnull final String onRelease) {
     attributes.setInteractOnRelease(onRelease);
   }
