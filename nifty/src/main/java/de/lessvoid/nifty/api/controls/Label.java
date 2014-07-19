@@ -1,13 +1,16 @@
 package de.lessvoid.nifty.api.controls;
 
+import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyNode;
 
 public class Label extends NiftyAbstractControl {
   private NiftyColor textColor = NiftyColor.WHITE();
   private String text;
+  private NiftyFont font;
 
   public void init(final NiftyNode niftyNode) {
     super.init(niftyNode);
@@ -50,11 +53,33 @@ public class Label extends NiftyAbstractControl {
     return textColor;
   }
 
+  /**
+   * Set the NiftyFont to use for this label.
+   *
+   * @param font the font to use
+   */
+  public void setFont(final NiftyFont font) {
+    this.font = font;
+  }
+
+  /**
+   * Get the NiftyFont this label uses.
+   *
+   * @return the NiftyFont
+   */
+  public NiftyFont getFont() {
+    return font;
+  }
+
   private class LabelCanvasPainter implements NiftyCanvasPainter {
+    private final NiftyCanvasPainterDefault defaultPainter = new NiftyCanvasPainterDefault();
+
     @Override
     public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+      defaultPainter.paint(node, canvas);
+
       canvas.setFillStyle(textColor);
-      canvas.fillRect(10, 10, 100, 100);
+      canvas.text(font, 0, 0, text);
     }
   }
 }

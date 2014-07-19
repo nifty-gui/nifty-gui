@@ -43,7 +43,7 @@ public class FontRenderer implements JGLFontRenderer {
       final int width,
       final int height,
       @Nonnull final String filename) throws IOException {
-    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.loadTexture("nifty.png")));// createTexture(width, height, data)));
+    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.createTexture(width, height, data)));
   }
 
   @Override

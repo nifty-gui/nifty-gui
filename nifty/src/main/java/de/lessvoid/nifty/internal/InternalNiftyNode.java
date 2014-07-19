@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import de.lessvoid.nifty.api.ChildLayout;
+import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.HorizontalAlignment;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCanvas;
@@ -18,7 +19,6 @@ import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
-import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvasPainterStandard;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.common.IdGenerator;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
@@ -68,7 +68,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   private NiftyColor backgroundColor = NiftyColor.TRANSPARENT();
 
   // If you don't set a specific NiftyCanvasPainter we use this one
-  private static final InternalNiftyCanvasPainterStandard standardPainter = new InternalNiftyCanvasPainterStandard();
+  private static final NiftyCanvasPainterDefault standardPainter = new NiftyCanvasPainterDefault();
 
   // The canvas.
   private NiftyCanvas canvas;

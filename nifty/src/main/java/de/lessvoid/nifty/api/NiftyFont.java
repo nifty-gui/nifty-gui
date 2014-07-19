@@ -15,6 +15,16 @@ public class NiftyFont {
     return font;
   }
 
+  /**
+   * Return the width of the given text String in px using.
+   *
+   * @param text the String to get the width for
+   * @return the width in px of the String
+   */
+  public int getWidth(final String text) {
+    return font.getStringWidth(text);
+  }
+
   static {
     NiftyFontAccessor.DEFAULT = new InternalNiftyFontAccessorImpl();
   }
