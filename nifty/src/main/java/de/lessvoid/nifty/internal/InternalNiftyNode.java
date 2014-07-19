@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.HorizontalAlignment;
+import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
@@ -15,7 +15,7 @@ import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
@@ -175,12 +175,12 @@ public class InternalNiftyNode implements InternalLayoutable {
     }
   }
 
-  public void setHorizontalAlignment(final HorizontalAlignment alignment) {
+  public void setHorizontalAlignment(final HAlign alignment) {
     constraints.setHorizontalAlign(alignment);
     needsLayout = true;
   }
 
-  public void setVerticalAlignment(final VerticalAlignment alignment) {
+  public void setVerticalAlignment(final VAlign alignment) {
     constraints.setVerticalAlign(alignment);
     needsLayout = true;
   }

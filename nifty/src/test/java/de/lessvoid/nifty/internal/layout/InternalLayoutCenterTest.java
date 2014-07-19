@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.HorizontalAlignment;
+import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutCenter;
@@ -47,8 +47,8 @@ public class InternalLayoutCenterTest {
   public void testCenterSingle() throws Exception {
     child.getBoxConstraints().setWidth(new UnitValue("100px"));
     child.getBoxConstraints().setHeight(new UnitValue("100px"));
-    child.getBoxConstraints().setHorizontalAlign(HorizontalAlignment.center);
-    child.getBoxConstraints().setVerticalAlign(VerticalAlignment.center);
+    child.getBoxConstraints().setHorizontalAlign(HAlign.center);
+    child.getBoxConstraints().setVerticalAlign(VAlign.center);
 
     layout.layoutElements(root, elements);
     Assert.assertBox(child.getLayoutPos(), 270, 190, 100, 100);
@@ -58,8 +58,8 @@ public class InternalLayoutCenterTest {
   public void testCenterSingleHeightSuffix() throws Exception {
     child.getBoxConstraints().setWidth(new UnitValue("75%h"));
     child.getBoxConstraints().setHeight(new UnitValue("100px"));
-    child.getBoxConstraints().setHorizontalAlign(HorizontalAlignment.center);
-    child.getBoxConstraints().setVerticalAlign(VerticalAlignment.center);
+    child.getBoxConstraints().setHorizontalAlign(HAlign.center);
+    child.getBoxConstraints().setVerticalAlign(VAlign.center);
 
     layout.layoutElements(root, elements);
     Assert.assertBox(child.getLayoutPos(), 282, 190, 75, 100);
@@ -69,8 +69,8 @@ public class InternalLayoutCenterTest {
   public void testCenterSingleWidthSuffix() throws Exception {
     child.getBoxConstraints().setWidth(new UnitValue("100px"));
     child.getBoxConstraints().setHeight(new UnitValue("75%w"));
-    child.getBoxConstraints().setHorizontalAlign(HorizontalAlignment.center);
-    child.getBoxConstraints().setVerticalAlign(VerticalAlignment.center);
+    child.getBoxConstraints().setHorizontalAlign(HAlign.center);
+    child.getBoxConstraints().setVerticalAlign(VAlign.center);
 
     layout.layoutElements(root, elements);
     Assert.assertBox(child.getLayoutPos(), 270, 202, 100, 75);

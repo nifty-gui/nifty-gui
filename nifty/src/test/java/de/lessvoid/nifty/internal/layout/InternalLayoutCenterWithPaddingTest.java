@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.HorizontalAlignment;
+import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
@@ -33,7 +33,7 @@ public class InternalLayoutCenterWithPaddingTest {
   public void testHorizontalAlignCenterWithBorder() throws Exception {
     constraint.setWidth(new UnitValue("100px"));
     constraint.setHeight(new UnitValue("100px"));
-    constraint.setHorizontalAlign(HorizontalAlignment.center);
+    constraint.setHorizontalAlign(HAlign.center);
 
     InternalLayoutableTestImpl child = prepare(constraint);
     Assert.assertBox(child.getLayoutPos(), 270, 190, 100, 100);
@@ -41,7 +41,7 @@ public class InternalLayoutCenterWithPaddingTest {
 
   @Test
   public void testHorizontalAlignCenterWithBorderNoConstraint() throws Exception {
-    constraint.setHorizontalAlign(HorizontalAlignment.center);
+    constraint.setHorizontalAlign(HAlign.center);
 
     InternalLayoutableTestImpl child = prepare(constraint);
     Assert.assertBox(child.getLayoutPos(), 50, 50, 540, 380);

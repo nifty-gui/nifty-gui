@@ -1,8 +1,8 @@
 package de.lessvoid.nifty.internal.layout;
 
-import de.lessvoid.nifty.api.HorizontalAlignment;
+import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.VAlign;
 
 /**
  * The BoxConstraints class represent constraints that will be used when a Layoutable is being layout. 
@@ -24,10 +24,10 @@ public class InternalBoxConstraints {
   private UnitValue height;
 
   // Horizontal Alignment Constraint.
-  private HorizontalAlignment horizontalAlign;
+  private HAlign horizontalAlign;
 
   // Vertical Alignment Constraint.
-  private VerticalAlignment verticalAlign;
+  private VAlign verticalAlign;
 
   // Left padding.
   private UnitValue paddingLeft;
@@ -61,8 +61,8 @@ public class InternalBoxConstraints {
     y = null;
     width = null;
     height = null;
-    horizontalAlign = HorizontalAlignment.horizontalDefault;
-    verticalAlign = VerticalAlignment.verticalDefault;
+    horizontalAlign = HAlign.horizontalDefault;
+    verticalAlign = VAlign.verticalDefault;
     paddingLeft = UnitValue.px(0);
     paddingRight = UnitValue.px(0);
     paddingTop = UnitValue.px(0);
@@ -87,8 +87,8 @@ public class InternalBoxConstraints {
       final UnitValue newY,
       final UnitValue newWidth,
       final UnitValue newHeight,
-      final HorizontalAlignment newHorizontalAlign,
-      final VerticalAlignment newVerticalAlign) {
+      final HAlign newHorizontalAlign,
+      final VAlign newVerticalAlign) {
     this();
     this.x = newX;
     this.y = newY;
@@ -187,7 +187,7 @@ public class InternalBoxConstraints {
    * Get the current horizontal align.
    * @return the current horizontal align.
    */
-  public HorizontalAlignment getHorizontalAlign() {
+  public HAlign getHorizontalAlign() {
     return horizontalAlign;
   }
 
@@ -195,7 +195,7 @@ public class InternalBoxConstraints {
    * Set a new horizontal align.
    * @param newHorizontalAlign the new horizontal align
    */
-  public void setHorizontalAlign(final HorizontalAlignment newHorizontalAlign) {
+  public void setHorizontalAlign(final HAlign newHorizontalAlign) {
     this.horizontalAlign = newHorizontalAlign;
   }
 
@@ -203,7 +203,7 @@ public class InternalBoxConstraints {
    * Get the current VerticalAlign.
    * @return the current VerticalAlign
    */
-  public VerticalAlignment getVerticalAlign() {
+  public VAlign getVerticalAlign() {
     return verticalAlign;
   }
 
@@ -211,7 +211,7 @@ public class InternalBoxConstraints {
    * Set a new VerticalAlign.
    * @param newVerticalAlign the new vertical align
    */
-  public void setVerticalAlign(final VerticalAlignment newVerticalAlign) {
+  public void setVerticalAlign(final VAlign newVerticalAlign) {
     this.verticalAlign = newVerticalAlign;
   }
 

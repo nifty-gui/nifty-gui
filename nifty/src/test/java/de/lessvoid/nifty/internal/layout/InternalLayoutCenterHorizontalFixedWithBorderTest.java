@@ -3,7 +3,7 @@ package de.lessvoid.nifty.internal.layout;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.HorizontalAlignment;
+import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
@@ -40,21 +40,21 @@ public class InternalLayoutCenterHorizontalFixedWithBorderTest {
 
   @Test
   public void testHorizontalAlignLeftFixedWidth() {
-    constraint.setHorizontalAlign(HorizontalAlignment.left);
+    constraint.setHorizontalAlign(HAlign.left);
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     Assert.assertBoxLeftWidth(box, 50, 100);
   }
 
   @Test
   public void testHorizontalAlignRightFixedWidth() {
-    constraint.setHorizontalAlign(HorizontalAlignment.right);
+    constraint.setHorizontalAlign(HAlign.right);
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     Assert.assertBoxLeftWidth(box, 640 - 100, 100);
   }
 
   @Test
   public void testHorizontalAlignCenterFixedWidth() {
-    constraint.setHorizontalAlign(HorizontalAlignment.center);
+    constraint.setHorizontalAlign(HAlign.center);
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     Assert.assertBoxLeftWidth(box, 270, 100);
   }

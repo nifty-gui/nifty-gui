@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutCenter;
@@ -36,21 +36,21 @@ public class InternalLayoutCenterVerticalFixedWithBorderTest {
 
   @Test
   public void testVerticalAlignTopFixedWidth() {
-    constraint.setVerticalAlign(VerticalAlignment.top);
+    constraint.setVerticalAlign(VAlign.top);
     layout.handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
     Assert.assertBoxTopHeight(box, 50, 100);
   }
 
   @Test
   public void testVerticalAlignBottomFixedWidth() {
-    constraint.setVerticalAlign(VerticalAlignment.bottom);
+    constraint.setVerticalAlign(VAlign.bottom);
     layout.handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
     Assert.assertBoxTopHeight(box, 480 - 100 - 50 + 50, 100);
   }
 
   @Test
   public void testVerticalAlignCenterFixedWidth() {
-    constraint.setVerticalAlign(VerticalAlignment.center);
+    constraint.setVerticalAlign(VAlign.center);
     layout.handleVerticalAlignment(rootBox, rootBoxConstraints, box, constraint);
     Assert.assertBoxTopHeight(box, 190, 100);
   }

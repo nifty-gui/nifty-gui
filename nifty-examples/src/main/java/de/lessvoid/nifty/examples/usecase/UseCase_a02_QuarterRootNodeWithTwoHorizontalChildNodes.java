@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.HorizontalAlignment;
+import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
@@ -23,7 +23,7 @@ public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes implements U
     rootNode = nifty.createRootNode(UnitValue.percent(50), UnitValue.percent(50), ChildLayout.Horizontal);
 
     // By changing the rootNode horizontal alignment we move it to the right. This makes it appear in the upper right.
-    rootNode.setHorizontalAlignment(HorizontalAlignment.right);
+    rootNode.setHorizontalAlignment(HAlign.right);
 
     // add two child nodes to the root node
     rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff08"));

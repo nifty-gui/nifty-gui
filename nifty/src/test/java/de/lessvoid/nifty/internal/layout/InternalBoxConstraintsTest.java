@@ -6,9 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.HorizontalAlignment;
+import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 
 public class InternalBoxConstraintsTest {
@@ -20,8 +20,8 @@ public class InternalBoxConstraintsTest {
     assertNull(box.getY());
     assertNull(box.getWidth());
     assertNull(box.getHeight());
-    assertEquals(HorizontalAlignment.horizontalDefault, box.getHorizontalAlign());
-    assertEquals(VerticalAlignment.verticalDefault, box.getVerticalAlign());
+    assertEquals(HAlign.horizontalDefault, box.getHorizontalAlign());
+    assertEquals(VAlign.verticalDefault, box.getVerticalAlign());
   }
 
   @Test
@@ -31,14 +31,14 @@ public class InternalBoxConstraintsTest {
         new UnitValue("200px"),
         new UnitValue("300px"),
         new UnitValue("400px"),
-        HorizontalAlignment.right,
-        VerticalAlignment.bottom);
+        HAlign.right,
+        VAlign.bottom);
     assertEquals("100px", box.getX().toString());
     assertEquals("200px", box.getY().toString());
     assertEquals("300px", box.getWidth().toString());
     assertEquals("400px", box.getHeight().toString());
-    assertEquals(HorizontalAlignment.right, box.getHorizontalAlign());
-    assertEquals(VerticalAlignment.bottom, box.getVerticalAlign());
+    assertEquals(HAlign.right, box.getHorizontalAlign());
+    assertEquals(VAlign.bottom, box.getVerticalAlign());
   }
 
   @Test
@@ -48,8 +48,8 @@ public class InternalBoxConstraintsTest {
         new UnitValue("200px"),
         new UnitValue("300px"),
         new UnitValue("400px"),
-        HorizontalAlignment.right,
-        VerticalAlignment.bottom);
+        HAlign.right,
+        VAlign.bottom);
     assertTrue(box.toString().startsWith(
         "InternalBoxConstraints [x=100px, y=200px, width=300px, height=400px, " +
         "horizontalAlign=right, verticalAlign=bottom, " +
@@ -65,8 +65,8 @@ public class InternalBoxConstraintsTest {
     assertNull(copy.getY());
     assertNull(copy.getWidth());
     assertNull(copy.getHeight());
-    assertEquals(HorizontalAlignment.horizontalDefault, copy.getHorizontalAlign());
-    assertEquals(VerticalAlignment.verticalDefault, copy.getVerticalAlign());
+    assertEquals(HAlign.horizontalDefault, copy.getHorizontalAlign());
+    assertEquals(VAlign.verticalDefault, copy.getVerticalAlign());
   }
 
   @Test
@@ -76,13 +76,13 @@ public class InternalBoxConstraintsTest {
     b.setY(new UnitValue("200px"));
     b.setWidth(new UnitValue("300px"));
     b.setHeight(new UnitValue("400px"));
-    b.setHorizontalAlign(HorizontalAlignment.right);
-    b.setVerticalAlign(VerticalAlignment.bottom);
+    b.setHorizontalAlign(HAlign.right);
+    b.setVerticalAlign(VAlign.bottom);
     assertEquals("100px", b.getX().toString());
     assertEquals("200px", b.getY().toString());
     assertEquals("300px", b.getWidth().toString());
     assertEquals("400px", b.getHeight().toString());
-    assertEquals(HorizontalAlignment.right, b.getHorizontalAlign());
-    assertEquals(VerticalAlignment.bottom, b.getVerticalAlign());
+    assertEquals(HAlign.right, b.getHorizontalAlign());
+    assertEquals(VAlign.bottom, b.getVerticalAlign());
   }
 }

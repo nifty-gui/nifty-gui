@@ -5,7 +5,7 @@ package de.lessvoid.nifty.api;
  * 
  * @author void
  */
-public enum HorizontalAlignment {
+public enum HAlign {
   /**
    * default alignment - the real value will be decided by the layout process.
    */

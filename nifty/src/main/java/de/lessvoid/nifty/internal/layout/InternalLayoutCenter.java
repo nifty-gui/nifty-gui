@@ -2,8 +2,8 @@ package de.lessvoid.nifty.internal.layout;
 
 import java.util.List;
 
-import de.lessvoid.nifty.api.HorizontalAlignment;
-import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.HAlign;
+import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.internal.common.Box;
 
 /**
@@ -116,9 +116,9 @@ public class InternalLayoutCenter implements InternalLayout {
     }
     box.setWidth(boxWidth);
 
-    if (constraint.getHorizontalAlign() == HorizontalAlignment.left) {
+    if (constraint.getHorizontalAlign() == HAlign.left) {
       box.setX(rootBoxX);
-    } else if (constraint.getHorizontalAlign() == HorizontalAlignment.right) {
+    } else if (constraint.getHorizontalAlign() == HAlign.right) {
       box.setX(rootBoxX +
                rootBox.getWidth() -
                rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()) - boxWidth);
@@ -144,9 +144,9 @@ public class InternalLayoutCenter implements InternalLayout {
     }
     box.setHeight(boxHeight);
 
-    if (constraint.getVerticalAlign() == VerticalAlignment.top) {
+    if (constraint.getVerticalAlign() == VAlign.top) {
       box.setY(rootBoxY);
-    } else if (constraint.getVerticalAlign() == VerticalAlignment.bottom) {
+    } else if (constraint.getVerticalAlign() == VAlign.bottom) {
       box.setY(rootBoxY +
                rootBox.getHeight() -
                rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight()) - boxHeight);

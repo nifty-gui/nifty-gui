@@ -2,7 +2,7 @@ package de.lessvoid.nifty.internal.layout;
 
 import java.util.List;
 
-import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.internal.common.Box;
 
 /**
@@ -122,11 +122,11 @@ public class InternalLayoutHorizontal implements InternalLayout {
       final int rootBoxHeight,
       final Box box,
       final InternalBoxConstraints boxConstraints) {
-    if (VerticalAlignment.center.equals(boxConstraints.getVerticalAlign())) {
+    if (VAlign.center.equals(boxConstraints.getVerticalAlign())) {
       return rootBoxY + ((rootBoxHeight - box.getHeight()) / 2);
-    } else if (VerticalAlignment.top.equals(boxConstraints.getVerticalAlign())) {
+    } else if (VAlign.top.equals(boxConstraints.getVerticalAlign())) {
       return rootBoxY;
-    } else if (VerticalAlignment.bottom.equals(boxConstraints.getVerticalAlign())) {
+    } else if (VAlign.bottom.equals(boxConstraints.getVerticalAlign())) {
       return rootBoxY + (rootBoxHeight - box.getHeight());
     } else {
       // top is default in here

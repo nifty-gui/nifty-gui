@@ -5,7 +5,7 @@ package de.lessvoid.nifty.api;
  * 
  * @author void
  */
-public enum VerticalAlignment {
+public enum VAlign {
   /**
    * default value - the actual alignment is decided later
    */

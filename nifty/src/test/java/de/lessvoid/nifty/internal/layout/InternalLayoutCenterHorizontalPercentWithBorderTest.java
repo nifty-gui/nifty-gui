@@ -3,7 +3,7 @@ package de.lessvoid.nifty.internal.layout;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.HorizontalAlignment;
+import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
@@ -33,7 +33,7 @@ public class InternalLayoutCenterHorizontalPercentWithBorderTest {
 
   @Test
   public void testHorizontalAlignLeftPercentWidth() {
-    constraint.setHorizontalAlign(HorizontalAlignment.left);
+    constraint.setHorizontalAlign(HAlign.left);
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     int width = (640 - 100) / 2;
     Assert.assertBoxLeftWidth(box, 50, width);
@@ -41,7 +41,7 @@ public class InternalLayoutCenterHorizontalPercentWithBorderTest {
 
   @Test
   public void testHorizontalAlignRightPercentWidth() {
-    constraint.setHorizontalAlign(HorizontalAlignment.right);
+    constraint.setHorizontalAlign(HAlign.right);
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     int width = (640 - 100) / 2;
     Assert.assertBoxLeftWidth(box, 640 - width, width);
@@ -49,7 +49,7 @@ public class InternalLayoutCenterHorizontalPercentWithBorderTest {
 
   @Test
   public void testHorizontalAlignCenterPercentWidth() {
-    constraint.setHorizontalAlign(HorizontalAlignment.center);
+    constraint.setHorizontalAlign(HAlign.center);
     layout.handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     Assert.assertBoxLeftWidth(box, 50 + ((640 - 100) / 2) / 2, (640 - 100) / 2);
   }

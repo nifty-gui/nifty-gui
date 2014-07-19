@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.VerticalAlignment;
+import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutHorizontal;
@@ -92,7 +92,7 @@ public class InternalLayoutHorizontalTest {
   @Test
   public void testLayoutFixedWidthTopAlign() {
     left.getBoxConstraints().setWidth(new UnitValue("20px"));
-    left.getBoxConstraints().setVerticalAlign(VerticalAlignment.top);
+    left.getBoxConstraints().setVerticalAlign(VAlign.top);
     layout.layoutElements(rootPanel, elements);
 
     Assert.assertBox(left.getLayoutPos(), 0, 0, 20, 480);
@@ -101,7 +101,7 @@ public class InternalLayoutHorizontalTest {
   @Test
   public void testLayoutFixedHeightCenterAlign() {
     left.getBoxConstraints().setHeight(new UnitValue("20px"));
-    left.getBoxConstraints().setVerticalAlign(VerticalAlignment.center);
+    left.getBoxConstraints().setVerticalAlign(VAlign.center);
     layout.layoutElements(rootPanel, elements);
 
     Assert.assertBox(left.getLayoutPos(), 0, 230, 320, 20);
@@ -110,7 +110,7 @@ public class InternalLayoutHorizontalTest {
   @Test
   public void testLayoutFixedHeightBottomAlign() {
     left.getBoxConstraints().setHeight(new UnitValue("20px"));
-    left.getBoxConstraints().setVerticalAlign(VerticalAlignment.bottom);
+    left.getBoxConstraints().setVerticalAlign(VAlign.bottom);
     layout.layoutElements(rootPanel, elements);
 
     Assert.assertBox(left.getLayoutPos(), 0, 460, 320, 20);
