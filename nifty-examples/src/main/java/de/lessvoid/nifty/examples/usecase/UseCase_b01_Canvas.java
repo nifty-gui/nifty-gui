@@ -22,7 +22,7 @@ public class UseCase_b01_Canvas implements UseCaseUpdateable {
     niftyNode.setBackgroundColor(NiftyColor.GREEN());
 
     child = niftyNode.newChildNode(UnitValue.percent(50), UnitValue.percent(50));
-    child.setContent(new NiftyCanvasPainter() {
+    child.setCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         // fill the whole node content with a plain white color

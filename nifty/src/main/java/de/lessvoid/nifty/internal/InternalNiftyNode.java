@@ -1,16 +1,17 @@
 package de.lessvoid.nifty.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.HorizontalAlignment;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
+import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
@@ -73,8 +74,8 @@ public class InternalNiftyNode implements InternalLayoutable {
   // The canvas.
   private NiftyCanvas canvas;
 
-  // The canvas painter.
-  private NiftyCanvasPainter canvasPainter = standardPainter;
+  // The canvas painters. Initialized with a single entry, the NiftyCanvasPainterDefault.
+  private List<NiftyCanvasPainter> canvasPainters = new ArrayList<NiftyCanvasPainter>(Arrays.asList(standardPainter));
 
   // The public Node that this node is linked to.
   private NiftyNode niftyNode;
@@ -278,8 +279,13 @@ public class InternalNiftyNode implements InternalLayoutable {
     angleZ = angle;
   }
 
-  public void setContent(final NiftyCanvasPainter painter) {
-    this.canvasPainter = painter;
+  public void setCanvasPainter(final NiftyCanvasPainter painter) {
+    canvasPainters.clear();
+    canvasPainters.add(painter);
+  }
+
+  public void addCanvasPainter(final NiftyCanvasPainter painter) {
+    canvasPainters.add(painter);
   }
 
   public void requestRedraw() {
@@ -348,7 +354,10 @@ public class InternalNiftyNode implements InternalLayoutable {
       InternalNiftyCanvas internalCanvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
       internalCanvas.reset();
 
-      canvasPainter.paint(niftyNode, canvas);
+      for (int i=0; i<canvasPainters.size(); i++) {
+        canvasPainters.get(i).paint(niftyNode, canvas);
+      }
+
       requestRedraw = false;
     }
 

@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.api.controls;
 
-import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
@@ -14,7 +13,7 @@ public class Label extends NiftyAbstractControl {
 
   public void init(final NiftyNode niftyNode) {
     super.init(niftyNode);
-    niftyNode.setContent(new LabelCanvasPainter());
+    niftyNode.addCanvasPainter(new LabelCanvasPainter());
   }
 
   /**
@@ -72,12 +71,8 @@ public class Label extends NiftyAbstractControl {
   }
 
   private class LabelCanvasPainter implements NiftyCanvasPainter {
-    private final NiftyCanvasPainterDefault defaultPainter = new NiftyCanvasPainterDefault();
-
     @Override
     public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-      defaultPainter.paint(node, canvas);
-
       canvas.setFillStyle(textColor);
       canvas.text(font, 0, 0, text);
     }

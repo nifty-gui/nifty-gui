@@ -23,7 +23,7 @@ public class UseCase_b02_CanvasLinearGradient {
 
     child = niftyNode.newChildNode(UnitValue.percent(100), UnitValue.percent(100));
     child.setBackgroundColor(NiftyColor.RED());
-    child.setContent(new NiftyCanvasPainter() {
+    child.setCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         canvas.setFillStyle(NiftyColor.BLUE());

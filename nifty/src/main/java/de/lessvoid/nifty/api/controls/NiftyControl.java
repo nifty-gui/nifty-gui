@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.api.controls;
 
 import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.UnitValue;
 
 /**
  * Interface for all Nifty Controls.
@@ -22,34 +21,6 @@ public interface NiftyControl {
    * @return the NiftyNode
    */
   NiftyNode getNode();
-
-  /**
-   * Get width as px value.
-   *
-   * @return width
-   */
-  int getWidth();
-
-  /**
-   * Set width as UnitValue.
-   *
-   * @param width width
-   */
-  void setWidth(UnitValue width);
-
-  /**
-   * Get height as px value.
-   *
-   * @return height
-   */
-  int getHeight();
-
-  /**
-   * Set Height as UnitValue.
-   *
-   * @param height new height
-   */
-  void setHeight(UnitValue height);
 
   /**
    * Enable the control.

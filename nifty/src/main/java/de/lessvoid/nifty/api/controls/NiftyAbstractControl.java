@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.api.controls;
 
 import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.UnitValue;
 
 /**
  * This abstract class already implements a couple of NiftyControl method. Use this class as the base class for
@@ -19,26 +18,6 @@ public abstract class NiftyAbstractControl implements NiftyControl {
   @Override
   public NiftyNode getNode() {
     return niftyNode;
-  }
-
-  @Override
-  public int getWidth() {
-    return niftyNode.getWidth();
-  }
-
-  @Override
-  public void setWidth(final UnitValue width) {
-    niftyNode.setWidthConstraint(width);
-  }
-
-  @Override
-  public int getHeight() {
-    return niftyNode.getHeight();
-  }
-
-  @Override
-  public void setHeight(final UnitValue height) {
-    niftyNode.setHeightConstraint(height);
   }
 
   @Override

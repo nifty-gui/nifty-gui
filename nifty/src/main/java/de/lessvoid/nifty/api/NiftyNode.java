@@ -258,8 +258,19 @@ public class NiftyNode {
    *
    * @param painter the NiftyCanvasPainter instance to use for this Node
    */
-  public void setContent(final NiftyCanvasPainter painter) {
-    impl.setContent(painter);
+  public void setCanvasPainter(final NiftyCanvasPainter painter) {
+    impl.setCanvasPainter(painter);
+  }
+
+  /**
+   * Add a NiftyCanvasPainter for the NiftyNode. This means you'd like to keep the canvas painters already available for
+   * this node and add your own one. This method is helpful if you want to keep the standard canvas painter and just
+   * add additional rendering on top of it.
+   *
+   * @param painter the NiftyCanvasPainter instance to add for this Node
+   */
+  public void addCanvasPainter(final NiftyCanvasPainter painter) {
+    impl.addCanvasPainter(painter);
   }
 
   /**
@@ -325,7 +336,8 @@ public class NiftyNode {
   }
 
   /**
-   * Create a new NiftyControl and make this node it's parent.
+   * Create a new NiftyControl and make this node it's parent. Internally this method will create a regular NiftyNode
+   * that will be attached to the NiftyControl.
    * 
    * @return a new NiftyControl
    */

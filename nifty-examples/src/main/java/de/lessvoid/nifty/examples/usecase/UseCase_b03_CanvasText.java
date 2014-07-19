@@ -22,7 +22,7 @@ public class UseCase_b03_CanvasText {
     final NiftyFont font = nifty.createFont("fonts/verdana-small-regular.fnt");
 
     niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
-    niftyNode.setContent(new NiftyCanvasPainter() {
+    niftyNode.setCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         canvas.setFillStyle(NiftyColor.BLUE());
