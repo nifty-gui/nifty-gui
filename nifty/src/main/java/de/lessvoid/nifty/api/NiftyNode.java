@@ -64,8 +64,8 @@ public class NiftyNode {
    * @param alignment
    *          the new horizontal alignment
    */
-  public void setHorizontalAlignment(final HAlign alignment) {
-    impl.setHorizontalAlignment(alignment);
+  public void setHAlign(final HAlign alignment) {
+    impl.setHAlign(alignment);
   }
 
   /**
@@ -74,8 +74,8 @@ public class NiftyNode {
    * @param alignment
    *          the new vertical alignment
    */
-  public void setVerticalAlignment(final VAlign alignment) {
-    impl.setVerticalAlignment(alignment);
+  public void setVAlign(final VAlign alignment) {
+    impl.setVAlign(alignment);
   }
 
   /**

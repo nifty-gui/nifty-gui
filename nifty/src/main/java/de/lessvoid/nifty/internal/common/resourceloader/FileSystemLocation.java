@@ -1,20 +1,23 @@
 package de.lessvoid.nifty.internal.common.resourceloader;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.WillNotClose;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.WillNotClose;
+
+import de.lessvoid.nifty.api.NiftyResourceLocation;
+
 /**
  * A resource loading location that searches somewhere on the classpath
  *
  * @author kevin
  */
-public class FileSystemLocation implements ResourceLocation {
+public class FileSystemLocation implements NiftyResourceLocation {
   /**
    * The root of the file system to search
    */

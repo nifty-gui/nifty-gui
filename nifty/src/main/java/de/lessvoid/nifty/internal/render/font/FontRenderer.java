@@ -33,7 +33,7 @@ public class FontRenderer implements JGLFontRenderer {
   @Override
   public void registerBitmap(@Nonnull final String bitmapId, final InputStream data, @Nonnull final String filename)
       throws IOException {
-    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.loadTexture(filename)));
+    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.loadTexture(filename, false)));
   }
 
   @Override
@@ -43,7 +43,7 @@ public class FontRenderer implements JGLFontRenderer {
       final int width,
       final int height,
       @Nonnull final String filename) throws IOException {
-    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.createTexture(width, height, data)));
+    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.createTexture(width, height, data, false)));
   }
 
   @Override
@@ -59,7 +59,7 @@ public class FontRenderer implements JGLFontRenderer {
       final float u1,
       final float v1) {
     BitmapInfo textureInfo = textureInfos.get(bitmapId);
-    textureInfo.addCharRenderInfo(c, new CharRenderInfo(xoff, yoff, w, h, u0, v0));
+    textureInfo.addCharRenderInfo(c, new CharRenderInfo(xoff, yoff, w, h, u0, v0, u1, v1));
   }
 
   @Override
@@ -140,14 +140,18 @@ public class FontRenderer implements JGLFontRenderer {
     final int h;
     final float u0;
     final float v0;
+    final float u1;
+    final float v1;
 
-    public CharRenderInfo(final int xoff, final int yoff, final int w, final int h, final float u0, final float v0) {
+    public CharRenderInfo(final int xoff, final int yoff, final int w, final int h, final float u0, final float v0, final float u1, final float v1) {
       this.xoff = xoff;
       this.yoff = yoff;
       this.w = w;
       this.h = h;
       this.u0 = u0;
       this.v0 = v0;
+      this.u1 = u1;
+      this.v1 = v1;
     }
 
     public void renderQuad(
@@ -162,20 +166,16 @@ public class FontRenderer implements JGLFontRenderer {
         final double u1,
         final double v1) {
       batchManager.addTextureQuad(image, Mat4.createIdentity(),
-          (double) (x + (float) Math.floor(xoff * sx)),
-          (double) (y + (float) Math.floor(yoff * sy)),
-          (int) (w * sx),
-          (int) (h * sy),
+          (double) (x + Math.floor(xoff * sx)),
+          (double) (y + Math.floor(yoff * sy)),
+          (int) (Math.floor(w * sx)),
+          (int) (Math.floor(h * sy)),
           u0 + this.u0,
           v0 + this.v0,
-          u0 + this.u0 + calcU(w, image.getWidth()),
-          v0 + this.v0 + calcU(h, image.getHeight()),
+          u0 + this.u1,
+          v0 + this.v1,
           textColor);
     }
-  }
-
-  private float calcU(final int value, final int max) {
-    return (0.5f / (float) max) + (value / (float) max);
   }
 
   // BitmapInfo

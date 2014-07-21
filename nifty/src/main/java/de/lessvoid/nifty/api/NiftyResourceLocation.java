@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.internal.common.resourceloader;
+package de.lessvoid.nifty.api;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -11,7 +11,7 @@ import java.net.URL;
  *
  * @author kevin
  */
-public interface ResourceLocation {
+public interface NiftyResourceLocation {
   /**
    * Get a resource as an input stream
    *

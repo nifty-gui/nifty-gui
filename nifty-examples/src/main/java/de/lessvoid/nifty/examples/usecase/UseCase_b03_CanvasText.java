@@ -19,7 +19,7 @@ public class UseCase_b03_CanvasText {
   private final NiftyNode niftyNode;
 
   public UseCase_b03_CanvasText(final Nifty nifty) throws IOException {
-    final NiftyFont font = nifty.createFont("fonts/verdana-small-regular.fnt");
+    final NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
 
     niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setCanvasPainter(new NiftyCanvasPainter() {
@@ -29,7 +29,7 @@ public class UseCase_b03_CanvasText {
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         canvas.setTextColor(NiftyColor.WHITE());
-        canvas.text(font, 10, 10, "abcdefghijklmnopqrstuvwxyz");
+        canvas.text(font, 10, 10, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
         canvas.setTextColor(NiftyColor.RED());
         canvas.setTextSize(1.2f);
@@ -45,7 +45,7 @@ public class UseCase_b03_CanvasText {
 
         canvas.setTextColor(NiftyColor.WHITE());
         canvas.setTextSize(2.0f);
-        canvas.text(font, 10, 150, "Hello Nifty 2.0 Text");
+        canvas.text(font, 10, 150, "ABC Hello Nifty 2.0 Text");
 }
     });
   }

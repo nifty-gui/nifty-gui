@@ -70,7 +70,7 @@ public class RendererNodeSync {
         node.getWidth(),
         node.getHeight(),
         node.getCanvas().getCommands(),
-        renderDevice.createTexture(node.getWidth(), node.getHeight()),
+        renderDevice.createTexture(node.getWidth(), node.getHeight(), true),
         renderDevice);
 
     for (int i=0; i<node.getChildren().size(); i++) {

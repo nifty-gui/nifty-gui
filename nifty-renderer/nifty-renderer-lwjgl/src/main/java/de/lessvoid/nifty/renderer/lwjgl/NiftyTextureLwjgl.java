@@ -7,7 +7,7 @@ import de.lessvoid.coregl.CoreTexture2D;
 import de.lessvoid.coregl.CoreTexture2D.ColorFormat;
 import de.lessvoid.coregl.CoreTexture2D.ResizeFilter;
 import de.lessvoid.coregl.CoreTexture2D.Type;
-import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
+import de.lessvoid.nifty.api.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.render.io.ImageLoader;
 import de.lessvoid.nifty.internal.render.io.ImageLoaderFactory;
 import de.lessvoid.nifty.spi.NiftyTexture;
@@ -18,22 +18,25 @@ public class NiftyTextureLwjgl implements NiftyTexture {
   public NiftyTextureLwjgl(
       final CoreFactory coreFactory,
       final int width,
-      final int height) {
-    texture = coreFactory.createEmptyTexture(ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, ResizeFilter.Linear);
+      final int height,
+      final boolean linear) {
+    texture = coreFactory.createEmptyTexture(ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear));
   }
 
   public NiftyTextureLwjgl(
       final CoreFactory coreFactory,
       final int width,
       final int height,
-      final ByteBuffer data) {
-    texture = coreFactory.createTexture(ColorFormat.RGBA, width, height, data, ResizeFilter.Linear);
+      final ByteBuffer data,
+      final boolean linear) {
+    texture = coreFactory.createTexture(ColorFormat.RGBA, width, height, data, resizeFilter(linear));
   }
 
   public NiftyTextureLwjgl(
       final CoreFactory coreFactory,
       final NiftyResourceLoader resourceLoader,
-      final String filename) {
+      final String filename,
+      final boolean linear) {
     try {
       ImageLoader imageLoader = ImageLoaderFactory.createImageLoader(filename);
       ByteBuffer data = imageLoader.loadAsByteBufferRGBA(resourceLoader.getResourceAsStream(filename));
@@ -42,7 +45,7 @@ public class NiftyTextureLwjgl implements NiftyTexture {
           imageLoader.getImageWidth(),
           imageLoader.getImageHeight(),
           data,
-          ResizeFilter.Linear);
+          resizeFilter(linear));
     } catch (Exception e) {
       throw new RuntimeException("Could not load image from file: [" + filename + "]", e);
     }
@@ -84,5 +87,12 @@ public class NiftyTextureLwjgl implements NiftyTexture {
   @Override
   public double getU1() {
     return 1.0;
+  }
+
+  private ResizeFilter resizeFilter(final boolean linear) {
+    if (linear) {
+      return ResizeFilter.Linear;
+    }
+    return ResizeFilter.Nearest;
   }
 }

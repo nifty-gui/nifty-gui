@@ -175,12 +175,12 @@ public class InternalNiftyNode implements InternalLayoutable {
     }
   }
 
-  public void setHorizontalAlignment(final HAlign alignment) {
+  public void setHAlign(final HAlign alignment) {
     constraints.setHorizontalAlign(alignment);
     needsLayout = true;
   }
 
-  public void setVerticalAlignment(final VAlign alignment) {
+  public void setVAlign(final VAlign alignment) {
     constraints.setVerticalAlign(alignment);
     needsLayout = true;
   }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
@@ -17,6 +18,13 @@ public class BatchManager {
 
   public void begin() {
     activeBatches.clear();
+
+    // we always start with blend mode enabled
+    changeBlendMode(BlendMode.BLEND);
+  }
+
+  public void changeBlendMode(final BlendMode blendMode) {
+    activeBatches.add(new ChangeBlendModeBatch(blendMode));
   }
 
   public void addTextureQuad(final NiftyTexture niftyTexture, final Mat4 mat, final NiftyColor color) {

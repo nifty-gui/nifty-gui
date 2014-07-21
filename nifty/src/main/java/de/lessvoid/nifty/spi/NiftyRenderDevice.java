@@ -5,8 +5,9 @@ import java.nio.FloatBuffer;
 
 import javax.annotation.Nonnull;
 
+import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
-import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
+import de.lessvoid.nifty.api.NiftyResourceLoader;
 
 /**
  * NiftyRenderDevice is part of the SPI that allows Nifty to use different graphics backends. Everything that can
@@ -47,7 +48,7 @@ public interface NiftyRenderDevice {
    * @param height the height of the texture
    * @return NiftyTexture
    */
-  NiftyTexture createTexture(int width, int height);
+  NiftyTexture createTexture(int width, int height, boolean filterLinear);
 
   /**
    * Create a texture of the given width and height and initialize it with the given pixel data.
@@ -57,7 +58,7 @@ public interface NiftyRenderDevice {
    * @param data the pixel data of the texture
    * @return NiftyTexture
    */
-  NiftyTexture createTexture(int width, int height, ByteBuffer data);
+  NiftyTexture createTexture(int width, int height, ByteBuffer data, boolean filterLinear);
 
   /**
    * Load an image and return a NiftyTexture from the image.
@@ -65,7 +66,7 @@ public interface NiftyRenderDevice {
    * @param filename the image filename to load
    * @return NiftyTexture
    */
-  NiftyTexture loadTexture(String filename);
+  NiftyTexture loadTexture(String filename, boolean filterLinear);
 
   void render(NiftyTexture renderTarget, FloatBuffer vertices);
   void renderColorQuads(FloatBuffer vertices);
@@ -76,6 +77,8 @@ public interface NiftyRenderDevice {
 
   void beginRenderToTexture(NiftyTexture texture);
   void endRenderToTexture(NiftyTexture texture);
+
+  void changeBlendMode(BlendMode blendMode);
 
 
 }

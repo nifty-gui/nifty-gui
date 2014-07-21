@@ -1,9 +1,19 @@
 package de.lessvoid.nifty.renderer.lwjgl;
 
+import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DST_COLOR;
+import static org.lwjgl.opengl.GL11.GL_ONE;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_ZERO;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glViewport;
+import static org.lwjgl.opengl.GL14.glBlendFuncSeparate;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -20,9 +30,10 @@ import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.CoreVBO.DataType;
 import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
+import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
-import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
+import de.lessvoid.nifty.api.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
 import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
@@ -112,18 +123,18 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public NiftyTexture createTexture(final int width, final int height) {
-    return new NiftyTextureLwjgl(coreFactory, width, height);
+  public NiftyTexture createTexture(final int width, final int height, final boolean filterLinear) {
+    return new NiftyTextureLwjgl(coreFactory, width, height, filterLinear);
   }
 
   @Override
-  public NiftyTexture createTexture(final int width, final int height, final ByteBuffer data) {
-    return new NiftyTextureLwjgl(coreFactory, width, height, data);
+  public NiftyTexture createTexture(final int width, final int height, final ByteBuffer data, final boolean filterLinear) {
+    return new NiftyTextureLwjgl(coreFactory, width, height, data, filterLinear);
   }
 
   @Override
-  public NiftyTexture loadTexture(final String filename) {
-    return new NiftyTextureLwjgl(coreFactory, resourceLoader, filename);
+  public NiftyTexture loadTexture(final String filename, final boolean filterLinear) {
+    return new NiftyTextureLwjgl(coreFactory, resourceLoader, filename, filterLinear);
   }
 
   @Override
@@ -238,6 +249,30 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   public void endRenderToTexture(final NiftyTexture texture) {
     fbo.disableAndResetViewport();
     mvp = MatrixFactory.createOrtho(0, getDisplayWidth(), getDisplayHeight(), 0);
+  }
+
+  @Override
+  public void changeBlendMode(final BlendMode blendMode) {
+    switch (blendMode) {
+    case OFF:
+        glDisable(GL_BLEND);
+        break;
+
+    case BLEND:
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        break;
+
+    case BLEND_SEP:
+      glEnable(GL_BLEND);
+      glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+      break;
+
+    case MULTIPLY:
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_DST_COLOR, GL_ZERO);
+        break;
+    }
   }
 
   private int getTextureId(final NiftyTexture texture) {

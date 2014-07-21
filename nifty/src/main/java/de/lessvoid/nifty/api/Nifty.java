@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lessvoid.nifty.internal.InternalNiftyImage;
 import org.jglfont.JGLFontFactory;
 
+import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
-import de.lessvoid.nifty.internal.common.resourceloader.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
@@ -144,7 +143,7 @@ public class Nifty {
    * @return a new NiftyImage
    */
   public NiftyImage createNiftyImage(final String filename) {
-    return NiftyImage.newInstance(InternalNiftyImage.newImage(renderDevice.loadTexture(filename)));
+    return NiftyImage.newInstance(InternalNiftyImage.newImage(renderDevice.loadTexture(filename, true)));
   }
 
   /**

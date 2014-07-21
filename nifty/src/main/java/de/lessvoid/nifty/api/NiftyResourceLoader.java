@@ -1,13 +1,17 @@
-package de.lessvoid.nifty.internal.common.resourceloader;
+package de.lessvoid.nifty.api;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import de.lessvoid.nifty.internal.common.resourceloader.ClasspathLocation;
+import de.lessvoid.nifty.internal.common.resourceloader.FileSystemLocation;
 
 /**
  * A simple wrapper around resource loading should anyone decide to change their minds how this is meant to work in
@@ -21,10 +25,10 @@ public class NiftyResourceLoader {
    * The list of locations to be searched
    */
   @Nonnull
-  private final List<ResourceLocation> locations;
+  private final List<NiftyResourceLocation> locations;
 
   public NiftyResourceLoader() {
-    locations = new ArrayList<ResourceLocation>();
+    locations = new ArrayList<NiftyResourceLocation>();
     locations.add(new ClasspathLocation());
     locations.add(new FileSystemLocation(new File(".")));
   }
@@ -34,7 +38,7 @@ public class NiftyResourceLoader {
    *
    * @param location The location that will be searched for resources
    */
-  public void addResourceLocation(@Nonnull final ResourceLocation location) {
+  public void addResourceLocation(@Nonnull final NiftyResourceLocation location) {
     locations.add(location);
   }
 
@@ -43,7 +47,7 @@ public class NiftyResourceLoader {
    *
    * @param location The location that will be removed from the search list
    */
-  public void removeResourceLocation(@Nonnull final ResourceLocation location) {
+  public void removeResourceLocation(@Nonnull final NiftyResourceLocation location) {
     locations.remove(location);
   }
 
@@ -65,7 +69,7 @@ public class NiftyResourceLoader {
     InputStream in = null;
 
     for (int i = 0; i < locations.size(); i++) {
-      ResourceLocation location = locations.get(i);
+      NiftyResourceLocation location = locations.get(i);
       in = location.getResourceAsStream(ref);
       if (in != null) {
         break;
@@ -90,7 +94,7 @@ public class NiftyResourceLoader {
     URL url = null;
 
     for (int i = 0; i < locations.size(); i++) {
-      ResourceLocation location = locations.get(i);
+      NiftyResourceLocation location = locations.get(i);
       url = location.getResource(ref);
       if (url != null) {
         break;
