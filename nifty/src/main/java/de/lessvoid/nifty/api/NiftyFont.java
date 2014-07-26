@@ -25,6 +25,15 @@ public class NiftyFont {
     return font.getStringWidth(text);
   }
 
+  /**
+   * Return the height of the font.
+   *
+   * @return the height in px
+   */
+  public int getHeight() {
+    return font.getHeight();
+  }
+
   static {
     NiftyFontAccessor.DEFAULT = new InternalNiftyFontAccessorImpl();
   }
