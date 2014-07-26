@@ -34,6 +34,7 @@ import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
+import de.lessvoid.nifty.internal.common.IdGenerator;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.MatrixFactory;
 import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
@@ -46,17 +47,23 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   private static final int VERTEX_SIZE = 5*6;
   private static final int MAX_QUADS = 2000;
   private static final int VBO_SIZE = MAX_QUADS * VERTEX_SIZE;
+  private static final float NANO_TO_MS_CONVERSION = 1000000.f;
 
   private final CoreFactory coreFactory;
   private final CoreShaderManager shaderManager = new CoreShaderManager();
+  private final CoreVBO<FloatBuffer> quadVBO; 
 
   private CoreVAO vao;
   private CoreVBO<FloatBuffer> vbo;
   private final CoreFBO fbo;
+
   private Mat4 mvp;
+  private int currentWidth;
+  private int currentHeight;
 
   private boolean clearScreenOnRender = false;
   private NiftyResourceLoader resourceLoader;
+  private long beginTime;
 
   private static final String TEXTURE_SHADER = "texture";
   private static final String PLAIN_COLOR_SHADER = "plain";
@@ -64,7 +71,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
   public NiftyRenderDeviceLwgl() {
     coreFactory = CoreFactoryLwjgl.create();
-    mvp = MatrixFactory.createOrtho(0, getDisplayWidth(), getDisplayHeight(), 0);
+    mvp(getDisplayWidth(), getDisplayHeight());
 
     shaderManager.register(PLAIN_COLOR_SHADER, loadPlainShader());
     shaderManager.register(TEXTURE_SHADER, loadTextureShader());
@@ -84,7 +91,19 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vbo = coreFactory.createVBO(DataType.FLOAT, UsageType.STREAM_DRAW, VBO_SIZE);
     vbo.bind();
 
+    quadVBO = coreFactory.createVBO(DataType.FLOAT, UsageType.STATIC_DRAW, new Float[] {
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 0.0f,
+
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+        1.0f, 0.0f
+    });
+    quadVBO.bind();
+
     vao.unbind();
+    beginTime = System.nanoTime();
   }
 
   @Override
@@ -242,13 +261,44 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     fbo.bindFramebuffer();
     fbo.attachTexture(getTextureId(texture), 0);
     glViewport(0, 0, texture.getWidth(), texture.getHeight());
-    mvp = MatrixFactory.createOrtho(0, texture.getWidth(), 0, texture.getHeight());
+    mvpFlipped(texture.getWidth(), texture.getHeight());
   }
 
   @Override
   public void endRenderToTexture(final NiftyTexture texture) {
     fbo.disableAndResetViewport();
-    mvp = MatrixFactory.createOrtho(0, getDisplayWidth(), getDisplayHeight(), 0);
+    mvp(getDisplayWidth(), getDisplayHeight());
+  }
+
+  @Override
+  public String loadCustomShader(final String filename) {
+    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex");
+    shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/custom.vs");
+    shader.fragmentShader(filename);
+    shader.link();
+
+    String id = String.valueOf(IdGenerator.generate());
+    shaderManager.register(id, shader);
+    return id;
+  }
+
+  @Override
+  public void renderWithShader(final String shaderId) {
+    CoreShader shader = shaderManager.activate(shaderId);
+    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
+    shader.setUniformf("time", (System.nanoTime() - beginTime) / NANO_TO_MS_CONVERSION / 1000.f);
+    shader.setUniformf("resolution", currentWidth, currentHeight);
+
+    vao.bind();
+    quadVBO.bind();
+    quadVBO.send();
+
+    vao.enableVertexAttribute(0);
+    vao.disableVertexAttribute(1);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+
+    coreFactory.getCoreRender().renderTriangles(3 * 2);
+    vao.unbind();
   }
 
   @Override
@@ -264,9 +314,9 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
         break;
 
     case BLEND_SEP:
-      glEnable(GL_BLEND);
-      glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-      break;
+        glEnable(GL_BLEND);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        break;
 
     case MULTIPLY:
         glEnable(GL_BLEND);
@@ -305,5 +355,17 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/linear-gradient.fs");
     shader.link();
     return shader;
+  }
+
+  private void mvp(final int newWidth, final int newHeight) {
+    mvp = MatrixFactory.createOrtho(0, newWidth, newHeight, 0);
+    currentWidth = newWidth;
+    currentHeight = newHeight;
+  }
+
+  private void mvpFlipped(final int newWidth, final int newHeight) {
+    mvp = MatrixFactory.createOrtho(0, newWidth, 0, newHeight);
+    currentWidth = newWidth;
+    currentHeight = newHeight;
   }
 }

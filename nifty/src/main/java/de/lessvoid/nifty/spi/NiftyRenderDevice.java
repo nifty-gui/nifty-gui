@@ -80,5 +80,8 @@ public interface NiftyRenderDevice {
 
   void changeBlendMode(BlendMode blendMode);
 
+  public String loadCustomShader(String filename);
+  public void renderWithShader(String shaderId);
+
 
 }

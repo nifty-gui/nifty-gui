@@ -214,6 +214,16 @@ public class Nifty {
     return new NiftyFont(fontFactory.loadFont(resourceLoader.getResourceAsStream(name), name, 12));
   }
 
+  /**
+   * Create a NiftyCanvasPainter that uses a customer shader to render into the canvas.
+   *
+   * @param shaderName the fragment shader filename to load and use
+   * @return a NiftyCanvasPainter using the given shader
+   */
+  public NiftyCanvasPainter customShaderCanvasPainter(final String shaderName) {
+    return new NiftyCanvasPainterShader(renderDevice, shaderName);
+  }
+
   // Friend methods
 
   NiftyRenderDevice getRenderDevice() {

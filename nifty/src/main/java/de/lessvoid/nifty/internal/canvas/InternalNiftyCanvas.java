@@ -70,6 +70,10 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
+  public void customerShader(final String shaderId) {
+    commands.add(new CommandCustomShader(shaderId));
+  }
+
   public boolean isChanged() {
     return changed;
   }

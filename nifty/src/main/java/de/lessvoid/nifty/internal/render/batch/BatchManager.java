@@ -112,6 +112,10 @@ public class BatchManager {
     throw new RuntimeException("Created new color batch but couldn't add any data to it. This should never happen!");
   }
 
+  public void addCustomShader(final String shaderId) {
+    activeBatches.add(new CustomShaderBatch(shaderId));
+  }
+
   public void end(final NiftyRenderDevice renderDevice) {
     renderDevice.begin();
     for (int i=0; i<activeBatches.size(); i++) {
