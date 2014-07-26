@@ -127,6 +127,22 @@ public class NiftyNode {
   }
 
   /**
+   * Change the blend mode when rendering this NiftyNode.
+   * @param blendMode the new BlendMode
+   */
+  public void setBlendMode(final BlendMode blendMode) {
+    impl.setBlendMode(blendMode);
+  }
+
+  /**
+   * Get the current active BlendMode by default this will be BlendMode.OFF.
+   * @return the current blendMode
+   */
+  public BlendMode getBlendMode() {
+    return impl.getBlendMode();
+  }
+
+  /**
    * Change the background color of this node to a new color. The default value is a fully transparent color.
    *
    * @param color the new background color
@@ -383,6 +399,10 @@ public class NiftyNode {
    */
   public void getStateInfo(final StringBuilder result, final String pattern) {
     impl.getStateInfo(result, pattern);
+  }
+
+  public void enableMinSize(final NiftyMinSizeCallback minSizeCallback) {
+    impl.enableMinSize(minSizeCallback);
   }
 
   // package private accessor stuff

@@ -22,6 +22,7 @@ public class RenderNode {
   private boolean needsRender = true;
   private boolean needsContentUpdate = true;
   private final Context context;
+  private final BlendMode blendMode;
 
   public RenderNode(
       final int nodeId,
@@ -30,19 +31,22 @@ public class RenderNode {
       final int h,
       final List<Command> commands,
       final NiftyTexture content,
-      final NiftyRenderDevice renderDevice) {
+      final NiftyRenderDevice renderDevice,
+      final BlendMode blendMode) {
     this.nodeId = nodeId;
     this.local = new Mat4(local);
     this.commands = commands;
     this.width = w;
     this.height = h;
     this.context = new Context(content);
+    this.blendMode = blendMode;
   }
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
     if (needsContentUpdate) {
       BatchManager contentBatchManager = new BatchManager();
       contentBatchManager.begin();
+      contentBatchManager.changeBlendMode(BlendMode.BLEND_SEP);
       context.prepare(renderDevice);
       for (int i=0; i<commands.size(); i++) {
         Command command = commands.get(i);
@@ -54,7 +58,7 @@ public class RenderNode {
     }
 
     Mat4 current = Mat4.mul(parent, local);
-    batchManager.changeBlendMode(BlendMode.OFF);
+    batchManager.changeBlendMode(blendMode);
     batchManager.addTextureQuad(context.getNiftyTexture(), current, NiftyColor.WHITE());
 
     for (int i=0; i<children.size(); i++) {

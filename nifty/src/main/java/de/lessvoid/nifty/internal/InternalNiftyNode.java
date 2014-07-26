@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
+import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.Nifty;
@@ -13,6 +14,7 @@ import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
@@ -25,6 +27,7 @@ import de.lessvoid.nifty.internal.common.IdGenerator;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
 import de.lessvoid.nifty.internal.layout.InternalLayoutableScreenSized;
+import de.lessvoid.nifty.internal.math.Vec2;
 
 public class InternalNiftyNode implements InternalLayoutable {
   private final StringBuilder builder = new StringBuilder();
@@ -89,6 +92,9 @@ public class InternalNiftyNode implements InternalLayoutable {
   private double scaleX = 1.0;
   private double scaleY = 1.0;
   private double scaleZ = 1.0;
+
+  private BlendMode blendMode = BlendMode.BLEND;
+  private NiftyMinSizeCallback minSizeCallback;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
@@ -210,6 +216,14 @@ public class InternalNiftyNode implements InternalLayoutable {
     requestRedraw = true;
   }
 
+  public void setBlendMode(final BlendMode blendMode) {
+    this.blendMode = blendMode;
+  }
+
+  public BlendMode getBlendMode() {
+    return blendMode;
+  }
+
   public double getScaleX() {
     return scaleX;
   }
@@ -298,6 +312,10 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public void getStateInfo(final StringBuilder result, final String pattern) {
     getStateInfo(result, "", Pattern.compile(pattern));
+  }
+
+  public void enableMinSize(final NiftyMinSizeCallback minSizeCallback) {
+    this.minSizeCallback = minSizeCallback;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,6 +429,20 @@ public class InternalNiftyNode implements InternalLayoutable {
       return;
     }
     assertChildLayout();
+
+    for (int i=0; i<children.size(); i++) {
+      InternalNiftyNode node = children.get(i);
+      if (node.constraints.getWidth() == null &&
+          node.constraints.getHeight() == null &&
+          node.minSizeCallback != null) {
+        Vec2 size = node.minSizeCallback.calculateMinSize(node.niftyNode);
+        if (size != null) {
+          node.constraints.setWidth(UnitValue.px(Math.round(size.getX())));
+          node.constraints.setHeight(UnitValue.px(Math.round(size.getY())));
+        }
+      }
+    }
+
     childLayout.getLayout().layoutElements(this, children);
 
     for (int i=0; i<children.size(); i++) {
@@ -436,7 +468,7 @@ public class InternalNiftyNode implements InternalLayoutable {
         needsLayout = false;
         layoutChildren();
       } else {
-        parentNode.layoutChildren();        
+        parentNode.layoutChildren();
       }
     }
   }

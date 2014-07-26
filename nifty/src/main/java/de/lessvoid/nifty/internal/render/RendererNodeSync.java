@@ -71,7 +71,8 @@ public class RendererNodeSync {
         node.getHeight(),
         node.getCanvas().getCommands(),
         renderDevice.createTexture(node.getWidth(), node.getHeight(), true),
-        renderDevice);
+        renderDevice,
+        node.getBlendMode());
 
     for (int i=0; i<node.getChildren().size(); i++) {
       renderNode.addChildNode(createRenderNode(node.getChildren().get(i)));

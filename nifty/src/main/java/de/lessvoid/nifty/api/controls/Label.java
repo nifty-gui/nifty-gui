@@ -5,10 +5,12 @@ import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
+import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.VAlign;
+import de.lessvoid.nifty.internal.math.Vec2;
 
-public class Label extends NiftyAbstractControl {
+public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback {
   private NiftyColor textColor = NiftyColor.WHITE();
   private String text;
   private NiftyFont font;
@@ -16,6 +18,7 @@ public class Label extends NiftyAbstractControl {
   public void init(final NiftyNode niftyNode) {
     super.init(niftyNode);
     niftyNode.addCanvasPainter(new LabelCanvasPainter());
+    niftyNode.enableMinSize(this);
   }
 
   /**
@@ -84,6 +87,11 @@ public class Label extends NiftyAbstractControl {
    * @param valign vertical alignment
    */
   public void setVAlign(final VAlign valign) {
+  }
+
+  @Override
+  public Vec2 calculateMinSize(final NiftyNode niftyNode) {
+    return new Vec2(font.getWidth(text), font.getHeight());
   }
 
   private class LabelCanvasPainter implements NiftyCanvasPainter {
