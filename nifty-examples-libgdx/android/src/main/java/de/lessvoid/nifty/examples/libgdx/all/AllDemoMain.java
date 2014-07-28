@@ -14,7 +14,6 @@ public class AllDemoMain extends AndroidApplication {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-    config.useGL20 = false;
     final int atlasWidth = 1024;
     final int atlasHeight = 1024;
     initialize(new LibgdxExampleApplication(new AllExamplesMain(), atlasWidth, atlasHeight), config);
