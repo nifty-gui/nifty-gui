@@ -28,11 +28,13 @@ public class ControlInteractAttributes {
   public void setOnClick(@Nonnull final String onClick) {
     setAttribute("onClick", onClick);
   }
-
+  public void setOnMultiClick(@Nonnull final String onOnMultiClick) {
+    setAttribute("onMultiClick", onOnMultiClick);
+  }
   public void setOnRelease(@Nonnull final String onRelease) {
     setAttribute("onRelease", onRelease);
   }
-
+  
   public void setOnMouseOver(@Nonnull final String onMouseOver) {
     setAttribute("onMouseOver", onMouseOver);
   }
