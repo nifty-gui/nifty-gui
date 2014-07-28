@@ -45,4 +45,13 @@ public final class MouseEventWheelMoved extends AbstractMouseEvent {
     return true;
   }
 
+  /**
+   * Get the delta value that defines how much and into what direction the mouse wheel got moved.
+   *
+   * @return the mouse wheel delta value
+   */
+  public final int getDelta() {
+    return wheelDelta;
+  }
+
 }

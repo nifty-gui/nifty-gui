@@ -57,4 +57,14 @@ public final class MouseEventClicked extends AbstractMouseEventButton {
     listener.mouseClicked(getButton(), getX(), getY(), count);
     return true;
   }
+
+  /**
+   * Get the count of how often the button got clicked.
+   *
+   * @return the mouse button click count
+   */
+  public final int getCount() {
+    return count;
+  }
+
 }
