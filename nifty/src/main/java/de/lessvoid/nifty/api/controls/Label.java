@@ -9,11 +9,14 @@ import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.internal.math.Vec2;
+import de.lessvoid.nifty.internal.render.TextRenderer;
 
 public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback {
   private NiftyColor textColor = NiftyColor.WHITE();
   private String text;
   private NiftyFont font;
+  private HAlign textHAlign = HAlign.center;
+  private VAlign textVAlign = VAlign.center;
 
   public void init(final NiftyNode niftyNode) {
     super.init(niftyNode);
@@ -80,6 +83,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    * @param halign horizontal alignment
    */
   public void setHAlign(final HAlign halign) {
+    textHAlign = halign;
   }
 
   /**
@@ -87,6 +91,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    * @param valign vertical alignment
    */
   public void setVAlign(final VAlign valign) {
+    textVAlign = valign;
   }
 
   @Override
@@ -95,10 +100,15 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
   }
 
   private class LabelCanvasPainter implements NiftyCanvasPainter {
+    private TextRenderer textRenderer = new TextRenderer();
+
     @Override
     public void paint(final NiftyNode node, final NiftyCanvas canvas) {
       canvas.setTextColor(textColor);
-      canvas.text(font, 0, 0, text);
+      textRenderer.initialize(font, text);
+      textRenderer.setTextHAlign(textHAlign);
+      textRenderer.setTextVAlign(textVAlign);
+      textRenderer.renderText(node, canvas);
     }
   }
 }
