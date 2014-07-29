@@ -29,7 +29,6 @@ public class TextRendererWrapTextTest {
 
   @Test
   public void testTextWidthEmpty() {
-    expectFontGetWidth("");
     replay(font);
 
     textRenderer.initialize(font, "");
