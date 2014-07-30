@@ -33,12 +33,50 @@ public class SizeValueTest {
   }
 
   @Test
-  public void testPercentString() {
+  public void testIntegerPercentString() {
     SizeValue value = new SizeValue("10%");
     assertEquals(100, value.getValueAsInt(1000.f));
     assertEquals(10, value.getValueAsInt(100.f));
     assertEquals(100.f, value.getValue(1000.f), 1.0e-7);
     assertEquals(10.f, value.getValue(100.f), 1.0e-7);
+    assertTrue(value.hasValue());
+    assertTrue(value.isPercent());
+    assertFalse(value.isPixel());
+    assertFalse(value.isIndependentFromParent());
+    assertFalse(value.hasDefault());
+    assertFalse(value.hasWildcard());
+    assertFalse(value.hasMax());
+    assertFalse(value.hasSum());
+    assertFalse(value.hasHeightSuffix());
+    assertFalse(value.hasWidthSuffix());
+  }
+
+  @Test
+  public void testFloatingPointPercentString() {
+    SizeValue value = new SizeValue("10.0%");
+    assertEquals(100, value.getValueAsInt(1000.f));
+    assertEquals(10, value.getValueAsInt(100.f));
+    assertEquals(100.f, value.getValue(1000.f), 1.0e-7);
+    assertEquals(10.f, value.getValue(100.f), 1.0e-7);
+    assertTrue(value.hasValue());
+    assertTrue(value.isPercent());
+    assertFalse(value.isPixel());
+    assertFalse(value.isIndependentFromParent());
+    assertFalse(value.hasDefault());
+    assertFalse(value.hasWildcard());
+    assertFalse(value.hasMax());
+    assertFalse(value.hasSum());
+    assertFalse(value.hasHeightSuffix());
+    assertFalse(value.hasWidthSuffix());
+  }
+
+  @Test
+  public void testRoundedFloatingPointPercentString() {
+    SizeValue value = new SizeValue("10.5%");
+    assertEquals(105, value.getValueAsInt(1000.f));
+    assertEquals(11, value.getValueAsInt(100.f));
+    assertEquals(105.f, value.getValue(1000.f), 1.0e-7);
+    assertEquals(10.5f, value.getValue(100.f), 1.0e-7);
     assertTrue(value.hasValue());
     assertTrue(value.isPercent());
     assertFalse(value.isPixel());
@@ -158,7 +196,7 @@ public class SizeValueTest {
   }
 
   @Test
-  public void testPixelString() {
+  public void testIntegerPixelString() {
     SizeValue value = new SizeValue("10px");
     assertEquals(10, value.getValueAsInt(1000.f));
     assertEquals(10, value.getValueAsInt(100.f));
@@ -177,12 +215,88 @@ public class SizeValueTest {
   }
 
   @Test
-  public void testPixelStringWithoutPx() {
+  public void testFloatingPointPixelString() {
+    SizeValue value = new SizeValue("10.0px");
+    assertEquals(10, value.getValueAsInt(1000.f));
+    assertEquals(10, value.getValueAsInt(100.f));
+    assertEquals(10.f, value.getValue(1000.f), 1.0e-7);
+    assertEquals(10.f, value.getValue(100.f), 1.0e-7);
+    assertTrue(value.hasValue());
+    assertFalse(value.isPercent());
+    assertTrue(value.isPixel());
+    assertTrue(value.isIndependentFromParent());
+    assertFalse(value.hasDefault());
+    assertFalse(value.hasWildcard());
+    assertFalse(value.hasMax());
+    assertFalse(value.hasSum());
+    assertFalse(value.hasHeightSuffix());
+    assertFalse(value.hasWidthSuffix());
+  }
+
+  @Test
+  public void testRoundedFloatingPointPixelString() {
+    SizeValue value = new SizeValue("10.5px");
+    assertEquals(11, value.getValueAsInt(1000.f));
+    assertEquals(11, value.getValueAsInt(100.f));
+    assertEquals(10.5f, value.getValue(1000.f), 1.0e-7);
+    assertEquals(10.5f, value.getValue(100.f), 1.0e-7);
+    assertTrue(value.hasValue());
+    assertFalse(value.isPercent());
+    assertTrue(value.isPixel());
+    assertTrue(value.isIndependentFromParent());
+    assertFalse(value.hasDefault());
+    assertFalse(value.hasWildcard());
+    assertFalse(value.hasMax());
+    assertFalse(value.hasSum());
+    assertFalse(value.hasHeightSuffix());
+    assertFalse(value.hasWidthSuffix());
+  }
+
+  @Test
+  public void testIntegerPixelStringWithoutPx() {
     SizeValue value = new SizeValue("10");
     assertEquals(10, value.getValueAsInt(1000.f));
     assertEquals(10, value.getValueAsInt(100.f));
     assertEquals(10.f, value.getValue(1000.f), 1.0e-7);
     assertEquals(10.f, value.getValue(100.f), 1.0e-7);
+    assertTrue(value.hasValue());
+    assertFalse(value.isPercent());
+    assertTrue(value.isPixel());
+    assertTrue(value.isIndependentFromParent());
+    assertFalse(value.hasDefault());
+    assertFalse(value.hasWildcard());
+    assertFalse(value.hasMax());
+    assertFalse(value.hasSum());
+    assertFalse(value.hasHeightSuffix());
+    assertFalse(value.hasWidthSuffix());
+  }
+
+  @Test
+  public void testFloatingPointPixelStringWithoutPx() {
+    SizeValue value = new SizeValue("10.0");
+    assertEquals(10, value.getValueAsInt(1000.f));
+    assertEquals(10, value.getValueAsInt(100.f));
+    assertEquals(10.f, value.getValue(1000.f), 1.0e-7);
+    assertEquals(10.f, value.getValue(100.f), 1.0e-7);
+    assertTrue(value.hasValue());
+    assertFalse(value.isPercent());
+    assertTrue(value.isPixel());
+    assertTrue(value.isIndependentFromParent());
+    assertFalse(value.hasDefault());
+    assertFalse(value.hasWildcard());
+    assertFalse(value.hasMax());
+    assertFalse(value.hasSum());
+    assertFalse(value.hasHeightSuffix());
+    assertFalse(value.hasWidthSuffix());
+  }
+
+  @Test
+  public void testRoundedFloatingPointPixelStringWithoutPx() {
+    SizeValue value = new SizeValue("10.5");
+    assertEquals(11, value.getValueAsInt(1000.f));
+    assertEquals(11, value.getValueAsInt(100.f));
+    assertEquals(10.5f, value.getValue(1000.f), 1.0e-7);
+    assertEquals(10.5f, value.getValue(100.f), 1.0e-7);
     assertTrue(value.hasValue());
     assertFalse(value.isPercent());
     assertTrue(value.isPixel());
@@ -556,7 +670,7 @@ public class SizeValueTest {
   }
 
   @Test
-  public void testPixelEquals() {
+  public void testPixelIntegerEquals() {
     SizeValue a = SizeValue.px(10);
     SizeValue b = new SizeValue(10, SizeValueType.Pixel);
     SizeValue c = new SizeValue("10px");
@@ -568,6 +682,31 @@ public class SizeValueTest {
   }
 
   @Test
+  public void testPixelFloatingPointEquals() {
+    SizeValue a = SizeValue.px(10);
+    SizeValue b = new SizeValue("10.0px");
+    SizeValue c = new SizeValue("10px");
+
+    assertEquals(a, b);
+    assertEquals(a, c);
+    assertEquals (b, c);
+  }
+
+  @Test
+  public void testPixelFloatingPointNotEquals() {
+    SizeValue a = SizeValue.px(10);
+    SizeValue b = new SizeValue("10.0001px");
+    SizeValue c = new SizeValue("10px");
+    SizeValue d = new SizeValue ("10.0002px");
+
+    assertNotEquals(a, b);
+    assertNotEquals (b, c);
+    assertNotEquals (b, d);
+    assertNotEquals (c, d);
+    assertNotEquals (a, d);
+  }
+
+  @Test
   public void testPercentEquals() {
     SizeValue a = SizeValue.percent(10);
     SizeValue b = new SizeValue(10, SizeValueType.Percent);
@@ -575,6 +714,30 @@ public class SizeValueTest {
 
     assertEquals(a, b);
     assertEquals(a, c);
+  }
+
+  @Test
+  public void testPercentFloatingPointEquals() {
+    SizeValue a = SizeValue.percent(10);
+    SizeValue b = new SizeValue("10.0%");
+    SizeValue c = new SizeValue("10%");
+
+    assertEquals(a, b);
+    assertEquals(a, c);
+  }
+
+  @Test
+  public void testPercentFloatingPointNotEquals() {
+    SizeValue a = SizeValue.percent(10);
+    SizeValue b = new SizeValue("10.0001%");
+    SizeValue c = new SizeValue("10%");
+    SizeValue d = new SizeValue ("10.0002%");
+
+    assertNotEquals(a, b);
+    assertNotEquals(b, c);
+    assertNotEquals (b, d);
+    assertNotEquals (c, d);
+    assertNotEquals (a, d);
   }
 
   @Test

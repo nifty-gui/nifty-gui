@@ -40,10 +40,10 @@ public class LayoutPartTest extends TestCase {
     assertEquals(200, copy.getBox().getY());
     assertEquals(300, copy.getBox().getWidth());
     assertEquals(400, copy.getBox().getHeight());
-    assertEquals("100px", copy.getBoxConstraints().getX().toString());
-    assertEquals("200px", copy.getBoxConstraints().getY().toString());
-    assertEquals("300px", copy.getBoxConstraints().getWidth().toString());
-    assertEquals("400px", copy.getBoxConstraints().getHeight().toString());
+    assertEquals("100.0px", copy.getBoxConstraints().getX().toString());
+    assertEquals("200.0px", copy.getBoxConstraints().getY().toString());
+    assertEquals("300.0px", copy.getBoxConstraints().getWidth().toString());
+    assertEquals("400.0px", copy.getBoxConstraints().getHeight().toString());
     assertEquals(HorizontalAlign.right, copy.getBoxConstraints().getHorizontalAlign());
     assertEquals(VerticalAlign.bottom, copy.getBoxConstraints().getVerticalAlign());
   }

@@ -61,7 +61,7 @@ public final class SizeValue {
    * The value stored in this size value, check {@link #hasCalculatedValue} and {@link #hasValue} to ensure that this
    * value is valid.
    */
-  private final int value;
+  private final float value;
 
   /**
    * This is set {@code true} in case the {@link #value} is set as calculated value.
@@ -86,7 +86,7 @@ public final class SizeValue {
       throw new IllegalArgumentException("Size value type " + type.name() + " requires a value!");
     }
     this.type = type;
-    value = 0;
+    value = 0.0f;
     hasValue = false;
     hasCalculatedValue = false;
   }
@@ -151,17 +151,17 @@ public final class SizeValue {
     hasCalculatedValue = false;
     if (valueParam == null || valueParam.isEmpty() || valueParam.equals("default")) { // alias for "d"
       type = SizeValueType.Default;
-      value = 0;
+      value = 0.0f;
       hasValue = false;
       return;
     } else if (valueParam.equals("sum")) { // alias for "s"
       type = SizeValueType.Sum;
-      value = 0;
+      value = 0.0f;
       hasValue = false;
       return;
     } else if (valueParam.equals("max")) { // alias for "m"
       type = SizeValueType.Maximum;
-      value = 0;
+      value = 0.0f;
       hasValue = false;
       return;
     }
@@ -178,7 +178,7 @@ public final class SizeValue {
       // no suffix -> falling back to px
       type = SizeValueType.Pixel;
       try {
-        value = Integer.valueOf(valueParam);
+        value = Float.valueOf(valueParam);
         hasValue = true;
       } catch (NumberFormatException e) {
         throw new IllegalArgumentException("String value [" + valueParam + "] does not fit the required format.", e);
@@ -199,7 +199,7 @@ public final class SizeValue {
             throw new IllegalArgumentException("The size type " + type.name() + " does not allow any values.");
         }
         try {
-          value = Integer.valueOf(valueParam.substring(0, paramLength - extensionLength));
+          value = Float.valueOf(valueParam.substring(0, paramLength - extensionLength));
           hasValue = true;
         } catch (NumberFormatException e) {
           throw new IllegalArgumentException("String value [" + valueParam + "] does not fit the required format.", e);
@@ -208,7 +208,7 @@ public final class SizeValue {
         if (type.getValueRequirement() == SizeValueType.ValueRequirement.Required) {
           throw new IllegalArgumentException("Size value type " + type.name() + " requires a value!");
         }
-        value = 0;
+        value = 0.0f;
         hasValue = false;
       }
     }
@@ -415,7 +415,7 @@ public final class SizeValue {
     if (isPercent()) {
       return Math.round((range / MAX_PERCENT) * value);
     } else if (isPixel()) {
-      return value;
+      return Math.round (value);
     } else {
       return -1;
     }
@@ -498,33 +498,26 @@ public final class SizeValue {
   }
 
   @Override
-  public int hashCode() {
-    int hash = 1;
-    hash = hash * 13 + (hasValue ? 1 : 0);
-    hash = hash * 19 + (hasCalculatedValue ? 1 : 0);
-    hash = hash * 29 + type.hashCode();
-    hash = hash * 37 + value;
-    return hash;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    SizeValue sizeValue = (SizeValue) o;
+
+    if (hasCalculatedValue != sizeValue.hasCalculatedValue) return false;
+    if (hasValue != sizeValue.hasValue) return false;
+    if (Float.compare(sizeValue.value, value) != 0) return false;
+    if (type != sizeValue.type) return false;
+
+    return true;
   }
 
   @Override
-  public boolean equals(@Nullable final Object obj) {
-    if (super.equals(obj)) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (!(obj instanceof SizeValue)) {
-      return false;
-    }
-    final SizeValue other = (SizeValue) obj;
-    if (type != other.type) {
-      return false;
-    }
-    if (value != other.value) {
-      return false;
-    }
-    return !(hasValue != other.hasValue || hasCalculatedValue != other.hasCalculatedValue);
+  public int hashCode() {
+    int result = type.hashCode();
+    result = 31 * result + (value != +0.0f ? Float.floatToIntBits(value) : 0);
+    result = 31 * result + (hasCalculatedValue ? 1 : 0);
+    result = 31 * result + (hasValue ? 1 : 0);
+    return result;
   }
 }
