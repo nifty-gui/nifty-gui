@@ -25,10 +25,10 @@ public class BoxConstraintsTest extends TestCase {
         new SizeValue("400px"),
         HorizontalAlign.right,
         VerticalAlign.bottom);
-    assertEquals("100px", box.getX().toString());
-    assertEquals("200px", box.getY().toString());
-    assertEquals("300px", box.getWidth().toString());
-    assertEquals("400px", box.getHeight().toString());
+    assertEquals("100.0px", box.getX().toString());
+    assertEquals("200.0px", box.getY().toString());
+    assertEquals("300.0px", box.getWidth().toString());
+    assertEquals("400.0px", box.getHeight().toString());
     assertEquals(HorizontalAlign.right, box.getHorizontalAlign());
     assertEquals(VerticalAlign.bottom, box.getVerticalAlign());
   }
