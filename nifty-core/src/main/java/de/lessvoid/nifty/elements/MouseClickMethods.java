@@ -68,6 +68,9 @@ public abstract class MouseClickMethods {
     if (onClickMethod != null) {
       onClickMethod.invoke();
     }
+    if (onReleaseMethod != null) {
+      onReleaseMethod.invoke();
+    }
   }
 
   public boolean onClickMouseMove(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent inputEvent) {
