@@ -16,11 +16,11 @@ import de.lessvoid.nifty.api.controls.Label;
  * Display a simple text.
  * @author void
  */
-public class UseCase_c01_LabelControl implements UseCaseUpdateable {
+public class UseCase_c01_LabelControlTextAlign implements UseCaseUpdateable {
   private final NiftyNode niftyNode;
   private final NiftyFont font;
 
-  public UseCase_c01_LabelControl(final Nifty nifty) throws IOException {
+  public UseCase_c01_LabelControlTextAlign(final Nifty nifty) throws IOException {
     niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Vertical);
     niftyNode.setBackgroundColor(NiftyColor.fromString("#003f"));
 
@@ -47,7 +47,7 @@ public class UseCase_c01_LabelControl implements UseCaseUpdateable {
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_c01_LabelControl.class, args);
+    UseCaseRunner.run(UseCase_c01_LabelControlTextAlign.class, args);
   }
 
   @Override

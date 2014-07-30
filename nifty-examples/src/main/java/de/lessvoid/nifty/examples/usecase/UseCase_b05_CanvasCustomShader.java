@@ -2,11 +2,9 @@ package de.lessvoid.nifty.examples.usecase;
 
 import java.io.IOException;
 
-import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.UnitValue;
 
 /**
  * custom canvas painter using a custom fragment shader ... read that last sentence again! =D
@@ -14,16 +12,11 @@ import de.lessvoid.nifty.api.UnitValue;
  */
 public class UseCase_b05_CanvasCustomShader implements UseCaseUpdateable {
   private final NiftyNode rootNode;
-  private final NiftyNode childNode;
-  private float angle;
+  private float totalTime;
 
   public UseCase_b05_CanvasCustomShader(final Nifty nifty) throws IOException {
     rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     rootNode.setCanvasPainter(nifty.customShaderCanvasPainter("shaders/custom.fs"));
-
-    childNode = rootNode.newChildNode(UnitValue.percent(25), UnitValue.percent(25));
-    childNode.setCanvasPainter(nifty.customShaderCanvasPainter("shaders/custom.fs"));
-    childNode.setBlendMode(BlendMode.MULTIPLY);
   }
 
   public static void main(final String[] args) throws Exception {
@@ -32,11 +25,10 @@ public class UseCase_b05_CanvasCustomShader implements UseCaseUpdateable {
 
   @Override
   public void update(final Nifty nifty, final float deltaTime) {
-    rootNode.requestRedraw();
-    childNode.requestRedraw();
-    childNode.setRotationZ(angle/10.0);
-    childNode.setScaleX(Math.sin(angle/500.0) + 1.5);
-    childNode.setScaleY(Math.sin(angle/500.0) + 1.5);
-    angle += deltaTime;
+    totalTime += deltaTime;
+    if (totalTime > 10) {
+      totalTime = 0.f;
+      rootNode.requestRedraw();
+    }
   }
 }

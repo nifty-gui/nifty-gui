@@ -7,35 +7,25 @@ import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.controls.Label;
 
 /**
- * custom canvas painter using a custom fragment shader ... read that last sentence again! =D
+ * Show case that a Label without any size constraints will be scaled to the minimum text size.
  * @author void
  */
-public class UseCase_c02_LabelControlMinSize implements UseCaseUpdateable {
-  private final NiftyNode niftyNode;
-  private final Label label;
-
+public class UseCase_c02_LabelControlMinSize {
   public UseCase_c02_LabelControlMinSize(final Nifty nifty) throws IOException {
     NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
+    NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
 
-    niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    niftyNode.setCanvasPainter(nifty.customShaderCanvasPainter("shaders/custom.fs"));
-
-    label = niftyNode.newControl(Label.class);
+    Label label = niftyNode.newControl(Label.class);
     label.setFont(font);
-    label.setText("Hello custom shader");
+    label.setText("hello autosize label");
     label.setColor(NiftyColor.fromString("#ffff"));
+    label.getNode().setBackgroundColor(NiftyColor.RED());
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_c02_LabelControlMinSize.class, args);
-  }
-
-  @Override
-  public void update(final Nifty nifty, final float deltaTime) {
-    niftyNode.requestRedraw();
   }
 }
