@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.internal.math.Vec2;
 
 /**
  * The NiftyMinSizeCallback allows you to provide a minimal size for a NiftyNode. This will be used when the minSize-
@@ -18,5 +17,13 @@ public interface NiftyMinSizeCallback {
    * @param niftyNode the NiftyNode to calculate the size for
    * @return a Vec2 representing width/height of the niftyNode
    */
-  Vec2 calculateMinSize(NiftyNode niftyNode);
+  Size calculateMinSize(NiftyNode niftyNode);
+
+  /**
+   * Just a simple Size class that will transport a width and height value.
+   */
+  public class Size {
+    public float width;
+    public float height;
+  }
 }

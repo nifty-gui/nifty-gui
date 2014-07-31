@@ -15,6 +15,7 @@ import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback;
+import de.lessvoid.nifty.api.NiftyMinSizeCallback.Size;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
@@ -27,7 +28,6 @@ import de.lessvoid.nifty.internal.common.IdGenerator;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
 import de.lessvoid.nifty.internal.layout.InternalLayoutableScreenSized;
-import de.lessvoid.nifty.internal.math.Vec2;
 
 public class InternalNiftyNode implements InternalLayoutable {
   private final StringBuilder builder = new StringBuilder();
@@ -435,10 +435,10 @@ public class InternalNiftyNode implements InternalLayoutable {
       if (node.constraints.getWidth() == null &&
           node.constraints.getHeight() == null &&
           node.minSizeCallback != null) {
-        Vec2 size = node.minSizeCallback.calculateMinSize(node.niftyNode);
+        Size size = node.minSizeCallback.calculateMinSize(node.niftyNode);
         if (size != null) {
-          node.constraints.setWidth(UnitValue.px(Math.round(size.getX())));
-          node.constraints.setHeight(UnitValue.px(Math.round(size.getY())));
+          node.constraints.setWidth(UnitValue.px(Math.round(size.width)));
+          node.constraints.setHeight(UnitValue.px(Math.round(size.height)));
         }
       }
     }

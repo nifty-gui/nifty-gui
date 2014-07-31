@@ -16,7 +16,7 @@ import de.lessvoid.nifty.api.controls.Label;
  * Display a simple text.
  * @author void
  */
-public class UseCase_c01_LabelControlTextAlign implements UseCaseUpdateable {
+public class UseCase_c01_LabelControlTextAlign {
   private final NiftyNode niftyNode;
   private final NiftyFont font;
 
@@ -48,10 +48,5 @@ public class UseCase_c01_LabelControlTextAlign implements UseCaseUpdateable {
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_c01_LabelControlTextAlign.class, args);
-  }
-
-  @Override
-  public void update(Nifty nifty, float deltaTime) {
-    niftyNode.requestRedraw();
   }
 }

@@ -95,8 +95,11 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
   }
 
   @Override
-  public Vec2 calculateMinSize(final NiftyNode niftyNode) {
-    return new Vec2(font.getWidth(text), font.getHeight());
+  public Size calculateMinSize(final NiftyNode niftyNode) {
+    Size result = new Size();
+    result.width = font.getWidth(text);
+    result.height = font.getHeight();
+    return result;
   }
 
   private class LabelCanvasPainter implements NiftyCanvasPainter {

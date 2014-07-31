@@ -1,7 +1,5 @@
 package de.lessvoid.nifty.api;
 
-
-
 /**
  * The DefaultNiftyCanvasPainter will be used when you don't set a specific one for a NiftyNode. It is part of the
  * public API so that you can use it as well (f.i. when you want the default behavior in your own NiftyCanvasPainter

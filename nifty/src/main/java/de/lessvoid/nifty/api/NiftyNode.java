@@ -401,6 +401,13 @@ public class NiftyNode {
     impl.getStateInfo(result, pattern);
   }
 
+  /**
+   * When this NiftyNode doesn't have any size constraints set but a NiftyMinSizeCallback is given then it is used to
+   * calculate the minimum size of the NiftyNode. The NiftyMinSizeCallback should return the minimum width and height
+   * of the content of the NiftyNode and Nifty will automatically set width and height constraints for the NiftyNode.
+   *
+   * @param minSizeCallback the NiftyMinSizeCallback.
+   */
   public void enableMinSize(final NiftyMinSizeCallback minSizeCallback) {
     impl.enableMinSize(minSizeCallback);
   }
