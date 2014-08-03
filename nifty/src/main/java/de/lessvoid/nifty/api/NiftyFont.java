@@ -34,6 +34,18 @@ public class NiftyFont {
     return font.getHeight();
   }
 
+  /**
+   * Return the width in px of the given character including kerning information taking the next character into account.
+   *
+   * @param currentCharacter current character
+   * @param nextCharacter next character
+   * @param size font size
+   * @return width of the character or {@code -1} when no information for the character is available
+   */
+  public int getCharacterWidth(final char currentCharacter, final char nextCharacter, final float size) {
+    return font.getCharacterWidth(currentCharacter, nextCharacter, size);
+  }
+
   static {
     NiftyFontAccessor.DEFAULT = new InternalNiftyFontAccessorImpl();
   }

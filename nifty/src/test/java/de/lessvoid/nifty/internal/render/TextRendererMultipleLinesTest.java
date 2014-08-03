@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import de.lessvoid.nifty.api.NiftyFont;
 
-public class TextRendererWrapTextTest {
+public class TextRendererMultipleLinesTest {
   private TextRenderer textRenderer;
   private NiftyFont font;
 
