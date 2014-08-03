@@ -11,10 +11,9 @@ import de.lessvoid.nifty.api.NiftyNode;
  * @author void
  */
 public class UseCase_b05_CanvasCustomShader {
-  private final NiftyNode rootNode;
 
   public UseCase_b05_CanvasCustomShader(final Nifty nifty) throws IOException {
-    rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     rootNode.setCanvasPainter(nifty.customShaderCanvasPainter("shaders/custom.fs"));
     rootNode.startAnimatedRedraw(0, 10);
   }

@@ -12,13 +12,11 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_a04_RotatingRootNode {
-  private final NiftyNode niftyNode;
-  private final NiftyNode childNode;
 
   public UseCase_a04_RotatingRootNode(final Nifty nifty) {
     nifty.clearScreenBeforeRender();
 
-    niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Absolute);
+    final NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Absolute);
     niftyNode.setBackgroundColor(NiftyColor.GREEN());
     niftyNode.startAnimated(0, 15, new NiftyCallback<Float>() {
       private float angle = 0;
@@ -29,7 +27,7 @@ public class UseCase_a04_RotatingRootNode {
       }
     });
 
-    childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
+    NiftyNode childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
     childNode.setBackgroundColor(NiftyColor.RED());
     childNode.setXConstraint(UnitValue.px(50));
     childNode.setYConstraint(UnitValue.px(50));

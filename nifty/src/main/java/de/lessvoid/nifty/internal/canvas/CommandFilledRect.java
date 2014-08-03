@@ -18,9 +18,9 @@ public class CommandFilledRect implements Command {
   @Override
   public void execute(final BatchManager batchManager, final Context context) {
     if (context.getFillLinearGradient() != null) {
-      batchManager.addLinearGradientQuad(x0, y0, x1, y1, context.getFillLinearGradient());
+      batchManager.addLinearGradientQuad(x0, y0, x1, y1, context.getTransform(), context.getFillLinearGradient());
       return;
     }
-    batchManager.addColorQuad(x0, y0, x1, y1, context.getFillColor());
+    batchManager.addColorQuad(x0, y0, x1, y1, context.getFillColor(), context.getTransform());
   }
 }

@@ -2,6 +2,7 @@ package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
@@ -13,6 +14,7 @@ public class Context {
   private NiftyColor strokeStyle = NiftyColor.WHITE();
   private NiftyColor textColor = NiftyColor.WHITE();
   private float textSize = 1.f;
+  private Mat4 transform = Mat4.createIdentity();
 
   public Context(final NiftyTexture textureParam) {
     texture = textureParam;
@@ -80,5 +82,17 @@ public class Context {
 
   public NiftyColor getTextColor() {
     return textColor;
+  }
+
+  public void addTransform(final Mat4 mat) {
+    transform = Mat4.mul(transform, mat);
+  }
+
+  public void resetTransform() {
+    transform = Mat4.createIdentity();
+  }
+
+  public Mat4 getTransform() {
+    return transform;
   }
 }

@@ -70,6 +70,26 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
+  public void scale(final float scaleWidth, final float scaleHeight) {
+    commands.add(new CommandScale(scaleWidth, scaleHeight));
+    changed = true;
+  }
+
+  public void rotate(final float angleDegrees) {
+    commands.add(new CommandRotate(angleDegrees));
+    changed = true;
+  }
+
+  public void translate(final float x, final float y) {
+    commands.add(new CommandTranslate(x, y));
+    changed = true;
+  }
+
+  public void resetTransform() {
+    commands.add(new CommandResetTransform());
+    changed = true;
+  }
+
   public void customerShader(final String shaderId) {
     commands.add(new CommandCustomShader(shaderId));
   }

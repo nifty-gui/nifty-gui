@@ -14,14 +14,12 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_b02_CanvasLinearGradient {
-  private final NiftyNode niftyNode;
-  private final NiftyNode child;
 
   public UseCase_b02_CanvasLinearGradient(final Nifty nifty) {
-    niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
+    NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.TRANSPARENT());
 
-    child = niftyNode.newChildNode(UnitValue.percent(100), UnitValue.percent(100));
+    NiftyNode child = niftyNode.newChildNode(UnitValue.percent(100), UnitValue.percent(100));
     child.setBackgroundColor(NiftyColor.RED());
     child.setCanvasPainter(new NiftyCanvasPainter() {
       @Override

@@ -14,6 +14,7 @@ import de.lessvoid.nifty.api.controls.Label;
  * @author void
  */
 public class UseCase_c02_LabelControlMinSize {
+
   public UseCase_c02_LabelControlMinSize(final Nifty nifty) throws IOException {
     NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);

@@ -21,6 +21,7 @@ public class CommandImage implements Command {
   @Override
   public void execute(final BatchManager batchManager, final Context context) {
     InternalNiftyImage internalImage = NiftyImageAccessor.getDefault().getInternalNiftyImage(image);
-    batchManager.addTextureQuad(internalImage.getTexture(), Mat4.createTranslate(x, y, 0.0f), NiftyColor.WHITE());
+    Mat4 local = Mat4.mul(context.getTransform(), Mat4.createTranslate(x, y, 0.0f));
+    batchManager.addTextureQuad(internalImage.getTexture(), local, NiftyColor.WHITE());
   }
 }

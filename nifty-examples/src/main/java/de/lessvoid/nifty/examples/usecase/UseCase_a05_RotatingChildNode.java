@@ -12,16 +12,22 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_a05_RotatingChildNode {
-  private final NiftyNode niftyNode;
-  private final NiftyNode childNode;
-  private final NiftyNode grandChildNode;
 
   public UseCase_a05_RotatingChildNode(final Nifty nifty) {
     nifty.clearScreenBeforeRender();
 
-    niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
+    final NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.GREEN());
     niftyNode.setPivot(0.5, 0.5);
+
+    final NiftyNode childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
+    childNode.setBackgroundColor(NiftyColor.BLACK());
+    childNode.setPivot(0.5, 0.5);
+
+    final NiftyNode grandChildNode = childNode.newChildNode(UnitValue.px(25), UnitValue.px(25));
+    grandChildNode.setBackgroundColor(NiftyColor.RED());
+    grandChildNode.setPivot(0.5, 0.5);
+
     niftyNode.startAnimated(0, 25, new NiftyCallback<Float>() {
       private float rot = 0;
 
@@ -39,14 +45,6 @@ public class UseCase_a05_RotatingChildNode {
         niftyNode.setScaleY((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
       }
     });
-
-    childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
-    childNode.setBackgroundColor(NiftyColor.BLACK());
-    childNode.setPivot(0.5, 0.5);
-
-    grandChildNode = childNode.newChildNode(UnitValue.px(25), UnitValue.px(25));
-    grandChildNode.setBackgroundColor(NiftyColor.RED());
-    grandChildNode.setPivot(0.5, 0.5);
   }
 
   public static void main(final String[] args) throws Exception {

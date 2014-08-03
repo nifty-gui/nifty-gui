@@ -14,12 +14,11 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_b04_CanvasImage {
-  private final NiftyNode niftyNode;
 
   public UseCase_b04_CanvasImage(final Nifty nifty) {
     final NiftyImage image = nifty.createNiftyImage("nifty.png");
 
-    niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
+    NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {

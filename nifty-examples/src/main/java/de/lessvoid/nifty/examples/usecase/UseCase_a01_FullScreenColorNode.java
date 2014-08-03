@@ -9,11 +9,10 @@ import de.lessvoid.nifty.api.NiftyNode;
  * @author void
  */
 public class UseCase_a01_FullScreenColorNode {
-  private NiftyNode niftyNode;
 
   public UseCase_a01_FullScreenColorNode(final Nifty nifty) {
     // Create a new root node that has the same size as the screen.
-    niftyNode = nifty.createRootNodeFullscreen();
+    NiftyNode niftyNode = nifty.createRootNodeFullscreen();
     niftyNode.setBackgroundColor(NiftyColor.RED());
   }
 

@@ -76,7 +76,13 @@ public class BatchManager {
     throw new RuntimeException("Created new texture batch but couldn't add any data to it. This should never happen!");
   }
 
-  public void addLinearGradientQuad(final double x0, final double y0, final double x1, final double y1, final NiftyLinearGradient fillLinearGradient) {
+  public void addLinearGradientQuad(
+      final double x0,
+      final double y0,
+      final double x1,
+      final double y1,
+      final Mat4 mat,
+      final NiftyLinearGradient fillLinearGradient) {
     float dx = (float) x1 - (float) x0;
     float dy = (float) y1 - (float) y0;
     NiftyLinearGradient gradient = new NiftyLinearGradient(
@@ -87,11 +93,11 @@ public class BatchManager {
     gradient.addColorSteps(fillLinearGradient.getColorStops());
 
     LinearGradientQuadBatch batch = linearGradientQuadBatch(gradient);
-    if (batch.add(x0, y0, x1, y1)) {
+    if (batch.add(x0, y0, x1, y1, mat)) {
       return;
     }
     batch = newLinearGradientQuadBatch(gradient);
-    if (batch.add(x0, y0, x1, y1)) {
+    if (batch.add(x0, y0, x1, y1, mat)) {
       return;
     }
 
@@ -99,13 +105,19 @@ public class BatchManager {
     throw new RuntimeException("Created new linear gradient batch but couldn't add any data to it. This should never happen!");
   }
 
-  public void addColorQuad(final double x0, final double y0, final double x1, final double y1, final NiftyColor c) {
+  public void addColorQuad(
+      final double x0,
+      final double y0,
+      final double x1,
+      final double y1,
+      final NiftyColor c,
+      final Mat4 mat) {
     ColorQuadBatch batch = colorQuadBatch();
-    if (batch.add(x0, y0, x1, y1, c, c, c, c)) {
+    if (batch.add(x0, y0, x1, y1, c, c, c, c, mat)) {
       return;
     }
     batch = newColorQuadBatch();
-    if (batch.add(x0, y0, x1, y1, c, c, c, c)) {
+    if (batch.add(x0, y0, x1, y1, c, c, c, c, mat)) {
       return;
     }
     // WTF?

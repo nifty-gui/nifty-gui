@@ -27,6 +27,16 @@ public class NiftyMutableColor {
   private double alpha = 0.0;
 
   /**
+   * Create a new {@link NiftyMutableColor} from an existing {@link NiftyColor}.
+   *
+   * @param color the NiftyColor to initialize the new instance
+   * @return new {@link NiftyMutableColor}
+   */
+  public static NiftyMutableColor fromColor(final NiftyColor color) {
+    return new NiftyMutableColor(color);
+  }
+
+  /**
    * Create a color from components.
    * @param newRed red component
    * @param newGreen green component

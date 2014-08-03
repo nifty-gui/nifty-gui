@@ -46,6 +46,26 @@ public class NiftyCanvas {
     impl.image(x, y, image);
   }
 
+  public void scale(final float scaleWidth, final float scaleHeight) {
+    impl.scale(scaleWidth, scaleHeight);
+  }
+
+  public void rotateRadians(final float angleRadians) {
+    impl.rotate((float) (angleRadians * 180 / Math.PI));
+  }
+
+  public void rotateDegrees(final float angleDegree) {
+    impl.rotate(angleDegree);
+  }
+
+  public void translate(final float translateX, final float translateY) {
+    impl.translate(translateX, translateY);
+  }
+
+  public void resetTransform() {
+    impl.resetTransform();
+  }
+
   /*
 
   public void setLineWidth(final double lineWidth) {

@@ -14,15 +14,14 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes {
-  NiftyNode rootNode;
 
   public UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes(final Nifty nifty) {
     // Change the root node placement child layout from the default Center to Vertical. This will be used to lay out
     // the root node on the screen in the upper half of the screen. We'll make the root node 50% of the screen.
     nifty.setRootNodePlacementLayout(ChildLayout.Vertical);
-    rootNode = nifty.createRootNode(UnitValue.percent(50), UnitValue.percent(50), ChildLayout.Horizontal);
 
     // By changing the rootNode horizontal alignment we move it to the right. This makes it appear in the upper right.
+    NiftyNode rootNode = nifty.createRootNode(UnitValue.percent(50), UnitValue.percent(50), ChildLayout.Horizontal);
     rootNode.setHAlign(HAlign.right);
 
     // add two child nodes to the root node
