@@ -73,37 +73,52 @@ public class InternalLayoutAbsolutePositionTest {
   }
 
   @Test
+  public void testLayoutMissingWidthAndHeight() {
+    try {
+      layout.layoutElements(rootPanel, elements);
+    } catch (IllegalArgumentException e) {
+      assertEquals("InternalLayoutAbsolute requires at least width or height constraints set", e.getMessage());
+    }
+  }
+
+  @Test
   public void testLayoutFixedX() {
     element.getBoxConstraints().setX(new UnitValue("20px"));
+    element.getBoxConstraints().setWidth(UnitValue.px(10));
+    element.getBoxConstraints().setHeight(UnitValue.px(10));
     layout.layoutElements(rootPanel, elements);
 
     assertEquals(20, element.getLayoutPos().getX());
     assertEquals(0, element.getLayoutPos().getY());
-    assertEquals(0, element.getLayoutPos().getWidth());
-    assertEquals(0, element.getLayoutPos().getHeight());
+    assertEquals(10, element.getLayoutPos().getWidth());
+    assertEquals(10, element.getLayoutPos().getHeight());
   }
 
   @Test
   public void testLayoutFixedY() {
     element.getBoxConstraints().setX(new UnitValue("20px"));
+    element.getBoxConstraints().setWidth(UnitValue.px(10));
+    element.getBoxConstraints().setHeight(UnitValue.px(10));
     layout.layoutElements(rootPanel, elements);
 
     assertEquals(20, element.getLayoutPos().getX());
     assertEquals(0, element.getLayoutPos().getY());
-    assertEquals(0, element.getLayoutPos().getWidth());
-    assertEquals(0, element.getLayoutPos().getHeight());
+    assertEquals(10, element.getLayoutPos().getWidth());
+    assertEquals(10, element.getLayoutPos().getHeight());
   }
 
   @Test
   public void testLayoutFixedXandY() {
     element.getBoxConstraints().setX(new UnitValue("20px"));
     element.getBoxConstraints().setY(new UnitValue("40px"));
+    element.getBoxConstraints().setWidth(UnitValue.px(10));
+    element.getBoxConstraints().setHeight(UnitValue.px(10));
     layout.layoutElements(rootPanel, elements);
 
     assertEquals(20, element.getLayoutPos().getX());
     assertEquals(40, element.getLayoutPos().getY());
-    assertEquals(0, element.getLayoutPos().getWidth());
-    assertEquals(0, element.getLayoutPos().getHeight());
+    assertEquals(10, element.getLayoutPos().getWidth());
+    assertEquals(10, element.getLayoutPos().getHeight());
   }
 
   @Test

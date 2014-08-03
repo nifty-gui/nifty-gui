@@ -69,6 +69,10 @@ public class InternalLayoutAbsolute implements InternalLayout {
         }
         box.setHeight(constraints.getHeight().getValueAsInt(box.getWidth()));
       } else {
+        if (constraints.getWidth() == null && constraints.getHeight() == null) {
+          throw new IllegalArgumentException(
+              this.getClass().getSimpleName() + " requires at least width or height constraints set");
+        }
         if (constraints.getWidth() != null) {
           box.setWidth(constraints.getWidth().getValueAsInt(rootBoxWidth));
         }

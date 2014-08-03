@@ -297,6 +297,13 @@ public class NiftyNode {
   }
 
   /**
+   * Forces this Node to be relayed out the next time nodes are refreshed.
+   */
+  public void requestLayout() {
+    impl.requestLayout();
+  }
+
+  /**
    * Call the given callback every interval ms after the delay in ms is over.
    *
    * @param delay the delay before the start in ms

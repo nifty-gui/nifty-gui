@@ -58,6 +58,7 @@ public class NiftyStatistics {
   }
 
   private final Statistics statistics;
+  private final StringBuilder fpsText = new StringBuilder();
 
   /**
    * Get all collected samples so far.
@@ -88,10 +89,23 @@ public class NiftyStatistics {
       line.append(formatValue(frameInfo.getSyncTime()));
       line.append(formatDirect(frameInfo.getRenderBatchCount()));
       line.append("\n");
-      System.out.println(line);
       stuff.add(line.toString());
     }
     return stuff;
+  }
+
+  public int getFps() {
+    return statistics.getFrames();
+  }
+
+  public String getFpsText() {
+    fpsText.setLength(0);
+    fpsText.append("fps: ");
+    fpsText.append(statistics.getFrames());
+    fpsText.append(" (");
+    fpsText.append(1000 / (float) statistics.getFrames());
+    fpsText.append(" ms)");
+    return fpsText.toString();
   }
 
   private String formatValue(final long value) {

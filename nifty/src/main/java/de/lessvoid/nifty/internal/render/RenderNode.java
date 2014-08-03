@@ -21,8 +21,10 @@ public class RenderNode {
   private int height;
   private boolean needsRender = true;
   private boolean needsContentUpdate = true;
-  private final Context context;
+  private boolean contentResized = false;
+  private Context context;
   private final BlendMode blendMode;
+  private final NiftyRenderDevice renderDevice;
 
   public RenderNode(
       final int nodeId,
@@ -40,9 +42,15 @@ public class RenderNode {
     this.height = h;
     this.context = new Context(content);
     this.blendMode = blendMode;
+    this.renderDevice = renderDevice;
   }
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
+    if (contentResized) {
+      context = new Context(renderDevice.createTexture(width, height, true));
+      contentResized = false;
+      needsContentUpdate = true;
+    }
     if (needsContentUpdate) {
       BatchManager contentBatchManager = new BatchManager();
       contentBatchManager.begin();
@@ -92,10 +100,16 @@ public class RenderNode {
   }
 
   public void setWidth(final int width) {
+    if (width != this.width) {
+      contentResized = true;
+    }
     this.width = width;
   }
 
   public void setHeight(final int height) {
+    if (height != this.height) {
+      contentResized = true;
+    }
     this.height = height;
   }
 

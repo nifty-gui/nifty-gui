@@ -40,6 +40,12 @@ public class RendererNodeSync {
 
     for (int i=0; i<srcNodes.size(); i++) {
       InternalNiftyNode src = niftyNodeAccessor.getInternalNiftyNode(srcNodes.get(i));
+
+      // skip nodes that have zero size
+      if (src.getWidth() == 0 && src.getHeight() == 0) {
+        continue;
+      }
+
       RenderNode dst = findNode(dstNodes, src.getId());
       if (dst == null) {
         dstNodes.add(createRenderNode(src));

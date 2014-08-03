@@ -4,12 +4,14 @@ import java.io.IOException;
 
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyCallback;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyMutableColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
+import de.lessvoid.nifty.api.controls.Label;
 
 /**
  * An example how to use an animated NiftyCanvas for a custom progress spinner animation.
@@ -19,8 +21,20 @@ public class UseCase_b10_CanvasProgressSpinner {
   private int pos = 0;
 
   public UseCase_b10_CanvasProgressSpinner(final Nifty nifty) throws IOException {
-    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    nifty.setRootNodePlacementLayout(ChildLayout.Vertical);
+    NiftyNode fpsNode = nifty.createRootNode(UnitValue.percent(100), UnitValue.wildcard(), ChildLayout.Horizontal);
 
+    final Label label = fpsNode.newControl(Label.class);
+    label.setText("HALLO2");
+    label.setFont(nifty.createFont("fonts/aurulent-sans-16.fnt"));
+    label.getNode().startAnimated(0, 1000, new NiftyCallback<Float>() {
+      @Override
+      public void execute(final Float t) {
+        label.setText(nifty.getStatistics().getFpsText());
+      }
+    });
+
+    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     NiftyNode spinner = rootNode.newChildNode(UnitValue.px(128), UnitValue.px(128));
     spinner.addCanvasPainter(new NiftyCanvasPainter() {
       @Override

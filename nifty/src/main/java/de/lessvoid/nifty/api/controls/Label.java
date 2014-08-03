@@ -8,7 +8,6 @@ import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.VAlign;
-import de.lessvoid.nifty.internal.math.Vec2;
 import de.lessvoid.nifty.internal.render.TextRenderer;
 
 public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback {
@@ -31,6 +30,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    */
   public void setText(final String text) {
     this.text = text;
+    niftyNode.requestLayout();
   }
 
   /**
@@ -49,6 +49,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    */
   public void setColor(final NiftyColor color) {
     this.textColor = color;
+    niftyNode.requestRedraw();
   }
 
   /**
@@ -67,6 +68,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    */
   public void setFont(final NiftyFont font) {
     this.font = font;
+    niftyNode.requestRedraw();
   }
 
   /**
@@ -94,8 +96,15 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
     textVAlign = valign;
   }
 
+  private void assertFont() {
+    if (font == null) {
+      throw new RuntimeException("Label requires a font but none available (null)");
+    }
+  }
+
   @Override
   public Size calculateMinSize(final NiftyNode niftyNode) {
+    assertFont();
     Size result = new Size();
     result.width = font.getWidth(text);
     result.height = font.getHeight();
@@ -107,7 +116,10 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
 
     @Override
     public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+      canvas.setFillStyle(NiftyColor.fromString("#000f"));
+      canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
       canvas.setTextColor(textColor);
+      assertFont();
       textRenderer.initialize(font, text);
       textRenderer.setTextHAlign(textHAlign);
       textRenderer.setTextVAlign(textVAlign);

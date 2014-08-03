@@ -104,6 +104,10 @@ public class InternalNiftyNode implements InternalLayoutable {
   private BlendMode blendMode = BlendMode.BLEND;
   private NiftyMinSizeCallback minSizeCallback;
 
+  // this will be set to true when the constraints of this node has been calculated by this node itself using the
+  // NiftyMinSizeCallback
+  private boolean calculatedMinSize;
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,6 +318,10 @@ public class InternalNiftyNode implements InternalLayoutable {
     requestRedraw = true;
   }
 
+  public void requestLayout() {
+    needsLayout = true;
+  }
+
   public void getStateInfo(final StringBuilder result) {
     getStateInfo(result, "", Pattern.compile(".*"));
   }
@@ -404,6 +412,8 @@ public class InternalNiftyNode implements InternalLayoutable {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   public void update() {
+    assertLayout();
+
     for (int i=0; i<animators.size(); i++) {
       animators.get(i).update();
     }
@@ -472,13 +482,17 @@ public class InternalNiftyNode implements InternalLayoutable {
 
     for (int i=0; i<children.size(); i++) {
       InternalNiftyNode node = children.get(i);
-      if (node.constraints.getWidth() == null &&
-          node.constraints.getHeight() == null &&
-          node.minSizeCallback != null) {
+      if (node.calculatedMinSize
+          ||
+          (node.constraints.getWidth() == null &&
+           node.constraints.getHeight() == null &&
+           node.minSizeCallback != null)) {
         Size size = node.minSizeCallback.calculateMinSize(node.niftyNode);
         if (size != null) {
-          node.constraints.setWidth(UnitValue.px(Math.round(size.width)));
-          node.constraints.setHeight(UnitValue.px(Math.round(size.height)));
+          node.setWidthConstraint(UnitValue.px(Math.round(size.width)));
+          node.setHeightConstraint(UnitValue.px(Math.round(size.height)));
+          node.calculatedMinSize = true;
+          node.requestRedraw();
         }
       }
     }

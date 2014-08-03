@@ -24,8 +24,8 @@ public class Nifty {
   private final NiftyResourceLoader resourceLoader = new NiftyResourceLoader();
 
   // The one and only NiftyStatistics instance.
-  private final NiftyStatistics statistics = new NiftyStatistics(new Statistics());
-  private final Statistics stats = statistics.getImpl();
+  private final NiftyStatistics statistics;
+  private final Statistics stats;
 
   // The NiftyRenderDevice we'll forward all render calls to.
   private final NiftyRenderDevice renderDevice;
@@ -55,6 +55,8 @@ public class Nifty {
     renderDevice = newRenderDevice;
     renderDevice.setResourceLoader(resourceLoader);
     timeProvider = newTimeProvider;
+    statistics = new NiftyStatistics(new Statistics(timeProvider));
+    stats = statistics.getImpl();
     renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
   }
@@ -90,18 +92,6 @@ public class Nifty {
    */
   public void setRootNodePlacementLayout(final ChildLayout rootNodePlacementLayout) {
     this.rootNodePlacementLayout = rootNodePlacementLayout;
-  }
-
-  /**
-   * Create a new root node. A root node is just a regular NiftyNode that forms the base node of a scene graph.
-   * You can add several root nodes!
-   * 
-   * @return a new NiftyNode acting as the root of a Nifty scene graph
-   */
-  public NiftyNode createRootNode() {
-    NiftyNode rootNodeInternal = createRootNodeInternal();
-    rootNodes.add(rootNodeInternal);
-    return rootNodeInternal;
   }
 
   /**
@@ -250,6 +240,12 @@ public class Nifty {
   }
 
   // Internal methods
+
+  private NiftyNode createRootNode() {
+    NiftyNode rootNodeInternal = createRootNodeInternal();
+    rootNodes.add(rootNodeInternal);
+    return rootNodeInternal;
+  }
 
   private NiftyNode createRootNodeInternal() {
     return NiftyNode.newInstance(InternalNiftyNode.newRootNode(this, rootNodePlacementLayout));

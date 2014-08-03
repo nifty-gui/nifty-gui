@@ -4,13 +4,19 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import de.lessvoid.nifty.api.NiftyStatistics.FrameInfo;
+import de.lessvoid.nifty.spi.TimeProvider;
 
 public class Statistics {
   private static final int TIME_HISTORY = 10;
 
+  private final TimeProvider timeProvider;
   private int frameCounter = 0;
   private final Queue<FrameInfo> frameHistory = new LinkedBlockingQueue<FrameInfo>(TIME_HISTORY);
   private final long[] times = new long[Type.values().length];
+
+  private int fpsFrameCounter = 0;
+  private long now = 0;
+  private int fpsFrames = -1;
 
   private enum Type {
     /**
@@ -20,6 +26,11 @@ public class Statistics {
     Update,
     Render,
     RenderBatchCount
+  }
+
+  public Statistics(final TimeProvider timeProvider) {
+    this.timeProvider = timeProvider;
+    this.now = timeProvider.getMsTime();
   }
 
   public void startFrame() {
@@ -50,12 +61,8 @@ public class Statistics {
     return frameHistory.toArray(new FrameInfo[0]);
   }
 
-  private void addSample(final FrameInfo frameInfo) {
-    if (frameHistory.offer(frameInfo)) {
-      return;
-    }
-    frameHistory.poll();
-    addSample(frameInfo);
+  public int getFrames() {
+    return fpsFrames;
   }
 
   public void startUpdate() {
@@ -72,6 +79,14 @@ public class Statistics {
 
   public void stopRender() {
     stop(Type.Render);
+
+    fpsFrameCounter++;
+    long diff = timeProvider.getMsTime() - now;
+    if (diff >= 1000) {
+      now += diff;
+      fpsFrames = fpsFrameCounter;
+      fpsFrameCounter = 0;
+    }
   }
 
   public void startSynchronize() {
@@ -80,6 +95,14 @@ public class Statistics {
 
   public void stopSynchronize() {
     stop(Type.Synchronize);
+  }
+
+  private void addSample(final FrameInfo frameInfo) {
+    if (frameHistory.offer(frameInfo)) {
+      return;
+    }
+    frameHistory.poll();
+    addSample(frameInfo);
   }
 
   private void start(final Type type) {
