@@ -13,7 +13,7 @@ import de.lessvoid.nifty.api.UnitValue;
  *
  * @author void
  */
-public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes implements UseCaseUpdateable {
+public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes {
   NiftyNode rootNode;
 
   public UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes(final Nifty nifty) {
@@ -28,11 +28,6 @@ public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes implements U
     // add two child nodes to the root node
     rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff08"));
     rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff0f"));
-  }
-
-  @Override
-  public void update(final Nifty nifty, final float deltaTime) {
-    rootNode.requestRedraw();
   }
 
   public static void main(final String[] args) throws Exception {

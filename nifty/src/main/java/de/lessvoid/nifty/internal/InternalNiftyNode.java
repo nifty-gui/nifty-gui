@@ -10,6 +10,7 @@ import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyCallback;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
@@ -22,6 +23,7 @@ import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
+import de.lessvoid.nifty.internal.animate.IntervalAnimator;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 import de.lessvoid.nifty.internal.common.Box;
 import de.lessvoid.nifty.internal.common.IdGenerator;
@@ -82,6 +84,12 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   // The public Node that this node is linked to.
   private NiftyNode niftyNode;
+
+  // IntervalAnimator will execute given NiftyCallbacks at given intervals
+  private List<IntervalAnimator> animators = new ArrayList<IntervalAnimator>();
+
+  // in case an animatedRequestRedraw is set we remember it here so that we can remove it later
+  private IntervalAnimator animatedRequestIntervalAnimator;
 
   private boolean transformationChanged = true;
   private double pivotX = 0.5;
@@ -318,6 +326,34 @@ public class InternalNiftyNode implements InternalLayoutable {
     this.minSizeCallback = minSizeCallback;
   }
 
+  public NiftyColor getBackgroundColor() {
+    return backgroundColor;
+  }
+
+  public InternalNiftyCanvas getCanvas() {
+    return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
+  }
+
+  public void resetTransformationChanged() {
+    transformationChanged = false;
+  }
+
+  public boolean isTransformationChanged() {
+    return transformationChanged;
+  }
+
+  public void startAnimated(final long delay, final long interval, final NiftyCallback<Float> callback) {
+    animators.add(new IntervalAnimator(nifty.getTimeProvider(), delay, interval, callback));
+  }
+
+  public void stopAnimatedRedraw() {
+    if (animatedRequestIntervalAnimator == null) {
+      return;
+    }
+    animators.remove(animatedRequestIntervalAnimator);
+    animatedRequestIntervalAnimator = null;
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Layoutable Implementation
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -367,7 +403,11 @@ public class InternalNiftyNode implements InternalLayoutable {
   // Private Methods and package private stuff
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public void updateContent() {
+  public void update() {
+    for (int i=0; i<animators.size(); i++) {
+      animators.get(i).update();
+    }
+
     if (requestRedraw) {
       InternalNiftyCanvas internalCanvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
       internalCanvas.reset();
@@ -380,7 +420,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     }
 
     for (int i=0; i<children.size(); i++) {
-      children.get(i).updateContent();
+      children.get(i).update();
     }
   }
 
@@ -524,22 +564,6 @@ public class InternalNiftyNode implements InternalLayoutable {
     if (param == null) {
       throw new IllegalArgumentException("ChildLayout must not be null. Use ChildLayout.None instead");
     }
-  }
-
-  public NiftyColor getBackgroundColor() {
-    return backgroundColor;
-  }
-
-  public InternalNiftyCanvas getCanvas() {
-    return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
-  }
-
-  public void resetTransformationChanged() {
-    transformationChanged = false;
-  }
-
-  public boolean isTransformationChanged() {
-    return transformationChanged;
   }
 
   private void updateTransformationChanged(final double oldValue, final double newValue) {

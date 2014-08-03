@@ -13,6 +13,7 @@ import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.TimeProvider;
 
 /**
  * The main control class of all things Nifty.
@@ -28,6 +29,9 @@ public class Nifty {
 
   // The NiftyRenderDevice we'll forward all render calls to.
   private final NiftyRenderDevice renderDevice;
+
+  // The TimeProvider to use.
+  private final TimeProvider timeProvider;
 
   // The list of root nodes.
   private final List<NiftyNode> rootNodes = new ArrayList<NiftyNode>();
@@ -45,25 +49,32 @@ public class Nifty {
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
+   * @param newTimeProvider the TimeProvider implementation to use
    */
-  public Nifty(final NiftyRenderDevice newRenderDevice) {
+  public Nifty(final NiftyRenderDevice newRenderDevice, final TimeProvider newTimeProvider) {
     renderDevice = newRenderDevice;
     renderDevice.setResourceLoader(resourceLoader);
+    timeProvider = newTimeProvider;
     renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
+  }
+
+  /**
+   * Update.
+   */
+  public void update() {
+    stats.startFrame();
+    stats.startUpdate();
+    for (int i=0; i<rootNodes.size(); i++) {
+      rootNodes.get(i).getImpl().update();
+    }
+    stats.stopUpdate();
   }
 
   /**
    * Render.
    */
   public boolean render() {
-    stats.startFrame();
-    stats.startUpdate();
-    for (int i=0; i<rootNodes.size(); i++) {
-      rootNodes.get(i).getImpl().updateContent();
-    }
-    stats.stopUpdate();
-
     stats.startRender();
     boolean frameChanged = renderer.render(rootNodes);
     stats.stopRender();
@@ -193,6 +204,14 @@ public class Nifty {
    */
   public NiftyStatistics getStatistics() {
     return statistics;
+  }
+
+  /**
+   * Get the TimeProvider of this Nifty instance.
+   * @return the TimeProvider
+   */
+  public TimeProvider getTimeProvider() {
+    return timeProvider;
   }
 
   /**

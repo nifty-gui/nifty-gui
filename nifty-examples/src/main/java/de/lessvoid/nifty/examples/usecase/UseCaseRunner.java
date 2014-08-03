@@ -6,6 +6,7 @@ import de.lessvoid.coregl.CoreFactory;
 import de.lessvoid.coregl.CoreSetup;
 import de.lessvoid.coregl.CoreSetup.RenderLoopCallback2;
 import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
+import de.lessvoid.nifty.api.AccurateTimeProvider;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.renderer.lwjgl.NiftyRenderDeviceLwgl;
 
@@ -17,7 +18,6 @@ import de.lessvoid.nifty.renderer.lwjgl.NiftyRenderDeviceLwgl;
  */
 public class UseCaseRunner {
   private static Logger log = Logger.getLogger(UseCaseRunner.class.getName());
-  private static float time;
 
   static void run(final Class<?> useCaseClass, final String[] args) throws Exception {
     CoreFactory factory = CoreFactoryLwjgl.create();
@@ -35,20 +35,13 @@ public class UseCaseRunner {
     setup.renderLoop2(new RenderLoopCallback2() {
       @Override
       public boolean render(final float deltaTime) {
-        updateUseCase(nifty, useCase, deltaTime);
+        nifty.update();
         return nifty.render();
       }
 
       @Override
       public boolean shouldEnd() {
         return false;
-      }
-
-      private void updateUseCase(final Nifty nifty, final Object useCase, final float deltaTime) {
-        if (!(useCase instanceof UseCaseUpdateable)) {
-          return;
-        }
-        ((UseCaseUpdateable) useCase).update(nifty, deltaTime);
       }
     });
   }
@@ -62,6 +55,6 @@ public class UseCaseRunner {
   }
 
   private static Nifty createNifty() {
-    return new Nifty(new NiftyRenderDeviceLwgl());
+    return new Nifty(new NiftyRenderDeviceLwgl(), new AccurateTimeProvider());
   }
 }

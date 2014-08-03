@@ -297,6 +297,40 @@ public class NiftyNode {
   }
 
   /**
+   * Call the given callback every interval ms after the delay in ms is over.
+   *
+   * @param delay the delay before the start in ms
+   * @param interval the interval after the callback is called
+   * @param callback the callback
+   */
+  public void startAnimated(final long delay, final long interval, final NiftyCallback<Float> callback) {
+    impl.startAnimated(delay, interval, callback);
+  }
+
+  /**
+   * This is a special version of startAnimated that will automatically redraws the content of this node after the
+   * given interval.
+   *
+   * @param delay the delay before the start in ms
+   * @param interval the interval after the callback is called
+   */
+  public void startAnimatedRedraw(final long delay, final long interval) {
+    impl.startAnimated(delay, interval, new NiftyCallback<Float>() {
+      @Override
+      public void execute(final Float t) {
+        impl.requestRedraw();
+      }
+    });
+  }
+
+  /**
+   * Stop redrawing this node constantly.
+   */
+  public void stopAnimatedRedraw(final long delay) {
+    impl.stopAnimatedRedraw();
+  }
+
+  /**
    * Create a new NiftyNode and make this node it's parent.
    * 
    * @return a new NiftyNode

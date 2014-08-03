@@ -129,8 +129,8 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   @Override
   public void begin() {
     if (clearScreenOnRender) {
-      glClearColor((float)Math.random(), (float)Math.random(), (float)Math.random(), 1.f);
-      // glClearColor(0.f, 0.f, 0.f, 1.f);
+//      glClearColor((float)Math.random(), (float)Math.random(), (float)Math.random(), 1.f);
+      glClearColor(0.f, 0.f, 0.f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT);
     }
 

@@ -12,10 +12,9 @@ import de.lessvoid.nifty.api.UnitValue;
  * custom canvas painter.
  * @author void
  */
-public class UseCase_b01_Canvas implements UseCaseUpdateable {
+public class UseCase_b01_Canvas {
   private final NiftyNode niftyNode;
   private final NiftyNode child;
-  private float totalTime;
 
   public UseCase_b01_Canvas(final Nifty nifty) {
     niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
@@ -38,17 +37,7 @@ public class UseCase_b01_Canvas implements UseCaseUpdateable {
             node.getHeight() - node.getHeight() / 2 + Math.random() * node.getHeight() / 2);
       }
     });
-  }
-
-  @Override
-  public void update(final Nifty nifty, final float deltaTime) {
-    totalTime += deltaTime;
-
-    // force a redraw of the canvas every 50ms
-    if (totalTime > 50) {
-      child.requestRedraw();
-      totalTime = 0;
-    }
+    child.startAnimatedRedraw(0, 50);
   }
 
   public static void main(final String[] args) throws Exception {
