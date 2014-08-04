@@ -27,7 +27,11 @@ import javax.annotation.Nullable;
  * The render device that takes care for rendering the Nifty GUI inside of Slick.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
+ *
+ * @deprecated Use {@link de.lessvoid.nifty.render.batch.BatchRenderDevice} with
+ * {@link de.lessvoid.nifty.slick2d.render.batch.SlickBatchRenderBackendFactory#create()}.
  */
+@Deprecated
 public final class SlickRenderDevice implements RenderDevice {
   /**
    * The mouse cursor that is currently active.
