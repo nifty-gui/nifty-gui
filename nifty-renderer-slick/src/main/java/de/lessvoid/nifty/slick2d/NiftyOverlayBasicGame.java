@@ -1,12 +1,15 @@
 package de.lessvoid.nifty.slick2d;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.slick2d.input.ForwardingInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickSlickInputSystem;
-import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
+import de.lessvoid.nifty.slick2d.render.batch.SlickBatchRenderBackendFactory;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
 import de.lessvoid.nifty.slick2d.time.LWJGLTimeProvider;
+import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import org.newdawn.slick.*;
 
@@ -106,8 +109,8 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
 
   /**
    * Initialize the game. This function is called during {@link #init(GameContainer)}. During this call its needed to
-   * initialize the Nifty GUI with own options by calling {@link #initNifty(GameContainer, SlickRenderDevice,
-   * SlickSoundDevice, SlickInputSystem, TimeProvider)} .
+   * initialize the Nifty GUI with own options by calling {@link #initNifty(GameContainer, RenderDevice,
+   * SoundDevice, SlickInputSystem, TimeProvider)} .
    *
    * @param container the game container that displays the game
    */
@@ -194,7 +197,6 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
    *
    * @param container the container used to display the game
    * @throws IllegalStateException in case this function was called before
-   * @see SlickRenderDevice
    * @see SlickSoundDevice
    * @see SlickSlickInputSystem
    */
@@ -209,11 +211,10 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
    * @param container   the container used to display the game
    * @param inputSystem the input system that is supposed to be used
    * @throws IllegalStateException in case this function was called before
-   * @see SlickRenderDevice
    * @see SlickSoundDevice
    */
   protected final void initNifty(@Nonnull final GameContainer container, @Nonnull final SlickInputSystem inputSystem) {
-    initNifty(container, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
+    initNifty(container, new BatchRenderDevice(SlickBatchRenderBackendFactory.create()), new SlickSoundDevice(), inputSystem);
   }
 
   /**
@@ -227,8 +228,8 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
    */
   protected final void initNifty(
       @Nonnull final GameContainer container,
-      @Nonnull final SlickRenderDevice renderDevice,
-      @Nonnull final SlickSoundDevice soundDevice,
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final SoundDevice soundDevice,
       @Nonnull final SlickInputSystem inputSystem) {
     initNifty(container, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
   }
@@ -245,8 +246,8 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
    */
   protected final void initNifty(
       @Nonnull @SuppressWarnings("TypeMayBeWeakened") final GameContainer container,
-      @Nonnull final SlickRenderDevice renderDevice,
-      @Nonnull final SlickSoundDevice soundDevice,
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final SoundDevice soundDevice,
       @Nonnull final SlickInputSystem inputSystem,
       @Nonnull final TimeProvider timeProvider) {
     if (niftyGUI != null) {

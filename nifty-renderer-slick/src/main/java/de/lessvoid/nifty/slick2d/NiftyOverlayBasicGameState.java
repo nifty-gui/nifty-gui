@@ -1,12 +1,15 @@
 package de.lessvoid.nifty.slick2d;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.slick2d.input.ForwardingInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickSlickInputSystem;
-import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
+import de.lessvoid.nifty.slick2d.render.batch.SlickBatchRenderBackendFactory;
 import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
 import de.lessvoid.nifty.slick2d.time.LWJGLTimeProvider;
+import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -155,7 +158,7 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
   /**
    * Initialize the game. This function is called during {@link #init(GameContainer, StateBasedGame)}. During this call
    * its needed to initialize the Nifty GUI with own options by calling {@link #initNifty(GameContainer, StateBasedGame,
-   * SlickRenderDevice, SlickSoundDevice, SlickInputSystem, TimeProvider)} .
+   * RenderDevice, SoundDevice, SlickInputSystem, TimeProvider)} .
    *
    * @param container the game container that displays the game
    * @param game      the state based game this state is part of
@@ -283,7 +286,6 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
    * @param container the container used to display the game
    * @param game      the state based game this state is part of
    * @throws IllegalStateException in case this function was called before
-   * @see SlickRenderDevice
    * @see SlickSoundDevice
    * @see SlickSlickInputSystem
    */
@@ -299,14 +301,13 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
    * @param game        the state based game this state is part of
    * @param inputSystem the input system that is supposed to be used
    * @throws IllegalStateException in case this function was called before
-   * @see SlickRenderDevice
    * @see SlickSoundDevice
    */
   protected final void initNifty(
       @Nonnull final GameContainer container,
       @Nonnull final StateBasedGame game,
       @Nonnull final SlickInputSystem inputSystem) {
-    initNifty(container, game, new SlickRenderDevice(container), new SlickSoundDevice(), inputSystem);
+    initNifty(container, game, new BatchRenderDevice(SlickBatchRenderBackendFactory.create()), new SlickSoundDevice(), inputSystem);
   }
 
   /**
@@ -322,8 +323,8 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
   protected final void initNifty(
       @Nonnull final GameContainer container,
       @Nonnull final StateBasedGame game,
-      @Nonnull final SlickRenderDevice renderDevice,
-      @Nonnull final SlickSoundDevice soundDevice,
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final SoundDevice soundDevice,
       @Nonnull final SlickInputSystem inputSystem) {
     initNifty(container, game, renderDevice, soundDevice, inputSystem, new LWJGLTimeProvider());
   }
@@ -342,8 +343,8 @@ public abstract class NiftyOverlayBasicGameState extends BasicGameState implemen
   protected final void initNifty(
       @Nonnull @SuppressWarnings("TypeMayBeWeakened") final GameContainer container,
       @Nonnull final StateBasedGame game,
-      @Nonnull final SlickRenderDevice renderDevice,
-      @Nonnull final SlickSoundDevice soundDevice,
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final SoundDevice soundDevice,
       @Nonnull final SlickInputSystem inputSystem,
       @Nonnull final TimeProvider timeProvider) {
     if (guiPrepared) {

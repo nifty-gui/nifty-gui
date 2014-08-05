@@ -3,9 +3,9 @@ package de.lessvoid.nifty.slick2d;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.slick2d.input.RelaySlickInputSystem;
 import de.lessvoid.nifty.slick2d.input.SlickInputSystem;
-import de.lessvoid.nifty.slick2d.render.SlickRenderDevice;
-import de.lessvoid.nifty.slick2d.sound.SlickSoundDevice;
 import de.lessvoid.nifty.spi.input.InputSystem;
+import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 
 import javax.annotation.Nonnull;
@@ -81,8 +81,8 @@ public final class NiftyCarrier {
    * @throws IllegalStateException in case this function was already called
    */
   public void initNifty(
-      @Nonnull final SlickRenderDevice renderDevice,
-      @Nonnull final SlickSoundDevice soundDevice,
+      @Nonnull final RenderDevice renderDevice,
+      @Nonnull final SoundDevice soundDevice,
       final SlickInputSystem inputSystem,
       @Nonnull final TimeProvider timeProvider) {
     if (isInitialized()) {
