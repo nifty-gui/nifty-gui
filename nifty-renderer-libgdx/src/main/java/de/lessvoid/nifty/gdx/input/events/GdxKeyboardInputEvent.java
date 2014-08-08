@@ -395,13 +395,13 @@ public final class GdxKeyboardInputEvent extends KeyboardInputEvent implements G
   }
 
   @Override
-  public void sendToGdx(@Nonnull final InputProcessor processor) {
+  public boolean sendToGdx(@Nonnull final InputProcessor processor) {
     if (typed) {
-      processor.keyTyped(getCharacter());
+      return processor.keyTyped(getCharacter());
     } else if (isKeyDown()) {
-      processor.keyDown(gdxKey);
+      return processor.keyDown(gdxKey);
     } else {
-      processor.keyUp(gdxKey);
+      return processor.keyUp(gdxKey);
     }
   }
 
