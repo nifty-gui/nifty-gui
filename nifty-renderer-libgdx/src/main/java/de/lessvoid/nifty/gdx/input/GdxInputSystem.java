@@ -1,7 +1,9 @@
 package de.lessvoid.nifty.gdx.input;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.Array;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.gdx.input.events.GdxInputEvent;
 import de.lessvoid.nifty.gdx.input.events.GdxKeyboardInputEvent;
@@ -10,21 +12,68 @@ import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.Queue;
 
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class GdxInputSystem implements InputSystem, InputProcessor {
+  @Nonnull
   private final Input input;
   @Nonnull
   private final Queue<GdxInputEvent> eventQueue;
+  @Nonnull
+  private final InputMultiplexer nonNiftyCustomInputMultiplexer;
+  private final NiftyReceivesInput inputOrder;
 
-  public GdxInputSystem(final Input gdxInput) {
+  public GdxInputSystem(@Nonnull final Input input, @Nullable final InputProcessor... customProcessors) {
+    this(input, NiftyReceivesInput.FIRST, customProcessors);
+  }
+
+  public GdxInputSystem(@Nonnull final Input input,
+                        @Nonnull NiftyReceivesInput inputOrder,
+                        @Nullable final InputProcessor... customProcessors) {
     eventQueue = new LinkedList<GdxInputEvent>();
-    input = gdxInput;
-    input.setInputProcessor(this);
+    this.input = input;
+    this.inputOrder = inputOrder;
+    this.input.setInputProcessor(this);
+    nonNiftyCustomInputMultiplexer = customProcessors != null ? new InputMultiplexer(customProcessors) : new InputMultiplexer();
+  }
+
+  public void appendCustomProcessor(@Nonnull final InputProcessor customProcessor) {
+    nonNiftyCustomInputMultiplexer.addProcessor(customProcessor);
+  }
+
+  public void insertCustomProcessor(final int index, @Nonnull final InputProcessor customProcessor) {
+    nonNiftyCustomInputMultiplexer.addProcessor(index, customProcessor);
+  }
+
+  public void removeCustomProcessor(final int index) {
+    nonNiftyCustomInputMultiplexer.removeProcessor(index);
+  }
+
+  public void removeCustomProcessor(@Nonnull final InputProcessor customProcessor) {
+    nonNiftyCustomInputMultiplexer.removeProcessor(customProcessor);
+  }
+
+  @Nonnull
+  public Array<InputProcessor> getCustomProcessors() {
+    return nonNiftyCustomInputMultiplexer.getProcessors();
+  }
+
+  public int getCustomProcessorCount() {
+    return nonNiftyCustomInputMultiplexer.size();
+  }
+
+  public void setCustomProcessors(@Nonnull final Array<InputProcessor> customProcessors) {
+    nonNiftyCustomInputMultiplexer.setProcessors(customProcessors);
+  }
+
+  public void clearCustomProcessors() {
+    nonNiftyCustomInputMultiplexer.clear();
   }
 
   @Override
@@ -35,10 +84,16 @@ public class GdxInputSystem implements InputSystem, InputProcessor {
   public void forwardEvents(@Nonnull final NiftyInputConsumer inputEventConsumer) {
     while (true) {
       final GdxInputEvent event = eventQueue.poll();
-      if (event == null) {
-        return;
+      if (event == null) return;
+      if (inputOrder == NiftyReceivesInput.FIRST) {
+        if (!event.sendToNifty(inputEventConsumer)) {
+          event.sendToGdx(nonNiftyCustomInputMultiplexer);
+        }
+      } else {
+        if (!event.sendToGdx(nonNiftyCustomInputMultiplexer)) {
+          event.sendToNifty(inputEventConsumer);
+        }
       }
-      event.sendToNifty(inputEventConsumer);
       event.freeEvent();
     }
   }

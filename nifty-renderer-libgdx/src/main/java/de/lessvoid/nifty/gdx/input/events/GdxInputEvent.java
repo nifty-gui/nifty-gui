@@ -10,8 +10,6 @@ import javax.annotation.Nonnull;
  */
 public interface GdxInputEvent {
   public boolean sendToNifty(@Nonnull NiftyInputConsumer consumer);
-
-  public void sendToGdx(@Nonnull InputProcessor processor);
-
+  public boolean sendToGdx(@Nonnull InputProcessor processor);
   public void freeEvent();
 }

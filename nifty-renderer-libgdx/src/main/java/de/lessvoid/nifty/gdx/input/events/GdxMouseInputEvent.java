@@ -62,17 +62,17 @@ public final class GdxMouseInputEvent implements GdxInputEvent, Pool.Poolable {
   }
 
   @Override
-  public void sendToGdx(@Nonnull final InputProcessor processor) {
+  public boolean sendToGdx(@Nonnull final InputProcessor processor) {
     if (dragging) {
-      processor.touchDragged(mouseX, mouseY, pointer);
+      return processor.touchDragged(mouseX, mouseY, pointer);
     } else if (buttonDown) {
-      processor.touchDown(mouseX, mouseY, pointer, button);
+      return processor.touchDown(mouseX, mouseY, pointer, button);
     } else if (button != NO_BUTTON) {
-      processor.touchUp(mouseX, mouseY, pointer, button);
+      return processor.touchUp(mouseX, mouseY, pointer, button);
     } else if (wheelDelta != 0) {
-      processor.scrolled(wheelDelta);
+      return processor.scrolled(wheelDelta);
     } else {
-      processor.mouseMoved(mouseX, mouseY);
+      return processor.mouseMoved(mouseX, mouseY);
     }
   }
 
