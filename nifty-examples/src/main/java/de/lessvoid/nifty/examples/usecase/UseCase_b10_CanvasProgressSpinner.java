@@ -21,26 +21,15 @@ public class UseCase_b10_CanvasProgressSpinner {
   private int pos = 0;
 
   public UseCase_b10_CanvasProgressSpinner(final Nifty nifty) throws IOException {
-    nifty.setRootNodePlacementLayout(ChildLayout.Vertical);
-    NiftyNode fpsNode = nifty.createRootNode(UnitValue.percent(100), UnitValue.wildcard(), ChildLayout.Horizontal);
-
-    final Label label = fpsNode.newControl(Label.class);
-    label.setText("HALLO2");
-    label.setFont(nifty.createFont("fonts/aurulent-sans-16.fnt"));
-    label.getNode().startAnimated(0, 1000, new NiftyCallback<Float>() {
-      @Override
-      public void execute(final Float t) {
-        label.setText(nifty.getStatistics().getFpsText());
-      }
-    });
-
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    rootNode.setBackgroundColor(NiftyColor.BLACK());
+
     NiftyNode spinner = rootNode.newChildNode(UnitValue.px(128), UnitValue.px(128));
     spinner.addCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         canvas.resetTransform();
-        canvas.setFillStyle(NiftyColor.BLACK());
+        canvas.setFillStyle(NiftyColor.fromString("#000f"));
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         NiftyMutableColor color = NiftyMutableColor.fromColor(NiftyColor.fromString("#f00"));
@@ -66,6 +55,18 @@ public class UseCase_b10_CanvasProgressSpinner {
       }
     });
     spinner.startAnimatedRedraw(0, 50);
+
+    nifty.setRootNodePlacementLayout(ChildLayout.Vertical);
+    NiftyNode fpsNode = nifty.createRootNode(UnitValue.percent(100), UnitValue.wildcard(), ChildLayout.Horizontal);
+    final Label label = fpsNode.newControl(Label.class);
+    label.setFont(nifty.createFont("fonts/aurulent-sans-16.fnt"));
+    label.getNode().setBackgroundColor(NiftyColor.BLACK());
+    label.getNode().startAnimated(0, 1000, new NiftyCallback<Float>() {
+      @Override
+      public void execute(final Float t) {
+        label.setText(nifty.getStatistics().getFpsText());
+      }
+    });
   }
 
   public static void main(final String[] args) throws Exception {
