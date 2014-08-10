@@ -10,9 +10,9 @@ import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
- *
+ * A linear gradient batch renders a quad filled with a linear gradient.
  */
-public class LinearGradientQuadBatch implements Batch {
+public class LinearGradientQuadBatch implements Batch<NiftyLinearGradient> {
   private final static int NUM_PRIMITIVES = 100;
   public final static int PRIMITIVE_SIZE = 2 * 6;
 
@@ -28,8 +28,14 @@ public class LinearGradientQuadBatch implements Batch {
     this.gradientParams = gradientParams;
   }
 
+  @Override
+  public void render(final NiftyRenderDevice renderDevice) {
+    renderDevice.renderLinearGradientQuads(gradientParams, b);
+  }
+
+  @Override
   public boolean requiresNewBatch(final NiftyLinearGradient params) {
-    return !gradientParams.equals(params);
+    return !gradientParams.equals(params) || (b.remaining() < PRIMITIVE_SIZE);
   }
 
   public boolean add(
@@ -50,11 +56,6 @@ public class LinearGradientQuadBatch implements Batch {
     addTransformed(x1, y0, mat);
 
     return true;
-  }
-
-  @Override
-  public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.renderLinearGradientQuads(gradientParams, b);
   }
 
   private void addTransformed(final double x, final double y, final Mat4 mat) {

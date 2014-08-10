@@ -11,13 +11,13 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 /**
- *
+ * A TextureBatch stores textured Quads with vertex colors.
  */
-public class TextureBatch implements Batch {
+public class TextureBatch implements Batch<NiftyTexture> {
   private final static int NUM_PRIMITIVES = 1000;
   public final static int PRIMITIVE_SIZE = 8 * 6;
 
-  private final FloatBuffer vertices;
+  private final FloatBuffer b;
   private final NiftyTexture texture;
   private final int atlasId;
 
@@ -28,15 +28,21 @@ public class TextureBatch implements Batch {
   public TextureBatch(final NiftyTexture texture) {
     this.atlasId = texture.getAtlasId();
     this.texture = texture;
-    this.vertices = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
+    this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
   }
 
-  public boolean needsNewBatch(final NiftyTexture niftyTexture) {
-    return niftyTexture.getAtlasId() != atlasId;
+  @Override
+  public void render(final NiftyRenderDevice renderDevice) {
+    renderDevice.render(texture, b);
+  }
+
+  @Override
+  public boolean requiresNewBatch(final NiftyTexture niftyTexture) {
+    return niftyTexture.getAtlasId() != atlasId || (b.remaining() < PRIMITIVE_SIZE);
   }
 
   public void reset() {
-    this.vertices.clear();
+    this.b.clear();
   }
 
   public boolean add(
@@ -50,41 +56,37 @@ public class TextureBatch implements Batch {
       final double v1,
       final Mat4 mat,
       final NiftyColor color) {
-    // FIXME check number of primitives and reject adding if we would overflow
-
-    addTransformed(x,         y,          mat); vertices.put((float) u0); vertices.put((float) v0); addColor(color);
-    addTransformed(x,         y + height, mat); vertices.put((float) u0); vertices.put((float) v1); addColor(color);
-    addTransformed(x + width, y,          mat); vertices.put((float) u1); vertices.put((float) v0); addColor(color);
-
-    addTransformed(x + width, y,          mat); vertices.put((float) u1); vertices.put((float) v0); addColor(color);
-    addTransformed(x,         y + height, mat); vertices.put((float) u0); vertices.put((float) v1); addColor(color);
-    addTransformed(x + width, y + height, mat); vertices.put((float) u1); vertices.put((float) v1); addColor(color);
-
+    addVertex(x,         y,          mat, u0, v0, color);
+    addVertex(x,         y + height, mat, u0, v1, color);
+    addVertex(x + width, y,          mat, u1, v0, color);
+    addVertex(x + width, y,          mat, u1, v0, color);
+    addVertex(x,         y + height, mat, u0, v1, color);
+    addVertex(x + width, y + height, mat, u1, v1, color);
     return true;
   }
 
-  @Override
-  public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.render(texture, vertices);
-  }
-
-  private void addTransformed(final double x, final double y, final Mat4 mat) {
+  private void addVertex(
+      final double x,
+      final double y,
+      final Mat4 mat,
+      final double u,
+      final double v,
+      final NiftyColor color) {
     vsrc.x = (float) x;
     vsrc.y = (float) y;
     vsrc.z = 0.0f;
     Mat4.transform(mat, vsrc, vdst);
-    vertices.put(vdst.x);
-    vertices.put(vdst.y);
+    b.put(vdst.x);
+    b.put(vdst.y);
+    b.put((float) u);
+    b.put((float) v);
+    b.put((float) color.getRed());
+    b.put((float) color.getGreen());
+    b.put((float) color.getBlue());
+    b.put((float) color.getAlpha());
   }
 
   private FloatBuffer createBuffer(final int size) {
     return ByteBuffer.allocateDirect(size << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
-  }
-
-  private void addColor(final NiftyColor color) {
-    vertices.put((float) color.getRed());
-    vertices.put((float) color.getGreen());
-    vertices.put((float) color.getBlue());
-    vertices.put((float) color.getAlpha());
   }
 }

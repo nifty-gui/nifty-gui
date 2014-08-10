@@ -2,7 +2,6 @@ package de.lessvoid.nifty.internal.render.batch;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyColor;
@@ -12,9 +11,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class BatchManager {
-  private static Logger log = Logger.getLogger(BatchManager.class.getName());
-
-  private List<Batch> activeBatches = new ArrayList<Batch>();
+  private List<Batch<?>> activeBatches = new ArrayList<Batch<?>>();
 
   public void begin() {
     activeBatches.clear();
@@ -23,33 +20,37 @@ public class BatchManager {
     changeBlendMode(BlendMode.BLEND);
   }
 
+  public void end(final NiftyRenderDevice renderDevice) {
+    renderDevice.begin();
+    for (int i=0; i<activeBatches.size(); i++) {
+      activeBatches.get(i).render(renderDevice);
+    }
+    renderDevice.end();
+  }
+
   public void changeBlendMode(final BlendMode blendMode) {
-    activeBatches.add(new ChangeBlendModeBatch(blendMode));
+    requestBatch(ChangeBlendModeBatch.class, blendMode, new BatchFactory<ChangeBlendModeBatch>() {
+      @Override
+      public ChangeBlendModeBatch createBatch() {
+        return new ChangeBlendModeBatch(blendMode);
+      }
+    });
   }
 
   public void addTextureQuad(final NiftyTexture niftyTexture, final Mat4 mat, final NiftyColor color) {
-    TextureBatch batch = textureBatch(niftyTexture);
-    if (batch.add(
+    TextureBatch batch = requestBatch(TextureBatch.class, niftyTexture, new BatchFactory<TextureBatch>() {
+      @Override
+      public TextureBatch createBatch() {
+        return new TextureBatch(niftyTexture);
+      }
+    });
+    batch.add(
         0.0, 0.0,
         niftyTexture.getWidth(), niftyTexture.getHeight(),
         niftyTexture.getU0(), niftyTexture.getV0(),
         niftyTexture.getU1(), niftyTexture.getV1(),
         mat,
-        color)) {
-      return;
-    }
-    batch = newTextureBatch(niftyTexture);
-    if (batch.add(
-        0.0, 0.0,
-        niftyTexture.getWidth(), niftyTexture.getHeight(),
-        niftyTexture.getU0(), niftyTexture.getV0(),
-        niftyTexture.getU1(), niftyTexture.getV1(),
-        mat,
-        color)) {
-      return;
-    }
-    // WTF?
-    throw new RuntimeException("Created new texture batch but couldn't add any data to it. This should never happen!");
+        color);
   }
 
   public void addTextureQuad(
@@ -64,16 +65,13 @@ public class BatchManager {
       final double u1,
       final double v1,
       final NiftyColor color) {
-    TextureBatch batch = textureBatch(niftyTexture);
-    if (batch.add(x, y, width, height, u0, v0, u1, v1, mat, color)) {
-      return;
-    }
-    batch = newTextureBatch(niftyTexture);
-    if (batch.add(x, y, width, height, u0, v0, u1, v1, mat, color)) {
-      return;
-    }
-    // WTF?
-    throw new RuntimeException("Created new texture batch but couldn't add any data to it. This should never happen!");
+    TextureBatch batch = requestBatch(TextureBatch.class, niftyTexture, new BatchFactory<TextureBatch>() {
+      @Override
+      public TextureBatch createBatch() {
+        return new TextureBatch(niftyTexture);
+      }
+    });
+    batch.add(x, y, width, height, u0, v0, u1, v1, mat, color);
   }
 
   public void addLinearGradientQuad(
@@ -85,24 +83,20 @@ public class BatchManager {
       final NiftyLinearGradient fillLinearGradient) {
     float dx = (float) x1 - (float) x0;
     float dy = (float) y1 - (float) y0;
-    NiftyLinearGradient gradient = new NiftyLinearGradient(
+    final NiftyLinearGradient gradient = new NiftyLinearGradient(
         x0 + fillLinearGradient.getX0() * dx,
         y0 + fillLinearGradient.getY0() * dy,
         x0 + fillLinearGradient.getX1() * dx,
         y0 + fillLinearGradient.getY1() * dy);
     gradient.addColorSteps(fillLinearGradient.getColorStops());
 
-    LinearGradientQuadBatch batch = linearGradientQuadBatch(gradient);
-    if (batch.add(x0, y0, x1, y1, mat)) {
-      return;
-    }
-    batch = newLinearGradientQuadBatch(gradient);
-    if (batch.add(x0, y0, x1, y1, mat)) {
-      return;
-    }
-
-    // WTF?
-    throw new RuntimeException("Created new linear gradient batch but couldn't add any data to it. This should never happen!");
+    LinearGradientQuadBatch batch = requestBatch(LinearGradientQuadBatch.class, gradient, new BatchFactory<LinearGradientQuadBatch>() {
+      @Override
+      public LinearGradientQuadBatch createBatch() {
+        return new LinearGradientQuadBatch(gradient);
+      }
+    });
+    batch.add(x0, y0, x1, y1, mat);
   }
 
   public void addColorQuad(
@@ -112,89 +106,48 @@ public class BatchManager {
       final double y1,
       final NiftyColor c,
       final Mat4 mat) {
-    ColorQuadBatch batch = colorQuadBatch();
-    if (batch.add(x0, y0, x1, y1, c, c, c, c, mat)) {
-      return;
-    }
-    batch = newColorQuadBatch();
-    if (batch.add(x0, y0, x1, y1, c, c, c, c, mat)) {
-      return;
-    }
-    // WTF?
-    throw new RuntimeException("Created new color batch but couldn't add any data to it. This should never happen!");
+    ColorQuadBatch batch = requestBatch(ColorQuadBatch.class, null, new BatchFactory<ColorQuadBatch>() {
+      @Override
+      public ColorQuadBatch createBatch() {
+        return new ColorQuadBatch();
+      }
+    });
+    batch.add(x0, y0, x1, y1, c, c, c, c, mat);
   }
 
   public void addCustomShader(final String shaderId) {
-    activeBatches.add(new CustomShaderBatch(shaderId));
+    requestBatch(CustomShaderBatch.class, shaderId, new BatchFactory<CustomShaderBatch>() {
+      @Override
+      public CustomShaderBatch createBatch() {
+        return new CustomShaderBatch(shaderId);
+      }
+    });
   }
 
-  public void end(final NiftyRenderDevice renderDevice) {
-    renderDevice.begin();
-    for (int i=0; i<activeBatches.size(); i++) {
-      activeBatches.get(i).render(renderDevice);
-    }
-    renderDevice.end();
-  }
-
-  private TextureBatch textureBatch(final NiftyTexture niftyTexture) {
+  private <T extends Batch<P>, P> T requestBatch(
+      final Class<T> clazz,
+      final P param,
+      final BatchFactory<T> batchFactory) {
     if (activeBatches.isEmpty()) {
-      return newTextureBatch(niftyTexture);
+      return addBatch(batchFactory);
     }
-    Batch lastBatch = activeBatches.get(activeBatches.size() - 1);
-    if (!(lastBatch instanceof TextureBatch)) {
-      return newTextureBatch(niftyTexture);
+    Batch<P> lastBatch = (Batch<P>) activeBatches.get(activeBatches.size() - 1);
+    if (!clazz.isInstance(lastBatch)) {
+      return addBatch(batchFactory);
     }
-    TextureBatch textureBatch = (TextureBatch) lastBatch; 
-    if (textureBatch.needsNewBatch(niftyTexture)) {
-      return newTextureBatch(niftyTexture);
+    if (!lastBatch.requiresNewBatch(param)) {
+      return (T) lastBatch;
     }
-    return textureBatch;
+    return addBatch(batchFactory);
   }
 
-  private TextureBatch newTextureBatch(final NiftyTexture niftyTexture) {
-    TextureBatch batch = new TextureBatch(niftyTexture);
+  private <T extends Batch<P>, P> T addBatch(final BatchFactory<T> batchFactory) {
+    T batch = batchFactory.createBatch();
     activeBatches.add(batch);
-    log.fine("new texture batch added. total batch count now: " + activeBatches.size());
     return batch;
   }
 
-  private ColorQuadBatch colorQuadBatch() {
-    if (activeBatches.isEmpty()) {
-      return newColorQuadBatch();
-    }
-    Batch lastBatch = activeBatches.get(activeBatches.size() - 1);
-    if (!(lastBatch instanceof ColorQuadBatch)) {
-      return newColorQuadBatch();
-    }
-    return (ColorQuadBatch) lastBatch; 
-  }
-
-  private ColorQuadBatch newColorQuadBatch() {
-    ColorQuadBatch batch = new ColorQuadBatch();
-    activeBatches.add(batch);
-    log.fine("new color quad batch added. total batch count now: " + activeBatches.size());
-    return batch;
-  }
-
-  private LinearGradientQuadBatch linearGradientQuadBatch(final NiftyLinearGradient params) {
-    if (activeBatches.isEmpty()) {
-      return newLinearGradientQuadBatch(params);
-    }
-    Batch lastBatch = activeBatches.get(activeBatches.size() - 1);
-    if (!(lastBatch instanceof LinearGradientQuadBatch)) {
-      return newLinearGradientQuadBatch(params);
-    }
-    LinearGradientQuadBatch batch = (LinearGradientQuadBatch) lastBatch;
-    if (!batch.requiresNewBatch(params)) {
-      return batch;
-    }
-    return newLinearGradientQuadBatch(params);
-  }
-
-  private LinearGradientQuadBatch newLinearGradientQuadBatch(final NiftyLinearGradient params) {
-    LinearGradientQuadBatch batch = new LinearGradientQuadBatch(params);
-    activeBatches.add(batch);
-    log.fine("new linear gradient quad batch added. total batch count now: " + activeBatches.size());
-    return batch;
+  private interface BatchFactory<T> {
+    T createBatch();
   }
 }

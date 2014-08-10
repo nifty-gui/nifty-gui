@@ -10,9 +10,9 @@ import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
- *
+ * A ColorQuadBatch stores 2d quads with vertex color at each vertex.
  */
-public class ColorQuadBatch implements Batch {
+public class ColorQuadBatch implements Batch<Void> {
   private final static int NUM_PRIMITIVES = 100;
   public final static int PRIMITIVE_SIZE = 6 * 6;
 
@@ -37,25 +37,14 @@ public class ColorQuadBatch implements Batch {
       final NiftyColor c4,
       final Mat4 mat) {
     // first
-    addTransformed(x0, y0, mat);
-    b.put((float) c1.getRed()); b.put((float) c1.getGreen()); b.put((float) c1.getBlue()); b.put((float) c1.getAlpha());
-
-    addTransformed(x0, y1, mat);
-    b.put((float) c3.getRed()); b.put((float) c3.getGreen()); b.put((float) c3.getBlue()); b.put((float) c3.getAlpha());
-
-    addTransformed(x1, y0, mat);
-    b.put((float) c2.getRed()); b.put((float) c2.getGreen()); b.put((float) c2.getBlue()); b.put((float) c2.getAlpha());
+    addTransformed(x0, y0, mat, c1);
+    addTransformed(x0, y1, mat, c3);
+    addTransformed(x1, y0, mat, c2);
 
     // second
-    addTransformed(x0, y1, mat);
-    b.put((float) c3.getRed()); b.put((float) c3.getGreen()); b.put((float) c3.getBlue()); b.put((float) c3.getAlpha());
-
-    addTransformed(x1, y1, mat);
-    b.put((float) c4.getRed()); b.put((float) c4.getGreen()); b.put((float) c4.getBlue()); b.put((float) c4.getAlpha());
-
-    addTransformed(x1, y0, mat);
-    b.put((float) c2.getRed()); b.put((float) c2.getGreen()); b.put((float) c2.getBlue()); b.put((float) c2.getAlpha());
-
+    addTransformed(x0, y1, mat, c3);
+    addTransformed(x1, y1, mat, c4);
+    addTransformed(x1, y0, mat, c2);
     return true;
   }
 
@@ -64,13 +53,22 @@ public class ColorQuadBatch implements Batch {
     renderDevice.renderColorQuads(b);
   }
 
-  private void addTransformed(final double x, final double y, final Mat4 mat) {
+  @Override
+  public boolean requiresNewBatch(final Void param) {
+    return (b.remaining() < PRIMITIVE_SIZE);
+  }
+
+  private void addTransformed(final double x, final double y, final Mat4 mat, final NiftyColor color) {
     vsrc.x = (float) x;
     vsrc.y = (float) y;
     vsrc.z = 0.0f;
     Mat4.transform(mat, vsrc, vdst);
     b.put(vdst.x);
     b.put(vdst.y);
+    b.put((float) color.getRed());
+    b.put((float) color.getGreen());
+    b.put((float) color.getBlue());
+    b.put((float) color.getAlpha());
   }
 
   private FloatBuffer createBuffer(final int size) {
