@@ -12,7 +12,7 @@ import de.lessvoid.nifty.internal.render.TextRenderer;
 
 public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback {
   private NiftyColor textColor = NiftyColor.WHITE();
-  private String text;
+  private String text = "";
   private NiftyFont font;
   private HAlign textHAlign = HAlign.center;
   private VAlign textVAlign = VAlign.center;
@@ -116,8 +116,6 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
 
     @Override
     public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-      canvas.setFillStyle(NiftyColor.fromString("#000f"));
-      canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
       canvas.setTextColor(textColor);
       assertFont();
       textRenderer.initialize(font, text);
