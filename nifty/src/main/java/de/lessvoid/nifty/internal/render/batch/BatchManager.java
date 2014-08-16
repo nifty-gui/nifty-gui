@@ -21,11 +21,11 @@ public class BatchManager {
   }
 
   public void end(final NiftyRenderDevice renderDevice) {
-    renderDevice.begin();
+    renderDevice.beginRender();
     for (int i=0; i<activeBatches.size(); i++) {
       activeBatches.get(i).render(renderDevice);
     }
-    renderDevice.end();
+    renderDevice.endRender();
   }
 
   public void changeBlendMode(final BlendMode blendMode) {

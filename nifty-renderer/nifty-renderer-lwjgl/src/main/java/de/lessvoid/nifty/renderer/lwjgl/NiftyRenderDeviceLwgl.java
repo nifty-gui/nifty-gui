@@ -127,7 +127,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void begin() {
+  public void beginRender() {
     if (clearScreenOnRender) {
 //      glClearColor((float)Math.random(), (float)Math.random(), (float)Math.random(), 1.f);
       glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -138,7 +138,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void end() {
+  public void endRender() {
   }
 
   @Override
@@ -157,7 +157,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void render(final NiftyTexture renderTarget, final FloatBuffer vertices) {
+  public void render(final NiftyTexture texture, final FloatBuffer vertices) {
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -178,7 +178,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.enableVertexAttribute(2);
     vao.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
 
-    internal(renderTarget).bind();
+    internal(texture).bind();
     coreFactory.getCoreRender().renderTriangles(vertices.position() / TextureBatch.PRIMITIVE_SIZE * 6);
 
     vao.disableVertexAttribute(2);
@@ -283,7 +283,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void renderWithShader(final String shaderId) {
+  public void activateCustomShader(final String shaderId) {
     CoreShader shader = shaderManager.activate(shaderId);
     shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
     shader.setUniformf("time", (System.nanoTime() - beginTime) / NANO_TO_MS_CONVERSION / 1000.f);

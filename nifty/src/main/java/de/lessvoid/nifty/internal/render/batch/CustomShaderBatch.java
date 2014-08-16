@@ -14,7 +14,7 @@ public class CustomShaderBatch implements Batch<String> {
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.renderWithShader(shaderId);
+    renderDevice.activateCustomShader(shaderId);
   }
 
   @Override
