@@ -69,12 +69,12 @@ public class PanelRenderer implements ElementRenderer {
     return debugColor;
   }
 
-  /**
-   * set a background color.
-   *
-   * @param newBackgroundColor background color
-   */
-  public void setBackgroundColor(@Nullable final Color newBackgroundColor) {
-    this.backgroundColor = newBackgroundColor;
+  public void setBackgroundColor(@Nullable final Color backgroundColor) {
+    this.backgroundColor = backgroundColor;
+  }
+
+  @Nullable
+  public Color getBackgroundColor() {
+    return backgroundColor;
   }
 }
