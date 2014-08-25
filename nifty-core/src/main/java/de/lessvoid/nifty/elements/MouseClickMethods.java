@@ -11,21 +11,22 @@ public abstract class MouseClickMethods {
   @Nullable
   private NiftyMethodInvoker onClickMethod;
   @Nullable
+  private NiftyMethodInvoker onMultiClickMethod;
+  @Nullable
   private NiftyMethodInvoker onClickMouseMoveMethod;
   @Nullable
   private NiftyMethodInvoker onReleaseMethod;
   @Nonnull
   protected final Element element;
-  @Nullable
-  private NiftyMethodInvoker onMultClickMethod;
 
   public MouseClickMethods(@Nonnull final Element element) {
     this.element = element;
   }
 
   public void setMultiClickMethod(@Nullable NiftyMethodInvoker onMultiClickMethod){
-      this.onMultClickMethod = onMultiClickMethod;
+    this.onMultiClickMethod = onMultiClickMethod;
   }
+
   public void setOnClickMethod(@Nullable NiftyMethodInvoker onClickMethod) {
     this.onClickMethod = onClickMethod;
   }
@@ -57,20 +58,11 @@ public abstract class MouseClickMethods {
       @Nullable final String onClickAlternateKey,
       @Nonnull final NiftyMouseInputEvent inputEvent,
       int clickCount) {
-    if (onMultClickMethod != null) {
+    if (onMultiClickMethod != null) {
       nifty.setAlternateKey(onClickAlternateKey);
-      return onMultClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY(),clickCount);
+      return onMultiClickMethod.invoke(inputEvent.getMouseX(), inputEvent.getMouseY(),clickCount);
     }
     return false;
-  }
-  
-  public void onActivate(@Nonnull final Nifty nifty) {
-    if (onClickMethod != null) {
-      onClickMethod.invoke();
-    }
-    if (onReleaseMethod != null) {
-      onReleaseMethod.invoke();
-    }
   }
 
   public boolean onClickMouseMove(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent inputEvent) {
@@ -80,10 +72,19 @@ public abstract class MouseClickMethods {
     return false;
   }
 
-  public boolean onMouseRelease(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent mouseEvent) {
+  public boolean onRelease(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent mouseEvent) {
     if (onReleaseMethod != null) {
       return onReleaseMethod.invoke();
     }
     return false;
+  }
+
+  public void clickAndRelease(@Nonnull final Nifty nifty) {
+    if (onClickMethod != null) {
+      onClickMethod.invoke();
+    }
+    if (onReleaseMethod != null) {
+      onReleaseMethod.invoke();
+    }
   }
 }

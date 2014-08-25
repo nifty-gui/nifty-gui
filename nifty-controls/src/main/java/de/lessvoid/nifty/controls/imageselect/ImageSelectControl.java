@@ -150,7 +150,7 @@ public class ImageSelectControl extends AbstractController implements ImageSelec
     } else if (inputEvent == NiftyStandardInputEvent.Activate) {
       Element element = getElement();
       if (element != null) {
-        element.onClick();
+        element.onClickAndReleasePrimaryMouseButton();
       }
       return true;
     }

@@ -58,7 +58,7 @@ public class PageControl implements Controller {
       focusHandler.getPrev(element).setFocus();
       return true;
     } else if (inputEvent == NiftyStandardInputEvent.Activate) {
-      element.onClick();
+      element.onClickAndReleasePrimaryMouseButton();
       return true;
     } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
       if (focusHandler != null) {

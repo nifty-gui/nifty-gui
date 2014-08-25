@@ -36,7 +36,7 @@ public class DefaultController implements Controller {
     if (nextPrevHelper.handleNextPrev(inputEvent)) {
       return true;
     } else if (inputEvent == NiftyStandardInputEvent.Activate) {
-      element.onClick();
+      element.onClickAndReleasePrimaryMouseButton();
       return true;
     }
     return false;

@@ -29,6 +29,20 @@ public class TertiaryClickMouseMethods extends MouseClickMethods {
   }
 
   @Override
+  public boolean onMultiClick(
+          @Nonnull final Nifty nifty,
+          @Nullable final String onClickAlternateKey,
+          @Nonnull final NiftyMouseInputEvent inputEvent,
+          int clickCount) {
+    String id = element.getId();
+    if (id != null) {
+      nifty.publishEvent(id, new NiftyMouseTertiaryMultiClickedEvent(element, inputEvent,clickCount));
+    }
+    element.startEffectWithoutChildren(EffectEventId.onClick);
+    return super.onMultiClick(nifty, onClickAlternateKey, inputEvent, clickCount);
+  }
+
+  @Override
   public boolean onClickMouseMove(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent inputEvent) {
     String id = element.getId();
     if (id != null) {
@@ -38,34 +52,21 @@ public class TertiaryClickMouseMethods extends MouseClickMethods {
   }
 
   @Override
-  public void onActivate(@Nonnull final Nifty nifty) {
-    String id = element.getId();
-    if (id != null) {
-      nifty.publishEvent(id, new NiftyMouseTertiaryClickedEvent(element));
-    }
-    super.onActivate(nifty);
-  }
-
-  @Override
-  public boolean onMouseRelease(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent mouseEvent) {
+  public boolean onRelease(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent mouseEvent) {
     String id = element.getId();
     if (id != null) {
       nifty.publishEvent(id, new NiftyMouseTertiaryReleaseEvent(element, mouseEvent));
     }
-    return super.onMouseRelease(nifty, mouseEvent);
+    return super.onRelease(nifty, mouseEvent);
   }
-  
-   @Override
-  public boolean onMultiClick(
-      @Nonnull final Nifty nifty,
-      @Nullable final String onClickAlternateKey,
-      @Nonnull final NiftyMouseInputEvent inputEvent,
-      int clickCount) {
+
+  @Override
+  public void clickAndRelease(@Nonnull final Nifty nifty) {
     String id = element.getId();
     if (id != null) {
-      nifty.publishEvent(id, new NiftyMouseTertiaryMultiClickedEvent(element, inputEvent,clickCount));
+      nifty.publishEvent(id, new NiftyMouseTertiaryClickedEvent(element));
+      nifty.publishEvent(id, new NiftyMouseTertiaryReleaseEvent(element));
     }
-    element.startEffectWithoutChildren(EffectEventId.onClick);
-    return super.onMultiClick(nifty, onClickAlternateKey, inputEvent,clickCount);
+    super.clickAndRelease(nifty);
   }
 }

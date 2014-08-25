@@ -101,7 +101,15 @@ public class ElementInteraction {
     return moveResult || clickResult;
   }
 
-  public void activate(@Nonnull final Nifty nifty) {
-    primary.activate(nifty);
+  public void clickAndReleasePrimaryMouseButton(@Nonnull final Nifty nifty) {
+    primary.clickAndReleaseMouse(nifty);
+  }
+
+  public void clickAndReleaseSecondaryMouseButton(@Nonnull final Nifty nifty) {
+    secondary.clickAndReleaseMouse(nifty);
+  }
+
+  public void clickAndReleaseTertiaryMouseButton(@Nonnull final Nifty nifty) {
+    tertiary.clickAndReleaseMouse(nifty);
   }
 }
