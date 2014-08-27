@@ -13,8 +13,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import javax.annotation.Nonnull;
 
 /**
- * Outro implementation for the nifty demo Outro screen.
- *
  * @author void
  */
 public class OutroController implements ScreenController, KeyInputHandler {

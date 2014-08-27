@@ -3,7 +3,7 @@
   <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
  
-  <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.ResizeMain">
+  <screen id="start" controller="de.lessvoid.nifty.examples.helloworld.ResizeExample">
     <layer childLayout="absolute" backgroundColor="#f008">
       <panel width="100" height="100" backgroundColor="#00ff" x="100" y="100" />
     </layer>

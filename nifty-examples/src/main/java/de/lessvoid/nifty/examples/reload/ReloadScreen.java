@@ -10,8 +10,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import javax.annotation.Nonnull;
 
 /**
- * ScreenController for Hello World Example.
- *
  * @author void
  */
 public class ReloadScreen implements ScreenController, NiftyExample {

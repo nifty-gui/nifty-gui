@@ -29,9 +29,9 @@
             <version>0.0.17</version>
         </dependency>
     </dependencies>
-    <description>This is an OpenAL/lwjgl based SoundDevice for Nifty GUI. It was extracted out of Slick2d to be
-        independent of the whole Slick2d library and to be used with none Slick2d based renderes. All credits for the
-        original code go to Kevin Glass and all Slick2d contributers.
+    <description>This is an OpenAL/lwjgl based SoundDevice for Nifty GUI. It was extracted out of Slick2D to be
+        independent of the whole Slick2D library and to be used with none Slick2D based renderes. All credits for the
+        original code go to Kevin Glass and all Slick2D contributers.
     </description>
     <reporting>
         <plugins>

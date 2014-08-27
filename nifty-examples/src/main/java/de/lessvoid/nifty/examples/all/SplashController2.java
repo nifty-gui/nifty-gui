@@ -10,8 +10,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import javax.annotation.Nonnull;
 
 /**
- * SplasScreen implementation for the nifty demo splash screen.
- *
  * @author void
  */
 public class SplashController2 implements ScreenController, KeyInputHandler {

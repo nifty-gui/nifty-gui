@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.examples.slick2d.helloniftybuilder;
 
-import de.lessvoid.nifty.examples.helloniftybuilder.HelloNiftyBuilderExampleMain;
+import de.lessvoid.nifty.examples.helloniftybuilder.HelloNiftyBuilderExample;
 import de.lessvoid.nifty.examples.slick2d.SlickExampleLoader;
 
 /**
@@ -15,6 +15,6 @@ public class HelloNiftyBuilderDemoMain {
    * @param args call arguments - have no effect
    */
   public static void main(final String[] args) {
-    SlickExampleLoader.createGame(new SlickExampleLoader(new HelloNiftyBuilderExampleMain()));
+    SlickExampleLoader.createGame(new SlickExampleLoader(new HelloNiftyBuilderExample()));
   }
 }

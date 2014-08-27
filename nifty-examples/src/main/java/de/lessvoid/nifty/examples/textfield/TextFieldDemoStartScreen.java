@@ -16,8 +16,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import javax.annotation.Nonnull;
 
 /**
- * TextFieldDemoStartScreen.
- *
  * @author void
  */
 public class TextFieldDemoStartScreen implements ScreenController, NiftyExample {

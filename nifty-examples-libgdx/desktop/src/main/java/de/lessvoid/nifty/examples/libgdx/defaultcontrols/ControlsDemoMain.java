@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import de.lessvoid.nifty.examples.defaultcontrols.ControlsDemo;
 import de.lessvoid.nifty.examples.libgdx.LibgdxExampleApplication;
 import de.lessvoid.nifty.examples.libgdx.resolution.GdxResolutionControl;
+import de.lessvoid.nifty.examples.libgdx.resolution.GdxResolutionControl.Resolution;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
@@ -20,7 +21,7 @@ public class ControlsDemoMain {
     config.resizable = true;
     final int atlasWidth = 2048;
     final int atlasHeight = 2048;
-    new LwjglApplication(new LibgdxExampleApplication(new ControlsDemo(new GdxResolutionControl()), atlasWidth,
-        atlasHeight), config);
+    new LwjglApplication(new LibgdxExampleApplication(new ControlsDemo<Resolution>(new GdxResolutionControl()),
+            atlasWidth, atlasHeight), config);
   }
 }

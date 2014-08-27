@@ -10,7 +10,6 @@ import de.lessvoid.nifty.screen.Screen;
 import javax.annotation.Nonnull;
 
 /**
- * MultiplayerPanelControl.
  * @author void
  */
 public class MultiplayerPanelControl implements Controller {

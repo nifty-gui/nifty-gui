@@ -108,7 +108,7 @@ public class MainPage implements ScreenController, KeyInputHandler {
     addChapter("Advanced Nifty: Styles", "pageChapterV");
     addChapter("Advanced Nifty: Controls", "pageChapterVI");
     addChapter("Advanced Nifty: Drag and Drop", "pageChapterVII");
-    addChapter("Integrate Nifty with: Slick2d", "pageChapterVIII");
+    addChapter("Integrate Nifty with: Slick2D", "pageChapterVIII");
     addChapter("The End", "pageTheEndTeaser");
     addChapter("Credits", "pageCredits");
 

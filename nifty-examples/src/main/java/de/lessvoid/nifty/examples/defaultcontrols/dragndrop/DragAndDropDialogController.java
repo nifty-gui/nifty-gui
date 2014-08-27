@@ -15,7 +15,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * The DragAndDropDialogController.
  * @author void
  */
 public class DragAndDropDialogController implements Controller {

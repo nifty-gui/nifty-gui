@@ -1,19 +1,12 @@
-/*
- * Created on 12.02.2005
- *  
- */
 package de.lessvoid.nifty.examples.defaultcontrols;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.render.batch.BatchRenderDevice;
-import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.builder.*;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.dropdown.builder.DropDownBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.slider.builder.SliderBuilder;
-import de.lessvoid.nifty.examples.LwjglInitHelper;
 import de.lessvoid.nifty.examples.NiftyExample;
 import de.lessvoid.nifty.examples.defaultcontrols.chatcontrol.ChatControlDialogDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.common.CommonBuilders;
@@ -30,16 +23,9 @@ import de.lessvoid.nifty.examples.defaultcontrols.tabs.TabsControlDialogDefiniti
 import de.lessvoid.nifty.examples.defaultcontrols.textfield.TextFieldDialogControlDefinition;
 import de.lessvoid.nifty.examples.defaultcontrols.treebox.TreeBoxControlDialogDefinition;
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
-import de.lessvoid.nifty.examples.resolution.ResolutionControlLWJGL;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendCoreProfileFactory;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
-import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import de.lessvoid.nifty.tools.Color;
-import org.lwjgl.opengl.DisplayMode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,57 +35,8 @@ public class ControlsDemo<T> implements NiftyExample {
   private static final CommonBuilders builders = new CommonBuilders();
   private final ResolutionControl<T> resolutionControl;
 
-  // this will enable the batched renderer when set to true
-  private final static boolean useBatchedRenderer = true;
-
-  // this will enable the CoreProfile renderer (please note that currently this required useBatchedRenderer set to true) 
-  private final static boolean useCoreProfile = false;
-
   public ControlsDemo(final ResolutionControl<T> resControl) {
     resolutionControl = resControl;
-  }
-
-  public static void main(final String[] args) {
-    // init lwjgl
-    if (!LwjglInitHelper.initSubSystems("Nifty Controls Demonstation", useCoreProfile)) {
-      System.exit(0);
-    }
-
-    // create Nifty and load default styles and controls
-    Nifty nifty;
-    if (useBatchedRenderer) {
-      BatchRenderDevice renderDevice = new BatchRenderDevice(createBatchRenderBackend(useCoreProfile));
-      renderDevice.enableLogFPS();
-
-      nifty = new Nifty(
-          renderDevice,
-          new OpenALSoundDevice(),
-          LwjglInitHelper.getInputSystem(),
-          new AccurateTimeProvider());
-    } else {
-      nifty = new Nifty(
-          new LwjglRenderDevice(true),
-          new OpenALSoundDevice(),
-          LwjglInitHelper.getInputSystem(),
-          new AccurateTimeProvider());
-    }
-    ControlsDemo<DisplayMode> demo = new ControlsDemo(new ResolutionControlLWJGL(useCoreProfile));
-    demo.prepareStart(nifty);
-
-    nifty.gotoScreen("start");
-
-    // start the render loop
-    LwjglInitHelper.renderLoop(nifty, null);
-    LwjglInitHelper.destroy();
-  }
-
-  @Nonnull
-  private static BatchRenderBackend createBatchRenderBackend(final boolean useCoreProfile) {
-    if (useCoreProfile) {
-      return LwjglBatchRenderBackendCoreProfileFactory.create();
-    } else {
-      return LwjglBatchRenderBackendFactory.create();
-    }
   }
 
   @Nonnull

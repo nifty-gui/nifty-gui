@@ -16,8 +16,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * ScreenController for Hello World Example.
- *
  * @author void
  */
 public class MenuStartScreen implements ScreenController, NiftyExample {

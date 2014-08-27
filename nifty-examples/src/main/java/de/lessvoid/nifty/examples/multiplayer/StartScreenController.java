@@ -11,8 +11,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import javax.annotation.Nonnull;
 
 /**
- * StartScreenController for Multiplayer.
- *
  * @author void
  */
 public class StartScreenController implements ScreenController, NiftyExample {
