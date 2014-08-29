@@ -9,8 +9,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import javax.annotation.Nonnull;
 
 /**
- * The screen controller for the message box example.
- *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class MessageBoxStartScreen implements ScreenController, NiftyExample {

@@ -19,12 +19,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * ConsoleDemoStartScreen.
- *
  * @author void
  */
-public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputHandler, NiftyExample {
-  @Nullable
+public class ConsoleSameScreenStartScreen implements ScreenController, KeyInputHandler, NiftyExample { @Nullable
   private Nifty nifty;
   @Nullable
   private Screen screen;

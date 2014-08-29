@@ -264,7 +264,7 @@
         </panel>
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
-          <text style="textFontNoWrap" text="The awesome Kevin Glass for creating Slick2d (" />
+          <text style="textFontNoWrap" text="The awesome Kevin Glass for creating Slick2D (" />
           <text style="textFontLink" text="http://slick.cokeandcode.com/" action="openLink(http://slick.cokeandcode.com/)" />
           <text style="textFontNoWrap" text=") and for being a great person. Thanks Kev! :&gt;" />
         </panel>
@@ -321,7 +321,7 @@
     <panel style="pagePanel">
       <panel style="middlePanel">
         <text style="captionFont" text="So what exactly is Nifty GUI?" />
-        <text style="textFont" text="Nifty GUI is a Java Library that supports the creation of interactive user interfaces for games or similar applications. The actual GUI is stored in xml-Files with supporting Java code.&#10;&#10;Nifty can easily be integrated into different rendering systems. There are Rendering Backend Implementations available for Lwjgl, Slick2d and the Java Monkey Engine (for both JME2 and JME3). The Rendering Interface you need to implement is simple, so Nifty can be integrated into other systems quite easily too.&#10;&#10;To summarize Nifty in one sentence: Nifty layouts and displays elements on a screen and allows you to interact with them.&#10;" />
+        <text style="textFont" text="Nifty GUI is a Java Library that supports the creation of interactive user interfaces for games or similar applications. The actual GUI is stored in xml-Files with supporting Java code.&#10;&#10;Nifty can easily be integrated into different rendering systems. There are Rendering Backend Implementations available for Lwjgl, Slick2D and the Java Monkey Engine (for both JME2 and JME3). The Rendering Interface you need to implement is simple, so Nifty can be integrated into other systems quite easily too.&#10;&#10;To summarize Nifty in one sentence: Nifty layouts and displays elements on a screen and allows you to interact with them.&#10;" />
         <text style="captionFont" text="And what is it not?" />
         <text style="textFont" text="Nifty is not an application framwork and it is not a Widget Toolkit (like AWT, Swing or even SWT). If you need a solution with lots of controls, windows, dialog boxes and so on, you might want to look somewhere else.&#10;"/>
         <panel childLayout="horizontal">
@@ -351,7 +351,7 @@
         <panel childLayout="horizontal">
           <image filename="tutorial/bullet-point.png" />
           <panel width="97%" childLayout="vertical">
-            <text style="textFont" text="Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice completed: The Nifty core is now independent of Lwjgl and Slick2d. There are now separate renderer implementations available that interface Nifty with LWJGL, Slick2D, Java Monkey Engine 2 and 3. You can find an overview of all available renderers in the Nifty wiki at" />
+            <text style="textFont" text="Service Provider Interface (SPI) for the RenderDevice, InputSystem and SoundDevice completed: The Nifty core is now independent of Lwjgl and Slick2D. There are now separate renderer implementations available that interface Nifty with LWJGL, Slick2D, Java Monkey Engine 2 and 3. You can find an overview of all available renderers in the Nifty wiki at" />
             <text style="textFontLink" text="http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices&#10;" action="openLink(http://sourceforge.net/apps/mediawiki/nifty-gui/index.php?title=Nifty_RenderDevices)" />
           </panel>
         </panel>
@@ -1138,7 +1138,7 @@
   <controlDefinition name="pageChapterVIII">
     <panel style="pagePanel">
       <panel style="centerPagePanel">
-        <text style="captionFont" text="Part VIII - Integrate Nifty with: Slick2d" />
+        <text style="captionFont" text="Part VIII - Integrate Nifty with: Slick2D" />
       </panel>
     </panel>
   </controlDefinition>
@@ -1146,11 +1146,11 @@
   <controlDefinition name="pageSlick1">
     <panel style="pagePanel">
       <panel style="middlePanel">
-        <text style="captionFont" text="Advanced Nifty, Slick2d Integration"/>
-        <text style="textFont" text="Using Slick2d together with Nifty is easily possible. However there are two different aproaches to get both working together.&#10;" />
+        <text style="captionFont" text="Advanced Nifty, Slick2D Integration"/>
+        <text style="textFont" text="Using Slick2D together with Nifty is easily possible. However there are two different aproaches to get both working together.&#10;" />
         <text style="textFont" text="If you are using Slicks StateBasedGame mechanism and you want to switch to a state that is completly Nifty (like a Nifty Menu) then you can simply use the de.lessvoid.nifty.slick.NiftyGameState class. The way to use this class is to create your own class and extend from NiftyGameState.&#10;" />
-        <text style="textFont" text="After you've done that you can use your own class just as any other Slick2d GameState. NiftyGameStates makes sure that all events, like mouse and keyboard events, are automatically forwarded from Slick2d to Nifty. It makes also sure that your Nifty GUI is rendered correctly and that the states of Slick2d are saved correctly while Nifty rendering is in progress and are later restored too. Additionally NiftyGameStates has helper methods, like loadFromXml() or gotoScreen() that can be used to easily access the Nifty functions underneath. When using the NiftyGameState class it should be really easy to switch to a Slick2d state, like a menu or so, that is fully driven by Nifty.&#10;"/>
-        <text style="textFont" text="Using the NiftyGameState is not the only way to connect Nifty and Slick2d. Nifty can also be used to render your in game GUI on top of Slick2d rendered graphics. To get this working is somewhat more involving but it's actually not that hard. And this approach does not only work with Slick2d but with any application that used lwjgl for rendering!&#10;"/>
+        <text style="textFont" text="After you've done that you can use your own class just as any other Slick2D GameState. NiftyGameStates makes sure that all events, like mouse and keyboard events, are automatically forwarded from Slick2D to Nifty. It makes also sure that your Nifty GUI is rendered correctly and that the states of Slick2D are saved correctly while Nifty rendering is in progress and are later restored too. Additionally NiftyGameStates has helper methods, like loadFromXml() or gotoScreen() that can be used to easily access the Nifty functions underneath. When using the NiftyGameState class it should be really easy to switch to a Slick2D state, like a menu or so, that is fully driven by Nifty.&#10;"/>
+        <text style="textFont" text="Using the NiftyGameState is not the only way to connect Nifty and Slick2D. Nifty can also be used to render your in game GUI on top of Slick2D rendered graphics. To get this working is somewhat more involving but it's actually not that hard. And this approach does not only work with Slick2D but with any application that used lwjgl for rendering!&#10;"/>
         <text style="textFont" text="You can find the recipe on the next page.&#10;" />
       </panel>
     </panel>
@@ -1159,9 +1159,9 @@
   <controlDefinition name="pageSlick2">
     <panel style="pagePanel">
       <panel style="middlePanel">
-        <text style="captionFont" text="Advanced Nifty, Slick2d Integration, Nifty Overlay"/>
-        <text style="textFont" text="The way to render a Nifty GUI Overlay is described here. You just need to make sure that the Slick2d states are saved and restored when switchting to and back from Nifty and that you forward all events (Mouse and Keyboard) from Slick to Nifty. Forwarding events to Nifty depends on your application. You can control which events reach Nifty to make sure that only appropriate events are forwarded.&#10;" />
-        <text style="textFont" text="Recipe for rendering a Nifty GUI Overlay above a Slick2d or general lwjgl rendered graphics:&#10;" />
+        <text style="captionFont" text="Advanced Nifty, Slick2D Integration, Nifty Overlay"/>
+        <text style="textFont" text="The way to render a Nifty GUI Overlay is described here. You just need to make sure that the Slick2D states are saved and restored when switchting to and back from Nifty and that you forward all events (Mouse and Keyboard) from Slick to Nifty. Forwarding events to Nifty depends on your application. You can control which events reach Nifty to make sure that only appropriate events are forwarded.&#10;" />
+        <text style="textFont" text="Recipe for rendering a Nifty GUI Overlay above a Slick2D or general lwjgl rendered graphics:&#10;" />
         <text style="textFont" text="1. Save the current OpenGL-state&#10;"/>
         <panel style="codeBlock">
           <text style="codeFont" text="\#000#SlickCallable.enterSafeBlock();"/>
@@ -1182,8 +1182,8 @@
   <controlDefinition name="pageSlick3">
     <panel style="pagePanel">
       <panel style="middlePanel">
-        <text style="captionFont" text="Advanced Nifty, Slick2d Integration, Nifty Overlay, cont."/>
-        <text style="textFont" text="If you're not using Slick you have to enable 2d Ortho mode after step 1 to make sure Nifty renders correctly. Nifty always assumes that the 2d Ortho mode is set by you (orthogonal projection, modelview matrix aligned with the screen and so on). This step is not necessary when you're using Slick2d because Slick has already set this up and will usually always stay in this mode.&#10;"/>
+        <text style="captionFont" text="Advanced Nifty, Slick2D Integration, Nifty Overlay, cont."/>
+        <text style="textFont" text="If you're not using Slick you have to enable 2d Ortho mode after step 1 to make sure Nifty renders correctly. Nifty always assumes that the 2d Ortho mode is set by you (orthogonal projection, modelview matrix aligned with the screen and so on). This step is not necessary when you're using Slick2D because Slick has already set this up and will usually always stay in this mode.&#10;"/>
         <text style="textFont" text="Example code for this and the NiftyGameState way are part of the nifty-examples project." />
       </panel>
     </panel>

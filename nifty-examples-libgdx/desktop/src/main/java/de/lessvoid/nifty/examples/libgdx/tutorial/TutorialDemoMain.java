@@ -4,7 +4,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import de.lessvoid.nifty.examples.libgdx.LibgdxExampleApplication;
-import de.lessvoid.nifty.examples.tutorial.TutorialExampleMain;
+import de.lessvoid.nifty.examples.tutorial.TutorialExample;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
@@ -20,6 +20,6 @@ public class TutorialDemoMain {
     config.resizable = true;
     final int atlasWidth = 2048;
     final int atlasHeight = 2048;
-    new LwjglApplication(new LibgdxExampleApplication(new TutorialExampleMain(), atlasWidth, atlasHeight), config);
+    new LwjglApplication(new LibgdxExampleApplication(new TutorialExample(), atlasWidth, atlasHeight), config);
   }
 }

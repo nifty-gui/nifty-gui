@@ -13,11 +13,12 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * ScreenController for TableStartScreen.
- *
  * @author void
  */
 public class TableStartScreen implements ScreenController, NiftyExample {
+  static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  @Nonnull
+  static Random rnd = new Random();
 
   @Override
   public void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
@@ -161,10 +162,6 @@ public class TableStartScreen implements ScreenController, NiftyExample {
       }
     }
   }
-
-  static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  @Nonnull
-  static Random rnd = new Random();
 
   @Nonnull
   private static String randomString() {

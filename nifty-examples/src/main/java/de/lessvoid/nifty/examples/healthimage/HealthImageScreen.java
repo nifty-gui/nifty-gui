@@ -14,8 +14,6 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
- * ScreenController for Hello World Example.
- *
  * @author void
  */
 public class HealthImageScreen implements ScreenController, NiftyExample {

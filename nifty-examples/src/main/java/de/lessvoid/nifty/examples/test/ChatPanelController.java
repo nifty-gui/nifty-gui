@@ -89,7 +89,5 @@ public class ChatPanelController implements Controller, KeyInputHandler {
       return true;
     }
     return false;
-
   }
-
 }

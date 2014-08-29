@@ -55,7 +55,7 @@ public class AllControlsDemoStartScreen implements ScreenController, NiftyExampl
   @Nonnull
   @Override
   public String getTitle() {
-    return "Nifty Standard Controls Demonstation";
+    return "Nifty Standard Controls Demonstration";
   }
 
   @Override

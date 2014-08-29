@@ -10,8 +10,6 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 
 /**
- * ScreenController for Hello World Example.
- *
  * @author void
  */
 public class HelloWorldStartScreen implements ScreenController, NiftyExample {

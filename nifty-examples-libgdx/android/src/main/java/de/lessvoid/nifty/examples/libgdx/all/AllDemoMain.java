@@ -3,7 +3,7 @@ package de.lessvoid.nifty.examples.libgdx.all;
 import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import de.lessvoid.nifty.examples.all.AllExamplesMain;
+import de.lessvoid.nifty.examples.all.AllExamples;
 import de.lessvoid.nifty.examples.libgdx.LibgdxExampleApplication;
 
 /**
@@ -16,6 +16,6 @@ public class AllDemoMain extends AndroidApplication {
     AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
     final int atlasWidth = 1024;
     final int atlasHeight = 1024;
-    initialize(new LibgdxExampleApplication(new AllExamplesMain(), atlasWidth, atlasHeight), config);
+    initialize(new LibgdxExampleApplication(new AllExamples(), atlasWidth, atlasHeight), config);
   }
 }

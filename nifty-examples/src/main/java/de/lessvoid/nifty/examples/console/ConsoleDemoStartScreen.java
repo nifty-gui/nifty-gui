@@ -18,8 +18,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * ConsoleDemoStartScreen.
- *
  * @author void
  */
 public class ConsoleDemoStartScreen implements ScreenController, KeyInputHandler, NiftyExample {

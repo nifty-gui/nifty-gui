@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.examples.slick2d.helloworld;
 
-import de.lessvoid.nifty.examples.helloworld.ResizeMain;
+import de.lessvoid.nifty.examples.helloworld.ResizeExample;
 import de.lessvoid.nifty.examples.slick2d.SlickExampleLoader;
 
 /**
@@ -15,6 +15,6 @@ public class ResizeDemoMain {
    * @param args call arguments - have no effect
    */
   public static void main(final String[] args) {
-    SlickExampleLoader.createGame(new SlickExampleLoader(new ResizeMain()));
+    SlickExampleLoader.createGame(new SlickExampleLoader(new ResizeExample()));
   }
 }

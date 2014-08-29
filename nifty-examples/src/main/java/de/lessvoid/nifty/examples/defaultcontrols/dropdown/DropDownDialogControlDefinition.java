@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
  * The DropDownDialogControlDefinition registers a new control with Nifty
  * that represents the whole Dialog. This gives us later an appropriate
  * ControlBuilder to actual construct the Dialog (as a control).
+ *
  * @author void
  */
 public class DropDownDialogControlDefinition {

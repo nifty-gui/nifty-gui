@@ -16,8 +16,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
- * ScreenController for Hello World Example.
- *
  * @author void
  */
 public class MouseStartScreen implements ScreenController, NiftyExample {

@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
-    <useControls filename="nifty-default-controls.xml"/>
-    <useStyles filename="nifty-default-styles.xml"/>
-    <screen id="GScreen0" controller="de.lessvoid.nifty.examples.multiclick.MultiClickExample">
-        <layer id="GLayer0" childLayout="center">
-            <panel id="GPanel0" height="58%" width="68%" childLayout="center">
-                
-                <panel id="GPanel2" height="44%" style="nifty-panel" width="32%" align="left" childLayout="center">
-                    <control name="label" id="GLabel0" text="DoubleClickMe" height="*" font="aurulent-sans-16.fnt" width="*">
-                         <interact onMultiClick="log()" />
-                    </control>
-                </panel>
-                <panel id="GPanel3" height="44%" style="nifty-panel-red" width="31%" align="right" childLayout="center"/>
-            </panel>
-        </layer>
-        
-           
-    </screen>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+  <useControls filename="nifty-default-controls.xml"/>
+  <useStyles filename="nifty-default-styles.xml"/>
+  <screen id="start" controller="de.lessvoid.nifty.examples.multiclick.MultiClickExample">
+    <layer id="GLayer0" childLayout="center">
+      <panel id="GPanel0" height="58%" width="68%" childLayout="center">
+        <panel id="GPanel2" height="44%" style="nifty-panel" width="32%" align="left" childLayout="center">
+            <control name="label" id="GLabel0" text="DoubleClickMe" height="*" font="aurulent-sans-16.fnt" width="*">
+              <interact onMultiClick="log()" />
+            </control>
+        </panel>
+        <panel id="GPanel3" height="44%" style="nifty-panel-red" width="31%" align="right" childLayout="center"/>
+      </panel>
+    </layer>
+  </screen>
 </nifty>

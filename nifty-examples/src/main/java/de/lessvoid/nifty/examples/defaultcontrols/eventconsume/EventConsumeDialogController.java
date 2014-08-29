@@ -13,9 +13,6 @@ import de.lessvoid.nifty.tools.Color;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * The Controller for the EventConsumeDialog.
- */
 public class EventConsumeDialogController implements Controller {
   private Screen screen;
   @Nullable

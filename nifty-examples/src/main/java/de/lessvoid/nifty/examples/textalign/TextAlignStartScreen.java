@@ -8,45 +8,24 @@ import de.lessvoid.nifty.screen.ScreenController;
 import javax.annotation.Nonnull;
 
 /**
- * ScreenController for Hello World Example.
- *
  * @author void
  */
 public class TextAlignStartScreen implements ScreenController, NiftyExample {
-
-  /**
-   * nifty instance.
-   */
   private Nifty nifty;
 
-  /**
-   * Bind this ScreenController to a screen.
-   *
-   * @param newNifty  nifty
-   * @param newScreen screen
-   */
   @Override
   public final void bind(@Nonnull final Nifty newNifty, @Nonnull final Screen newScreen) {
     this.nifty = newNifty;
   }
 
-  /**
-   * on start screen interactive.
-   */
   @Override
   public final void onStartScreen() {
   }
 
-  /**
-   * on end screen.
-   */
   @Override
   public final void onEndScreen() {
   }
 
-  /**
-   * quit method called from the helloworld.xml.
-   */
   public final void quit() {
     nifty.setAlternateKeyForNextLoadXml("fade");
     nifty.fromXml("all/intro.xml", "menu");

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://nifty-gui.sourceforge.net/webstart/" href="nifty-default-controls-examples-1.3.jnlp">
+  <information>
+    <title>nifty-default-controls-examples</title>
+    <vendor>void</vendor>
+    <homepage href="http://nifty-gui.sourceforge.net"/>
+    <description>nifty-default-controls-examples</description>
+    <description kind="short">nifty-default-controls-examples</description>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+  <resources>
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <jar href="nifty-default-controls-examples-1.3-complete-with-dependencies.jar" />
+  </resources>
+  <resources os="Windows">
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <nativelib href="lib/lwjgl-2.6/lwjgl-2.6-natives-win.jar" />
+  </resources>
+  <resources os="Linux">
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <nativelib href="lib/lwjgl-2.6/lwjgl-2.6-natives-linux.jar" />
+  </resources>
+  <resources os="Mac OS">
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+    <nativelib href="lib/lwjgl-2.6/lwjgl-2.6-natives-mac.jar" />
+  </resources>
+  <application-desc main-class="de.lessvoid.nifty.examples.controls.ControlsDemo"/>
+</jnlp>

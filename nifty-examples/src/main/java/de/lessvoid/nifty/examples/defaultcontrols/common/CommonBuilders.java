@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 
 /**
  * This is a helper class of reused builders so that we don't repeat ourself too much.
+ *
  * @author void
  */
 public class CommonBuilders {

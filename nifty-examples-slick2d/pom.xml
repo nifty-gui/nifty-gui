@@ -7,7 +7,7 @@
         <relativePath>..</relativePath>
     </parent>
     <artifactId>nifty-examples-slick2d</artifactId>
-    <name>Nifty Examples for Slick2d</name>
+    <name>Nifty Examples for Slick2D</name>
     <dependencies>
         <dependency>
             <groupId>lessvoid</groupId>
@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>lessvoid</groupId>
-            <artifactId>nifty-slick-renderer</artifactId>
+            <artifactId>nifty-slick2d-renderer</artifactId>
             <version>1.4.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

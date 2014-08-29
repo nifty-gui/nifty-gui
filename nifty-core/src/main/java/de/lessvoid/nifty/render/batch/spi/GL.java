@@ -9,9 +9,9 @@ import java.nio.ShortBuffer;
 /**
  * OpenGL compatibility (non-core-profile) abstraction to make it easy for internal OpenGL-based rendering classes to
  * make direct OpenGL calls, rather than forcing external rendering implementations to reinvent the wheel. For an
- * example of how this abstraction may be useful, see {@link de.lessvoid.nifty.render.batch.BatchRenderBackendInternal}. This
- * interface is not intended (at this time) to provide a complete OpenGL abstraction, but only access to the methods
- * (and constants) currently in use by internal OpenGL-based rendering classes.
+ * example of how this abstraction may be useful, see {@link de.lessvoid.nifty.render.batch.BatchRenderBackendInternal}.
+ * This interface is not intended (at this time) to provide a complete OpenGL abstraction, but only access to the
+ * methods (and constants) currently in use by internal OpenGL-based rendering classes.
  *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */

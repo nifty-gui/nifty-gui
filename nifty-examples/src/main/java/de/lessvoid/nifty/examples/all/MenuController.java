@@ -9,28 +9,12 @@ import de.lessvoid.nifty.screen.ScreenController;
 import javax.annotation.Nonnull;
 
 /**
- * Menu.
- *
  * @author void
  */
 public class MenuController implements ScreenController {
-
-  /**
-   * the nifty instance.
-   */
   private Nifty nifty;
-
-  /**
-   * the screen this menu belongs to.
-   */
   private Screen screen;
 
-  /**
-   * bind.
-   *
-   * @param niftyParam  niftyParam
-   * @param screenParam screenParam
-   */
   @Override
   public void bind(@Nonnull final Nifty niftyParam, @Nonnull final Screen screenParam) {
     this.nifty = niftyParam;
@@ -57,9 +41,6 @@ public class MenuController implements ScreenController {
     }
   }
 
-  /**
-   * just goto the next screen.
-   */
   @Override
   public final void onStartScreen() {
   }
@@ -121,11 +102,6 @@ public class MenuController implements ScreenController {
     nifty.showPopup(screen, "popupExit", null);
   }
 
-  /**
-   * popupExit.
-   *
-   * @param exit exit string
-   */
   public void popupExit(final String exit) {
     nifty.closePopup("popupExit", new EndNotify() {
       @Override

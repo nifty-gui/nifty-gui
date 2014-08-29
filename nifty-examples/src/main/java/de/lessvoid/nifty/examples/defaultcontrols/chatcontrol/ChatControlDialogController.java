@@ -19,6 +19,7 @@ import java.util.Random;
  * The ChatControlDialogController registers a new control with Nifty
  * that represents the whole Dialog. This gives us later an appropriate
  * ControlBuilder to actual construct the Dialog (as a control).
+ *
  * @author void
  */
 public class ChatControlDialogController implements Controller {
@@ -64,7 +65,6 @@ public class ChatControlDialogController implements Controller {
   @NiftyEventSubscriber(id="chat")
   public void onChatTextSendEvent(final String id, @Nonnull final ChatTextSendEvent event) {
     // You should post that text to the server ... 
-
 
     if (chat != null) {
       // here we simply post it to the chat window

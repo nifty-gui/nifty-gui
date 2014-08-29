@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.examples.slick2d.all;
 
-import de.lessvoid.nifty.examples.all.AllExamplesMain;
+import de.lessvoid.nifty.examples.all.AllExamples;
 import de.lessvoid.nifty.examples.slick2d.SlickExampleLoader;
 
 /**
@@ -15,6 +15,6 @@ public class AllDemoMain {
    * @param args call arguments - have no effect
    */
   public static void main(final String[] args) {
-    SlickExampleLoader.createGame(new SlickExampleLoader(new AllExamplesMain()));
+    SlickExampleLoader.createGame(new SlickExampleLoader(new AllExamples()));
   }
 }
