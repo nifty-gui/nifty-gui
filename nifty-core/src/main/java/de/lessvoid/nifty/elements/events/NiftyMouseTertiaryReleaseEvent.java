@@ -6,6 +6,10 @@ import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import javax.annotation.Nonnull;
 
 public class NiftyMouseTertiaryReleaseEvent extends NiftyMouseBaseEvent {
+  public NiftyMouseTertiaryReleaseEvent(final Element element) {
+    super(element);
+  }
+
   public NiftyMouseTertiaryReleaseEvent(final Element element, @Nonnull final NiftyMouseInputEvent mouseEvent) {
     super(element, mouseEvent);
   }

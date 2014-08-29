@@ -62,7 +62,7 @@ public class MenuItemControl extends AbstractController {
         }
       }
     } else if (inputEvent == NiftyStandardInputEvent.Activate) {
-      element.onClick();
+      element.onClickAndReleasePrimaryMouseButton();
       return true;
     }
     return false;

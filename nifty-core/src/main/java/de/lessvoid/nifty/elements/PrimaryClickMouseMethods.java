@@ -60,23 +60,24 @@ public class PrimaryClickMouseMethods extends MouseClickMethods {
   }
 
   @Override
-  public void onActivate(@Nonnull final Nifty nifty) {
-    String id = element.getId();
-    if (id != null) {
-      nifty.publishEvent(id, new NiftyMousePrimaryClickedEvent(element));
-    }
-    super.onActivate(nifty);
-  }
-
-  @Override
-  public boolean onMouseRelease(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent mouseEvent) {
+  public boolean onRelease(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent mouseEvent) {
     String id = element.getId();
     if (id != null) {
       nifty.publishEvent(id, new NiftyMousePrimaryReleaseEvent(element, mouseEvent));
     }
-    boolean result = super.onMouseRelease(nifty, mouseEvent);
+    boolean result = super.onRelease(nifty, mouseEvent);
     element.stopEffectWithoutChildren(EffectEventId.onClick);
     element.getFocusHandler().lostMouseFocus(element);
     return result;
+  }
+
+  @Override
+  public void clickAndRelease(@Nonnull final Nifty nifty) {
+    String id = element.getId();
+    if (id != null) {
+      nifty.publishEvent(id, new NiftyMousePrimaryClickedEvent(element));
+      nifty.publishEvent(id, new NiftyMousePrimaryReleaseEvent(element));
+    }
+    super.clickAndRelease(nifty);
   }
 }

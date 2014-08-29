@@ -46,7 +46,7 @@ public class MenuButtonController implements Controller {
       focusHandler.getPrev(element).setFocus();
       return true;
     } else if (inputEvent == NiftyStandardInputEvent.Activate) {
-      element.onClick();
+      element.onClickAndReleasePrimaryMouseButton();
       return true;
     }
     return false;

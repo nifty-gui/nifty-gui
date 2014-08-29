@@ -126,18 +126,17 @@ public class ButtonControl extends AbstractController implements Button {
     return false;
   }
 
-  private void buttonClick() {
-    Element element = getElement();
-    if (element != null) {
-      getElement().onClick();
-    }
-  }
-
   // Button Implementation
 
   @Override
   public void activate() {
-    buttonClick();
+    Element element = getElement();
+
+    if (element == null) {
+      return;
+    }
+
+    getElement().onClickAndReleasePrimaryMouseButton();
   }
 
   @Nonnull

@@ -30,11 +30,11 @@ public class MainPage implements ScreenController, KeyInputHandler {
   private boolean mute = false;
 
   @Nonnull
-  private final ArrayList <String> pages = new ArrayList <String> ();
+  private final ArrayList <String> pages = new ArrayList <String>();
   @Nonnull
-  private final ArrayList <String> chapterCaption = new ArrayList <String> ();
+  private final ArrayList <String> chapterCaption = new ArrayList <String>();
   @Nonnull
-  private final Map <String, Integer> chapterPageMap = new HashMap <String, Integer> ();
+  private final Map <String, Integer> chapterPageMap = new HashMap <String, Integer>();
   private int pageIndex = 0;
   private int lastPageIndex = 0;
   private boolean lastPageWasActive = false;
@@ -254,10 +254,10 @@ public class MainPage implements ScreenController, KeyInputHandler {
   @Override
   public boolean keyEvent(@Nonnull final NiftyInputEvent inputEvent) {
     if (NiftyStandardInputEvent.MoveCursorRight.equals(inputEvent)) {
-      screen.findElementById("nextButton").onClick();
+      screen.findElementById("nextButton").onClickAndReleasePrimaryMouseButton();
       return true;
     } else if (NiftyStandardInputEvent.MoveCursorLeft.equals(inputEvent)) {
-      screen.findElementById("backButton").onClick();
+      screen.findElementById("backButton").onClickAndReleasePrimaryMouseButton();
       return true;
     }
     return false;

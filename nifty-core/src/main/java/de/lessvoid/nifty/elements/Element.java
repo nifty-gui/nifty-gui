@@ -567,15 +567,6 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     layoutPart.getBox().setWidth(width);
   }
 
-  /**
-   * @deprecated Use {@link #getChildren()}
-   */
-  @Nonnull
-  @Deprecated
-  public List<Element> getElements() {
-    return getChildren();
-  }
-
   @Nonnull
   public List<Element> getChildren() {
     if (children == null) {
@@ -609,26 +600,6 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       return emptyIterator();
     }
     return new ElementTreeTraverser(this);
-  }
-
-  /**
-   * @deprecated Use {@link #addChild(Element)} instead.
-   * <p/>
-   * Adds a child element to the end of the list of this element's children.
-   */
-  @Deprecated
-  public void add(@Nonnull final Element child) {
-    addChild(child);
-  }
-
-  /**
-   * @deprecated Use {@link #insertChild(Element, int)} instead.
-   * <p/>
-   * Inserts a child element at the specified index in this element's list of children.
-   */
-  @Deprecated
-  public void add(@Nonnull final Element child, final int index) {
-    insertChild(child, index);
   }
 
   /**
@@ -1761,28 +1732,132 @@ public class Element implements NiftyEvent, EffectManager.Notify {
         mouseY < (parentClipY + parentClipHeight);
   }
 
+  /**
+   * @deprecated Use {@link #onClickAndReleasePrimaryMouseButton()} instead.
+   *
+   * Simulates a click-release of the primary mouse button on the element.
+   *
+   * @see #onClickAndReleasePrimaryMouseButton()
+   * @see #onClickAndReleaseSecondaryMouseButton()
+   * @see #onClickAndReleaseSecondaryMouseButton()
+   */
+  @Deprecated
   public void onClick() {
-    if (canHandleInteraction()) {
-      interaction.activate(nifty);
+    onClickAndReleasePrimaryMouseButton();
+  }
+
+  /**
+   * Simulates a click-release of the primary mouse button on the element.
+   *
+   * This method is called automatically in many cases as a response to receiving a
+   * {@link de.lessvoid.nifty.input.NiftyStandardInputEvent#Activate} event.
+   *
+   * An element will not respond to a click-release of the primary mouse button in the following situations:
+   *
+   * 1) When the element is disabled.
+   *
+   * 2) When a {@link de.lessvoid.nifty.screen.Screen} is starting or ending, or more specifically, when:
+   * {@link de.lessvoid.nifty.effects.EffectEventId#onStartScreen} or
+   * {@link de.lessvoid.nifty.effects.EffectEventId#onEndScreen} effects are active on the current
+   * {@link de.lessvoid.nifty.screen.Screen}.
+   *
+   * 3) If there is no current {@link de.lessvoid.nifty.screen.Screen}, i.e., the current
+   * {@link de.lessvoid.nifty.screen.Screen} is null.
+   *
+   * @see de.lessvoid.nifty.elements.ElementInteraction#clickAndReleasePrimaryMouseButton(de.lessvoid.nifty.Nifty)
+   * @see #onClickAndReleaseSecondaryMouseButton()
+   * @see #onClickAndReleaseTertiaryMouseButton()
+   * @see de.lessvoid.nifty.input.NiftyStandardInputEvent#Activate
+   * @see #isEnabled()
+   * @see #enable()
+   * @see #disable()
+   * @see Screen#isEffectActive(de.lessvoid.nifty.effects.EffectEventId)
+   * @see de.lessvoid.nifty.effects.EffectEventId#onStartScreen
+   * @see de.lessvoid.nifty.effects.EffectEventId#onEndScreen
+   * @see de.lessvoid.nifty.Nifty#getCurrentScreen()
+   */
+  public void onClickAndReleasePrimaryMouseButton() {
+    if (!canHandleInteraction()) {
+      return;
     }
+
+    interaction.clickAndReleasePrimaryMouseButton(nifty);
+  }
+
+  /**
+   * Simulates a click-release of the secondary mouse button on the element.
+   *
+   * An element will not respond to a click-release of the secondary mouse button in the following situations:
+   *
+   * 1) When the element is disabled.
+   *
+   * 2) When a {@link de.lessvoid.nifty.screen.Screen} is starting or ending, or more specifically, when:
+   * {@link de.lessvoid.nifty.effects.EffectEventId#onStartScreen} or
+   * {@link de.lessvoid.nifty.effects.EffectEventId#onEndScreen} effects are active on the current
+   * {@link de.lessvoid.nifty.screen.Screen}.
+   *
+   * 3) If there is no current {@link de.lessvoid.nifty.screen.Screen}, i.e., the current
+   * {@link de.lessvoid.nifty.screen.Screen} is null.
+   *
+   * @see de.lessvoid.nifty.elements.ElementInteraction#clickAndReleaseSecondaryMouseButton(de.lessvoid.nifty.Nifty)
+   * @see #onClickAndReleasePrimaryMouseButton()
+   * @see #onClickAndReleaseTertiaryMouseButton()
+   * @see #isEnabled()
+   * @see #enable()
+   * @see #disable()
+   * @see Screen#isEffectActive(de.lessvoid.nifty.effects.EffectEventId)
+   * @see de.lessvoid.nifty.effects.EffectEventId#onStartScreen
+   * @see de.lessvoid.nifty.effects.EffectEventId#onEndScreen
+   * @see de.lessvoid.nifty.Nifty#getCurrentScreen()
+   */
+  public void onClickAndReleaseSecondaryMouseButton() {
+    if (!canHandleInteraction()) {
+      return;
+    }
+
+    interaction.clickAndReleaseSecondaryMouseButton(nifty);
+  }
+
+  /**
+   * Simulates a click-release of the tertiary mouse button on the element.
+   *
+   * An element will not respond to a click-release of the tertiary mouse button in the following situations:
+   *
+   * 1) When the element is disabled.
+   *
+   * 2) When a {@link de.lessvoid.nifty.screen.Screen} is starting or ending, or more specifically, when:
+   * {@link de.lessvoid.nifty.effects.EffectEventId#onStartScreen} or
+   * {@link de.lessvoid.nifty.effects.EffectEventId#onEndScreen} effects are active on the current
+   * {@link de.lessvoid.nifty.screen.Screen}.
+   *
+   * 3) If there is no current {@link de.lessvoid.nifty.screen.Screen}, i.e., the current
+   * {@link de.lessvoid.nifty.screen.Screen} is null.
+   *
+   * @see de.lessvoid.nifty.elements.ElementInteraction#clickAndReleaseTertiaryMouseButton(de.lessvoid.nifty.Nifty)
+   * @see #onClickAndReleasePrimaryMouseButton()
+   * @see #onClickAndReleaseSecondaryMouseButton()
+   * @see #isEnabled()
+   * @see #enable()
+   * @see #disable()
+   * @see Screen#isEffectActive(de.lessvoid.nifty.effects.EffectEventId)
+   * @see de.lessvoid.nifty.effects.EffectEventId#onStartScreen
+   * @see de.lessvoid.nifty.effects.EffectEventId#onEndScreen
+   * @see de.lessvoid.nifty.Nifty#getCurrentScreen()
+   */
+  public void onClickAndReleaseTertiaryMouseButton() {
+    if (!canHandleInteraction()) {
+      return;
+    }
+
+    interaction.clickAndReleaseTertiaryMouseButton(nifty);
   }
 
   private boolean canHandleInteraction() {
     if (screen == null || !enabled) {
       return false;
     }
-    return !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId.onEndScreen);
-  }
 
-  /**
-   * @param name the name (id) of the element
-   * @return the element or null if an element with the specified name cannot be found
-   * @deprecated Please use {@link #findElementById(String)}.
-   */
-  @Nullable
-  @Deprecated
-  public Element findElementByName(final String name) {
-    return findElementById(name);
+    return !screen.isEffectActive(EffectEventId.onStartScreen) && !screen.isEffectActive(EffectEventId.onEndScreen);
   }
 
   /**
