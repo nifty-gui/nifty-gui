@@ -111,17 +111,11 @@ public class ButtonControl extends AbstractController implements Button {
       focusHandler.getPrev(buttonElement).setFocus();
       return true;
     } else if (inputEvent == NiftyStandardInputEvent.MoveCursorDown) {
-      Element nextElement = focusHandler.getNext(buttonElement);
-      if (nextElement.getParent().equals(buttonElement.getParent())) {
-        nextElement.setFocus();
-        return true;
-      }
+      focusHandler.getNext(buttonElement).setFocus();
+      return true;
     } else if (inputEvent == NiftyStandardInputEvent.MoveCursorUp) {
-      Element prevElement = focusHandler.getPrev(buttonElement);
-      if (prevElement.getParent().equals(buttonElement.getParent())) {
-        prevElement.setFocus();
-        return true;
-      }
+      focusHandler.getPrev(buttonElement).setFocus();
+      return true;
     }
     return false;
   }
