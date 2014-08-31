@@ -54,7 +54,7 @@ public class UseCaseRunner {
     log.info(nifty.getSceneInfoLog());
   }
 
-  private static Nifty createNifty() {
+  private static Nifty createNifty() throws Exception {
     return new Nifty(new NiftyRenderDeviceLwgl(), new AccurateTimeProvider());
   }
 }

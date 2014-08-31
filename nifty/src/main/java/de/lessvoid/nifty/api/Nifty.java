@@ -10,6 +10,7 @@ import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
+import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
@@ -36,10 +37,6 @@ public class Nifty {
   // The list of root nodes.
   private final List<NiftyNode> rootNodes = new ArrayList<NiftyNode>();
 
-  // The ChildLayout for the parent (!) of the root node! This actually places the root node on the screen since the
-  // parent of the root node is always using the exact same size as the screen. Defaults to ChildLayout.Center.
-  private ChildLayout rootNodePlacementLayout = ChildLayout.Center;
-
   // the class performing the conversion from NiftyNode to RenderNode and takes care of all rendering.
   private final NiftyRenderer renderer;
 
@@ -59,6 +56,18 @@ public class Nifty {
     stats = statistics.getImpl();
     renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
+  }
+
+  /**
+   * Set the NiftyStatisticsMode to display the statistics.
+   * @param mode the new NiftyStatisticsMode
+   */
+  public void showStatistics(final NiftyStatisticsMode mode) throws IOException {
+    switch (mode) {
+      case ShowFPS:
+        new StatisticsRendererFPS(this);
+        break;
+    }
   }
 
   /**
@@ -85,28 +94,42 @@ public class Nifty {
   }
 
   /**
-   * You can change the way the root node is placed on the screen with this call. You just need to call this method
-   * before you call any of the createRootNode() methods. By default this is set to ChildLayout.Center.
+   * Create a new root node with a given width, height and child layout. A root node is just a regular NiftyNode that
+   * forms the base node of a scene graph. You can add several root nodes!
    *
-   * @param rootNodePlacementLayout the new layout to place the root node on the screen
+   * @param rootNodePlacementLayout the child layout that defines how to place the new root node on the screen
+   * @param width the width of the root node
+   * @param height the height of the root node
+   * @param childLayout the childLayout for the root node (this determines the way any child nodes will be laid out
+   * in the new rootNode)
+   * 
+   * @return a new NiftyNode acting as the root of a Nifty scene graph
    */
-  public void setRootNodePlacementLayout(final ChildLayout rootNodePlacementLayout) {
-    this.rootNodePlacementLayout = rootNodePlacementLayout;
+  public NiftyNode createRootNode(
+      final UnitValue width,
+      final UnitValue height,
+      final ChildLayout childLayout) {
+    return createRootNode(ChildLayout.Center, width, height, childLayout);
   }
 
   /**
    * Create a new root node with a given width, height and child layout. A root node is just a regular NiftyNode that
    * forms the base node of a scene graph. You can add several root nodes!
    *
+   * @param rootNodePlacementLayout the child layout that defines how to place the new root node on the screen
    * @param width the width of the root node
    * @param height the height of the root node
-   * @param childLayout the childLayout for the root node (this determines the way any child nodes will be layed out
+   * @param childLayout the childLayout for the root node (this determines the way any child nodes will be laid out
    * in the new rootNode)
    * 
    * @return a new NiftyNode acting as the root of a Nifty scene graph
    */
-  public NiftyNode createRootNode(final UnitValue width, final UnitValue height, final ChildLayout childLayout) {
-    NiftyNode rootNodeInternal = createRootNode();
+  public NiftyNode createRootNode(
+      final ChildLayout rootNodePlacementLayout,
+      final UnitValue width,
+      final UnitValue height,
+      final ChildLayout childLayout) {
+    NiftyNode rootNodeInternal = createRootNode(rootNodePlacementLayout);
     rootNodeInternal.setWidthConstraint(width);
     rootNodeInternal.setHeightConstraint(height);
     rootNodeInternal.setChildLayout(childLayout);
@@ -121,7 +144,7 @@ public class Nifty {
    * @return a new NiftyNode
    */
   public NiftyNode createRootNodeFullscreen() {
-    return createRootNode(UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), ChildLayout.None);
+    return createRootNode(ChildLayout.Center, UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), ChildLayout.None);
   }
 
   /**
@@ -134,7 +157,7 @@ public class Nifty {
    * @return a new NiftyNode
    */
   public NiftyNode createRootNodeFullscreen(final ChildLayout childLayout) {
-    return createRootNode(UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), childLayout);
+    return createRootNode(ChildLayout.Center, UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), childLayout);
   }
 
   /**
@@ -241,13 +264,13 @@ public class Nifty {
 
   // Internal methods
 
-  private NiftyNode createRootNode() {
-    NiftyNode rootNodeInternal = createRootNodeInternal();
+  private NiftyNode createRootNode(final ChildLayout rootNodePlacementLayout) {
+    NiftyNode rootNodeInternal = createRootNodeInternal(rootNodePlacementLayout);
     rootNodes.add(rootNodeInternal);
     return rootNodeInternal;
   }
 
-  private NiftyNode createRootNodeInternal() {
+  private NiftyNode createRootNodeInternal(final ChildLayout rootNodePlacementLayout) {
     return NiftyNode.newInstance(InternalNiftyNode.newRootNode(this, rootNodePlacementLayout));
   }
 

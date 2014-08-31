@@ -5,6 +5,7 @@ import java.io.IOException;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyStatisticsMode;
 
 /**
  * custom canvas painter using a custom fragment shader ... read that last sentence again! =D
@@ -13,6 +14,8 @@ import de.lessvoid.nifty.api.NiftyNode;
 public class UseCase_b05_CanvasCustomShader {
 
   public UseCase_b05_CanvasCustomShader(final Nifty nifty) throws IOException {
+    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
+
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     rootNode.setCanvasPainter(nifty.customShaderCanvasPainter("shaders/custom.fs"));
     rootNode.startAnimatedRedraw(0, 10);
