@@ -229,7 +229,16 @@ public interface ListBox<T> extends NiftyControl {
   void refresh();
 
   void addItemProcessor(@Nonnull ListBoxItemProcessor processor);
-
+  /**
+   * Get the Horizontal scrollbar of this listBox.
+   * @return 
+   */
+  Scrollbar getHorizontalScrollbar();
+  /**
+   * Get the Vertical scrollbar of this listBox.
+   * @return 
+   */
+  Scrollbar getVerticalScrollbar();
   /**
    * The ListBoxSelectionMode determines how the ListBox handles selections.
    *

@@ -231,7 +231,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   @Nullable
-  private Scrollbar getVerticalScrollbar() {
+  public Scrollbar getVerticalScrollbar() {
     if (!verticalScrollbarState) {
       return null;
     }
@@ -242,7 +242,7 @@ public class ListBoxControl<T> extends AbstractController implements ListBox<T>,
   }
 
   @Nullable
-  private Scrollbar getHorizontalScrollbar() {
+  public Scrollbar getHorizontalScrollbar() {
     if (!horizontalScrollbarState) {
       return null;
     }
