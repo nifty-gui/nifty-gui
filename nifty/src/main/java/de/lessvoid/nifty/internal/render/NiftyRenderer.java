@@ -2,6 +2,7 @@ package de.lessvoid.nifty.internal.render;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.management.MBeanServer;
@@ -85,8 +86,16 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   private boolean synchronize(final List<NiftyNode> sourceNodes, final List<RenderNode> destinationNodes) {
     stats.startSynchronize();
     boolean changed = rendererSync.synchronize(sourceNodes, destinationNodes);
+    sortNodes(destinationNodes);
     stats.stopSynchronize();
     return changed;
+  }
+
+  private void sortNodes(final List<RenderNode> destinationNodes) {
+    Collections.sort(destinationNodes, new RenderNodeComparator());
+    for (int i=0; i<destinationNodes.size(); i++) {
+      destinationNodes.get(i).sortChildren();
+    }
   }
 
   private void render() {

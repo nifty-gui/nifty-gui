@@ -48,7 +48,10 @@ public class RendererNodeSync {
 
       RenderNode dst = findNode(dstNodes, src.getId());
       if (dst == null) {
-        dstNodes.add(createRenderNode(src));
+        RenderNode childRenderNode = createRenderNode(src);
+        dstNodes.add(childRenderNode);
+        childRenderNode.setIndexInParent(dstNodes.size() - 1);
+
         changed = true;
         continue;
       }
@@ -77,11 +80,13 @@ public class RendererNodeSync {
         node.getHeight(),
         node.getCanvas().getCommands(),
         renderDevice.createTexture(node.getWidth(), node.getHeight(), true),
-        renderDevice,
-        node.getBlendMode());
+        node.getBlendMode(),
+        node.getRenderOrder());
 
     for (int i=0; i<node.getChildren().size(); i++) {
-      renderNode.addChildNode(createRenderNode(node.getChildren().get(i)));
+      RenderNode childRenderNode = createRenderNode(node.getChildren().get(i));
+      renderNode.addChildNode(childRenderNode);
+      childRenderNode.setIndexInParent(i);
     }
 
     return renderNode;

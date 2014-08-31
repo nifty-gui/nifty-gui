@@ -108,6 +108,9 @@ public class InternalNiftyNode implements InternalLayoutable {
   // NiftyMinSizeCallback
   private boolean calculatedMinSize;
 
+  // nodes will be sorted ascending by this int
+  private int renderOrder;
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -436,6 +439,14 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public List<InternalNiftyNode> getChildren() {
     return children;
+  }
+
+  public int getRenderOrder() {
+    return renderOrder;
+  }
+
+  public void setRenderOrder(final int renderOrder) {
+    this.renderOrder = renderOrder;
   }
 
   private void getStateInfo(final StringBuilder result, final String offset, final Pattern pattern) {

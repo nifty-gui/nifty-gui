@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.internal.render;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.lessvoid.nifty.api.BlendMode;
@@ -24,7 +25,8 @@ public class RenderNode {
   private boolean contentResized = false;
   private Context context;
   private final BlendMode blendMode;
-  private final NiftyRenderDevice renderDevice;
+  private final int renderOrder;
+  private int indexInParent;
 
   public RenderNode(
       final int nodeId,
@@ -33,8 +35,8 @@ public class RenderNode {
       final int h,
       final List<Command> commands,
       final NiftyTexture content,
-      final NiftyRenderDevice renderDevice,
-      final BlendMode blendMode) {
+      final BlendMode blendMode,
+      final int renderOrder) {
     this.nodeId = nodeId;
     this.local = new Mat4(local);
     this.commands = commands;
@@ -42,7 +44,11 @@ public class RenderNode {
     this.height = h;
     this.context = new Context(content);
     this.blendMode = blendMode;
-    this.renderDevice = renderDevice;
+    this.renderOrder = renderOrder;
+  }
+
+  public void setIndexInParent(final int indexInParent) {
+    this.indexInParent = indexInParent;
   }
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
@@ -77,6 +83,7 @@ public class RenderNode {
 
   public void addChildNode(final RenderNode childNode) {
     children.add(childNode);
+    childNode.setIndexInParent(children.size() - 1);
   }
 
   public int getNodeId() {
@@ -139,6 +146,21 @@ public class RenderNode {
     RenderNodeStateLogger.stateInfo(this, new AABB(width, height), commands, needsContentUpdate, needsRender, result, offset);
     for (int i=0; i<children.size(); i++) {
       children.get(i).outputStateInfo(result, offset + "  ");
+    }
+  }
+
+  public int getRenderOrder() {
+    return renderOrder;
+  }
+
+  public int getIndexInParent() {
+    return indexInParent;
+  }
+
+  public void sortChildren() {
+    Collections.sort(children, new RenderNodeComparator());
+    for (int i=0; i<children.size(); i++) {
+      children.get(i).sortChildren();
     }
   }
 }

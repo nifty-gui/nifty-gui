@@ -338,6 +338,22 @@ public class NiftyNode {
   }
 
   /**
+   * Get render order value for this NiftyNode.
+   * @return renderOrder
+   */
+  public int getRenderOrder() {
+    return impl.getRenderOrder();
+  }
+
+  /**
+   * Set render order for this NiftyNode.
+   * @param renderOrder the new render order value
+   */
+  public void setRenderOrder(final int renderOrder) {
+    impl.setRenderOrder(renderOrder);
+  }
+
+  /**
    * Create a new NiftyNode and make this node it's parent.
    * 
    * @return a new NiftyNode
