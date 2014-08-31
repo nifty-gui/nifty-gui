@@ -66,14 +66,29 @@ public class NiftyCanvas {
     impl.resetTransform();
   }
 
+  public void beginPath() {
+    impl.beginPath();
+  }
+
+  public void closePath() {
+    impl.closePath();
+  }
+
+  public void moveTo(final float x, final float y) {
+    impl.moveTo(x, y);
+  }
+
+  public void lineTo(final float x, final float y) {
+    impl.lineTo(x, y);
+  }
+
+  public void stroke() {
+    impl.stroke();
+  }
   /*
 
   public void setLineWidth(final double lineWidth) {
     impl.setLineWidth(lineWidth);
-  }
-
-  public void line(final double x0, final double y0, final double x1, final double y1) {
-    impl.line(x0, y0, x1, y1);
   }
 
   public void rect(final double x0, final double y0, final double x1, final double y1) {

@@ -124,6 +124,16 @@ public class BatchManager {
     });
   }
 
+  public void addLine(final float x0, final float y0, final float x1, final float y1, final Mat4 mat) {
+    LineBatch batch = requestBatch(LineBatch.class, null, new BatchFactory<LineBatch>() {
+      @Override
+      public LineBatch createBatch() {
+        return new LineBatch();
+      }
+    });
+    batch.add(x0, y0, x1, y1, mat);
+  }
+
   private <T extends Batch<P>, P> T requestBatch(
       final Class<T> clazz,
       final P param,

@@ -133,6 +133,12 @@ public interface NiftyRenderDevice {
   public String loadCustomShader(String filename);
 
   /**
+   * Render lines from the given FloatBuffer containing the line vertices.
+   * @param b the FloatBuffer containing the vertex data
+   */
+  void renderLines(FloatBuffer b);
+
+  /**
    * Activate the custom shader with the given shaderId
    * @param shaderId the shaderId to activate
    */

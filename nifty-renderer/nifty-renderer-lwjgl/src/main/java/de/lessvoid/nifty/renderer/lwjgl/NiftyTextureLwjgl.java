@@ -15,12 +15,24 @@ import de.lessvoid.nifty.spi.NiftyTexture;
 public class NiftyTextureLwjgl implements NiftyTexture {
   final CoreTexture2D texture;
 
-  public NiftyTextureLwjgl(
+  private NiftyTextureLwjgl(final CoreTexture2D texture) {
+    this.texture = texture;
+  }
+
+  public static NiftyTextureLwjgl newTextureRGBA(
       final CoreFactory coreFactory,
       final int width,
       final int height,
       final boolean linear) {
-    texture = coreFactory.createEmptyTexture(ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear));
+    return new NiftyTextureLwjgl(coreFactory.createEmptyTexture(ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear)));
+  }
+
+  public static NiftyTextureLwjgl newTextureRed(
+      final CoreFactory coreFactory,
+      final int width,
+      final int height,
+      final boolean linear) {
+    return new NiftyTextureLwjgl(coreFactory.createEmptyTexture(ColorFormat.Red, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear)));
   }
 
   public NiftyTextureLwjgl(
@@ -89,7 +101,7 @@ public class NiftyTextureLwjgl implements NiftyTexture {
     return 1.0;
   }
 
-  private ResizeFilter resizeFilter(final boolean linear) {
+  private static ResizeFilter resizeFilter(final boolean linear) {
     if (linear) {
       return ResizeFilter.Linear;
     }

@@ -94,6 +94,34 @@ public class InternalNiftyCanvas {
     commands.add(new CommandCustomShader(shaderId));
   }
 
+  public void clear() {
+  }
+
+  public void beginPath() {
+    commands.add(new CommandBeginPath());
+    changed = true;
+  }
+
+  public void closePath() {
+    commands.add(new CommandClosePath());
+    changed = true;
+  }
+
+  public void moveTo(final float x, final float y) {
+    commands.add(new CommandMoveTo(x, y));
+    changed = true;
+  }
+
+  public void lineTo(final float x, final float y) {
+    commands.add(new CommandLineTo(x, y));
+    changed = true;
+  }
+
+  public void stroke() {
+    commands.add(new CommandStroke());
+    changed = true;
+  }
+
   public boolean isChanged() {
     return changed;
   }
@@ -106,8 +134,5 @@ public class InternalNiftyCanvas {
   public void reset() {
     commands.clear();
     changed = true;
-  }
-
-  public void clear() {
   }
 }

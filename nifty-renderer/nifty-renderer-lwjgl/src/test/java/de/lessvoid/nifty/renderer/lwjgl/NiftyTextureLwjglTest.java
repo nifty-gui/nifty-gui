@@ -40,7 +40,7 @@ public class NiftyTextureLwjglTest {
     prepareCoreTextureMockBind();
     prepareCoreFactoryMock(coreTextureMock);
 
-    NiftyTextureLwjgl niftyTexture = new NiftyTextureLwjgl(coreFactoryMock, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
+    NiftyTextureLwjgl niftyTexture = NiftyTextureLwjgl.newTextureRGBA(coreFactoryMock, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
     niftyTexture.bind();
   }
 
@@ -49,7 +49,7 @@ public class NiftyTextureLwjglTest {
     prepareCoreTextureMockGetWidth();
     prepareCoreFactoryMock(coreTextureMock);
 
-    NiftyTextureLwjgl niftyTexture = new NiftyTextureLwjgl(coreFactoryMock, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
+    NiftyTextureLwjgl niftyTexture = NiftyTextureLwjgl.newTextureRGBA(coreFactoryMock, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
     assertEquals(TEXTURE_WIDTH, niftyTexture.getWidth());
   }
 
@@ -58,7 +58,7 @@ public class NiftyTextureLwjglTest {
     prepareCoreTextureMockGetHeight();
     prepareCoreFactoryMock(coreTextureMock);
 
-    NiftyTextureLwjgl niftyTexture = new NiftyTextureLwjgl(coreFactoryMock, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
+    NiftyTextureLwjgl niftyTexture = NiftyTextureLwjgl.newTextureRGBA(coreFactoryMock, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
     assertEquals(TEXTURE_HEIGHT, niftyTexture.getHeight());
   }
 
