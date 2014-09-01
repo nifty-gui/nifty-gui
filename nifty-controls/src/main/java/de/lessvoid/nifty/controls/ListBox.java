@@ -243,6 +243,7 @@ public interface ListBox<T> extends NiftyControl {
    * @see de.lessvoid.nifty.controls.Scrollbar
    */
   Scrollbar getVerticalScrollbar();
+  
   /**
    * The ListBoxSelectionMode determines how the ListBox handles selections.
    *
