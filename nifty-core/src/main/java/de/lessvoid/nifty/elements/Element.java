@@ -1462,7 +1462,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     // show
     internalShow();
-    startEffect(EffectEventId.onShow, perform);
+    startEffectWithoutChildren(EffectEventId.onShow, perform);
   }
 
   private void internalShow() {
