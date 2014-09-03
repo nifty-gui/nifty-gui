@@ -1,5 +1,11 @@
 package de.lessvoid.nifty.effects.impl;
 
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyIdCreator;
@@ -14,11 +20,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Hint - show a hint, a nifty hint!
@@ -76,7 +77,6 @@ public class Hint implements EffectImpl {
     if (hintStyle != null) {
       builder.style(hintStyle);
     }
-    builder.visible(false);
     hintPanel = builder.build(nifty, screen, hintLayer);
   }
 
@@ -111,7 +111,7 @@ public class Hint implements EffectImpl {
       return;
     }
     if (normalizedTime > 0.0) {
-      if (!hintPanel.isVisible()) {
+      if (!hintLayer.isVisible()) {
         // decide if we can already show the hint
         if (nifty.getNiftyMouse().getNoMouseMovementTime() > hintDelay) {
           hintPanel.setConstraintX(SizeValue.px(getPosX(element, hintPanel, r.getWidth())));
