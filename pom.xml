@@ -9,7 +9,6 @@
     <module>nifty-core</module>
     <module>nifty-controls</module>
     <module>nifty-controls-style-black</module>
-    <module>nifty-renderer-java2d</module>
     <module>nifty-renderer-jogl</module>
     <module>nifty-renderer-libgdx</module>
     <module>nifty-renderer-lwjgl</module>
