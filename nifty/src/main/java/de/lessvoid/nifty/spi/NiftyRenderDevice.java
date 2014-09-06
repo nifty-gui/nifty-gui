@@ -160,6 +160,16 @@ public interface NiftyRenderDevice {
     private float lineWidth = 1.f;
     private NiftyColor lineColor = NiftyColor.WHITE();
 
+    public LineParameters() {
+    }
+
+    public LineParameters(final LineParameters lineParameters) {
+      lineCapType = lineParameters.getLineCapType();
+      lineJoinType = lineParameters.getLineJoinType();
+      lineWidth = lineParameters.getLineWidth();
+      lineColor = lineParameters.getColor();
+    }
+
     public NiftyLineCapType getLineCapType() {
       return lineCapType;
     }
@@ -203,13 +213,14 @@ public interface NiftyRenderDevice {
       final int prime = 31;
       int result = 1;
       result = prime * result + ((lineCapType == null) ? 0 : lineCapType.hashCode());
+      result = prime * result + ((lineColor == null) ? 0 : lineColor.hashCode());
       result = prime * result + ((lineJoinType == null) ? 0 : lineJoinType.hashCode());
       result = prime * result + Float.floatToIntBits(lineWidth);
       return result;
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
       if (this == obj)
         return true;
       if (obj == null)
@@ -218,6 +229,11 @@ public interface NiftyRenderDevice {
         return false;
       LineParameters other = (LineParameters) obj;
       if (lineCapType != other.lineCapType)
+        return false;
+      if (lineColor == null) {
+        if (other.lineColor != null)
+          return false;
+      } else if (!lineColor.equals(other.lineColor))
         return false;
       if (lineJoinType != other.lineJoinType)
         return false;

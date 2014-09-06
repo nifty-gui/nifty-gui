@@ -131,13 +131,20 @@ public class BatchManager {
       final float x1,
       final float y1,
       final Mat4 mat,
-      final LineParameters lineParameters) {
-    LineBatch batch = requestBatch(LineBatch.class, lineParameters, new BatchFactory<LineBatch>() {
+      final LineParameters lineParameters,
+      final boolean forceNewBatch) {
+    BatchFactory<LineBatch> batchFactory = new BatchFactory<LineBatch>() {
       @Override
       public LineBatch createBatch() {
         return new LineBatch(lineParameters);
       }
-    });
+    };
+    LineBatch batch;
+    if (forceNewBatch) {
+      batch = addBatch(batchFactory);
+    } else {
+      batch = requestBatch(LineBatch.class, lineParameters, batchFactory);
+    }
     batch.add(x0, y0, x1, y1, mat);
   }
 

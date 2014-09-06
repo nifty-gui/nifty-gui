@@ -141,12 +141,12 @@ public class Context {
 
   public void strokePath(final BatchManager batchManager) {
     for (int i=0; i<path.size(); i++) {
-      path.get(i).render(batchManager, lineParameters);
+      path.get(i).render(batchManager, lineParameters, i == 0);
     }
   }
 
   interface PathElement {
-    void render(BatchManager batchManager, LineParameters lineParameters);
+    void render(BatchManager batchManager, LineParameters lineParameters, final boolean first);
   }
 
   class PathElementLine implements PathElement {
@@ -163,8 +163,8 @@ public class Context {
     }
 
     @Override
-    public void render(final BatchManager batchManager, final LineParameters lineParameters) {
-      batchManager.addLine(x0, y0, x1, y1, getTransform(), lineParameters);
+    public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first) {
+      batchManager.addLine(x0, y0, x1, y1, getTransform(), lineParameters, first);
     }
   }
 }

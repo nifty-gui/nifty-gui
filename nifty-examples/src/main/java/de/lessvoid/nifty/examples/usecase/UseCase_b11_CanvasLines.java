@@ -9,7 +9,6 @@ import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
-import de.lessvoid.nifty.api.NiftyMutableColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
@@ -19,6 +18,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_b11_CanvasLines {
+  private static final float Y_POS = 60.f;
 
   public UseCase_b11_CanvasLines(final Nifty nifty) throws IOException {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
@@ -29,7 +29,6 @@ public class UseCase_b11_CanvasLines {
     NiftyNode childNode = rootNode.newChildNode(UnitValue.px(512), UnitValue.px(512));
     childNode.startAnimatedRedraw(0, 16);
     childNode.addCanvasPainter(new NiftyCanvasPainter() {
-      NiftyMutableColor mutableColor = new NiftyMutableColor(NiftyColor.WHITE());
 
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
@@ -39,18 +38,61 @@ public class UseCase_b11_CanvasLines {
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         canvas.beginPath();
-        canvas.moveTo( 10.f, 100.f);
-        canvas.lineTo(100.f, 90.f * (float) Math.sin(time / 900.) + 100.f);
-        canvas.lineTo(200.f, 100.f);
-        canvas.lineTo(300.f, 90.f * (float) Math.sin(time / 750.) + 100.f);
-        canvas.lineTo(400.f, 100.f);
-        canvas.lineTo(500.f, 90.f * (float) Math.sin(time / 1350.) + 100.f);
-
+        addPath(canvas, time, Y_POS + 0 * 75.f);
         canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
         canvas.setLineCap(NiftyLineCapType.Round);
         canvas.setLineJoin(NiftyLineJoinType.Miter);
-        canvas.setStrokeColor(mutableColor.linear(NiftyColor.WHITE(), NiftyColor.RED(), (Math.sin(time / 1500.) + 1.f) / 2.f).getColor());
+        canvas.setStrokeColor(NiftyColor.WHITE());
         canvas.stroke();
+
+        canvas.beginPath();
+        addPath(canvas, time, Y_POS + 1 * 75.f);
+        canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
+        canvas.setLineCap(NiftyLineCapType.Round);
+        canvas.setLineJoin(NiftyLineJoinType.None);
+        canvas.setStrokeColor(NiftyColor.BLACK());
+        canvas.stroke();
+
+        canvas.beginPath();
+        addPath(canvas, time, Y_POS + 2 * 75.f);
+        canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
+        canvas.setLineCap(NiftyLineCapType.Square);
+        canvas.setLineJoin(NiftyLineJoinType.Miter);
+        canvas.setStrokeColor(NiftyColor.RED());
+        canvas.stroke();
+
+        canvas.beginPath();
+        addPath(canvas, time, Y_POS + 3 * 75.f);
+        canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
+        canvas.setLineCap(NiftyLineCapType.Square);
+        canvas.setLineJoin(NiftyLineJoinType.None);
+        canvas.setStrokeColor(NiftyColor.YELLOW());
+        canvas.stroke();
+
+        canvas.beginPath();
+        addPath(canvas, time, Y_POS + 4 * 75.f);
+        canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
+        canvas.setLineCap(NiftyLineCapType.Butt);
+        canvas.setLineJoin(NiftyLineJoinType.Miter);
+        canvas.setStrokeColor(NiftyColor.GREEN());
+        canvas.stroke();
+
+        canvas.beginPath();
+        addPath(canvas, time, Y_POS + 5 * 75.f);
+        canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
+        canvas.setLineCap(NiftyLineCapType.Butt);
+        canvas.setLineJoin(NiftyLineJoinType.None);
+        canvas.setStrokeColor(NiftyColor.fromString("#f0ff"));
+        canvas.stroke();
+      }
+
+      private void addPath(final NiftyCanvas canvas, long time, final float y) {
+        canvas.moveTo( 10.f, y);
+        canvas.lineTo(100.f, y + 50.f * (float) Math.sin(time / 900.));
+        canvas.lineTo(200.f, y);
+        canvas.lineTo(300.f, y + 50.f * (float) Math.sin(time / 750.));
+        canvas.lineTo(400.f, y);
+        canvas.lineTo(500.f, y + 50.f * (float) Math.sin(time / 650.));
       }
     });
   }

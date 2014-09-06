@@ -26,7 +26,7 @@ public class LineBatch implements Batch<LineParameters> {
 
   public LineBatch(final LineParameters lineParameters) {
     this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
-    this.lineParameters = lineParameters;
+    this.lineParameters = new LineParameters(lineParameters);
   }
 
   @Override
