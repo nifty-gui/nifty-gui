@@ -39,14 +39,8 @@ public class LineBatch implements Batch<LineParameters> {
     return !lineParameters.equals(params) || (b.remaining() < PRIMITIVE_SIZE);
   }
 
-  public boolean add(
-      final float x0,
-      final float y0,
-      final float x1,
-      final float y1,
-      final Mat4 mat) {
-    addTransformed(x0, y0, mat);
-    addTransformed(x1, y1, mat);
+  public boolean add(final float x, final float y, final Mat4 mat) {
+    addTransformed(x, y, mat);
     return true;
   }
 

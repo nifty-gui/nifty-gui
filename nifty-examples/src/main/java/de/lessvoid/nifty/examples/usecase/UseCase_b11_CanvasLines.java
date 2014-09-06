@@ -37,6 +37,8 @@ public class UseCase_b11_CanvasLines {
         canvas.setFillStyle(NiftyColor.BLUE());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
+        // NiftyLineJoinType.Miter
+
         canvas.beginPath();
         addPath(canvas, time, Y_POS + 0 * 75.f);
         canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
@@ -48,41 +50,17 @@ public class UseCase_b11_CanvasLines {
         canvas.beginPath();
         addPath(canvas, time, Y_POS + 1 * 75.f);
         canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
-        canvas.setLineCap(NiftyLineCapType.Round);
-        canvas.setLineJoin(NiftyLineJoinType.None);
-        canvas.setStrokeColor(NiftyColor.BLACK());
-        canvas.stroke();
-
-        canvas.beginPath();
-        addPath(canvas, time, Y_POS + 2 * 75.f);
-        canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
         canvas.setLineCap(NiftyLineCapType.Square);
         canvas.setLineJoin(NiftyLineJoinType.Miter);
         canvas.setStrokeColor(NiftyColor.RED());
         canvas.stroke();
 
         canvas.beginPath();
-        addPath(canvas, time, Y_POS + 3 * 75.f);
-        canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
-        canvas.setLineCap(NiftyLineCapType.Square);
-        canvas.setLineJoin(NiftyLineJoinType.None);
-        canvas.setStrokeColor(NiftyColor.YELLOW());
-        canvas.stroke();
-
-        canvas.beginPath();
-        addPath(canvas, time, Y_POS + 4 * 75.f);
+        addPath(canvas, time, Y_POS + 2 * 75.f);
         canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
         canvas.setLineCap(NiftyLineCapType.Butt);
         canvas.setLineJoin(NiftyLineJoinType.Miter);
         canvas.setStrokeColor(NiftyColor.GREEN());
-        canvas.stroke();
-
-        canvas.beginPath();
-        addPath(canvas, time, Y_POS + 5 * 75.f);
-        canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
-        canvas.setLineCap(NiftyLineCapType.Butt);
-        canvas.setLineJoin(NiftyLineJoinType.None);
-        canvas.setStrokeColor(NiftyColor.fromString("#f0ff"));
         canvas.stroke();
       }
 

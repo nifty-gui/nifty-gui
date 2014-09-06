@@ -125,11 +125,9 @@ public class BatchManager {
     });
   }
 
-  public void addLine(
-      final float x0,
-      final float y0,
-      final float x1,
-      final float y1,
+  public void addLineVertex(
+      final float x,
+      final float y,
       final Mat4 mat,
       final LineParameters lineParameters,
       final boolean forceNewBatch) {
@@ -145,7 +143,7 @@ public class BatchManager {
     } else {
       batch = requestBatch(LineBatch.class, lineParameters, batchFactory);
     }
-    batch.add(x0, y0, x1, y1, mat);
+    batch.add(x, y, mat);
   }
 
   private <T extends Batch<P>, P> T requestBatch(

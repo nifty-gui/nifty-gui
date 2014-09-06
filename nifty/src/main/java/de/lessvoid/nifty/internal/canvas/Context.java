@@ -131,8 +131,11 @@ public class Context {
   }
 
   public void lineTo(final float x, final float y) {
-    path.add(new PathElementLine(currentPathX, currentPathY, x, y));
+    if (path.isEmpty()) {
+      path.add(new PathElementLine(currentPathStartX, currentPathStartY));
+    }
     moveTo(x, y);
+    path.add(new PathElementLine(currentPathX, currentPathY));
   }
 
   public void closePath() {
@@ -150,21 +153,17 @@ public class Context {
   }
 
   class PathElementLine implements PathElement {
-    private float x0;
-    private float y0;
-    private float x1;
-    private float y1;
+    private float x;
+    private float y;
 
-    public PathElementLine(final float x0, final float y0, final float x1, final float y1) {
-      this.x0 = x0;
-      this.y0 = y0;
-      this.x1 = x1;
-      this.y1 = y1;
+    public PathElementLine(final float x, final float y) {
+      this.x = x;
+      this.y = y;
     }
 
     @Override
     public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first) {
-      batchManager.addLine(x0, y0, x1, y1, getTransform(), lineParameters, first);
+      batchManager.addLineVertex(x, y, getTransform(), lineParameters, first);
     }
   }
 }
