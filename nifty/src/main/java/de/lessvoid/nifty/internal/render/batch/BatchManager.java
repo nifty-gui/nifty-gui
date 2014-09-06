@@ -8,6 +8,7 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class BatchManager {
@@ -124,11 +125,17 @@ public class BatchManager {
     });
   }
 
-  public void addLine(final float x0, final float y0, final float x1, final float y1, final Mat4 mat) {
-    LineBatch batch = requestBatch(LineBatch.class, null, new BatchFactory<LineBatch>() {
+  public void addLine(
+      final float x0,
+      final float y0,
+      final float x1,
+      final float y1,
+      final Mat4 mat,
+      final LineParameters lineParameters) {
+    LineBatch batch = requestBatch(LineBatch.class, lineParameters, new BatchFactory<LineBatch>() {
       @Override
       public LineBatch createBatch() {
-        return new LineBatch();
+        return new LineBatch(lineParameters);
       }
     });
     batch.add(x0, y0, x1, y1, mat);

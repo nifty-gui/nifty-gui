@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyLineCapType;
+import de.lessvoid.nifty.api.NiftyLineJoinType;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class Context {
   private final NiftyTexture texture;
   private NiftyColor fillColor;
-  private float lineWidth;
   private NiftyLinearGradient linearGradient;
-  private NiftyColor strokeStyle = NiftyColor.WHITE();
+  private LineParameters lineParameters;
   private NiftyColor textColor = NiftyColor.WHITE();
   private float textSize = 1.f;
   private Mat4 transform = Mat4.createIdentity();
@@ -32,6 +34,7 @@ public class Context {
   public void prepare(final NiftyRenderDevice renderDevice) {
     fillColor = NiftyColor.BLACK();
     linearGradient = null;
+    lineParameters = new LineParameters();
     renderDevice.beginRenderToTexture(texture);
   }
 
@@ -54,11 +57,11 @@ public class Context {
   }
 
   public void setLineWidth(final float lineWidth) {
-    this.lineWidth = lineWidth;
+    lineParameters.setLineWidth(lineWidth);
   }
 
   public float getLineWidth() {
-    return lineWidth;
+    return lineParameters.getLineWidth();
   }
 
   public NiftyTexture getNiftyTexture() {
@@ -70,11 +73,19 @@ public class Context {
   }
 
   public void setStrokeStyle(final NiftyColor color) {
-    this.strokeStyle = color;
+    this.lineParameters.setColor(color);
+  }
+
+  public void setLineCapType(final NiftyLineCapType lineCapType) {
+    this.lineParameters.setLineCapType(lineCapType);
+  }
+
+  public void setLineJoinType(final NiftyLineJoinType lineJoinType) {
+    this.lineParameters.setLineJoinType(lineJoinType);
   }
 
   public NiftyColor getStrokeStyle() {
-    return strokeStyle;
+    return lineParameters.getColor();
   }
 
   public void setTextSize(final float textSize) {
@@ -130,12 +141,12 @@ public class Context {
 
   public void strokePath(final BatchManager batchManager) {
     for (int i=0; i<path.size(); i++) {
-      path.get(i).render(batchManager);
+      path.get(i).render(batchManager, lineParameters);
     }
   }
 
   interface PathElement {
-    void render(BatchManager batchManager);
+    void render(BatchManager batchManager, LineParameters lineParameters);
   }
 
   class PathElementLine implements PathElement {
@@ -152,8 +163,8 @@ public class Context {
     }
 
     @Override
-    public void render(final BatchManager batchManager) {
-      batchManager.addLine(x0, y0, x1, y1, getTransform());
+    public void render(final BatchManager batchManager, final LineParameters lineParameters) {
+      batchManager.addLine(x0, y0, x1, y1, getTransform(), lineParameters);
     }
   }
 }

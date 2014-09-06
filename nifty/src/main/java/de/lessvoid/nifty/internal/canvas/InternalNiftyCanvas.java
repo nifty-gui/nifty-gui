@@ -6,6 +6,8 @@ import java.util.List;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyImage;
+import de.lessvoid.nifty.api.NiftyLineCapType;
+import de.lessvoid.nifty.api.NiftyLineJoinType;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 
 public class InternalNiftyCanvas {
@@ -25,7 +27,7 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void setStrokeStyle(final NiftyColor color) {
+  public void setStrokeColor(final NiftyColor color) {
     commands.add(new CommandStrokeStyle(color));
     changed = true;
   }
@@ -42,6 +44,16 @@ public class InternalNiftyCanvas {
 
   public void setLineWidth(final double lineWidth) {
     commands.add(new CommandLineWidth(lineWidth));
+    changed = true;
+  }
+
+  public void setLineCap(final NiftyLineCapType lineCapType) {
+    commands.add(new CommandLineCapType(lineCapType));
+    changed = true;
+  }
+
+  public void setLineJoin(final NiftyLineJoinType lineJoinType) {
+    commands.add(new CommandLineJoinType(lineJoinType));
     changed = true;
   }
 

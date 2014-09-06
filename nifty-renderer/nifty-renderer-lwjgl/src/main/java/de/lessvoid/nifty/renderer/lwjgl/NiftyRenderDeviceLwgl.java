@@ -38,6 +38,8 @@ import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
 import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyColorStop;
+import de.lessvoid.nifty.api.NiftyLineCapType;
+import de.lessvoid.nifty.api.NiftyLineJoinType;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.common.IdGenerator;
@@ -75,7 +77,6 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   private static final String TEXTURE_SHADER = "texture";
   private static final String PLAIN_COLOR_SHADER = "plain";
   private static final String LINEAR_GRADIENT_SHADER = "linearGradient";
-  private static final String LINE_ALPHA_SHADER = "line-alpha";
   private static final String PLAIN_COLOR_WITH_MASK_SHADER = "plain-color-with-alpha";
 
   private NiftyTexture alphaTexture;
@@ -89,8 +90,14 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     shaderManager.register(PLAIN_COLOR_SHADER, loadPlainShader());
     shaderManager.register(TEXTURE_SHADER, loadTextureShader());
     shaderManager.register(LINEAR_GRADIENT_SHADER, loadLinearGradientShader());
-    shaderManager.register(LINE_ALPHA_SHADER, loadLineShader());
     shaderManager.register(PLAIN_COLOR_WITH_MASK_SHADER, loadPlainColorWithMaskShader());
+
+    registerLineShader(NiftyLineCapType.Butt, NiftyLineJoinType.Miter, "CAP_BUTT", "JOIN_MITER");
+    registerLineShader(NiftyLineCapType.Round, NiftyLineJoinType.Miter, "CAP_ROUND", "JOIN_MITER");
+    registerLineShader(NiftyLineCapType.Square, NiftyLineJoinType.Miter, "CAP_SQUARE", "JOIN_MITER");
+    registerLineShader(NiftyLineCapType.Butt, NiftyLineJoinType.None, "CAP_BUTT", "JOIN_NONE");
+    registerLineShader(NiftyLineCapType.Round, NiftyLineJoinType.None, "CAP_ROUND", "JOIN_NONE");
+    registerLineShader(NiftyLineCapType.Square, NiftyLineJoinType.None, "CAP_SQUARE", "JOIN_NONE");
 
     CoreShader shader = shaderManager.get(TEXTURE_SHADER);
     shader.activate();
@@ -278,7 +285,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void renderLines(final FloatBuffer vertices) {
+  public void renderLines(final FloatBuffer vertices, final LineParameters lineParameter) {
     alphaTextureFBO.bindFramebuffer();
     glViewport(0, 0, alphaTexture.getWidth(), alphaTexture.getHeight());
 
@@ -301,11 +308,11 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     b.put(vertices.get(vertices.limit() - 1));
 
     // line parameters
-    float w = 10.f;
+    float w = lineParameter.getLineWidth();
     float r = 2.f;
 
     // set up the shader
-    CoreShader shader = shaderManager.activate(LINE_ALPHA_SHADER);
+    CoreShader shader = shaderManager.activate(getLineShaderKey(lineParameter.getLineCapType(), lineParameter.getLineJoinType()));
     mvpFlipped(alphaTexture.getWidth(), alphaTexture.getHeight());
     shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
     shader.setUniformf("lineColorAlpha", 1.f);
@@ -369,7 +376,12 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     shader = shaderManager.activate(PLAIN_COLOR_WITH_MASK_SHADER);
     shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
     shader.setUniformi("uTexture", 0);
-    shader.setUniformf("lineColor", 1.f, 1.f, 1.f, 1.f);
+    shader.setUniformf(
+        "lineColor",
+        (float) lineParameter.getColor().getRed(),
+        (float) lineParameter.getColor().getGreen(),
+        (float) lineParameter.getColor().getBlue(),
+        (float) lineParameter.getColor().getAlpha());
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
@@ -480,11 +492,11 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     return shader;
   }
 
-  private CoreShader loadLineShader() throws Exception {
+  private CoreShader loadLineShader(final String capStyle, final String joinType) throws Exception {
     CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/line-alpha.vs");
-    shader.geometryShader("de/lessvoid/nifty/renderer/lwjgl/line-alpha.gs", stream("#version 150 core\n#define CAP_ROUND\n#define JOIN_NONE\n"), resource("de/lessvoid/nifty/renderer/lwjgl/line-alpha.gs"));
-    shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/line-alpha.fs", stream("#version 150 core\n#define CAP_ROUND\n#define JOIN_NONE\n"), resource("de/lessvoid/nifty/renderer/lwjgl/line-alpha.fs"));
+    shader.geometryShader("de/lessvoid/nifty/renderer/lwjgl/line-alpha.gs", stream("#version 150 core\n#define " + capStyle + "\n#define " + joinType + "\n"), resource("de/lessvoid/nifty/renderer/lwjgl/line-alpha.gs"));
+    shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/line-alpha.fs", stream("#version 150 core\n#define " + capStyle + "\n#define " + joinType + "\n"), resource("de/lessvoid/nifty/renderer/lwjgl/line-alpha.fs"));
     shader.link();
     return shader;
   }
@@ -515,5 +527,17 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     mvp = MatrixFactory.createOrtho(0, newWidth, 0, newHeight);
     currentWidth = newWidth;
     currentHeight = newHeight;
+  }
+
+  private void registerLineShader(
+      final NiftyLineCapType lineCapType,
+      final NiftyLineJoinType lineJoinType,
+      final String lineCapString,
+      final String lineTypeString) throws Exception {
+    shaderManager.register(getLineShaderKey(lineCapType, lineJoinType), loadLineShader(lineCapString, lineTypeString));
+  }
+
+  private String getLineShaderKey(final NiftyLineCapType lineCapType, final NiftyLineJoinType lineJoinType) {
+    return lineCapType.toString() + ":" + lineJoinType.toString();
   }
 }

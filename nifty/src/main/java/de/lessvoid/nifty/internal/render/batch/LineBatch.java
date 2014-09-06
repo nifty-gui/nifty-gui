@@ -4,37 +4,39 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 
 /**
  * A line batch is a number of lines rendered with the same cap and join styles. Changing cap or join style will
  * create a new batch.
  */
-public class LineBatch implements Batch<NiftyLinearGradient> {
+public class LineBatch implements Batch<LineParameters> {
   private final static int NUM_PRIMITIVES = 100;
   public final static int PRIMITIVE_SIZE = 2;
 
   private final FloatBuffer b;
+  private final LineParameters lineParameters;
 
   // Vec4 buffer data
   private final Vec4 vsrc = new Vec4();
   private final Vec4 vdst = new Vec4();
 
-  public LineBatch() {
-    b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
+  public LineBatch(final LineParameters lineParameters) {
+    this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
+    this.lineParameters = lineParameters;
   }
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.renderLines(b);
+    renderDevice.renderLines(b, lineParameters);
   }
 
   @Override
-  public boolean requiresNewBatch(final NiftyLinearGradient params) {
-    return (b.remaining() < PRIMITIVE_SIZE);
+  public boolean requiresNewBatch(final LineParameters params) {
+    return !lineParameters.equals(params) || (b.remaining() < PRIMITIVE_SIZE);
   }
 
   public boolean add(

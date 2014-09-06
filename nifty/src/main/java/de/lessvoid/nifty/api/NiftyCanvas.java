@@ -26,8 +26,20 @@ public class NiftyCanvas {
     impl.filledRect(x0, y0, x1, y1);
   }
 
-  public void setStrokeStyle(final NiftyColor color) {
-    impl.setStrokeStyle(color);
+  public void setStrokeColor(final NiftyColor color) {
+    impl.setStrokeColor(color);
+  }
+
+  public void setLineWidth(final double lineWidth) {
+    impl.setLineWidth(lineWidth);
+  }
+
+  public void setLineCap(final NiftyLineCapType lineCapType) {
+    impl.setLineCap(lineCapType);
+  }
+
+  public void setLineJoin(final NiftyLineJoinType lineJoinType) {
+    impl.setLineJoin(lineJoinType);
   }
 
   public void setTextColor(final NiftyColor textColor) {
@@ -87,9 +99,6 @@ public class NiftyCanvas {
   }
   /*
 
-  public void setLineWidth(final double lineWidth) {
-    impl.setLineWidth(lineWidth);
-  }
 
   public void rect(final double x0, final double y0, final double x1, final double y1) {
     impl.rect(x0, y0, x1, y1);
