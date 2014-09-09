@@ -42,6 +42,19 @@ public class NiftyCanvas {
     impl.setLineJoin(lineJoinType);
   }
 
+  /**
+   * The arc() method creates an arc/curve (used to create circles, or parts of circles).
+   *
+   * @param x The x-coordinate of the center of the circle
+   * @param y The y-coordinate of the center of the circle
+   * @param r The radius of the circle
+   * @param startAngle The starting angle, in radians (0 is at 3 o'clock position of the arc's circle)
+   * @param endAngle The ending angle, in radians.
+   */
+  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+    impl.arc(x, y, r, startAngle, endAngle);
+  }
+
   public void setTextColor(final NiftyColor textColor) {
     impl.setTextColor(textColor);
   }

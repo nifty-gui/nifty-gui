@@ -134,6 +134,11 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
+  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+    commands.add(new CommandArc(x, y, r, startAngle, endAngle));
+    changed = true;
+  }
+
   public boolean isChanged() {
     return changed;
   }

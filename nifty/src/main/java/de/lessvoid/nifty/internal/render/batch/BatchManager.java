@@ -8,6 +8,7 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.ArcParameters;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
@@ -144,6 +145,30 @@ public class BatchManager {
       batch = requestBatch(LineBatch.class, lineParameters, batchFactory);
     }
     batch.add(x, y, mat);
+  }
+
+  public void addArc(
+      final double x,
+      final double y,
+      final double r,
+      final double startAngle,
+      final double endAngle,
+      final Mat4 mat,
+      final ArcParameters arcParameters,
+      final boolean forceNewBatch) {
+    BatchFactory<ArcBatch> batchFactory = new BatchFactory<ArcBatch>() {
+      @Override
+      public ArcBatch createBatch() {
+        return new ArcBatch(arcParameters);
+      }
+    };
+    ArcBatch batch;
+    if (forceNewBatch) {
+      batch = addBatch(batchFactory);
+    } else {
+      batch = requestBatch(ArcBatch.class, arcParameters, batchFactory);
+    }
+    batch.add(x, y, r, mat);
   }
 
   private <T extends Batch<P>, P> T requestBatch(

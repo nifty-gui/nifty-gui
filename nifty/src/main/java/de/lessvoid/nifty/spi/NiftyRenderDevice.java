@@ -106,6 +106,29 @@ public interface NiftyRenderDevice {
   void renderLinearGradientQuads(NiftyLinearGradient gradientParams, FloatBuffer vertices);
 
   /**
+   * Render arcs using the information given. You'll get a quad the size of the full arc with the following coordinates
+   *
+   *  (-1, -1)        ( 1, -1)
+   *     +---------------+
+   *     |               |
+   *     |               |
+   *     |       +       |
+   *     |               |
+   *     |               |
+   *     +---------------+
+   *  (-1, 1)         ( 1,  1)
+   *
+   * The quad will be the the size of the circle centered around the center of the circle. You'll get the following
+   * per vertex informations for each circle / quad (4 vertices per quad): 
+   * - 2 floats x and y vertex position
+   * - 2 floats u and v "texture" coordinates with the coordinates given in the diagram above
+   *
+   * @param vertices the vertex data to render
+   * @param arcParameters the parameters for all the arcs to be rendered
+   */
+  void renderArcs(FloatBuffer vertices, ArcParameters arcParameters);
+
+  /**
    * Called after all render*() calls are done to end rendering.
    */
   void endRender();
@@ -238,6 +261,80 @@ public interface NiftyRenderDevice {
       if (lineJoinType != other.lineJoinType)
         return false;
       if (Float.floatToIntBits(lineWidth) != Float.floatToIntBits(other.lineWidth))
+        return false;
+      return true;
+    }
+  }
+
+  /**
+   * This class stores all of the properties necessary to render an arc.
+   */
+  public static class ArcParameters {
+    private final LineParameters lineParameters;
+    private final float startAngle;
+    private final float endAngle;
+    private final float r;
+
+    public ArcParameters(final LineParameters lineParameters, final float startAngle, final float endAngle, final float r) {
+      this.lineParameters = new LineParameters(lineParameters);
+      this.startAngle = startAngle;
+      this.endAngle = endAngle;
+      this.r = r;
+    }
+
+    public ArcParameters(final ArcParameters arcParameters) {
+      this.lineParameters = new LineParameters(arcParameters.lineParameters);
+      this.startAngle = arcParameters.startAngle;
+      this.endAngle = arcParameters.endAngle;
+      this.r = arcParameters.r;
+    }
+
+    public LineParameters getLineParameters() {
+      return lineParameters;
+    }
+
+    public float getStartAngle() {
+      return startAngle;
+    }
+
+    public float getEndAngle() {
+      return endAngle;
+    }
+
+    public float getRadius() {
+      return r;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + Float.floatToIntBits(endAngle);
+      result = prime * result + ((lineParameters == null) ? 0 : lineParameters.hashCode());
+      result = prime * result + Float.floatToIntBits(r);
+      result = prime * result + Float.floatToIntBits(startAngle);
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      ArcParameters other = (ArcParameters) obj;
+      if (Float.floatToIntBits(endAngle) != Float.floatToIntBits(other.endAngle))
+        return false;
+      if (lineParameters == null) {
+        if (other.lineParameters != null)
+          return false;
+      } else if (!lineParameters.equals(other.lineParameters))
+        return false;
+      if (Float.floatToIntBits(r) != Float.floatToIntBits(other.r))
+        return false;
+      if (Float.floatToIntBits(startAngle) != Float.floatToIntBits(other.startAngle))
         return false;
       return true;
     }

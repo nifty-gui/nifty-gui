@@ -10,6 +10,7 @@ import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.ArcParameters;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
@@ -118,6 +119,8 @@ public class Context {
 
   public void beginPath() {
     path.clear();
+    currentPathStartX = 0.f;
+    currentPathStartY = 0.f;
   }
 
   public void moveTo(final float x, final float y) {
@@ -136,6 +139,11 @@ public class Context {
     }
     moveTo(x, y);
     path.add(new PathElementLine(currentPathX, currentPathY));
+  }
+
+  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+    // FIXME update the path correctly
+    path.add(new PathElementArc(x, y, r, startAngle, endAngle));
   }
 
   public void closePath() {
@@ -164,6 +172,27 @@ public class Context {
     @Override
     public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first) {
       batchManager.addLineVertex(x, y, getTransform(), lineParameters, first);
+    }
+  }
+
+  public class PathElementArc implements PathElement {
+    private double x;
+    private double y;
+    private double r;
+    private double startAngle;
+    private double endAngle;
+
+    public PathElementArc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+      this.x = x;
+      this.y = y;
+      this.r = r;
+      this.startAngle = startAngle;
+      this.endAngle = endAngle;
+    }
+
+    @Override
+    public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first) {
+      batchManager.addArc(x, y, r, startAngle, endAngle, getTransform(), new ArcParameters(lineParameters, (float) startAngle, (float) endAngle, (float) r), first);
     }
   }
 }
