@@ -1,10 +1,13 @@
 package de.lessvoid.nifty.examples.usecase;
 
+import java.io.IOException;
+
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCallback;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 
 /**
@@ -13,8 +16,9 @@ import de.lessvoid.nifty.api.UnitValue;
  */
 public class UseCase_a05_RotatingChildNode {
 
-  public UseCase_a05_RotatingChildNode(final Nifty nifty) {
+  public UseCase_a05_RotatingChildNode(final Nifty nifty) throws IOException {
     nifty.clearScreenBeforeRender();
+    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     final NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.GREEN());
