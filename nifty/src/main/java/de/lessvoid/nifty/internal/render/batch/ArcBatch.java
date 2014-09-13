@@ -8,6 +8,7 @@ import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.ArcParameters;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 
 /**
  * An arc batch is a number of arc rendered with the same line style. Changing line styles will create a new batch.
@@ -22,6 +23,8 @@ public class ArcBatch implements Batch<ArcParameters> {
   // Vec4 buffer data
   private final Vec4 vsrc = new Vec4();
   private final Vec4 vdst = new Vec4();
+  private boolean isStartPathBatch;
+  private boolean isEndPathBatch;
 
   public ArcBatch(final ArcParameters arcParameters) {
     this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
@@ -30,7 +33,15 @@ public class ArcBatch implements Batch<ArcParameters> {
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.renderArcs(b, arcParameters);
+    if (isStartPathBatch) {
+      renderDevice.pathBegin(arcParameters.getLineParameters());
+    }
+
+    renderDevice.pathArcs(b, arcParameters);
+
+    if (isEndPathBatch) {
+      renderDevice.pathEnd(arcParameters.getLineParameters());
+    }
   }
 
   @Override
@@ -46,6 +57,14 @@ public class ArcBatch implements Batch<ArcParameters> {
     addTransformed((float) (centerX + radius + lw), (float) (centerY + radius + lw),  uv, -uv, mat);
     addTransformed((float) (centerX + radius + lw), (float) (centerY - radius - lw),  uv,  uv, mat);
     return true;
+  }
+
+  public void enableStartPathBatch() {
+    isStartPathBatch = true;
+  }
+
+  public void enableEndPathBatch() {
+    isEndPathBatch = true;
   }
 
   private void addTransformed(final float x, final float y, final float u, final float v, final Mat4 mat) {

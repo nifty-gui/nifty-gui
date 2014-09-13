@@ -288,143 +288,6 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   @Override
-  public void renderLines(final FloatBuffer vertices, final LineParameters lineParameter) {
-    alphaTextureFBO.bindFramebuffer();
-    glViewport(0, 0, alphaTexture.getWidth(), alphaTexture.getHeight());
-
-    glClearColor(0.0f, 0.f, 0.f, 1.f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
-    vertices.flip();
-
-    // we need the first vertex twice for the shader to work correctly
-    b.put(vertices.get(0));
-    b.put(vertices.get(1));
-
-    // now put all the vertices into the buffer
-    b.put(vertices);
-
-    // we need the last vertex twice as well
-    b.put(vertices.get(vertices.limit() - 2));
-    b.put(vertices.get(vertices.limit() - 1));
-
-    // line parameters
-    float w = lineParameter.getLineWidth();
-    float r = 2.f;
-
-    // set up the shader
-    CoreShader shader = shaderManager.activate(getLineShaderKey(lineParameter.getLineCapType(), lineParameter.getLineJoinType()));
-    Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-    shader.setUniformf("lineColorAlpha", 1.f);
-    shader.setUniformf("lineParameters", (2*r + w), (2*r + w) / 2.f, (2*r + w) / 2.f - 2 * r, (2*r));
-
-    vao.bind();
-    vbo.bind();
-    vbo.getBuffer().rewind();
-    vbo.send();
-
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
-    vao.disableVertexAttribute(1);
-
-    glEnable(GL_BLEND);
-    glBlendEquationSeparate(GL_MAX, GL_MAX);
-    coreFactory.getCoreRender().renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
-
-    vbo.getBuffer().clear();
-    alphaTextureFBO.disable();
-
-    if (currentFBO != null) {
-      currentFBO.bindFramebuffer();
-    }
-
-    // Second Pass
-    //
-    // Now render the actual lines using the FBO texture as the alpha.
-    FloatBuffer quad = vbo.getBuffer();
-    quad.put(0.f);
-    quad.put(0.f);
-    quad.put(0.f);
-    quad.put(0.f);
-
-    quad.put(0.f);
-    quad.put(0.f + getDisplayHeight());
-    quad.put(0.0f);
-    quad.put(1.0f);
-
-    quad.put(0.f + getDisplayWidth());
-    quad.put(0.f);
-    quad.put(1.0f);
-    quad.put(0.0f);
-
-    quad.put(0.f + getDisplayWidth());
-    quad.put(0.f + getDisplayHeight());
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.rewind();
-
-    vao.bind();
-    vbo.bind();
-    vbo.send();
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 4, 0);
-    vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
-
-    internal(alphaTexture).bind();
-
-    shader = shaderManager.activate(PLAIN_COLOR_WITH_MASK_SHADER);
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-    shader.setUniformi("uTexture", 0);
-    shader.setUniformf(
-        "lineColor",
-        (float) lineParameter.getColor().getRed(),
-        (float) lineParameter.getColor().getGreen(),
-        (float) lineParameter.getColor().getBlue(),
-        (float) lineParameter.getColor().getAlpha());
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-    coreFactory.getCoreRender().renderTriangleStrip(4);
-    vao.unbind();
-  }
-
-  @Override
-  public void renderArcs(final FloatBuffer vertices, final ArcParameters arcParameters) {
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
-    vertices.flip();
-    b.put(vertices);
-
-    // set up the shader
-    CoreShader shader = shaderManager.activate(ARC_SHADER);
-    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
-    shader.setUniformf("param", arcParameters.getStartAngle(), arcParameters.getEndAngle(), arcParameters.getLineParameters().getLineWidth() / arcParameters.getRadius() / 2.f);
-    shader.setUniformf("lineColor", (float) arcParameters.getLineParameters().getColor().getRed(), (float) arcParameters.getLineParameters().getColor().getGreen(), (float) arcParameters.getLineParameters().getColor().getBlue(), (float) arcParameters.getLineParameters().getColor().getAlpha());
-
-    vao.bind();
-    vbo.bind();
-    vbo.getBuffer().rewind();
-    vbo.send();
-
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 4, 0);
-    vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-    coreFactory.getCoreRender().renderTriangleStrip(vertices.limit() / ArcBatch.PRIMITIVE_SIZE);
-
-    vbo.getBuffer().clear();
-    vao.unbind();
-  }
-
-  @Override
   public void beginRenderToTexture(final NiftyTexture texture) {
     fbo.bindFramebuffer();
     fbo.attachTexture(getTextureId(texture), 0);
@@ -495,6 +358,156 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     }
   }
 
+  @Override
+  public void pathBegin(final LineParameters lineParameters) {
+    alphaTextureFBO.bindFramebuffer();
+    glViewport(0, 0, alphaTexture.getWidth(), alphaTexture.getHeight());
+
+    glClearColor(0.0f, 0.f, 0.f, 1.f);
+    glClear(GL_COLOR_BUFFER_BIT);
+  }
+
+  @Override
+  public void pathLines(final FloatBuffer vertices, final LineParameters lineParameter) {
+    vbo.getBuffer().clear();
+    FloatBuffer b = vbo.getBuffer();
+    vertices.flip();
+
+    // we need the first vertex twice for the shader to work correctly
+    b.put(vertices.get(0));
+    b.put(vertices.get(1));
+
+    // now put all the vertices into the buffer
+    b.put(vertices);
+
+    // we need the last vertex twice as well
+    b.put(vertices.get(vertices.limit() - 2));
+    b.put(vertices.get(vertices.limit() - 1));
+
+    // line parameters
+    float w = lineParameter.getLineWidth();
+    float r = 2.f;
+
+    // set up the shader
+    CoreShader shader = shaderManager.activate(getLineShaderKey(lineParameter.getLineCapType(), lineParameter.getLineJoinType()));
+    Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
+    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+    shader.setUniformf("lineColorAlpha", 1.f);
+    shader.setUniformf("lineParameters", (2*r + w), (2*r + w) / 2.f, (2*r + w) / 2.f - 2 * r, (2*r));
+
+    vao.bind();
+    vbo.bind();
+    vbo.getBuffer().rewind();
+    vbo.send();
+
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+    vao.disableVertexAttribute(1);
+
+    glEnable(GL_BLEND);
+    glBlendEquationSeparate(GL_MAX, GL_MAX);
+    coreFactory.getCoreRender().renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
+
+    vbo.getBuffer().clear();
+  }
+
+  @Override
+  public void pathArcs(final FloatBuffer vertices, final ArcParameters arcParameters) {
+    vbo.getBuffer().clear();
+    FloatBuffer b = vbo.getBuffer();
+    vertices.flip();
+    b.put(vertices);
+
+    // set up the shader
+    CoreShader shader = shaderManager.activate(ARC_SHADER);
+    Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
+    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+    shader.setUniformf(
+        "param",
+        arcParameters.getStartAngle(),
+        arcParameters.getEndAngle(),
+        arcParameters.getLineParameters().getLineWidth() / arcParameters.getRadius() / 2.f,
+        (float) arcParameters.getLineParameters().getColor().getAlpha());
+
+    vao.bind();
+    vbo.bind();
+    vbo.getBuffer().rewind();
+    vbo.send();
+
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 4, 0);
+    vao.enableVertexAttribute(1);
+    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
+
+    glEnable(GL_BLEND);
+    glBlendEquationSeparate(GL_MAX, GL_MAX);
+    coreFactory.getCoreRender().renderTriangleStrip(vertices.limit() / ArcBatch.PRIMITIVE_SIZE);
+
+    vbo.getBuffer().clear();
+    vao.unbind();
+  }
+
+  @Override
+  public void pathEnd(final LineParameters lineParameters) {
+    alphaTextureFBO.disable();
+
+    if (currentFBO != null) {
+      currentFBO.bindFramebuffer();
+    }
+
+    // Second Pass
+    //
+    // Now render the actual lines using the FBO texture as the alpha.
+    FloatBuffer quad = vbo.getBuffer();
+    quad.put(0.f);
+    quad.put(0.f);
+    quad.put(0.f);
+    quad.put(0.f);
+
+    quad.put(0.f);
+    quad.put(0.f + getDisplayHeight());
+    quad.put(0.0f);
+    quad.put(1.0f);
+
+    quad.put(0.f + getDisplayWidth());
+    quad.put(0.f);
+    quad.put(1.0f);
+    quad.put(0.0f);
+
+    quad.put(0.f + getDisplayWidth());
+    quad.put(0.f + getDisplayHeight());
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.rewind();
+
+    vao.bind();
+    vbo.bind();
+    vbo.send();
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 4, 0);
+    vao.enableVertexAttribute(1);
+    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
+
+    internal(alphaTexture).bind();
+
+    CoreShader shader = shaderManager.activate(PLAIN_COLOR_WITH_MASK_SHADER);
+    Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
+    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+    shader.setUniformi("uTexture", 0);
+    shader.setUniformf(
+        "lineColor",
+        (float) lineParameters.getColor().getRed(),
+        (float) lineParameters.getColor().getGreen(),
+        (float) lineParameters.getColor().getBlue(),
+        (float) lineParameters.getColor().getAlpha());
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+    coreFactory.getCoreRender().renderTriangleStrip(4);
+    vao.unbind();
+  }
+
   private int getTextureId(final NiftyTexture texture) {
     return internal(texture).texture.getTextureId();
   }
@@ -546,8 +559,8 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
   private CoreShader loadArcShader() {
     CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aUV");
-    shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/circle.vs");
-    shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/circle.fs");
+    shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.vs");
+    shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.fs");
     shader.link();
     return shader;
   }

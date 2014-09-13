@@ -23,11 +23,9 @@ public class BatchManager {
   }
 
   public void end(final NiftyRenderDevice renderDevice) {
-    renderDevice.beginRender();
     for (int i=0; i<activeBatches.size(); i++) {
       activeBatches.get(i).render(renderDevice);
     }
-    renderDevice.endRender();
   }
 
   public void changeBlendMode(final BlendMode blendMode) {
@@ -131,7 +129,8 @@ public class BatchManager {
       final float y,
       final Mat4 mat,
       final LineParameters lineParameters,
-      final boolean forceNewBatch) {
+      final boolean forceNewBatch,
+      final boolean last) {
     BatchFactory<LineBatch> batchFactory = new BatchFactory<LineBatch>() {
       @Override
       public LineBatch createBatch() {
@@ -144,6 +143,12 @@ public class BatchManager {
     } else {
       batch = requestBatch(LineBatch.class, lineParameters, batchFactory);
     }
+    if (forceNewBatch) {
+      batch.enableStartPathBatch();
+    }
+    if (last) {
+      batch.enableEndPathBatch();
+    }
     batch.add(x, y, mat);
   }
 
@@ -155,7 +160,8 @@ public class BatchManager {
       final double endAngle,
       final Mat4 mat,
       final ArcParameters arcParameters,
-      final boolean forceNewBatch) {
+      final boolean forceNewBatch,
+      final boolean last) {
     BatchFactory<ArcBatch> batchFactory = new BatchFactory<ArcBatch>() {
       @Override
       public ArcBatch createBatch() {
@@ -167,6 +173,12 @@ public class BatchManager {
       batch = addBatch(batchFactory);
     } else {
       batch = requestBatch(ArcBatch.class, arcParameters, batchFactory);
+    }
+    if (forceNewBatch) {
+      batch.enableStartPathBatch();
+    }
+    if (last) {
+      batch.enableEndPathBatch();
     }
     batch.add(x, y, r, mat);
   }

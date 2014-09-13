@@ -27,6 +27,7 @@ public class Context {
   private float currentPathY = 0.f;
   private float currentPathStartX = 0.f;
   private float currentPathStartY = 0.f;
+  private NiftyRenderDevice renderDevice;
 
   public Context(final NiftyTexture textureParam) {
     texture = textureParam;
@@ -37,6 +38,7 @@ public class Context {
     linearGradient = null;
     lineParameters = new LineParameters();
     renderDevice.beginRenderToTexture(texture);
+    this.renderDevice = renderDevice;
   }
 
   public void flush(final NiftyRenderDevice renderDevice) {
@@ -151,13 +153,16 @@ public class Context {
   }
 
   public void strokePath(final BatchManager batchManager) {
+    if (path.isEmpty()) {
+      return;
+    }
     for (int i=0; i<path.size(); i++) {
-      path.get(i).render(batchManager, lineParameters, i == 0);
+      path.get(i).render(batchManager, lineParameters, i == 0, i == (path.size() - 1));
     }
   }
 
   interface PathElement {
-    void render(BatchManager batchManager, LineParameters lineParameters, final boolean first);
+    void render(BatchManager batchManager, LineParameters lineParameters, final boolean first, final boolean last);
   }
 
   class PathElementLine implements PathElement {
@@ -170,8 +175,8 @@ public class Context {
     }
 
     @Override
-    public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first) {
-      batchManager.addLineVertex(x, y, getTransform(), lineParameters, first);
+    public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first, final boolean last) {
+      batchManager.addLineVertex(x, y, getTransform(), lineParameters, first, last);
     }
   }
 
@@ -191,8 +196,13 @@ public class Context {
     }
 
     @Override
-    public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first) {
-      batchManager.addArc(x, y, r, startAngle, endAngle, getTransform(), new ArcParameters(lineParameters, (float) startAngle, (float) endAngle, (float) r), first);
+    public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first, final boolean last) {
+      batchManager.addArc(
+          x, y, r,
+          startAngle, endAngle,
+          getTransform(),
+          new ArcParameters(lineParameters, (float) startAngle, (float) endAngle, (float) r),
+          first, last);
     }
   }
 }

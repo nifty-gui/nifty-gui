@@ -8,14 +8,15 @@ out vec4 color;
 // param.x = startAngle
 // param.y = endAngle
 // param.z = line width / 2
-uniform vec3 param;
-uniform vec4 lineColor;
+// param.w = line color alpha
+uniform vec4 param;
 
 void main() {
     float radius = 1.0;
     float startAngle = param.x;
     float endAngle = param.y;
     float lineWidth = param.z;
+    float lineColorAlpha = param.w;
 
     float dist = distance(t, vec2(0.0, 0.0));
     float delta = fwidth(dist);
@@ -28,7 +29,8 @@ void main() {
     }
     at = 2 * PI - at;
     float angleMix = 1 - (smoothstep(startAngle - delta*2, startAngle, at) *
-                  (1 - smoothstep(endAngle, endAngle + delta*2, at)));
-    vec4 c = mix(lineColor, vec4(0.0, 0.0, 0.0, 0.0), alpha);
-    color = mix(c, vec4(0.0, 0.0, 0.0, 0.0), angleMix);
+                     (1 - smoothstep(endAngle, endAngle + delta*2, at)));
+    float c = mix(lineColorAlpha, 0.0, alpha);
+    color.r = mix(c, 0.0, angleMix);
+    color.gba = vec3(0.0, 0.0, 0.0);
 }

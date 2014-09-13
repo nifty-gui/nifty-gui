@@ -23,6 +23,8 @@ public class LineBatch implements Batch<LineParameters> {
   // Vec4 buffer data
   private final Vec4 vsrc = new Vec4();
   private final Vec4 vdst = new Vec4();
+  private boolean isStartPathBatch;
+  private boolean isEndPathBatch;
 
   public LineBatch(final LineParameters lineParameters) {
     this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
@@ -31,7 +33,15 @@ public class LineBatch implements Batch<LineParameters> {
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.renderLines(b, lineParameters);
+    if (isStartPathBatch) {
+      renderDevice.pathBegin(lineParameters);
+    }
+
+    renderDevice.pathLines(b, lineParameters);
+
+    if (isEndPathBatch) {
+      renderDevice.pathEnd(lineParameters);
+    }
   }
 
   @Override
@@ -55,5 +65,13 @@ public class LineBatch implements Batch<LineParameters> {
 
   private FloatBuffer createBuffer(final int size) {
     return ByteBuffer.allocateDirect(size << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
+  }
+
+  public void enableStartPathBatch() {
+    isStartPathBatch = true;
+  }
+
+  public void enableEndPathBatch() {
+    isEndPathBatch = true;
   }
 }

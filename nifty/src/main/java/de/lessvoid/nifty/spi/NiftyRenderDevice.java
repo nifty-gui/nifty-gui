@@ -106,29 +106,6 @@ public interface NiftyRenderDevice {
   void renderLinearGradientQuads(NiftyLinearGradient gradientParams, FloatBuffer vertices);
 
   /**
-   * Render arcs using the information given. You'll get a quad the size of the full arc with the following coordinates
-   *
-   *  (-1, -1)        ( 1, -1)
-   *     +---------------+
-   *     |               |
-   *     |               |
-   *     |       +       |
-   *     |               |
-   *     |               |
-   *     +---------------+
-   *  (-1, 1)         ( 1,  1)
-   *
-   * The quad will be the the size of the circle centered around the center of the circle. You'll get the following
-   * per vertex informations for each circle / quad (4 vertices per quad): 
-   * - 2 floats x and y vertex position
-   * - 2 floats u and v "texture" coordinates with the coordinates given in the diagram above
-   *
-   * @param vertices the vertex data to render
-   * @param arcParameters the parameters for all the arcs to be rendered
-   */
-  void renderArcs(FloatBuffer vertices, ArcParameters arcParameters);
-
-  /**
    * Called after all render*() calls are done to end rendering.
    */
   void endRender();
@@ -159,17 +136,50 @@ public interface NiftyRenderDevice {
   public String loadCustomShader(String filename);
 
   /**
-   * Render lines from the given FloatBuffer containing the line vertices.
-   * @param b the FloatBuffer containing the vertex data
-   * @param lineParameters the LineParameters to render ALL lines in the FloatBuffer with
-   */
-  void renderLines(FloatBuffer b, LineParameters lineParameters);
-
-  /**
    * Activate the custom shader with the given shaderId
    * @param shaderId the shaderId to activate
    */
   public void activateCustomShader(String shaderId);
+
+  /**
+   * @param lineParameters 
+   */
+  void pathBegin(LineParameters lineParameters);
+
+  /**
+   * Render lines from the given FloatBuffer containing the line vertices.
+   * @param b the FloatBuffer containing the vertex data
+   * @param lineParameters the LineParameters to render ALL lines in the FloatBuffer with
+   */
+  void pathLines(FloatBuffer b, LineParameters lineParameters);
+
+  /**
+   * Render arcs using the information given. You'll get a quad the size of the full arc with the following coordinates
+   *
+   *  (-1, -1)        ( 1, -1)
+   *     +---------------+
+   *     |               |
+   *     |               |
+   *     |       +       |
+   *     |               |
+   *     |               |
+   *     +---------------+
+   *  (-1, 1)         ( 1,  1)
+   *
+   * The quad will be the the size of the circle centered around the center of the circle. You'll get the following
+   * per vertex informations for each circle / quad (4 vertices per quad): 
+   * - 2 floats x and y vertex position
+   * - 2 floats u and v "texture" coordinates with the coordinates given in the diagram above
+   *
+   * @param vertices the vertex data to render
+   * @param arcParameters the parameters for all the arcs to be rendered
+   */
+  void pathArcs(FloatBuffer vertices, ArcParameters arcParameters);
+
+  /**
+   * @param lineParameters 
+   */
+  void pathEnd(LineParameters lineParameters);
 
   /**
    * This collects all available parameters for rendering lines. This is part of the NiftyRenderDevice interface
