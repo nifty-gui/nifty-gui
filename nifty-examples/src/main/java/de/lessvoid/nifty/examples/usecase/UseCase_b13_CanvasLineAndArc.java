@@ -1,0 +1,135 @@
+package de.lessvoid.nifty.examples.usecase;
+
+import java.io.IOException;
+
+import de.lessvoid.nifty.api.ChildLayout;
+import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyCanvas;
+import de.lessvoid.nifty.api.NiftyCanvasPainter;
+import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyStatisticsMode;
+import de.lessvoid.nifty.api.UnitValue;
+
+/**
+ * An example how to draw arcs and lines as part of one path into a NiftyCanvas.
+ * @author void
+ */
+public class UseCase_b13_CanvasLineAndArc {
+  public UseCase_b13_CanvasLineAndArc(final Nifty nifty) throws IOException {
+    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
+
+    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Vertical);
+    rootNode.setBackgroundColor(NiftyColor.BLACK());
+
+    NiftyNode top = rootNode.newChildNode(UnitValue.percent(100), UnitValue.percent(50), ChildLayout.Horizontal);
+    NiftyNode bottom = rootNode.newChildNode(UnitValue.percent(100), UnitValue.percent(50), ChildLayout.Horizontal);
+
+    // render arc -> arc (which will be connected automatically by a line)
+    NiftyNode childNode1 = top.newChildNode(UnitValue.percent(50), UnitValue.percent(100));
+    childNode1.startAnimatedRedraw(0, 10);
+    childNode1.addCanvasPainter(new NiftyCanvasPainter() {
+      float v = 0;
+      @Override
+      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+        canvas.setFillStyle(NiftyColor.BLUE());
+        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
+        canvas.setLineWidth(25);
+        canvas.setStrokeColor(NiftyColor.WHITE());
+
+        canvas.beginPath();
+        canvas.arc(100., 100., 50., v * Math.PI, 2 * Math.PI);
+        canvas.arc(412., 284., 50., v * Math.PI, 2 * Math.PI);
+        canvas.stroke();
+
+        v += 0.005;
+        if (v > 2) {
+          v -= 2;
+        }
+      }
+    });
+
+    // render arc -> line -> arc
+    NiftyNode childNode2 = top.newChildNode(UnitValue.percent(50), UnitValue.percent(100));
+    childNode2.startAnimatedRedraw(0, 10);
+    childNode2.addCanvasPainter(new NiftyCanvasPainter() {
+      float v = 0;
+      @Override
+      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+        canvas.setFillStyle(NiftyColor.GREEN());
+        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
+        canvas.setLineWidth(25);
+        canvas.setStrokeColor(NiftyColor.WHITE());
+
+        canvas.beginPath();
+        canvas.arc(100., 100., 50., v * Math.PI, 2 * Math.PI);
+        canvas.lineTo(1024/4, 768/4);
+        canvas.arc(412., 284., 50., v * Math.PI, 2 * Math.PI);
+        canvas.stroke();
+
+        v += 0.005;
+        if (v > 2) {
+          v -= 2;
+        }
+      }
+    });
+
+    // render moveTo -> arc
+    NiftyNode childNode3 = bottom.newChildNode(UnitValue.percent(50), UnitValue.percent(100));
+    childNode3.startAnimatedRedraw(0, 10);
+    childNode3.addCanvasPainter(new NiftyCanvasPainter() {
+      float v = 0;
+      @Override
+      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+        canvas.setFillStyle(NiftyColor.RED());
+        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
+        canvas.setLineWidth(25);
+        canvas.setStrokeColor(NiftyColor.WHITE());
+
+        canvas.beginPath();
+        canvas.moveTo(50, 50);
+        canvas.arc(412., 284., 50., v * Math.PI, 2 * Math.PI);
+        canvas.stroke();
+
+        v += 0.005;
+        if (v > 2) {
+          v -= 2;
+        }
+      }
+    });
+
+    // render moveTo -> lineTo -> arc -> lineTo
+    NiftyNode childNode4 = bottom.newChildNode(UnitValue.percent(50), UnitValue.percent(100));
+    childNode4.startAnimatedRedraw(0, 10);
+    childNode4.addCanvasPainter(new NiftyCanvasPainter() {
+      float v = 0;
+      @Override
+      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+        canvas.setFillStyle(NiftyColor.YELLOW());
+        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
+        canvas.setLineWidth(25);
+        canvas.setStrokeColor(NiftyColor.WHITE());
+
+        canvas.beginPath();
+        canvas.moveTo(50, 50);
+        canvas.lineTo(100, 50);
+        canvas.arc(256., 256., 100., v * Math.PI, 2 * Math.PI);
+        canvas.lineTo(412, 284);
+        canvas.stroke();
+
+        v += 0.005;
+        if (v > 2) {
+          v -= 2;
+        }
+      }
+    });
+  }
+
+  public static void main(final String[] args) throws Exception {
+    UseCaseRunner.run(UseCase_b13_CanvasLineAndArc.class, args);
+  }
+}

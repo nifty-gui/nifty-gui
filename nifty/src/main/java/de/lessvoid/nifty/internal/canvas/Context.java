@@ -23,10 +23,10 @@ public class Context {
   private float textSize = 1.f;
   private Mat4 transform = Mat4.createIdentity();
   private List<PathElement> path = new ArrayList<PathElement>();
-  private float currentPathX = 0.f;
-  private float currentPathY = 0.f;
-  private float currentPathStartX = 0.f;
-  private float currentPathStartY = 0.f;
+  private Float currentPathX;
+  private Float currentPathY;
+  private Float currentPathStartX;
+  private Float currentPathStartY;
   private NiftyRenderDevice renderDevice;
 
   public Context(final NiftyTexture textureParam) {
@@ -121,8 +121,10 @@ public class Context {
 
   public void beginPath() {
     path.clear();
-    currentPathStartX = 0.f;
-    currentPathStartY = 0.f;
+    currentPathX = null;
+    currentPathY = null;
+    currentPathStartX = null;
+    currentPathStartY = null;
   }
 
   public void moveTo(final float x, final float y) {
@@ -136,16 +138,31 @@ public class Context {
   }
 
   public void lineTo(final float x, final float y) {
-    if (path.isEmpty()) {
-      path.add(new PathElementLine(currentPathStartX, currentPathStartY));
+    PathElement lastPathElement = null;
+    if (!path.isEmpty()) {
+      lastPathElement = path.get(path.size() - 1);
+    }
+    if (currentPathX != null && currentPathY != null && !(lastPathElement instanceof PathElementLine)) {
+      path.add(new PathElementLine(currentPathX, currentPathY));
     }
     moveTo(x, y);
     path.add(new PathElementLine(currentPathX, currentPathY));
   }
 
   public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-    // FIXME update the path correctly
+    float startX = (float) (Math.cos(startAngle) * r + x);
+    float startY = (float) (Math.sin(startAngle) * r + y);
+    if (currentPathX != null && currentPathY != null) {
+      path.add(new PathElementLine(currentPathX, currentPathY));
+      path.add(new PathElementLine(startX, startY));
+      moveTo(startX, startY);
+    }
+
     path.add(new PathElementArc(x, y, r, startAngle, endAngle));
+
+    float endX = (float) (Math.cos(endAngle) * r + x);
+    float endY = (float) (Math.sin(endAngle) * r + y);
+    moveTo(endX, endY);
   }
 
   public void closePath() {
