@@ -50,8 +50,8 @@ public class ArcBatch implements Batch<ArcParameters> {
   }
 
   public boolean add(final double centerX, final double centerY, final double radius, final Mat4 mat) {
-    float lw = arcParameters.getLineParameters().getLineWidth() / 2 + 1; // 1 additional px because of anti-aliasing
-    float uv = (float) ((arcParameters.getLineParameters().getLineWidth() / 2) / radius) + 1.f;
+    float lw = arcParameters.getLineParameters().getLineWidth() / 2.f;
+    float uv = (float) ((((arcParameters.getLineParameters().getLineWidth()) / 2.f) + 2) / radius) + 1.f;
     addTransformed((float) (centerX - radius - lw), (float) (centerY + radius + lw), -uv, -uv, mat);
     addTransformed((float) (centerX - radius - lw), (float) (centerY - radius - lw), -uv,  uv, mat);
     addTransformed((float) (centerX + radius + lw), (float) (centerY + radius + lw),  uv, -uv, mat);

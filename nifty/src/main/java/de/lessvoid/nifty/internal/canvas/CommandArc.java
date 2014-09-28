@@ -3,6 +3,8 @@ package de.lessvoid.nifty.internal.canvas;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandArc implements Command {
+  private final static double TWO_PI = 2 * Math.PI;
+
   private final double x;
   private final double y;
   private final double r;
@@ -17,8 +19,14 @@ public class CommandArc implements Command {
     this.endAngle = endAngle;
   }
 
+  double normalize(double angle) {
+    return angle - Math.floor(angle / TWO_PI) * TWO_PI;
+  }
+  
   @Override
   public void execute(final BatchManager batchManager, final Context context) {
-    context.arc(x, y, r, startAngle, endAngle);
+    double start = normalize(startAngle);
+    double end = normalize(endAngle);
+    context.arc(x, y, r, start, end);
   }
 }
