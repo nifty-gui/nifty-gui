@@ -138,6 +138,11 @@ public class InternalNiftyCanvas {
     return new ArrayList<Command>(commands);
   }
 
+  public void bezierCurveTo(final float cp1x, final float cp1y, final float cp2x, final float cp2y, final float x, final float y) {
+    commands.add(new CommandBezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y));
+    changed = true;
+  }
+
   public void reset() {
     commands.clear();
     changed = true;

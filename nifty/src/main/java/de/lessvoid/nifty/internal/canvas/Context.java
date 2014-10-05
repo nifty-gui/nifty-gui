@@ -8,6 +8,7 @@ import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
+import de.lessvoid.nifty.internal.math.Vec2;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.ArcParameters;
@@ -175,6 +176,121 @@ public class Context {
     }
     for (int i=0; i<path.size(); i++) {
       path.get(i).render(batchManager, lineParameters, i == 0, i == (path.size() - 1));
+    }
+  }
+
+  public void bezierCurveTo(float cp1x, float cp1y, float cp2x, float cp2y, float x, float y) {
+    float startX = 0.f;
+    float startY = 0.f;
+
+    if (currentPathX != null &&
+        currentPathY != null) {
+      startX = currentPathStartX;
+      startY = currentPathStartY;
+    }
+
+    CubicBezier curve = new CubicBezier(
+        new Vec2(startX, startY),
+        new Vec2(cp1x, cp1y),
+        new Vec2(cp2x, cp2y),
+        new Vec2(x, y));
+    renderCurve(curve, this);
+  }
+
+  private void renderCurve(final CubicBezier c, final Context context) {
+    if (isSufficientlyFlat(c)) {
+      c.output(context);
+      return;
+    }
+
+    CubicBezier left = new CubicBezier();
+    CubicBezier right = new CubicBezier();
+    c.subdivide(left, right);
+
+    renderCurve(left, context);
+    renderCurve(right, context);
+  }
+
+  private boolean isSufficientlyFlat(final CubicBezier c) {
+    double ux = 3.0*c.b1.x - 2.0*c.b0.x - c.b3.x; ux *= ux;
+    double uy = 3.0*c.b1.y - 2.0*c.b0.y - c.b3.y; uy *= uy;
+    double vx = 3.0*c.b2.x - 2.0*c.b3.x - c.b0.x; vx *= vx;
+    double vy = 3.0*c.b2.y - 2.0*c.b3.y - c.b0.y; vy *= vy;
+    if (ux < vx) ux = vx;
+    if (uy < vy) uy = vy;
+    double tol = .25;
+    double tolerance = 16*tol*tol;
+    return (ux+uy <= tolerance);
+  }
+
+  private static class CubicBezier {
+    private Vec2 b0;
+    private Vec2 b1;
+    private Vec2 b2;
+    private Vec2 b3;
+
+    private CubicBezier() {
+      this.b0 = new Vec2();
+      this.b1 = new Vec2();
+      this.b2 = new Vec2();
+      this.b3 = new Vec2();
+    }
+
+    private CubicBezier(final Vec2 b0, final Vec2 b1, final Vec2 b2, final Vec2 b3) {
+      this.b0 = b0;
+      this.b1 = b1;
+      this.b2 = b2;
+      this.b3 = b3;
+    }
+
+    public void output(final Context context) {
+      context.lineTo(b3.getX(), b3.getY());
+    }
+
+    public void subdivide(final CubicBezier left, final CubicBezier right) {
+      float z = 0.5f;
+      float z_1 = z - 1.f;
+
+      // left
+      // b0 =       b0
+      left.b0 = new Vec2(b0);
+
+      // b1 =     z*b1 -       (z-1)*b0
+      Vec2.sub(new Vec2(b1).scale(z), new Vec2(b0).scale(z_1), left.b1);
+
+      // b2 =   z*z*b2 -   2*z*(z-1)*b1 +     (z-1)*(z-1)*b0
+      Vec2.sub(new Vec2(b2).scale(z*z), new Vec2(b1).scale(2*z*z_1), left.b2);
+      Vec2.add(left.b2, new Vec2(b0).scale(z_1*z_1), left.b2);
+
+      // b3 = z*z*z*b3 - 3*z*z*(z-1)*b2 + 3*z*(z-1)*(z-1)*b1 - (z-1)*(z-1)*(z-1)*b0
+      Vec2.sub(new Vec2(b3).scale(z*z*z), new Vec2(b2).scale(3*z*z*z_1), left.b3);
+      Vec2.add(left.b3, new Vec2(b1).scale(3*z*z_1*z_1), left.b3);
+      Vec2.sub(left.b3, new Vec2(b0).scale(z_1*z_1*z_1), left.b3);
+
+      // right
+      // b0 = z*z*z*b3 - 3*z*z*(z-1)*b2 + 3*z*(z-1)*(z-1)*b1 - (z-1)*(z-1)*(z-1)*b0
+      Vec2.sub(new Vec2(b3).scale(z*z*z), new Vec2(b2).scale(3*z*z*z_1), right.b0);
+      Vec2.add(right.b0, new Vec2(b1).scale(3*z*z_1*z_1), right.b0);
+      Vec2.sub(right.b0, new Vec2(b0).scale(z_1*z_1*z_1), right.b0);
+
+      // b1 =   z*z*b3 -   2*z*(z-1)*b2 +     (z-1)*(z-1)*b1
+      Vec2.sub(new Vec2(b3).scale(z*z), new Vec2(b2).scale(2*z*z_1), right.b1);
+      Vec2.add(right.b1, new Vec2(b1).scale(z_1*z_1), right.b1);
+
+      // b2 =     z*b3 -       (z-1)*b2
+      Vec2.sub(new Vec2(b3).scale(z), new Vec2(b2).scale(z_1), right.b2);
+
+      // b3 =       b3
+      right.b3 = new Vec2(b3);
+    }
+
+    public String toString() {
+      StringBuilder result = new StringBuilder();
+      result.append("b0 = " + b0).append("\n");
+      result.append("b1 = " + b1).append("\n");
+      result.append("b2 = " + b2).append("\n");
+      result.append("b3 = " + b3).append("\n");
+      return result.toString();
     }
   }
 

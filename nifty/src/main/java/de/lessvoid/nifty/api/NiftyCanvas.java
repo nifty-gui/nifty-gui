@@ -110,14 +110,27 @@ public class NiftyCanvas {
   public void stroke() {
     impl.stroke();
   }
-  /*
 
-
-  public void rect(final double x0, final double y0, final double x1, final double y1) {
-    impl.rect(x0, y0, x1, y1);
+  /**
+   * The bezierCurveTo() method adds a point to the current path by using the specified control points that represent
+   * a cubic Bézier curve.
+   *
+   * A cubic bezier curve requires three points. The first two points are control points that are used in the cubic
+   * Bézier calculation and the last point is the ending point for the curve. The starting point for the curve is the
+   * last point in the current path. If a path does not exist, use the beginPath() and moveTo() methods to define a
+   * starting point.
+   *
+   * @param cp1x control point 1 x
+   * @param cp1y control point 1 y
+   * @param cp2x control point 2 x
+   * @param cp2y control point 2 y
+   * @param x end point x
+   * @param y end point y
+   */
+  public void bezierCurveTo(final float cp1x, final float cp1y, final float cp2x, final float cp2y, final float x, final float y) {
+    impl.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
   }
 
-*/
   InternalNiftyCanvas getImpl() {
     return impl;
   }
