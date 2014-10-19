@@ -1,68 +1,101 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.media.nativewindow.util.Dimension;
+import javax.media.nativewindow.util.DimensionImmutable;
+import javax.media.nativewindow.util.PixelFormat;
+import javax.media.nativewindow.util.PixelRectangle;
+
+import com.jogamp.common.nio.Buffers;
+import com.jogamp.newt.Display.PointerIcon;
+import com.jogamp.newt.Window;
+
 import de.lessvoid.nifty.render.io.ImageLoader;
 import de.lessvoid.nifty.render.io.ImageLoaderFactory;
 import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-
 public class JoglMouseCursor implements MouseCursor {
-  @Nonnull
-  private static final Logger log = Logger.getLogger(JoglMouseCursor.class.getName());
-  @Nonnull
-  private final Cursor cursor;
+	@Nonnull
+	private static final Logger log = Logger.getLogger(JoglMouseCursor.class.getName());
+	@Nonnull
+	private final PointerIcon joglCursor;
+	
+	private Window newtWindow;
 
-  public JoglMouseCursor(
-          @Nonnull final String filename,
-          final int hotspotX,
-          final int hotspotY,
-          @Nonnull final NiftyResourceLoader resourceLoader) throws IOException {
-    ImageLoader imageLoader = ImageLoaderFactory.createImageLoader(filename);
-    InputStream imageStream = resourceLoader.getResourceAsStream(filename);
-    if (imageStream == null) {
-      throw new IOException("Cannot find / load mouse cursor image file: [" + filename + "].");
-    }
-    try {
-      BufferedImage image = imageLoader.loadAsBufferedImage(imageStream);
-      cursor = Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(hotspotX, hotspotY), filename);
-    } catch (Exception e) {
-      throw new IOException(e);
-    } finally {
-      try {
-        imageStream.close();
-      } catch (IOException e) {
-        log.log(Level.INFO, "An error occurred while closing the InputStream used to load mouse cursor image: " +
-                "[" + filename + "].", e);
-      }
-    }
-  }
+	public JoglMouseCursor(
+			@Nonnull final String filename,
+			final int hotspotX,
+			final int hotspotY,
+			@Nonnull final Window newtWindow,
+			@Nonnull final NiftyResourceLoader resourceLoader) throws IOException {
+		this.newtWindow = newtWindow;
+		ImageLoader imageLoader = ImageLoaderFactory.createImageLoader(filename);
+		InputStream imageStream = resourceLoader.getResourceAsStream(filename);
+		if (imageStream == null) {
+			throw new IOException("Cannot find / load mouse cursor image file: [" + filename + "].");
+		}
+		try {
+			BufferedImage image = imageLoader.loadAsBufferedImage(imageStream);
+			final DimensionImmutable size = new Dimension(image.getWidth(), image.getHeight());
+			
+			// grab pixel data from BufferedImage
+			int[] pixels = new int[image.getWidth() * image.getHeight()];
+			final IntBuffer pixelIntBuff = Buffers.newDirectIntBuffer(image.getData().getPixels(0, 0, 
+					image.getWidth(), image.getHeight(), pixels));
+			final ByteBuffer pixelBuff = Buffers.copyIntBufferAsByteBuffer(pixelIntBuff);
+			
+			// find compatible PixelFormat
+			PixelFormat pixFormat = null;
+			for (final PixelFormat pf : PixelFormat.values()) {
+				if (pf.componentCount == image.getColorModel().getNumComponents()
+						&& pf.bytesPerPixel() == image.getColorModel().getPixelSize() / 8) { // divide by 8 for bits -> bytes
+					pixFormat = pf;
+					break;
+				}
+			}
+			
+			final PixelRectangle.GenericPixelRect rec = new PixelRectangle.GenericPixelRect(pixFormat, size, 0, true,
+					pixelBuff);
+			joglCursor = newtWindow.getScreen().getDisplay().createPointerIcon(rec, hotspotX, hotspotY);
+		} catch (Exception e) {
+			throw new IOException(e);
+		} finally {
+			try {
+				imageStream.close();
+			} catch (IOException e) {
+				log.log(Level.INFO, "An error occurred while closing the InputStream used to load mouse cursor image: " +
+						"[" + filename + "].", e);
+			}
+		}
+	}
 
-  @Override
-  public void enable() {
-    // FIXME: Changing the mouse cursor is only supported on a java.awt.Frame, not a com.jogamp.newt.opengl.GLWindow,
-    // which, unfortunately, is what is currently being used for Nifty JOGL rendering. Is there any way to change this?
-    // You can however, use GLWindow#setPointerVisible(false) to hide the system cursor, and could then write a nasty
-    // hack that renders an image that moves with the mouse position, rather than directly changing the mouse cursor
-    // image. Might be better than nothing. Otherwise, try using a java.awt.Frame for rendering...
-  }
+	@Override
+	public void enable() {
+		newtWindow.setPointerIcon(joglCursor);
+	}
 
-  @Override
-  public void disable() {
-    // FIXME: Changing the mouse cursor is only supported on a java.awt.Frame, not a com.jogamp.newt.opengl.GLWindow,
-    // which, unfortunately, is what is currently being used for Nifty JOGL rendering. Is there any way to change this?
-    // You can however, use GLWindow#setPointerVisible(false) to hide the system cursor, and could then write a nasty
-    // hack that renders an image that moves with the mouse position, rather than directly changing the mouse cursor
-    // image. Might be better than nothing. Otherwise, try using a java.awt.Frame for rendering...
-  }
+	@Override
+	public void disable() {
+		newtWindow.setPointerIcon(null); // reset to default pointer icon
+	}
 
-  @Override
-  public void dispose() {
-  }
+	@Override
+	public void dispose() {
+		joglCursor.destroy();
+	}
+	
+	public void setCurrentWindow(final Window newtWindow) {
+		if (newtWindow == null)
+			return;
+		this.newtWindow = newtWindow;
+	}
 }

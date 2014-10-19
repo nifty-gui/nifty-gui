@@ -13,6 +13,7 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLContext;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.newt.Window;
 
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
@@ -36,6 +37,8 @@ public class JoglRenderDevice implements RenderDevice {
   private static final IntBuffer viewportBuffer = Buffers.newDirectIntBuffer(4);
   @Nonnull
   private final TimeProvider timeProvider = new AccurateTimeProvider();
+  @Nullable // for now
+  private Window newtWindow;
   @Nullable
   private RenderFont fpsFont;
   @Nullable
@@ -57,24 +60,48 @@ public class JoglRenderDevice implements RenderDevice {
   private int currentClippingX1 = 0;
   private int currentClippingY1 = 0;
 
+  @Deprecated
+  /**
+   * @deprecated Replaced by {@link #JoglRenderDevice(com.jogamp.newt.Window)}
+   * Use of this constructor will cause some RenderDevice operations to fail.
+   */
+  public JoglRenderDevice() {
+  	this(null);
+  }
+
+  @Deprecated
+  /**
+   * @deprecated Replaced by {@link #JoglRenderDevice(com.jogamp.newt.Window,boolean)}
+   * Use of this constructor will cause some RenderDevice operations to fail.
+   * @param displayFPS display the FPS counter on the screen
+   */
+  public JoglRenderDevice(final boolean displayFPS) {
+  	this(null, displayFPS);
+  }
+  
   /**
    * The standard constructor. You'll use this in production code. Using this constructor will
    * configure the RenderDevice to not log FPS on System.out.
+   * @param newtWindow the current window handling the rendering context
    */
-  public JoglRenderDevice() {
+  public JoglRenderDevice(final Window newtWindow) {
+  	if(newtWindow == null)
+  		log.warning("newtWindow parameter is null - some RenderDevice operations may not work properly");
+  	this.newtWindow = newtWindow;
     time = timeProvider.getMsTime();
     frames = 0;
   }
-
+  
   /**
    * The development mode constructor allows to display the FPS on screen when the given flag is
    * set to true. Note that setting displayFPS to false will still log the FPS on System.out every
    * couple of frames.
    *
+   * @param newtWindow the current window handling the rendering context
    * @param displayFPS display the FPS counter on the screen
    */
-  public JoglRenderDevice(final boolean displayFPS) {
-    this();
+  public JoglRenderDevice(final Window newtWindow, final boolean displayFPS) {
+  	this(newtWindow);
     this.logFPS = true;
     this.displayFPS = displayFPS;
     if (this.displayFPS) {
@@ -433,7 +460,7 @@ public class JoglRenderDevice implements RenderDevice {
 
   @Override
   public MouseCursor createMouseCursor(@Nonnull String filename, int hotspotX, int hotspotY) throws IOException {
-    return new JoglMouseCursor(filename, hotspotX, hotspotY, resourceLoader);
+    return new JoglMouseCursor(filename, hotspotX, hotspotY, newtWindow, resourceLoader);
   }
 
   @Override
