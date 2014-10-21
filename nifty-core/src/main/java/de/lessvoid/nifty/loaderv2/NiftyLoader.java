@@ -181,7 +181,7 @@ public class NiftyLoader {
       closeSilently(stream);
     }
   }
-
+  
   public void loadControlFile(
       @Nonnull final String schemaId,
       @Nonnull final String controlFilename,
