@@ -49,8 +49,8 @@ public class JoglMouseCursor implements MouseCursor {
 			
 			// grab pixel data from BufferedImage
 			int[] pixels = new int[image.getWidth() * image.getHeight()];
-			final IntBuffer pixelIntBuff = Buffers.newDirectIntBuffer(image.getData().getPixels(0, 0, 
-					image.getWidth(), image.getHeight(), pixels));
+			image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+			final IntBuffer pixelIntBuff = Buffers.newDirectIntBuffer(pixels);
 			final ByteBuffer pixelBuff = Buffers.copyIntBufferAsByteBuffer(pixelIntBuff);
 			
 			// find compatible PixelFormat
@@ -67,7 +67,7 @@ public class JoglMouseCursor implements MouseCursor {
 					pixelBuff);
 			joglCursor = newtWindow.getScreen().getDisplay().createPointerIcon(rec, hotspotX, hotspotY);
 		} catch (Exception e) {
-			throw new IOException(e);
+			throw(new RuntimeException(e));
 		} finally {
 			try {
 				imageStream.close();
