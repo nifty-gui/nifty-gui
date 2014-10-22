@@ -5,12 +5,7 @@ import java.util.logging.LogManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
+import javax.media.opengl.*;
 
 import paulscode.sound.SoundSystemException;
 import paulscode.sound.libraries.LibraryJavaSound;
@@ -123,11 +118,11 @@ public class JOGLNiftyRunner implements GLEventListener {
   public void init(GLAutoDrawable drawable) {
     RenderDevice renderDevice;
     if (Mode.Batch.equals(mode)) {
-      renderDevice = new BatchRenderDevice(JoglBatchRenderBackendFactory.create());
+      renderDevice = new BatchRenderDevice(JoglBatchRenderBackendFactory.create(window));
     } else if (Mode.Core.equals(mode)) {
-      renderDevice = new BatchRenderDevice(JoglBatchRenderBackendCoreProfileFactory.create());
+      renderDevice = new BatchRenderDevice(JoglBatchRenderBackendCoreProfileFactory.create(window));
     } else if (Mode.ES2.equals(mode)) {
-      renderDevice = new BatchRenderDevice(JoglBatchRenderBackendCoreProfileFactory.create());
+      renderDevice = new BatchRenderDevice(JoglBatchRenderBackendCoreProfileFactory.create(window));
     } else {
       renderDevice = new JoglRenderDevice();
     }
