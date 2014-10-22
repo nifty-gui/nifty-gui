@@ -79,6 +79,17 @@ public class Nifty {
   private final Map<String, Element> popups;
   @Nonnull
   private final Map<String, StyleType> styles;
+  
+  /**
+   * When nifty loads a new style also the styles of controls need to be
+   * updated.The only way to do this is to collect here all the style id of updated
+   * styles and then fire an event with eventbus 
+   * @see Nifty#loadStyleFile(java.lang.String) 
+   * @see Nifty#registerStyle(de.lessvoid.nifty.loaderv2.types.StyleType) 
+   * for further details.
+   */
+  @Nonnull
+  private final Set<String> controlStylesChanged;
   @Nonnull
   private final Map<String, ControlDefinitionType> controlDefinitions;
   @Nonnull
@@ -153,6 +164,7 @@ public class Nifty {
     controlDefinitions = new HashMap<String, ControlDefinitionType>();
     registeredEffects = new HashMap<String, RegisterEffectType>();
     registeredScreenControllers = new HashMap<String, ScreenController>();
+    controlStylesChanged = new HashSet<String>();
 
     delayedMethodInvokes = new FlipFlop<List<DelayedMethodInvoke>>(
         new ArrayList<DelayedMethodInvoke>(), new ArrayList<DelayedMethodInvoke>());
@@ -1311,12 +1323,44 @@ public class Nifty {
   }
 
   public void registerStyle(@Nonnull final StyleType style) {
-    log.fine("registerStyle " + style.getStyleId());
-    styles.put(style.getStyleId(), style);
+    final String styleId = style.getStyleId();
+    log.fine("registerStyle " + styleId);
+
+    // Handle the simple, normal case.
+    // This is a new style, register it and return early.
+    if (!styles.containsKey(styleId)) {
+      styles.put(styleId, style);
+      return;
+    }
+
+    // This style has already been registered.
+    // Log a warning and re-register it, overriding the previous value.
+
+    log.warning("Style: " + styleId + " was already registered. The "
+            + "new definition will override the previous.");
+
+    styles.put(styleId, style);
+
+    // Handle re-registration of control styles (containing a '#') 
+    // & regular styles.
+    if (styleId.contains("#")) {
+      // A sub-style has been changed. We need to take its base style name that
+      // is the first part of the name of this style (basename#subname).
+      final String simpleId = styleId.split("#")[0];
+      // We could fire the event here, but in case that more than one sub-style
+      // is changed we will send the same event for each. So we are batching it
+      // here and then fire an event in loadStyles method.
+      controlStylesChanged.add(simpleId);
+    } else {
+      // This is a regular style, so just fire the event now.
+      getEventService().publish("style-refresh:" + styleId, styleId);
+    }
   }
 
   public void registerControlDefintion(@Nonnull final ControlDefinitionType controlDefinition) {
     controlDefinitions.put(controlDefinition.getName(), controlDefinition);
+    // TODO: add the same behaviour of register style and try to updating 
+    // already registered control defintions.
   }
 
   public void registerEffect(@Nonnull final RegisterEffectType registerEffectType) {
@@ -1434,11 +1478,15 @@ public class Nifty {
         log.fine("loadStyleFile");
         log.fine(niftyType.output());
       }
+      for (String id : controlStylesChanged) {
+        getEventService().publish("style-refresh:" + id, id);
+      }
+      controlStylesChanged.clear();
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);
     }
   }
-
+  
   public void loadControlFile(@Nonnull final String controlFile) {
     try {
       NiftyType niftyType = new NiftyType();

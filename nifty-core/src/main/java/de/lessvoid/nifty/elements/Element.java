@@ -60,6 +60,8 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
+import java.util.regex.Pattern;
+import org.bushe.swing.event.EventTopicSubscriber;
 
 /**
  * @author void
@@ -243,6 +245,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
   @Nullable
   private Map<String, Object> userData;
+  private final StyleRefresh styleListener = new StyleRefresh();
 
   public Element(
       @Nonnull final Nifty nifty,
@@ -372,6 +375,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       ApplyRenderer rendererApply = rendererApplier.get(renderer.getClass());
       rendererApply.apply(targetScreen, this, attributes, renderEngine);
     }
+    //Subscribe for a style refresh
+    nifty.getEventService().subscribeStrongly("style-refresh:" + getStyle(), styleListener);
   }
 
   public void initializeFromPostAttributes(@Nonnull final Attributes attributes) {
@@ -2112,6 +2117,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       }
     }
   }
+  
+  /**
+  * An internal class that handles a possible style changing.
+  * @see Nifty#registerStyle(de.lessvoid.nifty.loaderv2.types.StyleType)
+  */
+  private class StyleRefresh implements EventTopicSubscriber {
+    @Override
+    public void onEvent(final String string, final Object style) {
+      log.fine("Rereshing style of " + Element.this.getId());
+      String styleid = style.toString();
+      String simplyStyle = styleid.split("#")[0];
+      Element.this.setStyle(simplyStyle);
+    }
+  }
 
   /**
    * @author void
@@ -2252,8 +2271,8 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     final String oldStyle = getStyle();
     if (oldStyle != null) {
       removeStyle(oldStyle);
+      nifty.getEventService().unsubscribe("style-refresh:" + oldStyle, styleListener);
     }
-
     elementType.getAttributes().set("style", newStyle);
     elementType.applyStyles(nifty.getDefaultStyleResolver());
     if (screen == null) {
@@ -2263,7 +2282,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       elementType.applyEffects(nifty, screen, this);
       elementType.applyInteract(nifty, screen, this);
     }
-
+    layoutElements();
     log.fine("after setStyle [" + newStyle + "]\n" + elementType.output(0));
     publishEvent();
   }
@@ -2278,7 +2297,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     elementType.removeWithTag(style);
     effectManager.removeAllEffects();
-
+     
+    // If the new style has no image the renderer will still display it 
+    // workaround :
+    ImageRenderer renderer = getRenderer(ImageRenderer.class);
+    if (renderer!= null) {
+      renderer.setImage(null);
+    }
     log.fine("after removeStyle [" + style + "]\n" + elementType.output(0));
     publishEvent();
   }
