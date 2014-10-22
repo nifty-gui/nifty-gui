@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +29,7 @@ public class JoglMouseCursor implements MouseCursor {
 	private static final Logger log = Logger.getLogger(JoglMouseCursor.class.getName());
 	@Nonnull
 	private final PointerIcon joglCursor;
-	
+
 	private Window newtWindow;
 
 	public JoglMouseCursor(
@@ -46,13 +47,14 @@ public class JoglMouseCursor implements MouseCursor {
 		try {
 			BufferedImage image = imageLoader.loadAsBufferedImage(imageStream);
 			final DimensionImmutable size = new Dimension(image.getWidth(), image.getHeight());
-			
+
 			// grab pixel data from BufferedImage
 			int[] pixels = new int[image.getWidth() * image.getHeight()];
 			image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+			flipArray(pixels); // flip image data to display correctly in OpenGL
 			final IntBuffer pixelIntBuff = Buffers.newDirectIntBuffer(pixels);
 			final ByteBuffer pixelBuff = Buffers.copyIntBufferAsByteBuffer(pixelIntBuff);
-			
+
 			// find compatible PixelFormat
 			PixelFormat pixFormat = null;
 			for (final PixelFormat pf : PixelFormat.values()) {
@@ -62,7 +64,7 @@ public class JoglMouseCursor implements MouseCursor {
 					break;
 				}
 			}
-			
+
 			final PixelRectangle.GenericPixelRect rec = new PixelRectangle.GenericPixelRect(pixFormat, size, 0, true,
 					pixelBuff);
 			joglCursor = newtWindow.getScreen().getDisplay().createPointerIcon(rec, hotspotX, hotspotY);
@@ -92,10 +94,23 @@ public class JoglMouseCursor implements MouseCursor {
 	public void dispose() {
 		joglCursor.destroy();
 	}
-	
+
 	public void setCurrentWindow(final Window newtWindow) {
 		if (newtWindow == null)
 			return;
 		this.newtWindow = newtWindow;
+	}
+
+	// reverses the order of the passed array so that head -> tail becomes tail -> head
+	private static void flipArray(int[] array) {
+		if (array == null) {
+			throw (new NullPointerException("passed array is of null value"));
+		}
+		int[] copy = Arrays.copyOf(array, array.length);
+		int inv = 0;
+		for (int i = array.length - 1; i >= 0; i--) {
+			array[i] = copy[inv];
+			inv++;
+		}
 	}
 }
