@@ -1,12 +1,13 @@
 package de.lessvoid.nifty.controls.chatcontrol;
 
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-
-import javax.annotation.Nonnull;
-import java.util.logging.Logger;
 
 /**
  * Handles the displaying of the items in the ChatBox.
@@ -50,13 +51,14 @@ public class ChatBoxViewConverter implements ListBoxViewConverter<ChatEntryModel
       log.severe("Icon entry of the chat line does not contain the required image renderer.");
       return;
     }
-    textRenderer.setText(item.toString());
-    iconRenderer.setImage(item.getIcon());
     if (item.getStyle() != null && !item.getStyle().equals("")) {
       text.setStyle(item.getStyle());
     } else {
       text.setStyle("default");
     }
+    // setStyle will reset the text to initial value (null), so setText/setImage should be called after it
+    textRenderer.setText(item.toString());
+    iconRenderer.setImage(item.getIcon());
   }
 
   @Override
