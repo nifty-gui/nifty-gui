@@ -1,58 +1,59 @@
-package de.lessvoid.nifty.renderer.lwjgl;
+package de.lessvoid.nifty.renderer.opengl;
 
 import java.nio.ByteBuffer;
 
-import de.lessvoid.coregl.CoreFactory;
+import de.lessvoid.coregl.ColorFormat;
 import de.lessvoid.coregl.CoreTexture2D;
-import de.lessvoid.coregl.CoreTexture2D.ColorFormat;
-import de.lessvoid.coregl.CoreTexture2D.ResizeFilter;
-import de.lessvoid.coregl.CoreTexture2D.Type;
+import de.lessvoid.coregl.ResizeFilter;
+import de.lessvoid.coregl.Type;
+import de.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.render.io.ImageLoader;
 import de.lessvoid.nifty.internal.render.io.ImageLoaderFactory;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
-public class NiftyTextureLwjgl implements NiftyTexture {
+public class NiftyTextureOpenGL implements NiftyTexture {
   final CoreTexture2D texture;
 
-  private NiftyTextureLwjgl(final CoreTexture2D texture) {
+  private NiftyTextureOpenGL(final CoreTexture2D texture) {
     this.texture = texture;
   }
 
-  public static NiftyTextureLwjgl newTextureRGBA(
-      final CoreFactory coreFactory,
+  public static NiftyTextureOpenGL newTextureRGBA(
+      final CoreGL gl,
       final int width,
       final int height,
       final boolean linear) {
-    return new NiftyTextureLwjgl(coreFactory.createEmptyTexture(ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear)));
+    return new NiftyTextureOpenGL(CoreTexture2D.createEmptyTexture(gl, ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear)));
   }
 
-  public static NiftyTextureLwjgl newTextureRed(
-      final CoreFactory coreFactory,
+  public static NiftyTextureOpenGL newTextureRed(
+      final CoreGL gl,
       final int width,
       final int height,
       final boolean linear) {
-    return new NiftyTextureLwjgl(coreFactory.createEmptyTexture(ColorFormat.Red, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear)));
+    return new NiftyTextureOpenGL(CoreTexture2D.createEmptyTexture(gl, ColorFormat.Red, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear)));
   }
 
-  public NiftyTextureLwjgl(
-      final CoreFactory coreFactory,
+  public NiftyTextureOpenGL(
+      final CoreGL gl,
       final int width,
       final int height,
       final ByteBuffer data,
       final boolean linear) {
-    texture = coreFactory.createTexture(ColorFormat.RGBA, width, height, data, resizeFilter(linear));
+    texture = CoreTexture2D.createCoreTexture(gl, ColorFormat.RGBA, width, height, data, resizeFilter(linear));
   }
 
-  public NiftyTextureLwjgl(
-      final CoreFactory coreFactory,
+  public NiftyTextureOpenGL(
+      final CoreGL gl,
       final NiftyResourceLoader resourceLoader,
       final String filename,
       final boolean linear) {
     try {
       ImageLoader imageLoader = ImageLoaderFactory.createImageLoader(filename);
       ByteBuffer data = imageLoader.loadAsByteBufferRGBA(resourceLoader.getResourceAsStream(filename));
-      texture = coreFactory.createTexture(
+      texture = CoreTexture2D.createCoreTexture(
+          gl,
           ColorFormat.RGBA,
           imageLoader.getImageWidth(),
           imageLoader.getImageHeight(),

@@ -25,7 +25,8 @@ public class Statistics {
     Synchronize,
     Update,
     Render,
-    RenderBatchCount
+    RenderBatchCount,
+    InputProcessing
   }
 
   public Statistics(final TimeProvider timeProvider) {
@@ -50,7 +51,8 @@ public class Statistics {
         times[Type.Render.ordinal()],
         times[Type.Update.ordinal()],
         times[Type.Synchronize.ordinal()],
-        times[Type.RenderBatchCount.ordinal()]));
+        times[Type.RenderBatchCount.ordinal()],
+        times[Type.InputProcessing.ordinal()]));
   }
 
   /**
@@ -71,6 +73,14 @@ public class Statistics {
 
   public void stopUpdate() {
     stop(Type.Update);
+  }
+
+  public void startInputProcessing() {
+    start(Type.InputProcessing);
+  }
+
+  public void stopInputProcessing() {
+    stop(Type.InputProcessing);
   }
 
   public void startRender() {

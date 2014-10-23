@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.jglfont.JGLFontFactory;
 
+import de.lessvoid.nifty.api.input.NiftyInputConsumer;
+import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
+import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
@@ -13,6 +16,7 @@ import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
+import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.TimeProvider;
 
@@ -40,6 +44,9 @@ public class Nifty {
   // the class performing the conversion from NiftyNode to RenderNode and takes care of all rendering.
   private final NiftyRenderer renderer;
 
+  // the class that interfaces us to input events (mouse, touch, keyboard)
+  private NiftyInputDevice inputDevice;
+
   // the FontFactory
   private final JGLFontFactory fontFactory;
 
@@ -48,9 +55,13 @@ public class Nifty {
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
    * @param newTimeProvider the TimeProvider implementation to use
    */
-  public Nifty(final NiftyRenderDevice newRenderDevice, final TimeProvider newTimeProvider) {
+  public Nifty(final NiftyRenderDevice newRenderDevice, final NiftyInputDevice newInputDevice, final TimeProvider newTimeProvider) {
     renderDevice = newRenderDevice;
     renderDevice.setResourceLoader(resourceLoader);
+
+    inputDevice = newInputDevice;
+    inputDevice.setResourceLoader(resourceLoader);
+
     timeProvider = newTimeProvider;
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
@@ -75,6 +86,26 @@ public class Nifty {
    */
   public void update() {
     stats.startFrame();
+
+    stats.startInputProcessing();
+    inputDevice.forwardEvents(new NiftyInputConsumer() {
+      @Override
+      public boolean processPointerEvent(final NiftyPointerEvent... pointerEvents) {
+        for (int i=0; i<pointerEvents.length; i++) {
+          for (int j=0; j<rootNodes.size(); j++) {
+            rootNodes.get(j).getImpl().pointerEvent(pointerEvents[i]);
+          }
+        }
+        return false;
+      }
+      
+      @Override
+      public boolean processKeyboardEvent(final NiftyKeyboardEvent keyEvent) {
+        return false;
+      }
+    });
+    stats.stopInputProcessing();
+
     stats.startUpdate();
     for (int i=0; i<rootNodes.size(); i++) {
       rootNodes.get(i).getImpl().update();

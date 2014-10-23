@@ -21,6 +21,7 @@ import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
+import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.animate.IntervalAnimator;
@@ -435,6 +436,9 @@ public class InternalNiftyNode implements InternalLayoutable {
     for (int i=0; i<children.size(); i++) {
       children.get(i).update();
     }
+  }
+
+  public void pointerEvent(final NiftyPointerEvent niftyPointerEvent) {
   }
 
   public List<InternalNiftyNode> getChildren() {

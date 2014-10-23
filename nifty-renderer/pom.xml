@@ -8,6 +8,6 @@
   <artifactId>nifty-renderer</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>nifty-renderer-lwjgl</module>
+    <module>nifty-renderer-opengl</module>
   </modules>  
 </project>

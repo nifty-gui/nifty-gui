@@ -22,18 +22,21 @@ public class NiftyStatistics {
     private final long updateTime;
     private final long syncTime;
     private final long renderBatchCount;
+    private final long inputProcessingUpdateTime;
 
     public FrameInfo(
         final long frame,
         final long renderTime,
         final long updateTime,
         final long syncTime,
-        final long renderBatchCount) {
+        final long renderBatchCount,
+        final long inputProcessingUpdateTime) {
       this.frame = frame;
       this.renderTime = renderTime;
       this.updateTime = updateTime;
       this.syncTime = syncTime;
       this.renderBatchCount = renderBatchCount;
+      this.inputProcessingUpdateTime = inputProcessingUpdateTime;
     }
 
     public long getFrame() {
@@ -54,6 +57,10 @@ public class NiftyStatistics {
 
     public long getRenderBatchCount() {
       return renderBatchCount;
+    }
+
+    public long getInputProcessingUpdateTime() {
+      return inputProcessingUpdateTime;
     }
   }
 
@@ -79,7 +86,7 @@ public class NiftyStatistics {
   public List<String> getStatistics() {
     List<String> stuff = new ArrayList<String>();
     FrameInfo[] frameInfos = getAllSamples();
-    stuff.add("     frame    update     render      synch   batchc.\n");
+    stuff.add("     frame    update     render      synch   batchc.   inputUpdate\n");
     StringBuilder line = new StringBuilder();
     for (FrameInfo frameInfo : frameInfos) {
       line.setLength(0);
@@ -88,6 +95,7 @@ public class NiftyStatistics {
       line.append(formatValue(frameInfo.getRenderTime()));
       line.append(formatValue(frameInfo.getSyncTime()));
       line.append(formatDirect(frameInfo.getRenderBatchCount()));
+      line.append(formatValue(frameInfo.getInputProcessingUpdateTime()));
       line.append("\n");
       stuff.add(line.toString());
     }

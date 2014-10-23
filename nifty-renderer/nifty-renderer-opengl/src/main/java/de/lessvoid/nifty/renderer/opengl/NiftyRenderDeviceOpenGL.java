@@ -1,22 +1,4 @@
-package de.lessvoid.nifty.renderer.lwjgl;
-
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DST_COLOR;
-import static org.lwjgl.opengl.GL11.GL_ONE;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_ZERO;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.opengl.GL14.GL_FUNC_ADD;
-import static org.lwjgl.opengl.GL14.GL_MAX;
-import static org.lwjgl.opengl.GL14.glBlendFuncSeparate;
-import static org.lwjgl.opengl.GL20.glBlendEquationSeparate;
+package de.lessvoid.nifty.renderer.opengl;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -27,7 +9,7 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 
 import de.lessvoid.coregl.CoreFBO;
-import de.lessvoid.coregl.CoreFactory;
+import de.lessvoid.coregl.CoreRender;
 import de.lessvoid.coregl.CoreShader;
 import de.lessvoid.coregl.CoreShaderManager;
 import de.lessvoid.coregl.CoreVAO;
@@ -35,7 +17,8 @@ import de.lessvoid.coregl.CoreVAO.FloatType;
 import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.CoreVBO.DataType;
 import de.lessvoid.coregl.CoreVBO.UsageType;
-import de.lessvoid.coregl.lwjgl.CoreFactoryLwjgl;
+import de.lessvoid.coregl.spi.CoreGL;
+import de.lessvoid.coregl.spi.CoreUtil;
 import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyLineCapType;
@@ -53,13 +36,14 @@ import de.lessvoid.nifty.internal.render.batch.TextureBatch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
-public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
+public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   private static final int VERTEX_SIZE = 5*6;
   private static final int MAX_QUADS = 2000;
   private static final int VBO_SIZE = MAX_QUADS * VERTEX_SIZE;
   private static final float NANO_TO_MS_CONVERSION = 1000000.f;
 
-  private final CoreFactory coreFactory;
+  private final CoreGL gl;
+  private final CoreRender coreRender;
   private final CoreShaderManager shaderManager = new CoreShaderManager();
   private final CoreVBO<FloatBuffer> quadVBO; 
 
@@ -84,8 +68,10 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   private CoreFBO alphaTextureFBO;
   private CoreFBO currentFBO;
 
-  public NiftyRenderDeviceLwgl() throws Exception {
-    coreFactory = CoreFactoryLwjgl.create();
+  public NiftyRenderDeviceOpenGL(final CoreGL gl) throws Exception {
+    this.gl = gl;
+    this.coreRender = CoreRender.createCoreRender(gl);
+
     mvp(getDisplayWidth(), getDisplayHeight());
 
     shaderManager.register(PLAIN_COLOR_SHADER, loadPlainShader());
@@ -108,17 +94,17 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     shader.activate();
     shader.setUniformi("uTexture", 0);
 
-    fbo = coreFactory.createCoreFBO();
+    fbo = CoreFBO.createCoreFBO(gl);
     fbo.bindFramebuffer();
     fbo.disable();
 
-    vao = coreFactory.createVAO();
+    vao = CoreVAO.createCoreVAO(gl);
     vao.bind();
 
-    vbo = coreFactory.createVBO(DataType.FLOAT, UsageType.STREAM_DRAW, VBO_SIZE);
+    vbo = CoreVBO.createCoreVBO(gl, DataType.FLOAT, UsageType.STREAM_DRAW, VBO_SIZE);
     vbo.bind();
 
-    quadVBO = coreFactory.createVBO(DataType.FLOAT, UsageType.STATIC_DRAW, new Float[] {
+    quadVBO = CoreVBO.createCoreVBO(gl, DataType.FLOAT, UsageType.STATIC_DRAW, new Float[] {
         0.0f, 0.0f,
         0.0f, 1.0f,
         1.0f, 0.0f,
@@ -131,8 +117,8 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
     vao.unbind();
 
-    alphaTexture = NiftyTextureLwjgl.newTextureRed(coreFactory, getDisplayWidth(), getDisplayHeight(), false);
-    alphaTextureFBO = coreFactory.createCoreFBO();
+    alphaTexture = NiftyTextureOpenGL.newTextureRed(gl, getDisplayWidth(), getDisplayHeight(), false);
+    alphaTextureFBO = CoreFBO.createCoreFBO(gl);
     alphaTextureFBO.bindFramebuffer();
     alphaTextureFBO.attachTexture(getTextureId(alphaTexture), 0);
     alphaTextureFBO.disable();
@@ -163,8 +149,8 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   @Override
   public void beginRender() {
     if (clearScreenOnRender) {
-      glClearColor(0.f, 0.f, 0.f, 1.f);
-      glClear(GL_COLOR_BUFFER_BIT);
+      gl.glClearColor(0.f, 0.f, 0.f, 1.f);
+      gl.glClear(gl.GL_COLOR_BUFFER_BIT());
     }
 
     vbo.getBuffer().clear();
@@ -176,17 +162,17 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
 
   @Override
   public NiftyTexture createTexture(final int width, final int height, final boolean filterLinear) {
-    return NiftyTextureLwjgl.newTextureRGBA(coreFactory, width, height, filterLinear);
+    return NiftyTextureOpenGL.newTextureRGBA(gl, width, height, filterLinear);
   }
 
   @Override
   public NiftyTexture createTexture(final int width, final int height, final ByteBuffer data, final boolean filterLinear) {
-    return new NiftyTextureLwjgl(coreFactory, width, height, data, filterLinear);
+    return new NiftyTextureOpenGL(gl, width, height, data, filterLinear);
   }
 
   @Override
   public NiftyTexture loadTexture(final String filename, final boolean filterLinear) {
-    return new NiftyTextureLwjgl(coreFactory, resourceLoader, filename, filterLinear);
+    return new NiftyTextureOpenGL(gl, resourceLoader, filename, filterLinear);
   }
 
   @Override
@@ -212,7 +198,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
 
     internal(texture).bind();
-    coreFactory.getCoreRender().renderTriangles(vertices.position() / TextureBatch.PRIMITIVE_SIZE * 6);
+    coreRender.renderTriangles(vertices.position() / TextureBatch.PRIMITIVE_SIZE * 6);
 
     vao.disableVertexAttribute(2);
 
@@ -240,7 +226,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.enableVertexAttribute(1);
     vao.vertexAttribPointer(1, 4, FloatType.FLOAT, 6, 2);
 
-    coreFactory.getCoreRender().renderTriangles(vertices.position() / ColorQuadBatch.PRIMITIVE_SIZE * 6);
+    coreRender.renderTriangles(vertices.position() / ColorQuadBatch.PRIMITIVE_SIZE * 6);
     vao.unbind();
     vbo.getBuffer().clear();
   }
@@ -284,7 +270,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
     vao.disableVertexAttribute(1);
 
-    coreFactory.getCoreRender().renderTriangles(vertices.position() / LinearGradientQuadBatch.PRIMITIVE_SIZE * 6);
+    coreRender.renderTriangles(vertices.position() / LinearGradientQuadBatch.PRIMITIVE_SIZE * 6);
     vao.unbind();
     vbo.getBuffer().clear();
   }
@@ -293,21 +279,21 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   public void beginRenderToTexture(final NiftyTexture texture) {
     fbo.bindFramebuffer();
     fbo.attachTexture(getTextureId(texture), 0);
-    glViewport(0, 0, texture.getWidth(), texture.getHeight());
+    gl.glViewport(0, 0, texture.getWidth(), texture.getHeight());
     mvpFlipped(texture.getWidth(), texture.getHeight());
     currentFBO = fbo;
   }
 
   @Override
   public void endRenderToTexture(final NiftyTexture texture) {
-    fbo.disableAndResetViewport();
+    fbo.disableAndResetViewport(getDisplayWidth(), getDisplayHeight());
     mvp(getDisplayWidth(), getDisplayHeight());
     currentFBO = null;
   }
 
   @Override
   public String loadCustomShader(final String filename) {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex");
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/custom.vs");
     shader.fragmentShader(filename);
     shader.link();
@@ -332,7 +318,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.disableVertexAttribute(1);
     vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
 
-    coreFactory.getCoreRender().renderTriangles(3 * 2);
+    coreRender.renderTriangles(3 * 2);
     vao.unbind();
   }
 
@@ -340,22 +326,22 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   public void changeBlendMode(final BlendMode blendMode) {
     switch (blendMode) {
     case OFF:
-        glDisable(GL_BLEND);
+        gl.glDisable(gl.GL_BLEND());
         break;
 
     case BLEND:
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
         break;
 
     case BLEND_SEP:
-        glEnable(GL_BLEND);
-        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFuncSeparate(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA(), gl.GL_ONE(), gl.GL_ONE_MINUS_SRC_ALPHA());
         break;
 
     case MULTIPLY:
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_DST_COLOR, GL_ZERO);
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_DST_COLOR(), gl.GL_ZERO());
         break;
     }
   }
@@ -363,10 +349,10 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   @Override
   public void pathBegin(final LineParameters lineParameters) {
     alphaTextureFBO.bindFramebuffer();
-    glViewport(0, 0, alphaTexture.getWidth(), alphaTexture.getHeight());
+    gl.glViewport(0, 0, alphaTexture.getWidth(), alphaTexture.getHeight());
 
-    glClearColor(0.0f, 0.f, 0.f, 1.f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    gl.glClearColor(0.0f, 0.f, 0.f, 1.f);
+    gl.glClear(gl.GL_COLOR_BUFFER_BIT());
   }
 
   @Override
@@ -406,9 +392,9 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
     vao.disableVertexAttribute(1);
 
-    glEnable(GL_BLEND);
-    glBlendEquationSeparate(GL_MAX, GL_MAX);
-    coreFactory.getCoreRender().renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
+    gl.glEnable(gl.GL_BLEND());
+    gl.glBlendEquationSeparate(gl.GL_MAX(), gl.GL_MAX());
+    coreRender.renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
 
     vbo.getBuffer().clear();
   }
@@ -441,9 +427,9 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     vao.enableVertexAttribute(1);
     vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
 
-    glEnable(GL_BLEND);
-    glBlendEquationSeparate(GL_MAX, GL_MAX);
-    coreFactory.getCoreRender().renderTriangleStrip(vertices.limit() / ArcBatch.PRIMITIVE_SIZE);
+    gl.glEnable(gl.GL_BLEND());
+    gl.glBlendEquationSeparate(gl.GL_MAX(), gl.GL_MAX());
+    coreRender.renderTriangleStrip(vertices.limit() / ArcBatch.PRIMITIVE_SIZE);
 
     vbo.getBuffer().clear();
     vao.unbind();
@@ -503,10 +489,10 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
         (float) lineParameters.getColor().getBlue(),
         (float) lineParameters.getColor().getAlpha());
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-    coreFactory.getCoreRender().renderTriangleStrip(4);
+    gl.glEnable(gl.GL_BLEND());
+    gl.glBlendFunc(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
+    gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
+    coreRender.renderTriangleStrip(4);
     vao.unbind();
   }
 
@@ -514,12 +500,12 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
     return internal(texture).texture.getTextureId();
   }
 
-  private NiftyTextureLwjgl internal(final NiftyTexture texture) {
-    return (NiftyTextureLwjgl) texture;
+  private NiftyTextureOpenGL internal(final NiftyTexture texture) {
+    return (NiftyTextureOpenGL) texture;
   }
 
   private CoreShader loadTextureShader() {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aUV", "aColor");
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex", "aUV", "aColor");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/texture.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/texture.fs");
     shader.link();
@@ -527,7 +513,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   private CoreShader loadPlainShader() {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aColor");
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex", "aColor");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/plain-color.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/plain-color.fs");
     shader.link();
@@ -535,7 +521,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   private CoreShader loadLinearGradientShader() {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex");
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/linear-gradient.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/linear-gradient.fs");
     shader.link();
@@ -543,7 +529,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   private CoreShader loadLineShader(final String capStyle, final String joinType) throws Exception {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex");
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/line-alpha.vs");
     shader.geometryShader("de/lessvoid/nifty/renderer/lwjgl/line-alpha.gs", stream("#version 150 core\n#define " + capStyle + "\n#define " + joinType + "\n"), resource("de/lessvoid/nifty/renderer/lwjgl/line-alpha.gs"));
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/line-alpha.fs", stream("#version 150 core\n#define " + capStyle + "\n#define " + joinType + "\n"), resource("de/lessvoid/nifty/renderer/lwjgl/line-alpha.fs"));
@@ -552,7 +538,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   private CoreShader loadArcShader(final String capStyle) throws Exception {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex");
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.fs", stream("#version 150 core\n#define " + capStyle + "\n"), resource("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.fs"));
     shader.link();
@@ -560,7 +546,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   private CoreShader loadPlainColorWithMaskShader() throws Exception {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aUV");
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex", "aUV");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/plain-color-with-mask.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/plain-color-with-mask.fs");
     shader.link();
@@ -568,7 +554,7 @@ public class NiftyRenderDeviceLwgl implements NiftyRenderDevice {
   }
 
   private CoreShader loadArcShader() {
-    CoreShader shader = coreFactory.newShaderWithVertexAttributes("aVertex", "aUV");
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex", "aUV");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.fs");
     shader.link();
