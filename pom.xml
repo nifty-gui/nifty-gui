@@ -4,12 +4,13 @@
   <artifactId>nifty-main</artifactId>
   <packaging>pom</packaging>
   <version>2.0-SNAPSHOT</version>
-  <name>Nifty Main</name>
+  <name>Nifty Main Project</name>
   <description>Nifty GUI is a Java Library that supports the building of interactive user interfaces for games or similar applications. It utilizes OpenGL for rendering and it can be easily integrated into many rendering systems. The configuration of the GUI is stored in xml files with little supporting Java code. In short Nifty helps you to layout stuff, display it in a cool way and interact with it :)</description>
   <modules>
     <module>nifty</module>
+    <module>nifty-renderer-opengl</module>
+    <module>nifty-input-lwjgl</module>
     <module>nifty-examples</module>
-    <module>nifty-renderer</module>
   </modules>
   <url>http://sourceforge.net/projects/nifty-gui/</url>
   <licenses>

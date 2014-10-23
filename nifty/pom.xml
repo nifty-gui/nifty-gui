@@ -7,7 +7,7 @@
   </parent>
   <artifactId>nifty</artifactId>
   <packaging>jar</packaging>
-  <name>Nifty</name>
+  <name>Nifty Core</name>
   <properties>
     <proguard.java.runtime.jar>${java.home}/lib/rt.jar</proguard.java.runtime.jar>
   </properties>
