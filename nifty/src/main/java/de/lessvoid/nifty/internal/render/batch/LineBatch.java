@@ -4,21 +4,21 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 
 /**
  * A line batch is a number of lines rendered with the same cap and join styles. Changing cap or join style will
  * create a new batch.
  */
-public class LineBatch implements Batch<LineParameters> {
+public class LineBatch implements Batch<NiftyLineParameters> {
   private final static int NUM_PRIMITIVES = 100;
   public final static int PRIMITIVE_SIZE = 2;
 
   private final FloatBuffer b;
-  private final LineParameters lineParameters;
+  private final NiftyLineParameters lineParameters;
 
   // Vec4 buffer data
   private final Vec4 vsrc = new Vec4();
@@ -26,9 +26,9 @@ public class LineBatch implements Batch<LineParameters> {
   private boolean isStartPathBatch;
   private boolean isEndPathBatch;
 
-  public LineBatch(final LineParameters lineParameters) {
+  public LineBatch(final NiftyLineParameters lineParameters) {
     this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
-    this.lineParameters = new LineParameters(lineParameters);
+    this.lineParameters = new NiftyLineParameters(lineParameters);
   }
 
   @Override
@@ -45,7 +45,7 @@ public class LineBatch implements Batch<LineParameters> {
   }
 
   @Override
-  public boolean requiresNewBatch(final LineParameters params) {
+  public boolean requiresNewBatch(final NiftyLineParameters params) {
     return !lineParameters.equals(params) || (b.remaining() < PRIMITIVE_SIZE);
   }
 

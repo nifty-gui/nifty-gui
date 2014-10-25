@@ -20,9 +20,11 @@ import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.coregl.spi.CoreUtil;
 import de.lessvoid.nifty.api.BlendMode;
+import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
+import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.common.IdGenerator;
@@ -347,7 +349,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathBegin(final LineParameters lineParameters) {
+  public void pathBegin(final NiftyLineParameters lineParameters) {
     alphaTextureFBO.bindFramebuffer();
     gl.glViewport(0, 0, alphaTexture.getWidth(), alphaTexture.getHeight());
 
@@ -356,7 +358,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathLines(final FloatBuffer vertices, final LineParameters lineParameter) {
+  public void pathLines(final FloatBuffer vertices, final NiftyLineParameters lineParameter) {
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -400,7 +402,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathArcs(final FloatBuffer vertices, final ArcParameters arcParameters) {
+  public void pathArcs(final FloatBuffer vertices, final NiftyArcParameters arcParameters) {
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -436,7 +438,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathEnd(final LineParameters lineParameters) {
+  public void pathEnd(final NiftyLineParameters lineParameters) {
     alphaTextureFBO.disable();
 
     if (currentFBO != null) {

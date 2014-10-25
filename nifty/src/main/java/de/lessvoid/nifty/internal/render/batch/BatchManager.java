@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.api.BlendMode;
+import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.ArcParameters;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class BatchManager {
@@ -128,7 +128,7 @@ public class BatchManager {
       final float x,
       final float y,
       final Mat4 mat,
-      final LineParameters lineParameters,
+      final NiftyLineParameters lineParameters,
       final boolean forceNewBatch,
       final boolean last) {
     BatchFactory<LineBatch> batchFactory = new BatchFactory<LineBatch>() {
@@ -159,7 +159,7 @@ public class BatchManager {
       final double startAngle,
       final double endAngle,
       final Mat4 mat,
-      final ArcParameters arcParameters,
+      final NiftyArcParameters arcParameters,
       final boolean forceNewBatch,
       final boolean last) {
     BatchFactory<ArcBatch> batchFactory = new BatchFactory<ArcBatch>() {

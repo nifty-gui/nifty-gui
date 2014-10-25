@@ -3,23 +3,23 @@ package de.lessvoid.nifty.internal.canvas;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
+import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec2;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.ArcParameters;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.LineParameters;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class Context {
   private final NiftyTexture texture;
   private NiftyColor fillColor;
   private NiftyLinearGradient linearGradient;
-  private LineParameters lineParameters;
+  private NiftyLineParameters lineParameters;
   private NiftyColor textColor = NiftyColor.WHITE();
   private float textSize = 1.f;
   private Mat4 transform = Mat4.createIdentity();
@@ -37,7 +37,7 @@ public class Context {
   public void prepare(final NiftyRenderDevice renderDevice) {
     fillColor = NiftyColor.BLACK();
     linearGradient = null;
-    lineParameters = new LineParameters();
+    lineParameters = new NiftyLineParameters();
     renderDevice.beginRenderToTexture(texture);
     this.renderDevice = renderDevice;
   }
@@ -295,7 +295,7 @@ public class Context {
   }
 
   interface PathElement {
-    void render(BatchManager batchManager, LineParameters lineParameters, final boolean first, final boolean last);
+    void render(BatchManager batchManager, NiftyLineParameters lineParameters, final boolean first, final boolean last);
   }
 
   class PathElementLine implements PathElement {
@@ -308,7 +308,7 @@ public class Context {
     }
 
     @Override
-    public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first, final boolean last) {
+    public void render(final BatchManager batchManager, final NiftyLineParameters lineParameters, final boolean first, final boolean last) {
       batchManager.addLineVertex(x, y, getTransform(), lineParameters, first, last);
     }
   }
@@ -329,12 +329,12 @@ public class Context {
     }
 
     @Override
-    public void render(final BatchManager batchManager, final LineParameters lineParameters, final boolean first, final boolean last) {
+    public void render(final BatchManager batchManager, final NiftyLineParameters lineParameters, final boolean first, final boolean last) {
       batchManager.addArc(
           x, y, r,
           startAngle, endAngle,
           getTransform(),
-          new ArcParameters(lineParameters, (float) startAngle, (float) endAngle, (float) r),
+          new NiftyArcParameters(lineParameters, (float) startAngle, (float) endAngle, (float) r),
           first, last);
     }
   }
