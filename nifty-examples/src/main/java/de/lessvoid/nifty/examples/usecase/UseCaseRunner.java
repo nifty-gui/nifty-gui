@@ -9,7 +9,7 @@ import de.lessvoid.coregl.spi.CoreSetup;
 import de.lessvoid.coregl.spi.CoreSetup.RenderLoopCallback;
 import de.lessvoid.nifty.api.AccurateTimeProvider;
 import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.renderer.opengl.NiftyInputDeviceOpenGL;
+import de.lessvoid.nifty.input.lwjgl.NiftyInputDeviceLWJGL;
 import de.lessvoid.nifty.renderer.opengl.NiftyRenderDeviceOpenGL;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 
@@ -69,6 +69,6 @@ public class UseCaseRunner {
   }
 
   private static NiftyInputDevice createInputDevice() throws Exception {
-    return new NiftyInputDeviceOpenGL();
+    return new NiftyInputDeviceLWJGL();
   }
 }

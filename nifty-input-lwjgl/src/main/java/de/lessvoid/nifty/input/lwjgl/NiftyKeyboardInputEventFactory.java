@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.renderer.opengl;
+package de.lessvoid.nifty.input.lwjgl;
 
 import javax.annotation.Nonnull;
 

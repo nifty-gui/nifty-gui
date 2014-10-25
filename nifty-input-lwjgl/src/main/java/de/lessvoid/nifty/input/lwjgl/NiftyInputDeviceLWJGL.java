@@ -1,10 +1,9 @@
-package de.lessvoid.nifty.renderer.opengl;
+package de.lessvoid.nifty.input.lwjgl;
 
 /**
  *
  * @author Joseph
  */
-
 import java.nio.IntBuffer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
@@ -23,8 +22,8 @@ import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 
-public class NiftyInputDeviceOpenGL implements NiftyInputDevice {
-  private final Logger log = Logger.getLogger(NiftyInputDeviceOpenGL.class.getName());
+public class NiftyInputDeviceLWJGL implements NiftyInputDevice {
+  private final Logger log = Logger.getLogger(NiftyInputDeviceLWJGL.class.getName());
   @Nonnull
   private final NiftyKeyboardInputEventFactory keyboardEventCreator = new NiftyKeyboardInputEventFactory();
   private final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
@@ -35,7 +34,7 @@ public class NiftyInputDeviceOpenGL implements NiftyInputDevice {
   private boolean niftyHasKeyboardFocus = true;
   private boolean niftyTakesKeyboardFocusOnClick = false;
 
-  public NiftyInputDeviceOpenGL() throws Exception {
+  public NiftyInputDeviceLWJGL() throws Exception {
     Mouse.create();
     Keyboard.create();
     Keyboard.enableRepeatEvents(true);
