@@ -62,10 +62,10 @@ public class UseCase_b14_CanvasCurves {
 
     NiftyNode canvasNode = rootNode.newChildNode(UnitValue.percent(50), UnitValue.percent(50), ChildLayout.Absolute);
 
-    cp0 = new ControlPoint( 50.f,  50.f, canvasNode, NiftyColor.BLACK());
-    cp1 = new ControlPoint( 50.f, 150.f, canvasNode, NiftyColor.BLACK());
-    cp2 = new ControlPoint(250.f, 150.f, canvasNode, NiftyColor.BLACK());
-    cp3 = new ControlPoint(250.f,  50.f, canvasNode, NiftyColor.BLACK());
+    cp0 = new ControlPoint( 50.f,  50.f, canvasNode, NiftyColor.RED());
+    cp1 = new ControlPoint( 50.f, 325.f, canvasNode, NiftyColor.RED());
+    cp2 = new ControlPoint(450.f, 325.f, canvasNode, NiftyColor.RED());
+    cp3 = new ControlPoint(450.f,  50.f, canvasNode, NiftyColor.RED());
 
     canvasNode.addCanvasPainter(new NiftyCanvasPainter() {
       @Override
@@ -78,13 +78,6 @@ public class UseCase_b14_CanvasCurves {
         canvas.beginPath();
         canvas.moveTo(cp0.getX(), cp0.getY());
         canvas.bezierCurveTo(cp1.getX(), cp1.getY(), cp2.getX(), cp2.getY(), cp3.getX(), cp3.getY());
-        canvas.stroke();
-
-        canvas.setStrokeColor(NiftyColor.BLACK());
-        canvas.setLineWidth(5);
-        canvas.beginPath();
-        canvas.moveTo(350.f, 350.f);
-        canvas.bezierCurveTo(350.f, 250.f, 450.f, 250.f, 450.f, 150.f);
         canvas.stroke();
       }
     });
