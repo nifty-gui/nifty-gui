@@ -2,7 +2,10 @@ package de.lessvoid.nifty.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.jglfont.JGLFontFactory;
 
@@ -11,6 +14,7 @@ import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.internal.NiftyNodeRenderOrderComparator;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
@@ -25,6 +29,8 @@ import de.lessvoid.nifty.spi.TimeProvider;
  * @author void
  */
 public class Nifty {
+  private final static Logger logger = Logger.getLogger(Nifty.class.getName());
+
   // The resource loader.
   private final NiftyResourceLoader resourceLoader = new NiftyResourceLoader();
 
@@ -41,6 +47,9 @@ public class Nifty {
   // The list of root nodes.
   private final List<NiftyNode> rootNodes = new ArrayList<NiftyNode>();
 
+  // The list of nodes that are able to receive input events
+  private final List<NiftyNode> nodesToReceiveEvents = new ArrayList<NiftyNode>();
+
   // the class performing the conversion from NiftyNode to RenderNode and takes care of all rendering.
   private final NiftyRenderer renderer;
 
@@ -49,6 +58,12 @@ public class Nifty {
 
   // the FontFactory
   private final JGLFontFactory fontFactory;
+
+  // the comparator used to sort the list of inputEventReceivers
+  private final Comparator<? super NiftyNode> inputEventReceiversComparator = new NiftyNodeRenderOrderComparator();
+
+  // whenever we need to build a string we'll re-use this instance instead of creating new instances all the time
+  private final StringBuilder str = new StringBuilder();
 
   /**
    * Create a new Nifty instance.
@@ -87,13 +102,52 @@ public class Nifty {
   public void update() {
     stats.startFrame();
 
+    stats.startUpdate();
+    for (int i=0; i<rootNodes.size(); i++) {
+      rootNodes.get(i).getImpl().update();
+    }
+    stats.stopUpdate();
+
     stats.startInputProcessing();
+    processInputEvents(collectInputReceivers());
+    stats.stopInputProcessing();
+  }
+
+  private List<NiftyNode> collectInputReceivers() {
+    nodesToReceiveEvents.clear();
+    for (int i=0; i<rootNodes.size(); i++) {
+      rootNodes.get(i).getImpl().addInputNodes(nodesToReceiveEvents);
+    }
+    return sortInputReceivers(nodesToReceiveEvents);
+  }
+
+  // sorts in place (the source list) and returns the sorted source list
+  private List<NiftyNode> sortInputReceivers(final List<NiftyNode> source) {
+    Collections.sort(source, inputEventReceiversComparator);
+    return source;
+  }
+
+  private void logInputReceivers(final List<NiftyNode> source) {
+    str.setLength(0);
+    str.append("inputReceivers: ");
+    for (int j=source.size()-1; j>=0; j--) {
+      str.append("[");
+      str.append(source.get(j).getImpl().getId());
+      str.append("]");
+      str.append(" ");
+    }
+    logger.fine(str.toString());
+  }
+
+  private void processInputEvents(final List<NiftyNode> inputReceivers) {
     inputDevice.forwardEvents(new NiftyInputConsumer() {
       @Override
       public boolean processPointerEvent(final NiftyPointerEvent... pointerEvents) {
+        logInputReceivers(inputReceivers);
+
         for (int i=0; i<pointerEvents.length; i++) {
-          for (int j=0; j<rootNodes.size(); j++) {
-            rootNodes.get(j).getImpl().pointerEvent(pointerEvents[i]);
+          for (int j=inputReceivers.size()-1; j>=0; j--) {
+            inputReceivers.get(j).getImpl().pointerEvent(pointerEvents[i]);
           }
         }
         return false;
@@ -104,13 +158,6 @@ public class Nifty {
         return false;
       }
     });
-    stats.stopInputProcessing();
-
-    stats.startUpdate();
-    for (int i=0; i<rootNodes.size(); i++) {
-      rootNodes.get(i).getImpl().update();
-    }
-    stats.stopUpdate();
   }
 
   /**

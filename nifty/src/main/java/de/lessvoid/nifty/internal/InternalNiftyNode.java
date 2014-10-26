@@ -31,6 +31,8 @@ import de.lessvoid.nifty.internal.common.IdGenerator;
 import de.lessvoid.nifty.internal.layout.InternalBoxConstraints;
 import de.lessvoid.nifty.internal.layout.InternalLayoutable;
 import de.lessvoid.nifty.internal.layout.InternalLayoutableScreenSized;
+import de.lessvoid.nifty.internal.math.Mat4;
+import de.lessvoid.nifty.internal.math.Vec4;
 
 public class InternalNiftyNode implements InternalLayoutable {
   private final StringBuilder builder = new StringBuilder();
@@ -49,6 +51,9 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   // The child elements of this element and the helper to easily iterator over the list.
   private final List<InternalNiftyNode> children = new CopyOnWriteArrayList<InternalNiftyNode>();
+
+  // everything input related will be forwarded to that class
+  private final InternalNiftyNodeInputHandler input;
 
   // The parent node.
   private InternalNiftyNode parentNode;
@@ -111,6 +116,17 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   // nodes will be sorted ascending by this int
   private int renderOrder;
+
+  // the local transformation matrix
+  // when accessing this always use the getLocalTransformation() method! it will make sure it's recalculated. 
+  private Mat4 localTransformation = new Mat4();
+  private Mat4 localTransformationInverse = new Mat4();
+  private Mat4 screenToLocalTransformation = new Mat4();
+  private Mat4 screenToLocalTransformationInverse = new Mat4();
+
+  // when this node is stored in the list of all input event receiving list we'll store the index in that list in this
+  // member variable. this will later be used as the default sort order.
+  private int inputOrderIndex;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
@@ -346,10 +362,6 @@ public class InternalNiftyNode implements InternalLayoutable {
     return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(canvas);
   }
 
-  public void resetTransformationChanged() {
-    transformationChanged = false;
-  }
-
   public boolean isTransformationChanged() {
     return transformationChanged;
   }
@@ -438,7 +450,26 @@ public class InternalNiftyNode implements InternalLayoutable {
     }
   }
 
+  public void addInputNodes(final List<NiftyNode> nodesToReceiveEvents) {
+    // FIXME actually check if this node is able to receive input events .. for now we add all nodes
+    nodesToReceiveEvents.add(niftyNode);
+    NiftyNodeAccessor.getDefault().getInternalNiftyNode(niftyNode).setInputOrderIndex(nodesToReceiveEvents.size() - 1);
+
+    for (int i=0; i<children.size(); i++) {
+      children.get(i).addInputNodes(nodesToReceiveEvents);
+    }
+  }
+
+  private void setInputOrderIndex(final int inputOrderIndex) {
+    this.inputOrderIndex = inputOrderIndex;
+  }
+
+  public int getInputOrderIndex() {
+    return inputOrderIndex;
+  }
+
   public void pointerEvent(final NiftyPointerEvent niftyPointerEvent) {
+    input.pointerEvent(niftyPointerEvent);
   }
 
   public List<InternalNiftyNode> getChildren() {
@@ -451,6 +482,36 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public void setRenderOrder(final int renderOrder) {
     this.renderOrder = renderOrder;
+  }
+
+  public Mat4 getLocalTransformation() {
+    updateTransformation();
+    return localTransformation;
+  }
+
+  public Mat4 getLocalTransformationInverse() {
+    updateTransformation();
+    return localTransformationInverse;
+  }
+
+  public Mat4 getScreenToLocalTransformation() {
+    updateTransformation();
+    return screenToLocalTransformation;
+  }
+
+  public Mat4 getScreenToLocalTransformationInverse() {
+    updateTransformation();
+    return screenToLocalTransformationInverse;
+  }
+
+  public Vec4 screenToLocal(final int x, final int y) {
+    Mat4 inverseTrans = getScreenToLocalTransformationInverse();
+    return Mat4.transform(inverseTrans, new Vec4(x, y, 0.f, 1.f));
+  }
+
+  public Vec4 localToScreen(final int x, final int y) {
+    Mat4 inverseTrans = getScreenToLocalTransformation();
+    return Mat4.transform(inverseTrans, new Vec4(x, y, 0.f, 1.f));
   }
 
   private void getStateInfo(final StringBuilder result, final String offset, final Pattern pattern) {
@@ -480,6 +541,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     this.rootNodePseudoParentLayout = rootNodePseudoParentLayout;
     this.rootNodePseudoLayoutable = rootNodePseudoLayoutable;
     this.canvas = NiftyNodeAccessor.getDefault().createNiftyCanvas(new InternalNiftyCanvas());
+    this.input = new InternalNiftyNodeInputHandler(this);
 
     if (this.parentNode == null) {
       rootNodePseudoChildren.add(this);
@@ -599,5 +661,39 @@ public class InternalNiftyNode implements InternalLayoutable {
     if (newValue != oldValue) {
       transformationChanged = true;
     }
+  }
+
+  private Mat4 buildLocalTransformation() {
+    float pivotX = (float) getPivotX() * getWidth();
+    float pivotY = (float) getPivotY() * getHeight();
+    return Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(
+        Mat4.createTranslate(getX(), getY(), 0.f),
+        Mat4.createTranslate(pivotX, pivotY, 0.0f)),
+        Mat4.createRotate((float) getRotationX(), 1.f, 0.f, 0.f)),
+        Mat4.createRotate((float) getRotationY(), 0.f, 1.f, 0.f)),
+        Mat4.createRotate((float) getRotationZ(), 0.f, 0.f, 1.f)),
+        Mat4.createScale((float) getScaleX(), (float) getScaleY(), (float) getScaleZ())),
+        Mat4.createTranslate(-pivotX, -pivotY, 0.0f));
+  }
+
+  private void updateTransformation() {
+    if (!isTransformationChanged()) {
+      return;
+    }
+    localTransformation = new Mat4(buildLocalTransformation());
+    localTransformationInverse = Mat4.invert(localTransformation, new Mat4());
+
+    Mat4 parentTransformation = getParentLocalTransformation();
+    screenToLocalTransformation = Mat4.mul(parentTransformation, localTransformation);
+    screenToLocalTransformationInverse = Mat4.invert(screenToLocalTransformation, new Mat4());
+
+    transformationChanged = false;
+  }
+
+  private Mat4 getParentLocalTransformation() {
+    if (parentNode == null) {
+      return new Mat4();
+    }
+    return parentNode.getLocalTransformation();
   }
 }

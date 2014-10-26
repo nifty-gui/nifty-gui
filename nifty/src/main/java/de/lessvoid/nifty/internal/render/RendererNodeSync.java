@@ -5,7 +5,6 @@ import java.util.List;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
-import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -75,7 +74,7 @@ public class RendererNodeSync {
   private RenderNode createRenderNode(final InternalNiftyNode node) {
     RenderNode renderNode = new RenderNode(
         node.getId(),
-        buildLocalTransformation(node),
+        node.getLocalTransformation(),
         node.getWidth(),
         node.getHeight(),
         node.getCanvas().getCommands(),
@@ -90,19 +89,6 @@ public class RendererNodeSync {
     }
 
     return renderNode;
-  }
-
-  private Mat4 buildLocalTransformation(final InternalNiftyNode node) {
-    float pivotX = (float) node.getPivotX() * node.getWidth();
-    float pivotY = (float) node.getPivotY() * node.getHeight();
-    return Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(Mat4.mul(
-        Mat4.createTranslate(node.getX(), node.getY(), 0.f),
-        Mat4.createTranslate(pivotX, pivotY, 0.0f)),
-        Mat4.createRotate((float) node.getRotationX(), 1.f, 0.f, 0.f)),
-        Mat4.createRotate((float) node.getRotationY(), 0.f, 1.f, 0.f)),
-        Mat4.createRotate((float) node.getRotationZ(), 0.f, 0.f, 1.f)),
-        Mat4.createScale((float) node.getScaleX(), (float) node.getScaleY(), (float) node.getScaleZ())),
-        Mat4.createTranslate(-pivotX, -pivotY, 0.0f));
   }
 
   private final int NEEDS_RENDER = 0x01;
@@ -127,11 +113,10 @@ public class RendererNodeSync {
     }
 
     if (needsRender || childNeedsRender) {
-      dst.setLocal(buildLocalTransformation(src));
+      dst.setLocal(src.getLocalTransformation());
       dst.setWidth(src.getWidth());
       dst.setHeight(src.getHeight());
       dst.needsRender();
-      src.resetTransformationChanged();
       result |= NEEDS_RENDER;
     }
 

@@ -53,7 +53,7 @@ public class NiftyPointerEvent {
     out.append("y ").append("[").append(y).append("] ");
     out.append("z ").append("[").append(z).append("] ");
     out.append("button ").append("[").append(button).append("] ");
-    out.append("buttonDown ").append("[").append(buttonDown).append("] ");
+    out.append("buttonDown ").append("[").append(buttonDown).append("]");
     return out.toString();
   }
 }
