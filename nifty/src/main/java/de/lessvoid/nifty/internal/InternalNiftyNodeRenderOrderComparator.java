@@ -13,7 +13,7 @@ import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
  * as the renderOrder value. This is done to keep the original sort order of the elements for
  * input processing.
  */
-public class NiftyNodeRenderOrderComparator implements Comparator<NiftyNode> {
+public class InternalNiftyNodeRenderOrderComparator implements Comparator<NiftyNode> {
 
   @Override
   public int compare(@Nonnull final NiftyNode o1, @Nonnull final NiftyNode o2) {

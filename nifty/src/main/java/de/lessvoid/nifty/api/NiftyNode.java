@@ -23,6 +23,14 @@ public class NiftyNode {
   }
 
   /**
+   * Get the id of this NiftyNode.
+   * @return the id
+   */
+  public int getId() {
+    return impl.getId();
+  }
+
+  /**
    * Get the x position of this node.
    * 
    * @return x position of this node.
@@ -467,6 +475,19 @@ public class NiftyNode {
    */
   public void enableMinSize(final NiftyMinSizeCallback minSizeCallback) {
     impl.enableMinSize(minSizeCallback);
+  }
+
+  /**
+   * Subscribe the given Object to receive events published by this NiftyNode.
+   * @param listener the Listener to subscribe events for
+   */
+  public void subscribe(final Object listener) {
+    impl.subscribe(listener);
+  }
+
+  @Override
+  public String toString() {
+    return "NiftyNode [" + getId() + "]";
   }
 
   // package private accessor stuff

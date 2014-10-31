@@ -2,6 +2,7 @@ package de.lessvoid.nifty.examples.usecase;
 
 import java.io.IOException;
 
+import net.engio.mbassy.listener.Handler;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCanvas;
@@ -10,6 +11,8 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
+import de.lessvoid.nifty.api.event.NiftyMouseEnterNodeEvent;
+import de.lessvoid.nifty.api.event.NiftyMouseLeaveNodeEvent;
 
 /**
  * An example how to draw bezier curves.
@@ -26,16 +29,18 @@ public class UseCase_b14_CanvasCurves {
     private float x;
     private float y;
     private NiftyNode handle;
+    private NiftyColor c;
 
     public ControlPoint(final float x, final float y, final NiftyNode parent, final NiftyColor color) {
       this.x = x;
       this.y = y;
+      this.c = color;
 
       handle = parent.newChildNode(UnitValue.px(12), UnitValue.px(12));
       handle.addCanvasPainter(new NiftyCanvasPainter() {
         @Override
         public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-          canvas.setStrokeColor(color);
+          canvas.setStrokeColor(c);
           canvas.setLineWidth(1.f);
           canvas.arc(node.getWidth() / 2.f, node.getHeight() / 2.f, node.getWidth() / 2.f, 0, 2*Math.PI);
           canvas.stroke();
@@ -43,6 +48,7 @@ public class UseCase_b14_CanvasCurves {
       });
       handle.setXConstraint(UnitValue.px((int) x - handle.getWidth() / 2));
       handle.setYConstraint(UnitValue.px((int) y - handle.getHeight() / 2));
+      handle.subscribe(this);
     }
 
     public float getX() {
@@ -52,7 +58,19 @@ public class UseCase_b14_CanvasCurves {
     public float getY() {
       return y;
     }
-  }
+
+    @Handler
+    private void onMouseEnter(final NiftyMouseEnterNodeEvent event) {
+      c = NiftyColor.GREEN();
+      handle.requestRedraw();
+    }
+
+    @Handler
+    private void onMouseLeave(final NiftyMouseLeaveNodeEvent event) {
+      c = NiftyColor.RED();
+      handle.requestRedraw();
+    }
+}
 
   public UseCase_b14_CanvasCurves(final Nifty nifty) throws IOException {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);

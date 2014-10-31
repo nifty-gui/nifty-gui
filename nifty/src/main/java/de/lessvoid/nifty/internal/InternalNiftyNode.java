@@ -21,6 +21,7 @@ import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
+import de.lessvoid.nifty.api.event.NiftyEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
@@ -128,6 +129,9 @@ public class InternalNiftyNode implements InternalLayoutable {
   // member variable. this will later be used as the default sort order.
   private int inputOrderIndex;
 
+  // the EventBus for this Node - this will be lazily instantiated if it is actually needed
+  private InternalNiftyEventBus eventBus;
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,6 +155,10 @@ public class InternalNiftyNode implements InternalLayoutable {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Nifty API "interface" implementation
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public int getId() {
+    return id;
+  }
 
   public void setXConstraint(final UnitValue value) {
     constraints.setX(value);
@@ -378,6 +386,10 @@ public class InternalNiftyNode implements InternalLayoutable {
     animatedRequestIntervalAnimator = null;
   }
 
+  public void subscribe(final Object object) {
+    eventBus().subscribe(object);
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Layoutable Implementation
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,16 +423,16 @@ public class InternalNiftyNode implements InternalLayoutable {
   // Other stuff
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public int getId() {
-    return id;
-  }
-
   public InternalNiftyNode getParent() {
     return parentNode;
   }
 
   public void setNiftyNode(final NiftyNode niftyNode) {
     this.niftyNode = niftyNode;
+  }
+
+  public NiftyNode getNiftyNode() {
+    return niftyNode;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -469,7 +481,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void pointerEvent(final NiftyPointerEvent niftyPointerEvent) {
-    input.pointerEvent(niftyPointerEvent);
+    input.pointerEvent(eventBus, niftyPointerEvent);
   }
 
   public List<InternalNiftyNode> getChildren() {
@@ -528,6 +540,17 @@ public class InternalNiftyNode implements InternalLayoutable {
     for (int i=0; i<children.size(); i++) {
       children.get(i).getStateInfo(result, offset + "  ", pattern);
     }
+  }
+
+  private InternalNiftyEventBus eventBus() {
+    if (eventBus == null) {
+      eventBus = new InternalNiftyEventBus();
+    }
+    return eventBus;
+  }
+
+  private void publish(final NiftyEvent event) {
+    eventBus().publish(event);
   }
 
   private InternalNiftyNode(

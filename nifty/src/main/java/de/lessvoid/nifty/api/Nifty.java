@@ -14,7 +14,8 @@ import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.NiftyNodeRenderOrderComparator;
+import de.lessvoid.nifty.internal.InternalNiftyEventBus;
+import de.lessvoid.nifty.internal.InternalNiftyNodeRenderOrderComparator;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
@@ -60,10 +61,13 @@ public class Nifty {
   private final JGLFontFactory fontFactory;
 
   // the comparator used to sort the list of inputEventReceivers
-  private final Comparator<? super NiftyNode> inputEventReceiversComparator = new NiftyNodeRenderOrderComparator();
+  private final Comparator<? super NiftyNode> inputEventReceiversComparator = new InternalNiftyNodeRenderOrderComparator();
 
   // whenever we need to build a string we'll re-use this instance instead of creating new instances all the time
   private final StringBuilder str = new StringBuilder();
+
+  // the EventBus this Nifty instance will use
+  private final InternalNiftyEventBus eventBus = new InternalNiftyEventBus();
 
   /**
    * Create a new Nifty instance.
@@ -88,12 +92,20 @@ public class Nifty {
    * Set the NiftyStatisticsMode to display the statistics.
    * @param mode the new NiftyStatisticsMode
    */
-  public void showStatistics(final NiftyStatisticsMode mode) throws IOException {
+  public void showStatistics(final NiftyStatisticsMode mode) {
     switch (mode) {
       case ShowFPS:
         new StatisticsRendererFPS(this);
         break;
     }
+  }
+
+  /**
+   * Check all @Handler annotations at the given listener Object and subscribe all of them.
+   * @param listener the Object to check for annotations
+   */
+  public void subscribe(final Object listener) {
+    eventBus.subscribe(listener);
   }
 
   /**
@@ -338,6 +350,10 @@ public class Nifty {
 
   NiftyRenderDevice getRenderDevice() {
     return renderDevice;   
+  }
+
+  InternalNiftyEventBus getEventBus() {
+    return eventBus;
   }
 
   // Internal methods
