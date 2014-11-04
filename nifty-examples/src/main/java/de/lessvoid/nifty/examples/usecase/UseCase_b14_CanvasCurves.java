@@ -12,7 +12,7 @@ import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.event.NiftyMouseEnterNodeEvent;
-import de.lessvoid.nifty.api.event.NiftyMouseLeaveNodeEvent;
+import de.lessvoid.nifty.api.event.NiftyMouseExitNodeEvent;
 
 /**
  * An example how to draw bezier curves.
@@ -66,7 +66,7 @@ public class UseCase_b14_CanvasCurves {
     }
 
     @Handler
-    private void onMouseLeave(final NiftyMouseLeaveNodeEvent event) {
+    private void onMouseLeave(final NiftyMouseExitNodeEvent event) {
       c = NiftyColor.RED();
       handle.requestRedraw();
     }

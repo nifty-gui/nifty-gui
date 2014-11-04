@@ -54,7 +54,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   private final List<InternalNiftyNode> children = new CopyOnWriteArrayList<InternalNiftyNode>();
 
   // everything input related will be forwarded to that class
-  private final InternalNiftyNodeInputHandler input;
+  private final InternalNiftyNodeInputHandler input = new InternalNiftyNodeInputHandler();
 
   // The parent node.
   private InternalNiftyNode parentNode;
@@ -481,7 +481,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void pointerEvent(final NiftyPointerEvent niftyPointerEvent) {
-    input.pointerEvent(eventBus, niftyPointerEvent);
+    input.pointerEvent(eventBus, this, niftyPointerEvent);
   }
 
   public List<InternalNiftyNode> getChildren() {
@@ -564,7 +564,6 @@ public class InternalNiftyNode implements InternalLayoutable {
     this.rootNodePseudoParentLayout = rootNodePseudoParentLayout;
     this.rootNodePseudoLayoutable = rootNodePseudoLayoutable;
     this.canvas = NiftyNodeAccessor.getDefault().createNiftyCanvas(new InternalNiftyCanvas());
-    this.input = new InternalNiftyNodeInputHandler(this);
 
     if (this.parentNode == null) {
       rootNodePseudoChildren.add(this);

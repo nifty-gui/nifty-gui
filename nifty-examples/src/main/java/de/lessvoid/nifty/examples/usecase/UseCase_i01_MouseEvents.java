@@ -10,7 +10,7 @@ import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.event.NiftyMouseEnterNodeEvent;
 import de.lessvoid.nifty.api.event.NiftyMouseHoverEvent;
-import de.lessvoid.nifty.api.event.NiftyMouseLeaveNodeEvent;
+import de.lessvoid.nifty.api.event.NiftyMouseExitNodeEvent;
 
 /**
  * Mouse hover over an element.
@@ -46,7 +46,7 @@ public class UseCase_i01_MouseEvents {
   }
 
   @Handler
-  private void onMouseLeave(final NiftyMouseLeaveNodeEvent event) {
+  private void onMouseLeave(final NiftyMouseExitNodeEvent event) {
     childNode.setBackgroundColor(NiftyColor.RED());
   }
 
