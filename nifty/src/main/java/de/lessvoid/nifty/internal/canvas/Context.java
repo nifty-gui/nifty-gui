@@ -21,13 +21,13 @@ public class Context {
   private NiftyLinearGradient linearGradient;
   private NiftyLineParameters lineParameters;
   private NiftyColor textColor = NiftyColor.WHITE();
-  private float textSize = 1.f;
+  private double textSize = 1.f;
   private Mat4 transform = Mat4.createIdentity();
   private List<PathElement> path = new ArrayList<PathElement>();
-  private Float currentPathX;
-  private Float currentPathY;
-  private Float currentPathStartX;
-  private Float currentPathStartY;
+  private Double currentPathX;
+  private Double currentPathY;
+  private Double currentPathStartX;
+  private Double currentPathStartY;
   private NiftyRenderDevice renderDevice;
 
   public Context(final NiftyTexture textureParam) {
@@ -92,11 +92,11 @@ public class Context {
     return lineParameters.getColor();
   }
 
-  public void setTextSize(final float textSize) {
+  public void setTextSize(final double textSize) {
     this.textSize = textSize;
   }
 
-  public float getTextSize() {
+  public double getTextSize() {
     return textSize;
   }
 
@@ -128,7 +128,7 @@ public class Context {
     currentPathStartY = null;
   }
 
-  public void moveTo(final float x, final float y) {
+  public void moveTo(final double x, final double y) {
     currentPathX = x;
     currentPathY = y;
 
@@ -138,7 +138,7 @@ public class Context {
     }
   }
 
-  public void lineTo(final float x, final float y) {
+  public void lineTo(final double x, final double y) {
     PathElement lastPathElement = null;
     if (!path.isEmpty()) {
       lastPathElement = path.get(path.size() - 1);
@@ -179,9 +179,9 @@ public class Context {
     }
   }
 
-  public void bezierCurveTo(float cp1x, float cp1y, float cp2x, float cp2y, float x, float y) {
-    float startX = 0.f;
-    float startY = 0.f;
+  public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
+    double startX = 0.f;
+    double startY = 0.f;
 
     if (currentPathX != null &&
         currentPathY != null) {
@@ -190,10 +190,10 @@ public class Context {
     }
 
     CubicBezier curve = new CubicBezier(
-        new Vec2(startX, startY),
-        new Vec2(cp1x, cp1y),
-        new Vec2(cp2x, cp2y),
-        new Vec2(x, y));
+        new Vec2((float) startX, (float) startY),
+        new Vec2((float) cp1x, (float) cp1y),
+        new Vec2((float) cp2x, (float) cp2y),
+        new Vec2((float) x, (float) y));
     renderCurve(curve, this);
   }
 
@@ -299,17 +299,17 @@ public class Context {
   }
 
   class PathElementLine implements PathElement {
-    private float x;
-    private float y;
+    private double x;
+    private double y;
 
-    public PathElementLine(final float x, final float y) {
+    public PathElementLine(final double x, final double y) {
       this.x = x;
       this.y = y;
     }
 
     @Override
     public void render(final BatchManager batchManager, final NiftyLineParameters lineParameters, final boolean first, final boolean last) {
-      batchManager.addLineVertex(x, y, getTransform(), lineParameters, first, last);
+      batchManager.addLineVertex((float) x, (float) y, getTransform(), lineParameters, first, last);
     }
   }
 

@@ -24,7 +24,7 @@ public class UseCase_b04_CanvasImage {
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         canvas.setFillStyle(NiftyColor.BLUE());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
-        canvas.image(image, 10, 10);
+        canvas.drawImage(image, 10, 10);
       }
     });
   }

@@ -3,10 +3,10 @@ package de.lessvoid.nifty.internal.canvas;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandMoveTo implements Command {
-  private final float x;
-  private final float y;
+  private final double x;
+  private final double y;
 
-  public CommandMoveTo(final float x, final float y) {
+  public CommandMoveTo(final double x, final double y) {
     this.x = x;
     this.y = y;
   }

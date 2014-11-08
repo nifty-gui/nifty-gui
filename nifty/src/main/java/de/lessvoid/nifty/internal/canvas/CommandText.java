@@ -27,7 +27,7 @@ public class CommandText implements Command {
 
     NiftyColor textColor = context.getTextColor();
     jglFont.renderText(
-        x, y, text, context.getTextSize(), context.getTextSize(),
+        x, y, text, (float) context.getTextSize(), (float) context.getTextSize(),
         (float) textColor.getRed(),
         (float) textColor.getGreen(),
         (float) textColor.getBlue(),

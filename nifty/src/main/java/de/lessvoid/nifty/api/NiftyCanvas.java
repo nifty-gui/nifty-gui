@@ -14,6 +14,8 @@ public class NiftyCanvas {
     this.impl = impl;
   }
 
+  // colors, styles and shadows
+
   public void setFillStyle(final NiftyColor color) {
     impl.setFillColor(color);
   }
@@ -22,17 +24,36 @@ public class NiftyCanvas {
     impl.setFillLinearGradient(gradient);
   }
 
-  public void fillRect(final double x0, final double y0, final double x1, final double y1) {
-    impl.filledRect(x0, y0, x1, y1);
-  }
-
   public void setStrokeColor(final NiftyColor color) {
     impl.setStrokeColor(color);
   }
 
-  public void setLineWidth(final double lineWidth) {
-    impl.setLineWidth(lineWidth);
+  public void setStrokeColor(final NiftyLinearGradient gradient) {
+    // TODO
+    throw new UnsupportedOperationException();
   }
+
+  public void setShadowColor(final NiftyColor color) {
+    // TODO
+    throw new UnsupportedOperationException();
+  }
+
+  public void setShadowBlur(final double shadowBlur) {
+    // TODO
+    throw new UnsupportedOperationException();
+  }
+
+  public void setShadowOffsetX(final double xOffset) {
+    // TODO
+    throw new UnsupportedOperationException();
+  }
+
+  public void setShadowOffsetY(final double yOffset) {
+    // TODO
+    throw new UnsupportedOperationException();
+  }
+
+  // line styles
 
   public void setLineCap(final NiftyLineCapType lineCapType) {
     impl.setLineCap(lineCapType);
@@ -42,73 +63,71 @@ public class NiftyCanvas {
     impl.setLineJoin(lineJoinType);
   }
 
-  /**
-   * The arc() method creates an arc/curve (used to create circles, or parts of circles).
-   *
-   * @param x The x-coordinate of the center of the circle
-   * @param y The y-coordinate of the center of the circle
-   * @param r The radius of the circle
-   * @param startAngle The starting angle, in radians (0 is at 3 o'clock position of the arc's circle)
-   * @param endAngle The ending angle, in radians.
-   */
-  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-    impl.arc(x, y, r, startAngle, endAngle);
+  public void setLineWidth(final double lineWidth) {
+    impl.setLineWidth(lineWidth);
   }
 
-  public void setTextColor(final NiftyColor textColor) {
-    impl.setTextColor(textColor);
+  public void setMiterLimit(final double miterLength) {
+    // TODO
+    throw new UnsupportedOperationException();
   }
 
-  public void setTextSize(final float textSize) {
-    impl.setTextSize(textSize);
+  // rectangles
+
+  public void rect(final double x0, final double y0, final double x1, final double y1) {
+    // TODO
+    throw new UnsupportedOperationException();    
   }
 
-  public void text(final NiftyFont niftyFont, final int x, final int y, final String text) {
-    impl.text(niftyFont, x, y, text);
+  public void fillRect(final double x0, final double y0, final double x1, final double y1) {
+    impl.filledRect(x0, y0, x1, y1);
   }
 
-  public void image(final NiftyImage image, final int x, final int y) {
-    impl.image(x, y, image);
+  public void strokeRect(final double x0, final double y0, final double x1, final double y1) {
+    // TODO
+    throw new UnsupportedOperationException();    
   }
 
-  public void scale(final float scaleWidth, final float scaleHeight) {
-    impl.scale(scaleWidth, scaleHeight);
+  public void clearRect(final double x0, final double y0, final double x1, final double y1) {
+    // TODO
+    throw new UnsupportedOperationException();    
   }
 
-  public void rotateRadians(final float angleRadians) {
-    impl.rotate((float) (angleRadians * 180 / Math.PI));
+  // paths
+
+  public void fill() {
+    // TODO
+    throw new UnsupportedOperationException();    
   }
 
-  public void rotateDegrees(final float angleDegree) {
-    impl.rotate(angleDegree);
-  }
-
-  public void translate(final float translateX, final float translateY) {
-    impl.translate(translateX, translateY);
-  }
-
-  public void resetTransform() {
-    impl.resetTransform();
+  public void stroke() {
+    impl.stroke();
   }
 
   public void beginPath() {
     impl.beginPath();
   }
 
+  public void moveTo(final double x, final double y) {
+    impl.moveTo(x, y);
+  }
+
   public void closePath() {
     impl.closePath();
   }
 
-  public void moveTo(final float x, final float y) {
-    impl.moveTo(x, y);
-  }
-
-  public void lineTo(final float x, final float y) {
+  public void lineTo(final double x, final double y) {
     impl.lineTo(x, y);
   }
 
-  public void stroke() {
-    impl.stroke();
+  public void clip() {
+    // TODO
+    throw new UnsupportedOperationException();    
+  }
+
+  public void quadraticCurveTo(final double cp1x, final double cp1y, final double x, final double y) {
+    // TODO
+    throw new UnsupportedOperationException();    
   }
 
   /**
@@ -127,9 +146,93 @@ public class NiftyCanvas {
    * @param x end point x
    * @param y end point y
    */
-  public void bezierCurveTo(final float cp1x, final float cp1y, final float cp2x, final float cp2y, final float x, final float y) {
+  public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
     impl.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
   }
+
+  /**
+   * The arc() method creates an arc/curve (used to create circles, or parts of circles).
+   *
+   * @param x The x-coordinate of the center of the circle
+   * @param y The y-coordinate of the center of the circle
+   * @param r The radius of the circle
+   * @param startAngle The starting angle, in radians (0 is at 3 o'clock position of the arc's circle)
+   * @param endAngle The ending angle, in radians.
+   */
+  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+    impl.arc(x, y, r, startAngle, endAngle);
+  }
+
+  public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
+    // TODO
+    throw new UnsupportedOperationException();    
+  }
+
+  public boolean isPointInPath() {
+    // TODO
+    throw new UnsupportedOperationException();    
+  }
+
+  // transformations
+
+  public void scale(final double scaleWidth, final double scaleHeight) {
+    impl.scale(scaleWidth, scaleHeight);
+  }
+
+  public void rotateRadians(final double angleRadians) {
+    impl.rotate(angleRadians * 180 / Math.PI);
+  }
+
+  public void rotateDegrees(final double angleDegree) {
+    impl.rotate(angleDegree);
+  }
+
+  public void translate(final double translateX, final double translateY) {
+    impl.translate(translateX, translateY);
+  }
+
+  public void transform(final double a, final double b, final double c, final double d, final double e, final double f) {
+    // TODO
+    throw new UnsupportedOperationException();
+  }
+
+  public void setTransform() {
+    impl.resetTransform();
+  }
+
+  // text - this currently uses bitmap texts so the API is a bit different until we support True/Open Type
+
+  public void setTextColor(final NiftyColor textColor) {
+    impl.setTextColor(textColor);
+  }
+
+  public void setTextSize(final double textSize) {
+    impl.setTextSize(textSize);
+  }
+
+  public void text(final NiftyFont niftyFont, final int x, final int y, final String text) {
+    impl.text(niftyFont, x, y, text);
+  }
+
+  // image drawing
+
+  public void drawImage(final NiftyImage image, final int x, final int y) {
+    impl.image(x, y, image);
+  }
+
+  // compositing
+
+  public void globalAlpha(final double globalAlpha) {
+    // TODO
+    throw new UnsupportedOperationException();
+  }
+
+  public void globalCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    // TODO
+    throw new UnsupportedOperationException();
+  }
+
+  // internals
 
   InternalNiftyCanvas getImpl() {
     return impl;

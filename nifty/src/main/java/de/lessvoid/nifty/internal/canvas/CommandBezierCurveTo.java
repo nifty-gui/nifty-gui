@@ -3,14 +3,14 @@ package de.lessvoid.nifty.internal.canvas;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandBezierCurveTo implements Command {
-  private final float cp1x;
-  private final float cp1y;
-  private final float cp2x;
-  private final float cp2y;
-  private final float x;
-  private final float y;
+  private final double cp1x;
+  private final double cp1y;
+  private final double cp2x;
+  private final double cp2y;
+  private final double x;
+  private final double y;
 
-  public CommandBezierCurveTo(final float cp1x, final float cp1y, final float cp2x, final float cp2y, final float x, final float y) {
+  public CommandBezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
     this.cp1x = cp1x;
     this.cp1y = cp1y;
     this.cp2x = cp2x;

@@ -27,7 +27,7 @@ public class UseCase_b10_CanvasProgressSpinner {
     spinner.addCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.resetTransform();
+        canvas.setTransform();
         canvas.setFillStyle(NiftyColor.fromString("#000f"));
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
@@ -39,7 +39,7 @@ public class UseCase_b10_CanvasProgressSpinner {
             index = index + max;
           }
           color.setAlpha(index / (float) max);
-          canvas.resetTransform();
+          canvas.setTransform();
           canvas.translate(node.getWidth() / 2, node.getHeight() / 2);
           canvas.rotateDegrees(i * 360.f / (float) max);
           canvas.translate(25.f, 0.f);

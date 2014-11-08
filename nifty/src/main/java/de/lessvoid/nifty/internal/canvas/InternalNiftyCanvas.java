@@ -37,7 +37,7 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void setTextSize(final float textSize) {
+  public void setTextSize(final double textSize) {
     commands.add(new CommandTextSize(textSize));
     changed = true;
   }
@@ -72,17 +72,17 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void scale(final float scaleWidth, final float scaleHeight) {
+  public void scale(final double scaleWidth, final double scaleHeight) {
     commands.add(new CommandScale(scaleWidth, scaleHeight));
     changed = true;
   }
 
-  public void rotate(final float angleDegrees) {
+  public void rotate(final double angleDegrees) {
     commands.add(new CommandRotate(angleDegrees));
     changed = true;
   }
 
-  public void translate(final float x, final float y) {
+  public void translate(final double x, final double y) {
     commands.add(new CommandTranslate(x, y));
     changed = true;
   }
@@ -109,12 +109,12 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void moveTo(final float x, final float y) {
+  public void moveTo(final double x, final double y) {
     commands.add(new CommandMoveTo(x, y));
     changed = true;
   }
 
-  public void lineTo(final float x, final float y) {
+  public void lineTo(final double x, final double y) {
     commands.add(new CommandLineTo(x, y));
     changed = true;
   }
@@ -138,7 +138,7 @@ public class InternalNiftyCanvas {
     return new ArrayList<Command>(commands);
   }
 
-  public void bezierCurveTo(final float cp1x, final float cp1y, final float cp2x, final float cp2y, final float x, final float y) {
+  public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
     commands.add(new CommandBezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y));
     changed = true;
   }

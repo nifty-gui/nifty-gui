@@ -3,9 +3,9 @@ package de.lessvoid.nifty.internal.canvas;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandTextSize implements Command {
-  private final float textSize;
+  private final double textSize;
 
-  public CommandTextSize(final float textSize) {
+  public CommandTextSize(final double textSize) {
     this.textSize = textSize;
   }
 

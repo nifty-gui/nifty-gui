@@ -37,7 +37,7 @@ public class UseCase_b09_CanvasTransformReset {
         canvas.scale(2.4f, 5.f);
 
         // reset transforms which will render the original rectangle
-        canvas.resetTransform();
+        canvas.setTransform();
         canvas.fillRect(10, 10, 50, 50);
       }
     });
