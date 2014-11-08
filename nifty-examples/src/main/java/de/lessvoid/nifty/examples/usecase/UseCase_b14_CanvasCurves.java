@@ -11,15 +11,16 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.event.NiftyMouseEnterNodeEvent;
-import de.lessvoid.nifty.api.event.NiftyMouseExitNodeEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerDraggedEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerEnterNodeEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerExitNodeEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerPressedEvent;
 
 /**
  * An example how to draw bezier curves.
  * @author void
  */
 public class UseCase_b14_CanvasCurves {
-
   ControlPoint cp0;
   ControlPoint cp1;
   ControlPoint cp2;
@@ -29,17 +30,24 @@ public class UseCase_b14_CanvasCurves {
     private float x;
     private float y;
     private NiftyNode handle;
+    private NiftyNode canvasNode;
     private NiftyColor c;
+    private int mouseStartX;
+    private int mouseStartY;
 
-    public ControlPoint(final float x, final float y, final NiftyNode parent, final NiftyColor color) {
+    public ControlPoint(final float x, final float y, final NiftyNode canvasNode, final NiftyColor color) {
       this.x = x;
       this.y = y;
       this.c = color;
+      this.canvasNode = canvasNode;
 
-      handle = parent.newChildNode(UnitValue.px(12), UnitValue.px(12));
+      handle = canvasNode.newChildNode(UnitValue.px(12), UnitValue.px(12));
       handle.addCanvasPainter(new NiftyCanvasPainter() {
         @Override
         public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+          canvas.setFillStyle(NiftyColor.BLUE());
+          canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+          canvas.beginPath();
           canvas.setStrokeColor(c);
           canvas.setLineWidth(1.f);
           canvas.arc(node.getWidth() / 2.f, node.getHeight() / 2.f, node.getWidth() / 2.f, 0, 2*Math.PI);
@@ -60,20 +68,42 @@ public class UseCase_b14_CanvasCurves {
     }
 
     @Handler
-    private void onMouseEnter(final NiftyMouseEnterNodeEvent event) {
+    private void onMouseEnter(final NiftyPointerEnterNodeEvent event) {
       c = NiftyColor.GREEN();
       handle.requestRedraw();
     }
 
     @Handler
-    private void onMouseLeave(final NiftyMouseExitNodeEvent event) {
+    private void onMouseLeave(final NiftyPointerExitNodeEvent event) {
       c = NiftyColor.RED();
       handle.requestRedraw();
     }
-}
+
+    @Handler
+    private void onPointerPressed(final NiftyPointerPressedEvent event) {
+      mouseStartX = event.getX();
+      mouseStartY = event.getY();
+    }
+
+    @Handler
+    private void onDragged(final NiftyPointerDraggedEvent event) {
+      int dx = event.getX() - mouseStartX;
+      int dy = event.getY() - mouseStartY;
+
+      x = x + dx;
+      y = y + dy;
+
+      handle.setXConstraint(UnitValue.px((int) x - handle.getWidth() / 2));
+      handle.setYConstraint(UnitValue.px((int) y - handle.getHeight() / 2));
+      canvasNode.requestRedraw();
+
+      mouseStartX = event.getX();
+      mouseStartY = event.getY();
+    }
+  }
 
   public UseCase_b14_CanvasCurves(final Nifty nifty) throws IOException {
-    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
+    //nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     rootNode.setBackgroundColor(NiftyColor.BLACK());

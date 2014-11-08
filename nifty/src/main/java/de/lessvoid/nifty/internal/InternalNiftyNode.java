@@ -371,7 +371,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public boolean isTransformationChanged() {
-    return transformationChanged;
+    return transformationChanged || layoutPos.isTransformationChanged();
   }
 
   public void startAnimated(final long delay, final long interval, final NiftyCallback<Float> callback) {
@@ -480,8 +480,12 @@ public class InternalNiftyNode implements InternalLayoutable {
     return inputOrderIndex;
   }
 
-  public void pointerEvent(final NiftyPointerEvent niftyPointerEvent) {
-    input.pointerEvent(eventBus, this, niftyPointerEvent);
+  public boolean pointerEvent(final NiftyPointerEvent niftyPointerEvent) {
+    return input.pointerEvent(eventBus, this, niftyPointerEvent);
+  }
+
+  public boolean capturedPointerEvent(final NiftyPointerEvent niftyPointerEvent) {
+    return input.capturedPointerEvent(eventBus, this, niftyPointerEvent);
   }
 
   public List<InternalNiftyNode> getChildren() {
@@ -710,6 +714,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     screenToLocalTransformationInverse = Mat4.invert(screenToLocalTransformation, new Mat4());
 
     transformationChanged = false;
+    layoutPos.resetTransformationChanged();
   }
 
   private Mat4 getParentLocalTransformation() {

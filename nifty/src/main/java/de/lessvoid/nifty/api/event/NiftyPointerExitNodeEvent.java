@@ -2,14 +2,14 @@ package de.lessvoid.nifty.api.event;
 
 import de.lessvoid.nifty.api.NiftyNode;
 
-public class NiftyMouseHoverEvent implements NiftyEvent {
+public class NiftyPointerExitNodeEvent implements NiftyEvent {
   private final NiftyNode niftyNode;
 
-  public NiftyMouseHoverEvent(final NiftyNode niftyNode) {
+  public NiftyPointerExitNodeEvent(final NiftyNode niftyNode) {
     this.niftyNode = niftyNode;
   }
 
   public String toString() {
-    return "mouse hover [" + niftyNode.toString() + "]";
+    return "pointer leave [" + niftyNode.toString() + "]";
   }
 }

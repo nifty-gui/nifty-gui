@@ -69,6 +69,11 @@ public class Nifty {
   // the EventBus this Nifty instance will use
   private final InternalNiftyEventBus eventBus = new InternalNiftyEventBus();
 
+  // in case someone presses and holds a pointer on a node this node will capture all pointer events unless the pointer
+  // is released again. the node that captured the pointer events will be stored in this member variable. if it is set
+  // all pointer events will be send to that node unless the pointer is released again.
+  private NiftyNode nodeThatCapturedPointerEvents;
+
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
@@ -114,15 +119,15 @@ public class Nifty {
   public void update() {
     stats.startFrame();
 
+    stats.startInputProcessing();
+    processInputEvents(collectInputReceivers());
+    stats.stopInputProcessing();
+
     stats.startUpdate();
     for (int i=0; i<rootNodes.size(); i++) {
       rootNodes.get(i).getImpl().update();
     }
     stats.stopUpdate();
-
-    stats.startInputProcessing();
-    processInputEvents(collectInputReceivers());
-    stats.stopInputProcessing();
   }
 
   private List<NiftyNode> collectInputReceivers() {
@@ -158,8 +163,17 @@ public class Nifty {
         logInputReceivers(inputReceivers);
 
         for (int i=0; i<pointerEvents.length; i++) {
-          for (int j=inputReceivers.size()-1; j>=0; j--) {
-            inputReceivers.get(j).getImpl().pointerEvent(pointerEvents[i]);
+          if (nodeThatCapturedPointerEvents != null) {
+            if (nodeThatCapturedPointerEvents.getImpl().capturedPointerEvent(pointerEvents[i])) {
+              nodeThatCapturedPointerEvents = null;
+            }
+          } else {
+            for (int j=inputReceivers.size()-1; j>=0; j--) {
+              if (inputReceivers.get(j).getImpl().pointerEvent(pointerEvents[i])) {
+                nodeThatCapturedPointerEvents = inputReceivers.get(j);
+                break;
+              }
+            }
           }
         }
         return false;

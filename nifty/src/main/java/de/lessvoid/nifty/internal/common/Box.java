@@ -20,6 +20,9 @@ public class Box {
   // Height of the box.
   private int height;
 
+  // this will be set to true whenever x, y, width or height changed
+  private boolean transformationChanged = true;
+
   /**
    * Create a new Box with some default coordinates (x,y) set to (0,0) and with width and height set to 0.
    */
@@ -67,6 +70,11 @@ public class Box {
    * @param src the source box to copy data from
    */
   public void from(final Box src) {
+    updateTransformationChanged(this.x, src.x);
+    updateTransformationChanged(this.y, src.y);
+    updateTransformationChanged(this.width, src.width);
+    updateTransformationChanged(this.height, src.height);
+
     this.x = src.x;
     this.y = src.y;
     this.width = src.width;
@@ -116,6 +124,7 @@ public class Box {
    *          the new height for the box.
    */
   public void setHeight(final int newHeight) {
+    updateTransformationChanged(this.height, newHeight);
     this.height = newHeight;
   }
 
@@ -126,6 +135,7 @@ public class Box {
    *          the new width
    */
   public void setWidth(final int newWidth) {
+    updateTransformationChanged(this.width, newWidth);
     this.width = newWidth;
   }
 
@@ -135,6 +145,8 @@ public class Box {
    * @param height the new height
    */
   public void setDimension(final int width, final int height) {
+    updateTransformationChanged(this.width, width);
+    updateTransformationChanged(this.height, height);
     this.width = width;
     this.height = height;
   }
@@ -146,6 +158,7 @@ public class Box {
    *          the vertical position of the box
    */
   public void setX(final int newX) {
+    updateTransformationChanged(this.x, newX);
     this.x = newX;
   }
 
@@ -156,7 +169,29 @@ public class Box {
    *          the vertical position of the box
    */
   public void setY(final int newY) {
+    updateTransformationChanged(this.y, newY);
     this.y = newY;
+  }
+
+  /**
+   * This will return true when x, y, width or height has been changed.
+   * @return true when any values have been changed and false if not
+   */
+  public boolean isTransformationChanged() {
+    return transformationChanged;
+  }
+
+  /**
+   * Reset the transformation changed flag to unchanged.
+   */
+  public void resetTransformationChanged() {
+    transformationChanged = false;
+  }
+
+  private void updateTransformationChanged(final int oldValue, final int newValue) {
+    if (newValue != oldValue) {
+      transformationChanged = true;
+    }
   }
 
   @Override

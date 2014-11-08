@@ -12,9 +12,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.event.NiftyMouseEnterNodeEvent;
-import de.lessvoid.nifty.api.event.NiftyMouseExitNodeEvent;
-import de.lessvoid.nifty.api.event.NiftyMouseHoverEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerClickedEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerDraggedEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerEnterNodeEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerExitNodeEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerHoverEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerPressedEvent;
+import de.lessvoid.nifty.api.event.NiftyPointerReleasedEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.math.Vec4;
 
@@ -49,59 +53,59 @@ public class InternalNiftyNodeInputHandlerTest {
 
   @Test
   public void testInside() {
-    expectEventBusNiftyMouseEnterNodeEvent();
-    expectEventBusNiftyMouseHoverEvent();
+    expectEventBusNiftyPointerEnterNodeEvent();
+    expectEventBusNiftyPointerHoverEvent();
     replayEventBus();
 
     prepareInternalNiftyNode(50, 50);
-    execTest(50, 50);
+    execPointerEvent(50, 50);
   }
 
   @Test
   public void testInsideBorderLeft() {
-    expectEventBusNiftyMouseEnterNodeEvent();
-    expectEventBusNiftyMouseHoverEvent();
+    expectEventBusNiftyPointerEnterNodeEvent();
+    expectEventBusNiftyPointerHoverEvent();
     replayEventBus();
 
     prepareInternalNiftyNode(0, 50);
-    execTest(0, 50);
+    execPointerEvent(0, 50);
   }
 
   @Test
   public void testInsideBorderRight() {
-    expectEventBusNiftyMouseEnterNodeEvent();
-    expectEventBusNiftyMouseHoverEvent();
+    expectEventBusNiftyPointerEnterNodeEvent();
+    expectEventBusNiftyPointerHoverEvent();
     replayEventBus();
 
     prepareInternalNiftyNode(100, 50);
-    execTest(100, 50);
+    execPointerEvent(100, 50);
   }
 
   @Test
   public void testInsideBorderTop() {
-    expectEventBusNiftyMouseEnterNodeEvent();
-    expectEventBusNiftyMouseHoverEvent();
+    expectEventBusNiftyPointerEnterNodeEvent();
+    expectEventBusNiftyPointerHoverEvent();
     replayEventBus();
 
     prepareInternalNiftyNode(100, 0);
-    execTest(100, 0);
+    execPointerEvent(100, 0);
   }
 
   @Test
   public void testInsideBorderBottom() {
-    expectEventBusNiftyMouseEnterNodeEvent();
-    expectEventBusNiftyMouseHoverEvent();
+    expectEventBusNiftyPointerEnterNodeEvent();
+    expectEventBusNiftyPointerHoverEvent();
     replayEventBus();
 
     prepareInternalNiftyNode(100, 100);
-    execTest(100, 100);
+    execPointerEvent(100, 100);
   }
 
   @Test
-  public void testMouseExitEvent() {
-    expectEventBusNiftyMouseEnterNodeEvent();
-    expectEventBusNiftyMouseHoverEvent();
-    orepareEventBusNiftyMouseExitNodeEvent();
+  public void testExitEvent() {
+    expectEventBusNiftyPointerEnterNodeEvent();
+    expectEventBusNiftyPointerHoverEvent();
+    orepareEventBusNiftyPointerExitNodeEvent();
     replayEventBus();
 
     prepareInternalNiftyNodeStandard();
@@ -109,8 +113,8 @@ public class InternalNiftyNodeInputHandlerTest {
     prepareInternalNiftyNodeScreenToLocal(150, 150);
     replayInternalNiftyNode();
 
-    execTest(100, 100);
-    execTest(150, 150);
+    execPointerEvent(100, 100);
+    execPointerEvent(150, 150);
   }
 
   @Test
@@ -122,6 +126,47 @@ public class InternalNiftyNodeInputHandlerTest {
     replayInternalNiftyNode();
 
     inputHandler.pointerEvent(eventBus, internalNiftyNode, makePointerEvent(150, 150));
+  }
+
+  @Test
+  public void testClicked() {
+    expectEventBusNiftyPointerEnterNodeEvent();
+    expectEventBusNiftyPointerHoverEvent();
+
+    expectEventBusNiftyPointerHoverEvent();
+    expectEventBusNiftyPointerPressedEvent();
+
+    expectEventBusNiftyPointerHoverEvent();
+    expectEventBusNiftyPointerClickedEvent();
+    expectEventBusNiftyPointerReleasedEvent();
+    replayEventBus();
+
+    prepareInternalNiftyNode(50, 50);
+    execPointerEvent(50, 50);
+    execPointerDownEvent(50, 50);
+    execPointerUpEvent(50, 50);
+  }
+
+  @Test
+  public void testDragged() {
+    expectEventBusNiftyPointerEnterNodeEvent();
+    expectEventBusNiftyPointerHoverEvent();
+
+    expectEventBusNiftyPointerHoverEvent();
+    expectEventBusNiftyPointerPressedEvent();
+
+    expectEventBusNiftyPointerHoverEvent();
+    expectEventBusNiftyPointerDraggedEvent();
+    replayEventBus();
+
+    prepareInternalNiftyNodeStandard();
+    prepareInternalNiftyNodeScreenToLocal(50, 50);
+    prepareInternalNiftyNodeScreenToLocal(51, 51);
+    replayInternalNiftyNode();
+
+    execPointerEvent(50, 50);
+    execPointerDownEvent(50, 50);
+    execPointerDownEvent(51, 51);
   }
 
   private void prepareInternalNiftyNode(final int x, final int y) {
@@ -142,19 +187,35 @@ public class InternalNiftyNodeInputHandlerTest {
   }
 
   private void prepareInternalNiftyNodeScreenToLocal(final int x, final int y) {
-    expect(internalNiftyNode.screenToLocal(x, y)).andReturn(new Vec4(x, y, 0.f, 1.f));
+    expect(internalNiftyNode.screenToLocal(x, y)).andReturn(new Vec4(x, y, 0.f, 1.f)).anyTimes();
   }
 
-  private void expectEventBusNiftyMouseHoverEvent() {
-    eventBus.publish(isA(NiftyMouseHoverEvent.class));
+  private void expectEventBusNiftyPointerHoverEvent() {
+    eventBus.publish(isA(NiftyPointerHoverEvent.class));
   }
 
-  private void expectEventBusNiftyMouseEnterNodeEvent() {
-    eventBus.publish(isA(NiftyMouseEnterNodeEvent.class));
+  private void expectEventBusNiftyPointerDraggedEvent() {
+    eventBus.publish(isA(NiftyPointerDraggedEvent.class));
   }
 
-  private void orepareEventBusNiftyMouseExitNodeEvent() {
-    eventBus.publish(isA(NiftyMouseExitNodeEvent.class));
+  private void expectEventBusNiftyPointerClickedEvent() {
+    eventBus.publish(isA(NiftyPointerClickedEvent.class));
+  }
+
+  private void expectEventBusNiftyPointerReleasedEvent() {
+    eventBus.publish(isA(NiftyPointerReleasedEvent.class));
+  }
+
+  private void expectEventBusNiftyPointerEnterNodeEvent() {
+    eventBus.publish(isA(NiftyPointerEnterNodeEvent.class));
+  }
+
+  private void orepareEventBusNiftyPointerExitNodeEvent() {
+    eventBus.publish(isA(NiftyPointerExitNodeEvent.class));
+  }
+
+  private void expectEventBusNiftyPointerPressedEvent() {
+    eventBus.publish(isA(NiftyPointerPressedEvent.class));
   }
 
   private void replayEventBus() {
@@ -168,7 +229,33 @@ public class InternalNiftyNodeInputHandlerTest {
     return event;
   }
 
-  private void execTest(final int x, final int y) {
+  private NiftyPointerEvent makePointerDownEvent(final int x, final int y) {
+    NiftyPointerEvent event = new NiftyPointerEvent();
+    event.setX(x);
+    event.setY(y);
+    event.setButton(0);
+    event.setButtonDown(true);
+    return event;
+  }
+
+  private NiftyPointerEvent makePointerUpEvent(final int x, final int y) {
+    NiftyPointerEvent event = new NiftyPointerEvent();
+    event.setX(x);
+    event.setY(y);
+    event.setButton(0);
+    event.setButtonDown(false);
+    return event;
+  }
+
+  private void execPointerEvent(final int x, final int y) {
     inputHandler.pointerEvent(eventBus, internalNiftyNode, makePointerEvent(x, y));
+  }
+
+  private void execPointerUpEvent(final int x, final int y) {
+    inputHandler.pointerEvent(eventBus, internalNiftyNode, makePointerUpEvent(x, y));
+  }
+
+  private void execPointerDownEvent(final int x, final int y) {
+    inputHandler.pointerEvent(eventBus, internalNiftyNode, makePointerDownEvent(x, y));
   }
 }

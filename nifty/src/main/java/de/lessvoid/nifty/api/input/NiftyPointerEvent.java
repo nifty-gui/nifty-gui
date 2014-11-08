@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.api.input;
 
 public class NiftyPointerEvent {
+  public final static int BUTTON_COUNT = 5;
+
   private int x;
   private int y;
   private int z; // mouse wheel
@@ -35,6 +37,10 @@ public class NiftyPointerEvent {
     return button;
   }
 
+  /**
+   * First button is 0, second is 1 and so on.
+   * @param button the button state for this event
+   */
   public void setButton(final int button) {
     this.button = button;
   }
@@ -43,6 +49,10 @@ public class NiftyPointerEvent {
     return buttonDown;
   }
 
+  /**
+   * If the button is down (true) or not (false).
+   * @param buttonDown the buttonDown flag
+   */
   public void setButtonDown(final boolean buttonDown) {
     this.buttonDown = buttonDown;
   }

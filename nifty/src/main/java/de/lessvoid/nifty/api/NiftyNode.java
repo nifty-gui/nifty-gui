@@ -3,6 +3,7 @@ package de.lessvoid.nifty.api;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
+import de.lessvoid.nifty.internal.math.Vec4;
 
 /**
  * The core element of the Nifty scene graph is a NiftyNode. It is created by the main Nifty instance and represents the
@@ -359,6 +360,30 @@ public class NiftyNode {
    */
   public void setRenderOrder(final int renderOrder) {
     impl.setRenderOrder(renderOrder);
+  }
+
+  /**
+   * Convert a position in screen coordinates to the corresponding coordinates local to this node.
+   *
+   * @param x the x coordinate to convert
+   * @param y the y coordinate to convert
+   * @return a Vec4 containing the coordinates in local space
+   */
+  public NiftyPoint screenToLocal(final int x, final int y) {
+    Vec4 v = impl.screenToLocal(x, y);
+    return new NiftyPoint(v.getX(), v.getY());
+  }
+
+  /**
+   * Convert a position in the local coordinate system for this node into screen coordinates.
+   *
+   * @param x the x coordinate in local node coordinates to convert to screen coordinates
+   * @param y the y coordinate in local node coordinates to convert to screen coordinates
+   * @return the screen coordinates
+   */
+  public NiftyPoint localToScreen(final int x, final int y) {
+    Vec4 v = impl.localToScreen(x, y);
+    return new NiftyPoint(v.getX(), v.getY());
   }
 
   /**
