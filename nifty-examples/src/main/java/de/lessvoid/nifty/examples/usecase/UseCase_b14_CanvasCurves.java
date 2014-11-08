@@ -41,11 +41,11 @@ public class UseCase_b14_CanvasCurves {
       this.c = color;
       this.canvasNode = canvasNode;
 
-      handle = canvasNode.newChildNode(UnitValue.px(12), UnitValue.px(12));
+      handle = canvasNode.newChildNode(UnitValue.px(16), UnitValue.px(16));
       handle.addCanvasPainter(new NiftyCanvasPainter() {
         @Override
         public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-          canvas.setFillStyle(NiftyColor.BLUE());
+          canvas.setFillStyle(NiftyColor.TRANSPARENT());
           canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
           canvas.beginPath();
           canvas.setStrokeColor(c);
@@ -103,7 +103,7 @@ public class UseCase_b14_CanvasCurves {
   }
 
   public UseCase_b14_CanvasCurves(final Nifty nifty) throws IOException {
-    //nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
+    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     rootNode.setBackgroundColor(NiftyColor.BLACK());
