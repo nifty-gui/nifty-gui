@@ -1,8 +1,9 @@
 ## <a name="commit"></a> Git Commit Guidelines
 
-**Note** These rules are loosely based on the [https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit](angular.js commit guidelines)
-but have been modified and simplified for the use in Nifty GUI. Please read this carefully (it's short and simple,
-I promise :smile:).
+**Note** These rules are loosely based on the [angular.js commit guidelines](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit)
+but have been modified and simplified for the use in Nifty GUI.
+
+Please read this carefully because we might reject pull requests that don't comply in the future. Don't be afraid though because it's short and simple, I promise :smile:.
 
 ### Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**. The footer is optional.
