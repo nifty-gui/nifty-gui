@@ -27,6 +27,7 @@ public class UseCase_i01_PointerEvents {
 
   public UseCase_i01_PointerEvents(final Nifty nifty) {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
+    nifty.clearScreenBeforeRender();
 
     niftyNode = nifty.createRootNode(UnitValue.px(256), UnitValue.px(256), ChildLayout.Absolute);
     niftyNode.setBackgroundColor(NiftyColor.BLUE());
@@ -38,7 +39,7 @@ public class UseCase_i01_PointerEvents {
     childNode.startAnimated(0, 16, new NiftyCallback<Float>() {
       @Override
       public void execute(final Float t) {
-        //childNode.setRotationZ(t * 100.f);
+        childNode.setRotationZ(t * 100.f);
       }
     });
     childNode.subscribe(this);
