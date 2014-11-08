@@ -83,8 +83,8 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void filledRect(final double x0, final double y0, final double x1, final double y1) {
-    commands.add(new CommandFilledRect(x0, y0, x1, y1));
+  public void filledRect(final double x, final double y, final double width, final double height) {
+    commands.add(new CommandFilledRect(x, y, width, height));
     changed = true;
   }
 

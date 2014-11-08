@@ -57,19 +57,19 @@ public class UseCase_b02_CanvasLinearGradient {
         gradient.addColorStop(0.0, NiftyColor.RED());
         gradient.addColorStop(1.0, NiftyColor.WHITE());
         canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 50, 350, 100);
+        canvas.fillRect(50, 50, 300, 100);
 
         gradient = new NiftyLinearGradient(0.0, 0.0, 0.0, 1.0);
         gradient.addColorStop(0.0, NiftyColor.GREEN());
         gradient.addColorStop(1.0, NiftyColor.BLACK());
         canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 150, 350, 200);
+        canvas.fillRect(50, 150, 300, 100);
 
         gradient = new NiftyLinearGradient(0.0, 0.0, 0.5, 1.0);
         gradient.addColorStop(0.0, NiftyColor.WHITE());
         gradient.addColorStop(1.0, NiftyColor.BLACK());
         canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 250, 350, 350);
+        canvas.fillRect(50, 250, 300, 100);
       }
     });
   }

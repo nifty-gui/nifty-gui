@@ -40,5 +40,4 @@ public class CommandFillColor implements Command {
   public void execute(final BatchManager batchManager, final Context context) {
     context.setFillColor(color);
   }
-
 }
