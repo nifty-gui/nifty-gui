@@ -29,20 +29,42 @@ package de.lessvoid.nifty.internal.canvas;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jglfont.JGLFont;
+
 import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyCompositeOperation;
+import de.lessvoid.nifty.api.NiftyFont;
+import de.lessvoid.nifty.api.NiftyImage;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
 import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.internal.InternalNiftyImage;
+import de.lessvoid.nifty.internal.accessor.NiftyFontAccessor;
+import de.lessvoid.nifty.internal.accessor.NiftyImageAccessor;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec2;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
+import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
+import de.lessvoid.nifty.internal.render.batch.TextureBatch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class Context {
-  private final NiftyTexture texture;
+  // contentTexture is the final content this Context draws to - what you think of when you think the content
+  private final NiftyTexture contentTexture;
+
+  // everything we're rendering to this Context will first rendered into this texture and later composited into
+  // the contentTexture
+  private final NiftyTexture workingTexture;
+
+  // we'll use the textureBatch to composite the workingTexture into the contentTexture
+  private final TextureBatch textureBatch;
+
+  // we'll use this ColorQuadBatch to clear the workingTexture
+  private final ColorQuadBatch colorBatch;
+
   private NiftyColor fillColor;
   private NiftyLinearGradient linearGradient;
   private NiftyLineParameters lineParameters;
@@ -55,21 +77,52 @@ public class Context {
   private Double currentPathStartX;
   private Double currentPathStartY;
   private NiftyRenderDevice renderDevice;
+  private BatchManager batchManager;
+  private NiftyCompositeOperation compositeOperation;
 
-  public Context(final NiftyTexture textureParam) {
-    texture = textureParam;
+  public Context(final NiftyTexture contentTexture, final NiftyTexture workingTexture) {
+    this.contentTexture = contentTexture;
+    this.workingTexture = workingTexture;
+    this.textureBatch = textureBatch(workingTexture);
+    this.colorBatch = colorBatch();
   }
 
-  public void prepare(final NiftyRenderDevice renderDevice) {
+  public void bind(final NiftyRenderDevice renderDevice, final BatchManager batchManager) {
+    this.renderDevice = renderDevice;
+    this.batchManager = batchManager;
+    this.compositeOperation = NiftyCompositeOperation.SourceOver;
+
+    // start by cleaning the content texture
+    renderDevice.beginRenderToTexture(contentTexture);
+    renderDevice.changeCompositeOperation(NiftyCompositeOperation.Off);
+    colorBatch.render(renderDevice);
+    renderDevice.endRenderToTexture(workingTexture);
+  }
+
+  public void prepare() {
+    batchManager.begin();
+
     fillColor = NiftyColor.BLACK();
     linearGradient = null;
     lineParameters = new NiftyLineParameters();
-    renderDevice.beginRenderToTexture(texture);
-    this.renderDevice = renderDevice;
+    renderDevice.beginRenderToTexture(workingTexture);
+    renderDevice.changeCompositeOperation(NiftyCompositeOperation.Off);
+    colorBatch.render(renderDevice);
+    renderDevice.changeCompositeOperation(NiftyCompositeOperation.SourceOver);
   }
 
-  public void flush(final NiftyRenderDevice renderDevice) {
-    renderDevice.endRenderToTexture(texture);
+  public void flush() {
+    batchManager.end(renderDevice);
+    renderDevice.endRenderToTexture(workingTexture);
+
+    // now render workingTexture into contentTexture
+    renderDevice.beginRenderToTexture(contentTexture);
+    renderDevice.changeCompositeOperation(compositeOperation);
+    textureBatch.render(renderDevice);
+    renderDevice.endRenderToTexture(contentTexture);
+
+    // reset composite operation to the standard
+    renderDevice.changeCompositeOperation(NiftyCompositeOperation.SourceOver);
   }
 
   public void setFillColor(final NiftyColor color) {
@@ -95,7 +148,7 @@ public class Context {
   }
 
   public NiftyTexture getNiftyTexture() {
-    return texture;
+    return contentTexture;
   }
 
   public NiftyLinearGradient getFillLinearGradient() {
@@ -196,7 +249,7 @@ public class Context {
     lineTo(currentPathStartX, currentPathStartY);
   }
 
-  public void strokePath(final BatchManager batchManager) {
+  public void strokePath() {
     if (path.isEmpty()) {
       return;
     }
@@ -223,6 +276,41 @@ public class Context {
     renderCurve(curve, this);
   }
 
+  public void setCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    this.compositeOperation = compositeOperation;
+  }
+
+  public void addCustomShader(final String shaderId) {
+    batchManager.addCustomShader(shaderId);
+  }
+
+  public void filledRect(final double x, final double y, final double width, final double height) {
+    if (getFillLinearGradient() != null) {
+      batchManager.addLinearGradientQuad(x, y, x + width, y + height, getTransform(), getFillLinearGradient());
+      return;
+    }
+    batchManager.addColorQuad(x, y, x + width, y + height, getFillColor(), getTransform());
+  }
+
+  public void image(final int x, final int y, final NiftyImage image) {
+    InternalNiftyImage internalImage = NiftyImageAccessor.getDefault().getInternalNiftyImage(image);
+    Mat4 local = Mat4.mul(getTransform(), Mat4.createTranslate(x, y, 0.0f));
+    batchManager.addTextureQuad(internalImage.getTexture(), local, NiftyColor.WHITE());
+  }
+
+  public void text(final int x, final int y, final NiftyFont font, final String text) {
+    JGLFont jglFont = NiftyFontAccessor.getDefault().getJGLFont(font);
+    jglFont.setCustomRenderState(batchManager);
+
+    NiftyColor textColor = getTextColor();
+    jglFont.renderText(
+        x, y, text, (float) getTextSize(), (float) getTextSize(),
+        (float) textColor.getRed(),
+        (float) textColor.getGreen(),
+        (float) textColor.getBlue(),
+        (float) textColor.getAlpha());
+  }
+
   private void renderCurve(final CubicBezier c, final Context context) {
     if (isSufficientlyFlat(c)) {
       c.output(context);
@@ -247,6 +335,27 @@ public class Context {
     double tol = .25;
     double tolerance = 16*tol*tol;
     return (ux+uy <= tolerance);
+  }
+
+  private TextureBatch textureBatch(final NiftyTexture texture) {
+    TextureBatch result = new TextureBatch(texture);
+    result.add(0., 0., texture.getWidth(), texture.getHeight(), 0., 0., 1., 1., Mat4.createIdentity(), NiftyColor.WHITE());
+    return result;
+  }
+
+  private ColorQuadBatch colorBatch() {
+    ColorQuadBatch result = new ColorQuadBatch();
+    result.add(
+        0.,
+        0.,
+        workingTexture.getWidth(),
+        workingTexture.getHeight(),
+        NiftyColor.TRANSPARENT(),
+        NiftyColor.TRANSPARENT(),
+        NiftyColor.TRANSPARENT(),
+        NiftyColor.TRANSPARENT(),
+        Mat4.createIdentity());
+    return result;
   }
 
   private static class CubicBezier {

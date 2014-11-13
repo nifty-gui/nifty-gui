@@ -26,23 +26,23 @@
  */
 package de.lessvoid.nifty.internal.render.batch;
 
-import de.lessvoid.nifty.api.BlendMode;
+import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
-public class ChangeBlendModeBatch implements Batch<BlendMode> {
-  private final BlendMode blendMode;
+public class ChangeCompositeOperationBatch implements Batch<NiftyCompositeOperation> {
+  private final NiftyCompositeOperation compositeOperation;
 
-  public ChangeBlendModeBatch(final BlendMode blendMode) {
-    this.blendMode = blendMode;
+  public ChangeCompositeOperationBatch(final NiftyCompositeOperation compositeOperation) {
+    this.compositeOperation = compositeOperation;
   }
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.changeBlendMode(blendMode);
+    renderDevice.changeCompositeOperation(compositeOperation);
   }
 
   @Override
-  public boolean requiresNewBatch(final BlendMode param) {
-    return true;
+  public boolean requiresNewBatch(final NiftyCompositeOperation param) {
+    return compositeOperation != param;
   }
 }

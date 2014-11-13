@@ -163,18 +163,18 @@ public class NiftyNode {
 
   /**
    * Change the blend mode when rendering this NiftyNode.
-   * @param blendMode the new BlendMode
+   * @param compositeOperation the new BlendMode
    */
-  public void setBlendMode(final BlendMode blendMode) {
-    impl.setBlendMode(blendMode);
+  public void setCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    impl.setCompositeOperation(compositeOperation);
   }
 
   /**
-   * Get the current active BlendMode by default this will be BlendMode.OFF.
-   * @return the current blendMode
+   * Get the current active composite operation for this node.
+   * @return the current composite operation
    */
-  public BlendMode getBlendMode() {
-    return impl.getBlendMode();
+  public NiftyCompositeOperation getCompositeOperation() {
+    return impl.getCompositeOperation();
   }
 
   /**

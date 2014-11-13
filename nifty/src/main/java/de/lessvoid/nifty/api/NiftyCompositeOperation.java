@@ -31,6 +31,18 @@ package de.lessvoid.nifty.api;
  * @author void
  */
 public enum NiftyCompositeOperation {
+  // completely disable blending
+  Off,
+
+  // Clean
+  Clear,
+
+  // Only use source color is being used (this is the same as Copy)
+  Source,
+
+  // Only use destination color
+  Destination,
+
   // Default. Displays the source image over the destination image
   SourceOver,
 

@@ -44,9 +44,9 @@ import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.CoreVBO.DataType;
 import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.spi.CoreGL;
-import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.api.NiftyColorStop;
+import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
 import de.lessvoid.nifty.api.NiftyLineParameters;
@@ -144,7 +144,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.unbind();
 
-    alphaTexture = NiftyTextureOpenGL.newTextureRed(gl, getDisplayWidth(), getDisplayHeight(), false);
+    alphaTexture = NiftyTextureOpenGL.newTextureRed(gl, getDisplayWidth(), getDisplayHeight(), FilterMode.Nearest);
     alphaTextureFBO = CoreFBO.createCoreFBO(gl);
     alphaTextureFBO.bindFramebuffer();
     alphaTextureFBO.attachTexture(getTextureId(alphaTexture), 0);
@@ -188,18 +188,28 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public NiftyTexture createTexture(final int width, final int height, final boolean filterLinear) {
-    return NiftyTextureOpenGL.newTextureRGBA(gl, width, height, filterLinear);
+  public NiftyTexture createTexture(
+      final int width,
+      final int height,
+      final FilterMode filterMode) {
+    return NiftyTextureOpenGL.newTextureRGBA(gl, width, height, filterMode);
   }
 
   @Override
-  public NiftyTexture createTexture(final int width, final int height, final ByteBuffer data, final boolean filterLinear) {
-    return new NiftyTextureOpenGL(gl, width, height, data, filterLinear);
+  public NiftyTexture createTexture(
+      final int width,
+      final int height,
+      final ByteBuffer data,
+      final FilterMode filterMode) {
+    return new NiftyTextureOpenGL(gl, width, height, data, filterMode);
   }
 
   @Override
-  public NiftyTexture loadTexture(final String filename, final boolean filterLinear) {
-    return new NiftyTextureOpenGL(gl, resourceLoader, filename, filterLinear);
+  public NiftyTexture loadTexture(
+      final String filename,
+      final FilterMode filterMode,
+      final PreMultipliedAlphaMode preMultipliedAlphaMode) {
+    return new NiftyTextureOpenGL(gl, resourceLoader, filename, filterMode, preMultipliedAlphaMode);
   }
 
   @Override
@@ -350,25 +360,66 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void changeBlendMode(final BlendMode blendMode) {
-    switch (blendMode) {
-    case OFF:
+  public void changeCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    switch (compositeOperation) {
+      case Off:
         gl.glDisable(gl.GL_BLEND());
         break;
-
-    case BLEND:
+      case Clear:
         gl.glEnable(gl.GL_BLEND());
-        gl.glBlendFunc(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        gl.glBlendFunc(gl.GL_ZERO(), gl.GL_ZERO());
         break;
-
-    case BLEND_SEP:
+      case Source:
         gl.glEnable(gl.GL_BLEND());
-        gl.glBlendFuncSeparate(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA(), gl.GL_ONE(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        gl.glBlendFunc(gl.GL_ONE(), gl.GL_ZERO());
         break;
-
-    case MULTIPLY:
+      case Destination:
         gl.glEnable(gl.GL_BLEND());
-        gl.glBlendFunc(gl.GL_DST_COLOR(), gl.GL_ZERO());
+        gl.glBlendFunc(gl.GL_ZERO(), gl.GL_ONE());
+        break;
+      case SourceOver:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ONE(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        break;
+      case SourceAtop:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_DST_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        break;
+      case SourceIn:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_DST_ALPHA(), gl.GL_ZERO());
+        break;
+      case SourceOut:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ONE_MINUS_DST_ALPHA(), gl.GL_ZERO());
+        break;
+      case DestinationOver:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ONE_MINUS_DST_ALPHA(), gl.GL_ONE());
+        break;
+      case DestinationAtop:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ONE_MINUS_DST_ALPHA(), gl.GL_SRC_ALPHA());
+        break;
+      case DestinationIn:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ZERO(), gl.GL_SRC_ALPHA());
+        break;
+      case DestinationOut:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ZERO(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        break;
+      case Lighter:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ONE(), gl.GL_ONE());
+        break;
+      case Copy:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ONE(), gl.GL_ZERO());
+        break;
+      case XOR:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ONE_MINUS_DST_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
         break;
     }
   }

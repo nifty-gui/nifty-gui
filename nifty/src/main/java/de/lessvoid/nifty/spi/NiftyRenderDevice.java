@@ -31,8 +31,8 @@ import java.nio.FloatBuffer;
 
 import javax.annotation.Nonnull;
 
-import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyArcParameters;
+import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
@@ -74,9 +74,10 @@ public interface NiftyRenderDevice {
    *
    * @param width the width of the texture
    * @param height the height of the texture
+   * @param filterMode the FilterMode to use
    * @return NiftyTexture
    */
-  NiftyTexture createTexture(int width, int height, boolean filterLinear);
+  NiftyTexture createTexture(int width, int height, FilterMode filterMode);
 
   /**
    * Create a texture of the given width and height and initialize it with the given pixel data.
@@ -84,17 +85,20 @@ public interface NiftyRenderDevice {
    * @param width the width of the texture
    * @param height the height of the texture
    * @param data the pixel data of the texture
+   * @param filterMode the FilterMode to use
    * @return NiftyTexture
    */
-  NiftyTexture createTexture(int width, int height, ByteBuffer data, boolean filterLinear);
+  NiftyTexture createTexture(int width, int height, ByteBuffer data, FilterMode filterMode);
 
   /**
    * Load an image and return a NiftyTexture from the image.
    *
    * @param filename the image filename to load
+   * @param filterMode the filter mode to use for the loaded texture
+   * @param preMultipliedAlphaMode the pre-multiplied alpha mode to use
    * @return NiftyTexture
    */
-  NiftyTexture loadTexture(String filename, boolean filterLinear);
+  NiftyTexture loadTexture(String filename, FilterMode filterMode, PreMultipliedAlphaMode preMultipliedAlphaMode);
 
   /**
    * Nifty will call this before it issues render*() calls.
@@ -148,10 +152,10 @@ public interface NiftyRenderDevice {
   void endRenderToTexture(NiftyTexture texture);
 
   /**
-   * Change the current BlendMode for subsequent render calls.
-   * @param blendMode the BlendMode
+   * Change the current composite operation (blend mode in GL) for subsequent render calls.
+   * @param compositeOperation the new composite operation
    */
-  void changeBlendMode(BlendMode blendMode);
+  void changeCompositeOperation(NiftyCompositeOperation compositeOperation);
 
   /**
    * Load a custom shader to be used for rendering later.
@@ -205,4 +209,29 @@ public interface NiftyRenderDevice {
    * @param lineParameters 
    */
   void pathEnd(NiftyLineParameters lineParameters);
+
+  /**
+   * The type of filtering to use when loading a texture (Actually this is the filtering mode of the texture after
+   * it has been loaded. It's named LoadTextureFilterMode because it can currently only be applied when loading a
+   * texture).
+   *
+   * @author void
+   */
+  enum FilterMode {
+    Nearest,
+    Linear
+  }
+
+  /**
+   * Specifies if loaded texture data already is pre-multiplied or if Nifty should pre-multiply it when loading.
+   *
+   * For best results texture data in Nifty should use pre-multiplied alpha!
+   *
+   * @author void
+   *
+   */
+  enum PreMultipliedAlphaMode {
+    UseAsIs,
+    PreMultiplyAlpha
+  }
 }

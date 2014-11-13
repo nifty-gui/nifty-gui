@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyImage;
 import de.lessvoid.nifty.api.NiftyLineCapType;
@@ -167,6 +168,11 @@ public class InternalNiftyCanvas {
   public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
     commands.add(new CommandBezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y));
     changed = true;
+  }
+
+  public void setGlobalCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    commands.add(new CommandGlobalCompositeOperation(compositeOperation));
+    changed = true;    
   }
 
   public void reset() {

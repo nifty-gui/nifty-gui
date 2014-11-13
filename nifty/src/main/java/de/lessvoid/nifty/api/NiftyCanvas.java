@@ -253,9 +253,8 @@ public class NiftyCanvas {
     throw new UnsupportedOperationException();
   }
 
-  public void globalCompositeOperation(final NiftyCompositeOperation compositeOperation) {
-    // TODO
-    throw new UnsupportedOperationException();
+  public void setGlobalCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    impl.setGlobalCompositeOperation(compositeOperation);
   }
 
   // internals

@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandArc implements Command {
   private final static double TWO_PI = 2 * Math.PI;
@@ -50,7 +49,7 @@ public class CommandArc implements Command {
   }
   
   @Override
-  public void execute(final BatchManager batchManager, final Context context) {
+  public void execute(final Context context) {
     double start = normalize(startAngle);
     double end = normalize(endAngle);
     context.arc(x, y, r, start, end);

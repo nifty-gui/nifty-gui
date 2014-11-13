@@ -27,7 +27,6 @@
 package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandFillColor implements Command {
   private final NiftyColor color;
@@ -37,7 +36,7 @@ public class CommandFillColor implements Command {
   }
 
   @Override
-  public void execute(final BatchManager batchManager, final Context context) {
+  public void execute(final Context context) {
     context.setFillColor(color);
   }
 }

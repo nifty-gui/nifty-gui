@@ -36,6 +36,8 @@ import de.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.render.io.ImageLoader;
 import de.lessvoid.nifty.internal.render.io.ImageLoaderFactory;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class NiftyTextureOpenGL implements NiftyTexture {
@@ -49,16 +51,16 @@ public class NiftyTextureOpenGL implements NiftyTexture {
       final CoreGL gl,
       final int width,
       final int height,
-      final boolean linear) {
-    return new NiftyTextureOpenGL(CoreTexture2D.createEmptyTexture(gl, ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear)));
+      final FilterMode filterMode) {
+    return new NiftyTextureOpenGL(CoreTexture2D.createEmptyTexture(gl, ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, resizeFilter(filterMode)));
   }
 
   public static NiftyTextureOpenGL newTextureRed(
       final CoreGL gl,
       final int width,
       final int height,
-      final boolean linear) {
-    return new NiftyTextureOpenGL(CoreTexture2D.createEmptyTexture(gl, ColorFormat.Red, Type.UNSIGNED_BYTE, width, height, resizeFilter(linear)));
+      final FilterMode filterMode) {
+    return new NiftyTextureOpenGL(CoreTexture2D.createEmptyTexture(gl, ColorFormat.Red, Type.UNSIGNED_BYTE, width, height, resizeFilter(filterMode)));
   }
 
   public NiftyTextureOpenGL(
@@ -66,15 +68,16 @@ public class NiftyTextureOpenGL implements NiftyTexture {
       final int width,
       final int height,
       final ByteBuffer data,
-      final boolean linear) {
-    texture = CoreTexture2D.createCoreTexture(gl, ColorFormat.RGBA, width, height, data, resizeFilter(linear));
+      final FilterMode filterMode) {
+    texture = CoreTexture2D.createCoreTexture(gl, ColorFormat.RGBA, width, height, data, resizeFilter(filterMode));
   }
 
   public NiftyTextureOpenGL(
       final CoreGL gl,
       final NiftyResourceLoader resourceLoader,
       final String filename,
-      final boolean linear) {
+      final FilterMode filterMode,
+      final PreMultipliedAlphaMode preMultipliedAlpha) {
     try {
       ImageLoader imageLoader = ImageLoaderFactory.createImageLoader(filename);
       ByteBuffer data = imageLoader.loadAsByteBufferRGBA(resourceLoader.getResourceAsStream(filename));
@@ -83,8 +86,8 @@ public class NiftyTextureOpenGL implements NiftyTexture {
           ColorFormat.RGBA,
           imageLoader.getImageWidth(),
           imageLoader.getImageHeight(),
-          data,
-          resizeFilter(linear));
+          preMultiply(data, preMultipliedAlpha),
+          resizeFilter(filterMode));
     } catch (Exception e) {
       throw new RuntimeException("Could not load image from file: [" + filename + "]", e);
     }
@@ -128,8 +131,42 @@ public class NiftyTextureOpenGL implements NiftyTexture {
     return 1.0;
   }
 
-  private static ResizeFilter resizeFilter(final boolean linear) {
-    if (linear) {
+  @Override
+  public void saveAsPng(final String filename) {
+    texture.bind();
+    texture.saveAsPNG(filename);
+  }
+
+  private ByteBuffer preMultiply(final ByteBuffer data, final PreMultipliedAlphaMode preMultipliedAlpha) {
+    if (PreMultipliedAlphaMode.UseAsIs == preMultipliedAlpha) {
+      return data;
+    }
+
+    for (int i=0; i<data.limit()/4; i++) {
+      int r = data.get(i*4 + 0) & 0xff;
+      int g = data.get(i*4 + 1) & 0xff;
+      int b = data.get(i*4 + 2) & 0xff;
+      int a = data.get(i*4 + 3) & 0xff;
+
+      float rr = (float) r / 255.f;
+      float gg = (float) g / 255.f;
+      float bb = (float) b / 255.f;
+      float aa = (float) a / 255.f;
+
+      int preR = (int) (rr * aa * 255);
+      int preG = (int) (gg * aa * 255);
+      int preB = (int) (bb * aa * 255);
+
+      data.put(i*4 + 0, (byte) (preR & 0xff));
+      data.put(i*4 + 1, (byte) (preG & 0xff));
+      data.put(i*4 + 2, (byte) (preB & 0xff));
+      data.put(i*4 + 3, (byte) (a & 0xff));
+    }
+    return data;
+  }
+
+  private static ResizeFilter resizeFilter(final FilterMode filterMode) {
+    if (FilterMode.Linear == filterMode) {
       return ResizeFilter.Linear;
     }
     return ResizeFilter.Nearest;

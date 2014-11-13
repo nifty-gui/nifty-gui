@@ -42,6 +42,8 @@ import de.lessvoid.nifty.internal.common.ColorValueParser;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class FontRenderer implements JGLFontRenderer {
@@ -59,7 +61,10 @@ public class FontRenderer implements JGLFontRenderer {
   @Override
   public void registerBitmap(@Nonnull final String bitmapId, final InputStream data, @Nonnull final String filename)
       throws IOException {
-    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.loadTexture(filename, false)));
+    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.loadTexture(
+        filename,
+        FilterMode.Nearest,
+        PreMultipliedAlphaMode.PreMultiplyAlpha)));
   }
 
   @Override
@@ -69,7 +74,11 @@ public class FontRenderer implements JGLFontRenderer {
       final int width,
       final int height,
       @Nonnull final String filename) throws IOException {
-    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.createTexture(width, height, data, false)));
+    textureInfos.put(bitmapId, new BitmapInfo(renderDevice.createTexture(
+        width,
+        height,
+        data,
+        FilterMode.Nearest)));
   }
 
   @Override

@@ -26,17 +26,19 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyLineCapType;
+import de.lessvoid.nifty.api.NiftyCompositeOperation;
 
-public class CommandLineCapType implements Command {
-  private NiftyLineCapType lineCapType;
+public class CommandGlobalCompositeOperation implements Command {
+  private final NiftyCompositeOperation compositeOperation;
 
-  public CommandLineCapType(final NiftyLineCapType lineCapType) {
-    this.lineCapType = lineCapType;
+  public CommandGlobalCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    this.compositeOperation = compositeOperation;
   }
 
   @Override
   public void execute(final Context context) {
-    context.setLineCapType(lineCapType);
+    context.flush();
+    context.setCompositeOperation(compositeOperation);
+    context.prepare();
   }
 }

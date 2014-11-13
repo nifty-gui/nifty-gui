@@ -49,6 +49,8 @@ import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.TimeProvider;
 
 /**
@@ -297,7 +299,11 @@ public class Nifty {
    * @return a new NiftyImage
    */
   public NiftyImage createNiftyImage(final String filename) {
-    return NiftyImage.newInstance(InternalNiftyImage.newImage(renderDevice.loadTexture(filename, true)));
+    // TODO consider to make the FilterMode and especially PreMultipliedAlphaMode availabe to the user
+    return NiftyImage.newInstance(InternalNiftyImage.newImage(renderDevice.loadTexture(
+        filename,
+        FilterMode.Linear,
+        PreMultipliedAlphaMode.PreMultiplyAlpha)));
   }
 
   /**

@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandLineTo implements Command {
   private final double x;
@@ -38,7 +37,7 @@ public class CommandLineTo implements Command {
   }
 
   @Override
-  public void execute(final BatchManager batchManager, final Context context) {
+  public void execute(final Context context) {
     context.lineTo(x, y);
   }
 }

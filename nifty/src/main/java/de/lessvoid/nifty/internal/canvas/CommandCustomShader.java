@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandCustomShader implements Command {
   private final String shaderId;
@@ -36,7 +35,7 @@ public class CommandCustomShader implements Command {
   }
 
   @Override
-  public void execute(final BatchManager batchManager, final Context context) {
-    batchManager.addCustomShader(shaderId);
+  public void execute(final Context context) {
+    context.addCustomShader(shaderId);
   }
 }

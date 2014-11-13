@@ -41,5 +41,8 @@ public interface ImageLoader {
   public int getTextureWidth();
 
   @Nonnull
-  public ByteBuffer loadAsByteBufferRGBA(@Nonnull @WillNotClose final InputStream imageStream) throws IOException;
+  public ByteBuffer loadAsByteBufferRGBA(
+      @Nonnull
+      @WillNotClose
+      final InputStream imageStream) throws IOException;
 }

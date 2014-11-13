@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
-import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.Nifty;
@@ -41,6 +40,7 @@ import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback.Size;
 import de.lessvoid.nifty.api.NiftyNode;
@@ -134,7 +134,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   private double scaleY = 1.0;
   private double scaleZ = 1.0;
 
-  private BlendMode blendMode = BlendMode.BLEND;
+  private NiftyCompositeOperation compositeOperation = NiftyCompositeOperation.SourceOver;
   private NiftyMinSizeCallback minSizeCallback;
 
   // this will be set to true when the constraints of this node has been calculated by this node itself using the
@@ -282,12 +282,12 @@ public class InternalNiftyNode implements InternalLayoutable {
     requestRedraw = true;
   }
 
-  public void setBlendMode(final BlendMode blendMode) {
-    this.blendMode = blendMode;
+  public void setCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    this.compositeOperation = compositeOperation;
   }
 
-  public BlendMode getBlendMode() {
-    return blendMode;
+  public NiftyCompositeOperation getCompositeOperation() {
+    return compositeOperation;
   }
 
   public double getScaleX() {

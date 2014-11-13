@@ -32,6 +32,7 @@ import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 
 /**
  * Synchronize a list of NiftyNodes to a list of RootRenderNode.
@@ -104,8 +105,9 @@ public class RendererNodeSync {
         node.getWidth(),
         node.getHeight(),
         node.getCanvas().getCommands(),
-        renderDevice.createTexture(node.getWidth(), node.getHeight(), true),
-        node.getBlendMode(),
+        renderDevice.createTexture(node.getWidth(), node.getHeight(), FilterMode.Linear),
+        renderDevice.createTexture(node.getWidth(), node.getHeight(), FilterMode.Linear),
+        node.getCompositeOperation(),
         node.getRenderOrder());
 
     for (int i=0; i<node.getChildren().size(); i++) {

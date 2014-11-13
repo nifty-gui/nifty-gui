@@ -30,14 +30,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.lessvoid.nifty.api.BlendMode;
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.internal.canvas.Command;
 import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 
 public class RenderNode {
   private final int nodeId;
@@ -50,7 +51,7 @@ public class RenderNode {
   private boolean needsContentUpdate = true;
   private boolean contentResized = false;
   private Context context;
-  private final BlendMode blendMode;
+  private final NiftyCompositeOperation compositeOperation;
   private final int renderOrder;
   private int indexInParent;
 
@@ -60,16 +61,17 @@ public class RenderNode {
       final int w,
       final int h,
       final List<Command> commands,
-      final NiftyTexture content,
-      final BlendMode blendMode,
+      final NiftyTexture contentTexture,
+      final NiftyTexture workingTexture,
+      final NiftyCompositeOperation compositeOperation,
       final int renderOrder) {
     this.nodeId = nodeId;
     this.local = new Mat4(local);
     this.commands = commands;
     this.width = w;
     this.height = h;
-    this.context = new Context(content);
-    this.blendMode = blendMode;
+    this.context = new Context(contentTexture, workingTexture);
+    this.compositeOperation = compositeOperation;
     this.renderOrder = renderOrder;
   }
 
@@ -79,26 +81,27 @@ public class RenderNode {
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
     if (contentResized) {
-      context = new Context(renderDevice.createTexture(width, height, true));
+      context = new Context(
+          renderDevice.createTexture(width, height, FilterMode.Linear),
+          renderDevice.createTexture(width, height, FilterMode.Linear));
       contentResized = false;
       needsContentUpdate = true;
     }
     if (needsContentUpdate) {
-      BatchManager contentBatchManager = new BatchManager();
-      contentBatchManager.begin();
-      contentBatchManager.changeBlendMode(BlendMode.BLEND_SEP);
-      context.prepare(renderDevice);
+      context.bind(renderDevice, new BatchManager());
+      context.prepare();
+
       for (int i=0; i<commands.size(); i++) {
         Command command = commands.get(i);
-        command.execute(contentBatchManager, context);
+        command.execute(context);
       }
-      contentBatchManager.end(renderDevice);
-      context.flush(renderDevice);
+
+      context.flush();
       needsContentUpdate = false;
     }
 
     Mat4 current = Mat4.mul(parent, local);
-    batchManager.changeBlendMode(blendMode);
+    batchManager.setCompositeOperation(compositeOperation);
     batchManager.addTextureQuad(context.getNiftyTexture(), current, NiftyColor.WHITE());
 
     for (int i=0; i<children.size(); i++) {

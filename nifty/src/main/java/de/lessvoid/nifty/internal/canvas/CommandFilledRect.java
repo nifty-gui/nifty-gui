@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandFilledRect implements Command {
   private final double x;
@@ -42,11 +41,7 @@ public class CommandFilledRect implements Command {
   }
 
   @Override
-  public void execute(final BatchManager batchManager, final Context context) {
-    if (context.getFillLinearGradient() != null) {
-      batchManager.addLinearGradientQuad(x, y, x + width, y + height, context.getTransform(), context.getFillLinearGradient());
-      return;
-    }
-    batchManager.addColorQuad(x, y, x + width, y + height, context.getFillColor(), context.getTransform());
+  public void execute(final Context context) {
+    context.filledRect(x, y, width, height);
   }
 }

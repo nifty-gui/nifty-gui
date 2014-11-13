@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
 public class CommandBezierCurveTo implements Command {
   private final double cp1x;
@@ -46,7 +45,7 @@ public class CommandBezierCurveTo implements Command {
   }
 
   @Override
-  public void execute(final BatchManager batchManager, final Context context) {
+  public void execute(final Context context) {
     context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
   }
 }

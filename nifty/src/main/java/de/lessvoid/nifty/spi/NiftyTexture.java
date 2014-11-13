@@ -80,4 +80,12 @@ public interface NiftyTexture {
    * @return texture coordinate V of this textures position in the texture atlas
    */
   double getU1();
+
+  /**
+   * Save the content of the texture to a file with the given filename. This is very useful for debugging render to
+   * texture issues.
+   *
+   * @param filename the filename to store the texture content to
+   */
+  void saveAsPng(String filename);
 }
