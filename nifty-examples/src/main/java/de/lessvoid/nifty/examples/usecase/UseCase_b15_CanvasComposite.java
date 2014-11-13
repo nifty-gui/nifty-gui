@@ -76,7 +76,12 @@ public class UseCase_b15_CanvasComposite {
 
   private void compositeExampleNode(final NiftyNode rootNode, final NiftyFont font, final NiftyCompositeOperation operation) {
     final NiftyNode canvasNode = rootNode.newChildNode(UnitValue.px(150), UnitValue.px(120), ChildLayout.Absolute);
+
+    // Yes, we actually redraw all of that every 16ms! It's not necessary but this way we can
+    // judge how many frames per second we can achieve. On my old 2009 Mac Pro with ATI Radeon HD 5870 1024 MB
+    // I get about 20000 FPS which is not that bad =D
     canvasNode.startAnimatedRedraw(0, 16);
+
     canvasNode.addCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
