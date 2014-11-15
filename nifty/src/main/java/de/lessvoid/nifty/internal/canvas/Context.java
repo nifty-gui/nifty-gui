@@ -31,7 +31,6 @@ import java.util.List;
 
 import org.jglfont.JGLFont;
 
-import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyFont;
@@ -137,6 +136,10 @@ public class Context {
   public void setFillLinearGradient(final NiftyLinearGradient gradient) {
     fillColor = null;
     linearGradient = new NiftyLinearGradient(gradient);
+  }
+
+  NiftyLineParameters getLineParameters() {
+    return lineParameters;
   }
 
   public void setLineWidth(final float lineWidth) {
@@ -254,8 +257,11 @@ public class Context {
       return;
     }
     for (int i=0; i<path.size(); i++) {
-      path.get(i).render(batchManager, lineParameters, i == 0, i == (path.size() - 1));
+      path.get(i).render(this, batchManager, i == 0, i == (path.size() - 1));
     }
+  }
+
+  public void fillPath() {
   }
 
   public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
@@ -356,121 +362,5 @@ public class Context {
         NiftyColor.TRANSPARENT(),
         Mat4.createIdentity());
     return result;
-  }
-
-  private static class CubicBezier {
-    private Vec2 b0;
-    private Vec2 b1;
-    private Vec2 b2;
-    private Vec2 b3;
-
-    private CubicBezier() {
-      this.b0 = new Vec2();
-      this.b1 = new Vec2();
-      this.b2 = new Vec2();
-      this.b3 = new Vec2();
-    }
-
-    private CubicBezier(final Vec2 b0, final Vec2 b1, final Vec2 b2, final Vec2 b3) {
-      this.b0 = b0;
-      this.b1 = b1;
-      this.b2 = b2;
-      this.b3 = b3;
-    }
-
-    public void output(final Context context) {
-      context.lineTo(b3.getX(), b3.getY());
-    }
-
-    public void subdivide(final CubicBezier left, final CubicBezier right) {
-      float z = 0.5f;
-      float z_1 = z - 1.f;
-
-      // left
-      // b0 =       b0
-      left.b0 = new Vec2(b0);
-
-      // b1 =     z*b1 -       (z-1)*b0
-      Vec2.sub(new Vec2(b1).scale(z), new Vec2(b0).scale(z_1), left.b1);
-
-      // b2 =   z*z*b2 -   2*z*(z-1)*b1 +     (z-1)*(z-1)*b0
-      Vec2.sub(new Vec2(b2).scale(z*z), new Vec2(b1).scale(2*z*z_1), left.b2);
-      Vec2.add(left.b2, new Vec2(b0).scale(z_1*z_1), left.b2);
-
-      // b3 = z*z*z*b3 - 3*z*z*(z-1)*b2 + 3*z*(z-1)*(z-1)*b1 - (z-1)*(z-1)*(z-1)*b0
-      Vec2.sub(new Vec2(b3).scale(z*z*z), new Vec2(b2).scale(3*z*z*z_1), left.b3);
-      Vec2.add(left.b3, new Vec2(b1).scale(3*z*z_1*z_1), left.b3);
-      Vec2.sub(left.b3, new Vec2(b0).scale(z_1*z_1*z_1), left.b3);
-
-      // right
-      // b0 = z*z*z*b3 - 3*z*z*(z-1)*b2 + 3*z*(z-1)*(z-1)*b1 - (z-1)*(z-1)*(z-1)*b0
-      Vec2.sub(new Vec2(b3).scale(z*z*z), new Vec2(b2).scale(3*z*z*z_1), right.b0);
-      Vec2.add(right.b0, new Vec2(b1).scale(3*z*z_1*z_1), right.b0);
-      Vec2.sub(right.b0, new Vec2(b0).scale(z_1*z_1*z_1), right.b0);
-
-      // b1 =   z*z*b3 -   2*z*(z-1)*b2 +     (z-1)*(z-1)*b1
-      Vec2.sub(new Vec2(b3).scale(z*z), new Vec2(b2).scale(2*z*z_1), right.b1);
-      Vec2.add(right.b1, new Vec2(b1).scale(z_1*z_1), right.b1);
-
-      // b2 =     z*b3 -       (z-1)*b2
-      Vec2.sub(new Vec2(b3).scale(z), new Vec2(b2).scale(z_1), right.b2);
-
-      // b3 =       b3
-      right.b3 = new Vec2(b3);
-    }
-
-    public String toString() {
-      StringBuilder result = new StringBuilder();
-      result.append("b0 = " + b0).append("\n");
-      result.append("b1 = " + b1).append("\n");
-      result.append("b2 = " + b2).append("\n");
-      result.append("b3 = " + b3).append("\n");
-      return result.toString();
-    }
-  }
-
-  interface PathElement {
-    void render(BatchManager batchManager, NiftyLineParameters lineParameters, final boolean first, final boolean last);
-  }
-
-  class PathElementLine implements PathElement {
-    private double x;
-    private double y;
-
-    public PathElementLine(final double x, final double y) {
-      this.x = x;
-      this.y = y;
-    }
-
-    @Override
-    public void render(final BatchManager batchManager, final NiftyLineParameters lineParameters, final boolean first, final boolean last) {
-      batchManager.addLineVertex((float) x, (float) y, getTransform(), lineParameters, first, last);
-    }
-  }
-
-  public class PathElementArc implements PathElement {
-    private double x;
-    private double y;
-    private double r;
-    private double startAngle;
-    private double endAngle;
-
-    public PathElementArc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-      this.x = x;
-      this.y = y;
-      this.r = r;
-      this.startAngle = startAngle;
-      this.endAngle = endAngle;
-    }
-
-    @Override
-    public void render(final BatchManager batchManager, final NiftyLineParameters lineParameters, final boolean first, final boolean last) {
-      batchManager.addArc(
-          x, y, r,
-          startAngle, endAngle,
-          getTransform(),
-          new NiftyArcParameters(lineParameters, (float) startAngle, (float) endAngle, (float) r),
-          first, last);
-    }
   }
 }
