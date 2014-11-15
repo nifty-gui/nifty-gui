@@ -30,10 +30,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.parameter.NiftyArcParameters;
 
 /**
  * An arc batch is a number of arc rendered with the same line style. Changing line styles will create a new batch.

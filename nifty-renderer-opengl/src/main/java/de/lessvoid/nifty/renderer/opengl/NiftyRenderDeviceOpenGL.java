@@ -44,12 +44,10 @@ import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.CoreVBO.DataType;
 import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.spi.CoreGL;
-import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
-import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.common.IdGenerator;
@@ -62,6 +60,8 @@ import de.lessvoid.nifty.internal.render.batch.LinearGradientQuadBatch;
 import de.lessvoid.nifty.internal.render.batch.TextureBatch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
+import de.lessvoid.nifty.spi.parameter.NiftyArcParameters;
+import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   private static final int VERTEX_SIZE = 5*6;

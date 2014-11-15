@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
+import de.lessvoid.nifty.spi.parameter.NiftyArcParameters;
 
 public class PathElementArc implements PathElement {
   private double x;

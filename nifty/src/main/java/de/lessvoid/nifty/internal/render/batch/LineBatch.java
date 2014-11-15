@@ -30,10 +30,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 /**
  * A line batch is a number of lines rendered with the same cap and join styles. Changing cap or join style will

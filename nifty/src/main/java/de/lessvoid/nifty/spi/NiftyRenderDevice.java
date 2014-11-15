@@ -31,11 +31,11 @@ import java.nio.FloatBuffer;
 
 import javax.annotation.Nonnull;
 
-import de.lessvoid.nifty.api.NiftyArcParameters;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
-import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
+import de.lessvoid.nifty.spi.parameter.NiftyArcParameters;
+import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 /**
  * NiftyRenderDevice is part of the SPI that allows Nifty to use different graphics backends. Everything that can

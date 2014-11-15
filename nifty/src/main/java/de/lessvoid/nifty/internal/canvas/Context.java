@@ -37,7 +37,6 @@ import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyImage;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
-import de.lessvoid.nifty.api.NiftyLineParameters;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.accessor.NiftyFontAccessor;
@@ -49,6 +48,7 @@ import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
 import de.lessvoid.nifty.internal.render.batch.TextureBatch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
+import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 public class Context {
   // contentTexture is the final content this Context draws to - what you think of when you think the content

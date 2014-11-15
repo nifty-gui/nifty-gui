@@ -24,7 +24,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api;
+package de.lessvoid.nifty.spi.parameter;
+
+import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyLineCapType;
+import de.lessvoid.nifty.api.NiftyLineJoinType;
 
 
 /**
