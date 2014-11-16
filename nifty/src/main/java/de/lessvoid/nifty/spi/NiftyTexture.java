@@ -88,4 +88,9 @@ public interface NiftyTexture {
    * @param filename the filename to store the texture content to
    */
   void saveAsPng(String filename);
+
+  /**
+   * Free the texture memory. Call this if you don't plan to use this texture anymore to free any associated resources.
+   */
+  void dispose();
 }

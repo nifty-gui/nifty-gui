@@ -317,6 +317,11 @@ public class Context {
         (float) textColor.getAlpha());
   }
 
+  public void free() {
+    contentTexture.dispose();
+    workingTexture.dispose();
+  }
+
   private void renderCurve(final CubicBezier c, final Context context) {
     if (isSufficientlyFlat(c)) {
       c.output(context);

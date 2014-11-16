@@ -137,6 +137,11 @@ public class NiftyTextureOpenGL implements NiftyTexture {
     texture.saveAsPNG(filename);
   }
 
+  @Override
+  public void dispose() {
+    texture.dispose();
+  }
+
   private ByteBuffer preMultiply(final ByteBuffer data, final PreMultipliedAlphaMode preMultipliedAlpha) {
     if (PreMultipliedAlphaMode.UseAsIs == preMultipliedAlpha) {
       return data;

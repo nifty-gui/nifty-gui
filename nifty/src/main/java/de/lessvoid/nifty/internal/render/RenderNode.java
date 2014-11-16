@@ -81,6 +81,7 @@ public class RenderNode {
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
     if (contentResized) {
+      context.free();
       context = new Context(
           renderDevice.createTexture(width, height, FilterMode.Linear),
           renderDevice.createTexture(width, height, FilterMode.Linear));
