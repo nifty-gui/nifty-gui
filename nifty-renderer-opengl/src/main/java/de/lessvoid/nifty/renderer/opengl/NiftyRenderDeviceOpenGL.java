@@ -44,6 +44,7 @@ import de.lessvoid.coregl.CoreVBO;
 import de.lessvoid.coregl.CoreVBO.DataType;
 import de.lessvoid.coregl.CoreVBO.UsageType;
 import de.lessvoid.coregl.spi.CoreGL;
+import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyLineCapType;
@@ -60,8 +61,6 @@ import de.lessvoid.nifty.internal.render.batch.LinearGradientQuadBatch;
 import de.lessvoid.nifty.internal.render.batch.TextureBatch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
-import de.lessvoid.nifty.spi.parameter.NiftyArcParameters;
-import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   private static final int VERTEX_SIZE = 5*6;
@@ -448,7 +447,11 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathLines(final FloatBuffer vertices, final NiftyLineParameters lineParameter) {
+  public void pathLines(
+      final FloatBuffer vertices,
+      final float lineWidth,
+      final NiftyLineCapType lineCapType,
+      final NiftyLineJoinType lineJoinType) {
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -465,11 +468,11 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     b.put(vertices.get(vertices.limit() - 1));
 
     // line parameters
-    float w = lineParameter.getLineWidth();
+    float w = lineWidth;
     float r = 2.f;
 
     // set up the shader
-    CoreShader shader = shaderManager.activate(getLineShaderKey(lineParameter.getLineCapType(), lineParameter.getLineJoinType()));
+    CoreShader shader = shaderManager.activate(getLineShaderKey(lineCapType, lineJoinType));
     Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
     shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
     shader.setUniformf("lineColorAlpha", 1.f);
@@ -491,22 +494,24 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathArcs(final FloatBuffer vertices, final NiftyArcParameters arcParameters) {
+  public void pathArcs(
+      final FloatBuffer vertices,
+      final NiftyLineCapType lineCapType,
+      final float startAngle,
+      final float endAngle,
+      final float lineWidth,
+      final float radius,
+      final double lineColorAlpha) {
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
     b.put(vertices);
 
     // set up the shader
-    CoreShader shader = shaderManager.activate(getArcShaderKey(arcParameters.getLineParameters().getLineCapType()));
+    CoreShader shader = shaderManager.activate(getArcShaderKey(lineCapType));
     Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
     shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-    shader.setUniformf(
-        "param",
-        arcParameters.getStartAngle(),
-        arcParameters.getEndAngle(),
-        arcParameters.getLineParameters().getLineWidth() / arcParameters.getRadius() / 2.f,
-        (float) arcParameters.getLineParameters().getColor().getAlpha());
+    shader.setUniformf("param", startAngle, endAngle, lineWidth / radius / 2.f, (float) lineColorAlpha);
 
     vao.bind();
     vbo.bind();
@@ -526,7 +531,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathEnd(final NiftyLineParameters lineParameters) {
+  public void pathEnd(final NiftyColor lineColor) {
     alphaTextureFBO.disable();
 
     if (currentFBO != null) {
@@ -574,10 +579,10 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     shader.setUniformi("uTexture", 0);
     shader.setUniformf(
         "lineColor",
-        (float) lineParameters.getColor().getRed(),
-        (float) lineParameters.getColor().getGreen(),
-        (float) lineParameters.getColor().getBlue(),
-        (float) lineParameters.getColor().getAlpha());
+        (float) lineColor.getRed(),
+        (float) lineColor.getGreen(),
+        (float) lineColor.getBlue(),
+        (float) lineColor.getAlpha());
 
     gl.glEnable(gl.GL_BLEND());
     gl.glBlendFunc(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
@@ -639,14 +644,6 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex", "aUV");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/plain-color-with-mask.vs");
     shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/plain-color-with-mask.fs");
-    shader.link();
-    return shader;
-  }
-
-  private CoreShader loadArcShader() {
-    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex", "aUV");
-    shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.vs");
-    shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/circle-alpha.fs");
     shader.link();
     return shader;
   }

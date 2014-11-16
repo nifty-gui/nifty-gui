@@ -31,11 +31,12 @@ import java.nio.FloatBuffer;
 
 import javax.annotation.Nonnull;
 
+import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
+import de.lessvoid.nifty.api.NiftyLineCapType;
+import de.lessvoid.nifty.api.NiftyLineJoinType;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
-import de.lessvoid.nifty.spi.parameter.NiftyArcParameters;
-import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 /**
  * NiftyRenderDevice is part of the SPI that allows Nifty to use different graphics backends. Everything that can
@@ -177,9 +178,11 @@ public interface NiftyRenderDevice {
   /**
    * Render lines from the given FloatBuffer containing the line vertices.
    * @param b the FloatBuffer containing the vertex data
-   * @param lineParameters the LineParameters to render ALL lines in the FloatBuffer with
+   * @param lineWidth the width of the line to render
+   * @param lineCapType the line cap type to use
+   * @param lineJoinType the line join type
    */
-  void pathLines(FloatBuffer b, NiftyLineParameters lineParameters);
+  void pathLines(FloatBuffer b, float lineWidth, NiftyLineCapType lineCapType, NiftyLineJoinType lineJoinType);
 
   /**
    * Render arcs using the information given. You'll get a quad the size of the full arc with the following coordinates
@@ -200,14 +203,19 @@ public interface NiftyRenderDevice {
    * - 2 floats u and v "texture" coordinates with the coordinates given in the diagram above
    *
    * @param vertices the vertex data to render
-   * @param arcParameters the parameters for all the arcs to be rendered
+   * @param lineCapType the line cap type
+   * @param startAngle the start angle
+   * @param endAngle the end angle
+   * @param lineWidth the line width
+   * @param radius the radius
+   * @param lineColorAlpha the line color alpha
    */
-  void pathArcs(FloatBuffer vertices, NiftyArcParameters arcParameters);
+  void pathArcs(FloatBuffer vertices, NiftyLineCapType lineCapType, float startAngle, float endAngle, float lineWidth, float radius, double lineColorAlpha);
 
   /**
-   * @param lineParameters 
+   * @param lineColor the color
    */
-  void pathEnd(NiftyLineParameters lineParameters);
+  void pathEnd(NiftyColor lineColor);
 
   /**
    * The type of filtering to use when loading a texture (Actually this is the filtering mode of the texture after

@@ -30,20 +30,20 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import de.lessvoid.nifty.internal.canvas.ArcParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.parameter.NiftyArcParameters;
 
 /**
  * An arc batch is a number of arc rendered with the same line style. Changing line styles will create a new batch.
  */
-public class ArcBatch implements Batch<NiftyArcParameters> {
+public class ArcBatch implements Batch<ArcParameters> {
   private final static int NUM_PRIMITIVES = 100;
   public final static int PRIMITIVE_SIZE = 4;
 
   private final FloatBuffer b;
-  private final NiftyArcParameters arcParameters;
+  private final ArcParameters arcParameters;
 
   // Vec4 buffer data
   private final Vec4 vsrc = new Vec4();
@@ -51,9 +51,9 @@ public class ArcBatch implements Batch<NiftyArcParameters> {
   private boolean isStartPathBatch;
   private boolean isEndPathBatch;
 
-  public ArcBatch(final NiftyArcParameters arcParameters) {
+  public ArcBatch(final ArcParameters arcParameters) {
     this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
-    this.arcParameters = new NiftyArcParameters(arcParameters);
+    this.arcParameters = new ArcParameters(arcParameters);
   }
 
   @Override
@@ -62,15 +62,22 @@ public class ArcBatch implements Batch<NiftyArcParameters> {
       renderDevice.pathBegin();
     }
 
-    renderDevice.pathArcs(b, arcParameters);
+    renderDevice.pathArcs(
+        b,
+        arcParameters.getLineParameters().getLineCapType(),
+        arcParameters.getStartAngle(),
+        arcParameters.getEndAngle(),
+        arcParameters.getLineParameters().getLineWidth(),
+        arcParameters.getRadius(),
+        arcParameters.getLineParameters().getColor().getAlpha());
 
     if (isEndPathBatch) {
-      renderDevice.pathEnd(arcParameters.getLineParameters());
+      renderDevice.pathEnd(arcParameters.getLineParameters().getColor());
     }
   }
 
   @Override
-  public boolean requiresNewBatch(final NiftyArcParameters params) {
+  public boolean requiresNewBatch(final ArcParameters params) {
     return !arcParameters.equals(params) || (b.remaining() < PRIMITIVE_SIZE);
   }
 

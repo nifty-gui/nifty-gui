@@ -24,7 +24,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.spi.parameter;
+package de.lessvoid.nifty.internal.canvas;
 
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLineCapType;
@@ -37,16 +37,16 @@ import de.lessvoid.nifty.api.NiftyLineJoinType;
  * is only used to communicate settings between Nifty and the NiftyRenderDevice. This class is not meant to be used
  * by actual user code.
  */
-public class NiftyLineParameters {
+public class LineParameters {
   private NiftyLineCapType lineCapType = NiftyLineCapType.Round;
   private NiftyLineJoinType lineJoinType = NiftyLineJoinType.Miter;
   private float lineWidth = 1.f;
   private NiftyColor lineColor = NiftyColor.WHITE();
 
-  public NiftyLineParameters() {
+  public LineParameters() {
   }
 
-  public NiftyLineParameters(final NiftyLineParameters lineParameters) {
+  public LineParameters(final LineParameters lineParameters) {
     lineCapType = lineParameters.getLineCapType();
     lineJoinType = lineParameters.getLineJoinType();
     lineWidth = lineParameters.getLineWidth();
@@ -110,7 +110,7 @@ public class NiftyLineParameters {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    NiftyLineParameters other = (NiftyLineParameters) obj;
+    LineParameters other = (LineParameters) obj;
     if (lineCapType != other.lineCapType)
       return false;
     if (lineColor == null) {

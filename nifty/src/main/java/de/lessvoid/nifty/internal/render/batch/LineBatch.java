@@ -30,21 +30,21 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import de.lessvoid.nifty.internal.canvas.LineParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 /**
  * A line batch is a number of lines rendered with the same cap and join styles. Changing cap or join style will
  * create a new batch.
  */
-public class LineBatch implements Batch<NiftyLineParameters> {
+public class LineBatch implements Batch<LineParameters> {
   private final static int NUM_PRIMITIVES = 100;
   public final static int PRIMITIVE_SIZE = 2;
 
   private final FloatBuffer b;
-  private final NiftyLineParameters lineParameters;
+  private final LineParameters lineParameters;
 
   // Vec4 buffer data
   private final Vec4 vsrc = new Vec4();
@@ -52,9 +52,9 @@ public class LineBatch implements Batch<NiftyLineParameters> {
   private boolean isStartPathBatch;
   private boolean isEndPathBatch;
 
-  public LineBatch(final NiftyLineParameters lineParameters) {
+  public LineBatch(final LineParameters lineParameters) {
     this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
-    this.lineParameters = new NiftyLineParameters(lineParameters);
+    this.lineParameters = new LineParameters(lineParameters);
   }
 
   @Override
@@ -63,15 +63,15 @@ public class LineBatch implements Batch<NiftyLineParameters> {
       renderDevice.pathBegin();
     }
 
-    renderDevice.pathLines(b, lineParameters);
+    renderDevice.pathLines(b, lineParameters.getLineWidth(), lineParameters.getLineCapType(), lineParameters.getLineJoinType());
 
     if (isEndPathBatch) {
-      renderDevice.pathEnd(lineParameters);
+      renderDevice.pathEnd(lineParameters.getColor());
     }
   }
 
   @Override
-  public boolean requiresNewBatch(final NiftyLineParameters params) {
+  public boolean requiresNewBatch(final LineParameters params) {
     return !lineParameters.equals(params) || (b.remaining() < PRIMITIVE_SIZE);
   }
 

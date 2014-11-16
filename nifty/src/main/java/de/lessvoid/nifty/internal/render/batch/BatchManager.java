@@ -32,11 +32,11 @@ import java.util.List;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.internal.canvas.ArcParameters;
+import de.lessvoid.nifty.internal.canvas.LineParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
-import de.lessvoid.nifty.spi.parameter.NiftyArcParameters;
-import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 public class BatchManager {
   private List<Batch<?>> activeBatches = new ArrayList<Batch<?>>();
@@ -154,7 +154,7 @@ public class BatchManager {
       final float x,
       final float y,
       final Mat4 mat,
-      final NiftyLineParameters lineParameters,
+      final LineParameters lineParameters,
       final boolean forceNewBatch,
       final boolean last) {
     BatchFactory<LineBatch> batchFactory = new BatchFactory<LineBatch>() {
@@ -185,7 +185,7 @@ public class BatchManager {
       final double startAngle,
       final double endAngle,
       final Mat4 mat,
-      final NiftyArcParameters arcParameters,
+      final ArcParameters arcParameters,
       final boolean forceNewBatch,
       final boolean last) {
     BatchFactory<ArcBatch> batchFactory = new BatchFactory<ArcBatch>() {

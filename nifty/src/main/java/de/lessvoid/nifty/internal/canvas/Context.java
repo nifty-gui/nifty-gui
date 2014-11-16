@@ -48,7 +48,6 @@ import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
 import de.lessvoid.nifty.internal.render.batch.TextureBatch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
-import de.lessvoid.nifty.spi.parameter.NiftyLineParameters;
 
 public class Context {
   // contentTexture is the final content this Context draws to - what you think of when you think the content
@@ -66,7 +65,7 @@ public class Context {
 
   private NiftyColor fillColor;
   private NiftyLinearGradient linearGradient;
-  private NiftyLineParameters lineParameters;
+  private LineParameters lineParameters;
   private NiftyColor textColor = NiftyColor.WHITE();
   private double textSize = 1.f;
   private Mat4 transform = Mat4.createIdentity();
@@ -103,7 +102,7 @@ public class Context {
 
     fillColor = NiftyColor.BLACK();
     linearGradient = null;
-    lineParameters = new NiftyLineParameters();
+    lineParameters = new LineParameters();
     renderDevice.beginRenderToTexture(workingTexture);
     renderDevice.changeCompositeOperation(NiftyCompositeOperation.Off);
     colorBatch.render(renderDevice);
@@ -138,7 +137,7 @@ public class Context {
     linearGradient = new NiftyLinearGradient(gradient);
   }
 
-  NiftyLineParameters getLineParameters() {
+  LineParameters getLineParameters() {
     return lineParameters;
   }
 

@@ -24,32 +24,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.spi.parameter;
+package de.lessvoid.nifty.internal.canvas;
 
 /**
  * This class stores all of the properties necessary to render an arc.
  */
-public class NiftyArcParameters {
-  private final NiftyLineParameters lineParameters;
+public class ArcParameters {
+  private final LineParameters lineParameters;
   private final float startAngle;
   private final float endAngle;
   private final float r;
 
-  public NiftyArcParameters(final NiftyLineParameters lineParameters, final float startAngle, final float endAngle, final float r) {
-    this.lineParameters = new NiftyLineParameters(lineParameters);
+  public ArcParameters(final LineParameters lineParameters, final float startAngle, final float endAngle, final float r) {
+    this.lineParameters = new LineParameters(lineParameters);
     this.startAngle = startAngle;
     this.endAngle = endAngle;
     this.r = r;
   }
 
-  public NiftyArcParameters(final NiftyArcParameters arcParameters) {
-    this.lineParameters = new NiftyLineParameters(arcParameters.lineParameters);
+  public ArcParameters(final ArcParameters arcParameters) {
+    this.lineParameters = new LineParameters(arcParameters.lineParameters);
     this.startAngle = arcParameters.startAngle;
     this.endAngle = arcParameters.endAngle;
     this.r = arcParameters.r;
   }
 
-  public NiftyLineParameters getLineParameters() {
+  public LineParameters getLineParameters() {
     return lineParameters;
   }
 
@@ -84,7 +84,7 @@ public class NiftyArcParameters {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    NiftyArcParameters other = (NiftyArcParameters) obj;
+    ArcParameters other = (ArcParameters) obj;
     if (Float.floatToIntBits(endAngle) != Float.floatToIntBits(other.endAngle))
       return false;
     if (lineParameters == null) {
