@@ -362,74 +362,88 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   @Override
   public void changeCompositeOperation(final NiftyCompositeOperation compositeOperation) {
     switch (compositeOperation) {
-      case Off:
-        gl.glDisable(gl.GL_BLEND());
-        break;
       case Clear:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ZERO(), gl.GL_ZERO());
-        break;
-      case Source:
-        gl.glEnable(gl.GL_BLEND());
-        gl.glBlendFunc(gl.GL_ONE(), gl.GL_ZERO());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case Destination:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ZERO(), gl.GL_ONE());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case SourceOver:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ONE(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case SourceAtop:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_DST_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case SourceIn:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_DST_ALPHA(), gl.GL_ZERO());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case SourceOut:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ONE_MINUS_DST_ALPHA(), gl.GL_ZERO());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case DestinationOver:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ONE_MINUS_DST_ALPHA(), gl.GL_ONE());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case DestinationAtop:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ONE_MINUS_DST_ALPHA(), gl.GL_SRC_ALPHA());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case DestinationIn:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ZERO(), gl.GL_SRC_ALPHA());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case DestinationOut:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ZERO(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case Lighter:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ONE(), gl.GL_ONE());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case Copy:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ONE(), gl.GL_ZERO());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
         break;
       case XOR:
         gl.glEnable(gl.GL_BLEND());
         gl.glBlendFunc(gl.GL_ONE_MINUS_DST_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
+        break;
+      case Off:
+        gl.glDisable(gl.GL_BLEND());
+        break;
+      case Max:
+        gl.glEnable(gl.GL_BLEND());
+        gl.glBlendFunc(gl.GL_ONE(), gl.GL_ONE_MINUS_SRC_ALPHA());
+        gl.glBlendEquationSeparate(gl.GL_MAX(), gl.GL_MAX());
         break;
     }
   }
 
   @Override
-  public void pathBegin(final NiftyLineParameters lineParameters) {
+  public void pathBegin() {
     alphaTextureFBO.bindFramebuffer();
     gl.glViewport(0, 0, alphaTexture.getWidth(), alphaTexture.getHeight());
 
-    gl.glClearColor(0.0f, 0.f, 0.f, 1.f);
+    gl.glClearColor(0.0f, 0.f, 0.f, 0.f);
     gl.glClear(gl.GL_COLOR_BUFFER_BIT());
   }
 
@@ -470,8 +484,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
     vao.disableVertexAttribute(1);
 
-    gl.glEnable(gl.GL_BLEND());
-    gl.glBlendEquationSeparate(gl.GL_MAX(), gl.GL_MAX());
+    changeCompositeOperation(NiftyCompositeOperation.Max);
     coreRender.renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
 
     vbo.getBuffer().clear();
@@ -505,8 +518,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     vao.enableVertexAttribute(1);
     vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
 
-    gl.glEnable(gl.GL_BLEND());
-    gl.glBlendEquationSeparate(gl.GL_MAX(), gl.GL_MAX());
+    changeCompositeOperation(NiftyCompositeOperation.Max);
     coreRender.renderTriangleStrip(vertices.limit() / ArcBatch.PRIMITIVE_SIZE);
 
     vbo.getBuffer().clear();

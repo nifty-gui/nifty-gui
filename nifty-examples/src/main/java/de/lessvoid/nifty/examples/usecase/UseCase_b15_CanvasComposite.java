@@ -52,7 +52,7 @@ public class UseCase_b15_CanvasComposite {
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     rootNode.setBackgroundColor(NiftyColor.BLACK());
 
-    final NiftyNode centerNode = rootNode.newChildNode(UnitValue.percent(60), UnitValue.percent(50), ChildLayout.Vertical);
+    final NiftyNode centerNode = rootNode.newChildNode(UnitValue.percent(60), UnitValue.percent(60), ChildLayout.Vertical);
     centerNode.setBackgroundColor(NiftyColor.WHITE());
 
     NiftyNode rowNode = centerNode.newChildNode(ChildLayout.Horizontal);
@@ -72,6 +72,10 @@ public class UseCase_b15_CanvasComposite {
     compositeExampleNode(rowNode, font, NiftyCompositeOperation.Copy);
     compositeExampleNode(rowNode, font, NiftyCompositeOperation.XOR);
     compositeExampleNode(rowNode, font, NiftyCompositeOperation.Clear);
+
+    rowNode = centerNode.newChildNode(ChildLayout.Horizontal);
+    compositeExampleNode(rowNode, font, NiftyCompositeOperation.Off);
+    compositeExampleNode(rowNode, font, NiftyCompositeOperation.Max);
   }
 
   private void compositeExampleNode(final NiftyNode rootNode, final NiftyFont font, final NiftyCompositeOperation operation) {

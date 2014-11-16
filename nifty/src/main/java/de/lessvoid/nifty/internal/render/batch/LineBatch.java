@@ -60,7 +60,7 @@ public class LineBatch implements Batch<NiftyLineParameters> {
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
     if (isStartPathBatch) {
-      renderDevice.pathBegin(lineParameters);
+      renderDevice.pathBegin();
     }
 
     renderDevice.pathLines(b, lineParameters);

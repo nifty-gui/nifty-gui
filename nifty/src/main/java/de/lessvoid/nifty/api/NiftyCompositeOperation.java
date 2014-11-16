@@ -31,14 +31,8 @@ package de.lessvoid.nifty.api;
  * @author void
  */
 public enum NiftyCompositeOperation {
-  // completely disable blending
-  Off,
-
   // Clean
   Clear,
-
-  // Only use source color is being used (this is the same as Copy)
-  Source,
 
   // Only use destination color
   Destination,
@@ -80,5 +74,13 @@ public enum NiftyCompositeOperation {
   Copy,
 
   // The source image is combined by using an exclusive OR with the destination imaga
-  XOR
+  XOR,
+
+  // additional blending modes not part of HTML5 canvas or the original porter/duff paper
+
+  // completely disable blending
+  Off,
+
+  // Use the maximum color and alpha values
+  Max
 }

@@ -134,7 +134,7 @@ public class UseCase_b13_CanvasLineAndArc {
       float v = 0;
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.YELLOW());
+        canvas.setFillStyle(NiftyColor.BLACK());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         canvas.setLineWidth(25);

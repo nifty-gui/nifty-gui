@@ -59,7 +59,7 @@ public class ArcBatch implements Batch<NiftyArcParameters> {
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
     if (isStartPathBatch) {
-      renderDevice.pathBegin(arcParameters.getLineParameters());
+      renderDevice.pathBegin();
     }
 
     renderDevice.pathArcs(b, arcParameters);

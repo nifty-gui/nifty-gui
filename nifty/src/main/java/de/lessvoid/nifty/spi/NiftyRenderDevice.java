@@ -152,6 +152,10 @@ public interface NiftyRenderDevice {
   void endRenderToTexture(NiftyTexture texture);
 
   /**
+   */
+  void pathBegin();
+
+  /**
    * Change the current composite operation (blend mode in GL) for subsequent render calls.
    * @param compositeOperation the new composite operation
    */
@@ -169,11 +173,6 @@ public interface NiftyRenderDevice {
    * @param shaderId the shaderId to activate
    */
   public void activateCustomShader(String shaderId);
-
-  /**
-   * @param lineParameters 
-   */
-  void pathBegin(NiftyLineParameters lineParameters);
 
   /**
    * Render lines from the given FloatBuffer containing the line vertices.
