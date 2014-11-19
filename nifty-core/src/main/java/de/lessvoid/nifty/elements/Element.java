@@ -1240,7 +1240,39 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     LocalEndNotify forwardToSelf = new LocalEndNotify(effectEventId, effectEndNotify);
 
     // start the effect for our self
-    effectManager.startEffect(effectEventId, this, time, forwardToSelf, customKey);
+
+    // The commit 77059d2544d3825aaa680491683b377aa1b1fb41 introduces an issue with the controls example. All the panels
+    // (and the hints too) didn't fade in properly and it is because of this commit. Here is the original commit comment
+    // for the commit:
+    //
+    // ---------------------------------
+    // element.show() not propagates EffectEventId.onShow to children anymore
+    //
+    // When you show() an element in the past the EffectEventId.onShow was
+    // triggered for all children, even for invisible ones. So we'd end up with
+    // invisible child elements with an active onShow effect which would
+    // prevent an actual show() call on that child elements.
+    //
+    // This commit will now not propagate EffectEventId.onShow to the children
+    // anymore.
+    // ---------------------------------
+    //
+    // So, somehow this didn't work for the controls example demonstration. The show() method has already been changed
+    // back to the original code that will use startEffect() instead of startEffectWithoutChildren(). Doing that means
+    // we'll end up here for all children - even the invisible ones. Which seems to be needed for some use cases.
+    // So instead of removing the traversing of the children for the onShow event completely we'll now only actually
+    // start the onShow effect for elements that are visible.
+    //
+    // For now we'll leave the other EffectEventIds untouched so they will still get executed for invisible elements -
+    // which was the behavior before this commit and the one that introduced the controls example demo bug too.
+    //
+    // With that change the default controls example is working again AND the intent of the original commit is preserved
+    // as well.
+    if (effectEventId != EffectEventId.onShow
+        ||
+        (effectEventId == EffectEventId.onShow && visible)) {
+      effectManager.startEffect(effectEventId, this, time, forwardToSelf, customKey);
+    }
 
     // notify all child elements of the start effect
     if (withChildren && children != null) {
@@ -1467,7 +1499,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     // show
     internalShow();
-    startEffectWithoutChildren(EffectEventId.onShow, perform);
+    startEffect(EffectEventId.onShow, perform);
   }
 
   private void internalShow() {
