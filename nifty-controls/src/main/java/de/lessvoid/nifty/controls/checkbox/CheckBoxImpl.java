@@ -48,8 +48,16 @@ class CheckBoxImpl {
     if (checked == newState) {
       return;
     }
+    changeChecked(newState);
+  }
+
+  private void changeChecked(final boolean newState) {
     checked = newState;
     updateView();
+  }
+
+  void setInitialCheckedState(final boolean checked) {
+    changeChecked(checked);
   }
 
   private void updateView() {

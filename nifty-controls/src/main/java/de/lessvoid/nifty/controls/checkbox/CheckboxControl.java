@@ -1,19 +1,23 @@
 package de.lessvoid.nifty.controls.checkbox;
 
-import de.lessvoid.nifty.EndNotify;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bushe.swing.event.EventTopicSubscriber;
+
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.*;
-import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.CheckBox;
+import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
+import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.ElementShowEvent;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import org.bushe.swing.event.EventTopicSubscriber;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.logging.Logger;
 
 /**
  * The controller for the checkbox element.
@@ -51,7 +55,7 @@ public class CheckboxControl extends AbstractController
     nifty = niftyParam;
     screen = screenParam;
     checkBoxImpl.bindToView(this);
-    checkBoxImpl.setChecked(propertiesParam.getAsBoolean("checked", false));
+    checkBoxImpl.setInitialCheckedState(propertiesParam.getAsBoolean("checked", false));
   }
 
   @Override
@@ -119,17 +123,8 @@ public class CheckboxControl extends AbstractController
     }
     if (checked) {
       selectImage.setVisible(true);
-      selectImage.stopEffect(EffectEventId.onCustom);
-      selectImage.startEffect(EffectEventId.onCustom, null, "show");
     } else {
-      selectImage.setVisible(true);
-      selectImage.stopEffect(EffectEventId.onCustom);
-      selectImage.startEffect(EffectEventId.onCustom, new EndNotify() {
-        @Override
-        public void perform() {
-          selectImage.setVisible(false);
-        }
-      }, "hide");
+      selectImage.setVisible(false);
     }
   }
 
