@@ -71,6 +71,7 @@ public class Hint implements EffectImpl {
     offsetY = parameter.getProperty("offsetY", "0");
 
     Element hintLayer = getHintLayer();
+    hintLayer.setVisible(false);
 
     ControlBuilder builder = new ControlBuilder(NiftyIdCreator.generate(), hintControl);
     builder.parameter("hintText", hintText);
