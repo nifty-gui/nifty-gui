@@ -54,8 +54,6 @@ public class UseCase_b10_CanvasProgressSpinner {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         canvas.setTransform();
-        canvas.setFillStyle(NiftyColor.fromString("#000f"));
-        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         NiftyMutableColor color = NiftyMutableColor.fromColor(NiftyColor.fromString("#f00"));
         int max = 24;
