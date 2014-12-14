@@ -24,32 +24,47 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.canvas;
+package de.lessvoid.nifty.internal.canvas.path;
 
+import de.lessvoid.nifty.internal.canvas.Context;
+import de.lessvoid.nifty.internal.canvas.LineParameters;
+import de.lessvoid.nifty.internal.math.Mat4;
+import de.lessvoid.nifty.internal.math.Vec2;
+import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
-public class CommandArc implements Command {
-  private final static double TWO_PI = 2 * Math.PI;
+/**
+ * A PathElement.
+ * @author void
+ */
+public interface PathElement {
 
-  private final double x;
-  private final double y;
-  private final double r;
-  private final double startAngle;
-  private final double endAngle;
+  /**
+   * Render this path element as a stroke to the batchManager using data from the Context and the parameters given.
+   *
+   * @param lineParameters the LineParameters to use when stroking the path
+   * @param batchManager the BatchManager
+   * @param currentPos the current position on the path
+   * @return the new current position
+   */
+  Vec2 stroke(
+      LineParameters lineParameters,
+      Mat4 transform,
+      BatchManager batchManager,
+      Vec2 currentPos);
 
-  public CommandArc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.startAngle = startAngle;
-    this.endAngle = endAngle;
-  }
-
-  double normalize(double angle) {
-    return angle - Math.floor(angle / TWO_PI) * TWO_PI;
-  }
   
-  @Override
-  public void execute(final Context context) {
-    context.arc(x, y, r, startAngle, endAngle);
-  }
+
+  /**
+   * Render this path element as a fill to the batchManager using data from the Context and the parameters given.
+   *
+   * @param context the Context
+   * @param batchManager the BatchManager
+   * @param first this is the first path element
+   * @param last this is the last path element
+   */
+  void fill(
+      Context context,
+      BatchManager batchManager,
+      boolean first,
+      boolean last);
 }

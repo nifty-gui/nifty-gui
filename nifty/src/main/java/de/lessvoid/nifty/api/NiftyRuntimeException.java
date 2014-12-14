@@ -33,6 +33,10 @@ package de.lessvoid.nifty.api;
 public class NiftyRuntimeException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
+  public NiftyRuntimeException(final String message) {
+    super(message);
+  }
+
   public NiftyRuntimeException(final Exception e) {
     super(e);
   }

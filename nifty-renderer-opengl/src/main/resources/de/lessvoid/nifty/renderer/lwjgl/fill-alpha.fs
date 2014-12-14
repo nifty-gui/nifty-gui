@@ -24,14 +24,9 @@
 // THE POSSIBILITY OF SUCH DAMAGE. 
 #version 150 core
 
-in vec2 aVertex;
-in vec2 aUV;
-
-out vec2 vUV;
-
-uniform mat4 uMvp;
+out vec4 color;
 
 void main() {
-  gl_Position = uMvp * vec4(aVertex.xy, 0.0, 1.0);
-  vUV = aUV;
+    color.r = 1.0;
+    color.gba = vec3(0.0, 0.0, 0.0);
 }

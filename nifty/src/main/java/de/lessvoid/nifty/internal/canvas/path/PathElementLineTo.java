@@ -24,32 +24,40 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.canvas;
+package de.lessvoid.nifty.internal.canvas.path;
 
+import de.lessvoid.nifty.internal.canvas.Context;
+import de.lessvoid.nifty.internal.canvas.LineParameters;
+import de.lessvoid.nifty.internal.math.Mat4;
+import de.lessvoid.nifty.internal.math.Vec2;
+import de.lessvoid.nifty.internal.render.batch.BatchManager;
 
-public class CommandArc implements Command {
-  private final static double TWO_PI = 2 * Math.PI;
-
+public class PathElementLineTo implements PathElement {
   private final double x;
   private final double y;
-  private final double r;
-  private final double startAngle;
-  private final double endAngle;
+  private final boolean hasPrecedingMoveTo;
 
-  public CommandArc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+  public PathElementLineTo(final double x, final double y, final boolean hasPrecedingMoveTo) {
     this.x = x;
     this.y = y;
-    this.r = r;
-    this.startAngle = startAngle;
-    this.endAngle = endAngle;
+    this.hasPrecedingMoveTo = hasPrecedingMoveTo;
   }
 
-  double normalize(double angle) {
-    return angle - Math.floor(angle / TWO_PI) * TWO_PI;
-  }
-  
   @Override
-  public void execute(final Context context) {
-    context.arc(x, y, r, startAngle, endAngle);
+  public Vec2 stroke(
+      final LineParameters lineParameters,
+      final Mat4 transform,
+      final BatchManager batchManager,
+      final Vec2 currentPos) {
+    if (hasPrecedingMoveTo) {
+      batchManager.addFirstLineVertex(currentPos.getX(), currentPos.getY(), transform, lineParameters);
+    }
+    batchManager.addLineVertex((float) x, (float) y, transform, lineParameters);
+    return new Vec2((float) x, (float) y);
+  }
+
+  @Override
+  public void fill(final Context context, final BatchManager batchManager, final boolean first, final boolean last) {
+ //   batchManager.addTriangleFanVertex((float) x, (float) y, context.getTransform(), first, last);
   }
 }

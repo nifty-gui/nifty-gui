@@ -102,7 +102,7 @@ public class RenderNode {
     }
 
     Mat4 current = Mat4.mul(parent, local);
-    batchManager.setCompositeOperation(compositeOperation);
+    batchManager.addChangeCompositeOperation(compositeOperation);
     batchManager.addTextureQuad(context.getNiftyTexture(), current, NiftyColor.WHITE());
 
     for (int i=0; i<children.size(); i++) {

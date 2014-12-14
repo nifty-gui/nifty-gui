@@ -31,6 +31,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 
@@ -59,10 +61,13 @@ import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
 import de.lessvoid.nifty.internal.render.batch.LineBatch;
 import de.lessvoid.nifty.internal.render.batch.LinearGradientQuadBatch;
 import de.lessvoid.nifty.internal.render.batch.TextureBatch;
+import de.lessvoid.nifty.internal.render.batch.TriangleFanBatch;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
+  private final static Logger log = Logger.getLogger(NiftyRenderDeviceOpenGL.class.getName());
+
   private static final int VERTEX_SIZE = 5*6;
   private static final int MAX_QUADS = 2000;
   private static final int VBO_SIZE = MAX_QUADS * VERTEX_SIZE;
@@ -88,10 +93,10 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   private static final String TEXTURE_SHADER = "texture";
   private static final String PLAIN_COLOR_SHADER = "plain";
   private static final String LINEAR_GRADIENT_SHADER = "linearGradient";
-  private static final String PLAIN_COLOR_WITH_MASK_SHADER = "plain-color-with-alpha";
+  private static final String FILL_ALPHA_SHADER = "fill-alpha";
 
-  private NiftyTexture alphaTexture;
-  private CoreFBO alphaTextureFBO;
+  private NiftyTexture pathTexture;
+  private CoreFBO pathFBO;
   private CoreFBO currentFBO;
 
   public NiftyRenderDeviceOpenGL(final CoreGL gl) throws Exception {
@@ -103,7 +108,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     shaderManager.register(PLAIN_COLOR_SHADER, loadPlainShader());
     shaderManager.register(TEXTURE_SHADER, loadTextureShader());
     shaderManager.register(LINEAR_GRADIENT_SHADER, loadLinearGradientShader());
-    shaderManager.register(PLAIN_COLOR_WITH_MASK_SHADER, loadPlainColorWithMaskShader());
+    shaderManager.register(FILL_ALPHA_SHADER, loadFillAlphaShader());
 
     registerLineShader(NiftyLineCapType.Butt, NiftyLineJoinType.Miter, "CAP_BUTT", "JOIN_MITER");
     registerLineShader(NiftyLineCapType.Round, NiftyLineJoinType.Miter, "CAP_ROUND", "JOIN_MITER");
@@ -124,6 +129,10 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     fbo.bindFramebuffer();
     fbo.disable();
 
+    pathFBO = CoreFBO.createCoreFBO(gl);
+    pathFBO.bindFramebuffer();
+    pathFBO.disable();
+
     vao = CoreVAO.createCoreVAO(gl);
     vao.bind();
 
@@ -143,11 +152,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.unbind();
 
-    alphaTexture = NiftyTextureOpenGL.newTextureRed(gl, getDisplayWidth(), getDisplayHeight(), FilterMode.Nearest);
-    alphaTextureFBO = CoreFBO.createCoreFBO(gl);
-    alphaTextureFBO.bindFramebuffer();
-    alphaTextureFBO.attachTexture(getTextureId(alphaTexture), 0);
-    alphaTextureFBO.disable();
+    pathTexture = NiftyTextureOpenGL.newTextureRGBA(gl, getDisplayWidth(), getDisplayHeight(), FilterMode.Nearest);
 
     beginTime = System.nanoTime();
   }
@@ -174,6 +179,8 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void beginRender() {
+    log.fine("beginRender()");
+
     if (clearScreenOnRender) {
       gl.glClearColor(0.f, 0.f, 0.f, 1.f);
       gl.glClear(gl.GL_COLOR_BUFFER_BIT());
@@ -184,6 +191,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void endRender() {
+    log.fine("endRender()");
   }
 
   @Override
@@ -191,6 +199,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final int width,
       final int height,
       final FilterMode filterMode) {
+    log.fine("createTexture()");
     return NiftyTextureOpenGL.newTextureRGBA(gl, width, height, filterMode);
   }
 
@@ -200,6 +209,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final int height,
       final ByteBuffer data,
       final FilterMode filterMode) {
+    log.fine("createTexture()");
     return new NiftyTextureOpenGL(gl, width, height, data, filterMode);
   }
 
@@ -208,11 +218,13 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final String filename,
       final FilterMode filterMode,
       final PreMultipliedAlphaMode preMultipliedAlphaMode) {
+    log.fine("loadTexture()");
     return new NiftyTextureOpenGL(gl, resourceLoader, filename, filterMode, preMultipliedAlphaMode);
   }
 
   @Override
   public void render(final NiftyTexture texture, final FloatBuffer vertices) {
+    log.fine("render()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -244,6 +256,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void renderColorQuads(final FloatBuffer vertices) {
+    log.fine("renderColorQuads()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -269,6 +282,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void renderLinearGradientQuads(final NiftyLinearGradient params, final FloatBuffer vertices) {
+    log.fine("renderLinearGradientQuads()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -313,6 +327,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void beginRenderToTexture(final NiftyTexture texture) {
+    log.fine("beginRenderToTexture()");
     fbo.bindFramebuffer();
     fbo.attachTexture(getTextureId(texture), 0);
     gl.glViewport(0, 0, texture.getWidth(), texture.getHeight());
@@ -322,6 +337,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void endRenderToTexture(final NiftyTexture texture) {
+    log.fine("endRenderToTexture()");
     fbo.disableAndResetViewport(getDisplayWidth(), getDisplayHeight());
     mvp(getDisplayWidth(), getDisplayHeight());
     currentFBO = null;
@@ -329,6 +345,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public String loadCustomShader(final String filename) {
+    log.fine("loadCustomShader()");
     CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/custom.vs");
     shader.fragmentShader(filename);
@@ -341,6 +358,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void activateCustomShader(final String shaderId) {
+    log.fine("activateCustomShader()");
     CoreShader shader = shaderManager.activate(shaderId);
     shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
     shader.setUniformf("time", (System.nanoTime() - beginTime) / NANO_TO_MS_CONVERSION / 1000.f);
@@ -360,6 +378,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void changeCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+    log.fine("changeCompositeOperation(" + compositeOperation + ")");
     switch (compositeOperation) {
       case Clear:
         gl.glEnable(gl.GL_BLEND());
@@ -439,10 +458,13 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void pathBegin() {
-    alphaTextureFBO.bindFramebuffer();
-    gl.glViewport(0, 0, alphaTexture.getWidth(), alphaTexture.getHeight());
+    log.fine("pathBegin()");
+    pathFBO.bindFramebuffer();
+    pathFBO.attachTexture(getTextureId(pathTexture), 0);
+    gl.glViewport(0, 0, pathTexture.getWidth(), pathTexture.getHeight());
+    mvpFlipped(pathTexture.getWidth(), pathTexture.getHeight());
 
-    gl.glClearColor(0.0f, 0.f, 0.f, 0.f);
+    gl.glClearColor(0.f, 0.f, 0.f, 0.f);
     gl.glClear(gl.GL_COLOR_BUFFER_BIT());
   }
 
@@ -452,6 +474,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final float lineWidth,
       final NiftyLineCapType lineCapType,
       final NiftyLineJoinType lineJoinType) {
+    log.fine("pathLines()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -473,7 +496,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     // set up the shader
     CoreShader shader = shaderManager.activate(getLineShaderKey(lineCapType, lineJoinType));
-    Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
+    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
     shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
     shader.setUniformf("lineColorAlpha", 1.f);
     shader.setUniformf("lineParameters", (2*r + w), (2*r + w) / 2.f, (2*r + w) / 2.f - 2 * r, (2*r));
@@ -502,6 +525,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final float lineWidth,
       final float radius,
       final double lineColorAlpha) {
+    log.fine("pathArcs()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -509,7 +533,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     // set up the shader
     CoreShader shader = shaderManager.activate(getArcShaderKey(lineCapType));
-    Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
+    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
     shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
     shader.setUniformf("param", startAngle, endAngle, lineWidth / radius / 2.f, (float) lineColorAlpha);
 
@@ -531,34 +555,130 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathEnd(final NiftyColor lineColor) {
-    alphaTextureFBO.disable();
+  public void pathFill(final FloatBuffer vertices) {
+    log.fine("pathFill()");
+    vbo.getBuffer().clear();
+    FloatBuffer b = vbo.getBuffer();
+    vertices.flip();
 
+    // put all the vertices into the buffer
+    b.put(vertices);
+
+    // set up the shader
+    CoreShader shader = shaderManager.activate(FILL_ALPHA_SHADER);
+    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
+    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+
+    vao.bind();
+    vbo.bind();
+    vbo.getBuffer().rewind();
+    vbo.send();
+
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+    vao.disableVertexAttribute(1);
+
+    changeCompositeOperation(NiftyCompositeOperation.Max);
+    coreRender.renderTriangleFan(vertices.limit() / TriangleFanBatch.PRIMITIVE_SIZE + 1);
+
+    vbo.getBuffer().clear();
+  }
+
+  @Override
+  public void pathEnd(final NiftyColor lineColor) {
+    log.fine("pathEnd()");
+    // Second Pass
+    //
+    // Now render the actual lines using the FBO texture as the mask.
+    FloatBuffer quad = vbo.getBuffer();
+    quad.put(0.f);
+    quad.put(0.f);
+    quad.put((float) lineColor.getRed());
+    quad.put((float) lineColor.getGreen());
+    quad.put((float) lineColor.getBlue());
+    quad.put((float) lineColor.getAlpha());
+
+    quad.put(0.f);
+    quad.put(0.f + getDisplayHeight());
+    quad.put((float) lineColor.getRed());
+    quad.put((float) lineColor.getGreen());
+    quad.put((float) lineColor.getBlue());
+    quad.put((float) lineColor.getAlpha());
+
+    quad.put(0.f + getDisplayWidth());
+    quad.put(0.f);
+    quad.put((float) lineColor.getRed());
+    quad.put((float) lineColor.getGreen());
+    quad.put((float) lineColor.getBlue());
+    quad.put((float) lineColor.getAlpha());
+
+    quad.put(0.f + getDisplayWidth());
+    quad.put(0.f + getDisplayHeight());
+    quad.put((float) lineColor.getRed());
+    quad.put((float) lineColor.getGreen());
+    quad.put((float) lineColor.getBlue());
+    quad.put((float) lineColor.getAlpha());
+    quad.rewind();
+
+    vao.bind();
+    vbo.bind();
+    vbo.send();
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 6, 0);
+    vao.enableVertexAttribute(1);
+    vao.vertexAttribPointer(1, 4, FloatType.FLOAT, 6, 2);
+
+    CoreShader shader = shaderManager.activate(PLAIN_COLOR_SHADER);
+    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
+    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+
+    changeCompositeOperation(NiftyCompositeOperation.SourceIn);
+    coreRender.renderTriangleStrip(4);
+    vao.unbind();
+
+    pathFBO.disable();
+
+    // Third Pass
+    //
+    // Now render the pathTexture to the target FBO (or the screen)
     if (currentFBO != null) {
       currentFBO.bindFramebuffer();
     }
 
-    // Second Pass
-    //
-    // Now render the actual lines using the FBO texture as the alpha.
-    FloatBuffer quad = vbo.getBuffer();
+    quad = vbo.getBuffer();
     quad.put(0.f);
     quad.put(0.f);
     quad.put(0.f);
     quad.put(0.f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
 
     quad.put(0.f);
     quad.put(0.f + getDisplayHeight());
-    quad.put(0.0f);
+    quad.put(0.f);
+    quad.put(1.f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
     quad.put(1.0f);
 
     quad.put(0.f + getDisplayWidth());
     quad.put(0.f);
+    quad.put(1.f);
+    quad.put(0.f);
     quad.put(1.0f);
-    quad.put(0.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
 
     quad.put(0.f + getDisplayWidth());
     quad.put(0.f + getDisplayHeight());
+    quad.put(1.f);
+    quad.put(1.f);
+    quad.put(1.0f);
+    quad.put(1.0f);
     quad.put(1.0f);
     quad.put(1.0f);
     quad.rewind();
@@ -567,27 +687,22 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     vbo.bind();
     vbo.send();
     vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 4, 0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 8, 0);
     vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
+    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 8, 2);
+    vao.enableVertexAttribute(2);
+    vao.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
 
-    internal(alphaTexture).bind();
-
-    CoreShader shader = shaderManager.activate(PLAIN_COLOR_WITH_MASK_SHADER);
-    Mat4 localMvp = mvpFlippedReturn(alphaTexture.getWidth(), alphaTexture.getHeight());
+    shader = shaderManager.activate(TEXTURE_SHADER);
+    localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
     shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-    shader.setUniformi("uTexture", 0);
-    shader.setUniformf(
-        "lineColor",
-        (float) lineColor.getRed(),
-        (float) lineColor.getGreen(),
-        (float) lineColor.getBlue(),
-        (float) lineColor.getAlpha());
 
-    gl.glEnable(gl.GL_BLEND());
-    gl.glBlendFunc(gl.GL_SRC_ALPHA(), gl.GL_ONE_MINUS_SRC_ALPHA());
-    gl.glBlendEquationSeparate(gl.GL_FUNC_ADD(), gl.GL_FUNC_ADD());
+    internal(pathTexture).bind();
+
+    changeCompositeOperation(NiftyCompositeOperation.SourceOver);
     coreRender.renderTriangleStrip(4);
+
+    vao.disableVertexAttribute(2);
     vao.unbind();
   }
 
@@ -640,10 +755,10 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     return shader;
   }
 
-  private CoreShader loadPlainColorWithMaskShader() throws Exception {
-    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex", "aUV");
-    shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/plain-color-with-mask.vs");
-    shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/plain-color-with-mask.fs");
+  private CoreShader loadFillAlphaShader() throws Exception {
+    CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex");
+    shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/fill-alpha.vs");
+    shader.fragmentShader("de/lessvoid/nifty/renderer/lwjgl/fill-alpha.fs");
     shader.link();
     return shader;
   }

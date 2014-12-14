@@ -24,10 +24,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.canvas;
+package de.lessvoid.nifty.internal.render.batch;
+
+import de.lessvoid.nifty.internal.canvas.LineParameters;
 
 /**
- * This class stores all of the properties necessary to render an arc.
+ * We keep all parameters that might create a new ArcBatch in this class. If any of these change
+ * a new ArcBatch is being created.  
+ * @author void
  */
 public class ArcParameters {
   private final LineParameters lineParameters;

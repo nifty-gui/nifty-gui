@@ -26,9 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jglfont.JGLFont;
 
 import de.lessvoid.nifty.api.NiftyColor;
@@ -41,8 +38,8 @@ import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.accessor.NiftyFontAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyImageAccessor;
+import de.lessvoid.nifty.internal.canvas.path.PathRenderer;
 import de.lessvoid.nifty.internal.math.Mat4;
-import de.lessvoid.nifty.internal.math.Vec2;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
 import de.lessvoid.nifty.internal.render.batch.ColorQuadBatch;
 import de.lessvoid.nifty.internal.render.batch.TextureBatch;
@@ -69,14 +66,11 @@ public class Context {
   private NiftyColor textColor = NiftyColor.WHITE();
   private double textSize = 1.f;
   private Mat4 transform = Mat4.createIdentity();
-  private List<PathElement> path = new ArrayList<PathElement>();
-  private Double currentPathX;
-  private Double currentPathY;
-  private Double currentPathStartX;
-  private Double currentPathStartY;
   private NiftyRenderDevice renderDevice;
   private BatchManager batchManager;
   private NiftyCompositeOperation compositeOperation;
+
+  private PathRenderer pathRenderer = new PathRenderer();
 
   public Context(final NiftyTexture contentTexture, final NiftyTexture workingTexture) {
     this.contentTexture = contentTexture;
@@ -137,7 +131,7 @@ public class Context {
     linearGradient = new NiftyLinearGradient(gradient);
   }
 
-  LineParameters getLineParameters() {
+  public LineParameters getLineParameters() {
     return lineParameters;
   }
 
@@ -202,83 +196,46 @@ public class Context {
   }
 
   public void beginPath() {
-    path.clear();
-    currentPathX = null;
-    currentPathY = null;
-    currentPathStartX = null;
-    currentPathStartY = null;
+    pathRenderer.beginPath();
   }
 
   public void moveTo(final double x, final double y) {
-    currentPathX = x;
-    currentPathY = y;
-
-    if (path.isEmpty()) {
-      currentPathStartX = x;
-      currentPathStartY = y;
-    }
+    pathRenderer.moveTo(x, y);
   }
 
   public void lineTo(final double x, final double y) {
-    PathElement lastPathElement = null;
-    if (!path.isEmpty()) {
-      lastPathElement = path.get(path.size() - 1);
-    }
-    if (currentPathX != null && currentPathY != null && !(lastPathElement instanceof PathElementLine)) {
-      path.add(new PathElementLine(currentPathX, currentPathY));
-    }
-    moveTo(x, y);
-    path.add(new PathElementLine(currentPathX, currentPathY));
+    pathRenderer.lineTo(x, y);
   }
 
   public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-    float startX = (float) (Math.cos(startAngle) * r + x);
-    float startY = (float) (Math.sin(startAngle) * r + y);
-    if (currentPathX != null && currentPathY != null) {
-      path.add(new PathElementLine(currentPathX, currentPathY));
-      path.add(new PathElementLine(startX, startY));
-      moveTo(startX, startY);
-    }
-
-    path.add(new PathElementArc(x, y, r, startAngle, endAngle));
-
-    float endX = (float) (Math.cos(endAngle) * r + x);
-    float endY = (float) (Math.sin(endAngle) * r + y);
-    moveTo(endX, endY);
+    pathRenderer.arc(x, y, r, startAngle, endAngle);
   }
 
   public void closePath() {
-    lineTo(currentPathStartX, currentPathStartY);
+    pathRenderer.closePath();
   }
 
   public void strokePath() {
-    if (path.isEmpty()) {
-      return;
-    }
-    for (int i=0; i<path.size(); i++) {
-      path.get(i).render(this, batchManager, i == 0, i == (path.size() - 1));
-    }
+    batchManager.addBeginPath();
+    pathRenderer.strokePath(lineParameters, transform, batchManager);
+    batchManager.addEndPath(lineParameters.getColor());
   }
 
   public void fillPath() {
+    pathRenderer.fillPath();
   }
 
   public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
-    double startX = 0.f;
-    double startY = 0.f;
+    pathRenderer.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+  }
 
-    if (currentPathX != null &&
-        currentPathY != null) {
-      startX = currentPathStartX;
-      startY = currentPathStartY;
+  // This is not path related at all and is executed without the pathRenderer directly
+  public void filledRect(final double x, final double y, final double width, final double height) {
+    if (getFillLinearGradient() != null) {
+      batchManager.addLinearGradientQuad(x, y, x + width, y + height, getTransform(), getFillLinearGradient());
+      return;
     }
-
-    CubicBezier curve = new CubicBezier(
-        new Vec2((float) startX, (float) startY),
-        new Vec2((float) cp1x, (float) cp1y),
-        new Vec2((float) cp2x, (float) cp2y),
-        new Vec2((float) x, (float) y));
-    renderCurve(curve, this);
+    batchManager.addColorQuad(x, y, x + width, y + height, getFillColor(), getTransform());
   }
 
   public void setCompositeOperation(final NiftyCompositeOperation compositeOperation) {
@@ -287,14 +244,6 @@ public class Context {
 
   public void addCustomShader(final String shaderId) {
     batchManager.addCustomShader(shaderId);
-  }
-
-  public void filledRect(final double x, final double y, final double width, final double height) {
-    if (getFillLinearGradient() != null) {
-      batchManager.addLinearGradientQuad(x, y, x + width, y + height, getTransform(), getFillLinearGradient());
-      return;
-    }
-    batchManager.addColorQuad(x, y, x + width, y + height, getFillColor(), getTransform());
   }
 
   public void image(final int x, final int y, final NiftyImage image) {
@@ -321,30 +270,8 @@ public class Context {
     workingTexture.dispose();
   }
 
-  private void renderCurve(final CubicBezier c, final Context context) {
-    if (isSufficientlyFlat(c)) {
-      c.output(context);
-      return;
-    }
-
-    CubicBezier left = new CubicBezier();
-    CubicBezier right = new CubicBezier();
-    c.subdivide(left, right);
-
-    renderCurve(left, context);
-    renderCurve(right, context);
-  }
-
-  private boolean isSufficientlyFlat(final CubicBezier c) {
-    double ux = 3.0*c.b1.x - 2.0*c.b0.x - c.b3.x; ux *= ux;
-    double uy = 3.0*c.b1.y - 2.0*c.b0.y - c.b3.y; uy *= uy;
-    double vx = 3.0*c.b2.x - 2.0*c.b3.x - c.b0.x; vx *= vx;
-    double vy = 3.0*c.b2.y - 2.0*c.b3.y - c.b0.y; vy *= vy;
-    if (ux < vx) ux = vx;
-    if (uy < vy) uy = vy;
-    double tol = .25;
-    double tolerance = 16*tol*tol;
-    return (ux+uy <= tolerance);
+  public int getArcSteps() {
+    return 32;
   }
 
   private TextureBatch textureBatch(final NiftyTexture texture) {

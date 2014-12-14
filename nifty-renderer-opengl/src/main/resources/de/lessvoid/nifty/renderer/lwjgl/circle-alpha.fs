@@ -66,6 +66,7 @@ void main() {
     at = 2 * PI - at;
 
     float angleMix;
+    float finalAlpha;
 
 #ifdef CAP_BUTT
 
@@ -113,7 +114,7 @@ void main() {
 
 #endif
 
-    color.r = mix(lineColorAlpha, 0.0, alpha + angleMix);
+    finalAlpha = mix(lineColorAlpha, 0.0, alpha + angleMix);
 
 #ifdef CAP_ROUND
 
@@ -127,7 +128,7 @@ void main() {
     vec2 capCenterNormal = normalize(vec2(cos(startAngleAlpha), sin(startAngleAlpha)));
     vec2 capCenterNormalFlip = vec2(-capCenterNormal.y, capCenterNormal.x);
     float distance = smoothstep(lineWidth, lineWidth + delta, distance(capPoint, capCenterPoint));
-    color.r = max(color.r, mix(lineColorAlpha, 0.0, distance) * step(0.0, dot(capCenterNormalFlip, capPoint)));
+    finalAlpha = max(finalAlpha, mix(lineColorAlpha, 0.0, distance) * step(0.0, dot(capCenterNormalFlip, capPoint)));
 
     startAngleAlpha = endAngle;
     if (startAngleAlpha < 0) {
@@ -143,5 +144,5 @@ void main() {
 
 #endif
 
-    color.gba = vec3(0.0, 0.0, 0.0);
+    color.rgba = vec4(0.0, 0.0, 0.0, finalAlpha);
 }

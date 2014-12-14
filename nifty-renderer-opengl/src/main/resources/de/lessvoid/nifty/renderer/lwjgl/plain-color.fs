@@ -28,5 +28,8 @@ in vec4 vColor;
 out vec4 fColor;
 
 void main() {
-  fColor = vColor;
+  fColor.r = vColor.r * vColor.a;
+  fColor.g = vColor.g * vColor.a;
+  fColor.b = vColor.b * vColor.a;
+  fColor.a = vColor.a;
 }

@@ -32,7 +32,6 @@ import java.util.List;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
-import de.lessvoid.nifty.internal.canvas.ArcParameters;
 import de.lessvoid.nifty.internal.canvas.LineParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
@@ -51,7 +50,7 @@ public class BatchManager {
     }
   }
 
-  public void setCompositeOperation(final NiftyCompositeOperation compositeOperation) {
+  public void addChangeCompositeOperation(final NiftyCompositeOperation compositeOperation) {
     requestBatch(
         ChangeCompositeOperationBatch.class,
         compositeOperation,
@@ -59,6 +58,30 @@ public class BatchManager {
           @Override
           public ChangeCompositeOperationBatch createBatch() {
             return new ChangeCompositeOperationBatch(compositeOperation);
+          }
+        });
+  }
+
+  public void addBeginPath() {
+    requestBatch(
+        BeginPathBatch.class,
+        null,
+        new BatchFactory<BeginPathBatch>() {
+          @Override
+          public BeginPathBatch createBatch() {
+            return new BeginPathBatch();
+          }
+        });
+  }
+
+  public void addEndPath(final NiftyColor lineColor) {
+    requestBatch(
+        EndPathBatch.class,
+        null,
+        new BatchFactory<EndPathBatch>() {
+          @Override
+          public EndPathBatch createBatch() {
+            return new EndPathBatch(lineColor);
           }
         });
   }
@@ -154,20 +177,47 @@ public class BatchManager {
       final float x,
       final float y,
       final Mat4 mat,
-      final LineParameters lineParameters,
-      final boolean forceNewBatch,
-      final boolean last) {
-    BatchFactory<LineBatch> batchFactory = new BatchFactory<LineBatch>() {
+      final LineParameters lineParameters) {
+    LineBatch batch = requestBatch(LineBatch.class, lineParameters, createLineBatchFactory(lineParameters));
+    batch.add(x, y, mat);
+  }
+
+  public void addFirstLineVertex(
+      final float x,
+      final float y,
+      final Mat4 mat,
+      final LineParameters lineParameters) {
+    LineBatch batch = addBatch(createLineBatchFactory(lineParameters));
+    batch.add(x, y, mat);
+  }
+
+  public void addArc(
+      final double x,
+      final double y,
+      final Mat4 mat,
+      final ArcParameters arcParameters) {
+    BatchFactory<ArcBatch> batchFactory = new BatchFactory<ArcBatch>() {
       @Override
-      public LineBatch createBatch() {
-        return new LineBatch(lineParameters);
+      public ArcBatch createBatch() {
+        return new ArcBatch(arcParameters);
       }
     };
-    LineBatch batch;
+    ArcBatch batch = requestBatch(ArcBatch.class, arcParameters, batchFactory);
+    batch.add(x, y, arcParameters.getRadius(), mat);
+  }
+
+  public void addTriangleFanVertex(final float x, final float y, final Mat4 mat, final boolean forceNewBatch, final boolean last) {
+    BatchFactory<TriangleFanBatch> batchFactory = new BatchFactory<TriangleFanBatch>() {
+      @Override
+      public TriangleFanBatch createBatch() {
+        return new TriangleFanBatch();
+      }
+    };
+    TriangleFanBatch batch;
     if (forceNewBatch) {
       batch = addBatch(batchFactory);
     } else {
-      batch = requestBatch(LineBatch.class, lineParameters, batchFactory);
+      batch = requestBatch(TriangleFanBatch.class, (Void) null, batchFactory);
     }
     if (forceNewBatch) {
       batch.enableStartPathBatch();
@@ -176,37 +226,6 @@ public class BatchManager {
       batch.enableEndPathBatch();
     }
     batch.add(x, y, mat);
-  }
-
-  public void addArc(
-      final double x,
-      final double y,
-      final double r,
-      final double startAngle,
-      final double endAngle,
-      final Mat4 mat,
-      final ArcParameters arcParameters,
-      final boolean forceNewBatch,
-      final boolean last) {
-    BatchFactory<ArcBatch> batchFactory = new BatchFactory<ArcBatch>() {
-      @Override
-      public ArcBatch createBatch() {
-        return new ArcBatch(arcParameters);
-      }
-    };
-    ArcBatch batch;
-    if (forceNewBatch) {
-      batch = addBatch(batchFactory);
-    } else {
-      batch = requestBatch(ArcBatch.class, arcParameters, batchFactory);
-    }
-    if (forceNewBatch) {
-      batch.enableStartPathBatch();
-    }
-    if (last) {
-      batch.enableEndPathBatch();
-    }
-    batch.add(x, y, r, mat);
   }
 
   private <T extends Batch<P>, P> T requestBatch(
@@ -230,6 +249,16 @@ public class BatchManager {
     T batch = batchFactory.createBatch();
     activeBatches.add(batch);
     return batch;
+  }
+
+  private BatchFactory<LineBatch> createLineBatchFactory(final LineParameters lineParameters) {
+    BatchFactory<LineBatch> batchFactory = new BatchFactory<LineBatch>() {
+      @Override
+      public LineBatch createBatch() {
+        return new LineBatch(lineParameters);
+      }
+    };
+    return batchFactory;
   }
 
   private interface BatchFactory<T> {

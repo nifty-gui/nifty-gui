@@ -122,8 +122,7 @@ public class NiftyCanvas {
   // paths
 
   public void fill() {
-    // TODO
-    throw new UnsupportedOperationException();    
+    impl.fillPath();
   }
 
   public void stroke() {

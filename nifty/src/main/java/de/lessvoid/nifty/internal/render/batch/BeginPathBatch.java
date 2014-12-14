@@ -24,32 +24,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.canvas;
+package de.lessvoid.nifty.internal.render.batch;
 
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
-public class CommandArc implements Command {
-  private final static double TWO_PI = 2 * Math.PI;
+public class BeginPathBatch implements Batch<Void> {
 
-  private final double x;
-  private final double y;
-  private final double r;
-  private final double startAngle;
-  private final double endAngle;
-
-  public CommandArc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.startAngle = startAngle;
-    this.endAngle = endAngle;
-  }
-
-  double normalize(double angle) {
-    return angle - Math.floor(angle / TWO_PI) * TWO_PI;
-  }
-  
   @Override
-  public void execute(final Context context) {
-    context.arc(x, y, r, startAngle, endAngle);
+  public void render(final NiftyRenderDevice renderDevice) {
+    renderDevice.pathBegin();
+  }
+
+  @Override
+  public boolean requiresNewBatch(final Void param) {
+    return true;
   }
 }

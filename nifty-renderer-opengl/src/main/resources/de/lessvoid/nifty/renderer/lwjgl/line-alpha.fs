@@ -74,5 +74,5 @@ void main() {
   float alpha = intensityX*intensityY*lineColorAlpha;
 
 #endif
-  color = vec4(alpha, 0.0, 0.0, 0.0);
+  color = vec4(0.0, 0.0, 0.0, alpha);
 }

@@ -213,6 +213,13 @@ public interface NiftyRenderDevice {
   void pathArcs(FloatBuffer vertices, NiftyLineCapType lineCapType, float startAngle, float endAngle, float lineWidth, float radius, double lineColorAlpha);
 
   /**
+   * FIXME
+   *
+   * @param vertices the vertex data to render
+   */
+  public void pathFill(final FloatBuffer vertices);
+
+  /**
    * @param lineColor the color
    */
   void pathEnd(NiftyColor lineColor);

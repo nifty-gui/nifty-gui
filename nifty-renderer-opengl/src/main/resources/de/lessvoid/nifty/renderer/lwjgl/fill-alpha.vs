@@ -24,18 +24,12 @@
 // THE POSSIBILITY OF SUCH DAMAGE. 
 #version 150 core
 
-uniform sampler2D uTexture;
+// vertex attributes
+in vec2 aVertex;
 
-// the line color
-uniform vec4 lineColor;
-
-in vec2 vUV;
-
-out vec4 color;
+// model view projection matrix
+uniform mat4 uMvp;
 
 void main() {
-  color.r = lineColor.r;
-  color.g = lineColor.g;
-  color.b = lineColor.b;
-  color.a = texture(uTexture, vUV).r;
+  gl_Position = uMvp * vec4(aVertex.x, aVertex.y, 0.0, 1.0);
 }
