@@ -26,16 +26,26 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 
 public class LoggerShortFormat extends java.util.logging.Formatter {
   public String format(final LogRecord record) {
-    return record.getMillis() + " " +
+    String stackTrace = "";
+    if (record.getThrown() != null) {
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      PrintStream s = new PrintStream(out, true);
+      record.getThrown().printStackTrace(s);
+      stackTrace = out.toString() + "\n";
+    }
+    return
+        record.getMillis() + " " +
         record.getLevel() + " [" +
         record.getSourceClassName() + "] " +
-        record.getMessage() + "\n";
+        record.getMessage() + "\n" + stackTrace;
   }
 
   public static void intialize() throws Exception {
