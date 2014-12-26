@@ -1,0 +1,351 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Introducing Nifty Controls &#8211; Nifty GUI</title>
+<meta name="description" content="At the moment there are not many actual controls in Nifty. Besides from clicking on elements, f.i. an Image, there was so far not a lot of interaction possible.
+Well, it's about time to change this with Nifty Controls :)
+To allow as much freedom as possible I've decided against predefining &lt;&#47;scrollbar&gt;&lt;&#47;code&gt; new control types that let you only change color or customize some images. Instead the idea is, that you use the already existing elements (Text, Image, Panel) and combine them to create the control you like.
+You can create your own control with the  Tag:
+
+  
+
+      &lt;img id="scrollposition" filename="ball.tga" &#47;&gt;
+    &lt;&#47;panel&gt;
+  &lt;&#47;controldefinition&gt;&lt;&#47;pre&gt;
+With this xml t&lt;&#47;code&gt;ag you can define a control like it is illustrated in figure 1.
+&lt;&#47;a&gt;
+&lt;img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-controldefinition-small.png" alt="blog-controldefinition.png" border="0" hspace="10" vspace="10" &#47;&gt;&lt;&#47;a&gt;&lt;&#47;p&gt;
+A controldefinition actually defines a couple of things:
+
+The name of the new control with the name&lt;&#47;code&gt; attribute.&lt;&#47;li&gt;
+The control logic class with the controller&lt;&#47;code&gt; attribute.&lt;&#47;li&gt;
+The actual look of the control with a combination of panel, image and text elements. You can even add effects. So if you want a hover effect you can simply add it to the control definition :)&lt;&#47;li&gt;
+&lt;&#47;ol&gt;
+With the mandatory attribute "name" you give your new control a name so that you can refer to it later. There's another new tag to use your newly created control, the control&lt;&#47;code&gt; tag:
+
+  &lt;&#47;control&gt;&lt;&#47;pre&gt;
+So you define the look and feel as well as the control logic once and then use it everywhere you need it like figure 2 shows.
+&lt;&#47;a&gt;
+&lt;img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-control-small.png" alt="blog-control.png" border="0" hspace="10" vspace="10" &#47;&gt;&lt;&#47;a&gt;&lt;&#47;p&gt;
+That's all for now. This just covers the basic idea. More on controls later.
+Have Fun!
+
+
+
+">
+<meta name="keywords" content="">
+
+  
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Introducing Nifty Controls">
+<meta name="twitter:description" content="At the moment there are not many actual controls in Nifty. Besides from clicking on elements, f.i. an Image, there was so far not a lot of interaction possible.
+Well, it's about time to change this with Nifty Controls :)
+To allow as much freedom as possible I've decided against predefining &lt;&#47;scrollbar&gt;&lt;&#47;code&gt; new control types that let you only change color or customize some images. Instead the idea is, that you use the already existing elements (Text, Image, Panel) and combine them to create the control you like.
+You can create your own control with the  Tag:
+
+  
+
+      &lt;img id="scrollposition" filename="ball.tga" &#47;&gt;
+    &lt;&#47;panel&gt;
+  &lt;&#47;controldefinition&gt;&lt;&#47;pre&gt;
+With this xml t&lt;&#47;code&gt;ag you can define a control like it is illustrated in figure 1.
+&lt;&#47;a&gt;
+&lt;img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-controldefinition-small.png" alt="blog-controldefinition.png" border="0" hspace="10" vspace="10" &#47;&gt;&lt;&#47;a&gt;&lt;&#47;p&gt;
+A controldefinition actually defines a couple of things:
+
+The name of the new control with the name&lt;&#47;code&gt; attribute.&lt;&#47;li&gt;
+The control logic class with the controller&lt;&#47;code&gt; attribute.&lt;&#47;li&gt;
+The actual look of the control with a combination of panel, image and text elements. You can even add effects. So if you want a hover effect you can simply add it to the control definition :)&lt;&#47;li&gt;
+&lt;&#47;ol&gt;
+With the mandatory attribute "name" you give your new control a name so that you can refer to it later. There's another new tag to use your newly created control, the control&lt;&#47;code&gt; tag:
+
+  &lt;&#47;control&gt;&lt;&#47;pre&gt;
+So you define the look and feel as well as the control logic once and then use it everywhere you need it like figure 2 shows.
+&lt;&#47;a&gt;
+&lt;img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-control-small.png" alt="blog-control.png" border="0" hspace="10" vspace="10" &#47;&gt;&lt;&#47;a&gt;&lt;&#47;p&gt;
+That's all for now. This just covers the basic idea. More on controls later.
+Have Fun!
+
+
+
+">
+<meta name="twitter:site" content="@void256">
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introducing Nifty Controls">
+<meta property="og:description" content="At the moment there are not many actual controls in Nifty. Besides from clicking on elements, f.i. an Image, there was so far not a lot of interaction possible.
+Well, it's about time to change this with Nifty Controls :)
+To allow as much freedom as possible I've decided against predefining &lt;&#47;scrollbar&gt;&lt;&#47;code&gt; new control types that let you only change color or customize some images. Instead the idea is, that you use the already existing elements (Text, Image, Panel) and combine them to create the control you like.
+You can create your own control with the  Tag:
+
+  
+
+      &lt;img id="scrollposition" filename="ball.tga" &#47;&gt;
+    &lt;&#47;panel&gt;
+  &lt;&#47;controldefinition&gt;&lt;&#47;pre&gt;
+With this xml t&lt;&#47;code&gt;ag you can define a control like it is illustrated in figure 1.
+&lt;&#47;a&gt;
+&lt;img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-controldefinition-small.png" alt="blog-controldefinition.png" border="0" hspace="10" vspace="10" &#47;&gt;&lt;&#47;a&gt;&lt;&#47;p&gt;
+A controldefinition actually defines a couple of things:
+
+The name of the new control with the name&lt;&#47;code&gt; attribute.&lt;&#47;li&gt;
+The control logic class with the controller&lt;&#47;code&gt; attribute.&lt;&#47;li&gt;
+The actual look of the control with a combination of panel, image and text elements. You can even add effects. So if you want a hover effect you can simply add it to the control definition :)&lt;&#47;li&gt;
+&lt;&#47;ol&gt;
+With the mandatory attribute "name" you give your new control a name so that you can refer to it later. There's another new tag to use your newly created control, the control&lt;&#47;code&gt; tag:
+
+  &lt;&#47;control&gt;&lt;&#47;pre&gt;
+So you define the look and feel as well as the control logic once and then use it everywhere you need it like figure 2 shows.
+&lt;&#47;a&gt;
+&lt;img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-control-small.png" alt="blog-control.png" border="0" hspace="10" vspace="10" &#47;&gt;&lt;&#47;a&gt;&lt;&#47;p&gt;
+That's all for now. This just covers the basic idea. More on controls later.
+Have Fun!
+
+
+
+">
+<meta property="og:url" content="/demo/introducing-nifty-controls/">
+<meta property="og:site_name" content="Nifty GUI">
+
+
+
+
+
+<link rel="canonical" href="/demo/introducing-nifty-controls/">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Nifty GUI Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="/">Nifty GUI</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+				    
+				        
+				    
+				    <li><a href="/about/" >About</a></li>
+				
+				    
+				        
+				    
+				    <li><a href="/posts/" >Blog</a></li>
+				
+				    
+				        
+				        
+				    <li><a href="https://github.com/void256/nifty-gui" target="_blank">Nifty GUI @ GitHub</a></li>
+				
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+  
+
+
+	<img src="/images/" class="bio-photo" alt=" bio photo">
+
+<h3></h3>
+<p></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="/demo/introducing-nifty-controls/" rel="bookmark" title="Introducing Nifty Controls">Introducing Nifty Controls</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p>At the moment there are not many actual controls in Nifty. Besides from clicking on elements, f.i. an Image, there was so far not a lot of interaction possible.</p>
+<p>Well, it's about time to change this with Nifty Controls :)</p>
+<p>To allow as much freedom as possible I've decided against predefining <code><scrollbar>&lt;&#47;scrollbar&gt;&lt;&#47;code&gt; new control types that let you only change color or customize some images. Instead the idea is, that you use the already existing elements (Text, Image, Panel) and combine them to create the control you like.
+<p>You can create your own control with the <controldefinition> Tag:
+<pre lang="xml">
+  <controldefinition name="coolControl" controller="my.package.SimpleSlider">
+<panel layout="absolute" backgroundcolor="#f0ff">
+      &lt;img id="scrollposition" filename="ball.tga" &#47;&gt;<br />
+    &lt;&#47;panel&gt;<br />
+  &lt;&#47;controldefinition&gt;&lt;&#47;pre&gt;<br />
+With this xml t<code>&lt;&#47;code&gt;ag you can define a control like it is illustrated in figure 1.
+<p><a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-controldefinition.png" title="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-controldefinition.png">&lt;&#47;a&gt;
+<p style="text-align: center"><a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-controldefinition.png" title="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-controldefinition.png">&lt;img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-controldefinition-small.png" alt="blog-controldefinition.png" border="0" hspace="10" vspace="10" &#47;&gt;&lt;&#47;a&gt;&lt;&#47;p&gt;<br />
+A controldefinition actually defines a couple of things:
+<ol>
+<li>The name of the new control with the <code>name&lt;&#47;code&gt; attribute.&lt;&#47;li&gt;
+<li>The control logic class with the <code>controller&lt;&#47;code&gt; attribute.&lt;&#47;li&gt;
+<li>The actual look of the control with a combination of panel, image and text elements. You can even add effects. So if you want a hover effect you can simply add it to the control definition :)&lt;&#47;li&gt;<br />
+&lt;&#47;ol&gt;<br />
+With the mandatory attribute "name" you give your new control a name so that you can refer to it later. There's another new tag to use your newly created control, the <code>control&lt;&#47;code&gt; tag:
+<pre lang="xml">
+  <control name="coolControl">&lt;&#47;control&gt;&lt;&#47;pre&gt;<br />
+So you define the look and feel as well as the control logic once and then use it everywhere you need it like figure 2 shows.
+<p><a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-control.png" title="blog-control.png">&lt;&#47;a&gt;
+<p style="text-align: center" align="left"><a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-control.png" title="blog-control.png">&lt;img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;blog-control-small.png" alt="blog-control.png" border="0" hspace="10" vspace="10" &#47;&gt;&lt;&#47;a&gt;&lt;&#47;p&gt;<br />
+That's all for now. This just covers the basic idea. More on controls later.
+<p>Have Fun!</p>
+</a></p></a></p></control></pre></code></li></code></li></code></li></ol></a></p></a></p></code></panel></controldefinition></pre></controldefinition></p></scrollbar></code></p>
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+  
+
+
+	<img src="/images/" class="bio-photo" alt=" bio photo">
+
+<h3></h3>
+<p></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        <p class="byline"><strong>Introducing Nifty Controls</strong> was published on <time datetime="2008-02-17T15:25:21+01:00">February 17, 2008</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="/blog/update/new-blog/" title="Moving the Blog to github pages">Moving the Blog to github pages</a></li>
+    
+      <li><a href="/uncategorized/nifty-1-4-has-been-released/" title="Nifty 1.4 has been released">Nifty 1.4 has been released</a></li>
+    
+      <li><a href="/uncategorized/jogamp-bof-siggraph-2013/" title="JogAmp BOF Siggraph 2013">JogAmp BOF Siggraph 2013</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2014 void256. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/assets/js/scripts.min.js"></script>
+
+
+  
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'nifty-gui'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+	        
+
+</body>
+</html>

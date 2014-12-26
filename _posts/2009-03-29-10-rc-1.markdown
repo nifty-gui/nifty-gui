@@ -1,0 +1,28 @@
+---
+layout: post
+status: publish
+published: true
+title: 1.0 - RC 1
+author:
+  display_name: void
+  login: admin
+  email: void@lessvoid.com
+  url: http://nifty-gui.lessvoid.com/
+author_login: admin
+author_email: void@lessvoid.com
+author_url: http://nifty-gui.lessvoid.com/
+wordpress_id: 82
+wordpress_url: http://nifty-gui.lessvoid.com/?p=82
+date: '2009-03-29 18:38:16 +0200'
+date_gmt: '2009-03-29 17:38:16 +0200'
+categories:
+- bubble
+tags: []
+comments: []
+---
+<p>I've just commited some final changes to the loader to svn.</p>
+<p>Finally everything is in place again. Changing the loading code was a lot more work than expected. But adding a preprocessing step was the key to solve all the issues and get the code much cleaner.</p>
+<p>As an additional benefit nifty now knows for every attribute from which style it came from. So removing a style and replacing it with another one on the fly is supported :)</p>
+<p>We're now testing the current version in svn with an actual game. When everything works ok the 1.0 release of nifty gui will be available soon - for real this time ;)</p>
+<p>In the meantime you can follow nifty development at <a href="http:&#47;&#47;twitter.com&#47;niftygui">twitter<&#47;a></p>
+<p><object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="290" height="350" codebase="http:&#47;&#47;download.macromedia.com&#47;pub&#47;shockwave&#47;cabs&#47;flash&#47;swflash.cab#version=6,0,40,0"><param name="name" value="TwitterWidget" &#47;><param name="bgcolor" value="#000000" &#47;><param name="align" value="middle" &#47;><param name="flashvars" value="userID=25799582&amp;styleURL=http:&#47;&#47;static.twitter.com&#47;flash&#47;widgets&#47;profile&#47;smooth.xml" &#47;><param name="src" value="http:&#47;&#47;static.twitter.com&#47;flash&#47;widgets&#47;profile&#47;TwitterWidget.swf" &#47;><embed type="application&#47;x-shockwave-flash" width="290" height="350" src="http:&#47;&#47;static.twitter.com&#47;flash&#47;widgets&#47;profile&#47;TwitterWidget.swf" flashvars="userID=25799582&amp;styleURL=http:&#47;&#47;static.twitter.com&#47;flash&#47;widgets&#47;profile&#47;smooth.xml" align="middle" bgcolor="#000000" name="TwitterWidget"><&#47;embed><&#47;object></p>

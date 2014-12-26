@@ -1,0 +1,305 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>How to use the Drop Down Control &#8211; Nifty GUI</title>
+<meta name="description" content="Nifty 0.0.5 adds support for a Drop Down Control. Here we show how to actually use it.
+
+XML
+
+First of all you need to add the standard Nifty controls to your xml. To keep things easy for the moment we use the default Nifty styles too.
+
+So adding a Drop Down Control works like adding any other control:
+
+Basically you address the control you want to add, in this case it's "dropDownControl". And you need to give your control an id too, so that you can reference it later ("dropDown1").
+
+">
+<meta name="keywords" content="drop down control how to">
+
+  
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="How to use the Drop Down Control">
+<meta name="twitter:description" content="Nifty 0.0.5 adds support for a Drop Down Control. Here we show how to actually use it.
+
+XML
+
+First of all you need to add the standard Nifty controls to your xml. To keep things easy for the moment we use the default Nifty styles too.
+
+So adding a Drop Down Control works like adding any other control:
+
+Basically you address the control you want to add, in this case it's "dropDownControl". And you need to give your control an id too, so that you can reference it later ("dropDown1").
+
+">
+<meta name="twitter:site" content="@void256">
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to use the Drop Down Control">
+<meta property="og:description" content="Nifty 0.0.5 adds support for a Drop Down Control. Here we show how to actually use it.
+
+XML
+
+First of all you need to add the standard Nifty controls to your xml. To keep things easy for the moment we use the default Nifty styles too.
+
+So adding a Drop Down Control works like adding any other control:
+
+Basically you address the control you want to add, in this case it's "dropDownControl". And you need to give your control an id too, so that you can reference it later ("dropDown1").
+
+">
+<meta property="og:url" content="/docs/how-to-use-the-drop-down-control/">
+<meta property="og:site_name" content="Nifty GUI">
+
+
+
+
+
+<link rel="canonical" href="/docs/how-to-use-the-drop-down-control/">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Nifty GUI Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="/">Nifty GUI</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+				    
+				        
+				    
+				    <li><a href="/about/" >About</a></li>
+				
+				    
+				        
+				    
+				    <li><a href="/posts/" >Blog</a></li>
+				
+				    
+				        
+				        
+				    <li><a href="https://github.com/void256/nifty-gui" target="_blank">Nifty GUI @ GitHub</a></li>
+				
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+  
+
+
+	<img src="/images/" class="bio-photo" alt=" bio photo">
+
+<h3></h3>
+<p></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="/docs/how-to-use-the-drop-down-control/" rel="bookmark" title="How to use the Drop Down Control">How to use the Drop Down Control</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p>Nifty 0.0.5 adds support for a Drop Down Control. Here we show how to actually use it.</p>
+<p><strong>XML&lt;&#47;strong&gt;
+<p>First of all you need to add the standard Nifty controls to your xml. To keep things easy for the moment we use the default Nifty styles too.</p>
+<pre lang="xml"><!-- load default styles and controls -->&lt;&#47;pre&gt;<br />
+So adding a Drop Down Control works like adding any other control:
+<p>Basically you address the control you want to add, in this case it's "dropDownControl". And you need to give your control an id too, so that you can reference it later ("dropDown1").</p>
+<p><a id="more"></a><a id="more-49"></a><br />
+<strong>Java&lt;&#47;strong&gt;
+<p>Back in Java you want to populate your new Drop Down Control with data.</p>
+<p>For this you need the Drop Down Control Class. With Nifty 0.0.5 there is a new method on the Nifty Screen class that makes selecting Controls even easier:</p>
+<pre lang="java5">public class Screen {<br />
+    ...<br />
+    public &lt; T extends Controller &gt; T findControl(<br />
+        final String elementName,<br />
+        final Class &lt; T &gt; requestedControlClass) ...&lt;&#47;pre&gt;<br />
+Looks complicated but it is really easy to use. To get the Drop Down Control instance from a Screen we simply use the following line:
+<pre lang="java5">DropDownControl dropDown1 = screen.findControl("dropDown1", DropDownControl.class);&lt;&#47;pre&gt;<br />
+And now that we have the instance we can use it to add items to the Drop Down Control:
+<pre lang="java5">dropDown1.addItem("Nifty GUI");<br />
+dropDown1.addItem("Slick2d");<br />
+dropDown1.addItem("Lwjgl");&lt;&#47;pre&gt;<br />
+<strong>Set the Selected Item&lt;&#47;strong&gt;
+<p>To select a value from the Drop Down Control we can use the setSelectedItem() or setSelectedItemIdx() methods:</p>
+<pre lang="java5">public void setSelectedItemIdx(final int idx)<br />
+public void setSelectedItem(final String text)&lt;&#47;pre&gt;<br />
+The first allows you to select the Item with its index and the second can be used to select the text items directly.
+<p>So we use:</p>
+<pre lang="java5">dropDown1.setSelectedItemIdx(2);<br />
+  or<br />
+dropDown1.setSelectedItem("Lwjgl");&lt;&#47;pre&gt;<br />
+to select the last Item.
+<p><strong>Get the Selected Item&lt;&#47;strong&gt;
+<p>Getting the selected Item works - you guessed it - the same. You can use one of the following methods:</p>
+<pre lang="java5">public int getSelectedItemIdx()<br />
+public String getSelectedItem()&lt;&#47;pre&gt;<br />
+So you can get the index of the selected item or the String directly:
+<pre lang="java5">assertEquals(2, dropDown1.getSelectedItemIdx());<br />
+  or<br />
+assertEquals("Lwjgl", dropDown1.getSelectedItem());&lt;&#47;pre&gt;<br />
+That's it! Nifty!
+<p>Have Fun! :D</p>
+</pre></pre></strong></p></pre></pre></strong></pre></pre></pre></strong></p></pre></strong></p>
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+  
+
+
+	<img src="/images/" class="bio-photo" alt=" bio photo">
+
+<h3></h3>
+<p></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        <p class="byline"><strong>How to use the Drop Down Control</strong> was published on <time datetime="2008-12-07T11:01:32+01:00">December 07, 2008</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="/blog/update/new-blog/" title="Moving the Blog to github pages">Moving the Blog to github pages</a></li>
+    
+      <li><a href="/uncategorized/nifty-1-4-has-been-released/" title="Nifty 1.4 has been released">Nifty 1.4 has been released</a></li>
+    
+      <li><a href="/uncategorized/jogamp-bof-siggraph-2013/" title="JogAmp BOF Siggraph 2013">JogAmp BOF Siggraph 2013</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2014 void256. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/assets/js/scripts.min.js"></script>
+
+
+  
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'nifty-gui'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+	        
+
+</body>
+</html>
