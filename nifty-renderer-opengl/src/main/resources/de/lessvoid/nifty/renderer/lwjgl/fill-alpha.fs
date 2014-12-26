@@ -27,6 +27,5 @@
 out vec4 color;
 
 void main() {
-    color.r = 1.0;
-    color.gba = vec3(0.0, 0.0, 0.0);
+    color.rgba = vec4(1.0, 0.0, 0.0, 1.0);
 }

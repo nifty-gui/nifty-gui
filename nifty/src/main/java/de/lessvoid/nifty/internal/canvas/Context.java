@@ -88,7 +88,7 @@ public class Context {
     renderDevice.beginRenderToTexture(contentTexture);
     renderDevice.changeCompositeOperation(NiftyCompositeOperation.Off);
     colorBatch.render(renderDevice);
-    renderDevice.endRenderToTexture(workingTexture);
+    renderDevice.endRenderToTexture(contentTexture);
   }
 
   public void prepare() {
@@ -101,6 +101,13 @@ public class Context {
     renderDevice.changeCompositeOperation(NiftyCompositeOperation.Off);
     colorBatch.render(renderDevice);
     renderDevice.changeCompositeOperation(NiftyCompositeOperation.SourceOver);
+  }
+
+  public void clear() {
+    renderDevice.beginRenderToTexture(contentTexture);
+    renderDevice.changeCompositeOperation(NiftyCompositeOperation.Off);
+    colorBatch.render(renderDevice);
+    renderDevice.endRenderToTexture(contentTexture);    
   }
 
   public void flush() {
@@ -222,7 +229,7 @@ public class Context {
   }
 
   public void fillPath() {
-    pathRenderer.fillPath();
+    pathRenderer.fillPath(transform, batchManager);
   }
 
   public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {

@@ -47,6 +47,8 @@ public class RenderNode {
   private final Mat4 local;
   private int width;
   private int height;
+  private int oldWidth;
+  private int oldHeight;
   private boolean needsRender = true;
   private boolean needsContentUpdate = true;
   private boolean contentResized = false;
@@ -68,8 +70,8 @@ public class RenderNode {
     this.nodeId = nodeId;
     this.local = new Mat4(local);
     this.commands = commands;
-    this.width = w;
-    this.height = h;
+    this.width = this.oldWidth = w;
+    this.height = this.oldHeight = h;
     this.context = new Context(contentTexture, workingTexture);
     this.compositeOperation = compositeOperation;
     this.renderOrder = renderOrder;
@@ -81,10 +83,14 @@ public class RenderNode {
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
     if (contentResized) {
-      context.free();
-      context = new Context(
-          renderDevice.createTexture(width, height, FilterMode.Linear),
-          renderDevice.createTexture(width, height, FilterMode.Linear));
+      // only actually allocate new data when the new size is greater than the old size
+      // if they are the same size or lower then we can keep the current data
+      if (width > oldWidth || height > oldHeight) {
+        context.free();
+        context = new Context(
+            renderDevice.createTexture(width, height, FilterMode.Linear),
+            renderDevice.createTexture(width, height, FilterMode.Linear));
+      }
       contentResized = false;
       needsContentUpdate = true;
     }
@@ -140,6 +146,7 @@ public class RenderNode {
     if (width != this.width) {
       contentResized = true;
     }
+    this.oldWidth = this.width;
     this.width = width;
   }
 
@@ -147,6 +154,7 @@ public class RenderNode {
     if (height != this.height) {
       contentResized = true;
     }
+    this.oldHeight = this.height;
     this.height = height;
   }
 

@@ -128,15 +128,14 @@ public class PathRenderer {
     }
   }
 
-  public void fillPath() {
-    /*
-    if (path.isEmpty()) {
-      return;
-    }
+  public void fillPath(
+      final Mat4 transform,
+      final BatchManager batchManager) {
+    assertPath();
+
     for (int i=0; i<path.size(); i++) {
-      path.get(i).fill(this, batchManager, i == 0, i == (path.size() - 1));
+      path.get(i).fill(transform, batchManager);
     }
-    */
   }
 
   private boolean isLastPathElementMoveTo() {

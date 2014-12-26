@@ -24,42 +24,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.canvas.path;
+package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.internal.canvas.LineParameters;
-import de.lessvoid.nifty.internal.math.Mat4;
-import de.lessvoid.nifty.internal.math.Vec2;
-import de.lessvoid.nifty.internal.render.batch.BatchManager;
+import de.lessvoid.nifty.api.ChildLayout;
+import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyCanvas;
+import de.lessvoid.nifty.api.NiftyCanvasPainter;
+import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyStatisticsMode;
+import de.lessvoid.nifty.api.UnitValue;
 
 /**
- * A PathElement.
+ * 
  * @author void
  */
-public interface PathElement {
+public class UseCase_b16_Canvas {
 
-  /**
-   * Render this path element as a stroke to the batchManager using data from the Context and the parameters given.
-   *
-   * @param lineParameters the LineParameters to use when stroking the path
-   * @param batchManager the BatchManager
-   * @param currentPos the current position on the path
-   * @return the new current position
-   */
-  Vec2 stroke(
-      LineParameters lineParameters,
-      Mat4 transform,
-      BatchManager batchManager,
-      Vec2 currentPos);
+  public UseCase_b16_Canvas(final Nifty nifty) {
+    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
-  
+    NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
+    niftyNode.setBackgroundColor(NiftyColor.GREEN());
+    niftyNode.addCanvasPainter(new NiftyCanvasPainter() {
+      @Override
+      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+        canvas.beginPath();
+        canvas.arc(200, 200, 100, 0., Math.PI*2 - .75);
+        //canvas.lineTo(100, 200);
+        //canvas.lineTo(200, 200);
+        //canvas.lineTo(200, 100);
 
-  /**
-   * Render this path element as a fill to the batchManager using data from the Context and the parameters given.
-   *
-   * @param transform the Context
-   * @param batchManager the BatchManager
-   */
-  void fill(
-      Mat4 transform,
-      BatchManager batchManager);
+        canvas.setFillStyle(NiftyColor.RED());
+        canvas.fill();
+
+        canvas.setStrokeColor(NiftyColor.BLACK());
+        canvas.stroke();
+
+      }
+    });
+  }
+
+  public static void main(final String[] args) throws Exception {
+    UseCaseRunner.run(UseCase_b16_Canvas.class, args);
+  }
 }

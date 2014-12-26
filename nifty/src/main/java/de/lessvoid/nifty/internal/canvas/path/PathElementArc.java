@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas.path;
 
-import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.canvas.LineParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec2;
@@ -62,14 +61,14 @@ public class PathElementArc implements PathElement {
   }
 
   @Override
-  public void fill(Context context, BatchManager batchManager, boolean first, boolean last) {
-    for (int i=0; i<context.getArcSteps(); i++) {
-      double t = i / (double) (context.getArcSteps() - 1);
+  public void fill(final Mat4 transform, final BatchManager batchManager) {
+    for (int i=0; i<32; i++) {
+      double t = i / (double) (32 - 1);
 
       double angle = startAngle + t * (endAngle - startAngle);
       double cx = x + r * Math.cos(angle);
       double cy = y + r * Math.sin(angle);
-      batchManager.addTriangleFanVertex((float) cx, (float) cy, context.getTransform(), i==0, i==context.getArcSteps()-1);
+      batchManager.addTriangleFanVertex((float) cx, (float) cy, transform, i==0, i==32-1);
     }
   }
 }

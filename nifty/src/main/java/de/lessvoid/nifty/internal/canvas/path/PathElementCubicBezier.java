@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas.path;
 
-import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.canvas.LineParameters;
 import de.lessvoid.nifty.internal.canvas.path.CubicBezier.Renderer;
 import de.lessvoid.nifty.internal.math.Mat4;
@@ -84,6 +83,6 @@ public class PathElementCubicBezier implements PathElement {
   } 
 
   @Override
-  public void fill(Context context, BatchManager batchManager, boolean first, boolean last) {
+  public void fill(Mat4 transform, BatchManager batchManager) {
   }
 }

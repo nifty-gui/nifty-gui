@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.canvas.path;
 
-import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.canvas.LineParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec2;
@@ -57,7 +56,7 @@ public class PathElementLineTo implements PathElement {
   }
 
   @Override
-  public void fill(final Context context, final BatchManager batchManager, final boolean first, final boolean last) {
+  public void fill(final Mat4 transform, final BatchManager batchManager) {
  //   batchManager.addTriangleFanVertex((float) x, (float) y, context.getTransform(), first, last);
   }
 }
