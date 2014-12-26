@@ -31,6 +31,7 @@ import java.io.IOException;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.UnitValue;
 
 /**
  * Demonstrates CSS support in Nifty.
@@ -41,6 +42,8 @@ public class UseCase_d01_CssTest {
   public UseCase_d01_CssTest(final Nifty nifty) throws IOException {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     niftyNode.setCssClass("my");
+
+    niftyNode.newChildNode("special-id", UnitValue.percent(50), UnitValue.percent(50));
 
     nifty.applyCSS(UseCase_d01_CssTest.class.getResourceAsStream("UseCase_d01_CssTest.css"));
   }

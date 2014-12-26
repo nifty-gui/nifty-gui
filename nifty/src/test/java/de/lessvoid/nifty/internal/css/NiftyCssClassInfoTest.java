@@ -105,7 +105,9 @@ public class NiftyCssClassInfoTest {
     };
 
     NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
-    assertTrue(classCache.getProperties(object).isEmpty());
+    Map<String, String> map = classCache.getProperties(object);
+    assertEquals(1, map.size());
+    assertEquals("42", map.get("the-value"));
   }
 
   @Test

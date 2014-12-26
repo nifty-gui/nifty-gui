@@ -1,3 +1,9 @@
+/* class selector */
 .my {
   background-color: #500f;
+}
+
+/* id selector */
+#special-id {
+  background-color: #0f0a;
 }

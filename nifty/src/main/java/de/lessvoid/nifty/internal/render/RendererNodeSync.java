@@ -72,7 +72,7 @@ public class RendererNodeSync {
         continue;
       }
 
-      RenderNode dst = findNode(dstNodes, src.getId());
+      RenderNode dst = findNode(dstNodes, src.getId().hashCode());
       if (dst == null) {
         RenderNode childRenderNode = createRenderNode(src);
         dstNodes.add(childRenderNode);
@@ -100,7 +100,7 @@ public class RendererNodeSync {
 
   private RenderNode createRenderNode(final InternalNiftyNode node) {
     RenderNode renderNode = new RenderNode(
-        node.getId(),
+        node.getId().hashCode(),
         node.getLocalTransformation(),
         node.getWidth(),
         node.getHeight(),
@@ -174,7 +174,7 @@ public class RendererNodeSync {
   }
 
   private int syncRenderNodeBufferChild(final InternalNiftyNode src, final RenderNode dstParent) {
-    RenderNode dst = dstParent.findChildWithId(src.getId());
+    RenderNode dst = dstParent.findChildWithId(src.getId().hashCode());
     if (dst == null) {
       dstParent.addChildNode(createRenderNode(src));
       return NEEDS_RENDER | NEEDS_CONTENT;

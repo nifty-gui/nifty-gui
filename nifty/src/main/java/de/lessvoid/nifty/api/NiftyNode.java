@@ -55,7 +55,8 @@ public class NiftyNode {
    * Get the id of this NiftyNode.
    * @return the id
    */
-  public int getId() {
+  @NiftyCssProperty(name = "id")
+  public String getId() {
     return impl.getId();
   }
 
@@ -483,6 +484,65 @@ public class NiftyNode {
    */
   public NiftyNode newChildNode(final UnitValue width, final UnitValue height, final ChildLayout childLayout) {
     return new NiftyNode(impl.newChildNode(width, height, childLayout));
+  }
+
+  /**
+   * Create a new NiftyNode and make this node it's parent.
+   *
+   * @param id the id of the new child node
+   * @return a new NiftyNode
+   */
+  public NiftyNode newChildNode(final String id) {
+    return new NiftyNode(impl.newChildNode(id));
+  }
+
+  /**
+   * Create a new NiftyNode and make this node it's parent. Use the given
+   * childLayout for the new child node.
+   *
+   * @param id the id of the new child node
+   * @param childLayout
+   *          the new ChildLayout for the new node
+   * @return a new NiftyNode
+   */
+  public NiftyNode newChildNode(final String id, final ChildLayout childLayout) {
+    return new NiftyNode(impl.newChildNode(id, childLayout));
+  }
+
+  /**
+   * Create a new NiftyNode and make this node it's parent. The new ChildNode
+   * will be given the given width and height. This is a convienience method
+   * only since you can always change the height of the node after you've
+   * created a new node.
+   *
+   * @param id the id of the new child node
+   * @param width
+   *          width of the new NiftyNode
+   * @param height
+   *          height of the new NiftyNode
+   * @return a new NiftyNode
+   */
+  public NiftyNode newChildNode(final String id, final UnitValue width, final UnitValue height) {
+    return new NiftyNode(impl.newChildNode(id, width, height));
+  }
+
+  /**
+   * Create a new NiftyNode and make this node it's parent. The new ChildNode
+   * will be given the given width and height. This is a convienience method
+   * only since you can always change the height of the node after you've
+   * created a new node.
+   *
+   * @param id the id of the new child node
+   * @param width
+   *          width of the new NiftyNode
+   * @param height
+   *          height of the new NiftyNode
+   * @param childLayout
+   *          the new ChildLayout for the new node
+   * @return a new NiftyNode
+   */
+  public NiftyNode newChildNode(final String id, final UnitValue width, final UnitValue height, final ChildLayout childLayout) {
+    return new NiftyNode(impl.newChildNode(id, width, height, childLayout));
   }
 
   /**

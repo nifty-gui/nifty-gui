@@ -95,19 +95,22 @@ public class NiftyCssClassInfo {
   }
 
   private NiftyCssProperty getNiftyCssProperty(final PropertyDescriptor property) {
+    // we now allow read only properties but this means the read method is mandatory
     Method readMethod = property.getReadMethod();
     if (readMethod == null) {
       return null;
     }
+
+    // since we now allow read only properties the write method is optional
     Method writeMethod = property.getWriteMethod();
-    if (writeMethod == null) {
-      return null;
-    }
-    NiftyCssProperty readProperty = readMethod.getAnnotation(NiftyCssProperty.class);
-    NiftyCssProperty writeProperty = writeMethod.getAnnotation(NiftyCssProperty.class);
+
+    // get the annotations
+    NiftyCssProperty readProperty = getNiftyCssProperty(readMethod);
+    NiftyCssProperty writeProperty = getNiftyCssProperty(writeMethod);
     if (readProperty == null && writeProperty == null) {
       return null;
     }
+
     if (readProperty != null && writeProperty != null) {
       // names have to match when they are given at both methods - otherwise this is an error!
       if (!readProperty.name().equals(writeProperty.name())) {
@@ -116,6 +119,13 @@ public class NiftyCssClassInfo {
       }
     }
     return getNonNull(readProperty, writeProperty);
+  }
+
+  private NiftyCssProperty getNiftyCssProperty(final Method method) {
+    if (method == null) {
+      return null;
+    }
+    return method.getAnnotation(NiftyCssProperty.class);
   }
 
   private BeanInfo getBeanInfo(final Class<?> clazz) throws IntrospectionException {
@@ -150,6 +160,9 @@ public class NiftyCssClassInfo {
     }
 
     public void writeValue(final Object obj, final String value) throws Exception {
+      if (write == null) {
+        throw new Exception("trying to write a read-only property with the name {" + cssProperty.name() + "} and value {" + value + "} on object {" + obj + "} ignored");
+      }
       NiftyCssStringConverter<?> converter = cssProperty.converter().newInstance();
       write.invoke(obj, converter.fromString(value));
     }

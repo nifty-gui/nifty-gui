@@ -209,7 +209,7 @@ public class InternalNiftyNodeInputHandlerTest {
     expect(internalNiftyNode.getNiftyNode()).andReturn(niftyNode).anyTimes();
     expect(internalNiftyNode.getWidth()).andReturn(100).anyTimes();
     expect(internalNiftyNode.getHeight()).andReturn(100).anyTimes();
-    expect(internalNiftyNode.getId()).andReturn(12).anyTimes();
+    expect(internalNiftyNode.getId()).andReturn("12").anyTimes();
   }
 
   private void prepareInternalNiftyNodeScreenToLocal(final int x, final int y) {
