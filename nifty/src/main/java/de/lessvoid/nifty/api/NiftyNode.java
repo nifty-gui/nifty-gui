@@ -26,6 +26,8 @@
  */
 package de.lessvoid.nifty.api;
 
+import de.lessvoid.nifty.api.annotation.NiftyCssProperty;
+import de.lessvoid.nifty.api.annotation.NiftyCssStringConverterNiftyColor;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
@@ -182,6 +184,7 @@ public class NiftyNode {
    *
    * @param color the new background color
    */
+  @NiftyCssProperty(name = "background-color", converter = NiftyCssStringConverterNiftyColor.class)
   public void setBackgroundColor(final NiftyColor color) {
     impl.setBackgroundColor(color);
   }
@@ -410,6 +413,21 @@ public class NiftyNode {
   public NiftyPoint localToScreen(final int x, final int y) {
     Vec4 v = impl.localToScreen(x, y);
     return new NiftyPoint(v.getX(), v.getY());
+  }
+
+  /**
+   * Apply the given class (or classes of the values are separated by white spaces) to that node. Calling this method
+   * will replace all other classes that might have been added before.
+   *
+   * @param classes the css classes
+   */
+  public void setCssClass(final String classes) {
+    impl.setCssClass(classes);
+  }
+
+  @NiftyCssProperty(name="class")
+  public String getCssClass() {
+    return impl.getCssClass();
   }
 
   /**

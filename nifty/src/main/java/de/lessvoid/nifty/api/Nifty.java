@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.api;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,6 +46,7 @@ import de.lessvoid.nifty.internal.InternalNiftyNodeRenderOrderComparator;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
+import de.lessvoid.nifty.internal.css.NiftyCss;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
@@ -102,6 +104,9 @@ public class Nifty {
   // all pointer events will be send to that node unless the pointer is released again.
   private NiftyNode nodeThatCapturedPointerEvents;
 
+  // this class takes care of applying CSS to a list for rootnodes
+  private NiftyCss niftyCss = new NiftyCss();
+
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
@@ -139,6 +144,16 @@ public class Nifty {
    */
   public void subscribe(final Object listener) {
     eventBus.subscribe(listener);
+  }
+
+  /**
+   * This is somewhat beta API - I'm not yet sure when to apply CSS or if at all. So for the meantime this is a
+   * manual process. You provide a CSS file (with Nifty specific styles) and this method will do it's best to apply
+   * them to all the rootNodes (and child nodes).
+   * @throws IOException 
+   */
+  public void applyCSS(final InputStream source) throws IOException {
+    niftyCss.applyCss(source, rootNodes);
   }
 
   /**
@@ -215,7 +230,9 @@ public class Nifty {
   }
 
   /**
-   * Render.
+   * Render the Nifty scene.
+   *
+   * @return true if the frame changed and false if the content is still the same
    */
   public boolean render() {
     stats.startRender();

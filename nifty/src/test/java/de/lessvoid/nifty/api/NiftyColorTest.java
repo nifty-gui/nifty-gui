@@ -119,6 +119,11 @@ public class NiftyColorTest {
   }
 
   @Test
+  public void testToHexString() {
+    assertEquals("#0000ffff", NiftyColor.BLUE().toHexString());
+  }
+
+  @Test
   public void testHashCode() {
     assertEquals(-1173481599L, NiftyColor.RED().hashCode());
   }

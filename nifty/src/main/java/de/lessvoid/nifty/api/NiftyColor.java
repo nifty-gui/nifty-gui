@@ -266,6 +266,16 @@ public class NiftyColor {
     return result.toString();
   }
 
+  public String toHexString() {
+    StringBuilder result = new StringBuilder();
+    result.append("#");
+    result.append(zeroPadded(Integer.toHexString((int) (red*255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (green*255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (blue*255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (alpha*255.))));
+    return result.toString();
+  }
+
   /**
    * @see Object#hashCode() hashCode
    */

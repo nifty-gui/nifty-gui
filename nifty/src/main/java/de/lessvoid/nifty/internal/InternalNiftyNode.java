@@ -46,6 +46,7 @@ import de.lessvoid.nifty.api.NiftyMinSizeCallback.Size;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
+import de.lessvoid.nifty.api.annotation.NiftyCssProperty;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.api.event.NiftyEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
@@ -123,6 +124,9 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   // in case an animatedRequestRedraw is set we remember it here so that we can remove it later
   private IntervalAnimator animatedRequestIntervalAnimator;
+
+  // css style class applied to that node (can be multiple classes in which case they should be whitespace seperated)
+  private String cssClasses;
 
   private boolean transformationChanged = true;
   private double pivotX = 0.5;
@@ -416,6 +420,14 @@ public class InternalNiftyNode implements InternalLayoutable {
     eventBus().subscribe(object);
   }
 
+  public void setCssClass(final String classes) {
+    this.cssClasses = classes;
+  }
+
+  public String getCssClass() {
+    return cssClasses;
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Layoutable Implementation
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -459,6 +471,10 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public NiftyNode getNiftyNode() {
     return niftyNode;
+  }
+
+  public boolean isRootNode() {
+    return parentNode == null;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -566,6 +582,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     result.append(matches(pattern, stateConstraints(), offset + "  "));
     result.append(matches(pattern, stateBackgroundColor(), offset + "  "));
     result.append(matches(pattern, stateChildLayout(), offset + "  "));
+    result.append(matches(pattern, stateCssClasses(), offset + "  "));
 
     for (int i=0; i<children.size(); i++) {
       children.get(i).getStateInfo(result, offset + "  ", pattern);
@@ -656,10 +673,6 @@ public class InternalNiftyNode implements InternalLayoutable {
     }
   }
 
-  private boolean isRootNode() {
-    return parentNode == null;
-  }
-
   private String statePosition() {
     return "position [x=" + getX() + ", y=" + getY() + ", width=" + getWidth() + ", height=" + getHeight() + "]\n";
   }
@@ -690,6 +703,10 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   private String stateChildLayout() {
     return "childLayout [" + childLayout + "]\n";
+  }
+
+  private String stateCssClasses() {
+    return "cssClasses [" + cssClasses + "]\n";
   }
 
   private String matches(final Pattern pattern, final String data, final String offset) {
