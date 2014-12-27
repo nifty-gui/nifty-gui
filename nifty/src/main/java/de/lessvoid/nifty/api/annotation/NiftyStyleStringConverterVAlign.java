@@ -26,27 +26,17 @@
  */
 package de.lessvoid.nifty.api.annotation;
 
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.api.VAlign;
 
-import org.junit.Test;
+public class NiftyStyleStringConverterVAlign implements NiftyStyleStringConverter<VAlign> {
 
-import de.lessvoid.nifty.api.NiftyColor;
-
-public class NiftyStyleStringConverterNiftyColorTest {
-  private NiftyStyleStringConverterNiftyColor converter = new NiftyStyleStringConverterNiftyColor();
-
-  @Test
-  public void testToString() {
-    assertEquals("#ff0000ff", converter.toString(NiftyColor.RED()));
+  @Override
+  public VAlign fromString(final String value) {
+    return VAlign.valueOf(value);
   }
 
-  @Test
-  public void testFromString() {
-    assertEquals(NiftyColor.RED(), converter.fromString("#ff0000ff"));
-  }
-
-  @Test
-  public void testFromStringNoAlpha() {
-    assertEquals(NiftyColor.RED(), converter.fromString("#ff0000"));
+  @Override
+  public String toString(final VAlign value) {
+    return value.name();
   }
 }

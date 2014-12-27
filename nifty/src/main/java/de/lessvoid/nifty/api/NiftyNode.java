@@ -27,7 +27,9 @@
 package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterHAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyColor;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
@@ -102,6 +104,7 @@ public class NiftyNode {
    * @param alignment
    *          the new horizontal alignment
    */
+  @NiftyStyleProperty(name = "halign", converter = NiftyStyleStringConverterHAlign.class)
   public void setHAlign(final HAlign alignment) {
     impl.setHAlign(alignment);
   }
@@ -112,6 +115,7 @@ public class NiftyNode {
    * @param alignment
    *          the new vertical alignment
    */
+  @NiftyStyleProperty(name = "valign", converter = NiftyStyleStringConverterVAlign.class)
   public void setVAlign(final VAlign alignment) {
     impl.setVAlign(alignment);
   }

@@ -30,23 +30,24 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.VAlign;
 
-public class NiftyStyleStringConverterNiftyColorTest {
-  private NiftyStyleStringConverterNiftyColor converter = new NiftyStyleStringConverterNiftyColor();
+public class NiftyStyleStringConverterVAlignTest {
+  private final NiftyStyleStringConverterVAlign converter = new NiftyStyleStringConverterVAlign();
 
   @Test
   public void testToString() {
-    assertEquals("#ff0000ff", converter.toString(NiftyColor.RED()));
+    assertEquals("verticalDefault", converter.toString(VAlign.verticalDefault));
+    assertEquals("top", converter.toString(VAlign.top));
+    assertEquals("center", converter.toString(VAlign.center));
+    assertEquals("bottom", converter.toString(VAlign.bottom));
   }
 
   @Test
   public void testFromString() {
-    assertEquals(NiftyColor.RED(), converter.fromString("#ff0000ff"));
-  }
-
-  @Test
-  public void testFromStringNoAlpha() {
-    assertEquals(NiftyColor.RED(), converter.fromString("#ff0000"));
+    assertEquals(VAlign.verticalDefault, converter.fromString("verticalDefault"));
+    assertEquals(VAlign.top, converter.fromString("top"));
+    assertEquals(VAlign.center, converter.fromString("center"));
+    assertEquals(VAlign.bottom, converter.fromString("bottom"));
   }
 }
