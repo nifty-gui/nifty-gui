@@ -26,29 +26,29 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 
+import java.io.IOException;
+
 /**
- * Demonstrates CSS support in Nifty.
+ * Demonstrates style support in Nifty.
  * @author void
  */
-public class UseCase_d01_CssTest {
+public class UseCase_d01_StyleTest {
 
-  public UseCase_d01_CssTest(final Nifty nifty) throws IOException {
+  public UseCase_d01_StyleTest(final Nifty nifty) throws IOException {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    niftyNode.setCssClass("my");
+    niftyNode.setStyleClass("my");
 
     niftyNode.newChildNode("special-id", UnitValue.percent(50), UnitValue.percent(50));
 
-    nifty.applyCSS(UseCase_d01_CssTest.class.getResourceAsStream("UseCase_d01_CssTest.css"));
+    nifty.applyStyle(UseCase_d01_StyleTest.class.getResourceAsStream("UseCase_d01_StyleTest.css"));
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_d01_CssTest.class, args);
+    UseCaseRunner.run(UseCase_d01_StyleTest.class, args);
   }
 }

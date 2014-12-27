@@ -24,7 +24,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.css;
+package de.lessvoid.nifty.internal.style;
+
+import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverter;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -36,33 +39,30 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.lessvoid.nifty.api.annotation.NiftyCssProperty;
-import de.lessvoid.nifty.api.annotation.NiftyCssStringConverter;
-
 /**
- * This class stores all properties of a class that are annotated with @NiftyCssProperty for later use. The idea is
+ * This class stores all properties of a class that are annotated with @NiftyStyleProperty for later use. The idea is
  * to let this class process a class once and then reuse that information later.
  *
  * @author void
  */
-public class NiftyCssClassInfo {
-  private final static Logger log = Logger.getLogger(NiftyCssClassInfo.class.getName());
+public class NiftyStyleClassInfo {
+  private final static Logger log = Logger.getLogger(NiftyStyleClassInfo.class.getName());
   private final Class<?> clazz;
   private final Map<String, Accessor> map = new HashMap<String, Accessor>();
 
-  public NiftyCssClassInfo(final Class<?> clazz) throws Exception {
+  public NiftyStyleClassInfo(final Class<?> clazz) throws Exception {
     this.clazz = clazz;
 
     PropertyDescriptor[] properties = getBeanInfo(clazz).getPropertyDescriptors();
     for (int i=0; i<properties.length; i++) {
       PropertyDescriptor descriptor = properties[i];
 
-      NiftyCssProperty cssProperty = getNiftyCssProperty(descriptor);
-      if (cssProperty == null) {
+      NiftyStyleProperty styleProperty = getNiftyStyleProperty(descriptor);
+      if (styleProperty == null) {
         continue;
       }
 
-      map.put(cssProperty.name(), new Accessor(cssProperty, descriptor.getReadMethod(), descriptor.getWriteMethod()));
+      map.put(styleProperty.name(), new Accessor(styleProperty, descriptor.getReadMethod(), descriptor.getWriteMethod()));
     }
   }
 
@@ -81,7 +81,7 @@ public class NiftyCssClassInfo {
   public String readValue(final String key, final Object o) throws Exception {
     Accessor accessor = map.get(key);
     if (accessor == null) {
-      throw new Exception("The class {" + clazz + "} doesn't seem to have a css property with the given name {" + key + "}");
+      throw new Exception("The class {" + clazz + "} doesn't seem to have a style property with the given name {" + key + "}");
     }
     return accessor.readValue(o);
   }
@@ -89,12 +89,12 @@ public class NiftyCssClassInfo {
   public void writeValue(final Object o, final String key, final String value) throws Exception {
     Accessor accessor = map.get(key);
     if (accessor == null) {
-      throw new Exception("The class {" + clazz + "} doesn't seem to have a css property with the given name {" + key + "}");
+      throw new Exception("The class {" + clazz + "} doesn't seem to have a style property with the given name {" + key + "}");
     }
     accessor.writeValue(o, value);
   }
 
-  private NiftyCssProperty getNiftyCssProperty(final PropertyDescriptor property) {
+  private NiftyStyleProperty getNiftyStyleProperty(final PropertyDescriptor property) {
     // we now allow read only properties but this means the read method is mandatory
     Method readMethod = property.getReadMethod();
     if (readMethod == null) {
@@ -105,8 +105,8 @@ public class NiftyCssClassInfo {
     Method writeMethod = property.getWriteMethod();
 
     // get the annotations
-    NiftyCssProperty readProperty = getNiftyCssProperty(readMethod);
-    NiftyCssProperty writeProperty = getNiftyCssProperty(writeMethod);
+    NiftyStyleProperty readProperty = getNiftyStyleProperty(readMethod);
+    NiftyStyleProperty writeProperty = getNiftyStyleProperty(writeMethod);
     if (readProperty == null && writeProperty == null) {
       return null;
     }
@@ -114,25 +114,25 @@ public class NiftyCssClassInfo {
     if (readProperty != null && writeProperty != null) {
       // names have to match when they are given at both methods - otherwise this is an error!
       if (!readProperty.name().equals(writeProperty.name())) {
-        log.log(Level.WARNING, "CSS property names have to match when @NiftyCssProperty is provided for getter (" + readProperty.name() + ") and setter (" + writeProperty.name() + ") - this entry will be ignored!");
+        log.log(Level.WARNING, "Style property names have to match when @NiftyStyleProperty is provided for getter (" + readProperty.name() + ") and setter (" + writeProperty.name() + ") - this entry will be ignored!");
         return null;
       }
     }
     return getNonNull(readProperty, writeProperty);
   }
 
-  private NiftyCssProperty getNiftyCssProperty(final Method method) {
+  private NiftyStyleProperty getNiftyStyleProperty(final Method method) {
     if (method == null) {
       return null;
     }
-    return method.getAnnotation(NiftyCssProperty.class);
+    return method.getAnnotation(NiftyStyleProperty.class);
   }
 
   private BeanInfo getBeanInfo(final Class<?> clazz) throws IntrospectionException {
     return Introspector.getBeanInfo(clazz, Object.class);
   }
 
-  private NiftyCssProperty getNonNull(final NiftyCssProperty readProperty, final NiftyCssProperty writeProperty) {
+  private NiftyStyleProperty getNonNull(final NiftyStyleProperty readProperty, final NiftyStyleProperty writeProperty) {
     if (readProperty != null) {
       return readProperty;
     }
@@ -140,18 +140,18 @@ public class NiftyCssClassInfo {
   }
 
   private static class Accessor {
-    private final NiftyCssProperty cssProperty;
+    private final NiftyStyleProperty styleProperty;
     private final Method read;
     private final Method write;
 
-    public Accessor(final NiftyCssProperty cssProperty, final Method read, final Method write) {
-      this.cssProperty = cssProperty;
+    public Accessor(final NiftyStyleProperty styleProperty, final Method read, final Method write) {
+      this.styleProperty = styleProperty;
       this.read = read;
       this.write = write;
     }
 
     public String readValue(final Object obj) throws Exception {
-      NiftyCssStringConverter converter = cssProperty.converter().newInstance();
+      NiftyStyleStringConverter converter = styleProperty.converter().newInstance();
       Object value = read.invoke(obj);
       if (value == null) {
         return null;
@@ -161,9 +161,9 @@ public class NiftyCssClassInfo {
 
     public void writeValue(final Object obj, final String value) throws Exception {
       if (write == null) {
-        throw new Exception("trying to write a read-only property with the name {" + cssProperty.name() + "} and value {" + value + "} on object {" + obj + "} ignored");
+        throw new Exception("trying to write a read-only property with the name {" + styleProperty.name() + "} and value {" + value + "} on object {" + obj + "} ignored");
       }
-      NiftyCssStringConverter<?> converter = cssProperty.converter().newInstance();
+      NiftyStyleStringConverter<?> converter = styleProperty.converter().newInstance();
       write.invoke(obj, converter.fromString(value));
     }
   }

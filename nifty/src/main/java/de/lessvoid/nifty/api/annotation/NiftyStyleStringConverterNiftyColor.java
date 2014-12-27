@@ -2,7 +2,7 @@ package de.lessvoid.nifty.api.annotation;
 
 import de.lessvoid.nifty.api.NiftyColor;
 
-public class NiftyCssStringConverterNiftyColor implements NiftyCssStringConverter<NiftyColor> {
+public class NiftyStyleStringConverterNiftyColor implements NiftyStyleStringConverter<NiftyColor> {
 
   @Override
   public NiftyColor fromString(final String value) {

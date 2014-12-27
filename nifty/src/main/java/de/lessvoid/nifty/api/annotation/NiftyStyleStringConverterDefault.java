@@ -1,6 +1,6 @@
 package de.lessvoid.nifty.api.annotation;
 
-public class NiftyCssStringConverterDefault implements NiftyCssStringConverter<Object> {
+public class NiftyStyleStringConverterDefault implements NiftyStyleStringConverter<Object> {
 
   @Override
   public Object fromString(String value) {

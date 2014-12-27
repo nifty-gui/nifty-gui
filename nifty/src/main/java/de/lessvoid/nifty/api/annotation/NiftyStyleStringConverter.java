@@ -1,14 +1,14 @@
 package de.lessvoid.nifty.api.annotation;
 
 /**
- * You'll need to provide an implementation of this interface when you annotate methods with @NiftyCssProperty
+ * You'll need to provide an implementation of this interface when you annotate methods with @NiftyStyleProperty
  * that are not String properties. This interface will convert the actual values to Strings and back.
  *
- * This is necessary since CSS files only contain String properties.
+ * This is necessary since style files only contain String properties.
  *
  * @author void
  */
-public interface NiftyCssStringConverter<E> {
+public interface NiftyStyleStringConverter<E> {
   /**
    * Take the given value and convert it to whatever type you need.
    * @param value the String value

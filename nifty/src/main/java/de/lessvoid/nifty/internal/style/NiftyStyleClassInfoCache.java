@@ -24,19 +24,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.css;
+package de.lessvoid.nifty.internal.style;
 
-import static org.junit.Assert.assertEquals;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.junit.Test;
+/**
+ * This class keeps NiftyStyleClassInfo instances around so that they can be reused.
+ * @author void
+ *
+ */
+public class NiftyStyleClassInfoCache {
+  private final Map<Class<?>, NiftyStyleClassInfo> cache = new HashMap<Class<?>, NiftyStyleClassInfo>();
 
-public class NiftyCssClassInfoCacheTest {
-  private NiftyCssClassInfoCache cache = new NiftyCssClassInfoCache();
-
-  @Test
-  public void testReuse() throws Exception {
-    NiftyCssClassInfo classInfo = cache.getNiftyCssClass(this.getClass());
-    assertEquals(classInfo, cache.getNiftyCssClass(this.getClass()));
+  public NiftyStyleClassInfo getNiftyStyleClass(final Class<?> clazz) throws Exception {
+    NiftyStyleClassInfo result = cache.get(clazz);
+    if (result == null) {
+      result = new NiftyStyleClassInfo(clazz);
+      cache.put(clazz, result);
+    }
+    return result;
   }
-
 }

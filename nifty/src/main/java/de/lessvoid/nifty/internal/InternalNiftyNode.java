@@ -124,8 +124,8 @@ public class InternalNiftyNode implements InternalLayoutable {
   // in case an animatedRequestRedraw is set we remember it here so that we can remove it later
   private IntervalAnimator animatedRequestIntervalAnimator;
 
-  // css style class applied to that node (can be multiple classes in which case they should be whitespace seperated)
-  private String cssClasses;
+  // style class applied to that node (can be multiple classes in which case they should be whitespace seperated)
+  private String styleClasses;
 
   private boolean transformationChanged = true;
   private double pivotX = 0.5;
@@ -464,12 +464,12 @@ public class InternalNiftyNode implements InternalLayoutable {
     eventBus().subscribe(object);
   }
 
-  public void setCssClass(final String classes) {
-    this.cssClasses = classes;
+  public void setStyleClass(final String classes) {
+    this.styleClasses = classes;
   }
 
-  public String getCssClass() {
-    return cssClasses;
+  public String getStyleClass() {
+    return styleClasses;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -626,7 +626,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     result.append(matches(pattern, stateConstraints(), offset + "  "));
     result.append(matches(pattern, stateBackgroundColor(), offset + "  "));
     result.append(matches(pattern, stateChildLayout(), offset + "  "));
-    result.append(matches(pattern, stateCssClasses(), offset + "  "));
+    result.append(matches(pattern, stateStyleClasses(), offset + "  "));
 
     for (int i=0; i<children.size(); i++) {
       children.get(i).getStateInfo(result, offset + "  ", pattern);
@@ -751,8 +751,8 @@ public class InternalNiftyNode implements InternalLayoutable {
     return "childLayout [" + childLayout + "]\n";
   }
 
-  private String stateCssClasses() {
-    return "cssClasses [" + cssClasses + "]\n";
+  private String stateStyleClasses() {
+    return "styleClasses [" + styleClasses + "]\n";
   }
 
   private String matches(final Pattern pattern, final String data, final String offset) {
