@@ -26,15 +26,16 @@
  */
 package de.lessvoid.nifty.internal.style;
 
-import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
-import org.junit.Test;
-
-import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.util.Map;
+
+import org.junit.Test;
+
+import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
 
 @SuppressWarnings("unused")
 public class NiftyStyleClassInfoTest {
@@ -145,6 +146,39 @@ public class NiftyStyleClassInfoTest {
   }
 
   @Test
+  public void testReadValueNoGetter() throws Exception {
+    Object object = new Object() {
+      private String value = "42";
+      @NiftyStyleProperty(name = "the-value")
+      public void setValue(final String value) { this.value = value; }
+    };
+
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
+    try {
+      classCache.readValue("the-value", object);
+      fail("expected exception");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().startsWith("trying to read a write-only property with the name {the-value} on object"));
+    }
+  }
+
+  @Test
+  public void testWriteValueNoSetter() throws Exception {
+    Object object = new Object() {
+      private String value = "42";
+      @NiftyStyleProperty(name = "the-value") public String getValue() { return value; }
+    };
+
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
+    try {
+      classCache.writeValue(object, "the-value", "43");
+      fail("expected exception");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().startsWith("trying to write a read-only property with the name {the-value} and value {43} on object "));
+    }
+  }
+
+  @Test
   public void testReadValueThatIsNull() throws Exception {
     Object object = new Object() {
       private String value = null;
@@ -169,7 +203,7 @@ public class NiftyStyleClassInfoTest {
       classCache.readValue("some-value", object);
       fail("expected exception");
     } catch (Exception e) {
-      assertEquals("The class {class de.lessvoid.nifty.internal.style.NiftyStyleClassInfoTest$10} doesn't seem to have a style property with the given name {some-value}", e.getMessage());
+      assertTrue(e.getMessage().endsWith(" doesn't seem to have a style property with the given name {some-value}"));
     }
   }
 

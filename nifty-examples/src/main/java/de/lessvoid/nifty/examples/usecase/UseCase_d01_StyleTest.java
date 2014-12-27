@@ -43,7 +43,8 @@ public class UseCase_d01_StyleTest {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     niftyNode.setStyleClass("my");
 
-    niftyNode.newChildNode("special-id", UnitValue.percent(50), UnitValue.percent(50));
+    NiftyNode child1 = niftyNode.newChildNode("special-id", UnitValue.percent(50), UnitValue.percent(50), ChildLayout.Center);
+    NiftyNode child2 = child1.newChildNode("inner", UnitValue.percent(50), UnitValue.percent(50));
 
     nifty.applyStyle(UseCase_d01_StyleTest.class.getResourceAsStream("UseCase_d01_StyleTest.css"));
   }

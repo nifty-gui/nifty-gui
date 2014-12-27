@@ -28,6 +28,7 @@ package de.lessvoid.nifty.internal.style;
 
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.internal.common.ListBuilder;
 import se.fishtank.css.selectors.NodeSelectorException;
 import se.fishtank.css.selectors.generic.GenericNodeAdapter;
 
@@ -51,7 +52,7 @@ public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNo
     try {
       NiftyNode internal = node.getNiftyNode();
       Map<String, String> attr = classInfoCache.getNiftyStyleClass(internal.getClass()).getProperties(internal);
-      System.out.println("getAttributes for node [" + node + "]: " + attr);
+      log.fine("getAttributes(" + node + ") -> " + attr);
       return attr;
     } catch (Exception e) {
       log.log(Level.WARNING, "failed to get properties for {" + node + "}", e);
@@ -61,74 +62,86 @@ public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNo
 
   @Override
   public List<InternalNiftyNode> getChildNodes(final InternalNiftyNode node) {
-    System.out.println("getChildNodes: " + node);
+    log.fine("getChildNodes(" + node + ") -> " + node);
     return node.getChildren();
   }
 
   @Override
-  public boolean isEmptyNode(InternalNiftyNode node) {
-    System.out.println("isEmptyNode: " + node);
+  public boolean isEmptyNode(final InternalNiftyNode node) {
+    log.fine("isEmptyNode(" + node + ") -> " + node);
     return false;
   }
 
   @Override
-  public InternalNiftyNode getPreviousSiblingElement(InternalNiftyNode node) {
-    System.out.println("getPreviousSiblingElement: " + node);
+  public InternalNiftyNode getPreviousSiblingElement(final InternalNiftyNode node) {
+    log.fine("getPreviousSiblingElement(" + node + ") -> " + node);
     return null;
   }
 
   @Override
-  public InternalNiftyNode getNextSiblingElement(InternalNiftyNode node) {
-    System.out.println("getNextSiblingElement: " + node);
+  public InternalNiftyNode getNextSiblingElement(final InternalNiftyNode node) {
+    log.fine("getNextSiblingElement(" + node + ") -> " + node);
     return null;
   }
 
   @Override
-  public String getNodeName(InternalNiftyNode node) {
-    System.out.println("getNodeName: " + node);
+  public String getNodeName(final InternalNiftyNode node) {
+    log.fine("getNodeName(" + node + ") -> " + node);
     return null;
   }
 
   @Override
-  public InternalNiftyNode getRootNode(InternalNiftyNode node) {
-    System.out.println("getRootNode: " + node);
+  public InternalNiftyNode getRootNode(final InternalNiftyNode node) {
     if (node.isRootNode()) {
+      log.fine("getRootNode(" + node + ") -> " + node);
       return node;
     }
-    return getRootNode(node.getParent());
+    InternalNiftyNode rootNode = getRootNode(node.getParent());
+    log.fine("getRootNode(" + node + ") -> " + rootNode);
+    return rootNode;
   }
 
   @Override
-  public List<InternalNiftyNode> getNodesByTagName(InternalNiftyNode node, String tagName) throws NodeSelectorException {
-    System.out.println("getNodesByTagName: " + node);
-    // FIXME really check tag
+  public List<InternalNiftyNode> getNodesByTagName(final InternalNiftyNode node, final String tagName) throws NodeSelectorException {
     ArrayList<InternalNiftyNode> result = new ArrayList<InternalNiftyNode>();
-    if (node.isRootNode() && tagName.equals("*")) {
+    if (isWildcard(tagName) && node.isRootNode()) {
       result.add(node);
     }
     for (int i=0; i<node.getChildren().size(); i++) {
       InternalNiftyNode child = node.getChildren().get(i);
-      result.add(child);
-      result.addAll(getNodesByTagName(child, tagName));
+      if (isWildcard(tagName) || isMatch(tagName, child)) {
+        result.add(child);
+        result.addAll(getNodesByTagName(child, tagName));
+      }
     }
+    log.fine("getNodesByTagName(" + node + ", " + tagName + ") -> " + ListBuilder.makeString(result));
     return result;
   }
 
   @Override
-  public String getTextContent(InternalNiftyNode node) {
-    System.out.println("getTextContent: " + node);
+  public String getTextContent(final InternalNiftyNode node) {
+    log.fine("getTextContent(" + node + ") -> ");
     return "";
   }
 
   @Override
-  public boolean isElementNode(InternalNiftyNode node) {
-    System.out.println("isElementNode: " + node);
+  public boolean isElementNode(final InternalNiftyNode node) {
+    log.fine("isElementNode(" + node + ") -> true");
     return true;
   }
 
   @Override
-  public boolean isCaseSensitive(InternalNiftyNode node) {
-    System.out.println("isCaseSensitive: " + node);
+  public boolean isCaseSensitive(final InternalNiftyNode node) {
+    log.fine("isCaseSensitive(" + node + ") -> true");
     return true;
+  }
+
+  private boolean isWildcard(final String tagName) {
+    return tagName.equals("*");
+  }
+
+  private boolean isMatch(final String tagName, final InternalNiftyNode child) {
+    // TODO figure out a way to handle controls later ...
+    return child.getNiftyNode().getClass().getSimpleName().equals(tagName);
   }
 }

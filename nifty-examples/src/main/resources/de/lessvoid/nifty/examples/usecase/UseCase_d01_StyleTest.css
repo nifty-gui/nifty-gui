@@ -7,3 +7,14 @@
 #special-id {
   background-color: #0f0a;
 }
+
+/* select by tag (which means in Nifty the simple name of the class) and by attribute id using attribute selector */
+NiftyNode[id="inner"] {
+  background-color: #ffff;
+}
+
+/* same as above but with a tagName that doesn't match therefore it's not applied */
+/* you should see a white inner node and not a blue one! */
+NiftyNode2[id="inner"] {
+  background-color: #00ff;
+}

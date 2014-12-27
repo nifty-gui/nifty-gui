@@ -26,9 +26,6 @@
  */
 package de.lessvoid.nifty.internal.style;
 
-import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverter;
-
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -38,6 +35,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverter;
 
 /**
  * This class stores all properties of a class that are annotated with @NiftyStyleProperty for later use. The idea is
@@ -70,7 +70,10 @@ public class NiftyStyleClassInfo {
     Map<String, String> result = new HashMap<String, String>();
     for (Map.Entry<String, Accessor> entry : map.entrySet()) {
       try {
-        result.put(entry.getKey(), entry.getValue().readValue(obj));
+        Accessor accessor = entry.getValue();
+        if (accessor.canRead()) {
+          result.put(entry.getKey(), accessor.readValue(obj));
+        }
       } catch (Throwable e) {
         log.log(Level.WARNING, "Error accessing {" + entry.getKey() + "} for Object {" + obj + "} value", e);
       }
@@ -95,14 +98,11 @@ public class NiftyStyleClassInfo {
   }
 
   private NiftyStyleProperty getNiftyStyleProperty(final PropertyDescriptor property) {
-    // we now allow read only properties but this means the read method is mandatory
     Method readMethod = property.getReadMethod();
-    if (readMethod == null) {
+    Method writeMethod = property.getWriteMethod();
+    if (readMethod == null && writeMethod == null) {
       return null;
     }
-
-    // since we now allow read only properties the write method is optional
-    Method writeMethod = property.getWriteMethod();
 
     // get the annotations
     NiftyStyleProperty readProperty = getNiftyStyleProperty(readMethod);
@@ -150,7 +150,14 @@ public class NiftyStyleClassInfo {
       this.write = write;
     }
 
+    public boolean canRead() {
+      return read != null;
+    }
+
     public String readValue(final Object obj) throws Exception {
+      if (read == null) {
+        throw new Exception("trying to read a write-only property with the name {" + styleProperty.name() + "} on object {" + obj + "} ignored");
+      }
       NiftyStyleStringConverter converter = styleProperty.converter().newInstance();
       Object value = read.invoke(obj);
       if (value == null) {
