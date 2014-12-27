@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import de.lessvoid.nifty.api.NiftyColor;
 
-public class NiftyCssStringConverterNiftyColorTest {
-  private NiftyCssStringConverterNiftyColor converter = new NiftyCssStringConverterNiftyColor();
+public class NiftyStyleStringConverterNiftyColorTest {
+  private NiftyStyleStringConverterNiftyColor converter = new NiftyStyleStringConverterNiftyColor();
 
   @Test
   public void testToString() {

@@ -26,8 +26,8 @@
  */
 package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.api.annotation.NiftyCssProperty;
-import de.lessvoid.nifty.api.annotation.NiftyCssStringConverterNiftyColor;
+import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyColor;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
@@ -55,7 +55,7 @@ public class NiftyNode {
    * Get the id of this NiftyNode.
    * @return the id
    */
-  @NiftyCssProperty(name = "id")
+  @NiftyStyleProperty(name = "id")
   public String getId() {
     return impl.getId();
   }
@@ -185,7 +185,7 @@ public class NiftyNode {
    *
    * @param color the new background color
    */
-  @NiftyCssProperty(name = "background-color", converter = NiftyCssStringConverterNiftyColor.class)
+  @NiftyStyleProperty(name = "background-color", converter = NiftyStyleStringConverterNiftyColor.class)
   public void setBackgroundColor(final NiftyColor color) {
     impl.setBackgroundColor(color);
   }
@@ -420,15 +420,15 @@ public class NiftyNode {
    * Apply the given class (or classes of the values are separated by white spaces) to that node. Calling this method
    * will replace all other classes that might have been added before.
    *
-   * @param classes the css classes
+   * @param classes the style classes
    */
-  public void setCssClass(final String classes) {
-    impl.setCssClass(classes);
+  public void setStyleClass(final String classes) {
+    impl.setStyleClass(classes);
   }
 
-  @NiftyCssProperty(name="class")
-  public String getCssClass() {
-    return impl.getCssClass();
+  @NiftyStyleProperty(name="class")
+  public String getStyleClass() {
+    return impl.getStyleClass();
   }
 
   /**

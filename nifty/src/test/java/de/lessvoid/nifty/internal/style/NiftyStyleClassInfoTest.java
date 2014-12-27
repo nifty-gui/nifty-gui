@@ -24,31 +24,30 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.css;
+package de.lessvoid.nifty.internal.style;
+
+import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
+import org.junit.Test;
+
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.Map;
-
-import org.junit.Test;
-
-import de.lessvoid.nifty.api.annotation.NiftyCssProperty;
-
 @SuppressWarnings("unused")
-public class NiftyCssClassInfoTest {
+public class NiftyStyleClassInfoTest {
 
   @Test
-  public void testGetPropertiesWithNiftyCssPropertyAtGetter() throws Exception {
+  public void testGetPropertiesWithNiftyStylePropertyAtGetter() throws Exception {
     Object object = new Object() {
       private String value = "42";
-      @NiftyCssProperty(name = "the-value") public String getValue() { return value; }
+      @NiftyStyleProperty(name = "the-value") public String getValue() { return value; }
       public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
 
     Map<String, String> map = classCache.getProperties(object);
     assertEquals(1, map.size());
@@ -56,14 +55,14 @@ public class NiftyCssClassInfoTest {
   }
 
   @Test
-  public void testGetPropertiesWithNiftyCssPropertyAtSetter() throws Exception {
+  public void testGetPropertiesWithNiftyStylePropertyAtSetter() throws Exception {
     Object object = new Object() {
       private String value = "42";
       public String getValue() { return value; }
-      @NiftyCssProperty(name = "the-value") public void setValue(final String value) { this.value = value; }
+      @NiftyStyleProperty(name = "the-value") public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
 
     Map<String, String> map = classCache.getProperties(object);
     assertEquals(1, map.size());
@@ -71,14 +70,14 @@ public class NiftyCssClassInfoTest {
   }
 
   @Test
-  public void testGetPropertiesWithNiftyCssPropertyAtBothMethods() throws Exception {
+  public void testGetPropertiesWithNiftyStylePropertyAtBothMethods() throws Exception {
     Object object = new Object() {
       private String value = "42";
-      @NiftyCssProperty(name = "the-value") public String getValue() { return value; }
-      @NiftyCssProperty(name = "the-value") public void setValue(final String value) { this.value = value; }
+      @NiftyStyleProperty(name = "the-value") public String getValue() { return value; }
+      @NiftyStyleProperty(name = "the-value") public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
 
     Map<String, String> map = classCache.getProperties(object);
     assertEquals(1, map.size());
@@ -89,11 +88,11 @@ public class NiftyCssClassInfoTest {
   public void testGetPropertiesNameMismatch() throws Exception {
     Object object = new Object() {
       private String value = "42";
-      @NiftyCssProperty(name = "the-value-1") public String getValue() { return value; }
-      @NiftyCssProperty(name = "the-value-2") public void setValue(final String value) { this.value = value; }
+      @NiftyStyleProperty(name = "the-value-1") public String getValue() { return value; }
+      @NiftyStyleProperty(name = "the-value-2") public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
     assertTrue(classCache.getProperties(object).isEmpty());
   }
 
@@ -101,10 +100,10 @@ public class NiftyCssClassInfoTest {
   public void testGetPropertiesNoSetter() throws Exception {
     Object object = new Object() {
       private String value = "42";
-      @NiftyCssProperty(name = "the-value") public String getValue() { return value; }
+      @NiftyStyleProperty(name = "the-value") public String getValue() { return value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
     Map<String, String> map = classCache.getProperties(object);
     assertEquals(1, map.size());
     assertEquals("42", map.get("the-value"));
@@ -117,19 +116,19 @@ public class NiftyCssClassInfoTest {
       public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
     assertTrue(classCache.getProperties(object).isEmpty());
   }
 
   @Test
-  public void testGetPropertiesNoNiftyCssPropertyAnnotation() throws Exception {
+  public void testGetPropertiesNoNiftyStylePropertyAnnotation() throws Exception {
     Object object = new Object() {
       private String value = "42";
       public String getValue() { return value; }
       public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
     assertTrue(classCache.getProperties(object).isEmpty());
   }
 
@@ -137,11 +136,11 @@ public class NiftyCssClassInfoTest {
   public void testReadValue() throws Exception {
     Object object = new Object() {
       private String value = "42";
-      @NiftyCssProperty(name = "the-value") public String getValue() { return value; }
+      @NiftyStyleProperty(name = "the-value") public String getValue() { return value; }
       public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
     assertEquals("42", classCache.readValue("the-value", object));
   }
 
@@ -149,11 +148,11 @@ public class NiftyCssClassInfoTest {
   public void testReadValueThatIsNull() throws Exception {
     Object object = new Object() {
       private String value = null;
-      @NiftyCssProperty(name = "the-value") public String getValue() { return value; }
+      @NiftyStyleProperty(name = "the-value") public String getValue() { return value; }
       public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
     assertNull(classCache.readValue("the-value", object));
   }
 
@@ -161,16 +160,16 @@ public class NiftyCssClassInfoTest {
   public void testReadValueUnknownName() throws Exception {
     Object object = new Object() {
       private String value = null;
-      @NiftyCssProperty(name = "the-value") public String getValue() { return value; }
+      @NiftyStyleProperty(name = "the-value") public String getValue() { return value; }
       public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
     try {
       classCache.readValue("some-value", object);
       fail("expected exception");
     } catch (Exception e) {
-      assertEquals("The class {class de.lessvoid.nifty.internal.css.NiftyCssClassInfoTest$10} doesn't seem to have a css property with the given name {some-value}", e.getMessage());
+      assertEquals("The class {class de.lessvoid.nifty.internal.style.NiftyStyleClassInfoTest$10} doesn't seem to have a style property with the given name {some-value}", e.getMessage());
     }
   }
 
@@ -178,11 +177,11 @@ public class NiftyCssClassInfoTest {
   public void testReadValueWithException() throws Exception {
     Object object = new Object() {
       private String value = null;
-      @NiftyCssProperty(name = "the-value") public String getValue() { throw new RuntimeException("some error"); }
+      @NiftyStyleProperty(name = "the-value") public String getValue() { throw new RuntimeException("some error"); }
       public void setValue(final String value) { this.value = value; }
     };
 
-    NiftyCssClassInfo classCache = new NiftyCssClassInfo(object.getClass());
+    NiftyStyleClassInfo classCache = new NiftyStyleClassInfo(object.getClass());
     assertTrue(classCache.getProperties(object).isEmpty());
   }
 }

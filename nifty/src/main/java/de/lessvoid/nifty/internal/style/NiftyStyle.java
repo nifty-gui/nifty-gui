@@ -24,16 +24,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.css;
+package de.lessvoid.nifty.internal.style;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import se.fishtank.css.selectors.NodeSelector;
 import se.fishtank.css.selectors.generic.GenericNodeSelector;
 import self.philbrown.cssparser.CSSHandler;
@@ -43,27 +38,32 @@ import self.philbrown.cssparser.FontFace;
 import self.philbrown.cssparser.KeyFrame;
 import self.philbrown.cssparser.RuleSet;
 import self.philbrown.cssparser.TokenSequence;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 
-public class NiftyCss {
-  private final static Logger log = Logger.getLogger(NiftyCss.class.getName());
-  private NiftyCssClassInfoCache classInfoCache = new NiftyCssClassInfoCache();
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-  public void applyCss(final InputStream source, final List<NiftyNode> rootNodes) throws IOException {
+public class NiftyStyle {
+  private final static Logger log = Logger.getLogger(NiftyStyle.class.getName());
+  private NiftyStyleClassInfoCache classInfoCache = new NiftyStyleClassInfoCache();
+
+  public void applyStyle(final InputStream source, final List<NiftyNode> rootNodes) throws IOException {
     CSSParser parser = new CSSParser(source, new NiftyNodeCSSHandler(rootNodes, classInfoCache));
     parser.parse();
   }
 
   private static class NiftyNodeCSSHandler implements CSSHandler {
-    private final NiftyCssClassInfoCache classInfoCache;
+    private final NiftyStyleClassInfoCache classInfoCache;
     private final List<InternalNiftyNode> rootNodes = new ArrayList<InternalNiftyNode>();
-    private final NiftyCssNodeAdapter nodeAdapter;
+    private final NiftyStyleNodeAdapter nodeAdapter;
 
-    NiftyNodeCSSHandler(final List<NiftyNode> rootNodes, final NiftyCssClassInfoCache classInfoCache) {
+    NiftyNodeCSSHandler(final List<NiftyNode> rootNodes, final NiftyStyleClassInfoCache classInfoCache) {
       this.classInfoCache = classInfoCache;
-      this.nodeAdapter = new NiftyCssNodeAdapter(classInfoCache);
+      this.nodeAdapter = new NiftyStyleNodeAdapter(classInfoCache);
 
       for (int i=0; i<rootNodes.size(); i++) {
         this.rootNodes.add(NiftyNodeAccessor.getDefault().getInternalNiftyNode(rootNodes.get(i)));
@@ -148,7 +148,7 @@ public class NiftyCss {
 
     private void applyRuleSet(final InternalNiftyNode node, final RuleSet ruleSet) throws Exception {
       NiftyNode internal = node.getNiftyNode();
-      NiftyCssClassInfo classInfo = classInfoCache.getNiftyCssClass(internal.getClass());
+      NiftyStyleClassInfo classInfo = classInfoCache.getNiftyStyleClass(internal.getClass());
       for (int i=0; i<ruleSet.getDeclarationBlock().size(); i++) {
         Declaration decleration = ruleSet.getDeclarationBlock().get(i);
         String prop = decleration.getProperty().toString();

@@ -24,7 +24,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.css;
+package de.lessvoid.nifty.internal.style;
+
+import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.internal.InternalNiftyNode;
+import se.fishtank.css.selectors.NodeSelectorException;
+import se.fishtank.css.selectors.generic.GenericNodeAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,16 +38,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import se.fishtank.css.selectors.NodeSelectorException;
-import se.fishtank.css.selectors.generic.GenericNodeAdapter;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.internal.InternalNiftyNode;
+public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNode> {
+  private final static Logger log = Logger.getLogger(NiftyStyleNodeAdapter.class.getName());
+  private final NiftyStyleClassInfoCache classInfoCache;
 
-public class NiftyCssNodeAdapter implements GenericNodeAdapter<InternalNiftyNode> {
-  private final static Logger log = Logger.getLogger(NiftyCssNodeAdapter.class.getName());
-  private final NiftyCssClassInfoCache classInfoCache;
-
-  public NiftyCssNodeAdapter(final NiftyCssClassInfoCache classInfoCache) {
+  public NiftyStyleNodeAdapter(final NiftyStyleClassInfoCache classInfoCache) {
     this.classInfoCache = classInfoCache;
   }
 
@@ -50,7 +50,7 @@ public class NiftyCssNodeAdapter implements GenericNodeAdapter<InternalNiftyNode
   public Map<String, String> getAttributes(final InternalNiftyNode node) {
     try {
       NiftyNode internal = node.getNiftyNode();
-      Map<String, String> attr = classInfoCache.getNiftyCssClass(internal.getClass()).getProperties(internal);
+      Map<String, String> attr = classInfoCache.getNiftyStyleClass(internal.getClass()).getProperties(internal);
       System.out.println("getAttributes for node [" + node + "]: " + attr);
       return attr;
     } catch (Exception e) {

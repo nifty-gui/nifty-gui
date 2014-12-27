@@ -7,12 +7,12 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface NiftyCssProperty {
+public @interface NiftyStyleProperty {
   /**
-   * The name that this attribute will be referred to in CSS.
+   * The name that this attribute will be referred to in the stylesheet.
    * @return the name of this attribute
    */
   String name();
 
-  Class<? extends NiftyCssStringConverter<?>> converter() default NiftyCssStringConverterDefault.class;
+  Class<? extends NiftyStyleStringConverter<?>> converter() default NiftyStyleStringConverterDefault.class;
 }
