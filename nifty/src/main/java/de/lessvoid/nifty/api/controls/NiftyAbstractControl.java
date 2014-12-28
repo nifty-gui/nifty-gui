@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.api.controls;
 
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 
 /**
  * This abstract class already implements a couple of NiftyControl method. Use this class as the base class for
@@ -39,6 +40,7 @@ public abstract class NiftyAbstractControl implements NiftyControl {
 
   public void init(final NiftyNode niftyNode) {
     this.niftyNode = niftyNode;
+    NiftyNodeAccessor.getDefault().getInternalNiftyNode(niftyNode).setControl(this);
   }
 
   @Override
@@ -81,5 +83,10 @@ public abstract class NiftyAbstractControl implements NiftyControl {
   public boolean hasFocus() {
     // TODO
     return false;
+  }
+
+  @Override
+  public String toString() {
+    return this.getClass().getSimpleName() + niftyNode.toString();
   }
 }

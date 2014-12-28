@@ -34,6 +34,11 @@ import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.VAlign;
+import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyFont;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterHAlign;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyColor;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.internal.render.TextRenderer;
 
 public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback {
@@ -47,6 +52,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
     super.init(niftyNode);
     niftyNode.addCanvasPainter(new LabelCanvasPainter());
     niftyNode.enableMinSize(this);
+    niftyNode.setStyleClass("label");
   }
 
   /**
@@ -54,6 +60,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    *
    * @param text new text
    */
+  @NiftyStyleProperty(name = "text")
   public void setText(final String text) {
     this.text = text;
     niftyNode.requestLayout();
@@ -73,6 +80,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    *
    * @param color the color
    */
+  @NiftyStyleProperty(name = "text-color", converter = NiftyStyleStringConverterNiftyColor.class)
   public void setColor(final NiftyColor color) {
     this.textColor = color;
     niftyNode.requestRedraw();
@@ -92,6 +100,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    *
    * @param font the font to use
    */
+  @NiftyStyleProperty(name = "font", converter = NiftyStyleStringConverterNiftyFont.class)
   public void setFont(final NiftyFont font) {
     this.font = font;
     niftyNode.requestRedraw();
@@ -110,6 +119,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    * Set the horizontal alignment.
    * @param halign horizontal alignment
    */
+  @NiftyStyleProperty(name = "text-halign", converter = NiftyStyleStringConverterHAlign.class)
   public void setHAlign(final HAlign halign) {
     textHAlign = halign;
   }
@@ -118,6 +128,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    * Set the vertical alignment.
    * @param valign vertical alignment
    */
+  @NiftyStyleProperty(name = "text-valign", converter = NiftyStyleStringConverterVAlign.class)
   public void setVAlign(final VAlign valign) {
     textVAlign = valign;
   }

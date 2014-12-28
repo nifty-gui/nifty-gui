@@ -30,12 +30,14 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverter;
 
@@ -50,7 +52,7 @@ public class NiftyStyleClassInfo {
   private final Class<?> clazz;
   private final Map<String, Accessor> map = new HashMap<String, Accessor>();
 
-  public NiftyStyleClassInfo(final Class<?> clazz) throws Exception {
+  public NiftyStyleClassInfo(final Nifty nifty, final Class<?> clazz) throws Exception {
     this.clazz = clazz;
 
     PropertyDescriptor[] properties = getBeanInfo(clazz).getPropertyDescriptors();
@@ -62,7 +64,7 @@ public class NiftyStyleClassInfo {
         continue;
       }
 
-      map.put(styleProperty.name(), new Accessor(styleProperty, descriptor.getReadMethod(), descriptor.getWriteMethod()));
+      map.put(styleProperty.name(), new Accessor(nifty, styleProperty, descriptor.getReadMethod(), descriptor.getWriteMethod()));
     }
   }
 
@@ -84,17 +86,18 @@ public class NiftyStyleClassInfo {
   public String readValue(final String key, final Object o) throws Exception {
     Accessor accessor = map.get(key);
     if (accessor == null) {
-      throw new Exception("The class {" + clazz + "} doesn't seem to have a style property with the given name {" + key + "}");
+      return null;
     }
     return accessor.readValue(o);
   }
 
-  public void writeValue(final Object o, final String key, final String value) throws Exception {
+  public boolean writeValue(final Object o, final String key, final String value) throws Exception {
     Accessor accessor = map.get(key);
     if (accessor == null) {
-      throw new Exception("The class {" + clazz + "} doesn't seem to have a style property with the given name {" + key + "}");
+      return false;
     }
     accessor.writeValue(o, value);
+    return true;
   }
 
   private NiftyStyleProperty getNiftyStyleProperty(final PropertyDescriptor property) {
@@ -140,11 +143,13 @@ public class NiftyStyleClassInfo {
   }
 
   private static class Accessor {
+    private final Nifty nifty;
     private final NiftyStyleProperty styleProperty;
     private final Method read;
     private final Method write;
 
-    public Accessor(final NiftyStyleProperty styleProperty, final Method read, final Method write) {
+    public Accessor(final Nifty nifty, final NiftyStyleProperty styleProperty, final Method read, final Method write) {
+      this.nifty = nifty;
       this.styleProperty = styleProperty;
       this.read = read;
       this.write = write;
@@ -158,7 +163,7 @@ public class NiftyStyleClassInfo {
       if (read == null) {
         throw new Exception("trying to read a write-only property with the name {" + styleProperty.name() + "} on object {" + obj + "} ignored");
       }
-      NiftyStyleStringConverter converter = styleProperty.converter().newInstance();
+      NiftyStyleStringConverter converter = createConverter();
       Object value = read.invoke(obj);
       if (value == null) {
         return null;
@@ -170,8 +175,32 @@ public class NiftyStyleClassInfo {
       if (write == null) {
         throw new Exception("trying to write a read-only property with the name {" + styleProperty.name() + "} and value {" + value + "} on object {" + obj + "} ignored");
       }
-      NiftyStyleStringConverter<?> converter = styleProperty.converter().newInstance();
+      NiftyStyleStringConverter<?> converter = createConverter();
       write.invoke(obj, converter.fromString(value));
+    }
+
+    private NiftyStyleStringConverter createConverter() throws Exception {
+      Class<? extends NiftyStyleStringConverter<?>> converterClass = styleProperty.converter();
+
+      // we first check if we have a constructor that takes a Nifty as the parameter
+      Constructor<? extends NiftyStyleStringConverter<?>> constructorWithNifty = getNiftyConstructor(converterClass);
+      if (constructorWithNifty != null) {
+        return constructorWithNifty.newInstance(nifty);
+      }
+      return converterClass.newInstance();
+    }
+
+    private Constructor<? extends NiftyStyleStringConverter<?>> getNiftyConstructor(
+        Class<? extends NiftyStyleStringConverter<?>> converterClass) {
+      for (Constructor<?> constructor : converterClass.getConstructors()) {
+        Class<?>[] params = constructor.getParameterTypes();
+        if (params.length == 1) {
+          if (params[0] == Nifty.class) {
+            return (Constructor<? extends NiftyStyleStringConverter<?>>) constructor;
+          }
+        }
+      }
+      return null;
     }
   }
 }

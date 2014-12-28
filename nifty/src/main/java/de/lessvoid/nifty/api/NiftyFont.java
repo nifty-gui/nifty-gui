@@ -32,9 +32,11 @@ import de.lessvoid.nifty.internal.accessor.NiftyFontAccessor;
 
 public class NiftyFont {
   private final JGLFont font;
+  private final String name;
 
-  NiftyFont(final JGLFont font) {
+  NiftyFont(final JGLFont font, final String name) {
     this.font = font;
+    this.name = name;
   }
 
   JGLFont getJGLFont() {
@@ -70,6 +72,14 @@ public class NiftyFont {
    */
   public int getCharacterWidth(final char currentCharacter, final char nextCharacter, final float size) {
     return font.getCharacterWidth(currentCharacter, nextCharacter, size);
+  }
+
+  /**
+   * Return the filename this font originates from.
+   * @return the filename of the font
+   */
+  public String getName() {
+    return name;
   }
 
   static {

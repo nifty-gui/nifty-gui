@@ -24,36 +24,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.style;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+package de.lessvoid.nifty.api.annotation;
 
 import de.lessvoid.nifty.api.Nifty;
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.api.NiftyFont;
 
-import static org.easymock.EasyMock.*;
+public class NiftyStyleStringConverterNiftyFont implements NiftyStyleStringConverter<NiftyFont> {
+  private final Nifty nifty;
 
-public class NiftyStyleClassInfoCacheTest {
-  private Nifty nifty;
-  private NiftyStyleClassInfoCache cache = new NiftyStyleClassInfoCache();
-
-  @Before
-  public void before() {
-    nifty = createMock(Nifty.class);
-    replay(nifty);
+  public NiftyStyleStringConverterNiftyFont(final Nifty nifty) {
+    this.nifty = nifty;
   }
 
-  @After
-  public void after() {
-    verify(nifty);
+  @Override
+  public NiftyFont fromString(final String value) throws Exception {
+    return nifty.createFont(value);
   }
 
-  @Test
-  public void testReuse() throws Exception {
-    NiftyStyleClassInfo classInfo = cache.getNiftyStyleClass(nifty, this.getClass());
-    assertEquals(classInfo, cache.getNiftyStyleClass(nifty, this.getClass()));
+  @Override
+  public String toString(final NiftyFont value) throws Exception {
+    return value.getName();
   }
-
 }

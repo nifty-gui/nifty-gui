@@ -29,18 +29,19 @@ package de.lessvoid.nifty.internal.style;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.lessvoid.nifty.api.Nifty;
+
 /**
  * This class keeps NiftyStyleClassInfo instances around so that they can be reused.
  * @author void
- *
  */
 public class NiftyStyleClassInfoCache {
   private final Map<Class<?>, NiftyStyleClassInfo> cache = new HashMap<Class<?>, NiftyStyleClassInfo>();
 
-  public NiftyStyleClassInfo getNiftyStyleClass(final Class<?> clazz) throws Exception {
+  public NiftyStyleClassInfo getNiftyStyleClass(final Nifty nifty, final Class<?> clazz) throws Exception {
     NiftyStyleClassInfo result = cache.get(clazz);
     if (result == null) {
-      result = new NiftyStyleClassInfo(clazz);
+      result = new NiftyStyleClassInfo(nifty, clazz);
       cache.put(clazz, result);
     }
     return result;

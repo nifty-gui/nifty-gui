@@ -620,7 +620,7 @@ public class NiftyNode {
 
   @Override
   public String toString() {
-    return "NiftyNode [" + getId() + "]";
+    return "[" + impl.toString() + "]";
   }
 
   // package private accessor stuff

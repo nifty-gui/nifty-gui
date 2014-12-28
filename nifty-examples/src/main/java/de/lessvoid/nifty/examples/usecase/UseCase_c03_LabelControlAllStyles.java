@@ -24,36 +24,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.style;
+package de.lessvoid.nifty.examples.usecase;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import java.io.IOException;
 
+import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.controls.Label;
 
-import static org.easymock.EasyMock.*;
+/**
+ * Show case CSS styles for the label control. This will use all common CSS attributes to all controls as well as the
+ * ones specific to the Label.
+ * @author void
+ */
+public class UseCase_c03_LabelControlAllStyles {
 
-public class NiftyStyleClassInfoCacheTest {
-  private Nifty nifty;
-  private NiftyStyleClassInfoCache cache = new NiftyStyleClassInfoCache();
-
-  @Before
-  public void before() {
-    nifty = createMock(Nifty.class);
-    replay(nifty);
+  public UseCase_c03_LabelControlAllStyles(final Nifty nifty) throws IOException {
+    NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    Label label = niftyNode.newControl(Label.class);
+    nifty.applyStyle(UseCase_c03_LabelControlAllStyles.class.getResourceAsStream("UseCase_c03_LabelControlAllStyles.css"));
   }
 
-  @After
-  public void after() {
-    verify(nifty);
+  public static void main(final String[] args) throws Exception {
+    UseCaseRunner.run(UseCase_c03_LabelControlAllStyles.class, args);
   }
-
-  @Test
-  public void testReuse() throws Exception {
-    NiftyStyleClassInfo classInfo = cache.getNiftyStyleClass(nifty, this.getClass());
-    assertEquals(classInfo, cache.getNiftyStyleClass(nifty, this.getClass()));
-  }
-
 }

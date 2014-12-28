@@ -26,9 +26,14 @@
  */
 package de.lessvoid.nifty.internal.style;
 
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import se.fishtank.css.selectors.NodeSelector;
 import se.fishtank.css.selectors.generic.GenericNodeSelector;
 import self.philbrown.cssparser.CSSHandler;
@@ -38,32 +43,31 @@ import self.philbrown.cssparser.FontFace;
 import self.philbrown.cssparser.KeyFrame;
 import self.philbrown.cssparser.RuleSet;
 import self.philbrown.cssparser.TokenSequence;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
+import de.lessvoid.nifty.internal.common.ListBuilder;
 
 public class NiftyStyle {
   private final static Logger log = Logger.getLogger(NiftyStyle.class.getName());
   private NiftyStyleClassInfoCache classInfoCache = new NiftyStyleClassInfoCache();
 
-  public void applyStyle(final InputStream source, final List<NiftyNode> rootNodes) throws IOException {
-    CSSParser parser = new CSSParser(source, new NiftyNodeCSSHandler(rootNodes, classInfoCache));
+  public void applyStyle(final Nifty nifty, final InputStream source, final List<NiftyNode> rootNodes) throws IOException {
+    CSSParser parser = new CSSParser(source, new NiftyNodeCSSHandler(nifty, rootNodes, classInfoCache));
     parser.parse();
   }
 
   private static class NiftyNodeCSSHandler implements CSSHandler {
+    private final Nifty nifty;
     private final NiftyStyleClassInfoCache classInfoCache;
     private final List<InternalNiftyNode> rootNodes = new ArrayList<InternalNiftyNode>();
     private final NiftyStyleNodeAdapter nodeAdapter;
 
-    NiftyNodeCSSHandler(final List<NiftyNode> rootNodes, final NiftyStyleClassInfoCache classInfoCache) {
+    NiftyNodeCSSHandler(final Nifty nifty, final List<NiftyNode> rootNodes, final NiftyStyleClassInfoCache classInfoCache) {
+      this.nifty = nifty;
       this.classInfoCache = classInfoCache;
-      this.nodeAdapter = new NiftyStyleNodeAdapter(classInfoCache);
+      this.nodeAdapter = new NiftyStyleNodeAdapter(nifty, classInfoCache);
 
       for (int i=0; i<rootNodes.size(); i++) {
         this.rootNodes.add(NiftyNodeAccessor.getDefault().getInternalNiftyNode(rootNodes.get(i)));
@@ -136,7 +140,7 @@ public class NiftyStyle {
         NodeSelector<InternalNiftyNode> selector = new GenericNodeSelector<InternalNiftyNode>(nodeAdapter, rootNodes.get(i));
         try {
           Set<InternalNiftyNode> result = selector.querySelectorAll(ruleSet.getSelector().toString());
-          log.fine("found: " + result.size());
+          log.fine("found: " + result.size() + " " + ListBuilder.makeString(new ArrayList<InternalNiftyNode>(result)));
           for (InternalNiftyNode r : result) {
             applyRuleSet(r, ruleSet);
           }
@@ -147,14 +151,22 @@ public class NiftyStyle {
     }
 
     private void applyRuleSet(final InternalNiftyNode node, final RuleSet ruleSet) throws Exception {
-      NiftyNode internal = node.getNiftyNode();
-      NiftyStyleClassInfo classInfo = classInfoCache.getNiftyStyleClass(internal.getClass());
+      applyRuleSetInternal(ruleSet, node.getControl());
+      applyRuleSetInternal(ruleSet, node.getNiftyNode());
+    }
+
+    private void applyRuleSetInternal(final RuleSet ruleSet, Object object) throws Exception {
+      if (object == null) {
+        return;
+      }
+      NiftyStyleClassInfo classInfo = classInfoCache.getNiftyStyleClass(nifty, object.getClass());
       for (int i=0; i<ruleSet.getDeclarationBlock().size(); i++) {
         Declaration decleration = ruleSet.getDeclarationBlock().get(i);
         String prop = decleration.getProperty().toString();
         String value = decleration.getValue().toString();
-        log.fine("Applying rule: {" + prop + "} -> {" + value + "}");
-        classInfo.writeValue(internal, prop, value);
+        if (classInfo.writeValue(object, prop, value)) {
+          log.fine("Applying rule to (" + object + "): {" + prop + "} -> {" + value + "}");  
+        }
       }
     }
   }

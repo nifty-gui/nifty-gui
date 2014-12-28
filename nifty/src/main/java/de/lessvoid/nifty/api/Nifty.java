@@ -39,16 +39,16 @@ import org.jglfont.JGLFontFactory;
 import de.lessvoid.nifty.api.input.NiftyInputConsumer;
 import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
+import de.lessvoid.nifty.internal.InternalNiftyEventBus;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.InternalNiftyEventBus;
 import de.lessvoid.nifty.internal.InternalNiftyNodeRenderOrderComparator;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
-import de.lessvoid.nifty.internal.style.NiftyStyle;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
+import de.lessvoid.nifty.internal.style.NiftyStyle;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -153,7 +153,7 @@ public class Nifty {
    * @throws IOException 
    */
   public void applyStyle(final InputStream source) throws IOException {
-    niftyStyle.applyStyle(source, rootNodes);
+    niftyStyle.applyStyle(this, source, rootNodes);
   }
 
   /**
@@ -396,7 +396,7 @@ public class Nifty {
    * @throws IOException
    */
   public NiftyFont createFont(final String name) throws IOException {
-    return new NiftyFont(fontFactory.loadFont(resourceLoader.getResourceAsStream(name), name, 12));
+    return new NiftyFont(fontFactory.loadFont(resourceLoader.getResourceAsStream(name), name, 12), name);
   }
 
   /**

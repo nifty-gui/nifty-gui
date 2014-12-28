@@ -161,6 +161,9 @@ public class InternalNiftyNode implements InternalLayoutable {
   // the EventBus for this Node - this will be lazily instantiated if it is actually needed
   private InternalNiftyEventBus eventBus;
 
+  // if this node is the parent node of a control node hierachy then control keeps a reference to the NiftyControl
+  private NiftyControl control;
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -493,11 +496,9 @@ public class InternalNiftyNode implements InternalLayoutable {
   @Override
   public String toString() {
     builder.setLength(0);
-    builder.append("NiftyNode [");
     builder.append(id);
-    builder.append("] (");
-    builder.append(super.toString());
-    builder.append(")");
+    builder.append("@");
+    builder.append(super.hashCode());
     return builder.toString();
   }
 
@@ -614,6 +615,14 @@ public class InternalNiftyNode implements InternalLayoutable {
   public Vec4 localToScreen(final int x, final int y) {
     Mat4 inverseTrans = getScreenToLocalTransformation();
     return Mat4.transform(inverseTrans, new Vec4(x, y, 0.f, 1.f));
+  }
+
+  public void setControl(final NiftyControl control) {
+    this.control = control;
+  }
+
+  public NiftyControl getControl() {
+    return control;
   }
 
   private void getStateInfo(final StringBuilder result, final String offset, final Pattern pattern) {

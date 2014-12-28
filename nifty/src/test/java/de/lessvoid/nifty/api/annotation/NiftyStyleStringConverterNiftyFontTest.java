@@ -24,36 +24,52 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.style;
+package de.lessvoid.nifty.api.annotation;
+
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.Nifty;
-import static org.junit.Assert.assertEquals;
+import de.lessvoid.nifty.api.NiftyFont;
 
-import static org.easymock.EasyMock.*;
-
-public class NiftyStyleClassInfoCacheTest {
-  private Nifty nifty;
-  private NiftyStyleClassInfoCache cache = new NiftyStyleClassInfoCache();
-
-  @Before
-  public void before() {
-    nifty = createMock(Nifty.class);
-    replay(nifty);
-  }
+public class NiftyStyleStringConverterNiftyFontTest {
+  private Nifty niftyMock = createMock(Nifty.class);
+  private NiftyStyleStringConverterNiftyFont converter = new NiftyStyleStringConverterNiftyFont(niftyMock);
 
   @After
   public void after() {
-    verify(nifty);
+    verify(niftyMock);
   }
 
   @Test
-  public void testReuse() throws Exception {
-    NiftyStyleClassInfo classInfo = cache.getNiftyStyleClass(nifty, this.getClass());
-    assertEquals(classInfo, cache.getNiftyStyleClass(nifty, this.getClass()));
+  public void testToString() throws Exception {
+    replay(niftyMock);
+
+    NiftyFont niftyFontMock = createMock(NiftyFont.class);
+    expect(niftyFontMock.getName()).andReturn("my-name");
+    replay(niftyFontMock);
+
+    assertEquals("my-name", converter.toString(niftyFontMock));
+
+    verify(niftyFontMock);
   }
 
+  @Test
+  public void testFromString() throws Exception {
+    NiftyFont niftyFontMock = createMock(NiftyFont.class);
+    replay(niftyFontMock);
+
+    expect(niftyMock.createFont("my-name")).andReturn(niftyFontMock);
+    replay(niftyMock);
+
+    assertEquals(niftyFontMock, converter.fromString("my-name"));
+
+    verify(niftyMock);
+  }
 }

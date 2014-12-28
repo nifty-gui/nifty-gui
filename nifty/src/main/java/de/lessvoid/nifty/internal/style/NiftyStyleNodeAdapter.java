@@ -26,12 +26,6 @@
  */
 package de.lessvoid.nifty.internal.style;
 
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.common.ListBuilder;
-import se.fishtank.css.selectors.NodeSelectorException;
-import se.fishtank.css.selectors.generic.GenericNodeAdapter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,11 +33,20 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import se.fishtank.css.selectors.NodeSelectorException;
+import se.fishtank.css.selectors.generic.GenericNodeAdapter;
+import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.internal.common.ListBuilder;
+
 public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNode> {
   private final static Logger log = Logger.getLogger(NiftyStyleNodeAdapter.class.getName());
+  private final Nifty nifty;
   private final NiftyStyleClassInfoCache classInfoCache;
 
-  public NiftyStyleNodeAdapter(final NiftyStyleClassInfoCache classInfoCache) {
+  public NiftyStyleNodeAdapter(final Nifty nifty, final NiftyStyleClassInfoCache classInfoCache) {
+    this.nifty = nifty;
     this.classInfoCache = classInfoCache;
   }
 
@@ -51,7 +54,7 @@ public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNo
   public Map<String, String> getAttributes(final InternalNiftyNode node) {
     try {
       NiftyNode internal = node.getNiftyNode();
-      Map<String, String> attr = classInfoCache.getNiftyStyleClass(internal.getClass()).getProperties(internal);
+      Map<String, String> attr = classInfoCache.getNiftyStyleClass(nifty, internal.getClass()).getProperties(internal);
       log.fine("getAttributes(" + node + ") -> " + attr);
       return attr;
     } catch (Exception e) {
