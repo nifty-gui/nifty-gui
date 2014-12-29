@@ -48,7 +48,7 @@ public class UseCase_c02_LabelControlMinSize {
     Label label = niftyNode.newControl(Label.class);
     label.setFont(font);
     label.setText("hello autosize label");
-    label.setColor(NiftyColor.fromString("#ffff"));
+    label.setTextColor(NiftyColor.fromString("#ffff"));
     label.getNode().setBackgroundColor(NiftyColor.RED());
   }
 

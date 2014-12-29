@@ -38,6 +38,7 @@ import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 public abstract class NiftyAbstractControl implements NiftyControl {
   protected NiftyNode niftyNode;
 
+  @Override
   public void init(final NiftyNode niftyNode) {
     this.niftyNode = niftyNode;
     NiftyNodeAccessor.getDefault().getInternalNiftyNode(niftyNode).setControl(this);

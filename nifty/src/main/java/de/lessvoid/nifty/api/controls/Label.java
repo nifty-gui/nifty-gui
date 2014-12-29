@@ -35,9 +35,9 @@ import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyFont;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterHAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyColor;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyFont;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.internal.render.TextRenderer;
 
@@ -48,6 +48,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
   private HAlign textHAlign = HAlign.center;
   private VAlign textVAlign = VAlign.center;
 
+  @Override
   public void init(final NiftyNode niftyNode) {
     super.init(niftyNode);
     niftyNode.addCanvasPainter(new LabelCanvasPainter());
@@ -81,7 +82,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    * @param color the color
    */
   @NiftyStyleProperty(name = "text-color", converter = NiftyStyleStringConverterNiftyColor.class)
-  public void setColor(final NiftyColor color) {
+  public void setTextColor(final NiftyColor color) {
     this.textColor = color;
     niftyNode.requestRedraw();
   }
@@ -91,7 +92,7 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    *
    * @return the current color of the label
    */
-  public NiftyColor getColor() {
+  public NiftyColor getTextColor() {
     return textColor;
   }
 
@@ -120,8 +121,16 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    * @param halign horizontal alignment
    */
   @NiftyStyleProperty(name = "text-halign", converter = NiftyStyleStringConverterHAlign.class)
-  public void setHAlign(final HAlign halign) {
+  public void setTextHAlign(final HAlign halign) {
     textHAlign = halign;
+  }
+
+  /**
+   * Get the horizontal alignment.
+   * @return the horizontal alignment
+   */
+  public HAlign getTextHAlign() {
+    return textHAlign;
   }
 
   /**
@@ -129,14 +138,16 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
    * @param valign vertical alignment
    */
   @NiftyStyleProperty(name = "text-valign", converter = NiftyStyleStringConverterVAlign.class)
-  public void setVAlign(final VAlign valign) {
+  public void setTextVAlign(final VAlign valign) {
     textVAlign = valign;
   }
 
-  private void assertFont() {
-    if (font == null) {
-      throw new RuntimeException("Label requires a font but none available (null)");
-    }
+  /**
+   * Get the vertical alignment.
+   * @return the vertical alignment
+   */
+  public VAlign getTextVAlign() {
+    return textVAlign;
   }
 
   @Override
@@ -146,6 +157,12 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
     result.width = font.getWidth(text);
     result.height = font.getHeight();
     return result;
+  }
+
+  private void assertFont() {
+    if (font == null) {
+      throw new RuntimeException("Label requires a font but none available (null)");
+    }
   }
 
   private class LabelCanvasPainter implements NiftyCanvasPainter {
