@@ -144,7 +144,12 @@ public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNo
   }
 
   private boolean isMatch(final String tagName, final InternalNiftyNode child) {
-    // TODO figure out a way to handle controls later ...
+    // if the node has a control we'll check first its name against the tagName too.
+    if (child.getControl() != null) {
+      if (child.getControl().getClass().getSimpleName().equals(tagName)) {
+        return true;
+      }
+    }
     return child.getNiftyNode().getClass().getSimpleName().equals(tagName);
   }
 }
