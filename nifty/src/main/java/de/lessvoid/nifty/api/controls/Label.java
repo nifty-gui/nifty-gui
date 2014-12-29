@@ -41,7 +41,7 @@ import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyFont;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.internal.render.TextRenderer;
 
-public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback {
+public class Label extends NiftyAbstractControl {
   private NiftyColor textColor = NiftyColor.WHITE();
   private String text = "";
   private NiftyFont font;
@@ -52,7 +52,16 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
   public void init(final NiftyNode niftyNode) {
     super.init(niftyNode);
     niftyNode.addCanvasPainter(new LabelCanvasPainter());
-    niftyNode.enableMinSize(this);
+    niftyNode.enableMinSize(new NiftyMinSizeCallback() {
+      @Override
+      public Size calculateMinSize(final NiftyNode niftyNode) {
+        assertFont();
+        Size result = new Size();
+        result.width = font.getWidth(text);
+        result.height = font.getHeight();
+        return result;
+      }
+    });
     niftyNode.setStyleClass("label");
   }
 
@@ -150,13 +159,20 @@ public class Label extends NiftyAbstractControl implements NiftyMinSizeCallback 
     return textVAlign;
   }
 
-  @Override
-  public Size calculateMinSize(final NiftyNode niftyNode) {
-    assertFont();
-    Size result = new Size();
-    result.width = font.getWidth(text);
-    result.height = font.getHeight();
-    return result;
+  /**
+   * Get the width of the current text in px.
+   * @return the width of the current text in px
+   */
+  public int getTextWidth() {
+    return font.getWidth(text);
+  }
+
+  /**
+   * Get the height of the current text in px.
+   * @return the height of the current text in px
+   */
+  public int getTextHeight() {
+    return font.getHeight();
   }
 
   private void assertFont() {
