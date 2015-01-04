@@ -53,7 +53,7 @@ import de.lessvoid.nifty.api.NiftyColor;
  * The first argument to the function specifies the gradient line, which gives the gradient a direction and determines
  * how color-stops are positioned. It may be omitted; if so, it defaults to to bottom.
  *
- * The gradient line’s direction may be specified in two ways:
+ * The gradient line's direction may be specified in two ways:
  *
  * using angles
  * For the purpose of this argument, 0deg points upward, and positive angles represent clockwise rotation, so
