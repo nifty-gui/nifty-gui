@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -34,6 +35,21 @@ import java.util.List;
 import org.junit.Test;
 
 public class NiftyLinearGradientTest {
+
+  @Test
+  public void testCopyConstructor() {
+    NiftyLinearGradient source = createNiftyLinearGradient();
+    source.addColorStop(0.0, NiftyColor.black());
+    source.addColorStop(0.0, NiftyColor.blue());
+    source.setFlip();
+    source.setScale(2.);
+
+    NiftyLinearGradient gradient = new NiftyLinearGradient(source);
+    assertEquals(Math.PI/2, gradient.getAngleInRadiants());
+    assertColorStops(gradient.getColorStops(), new NiftyColorStop(0.0, NiftyColor.blue()));
+    assertTrue(gradient.isFlip());
+    assertEquals(2., gradient.getScale());
+  }
 
   @Test
   public void testPoints() {
@@ -78,6 +94,26 @@ public class NiftyLinearGradientTest {
     gradient.addColorStop(0.0, NiftyColor.black());
     gradient.addColorStop(0.0, NiftyColor.blue());
     assertColorStops(gradient.getColorStops(), new NiftyColorStop(0.0, NiftyColor.blue()));
+  }
+
+  @Test
+  public void testScale() {
+    NiftyLinearGradient gradient = createNiftyLinearGradient();
+    assertEquals(gradient, gradient.setScale(1.23));
+    assertEquals(1.23, gradient.getScale());
+  }
+
+  @Test
+  public void testFlipDefault() {
+    NiftyLinearGradient gradient = createNiftyLinearGradient();
+    assertFalse(gradient.isFlip());
+  }
+
+  @Test
+  public void testFlip() {
+    NiftyLinearGradient gradient = createNiftyLinearGradient();
+    assertEquals(gradient, gradient.setFlip());
+    assertTrue(gradient.isFlip());
   }
 
   private NiftyLinearGradient createNiftyLinearGradient() {

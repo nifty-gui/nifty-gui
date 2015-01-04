@@ -1,3 +1,17 @@
 .button {
-  background-gradient: linear-gradient(#737373, #343434 37%, #000000 40%, #000000 44%, #343434);
+  /*
+    The original 1.x Nifty style used the following gradient in Photoshop. However it was flipped and scaled by 123%.
+
+    We could actually reproduce this in Nifty 2.x using the methods setScale(1.23) and setFlip() in the
+    NiftyLinearGradient class - a pretty cool feature btw =)
+
+    But since we'd really like to use the pure CSS3 syntax in here for the gradient but that doesn't support scaling or
+    flipping of the gradient we calculated the corresponding flipped gradient and use that instead.
+
+    Consider this comment as a note from the past or something :)
+
+    Original photoshop gradient in Nifty 1.x: linear-gradient(#737373, #343434 37%, #000000 40%, #000000 44%, #343434);
+   */
+
+  background-gradient: linear-gradient(#343434 -23%, #000000 45.8%, #000000 50.8%, #343434 54.5%, #737373);
 }

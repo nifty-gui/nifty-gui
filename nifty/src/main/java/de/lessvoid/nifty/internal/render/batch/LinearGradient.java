@@ -73,7 +73,7 @@ public class LinearGradient {
     this.startY = my - halfLength * cosAngle;
     this.endX = mx + halfLength * sinAngle;
     this.endY = my + halfLength * cosAngle;
-    this.colorStops.addAll(gradient.getColorStops());
+    this.colorStops.addAll(flip(applyScale(gradient.getColorStops(), gradient.getScale()), gradient.isFlip()));
   }
 
   /**
@@ -172,5 +172,47 @@ public class LinearGradient {
     if (Double.doubleToLongBits(endY) != Double.doubleToLongBits(other.endY))
       return false;
     return true;
+  }
+
+  private List<NiftyColorStop> flip(final List<NiftyColorStop> colorStops, final boolean flip) {
+    if (!flip) {
+      return colorStops;
+    }
+
+    // make a copy of the stops
+    ArrayList<NiftyColorStop> reversedList = new ArrayList<NiftyColorStop>(colorStops);
+
+    // reverse the order (so that the colors are in the flipped order)
+    Collections.reverse(reversedList);
+
+    // since NiftyColorStop is not mutable we need to return a new list
+    ArrayList<NiftyColorStop> result = new ArrayList<NiftyColorStop>();
+
+    // now flip the color stops as well 
+    for (int i=0; i<reversedList.size(); i++) {
+      NiftyColorStop stop = reversedList.get(i);
+      result.add(new NiftyColorStop((stop.getStop() - 1.0) * -1.0, stop.getColor()));
+    }
+    return result;
+  }
+
+  private List<NiftyColorStop> applyScale(final List<NiftyColorStop> colorStops, final double scale) {
+    // just shortcut the regular case
+    if (scale == 1.0) {
+      return colorStops;
+    }
+
+    List<NiftyColorStop> result = new ArrayList<NiftyColorStop>();
+    for (int i=0; i<colorStops.size(); i++) {
+      NiftyColorStop colorStop = colorStops.get(i);
+      double newStop = colorStop.getStop() * scale;
+      result.add(new NiftyColorStop(newStop, colorStop.getColor()));
+
+      // having colorStops > 1.0 doesn't really make sense since we'll never see them
+      if (newStop >= 1.0) {
+        return result;
+      }
+    }
+    return result;
   }
 }

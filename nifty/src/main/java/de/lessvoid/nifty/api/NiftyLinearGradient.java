@@ -40,6 +40,8 @@ import java.util.TreeSet;
 public class NiftyLinearGradient {
   private final double angleInRadiants;
   private final Set<NiftyColorStop> colorStops = new TreeSet<NiftyColorStop>();
+  private double scale = 1.0;
+  private boolean flip = false;
 
   private NiftyLinearGradient(final double angleInRadiants) {
     this.angleInRadiants = angleInRadiants;
@@ -70,6 +72,8 @@ public class NiftyLinearGradient {
   public NiftyLinearGradient(final NiftyLinearGradient src) {
     this.angleInRadiants = src.angleInRadiants;
     this.colorStops.addAll(src.colorStops);
+    this.scale = src.scale;
+    this.flip = src.flip;
   }
 
   /**
@@ -89,8 +93,6 @@ public class NiftyLinearGradient {
    * @param color a NiftyColor to display at stop position.
    */
   public NiftyLinearGradient addColorStop(final double stop, final NiftyColor color) {
-    assertValidStop(stop);
-
     NiftyColorStop newColorStop = new NiftyColorStop(stop, color);
     colorStops.remove(newColorStop);
     colorStops.add(newColorStop);
@@ -112,6 +114,42 @@ public class NiftyLinearGradient {
    */
   public List<NiftyColorStop> getColorStops() {
     return Collections.unmodifiableList(new ArrayList<NiftyColorStop>(colorStops));
+  }
+
+  /**
+   * Apply an optional scale factor to all stops. The default value is 1.0.
+   * @param scale the new scale factor for the gradient
+   * @return this
+   */
+  public NiftyLinearGradient setScale(final double scale) {
+    assertPositiveScale(scale);
+    this.scale = scale;
+    return this;
+  }
+
+  /**
+   * Get the current scale factor.
+   * @return the current scale factor or 1.0 if none have been set.
+   */
+  public double getScale() {
+    return scale ;
+  }
+
+  /**
+   * Flip the color stops in this gradient around.
+   * @return this
+   */
+  public NiftyLinearGradient setFlip() {
+    this.flip = true;
+    return this;
+  }
+
+  /**
+   * Return true if this gradient should be flipped. Default is false.
+   * @return true when this gradient is supposed to be flipped and false if not
+   */
+  public boolean isFlip() {
+    return flip;
   }
 
   @Override
@@ -144,9 +182,9 @@ public class NiftyLinearGradient {
     return true;
   }
 
-  private void assertValidStop(final double stop) {
-    if (stop < 0.0 || stop > 1.0) {
-      throw new IllegalArgumentException("color stop value [" + stop + "] not between 0.0 and 1.0");
+  private void assertPositiveScale(final double scale) {
+    if (Math.signum(scale) < 0) {
+      throw new IllegalArgumentException("scale must be positive but was (" + scale + ")");
     }
   }
 

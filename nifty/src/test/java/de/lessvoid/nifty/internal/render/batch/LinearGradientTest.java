@@ -38,7 +38,7 @@ import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
 
 public class LinearGradientTest {
-  private static final double EPSILON = 0.000000001;
+  private static final double EPSILON = 0.001;
 
   @Test
   public void test0degrees() {
@@ -117,11 +117,121 @@ public class LinearGradientTest {
         new NiftyColorStop(1.0, NiftyColor.green()));
   }
 
+  @Test
+  public void testScaleUp() {
+    LinearGradient gradient = new LinearGradient(
+        0.0, 0.0, 200.0, 100.0,
+        NiftyLinearGradient.createFromAngleInDeg(90.0)
+          .addColorStop(0.0, NiftyColor.black())
+          .addColorStop(1.0, NiftyColor.green())
+          .setScale(2.0));
+    assertColorStops(
+        gradient.getColorStops(),
+        new NiftyColorStop(0.0, NiftyColor.black()),
+        new NiftyColorStop(2.0, NiftyColor.green()));
+  }
+
+  @Test
+  public void testFlip() {
+    LinearGradient gradient = new LinearGradient(
+        0.0, 0.0, 200.0, 100.0,
+        NiftyLinearGradient.createFromAngleInDeg(90.0)
+          .addColorStop(0.0, NiftyColor.black())
+          .addColorStop(0.25, NiftyColor.red())
+          .addColorStop(0.5, NiftyColor.blue())
+          .addColorStop(1.0, NiftyColor.green())
+          .setFlip());
+    assertColorStops(
+        gradient.getColorStops(),
+        new NiftyColorStop(0.0, NiftyColor.green()),
+        new NiftyColorStop(0.5, NiftyColor.blue()),
+        new NiftyColorStop(0.75, NiftyColor.red()),
+        new NiftyColorStop(1.0, NiftyColor.black()));
+  }
+
+  @Test
+  public void testFlipAndScale() {
+    LinearGradient gradient = new LinearGradient(
+        0.0, 0.0, 200.0, 100.0,
+        NiftyLinearGradient.createFromAngleInDeg(90.0)
+          .addColorStop(0.0, NiftyColor.black())
+          .addColorStop(0.25, NiftyColor.red())
+          .addColorStop(0.5, NiftyColor.blue())
+          .addColorStop(1.0, NiftyColor.green())
+          .setFlip()
+          .setScale(2.0));
+    assertColorStops(
+        gradient.getColorStops(),
+        new NiftyColorStop(0.0, NiftyColor.blue()),
+        new NiftyColorStop(0.5, NiftyColor.red()),
+        new NiftyColorStop(1.0, NiftyColor.black()));
+  }
+
+  @Test
+  public void testFlipAndScale2() {
+    LinearGradient gradient = new LinearGradient(
+        0.0, 0.0, 200.0, 100.0,
+        NiftyLinearGradient.createFromAngleInDeg(90.0)
+          .addColorStop(0.0, NiftyColor.fromString("#737373"))
+          .addColorStop(0.37, NiftyColor.fromString("#343434"))
+          .addColorStop(0.4, NiftyColor.fromString("#000000"))
+          .addColorStop(0.44, NiftyColor.fromString("#000000"))
+          .addColorStop(1.0, NiftyColor.fromString("#343434"))
+          .setFlip()
+          .setScale(1.23));
+    assertColorStops(
+        gradient.getColorStops(),
+        new NiftyColorStop(-0.23, NiftyColor.fromString("#343434")),
+        new NiftyColorStop(0.458, NiftyColor.fromString("#000000")),
+        new NiftyColorStop(0.508, NiftyColor.fromString("#000000")),
+        new NiftyColorStop(0.545, NiftyColor.fromString("#343434")),
+        new NiftyColorStop(1.00, NiftyColor.fromString("#737373")));
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testNegativeScaleError() {
+    new LinearGradient(
+        0.0, 0.0, 200.0, 100.0,
+        NiftyLinearGradient.createFromAngleInDeg(90.0)
+          .addColorStop(0.0, NiftyColor.black())
+          .addColorStop(1.0, NiftyColor.green())
+          .setScale(-1.0));
+  }
+
+  @Test
+  public void testScaleDown() {
+    LinearGradient gradient = new LinearGradient(
+        0.0, 0.0, 200.0, 100.0,
+        NiftyLinearGradient.createFromAngleInDeg(90.0)
+          .addColorStop(0.0, NiftyColor.black())
+          .addColorStop(1.0, NiftyColor.green())
+          .setScale(.5));
+    assertColorStops(
+        gradient.getColorStops(),
+        new NiftyColorStop(0.0, NiftyColor.black()),
+        new NiftyColorStop(0.5, NiftyColor.green()));
+  }
+
+  @Test
+  public void testScaleCutOff() {
+    LinearGradient gradient = new LinearGradient(
+        0.0, 0.0, 200.0, 100.0,
+        NiftyLinearGradient.createFromAngleInDeg(90.0)
+          .addColorStop(0.0, NiftyColor.black())
+          .addColorStop(0.5, NiftyColor.red())
+          .addColorStop(1.0, NiftyColor.green())
+          .setScale(2.0));
+    assertColorStops(
+        gradient.getColorStops(),
+        new NiftyColorStop(0.0, NiftyColor.black()),
+        new NiftyColorStop(1.0, NiftyColor.red()));
+  }
+
   private void assertColorStops(final List<NiftyColorStop> colorStops, final NiftyColorStop ... stops) {
-    assertEquals(colorStops.size(), stops.length);
+    assertEquals(stops.length, colorStops.size());
     for (int i=0; i<stops.length; i++) {
-      assertTrue(colorStops.get(i).equals(stops[i]));
-      assertTrue(colorStops.get(i).getColor().equals(stops[i].getColor()));
+      assertEquals(stops[i].getStop(), colorStops.get(i).getStop(), EPSILON);
+      assertEquals(stops[i].getColor(), colorStops.get(i).getColor());
     }
   }
 }
