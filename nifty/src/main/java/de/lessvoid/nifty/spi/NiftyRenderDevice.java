@@ -28,14 +28,15 @@ package de.lessvoid.nifty.spi;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
 
 /**
@@ -130,10 +131,14 @@ public interface NiftyRenderDevice {
    * Render a linear gradient with the given parameters using vertex data given in the FloatBuffer containing:
    * - 2 floats x and y vertex position
    *
-   * @param gradientParams the NiftyLinearGradient containing the linear gradient parameters to use
+   * @param x0 the x position of the first edge point
+   * @param y0 the y position of the first edge point
+   * @param x1 the x position of the second edge point
+   * @param y1 the y position of the second edge point
+   * @param colorStops the list of colorstops
    * @param vertices the vertex data to render
    */
-  void renderLinearGradientQuads(NiftyLinearGradient gradientParams, FloatBuffer vertices);
+  void renderLinearGradientQuads(double x0, double y0, double x1, double y1, List<NiftyColorStop> colorStops, FloatBuffer vertices);
 
   /**
    * Called after all render*() calls are done to end rendering.

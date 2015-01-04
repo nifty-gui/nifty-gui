@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -50,7 +51,6 @@ import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.common.IdGenerator;
 import de.lessvoid.nifty.internal.math.Mat4;
@@ -280,7 +280,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void renderLinearGradientQuads(final NiftyLinearGradient params, final FloatBuffer vertices) {
+  public void renderLinearGradientQuads(final double x0, final double y0, final double x1, final double y1, final List<NiftyColorStop> colorStops, final FloatBuffer vertices) {
     log.fine("renderLinearGradientQuads()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
@@ -290,10 +290,10 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     CoreShader shader = shaderManager.activate(LINEAR_GRADIENT_SHADER);
     shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
 
-    float[] gradientStop = new float[params.getColorStops().size()];
-    float[] gradientColor = new float[params.getColorStops().size() * 4];
+    float[] gradientStop = new float[colorStops.size()];
+    float[] gradientColor = new float[colorStops.size() * 4];
     int i = 0;
-    for (NiftyColorStop stop : params.getColorStops()) {
+    for (NiftyColorStop stop : colorStops) {
       gradientColor[i * 4 + 0] = (float) stop.getColor().getRed();
       gradientColor[i * 4 + 1] = (float) stop.getColor().getGreen();
       gradientColor[i * 4 + 2] = (float) stop.getColor().getBlue();
@@ -304,11 +304,8 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     shader.setUniformfv("gradientStop", 1, gradientStop);
     shader.setUniformfv("gradientColor", 4, gradientColor);
-    shader.setUniformi("numStops", params.getColorStops().size());
-    shader.setUniformf(
-        "gradient",
-        (float)params.getX0(), (float)params.getY0(),
-        (float)params.getX1(), (float)params.getY1());
+    shader.setUniformi("numStops", colorStops.size());
+    shader.setUniformf("gradient", (float)x0, (float)y0, (float)x1, (float)y1);
 
     vao.bind();
     vbo.bind();

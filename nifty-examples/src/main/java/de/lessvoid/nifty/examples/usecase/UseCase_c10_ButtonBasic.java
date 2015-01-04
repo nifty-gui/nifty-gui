@@ -26,40 +26,37 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import java.io.IOException;
+
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCallback;
-import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
+import de.lessvoid.nifty.api.controls.Button;
 
 /**
- * A single root node of a fixed size with a background color that is constantly rotating.
+ * Display a simple Button.
  * @author void
  */
-public class UseCase_a04_RotatingRootNode {
+public class UseCase_c10_ButtonBasic {
+  private final NiftyNode niftyNode;
+  private final NiftyFont font;
 
-  public UseCase_a04_RotatingRootNode(final Nifty nifty) {
-    nifty.clearScreenBeforeRender();
+  public UseCase_c10_ButtonBasic(final Nifty nifty) throws IOException {
+    niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    font = nifty.createFont("fonts/aurulent-sans-16.fnt");
 
-    final NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Absolute);
-    niftyNode.setBackgroundColor(NiftyColor.green());
-    niftyNode.startAnimated(0, 15, new NiftyCallback<Float>() {
-      private float angle = 0;
+    Button button = niftyNode.newControl(Button.class);
+    button.setFont(font);
+    button.getNode().setWidthConstraint(UnitValue.px(100));
+    button.getNode().setHeightConstraint(UnitValue.px(23));
+    button.setText("OK");
 
-      @Override
-      public void execute(final Float time) {
-        niftyNode.setRotationZ(angle++);
-      }
-    });
-
-    NiftyNode childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
-    childNode.setBackgroundColor(NiftyColor.red());
-    childNode.setXConstraint(UnitValue.px(50));
-    childNode.setYConstraint(UnitValue.px(50));
+    nifty.applyStyle(UseCase_c10_ButtonBasic.class.getResourceAsStream("UseCase_c10_ButtonBasic.css"));
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args);
+    UseCaseRunner.run(UseCase_c10_ButtonBasic.class, args);
   }
 }

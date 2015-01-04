@@ -50,14 +50,14 @@ public class UseCase_b07_CanvasTransformTranslate {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         // fill the whole node content with a plain white color
-        canvas.setFillStyle(NiftyColor.WHITE());
+        canvas.setFillStyle(NiftyColor.white());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        canvas.setFillStyle(NiftyColor.BLACK());
+        canvas.setFillStyle(NiftyColor.black());
         canvas.fillRect(10, 10, 50, 50);
 
         canvas.translate(60.f, 60.f);
-        canvas.setFillStyle(NiftyColor.RED());
+        canvas.setFillStyle(NiftyColor.red());
         canvas.fillRect(10, 10, 50, 50);
       }
     });

@@ -50,10 +50,10 @@ public class UseCase_b15_CanvasComposite {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    rootNode.setBackgroundColor(NiftyColor.BLACK());
+    rootNode.setBackgroundColor(NiftyColor.black());
 
     final NiftyNode centerNode = rootNode.newChildNode(UnitValue.percent(60), UnitValue.percent(60), ChildLayout.Vertical);
-    centerNode.setBackgroundColor(NiftyColor.WHITE());
+    centerNode.setBackgroundColor(NiftyColor.white());
 
     NiftyNode rowNode = centerNode.newChildNode(ChildLayout.Horizontal);
     compositeExampleNode(rowNode, font, NiftyCompositeOperation.SourceOver);
@@ -89,15 +89,15 @@ public class UseCase_b15_CanvasComposite {
     canvasNode.addCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.BLUE());
+        canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 20, 75, 50);
   
         canvas.setGlobalCompositeOperation(operation);
-        canvas.setFillStyle(NiftyColor.RED());
+        canvas.setFillStyle(NiftyColor.red());
         canvas.fillRect(30, 50, 75, 50);
 
         canvas.setGlobalCompositeOperation(NiftyCompositeOperation.SourceOver);
-        canvas.setTextColor(NiftyColor.BLACK());
+        canvas.setTextColor(NiftyColor.black());
         canvas.setTextSize(1.0f);
         canvas.text(font, 0, 0, operation.toString());
       }

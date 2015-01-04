@@ -31,7 +31,7 @@ import static de.lessvoid.nifty.AssertColor.assertColor;
 import org.junit.Test;
 
 public class NiftyMutableColorTest {
-  private NiftyMutableColor color = new NiftyMutableColor(NiftyColor.TRANSPARENT());
+  private NiftyMutableColor color = new NiftyMutableColor(NiftyColor.transparent());
 
   @Test
   public void testSet() {
@@ -45,8 +45,8 @@ public class NiftyMutableColorTest {
 
   @Test
   public void testLinear() {
-    NiftyColor start = NiftyColor.NONE();
-    NiftyColor end = NiftyColor.WHITE();
+    NiftyColor start = NiftyColor.none();
+    NiftyColor end = NiftyColor.white();
     assertColor(0.5f, 0.5f, 0.5f, 0.5f, color.linear(start, end, 0.5f));
   }
 

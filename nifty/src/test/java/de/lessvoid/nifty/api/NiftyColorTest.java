@@ -32,8 +32,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.NiftyColor;
-
 public class NiftyColorTest {
 
   @Test
@@ -50,37 +48,37 @@ public class NiftyColorTest {
 
   @Test
   public void testBLACK() {
-    assertColor(0.f, 0.f, 0.f, 1.f, NiftyColor.BLACK());
+    assertColor(0.f, 0.f, 0.f, 1.f, NiftyColor.black());
   }
 
   @Test
   public void testWHITE() {
-    assertColor(1.f, 1.f, 1.f, 1.f, NiftyColor.WHITE());
+    assertColor(1.f, 1.f, 1.f, 1.f, NiftyColor.white());
   }
 
   @Test
   public void testRED() {
-    assertColor(1.f, 0.f, 0.f, 1.f, NiftyColor.RED());
+    assertColor(1.f, 0.f, 0.f, 1.f, NiftyColor.red());
   }
 
   @Test
   public void testGREEN() {
-    assertColor(0.f, 1.f, 0.f, 1.f, NiftyColor.GREEN());
+    assertColor(0.f, 0.5f, 0.f, 1.f, NiftyColor.green());
   }
 
   @Test
   public void testBLUE() {
-    assertColor(0.f, 0.f, 1.f, 1.f, NiftyColor.BLUE());
+    assertColor(0.f, 0.f, 1.f, 1.f, NiftyColor.blue());
   }
 
   @Test
   public void testYELLOW() {
-    assertColor(1.f, 1.f, 0.f, 1.f, NiftyColor.YELLOW());
+    assertColor(1.f, 1.f, 0.f, 1.f, NiftyColor.yellow());
   }
 
   @Test
   public void testNONE() {
-    assertColor(0.f, 0.f, 0.f, 0.f, NiftyColor.NONE());
+    assertColor(0.f, 0.f, 0.f, 0.f, NiftyColor.none());
   }
 
   @Test
@@ -95,7 +93,7 @@ public class NiftyColorTest {
 
   @Test
   public void testFromColorWithAlpha() {
-    assertColor(1.f, 0.f, 0.f, .45f, NiftyColor.fromColorWithAlpha(NiftyColor.RED(), 0.45f));
+    assertColor(1.f, 0.f, 0.f, .45f, NiftyColor.fromColorWithAlpha(NiftyColor.red(), 0.45f));
   }
 
   @Test
@@ -115,30 +113,35 @@ public class NiftyColorTest {
 
   @Test
   public void testToString() {
-    assertEquals("#0000ffff {0.0, 0.0, 1.0, 1.0}", NiftyColor.BLUE().toString());
+    assertEquals("#0000ffff {0.0, 0.0, 1.0, 1.0}", NiftyColor.blue().toString());
   }
 
   @Test
   public void testToHexString() {
-    assertEquals("#0000ffff", NiftyColor.BLUE().toHexString());
+    assertEquals("#0000ffff", NiftyColor.blue().toHexString());
   }
 
   @Test
   public void testHashCode() {
-    assertEquals(-1173481599L, NiftyColor.RED().hashCode());
+    assertEquals(-1173481599L, NiftyColor.red().hashCode());
   }
 
   @Test
   public void testEquals() {
-    NiftyColor a = NiftyColor.NONE();
+    NiftyColor a = NiftyColor.none();
     NiftyColor b = new NiftyColor(0.f, 0.f, 0.f, 0.f);
     assertTrue(a.equals(b));
   }
 
   @Test
   public void testEqualsSame() {
-    NiftyColor a = NiftyColor.NONE();
+    NiftyColor a = NiftyColor.none();
     NiftyColor b = a;
     assertTrue(a.equals(b));
+  }
+
+  @Test
+  public void testIsColor() {
+    assertTrue(NiftyColor.isColor("#f00f"));
   }
 }

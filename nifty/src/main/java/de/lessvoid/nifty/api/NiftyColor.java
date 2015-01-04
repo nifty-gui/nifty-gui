@@ -85,59 +85,75 @@ public class NiftyColor {
     this(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
   }
 
-  /**
-   * Get a new BLACK color.
-   * @return NiftyColor
-   */
-  public static NiftyColor BLACK() {
-    return new NiftyColor(0.0f, 0.0f, 0.0f, 1.0f);
+  public static NiftyColor black() {
+    return NiftyColor.fromString("black");
   }
 
-  /**
-   * Get a new WHITE color.
-   * @return NiftyColor
-   */
-  public static NiftyColor WHITE() {
-    return new NiftyColor(1.0f, 1.0f, 1.0f, 1.0f);
+  public static NiftyColor silver() {
+    return NiftyColor.fromString("silver");
   }
 
-  /**
-   * Get a new RED color.
-   * @return NiftyColor
-   */
-  public static NiftyColor RED() {
-    return new NiftyColor(1.0f, 0.0f, 0.0f, 1.0f);
+  public static NiftyColor gray() {
+    return NiftyColor.fromString("gray");
   }
 
-  /**
-   * Get a new GREEN color.
-   * @return NiftyColor
-   */
-  public static NiftyColor GREEN() {
-    return new NiftyColor(0.0f, 1.0f, 0.0f, 1.0f);
+  public static NiftyColor white() {
+    return NiftyColor.fromString("white");
   }
 
-  /**
-   * Get a new BLUE color.
-   * @return NiftyColor
-   */
-  public static NiftyColor BLUE() {
-    return new NiftyColor(0.0f, 0.0f, 1.0f, 1.0f);
+  public static NiftyColor maroon() {
+    return NiftyColor.fromString("maroon");
   }
 
-  /**
-   * Get a new YELLOW color.
-   * @return NiftyColor
-   */
-  public static NiftyColor YELLOW() {
-    return new NiftyColor(1.0f, 1.0f, 0.0f, 1.0f);
+  public static NiftyColor red() {
+    return NiftyColor.fromString("red");
+  }
+
+  public static NiftyColor purple() {
+    return NiftyColor.fromString("purple");
+  }
+
+  public static NiftyColor fuchsia() {
+    return NiftyColor.fromString("fuchsia");
+  }
+
+  public static NiftyColor green() {
+    return NiftyColor.fromString("green");
+  }
+
+  public static NiftyColor lime() {
+    return NiftyColor.fromString("lime");
+  }
+
+  public static NiftyColor olive() {
+    return NiftyColor.fromString("olive");
+  }
+
+  public static NiftyColor yellow() {
+    return NiftyColor.fromString("yellow");
+  }
+
+  public static NiftyColor navy() {
+    return NiftyColor.fromString("navy");
+  }
+
+  public static NiftyColor blue() {
+    return NiftyColor.fromString("blue");
+  }
+
+  public static NiftyColor teal() {
+    return NiftyColor.fromString("teal");
+  }
+
+  public static NiftyColor aqua() {
+    return NiftyColor.fromString("aqua");
   }
 
   /**
    * Get a new fully transparent black color.
    * @return NiftyColor
    */
-  public static NiftyColor NONE() {
+  public static NiftyColor none() {
     return new NiftyColor(0.0f, 0.0f, 0.0f, 0.0f);
   }
 
@@ -145,8 +161,16 @@ public class NiftyColor {
    * Get a new fully transparent color.
    * @return NiftyColor
    */
-  public static NiftyColor TRANSPARENT() {
+  public static NiftyColor transparent() {
     return new NiftyColor(0.0f, 0.0f, 0.0f, 0.0f);
+  }
+
+  /**
+   * Returns true if the given String could be parsed as a color.
+   * @return true if the color String can be parsed as a color
+   */
+  public static boolean isColor(final String color) {
+    return parser.isValid(color);
   }
 
   /**

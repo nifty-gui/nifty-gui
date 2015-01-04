@@ -46,7 +46,7 @@ public class UseCase_b13_CanvasLineAndArc {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Vertical);
-    rootNode.setBackgroundColor(NiftyColor.BLACK());
+    rootNode.setBackgroundColor(NiftyColor.black());
 
     NiftyNode top = rootNode.newChildNode(UnitValue.percent(100), UnitValue.percent(50), ChildLayout.Horizontal);
     NiftyNode bottom = rootNode.newChildNode(UnitValue.percent(100), UnitValue.percent(50), ChildLayout.Horizontal);
@@ -58,11 +58,11 @@ public class UseCase_b13_CanvasLineAndArc {
       float v = 0;
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.BLUE());
+        canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         canvas.setLineWidth(25);
-        canvas.setStrokeColor(NiftyColor.WHITE());
+        canvas.setStrokeColor(NiftyColor.white());
 
         canvas.beginPath();
         canvas.arc(100., 100., 50., v * Math.PI, 2 * Math.PI);
@@ -83,11 +83,11 @@ public class UseCase_b13_CanvasLineAndArc {
       float v = 0;
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.GREEN());
+        canvas.setFillStyle(NiftyColor.green());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         canvas.setLineWidth(25);
-        canvas.setStrokeColor(NiftyColor.WHITE());
+        canvas.setStrokeColor(NiftyColor.white());
 
         canvas.beginPath();
         canvas.arc(100., 100., 50., v * Math.PI, 2 * Math.PI);
@@ -109,11 +109,11 @@ public class UseCase_b13_CanvasLineAndArc {
       float v = 0;
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.RED());
+        canvas.setFillStyle(NiftyColor.red());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         canvas.setLineWidth(25);
-        canvas.setStrokeColor(NiftyColor.WHITE());
+        canvas.setStrokeColor(NiftyColor.white());
 
         canvas.beginPath();
         canvas.moveTo(50, 50);
@@ -134,11 +134,11 @@ public class UseCase_b13_CanvasLineAndArc {
       float v = 0;
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.BLACK());
+        canvas.setFillStyle(NiftyColor.black());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         canvas.setLineWidth(25);
-        canvas.setStrokeColor(NiftyColor.WHITE());
+        canvas.setStrokeColor(NiftyColor.white());
 
         canvas.beginPath();
         canvas.moveTo(50, 50);

@@ -45,7 +45,7 @@ public class UseCase_b16_Canvas {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
-    niftyNode.setBackgroundColor(NiftyColor.GREEN());
+    niftyNode.setBackgroundColor(NiftyColor.green());
     niftyNode.addCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
@@ -55,10 +55,10 @@ public class UseCase_b16_Canvas {
         //canvas.lineTo(200, 200);
         //canvas.lineTo(200, 100);
 
-        canvas.setFillStyle(NiftyColor.RED());
+        canvas.setFillStyle(NiftyColor.red());
         canvas.fill();
 
-        canvas.setStrokeColor(NiftyColor.BLACK());
+        canvas.setStrokeColor(NiftyColor.black());
         canvas.stroke();
 
       }

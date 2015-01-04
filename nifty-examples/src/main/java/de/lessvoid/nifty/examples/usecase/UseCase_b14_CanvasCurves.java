@@ -71,7 +71,7 @@ public class UseCase_b14_CanvasCurves {
       handle.addCanvasPainter(new NiftyCanvasPainter() {
         @Override
         public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-          canvas.setFillStyle(NiftyColor.TRANSPARENT());
+          canvas.setFillStyle(NiftyColor.transparent());
           canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
           canvas.beginPath();
           canvas.setStrokeColor(c);
@@ -95,13 +95,13 @@ public class UseCase_b14_CanvasCurves {
 
     @Handler
     private void onMouseEnter(final NiftyPointerEnterNodeEvent event) {
-      c = NiftyColor.GREEN();
+      c = NiftyColor.green();
       handle.requestRedraw();
     }
 
     @Handler
     private void onMouseLeave(final NiftyPointerExitNodeEvent event) {
-      c = NiftyColor.RED();
+      c = NiftyColor.red();
       handle.requestRedraw();
     }
 
@@ -132,22 +132,22 @@ public class UseCase_b14_CanvasCurves {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    rootNode.setBackgroundColor(NiftyColor.BLACK());
+    rootNode.setBackgroundColor(NiftyColor.black());
 
     NiftyNode canvasNode = rootNode.newChildNode(UnitValue.percent(50), UnitValue.percent(50), ChildLayout.Absolute);
 
-    cp0 = new ControlPoint( 50.f,  50.f, canvasNode, NiftyColor.RED());
-    cp1 = new ControlPoint( 50.f, 325.f, canvasNode, NiftyColor.RED());
-    cp2 = new ControlPoint(450.f, 325.f, canvasNode, NiftyColor.RED());
-    cp3 = new ControlPoint(450.f,  50.f, canvasNode, NiftyColor.RED());
+    cp0 = new ControlPoint( 50.f,  50.f, canvasNode, NiftyColor.red());
+    cp1 = new ControlPoint( 50.f, 325.f, canvasNode, NiftyColor.red());
+    cp2 = new ControlPoint(450.f, 325.f, canvasNode, NiftyColor.red());
+    cp3 = new ControlPoint(450.f,  50.f, canvasNode, NiftyColor.red());
 
     canvasNode.addCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.WHITE());
+        canvas.setFillStyle(NiftyColor.white());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        canvas.setStrokeColor(NiftyColor.BLACK());
+        canvas.setStrokeColor(NiftyColor.black());
         canvas.setLineWidth(5);
         canvas.beginPath();
         canvas.moveTo(cp0.getX(), cp0.getY());

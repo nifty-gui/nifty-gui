@@ -47,7 +47,7 @@ public class UseCase_b10_CanvasProgressSpinner {
 
   public UseCase_b10_CanvasProgressSpinner(final Nifty nifty) throws IOException {
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    rootNode.setBackgroundColor(NiftyColor.BLACK());
+    rootNode.setBackgroundColor(NiftyColor.black());
 
     NiftyNode spinner = rootNode.newChildNode(UnitValue.px(128), UnitValue.px(128));
     spinner.addCanvasPainter(new NiftyCanvasPainter() {

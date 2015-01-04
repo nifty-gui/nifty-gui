@@ -50,7 +50,7 @@ public class UseCase_b11_CanvasLines {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    rootNode.setBackgroundColor(NiftyColor.BLACK());
+    rootNode.setBackgroundColor(NiftyColor.black());
 
     NiftyNode childNode = rootNode.newChildNode(UnitValue.px(512), UnitValue.px(512));
     childNode.startAnimatedRedraw(0, 16);
@@ -60,7 +60,7 @@ public class UseCase_b11_CanvasLines {
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         long time = nifty.getTimeProvider().getMsTime();
 
-        canvas.setFillStyle(NiftyColor.BLUE());
+        canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
         // NiftyLineJoinType.Miter
@@ -70,7 +70,7 @@ public class UseCase_b11_CanvasLines {
         canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
         canvas.setLineCap(NiftyLineCapType.Round);
         canvas.setLineJoin(NiftyLineJoinType.Miter);
-        canvas.setStrokeColor(NiftyColor.WHITE());
+        canvas.setStrokeColor(NiftyColor.white());
         canvas.stroke();
 
         canvas.beginPath();
@@ -78,7 +78,7 @@ public class UseCase_b11_CanvasLines {
         canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
         canvas.setLineCap(NiftyLineCapType.Square);
         canvas.setLineJoin(NiftyLineJoinType.Miter);
-        canvas.setStrokeColor(NiftyColor.RED());
+        canvas.setStrokeColor(NiftyColor.red());
         canvas.stroke();
 
         canvas.beginPath();
@@ -86,7 +86,7 @@ public class UseCase_b11_CanvasLines {
         canvas.setLineWidth((Math.sin(time / 750.) + 1.f) / 2.f * 24.f + 1.f);
         canvas.setLineCap(NiftyLineCapType.Butt);
         canvas.setLineJoin(NiftyLineJoinType.Miter);
-        canvas.setStrokeColor(NiftyColor.GREEN());
+        canvas.setStrokeColor(NiftyColor.green());
         canvas.stroke();
       }
 

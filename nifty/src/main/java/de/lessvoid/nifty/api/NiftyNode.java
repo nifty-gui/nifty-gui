@@ -29,6 +29,7 @@ package de.lessvoid.nifty.api;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterHAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyColor;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyLinearGradient;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
@@ -201,6 +202,25 @@ public class NiftyNode {
    */
   public NiftyColor getBackgroundColor() {
     return impl.getBackgroundColor();
+  }
+
+  /**
+   * Change the background gradient of this node. The default value is null.
+   *
+   * @param gradient the new background gradient
+   */
+  @NiftyStyleProperty(name = "background-gradient", converter = NiftyStyleStringConverterNiftyLinearGradient.class)
+  public void setBackgroundGradient(final NiftyLinearGradient gradient) {
+    impl.setBackgroundGradient(gradient);
+  }
+
+  /**
+   * Get the current background gradient of this node.
+   *
+   * @return the currently set background gradient
+   */
+  public NiftyLinearGradient getBackgroundGradient() {
+    return impl.getBackgroundGradient();
   }
 
   /**

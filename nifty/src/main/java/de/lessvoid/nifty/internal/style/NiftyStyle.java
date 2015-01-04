@@ -162,6 +162,9 @@ public class NiftyStyle {
       NiftyStyleClassInfo classInfo = classInfoCache.getNiftyStyleClass(nifty, object.getClass());
       for (int i=0; i<ruleSet.getDeclarationBlock().size(); i++) {
         Declaration decleration = ruleSet.getDeclarationBlock().get(i);
+
+        TokenSequence tokenSequence = decleration.getValue();
+
         String prop = decleration.getProperty().toString();
         String value = decleration.getValue().toString();
         if (classInfo.writeValue(object, prop, value)) {

@@ -63,7 +63,7 @@ public class Context {
   private NiftyColor fillColor;
   private NiftyLinearGradient linearGradient;
   private LineParameters lineParameters;
-  private NiftyColor textColor = NiftyColor.WHITE();
+  private NiftyColor textColor = NiftyColor.white();
   private double textSize = 1.f;
   private Mat4 transform = Mat4.createIdentity();
   private NiftyRenderDevice renderDevice;
@@ -94,7 +94,7 @@ public class Context {
   public void prepare() {
     batchManager.begin();
 
-    fillColor = NiftyColor.BLACK();
+    fillColor = NiftyColor.black();
     linearGradient = null;
     lineParameters = new LineParameters();
     renderDevice.beginRenderToTexture(workingTexture);
@@ -256,7 +256,7 @@ public class Context {
   public void image(final int x, final int y, final NiftyImage image) {
     InternalNiftyImage internalImage = NiftyImageAccessor.getDefault().getInternalNiftyImage(image);
     Mat4 local = Mat4.mul(getTransform(), Mat4.createTranslate(x, y, 0.0f));
-    batchManager.addTextureQuad(internalImage.getTexture(), local, NiftyColor.WHITE());
+    batchManager.addTextureQuad(internalImage.getTexture(), local, NiftyColor.white());
   }
 
   public void text(final int x, final int y, final NiftyFont font, final String text) {
@@ -283,7 +283,7 @@ public class Context {
 
   private TextureBatch textureBatch(final NiftyTexture texture) {
     TextureBatch result = new TextureBatch(texture);
-    result.add(0., 0., texture.getWidth(), texture.getHeight(), 0., 0., 1., 1., Mat4.createIdentity(), NiftyColor.WHITE());
+    result.add(0., 0., texture.getWidth(), texture.getHeight(), 0., 0., 1., 1., Mat4.createIdentity(), NiftyColor.white());
     return result;
   }
 
@@ -294,10 +294,10 @@ public class Context {
         0.,
         workingTexture.getWidth(),
         workingTexture.getHeight(),
-        NiftyColor.TRANSPARENT(),
-        NiftyColor.TRANSPARENT(),
-        NiftyColor.TRANSPARENT(),
-        NiftyColor.TRANSPARENT(),
+        NiftyColor.transparent(),
+        NiftyColor.transparent(),
+        NiftyColor.transparent(),
+        NiftyColor.transparent(),
         Mat4.createIdentity());
     return result;
   }

@@ -30,7 +30,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
@@ -38,29 +37,35 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 /**
  * A linear gradient batch renders a quad filled with a linear gradient.
  */
-public class LinearGradientQuadBatch implements Batch<NiftyLinearGradient> {
+public class LinearGradientQuadBatch implements Batch<LinearGradient> {
   private final static int NUM_PRIMITIVES = 100;
   public final static int PRIMITIVE_SIZE = 2 * 6;
 
   private final FloatBuffer b;
-  private final NiftyLinearGradient gradientParams;
+  private final LinearGradient gradientParams;
 
   // Vec4 buffer data
   private final Vec4 vsrc = new Vec4();
   private final Vec4 vdst = new Vec4();
 
-  public LinearGradientQuadBatch(final NiftyLinearGradient gradientParams) {
+  public LinearGradientQuadBatch(final LinearGradient gradientParams) {
     this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
     this.gradientParams = gradientParams;
   }
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.renderLinearGradientQuads(gradientParams, b);
+    renderDevice.renderLinearGradientQuads(
+        gradientParams.getStartX(),
+        gradientParams.getStartY(),
+        gradientParams.getEndX(),
+        gradientParams.getEndY(),
+        gradientParams.getColorStops(),
+        b);
   }
 
   @Override
-  public boolean requiresNewBatch(final NiftyLinearGradient params) {
+  public boolean requiresNewBatch(final LinearGradient params) {
     return !gradientParams.equals(params) || (b.remaining() < PRIMITIVE_SIZE);
   }
 

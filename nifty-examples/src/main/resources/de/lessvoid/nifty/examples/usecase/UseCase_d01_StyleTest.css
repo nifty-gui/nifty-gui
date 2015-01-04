@@ -11,6 +11,7 @@
 /* select by tag (which means in Nifty the simple name of the class) and by attribute id using attribute selector */
 NiftyNode[id="inner"] {
   background-color: #ffff;
+  stuff: linear-gradient(yellow, blue);
 }
 
 /* same as above but with a tagName that doesn't match therefore it's not applied */

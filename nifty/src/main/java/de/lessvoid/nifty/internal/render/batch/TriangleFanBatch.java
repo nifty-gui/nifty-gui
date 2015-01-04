@@ -63,7 +63,7 @@ public class TriangleFanBatch implements Batch<Void> {
     renderDevice.pathFill(b);
 
     if (isEndPathBatch) {
-      renderDevice.pathEnd(NiftyColor.RED());
+      renderDevice.pathEnd(NiftyColor.red());
     }
   }
 

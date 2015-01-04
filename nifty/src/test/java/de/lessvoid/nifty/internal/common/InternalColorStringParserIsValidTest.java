@@ -26,133 +26,116 @@
  */
 package de.lessvoid.nifty.internal.common;
 
-import static de.lessvoid.nifty.AssertColor.assertColor;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.internal.common.ColorStringParser;
-
-public class InternalColorStringParserTest {
+public class InternalColorStringParserIsValidTest {
   private ColorStringParser parser = new ColorStringParser();
 
   @Test
   public void testShortWithoutAlpha() {
-    assertColor(1.f, 0.f, 0.55f, 1.f, parser.fromString("#f08"));
+    assertTrue(parser.isValid("#f08"));
   }
 
   @Test
   public void testLongWithoutAlpha() {
-    assertColor(1.f, 0.f, 0.55f, 1.f, parser.fromString("#ff0088"));
+    assertTrue(parser.isValid("#ff0088"));
   }
 
   @Test
   public void testShort() {
-    assertColor(1.f, 0.f, 0.55f, 0.f, parser.fromString("#f080"));
+    assertTrue(parser.isValid("#f080"));
   }
 
   @Test
   public void testLong() {
-    assertColor(1.f, 0.f, 0.55f, 0.f, parser.fromString("#ff008800"));
+    assertTrue(parser.isValid("#ff008800"));
   }
 
   @Test
   public void testInvalid() {
-    assertColor(1.f, 1.f, 1.f, 1.f, parser.fromString("bla"));
+    assertFalse(parser.isValid("bla"));
   }
 
   @Test
   public void testConstantBlack() {
-    assertColor("#000000ff", parser.fromString("black"));
-    assertColor("#000000ff", parser.fromString("BLACK"));
+    assertTrue(parser.isValid("black"));
   }
 
   @Test
   public void testConstantSilver() {
-    assertColor("#c0c0c0ff", parser.fromString("silver"));
-    assertColor("#c0c0c0ff", parser.fromString("SILVER"));
+    assertTrue(parser.isValid("silver"));
   }
 
   @Test
   public void testConstantGray() {
-    assertColor("#808080ff", parser.fromString("gray"));
-    assertColor("#808080ff", parser.fromString("GRAY"));
+    assertTrue(parser.isValid("gray"));
   }
 
   @Test
   public void testConstantWhite() {
-    assertColor("#ffffffff", parser.fromString("white"));
-    assertColor("#ffffffff", parser.fromString("WHITE"));
+    assertTrue(parser.isValid("white"));
   }
 
   @Test
   public void testConstantMaroon() {
-    assertColor("#800000ff", parser.fromString("maroon"));
-    assertColor("#800000ff", parser.fromString("MAROON"));
+    assertTrue(parser.isValid("maroon"));
   }
 
   @Test
   public void testConstantRed() {
-    assertColor("#ff0000ff", parser.fromString("red"));
-    assertColor("#ff0000ff", parser.fromString("RED"));
+    assertTrue(parser.isValid("red"));
   }
 
   @Test
   public void testConstantPurple() {
-    assertColor("#800080ff", parser.fromString("purple"));
-    assertColor("#800080ff", parser.fromString("PURPLE"));
+    assertTrue(parser.isValid("purple"));
   }
 
   @Test
   public void testConstantFuchsia() {
-    assertColor("#ff00ffff", parser.fromString("fuchsia"));
-    assertColor("#ff00ffff", parser.fromString("FUCHSIA"));
+    assertTrue(parser.isValid("fuchsia"));
   }
 
   @Test
   public void testConstantGreen() {
-    assertColor("#008000ff", parser.fromString("green"));
-    assertColor("#008000ff", parser.fromString("GREEN"));
+    assertTrue(parser.isValid("green"));
   }
 
   @Test
   public void testConstantLime() {
-    assertColor("#00ff00ff", parser.fromString("lime"));
-    assertColor("#00ff00ff", parser.fromString("LIME"));
+    assertTrue(parser.isValid("lime"));
   }
 
   @Test
   public void testConstantOlive() {
-    assertColor("#808000ff", parser.fromString("olive"));
-    assertColor("#808000ff", parser.fromString("OLIVE"));
+    assertTrue(parser.isValid("olive"));
   }
 
   @Test
   public void testConstantYellow() {
-    assertColor("#ffff00ff", parser.fromString("yellow"));
-    assertColor("#ffff00ff", parser.fromString("YELLOW"));
+    assertTrue(parser.isValid("yellow"));
   }
 
   @Test
   public void testConstantNavy() {
-    assertColor("#000080ff", parser.fromString("navy"));
-    assertColor("#000080ff", parser.fromString("NAVY"));
+    assertTrue(parser.isValid("navy"));
   }
 
   @Test
   public void testConstantBlue() {
-    assertColor("#0000ffff", parser.fromString("blue"));
-    assertColor("#0000ffff", parser.fromString("BLUE"));
+    assertTrue(parser.isValid("blue"));
   }
 
   @Test
   public void testConstantTeal() {
-    assertColor("#008080ff", parser.fromString("teal"));
-    assertColor("#008080ff", parser.fromString("TEAL"));
+    assertTrue(parser.isValid("teal"));
   }
 
   @Test
   public void testConstantAqua() {
-    assertColor("#00ffffff", parser.fromString("aqua"));
-    assertColor("#00ffffff", parser.fromString("AQUA"));
+    assertTrue(parser.isValid("aqua"));
   }
 }

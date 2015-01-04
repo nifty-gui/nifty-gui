@@ -50,25 +50,25 @@ public class UseCase_b03_CanvasText {
     niftyNode.setCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.BLUE());
+        canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        canvas.setTextColor(NiftyColor.WHITE());
+        canvas.setTextColor(NiftyColor.white());
         canvas.text(font, 10, 10, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-        canvas.setTextColor(NiftyColor.RED());
+        canvas.setTextColor(NiftyColor.red());
         canvas.setTextSize(1.2f);
         canvas.text(font, 10, 40, "abcdefghijklmnopqrstuvwxyz");
 
-        canvas.setTextColor(NiftyColor.GREEN());
+        canvas.setTextColor(NiftyColor.green());
         canvas.setTextSize(1.4f);
         canvas.text(font, 10, 70, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-        canvas.setTextColor(NiftyColor.YELLOW());
+        canvas.setTextColor(NiftyColor.yellow());
         canvas.setTextSize(1.6f);
         canvas.text(font, 10, 100, "0123456789");
 
-        canvas.setTextColor(NiftyColor.WHITE());
+        canvas.setTextColor(NiftyColor.white());
         canvas.setTextSize(2.0f);
         canvas.text(font, 10, 150, "ABC Hello Nifty 2.0 Text");
 }

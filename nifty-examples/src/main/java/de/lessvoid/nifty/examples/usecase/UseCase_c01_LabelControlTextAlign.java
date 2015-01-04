@@ -63,7 +63,7 @@ public class UseCase_c01_LabelControlTextAlign {
     Label label = niftyNode.newControl(Label.class);
     label.setFont(font);
     label.setText(text);
-    label.setTextColor(NiftyColor.BLACK());
+    label.setTextColor(NiftyColor.black());
     label.setTextHAlign(halign);
     label.setTextVAlign(valign);
     label.getNode().setBackgroundColor(backgroundColor);

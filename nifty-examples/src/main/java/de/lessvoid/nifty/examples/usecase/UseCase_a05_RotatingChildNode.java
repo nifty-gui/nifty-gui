@@ -47,15 +47,15 @@ public class UseCase_a05_RotatingChildNode {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     final NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
-    niftyNode.setBackgroundColor(NiftyColor.GREEN());
+    niftyNode.setBackgroundColor(NiftyColor.green());
     niftyNode.setPivot(0.5, 0.5);
 
     final NiftyNode childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
-    childNode.setBackgroundColor(NiftyColor.BLACK());
+    childNode.setBackgroundColor(NiftyColor.black());
     childNode.setPivot(0.5, 0.5);
 
     final NiftyNode grandChildNode = childNode.newChildNode(UnitValue.px(25), UnitValue.px(25));
-    grandChildNode.setBackgroundColor(NiftyColor.RED());
+    grandChildNode.setBackgroundColor(NiftyColor.red());
     grandChildNode.setPivot(0.5, 0.5);
 
     niftyNode.startAnimated(0, 25, new NiftyCallback<Float>() {

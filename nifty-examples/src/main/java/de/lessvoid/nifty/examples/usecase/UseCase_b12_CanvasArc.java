@@ -54,7 +54,7 @@ public class UseCase_b12_CanvasArc {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Horizontal);
-    rootNode.setBackgroundColor(NiftyColor.BLACK());
+    rootNode.setBackgroundColor(NiftyColor.black());
 
     NiftyNode butt = rootNode.newChildNode(UnitValue.px(256), UnitValue.px(256));
     butt.setVAlign(VAlign.center);
@@ -93,22 +93,22 @@ public class UseCase_b12_CanvasArc {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         canvas.setLineCap(NiftyLineCapType.Square);
-        canvas.setFillStyle(NiftyColor.BLUE());
+        canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        canvas.setTextColor(NiftyColor.WHITE());
+        canvas.setTextColor(NiftyColor.white());
         canvas.text(font, 5, 5, "Animated ;)");
 
         canvas.beginPath();
         canvas.arc(128., 128., 100., v * Math.PI, (v + 1.25) * Math.PI);
         canvas.setLineWidth(24);
-        canvas.setStrokeColor(NiftyColor.WHITE());
+        canvas.setStrokeColor(NiftyColor.white());
         canvas.stroke();
 
         canvas.beginPath();
         canvas.arc(128., 128., 100., v * Math.PI, (v + 1.25) * Math.PI);
         canvas.setLineWidth(1);
-        canvas.setStrokeColor(NiftyColor.BLACK());
+        canvas.setStrokeColor(NiftyColor.black());
         canvas.stroke();
 
         v += 0.001;
@@ -121,22 +121,22 @@ public class UseCase_b12_CanvasArc {
 
   private static void draw(final NiftyNode node, final NiftyCanvas canvas, final NiftyLineCapType cap) {
     canvas.setLineCap(cap);
-    canvas.setFillStyle(NiftyColor.BLUE());
+    canvas.setFillStyle(NiftyColor.blue());
     canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-    canvas.setTextColor(NiftyColor.WHITE());
+    canvas.setTextColor(NiftyColor.white());
     canvas.text(font, 5, 5, cap.toString());
 
     canvas.beginPath();
     canvas.arc(128., 128., 100., 0.5 * Math.PI, 1.25 * Math.PI);
     canvas.setLineWidth(24);
-    canvas.setStrokeColor(NiftyColor.WHITE());
+    canvas.setStrokeColor(NiftyColor.white());
     canvas.stroke();
 
     canvas.beginPath();
     canvas.arc(128., 128., 100., 0.5 * Math.PI, 1.25 * Math.PI);
     canvas.setLineWidth(1);
-    canvas.setStrokeColor(NiftyColor.BLACK());
+    canvas.setStrokeColor(NiftyColor.black());
     canvas.stroke();
   }
 

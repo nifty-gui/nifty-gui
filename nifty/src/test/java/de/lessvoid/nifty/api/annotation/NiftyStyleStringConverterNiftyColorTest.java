@@ -37,16 +37,16 @@ public class NiftyStyleStringConverterNiftyColorTest {
 
   @Test
   public void testToString() {
-    assertEquals("#ff0000ff", converter.toString(NiftyColor.RED()));
+    assertEquals("#ff0000ff", converter.toString(NiftyColor.red()));
   }
 
   @Test
   public void testFromString() {
-    assertEquals(NiftyColor.RED(), converter.fromString("#ff0000ff"));
+    assertEquals(NiftyColor.red(), converter.fromString("#ff0000ff"));
   }
 
   @Test
   public void testFromStringNoAlpha() {
-    assertEquals(NiftyColor.RED(), converter.fromString("#ff0000"));
+    assertEquals(NiftyColor.red(), converter.fromString("#ff0000"));
   }
 }

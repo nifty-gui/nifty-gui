@@ -41,6 +41,7 @@ import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyCanvasPainterDefault;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyCompositeOperation;
+import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback.Size;
 import de.lessvoid.nifty.api.NiftyNode;
@@ -104,7 +105,10 @@ public class InternalNiftyNode implements InternalLayoutable {
   private final List<InternalLayoutable> rootNodePseudoChildren = new ArrayList<InternalLayoutable>();
 
   // The backgroundColor of the NiftyNode. 
-  private NiftyColor backgroundColor = NiftyColor.TRANSPARENT();
+  private NiftyColor backgroundColor = NiftyColor.transparent();
+
+  // The background gradient
+  private NiftyLinearGradient backgroundGradient;
 
   // If you don't set a specific NiftyCanvasPainter we use this one
   private static final NiftyCanvasPainterDefault standardPainter = new NiftyCanvasPainterDefault();
@@ -475,6 +479,14 @@ public class InternalNiftyNode implements InternalLayoutable {
     return styleClasses;
   }
 
+  public void setBackgroundGradient(final NiftyLinearGradient gradient) {
+    this.backgroundGradient = gradient;
+  }
+
+  public NiftyLinearGradient getBackgroundGradient() {
+    return backgroundGradient;
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Layoutable Implementation
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -630,7 +642,16 @@ public class InternalNiftyNode implements InternalLayoutable {
     if (parentNode == null) {
       rootNodeString = " {rootNode} ";
     }
-    result.append(offset).append("- ").append("[").append(id).append("]").append(rootNodeString).append("\n");
+    result.append(offset).append("- ");
+    if (control != null) {
+      result.append(control.toString());
+    } else {
+      result.append("NiftyNode[");
+      result.append(toString());
+      result.append("]");
+    }
+    result.append(rootNodeString);
+    result.append("\n");
     result.append(matches(pattern, statePosition(), offset + "  "));
     result.append(matches(pattern, stateConstraints(), offset + "  "));
     result.append(matches(pattern, stateBackgroundColor(), offset + "  "));

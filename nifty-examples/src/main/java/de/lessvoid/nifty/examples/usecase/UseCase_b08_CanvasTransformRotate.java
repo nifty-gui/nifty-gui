@@ -50,13 +50,13 @@ public class UseCase_b08_CanvasTransformRotate {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
         // fill the whole node content with a plain white color
-        canvas.setFillStyle(NiftyColor.WHITE());
+        canvas.setFillStyle(NiftyColor.white());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        canvas.setFillStyle(NiftyColor.BLACK());
+        canvas.setFillStyle(NiftyColor.black());
         canvas.fillRect(10, 10, 50, 50);
 
-        canvas.setFillStyle(NiftyColor.RED());
+        canvas.setFillStyle(NiftyColor.red());
         canvas.rotateDegrees(20.f);
         canvas.fillRect(10, 10, 50, 50);
       }

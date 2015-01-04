@@ -24,42 +24,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.examples.usecase;
+package de.lessvoid.nifty.api.controls;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCallback;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.UnitValue;
+import javax.annotation.Nonnull;
 
-/**
- * A single root node of a fixed size with a background color that is constantly rotating.
- * @author void
- */
-public class UseCase_a04_RotatingRootNode {
+import de.lessvoid.nifty.api.event.NiftyEvent;
 
-  public UseCase_a04_RotatingRootNode(final Nifty nifty) {
-    nifty.clearScreenBeforeRender();
+public class ButtonReleasedEvent implements NiftyEvent {
+  @Nonnull
+  private final Button button;
 
-    final NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Absolute);
-    niftyNode.setBackgroundColor(NiftyColor.green());
-    niftyNode.startAnimated(0, 15, new NiftyCallback<Float>() {
-      private float angle = 0;
-
-      @Override
-      public void execute(final Float time) {
-        niftyNode.setRotationZ(angle++);
-      }
-    });
-
-    NiftyNode childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
-    childNode.setBackgroundColor(NiftyColor.red());
-    childNode.setXConstraint(UnitValue.px(50));
-    childNode.setYConstraint(UnitValue.px(50));
+  public ButtonReleasedEvent(@Nonnull final Button button) {
+    this.button = button;
   }
 
-  public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args);
+  @Nonnull
+  public Button getButton() {
+    return button;
   }
 }

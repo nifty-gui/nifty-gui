@@ -43,31 +43,31 @@ public class UseCase_b02_CanvasLinearGradient {
 
   public UseCase_b02_CanvasLinearGradient(final Nifty nifty) {
     NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
-    niftyNode.setBackgroundColor(NiftyColor.TRANSPARENT());
+    niftyNode.setBackgroundColor(NiftyColor.transparent());
 
     NiftyNode child = niftyNode.newChildNode(UnitValue.percent(100), UnitValue.percent(100));
-    child.setBackgroundColor(NiftyColor.RED());
+    child.setBackgroundColor(NiftyColor.red());
     child.setCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.BLUE());
+        canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        NiftyLinearGradient gradient = new NiftyLinearGradient(0.0, 0.0, 1.0, 0.0);
-        gradient.addColorStop(0.0, NiftyColor.RED());
-        gradient.addColorStop(1.0, NiftyColor.WHITE());
+        NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(90.);
+        gradient.addColorStop(0.0, NiftyColor.red());
+        gradient.addColorStop(1.0, NiftyColor.white());
         canvas.setFillStyle(gradient);
         canvas.fillRect(50, 50, 300, 100);
 
-        gradient = new NiftyLinearGradient(0.0, 0.0, 0.0, 1.0);
-        gradient.addColorStop(0.0, NiftyColor.GREEN());
-        gradient.addColorStop(1.0, NiftyColor.BLACK());
+        gradient = NiftyLinearGradient.createFromAngleInDeg(180.);
+        gradient.addColorStop(0.0, NiftyColor.green());
+        gradient.addColorStop(1.0, NiftyColor.black());
         canvas.setFillStyle(gradient);
         canvas.fillRect(50, 150, 300, 100);
 
-        gradient = new NiftyLinearGradient(0.0, 0.0, 0.5, 1.0);
-        gradient.addColorStop(0.0, NiftyColor.WHITE());
-        gradient.addColorStop(1.0, NiftyColor.BLACK());
+        gradient = NiftyLinearGradient.createFromAngleInDeg(135.);
+        gradient.addColorStop(0.0, NiftyColor.white());
+        gradient.addColorStop(1.0, NiftyColor.black());
         canvas.setFillStyle(gradient);
         canvas.fillRect(50, 250, 300, 100);
       }

@@ -42,7 +42,7 @@ import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.internal.render.TextRenderer;
 
 public class Label extends NiftyAbstractControl {
-  private NiftyColor textColor = NiftyColor.WHITE();
+  private NiftyColor textColor = NiftyColor.white();
   private String text = "";
   private NiftyFont font;
   private HAlign textHAlign = HAlign.center;

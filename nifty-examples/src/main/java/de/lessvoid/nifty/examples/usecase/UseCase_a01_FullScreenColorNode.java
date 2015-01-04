@@ -39,7 +39,7 @@ public class UseCase_a01_FullScreenColorNode {
   public UseCase_a01_FullScreenColorNode(final Nifty nifty) {
     // Create a new root node that has the same size as the screen.
     NiftyNode niftyNode = nifty.createRootNodeFullscreen();
-    niftyNode.setBackgroundColor(NiftyColor.RED());
+    niftyNode.setBackgroundColor(NiftyColor.red());
   }
 
   public static void main(final String[] args) throws Exception {

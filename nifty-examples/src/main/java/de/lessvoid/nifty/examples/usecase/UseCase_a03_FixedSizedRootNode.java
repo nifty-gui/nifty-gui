@@ -41,7 +41,7 @@ public class UseCase_a03_FixedSizedRootNode {
   public UseCase_a03_FixedSizedRootNode(final Nifty nifty) {
     // Create a new root node that is exactly 100x100px and is centered.
     NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.None);
-    niftyNode.setBackgroundColor(NiftyColor.BLUE());
+    niftyNode.setBackgroundColor(NiftyColor.blue());
   }
 
   public static void main(final String[] args) throws Exception {

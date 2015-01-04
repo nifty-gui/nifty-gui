@@ -39,7 +39,7 @@ public class NiftyColorStop implements Comparable<NiftyColorStop> {
   private final double stop;
   private final NiftyColor color;
 
-  NiftyColorStop(final double stop, final NiftyColor color) {
+  public NiftyColorStop(final double stop, final NiftyColor color) {
     this.stop = stop;
     this.color = color;
   }

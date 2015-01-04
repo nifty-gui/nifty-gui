@@ -26,6 +26,8 @@
  */
 package de.lessvoid.nifty.internal.common;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,9 +60,49 @@ public class ColorStringParser {
    */
   private static final int HEX_BASE = 16;
 
+  /*
+   * CSS3 color constants we support. 
+   */
+  private static final Map<String, String> COLOR_MAP = new HashMap<String, String>();
+  {
+    COLOR_MAP.put("black",   "#000000");
+    COLOR_MAP.put("silver",  "#C0C0C0");
+    COLOR_MAP.put("gray",    "#808080");
+    COLOR_MAP.put("white",   "#FFFFFF");
+    COLOR_MAP.put("maroon",  "#800000");
+    COLOR_MAP.put("red",     "#FF0000");
+    COLOR_MAP.put("purple",  "#800080");
+    COLOR_MAP.put("fuchsia", "#FF00FF");
+    COLOR_MAP.put("green",   "#008000");
+    COLOR_MAP.put("lime",    "#00FF00");
+    COLOR_MAP.put("olive",   "#808000");
+    COLOR_MAP.put("yellow",  "#FFFF00");
+    COLOR_MAP.put("navy",    "#000080");
+    COLOR_MAP.put("blue",    "#0000FF");
+    COLOR_MAP.put("teal",    "#008080");
+    COLOR_MAP.put("aqua",    "#00FFFF");
+  } 
+
+  /**
+   * Checks if the given color String can be parsed.
+   * @return true if color is a valid color String and false if not.
+   */
+  public boolean isValid(final String color) {
+    if (colorValidator.isShortModeWithoutAlpha(color)) {
+      return true;
+    } else if (colorValidator.isLongModeWithoutAlpha(color)) {
+      return true;
+    } else if (colorValidator.isValid(color)) {
+      return true;
+    } else if (isColorConstant(color)) {
+      return true;
+    }
+    return false;
+  }
+
   /**
    * Create a new Color instance from a color String.
-   * @param color color String in short mode without alphe ("f09") or in short mode with alpha ("f09a") or in long
+   * @param color color String in short mode without alpha ("f09") or in short mode with alpha ("f09a") or in long
    * mode without alpha ("ff0099") or with alpha ("ff0099aa") 
    * @return Color instance
    */
@@ -89,6 +131,11 @@ public class ColorStringParser {
       green = getGFromString(color);
       blue = getBFromString(color);
       alpha = getAFromString(color);
+    } else if (isColorConstant(color)) {
+      String colorString = COLOR_MAP.get(color.toLowerCase());
+      red = getRFromString(colorString);
+      green = getGFromString(colorString);
+      blue = getBFromString(colorString);
     } else {
       log.fine("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
       red = green = blue = alpha = 1.0f;
@@ -155,5 +202,14 @@ public class ColorStringParser {
    */
   private boolean isShortMode(final String color) {
     return colorValidator.isShortMode(color) || colorValidator.isShortModeWithoutAlpha(color);
+  }
+
+  /**
+   * Returns true if the color is part of the constant color map.
+   * @param color the color string
+   * @return true when this is a constant color
+   */
+  private boolean isColorConstant(final String color) {
+    return COLOR_MAP.containsKey(color.toLowerCase());
   }
 }

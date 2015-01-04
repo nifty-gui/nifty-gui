@@ -41,7 +41,7 @@ public class LineParameters {
   private NiftyLineCapType lineCapType = NiftyLineCapType.Round;
   private NiftyLineJoinType lineJoinType = NiftyLineJoinType.Miter;
   private float lineWidth = 1.f;
-  private NiftyColor lineColor = NiftyColor.WHITE();
+  private NiftyColor lineColor = NiftyColor.white();
 
   public LineParameters() {
   }

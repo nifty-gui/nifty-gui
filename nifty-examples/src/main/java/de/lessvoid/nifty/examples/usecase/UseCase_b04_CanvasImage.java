@@ -48,7 +48,7 @@ public class UseCase_b04_CanvasImage {
     niftyNode.setCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.BLUE());
+        canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
         canvas.drawImage(image, 10, 10);
       }

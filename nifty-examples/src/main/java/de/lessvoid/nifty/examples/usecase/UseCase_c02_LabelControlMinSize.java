@@ -49,7 +49,7 @@ public class UseCase_c02_LabelControlMinSize {
     label.setFont(font);
     label.setText("hello autosize label");
     label.setTextColor(NiftyColor.fromString("#ffff"));
-    label.getNode().setBackgroundColor(NiftyColor.RED());
+    label.getNode().setBackgroundColor(NiftyColor.red());
   }
 
   public static void main(final String[] args) throws Exception {

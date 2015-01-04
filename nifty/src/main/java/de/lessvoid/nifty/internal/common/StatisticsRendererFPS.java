@@ -46,7 +46,7 @@ public class StatisticsRendererFPS {
     try {
       final Label label = fpsNode.newControl(Label.class);
       label.setFont(nifty.createFont("fonts/aurulent-sans-16.fnt"));
-      label.getNode().setBackgroundColor(NiftyColor.BLACK());
+      label.getNode().setBackgroundColor(NiftyColor.black());
       label.getNode().startAnimated(0, 1000, new NiftyCallback<Float>() {
         @Override
         public void execute(final Float t) {

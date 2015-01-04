@@ -44,4 +44,8 @@ public class AssertColor {
     assertEquals(b, c.getBlue());
     assertEquals(a, c.getAlpha());
   }
+
+  public static void assertColor(final String expected, final NiftyColor c) {
+    assertEquals(expected, c.toHexString());
+  }
 }

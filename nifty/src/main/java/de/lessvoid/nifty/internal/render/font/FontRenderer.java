@@ -50,7 +50,7 @@ public class FontRenderer implements JGLFontRenderer {
   private final Map<String, BitmapInfo> textureInfos = new HashMap<String, BitmapInfo>();
   private final ColorValueParser colorValueParser = new ColorValueParser();
   private final NiftyRenderDevice renderDevice;
-  private final NiftyMutableColor textColor = new NiftyMutableColor(NiftyColor.WHITE());
+  private final NiftyMutableColor textColor = new NiftyMutableColor(NiftyColor.white());
   private boolean hasColor;
   private BatchManager batchManager;
 

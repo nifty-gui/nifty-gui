@@ -130,14 +130,7 @@ public class BatchManager {
       final double y1,
       final Mat4 mat,
       final NiftyLinearGradient fillLinearGradient) {
-    float dx = (float) x1 - (float) x0;
-    float dy = (float) y1 - (float) y0;
-    final NiftyLinearGradient gradient = new NiftyLinearGradient(
-        x0 + fillLinearGradient.getX0() * dx,
-        y0 + fillLinearGradient.getY0() * dy,
-        x0 + fillLinearGradient.getX1() * dx,
-        y0 + fillLinearGradient.getY1() * dy);
-    gradient.addColorSteps(fillLinearGradient.getColorStops());
+    final LinearGradient gradient = new LinearGradient(x0, y0, x1, y1, fillLinearGradient);
 
     LinearGradientQuadBatch batch = requestBatch(LinearGradientQuadBatch.class, gradient, new BatchFactory<LinearGradientQuadBatch>() {
       @Override

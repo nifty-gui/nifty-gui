@@ -56,12 +56,12 @@ public class UseCase_i01_PointerEvents {
     nifty.clearScreenBeforeRender();
 
     niftyNode = nifty.createRootNode(UnitValue.px(256), UnitValue.px(256), ChildLayout.Absolute);
-    niftyNode.setBackgroundColor(NiftyColor.BLUE());
+    niftyNode.setBackgroundColor(NiftyColor.blue());
 
     childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100));
     childNode.setXConstraint(UnitValue.px(100));
     childNode.setYConstraint(UnitValue.px(100));
-    childNode.setBackgroundColor(NiftyColor.RED());
+    childNode.setBackgroundColor(NiftyColor.red());
     childNode.startAnimated(0, 16, new NiftyCallback<Float>() {
       @Override
       public void execute(final Float t) {
@@ -73,7 +73,7 @@ public class UseCase_i01_PointerEvents {
 
   @Handler
   private void onPointerEnter(final NiftyPointerEnterNodeEvent event) {
-    childNode.setBackgroundColor(NiftyColor.GREEN());
+    childNode.setBackgroundColor(NiftyColor.green());
   }
 
   @Handler
@@ -82,24 +82,24 @@ public class UseCase_i01_PointerEvents {
 
   @Handler
   private void onPointerLeave(final NiftyPointerExitNodeEvent event) {
-    childNode.setBackgroundColor(NiftyColor.RED());
+    childNode.setBackgroundColor(NiftyColor.red());
   }
 
   @Handler
   private void onPointerPressed(final NiftyPointerPressedEvent event) {
-    childNode.setBackgroundColor(NiftyColor.YELLOW());
+    childNode.setBackgroundColor(NiftyColor.yellow());
     mouseStartX = event.getX();
     mouseStartY = event.getY();
   }
 
   @Handler
   private void onPointerLeave(final NiftyPointerClickedEvent event) {
-    childNode.setBackgroundColor(NiftyColor.WHITE());
+    childNode.setBackgroundColor(NiftyColor.white());
   }
 
   @Handler
   private void onPointerDragged(final NiftyPointerDraggedEvent event) {
-    childNode.setBackgroundColor(NiftyColor.BLACK());
+    childNode.setBackgroundColor(NiftyColor.black());
     
     int dx = event.getX() - mouseStartX;
     int dy = event.getY() - mouseStartY;
