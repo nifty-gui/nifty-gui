@@ -209,18 +209,10 @@ public class LinearGradientParser {
 
     // angle mode
     if (peekNumber(tokenSeq)) {
-      StringBuilder number = new StringBuilder();
-      while (peekNumber(tokenSeq)) {
-        Token next = tokenSeq.poll();
-        if (next.tokenCode == Token.DOT) {
-          number.append('.');
-        } else {
-          number.append(next.attribute);
-        }
-      }
+      String number = readNumber(tokenSeq);
       String angleUnit = assertAngleUnit(tokenSeq);
       assertComma(tokenSeq);
-      result = makeNiftyLinearGradientFromAngle(number.toString(), angleUnit);
+      result = makeNiftyLinearGradientFromAngle(number, angleUnit);
     } else if (peekIdentifier(tokenSeq, "to")) {
       tokenSeq.poll(); // skip 'to' identifier
       String sideOrCorner = assertSideOrCorner(tokenSeq);
@@ -239,6 +231,21 @@ public class LinearGradientParser {
     assertRightParenthesis(tokenSeq);
     assertSemicolon(tokenSeq);
     return result;
+  }
+
+  private String readNumber(final Queue<Token> tokenSeq) throws Exception {
+    StringBuilder number = new StringBuilder();
+    while (peekNumber(tokenSeq)) {
+      Token next = tokenSeq.poll();
+      if (next.tokenCode == Token.IDENTIFIER) {
+        number.append(next.attribute);
+      } else if (next.tokenCode == Token.DOT) {
+        number.append('.');
+      } else {
+        number.append(next.attribute);
+      }
+    }
+    return number.toString();
   }
 
   private String assertSideOrCorner(final Queue<Token> tokenSeq) throws Exception {
@@ -356,16 +363,12 @@ public class LinearGradientParser {
   }
 
   private Double assertOptionalStep(final Queue<Token> tokenSeq) throws Exception {
-    Token nextElement = tokenSeq.peek();
-    if (nextElement == null) {
+    if (!peekNumber(tokenSeq)) {
       return null;
     }
-    if (nextElement.tokenCode != Token.NUMBER) {
-      return null;
-    }
-    nextElement = tokenSeq.poll();
+    String number = readNumber(tokenSeq);
     assertPercent(tokenSeq);
-    return Double.valueOf(nextElement.attribute) / 100.;
+    return Double.valueOf(number) / 100.;
   }
 
   private boolean peekNumber(final Queue<Token> tokenSeq) throws Exception {
@@ -373,7 +376,15 @@ public class LinearGradientParser {
     if (nextElement == null) {
       return false;
     }
-    return (nextElement.tokenCode == Token.NUMBER || nextElement.tokenCode == Token.DOT);
+    return (
+        nextElement.tokenCode == Token.NUMBER ||
+        nextElement.tokenCode == Token.DOT ||
+          (
+            nextElement.tokenCode == Token.IDENTIFIER &&
+            nextElement.attribute != null &&
+            nextElement.attribute.startsWith("-")
+          )
+        );
   }
 
   private void assertPercent(final Queue<Token> tokenSeq) throws Exception {

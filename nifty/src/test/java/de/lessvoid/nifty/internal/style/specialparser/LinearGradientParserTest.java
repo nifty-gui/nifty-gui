@@ -54,6 +54,16 @@ public class LinearGradientParserTest {
   }
 
   @Test
+  public void testSingleColorstopWithDecimal() throws Exception {
+    execTest("linear-gradient(red 10.5%);", 180, new ColorStop("red", 0.105));
+  }
+
+  @Test
+  public void testSingleColorstopWithNegativePercent() throws Exception {
+    execTest("linear-gradient(red -10%);", 180, new ColorStop("red", -0.1));
+  }
+
+  @Test
   public void testTwoColorstopsWebColorsWithAlpha() throws Exception {
     execTest("linear-gradient(#f000, #ff00aaff);", 180, new ColorStop("#f000"), new ColorStop("#ff00aaff"));
   }
@@ -81,6 +91,11 @@ public class LinearGradientParserTest {
   @Test
   public void testStartsWithAngleDeg() throws Exception {
     execTest("linear-gradient(10deg, red);", 10, new ColorStop("red"));
+  }
+
+  @Test
+  public void testStartsWithNegativeDecimalAngleDeg() throws Exception {
+    execTest("linear-gradient(-10.5deg, red);", -10.5, new ColorStop("red"));
   }
 
   @Test
