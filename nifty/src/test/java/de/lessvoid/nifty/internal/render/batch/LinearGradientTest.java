@@ -44,28 +44,28 @@ public class LinearGradientTest {
   public void test0degrees() {
     LinearGradient gradient = new LinearGradient(0.0, 0.0, 200.0, 100.0, NiftyLinearGradient.createFromAngleInDeg(0.));
     assertEquals(100.0, gradient.getStartX(), EPSILON);
-    assertEquals(  0.0, gradient.getStartY(), EPSILON);
+    assertEquals(100.0, gradient.getStartY(), EPSILON);
     assertEquals(100.0, gradient.getEndX(), EPSILON);
-    assertEquals(100.0, gradient.getEndY(), EPSILON);
+    assertEquals(  0.0, gradient.getEndY(), EPSILON);
     assertTrue(gradient.getColorStops().isEmpty());
   }
 
   @Test
   public void test45degrees() {
     LinearGradient gradient = new LinearGradient(0.0, 0.0, 200.0, 100.0, NiftyLinearGradient.createFromAngleInDeg(45.));
-    assertEquals( 25.0, gradient.getStartX(), EPSILON);
-    assertEquals(-25.0, gradient.getStartY(), EPSILON);
-    assertEquals(175.0, gradient.getEndX(), EPSILON);
-    assertEquals(125.0, gradient.getEndY(), EPSILON);
+    assertEquals(175.0, gradient.getStartX(), EPSILON);
+    assertEquals(125.0, gradient.getStartY(), EPSILON);
+    assertEquals( 25.0, gradient.getEndX(), EPSILON);
+    assertEquals(-25.0, gradient.getEndY(), EPSILON);
     assertTrue(gradient.getColorStops().isEmpty());
   }
 
   @Test
   public void test90degrees() {
     LinearGradient gradient = new LinearGradient(0.0, 0.0, 200.0, 100.0, NiftyLinearGradient.createFromAngleInDeg(90.));
-    assertEquals(  0.0, gradient.getStartX(), EPSILON);
+    assertEquals(200.0, gradient.getStartX(), EPSILON);
     assertEquals( 50.0, gradient.getStartY(), EPSILON);
-    assertEquals(200.0, gradient.getEndX(), EPSILON);
+    assertEquals(  0.0, gradient.getEndX(), EPSILON);
     assertEquals( 50.0, gradient.getEndY(), EPSILON);
     assertTrue(gradient.getColorStops().isEmpty());
   }
@@ -74,9 +74,9 @@ public class LinearGradientTest {
   public void test180degrees() {
     LinearGradient gradient = new LinearGradient(0.0, 0.0, 200.0, 100.0, NiftyLinearGradient.createFromAngleInDeg(180.));
     assertEquals(100.0, gradient.getStartX(), EPSILON);
-    assertEquals(100.0, gradient.getStartY(), EPSILON);
+    assertEquals(  0.0, gradient.getStartY(), EPSILON);
     assertEquals(100.0, gradient.getEndX(), EPSILON);
-    assertEquals(  0.0, gradient.getEndY(), EPSILON);
+    assertEquals(100.0, gradient.getEndY(), EPSILON);
     assertTrue(gradient.getColorStops().isEmpty());
   }
 

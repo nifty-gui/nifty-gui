@@ -69,10 +69,12 @@ public class LinearGradient {
     double length = Math.abs(w * sinAngle) +
                     Math.abs(h * cosAngle);
     double halfLength = length / 2;
-    this.startX = mx - halfLength * sinAngle;
-    this.startY = my - halfLength * cosAngle;
-    this.endX = mx + halfLength * sinAngle;
-    this.endY = my + halfLength * cosAngle;
+
+    // we flip start end end coordinates here since in Nifty the upper left hand corner is (0, 0)
+    this.startX = mx + halfLength * sinAngle;
+    this.startY = my + halfLength * cosAngle;
+    this.endX = mx - halfLength * sinAngle;
+    this.endY = my - halfLength * cosAngle;
     this.colorStops.addAll(flip(applyScale(gradient.getColorStops(), gradient.getScale()), gradient.isFlip()));
   }
 
