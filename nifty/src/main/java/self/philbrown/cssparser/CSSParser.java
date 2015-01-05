@@ -18,6 +18,7 @@ package self.philbrown.cssparser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -64,7 +65,7 @@ public class CSSParser implements ParserConstants
 	 * @throws IOException if the given {@code matcher} is not the token code of the current {@link Token}.
 	 * @see ParserConstants
 	 */
-	private void match(int matcher) throws IOException
+	private void match(int matcher) throws IOException, ParseException
 	{
 		if (t.tokenCode == matcher)
 		{
@@ -79,8 +80,9 @@ public class CSSParser implements ParserConstants
 			t = s.nextToken();
 		}
 		else {
-			handler.handleError(String.format(Locale.US, "Match Error at line %d and character %d. Need: %s Found: %s. Previous Token is %s.", s.getLineNumber(), s.getCharacterNumberForCurrentLine(), new Token(matcher, null).toDebugString(), t.toString(), previous.toDebugString()), new Exception("Matcher Error"));
-			System.exit(0);
+			String message = String.format(Locale.US, "Match Error at line %d and character %d. Need: %s Found: %s. Previous Token is %s.", s.getLineNumber(), s.getCharacterNumberForCurrentLine(), new Token(matcher, null).toDebugString(), t.toString(), previous.toDebugString());
+			handler.handleError(message, new Exception("Matcher Error"));
+			throw new ParseException(message, s.getCharacterNumber());
 		}
 	}
 	
@@ -88,7 +90,7 @@ public class CSSParser implements ParserConstants
 	 * Parse the CSS Input Stream
 	 * @throws IOException if the given {@code matcher} is not the token code of the current {@link Token}.
 	 */
-	public void parse() throws IOException
+	public void parse() throws IOException, ParseException
 	{
 		t = s.nextToken();
 		if (debug)
@@ -300,8 +302,9 @@ public class CSSParser implements ParserConstants
 					}
 					catch (Throwable t)
 					{
-						handler.handleError("Could not parse @font-face", t);
-						System.exit(0);
+						String message = "Could not parse @font-face";
+						handler.handleError(message, t);
+						throw new ParseException(message, s.getCharacterNumber());
 					}
 					
 				}
@@ -455,9 +458,9 @@ public class CSSParser implements ParserConstants
 //----DEVELOPERS CAN ADD SUPPORT FOR ADDITIONAL AT-RULES HERE!
 				else
 				{
-					
-					handler.handleError(String.format(Locale.US, "This implementation does not support the at-rule %s.", t.toString()), new Exception("At-Rule not supported"));
-					System.exit(0);
+					String message = String.format(Locale.US, "This implementation does not support the at-rule %s.", t.toString());
+					handler.handleError(message, new Exception("At-Rule not supported"));
+					throw new ParseException(message, s.getCharacterNumber());
 				}
 			}
 			else
@@ -521,7 +524,7 @@ public class CSSParser implements ParserConstants
 	 * Parses and prints debug info
 	 * @throws IOException 
 	 */
-	public void debug() throws IOException
+	public void debug() throws IOException, ParseException
 	{
 		debug = true;
 		parse();

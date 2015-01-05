@@ -17,7 +17,9 @@
 package self.philbrown.cssparser;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 
 /**
  * Tests the parser using a stylesheet string, which is derived from HTML5 boilerplate css.
@@ -80,9 +82,13 @@ public class Tester
 			parser.setLineSeparator('\n');
 			parser.parse();
 		}
-		catch (Throwable t)
+		catch (IOException e)
 		{
-			t.printStackTrace();
+			e.printStackTrace();
+		}
+		catch (ParseException e) 
+		{
+			e.printStackTrace();
 		}
 	}
 	

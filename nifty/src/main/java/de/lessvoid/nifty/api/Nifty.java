@@ -152,7 +152,7 @@ public class Nifty {
    * to apply them to all the rootNodes (and child nodes).
    * @throws IOException 
    */
-  public void applyStyle(final InputStream source) throws IOException {
+  public void applyStyle(final InputStream source) throws Exception {
     niftyStyle.applyStyle(this, source, rootNodes);
   }
 

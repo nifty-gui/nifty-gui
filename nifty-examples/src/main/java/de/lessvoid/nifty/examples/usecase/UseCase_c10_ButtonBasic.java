@@ -26,8 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNode;
@@ -41,7 +39,7 @@ import de.lessvoid.nifty.api.controls.Button;
 public class UseCase_c10_ButtonBasic {
   private final NiftyNode niftyNode;
 
-  public UseCase_c10_ButtonBasic(final Nifty nifty) throws IOException {
+  public UseCase_c10_ButtonBasic(final Nifty nifty) throws Exception {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
     niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
 

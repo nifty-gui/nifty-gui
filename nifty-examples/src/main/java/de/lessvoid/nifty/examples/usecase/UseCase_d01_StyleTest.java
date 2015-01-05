@@ -31,15 +31,13 @@ import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 
-import java.io.IOException;
-
 /**
  * Demonstrates style support in Nifty.
  * @author void
  */
 public class UseCase_d01_StyleTest {
 
-  public UseCase_d01_StyleTest(final Nifty nifty) throws IOException {
+  public UseCase_d01_StyleTest(final Nifty nifty) throws Exception {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     niftyNode.setStyleClass("my");
 

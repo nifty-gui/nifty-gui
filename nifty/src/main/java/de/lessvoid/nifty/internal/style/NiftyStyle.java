@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.internal.style;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +52,7 @@ public class NiftyStyle {
   private final static Logger log = Logger.getLogger(NiftyStyle.class.getName());
   private NiftyStyleClassInfoCache classInfoCache = new NiftyStyleClassInfoCache();
 
-  public void applyStyle(final Nifty nifty, final InputStream source, final List<NiftyNode> rootNodes) throws IOException {
+  public void applyStyle(final Nifty nifty, final InputStream source, final List<NiftyNode> rootNodes) throws Exception {
     CSSParser parser = new CSSParser(source, new NiftyNodeCSSHandler(nifty, rootNodes, classInfoCache));
     parser.parse();
   }
