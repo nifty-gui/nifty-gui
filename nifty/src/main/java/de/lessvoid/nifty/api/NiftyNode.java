@@ -30,6 +30,7 @@ import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterHAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyColor;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyLinearGradient;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterUnitValue;
 import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
@@ -144,6 +145,7 @@ public class NiftyNode {
    * @param value
    *          the UnitValue representing the new width
    */
+  @NiftyStyleProperty(name = "width", converter = NiftyStyleStringConverterUnitValue.class)
   public void setWidthConstraint(final UnitValue value) {
     impl.setWidthConstraint(value);
   }
@@ -155,6 +157,7 @@ public class NiftyNode {
    * @param value
    *          the UnitValue representing the new height
    */
+  @NiftyStyleProperty(name = "height", converter = NiftyStyleStringConverterUnitValue.class)
   public void setHeightConstraint(final UnitValue value) {
     impl.setHeightConstraint(value);
   }

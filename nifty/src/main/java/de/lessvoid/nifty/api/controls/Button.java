@@ -36,6 +36,8 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.VAlign;
+import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
+import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyFont;
 
 public class Button extends NiftyAbstractControl {
   private Label label;
@@ -72,6 +74,7 @@ public class Button extends NiftyAbstractControl {
    * @param text
    *          new text to show
    */
+  @NiftyStyleProperty(name = "text")
   public void setText(@Nonnull final String text) {
     label.setText(text);
   }
@@ -109,6 +112,7 @@ public class Button extends NiftyAbstractControl {
    * @param font
    *          new font or {@code null} to use the default font
    */
+  @NiftyStyleProperty(name = "font", converter = NiftyStyleStringConverterNiftyFont.class)
   public void setFont(final NiftyFont font) {
     label.setFont(font);
   }

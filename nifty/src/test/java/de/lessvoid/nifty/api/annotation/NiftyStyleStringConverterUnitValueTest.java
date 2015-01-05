@@ -24,32 +24,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.examples.usecase;
+package de.lessvoid.nifty.api.annotation;
 
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.controls.Button;
+import org.junit.Test;
 
-/**
- * Display a simple Button.
- * @author void
- */
-public class UseCase_c10_ButtonBasic {
-  private final NiftyNode niftyNode;
+import de.lessvoid.nifty.api.UnitValue;
 
-  public UseCase_c10_ButtonBasic(final Nifty nifty) throws IOException {
-    niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+public class NiftyStyleStringConverterUnitValueTest {
+  private NiftyStyleStringConverterUnitValue converter = new NiftyStyleStringConverterUnitValue();
 
-    Button button = niftyNode.newControl(Button.class);
-    button.setText("Nifty");
-
-    nifty.applyStyle(UseCase_c10_ButtonBasic.class.getResourceAsStream("UseCase_c10_ButtonBasic.css"));
+  @Test
+  public void testFromString() throws Exception {
+    assertEquals(new UnitValue("20px"), converter.fromString("20px"));
   }
 
-  public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_c10_ButtonBasic.class, args);
+  @Test
+  public void testToString() throws Exception {
+    assertEquals("20px", converter.toString(new UnitValue("20px")));
   }
+
 }

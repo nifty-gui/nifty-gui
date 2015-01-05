@@ -24,32 +24,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.examples.usecase;
+package de.lessvoid.nifty.api.annotation;
 
-import java.io.IOException;
+import de.lessvoid.nifty.api.UnitValue;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.controls.Button;
+public class NiftyStyleStringConverterUnitValue implements NiftyStyleStringConverter<UnitValue> {
 
-/**
- * Display a simple Button.
- * @author void
- */
-public class UseCase_c10_ButtonBasic {
-  private final NiftyNode niftyNode;
-
-  public UseCase_c10_ButtonBasic(final Nifty nifty) throws IOException {
-    niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-
-    Button button = niftyNode.newControl(Button.class);
-    button.setText("Nifty");
-
-    nifty.applyStyle(UseCase_c10_ButtonBasic.class.getResourceAsStream("UseCase_c10_ButtonBasic.css"));
+  @Override
+  public UnitValue fromString(final String value) throws Exception {
+    return new UnitValue(value);
   }
 
-  public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_c10_ButtonBasic.class, args);
+  @Override
+  public String toString(final UnitValue value) throws Exception {
+    return value.toString();
   }
 }
