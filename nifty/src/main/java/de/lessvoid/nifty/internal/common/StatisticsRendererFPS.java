@@ -36,11 +36,13 @@ import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyRuntimeException;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.controls.Label;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 
 public class StatisticsRendererFPS {
 
   public StatisticsRendererFPS(final Nifty nifty) {
     NiftyNode fpsNode = nifty.createRootNode(ChildLayout.Vertical, UnitValue.percent(100), UnitValue.wildcard(), ChildLayout.Horizontal);
+    NiftyNodeAccessor.getDefault().getInternalNiftyNode(fpsNode).setNiftyPrivateNode();
     fpsNode.setRenderOrder(1000);
 
     try {

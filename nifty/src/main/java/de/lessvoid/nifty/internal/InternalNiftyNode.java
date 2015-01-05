@@ -168,6 +168,9 @@ public class InternalNiftyNode implements InternalLayoutable {
   // if this node is the parent node of a control node hierachy then control keeps a reference to the NiftyControl
   private NiftyControl control;
 
+  // Nifty will use NiftyNodes to display some optional data like the FPS counter. These nodes will be hidden.
+  private boolean niftyPrivateNode = false;
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -637,7 +640,18 @@ public class InternalNiftyNode implements InternalLayoutable {
     return control;
   }
 
+  public void setNiftyPrivateNode() {
+    niftyPrivateNode = true;
+  }
+
+  public boolean isNiftyPrivateNode() {
+    return niftyPrivateNode;
+  }
+
   private void getStateInfo(final StringBuilder result, final String offset, final Pattern pattern) {
+    if (niftyPrivateNode) {
+      return;
+    }
     String rootNodeString = "";
     if (parentNode == null) {
       rootNodeString = " {rootNode} ";

@@ -95,7 +95,7 @@ public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNo
 
   @Override
   public InternalNiftyNode getRootNode(final InternalNiftyNode node) {
-    if (node.isRootNode()) {
+    if (node.isRootNode() && !node.isNiftyPrivateNode()) {
       log.fine("getRootNode(" + node + ") -> " + node);
       return node;
     }
@@ -107,7 +107,7 @@ public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNo
   @Override
   public List<InternalNiftyNode> getNodesByTagName(final InternalNiftyNode node, final String tagName) throws NodeSelectorException {
     ArrayList<InternalNiftyNode> result = new ArrayList<InternalNiftyNode>();
-    if (isWildcard(tagName) && node.isRootNode()) {
+    if (isWildcard(tagName) && node.isRootNode() && !node.isNiftyPrivateNode()) {
       result.add(node);
     }
     for (int i=0; i<node.getChildren().size(); i++) {
