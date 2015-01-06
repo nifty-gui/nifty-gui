@@ -1,6 +1,6 @@
 Nifty 2.0 - You haven't seen anything yet ...
 
-But in case you want to see something. Try something like that:
+... but in case you want to see something, try:
 
 ```
 cd /tmp
@@ -16,6 +16,8 @@ mvn exec:java -Dexec.mainClass="de.lessvoid.nifty.examples.usecase.UseCase_a05_R
 Also take a look at [the other examples](https://github.com/void256/nifty-gui/tree/2.0/nifty-examples/src/main/java/de/lessvoid/nifty/examples/usecase) which you can run the same way.
 
 Nifty? :smile:
+
+**Disclaimer: This is really very early work in progress preview kind of stuff! Be careful when you look around .. there might be monsters ...**
 
 ---
 
