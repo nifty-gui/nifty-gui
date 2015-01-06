@@ -24,19 +24,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.annotation;
+package de.lessvoid.nifty.api.converter;
 
-import de.lessvoid.nifty.api.HAlign;
+/**
+ * You'll need to provide an implementation of this interface when you annotate methods with @NiftyStyleProperty
+ * that are not String properties. This interface will convert the actual values to Strings and back.
+ *
+ * This is necessary since style files only contain String properties.
+ *
+ * @author void
+ */
+public interface NiftyStyleStringConverter<E> {
+  /**
+   * Take the given value and convert it to whatever type you need.
+   * @param value the String value
+   * @return the actual converted value
+   */
+  E fromString(String value) throws Exception;
 
-public class NiftyStyleStringConverterHAlign implements NiftyStyleStringConverter<HAlign> {
-
-  @Override
-  public HAlign fromString(final String value) {
-    return HAlign.valueOf(value);
-  }
-
-  @Override
-  public String toString(final HAlign value) {
-    return value.name();
-  }
+  /**
+   * Take the given value and return a String representation.
+   * @param value the value
+   * @return the String value
+   */
+  String toString(E value) throws Exception;
 }

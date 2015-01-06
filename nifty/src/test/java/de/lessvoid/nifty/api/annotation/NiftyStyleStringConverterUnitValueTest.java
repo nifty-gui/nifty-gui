@@ -31,6 +31,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.UnitValue;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterUnitValue;
 
 public class NiftyStyleStringConverterUnitValueTest {
   private NiftyStyleStringConverterUnitValue converter = new NiftyStyleStringConverterUnitValue();

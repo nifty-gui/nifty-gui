@@ -37,6 +37,7 @@ import org.junit.Test;
 
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyFont;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyFont;
 
 public class NiftyStyleStringConverterNiftyFontTest {
   private Nifty niftyMock = createMock(Nifty.class);

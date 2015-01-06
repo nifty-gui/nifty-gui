@@ -24,25 +24,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.annotation;
+package de.lessvoid.nifty.api.converter;
 
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyFont;
+import de.lessvoid.nifty.api.VAlign;
 
-public class NiftyStyleStringConverterNiftyFont implements NiftyStyleStringConverter<NiftyFont> {
-  private final Nifty nifty;
+public class NiftyStyleStringConverterVAlign implements NiftyStyleStringConverter<VAlign> {
 
-  public NiftyStyleStringConverterNiftyFont(final Nifty nifty) {
-    this.nifty = nifty;
+  @Override
+  public VAlign fromString(final String value) {
+    return VAlign.valueOf(value);
   }
 
   @Override
-  public NiftyFont fromString(final String value) throws Exception {
-    return nifty.createFont(value);
-  }
-
-  @Override
-  public String toString(final NiftyFont value) throws Exception {
-    return value.getName();
+  public String toString(final VAlign value) {
+    return value.name();
   }
 }

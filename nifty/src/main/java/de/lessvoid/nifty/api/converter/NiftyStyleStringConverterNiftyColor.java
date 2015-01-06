@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.api.annotation;
+package de.lessvoid.nifty.api.converter;
 
 import de.lessvoid.nifty.api.NiftyColor;
 

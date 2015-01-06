@@ -5,6 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverter;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterDefault;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface NiftyStyleProperty {

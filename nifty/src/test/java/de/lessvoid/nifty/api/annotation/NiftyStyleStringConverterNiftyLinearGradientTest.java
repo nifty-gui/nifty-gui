@@ -35,6 +35,7 @@ import org.junit.Test;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyColorStop;
 import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyLinearGradient;
 
 public class NiftyStyleStringConverterNiftyLinearGradientTest {
   private NiftyStyleStringConverterNiftyLinearGradient converter = new NiftyStyleStringConverterNiftyLinearGradient();

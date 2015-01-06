@@ -24,19 +24,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.annotation;
+package de.lessvoid.nifty.api.converter;
 
-import de.lessvoid.nifty.api.VAlign;
+import de.lessvoid.nifty.api.HAlign;
 
-public class NiftyStyleStringConverterVAlign implements NiftyStyleStringConverter<VAlign> {
+public class NiftyStyleStringConverterHAlign implements NiftyStyleStringConverter<HAlign> {
 
   @Override
-  public VAlign fromString(final String value) {
-    return VAlign.valueOf(value);
+  public HAlign fromString(final String value) {
+    return HAlign.valueOf(value);
   }
 
   @Override
-  public String toString(final VAlign value) {
+  public String toString(final HAlign value) {
     return value.name();
   }
 }

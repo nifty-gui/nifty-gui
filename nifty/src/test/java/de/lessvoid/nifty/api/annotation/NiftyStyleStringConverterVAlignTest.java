@@ -31,6 +31,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.VAlign;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
 
 public class NiftyStyleStringConverterVAlignTest {
   private final NiftyStyleStringConverterVAlign converter = new NiftyStyleStringConverterVAlign();

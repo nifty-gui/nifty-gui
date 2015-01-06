@@ -35,10 +35,10 @@ import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterHAlign;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyColor;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyFont;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterHAlign;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyColor;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyFont;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.internal.render.TextRenderer;
 
 public class Label extends NiftyAbstractControl {

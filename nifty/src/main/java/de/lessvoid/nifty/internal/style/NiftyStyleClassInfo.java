@@ -39,7 +39,7 @@ import java.util.logging.Logger;
 
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverter;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverter;
 
 /**
  * This class stores all properties of a class that are annotated with @NiftyStyleProperty for later use. The idea is

@@ -37,7 +37,7 @@ import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyFont;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyFont;
 
 public class Button extends NiftyAbstractControl {
   private Label label;

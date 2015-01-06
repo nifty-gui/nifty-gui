@@ -31,6 +31,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyColor;
 
 public class NiftyStyleStringConverterNiftyColorTest {
   private NiftyStyleStringConverterNiftyColor converter = new NiftyStyleStringConverterNiftyColor();

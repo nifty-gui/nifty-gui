@@ -27,12 +27,12 @@
 package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterHAlign;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyColor;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyLinearGradient;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterUnitValue;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterHAlign;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyColor;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyLinearGradient;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterUnitValue;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.math.Vec4;

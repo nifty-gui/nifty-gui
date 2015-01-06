@@ -44,7 +44,7 @@ import org.junit.Test;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
-import de.lessvoid.nifty.api.annotation.NiftyStyleStringConverterNiftyFont;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyFont;
 
 @SuppressWarnings("unused")
 public class NiftyStyleClassInfoTest {
