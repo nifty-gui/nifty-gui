@@ -16,6 +16,7 @@ import org.xmlpull.v1.XmlPullParser;
 
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.xml.tools.BundleInfo;
 import de.lessvoid.xml.tools.SpecialValuesReplace;
 
 /**
@@ -70,7 +71,7 @@ public class Attributes {
   }
 
   public void translateSpecialValues(
-      @Nonnull final Map<String, String> resourceBundle,
+      @Nonnull final Map<String, BundleInfo> resourceBundle,
       @Nullable final ScreenController screenController,
       @Nullable final Properties globalProperties,
       @Nullable final Locale loc) {

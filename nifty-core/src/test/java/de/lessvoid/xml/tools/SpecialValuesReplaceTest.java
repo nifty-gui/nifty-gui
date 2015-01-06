@@ -1,11 +1,13 @@
 package de.lessvoid.xml.tools;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the class {@link SpecialValuesReplace}.
@@ -60,11 +62,9 @@ public class SpecialValuesReplaceTest {
   }
 
   @Test
-  public void testLocalize() {
-    Map<String, String> resources = new HashMap<String, String>();
-    resources.put("id", "stuff");
-//    assertEquals("${notfound}", SpecialValuesReplace.replace("${notfound}", resources, null, null, null));
-//    assertEquals("${unknown.notfound}", SpecialValuesReplace.replace("${unknown.notfound}", resources, null, null, null));
+  public void testLocalizeBasename() {
+    Map<String, BundleInfo> resources = new HashMap<String, BundleInfo>();
+    resources.put("id", new BundleInfoBasename("stuff"));
     assertEquals("value", SpecialValuesReplace.replace("${id.test}", resources, null, null, null));
   }
 

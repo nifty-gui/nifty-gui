@@ -1,12 +1,16 @@
 package de.lessvoid.xml.tools;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Marc Pompl
@@ -56,7 +60,7 @@ public class SpecialValuesReplace {
   @Nonnull
   public static String replace(
       @Nullable final String input,
-      @Nonnull final Map<String, String> resourceBundles,
+      @Nonnull final Map<String, BundleInfo> resourceBundles,
       @Nullable final Object methodCallTarget,
       @Nullable final Properties properties,
       @Nonnull final Locale locale) {
@@ -175,28 +179,21 @@ public class SpecialValuesReplace {
 
   private static String handleLocalize(
       @Nonnull final String value,
-      @Nonnull final Map<String, String> resourceBundles,
+      @Nonnull final Map<String, BundleInfo> resourceBundles,
       @Nonnull final Locale locale) {
     if (value.contains(".")) {
       String removedQuotes = removeQuotes(value);
       String resourceSelector = removedQuotes.substring(0, removedQuotes.indexOf("."));
       String resourceKey = removedQuotes.substring(removedQuotes.indexOf(".") + 1);
-      String baseName = resourceBundles.get(resourceSelector);
-      if (baseName == null) {
+      BundleInfo bundleInfo = resourceBundles.get(resourceSelector);
+      if (bundleInfo == null) {
         if (log.isLoggable(Level.WARNING)) {
           log.warning("no resource bundle defined for: " + resourceSelector);
         }
         return value;
       }
-
       try {
-        ResourceBundle res;
-        if (locale == null) {
-          res = ResourceBundle.getBundle(baseName);
-        } else {
-          res = ResourceBundle.getBundle(baseName, locale);
-        }
-        return res.getString(resourceKey);
+        return bundleInfo.getString(resourceKey, locale);
       } catch(MissingResourceException e) {
         if (log.isLoggable(Level.WARNING)) {
           log.warning("Missing resource: " + resourceSelector + "." + resourceKey);

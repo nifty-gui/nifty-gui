@@ -1,8 +1,41 @@
 package de.lessvoid.nifty;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.WillClose;
+
+import org.bushe.swing.event.EventService;
+import org.bushe.swing.event.EventServiceExistsException;
+import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.EventTopicSubscriber;
+import org.bushe.swing.event.ProxySubscriber;
+import org.bushe.swing.event.ThreadSafeEventService;
+import org.bushe.swing.event.annotation.ReferenceStrength;
+
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
-import de.lessvoid.nifty.elements.*;
+import de.lessvoid.nifty.elements.Action;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.ElementMoveAction;
+import de.lessvoid.nifty.elements.ElementRemoveAction;
+import de.lessvoid.nifty.elements.EndOfFrameElementAction;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventProcessor;
@@ -11,7 +44,16 @@ import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.RootLayerFactory;
-import de.lessvoid.nifty.loaderv2.types.*;
+import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
+import de.lessvoid.nifty.loaderv2.types.ElementType;
+import de.lessvoid.nifty.loaderv2.types.LayerType;
+import de.lessvoid.nifty.loaderv2.types.NiftyType;
+import de.lessvoid.nifty.loaderv2.types.PopupType;
+import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
+import de.lessvoid.nifty.loaderv2.types.RegisterMusicType;
+import de.lessvoid.nifty.loaderv2.types.RegisterSoundType;
+import de.lessvoid.nifty.loaderv2.types.ResourceBundleType;
+import de.lessvoid.nifty.loaderv2.types.StyleType;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolverDefault;
 import de.lessvoid.nifty.render.NiftyImage;
@@ -29,20 +71,11 @@ import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.FlipFlop;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import de.lessvoid.xml.tools.BundleInfo;
+import de.lessvoid.xml.tools.BundleInfoBasename;
+import de.lessvoid.xml.tools.BundleInfoResourceBundle;
 import de.lessvoid.xml.tools.SpecialValuesReplace;
 import de.lessvoid.xml.xpp3.Attributes;
-import org.bushe.swing.event.*;
-import org.bushe.swing.event.annotation.ReferenceStrength;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.WillClose;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The main Nifty class.
@@ -125,7 +158,7 @@ public class Nifty {
   @Nullable
   private String alternateKey;
   @Nonnull
-  private final Map<String, String> resourceBundles = new HashMap<String, String>();
+  private final Map<String, BundleInfo> resourceBundles = new HashMap<String, BundleInfo>();
   @Nullable
   private Properties globalProperties;
   @Nonnull
@@ -1447,12 +1480,21 @@ public class Nifty {
   }
 
   @Nonnull
-  public Map<String, String> getResourceBundles() {
+  public Map<String, BundleInfo> getResourceBundles() {
     return resourceBundles;
   }
 
   public void addResourceBundle(@Nonnull final String id, @Nonnull final String filename) {
-    resourceBundles.put(id, filename);
+    resourceBundles.put(id, new BundleInfoBasename(filename));
+  }
+
+  public void addResourceBundle(@Nonnull final String id, @Nonnull final ResourceBundle resourceBundle) {
+    BundleInfo bundleInfo = resourceBundles.get(id);
+    if (bundleInfo != null && bundleInfo instanceof BundleInfoResourceBundle) {
+      ((BundleInfoResourceBundle) bundleInfo).add(resourceBundle);
+      return;
+    }
+    resourceBundles.put(id, new BundleInfoResourceBundle(resourceBundle));
   }
 
   @Nullable
