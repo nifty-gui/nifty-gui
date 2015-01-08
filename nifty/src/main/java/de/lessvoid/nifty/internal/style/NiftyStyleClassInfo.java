@@ -179,7 +179,7 @@ public class NiftyStyleClassInfo {
       write.invoke(obj, converter.fromString(value));
     }
 
-    private NiftyStyleStringConverter createConverter() throws Exception {
+    private NiftyStyleStringConverter<?> createConverter() throws Exception {
       Class<? extends NiftyStyleStringConverter<?>> converterClass = styleProperty.converter();
 
       // we first check if we have a constructor that takes a Nifty as the parameter

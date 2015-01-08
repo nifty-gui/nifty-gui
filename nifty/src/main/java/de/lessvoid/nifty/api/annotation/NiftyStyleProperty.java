@@ -17,5 +17,10 @@ public @interface NiftyStyleProperty {
    */
   String name();
 
+  /**
+   * In case the property is not a type String you can provide an instance of NiftyStyleStringConverter to convert
+   * the actual type of the property to and from a String.
+   * @return the NiftyStyleStringConverter implementation to use
+   */
   Class<? extends NiftyStyleStringConverter<?>> converter() default NiftyStyleStringConverterDefault.class;
 }
