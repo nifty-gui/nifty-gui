@@ -195,16 +195,18 @@ public class NiftyNode {
    */
   @NiftyStyleProperty(name = "background-color", converter = NiftyStyleStringConverterNiftyColor.class)
   public void setBackgroundColor(final NiftyColor color) {
-    impl.setBackgroundColor(color);
+    setBackgroundColor(color, NiftyNodeState.Regular);
   }
 
   /**
-   * Get the current background color of this node.
+   * Change the background color of this node to a new color. The default value is a fully transparent color.
    *
-   * @return the currently set background color
+   * @param color the new background color
+   * @param states the NiftyNode.State that this background color should be applied to. This is optional. If you omit it
+   * the standard default state is being modified.
    */
-  public NiftyColor getBackgroundColor() {
-    return impl.getBackgroundColor();
+  public void setBackgroundColor(final NiftyColor color, final NiftyNodeState ... states) {
+    impl.setBackgroundColor(color, states);
   }
 
   /**
@@ -214,7 +216,27 @@ public class NiftyNode {
    */
   @NiftyStyleProperty(name = "background-gradient", converter = NiftyStyleStringConverterNiftyLinearGradient.class)
   public void setBackgroundGradient(final NiftyLinearGradient gradient) {
-    impl.setBackgroundGradient(gradient);
+    setBackgroundGradient(gradient, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Change the background gradient of this node. The default value is null.
+   *
+   * @param gradient the new background gradient
+   * @param states the NiftyNode.State that this background gradient should be applied to. This is optional. If you omit
+   * it the standard default state is being modified.
+   */
+  public void setBackgroundGradient(final NiftyLinearGradient gradient, final NiftyNodeState ... states) {
+    impl.setBackgroundGradient(gradient, states);
+  }
+
+  /**
+   * Get the current background color of this node.
+   *
+   * @return the currently set background color
+   */
+  public NiftyColor getBackgroundColor() {
+    return impl.getBackgroundColor();
   }
 
   /**
@@ -639,6 +661,22 @@ public class NiftyNode {
    */
   public void subscribe(final Object listener) {
     impl.subscribe(listener);
+  }
+
+  /**
+   * Force this Node to the NiftyNodeStates given. Please note that usually it's NOT necessary to call this method at
+   * all. It's only ever interesting to be called for special purposes like you want't to test your new cool hover
+   * state and you don't want to manually hover your node with your pointer each time you made a change.
+   *
+   * Also note that when you call this then that's it! Nifty will not update the states by itself anymore! It will
+   * just render the states you give it here! So make sure you know what you're doing when you call this method :)
+   *
+   * (And as I said, actually it's not necessary to call it at all ...)
+   *
+   * @param states the NiftyNodeStates you want this Node to have
+   */
+  public void forceStates(final NiftyNodeState ... states) {
+    impl.forceStates(states);
   }
 
   @Override

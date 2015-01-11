@@ -29,39 +29,39 @@ package de.lessvoid.nifty.examples.usecase;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyNodeState;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
-import de.lessvoid.nifty.api.controls.Button;
+import de.lessvoid.nifty.api.UnitValue;
 
 /**
- * Display a simple Button.
+ * State changes.
  * @author void
  */
-public class UseCase_c10_ButtonBasic {
-  private final NiftyNode niftyNode;
+public class UseCase_i02_StateChange {
 
-  public UseCase_c10_ButtonBasic(final Nifty nifty) throws Exception {
+  public UseCase_i02_StateChange(final Nifty nifty) {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
-    niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    nifty.clearScreenBeforeRender();
 
-    Button button = niftyNode.newControl(Button.class);
-    button.setText("Nifty");
+    NiftyNode rootNode = nifty.createRootNode(UnitValue.px(256), UnitValue.px(256), ChildLayout.Horizontal);
 
-    // we don't have ":hover: pseudoclass support in CSS yet so we need to workaround like so for now
-    NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(0);
-    gradient.addColorStop(-.23, NiftyColor.fromString("#34b4b4"));
-    gradient.addColorStop(.458, NiftyColor.fromString("#008080"));
-    gradient.addColorStop(.508, NiftyColor.fromString("#008080"));
-    gradient.addColorStop(.545, NiftyColor.fromString("#34b4b4"));
-    gradient.addColorStop(1.0, NiftyColor.fromString("#73f3f3"));
-    button.getNode().setBackgroundGradient(gradient, NiftyNodeState.Hover);
+    // the regular node
+    addNewDemoNode(rootNode);
 
-    nifty.applyStyle(UseCase_c10_ButtonBasic.class.getResourceAsStream("UseCase_c10_ButtonBasic.css"));
+    // we add the same node again but FORCE it's state to Hover
+    NiftyNode hover = addNewDemoNode(rootNode);
+    hover.forceStates(NiftyNodeState.Hover);
+  }
+
+  private NiftyNode addNewDemoNode(final NiftyNode parent) {
+    NiftyNode node = parent.newChildNode(UnitValue.percent(50), UnitValue.percent(50), ChildLayout.Center);
+    node.setBackgroundColor(NiftyColor.blue());
+    node.setBackgroundColor(NiftyColor.white(), NiftyNodeState.Hover);
+    return node;
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_c10_ButtonBasic.class, args);
+    UseCaseRunner.run(UseCase_i02_StateChange.class, args);
   }
 }

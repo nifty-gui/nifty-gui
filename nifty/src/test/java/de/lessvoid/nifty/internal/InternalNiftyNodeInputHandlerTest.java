@@ -73,7 +73,12 @@ public class InternalNiftyNodeInputHandlerTest {
   @Test
   public void testNoEventBus() {
     replayEventBus();
+
+    prepareInternalNiftyNodeStandard();
+    prepareInternalNiftyNodeScreenToLocal(0, 0);
+    internalNiftyNode.onHover(isA(NiftyPointerEvent.class));
     replayInternalNiftyNode();
+
     inputHandler.pointerEvent(null, internalNiftyNode, makePointerEvent(0, 0));
   }
 
@@ -137,6 +142,7 @@ public class InternalNiftyNodeInputHandlerTest {
     prepareInternalNiftyNodeStandard();
     prepareInternalNiftyNodeScreenToLocal(100, 100);
     prepareInternalNiftyNodeScreenToLocal(150, 150);
+    internalNiftyNode.onExit();
     replayInternalNiftyNode();
 
     execPointerEvent(100, 100);
@@ -217,6 +223,7 @@ public class InternalNiftyNodeInputHandlerTest {
   }
 
   private void expectEventBusNiftyPointerHoverEvent() {
+    internalNiftyNode.onHover(isA(NiftyPointerEvent.class));
     eventBus.publish(isA(NiftyPointerHoverEvent.class));
   }
 

@@ -54,10 +54,6 @@ public class InternalNiftyNodeInputHandler {
       final InternalNiftyEventBus eventBus,
       final InternalNiftyNode internalNiftyNode,
       final NiftyPointerEvent pointerEvent) {
-    if (eventBus == null) {
-      return false;
-    }
-
     if (isInside(internalNiftyNode, pointerEvent.getX(), pointerEvent.getY())) {
       return inside(eventBus, internalNiftyNode, pointerEvent);
     } else {
@@ -78,25 +74,21 @@ public class InternalNiftyNodeInputHandler {
       final InternalNiftyEventBus eventBus,
       final InternalNiftyNode internalNiftyNode,
       final NiftyPointerEvent pointerEvent) {
-    if (eventBus == null) {
-      return false;
-    }
-
     boolean wantsToGiveUpCapturing = false;
-    eventBus.publish(new NiftyPointerHoverEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getX(), pointerEvent.getY()));
+    onHover(eventBus, internalNiftyNode, pointerEvent);
 
     if (!pointerEvent.isButtonDown()) {
       if (pointerEvent.getButton() >= 0) {
         if (buttonDown[pointerEvent.getButton()]) {
           buttonDown[pointerEvent.getButton()] = false;
   
-          eventBus.publish(new NiftyPointerReleasedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+          onRelease(eventBus, internalNiftyNode, pointerEvent);
           if (isInside(internalNiftyNode, pointerEvent.getX(), pointerEvent.getY())) {
-            eventBus.publish(new NiftyPointerClickedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+            onClicked(eventBus, internalNiftyNode, pointerEvent);
           } else {
             if (mouseOverNode) {
               mouseOverNode = false;
-              eventBus.publish(new NiftyPointerExitNodeEvent(internalNiftyNode.getNiftyNode()));
+              onExit(eventBus, internalNiftyNode);
             }
           }
           wantsToGiveUpCapturing = true;
@@ -105,7 +97,7 @@ public class InternalNiftyNodeInputHandler {
     }
 
     if (anyButtonDown() && (lastPosX != pointerEvent.getX() || lastPosY != pointerEvent.getY())) {
-      eventBus.publish(new NiftyPointerDraggedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+      onDragged(eventBus, internalNiftyNode, pointerEvent);
     }
 
     lastPosX = pointerEvent.getX();
@@ -123,15 +115,15 @@ public class InternalNiftyNodeInputHandler {
     boolean wantsToCaptureEvents = false;
     if (!mouseOverNode) {
       mouseOverNode = true;
-      eventBus.publish(new NiftyPointerEnterNodeEvent(internalNiftyNode.getNiftyNode()));
+      onEnter(eventBus, internalNiftyNode);
     }
 
-    eventBus.publish(new NiftyPointerHoverEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getX(), pointerEvent.getY()));
+    onHover(eventBus, internalNiftyNode, pointerEvent);
 
     if (pointerEvent.isButtonDown()) {
       if (!buttonDown[pointerEvent.getButton()]) {
         buttonDown[pointerEvent.getButton()] = true;
-        eventBus.publish(new NiftyPointerPressedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+        onPressed(eventBus, internalNiftyNode, pointerEvent);
         wantsToCaptureEvents = true;
       }
     } else {
@@ -139,14 +131,14 @@ public class InternalNiftyNodeInputHandler {
         if (buttonDown[pointerEvent.getButton()]) {
           buttonDown[pointerEvent.getButton()] = false;
   
-          eventBus.publish(new NiftyPointerReleasedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
-          eventBus.publish(new NiftyPointerClickedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+          onRelease(eventBus, internalNiftyNode, pointerEvent);
+          onClicked(eventBus, internalNiftyNode, pointerEvent);
         }
       }
     }
 
     if (anyButtonDown() && (lastPosX != pointerEvent.getX() || lastPosY != pointerEvent.getY())) {
-      eventBus.publish(new NiftyPointerDraggedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+      onDragged(eventBus, internalNiftyNode, pointerEvent);
     }
 
     lastPosX = pointerEvent.getX();
@@ -168,7 +160,7 @@ public class InternalNiftyNodeInputHandler {
       return;
     }
     mouseOverNode = false;
-    eventBus.publish(new NiftyPointerExitNodeEvent(internalNiftyNode.getNiftyNode()));
+    onExit(eventBus, internalNiftyNode);
   }
 
   private boolean isInside(final InternalNiftyNode internalNiftyNode, final int x, final int y) {
@@ -183,6 +175,65 @@ public class InternalNiftyNodeInputHandler {
   private void logInside(final InternalNiftyNode internalNiftyNode, final NiftyPointerEvent pointerEvent) {
     if (logger.isLoggable(Level.FINE)) {
       logger.fine("HOVER [" + internalNiftyNode.getId() + "] (" + pointerEvent + ")");
+    }
+  }
+
+  private void onHover(
+      final InternalNiftyEventBus eventBus,
+      final InternalNiftyNode internalNiftyNode,
+      final NiftyPointerEvent pointerEvent) {
+    internalNiftyNode.onHover(pointerEvent);
+    if (eventBus != null) {
+      eventBus.publish(new NiftyPointerHoverEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getX(), pointerEvent.getY()));
+    }
+  }
+
+  private void onDragged(
+      final InternalNiftyEventBus eventBus,
+      final InternalNiftyNode internalNiftyNode,
+      final NiftyPointerEvent pointerEvent) {
+    if (eventBus != null) {
+      eventBus.publish(new NiftyPointerDraggedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+    }
+  }
+
+  private void onExit(final InternalNiftyEventBus eventBus, final InternalNiftyNode internalNiftyNode) {
+    internalNiftyNode.onExit();
+    if (eventBus != null) {
+      eventBus.publish(new NiftyPointerExitNodeEvent(internalNiftyNode.getNiftyNode()));
+    }
+  }
+
+  private void onClicked(
+      final InternalNiftyEventBus eventBus,
+      final InternalNiftyNode internalNiftyNode,
+      final NiftyPointerEvent pointerEvent) {
+    if (eventBus != null) {
+      eventBus.publish(new NiftyPointerClickedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+    }
+  }
+
+  private void onRelease(
+      final InternalNiftyEventBus eventBus,
+      final InternalNiftyNode internalNiftyNode,
+      final NiftyPointerEvent pointerEvent) {
+    if (eventBus != null) {
+      eventBus.publish(new NiftyPointerReleasedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+    }
+  }
+
+  private void onPressed(
+      final InternalNiftyEventBus eventBus,
+      final InternalNiftyNode internalNiftyNode,
+      final NiftyPointerEvent pointerEvent) {
+    if (eventBus != null) {
+      eventBus.publish(new NiftyPointerPressedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+    }
+  }
+
+  private void onEnter(final InternalNiftyEventBus eventBus, final InternalNiftyNode internalNiftyNode) {
+    if (eventBus != null) {
+      eventBus.publish(new NiftyPointerEnterNodeEvent(internalNiftyNode.getNiftyNode()));
     }
   }
 }

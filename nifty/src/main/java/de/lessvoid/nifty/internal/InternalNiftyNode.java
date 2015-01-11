@@ -45,10 +45,10 @@ import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback.Size;
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyNodeState;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
-import de.lessvoid.nifty.api.event.NiftyEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
@@ -131,6 +131,9 @@ public class InternalNiftyNode implements InternalLayoutable {
   // style class applied to that node (can be multiple classes in which case they should be whitespace seperated)
   private String styleClasses;
 
+  // The StateManager to manage all of the states for this node.
+  private final StateManager<InternalNiftyNode> stateManager = new StateManager(this);
+
   private boolean transformationChanged = true;
   private double pivotX = 0.5;
   private double pivotY = 0.5;
@@ -170,6 +173,28 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   // Nifty will use NiftyNodes to display some optional data like the FPS counter. These nodes will be hidden.
   private boolean niftyPrivateNode = false;
+
+  // As a feature Nifty supports the forcing of states through its public API. What that means, however, is that
+  // Nifty will not update the acual states anymore. So if this array here contains not null than these states will
+  // be used.
+  private List<NiftyNodeState> forcedStates;
+
+  // StateSetters for all properties that take part in the StateManager business. These are declared static so that we
+  // can reuse them in all instances and don't generate additional GC stress.
+  private static StateSetter<InternalNiftyNode, NiftyColor> stateSetterBackgroundColor = new StateSetter<InternalNiftyNode, NiftyColor>() {
+    @Override
+    public void set(final InternalNiftyNode target, final NiftyColor value) {
+      target.backgroundColor = value;
+      target.requestRedraw = true;
+    }
+  };
+  private static StateSetter<InternalNiftyNode, NiftyLinearGradient> stateSetterLinearGradient = new StateSetter<InternalNiftyNode, NiftyLinearGradient>() {
+    @Override
+    public void set(final InternalNiftyNode target, final NiftyLinearGradient value) {
+      target.backgroundGradient = value;
+      target.requestRedraw = true;
+    }
+  };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
@@ -335,9 +360,12 @@ public class InternalNiftyNode implements InternalLayoutable {
     return layoutPos.getWidth();
   }
 
-  public void setBackgroundColor(final NiftyColor color) {
-    backgroundColor  = color;
-    requestRedraw = true;
+  public void setBackgroundColor(final NiftyColor color, final NiftyNodeState ... states) {
+    stateManager.setValue("background-color", color, stateSetterBackgroundColor, states);
+  }
+
+  public void setBackgroundGradient(final NiftyLinearGradient gradient, final NiftyNodeState ... states) {
+    stateManager.setValue("background-gradient", gradient, stateSetterLinearGradient, states);
   }
 
   public void setCompositeOperation(final NiftyCompositeOperation compositeOperation) {
@@ -474,16 +502,30 @@ public class InternalNiftyNode implements InternalLayoutable {
     eventBus().subscribe(object);
   }
 
+  public void forceStates(final NiftyNodeState ... newStates) {
+    if (newStates == null || newStates.length == 0) {
+      forcedStates = null;
+    } else {
+      forcedStates = Arrays.asList(newStates);
+    }
+    stateManager.activateStates(forcedStates.toArray(new NiftyNodeState[0]));
+  }
+
+  // This method is called internally by methods in this class to set new states
+  private void setStatesInternal(final NiftyNodeState ... newStates) {
+    // if we have forcedStates than we will ignore any calls
+    if (forcedStates != null) {
+      return;
+    }
+    stateManager.activateStates(newStates);
+  }
+
   public void setStyleClass(final String classes) {
     this.styleClasses = classes;
   }
 
   public String getStyleClass() {
     return styleClasses;
-  }
-
-  public void setBackgroundGradient(final NiftyLinearGradient gradient) {
-    this.backgroundGradient = gradient;
   }
 
   public NiftyLinearGradient getBackgroundGradient() {
@@ -654,7 +696,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     }
     String rootNodeString = "";
     if (parentNode == null) {
-      rootNodeString = " {rootNode} ";
+      rootNodeString = " {rootNode}";
     }
     result.append(offset).append("- ");
     if (control != null) {
@@ -665,6 +707,9 @@ public class InternalNiftyNode implements InternalLayoutable {
       result.append("]");
     }
     result.append(rootNodeString);
+    result.append(" {");
+    result.append(stateManager.toString());
+    result.append("}");
     result.append("\n");
     result.append(matches(pattern, statePosition(), offset + "  "));
     result.append(matches(pattern, stateConstraints(), offset + "  "));
@@ -682,10 +727,6 @@ public class InternalNiftyNode implements InternalLayoutable {
       eventBus = new InternalNiftyEventBus();
     }
     return eventBus;
-  }
-
-  private void publish(final NiftyEvent event) {
-    eventBus().publish(event);
   }
 
   private InternalNiftyNode(
@@ -859,5 +900,13 @@ public class InternalNiftyNode implements InternalLayoutable {
       return new Mat4();
     }
     return parentNode.getLocalTransformation();
+  }
+
+  public void onHover(final NiftyPointerEvent pointerEvent) {
+    setStatesInternal(NiftyNodeState.Hover);
+  }
+
+  public void onExit() {
+    setStatesInternal();
   }
 }
