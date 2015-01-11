@@ -231,7 +231,10 @@ public class GenericPseudoClassSpecifierChecker<E> extends GenericNodeTraversalC
      * @see <a href="http://www.w3.org/TR/css3-selectors/#root-pseudo"><code>:root</code> pseudo-class</a>
      */
     private void addRootElement() {
-        result.add(nodeAdapter.getRootNode(root));
+        E rootNode = nodeAdapter.getRootNode(root);
+        if (rootNode != null) {
+          result.add(rootNode);
+        }
     }
     
 }

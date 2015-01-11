@@ -95,6 +95,9 @@ public class NiftyStyleNodeAdapter implements GenericNodeAdapter<InternalNiftyNo
 
   @Override
   public InternalNiftyNode getRootNode(final InternalNiftyNode node) {
+    if (node == null) {
+      return null;
+    }
     if (node.isRootNode() && !node.isNiftyPrivateNode()) {
       log.fine("getRootNode(" + node + ") -> " + node);
       return node;
