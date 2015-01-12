@@ -61,7 +61,7 @@ public class StateDataTest {
     target.setValue("value-1");
     replay(target);
 
-    stateData.set("key-1", "value-1", new StateSetter<DemoObject, String>() {
+    stateData.set("value-1", new StateSetter<DemoObject, String>() {
       @Override
       public void set(final DemoObject target, final String value) {
         target.setValue(value);
@@ -76,13 +76,13 @@ public class StateDataTest {
     target.setValue("value-2");
     replay(target);
 
-    stateData.set("key-1", "value-1", new StateSetter<DemoObject, String>() {
+    stateData.set("value-1", new StateSetter<DemoObject, String>() {
       @Override
       public void set(final DemoObject target, final String value) {
         target.setValue(value);
       }
     });
-    stateData.set("key-2", "value-2", new StateSetter<DemoObject, String>() {
+    stateData.set("value-2", new StateSetter<DemoObject, String>() {
       @Override
       public void set(final DemoObject target, final String value) {
         target.setValue(value);
@@ -94,22 +94,17 @@ public class StateDataTest {
 
   @Test
   public void testWithTwoSettersOverwritting() {
-    target.setValue("value-2");
+    target.setValue("value-1");
     replay(target);
 
-    stateData.set("key-1", "value-1", new StateSetter<DemoObject, String>() {
+    StateSetter<DemoObject, String> setter = new StateSetter<DemoObject, String>() {
       @Override
       public void set(final DemoObject target, final String value) {
         target.setValue(value);
       }
-    });
-    stateData.set("key-1", "value-2", new StateSetter<DemoObject, String>() {
-      @Override
-      public void set(final DemoObject target, final String value) {
-        target.setValue(value);
-      }
-    });
-
+    };
+    stateData.set("value-1", setter);
+    stateData.set("value-1", setter);
     stateData.apply(target);
   }
 
@@ -117,27 +112,27 @@ public class StateDataTest {
   public void testToStringEmpty() {
     replay(target);
 
-    assertEquals("{}", stateData.toString());
+    assertEquals("[]", stateData.toString());
   }
 
   @Test
   public void testToStringWithData() {
     replay(target);
 
-    stateData.set("key-1", "value-1", new StateSetter<DemoObject, String>() {
+    stateData.set("value-1", new StateSetter<DemoObject, String>() {
       @Override
       public void set(final DemoObject target, final String value) {
         target.setValue(value);
       }
     });
-    stateData.set("key-2", "value-2", new StateSetter<DemoObject, String>() {
+    stateData.set("value-2", new StateSetter<DemoObject, String>() {
       @Override
       public void set(final DemoObject target, final String value) {
         target.setValue(value);
       }
     });
 
-    assertEquals("{key-1=value-1, key-2=value-2}", stateData.toString());
+    assertEquals("[value-1, value-2]", stateData.toString());
   }
 
   public static class DemoObject {

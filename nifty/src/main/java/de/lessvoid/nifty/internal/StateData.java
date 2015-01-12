@@ -26,23 +26,23 @@
  */
 package de.lessvoid.nifty.internal;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Helper class to store all the data that is part of a certain NiftyNodeState.
  * @author void
  */
 public class StateData<O> {
-  private Map<String, StateDataValue<O, ?>> data = new TreeMap<String, StateDataValue<O, ?>>();
+  private Set<StateDataValue<O, ?>> data = new LinkedHashSet<StateDataValue<O, ?>>();
 
   @SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
-  <O, V> void set(final String key, final V value, final StateSetter<O, V> setter) {
-    data.put(key, new StateDataValue(value, setter));
+  <O, V> void set(final V value, final StateSetter<O, V> setter) {
+    data.add(new StateDataValue(value, setter));
   }
 
   void apply(final O target) {
-    for (StateDataValue<O, ?> stateDataSetter : data.values()) {
+    for (StateDataValue<O, ?> stateDataSetter : data) {
       stateDataSetter.setter(target);
     }
   }

@@ -53,15 +53,15 @@ public class StateManager<O> {
     }
   }
 
-  public <V> void setValue(final String key, final V value, final StateSetter<O, V> setter, final NiftyNodeState ... states) {
+  public <V> void setValue(final V value, final StateSetter<O, V> setter, final NiftyNodeState ... states) {
     if (targetIsRegularState(states)) {
-      stateInfos.get(NiftyNodeState.Regular).set(key, value, setter);
+      stateInfos.get(NiftyNodeState.Regular).set(value, setter);
       setter.set(target, value);
       return;
     }
 
     for (int i=0; i<states.length; i++) {
-      stateInfos.get(states[i]).set(key, value, setter);
+      stateInfos.get(states[i]).set(value, setter);
       if (states[i] == NiftyNodeState.Regular) {
         setter.set(target, value);
       }

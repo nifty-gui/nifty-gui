@@ -66,7 +66,7 @@ public class StateManagerTest {
     setter.set(testTarget, "value");
     replay(setter);
 
-    stateManager.setValue("key", "value", setter);
+    stateManager.setValue("value", setter);
   }
 
   @Test
@@ -76,7 +76,7 @@ public class StateManagerTest {
     setter.set(testTarget, "value");
     replay(setter);
 
-    stateManager.setValue("key", "value", setter, new NiftyNodeState[0]);
+    stateManager.setValue("value", setter, new NiftyNodeState[0]);
   }
 
   @Test
@@ -86,7 +86,7 @@ public class StateManagerTest {
     setter.set(testTarget, "value");
     replay(setter);
 
-    stateManager.setValue("key", "value", setter, NiftyNodeState.Regular);
+    stateManager.setValue("value", setter, NiftyNodeState.Regular);
   }
 
   @Test
@@ -94,7 +94,7 @@ public class StateManagerTest {
     replay(testTarget);
     replay(setter);
 
-    stateManager.setValue("key", "value", setter, NiftyNodeState.Hover);
+    stateManager.setValue("value", setter, NiftyNodeState.Hover);
   }
 
   @Test
@@ -113,7 +113,7 @@ public class StateManagerTest {
     setter.set(testTarget, "value");
     replay(setter);
 
-    stateManager.setValue("key", "value", setter, NiftyNodeState.Regular);
+    stateManager.setValue("value", setter, NiftyNodeState.Regular);
     stateManager.activateStates();
   }
 
@@ -122,7 +122,7 @@ public class StateManagerTest {
     replay(testTarget);
     replay(setter);
 
-    stateManager.setValue("key", "value", setter, NiftyNodeState.Hover);
+    stateManager.setValue("value", setter, NiftyNodeState.Hover);
     stateManager.activateStates();
   }
 
@@ -133,7 +133,7 @@ public class StateManagerTest {
     setter.set(testTarget, "value");
     replay(setter);
 
-    stateManager.setValue("key", "value", setter, NiftyNodeState.Hover);
+    stateManager.setValue("value", setter, NiftyNodeState.Hover);
     stateManager.activateStates(NiftyNodeState.Hover);
   }
 
@@ -143,7 +143,7 @@ public class StateManagerTest {
     replay(setter);
 
     assertEquals(
-        "current states: [Regular], available: {Regular={}, Hover={}}",
+        "current states: [Regular], available: {Regular=[], Hover=[]}",
         stateManager.toString());
   }
 
@@ -154,11 +154,11 @@ public class StateManagerTest {
     setter.set(testTarget, "value");
     replay(setter);
 
-    stateManager.setValue("key", "value", setter, NiftyNodeState.Hover);
+    stateManager.setValue("value", setter, NiftyNodeState.Hover);
     stateManager.activateStates(NiftyNodeState.Hover);
 
     assertEquals(
-        "current states: [Regular, Hover], available: {Regular={}, Hover={key=value}}",
+        "current states: [Regular, Hover], available: {Regular=[], Hover=[value]}",
         stateManager.toString());
   }
 }

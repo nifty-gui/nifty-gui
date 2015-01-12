@@ -108,7 +108,18 @@ public class NiftyNode {
    */
   @NiftyStyleProperty(name = "halign", converter = NiftyStyleStringConverterHAlign.class)
   public void setHAlign(final HAlign alignment) {
-    impl.setHAlign(alignment);
+    setHAlign(alignment, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the horizontal alignment.
+   * 
+   * @param alignment
+   *          the new horizontal alignment
+   * @param states the NiftyNode.State that this should be applied to.
+   */
+  public void setHAlign(final HAlign alignment, final NiftyNodeState ... states) {
+    impl.setHAlign(alignment, states);
   }
 
   /**
@@ -119,7 +130,18 @@ public class NiftyNode {
    */
   @NiftyStyleProperty(name = "valign", converter = NiftyStyleStringConverterVAlign.class)
   public void setVAlign(final VAlign alignment) {
-    impl.setVAlign(alignment);
+    setVAlign(alignment, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the vertical alignment.
+   * 
+   * @param alignment
+   *          the new vertical alignment
+   * @param states the NiftyNode.State that this should be applied to.
+   */
+  public void setVAlign(final VAlign alignment, final NiftyNodeState ... states) {
+    impl.setVAlign(alignment, states);
   }
 
   /**
@@ -127,7 +149,16 @@ public class NiftyNode {
    * @param value the UnitValue representing the new x position
    */
   public void setXConstraint(final UnitValue value) {
-    impl.setXConstraint(value);
+    setXConstraint(value, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the x constraint of this NiftyNode. Please remember that not all layouts will respect that value.
+   * @param value the UnitValue representing the new x position
+   * @param states the NiftyNode.State that this should be applied to.
+   */
+  public void setXConstraint(final UnitValue value, final NiftyNodeState ... states) {
+    impl.setXConstraint(value, states);
   }
 
   /**
@@ -135,7 +166,16 @@ public class NiftyNode {
    * @param value the UnitValue representing the new y position
    */
   public void setYConstraint(final UnitValue value) {
-    impl.setYConstraint(value);
+    setYConstraint(value, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the y constraint of this NiftyNode. Please remember that not all layouts will respect that value.
+   * @param value the UnitValue representing the new y position
+   * @param states the NiftyNode.State that this should be applied to.
+   */
+  public void setYConstraint(final UnitValue value, final NiftyNodeState ... states) {
+    impl.setYConstraint(value, states);
   }
 
   /**
@@ -147,7 +187,19 @@ public class NiftyNode {
    */
   @NiftyStyleProperty(name = "width", converter = NiftyStyleStringConverterUnitValue.class)
   public void setWidthConstraint(final UnitValue value) {
-    impl.setWidthConstraint(value);
+    setWidthConstraint(value, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Change the width constraint of this NiftyNode forcing it to a certain
+   * UnitValue.
+   * 
+   * @param value
+   *          the UnitValue representing the new width
+   * @param states the NiftyNode.State that this should be applied to.
+   */
+  public void setWidthConstraint(final UnitValue value, final NiftyNodeState ... states) {
+    impl.setWidthConstraint(value, states);
   }
 
   /**
@@ -159,7 +211,19 @@ public class NiftyNode {
    */
   @NiftyStyleProperty(name = "height", converter = NiftyStyleStringConverterUnitValue.class)
   public void setHeightConstraint(final UnitValue value) {
-    impl.setHeightConstraint(value);
+    setHeightConstraint(value, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Change the height constraint of this NiftyNode forcing it to a certain
+   * UnitValue.
+   * 
+   * @param value
+   *          the UnitValue representing the new height
+   * @param states the NiftyNode.State that this should be applied to.
+   */
+  public void setHeightConstraint(final UnitValue value, final NiftyNodeState ... states) {
+    impl.setHeightConstraint(value, states);
   }
 
   /**
@@ -169,7 +233,18 @@ public class NiftyNode {
    * @param childLayout
    */
   public void setChildLayout(final ChildLayout childLayout) {
-    impl.setChildLayout(childLayout);
+    setChildLayout(childLayout, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the ChildLayout for this NiftyNode. The ChildLayout defines the way
+   * child element of this node will be layed out.
+   * 
+   * @param childLayout
+   * @param states the NiftyNode.State that this should be applied to.
+   */
+  public void setChildLayout(final ChildLayout childLayout, final NiftyNodeState ... states) {
+    impl.setChildLayout(childLayout, states);
   }
 
   /**
@@ -177,7 +252,16 @@ public class NiftyNode {
    * @param compositeOperation the new BlendMode
    */
   public void setCompositeOperation(final NiftyCompositeOperation compositeOperation) {
-    impl.setCompositeOperation(compositeOperation);
+    setCompositeOperation(compositeOperation, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Change the blend mode when rendering this NiftyNode.
+   * @param compositeOperation the new BlendMode
+   * @param states the NiftyNode.State that this should be applied to.
+   */
+  public void setCompositeOperation(final NiftyCompositeOperation compositeOperation, final NiftyNodeState ... states) {
+    impl.setCompositeOperation(compositeOperation, states);
   }
 
   /**
@@ -264,7 +348,16 @@ public class NiftyNode {
    * @param angle rotation angle
    */
   public void setRotationX(final double angle) {
-    impl.setRotationX(angle);
+    setRotationX(angle, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set rotation around the x-axis in degrees.
+   * @param angle rotation angle
+   * @param states the NiftyNode.State that this should be applied to. This is optional.
+   */
+  public void setRotationX(final double angle, final NiftyNodeState ... states) {
+    impl.setRotationX(angle, states);
   }
 
   /**
@@ -272,7 +365,16 @@ public class NiftyNode {
    * @param angle rotation angle
    */
   public void setRotationY(final double angle) {
-    impl.setRotationY(angle);
+    setRotationY(angle, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set rotation around the y-axis in degrees.
+   * @param angle rotation angle
+   * @param states the NiftyNode.State that this should be applied to. This is optional.
+   */
+  public void setRotationY(final double angle, final NiftyNodeState ... states) {
+    impl.setRotationY(angle, states);
   }
 
   /**
@@ -280,7 +382,16 @@ public class NiftyNode {
    * @param angle rotation angle
    */
   public void setRotationZ(final double angle) {
-    impl.setRotationZ(angle);
+    setRotationZ(angle, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set rotation around the z-axis in degrees.
+   * @param angle rotation angle
+   * @param states the NiftyNode.State that this should be applied to. This is optional.
+   */
+  public void setRotationZ(final double angle, final NiftyNodeState ... states) {
+    impl.setRotationZ(angle, states);
   }
 
   /**
@@ -288,7 +399,16 @@ public class NiftyNode {
    * @param factor factor
    */
   public void setScaleX(final double factor) {
-    impl.setScaleX(factor);
+    setScaleX(factor, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set scale for x-axis.
+   * @param factor factor
+   * @param states the NiftyNode.State that this should be applied to. This is optional.
+   */
+  public void setScaleX(final double factor, final NiftyNodeState ... states) {
+    impl.setScaleX(factor, states);
   }
 
   /**
@@ -296,7 +416,16 @@ public class NiftyNode {
    * @param factor factor
    */
   public void setScaleY(final double factor) {
-    impl.setScaleY(factor);
+    setScaleY(factor, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set scale for y-axis.
+   * @param factor factor
+   * @param states the NiftyNode.State that this should be applied to. This is optional.
+   */
+  public void setScaleY(final double factor, final NiftyNodeState ... states) {
+    impl.setScaleY(factor, states);
   }
 
   /**
@@ -304,7 +433,16 @@ public class NiftyNode {
    * @param factor factor
    */
   public void setScaleZ(final double factor) {
-    impl.setScaleZ(factor);
+    setScaleZ(factor, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set scale for z-axis.
+   * @param factor factor
+   * @param states the NiftyNode.State that this should be applied to. This is optional.
+   */
+  public void setScaleZ(final double factor, final NiftyNodeState ... states) {
+    impl.setScaleZ(factor, states);
   }
 
   /**
@@ -363,7 +501,19 @@ public class NiftyNode {
    * @param painter the NiftyCanvasPainter instance to use for this Node
    */
   public void setCanvasPainter(final NiftyCanvasPainter painter) {
-    impl.setCanvasPainter(painter);
+    setCanvasPainter(painter, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set a NiftyCanvasPainter for the NiftyNode. This means you'd like to provide the content on your own. The
+   * NiftyCanvasPainter is an interface you're supposed to implement. Nifty will call you back when it is time to
+   * provide the content of this Node.
+   *
+   * @param painter the NiftyCanvasPainter instance to use for this Node
+   * @param states the NiftyNode.State that this should be applied to. This is optional.
+   */
+  public void setCanvasPainter(final NiftyCanvasPainter painter, final NiftyNodeState ... states) {
+    impl.setCanvasPainter(painter, states);
   }
 
   /**
@@ -438,7 +588,16 @@ public class NiftyNode {
    * @param renderOrder the new render order value
    */
   public void setRenderOrder(final int renderOrder) {
-    impl.setRenderOrder(renderOrder);
+    setRenderOrder(renderOrder, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set render order for this NiftyNode.
+   * @param renderOrder the new render order value
+   * @param states the NiftyNode.State that this should be applied to. This is optional.
+   */
+  public void setRenderOrder(final int renderOrder, final NiftyNodeState ... states) {
+    impl.setRenderOrder(renderOrder, states);
   }
 
   /**
