@@ -28,6 +28,7 @@ package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.internal.InternalNiftyEventBus;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
+import de.lessvoid.nifty.internal.style.NiftyStyleClassInfo;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 final class InternalNiftyAccessorImpl extends NiftyAccessor {
@@ -39,5 +40,10 @@ final class InternalNiftyAccessorImpl extends NiftyAccessor {
     @Override
     public InternalNiftyEventBus getEventBus(final Nifty nifty) {
       return nifty.getEventBus();
+    }
+
+    @Override
+    public NiftyStyleClassInfo getNiftyStyleClassInfo(final Nifty nifty, final Class<?> clazz) throws Exception {
+      return nifty.getStyleClassInfo(clazz);
     }
 }

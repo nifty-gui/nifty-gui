@@ -29,7 +29,10 @@ package de.lessvoid.nifty.internal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import de.lessvoid.nifty.api.ChildLayout;
@@ -46,10 +49,12 @@ import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback.Size;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyNodeState;
+import de.lessvoid.nifty.api.NiftyStateSetter;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
+import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.animate.IntervalAnimator;
@@ -61,8 +66,10 @@ import de.lessvoid.nifty.internal.layout.InternalLayoutable;
 import de.lessvoid.nifty.internal.layout.InternalLayoutableScreenSized;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.math.Vec4;
+import de.lessvoid.nifty.internal.style.NiftyStyleClassInfo;
 
 public class InternalNiftyNode implements InternalLayoutable {
+  private final static Logger log = Logger.getLogger(InternalNiftyNode.class.getName());
   private final StringBuilder builder = new StringBuilder();
 
   // The Nifty instance this NiftyNode belongs to.
@@ -132,7 +139,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   private String styleClasses;
 
   // The StateManager to manage all of the states for this node.
-  private final StateManager<InternalNiftyNode> stateManager = new StateManager(this);
+  private final InternalStateManager stateManager = new InternalStateManager();
 
   private boolean transformationChanged = true;
   private double pivotX = 0.5;
@@ -178,133 +185,6 @@ public class InternalNiftyNode implements InternalLayoutable {
   // Nifty will not update the acual states anymore. So if this array here contains not null than these states will
   // be used.
   private List<NiftyNodeState> forcedStates;
-
-  // StateSetters for all properties that take part in the StateManager business. These are declared static so that we
-  // can reuse them in all instances and don't generate additional GC stress.
-  private static StateSetter<InternalNiftyNode, NiftyColor> stateSetterBackgroundColor = new StateSetter<InternalNiftyNode, NiftyColor>() {
-    @Override
-    public void set(final InternalNiftyNode target, final NiftyColor value) {
-      target.backgroundColor = value;
-      target.requestRedraw = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, NiftyLinearGradient> stateSetterLinearGradient = new StateSetter<InternalNiftyNode, NiftyLinearGradient>() {
-    @Override
-    public void set(final InternalNiftyNode target, final NiftyLinearGradient value) {
-      target.backgroundGradient = value;
-      target.requestRedraw = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, UnitValue> stateSetterXConstraint = new StateSetter<InternalNiftyNode, UnitValue>() {
-    @Override
-    public void set(final InternalNiftyNode target, final UnitValue value) {
-      target.constraints.setX(value);
-      target.needsLayout = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, UnitValue> stateSetterYConstraint = new StateSetter<InternalNiftyNode, UnitValue>() {
-    @Override
-    public void set(final InternalNiftyNode target, final UnitValue value) {
-      target.constraints.setY(value);
-      target.needsLayout = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, UnitValue> stateSetterWidth = new StateSetter<InternalNiftyNode, UnitValue>() {
-    @Override
-    public void set(final InternalNiftyNode target, final UnitValue value) {
-      target.constraints.setWidth(value);
-      target.needsLayout = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, UnitValue> stateSetterHeight = new StateSetter<InternalNiftyNode, UnitValue>() {
-    @Override
-    public void set(final InternalNiftyNode target, final UnitValue value) {
-      target.constraints.setHeight(value);
-      target.needsLayout = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, ChildLayout> stateSetterChildLayout = new StateSetter<InternalNiftyNode, ChildLayout>() {
-    @Override
-    public void set(final InternalNiftyNode target, final ChildLayout childLayout) {
-      target.childLayout = childLayout;
-      target.needsLayout = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, HAlign> stateSetterHAlign = new StateSetter<InternalNiftyNode, HAlign>() {
-    @Override
-    public void set(final InternalNiftyNode target, final HAlign alignment) {
-      target.constraints.setHorizontalAlign(alignment);
-      target.needsLayout = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, VAlign> stateSetterVAlign = new StateSetter<InternalNiftyNode, VAlign>() {
-    @Override
-    public void set(final InternalNiftyNode target, final VAlign alignment) {
-      target.constraints.setVerticalAlign(alignment);
-      target.needsLayout = true;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, NiftyCompositeOperation> stateSetterCompositeOperation = new StateSetter<InternalNiftyNode, NiftyCompositeOperation>() {
-    @Override
-    public void set(final InternalNiftyNode target, final NiftyCompositeOperation compositeOperation) {
-      target.compositeOperation = compositeOperation;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, Double> stateSetterScaleX = new StateSetter<InternalNiftyNode, Double>() {
-    @Override
-    public void set(final InternalNiftyNode target, final Double factor) {
-      target.updateTransformationChanged(target.scaleX, factor);
-      target.scaleX = factor;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, Double> stateSetterScaleY = new StateSetter<InternalNiftyNode, Double>() {
-    @Override
-    public void set(final InternalNiftyNode target, final Double factor) {
-      target.updateTransformationChanged(target.scaleY, factor);
-      target.scaleY = factor;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, Double> stateSetterScaleZ = new StateSetter<InternalNiftyNode, Double>() {
-    @Override
-    public void set(final InternalNiftyNode target, final Double factor) {
-      target.updateTransformationChanged(target.scaleZ, factor);
-      target.scaleZ = factor;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, Double> stateSetterRotationX = new StateSetter<InternalNiftyNode, Double>() {
-    @Override
-    public void set(final InternalNiftyNode target, final Double angle) {
-      target.updateTransformationChanged(target.angleX, angle);
-      target.angleX = angle;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, Double> stateSetterRotationY = new StateSetter<InternalNiftyNode, Double>() {
-    @Override
-    public void set(final InternalNiftyNode target, final Double angle) {
-      target.updateTransformationChanged(target.angleY, angle);
-      target.angleY = angle;
-    }
-  };
-  private static StateSetter<InternalNiftyNode, Double> stateSetterRotationZ = new StateSetter<InternalNiftyNode, Double>() {
-    @Override
-    public void set(final InternalNiftyNode target, final Double angle) {
-      target.updateTransformationChanged(target.angleZ, angle);
-      target.angleZ = angle;
-    }
-  };
-  private StateSetter<InternalNiftyNode, Integer> stateSetterRenderOrder = new StateSetter<InternalNiftyNode, Integer>() {
-    @Override
-    public void set(final InternalNiftyNode target, final Integer renderOrder) {
-      target.renderOrder = renderOrder;
-    }
-  };
-  private StateSetter<InternalNiftyNode, NiftyCanvasPainter> stateSetterCanvasPainter = new StateSetter<InternalNiftyNode, NiftyCanvasPainter>() {
-    @Override
-    public void set(final InternalNiftyNode target, final NiftyCanvasPainter canvasPainter) {
-      target.canvasPainters.clear();
-      target.canvasPainters.add(canvasPainter);
-    }
-  };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
@@ -355,24 +235,24 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setXConstraint(final UnitValue value, final NiftyNodeState ... states) {
-    stateManager.setValue(value, stateSetterXConstraint, states);
+    stateManager.setValue(this, value, stateSetterXConstraint, states);
   }
 
   public void setYConstraint(final UnitValue value, final NiftyNodeState ... states) {
-    stateManager.setValue(value, stateSetterYConstraint, states);
+    stateManager.setValue(this, value, stateSetterYConstraint, states);
   }
 
   public void setWidthConstraint(final UnitValue value, final NiftyNodeState ... states) {
-    stateManager.setValue(value, stateSetterWidth, states);
+    stateManager.setValue(this, value, stateSetterWidth, states);
   }
 
   public void setHeightConstraint(final UnitValue value, final NiftyNodeState ... states) {
-    stateManager.setValue(value, stateSetterHeight, states);
+    stateManager.setValue(this, value, stateSetterHeight, states);
   }
 
   public void setChildLayout(final ChildLayout childLayout, final NiftyNodeState ... states) {
     assertNotNull(childLayout);
-    stateManager.setValue(childLayout, stateSetterChildLayout, states);
+    stateManager.setValue(this, childLayout, stateSetterChildLayout, states);
   }
 
   public InternalNiftyNode newChildNode() {
@@ -428,7 +308,8 @@ public class InternalNiftyNode implements InternalLayoutable {
   public <T extends NiftyControl> T newControl(final Class<T> controlClass, final NiftyNode childNode) {
     try {
       T result = controlClass.newInstance();
-      result.init(childNode);
+      result.init(childNode, stateManager);
+      initDefaultProperties(result);
       return result;
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -436,11 +317,11 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setHAlign(final HAlign alignment, final NiftyNodeState ... states) {
-    stateManager.setValue(alignment, stateSetterHAlign, states);
+    stateManager.setValue(this, alignment, stateSetterHAlign, states);
   }
 
   public void setVAlign(final VAlign alignment, final NiftyNodeState ... states) {
-    stateManager.setValue(alignment, stateSetterVAlign, states);
+    stateManager.setValue(this, alignment, stateSetterVAlign, states);
   }
 
   public int getX() {
@@ -464,15 +345,15 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setBackgroundColor(final NiftyColor color, final NiftyNodeState ... states) {
-    stateManager.setValue(color, stateSetterBackgroundColor, states);
+    stateManager.setValue(this, color, stateSetterBackgroundColor, states);
   }
 
   public void setBackgroundGradient(final NiftyLinearGradient gradient, final NiftyNodeState ... states) {
-    stateManager.setValue(gradient, stateSetterLinearGradient, states);
+    stateManager.setValue(this, gradient, stateSetterLinearGradient, states);
   }
 
   public void setCompositeOperation(final NiftyCompositeOperation compositeOperation, final NiftyNodeState ... states) {
-    stateManager.setValue(compositeOperation, stateSetterCompositeOperation, states);
+    stateManager.setValue(this, compositeOperation, stateSetterCompositeOperation, states);
   }
 
   public NiftyCompositeOperation getCompositeOperation() {
@@ -484,7 +365,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setScaleX(final double factor, final NiftyNodeState ... states) {
-    stateManager.setValue(factor, stateSetterScaleX, states);
+    stateManager.setValue(this, factor, stateSetterScaleX, states);
   }
 
   public double getScaleY() {
@@ -492,7 +373,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setScaleY(final double factor, final NiftyNodeState ... states) {
-    stateManager.setValue(factor, stateSetterScaleY, states);
+    stateManager.setValue(this, factor, stateSetterScaleY, states);
   }
 
   public double getScaleZ() {
@@ -500,7 +381,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setScaleZ(final double factor, final NiftyNodeState ... states) {
-    stateManager.setValue(factor, stateSetterScaleZ, states);
+    stateManager.setValue(this, factor, stateSetterScaleZ, states);
   }
 
   public void setPivot(final double x, final double y) {
@@ -523,7 +404,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setRotationX(final double angle, final NiftyNodeState ... states) {
-    stateManager.setValue(angle, stateSetterRotationX, states);
+    stateManager.setValue(this, angle, stateSetterRotationX, states);
   }
 
   public double getRotationY() {
@@ -531,7 +412,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setRotationY(final double angle, final NiftyNodeState ... states) {
-    stateManager.setValue(angle, stateSetterRotationY, states);
+    stateManager.setValue(this, angle, stateSetterRotationY, states);
   }
 
   public double getRotationZ() {
@@ -539,11 +420,11 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setRotationZ(final double angle, final NiftyNodeState ... states) {
-    stateManager.setValue(angle, stateSetterRotationZ, states);
+    stateManager.setValue(this, angle, stateSetterRotationZ, states);
   }
 
   public void setCanvasPainter(final NiftyCanvasPainter painter, final NiftyNodeState ... states) {
-    stateManager.setValue(painter, stateSetterCanvasPainter, states);
+    stateManager.setValue(this, painter, stateSetterCanvasPainter, states);
   }
 
   public void addCanvasPainter(final NiftyCanvasPainter painter) {
@@ -737,7 +618,7 @@ public class InternalNiftyNode implements InternalLayoutable {
   }
 
   public void setRenderOrder(final int renderOrder, final NiftyNodeState ... states) {
-    stateManager.setValue(renderOrder, stateSetterRenderOrder, states);
+    stateManager.setValue(this, renderOrder, stateSetterRenderOrder, states);
   }
 
   public Mat4 getLocalTransformation() {
@@ -784,6 +665,14 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public boolean isNiftyPrivateNode() {
     return niftyPrivateNode;
+  }
+
+  void onHover(final NiftyPointerEvent pointerEvent) {
+    setStatesInternal(NiftyNodeState.Hover);
+  }
+
+  void onExit() {
+    setStatesInternal();
   }
 
   private void getStateInfo(final StringBuilder result, final String offset, final Pattern pattern) {
@@ -998,11 +887,147 @@ public class InternalNiftyNode implements InternalLayoutable {
     return parentNode.getLocalTransformation();
   }
 
-  public void onHover(final NiftyPointerEvent pointerEvent) {
-    setStatesInternal(NiftyNodeState.Hover);
+  public void initDefaultProperties(final Object instance) {
+    try {
+      NiftyStyleClassInfo styleClassInfo = NiftyAccessor.getDefault().getNiftyStyleClassInfo(nifty, instance.getClass());
+      Map<String, String> properties = styleClassInfo.getProperties(instance);
+      for (Map.Entry<String, String> entry : properties.entrySet()) {
+        try {
+          System.out.println(entry.getKey() + " => " + entry.getValue());
+          styleClassInfo.writeValue(instance, entry.getKey(), entry.getValue(), Arrays.asList(NiftyNodeState.Regular));
+        } catch (Exception e) {
+          log.log(Level.WARNING, "writeValue exception", e);
+        }
+      }
+    } catch (Exception e) {
+      log.log(Level.WARNING, "unable to init default properties for " + instance.getClass() + ", instance: " + instance, e);
+    }
   }
 
-  public void onExit() {
-    setStatesInternal();
-  }
+  // StateSetters for all properties that take part in the StateManager business. These are declared static so that we
+  // can reuse them in all instances and don't generate additional GC stress.
+  private static NiftyStateSetter<InternalNiftyNode, NiftyColor> stateSetterBackgroundColor = new NiftyStateSetter<InternalNiftyNode, NiftyColor>() {
+    @Override
+    public void set(final InternalNiftyNode target, final NiftyColor value, final NiftyNodeState state) {
+      target.backgroundColor = value;
+      target.requestRedraw = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, NiftyLinearGradient> stateSetterLinearGradient = new NiftyStateSetter<InternalNiftyNode, NiftyLinearGradient>() {
+    @Override
+    public void set(final InternalNiftyNode target, final NiftyLinearGradient value, final NiftyNodeState state) {
+      target.backgroundGradient = value;
+      target.requestRedraw = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, UnitValue> stateSetterXConstraint = new NiftyStateSetter<InternalNiftyNode, UnitValue>() {
+    @Override
+    public void set(final InternalNiftyNode target, final UnitValue value, final NiftyNodeState state) {
+      target.constraints.setX(value);
+      target.needsLayout = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, UnitValue> stateSetterYConstraint = new NiftyStateSetter<InternalNiftyNode, UnitValue>() {
+    @Override
+    public void set(final InternalNiftyNode target, final UnitValue value, final NiftyNodeState state) {
+      target.constraints.setY(value);
+      target.needsLayout = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, UnitValue> stateSetterWidth = new NiftyStateSetter<InternalNiftyNode, UnitValue>() {
+    @Override
+    public void set(final InternalNiftyNode target, final UnitValue value, final NiftyNodeState state) {
+      target.constraints.setWidth(value);
+      target.needsLayout = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, UnitValue> stateSetterHeight = new NiftyStateSetter<InternalNiftyNode, UnitValue>() {
+    @Override
+    public void set(final InternalNiftyNode target, final UnitValue value, final NiftyNodeState state) {
+      target.constraints.setHeight(value);
+      target.needsLayout = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, ChildLayout> stateSetterChildLayout = new NiftyStateSetter<InternalNiftyNode, ChildLayout>() {
+    @Override
+    public void set(final InternalNiftyNode target, final ChildLayout childLayout, final NiftyNodeState state) {
+      target.childLayout = childLayout;
+      target.needsLayout = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, HAlign> stateSetterHAlign = new NiftyStateSetter<InternalNiftyNode, HAlign>() {
+    @Override
+    public void set(final InternalNiftyNode target, final HAlign alignment, final NiftyNodeState state) {
+      target.constraints.setHorizontalAlign(alignment);
+      target.needsLayout = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, VAlign> stateSetterVAlign = new NiftyStateSetter<InternalNiftyNode, VAlign>() {
+    @Override
+    public void set(final InternalNiftyNode target, final VAlign alignment, final NiftyNodeState state) {
+      target.constraints.setVerticalAlign(alignment);
+      target.needsLayout = true;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, NiftyCompositeOperation> stateSetterCompositeOperation = new NiftyStateSetter<InternalNiftyNode, NiftyCompositeOperation>() {
+    @Override
+    public void set(final InternalNiftyNode target, final NiftyCompositeOperation compositeOperation, final NiftyNodeState state) {
+      target.compositeOperation = compositeOperation;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, Double> stateSetterScaleX = new NiftyStateSetter<InternalNiftyNode, Double>() {
+    @Override
+    public void set(final InternalNiftyNode target, final Double factor, final NiftyNodeState state) {
+      target.updateTransformationChanged(target.scaleX, factor);
+      target.scaleX = factor;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, Double> stateSetterScaleY = new NiftyStateSetter<InternalNiftyNode, Double>() {
+    @Override
+    public void set(final InternalNiftyNode target, final Double factor, final NiftyNodeState state) {
+      target.updateTransformationChanged(target.scaleY, factor);
+      target.scaleY = factor;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, Double> stateSetterScaleZ = new NiftyStateSetter<InternalNiftyNode, Double>() {
+    @Override
+    public void set(final InternalNiftyNode target, final Double factor, final NiftyNodeState state) {
+      target.updateTransformationChanged(target.scaleZ, factor);
+      target.scaleZ = factor;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, Double> stateSetterRotationX = new NiftyStateSetter<InternalNiftyNode, Double>() {
+    @Override
+    public void set(final InternalNiftyNode target, final Double angle, final NiftyNodeState state) {
+      target.updateTransformationChanged(target.angleX, angle);
+      target.angleX = angle;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, Double> stateSetterRotationY = new NiftyStateSetter<InternalNiftyNode, Double>() {
+    @Override
+    public void set(final InternalNiftyNode target, final Double angle, final NiftyNodeState state) {
+      target.updateTransformationChanged(target.angleY, angle);
+      target.angleY = angle;
+    }
+  };
+  private static NiftyStateSetter<InternalNiftyNode, Double> stateSetterRotationZ = new NiftyStateSetter<InternalNiftyNode, Double>() {
+    @Override
+    public void set(final InternalNiftyNode target, final Double angle, final NiftyNodeState state) {
+      target.updateTransformationChanged(target.angleZ, angle);
+      target.angleZ = angle;
+    }
+  };
+  private NiftyStateSetter<InternalNiftyNode, Integer> stateSetterRenderOrder = new NiftyStateSetter<InternalNiftyNode, Integer>() {
+    @Override
+    public void set(final InternalNiftyNode target, final Integer renderOrder, final NiftyNodeState state) {
+      target.renderOrder = renderOrder;
+    }
+  };
+  private NiftyStateSetter<InternalNiftyNode, NiftyCanvasPainter> stateSetterCanvasPainter = new NiftyStateSetter<InternalNiftyNode, NiftyCanvasPainter>() {
+    @Override
+    public void set(final InternalNiftyNode target, final NiftyCanvasPainter canvasPainter, final NiftyNodeState state) {
+      target.canvasPainters.clear();
+      target.canvasPainters.add(canvasPainter);
+    }
+  };
 }

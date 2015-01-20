@@ -33,11 +33,13 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.api.NiftyNodeState;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverter;
 
@@ -63,8 +65,14 @@ public class NiftyStyleClassInfo {
       if (styleProperty == null) {
         continue;
       }
-
-      map.put(styleProperty.name(), new Accessor(nifty, styleProperty, descriptor.getReadMethod(), descriptor.getWriteMethod()));
+      map.put(
+          styleProperty.name(),
+          new Accessor(
+              nifty,
+              styleProperty,
+              descriptor.getReadMethod(),
+              descriptor.getWriteMethod(),
+              writeMethodWithNiftyNodeStates(descriptor.getWriteMethod())));
     }
   }
 
@@ -91,13 +99,28 @@ public class NiftyStyleClassInfo {
     return accessor.readValue(o);
   }
 
-  public boolean writeValue(final Object o, final String key, final String value) throws Exception {
+  public boolean writeValue(final Object o, final String key, final String value, final List<NiftyNodeState> pseudoClasses) throws Exception {
     Accessor accessor = map.get(key);
     if (accessor == null) {
       return false;
     }
-    accessor.writeValue(o, value);
+    accessor.writeValue(o, value, pseudoClasses);
     return true;
+  }
+
+  private Method writeMethodWithNiftyNodeStates(final Method writeMethod) {
+    if (writeMethod == null) {
+      return null;
+    }
+    Class<?>[] params = writeMethod.getParameterTypes();
+    Class<?>[] newParams = new Class<?>[params.length + 1];
+    System.arraycopy(params, 0, newParams, 0, params.length);
+    newParams[newParams.length - 1] = new NiftyNodeState[0].getClass();
+    try {
+      return clazz.getMethod(writeMethod.getName(), newParams);
+    } catch (NoSuchMethodException e) {
+      return null;
+    }
   }
 
   private NiftyStyleProperty getNiftyStyleProperty(final PropertyDescriptor property) {
@@ -147,12 +170,19 @@ public class NiftyStyleClassInfo {
     private final NiftyStyleProperty styleProperty;
     private final Method read;
     private final Method write;
+    private final Method writeWithNiftyNodeState;
 
-    public Accessor(final Nifty nifty, final NiftyStyleProperty styleProperty, final Method read, final Method write) {
+    public Accessor(
+        final Nifty nifty,
+        final NiftyStyleProperty styleProperty,
+        final Method read,
+        final Method write,
+        final Method writeWithNiftyNodeState) {
       this.nifty = nifty;
       this.styleProperty = styleProperty;
       this.read = read;
       this.write = write;
+      this.writeWithNiftyNodeState = writeWithNiftyNodeState;
     }
 
     public boolean canRead() {
@@ -171,11 +201,19 @@ public class NiftyStyleClassInfo {
       return converter.toString(value);
     }
 
-    public void writeValue(final Object obj, final String value) throws Exception {
+    public void writeValue(final Object obj, final String value, final List<NiftyNodeState> pseudoClasses) throws Exception {
       if (write == null) {
-        throw new Exception("trying to write a read-only property with the name {" + styleProperty.name() + "} and value {" + value + "} on object {" + obj + "} ignored");
+        return;
       }
       NiftyStyleStringConverter<?> converter = createConverter();
+      if (!pseudoClasses.isEmpty()) {
+        if (writeWithNiftyNodeState != null) {
+          writeWithNiftyNodeState.invoke(obj, converter.fromString(value), pseudoClasses.toArray(new NiftyNodeState[0]));
+        }
+        // we have to quit anyway. if we have a writeWithNiftyNodeState it's been called and all is well. if we don't
+        // have one then this means that this property is not supported for NiftyNodeStates.
+        return;
+      }
       write.invoke(obj, converter.fromString(value));
     }
 

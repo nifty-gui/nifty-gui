@@ -35,6 +35,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.junit.After;
@@ -43,6 +44,7 @@ import org.junit.Test;
 
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyFont;
+import de.lessvoid.nifty.api.NiftyNodeState;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyFont;
 
@@ -191,12 +193,7 @@ public class NiftyStyleClassInfoTest {
     };
 
     NiftyStyleClassInfo classCache = createStyleClassInfo(object);
-    try {
-      classCache.writeValue(object, "the-value", "43");
-      fail("expected exception");
-    } catch (Exception e) {
-      assertTrue(e.getMessage().startsWith("trying to write a read-only property with the name {the-value} and value {43} on object "));
-    }
+    classCache.writeValue(object, "the-value", "43", new ArrayList<NiftyNodeState>());
   }
 
   @Test
@@ -264,7 +261,7 @@ public class NiftyStyleClassInfoTest {
     WriteValueWithNiftyFontConverter object = new WriteValueWithNiftyFontConverter();
 
     NiftyStyleClassInfo classCache = createStyleClassInfo(object);
-    assertTrue(classCache.writeValue(object, "the-font", "my-font"));
+    assertTrue(classCache.writeValue(object, "the-font", "my-font", new ArrayList<NiftyNodeState>()));
     assertEquals(niftyFont, object.getValue());
 
     verify(niftyFont);

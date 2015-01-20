@@ -24,36 +24,58 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal;
+package de.lessvoid.nifty.internal.style.specialparser;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
-import de.lessvoid.nifty.api.NiftyNodeState;
-import de.lessvoid.nifty.api.NiftyStateSetter;
+import self.philbrown.cssparser.Token;
 
-/**
- * Helper class to store all the data that is part of a certain NiftyNodeState.
- * @author void
- */
-public class StateData {
-  private Set<StateDataValue<?, ?>> data = new LinkedHashSet<StateDataValue<?, ?>>();
-
-  @SuppressWarnings({ "unchecked", "rawtypes"})
-  <T, V> void set(final T target, final V value, final NiftyStateSetter<T, V> setter) {
-    StateDataValue stateDataValue = new StateDataValue(target, value, setter);
-    data.remove(stateDataValue);
-    data.add(stateDataValue);
+public class PseudoClassExtractor {
+  private final static Set<Integer> PSEUDO_CLASSES = new HashSet<Integer>();
+  {
+    PSEUDO_CLASSES.add(Token.HOVER);
+    PSEUDO_CLASSES.add(Token.ACTIVE);
+    PSEUDO_CLASSES.add(Token.FOCUS);
+    PSEUDO_CLASSES.add(Token.ENABLED);
+    PSEUDO_CLASSES.add(Token.DISABLED);
+    PSEUDO_CLASSES.add(Token.CHECKED);
   }
 
-  void apply(final NiftyNodeState state) {
-    for (StateDataValue<?, ?> stateDataSetter : data) {
-      stateDataSetter.setter(state);
+  public List<String> parse(final List<Token> tokenList) {
+    List<String> result = new ArrayList<String>();
+
+    Queue<Token> tokenSeq = new LinkedList<Token>(tokenList);
+    while (tokenSeq.peek() != null) {
+      Token colon = scanToColon(tokenSeq);
+      if (colon != null) {
+        Token identifier = identifier(tokenSeq);
+        if (identifier != null) {
+          result.add(identifier.attribute);
+        }
+      }
     }
+
+    return result;
   }
 
-  @Override
-  public String toString() {
-    return data.toString();
+  private Token scanToColon(final Queue<Token> tokenSeq) {
+    Token next = tokenSeq.poll();
+    while (next != null && next.tokenCode != Token.COLON) {
+      next = tokenSeq.poll();
+    }
+    return next;
+  }
+
+  private Token identifier(final Queue<Token> tokenSeq) {
+    Token next = tokenSeq.poll();
+    if (PSEUDO_CLASSES.contains(next.tokenCode)) {
+      return next;
+    }
+    return null;
   }
 }

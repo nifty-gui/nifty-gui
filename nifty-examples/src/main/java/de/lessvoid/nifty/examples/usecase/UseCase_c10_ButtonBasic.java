@@ -28,15 +28,13 @@ package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
 import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.NiftyNodeState;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
+import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.controls.Button;
 
 /**
- * Display a simple Button.
+ * Display some simple Button - with style ;)
  * @author void
  */
 public class UseCase_c10_ButtonBasic {
@@ -44,19 +42,20 @@ public class UseCase_c10_ButtonBasic {
 
   public UseCase_c10_ButtonBasic(final Nifty nifty) throws Exception {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
-    niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+
+    niftyNode = rootNode.newChildNode(ChildLayout.Horizontal);
+    niftyNode.setWidthConstraint(UnitValue.percent(25));
+    niftyNode.setHeightConstraint(UnitValue.percent(5));
 
     Button button = niftyNode.newControl(Button.class);
-    button.setText("Nifty");
+    button.setText("Default");
 
-    // we don't have ":hover: pseudoclass support in CSS yet so we need to workaround like so for now
-    NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(0);
-    gradient.addColorStop(-.23, NiftyColor.fromString("#34b4b4"));
-    gradient.addColorStop(.458, NiftyColor.fromString("#008080"));
-    gradient.addColorStop(.508, NiftyColor.fromString("#008080"));
-    gradient.addColorStop(.545, NiftyColor.fromString("#34b4b4"));
-    gradient.addColorStop(1.0, NiftyColor.fromString("#73f3f3"));
-    button.getNode().setBackgroundGradient(gradient, NiftyNodeState.Hover);
+    niftyNode.newChildNode(UnitValue.px(20), UnitValue.wildcard());
+
+    Button button2 = niftyNode.newControl(Button.class);
+    button2.setText("Custom");
+    button2.getNode().setStyleClass("flat-button");
 
     nifty.applyStyle(UseCase_c10_ButtonBasic.class.getResourceAsStream("UseCase_c10_ButtonBasic.css"));
   }

@@ -248,6 +248,19 @@ public class LinearGradientParser {
     return number.toString();
   }
 
+  private String readColor(final Queue<Token> tokenSeq) throws Exception {
+    StringBuilder number = new StringBuilder();
+    while (peekColorPart(tokenSeq)) {
+      Token next = tokenSeq.poll();
+      System.out.println(next.tokenCode  +" -> " + next.attribute);
+      number.append(next.attribute);
+      if (number.length() == 3 || number.length() == 6) {
+        return number.toString();
+      }
+    }
+    return number.toString();
+  }
+
   private String assertSideOrCorner(final Queue<Token> tokenSeq) throws Exception {
     Token first = assertNext(tokenSeq);
     if (first.tokenCode != Token.IDENTIFIER) {
@@ -351,12 +364,11 @@ public class LinearGradientParser {
       assertTokenCode(nextElement, Token.IDENTIFIER);
       return assertTokenAttributeColor(nextElement);
     } else if (nextElement.tokenCode == Token.HASH) {
-      nextElement = assertNext(tokenSeq);
-      assertTokenCode(nextElement, Token.IDENTIFIER, Token.NUMBER);
-      if (!NiftyColor.isColor("#" + nextElement.attribute)) {
-        throw new Exception("expected color value but was (" + "#" + nextElement.attribute + ")");
+      String colorValue = readColor(tokenSeq);
+      if (!NiftyColor.isColor("#" + colorValue)) {
+        throw new Exception("expected color value but was (" + "#" + colorValue + ")");
       }
-      return "#" + nextElement.attribute;
+      return "#" + colorValue;
     } else {
       throw new Exception("expected color token here but was (" + nextElement.toDebugString() + ")");
     }
@@ -385,6 +397,16 @@ public class LinearGradientParser {
             nextElement.attribute.startsWith("-")
           )
         );
+  }
+
+  private boolean peekColorPart(final Queue<Token> tokenSeq) throws Exception {
+    Token nextElement = tokenSeq.peek();
+    if (nextElement == null) {
+      return false;
+    }
+    return (
+        nextElement.tokenCode == Token.NUMBER ||
+        nextElement.tokenCode == Token.IDENTIFIER);
   }
 
   private void assertPercent(final Queue<Token> tokenSeq) throws Exception {

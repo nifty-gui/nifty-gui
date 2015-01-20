@@ -49,6 +49,8 @@ import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
 import de.lessvoid.nifty.internal.style.NiftyStyle;
+import de.lessvoid.nifty.internal.style.NiftyStyleClassInfo;
+import de.lessvoid.nifty.internal.style.NiftyStyleClassInfoCache;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -104,8 +106,11 @@ public class Nifty {
   // all pointer events will be send to that node unless the pointer is released again.
   private NiftyNode nodeThatCapturedPointerEvents;
 
+  // The NiftyStyleClassInfoCache keeps style informations about classes.
+  private NiftyStyleClassInfoCache styleClassInfoCache = new NiftyStyleClassInfoCache();
+
   // this class takes care of applying styles to a list for root nodes
-  private NiftyStyle niftyStyle = new NiftyStyle();
+  private NiftyStyle niftyStyle = new NiftyStyle(styleClassInfoCache);
 
   /**
    * Create a new Nifty instance.
@@ -396,6 +401,9 @@ public class Nifty {
    * @throws IOException
    */
   public NiftyFont createFont(final String name) throws IOException {
+    if (name == null) {
+      return null;
+    }
     return new NiftyFont(fontFactory.loadFont(resourceLoader.getResourceAsStream(name), name, 12), name);
   }
 
@@ -417,6 +425,10 @@ public class Nifty {
 
   InternalNiftyEventBus getEventBus() {
     return eventBus;
+  }
+
+  NiftyStyleClassInfo getStyleClassInfo(final Class<?> controlClass) throws Exception {
+    return styleClassInfoCache.getNiftyStyleClass(this, controlClass);
   }
 
   // Internal methods

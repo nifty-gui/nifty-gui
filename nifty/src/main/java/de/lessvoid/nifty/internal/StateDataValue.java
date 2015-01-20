@@ -26,6 +26,9 @@
  */
 package de.lessvoid.nifty.internal;
 
+import de.lessvoid.nifty.api.NiftyNodeState;
+import de.lessvoid.nifty.api.NiftyStateSetter;
+
 /**
  * A StateDataValue holds a value and a StateSetter to set this value.
  * @author void
@@ -34,16 +37,18 @@ package de.lessvoid.nifty.internal;
  * @param <V> the value type
  */
 class StateDataValue<T, V> {
-  private V value;
-  private StateSetter<T, V> setter;
+  final private T target;
+  final private V value;
+  final private NiftyStateSetter<T, V> setter;
 
-  StateDataValue(final V value, final StateSetter<T, V> setter) {
+  StateDataValue(final T target, final V value, final NiftyStateSetter<T, V> setter) {
+    this.target = target;
     this.value = value;
     this.setter = setter;
   }
 
-  void setter(final T object) {
-    setter.set(object, value);
+  void setter(final NiftyNodeState state) {
+    setter.set(target, value, state);
   }
 
   @Override
@@ -59,7 +64,6 @@ class StateDataValue<T, V> {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((setter == null) ? 0 : setter.hashCode());
-    result = prime * result + ((value == null) ? 0 : value.hashCode());
     return result;
   }
 
@@ -76,11 +80,6 @@ class StateDataValue<T, V> {
       if (other.setter != null)
         return false;
     } else if (!setter.equals(other.setter))
-      return false;
-    if (value == null) {
-      if (other.value != null)
-        return false;
-    } else if (!value.equals(other.value))
       return false;
     return true;
   }

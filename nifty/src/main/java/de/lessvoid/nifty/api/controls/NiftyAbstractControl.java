@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.api.controls;
 
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyStateManager;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 
 /**
@@ -37,10 +38,12 @@ import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
  */
 public abstract class NiftyAbstractControl implements NiftyControl {
   protected NiftyNode niftyNode;
+  protected NiftyStateManager stateManager;
 
   @Override
-  public void init(final NiftyNode niftyNode) {
+  public void init(final NiftyNode niftyNode, final NiftyStateManager stateManager) {
     this.niftyNode = niftyNode;
+    this.stateManager = stateManager;
     NiftyNodeAccessor.getDefault().getInternalNiftyNode(niftyNode).setControl(this);
   }
 

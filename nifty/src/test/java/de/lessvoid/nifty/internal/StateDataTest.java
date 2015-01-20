@@ -35,8 +35,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.lessvoid.nifty.api.NiftyNodeState;
+import de.lessvoid.nifty.api.NiftyStateSetter;
+
 public class StateDataTest {
-  private StateData<DemoObject> stateData = new StateData<DemoObject>();
+  private StateData stateData = new StateData();
   private DemoObject target;
 
   @Before
@@ -53,7 +56,7 @@ public class StateDataTest {
   public void testApplyWithEmptyData() {
     replay(target);
 
-    stateData.apply(target);
+    stateData.apply(NiftyNodeState.Regular);
   }
 
   @Test
@@ -61,13 +64,13 @@ public class StateDataTest {
     target.setValue("value-1");
     replay(target);
 
-    stateData.set("value-1", new StateSetter<DemoObject, String>() {
+    stateData.set(target, "value-1", new NiftyStateSetter<DemoObject, String>() {
       @Override
-      public void set(final DemoObject target, final String value) {
+      public void set(final DemoObject target, final String value, final NiftyNodeState state) {
         target.setValue(value);
       }
     });
-    stateData.apply(target);
+    stateData.apply(NiftyNodeState.Regular);
   }
 
   @Test
@@ -76,20 +79,20 @@ public class StateDataTest {
     target.setValue("value-2");
     replay(target);
 
-    stateData.set("value-1", new StateSetter<DemoObject, String>() {
+    stateData.set(target, "value-1", new NiftyStateSetter<DemoObject, String>() {
       @Override
-      public void set(final DemoObject target, final String value) {
+      public void set(final DemoObject target, final String value, final NiftyNodeState state) {
         target.setValue(value);
       }
     });
-    stateData.set("value-2", new StateSetter<DemoObject, String>() {
+    stateData.set(target, "value-2", new NiftyStateSetter<DemoObject, String>() {
       @Override
-      public void set(final DemoObject target, final String value) {
+      public void set(final DemoObject target, final String value, final NiftyNodeState state) {
         target.setValue(value);
       }
     });
 
-    stateData.apply(target);
+    stateData.apply(NiftyNodeState.Regular);
   }
 
   @Test
@@ -97,15 +100,15 @@ public class StateDataTest {
     target.setValue("value-1");
     replay(target);
 
-    StateSetter<DemoObject, String> setter = new StateSetter<DemoObject, String>() {
+    NiftyStateSetter<DemoObject, String> setter = new NiftyStateSetter<DemoObject, String>() {
       @Override
-      public void set(final DemoObject target, final String value) {
+      public void set(final DemoObject target, final String value, final NiftyNodeState state) {
         target.setValue(value);
       }
     };
-    stateData.set("value-1", setter);
-    stateData.set("value-1", setter);
-    stateData.apply(target);
+    stateData.set(target, "value-2", setter);
+    stateData.set(target, "value-1", setter);
+    stateData.apply(NiftyNodeState.Regular);
   }
 
   @Test
@@ -119,15 +122,15 @@ public class StateDataTest {
   public void testToStringWithData() {
     replay(target);
 
-    stateData.set("value-1", new StateSetter<DemoObject, String>() {
+    stateData.set(target, "value-1", new NiftyStateSetter<DemoObject, String>() {
       @Override
-      public void set(final DemoObject target, final String value) {
+      public void set(final DemoObject target, final String value, final NiftyNodeState state) {
         target.setValue(value);
       }
     });
-    stateData.set("value-2", new StateSetter<DemoObject, String>() {
+    stateData.set(target, "value-2", new NiftyStateSetter<DemoObject, String>() {
       @Override
-      public void set(final DemoObject target, final String value) {
+      public void set(final DemoObject target, final String value, final NiftyNodeState state) {
         target.setValue(value);
       }
     });

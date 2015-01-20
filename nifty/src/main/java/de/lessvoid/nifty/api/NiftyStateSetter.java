@@ -24,7 +24,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal;
+package de.lessvoid.nifty.api;
 
 /**
  * A helper interface to set some value V at an instance of T.
@@ -33,6 +33,6 @@ package de.lessvoid.nifty.internal;
  * @param <T> the target object this StateSetter applies too
  * @param <V> the value to set later
  */
-public interface StateSetter<T, V> {
-  void set(T target, V value);
+public interface NiftyStateSetter<T, V> {
+  void set(T target, V value, NiftyNodeState activeState);
 }

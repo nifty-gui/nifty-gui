@@ -41,6 +41,9 @@ public class NiftyStyleStringConverterNiftyLinearGradient implements NiftyStyleS
 
   @Override
   public NiftyLinearGradient fromString(final String value) throws Exception {
+    if (value == null) {
+      return null;
+    }
     return createNiftyLinearGradient(parser.parse(value + ";"));
   }
 

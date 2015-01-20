@@ -44,13 +44,19 @@ import self.philbrown.cssparser.RuleSet;
 import self.philbrown.cssparser.TokenSequence;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyNodeState;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.common.ListBuilder;
+import de.lessvoid.nifty.internal.style.specialparser.PseudoClassExtractor;
 
 public class NiftyStyle {
   private final static Logger log = Logger.getLogger(NiftyStyle.class.getName());
-  private NiftyStyleClassInfoCache classInfoCache = new NiftyStyleClassInfoCache();
+  private final NiftyStyleClassInfoCache classInfoCache;
+
+  public NiftyStyle(final NiftyStyleClassInfoCache classInfoCache) {
+    this.classInfoCache = classInfoCache;
+  }
 
   public void applyStyle(final Nifty nifty, final InputStream source, final List<NiftyNode> rootNodes) throws Exception {
     CSSParser parser = new CSSParser(source, new NiftyNodeCSSHandler(nifty, rootNodes, classInfoCache));
@@ -58,6 +64,7 @@ public class NiftyStyle {
   }
 
   private static class NiftyNodeCSSHandler implements CSSHandler {
+    private final PseudoClassExtractor pseudoClassExtractor = new PseudoClassExtractor();
     private final Nifty nifty;
     private final NiftyStyleClassInfoCache classInfoCache;
     private final List<InternalNiftyNode> rootNodes = new ArrayList<InternalNiftyNode>();
@@ -139,9 +146,10 @@ public class NiftyStyle {
         NodeSelector<InternalNiftyNode> selector = new GenericNodeSelector<InternalNiftyNode>(nodeAdapter, rootNodes.get(i));
         try {
           Set<InternalNiftyNode> result = selector.querySelectorAll(ruleSet.getSelector().toString());
+          List<String> dynamicPseudoClasses = pseudoClassExtractor.parse(ruleSet.getSelector().getTokens());
           log.fine("found: " + result.size() + " " + ListBuilder.makeString(new ArrayList<InternalNiftyNode>(result)));
           for (InternalNiftyNode r : result) {
-            applyRuleSet(r, ruleSet);
+            applyRuleSet(r, ruleSet, dynamicPseudoClasses);
           }
         } catch (Exception e) {
           log.log(Level.WARNING, "Exception querying with selector", e);
@@ -149,12 +157,12 @@ public class NiftyStyle {
       }
     }
 
-    private void applyRuleSet(final InternalNiftyNode node, final RuleSet ruleSet) throws Exception {
-      applyRuleSetInternal(ruleSet, node.getControl());
-      applyRuleSetInternal(ruleSet, node.getNiftyNode());
+    private void applyRuleSet(final InternalNiftyNode node, final RuleSet ruleSet, final List<String> pseudoClasses) throws Exception {
+      applyRuleSetInternal(ruleSet, node.getControl(), pseudoClasses);
+      applyRuleSetInternal(ruleSet, node.getNiftyNode(), pseudoClasses);
     }
 
-    private void applyRuleSetInternal(final RuleSet ruleSet, Object object) throws Exception {
+    private void applyRuleSetInternal(final RuleSet ruleSet, final Object object, final List<String> pseudoClasses) throws Exception {
       if (object == null) {
         return;
       }
@@ -163,10 +171,21 @@ public class NiftyStyle {
         Declaration decleration = ruleSet.getDeclarationBlock().get(i);
         String prop = decleration.getProperty().toString();
         String value = decleration.getValue().toString();
-        if (classInfo.writeValue(object, prop, value)) {
-          log.fine("Applying rule to (" + object + "): {" + prop + "} -> {" + value + "}");  
+        if (classInfo.writeValue(object, prop, value, translate(pseudoClasses))) {
+          log.fine("Applying rule to (" + object + ") with (" + pseudoClasses  +"): {" + prop + "} -> {" + value + "}");  
         }
       }
+    }
+
+    private List<NiftyNodeState> translate(final List<String> pseudoClasses) {
+      List<NiftyNodeState> result = new ArrayList<NiftyNodeState>();
+      for (int i=0; i<pseudoClasses.size(); i++) {
+        String value = pseudoClasses.get(i).toLowerCase();
+        if ("hover".equals(value)) {
+          result.add(NiftyNodeState.Hover);
+        }
+      }
+      return result;
     }
   }
 }

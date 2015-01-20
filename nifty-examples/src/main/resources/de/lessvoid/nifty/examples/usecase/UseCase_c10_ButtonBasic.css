@@ -2,9 +2,35 @@
   background-gradient: linear-gradient(black, #737373);
 }
 
+/*
+ * standard button style
+ */
+
 .button {
   background-gradient: linear-gradient(to top, #343434 -23%, #000000 45.8%, #000000 50.8%, #343434 54.5%, #737373);
   width: 100px;
   height: 23px;
   font: fonts/aurulent-sans-16.fnt;
+}
+
+.button:hover {
+  background-gradient: linear-gradient(to top, #ff5454 -23%, #000000 45.8%, #000000 50.8%, #545454 54.5%, #939393);
+  text-color: white;
+}
+
+/*
+ * custom flat style
+ */
+
+.flat-button {
+  background-gradient: linear-gradient(#777, #999);
+  width: 100px;
+  height: 23px;
+  font: fonts/aurulent-sans-16.fnt;
+  text-color: #111;
+}
+
+.flat-button:hover {
+  background-gradient: linear-gradient(#999, #888 40%, #f20);
+  text-color: #000;
 }

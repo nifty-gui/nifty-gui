@@ -36,11 +36,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lessvoid.nifty.api.NiftyNodeState;
+import de.lessvoid.nifty.api.NiftyStateSetter;
 
 public class StateManagerTest {
-  private StateManager<TestTarget> stateManager;
+  private InternalStateManager stateManager;
   private TestTarget testTarget;
-  private StateSetter<TestTarget, String> setter;
+  private NiftyStateSetter<TestTarget, String> setter;
 
   private static class TestTarget {
     
@@ -49,8 +50,8 @@ public class StateManagerTest {
   @Before
   public void before() {
     testTarget = createMock(TestTarget.class);
-    setter = createMock(StateSetter.class);
-    stateManager = new StateManager<StateManagerTest.TestTarget>(testTarget);
+    setter = createMock(NiftyStateSetter.class);
+    stateManager = new InternalStateManager();
   }
 
   @After
@@ -63,30 +64,30 @@ public class StateManagerTest {
   public void testSetValue_NullStates() {
     replay(testTarget);
 
-    setter.set(testTarget, "value");
+    setter.set(testTarget, "value", NiftyNodeState.Regular);
     replay(setter);
 
-    stateManager.setValue("value", setter);
+    stateManager.setValue(testTarget, "value", setter);
   }
 
   @Test
   public void testSetValue_EmptyStates() {
     replay(testTarget);
 
-    setter.set(testTarget, "value");
+    setter.set(testTarget, "value", NiftyNodeState.Regular);
     replay(setter);
 
-    stateManager.setValue("value", setter, new NiftyNodeState[0]);
+    stateManager.setValue(testTarget, "value", setter, new NiftyNodeState[0]);
   }
 
   @Test
   public void testSetValue_RegularStateOnly() {
     replay(testTarget);
 
-    setter.set(testTarget, "value");
+    setter.set(testTarget, "value", NiftyNodeState.Regular);
     replay(setter);
 
-    stateManager.setValue("value", setter, NiftyNodeState.Regular);
+    stateManager.setValue(testTarget, "value", setter, NiftyNodeState.Regular);
   }
 
   @Test
@@ -94,7 +95,7 @@ public class StateManagerTest {
     replay(testTarget);
     replay(setter);
 
-    stateManager.setValue("value", setter, NiftyNodeState.Hover);
+    stateManager.setValue(testTarget, "value", setter, NiftyNodeState.Hover);
   }
 
   @Test
@@ -109,11 +110,11 @@ public class StateManagerTest {
   public void testActivateStates_WithRegular() {
     replay(testTarget);
 
-    setter.set(testTarget, "value");
-    setter.set(testTarget, "value");
+    setter.set(testTarget, "value", NiftyNodeState.Regular);
+    setter.set(testTarget, "value", NiftyNodeState.Regular);
     replay(setter);
 
-    stateManager.setValue("value", setter, NiftyNodeState.Regular);
+    stateManager.setValue(testTarget, "value", setter, NiftyNodeState.Regular);
     stateManager.activateStates();
   }
 
@@ -122,7 +123,7 @@ public class StateManagerTest {
     replay(testTarget);
     replay(setter);
 
-    stateManager.setValue("value", setter, NiftyNodeState.Hover);
+    stateManager.setValue(testTarget, "value", setter, NiftyNodeState.Hover);
     stateManager.activateStates();
   }
 
@@ -130,10 +131,10 @@ public class StateManagerTest {
   public void testActivateStates_WithHoverActive() {
     replay(testTarget);
 
-    setter.set(testTarget, "value");
+    setter.set(testTarget, "value", NiftyNodeState.Hover);
     replay(setter);
 
-    stateManager.setValue("value", setter, NiftyNodeState.Hover);
+    stateManager.setValue(testTarget, "value", setter, NiftyNodeState.Hover);
     stateManager.activateStates(NiftyNodeState.Hover);
   }
 
@@ -151,10 +152,10 @@ public class StateManagerTest {
   public void testToString_Hover() {
     replay(testTarget);
 
-    setter.set(testTarget, "value");
+    setter.set(testTarget, "value", NiftyNodeState.Hover);
     replay(setter);
 
-    stateManager.setValue("value", setter, NiftyNodeState.Hover);
+    stateManager.setValue(testTarget, "value", setter, NiftyNodeState.Hover);
     stateManager.activateStates(NiftyNodeState.Hover);
 
     assertEquals(

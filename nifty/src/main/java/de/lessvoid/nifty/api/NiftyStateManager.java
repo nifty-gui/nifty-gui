@@ -24,36 +24,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import de.lessvoid.nifty.api.NiftyNodeState;
-import de.lessvoid.nifty.api.NiftyStateSetter;
+package de.lessvoid.nifty.api;
 
 /**
- * Helper class to store all the data that is part of a certain NiftyNodeState.
+ * NiftyStateManager allows support for NiftyNodeState related values. This basically registeres the given value
+ * with the given NiftyNodeStates.
+ *
  * @author void
  */
-public class StateData {
-  private Set<StateDataValue<?, ?>> data = new LinkedHashSet<StateDataValue<?, ?>>();
+public interface NiftyStateManager {
 
-  @SuppressWarnings({ "unchecked", "rawtypes"})
-  <T, V> void set(final T target, final V value, final NiftyStateSetter<T, V> setter) {
-    StateDataValue stateDataValue = new StateDataValue(target, value, setter);
-    data.remove(stateDataValue);
-    data.add(stateDataValue);
-  }
+  /**
+   * Set the given value using the given setter for the states given.
+   *
+   * @param target the target object the setter will be called at
+   * @param value the value to set later
+   * @param setter the setter to use
+   * @param states the states to register the value for
+   */
+  public <T, V> void setValue(T target, V value, NiftyStateSetter<T, V> setter, NiftyNodeState... states);
 
-  void apply(final NiftyNodeState state) {
-    for (StateDataValue<?, ?> stateDataSetter : data) {
-      stateDataSetter.setter(state);
-    }
-  }
-
-  @Override
-  public String toString() {
-    return data.toString();
-  }
 }

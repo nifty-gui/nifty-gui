@@ -33,6 +33,9 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyMinSizeCallback;
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyNodeState;
+import de.lessvoid.nifty.api.NiftyStateManager;
+import de.lessvoid.nifty.api.NiftyStateSetter;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterHAlign;
@@ -49,8 +52,8 @@ public class Label extends NiftyAbstractControl {
   private VAlign textVAlign = VAlign.center;
 
   @Override
-  public void init(final NiftyNode niftyNode) {
-    super.init(niftyNode);
+  public void init(final NiftyNode niftyNode, final NiftyStateManager stateManager) {
+    super.init(niftyNode, stateManager);
     niftyNode.addCanvasPainter(new LabelCanvasPainter());
     niftyNode.enableMinSize(new NiftyMinSizeCallback() {
       @Override
@@ -72,8 +75,11 @@ public class Label extends NiftyAbstractControl {
    */
   @NiftyStyleProperty(name = "text")
   public void setText(final String text) {
-    this.text = text;
-    niftyNode.requestLayout();
+    setText(text, NiftyNodeState.Regular);
+  }
+
+  public void setText(final String text, final NiftyNodeState ... states) {
+    stateManager.setValue(this, text, stateSetterText, states);
   }
 
   /**
@@ -92,8 +98,11 @@ public class Label extends NiftyAbstractControl {
    */
   @NiftyStyleProperty(name = "text-color", converter = NiftyStyleStringConverterNiftyColor.class)
   public void setTextColor(final NiftyColor color) {
-    this.textColor = color;
-    niftyNode.requestRedraw();
+    setTextColor(color, NiftyNodeState.Regular);
+  }
+
+  public void setTextColor(final NiftyColor color, final NiftyNodeState ... states) {
+    stateManager.setValue(this, color, stateSetterTextColor, states);
   }
 
   /**
@@ -112,8 +121,11 @@ public class Label extends NiftyAbstractControl {
    */
   @NiftyStyleProperty(name = "font", converter = NiftyStyleStringConverterNiftyFont.class)
   public void setFont(final NiftyFont font) {
-    this.font = font;
-    niftyNode.requestRedraw();
+    setFont(font, NiftyNodeState.Regular);
+  }
+
+  public void setFont(final NiftyFont font, final NiftyNodeState ... states) {
+    stateManager.setValue(this, font, stateSetterNiftyFont, states);
   }
 
   /**
@@ -131,7 +143,11 @@ public class Label extends NiftyAbstractControl {
    */
   @NiftyStyleProperty(name = "text-halign", converter = NiftyStyleStringConverterHAlign.class)
   public void setTextHAlign(final HAlign halign) {
-    textHAlign = halign;
+    setTextHAlign(halign, NiftyNodeState.Regular);
+  }
+
+  public void setTextHAlign(final HAlign halign, final NiftyNodeState ... states) {
+    stateManager.setValue(this, halign, stateSetterHAlign, states);
   }
 
   /**
@@ -148,7 +164,11 @@ public class Label extends NiftyAbstractControl {
    */
   @NiftyStyleProperty(name = "text-valign", converter = NiftyStyleStringConverterVAlign.class)
   public void setTextVAlign(final VAlign valign) {
-    textVAlign = valign;
+    setTextVAlign(valign, NiftyNodeState.Regular);
+  }
+
+  public void setTextVAlign(final VAlign valign, final NiftyNodeState ... states) {
+    stateManager.setValue(this, valign, stateSetterVAlign, states);
   }
 
   /**
@@ -194,4 +214,38 @@ public class Label extends NiftyAbstractControl {
       textRenderer.renderText(node, canvas);
     }
   }
+
+  private static NiftyStateSetter<Label, String> stateSetterText = new NiftyStateSetter<Label, String>() {
+    @Override
+    public void set(final Label target, final String text, final NiftyNodeState state) {
+      target.text = text;
+      target.niftyNode.requestLayout();
+    }
+  };
+  private static NiftyStateSetter<Label, NiftyColor> stateSetterTextColor = new NiftyStateSetter<Label, NiftyColor>() {
+    @Override
+    public void set(final Label target, final NiftyColor color, final NiftyNodeState state) {
+      target.textColor = color;
+      target.niftyNode.requestRedraw();
+    }
+  };
+  private static NiftyStateSetter<Label, NiftyFont> stateSetterNiftyFont = new NiftyStateSetter<Label, NiftyFont>() {
+    @Override
+    public void set(final Label target, final NiftyFont font, final NiftyNodeState state) {
+      target.font = font;
+      target.niftyNode.requestRedraw();
+    }
+  };
+  private static NiftyStateSetter<Label, HAlign> stateSetterHAlign = new NiftyStateSetter<Label, HAlign>() {
+    @Override
+    public void set(final Label target, final HAlign textHAlign, final NiftyNodeState state) {
+      target.textHAlign = textHAlign;
+    }
+  };
+  private static NiftyStateSetter<Label, VAlign> stateSetterVAlign = new NiftyStateSetter<Label, VAlign>() {
+    @Override
+    public void set(final Label target, final VAlign textVAlign, final NiftyNodeState state) {
+      target.textVAlign = textVAlign;
+    }
+  };
 }

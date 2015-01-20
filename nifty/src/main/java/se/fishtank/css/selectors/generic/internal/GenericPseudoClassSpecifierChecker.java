@@ -1,5 +1,6 @@
 package se.fishtank.css.selectors.generic.internal;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,20 @@ import se.fishtank.css.util.Assert;
  * @author Jens Hohmuth
  */
 public class GenericPseudoClassSpecifierChecker<E> extends GenericNodeTraversalChecker<E> {
-    
+    private final static Set<String> USER_ACTION_PSEUDO_CLASSES = new HashSet<String>();
+    private final static Set<String> ELEMENT_STATES_PSEUDO_CLASSES = new HashSet<String>();
+
+    {
+      USER_ACTION_PSEUDO_CLASSES.add("hover");
+      USER_ACTION_PSEUDO_CLASSES.add("active");
+      USER_ACTION_PSEUDO_CLASSES.add("focus");
+
+      ELEMENT_STATES_PSEUDO_CLASSES.add("enabled");
+      ELEMENT_STATES_PSEUDO_CLASSES.add("disabled");
+      ELEMENT_STATES_PSEUDO_CLASSES.add("checked");
+      ELEMENT_STATES_PSEUDO_CLASSES.add("indeterminate");
+    }
+
     /** The generic node adapter */
     private final GenericNodeAdapter<E> nodeAdapter;
 
@@ -74,6 +88,8 @@ public class GenericPseudoClassSpecifierChecker<E> extends GenericNodeTraversalC
             addOnlyOfTypeElements();
         } else if ("root".equals(value)) {
             addRootElement();
+        } else if (USER_ACTION_PSEUDO_CLASSES.contains(value) || ELEMENT_STATES_PSEUDO_CLASSES.contains(value)) {
+            result.addAll(nodes);
         } else {
             throw new NodeSelectorException("Unknown pseudo class: " + value);
         }

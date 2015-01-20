@@ -1,7 +1,7 @@
 .label {
   font: fonts/aurulent-sans-16.fnt;
   text: hello nifty world; /* not really useful in a style but works as well */
-  text-color: #ffff;
+  text-color: #000f;
   background-color: #f00f;
   text-halign: left;
   text-valign: top;

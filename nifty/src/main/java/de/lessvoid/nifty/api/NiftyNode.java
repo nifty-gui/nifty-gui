@@ -53,6 +53,7 @@ public class NiftyNode {
   private NiftyNode(final InternalNiftyNode impl) {
     this.impl = impl;
     this.impl.setNiftyNode(this);
+    this.impl.initDefaultProperties(this);
   }
 
   /**

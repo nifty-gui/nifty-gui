@@ -28,10 +28,14 @@ package de.lessvoid.nifty.internal.style.specialparser;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.junit.Test;
 
+import self.philbrown.cssparser.Token;
+import self.philbrown.cssparser.TokenSequence;
 import de.lessvoid.nifty.internal.style.specialparser.LinearGradientParser.ColorStop;
 import de.lessvoid.nifty.internal.style.specialparser.LinearGradientParser.Result;
 
@@ -46,6 +50,41 @@ public class LinearGradientParserTest {
   @Test
   public void testSingleColorstops() throws Exception {
     execTest("linear-gradient(red);", 180, new ColorStop("red"));
+  }
+
+  @Test
+  public void testSingleColorstopsColorNumber() throws Exception {
+    execTest("linear-gradient(#800000);", 180, new ColorStop("#800000"));
+  }
+
+  @Test
+  public void testSingleColorstopsColorAlphaNumber() throws Exception {
+    execTest("linear-gradient(#ff0000);", 180, new ColorStop("#ff0000"));
+  }
+
+  @Test
+  public void testSingleColorstopsColorMixedNumber() throws Exception {
+    execTest("linear-gradient(#80ffff);", 180, new ColorStop("#80ffff"));
+  }
+
+  @Test
+  public void testSingleColorstopsColorTotallyMixedNumber() throws Exception {
+    execTest("linear-gradient(#a0b29f 10%);", 180, new ColorStop("#a0b29f", 0.1));
+  }
+/* FIXME
+  @Test
+  public void testSingleColorstopsColorTotallyMixedNumber2() throws Exception {
+    execTest("linear-gradient(#200b30 10%);", 180, new ColorStop("#200b30", 0.1));
+  }
+*/
+  @Test
+  public void testSingleColorstopsColorMixedNumberWithPercent() throws Exception {
+    execTest("linear-gradient(#80ffff -23%);", 180, new ColorStop("#80ffff", -0.23));
+  }
+
+  @Test
+  public void testSingleColorstopsColorMixedNumberWithPercent2() throws Exception {
+    execTest("linear-gradient(#80ffff 23%);", 180, new ColorStop("#80ffff", 0.23));
   }
 
   @Test

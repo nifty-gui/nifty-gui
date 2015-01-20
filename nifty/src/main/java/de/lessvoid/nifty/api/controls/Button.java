@@ -35,16 +35,21 @@ import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.api.NiftyNodeState;
+import de.lessvoid.nifty.api.NiftyStateManager;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.annotation.NiftyStyleProperty;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterHAlign;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyColor;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyFont;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
 
 public class Button extends NiftyAbstractControl {
   private Label label;
 
   @Override
-  public void init(final NiftyNode niftyNode) {
-    super.init(niftyNode);
+  public void init(final NiftyNode niftyNode, final NiftyStateManager stateManager) {
+    super.init(niftyNode, stateManager);
 
     niftyNode.setChildLayout(ChildLayout.Center);
     niftyNode.addCanvasPainter(new ButtonCanvasPainter());
@@ -76,7 +81,11 @@ public class Button extends NiftyAbstractControl {
    */
   @NiftyStyleProperty(name = "text")
   public void setText(@Nonnull final String text) {
-    label.setText(text);
+    setText(text, NiftyNodeState.Regular);
+  }
+
+  public void setText(@Nonnull final String text, final NiftyNodeState ... states) {
+    label.setText(text, states);
   }
 
   /**
@@ -114,7 +123,11 @@ public class Button extends NiftyAbstractControl {
    */
   @NiftyStyleProperty(name = "font", converter = NiftyStyleStringConverterNiftyFont.class)
   public void setFont(final NiftyFont font) {
-    label.setFont(font);
+    setFont(font, NiftyNodeState.Regular);
+  }
+
+  public void setFont(final NiftyFont font, final NiftyNodeState ... states) {
+    label.setFont(font, states);
   }
 
   /**
@@ -132,8 +145,13 @@ public class Button extends NiftyAbstractControl {
    * @param newTextVAlign
    *          VerticalAlign
    */
+  @NiftyStyleProperty(name = "text-valign", converter = NiftyStyleStringConverterVAlign.class)
   public void setTextVAlign(final VAlign newTextVAlign) {
-    label.setTextVAlign(newTextVAlign);
+    setTextVAlign(newTextVAlign, NiftyNodeState.Regular);
+  }
+
+  public void setTextVAlign(final VAlign newTextVAlign, final NiftyNodeState ... states) {
+    label.setTextVAlign(newTextVAlign, states);
   }
 
   /**
@@ -151,8 +169,13 @@ public class Button extends NiftyAbstractControl {
    * @param newTextHAlign
    *          HorizontalAlign
    */
+  @NiftyStyleProperty(name = "text-halign", converter = NiftyStyleStringConverterHAlign.class)
   public void setTextHAlign(@Nonnull final HAlign newTextHAlign) {
-    label.setTextHAlign(newTextHAlign);
+    setTextHAlign(newTextHAlign, NiftyNodeState.Regular);
+  }
+
+  public void setTextHAlign(@Nonnull final HAlign newTextHAlign, final NiftyNodeState ... states) {
+    label.setTextHAlign(newTextHAlign, states);
   }
 
   /**
@@ -170,8 +193,13 @@ public class Button extends NiftyAbstractControl {
    * @param newColor
    *          new Color for the button text
    */
-  void setTextColor(final NiftyColor newColor) {
-    label.setTextColor(newColor);
+  @NiftyStyleProperty(name = "text-color", converter = NiftyStyleStringConverterNiftyColor.class)
+  public void setTextColor(final NiftyColor newColor) {
+    setTextColor(newColor, NiftyNodeState.Regular);
+  }
+
+  public void setTextColor(final NiftyColor newColor, final NiftyNodeState ... states) {
+    label.setTextColor(newColor, states);
   }
 
   private class ButtonCanvasPainter implements NiftyCanvasPainter {
