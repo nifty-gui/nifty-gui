@@ -181,7 +181,10 @@ public class Nifty {
   private List<NiftyNode> collectInputReceivers() {
     nodesToReceiveEvents.clear();
     for (int i=0; i<rootNodes.size(); i++) {
-      rootNodes.get(i).getImpl().addInputNodes(nodesToReceiveEvents);
+      InternalNiftyNode impl = rootNodes.get(i).getImpl();
+      if (!impl.isNiftyPrivateNode()) {
+        impl.addInputNodes(nodesToReceiveEvents);
+      }
     }
     return sortInputReceivers(nodesToReceiveEvents);
   }
